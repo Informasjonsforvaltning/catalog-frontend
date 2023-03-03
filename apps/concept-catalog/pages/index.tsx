@@ -1,12 +1,15 @@
 import styled from 'styled-components';
 import { HelloWorld } from '@catalog-frontend/hello-world'
+import { signIn, useSession } from "@catalog-frontend/auth"
 
 const StyledPage = styled.div`
   .page {
   }
 `;
 
-export function Index() {
+export const Index = () => {
+  const { data: session } = useSession();
+
   /*
    * Replace the elements below with your own.
    *
@@ -22,6 +25,44 @@ export function Index() {
               Welcome concept-catalog 👋
             </h1>
             <HelloWorld />
+            <div className='auth'>
+            {!session && (                     
+                <a className='button-pill rounded shadow'
+                  href={`/api/auth/signin`}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    signIn('keycloak')
+                  }}
+                >
+                  <span>
+                    You are not logged in
+                    <span>Log in</span>
+                  </span>
+                </a>
+            )}
+            {session?.user && (
+              <>
+                <a className='button-pill rounded shadow'
+                  href={`/api/auth/federated-sign-out`}                  
+                >
+                  <span>
+                    <small>Logged in as</small>
+                    <br />
+                    <strong>{session.user.email ?? session.user.name}</strong>
+                    <span>Log out</span>
+                  </span>                  
+                </a>
+              </>
+            )}
+            <a className='button-pill rounded shadow'
+                  href={`/protected`}                  
+                >
+                  <span>
+                    Protected page
+                    <span>Open protected page</span>
+                  </span>
+                </a>
+            </div>
           </div>
 
           <div id="hero" className="rounded">

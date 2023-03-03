@@ -84,7 +84,7 @@ pre {
   letter-spacing: -0.025em;
   line-height: 1;
 }
-#welcome span {
+#welcome > span {
   display: block;
   font-size: 1.875rem;
   font-weight: 300;
@@ -387,6 +387,17 @@ summary svg {
   display: inline;
   margin-top: -0.25rem;
 }
+.protected {
+
+}
+
+.auth > a {
+  margin-top: 2em;  
+}
+.auth a:hover {
+  background-color: rgba(0, 122, 204, 1);
+}
+
 @media screen and (min-width: 768px) {
   #hero {
     grid-template-columns: repeat(2, minmax(0, 1fr));

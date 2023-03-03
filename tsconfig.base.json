@@ -18,6 +18,9 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@catalog-frontend/auth": [
+        "libs/auth/src/index.ts"
+      ],
       "@catalog-frontend/hello-world": [
         "libs/hello-world/src/index.ts"
       ]
