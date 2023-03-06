@@ -1,3 +1,7 @@
+import { TextEncoder } from 'util';
+
+global.TextEncoder = TextEncoder;
+
 /* eslint-disable */
 export default {
   displayName: 'auth',
@@ -6,5 +10,5 @@ export default {
     '^.+\\.[tj]sx?$': ['@swc/jest', { jsc: { transform: { react: { runtime: 'automatic' } } } }]
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/libs/auth'
+  coverageDirectory: '../../coverage/libs/auth',
 };
