@@ -14,11 +14,10 @@ export const authOptions = {
       issuer: process.env.KEYCLOAK_ISSUER,
       idToken: true,
 			profile(profile, tokens) {
-        console.log(profile);
 				return {
 					id: profile.sub,
-          name: profile.name,
-          email: profile.email,
+					name: profile.name,
+					email: profile.email,
 					// Append the id token to the profile
 					idToken: tokens.id_token,
 				};
