@@ -5,7 +5,7 @@ on:
     types: [ready_for_review, opened, reopened, synchronize]
     branches:
       - main
-    
+
 jobs:
   test:
     name: Test and build
@@ -20,7 +20,7 @@ jobs:
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare against.
           fetch-depth: 0
-      
+
       - uses: nrwl/nx-set-shas@v3
       - run: yarn install --frozen-lockfile
 
@@ -33,11 +33,11 @@ jobs:
         run: |
           echo "matrix={\"appname\":$(yarn --silent run matrix)}" >> $GITHUB_OUTPUT
           echo "changed=$(yarn --silent run matrix)" >> $GITHUB_OUTPUT
-            
-      - run: yarn run affected:lint  --parallel=3
-      - run: yarn run affected:test  --parallel=3 --configuration=ci
-      - run: yarn run affected:e2e   --parallel=3 --configuration=ci
-      - run: yarn run affected:build --parallel=3 --configuration=ci
+
+      - run: yarn run affected:lint  --parallel=2
+      - run: yarn run affected:test  --parallel=2 --configuration=ci
+      - run: yarn run affected:e2e   --parallel=2 --configuration=ci
+      - run: yarn run affected:build --parallel=2 --configuration=ci
 
       - name: Caching Dist Folder
         uses: actions/cache@v3
@@ -50,7 +50,7 @@ jobs:
     needs: [test]
     if: ${{ needs.test.outputs.changed != '[]' }}
     strategy:
-      matrix: ${{fromJSON(needs.test.outputs.matrix)}}    
+      matrix: ${{fromJSON(needs.test.outputs.matrix)}}
     uses: Informasjonsforvaltning/workflows/.github/workflows/build-push.yaml@main
     with:
       app_name: ${{ matrix.appname }}-frontend
@@ -70,7 +70,7 @@ jobs:
     needs: [test, build]
     if: ${{ needs.test.outputs.changed != '[]' }}
     strategy:
-      matrix: ${{fromJSON(needs.test.outputs.matrix)}}    
+      matrix: ${{fromJSON(needs.test.outputs.matrix)}}
     uses: Informasjonsforvaltning/workflows/.github/workflows/kustomize-deploy.yaml@main
     with:
       app_name: ${{ matrix.appname }}-frontend
