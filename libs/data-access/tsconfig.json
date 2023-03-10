@@ -8,6 +8,7 @@
   },
   "files": [],
   "include": [],
+  "exclude": ["libs/data-access/src/lib/concept/concept-config.ts"],
   "references": [
     {
       "path": "./tsconfig.lib.json"
