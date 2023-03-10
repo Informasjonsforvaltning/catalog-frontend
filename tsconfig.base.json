@@ -21,8 +21,14 @@
       "@catalog-frontend/auth": [
         "libs/auth/src/index.ts"
       ],
-      "@catalog-frontend/hello-world": [
-        "libs/hello-world/src/index.ts"
+      "@catalog-frontend/data-access": [
+        "libs/data-access/src/index.ts"
+      ],
+      "@catalog-frontend/ui": [
+        "libs/ui/src/index.ts"
+      ],
+      "@catalog-frontend/utils": [
+        "libs/utils/src/index.ts"
       ]
     }
   },
