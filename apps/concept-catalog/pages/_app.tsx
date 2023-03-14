@@ -4,7 +4,7 @@ import Head from 'next/head';
 import {SessionProvider, Session} from '@catalog-frontend/auth';
 import {DefaultTheme} from '@fellesdatakatalog/theme';
 import {ThemeProvider} from 'styled-components';
-import './styles.css';
+import GlobalStyle from '../styles/global';
 
 function CustomApp({
   Component,
@@ -17,6 +17,7 @@ function CustomApp({
       </Head>
       <main>
         <ThemeProvider theme={DefaultTheme}>
+          <GlobalStyle />
           <Component {...pageProps} />
         </ThemeProvider>
       </main>

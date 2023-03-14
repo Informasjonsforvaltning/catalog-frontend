@@ -1,8 +1,14 @@
 import {useRouter} from 'next/router';
-import {Breadcrumbs, breadcrumbT} from '@catalog-frontend/ui';
+import {
+  Breadcrumbs,
+  breadcrumbT,
+  PageTitle,
+  PageSubtitle,
+} from '@catalog-frontend/ui';
 import {localization} from '@catalog-frontend/utils';
+import SC from '../../styles/search-page';
 
-export const Index = () => {
+export const SearchPage = () => {
   const router = useRouter();
   const {catalogId} = router.query;
 
@@ -15,11 +21,17 @@ export const Index = () => {
       ] as unknown as breadcrumbT[])
     : [];
 
+  const pageSubtitle = catalogId ?? 'No title';
+
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <SC.SearchPage>
+        <PageTitle>{localization.catalogType.concept}</PageTitle>
+        <PageSubtitle>{pageSubtitle}</PageSubtitle>
+      </SC.SearchPage>
     </>
   );
 };
 
-export default Index;
+export default SearchPage;

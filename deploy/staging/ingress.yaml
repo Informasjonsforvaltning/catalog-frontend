@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ai-project-service
+  name: concept-catalog-frontend
 spec:
   ingressClassName: nginx
   rules:
