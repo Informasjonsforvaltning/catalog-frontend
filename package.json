@@ -29,6 +29,7 @@
   },
   "private": true,
   "dependencies": {
+    "@fellesdatakatalog/icons": "^0.8.3",
     "@fellesdatakatalog/theme": "^0.5.4",
     "@nrwl/next": "15.8.1",
     "lodash": "^4.17.21",
