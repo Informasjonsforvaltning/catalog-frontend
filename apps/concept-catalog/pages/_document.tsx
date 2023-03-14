@@ -7,7 +7,7 @@ import Document, {
   DocumentContext,
   DocumentInitialProps,
 } from 'next/document';
-import { ServerStyleSheet } from 'styled-components';
+import {ServerStyleSheet} from 'styled-components';
 
 export default class CustomDocument extends Document {
   static async getInitialProps(
@@ -26,13 +26,21 @@ export default class CustomDocument extends Document {
     const intialProps = await Document.getInitialProps(ctx);
     const styles = sheet.getStyleElement();
 
-    return { ...intialProps, styles };
+    return {...intialProps, styles};
   }
 
   render() {
     return (
       <Html>
-        <Head>{this.props.styles}</Head>
+        <Head>
+          {this.props.styles}
+          {
+            <link
+              rel="stylesheet"
+              href="https://fonts.googleapis.com/css2?family=Heebo:wght@100;300;400;500;700;800;900&display=swap"
+            />
+          }
+        </Head>
         <body>
           <Main />
           <NextScript />
