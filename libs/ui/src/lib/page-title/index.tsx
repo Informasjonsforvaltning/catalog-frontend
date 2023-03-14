@@ -6,7 +6,7 @@ export interface PageTitleProps {
   children: React.ReactNode;
 }
 
-const StyledPageTitle = styled.div`
+const StyledPageTitle = styled.h1`
   width: 100%;
   height: ${theme.spacing('S32')};
   font-style: normal;
