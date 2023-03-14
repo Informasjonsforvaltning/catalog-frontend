@@ -1124,6 +1124,11 @@
     minimatch "^3.1.2"
     strip-json-comments "^3.1.1"
 
+"@fellesdatakatalog/icons@^0.8.3":
+  version "0.8.3"
+  resolved "https://registry.yarnpkg.com/@fellesdatakatalog/icons/-/icons-0.8.3.tgz#21860606954a4ac4db5aa556c9c2d57d754c5f2f"
+  integrity sha512-F6k2dwhJUNRFw16o9KFnc/6UtyO4urdUSwTnMGJ1Dh+SLH9bwquAFlxxbe9nNxeEVe79CuDtPakyXLUdXedUVw==
+
 "@fellesdatakatalog/theme@^0.5.4":
   version "0.5.4"
   resolved "https://registry.npmjs.org/@fellesdatakatalog/theme/-/theme-0.5.4.tgz"
