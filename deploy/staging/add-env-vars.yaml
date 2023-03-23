@@ -11,10 +11,18 @@ spec:
       containers:
         - name: concept-catalog-frontend
           env:
-            - name: NEXT_AUTH_URL
+            - name: NEXTAUTH_URL
               value: https://begrepskatalog.staging.fellesdatakatalog.digdir.no
-            - name: NEXT_AUTH_SECRET
+            - name: NEXTAUTH_SECRET
               valueFrom:
                 secretKeyRef:
                   name: concept-catalog-frontend-staging
-                  key: NEXT_AUTH_SECRET
+                  key: NEXTAUTH_SECRET
+            - name: KEYCLOAK_ID
+              value: concept-catalog-frontend      
+            - name: KEYCLOAK_ISSUER
+              valueFrom:
+                secretKeyRef:
+                  name: sso-staging
+                  key: SSO_OIDC_ISSUER
+            

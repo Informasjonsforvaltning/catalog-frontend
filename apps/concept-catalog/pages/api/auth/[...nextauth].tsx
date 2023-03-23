@@ -7,7 +7,6 @@ export {SessionProvider, useSession, signIn, signOut} from 'next-auth/react';
 export type {Session} from 'next-auth';
 
 export const authOptions = {
-  secret: process.env.SECRET,
   pages: {
     signIn: '/auth/signin',
     signOut: '/auth/signout',
