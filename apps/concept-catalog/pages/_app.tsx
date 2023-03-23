@@ -1,6 +1,7 @@
 import {AppProps} from 'next/app';
 import Head from 'next/head';
 
+import "@altinn/figma-design-tokens/dist/tokens.css";
 import {SessionProvider, Session} from '@catalog-frontend/auth';
 import {DefaultTheme} from '@fellesdatakatalog/theme';
 import {ThemeProvider} from 'styled-components';

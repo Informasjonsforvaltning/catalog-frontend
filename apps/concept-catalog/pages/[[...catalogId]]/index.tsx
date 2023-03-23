@@ -4,6 +4,7 @@ import {
   breadcrumbT,
   PageTitle,
   PageSubtitle,
+  ImportButton,
 } from '@catalog-frontend/ui';
 import {localization} from '@catalog-frontend/utils';
 import SC from '../../styles/search-page';
@@ -29,6 +30,7 @@ export const SearchPage = () => {
       <SC.SearchPage>
         <PageTitle>{localization.catalogType.concept}</PageTitle>
         <PageSubtitle>{pageSubtitle}</PageSubtitle>
+        <ImportButton />
       </SC.SearchPage>
     </>
   );
