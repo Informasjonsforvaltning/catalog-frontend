@@ -18,6 +18,8 @@ export const nb = {
 
   button: {
     addDataset: 'Legg til ny datasettbeskrivelse',
+    addConcept: 'Legg til nytt begrep',
+    importConcept: 'Importer begrep',
     delete: 'Slett',
     expandAll: 'Vis alle felter',
     harvestDataset: 'Høst spesifikasjon fra katalog',
