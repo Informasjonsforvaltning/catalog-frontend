@@ -29,6 +29,7 @@
   },
   "private": true,
   "dependencies": {
+    "@digdir/design-system-react": "^0.9.0",
     "@fellesdatakatalog/icons": "^0.8.3",
     "@fellesdatakatalog/theme": "^0.5.4",
     "@nrwl/next": "15.8.1",
