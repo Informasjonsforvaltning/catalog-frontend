@@ -5,3 +5,6 @@ namespace: staging
 resources:
   - ../base
   - ingress.yaml
+
+patchesStrategicMerge:
+  - add-env-vars.yaml
