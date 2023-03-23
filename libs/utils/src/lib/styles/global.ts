@@ -2,7 +2,7 @@ import {createGlobalStyle} from 'styled-components';
 import reset from './reset';
 import {Colour, theme} from '@fellesdatakatalog/theme';
 
-const GlobalStyle = createGlobalStyle`
+export const GlobalStyle = createGlobalStyle`
   ${reset}
   
   html {

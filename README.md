@@ -30,25 +30,30 @@ Run `yarn nx g @nrwl/next:app my-new-app` to add new app to this monorepo.
 
 Run `yarn nx g @nrwl/next:lib my-new-lib` to add new library to this monorepo.
 
-## Add pages and components
+## Add new pages
 
 Run `yarn nx g @nrwl/next:page my-new-page --project=concept-catalog` to add new page to concept-catalog app this monorepo.
 
-Run `yarn nx g @nrwl/next:component my-new-component --project=concept-catalog` to add new component to concept-catalog app this monorepo.
+## Add new components
+
+Run `yarn nx g @nrwl/next:component my-new-component --project=ui` to add a new component to **ui** library in **libs** folder
 
 ## Testing
 
 ```
 yarn nx test concept-catalog
-yarn nx test hello-world
-yarn nx e2e concept-catalog-e2e
 ```
 
 ## Linting
 
 ```
 yarn nx lint concept-catalog
-yarn nx lint hello-world
+```
+
+## Producing a production build
+
+```
+yarn nx run concept-catalog:build:production
 ```
 
 ## Further help
