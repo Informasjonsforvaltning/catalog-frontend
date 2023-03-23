@@ -34,12 +34,10 @@ export default class CustomDocument extends Document {
       <Html>
         <Head>
           {this.props.styles}
-          {
-            <link
-              rel="stylesheet"
-              href="https://fonts.googleapis.com/css2?family=Heebo:wght@100;300;400;500;700;800;900&display=swap"
-            />
-          }
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Heebo:wght@100;300;400;500;700;800;900&display=swap"
+          />
         </Head>
         <body>
           <Main />

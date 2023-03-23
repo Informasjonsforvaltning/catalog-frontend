@@ -47,4 +47,4 @@ export function Button({
 }
 
 export default Button;
-export {ButtonType, ButtonProps};
+export type {ButtonType, ButtonProps};

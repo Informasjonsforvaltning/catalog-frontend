@@ -31,7 +31,7 @@ export function Breadcrumbs({breadcrumbList}: BreadcrumbsProps) {
           {breadcrumbList &&
             breadcrumbList.map((breadcrumb, i) => {
               return (
-                <span>
+                <span key={i}>
                   <Separator>{'>'}</Separator>
                   {i === breadcrumbList.length - 1 ? (
                     <DeactiveLink>{breadcrumb.text}</DeactiveLink>
