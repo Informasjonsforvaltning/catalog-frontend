@@ -1,10 +1,10 @@
 import {AppProps} from 'next/app';
 import Head from 'next/head';
 
-import {SessionProvider, Session} from '@catalog-frontend/auth';
 import {DefaultTheme} from '@fellesdatakatalog/theme';
 import {ThemeProvider} from 'styled-components';
 import {GlobalStyle} from '@catalog-frontend/utils';
+import {RouteGaurd, Session, SessionProvider} from './api/auth/[...nextauth]';
 
 function CustomApp({
   Component,
@@ -13,12 +13,14 @@ function CustomApp({
   return (
     <SessionProvider session={session}>
       <Head>
-        <title>Welcome to concept-catalog!</title>
+        <title>Begrepskatalogen</title>
       </Head>
       <main>
         <ThemeProvider theme={DefaultTheme}>
           <GlobalStyle />
-          <Component {...pageProps} />
+          <RouteGaurd>
+            <Component {...pageProps} />
+          </RouteGaurd>
         </ThemeProvider>
       </main>
     </SessionProvider>

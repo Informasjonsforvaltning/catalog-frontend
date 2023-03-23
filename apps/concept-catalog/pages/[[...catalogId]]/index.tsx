@@ -1,5 +1,7 @@
 import {useRouter} from 'next/router';
 import {Colour, theme} from '@fellesdatakatalog/theme';
+import {getServerSession} from 'next-auth/next';
+
 import {
   Breadcrumbs,
   breadcrumbT,
@@ -10,6 +12,8 @@ import {
 } from '@catalog-frontend/ui';
 import {localization} from '@catalog-frontend/utils';
 import SC from '../../styles/search-page';
+import {GetServerSideProps} from 'next';
+import {authOptions} from '../api/auth/[...nextauth]';
 
 export const SearchPage = () => {
   const router = useRouter();
@@ -51,6 +55,25 @@ export const SearchPage = () => {
       </SC.SearchPage>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
+  const session = await getServerSession(req, res, authOptions);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/signin',
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {
+      session,
+    },
+  };
 };
 
 export default SearchPage;
