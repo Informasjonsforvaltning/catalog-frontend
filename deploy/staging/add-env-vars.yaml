@@ -1,0 +1,20 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: concept-catalog-frontend
+  labels:
+    app: concept-catalog-frontend
+spec:
+  template:
+    spec:
+      containers:
+        - name: concept-catalog-frontend
+          env:
+            - name: NEXT_AUTH_URL
+              value: https://begrepskatalog.staging.fellesdatakatalog.digdir.no
+            - name: NEXT_AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: concept-catalog-frontend-staging
+                  key: NEXT_AUTH_SECRET
