@@ -1,5 +1,4 @@
 /* eslint-disable import/no-anonymous-default-export */
-import {theme} from '@fellesdatakatalog/theme';
 import {Breakpoint} from '@catalog-frontend/utils';
 import styled from 'styled-components';
 
@@ -18,7 +17,7 @@ const ContainerOne = styled.span`
   display: flex;
   width: 100%;
   display: flex;
-  gap: ${theme.spacing('S10')};
+  gap: 1.0rem;
   align-items: start;
   margin: 4px;
 

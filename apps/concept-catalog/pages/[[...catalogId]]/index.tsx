@@ -1,5 +1,4 @@
 import {useRouter} from 'next/router';
-import {Colour, theme} from '@fellesdatakatalog/theme';
 import {getServerSession} from 'next-auth/next';
 
 import {
@@ -41,14 +40,14 @@ export const SearchPage = () => {
           </div>
           <Button
             name={localization.button.addConcept}
-            bg={theme.colour(Colour.NEUTRAL, 'N60')}
+            bg='#2d3741'
             btnType="filled"
             iconPos="left"
             startIcon={<Icon name="circlePlusStroke" />}
           />
           <Button
             name={localization.button.importConcept}
-            bg={theme.colour(Colour.GREEN, 'G60')}
+            bg='#2e6773'
             btnType="filled"
           />
         </SC.ContainerOne>

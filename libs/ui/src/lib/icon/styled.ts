@@ -1,10 +1,9 @@
 import styled from 'styled-components';
 import SvgIcon from '@fellesdatakatalog/icons';
-import {theme} from '@fellesdatakatalog/theme';
 
 const Icon = styled(SvgIcon)`
-  width: ${theme.spacing('S16')};
-  height: ${theme.spacing('S16')};
+  width: 1.6rem;
+  height: 1.6rem;
 `;
 
 const Text = styled.text`
