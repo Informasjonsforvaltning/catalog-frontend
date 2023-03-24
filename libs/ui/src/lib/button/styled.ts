@@ -1,4 +1,3 @@
-import {Colour, theme} from '@fellesdatakatalog/theme';
 import styled, {AnyStyledComponent, css} from 'styled-components';
 import {ButtonProps, ButtonType} from '.';
 
@@ -23,14 +22,14 @@ const linkStyle = css`
   ${button};
   ${iconStyle};
 
-  padding: ${theme.spacing('S4')};
+  padding: 0.4rem;
   border-bottom: dashed;
-  height: ${theme.spacing('S24')};
+  height: 2.4rem;
   background: none;
 
   svg {
-    width: ${theme.spacing('S10')};
-    height: ${theme.spacing('S10')};
+    width: 1rem;
+    height: 1rem;
   }
 
   :hover {
@@ -42,20 +41,20 @@ const filledStyle = css`
   ${button};
   ${iconStyle};
 
-  height: ${theme.spacing('S32')};
+  height: 3.2rem;
   border-radius: 0.3rem;
-  padding: ${theme.spacing('S16')} ${theme.spacing('S12')};
+  padding: 1.6rem 1.2rem;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
 
   :hover {
-    color: ${theme.colour(Colour.NEUTRAL, 'N0')};
-    background-color: ${theme.colour(Colour.NEUTRAL, 'N70')};
+    color: #fff;
+    background-color: #121619;
 
     & * {
-      stroke: ${theme.colour(Colour.NEUTRAL, 'N0')};
+      stroke: #fff;
     }
   }
 `;
@@ -69,9 +68,9 @@ const tranparentStyle = css`
 `;
 
 const Text = styled.p`
-  font-weight: ${theme.fontWeight('FW100')};
-  font-size: ${theme.fontSize('FS12')};
-  line-height: ${theme.spacing('S12')};
+  font-weight: 100;
+  font-size: 1.2rem;
+  line-height: 1.2rem;
   white-space: nowrap;
 `;
 
@@ -93,12 +92,12 @@ const Filled = styled.button<ButtonProps>`
     (iconPos === 'left'
       ? css`
           svg {
-            margin-right: ${theme.spacing('S4')};
+            margin-right: 0.4rem;
           }
         `
       : css`
           svg {
-            margin-left: ${theme.spacing('S4')};
+            margin-left: 0.4rem;
           }
         `)}
 `;
@@ -121,12 +120,12 @@ const Link = styled.button<ButtonProps>`
     (iconPos === 'left'
       ? css`
           svg {
-            margin-right: ${theme.spacing('S4')};
+            margin-right: 0.4rem;
           }
         `
       : css`
           svg {
-            margin-left: ${theme.spacing('S4')};
+            margin-left: 0.4rem;
           }
         `)}
 `;
@@ -139,12 +138,12 @@ const Transparent = styled.button<ButtonProps>`
     (iconPos === 'left'
       ? css`
           svg {
-            margin-right: ${theme.spacing('S4')};
+            margin-right: 0.4rem;
           }
         `
       : css`
           svg {
-            margin-left: ${theme.spacing('S4')};
+            margin-left: 0.4rem;
           }
         `)}
 `;

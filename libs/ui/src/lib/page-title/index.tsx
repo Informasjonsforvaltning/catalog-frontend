@@ -1,4 +1,3 @@
-import {Colour, theme} from '@fellesdatakatalog/theme';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */
@@ -8,12 +7,12 @@ export interface PageTitleProps {
 
 const StyledPageTitle = styled.h1`
   width: 100%;
-  height: ${theme.spacing('S32')};
+  height: 3.2rem;
   font-style: normal;
-  font-weight: ${theme.fontWeight('FW700')};
-  font-size: ${theme.fontSize('FS28')};
-  line-height: ${theme.spacing('S16')};
-  color: ${theme.colour(Colour.NEUTRAL, 'N60')};
+  font-weight: 700;
+  font-size: 2.8rem;
+  line-height: 1.6rem;
+  color: #2d3741;
 `;
 
 export function PageTitle({children}: PageTitleProps) {

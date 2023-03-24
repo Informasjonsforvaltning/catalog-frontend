@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Header should render successfully 1`] = `
+<body>
+  <div>
+    <header
+      class="sc-jSUZER eDxdhu"
+    >
+      <div
+        class="sc-gKPRtg gCazUl"
+      >
+        <a
+          aria-label="Gå til hovedsiden"
+        >
+          <svgrurl
+            class="sc-iBYQkv kerOCC"
+          />
+        </a>
+        <ul
+          class="sc-csuSiG hvkIuU"
+        >
+          <li
+            class="sc-eDWCr lkyTcG"
+          >
+            <a
+              href="https://fellesdatakatalog.digdir.no/guidance"
+            >
+              Registrere data
+            </a>
+          </li>
+          <li
+            class="sc-eDWCr lkyTcG"
+          >
+            <a
+              href="https://admin.fellesdatakatalog.digdir.no"
+            >
+              Høste data
+            </a>
+          </li>
+          <li
+            class="sc-eDWCr lkyTcG"
+          >
+            <a
+              href="https://datalandsbyen.norge.no"
+            >
+              Datalandsbyen
+            </a>
+          </li>
+          <li
+            class="sc-eDWCr lkyTcG"
+          >
+            <a
+              href="https://data.norge.no"
+            >
+              Felles datakatalog
+            </a>
+          </li>
+        </ul>
+      </div>
+    </header>
+  </div>
+</body>
+`;

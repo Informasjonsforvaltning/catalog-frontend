@@ -1,12 +1,11 @@
 import {createGlobalStyle} from 'styled-components';
 import reset from './reset';
-import {Colour, theme} from '@fellesdatakatalog/theme';
 
 export const GlobalStyle = createGlobalStyle`
   ${reset}
   
   html {
-    font-family: ${theme.fontFamily()};
+    font-family: Heebo,sans-serif;
     font-display: swap;
     font-size: 16px; 
     -webkit-font-smoothing: antialiased;
@@ -16,7 +15,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     font-family: inherit;
     line-height: inherit;
-    background-color: ${theme.colour(Colour.GREEN, 'G15')};
+    background-color: #f0f6f7;
     margin: 0;
     padding: 0;
   }

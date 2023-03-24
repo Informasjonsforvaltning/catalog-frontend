@@ -24,6 +24,9 @@
       "@catalog-frontend/data-access": [
         "libs/data-access/src/index.ts"
       ],
+      "@catalog-frontend/my-new-lib": [
+        "libs/my-new-lib/src/index.ts"
+      ],
       "@catalog-frontend/ui": [
         "libs/ui/src/index.ts"
       ],

@@ -1,27 +1,34 @@
 import {AppProps} from 'next/app';
 import Head from 'next/head';
 
-import {DefaultTheme} from '@fellesdatakatalog/theme';
-import {ThemeProvider} from 'styled-components';
 import {GlobalStyle} from '@catalog-frontend/utils';
+import {Header} from '@catalog-frontend/ui';
 import {RouteGaurd, Session, SessionProvider} from './api/auth/[...nextauth]';
+import { useRouter } from 'next/router';
 
 function CustomApp({
   Component,
   pageProps: {session, ...pageProps},
 }: AppProps<{session: Session}>) {
+
+  const router = useRouter();
+
+  const handleLogout = () => {
+    router.push('/auth/signout');
+  }
+
   return (
     <SessionProvider session={session}>
       <Head>
         <title>Begrepskatalogen</title>
+        <link rel="shortcut icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <ThemeProvider theme={DefaultTheme}>
-          <GlobalStyle />
-          <RouteGaurd>
-            <Component {...pageProps} />
-          </RouteGaurd>
-        </ThemeProvider>
+      <main>      
+        <GlobalStyle />
+        <RouteGaurd>
+          <Header username={session?.user?.name} onLogout={handleLogout}/>
+          <Component {...pageProps} />
+        </RouteGaurd>
       </main>
     </SessionProvider>
   );
