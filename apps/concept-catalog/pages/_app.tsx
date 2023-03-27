@@ -2,7 +2,7 @@ import {AppProps} from 'next/app';
 import Head from 'next/head';
 
 import {GlobalStyle} from '@catalog-frontend/utils';
-import {Header} from '@catalog-frontend/ui';
+import {Header, Footer, Root} from '@catalog-frontend/ui';
 import {RouteGaurd, Session, SessionProvider} from './api/auth/[...nextauth]';
 import { useRouter } from 'next/router';
 
@@ -18,18 +18,19 @@ function CustomApp({
   }
 
   return (
-    <SessionProvider session={session}>
+    <SessionProvider session={session}>    
       <Head>
         <title>Begrepskatalogen</title>
         <link rel="shortcut icon" href="/favicon.ico" />
       </Head>
-      <main>      
-        <GlobalStyle />
-        <RouteGaurd>
+      <GlobalStyle /> 
+      <RouteGaurd>
+        <Root>
           <Header username={session?.user?.name} onLogout={handleLogout}/>
           <Component {...pageProps} />
-        </RouteGaurd>
-      </main>
+          <Footer />          
+        </Root>
+      </RouteGaurd>      
     </SessionProvider>
   );
 }

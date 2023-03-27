@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Footer should render successfully 1`] = `
+<body>
+  <div>
+    <footer
+      class="footer"
+    >
+      <svgrurl
+        class="illustration"
+      />
+      <div
+        class="content"
+      >
+        <div
+          class="column"
+        >
+          Digitaliseringsdirektoratet forvalter Felles datakatalog.
+        </div>
+        <div
+          class="column"
+        >
+          <a
+            class="link"
+            href="https://data.norge.no/publishing/terms-of-use"
+          >
+            Bruksvilkår
+          </a>
+          <a
+            class="link"
+            href="https://www.digdir.no/om-oss/personvernerklaering/706"
+          >
+            Personvernerklæring
+          </a>
+          <a
+            class="link"
+            href="https://www.digdir.no/om-oss/informasjonskapsler/707"
+          >
+            Informasjonskapsler
+          </a>
+          <a
+            class="link"
+            href="https://uustatus.no/nb/erklaringer/publisert/8020b962-b706-4cdf-ab8b-cdb5f480a696"
+          >
+            Tilgjengelighetserklæring
+          </a>
+        </div>
+        <div
+          class="column"
+        >
+          <a
+            class="link"
+            href="mailto:fellesdatakatalog@digdir.no"
+          >
+            <span
+              class="icon"
+            >
+              <svgrurl />
+            </span>
+            fellesdatakatalog@digdir.no
+          </a>
+          <a
+            class="link"
+            href="https://twitter.com/datakatalogen?ref_src=twsrc%5Etfw%7Ctwcamp%5Eembeddedtimeline%7Ctwterm%5Eprofile%3Adatakatalogen&ref_url=https%3A%2F%2Ffellesdatakatalog.digdir.no%2F"
+          >
+            <span
+              class="icon"
+            >
+              <svgrurl />
+            </span>
+            Twitter
+          </a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+`;
