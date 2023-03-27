@@ -6,7 +6,7 @@ exports[`Header should render successfully 1`] = `
     <header
       class="sc-jSUZER eDxdhu"
     >
-      <div
+      <nav
         class="sc-gKPRtg gCazUl"
       >
         <a
@@ -56,7 +56,7 @@ exports[`Header should render successfully 1`] = `
             </a>
           </li>
         </ul>
-      </div>
+      </nav>
     </header>
   </div>
 </body>

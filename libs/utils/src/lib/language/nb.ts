@@ -33,6 +33,15 @@ export const nb = {
     descriptionDatasetSerie: "Beskrivelse av datasettserie",
   },
 
+  footer: {
+    digdirManagesNationalDataCatalog: 'Digitaliseringsdirektoratet forvalter Felles datakatalog.',
+    termsOfUse: 'Bruksvilkår',
+    privacyStatement: 'Personvernerklæring',
+    cookies: 'Informasjonskapsler',
+    accessibility: 'Tilgjengelighetserklæring',
+    twitter: 'Twitter'
+  },
+
   header: {
     registerData: "Registrere data",
     harvestData: "Høste data",

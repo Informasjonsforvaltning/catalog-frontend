@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 const SearchPage = styled.main`
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
   width: 100%;
   max-width: 1140px;
