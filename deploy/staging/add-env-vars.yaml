@@ -25,4 +25,8 @@ spec:
                 secretKeyRef:
                   name: sso-staging
                   key: SSO_OIDC_ISSUER
-            
+            - name: KEYCLOAK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sso-staging
+                  key: FDK_CLIENT_SECRET            
