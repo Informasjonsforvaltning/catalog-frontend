@@ -28,5 +28,5 @@ spec:
             - name: KEYCLOAK_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: sso-staging
-                  key: FDK_CLIENT_SECRET            
+                  name: sso-client-credentials
+                  key: CONCEPT_CATALOG_FRONTEND
