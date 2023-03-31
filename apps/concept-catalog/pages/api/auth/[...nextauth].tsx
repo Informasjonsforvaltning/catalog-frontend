@@ -1,7 +1,5 @@
 import NextAuth from 'next-auth';
 import KeycloakProvider from 'next-auth/providers/keycloak';
-import {signIn, useSession} from 'next-auth/react';
-import {useEffect} from 'react';
 
 export {SessionProvider, useSession, signIn, signOut} from 'next-auth/react';
 export type {Session} from 'next-auth';
@@ -17,38 +15,28 @@ export const authOptions = {
       clientSecret: process.env.KEYCLOAK_SECRET ?? '',
       issuer: process.env.KEYCLOAK_ISSUER,
       idToken: true,
-      profile(profile, tokens) {
-        return {
-          id: profile.sub,
-          name: profile.name,
-          email: profile.email ?? null,
-          image: profile.email ?? null,
-          // Append the id token to the profile
-          idToken: tokens.id_token,
-        };
-      },
     }),
   ],
   callbacks: {
     async session({session, token}: any) {
       session.user = {
         ...{
-          // append the id token to the next-auth session
-          idToken: token.idToken ?? null,
-        },
-        ...{
           id: session.user.id ?? null,
           name: session.user.name,
           email: session.user.email ?? null,
           image: session.user.image ?? null,
+          idToken: token.idToken ?? null,
         },
       };
+      session.account = token.account ?? null;
       return session;
     },
-    async jwt({token, user}: any) {
+    async jwt({token, user, account}) {
       if (user) {
-        // append the id token to the next-auth token
         token.idToken = user.idToken;
+      }
+      if (account) {
+        token.account = account;
       }
       return token;
     },

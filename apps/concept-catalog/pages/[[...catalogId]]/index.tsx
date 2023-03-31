@@ -40,14 +40,14 @@ export const SearchPage = () => {
           </div>
           <Button
             name={localization.button.addConcept}
-            bg='#2d3741'
+            bg="#2d3741"
             btnType="filled"
             iconPos="left"
             startIcon={<Icon name="circlePlusStroke" />}
           />
           <Button
             name={localization.button.importConcept}
-            bg='#2e6773'
+            bg="#2e6773"
             btnType="filled"
           />
         </SC.ContainerOne>
@@ -56,8 +56,8 @@ export const SearchPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({req, res}) => {
-  const session = await getServerSession(req, res, authOptions);
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
 
   if (!session) {
     return {
