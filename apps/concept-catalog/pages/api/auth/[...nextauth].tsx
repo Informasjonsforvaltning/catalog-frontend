@@ -43,5 +43,23 @@ export const authOptions = {
   },
 };
 
+export function RouteGaurd({children}) {
+  const {data: session, status} = useSession();
+  const isUser = !!session?.user;
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && status === 'loading') return;
+    if (!isUser) signIn('keycloak');
+  }, [isUser, status]);
+
+  if (isUser) {
+    return children;
+  }
+
+  // Session is being fetched, or no user.
+  // If no user, useEffect() will redirect.
+  return <div>Loading...</div>;
+}
+
 export const Auth = NextAuth(authOptions);
 export default Auth;

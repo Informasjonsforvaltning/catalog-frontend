@@ -1,17 +1,26 @@
-import { signOut } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import {GetServerSidePropsContext} from 'next';
+import {authOptions, signOut} from '../api/auth/[...nextauth]';
+import {getServerSession} from 'next-auth';
 
-export const SignOut = () => {
-	const router = useRouter();
-
-	useEffect(() => {
-		signOut({ redirect: false }).then(() => {
-			router.push("/");
-		});
-	}, [router]);
-
-	return <p>Logger ut...</p>;
+export default function SignOut() {
+  void signOut();
 }
 
-export default SignOut;
+export async function getServerSideProps({
+  req,
+  res,
+}: GetServerSidePropsContext) {
+  const baseUrl = process.env.NEXTAUTH_URL ?? '';
+  const session = await getServerSession(req, res, authOptions);
+  const endSessionURL = `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/logout`;
+  const redirectURL = `${baseUrl}/api/auth/signout`;
+  const endSessionParams = new URLSearchParams({
+    id_token_hint: (session?.user as any)?.idToken,
+    post_logout_redirect_uri: redirectURL,
+  });
+  const fullUrl = `${endSessionURL}?${endSessionParams.toString()}`;
+
+  await fetch(fullUrl);
+
+  return {props: {}};
+}
