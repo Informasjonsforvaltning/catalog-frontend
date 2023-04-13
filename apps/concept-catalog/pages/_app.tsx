@@ -4,18 +4,17 @@ import Head from 'next/head';
 import {GlobalStyle} from '@catalog-frontend/utils';
 import {Header, Footer, Root} from '@catalog-frontend/ui';
 import {RouteGaurd, Session, SessionProvider} from './api/auth/[...nextauth]';
-import { useRouter } from 'next/router';
+import {useRouter} from 'next/router';
 
 function CustomApp({
   Component,
   pageProps: {session, ...pageProps},
 }: AppProps<{session: Session}>) {
-
   const router = useRouter();
 
   const handleLogout = () => {
     router.push('/auth/signout');
-  }
+  };
 
   return (
     <SessionProvider session={session}>
@@ -39,6 +38,6 @@ function CustomApp({
       </RouteGaurd>
     </SessionProvider>
   );
-};
+}
 
 export default CustomApp;

@@ -1,5 +1,7 @@
 import NextAuth from 'next-auth';
 import KeycloakProvider from 'next-auth/providers/keycloak';
+import {signIn, useSession} from 'next-auth/react';
+import {useEffect} from 'react';
 
 export {SessionProvider, useSession, signIn, signOut} from 'next-auth/react';
 export type {Session} from 'next-auth';
@@ -14,7 +16,6 @@ export const authOptions = {
       clientId: process.env.KEYCLOAK_ID ?? '',
       clientSecret: process.env.KEYCLOAK_SECRET ?? '',
       issuer: process.env.KEYCLOAK_ISSUER,
-      idToken: true,
     }),
   ],
   callbacks: {

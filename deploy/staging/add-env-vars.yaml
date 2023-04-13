@@ -13,13 +13,15 @@ spec:
           env:
             - name: NEXTAUTH_URL
               value: https://begrepskatalog.staging.fellesdatakatalog.digdir.no
+            - name: NEXTAUTH_URL_INTERNAL
+              value: http://localhost:8080
             - name: NEXTAUTH_SECRET
               valueFrom:
                 secretKeyRef:
                   name: concept-catalog-frontend-staging
                   key: NEXTAUTH_SECRET
             - name: KEYCLOAK_ID
-              value: concept-catalog-frontend      
+              value: concept-catalog-frontend
             - name: KEYCLOAK_ISSUER
               valueFrom:
                 secretKeyRef:
