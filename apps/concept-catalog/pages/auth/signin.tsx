@@ -2,9 +2,12 @@ import type {GetServerSidePropsContext} from 'next';
 import {signIn} from 'next-auth/react';
 import {getServerSession} from 'next-auth/next';
 import {authOptions} from '../api/auth/[...nextauth]';
+import { useEffect } from 'react';
 
 export default function SignIn() {
-  void signIn('keycloak');
+  	useEffect(() => {
+  		signIn('keycloak');
+  	}, []);
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
