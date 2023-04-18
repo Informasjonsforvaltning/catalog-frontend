@@ -1,12 +1,14 @@
 import NextAuth from 'next-auth';
 import KeycloakProvider from 'next-auth/providers/keycloak';
-import {signIn, useSession} from 'next-auth/react';
+import {useSession} from 'next-auth/react';
+import {useRouter} from 'next/router';
 import {useEffect} from 'react';
 
 export {SessionProvider, useSession, signIn, signOut} from 'next-auth/react';
 export type {Session} from 'next-auth';
 
 export const authOptions = {
+  debug: true,
   pages: {
     signIn: '/auth/signin',
     signOut: '/auth/signout',
@@ -45,13 +47,19 @@ export const authOptions = {
 };
 
 export function RouteGaurd({children}) {
+  const router = useRouter();
   const {data: session, status} = useSession();
   const isUser = !!session?.user;
 
   useEffect(() => {
     if (typeof window !== 'undefined' && status === 'loading') return;
-    if (!isUser) signIn('keycloak');
-  }, [isUser, status]);
+    if (!isUser) {
+      router.push({
+        pathname: '/auth/signin',
+        query: router.asPath === '/' ? {} : {callbackUrl: router.asPath},
+      });
+    }
+  }, [isUser, router, status]);
 
   if (isUser) {
     return children;
