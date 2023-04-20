@@ -2,20 +2,20 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { FC, PropsWithChildren, useEffect } from "react";
 
-
-const RouteGuard: FC<PropsWithChildren> = ({children}) => {
+const RouteGuard: FC<PropsWithChildren> = ({children}) => {  
   const router = useRouter();
   const {data: session, status} = useSession();
-  const isUser = !!session?.user;
 
+  const allowed = !!session?.user;
+  
   useEffect(() => {
-    if (typeof window !== 'undefined' && status === 'loading') return;
-    if (!isUser) {
-      signIn('keycloak');
-    }
-  }, [isUser, status, router]);
+    if ((session?.error === "RefreshAccessTokenError" || status === 'unauthenticated') 
+      && router.pathname !== '/auth/signout') {
+      signIn('keycloak'); 
+    } 
+  }, [session, status, router]);
 
-  if (isUser) {
+  if (allowed) {
     return <>{children}</>;
   }
 

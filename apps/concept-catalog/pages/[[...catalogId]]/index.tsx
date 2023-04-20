@@ -1,5 +1,4 @@
 import {useRouter} from 'next/router';
-import {getServerSession} from 'next-auth/next';
 
 import {
   Breadcrumbs,
@@ -12,10 +11,10 @@ import {
 import {localization} from '@catalog-frontend/utils';
 import SC from '../../styles/search-page';
 import {GetServerSideProps} from 'next';
-import {authOptions} from '../api/auth/[...nextauth]';
 
 export const SearchPage = () => {
   const router = useRouter();
+
   const {catalogId} = router.query;
 
   const breadcrumbList = catalogId
@@ -57,21 +56,8 @@ export const SearchPage = () => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth/signin',
-        permanent: false,
-      },
-    };
-  }
-
   return {
-    props: {
-      session,
-    },
+    props: {},
   };
 };
 
