@@ -168,3 +168,10 @@ export interface Publisher {
   name?: string;
   prefLabel?: TekstMedSpraakKode;
 }
+
+export interface ConceptHitPageProps {
+  currentPage: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+}
