@@ -1,12 +1,12 @@
 export const searchConceptsForCatalog = async (
-  catalog_id: string,
-  access_token: string,
+  catalogId: string,
+  accessToken: string,
   query = ''
 ) => {
-  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/begreper/search?orgNummer=${catalog_id}`;
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/begreper/search?orgNummer=${catalogId}`;
   const options = {
     headers: {
-      Authorization: `Bearer ${access_token}`,
+      Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({query}),
