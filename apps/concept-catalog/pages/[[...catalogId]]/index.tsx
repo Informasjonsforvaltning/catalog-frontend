@@ -7,6 +7,7 @@ import {
   PageSubtitle,
   Button,
   Icon,
+  SearchHit,
 } from '@catalog-frontend/ui';
 import {localization} from '@catalog-frontend/utils';
 import SC from '../../styles/search-page';
@@ -79,6 +80,15 @@ export const SearchPage = ({
             bg="#2e6773"
             btnType="filled"
           />
+        </SC.ContainerOne>
+        <SC.ContainerOne>
+          <div>
+            {searchConceptResponse.hits.map((hit) => (
+              <SC.SearchHitContainer>
+                <SearchHit searchHit={hit} />
+              </SC.SearchHitContainer>
+            ))}
+          </div>
         </SC.ContainerOne>
       </SC.SearchPage>
     </>

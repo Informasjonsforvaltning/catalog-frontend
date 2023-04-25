@@ -7,3 +7,4 @@ export * from './lib/icon';
 export * from './lib/page-subtitle';
 export * from './lib/page-title';
 export * from './lib/root';
+export * from './lib/search-hit';

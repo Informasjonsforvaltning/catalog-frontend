@@ -56,4 +56,7 @@ export const nb = {
     draft: "Utkast",
     publish: "Publisert",
   },
+  searchHit: {
+    lastEdited: "Sist endret"
+  }
 };
