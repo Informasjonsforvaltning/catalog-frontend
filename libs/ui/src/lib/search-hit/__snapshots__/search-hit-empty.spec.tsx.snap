@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchHit should render SearchHit with undefined input successfully 1`] = `
+<body>
+  <div>
+    <div
+      class="container"
+    >
+      <div
+        class="rowSpaceBetween"
+      >
+        <p
+          class="greyFont"
+        >
+          Brødsmuler - Ikke klart i backend 
+        </p>
+      </div>
+      <div
+        class="metaData"
+      >
+        <p>
+          Sist endret
+            
+        </p>
+      </div>
+      <div
+        class="rowSpaceBetween"
+      >
+        <div
+          class="metaData"
+        >
+          <p>
+            Dette begrepet er under revisjon. Se utkast under versjoner. - Ikke klart i backend
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;

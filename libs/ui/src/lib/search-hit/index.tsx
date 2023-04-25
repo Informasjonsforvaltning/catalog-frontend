@@ -22,11 +22,11 @@ export function SearchHit({searchHit}: SearchHit) {
 
       <div className={styles.metaData}>
         <p>{localization.searchHit.lastEdited} &nbsp;</p>
-        {searchHit.endringslogelement && (
+        {searchHit?.endringslogelement && (
           <p>{searchHit.endringslogelement.endringstidspunkt}</p>
         )}
 
-        {searchHit.status && (
+        {searchHit?.status && (
           <>
             <p className={styles.dot}>•</p>
             <p>
@@ -36,7 +36,7 @@ export function SearchHit({searchHit}: SearchHit) {
           </>
         )}
 
-        {searchHit.erPublisert && (
+        {searchHit?.erPublisert && (
           <>
             <p className={styles.dot}>•</p>
             <p>{localization.searchHit.publishedInFDK}</p>
@@ -51,7 +51,7 @@ export function SearchHit({searchHit}: SearchHit) {
             klart i backend
           </p>
         </div>
-        {searchHit.tildeltBruker && (
+        {searchHit?.tildeltBruker && (
           <p className={styles.greyFont}>{searchHit.tildeltBruker.id}</p>
         )}
       </div>
