@@ -39,7 +39,7 @@ export function SearchHit({searchHit}: SearchHit) {
         {searchHit.erPublisert && (
           <>
             <p className={styles.dot}>•</p>
-            <p>localization.searchHit.publishedInFDK</p>
+            <p>{localization.searchHit.publishedInFDK}</p>
           </>
         )}
       </div>

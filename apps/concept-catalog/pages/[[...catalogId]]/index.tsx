@@ -60,12 +60,8 @@ export const SearchPage = ({
     dispatch(action('POPULATE', conceptState));
   }, []);
 
-  const results = useConceptState()
-
   return (
     <>
-      {console.log("Test staging, searchConceptResponse:", searchConceptResponse)}
-      {console.log("Test staging, results:", results)}
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <SC.SearchPage>
         <SC.ContainerOne>
