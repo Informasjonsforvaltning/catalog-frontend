@@ -17,6 +17,7 @@ import {
   action,
   searchConceptsForCatalog,
   useConceptDispatch,
+  useConceptState,
 } from '@catalog-frontend/data-access';
 import {Concept, ConceptHitPageProps} from '@catalog-frontend/types';
 import {useEffect} from 'react';
@@ -59,9 +60,12 @@ export const SearchPage = ({
     dispatch(action('POPULATE', conceptState));
   }, []);
 
+  const results = useConceptState()
+
   return (
     <>
-      {console.log("Test staging:", searchConceptResponse)}
+      {console.log("Test staging, searchConceptResponse:", searchConceptResponse)}
+      {console.log("Test staging, results:", results)}
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <SC.SearchPage>
         <SC.ContainerOne>
