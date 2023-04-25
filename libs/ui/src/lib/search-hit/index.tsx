@@ -1,8 +1,14 @@
 import {localization} from '@catalog-frontend/utils';
 import {getTranslateText as translate} from 'libs/utils/src/lib/language/translateText';
 import styles from './search-hit.module.css';
+import {Concept} from '@catalog-frontend/types';
 
-export function SearchHit({searchHit}: any) {
+
+interface SearchHit {
+  searchHit: Concept;
+}
+
+export function SearchHit({searchHit}: SearchHit) {
 
   return (
     <div className={styles.container}>
