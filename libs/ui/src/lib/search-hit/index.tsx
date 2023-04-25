@@ -21,15 +21,23 @@ export function SearchHit({searchHit}: any) {
         {searchHit.endringslogelement && (
           <p>{searchHit.endringslogelement.endringstidspunkt}</p>
         )}
-        <p className={styles.dot}>•</p>
+
         {searchHit.status && (
-          <p>
-            {searchHit.status.charAt(0).toUpperCase() +
-              searchHit.status.substring(1)}
-          </p>
+          <>
+            <p className={styles.dot}>•</p>
+            <p>
+              {searchHit.status.charAt(0).toUpperCase() +
+                searchHit.status.substring(1)}
+            </p>
+          </>
         )}
-        <p className={styles.dot}>•</p>
-        <p>Publisert i felles datakatalog: Ikke klart i backend</p>
+
+        {searchHit.erPublisert && (
+          <>
+            <p className={styles.dot}>•</p>
+            <p>localization.searchHit.publishedInFDK</p>
+          </>
+        )}
       </div>
 
       <div className={styles.rowSpaceBetween}>
