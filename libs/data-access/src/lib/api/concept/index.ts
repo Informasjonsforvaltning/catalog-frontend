@@ -3,8 +3,7 @@ export const searchConceptsForCatalog = async (
   accessToken: string,
   query = ''
 ) => {
-
-  const resource = `https://concept-catalog.staging.fellesdatakatalog.digdir.no/begreper/search?orgNummer=${catalogId}`;
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/begreper/search?orgNummer=${catalogId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
