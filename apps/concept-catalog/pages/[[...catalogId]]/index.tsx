@@ -61,6 +61,7 @@ export const SearchPage = ({
 
   return (
     <>
+      {console.log("Test staging:", searchConceptResponse)}
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <SC.SearchPage>
         <SC.ContainerOne>
@@ -83,8 +84,8 @@ export const SearchPage = ({
         </SC.ContainerOne>
         <SC.ContainerOne>
           <div>
-            {searchConceptResponse.hits.map((hit) => (
-              <SC.SearchHitContainer>
+            {searchConceptResponse.hits && searchConceptResponse.hits.map((hit) => (
+              <SC.SearchHitContainer key={hit.id}>
                 <SearchHit searchHit={hit} />
               </SC.SearchHitContainer>
             ))}
