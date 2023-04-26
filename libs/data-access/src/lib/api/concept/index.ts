@@ -9,7 +9,7 @@ export const searchConceptsForCatalog = async (
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({query}),
+    body: query,
     method: 'POST',
   };
   const response = await fetch(resource, options)

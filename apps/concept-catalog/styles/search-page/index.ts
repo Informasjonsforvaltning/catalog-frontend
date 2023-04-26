@@ -36,6 +36,7 @@ const ContainerOne = styled.span`
 
 const SearchHitContainer = styled.div`
   margin-bottom: 15px;
+  min-width: 924px;
 `;
 
 export default {SearchPage, ContainerOne, SearchHitContainer};
