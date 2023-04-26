@@ -132,6 +132,7 @@ export interface Concept {
   endringslogelement?: Endringslogelement;
   tildeltBruker?: User;
   begrepsRelasjon?: Relasjon[];
+  erPublisert?: boolean;
 }
 
 export interface Comment {

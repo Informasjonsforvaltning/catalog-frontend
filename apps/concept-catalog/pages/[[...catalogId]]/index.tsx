@@ -7,6 +7,7 @@ import {
   PageSubtitle,
   Button,
   Icon,
+  SearchHit,
 } from '@catalog-frontend/ui';
 import {localization} from '@catalog-frontend/utils';
 import SC from '../../styles/search-page';
@@ -16,6 +17,7 @@ import {
   action,
   searchConceptsForCatalog,
   useConceptDispatch,
+  useConceptState,
 } from '@catalog-frontend/data-access';
 import {Concept, ConceptHitPageProps} from '@catalog-frontend/types';
 import {useEffect} from 'react';
@@ -79,6 +81,15 @@ export const SearchPage = ({
             bg="#2e6773"
             btnType="filled"
           />
+        </SC.ContainerOne>
+        <SC.ContainerOne>
+          <div>
+            {searchConceptResponse.hits && searchConceptResponse.hits.map((hit) => (
+              <SC.SearchHitContainer key={hit.id}>
+                <SearchHit searchHit={hit} />
+              </SC.SearchHitContainer>
+            ))}
+          </div>
         </SC.ContainerOne>
       </SC.SearchPage>
     </>

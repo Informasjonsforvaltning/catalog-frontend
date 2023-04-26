@@ -1,0 +1,66 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SearchHit should render SearchHit successfully 1`] = `
+<body>
+  <div>
+    <div
+      class="container"
+    >
+      <div
+        class="rowSpaceBetween"
+      >
+        <h2
+          class="title"
+        >
+          test 2
+        </h2>
+        <p
+          class="greyFont"
+        >
+          Brødsmuler - Ikke klart i backend 
+        </p>
+      </div>
+      <div
+        class="metaData"
+      >
+        <p>
+          Sist endret
+            
+        </p>
+        <p>
+          2023-01-16T14:29:28.768+01:00
+        </p>
+        <p
+          class="dot"
+        >
+          •
+        </p>
+        <p>
+          Utkast
+        </p>
+      </div>
+      <div
+        class="rowSpaceBetween"
+      >
+        <div
+          class="metaData"
+        >
+          <p>
+            Dette begrepet er under revisjon. Se utkast under versjoner. - Ikke klart i backend
+          </p>
+        </div>
+        <p
+          class="greyFont"
+        >
+          John Doe
+        </p>
+      </div>
+      <p
+        class="description"
+      >
+        anbefalt og definisjon
+      </p>
+    </div>
+  </div>
+</body>
+`;

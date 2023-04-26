@@ -17,10 +17,10 @@ const SearchPage = styled.main`
 const ContainerOne = styled.span`
   display: flex;
   width: 100%;
-  display: flex;
-  gap: 1.0rem;
+  gap: 1rem;
   align-items: start;
   margin: 4px;
+  justify-content: space-between;
 
   div:first-child {
     flex-grow: 0.75;
@@ -34,4 +34,8 @@ const ContainerOne = styled.span`
   }
 `;
 
-export default {SearchPage, ContainerOne};
+const SearchHitContainer = styled.div`
+  margin-bottom: 15px;
+`;
+
+export default {SearchPage, ContainerOne, SearchHitContainer};

@@ -30,3 +30,8 @@ spec:
                 secretKeyRef:
                   name: sso-client-credentials
                   key: CONCEPT_CATALOG_FRONTEND
+            - name: CONCEPT_CATALOG_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: CONCEPT_CATALOG_BASE_URI

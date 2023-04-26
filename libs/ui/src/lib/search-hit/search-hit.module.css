@@ -1,0 +1,47 @@
+.container {
+  background-color: white;
+  max-width: 934px;
+  border: solid 1px;
+  border-color: #d5d7d9;
+  border-radius: 8px;
+  padding: 37px;
+}
+
+.rowSpaceBetween {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  color: #2d3741;
+  font-size: 24px;
+  text-decoration-line: underline;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.metaData {
+  display: flex;
+  color: #2d3741;
+  font-size: 16px;
+  line-height: 16px;
+  margin-bottom: 9px;
+}
+
+.description {
+  font-style: normal;
+  font-size: 20px;
+  text-align: left;
+  color: #2d3741;
+  margin: 30px 0px;
+}
+
+.dot {
+  font-size: 25px;
+  padding: 2.5px 5px 0px 5px;
+}
+
+.greyFont {
+  color: #969ba0;
+  font-size: 16px;
+}

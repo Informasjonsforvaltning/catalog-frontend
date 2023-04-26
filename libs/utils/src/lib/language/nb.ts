@@ -56,4 +56,8 @@ export const nb = {
     draft: "Utkast",
     publish: "Publisert",
   },
+  searchHit: {
+    lastEdited: "Sist endret",
+    publishedInFDK: "Publisert i Felles Datakatalog"
+  }
 };
