@@ -45,3 +45,23 @@
   color: #969ba0;
   font-size: 16px;
 }
+
+@media (max-width: 500px) {
+  .container {
+    max-width: 255px;
+  }
+  .rowSpaceBetween {
+    flex-direction: column;
+  }
+
+  .metaData {
+    flex-direction: column;
+  }
+  .dot {
+    display: none;
+  }
+  .date {
+    display: flex;
+  }
+}
+
