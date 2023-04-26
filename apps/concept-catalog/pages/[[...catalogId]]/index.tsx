@@ -12,7 +12,7 @@ import {
 } from '@catalog-frontend/ui';
 import {localization} from '@catalog-frontend/utils';
 import SC from '../../styles/search-page';
-import styles from 'libs/ui/src/lib/pagination/pagination.module.css';
+import styles from './pagination.module.css';
 import {ArrowLeftIcon, ArrowRightIcon} from '@navikt/aksel-icons';
 import {GetServerSideProps} from 'next';
 import {authOptions} from '../api/auth/[...nextauth]';
@@ -20,7 +20,6 @@ import {
   action,
   searchConceptsForCatalog,
   useConceptDispatch,
-  useConceptState,
 } from '@catalog-frontend/data-access';
 import {Concept, ConceptHitPageProps} from '@catalog-frontend/types';
 import ReactPaginate from 'react-paginate';
@@ -138,7 +137,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
   if (session?.user) {
     const {accessToken} = session.user;
-    let pageNumb = query.page || 1;
+    const pageNumb = query.page || 1;
 
     const pageQuery = JSON.stringify({
       query: '',
