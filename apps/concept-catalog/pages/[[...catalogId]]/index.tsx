@@ -97,11 +97,12 @@ export const SearchPage = ({
         </SC.ContainerOne>
         <SC.ContainerOne>
           <div>
-            {searchConceptResponse.hits && searchConceptResponse.hits.map((hit) => (
-              <SC.SearchHitContainer key={hit.id}>
-                <SearchHit searchHit={hit} />
-              </SC.SearchHitContainer>
-            ))}
+            {searchConceptResponse.hits &&
+              searchConceptResponse.hits.map((hit) => (
+                <SC.SearchHitContainer key={hit.id}>
+                  <SearchHit searchHit={hit} />
+                </SC.SearchHitContainer>
+              ))}
             <ReactPaginate
               onPageChange={changePage}
               forcePage={pageNumb - 1}
@@ -138,14 +139,13 @@ export const getServerSideProps: GetServerSideProps = async ({
   if (session?.user) {
     const {accessToken} = session.user;
     const pageNumb = query.page || 1;
+    let catalogId = '';
+    let searchConceptResponse: SearchConceptResponseProps;
 
-    const pageQuery = JSON.stringify({
+    const jsonSearchBody = JSON.stringify({
       query: '',
       pagination: {page: Number(pageNumb) - 1, size: 5},
     });
-
-    let catalogId = '';
-    let searchConceptResponse: SearchConceptResponseProps;
 
     try {
       catalogId = query.catalogId[0];
@@ -157,7 +157,7 @@ export const getServerSideProps: GetServerSideProps = async ({
       searchConceptResponse = await searchConceptsForCatalog(
         catalogId,
         accessToken,
-        pageQuery
+        jsonSearchBody
       );
     }
 

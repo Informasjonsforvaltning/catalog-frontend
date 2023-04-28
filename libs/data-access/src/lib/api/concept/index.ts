@@ -1,7 +1,7 @@
 export const searchConceptsForCatalog = async (
   catalogId: string,
   accessToken: string,
-  query = ''
+  body = ''
 ) => {
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/begreper/search?orgNummer=${catalogId}`;
   const options = {
@@ -9,7 +9,7 @@ export const searchConceptsForCatalog = async (
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
-    body: query,
+    body: body,
     method: 'POST',
   };
   const response = await fetch(resource, options)
