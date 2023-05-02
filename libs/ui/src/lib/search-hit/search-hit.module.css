@@ -48,7 +48,7 @@
 
 @media (max-width: 768px) {
   .container {
-   max-width: 70%;
+    max-width: 70vw;
   }
   .rowSpaceBetween {
     flex-direction: column;
@@ -64,4 +64,3 @@
     display: flex;
   }
 }
-
