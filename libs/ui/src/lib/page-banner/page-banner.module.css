@@ -1,6 +1,3 @@
-@value small: 600px;
-@value medium: 900px;
-
 .banner {
   display: flex;
   width: 100%;
@@ -9,7 +6,7 @@
   overflow-wrap: break-word;
 }
 
-.title-container {
+.titleContainer {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -21,7 +18,7 @@
   margin: 0 auto;
 }
 
-.page-title {
+.pageTitle {
   display: flex;
   width: 100%;
   height: 3rem;
@@ -37,7 +34,7 @@
   overflow-wrap: break-word;
 }
 
-.page-subtitle {
+.pageSubtitle {
   width: 100%;
   font-style: normal;
   font-weight: 400;
@@ -50,25 +47,22 @@
   overflow-wrap: break-word;
 }
 
-.svg-ellipse {
+.svgEllipse {
   display: flex;
   padding-top: 1.6rem;
 }
 
-.svg-rectangle {
+.svgRectangle {
   display: flex;
   padding-bottom: 1.6rem;
 }
 
 @media screen and (max-width: 600px) {
-  .svg-rectangle {
+  .svgRectangle {
     display: none;
   }
 
-  .svg-ellipse {
+  .svgEllipse {
     display: none;
   }
-}
-
-@media screen and (min-width: 600px) {
 }

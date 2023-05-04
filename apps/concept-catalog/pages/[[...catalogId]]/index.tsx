@@ -6,24 +6,16 @@ import styles from './pagination.module.css';
 import {ArrowLeftIcon, ArrowRightIcon} from '@navikt/aksel-icons';
 import {GetServerSideProps} from 'next';
 import {authOptions} from '../api/auth/[...nextauth]';
-import {
-  action,
-  searchConceptsForCatalog,
-  useConceptDispatch,
-} from '@catalog-frontend/data-access';
-import {Concept, ConceptHitPageProps} from '@catalog-frontend/types';
+import {searchConceptsForCatalog} from '@catalog-frontend/data-access';
 import ReactPaginate from 'react-paginate';
 import {useRouter} from 'next/router';
-import {useEffect} from 'react';
 import {PageBanner} from '@catalog-frontend/ui';
+import {SearchConceptResponse} from '@catalog-frontend/types';
 
-interface SearchConceptResponseProps {
-  hits: Concept[];
-  page: ConceptHitPageProps;
-}
 interface SearchPageProps {
+  accessToken: string;
   catalogId: string;
-  searchConceptResponse: SearchConceptResponseProps;
+  searchConceptResponse: SearchConceptResponse;
   pageNumb: number;
 }
 
@@ -33,6 +25,9 @@ export const SearchPage = ({
   pageNumb,
 }: SearchPageProps) => {
   const router = useRouter();
+  const pageSubtitle = catalogId ?? 'No title';
+  const {page, hits: concepts} = searchConceptResponse;
+
   const breadcrumbList = catalogId
     ? ([
         {
@@ -41,22 +36,6 @@ export const SearchPage = ({
         },
       ] as unknown as breadcrumbT[])
     : [];
-
-  const pageSubtitle = catalogId ?? 'No title';
-  let conceptState = undefined;
-  const dispatch = useConceptDispatch();
-
-  if (Object.entries(searchConceptResponse).length !== 0) {
-    conceptState = {
-      catalogId: catalogId,
-      concepts: searchConceptResponse.hits,
-      page: searchConceptResponse.page,
-    };
-  }
-
-  useEffect(() => {
-    dispatch(action('POPULATE', conceptState));
-  }, []);
 
   const changePage = (currentPage) => {
     router.push({
@@ -75,20 +54,16 @@ export const SearchPage = ({
       <SC.SearchPage>
         <SC.ContainerOne>
           <div>
-            {searchConceptResponse.hits &&
-              searchConceptResponse.hits.map((hit) => (
-                <SC.SearchHitContainer key={hit.id}>
-                  <SearchHit searchHit={hit} />
+            {concepts &&
+              concepts.map((concept) => (
+                <SC.SearchHitContainer key={concept.id}>
+                  <SearchHit searchHit={concept} />
                 </SC.SearchHitContainer>
               ))}
             <ReactPaginate
               onPageChange={changePage}
               forcePage={pageNumb - 1}
-              pageCount={
-                searchConceptResponse.page
-                  ? searchConceptResponse.page.totalPages
-                  : 0
-              }
+              pageCount={page ? page.totalPages : 0}
               marginPagesDisplayed={1}
               pageRangeDisplayed={2}
               previousLabel={<ArrowLeftIcon />}
@@ -114,11 +89,17 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
   const session = await getServerSession(req, res, authOptions);
 
+  if (!session) {
+    return {
+      props: {},
+    };
+  }
+
   if (session?.user) {
     const {accessToken} = session.user;
     const pageNumb = query.page || 1;
     let catalogId = '';
-    let searchConceptResponse: SearchConceptResponseProps;
+    let searchConceptResponse: SearchConceptResponse;
 
     const jsonSearchBody = JSON.stringify({
       query: '',
@@ -140,7 +121,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
 
     if (!searchConceptResponse) {
-      searchConceptResponse = {} as SearchConceptResponseProps;
+      searchConceptResponse = {} as SearchConceptResponse;
     }
 
     return {
@@ -148,10 +129,14 @@ export const getServerSideProps: GetServerSideProps = async ({
         catalogId,
         searchConceptResponse,
         pageNumb,
+        accessToken,
       },
     };
   }
-  return {props: {}};
+
+  return {
+    props: {},
+  };
 };
 
 export default SearchPage;
