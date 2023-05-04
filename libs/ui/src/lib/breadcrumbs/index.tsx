@@ -3,7 +3,6 @@ import StyledBreadcrumbs, {
   ExternalLink,
   Separator,
   DeactiveLink,
-  Divider,
 } from './styled';
 import {localization} from '@catalog-frontend/utils';
 
@@ -19,34 +18,31 @@ export interface BreadcrumbsProps {
 
 export function Breadcrumbs({breadcrumbList}: BreadcrumbsProps) {
   return (
-    <>
-      <StyledBreadcrumbs>
-        <span>
-          <ExternalLink
-            aria-label={localization.allCatalogs}
-            href={process.env.REGISTRATION_HOST}
-          >
-            {localization.allCatalogs}
-          </ExternalLink>
-          {breadcrumbList &&
-            breadcrumbList.map((breadcrumb, i) => {
-              return (
-                <span key={i}>
-                  <Separator>{'>'}</Separator>
-                  {i === breadcrumbList.length - 1 ? (
-                    <DeactiveLink>{breadcrumb.text}</DeactiveLink>
-                  ) : (
-                    <InternalLink href={breadcrumb.href}>
-                      {breadcrumb.text}
-                    </InternalLink>
-                  )}
-                </span>
-              );
-            })}
-        </span>
-      </StyledBreadcrumbs>
-      <Divider />
-    </>
+    <StyledBreadcrumbs>
+      <span>
+        <ExternalLink
+          aria-label={localization.allCatalogs}
+          href={process.env.REGISTRATION_HOST}
+        >
+          {localization.allCatalogs}
+        </ExternalLink>
+        {breadcrumbList &&
+          breadcrumbList.map((breadcrumb, i) => {
+            return (
+              <span key={i}>
+                <Separator>{'>'}</Separator>
+                {i === breadcrumbList.length - 1 ? (
+                  <DeactiveLink>{breadcrumb.text}</DeactiveLink>
+                ) : (
+                  <InternalLink href={breadcrumb.href}>
+                    {breadcrumb.text}
+                  </InternalLink>
+                )}
+              </span>
+            );
+          })}
+      </span>
+    </StyledBreadcrumbs>
   );
 }
 

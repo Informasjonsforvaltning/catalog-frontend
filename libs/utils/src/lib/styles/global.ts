@@ -15,7 +15,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     font-family: inherit;
     line-height: inherit;
-    background-color: #f0f6f7;
+    background-color: #FAFAFA;
     margin: 0;
     padding: 0;
   }

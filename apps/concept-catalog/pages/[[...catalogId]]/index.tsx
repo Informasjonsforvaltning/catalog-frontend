@@ -1,15 +1,5 @@
 import {getServerSession} from 'next-auth/next';
-import {useEffect} from 'react';
-
-import {
-  Breadcrumbs,
-  breadcrumbT,
-  PageTitle,
-  PageSubtitle,
-  Button,
-  Icon,
-  SearchHit,
-} from '@catalog-frontend/ui';
+import {Breadcrumbs, breadcrumbT, SearchHit} from '@catalog-frontend/ui';
 import {localization} from '@catalog-frontend/utils';
 import SC from '../../styles/search-page';
 import styles from './pagination.module.css';
@@ -24,6 +14,8 @@ import {
 import {Concept, ConceptHitPageProps} from '@catalog-frontend/types';
 import ReactPaginate from 'react-paginate';
 import {useRouter} from 'next/router';
+import {useEffect} from 'react';
+import {PageBanner} from '@catalog-frontend/ui';
 
 interface SearchConceptResponseProps {
   hits: Concept[];
@@ -76,25 +68,11 @@ export const SearchPage = ({
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <PageBanner
+        title={localization.catalogType.concept}
+        subtitle={pageSubtitle}
+      />
       <SC.SearchPage>
-        <SC.ContainerOne>
-          <div>
-            <PageTitle>{localization.catalogType.concept}</PageTitle>
-            <PageSubtitle>{pageSubtitle}</PageSubtitle>
-          </div>
-          <Button
-            name={localization.button.addConcept}
-            bg="#2d3741"
-            btnType="filled"
-            iconPos="left"
-            startIcon={<Icon name="circlePlusStroke" />}
-          />
-          <Button
-            name={localization.button.importConcept}
-            bg="#2e6773"
-            btnType="filled"
-          />
-        </SC.ContainerOne>
         <SC.ContainerOne>
           <div>
             {searchConceptResponse.hits &&
@@ -115,7 +93,7 @@ export const SearchPage = ({
               pageRangeDisplayed={2}
               previousLabel={<ArrowLeftIcon />}
               nextLabel={<ArrowRightIcon />}
-              breakLabel='...'
+              breakLabel="..."
               pageLinkClassName={styles.pageLink}
               containerClassName={styles.paginationContainer}
               activeClassName={styles.active}
