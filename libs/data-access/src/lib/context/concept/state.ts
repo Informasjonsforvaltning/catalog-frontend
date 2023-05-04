@@ -1,12 +1,14 @@
 import {Concept, ConceptHitPageProps} from '@catalog-frontend/types';
 
 export interface ConceptState {
+  accessToken: string;
   catalogId: string;
   concepts: Concept[];
   page: ConceptHitPageProps;
 }
 
 export const DefaultConceptState = {
+  accessToken: '',
   catalogId: '',
   concepts: [],
   page: {

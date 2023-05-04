@@ -6,4 +6,4 @@ export * from './lib/header';
 export * from './lib/icon';
 export * from './lib/page-banner';
 export * from './lib/search-hit';
-export * from './lib/layout';
+export * from './lib/search-field';
