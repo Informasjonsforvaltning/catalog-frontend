@@ -4,7 +4,6 @@ export * from './lib/dropdown-menu';
 export * from './lib/footer';
 export * from './lib/header';
 export * from './lib/icon';
-export * from './lib/page-subtitle';
-export * from './lib/page-title';
+export * from './lib/page-banner';
 export * from './lib/root';
 export * from './lib/search-hit';

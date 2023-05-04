@@ -7,9 +7,9 @@ const StyledBreadcrumbs = styled.nav`
   flex-direction: column;
   width: 100%;
   max-width: 1140px;
-  margin: 0 auto;
-  padding: 1.6rem 1.6rem 0 1.6rem;
+  margin: 1.6rem auto;
   overflow-wrap: break-word;
+  padding-left: 1.6rem;
 `;
 
 const linkStyle = css`
@@ -19,7 +19,7 @@ const linkStyle = css`
   font-style: normal;
   font-weight: 400;
   line-height: 2.4rem;
-  color: #335380;
+  color: #1e2b3c;
 
   :hover {
     border-bottom: none;
@@ -38,7 +38,7 @@ const DeactiveLink = styled.span`
   font-style: normal;
   font-weight: 400;
   line-height: 2.4rem;
-  color: #335380;
+  color: #1e2b3c;
 `;
 
 const Separator = styled.span`
@@ -47,11 +47,5 @@ const Separator = styled.span`
   margin: 0 1rem 0 1rem;
 `;
 
-const Divider = styled.hr`
-  margin-top: 1.2rem;
-  border: #d5e1f2 1px solid;
-  width: 100vw;
-`;
-
 export default StyledBreadcrumbs;
-export {InternalLink, ExternalLink, Separator, DeactiveLink, Divider};
+export {InternalLink, ExternalLink, Separator, DeactiveLink};
