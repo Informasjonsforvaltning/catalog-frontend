@@ -1,4 +1,4 @@
-import cn from './page-banner.module.css';
+import style from './page-banner.module.css';
 import EllipseSVG from './svg/ellipse-1.svg';
 import RectangleSVG from './svg/rectangle-1.svg';
 
@@ -9,15 +9,15 @@ interface PageBannerProps {
 
 const PageBanner = ({title, subtitle}: PageBannerProps) => {
   return (
-    <div className={cn['banner']}>
-      <div className={cn['svg-ellipse']}>
+    <div className={style.banner}>
+      <div className={style.svgEllipse}>
         <EllipseSVG />
       </div>
-      <div className={cn['title-container']}>
-        <h1 className={cn['page-title']}>{title}</h1>
-        <h2 className={cn['page-subtitle']}>{subtitle}</h2>
+      <div className={style.titleContainer}>
+        <h1 className={style.pageTitle}>{title}</h1>
+        <h2 className={style.pageSubtitle}>{subtitle}</h2>
       </div>
-      <div className={cn['svg-rectangle']}>
+      <div className={style.svgRectangle}>
         <RectangleSVG />
       </div>
     </div>

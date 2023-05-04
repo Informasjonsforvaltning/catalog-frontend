@@ -176,3 +176,8 @@ export interface ConceptHitPageProps {
   totalElements: number;
   totalPages: number;
 }
+
+export interface SearchConceptResponse {
+  hits: Concept[];
+  page: ConceptHitPageProps;
+}

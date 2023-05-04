@@ -1,13 +1,10 @@
 import {FC} from 'react';
 import {AppProps} from 'next/app';
 import Head from 'next/head';
-import {GlobalStyle} from '@catalog-frontend/utils';
-import {Footer, Root} from '@catalog-frontend/ui';
+import {localization} from '@catalog-frontend/utils';
 import type {Session} from 'next-auth';
 import {SessionProvider} from 'next-auth/react';
-import Header from '../components/header/header';
-import RouteGuard from '../components/route-guard/route-guard';
-import {ConceptContextProvider} from '@catalog-frontend/data-access';
+import {Layout} from '@catalog-frontend/ui';
 
 const CustomApp: FC<AppProps<{session: Session}>> = ({
   Component,
@@ -16,22 +13,15 @@ const CustomApp: FC<AppProps<{session: Session}>> = ({
   return (
     <SessionProvider session={session}>
       <Head>
-        <title>Begrepskatalogen</title>
+        <title>{localization.catalogType.concept}</title>
         <link
           rel="shortcut icon"
           href="/favicon.ico"
         />
       </Head>
-      <GlobalStyle />
-      <Root>
-        <RouteGuard>
-          <Header />
-          <ConceptContextProvider>
-            <Component {...pageProps} />
-          </ConceptContextProvider>
-          <Footer />
-        </RouteGuard>
-      </Root>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </SessionProvider>
   );
 };
