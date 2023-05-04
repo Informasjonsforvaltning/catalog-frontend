@@ -1,4 +1,7 @@
-import {localization, getTranslateText as translate} from '@catalog-frontend/utils';
+import {
+  localization,
+  getTranslateText as translate,
+} from '@catalog-frontend/utils';
 import styles from './search-hit.module.css';
 import {Concept} from '@catalog-frontend/types';
 
