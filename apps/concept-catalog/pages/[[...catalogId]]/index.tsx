@@ -9,8 +9,10 @@ import {authOptions} from '../api/auth/[...nextauth]';
 import {searchConceptsForCatalog} from '@catalog-frontend/data-access';
 import ReactPaginate from 'react-paginate';
 import {useRouter} from 'next/router';
+import {SearchField} from '@catalog-frontend/ui';
 import {PageBanner} from '@catalog-frontend/ui';
 import {SearchConceptResponse} from '@catalog-frontend/types';
+import {useState} from 'react';
 
 interface SearchPageProps {
   accessToken: string;
@@ -20,13 +22,15 @@ interface SearchPageProps {
 }
 
 export const SearchPage = ({
+  accessToken,
   catalogId,
   searchConceptResponse,
   pageNumb,
 }: SearchPageProps) => {
+  const [concepts, setConcepts] = useState(searchConceptResponse.hits);
   const router = useRouter();
   const pageSubtitle = catalogId ?? 'No title';
-  const {page, hits: concepts} = searchConceptResponse;
+  let page = searchConceptResponse.page;
 
   const breadcrumbList = catalogId
     ? ([
@@ -44,6 +48,22 @@ export const SearchPage = ({
     });
   };
 
+  const onSearchSubmit = async (searchTerm: string) => {
+    const jsonSearchBody = JSON.stringify({
+      query: searchTerm,
+      pagination: {page: Number(pageNumb) - 1, size: 5},
+    });
+
+    searchConceptsForCatalog(catalogId, accessToken, jsonSearchBody).then(
+      (res) => {
+        if (res.hits) {
+          setConcepts(res.hits);
+          page = res.page;
+        }
+      }
+    );
+  };
+
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
@@ -52,6 +72,11 @@ export const SearchPage = ({
         subtitle={pageSubtitle}
       />
       <SC.SearchPage>
+        <SearchField
+          ariaLabel={localization.search.searchInAllFields}
+          placeholder={localization.search.searchInAllFields}
+          onSearchSubmit={onSearchSubmit}
+        />
         <SC.ContainerOne>
           <div>
             {concepts &&
