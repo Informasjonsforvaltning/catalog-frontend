@@ -1,6 +1,7 @@
-import {FC, ChangeEvent, useState} from 'react';
+import {FC, ChangeEvent, useState, KeyboardEvent, MouseEvent} from 'react';
 import {Input, SearchField as StyledSearchField} from './styled';
 import MagnifyingGlassSVG from './MagnifyingGlass.svg';
+import {typeOf} from 'react-is';
 
 type InputType =
   | 'text'
@@ -30,7 +31,7 @@ const SearchField: FC<SearchFieldProps> = ({
   ariaLabel,
   startIcon,
   endIcon = <MagnifyingGlassSVG />,
-  type = 'text',
+  type = 'search',
   placeholder = 'Input placeholder ...',
   error = false,
   onSearchSubmit,
@@ -40,7 +41,14 @@ const SearchField: FC<SearchFieldProps> = ({
 
   const onChange = (changeEvent: ChangeEvent<HTMLInputElement>) => {
     setInputValue(changeEvent.target.value);
-    onSearchSubmit && onSearchSubmit(changeEvent.target.value);
+  };
+
+  const onSubmit = (event: KeyboardEvent<HTMLInputElement> | 'clicked') => {
+    if (onSearchSubmit) {
+      if (event === 'clicked' || event?.key === 'Enter') {
+        onSearchSubmit(inputValue);
+      }
+    }
   };
 
   return (
@@ -56,9 +64,9 @@ const SearchField: FC<SearchFieldProps> = ({
         type={type}
         value={inputValue}
         onChange={onChange}
-        onSubmit={onChange}
+        onKeyUp={onSubmit}
       />
-      {endIcon}
+      <figure onClick={(e) => onSubmit('clicked')}>{endIcon}</figure>
     </StyledSearchField>
   );
 };

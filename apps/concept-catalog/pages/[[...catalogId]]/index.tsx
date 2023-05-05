@@ -1,36 +1,35 @@
-import {getServerSession} from 'next-auth/next';
 import {Breadcrumbs, breadcrumbT, SearchHit} from '@catalog-frontend/ui';
 import {localization} from '@catalog-frontend/utils';
 import SC from '../../styles/search-page';
 import styles from './pagination.module.css';
 import {ArrowLeftIcon, ArrowRightIcon} from '@navikt/aksel-icons';
-import {GetServerSideProps} from 'next';
-import {authOptions} from '../api/auth/[...nextauth]';
-import {searchConceptsForCatalog} from '@catalog-frontend/data-access';
 import ReactPaginate from 'react-paginate';
 import {useRouter} from 'next/router';
 import {SearchField} from '@catalog-frontend/ui';
 import {PageBanner} from '@catalog-frontend/ui';
-import {SearchConceptResponse} from '@catalog-frontend/types';
-import {useState} from 'react';
+import {ConceptHitPageProps} from '@catalog-frontend/types';
+import {useEffect, useState} from 'react';
 
-interface SearchPageProps {
-  accessToken: string;
-  catalogId: string;
-  searchConceptResponse: SearchConceptResponse;
-  pageNumb: number;
-}
-
-export const SearchPage = ({
-  accessToken,
-  catalogId,
-  searchConceptResponse,
-  pageNumb,
-}: SearchPageProps) => {
-  const [concepts, setConcepts] = useState(searchConceptResponse.hits);
+export const SearchPage = () => {
+  const [page, setPage] = useState<ConceptHitPageProps>();
+  const [concepts, setConcepts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
+  const [catalogId] = router.query.catalogId ?? '';
   const pageSubtitle = catalogId ?? 'No title';
-  let page = searchConceptResponse.page;
+  const [pageNumb, setPageNum] = useState(1);
+
+  // initial page data population
+  useEffect(() => {
+    const init = () =>
+      updatePage(catalogId, searchTerm, pageNumb).then((data) => {
+        if (data) {
+          setConcepts(data.hits);
+          setPage(data.page);
+        }
+      });
+    init();
+  }, []);
 
   const breadcrumbList = catalogId
     ? ([
@@ -41,27 +40,29 @@ export const SearchPage = ({
       ] as unknown as breadcrumbT[])
     : [];
 
-  const changePage = (currentPage) => {
+  const changePage = async (currentPage) => {
     router.push({
       pathname: catalogId,
       query: {page: currentPage.selected + 1},
     });
+
+    const data = await updatePage(catalogId, searchTerm, currentPage);
+
+    if (data) {
+      setConcepts(data.hits);
+      setPage(data.page);
+      setPageNum(currentPage.selected + 1);
+    }
   };
 
-  const onSearchSubmit = async (searchTerm: string) => {
-    const jsonSearchBody = JSON.stringify({
-      query: searchTerm,
-      pagination: {page: Number(pageNumb) - 1, size: 5},
-    });
+  const onSearchSubmit = async (term = searchTerm) => {
+    const data = await updatePage(catalogId, term, page.currentPage);
 
-    searchConceptsForCatalog(catalogId, accessToken, jsonSearchBody).then(
-      (res) => {
-        if (res.hits) {
-          setConcepts(res.hits);
-          page = res.page;
-        }
-      }
-    );
+    if (data) {
+      setConcepts(data.hits);
+      setPage(data.page);
+      setSearchTerm(term);
+    }
   };
 
   return (
@@ -107,61 +108,22 @@ export const SearchPage = ({
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({
-  req,
-  res,
-  query,
-}) => {
-  const session = await getServerSession(req, res, authOptions);
+const updatePage = async (catalogId, searchTerm, currentPage) => {
+  const body = JSON.stringify({
+    catalogId,
+    query: {
+      query: searchTerm,
+      pagination: {page: currentPage.selected + 1, size: 5},
+    },
+  });
 
-  if (!session) {
-    return {
-      props: {},
-    };
-  }
+  const res = await fetch('/api/search', {
+    method: 'POST',
+    body: body,
+  });
 
-  if (session?.user) {
-    const {accessToken} = session.user;
-    const pageNumb = query.page || 1;
-    let catalogId = '';
-    let searchConceptResponse: SearchConceptResponse;
-
-    const jsonSearchBody = JSON.stringify({
-      query: '',
-      pagination: {page: Number(pageNumb) - 1, size: 5},
-    });
-
-    try {
-      catalogId = query.catalogId[0];
-    } catch (error) {
-      console.log(error);
-    }
-
-    if (catalogId) {
-      searchConceptResponse = await searchConceptsForCatalog(
-        catalogId,
-        accessToken,
-        jsonSearchBody
-      );
-    }
-
-    if (!searchConceptResponse) {
-      searchConceptResponse = {} as SearchConceptResponse;
-    }
-
-    return {
-      props: {
-        catalogId,
-        searchConceptResponse,
-        pageNumb,
-        accessToken,
-      },
-    };
-  }
-
-  return {
-    props: {},
-  };
+  const data = await res.json();
+  return data;
 };
 
 export default SearchPage;
