@@ -12,7 +12,6 @@ const SearchField = styled.div<SearchFieldProps>`
 
   :hover {
     border: 0.15rem solid #121619;
-    margin: -0.05rem;
   }
 
   svg {
