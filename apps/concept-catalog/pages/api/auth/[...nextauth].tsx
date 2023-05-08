@@ -23,9 +23,7 @@ export const authOptions = {
         id: token.id ?? null,
         name: token.name,
         email: token.email ?? null,
-        image: null,
-        accessToken: token.access_token,
-        idToken: token.id_token,
+        image: null,      
       };
 
       if (token.error) {
