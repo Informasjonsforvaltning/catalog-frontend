@@ -1,0 +1,63 @@
+.pageContainer {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 1.6rem;
+  overflow-wrap: break-word;
+}
+
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.searchHitContainer {
+  margin: 0 auto 15px auto;
+  min-width: 924px;
+}
+
+.pageLink {
+  padding: 0px 15px;
+}
+
+.active {
+  text-decoration: underline;
+}
+
+.arrowIcon {
+  padding-top: 2.5px;
+}
+
+.searchRowContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.select {
+  min-width: 15rem;
+  flex: 1 1 0;
+}
+
+.select input {
+  font-size: 1.6rem;
+}
+
+.select > span {
+  display: flex;
+}
+
+.select span > span > span > span {
+  height: 3.5rem;
+}
+
+.select > span > span > span > span:hover {
+  border: 0.2rem solid #121619;
+  box-sizing: border-box;
+}

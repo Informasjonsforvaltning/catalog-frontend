@@ -2,16 +2,16 @@ import styled, {css} from 'styled-components';
 import {SearchFieldProps} from '.';
 
 const SearchField = styled.div<SearchFieldProps>`
-  height: 3.5rem;
+  height: 3.6rem;
   background-color: #ffffff;
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  border: 0.1rem solid #121619;
+  border: 0.13rem solid #121619;
   border-radius: 0.2rem;
 
   :hover {
-    border: 0.15rem solid #121619;
+    outline: 0.07rem solid #121619;
   }
 
   svg {
@@ -55,4 +55,8 @@ const Input = styled.input`
   }
 `;
 
-export {Input, SearchField};
+const SvgWrapper = styled.figure`
+  display: contents;
+`;
+
+export {Input, SearchField, SvgWrapper};

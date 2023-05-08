@@ -170,7 +170,7 @@ export interface Publisher {
   prefLabel?: TekstMedSpraakKode;
 }
 
-export interface ConceptHitPageProps {
+export interface ConceptHitPage {
   currentPage: number;
   size: number;
   totalElements: number;
@@ -179,5 +179,12 @@ export interface ConceptHitPageProps {
 
 export interface SearchConceptResponse {
   hits: Concept[];
-  page: ConceptHitPageProps;
+  page: ConceptHitPage;
 }
+
+export type SearchableField =
+  | 'anbefaltTerm'
+  | 'frarådetTerm'
+  | 'tillattTerm'
+  | 'definisjon'
+  | 'merknad';

@@ -1,7 +1,6 @@
-import {FC, ChangeEvent, useState, KeyboardEvent, MouseEvent} from 'react';
-import {Input, SearchField as StyledSearchField} from './styled';
+import {FC, ChangeEvent, useState, KeyboardEvent} from 'react';
+import {Input, SearchField as StyledSearchField, SvgWrapper} from './styled';
 import MagnifyingGlassSVG from './MagnifyingGlass.svg';
-import {typeOf} from 'react-is';
 
 type InputType =
   | 'text'
@@ -66,7 +65,7 @@ const SearchField: FC<SearchFieldProps> = ({
         onChange={onChange}
         onKeyUp={onSubmit}
       />
-      <figure onClick={(e) => onSubmit('clicked')}>{endIcon}</figure>
+      <SvgWrapper onClick={(e) => onSubmit('clicked')}>{endIcon}</SvgWrapper>
     </StyledSearchField>
   );
 };
