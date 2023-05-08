@@ -1,34 +1,54 @@
-import {useEffect, useState} from 'react';
+import {Breadcrumbs, breadcrumbT, SearchHit} from '@catalog-frontend/ui';
+import {
+  hasOrganizationReadPermission,
+  localization,
+} from '@catalog-frontend/utils';
+import {ArrowLeftIcon, ArrowRightIcon} from '@navikt/aksel-icons';
 import ReactPaginate from 'react-paginate';
 import {useRouter} from 'next/router';
-import { getToken } from "next-auth/jwt";
-import {PageBanner, SearchField, Breadcrumbs, breadcrumbT, SearchHit} from '@catalog-frontend/ui';
-import {ConceptHitPageProps} from '@catalog-frontend/types';
-import {localization, hasOrganizationReadPermission} from '@catalog-frontend/utils';
-import {ArrowLeftIcon, ArrowRightIcon} from '@navikt/aksel-icons';
-import SC from '../../styles/search-page';
-import styles from './pagination.module.css';
+import {SearchField} from '@catalog-frontend/ui';
+import {PageBanner} from '@catalog-frontend/ui';
+import {ConceptHitPage, SearchableField} from '@catalog-frontend/types';
+import {useEffect, useState} from 'react';
+import {Select} from '@digdir/design-system-react';
+import {
+  getFields,
+  getSelectOptions,
+  updatePage,
+} from '../../logic/[[...catalogId]]';
+import styles from './style.module.css';
+import '@altinn/figma-design-tokens/dist/tokens.css';
+import {getToken} from 'next-auth/jwt';
 
 export const SearchPage = () => {
-  const [page, setPage] = useState<ConceptHitPageProps>();  
+  const [page, setPage] = useState<ConceptHitPage>();
   const [concepts, setConcepts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
-  const catalogId = router.query.catalogId as string ?? '';
+  const catalogId = router.query.catalogId.toString() ?? '';
   const pageSubtitle = catalogId ?? 'No title';
   const [pageNumb, setPageNum] = useState(1);
+  const [selectedField, setSelectedField] = useState(
+    'alleFelter' as SearchableField | 'alleFelter'
+  );
+  const selectOptions = getSelectOptions();
 
   // initial page data population
   useEffect(() => {
     const init = () =>
-      updatePage(catalogId, searchTerm, pageNumb).then((data) => {
+      updatePage({
+        catalogId,
+        searchTerm,
+        page: pageNumb,
+        fields: getFields('alleFelter'),
+      }).then((data) => {
         if (data) {
           setConcepts(data.hits);
           setPage(data.page);
         }
       });
     init();
-  }, [catalogId, pageNumb, searchTerm]);
+  }, []);
 
   const breadcrumbList = catalogId
     ? ([
@@ -45,7 +65,12 @@ export const SearchPage = () => {
       query: {page: currentPage.selected + 1},
     });
 
-    const data = await updatePage(catalogId, searchTerm, currentPage);
+    const data = await updatePage({
+      catalogId,
+      searchTerm,
+      page: currentPage,
+      fields: getFields(selectedField),
+    });
 
     if (data) {
       setConcepts(data.hits);
@@ -55,7 +80,12 @@ export const SearchPage = () => {
   };
 
   const onSearchSubmit = async (term = searchTerm) => {
-    const data = await updatePage(catalogId, term, page.currentPage);
+    const data = await updatePage({
+      catalogId,
+      searchTerm: term,
+      page: page.currentPage,
+      fields: getFields(selectedField),
+    });
 
     if (data) {
       setConcepts(data.hits);
@@ -64,85 +94,79 @@ export const SearchPage = () => {
     }
   };
 
+  const onFieldSelect = async (selectValue: SearchableField) => {
+    setSelectedField(selectValue);
+  };
+
   return (
     <>
-      
-        <Breadcrumbs breadcrumbList={breadcrumbList} />
-        <PageBanner
-          title={localization.catalogType.concept}
-          subtitle={pageSubtitle}
-        />
-        <SC.SearchPage>        
+      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <PageBanner
+        title={localization.catalogType.concept}
+        subtitle={pageSubtitle}
+      />
+      <div className={styles.pageContainer}>
+        <div className={styles.searchRowContainer}>
           <SearchField
             ariaLabel={localization.search.searchInAllFields}
             placeholder={localization.search.searchInAllFields}
             onSearchSubmit={onSearchSubmit}
           />
-          <SC.ContainerOne>
-            <div>
-              {concepts?.map((concept) => (
-                  <SC.SearchHitContainer key={concept.id}>
-                    <SearchHit catalogId={catalogId} searchHit={concept} />
-                  </SC.SearchHitContainer>
-                ))}
-              {concepts?.length > 0 && (
-                <ReactPaginate
-                  onPageChange={changePage}
-                  forcePage={pageNumb - 1}
-                  pageCount={page ? page.totalPages : 0}
-                  marginPagesDisplayed={1}
-                  pageRangeDisplayed={2}
-                  previousLabel={<ArrowLeftIcon />}
-                  nextLabel={<ArrowRightIcon />}
-                  breakLabel="..."
-                  pageLinkClassName={styles.pageLink}
-                  containerClassName={styles.paginationContainer}
-                  activeClassName={styles.active}
-                  previousClassName={styles.arrowIcon}
-                  nextClassName={styles.arrowIcon}
+          <span className={styles.select}>
+            <Select
+              options={selectOptions}
+              onChange={onFieldSelect}
+              value={selectedField}
+              deleteButtonLabel="x"
+            />
+          </span>
+        </div>
+        <div>
+          {concepts &&
+            concepts.map((concept) => (
+              <div
+                className={styles.searchHitContainer}
+                key={concept.id}
+              >
+                <SearchHit
+                  searchHit={concept}
+                  catalogId={catalogId}
                 />
-              )}
-              {concepts?.length === 0 && (
-                localization.search.noResults
-              )}
-            </div>
-          </SC.ContainerOne>        
-        </SC.SearchPage>
-      
+              </div>
+            ))}
+          <ReactPaginate
+            onPageChange={changePage}
+            forcePage={pageNumb - 1}
+            pageCount={page ? page.totalPages : 0}
+            marginPagesDisplayed={1}
+            pageRangeDisplayed={2}
+            previousLabel={<ArrowLeftIcon />}
+            nextLabel={<ArrowRightIcon />}
+            breakLabel="..."
+            pageLinkClassName={styles.pageLink}
+            containerClassName={styles.paginationContainer}
+            activeClassName={styles.active}
+            previousClassName={styles.arrowIcon}
+            nextClassName={styles.arrowIcon}
+          />
+        </div>
+      </div>
     </>
   );
 };
 
-const updatePage = async (catalogId, searchTerm, currentPage) => {
-  const body = JSON.stringify({
-    catalogId,
-    query: {
-      query: searchTerm,
-      pagination: {page: currentPage.selected + 1, size: 5},
-    },
-  });
+export async function getServerSideProps({req, params}) {
+  const token = await getToken({req});
+  const {catalogId} = params;
 
-  const res = await fetch('/api/search', {
-    method: 'POST',
-    body: body,
-  });
-
-  const data = await res.json();
-  return data;
-};
-
-export async function getServerSideProps({ req, params }) {
-	const token = await getToken({ req });
-  const { catalogId } = params;
-
-  if(!hasOrganizationReadPermission(token?.access_token, catalogId)) {
-    return {    
-      notFound: true 
+  if (!hasOrganizationReadPermission(token?.access_token, catalogId)) {
+    return {
+      notFound: true,
     };
   }
-  
+
   return {
-    props: {}
+    props: {},
   };
 }
 

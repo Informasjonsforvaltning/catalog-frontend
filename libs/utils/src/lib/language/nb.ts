@@ -15,7 +15,15 @@ export const nb = {
       'Søk i Felles datakatalog',
       'Lenke til søk i felles datakatalog',
     ],
-    noResults: 'Ingen resultater'
+    noResults: 'Ingen resultater',
+    fields: {
+      alleFelter: 'Alle felter',
+      anbefaltTerm: 'Anbefalt term',
+      frarådetTerm: 'Frarådet term',
+      tillattTerm: 'Tillatt term',
+      definisjon: 'Definisjon',
+      merknad: 'Merknad',
+    },
   },
   linkToDataset: 'Lenke til datasett',
   linkToDatasets: 'Lenke til datasett',
@@ -62,7 +70,7 @@ export const nb = {
     publish: 'Publisert',
   },
   searchHit: {
-    lastEdited: "Sist endret",
-    publishedInFDK: "Publisert i Felles Datakatalog"
-  }
+    lastEdited: 'Sist endret',
+    publishedInFDK: 'Publisert i Felles Datakatalog',
+  },
 };
