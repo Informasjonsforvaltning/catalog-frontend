@@ -4,20 +4,24 @@ import {
 } from '@catalog-frontend/utils';
 import styles from './search-hit.module.css';
 import {Concept} from '@catalog-frontend/types';
+import Link from 'next/link'
 
 interface SearchHit {
+  catalogId: string;
   searchHit: Concept;
 }
 
-export function SearchHit({searchHit}: SearchHit) {
+export function SearchHit({catalogId, searchHit}: SearchHit) {
 
   return (
     <div className={styles.container}>
       <div className={styles.rowSpaceBetween}>
         {searchHit?.anbefaltTerm && (
-          <h2 className={styles.title}>
-            {translate(searchHit?.anbefaltTerm.navn)}
-          </h2>
+          <Link href={`${catalogId}/${searchHit.id}`}>
+            <h2 className={styles.title}>
+              {translate(searchHit?.anbefaltTerm.navn)}
+            </h2>
+          </Link>          
         )}
 
         <p className={styles.greyFont}>Brødsmuler - Ikke klart i backend </p>

@@ -1,17 +1,16 @@
-import {Breadcrumbs, breadcrumbT, SearchHit} from '@catalog-frontend/ui';
-import {localization} from '@catalog-frontend/utils';
-import SC from '../../styles/search-page';
-import styles from './pagination.module.css';
-import {ArrowLeftIcon, ArrowRightIcon} from '@navikt/aksel-icons';
+import {useEffect, useState} from 'react';
 import ReactPaginate from 'react-paginate';
 import {useRouter} from 'next/router';
-import {SearchField} from '@catalog-frontend/ui';
-import {PageBanner} from '@catalog-frontend/ui';
+import { JWT, getToken } from "next-auth/jwt";
+import {PageBanner, SearchField, Breadcrumbs, breadcrumbT, SearchHit} from '@catalog-frontend/ui';
 import {ConceptHitPageProps} from '@catalog-frontend/types';
-import {useEffect, useState} from 'react';
+import {localization, hasOrganizationReadPermission} from '@catalog-frontend/utils';
+import {ArrowLeftIcon, ArrowRightIcon} from '@navikt/aksel-icons';
+import SC from '../../styles/search-page';
+import styles from './pagination.module.css';
 
 export const SearchPage = () => {
-  const [page, setPage] = useState<ConceptHitPageProps>();
+  const [page, setPage] = useState<ConceptHitPageProps>();  
   const [concepts, setConcepts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
@@ -80,27 +79,31 @@ export const SearchPage = () => {
         />
         <SC.ContainerOne>
           <div>
-            {concepts &&
-              concepts.map((concept) => (
+            {concepts?.map((concept) => (
                 <SC.SearchHitContainer key={concept.id}>
-                  <SearchHit searchHit={concept} />
+                  <SearchHit catalogId={catalogId} searchHit={concept} />
                 </SC.SearchHitContainer>
               ))}
-            <ReactPaginate
-              onPageChange={changePage}
-              forcePage={pageNumb - 1}
-              pageCount={page ? page.totalPages : 0}
-              marginPagesDisplayed={1}
-              pageRangeDisplayed={2}
-              previousLabel={<ArrowLeftIcon />}
-              nextLabel={<ArrowRightIcon />}
-              breakLabel="..."
-              pageLinkClassName={styles.pageLink}
-              containerClassName={styles.paginationContainer}
-              activeClassName={styles.active}
-              previousClassName={styles.arrowIcon}
-              nextClassName={styles.arrowIcon}
-            />
+            {concepts?.length > 0 && (
+              <ReactPaginate
+                onPageChange={changePage}
+                forcePage={pageNumb - 1}
+                pageCount={page ? page.totalPages : 0}
+                marginPagesDisplayed={1}
+                pageRangeDisplayed={2}
+                previousLabel={<ArrowLeftIcon />}
+                nextLabel={<ArrowRightIcon />}
+                breakLabel="..."
+                pageLinkClassName={styles.pageLink}
+                containerClassName={styles.paginationContainer}
+                activeClassName={styles.active}
+                previousClassName={styles.arrowIcon}
+                nextClassName={styles.arrowIcon}
+              />
+            )}
+            {concepts?.length === 0 && (
+              localization.search.noResults
+            )}
           </div>
         </SC.ContainerOne>
       </SC.SearchPage>
@@ -125,5 +128,20 @@ const updatePage = async (catalogId, searchTerm, currentPage) => {
   const data = await res.json();
   return data;
 };
+
+export async function getServerSideProps({ req, params }) {
+	const token = await getToken({ req });
+  const { catalogId } = params;
+
+  if(!hasOrganizationReadPermission(token?.access_token, catalogId)) {
+    return {    
+      notFound: true 
+    };
+  }
+  
+  return {
+    props: {}
+  };
+}
 
 export default SearchPage;
