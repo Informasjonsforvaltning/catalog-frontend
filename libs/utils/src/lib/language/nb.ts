@@ -15,6 +15,7 @@ export const nb = {
       'Søk i Felles datakatalog',
       'Lenke til søk i felles datakatalog',
     ],
+    noResults: 'Ingen resultater'
   },
   linkToDataset: 'Lenke til datasett',
   linkToDatasets: 'Lenke til datasett',

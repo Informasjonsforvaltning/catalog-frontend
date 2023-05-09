@@ -33,6 +33,7 @@
     "@navikt/aksel-icons": "^2.8.13",
     "@nrwl/next": "15.8.1",
     "immer": "^10.0.1",
+    "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
     "next": "13.1.1",
     "next-auth": "^4.20.0",
