@@ -18,6 +18,7 @@ export interface BreadcrumbsProps {
 
 export function Breadcrumbs({breadcrumbList}: BreadcrumbsProps) {
   return (
+    <div className='container'>
     <StyledBreadcrumbs>
       <span>
         <ExternalLink
@@ -43,6 +44,7 @@ export function Breadcrumbs({breadcrumbList}: BreadcrumbsProps) {
           })}
       </span>
     </StyledBreadcrumbs>
+    </div>
   );
 }
 

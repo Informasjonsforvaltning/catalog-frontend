@@ -13,9 +13,11 @@ const PageBanner = ({title, subtitle}: PageBannerProps) => {
       <div className={style.svgEllipse}>
         <EllipseSVG />
       </div>
-      <div className={style.titleContainer}>
-        <h1 className={style.pageTitle}>{title}</h1>
-        <h2 className={style.pageSubtitle}>{subtitle}</h2>
+      <div className='container'>
+        <div className={style.titleContainer}>
+          <h1 className={style.pageTitle}>{title}</h1>
+          <span className={style.pageSubtitle}>{subtitle}</span>
+        </div>
       </div>
       <div className={style.svgRectangle}>
         <RectangleSVG />

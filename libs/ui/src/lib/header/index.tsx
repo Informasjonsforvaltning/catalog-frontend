@@ -37,67 +37,47 @@ export const Header: FC<Props> = ({homeUrl, useDemoLogo}) => {
 
   return (
     <SC.Header>
-      <SC.Container>
-        <a
-          href={homeUrl}
-          aria-label="Gå til hovedsiden"
-        >
-          {useDemoLogo ? <SC.LogoDemo /> : <SC.Logo />}
-        </a>
-        <SC.MenuItems>
-          <SC.MenuItem>
-            <a href="https://fellesdatakatalog.digdir.no/guidance">
-              {localization.header.registerData}
-            </a>
-          </SC.MenuItem>
-          <SC.MenuItem>
-            <a href="https://admin.fellesdatakatalog.digdir.no">
-              {localization.header.harvestData}
-            </a>
-          </SC.MenuItem>
-          <SC.MenuItem>
-            <a href="https://datalandsbyen.norge.no">
-              {localization.header.dataCommunity}
-            </a>
-          </SC.MenuItem>
-          <SC.MenuItem>
-            <a href="https://data.norge.no">
-              {localization.header.nationalDataCatalog}
-            </a>
-          </SC.MenuItem>
-        </SC.MenuItems>
-        {username && (
-          <SC.DropdownMenu
-            isOpen={isDropdownMenuOpen}
-            onClose={closeDropdownMenu}
+      <div className='container'>
+        <SC.Navigation>
+          <a
+            href={homeUrl}
+            aria-label="Gå til hovedsiden"
           >
-            <Trigger>
-              <SC.MenuButton onClick={openDropdownMenu}>
-                <SC.MenuButtonContent>
-                  <UserIcon />
-                  <SC.MenuButtonContentSpan>
-                    {username}
-                  </SC.MenuButtonContentSpan>
-                  <SC.ExpandIconWrapper>
-                    <Icon name="chevronDownStroke" />
-                  </SC.ExpandIconWrapper>
-                </SC.MenuButtonContent>
-              </SC.MenuButton>
-            </Trigger>
-            {handleLogout && (
-              <Menu>
-                <SC.Menu>
-                  <li>
-                    <SC.MenuButton onClick={handleLogout}>
-                      <span>{localization.header.logout}</span>
-                    </SC.MenuButton>
-                  </li>
-                </SC.Menu>
-              </Menu>
-            )}
-          </SC.DropdownMenu>
-        )}
-      </SC.Container>
+            {useDemoLogo ? <SC.LogoDemo /> : <SC.Logo />}
+          </a>        
+          {username && (
+            <SC.DropdownMenu
+              isOpen={isDropdownMenuOpen}
+              onClose={closeDropdownMenu}
+            >
+              <Trigger>
+                <SC.MenuButton onClick={openDropdownMenu}>
+                  <SC.MenuButtonContent>
+                    <UserIcon />
+                    <SC.MenuButtonContentSpan>
+                      {username}
+                    </SC.MenuButtonContentSpan>
+                    <SC.ExpandIconWrapper>
+                      <Icon name="chevronDownStroke" />
+                    </SC.ExpandIconWrapper>
+                  </SC.MenuButtonContent>
+                </SC.MenuButton>
+              </Trigger>
+              {handleLogout && (
+                <Menu>
+                  <SC.Menu>
+                    <li>
+                      <SC.MenuButton onClick={handleLogout}>
+                        <span>{localization.header.logout}</span>
+                      </SC.MenuButton>
+                    </li>
+                  </SC.Menu>
+                </Menu>
+              )}
+            </SC.DropdownMenu>
+          )}
+        </SC.Navigation>
+      </div>
     </SC.Header>
   );
 };

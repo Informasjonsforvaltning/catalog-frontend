@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import ReactPaginate from 'react-paginate';
 import {useRouter} from 'next/router';
-import { JWT, getToken } from "next-auth/jwt";
+import { getToken } from "next-auth/jwt";
 import {PageBanner, SearchField, Breadcrumbs, breadcrumbT, SearchHit} from '@catalog-frontend/ui';
 import {ConceptHitPageProps} from '@catalog-frontend/types';
 import {localization, hasOrganizationReadPermission} from '@catalog-frontend/utils';
@@ -14,7 +14,7 @@ export const SearchPage = () => {
   const [concepts, setConcepts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
-  const [catalogId] = router.query.catalogId ?? '';
+  const catalogId = router.query.catalogId as string ?? '';
   const pageSubtitle = catalogId ?? 'No title';
   const [pageNumb, setPageNum] = useState(1);
 
@@ -28,7 +28,7 @@ export const SearchPage = () => {
         }
       });
     init();
-  }, []);
+  }, [catalogId, pageNumb, searchTerm]);
 
   const breadcrumbList = catalogId
     ? ([
@@ -66,47 +66,49 @@ export const SearchPage = () => {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
-      <PageBanner
-        title={localization.catalogType.concept}
-        subtitle={pageSubtitle}
-      />
-      <SC.SearchPage>
-        <SearchField
-          ariaLabel={localization.search.searchInAllFields}
-          placeholder={localization.search.searchInAllFields}
-          onSearchSubmit={onSearchSubmit}
+      
+        <Breadcrumbs breadcrumbList={breadcrumbList} />
+        <PageBanner
+          title={localization.catalogType.concept}
+          subtitle={pageSubtitle}
         />
-        <SC.ContainerOne>
-          <div>
-            {concepts?.map((concept) => (
-                <SC.SearchHitContainer key={concept.id}>
-                  <SearchHit catalogId={catalogId} searchHit={concept} />
-                </SC.SearchHitContainer>
-              ))}
-            {concepts?.length > 0 && (
-              <ReactPaginate
-                onPageChange={changePage}
-                forcePage={pageNumb - 1}
-                pageCount={page ? page.totalPages : 0}
-                marginPagesDisplayed={1}
-                pageRangeDisplayed={2}
-                previousLabel={<ArrowLeftIcon />}
-                nextLabel={<ArrowRightIcon />}
-                breakLabel="..."
-                pageLinkClassName={styles.pageLink}
-                containerClassName={styles.paginationContainer}
-                activeClassName={styles.active}
-                previousClassName={styles.arrowIcon}
-                nextClassName={styles.arrowIcon}
-              />
-            )}
-            {concepts?.length === 0 && (
-              localization.search.noResults
-            )}
-          </div>
-        </SC.ContainerOne>
-      </SC.SearchPage>
+        <SC.SearchPage>        
+          <SearchField
+            ariaLabel={localization.search.searchInAllFields}
+            placeholder={localization.search.searchInAllFields}
+            onSearchSubmit={onSearchSubmit}
+          />
+          <SC.ContainerOne>
+            <div>
+              {concepts?.map((concept) => (
+                  <SC.SearchHitContainer key={concept.id}>
+                    <SearchHit catalogId={catalogId} searchHit={concept} />
+                  </SC.SearchHitContainer>
+                ))}
+              {concepts?.length > 0 && (
+                <ReactPaginate
+                  onPageChange={changePage}
+                  forcePage={pageNumb - 1}
+                  pageCount={page ? page.totalPages : 0}
+                  marginPagesDisplayed={1}
+                  pageRangeDisplayed={2}
+                  previousLabel={<ArrowLeftIcon />}
+                  nextLabel={<ArrowRightIcon />}
+                  breakLabel="..."
+                  pageLinkClassName={styles.pageLink}
+                  containerClassName={styles.paginationContainer}
+                  activeClassName={styles.active}
+                  previousClassName={styles.arrowIcon}
+                  nextClassName={styles.arrowIcon}
+                />
+              )}
+              {concepts?.length === 0 && (
+                localization.search.noResults
+              )}
+            </div>
+          </SC.ContainerOne>        
+        </SC.SearchPage>
+      
     </>
   );
 };

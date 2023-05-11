@@ -1,0 +1,31 @@
+.info {
+  display: flex;
+  justify-content: stretch;  
+  gap: 2em;
+  margin: 3em 0 3em 0;
+}
+
+.info > *:first-child {
+  flex-grow: 1;
+}
+
+.info > *:last-child {
+  width: 330px;
+}
+
+.definition {
+  font-size: 20px;
+  line-height: 30px;
+  max-width: calc(100% - 330px);
+}
+
+.definition > h3,
+.source,
+.source a {
+  font-size: 14px;
+}
+
+.source,
+.source a {
+  color: #6c737a;
+}

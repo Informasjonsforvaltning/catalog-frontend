@@ -1,0 +1,41 @@
+.infoCard > .item {
+  border-width: 1px 1px 0 1px;
+  border-color: #d5d7d9;
+  border-style: solid;
+  background-color: #fff;
+  padding: 37px;
+}
+
+.infoCard > .item:first-child {
+  border-radius: 8px 8px 0 0;
+}
+
+.infoCard > .item:last-child {
+  border-radius: 0 0 8px 8px;
+  border-bottom: 1px solid #d5d7d9;
+}
+
+.infoCard.small > .item:not(:first-child) {
+  border-top: 0;
+}
+
+.infoCard.small > .item:not(:first-child) > div {
+  border-top: 1px solid #d5d7d9;
+}
+
+.infoCard.small > .item {
+  padding-top: 0;
+}
+
+.infoCard.small > .item > div {
+  padding-top: 37px;
+}
+
+.label {
+  font-size: 14px;
+}
+
+.light,
+.light a {
+  color: #6c737a;
+}
