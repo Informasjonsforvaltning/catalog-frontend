@@ -18,7 +18,7 @@ const ContainerOne = styled.span`
   display: flex;
   width: 100%;
   gap: 1rem;
-  align-items: start;
+  align-items: flex-start;
   margin: 4px;
   justify-content: space-between;
 

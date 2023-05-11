@@ -6,10 +6,8 @@ const StyledBreadcrumbs = styled.nav`
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 1140px;
   margin: 1.6rem auto;
-  overflow-wrap: break-word;
-  padding-left: 1.6rem;
+  overflow-wrap: break-word;  
 `;
 
 const linkStyle = css`

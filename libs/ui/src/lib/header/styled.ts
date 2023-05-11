@@ -19,17 +19,12 @@ const Header = styled.header`
   z-index: 1000;
 `;
 
-const Container = styled.nav`
+const Navigation = styled.nav`
   align-items: center;
   display: flex;
   justify-content: space-between;
   overflow-wrap: break-word;
-  padding: 0px 15px;
   width: 100%;
-
-  @media (min-width: 768px) {
-    max-width: 1140px;
-  }
 `;
 
 const Logo = styled(LogoFDK)`
@@ -202,7 +197,7 @@ const ExpandIconWrapper = styled.div`
 
 export default {
   Header,
-  Container,
+  Navigation,
   Logo,
   LogoDemo,    
   LogoutButton,

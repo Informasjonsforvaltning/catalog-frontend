@@ -1,7 +1,8 @@
 .banner {
+  position: relative;
   display: flex;
   width: 100%;
-  align-items: start;
+  align-items: flex-start;
   background-color: #ffffff;
   overflow-wrap: break-word;
 }
@@ -10,11 +11,10 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  align-items: start;
+  align-items: flex-start;
   background-color: #ffffff;
   overflow-wrap: break-word;
   flex-grow: 1;
-  max-width: 1140px;
   margin: 0 auto;
 }
 
@@ -28,10 +28,10 @@
   line-height: 1.6rem;
   color: #2d3741;
   flex-grow: 1;
-  max-width: 1000px;
   margin: 0 auto;
-  padding: 3rem 1.6rem 0 1.6rem;
+  padding-top: 3rem;
   overflow-wrap: break-word;
+  z-index: 1;
 }
 
 .pageSubtitle {
@@ -41,19 +41,20 @@
   font-size: 1.4rem;
   line-height: 1.6rem;
   color: #2d3741;
-  max-width: 1000px;
   margin: 0 auto;
-  padding: 0 1.6rem 3rem 1.6rem;
+  padding: 0 1.6rem 3rem 0;
   overflow-wrap: break-word;
+  z-index: 1;
 }
 
 .svgEllipse {
-  display: flex;
+  position: absolute;
   padding-top: 1.6rem;
 }
 
 .svgRectangle {
-  display: flex;
+  position: absolute;
+  right: 100px;
   padding-bottom: 1.6rem;
 }
 
