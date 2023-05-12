@@ -25,7 +25,7 @@ import styles from './style.module.css';
 import '@altinn/figma-design-tokens/dist/tokens.css';
 import {getToken} from 'next-auth/jwt';
 
-export const SearchPage = () => {
+export const SearchPage = ({ hasPermission }) => {
   const [page, setPage] = useState<ConceptHitPage>();
   const [concepts, setConcepts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -40,19 +40,21 @@ export const SearchPage = () => {
 
   // initial page data population
   useEffect(() => {
-    const init = () =>
-      updatePage({
-        catalogId,
-        searchTerm,
-        page: pageNumb,
-        fields: getFields('alleFelter'),
-      }).then((data) => {
-        if (data) {
-          setConcepts(data.hits);
-          setPage(data.page);
-        }
-      });
-    init();
+    if(hasPermission) {
+      const init = () =>
+        updatePage({
+          catalogId,
+          searchTerm,
+          page: pageNumb,
+          fields: getFields('alleFelter'),
+        }).then((data) => {
+          if (data) {
+            setConcepts(data.hits);
+            setPage(data.page);
+          }
+        });
+      init();
+    }
   }, []);
 
   const breadcrumbList = catalogId
@@ -111,34 +113,46 @@ export const SearchPage = () => {
         subtitle={pageSubtitle}
       />
       <div className={styles.pageContainer}>
-        <div className={styles.searchRowContainer}>
-          <SearchField
-            ariaLabel={localization.search.searchInAllFields}
-            placeholder={localization.search.searchInAllFields}
-            onSearchSubmit={onSearchSubmit}
-          />
-          <span className={styles.select}>
-            <Select
-              options={selectOptions}
-              onChange={onFieldSelect}
-              value={selectedField}
-              deleteButtonLabel='x'
-            />
-          </span>
-        </div>
-        <div>
-          {concepts &&
-            concepts.map((concept) => (
-              <div className={styles.searchHitContainer} key={concept.id}>
-                <SearchHit searchHit={concept} catalogId={catalogId} />
-              </div>
-            ))}
-          <Pagination
-            onPageChange={changePage}
-            forcePage={pageNumb - 1}
-            pageCount={page ? page.totalPages - 1 : 0}
-          />
-        </div>
+        {hasPermission ? (
+          <>
+            <div className={styles.searchRowContainer}>
+              <SearchField
+                ariaLabel={localization.search.searchInAllFields}
+                placeholder={localization.search.searchInAllFields}
+                onSearchSubmit={onSearchSubmit}
+              />
+              <span className={styles.select}>
+                <Select
+                  options={selectOptions}
+                  onChange={onFieldSelect}
+                  value={selectedField}
+                  deleteButtonLabel="x"
+                />
+              </span>
+            </div>
+            <div>
+              {concepts &&
+                concepts.map((concept) => (
+                  <div
+                    className={styles.searchHitContainer}
+                    key={concept.id}
+                  >
+                    <SearchHit
+                      searchHit={concept}
+                      catalogId={catalogId}
+                    />
+                  </div>
+                ))}
+              <Pagination
+                onPageChange={changePage}
+                forcePage={pageNumb - 1}
+                pageCount={page ? page.totalPages - 1 : 0}
+              />
+            </div>
+          </>
+        ) : (
+          <div>{localization.noAccess}</div>
+        )}              
       </div>
     </>
   );
@@ -148,14 +162,10 @@ export async function getServerSideProps({ req, params }) {
 	const token = await getToken({ req });
   const { catalogId } = params;
 
-  if(!token || !hasOrganizationReadPermission(token.access_token, catalogId)) {
-    return {    
-      notFound: true 
-    };
-  }
-
   return {
-    props: {},
+    props: {
+      hasPermission: token && hasOrganizationReadPermission(token.access_token, catalogId)
+    },
   };
 }
 

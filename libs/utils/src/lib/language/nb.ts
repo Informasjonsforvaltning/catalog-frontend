@@ -3,6 +3,7 @@
  */
 
 export const nb = {
+  noAccess: 'Ingen tilgang.',
   allCatalogs: 'Alle kataloger',
   catalogType: {concept: 'Begrepskatalog', dataset: 'Datasettkatalogen'},
   dataVillage: ['Datalandsbyen', 'Lenke til Datalandsbyen'],
