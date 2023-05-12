@@ -144,13 +144,13 @@ export const SearchPage = () => {
   );
 };
 
-export async function getServerSideProps({req, params}) {
-  const token = await getToken({req});
-  const {catalogId} = params;
+export async function getServerSideProps({ req, params }) {
+	const token = await getToken({ req });
+  const { catalogId } = params;
 
-  if (!hasOrganizationReadPermission(token?.access_token, catalogId)) {
-    return {
-      notFound: true,
+  if(!token || !hasOrganizationReadPermission(token.access_token, catalogId)) {
+    return {    
+      notFound: true 
     };
   }
 

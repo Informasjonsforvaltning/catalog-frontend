@@ -33,9 +33,11 @@
 
 .label {
   font-size: 14px;
+  font-weight: 500;
 }
 
 .light,
 .light a {
+  font-weight: 400;
   color: #6c737a;
 }
