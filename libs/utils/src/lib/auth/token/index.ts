@@ -50,11 +50,13 @@ export const hasOrganizationRole = (token: string, {
 }: OrganizationRole): boolean =>
     hasResourceRole(token, { resource: 'organization', resourceId: orgNr, role });
 
-export const hasOrganizationReadPermission = (token: string, orgNr: string): boolean =>
-    !!getResourceRoles(token).find(
-      ({ resource, resourceId }) =>
-        resource === 'organization' && resourceId === orgNr
-    );
+export const hasOrganizationReadPermission = (token: string, orgNr: string): boolean => {
+  const roles = getResourceRoles(token); 
+  return roles?.find(
+    ({ resource, resourceId }) =>
+      resource === 'organization' && resourceId === orgNr
+  ) !== undefined;
+}
 
 export const hasOrganizationWritePermission = (token: string, orgNr: string): boolean =>
     hasOrganizationRole(token, { orgNr, role: 'admin' });

@@ -37,6 +37,7 @@ export const getConcept = async (
     .catch((err) =>
       console.error('getConcept failed with: ', err)
     );
+
   return response;
 };
 

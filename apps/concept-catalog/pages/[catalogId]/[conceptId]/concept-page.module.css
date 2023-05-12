@@ -31,7 +31,8 @@
 }
 
 .info > *:last-child {
-  width: 330px;
+  min-width: 330px;
+  max-width: 330px;
 }
 
 .definition {
@@ -49,4 +50,13 @@
 .source,
 .source a {
   color: #6c737a;
+}
+
+.tabs {
+  margin-top: 2rem;
+}
+
+.tabs > div > div {
+  margin-left: 0;
+  margin-right: 0;
 }
