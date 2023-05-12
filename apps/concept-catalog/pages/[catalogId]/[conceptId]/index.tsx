@@ -6,6 +6,7 @@ import {
   Breadcrumbs,
   breadcrumbT,
   InfoCard,
+  DetailHeading,
 } from '@catalog-frontend/ui';
 import {
   localization,
@@ -16,6 +17,7 @@ import {getConcept} from '@catalog-frontend/data-access';
 import {Concept} from '@catalog-frontend/types';
 import cn from 'classnames';
 import classes from './concept-page.module.css';
+import { CheckboxGroup, CheckboxGroupVariant } from '@digdir/design-system-react';
 
 export const ConceptPage = ({
   data,
@@ -23,6 +25,20 @@ export const ConceptPage = ({
   const router = useRouter();
   const catalogId = (router.query.catalogId as string) ?? '';
   const pageSubtitle = catalogId ?? 'No title';
+
+  const infoData2 = [
+    ["ID", data.id],
+    ["Publiseringsdato", 'N/A'],
+    ["Versjon", `${data?.versjonsnr.major}.${data?.versjonsnr.minor}.${data?.versjonsnr.patch}`], 
+    ["Gyldighet", `Fra/til: ${data?.gyldigFom} - ${data?.gyldigTom}`],
+    ["Tildelt", 'N/A'],
+    ["Sist oppdatert", 'N/A'],
+    ["Opprettet", 'N/A'],
+    ["Merkelapp", 'N/A'],
+    ["Begrepsansvarlig", 'N/A'],
+    ["Godkjenner", 'N/A'],
+    ["Opprettet av", 'N/A'],
+  ];
 
   const breadcrumbList = catalogId
     ? ([
@@ -40,7 +56,24 @@ export const ConceptPage = ({
         title={localization.catalogType.concept}
         subtitle={pageSubtitle}
       />
-      <div className="container">
+      <div className='container'>
+        <DetailHeading 
+          className={classes.detailHeading} 
+          headingTitle={<h2>{translate(data.anbefaltTerm?.navn)}</h2>} 
+          subtitle={translate(data.fagområde)} />
+        <div className={classes.status}><span>Godkjent</span></div>
+        <div className={classes.languages}>
+        <CheckboxGroup           
+          compact={false}
+          description='Velg én eller flere språk.'
+          disabled={false}
+          items={[
+            { checked: false, label: 'Bokmål', name: 'nb' },
+            { checked: false, label: 'Nynorsk', name: 'nn' },
+            { checked: false, label: 'Engelsk', name: 'en' },
+          ]}
+          variant={CheckboxGroupVariant.Horizontal} />
+        </div>
         <div className={classes.definition}>
           <h3>Definisjon:</h3>
           <div>{translate(data?.definisjon.tekst)}</div>
@@ -57,51 +90,46 @@ export const ConceptPage = ({
             <InfoCard.Item label="Merknad:">
               <span>{translate(data?.merknad)}</span>
             </InfoCard.Item>
+            <InfoCard.Item label='Eksempel:'>
+              <span>{translate(data?.eksempel)}</span>
+            </InfoCard.Item>
+            <InfoCard.Item label='Folkelig forklaring:'>
+              <span>?</span>
+            </InfoCard.Item>
+            <InfoCard.Item label='Rettslig forklaring:'>
+              <span>?</span>
+            </InfoCard.Item>
             <InfoCard.Item>
               <table>
-                <tr>
-                  <th>Column 1</th>
-                  <th>Column 2</th>
-                  <th>Column 3</th>
-                </tr>
-                <tr>
-                  <td>1</td>
-                  <td>2</td>
-                  <td>3</td>
-                </tr>
+                <thead>
+                  <tr>
+                    <th>Forkortelse:</th>
+                    <th>Tillatt term:</th>
+                    <th>Frarådet term:</th>
+                  </tr>
+                </thead>  
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                  </tr>
+                </tbody>
               </table>
             </InfoCard.Item>
+            <InfoCard.Item label='Verdiområde:'>
+              <span>N/A</span>
+            </InfoCard.Item>
+            <InfoCard.Item label='Interne felt:'>
+              <span>N/A</span>
+            </InfoCard.Item>
           </InfoCard>
-          <InfoCard size="small">
-            <InfoCard.Item
-              label="ID"
-              labelColor="light"
-            >
-              <span>{data?.id}</span>
-            </InfoCard.Item>
-            <InfoCard.Item
-              label="Publiseringsdato"
-              labelColor="light"
-            >
-              <span>Publisert i Felles datakatalog 31.01.2022</span>
-            </InfoCard.Item>
-            <InfoCard.Item
-              label="Versjon"
-              labelColor="light"
-            >
-              <span>
-                {data?.versjonsnr.major}.{data?.versjonsnr.minor}.
-                {data?.versjonsnr.patch}
-              </span>
-            </InfoCard.Item>
-            <InfoCard.Item
-              label="Gyldighet"
-              labelColor="light"
-            >
-              <span>
-                Fra/til: {data?.gyldigFom} - {data?.gyldigTom}
-              </span>
-            </InfoCard.Item>
+          <InfoCard size='small'>
+            {infoData2.map(([label, value]) => (
+              <InfoCard.Item key={`info-data-${label}`} label={label} labelColor='light'> 
+                <span>{value}</span>
+              </InfoCard.Item>
+            ))}
           </InfoCard>
         </div>
       </div>
@@ -113,9 +141,9 @@ export async function getServerSideProps({req, params}) {
   const token = await getToken({req});
   const {catalogId, conceptId} = params;
 
-  if (!hasOrganizationReadPermission(token?.access_token, catalogId)) {
-    return {
-      notFound: true,
+  if(!token || !hasOrganizationReadPermission(token.access_token, catalogId)) {
+    return {    
+      notFound: true 
     };
   }
 

@@ -1,6 +1,27 @@
+.detailHeading {
+  margin-top: 3rem;
+  margin-bottom: 1rem;
+}
+
+.languages {
+  margin-bottom: 2rem;
+}
+
+.status {
+  display: flex;
+  justify-content: right;
+}
+
+.status > span {
+  border-radius: 50px;
+  background-color: #d1f4e1;
+  border: 1px solid #0c6536;
+  padding: 0 12px;
+}
+
 .info {
   display: flex;
-  justify-content: stretch;  
+  justify-content: stretch;
   gap: 2em;
   margin: 3em 0 3em 0;
 }

@@ -1100,6 +1100,11 @@
     "@navikt/ds-icons" "^2.3.0"
     react-number-format "^5.1.4"
 
+"@digdir/design-system-tokens@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@digdir/design-system-tokens/-/design-system-tokens-0.0.3.tgz#fb607a55b8e373e9a17ac500af7abf9fa82c16bf"
+  integrity sha512-gfmUOuLsZ8rm/T9P81rVCxTa97DWtekp3ii9Joo520NB7KGJLQZeAqx+vKtkLy7a+QyKmtGwWjoXTHDjqF8wYg==
+
 "@emotion/is-prop-valid@^1.1.0":
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/@emotion/is-prop-valid/-/is-prop-valid-1.2.1.tgz#23116cf1ed18bfeac910ec6436561ecb1a3885cc"

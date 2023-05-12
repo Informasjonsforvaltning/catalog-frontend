@@ -29,7 +29,9 @@
   },
   "private": true,
   "dependencies": {
+    "@altinn/figma-design-tokens": "^6.0.1",
     "@digdir/design-system-react": "^0.11.3",
+    "@digdir/design-system-tokens": "^0.0.3",
     "@fellesdatakatalog/icons": "^0.8.3",
     "@navikt/aksel-icons": "^2.8.13",
     "@nrwl/next": "15.8.1",
