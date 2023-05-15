@@ -10,3 +10,4 @@ export * from './lib/search-hit';
 export * from './lib/search-field';
 export * from './lib/layout';
 export * from './lib/select';
+export * from './lib/pagination';
