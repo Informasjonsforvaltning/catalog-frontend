@@ -1,0 +1,21 @@
+.card {
+  width: 628px;
+  height: 321px;
+  background-color: #d5e1f2;
+  border: solid 1px;
+  border-color: #d5d7d9;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+}
+
+.title {
+  font-size: 24px;
+}
+
+.arrowIcon {
+  font-size: 24px;
+  color: black;
+}

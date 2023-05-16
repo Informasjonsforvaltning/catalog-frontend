@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import {Card} from '@catalog-frontend/ui';
 
 const StyledPage = styled.div`
   .page {
@@ -13,15 +14,15 @@ export function Index() {
    */
   return (
     <StyledPage>
-      <div className='wrapper'>
-        <div className='container'>
-          <div id='welcome'>
-            <h1>
-              <span> Hello there, </span>
-              Welcome catalog-admin 👋
-            </h1>
-          </div>
-        </div>
+      <div>
+        <Card
+          title='Generelt'
+          body='Oversikt over beskrivelser av datasett, begrep, apier og informasjonmodeller. Innholdet blir levert av ulike virksomheter, offentlige og private.'
+        />
+        <Card
+          title='Begrepskatalog'
+          body='Formålet med begrepskatalogen er å gjøre dataene mer forståelige. Like begreper kan brukes på forskjellige måter i ulik kontekster.'
+        />
       </div>
     </StyledPage>
   );
