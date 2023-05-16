@@ -1,0 +1,47 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: concept-catalog-frontend
+  labels:
+    app: concept-catalog-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: concept-catalog-frontend
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: concept-catalog-frontend
+      annotations:
+        prometheus.io/scrape: 'false'
+    spec:
+      containers:
+        - name: concept-catalog-frontend
+          image: concept-catalog-frontend
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/ping
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+            initialDelaySeconds: 20
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/ping
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+            initialDelaySeconds: 20

@@ -4,7 +4,9 @@ kind: Kustomization
 namespace: staging
 resources:
   - ../base
-  - ingress.yaml
+  - catalog-admin-frontend-ingress.yaml
+  - concept-catalog-frontend-ingress.yaml
 
 patchesStrategicMerge:
-  - add-env-vars.yaml
+  - catalog-admin-frontend-env.yaml
+  - concept-catalog-frontend-env.yaml

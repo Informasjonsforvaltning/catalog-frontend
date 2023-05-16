@@ -20,3 +20,13 @@ spec:
                   number: 8080
             path: /
             pathType: Prefix
+    - host: catalog-admin.staging.fellesdatakatalog.digdir.no
+      http:
+        paths:
+          - backend:
+              service:
+                name: catalog-admin
+                port:
+                  number: 8080
+            path: /
+            pathType: Prefix        
