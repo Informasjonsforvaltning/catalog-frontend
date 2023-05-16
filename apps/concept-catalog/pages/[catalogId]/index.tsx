@@ -1,4 +1,9 @@
-import {Breadcrumbs, breadcrumbT, SearchHit} from '@catalog-frontend/ui';
+import {
+  Breadcrumbs,
+  breadcrumbT,
+  SearchHit,
+  Pagination,
+} from '@catalog-frontend/ui';
 import {
   hasOrganizationReadPermission,
   localization,
@@ -117,37 +122,21 @@ export const SearchPage = () => {
               options={selectOptions}
               onChange={onFieldSelect}
               value={selectedField}
-              deleteButtonLabel="x"
+              deleteButtonLabel='x'
             />
           </span>
         </div>
         <div>
           {concepts &&
             concepts.map((concept) => (
-              <div
-                className={styles.searchHitContainer}
-                key={concept.id}
-              >
-                <SearchHit
-                  searchHit={concept}
-                  catalogId={catalogId}
-                />
+              <div className={styles.searchHitContainer} key={concept.id}>
+                <SearchHit searchHit={concept} catalogId={catalogId} />
               </div>
             ))}
-          <ReactPaginate
+          <Pagination
             onPageChange={changePage}
             forcePage={pageNumb - 1}
-            pageCount={page ? page.totalPages : 0}
-            marginPagesDisplayed={1}
-            pageRangeDisplayed={2}
-            previousLabel={<ArrowLeftIcon />}
-            nextLabel={<ArrowRightIcon />}
-            breakLabel="..."
-            pageLinkClassName={styles.pageLink}
-            containerClassName={styles.paginationContainer}
-            activeClassName={styles.active}
-            previousClassName={styles.arrowIcon}
-            nextClassName={styles.arrowIcon}
+            pageCount={page ? page.totalPages - 1 : 0}
           />
         </div>
       </div>
