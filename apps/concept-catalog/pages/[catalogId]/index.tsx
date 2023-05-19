@@ -25,7 +25,7 @@ import { getToken } from 'next-auth/jwt';
 
 export const SearchPage = ({ hasPermission }) => {
   const router = useRouter();
-  const catalogId: number = +router.query.catalogId ?? 0;
+  const catalogId: string = `${router.query.catalogId}` ?? '';
   const pageNumber: number = +router.query.page ?? 1;
 
   const [searchTerm, setSearchTerm] = useState('');  
@@ -57,7 +57,7 @@ export const SearchPage = ({ hasPermission }) => {
 
   const changePage = async (page) => {
     router.push({
-      pathname: `${catalogId}`,
+      pathname: catalogId,
       query: {page: page.selected + 1},
     });
 
