@@ -2,7 +2,11 @@ import {SearchableField} from '@catalog-frontend/types';
 import {localization} from '@catalog-frontend/utils';
 import {SingleSelectOption} from '@digdir/design-system-react';
 import {useQuery} from '@tanstack/react-query';
-interface Fields {
+
+export type SortFields = 'SIST_ENDRET' | 'ELDST';
+export type SortDirection = 'ASC' | 'DESC';
+
+export interface FieldOptions {
   anbefaltTerm: boolean;
   frarådetTerm: boolean;
   tillattTerm: boolean;
@@ -10,11 +14,17 @@ interface Fields {
   merknad: boolean;
 }
 
+export interface SortOptions {
+  field: SortFields;
+  direction: SortDirection;
+}
+
 export interface PageUpdate {
   catalogId: string;
   searchTerm: string;
   page: number;
-  fields: Fields;
+  fields: FieldOptions;
+  sort?: SortOptions;
 }
 
 export const fields = {
@@ -33,7 +43,7 @@ const getNegatedFields = () => {
   return negatedFields;
 };
 
-export const getFields = (field: SearchableField | 'alleFelter'): Fields => {
+export const getFields = (field: SearchableField | 'alleFelter'): FieldOptions => {
   if (field === 'alleFelter') {
     return fields;
   } else {
@@ -41,15 +51,21 @@ export const getFields = (field: SearchableField | 'alleFelter'): Fields => {
   }
 };
 
-export const getSelectOptions = (): SingleSelectOption[] => {
-  const fieldKeys = Object.keys(localization.search.fields);
-  const fieldValues = Object.values(localization.search.fields);
-  const options = fieldKeys.map((key, index) => ({
+export const getSelectOptions = (object: any): SingleSelectOption[] => {
+  if (!object) return [];
+  const sortKeys = Object.keys(object);
+  const sortValues = Object.values(object);
+  const options = sortKeys.map((key, index) => ({
     value: key,
-    label: fieldValues[index] as string,
+    label: sortValues[index] as string,
   }));
   return options;
 };
+
+export const getDefaultSortOptions = (): SortOptions => ({
+  field: 'SIST_ENDRET',
+  direction: 'DESC',
+});
 
 export const useSearchConcepts = ({
   catalogId,

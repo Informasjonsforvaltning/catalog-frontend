@@ -3,6 +3,7 @@ import {
   BreadcrumbType,
   SearchHit,
   Pagination,
+  Spinner,
 } from '@catalog-frontend/ui';
 import {
   hasOrganizationReadPermission,
@@ -13,15 +14,17 @@ import {SearchField} from '@catalog-frontend/ui';
 import {PageBanner} from '@catalog-frontend/ui';
 import {SearchableField} from '@catalog-frontend/types';
 import {useEffect, useState} from 'react';
-import {Select} from '@digdir/design-system-react';
+import {Select, SortDirection} from '@digdir/design-system-react';
 import {
+  SortFields,
+  SortOptions,
+  getDefaultSortOptions,
   getFields,
   getSelectOptions,
   useSearchConcepts,
 } from '../../hooks/search';
 import styles from './style.module.css';
-import '@altinn/figma-design-tokens/dist/tokens.css';
-import { getToken } from 'next-auth/jwt';
+import {getToken} from 'next-auth/jwt';
 
 export const SearchPage = ({ hasPermission }) => {
   const router = useRouter();
@@ -29,22 +32,19 @@ export const SearchPage = ({ hasPermission }) => {
   const pageNumber: number = +router.query.page ?? 1;
 
   const [searchTerm, setSearchTerm] = useState('');  
-<<<<<<< HEAD
-  const [currentPage, setCurrentPage] = useState(pageNumber as number);
   const [selectedFieldOption, setSelectedFieldOption] = useState(
     'alleFelter' as SearchableField | 'alleFelter'
   );
   const [selectedSortOption, setSelectedSortOption] = useState(getDefaultSortOptions());
-=======
   const [currentPage, setCurrentPage] = useState(pageNumber);
-  const [selectedField, setSelectedField] = useState<SearchableField|'alleFelter'>('alleFelter');
->>>>>>> 1db0480 (chore: use selected field)
-
+  
   const { status, data, refetch } = useSearchConcepts({
     catalogId,
     searchTerm,
     page: currentPage,
-    fields: getFields(selectedField)});
+    fields: getFields(selectedFieldOption),
+    sort: selectedSortOption
+  });
 
   const pageSubtitle = catalogId ?? 'No title'; 
   const fieldOptions = getSelectOptions(localization.search.fields);
@@ -74,7 +74,7 @@ export const SearchPage = ({ hasPermission }) => {
   };
 
   const onFieldSelect = (selectValue: SearchableField) => {
-    setSelectedField(selectValue);
+    setSelectedFieldOption(selectValue);
   };
 
   const onAlphabeticSortSelect = async (selectValue: SortDirection) => {
@@ -93,12 +93,8 @@ export const SearchPage = ({ hasPermission }) => {
 
   useEffect(() => {
     refetch();
-<<<<<<< HEAD
   }, [searchTerm, currentPage, selectedFieldOption, selectedSortOption, refetch]);
-=======
-  }, [searchTerm, currentPage, selectedField, refetch]);
->>>>>>> 1db0480 (chore: use selected field)
-
+ 
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
@@ -136,9 +132,7 @@ export const SearchPage = ({ hasPermission }) => {
             </div>
             <div>
               {status === "loading" ? (
-                <div className={styles.spinner}>
-                  <Spinner title={localization.loading} size="3xLarge" />
-                </div>
+                <Spinner />
               ) : status === "error" ? (
                 <div className={styles.error}>
                   <span>{localization.somethingWentWrong}</span>
