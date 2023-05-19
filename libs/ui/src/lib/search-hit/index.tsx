@@ -34,17 +34,11 @@ export function SearchHit({catalogId, searchHit}: SearchHit) {
       <div className={styles.metaData}>
         <p>{localization.searchHit.lastEdited} &nbsp;</p>
         {searchHit?.endringslogelement && (
-          <p>{searchHit.endringslogelement.endringstidspunkt}</p>
-        )}
-
-        {searchHit?.status && (
-          <>
-            <p className={styles.dot}>•</p>
-            <p>
-              {searchHit.status.charAt(0).toUpperCase() +
-                searchHit.status.substring(1)}
-            </p>
-          </>
+          <p>
+            {new Date(
+              searchHit.endringslogelement.endringstidspunkt
+            ).toLocaleDateString()}
+          </p>
         )}
 
         {searchHit?.erPublisert && (
