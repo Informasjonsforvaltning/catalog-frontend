@@ -1,5 +1,5 @@
-import styled, {css} from 'styled-components';
-import {SearchFieldProps} from '.';
+import styled, { css } from 'styled-components';
+import { SearchFieldProps } from '.';
 
 const SearchField = styled.div<SearchFieldProps>`
   height: 3.6rem;
@@ -15,7 +15,7 @@ const SearchField = styled.div<SearchFieldProps>`
   }
 
   svg {
-    ${({iconPos}) =>
+    ${({ iconPos }) =>
       iconPos && iconPos === 'right'
         ? css`
             margin-right: 1.2rem;
@@ -25,7 +25,7 @@ const SearchField = styled.div<SearchFieldProps>`
           `}
   }
 
-  ${({error}) =>
+  ${({ error }) =>
     error &&
     css`
       input {
@@ -57,6 +57,10 @@ const Input = styled.input`
 
 const SvgWrapper = styled.figure`
   display: contents;
+
+  :hover {
+    cursor: pointer;
+  }
 `;
 
-export {Input, SearchField, SvgWrapper};
+export { Input, SearchField, SvgWrapper };
