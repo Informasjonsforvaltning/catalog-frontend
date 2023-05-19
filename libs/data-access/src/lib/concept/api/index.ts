@@ -41,3 +41,24 @@ export const getConcept = async (
   return response;
 };
 
+export const getConceptRevisions = async (
+  conceptId: string,
+  accessToken: string
+) => {
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/begreper/${conceptId}/revisions`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'GET',
+  };
+  const response = await fetch(resource, options)
+    .then((res) => res.json())
+    .catch((err) =>
+      console.error('getRevisions failed with: ', err)
+    );
+
+  return response;
+};
+

@@ -6,14 +6,14 @@ import StyledBreadcrumbs, {
 } from './styled';
 import {localization} from '@catalog-frontend/utils';
 
-export type breadcrumbT = {
+export type BreadcrumbType = {
   href: string;
   text: string;
 };
 
 /* eslint-disable-next-line */
 export interface BreadcrumbsProps {
-  breadcrumbList?: breadcrumbT[];
+  breadcrumbList?: BreadcrumbType[];
 }
 
 export function Breadcrumbs({breadcrumbList}: BreadcrumbsProps) {

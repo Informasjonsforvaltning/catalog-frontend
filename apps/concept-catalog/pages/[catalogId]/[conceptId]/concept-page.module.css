@@ -13,10 +13,20 @@
 }
 
 .status > span {
-  border-radius: 50px;
-  background-color: #d1f4e1;
-  border: 1px solid #0c6536;
-  padding: 0 12px;
+  border-radius: 2px;
+  padding: 0 8px;
+  background-color: #cccccc;
+  border: 1px solid black;
+}
+
+.draft > span {
+  background-color: #ffe6e6;
+  border: 1px solid #c30000;
+}
+
+.approved > span {
+  background-color: #f3fcf5;
+  border: 1px solid #06893a;
 }
 
 .info {
@@ -24,6 +34,10 @@
   justify-content: stretch;
   gap: 2em;
   margin: 3em 0 3em 0;
+}
+
+.info a {
+  color: #0062ba;
 }
 
 .info > *:first-child {
@@ -59,4 +73,20 @@
 .tabs > div > div {
   margin-left: 0;
   margin-right: 0;
+}
+
+.revision {
+  display: flex;
+}
+
+.revision a {
+  color: #0062ba;
+}
+
+.revision > div:not(:last-child) {
+  padding-right: 2rem;
+}
+
+.revision > div:last-child {
+  flex-grow: 1;
 }

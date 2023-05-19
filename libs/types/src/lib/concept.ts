@@ -126,7 +126,7 @@ export interface Concept {
   gyldigTom?: string | null;
   seOgså: string[];
   erstattesAv?: string[];
-  status?: string | null;
+  status?: Status | null;
   erSistPublisert?: boolean;
   revisjonAvSistPublisert?: boolean;
   endringslogelement?: Endringslogelement;
@@ -188,3 +188,9 @@ export type SearchableField =
   | 'tillattTerm'
   | 'definisjon'
   | 'merknad';
+
+export type Status = 
+  | 'utkast'
+  | 'godkjent'
+  | 'høring'
+  | 'publisert';
