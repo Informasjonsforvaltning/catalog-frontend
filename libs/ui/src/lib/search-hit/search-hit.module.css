@@ -46,6 +46,10 @@
   font-size: 16px;
 }
 
+.titleRow {
+  display: flex;
+}
+
 @media (max-width: 768px) {
   .container {
     max-width: 70vw;
