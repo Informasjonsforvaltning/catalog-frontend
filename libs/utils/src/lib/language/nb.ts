@@ -5,17 +5,17 @@
 export const nb = {
   noAccess: 'Ingen tilgang.',
   allCatalogs: 'Alle kataloger',
-  catalogType: {concept: 'Begrepskatalog', dataset: 'Datasettkatalogen'},
+  catalogType: { concept: 'Begrepskatalog', dataset: 'Datasettkatalogen' },
   dataVillage: ['Datalandsbyen', 'Lenke til Datalandsbyen'],
   harvestData: ['Høste data', 'Lenke til å høste data'],
   registerData: ['Registrere data', 'Lenke til å registrere data'],
   search: {
     searchInAllFields: 'Søk i alle felt',
     searchForDataset: 'Søk etter datasettbeskrivelse',
-    searchInCatalogs: [
-      'Søk i Felles datakatalog',
-      'Lenke til søk i felles datakatalog',
-    ],
+    alphabeticalSort: 'Alfabetisk sortering',
+    dateSort: 'Sortering på dato',
+    searchField: 'Søk i felt',
+    searchInCatalogs: ['Søk i Felles datakatalog', 'Lenke til søk i felles datakatalog'],
     noResults: 'Ingen resultater',
     fields: {
       alleFelter: 'Alle felter',
@@ -24,6 +24,14 @@ export const nb = {
       tillattTerm: 'Tillatt term',
       definisjon: 'Definisjon',
       merknad: 'Merknad',
+    },
+    sortOptions: {
+      ASC: 'Stigende',
+      DESC: 'Synkende',
+    },
+    dateSortOptions: {
+      SIST_ENDRET: 'Sist endret',
+      ELDST: 'Eldst',
     },
   },
   linkToDataset: 'Lenke til datasett',
@@ -47,8 +55,7 @@ export const nb = {
   },
 
   footer: {
-    digdirManagesNationalDataCatalog:
-      'Digitaliseringsdirektoratet forvalter Felles datakatalog.',
+    digdirManagesNationalDataCatalog: 'Digitaliseringsdirektoratet forvalter Felles datakatalog.',
     termsOfUse: 'Bruksvilkår',
     privacyStatement: 'Personvernerklæring',
     cookies: 'Informasjonskapsler',

@@ -1,1 +1,0 @@
-import { Select } from "@digdir/design-system-react";
