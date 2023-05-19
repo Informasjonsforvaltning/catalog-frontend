@@ -39,3 +39,38 @@
   margin-bottom: 1rem;
   gap: 1rem;
 }
+
+.select {
+  min-width: 15rem;
+  flex: 1 1 0;
+}
+
+.select input {
+  font-size: 1.6rem;
+}
+
+.select > span {
+  display: flex;
+}
+
+.select span > span > span > span {
+  height: 3.5rem;
+}
+
+.select > span > span > span > span:hover {
+  border: 0.2rem solid #121619;
+  box-sizing: border-box;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  margin: 3rem;
+}
+
+.error {
+  display: flex;
+  justify-content: center;
+  margin: 3rem;
+  font-size: 2rem;
+}
