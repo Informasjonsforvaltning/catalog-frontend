@@ -9,6 +9,9 @@ exports[`SearchHit should render SearchHit with undefined input successfully 1`]
       <div
         class="rowSpaceBetween"
       >
+        <div
+          class="titleRow"
+        />
         <p
           class="greyFont"
         >
