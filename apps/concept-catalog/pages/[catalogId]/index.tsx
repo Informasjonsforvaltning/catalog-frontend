@@ -57,7 +57,7 @@ export const SearchPage = ({ hasPermission }) => {
 
   const changePage = async (page) => {
     router.push({
-      pathname: catalogId,
+      pathname: `${catalogId}`,
       query: {page: page.selected + 1},
     });
 
