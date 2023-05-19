@@ -25,8 +25,8 @@ import { getToken } from 'next-auth/jwt';
 
 export const SearchPage = ({ hasPermission }) => {
   const router = useRouter();
-  const catalogId = router.query.catalogId.toString() ?? '';
-  const pageNumber = router.query.page.toString() ?? 1;
+  const catalogId: number = +router.query.catalogId ?? 0;
+  const pageNumber: number = +router.query.page ?? 1;
 
   const [searchTerm, setSearchTerm] = useState('');  
   const [currentPage, setCurrentPage] = useState(pageNumber as number);
