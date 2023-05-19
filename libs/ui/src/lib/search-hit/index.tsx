@@ -5,7 +5,7 @@ import {
 import styles from './search-hit.module.css';
 import {Concept} from '@catalog-frontend/types';
 import Link from 'next/link';
-import {Tag} from '@catalog-frontend/ui';
+import {Tag} from '../tag';
 
 interface SearchHit {
   catalogId: string;
