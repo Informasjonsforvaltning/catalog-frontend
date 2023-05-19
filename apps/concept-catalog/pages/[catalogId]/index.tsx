@@ -3,18 +3,20 @@ import {
   BreadcrumbType,
   SearchHit,
   Pagination,
+  Select,
   Spinner,
 } from '@catalog-frontend/ui';
 import {
   hasOrganizationReadPermission,
   localization,
+  textToNumber,
 } from '@catalog-frontend/utils';
 import {useRouter} from 'next/router';
 import {SearchField} from '@catalog-frontend/ui';
 import {PageBanner} from '@catalog-frontend/ui';
 import {SearchableField} from '@catalog-frontend/types';
 import {useEffect, useState} from 'react';
-import {Select, SortDirection} from '@digdir/design-system-react';
+import {SortDirection} from '@digdir/design-system-react';
 import {
   SortFields,
   SortOptions,
@@ -29,7 +31,7 @@ import {getToken} from 'next-auth/jwt';
 export const SearchPage = ({ hasPermission }) => {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
-  const pageNumber: number = +router.query.page ?? 1;
+  const pageNumber: number = textToNumber(router.query.page as string, 1);
 
   const [searchTerm, setSearchTerm] = useState('');  
   const [selectedFieldOption, setSelectedFieldOption] = useState(
@@ -102,7 +104,8 @@ export const SearchPage = ({ hasPermission }) => {
         title={localization.catalogType.concept}
         subtitle={pageSubtitle}
       />
-      <div className={styles.pageContainer}>
+      <div className='container'>
+        <div className={styles.pageContainer}>
         {hasPermission ? (
           <>
             <div className={styles.searchRowContainer}>
@@ -164,6 +167,7 @@ export const SearchPage = ({ hasPermission }) => {
         ) : (
           <div>{localization.noAccess}</div>
         )}
+        </div>
       </div>
     </>
   );

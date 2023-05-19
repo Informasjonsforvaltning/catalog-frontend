@@ -3,9 +3,8 @@
   flex-grow: 1;
   flex-direction: column;
   width: 100%;
-  max-width: 1140px;
   margin: 0 auto;
-  padding: 1.6rem;
+  padding: 1.6rem 0;
   overflow-wrap: break-word;
 }
 
@@ -37,29 +36,11 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 1rem;
-  gap: 1rem;
+  gap: 3rem;
 }
 
-.select {
-  min-width: 15rem;
-  flex: 1 1 0;
-}
-
-.select input {
-  font-size: 1.6rem;
-}
-
-.select > span {
-  display: flex;
-}
-
-.select span > span > span > span {
-  height: 3.5rem;
-}
-
-.select > span > span > span > span:hover {
-  border: 0.2rem solid #121619;
-  box-sizing: border-box;
+.searchRowContainer > span:first-of-type {
+  flex-grow: 0;
 }
 
 .error {

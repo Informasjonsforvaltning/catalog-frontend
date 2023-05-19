@@ -72,6 +72,7 @@ export const useSearchConcepts = ({
   searchTerm,
   page,
   fields,
+  sort
 }: PageUpdate) => {
   const hitsPerPage = 5;
   const body = {
@@ -79,10 +80,11 @@ export const useSearchConcepts = ({
     query: {
       query: searchTerm,
       pagination: {
-        page: page, 
+        page: page ?? 1, 
         size: hitsPerPage
       },
       fields: fields,
+      sort
     },
   };
 
