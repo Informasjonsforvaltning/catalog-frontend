@@ -11,7 +11,7 @@ interface Fields {
 }
 
 export interface PageUpdate {
-  catalogId: string;
+  catalogId: number;
   searchTerm: string;
   page: number;
   fields: Fields;
