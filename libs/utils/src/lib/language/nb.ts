@@ -3,7 +3,9 @@
  */
 
 export const nb = {
+  loading: 'Laster',
   noAccess: 'Ingen tilgang.',
+  somethingWentWrong: 'Beklager, noe gikk galt. Prøv på nytt litt senere.',
   allCatalogs: 'Alle kataloger',
   catalogType: { concept: 'Begrepskatalog', dataset: 'Datasettkatalogen' },
   dataVillage: ['Datalandsbyen', 'Lenke til Datalandsbyen'],

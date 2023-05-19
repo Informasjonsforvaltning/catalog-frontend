@@ -7,11 +7,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const token = await getToken({ req });
   const { catalogId, query: jsonSearchBody } = JSON.parse(req.body);
 
-  searchConceptsForCatalog(catalogId, `${token.access_token}`, JSON.stringify(jsonSearchBody)).then(
-    async (response) => {
-      if (response?.hits) {
-        return res.status(200).send(response);
-      } else res.status(404).send('Not found');
-    },
-  );
+  searchConceptsForCatalog(
+    catalogId,
+    `${token?.access_token}`,
+    JSON.stringify(jsonSearchBody)
+  ).then(async (response) => {
+    if (response?.hits) {
+      return res.status(200).send(response);
+    } else res.status(404).send('Not found');
+  });
 }
