@@ -29,17 +29,22 @@ export const SearchPage = ({ hasPermission }) => {
   const pageNumber: number = +router.query.page ?? 1;
 
   const [searchTerm, setSearchTerm] = useState('');  
+<<<<<<< HEAD
   const [currentPage, setCurrentPage] = useState(pageNumber as number);
   const [selectedFieldOption, setSelectedFieldOption] = useState(
     'alleFelter' as SearchableField | 'alleFelter'
   );
   const [selectedSortOption, setSelectedSortOption] = useState(getDefaultSortOptions());
+=======
+  const [currentPage, setCurrentPage] = useState(pageNumber);
+  const [selectedField, setSelectedField] = useState<SearchableField|'alleFelter'>('alleFelter');
+>>>>>>> 1db0480 (chore: use selected field)
 
   const { status, data, refetch } = useSearchConcepts({
     catalogId,
     searchTerm,
     page: currentPage,
-    fields: getFields('alleFelter')});
+    fields: getFields(selectedField)});
 
   const pageSubtitle = catalogId ?? 'No title'; 
   const fieldOptions = getSelectOptions(localization.search.fields);
@@ -64,11 +69,11 @@ export const SearchPage = ({ hasPermission }) => {
     setCurrentPage(page.selected + 1);
   };
 
-  const onSearchSubmit = async (term = searchTerm) => {
+  const onSearchSubmit = (term = searchTerm) => {
     setSearchTerm(term);
   };
 
-  const onFieldSelect = async (selectValue: SearchableField) => {
+  const onFieldSelect = (selectValue: SearchableField) => {
     setSelectedField(selectValue);
   };
 
@@ -88,7 +93,11 @@ export const SearchPage = ({ hasPermission }) => {
 
   useEffect(() => {
     refetch();
+<<<<<<< HEAD
   }, [searchTerm, currentPage, selectedFieldOption, selectedSortOption, refetch]);
+=======
+  }, [searchTerm, currentPage, selectedField, refetch]);
+>>>>>>> 1db0480 (chore: use selected field)
 
   return (
     <>
@@ -153,7 +162,7 @@ export const SearchPage = ({ hasPermission }) => {
                 <Pagination
                   onPageChange={changePage}
                   forcePage={currentPage - 1}
-                  pageCount={data?.page ? data?.page.totalPages - 1 : 0}
+                  pageCount={data?.page?.totalPages ?? 0}
                 />
               )}
             </div>
