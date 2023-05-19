@@ -4,7 +4,7 @@ import {getToken} from 'next-auth/jwt';
 import {
   PageBanner,
   Breadcrumbs,
-  breadcrumbT,
+  BreadcrumbType,
   InfoCard,
   DetailHeading,
 } from '@catalog-frontend/ui';
@@ -12,25 +12,27 @@ import {
   localization,
   getTranslateText as translate,
   hasOrganizationReadPermission,
+  capitalizeFirstLetter,
 } from '@catalog-frontend/utils';
-import {getConcept} from '@catalog-frontend/data-access';
+import {getConcept, getConceptRevisions} from '@catalog-frontend/data-access';
 import {Concept} from '@catalog-frontend/types';
 import cn from 'classnames';
 import classes from './concept-page.module.css';
 import { CheckboxGroup, CheckboxGroupVariant, Tabs } from '@digdir/design-system-react';
+import Link from 'next/link';
 
 export const ConceptPage = ({
-  hasPermission, data,
+  hasPermission, concept, revisions
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const catalogId = (router.query.catalogId as string) ?? '';
   const pageSubtitle = catalogId ?? 'No title';
 
   const infoData2 = [
-    ["ID", data?.id],
+    ["ID", concept?.id],
     ["Publiseringsdato", 'N/A'],
-    ["Versjon", `${data?.versjonsnr.major}.${data?.versjonsnr.minor}.${data?.versjonsnr.patch}`], 
-    ["Gyldighet", `Fra/til: ${data?.gyldigFom} - ${data?.gyldigTom}`],
+    ["Versjon", `${concept?.versjonsnr.major}.${concept?.versjonsnr.minor}.${concept?.versjonsnr.patch}`], 
+    ["Gyldighet", `Fra/til: ${concept?.gyldigFom} - ${concept?.gyldigTom}`],
     ["Tildelt", 'N/A'],
     ["Sist oppdatert", 'N/A'],
     ["Opprettet", 'N/A'],
@@ -40,13 +42,34 @@ export const ConceptPage = ({
     ["Opprettet av", 'N/A'],
   ];
 
+  const renderRevisions = () => 
+    revisions?.map(revision => (
+      <InfoCard.Item key={`revision-${revision.id}`}>
+        <div className={classes.revision}>
+          <div>v{revision?.versjonsnr.major}.{revision?.versjonsnr.minor}.{revision?.versjonsnr.patch}</div>
+          <div><Link href={`/${catalogId}/${revision.id}`}>{translate(revision?.anbefaltTerm?.navn)}</Link></div>
+          <div className={cn(
+              classes.status, 
+              {[classes.draft]: revision.status === 'utkast'},
+              {[classes.approved]: revision.status === 'godkjent'})}>
+                <span>{capitalizeFirstLetter(revision.status)}</span>
+          </div>
+        </div>                           
+      </InfoCard.Item>
+    ));
+  
+
   const breadcrumbList = catalogId
     ? ([
         {
           href: `/${catalogId}`,
           text: localization.catalogType.concept,
         },
-      ] as unknown as breadcrumbT[])
+        {
+          href: `/${catalogId}/${concept?.id}`,
+          text: translate(concept?.anbefaltTerm?.navn),
+        },
+      ] as BreadcrumbType[])
     : [];
 
   return (
@@ -61,9 +84,13 @@ export const ConceptPage = ({
           <>
             <DetailHeading 
               className={classes.detailHeading} 
-              headingTitle={<h2>{translate(data?.anbefaltTerm?.navn)}</h2>} 
-              subtitle={translate(data?.fagområde)} />
-            <div className={classes.status}><span>Godkjent</span></div>
+              headingTitle={<h2>{translate(concept?.anbefaltTerm?.navn)}</h2>} 
+              subtitle={translate(concept?.fagområde)} />
+            <div className={cn(
+              classes.status,
+              {[classes.draft]: concept?.status === 'utkast'},
+              {[classes.approved]: concept?.status === 'godkjent'})}>
+                <span>{capitalizeFirstLetter(concept?.status)}</span></div>
             <div className={classes.languages}>
             <CheckboxGroup           
               compact={false}
@@ -78,7 +105,7 @@ export const ConceptPage = ({
             </div>
             <div className={classes.definition}>
               <h3>Definisjon:</h3>
-              <div>{translate(data?.definisjon.tekst)}</div>
+              <div>{translate(concept?.definisjon.tekst)}</div>
               <div className={cn(classes.source)}>
                 Kilde: <a href="#">Basert på Skatteetaten</a>
               </div>
@@ -91,10 +118,10 @@ export const ConceptPage = ({
                     <span>Begrep x</span>
                   </InfoCard.Item>
                   <InfoCard.Item label="Merknad:">
-                    <span>{translate(data?.merknad)}</span>
+                    <span>{translate(concept?.merknad)}</span>
                   </InfoCard.Item>
                   <InfoCard.Item label='Eksempel:'>
-                    <span>{translate(data?.eksempel)}</span>
+                    <span>{translate(concept?.eksempel)}</span>
                   </InfoCard.Item>
                   <InfoCard.Item label='Folkelig forklaring:'>
                     <span>N/A</span>
@@ -142,16 +169,8 @@ export const ConceptPage = ({
                       {
                         content: (
                           <InfoCard>
-                            <InfoCard.Item>
-                              <span>v1.2.1 - Testbegrep med mange metadata</span>                              
-                            </InfoCard.Item>
-                            <InfoCard.Item>
-                              <span>v1.2.0 - Testbegrep med mange metadata</span>
-                            </InfoCard.Item>
-                            <InfoCard.Item>
-                              <span>v1.1.0 - Begrep med mange metadata</span>
-                            </InfoCard.Item>
-                           </InfoCard>   
+                            {renderRevisions()}
+                          </InfoCard>   
                         ),
                         name: 'Versjoner'
                       },
@@ -184,7 +203,14 @@ export async function getServerSideProps({req, params}) {
 
   
   const hasPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
-  const data: Concept | null = hasPermission ? await getConcept(
+  const concept: Concept | null = hasPermission ? await getConcept(
+    conceptId,
+    `${token.access_token}`
+  ).then(async (response) => {
+    return response || null;
+  }) : null;
+
+  const revisions: Concept[] | null = hasPermission ? await getConceptRevisions(
     conceptId,
     `${token.access_token}`
   ).then(async (response) => {
@@ -194,7 +220,8 @@ export async function getServerSideProps({req, params}) {
   return {
     props: {
       hasPermission,
-      data,
+      concept,
+      revisions
     },
   };  
 }

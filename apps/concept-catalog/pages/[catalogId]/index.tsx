@@ -1,6 +1,6 @@
 import {
   Breadcrumbs,
-  breadcrumbT,
+  BreadcrumbType,
   SearchHit,
   Pagination,
 } from '@catalog-frontend/ui';
@@ -8,8 +8,6 @@ import {
   hasOrganizationReadPermission,
   localization,
 } from '@catalog-frontend/utils';
-import {ArrowLeftIcon, ArrowRightIcon} from '@navikt/aksel-icons';
-import ReactPaginate from 'react-paginate';
 import {useRouter} from 'next/router';
 import {SearchField} from '@catalog-frontend/ui';
 import {PageBanner} from '@catalog-frontend/ui';
@@ -42,6 +40,7 @@ export const SearchPage = ({ hasPermission }) => {
   useEffect(() => {
     if(hasPermission) {
       const init = () =>
+        
         updatePage({
           catalogId,
           searchTerm,
@@ -63,7 +62,7 @@ export const SearchPage = ({ hasPermission }) => {
           href: `/${catalogId}`,
           text: localization.catalogType.concept,
         },
-      ] as unknown as breadcrumbT[])
+      ] as BreadcrumbType[])
     : [];
 
   const changePage = async (currentPage) => {
