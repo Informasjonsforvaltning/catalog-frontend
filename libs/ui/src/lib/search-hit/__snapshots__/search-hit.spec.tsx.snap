@@ -9,15 +9,28 @@ exports[`SearchHit should render SearchHit successfully 1`] = `
       <div
         class="rowSpaceBetween"
       >
-        <a
-          href="undefined/bec18f0d-389e-4fa3-970d-23c1196cbe00"
+        <div
+          class="titleRow"
         >
-          <h2
-            class="title"
+          <a
+            href="undefined/bec18f0d-389e-4fa3-970d-23c1196cbe00"
           >
-            test 2
-          </h2>
-        </a>
+            <h2
+              class="title"
+            >
+              test 2
+            </h2>
+          </a>
+          <div
+            class="container utkast"
+          >
+            <p
+              class="text"
+            >
+              Utkast
+            </p>
+          </div>
+        </div>
         <p
           class="greyFont"
         >
@@ -32,15 +45,7 @@ exports[`SearchHit should render SearchHit successfully 1`] = `
             
         </p>
         <p>
-          2023-01-16T14:29:28.768+01:00
-        </p>
-        <p
-          class="dot"
-        >
-          •
-        </p>
-        <p>
-          Utkast
+          1/16/2023
         </p>
       </div>
       <div

@@ -1,0 +1,28 @@
+.container {
+  border: solid 1px;
+  border-color: #969ba0;
+  border-radius: 2px;
+  width: fit-content;
+  height: fit-content;
+  padding: 1px 8px;
+  margin-left: 15px;
+  margin-top: 1px;
+}
+
+.godkjent {
+  background-color: #f3fcf5;
+  border-color: #06893a;
+}
+.utkast {
+  background-color: #ffe6e6;
+  border-color: #c30000;
+}
+
+.publisert {
+  background-color: #e6f1f8;
+  border-color: #005b82;
+}
+.høring {
+  background-color: #fff9f0;
+  border-color: #d47b00;
+}

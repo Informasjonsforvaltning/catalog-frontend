@@ -4,7 +4,8 @@ import {
 } from '@catalog-frontend/utils';
 import styles from './search-hit.module.css';
 import {Concept} from '@catalog-frontend/types';
-import Link from 'next/link'
+import Link from 'next/link';
+import {Tag} from '../tag';
 
 interface SearchHit {
   catalogId: string;
@@ -12,17 +13,20 @@ interface SearchHit {
 }
 
 export function SearchHit({catalogId, searchHit}: SearchHit) {
-
   return (
     <div className={styles.container}>
       <div className={styles.rowSpaceBetween}>
-        {searchHit?.anbefaltTerm && (
-          <Link href={`${catalogId}/${searchHit.id}`}>
-            <h2 className={styles.title}>
-              {translate(searchHit?.anbefaltTerm.navn)}
-            </h2>
-          </Link>          
-        )}
+        <div className={styles.titleRow}>
+          {searchHit?.anbefaltTerm && (
+            <Link href={`${catalogId}/${searchHit.id}`}>
+              <h2 className={styles.title}>
+                {translate(searchHit?.anbefaltTerm.navn)}
+              </h2>
+            </Link>
+          )}
+
+          {searchHit?.status && <Tag label={searchHit.status} />}
+        </div>
 
         <p className={styles.greyFont}>Brødsmuler - Ikke klart i backend </p>
       </div>
@@ -30,17 +34,11 @@ export function SearchHit({catalogId, searchHit}: SearchHit) {
       <div className={styles.metaData}>
         <p>{localization.searchHit.lastEdited} &nbsp;</p>
         {searchHit?.endringslogelement && (
-          <p>{searchHit.endringslogelement.endringstidspunkt}</p>
-        )}
-
-        {searchHit?.status && (
-          <>
-            <p className={styles.dot}>•</p>
-            <p>
-              {searchHit.status.charAt(0).toUpperCase() +
-                searchHit.status.substring(1)}
-            </p>
-          </>
+          <p>
+            {new Date(
+              searchHit.endringslogelement.endringstidspunkt
+            ).toLocaleDateString()}
+          </p>
         )}
 
         {searchHit?.erPublisert && (
