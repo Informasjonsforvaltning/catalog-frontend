@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import styled, {css} from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const StyledBreadcrumbs = styled.nav`
   color: #335380;
@@ -7,7 +7,7 @@ const StyledBreadcrumbs = styled.nav`
   flex-direction: column;
   width: 100%;
   margin: 1.6rem auto;
-  overflow-wrap: break-word;  
+  overflow-wrap: break-word;
 `;
 
 const linkStyle = css`
@@ -46,4 +46,4 @@ const Separator = styled.span`
 `;
 
 export default StyledBreadcrumbs;
-export {InternalLink, ExternalLink, Separator, DeactiveLink};
+export { InternalLink, ExternalLink, Separator, DeactiveLink };

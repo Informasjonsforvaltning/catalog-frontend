@@ -1,5 +1,5 @@
-import styled, {AnyStyledComponent, css} from 'styled-components';
-import {ButtonProps, ButtonType} from '.';
+import styled, { AnyStyledComponent, css } from 'styled-components';
+import { ButtonProps, ButtonType } from '.';
 
 const button = css`
   display: flex;
@@ -75,11 +75,11 @@ const Text = styled.p`
 `;
 
 const Filled = styled.button<ButtonProps>`
-  color: ${({btnColor}) => btnColor};
-  background-color: ${({bg}) => bg};
+  color: ${({ btnColor }) => btnColor};
+  background-color: ${({ bg }) => bg};
   ${filledStyle};
 
-  ${({btnColor}) =>
+  ${({ btnColor }) =>
     btnColor &&
     css`
       & * {
@@ -87,7 +87,7 @@ const Filled = styled.button<ButtonProps>`
       }
     `}
 
-  ${({iconPos}) =>
+  ${({ iconPos }) =>
     iconPos &&
     (iconPos === 'left'
       ? css`
@@ -103,10 +103,10 @@ const Filled = styled.button<ButtonProps>`
 `;
 
 const Link = styled.button<ButtonProps>`
-  color: ${({btnColor}) => btnColor};
-  border-color: ${({btnColor}) => btnColor};
+  color: ${({ btnColor }) => btnColor};
+  border-color: ${({ btnColor }) => btnColor};
 
-  ${({btnColor}) =>
+  ${({ btnColor }) =>
     btnColor &&
     css`
       & * {
@@ -115,7 +115,7 @@ const Link = styled.button<ButtonProps>`
     `}
 
   ${linkStyle};
-  ${({iconPos}) =>
+  ${({ iconPos }) =>
     iconPos &&
     (iconPos === 'left'
       ? css`
@@ -133,7 +133,7 @@ const Link = styled.button<ButtonProps>`
 const Transparent = styled.button<ButtonProps>`
   ${tranparentStyle};
 
-  ${({iconPos}) =>
+  ${({ iconPos }) =>
     iconPos &&
     (iconPos === 'left'
       ? css`
@@ -161,4 +161,4 @@ const getStyledComponent = (type: ButtonType): AnyStyledComponent => {
   }
 };
 
-export {getStyledComponent, Text};
+export { getStyledComponent, Text };

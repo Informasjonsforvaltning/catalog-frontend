@@ -7,7 +7,7 @@ interface PageBannerProps {
   subtitle: string;
 }
 
-const PageBanner = ({title, subtitle}: PageBannerProps) => {
+const PageBanner = ({ title, subtitle }: PageBannerProps) => {
   return (
     <div className={style.banner}>
       <div className={style.svgEllipse}>
@@ -26,4 +26,4 @@ const PageBanner = ({title, subtitle}: PageBannerProps) => {
   );
 };
 
-export {PageBanner};
+export { PageBanner };

@@ -4,12 +4,10 @@ interface TagProps {
   label?: string;
 }
 
-export function Tag({label}: TagProps) {
+export function Tag({ label }: TagProps) {
   return (
     <div className={cn(styles.container, styles[label ? label : ''])}>
-      <p className={styles.text}>
-        {label && label.charAt(0).toUpperCase() + label.substring(1)}
-      </p>
+      <p className={styles.text}>{label && label.charAt(0).toUpperCase() + label.substring(1)}</p>
     </div>
   );
 }

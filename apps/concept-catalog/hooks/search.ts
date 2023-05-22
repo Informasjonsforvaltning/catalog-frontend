@@ -1,7 +1,7 @@
-import {SearchableField} from '@catalog-frontend/types';
-import {localization} from '@catalog-frontend/utils';
-import {SingleSelectOption} from '@digdir/design-system-react';
-import {useQuery} from '@tanstack/react-query';
+import { SearchableField } from '@catalog-frontend/types';
+import { localization } from '@catalog-frontend/utils';
+import { SingleSelectOption } from '@digdir/design-system-react';
+import { useQuery } from '@tanstack/react-query';
 
 export type SortFields = 'SIST_ENDRET' | 'ELDST';
 export type SortDirection = 'ASC' | 'DESC';
@@ -36,7 +36,7 @@ export const fields = {
 };
 
 const getNegatedFields = () => {
-  const negatedFields = {...fields};
+  const negatedFields = { ...fields };
   for (const field in negatedFields) {
     negatedFields[field] = false;
   }
@@ -47,7 +47,7 @@ export const getFields = (field: SearchableField | 'alleFelter'): FieldOptions =
   if (field === 'alleFelter') {
     return fields;
   } else {
-    return {...getNegatedFields(), [field]: true};
+    return { ...getNegatedFields(), [field]: true };
   }
 };
 
@@ -67,29 +67,23 @@ export const getDefaultSortOptions = (): SortOptions => ({
   direction: 'DESC',
 });
 
-export const useSearchConcepts = ({
-  catalogId,
-  searchTerm,
-  page,
-  fields,
-  sort
-}: PageUpdate) => {
+export const useSearchConcepts = ({ catalogId, searchTerm, page, fields, sort }: PageUpdate) => {
   const hitsPerPage = 5;
   const body = {
     catalogId,
     query: {
       query: searchTerm,
       pagination: {
-        page: page ?? 1, 
-        size: hitsPerPage
+        page: page ?? 1,
+        size: hitsPerPage,
       },
       fields: fields,
-      sort
+      sort,
     },
   };
 
   return useQuery({
-    queryKey: ["searchConcepts", body],
+    queryKey: ['searchConcepts', body],
     queryFn: async () => {
       const response = await fetch('/api/search', {
         method: 'POST',

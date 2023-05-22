@@ -1,16 +1,8 @@
-import {FC, ChangeEvent, useState, KeyboardEvent} from 'react';
-import {Input, SearchField as StyledSearchField, SvgWrapper} from './styled';
+import { FC, ChangeEvent, useState, KeyboardEvent } from 'react';
+import { Input, SearchField as StyledSearchField, SvgWrapper } from './styled';
 import MagnifyingGlassSVG from './MagnifyingGlass.svg';
 
-type InputType =
-  | 'text'
-  | 'tel'
-  | 'url'
-  | 'number'
-  | 'file'
-  | 'email'
-  | 'date'
-  | 'search';
+type InputType = 'text' | 'tel' | 'url' | 'number' | 'file' | 'email' | 'date' | 'search';
 type IconPoseType = 'left' | 'right' | undefined;
 
 interface SearchFieldProps {
@@ -52,7 +44,7 @@ const SearchField: FC<SearchFieldProps> = ({
 
   return (
     <StyledSearchField
-      ariaLabel=""
+      ariaLabel=''
       error={error}
       iconPos={startIcon ? 'left' : endIcon ? 'right' : undefined}
     >
@@ -70,4 +62,4 @@ const SearchField: FC<SearchFieldProps> = ({
   );
 };
 
-export {SearchField, type SearchFieldProps};
+export { SearchField, type SearchFieldProps };

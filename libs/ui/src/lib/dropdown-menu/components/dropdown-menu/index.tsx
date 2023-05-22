@@ -1,12 +1,4 @@
-import React, {
-  FC,
-  useRef,
-  useEffect,
-  PropsWithChildren,
-  HTMLAttributes,
-  Children,
-  isValidElement
-} from 'react';
+import React, { FC, useRef, useEffect, PropsWithChildren, HTMLAttributes, Children, isValidElement } from 'react';
 
 import SC from './styled';
 
@@ -27,19 +19,14 @@ export interface Props extends HTMLAttributes<HTMLElement> {
   onClose: () => void;
 }
 
-export const DropdownMenu: FC<PropsWithChildren<Props>> = ({
-  isOpen,
-  onClose,
-  children,
-  ...props
-}) => {
+export const DropdownMenu: FC<PropsWithChildren<Props>> = ({ isOpen, onClose, children, ...props }) => {
   const dropdownMenuElement = useRef<HTMLElement | null>(null);
 
-  const triggerChild = Children.map(children, child =>
-    isValidElement(child) && child.type === Trigger ? child : null
+  const triggerChild = Children.map(children, (child) =>
+    isValidElement(child) && child.type === Trigger ? child : null,
   )?.shift();
-  const menuChild = Children.map(children, child =>
-    isValidElement(child) && child.type === Menu ? child : null
+  const menuChild = Children.map(children, (child) =>
+    isValidElement(child) && child.type === Menu ? child : null,
   )?.shift();
 
   useEffect(() => {
@@ -48,10 +35,10 @@ export const DropdownMenu: FC<PropsWithChildren<Props>> = ({
         onClose();
       }
     };
-  
+
     const handleClickOutside = (e: MouseEvent) => {
       e.stopPropagation();
-  
+
       if (!dropdownMenuElement.current?.contains(e.target as Node)) {
         onClose();
       }
@@ -67,10 +54,11 @@ export const DropdownMenu: FC<PropsWithChildren<Props>> = ({
   }, [onClose]);
 
   return (
-    <SC.DropdownMenu {...props} ref={dropdownMenuElement}>
-      <SC.Trigger onClick={isOpen ? onClose : undefined}>
-        {triggerChild}
-      </SC.Trigger>
+    <SC.DropdownMenu
+      {...props}
+      ref={dropdownMenuElement}
+    >
+      <SC.Trigger onClick={isOpen ? onClose : undefined}>{triggerChild}</SC.Trigger>
       {isOpen && <SC.Menu>{menuChild}</SC.Menu>}
     </SC.DropdownMenu>
   );

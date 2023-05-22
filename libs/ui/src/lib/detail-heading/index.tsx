@@ -1,4 +1,4 @@
-import {HTMLAttributes, ReactNode} from 'react';
+import { HTMLAttributes, ReactNode } from 'react';
 import cn from 'classnames';
 import style from './detail-heading.module.css';
 
@@ -7,7 +7,7 @@ interface DetailHeadingProps extends HTMLAttributes<HTMLDivElement> {
   subtitle?: ReactNode;
 }
 
-export const DetailHeading = ({headingTitle, subtitle, className, ...rest}: DetailHeadingProps) => {
+export const DetailHeading = ({ headingTitle, subtitle, className, ...rest }: DetailHeadingProps) => {
   return (
     <div className={cn(style.detailHeading, className)}>
       <div className={cn(style.title)}>{headingTitle}</div>
@@ -17,4 +17,3 @@ export const DetailHeading = ({headingTitle, subtitle, className, ...rest}: Deta
 };
 
 export default DetailHeading;
-
