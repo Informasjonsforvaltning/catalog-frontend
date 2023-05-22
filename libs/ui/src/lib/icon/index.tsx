@@ -2,9 +2,9 @@
  * Check all available icon name and className here: https://github.com/fellesdatakatalog/fdk-kit/tree/develop/packages/icons/src/assets/svg
  */
 
-import {SvgIconTypes} from '@fellesdatakatalog/icons';
-import React, {FC} from 'react';
-import {Icon as StyledIcon, Text} from './styled';
+import { SvgIconTypes } from '@fellesdatakatalog/icons';
+import React, { FC } from 'react';
+import { Icon as StyledIcon, Text } from './styled';
 
 type IconType = 'icon' | 'textIcon';
 
@@ -15,20 +15,15 @@ interface IconProps {
   className?: string;
 }
 
-export const Icon: FC<IconProps> = ({
-  className,
-  name,
-  type = 'icon',
-  text = 'nb',
-}) => {
+export const Icon: FC<IconProps> = ({ className, name, type = 'icon', text = 'nb' }) => {
   return type === 'textIcon' ? (
     <StyledIcon
       className={className}
       name={name as SvgIconTypes}
     >
       <Text
-        x="10%"
-        y="50%"
+        x='10%'
+        y='50%'
       >
         {text}
       </Text>

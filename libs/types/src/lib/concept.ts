@@ -109,7 +109,7 @@ export interface Concept {
   revisjonAv?: string;
   anbefaltTerm?: AnbefaltTerm;
   definisjon?: Definisjon;
-  ansvarligVirksomhet: {id: string};
+  ansvarligVirksomhet: { id: string };
   kildebeskrivelse?: {
     forholdTilKilde: string;
     kilde: Kilde[];
@@ -182,15 +182,6 @@ export interface SearchConceptResponse {
   page: ConceptHitPage;
 }
 
-export type SearchableField =
-  | 'anbefaltTerm'
-  | 'frarådetTerm'
-  | 'tillattTerm'
-  | 'definisjon'
-  | 'merknad';
+export type SearchableField = 'anbefaltTerm' | 'frarådetTerm' | 'tillattTerm' | 'definisjon' | 'merknad';
 
-export type Status = 
-  | 'utkast'
-  | 'godkjent'
-  | 'høring'
-  | 'publisert';
+export type Status = 'utkast' | 'godkjent' | 'høring' | 'publisert';

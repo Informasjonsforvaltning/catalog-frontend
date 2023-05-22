@@ -11,4 +11,4 @@ const Text = styled.text`
   dominant-baseline: middle;
 `;
 
-export {Icon, Text};
+export { Icon, Text };

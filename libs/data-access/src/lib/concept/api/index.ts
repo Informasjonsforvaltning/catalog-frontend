@@ -1,8 +1,4 @@
-export const searchConceptsForCatalog = async (
-  catalogId: string,
-  accessToken: string,
-  body = ''
-) => {
+export const searchConceptsForCatalog = async (catalogId: string, accessToken: string, body = '') => {
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/begreper/search?orgNummer=${catalogId}`;
   const options = {
     headers: {
@@ -14,16 +10,11 @@ export const searchConceptsForCatalog = async (
   };
   const response = await fetch(resource, options)
     .then((res) => res.json())
-    .catch((err) =>
-      console.error('searchConceptsForCatalog failed with: ', err)
-    );
+    .catch((err) => console.error('searchConceptsForCatalog failed with: ', err));
   return response;
 };
 
-export const getConcept = async (
-  conceptId: string,
-  accessToken: string
-) => {
+export const getConcept = async (conceptId: string, accessToken: string) => {
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/begreper/${conceptId}`;
   const options = {
     headers: {
@@ -34,17 +25,12 @@ export const getConcept = async (
   };
   const response = await fetch(resource, options)
     .then((res) => res.json())
-    .catch((err) =>
-      console.error('getConcept failed with: ', err)
-    );
+    .catch((err) => console.error('getConcept failed with: ', err));
 
   return response;
 };
 
-export const getConceptRevisions = async (
-  conceptId: string,
-  accessToken: string
-) => {
+export const getConceptRevisions = async (conceptId: string, accessToken: string) => {
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/begreper/${conceptId}/revisions`;
   const options = {
     headers: {
@@ -55,10 +41,7 @@ export const getConceptRevisions = async (
   };
   const response = await fetch(resource, options)
     .then((res) => res.json())
-    .catch((err) =>
-      console.error('getRevisions failed with: ', err)
-    );
+    .catch((err) => console.error('getRevisions failed with: ', err));
 
   return response;
 };
-

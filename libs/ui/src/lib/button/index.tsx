@@ -1,6 +1,6 @@
-import React, {ButtonHTMLAttributes} from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 
-import {getStyledComponent, Text} from './styled';
+import { getStyledComponent, Text } from './styled';
 
 type ButtonType = 'default' | 'filled' | 'link' | 'transparent';
 type IconPoseType = 'left' | 'right' | undefined;
@@ -21,9 +21,7 @@ export function Button({
   endIcon,
   btnType = 'default',
   name = 'Button',
-  btnColor = btnType === 'link' || btnType === 'transparent'
-    ? '#335380'
-    : '#fff',
+  btnColor = btnType === 'link' || btnType === 'transparent' ? '#335380' : '#fff',
   bg = '#335380',
   onClick,
 }: ButtonProps) {
@@ -46,4 +44,4 @@ export function Button({
 }
 
 export default Button;
-export type {ButtonType, ButtonProps};
+export type { ButtonType, ButtonProps };

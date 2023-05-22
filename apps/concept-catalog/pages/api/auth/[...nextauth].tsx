@@ -18,12 +18,12 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    async session({session, token}: any) {
+    async session({ session, token }: any) {
       session.user = {
         id: token.id ?? null,
         name: token.name,
         email: token.email ?? null,
-        image: null,      
+        image: null,
       };
 
       if (token.error) {
@@ -32,7 +32,7 @@ export const authOptions = {
 
       return session;
     },
-    async jwt({token, user, account}) {
+    async jwt({ token, user, account }) {
       if (account) {
         // Save the access token and refresh token in the JWT on the initial login
         return {
@@ -50,19 +50,16 @@ export const authOptions = {
         try {
           // https://accounts.google.com/.well-known/openid-configuration
           // We need the `token_endpoint`.
-          const response = await fetch(
-            `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`,
-            {
-              headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-              body: new URLSearchParams({
-                client_id: process.env.KEYCLOAK_ID,
-                client_secret: process.env.KEYCLOAK_SECRET,
-                grant_type: 'refresh_token',
-                refresh_token: token.refresh_token,
-              }),
-              method: 'POST',
-            }
-          );
+          const response = await fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`, {
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+              client_id: process.env.KEYCLOAK_ID,
+              client_secret: process.env.KEYCLOAK_SECRET,
+              grant_type: 'refresh_token',
+              refresh_token: token.refresh_token,
+            }),
+            method: 'POST',
+          });
 
           const tokens = await response.json();
 
@@ -79,7 +76,7 @@ export const authOptions = {
         } catch (error) {
           console.error('Error refreshing access token', error);
           // The error property will be used client-side to handle the refresh token error
-          return {...token, error: 'RefreshAccessTokenError' as const};
+          return { ...token, error: 'RefreshAccessTokenError' as const };
         }
       }
     },

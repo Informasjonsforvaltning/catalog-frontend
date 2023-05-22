@@ -1,10 +1,10 @@
 import React from 'react';
-import {render} from '@testing-library/react';
+import { render } from '@testing-library/react';
 import SearchHit from '.';
 
 describe('SearchHit', () => {
   it('should render SearchHit successfully', () => {
-    const {baseElement} = render(
+    const { baseElement } = render(
       <SearchHit
         searchHit={{
           id: 'bec18f0d-389e-4fa3-970d-23c1196cbe00',
@@ -28,7 +28,7 @@ describe('SearchHit', () => {
             id: 'John Doe',
           },
         }}
-      />
+      />,
     );
     expect(baseElement).toBeTruthy();
     expect(baseElement).toMatchSnapshot();

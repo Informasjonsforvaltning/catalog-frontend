@@ -87,7 +87,7 @@ const LogoutButton = styled.button`
   cursor: pointer;
   padding: 0;
   white-space: nowrap;
-  font-size:
+  font-size: ;
 `;
 
 const ButtonLabel = styled.span`
@@ -113,7 +113,7 @@ const MenuItems = styled.ul`
 `;
 
 const MenuItem = styled.li`
-  list-style-type: none;  
+  list-style-type: none;
   & > * {
     color: #fff;
   }
@@ -199,7 +199,7 @@ export default {
   Header,
   Navigation,
   Logo,
-  LogoDemo,    
+  LogoDemo,
   LogoutButton,
   ButtonLabel,
   MenuItems,
@@ -210,5 +210,5 @@ export default {
   MenuButtonContentSpan,
   Menu,
   DropdownMenuItem,
-  ExpandIconWrapper
+  ExpandIconWrapper,
 };
