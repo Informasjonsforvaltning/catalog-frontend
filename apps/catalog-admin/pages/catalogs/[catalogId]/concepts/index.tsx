@@ -2,6 +2,7 @@ import { Card } from '@catalog-frontend/ui';
 import styles from './concepts.module.css';
 import React from 'react';
 import { useRouter } from 'next/router';
+import { localization } from '@catalog-frontend/utils';
 
 export const ConceptsPage = () => {
   const router = useRouter();
@@ -10,13 +11,13 @@ export const ConceptsPage = () => {
   return (
     <div className={styles.container}>
       <Card
-        title='Kodeliste'
-        body='Administrer kodeliste'
+        title={localization.catalogAdmin.codeList}
+        body={localization.catalogAdmin.manage.codeList}
         href={`/catalogs/${catalogId}/concepts/code-lists`}
       />
       <Card
-        title='Interne felt'
-        body='Administrer interne felt'
+        title={localization.catalogAdmin.internalFields}
+        body={localization.catalogAdmin.manage.internalFields}
         href={`/catalogs/${catalogId}/concepts/internal-fields`}
       />
     </div>

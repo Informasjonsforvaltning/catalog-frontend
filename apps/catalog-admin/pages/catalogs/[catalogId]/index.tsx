@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { Card } from '@catalog-frontend/ui';
 
 import styles from './style.module.css';
+import { localization } from '@catalog-frontend/utils';
 
 export const CatalogsAdminPage = () => {
   const router = useRouter();
@@ -10,17 +11,16 @@ export const CatalogsAdminPage = () => {
 
   return (
     <>
-      <div>{catalogId}</div>
       <div>
         <div className={styles.card}>
           <Card
-            title='Generelt'
-            body='Oversikt over beskrivelser av datasett, begrep, apier og informasjonmodeller. Innholdet blir levert av ulike virksomheter, offentlige og private.'
+            title={localization.general}
+            body={localization.catalogAdmin.description.general}
             href={`/catalogs/${catalogId}/general`}
           />
           <Card
-            title='Begrepskatalog'
-            body='Formålet med begrepskatalogen er å gjøre dataene mer forståelige. Like begreper kan brukes på forskjellige måter i ulik kontekster.'
+            title={localization.catalogType.concept}
+            body={localization.catalogAdmin.description.conceptCatalog}
             href={`/catalogs/${catalogId}/concepts`}
           />
         </div>

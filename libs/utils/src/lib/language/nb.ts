@@ -4,6 +4,7 @@
 
 export const nb = {
   loading: 'Laster',
+  general: 'Generelt',
   noAccess: 'Ingen tilgang.',
   somethingWentWrong: 'Beklager, noe gikk galt. Prøv på nytt litt senere.',
   allCatalogs: 'Alle kataloger',
@@ -82,5 +83,19 @@ export const nb = {
   searchHit: {
     lastEdited: 'Sist endret',
     publishedInFDK: 'Publisert i Felles Datakatalog',
+  },
+  catalogAdmin: {
+    internalFields: 'Interne felt',
+    codeList: 'Kodeliste',
+    description: {
+      general:
+        'Oversikt over beskrivelser av datasett, begrep, apier og informasjonmodeller. Innholdet blir levert av ulike virksomheter, offentlige og private.',
+      conceptCatalog:
+        'Oversikt over beskrivelser av datasett, begrep, apier og informasjonmodeller. Innholdet blir levert av ulike virksomheter, offentlige og private.',
+    },
+    manage: {
+      internalFields: 'Administrer interne felt',
+      codeList: 'Administrer kodeliste',
+    },
   },
 };
