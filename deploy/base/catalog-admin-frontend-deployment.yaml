@@ -2,26 +2,26 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: concept-catalog-frontend
+  name: catalog-admin-frontend
   labels:
-    app: concept-catalog-frontend
+    app: catalog-admin-frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: concept-catalog-frontend
+      app: catalog-admin-frontend
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app: concept-catalog-frontend
+        app: catalog-admin-frontend
       annotations:
         prometheus.io/scrape: 'false'
     spec:
       containers:
-        - name: concept-catalog-frontend
-          image: concept-catalog-frontend
+        - name: catalog-admin-frontend
+          image: catalog-adming-frontend
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
