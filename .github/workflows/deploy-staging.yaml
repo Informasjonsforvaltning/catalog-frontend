@@ -76,6 +76,7 @@ jobs:
     with:
       app_name: ${{ matrix.appname }}-frontend
       environment: staging
+      monorepo_app: true
       cluster: digdir-fdk-dev
     secrets:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
