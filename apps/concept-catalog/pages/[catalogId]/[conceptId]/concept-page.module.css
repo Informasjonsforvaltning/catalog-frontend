@@ -12,23 +12,6 @@
   justify-content: right;
 }
 
-.status > span {
-  border-radius: 2px;
-  padding: 0 8px;
-  background-color: #cccccc;
-  border: 1px solid black;
-}
-
-.draft > span {
-  background-color: #ffe6e6;
-  border: 1px solid #c30000;
-}
-
-.approved > span {
-  background-color: #f3fcf5;
-  border: 1px solid #06893a;
-}
-
 .info {
   display: flex;
   justify-content: stretch;

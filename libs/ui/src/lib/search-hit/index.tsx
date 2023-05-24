@@ -20,7 +20,7 @@ export function SearchHit({ catalogId, searchHit }: SearchHit) {
             </Link>
           )}
 
-          {searchHit?.status && <Tag label={searchHit.status} />}
+          {searchHit?.status && <Tag>{searchHit.status}</Tag>}
         </div>
 
         <p className={styles.greyFont}>Brødsmuler - Ikke klart i backend </p>

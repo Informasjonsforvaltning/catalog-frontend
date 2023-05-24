@@ -1,7 +1,7 @@
 import { InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { getToken } from 'next-auth/jwt';
-import { PageBanner, Breadcrumbs, BreadcrumbType, InfoCard, DetailHeading } from '@catalog-frontend/ui';
+import { PageBanner, Breadcrumbs, BreadcrumbType, InfoCard, DetailHeading, Tag } from '@catalog-frontend/ui';
 import {
   localization,
   getTranslateText as translate,
@@ -48,14 +48,8 @@ export const ConceptPage = ({
           <div>
             <Link href={`/${catalogId}/${revision.id}`}>{translate(revision?.anbefaltTerm?.navn)}</Link>
           </div>
-          <div
-            className={cn(
-              classes.status,
-              { [classes.draft]: revision.status === 'utkast' },
-              { [classes.approved]: revision.status === 'godkjent' },
-            )}
-          >
-            <span>{capitalizeFirstLetter(revision.status)}</span>
+          <div className={cn(classes.status)}>
+            <Tag>{revision?.status}</Tag>
           </div>
         </div>
       </InfoCard.Item>
@@ -89,14 +83,8 @@ export const ConceptPage = ({
               headingTitle={<h2>{translate(concept?.anbefaltTerm?.navn)}</h2>}
               subtitle={translate(concept?.fagområde)}
             />
-            <div
-              className={cn(
-                classes.status,
-                { [classes.draft]: concept?.status === 'utkast' },
-                { [classes.approved]: concept?.status === 'godkjent' },
-              )}
-            >
-              <span>{capitalizeFirstLetter(concept?.status)}</span>
+            <div className={cn(classes.status)}>
+              <Tag>{concept?.status}</Tag>
             </div>
             <div className={classes.languages}>
               <CheckboxGroup
