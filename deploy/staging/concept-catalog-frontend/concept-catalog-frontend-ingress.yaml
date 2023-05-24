@@ -2,7 +2,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: catalog-admin-frontend
+  name: concept-catalog-frontend
   annotations:
     nginx.ingress.kubernetes.io/proxy-buffering: 'on'
     nginx.ingress.kubernetes.io/proxy-buffers-number: '8'
@@ -10,22 +10,12 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: catalog-admin.staging.fellesdatakatalog.digdir.no
+    - host: begrepskatalog.staging.fellesdatakatalog.digdir.no
       http:
         paths:
           - backend:
               service:
-                name: catalog-admin-frontend
-                port:
-                  number: 8080
-            path: /
-            pathType: Prefix
-    - host: catalog-admin.staging.fellesdatakatalog.digdir.no
-      http:
-        paths:
-          - backend:
-              service:
-                name: catalog-admin
+                name: concept-catalog-frontend
                 port:
                   number: 8080
             path: /
