@@ -16,7 +16,7 @@ spec:
             - name: NEXTAUTH_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: catalog-admin-frontend-staging
+                  name: catalog-admin-frontend
                   key: NEXTAUTH_SECRET
             - name: KEYCLOAK_ID
               value: catalog-admin-frontend
