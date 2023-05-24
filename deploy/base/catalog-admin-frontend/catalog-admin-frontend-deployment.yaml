@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: catalog-admin-frontend
-          image: catalog-adming-frontend
+          image: catalog-admin-frontend
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
