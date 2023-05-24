@@ -1,13 +1,14 @@
+import { capitalizeFirstLetter } from '@catalog-frontend/utils';
 import styles from './tag.module.css';
 import cn from 'classnames';
 interface TagProps {
-  label?: string;
+  children?: string;
 }
 
-export function Tag({ label }: TagProps) {
+export function Tag({ children }: TagProps) {
   return (
-    <div className={cn(styles.container, styles[label ? label : ''])}>
-      <p className={styles.text}>{label && label.charAt(0).toUpperCase() + label.substring(1)}</p>
+    <div className={cn(styles.container, styles[children ? children.toLocaleLowerCase() : ''])}>
+      <p className={styles.text}>{children && capitalizeFirstLetter(children)}</p>
     </div>
   );
 }
