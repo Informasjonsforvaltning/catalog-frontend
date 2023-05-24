@@ -7,7 +7,7 @@ import SC from './styled';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 
-export interface Props {
+export interface HeaderProps {
   /**
    * Url on logo
    * @type {string}
@@ -21,7 +21,7 @@ export interface Props {
   useDemoLogo?: boolean;
 }
 
-export const Header: FC<Props> = ({ homeUrl, useDemoLogo }) => {
+export const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo }) => {
   const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
 
   const openDropdownMenu = () => setIsDropdownMenuOpen(true);

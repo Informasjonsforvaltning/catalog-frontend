@@ -5,6 +5,7 @@
 
 .languages {
   margin-bottom: 2rem;
+  width: 200px;
 }
 
 .status {
@@ -60,6 +61,7 @@
 
 .revision {
   display: flex;
+  align-items: center;
 }
 
 .revision a {
@@ -72,4 +74,55 @@
 
 .revision > div:last-child {
   flex-grow: 1;
+}
+
+.bottomSpacingSmall {
+  margin-bottom: 1rem;
+}
+
+.bottomSpacingLarge {
+  margin-bottom: 3rem;
+}
+
+.commentsHeader {
+  font-size: 20px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.commentsHeader > svg {
+  margin-right: 0.5rem;
+}
+
+.comment {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.commentUser {
+  margin-bottom: 1rem;
+}
+
+.commentUser > span {
+  color: #969ba0;
+  margin-left: 1rem;
+}
+
+.commentActions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.termsRow {
+  display: flex;
+}
+
+a.versionTitle {
+  color: #2d3741;
+  font-size: 24px;
+  text-decoration-line: underline;
+  font-weight: 700;
+  margin-bottom: 18px;
 }

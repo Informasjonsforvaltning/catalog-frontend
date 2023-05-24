@@ -7,6 +7,7 @@ export const searchConceptsForCatalog = async (catalogId: string, accessToken: s
     },
     body: body,
     method: 'POST',
+    cache: 'no-cache' as RequestCache
   };
   const response = await fetch(resource, options)
     .then((res) => res.json())
@@ -22,6 +23,7 @@ export const getConcept = async (conceptId: string, accessToken: string) => {
       'Content-Type': 'application/json',
     },
     method: 'GET',
+    cache: 'no-cache' as RequestCache
   };
   const response = await fetch(resource, options)
     .then((res) => res.json())
@@ -38,6 +40,7 @@ export const getConceptRevisions = async (conceptId: string, accessToken: string
       'Content-Type': 'application/json',
     },
     method: 'GET',
+    cache: 'no-cache' as RequestCache
   };
   const response = await fetch(resource, options)
     .then((res) => res.json())

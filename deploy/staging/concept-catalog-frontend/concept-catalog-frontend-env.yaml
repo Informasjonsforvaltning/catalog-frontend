@@ -40,3 +40,8 @@ spec:
                 secretKeyRef:
                   name: commonurl-staging
                   key: FDK_REGISTRATION_BASE_URI
+            - name: CATALOG_COMMENTS_SERVICE_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: CATALOG_COMMENTS_SERVICE_BASE_URI
