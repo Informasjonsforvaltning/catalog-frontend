@@ -16,7 +16,7 @@ spec:
             - name: NEXTAUTH_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: concept-catalog-frontend-staging
+                  name: concept-catalog-frontend
                   key: NEXTAUTH_SECRET
             - name: KEYCLOAK_ID
               value: concept-catalog-frontend      
