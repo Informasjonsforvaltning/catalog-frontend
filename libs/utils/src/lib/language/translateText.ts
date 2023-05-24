@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { localization } from './localization';
 
-export const getTranslateText = (textObj: any, language?: string): string => {
+export const getTranslateText = (textObj: any, language?: string): string | string[] => {
   const selectedLanguage = language || localization.getLanguage();
   if (typeof textObj === 'string') {
     return textObj;

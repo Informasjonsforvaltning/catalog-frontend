@@ -6,3 +6,4 @@ export * from './lib/styles/break-point';
 export * from './lib/styles/global';
 export * from './lib/auth/route-guard';
 export * from './lib/auth/token';
+export * from './lib/date/format';

@@ -14,6 +14,7 @@ export const nb = {
   registerData: ['Registrere data', 'Lenke til å registrere data'],
   linkToDataset: 'Lenke til datasett',
   linkToDatasets: 'Lenke til datasett',
+  chooseLanguage: 'Velg språk',
 
   search: {
     searchInAllFields: 'Søk i alle felt',
@@ -103,4 +104,25 @@ export const nb = {
       codeList: 'Administrer kodeliste',
     },
   },
+
+  concept: {
+    replacedBy: 'Erstattet av',
+    note: 'Merknad',
+    example: 'Eksempel',
+    simplifiedExplanation: 'Folkelig forklaring',
+    legalExplanation: 'Rettslig forklaring',
+    allowedTerm: 'Tillatt term',
+    notRecommendedTerm: 'Frarådet term',
+    abbreviation: 'Forkortelse',
+    valueDomain: 'Verdiområde',
+    internalField: 'Interne felt'
+  },
+
+  comment: {
+    comments: 'Kommentarer',
+    confirmDelete: 'Er du sikker du ønsker å slette kommentaren?',
+    editComment: 'Rediger kommentar',
+    deleteComment: 'Slett kommentar',
+    saveComment: 'Lagre kommentar'
+  }
 };

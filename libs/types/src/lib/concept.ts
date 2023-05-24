@@ -1,3 +1,5 @@
+import { User } from "./user";
+
 export interface ErrorMessage {
   name?: string;
   message?: string;
@@ -88,12 +90,6 @@ export interface Endringslogelement {
   endringstidspunkt: string;
 }
 
-export interface User {
-  id: string;
-  name?: string;
-  email?: string;
-}
-
 export interface Relasjon {
   relasjon?: string;
   relasjonsType?: string;
@@ -133,16 +129,6 @@ export interface Concept {
   tildeltBruker?: User;
   begrepsRelasjon?: Relasjon[];
   erPublisert?: boolean;
-}
-
-export interface Comment {
-  id: string;
-  createdDate: string;
-  lastChangedDate?: string;
-  topicId: string;
-  orgNumber: string;
-  user?: User;
-  comment: string;
 }
 
 export interface SkosConcept {

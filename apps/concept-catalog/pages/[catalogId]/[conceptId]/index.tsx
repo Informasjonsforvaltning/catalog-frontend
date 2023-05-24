@@ -1,28 +1,67 @@
+import { useState } from 'react';
 import { InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { getToken } from 'next-auth/jwt';
-import { PageBanner, Breadcrumbs, BreadcrumbType, InfoCard, DetailHeading, Tag } from '@catalog-frontend/ui';
+import Link from 'next/link';
+import { PageBanner, Breadcrumbs, BreadcrumbType, InfoCard, DetailHeading, Spinner, Tag, Select } from '@catalog-frontend/ui';
 import {
   localization,
   getTranslateText as translate,
   hasOrganizationReadPermission,
-  capitalizeFirstLetter,
+  formatISO,
 } from '@catalog-frontend/utils';
 import { getConcept, getConceptRevisions } from '@catalog-frontend/data-access';
-import { Concept } from '@catalog-frontend/types';
+import { Concept, Comment } from '@catalog-frontend/types';
+import {
+  ChatIcon
+} from '@navikt/aksel-icons';
 import cn from 'classnames';
+import { Button, Tabs, TextArea } from '@digdir/design-system-react';
 import classes from './concept-page.module.css';
-import { CheckboxGroup, CheckboxGroupVariant, Tabs } from '@digdir/design-system-react';
-import Link from 'next/link';
+import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../hooks/comments';
+
+type MapType = { 
+  [id: string]: string; 
+}
 
 export const ConceptPage = ({
   hasPermission,
   concept,
   revisions,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [language, setLanguage] = useState('nb');
+  const [newCommentText, setNewCommentText] = useState('');
+  const [updateCommentText, setUpdateCommentText] = useState<MapType>({});
   const router = useRouter();
   const catalogId = (router.query.catalogId as string) ?? '';
+  
+  const { status: getCommentsStatus, data: getCommentsData, refetch: getCommentsRefetch } = useGetComments({
+    orgNumber: catalogId,
+    topicId: concept?.id,
+  });
+
+  const createComment = useCreateComment({
+    orgNumber: catalogId,
+    topicId: concept?.id
+  });
+
+  const updateComment = useUpdateComment({
+    orgNumber: catalogId,
+    topicId: concept?.id
+  });
+
+  const deleteComment = useDeleteComment({
+    orgNumber: catalogId,
+    topicId: concept?.id
+  });
+
   const pageSubtitle = catalogId ?? 'No title';
+
+  const languageOptions = [
+    {value: 'nb', label: 'Norsk bokmål'},
+    {value: 'nn', label: 'Norsk nynorsk'},
+    {value: 'en', label: 'English'}
+  ];
 
   const infoData2 = [
     ['ID', concept?.id],
@@ -38,7 +77,55 @@ export const ConceptPage = ({
     ['Opprettet av', 'N/A'],
   ];
 
-  const renderRevisions = () =>
+  const handleLanguageChange = (lang) => {
+    setLanguage(lang);
+  }
+
+  const handleNewCommentChange = (event) => {
+    setNewCommentText(event.target.value);
+  }
+
+  const handleUpdateCommentChange = (commentId, event) => {
+    setUpdateCommentText({...updateCommentText, ...{[commentId]: event.target.value}});
+  }
+
+  const handleCreateComment  = () => {
+    createComment.mutate(newCommentText, {
+      onSuccess: () => {
+        setNewCommentText('');
+      }
+    });
+  }
+
+  const handleUpdateComment  = ({id, comment}) => {
+    if(updateCommentText[id]) {
+      updateComment.mutate({ commentId: id, comment: updateCommentText[id]}, {
+        onSuccess: () => {
+          //Set comment back in read mode
+          setUpdateCommentText(Object.keys(updateCommentText).filter(key =>
+            key !== id).reduce((obj, key) =>
+            {
+                obj[key] = updateCommentText[key];
+                return obj;
+            }, {}
+          ));
+        }
+      });      
+    } else {
+      setUpdateCommentText({...updateCommentText, ...{[id]: comment}});
+    }
+  }
+
+  const handleDeleteComment  = (id, event) => {
+    if (window.confirm(localization.comment.confirmDelete)) {
+      deleteComment.mutate(id);      
+    }     
+  }
+
+  const isCommentInEditMode = (id) => id in updateCommentText;
+  
+  const RevisionsTab = () => 
+    <InfoCard>{
     revisions?.map((revision) => (
       <InfoCard.Item key={`revision-${revision.id}`}>
         <div className={classes.revision}>
@@ -46,14 +133,15 @@ export const ConceptPage = ({
             v{revision?.versjonsnr.major}.{revision?.versjonsnr.minor}.{revision?.versjonsnr.patch}
           </div>
           <div>
-            <Link href={`/${catalogId}/${revision.id}`}>{translate(revision?.anbefaltTerm?.navn)}</Link>
+            <Link href={`/${catalogId}/${revision.id}`} className={classes.versionTitle}>{translate(revision?.anbefaltTerm?.navn, language)}</Link>
           </div>
           <div className={cn(classes.status)}>
             <Tag>{revision?.status}</Tag>
           </div>
         </div>
       </InfoCard.Item>
-    ));
+    ))
+  }</InfoCard>;
 
   const breadcrumbList = catalogId
     ? ([
@@ -63,10 +151,10 @@ export const ConceptPage = ({
         },
         {
           href: `/${catalogId}/${concept?.id}`,
-          text: translate(concept?.anbefaltTerm?.navn),
+          text: translate(concept?.anbefaltTerm?.navn, language),
         },
       ] as BreadcrumbType[])
-    : [];
+    : [];    
 
   return (
     <>
@@ -80,28 +168,23 @@ export const ConceptPage = ({
           <>
             <DetailHeading
               className={classes.detailHeading}
-              headingTitle={<h2>{translate(concept?.anbefaltTerm?.navn)}</h2>}
-              subtitle={translate(concept?.fagområde)}
+              headingTitle={<h2>{translate(concept?.anbefaltTerm?.navn, language)}</h2>}
+              subtitle={translate(concept?.fagområde, language)}
             />
             <div className={cn(classes.status)}>
               <Tag>{concept?.status}</Tag>
             </div>
             <div className={classes.languages}>
-              <CheckboxGroup
-                compact={false}
-                description='Velg én eller flere språk.'
-                disabled={false}
-                items={[
-                  { checked: false, label: 'Bokmål', name: 'nb' },
-                  { checked: false, label: 'Nynorsk', name: 'nn' },
-                  { checked: false, label: 'Engelsk', name: 'en' },
-                ]}
-                variant={CheckboxGroupVariant.Horizontal}
+              <Select
+                label={localization.chooseLanguage}
+                options={languageOptions}
+                onChange={handleLanguageChange}
+                value={language}
               />
             </div>
             <div className={classes.definition}>
               <h3>Definisjon:</h3>
-              <div>{translate(concept?.definisjon.tekst)}</div>
+              <div>{translate(concept?.definisjon.tekst, language)}</div>
               <div className={cn(classes.source)}>
                 Kilde: <a href='#'>Basert på Skatteetaten</a>
               </div>
@@ -110,43 +193,51 @@ export const ConceptPage = ({
             <div className={classes.info}>
               <div>
                 <InfoCard>
-                  <InfoCard.Item label='Erstattet av:'>
+                  <InfoCard.Item label={`${localization.concept.replacedBy}:`}>
                     <span>Begrep x</span>
                   </InfoCard.Item>
-                  <InfoCard.Item label='Merknad:'>
-                    <span>{translate(concept?.merknad)}</span>
+                  <InfoCard.Item label={`${localization.concept.note}:`}>
+                    <span>{translate(concept?.merknad, language)}</span>
                   </InfoCard.Item>
-                  <InfoCard.Item label='Eksempel:'>
-                    <span>{translate(concept?.eksempel)}</span>
+                  <InfoCard.Item label={`${localization.concept.example}:`}>
+                    <span>{translate(concept?.eksempel, language)}</span>
                   </InfoCard.Item>
-                  <InfoCard.Item label='Folkelig forklaring:'>
+                  <InfoCard.Item label={`${localization.concept.simplifiedExplanation}:`}>
                     <span>N/A</span>
                   </InfoCard.Item>
-                  <InfoCard.Item label='Rettslig forklaring:'>
+                  <InfoCard.Item label={`${localization.concept.legalExplanation}:`}>
                     <span>N/A</span>
                   </InfoCard.Item>
                   <InfoCard.Item>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Forkortelse:</th>
-                          <th>Tillatt term:</th>
-                          <th>Frarådet term:</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>1</td>
-                          <td>2</td>
-                          <td>3</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </InfoCard.Item>
-                  <InfoCard.Item label='Verdiområde:'>
+                    <div className={classes.termsRow}>
+                      <h3>{`${localization.concept.abbreviation}:`}</h3>
+                      <span>N/A</span>
+                    </div>
+                    <div className={classes.termsRow}>
+                      <h3>{`${localization.concept.allowedTerm}:`}</h3>
+                      <ul>
+                        {                           
+                          Array.of(translate(concept?.tillattTerm, language)).map((term, i) => (
+                           <li key={`allowedTerm-${i}`}>{term}</li>
+                          ))
+                        }
+                      </ul>
+                    </div>
+                    <div className={classes.termsRow}>
+                      <h3>{`${localization.concept.notRecommendedTerm}:`}</h3>
+                      <ul>
+                        {                           
+                          Array.of(translate(concept?.frarådetTerm, language)).map((term, i) => (
+                           <li key={`notRecommendedTerm-${i}`}>{term}</li>
+                          ))
+                        }
+                      </ul>        
+                    </div>                    
+                  </InfoCard.Item>                  
+                  <InfoCard.Item label={`${localization.concept.valueDomain}:`}>
                     <span>N/A</span>
                   </InfoCard.Item>
-                  <InfoCard.Item label='Interne felt:'>
+                  <InfoCard.Item label={`${localization.concept.internalField}:`}>
                     <span>N/A</span>
                   </InfoCard.Item>
                 </InfoCard>
@@ -155,20 +246,43 @@ export const ConceptPage = ({
                   <Tabs
                     items={[
                       {
-                        content: (
-                          <p>
-                            Nulla nec rutrum libero. Curabitur lorem est, tempor nec iaculis in, egestas eu lacus. Ut
-                            malesuada risus ut ipsum consequat mattis. Donec quis nunc ut lorem suscipit pharetra. Nulla
-                            ornare sed nisl nec facilisis. Sed in lacinia elit. Sed et eleifend nisi. Sed egestas nulla
-                            lobortis sapien scelerisque, at venenatis risus elementum. Aliquam eleifend, metus non
-                            molestie viverra, erat sem ornare enim, nec suscipit nulla nisi vel dolor. Etiam volutpat
-                            sapien arcu. Orci varius natoque penatibus et magnis dis parturient montes, nascetur
-                            ridiculus mus. Nulla sollicitudin molestie leo sit amet faucibus. Sed interdum condimentum
-                            interdum. Praesent volutpat turpis mattis purus venenatis egestas. In iaculis condimentum
-                            fringilla. Duis dignissim turpis mattis tristique vulputate.
-                          </p>
+                        content: getCommentsStatus == 'loading' ? (
+                          <Spinner size='medium' />
+                        ) : getCommentsStatus === 'error' ? (
+                          <span>Kommentarer er ikke tilgjengelig. Prøv igjen senere.</span>
+                        ) : (
+                          <>
+                            <div className={classes.bottomSpacingSmall}>
+                              <TextArea resize='vertical' value={newCommentText} onChange={handleNewCommentChange} rows={5} />
+                            </div>
+                            <div className={classes.bottomSpacingLarge}>
+                              <Button onClick={() => handleCreateComment()}>Legg til kommentar</Button>
+                            </div>
+                            <div>            
+                              <div className={classes.commentsHeader}><ChatIcon />Kommentarer ({getCommentsData.length})</div>          
+                              {
+                                getCommentsData.length > 0 && getCommentsData.map((comment: Comment, i) => (
+                                  <InfoCard key={`comment-${comment.id}`} className={classes.comment}>
+                                    <InfoCard.Item >
+                                      <div className={classes.commentUser}>{comment?.user.name}<span>{formatISO(comment?.createdDate)}</span></div>
+                                      {isCommentInEditMode(comment?.id) ? (
+                                        <TextArea resize='vertical' value={updateCommentText[comment?.id]} onChange={(e) => handleUpdateCommentChange(comment.id, e)} rows={5} />
+                                      ) : (
+                                        <div>{comment?.comment.split('\n').map((ln, i) => <span key={`comment-${comment?.id}-${i}`}>{ln}<br/></span>)}</div>
+                                      )}
+                                      <div className={classes.commentActions}>
+                                        <Button variant="outline" onClick={() => handleUpdateComment(comment)}>
+                                          {isCommentInEditMode(comment.id) ? localization.comment.saveComment : localization.comment.editComment}</Button>
+                                        <Button variant="outline" onClick={(e) => handleDeleteComment(comment.id, e)}>{localization.comment.deleteComment}</Button>
+                                      </div>
+                                    </InfoCard.Item>  
+                                  </InfoCard>
+                                ))
+                              }
+                            </div>
+                          </>
                         ),
-                        name: 'Kommentarer',
+                        name: localization.comment.comments,
                       },
                       {
                         content: (
@@ -187,7 +301,7 @@ export const ConceptPage = ({
                         name: 'Endringshistorikk',
                       },
                       {
-                        content: <InfoCard>{renderRevisions()}</InfoCard>,
+                        content: <RevisionsTab />,
                         name: 'Versjoner',
                       },
                     ]}
@@ -221,17 +335,12 @@ export async function getServerSideProps({ req, params }) {
   const { catalogId, conceptId } = params;
 
   const hasPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
-  const concept: Concept | null = hasPermission
-    ? await getConcept(conceptId, `${token.access_token}`).then(async (response) => {
+  const concept: Concept | null = await getConcept(conceptId, `${token.access_token}`).then(async (response) => {
         return response || null;
-      })
-    : null;
-
-  const revisions: Concept[] | null = hasPermission
-    ? await getConceptRevisions(conceptId, `${token.access_token}`).then(async (response) => {
+      });
+  const revisions: Concept[] | null = await getConceptRevisions(conceptId, `${token.access_token}`).then(async (response) => {
         return response || null;
-      })
-    : null;
+      });
 
   return {
     props: {
