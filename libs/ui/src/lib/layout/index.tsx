@@ -4,6 +4,7 @@ import { ReactNode } from 'react';
 import style from './layout.module.css';
 import { RouteGuard } from '@catalog-frontend/utils';
 import { GlobalStyle } from '@catalog-frontend/utils';
+
 interface LayoutProps {
   children: ReactNode;
 }

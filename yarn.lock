@@ -1100,10 +1100,10 @@
     "@navikt/ds-icons" "^2.3.0"
     react-number-format "^5.1.4"
 
-"@digdir/design-system-tokens@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@digdir/design-system-tokens/-/design-system-tokens-0.0.3.tgz#fb607a55b8e373e9a17ac500af7abf9fa82c16bf"
-  integrity sha512-gfmUOuLsZ8rm/T9P81rVCxTa97DWtekp3ii9Joo520NB7KGJLQZeAqx+vKtkLy7a+QyKmtGwWjoXTHDjqF8wYg==
+"@digdir/design-system-tokens@^0.1.1":
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/@digdir/design-system-tokens/-/design-system-tokens-0.1.1.tgz#8515884339e2add29445291ac1cab77a3778004d"
+  integrity sha512-0x5JH1lnSi3/qvdigrXHpu5mJbwv0zFpazD+mlpDUqWGyZWgBFnHyiA4gz367SDV4U950eDkI00/0kD7z9aoow==
 
 "@emotion/is-prop-valid@^1.1.0":
   version "1.2.1"
@@ -1658,10 +1658,10 @@
   resolved "https://registry.yarnpkg.com/@leichtgewicht/ip-codec/-/ip-codec-2.0.4.tgz#b2ac626d6cb9c8718ab459166d4bb405b8ffa78b"
   integrity sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==
 
-"@navikt/aksel-icons@^2.8.13":
-  version "2.9.8"
-  resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-2.9.8.tgz#04e4868d2f8f1022b52e9de54668127f6d0f5052"
-  integrity sha512-HANk2yejzzQxj4UefLg5Q8YXqkwh98SN98fNJUIlfonnh1bla1XB2h690QZJiY5SghHDnb2RGo/aojc8BwI8kQ==
+"@navikt/aksel-icons@^3.2.3":
+  version "3.2.3"
+  resolved "https://registry.yarnpkg.com/@navikt/aksel-icons/-/aksel-icons-3.2.3.tgz#6ac5fd8eb4ccca8860dd5c1d54b376ce4cb26b5e"
+  integrity sha512-Kf52dgljLMxJCY10DPaHLei0Cyv0Zaog8XGBS+RiUtmZ2nlZd/EKV5b5AVD1QBgiqLHBJddfVD0AfK0o8+1QuQ==
 
 "@navikt/ds-icons@^2.3.0":
   version "2.9.8"

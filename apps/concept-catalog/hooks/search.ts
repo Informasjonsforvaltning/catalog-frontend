@@ -1,5 +1,4 @@
 import { SearchableField } from '@catalog-frontend/types';
-import { localization } from '@catalog-frontend/utils';
 import { SingleSelectOption } from '@digdir/design-system-react';
 import { useQuery } from '@tanstack/react-query';
 

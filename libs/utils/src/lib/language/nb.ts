@@ -12,6 +12,9 @@ export const nb = {
   dataVillage: ['Datalandsbyen', 'Lenke til Datalandsbyen'],
   harvestData: ['Høste data', 'Lenke til å høste data'],
   registerData: ['Registrere data', 'Lenke til å registrere data'],
+  linkToDataset: 'Lenke til datasett',
+  linkToDatasets: 'Lenke til datasett',
+
   search: {
     searchInAllFields: 'Søk i alle felt',
     searchForDataset: 'Søk etter datasettbeskrivelse',
@@ -20,6 +23,7 @@ export const nb = {
     searchField: 'Søk i felt',
     searchInCatalogs: ['Søk i Felles datakatalog', 'Lenke til søk i felles datakatalog'],
     noResults: 'Ingen resultater',
+
     fields: {
       alleFelter: 'Alle felter',
       anbefaltTerm: 'Anbefalt term',
@@ -28,22 +32,22 @@ export const nb = {
       definisjon: 'Definisjon',
       merknad: 'Merknad',
     },
+
     sortOptions: {
       ASC: 'Stigende',
       DESC: 'Synkende',
     },
+
     dateSortOptions: {
       SIST_ENDRET: 'Sist endret',
       ELDST: 'Eldst',
     },
   },
-  linkToDataset: 'Lenke til datasett',
-  linkToDatasets: 'Lenke til datasett',
 
   button: {
     addDataset: 'Legg til ny datasettbeskrivelse',
-    addConcept: 'Legg til nytt begrep',
-    importConcept: 'Importer begrep',
+    createConcept: 'Nytt begrep',
+    importConcept: 'Importer',
     delete: 'Slett',
     expandAll: 'Vis alle felter',
     harvestDataset: 'Høst spesifikasjon fra katalog',
@@ -80,6 +84,7 @@ export const nb = {
     draft: 'Utkast',
     publish: 'Publisert',
   },
+
   searchHit: {
     lastEdited: 'Sist endret',
     publishedInFDK: 'Publisert i Felles Datakatalog',
