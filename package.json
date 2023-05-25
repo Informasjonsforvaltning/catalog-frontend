@@ -36,9 +36,9 @@
   "dependencies": {
     "@altinn/figma-design-tokens": "^6.0.1",
     "@digdir/design-system-react": "^0.11.3",
-    "@digdir/design-system-tokens": "^0.0.3",
+    "@digdir/design-system-tokens": "^0.1.1",
     "@fellesdatakatalog/icons": "^0.8.3",
-    "@navikt/aksel-icons": "^2.8.13",
+    "@navikt/aksel-icons": "^3.2.3",
     "@nrwl/next": "15.8.1",
     "@tanstack/react-query": "^4.29.7",
     "classnames": "^2.3.2",

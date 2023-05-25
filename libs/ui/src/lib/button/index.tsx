@@ -1,47 +1,13 @@
-import React, { ButtonHTMLAttributes } from 'react';
+import { Button as DigdirButton } from '@digdir/design-system-react';
+import cn from './button.module.css';
 
-import { getStyledComponent, Text } from './styled';
+const Button = ({ children, ...props }: any) => (
+  <DigdirButton
+    {...props}
+    className={cn.button}
+  >
+    {children}
+  </DigdirButton>
+);
 
-type ButtonType = 'default' | 'filled' | 'link' | 'transparent';
-type IconPoseType = 'left' | 'right' | undefined;
-
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  btnType?: ButtonType;
-  name?: string;
-  iconPos?: IconPoseType;
-  startIcon?: JSX.Element;
-  endIcon?: JSX.Element;
-  btnColor?: string;
-  bg?: string;
-  onClick?: () => void;
-}
-
-export function Button({
-  startIcon,
-  endIcon,
-  btnType = 'default',
-  name = 'Button',
-  btnColor = btnType === 'link' || btnType === 'transparent' ? '#335380' : '#fff',
-  bg = '#335380',
-  onClick,
-}: ButtonProps) {
-  const Component = getStyledComponent(btnType);
-
-  return (
-    <label>
-      <Component
-        btnColor={btnColor}
-        bg={bg}
-        iconPos={startIcon ? 'left' : endIcon ? 'right' : undefined}
-        onClick={onClick}
-      >
-        {startIcon}
-        <Text>{name}</Text>
-        {endIcon}
-      </Component>
-    </label>
-  );
-}
-
-export default Button;
-export type { ButtonType, ButtonProps };
+export { Button };

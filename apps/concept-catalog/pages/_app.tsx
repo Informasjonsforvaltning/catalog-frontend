@@ -4,7 +4,6 @@ import Head from 'next/head';
 import type { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import '@altinn/figma-design-tokens/dist/tokens.css';
-import '@digdir/design-system-tokens/dist/digdir/tokens.css';
 import { localization } from '@catalog-frontend/utils';
 import { Layout } from '@catalog-frontend/ui';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';

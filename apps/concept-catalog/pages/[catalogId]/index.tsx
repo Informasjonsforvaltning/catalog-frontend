@@ -3,7 +3,7 @@ import { hasOrganizationReadPermission, localization, textToNumber } from '@cata
 import { useRouter } from 'next/router';
 import { SearchField } from '@catalog-frontend/ui';
 import { PageBanner } from '@catalog-frontend/ui';
-import { SearchableField } from '@catalog-frontend/types';
+import { Concept, SearchableField } from '@catalog-frontend/types';
 import { useEffect, useState } from 'react';
 import { SortDirection } from '@digdir/design-system-react';
 import {
@@ -14,8 +14,10 @@ import {
   getSelectOptions,
   useSearchConcepts,
 } from '../../hooks/search';
-import styles from './style.module.css';
+import cn from './search-page.module.css';
 import { getToken } from 'next-auth/jwt';
+import { Button } from '@catalog-frontend/ui';
+import { FileImportIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 
 export const SearchPage = ({ hasPermission }) => {
   const router = useRouter();
@@ -49,7 +51,7 @@ export const SearchPage = ({ hasPermission }) => {
       ] as BreadcrumbType[])
     : [];
 
-  const changePage = async (page) => {
+  const changePage = async (page: { selected: number }) => {
     router.push({
       pathname: catalogId,
       query: { page: page.selected + 1 },
@@ -92,10 +94,10 @@ export const SearchPage = ({ hasPermission }) => {
         subtitle={pageSubtitle}
       />
       <div className='container'>
-        <div className={styles.pageContainer}>
+        <div className={cn.pageContainer}>
           {hasPermission ? (
             <>
-              <div className={styles.searchRowContainer}>
+              <div className={cn.searchRowContainer}>
                 <SearchField
                   ariaLabel={localization.search.searchInAllFields}
                   placeholder={localization.search.searchInAllFields}
@@ -120,18 +122,41 @@ export const SearchPage = ({ hasPermission }) => {
                   value={selectedSortOption.direction}
                 />
               </div>
+              <div className={cn.buttonsContainer}>
+                <Button
+                  icon={
+                    <PlusCircleIcon
+                      title='a11y-title'
+                      fontSize='1.5rem'
+                    />
+                  }
+                >
+                  {localization.button.createConcept}
+                </Button>
+                <Button
+                  variant='outline'
+                  icon={
+                    <FileImportIcon
+                      title='a11y-title'
+                      fontSize='1.5rem'
+                    />
+                  }
+                >
+                  {localization.button.importConcept}
+                </Button>
+              </div>
               <div>
                 {status === 'loading' ? (
                   <Spinner />
                 ) : status === 'error' ? (
-                  <div className={styles.error}>
+                  <div className={cn.error}>
                     <span>{localization.somethingWentWrong}</span>
                   </div>
                 ) : (
                   <>
-                    {data?.hits.map((concept) => (
+                    {data?.hits.map((concept: Concept) => (
                       <div
-                        className={styles.searchHitContainer}
+                        className={cn.searchHitContainer}
                         key={concept.id}
                       >
                         <SearchHit
