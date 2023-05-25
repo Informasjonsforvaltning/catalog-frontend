@@ -19,7 +19,7 @@ spec:
                   name: concept-catalog-frontend-staging
                   key: NEXTAUTH_SECRET
             - name: KEYCLOAK_ID
-              value: concept-catalog-frontend      
+              value: concept-catalog-frontend
             - name: KEYCLOAK_ISSUER
               valueFrom:
                 secretKeyRef:
@@ -40,4 +40,3 @@ spec:
                 secretKeyRef:
                   name: commonurl-staging
                   key: FDK_REGISTRATION_BASE_URI
-                  
