@@ -30,7 +30,8 @@ jobs:
           path: node_modules/.cache
           key: cache-nx-${{ hashFiles('yarn.lock') }}
 
-      - id: set-matrix
+      - name: Set matrix for identifying changed app
+        id: set-matrix
         run: |
           echo "matrix={\"appname\":$(yarn --silent run matrix)}" >> $GITHUB_OUTPUT
           echo "changed=$(yarn --silent run matrix)" >> $GITHUB_OUTPUT
