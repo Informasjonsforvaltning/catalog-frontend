@@ -256,7 +256,7 @@ export const ConceptPage = ({
                               <TextArea resize='vertical' value={newCommentText} onChange={handleNewCommentChange} rows={5} />
                             </div>
                             <div className={classes.bottomSpacingLarge}>
-                              <Button onClick={() => handleCreateComment()}>Legg til kommentar</Button>
+                              <Button disabled={newCommentText?.length === 0} onClick={() => handleCreateComment()}>Legg til kommentar</Button>
                             </div>
                             <div>            
                               <div className={classes.commentsHeader}><ChatIcon />Kommentarer ({getCommentsData.length})</div>          
