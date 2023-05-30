@@ -1,0 +1,53 @@
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 87px;
+  margin-top: 48px;
+}
+
+.createButton {
+  --component-button-filled-primary-color-background-default: #2d3741;
+}
+
+.importButton {
+  --component-button-outline-primary-color-text-default: #2d3741;
+  --component-button-outline-primary-color-border-default: #2d3741;
+}
+
+.accordion {
+  margin-bottom: 25px;
+  font-family: Heebo, sans-serif;
+  --fds-typography-paragraph-small: Heebo;
+  width: 100%;
+}
+
+.label {
+  --fds-typography-label-medium: Heebo;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.buttons {
+  display: flex;
+  gap: 26px;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.page {
+  width: 1200px;
+  min-height: 100%;
+}
+
+.label {
+  font-weight: bold;
+  font-size: 20px;
+}
