@@ -4,14 +4,16 @@ import { ReactNode } from 'react';
 import style from './layout.module.css';
 import { RouteGuard } from '@catalog-frontend/utils';
 import { GlobalStyle } from '@catalog-frontend/utils';
+import cn from 'classnames';
 
 interface LayoutProps {
   children: ReactNode;
+  className?: string;
 }
 
-export const Layout = ({ children }: LayoutProps) => {
+export const Layout = ({ children, className }: LayoutProps) => {
   return (
-    <div className={style.layout}>
+    <div className={cn(style.layout, className)}>
       <GlobalStyle />
       <RouteGuard>
         <Header />

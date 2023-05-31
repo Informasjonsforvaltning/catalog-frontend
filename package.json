@@ -39,7 +39,7 @@
     "@digdir/design-system-tokens": "^0.1.1",
     "@fellesdatakatalog/icons": "^0.8.3",
     "@navikt/aksel-icons": "^3.2.3",
-    "@nrwl/next": "15.8.1",
+    "@next/font": "^13.4.4",
     "@nrwl/next": "16.2.2",
     "classnames": "^2.3.2",
     "immer": "^10.0.1",
