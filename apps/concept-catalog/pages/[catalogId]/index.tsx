@@ -23,7 +23,7 @@ import SideFilter from '../../components/side-filter';
 export const SearchPage = ({ hasPermission }) => {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
-  const pageNumber: number = textToNumber(router.query.page as string, 1);
+  const pageNumber: number = textToNumber(router.query.page as string, 0);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFieldOption, setSelectedFieldOption] = useState('alleFelter' as SearchableField | 'alleFelter');
@@ -55,10 +55,10 @@ export const SearchPage = ({ hasPermission }) => {
   const changePage = async (page: { selected: number }) => {
     router.push({
       pathname: catalogId,
-      query: { page: page.selected + 1 },
+      query: { page: page.selected },
     });
 
-    setCurrentPage(page.selected + 1);
+    setCurrentPage(page.selected);
   };
 
   const onSearchSubmit = (term = searchTerm) => {
