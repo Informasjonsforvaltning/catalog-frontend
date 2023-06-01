@@ -1,4 +1,4 @@
-import ColorPicker from 'apps/catalog-admin/components/color-picker';
+import { ColorPicker } from '../../../../components/color-picker';
 
 export const GeneralPage = () => {
   return (

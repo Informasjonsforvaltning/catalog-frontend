@@ -6,7 +6,7 @@ interface ColorPicker {
   defaultColor?: string;
 }
 
-export function ColorPicker({ defaultColor }: ColorPicker) {
+export const ColorPicker = ({ defaultColor }: ColorPicker) => {
   const [inputColor, setInputColor] = useState(defaultColor);
   const regex = new RegExp('^#(?:[0-9a-fA-F]{3}){1,2}$');
   const [isValidInput, setIsValidInput] = useState(regex.test(defaultColor));
@@ -22,11 +22,12 @@ export function ColorPicker({ defaultColor }: ColorPicker) {
         defaultValue={defaultColor ? defaultColor : '#FFFFFF'}
         isValid={isValidInput}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          setInputColor(event.target.value), setIsValidInput(regex.test(event.target.value));
+          setInputColor(event.target.value);
+          setIsValidInput(regex.test(event.target.value));
         }}
       />
     </div>
   );
-}
+};
 
 export default ColorPicker;
