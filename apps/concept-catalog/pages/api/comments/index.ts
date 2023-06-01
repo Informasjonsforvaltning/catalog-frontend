@@ -1,9 +1,8 @@
 import { createComment, deleteComment, getComments, updateComment } from '@catalog-frontend/data-access';
-import { SearchConceptResponse } from '@catalog-frontend/types';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getToken } from 'next-auth/jwt';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<SearchConceptResponse | string>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Comment[] | string>) {
   const token = await getToken({ req });
   const { orgNumber, topicId } = req.query;
 

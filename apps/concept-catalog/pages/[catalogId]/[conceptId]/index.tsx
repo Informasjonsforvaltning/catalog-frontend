@@ -11,7 +11,7 @@ import {
   formatISO,
 } from '@catalog-frontend/utils';
 import { getConcept, getConceptRevisions } from '@catalog-frontend/data-access';
-import { Concept, Comment } from '@catalog-frontend/types';
+import { Concept, Comment, UpdateList, Update } from '@catalog-frontend/types';
 import {
   ChatIcon
 } from '@navikt/aksel-icons';
@@ -19,6 +19,8 @@ import cn from 'classnames';
 import { Button, Tabs, TextArea } from '@digdir/design-system-react';
 import classes from './concept-page.module.css';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../hooks/comments';
+import { useGetHistory } from '../../../hooks/history';
+import { useSession } from 'next-auth/react';
 
 type MapType = { 
   [id: string]: string; 
@@ -34,8 +36,13 @@ export const ConceptPage = ({
   const [updateCommentText, setUpdateCommentText] = useState<MapType>({});
   const router = useRouter();
   const catalogId = (router.query.catalogId as string) ?? '';
+
+  const { data: session } = useSession();
+  const username = session?.user?.username;
+
+  console.log(username);
   
-  const { status: getCommentsStatus, data: getCommentsData, refetch: getCommentsRefetch } = useGetComments({
+  const { status: getCommentsStatus, data: getCommentsData } = useGetComments({
     orgNumber: catalogId,
     topicId: concept?.id,
   });
@@ -54,6 +61,11 @@ export const ConceptPage = ({
     orgNumber: catalogId,
     topicId: concept?.id
   });
+
+  const { status: getHistoryStatus, data: getHistoryData } = useGetHistory({
+    conceptId: concept?.id
+  });
+
 
   const pageSubtitle = catalogId ?? 'No title';
 
@@ -184,7 +196,7 @@ export const ConceptPage = ({
             </div>
             <div className={classes.definition}>
               <h3>Definisjon:</h3>
-              <div>{translate(concept?.definisjon.tekst, language)}</div>
+              <div>{translate(concept?.definisjon?.tekst, language)}</div>
               <div className={cn(classes.source)}>
                 Kilde: <a href='#'>Basert på Skatteetaten</a>
               </div>
@@ -260,8 +272,7 @@ export const ConceptPage = ({
                             </div>
                             <div>            
                               <div className={classes.commentsHeader}><ChatIcon />Kommentarer ({getCommentsData.length})</div>          
-                              {
-                                getCommentsData.length > 0 && getCommentsData.map((comment: Comment, i) => (
+                              {getCommentsData.length > 0 && getCommentsData.map((comment: Comment, i) => (
                                   <InfoCard key={`comment-${comment.id}`} className={classes.comment}>
                                     <InfoCard.Item >
                                       <div className={classes.commentUser}>{comment?.user.name}<span>{formatISO(comment?.createdDate)}</span></div>
@@ -270,33 +281,32 @@ export const ConceptPage = ({
                                       ) : (
                                         <div>{comment?.comment.split('\n').map((ln, i) => <span key={`comment-${comment?.id}-${i}`}>{ln}<br/></span>)}</div>
                                       )}
+                                      {comment.user.id === username && (
                                       <div className={classes.commentActions}>
                                         <Button variant="outline" onClick={() => handleUpdateComment(comment)}>
                                           {isCommentInEditMode(comment.id) ? localization.comment.saveComment : localization.comment.editComment}</Button>
                                         <Button variant="outline" onClick={(e) => handleDeleteComment(comment.id, e)}>{localization.comment.deleteComment}</Button>
                                       </div>
+                                      )}
                                     </InfoCard.Item>  
                                   </InfoCard>
-                                ))
-                              }
+                                ))}
                             </div>
                           </>
                         ),
                         name: localization.comment.comments,
                       },
                       {
-                        content: (
-                          <p>
-                            Vestibulum nisl diam, tempus sit amet justo eu, semper facilisis dolor. Proin scelerisque
-                            tellus sit amet consectetur condimentum. Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit. Quisque et dui vehicula, semper arcu vitae, posuere odio. Pellentesque eu ante in elit
-                            semper pellentesque. Donec cursus eros non diam condimentum viverra. Pellentesque at odio
-                            lorem. Aenean ac enim et risus bibendum scelerisque et a purus. Donec ultricies, ex et
-                            ornare fringilla, turpis ex consectetur ante, ut porta libero metus quis magna. Nulla eu
-                            hendrerit ex, non dapibus quam. Nulla dictum ligula tellus, et elementum orci convallis sit
-                            amet. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos
-                            himenaeos. Fusce dolor orci, sagittis vel elit eget, viverra ultrices nulla.
-                          </p>
+                        content: getHistoryStatus == 'loading' ? (
+                          <Spinner size='medium' />
+                        ) : getHistoryStatus === 'error' ? (
+                          <span>Endringslogg er ikke tilgjengelig. Prøv igjen senere.</span>
+                        ) : (
+                          <>
+                          {getHistoryData.length > 0 && getHistoryData.updates.map((update: Update, i) => (
+                            <span key={`history-${update.id}`}>{update.dateTime}</span>
+                          ))}
+                          </>
                         ),
                         name: 'Endringshistorikk',
                       },

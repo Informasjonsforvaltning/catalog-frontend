@@ -22,6 +22,7 @@ export const authOptions = {
       session.user = {
         id: token.id ?? null,
         name: token.name,
+        username: token.user_name,
         email: token.email ?? null,
         image: null,
       };
