@@ -24,7 +24,6 @@ export const ColorPicker = ({ defaultColor, type }: ColorPicker) => {
 
   return (
     <AdminContextProvider>
-      <p>{inputColor}</p>
       <div className={styles.container}>
         <div
           className={styles.color}

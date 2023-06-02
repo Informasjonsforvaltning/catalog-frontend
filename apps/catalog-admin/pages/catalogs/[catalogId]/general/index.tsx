@@ -1,6 +1,7 @@
 import { useAdminState } from '../../../../context/admin';
 import { ColorPicker } from '../../../../components/color-picker';
 import { ImageUploader } from '../../../../components/image-uploader';
+import { Banner } from '../../../../components/banner';
 import styles from './general.module.css';
 
 export const GeneralPage = () => {
@@ -11,18 +12,12 @@ export const GeneralPage = () => {
 
   return (
     <>
-      <div
-        className={styles.banner}
-        style={{ background: backgroundColor, color: fontColor }}
-      >
-        Banner!
-        {logo && (
-          <img
-            alt='preview image'
-            src={logo}
-          />
-        )}
-      </div>
+      <Banner
+        backgroundColor={backgroundColor}
+        fontColor={fontColor}
+        logo={logo}
+      />
+
       <ImageUploader />
       <ColorPicker
         type='background'

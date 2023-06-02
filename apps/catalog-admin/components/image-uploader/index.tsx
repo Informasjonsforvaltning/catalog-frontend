@@ -3,6 +3,7 @@ import styles from './image-uploader.module.css';
 import { useAdminDispatch } from 'apps/catalog-admin/context/admin';
 import { Button } from '@catalog-frontend/ui';
 import { FileImportIcon, TrashIcon } from '@navikt/aksel-icons';
+import { localization } from '@catalog-frontend/utils';
 
 const allowedFileTypes = ['image/x-png', 'image/svg+xml'];
 export function ImageUploader() {
@@ -27,7 +28,7 @@ export function ImageUploader() {
           <div className={styles.filename}>
             <div className={styles.file}>{fileName}</div>
             <TrashIcon
-              title='a11y-title'
+              title={localization.button.bin} // HER
               onClick={() => {
                 setFileName(null);
                 setImage(null);
@@ -43,11 +44,8 @@ export function ImageUploader() {
           aria-expanded='true'
           tabIndex={0}
         >
-          <FileImportIcon
-            title='a11y-title'
-            fontSize='1.5rem'
-          />
-          <div>Import logo</div>
+          <FileImportIcon fontSize='1.5rem' />
+          <div>{localization.button.importLogo}</div>
         </label>
         <input
           id='file-upload'
@@ -55,9 +53,6 @@ export function ImageUploader() {
           accept={allowedFileTypes.join(', ')}
           onChange={onImageChange}
           className={styles.input}
-          aria-label={'test'}
-          aria-required='true'
-          name='file-upload'
         />
       </div>
     </>

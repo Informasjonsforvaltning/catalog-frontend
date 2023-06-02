@@ -1,7 +1,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  box-sizing: border-box;
+  align-items: center;
   width: 272px;
   height: 198px;
   left: 323px;
@@ -11,7 +11,6 @@
   border-radius: 8px;
   justify-content: end;
   padding-bottom: 21px;
-  align-items: center;
 }
 
 .input {
@@ -35,14 +34,13 @@
 
 .filename {
   max-width: 170px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 18px;
+  color: #2d3741;
 }
 
 .file {
-  color: #2d3741;
   width: fit-content;
-  display: flex;
-  flex-direction: row;
-  font-size: 18px;
-  align-items: center;
-  width: 203px;
 }

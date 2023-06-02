@@ -60,6 +60,8 @@ export const nb = {
     delete: 'Slett',
     expandAll: 'Vis alle felter',
     harvestDataset: 'Høst spesifikasjon fra katalog',
+    importLogo: 'Importer bilde',
+    bin: 'Søppelkasse',
   },
 
   dropdown: {

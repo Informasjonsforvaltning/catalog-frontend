@@ -1,0 +1,28 @@
+.logo {
+  height: 89px;
+  padding-left: 134px;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 48px;
+  line-height: 58px;
+}
+
+.company {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.container {
+  width: 1377px;
+  height: 167px;
+  display: flex;
+  align-items: center;
+}
+
+.heading {
+  padding-left: 37px;
+}
