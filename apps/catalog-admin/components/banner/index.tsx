@@ -1,7 +1,4 @@
 import styles from './banner.module.css';
-import { TextField } from '@digdir/design-system-react';
-import { AdminContextProvider, useAdminDispatch, useAdminState } from 'apps/catalog-admin/context/admin';
-import { useEffect, useState } from 'react';
 
 interface BannerProps {
   backgroundColor?: string;

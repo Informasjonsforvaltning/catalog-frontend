@@ -7,5 +7,5 @@ export interface AdminState {
 export const DefaultAdminState = {
   backgroundColor: '#FFFFFF',
   fontColor: '#2D3741',
-  logo: null,
+  logo: undefined,
 };

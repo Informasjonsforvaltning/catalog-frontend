@@ -7,8 +7,8 @@ import { localization } from '@catalog-frontend/utils';
 
 const allowedFileTypes = ['image/x-png', 'image/svg+xml'];
 export function ImageUploader() {
-  const [image, setImage] = useState<string>(null);
-  const [fileName, setFileName] = useState<string>(null);
+  const [image, setImage] = useState<string>(undefined);
+  const [fileName, setFileName] = useState<string>(undefined);
 
   const onImageChange = (event) => {
     if (event.target.files && event.target.files[0]) {
@@ -19,7 +19,6 @@ export function ImageUploader() {
 
   const adminDispatch = useAdminDispatch();
   useEffect(() => adminDispatch({ type: 'SET_LOGO', payload: { logo: image } }), [image]);
-  console.log('Logo-imageuploader:', image);
 
   return (
     <>
@@ -28,10 +27,10 @@ export function ImageUploader() {
           <div className={styles.filename}>
             <div className={styles.file}>{fileName}</div>
             <TrashIcon
-              title={localization.button.bin} // HER
+              title={localization.button.bin}
               onClick={() => {
-                setFileName(null);
-                setImage(null);
+                setFileName(undefined);
+                setImage(undefined);
               }}
             />
           </div>
