@@ -8,8 +8,9 @@ const SearchField = styled.div<SearchFieldProps>`
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  border: 0.13rem solid #121619;
+  border: 1px solid #121619;
   border-radius: 0.2rem;
+  align-self: flex-end;
 
   :hover {
     outline: 0.07rem solid #121619;
@@ -41,6 +42,10 @@ const SearchField = styled.div<SearchFieldProps>`
         border-color: #803353;
       }
     `}
+
+  @media (max-width: 900px) {
+    align-self: center;
+  }
 `;
 
 const Input = styled.input`

@@ -18,6 +18,7 @@ import styles from './search-page.module.css';
 import { getToken } from 'next-auth/jwt';
 import { Button } from '@catalog-frontend/ui';
 import { FileImportIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import SideFilter from '../../components/side-filter';
 
 export const SearchPage = ({ hasPermission }) => {
   const router = useRouter();
@@ -153,19 +154,22 @@ export const SearchPage = ({ hasPermission }) => {
                     <span>{localization.somethingWentWrong}</span>
                   </div>
                 ) : (
-                  <>
-                    {data?.hits.map((concept: Concept) => (
-                      <div
-                        className={cn.searchHitContainer}
-                        key={concept.id}
-                      >
-                        <SearchHit
-                          searchHit={concept}
-                          catalogId={catalogId}
-                        />
-                      </div>
-                    ))}
-                  </>
+                  <div className={styles.gridContainer}>
+                    <SideFilter />
+                    <div className={styles.searchHitsContainer}>
+                      {data?.hits.map((concept: Concept) => (
+                        <div
+                          className={styles.searchHitContainer}
+                          key={concept.id}
+                        >
+                          <SearchHit
+                            searchHit={concept}
+                            catalogId={catalogId}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 )}
                 {data?.hits.length > 0 && (
                   <Pagination
