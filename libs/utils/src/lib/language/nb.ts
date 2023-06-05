@@ -24,8 +24,7 @@ export const nb = {
   search: {
     searchInAllFields: 'Søk i alle felt',
     searchForDataset: 'Søk etter datasettbeskrivelse',
-    alphabeticalSort: 'Alfabetisk sortering',
-    dateSort: 'Sortering på dato',
+    sort: 'Sortering',
     searchField: 'Søk i felt',
     searchInCatalogs: ['Søk i Felles datakatalog', 'Lenke til søk i felles datakatalog'],
     noResults: 'Ingen resultater',
@@ -40,13 +39,10 @@ export const nb = {
     },
 
     sortOptions: {
-      ASC: 'Stigende',
-      DESC: 'Synkende',
-    },
-
-    dateSortOptions: {
-      SIST_ENDRET: 'Sist endret',
-      ELDST: 'Eldst',
+      LAST_UPDATED_FIRST: 'Sist endret først',
+      LAST_UPDATED_LAST: 'Eldst først',
+      RECOMMENDED_TERM_AÅ: 'Anbefalt term A-Å',
+      RECOMMENDED_TERM_ÅA: 'Anbefalt term Å-A',
     },
   },
 

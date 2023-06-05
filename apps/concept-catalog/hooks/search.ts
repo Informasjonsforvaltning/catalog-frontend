@@ -2,7 +2,7 @@ import { SearchableField } from '@catalog-frontend/types';
 import { SingleSelectOption } from '@digdir/design-system-react';
 import { useQuery } from '@tanstack/react-query';
 
-export type SortFields = 'SIST_ENDRET' | 'ELDST';
+export type SortFields = 'SIST_ENDRET' | 'ANBEFALT_TERM_NB';
 export type SortDirection = 'ASC' | 'DESC';
 
 export interface FieldOptions {
@@ -11,6 +11,13 @@ export interface FieldOptions {
   tillattTerm: boolean;
   definisjon: boolean;
   merknad: boolean;
+}
+
+export enum SortOption {
+  LAST_UPDATED_FIRST = 'LAST_UPDATED_FIRST',
+  LAST_UPDATED_LAST = 'LAST_UPDATED_LAST',
+  RECOMMENDED_TERM_AÅ = 'RECOMMENDED_TERM_AÅ',
+  RECOMMENDED_TERM_ÅA = 'RECOMMENDED_TERM_ÅA',
 }
 
 export interface SortOptions {
@@ -60,11 +67,6 @@ export const getSelectOptions = (object: any): SingleSelectOption[] => {
   }));
   return options;
 };
-
-export const getDefaultSortOptions = (): SortOptions => ({
-  field: 'SIST_ENDRET',
-  direction: 'DESC',
-});
 
 export const useSearchConcepts = ({ catalogId, searchTerm, page, fields, sort }: PageUpdate) => {
   const hitsPerPage = 5;
