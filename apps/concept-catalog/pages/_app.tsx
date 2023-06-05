@@ -7,7 +7,7 @@ import '@altinn/figma-design-tokens/dist/tokens.css';
 import '@digdir/design-system-tokens/brand/digdir/tokens.css';
 import { localization } from '@catalog-frontend/utils';
 import { Layout } from '@catalog-frontend/ui';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Heebo } from '@next/font/google';
 
 const heebo = Heebo({ subsets: ['latin'] });

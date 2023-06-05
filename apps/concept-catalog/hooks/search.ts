@@ -1,6 +1,6 @@
 import { SearchableField } from '@catalog-frontend/types';
 import { SingleSelectOption } from '@digdir/design-system-react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 export type SortFields = 'SIST_ENDRET' | 'ELDST';
 export type SortDirection = 'ASC' | 'DESC';

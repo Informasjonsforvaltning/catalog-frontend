@@ -50,7 +50,6 @@
     "react-is": "18.2.0",
     "react-localization": "^1.0.19",
     "react-paginate": "^8.2.0",
-    "react-query": "^3.39.3",
     "styled-components": "5.3.11",
     "tslib": "^2.3.0"
   },

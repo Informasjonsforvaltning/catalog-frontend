@@ -6,7 +6,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const token = await getToken({ req });
   const { slug } = req.query;
 
-  if (slug?.length != 2) {
+  if (slug?.length >= 2 && slug?.length <= 3) {
     const [orgNumber, topicId, commentId] = slug;
 
     if (req.method == 'GET') {
