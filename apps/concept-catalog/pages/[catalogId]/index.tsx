@@ -14,7 +14,7 @@ import {
   getSelectOptions,
   useSearchConcepts,
 } from '../../hooks/search';
-import cn from './search-page.module.css';
+import styles from './search-page.module.css';
 import { getToken } from 'next-auth/jwt';
 import { Button } from '@catalog-frontend/ui';
 import { FileImportIcon, PlusCircleIcon } from '@navikt/aksel-icons';
@@ -94,10 +94,10 @@ export const SearchPage = ({ hasPermission }) => {
         subtitle={pageSubtitle}
       />
       <div className='container'>
-        <div className={cn.pageContainer}>
+        <div className={styles.pageContainer}>
           {hasPermission ? (
             <>
-              <div className={cn.searchRowContainer}>
+              <div className={styles.searchRowContainer}>
                 <SearchField
                   ariaLabel={localization.search.searchInAllFields}
                   placeholder={localization.search.searchInAllFields}
@@ -122,7 +122,7 @@ export const SearchPage = ({ hasPermission }) => {
                   value={selectedSortOption.direction}
                 />
               </div>
-              <div className={cn.buttonsContainer}>
+              <div className={styles.buttonsContainer}>
                 <Button
                   icon={
                     <PlusCircleIcon
@@ -149,7 +149,7 @@ export const SearchPage = ({ hasPermission }) => {
                 {status === 'loading' ? (
                   <Spinner />
                 ) : status === 'error' ? (
-                  <div className={cn.error}>
+                  <div className={styles.error}>
                     <span>{localization.somethingWentWrong}</span>
                   </div>
                 ) : (

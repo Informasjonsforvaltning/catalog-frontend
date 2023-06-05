@@ -3,10 +3,6 @@
   flex: 1 1 0;
 }
 
-.select > span {
-  display: flex;
-}
-
 .select span > span > span > span {
   height: 1.5rem;
 }
