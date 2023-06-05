@@ -10,7 +10,7 @@
 
 .paginationContainer {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   cursor: pointer;
 }
 
@@ -41,10 +41,20 @@
 
 .searchRowContainer {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: stretch;
+  align-items: flex-end;
   margin-bottom: 1rem;
-  gap: 3rem;
+  gap: 5rem;
+}
+
+.searchRowContainer > div:first-of-type {
+  flex-grow: 1;
+}
+
+.searchOptions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 .buttonsContainer {
@@ -53,10 +63,6 @@
   gap: 1rem;
   margin-top: 1rem;
   margin-bottom: 3rem;
-}
-
-.searchRowContainer > span:first-of-type {
-  flex-grow: 0;
 }
 
 .error {

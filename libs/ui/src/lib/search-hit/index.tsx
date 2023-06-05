@@ -46,7 +46,7 @@ export function SearchHit({ catalogId, searchHit }: SearchHit) {
         </div>
         {searchHit?.tildeltBruker && <p className={styles.greyFont}>{searchHit.tildeltBruker.id}</p>}
       </div>
-      {searchHit?.definisjon && <p className={styles.description}>{translate(searchHit?.definisjon.tekst)}</p>}
+      {searchHit?.definisjon && <p className={styles.description}>{translate(searchHit?.definisjon?.tekst)}</p>}
     </div>
   );
 }

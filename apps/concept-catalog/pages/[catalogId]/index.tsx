@@ -5,14 +5,13 @@ import { SearchField } from '@catalog-frontend/ui';
 import { PageBanner } from '@catalog-frontend/ui';
 import { Concept, SearchableField } from '@catalog-frontend/types';
 import { useEffect, useState } from 'react';
-import { SortDirection } from '@digdir/design-system-react';
 import {
   SortFields,
   SortOptions,
-  getDefaultSortOptions,
   getFields,
   getSelectOptions,
   useSearchConcepts,
+  SortOption,
 } from '../../hooks/search';
 import styles from './search-page.module.css';
 import { getToken } from 'next-auth/jwt';
@@ -27,21 +26,27 @@ export const SearchPage = ({ hasPermission }) => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFieldOption, setSelectedFieldOption] = useState('alleFelter' as SearchableField | 'alleFelter');
-  const [selectedSortOption, setSelectedSortOption] = useState(getDefaultSortOptions());
+  const [selectedSortOption, setSelectedSortOption] = useState(SortOption.LAST_UPDATED_FIRST);
   const [currentPage, setCurrentPage] = useState(pageNumber);
+
+  const sortMappings: Record<SortOption, SortOptions> = {
+    [SortOption.LAST_UPDATED_FIRST]: { field: 'SIST_ENDRET', direction: 'DESC' },
+    [SortOption.LAST_UPDATED_LAST]: { field: 'SIST_ENDRET', direction: 'ASC' },
+    [SortOption.RECOMMENDED_TERM_AÅ]: { field: 'ANBEFALT_TERM_NB', direction: 'ASC' },
+    [SortOption.RECOMMENDED_TERM_ÅA]: { field: 'ANBEFALT_TERM_NB', direction: 'DESC' },
+  };
 
   const { status, data, refetch } = useSearchConcepts({
     catalogId,
     searchTerm,
     page: currentPage,
     fields: getFields(selectedFieldOption),
-    sort: selectedSortOption,
+    sort: sortMappings[selectedSortOption],
   });
 
   const pageSubtitle = catalogId ?? 'No title';
   const fieldOptions = getSelectOptions(localization.search.fields);
   const sortOptions = getSelectOptions(localization.search.sortOptions);
-  const dateSortOptions = getSelectOptions(localization.search.dateSortOptions);
 
   const breadcrumbList = catalogId
     ? ([
@@ -65,22 +70,12 @@ export const SearchPage = ({ hasPermission }) => {
     setSearchTerm(term);
   };
 
-  const onFieldSelect = (selectValue: SearchableField) => {
-    setSelectedFieldOption(selectValue);
+  const onFieldSelect = (field: SearchableField) => {
+    setSelectedFieldOption(field);
   };
 
-  const onAlphabeticSortSelect = async (selectValue: SortDirection) => {
-    setSelectedSortOption({
-      ...selectedSortOption,
-      direction: selectValue,
-    } as unknown as SortOptions);
-  };
-
-  const onDateSortSelect = async (selectValue: SortFields) => {
-    setSelectedSortOption({
-      ...selectedSortOption,
-      field: selectValue,
-    } as unknown as SortOptions);
+  const onSortSelect = async (option: SortOption) => {
+    setSelectedSortOption(option);
   };
 
   useEffect(() => {
@@ -104,24 +99,20 @@ export const SearchPage = ({ hasPermission }) => {
                   placeholder={localization.search.searchInAllFields}
                   onSearchSubmit={onSearchSubmit}
                 />
-                <Select
-                  label={localization.search.searchField}
-                  options={fieldOptions}
-                  onChange={onFieldSelect}
-                  value={selectedFieldOption}
-                />
-                <Select
-                  label={localization.search.dateSort}
-                  options={dateSortOptions}
-                  onChange={onDateSortSelect}
-                  value={selectedSortOption.field}
-                />
-                <Select
-                  label={localization.search.alphabeticalSort}
-                  options={sortOptions}
-                  onChange={onAlphabeticSortSelect}
-                  value={selectedSortOption.direction}
-                />
+                <div className={styles.searchOptions}>
+                  <Select
+                    label={localization.search.searchField}
+                    options={fieldOptions}
+                    onChange={onFieldSelect}
+                    value={selectedFieldOption}
+                  />
+                  <Select
+                    label={localization.search.sort}
+                    options={sortOptions}
+                    onChange={onSortSelect}
+                    value={selectedSortOption}
+                  />
+                </div>
               </div>
               <div className={styles.buttonsContainer}>
                 <Button

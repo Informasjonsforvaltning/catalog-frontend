@@ -21,7 +21,7 @@ import {
   getUsername,
 } from '@catalog-frontend/utils';
 import { getConcept, getConceptRevisions } from '@catalog-frontend/data-access';
-import { Concept, Comment, UpdateList, Update } from '@catalog-frontend/types';
+import { Concept, Comment, Update } from '@catalog-frontend/types';
 import { ChatIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
 import { Button, Tabs, TextArea } from '@digdir/design-system-react';
@@ -45,7 +45,10 @@ export const ConceptPage = ({
   const router = useRouter();
   const catalogId = (router.query.catalogId as string) ?? '';
 
-  const { status: getCommentsStatus, data: getCommentsData } = useGetComments({
+  const {
+    status: getCommentsStatus,
+    data: getCommentsData,
+  } = useGetComments({
     orgNumber: catalogId,
     topicId: concept?.id,
   });
@@ -341,6 +344,22 @@ export const ConceptPage = ({
                                             </Button>
                                           </div>
                                         )}
+                                        <div className={classes.commentActions}>
+                                          <Button
+                                            variant='outline'
+                                            onClick={() => handleUpdateComment(comment)}
+                                          >
+                                            {isCommentInEditMode(comment.id)
+                                              ? localization.comment.saveComment
+                                              : localization.comment.editComment}
+                                          </Button>
+                                          <Button
+                                            variant='outline'
+                                            onClick={(e) => handleDeleteComment(comment.id, e)}
+                                          >
+                                            {localization.comment.deleteComment}
+                                          </Button>
+                                        </div>
                                       </InfoCard.Item>
                                     </InfoCard>
                                   ))}
