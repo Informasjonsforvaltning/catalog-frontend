@@ -1,4 +1,4 @@
-import { AdminContextProvider, useAdminState } from 'apps/catalog-admin/context/admin';
+import { useAdminState } from '../../../../context/admin';
 import { ColorPicker } from '../../../../components/color-picker';
 import styles from './general.module.css';
 

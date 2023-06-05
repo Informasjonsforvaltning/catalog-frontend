@@ -1,6 +1,6 @@
 import styles from './color-picker.module.css';
 import { TextField } from '@digdir/design-system-react';
-import { AdminContextProvider, useAdminDispatch, useAdminState } from 'apps/catalog-admin/context/admin';
+import { AdminContextProvider, useAdminDispatch } from '../../context/admin';
 import { useEffect, useState } from 'react';
 
 interface ColorPicker {
@@ -13,15 +13,14 @@ export const ColorPicker = ({ defaultColor, type }: ColorPicker) => {
   const regex = new RegExp('^#(?:[0-9a-fA-F]{3}){1,2}$');
   const [isValidInput, setIsValidInput] = useState(regex.test(defaultColor));
   const adminDispatch = useAdminDispatch();
-  if (type === 'background') {
-    useEffect(
-      () => adminDispatch({ type: 'SET_BACKGROUND_COLOR', payload: { backgroundColor: inputColor } }),
-      [inputColor],
-    );
-  }
-  if (type === 'font') {
-    useEffect(() => adminDispatch({ type: 'SET_FONT_COLOR', payload: { fontColor: inputColor } }), [inputColor]);
-  }
+
+  useEffect(() => {
+    if (type === 'background') {
+      adminDispatch({ type: 'SET_BACKGROUND_COLOR', payload: { backgroundColor: inputColor } });
+    } else if (type === 'font') {
+      adminDispatch({ type: 'SET_FONT_COLOR', payload: { fontColor: inputColor } });
+    }
+  }, [inputColor]);
 
   return (
     <AdminContextProvider>
