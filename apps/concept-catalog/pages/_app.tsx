@@ -5,7 +5,7 @@ import type { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 import { localization } from '@catalog-frontend/utils';
 import { Layout } from '@catalog-frontend/ui';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Heebo } from '@next/font/google';
 
 const heebo = Heebo({ subsets: ['latin'] });

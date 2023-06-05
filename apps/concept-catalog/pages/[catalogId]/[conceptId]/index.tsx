@@ -47,8 +47,6 @@ export const ConceptPage = ({
   const { data: session } = useSession();
   const username = session?.user?.username;
 
-  console.log(username);
-
   const { status: getCommentsStatus, data: getCommentsData } = useGetComments({
     orgNumber: catalogId,
     topicId: concept?.id,
