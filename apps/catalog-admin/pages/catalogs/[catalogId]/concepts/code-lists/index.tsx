@@ -33,8 +33,9 @@ export const CodeListsPage = () => {
           </div>
         </div>
         <div className={styles.content}>
-          {data.map((data) => (
+          {data.map((data, index) => (
             <Accordion
+              key={index}
               border={true}
               className={styles.accordion}
             >
