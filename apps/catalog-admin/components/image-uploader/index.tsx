@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import styles from './image-uploader.module.css';
-import { useAdminDispatch } from 'apps/catalog-admin/context/admin';
-import { Button } from '@catalog-frontend/ui';
+import { useAdminDispatch } from '../../context/admin';
 import { FileImportIcon, TrashIcon } from '@navikt/aksel-icons';
 import { localization } from '@catalog-frontend/utils';
 

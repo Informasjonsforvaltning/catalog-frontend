@@ -9,7 +9,7 @@
   background: #ffffff;
   border: 1px solid #d5d7d9;
   border-radius: 8px;
-  justify-content: end;
+  justify-content: flex-end;
   padding-bottom: 21px;
 }
 
