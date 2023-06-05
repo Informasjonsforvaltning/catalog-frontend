@@ -15,6 +15,11 @@ export const nb = {
   linkToDataset: 'Lenke til datasett',
   linkToDatasets: 'Lenke til datasett',
   chooseLanguage: 'Velg språk',
+  subjectArea: 'Fagområde',
+  conceptStatus: 'Begrepsstatus',
+  assigned: 'Tildelt',
+  publicationState: 'Publiseringstilstand',
+  nameAndConcept: 'Navn og begrep',
 
   search: {
     searchInAllFields: 'Søk i alle felt',
@@ -115,7 +120,7 @@ export const nb = {
     notRecommendedTerm: 'Frarådet term',
     abbreviation: 'Forkortelse',
     valueDomain: 'Verdiområde',
-    internalField: 'Interne felt'
+    internalField: 'Interne felt',
   },
 
   comment: {
@@ -123,6 +128,6 @@ export const nb = {
     confirmDelete: 'Er du sikker du ønsker å slette kommentaren?',
     editComment: 'Rediger kommentar',
     deleteComment: 'Slett kommentar',
-    saveComment: 'Lagre kommentar'
-  }
+    saveComment: 'Lagre kommentar',
+  },
 };

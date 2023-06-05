@@ -2,12 +2,3 @@
   min-width: 15rem;
   flex: 1 1 0;
 }
-
-.select span > span > span > span {
-  height: 1.5rem;
-}
-
-.select > span > span > span > span:hover {
-  border: 0.2rem solid #121619;
-  box-sizing: border-box;
-}

@@ -1,0 +1,16 @@
+.sideFilter {
+  display: flex;
+  border: 1px solid #d5d7d9;
+  padding: 1px;
+  border-radius: 4px;
+  height: fit-content;
+  box-sizing: border-box;
+}
+
+.accordion {
+  width: 20rem;
+  box-sizing: border-box;
+}
+.accordionFirstItem {
+  --fdsc-accordion-header-border: none;
+}

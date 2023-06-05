@@ -15,8 +15,16 @@
 }
 
 .searchHitContainer {
-  margin: 0 auto 15px auto;
-  min-width: 924px;
+  margin: 0;
+  margin-bottom: 1rem;
+  max-width: 90rem;
+  box-sizing: border-box;
+}
+
+.searchHitsContainer {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
 }
 
 .pageLink {
@@ -38,6 +46,7 @@
   margin-bottom: 1rem;
   gap: 3rem;
 }
+
 .buttonsContainer {
   display: flex;
   justify-content: flex-end;
@@ -55,4 +64,39 @@
   justify-content: center;
   margin: 3rem;
   font-size: 2rem;
+}
+
+.gridContainer {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 20rem 1fr;
+  column-gap: 2rem;
+}
+
+@media (max-width: 900px) {
+  .searchRowContainer {
+    background-color: var(--ba);
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .buttonsContainer {
+    justify-content: center;
+  }
+
+  .gridContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .searchHitContainer {
+    display: flex;
+    width: 100%;
+  }
+
+  .searchHitsContainer {
+    margin: 1rem auto;
+    align-items: center;
+  }
 }
