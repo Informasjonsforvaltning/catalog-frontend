@@ -11,7 +11,7 @@ import {
 } from '@catalog-frontend/ui';
 import { hasOrganizationReadPermission, localization, textToNumber } from '@catalog-frontend/utils';
 import { useRouter } from 'next/router';
-import { Concept, SearchableField } from '@catalog-frontend/types';
+import { Concept, Organization, SearchableField } from '@catalog-frontend/types';
 import { useEffect, useState } from 'react';
 import { SortOptions, getFields, getSelectOptions, useSearchConcepts, SortOption } from '../../hooks/search';
 import styles from './search-page.module.css';
@@ -19,8 +19,9 @@ import { getToken } from 'next-auth/jwt';
 import { FileImportIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import SideFilter from '../../components/side-filter';
 import { useCreateConcept } from '../../hooks/concept';
+import { getOrganization } from '@catalog-frontend/data-access';
 
-export const SearchPage = ({ hasPermission }) => {
+export const SearchPage = ({ hasPermission, organization }) => {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
   const createConcept = useCreateConcept(catalogId);
@@ -46,7 +47,7 @@ export const SearchPage = ({ hasPermission }) => {
     sort: sortMappings[selectedSortOption],
   });
 
-  const pageSubtitle = catalogId ?? 'No title';
+  const pageSubtitle = organization?.name ?? catalogId;
   const fieldOptions = getSelectOptions(localization.search.fields);
   const sortOptions = getSelectOptions(localization.search.sortOptions);
 
@@ -187,9 +188,12 @@ export async function getServerSideProps({ req, params }) {
   const token = await getToken({ req });
   const { catalogId } = params;
 
+  const organization: Organization = await getOrganization(catalogId);
+
   return {
     props: {
       hasPermission: token && hasOrganizationReadPermission(token.access_token, catalogId),
+      organization,
     },
   };
 }
