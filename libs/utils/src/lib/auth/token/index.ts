@@ -19,6 +19,11 @@ export interface AuthConfiguration {
   silentCheckSsoRedirectUri?: string;
 }
 
+export const getUsername = (token: string): string => {
+  const tokenDecoded = jwtDecode(token);
+  return ((tokenDecoded && (tokenDecoded as any).user_name) as string) || '';
+};
+
 const getAuthorities = (token: string): string => {
   const tokenDecoded = jwtDecode(token);
   return ((tokenDecoded && (tokenDecoded as any).authorities) as string) || '';
