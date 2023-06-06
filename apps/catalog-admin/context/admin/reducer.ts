@@ -9,7 +9,8 @@ export const reducer = produce((state: AdminState, action: ACTION): AdminState =
       return state;
     }
     case 'SET_BACKGROUND_COLOR': {
-      return { ...state, backgroundColor: action.payload.backgroundColor };
+      state.backgroundColor = action.payload.backgroundColor;
+      return state;
     }
     case 'SET_FONT_COLOR': {
       return { ...state, fontColor: action.payload.fontColor };
