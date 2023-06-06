@@ -18,6 +18,7 @@ import {
   getTranslateText as translate,
   hasOrganizationReadPermission,
   formatISO,
+  getUsername,
 } from '@catalog-frontend/utils';
 import { getConcept, getConceptRevisions } from '@catalog-frontend/data-access';
 import { Concept, Comment, UpdateList, Update } from '@catalog-frontend/types';
@@ -27,7 +28,6 @@ import { Button, Tabs, TextArea } from '@digdir/design-system-react';
 import classes from './concept-page.module.css';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../hooks/comments';
 import { useGetHistory } from '../../../hooks/history';
-import { useSession } from 'next-auth/react';
 
 type MapType = {
   [id: string]: string;
@@ -35,6 +35,7 @@ type MapType = {
 
 export const ConceptPage = ({
   hasPermission,
+  username,
   concept,
   revisions,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
@@ -43,9 +44,6 @@ export const ConceptPage = ({
   const [updateCommentText, setUpdateCommentText] = useState<MapType>({});
   const router = useRouter();
   const catalogId = (router.query.catalogId as string) ?? '';
-
-  const { data: session } = useSession();
-  const username = session?.user?.username;
 
   const { status: getCommentsStatus, data: getCommentsData } = useGetComments({
     orgNumber: catalogId,
@@ -402,6 +400,7 @@ export async function getServerSideProps({ req, params }) {
   const { catalogId, conceptId } = params;
 
   const hasPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
+  const username = token && getUsername(token.id_token);
   const concept: Concept | null = await getConcept(conceptId, `${token.access_token}`).then(async (response) => {
     return response || null;
   });
@@ -414,6 +413,7 @@ export async function getServerSideProps({ req, params }) {
   return {
     props: {
       hasPermission,
+      username,
       concept,
       revisions,
     },

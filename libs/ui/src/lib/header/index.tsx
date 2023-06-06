@@ -29,7 +29,7 @@ export const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo }) => {
 
   const router = useRouter();
   const { data: session } = useSession();
-  const username = session?.user?.name;
+  const userDisplayName = session?.user?.name;
 
   const handleLogout = () => {
     router.push('/api/auth/logout');
@@ -45,7 +45,7 @@ export const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo }) => {
           >
             {useDemoLogo ? <SC.LogoDemo /> : <SC.Logo />}
           </a>
-          {username && (
+          {userDisplayName && (
             <SC.DropdownMenu
               isOpen={isDropdownMenuOpen}
               onClose={closeDropdownMenu}
@@ -54,7 +54,7 @@ export const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo }) => {
                 <SC.MenuButton onClick={openDropdownMenu}>
                   <SC.MenuButtonContent>
                     <UserIcon />
-                    <SC.MenuButtonContentSpan>{username}</SC.MenuButtonContentSpan>
+                    <SC.MenuButtonContentSpan>{userDisplayName}</SC.MenuButtonContentSpan>
                     <SC.ExpandIconWrapper>
                       <Icon name='chevronDownStroke' />
                     </SC.ExpandIconWrapper>
