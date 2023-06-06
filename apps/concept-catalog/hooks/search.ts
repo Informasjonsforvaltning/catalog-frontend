@@ -1,4 +1,4 @@
-import { SearchableField } from '@catalog-frontend/types';
+import { SearchableField, Status } from '@catalog-frontend/types';
 import { SingleSelectOption } from '@digdir/design-system-react';
 import { useQuery } from '@tanstack/react-query';
 
@@ -25,12 +25,22 @@ export interface SortOptions {
   direction: SortDirection;
 }
 
+export interface SearchFilters {
+  published?: {
+    value: boolean;
+  };
+  status?: {
+    value: Status[];
+  };
+}
+
 export interface PageUpdate {
   catalogId: string;
   searchTerm: string;
   page: number;
   fields: FieldOptions;
   sort?: SortOptions;
+  filters?: SearchFilters;
 }
 
 export const fields = {
@@ -68,18 +78,19 @@ export const getSelectOptions = (object: any): SingleSelectOption[] => {
   return options;
 };
 
-export const useSearchConcepts = ({ catalogId, searchTerm, page, fields, sort }: PageUpdate) => {
+export const useSearchConcepts = ({ catalogId, searchTerm, page, fields, sort, filters }: PageUpdate) => {
   const hitsPerPage = 5;
   const body = {
     catalogId,
     query: {
       query: searchTerm,
       pagination: {
-        page: page ?? 1,
+        page: page ?? 0,
         size: hitsPerPage,
       },
       fields: fields,
       sort,
+      filters,
     },
   };
 

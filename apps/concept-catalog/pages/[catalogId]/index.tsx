@@ -5,9 +5,9 @@ import {
   Select,
   Spinner,
   BreadcrumbType,
-  SearchField,
   Button,
   PageBanner,
+  SearchField,
 } from '@catalog-frontend/ui';
 import { hasOrganizationReadPermission, localization, textToNumber } from '@catalog-frontend/utils';
 import { useRouter } from 'next/router';
@@ -20,6 +20,7 @@ import { FileImportIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import SideFilter from '../../components/side-filter';
 import { useCreateConcept } from '../../hooks/concept';
 import { getOrganization } from '@catalog-frontend/data-access';
+import { useSearchState } from '../../context/search';
 
 export const SearchPage = ({ hasPermission, organization }) => {
   const router = useRouter();
@@ -27,6 +28,7 @@ export const SearchPage = ({ hasPermission, organization }) => {
   const createConcept = useCreateConcept(catalogId);
   const pageNumber: number = textToNumber(router.query.page as string, 0);
 
+  const searchState = useSearchState();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFieldOption, setSelectedFieldOption] = useState('alleFelter' as SearchableField | 'alleFelter');
   const [selectedSortOption, setSelectedSortOption] = useState(SortOption.LAST_UPDATED_FIRST);
@@ -45,6 +47,12 @@ export const SearchPage = ({ hasPermission, organization }) => {
     page: currentPage,
     fields: getFields(selectedFieldOption),
     sort: sortMappings[selectedSortOption],
+    filters: Object.assign(
+      {},
+      searchState.filters.published?.length === 1 && {
+        published: { value: searchState.filters.published.includes('published') },
+      },
+    ),
   });
 
   const pageSubtitle = organization?.name ?? catalogId;
@@ -83,7 +91,7 @@ export const SearchPage = ({ hasPermission, organization }) => {
 
   useEffect(() => {
     refetch().catch((error) => console.error('refetch() failed: ', error));
-  }, [searchTerm, currentPage, selectedFieldOption, selectedSortOption, refetch]);
+  }, [searchTerm, currentPage, selectedFieldOption, selectedSortOption, searchState, refetch]);
 
   return (
     <>
@@ -142,16 +150,17 @@ export const SearchPage = ({ hasPermission, organization }) => {
                 </Button>
               </div>
               <div>
-                {status === 'loading' ? (
-                  <Spinner />
-                ) : status === 'error' ? (
-                  <div className={styles.error}>
-                    <span>{localization.somethingWentWrong}</span>
-                  </div>
-                ) : (
-                  <div className={styles.gridContainer}>
-                    <SideFilter />
+                <div className={styles.gridContainer}>
+                  <SideFilter />
+                  {status === 'loading' ? (
+                    <Spinner />
+                  ) : status === 'error' ? (
+                    <div className={styles.error}>
+                      <span>{localization.somethingWentWrong}</span>
+                    </div>
+                  ) : (
                     <div className={styles.searchHitsContainer}>
+                      {data?.hits.length === 0 && <div className={styles.noHits}>{localization.search.noHits}</div>}
                       {data?.hits.map((concept: Concept) => (
                         <div
                           className={styles.searchHitContainer}
@@ -164,8 +173,9 @@ export const SearchPage = ({ hasPermission, organization }) => {
                         </div>
                       ))}
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
+
                 {data?.hits.length > 0 && (
                   <Pagination
                     onPageChange={changePage}

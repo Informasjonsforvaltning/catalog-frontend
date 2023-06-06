@@ -9,6 +9,7 @@ import { localization } from '@catalog-frontend/utils';
 import { Layout } from '@catalog-frontend/ui';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Heebo } from '@next/font/google';
+import { SearchContextProvider } from '../context/search';
 
 const heebo = Heebo({ subsets: ['latin'] });
 
@@ -16,20 +17,22 @@ const CustomApp: FC<AppProps<{ session: Session }>> = ({ Component, pageProps: {
   const queryClient = new QueryClient();
 
   return (
-    <SessionProvider session={session}>
-      <QueryClientProvider client={queryClient}>
-        <Head>
-          <title>{localization.catalogType.concept}</title>
-          <link
-            rel='shortcut icon'
-            href='/favicon.ico'
-          />
-        </Head>
-        <Layout className={heebo.className}>
-          <Component {...pageProps} />
-        </Layout>
-      </QueryClientProvider>
-    </SessionProvider>
+    <SearchContextProvider>
+      <SessionProvider session={session}>
+        <QueryClientProvider client={queryClient}>
+          <Head>
+            <title>{localization.catalogType.concept}</title>
+            <link
+              rel='shortcut icon'
+              href='/favicon.ico'
+            />
+          </Head>
+          <Layout className={heebo.className}>
+            <Component {...pageProps} />
+          </Layout>
+        </QueryClientProvider>
+      </SessionProvider>
+    </SearchContextProvider>
   );
 };
 
