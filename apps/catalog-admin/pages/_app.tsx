@@ -7,21 +7,24 @@ import { SessionProvider } from 'next-auth/react';
 import { Layout } from '@catalog-frontend/ui';
 import '@altinn/figma-design-tokens/dist/tokens.css';
 import '@digdir/design-system-tokens/brand/digdir/tokens.css';
+import { AdminContextProvider } from '../context/admin';
 
 const CustomApp: FC<AppProps<{ session: Session }>> = ({ Component, pageProps: { session, ...pageProps } }) => {
   return (
-    <SessionProvider session={session}>
-      <Head>
-        <title>{localization.catalogType.concept}</title>
-        <link
-          rel='shortcut icon'
-          href='/favicon.ico'
-        />
-      </Head>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </SessionProvider>
+    <AdminContextProvider>
+      <SessionProvider session={session}>
+        <Head>
+          <title>{localization.catalogType.concept}</title>
+          <link
+            rel='shortcut icon'
+            href='/favicon.ico'
+          />
+        </Head>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </SessionProvider>
+    </AdminContextProvider>
   );
 };
 
