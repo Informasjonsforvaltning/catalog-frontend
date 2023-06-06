@@ -19,6 +19,8 @@ export const nb = {
   conceptStatus: 'Begrepsstatus',
   assigned: 'Tildelt',
   publicationState: 'Publiseringstilstand',
+  publicationStateDescription:
+    'Publiseringstilstand forteller om et begrep er publisert i Felles Datakatalog eller ikke.',
   nameAndConcept: 'Navn og begrep',
 
   search: {
@@ -27,7 +29,7 @@ export const nb = {
     sort: 'Sortering',
     searchField: 'Søk i felt',
     searchInCatalogs: ['Søk i Felles datakatalog', 'Lenke til søk i felles datakatalog'],
-    noResults: 'Ingen resultater',
+    noHits: 'Ditt søk ga ingen treff',
 
     fields: {
       alleFelter: 'Alle felter',
@@ -43,6 +45,11 @@ export const nb = {
       LAST_UPDATED_LAST: 'Eldst først',
       RECOMMENDED_TERM_AÅ: 'Anbefalt term A-Å',
       RECOMMENDED_TERM_ÅA: 'Anbefalt term Å-A',
+    },
+
+    filter: {
+      published: 'Publisert',
+      notPublished: 'Ikke publisert',
     },
   },
 
