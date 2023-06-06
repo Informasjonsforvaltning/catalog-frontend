@@ -1,0 +1,74 @@
+.row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.topButtonRow {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.pb0_5 {
+  padding-bottom: 0.5em;
+}
+
+.accordion {
+  font-family: Heebo, sans-serif;
+  --fds-typography-paragraph-small: Heebo;
+  border-radius: 1em;
+  width: inherit;
+}
+
+.accordionContent > .field:not(:nth-last-child(-n + 2)) {
+  border-bottom: 1px solid #eaeaea;
+}
+
+.label {
+  --fds-typography-label-medium: Heebo;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2em 2em;
+  gap: 1em;
+}
+
+.accordionButtons {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+
+.saveButton {
+  min-width: 7em;
+}
+
+.pageContent {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  gap: 1em;
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.page {
+  width: 90%;
+  max-width: 1320px;
+  min-height: 100%;
+  padding-bottom: 6em;
+  padding-top: 4em;
+}
+
+.label {
+  font-weight: 500;
+  font-size: 1.2em;
+}
