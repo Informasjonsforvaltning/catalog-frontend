@@ -1,8 +1,11 @@
-import { Card } from '@catalog-frontend/ui';
-import styles from './general.module.css';
+import { ColorPicker } from '../../../../components/color-picker';
 
 export const GeneralPage = () => {
-  return <h1>Generelt</h1>;
+  return (
+    <>
+      <ColorPicker defaultColor='#FFFFFF' />
+    </>
+  );
 };
 
 export default GeneralPage;

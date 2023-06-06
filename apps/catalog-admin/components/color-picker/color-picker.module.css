@@ -1,0 +1,19 @@
+.container {
+  width: 272px;
+}
+
+.color {
+  background-color: white;
+  height: 138px;
+  border-radius: 8px 8px 0px 0px;
+}
+
+.textField {
+  text-align: center;
+  height: 50px;
+  color: #2d3741;
+  border: 1px solid #d5d7d9;
+  border-radius: 0px 0px 8px 8px;
+  font-size: 20px;
+  width: 272px;
+}
