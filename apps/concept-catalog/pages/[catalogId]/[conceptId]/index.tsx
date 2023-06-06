@@ -20,8 +20,8 @@ import {
   formatISO,
   getUsername,
 } from '@catalog-frontend/utils';
-import { getConcept, getConceptRevisions } from '@catalog-frontend/data-access';
-import { Concept, Comment, Update } from '@catalog-frontend/types';
+import { getConcept, getConceptRevisions, getOrganization } from '@catalog-frontend/data-access';
+import { Concept, Comment, Update, Organization } from '@catalog-frontend/types';
 import { ChatIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
 import { Accordion, Button, Tabs, TextArea } from '@digdir/design-system-react';
@@ -36,6 +36,7 @@ type MapType = {
 export const ConceptPage = ({
   hasPermission,
   username,
+  organization,
   concept,
   revisions,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
@@ -70,7 +71,7 @@ export const ConceptPage = ({
     resourceId: concept?.id,
   });
 
-  const pageSubtitle = catalogId ?? 'No title';
+  const pageSubtitle = organization?.name ?? catalogId;
 
   const languageOptions = [
     { value: 'nb', label: 'Norsk bokmål' },
@@ -419,6 +420,7 @@ export async function getServerSideProps({ req, params }) {
 
   const hasPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
   const username = token && getUsername(token.id_token);
+  const organization: Organization = await getOrganization(catalogId);
   const concept: Concept | null = await getConcept(conceptId, `${token.access_token}`).then(async (response) => {
     return response || null;
   });
@@ -432,6 +434,7 @@ export async function getServerSideProps({ req, params }) {
     props: {
       hasPermission,
       username,
+      organization,
       concept,
       revisions,
     },
