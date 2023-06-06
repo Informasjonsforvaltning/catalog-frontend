@@ -45,10 +45,7 @@ export const ConceptPage = ({
   const router = useRouter();
   const catalogId = (router.query.catalogId as string) ?? '';
 
-  const {
-    status: getCommentsStatus,
-    data: getCommentsData,
-  } = useGetComments({
+  const { status: getCommentsStatus, data: getCommentsData } = useGetComments({
     orgNumber: catalogId,
     topicId: concept?.id,
   });
@@ -344,22 +341,6 @@ export const ConceptPage = ({
                                             </Button>
                                           </div>
                                         )}
-                                        <div className={classes.commentActions}>
-                                          <Button
-                                            variant='outline'
-                                            onClick={() => handleUpdateComment(comment)}
-                                          >
-                                            {isCommentInEditMode(comment.id)
-                                              ? localization.comment.saveComment
-                                              : localization.comment.editComment}
-                                          </Button>
-                                          <Button
-                                            variant='outline'
-                                            onClick={(e) => handleDeleteComment(comment.id, e)}
-                                          >
-                                            {localization.comment.deleteComment}
-                                          </Button>
-                                        </div>
                                       </InfoCard.Item>
                                     </InfoCard>
                                   ))}
