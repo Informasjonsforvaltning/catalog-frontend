@@ -1,6 +1,6 @@
 import { AdminState } from './state';
 
-// add new action types here as needed: E.g. 'POPULATE' | 'UPDATE'
+// add new action types here as needed: E.g. 'POPULATE' | 'UPDATE' test
 export type ACTION_TYPE = 'POPULATE' | 'SET_BACKGROUND_COLOR' | 'SET_FONT_COLOR';
 
 // add new payload types here as needed
