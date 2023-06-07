@@ -24,7 +24,7 @@ import { getConcept, getConceptRevisions } from '@catalog-frontend/data-access';
 import { Concept, Comment, Update } from '@catalog-frontend/types';
 import { ChatIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
-import { Button, Tabs, TextArea } from '@digdir/design-system-react';
+import { Accordion, Button, Tabs, TextArea } from '@digdir/design-system-react';
 import classes from './concept-page.module.css';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../hooks/comments';
 import { useGetHistory } from '../../../hooks/history';
@@ -356,12 +356,30 @@ export const ConceptPage = ({
                           ) : getHistoryStatus === 'error' ? (
                             <span>Endringslogg er ikke tilgjengelig. Prøv igjen senere.</span>
                           ) : (
-                            <>
-                              {getHistoryData.length > 0 &&
+                            <Accordion>
+                              {getHistoryData.updates?.length > 0 &&
                                 getHistoryData.updates.map((update: Update, i) => (
-                                  <span key={`history-${update.id}`}>{update.dateTime}</span>
+                                  <Accordion.Item key={`history-${update.id}`}>
+                                    <Accordion.Header className={classes.historyHeader}>
+                                      <span>{update.person.name}</span>
+                                      <span>{formatISO(update.datetime)}</span>
+                                    </Accordion.Header>
+                                    <Accordion.Content>
+                                      {update.operations.map((operation, i) => (
+                                        <div
+                                          key={`operation-${i}`}
+                                          className={classes.historyOperation}
+                                        >
+                                          <div>
+                                            {operation.op} - {operation.path}
+                                          </div>
+                                          <div>{operation.value}</div>
+                                        </div>
+                                      ))}
+                                    </Accordion.Content>
+                                  </Accordion.Item>
                                 ))}
-                            </>
+                            </Accordion>
                           ),
                         name: 'Endringshistorikk',
                       },

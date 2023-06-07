@@ -1,4 +1,4 @@
-import { User } from "./user";
+import { User } from './user';
 
 export interface JsonPatchOperation {
   op: string;
@@ -14,6 +14,6 @@ export interface Update {
   id: string;
   resourceId: string;
   person: User;
-  dateTime: string;
+  datetime: string;
   operations: JsonPatchOperation[];
 }

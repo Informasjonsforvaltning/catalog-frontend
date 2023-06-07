@@ -126,3 +126,29 @@ a.versionTitle {
   font-weight: 700;
   margin-bottom: 18px;
 }
+
+.historyHeader span:first-of-type {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.historyHeader span:first-of-type > span {
+  white-space: nowrap;
+}
+
+.historyHeader span:first-of-type > span:first-of-type {
+  font-weight: 700;
+}
+
+.historyOperation {
+  padding: 1rem;
+}
+
+.historyOperation:not(:last-of-type) {
+  margin-bottom: 1rem;
+}
+
+.historyOperation:nth-of-type(2n) {
+  background-color: #eeeeeeb6;
+}
