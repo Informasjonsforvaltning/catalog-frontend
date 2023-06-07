@@ -209,7 +209,7 @@ export const ConceptPage = ({
             </div>
             <div className={classes.definition}>
               <h3>Definisjon:</h3>
-              <div>{translate(concept?.definisjon?.tekst, language)}</div>
+              <div>{translate(concept?.definisjon?.tekst ?? '', language)}</div>
               <div className={cn(classes.source)}>
                 Kilde: <a href='#'>Basert på Skatteetaten</a>
               </div>
