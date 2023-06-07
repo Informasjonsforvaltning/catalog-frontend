@@ -59,8 +59,3 @@ yarn nx run concept-catalog:build:production
 ## Further help
 
 Visit the [Nx Documentation](https://nx.dev) and [Nx NextJs](https://nx.dev/packages/next) to learn more.
-
-## Todo
-
-- Unauthorized page + behavior
-- Loading page / skeleton

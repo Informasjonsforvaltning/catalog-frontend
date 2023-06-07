@@ -1,27 +1,29 @@
-import { Breadcrumbs, SearchHit, Pagination, Select, Spinner, BreadcrumbType } from '@catalog-frontend/ui';
+import {
+  Breadcrumbs,
+  SearchHit,
+  Pagination,
+  Select,
+  Spinner,
+  BreadcrumbType,
+  SearchField,
+  Button,
+  PageBanner,
+} from '@catalog-frontend/ui';
 import { hasOrganizationReadPermission, localization, textToNumber } from '@catalog-frontend/utils';
 import { useRouter } from 'next/router';
-import { SearchField } from '@catalog-frontend/ui';
-import { PageBanner } from '@catalog-frontend/ui';
 import { Concept, SearchableField } from '@catalog-frontend/types';
 import { useEffect, useState } from 'react';
-import {
-  SortFields,
-  SortOptions,
-  getFields,
-  getSelectOptions,
-  useSearchConcepts,
-  SortOption,
-} from '../../hooks/search';
+import { SortOptions, getFields, getSelectOptions, useSearchConcepts, SortOption } from '../../hooks/search';
 import styles from './search-page.module.css';
 import { getToken } from 'next-auth/jwt';
-import { Button } from '@catalog-frontend/ui';
 import { FileImportIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import SideFilter from '../../components/side-filter';
+import { useCreateConcept } from '../../hooks/concept';
 
 export const SearchPage = ({ hasPermission }) => {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
+  const createConcept = useCreateConcept(catalogId);
   const pageNumber: number = textToNumber(router.query.page as string, 0);
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -58,7 +60,7 @@ export const SearchPage = ({ hasPermission }) => {
     : [];
 
   const changePage = async (page: { selected: number }) => {
-    router.push({
+    await router.push({
       pathname: catalogId,
       query: { page: page.selected },
     });
@@ -79,7 +81,7 @@ export const SearchPage = ({ hasPermission }) => {
   };
 
   useEffect(() => {
-    refetch();
+    refetch().catch((error) => console.error('refetch() failed: ', error));
   }, [searchTerm, currentPage, selectedFieldOption, selectedSortOption, refetch]);
 
   return (
@@ -116,6 +118,7 @@ export const SearchPage = ({ hasPermission }) => {
               </div>
               <div className={styles.buttonsContainer}>
                 <Button
+                  onClick={() => createConcept.mutate()}
                   icon={
                     <PlusCircleIcon
                       title='a11y-title'
