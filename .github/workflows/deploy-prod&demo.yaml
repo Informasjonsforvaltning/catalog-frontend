@@ -77,6 +77,9 @@ jobs:
       demo_config: ${{ steps.check_demo_config.outputs.has_config }}
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Check for prod deploy config
         id: check_prod_config
         if: ${{ hashFiles('deploy/prod/${{ matrix.appname }}' != '') }}
