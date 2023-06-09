@@ -90,7 +90,7 @@
 }
 
 .removable {
-  background-color: var(--fds-semantic-surface-action-active);
+  background-color: #2d3741;
   color: var(--fds-semantic-text-action-on_action);
   border: 0;
   padding-right: 0;
