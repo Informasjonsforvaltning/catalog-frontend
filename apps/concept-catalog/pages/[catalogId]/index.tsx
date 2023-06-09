@@ -6,6 +6,7 @@ import {
   Spinner,
   BreadcrumbType,
   Button,
+  UploadButton,
   PageBanner,
   SearchField,
 } from '@catalog-frontend/ui';
@@ -18,9 +19,10 @@ import styles from './search-page.module.css';
 import { getToken } from 'next-auth/jwt';
 import { FileImportIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import SideFilter from '../../components/side-filter';
-import { useCreateConcept } from '../../hooks/concept';
+import { useCreateConcept } from '../../hooks/concepts';
 import { getOrganization } from '@catalog-frontend/data-access';
 import { useSearchState } from '../../context/search';
+import { useImportConcepts } from '../../hooks/import';
 
 export const SearchPage = ({ hasPermission, organization }) => {
   const router = useRouter();
@@ -54,6 +56,8 @@ export const SearchPage = ({ hasPermission, organization }) => {
       },
     ),
   });
+
+  const importConcepts = useImportConcepts(catalogId);
 
   const pageSubtitle = organization?.name ?? catalogId;
   const fieldOptions = getSelectOptions(localization.search.fields);
@@ -89,6 +93,13 @@ export const SearchPage = ({ hasPermission, organization }) => {
     setSelectedSortOption(option);
   };
 
+  const onImportUpload = (event) => {
+    event.target.files[0].text().then((text) => {
+      importConcepts.mutate(text);
+    });
+  };
+
+  console.log(JSON.stringify(data));
   useEffect(() => {
     refetch().catch((error) => console.error('refetch() failed: ', error));
   }, [searchTerm, currentPage, selectedFieldOption, selectedSortOption, searchState, refetch]);
@@ -137,7 +148,7 @@ export const SearchPage = ({ hasPermission, organization }) => {
                 >
                   {localization.button.createConcept}
                 </Button>
-                <Button
+                <UploadButton
                   variant='outline'
                   icon={
                     <FileImportIcon
@@ -145,9 +156,19 @@ export const SearchPage = ({ hasPermission, organization }) => {
                       fontSize='1.5rem'
                     />
                   }
+                  allowedMimeTypes={[
+                    'text/csv',
+                    'text/x-csv',
+                    'text/plain',
+                    'application/csv',
+                    'application/x-csv',
+                    'application/vnd.ms-excel',
+                    'application/json',
+                  ]}
+                  onUpload={onImportUpload}
                 >
                   {localization.button.importConcept}
-                </Button>
+                </UploadButton>
               </div>
               <div>
                 <div className={styles.gridContainer}>
@@ -179,7 +200,7 @@ export const SearchPage = ({ hasPermission, organization }) => {
                 {data?.hits.length > 0 && (
                   <Pagination
                     onPageChange={changePage}
-                    forcePage={currentPage - 1}
+                    forcePage={currentPage}
                     pageCount={data?.page?.totalPages ?? 0}
                   />
                 )}

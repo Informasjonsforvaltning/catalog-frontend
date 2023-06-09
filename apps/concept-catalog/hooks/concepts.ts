@@ -13,7 +13,7 @@ export const useCreateConcept = (catalogId: string) => {
         return Promise.reject('Invalid catalog id');
       }
 
-      const response = await fetch('/api/concept', options);
+      const response = await fetch('/api/concepts', options);
       return response.json();
     },
     onSuccess(data) {

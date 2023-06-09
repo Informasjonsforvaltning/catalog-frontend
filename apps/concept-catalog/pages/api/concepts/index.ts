@@ -2,14 +2,14 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getToken } from 'next-auth/jwt';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const resource = `${process.env.CONCEPT_REGISTRATION_API}/begreper`;
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/begreper`;
 
   const token = await getToken({ req });
   const catalogId = req.body;
 
   const drafConcept = {
     anbefaltTerm: {
-      navn: {},
+      navn: { nb: 'Nytt begrep' },
     },
     status: 'utkast',
     ansvarligVirksomhet: {
