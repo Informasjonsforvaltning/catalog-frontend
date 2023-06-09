@@ -51,6 +51,7 @@
     "react-is": "18.2.0",
     "react-localization": "^1.0.19",
     "react-paginate": "^8.2.0",
+    "react-papaparse": "^4.1.0",
     "styled-components": "5.3.11",
     "tslib": "^2.3.0"
   },
