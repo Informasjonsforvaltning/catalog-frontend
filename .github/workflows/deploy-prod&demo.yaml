@@ -71,7 +71,7 @@ jobs:
     needs: [test, build]
     strategy:
       matrix: ${{fromJSON(needs.test.outputs.matrix)}}
-    if: ${{ needs.test.outputs.changed != '[]' && [[ test -f 'deploy/prod/${{ matrix.appname }}' ]] }}
+    if: ${{ needs.test.outputs.changed != '[]' && hashFiles('deploy/prod/${{ matrix.appname }}') != '' }}
     uses: Informasjonsforvaltning/workflows/.github/workflows/kustomize-deploy.yaml@main
     with:
       app_name: ${{ matrix.appname }}-frontend
@@ -88,7 +88,7 @@ jobs:
     needs: [deploy-prod]
     strategy:
       matrix: ${{fromJSON(needs.test.outputs.matrix)}}
-    if: ${{ needs.test.outputs.changed != '[]' && [[ test -f 'deploy/demo/${{ matrix.appname }}' ]] }} }}
+    if: ${{ needs.test.outputs.changed != '[]' && hashFiles('deploy/demo/${{ matrix.appname }}') != '' }}
     uses: Informasjonsforvaltning/workflows/.github/workflows/kustomize-deploy.yaml@main
     with:
       app_name: ${{ matrix.appname }}-frontend
