@@ -66,6 +66,25 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GCP_SA_DIGDIR_FDK_GCR_KEY: ${{ secrets.GCP_SA_DIGDIR_FDK_GCR_KEY }}
 
+  check_deploy:
+    name: Check if deployment config exists
+    needs: [test, build]
+    if: ${{ needs.test.outputs.changed != '[]' }}
+    strategy:
+      matrix: ${{fromJSON(needs.test.outputs.matrix)}}
+    outputs:
+      staging_config: ${{ steps.check_staging_config.outputs.has_config }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Check for staging deploy config
+        id: check_staging_config
+        if: ${{ hashFiles('deploy/staging/${{ matrix.appname }}' != '') }}
+        run: |
+          echo "has_config=True" >> $GITHUB_ENV
+
   deploy:
     name: Deploy affected apps to staging environment with reusable workflow
     needs: [test, build]
