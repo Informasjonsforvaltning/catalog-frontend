@@ -69,9 +69,9 @@ jobs:
   deploy-prod:
     name: Deploy affected apps to production environment with reusable workflow
     needs: [test, build]
-    if: ${{ needs.test.outputs.changed != '[]' }}
     strategy:
       matrix: ${{fromJSON(needs.test.outputs.matrix)}}
+    if: ${{ needs.test.outputs.changed != '[]' && test -f 'deploy/prod/${{ matrix.appname }}' }}
     uses: Informasjonsforvaltning/workflows/.github/workflows/kustomize-deploy.yaml@main
     with:
       app_name: ${{ matrix.appname }}-frontend
@@ -86,9 +86,9 @@ jobs:
   deploy-demo:
     name: Deploy affected apps to demo environment with reusable workflow
     needs: [deploy-prod]
-    if: ${{ needs.test.outputs.changed != '[]' }}
     strategy:
       matrix: ${{fromJSON(needs.test.outputs.matrix)}}
+    if: ${{ needs.test.outputs.changed != '[]' && test -f 'deploy/demo/${{ matrix.appname }}' }} }}
     uses: Informasjonsforvaltning/workflows/.github/workflows/kustomize-deploy.yaml@main
     with:
       app_name: ${{ matrix.appname }}-frontend
