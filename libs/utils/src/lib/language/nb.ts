@@ -133,4 +133,8 @@ export const nb = {
     deleteComment: 'Slett kommentar',
     saveComment: 'Lagre kommentar',
   },
+
+  history: {
+    noChanges: 'Ingen endringer er gjort',
+  },
 };

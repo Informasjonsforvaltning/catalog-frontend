@@ -1,9 +1,18 @@
+import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const useGetComments = ({ orgNumber, topicId }) => {
   return useQuery({
     queryKey: ['getComments', orgNumber, topicId],
     queryFn: async () => {
+      if (!validOrganizationNumber(orgNumber)) {
+        return Promise.reject('Invalid organization number');
+      }
+
+      if (!validUUID(topicId)) {
+        return Promise.reject('Invalid topic id');
+      }
+
       const response = await fetch(`/api/comments/${orgNumber}/${topicId}`, {
         method: 'GET',
       });
@@ -17,6 +26,18 @@ export const useCreateComment = ({ orgNumber, topicId }) => {
 
   return useMutation({
     mutationFn: async (comment: string) => {
+      if (!validOrganizationNumber(orgNumber)) {
+        return Promise.reject('Invalid organization number');
+      }
+
+      if (!validUUID(topicId)) {
+        return Promise.reject('Invalid topic id');
+      }
+
+      if (comment.length === 0) {
+        return Promise.reject('Comment cannot be empty');
+      }
+
       const response = await fetch(`/api/comments/${orgNumber}/${topicId}`, {
         method: 'POST',
         body: JSON.stringify({
@@ -38,6 +59,22 @@ export const useUpdateComment = ({ orgNumber, topicId }) => {
 
   return useMutation({
     mutationFn: async ({ commentId, comment }: { commentId: string; comment: string }) => {
+      if (!validOrganizationNumber(orgNumber)) {
+        return Promise.reject('Invalid organization number');
+      }
+
+      if (!validUUID(topicId)) {
+        return Promise.reject('Invalid topic id');
+      }
+
+      if (!validUUID(commentId)) {
+        return Promise.reject('Invalid comment id');
+      }
+
+      if (comment.length === 0) {
+        return Promise.reject('Comment cannot be empty');
+      }
+
       const response = await fetch(`/api/comments/${orgNumber}/${topicId}/${commentId}`, {
         method: 'PUT',
         body: JSON.stringify({
@@ -59,6 +96,18 @@ export const useDeleteComment = ({ orgNumber, topicId }) => {
 
   return useMutation({
     mutationFn: async (commentId: string) => {
+      if (!validOrganizationNumber(orgNumber)) {
+        return Promise.reject('Invalid organization number');
+      }
+
+      if (!validUUID(topicId)) {
+        return Promise.reject('Invalid topic id');
+      }
+
+      if (!validUUID(commentId)) {
+        return Promise.reject('Invalid comment id');
+      }
+
       const response = await fetch(`/api/comments/${orgNumber}/${topicId}/${commentId}`, {
         method: 'DELETE',
         cache: 'no-store',

@@ -1,4 +1,9 @@
-import { localization, getTranslateText as translate } from '@catalog-frontend/utils';
+import {
+  localization,
+  getTranslateText as translate,
+  validOrganizationNumber,
+  validUUID,
+} from '@catalog-frontend/utils';
 import styles from './search-hit.module.css';
 import { Concept } from '@catalog-frontend/types';
 import Link from 'next/link';
@@ -15,7 +20,11 @@ export function SearchHit({ catalogId, searchHit }: SearchHit) {
       <div className={styles.rowSpaceBetween}>
         <div className={styles.titleRow}>
           {searchHit?.anbefaltTerm && (
-            <Link href={`${catalogId}/${searchHit.id}`}>
+            <Link
+              href={
+                validOrganizationNumber(catalogId) && validUUID(searchHit.id) ? `/${catalogId}/${searchHit.id}` : '#'
+              }
+            >
               <h2 className={styles.title}>{translate(searchHit?.anbefaltTerm.navn)}</h2>
             </Link>
           )}
