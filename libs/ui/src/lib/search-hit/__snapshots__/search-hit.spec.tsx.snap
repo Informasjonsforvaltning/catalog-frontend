@@ -13,7 +13,7 @@ exports[`SearchHit should render SearchHit successfully 1`] = `
           class="titleRow"
         >
           <a
-            href="undefined/bec18f0d-389e-4fa3-970d-23c1196cbe00"
+            href="/undefined/bec18f0d-389e-4fa3-970d-23c1196cbe00"
           >
             <h2
               class="title"

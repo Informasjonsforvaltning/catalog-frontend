@@ -19,6 +19,8 @@ import {
   hasOrganizationReadPermission,
   formatISO,
   getUsername,
+  validOrganizationNumber,
+  validUUID,
 } from '@catalog-frontend/utils';
 import { getConcept, getConceptRevisions, getOrganization } from '@catalog-frontend/data-access';
 import { Concept, Comment, Update, Organization } from '@catalog-frontend/types';
@@ -154,7 +156,9 @@ export const ConceptPage = ({
             </div>
             <div>
               <Link
-                href={`/${catalogId}/${revision.id}`}
+                href={
+                  validOrganizationNumber(catalogId) && validUUID(revision.id) ? `/${catalogId}/${revision.id}` : '#'
+                }
                 className={classes.versionTitle}
               >
                 {translate(revision?.anbefaltTerm?.navn, language)}
@@ -272,7 +276,7 @@ export const ConceptPage = ({
                           getCommentsStatus == 'loading' ? (
                             <Spinner size='medium' />
                           ) : getCommentsStatus === 'error' ? (
-                            <span>Kommentarer er ikke tilgjengelig. Prøv igjen senere.</span>
+                            <span>{localization.somethingWentWrong}</span>
                           ) : (
                             <>
                               <div className={classes.bottomSpacingSmall}>
@@ -355,7 +359,9 @@ export const ConceptPage = ({
                           getHistoryStatus == 'loading' ? (
                             <Spinner size='medium' />
                           ) : getHistoryStatus === 'error' ? (
-                            <span>Endringslogg er ikke tilgjengelig. Prøv igjen senere.</span>
+                            <span>{localization.somethingWentWrong}</span>
+                          ) : getHistoryData.updates?.length === 0 ? (
+                            <span>{localization.history.noChanges}</span>
                           ) : (
                             <Accordion>
                               {getHistoryData.updates?.length > 0 &&
