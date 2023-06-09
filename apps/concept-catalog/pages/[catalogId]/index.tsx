@@ -9,6 +9,7 @@ import {
   UploadButton,
   PageBanner,
   SearchField,
+  Chips,
 } from '@catalog-frontend/ui';
 import { hasOrganizationReadPermission, localization, textToNumber } from '@catalog-frontend/utils';
 import { useRouter } from 'next/router';
