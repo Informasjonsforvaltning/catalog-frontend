@@ -85,7 +85,7 @@ jobs:
 
   deploy-demo:
     name: Deploy affected apps to demo environment with reusable workflow
-    needs: [test, build]
+    needs: [deploy-prod]
     if: ${{ needs.test.outputs.changed != '[]' }}
     strategy:
       matrix: ${{fromJSON(needs.test.outputs.matrix)}}
