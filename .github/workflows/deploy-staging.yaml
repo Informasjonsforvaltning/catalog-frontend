@@ -87,8 +87,8 @@ jobs:
 
   deploy:
     name: Deploy affected apps to staging environment with reusable workflow
-    needs: [test, build]
-    if: ${{ needs.test.outputs.changed != '[]' }}
+    needs: [test, build, check_deploy]
+    if: ${{ needs.test.outputs.changed != '[]'  && needs.check_deploy.prod_config }}
     strategy:
       matrix: ${{fromJSON(needs.test.outputs.matrix)}}
     uses: Informasjonsforvaltning/workflows/.github/workflows/kustomize-deploy.yaml@main
