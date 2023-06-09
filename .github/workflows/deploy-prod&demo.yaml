@@ -68,7 +68,7 @@ jobs:
 
   check_deploy:
     name: Check if deployment config exists
-    needs: [build]
+    needs: [test, build]
     if: ${{ needs.test.outputs.changed != '[]' }}
     strategy:
       matrix: ${{fromJSON(needs.test.outputs.matrix)}}
