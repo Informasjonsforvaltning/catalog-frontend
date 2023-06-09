@@ -66,12 +66,34 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GCP_SA_DIGDIR_FDK_GCR_KEY: ${{ secrets.GCP_SA_DIGDIR_FDK_GCR_KEY }}
 
-  deploy-prod:
-    name: Deploy affected apps to production environment with reusable workflow
-    needs: [test, build]
+  check_deploy:
+    name: Check if deployment config exists
+    needs: [build]
+    if: ${{ needs.test.outputs.changed != '[]' }}
     strategy:
       matrix: ${{fromJSON(needs.test.outputs.matrix)}}
-    if: ${{ needs.test.outputs.changed != '[]' && hashFiles('deploy/prod/${{ matrix.appname }}') != '' }}
+    outputs:
+      prod_config: ${{ steps.check_prod_config.outputs.has_config }}
+      demo_config: ${{ steps.check_demo_config.outputs.has_config }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check for prod deploy config
+        id: check_prod_config
+        if: ${{ hashFiles('deploy/prod/${{ matrix.appname }}' != '') }}
+        run: |
+          echo "has_config=True" >> $GITHUB_ENV
+      - name: Check for demo deploy config
+        id: check_demo_config
+        if: ${{ hashFiles('deploy/demo/${{ matrix.appname }}' != '') }}
+        run: |
+          echo "has_config=True" >> $GITHUB_ENV
+
+  deploy-prod:
+    name: Deploy affected apps to production environment with reusable workflow
+    needs: [test, build, check_deploy]
+    strategy:
+      matrix: ${{fromJSON(needs.test.outputs.matrix)}}
+    if: ${{ needs.test.outputs.changed != '[]' && needs.check_deploy.prod_config }}
     uses: Informasjonsforvaltning/workflows/.github/workflows/kustomize-deploy.yaml@main
     with:
       app_name: ${{ matrix.appname }}-frontend
@@ -85,10 +107,10 @@ jobs:
 
   deploy-demo:
     name: Deploy affected apps to demo environment with reusable workflow
-    needs: [deploy-prod]
+    needs: [test, check_deploy, deploy-prod]
     strategy:
       matrix: ${{fromJSON(needs.test.outputs.matrix)}}
-    if: ${{ needs.test.outputs.changed != '[]' && hashFiles('deploy/demo/${{ matrix.appname }}') != '' }}
+    if: ${{ needs.test.outputs.changed != '[]' && needs.check_deploy.demo_config }}
     uses: Informasjonsforvaltning/workflows/.github/workflows/kustomize-deploy.yaml@main
     with:
       app_name: ${{ matrix.appname }}-frontend
