@@ -22,6 +22,7 @@ export const nb = {
   publicationStateDescription:
     'Publiseringstilstand forteller om et begrep er publisert i Felles Datakatalog eller ikke.',
   nameAndConcept: 'Navn og begrep',
+  save: 'Lagre',
 
   search: {
     searchInAllFields: 'Søk i alle felt',
@@ -103,6 +104,13 @@ export const nb = {
   catalogAdmin: {
     internalFields: 'Interne felt',
     codeList: 'Kodeliste',
+    fontColor: 'Skriftfarge',
+    backgroundColor: 'Bakgrunnsfarge',
+    descriptionLogo: 'Beskrivelse av logo',
+    logo: 'Logo',
+    preview: 'Forhåndsvisning',
+    general: 'Generelt',
+    customizeDesign: 'Tilpass design',
     description: {
       general:
         'Oversikt over beskrivelser av datasett, begrep, apier og informasjonmodeller. Innholdet blir levert av ulike virksomheter, offentlige og private.',

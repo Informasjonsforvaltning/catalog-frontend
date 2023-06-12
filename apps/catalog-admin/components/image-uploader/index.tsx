@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './image-uploader.module.css';
 import { useAdminDispatch } from '../../context/admin';
-import { FileImportIcon, TrashIcon } from '@navikt/aksel-icons';
+import { FileImportIcon, TrashIcon, UploadIcon } from '@navikt/aksel-icons';
 import { localization } from '@catalog-frontend/utils';
 import { UploadButton } from '@catalog-frontend/ui';
 
@@ -57,12 +57,14 @@ export function ImageUploader() {
 
   return (
     <div className={styles.container}>
+      {!fileName && <UploadIcon className={styles.uploadIcon} />}
       {fileName && (
         <div className={styles.filename}>
           <div className={styles.file}>{fileName}</div>
           <TrashIcon
             title={localization.button.bin}
             onClick={resetImage}
+            fontSize={'25px'}
           />
         </div>
       )}
