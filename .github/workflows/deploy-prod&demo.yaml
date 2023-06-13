@@ -68,7 +68,7 @@ jobs:
 
   deploy-prod:
     name: Deploy affected apps to production environment with reusable workflow
-    needs: [test, build, check_deploy]
+    needs: [test, build]
     strategy:
       matrix: ${{fromJSON(needs.test.outputs.matrix)}}
       fail-fast: false
@@ -86,7 +86,7 @@ jobs:
 
   deploy-demo:
     name: Deploy affected apps to demo environment with reusable workflow
-    needs: [test, check_deploy, deploy-prod]
+    needs: [test, deploy-prod]
     strategy:
       matrix: ${{fromJSON(needs.test.outputs.matrix)}}
       fail-fast: false
