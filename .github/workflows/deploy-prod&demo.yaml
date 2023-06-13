@@ -90,7 +90,7 @@ jobs:
     strategy:
       matrix: ${{fromJSON(needs.test.outputs.matrix)}}
       fail-fast: false
-    if: ${{ needs.test.outputs.changed != '[]' && needs.check_deploy.demo_config }}
+    if: ${{ needs.test.outputs.changed != '[]' }}
     uses: Informasjonsforvaltning/workflows/.github/workflows/kustomize-deploy.yaml@main
     with:
       app_name: ${{ matrix.appname }}-frontend
