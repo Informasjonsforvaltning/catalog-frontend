@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { useAdminState } from '../../../../context/admin';
 import { ColorPicker } from '../../../../components/color-picker';
 import { ImageUploader } from '../../../../components/image-uploader';
@@ -5,16 +6,18 @@ import { Banner } from '../../../../components/banner';
 import styles from './general.module.css';
 import { Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
 import { Heading, HelpText, TextField } from '@digdir/design-system-react';
-import { useState } from 'react';
 import { localization } from '@catalog-frontend/utils';
 
-export const GeneralPage = () => {
+const GeneralPage = () => {
   const adminContext = useAdminState();
-  const backgroundColor = adminContext.backgroundColor;
-  const fontColor = adminContext.fontColor;
-  const logo = adminContext.logo;
+  const { backgroundColor, fontColor, logo } = adminContext;
   const [imageLabel, setImageLabel] = useState('');
-  console.log('Farge', backgroundColor, 'Skrift', fontColor, 'logo', logo);
+  const [isTextInputValid, setIsTextInputValid] = useState(true);
+
+  function validateInputContent(text: string): boolean {
+    let alphanumericRegex = /^[a-zA-Z0-9\s]*$/;
+    return alphanumericRegex.test(text);
+  }
 
   return (
     <div className={styles.center}>
@@ -57,9 +60,11 @@ export const GeneralPage = () => {
           </div>
           <div>
             <TextField
+              isValid={isTextInputValid}
               className={styles.textField}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              onChange={(event) => {
                 setImageLabel(event.target.value);
+                setIsTextInputValid(validateInputContent(event.target.value));
               }}
             />
           </div>
