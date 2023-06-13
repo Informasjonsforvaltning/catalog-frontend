@@ -3,7 +3,7 @@
 }
 
 .color {
-  background-color: white;
+  border: 1px solid #d5d7d9;
   height: 138px;
   border-radius: 8px 8px 0px 0px;
 }

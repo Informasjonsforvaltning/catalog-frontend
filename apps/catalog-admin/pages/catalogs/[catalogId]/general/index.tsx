@@ -1,20 +1,24 @@
 import { useAdminState } from '../../../../context/admin';
 import { ColorPicker } from '../../../../components/color-picker';
+import { ImageUploader } from '../../../../components/image-uploader';
+import { Banner } from '../../../../components/banner';
 import styles from './general.module.css';
 
 export const GeneralPage = () => {
   const adminContext = useAdminState();
   const backgroundColor = adminContext.backgroundColor;
   const fontColor = adminContext.fontColor;
+  const logo = adminContext.logo;
 
   return (
     <>
-      <div
-        className={styles.banner}
-        style={{ background: backgroundColor, color: fontColor }}
-      >
-        Banner!
-      </div>
+      <Banner
+        backgroundColor={backgroundColor}
+        fontColor={fontColor}
+        logo={logo}
+      />
+
+      <ImageUploader />
       <ColorPicker
         type='background'
         defaultColor={'#FFFFFF'}

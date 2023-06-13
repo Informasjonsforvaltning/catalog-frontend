@@ -15,6 +15,9 @@ export const reducer = produce((state: AdminState, action: ACTION): AdminState =
     case 'SET_FONT_COLOR': {
       return { ...state, fontColor: action.payload.fontColor };
     }
+    case 'SET_LOGO': {
+      return { ...state, logo: action.payload.logo };
+    }
     default:
       throw new Error(`Unknown action type ${action.type}`);
   }

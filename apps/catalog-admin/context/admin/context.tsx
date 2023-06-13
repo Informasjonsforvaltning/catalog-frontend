@@ -12,7 +12,7 @@ interface ContextProps {
 
 const context: ContextProps = {
   state: DefaultAdminState,
-  dispatch: () => null,
+  dispatch: () => undefined,
 };
 
 const AdminContext = createContext(context);
