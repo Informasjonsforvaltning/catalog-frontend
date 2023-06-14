@@ -1,7 +1,7 @@
 import { SearchState } from './state';
 
 // add new action types here as needed: E.g. 'POPULATE' | 'UPDATE'
-export type ACTION_TYPE = 'POPULATE' | 'SET_PUBLISHED' | 'SET_STATUS';
+export type ACTION_TYPE = 'POPULATE' | 'SET_PUBLICATION_STATE' | 'SET_CONCEPT_STATUS' | 'SET_NAME_AND_CONCEPT';
 
 // add new payload types here as needed
 export type ACTION_PAYLOAD = SearchState;

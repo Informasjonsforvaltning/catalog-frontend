@@ -1,8 +1,7 @@
-import { createContext, useReducer, type ReactNode, useContext } from 'react';
+import { createContext, useReducer, type ReactNode, useContext, useMemo } from 'react';
 
 import { reducer } from './reducer';
-import { DefaultSearchState } from './state';
-import { type SearchState } from './state';
+import { DefaultSearchState, SearchState } from './state';
 import { ACTION } from './action';
 
 interface ContextProps {
@@ -26,10 +25,7 @@ interface StateProviderProps {
 const SearchContextProvider = ({ children }: StateProviderProps) => {
   const [state, dispatch] = useReducer(reducer, DefaultSearchState);
 
-  const value = {
-    state,
-    dispatch,
-  };
+  const value = useMemo(() => ({ state, dispatch }), [state, dispatch]);
 
   return <SearchContext.Provider value={value}>{children}</SearchContext.Provider>;
 };

@@ -1,6 +1,7 @@
 import { Status } from '@catalog-frontend/types';
 
 export type PublishedFilterType = 'published' | 'notPublished';
+export type StatusFilterType = Status;
 
 export type SearchFilters = {
   published?: PublishedFilterType[];

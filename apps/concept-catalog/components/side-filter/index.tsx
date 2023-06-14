@@ -1,86 +1,84 @@
-import { Accordion, CheckboxGroup } from '@digdir/design-system-react';
-import { ReactNode, memo } from 'react';
-import { localization } from '@catalog-frontend/utils';
+import { Accordion } from '@digdir/design-system-react';
+import { memo } from 'react';
+import { action, useSearchDispatch } from '../../context/search';
+import { PublishedFilterType, StatusFilterType } from '../../context/search/state';
+import { localization as loc } from '@catalog-frontend/utils';
 import styles from './side-filter.module.css';
-import { useSearchDispatch, useSearchState } from '../../context/search';
-import { PublishedFilterType } from '../../context/search/state';
-
-type AccordionItem = {
-  header: string;
-  content: ReactNode;
-};
+import { createCheckboxGroup } from './checkbox-group-generator';
+import { uniqueId } from 'lodash';
+import { AccordionItem, AccordionItemProps } from './accordion-item';
 
 const SideFilter = () => {
-  const searchState = useSearchState();
   const searchDispatch = useSearchDispatch();
-  const handleOnPublishedChange = (names: string[]) => {
-    searchDispatch({
-      type: 'SET_PUBLISHED',
-      payload: { filters: { published: names.map((name) => name as PublishedFilterType) } },
-    });
-  };
 
-  const accordionItemContents: AccordionItem[] = [
+  const statusLabels = ['Utkast', 'Høring', 'Kvalitetssikret', 'Godkjent'];
+  const nameAndConceptLabels = ['Egenskapsnavn', 'Forretningsbegrep'];
+  const publicationState = ['Publisert', 'Ikke publisert'];
+
+  const handleOnStatusChange = (names: string[]) =>
+    searchDispatch(
+      action('SET_CONCEPT_STATUS', { filters: { status: names.map((name) => name as StatusFilterType) } }),
+    );
+
+  const handleOnNameAndConceptChange = (names: string[]) =>
+    searchDispatch(action('SET_NAME_AND_CONCEPT', { filters: {} }));
+
+  const handlePublicationOnChange = (names: string[]) =>
+    searchDispatch(
+      action('SET_PUBLICATION_STATE', { filters: { published: names.map((name) => name as PublishedFilterType) } }),
+    );
+
+  const NameAndConcept = createCheckboxGroup('NameAndConcept', nameAndConceptLabels, handleOnNameAndConceptChange);
+  const ConceptStatus = createCheckboxGroup('ConceptStatus', statusLabels, handleOnStatusChange);
+  const PublicationState = createCheckboxGroup('PublicationState', publicationState, handlePublicationOnChange);
+
+  const accordionItemContents: AccordionItemProps[] = [
     {
-      header: localization.subjectArea,
+      header: loc.subjectArea,
       content: <div>Accordion content</div>,
     },
     {
-      header: localization.conceptStatus,
+      header: loc.conceptStatus,
+      content: <ConceptStatus />,
+    },
+    {
+      header: loc.assigned,
       content: <div>Accordion content</div>,
     },
     {
-      header: localization.assigned,
-      content: <div>Accordion content</div>,
-    },
-    {
-      header: localization.publicationState,
+      header: loc.publicationState,
       content: (
         <>
           <p>
-            {localization.publicationStateDescription}
+            {loc.publicationStateDescription}
             <br />
             <br />
           </p>
-          <CheckboxGroup
-            items={[
-              {
-                label: localization.search.filter.published,
-                name: 'published',
-                checked: searchState.filters.published?.includes('published'),
-              },
-              {
-                label: localization.search.filter.notPublished,
-                name: 'unpublished',
-                checked: searchState.filters.published?.includes('notPublished'),
-              },
-            ]}
-            onChange={handleOnPublishedChange}
-          />
+          <PublicationState />
         </>
       ),
     },
     {
-      header: localization.nameAndConcept,
-      content: <div>Accordion content</div>,
+      header: loc.nameAndConcept,
+      content: <NameAndConcept />,
     },
   ];
 
-  const accordionItems = accordionItemContents.map((item, i) => {
-    return (
-      <Accordion.Item
-        key={`filter-accordion-header-${i}`}
-        className={i === 0 && styles.accordionFirstItem}
-      >
-        <Accordion.Header>{item.header}</Accordion.Header>
-        <Accordion.Content>{item.content}</Accordion.Content>
-      </Accordion.Item>
-    );
-  });
+  const accordionItems = accordionItemContents.map((item) => (
+    <AccordionItem
+      key={`accordion-item-${uniqueId()}`}
+      {...item}
+    />
+  ));
 
   return (
     <div className={styles.sideFilter}>
-      <Accordion className={styles.accordion}>{accordionItems}</Accordion>
+      <Accordion
+        border={true}
+        className={styles.accordion}
+      >
+        {accordionItems}
+      </Accordion>
     </div>
   );
 };
