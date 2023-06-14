@@ -8,12 +8,16 @@ export const reducer = produce((state: SearchState, action: ACTION): SearchState
       state = action.payload;
       return state;
     }
-    case 'SET_PUBLISHED': {
+    case 'SET_PUBLICATION_STATE': {
       state.filters.published = action.payload.filters?.published;
       return state;
     }
-    case 'SET_STATUS': {
+    case 'SET_CONCEPT_STATUS': {
       state.filters.status = action.payload.filters?.status;
+      return state;
+    }
+    case 'SET_NAME_AND_CONCEPT': {
+      // TODO: implement when backend is ready
       return state;
     }
     default:
