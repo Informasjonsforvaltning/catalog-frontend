@@ -35,11 +35,6 @@ spec:
                 secretKeyRef:
                   name: commonurl-staging
                   key: CONCEPT_CATALOG_BASE_URI
-            - name: FDK_REGISTRATION_BASE_URI
-              valueFrom:
-                secretKeyRef:
-                  name: commonurl-staging
-                  key: FDK_REGISTRATION_BASE_URI
             - name: CATALOG_COMMENTS_SERVICE_BASE_URI
               valueFrom:
                 secretKeyRef:
@@ -55,3 +50,13 @@ spec:
                 secretKeyRef:
                   name: commonurl-staging
                   key: ORGANIZATION_CATALOG_BASE_URI
+            - name: NEXT_PUBLIC_FDK_REGISTRATION_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: FDK_REGISTRATION_BASE_URI
+            - name: NEXT_PUBLIC_CONCEPT_CATALOG_GUI_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: CONCEPT_CATALOGUE_GUI_BASE_URI
