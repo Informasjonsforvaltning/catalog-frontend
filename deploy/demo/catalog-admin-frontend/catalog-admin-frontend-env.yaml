@@ -2,24 +2,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: concept-catalog-frontend
+  name: catalog-admin-frontend
   labels:
-    app: concept-catalog-frontend
+    app: catalog-admin-frontend
 spec:
   template:
     spec:
       containers:
-        - name: concept-catalog-frontend
+        - name: catalog-admin-frontend
           env:
             - name: NEXTAUTH_URL
-              value: https://begrepskatalog.demo.fellesdatakatalog.digdir.no
+              value: https://catalog-admin.demo.fellesdatakatalog.digdir.no
             - name: NEXTAUTH_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: concept-catalog-frontend-demo
+                  name: catalog-admin-frontend
                   key: NEXTAUTH_SECRET
             - name: KEYCLOAK_ID
-              value: concept-catalog-frontend
+              value: catalog-admin-frontend
             - name: KEYCLOAK_ISSUER
               valueFrom:
                 secretKeyRef:
@@ -29,12 +29,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: sso-client-credentials
-                  key: CONCEPT_CATALOG_FRONTEND
-            - name: CONCEPT_CATALOG_BASE_URI
+                  key: CATALOG_ADMIN_FRONTEND
+            - name: CATALOG_ADMIN_BASE_URI
               valueFrom:
                 secretKeyRef:
                   name: commonurl-demo
-                  key: CONCEPT_CATALOG_BASE_URI
+                  key: CATALOG_ADMIN_BASE_URI
             - name: FDK_REGISTRATION_BASE_URI
               valueFrom:
                 secretKeyRef:
