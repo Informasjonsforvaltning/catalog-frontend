@@ -10,7 +10,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: begrepskatalo.fellesdatakatalog.digdir.no
+    - host: begrepskatalog.fellesdatakatalog.digdir.no
       http:
         paths:
           - backend:
