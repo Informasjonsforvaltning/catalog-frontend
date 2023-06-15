@@ -12,7 +12,7 @@ spec:
         - name: catalog-admin-frontend
           env:
             - name: NEXTAUTH_URL
-              value: https://catalog-admin.fellesdatakatalog.digdir.no
+              value: https://catalog-admin.demo.fellesdatakatalog.digdir.no
             - name: NEXTAUTH_SECRET
               valueFrom:
                 secretKeyRef:

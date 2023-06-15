@@ -12,7 +12,7 @@ spec:
         - name: concept-catalog-frontend
           env:
             - name: NEXTAUTH_URL
-              value: https://begrepskatalog.fellesdatakatalog.digdir.no
+              value: https://begrepskatalog.demo.fellesdatakatalog.digdir.no
             - name: NEXTAUTH_SECRET
               valueFrom:
                 secretKeyRef:
