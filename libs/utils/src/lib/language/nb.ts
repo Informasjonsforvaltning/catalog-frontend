@@ -5,7 +5,10 @@
 export const nb = {
   loading: 'Laster',
   general: 'Generelt',
-  noAccess: 'Ingen tilgang.',
+  noAccess: 'Det ser ut at du ikke har tilgang.',
+  notFound: 'Ikke funnet',
+  didNotFoundPage: 'Fant ikke siden du lette etter.',
+  error: 'Feil',
   somethingWentWrong: 'Beklager, noe gikk galt. Prøv på nytt litt senere.',
   allCatalogs: 'Alle kataloger',
   catalogType: { concept: 'Begrepskatalog', dataset: 'Datasettkatalogen' },
@@ -126,6 +129,8 @@ export const nb = {
     abbreviation: 'Forkortelse',
     valueDomain: 'Verdiområde',
     internalField: 'Interne felt',
+    confirmDelete: 'Er du sikker du ønsker å slette begrepet?',
+    noName: 'Uten navn',
   },
 
   comment: {

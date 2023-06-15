@@ -1,4 +1,4 @@
-import { User } from "./user";
+import { User } from './user';
 
 export interface ErrorMessage {
   name?: string;
@@ -161,6 +161,30 @@ export interface ConceptHitPage {
   size: number;
   totalElements: number;
   totalPages: number;
+}
+
+export interface QuerySort {
+  field: string;
+  direction: string;
+}
+
+export interface QueryFilters {
+  published?: {
+    value: boolean;
+  };
+  status?: {
+    value: Status[];
+  };
+}
+export interface SearchConceptQuery {
+  query: string;
+  pagination: {
+    page: number;
+    size: number;
+  };
+  fields: string[];
+  sort: QuerySort;
+  filters: QueryFilters;
 }
 
 export interface SearchConceptResponse {

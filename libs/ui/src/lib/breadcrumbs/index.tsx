@@ -18,7 +18,7 @@ export function Breadcrumbs({ breadcrumbList }: BreadcrumbsProps) {
         <span>
           <ExternalLink
             aria-label={localization.allCatalogs}
-            href={process.env.REGISTRATION_HOST}
+            href={process.env.NEXT_PUBLIC_FDK_REGISTRATION_BASE_URI}
           >
             {localization.allCatalogs}
           </ExternalLink>

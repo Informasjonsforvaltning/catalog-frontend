@@ -2142,13 +2142,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@next/font@npm:^13.4.4":
-  version: 13.4.4
-  resolution: "@next/font@npm:13.4.4"
-  checksum: 4c49743d65e0ab45356534d57b053c33505ec386cb35096acb38fabc4a56cd733d28b3173c451fafa7df777455506c051ce9b48d42ce7a4d003562fb09beac99
-  languageName: node
-  linkType: hard
-
 "@next/swc-darwin-arm64@npm:13.4.4":
   version: 13.4.4
   resolution: "@next/swc-darwin-arm64@npm:13.4.4"
@@ -4533,7 +4526,6 @@ __metadata:
     "@digdir/design-system-tokens": ^0.1.1
     "@fellesdatakatalog/icons": ^0.8.3
     "@navikt/aksel-icons": ^3.2.3
-    "@next/font": ^13.4.4
     "@nx/cypress": 16.3.2
     "@nx/eslint-plugin": ^16.3.2
     "@nx/jest": 16.3.2

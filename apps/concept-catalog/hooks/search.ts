@@ -1,4 +1,4 @@
-import { SearchableField, Status } from '@catalog-frontend/types';
+import { QueryFilters, QuerySort, SearchableField } from '@catalog-frontend/types';
 import { SingleSelectOption } from '@digdir/design-system-react';
 import { useQuery } from '@tanstack/react-query';
 
@@ -19,28 +19,13 @@ export enum SortOption {
   RECOMMENDED_TERM_AÅ = 'RECOMMENDED_TERM_AÅ',
   RECOMMENDED_TERM_ÅA = 'RECOMMENDED_TERM_ÅA',
 }
-
-export interface SortOptions {
-  field: SortFields;
-  direction: SortDirection;
-}
-
-export interface SearchFilters {
-  published?: {
-    value: boolean;
-  };
-  status?: {
-    value: Status[];
-  };
-}
-
 export interface PageUpdate {
   catalogId: string;
   searchTerm: string;
   page: number;
   fields: FieldOptions;
-  sort?: SortOptions;
-  filters?: SearchFilters;
+  sort?: QuerySort;
+  filters?: QueryFilters;
 }
 
 export const fields = {
