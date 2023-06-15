@@ -10,6 +10,7 @@ import '@altinn/figma-design-tokens/dist/tokens.css';
 import './global.css';
 
 import style from './layout.module.css';
+import ErrorBoundary from '../error-boundry';
 
 interface LayoutProps {
   children: ReactNode;
@@ -21,7 +22,9 @@ export const Layout = ({ children, className }: LayoutProps) => {
     <div className={cn(style.layout, className)}>
       <RouteGuard>
         <Header />
-        <main>{children}</main>
+        <main className={style.main}>
+          <ErrorBoundary>{children}</ErrorBoundary>
+        </main>
         <Footer />
       </RouteGuard>
     </div>

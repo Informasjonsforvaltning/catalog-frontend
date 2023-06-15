@@ -15,6 +15,11 @@ interface SearchHit {
 }
 
 export function SearchHit({ catalogId, searchHit }: SearchHit) {
+  const Title = () => {
+    const title = translate(searchHit?.anbefaltTerm?.navn);
+    return <span>{title ? title : localization.concept.noName}</span>;
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.rowSpaceBetween}>
@@ -25,7 +30,9 @@ export function SearchHit({ catalogId, searchHit }: SearchHit) {
                 validOrganizationNumber(catalogId) && validUUID(searchHit.id) ? `/${catalogId}/${searchHit.id}` : '#'
               }
             >
-              <h2 className={styles.title}>{translate(searchHit?.anbefaltTerm.navn)}</h2>
+              <h2 className={styles.title}>
+                <Title />
+              </h2>
             </Link>
           )}
 

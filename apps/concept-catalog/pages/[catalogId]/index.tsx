@@ -12,9 +12,9 @@ import {
 } from '@catalog-frontend/ui';
 import { hasOrganizationReadPermission, localization, textToNumber } from '@catalog-frontend/utils';
 import { useRouter } from 'next/router';
-import { Concept, Organization, SearchableField } from '@catalog-frontend/types';
+import { Concept, Organization, QuerySort, SearchableField } from '@catalog-frontend/types';
 import { useEffect, useState } from 'react';
-import { SortOptions, getFields, getSelectOptions, useSearchConcepts, SortOption } from '../../hooks/search';
+import { getFields, getSelectOptions, useSearchConcepts, SortOption } from '../../hooks/search';
 import styles from './search-page.module.css';
 import { getToken } from 'next-auth/jwt';
 import { FileImportIcon, PlusCircleIcon } from '@navikt/aksel-icons';
@@ -24,7 +24,7 @@ import { getOrganization } from '@catalog-frontend/data-access';
 import { useSearchState } from '../../context/search';
 import { useImportConcepts } from '../../hooks/import';
 
-export const SearchPage = ({ hasPermission, organization }) => {
+export const SearchPage = ({ organization }) => {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
   const createConcept = useCreateConcept(catalogId);
@@ -36,7 +36,7 @@ export const SearchPage = ({ hasPermission, organization }) => {
   const [selectedSortOption, setSelectedSortOption] = useState(SortOption.LAST_UPDATED_FIRST);
   const [currentPage, setCurrentPage] = useState(pageNumber);
 
-  const sortMappings: Record<SortOption, SortOptions> = {
+  const sortMappings: Record<SortOption, QuerySort> = {
     [SortOption.LAST_UPDATED_FIRST]: { field: 'SIST_ENDRET', direction: 'DESC' },
     [SortOption.LAST_UPDATED_LAST]: { field: 'SIST_ENDRET', direction: 'ASC' },
     [SortOption.RECOMMENDED_TERM_AÅ]: { field: 'ANBEFALT_TERM_NB', direction: 'ASC' },
@@ -58,7 +58,6 @@ export const SearchPage = ({ hasPermission, organization }) => {
   });
 
   const importConcepts = useImportConcepts(catalogId);
-
   const pageSubtitle = organization?.name ?? catalogId;
   const fieldOptions = getSelectOptions(localization.search.fields);
   const sortOptions = getSelectOptions(localization.search.sortOptions);
@@ -99,7 +98,6 @@ export const SearchPage = ({ hasPermission, organization }) => {
     });
   };
 
-  console.log(JSON.stringify(data));
   useEffect(() => {
     refetch().catch((error) => console.error('refetch() failed: ', error));
   }, [searchTerm, currentPage, selectedFieldOption, selectedSortOption, searchState, refetch]);
@@ -113,102 +111,96 @@ export const SearchPage = ({ hasPermission, organization }) => {
       />
       <div className='container'>
         <div className={styles.pageContainer}>
-          {hasPermission ? (
-            <>
-              <div className={styles.searchRowContainer}>
-                <SearchField
-                  ariaLabel={localization.search.searchInAllFields}
-                  placeholder={localization.search.searchInAllFields}
-                  onSearchSubmit={onSearchSubmit}
+          <div className={styles.searchRowContainer}>
+            <SearchField
+              ariaLabel={localization.search.searchInAllFields}
+              placeholder={localization.search.searchInAllFields}
+              onSearchSubmit={onSearchSubmit}
+            />
+            <div className={styles.searchOptions}>
+              <Select
+                label={localization.search.searchField}
+                options={fieldOptions}
+                onChange={onFieldSelect}
+                value={selectedFieldOption}
+              />
+              <Select
+                label={localization.search.sort}
+                options={sortOptions}
+                onChange={onSortSelect}
+                value={selectedSortOption}
+              />
+            </div>
+          </div>
+          <div className={styles.buttonsContainer}>
+            <Button
+              onClick={() => createConcept.mutate()}
+              icon={
+                <PlusCircleIcon
+                  title='a11y-title'
+                  fontSize='1.5rem'
                 />
-                <div className={styles.searchOptions}>
-                  <Select
-                    label={localization.search.searchField}
-                    options={fieldOptions}
-                    onChange={onFieldSelect}
-                    value={selectedFieldOption}
-                  />
-                  <Select
-                    label={localization.search.sort}
-                    options={sortOptions}
-                    onChange={onSortSelect}
-                    value={selectedSortOption}
-                  />
+              }
+            >
+              {localization.button.createConcept}
+            </Button>
+            <UploadButton
+              variant='outline'
+              icon={
+                <FileImportIcon
+                  title='a11y-title'
+                  fontSize='1.5rem'
+                />
+              }
+              allowedMimeTypes={[
+                'text/csv',
+                'text/x-csv',
+                'text/plain',
+                'application/csv',
+                'application/x-csv',
+                'application/vnd.ms-excel',
+                'application/json',
+              ]}
+              onUpload={onImportUpload}
+            >
+              {localization.button.importConcept}
+            </UploadButton>
+          </div>
+          <div>
+            <div className={styles.gridContainer}>
+              <SideFilter />
+              {status === 'loading' ? (
+                <Spinner />
+              ) : status === 'error' ? (
+                <div className={styles.error}>
+                  <span>{localization.somethingWentWrong}</span>
                 </div>
-              </div>
-              <div className={styles.buttonsContainer}>
-                <Button
-                  onClick={() => createConcept.mutate()}
-                  icon={
-                    <PlusCircleIcon
-                      title='a11y-title'
-                      fontSize='1.5rem'
-                    />
-                  }
-                >
-                  {localization.button.createConcept}
-                </Button>
-                <UploadButton
-                  variant='outline'
-                  icon={
-                    <FileImportIcon
-                      title='a11y-title'
-                      fontSize='1.5rem'
-                    />
-                  }
-                  allowedMimeTypes={[
-                    'text/csv',
-                    'text/x-csv',
-                    'text/plain',
-                    'application/csv',
-                    'application/x-csv',
-                    'application/vnd.ms-excel',
-                    'application/json',
-                  ]}
-                  onUpload={onImportUpload}
-                >
-                  {localization.button.importConcept}
-                </UploadButton>
-              </div>
-              <div>
-                <div className={styles.gridContainer}>
-                  <SideFilter />
-                  {status === 'loading' ? (
-                    <Spinner />
-                  ) : status === 'error' ? (
-                    <div className={styles.error}>
-                      <span>{localization.somethingWentWrong}</span>
+              ) : (
+                <div className={styles.searchHitsContainer}>
+                  {data?.hits.length === 0 && <div className={styles.noHits}>{localization.search.noHits}</div>}
+                  {data?.hits.map((concept: Concept) => (
+                    <div
+                      className={styles.searchHitContainer}
+                      key={concept.id}
+                    >
+                      <SearchHit
+                        searchHit={concept}
+                        catalogId={catalogId}
+                      />
                     </div>
-                  ) : (
-                    <div className={styles.searchHitsContainer}>
-                      {data?.hits.length === 0 && <div className={styles.noHits}>{localization.search.noHits}</div>}
-                      {data?.hits.map((concept: Concept) => (
-                        <div
-                          className={styles.searchHitContainer}
-                          key={concept.id}
-                        >
-                          <SearchHit
-                            searchHit={concept}
-                            catalogId={catalogId}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                  ))}
                 </div>
+              )}
+            </div>
 
-                {data?.hits.length > 0 && (
-                  <Pagination
-                    onPageChange={changePage}
-                    forcePage={currentPage}
-                    pageCount={data?.page?.totalPages ?? 0}
-                  />
-                )}
-              </div>
-            </>
-          ) : (
-            <div>{localization.noAccess}</div>
-          )}
+            {data?.hits.length > 0 && (
+              <Pagination
+                onPageChange={changePage}
+                forcePage={currentPage}
+                pageCount={data?.page?.totalPages ?? 0}
+              />
+            )}
+          </div>
         </div>
       </div>
     </>
@@ -219,11 +211,16 @@ export async function getServerSideProps({ req, params }) {
   const token = await getToken({ req });
   const { catalogId } = params;
 
-  const organization: Organization = await getOrganization(catalogId);
+  const hasPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
+  if (!hasPermission) {
+    return {
+      notFound: true,
+    };
+  }
 
+  const organization: Organization = await getOrganization(catalogId);
   return {
     props: {
-      hasPermission: token && hasOrganizationReadPermission(token.access_token, catalogId),
       organization,
     },
   };

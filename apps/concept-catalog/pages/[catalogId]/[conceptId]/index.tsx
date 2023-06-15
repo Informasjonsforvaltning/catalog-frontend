@@ -12,6 +12,7 @@ import {
   Spinner,
   Tag,
   Select,
+  Button,
 } from '@catalog-frontend/ui';
 import {
   localization,
@@ -26,17 +27,17 @@ import { getConcept, getConceptRevisions, getOrganization } from '@catalog-front
 import { Concept, Comment, Update, Organization } from '@catalog-frontend/types';
 import { ChatIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
-import { Accordion, Button, Tabs, TextArea } from '@digdir/design-system-react';
+import { Accordion, Tabs, TextArea } from '@digdir/design-system-react';
 import classes from './concept-page.module.css';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../hooks/comments';
 import { useGetHistory } from '../../../hooks/history';
+import { useDeleteConcept } from '../../../hooks/concepts';
 
 type MapType = {
   [id: string]: string;
 };
 
 export const ConceptPage = ({
-  hasPermission,
   username,
   organization,
   concept,
@@ -52,6 +53,8 @@ export const ConceptPage = ({
     orgNumber: catalogId,
     topicId: concept?.id,
   });
+
+  const deleteConcept = useDeleteConcept(catalogId);
 
   const createComment = useCreateComment({
     orgNumber: catalogId,
@@ -144,34 +147,50 @@ export const ConceptPage = ({
     }
   };
 
+  const handleEditConcept = () => {
+    router
+      .push(`/concept-catalog-gui/${catalogId}/${concept?.id}`)
+      .catch((err) => console.error('Failed to navigate to concept edit page: ', err));
+  };
+
+  const handleDeleteConcept = () => {
+    if (window.confirm(localization.concept.confirmDelete)) {
+      deleteConcept.mutate(concept?.id);
+    }
+  };
+
+  const getTitle = (text: string | string[]) => (text ? text : localization.concept.noName);
+
   const isCommentInEditMode = (id) => id in updateCommentText;
 
-  const RevisionsTab = () => (
-    <InfoCard>
-      {revisions?.map((revision) => (
-        <InfoCard.Item key={`revision-${revision.id}`}>
-          <div className={classes.revision}>
-            <div>
-              v{revision?.versjonsnr.major}.{revision?.versjonsnr.minor}.{revision?.versjonsnr.patch}
+  const RevisionsTab = () => {
+    return (
+      <InfoCard>
+        {revisions?.map((revision) => (
+          <InfoCard.Item key={`revision-${revision.id}`}>
+            <div className={classes.revision}>
+              <div>
+                v{revision?.versjonsnr.major}.{revision?.versjonsnr.minor}.{revision?.versjonsnr.patch}
+              </div>
+              <div>
+                <Link
+                  href={
+                    validOrganizationNumber(catalogId) && validUUID(revision.id) ? `/${catalogId}/${revision.id}` : '#'
+                  }
+                  className={classes.versionTitle}
+                >
+                  {getTitle(translate(revision?.anbefaltTerm?.navn))}
+                </Link>
+              </div>
+              <div className={cn(classes.status)}>
+                <Tag>{revision?.status}</Tag>
+              </div>
             </div>
-            <div>
-              <Link
-                href={
-                  validOrganizationNumber(catalogId) && validUUID(revision.id) ? `/${catalogId}/${revision.id}` : '#'
-                }
-                className={classes.versionTitle}
-              >
-                {translate(revision?.anbefaltTerm?.navn, language)}
-              </Link>
-            </div>
-            <div className={cn(classes.status)}>
-              <Tag>{revision?.status}</Tag>
-            </div>
-          </div>
-        </InfoCard.Item>
-      ))}
-    </InfoCard>
-  );
+          </InfoCard.Item>
+        ))}
+      </InfoCard>
+    );
+  };
 
   const breadcrumbList = catalogId
     ? ([
@@ -181,7 +200,7 @@ export const ConceptPage = ({
         },
         {
           href: `/${catalogId}/${concept?.id}`,
-          text: translate(concept?.anbefaltTerm?.navn, language),
+          text: getTitle(translate(concept?.anbefaltTerm?.navn, language)),
         },
       ] as BreadcrumbType[])
     : [];
@@ -194,227 +213,231 @@ export const ConceptPage = ({
         subtitle={pageSubtitle}
       />
       <div className='container'>
-        {hasPermission ? (
-          <>
-            <DetailHeading
-              className={classes.detailHeading}
-              headingTitle={<h2>{translate(concept?.anbefaltTerm?.navn, language)}</h2>}
-              subtitle={translate(concept?.fagområde, language)}
-            />
-            <div className={cn(classes.status)}>
-              <Tag>{concept?.status}</Tag>
+        <DetailHeading
+          className={classes.detailHeading}
+          headingTitle={<h2>{getTitle(translate(concept?.anbefaltTerm?.navn))}</h2>}
+          subtitle={translate(concept?.fagområde, language)}
+        />
+        <div className={cn(classes.status)}>
+          <Tag>{concept?.status}</Tag>
+        </div>
+        <div className={classes.languages}>
+          <Select
+            label={localization.chooseLanguage}
+            options={languageOptions}
+            onChange={handleLanguageChange}
+            value={language}
+          />
+        </div>
+        <div className={classes.twoColumnRow}>
+          <div className={classes.definition}>
+            <h3>Definisjon:</h3>
+            <div>{translate(concept?.definisjon?.tekst ?? '', language)}</div>
+            <div className={cn(classes.source)}>
+              Kilde: <a href='#'>Basert på Skatteetaten</a>
             </div>
-            <div className={classes.languages}>
-              <Select
-                label={localization.chooseLanguage}
-                options={languageOptions}
-                onChange={handleLanguageChange}
-                value={language}
+          </div>
+          <div className={classes.actionButtons}>
+            <Button onClick={handleEditConcept}>Rediger</Button>
+            <Button
+              color={'danger'}
+              onClick={handleDeleteConcept}
+            >
+              Slett
+            </Button>
+          </div>
+        </div>
+        <div className={cn(classes.twoColumnRow, classes.bottomSpace)}>
+          <div>
+            <InfoCard>
+              <InfoCard.Item label={`${localization.concept.replacedBy}:`}>
+                <span>Begrep x</span>
+              </InfoCard.Item>
+              <InfoCard.Item label={`${localization.concept.note}:`}>
+                <span>{translate(concept?.merknad, language)}</span>
+              </InfoCard.Item>
+              <InfoCard.Item label={`${localization.concept.example}:`}>
+                <span>{translate(concept?.eksempel, language)}</span>
+              </InfoCard.Item>
+              <InfoCard.Item label={`${localization.concept.simplifiedExplanation}:`}>
+                <span>N/A</span>
+              </InfoCard.Item>
+              <InfoCard.Item label={`${localization.concept.legalExplanation}:`}>
+                <span>N/A</span>
+              </InfoCard.Item>
+              <InfoCard.Item>
+                <div className={classes.termsRow}>
+                  <h3>{`${localization.concept.abbreviation}:`}</h3>
+                  <span>N/A</span>
+                </div>
+                <div className={classes.termsRow}>
+                  <h3>{`${localization.concept.allowedTerm}:`}</h3>
+                  <ul>
+                    {Array.of(translate(concept?.tillattTerm, language)).map((term, i) => (
+                      <li key={`allowedTerm-${i}`}>{term}</li>
+                    ))}
+                  </ul>
+                </div>
+                <div className={classes.termsRow}>
+                  <h3>{`${localization.concept.notRecommendedTerm}:`}</h3>
+                  <ul>
+                    {Array.of(translate(concept?.frarådetTerm, language)).map((term, i) => (
+                      <li key={`notRecommendedTerm-${i}`}>{term}</li>
+                    ))}
+                  </ul>
+                </div>
+              </InfoCard.Item>
+              <InfoCard.Item label={`${localization.concept.valueDomain}:`}>
+                <span>N/A</span>
+              </InfoCard.Item>
+              <InfoCard.Item label={`${localization.concept.internalField}:`}>
+                <span>N/A</span>
+              </InfoCard.Item>
+            </InfoCard>
+
+            <div className={classes.tabs}>
+              <Tabs
+                items={[
+                  {
+                    content:
+                      getCommentsStatus == 'loading' ? (
+                        <Spinner size='medium' />
+                      ) : getCommentsStatus === 'error' ? (
+                        <span>{localization.somethingWentWrong}</span>
+                      ) : (
+                        <>
+                          <div className={classes.bottomSpacingSmall}>
+                            <TextArea
+                              resize='vertical'
+                              value={newCommentText}
+                              onChange={handleNewCommentChange}
+                              rows={5}
+                            />
+                          </div>
+                          <div className={classes.bottomSpacingLarge}>
+                            <Button
+                              disabled={newCommentText?.length === 0}
+                              onClick={() => handleCreateComment()}
+                            >
+                              Legg til kommentar
+                            </Button>
+                          </div>
+                          <div>
+                            <div className={classes.commentsHeader}>
+                              <ChatIcon />
+                              Kommentarer ({getCommentsData.length})
+                            </div>
+                            {getCommentsData.length > 0 &&
+                              getCommentsData.map((comment: Comment, i) => (
+                                <InfoCard
+                                  key={`comment-${comment.id}`}
+                                  className={classes.comment}
+                                >
+                                  <InfoCard.Item>
+                                    <div className={classes.commentUser}>
+                                      {comment?.user.name}
+                                      <span>{formatISO(comment?.createdDate)}</span>
+                                    </div>
+                                    {isCommentInEditMode(comment?.id) ? (
+                                      <TextArea
+                                        resize='vertical'
+                                        value={updateCommentText[comment?.id]}
+                                        onChange={(e) => handleUpdateCommentChange(comment.id, e)}
+                                        rows={5}
+                                      />
+                                    ) : (
+                                      <div>
+                                        {comment?.comment.split('\n').map((ln, i) => (
+                                          <span key={`comment-${comment?.id}-${i}`}>
+                                            {ln}
+                                            <br />
+                                          </span>
+                                        ))}
+                                      </div>
+                                    )}
+                                    {comment.user.id === username && (
+                                      <div className={classes.commentActions}>
+                                        <Button
+                                          variant='outline'
+                                          onClick={() => handleUpdateComment(comment)}
+                                        >
+                                          {isCommentInEditMode(comment.id)
+                                            ? localization.comment.saveComment
+                                            : localization.comment.editComment}
+                                        </Button>
+                                        <Button
+                                          variant='outline'
+                                          onClick={(e) => handleDeleteComment(comment.id, e)}
+                                        >
+                                          {localization.comment.deleteComment}
+                                        </Button>
+                                      </div>
+                                    )}
+                                  </InfoCard.Item>
+                                </InfoCard>
+                              ))}
+                          </div>
+                        </>
+                      ),
+                    name: localization.comment.comments,
+                  },
+                  {
+                    content:
+                      getHistoryStatus == 'loading' ? (
+                        <Spinner size='medium' />
+                      ) : getHistoryStatus === 'error' ? (
+                        <span>{localization.somethingWentWrong}</span>
+                      ) : getHistoryData.updates?.length === 0 ? (
+                        <span>{localization.history.noChanges}</span>
+                      ) : (
+                        <Accordion>
+                          {getHistoryData.updates?.length > 0 &&
+                            getHistoryData.updates.map((update: Update, i) => (
+                              <Accordion.Item key={`history-${update.id}`}>
+                                <Accordion.Header className={classes.historyHeader}>
+                                  <span>{update.person.name}</span>
+                                  <span>{formatISO(update.datetime)}</span>
+                                </Accordion.Header>
+                                <Accordion.Content>
+                                  {update.operations.map((operation, i) => (
+                                    <div
+                                      key={`operation-${i}`}
+                                      className={classes.historyOperation}
+                                    >
+                                      <div>
+                                        {operation.op} - {operation.path}
+                                      </div>
+                                      <div>{operation.value}</div>
+                                    </div>
+                                  ))}
+                                </Accordion.Content>
+                              </Accordion.Item>
+                            ))}
+                        </Accordion>
+                      ),
+                    name: 'Endringshistorikk',
+                  },
+                  {
+                    content: <RevisionsTab />,
+                    name: 'Versjoner',
+                  },
+                ]}
               />
             </div>
-            <div className={classes.definition}>
-              <h3>Definisjon:</h3>
-              <div>{translate(concept?.definisjon?.tekst ?? '', language)}</div>
-              <div className={cn(classes.source)}>
-                Kilde: <a href='#'>Basert på Skatteetaten</a>
-              </div>
-            </div>
+          </div>
 
-            <div className={classes.info}>
-              <div>
-                <InfoCard>
-                  <InfoCard.Item label={`${localization.concept.replacedBy}:`}>
-                    <span>Begrep x</span>
-                  </InfoCard.Item>
-                  <InfoCard.Item label={`${localization.concept.note}:`}>
-                    <span>{translate(concept?.merknad, language)}</span>
-                  </InfoCard.Item>
-                  <InfoCard.Item label={`${localization.concept.example}:`}>
-                    <span>{translate(concept?.eksempel, language)}</span>
-                  </InfoCard.Item>
-                  <InfoCard.Item label={`${localization.concept.simplifiedExplanation}:`}>
-                    <span>N/A</span>
-                  </InfoCard.Item>
-                  <InfoCard.Item label={`${localization.concept.legalExplanation}:`}>
-                    <span>N/A</span>
-                  </InfoCard.Item>
-                  <InfoCard.Item>
-                    <div className={classes.termsRow}>
-                      <h3>{`${localization.concept.abbreviation}:`}</h3>
-                      <span>N/A</span>
-                    </div>
-                    <div className={classes.termsRow}>
-                      <h3>{`${localization.concept.allowedTerm}:`}</h3>
-                      <ul>
-                        {Array.of(translate(concept?.tillattTerm, language)).map((term, i) => (
-                          <li key={`allowedTerm-${i}`}>{term}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div className={classes.termsRow}>
-                      <h3>{`${localization.concept.notRecommendedTerm}:`}</h3>
-                      <ul>
-                        {Array.of(translate(concept?.frarådetTerm, language)).map((term, i) => (
-                          <li key={`notRecommendedTerm-${i}`}>{term}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </InfoCard.Item>
-                  <InfoCard.Item label={`${localization.concept.valueDomain}:`}>
-                    <span>N/A</span>
-                  </InfoCard.Item>
-                  <InfoCard.Item label={`${localization.concept.internalField}:`}>
-                    <span>N/A</span>
-                  </InfoCard.Item>
-                </InfoCard>
-
-                <div className={classes.tabs}>
-                  <Tabs
-                    items={[
-                      {
-                        content:
-                          getCommentsStatus == 'loading' ? (
-                            <Spinner size='medium' />
-                          ) : getCommentsStatus === 'error' ? (
-                            <span>{localization.somethingWentWrong}</span>
-                          ) : (
-                            <>
-                              <div className={classes.bottomSpacingSmall}>
-                                <TextArea
-                                  resize='vertical'
-                                  value={newCommentText}
-                                  onChange={handleNewCommentChange}
-                                  rows={5}
-                                />
-                              </div>
-                              <div className={classes.bottomSpacingLarge}>
-                                <Button
-                                  disabled={newCommentText?.length === 0}
-                                  onClick={() => handleCreateComment()}
-                                >
-                                  Legg til kommentar
-                                </Button>
-                              </div>
-                              <div>
-                                <div className={classes.commentsHeader}>
-                                  <ChatIcon />
-                                  Kommentarer ({getCommentsData.length})
-                                </div>
-                                {getCommentsData.length > 0 &&
-                                  getCommentsData.map((comment: Comment, i) => (
-                                    <InfoCard
-                                      key={`comment-${comment.id}`}
-                                      className={classes.comment}
-                                    >
-                                      <InfoCard.Item>
-                                        <div className={classes.commentUser}>
-                                          {comment?.user.name}
-                                          <span>{formatISO(comment?.createdDate)}</span>
-                                        </div>
-                                        {isCommentInEditMode(comment?.id) ? (
-                                          <TextArea
-                                            resize='vertical'
-                                            value={updateCommentText[comment?.id]}
-                                            onChange={(e) => handleUpdateCommentChange(comment.id, e)}
-                                            rows={5}
-                                          />
-                                        ) : (
-                                          <div>
-                                            {comment?.comment.split('\n').map((ln, i) => (
-                                              <span key={`comment-${comment?.id}-${i}`}>
-                                                {ln}
-                                                <br />
-                                              </span>
-                                            ))}
-                                          </div>
-                                        )}
-                                        {comment.user.id === username && (
-                                          <div className={classes.commentActions}>
-                                            <Button
-                                              variant='outline'
-                                              onClick={() => handleUpdateComment(comment)}
-                                            >
-                                              {isCommentInEditMode(comment.id)
-                                                ? localization.comment.saveComment
-                                                : localization.comment.editComment}
-                                            </Button>
-                                            <Button
-                                              variant='outline'
-                                              onClick={(e) => handleDeleteComment(comment.id, e)}
-                                            >
-                                              {localization.comment.deleteComment}
-                                            </Button>
-                                          </div>
-                                        )}
-                                      </InfoCard.Item>
-                                    </InfoCard>
-                                  ))}
-                              </div>
-                            </>
-                          ),
-                        name: localization.comment.comments,
-                      },
-                      {
-                        content:
-                          getHistoryStatus == 'loading' ? (
-                            <Spinner size='medium' />
-                          ) : getHistoryStatus === 'error' ? (
-                            <span>{localization.somethingWentWrong}</span>
-                          ) : getHistoryData.updates?.length === 0 ? (
-                            <span>{localization.history.noChanges}</span>
-                          ) : (
-                            <Accordion>
-                              {getHistoryData.updates?.length > 0 &&
-                                getHistoryData.updates.map((update: Update, i) => (
-                                  <Accordion.Item key={`history-${update.id}`}>
-                                    <Accordion.Header className={classes.historyHeader}>
-                                      <span>{update.person.name}</span>
-                                      <span>{formatISO(update.datetime)}</span>
-                                    </Accordion.Header>
-                                    <Accordion.Content>
-                                      {update.operations.map((operation, i) => (
-                                        <div
-                                          key={`operation-${i}`}
-                                          className={classes.historyOperation}
-                                        >
-                                          <div>
-                                            {operation.op} - {operation.path}
-                                          </div>
-                                          <div>{operation.value}</div>
-                                        </div>
-                                      ))}
-                                    </Accordion.Content>
-                                  </Accordion.Item>
-                                ))}
-                            </Accordion>
-                          ),
-                        name: 'Endringshistorikk',
-                      },
-                      {
-                        content: <RevisionsTab />,
-                        name: 'Versjoner',
-                      },
-                    ]}
-                  />
-                </div>
-              </div>
-
-              <InfoCard size='small'>
-                {infoData2.map(([label, value]) => (
-                  <InfoCard.Item
-                    key={`info-data-${label}`}
-                    label={label}
-                    labelColor='light'
-                  >
-                    <span>{value}</span>
-                  </InfoCard.Item>
-                ))}
-              </InfoCard>
-            </div>
-          </>
-        ) : (
-          <div>{localization.noAccess}</div>
-        )}
+          <InfoCard size='small'>
+            {infoData2.map(([label, value]) => (
+              <InfoCard.Item
+                key={`info-data-${label}`}
+                label={label}
+                labelColor='light'
+              >
+                <span>{value}</span>
+              </InfoCard.Item>
+            ))}
+          </InfoCard>
+        </div>
       </div>
     </>
   );
@@ -425,11 +448,15 @@ export async function getServerSideProps({ req, params }) {
   const { catalogId, conceptId } = params;
 
   const hasPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
+  const concept: Concept | null = await getConcept(conceptId, `${token.access_token}`);
+  if (!(concept && hasPermission)) {
+    return {
+      notFound: true,
+    };
+  }
+
   const username = token && getUsername(token.id_token);
   const organization: Organization = await getOrganization(catalogId);
-  const concept: Concept | null = await getConcept(conceptId, `${token.access_token}`).then(async (response) => {
-    return response || null;
-  });
   const revisions: Concept[] | null = await getConceptRevisions(conceptId, `${token.access_token}`).then(
     async (response) => {
       return response || null;
@@ -438,7 +465,6 @@ export async function getServerSideProps({ req, params }) {
 
   return {
     props: {
-      hasPermission,
       username,
       organization,
       concept,

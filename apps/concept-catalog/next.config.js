@@ -12,6 +12,16 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  async redirects() {
+    return [
+      {
+        source: '/concept-catalog-gui/:catalogId/:conceptId',
+        destination: `${process.env.NEXT_PUBLIC_CONCEPT_CATALOG_GUI_BASE_URI}/:catalogId/:conceptId`, // Matched parameters can be used in the destination
+        permanent: true,
+        basePath: false,
+      },
+    ];
+  },
   webpack(config) {
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule) => rule.test?.test?.('.svg'));

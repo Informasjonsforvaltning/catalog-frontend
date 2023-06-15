@@ -8,7 +8,7 @@ import '@digdir/design-system-tokens/brand/digdir/tokens.css';
 import { localization } from '@catalog-frontend/utils';
 import { Layout } from '@catalog-frontend/ui';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Heebo } from '@next/font/google';
+import { Heebo } from 'next/font/google';
 import { SearchContextProvider } from '../context/search';
 
 const heebo = Heebo({ subsets: ['latin'] });
