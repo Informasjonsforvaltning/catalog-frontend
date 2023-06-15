@@ -59,11 +59,23 @@
 }
 
 @media screen and (max-width: 600px) {
+  .svgEllipse {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 940px) {
   .svgRectangle {
     display: none;
   }
+}
 
+@media (max-width: 1620px) {
   .svgEllipse {
-    display: none;
+    position: relative;
+  }
+
+  .svgRectangle {
+    position: relative;
   }
 }
