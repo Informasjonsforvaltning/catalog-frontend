@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-admin-frontend
+  labels:
+    app: catalog-admin-frontend
+spec:
+  template:
+    spec:
+      containers:
+        - name: catalog-admin-frontend
+          env:
+            - name: NEXTAUTH_URL
+              value: https://catalog-admin.fellesdatakatalog.digdir.no
+            - name: NEXTAUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: catalog-admin-frontend-demo
+                  key: NEXTAUTH_SECRET
+            - name: KEYCLOAK_ID
+              value: catalog-admin-frontend
+            - name: KEYCLOAK_ISSUER
+              valueFrom:
+                secretKeyRef:
+                  name: sso-demo
+                  key: SSO_OIDC_ISSUER
+            - name: KEYCLOAK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sso-client-credentials
+                  key: CATALOG_ADMIN_FRONTEND
+            - name: CATALOG_ADMIN_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-demo
+                  key: CATALOG_ADMIN_BASE_URI
+            - name: FDK_REGISTRATION_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-demo
+                  key: FDK_REGISTRATION_BASE_URI
+            - name: CATALOG_COMMENTS_SERVICE_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-demo
+                  key: CATALOG_COMMENTS_SERVICE_BASE_URI
+            - name: CATALOG_HISTORY_SERVICE_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-demo
+                  key: CATALOG_HISTORY_SERVICE_BASE_URI
+            - name: ORGANIZATION_CATALOG_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-demo
+                  key: ORGANIZATION_CATALOG_BASE_URI
