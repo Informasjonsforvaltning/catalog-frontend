@@ -18,7 +18,9 @@ exports[`SearchHit should render SearchHit successfully 1`] = `
             <h2
               class="title"
             >
-              test 2
+              <span>
+                test 2
+              </span>
             </h2>
           </a>
           <div
