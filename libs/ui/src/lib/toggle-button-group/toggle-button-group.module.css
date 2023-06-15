@@ -1,0 +1,8 @@
+.toggleButtonGroup {
+  --component-toggle_button-color-background-active: #2d3741;
+  --component-toggle_button-color-border-inactive: #2d3741;
+}
+
+.toggleButtonGroup button {
+  white-space: nowrap;
+}

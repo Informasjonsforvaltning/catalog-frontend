@@ -11,8 +11,8 @@ import {
   DetailHeading,
   Spinner,
   Tag,
-  Select,
   Button,
+  ToggleButtonGroup,
 } from '@catalog-frontend/ui';
 import {
   localization,
@@ -222,12 +222,10 @@ export const ConceptPage = ({
           <Tag>{concept?.status}</Tag>
         </div>
         <div className={classes.languages}>
-          <Select
-            label={localization.chooseLanguage}
-            options={languageOptions}
+          <ToggleButtonGroup
+            items={languageOptions}
             onChange={handleLanguageChange}
-            value={language}
-          />
+            selectedValue={language} />
         </div>
         <div className={classes.twoColumnRow}>
           <div className={classes.definition}>

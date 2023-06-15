@@ -9,6 +9,7 @@ export * from './lib/icon';
 export * from './lib/page-banner';
 export * from './lib/search-hit';
 export * from './lib/search-field';
+export * from './lib/toggle-button-group';
 export * from './lib/layout';
 export * from './lib/select';
 export * from './lib/spinner';
