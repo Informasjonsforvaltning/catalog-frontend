@@ -89,6 +89,7 @@
   .searchRowContainer {
     background-color: var(--ba);
     flex-direction: column;
+    align-items: center;
     gap: 1rem;
   }
 
