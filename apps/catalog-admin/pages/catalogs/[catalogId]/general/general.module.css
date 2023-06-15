@@ -53,7 +53,14 @@
 }
 
 .textField {
-  width: 335px;
+  padding-left: 25px;
+  color: #2d3741;
+  font-size: 18px;
+  width: 323px;
+}
+
+.textFieldContainer {
+  width: 323px;
 }
 
 .colorPickers {

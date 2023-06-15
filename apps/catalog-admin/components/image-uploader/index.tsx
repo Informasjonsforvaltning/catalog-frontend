@@ -69,7 +69,6 @@ export function ImageUploader() {
         </div>
       )}
       <UploadButton
-        icon={<FileImportIcon fontSize='1.5rem' />}
         allowedMimeTypes={allowedFileTypes}
         onUpload={onImageChange}
       >
