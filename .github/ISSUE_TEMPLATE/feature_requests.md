@@ -16,5 +16,5 @@ title: 'Feature: kort beskrivelse av feature'
 
 ### Sjekkliste (Sjekk av etter issue er laget)
 
-- [ ] Lagt til label(s)
+- [ ] Lagt til label for app: admin, concept, e.l.
 - [ ] Lagt i utviklingsbrettet (Project)
