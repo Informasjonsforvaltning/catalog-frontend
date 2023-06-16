@@ -30,7 +30,7 @@ const RemovableChip: RemovableChipType = forwardRef(({ className, children, onDe
       <button
         ref={ref}
         {...rest}
-        aria-label={`${children}`}
+        aria-label={localization.button.removeFilter}
         className={cn(classes.chip, classes.removable)}
         onClick={(e) => {
           onDelete?.();

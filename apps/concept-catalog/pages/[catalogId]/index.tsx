@@ -24,7 +24,7 @@ import { useCreateConcept } from '../../hooks/concepts';
 import { getOrganization } from '@catalog-frontend/data-access';
 import { useImportConcepts } from '../../hooks/import';
 import { useSearchDispatch, useSearchState } from '../../context/search';
-import { PublishedFilterType } from 'apps/concept-catalog/context/search/state';
+import { PublishedFilterType } from '../../context/search/state';
 
 export const SearchPage = ({ organization }) => {
   const router = useRouter();
@@ -156,31 +156,21 @@ export const SearchPage = ({ organization }) => {
                   onClick={() => removeFilter(filter)}
                 >
                   {filter === 'published'
-                    ? localization.search.filter.published
-                    : localization.search.filter.notPublished}
+                    ? localization.publicationStateType.published
+                    : localization.publicationStateType.unpublished}
                 </Chips.Removable>
               ))}
             </Chips>
             <div className={styles.buttonsContainer}>
               <Button
                 onClick={() => createConcept.mutate()}
-                icon={
-                  <PlusCircleIcon
-                    title='a11y-title'
-                    fontSize='1.5rem'
-                  />
-                }
+                icon={<PlusCircleIcon fontSize='1.5rem' />}
               >
                 {localization.button.createConcept}
               </Button>
               <UploadButton
                 variant='outline'
-                icon={
-                  <FileImportIcon
-                    title='a11y-title'
-                    fontSize='1.5rem'
-                  />
-                }
+                icon={<FileImportIcon fontSize='1.5rem' />}
                 allowedMimeTypes={[
                   'text/csv',
                   'text/x-csv',

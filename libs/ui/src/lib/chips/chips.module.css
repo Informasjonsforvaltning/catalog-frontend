@@ -30,7 +30,7 @@
 .chips.small > li > .chip {
   height: 2rem;
   font-size: var(--fds-typography-heading-medium);
-  padding-left: 0.5rem;
+  padding-left: 1rem;
 }
 
 .chips.xsmall > li > .chip.toggle {
