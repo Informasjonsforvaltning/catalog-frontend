@@ -148,9 +148,11 @@ export const ConceptPage = ({
   };
 
   const handleEditConcept = () => {
-    router
-      .push(`/${catalogId}/${concept?.id}/edit`)
-      .catch((err) => console.error('Failed to navigate to concept edit page: ', err));
+    if (validOrganizationNumber(catalogId) && validUUID(concept?.id)) {
+      router
+        .push(`/${catalogId}/${concept?.id}/edit`)
+        .catch((err) => console.error('Failed to navigate to concept edit page: ', err));
+    }
   };
 
   const handleDeleteConcept = () => {
