@@ -51,6 +51,9 @@ export const SearchPage = ({ organization }) => {
     sort: sortMappings[selectedSortOption],
     filters: Object.assign(
       {},
+      searchState.filters.status?.length > 0 && {
+        status: { value: searchState.filters.status },
+      },
       searchState.filters.published?.length === 1 && {
         published: { value: searchState.filters.published.includes('published') },
       },

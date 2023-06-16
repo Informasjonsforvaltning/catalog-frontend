@@ -1,12 +1,12 @@
 import { Status } from '@catalog-frontend/types';
 
-export type PublishedFilterType = 'published' | 'notPublished';
+export type PublishedFilterType = 'published' | 'unpublished';
 export type StatusFilterType = Status;
 
-export type SearchFilters = {
+export interface SearchFilters {
   published?: PublishedFilterType[];
-  status?: Status[];
-};
+  status?: StatusFilterType[];
+}
 
 export interface SearchState {
   filters: SearchFilters;

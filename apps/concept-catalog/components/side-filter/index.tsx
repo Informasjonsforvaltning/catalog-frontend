@@ -4,21 +4,32 @@ import { action, useSearchDispatch } from '../../context/search';
 import { PublishedFilterType, StatusFilterType } from '../../context/search/state';
 import { localization as loc } from '@catalog-frontend/utils';
 import styles from './side-filter.module.css';
-import { createCheckboxGroup } from './checkbox-group-generator';
-import { uniqueId } from 'lodash';
+import { CheckboxGroupFilter } from './checkbox-group-filter';
 import { AccordionItem, AccordionItemProps } from './accordion-item';
 
 const SideFilter = () => {
   const searchDispatch = useSearchDispatch();
 
-  const statusLabels = ['Utkast', 'Høring', 'Kvalitetssikret', 'Godkjent'];
-  const nameAndConceptLabels = ['Egenskapsnavn', 'Forretningsbegrep'];
-  const publicationState = ['Publisert', 'Ikke publisert'];
+  const statusItems = [
+    { value: 'utkast' as StatusFilterType, label: loc.statusType.draft },
+    { value: 'høring' as StatusFilterType, label: loc.statusType.hearing },
+    { value: 'godkjent' as StatusFilterType, label: loc.statusType.approved },
+  ];
+  const nameAndConceptItems = [
+    { value: 'Egenskapsnavn', label: 'Egenskapsnavn' },
+    { value: 'Forretningsbegrep', label: 'Forretningsbegrep' },
+  ];
+  const publicationStateItems = [
+    { value: 'published' as PublishedFilterType, label: loc.publicationStateType.published },
+    { value: 'unpublished' as PublishedFilterType, label: loc.publicationStateType.unpublished },
+  ];
 
-  const handleOnStatusChange = (names: string[]) =>
+  const handleOnStatusChange = (names: string[]) => {
+    console.log(names);
     searchDispatch(
       action('SET_CONCEPT_STATUS', { filters: { status: names.map((name) => name as StatusFilterType) } }),
     );
+  };
 
   const handleOnNameAndConceptChange = (names: string[]) =>
     searchDispatch(action('SET_NAME_AND_CONCEPT', { filters: {} }));
@@ -28,10 +39,6 @@ const SideFilter = () => {
       action('SET_PUBLICATION_STATE', { filters: { published: names.map((name) => name as PublishedFilterType) } }),
     );
 
-  const NameAndConcept = createCheckboxGroup('NameAndConcept', nameAndConceptLabels, handleOnNameAndConceptChange);
-  const ConceptStatus = createCheckboxGroup('ConceptStatus', statusLabels, handleOnStatusChange);
-  const PublicationState = createCheckboxGroup('PublicationState', publicationState, handlePublicationOnChange);
-
   const accordionItemContents: AccordionItemProps[] = [
     {
       header: loc.subjectArea,
@@ -39,7 +46,13 @@ const SideFilter = () => {
     },
     {
       header: loc.conceptStatus,
-      content: <ConceptStatus />,
+      content: (
+        <CheckboxGroupFilter<StatusFilterType>
+          items={statusItems}
+          filterName='status'
+          onChange={handleOnStatusChange}
+        />
+      ),
     },
     {
       header: loc.assigned,
@@ -54,19 +67,29 @@ const SideFilter = () => {
             <br />
             <br />
           </p>
-          <PublicationState />
+          <CheckboxGroupFilter<PublishedFilterType>
+            items={publicationStateItems}
+            filterName='published'
+            onChange={handlePublicationOnChange}
+          />
         </>
       ),
     },
     {
       header: loc.nameAndConcept,
-      content: <NameAndConcept />,
+      content: (
+        <CheckboxGroupFilter<string>
+          items={nameAndConceptItems}
+          filterName='nameAndConcept'
+          onChange={handleOnNameAndConceptChange}
+        />
+      ),
     },
   ];
 
-  const accordionItems = accordionItemContents.map((item) => (
+  const accordionItems = accordionItemContents.map((item, index) => (
     <AccordionItem
-      key={`accordion-item-${uniqueId()}`}
+      key={`accordion-item-${index}`}
       {...item}
     />
   ));
