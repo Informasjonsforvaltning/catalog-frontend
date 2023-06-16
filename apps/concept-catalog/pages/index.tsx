@@ -6,7 +6,7 @@ export async function getServerSideProps() {
   return {
     redirect: {
       permanent: false,
-      destination: process.env.FDK_REGISTRATION_BASE_URI,
+      destination: process.env.NEXT_PUBLIC_FDK_REGISTRATION_BASE_URI,
     },
   };
 }
