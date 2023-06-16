@@ -149,7 +149,7 @@ export const ConceptPage = ({
 
   const handleEditConcept = () => {
     router
-      .push(`/concept-catalog-gui/${catalogId}/${concept?.id}`)
+      .push(`/${catalogId}/${concept?.id}/edit`)
       .catch((err) => console.error('Failed to navigate to concept edit page: ', err));
   };
 
@@ -225,7 +225,8 @@ export const ConceptPage = ({
           <ToggleButtonGroup
             items={languageOptions}
             onChange={handleLanguageChange}
-            selectedValue={language} />
+            selectedValue={language}
+          />
         </div>
         <div className={classes.twoColumnRow}>
           <div className={classes.definition}>

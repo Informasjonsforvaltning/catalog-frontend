@@ -17,7 +17,7 @@ export const useCreateConcept = (catalogId: string) => {
     onSuccess(data) {
       if (validOrganizationNumber(catalogId) && validUUID(data.conceptId)) {
         router
-          .push(`/concept-catalog-gui/${catalogId}/${data.conceptId}`)
+          .push(`/${catalogId}/${data.conceptId}/edit`)
           .catch((err) => console.error('Failed to navigate to newly created concept: ', err));
       }
     },
