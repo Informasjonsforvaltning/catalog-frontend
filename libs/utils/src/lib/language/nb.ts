@@ -50,11 +50,6 @@ export const nb = {
       RECOMMENDED_TERM_AÅ: 'Anbefalt term A-Å',
       RECOMMENDED_TERM_ÅA: 'Anbefalt term Å-A',
     },
-
-    filter: {
-      published: 'Publisert',
-      notPublished: 'Ikke publisert',
-    },
   },
 
   button: {
@@ -151,5 +146,16 @@ export const nb = {
 
   history: {
     noChanges: 'Ingen endringer er gjort',
+  },
+
+  statusType: {
+    draft: 'Utkast',
+    approved: 'Godkjent',
+    hearing: 'Høring',
+  },
+
+  publicationStateType: {
+    published: 'Publisert',
+    unpublished: 'Ikke publisert',
   },
 };
