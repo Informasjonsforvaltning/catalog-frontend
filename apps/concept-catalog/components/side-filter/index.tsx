@@ -6,6 +6,7 @@ import { hashCode, localization as loc } from '@catalog-frontend/utils';
 import styles from './side-filter.module.css';
 import { CheckboxGroupFilter } from './checkbox-group-filter';
 import { AccordionItem, AccordionItemProps } from './accordion-item';
+import { Select } from '@catalog-frontend/ui';
 
 const SideFilter = () => {
   const searchDispatch = useSearchDispatch();
@@ -55,7 +56,15 @@ const SideFilter = () => {
     },
     {
       header: loc.assigned,
-      content: <div>Accordion content</div>,
+      content: (
+        <Select
+          label={loc.search.searchField}
+          options={['TODO1', 'TODO2', 'TODO3'].map((item) => ({ label: item, value: item }))}
+          onChange={() => 'TODO'}
+          value={'TODO'}
+          hideLabel={true}
+        />
+      ),
     },
     {
       header: loc.publicationState,
