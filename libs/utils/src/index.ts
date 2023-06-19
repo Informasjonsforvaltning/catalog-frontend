@@ -7,3 +7,4 @@ export * from './lib/auth/token';
 export * from './lib/date/format';
 export * from './lib/validation/organization-number';
 export * from './lib/validation/uuid';
+export * from './lib/functions';
