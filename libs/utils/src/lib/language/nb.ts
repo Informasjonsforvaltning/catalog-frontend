@@ -109,6 +109,9 @@ export const nb = {
     preview: 'Forhåndsvisning',
     general: 'Generelt',
     customizeDesign: 'Tilpass design',
+    userList: 'Brukerliste',
+    design: 'Design',
+    addUser: 'Legg til ny bruker',
     description: {
       general:
         'Oversikt over beskrivelser av datasett, begrep, apier og informasjonmodeller. Innholdet blir levert av ulike virksomheter, offentlige og private.',
@@ -118,6 +121,8 @@ export const nb = {
     manage: {
       internalFields: 'Administrer interne felt',
       codeList: 'Administrer kodeliste',
+      design: 'Administrer organisasjonsspesifikt design',
+      userList: 'Administrer brukerliste',
     },
   },
 
