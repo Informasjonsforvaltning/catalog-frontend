@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { useMutation } from '@tanstack/react-query';
 import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
+import { signIn } from 'next-auth/react';
 
 export const useCreateConcept = (catalogId: string) => {
   const router = useRouter();
@@ -12,6 +13,12 @@ export const useCreateConcept = (catalogId: string) => {
       }
 
       const response = await fetch(`/api/concepts/${catalogId}`, { method: 'POST' });
+
+      if (response.status === 401) {
+        signIn('keycloak');
+        return;
+      }
+
       return response.json();
     },
     onSuccess(data) {
@@ -35,7 +42,14 @@ export const useDeleteConcept = (catalogId: string) => {
         return Promise.reject('Invalid catalog id');
       }
 
-      return await fetch(`/api/concepts/${catalogId}/${conceptId}`, { method: 'DELETE' });
+      const response = await fetch(`/api/concepts/${catalogId}/${conceptId}`, { method: 'DELETE' });
+
+      if (response.status === 401) {
+        signIn('keycloak');
+        return;
+      }
+
+      return response;
     },
     onSuccess(data) {
       if (validOrganizationNumber(catalogId)) {

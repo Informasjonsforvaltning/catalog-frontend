@@ -5,6 +5,7 @@ import { Concept, Status } from '@catalog-frontend/types';
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { validOrganizationNumber } from '@catalog-frontend/utils';
+import { signIn } from 'next-auth/react';
 
 const mapToSingleValue = (csvMap: Record<string, string[]>, key: string) => {
   const value = csvMap[key];
@@ -176,7 +177,14 @@ export const useImportConcepts = (catalogId: string) => {
           `Du er i ferd med å importere ${concepts.length} begreper. Dette vil opprette nye begreper i katalogen. Fortsette?`,
         )
       ) {
-        return await fetch('/api/concepts/import', { method: 'POST', body: JSON.stringify(concepts) });
+        const response = await fetch('/api/concepts/import', { method: 'POST', body: JSON.stringify(concepts) });
+
+        if (response.status === 401) {
+          signIn('keycloak');
+          return;
+        }
+
+        return response;
       }
 
       return Promise.reject('Canceled');
