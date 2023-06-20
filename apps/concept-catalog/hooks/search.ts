@@ -1,6 +1,7 @@
 import { QueryFilters, QuerySort, SearchableField } from '@catalog-frontend/types';
 import { SingleSelectOption } from '@digdir/design-system-react';
 import { useQuery } from '@tanstack/react-query';
+import { signIn } from 'next-auth/react';
 
 export type SortFields = 'SIST_ENDRET' | 'ANBEFALT_TERM_NB';
 export type SortDirection = 'ASC' | 'DESC';
@@ -44,12 +45,14 @@ const getNegatedFields = () => {
   return negatedFields;
 };
 
-export const getFields = (field: SearchableField | 'alleFelter'): FieldOptions => {
+export const getFields = (field: SearchableField | 'alleFelter' | 'alleTermer'): FieldOptions => {
   if (field === 'alleFelter') {
     return fields;
-  } else {
-    return { ...getNegatedFields(), [field]: true };
   }
+  if (field === 'alleTermer') {
+    return { ...getNegatedFields(), anbefaltTerm: true, frarådetTerm: true, tillattTerm: true };
+  }
+  return { ...getNegatedFields(), [field]: true };
 };
 
 export const getSelectOptions = (object: any): SingleSelectOption[] => {
@@ -86,6 +89,12 @@ export const useSearchConcepts = ({ catalogId, searchTerm, page, fields, sort, f
         method: 'POST',
         body: JSON.stringify(body),
       });
+
+      if (response.status === 401) {
+        signIn('keycloak');
+        return;
+      }
+
       return response.json();
     },
   });

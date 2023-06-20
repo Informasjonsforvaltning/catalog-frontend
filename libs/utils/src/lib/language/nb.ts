@@ -37,6 +37,7 @@ export const nb = {
 
     fields: {
       alleFelter: 'Alle felter',
+      alleTermer: 'Alle termer',
       anbefaltTerm: 'Anbefalt term',
       frarådetTerm: 'Frarådet term',
       tillattTerm: 'Tillatt term',
