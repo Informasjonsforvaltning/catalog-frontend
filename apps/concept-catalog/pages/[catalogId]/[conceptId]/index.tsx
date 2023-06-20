@@ -448,9 +448,18 @@ export async function getServerSideProps({ req, params }) {
   const token = await getToken({ req });
   const { catalogId, conceptId } = params;
 
-  const hasPermission = token && hasOrganizationReadPermission(token?.access_token, catalogId);
+  const hasPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
+  if (!hasPermission) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: '/401',
+      },
+    };
+  }
+
   const concept: Concept | null = await getConcept(conceptId, `${token?.access_token}`);
-  if (!(concept && hasPermission)) {
+  if (!concept) {
     return {
       notFound: true,
     };

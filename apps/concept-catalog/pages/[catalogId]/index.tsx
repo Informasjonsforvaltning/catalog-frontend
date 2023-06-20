@@ -217,7 +217,10 @@ export async function getServerSideProps({ req, params }) {
   const hasPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
   if (!hasPermission) {
     return {
-      notFound: true,
+      redirect: {
+        permanent: false,
+        destination: '/401',
+      },
     };
   }
 
