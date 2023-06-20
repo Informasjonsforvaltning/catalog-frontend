@@ -6,10 +6,12 @@
 
 .pageLink {
   padding: 0px 15px;
+  text-decoration: underline;
 }
 
-.active {
-  text-decoration: underline;
+.active > .pageLink {
+  font-weight: 700;
+  text-decoration: none;
 }
 
 .arrowIcon {
