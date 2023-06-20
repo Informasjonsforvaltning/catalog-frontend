@@ -5,6 +5,11 @@ import { getToken } from 'next-auth/jwt';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const token = await getToken({ req });
+  if (!token || (token?.expires_at && token?.expires_at < Date.now() / 1000)) {
+    res.status(401).send({ error: 'Unauthorized' });
+    return;
+  }
+
   const { slug } = req.query;
 
   if (req.method === 'POST' && slug === 'import') {
@@ -35,7 +40,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(500).send({ error: 'Failed to create concept' });
       console.log('error', err);
     }
-  } else {
-    res.status(400).send({ error: 'Invalid request' });
+    return;
   }
+
+  res.status(400).send({ error: 'Invalid request' });
 }

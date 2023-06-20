@@ -1,5 +1,6 @@
 import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { signIn } from 'next-auth/react';
 
 export const useGetComments = ({ orgNumber, topicId }) => {
   return useQuery({
@@ -16,6 +17,12 @@ export const useGetComments = ({ orgNumber, topicId }) => {
       const response = await fetch(`/api/comments/${orgNumber}/${topicId}`, {
         method: 'GET',
       });
+
+      if (response.status === 401) {
+        signIn('keycloak');
+        return;
+      }
+
       return response.json();
     },
   });
@@ -45,6 +52,12 @@ export const useCreateComment = ({ orgNumber, topicId }) => {
         }),
         cache: 'no-store',
       });
+
+      if (response.status === 401) {
+        signIn('keycloak');
+        return;
+      }
+
       return response.json();
     },
     onSuccess: () => {
@@ -82,6 +95,12 @@ export const useUpdateComment = ({ orgNumber, topicId }) => {
         }),
         cache: 'no-store',
       });
+
+      if (response.status === 401) {
+        signIn('keycloak');
+        return;
+      }
+
       return response.json();
     },
     onSuccess: () => {
@@ -112,6 +131,11 @@ export const useDeleteComment = ({ orgNumber, topicId }) => {
         method: 'DELETE',
         cache: 'no-store',
       });
+
+      if (response.status === 401) {
+        signIn('keycloak');
+        return;
+      }
 
       return response;
     },
