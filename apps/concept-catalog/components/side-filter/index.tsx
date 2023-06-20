@@ -25,7 +25,6 @@ const SideFilter = () => {
   ];
 
   const handleOnStatusChange = (names: string[]) => {
-    console.log(names);
     searchDispatch(
       action('SET_CONCEPT_STATUS', { filters: { status: names.map((name) => name as StatusFilterType) } }),
     );

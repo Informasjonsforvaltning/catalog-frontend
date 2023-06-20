@@ -5,7 +5,8 @@
 export const nb = {
   loading: 'Laster',
   general: 'Generelt',
-  noAccess: 'Det ser ut at du ikke har tilgang.',
+  noAccess: 'Ingen tilgang',
+  youHaveNoAccess: 'Det ser ut at du ikke har tilgang.',
   notFound: 'Ikke funnet',
   didNotFoundPage: 'Fant ikke siden du lette etter.',
   error: 'Feil',
