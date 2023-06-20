@@ -85,6 +85,7 @@ export const SearchPage = ({ organization }) => {
 
   const onSearchSubmit = (term = searchTerm) => {
     setSearchTerm(term);
+    setCurrentPage(0);
   };
 
   const onFieldSelect = (field: SearchableField) => {
