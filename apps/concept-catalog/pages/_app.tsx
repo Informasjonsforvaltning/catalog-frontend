@@ -10,6 +10,7 @@ import { Layout } from '@catalog-frontend/ui';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Heebo } from 'next/font/google';
 import { SearchContextProvider } from '../context/search';
+import { Html } from 'next/document';
 
 const heebo = Heebo({ subsets: ['latin'] });
 
