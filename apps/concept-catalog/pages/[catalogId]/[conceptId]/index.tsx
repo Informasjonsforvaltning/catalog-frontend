@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useState } from 'react';
 import { InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import { getToken } from 'next-auth/jwt';
@@ -163,6 +163,7 @@ export const ConceptPage = ({
 
   const getTitle = (text: string | string[]) => (text ? text : localization.concept.noName);
 
+  const newCommentButtonId = useId();
   const isCommentInEditMode = (id) => id in updateCommentText;
 
   const RevisionsTab = () => {
@@ -313,10 +314,13 @@ export const ConceptPage = ({
                               value={newCommentText}
                               onChange={handleNewCommentChange}
                               rows={5}
+                              aria-labelledby={newCommentButtonId}
+                              aria-describedby={newCommentButtonId}
                             />
                           </div>
                           <div className={classes.bottomSpacingLarge}>
                             <Button
+                              id={newCommentButtonId}
                               disabled={newCommentText?.length === 0}
                               onClick={() => handleCreateComment()}
                             >
