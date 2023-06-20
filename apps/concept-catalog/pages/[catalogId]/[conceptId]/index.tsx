@@ -453,7 +453,7 @@ export async function getServerSideProps({ req, params }) {
     return {
       redirect: {
         permanent: false,
-        destination: '/401',
+        destination: '/no-access',
       },
     };
   }
