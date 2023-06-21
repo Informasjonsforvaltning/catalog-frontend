@@ -13,7 +13,7 @@ import {
 } from '@catalog-frontend/ui';
 import { hasOrganizationReadPermission, localization, textToNumber } from '@catalog-frontend/utils';
 import { useRouter } from 'next/router';
-import { Concept, Organization, QuerySort, SearchableField } from '@catalog-frontend/types';
+import { Concept, Organization, QuerySort } from '@catalog-frontend/types';
 import { useEffect, useState } from 'react';
 import { getFields, getSelectOptions, useSearchConcepts, SortOption } from '../../hooks/search';
 import styles from './search-page.module.css';
@@ -28,14 +28,14 @@ import { PublishedFilterType } from '../../context/search/state';
 
 export const SearchPage = ({ organization }) => {
   const router = useRouter();
-  const catalogId: string = `${router.query.catalogId}` ?? '';
+  const catalogId = `${router.query.catalogId}`;
   const createConcept = useCreateConcept(catalogId);
   const pageNumber: number = textToNumber(router.query.page as string, 0);
 
   const searchState = useSearchState();
   const searchDispatch = useSearchDispatch();
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedFieldOption, setSelectedFieldOption] = useState('alleFelter' as SearchableField | 'alleFelter');
+  const [selectedFieldOptions, setSelectedFieldOptions] = useState(['alleFelter']);
   const [selectedSortOption, setSelectedSortOption] = useState(SortOption.LAST_UPDATED_FIRST);
   const [currentPage, setCurrentPage] = useState(pageNumber);
 
@@ -50,7 +50,7 @@ export const SearchPage = ({ organization }) => {
     catalogId,
     searchTerm,
     page: currentPage,
-    fields: getFields(selectedFieldOption),
+    fields: getFields(selectedFieldOptions),
     sort: sortMappings[selectedSortOption],
     filters: Object.assign(
       {},
@@ -92,7 +92,7 @@ export const SearchPage = ({ organization }) => {
     });
     searchDispatch({
       type: 'SET_PUBLICATION_STATE',
-      payload: { filters: { published: filters.map((name) => name as PublishedFilterType) } },
+      payload: { filters: { published: filters.map<PublishedFilterType>((name) => name) } },
     });
   };
 
@@ -101,8 +101,14 @@ export const SearchPage = ({ organization }) => {
     setCurrentPage(0);
   };
 
-  const onFieldSelect = (field: SearchableField) => {
-    setSelectedFieldOption(field);
+  const onFieldSelect = (fields) => {
+    let selected = [];
+    if (typeof fields === 'string' || fields.length === 0) {
+      selected = ['alleFelter'];
+    } else {
+      selected = fields.filter((field) => field !== 'alleFelter');
+    }
+    setSelectedFieldOptions(selected);
   };
 
   const onSortSelect = async (option: SortOption) => {
@@ -117,7 +123,7 @@ export const SearchPage = ({ organization }) => {
 
   useEffect(() => {
     refetch().catch((error) => console.error('refetch() failed: ', error));
-  }, [searchTerm, currentPage, selectedFieldOption, selectedSortOption, searchState, refetch]);
+  }, [searchTerm, currentPage, selectedFieldOptions, selectedSortOption, searchState, refetch]);
 
   return (
     <>
@@ -139,7 +145,8 @@ export const SearchPage = ({ organization }) => {
                 label={localization.search.searchField}
                 options={fieldOptions}
                 onChange={onFieldSelect}
-                value={selectedFieldOption}
+                value={selectedFieldOptions}
+                multiple={true}
               />
               <Select
                 label={localization.search.sort}
@@ -198,7 +205,7 @@ export const SearchPage = ({ organization }) => {
                 </div>
               ) : (
                 <div className={styles.searchHitsContainer}>
-                  {data?.hits.length === 0 && <div className={styles.noHits}>{localization.search.noHits}</div>}
+                  {data?.hits?.length === 0 && <div className={styles.noHits}>{localization.search.noHits}</div>}
                   {data?.hits.map((concept: Concept) => (
                     <div
                       className={styles.searchHitContainer}
