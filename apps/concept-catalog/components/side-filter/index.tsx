@@ -1,15 +1,17 @@
-import { Accordion } from '@digdir/design-system-react';
-import { memo } from 'react';
+import { FC, memo, useState } from 'react';
+import { Accordion, TextField } from '@digdir/design-system-react';
+import { Select } from '@catalog-frontend/ui';
+import { hashCode, localization as loc } from '@catalog-frontend/utils';
+import { Tree } from 'react-arborist';
 import { action, useSearchDispatch } from '../../context/search';
 import { PublishedFilterType, StatusFilterType } from '../../context/search/state';
-import { hashCode, localization as loc } from '@catalog-frontend/utils';
-import styles from './side-filter.module.css';
 import { CheckboxGroupFilter } from './checkbox-group-filter';
 import { AccordionItem, AccordionItemProps } from './accordion-item';
-import { Select } from '@catalog-frontend/ui';
+import styles from './side-filter.module.css';
 
 const SideFilter = () => {
   const searchDispatch = useSearchDispatch();
+  const [fagomraadeTerm, setFagomraadeTerm] = useState('');
 
   const statusItems = [
     { value: 'utkast' as StatusFilterType, label: loc.statusType.draft },
@@ -23,6 +25,29 @@ const SideFilter = () => {
   const publicationStateItems = [
     { value: 'published' as PublishedFilterType, label: loc.publicationStateType.published },
     { value: 'unpublished' as PublishedFilterType, label: loc.publicationStateType.unpublished },
+  ];
+
+  const fagomraadeData = [
+    { id: '1', name: 'Unread' },
+    { id: '2', name: 'Threads' },
+    {
+      id: '3',
+      name: 'Chat Rooms',
+      children: [
+        { id: 'c1', name: 'General' },
+        { id: 'c2', name: 'Random' },
+        { id: 'c3', name: 'Open Source Projects' },
+      ],
+    },
+    {
+      id: '4',
+      name: 'Direct Messages',
+      children: [
+        { id: 'd1', name: 'Alice' },
+        { id: 'd2', name: 'Bob' },
+        { id: 'd3', name: 'Charlie' },
+      ],
+    },
   ];
 
   const handleOnStatusChange = (names: string[]) => {
@@ -39,10 +64,31 @@ const SideFilter = () => {
       action('SET_PUBLICATION_STATE', { filters: { published: names.map((name) => name as PublishedFilterType) } }),
     );
 
+  const FagomraadeFilter = () => {
+    return (
+      <div key={'fagomraadeFilterTermDiv'}>
+        <TextField
+          key={'fagomraadeFilterTerm'}
+          value={fagomraadeTerm}
+          onChange={(e) => {
+            e.preventDefault();
+            setFagomraadeTerm(e.target.value);
+          }}
+        />
+        <Tree
+          key={'fagomraadeFilterTree'}
+          data={fagomraadeData}
+          searchTerm={fagomraadeTerm}
+          searchMatch={(node, term) => node.data.name.toLowerCase().includes(term.toLowerCase())}
+        />
+      </div>
+    );
+  };
+
   const accordionItemContents: AccordionItemProps[] = [
     {
       header: loc.subjectArea,
-      content: <div>Accordion content</div>,
+      content: <FagomraadeFilter />,
     },
     {
       header: loc.conceptStatus,
