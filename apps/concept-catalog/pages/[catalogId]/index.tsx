@@ -9,6 +9,7 @@ import {
   UploadButton,
   PageBanner,
   SearchField,
+  Chips,
 } from '@catalog-frontend/ui';
 import { hasOrganizationReadPermission, localization, textToNumber } from '@catalog-frontend/utils';
 import { useRouter } from 'next/router';
@@ -21,8 +22,9 @@ import { FileImportIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import SideFilter from '../../components/side-filter';
 import { useCreateConcept } from '../../hooks/concepts';
 import { getOrganization } from '@catalog-frontend/data-access';
-import { useSearchState } from '../../context/search';
 import { useImportConcepts } from '../../hooks/import';
+import { useSearchDispatch, useSearchState } from '../../context/search';
+import { PublishedFilterType } from '../../context/search/state';
 
 export const SearchPage = ({ organization }) => {
   const router = useRouter();
@@ -31,6 +33,7 @@ export const SearchPage = ({ organization }) => {
   const pageNumber: number = textToNumber(router.query.page as string, 0);
 
   const searchState = useSearchState();
+  const searchDispatch = useSearchDispatch();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFieldOption, setSelectedFieldOption] = useState('alleFelter' as SearchableField | 'alleFelter');
   const [selectedSortOption, setSelectedSortOption] = useState(SortOption.LAST_UPDATED_FIRST);
@@ -81,6 +84,16 @@ export const SearchPage = ({ organization }) => {
     });
 
     setCurrentPage(page.selected);
+  };
+
+  const removeFilter = (name: string) => {
+    const filters = searchState.filters.published?.filter(function (filterName) {
+      return filterName !== name;
+    });
+    searchDispatch({
+      type: 'SET_PUBLICATION_STATE',
+      payload: { filters: { published: filters.map((name) => name as PublishedFilterType) } },
+    });
   };
 
   const onSearchSubmit = (term = searchTerm) => {
@@ -136,39 +149,43 @@ export const SearchPage = ({ organization }) => {
               />
             </div>
           </div>
-          <div className={styles.buttonsContainer}>
-            <Button
-              onClick={() => createConcept.mutate()}
-              icon={
-                <PlusCircleIcon
-                  title='a11y-title'
-                  fontSize='1.5rem'
-                />
-              }
-            >
-              {localization.button.createConcept}
-            </Button>
-            <UploadButton
-              variant='outline'
-              icon={
-                <FileImportIcon
-                  title='a11y-title'
-                  fontSize='1.5rem'
-                />
-              }
-              allowedMimeTypes={[
-                'text/csv',
-                'text/x-csv',
-                'text/plain',
-                'application/csv',
-                'application/x-csv',
-                'application/vnd.ms-excel',
-                'application/json',
-              ]}
-              onUpload={onImportUpload}
-            >
-              {localization.button.importConcept}
-            </UploadButton>
+          <div className={styles.secondRowContainer}>
+            <Chips size='small'>
+              {searchState.filters.published?.map((filter, index) => (
+                <Chips.Removable
+                  key={index}
+                  onClick={() => removeFilter(filter)}
+                >
+                  {filter === 'published'
+                    ? localization.publicationStateType.published
+                    : localization.publicationStateType.unpublished}
+                </Chips.Removable>
+              ))}
+            </Chips>
+            <div className={styles.buttonsContainer}>
+              <Button
+                onClick={() => createConcept.mutate()}
+                icon={<PlusCircleIcon fontSize='1.5rem' />}
+              >
+                {localization.button.createConcept}
+              </Button>
+              <UploadButton
+                variant='outline'
+                icon={<FileImportIcon fontSize='1.5rem' />}
+                allowedMimeTypes={[
+                  'text/csv',
+                  'text/x-csv',
+                  'text/plain',
+                  'application/csv',
+                  'application/x-csv',
+                  'application/vnd.ms-excel',
+                  'application/json',
+                ]}
+                onUpload={onImportUpload}
+              >
+                {localization.button.importConcept}
+              </UploadButton>
+            </div>
           </div>
           <div>
             <div className={styles.gridContainer}>

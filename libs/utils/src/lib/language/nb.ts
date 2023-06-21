@@ -63,6 +63,7 @@ export const nb = {
     harvestDataset: 'Høst spesifikasjon fra katalog',
     importLogo: 'Importer logo',
     bin: 'Søppelkasse',
+    removeFilter: 'Fjern filter',
   },
 
   dropdown: {

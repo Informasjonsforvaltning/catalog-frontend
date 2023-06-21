@@ -67,8 +67,6 @@
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  margin-top: 1rem;
-  margin-bottom: 3rem;
 }
 
 .error {
@@ -112,4 +110,11 @@
     margin: 1rem auto;
     align-items: center;
   }
+}
+
+.secondRowContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  margin-bottom: 3rem;
 }
