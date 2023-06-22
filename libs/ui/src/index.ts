@@ -1,5 +1,6 @@
 export * from './lib/breadcrumbs';
 export * from './lib/button';
+export * from './lib/center-container';
 export * from './lib/info-card';
 export * from './lib/detail-heading';
 export * from './lib/dropdown-menu';

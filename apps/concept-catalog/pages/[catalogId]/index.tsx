@@ -11,7 +11,12 @@ import {
   SearchField,
   Chips,
 } from '@catalog-frontend/ui';
-import { hasOrganizationReadPermission, localization, textToNumber } from '@catalog-frontend/utils';
+import {
+  hasOrganizationReadPermission,
+  localization,
+  textToNumber,
+  validOrganizationNumber,
+} from '@catalog-frontend/utils';
 import { useRouter } from 'next/router';
 import { Concept, Organization, QuerySort } from '@catalog-frontend/types';
 import { useEffect, useState } from 'react';
@@ -25,6 +30,9 @@ import { getOrganization } from '@catalog-frontend/data-access';
 import { useImportConcepts } from '../../hooks/import';
 import { useSearchDispatch, useSearchState } from '../../context/search';
 import { PublishedFilterType } from '../../context/search/state';
+import { getSession } from 'next-auth/react';
+import { Session, getServerSession } from 'next-auth';
+import { authOptions } from '../api/auth/[...nextauth]';
 
 export const SearchPage = ({ organization }) => {
   const router = useRouter();
@@ -235,16 +243,30 @@ export const SearchPage = ({ organization }) => {
   );
 };
 
-export async function getServerSideProps({ req, params }) {
+export async function getServerSideProps({ req, res, params }) {
+  const session: Session = await getServerSession(req, res, authOptions);
   const token = await getToken({ req });
   const { catalogId } = params;
 
-  const hasPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
-  if (!hasPermission) {
+  if (!validOrganizationNumber(catalogId)) {
+    return { notFound: true };
+  }
+
+  if (!(session?.user && Date.now() < token?.expires_at * 1000)) {
     return {
       redirect: {
         permanent: false,
-        destination: '/no-access',
+        destination: `/auth/signin?catalogId=${catalogId}`,
+      },
+    };
+  }
+
+  const hasReadPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
+  if (!hasReadPermission) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: `/${catalogId}/no-access`,
       },
     };
   }
