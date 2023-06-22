@@ -1,10 +1,10 @@
 import { localization } from '@catalog-frontend/utils';
-import { useRouter } from 'next/router';
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import Breadcrumbs, { BreadcrumbType } from '../breadcrumbs';
 import { PageBanner } from '../page-banner';
 import { Heading } from '@digdir/design-system-react';
 import withRouter, { WithRouterProps } from 'next/dist/client/with-router';
+import { CenterContainer } from '../center-container';
 
 interface Props extends WithRouterProps {
   children?: ReactNode;
@@ -49,14 +49,14 @@ class ErrorBoundary extends Component<Props, State> {
             title={localization.catalogType.concept}
             subtitle={pageSubtitle}
           />
-          <div className='container grow center'>
+          <CenterContainer>
             <Heading
               level={2}
               size='small'
             >
               {localization.somethingWentWrong}
             </Heading>
-          </div>
+          </CenterContainer>
         </>
       );
     }

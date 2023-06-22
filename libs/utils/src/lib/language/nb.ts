@@ -26,6 +26,13 @@ export const nb = {
   nameAndConcept: 'Navn og begrep',
   save: 'Lagre',
 
+  auth: {
+    login: 'Logg inn',
+    logout: 'Logg ut',
+    loggingIn: 'Logger inn...',
+    loggingOut: 'Logger ut...',
+  },
+
   search: {
     searchInAllFields: 'Søk i alle felt',
     searchForDataset: 'Søk etter datasettbeskrivelse',
@@ -86,7 +93,6 @@ export const nb = {
     harvestData: 'Høste data',
     dataCommunity: 'Datalandsbyen',
     nationalDataCatalog: 'Felles datakatalog',
-    logout: 'Logg ut',
   },
 
   tag: {

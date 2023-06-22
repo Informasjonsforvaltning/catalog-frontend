@@ -66,7 +66,7 @@ export const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo }) => {
                   <SC.Menu>
                     <li>
                       <SC.MenuButton onClick={handleLogout}>
-                        <span>{localization.header.logout}</span>
+                        <span>{localization.auth.logout}</span>
                       </SC.MenuButton>
                     </li>
                   </SC.Menu>

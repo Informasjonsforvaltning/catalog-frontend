@@ -1,4 +1,4 @@
-import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Heading } from '@digdir/design-system-react';
 import { useRouter } from 'next/router';
@@ -27,14 +27,14 @@ export const Custom404 = () => {
         title={localization.catalogType.concept}
         subtitle={localization.notFound}
       />
-      <div className='container grow center'>
+      <CenterContainer>
         <Heading
           level={2}
           size='small'
         >
           {localization.didNotFoundPage}
         </Heading>
-      </div>
+      </CenterContainer>
     </>
   );
 };

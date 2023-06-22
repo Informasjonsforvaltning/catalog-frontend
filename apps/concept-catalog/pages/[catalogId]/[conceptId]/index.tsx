@@ -32,6 +32,8 @@ import classes from './concept-page.module.css';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../hooks/comments';
 import { useGetHistory } from '../../../hooks/history';
 import { useDeleteConcept } from '../../../hooks/concepts';
+import { authOptions } from '../../api/auth/[...nextauth]';
+import { getServerSession } from 'next-auth';
 
 type MapType = {
   [id: string]: string;
@@ -458,16 +460,30 @@ export const ConceptPage = ({
   );
 };
 
-export async function getServerSideProps({ req, params }) {
+export async function getServerSideProps({ req, res, params }) {
+  const session = await getServerSession(req, res, authOptions);
   const token = await getToken({ req });
   const { catalogId, conceptId } = params;
 
-  const hasPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
-  if (!hasPermission) {
+  if (!(validOrganizationNumber(catalogId) && validUUID(conceptId))) {
+    return { notFound: true };
+  }
+
+  if (!(session?.user && Date.now() < token?.expires_at * 1000)) {
     return {
       redirect: {
         permanent: false,
-        destination: '/no-access',
+        destination: `/auth/signin?catalogId=${catalogId}`,
+      },
+    };
+  }
+
+  const hasReadPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
+  if (!hasReadPermission) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: `/${catalogId}/no-access`,
       },
     };
   }
