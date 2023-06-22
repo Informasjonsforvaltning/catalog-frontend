@@ -164,8 +164,8 @@ export const SearchPage = ({ organization }) => {
                   onClick={() => removeFilter(filter)}
                 >
                   {filter === 'published'
-                    ? localization.publicationStateType.published
-                    : localization.publicationStateType.unpublished}
+                    ? localization.publicationState.published
+                    : localization.publicationState.unpublished}
                 </Chips.Removable>
               ))}
             </Chips>

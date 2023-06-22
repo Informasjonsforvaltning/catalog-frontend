@@ -12,17 +12,17 @@ const SideFilter = () => {
   const searchDispatch = useSearchDispatch();
 
   const statusItems = [
-    { value: 'utkast' as StatusFilterType, label: loc.statusType.draft },
-    { value: 'høring' as StatusFilterType, label: loc.statusType.hearing },
-    { value: 'godkjent' as StatusFilterType, label: loc.statusType.approved },
+    { value: 'utkast' as StatusFilterType, label: loc.status.draft },
+    { value: 'høring' as StatusFilterType, label: loc.status.hearing },
+    { value: 'godkjent' as StatusFilterType, label: loc.status.approved },
   ];
   const nameAndConceptItems = [
     { value: 'Egenskapsnavn', label: 'Egenskapsnavn' },
     { value: 'Forretningsbegrep', label: 'Forretningsbegrep' },
   ];
   const publicationStateItems = [
-    { value: 'published' as PublishedFilterType, label: loc.publicationStateType.published },
-    { value: 'unpublished' as PublishedFilterType, label: loc.publicationStateType.unpublished },
+    { value: 'published' as PublishedFilterType, label: loc.publicationState.published },
+    { value: 'unpublished' as PublishedFilterType, label: loc.publicationState.unpublished },
   ];
 
   const handleOnStatusChange = (names: string[]) => {
@@ -67,11 +67,11 @@ const SideFilter = () => {
       ),
     },
     {
-      header: loc.publicationState,
+      header: loc.publicationState.state,
       content: (
         <>
           <p>
-            {loc.publicationStateDescription}
+            {loc.publicationState.description}
             <br />
             <br />
           </p>
