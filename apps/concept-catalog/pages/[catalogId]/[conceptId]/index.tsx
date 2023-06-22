@@ -86,7 +86,17 @@ export const ConceptPage = ({
 
   const infoData2 = [
     ['ID', concept?.id],
-    ['Publiseringsdato', 'N/A'],
+    [
+      localization.publicationState.state,
+      concept?.erPublisert
+        ? `${localization.publicationState.publishedInFDK} ${formatISO(concept?.publiseringsTidspunkt, {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })}`
+        : localization.publicationState.unpublished,
+    ],
     ['Versjon', `${concept?.versjonsnr.major}.${concept?.versjonsnr.minor}.${concept?.versjonsnr.patch}`],
     ['Gyldighet', `Fra/til: ${concept?.gyldigFom} - ${concept?.gyldigTom}`],
     ['Tildelt', 'N/A'],

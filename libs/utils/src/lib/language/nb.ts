@@ -22,9 +22,7 @@ export const nb = {
   subjectArea: 'Fagområde',
   conceptStatus: 'Begrepsstatus',
   assigned: 'Tildelt',
-  publicationState: 'Publiseringstilstand',
-  publicationStateDescription:
-    'Publiseringstilstand forteller om et begrep er publisert i Felles Datakatalog eller ikke.',
+
   nameAndConcept: 'Navn og begrep',
   save: 'Lagre',
 
@@ -100,7 +98,6 @@ export const nb = {
 
   searchHit: {
     lastEdited: 'Sist endret',
-    publishedInFDK: 'Publisert i Felles Datakatalog',
   },
   catalogAdmin: {
     internalFields: 'Interne felt',
@@ -151,14 +148,17 @@ export const nb = {
     noChanges: 'Ingen endringer er gjort',
   },
 
-  statusType: {
+  status: {
     draft: 'Utkast',
     approved: 'Godkjent',
     hearing: 'Høring',
   },
 
-  publicationStateType: {
+  publicationState: {
+    state: 'Publiseringstilstand',
+    description: 'Publiseringstilstand forteller om et begrep er publisert i Felles Datakatalog eller ikke.',
     published: 'Publisert',
+    publishedInFDK: 'Publisert i Felles Datakatalog',
     unpublished: 'Ikke publisert',
   },
 };

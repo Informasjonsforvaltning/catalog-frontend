@@ -1,4 +1,5 @@
 import {
+  formatISO,
   localization,
   getTranslateText as translate,
   validOrganizationNumber,
@@ -45,13 +46,19 @@ export function SearchHit({ catalogId, searchHit }: SearchHit) {
       <div className={styles.metaData}>
         <p>{localization.searchHit.lastEdited} &nbsp;</p>
         {searchHit?.endringslogelement && (
-          <p>{new Date(searchHit.endringslogelement.endringstidspunkt).toLocaleDateString()}</p>
+          <p>
+            {formatISO(searchHit.endringslogelement.endringstidspunkt, {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </p>
         )}
 
         {searchHit?.erPublisert && (
           <>
             <p className={styles.dot}>•</p>
-            <p>{localization.searchHit.publishedInFDK}</p>
+            <p>{localization.publicationState.publishedInFDK}</p>
           </>
         )}
       </div>

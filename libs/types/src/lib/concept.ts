@@ -129,6 +129,7 @@ export interface Concept {
   tildeltBruker?: User;
   begrepsRelasjon?: Relasjon[];
   erPublisert?: boolean;
+  publiseringsTidspunkt?: string;
 }
 
 export interface SkosConcept {
