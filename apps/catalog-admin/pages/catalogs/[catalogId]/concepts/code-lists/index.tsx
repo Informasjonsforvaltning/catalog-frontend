@@ -4,12 +4,15 @@ import { Button, Accordion, TextField } from '@digdir/design-system-react';
 import { SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 import { useRouter } from 'next/router';
-import { useCreateCodeList, useGetAllCodeLists } from '../../../../../hooks/code-lists';
+import { useCreateCodeList, useDeleteCodeList, useGetAllCodeLists } from '../../../../../hooks/code-lists';
+import { CodeList } from '@catalog-frontend/types';
+import { localization } from '@catalog-frontend/utils';
 
 export const CodeListsPage = () => {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
   const createCodeList = useCreateCodeList(catalogId);
+  const deleteCodeList = useDeleteCodeList(catalogId);
   const [newCodeList, setNewCodeList] = useState(null);
 
   const handleCreateCodeList = () => {
@@ -20,6 +23,11 @@ export const CodeListsPage = () => {
     });
   };
 
+  const handleDeleteCodeList = (codeListId: string, event) => {
+    if (window.confirm(localization.codeList.confirmDelete)) {
+      deleteCodeList.mutate(codeListId);
+    }
+  };
   const { data: getAllCodeLists } = useGetAllCodeLists({
     catalogId: catalogId,
   });
@@ -52,7 +60,7 @@ export const CodeListsPage = () => {
         </div>
         <div className={styles.content}>
           {getAllCodeLists &&
-            getAllCodeLists.codeLists.map((data, index) => (
+            getAllCodeLists.codeLists.map((data: CodeList, index: number) => (
               <Accordion
                 key={index}
                 border={true}
@@ -64,7 +72,7 @@ export const CodeListsPage = () => {
                     <p className={styles.description}> {data.description} </p>
                   </Accordion.Header>
                   <Accordion.Content>
-                    <button onClick={() => handleCreateCodeList()}>Slett</button>
+                    <button onClick={(e) => handleDeleteCodeList(data.id, e)}>Slett</button>
                   </Accordion.Content>
                 </Accordion.Item>
               </Accordion>

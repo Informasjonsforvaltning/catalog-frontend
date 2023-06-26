@@ -67,8 +67,10 @@ export const createCodeList = (codeList: Partial<CodeList>, accessToken: string,
 //     return Promise.reject(err);
 //   });
 
-// export const deleteConcept = async (conceptId: string, accessToken: string) =>
-//   await conceptCatalogApiCall('DELETE', `/begreper/${conceptId}`, null, accessToken).catch((err) => {
-//     console.error('deleteConcept failed with: ', err);
-//     return Promise.reject(err);
-//   });
+export const deleteCodeList = async (catalogId: string, codeListId: string, accessToken: string) =>
+  await codeListCatalogApiCall('DELETE', `/concepts/code-lists/${codeListId}`, null, accessToken, catalogId).catch(
+    (err) => {
+      console.error('deleteCodeList failed with: ', err);
+      return Promise.reject(err);
+    },
+  );

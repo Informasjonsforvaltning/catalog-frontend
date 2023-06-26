@@ -85,33 +85,25 @@ export const useCreateCodeList = (catalogId: string) => {
 //   });
 // };
 
-// export const useDeleteComment = ({ orgNumber, topicId }) => {
-//   const queryClient = useQueryClient();
+export const useDeleteCodeList = (catalogId: string) => {
+  const queryClient = useQueryClient();
 
-//   return useMutation({
-//     mutationFn: async (commentId: string) => {
-//       if (!validOrganizationNumber(orgNumber)) {
-//         return Promise.reject('Invalid organization number');
-//       }
+  return useMutation({
+    mutationFn: async (codeListId: string) => {
+      if (!validOrganizationNumber(catalogId)) {
+        return Promise.reject('Invalid organization number');
+      }
 
-//       if (!validUUID(topicId)) {
-//         return Promise.reject('Invalid topic id');
-//       }
+      const response = await fetch(`/api/code-lists/${catalogId}/${codeListId}`, {
+        method: 'DELETE',
+        cache: 'no-store',
+      });
 
-//       if (!validUUID(commentId)) {
-//         return Promise.reject('Invalid comment id');
-//       }
-
-//       const response = await fetch(`/api/comments/${orgNumber}/${topicId}/${commentId}`, {
-//         method: 'DELETE',
-//         cache: 'no-store',
-//       });
-
-//       return response;
-//     },
-//     onSuccess: () => {
-//       // Invalidate and refetch
-//       queryClient.invalidateQueries({ queryKey: ['getComments', orgNumber, topicId] });
-//     },
-//   });
-// };
+      return response;
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['getAllCodeLists', catalogId] });
+    },
+  });
+};

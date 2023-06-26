@@ -1,10 +1,11 @@
-import { createCodeList, getAllCodeLists } from '@catalog-frontend/data-access';
+import { createCodeList, deleteCodeList, getAllCodeLists } from '@catalog-frontend/data-access';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getToken } from 'next-auth/jwt';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const token = await getToken({ req });
   const { slug } = req.query;
+  const [catalogId, codeListId] = slug;
 
   if (req.method == 'GET') {
     getAllCodeLists(slug as string, `${token?.access_token}`)
@@ -19,7 +20,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     createCodeList(codeList, `${token?.access_token}`, slug as string)
       .then((response) => {
-        console.log('POST-response', response.status);
         return res.status(200).send(response);
       })
       .catch(() => {
@@ -36,14 +36,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   //     .catch(() => {
   //       return res.status(500).send('');
   //     });
-  // } else if (req.method == 'DELETE') {
-  //   deleteComment(orgNumber as string, topicId as string, commentId, `${token?.access_token}`)
-  //     .then(() => {
-  //       return res.status(200).send('');
-  //     })
-  //     .catch((e) => res.status(500).send(''));
   // }
-  else {
+  else if (req.method == 'DELETE') {
+    deleteCodeList(catalogId as string, codeListId as string as string, `${token?.access_token}`)
+      .then(() => {
+        return res.status(200).send('');
+      })
+      .catch((e) => res.status(500).send(''));
+  } else {
     return res.status(400).send('');
   }
 }
