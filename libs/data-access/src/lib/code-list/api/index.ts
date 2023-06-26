@@ -5,7 +5,7 @@ export const codeListCatalogApiCall = async (
   path: string,
   body: any,
   accessToken: string,
-  catalogId: number,
+  catalogId: string,
 ) =>
   await fetch(
     `${process.env.CATALOG_ADMIN_BASE_URI}/${catalogId}${path}`,
@@ -23,6 +23,20 @@ export const codeListCatalogApiCall = async (
     ),
   );
 
+export const getAllCodeLists = async (catalogId: string, accessToken: string) =>
+  await codeListCatalogApiCall('GET', '/concepts/code-lists', null, accessToken, catalogId)
+    .then((res) => (res.status === 200 ? res.json() : { name: catalogId, accessToken: accessToken }))
+    .catch((err) => {
+      console.error('getAllCodeLists failed with: ', err);
+      return Promise.reject(err);
+    });
+
+export const createCodeList = (codeList: Partial<CodeList>, accessToken: string, catalogId: string) =>
+  codeListCatalogApiCall('POST', `/concepts/code-lists`, codeList, accessToken, catalogId).catch((err) => {
+    console.error('createConcept failed with: ', err);
+    return Promise.reject(err);
+  });
+
 // export const searchCodelistsForCatalog = async (catalogId: string, query: SearchConceptQuery, accessToken: string) =>
 //   await conceptCatalogApiCall('POST', `/begreper/search?orgNummer=${catalogId}`, query, accessToken)
 //     .then((res) => (res.status === 200 ? res.json() : null))
@@ -31,21 +45,13 @@ export const codeListCatalogApiCall = async (
 //       return Promise.reject(err);
 //     });
 
-export const getAllCodeLists = async (catalogId: number, accessToken: string) =>
-  await codeListCatalogApiCall('GET', '/concepts/code-lists', null, accessToken, catalogId)
-    .then((res) => (res.status === 200 ? res.json() : { name: catalogId, accessToken: accessToken }))
-    .catch((err) => {
-      console.error('getAllCodeLists failed with: ', err);
-      return Promise.reject(err);
-    });
-
-export const getCodeListById = async (codeListId: string, accessToken: string, catalogId: number) =>
-  await codeListCatalogApiCall('GET', `/concepts/code-lists/${codeListId}`, null, accessToken, catalogId)
-    .then((res) => (res.status === 200 ? res.json() : null))
-    .catch((err) => {
-      console.error('getCodeListById failed with: ', err);
-      return Promise.reject(err);
-    });
+// export const getCodeListById = async (codeListId: string, accessToken: string, catalogId: number) =>
+//   await codeListCatalogApiCall('GET', `/concepts/code-lists/${codeListId}`, null, accessToken, catalogId)
+//     .then((res) => (res.status === 200 ? res.json() : null))
+//     .catch((err) => {
+//       console.error('getCodeListById failed with: ', err);
+//       return Promise.reject(err);
+//     });
 
 // export const patchCodeList = async (codeListId: string, accessToken: string, value: String) =>
 //   await codeListCatalogApiCall('PATCH', `/concepts/code-lists/${codeListId}`, value, accessToken)
@@ -54,12 +60,6 @@ export const getCodeListById = async (codeListId: string, accessToken: string, c
 //       console.error('getConceptRevisions failed with: ', err);
 //       return Promise.reject(err);
 //     });
-
-// export const createCodeList = (codeList: Partial<CodeList>, accessToken: string) =>
-//   codeListCatalogApiCall('POST', `/concepts/code-lists/`, codeList, accessToken).catch((err) => {
-//     console.error('create code list failed with: ', err);
-//     return Promise.reject(err);
-//   });
 
 // export const importConcepts = async (concepts: Omit<Concept, 'id'>[], accessToken: string) =>
 //   await conceptCatalogApiCall('POST', `/begreper/import`, concepts, accessToken).catch((err) => {

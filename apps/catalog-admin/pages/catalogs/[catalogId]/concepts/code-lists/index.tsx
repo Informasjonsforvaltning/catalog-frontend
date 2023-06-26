@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './code-lists.module.css';
-import { Button, Accordion, Label, Ingress } from '@digdir/design-system-react';
+import { Button, Accordion, TextField } from '@digdir/design-system-react';
 import { SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
-import data from './mock-data.json';
-import { getToken } from 'next-auth/jwt';
-import { hasOrganizationReadPermission } from '@catalog-frontend/utils';
-import { CodeList } from '@catalog-frontend/types';
-import { getAllCodeLists } from '@catalog-frontend/data-access';
 import { useRouter } from 'next/router';
-import { useCreateCodeList } from '../../../../../hooks/code-lists';
+import { useCreateCodeList, useGetAllCodeLists } from '../../../../../hooks/code-lists';
 
-export const CodeListsPage = ({ codeLists }) => {
+export const CodeListsPage = () => {
   const router = useRouter();
+  const catalogId: string = `${router.query.catalogId}` ?? '';
+  const createCodeList = useCreateCodeList(catalogId);
+  const [newCodeList, setNewCodeList] = useState(null);
+
+  const handleCreateCodeList = () => {
+    createCodeList.mutate(newCodeList, {
+      onSuccess: () => {
+        setNewCodeList('');
+      },
+    });
+  };
+
+  const { data: getAllCodeLists } = useGetAllCodeLists({
+    catalogId: catalogId,
+  });
   return (
     <div className={styles.center}>
       <div className={styles.page}>
@@ -26,6 +36,7 @@ export const CodeListsPage = ({ codeLists }) => {
               <Button
                 className={styles.createButton}
                 icon={<PlusCircleIcon />}
+                onClick={() => handleCreateCodeList()}
               >
                 Opprett ny kodeliste
               </Button>
@@ -40,8 +51,8 @@ export const CodeListsPage = ({ codeLists }) => {
           </div>
         </div>
         <div className={styles.content}>
-          {codeLists.codeLists &&
-            codeLists.codeLists.map((data, index) => (
+          {getAllCodeLists &&
+            getAllCodeLists.codeLists.map((data, index) => (
               <Accordion
                 key={index}
                 border={true}
@@ -50,33 +61,43 @@ export const CodeListsPage = ({ codeLists }) => {
                 <Accordion.Item>
                   <Accordion.Header>
                     <h1 className={styles.label}>{data.name}</h1>
-                    <p className={styles.description}> Description </p>
+                    <p className={styles.description}> {data.description} </p>
                   </Accordion.Header>
-                  <Accordion.Content>Accordion content</Accordion.Content>
+                  <Accordion.Content>
+                    <button onClick={() => handleCreateCodeList()}>Slett</button>
+                  </Accordion.Content>
                 </Accordion.Item>
               </Accordion>
             ))}
+          <TextField
+            className={styles.textField}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setNewCodeList({ name: event.target.value, description: event.target.value, codes: [] });
+            }}
+          />
+          {newCodeList && <p>{newCodeList.name}</p>}
         </div>
       </div>
     </div>
   );
 };
 
-export async function getServerSideProps({ req, params }) {
-  const token = await getToken({ req });
-  const { catalogId } = params;
-  const hasPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
-  if (!hasPermission) {
-    return {
-      notFound: true,
-    };
-  }
-  const codeLists: CodeList[] = await getAllCodeLists(catalogId, token.access_token);
-  return {
-    props: {
-      codeLists,
-    },
-  };
-}
+// export async function getServerSideProps({ req, params }) {
+//   const token = await getToken({ req });
+//   const { catalogId } = params;
+//   const hasPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
+//   if (!hasPermission) {
+//     return {
+//       notFound: true,
+//     };
+//   }
+
+//   const organization: Organization = await getOrganization(catalogId);
+//   return {
+//     props: {
+//       organization,
+//     },
+//   };
+// }
 
 export default CodeListsPage;
