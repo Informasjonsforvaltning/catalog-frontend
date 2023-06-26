@@ -11,21 +11,21 @@ export const CodeListsPage = () => {
       <div className={styles.page}>
         <div className={styles.row}>
           <SearchField
-            ariaLabel={''}
+            ariaLabel={'Søkefelt kodeliste'}
             placeholder='Søk etter kodeliste...'
           />
           <div className={styles.buttons}>
             <div className={styles.buttons}>
               <Button
                 className={styles.createButton}
-                icon={<PlusCircleIcon title='a11y-title' />}
+                icon={<PlusCircleIcon />}
               >
                 Opprett ny kodeliste
               </Button>
             </div>
             <Button
               className={styles.importButton}
-              icon={<FileImportIcon title='a11y-title' />}
+              icon={<FileImportIcon />}
               variant='outline'
             >
               Importer ny kodeliste

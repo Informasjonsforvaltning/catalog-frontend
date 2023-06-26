@@ -15,8 +15,8 @@ const DesignPage = () => {
   const [isTextInputValid, setIsTextInputValid] = useState(false);
   const [disableTextField, setDisableTextField] = useState(true);
 
-  function validateInputContent(text: string): boolean {
-    const alphanumericRegex = /^(?=.*[A-Za-z0-9])[A-Za-z0-9 ]+$/;
+  function validateLogoDescription(text: string): boolean {
+    const alphanumericRegex = /^[a-zA-ZæøåÆØÅ0-9\s\-_&,.]+$/;
     return logo ? alphanumericRegex.test(text) : false;
   }
 
@@ -59,15 +59,17 @@ const DesignPage = () => {
             <div className={styles.imageUploader}>
               <div className={styles.label}>
                 <h3>{localization.catalogAdmin.logo}</h3>
-                <HelpText title={'Tekstene skal byttes ut men vet ikke hva som skal stå enda:-)'}>
-                  {'SVG eller PNG format'}
+                <HelpText title={localization.catalogAdmin.designHelpText.helpTextDescription.logo}>
+                  {localization.catalogAdmin.designHelpText.logo}
                 </HelpText>
               </div>
               <ImageUploader />
             </div>
             <div className={styles.label}>
               <h3>{localization.catalogAdmin.descriptionLogo}</h3>
-              <HelpText title={'Beskrivelse av logo hjelpetekst'}>{'Ønsker til hjelpetekst?'}</HelpText>
+              <HelpText title={localization.catalogAdmin.designHelpText.helpTextDescription.logoDescription}>
+                {localization.catalogAdmin.designHelpText.logoDescription}
+              </HelpText>
             </div>
             <div className={styles.textFieldContainer}>
               <TextField
@@ -75,7 +77,7 @@ const DesignPage = () => {
                 isValid={isTextInputValid}
                 onChange={(event) => {
                   setImageLabel(event.target.value);
-                  setIsTextInputValid(validateInputContent(event.target.value));
+                  setIsTextInputValid(validateLogoDescription(event.target.value));
                 }}
                 required={true}
                 disabled={disableTextField}
@@ -86,7 +88,9 @@ const DesignPage = () => {
               <div>
                 <div className={styles.label}>
                   <h3>{localization.catalogAdmin.backgroundColor}</h3>
-                  <HelpText title={'Bakgrunnsfarge hjelpetekst'}>{'Ønsker til hjelpetekst?'}</HelpText>
+                  <HelpText title={localization.catalogAdmin.designHelpText.helpTextDescription.backgroundColor}>
+                    {localization.catalogAdmin.designHelpText.backgroundColor}
+                  </HelpText>
                 </div>
 
                 <ColorPicker
@@ -97,7 +101,9 @@ const DesignPage = () => {
               <div>
                 <div className={styles.label}>
                   <h3>{localization.catalogAdmin.fontColor}</h3>
-                  <HelpText title={'Skriftfarge hjelpetekst'}>{'Ønsker til hjelpetekst?'}</HelpText>
+                  <HelpText title={localization.catalogAdmin.designHelpText.helpTextDescription.fontColor}>
+                    {localization.catalogAdmin.designHelpText.fontColor}
+                  </HelpText>
                 </div>
 
                 <ColorPicker

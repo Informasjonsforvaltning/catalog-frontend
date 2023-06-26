@@ -124,6 +124,19 @@ export const nb = {
       design: 'Administrer organisasjonsspesifikt design',
       userList: 'Administrer brukerliste',
     },
+    designHelpText: {
+      logo: 'Tillatte filtyper er SVG og PNG.',
+      logoDescription: 'Beskrivelse av logo for skjermleser.',
+      backgroundColor: 'Bakgrunnsfarge for banner. Fargen må være oppgitt som HEX-kode på formen #FFF eller #FFFFFF',
+      fontColor:
+        'Skriftfarge for banner. Fargen må være oppgitt som HEX-kode på formen #FFF eller #FFFFFF. OBS! Husk å at kontrasten til bakgrunnen må være 3:1 for å oppfylle WCAG-kravet.',
+      helpTextDescription: {
+        logo: 'Hjelpetekst for logo',
+        logoDescription: 'Hjelpetekst for beskrivelse av logo',
+        backgroundColor: 'Hjelpetekst for bakgrunnsfarge',
+        fontColor: 'Hjelpetekst for skriftfarge',
+      },
+    },
   },
 
   concept: {
