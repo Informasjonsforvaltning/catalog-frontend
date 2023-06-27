@@ -115,6 +115,9 @@ export const nb = {
     preview: 'Forhåndsvisning',
     general: 'Generelt',
     customizeDesign: 'Tilpass design',
+    userList: 'Brukerliste',
+    design: 'Design',
+    addUser: 'Legg til ny bruker',
     description: {
       general:
         'Oversikt over beskrivelser av datasett, begrep, apier og informasjonmodeller. Innholdet blir levert av ulike virksomheter, offentlige og private.',
@@ -124,6 +127,21 @@ export const nb = {
     manage: {
       internalFields: 'Administrer interne felt',
       codeList: 'Administrer kodeliste',
+      design: 'Administrer organisasjonsspesifikt design',
+      userList: 'Administrer brukerliste',
+    },
+    designHelpText: {
+      logo: 'Tillatte filtyper er SVG og PNG.',
+      logoDescription: 'Beskrivelse av logo for skjermleser.',
+      backgroundColor: 'Bakgrunnsfarge for banner. Fargen må være oppgitt som HEX-kode på formen #FFF eller #FFFFFF',
+      fontColor:
+        'Skriftfarge for banner. Fargen må være oppgitt som HEX-kode på formen #FFF eller #FFFFFF. OBS! Husk å at kontrasten til bakgrunnen må være 3:1 for å oppfylle WCAG-kravet.',
+      helpTextDescription: {
+        logo: 'Hjelpetekst for logo',
+        logoDescription: 'Hjelpetekst for beskrivelse av logo',
+        backgroundColor: 'Hjelpetekst for bakgrunnsfarge',
+        fontColor: 'Hjelpetekst for skriftfarge',
+      },
     },
   },
 

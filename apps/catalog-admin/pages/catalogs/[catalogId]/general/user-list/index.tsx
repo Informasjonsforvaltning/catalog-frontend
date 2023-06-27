@@ -1,17 +1,18 @@
 import React from 'react';
-import styles from './code-lists.module.css';
+import styles from './user-list.module.css';
 import { Button, Accordion, Label, Ingress } from '@digdir/design-system-react';
 import { SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
-import data from './mock-data.json';
+import { localization } from '@catalog-frontend/utils';
 
 export const CodeListsPage = () => {
+  const testData = ['navn1', 'navn2', 'navn3'];
   return (
     <div className={styles.center}>
       <div className={styles.page}>
         <div className={styles.row}>
           <SearchField
-            ariaLabel={'Søkefelt kodeliste'}
+            ariaLabel={''}
             placeholder='Søk etter kodeliste...'
           />
           <div className={styles.buttons}>
@@ -20,20 +21,13 @@ export const CodeListsPage = () => {
                 className={styles.createButton}
                 icon={<PlusCircleIcon />}
               >
-                Opprett ny kodeliste
+                {localization.catalogAdmin.addUser}
               </Button>
             </div>
-            <Button
-              className={styles.importButton}
-              icon={<FileImportIcon />}
-              variant='outline'
-            >
-              Importer ny kodeliste
-            </Button>
           </div>
         </div>
         <div className={styles.content}>
-          {data.map((data, index) => (
+          {testData.map((data, index) => (
             <Accordion
               key={index}
               border={true}
@@ -41,7 +35,7 @@ export const CodeListsPage = () => {
             >
               <Accordion.Item>
                 <Accordion.Header>
-                  <h1 className={styles.label}>{data.name}</h1>
+                  <h1 className={styles.label}>{data}</h1>
                   <p className={styles.description}> Description </p>
                 </Accordion.Header>
                 <Accordion.Content>Accordion content</Accordion.Content>
