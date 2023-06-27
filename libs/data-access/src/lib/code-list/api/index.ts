@@ -25,7 +25,7 @@ export const codeListCatalogApiCall = async (
 
 export const getAllCodeLists = async (catalogId: string, accessToken: string) =>
   await codeListCatalogApiCall('GET', '/concepts/code-lists', null, accessToken, catalogId)
-    .then((res) => (res.status === 200 ? res.json() : { name: catalogId, accessToken: accessToken }))
+    .then((res) => (res.status === 200 ? res.json() : null))
     .catch((err) => {
       console.error('getAllCodeLists failed with: ', err);
       return Promise.reject(err);

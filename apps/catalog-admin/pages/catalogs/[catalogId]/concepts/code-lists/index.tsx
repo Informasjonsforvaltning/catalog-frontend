@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { useCreateCodeList, useDeleteCodeList, useGetAllCodeLists } from '../../../../../hooks/code-lists';
 import { CodeList } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
+import { CodeListEditor } from 'apps/catalog-admin/components/code-list-editor';
 
 export const CodeListsPage = () => {
   const router = useRouter();
@@ -60,7 +61,7 @@ export const CodeListsPage = () => {
         </div>
         <div className={styles.content}>
           {getAllCodeLists &&
-            getAllCodeLists.codeLists.map((data: CodeList, index: number) => (
+            getAllCodeLists.codeLists?.map((data: CodeList, index: number) => (
               <Accordion
                 key={index}
                 border={true}
@@ -73,6 +74,7 @@ export const CodeListsPage = () => {
                   </Accordion.Header>
                   <Accordion.Content>
                     <button onClick={(e) => handleDeleteCodeList(data.id, e)}>Slett</button>
+                    <CodeListEditor codeList={''} />
                   </Accordion.Content>
                 </Accordion.Item>
               </Accordion>

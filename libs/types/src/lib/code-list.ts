@@ -12,6 +12,7 @@ export interface Code {
   parentId?: number;
 }
 
+//TODO: move to more generic place
 export interface MultiLanguageText {
   nb?: any;
   nn?: any;
