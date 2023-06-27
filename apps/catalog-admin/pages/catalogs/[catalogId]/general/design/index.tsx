@@ -6,10 +6,17 @@ import { Banner } from '../../../../../components/banner';
 import styles from './design.module.css';
 import { Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
 import { Heading, HelpText, TextField } from '@digdir/design-system-react';
-import { localization } from '@catalog-frontend/utils';
+import { hasOrganizationReadPermission, localization } from '@catalog-frontend/utils';
+import { getToken } from 'next-auth/jwt';
+import { Organization } from '@catalog-frontend/types';
+import { getOrganization } from '@catalog-frontend/data-access';
+import { useRouter } from 'next/router';
 
-const DesignPage = () => {
+const DesignPage = (organization) => {
   const adminContext = useAdminState();
+  const router = useRouter();
+  const catalogId: string = `${router.query.catalogId}` ?? '';
+  const pageSubtitle = organization.organization?.name ?? catalogId;
   const { backgroundColor, fontColor, logo } = adminContext;
   const [imageLabel, setImageLabel] = useState('');
   const [isTextInputValid, setIsTextInputValid] = useState(false);
@@ -42,8 +49,8 @@ const DesignPage = () => {
           <h2 className={styles.subheading}>{localization.catalogAdmin.preview}</h2>
           {backgroundColor === '#FFFFFF' && fontColor === '#2D3741' && !logo ? (
             <PageBanner
-              title={'Intern begrepskaralog'}
-              subtitle={'Skatteetaten'}
+              title={localization.catalogType.concept}
+              subtitle={pageSubtitle}
             />
           ) : (
             <Banner
@@ -121,5 +128,24 @@ const DesignPage = () => {
     </>
   );
 };
+
+export async function getServerSideProps({ req, params }) {
+  const token = await getToken({ req });
+  const { catalogId } = params;
+
+  const hasPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
+  if (!hasPermission) {
+    return {
+      notFound: true,
+    };
+  }
+
+  const organization: Organization = await getOrganization(catalogId);
+  return {
+    props: {
+      organization,
+    },
+  };
+}
 
 export default DesignPage;
