@@ -1,5 +1,5 @@
 import { QueryFilters, QuerySort, SearchableField } from '@catalog-frontend/types';
-import { MultiSelectOption } from '@digdir/design-system-react';
+import { SingleSelectOption } from '@digdir/design-system-react';
 import { useQuery } from '@tanstack/react-query';
 import { signIn } from 'next-auth/react';
 
@@ -45,31 +45,17 @@ const getNegatedFields = () => {
   return negatedFields;
 };
 
-/**
- *
- * @param fieldArray is either 'alleFelter' or 'alleTermer' or an array of searchable fields
- * @returns an object with the searchable fields as keys and true as value if the field is included in the array
- */
-export const getFields = (fieldArray): FieldOptions => {
-  if (fieldArray.length === 1) {
-    if (fieldArray[0] === 'alleFelter') {
-      return fields;
-    }
-    if (fieldArray[0] === 'alleTermer') {
-      return { ...getNegatedFields(), anbefaltTerm: true, frarådetTerm: true, tillattTerm: true };
-    }
+export const getFields = (field: SearchableField | 'alleFelter' | 'alleTermer'): FieldOptions => {
+  if (field === 'alleFelter') {
+    return fields;
   }
-
-  const fieldOptions = { ...getNegatedFields() };
-  for (const field in fieldOptions) {
-    if (fieldArray.includes(field)) {
-      fieldOptions[field] = true;
-    }
+  if (field === 'alleTermer') {
+    return { ...getNegatedFields(), anbefaltTerm: true, frarådetTerm: true, tillattTerm: true };
   }
-  return fieldOptions;
+  return { ...getNegatedFields(), [field]: true };
 };
 
-export const getSelectOptions = (object: any): MultiSelectOption[] => {
+export const getSelectOptions = (object: any): SingleSelectOption[] => {
   if (!object) return [];
   const sortKeys = Object.keys(object);
   const sortValues = Object.values(object);
@@ -90,7 +76,7 @@ export const useSearchConcepts = ({ catalogId, searchTerm, page, fields, sort, f
         page: page ?? 0,
         size: hitsPerPage,
       },
-      fields,
+      fields: fields,
       sort,
       filters,
     },
