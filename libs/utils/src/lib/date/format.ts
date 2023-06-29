@@ -9,6 +9,10 @@ export const formatISO = (
     minute: '2-digit',
   },
 ) => {
+  if (!isoDate) {
+    return null;
+  }
+
   const d = new Date(isoDate);
   return d.toLocaleString('no-NO', options);
 };
