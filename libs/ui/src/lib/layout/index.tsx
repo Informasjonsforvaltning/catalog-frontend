@@ -15,17 +15,25 @@ import ErrorBoundary from '../error-boundry';
 interface LayoutProps {
   children: ReactNode;
   className?: string;
+  fontColor?: string;
+  backgroundColor?: string;
 }
 
-export const Layout = ({ children, className }: LayoutProps) => {
+export const Layout = ({ children, className, fontColor, backgroundColor }: LayoutProps) => {
   return (
     <div className={cn(style.layout, className)}>
       <RouteGuard>
-        <Header />
+        <Header
+          fontColor={fontColor}
+          backgroundColor={backgroundColor}
+        />
         <main className={style.main}>
           <ErrorBoundary>{children}</ErrorBoundary>
         </main>
-        <Footer />
+        <Footer
+          fontColor={fontColor}
+          backgroundColor={backgroundColor}
+        />
       </RouteGuard>
     </div>
   );

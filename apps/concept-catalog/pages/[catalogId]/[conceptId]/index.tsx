@@ -41,6 +41,7 @@ import { useGetHistory } from '../../../hooks/history';
 import { useDeleteConcept } from '../../../hooks/concepts';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
+import { useCatalogDesign } from '../../../context/catalog-design';
 
 type MapType = {
   [id: string]: string;
@@ -199,6 +200,7 @@ export const ConceptPage = ({
     }
   };
 
+  const design = useCatalogDesign();
   const getTitle = (text: string | string[]) => (text ? text : localization.concept.noName);
 
   const newCommentButtonId = useId();
@@ -255,6 +257,10 @@ export const ConceptPage = ({
       <PageBanner
         title={localization.catalogType.concept}
         subtitle={pageSubtitle}
+        fontColor={design?.fontColor}
+        backgroundColor={design?.backgroundColor}
+        logo={design?.hasLogo && `/api/catalog-admin/${catalogId}/design/logo`}
+        logoDescription={design?.logoDescription}
       />
       <div className='container'>
         <DetailHeading
@@ -283,7 +289,7 @@ export const ConceptPage = ({
                   <ul>
                     {concept?.kildebeskrivelse?.kilde?.map((kilde, i) => (
                       <li key={`kilde-${i}`}>
-                        <a href={kilde.uri}>{kilde.tekst}</a>
+                        {kilde.uri ? <a href={kilde.uri}>{kilde.tekst}</a> : <span>{kilde.tekst}</span>}
                       </li>
                     ))}
                   </ul>
@@ -330,9 +336,9 @@ export const ConceptPage = ({
               <InfoCard.Item>
                 <div className={classes.termsRow}>
                   <h3>{`${localization.concept.allowedTerm}:`}</h3>
-                  {(translate(concept?.tillattTerm, language) as string[]).length > 0 ? (
+                  {Array.of(translate(concept?.tillattTerm, language)).length > 0 ? (
                     <ul>
-                      {(translate(concept?.tillattTerm, language) as string[]).map((term, i) => (
+                      {Array.of(translate(concept?.tillattTerm, language)).map((term, i) => (
                         <li key={`allowedTerm-${i}`}>{term}</li>
                       ))}
                     </ul>
@@ -344,7 +350,7 @@ export const ConceptPage = ({
                   <h3>{`${localization.concept.notRecommendedTerm}:`}</h3>
                   {Array.of(translate(concept?.frarådetTerm, language)).length > 0 ? (
                     <ul>
-                      {(translate(concept?.frarådetTerm, language) as string[]).map((term, i) => (
+                      {Array.of(translate(concept?.frarådetTerm, language)).map((term, i) => (
                         <li key={`notRecommendedTerm-${i}`}>{term}</li>
                       ))}
                     </ul>
@@ -354,9 +360,11 @@ export const ConceptPage = ({
                 </div>
               </InfoCard.Item>
               <InfoCard.Item label={`${localization.concept.valueDomain}:`}>
-                <span>
+                {concept?.omfang?.uri ? (
                   <Link href={concept?.omfang?.uri}>{concept?.omfang?.tekst}</Link>
-                </span>
+                ) : (
+                  <span>{concept?.omfang?.tekst}</span>
+                )}
               </InfoCard.Item>
             </InfoCard>
 
@@ -467,7 +475,7 @@ export const ConceptPage = ({
                                   <span>{formatISO(update.datetime)}</span>
                                 </Accordion.Header>
                                 <Accordion.Content>
-                                  {update.operations.map((operation, i) => (
+                                  {update.operations?.map((operation, i) => (
                                     <div
                                       key={`operation-${i}`}
                                       className={classes.historyOperation}
@@ -475,7 +483,7 @@ export const ConceptPage = ({
                                       <div>
                                         {operation.op} - {operation.path}
                                       </div>
-                                      <div>{operation.value}</div>
+                                      <div>{`${operation.value}`}</div>
                                     </div>
                                   ))}
                                 </Accordion.Content>

@@ -34,6 +34,7 @@ import { useImportConcepts } from '../../hooks/import';
 import { useSearchDispatch, useSearchState } from '../../context/search';
 import { Session, getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
+import { useCatalogDesign } from '../../context/catalog-design';
 
 export const SearchPage = ({ organization, hasWritePermission, FDK_REGISTRATION_BASE_URI }) => {
   const router = useRouter();
@@ -130,6 +131,8 @@ export const SearchPage = ({ organization, hasWritePermission, FDK_REGISTRATION_
     }
   };
 
+  const design = useCatalogDesign();
+
   useEffect(() => {
     refetch().catch((error) => console.error('refetch() failed: ', error));
   }, [searchTerm, currentPage, selectedFieldOption, selectedSortOption, searchState, refetch]);
@@ -143,6 +146,10 @@ export const SearchPage = ({ organization, hasWritePermission, FDK_REGISTRATION_
       <PageBanner
         title={loc.catalogType.concept}
         subtitle={pageSubtitle}
+        fontColor={design?.fontColor}
+        backgroundColor={design?.backgroundColor}
+        logo={design?.hasLogo && `/api/catalog-admin/${catalogId}/design/logo`}
+        logoDescription={design?.logoDescription}
       />
       <div className='container'>
         <div className={styles.pageContainer}>

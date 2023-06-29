@@ -5,11 +5,11 @@ import DropdownMenuBase from '../dropdown-menu';
 import LogoFDK from './images/fdk-publishing-logo-negative.svg';
 import LogoFDKDemo from './images/fdk-publishing-logo-negative-demo.svg';
 
-const Header = styled.header`
-  background: #2d3741;
+const Header = styled.header<{ fontColor?: string; background?: string }>`
+  background: ${(props) => props.background || '#2d3741'};
   border-bottom: 1px solid rgb(230, 230, 230);
   box-shadow: #969ba0 0px 0px 10px -5px;
-  color: #fff;
+  color: ${(props) => props.fontColor || '#fff'};
   display: flex;
   font-size: 16px;
   justify-content: center;
@@ -99,7 +99,7 @@ const ButtonLabel = styled.span`
 const MenuItems = styled.ul`
   display: none;
   margin: 0;
-  color: #fff;
+  color: currentColor;
 
   @media (min-width: 900px) {
     & {
@@ -115,7 +115,7 @@ const MenuItems = styled.ul`
 const MenuItem = styled.li`
   list-style-type: none;
   & > * {
-    color: #fff;
+    color: currentColor;
   }
 
   & > a {
@@ -134,7 +134,7 @@ const MenuItem = styled.li`
 
 const DropdownMenu = styled(DropdownMenuBase)`
   display: flex;
-  color: #fff;
+  color: currentColor;
 `;
 
 const MenuButton = styled.button`
@@ -190,7 +190,7 @@ const ExpandIconWrapper = styled.div`
     width: 16px;
     margin-left: 0.3em;
     & * {
-      stroke: #fff;
+      stroke: currentColor;
     }
   }
 `;

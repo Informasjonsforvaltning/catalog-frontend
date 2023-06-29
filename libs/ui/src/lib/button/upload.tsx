@@ -1,14 +1,13 @@
 import { ChangeEvent, FC, useId, useRef } from 'react';
 import { ButtonProps } from '@digdir/design-system-react';
 import Button from './button';
-import styles from './upload.module.scss';
 
-export interface Props extends ButtonProps {
+export interface UploadButtonProps extends ButtonProps {
   allowedMimeTypes?: string[];
   onUpload?: (event: ChangeEvent) => void;
 }
 
-export const UploadButton: FC<Props> = ({ children, allowedMimeTypes, onUpload, ...props }: any) => {
+export const UploadButton: FC<UploadButtonProps> = ({ children, allowedMimeTypes, onUpload, ...props }: any) => {
   const ref = useRef<HTMLInputElement>(null);
   const buttonId = useId();
 
