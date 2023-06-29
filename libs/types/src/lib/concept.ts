@@ -130,6 +130,8 @@ export interface Concept {
   begrepsRelasjon?: Relasjon[];
   erPublisert?: boolean;
   publiseringsTidspunkt?: string;
+  opprettet?: string;
+  opprettetAv?: string;
 }
 
 export interface SkosConcept {
@@ -152,7 +154,14 @@ export interface Collection {
 }
 
 export interface Publisher {
-  organizationId: string;
+  organizationId?: string;
+  name?: string;
+  prefLabel?: TekstMedSpraakKode;
+}
+
+export interface PublisherRdf {
+  id: string;
+  uri: string;
   name?: string;
   prefLabel?: TekstMedSpraakKode;
 }
@@ -196,3 +205,11 @@ export interface SearchConceptResponse {
 export type SearchableField = 'anbefaltTerm' | 'frarådetTerm' | 'tillattTerm' | 'definisjon' | 'merknad';
 
 export type Status = 'utkast' | 'godkjent' | 'høring' | 'publisert';
+
+export interface ConceptSearchFulltextHit {
+  id: string;
+  identifier: string[];
+  uri: string;
+  publisher?: PublisherRdf;
+  prefLabel: TekstMedSpraakKode;
+}

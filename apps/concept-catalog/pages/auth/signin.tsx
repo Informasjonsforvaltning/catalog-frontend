@@ -1,4 +1,4 @@
-import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner, Spinner } from '@catalog-frontend/ui';
 import { localization, validOrganizationNumber } from '@catalog-frontend/utils';
 import { Heading } from '@digdir/design-system-react';
 import { Session } from 'next-auth';
@@ -47,7 +47,12 @@ export const SignIn = ({ FDK_REGISTRATION_BASE_URI }) => {
           level={2}
           size='small'
         >
-          {needLogin(session, status, router) && localization.auth.loggingIn}
+          {needLogin(session, status, router) && (
+            <>
+              <div>{localization.auth.loggingIn}</div>
+              <Spinner />
+            </>
+          )}
         </Heading>
       </CenterContainer>
     </>

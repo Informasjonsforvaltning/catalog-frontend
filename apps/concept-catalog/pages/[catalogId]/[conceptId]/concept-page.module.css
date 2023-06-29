@@ -57,6 +57,16 @@
   font-size: 14px;
 }
 
+.source {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.source ul > li {
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
 .source,
 .source a {
   color: #6c737a;
@@ -129,6 +139,15 @@
 
 .termsRow {
   display: flex;
+}
+
+.termsRow:not(:last-of-type) {
+  margin-bottom: 1rem;
+}
+
+.termsRow > *:first-child {
+  width: 150px;
+  font-weight: 700;
 }
 
 a.versionTitle {

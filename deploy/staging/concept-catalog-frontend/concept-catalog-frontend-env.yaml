@@ -60,3 +60,8 @@ spec:
                 secretKeyRef:
                   name: commonurl-staging
                   key: CONCEPT_CATALOGUE_GUI_BASE_URI
+            - name: FULLTEXT_SEARCH_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: FDK_FULLTEXT_SEARCH_BASE_URI

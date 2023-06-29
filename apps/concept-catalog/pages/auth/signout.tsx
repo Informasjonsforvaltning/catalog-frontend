@@ -1,4 +1,4 @@
-import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner, Spinner } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Heading } from '@digdir/design-system-react';
 import { signOut } from 'next-auth/react';
@@ -36,7 +36,10 @@ export const SignOut = ({ FDK_REGISTRATION_BASE_URI }) => {
           level={2}
           size='small'
         >
-          {localization.auth.loggingOut}
+          <>
+            <div>{localization.auth.loggingOut}</div>
+            <Spinner />
+          </>
         </Heading>
       </CenterContainer>
     </>

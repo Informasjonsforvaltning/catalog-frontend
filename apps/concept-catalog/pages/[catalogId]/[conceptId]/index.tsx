@@ -23,7 +23,12 @@ import {
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
-import { getConcept, getConceptRevisions, getOrganization } from '@catalog-frontend/data-access';
+import {
+  getConcept,
+  getConceptRevisions,
+  getOrganization,
+  searchConceptsByIdentifiers,
+} from '@catalog-frontend/data-access';
 import { Concept, Comment, Update, Organization } from '@catalog-frontend/types';
 import { ChatIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
@@ -44,7 +49,8 @@ export const ConceptPage = ({
   organization,
   concept,
   revisions,
-  FDK_REGISTRATION_BASE_URI,
+  replacedConcepts,
+  FDK_REGISTRATION_BASE_URI,  
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [language, setLanguage] = useState('nb');
   const [newCommentText, setNewCommentText] = useState('');
@@ -102,13 +108,29 @@ export const ConceptPage = ({
     ],
     ['Versjon', `${concept?.versjonsnr.major}.${concept?.versjonsnr.minor}.${concept?.versjonsnr.patch}`],
     ['Gyldighet', `Fra/til: ${concept?.gyldigFom} - ${concept?.gyldigTom}`],
-    ['Tildelt', 'N/A'],
-    ['Sist oppdatert', 'N/A'],
-    ['Opprettet', 'N/A'],
-    ['Merkelapp', 'N/A'],
-    ['Begrepsansvarlig', 'N/A'],
-    ['Godkjenner', 'N/A'],
-    ['Opprettet av', 'N/A'],
+    [
+      'Sist oppdatert',
+      formatISO(concept?.endringslogelement?.endringstidspunkt, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }) ?? '',
+    ],
+    [
+      'Opprettet',
+      formatISO(concept?.opprettet, {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }) ?? '',
+    ],
+    ['Opprettet av', concept?.opprettetAv ?? ''],
+    ['Tildelt', 'TODO (interne felt)'],
+    ['Begrepsansvarlig', 'TODO (interne felt)'],
+    ['Godkjenner', 'TODO (interne felt)'],
+    ['Merkelapp', 'TODO (interne felt)'],
   ];
 
   const handleLanguageChange = (lang) => {
@@ -251,9 +273,20 @@ export const ConceptPage = ({
           <div className={classes.definition}>
             <h3>Definisjon:</h3>
             <div>{translate(concept?.definisjon?.tekst ?? '', language)}</div>
-            <div className={cn(classes.source)}>
-              Kilde: <a href='#'>Basert på Skatteetaten</a>
-            </div>
+            {concept?.kildebeskrivelse?.kilde.length > 0 && (
+              <div className={cn(classes.source)}>
+                <div>Kilde:</div>
+                <div>
+                  <ul>
+                    {concept?.kildebeskrivelse?.kilde?.map((kilde, i) => (
+                      <li key={`kilde-${i}`}>
+                        <a href={kilde.uri}>{kilde.tekst}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
           </div>
           <div className={classes.actionButtons}>
             <Button onClick={handleEditConcept}>Rediger</Button>
@@ -268,9 +301,15 @@ export const ConceptPage = ({
         <div className={cn(classes.twoColumnRow, classes.bottomSpace)}>
           <div>
             <InfoCard>
-              <InfoCard.Item label={`${localization.concept.replacedBy}:`}>
-                <span>Begrep x</span>
-              </InfoCard.Item>
+              {replacedConcepts.length > 0 && (
+                <InfoCard.Item label={`${localization.concept.replacedBy}:`}>
+                  <ul>
+                    {replacedConcepts.map((concept, i) => (
+                      <li key={`replacedConcept-${i}`}>{translate(concept.prefLabel, language)}</li>
+                    ))}
+                  </ul>
+                </InfoCard.Item>
+              )}
               <InfoCard.Item label={`${localization.concept.note}:`}>
                 <span>{translate(concept?.merknad, language)}</span>
               </InfoCard.Item>
@@ -278,38 +317,41 @@ export const ConceptPage = ({
                 <span>{translate(concept?.eksempel, language)}</span>
               </InfoCard.Item>
               <InfoCard.Item label={`${localization.concept.simplifiedExplanation}:`}>
-                <span>N/A</span>
+                <span>TODO</span>
               </InfoCard.Item>
               <InfoCard.Item label={`${localization.concept.legalExplanation}:`}>
-                <span>N/A</span>
+                <span>TODO</span>
               </InfoCard.Item>
               <InfoCard.Item>
                 <div className={classes.termsRow}>
-                  <h3>{`${localization.concept.abbreviation}:`}</h3>
-                  <span>N/A</span>
-                </div>
-                <div className={classes.termsRow}>
                   <h3>{`${localization.concept.allowedTerm}:`}</h3>
-                  <ul>
-                    {Array.of(translate(concept?.tillattTerm, language)).map((term, i) => (
-                      <li key={`allowedTerm-${i}`}>{term}</li>
-                    ))}
-                  </ul>
+                  {(translate(concept?.tillattTerm, language) as string[]).length > 0 ? (
+                    <ul>
+                      {(translate(concept?.tillattTerm, language) as string[]).map((term, i) => (
+                        <li key={`allowedTerm-${i}`}>{term}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <span>Ingen term</span>
+                  )}
                 </div>
                 <div className={classes.termsRow}>
                   <h3>{`${localization.concept.notRecommendedTerm}:`}</h3>
-                  <ul>
-                    {Array.of(translate(concept?.frarådetTerm, language)).map((term, i) => (
-                      <li key={`notRecommendedTerm-${i}`}>{term}</li>
-                    ))}
-                  </ul>
+                  {Array.of(translate(concept?.frarådetTerm, language)).length > 0 ? (
+                    <ul>
+                      {(translate(concept?.frarådetTerm, language) as string[]).map((term, i) => (
+                        <li key={`notRecommendedTerm-${i}`}>{term}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <span>Ingen term</span>
+                  )}
                 </div>
               </InfoCard.Item>
               <InfoCard.Item label={`${localization.concept.valueDomain}:`}>
-                <span>N/A</span>
-              </InfoCard.Item>
-              <InfoCard.Item label={`${localization.concept.internalField}:`}>
-                <span>N/A</span>
+                <span>
+                  <Link href={concept?.omfang?.uri}>{concept?.omfang?.tekst}</Link>
+                </span>
               </InfoCard.Item>
             </InfoCard>
 
@@ -499,7 +541,19 @@ export async function getServerSideProps({ req, res, params }) {
     };
   }
 
-  const username = token && getUsername(token.id_token);
+  const getReplacedConcepts = async () => {
+    if (concept?.erstattesAv?.length === 0) {
+      return [];
+    }
+
+    const searchConceptsResponse = await searchConceptsByIdentifiers(concept?.erstattesAv);
+    return searchConceptsResponse instanceof Response && searchConceptsResponse.status === 200
+      ? (await searchConceptsResponse?.json())?.hits ?? []
+      : [];
+  };
+
+  const replacedConcepts = await getReplacedConcepts();
+  const username: string = token && getUsername(token.id_token);
   const organization: Organization = await getOrganization(catalogId);
   const revisions: Concept[] | null = await getConceptRevisions(conceptId, `${token.access_token}`).then(
     async (response) => {
@@ -513,7 +567,8 @@ export async function getServerSideProps({ req, res, params }) {
       organization,
       concept,
       revisions,
-      FDK_REGISTRATION_BASE_URI: process.env.NEXT_PUBLIC_FDK_REGISTRATION_BASE_URI,
+      replacedConcepts,
+      FDK_REGISTRATION_BASE_URI: process.env.NEXT_PUBLIC_FDK_REGISTRATION_BASE_URI,      
     },
   };
 }
