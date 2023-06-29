@@ -7,8 +7,24 @@ import TwitterIcon from './images/twitter.svg';
 import Illustration from './images/illustration.svg';
 import { localization } from '@catalog-frontend/utils';
 
-const Footer: FC = () => (
-  <footer className={styles.footer}>
+export interface FooterProps {
+  /**
+   * font color
+   * @type {string}
+   */
+  fontColor?: string;
+  /**
+   * background color
+   * @type {string}
+   */
+  backgroundColor?: string;
+}
+
+export const Footer: FC<FooterProps> = ({ fontColor, backgroundColor }) => (
+  <footer
+    className={styles.footer}
+    style={{ ...(fontColor ? { color: fontColor } : {}), ...(backgroundColor ? { background: backgroundColor } : {}) }}
+  >
     <Illustration className={styles.illustration} />
     <div className={styles.content}>
       <div className={styles.column}>{localization.footer.digdirManagesNationalDataCatalog}</div>
@@ -38,4 +54,4 @@ const Footer: FC = () => (
   </footer>
 );
 
-export { Footer };
+export default Footer;

@@ -19,9 +19,19 @@ export interface HeaderProps {
    * @default {false}
    */
   useDemoLogo?: boolean;
+  /**
+   * font color
+   * @type {string}
+   */
+  fontColor?: string;
+  /**
+   * background color
+   * @type {string}
+   */
+  backgroundColor?: string;
 }
 
-export const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo }) => {
+export const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo, fontColor, backgroundColor }) => {
   const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
 
   const openDropdownMenu = () => setIsDropdownMenuOpen(true);
@@ -36,7 +46,10 @@ export const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo }) => {
   };
 
   return (
-    <SC.Header>
+    <SC.Header
+      fontColor={fontColor}
+      background={backgroundColor}
+    >
       <div className='container'>
         <SC.Navigation>
           <a

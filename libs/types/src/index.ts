@@ -1,3 +1,4 @@
+export * from './lib/catalog-admin';
 export * from './lib/comment';
 export * from './lib/concept';
 export * from './lib/error';

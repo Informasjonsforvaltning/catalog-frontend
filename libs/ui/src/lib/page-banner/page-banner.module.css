@@ -3,8 +3,19 @@
   display: flex;
   width: 100%;
   align-items: flex-start;
+  color: #2d3741;
   background-color: #ffffff;
   overflow-wrap: break-word;
+}
+
+.contentContainer {
+  display: flex;
+}
+
+.logoContainer {
+  display: flex;
+  width: 100px;
+  margin-right: 2rem;
 }
 
 .titleContainer {
@@ -12,7 +23,6 @@
   flex-direction: column;
   width: 100%;
   align-items: flex-start;
-  background-color: #ffffff;
   overflow-wrap: break-word;
   flex-grow: 1;
   margin: 0 auto;
@@ -26,7 +36,7 @@
   font-weight: 600;
   font-size: 3rem;
   line-height: 1.6rem;
-  color: #2d3741;
+  color: currentColor;
   flex-grow: 1;
   margin: 0 auto;
   padding-top: 3rem;
@@ -40,7 +50,7 @@
   font-weight: 400;
   font-size: 1.4rem;
   line-height: 1.6rem;
-  color: #2d3741;
+  color: currentColor;
   margin: 0 auto;
   padding: 0 1.6rem 3rem 0;
   overflow-wrap: break-word;
