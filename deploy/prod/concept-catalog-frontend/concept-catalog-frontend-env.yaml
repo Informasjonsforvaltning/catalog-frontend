@@ -55,3 +55,8 @@ spec:
                 secretKeyRef:
                   name: commonurl-prod
                   key: ORGANIZATION_CATALOG_BASE_URI
+            - name: NEXT_PUBLIC_FDK_REGISTRATION_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-prod
+                  key: FDK_REGISTRATION_BASE_URI

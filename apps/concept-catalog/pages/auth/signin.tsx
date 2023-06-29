@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 const needLogin = (session, status, router) =>
   (session?.error === 'RefreshAccessTokenError' || status === 'unauthenticated') && router.pathname !== '/auth/signout';
 
-export const SignIn = () => {
+export const SignIn = ({ FDK_REGISTRATION_BASE_URI }) => {
   const router = useRouter();
   const { data, status } = useSession();
   const session: Session = data;
@@ -34,7 +34,10 @@ export const SignIn = () => {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Breadcrumbs
+        baseURI={FDK_REGISTRATION_BASE_URI}
+        breadcrumbList={breadcrumbList}
+      />
       <PageBanner
         title={localization.catalogType.concept}
         subtitle={localization.auth.login}
@@ -50,5 +53,13 @@ export const SignIn = () => {
     </>
   );
 };
+
+export async function getServerSideProps() {
+  return {
+    props: {
+      FDK_REGISTRATION_BASE_URI: process.env.NEXT_PUBLIC_FDK_REGISTRATION_BASE_URI,
+    },
+  };
+}
 
 export default SignIn;

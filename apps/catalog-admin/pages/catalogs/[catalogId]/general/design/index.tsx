@@ -12,7 +12,7 @@ import { Organization } from '@catalog-frontend/types';
 import { getOrganization } from '@catalog-frontend/data-access';
 import { useRouter } from 'next/router';
 
-const DesignPage = (organization) => {
+const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
   const adminContext = useAdminState();
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
@@ -41,7 +41,7 @@ const DesignPage = (organization) => {
     <>
       <div className={styles.center}>
         <div className={styles.container}>
-          <Breadcrumbs />
+          <Breadcrumbs baseURI={FDK_REGISTRATION_BASE_URI} />
           <div className={styles.heading}>
             <Heading size='xlarge'>{localization.catalogAdmin.general}</Heading>
           </div>
@@ -144,6 +144,7 @@ export async function getServerSideProps({ req, params }) {
   return {
     props: {
       organization,
+      FDK_REGISTRATION_BASE_URI: process.env.NEXT_PUBLIC_FDK_REGISTRATION_BASE_URI,
     },
   };
 }

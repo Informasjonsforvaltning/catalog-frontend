@@ -29,14 +29,12 @@ import { useCreateConcept } from '../../hooks/concepts';
 import { getOrganization } from '@catalog-frontend/data-access';
 import { useImportConcepts } from '../../hooks/import';
 import { useSearchDispatch, useSearchState } from '../../context/search';
-import { PublishedFilterType } from '../../context/search/state';
-import { getSession } from 'next-auth/react';
 import { Session, getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 
-export const SearchPage = ({ organization }) => {
+export const SearchPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
   const router = useRouter();
-  const catalogId: string = `${router.query.catalogId}` ?? '';
+  const catalogId = `${router.query.catalogId}`;
   const createConcept = useCreateConcept(catalogId);
   const pageNumber: number = textToNumber(router.query.page as string, 0);
 
@@ -100,7 +98,7 @@ export const SearchPage = ({ organization }) => {
     });
     searchDispatch({
       type: 'SET_PUBLICATION_STATE',
-      payload: { filters: { published: filters.map((name) => name as PublishedFilterType) } },
+      payload: { filters: { published: filters.map((name) => name) } },
     });
   };
 
@@ -129,7 +127,10 @@ export const SearchPage = ({ organization }) => {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Breadcrumbs
+        baseURI={FDK_REGISTRATION_BASE_URI}
+        breadcrumbList={breadcrumbList}
+      />
       <PageBanner
         title={localization.catalogType.concept}
         subtitle={pageSubtitle}
@@ -268,6 +269,7 @@ export async function getServerSideProps({ req, res, params }) {
   return {
     props: {
       organization,
+      FDK_REGISTRATION_BASE_URI: process.env.NEXT_PUBLIC_FDK_REGISTRATION_BASE_URI,
     },
   };
 }

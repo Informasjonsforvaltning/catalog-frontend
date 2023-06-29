@@ -44,6 +44,7 @@ export const ConceptPage = ({
   organization,
   concept,
   revisions,
+  FDK_REGISTRATION_BASE_URI,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [language, setLanguage] = useState('nb');
   const [newCommentText, setNewCommentText] = useState('');
@@ -222,7 +223,10 @@ export const ConceptPage = ({
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Breadcrumbs
+        baseURI={FDK_REGISTRATION_BASE_URI}
+        breadcrumbList={breadcrumbList}
+      />
       <PageBanner
         title={localization.catalogType.concept}
         subtitle={pageSubtitle}
@@ -509,6 +513,7 @@ export async function getServerSideProps({ req, res, params }) {
       organization,
       concept,
       revisions,
+      FDK_REGISTRATION_BASE_URI: process.env.NEXT_PUBLIC_FDK_REGISTRATION_BASE_URI,
     },
   };
 }

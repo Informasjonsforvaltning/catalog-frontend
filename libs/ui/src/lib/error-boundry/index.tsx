@@ -8,6 +8,7 @@ import { CenterContainer } from '../center-container';
 
 interface Props extends WithRouterProps {
   children?: ReactNode;
+  FDK_REGISTRATION_BASE_URI?: string;
 }
 
 interface State {
@@ -15,6 +16,12 @@ interface State {
 }
 
 class ErrorBoundary extends Component<Props, State> {
+  private FDK_REGISTRATION_BASE_URI: string | undefined;
+  constructor({ FDK_REGISTRATION_BASE_URI, ...props }: Props) {
+    super(props);
+    this.FDK_REGISTRATION_BASE_URI = FDK_REGISTRATION_BASE_URI;
+  }
+
   public state: State = {
     hasError: false,
   };
@@ -44,7 +51,10 @@ class ErrorBoundary extends Component<Props, State> {
 
       return (
         <>
-          <Breadcrumbs breadcrumbList={breadcrumbList} />
+          <Breadcrumbs
+            baseURI={this.FDK_REGISTRATION_BASE_URI}
+            breadcrumbList={breadcrumbList}
+          />
           <PageBanner
             title={localization.catalogType.concept}
             subtitle={pageSubtitle}

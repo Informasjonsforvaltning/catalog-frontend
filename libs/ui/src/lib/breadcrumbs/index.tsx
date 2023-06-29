@@ -8,17 +8,18 @@ export type BreadcrumbType = {
 
 /* eslint-disable-next-line */
 export interface BreadcrumbsProps {
+  baseURI?: string;
   breadcrumbList?: BreadcrumbType[];
 }
 
-export function Breadcrumbs({ breadcrumbList }: BreadcrumbsProps) {
+export function Breadcrumbs({ baseURI, breadcrumbList }: BreadcrumbsProps) {
   return (
     <div className='container'>
       <StyledBreadcrumbs>
         <span>
           <ExternalLink
             aria-label={localization.allCatalogs}
-            href={process.env.NEXT_PUBLIC_FDK_REGISTRATION_BASE_URI}
+            href={baseURI || '/'}
           >
             {localization.allCatalogs}
           </ExternalLink>
