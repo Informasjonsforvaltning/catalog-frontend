@@ -5,7 +5,7 @@ import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-export const SignOut = () => {
+export const SignOut = ({ FDK_REGISTRATION_BASE_URI }) => {
   const router = useRouter();
 
   const breadcrumbList = [
@@ -23,7 +23,10 @@ export const SignOut = () => {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Breadcrumbs
+        baseURI={FDK_REGISTRATION_BASE_URI}
+        breadcrumbList={breadcrumbList}
+      />
       <PageBanner
         title={localization.catalogType.concept}
         subtitle={localization.auth.logout}
@@ -39,5 +42,13 @@ export const SignOut = () => {
     </>
   );
 };
+
+export async function getServerSideProps() {
+  return {
+    props: {
+      FDK_REGISTRATION_BASE_URI: process.env.NEXT_PUBLIC_FDK_REGISTRATION_BASE_URI,
+    },
+  };
+}
 
 export default SignOut;

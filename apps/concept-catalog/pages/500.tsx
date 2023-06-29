@@ -22,7 +22,10 @@ export const Custom500 = () => {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Breadcrumbs
+        baseURI={process.env.NEXT_PUBLIC_FDK_REGISTRATION_BASE_URI}
+        breadcrumbList={breadcrumbList}
+      />
       <PageBanner
         title={localization.catalogType.concept}
         subtitle={localization.error}
