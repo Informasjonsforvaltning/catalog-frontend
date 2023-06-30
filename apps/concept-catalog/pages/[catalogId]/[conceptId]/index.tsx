@@ -50,7 +50,7 @@ export const ConceptPage = ({
   concept,
   revisions,
   replacedConcepts,
-  FDK_REGISTRATION_BASE_URI,  
+  FDK_REGISTRATION_BASE_URI,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [language, setLanguage] = useState('nb');
   const [newCommentText, setNewCommentText] = useState('');
@@ -568,7 +568,7 @@ export async function getServerSideProps({ req, res, params }) {
       concept,
       revisions,
       replacedConcepts,
-      FDK_REGISTRATION_BASE_URI: process.env.NEXT_PUBLIC_FDK_REGISTRATION_BASE_URI,      
+      FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
     },
   };
 }

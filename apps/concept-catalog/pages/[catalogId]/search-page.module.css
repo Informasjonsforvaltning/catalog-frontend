@@ -14,25 +14,6 @@
   cursor: pointer;
 }
 
-.searchHitContainer {
-  margin: 0;
-  margin-bottom: 1rem;
-  max-width: 90rem;
-  box-sizing: border-box;
-}
-
-.searchHitsContainer {
-  display: flex;
-  width: 100%;
-  flex-direction: column;
-}
-
-.noHits {
-  display: flex;
-  justify-content: center;
-  font-size: 24px;
-}
-
 .pageLink {
   padding: 0px 15px;
 }
@@ -48,7 +29,7 @@
 .searchRowContainer {
   display: flex;
   justify-content: stretch;
-  align-items: flex-end;
+  justify-content: space-between;
   margin-bottom: 1rem;
   gap: 5rem;
 }
@@ -67,13 +48,6 @@
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-}
-
-.error {
-  display: flex;
-  justify-content: center;
-  margin: 3rem;
-  font-size: 2rem;
 }
 
 .gridContainer {
@@ -98,16 +72,6 @@
   .gridContainer {
     display: flex;
     flex-direction: column;
-    align-items: center;
-  }
-
-  .searchHitContainer {
-    display: flex;
-    width: 100%;
-  }
-
-  .searchHitsContainer {
-    margin: 1rem auto;
     align-items: center;
   }
 }

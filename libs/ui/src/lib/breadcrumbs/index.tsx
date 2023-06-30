@@ -1,5 +1,5 @@
+import { hashCode, localization } from '@catalog-frontend/utils';
 import StyledBreadcrumbs, { InternalLink, ExternalLink, Separator, DeactiveLink } from './styled';
-import { localization } from '@catalog-frontend/utils';
 
 export type BreadcrumbType = {
   href: string;
@@ -12,7 +12,7 @@ export interface BreadcrumbsProps {
   breadcrumbList?: BreadcrumbType[];
 }
 
-export function Breadcrumbs({ baseURI, breadcrumbList }: BreadcrumbsProps) {
+const Breadcrumbs = ({ baseURI, breadcrumbList }: BreadcrumbsProps) => {
   return (
     <div className='container'>
       <StyledBreadcrumbs>
@@ -26,7 +26,7 @@ export function Breadcrumbs({ baseURI, breadcrumbList }: BreadcrumbsProps) {
           {breadcrumbList &&
             breadcrumbList.map((breadcrumb, i) => {
               return (
-                <span key={i}>
+                <span key={hashCode(breadcrumb.href)}>
                   <Separator>{'>'}</Separator>
                   {i === breadcrumbList.length - 1 ? (
                     <DeactiveLink>{breadcrumb.text}</DeactiveLink>
@@ -40,6 +40,6 @@ export function Breadcrumbs({ baseURI, breadcrumbList }: BreadcrumbsProps) {
       </StyledBreadcrumbs>
     </div>
   );
-}
+};
 
-export default Breadcrumbs;
+export { Breadcrumbs };

@@ -1,0 +1,30 @@
+.searchHitContainer {
+  margin: 0;
+  margin-bottom: 1rem;
+  max-width: 90rem;
+  box-sizing: border-box;
+}
+
+.searchHitsContainer {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.noHits {
+  display: flex;
+  justify-content: center;
+  font-size: 24px;
+}
+
+@media (max-width: 900px) {
+  .searchHitContainer {
+    display: flex;
+    width: 100%;
+  }
+
+  .searchHitsContainer {
+    margin: 1rem auto;
+    align-items: center;
+  }
+}

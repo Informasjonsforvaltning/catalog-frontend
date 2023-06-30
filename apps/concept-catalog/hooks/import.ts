@@ -2,7 +2,6 @@ import { readString } from 'react-papaparse';
 import type { ParseResult } from 'papaparse';
 
 import { Concept, Status } from '@catalog-frontend/types';
-import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { validOrganizationNumber } from '@catalog-frontend/utils';
 import { signIn } from 'next-auth/react';

@@ -1,6 +1,5 @@
 import {
   Breadcrumbs,
-  SearchHit,
   Pagination,
   Select,
   Spinner,
@@ -10,15 +9,17 @@ import {
   PageBanner,
   SearchField,
   Chips,
+  SearchHitContainer,
+  CustomError,
 } from '@catalog-frontend/ui';
 import {
   hasOrganizationReadPermission,
-  localization,
+  localization as loc,
   textToNumber,
   validOrganizationNumber,
 } from '@catalog-frontend/utils';
 import { useRouter } from 'next/router';
-import { Concept, Organization, QuerySort, SearchableField } from '@catalog-frontend/types';
+import { Organization, QuerySort, SearchableField } from '@catalog-frontend/types';
 import { useEffect, useState } from 'react';
 import { getFields, getSelectOptions, useSearchConcepts, SortOption } from '../../hooks/search';
 import styles from './search-page.module.css';
@@ -71,14 +72,14 @@ export const SearchPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
 
   const importConcepts = useImportConcepts(catalogId);
   const pageSubtitle = organization?.name ?? catalogId;
-  const fieldOptions = getSelectOptions(localization.search.fields);
-  const sortOptions = getSelectOptions(localization.search.sortOptions);
+  const fieldOptions = getSelectOptions(loc.search.fields);
+  const sortOptions = getSelectOptions(loc.search.sortOptions);
 
   const breadcrumbList = catalogId
     ? ([
         {
           href: `/${catalogId}`,
-          text: localization.catalogType.concept,
+          text: loc.catalogType.concept,
         },
       ] as BreadcrumbType[])
     : [];
@@ -121,6 +122,12 @@ export const SearchPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
     });
   };
 
+  const onSeeChangeRequests = () => {
+    if (validOrganizationNumber(catalogId)) {
+      router.push(`${catalogId}/change-requests`);
+    }
+  };
+
   useEffect(() => {
     refetch().catch((error) => console.error('refetch() failed: ', error));
   }, [searchTerm, currentPage, selectedFieldOption, selectedSortOption, searchState, refetch]);
@@ -132,32 +139,11 @@ export const SearchPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
         breadcrumbList={breadcrumbList}
       />
       <PageBanner
-        title={localization.catalogType.concept}
+        title={loc.catalogType.concept}
         subtitle={pageSubtitle}
       />
       <div className='container'>
         <div className={styles.pageContainer}>
-          <div className={styles.searchRowContainer}>
-            <SearchField
-              ariaLabel={localization.search.searchInAllFields}
-              placeholder={localization.search.searchInAllFields}
-              onSearchSubmit={onSearchSubmit}
-            />
-            <div className={styles.searchOptions}>
-              <Select
-                label={localization.search.searchField}
-                options={fieldOptions}
-                onChange={onFieldSelect}
-                value={selectedFieldOption}
-              />
-              <Select
-                label={localization.search.sort}
-                options={sortOptions}
-                onChange={onSortSelect}
-                value={selectedSortOption}
-              />
-            </div>
-          </div>
           <div className={styles.secondRowContainer}>
             <Chips size='small'>
               {searchState.filters.published?.map((filter, index) => (
@@ -165,18 +151,22 @@ export const SearchPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
                   key={index}
                   onClick={() => removeFilter(filter)}
                 >
-                  {filter === 'published'
-                    ? localization.publicationState.published
-                    : localization.publicationState.unpublished}
+                  {filter === 'published' ? loc.publicationState.published : loc.publicationState.unpublished}
                 </Chips.Removable>
               ))}
             </Chips>
             <div className={styles.buttonsContainer}>
               <Button
+                variant='outline'
+                onClick={onSeeChangeRequests}
+              >
+                {loc.seeChangeRequests}
+              </Button>
+              <Button
                 onClick={() => createConcept.mutate()}
                 icon={<PlusCircleIcon fontSize='1.5rem' />}
               >
-                {localization.button.createConcept}
+                {loc.button.createConcept}
               </Button>
               <UploadButton
                 variant='outline'
@@ -192,34 +182,45 @@ export const SearchPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
                 ]}
                 onUpload={onImportUpload}
               >
-                {localization.button.importConcept}
+                {loc.button.importConcept}
               </UploadButton>
             </div>
           </div>
+
+          <div className={styles.searchRowContainer}>
+            <SearchField
+              ariaLabel={loc.search.searchInAllFields}
+              placeholder={loc.search.searchInAllFields}
+              onSearchSubmit={onSearchSubmit}
+            />
+            <div className={styles.searchOptions}>
+              <Select
+                label={loc.search.searchField}
+                options={fieldOptions}
+                onChange={onFieldSelect}
+                value={selectedFieldOption}
+              />
+              <Select
+                label={loc.search.sort}
+                options={sortOptions}
+                onChange={onSortSelect}
+                value={selectedSortOption}
+              />
+            </div>
+          </div>
+
           <div>
             <div className={styles.gridContainer}>
               <SideFilter />
               {status === 'loading' ? (
                 <Spinner />
               ) : status === 'error' ? (
-                <div className={styles.error}>
-                  <span>{localization.somethingWentWrong}</span>
-                </div>
+                <CustomError />
               ) : (
-                <div className={styles.searchHitsContainer}>
-                  {data?.hits.length === 0 && <div className={styles.noHits}>{localization.search.noHits}</div>}
-                  {data?.hits.map((concept: Concept) => (
-                    <div
-                      className={styles.searchHitContainer}
-                      key={concept.id}
-                    >
-                      <SearchHit
-                        searchHit={concept}
-                        catalogId={catalogId}
-                      />
-                    </div>
-                  ))}
-                </div>
+                <SearchHitContainer
+                  data={data}
+                  catalogId={catalogId}
+                />
               )}
             </div>
 
