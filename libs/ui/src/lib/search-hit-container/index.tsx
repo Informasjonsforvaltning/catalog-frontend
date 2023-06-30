@@ -1,7 +1,7 @@
-import { SearchHit } from '@catalog-frontend/ui';
-import styles from './search-hit-container.module.css';
 import { Concept } from '@catalog-frontend/types';
+import { SearchHit } from '../search-hit';
 import { localization as loc } from '@catalog-frontend/utils';
+import styles from './search-hit-container.module.css';
 
 type Props = {
   data: any;

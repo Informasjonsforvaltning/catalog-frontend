@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import Link from '../link';
 
 import styles from './footer.module.css';
@@ -7,7 +7,7 @@ import TwitterIcon from './images/twitter.svg';
 import Illustration from './images/illustration.svg';
 import { localization } from '@catalog-frontend/utils';
 
-export const Footer: FC = () => (
+const Footer: FC = () => (
   <footer className={styles.footer}>
     <Illustration className={styles.illustration} />
     <div className={styles.content}>
@@ -38,4 +38,4 @@ export const Footer: FC = () => (
   </footer>
 );
 
-export default Footer;
+export { Footer };

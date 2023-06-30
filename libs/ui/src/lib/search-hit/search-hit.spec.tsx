@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import SearchHit from '.';
+import { SearchHit } from './';
 
 describe('SearchHit', () => {
   it('should render SearchHit successfully', () => {
@@ -28,6 +28,7 @@ describe('SearchHit', () => {
             id: 'John Doe',
           },
         }}
+        catalogId={''}
       />,
     );
     expect(baseElement).toBeTruthy();
