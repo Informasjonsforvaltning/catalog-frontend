@@ -49,7 +49,7 @@ export const SignOut = ({ FDK_REGISTRATION_BASE_URI }) => {
 export async function getServerSideProps() {
   return {
     props: {
-      FDK_REGISTRATION_BASE_URI: process.env.NEXT_PUBLIC_FDK_REGISTRATION_BASE_URI,
+      FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
     },
   };
 }

@@ -19,19 +19,17 @@ export interface ChipsProps extends React.HTMLAttributes<HTMLUListElement> {
   size?: ChipsSize;
 }
 
-export const Chips = forwardRef<HTMLUListElement, ChipsProps>(
-  ({ className, size = 'small', children, ...rest }, ref) => (
-    <ul
-      {...rest}
-      ref={ref}
-      className={cn(className, classes.chips, classes[size])}
-    >
-      {children}
-    </ul>
-  ),
-) as ChipsComponent;
+const Chips = forwardRef<HTMLUListElement, ChipsProps>(({ className, size = 'small', children, ...rest }, ref) => (
+  <ul
+    {...rest}
+    ref={ref}
+    className={cn(className, classes.chips, classes[size])}
+  >
+    {children}
+  </ul>
+)) as ChipsComponent;
 
 Chips.Toggle = ToggleChip;
 Chips.Removable = RemovableChip;
 
-export default Chips;
+export { Chips };

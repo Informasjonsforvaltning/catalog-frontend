@@ -10,12 +10,12 @@ import { Concept } from '@catalog-frontend/types';
 import Link from 'next/link';
 import { Tag } from '../tag';
 
-interface SearchHit {
+interface Props {
   catalogId: string;
   searchHit: Concept;
 }
 
-export function SearchHit({ catalogId, searchHit }: SearchHit) {
+const SearchHit = ({ catalogId, searchHit }: Props) => {
   const Title = () => {
     const title = translate(searchHit?.anbefaltTerm?.navn);
     return <span>{title ? title : localization.concept.noName}</span>;
@@ -72,6 +72,6 @@ export function SearchHit({ catalogId, searchHit }: SearchHit) {
       {searchHit?.definisjon && <p className={styles.description}>{translate(searchHit?.definisjon?.tekst)}</p>}
     </div>
   );
-}
+};
 
-export default SearchHit;
+export { SearchHit };

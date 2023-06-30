@@ -1,6 +1,6 @@
 import { localization } from '@catalog-frontend/utils';
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import Breadcrumbs, { BreadcrumbType } from '../breadcrumbs';
+import { Breadcrumbs, BreadcrumbType } from '../breadcrumbs';
 import { PageBanner } from '../page-banner';
 import { Heading } from '@digdir/design-system-react';
 import withRouter, { WithRouterProps } from 'next/dist/client/with-router';

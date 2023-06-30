@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import Chips from './index';
+import { Chips } from './';
 import React from 'react';
 
 describe('Chips', () => {

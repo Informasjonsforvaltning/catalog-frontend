@@ -23,7 +23,7 @@ export const Custom500 = () => {
   return (
     <>
       <Breadcrumbs
-        baseURI={process.env.NEXT_PUBLIC_FDK_REGISTRATION_BASE_URI}
+        baseURI={process.env.FDK_REGISTRATION_BASE_URI}
         breadcrumbList={breadcrumbList}
       />
       <PageBanner
