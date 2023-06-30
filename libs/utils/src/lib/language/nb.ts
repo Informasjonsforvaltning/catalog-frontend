@@ -25,6 +25,8 @@ export const nb = {
 
   nameAndConcept: 'Navn og begrep',
   save: 'Lagre',
+  seeChangeRequests: 'Se alle endringsforslag',
+  suggestionForNewConcept: 'Forslag til nytt begrep',
 
   auth: {
     login: 'Logg inn',

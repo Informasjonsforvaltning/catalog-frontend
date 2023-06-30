@@ -202,6 +202,16 @@ export interface SearchConceptResponse {
   page: ConceptHitPage;
 }
 
+export interface ChangeRequest {
+  id: string;
+  conceptId?: string;
+  catalogId: string;
+  anbefaltTerm?: string;
+  tillattTerm?: string;
+  frarådetTerm?: string;
+  definisjon?: string;
+}
+
 export type SearchableField = 'anbefaltTerm' | 'frarådetTerm' | 'tillattTerm' | 'definisjon' | 'merknad';
 
 export type Status = 'utkast' | 'godkjent' | 'høring' | 'publisert';

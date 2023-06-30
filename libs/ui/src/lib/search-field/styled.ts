@@ -2,7 +2,8 @@ import styled, { css } from 'styled-components';
 import { SearchFieldProps } from '.';
 
 const SearchField = styled.div<SearchFieldProps>`
-  min-width: 20rem;
+  min-width: 10rem;
+  max-width: 30rem;
   height: 3.6rem;
   background-color: #ffffff;
   display: flex;

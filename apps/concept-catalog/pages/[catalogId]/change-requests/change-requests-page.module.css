@@ -1,0 +1,31 @@
+.pageContainer {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.6rem 0;
+  overflow-wrap: break-word;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+}
+
+/* Should be deleted when overriding list variables is not needed anymore */
+.listWrapper {
+  margin-bottom: 5rem;
+}
+
+.listWrapper > ul > li {
+  padding: 1rem;
+}
+
+.listWrapper > ul > li:hover {
+  cursor: pointer;
+  background-color: #e6eff8;
+}
