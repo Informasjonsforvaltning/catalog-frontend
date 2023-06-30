@@ -1,5 +1,5 @@
 import { localization } from '@catalog-frontend/utils';
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
 import { Breadcrumbs, BreadcrumbType } from '../breadcrumbs';
 import { PageBanner } from '../page-banner';
 import { Heading } from '@digdir/design-system-react';
@@ -17,9 +17,9 @@ interface State {
 
 class ErrorBoundary extends Component<Props, State> {
   private FDK_REGISTRATION_BASE_URI: string | undefined;
-  constructor({ FDK_REGISTRATION_BASE_URI, ...props }: Props) {
+  constructor(props: Props) {
     super(props);
-    this.FDK_REGISTRATION_BASE_URI = FDK_REGISTRATION_BASE_URI;
+    this.FDK_REGISTRATION_BASE_URI = props.FDK_REGISTRATION_BASE_URI;
   }
 
   public state: State = {
