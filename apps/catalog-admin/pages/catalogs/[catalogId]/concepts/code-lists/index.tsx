@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './code-lists.module.css';
-import { Button, Accordion, TextField } from '@digdir/design-system-react';
+import { Accordion, TextField } from '@digdir/design-system-react';
 import { SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 import { useRouter } from 'next/router';
@@ -8,6 +8,7 @@ import { useCreateCodeList, useDeleteCodeList, useGetAllCodeLists } from '../../
 import { CodeList } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
 import { CodeListEditor } from 'apps/catalog-admin/components/code-list-editor';
+import { Button } from '@catalog-frontend/ui';
 
 export const CodeListsPage = () => {
   const router = useRouter();
@@ -73,8 +74,14 @@ export const CodeListsPage = () => {
                     <p className={styles.description}> {data.description} </p>
                   </Accordion.Header>
                   <Accordion.Content>
-                    <button onClick={(e) => handleDeleteCodeList(data.id, e)}>Slett</button>
-                    <CodeListEditor codeList={''} />
+                    <Button
+                      onClick={(e) => handleDeleteCodeList(data.id, e)}
+                      color='danger'
+                    >
+                      Slett kodeliste
+                    </Button>
+
+                    <CodeListEditor codeList={data} />
                   </Accordion.Content>
                 </Accordion.Item>
               </Accordion>

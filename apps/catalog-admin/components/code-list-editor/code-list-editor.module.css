@@ -252,3 +252,27 @@
     color: black;
   }
 }
+
+.header {
+  display: flex;
+  padding: 0px 7px 20px 37px;
+  border: solid 1px #d5d7d9;
+  border-bottom: 0px;
+  background-color: #e6eff8;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
+
+.codeListEditor {
+  padding-bottom: 20px;
+}
+
+.headerText {
+  padding-top: 20px;
+}
+
+.xmark {
+  display: flex;
+  padding-left: 200px;
+  padding-top: 7px;
+}
