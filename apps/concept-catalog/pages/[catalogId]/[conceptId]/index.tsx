@@ -22,6 +22,8 @@ import {
   getUsername,
   validOrganizationNumber,
   validUUID,
+  hasSystemAdminPermission,
+  hasOrganizationWritePermission,
 } from '@catalog-frontend/utils';
 import {
   getConcept,
@@ -50,6 +52,7 @@ export const ConceptPage = ({
   concept,
   revisions,
   replacedConcepts,
+  hasWritePermission,
   FDK_REGISTRATION_BASE_URI,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [language, setLanguage] = useState('nb');
@@ -288,15 +291,17 @@ export const ConceptPage = ({
               </div>
             )}
           </div>
-          <div className={classes.actionButtons}>
-            <Button onClick={handleEditConcept}>Rediger</Button>
-            <Button
-              color={'danger'}
-              onClick={handleDeleteConcept}
-            >
-              Slett
-            </Button>
-          </div>
+          {hasWritePermission && (
+            <div className={classes.actionButtons}>
+              <Button onClick={handleEditConcept}>Rediger</Button>
+              <Button
+                color={'danger'}
+                onClick={handleDeleteConcept}
+              >
+                Slett
+              </Button>
+            </div>
+          )}
         </div>
         <div className={cn(classes.twoColumnRow, classes.bottomSpace)}>
           <div>
@@ -524,7 +529,9 @@ export async function getServerSideProps({ req, res, params }) {
     };
   }
 
-  const hasReadPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
+  const hasReadPermission =
+    (token && hasOrganizationReadPermission(token.access_token, catalogId)) ||
+    hasSystemAdminPermission(token.access_token);
   if (!hasReadPermission) {
     return {
       redirect: {
@@ -552,6 +559,7 @@ export async function getServerSideProps({ req, res, params }) {
       : [];
   };
 
+  const hasWritePermission = token && hasOrganizationWritePermission(token.access_token, catalogId);
   const replacedConcepts = await getReplacedConcepts();
   const username: string = token && getUsername(token.id_token);
   const organization: Organization = await getOrganization(catalogId);
@@ -568,6 +576,7 @@ export async function getServerSideProps({ req, res, params }) {
       concept,
       revisions,
       replacedConcepts,
+      hasWritePermission,
       FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
     },
   };

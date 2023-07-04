@@ -14,6 +14,8 @@ import {
 } from '@catalog-frontend/ui';
 import {
   hasOrganizationReadPermission,
+  hasOrganizationWritePermission,
+  hasSystemAdminPermission,
   localization as loc,
   textToNumber,
   validOrganizationNumber,
@@ -33,7 +35,7 @@ import { useSearchDispatch, useSearchState } from '../../context/search';
 import { Session, getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 
-export const SearchPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
+export const SearchPage = ({ organization, hasWritePermission, FDK_REGISTRATION_BASE_URI }) => {
   const router = useRouter();
   const catalogId = `${router.query.catalogId}`;
   const createConcept = useCreateConcept(catalogId);
@@ -162,28 +164,32 @@ export const SearchPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
               >
                 {loc.seeChangeRequests}
               </Button>
-              <Button
-                onClick={() => createConcept.mutate()}
-                icon={<PlusCircleIcon fontSize='1.5rem' />}
-              >
-                {loc.button.createConcept}
-              </Button>
-              <UploadButton
-                variant='outline'
-                icon={<FileImportIcon fontSize='1.5rem' />}
-                allowedMimeTypes={[
-                  'text/csv',
-                  'text/x-csv',
-                  'text/plain',
-                  'application/csv',
-                  'application/x-csv',
-                  'application/vnd.ms-excel',
-                  'application/json',
-                ]}
-                onUpload={onImportUpload}
-              >
-                {loc.button.importConcept}
-              </UploadButton>
+              {hasWritePermission && (
+                <>
+                  <Button
+                    onClick={() => createConcept.mutate()}
+                    icon={<PlusCircleIcon fontSize='1.5rem' />}
+                  >
+                    {loc.button.createConcept}
+                  </Button>
+                  <UploadButton
+                    variant='outline'
+                    icon={<FileImportIcon fontSize='1.5rem' />}
+                    allowedMimeTypes={[
+                      'text/csv',
+                      'text/x-csv',
+                      'text/plain',
+                      'application/csv',
+                      'application/x-csv',
+                      'application/vnd.ms-excel',
+                      'application/json',
+                    ]}
+                    onUpload={onImportUpload}
+                  >
+                    {loc.button.importConcept}
+                  </UploadButton>
+                </>
+              )}
             </div>
           </div>
 
@@ -256,7 +262,9 @@ export async function getServerSideProps({ req, res, params }) {
     };
   }
 
-  const hasReadPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
+  const hasReadPermission =
+    (token && hasOrganizationReadPermission(token.access_token, catalogId)) ||
+    hasSystemAdminPermission(token.access_token);
   if (!hasReadPermission) {
     return {
       redirect: {
@@ -266,10 +274,12 @@ export async function getServerSideProps({ req, res, params }) {
     };
   }
 
+  const hasWritePermission = token && hasOrganizationWritePermission(token.access_token, catalogId);
   const organization: Organization = await getOrganization(catalogId);
   return {
     props: {
       organization,
+      hasWritePermission,
       FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
     },
   };

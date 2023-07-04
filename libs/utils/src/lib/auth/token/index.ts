@@ -47,7 +47,7 @@ export const hasOrganizationReadPermission = (token: string, orgNr: string): boo
 };
 
 export const hasOrganizationWritePermission = (token: string, orgNr: string): boolean =>
-  hasOrganizationRole(token, { orgNr, role: 'admin' });
+  hasOrganizationRole(token, { orgNr, role: 'admin' }) || hasOrganizationRole(token, { orgNr, role: 'write' });
 
 export const hasOrganizationAdminPermission = (token: string, orgNr: string) =>
   hasOrganizationRole(token, { orgNr, role: 'admin' });
