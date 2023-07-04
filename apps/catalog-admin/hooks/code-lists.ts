@@ -1,8 +1,10 @@
 import { CodeList } from '@catalog-frontend/types';
-import { validOrganizationNumber } from '@catalog-frontend/utils';
+import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { compare } from 'fast-json-patch';
 
 export const useGetAllCodeLists = ({ catalogId }) => {
+  console.log(1);
   return useQuery({
     queryKey: ['getAllCodeLists', catalogId],
 
@@ -38,6 +40,7 @@ export const useCreateCodeList = (catalogId: string) => {
         }),
         cache: 'no-store',
       });
+      console.log('create response', response);
       return response.json();
     },
 
@@ -48,42 +51,46 @@ export const useCreateCodeList = (catalogId: string) => {
   });
 };
 
-// export const useUpdateComment = ({ orgNumber, topicId }) => {
-//   const queryClient = useQueryClient();
+export const useUpdateCodeList = (catalogId: string) => {
+  const queryClient = useQueryClient();
 
-//   return useMutation({
-//     mutationFn: async ({ commentId, comment }: { commentId: string; comment: string }) => {
-//       if (!validOrganizationNumber(orgNumber)) {
-//         return Promise.reject('Invalid organization number');
-//       }
+  return useMutation(
+    async ({ oldCodeList, newCodeList }: { oldCodeList: CodeList; newCodeList: CodeList }) => {
+      const diff = compare(oldCodeList, newCodeList);
 
-//       if (!validUUID(topicId)) {
-//         return Promise.reject('Invalid topic id');
-//       }
+      if (!validOrganizationNumber(catalogId)) {
+        throw new Error('Invalid organization number');
+      }
 
-//       if (!validUUID(commentId)) {
-//         return Promise.reject('Invalid comment id');
-//       }
+      if (!validUUID(oldCodeList.id)) {
+        throw new Error('Invalid code list id');
+      }
 
-//       if (comment.length === 0) {
-//         return Promise.reject('Comment cannot be empty');
-//       }
+      if (diff) {
+        const response = await fetch(`/api/code-lists/${catalogId}/${oldCodeList.id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            diff,
+          }),
+          cache: 'no-store',
+        });
 
-//       const response = await fetch(`/api/comments/${orgNumber}/${topicId}/${commentId}`, {
-//         method: 'PUT',
-//         body: JSON.stringify({
-//           comment,
-//         }),
-//         cache: 'no-store',
-//       });
-//       return response.json();
-//     },
-//     onSuccess: () => {
-//       // Invalidate and refetch
-//       queryClient.invalidateQueries({ queryKey: ['getComments', orgNumber, topicId] });
-//     },
-//   });
-// };
+        if (!response.ok) {
+          throw new Error('Failed to update code list');
+        }
+
+        return response;
+      }
+    },
+    {
+      onSuccess: () => {
+        // Invalidate and refetch
+        console.log('Success!!');
+        queryClient.invalidateQueries(['getAllCodeLists', catalogId]);
+      },
+    },
+  );
+};
 
 export const useDeleteCodeList = (catalogId: string) => {
   const queryClient = useQueryClient();

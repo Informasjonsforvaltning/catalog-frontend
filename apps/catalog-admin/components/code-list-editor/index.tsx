@@ -3,10 +3,11 @@ import { NodeApi, NodeRendererProps, Tree, TreeApi } from 'react-arborist';
 import { TabsAddIcon, TabsRemoveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
 import styles from './code-list-editor.module.css';
-import { Button, Card, InfoCard, Select } from '@catalog-frontend/ui';
-import { SingleSelectOption, TextField } from '@digdir/design-system-react';
+import { Button, InfoCard, Select } from '@catalog-frontend/ui';
+import { TextField } from '@digdir/design-system-react';
 import { Code, CodeList } from '@catalog-frontend/types';
 import { getTranslateText } from '@catalog-frontend/utils';
+import { useAdminDispatch, useAdminState } from 'apps/catalog-admin/context/admin';
 
 type Data = {
   id: string;
@@ -25,10 +26,13 @@ export const CodeListEditor = ({ codeList }: Props) => {
   const [selectedCode, setSelectedCode] = useState<Code>({
     id: 0,
     name: { nb: '', nn: '', en: '' },
-    parentId: -1,
+    parentID: -1,
   });
   const [updatedCodeList, setUpdatedCodeList] = useState(codeList);
   const [isEditViewOpen, setIsEditViewOpen] = useState(false);
+  const adminDispatch = useAdminDispatch();
+  const adminContext = useAdminState();
+  const { updatedCodeLists } = adminContext;
 
   const findParent = (id: number, data: Data[]) => {
     const parent = data.find((item) => item.id === `${id}`);
@@ -56,7 +60,7 @@ export const CodeListEditor = ({ codeList }: Props) => {
   };
 
   const treeData = updatedCodeList.codes?.reduce((accumulator, currentValue) => {
-    const parent = findParent(currentValue.parentId, accumulator);
+    const parent = findParent(currentValue.parentID, accumulator);
     if (parent) {
       parent.children = [...(parent.children ?? []), { id: `${currentValue.id}`, name: currentValue.name.nb }];
     } else {
@@ -120,13 +124,13 @@ export const CodeListEditor = ({ codeList }: Props) => {
     setSelectedCode(updatedCodeList.codes?.find((code) => code.id === Number.parseInt(node.data.id)));
   };
 
-  const handleOnCreate = (parentId: string, parentNode: NodeApi<Data>, index, type) => {
+  const handleOnCreate = (parentID: string, parentNode: NodeApi<Data>, index, type) => {
     throw new Error('Function not implemented.');
   };
 
-  const handleOnMove = ({ dragIds, dragNodes, parentId, parentNode, index }) => {
+  const handleOnMove = ({ dragIds, dragNodes, parentID, parentNode, index }) => {
     console.log('move');
-    console.log(dragIds, dragNodes, parentId, parentNode, index);
+    console.log(dragIds, dragNodes, parentID, parentNode, index);
   };
 
   function codeExists(codes: Code[], codeToCheck: Code): boolean {
@@ -162,41 +166,91 @@ export const CodeListEditor = ({ codeList }: Props) => {
   const createNewCode = () => {
     const newCode = {
       id: getNextId(updatedCodeList.codes),
-      name: { nb: 'Test2', nn: '', en: '' },
-      parentId: -1,
+      name: { nb: '', nn: '', en: '' },
+      parentID: -1,
     };
 
     setSelectedCode(newCode);
 
-    setUpdatedCodeList((prevCodeList) => {
-      const newCodeList = [...prevCodeList.codes, newCode];
-      return { ...prevCodeList, codes: newCodeList };
-    });
+    // const updatedCodeListCopy = {
+    //   ...updatedCodeList,
+    //   codes: [...updatedCodeList.codes, newCode],
+    // };
+
+    // adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: [updatedCodeListCopy] } });
   };
 
   const removeFromCodeList = (codeId: number) => {
     setUpdatedCodeList((prevCodeList) => {
       const filteredCodes = prevCodeList.codes.filter((code) => code.id !== codeId);
-      return { ...prevCodeList, codes: filteredCodes };
+      const updatedCodeList = { ...prevCodeList, codes: filteredCodes };
+      adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: [updatedCodeList] } });
+      return updatedCodeList;
     });
   };
 
-  const handleUpdateCodeListCodes = (codes: Code[], updatedCode: Code) => {
-    const newCodes = codes.map((item) => {
-      if (item.id === updatedCode.id) {
-        return updatedCode;
-      }
-      return item;
-    });
+  const updateListOfCodes = (codes: Code[], codeId: number) => {
+    const codeIndex = codes.findIndex((code) => code.id === codeId);
+    const updatedCodes = [...codes];
 
-    const newCodeList: CodeList = {
-      name: updatedCodeList.name,
-      description: updatedCodeList.description,
-      codes: newCodes,
-    };
+    if (codeIndex !== -1) {
+      const codeToBeUpdated = codes[codeIndex];
+      const updatedCode = {
+        ...codeToBeUpdated,
+        name: selectedCode.name ?? codeToBeUpdated.name,
+        parentID: selectedCode.parentID ?? codeToBeUpdated.parentID,
+      };
 
-    setUpdatedCodeList(newCodeList);
+      updatedCodes[codeIndex] = updatedCode;
+
+      return updatedCodes;
+    }
+    return [...updatedCodes, selectedCode]; // Add the selected code if it does not already exist
   };
+
+  const handleCodeUpdate = (codeList: CodeList, codeId: number) => {
+    const codeListToUpdateIndex = updatedCodeLists.findIndex((item) => item.id === codeList.id);
+
+    if (codeListToUpdateIndex !== -1) {
+      // Finnes i context fra før
+      const codeListToUpdate = updatedCodeLists[codeListToUpdateIndex];
+      const updatedListOfCodes = updateListOfCodes(codeListToUpdate.codes, codeId);
+      const updatedCodeList = {
+        ...codeListToUpdate,
+        codes: selectedCode !== undefined ? updatedListOfCodes : codeListToUpdate.codes,
+      };
+
+      const updatedCodeListsCopy = [...updatedCodeLists];
+      updatedCodeListsCopy[codeListToUpdateIndex] = updatedCodeList;
+
+      adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
+    } else {
+      const updatedCodeList: CodeList = {
+        ...codeList,
+        codes: selectedCode !== undefined ? updateListOfCodes(codeList.codes, codeId) : codeList.codes,
+      };
+
+      const updatedCodeListsCopy = [...updatedCodeLists, updatedCodeList];
+      adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
+    }
+  };
+
+  // const handleUpdateCodeListCodes = (codes: Code[], updatedCode: Code) => {
+  //   const newCodes = codes.map((item) => {
+  //     if (item.id === updatedCode.id) {
+  //       return updatedCode;
+  //     }
+  //     return item;
+  //   });
+
+  //   const newCodeList: CodeList = {
+  //     name: updatedCodeList.name,
+  //     description: updatedCodeList.description,
+  //     codes: newCodes,
+  //   };
+
+  //   setUpdatedCodeList(newCodeList);
+  // };
 
   const updateCodeName = (field: 'nb' | 'nn' | 'en', value: string) => {
     setSelectedCode((prevSelectedCode) => ({
@@ -208,10 +262,23 @@ export const CodeListEditor = ({ codeList }: Props) => {
     }));
   };
 
+  // const updateCodeName = (field: 'nb' | 'nn' | 'en', value: string) => {
+  //   setSelectedCode((prevSelectedCode) => {
+  //     const updatedCode = {
+  //       ...prevSelectedCode,
+  //       name: {
+  //         ...prevSelectedCode.name,
+  //         [field]: value,
+  //       },
+  //     };
+  //     return updatedCode;
+  //   });
+  // };
+
   const updateCodeParent = (value: number) => {
     setSelectedCode((prevSelectedCode) => ({
       ...prevSelectedCode,
-      parentId: value,
+      parentID: value,
     }));
   };
 
@@ -229,7 +296,7 @@ export const CodeListEditor = ({ codeList }: Props) => {
               height={treeData.length * 85}
               onActivate={handleOnClick}
               onClick={() => setIsEditViewOpen(true)}
-              onMove={handleOnMove}
+              //onMove={handleOnMove}
               //onCreate={handleOnCreate}
               disableEdit
             >
@@ -290,7 +357,7 @@ export const CodeListEditor = ({ codeList }: Props) => {
                 <Select
                   label='Overordnet kode'
                   options={possibleParentCodes(updatedCodeList.codes, selectedCode)}
-                  value={selectedCode?.parentId}
+                  value={selectedCode?.parentID}
                   onChange={updateCodeParent}
                 />
               </div>
@@ -298,7 +365,7 @@ export const CodeListEditor = ({ codeList }: Props) => {
               <div className={styles.buttonRow}>
                 <Button
                   onClick={() => {
-                    handleUpdateCodeListCodes(updatedCodeList.codes, selectedCode);
+                    handleCodeUpdate(updatedCodeList, selectedCode.id);
                     setIsEditViewOpen(false);
                   }}
                 >

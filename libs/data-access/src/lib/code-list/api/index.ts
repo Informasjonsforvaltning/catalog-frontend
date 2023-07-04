@@ -1,4 +1,6 @@
 import { CodeList, Concept, SearchConceptQuery } from '@catalog-frontend/types';
+import _ from 'lodash';
+import { Operation } from 'fast-json-patch';
 
 export const codeListCatalogApiCall = async (
   method: 'GET' | 'POST' | 'DELETE' | 'PATCH',
@@ -53,6 +55,12 @@ export const createCodeList = (codeList: Partial<CodeList>, accessToken: string,
 //       return Promise.reject(err);
 //     });
 
+// export const importConcepts = async (concepts: Omit<Concept, 'id'>[], accessToken: string) =>
+//   await conceptCatalogApiCall('POST', `/begreper/import`, concepts, accessToken).catch((err) => {
+//     console.error('importConcepts failed with: ', err);
+//     return Promise.reject(err);
+//   });
+
 // export const patchCodeList = async (codeListId: string, accessToken: string, value: String) =>
 //   await codeListCatalogApiCall('PATCH', `/concepts/code-lists/${codeListId}`, value, accessToken)
 //     .then((res) => (res.status === 200 ? res.json() : []))
@@ -61,11 +69,24 @@ export const createCodeList = (codeList: Partial<CodeList>, accessToken: string,
 //       return Promise.reject(err);
 //     });
 
-// export const importConcepts = async (concepts: Omit<Concept, 'id'>[], accessToken: string) =>
-//   await conceptCatalogApiCall('POST', `/begreper/import`, concepts, accessToken).catch((err) => {
-//     console.error('importConcepts failed with: ', err);
-//     return Promise.reject(err);
-//   });
+export const patchCodeList = async (
+  catalogId: string,
+  codeListId: string,
+  accessToken: string,
+  //oldCodeList: CodeList,
+  //newCodeList: CodeList,
+  diff: Operation[],
+) => {
+  //const diff = compare(oldCodeList, newCodeList);
+  if (diff.length > 0) {
+    try {
+      await codeListCatalogApiCall('PATCH', `/concepts/code-lists/${codeListId}`, diff, accessToken, catalogId);
+    } catch (err) {
+      console.error('patchCodeList failed with: ', err);
+      return Promise.reject(err);
+    }
+  }
+};
 
 export const deleteCodeList = async (catalogId: string, codeListId: string, accessToken: string) =>
   await codeListCatalogApiCall('DELETE', `/concepts/code-lists/${codeListId}`, null, accessToken, catalogId).catch(

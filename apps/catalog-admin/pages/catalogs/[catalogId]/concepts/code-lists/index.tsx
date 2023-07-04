@@ -4,18 +4,25 @@ import { Accordion, TextField } from '@digdir/design-system-react';
 import { SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 import { useRouter } from 'next/router';
-import { useCreateCodeList, useDeleteCodeList, useGetAllCodeLists } from '../../../../../hooks/code-lists';
+import {
+  useCreateCodeList,
+  useDeleteCodeList,
+  useGetAllCodeLists,
+  useUpdateCodeList,
+} from '../../../../../hooks/code-lists';
 import { CodeList } from '@catalog-frontend/types';
-import { localization } from '@catalog-frontend/utils';
+import { localization, getTranslateText } from '@catalog-frontend/utils';
 import { CodeListEditor } from 'apps/catalog-admin/components/code-list-editor';
 import { Button } from '@catalog-frontend/ui';
 import { useAdminDispatch, useAdminState } from 'apps/catalog-admin/context/admin';
+import { compare } from 'fast-json-patch';
 
 export const CodeListsPage = () => {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
   const createCodeList = useCreateCodeList(catalogId);
   const deleteCodeList = useDeleteCodeList(catalogId);
+  const updateCodeList = useUpdateCodeList(catalogId);
   const [newCodeList, setNewCodeList] = useState(null);
   const adminDispatch = useAdminDispatch();
   const adminContext = useAdminState();
@@ -27,6 +34,18 @@ export const CodeListsPage = () => {
         setNewCodeList('');
       },
     });
+  };
+
+  const handleUpdateDbCodeList = (codeListId: string) => {
+    const updatedCodeList: CodeList = updatedCodeLists.find((codeList) => codeList.id === codeListId);
+    const dbCodeList: CodeList = getAllCodeLists.codeLists.find((codeList: CodeList) => codeList.id === codeListId);
+    const diff = compare(dbCodeList, updatedCodeList);
+
+    console.log('diff', diff);
+
+    if (diff) {
+      updateCodeList.mutate({ oldCodeList: dbCodeList, newCodeList: updatedCodeList });
+    }
   };
 
   const handleCodeListUpdate = (codeListId: string, newName?: string, newDescription?: string) => {
@@ -73,6 +92,11 @@ export const CodeListsPage = () => {
     catalogId: catalogId,
   });
 
+  console.log(
+    'DB kodelister',
+    getAllCodeLists?.codeLists.find((codeList: CodeList) => codeList.id === 'fc4d43e1-ea1e-430b-9116-762cffad69aa'),
+  );
+
   return (
     <div className={styles.center}>
       <div className={styles.page}>
@@ -113,7 +137,15 @@ export const CodeListsPage = () => {
                     <h1 className={styles.label}>{data.name}</h1>
                     <p className={styles.description}> {data.description} </p>
                   </Accordion.Header>
-                  <Accordion.Content>ID: {data.id}</Accordion.Content>
+                  <Accordion.Content>
+                    <div>ID: {data.id}</div>
+                    <div>
+                      {data.codes.map((code) => (
+                        <div>{getTranslateText(code.name)}</div>
+                      ))}
+                    </div>
+                  </Accordion.Content>
+
                   <Accordion.Content>
                     <div className={styles.codeListInfo}>
                       <TextField
@@ -132,7 +164,7 @@ export const CodeListsPage = () => {
 
                     <CodeListEditor codeList={data} />
                     <div className={styles.buttons}>
-                      <Button>Lagre endringer</Button>
+                      <Button onClick={() => handleUpdateDbCodeList(data.id)}>Lagre endringer</Button>
                       <Button
                         onClick={(e) => handleDeleteCodeList(data.id, e)}
                         color='danger'
