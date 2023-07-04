@@ -18,6 +18,10 @@ export const reducer = produce((state: AdminState, action: ACTION): AdminState =
     case 'SET_LOGO': {
       return { ...state, logo: action.payload.logo };
     }
+    case 'SET_CODE_LISTS': {
+      return { ...state, updatedCodeLists: action.payload.updatedCodeLists };
+    }
+
     default:
       throw new Error(`Unknown action type ${action.type}`);
   }

@@ -216,95 +216,108 @@ export const CodeListEditor = ({ codeList }: Props) => {
   };
 
   return (
-    <div className={styles.editorContainer}>
-      <Button
-        onClick={() => {
-          createNewCode();
-          setIsEditViewOpen(true);
-        }}
-      >
-        Opprett ny kode
-      </Button>
-      <InfoCard className={styles.codeTree}>
-        <InfoCard.Item>
-          <Tree<Data>
-            data={treeData}
-            ref={(t) => setTree(t)}
-            selectionFollowsFocus={false}
-            padding={15}
-            rowHeight={30}
-            height={treeData.length * 85}
-            onActivate={handleOnClick}
-            onClick={() => setIsEditViewOpen(true)}
-            onMove={handleOnMove}
-            //onCreate={handleOnCreate}
-            disableEdit
-          >
-            {Node}
-          </Tree>
-        </InfoCard.Item>
-      </InfoCard>
-      {isEditViewOpen && (
-        <InfoCard>
-          <div className={styles.header}>
-            <p className={styles.headerText}>Code Edit</p>
-            <XMarkIcon
-              fontSize='1.5rem'
-              className={styles.xmark}
-              title='close edit view'
-              onClick={() => setIsEditViewOpen(false)}
-            />
-          </div>
-          <InfoCard.Item className={styles.codeListEditor}>
-            <div className={styles.codeListEditor}>
-              <TextField
-                label='Navn (norsk bokmål)'
-                value={selectedCode?.name?.nb}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  updateCodeName('nb', event.target.value);
-                }}
-              />
-            </div>
-            <div className={styles.codeListEditor}>
-              <TextField
-                label='Navn (nynorsk)'
-                value={selectedCode?.name?.nn}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  updateCodeName('nn', event.target.value);
-                }}
-              />
-            </div>
-            <div className={styles.codeListEditor}>
-              <TextField
-                label='Navn (engelsk)'
-                value={selectedCode?.name?.en}
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                  updateCodeName('en', event.target.value);
-                }}
-              />
-            </div>
-            <div className={styles.codeListEditor}>
-              <Select
-                label='Overordnet kode'
-                options={possibleParentCodes(updatedCodeList.codes, selectedCode)}
-                value={selectedCode?.parentId}
-                onChange={updateCodeParent}
-              />
-            </div>
-
-            <div className={styles.buttonRow}>
-              <Button onClick={() => handleUpdateCodeListCodes(updatedCodeList.codes, selectedCode)}>Ok</Button>
-              <Button
-                color='danger'
-                onClick={() => removeFromCodeList(selectedCode.id)}
-              >
-                Fjern fra kodeliste
-              </Button>
-            </div>
+    <>
+      <div className={styles.editorContainer}>
+        <InfoCard className={styles.codeTree}>
+          <InfoCard.Item>
+            <Tree<Data>
+              data={treeData}
+              ref={(t) => setTree(t)}
+              selectionFollowsFocus={false}
+              padding={15}
+              rowHeight={30}
+              height={treeData.length * 85}
+              onActivate={handleOnClick}
+              onClick={() => setIsEditViewOpen(true)}
+              onMove={handleOnMove}
+              //onCreate={handleOnCreate}
+              disableEdit
+            >
+              {Node}
+            </Tree>
+          </InfoCard.Item>
+          <InfoCard.Item>
+            <Button
+              onClick={() => {
+                createNewCode();
+                setIsEditViewOpen(true);
+              }}
+            >
+              Opprett ny kode
+            </Button>
           </InfoCard.Item>
         </InfoCard>
-      )}
-    </div>
+        {isEditViewOpen && (
+          <InfoCard>
+            <div className={styles.header}>
+              <p className={styles.headerText}>Code Edit</p>
+              <XMarkIcon
+                fontSize='1.5rem'
+                className={styles.xmark}
+                title='close edit view'
+                onClick={() => setIsEditViewOpen(false)}
+              />
+            </div>
+            <InfoCard.Item className={styles.codeListEditor}>
+              <div className={styles.codeListEditor}>
+                <TextField
+                  label='Navn (norsk bokmål)'
+                  value={selectedCode?.name?.nb}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    updateCodeName('nb', event.target.value);
+                  }}
+                />
+              </div>
+              <div className={styles.codeListEditor}>
+                <TextField
+                  label='Navn (nynorsk)'
+                  value={selectedCode?.name?.nn}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    updateCodeName('nn', event.target.value);
+                  }}
+                />
+              </div>
+              <div className={styles.codeListEditor}>
+                <TextField
+                  label='Navn (engelsk)'
+                  value={selectedCode?.name?.en}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    updateCodeName('en', event.target.value);
+                  }}
+                />
+              </div>
+              <div className={styles.codeListEditor}>
+                <Select
+                  label='Overordnet kode'
+                  options={possibleParentCodes(updatedCodeList.codes, selectedCode)}
+                  value={selectedCode?.parentId}
+                  onChange={updateCodeParent}
+                />
+              </div>
+
+              <div className={styles.buttonRow}>
+                <Button
+                  onClick={() => {
+                    handleUpdateCodeListCodes(updatedCodeList.codes, selectedCode);
+                    setIsEditViewOpen(false);
+                  }}
+                >
+                  Ok
+                </Button>
+                <Button
+                  color='danger'
+                  onClick={() => {
+                    removeFromCodeList(selectedCode.id), setIsEditViewOpen(false);
+                  }}
+                >
+                  Fjern fra kodeliste
+                </Button>
+              </div>
+            </InfoCard.Item>
+          </InfoCard>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -9,6 +9,7 @@ import { CodeList } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
 import { CodeListEditor } from 'apps/catalog-admin/components/code-list-editor';
 import { Button } from '@catalog-frontend/ui';
+import { useAdminDispatch, useAdminState } from 'apps/catalog-admin/context/admin';
 
 export const CodeListsPage = () => {
   const router = useRouter();
@@ -16,6 +17,9 @@ export const CodeListsPage = () => {
   const createCodeList = useCreateCodeList(catalogId);
   const deleteCodeList = useDeleteCodeList(catalogId);
   const [newCodeList, setNewCodeList] = useState(null);
+  const adminDispatch = useAdminDispatch();
+  const adminContext = useAdminState();
+  const { updatedCodeLists } = adminContext;
 
   const handleCreateCodeList = () => {
     createCodeList.mutate(newCodeList, {
@@ -25,14 +29,50 @@ export const CodeListsPage = () => {
     });
   };
 
+  const handleCodeListUpdate = (codeListId: string, newName?: string, newDescription?: string) => {
+    const indexInUpdatedCodeLists = updatedCodeLists.findIndex((code) => code.id === codeListId);
+
+    if (indexInUpdatedCodeLists !== -1) {
+      const codeListToUpdate = updatedCodeLists[indexInUpdatedCodeLists];
+
+      if (codeListToUpdate) {
+        const updatedCodeList = {
+          ...codeListToUpdate,
+          name: newName !== undefined ? newName : codeListToUpdate.name,
+          description: newDescription !== undefined ? newDescription : codeListToUpdate.description,
+        };
+
+        const updatedCodeListsCopy = [...updatedCodeLists];
+        updatedCodeListsCopy[indexInUpdatedCodeLists] = updatedCodeList;
+
+        adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
+      }
+    } else {
+      const codeListToUpdate = getAllCodeLists.codeLists.find((codeList: CodeList) => codeList.id === codeListId);
+
+      if (codeListToUpdate) {
+        const updatedCodeList = {
+          ...codeListToUpdate,
+          name: newName !== undefined ? newName : codeListToUpdate.name,
+          description: newDescription !== undefined ? newDescription : codeListToUpdate.description,
+        };
+
+        const updatedCodeListsCopy = [...updatedCodeLists, updatedCodeList];
+        adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
+      }
+    }
+  };
+
   const handleDeleteCodeList = (codeListId: string, event) => {
     if (window.confirm(localization.codeList.confirmDelete)) {
       deleteCodeList.mutate(codeListId);
     }
   };
+
   const { data: getAllCodeLists } = useGetAllCodeLists({
     catalogId: catalogId,
   });
+
   return (
     <div className={styles.center}>
       <div className={styles.page}>
@@ -73,15 +113,33 @@ export const CodeListsPage = () => {
                     <h1 className={styles.label}>{data.name}</h1>
                     <p className={styles.description}> {data.description} </p>
                   </Accordion.Header>
+                  <Accordion.Content>ID: {data.id}</Accordion.Content>
                   <Accordion.Content>
-                    <Button
-                      onClick={(e) => handleDeleteCodeList(data.id, e)}
-                      color='danger'
-                    >
-                      Slett kodeliste
-                    </Button>
+                    <div className={styles.codeListInfo}>
+                      <TextField
+                        label='Navn'
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                          handleCodeListUpdate(data.id, event.target.value, undefined);
+                        }}
+                      />
+                      <TextField
+                        label='Beskrivelse'
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                          handleCodeListUpdate(data.id, undefined, event.target.value);
+                        }}
+                      />
+                    </div>
 
                     <CodeListEditor codeList={data} />
+                    <div className={styles.buttons}>
+                      <Button>Lagre endringer</Button>
+                      <Button
+                        onClick={(e) => handleDeleteCodeList(data.id, e)}
+                        color='danger'
+                      >
+                        Slett kodeliste
+                      </Button>
+                    </div>
                   </Accordion.Content>
                 </Accordion.Item>
               </Accordion>
