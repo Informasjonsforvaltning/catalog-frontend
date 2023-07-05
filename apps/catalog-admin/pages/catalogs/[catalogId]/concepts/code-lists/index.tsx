@@ -42,14 +42,12 @@ const CodeListsPage = () => {
     const dbCodeList = getAllCodeLists.codeLists.find((codeList) => codeList.id === codeListId);
     const diff = compare(dbCodeList, updatedCodeList);
 
-    console.log('diff', diff);
-
     if (diff) {
       updateCodeList.mutate({ oldCodeList: dbCodeList, newCodeList: updatedCodeList });
     }
   };
 
-  const handleCodeListUpdate = (codeListId, newName, newDescription) => {
+  const handleCodeListUpdate = (codeListId: string, newName?: string, newDescription?: string) => {
     const indexInUpdatedCodeLists = updatedCodeLists.findIndex((code) => code.id === codeListId);
 
     if (indexInUpdatedCodeLists !== -1) {
@@ -93,11 +91,6 @@ const CodeListsPage = () => {
     catalogId: catalogId,
   });
 
-  console.log(
-    'DB kodelister',
-    getAllCodeLists?.codeLists.find((codeList) => codeList.id === 'fc4d43e1-ea1e-430b-9116-762cffad69aa'),
-  );
-
   return (
     <div className={styles.center}>
       <div className={styles.page}>
@@ -132,14 +125,7 @@ const CodeListsPage = () => {
                 key={index}
                 border={true}
                 className={styles.accordion}
-                onClick={() => {
-                  if (name === '') {
-                    setName(data.name);
-                  }
-                  if (description === '') {
-                    setDescription(data.description);
-                  }
-                }}
+                onClick={() => handleCodeListUpdate(data.id)} // adds codelist to context
               >
                 <Accordion.Item>
                   <Accordion.Header>
@@ -158,7 +144,7 @@ const CodeListsPage = () => {
                           handleCodeListUpdate(data.id, event.target.value, undefined);
                           setName(event.target.value);
                         }}
-                        value={name}
+                        value={updatedCodeLists.find((c) => c.id === data.id)?.name}
                       />
                       <TextField
                         label='Beskrivelse'
@@ -166,7 +152,7 @@ const CodeListsPage = () => {
                           handleCodeListUpdate(data.id, undefined, event.target.value);
                           setDescription(event.target.value);
                         }}
-                        value={description}
+                        value={updatedCodeLists.find((c) => c.id === data.id)?.description}
                       />
                     </div>
 
