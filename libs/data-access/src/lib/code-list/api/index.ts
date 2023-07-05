@@ -39,45 +39,7 @@ export const createCodeList = (codeList: Partial<CodeList>, accessToken: string,
     return Promise.reject(err);
   });
 
-// export const searchCodelistsForCatalog = async (catalogId: string, query: SearchConceptQuery, accessToken: string) =>
-//   await conceptCatalogApiCall('POST', `/begreper/search?orgNummer=${catalogId}`, query, accessToken)
-//     .then((res) => (res.status === 200 ? res.json() : null))
-//     .catch((err) => {
-//       console.error('searchConceptsForCatalog failed with: ', err);
-//       return Promise.reject(err);
-//     });
-
-// export const getCodeListById = async (codeListId: string, accessToken: string, catalogId: number) =>
-//   await codeListCatalogApiCall('GET', `/concepts/code-lists/${codeListId}`, null, accessToken, catalogId)
-//     .then((res) => (res.status === 200 ? res.json() : null))
-//     .catch((err) => {
-//       console.error('getCodeListById failed with: ', err);
-//       return Promise.reject(err);
-//     });
-
-// export const importConcepts = async (concepts: Omit<Concept, 'id'>[], accessToken: string) =>
-//   await conceptCatalogApiCall('POST', `/begreper/import`, concepts, accessToken).catch((err) => {
-//     console.error('importConcepts failed with: ', err);
-//     return Promise.reject(err);
-//   });
-
-// export const patchCodeList = async (codeListId: string, accessToken: string, value: String) =>
-//   await codeListCatalogApiCall('PATCH', `/concepts/code-lists/${codeListId}`, value, accessToken)
-//     .then((res) => (res.status === 200 ? res.json() : []))
-//     .catch((err) => {
-//       console.error('getConceptRevisions failed with: ', err);
-//       return Promise.reject(err);
-//     });
-
-export const patchCodeList = async (
-  catalogId: string,
-  codeListId: string,
-  accessToken: string,
-  //oldCodeList: CodeList,
-  //newCodeList: CodeList,
-  diff: Operation[],
-) => {
-  //const diff = compare(oldCodeList, newCodeList);
+export const patchCodeList = async (catalogId: string, codeListId: string, accessToken: string, diff: Operation[]) => {
   if (diff.length > 0) {
     try {
       await codeListCatalogApiCall('PATCH', `/concepts/code-lists/${codeListId}`, diff, accessToken, catalogId);
