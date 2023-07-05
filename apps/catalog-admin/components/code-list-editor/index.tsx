@@ -148,10 +148,10 @@ export const CodeListEditor = ({ codeList }: Props) => {
     return combinedCodes;
   };
 
-  const possibleParentCodes = (codes: Code[], parentCode: Code) => {
+  const possibleParentCodes = (codes: Code[], currentCode: Code) => {
     return (
       codes
-        ?.filter((code: Code) => code !== parentCode)
+        ?.filter((code: Code) => code.id !== currentCode.id && code.parentID !== currentCode.id)
         .map((code) => ({
           label: getTranslateText(code.name),
           value: code.id,
