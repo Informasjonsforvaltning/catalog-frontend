@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './code-lists.module.css';
-import { Accordion, TextField } from '@digdir/design-system-react';
+import { Accordion, TextField, Button } from '@digdir/design-system-react';
 import { SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 import { useRouter } from 'next/router';
@@ -13,11 +13,10 @@ import {
 import { CodeList } from '@catalog-frontend/types';
 import { localization, getTranslateText } from '@catalog-frontend/utils';
 import { CodeListEditor } from 'apps/catalog-admin/components/code-list-editor';
-import { Button } from '@catalog-frontend/ui';
 import { useAdminDispatch, useAdminState } from 'apps/catalog-admin/context/admin';
 import { compare } from 'fast-json-patch';
 
-export const CodeListsPage = () => {
+const CodeListsPage = () => {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
   const createCodeList = useCreateCodeList(catalogId);
@@ -27,6 +26,8 @@ export const CodeListsPage = () => {
   const adminDispatch = useAdminDispatch();
   const adminContext = useAdminState();
   const { updatedCodeLists } = adminContext;
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
 
   const handleCreateCodeList = () => {
     createCodeList.mutate(newCodeList, {
@@ -37,8 +38,8 @@ export const CodeListsPage = () => {
   };
 
   const handleUpdateDbCodeList = (codeListId: string) => {
-    const updatedCodeList: CodeList = updatedCodeLists.find((codeList) => codeList.id === codeListId);
-    const dbCodeList: CodeList = getAllCodeLists.codeLists.find((codeList: CodeList) => codeList.id === codeListId);
+    const updatedCodeList = updatedCodeLists.find((codeList) => codeList.id === codeListId);
+    const dbCodeList = getAllCodeLists.codeLists.find((codeList) => codeList.id === codeListId);
     const diff = compare(dbCodeList, updatedCodeList);
 
     console.log('diff', diff);
@@ -48,7 +49,7 @@ export const CodeListsPage = () => {
     }
   };
 
-  const handleCodeListUpdate = (codeListId: string, newName?: string, newDescription?: string) => {
+  const handleCodeListUpdate = (codeListId, newName, newDescription) => {
     const indexInUpdatedCodeLists = updatedCodeLists.findIndex((code) => code.id === codeListId);
 
     if (indexInUpdatedCodeLists !== -1) {
@@ -67,7 +68,7 @@ export const CodeListsPage = () => {
         adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
       }
     } else {
-      const codeListToUpdate = getAllCodeLists.codeLists.find((codeList: CodeList) => codeList.id === codeListId);
+      const codeListToUpdate = getAllCodeLists.codeLists.find((codeList) => codeList.id === codeListId);
 
       if (codeListToUpdate) {
         const updatedCodeList = {
@@ -82,7 +83,7 @@ export const CodeListsPage = () => {
     }
   };
 
-  const handleDeleteCodeList = (codeListId: string, event) => {
+  const handleDeleteCodeList = (codeListId, event) => {
     if (window.confirm(localization.codeList.confirmDelete)) {
       deleteCodeList.mutate(codeListId);
     }
@@ -94,7 +95,7 @@ export const CodeListsPage = () => {
 
   console.log(
     'DB kodelister',
-    getAllCodeLists?.codeLists.find((codeList: CodeList) => codeList.id === 'fc4d43e1-ea1e-430b-9116-762cffad69aa'),
+    getAllCodeLists?.codeLists.find((codeList) => codeList.id === 'fc4d43e1-ea1e-430b-9116-762cffad69aa'),
   );
 
   return (
@@ -110,7 +111,7 @@ export const CodeListsPage = () => {
               <Button
                 className={styles.createButton}
                 icon={<PlusCircleIcon />}
-                onClick={() => handleCreateCodeList()}
+                onClick={handleCreateCodeList}
               >
                 Opprett ny kodeliste
               </Button>
@@ -131,6 +132,14 @@ export const CodeListsPage = () => {
                 key={index}
                 border={true}
                 className={styles.accordion}
+                onClick={() => {
+                  if (name === '') {
+                    setName(data.name);
+                  }
+                  if (description === '') {
+                    setDescription(data.description);
+                  }
+                }}
               >
                 <Accordion.Item>
                   <Accordion.Header>
@@ -139,11 +148,6 @@ export const CodeListsPage = () => {
                   </Accordion.Header>
                   <Accordion.Content>
                     <div>ID: {data.id}</div>
-                    <div>
-                      {data.codes.map((code) => (
-                        <div>{getTranslateText(code.name)}</div>
-                      ))}
-                    </div>
                   </Accordion.Content>
 
                   <Accordion.Content>
@@ -152,13 +156,17 @@ export const CodeListsPage = () => {
                         label='Navn'
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                           handleCodeListUpdate(data.id, event.target.value, undefined);
+                          setName(event.target.value);
                         }}
+                        value={name}
                       />
                       <TextField
                         label='Beskrivelse'
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                           handleCodeListUpdate(data.id, undefined, event.target.value);
+                          setDescription(event.target.value);
                         }}
+                        value={description}
                       />
                     </div>
 
@@ -188,23 +196,5 @@ export const CodeListsPage = () => {
     </div>
   );
 };
-
-// export async function getServerSideProps({ req, params }) {
-//   const token = await getToken({ req });
-//   const { catalogId } = params;
-//   const hasPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
-//   if (!hasPermission) {
-//     return {
-//       notFound: true,
-//     };
-//   }
-
-//   const organization: Organization = await getOrganization(catalogId);
-//   return {
-//     props: {
-//       organization,
-//     },
-//   };
-// }
 
 export default CodeListsPage;
