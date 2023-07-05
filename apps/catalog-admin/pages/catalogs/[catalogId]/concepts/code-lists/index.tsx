@@ -12,8 +12,8 @@ import {
 } from '../../../../../hooks/code-lists';
 import { CodeList } from '@catalog-frontend/types';
 import { localization, getTranslateText } from '@catalog-frontend/utils';
-import { CodeListEditor } from 'apps/catalog-admin/components/code-list-editor';
-import { useAdminDispatch, useAdminState } from 'apps/catalog-admin/context/admin';
+import { CodeListEditor } from '../../../../../components/code-list-editor';
+import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
 import { compare } from 'fast-json-patch';
 
 const CodeListsPage = () => {

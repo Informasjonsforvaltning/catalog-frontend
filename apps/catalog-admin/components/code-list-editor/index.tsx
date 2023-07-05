@@ -7,7 +7,7 @@ import { Button, InfoCard, Select } from '@catalog-frontend/ui';
 import { TextField } from '@digdir/design-system-react';
 import { Code, CodeList } from '@catalog-frontend/types';
 import { getTranslateText } from '@catalog-frontend/utils';
-import { useAdminDispatch, useAdminState } from 'apps/catalog-admin/context/admin';
+import { useAdminDispatch, useAdminState } from '../../context/admin';
 
 const INDENT_STEP = 15;
 
@@ -343,7 +343,8 @@ export const CodeListEditor = ({ codeList }: Props) => {
                 <Button
                   color='danger'
                   onClick={() => {
-                    removeFromCodeList(selectedCode.id), setIsEditViewOpen(false);
+                    removeFromCodeList(selectedCode.id);
+                    setIsEditViewOpen(false);
                   }}
                 >
                   Fjern fra kodeliste
