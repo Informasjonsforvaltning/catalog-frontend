@@ -30,7 +30,7 @@ spec:
                 secretKeyRef:
                   name: sso-client-credentials
                   key: CATALOG_ADMIN_FRONTEND
-            - name: NEXT_PUBLIC_CATALOG_ADMIN_BASE_URI
+            - name: CATALOG_ADMIN_BASE_URI
               valueFrom:
                 secretKeyRef:
                   name: commonurl-demo
