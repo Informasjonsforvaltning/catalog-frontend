@@ -10,7 +10,7 @@ export const codeListCatalogApiCall = async (
   catalogId: string,
 ) =>
   await fetch(
-    `${process.env.CATALOG_ADMIN_BASE_URI}/${catalogId}${path}`,
+    `${process.env.CATALOG_ADMIN_SERVICE_BASE_URI}/${catalogId}${path}`,
 
     Object.assign(
       {
