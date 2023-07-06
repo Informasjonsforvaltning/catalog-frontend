@@ -39,7 +39,6 @@ export const useCreateCodeList = (catalogId: string) => {
         }),
         cache: 'no-store',
       });
-      console.log('create response', response);
       return response.json();
     },
 
