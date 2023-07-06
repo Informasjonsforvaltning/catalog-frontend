@@ -4,7 +4,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { compare } from 'fast-json-patch';
 
 export const useGetAllCodeLists = ({ catalogId }) => {
-  console.log(1);
   return useQuery({
     queryKey: ['getAllCodeLists', catalogId],
 
@@ -85,7 +84,6 @@ export const useUpdateCodeList = (catalogId: string) => {
     {
       onSuccess: () => {
         // Invalidate and refetch
-        console.log('Success!!');
         queryClient.invalidateQueries(['getAllCodeLists', catalogId]);
       },
     },

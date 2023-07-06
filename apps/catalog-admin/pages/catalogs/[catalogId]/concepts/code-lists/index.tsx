@@ -26,8 +26,6 @@ const CodeListsPage = () => {
   const adminDispatch = useAdminDispatch();
   const adminContext = useAdminState();
   const { updatedCodeLists } = adminContext;
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
 
   const handleCreateCodeList = () => {
     createCodeList.mutate(newCodeList, {
@@ -125,7 +123,6 @@ const CodeListsPage = () => {
                 key={index}
                 border={true}
                 className={styles.accordion}
-                onClick={() => handleCodeListUpdate(data.id)} // adds codelist to context
               >
                 <Accordion.Item>
                   <Accordion.Header>
@@ -142,21 +139,19 @@ const CodeListsPage = () => {
                         label='Navn'
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                           handleCodeListUpdate(data.id, event.target.value, undefined);
-                          setName(event.target.value);
                         }}
-                        value={updatedCodeLists.find((c) => c.id === data.id)?.name}
+                        value={(updatedCodeLists.find((c) => c.id === data.id) || data)?.name}
                       />
                       <TextField
                         label='Beskrivelse'
                         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                           handleCodeListUpdate(data.id, undefined, event.target.value);
-                          setDescription(event.target.value);
                         }}
-                        value={updatedCodeLists.find((c) => c.id === data.id)?.description}
+                        value={(updatedCodeLists.find((c) => c.id === data.id) || data)?.description}
                       />
                     </div>
 
-                    <CodeListEditor codeList={data} />
+                    <CodeListEditor dbCodeList={data} />
                     <div className={styles.buttons}>
                       <Button onClick={() => handleUpdateDbCodeList(data.id)}>Lagre endringer</Button>
                       <Button

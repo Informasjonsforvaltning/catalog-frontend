@@ -9,7 +9,7 @@ export interface CodeList {
 export interface Code {
   id: number;
   name: MultiLanguageText;
-  parentID?: number;
+  parentID: number | null;
 }
 
 //TODO: move to more generic place
