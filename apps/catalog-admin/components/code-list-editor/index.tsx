@@ -32,6 +32,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
   const [isEditViewOpen, setIsEditViewOpen] = useState(false);
 
   const combinedListOfCodes = (): Code[] => {
+    // To show codes from both db and context
     const codesInContext: Code[] = codeListInContext?.codes || [];
     const codesInDb: Code[] = dbCodeList.codes || [];
 
@@ -101,11 +102,8 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
       };
 
       updatedCodes[codeIndex] = updatedCode;
-      console.log('updateListOfCodes', updatedCodes);
       return updatedCodes;
     }
-
-    console.log('updateListOfCodes2', [...updatedCodes, selectedCode]);
     return [...updatedCodes, selectedCode]; // Add the selected code if it does not already exist
   };
 
@@ -123,15 +121,10 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
         codes: selectedCode !== undefined ? updatedListOfCodes : codeListToUpdateInContext.codes,
       };
 
-      console.log('Updated CodeList: ', updatedCodeList);
-
       const updatedCodeListsCopy: CodeList[] = [...updatedCodeLists];
       updatedCodeListsCopy[codeListToUpdateIndex] = updatedCodeList;
 
-      console.log('updatedCodeListsCopy', updatedCodeListsCopy);
-
       adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
-      console.log('codelist in context', codeListInContext);
     } else {
       // Does not exist in context
       const updatedCodeList: CodeList = {
@@ -240,7 +233,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
   }
 
   const possibleParentCodes = (codes: Code[], currentCode: Code) => {
-    // Not itself, not child, undefined to remove parent
+    // Not itself, not child, -1 to remove parent
     return (
       codes
         ?.filter((code: Code) => code.id !== currentCode.id && code.parentID !== currentCode.id)
@@ -354,7 +347,6 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
                   onClick={() => {
                     handleCodeListUpdate(dbCodeList, selectedCode.id);
                     setIsEditViewOpen(false);
-                    console.log('Selected code', selectedCode);
                   }}
                 >
                   Ok
