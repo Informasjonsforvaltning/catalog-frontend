@@ -103,3 +103,11 @@
   padding-left: 200px;
   padding-top: 7px;
 }
+
+.codeId {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 7px;
+  border-left: solid 1px #d5d7d9;
+  border-right: solid 1px #d5d7d9;
+}

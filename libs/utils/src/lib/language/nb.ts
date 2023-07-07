@@ -22,6 +22,9 @@ export const nb = {
   subjectArea: 'Fagområde',
   conceptStatus: 'Begrepsstatus',
   assigned: 'Tildelt',
+  ok: 'Ok',
+  description: 'Beskrivelse',
+  name: 'Navn',
 
   nameAndConcept: 'Navn og begrep',
   save: 'Lagre',
@@ -120,6 +123,15 @@ export const nb = {
     userList: 'Brukerliste',
     design: 'Design',
     addUser: 'Legg til ny bruker',
+    parentCode: 'Overordnet kode',
+    noParentCode: 'Ingen overordnet kode',
+    editCode: 'Rediger kode',
+    createCode: 'Opprett kode',
+    deleteCodeList: 'Slett kodeliste',
+    importCodeList: 'Importer kodeliste',
+    createCodeList: 'Opprett kodeliste',
+    searchForCodeList: 'Søk etter kodeliste...',
+    searchFieldCodeList: 'Søkefelt kodeliste',
     description: {
       general:
         'Oversikt over beskrivelser av datasett, begrep, apier og informasjonmodeller. Innholdet blir levert av ulike virksomheter, offentlige og private.',
@@ -143,7 +155,13 @@ export const nb = {
         logoDescription: 'Hjelpetekst for beskrivelse av logo',
         backgroundColor: 'Hjelpetekst for bakgrunnsfarge',
         fontColor: 'Hjelpetekst for skriftfarge',
+        closeEdit: 'Lukk redigeringsvindu',
       },
+    },
+    codeName: {
+      en: 'Navn (engelsk)',
+      nn: 'Navn (nynorsk)',
+      nb: 'Navn (bokmål)',
     },
   },
 
