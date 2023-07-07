@@ -4,42 +4,62 @@ import { getToken } from 'next-auth/jwt';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const token = await getToken({ req });
+
+  if (!token || (token?.expires_at && token?.expires_at < Date.now() / 1000)) {
+    return res.status(401).send({ error: 'Unauthorized' });
+  }
+
+  res.status(200);
+
   const { slug } = req.query;
   const [catalogId, codeListId] = slug;
 
   if (req.method == 'GET') {
-    getAllCodeLists(catalogId as string, `${token?.access_token}`)
-      .then((response) => {
-        return res.status(200).send(response);
-      })
-      .catch(() => {
-        return res.status(500).send('');
-      });
-  } else if (req.method == 'POST') {
-    const { codeList } = JSON.parse(req.body);
+    try {
+      const response = await getAllCodeLists(catalogId, `${token?.access_token}`);
+      if (response.status !== 200) {
+        return res.status(response.status).send({ error: 'Failed to get code lists' });
+      }
 
-    createCodeList(codeList, `${token?.access_token}`, catalogId as string)
-      .then((response) => {
-        return res.status(200).send(response);
-      })
-      .catch(() => {
-        return res.status(500).send('');
-      });
+      res.send(await response.json());
+    } catch (error) {
+      res.status(500).send({ error: 'Failed to get code lists' });
+    }
+  } else if (req.method == 'POST') {
+    try {
+      const { codeList } = JSON.parse(req.body);
+      const response = await createCodeList(codeList, `${token?.access_token}`, catalogId as string);
+      if (response.status !== 200) {
+        return res.status(response.status).send({ error: 'Failed to create code list' });
+      }
+
+      res.send(await response.json());
+    } catch (error) {
+      res.status(500).send({ error: 'Failed to create code list' });
+    }
   } else if (req.method == 'PATCH') {
-    const { diff } = JSON.parse(req.body);
-    patchCodeList(catalogId as string, codeListId as string, `${token?.access_token}`, diff)
-      .then((response) => {
-        return res.status(200).send(response);
-      })
-      .catch(() => {
-        return res.status(500).send('');
-      });
+    try {
+      const { diff } = JSON.parse(req.body);
+      const response = await patchCodeList(catalogId as string, codeListId as string, `${token?.access_token}`, diff);
+      if (response.status !== 200) {
+        return res.status(response.status).send({ error: 'Failed to update code list' });
+      }
+
+      res.send(await response.json());
+    } catch (error) {
+      res.status(500).send({ error: 'Failed to update code list' });
+    }
   } else if (req.method == 'DELETE') {
-    deleteCodeList(catalogId as string, codeListId as string, `${token?.access_token}`)
-      .then(() => {
-        return res.status(200).send('');
-      })
-      .catch((e) => res.status(500).send(''));
+    try {
+      const response = await deleteCodeList(catalogId as string, codeListId as string, `${token?.access_token}`);
+      if (response.status !== 200) {
+        return res.status(response.status).send({ error: 'Failed to delete code list' });
+      }
+
+      res.send(await response.json());
+    } catch (error) {
+      res.status(500).send({ error: 'Failed to delete code list' });
+    }
   } else {
     return res.status(400).send('');
   }
