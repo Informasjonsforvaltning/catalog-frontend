@@ -29,8 +29,8 @@ export const useCreateCodeList = (catalogId: string) => {
         return Promise.reject('Invalid organization number');
       }
 
-      if (codeList.name.length === 0 || codeList.description.length === 0) {
-        return Promise.reject('Code list must have name and description');
+      if (codeList.name.length === 0) {
+        return Promise.reject('Code list must have a name');
       }
       const response = await fetch(`/api/code-lists/${catalogId}`, {
         method: 'POST',

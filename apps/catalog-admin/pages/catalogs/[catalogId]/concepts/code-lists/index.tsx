@@ -22,15 +22,25 @@ const CodeListsPage = () => {
   const createCodeList = useCreateCodeList(catalogId);
   const deleteCodeList = useDeleteCodeList(catalogId);
   const updateCodeList = useUpdateCodeList(catalogId);
-  const [newCodeList, setNewCodeList] = useState(null);
+  const [accordionIsOpen, setAccordionIsOpen] = useState(false);
   const adminDispatch = useAdminDispatch();
   const adminContext = useAdminState();
   const { updatedCodeLists } = adminContext;
 
+  const { data: getAllCodeLists } = useGetAllCodeLists({
+    catalogId: catalogId,
+  });
+
+  const newCodeList = {
+    name: 'Ny kodeliste ' + getNextNewCodeListNumber(getAllCodeLists?.codeLists),
+    description: '',
+    codes: [],
+  };
+
   const handleCreateCodeList = () => {
     createCodeList.mutate(newCodeList, {
       onSuccess: () => {
-        setNewCodeList('');
+        setAccordionIsOpen(true);
       },
     });
   };
@@ -85,9 +95,10 @@ const CodeListsPage = () => {
     }
   };
 
-  const { data: getAllCodeLists } = useGetAllCodeLists({
-    catalogId: catalogId,
-  });
+  function getNextNewCodeListNumber(codeLists: CodeList[]): number {
+    const lenght = codeLists ? codeLists?.length : 0;
+    return lenght + 1;
+  }
 
   return (
     <div className={styles.center}>
@@ -124,8 +135,8 @@ const CodeListsPage = () => {
                 border={true}
                 className={styles.accordion}
               >
-                <Accordion.Item>
-                  <Accordion.Header>
+                <Accordion.Item open={data.name.includes('Ny kodeliste') ? accordionIsOpen : undefined}>
+                  <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
                     <h1 className={styles.label}>{data.name}</h1>
                     <p className={styles.description}> {data.description} </p>
                   </Accordion.Header>
@@ -165,13 +176,6 @@ const CodeListsPage = () => {
                 </Accordion.Item>
               </Accordion>
             ))}
-          <TextField
-            className={styles.textField}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              setNewCodeList({ name: event.target.value, description: event.target.value, codes: [] });
-            }}
-          />
-          {newCodeList && <p>{newCodeList.name}</p>}
         </div>
       </div>
     </div>
