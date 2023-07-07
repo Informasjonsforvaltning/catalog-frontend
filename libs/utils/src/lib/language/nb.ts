@@ -170,6 +170,10 @@ export const nb = {
     saveComment: 'Lagre kommentar',
   },
 
+  codeList: {
+    confirmDelete: 'Er du sikker på at du ønsker å slette kodelisten?',
+  },
+
   history: {
     noChanges: 'Ingen endringer er gjort',
   },

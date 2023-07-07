@@ -1,11 +1,94 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './code-lists.module.css';
-import { Button, Accordion, Label, Ingress } from '@digdir/design-system-react';
+import { Accordion, TextField, Button } from '@digdir/design-system-react';
 import { SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
-import data from './mock-data.json';
+import { useRouter } from 'next/router';
+import {
+  useCreateCodeList,
+  useDeleteCodeList,
+  useGetAllCodeLists,
+  useUpdateCodeList,
+} from '../../../../../hooks/code-lists';
+import { CodeList } from '@catalog-frontend/types';
+import { localization, getTranslateText } from '@catalog-frontend/utils';
+import { CodeListEditor } from '../../../../../components/code-list-editor';
+import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
+import { compare } from 'fast-json-patch';
 
-export const CodeListsPage = () => {
+const CodeListsPage = () => {
+  const router = useRouter();
+  const catalogId: string = `${router.query.catalogId}` ?? '';
+  const createCodeList = useCreateCodeList(catalogId);
+  const deleteCodeList = useDeleteCodeList(catalogId);
+  const updateCodeList = useUpdateCodeList(catalogId);
+  const [newCodeList, setNewCodeList] = useState(null);
+  const adminDispatch = useAdminDispatch();
+  const adminContext = useAdminState();
+  const { updatedCodeLists } = adminContext;
+
+  const handleCreateCodeList = () => {
+    createCodeList.mutate(newCodeList, {
+      onSuccess: () => {
+        setNewCodeList('');
+      },
+    });
+  };
+
+  const handleUpdateDbCodeList = (codeListId: string) => {
+    const updatedCodeList = updatedCodeLists.find((codeList) => codeList.id === codeListId);
+    const dbCodeList = getAllCodeLists.codeLists.find((codeList) => codeList.id === codeListId);
+    const diff = compare(dbCodeList, updatedCodeList);
+
+    if (diff) {
+      updateCodeList.mutate({ oldCodeList: dbCodeList, newCodeList: updatedCodeList });
+    }
+  };
+
+  const handleCodeListUpdate = (codeListId: string, newName?: string, newDescription?: string) => {
+    const indexInUpdatedCodeLists = updatedCodeLists.findIndex((code) => code.id === codeListId);
+
+    if (indexInUpdatedCodeLists !== -1) {
+      const codeListToUpdate = updatedCodeLists[indexInUpdatedCodeLists];
+
+      if (codeListToUpdate) {
+        const updatedCodeList = {
+          ...codeListToUpdate,
+          name: newName !== undefined ? newName : codeListToUpdate.name,
+          description: newDescription !== undefined ? newDescription : codeListToUpdate.description,
+        };
+
+        const updatedCodeListsCopy = [...updatedCodeLists];
+        updatedCodeListsCopy[indexInUpdatedCodeLists] = updatedCodeList;
+
+        adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
+      }
+    } else {
+      const codeListToUpdate = getAllCodeLists.codeLists.find((codeList) => codeList.id === codeListId);
+
+      if (codeListToUpdate) {
+        const updatedCodeList = {
+          ...codeListToUpdate,
+          name: newName !== undefined ? newName : codeListToUpdate.name,
+          description: newDescription !== undefined ? newDescription : codeListToUpdate.description,
+        };
+
+        const updatedCodeListsCopy = [...updatedCodeLists, updatedCodeList];
+        adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
+      }
+    }
+  };
+
+  const handleDeleteCodeList = (codeListId, event) => {
+    if (window.confirm(localization.codeList.confirmDelete)) {
+      deleteCodeList.mutate(codeListId);
+    }
+  };
+
+  const { data: getAllCodeLists } = useGetAllCodeLists({
+    catalogId: catalogId,
+  });
+
   return (
     <div className={styles.center}>
       <div className={styles.page}>
@@ -19,6 +102,7 @@ export const CodeListsPage = () => {
               <Button
                 className={styles.createButton}
                 icon={<PlusCircleIcon />}
+                onClick={handleCreateCodeList}
               >
                 Opprett ny kodeliste
               </Button>
@@ -33,21 +117,61 @@ export const CodeListsPage = () => {
           </div>
         </div>
         <div className={styles.content}>
-          {data.map((data, index) => (
-            <Accordion
-              key={index}
-              border={true}
-              className={styles.accordion}
-            >
-              <Accordion.Item>
-                <Accordion.Header>
-                  <h1 className={styles.label}>{data.name}</h1>
-                  <p className={styles.description}> Description </p>
-                </Accordion.Header>
-                <Accordion.Content>Accordion content</Accordion.Content>
-              </Accordion.Item>
-            </Accordion>
-          ))}
+          {getAllCodeLists &&
+            getAllCodeLists.codeLists?.map((data: CodeList, index: number) => (
+              <Accordion
+                key={index}
+                border={true}
+                className={styles.accordion}
+              >
+                <Accordion.Item>
+                  <Accordion.Header>
+                    <h1 className={styles.label}>{data.name}</h1>
+                    <p className={styles.description}> {data.description} </p>
+                  </Accordion.Header>
+                  <Accordion.Content>
+                    <div>ID: {data.id}</div>
+                  </Accordion.Content>
+
+                  <Accordion.Content>
+                    <div className={styles.codeListInfo}>
+                      <TextField
+                        label='Navn'
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                          handleCodeListUpdate(data.id, event.target.value, undefined);
+                        }}
+                        value={(updatedCodeLists.find((c) => c.id === data.id) || data)?.name}
+                      />
+                      <TextField
+                        label='Beskrivelse'
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                          handleCodeListUpdate(data.id, undefined, event.target.value);
+                        }}
+                        value={(updatedCodeLists.find((c) => c.id === data.id) || data)?.description}
+                      />
+                    </div>
+
+                    <CodeListEditor dbCodeList={data} />
+                    <div className={styles.buttons}>
+                      <Button onClick={() => handleUpdateDbCodeList(data.id)}>Lagre endringer</Button>
+                      <Button
+                        onClick={(e) => handleDeleteCodeList(data.id, e)}
+                        color='danger'
+                      >
+                        Slett kodeliste
+                      </Button>
+                    </div>
+                  </Accordion.Content>
+                </Accordion.Item>
+              </Accordion>
+            ))}
+          <TextField
+            className={styles.textField}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setNewCodeList({ name: event.target.value, description: event.target.value, codes: [] });
+            }}
+          />
+          {newCodeList && <p>{newCodeList.name}</p>}
         </div>
       </div>
     </div>
