@@ -225,9 +225,9 @@ export const SearchPage = ({ organization, hasWritePermission, FDK_REGISTRATION_
           <div>
             <div className={styles.gridContainer}>
               <SideFilter />
-              {status === 'loading' ? (
+              {status === 'loading' || createConcept.status === 'loading' || importConcepts.status === 'loading' ? (
                 <Spinner />
-              ) : status === 'error' ? (
+              ) : status === 'error' || createConcept.status === 'error' || importConcepts.status === 'error' ? (
                 <CustomError />
               ) : (
                 <SearchHitContainer

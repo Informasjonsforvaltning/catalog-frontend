@@ -34,6 +34,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
       const response = await createConcept(drafConcept, token.access_token);
+      if (response.status !== 201) {
+        return res.status(response.status).send({ error: 'Failed to create concept' });
+      }
       const conceptId = response?.headers?.get('location').split('/').pop();
       res.status(200).send({ conceptId });
     } catch (err) {

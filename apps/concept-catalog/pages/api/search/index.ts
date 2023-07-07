@@ -9,15 +9,20 @@ export default async function handler(
 ) {
   const token = await getToken({ req });
   if (!token || (token?.expires_at && token?.expires_at < Date.now() / 1000)) {
-    res.status(401).send({ error: 'Unauthorized' });
-    return;
+    return res.status(401).send({ error: 'Unauthorized' });
   }
 
-  const { catalogId, query } = JSON.parse(req.body);
+  res.status(200);
 
-  searchConceptsForCatalog(catalogId, query, `${token?.access_token}`).then(async (response) => {
-    if (response?.hits) {
-      return res.status(200).send(response);
-    } else res.status(404).send({ error: 'Not found' });
-  });
+  try {
+    const { catalogId, query: searchQuery } = JSON.parse(req.body);
+    const response = await searchConceptsForCatalog(catalogId, searchQuery, `${token.access_token}`);
+    if (response.status !== 200) {
+      return res.status(response.status).send({ error: 'Failed to search concepts' });
+    }
+
+    res.send(await response.json());
+  } catch (error) {
+    res.status(500).send({ error: 'Failed to search concepts' });
+  }
 }

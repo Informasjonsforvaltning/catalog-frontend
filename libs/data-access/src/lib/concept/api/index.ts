@@ -21,44 +21,20 @@ export const conceptCatalogApiCall = async (
     ),
   );
 
-export const searchConceptsForCatalog = async (catalogId: string, query: SearchConceptQuery, accessToken: string) =>
-  await conceptCatalogApiCall('POST', `/begreper/search?orgNummer=${catalogId}`, query, accessToken)
-    .then((res) => (res.status === 200 ? res.json() : null))
-    .catch((err) => {
-      console.error('searchConceptsForCatalog failed with: ', err);
-      return Promise.reject(err);
-    });
+export const searchConceptsForCatalog = (catalogId: string, query: SearchConceptQuery, accessToken: string) =>
+  conceptCatalogApiCall('POST', `/begreper/search?orgNummer=${catalogId}`, query, accessToken);
 
-export const getConcept = async (conceptId: string, accessToken: string) =>
-  await conceptCatalogApiCall('GET', `/begreper/${conceptId}`, null, accessToken)
-    .then((res) => (res.status === 200 ? res.json() : null))
-    .catch((err) => {
-      console.error('getConcept failed with: ', err);
-      return Promise.reject(err);
-    });
+export const getConcept = (conceptId: string, accessToken: string) =>
+  conceptCatalogApiCall('GET', `/begreper/${conceptId}`, null, accessToken);
 
-export const getConceptRevisions = async (conceptId: string, accessToken: string) =>
-  await conceptCatalogApiCall('GET', `/begreper/${conceptId}/revisions`, null, accessToken)
-    .then((res) => (res.status === 200 ? res.json() : []))
-    .catch((err) => {
-      console.error('getConceptRevisions failed with: ', err);
-      return Promise.reject(err);
-    });
+export const getConceptRevisions = (conceptId: string, accessToken: string) =>
+  conceptCatalogApiCall('GET', `/begreper/${conceptId}/revisions`, null, accessToken);
 
 export const createConcept = (concept: Partial<Concept>, accessToken: string) =>
-  conceptCatalogApiCall('POST', `/begreper`, concept, accessToken).catch((err) => {
-    console.error('createConcept failed with: ', err);
-    return Promise.reject(err);
-  });
+  conceptCatalogApiCall('POST', `/begreper`, concept, accessToken);
 
-export const importConcepts = async (concepts: Omit<Concept, 'id'>[], accessToken: string) =>
-  await conceptCatalogApiCall('POST', `/begreper/import`, concepts, accessToken).catch((err) => {
-    console.error('importConcepts failed with: ', err);
-    return Promise.reject(err);
-  });
+export const importConcepts = (concepts: Omit<Concept, 'id'>[], accessToken: string) =>
+  conceptCatalogApiCall('POST', `/begreper/import`, concepts, accessToken);
 
-export const deleteConcept = async (conceptId: string, accessToken: string) =>
-  await conceptCatalogApiCall('DELETE', `/begreper/${conceptId}`, null, accessToken).catch((err) => {
-    console.error('deleteConcept failed with: ', err);
-    return Promise.reject(err);
-  });
+export const deleteConcept = (conceptId: string, accessToken: string) =>
+  conceptCatalogApiCall('DELETE', `/begreper/${conceptId}`, null, accessToken);

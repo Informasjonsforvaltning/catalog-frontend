@@ -26,23 +26,20 @@ const paramsToSearchBody = ({ q, ...params }: any) => {
   return body;
 };
 
-const searchFullTextApi = async ({ path, method, body }: Props) =>
-  await fetch(
-    `${process.env.FULLTEXT_SEARCH_BASE_URI}${path}`,
-    Object.assign(
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        method,
-        body,
+const searchFullTextApi = ({ path, method, body }: Props) =>
+  fetch(`${process.env.FULLTEXT_SEARCH_BASE_URI}${path}`, {
+    ...{
+      headers: {
+        'Content-Type': 'application/json',
       },
-      body && { body: JSON.stringify(body) },
-    ),
-  ).catch((err) => console.log('Error fetching from fulltext search api', err));
+      method,
+      body,
+    },
+    ...(body && { body: JSON.stringify(body) }),
+  });
 
-export const searchConceptsByIdentifiers = async (identifiers: string[]) =>
-  await searchFullTextApi({
+export const searchConceptsByIdentifiers = (identifiers: string[]) =>
+  searchFullTextApi({
     path: '/concepts',
     method: 'POST',
     body: paramsToSearchBody({ identifier: identifiers }),

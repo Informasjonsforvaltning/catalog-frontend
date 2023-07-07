@@ -14,13 +14,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method == 'GET' && slug?.length == 2) {
     const [catalogId, resourceId] = slug;
 
-    getHistory(catalogId, resourceId, `${token?.access_token}`)
-      .then((response) => {
-        return res.status(200).send(response);
-      })
-      .catch(() => {
-        return res.status(500).send({ error: 'Failed to get history' });
-      });
+    try {
+      const response = await getHistory(catalogId, resourceId, `${token?.access_token}`);
+      if (response.status !== 200) {
+        return res.status(response.status).send({ error: 'Failed to create concept' });
+      }
+      return res.status(200).send(response.json());
+    } catch (error) {
+      return res.status(500).send({ error: 'Failed to get history' });
+    }
   } else {
     return res.status(400).send({ error: 'Invalid request' });
   }
