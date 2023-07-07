@@ -8,13 +8,7 @@ export const getComments = async (orgNumber: string, topicId: string, accessToke
     method: 'GET',
   };
 
-  const response = await fetch(resource, options)
-    .then((res) => {
-      return res.json() 
-    })
-    .catch((err) => console.error('getComments failed with: ', err));
-
-  return response;
+  return await fetch(resource, options);
 };
 
 export const createComment = async (orgNumber: string, topicId: string, comment: string, accessToken: string) => {
@@ -28,13 +22,10 @@ export const createComment = async (orgNumber: string, topicId: string, comment:
       comment,
     }),
     method: 'POST',
-    cache: 'no-cache' as RequestCache
+    cache: 'no-cache' as RequestCache,
   };
-  const response = await fetch(resource, options)
-    .then((res) => res.json())
-    .catch((err) => console.error('createComment failed with: ', err));
 
-  return response;
+  return await fetch(resource, options);
 };
 
 export const updateComment = async (
@@ -54,13 +45,10 @@ export const updateComment = async (
       comment,
     }),
     method: 'PUT',
-    cache: 'no-cache' as RequestCache 
+    cache: 'no-cache' as RequestCache,
   };
-  const response = await fetch(resource, options)
-    .then((res) => res.json())
-    .catch((err) => console.error('updateComment failed with: ', err));
 
-  return response;
+  return await fetch(resource, options);
 };
 
 export const deleteComment = async (orgNumber: string, topicId: string, commentId: string, accessToken: string) => {
@@ -71,11 +59,7 @@ export const deleteComment = async (orgNumber: string, topicId: string, commentI
       'Content-Type': 'application/json',
     },
     method: 'DELETE',
-    cache: 'no-cache' as RequestCache
+    cache: 'no-cache' as RequestCache,
   };
-  const response = await fetch(resource, options)
-    .then((res) => res)
-    .catch((err) => console.error('deleteComment failed with: ', err));
-
-  return response;
+  return await fetch(resource, options);
 };
