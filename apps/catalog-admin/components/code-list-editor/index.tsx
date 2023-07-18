@@ -88,33 +88,32 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
   };
 
   const updateListOfCodes = (codeId: number): Code[] => {
-    const codes: Code[] = codeListInContext?.codes || [];
+    const codes: Code[] = codeListInContext?.codes || dbCodeList.codes || [];
     const updatedCodes: Code[] = [...codes];
-    const codeIndex: number = codes.findIndex((code: Code) => code.id === codeId);
+    const codeContextIndex: number = codes.findIndex((code: Code) => code.id === codeId);
 
-    if (codeIndex !== -1) {
+    if (codeContextIndex !== -1) {
       // Code exists
-      const codeToBeUpdated: Code = codes[codeIndex];
+      const codeToBeUpdated: Code = codes[codeContextIndex];
       const updatedCode: Code = {
         ...codeToBeUpdated,
         name: selectedCode.name ?? codeToBeUpdated.name,
         parentID: selectedCode.parentID ?? codeToBeUpdated.parentID,
       };
 
-      updatedCodes[codeIndex] = updatedCode;
+      updatedCodes[codeContextIndex] = updatedCode;
       return updatedCodes;
     }
     return [...updatedCodes, selectedCode]; // Add the selected code if it does not already exist
   };
 
-  const handleCodeListUpdate = (codeListToUpdate: CodeList, codeId: number) => {
-    const codeListToUpdateIndex: number = updatedCodeLists.findIndex(
-      (item: CodeList) => item.id === codeListToUpdate.id,
-    );
+  const handleCodeUpdate = (codeId: number) => {
+    const contextCodeListIndex: number = updatedCodeLists.findIndex((item: CodeList) => item.id === dbCodeList.id);
 
-    if (codeListToUpdateIndex !== -1) {
-      // Already exists in context
-      const codeListToUpdateInContext: CodeList = updatedCodeLists[codeListToUpdateIndex];
+    if (contextCodeListIndex !== -1) {
+      // Code list already exists in context
+
+      const codeListToUpdateInContext: CodeList = updatedCodeLists[contextCodeListIndex];
       const updatedListOfCodes: Code[] = updateListOfCodes(codeId);
       const updatedCodeList: CodeList = {
         ...codeListToUpdateInContext,
@@ -122,14 +121,15 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
       };
 
       const updatedCodeListsCopy: CodeList[] = [...updatedCodeLists];
-      updatedCodeListsCopy[codeListToUpdateIndex] = updatedCodeList;
+      updatedCodeListsCopy[contextCodeListIndex] = updatedCodeList;
 
       adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
     } else {
-      // Does not exist in context
+      // Code list does not exist in context
+
       const updatedCodeList: CodeList = {
-        ...codeListToUpdate,
-        codes: selectedCode !== undefined ? updateListOfCodes(codeId) : codeListToUpdate.codes,
+        ...dbCodeList,
+        codes: selectedCode !== undefined ? updateListOfCodes(codeId) : dbCodeList.codes,
       };
 
       const updatedCodeListsCopy: CodeList[] = [...updatedCodeLists, updatedCodeList];
@@ -347,7 +347,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
               <div className={styles.buttonRow}>
                 <Button
                   onClick={() => {
-                    handleCodeListUpdate(dbCodeList, selectedCode.id);
+                    handleCodeUpdate(selectedCode.id);
                     setIsEditViewOpen(false);
                   }}
                 >
