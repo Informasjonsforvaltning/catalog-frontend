@@ -2,10 +2,10 @@
   display: flex;
   flex-direction: row;
   gap: 1em;
+  margin-left: 37px;
 }
 
 .codeTree {
-  margin-top: 1em;
   border-radius: 5px;
   flex-basis: 50%;
 }
@@ -96,6 +96,7 @@
 
 .headerText {
   padding-top: 20px;
+  width: 100px;
 }
 
 .xmark {
