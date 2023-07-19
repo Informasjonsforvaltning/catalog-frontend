@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './code-lists.module.css';
 import { Accordion, TextField, Heading } from '@digdir/design-system-react';
-import { Button, PageBanner, SearchField } from '@catalog-frontend/ui';
+import { Button, PageBanner, SearchField, UploadButton } from '@catalog-frontend/ui';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 import { useRouter } from 'next/router';
 import {
@@ -123,13 +123,13 @@ const CodeListsPage = () => {
                   {localization.catalogAdmin.createCodeList}
                 </Button>
               </div>
-              <Button
+              <UploadButton
                 className={styles.importButton}
                 icon={<FileImportIcon />}
                 variant='outline'
               >
                 {localization.catalogAdmin.importCodeList}
-              </Button>
+              </UploadButton>
             </div>
           </div>
           <Heading
