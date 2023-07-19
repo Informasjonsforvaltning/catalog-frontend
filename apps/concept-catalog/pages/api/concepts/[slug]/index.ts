@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const response = await importConcepts(concepts, token.access_token);
       res.status(response.status).send('');
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(500).send({ error: 'Failed to import concept' });
     }
   } else if (req.method === 'POST') {
@@ -41,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(200).send({ conceptId });
     } catch (err) {
       res.status(500).send({ error: 'Failed to create concept' });
-      console.log('error', err);
+      console.error('error', err);
     }
     return;
   }

@@ -19,7 +19,8 @@
       "@catalog-frontend/data-access": ["libs/data-access/src/index.ts"],
       "@catalog-frontend/types": ["libs/types/src/index.ts"],
       "@catalog-frontend/ui": ["libs/ui/src/index.ts"],
-      "@catalog-frontend/utils": ["libs/utils/src/index.ts"]
+      "@catalog-frontend/utils": ["libs/utils/src/index.ts"],
+      "react": ["./node_modules/@types/react"]
     }
   },
   "exclude": ["node_modules", "tmp"]

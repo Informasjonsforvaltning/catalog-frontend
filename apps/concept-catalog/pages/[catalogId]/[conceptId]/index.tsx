@@ -42,6 +42,7 @@ import { useDeleteConcept } from '../../../hooks/concepts';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
 import { useCatalogDesign } from '../../../context/catalog-design';
+import _ from 'lodash';
 
 type MapType = {
   [id: string]: string;
@@ -286,12 +287,12 @@ export const ConceptPage = ({
               <div className={classes.definition}>
                 <h3>Definisjon:</h3>
                 <div>{translate(concept?.definisjon?.tekst ?? '', language)}</div>
-                {concept?.kildebeskrivelse?.kilde.length > 0 && (
+                {concept?.definisjon?.kildebeskrivelse?.kilde.length > 0 && (
                   <div className={cn(classes.source)}>
                     <div>Kilde:</div>
                     <div>
                       <ul>
-                        {concept?.kildebeskrivelse?.kilde?.map((kilde, i) => (
+                        {concept?.definisjon?.kildebeskrivelse?.kilde?.map((kilde, i) => (
                           <li key={`kilde-${i}`}>
                             {kilde.uri ? <a href={kilde.uri}>{kilde.tekst}</a> : <span>{kilde.tekst}</span>}
                           </li>
@@ -316,7 +317,7 @@ export const ConceptPage = ({
             <div className={cn(classes.twoColumnRow, classes.bottomSpace)}>
               <div>
                 <InfoCard>
-                  {replacedConcepts.length > 0 && (
+                  {!_.isEmpty(replacedConcepts) && (
                     <InfoCard.Item label={`${localization.concept.replacedBy}:`}>
                       <ul>
                         {replacedConcepts.map((concept, i) => (
@@ -325,51 +326,91 @@ export const ConceptPage = ({
                       </ul>
                     </InfoCard.Item>
                   )}
-                  <InfoCard.Item label={`${localization.concept.note}:`}>
-                    <span>{translate(concept?.merknad, language)}</span>
-                  </InfoCard.Item>
-                  <InfoCard.Item label={`${localization.concept.example}:`}>
-                    <span>{translate(concept?.eksempel, language)}</span>
-                  </InfoCard.Item>
-                  <InfoCard.Item label={`${localization.concept.simplifiedExplanation}:`}>
-                    <span>TODO</span>
-                  </InfoCard.Item>
-                  <InfoCard.Item label={`${localization.concept.legalExplanation}:`}>
-                    <span>TODO</span>
-                  </InfoCard.Item>
-                  <InfoCard.Item>
-                    <div className={classes.termsRow}>
-                      <h3>{`${localization.concept.allowedTerm}:`}</h3>
-                      {Array.of(translate(concept?.tillattTerm, language)).length > 0 ? (
-                        <ul>
-                          {Array.of(translate(concept?.tillattTerm, language)).map((term, i) => (
-                            <li key={`allowedTerm-${i}`}>{term}</li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <span>Ingen term</span>
+                  {!_.isEmpty(concept?.merknad) && (
+                    <InfoCard.Item label={`${localization.concept.note}:`}>
+                      <span>{translate(concept?.merknad, language)}</span>
+                    </InfoCard.Item>
+                  )}
+                  {!_.isEmpty(concept?.eksempel) && (
+                    <InfoCard.Item label={`${localization.concept.example}:`}>
+                      <span>{translate(concept?.eksempel, language)}</span>
+                    </InfoCard.Item>
+                  )}
+                  {!_.isEmpty(concept?.folkeligForklaring?.tekst) && (
+                    <InfoCard.Item label={`${localization.concept.publicDefinition}:`}>
+                      <div>{translate(concept?.folkeligForklaring?.tekst ?? '', language)}</div>
+                      {concept?.folkeligForklaring?.kildebeskrivelse?.kilde.length > 0 && (
+                        <div className={cn(classes.source)}>
+                          <div>Kilde:</div>
+                          <div>
+                            <ul>
+                              {concept?.folkeligForklaring?.kildebeskrivelse?.kilde?.map((kilde, i) => (
+                                <li key={`kilde-${i}`}>
+                                  {kilde.uri ? <a href={kilde.uri}>{kilde.tekst}</a> : <span>{kilde.tekst}</span>}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
                       )}
-                    </div>
-                    <div className={classes.termsRow}>
-                      <h3>{`${localization.concept.notRecommendedTerm}:`}</h3>
-                      {Array.of(translate(concept?.frarådetTerm, language)).length > 0 ? (
-                        <ul>
-                          {Array.of(translate(concept?.frarådetTerm, language)).map((term, i) => (
-                            <li key={`notRecommendedTerm-${i}`}>{term}</li>
-                          ))}
-                        </ul>
-                      ) : (
-                        <span>Ingen term</span>
+                    </InfoCard.Item>
+                  )}
+                  {concept?.rettsligForklaring && (
+                    <InfoCard.Item label={`${localization.concept.specialistDefinition}:`}>
+                      <div>{translate(concept?.rettsligForklaring?.tekst ?? '', language)}</div>
+                      {concept?.rettsligForklaring?.kildebeskrivelse?.kilde.length > 0 && (
+                        <div className={cn(classes.source)}>
+                          <div>Kilde:</div>
+                          <div>
+                            <ul>
+                              {concept?.rettsligForklaring?.kildebeskrivelse?.kilde?.map((kilde, i) => (
+                                <li key={`kilde-${i}`}>
+                                  {kilde.uri ? <a href={kilde.uri}>{kilde.tekst}</a> : <span>{kilde.tekst}</span>}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
                       )}
-                    </div>
-                  </InfoCard.Item>
-                  <InfoCard.Item label={`${localization.concept.valueDomain}:`}>
-                    {concept?.omfang?.uri ? (
-                      <Link href={concept?.omfang?.uri}>{concept?.omfang?.tekst}</Link>
-                    ) : (
-                      <span>{concept?.omfang?.tekst}</span>
-                    )}
-                  </InfoCard.Item>
+                    </InfoCard.Item>
+                  )}
+                  {!(_.isEmpty(concept?.tillattTerm) && _.isEmpty(concept?.frarådetTerm)) && (
+                    <InfoCard.Item>
+                      <div className={classes.termsRow}>
+                        <h3>{`${localization.concept.allowedTerm}:`}</h3>
+                        {Array.of(translate(concept?.tillattTerm, language)).length > 0 ? (
+                          <ul>
+                            {Array.of(translate(concept?.tillattTerm, language)).map((term, i) => (
+                              <li key={`allowedTerm-${i}`}>{term}</li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <span>Ingen term</span>
+                        )}
+                      </div>
+                      <div className={classes.termsRow}>
+                        <h3>{`${localization.concept.notRecommendedTerm}:`}</h3>
+                        {Array.of(translate(concept?.frarådetTerm, language)).length > 0 ? (
+                          <ul>
+                            {Array.of(translate(concept?.frarådetTerm, language)).map((term, i) => (
+                              <li key={`notRecommendedTerm-${i}`}>{term}</li>
+                            ))}
+                          </ul>
+                        ) : (
+                          <span>Ingen term</span>
+                        )}
+                      </div>
+                    </InfoCard.Item>
+                  )}
+                  {!_.isEmpty(concept?.omfang) && (
+                    <InfoCard.Item label={`${localization.concept.valueDomain}:`}>
+                      {concept?.omfang?.uri ? (
+                        <Link href={concept?.omfang?.uri}>{concept?.omfang?.tekst}</Link>
+                      ) : (
+                        <span>{concept?.omfang?.tekst}</span>
+                      )}
+                    </InfoCard.Item>
+                  )}
                 </InfoCard>
 
                 <div className={classes.tabs}>

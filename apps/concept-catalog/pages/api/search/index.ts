@@ -18,11 +18,13 @@ export default async function handler(
     const { catalogId, query: searchQuery } = JSON.parse(req.body);
     const response = await searchConceptsForCatalog(catalogId, searchQuery, `${token.access_token}`);
     if (response.status !== 200) {
+      console.error('Failed to search concepts', await response.text());
       return res.status(response.status).send({ error: 'Failed to search concepts' });
     }
 
     res.send(await response.json());
   } catch (error) {
+    console.error('Failed to search concepts', error);
     res.status(500).send({ error: 'Failed to search concepts' });
   }
 }

@@ -57,8 +57,11 @@ const createCsvMap = (header: string[], data: string[]) => {
   return csvMap;
 };
 
-const mapKilde = (csvMap: Record<string, string[]>) => {
-  const forholdTilKilde = mapToSingleValue(csvMap, 'forholdtilkilde');
+const mapKilde = (
+  csvMap: Record<string, string[]>,
+  type: 'definisjon' | 'folkeligForklaring' | 'rettsligForklaring',
+) => {
+  const forholdTilKilde = mapToSingleValue(csvMap, `${type}Forholdtilkilde`);
   if (forholdTilKilde && forholdTilKilde?.toLowerCase() === 'egendefinert') {
     return {
       forholdTilKilde,
@@ -66,7 +69,7 @@ const mapKilde = (csvMap: Record<string, string[]>) => {
     };
   }
 
-  const formatterteKilder = csvMap.kilde?.map((kilde) => {
+  const formatterteKilder = csvMap[`${type}Kilde`]?.map((kilde) => {
     const [tekst, uri] = kilde.split('|');
     if (!tekst && !uri) {
       throw new Error(`Kilder skal være på følgende format "kilde|uri", men var følgende:  ${kilde}`);
@@ -94,14 +97,25 @@ const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Conc
     anbefaltTerm: { navn: mapRowToLanguageValue(csvMap, 'anbefaltterm') },
     tillattTerm: mapRowToLanguageValueList(csvMap, 'tillattterm'),
     frarådetTerm: mapRowToLanguageValueList(csvMap, 'frarådetterm'),
-    definisjon: { tekst: mapRowToLanguageValue(csvMap, 'definisjon') },
+    definisjon: {
+      tekst: mapRowToLanguageValue(csvMap, 'definisjon'),
+      kildebeskrivelse: mapKilde(csvMap, 'definisjon'),
+    },
+    folkeligForklaring: {
+      tekst: mapRowToLanguageValue(csvMap, 'folkeligForklaring'),
+      kildebeskrivelse: mapKilde(csvMap, 'folkeligForklaring'),
+    },
+    rettsligForklaring: {
+      tekst: mapRowToLanguageValue(csvMap, 'rettsligForklaring'),
+      kildebeskrivelse: mapKilde(csvMap, 'rettsligForklaring'),
+    },
     merknad: mapRowToLanguageValueList(csvMap, 'merknad'),
     eksempel: mapRowToLanguageValueList(csvMap, 'eksempel'),
     fagområde: mapRowToLanguageValue(csvMap, 'fagområde'),
     bruksområde: mapRowToLanguageValueList(csvMap, 'bruksområde'),
     gyldigFom: mapToSingleValue(csvMap, 'gyldigfom'),
     gyldigTom: mapToSingleValue(csvMap, 'gyldigtom'),
-    kildebeskrivelse: mapKilde(csvMap),
+
     omfang: {
       uri: mapToSingleValue(csvMap, 'omfang_uri'),
       tekst: mapToSingleValue(csvMap, 'omfang_tekst'),

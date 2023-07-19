@@ -14,7 +14,7 @@ import CatalogLayout from '../components/catalog-layout';
 
 const heebo = Heebo({ subsets: ['latin'] });
 
-const CustomApp: FC<AppProps<{ session: Session }>> = ({ Component, router, pageProps: { session, ...pageProps } }) => {
+const CustomApp: FC<AppProps<{ session: Session }>> = ({ Component, pageProps: { session, ...pageProps } }) => {
   const queryClient = new QueryClient();
 
   return (

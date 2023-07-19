@@ -8,11 +8,5 @@ export const getHistory = async (catalogId: string, resourceId: string, accessTo
     method: 'GET',
   };
 
-  const response = await fetch(resource, options)
-    .then((res) => {
-      return res.json();
-    })
-    .catch((err) => console.error('getHistory failed with: ', err));
-
-  return response;
+  return fetch(resource, options);
 };
