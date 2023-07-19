@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './code-lists.module.css';
-import { Accordion, TextField, Button } from '@digdir/design-system-react';
-import { SearchField } from '@catalog-frontend/ui';
+import { Accordion, TextField, Heading } from '@digdir/design-system-react';
+import { Button, PageBanner, SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 import { useRouter } from 'next/router';
 import {
@@ -11,7 +11,7 @@ import {
   useUpdateCodeList,
 } from '../../../../../hooks/code-lists';
 import { CodeList } from '@catalog-frontend/types';
-import { localization, getTranslateText } from '@catalog-frontend/utils';
+import { localization } from '@catalog-frontend/utils';
 import { CodeListEditor } from '../../../../../components/code-list-editor';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
 import { compare } from 'fast-json-patch';
@@ -101,84 +101,100 @@ const CodeListsPage = () => {
   }
 
   return (
-    <div className={styles.center}>
-      <div className={styles.page}>
-        <div className={styles.row}>
-          <SearchField
-            ariaLabel={'Søkefelt kodeliste'}
-            placeholder='Søk etter kodeliste...'
-          />
-          <div className={styles.buttons}>
+    <>
+      <PageBanner
+        title={localization.catalogType.concept}
+        subtitle={'Skatteetaten'}
+      />
+      <div className={styles.center}>
+        <div className={styles.page}>
+          <div className={styles.row}>
+            <SearchField
+              ariaLabel={'Søkefelt kodeliste'}
+              placeholder='Søk etter kodeliste...'
+            />
             <div className={styles.buttons}>
+              <div className={styles.buttons}>
+                <Button
+                  className={styles.createButton}
+                  icon={<PlusCircleIcon />}
+                  onClick={handleCreateCodeList}
+                >
+                  {localization.catalogAdmin.createCodeList}
+                </Button>
+              </div>
               <Button
-                className={styles.createButton}
-                icon={<PlusCircleIcon />}
-                onClick={handleCreateCodeList}
+                className={styles.importButton}
+                icon={<FileImportIcon />}
+                variant='outline'
               >
-                Opprett ny kodeliste
+                {localization.catalogAdmin.importCodeList}
               </Button>
             </div>
-            <Button
-              className={styles.importButton}
-              icon={<FileImportIcon />}
-              variant='outline'
-            >
-              Importer ny kodeliste
-            </Button>
+          </div>
+          <Heading
+            level={2}
+            size='xsmall'
+          >
+            {localization.catalogAdmin.codeLists}
+          </Heading>
+          <div className={styles.content}>
+            {getAllCodeLists &&
+              getAllCodeLists.codeLists?.map((data: CodeList, index: number) => (
+                <Accordion
+                  key={index}
+                  border={true}
+                  className={styles.accordion}
+                >
+                  <Accordion.Item open={data.name.includes('Ny kodeliste') ? accordionIsOpen : undefined}>
+                    <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
+                      <h1 className={styles.label}>{data.name}</h1>
+                      <p className={styles.description}> {data.description} </p>
+                    </Accordion.Header>
+                    <Accordion.Content>
+                      <p className={styles.id}>ID: {data.id}</p>
+                    </Accordion.Content>
+
+                    <Accordion.Content>
+                      <div className={styles.codeListInfo}>
+                        <div className={styles.textField}>
+                          <TextField
+                            label={localization.name}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                              handleCodeListUpdate(data.id, event.target.value, undefined);
+                            }}
+                            value={(updatedCodeLists.find((c) => c.id === data.id) || data)?.name}
+                          />
+                        </div>
+                        <div className={styles.textField}>
+                          <TextField
+                            label={localization.description}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                              handleCodeListUpdate(data.id, undefined, event.target.value);
+                            }}
+                            value={(updatedCodeLists.find((c) => c.id === data.id) || data)?.description}
+                          />
+                        </div>
+                      </div>
+
+                      <CodeListEditor dbCodeList={data} />
+                      <div className={styles.formButtons}>
+                        <Button onClick={() => handleUpdateDbCodeList(data.id)}>{localization.saveEdits}</Button>
+                        <Button
+                          onClick={(e) => handleDeleteCodeList(data.id, e)}
+                          color='danger'
+                        >
+                          {localization.catalogAdmin.deleteCodeList}
+                        </Button>
+                      </div>
+                    </Accordion.Content>
+                  </Accordion.Item>
+                </Accordion>
+              ))}
           </div>
         </div>
-        <div className={styles.content}>
-          {getAllCodeLists &&
-            getAllCodeLists.codeLists?.map((data: CodeList, index: number) => (
-              <Accordion
-                key={index}
-                border={true}
-                className={styles.accordion}
-              >
-                <Accordion.Item open={data.name.includes('Ny kodeliste') ? accordionIsOpen : undefined}>
-                  <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
-                    <h1 className={styles.label}>{data.name}</h1>
-                    <p className={styles.description}> {data.description} </p>
-                  </Accordion.Header>
-                  <Accordion.Content>
-                    <div>ID: {data.id}</div>
-                  </Accordion.Content>
-
-                  <Accordion.Content>
-                    <div className={styles.codeListInfo}>
-                      <TextField
-                        label='Navn'
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                          handleCodeListUpdate(data.id, event.target.value, undefined);
-                        }}
-                        value={(updatedCodeLists.find((c) => c.id === data.id) || data)?.name}
-                      />
-                      <TextField
-                        label='Beskrivelse'
-                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                          handleCodeListUpdate(data.id, undefined, event.target.value);
-                        }}
-                        value={(updatedCodeLists.find((c) => c.id === data.id) || data)?.description}
-                      />
-                    </div>
-
-                    <CodeListEditor dbCodeList={data} />
-                    <div className={styles.buttons}>
-                      <Button onClick={() => handleUpdateDbCodeList(data.id)}>Lagre endringer</Button>
-                      <Button
-                        onClick={(e) => handleDeleteCodeList(data.id, e)}
-                        color='danger'
-                      >
-                        Slett kodeliste
-                      </Button>
-                    </div>
-                  </Accordion.Content>
-                </Accordion.Item>
-              </Accordion>
-            ))}
-        </div>
       </div>
-    </div>
+    </>
   );
 };
 

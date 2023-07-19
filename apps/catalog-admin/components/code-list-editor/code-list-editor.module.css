@@ -2,10 +2,10 @@
   display: flex;
   flex-direction: row;
   gap: 1em;
+  margin-left: 37px;
 }
 
 .codeTree {
-  margin-top: 1em;
   border-radius: 5px;
   flex-basis: 50%;
 }
@@ -96,10 +96,19 @@
 
 .headerText {
   padding-top: 20px;
+  width: 100px;
 }
 
 .xmark {
   display: flex;
   padding-left: 200px;
   padding-top: 7px;
+}
+
+.codeId {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 7px;
+  border-left: solid 1px #d5d7d9;
+  border-right: solid 1px #d5d7d9;
 }

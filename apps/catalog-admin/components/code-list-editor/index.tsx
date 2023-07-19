@@ -4,9 +4,9 @@ import { TabsAddIcon, TabsRemoveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
 import styles from './code-list-editor.module.css';
 import { Button, InfoCard, Select } from '@catalog-frontend/ui';
-import { TextField } from '@digdir/design-system-react';
+import { TextField, Button as FdsButton } from '@digdir/design-system-react';
 import { Code, CodeList } from '@catalog-frontend/types';
-import { getTranslateText } from '@catalog-frontend/utils';
+import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useAdminDispatch, useAdminState } from '../../context/admin';
 
 const INDENT_STEP = 15;
@@ -267,48 +267,50 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
       <div className={styles.editorContainer}>
         <InfoCard className={styles.codeTree}>
           <InfoCard.Item>
-            <Tree<Data>
-              data={treeData}
-              ref={(t) => setTree(t)}
-              selectionFollowsFocus={false}
-              padding={15}
-              rowHeight={30}
-              height={treeData.length * 85}
-              onActivate={handleOnClick}
-              onClick={() => setIsEditViewOpen(true)}
-              onMove={handleOnMove}
-              //onCreate={handleOnCreate}
-              disableEdit
-            >
-              {Node}
-            </Tree>
-          </InfoCard.Item>
-          <InfoCard.Item>
-            <Button
-              onClick={() => {
-                createNewCode();
-                setIsEditViewOpen(true);
-              }}
-            >
-              Opprett ny kode
-            </Button>
+            <div>
+              <Tree<Data>
+                data={treeData}
+                ref={(t) => setTree(t)}
+                selectionFollowsFocus={false}
+                padding={15}
+                rowHeight={30}
+                height={441}
+                width={453}
+                onActivate={handleOnClick}
+                onClick={() => setIsEditViewOpen(true)}
+                onMove={handleOnMove}
+                disableEdit
+              >
+                {Node}
+              </Tree>
+              <FdsButton
+                onClick={() => {
+                  createNewCode();
+                  setIsEditViewOpen(true);
+                }}
+                variant='outline'
+              >
+                {localization.catalogAdmin.createCode}
+              </FdsButton>
+            </div>
           </InfoCard.Item>
         </InfoCard>
         {isEditViewOpen && (
           <InfoCard>
             <div className={styles.header}>
-              <p className={styles.headerText}>Code Edit</p>
+              <p className={styles.headerText}>{localization.catalogAdmin.editCode}</p>
               <XMarkIcon
                 fontSize='1.5rem'
                 className={styles.xmark}
-                title='close edit view'
+                title={localization.catalogAdmin.closeEdit}
                 onClick={() => setIsEditViewOpen(false)}
               />
             </div>
+            <div className={styles.codeId}>ID: {selectedCode?.id}</div>
             <InfoCard.Item className={styles.codeListEditor}>
               <div className={styles.codeListEditor}>
                 <TextField
-                  label='Navn (norsk bokmål)'
+                  label={localization.catalogAdmin.codeName.nb}
                   value={selectedCode?.name?.nb}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     updateCodeName('nb', event.target.value);
@@ -317,7 +319,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
               </div>
               <div className={styles.codeListEditor}>
                 <TextField
-                  label='Navn (nynorsk)'
+                  label={localization.catalogAdmin.codeName.nn}
                   value={selectedCode?.name?.nn}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     updateCodeName('nn', event.target.value);
@@ -326,7 +328,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
               </div>
               <div className={styles.codeListEditor}>
                 <TextField
-                  label='Navn (engelsk)'
+                  label={localization.catalogAdmin.codeName.en}
                   value={selectedCode?.name?.en}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     updateCodeName('en', event.target.value);
@@ -335,7 +337,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
               </div>
               <div className={styles.codeListEditor}>
                 <Select
-                  label='Overordnet kode'
+                  label={localization.catalogAdmin.parentCode}
                   options={possibleParentCodes(combinedListOfCodes(), selectedCode)}
                   value={selectedCode?.parentID}
                   onChange={updateCodeParent}
@@ -349,7 +351,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
                     setIsEditViewOpen(false);
                   }}
                 >
-                  Ok
+                  {localization.ok}
                 </Button>
                 <Button
                   color='danger'

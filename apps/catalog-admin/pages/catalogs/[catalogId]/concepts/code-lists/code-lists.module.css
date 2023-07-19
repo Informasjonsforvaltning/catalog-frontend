@@ -36,6 +36,11 @@
   gap: 26px;
 }
 
+.formButtons {
+  composes: buttons;
+  margin: 37px;
+}
+
 .center {
   display: flex;
   align-items: center;
@@ -47,6 +52,12 @@
   min-height: 100%;
 }
 
+@media screen and (max-width: 1200px) {
+  .page {
+    width: 100%;
+  }
+}
+
 .label {
   font-weight: bold;
   font-size: 20px;
@@ -54,8 +65,15 @@
 
 .codeListInfo {
   width: 640px;
+  margin: 37px;
+  gap: 37px;
 }
 
 .textField {
   padding-bottom: 20px;
+}
+
+.id {
+  margin-left: 37px;
+  font-size: 20px;
 }
