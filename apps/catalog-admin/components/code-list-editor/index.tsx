@@ -68,7 +68,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
     const newCode = {
       id: getNextId(combinedListOfCodes()),
       name: { nb: '', nn: '', en: '' },
-      parentID: -1,
+      parentID: null,
     };
 
     setSelectedCode(newCode);
@@ -233,7 +233,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
   }
 
   const possibleParentCodes = (codes: Code[], currentCode: Code) => {
-    // Not itself, not child, -1 to remove parent
+    // Not itself, not child, null to remove parent
     return (
       codes
         ?.filter((code: Code) => code.id !== currentCode.id && code.parentID !== currentCode.id)
@@ -241,7 +241,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
           label: getTranslateText(code.name),
           value: code.id,
         }))
-        .concat([{ label: 'Ingen overordnet kode', value: -1 }]) ?? []
+        .concat([{ label: 'Ingen overordnet kode', value: null }]) ?? []
     );
   };
 
