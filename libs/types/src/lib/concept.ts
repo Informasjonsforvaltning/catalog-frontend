@@ -67,6 +67,10 @@ export interface AnbefaltTerm {
 
 export interface Definisjon {
   tekst: TekstMedSpraakKode;
+  kildebeskrivelse?: {
+    forholdTilKilde: string;
+    kilde: Kilde[];
+  } | null;
 }
 
 export interface TekstMedSpraakKode {
@@ -105,11 +109,9 @@ export interface Concept {
   revisjonAv?: string;
   anbefaltTerm?: AnbefaltTerm;
   definisjon?: Definisjon;
+  folkeligForklaring?: Definisjon;
+  rettsligForklaring?: Definisjon;
   ansvarligVirksomhet: { id: string };
-  kildebeskrivelse?: {
-    forholdTilKilde: string;
-    kilde: Kilde[];
-  } | null;
   merknad?: Record<string, string[]>;
   eksempel?: Record<string, string[]>;
   fagområde?: TekstMedSpraakKode;
