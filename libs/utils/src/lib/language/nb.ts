@@ -28,6 +28,7 @@ export const nb = {
 
   nameAndConcept: 'Navn og begrep',
   save: 'Lagre',
+  saveEdits: 'Lagre endringer',
   seeChangeRequests: 'Se alle endringsforslag',
   suggestionForNewConcept: 'Forslag til nytt begrep',
 
@@ -113,6 +114,7 @@ export const nb = {
   catalogAdmin: {
     internalFields: 'Interne felt',
     codeList: 'Kodeliste',
+    codeLists: 'Kodelister',
     fontColor: 'Skriftfarge',
     backgroundColor: 'Bakgrunnsfarge',
     descriptionLogo: 'Beskrivelse av logo',

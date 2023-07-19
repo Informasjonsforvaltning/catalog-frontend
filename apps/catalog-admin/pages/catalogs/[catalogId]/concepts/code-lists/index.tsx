@@ -120,7 +120,7 @@ const CodeListsPage = () => {
                   icon={<PlusCircleIcon />}
                   onClick={handleCreateCodeList}
                 >
-                  Opprett ny kodeliste
+                  {localization.catalogAdmin.createCodeList}
                 </Button>
               </div>
               <Button
@@ -128,7 +128,7 @@ const CodeListsPage = () => {
                 icon={<FileImportIcon />}
                 variant='outline'
               >
-                Importer ny kodeliste
+                {localization.catalogAdmin.importCodeList}
               </Button>
             </div>
           </div>
@@ -136,7 +136,7 @@ const CodeListsPage = () => {
             level={2}
             size='xsmall'
           >
-            Kodelister
+            {localization.catalogAdmin.codeLists}
           </Heading>
           <div className={styles.content}>
             {getAllCodeLists &&
@@ -159,7 +159,7 @@ const CodeListsPage = () => {
                       <div className={styles.codeListInfo}>
                         <div className={styles.textField}>
                           <TextField
-                            label='Navn'
+                            label={localization.name}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                               handleCodeListUpdate(data.id, event.target.value, undefined);
                             }}
@@ -168,7 +168,7 @@ const CodeListsPage = () => {
                         </div>
                         <div className={styles.textField}>
                           <TextField
-                            label='Beskrivelse'
+                            label={localization.description}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                               handleCodeListUpdate(data.id, undefined, event.target.value);
                             }}
@@ -179,12 +179,12 @@ const CodeListsPage = () => {
 
                       <CodeListEditor dbCodeList={data} />
                       <div className={styles.formButtons}>
-                        <Button onClick={() => handleUpdateDbCodeList(data.id)}>Lagre endringer</Button>
+                        <Button onClick={() => handleUpdateDbCodeList(data.id)}>{localization.saveEdits}</Button>
                         <Button
                           onClick={(e) => handleDeleteCodeList(data.id, e)}
                           color='danger'
                         >
-                          Slett kodeliste
+                          {localization.catalogAdmin.deleteCodeList}
                         </Button>
                       </div>
                     </Accordion.Content>
@@ -193,7 +193,7 @@ const CodeListsPage = () => {
               ))}
           </div>
         </div>
-      </div >
+      </div>
     </>
   );
 };
