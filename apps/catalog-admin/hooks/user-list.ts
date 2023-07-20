@@ -64,6 +64,22 @@ export const useUpdateUser = (catalogId: string) => {
         throw new Error('Invalid user id');
       }
 
+      const nameRegex = /^[a-zA-Z\s'-]+$/;
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      const telephoneNumberRegex = /^\+?\d+(?:\(\d+\))?(?:[\s-]?\d+)*$/;
+
+      if (!nameRegex.test(updatedUser.name)) {
+        throw new Error('Invalid name');
+      }
+
+      if (!emailRegex.test(updatedUser.email)) {
+        throw new Error('Invalid email');
+      }
+
+      if (!telephoneNumberRegex.test(String(updatedUser.telephoneNumber))) {
+        throw new Error('Invalid telephone number');
+      }
+
       if (diff) {
         const response = await fetch(`/api/user-list/${catalogId}/${beforeUpdateUser.userId}`, {
           method: 'PATCH',
