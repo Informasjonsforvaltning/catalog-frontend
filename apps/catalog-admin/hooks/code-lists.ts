@@ -111,20 +111,3 @@ export const useDeleteCodeList = (catalogId: string) => {
     },
   });
 };
-
-export const useGetUserList = ({ catalogId }) => {
-  return useQuery({
-    queryKey: ['getAllCodeLists', catalogId],
-
-    queryFn: async () => {
-      if (!validOrganizationNumber(catalogId)) {
-        return Promise.reject('Invalid organization number');
-      }
-
-      const response = await fetch(`/api/user-list/${catalogId}`, {
-        method: 'GET',
-      });
-      return response.json();
-    },
-  });
-};
