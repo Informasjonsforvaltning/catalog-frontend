@@ -1,50 +1,174 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './user-list.module.css';
-import { Button, Accordion, Label, Ingress } from '@digdir/design-system-react';
-import { SearchField } from '@catalog-frontend/ui';
+import { Accordion, Label, Ingress, TextField, Heading } from '@digdir/design-system-react';
+import { Button, PageBanner, SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 import { localization } from '@catalog-frontend/utils';
+import { useGetUsers, useCreateUser, useDeleteUser, useUpdateUser } from '../../../../../hooks/user-list';
+import { useRouter } from 'next/router';
+import { User } from '@catalog-frontend/types';
+import { compare } from 'fast-json-patch';
 
 export const CodeListsPage = () => {
-  const testData = ['navn1', 'navn2', 'navn3'];
+  const router = useRouter();
+  const catalogId: string = `${router.query.catalogId}` ?? '';
+
+  const { data: getUsers } = useGetUsers(catalogId);
+  const dbUsers = getUsers?.users;
+  const createUser = useCreateUser(catalogId);
+  const deleteUser = useDeleteUser(catalogId);
+  const updateUser = useUpdateUser(catalogId);
+
+  const newUser: User = {
+    name: 'Ny bruker ' + getNextUserNumber(getUsers?.users),
+  };
+
+  function getNextUserNumber(users: User[]): number {
+    const lenght = users ? users?.length : 0;
+    return lenght + 1;
+  }
+
+  const handleCreateUser = () => {
+    createUser.mutate(newUser);
+  };
+
+  const handleDeleteUser = (userId: string) => {
+    if (window.confirm('Er du sikker på at du vil slette denne brukeren?')) {
+      deleteUser.mutate(userId);
+    }
+  };
+
+  const [updatedUserList, setUpdatedUserList] = useState<User[]>([]);
+
+  const handleUpdateUser = (userId: string) => {
+    const updatedUser = updatedUserList.find((user) => user.userId === userId);
+    const dbUser: User = getUsers.users.find((user) => user.userId === userId);
+    const diff = dbUser && updatedUser ? compare(dbUser, updatedUser) : null;
+
+    if (diff) {
+      updateUser.mutate({ beforeUpdateUser: dbUser, updatedUser: updatedUser });
+    }
+  };
+
+  const updateUserState = (userId: string, newName?: string, newEmail?: string, newTelephoneNumber?: number) => {
+    const updatedUserListIndex = updatedUserList.findIndex((user) => user.userId === userId);
+    const userToUpdate =
+      updatedUserListIndex !== -1
+        ? updatedUserList[updatedUserListIndex]
+        : dbUsers.find((user) => user.userId === userId);
+    const updatedUserListsCopy = [...updatedUserList];
+
+    if (userToUpdate) {
+      const updatedUser = {
+        ...userToUpdate,
+        name: newName !== undefined ? newName : userToUpdate.name,
+        email: newEmail !== undefined ? newEmail : userToUpdate.email,
+        telephoneNumber: newTelephoneNumber !== undefined ? newTelephoneNumber : userToUpdate.telephoneNumber,
+      };
+      if (updatedUserListIndex !== -1) {
+        updatedUserListsCopy[updatedUserListIndex] = updatedUser;
+      } else {
+        updatedUserListsCopy.push(updatedUser);
+      }
+      setUpdatedUserList(updatedUserListsCopy);
+    }
+  };
+
   return (
-    <div className={styles.center}>
-      <div className={styles.page}>
-        <div className={styles.row}>
-          <SearchField
-            ariaLabel={''}
-            placeholder='Søk etter kodeliste...'
-          />
-          <div className={styles.buttons}>
+    <>
+      <PageBanner
+        title={localization.catalogType.concept}
+        subtitle={'Skatteetaten'}
+      />
+      <div className={styles.center}>
+        <div className={styles.page}>
+          <div className={styles.row}>
+            <SearchField
+              ariaLabel={''}
+              placeholder='Søk etter bruker...'
+            />
             <div className={styles.buttons}>
-              <Button
-                className={styles.createButton}
-                icon={<PlusCircleIcon />}
-              >
-                {localization.catalogAdmin.addUser}
-              </Button>
+              <div className={styles.buttons}>
+                <Button
+                  className={styles.createButton}
+                  icon={<PlusCircleIcon />}
+                  onClick={handleCreateUser}
+                >
+                  {localization.catalogAdmin.addUser}
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-        <div className={styles.content}>
-          {testData.map((data, index) => (
-            <Accordion
-              key={index}
-              border={true}
-              className={styles.accordion}
-            >
-              <Accordion.Item>
-                <Accordion.Header>
-                  <h1 className={styles.label}>{data}</h1>
-                  <p className={styles.description}> Description </p>
-                </Accordion.Header>
-                <Accordion.Content>Accordion content</Accordion.Content>
-              </Accordion.Item>
-            </Accordion>
-          ))}
+
+          <Heading
+            level={2}
+            size='xsmall'
+          >
+            Brukerliste
+          </Heading>
+          {dbUsers &&
+            dbUsers.map((user: User, index) => (
+              <Accordion
+                key={index}
+                border={true}
+                className={styles.accordion}
+              >
+                <Accordion.Item>
+                  <Accordion.Header>
+                    <h1 className={styles.label}>{user.name}</h1>
+                  </Accordion.Header>
+                  <Accordion.Content>
+                    <div className={styles.codeListInfo}>
+                      <div className={styles.textField}>
+                        <TextField
+                          label='Navn'
+                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                            updateUserState(user.userId, event.target.value);
+                          }}
+                          value={(updatedUserList.find((c) => c.userId === user.userId) || user)?.name}
+                        />
+                      </div>
+                      <div className={styles.textField}>
+                        <TextField
+                          label='E-post'
+                          inputMode='email'
+                          value={(updatedUserList.find((c) => c.userId === user.userId) || user)?.email}
+                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                            updateUserState(user.userId, undefined, event.target.value, undefined);
+                          }}
+                        />
+                      </div>
+                      <div className={styles.textField}>
+                        <TextField
+                          label='Telefonnummer'
+                          type='tel'
+                          inputMode='tel'
+                          value={String(
+                            (updatedUserList.find((c) => c.userId === user.userId) || user)?.telephoneNumber,
+                          )}
+                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                            updateUserState(user.userId, undefined, undefined, Number(event.target.value));
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className={styles.formButtons}>
+                      <Button onClick={() => handleUpdateUser(user.userId)}>Lagre</Button>
+                      <Button
+                        color='danger'
+                        onClick={() => handleDeleteUser(user.userId)}
+                      >
+                        Slett
+                      </Button>
+                    </div>
+                  </Accordion.Content>
+                </Accordion.Item>
+              </Accordion>
+            ))}
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

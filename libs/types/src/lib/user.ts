@@ -1,5 +1,7 @@
 export interface User {
-    id: string;
-    name?: string;
-    email?: string;
+  userId?: string;
+  catalogId?: string;
+  name: string;
+  email?: string;
+  telephoneNumber?: number;
 }
