@@ -1,4 +1,4 @@
-import { User } from "./user";
+import { AssignedUser } from './user';
 
 export interface Comment {
   id: string;
@@ -6,6 +6,6 @@ export interface Comment {
   lastChangedDate: string;
   topicId: string;
   orgNumber: string;
-  user: User;
+  user: AssignedUser;
   comment: string;
 }

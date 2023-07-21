@@ -1,8 +1,14 @@
-export interface User {
-  userId?: string; // used in catalog admin
-  id?: string; // used in tildelt bruker
+interface UserBase {
   catalogId?: string;
   name?: string;
   email?: string;
   telephoneNumber?: number;
+}
+
+export interface AssignedUser extends UserBase {
+  id: string;
+}
+
+export interface User extends UserBase {
+  userId?: string;
 }
