@@ -1,4 +1,4 @@
-import { User } from './user';
+import { AssignedUser } from './user';
 
 export interface ErrorMessage {
   name?: string;
@@ -126,7 +126,7 @@ export interface Concept {
   erSistPublisert?: boolean;
   revisjonAvSistPublisert?: boolean;
   endringslogelement?: Endringslogelement;
-  tildeltBruker?: User;
+  tildeltBruker?: AssignedUser;
   begrepsRelasjon?: Relasjon[];
   erPublisert?: boolean;
   publiseringsTidspunkt?: string;

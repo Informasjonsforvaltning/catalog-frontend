@@ -9,11 +9,6 @@
   --component-button-filled-primary-color-background-default: #2d3741;
 }
 
-.importButton {
-  --component-button-outline-primary-color-text-default: #2d3741;
-  --component-button-outline-primary-color-border-default: #2d3741;
-}
-
 .accordion {
   margin-bottom: 25px;
   font-family: Heebo, sans-serif;
@@ -36,6 +31,11 @@
   gap: 26px;
 }
 
+.formButtons {
+  composes: buttons;
+  margin: 37px;
+}
+
 .center {
   display: flex;
   align-items: center;
@@ -47,7 +47,28 @@
   min-height: 100%;
 }
 
+@media screen and (max-width: 1200px) {
+  .page {
+    width: 100%;
+  }
+}
+
 .label {
   font-weight: bold;
   font-size: 20px;
+}
+
+.textField {
+  padding-bottom: 20px;
+}
+
+.id {
+  font-size: 20px;
+  padding-bottom: 37px;
+}
+
+.codeListInfo {
+  width: 640px;
+  margin: 37px;
+  gap: 37px;
 }
