@@ -21,7 +21,7 @@ export const CodeListsPage = () => {
 
   const nameRegex =
     /^[a-zA-ZàáâäãåąčćęèéêëėæįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
-  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  const emailRegex = /^[\w-]+@[\w-]+\.[\w-]{2,4}$/;
   const telephoneNumberRegex = /^\+?[1-9][0-9]{7,14}$/;
 
   const newUser: User = {
