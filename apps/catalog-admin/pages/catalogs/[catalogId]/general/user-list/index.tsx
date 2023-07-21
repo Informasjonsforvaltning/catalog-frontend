@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styles from './user-list.module.css';
-import { Accordion, Label, Ingress, TextField, Heading } from '@digdir/design-system-react';
+import { Accordion, TextField, Heading } from '@digdir/design-system-react';
 import { Button, PageBanner, SearchField } from '@catalog-frontend/ui';
-import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { localization } from '@catalog-frontend/utils';
 import { useGetUsers, useCreateUser, useDeleteUser, useUpdateUser } from '../../../../../hooks/user-list';
 import { useRouter } from 'next/router';
@@ -18,6 +18,11 @@ export const CodeListsPage = () => {
   const createUser = useCreateUser(catalogId);
   const deleteUser = useDeleteUser(catalogId);
   const updateUser = useUpdateUser(catalogId);
+
+  const nameRegex =
+    /^[a-zA-ZàáâäãåąčćęèéêëėæįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
+  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+  const telephoneNumberRegex = /^\+?[1-9][0-9]{7,14}$/;
 
   const newUser: User = {
     name: 'Ny bruker ' + getNextUserNumber(getUsers?.users),
@@ -121,6 +126,9 @@ export const CodeListsPage = () => {
                     <div className={styles.codeListInfo}>
                       <div className={styles.textField}>
                         <TextField
+                          isValid={nameRegex.test(
+                            (updatedUserList.find((c) => c.userId === user.userId) || user)?.name,
+                          )}
                           label='Navn'
                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             updateUserState(user.userId, event.target.value);
@@ -130,6 +138,9 @@ export const CodeListsPage = () => {
                       </div>
                       <div className={styles.textField}>
                         <TextField
+                          isValid={emailRegex.test(
+                            (updatedUserList.find((c) => c.userId === user.userId) || user)?.email,
+                          )}
                           label='E-post'
                           inputMode='email'
                           value={(updatedUserList.find((c) => c.userId === user.userId) || user)?.email}
@@ -143,6 +154,9 @@ export const CodeListsPage = () => {
                           label='Telefonnummer'
                           type='tel'
                           inputMode='tel'
+                          isValid={telephoneNumberRegex.test(
+                            String((updatedUserList.find((c) => c.userId === user.userId) || user)?.telephoneNumber),
+                          )}
                           value={String(
                             (updatedUserList.find((c) => c.userId === user.userId) || user)?.telephoneNumber,
                           )}

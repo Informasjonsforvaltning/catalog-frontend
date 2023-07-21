@@ -64,9 +64,10 @@ export const useUpdateUser = (catalogId: string) => {
         throw new Error('Invalid user id');
       }
 
-      const nameRegex = /^[a-zA-Z\s'-]+$/;
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      const telephoneNumberRegex = /^\+?\d+(?:\(\d+\))?(?:[\s-]?\d+)*$/;
+      const nameRegex =
+        /^[a-zA-ZàáâäãåąčćęèéêëėæįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
+      const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+      const telephoneNumberRegex = /^\+?[1-9][0-9]{7,14}$/;
 
       if (!nameRegex.test(updatedUser.name)) {
         throw new Error('Invalid name');
