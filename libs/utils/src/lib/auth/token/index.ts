@@ -29,7 +29,7 @@ const getAuthorities = (token: string): string => {
   return ((tokenDecoded && (tokenDecoded as any).authorities) as string) || '';
 };
 
-const getResourceRoles = (token: string): ResourceRole[] =>
+export const getResourceRoles = (token: string): ResourceRole[] =>
   getAuthorities(token)
     .split(',')
     .map((authorityDescriptor) => authorityDescriptor.split(':'))

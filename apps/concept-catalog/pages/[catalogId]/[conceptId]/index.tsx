@@ -621,10 +621,10 @@ export async function getServerSideProps({ req, res, params }) {
   const hasWritePermission = token && hasOrganizationWritePermission(token.access_token, catalogId);
   const replacedConcepts = await getReplacedConcepts();
   const username: string = token && getUsername(token.id_token);
-  const organization: Organization = await getOrganization(catalogId);
-  const revisions: Concept[] | null = await getConceptRevisions(conceptId, `${token.access_token}`).then((response) => {
-    return response.json() || null;
-  });
+  const organization: Organization = await getOrganization(catalogId).then((response) => response.json());
+  const revisions: Concept[] | null = await getConceptRevisions(conceptId, `${token.access_token}`).then(
+    (response) => response.json() || null,
+  );
 
   return {
     props: {

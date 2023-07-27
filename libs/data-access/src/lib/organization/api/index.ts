@@ -1,3 +1,19 @@
+export const getOrganizations = async (organizationIds: string[]) => {
+  if (organizationIds.length > 0) {
+    const resource = `${process.env.ORGANIZATION_CATALOG_BASE_URI}/organizations?organizationId=${organizationIds}`;
+    const options = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'GET',
+      cache: 'no-cache' as RequestCache,
+    };
+    return await fetch(resource, options);
+  }
+
+  return Promise.reject('Organization ids cannot be empty');
+};
+
 export const getOrganization = async (organizationId: string) => {
   if (organizationId.match(/^\d{9}$/)) {
     const resource = `${process.env.ORGANIZATION_CATALOG_BASE_URI}/organizations/${organizationId}`;
@@ -8,13 +24,7 @@ export const getOrganization = async (organizationId: string) => {
       method: 'GET',
       cache: 'no-cache' as RequestCache,
     };
-    const response = await fetch(resource, options)
-      .then((res) => {
-        return res.status === 200 && res.json();
-      })
-      .catch((err) => console.error('getOrganization failed with: ', err));
-
-    return response;
+    return await fetch(resource, options);
   }
 
   return Promise.reject('Invalid organization id');

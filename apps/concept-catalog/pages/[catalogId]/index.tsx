@@ -282,7 +282,7 @@ export async function getServerSideProps({ req, res, params }) {
   }
 
   const hasWritePermission = token && hasOrganizationWritePermission(token.access_token, catalogId);
-  const organization: Organization = await getOrganization(catalogId);
+  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   return {
     props: {
       organization,
