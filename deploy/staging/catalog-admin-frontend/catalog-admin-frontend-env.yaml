@@ -35,6 +35,11 @@ spec:
                 secretKeyRef:
                   name: commonurl-staging
                   key: CATALOG_ADMIN_SERVICE_BASE_URI
+            - name: ORGANIZATION_CATALOG_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: ORGANIZATION_CATALOG_BASE_URI
             - name: NEXT_PUBLIC_CATALOG_ADMIN_BASE_URI
               valueFrom:
                 secretKeyRef:
