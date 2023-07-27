@@ -140,7 +140,7 @@ export async function getServerSideProps({ req, params }) {
     };
   }
 
-  const organization: Organization = await getOrganization(catalogId);
+  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   return {
     props: {
       organization,

@@ -21,21 +21,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(response.status).send({ error: 'Failed to get code lists' });
       }
 
-      res.send(await response.json());
+      return res.send(await response.json());
     } catch (error) {
-      res.status(500).send({ error: 'Failed to get code lists' });
+      return res.status(500).send({ error: 'Failed to get code lists' });
     }
   } else if (req.method == 'POST') {
     try {
       const { codeList } = JSON.parse(req.body);
       const response = await createCodeList(codeList, `${token?.access_token}`, catalogId as string);
       if (response.status !== 200) {
+        console.log('Failed to create code list');
         return res.status(response.status).send({ error: 'Failed to create code list' });
       }
 
-      res.send(await response.json());
+      return res.send(await response.json());
     } catch (error) {
-      res.status(500).send({ error: 'Failed to create code list' });
+      return res.status(500).send({ error: 'Failed to create code list' });
     }
   } else if (req.method == 'PATCH') {
     try {
@@ -45,9 +46,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(response.status).send({ error: 'Failed to update code list' });
       }
 
-      res.send(await response.json());
+      return res.send(await response.json());
     } catch (error) {
-      res.status(500).send({ error: 'Failed to update code list' });
+      return res.status(500).send({ error: 'Failed to update code list' });
     }
   } else if (req.method == 'DELETE') {
     try {
@@ -56,9 +57,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(response.status).send({ error: 'Failed to delete code list' });
       }
 
-      res.send(await response.json());
+      return res.send(await response.json());
     } catch (error) {
-      res.status(500).send({ error: 'Failed to delete code list' });
+      return res.status(500).send({ error: 'Failed to delete code list' });
     }
   } else {
     return res.status(400).send('');
