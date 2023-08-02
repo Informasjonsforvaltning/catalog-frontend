@@ -28,15 +28,7 @@ exports[`SearchHit should render SearchHit with undefined input successfully 1`]
       </div>
       <div
         class="rowSpaceBetween"
-      >
-        <div
-          class="metaData"
-        >
-          <p>
-            Dette begrepet er under revisjon. Se utkast under versjoner. - Ikke klart i backend
-          </p>
-        </div>
-      </div>
+      />
     </div>
   </div>
 </body>

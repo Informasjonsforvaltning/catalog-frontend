@@ -187,16 +187,21 @@ export const ConceptPage = ({
   };
 
   const handleEditConcept = () => {
-    if (validOrganizationNumber(catalogId) && validUUID(concept?.id)) {
+    const revision = revisions?.find((revision) => !revision.erPublisert);
+    const id = revision ? revision.id : concept?.id;
+    if (validOrganizationNumber(catalogId) && validUUID(id)) {
       router
-        .push(`/${catalogId}/${concept?.id}/edit`)
+        .push(`/${catalogId}/${id}/edit`)
         .catch((err) => console.error('Failed to navigate to concept edit page: ', err));
     }
   };
 
   const handleDeleteConcept = () => {
     if (window.confirm(localization.concept.confirmDelete)) {
-      deleteConcept.mutate(concept?.id);
+      const revision = revisions?.find((revision) => !revision.erPublisert);
+      if (revision) {
+        deleteConcept.mutate(revision.id);
+      }
     }
   };
 
@@ -304,12 +309,14 @@ export const ConceptPage = ({
               {hasWritePermission && (
                 <div className={classes.actionButtons}>
                   <Button onClick={handleEditConcept}>Rediger</Button>
-                  <Button
-                    color={'danger'}
-                    onClick={handleDeleteConcept}
-                  >
-                    Slett
-                  </Button>
+                  {!concept?.erPublisert && (
+                    <Button
+                      color={'danger'}
+                      onClick={handleDeleteConcept}
+                    >
+                      Slett
+                    </Button>
+                  )}
                 </div>
               )}
             </div>

@@ -9,6 +9,7 @@ import styles from './search-hit.module.css';
 import { Concept } from '@catalog-frontend/types';
 import Link from 'next/link';
 import { Tag } from '../tag';
+import { loadComponents } from 'next/dist/server/load-components';
 
 interface Props {
   catalogId: string;
@@ -64,9 +65,21 @@ const SearchHit = ({ catalogId, searchHit }: Props) => {
       </div>
 
       <div className={styles.rowSpaceBetween}>
-        <div className={styles.metaData}>
-          <p>Dette begrepet er under revisjon. Se utkast under versjoner. - Ikke klart i backend</p>
-        </div>
+        {searchHit.gjeldendeRevisjon && (
+          <div className={styles.metaData}>
+            <p>
+              <Link
+                href={
+                  validOrganizationNumber(catalogId) && validUUID(searchHit.gjeldendeRevisjon)
+                    ? `/${catalogId}/${searchHit.gjeldendeRevisjon}`
+                    : '#'
+                }
+              >
+                {localization.searchHit.underRevision}
+              </Link>
+            </p>
+          </div>
+        )}
         {searchHit?.tildeltBruker && <p className={styles.greyFont}>{searchHit.tildeltBruker.id}</p>}
       </div>
       {searchHit?.definisjon && <p className={styles.description}>{translate(searchHit?.definisjon?.tekst)}</p>}

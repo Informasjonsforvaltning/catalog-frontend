@@ -53,13 +53,6 @@ exports[`SearchHit should render SearchHit successfully 1`] = `
       <div
         class="rowSpaceBetween"
       >
-        <div
-          class="metaData"
-        >
-          <p>
-            Dette begrepet er under revisjon. Se utkast under versjoner. - Ikke klart i backend
-          </p>
-        </div>
         <p
           class="greyFont"
         >
