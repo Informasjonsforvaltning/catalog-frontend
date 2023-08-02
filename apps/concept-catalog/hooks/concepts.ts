@@ -51,7 +51,7 @@ export const useDeleteConcept = (catalogId: string) => {
 
       return response;
     },
-    onSuccess(data) {
+    onSuccess() {
       if (validOrganizationNumber(catalogId)) {
         router.push(`/${catalogId}`).catch((err) => console.error('Failed to navigate to search page: ', err));
       }
