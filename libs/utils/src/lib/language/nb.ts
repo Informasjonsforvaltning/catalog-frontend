@@ -110,6 +110,7 @@ export const nb = {
 
   searchHit: {
     lastEdited: 'Sist endret',
+    underRevision: 'Under revidering',
   },
   catalogAdmin: {
     internalFields: 'Interne felt',

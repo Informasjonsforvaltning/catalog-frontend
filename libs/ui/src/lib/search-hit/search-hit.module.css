@@ -28,6 +28,10 @@
   margin-bottom: 9px;
 }
 
+.metaData a {
+  color: #2d3741;
+}
+
 .description {
   font-style: normal;
   font-size: 20px;

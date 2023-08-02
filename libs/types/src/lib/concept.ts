@@ -122,6 +122,7 @@ export interface Concept {
   kontaktpunkt?: ContactDetails | null;
   gyldigFom?: string | null;
   gyldigTom?: string | null;
+  gjeldendeRevisjon?: string;
   seOgså: string[];
   erstattesAv?: string[];
   status?: Status | null;
