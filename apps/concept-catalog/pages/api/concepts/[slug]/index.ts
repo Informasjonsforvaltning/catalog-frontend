@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } else if (req.method === 'POST') {
     const drafConcept = {
       anbefaltTerm: {
-        navn: { nb: 'Nytt begrep' },
+        navn: { nb: '' },
       },
       status: 'utkast' as Status,
       ansvarligVirksomhet: {
