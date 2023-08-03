@@ -17,6 +17,7 @@ export const useGetAllCodeLists = ({ catalogId }) => {
       });
       return response.json();
     },
+    refetchOnWindowFocus: false,
   });
 };
 

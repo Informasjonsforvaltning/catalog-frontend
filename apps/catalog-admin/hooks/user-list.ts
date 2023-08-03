@@ -17,6 +17,7 @@ export const useGetUsers = (catalogId: string) => {
       });
       return response.json();
     },
+    refetchOnWindowFocus: false,
   });
 };
 
