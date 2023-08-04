@@ -23,7 +23,7 @@ export const CheckboxGroupFilter = <T,>({ items, filterName, onChange }: Props<T
         name: value as string,
         key: `checkbox-item-${value}`,
         label,
-        checked: searchState.filters[filterName]?.includes(value as T),
+        checked: searchState.filters[filterName]?.includes(value),
       }))}
     />
   );
