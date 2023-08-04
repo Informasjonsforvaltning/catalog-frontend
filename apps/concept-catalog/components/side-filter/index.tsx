@@ -1,20 +1,26 @@
 import { Accordion } from '@digdir/design-system-react';
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import { action, useSearchDispatch } from '../../context/search';
-import { PublishedFilterType, StatusFilterType } from '../../context/search/state';
+import { PublishedFilterType } from '../../context/search/state';
 import { hashCode, localization as loc } from '@catalog-frontend/utils';
 import styles from './side-filter.module.css';
 import { CheckboxGroupFilter } from './checkbox-group-filter';
 import { AccordionItem, AccordionItemProps } from './accordion-item';
 import { Select } from '@catalog-frontend/ui';
+import { useRouter } from 'next/router';
+import { useGetUsers } from '../../hooks/user-list';
+import { AssignedUser, Status, User, mapUserToAssignedUser } from '@catalog-frontend/types';
 
 const SideFilter = () => {
+  const router = useRouter();
+  const catalogId = `${router.query?.catalogId}`;
   const searchDispatch = useSearchDispatch();
+  const [assignedUserIdValue, setAssignedUserIdValue] = useState('');
 
   const statusItems = [
-    { value: 'utkast' as StatusFilterType, label: loc.status.draft },
-    { value: 'høring' as StatusFilterType, label: loc.status.hearing },
-    { value: 'godkjent' as StatusFilterType, label: loc.status.approved },
+    { value: 'utkast' as Status, label: loc.status.draft },
+    { value: 'høring' as Status, label: loc.status.hearing },
+    { value: 'godkjent' as Status, label: loc.status.approved },
   ];
   const nameAndConceptItems = [
     { value: 'Egenskapsnavn', label: 'Egenskapsnavn' },
@@ -25,10 +31,11 @@ const SideFilter = () => {
     { value: 'unpublished' as PublishedFilterType, label: loc.publicationState.unpublished },
   ];
 
+  const { data: getUsers } = useGetUsers(catalogId);
+  const assignedUserItems: User[] = getUsers?.users;
+
   const handleOnStatusChange = (names: string[]) => {
-    searchDispatch(
-      action('SET_CONCEPT_STATUS', { filters: { status: names.map((name) => name as StatusFilterType) } }),
-    );
+    searchDispatch(action('SET_CONCEPT_STATUS', { filters: { status: names.map((name) => name as Status) } }));
   };
 
   const handleOnNameAndConceptChange = (names: string[]) =>
@@ -39,6 +46,12 @@ const SideFilter = () => {
       action('SET_PUBLICATION_STATE', { filters: { published: names.map((name) => name as PublishedFilterType) } }),
     );
 
+  const handleOnAssignedChange = (userId: string) => {
+    const assignedUser: AssignedUser = mapUserToAssignedUser(assignedUserItems.find((item) => item.userId === userId));
+    searchDispatch(action('SET_ASSIGNED_USER', { filters: { assignedUser } }));
+    setAssignedUserIdValue(assignedUser.id);
+  };
+
   const accordionItemContents: AccordionItemProps[] = [
     {
       header: loc.subjectArea,
@@ -47,7 +60,7 @@ const SideFilter = () => {
     {
       header: loc.conceptStatus,
       content: (
-        <CheckboxGroupFilter<StatusFilterType>
+        <CheckboxGroupFilter<Status>
           items={statusItems}
           filterName='status'
           onChange={handleOnStatusChange}
@@ -58,11 +71,11 @@ const SideFilter = () => {
       header: loc.assigned,
       content: (
         <Select
-          label={loc.search.searchField}
-          options={['TODO1', 'TODO2', 'TODO3'].map((item) => ({ label: item, value: item }))}
-          onChange={() => 'TODO'}
-          value={'TODO'}
-          hideLabel={true}
+          options={
+            assignedUserItems ? [...assignedUserItems.map((item) => ({ label: item.name, value: item.userId }))] : []
+          }
+          onChange={handleOnAssignedChange}
+          value={assignedUserIdValue}
         />
       ),
     },

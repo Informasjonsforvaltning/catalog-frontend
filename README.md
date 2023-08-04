@@ -12,7 +12,7 @@ Then run the command below to install the dependencies:
 
 ## Development server
 
-Run `yarn nx serve concept-catalog` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+Run `yarn nx serve concept-catalog` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files. Remember to add your organization number to the end of the url, e.g. http://localhost:4200/123456789.
 
 ## Understand this workspace
 

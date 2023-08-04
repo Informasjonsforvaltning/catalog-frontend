@@ -1,11 +1,11 @@
-import { Status } from '@catalog-frontend/types';
+import { AssignedUser, Status } from '@catalog-frontend/types';
 
 export type PublishedFilterType = 'published' | 'unpublished';
-export type StatusFilterType = Status;
 
 export interface SearchFilters {
   published?: PublishedFilterType[];
-  status?: StatusFilterType[];
+  status?: Status[];
+  assignedUser?: AssignedUser;
 }
 
 export interface SearchState {

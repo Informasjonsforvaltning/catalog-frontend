@@ -20,6 +20,10 @@ export const reducer = produce((state: SearchState, action: ACTION): SearchState
       // TODO: implement when backend is ready
       return state;
     }
+    case 'SET_ASSIGNED_USER': {
+      state.filters.assignedUser = action.payload.filters?.assignedUser;
+      return state;
+    }
     default:
       throw new Error(`Unknown action type ${action.type}`);
   }
