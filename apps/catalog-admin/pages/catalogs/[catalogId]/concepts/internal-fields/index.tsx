@@ -13,7 +13,7 @@ import {
   useDeleteInternalField,
   useUpdateInternalField,
 } from '../../../../../hooks/internal-fields';
-import { useGetAllCodeLists } from 'apps/catalog-admin/hooks/code-lists';
+import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
 import { compare } from 'fast-json-patch';
 
 const fieldTypeOptions: { [key: string]: SelectOption } = {
