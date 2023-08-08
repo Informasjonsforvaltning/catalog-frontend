@@ -18,7 +18,8 @@ import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
 import { compare } from 'fast-json-patch';
 
 const fieldTypeOptions: { [key: string]: SelectOption } = {
-  freetext: { label: 'Fritekst', value: 'text_short' },
+  shortText: { label: 'Kort tekst', value: 'text_short' },
+  longText: { label: 'Lang tekst', value: 'text_long' },
   boolean: { label: 'Boolsk verdi', value: 'boolean' },
   codelist: { label: 'Kodeliste', value: 'code_list' },
 };
