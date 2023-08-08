@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import styles from './internal-fields.module.css';
 import { Accordion, TextField } from '@digdir/design-system-react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
@@ -34,6 +34,7 @@ export const InternalFieldsPage = () => {
   const createInternalField = useCreateInternalField(catalogId);
   const deleteInternalField = useDeleteInternalField(catalogId);
   const updateInternalField = useUpdateInternalField(catalogId);
+  const [accordionIsOpen, setAccordionIsOpen] = useState(false);
 
   const getNextFieldNumber = (fields: Field[]): number => (fields ? fields.length : 0) + 1;
 
@@ -44,8 +45,19 @@ export const InternalFieldsPage = () => {
     description: { nb: 'Nytt felt beskrivelse' },
   };
 
+  const newAccordionRef = useRef(null);
+
   const handleCreateInternalField = () => {
-    createInternalField.mutate(newField);
+    createInternalField.mutate(newField, {
+      onSuccess: () => {
+        setAccordionIsOpen(true);
+        newAccordionRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest',
+        });
+      },
+    });
   };
 
   const [updatedFieldsList, setUpdatedFieldsList] = React.useState<Field[]>([]);
@@ -151,8 +163,15 @@ export const InternalFieldsPage = () => {
                 border={true}
                 className={styles.accordion}
               >
-                <Accordion.Item>
-                  <Accordion.Header level={2}>
+                <Accordion.Item
+                  ref={newAccordionRef}
+                  open={
+                    getTranslateText(field.label).includes(`Nytt felt ${getNextFieldNumber(dbFields) - 1}`)
+                      ? accordionIsOpen
+                      : undefined
+                  }
+                >
+                  <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
                     <h2 className={styles.label}>{getTranslateText(field.label)}</h2>
                   </Accordion.Header>
 
