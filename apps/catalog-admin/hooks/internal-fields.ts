@@ -39,9 +39,9 @@ export const useCreateInternalField = (catalogId: string) => {
         return Promise.reject('Internal field must have a label');
       }
 
-      // if (!validateLabelField(String(getTranslateText(String(field.label))))) {
-      //   return Promise.reject('Internal field label must have correct format');
-      // }
+      if (!validateLabelField(String(getTranslateText(field.label)))) {
+        return Promise.reject('Internal field label must have correct format');
+      }
 
       const response = await fetch(`/api/internal-fields/${catalogId}`, {
         method: 'POST',
