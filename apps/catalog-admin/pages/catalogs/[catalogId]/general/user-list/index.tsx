@@ -8,6 +8,7 @@ import { useGetUsers, useCreateUser, useDeleteUser, useUpdateUser } from '../../
 import { useRouter } from 'next/router';
 import { User } from '@catalog-frontend/types';
 import { compare } from 'fast-json-patch';
+import { textRegex, telephoneNumberRegex, emailRegex } from '@catalog-frontend/utils';
 
 export const CodeListsPage = () => {
   const router = useRouter();
@@ -18,11 +19,6 @@ export const CodeListsPage = () => {
   const createUser = useCreateUser(catalogId);
   const deleteUser = useDeleteUser(catalogId);
   const updateUser = useUpdateUser(catalogId);
-
-  const nameRegex =
-    /^[a-zA-ZàáâäãåąčćęèéêëėæįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
-  const emailRegex = /^[\w-]+@[\w-]+\.[\w-]{2,4}$/;
-  const telephoneNumberRegex = /^\+?[1-9][0-9]{7,14}$/;
 
   const newUser: User = {
     name: 'Ny bruker ' + getNextUserNumber(getUsers?.users),
@@ -126,7 +122,7 @@ export const CodeListsPage = () => {
                     <div className={styles.codeListInfo}>
                       <div className={styles.textField}>
                         <TextField
-                          isValid={nameRegex.test(
+                          isValid={textRegex.test(
                             (updatedUserList.find((c) => c.userId === user.userId) || user)?.name,
                           )}
                           label='Navn'

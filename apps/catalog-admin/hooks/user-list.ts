@@ -2,6 +2,7 @@ import { User } from '@catalog-frontend/types';
 import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { compare } from 'fast-json-patch';
+import { textRegex, emailRegex, telephoneNumberRegex } from '@catalog-frontend/utils';
 
 export const useGetUsers = (catalogId: string) => {
   return useQuery({
@@ -65,12 +66,7 @@ export const useUpdateUser = (catalogId: string) => {
         throw new Error('Invalid user id');
       }
 
-      const nameRegex =
-        /^[a-zA-ZàáâäãåąčćęèéêëėæįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
-      const emailRegex = /^[\w-]+@[\w-]+\.[\w-]{2,4}$/;
-      const telephoneNumberRegex = /^\+?[1-9][0-9]{7,14}$/;
-
-      if (!nameRegex.test(updatedUser.name)) {
+      if (!textRegex.test(updatedUser.name)) {
         throw new Error('Invalid name');
       }
 

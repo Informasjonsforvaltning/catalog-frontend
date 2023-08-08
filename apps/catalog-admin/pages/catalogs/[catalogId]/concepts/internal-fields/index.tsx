@@ -6,6 +6,7 @@ import { Button, Select } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { CodeList, Field, FieldType, SelectOption } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
+import { textRegex } from '@catalog-frontend/utils';
 
 import {
   useGetInternalFields,
@@ -34,14 +35,14 @@ export const InternalFieldsPage = () => {
   const deleteInternalField = useDeleteInternalField(catalogId);
   const updateInternalField = useUpdateInternalField(catalogId);
 
+  const getNextFieldNumber = (fields: Field[]): number => (fields ? fields.length : 0) + 1;
+
   const newField: Field = {
-    label: { nb: 'new field' },
+    label: { nb: `Nytt felt ${getNextFieldNumber(dbFields)}` },
     type: 'boolean',
     location: 'main_column',
-    description: { nb: 'new field description' },
+    description: { nb: 'Nytt felt beskrivelse' },
   };
-
-  const getNextFieldNumber = (fields: Field[]): number => (fields ? fields.length : 0) + 1;
 
   const handleCreateInternalField = () => {
     createInternalField.mutate(newField);
@@ -113,8 +114,7 @@ export const InternalFieldsPage = () => {
        - Must contain one or more characters
        - Can contain æøå and  -.,?+&%
     */
-    const labelRegex = /^(?! )(?!.* $)[\wæøåÆØÅ\s\-.,?!+&%]+$/;
-    return labelRegex.test(label);
+    return textRegex.test(label);
   };
 
   const codeListsOptions = () => {
@@ -151,7 +151,7 @@ export const InternalFieldsPage = () => {
                 border={true}
                 className={styles.accordion}
               >
-                <Accordion.Item key={field.id}>
+                <Accordion.Item open={true}>
                   <Accordion.Header level={2}>
                     <h2 className={styles.label}>{getTranslateText(field.label)}</h2>
                   </Accordion.Header>

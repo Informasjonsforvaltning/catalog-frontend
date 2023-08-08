@@ -2,16 +2,10 @@ import { Field } from '@catalog-frontend/types';
 import { getTranslateText, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { compare } from 'fast-json-patch';
+import { textRegex } from '@catalog-frontend/utils';
 
 const validateLabelField = (label: string) => {
-  /* Can contain letters from the english alphabet, number, space, æ@å and -.,?+&%. Cannot be empty
-     - Can contain letteres and numbers 
-     - Can contain space (but not start or end with it)
-     - Must contain one or more characters
-     - Can contain æøå and  -.,?+&%
-  */
-  const labelRegex = /^(?! )(?!.* $)[\wæøåÆØÅ\s\-.,?!+&%]+$/;
-  return labelRegex.test(label);
+  return textRegex.test(label);
 };
 
 export const useGetInternalFields = (catalogId: string) => {
