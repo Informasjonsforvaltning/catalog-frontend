@@ -6,7 +6,7 @@ import { Button, Select } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { CodeList, Field, FieldType, SelectOption } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
-import { textRegex } from '@catalog-frontend/utils';
+import { textRegexWithNumbers } from '@catalog-frontend/utils';
 
 import {
   useGetInternalFields,
@@ -114,7 +114,7 @@ export const InternalFieldsPage = () => {
        - Must contain one or more characters
        - Can contain æøå and  -.,?+&%
     */
-    return textRegex.test(label);
+    return textRegexWithNumbers.test(label);
   };
 
   const codeListsOptions = () => {

@@ -2,10 +2,10 @@ import { Field } from '@catalog-frontend/types';
 import { getTranslateText, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { compare } from 'fast-json-patch';
-import { textRegex } from '@catalog-frontend/utils';
+import { textRegexWithNumbers } from '@catalog-frontend/utils';
 
 const validateLabelField = (label: string) => {
-  return textRegex.test(label);
+  return textRegexWithNumbers.test(label);
 };
 
 export const useGetInternalFields = (catalogId: string) => {
