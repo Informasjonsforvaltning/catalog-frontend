@@ -151,7 +151,7 @@ export const InternalFieldsPage = () => {
                 border={true}
                 className={styles.accordion}
               >
-                <Accordion.Item open={true}>
+                <Accordion.Item>
                   <Accordion.Header level={2}>
                     <h2 className={styles.label}>{getTranslateText(field.label)}</h2>
                   </Accordion.Header>
