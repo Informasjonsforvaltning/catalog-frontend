@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styles from './code-lists.module.css';
 import { Accordion, TextField, Heading } from '@digdir/design-system-react';
 import { Button, PageBanner, SearchField, UploadButton } from '@catalog-frontend/ui';
@@ -37,10 +37,17 @@ const CodeListsPage = () => {
     codes: [],
   };
 
+  const newAccordionRef = useRef(null);
+
   const handleCreateCodeList = () => {
     createCodeList.mutate(newCodeList, {
       onSuccess: () => {
         setAccordionIsOpen(true);
+        newAccordionRef.current?.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest',
+        });
       },
     });
   };
@@ -146,7 +153,14 @@ const CodeListsPage = () => {
                   border={true}
                   className={styles.accordion}
                 >
-                  <Accordion.Item open={data.name.includes('Ny kodeliste') ? accordionIsOpen : undefined}>
+                  <Accordion.Item
+                    ref={newAccordionRef}
+                    open={
+                      data.name.includes(`Ny kodeliste ${getNextNewCodeListNumber(getAllCodeLists.codeLists) - 1}`)
+                        ? accordionIsOpen
+                        : undefined
+                    }
+                  >
                     <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
                       <h1 className={styles.label}>{data.name}</h1>
                       <p className={styles.description}> {data.description} </p>

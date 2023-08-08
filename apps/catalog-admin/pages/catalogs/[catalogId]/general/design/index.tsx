@@ -11,6 +11,7 @@ import { getToken } from 'next-auth/jwt';
 import { Organization } from '@catalog-frontend/types';
 import { getOrganization } from '@catalog-frontend/data-access';
 import { useRouter } from 'next/router';
+import { textRegexWithNumbers } from '@catalog-frontend/utils';
 
 const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
   const adminContext = useAdminState();
@@ -23,8 +24,7 @@ const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
   const [disableTextField, setDisableTextField] = useState(true);
 
   function validateLogoDescription(text: string): boolean {
-    const alphanumericRegex = /^[a-zA-ZæøåÆØÅ0-9\s\-_&,.]+$/;
-    return logo ? alphanumericRegex.test(text) : false;
+    return logo ? textRegexWithNumbers.test(text) : false;
   }
 
   useEffect(() => {

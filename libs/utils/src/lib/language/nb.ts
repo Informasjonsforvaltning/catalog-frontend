@@ -75,6 +75,7 @@ export const nb = {
     importLogo: 'Importer logo',
     bin: 'Søppelkasse',
     removeFilter: 'Fjern filter',
+    save: 'Lagre',
   },
 
   dropdown: {
@@ -112,6 +113,7 @@ export const nb = {
     lastEdited: 'Sist endret',
     underRevision: 'Under revidering',
   },
+
   catalogAdmin: {
     internalFields: 'Interne felt',
     codeList: 'Kodeliste',
@@ -165,7 +167,14 @@ export const nb = {
       en: 'Navn (engelsk)',
       nn: 'Navn (nynorsk)',
       nb: 'Navn (bokmål)',
+      confirmDelete: 'Er du sikker på at du vil slette dette feltet?',
     },
+    create: {
+      newInternalField: 'Opprett nytt internt felt',
+    },
+    fieldNameDescription: 'Navn på felt',
+    fieldTypeDescription: 'Type felt',
+    chooseCodeList: 'Velg kodeliste',
   },
 
   concept: {

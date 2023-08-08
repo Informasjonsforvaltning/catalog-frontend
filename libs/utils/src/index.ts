@@ -9,3 +9,4 @@ export * from './lib/validation/organization-number';
 export * from './lib/validation/uuid';
 export * from './lib/functions';
 export * from './lib/validation/change-requests-id';
+export * from './lib/regex/regex';

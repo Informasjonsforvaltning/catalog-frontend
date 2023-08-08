@@ -2,6 +2,7 @@ import styles from './color-picker.module.css';
 import { TextField } from '@digdir/design-system-react';
 import { AdminContextProvider, useAdminDispatch } from '../../context/admin';
 import { useEffect, useState } from 'react';
+import { colorRegex } from '@catalog-frontend/utils';
 
 interface ColorPicker {
   defaultColor?: string;
@@ -10,8 +11,7 @@ interface ColorPicker {
 
 export const ColorPicker = ({ defaultColor, type }: ColorPicker) => {
   const [inputColor, setInputColor] = useState(defaultColor);
-  const regex = new RegExp('^#(?:[0-9a-fA-F]{3}){1,2}$');
-  const [isValidInput, setIsValidInput] = useState(regex.test(defaultColor));
+  const [isValidInput, setIsValidInput] = useState(colorRegex.test(defaultColor));
   const adminDispatch = useAdminDispatch();
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export const ColorPicker = ({ defaultColor, type }: ColorPicker) => {
           isValid={isValidInput}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setInputColor(event.target.value);
-            setIsValidInput(regex.test(event.target.value));
+            setIsValidInput(colorRegex.test(event.target.value));
           }}
         />
       </div>
