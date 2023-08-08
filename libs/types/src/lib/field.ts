@@ -1,6 +1,6 @@
 import { MultiLanguageText } from './types';
 
-export type FieldType = 'text_short' | 'boolean' | 'code_list';
+export type FieldType = 'text_short' | 'text_long' | 'boolean' | 'code_list';
 
 type FieldLocation = 'main_column' | 'right_column';
 
