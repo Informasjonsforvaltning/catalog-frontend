@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import styles from './internal-fields.module.css';
-import { Accordion, TextField } from '@digdir/design-system-react';
+import { Accordion, Heading, TextField } from '@digdir/design-system-react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button, Select } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
@@ -153,7 +153,12 @@ export const InternalFieldsPage = () => {
         </div>
 
         <div className={`${styles.row} ${styles.pb0_5}`}>
-          <p>{localization.catalogAdmin.internalFields}</p>
+          <Heading
+            level={2}
+            size='xsmall'
+          >
+            {localization.catalogAdmin.internalFields}
+          </Heading>
         </div>
 
         <div className={styles.pageContent}>
