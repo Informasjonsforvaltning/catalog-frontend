@@ -102,11 +102,9 @@ export const InternalFieldsPage = () => {
       updateInternalField
         .mutateAsync({ beforeUpdateField: dbField, updatedField: updatedField })
         .then((data) => {
-          console.log('Update successful:', data);
           alert('Field updated successfully!');
         })
         .catch((error) => {
-          console.error('Update failed:', error);
           alert('Failed to update field.');
         });
     } else {
@@ -121,12 +119,6 @@ export const InternalFieldsPage = () => {
   };
 
   const validateLabelField = (label: string) => {
-    /* Can contain letters from the english alphabet, number, space, æ@å and -.,?+&%. Cannot be empty
-       - Can contain letteres and numbers 
-       - Can contain space (but not start or end with it)
-       - Must contain one or more characters
-       - Can contain æøå and  -.,?+&%
-    */
     return textRegexWithNumbers.test(label);
   };
 

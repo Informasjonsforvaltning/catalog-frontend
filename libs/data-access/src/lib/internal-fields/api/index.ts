@@ -59,3 +59,18 @@ export const deleteInternalField = async (catalogId: string, fieldId: string, ac
   };
   return await fetch(resource, options);
 };
+
+export const patchEditableField = async (catalogId: string, accessToken: string, diff: Operation[]) => {
+  if (diff.length > 0) {
+    const resource = `${path}/${catalogId}/concepts/fields/editable`;
+    const options = {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      method: 'PATCH',
+      body: JSON.stringify(diff),
+    };
+    return await fetch(resource, options);
+  }
+};

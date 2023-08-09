@@ -116,6 +116,7 @@ export const nb = {
 
   catalogAdmin: {
     internalFields: 'Interne felt',
+    editableFields: 'Editerbare felt',
     codeList: 'Kodeliste',
     codeLists: 'Kodelister',
     fontColor: 'Skriftfarge',
@@ -145,6 +146,7 @@ export const nb = {
     },
     manage: {
       internalFields: 'Administrer interne felt',
+      editableFields: 'Administrer editerbare felt',
       codeList: 'Administrer kodeliste',
       design: 'Administrer organisasjonsspesifikt design',
       userList: 'Administrer brukerliste',
