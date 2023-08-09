@@ -1,10 +1,10 @@
-import { User } from '@catalog-frontend/types';
+import { AssignedUser } from '@catalog-frontend/types';
 import { Operation } from 'fast-json-patch';
 
 const path = `${process.env.CATALOG_ADMIN_SERVICE_BASE_URI}`;
 
 export const getUsers = async (catalogId: string, accessToken: string) => {
-  const resource = `${path}/${catalogId}/general/user-list`;
+  const resource = `${path}/${catalogId}/general/users`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -15,8 +15,8 @@ export const getUsers = async (catalogId: string, accessToken: string) => {
   return await fetch(resource, options);
 };
 
-export const createUser = async (user: Partial<User>, accessToken: string, catalogId: string) => {
-  const resource = `${path}/${catalogId}/general/user-list`;
+export const createUser = async (user: Partial<AssignedUser>, accessToken: string, catalogId: string) => {
+  const resource = `${path}/${catalogId}/general/users`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -30,7 +30,7 @@ export const createUser = async (user: Partial<User>, accessToken: string, catal
 
 export const patchUser = async (catalogId: string, userId: string, accessToken: string, diff: Operation[]) => {
   if (diff.length > 0) {
-    const resource = `${path}/${catalogId}/general/user-list/${userId}`;
+    const resource = `${path}/${catalogId}/general/users/${userId}`;
     const options = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -44,7 +44,7 @@ export const patchUser = async (catalogId: string, userId: string, accessToken: 
 };
 
 export const deleteUser = async (catalogId: string, userId: string, accessToken: string) => {
-  const resource = `${path}/${catalogId}/general/user-list/${userId}`;
+  const resource = `${path}/${catalogId}/general/users/${userId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
