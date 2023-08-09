@@ -1,19 +1,17 @@
 import { Accordion } from '@digdir/design-system-react';
-import { uniqueId } from 'lodash';
 import React, { ReactNode, useState } from 'react';
 
 export type AccordionItemProps = {
-  header: string;
+  header: ReactNode;
   content: ReactNode;
+  initiallyOpen?: boolean;
 };
-const AccordionItem = ({ header, content }: AccordionItemProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+
+const AccordionItem = ({ header, content, initiallyOpen = false }: AccordionItemProps) => {
+  const [isOpen, setIsOpen] = useState(initiallyOpen);
 
   return (
-    <Accordion.Item
-      key={`accordion-item-${uniqueId()}`}
-      open={isOpen}
-    >
+    <Accordion.Item open={isOpen}>
       <Accordion.Header onHeaderClick={() => setIsOpen(!isOpen)}>{header}</Accordion.Header>
       <Accordion.Content>{content}</Accordion.Content>
     </Accordion.Item>

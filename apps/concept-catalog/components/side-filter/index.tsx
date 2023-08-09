@@ -2,10 +2,10 @@ import { Accordion } from '@digdir/design-system-react';
 import { memo, useState } from 'react';
 import { action, useSearchDispatch } from '../../context/search';
 import { PublishedFilterType } from '../../context/search/state';
-import { hashCode, localization as loc } from '@catalog-frontend/utils';
+import { localization as loc } from '@catalog-frontend/utils';
 import styles from './side-filter.module.css';
 import { CheckboxGroupFilter } from './checkbox-group-filter';
-import { AccordionItem, AccordionItemProps } from './accordion-item';
+import { AccordionItem, AccordionItemProps } from '../accordion-item';
 import { Select } from '@catalog-frontend/ui';
 import { useRouter } from 'next/router';
 import { useGetUsers } from '../../hooks/users';
@@ -110,7 +110,7 @@ const SideFilter = () => {
 
   const accordionItems = accordionItemContents.map((item) => (
     <AccordionItem
-      key={`accordion-item-${hashCode(item.header)}`}
+      key={`accordion-item-${item.header}`}
       {...item}
     />
   ));
