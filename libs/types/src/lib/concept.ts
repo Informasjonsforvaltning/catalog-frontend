@@ -135,6 +135,7 @@ export interface Concept {
   publiseringsTidspunkt?: string;
   opprettet?: string;
   opprettetAv?: string;
+  interneFelt?: Record<string, { value: string }>;
 }
 
 export interface SkosConcept {

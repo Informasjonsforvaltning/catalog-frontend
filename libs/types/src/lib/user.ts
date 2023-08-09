@@ -5,3 +5,7 @@ export interface AssignedUser {
   email?: string;
   telephoneNumber?: number;
 }
+
+export interface UsersResult {
+  users: AssignedUser[];
+}

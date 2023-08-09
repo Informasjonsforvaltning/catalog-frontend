@@ -1,4 +1,4 @@
-import { EditableField, Field } from '@catalog-frontend/types';
+import { EditableFields, Field } from '@catalog-frontend/types';
 import { getTranslateText, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { compare } from 'fast-json-patch';
@@ -132,11 +132,11 @@ export const useDeleteInternalField = (catalogId: string) => {
   });
 };
 
-export const useUpdateEditableField = (catalogId: string) => {
+export const useUpdateEditableFields = (catalogId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(
-    async ({ beforeUpdate, afterUpdate }: { beforeUpdate: EditableField; afterUpdate: EditableField }) => {
+    async ({ beforeUpdate, afterUpdate }: { beforeUpdate: EditableFields; afterUpdate: EditableFields }) => {
       const diff = compare(beforeUpdate, afterUpdate);
 
       if (!validOrganizationNumber(catalogId)) {

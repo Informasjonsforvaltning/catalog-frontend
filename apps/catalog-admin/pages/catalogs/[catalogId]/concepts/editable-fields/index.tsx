@@ -6,7 +6,7 @@ import { CodeList } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
 
 import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
-import { useGetInternalFields, useUpdateEditableField } from '../../../../../hooks/internal-fields';
+import { useGetInternalFields, useUpdateEditableFields } from '../../../../../hooks/internal-fields';
 import { useState } from 'react';
 import { compare } from 'fast-json-patch';
 
@@ -16,13 +16,13 @@ export function EditableFields() {
   const { data: getAllCodeLists } = useGetAllCodeLists({ catalogId });
   const dbCodeLists: CodeList[] = getAllCodeLists?.codeLists;
   const { data: getInternalFields } = useGetInternalFields(catalogId);
-  const dbEditableField = getInternalFields?.editable;
+  const dbEditableFields = getInternalFields?.editable;
   const [updatedCodeListId, setUpdatedCodeListId] = useState<string>(null);
-  const updateCodeListId = useUpdateEditableField(catalogId);
+  const updateCodeListId = useUpdateEditableFields(catalogId);
 
   const handleUpdateDbCodeListId = () => {
     const newField = { catalogId: catalogId, domainCodeListId: updatedCodeListId };
-    const diff = compare(dbEditableField, newField);
+    const diff = compare(dbEditableFields, newField);
 
     if (diff) {
       if (updatedCodeListId === undefined) {
@@ -31,7 +31,7 @@ export function EditableFields() {
       }
 
       updateCodeListId
-        .mutateAsync({ beforeUpdate: dbEditableField, afterUpdate: newField })
+        .mutateAsync({ beforeUpdate: dbEditableFields, afterUpdate: newField })
         .then(() => {
           alert('Field updated successfully!');
         })
@@ -77,7 +77,7 @@ export function EditableFields() {
                 <Select
                   label={localization.catalogAdmin.chooseCodeList}
                   options={codeListsOptions()}
-                  value={dbEditableField?.domainCodeListId}
+                  value={dbEditableFields?.domainCodeListId}
                   onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                     setUpdatedCodeListId(String(event));
                   }}
