@@ -1,4 +1,4 @@
-import { Field } from '@catalog-frontend/types';
+import { EditableField, Field } from '@catalog-frontend/types';
 import { getTranslateText, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { compare } from 'fast-json-patch';
@@ -130,4 +130,39 @@ export const useDeleteInternalField = (catalogId: string) => {
       queryClient.invalidateQueries({ queryKey: ['getInternalFields', catalogId] });
     },
   });
+};
+
+export const useUpdateEditableField = (catalogId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    async ({ beforeUpdate, afterUpdate }: { beforeUpdate: EditableField; afterUpdate: EditableField }) => {
+      const diff = compare(beforeUpdate, afterUpdate);
+
+      if (!validOrganizationNumber(catalogId)) {
+        throw new Error('Invalid organization number');
+      }
+
+      if (diff) {
+        const response = await fetch(`/api/editable-fields/${catalogId}`, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            diff,
+          }),
+          cache: 'no-store',
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to upddate editable field');
+        }
+        return response;
+      }
+    },
+    {
+      onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries(['getInternalFields', catalogId]);
+      },
+    },
+  );
 };

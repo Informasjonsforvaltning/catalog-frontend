@@ -18,3 +18,8 @@ export interface SelectOption {
   label: string;
   value: FieldType;
 }
+
+export interface EditableField {
+  catalogId?: string;
+  domainCodeListId?: string;
+}

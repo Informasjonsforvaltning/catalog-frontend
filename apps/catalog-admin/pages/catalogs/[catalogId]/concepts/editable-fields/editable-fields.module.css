@@ -1,0 +1,45 @@
+.page {
+  width: 90%;
+  max-width: 1320px;
+  padding-bottom: 37px;
+  padding-top: 37px;
+  background-color: white;
+  border: 1px solid #ccc;
+}
+
+.field {
+  composes: field from '../internal-fields/internal-fields.module.css';
+}
+
+.accordion {
+  composes: accordion from '../internal-fields/internal-fields.module.css';
+}
+
+.page-content {
+  composes: page-content from '../internal-fields/internal-fields.module.css';
+  padding: 37px;
+}
+
+.center {
+  composes: center from '../internal-fields/internal-fields.module.css';
+  margin: 37px;
+}
+
+.row {
+  composes: row from '../internal-fields/internal-fields.module.css';
+}
+
+.accordionButtons {
+  composes: accordionButtons from '../internal-fields/internal-fields.module.css';
+}
+
+.saveButton {
+  composes: saveButton from '../internal-fields/internal-fields.module.css';
+}
+
+.heading {
+  max-width: 1320px;
+  width: 90%;
+  display: flex;
+  justify-content: flex-start;
+}
