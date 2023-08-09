@@ -1,4 +1,4 @@
-import { patchEditableField } from '@catalog-frontend/data-access';
+import { patchEditableFields } from '@catalog-frontend/data-access';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getToken } from 'next-auth/jwt';
 
@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method == 'PATCH') {
     try {
       const { diff } = JSON.parse(req.body);
-      const response = await patchEditableField(catalogId as string, `${token?.access_token}`, diff);
+      const response = await patchEditableFields(catalogId as string, `${token?.access_token}`, diff);
 
       if (response.status !== 200) {
         return res.status(response.status).send({ error: 'Failed to update editable field1' });

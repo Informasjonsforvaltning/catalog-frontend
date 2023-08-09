@@ -1,4 +1,4 @@
-export * from './lib/catalog-admin/api';
+export * from './lib/design/api';
 export * from './lib/catalog-comments/api';
 export * from './lib/catalog-history/api';
 export * from './lib/concept/api';

@@ -26,12 +26,26 @@ import {
   hasOrganizationWritePermission,
 } from '@catalog-frontend/utils';
 import {
+  getAllCodeLists,
   getConcept,
   getConceptRevisions,
+  getFields,
   getOrganization,
+  getUsers,
   searchConceptsByIdentifiers,
 } from '@catalog-frontend/data-access';
-import { Concept, Comment, Update, Organization } from '@catalog-frontend/types';
+import {
+  Concept,
+  Comment,
+  Update,
+  Organization,
+  CodeList,
+  Field,
+  AssignedUser,
+  FieldsResult,
+  CodeListsResult,
+  UsersResult,
+} from '@catalog-frontend/types';
 import { ChatIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
 import { Accordion, Tabs, TextArea } from '@digdir/design-system-react';
@@ -48,6 +62,56 @@ type MapType = {
   [id: string]: string;
 };
 
+interface InterneFeltProps {
+  concept: Concept;
+  fields: Field[];
+  codeLists: CodeList[];
+  users: AssignedUser[];
+  location: 'main_column' | 'right_column';
+}
+
+const InterneFelt = ({ concept, fields, codeLists, users, location }: InterneFeltProps) => {
+  const getCodeName = (codeListId: string, codeId: string) => {
+    const codeList = codeLists.find((codeList) => codeList.id === codeListId);
+    return translate(codeList?.codes.find((code) => `${code.id}` === codeId)?.name);
+  };
+
+  const getUserName = (userId: string) => {
+    return users.find((user) => user.id === userId)?.name;
+  };
+
+  const filteredFields = Object.keys(concept?.interneFelt)
+    .map((fieldId) => {
+      const field = fields.find((field) => field.id === fieldId);
+      if (!field) {
+        return null;
+      }
+
+      return {
+        ...field,
+        value: concept?.interneFelt[fieldId].value,
+      };
+    })
+    .filter((field) => field !== null && field.location === location)
+    .sort((a, b) => `${translate(a.label)}`.localeCompare(`${translate(b.label)}`));
+
+  return (
+    <>
+      {filteredFields.map((field) => (
+        <InfoCard.Item
+          key={`internalField-${field.id}`}
+          label={`${translate(field.label)}:`}
+        >
+          {(field.type === 'text_short' || field.type === 'text_long') && <span>{field.value}</span>}
+          {field.type === 'boolean' && <span>{field.value ? localization.yes : localization.no}</span>}
+          {field.type === 'user_list' && <span>{getUserName(field.value)}</span>}
+          {field.type === 'code_list' && <span>{getCodeName(field.codeListId, field.value)}</span>}
+        </InfoCard.Item>
+      ))}
+    </>
+  );
+};
+
 export const ConceptPage = ({
   username,
   organization,
@@ -55,6 +119,9 @@ export const ConceptPage = ({
   revisions,
   replacedConcepts,
   hasWritePermission,
+  fieldsResult,
+  codeListsResult,
+  usersResult,
   FDK_REGISTRATION_BASE_URI,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [language, setLanguage] = useState('nb');
@@ -132,10 +199,6 @@ export const ConceptPage = ({
       }) ?? '',
     ],
     ['Opprettet av', concept?.opprettetAv ?? ''],
-    ['Tildelt', 'TODO (interne felt)'],
-    ['Begrepsansvarlig', 'TODO (interne felt)'],
-    ['Godkjenner', 'TODO (interne felt)'],
-    ['Merkelapp', 'TODO (interne felt)'],
   ];
 
   const handleLanguageChange = (lang) => {
@@ -418,6 +481,13 @@ export const ConceptPage = ({
                       )}
                     </InfoCard.Item>
                   )}
+                  <InterneFelt
+                    fields={fieldsResult.internal}
+                    codeLists={codeListsResult.codeLists}
+                    users={usersResult.users}
+                    concept={concept}
+                    location='main_column'
+                  />
                 </InfoCard>
 
                 <div className={classes.tabs}>
@@ -564,6 +634,13 @@ export const ConceptPage = ({
                     <span>{value}</span>
                   </InfoCard.Item>
                 ))}
+                <InterneFelt
+                  fields={fieldsResult.internal}
+                  codeLists={codeListsResult.codeLists}
+                  users={usersResult.users}
+                  concept={concept}
+                  location='right_column'
+                />
               </InfoCard>
             </div>
           </>
@@ -632,6 +709,15 @@ export async function getServerSideProps({ req, res, params }) {
   const revisions: Concept[] | null = await getConceptRevisions(conceptId, `${token.access_token}`).then(
     (response) => response.json() || null,
   );
+  const fieldsResult: FieldsResult = await getFields(catalogId, `${token.access_token}`).then((response) =>
+    response.json(),
+  );
+  const codeListsResult: CodeListsResult = await getAllCodeLists(catalogId, `${token.access_token}`).then((response) =>
+    response.json(),
+  );
+  const usersResult: UsersResult = await getUsers(catalogId, `${token.access_token}`).then((response) =>
+    response.json(),
+  );
 
   return {
     props: {
@@ -640,6 +726,9 @@ export async function getServerSideProps({ req, res, params }) {
       concept,
       revisions,
       replacedConcepts,
+      fieldsResult,
+      codeListsResult,
+      usersResult,
       hasWritePermission,
       FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
     },

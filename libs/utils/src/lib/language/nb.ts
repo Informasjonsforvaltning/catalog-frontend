@@ -3,6 +3,8 @@
  */
 
 export const nb = {
+  yes: 'Ja',
+  no: 'Nei',
   loading: 'Laster',
   general: 'Generelt',
   noAccess: 'Ingen tilgang',
