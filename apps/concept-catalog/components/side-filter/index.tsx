@@ -8,8 +8,8 @@ import { CheckboxGroupFilter } from './checkbox-group-filter';
 import { AccordionItem, AccordionItemProps } from './accordion-item';
 import { Select } from '@catalog-frontend/ui';
 import { useRouter } from 'next/router';
-import { useGetUsers } from '../../hooks/user-list';
-import { AssignedUser, Status, User, mapUserToAssignedUser } from '@catalog-frontend/types';
+import { useGetUsers } from '../../hooks/users';
+import { AssignedUser, Status } from '@catalog-frontend/types';
 
 const SideFilter = () => {
   const router = useRouter();
@@ -32,7 +32,7 @@ const SideFilter = () => {
   ];
 
   const { data: getUsers } = useGetUsers(catalogId);
-  const assignedUserItems: User[] = getUsers?.users;
+  const assignedUserItems: AssignedUser[] = getUsers?.users;
 
   const handleOnStatusChange = (names: string[]) => {
     searchDispatch(action('SET_CONCEPT_STATUS', { filters: { status: names.map((name) => name as Status) } }));
@@ -47,7 +47,7 @@ const SideFilter = () => {
     );
 
   const handleOnAssignedChange = (userId: string) => {
-    const assignedUser: AssignedUser = mapUserToAssignedUser(assignedUserItems.find((item) => item.userId === userId));
+    const assignedUser: AssignedUser = assignedUserItems.find((item) => item.id === userId);
     searchDispatch(action('SET_ASSIGNED_USER', { filters: { assignedUser } }));
     setAssignedUserIdValue(assignedUser.id);
   };
@@ -72,7 +72,7 @@ const SideFilter = () => {
       content: (
         <Select
           options={
-            assignedUserItems ? [...assignedUserItems.map((item) => ({ label: item.name, value: item.userId }))] : []
+            assignedUserItems ? [...assignedUserItems.map((item) => ({ label: item.name, value: item.id }))] : []
           }
           onChange={handleOnAssignedChange}
           value={assignedUserIdValue}

@@ -10,7 +10,7 @@ export const useGetUsers = (catalogId: string) => {
         return Promise.reject('Invalid organization number');
       }
 
-      const response = await fetch(`/api/user-list/${catalogId}`, {
+      const response = await fetch(`/api/users/${catalogId}`, {
         method: 'GET',
       });
       return response.json();

@@ -1,4 +1,4 @@
-import { User } from '@catalog-frontend/types';
+import { AssignedUser } from '@catalog-frontend/types';
 import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { compare } from 'fast-json-patch';
@@ -13,7 +13,7 @@ export const useGetUsers = (catalogId: string) => {
         return Promise.reject('Invalid organization number');
       }
 
-      const response = await fetch(`/api/user-list/${catalogId}`, {
+      const response = await fetch(`/api/users/${catalogId}`, {
         method: 'GET',
       });
       return response.json();
@@ -26,7 +26,7 @@ export const useCreateUser = (catalogId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (user: User) => {
+    mutationFn: async (user: AssignedUser) => {
       if (!validOrganizationNumber(catalogId)) {
         return Promise.reject('Invalid organization number');
       }
@@ -34,7 +34,7 @@ export const useCreateUser = (catalogId: string) => {
       if (user.name.length === 0) {
         return Promise.reject('User must have a name');
       }
-      const response = await fetch(`/api/user-list/${catalogId}`, {
+      const response = await fetch(`/api/users/${catalogId}`, {
         method: 'POST',
         body: JSON.stringify({
           user,
@@ -55,14 +55,14 @@ export const useUpdateUser = (catalogId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(
-    async ({ beforeUpdateUser, updatedUser }: { beforeUpdateUser: User; updatedUser: User }) => {
+    async ({ beforeUpdateUser, updatedUser }: { beforeUpdateUser: AssignedUser; updatedUser: AssignedUser }) => {
       const diff = compare(beforeUpdateUser, updatedUser);
 
       if (!validOrganizationNumber(catalogId)) {
         throw new Error('Invalid organization number');
       }
 
-      if (!validUUID(beforeUpdateUser.userId)) {
+      if (!validUUID(beforeUpdateUser.id)) {
         throw new Error('Invalid user id');
       }
 
@@ -79,7 +79,7 @@ export const useUpdateUser = (catalogId: string) => {
       }
 
       if (diff) {
-        const response = await fetch(`/api/user-list/${catalogId}/${beforeUpdateUser.userId}`, {
+        const response = await fetch(`/api/users/${catalogId}/${beforeUpdateUser.id}`, {
           method: 'PATCH',
           body: JSON.stringify({
             diff,
@@ -112,7 +112,7 @@ export const useDeleteUser = (catalogId: string) => {
         return Promise.reject('Invalid organization number');
       }
 
-      const response = await fetch(`/api/user-list/${catalogId}/${userId}`, {
+      const response = await fetch(`/api/users/${catalogId}/${userId}`, {
         method: 'DELETE',
         cache: 'no-store',
       });
