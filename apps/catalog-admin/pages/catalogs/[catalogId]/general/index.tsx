@@ -18,7 +18,7 @@ export const ConceptsPage = () => {
       <Card
         title={localization.catalogAdmin.userList}
         body={localization.catalogAdmin.manage.userList}
-        href={`/catalogs/${catalogId}/general/user-list`}
+        href={`/catalogs/${catalogId}/general/users`}
       />
     </div>
   );

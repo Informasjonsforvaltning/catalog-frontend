@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import styles from './user-list.module.css';
+import styles from './users.module.css';
 import { Accordion, TextField, Heading } from '@digdir/design-system-react';
 import { Button, PageBanner, SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { localization } from '@catalog-frontend/utils';
-import { useGetUsers, useCreateUser, useDeleteUser, useUpdateUser } from '../../../../../hooks/user-list';
+import { useGetUsers, useCreateUser, useDeleteUser, useUpdateUser } from '../../../../../hooks/users';
 import { useRouter } from 'next/router';
 import { AssignedUser } from '@catalog-frontend/types';
 import { compare } from 'fast-json-patch';

@@ -13,7 +13,7 @@ export const useGetUsers = (catalogId: string) => {
         return Promise.reject('Invalid organization number');
       }
 
-      const response = await fetch(`/api/user-list/${catalogId}`, {
+      const response = await fetch(`/api/users/${catalogId}`, {
         method: 'GET',
       });
       return response.json();
@@ -34,7 +34,7 @@ export const useCreateUser = (catalogId: string) => {
       if (user.name.length === 0) {
         return Promise.reject('User must have a name');
       }
-      const response = await fetch(`/api/user-list/${catalogId}`, {
+      const response = await fetch(`/api/users/${catalogId}`, {
         method: 'POST',
         body: JSON.stringify({
           user,
@@ -79,7 +79,7 @@ export const useUpdateUser = (catalogId: string) => {
       }
 
       if (diff) {
-        const response = await fetch(`/api/user-list/${catalogId}/${beforeUpdateUser.id}`, {
+        const response = await fetch(`/api/users/${catalogId}/${beforeUpdateUser.id}`, {
           method: 'PATCH',
           body: JSON.stringify({
             diff,
@@ -112,7 +112,7 @@ export const useDeleteUser = (catalogId: string) => {
         return Promise.reject('Invalid organization number');
       }
 
-      const response = await fetch(`/api/user-list/${catalogId}/${userId}`, {
+      const response = await fetch(`/api/users/${catalogId}/${userId}`, {
         method: 'DELETE',
         cache: 'no-store',
       });

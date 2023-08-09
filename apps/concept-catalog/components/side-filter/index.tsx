@@ -8,7 +8,7 @@ import { CheckboxGroupFilter } from './checkbox-group-filter';
 import { AccordionItem, AccordionItemProps } from './accordion-item';
 import { Select } from '@catalog-frontend/ui';
 import { useRouter } from 'next/router';
-import { useGetUsers } from '../../hooks/user-list';
+import { useGetUsers } from '../../hooks/users';
 import { AssignedUser, Status } from '@catalog-frontend/types';
 
 const SideFilter = () => {

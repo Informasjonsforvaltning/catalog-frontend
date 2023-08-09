@@ -5,5 +5,5 @@ export * from './lib/concept/api';
 export * from './lib/organization/api';
 export * from './lib/search-fulltext/api';
 export * from './lib/code-list/api';
-export * from './lib/user-list/api';
+export * from './lib/users/api';
 export * from './lib/internal-fields/api';
