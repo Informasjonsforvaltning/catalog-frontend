@@ -4,7 +4,7 @@ import { Accordion, Heading, TextField } from '@digdir/design-system-react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button, Select } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { CodeList, Field, FieldType, SelectOption } from '@catalog-frontend/types';
+import { CodeList, InternalField, FieldType, SelectOption } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
 import { textRegexWithNumbers } from '@catalog-frontend/utils';
 
@@ -37,9 +37,9 @@ export const InternalFieldsPage = () => {
   const updateInternalField = useUpdateInternalField(catalogId);
   const [accordionIsOpen, setAccordionIsOpen] = useState(false);
 
-  const getNextFieldNumber = (fields: Field[]): number => (fields ? fields.length : 0) + 1;
+  const getNextFieldNumber = (fields: InternalField[]): number => (fields ? fields.length : 0) + 1;
 
-  const newField: Field = {
+  const newField: InternalField = {
     label: { nb: `Nytt felt ${getNextFieldNumber(dbFields)}` },
     type: 'boolean',
     location: 'main_column',
@@ -61,11 +61,11 @@ export const InternalFieldsPage = () => {
     });
   };
 
-  const [updatedFieldsList, setUpdatedFieldsList] = React.useState<Field[]>([]);
+  const [updatedFieldsList, setUpdatedFieldsList] = React.useState<InternalField[]>([]);
 
   const updateFieldsListState = (fieldId: string, newLabel?: string, newType?: FieldType, newCodeList?: string) => {
     const updatedFieldIndex = updatedFieldsList.findIndex((field) => field.id === fieldId);
-    const fieldToUpdate: Field =
+    const fieldToUpdate: InternalField =
       updatedFieldIndex !== -1 ? updatedFieldsList[updatedFieldIndex] : dbFields.find((field) => field.id === fieldId);
     const updatedFieldsListCopy = [...updatedFieldsList];
 
@@ -88,8 +88,8 @@ export const InternalFieldsPage = () => {
   };
 
   const handleUpdateDbInternalField = (fieldId: string) => {
-    const updatedField: Field | undefined = updatedFieldsList.find((field) => field.id === fieldId)!;
-    const dbField: Field | undefined = dbFields.find((field) => field.id === fieldId)!;
+    const updatedField: InternalField | undefined = updatedFieldsList.find((field) => field.id === fieldId)!;
+    const dbField: InternalField | undefined = dbFields.find((field) => field.id === fieldId)!;
 
     if (!updatedField || !dbField) {
       console.error(`Field with id ${fieldId} not found`);
