@@ -1,4 +1,4 @@
-import { Field } from '@catalog-frontend/types';
+import { InternalField } from '@catalog-frontend/types';
 import { Operation } from 'fast-json-patch';
 
 const path = `${process.env.CATALOG_ADMIN_SERVICE_BASE_URI}`;
@@ -15,7 +15,7 @@ export const getFields = async (catalogId: string, accessToken: string) => {
   return await fetch(resource, options);
 };
 
-export const createInternalField = async (field: Partial<Field>, accessToken: string, catalogId: string) => {
+export const createInternalField = async (field: Partial<InternalField>, accessToken: string, catalogId: string) => {
   const resource = `${path}/${catalogId}/concepts/fields/internal`;
   const options = {
     headers: {

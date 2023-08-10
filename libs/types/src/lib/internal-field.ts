@@ -4,7 +4,7 @@ export type FieldType = 'text_short' | 'text_long' | 'boolean' | 'code_list' | '
 
 export type FieldLocation = 'main_column' | 'right_column';
 
-export interface Field {
+export interface InternalField {
   id?: string;
   catalogId?: string;
   label?: MultiLanguageText;
@@ -26,5 +26,5 @@ export interface SelectOption {
 
 export interface FieldsResult {
   editable: EditableFields;
-  internal: Field[];
+  internal: InternalField[];
 }

@@ -40,7 +40,7 @@ import {
   Update,
   Organization,
   CodeList,
-  Field,
+  InternalField,
   AssignedUser,
   FieldsResult,
   CodeListsResult,
@@ -64,7 +64,7 @@ type MapType = {
 
 interface InterneFeltProps {
   concept: Concept;
-  fields: Field[];
+  fields: InternalField[];
   codeLists: CodeList[];
   users: AssignedUser[];
   location: 'main_column' | 'right_column';

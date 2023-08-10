@@ -1,4 +1,4 @@
-import { EditableFields, Field } from '@catalog-frontend/types';
+import { EditableFields, InternalField } from '@catalog-frontend/types';
 import { getTranslateText, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { compare } from 'fast-json-patch';
@@ -30,7 +30,7 @@ export const useCreateInternalField = (catalogId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (field: Field) => {
+    mutationFn: async (field: InternalField) => {
       if (!validOrganizationNumber(catalogId)) {
         return Promise.reject('Invalid organization number');
       }
@@ -64,7 +64,7 @@ export const useUpdateInternalField = (catalogId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation(
-    async ({ beforeUpdateField, updatedField }: { beforeUpdateField: Field; updatedField: Field }) => {
+    async ({ beforeUpdateField, updatedField }: { beforeUpdateField: InternalField; updatedField: InternalField }) => {
       const diff = compare(beforeUpdateField, updatedField);
 
       if (!validOrganizationNumber(catalogId)) {
