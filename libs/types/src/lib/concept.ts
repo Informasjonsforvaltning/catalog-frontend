@@ -210,10 +210,10 @@ export interface ChangeRequest {
   id: string;
   conceptId?: string;
   catalogId: string;
-  anbefaltTerm?: string;
-  tillattTerm?: string;
-  frarådetTerm?: string;
-  definisjon?: string;
+  anbefaltTerm?: AnbefaltTerm;
+  tillattTerm?: Record<string, string[]>;
+  frarådetTerm?: Record<string, string[]>;
+  definisjon?: Definisjon;
 }
 
 export type SearchableField = 'anbefaltTerm' | 'frarådetTerm' | 'tillattTerm' | 'definisjon' | 'merknad';
