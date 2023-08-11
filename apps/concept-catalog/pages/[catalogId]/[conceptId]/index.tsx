@@ -80,7 +80,7 @@ const InterneFelt = ({ concept, fields, codeLists, users, location }: InterneFel
     return users.find((user) => user.id === userId)?.name;
   };
 
-  const filteredFields = Object.keys(concept?.interneFelt)
+  const filteredFields = Object.keys(concept?.interneFelt ?? {})
     .map((fieldId) => {
       const field = fields.find((field) => field.id === fieldId);
       if (!field) {
