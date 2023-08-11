@@ -115,6 +115,7 @@ export interface Concept {
   merknad?: Record<string, string[]>;
   eksempel?: Record<string, string[]>;
   fagområde?: TekstMedSpraakKode;
+  fagområdeKoder?: string[];
   bruksområde?: Record<string, string[]>;
   omfang?: UriText | null;
   tillattTerm?: Record<string, string[]>;
