@@ -1,5 +1,5 @@
 /* Color in hex format #000 or #000000 */
-export const colorRegex = /^#(?:[0-9a-fA-F]{3}){1,2}$/;
+export const colorRegex = /#([A-Fa-f0-9]{3}){1,2}\b/;
 
 /* Can contain letters and spaces, including accented characters like æøå */
 export const textRegex =

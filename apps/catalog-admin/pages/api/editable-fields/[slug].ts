@@ -20,11 +20,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const response = await patchEditableFields(catalogId as string, `${token?.access_token}`, diff);
 
       if (response.status !== 200) {
-        return res.status(response.status).send({ error: 'Failed to update editable field1' });
+        return res.status(response.status).send({ error: 'Failed to update editable field' });
       }
       res.send(await response.json());
     } catch (error) {
-      res.status(500).send({ error: 'Failed to update editable field2' });
+      res.status(500).send({ error: 'Failed to update editable field' });
     }
   } else {
     return res.status(400).send('');

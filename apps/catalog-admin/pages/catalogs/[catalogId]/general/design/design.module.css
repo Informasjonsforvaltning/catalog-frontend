@@ -4,15 +4,27 @@
   align-items: center;
 }
 
+@media screen and (max-width: 1200px) {
+  .container {
+    width: 100%;
+  }
+}
+
 .container {
-  width: 1377px;
+  max-width: 1377px;
+  width: 100%;
+}
+
+@media screen and (max-width: 1200px) {
+  .page {
+    width: 100%;
+  }
 }
 
 .backgroundContainer {
   display: flex;
   flex-direction: column;
   background-color: white;
-  width: 800px;
   border: 1px solid #d5d7d9;
   border-radius: 0px 0px 8px 8px;
   align-self: center;
@@ -23,7 +35,6 @@
 }
 
 .banner {
-  width: 1444px;
   height: 167px;
   color: white;
   font-size: 48px;

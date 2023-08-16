@@ -3,15 +3,24 @@ import { TextField } from '@digdir/design-system-react';
 import { AdminContextProvider, useAdminDispatch } from '../../context/admin';
 import { useEffect, useState } from 'react';
 import { colorRegex } from '@catalog-frontend/utils';
+import { useGetDesign } from 'apps/catalog-admin/hooks/design';
+import { Design } from '@catalog-frontend/types';
+import { useRouter } from 'next/router';
 
 interface ColorPicker {
-  defaultColor?: string;
   type: 'background' | 'font';
 }
 
-export const ColorPicker = ({ defaultColor, type }: ColorPicker) => {
-  const [inputColor, setInputColor] = useState(defaultColor);
-  const [isValidInput, setIsValidInput] = useState(colorRegex.test(defaultColor));
+export const ColorPicker = ({ type }: ColorPicker) => {
+  const router = useRouter();
+  const catalogId = `${router.query.catalogId}` || '';
+
+  const { data: getDesign } = useGetDesign(catalogId);
+  const dbDesign: Design = getDesign;
+
+  const [inputColor, setInputColor] = useState('');
+  const [isValidInput, setIsValidInput] = useState(null);
+
   const adminDispatch = useAdminDispatch();
 
   useEffect(() => {
@@ -22,6 +31,18 @@ export const ColorPicker = ({ defaultColor, type }: ColorPicker) => {
     }
   }, [inputColor]);
 
+  useEffect(() => {
+    if (dbDesign?.backgroundColor !== undefined && type === 'background') {
+      setInputColor(dbDesign?.backgroundColor);
+      setIsValidInput(colorRegex.test(dbDesign?.backgroundColor));
+    }
+
+    if (dbDesign?.fontColor !== undefined && type === 'font') {
+      setInputColor(dbDesign?.fontColor);
+      setIsValidInput(colorRegex.test(dbDesign?.fontColor));
+    }
+  }, [dbDesign]);
+
   return (
     <AdminContextProvider>
       <div className={styles.container}>
@@ -31,8 +52,8 @@ export const ColorPicker = ({ defaultColor, type }: ColorPicker) => {
         ></div>
         <TextField
           className={styles.textField}
-          defaultValue={defaultColor}
           isValid={isValidInput}
+          value={inputColor}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setInputColor(event.target.value);
             setIsValidInput(colorRegex.test(event.target.value));

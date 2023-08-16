@@ -8,8 +8,8 @@ export interface AdminState {
 }
 
 export const DefaultAdminState = {
-  backgroundColor: '#FFFFFF',
-  fontColor: '#2D3741',
+  backgroundColor: null,
+  fontColor: null,
   logo: null,
   updatedCodeLists: [],
 };

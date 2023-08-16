@@ -30,7 +30,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const { codeList } = JSON.parse(req.body);
       const response = await createCodeList(codeList, `${token?.access_token}`, catalogId as string);
       if (response.status !== 200) {
-        console.log('Failed to create code list');
         return res.status(response.status).send({ error: 'Failed to create code list' });
       }
 

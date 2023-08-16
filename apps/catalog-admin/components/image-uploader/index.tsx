@@ -4,6 +4,9 @@ import { useAdminDispatch } from '../../context/admin';
 import { FileImportIcon, TrashIcon, UploadIcon } from '@navikt/aksel-icons';
 import { localization } from '@catalog-frontend/utils';
 import { UploadButton } from '@catalog-frontend/ui';
+import { validateImageFile } from '@catalog-frontend/utils';
+import { useDeleteLogo, useGetLogo, useUpdateLogo } from 'apps/catalog-admin/hooks/design';
+import { useRouter } from 'next/router';
 
 const allowedFileTypes = ['image/x-png', 'image/svg+xml'];
 
@@ -12,11 +15,33 @@ export function ImageUploader() {
   const [fileName, setFileName] = useState<string | undefined>(undefined);
   const adminDispatch = useAdminDispatch();
 
-  const onImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const router = useRouter();
+  const catalogId = `${router.query.catalogId}` || '';
+
+  const { data: getLogo } = useGetLogo(catalogId);
+  const dbLogo = getLogo;
+
+  const updateLogo = useUpdateLogo(catalogId);
+  const deleteLogo = useDeleteLogo(catalogId);
+
+  const onImageChange = async (event) => {
     const file = event.target.files?.[0];
+    const blob = new Blob([file], { type: file.type });
     if (file && (await validateImageFile(file))) {
       setImage(URL.createObjectURL(file));
       setFileName(file.name);
+
+      const reader = new FileReader();
+      //const test = reader.readAsBinaryString(file);
+
+      reader.onload = (e) => {
+        const svgText = e.target?.result;
+        //setSvgContent(svgText);
+        console.log('test', typeof svgText);
+      };
+      reader.readAsBinaryString(file);
+
+      updateLogo.mutate(blob);
     }
   };
 
@@ -24,35 +49,22 @@ export function ImageUploader() {
     adminDispatch({ type: 'SET_LOGO', payload: { logo: image } });
   }, [image, adminDispatch]);
 
-  const validateImageFile = (file: File | null): Promise<boolean> => {
-    return new Promise((resolve) => {
-      if (!file) {
-        resolve(false);
-        return;
-      }
-      if (!file.name.match(/\.(svg|png)$/)) {
-        resolve(false);
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          resolve(true); // Image content is valid
-        };
-        img.onerror = () => {
-          alert('The content of the file is not valid.');
-          resolve(false);
-        };
-        img.src = e.target?.result as string;
-      };
-      reader.readAsDataURL(file);
-    });
+  useEffect(() => {
+    setFileName(typeof dbLogo);
+  }, [dbLogo]);
+
+  const handleDeleteLogo = () => {
+    if (window.confirm('Er du sikker på at du ønsker å slette logoen?')) {
+      deleteLogo.mutate();
+    }
   };
 
   const resetImage = () => {
     setFileName(undefined);
     setImage(undefined);
+    if (dbLogo) {
+      handleDeleteLogo();
+    }
   };
 
   return (
@@ -70,7 +82,9 @@ export function ImageUploader() {
       )}
       <UploadButton
         allowedMimeTypes={allowedFileTypes}
-        onUpload={onImageChange}
+        onUpload={(e) => {
+          onImageChange(e);
+        }}
       >
         {localization.button.importLogo}
       </UploadButton>

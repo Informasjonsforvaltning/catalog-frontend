@@ -1,0 +1,148 @@
+import { Design } from '@catalog-frontend/types';
+import { colorRegex, textRegexWithNumbers, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { compare } from 'fast-json-patch';
+import { textRegex } from '@catalog-frontend/utils';
+import { validateImageFile } from '@catalog-frontend/utils';
+import { signIn } from 'next-auth/react';
+
+export const useGetDesign = (catalogId) =>
+  useQuery<Design>({
+    queryKey: ['getDesign', catalogId],
+    queryFn: async () => {
+      if (!validOrganizationNumber(catalogId)) {
+        return null;
+      }
+      const response = await fetch(`/api/design/${catalogId}/design`, {
+        method: 'GET',
+      });
+
+      if (response.status === 401) {
+        return signIn('keycloak');
+      }
+      return response.json();
+    },
+  });
+
+export const useUpdateDesign = (catalogId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    async ({ oldDesign, newDesign }: { oldDesign: Design; newDesign: Design }) => {
+      const diff = compare(oldDesign, newDesign);
+
+      if (!validOrganizationNumber(catalogId)) {
+        throw new Error('Invalid organization number');
+      }
+
+      if (!colorRegex.test(newDesign.fontColor)) {
+        throw new Error('Invalid font color format');
+      }
+
+      if (!colorRegex.test(newDesign.backgroundColor)) {
+        throw new Error('Invalid background color format');
+      }
+
+      if (!textRegexWithNumbers.test(newDesign.logoDescription)) {
+        throw new Error('Invalid logo description');
+      }
+
+      if (diff) {
+        const response = await fetch(`/api/design/${catalogId}`, {
+          method: 'PATCH',
+          body: JSON.stringify(diff),
+          cache: 'no-store',
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to update design');
+        }
+        return response;
+      }
+    },
+    {
+      onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries(['getDesign', catalogId]);
+      },
+    },
+  );
+};
+
+export const useGetLogo = (catalogId) =>
+  useQuery<string>({
+    queryKey: ['getLogo', catalogId],
+    queryFn: async () => {
+      const response = await fetch(`/api/design/${catalogId}/logo`, {
+        method: 'GET',
+      });
+
+      if (response.status === 404) {
+        return null;
+      }
+
+      if (response.status === 401) {
+        signIn('keycloak');
+        return;
+      }
+
+      return response.text();
+    },
+  });
+
+export const useUpdateLogo = (catalogId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (logo: Blob) => {
+      if (!validOrganizationNumber(catalogId)) {
+        return Promise.reject('Invalid organization number');
+      }
+
+      // if (codeList.name.length === 0) {
+      //   return Promise.reject('Code list must have a name');
+      // }
+
+      //const formData = new FormData();
+      //formData.append('logo', logo);
+      //formData.append('filname', logo.name);
+
+      console.log('Logo hook:', logo);
+
+      const response = await fetch(`/api/design/${catalogId}`, {
+        method: 'POST',
+        body: logo,
+        cache: 'no-store',
+      });
+      return response.json();
+    },
+
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries(['getLogo', catalogId]);
+    },
+  });
+};
+
+export const useDeleteLogo = (catalogId: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async () => {
+      if (!validOrganizationNumber(catalogId)) {
+        return Promise.reject('Invalid organization number');
+      }
+
+      const response = await fetch(`/api/design/${catalogId}/logo`, {
+        method: 'DELETE',
+        cache: 'no-store',
+      });
+
+      return response;
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['getLogo', catalogId] });
+    },
+  });
+};
