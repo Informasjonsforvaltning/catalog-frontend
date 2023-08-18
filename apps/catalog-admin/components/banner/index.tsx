@@ -1,11 +1,10 @@
 import { useRouter } from 'next/router';
-import styles from './banner.module.css';
-import { useGetDesign, useGetLogo } from 'apps/catalog-admin/hooks/design';
-import { PageBanner } from '@catalog-frontend/ui';
 import { getToken } from 'next-auth/jwt';
 import { hasOrganizationReadPermission } from '@catalog-frontend/utils';
 import { getOrganization } from '@catalog-frontend/data-access';
 import { Design, Organization } from '@catalog-frontend/types';
+import { useGetDesign, useGetLogo } from '../../hooks/design';
+import styles from './banner.module.css';
 
 interface BannerProps {
   backgroundColor?: string;

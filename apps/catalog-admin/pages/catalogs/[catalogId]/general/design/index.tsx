@@ -11,7 +11,7 @@ import { Design, Organization } from '@catalog-frontend/types';
 import { getOrganization } from '@catalog-frontend/data-access';
 import { useRouter } from 'next/router';
 import { textRegexWithNumbers } from '@catalog-frontend/utils';
-import { useGetDesign, useGetLogo, useUpdateDesign } from 'apps/catalog-admin/hooks/design';
+import { useGetDesign, useGetLogo, useUpdateDesign } from '../../../../../hooks/design';
 import { compare } from 'fast-json-patch';
 
 const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {

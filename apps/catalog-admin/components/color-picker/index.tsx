@@ -1,11 +1,11 @@
-import styles from './color-picker.module.css';
 import { TextField } from '@digdir/design-system-react';
-import { AdminContextProvider, useAdminDispatch } from '../../context/admin';
 import { useEffect, useState } from 'react';
 import { colorRegex } from '@catalog-frontend/utils';
-import { useGetDesign } from 'apps/catalog-admin/hooks/design';
 import { Design } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
+import { useGetDesign } from '../../hooks/design';
+import { AdminContextProvider, useAdminDispatch } from '../../context/admin';
+import styles from './color-picker.module.css';
 
 interface ColorPicker {
   type: 'background' | 'font';

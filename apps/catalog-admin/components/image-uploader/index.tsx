@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import styles from './image-uploader.module.css';
-import { useAdminDispatch } from '../../context/admin';
-import { FileImportIcon, TrashIcon, UploadIcon } from '@navikt/aksel-icons';
+import { TrashIcon, UploadIcon } from '@navikt/aksel-icons';
 import { localization } from '@catalog-frontend/utils';
 import { UploadButton } from '@catalog-frontend/ui';
 import { validateImageFile } from '@catalog-frontend/utils';
-import { useDeleteLogo, useGetLogo, useUpdateLogo } from 'apps/catalog-admin/hooks/design';
 import { useRouter } from 'next/router';
+import { useDeleteLogo, useGetLogo, useUpdateLogo } from '../../hooks/design';
+import { useAdminDispatch } from '../../context/admin';
+import styles from './image-uploader.module.css';
 
 const allowedFileTypes = ['image/x-png', 'image/svg+xml'];
 
