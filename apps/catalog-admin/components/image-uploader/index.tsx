@@ -26,22 +26,11 @@ export function ImageUploader() {
 
   const onImageChange = async (event) => {
     const file = event.target.files?.[0];
-    const blob = new Blob([file], { type: file.type });
     if (file && (await validateImageFile(file))) {
       setImage(URL.createObjectURL(file));
       setFileName(file.name);
 
-      const reader = new FileReader();
-      //const test = reader.readAsBinaryString(file);
-
-      reader.onload = (e) => {
-        const svgText = e.target?.result;
-        //setSvgContent(svgText);
-        console.log('test', typeof svgText);
-      };
-      reader.readAsBinaryString(file);
-
-      updateLogo.mutate(blob);
+      updateLogo.mutate(file);
     }
   };
 

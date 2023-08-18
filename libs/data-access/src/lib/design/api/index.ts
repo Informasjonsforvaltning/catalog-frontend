@@ -35,11 +35,11 @@ export const patchDesign = async (catalogId: string, accessToken: string, diff: 
   }
 };
 
-export const postDesignLogo = async (catalogId: string, accessToken: string, logo: Blob) => {
+export const postDesignLogo = async (catalogId: string, accessToken: string, logo: any) => {
   const resource = `${path}/${catalogId}/design/logo`;
 
   const formData = new FormData();
-  formData.append('logo', logo, logo.name);
+  formData.append('logo', logo);
 
   const options = {
     headers: {

@@ -79,8 +79,8 @@ const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
     }
   }, [dbDesign]);
 
-  console.log(dbDesign?.hasLogo);
-  console.log(dbLogo);
+  // console.log(dbDesign?.hasLogo);
+  // console.log(dbLogo);
 
   return (
     <>

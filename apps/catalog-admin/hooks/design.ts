@@ -94,27 +94,24 @@ export const useUpdateLogo = (catalogId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (logo: Blob) => {
+    mutationFn: async (file: any) => {
       if (!validOrganizationNumber(catalogId)) {
         return Promise.reject('Invalid organization number');
       }
+
+      console.log(file);
 
       // if (codeList.name.length === 0) {
       //   return Promise.reject('Code list must have a name');
       // }
 
-      //const formData = new FormData();
-      //formData.append('logo', logo);
-      //formData.append('filname', logo.name);
+      const formData = new FormData();
+      formData.append('logo', file);
 
-      console.log('Logo hook:', logo);
-
-      const response = await fetch(`/api/design/${catalogId}`, {
+      return await fetch(`/api/design/${catalogId}/logo`, {
         method: 'POST',
-        body: logo,
-        cache: 'no-store',
+        body: formData,
       });
-      return response.json();
     },
 
     onSuccess: () => {
