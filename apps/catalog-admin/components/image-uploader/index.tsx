@@ -18,6 +18,10 @@ export function ImageUploader() {
   const router = useRouter();
   const catalogId = `${router.query.catalogId}` || '';
 
+  if (!/^\d+$/.test(catalogId)) {
+    throw new Error('Invalid catalogId');
+  }
+
   const { data: getLogo } = useGetLogo(catalogId);
   const dbLogo = getLogo && getLogo.body;
   const dbFileName = getLogo && getLogo.headers.get('Content-Disposition').match(/filename="([^"]+)"/)[1];
