@@ -11,15 +11,16 @@ import styles from './image-uploader.module.css';
 const allowedFileTypes = ['image/x-png', 'image/svg+xml'];
 
 export function ImageUploader() {
-  const [image, setImage] = useState<string | undefined>(undefined);
-  const [fileName, setFileName] = useState<string | undefined>(undefined);
+  const [image, setImage] = useState(null);
+  const [fileName, setFileName] = useState(null);
   const adminDispatch = useAdminDispatch();
 
   const router = useRouter();
   const catalogId = `${router.query.catalogId}` || '';
 
   const { data: getLogo } = useGetLogo(catalogId);
-  const dbLogo = getLogo;
+  const dbLogo = getLogo && getLogo.body;
+  const dbFileName = getLogo && getLogo.headers.get('Content-Disposition').match(/filename="([^"]+)"/)[1];
 
   const updateLogo = useUpdateLogo(catalogId);
   const deleteLogo = useDeleteLogo(catalogId);
@@ -39,7 +40,7 @@ export function ImageUploader() {
   }, [image, adminDispatch]);
 
   useEffect(() => {
-    setFileName(typeof dbLogo);
+    setFileName(dbFileName);
   }, [dbLogo]);
 
   const handleDeleteLogo = () => {

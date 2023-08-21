@@ -110,10 +110,10 @@ export const InternalFieldsPage = () => {
       updateInternalField
         .mutateAsync({ beforeUpdateField: dbField, updatedField: updatedField })
         .then((data) => {
-          alert('Field updated successfully!');
+          alert(localization.alert.success);
         })
         .catch((error) => {
-          alert('Failed to update field.');
+          alert(localization.alert.fail);
         });
     } else {
       console.log('No changes detected.');

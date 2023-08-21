@@ -33,10 +33,10 @@ export function EditableFields() {
       updateCodeListId
         .mutateAsync({ beforeUpdate: dbEditableFields, afterUpdate: newField })
         .then(() => {
-          alert('Field updated successfully!');
+          alert(localization.alert.success);
         })
         .catch(() => {
-          alert('Failed to update field.');
+          alert(localization.alert.fail);
         });
     } else {
       console.log('No changes detected.');

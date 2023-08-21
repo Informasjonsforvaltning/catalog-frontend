@@ -1,3 +1,5 @@
+import { localization } from '../language/localization';
+
 export const validateImageFile = (file: File | null): Promise<boolean> => {
   return new Promise((resolve) => {
     if (!file) {
@@ -15,7 +17,7 @@ export const validateImageFile = (file: File | null): Promise<boolean> => {
         resolve(true); // Image content is valid
       };
       img.onerror = () => {
-        alert('The content of the file is not valid.');
+        alert(localization.alert.fileNotValid);
         resolve(false);
       };
       img.src = e.target?.result as string;

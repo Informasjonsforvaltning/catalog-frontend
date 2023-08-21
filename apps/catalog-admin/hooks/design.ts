@@ -1,9 +1,7 @@
 import { Design } from '@catalog-frontend/types';
-import { colorRegex, textRegexWithNumbers, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
+import { colorRegex, textRegexWithNumbers, validOrganizationNumber } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { compare } from 'fast-json-patch';
-import { textRegex } from '@catalog-frontend/utils';
-import { validateImageFile } from '@catalog-frontend/utils';
 import { signIn } from 'next-auth/react';
 
 export const useGetDesign = (catalogId) =>
@@ -48,7 +46,7 @@ export const useUpdateDesign = (catalogId: string) => {
       }
 
       if (diff) {
-        const response = await fetch(`/api/design/${catalogId}`, {
+        const response = await fetch(`/api/design/${catalogId}/design`, {
           method: 'PATCH',
           body: JSON.stringify(diff),
           cache: 'no-store',
@@ -69,13 +67,14 @@ export const useUpdateDesign = (catalogId: string) => {
   );
 };
 
-export const useGetLogo = (catalogId) =>
-  useQuery<string>({
+export const useGetLogo = (catalogId: string) =>
+  useQuery<{ body: string; headers: Headers }>({
     queryKey: ['getLogo', catalogId],
     queryFn: async () => {
       const response = await fetch(`/api/design/${catalogId}/logo`, {
         method: 'GET',
       });
+      const responseBody = await response.text();
 
       if (response.status === 404) {
         return null;
@@ -86,7 +85,7 @@ export const useGetLogo = (catalogId) =>
         return;
       }
 
-      return response.text();
+      return { body: responseBody, headers: response.headers };
     },
   });
 
@@ -98,13 +97,6 @@ export const useUpdateLogo = (catalogId: string) => {
       if (!validOrganizationNumber(catalogId)) {
         return Promise.reject('Invalid organization number');
       }
-
-      console.log(file);
-
-      // if (codeList.name.length === 0) {
-      //   return Promise.reject('Code list must have a name');
-      // }
-
       const formData = new FormData();
       formData.append('logo', file);
 

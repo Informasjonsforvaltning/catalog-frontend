@@ -29,13 +29,6 @@ const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
   const { data: getLogo } = useGetLogo(catalogId);
   const dbLogo = getLogo;
 
-  function validateLogoDescription(text: string): boolean {
-    return logo ? textRegexWithNumbers.test(text) : false;
-  }
-
-  //const dbBlob = new Blob([dbLogo], { type: 'image/svg+xml' }); //OBS husk å legge til at type kan være png
-  //const dbUrl = URL.createObjectURL(dbBlob);
-
   const [imageLabel, setImageLabel] = useState('');
   const updateDesign = useUpdateDesign(catalogId);
 
@@ -52,35 +45,24 @@ const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
     if (diff) {
       updateDesign
         .mutateAsync({ oldDesign: dbDesign, newDesign: newDesign })
-        .then(() => {
-          alert('Design updated successfully!');
-        })
-        .catch(() => {
-          alert('Failed to design field.');
-        });
+        .then(() => alert(localization.alert.success))
+        .catch(() => alert(localization.alert.fail));
     } else {
       console.log('No changes detected.');
     }
   };
 
   useEffect(() => {
-    if (logo) {
-      setDisableTextField(false);
-      setIsTextInputValid(false);
-    } else {
-      setDisableTextField(true);
-      setIsTextInputValid(true);
-    }
-  }, [logo]);
+    const hasValidLabel = dbDesign?.hasLogo ? textRegexWithNumbers.test(dbDesign.logoDescription) : false;
+    setDisableTextField(!(logo || (dbDesign && dbDesign.hasLogo) || hasValidLabel));
+    setIsTextInputValid(hasValidLabel);
+  }, [logo, dbLogo, dbDesign]);
 
   useEffect(() => {
     if (dbDesign?.logoDescription !== undefined) {
       setImageLabel(dbDesign.logoDescription);
     }
   }, [dbDesign]);
-
-  // console.log(dbDesign?.hasLogo);
-  // console.log(dbLogo);
 
   return (
     <>
@@ -105,7 +87,7 @@ const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
                 logoDescription={dbDesign?.hasLogo && dbDesign?.logoDescription}
                 backgroundColor={backgroundColor || dbDesign?.backgroundColor || '#FFFFFF'}
                 fontColor={fontColor || dbDesign?.fontColor || '#2D3741'}
-                logo={logo || (dbDesign?.hasLogo && `/api/design/${catalogId}/logo`) || null} //OBS! hasLogo ikke oppdatert ved sletting
+                logo={logo || (dbDesign?.hasLogo && `/api/design/${catalogId}/logo`) || null}
               />
             </>
           )}
@@ -134,7 +116,8 @@ const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
                 isValid={isTextInputValid}
                 value={imageLabel}
                 onChange={(event) => {
-                  setIsTextInputValid(validateLogoDescription(event.target.value));
+                  setImageLabel(event.target.value);
+                  setIsTextInputValid(textRegexWithNumbers.test(event.target.value));
                 }}
                 required={true}
                 disabled={disableTextField}
