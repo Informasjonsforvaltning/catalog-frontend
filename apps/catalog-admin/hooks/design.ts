@@ -71,10 +71,13 @@ export const useGetLogo = (catalogId: string) =>
   useQuery<{ body: string; headers: Headers }>({
     queryKey: ['getLogo', catalogId],
     queryFn: async () => {
+      if (!validOrganizationNumber(catalogId)) {
+        return Promise.reject('Invalid organization number');
+      }
+
       const response = await fetch(`/api/design/${catalogId}/logo`, {
         method: 'GET',
       });
-      const responseBody = await response.text();
 
       if (response.status === 404) {
         return null;
@@ -85,6 +88,7 @@ export const useGetLogo = (catalogId: string) =>
         return;
       }
 
+      const responseBody = await response.text();
       return { body: responseBody, headers: response.headers };
     },
   });

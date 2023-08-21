@@ -20,10 +20,6 @@ const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
   const catalogId = `${router.query.catalogId}` || '';
   const pageSubtitle = organization.organization?.name || catalogId;
 
-  if (!/^\d+$/.test(catalogId)) {
-    throw new Error('Invalid catalogId');
-  }
-
   const { backgroundColor, fontColor, logo } = adminContext;
   const [isTextInputValid, setIsTextInputValid] = useState(false);
   const [disableTextField, setDisableTextField] = useState(true);
