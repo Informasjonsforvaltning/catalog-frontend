@@ -1,17 +1,22 @@
-import { Accordion } from '@digdir/design-system-react';
 import { memo, useState } from 'react';
+import { useRouter } from 'next/router';
+import { Accordion } from '@digdir/design-system-react';
+import { Select } from '@catalog-frontend/ui';
+import { AssignedUser, CodeList, Status } from '@catalog-frontend/types';
+import { convertCodeListToTreeNodes, localization as loc } from '@catalog-frontend/utils';
 import { action, useSearchDispatch } from '../../context/search';
 import { PublishedFilterType } from '../../context/search/state';
-import { localization as loc } from '@catalog-frontend/utils';
-import styles from './side-filter.module.css';
+import styles from './search-filter.module.css';
 import { CheckboxGroupFilter } from './checkbox-group-filter';
 import { AccordionItem, AccordionItemProps } from '../accordion-item';
-import { Select } from '@catalog-frontend/ui';
-import { useRouter } from 'next/router';
 import { useGetUsers } from '../../hooks/users';
-import { AssignedUser, Status } from '@catalog-frontend/types';
+import { CheckboxTreeFilter } from './checkbox-tree-filter';
 
-const SideFilter = () => {
+interface Props {
+  subjectCodeList?: CodeList;
+}
+
+const SearchFilter = ({ subjectCodeList }: Props) => {
   const router = useRouter();
   const catalogId = `${router.query?.catalogId}`;
   const searchDispatch = useSearchDispatch();
@@ -52,10 +57,19 @@ const SideFilter = () => {
     setAssignedUserIdValue(assignedUser.id);
   };
 
+  const handleSubjectOnCheck = (values: string[]) => {
+    searchDispatch(action('SET_SUBJECTS', { filters: { subject: values } }));
+  };
+
   const accordionItemContents: AccordionItemProps[] = [
     {
       header: loc.subjectArea,
-      content: <div>Accordion content</div>,
+      content: (
+        <CheckboxTreeFilter
+          nodes={convertCodeListToTreeNodes(subjectCodeList)}
+          onCheck={handleSubjectOnCheck}
+        />
+      ),
     },
     {
       header: loc.conceptStatus,
@@ -116,7 +130,7 @@ const SideFilter = () => {
   ));
 
   return (
-    <div className={styles.sideFilter}>
+    <div className={styles.searchFilter}>
       <Accordion
         border={true}
         className={styles.accordion}
@@ -127,4 +141,4 @@ const SideFilter = () => {
   );
 };
 
-export default memo(SideFilter);
+export default memo(SearchFilter);

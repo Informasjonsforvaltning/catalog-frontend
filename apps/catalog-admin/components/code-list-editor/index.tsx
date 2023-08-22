@@ -238,8 +238,8 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
       codes
         ?.filter((code: Code) => code.id !== currentCode.id && code.parentID !== currentCode.id)
         .map((code) => ({
-          label: getTranslateText(code.name),
-          value: code.id,
+          label: `${getTranslateText(code.name)}`,
+          value: `${code.id}`,
         }))
         .concat([{ label: 'Ingen overordnet kode', value: null }]) ?? []
     );
@@ -255,10 +255,10 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
     }));
   };
 
-  const updateCodeParent = (value: number) => {
+  const updateCodeParent = (value: string) => {
     setSelectedCode((prevSelectedCode) => ({
       ...prevSelectedCode,
-      parentID: value,
+      parentID: +value,
     }));
   };
 
@@ -339,7 +339,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
                 <Select
                   label={localization.catalogAdmin.parentCode}
                   options={possibleParentCodes(combinedListOfCodes(), selectedCode)}
-                  value={selectedCode?.parentID}
+                  value={`${selectedCode?.parentID}`}
                   onChange={updateCodeParent}
                 />
               </div>

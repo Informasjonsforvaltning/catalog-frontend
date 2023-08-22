@@ -1,4 +1,4 @@
-import { MultiLanguageText } from './types';
+import { MultiLanguageText } from './language';
 
 export interface CodeListsResult {
   codeLists: CodeList[];
@@ -16,4 +16,10 @@ export interface Code {
   id: number;
   name: MultiLanguageText;
   parentID: number | null;
+}
+
+export interface TreeNode {
+  value: string;
+  label: string;
+  children?: TreeNode[];
 }

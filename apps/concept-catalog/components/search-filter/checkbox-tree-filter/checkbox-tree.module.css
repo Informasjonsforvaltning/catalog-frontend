@@ -1,0 +1,17 @@
+.checkbox label {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox :global(.rct-collapse) {
+  display: none;
+}
+
+.checkbox :global(.rct-checkbox) {
+  padding: 0;
+}
+
+.checkboxIcon {
+  width: 24px;
+  height: 24px;
+}

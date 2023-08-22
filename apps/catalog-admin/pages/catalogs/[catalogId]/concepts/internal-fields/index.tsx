@@ -199,8 +199,8 @@ export const InternalFieldsPage = () => {
                           label={localization.catalogAdmin.fieldTypeDescription}
                           options={Object.values(fieldTypeOptions)}
                           value={(updatedFieldsList.find((f) => f.id === field.id) || field)?.type}
-                          onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                            updateFieldsListState(field.id, undefined, String(event) as FieldType, undefined);
+                          onChange={(value) => {
+                            updateFieldsListState(field.id, undefined, value as FieldType, undefined);
                           }}
                         />
                       </div>
@@ -211,8 +211,8 @@ export const InternalFieldsPage = () => {
                             label={localization.catalogAdmin.chooseCodeList}
                             options={codeListsOptions()}
                             value={(updatedFieldsList.find((f) => f.id === field.id) || field)?.codeListId}
-                            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                              updateFieldsListState(field.id, undefined, undefined, String(event));
+                            onChange={(value) => {
+                              updateFieldsListState(field.id, undefined, undefined, value);
                             }}
                           />
                         </div>

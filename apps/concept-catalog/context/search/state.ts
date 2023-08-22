@@ -6,6 +6,7 @@ export interface SearchFilters {
   published?: PublishedFilterType[];
   status?: Status[];
   assignedUser?: AssignedUser;
+  subject?: string[];
 }
 
 export interface SearchState {
