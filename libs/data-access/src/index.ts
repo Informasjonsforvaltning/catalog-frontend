@@ -7,3 +7,4 @@ export * from './lib/search-fulltext/api';
 export * from './lib/code-list/api';
 export * from './lib/users/api';
 export * from './lib/internal-fields/api';
+export * from './lib/change-requests/api';

@@ -1,27 +1,23 @@
-import { getOrganization } from '@catalog-frontend/data-access';
-import { Organization } from '@catalog-frontend/types';
+import { getChangeRequests, getOrganization } from '@catalog-frontend/data-access';
+import { ChangeRequest, Organization } from '@catalog-frontend/types';
 import { Button, List, ListItem, PageBanner } from '@catalog-frontend/ui';
 import {
   hasOrganizationReadPermission,
-  validChangeRequestId,
   localization as loc,
+  validChangeRequestId,
   validOrganizationNumber,
 } from '@catalog-frontend/utils';
 import { getToken } from 'next-auth/jwt';
 import styles from './change-requests-page.module.css';
 import { useRouter } from 'next/router';
+import { useDeleteChangeRequest } from 'apps/concept-catalog/hooks/change-requests';
 
-export const ChangeRequestsPage = ({ organization }) => {
+export const ChangeRequestsPage = ({ organization, changeRequests }) => {
   const pageSubtitle = organization?.name ?? '';
   const router = useRouter();
-  const changeRequests = [
-    { id: '1', catalogId: '11' },
-    { id: '2', catalogId: '22' },
-    { id: '3', catalogId: '33' },
-    { id: '4', catalogId: '44' },
-    { id: '5', catalogId: '55' },
-    { id: '6', catalogId: '66' },
-  ];
+  const catalogId: string = `${router.query.catalogId}` ?? '';
+
+  const deleteChangeRequest = useDeleteChangeRequest(catalogId);
 
   const handleListItemClick = (e) => {
     if (
@@ -29,6 +25,12 @@ export const ChangeRequestsPage = ({ organization }) => {
       validChangeRequestId(changeRequests, e.target.attributes.itemID.value)
     ) {
       router.push(`/catalog/${router.query.catalogId}/change-requests/${e.target.attributes.itemID.value}`);
+    }
+  };
+
+  const handleDeleteChangeRequest = (changeRequestId: string) => {
+    if (window.confirm('Er du sikker på at du vil slette dette endringsforslaget?')) {
+      deleteChangeRequest.mutate(changeRequestId);
     }
   };
 
@@ -76,9 +78,22 @@ export async function getServerSideProps({ req, params }) {
 
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
+  const changeRequests: ChangeRequest[] = await getChangeRequests(catalogId, `${token.access_token}`)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`getChangeRequests failed with status ${response.status}`);
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      throw error;
+    });
+
   return {
     props: {
       organization,
+      changeRequests,
     },
   };
 }
