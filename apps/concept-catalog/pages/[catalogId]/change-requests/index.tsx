@@ -10,14 +10,10 @@ import {
 import { getToken } from 'next-auth/jwt';
 import styles from './change-requests-page.module.css';
 import { useRouter } from 'next/router';
-import { useDeleteChangeRequest } from 'apps/concept-catalog/hooks/change-requests';
 
 export const ChangeRequestsPage = ({ organization, changeRequests }) => {
   const pageSubtitle = organization?.name ?? '';
   const router = useRouter();
-  const catalogId: string = `${router.query.catalogId}` ?? '';
-
-  const deleteChangeRequest = useDeleteChangeRequest(catalogId);
 
   const handleListItemClick = (e) => {
     if (
@@ -25,12 +21,6 @@ export const ChangeRequestsPage = ({ organization, changeRequests }) => {
       validChangeRequestId(changeRequests, e.target.attributes.itemID.value)
     ) {
       router.push(`/catalog/${router.query.catalogId}/change-requests/${e.target.attributes.itemID.value}`);
-    }
-  };
-
-  const handleDeleteChangeRequest = (changeRequestId: string) => {
-    if (window.confirm('Er du sikker på at du vil slette dette endringsforslaget?')) {
-      deleteChangeRequest.mutate(changeRequestId);
     }
   };
 

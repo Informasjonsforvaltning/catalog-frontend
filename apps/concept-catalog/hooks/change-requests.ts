@@ -18,26 +18,3 @@ export const useGetChangeRequests = (catalogId: string) => {
     refetchOnWindowFocus: false,
   });
 };
-
-export const useDeleteChangeRequest = (catalogId: string) => {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (changeRequestId: string) => {
-      if (!validOrganizationNumber(catalogId)) {
-        return Promise.reject('Invalid organization number');
-      }
-
-      const response = await fetch(`/api/change-requests/${catalogId}/${changeRequestId}`, {
-        method: 'DELETE',
-        cache: 'no-store',
-      });
-
-      return response;
-    },
-    onSuccess: () => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ['getChangeRequests', catalogId] });
-    },
-  });
-};

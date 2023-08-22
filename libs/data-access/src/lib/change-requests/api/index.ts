@@ -14,15 +14,3 @@ export const getChangeRequests = async (catalogId: string, accessToken: string) 
   };
   return await fetch(resource, options);
 };
-
-export const deleteChangeRequest = async (catalogId: string, changeRequest: string, accessToken: string) => {
-  const resource = `${path}/${catalogId}/endringsforslag/${changeRequest}`;
-  const options = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-    method: 'DELETE',
-  };
-  return await fetch(resource, options);
-};
