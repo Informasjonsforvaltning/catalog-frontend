@@ -13,7 +13,7 @@ interface ColorPicker {
 
 export const ColorPicker = ({ type }: ColorPicker) => {
   const router = useRouter();
-  const catalogId = `${router.query.catalogId}` || '';
+  const catalogId = `${router.query.catalogId}`;
 
   const { data: getDesign } = useGetDesign(catalogId);
   const dbDesign: Design = getDesign;

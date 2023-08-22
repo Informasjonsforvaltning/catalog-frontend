@@ -16,7 +16,7 @@ export function ImageUploader() {
   const adminDispatch = useAdminDispatch();
 
   const router = useRouter();
-  const catalogId = `${router.query.catalogId}` || '';
+  const catalogId = `${router.query.catalogId}`;
 
   const { data: getLogo } = useGetLogo(catalogId);
   const dbLogo = getLogo && getLogo.body;

@@ -17,7 +17,7 @@ import { compare } from 'fast-json-patch';
 const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
   const adminContext = useAdminState();
   const router = useRouter();
-  const catalogId = `${router.query.catalogId}` || '';
+  const catalogId = `${router.query.catalogId}`;
   const pageSubtitle = organization.organization?.name || catalogId;
 
   const { backgroundColor, fontColor, logo } = adminContext;
