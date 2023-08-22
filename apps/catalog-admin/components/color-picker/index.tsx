@@ -49,7 +49,7 @@ export const ColorPicker = ({ type }: ColorPicker) => {
         <div
           className={styles.color}
           style={{ background: inputColor }}
-        ></div>
+        />
         <TextField
           className={styles.textField}
           isValid={isValidInput}
