@@ -21,22 +21,29 @@ import {
   validOrganizationNumber,
 } from '@catalog-frontend/utils';
 import { useRouter } from 'next/router';
-import { Organization, QuerySort, SearchableField } from '@catalog-frontend/types';
+import { CodeListsResult, FieldsResult, Organization, QuerySort, SearchableField } from '@catalog-frontend/types';
 import { useEffect, useState } from 'react';
-import { getFields, getSelectOptions, useSearchConcepts, SortOption } from '../../hooks/search';
+import { getFields as getSearchFields, getSelectOptions, useSearchConcepts, SortOption } from '../../hooks/search';
 import styles from './search-page.module.css';
 import { getToken } from 'next-auth/jwt';
 import { FileImportIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import SideFilter from '../../components/side-filter';
+import SearchFilter from '../../components/search-filter';
 import { useCreateConcept } from '../../hooks/concepts';
-import { getOrganization } from '@catalog-frontend/data-access';
+import { getAllCodeLists, getFields, getOrganization } from '@catalog-frontend/data-access';
 import { useImportConcepts } from '../../hooks/import';
 import { useSearchDispatch, useSearchState } from '../../context/search';
 import { Session, getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useCatalogDesign } from '../../context/catalog-design';
+import { InferGetServerSidePropsType } from 'next';
 
-export const SearchPage = ({ organization, hasWritePermission, FDK_REGISTRATION_BASE_URI }) => {
+export const SearchPage = ({
+  organization,
+  hasWritePermission,
+  fieldsResult,
+  codeListsResult,
+  FDK_REGISTRATION_BASE_URI,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const catalogId = `${router.query.catalogId}`;
   const createConcept = useCreateConcept(catalogId);
@@ -60,7 +67,7 @@ export const SearchPage = ({ organization, hasWritePermission, FDK_REGISTRATION_
     catalogId,
     searchTerm,
     page: currentPage,
-    fields: getFields(selectedFieldOption),
+    fields: getSearchFields(selectedFieldOption),
     sort: sortMappings[selectedSortOption],
     filters: Object.assign(
       {},
@@ -69,6 +76,12 @@ export const SearchPage = ({ organization, hasWritePermission, FDK_REGISTRATION_
       },
       searchState.filters.published?.length === 1 && {
         published: { value: searchState.filters.published.includes('published') },
+      },
+      searchState.filters.assignedUser && {
+        assignedUser: { value: [searchState.filters.assignedUser.id] },
+      },
+      searchState.filters.subject?.length > 0 && {
+        subject: { value: searchState.filters.subject },
       },
     ),
   });
@@ -224,7 +237,11 @@ export const SearchPage = ({ organization, hasWritePermission, FDK_REGISTRATION_
 
           <div>
             <div className={styles.gridContainer}>
-              <SideFilter />
+              <SearchFilter
+                subjectCodeList={codeListsResult?.codeLists?.find(
+                  (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
+                )}
+              />
               {status === 'loading' || createConcept.status === 'loading' || importConcepts.status === 'loading' ? (
                 <Spinner />
               ) : status === 'error' || createConcept.status === 'error' || importConcepts.status === 'error' ? (
@@ -283,10 +300,20 @@ export async function getServerSideProps({ req, res, params }) {
 
   const hasWritePermission = token && hasOrganizationWritePermission(token.access_token, catalogId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+
+  const fieldsResult: FieldsResult = await getFields(catalogId, `${token.access_token}`).then((response) =>
+    response.json(),
+  );
+  const codeListsResult: CodeListsResult = await getAllCodeLists(catalogId, `${token.access_token}`).then((response) =>
+    response.json(),
+  );
+
   return {
     props: {
       organization,
       hasWritePermission,
+      fieldsResult,
+      codeListsResult,
       FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
     },
   };

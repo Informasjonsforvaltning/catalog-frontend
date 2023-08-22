@@ -1,4 +1,4 @@
-import { MultiLanguageText } from './types';
+import { MultiLanguageText } from './language';
 
 export type FieldType = 'text_short' | 'text_long' | 'boolean' | 'code_list' | 'user_list';
 

@@ -6,7 +6,8 @@ export type ACTION_TYPE =
   | 'SET_PUBLICATION_STATE'
   | 'SET_CONCEPT_STATUS'
   | 'SET_NAME_AND_CONCEPT'
-  | 'SET_ASSIGNED_USER';
+  | 'SET_ASSIGNED_USER'
+  | 'SET_SUBJECTS';
 
 // add new payload types here as needed
 export type ACTION_PAYLOAD = SearchState;

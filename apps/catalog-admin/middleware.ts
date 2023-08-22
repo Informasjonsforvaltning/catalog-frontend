@@ -53,7 +53,7 @@ export async function middleware(req: any) {
       req: req,
       secret: secret,
     });
-    const hasPermission = token && hasOrganizationAdminPermission(JSON.stringify(token), catalogId);
+    const hasPermission = token && hasOrganizationAdminPermission(token.access_token, catalogId);
 
     if (!hasPermission) {
       return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access`, req.url));

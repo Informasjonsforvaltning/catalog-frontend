@@ -1,5 +1,5 @@
 import styles from './editable-fields.module.css';
-import { Heading } from '@digdir/design-system-react';
+import { Heading, SingleSelectEvent } from '@digdir/design-system-react';
 import { Button, PageBanner, Select } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { CodeList } from '@catalog-frontend/types';
@@ -78,8 +78,8 @@ export function EditableFields() {
                   label={localization.catalogAdmin.chooseCodeList}
                   options={codeListsOptions()}
                   value={dbEditableFields?.domainCodeListId}
-                  onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
-                    setUpdatedCodeListId(String(event));
+                  onChange={(value) => {
+                    setUpdatedCodeListId(value);
                   }}
                 />
               </div>
