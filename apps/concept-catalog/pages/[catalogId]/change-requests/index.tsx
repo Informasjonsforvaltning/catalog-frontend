@@ -6,6 +6,7 @@ import {
   localization as loc,
   validChangeRequestId,
   validOrganizationNumber,
+  validUUID,
 } from '@catalog-frontend/utils';
 import { getToken } from 'next-auth/jwt';
 import styles from './change-requests-page.module.css';
@@ -16,11 +17,13 @@ export const ChangeRequestsPage = ({ organization, changeRequests }) => {
   const router = useRouter();
 
   const handleListItemClick = (e) => {
+    const changeRequestId = e.target.attributes.itemID.value;
     if (
       validOrganizationNumber(router.query.catalogId.toString()) &&
-      validChangeRequestId(changeRequests, e.target.attributes.itemID.value)
+      validUUID(changeRequestId) &&
+      validChangeRequestId(changeRequests, changeRequestId)
     ) {
-      router.push(`/catalog/${router.query.catalogId}/change-requests/${e.target.attributes.itemID.value}`);
+      router.push(`/${router.query.catalogId}/change-requests/${changeRequestId}`);
     }
   };
 
