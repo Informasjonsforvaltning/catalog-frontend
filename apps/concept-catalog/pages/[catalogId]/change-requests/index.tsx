@@ -18,14 +18,13 @@ export const ChangeRequestsPage = ({ organization, changeRequests }) => {
 
   const handleListItemClick = (e) => {
     const changeRequestId = e.target.attributes.itemID.value;
+    const catalogId = router.query.catalogId.toString();
     if (
-      validOrganizationNumber(router.query.catalogId.toString()) &&
+      validOrganizationNumber(catalogId) &&
       validUUID(changeRequestId) &&
       validChangeRequestId(changeRequests, changeRequestId)
     ) {
-      const encodedCatalogId = encodeURIComponent(router.query.catalogId.toString());
-      const encodedChangeRequestId = encodeURIComponent(changeRequestId);
-      router.push(`/${encodedCatalogId}/change-requests/${encodedChangeRequestId}`);
+      router.push(`/${catalogId}/change-requests/${changeRequestId}`);
     }
   };
 
