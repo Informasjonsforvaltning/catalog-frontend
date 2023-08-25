@@ -1,5 +1,5 @@
 import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner, Spinner } from '@catalog-frontend/ui';
-import { localization, validOrganizationNumber } from '@catalog-frontend/utils';
+import { localization, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { Heading } from '@digdir/design-system-react';
 import { Session } from 'next-auth';
 import { signIn, useSession } from 'next-auth/react';
@@ -13,7 +13,7 @@ export const SignIn = ({ FDK_REGISTRATION_BASE_URI }) => {
   const router = useRouter();
   const { data, status } = useSession();
   const session: Session = data;
-  const catalogId = router.query.catalogId as string;
+  const callbackUrl = router.query.callbackUrl as string;
 
   const breadcrumbList = [
     {
@@ -23,14 +23,25 @@ export const SignIn = ({ FDK_REGISTRATION_BASE_URI }) => {
   ] as BreadcrumbType[];
 
   useEffect(() => {
-    if (validOrganizationNumber(catalogId)) {
+    const parts = callbackUrl.split('/');
+    let securedUrl = null;
+    if (parts.length === 2) {
+      const orgNumber = validOrganizationNumber(parts[1]) ? parts[1] : '0';
+      securedUrl = `/${orgNumber}`;
+    } else if (parts.length === 3) {
+      const orgNumber = validOrganizationNumber(parts[1]) ? parts[1] : '0';
+      const conceptId = validUUID(parts[2]) ? parts[2] : '0';
+      securedUrl = `/${orgNumber}/${conceptId}`;
+    }
+
+    if (securedUrl) {
       if (needLogin(session, status, router)) {
-        signIn('keycloak', { callbackUrl: `/${catalogId}` });
+        signIn('keycloak', { callbackUrl: `${securedUrl}` });
       } else {
-        router.push(`/${catalogId}`);
+        router.push(`${securedUrl}`);
       }
     }
-  }, [session, status, router, catalogId]);
+  }, [session, status, router, callbackUrl]);
 
   return (
     <>

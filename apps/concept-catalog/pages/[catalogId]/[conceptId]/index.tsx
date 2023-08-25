@@ -680,7 +680,7 @@ export async function getServerSideProps({ req, res, params }) {
     return {
       redirect: {
         permanent: false,
-        destination: `/auth/signin?catalogId=${catalogId}`,
+        destination: `/auth/signin?callbackUrl=/${catalogId}/${conceptId}`,
       },
     };
   }
