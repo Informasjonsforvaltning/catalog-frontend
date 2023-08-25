@@ -23,7 +23,9 @@ export const ChangeRequestsPage = ({ organization, changeRequests }) => {
       validUUID(changeRequestId) &&
       validChangeRequestId(changeRequests, changeRequestId)
     ) {
-      router.push(`/${router.query.catalogId}/change-requests/${changeRequestId}`);
+      const encodedCatalogId = encodeURIComponent(router.query.catalogId.toString());
+      const encodedChangeRequestId = encodeURIComponent(changeRequestId);
+      router.push(`/${encodedCatalogId}/change-requests/${encodedChangeRequestId}`);
     }
   };
 
