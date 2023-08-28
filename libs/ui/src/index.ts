@@ -18,7 +18,6 @@ export * from './lib/pagination';
 export * from './lib/tag';
 export * from './lib/card';
 export * from './lib/checkbox-group';
-export * from './lib/chips';
 export * from './lib/list';
 export * from './lib/search-hit-container';
 export * from './lib/custom-error';

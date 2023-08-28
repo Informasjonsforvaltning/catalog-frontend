@@ -8,7 +8,6 @@ import {
   UploadButton,
   PageBanner,
   SearchField,
-  Chips,
   SearchHitContainer,
 } from '@catalog-frontend/ui';
 import {
@@ -35,6 +34,7 @@ import { Session, getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useCatalogDesign } from '../../context/catalog-design';
 import { InferGetServerSidePropsType } from 'next';
+import { Chip } from '@digdir/design-system-react';
 
 export const SearchPage = ({
   organization,
@@ -177,16 +177,6 @@ export const SearchPage = ({
       <div className='container'>
         <div className={styles.pageContainer}>
           <div className={styles.secondRowContainer}>
-            <Chips size='small'>
-              {searchState.filters.published?.map((filter, index) => (
-                <Chips.Removable
-                  key={index}
-                  onClick={() => removeFilter(filter)}
-                >
-                  {filter === 'published' ? loc.publicationState.published : loc.publicationState.unpublished}
-                </Chips.Removable>
-              ))}
-            </Chips>
             <div className={styles.buttonsContainer}>
               <Button
                 variant='outline'
@@ -224,11 +214,26 @@ export const SearchPage = ({
           </div>
 
           <div className={styles.searchRowContainer}>
-            <SearchField
-              ariaLabel={loc.search.searchInAllFields}
-              placeholder={loc.search.searchInAllFields}
-              onSearchSubmit={onSearchSubmit}
-            />
+            <div>
+              <SearchField
+                ariaLabel={loc.search.searchInAllFields}
+                placeholder={loc.search.searchInAllFields}
+                onSearchSubmit={onSearchSubmit}
+              />
+              <div className={styles.chips}>
+                <Chip.Group size='small'>
+                  {searchState.filters.published?.map((filter, index) => (
+                    <Chip.Removable
+                      key={index}
+                      onClick={() => removeFilter(filter)}
+                    >
+                      {filter === 'published' ? loc.publicationState.published : loc.publicationState.unpublished}
+                    </Chip.Removable>
+                  ))}
+                </Chip.Group>
+              </div>
+            </div>
+
             <div className={styles.searchOptions}>
               <Select
                 label={loc.search.searchField}
