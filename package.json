@@ -33,7 +33,7 @@
   "private": true,
   "dependencies": {
     "@altinn/figma-design-tokens": "^6.0.1",
-    "@digdir/design-system-react": "^0.12.1",
+    "@digdir/design-system-react": "^0.23.3",
     "@digdir/design-system-tokens": "^0.1.1",
     "@fellesdatakatalog/icons": "^0.8.3",
     "@fortawesome/fontawesome-svg-core": "^6.4.2",
