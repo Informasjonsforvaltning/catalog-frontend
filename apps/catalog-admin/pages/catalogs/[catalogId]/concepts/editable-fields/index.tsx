@@ -1,5 +1,5 @@
 import styles from './editable-fields.module.css';
-import { Heading, SingleSelectEvent } from '@digdir/design-system-react';
+import { Heading } from '@digdir/design-system-react';
 import { Button, PageBanner, Select } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { CodeList } from '@catalog-frontend/types';

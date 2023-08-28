@@ -69,7 +69,7 @@ export const InternalFieldsPage = () => {
     newLabel?: string,
     newType?: FieldType,
     newCodeList?: string,
-    enableFilter?: Boolean,
+    enableFilter?: boolean,
   ) => {
     const updatedFieldIndex = updatedFieldsList.findIndex((field) => field.id === fieldId);
     const fieldToUpdate: InternalField =
