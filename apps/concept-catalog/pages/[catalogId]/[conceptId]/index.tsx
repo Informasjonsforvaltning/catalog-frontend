@@ -334,8 +334,6 @@ export const ConceptPage = ({
       ] as BreadcrumbType[])
     : [];
 
-  console.log(translate(concept?.frarådetTerm, language));
-
   return (
     <>
       <Breadcrumbs
