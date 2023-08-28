@@ -1,31 +1,48 @@
-.pageContainer {
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-  width: 100%;
-  margin: 0 auto;
-  padding: 1.6rem 0;
-  overflow-wrap: break-word;
-}
-
 .buttonsContainer {
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 3rem;
   margin-bottom: 3rem;
+  max-width: 1200px;
 }
 
-/* Should be deleted when overriding list variables is not needed anymore */
+.listItem {
+  background-color: white;
+  border: 1px solid #dfe1e2;
+  border-radius: 3px;
+  margin-bottom: 15px;
+  max-width: 1200px;
+}
+
+.listContent {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 37px 20px 37px;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+}
+
+.text {
+  font-family: Inter;
+  font-size: 16px;
+  font-weight: 400;
+  display: flex;
+  gap: 10px;
+  color: #2d3741;
+}
+
+.heading {
+  font-family: Inter;
+  font-size: 18px;
+  font-weight: bold;
+  padding-bottom: 10px;
+  color: #2d3741;
+}
+
 .listWrapper {
-  margin-bottom: 5rem;
-}
-
-.listWrapper > ul > li {
-  padding: 1rem;
-}
-
-.listWrapper > ul > li:hover {
-  cursor: pointer;
-  background-color: #e6eff8;
+  padding-top: 10px;
+  padding-bottom: 37px;
 }

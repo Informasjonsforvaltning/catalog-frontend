@@ -1,7 +1,10 @@
-import { getChangeRequests, getOrganization } from '@catalog-frontend/data-access';
-import { ChangeRequest, Organization } from '@catalog-frontend/types';
-import { Button, List, ListItem, PageBanner } from '@catalog-frontend/ui';
+import { getChangeRequests, getOrganization, searchConceptsForCatalog } from '@catalog-frontend/data-access';
+import { ChangeRequest, Concept, Organization, SearchConceptQuery } from '@catalog-frontend/types';
+import { Button, PageBanner, Tag } from '@catalog-frontend/ui';
 import {
+  capitalizeFirstLetter,
+  convertTimestampToDateAndTime,
+  getTranslateText,
   hasOrganizationReadPermission,
   localization as loc,
   validChangeRequestId,
@@ -11,8 +14,9 @@ import {
 import { getToken } from 'next-auth/jwt';
 import styles from './change-requests-page.module.css';
 import { useRouter } from 'next/router';
+import { Heading } from '@digdir/design-system-react';
 
-export const ChangeRequestsPage = ({ organization, changeRequests }) => {
+export const ChangeRequestsPage = ({ organization, changeRequests, conceptsWithChangeRequest }) => {
   const pageSubtitle = organization?.name ?? '';
   const router = useRouter();
 
@@ -38,18 +42,50 @@ export const ChangeRequestsPage = ({ organization, changeRequests }) => {
         <div className={styles.buttonsContainer}>
           <Button onClick={() => alert('Under utvikling')}>{loc.suggestionForNewConcept}</Button>
         </div>
+        <Heading
+          level={2}
+          size='xsmall'
+        >
+          Endringsforslag
+        </Heading>
         <div className={styles.listWrapper}>
-          <List onClick={handleListItemClick}>
+          <ul className={styles.list}>
             {changeRequests.map((changeRequest) => (
-              <ListItem
+              <li
                 key={changeRequest.id}
                 itemID={changeRequest.id}
                 title={changeRequest.catalogId}
+                className={styles.listItem}
+                onClick={handleListItemClick}
               >
-                {changeRequest.id}
-              </ListItem>
+                <div className={styles.listContent}>
+                  <div>
+                    <h2 className={styles.heading}>
+                      {changeRequest?.conceptId && conceptsWithChangeRequest
+                        ? getTranslateText(
+                            conceptsWithChangeRequest?.hits?.find(
+                              (concept) => concept.originaltBegrep === changeRequest.conceptId,
+                            )?.anbefaltTerm?.navn,
+                          )
+                        : 'Forslag til nytt begrep'}
+                    </h2>
+                    <div className={styles.text}>
+                      <p className={styles.time}>{convertTimestampToDateAndTime(changeRequest.timeForProposal)}</p>
+                      <p className={styles.proposedBy}>
+                        {changeRequest.proposedBy.name
+                          .split(' ')
+                          .map((namePart) => capitalizeFirstLetter(namePart))
+                          .join(' ')}
+                      </p>
+                    </div>
+                  </div>
+                  <div className={styles.status}>
+                    <Tag>{changeRequest.status}</Tag>
+                  </div>
+                </div>
+              </li>
             ))}
-          </List>
+          </ul>
         </div>
       </div>
     </>
@@ -84,10 +120,29 @@ export async function getServerSideProps({ req, params }) {
       throw error;
     });
 
+  const originalIds = changeRequests
+    .map((cr) => cr.conceptId)
+    .filter((conceptId) => conceptId !== null && conceptId !== undefined);
+
+  const searchQuery: SearchConceptQuery = {
+    query: '',
+    pagination: {
+      page: 0,
+      size: originalIds.length,
+    },
+    fields: undefined,
+    sort: undefined,
+    filters: { originalId: { value: originalIds } },
+  };
+
+  const response = await searchConceptsForCatalog(catalogId, searchQuery, token.access_token);
+  const conceptsWithChangeRequest: Concept[] = await response.json();
+
   return {
     props: {
       organization,
       changeRequests,
+      conceptsWithChangeRequest,
     },
   };
 }
