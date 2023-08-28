@@ -1,13 +1,12 @@
 import { FC, ChangeEvent, useState, KeyboardEvent } from 'react';
 import { Input, SearchField as StyledSearchField, SvgWrapper } from './styled';
 import MagnifyingGlassSVG from './MagnifyingGlass.svg';
+import { on } from 'events';
 
-type InputType = 'text' | 'tel' | 'url' | 'number' | 'file' | 'email' | 'date' | 'search';
 type IconPoseType = 'left' | 'right' | undefined;
 
 interface SearchFieldProps {
   ariaLabel: string;
-  type?: InputType;
   placeholder?: string;
   label?: string;
   error?: boolean;
@@ -22,7 +21,6 @@ const SearchField: FC<SearchFieldProps> = ({
   ariaLabel,
   startIcon,
   endIcon = <MagnifyingGlassSVG />,
-  type = 'search',
   placeholder = 'Input placeholder ...',
   error = false,
   onSearchSubmit,
@@ -30,8 +28,12 @@ const SearchField: FC<SearchFieldProps> = ({
   const [inputValue, setInputValue] = useState('');
   const conditionalPlaceholder = error ? 'Invalid input' : placeholder;
 
-  const onChange = (changeEvent: ChangeEvent<HTMLInputElement>) => {
+  const onInput = (changeEvent: ChangeEvent<HTMLInputElement>) => {
     setInputValue(changeEvent.target.value);
+
+    if (onSearchSubmit && changeEvent.target.value === '') {
+      onSearchSubmit('');
+    }
   };
 
   const onSubmit = (event: KeyboardEvent<HTMLInputElement> | 'clicked') => {
@@ -52,9 +54,9 @@ const SearchField: FC<SearchFieldProps> = ({
       <Input
         aria-label={ariaLabel}
         placeholder={conditionalPlaceholder}
-        type={type}
+        type='search'
         value={inputValue}
-        onChange={onChange}
+        onInput={onInput}
         onKeyUp={onSubmit}
       />
       <SvgWrapper onClick={(e) => onSubmit('clicked')}>{endIcon}</SvgWrapper>
