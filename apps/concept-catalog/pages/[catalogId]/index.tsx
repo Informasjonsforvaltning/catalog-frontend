@@ -147,8 +147,12 @@ export const SearchPage = ({
   const design = useCatalogDesign();
 
   useEffect(() => {
+    setCurrentPage(0);
+  }, [searchTerm, selectedFieldOption, searchState]);
+
+  useEffect(() => {
     refetch().catch((error) => console.error('refetch() failed: ', error));
-  }, [searchTerm, currentPage, selectedFieldOption, selectedSortOption, searchState, refetch]);
+  }, [currentPage, selectedSortOption, refetch]);
 
   return (
     <>
