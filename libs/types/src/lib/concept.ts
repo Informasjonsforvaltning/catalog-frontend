@@ -190,6 +190,9 @@ export interface QueryFilters {
   status?: {
     value: Status[];
   };
+  originalId?: {
+    value: string[];
+  };
 }
 export interface SearchConceptQuery {
   query: string;

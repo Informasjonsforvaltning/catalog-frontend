@@ -26,3 +26,18 @@
   background-color: #fff9f0;
   border-color: #d47b00;
 }
+
+.open {
+  background-color: #f3fcf5;
+  border-color: #06893a;
+}
+
+.accepted {
+  background-color: #fff9f0;
+  border-color: #d47b00;
+}
+
+.rejected {
+  background-color: #ffe6e6;
+  border-color: #c30000;
+}
