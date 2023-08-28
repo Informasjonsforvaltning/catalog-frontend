@@ -334,6 +334,8 @@ export const ConceptPage = ({
       ] as BreadcrumbType[])
     : [];
 
+  console.log(translate(concept?.frarådetTerm, language));
+
   return (
     <>
       <Breadcrumbs
@@ -465,9 +467,9 @@ export const ConceptPage = ({
                     <InfoCard.Item>
                       <div className={classes.termsRow}>
                         <h3>{`${localization.concept.allowedTerm}:`}</h3>
-                        {Array.of(translate(concept?.tillattTerm, language)).length > 0 ? (
+                        {ensureStringArray(translate(concept?.tillattTerm, language)).length > 0 ? (
                           <ul>
-                            {Array.of(translate(concept?.tillattTerm, language)).map((term, i) => (
+                            {ensureStringArray(translate(concept?.tillattTerm, language)).map((term, i) => (
                               <li key={`allowedTerm-${i}`}>{term}</li>
                             ))}
                           </ul>
@@ -477,9 +479,9 @@ export const ConceptPage = ({
                       </div>
                       <div className={classes.termsRow}>
                         <h3>{`${localization.concept.notRecommendedTerm}:`}</h3>
-                        {Array.of(translate(concept?.frarådetTerm, language)).length > 0 ? (
+                        {ensureStringArray(translate(concept?.frarådetTerm, language)).length > 0 ? (
                           <ul>
-                            {Array.of(translate(concept?.frarådetTerm, language)).map((term, i) => (
+                            {ensureStringArray(translate(concept?.frarådetTerm, language)).map((term, i) => (
                               <li key={`notRecommendedTerm-${i}`}>{term}</li>
                             ))}
                           </ul>
