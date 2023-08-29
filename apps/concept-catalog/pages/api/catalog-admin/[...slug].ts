@@ -31,6 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       res.setHeader('Content-Type', response.headers.get('Content-Type'));
+      res.setHeader('Content-Disposition', response.headers.get('Content-Disposition'));
       res.end(Buffer.from(await response.arrayBuffer()));
     } catch (error) {
       res.status(500).send('Failed to get design logo');

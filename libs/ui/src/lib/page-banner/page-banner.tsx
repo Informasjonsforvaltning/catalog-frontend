@@ -28,11 +28,12 @@ const PageBanner = ({ title, subtitle, fontColor, backgroundColor, logo, logoDes
       <div className='container'>
         <div className={style.contentContainer}>
           {logo && (
-            <div className={style.logoContainer}>
+            <div className={style.contentContainer}>
               <img
                 src={logo}
                 alt={logoDescription}
                 title={logoDescription}
+                className={style.logoContainer}
               />
             </div>
           )}

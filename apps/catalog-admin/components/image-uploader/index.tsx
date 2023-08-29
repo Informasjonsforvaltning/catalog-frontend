@@ -1,22 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import styles from './image-uploader.module.css';
-import { useAdminDispatch } from '../../context/admin';
-import { FileImportIcon, TrashIcon, UploadIcon } from '@navikt/aksel-icons';
+import { TrashIcon, UploadIcon } from '@navikt/aksel-icons';
 import { localization } from '@catalog-frontend/utils';
 import { UploadButton } from '@catalog-frontend/ui';
+import { validateImageFile } from '@catalog-frontend/utils';
+import { useRouter } from 'next/router';
+import { useDeleteLogo, useGetLogo, useUpdateLogo } from '../../hooks/design';
+import { useAdminDispatch } from '../../context/admin';
+import styles from './image-uploader.module.css';
 
 const allowedFileTypes = ['image/x-png', 'image/svg+xml'];
 
 export function ImageUploader() {
-  const [image, setImage] = useState<string | undefined>(undefined);
-  const [fileName, setFileName] = useState<string | undefined>(undefined);
+  const [image, setImage] = useState(null);
+  const [fileName, setFileName] = useState(null);
   const adminDispatch = useAdminDispatch();
 
-  const onImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const router = useRouter();
+  const catalogId = `${router.query.catalogId}`;
+
+  const { data: getLogo } = useGetLogo(catalogId);
+  const dbLogo = getLogo && getLogo.body;
+  const dbFileName = getLogo && getLogo.headers.get('Content-Disposition').match(/filename="([^"]+)"/)[1];
+
+  const updateLogo = useUpdateLogo(catalogId);
+  const deleteLogo = useDeleteLogo(catalogId);
+
+  const onImageChange = async (event) => {
     const file = event.target.files?.[0];
     if (file && (await validateImageFile(file))) {
       setImage(URL.createObjectURL(file));
       setFileName(file.name);
+
+      updateLogo.mutate(file);
     }
   };
 
@@ -24,35 +39,22 @@ export function ImageUploader() {
     adminDispatch({ type: 'SET_LOGO', payload: { logo: image } });
   }, [image, adminDispatch]);
 
-  const validateImageFile = (file: File | null): Promise<boolean> => {
-    return new Promise((resolve) => {
-      if (!file) {
-        resolve(false);
-        return;
-      }
-      if (!file.name.match(/\.(svg|png)$/)) {
-        resolve(false);
-        return;
-      }
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          resolve(true); // Image content is valid
-        };
-        img.onerror = () => {
-          alert('The content of the file is not valid.');
-          resolve(false);
-        };
-        img.src = e.target?.result as string;
-      };
-      reader.readAsDataURL(file);
-    });
+  useEffect(() => {
+    setFileName(dbFileName);
+  }, [dbLogo]);
+
+  const handleDeleteLogo = () => {
+    if (window.confirm('Er du sikker på at du ønsker å slette logoen?')) {
+      deleteLogo.mutate();
+    }
   };
 
   const resetImage = () => {
     setFileName(undefined);
     setImage(undefined);
+    if (dbLogo) {
+      handleDeleteLogo();
+    }
   };
 
   return (
@@ -70,7 +72,9 @@ export function ImageUploader() {
       )}
       <UploadButton
         allowedMimeTypes={allowedFileTypes}
-        onUpload={onImageChange}
+        onUpload={(e) => {
+          onImageChange(e);
+        }}
       >
         {localization.button.importLogo}
       </UploadButton>

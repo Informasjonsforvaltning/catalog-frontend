@@ -116,6 +116,12 @@ export const nb = {
     underRevision: 'Under revidering',
   },
 
+  alert: {
+    success: 'Oppdatering vellykket!',
+    fail: 'Oppdatering feilet.',
+    notValidFile: 'Innholdet i filet er ikke gyldig.',
+  },
+
   catalogAdmin: {
     internalFields: 'Interne felt',
     editableFields: 'Editerbare felt',
