@@ -1,6 +1,5 @@
 import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { signIn } from 'next-auth/react';
 
 export const useGetComments = ({ orgNumber, topicId }) => {
   return useQuery({
@@ -19,8 +18,7 @@ export const useGetComments = ({ orgNumber, topicId }) => {
       });
 
       if (response.status === 401) {
-        signIn('keycloak');
-        return;
+        return Promise.reject('Unauthorized');
       }
 
       return response.json();
@@ -54,8 +52,7 @@ export const useCreateComment = ({ orgNumber, topicId }) => {
       });
 
       if (response.status === 401) {
-        signIn('keycloak');
-        return;
+        return Promise.reject('Unauthorized');
       }
 
       return response.json();
@@ -97,8 +94,7 @@ export const useUpdateComment = ({ orgNumber, topicId }) => {
       });
 
       if (response.status === 401) {
-        signIn('keycloak');
-        return;
+        return Promise.reject('Unauthorized');
       }
 
       return response.json();
@@ -133,8 +129,7 @@ export const useDeleteComment = ({ orgNumber, topicId }) => {
       });
 
       if (response.status === 401) {
-        signIn('keycloak');
-        return;
+        return Promise.reject('Unauthorized');
       }
 
       return response;

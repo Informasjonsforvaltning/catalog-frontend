@@ -1,7 +1,6 @@
 import { Design } from '@catalog-frontend/types';
 import { validOrganizationNumber } from '@catalog-frontend/utils';
 import { useQuery } from '@tanstack/react-query';
-import { signIn } from 'next-auth/react';
 
 export const useGetCatalogDesign = (catalogId) =>
   useQuery<Design>({
@@ -16,7 +15,7 @@ export const useGetCatalogDesign = (catalogId) =>
       });
 
       if (response.status === 401) {
-        return signIn('keycloak');
+        return Promise.reject('Unauthorized');
       }
 
       return response.json();
@@ -36,8 +35,7 @@ export const useGetCatalogDesignLogo = (catalogId) =>
       }
 
       if (response.status === 401) {
-        signIn('keycloak');
-        return;
+        return Promise.reject('Unauthorized');
       }
 
       return response.text();

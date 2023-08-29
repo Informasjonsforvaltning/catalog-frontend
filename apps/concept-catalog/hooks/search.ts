@@ -1,7 +1,6 @@
 import { QueryFilters, QuerySort, SearchableField } from '@catalog-frontend/types';
 import { SingleSelectOption } from '@digdir/design-system-react';
 import { useQuery } from '@tanstack/react-query';
-import { signIn } from 'next-auth/react';
 
 export type SortFields = 'SIST_ENDRET' | 'ANBEFALT_TERM_NB';
 export type SortDirection = 'ASC' | 'DESC';
@@ -91,8 +90,7 @@ export const useSearchConcepts = ({ catalogId, searchTerm, page, fields, sort, f
       });
 
       if (response.status === 401) {
-        signIn('keycloak');
-        return;
+        return Promise.reject('Unauthorized');
       }
 
       return response.json();
