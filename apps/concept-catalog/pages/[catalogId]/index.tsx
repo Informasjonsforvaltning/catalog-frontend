@@ -10,7 +10,6 @@ import {
   SearchField,
   Chips,
   SearchHitContainer,
-  CustomError,
 } from '@catalog-frontend/ui';
 import {
   hasOrganizationReadPermission,
@@ -252,8 +251,6 @@ export const SearchPage = ({
               />
               {status === 'loading' || createConcept.status === 'loading' || importConcepts.status === 'loading' ? (
                 <Spinner />
-              ) : status === 'error' || createConcept.status === 'error' || importConcepts.status === 'error' ? (
-                <CustomError />
               ) : (
                 <SearchHitContainer
                   data={data}

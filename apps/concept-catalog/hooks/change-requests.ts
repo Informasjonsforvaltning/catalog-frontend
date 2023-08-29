@@ -1,6 +1,5 @@
 import { validOrganizationNumber } from '@catalog-frontend/utils';
 import { useQuery } from '@tanstack/react-query';
-import { signIn } from 'next-auth/react';
 
 export const useGetChangeRequests = (catalogId: string) => {
   return useQuery({
@@ -16,8 +15,7 @@ export const useGetChangeRequests = (catalogId: string) => {
       });
 
       if (response.status === 401) {
-        signIn('keycloak');
-        return;
+        return Promise.reject('Unauthorized');
       }
       return response.json();
     },

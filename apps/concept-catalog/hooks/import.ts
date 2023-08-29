@@ -4,7 +4,6 @@ import type { ParseResult } from 'papaparse';
 import { Concept, Status } from '@catalog-frontend/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { validOrganizationNumber } from '@catalog-frontend/utils';
-import { signIn } from 'next-auth/react';
 
 const mapToSingleValue = (csvMap: Record<string, string[]>, key: string) => {
   const value = csvMap[key];
@@ -193,8 +192,7 @@ export const useImportConcepts = (catalogId: string) => {
         const response = await fetch('/api/concepts/import', { method: 'POST', body: JSON.stringify(concepts) });
 
         if (response.status === 401) {
-          signIn('keycloak');
-          return;
+          return Promise.reject('Unauthorized');
         }
 
         return response;

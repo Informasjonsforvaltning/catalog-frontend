@@ -514,8 +514,6 @@ export const ConceptPage = ({
                         content:
                           getCommentsStatus == 'loading' ? (
                             <Spinner size='medium' />
-                          ) : getCommentsStatus === 'error' ? (
-                            <span>{localization.somethingWentWrong}</span>
                           ) : (
                             <>
                               <div className={classes.bottomSpacingSmall}>
@@ -600,8 +598,6 @@ export const ConceptPage = ({
                         content:
                           getHistoryStatus == 'loading' ? (
                             <Spinner size='medium' />
-                          ) : getHistoryStatus === 'error' ? (
-                            <span>{localization.somethingWentWrong}</span>
                           ) : getHistoryData.updates?.length === 0 ? (
                             <span>{localization.history.noChanges}</span>
                           ) : (

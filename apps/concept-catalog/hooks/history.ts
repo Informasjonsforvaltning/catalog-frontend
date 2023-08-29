@@ -1,6 +1,5 @@
 import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useQuery } from '@tanstack/react-query';
-import { signIn } from 'next-auth/react';
 
 export const useGetHistory = ({ catalogId, resourceId }) => {
   return useQuery({
@@ -19,8 +18,7 @@ export const useGetHistory = ({ catalogId, resourceId }) => {
       });
 
       if (response.status === 401) {
-        signIn('keycloak');
-        return;
+        return Promise.reject('Unauthorized');
       }
 
       return response.json();

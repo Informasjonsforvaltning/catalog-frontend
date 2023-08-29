@@ -15,8 +15,7 @@ export const useCreateConcept = (catalogId: string) => {
       const response = await fetch(`/api/concepts/${catalogId}`, { method: 'POST' });
 
       if (response.status === 401) {
-        signIn('keycloak');
-        return;
+        return Promise.reject('Unauthorized');
       }
 
       return response.json();
@@ -45,8 +44,7 @@ export const useDeleteConcept = (catalogId: string) => {
       const response = await fetch(`/api/concepts/${catalogId}/${conceptId}`, { method: 'DELETE' });
 
       if (response.status === 401) {
-        signIn('keycloak');
-        return;
+        return Promise.reject('Unauthorized');
       }
 
       return response;
