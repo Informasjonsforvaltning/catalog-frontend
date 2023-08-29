@@ -83,6 +83,9 @@ export const SearchPage = ({
       searchState.filters.subject?.length > 0 && {
         subject: { value: searchState.filters.subject },
       },
+      Object.keys(searchState.filters.internalFields ?? {}).length > 0 && {
+        internalFields: { value: searchState.filters.internalFields },
+      },
     ),
   });
 
@@ -114,7 +117,7 @@ export const SearchPage = ({
       return filterName !== name;
     });
     searchDispatch({
-      type: 'SET_PUBLICATION_STATE',
+      type: 'SET_PUBLICATION_STATE_FILTER',
       payload: { filters: { published: filters.map((name) => name) } },
     });
   };
@@ -242,6 +245,7 @@ export const SearchPage = ({
           <div>
             <div className={styles.gridContainer}>
               <SearchFilter
+                internalFields={fieldsResult?.internal}
                 subjectCodeList={codeListsResult?.codeLists?.find(
                   (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
                 )}

@@ -2,9 +2,9 @@ import { memo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Accordion } from '@digdir/design-system-react';
 import { Select } from '@catalog-frontend/ui';
-import { AssignedUser, CodeList, Status } from '@catalog-frontend/types';
-import { convertCodeListToTreeNodes, localization as loc } from '@catalog-frontend/utils';
-import { action, useSearchDispatch } from '../../context/search';
+import { AssignedUser, CodeList, InternalField, Status } from '@catalog-frontend/types';
+import { convertCodeListToTreeNodes, getTranslateText, localization as loc } from '@catalog-frontend/utils';
+import { action, useSearchDispatch, useSearchState } from '../../context/search';
 import { PublishedFilterType } from '../../context/search/state';
 import styles from './search-filter.module.css';
 import { CheckboxGroupFilter } from './checkbox-group-filter';
@@ -13,23 +13,21 @@ import { useGetUsers } from '../../hooks/users';
 import { CheckboxTreeFilter } from './checkbox-tree-filter';
 
 interface Props {
+  internalFields?: InternalField[];
   subjectCodeList?: CodeList;
 }
 
-const SearchFilter = ({ subjectCodeList }: Props) => {
+const SearchFilter = ({ internalFields, subjectCodeList }: Props) => {
   const router = useRouter();
   const catalogId = `${router.query?.catalogId}`;
   const searchDispatch = useSearchDispatch();
+  const searchState = useSearchState();
   const [assignedUserIdValue, setAssignedUserIdValue] = useState('');
 
   const statusItems = [
     { value: 'utkast' as Status, label: loc.status.draft },
     { value: 'høring' as Status, label: loc.status.hearing },
     { value: 'godkjent' as Status, label: loc.status.approved },
-  ];
-  const nameAndConceptItems = [
-    { value: 'Egenskapsnavn', label: 'Egenskapsnavn' },
-    { value: 'Forretningsbegrep', label: 'Forretningsbegrep' },
   ];
   const publicationStateItems = [
     { value: 'published' as PublishedFilterType, label: loc.publicationState.published },
@@ -40,25 +38,39 @@ const SearchFilter = ({ subjectCodeList }: Props) => {
   const assignedUserItems: AssignedUser[] = getUsers?.users;
 
   const handleOnStatusChange = (names: string[]) => {
-    searchDispatch(action('SET_CONCEPT_STATUS', { filters: { status: names.map((name) => name as Status) } }));
+    searchDispatch(action('SET_CONCEPT_STATUS_FILTER', { filters: { status: names.map((name) => name as Status) } }));
   };
-
-  const handleOnNameAndConceptChange = (names: string[]) =>
-    searchDispatch(action('SET_NAME_AND_CONCEPT', { filters: {} }));
 
   const handlePublicationOnChange = (names: string[]) =>
     searchDispatch(
-      action('SET_PUBLICATION_STATE', { filters: { published: names.map((name) => name as PublishedFilterType) } }),
+      action('SET_PUBLICATION_STATE_FILTER', {
+        filters: { published: names.map((name) => name as PublishedFilterType) },
+      }),
     );
 
   const handleOnAssignedChange = (userId: string) => {
     const assignedUser: AssignedUser = assignedUserItems.find((item) => item.id === userId);
-    searchDispatch(action('SET_ASSIGNED_USER', { filters: { assignedUser } }));
+    searchDispatch(action('SET_ASSIGNED_USER_FILTER', { filters: { assignedUser } }));
     setAssignedUserIdValue(assignedUser.id);
   };
 
+  const handleInternalFieldChange = (fieldId: string, names: string[]) => {
+    searchDispatch(
+      action('SET_INTERNAL_FIELDS_FILTER', {
+        filters: {
+          internalFields: {
+            ...searchState.filters.internalFields,
+            ...{
+              [fieldId]: [names.includes(fieldId) ? 'true' : 'false'],
+            },
+          },
+        },
+      }),
+    );
+  };
+
   const handleSubjectOnCheck = (values: string[]) => {
-    searchDispatch(action('SET_SUBJECTS', { filters: { subject: values } }));
+    searchDispatch(action('SET_SUBJECTS_FILTER', { filters: { subject: values } }));
   };
 
   const accordionItemContents: AccordionItemProps[] = [
@@ -110,16 +122,23 @@ const SearchFilter = ({ subjectCodeList }: Props) => {
         </>
       ),
     },
-    {
-      header: loc.nameAndConcept,
-      content: (
-        <CheckboxGroupFilter<string>
-          items={nameAndConceptItems}
-          filterName='nameAndConcept'
-          onChange={handleOnNameAndConceptChange}
-        />
-      ),
-    },
+    ...internalFields
+      .filter((field) => field.enableFilter)
+      .map((field) => ({
+        header: getTranslateText(field.label),
+        content: (
+          <CheckboxGroupFilter<string>
+            items={[
+              {
+                value: field.id,
+                label: `${getTranslateText(field.label)}`,
+              },
+            ]}
+            filterName={field.id}
+            onChange={(names) => handleInternalFieldChange(field.id, names)}
+          />
+        ),
+      })),
   ];
 
   const accordionItems = accordionItemContents.map((item) => (

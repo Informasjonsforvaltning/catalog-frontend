@@ -8,23 +8,23 @@ export const reducer = produce((state: SearchState, action: ACTION): SearchState
       state = action.payload;
       return state;
     }
-    case 'SET_PUBLICATION_STATE': {
+    case 'SET_PUBLICATION_STATE_FILTER': {
       state.filters.published = action.payload.filters?.published;
       return state;
     }
-    case 'SET_CONCEPT_STATUS': {
+    case 'SET_CONCEPT_STATUS_FILTER': {
       state.filters.status = action.payload.filters?.status;
       return state;
     }
-    case 'SET_SUBJECTS': {
+    case 'SET_SUBJECTS_FILTER': {
       state.filters.subject = action.payload.filters?.subject;
       return state;
     }
-    case 'SET_NAME_AND_CONCEPT': {
-      // TODO: implement when backend is ready
+    case 'SET_INTERNAL_FIELDS_FILTER': {
+      state.filters.internalFields = action.payload.filters?.internalFields;
       return state;
     }
-    case 'SET_ASSIGNED_USER': {
+    case 'SET_ASSIGNED_USER_FILTER': {
       state.filters.assignedUser = action.payload.filters?.assignedUser;
       return state;
     }

@@ -10,6 +10,7 @@ export interface InternalField {
   label?: MultiLanguageText;
   description?: MultiLanguageText;
   type: FieldType;
+  enableFilter?: boolean;
   location?: FieldLocation;
   codeListId?: string;
 }
