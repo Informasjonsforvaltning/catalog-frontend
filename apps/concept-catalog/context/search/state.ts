@@ -6,6 +6,7 @@ export type InternalFieldFilterType = {
   id: string;
   value: string;
 };
+export type FilterTypes = 'published' | 'status' | 'assignedUser' | 'subject';
 
 export interface SearchFilters {
   published?: PublishedFilterType[];
@@ -19,4 +20,11 @@ export interface SearchState {
   filters: SearchFilters;
 }
 
-export const DefaultSearchState = { filters: {} };
+export const DefaultSearchState: SearchState = {
+  filters: {
+    published: [],
+    status: [],
+    assignedUser: null,
+    subject: [],
+  },
+};

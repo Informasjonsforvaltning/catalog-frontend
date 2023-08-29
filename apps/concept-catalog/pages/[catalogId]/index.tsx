@@ -19,7 +19,14 @@ import {
   validOrganizationNumber,
 } from '@catalog-frontend/utils';
 import { useRouter } from 'next/router';
-import { CodeListsResult, FieldsResult, Organization, QuerySort, SearchableField } from '@catalog-frontend/types';
+import {
+  CodeListsResult,
+  FieldsResult,
+  Organization,
+  QuerySort,
+  SearchableField,
+  Status,
+} from '@catalog-frontend/types';
 import { useEffect, useState } from 'react';
 import { getFields as getSearchFields, getSelectOptions, useSearchConcepts, SortOption } from '../../hooks/search';
 import styles from './search-page.module.css';
@@ -29,7 +36,7 @@ import SearchFilter from '../../components/search-filter';
 import { useCreateConcept } from '../../hooks/concepts';
 import { getAllCodeLists, getFields, getOrganization } from '@catalog-frontend/data-access';
 import { useImportConcepts } from '../../hooks/import';
-import { useSearchDispatch, useSearchState } from '../../context/search';
+import { action, useSearchDispatch, useSearchState } from '../../context/search';
 import { Session, getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useCatalogDesign } from '../../context/catalog-design';
@@ -111,14 +118,12 @@ export const SearchPage = ({
     setCurrentPage(page.selected);
   };
 
-  const removeFilter = (name: string) => {
-    const filters = searchState.filters.published?.filter(function (filterName) {
-      return filterName !== name;
-    });
-    searchDispatch({
-      type: 'SET_PUBLICATION_STATE_FILTER',
-      payload: { filters: { published: filters.map((name) => name) } },
-    });
+  const removeFilter = (status: Status, type: string) => {
+    const updatedStatusFilters = searchState.filters.status.filter((s) => s !== status);
+
+    searchDispatch(
+      action('SET_CONCEPT_STATUS_FILTER', { filters: { status: updatedStatusFilters.map((name) => name as Status) } }),
+    );
   };
 
   const onSearchSubmit = (term = searchTerm) => {
@@ -222,14 +227,41 @@ export const SearchPage = ({
               />
               <div className={styles.chips}>
                 <Chip.Group size='small'>
-                  {searchState.filters.published?.map((filter, index) => (
+                  {searchState.filters.subject &&
+                    searchState.filters.subject?.map((filter, index) => (
+                      <Chip.Removable
+                        key={`subject-${index}`}
+                        //onClick={() => removeFilter(filter, 'subject')}
+                      >
+                        {filter}
+                      </Chip.Removable>
+                    ))}
+                  {searchState.filters?.status &&
+                    searchState.filters?.status.map((filter, index) => (
+                      <Chip.Removable
+                        key={`status-${index}`}
+                        onClick={() => removeFilter(filter, 'status')}
+                      >
+                        {filter}
+                      </Chip.Removable>
+                    ))}
+                  {searchState.filters.assignedUser && searchState.filters.assignedUser && (
                     <Chip.Removable
-                      key={index}
-                      onClick={() => removeFilter(filter)}
+                      key={`${searchState.filters.assignedUser}`}
+                      //onClick={() => removeFilter(searchState.filters?.assignedUser?.name, 'assignedUser')}
                     >
-                      {filter === 'published' ? loc.publicationState.published : loc.publicationState.unpublished}
+                      {searchState.filters?.assignedUser?.name}
                     </Chip.Removable>
-                  ))}
+                  )}
+                  {searchState.filters.published &&
+                    searchState.filters.published?.map((filter, index) => (
+                      <Chip.Removable
+                        key={`published-${index}`}
+                        //onClick={() => removeFilter(filter, 'published')}
+                      >
+                        {filter === 'published' ? loc.publicationState.published : loc.publicationState.unpublished}
+                      </Chip.Removable>
+                    ))}
                 </Chip.Group>
               </div>
             </div>
@@ -267,7 +299,7 @@ export const SearchPage = ({
               )}
             </div>
 
-            {data?.hits.length > 0 && (
+            {data?.hits?.length > 0 && (
               <Pagination
                 onPageChange={changePage}
                 forcePage={currentPage}
