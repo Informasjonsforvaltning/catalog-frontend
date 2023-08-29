@@ -121,9 +121,7 @@ export const SearchPage = ({
   const removeFilter = (status: Status, type: string) => {
     const updatedStatusFilters = searchState.filters.status.filter((s) => s !== status);
 
-    searchDispatch(
-      action('SET_CONCEPT_STATUS_FILTER', { filters: { status: updatedStatusFilters.map((name) => name as Status) } }),
-    );
+    searchDispatch(action('SET_CONCEPT_STATUS_FILTER', { filters: { status: updatedStatusFilters } }));
   };
 
   const onSearchSubmit = (term = searchTerm) => {

@@ -16,10 +16,12 @@ export const CheckboxGroupFilter = <T,>({ items, filterName, onChange }: Props<T
   const searchState = useSearchState();
 
   return (
-    <Checkbox.Group onChange={onChange}>
+    <Checkbox.Group
+      onChange={onChange}
+      value={searchState.filters[filterName]}
+    >
       {items.map(({ value, label }) => (
         <Checkbox
-          checked={searchState.filters[filterName]?.includes(value)}
           key={`checkbox-item-${value}`}
           value={value as string}
         >
