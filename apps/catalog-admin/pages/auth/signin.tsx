@@ -1,4 +1,4 @@
-import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner, Spinner } from '@catalog-frontend/ui';
+import { CenterContainer, PageBanner, Spinner } from '@catalog-frontend/ui';
 import { localization, validOrganizationNumber } from '@catalog-frontend/utils';
 import { Heading } from '@digdir/design-system-react';
 import { Session } from 'next-auth';

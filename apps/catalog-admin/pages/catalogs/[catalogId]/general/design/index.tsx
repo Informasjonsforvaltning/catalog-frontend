@@ -19,7 +19,6 @@ const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
   const catalogId: string = `${router.query.catalogId}` ?? '';
   const pageSubtitle = organization.organization?.name ?? catalogId;
   const { backgroundColor, fontColor, logo } = adminContext;
-  const [imageLabel, setImageLabel] = useState('');
   const [isTextInputValid, setIsTextInputValid] = useState(false);
   const [disableTextField, setDisableTextField] = useState(true);
 
@@ -83,7 +82,6 @@ const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
                 className={styles.textField}
                 isValid={isTextInputValid}
                 onChange={(event) => {
-                  setImageLabel(event.target.value);
                   setIsTextInputValid(validateLogoDescription(event.target.value));
                 }}
                 required={true}

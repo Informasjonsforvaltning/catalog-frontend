@@ -140,6 +140,7 @@ export const nb = {
     createCodeList: 'Opprett kodeliste',
     searchForCodeList: 'Søk etter kodeliste...',
     searchFieldCodeList: 'Søkefelt kodeliste',
+    enableFilter: 'Aktiver filter',
     description: {
       general:
         'Oversikt over beskrivelser av datasett, begrep, apier og informasjonmodeller. Innholdet blir levert av ulike virksomheter, offentlige og private.',

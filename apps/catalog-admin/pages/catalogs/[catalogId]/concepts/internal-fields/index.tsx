@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import styles from './internal-fields.module.css';
-import { Accordion, Heading, TextField } from '@digdir/design-system-react';
+import { Accordion, Checkbox, Heading, TextField } from '@digdir/design-system-react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { Button, Select } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
@@ -36,6 +36,7 @@ export const InternalFieldsPage = () => {
   const deleteInternalField = useDeleteInternalField(catalogId);
   const updateInternalField = useUpdateInternalField(catalogId);
   const [accordionIsOpen, setAccordionIsOpen] = useState(false);
+  const [checkboxState, setCheckboxState] = useState(false);
 
   const getNextFieldNumber = (fields: InternalField[]): number => (fields ? fields.length : 0) + 1;
 
@@ -63,7 +64,13 @@ export const InternalFieldsPage = () => {
 
   const [updatedFieldsList, setUpdatedFieldsList] = React.useState<InternalField[]>([]);
 
-  const updateFieldsListState = (fieldId: string, newLabel?: string, newType?: FieldType, newCodeList?: string) => {
+  const updateFieldsListState = (
+    fieldId: string,
+    newLabel?: string,
+    newType?: FieldType,
+    newCodeList?: string,
+    enableFilter?: boolean,
+  ) => {
     const updatedFieldIndex = updatedFieldsList.findIndex((field) => field.id === fieldId);
     const fieldToUpdate: InternalField =
       updatedFieldIndex !== -1 ? updatedFieldsList[updatedFieldIndex] : dbFields.find((field) => field.id === fieldId);
@@ -75,6 +82,7 @@ export const InternalFieldsPage = () => {
         label: newLabel !== undefined ? { nb: newLabel } : fieldToUpdate.label,
         type: newType !== undefined ? newType : fieldToUpdate.type,
         codeListId: newCodeList !== undefined ? newCodeList : fieldToUpdate.codeListId,
+        enableFilter: enableFilter,
       };
 
       if (updatedFieldIndex !== -1) {
@@ -216,6 +224,26 @@ export const InternalFieldsPage = () => {
                             }}
                           />
                         </div>
+                      )}
+
+                      {(updatedFieldsList.find((f) => f.id === field.id) || field)?.type == 'boolean' && (
+                        <>
+                          <div className={styles.field}>
+                            <Checkbox
+                              onChange={(e) => {
+                                updateFieldsListState(field.id, undefined, undefined, undefined, e.target.checked);
+                                setCheckboxState(e.target.checked);
+                              }}
+                              value={''}
+                              checked={
+                                (updatedFieldsList.find((f) => f.id === field.id) || field)?.enableFilter ||
+                                checkboxState
+                              }
+                            >
+                              {localization.catalogAdmin.enableFilter}
+                            </Checkbox>
+                          </div>
+                        </>
                       )}
 
                       <div className={styles.field}>
