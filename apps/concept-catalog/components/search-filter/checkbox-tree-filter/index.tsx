@@ -1,5 +1,5 @@
-import React, { FC } from 'react';
-import CheckboxTree, { Node, OnCheckNode } from 'react-checkbox-tree';
+import React, { FC, useEffect } from 'react';
+import CheckboxTree, { OnCheckNode } from 'react-checkbox-tree';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 
 import classes from './checkbox-tree.module.css';
@@ -17,6 +17,7 @@ export interface TreeNode {
 interface Props {
   nodes?: TreeNode[];
   onCheck?: (value: string[]) => void;
+  filters: string[];
 }
 
 const getSearchOptions = (nodes?: TreeNode[]) => {
@@ -31,16 +32,19 @@ const getSearchOptions = (nodes?: TreeNode[]) => {
   return options;
 };
 
-export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck }) => {
+export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
   const [checked, setChecked] = React.useState<string[]>([]);
   const [expanded, setExpanded] = React.useState<string[]>([]);
+
+  useEffect(() => {
+    setChecked(filters);
+  }, [filters]);
 
   const handleChecked = ({ value }) => {
     const path = getPath(nodes, value).map((item) => item.value);
     if (checked.includes(value)) {
       const newChecked = path.slice(0, -1);
       setExpanded(newChecked);
-      setChecked(newChecked);
       onCheck?.(newChecked);
       return;
     }
@@ -55,11 +59,9 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck }) => {
 
     if (!inCurrentPath) {
       setExpanded([value]);
-      setChecked([value]);
       onCheck?.([value]);
     } else {
       setExpanded(path);
-      setChecked(path);
       onCheck?.(path);
     }
   };
@@ -67,7 +69,6 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck }) => {
     if (value !== null) {
       const path = getPath(nodes, value).map((item) => item.value);
       setExpanded(path);
-      setChecked(path);
       onCheck?.(path);
     }
   };

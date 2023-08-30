@@ -11,6 +11,8 @@ import {
   SearchHitContainer,
 } from '@catalog-frontend/ui';
 import {
+  capitalizeFirstLetter,
+  getTranslateText,
   hasOrganizationReadPermission,
   hasOrganizationWritePermission,
   hasSystemAdminPermission,
@@ -19,14 +21,7 @@ import {
   validOrganizationNumber,
 } from '@catalog-frontend/utils';
 import { useRouter } from 'next/router';
-import {
-  CodeListsResult,
-  FieldsResult,
-  Organization,
-  QuerySort,
-  SearchableField,
-  Status,
-} from '@catalog-frontend/types';
+import { CodeListsResult, FieldsResult, Organization, QuerySort, SearchableField } from '@catalog-frontend/types';
 import { useEffect, useState } from 'react';
 import { getFields as getSearchFields, getSelectOptions, useSearchConcepts, SortOption } from '../../hooks/search';
 import styles from './search-page.module.css';
@@ -68,6 +63,10 @@ export const SearchPage = ({
     [SortOption.RECOMMENDED_TERM_AÅ]: { field: 'ANBEFALT_TERM_NB', direction: 'ASC' },
     [SortOption.RECOMMENDED_TERM_ÅA]: { field: 'ANBEFALT_TERM_NB', direction: 'DESC' },
   };
+
+  const subjectCodeList = codeListsResult?.codeLists?.find(
+    (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
+  );
 
   const { status, data, refetch } = useSearchConcepts({
     catalogId,
@@ -118,10 +117,28 @@ export const SearchPage = ({
     setCurrentPage(page.selected);
   };
 
-  const removeFilter = (status: Status, type: string) => {
-    const updatedStatusFilters = searchState.filters.status.filter((s) => s !== status);
+  const removeFilter = (filterName, filterType: string) => {
+    let updatedFilters = null;
+    if (filterType !== 'assignedUser') {
+      updatedFilters = searchState.filters[filterType].filter((name) => name !== filterName);
+    }
 
-    searchDispatch(action('SET_CONCEPT_STATUS_FILTER', { filters: { status: updatedStatusFilters } }));
+    switch (filterType) {
+      case 'published':
+        searchDispatch(action('SET_PUBLICATION_STATE_FILTER', { filters: { published: updatedFilters } }));
+        break;
+      case 'status':
+        searchDispatch(action('SET_CONCEPT_STATUS_FILTER', { filters: { status: updatedFilters } }));
+        break;
+      case 'assignedUser':
+        searchDispatch(action('SET_ASSIGNED_USER_FILTER', { filters: { assignedUser: null } }));
+        break;
+      case 'subject':
+        searchDispatch(action('SET_SUBJECTS_FILTER', { filters: { subject: updatedFilters } }));
+        break;
+      default:
+        break;
+    }
   };
 
   const onSearchSubmit = (term = searchTerm) => {
@@ -150,10 +167,6 @@ export const SearchPage = ({
   };
 
   const design = useCatalogDesign();
-
-  const subjectCodeList = codeListsResult?.codeLists?.find(
-    (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
-  );
 
   useEffect(() => {
     setCurrentPage(0);
@@ -229,9 +242,9 @@ export const SearchPage = ({
                     searchState.filters.subject?.map((filter, index) => (
                       <Chip.Removable
                         key={`subject-${index}`}
-                        //onClick={() => removeFilter(filter, 'subject')}
+                        onClick={() => removeFilter(filter, 'subject')}
                       >
-                        {filter}
+                        {getTranslateText(subjectCodeList.codes.find((c) => c.id === Number(filter))?.name)}
                       </Chip.Removable>
                     ))}
                   {searchState.filters?.status &&
@@ -240,13 +253,13 @@ export const SearchPage = ({
                         key={`status-${index}`}
                         onClick={() => removeFilter(filter, 'status')}
                       >
-                        {filter}
+                        {capitalizeFirstLetter(filter)}
                       </Chip.Removable>
                     ))}
-                  {searchState.filters.assignedUser && searchState.filters.assignedUser && (
+                  {searchState.filters.assignedUser && (
                     <Chip.Removable
                       key={`${searchState.filters.assignedUser}`}
-                      //onClick={() => removeFilter(searchState.filters?.assignedUser?.name, 'assignedUser')}
+                      onClick={() => removeFilter(searchState.filters?.assignedUser?.name, 'assignedUser')}
                     >
                       {searchState.filters?.assignedUser?.name}
                     </Chip.Removable>
@@ -255,7 +268,7 @@ export const SearchPage = ({
                     searchState.filters.published?.map((filter, index) => (
                       <Chip.Removable
                         key={`published-${index}`}
-                        //onClick={() => removeFilter(filter, 'published')}
+                        onClick={() => removeFilter(filter, 'published')}
                       >
                         {filter === 'published' ? loc.publicationState.published : loc.publicationState.unpublished}
                       </Chip.Removable>
