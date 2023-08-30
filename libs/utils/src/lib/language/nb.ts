@@ -38,7 +38,6 @@ export const nb = {
   nameAndConcept: 'Navn og begrep',
   save: 'Lagre',
   saveEdits: 'Lagre endringer',
-  seeChangeRequests: 'Se alle endringsforslag',
   suggestionForNewConcept: 'Forslag til nytt begrep',
 
   auth: {
@@ -209,6 +208,11 @@ export const nb = {
     internalField: 'Interne felt',
     confirmDelete: 'Er du sikker du ønsker å slette begrepet?',
     noName: 'Uten navn',
+  },
+
+  changeRequest: {
+    changeRequest: 'Endringsforslag',
+    seeChangeRequests: 'Se alle endringsforslag',
   },
 
   comment: {
