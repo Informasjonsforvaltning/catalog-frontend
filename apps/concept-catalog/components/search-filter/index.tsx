@@ -54,14 +54,14 @@ const SearchFilter = ({ internalFields, subjectCodeList }: Props) => {
     setAssignedUserIdValue(assignedUser.id);
   };
 
-  const handleInternalFieldChange = (fieldId: string, names: string[]) => {
+  const handleInternalFieldChange = (fieldId: string, value: string[]) => {
     searchDispatch(
       action('SET_INTERNAL_FIELDS_FILTER', {
         filters: {
           internalFields: {
             ...searchState.filters.internalFields,
             ...{
-              [fieldId]: [names.includes(fieldId) ? 'true' : 'false'],
+              [fieldId]: value,
             },
           },
         },
@@ -123,19 +123,23 @@ const SearchFilter = ({ internalFields, subjectCodeList }: Props) => {
       ),
     },
     ...internalFields
-      .filter((field) => field.enableFilter)
+      .filter((field) => field.enableFilter && field.type === 'boolean')
       .map((field) => ({
         header: getTranslateText(field.label),
         content: (
           <CheckboxGroupFilter<string>
             items={[
               {
-                value: field.id,
-                label: `${getTranslateText(field.label)}`,
+                value: 'true',
+                label: loc.yes,
+              },
+              {
+                value: 'false',
+                label: loc.no,
               },
             ]}
             filterName={field.id}
-            onChange={(names) => handleInternalFieldChange(field.id, names)}
+            onChange={(value) => handleInternalFieldChange(field.id, value)}
           />
         ),
       })),

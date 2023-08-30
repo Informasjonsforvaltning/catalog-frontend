@@ -9,7 +9,7 @@ type CheckboxGroupFilterItem<T> = {
 interface Props<T> {
   items: CheckboxGroupFilterItem<T>[];
   filterName: string;
-  onChange: (names: string[]) => void;
+  onChange: (value: string[]) => void;
 }
 
 export const CheckboxGroupFilter = <T,>({ items, filterName, onChange }: Props<T>) => {
