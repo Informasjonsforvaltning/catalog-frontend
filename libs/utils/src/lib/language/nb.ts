@@ -28,6 +28,13 @@ export const nb = {
   description: 'Beskrivelse',
   name: 'Navn',
 
+  language: {
+    nb: 'Bokmål',
+    nn: 'Nynorsk',
+    en: 'Engelsk',
+    no: 'Norsk',
+  },
+
   nameAndConcept: 'Navn og begrep',
   save: 'Lagre',
   saveEdits: 'Lagre endringer',
