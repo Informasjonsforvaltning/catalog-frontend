@@ -3,3 +3,5 @@ export interface MultiLanguageText {
   nn?: any;
   en?: any;
 }
+
+export type ISOLanguage = 'nb' | 'nn' | 'no' | 'en';
