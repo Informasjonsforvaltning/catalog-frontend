@@ -192,7 +192,7 @@ export const SearchPage = ({
                 variant='outline'
                 onClick={onSeeChangeRequests}
               >
-                {loc.seeChangeRequests}
+                {loc.changeRequest.seeChangeRequests}
               </Button>
               {hasWritePermission && (
                 <>

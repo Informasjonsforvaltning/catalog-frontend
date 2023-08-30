@@ -20,8 +20,14 @@ export const ChangeRequestsPage = ({ organization, changeRequests, conceptsWithC
   const pageSubtitle = organization?.name ?? '';
   const router = useRouter();
 
-  const handleListItemClick = (e) => {
-    const changeRequestId = e.target.attributes.itemID.value;
+  const handleNewConceptSuggestion = () => {
+    const catalogId = router.query.catalogId.toString();
+    if (validOrganizationNumber(catalogId)) {
+      router.push(`/${catalogId}/change-requests/new`);
+    }
+  };
+
+  const handleListItemClick = ({ id: changeRequestId }) => {
     const catalogId = router.query.catalogId.toString();
     if (
       validOrganizationNumber(catalogId) &&
@@ -40,39 +46,38 @@ export const ChangeRequestsPage = ({ organization, changeRequests, conceptsWithC
       />
       <div className='container'>
         <div className={styles.buttonsContainer}>
-          <Button onClick={() => alert('Under utvikling')}>{loc.suggestionForNewConcept}</Button>
+          <Button onClick={handleNewConceptSuggestion}>{loc.suggestionForNewConcept}</Button>
         </div>
         <Heading
           level={2}
           size='xsmall'
         >
-          Endringsforslag
+          {loc.changeRequest.changeRequest}
         </Heading>
         <div className={styles.listWrapper}>
           <ul className={styles.list}>
-            {changeRequests.map((changeRequest) => (
+            {changeRequests.map(({ id, catalogId, conceptId, timeForProposal, proposedBy, status }) => (
               <li
-                key={changeRequest.id}
-                itemID={changeRequest.id}
-                title={changeRequest.catalogId}
+                key={id}
+                itemID={id}
+                title={catalogId}
                 className={styles.listItem}
-                onClick={handleListItemClick}
+                onClick={() => handleListItemClick(id)}
               >
                 <div className={styles.listContent}>
                   <div>
                     <h2 className={styles.heading}>
-                      {changeRequest?.conceptId && conceptsWithChangeRequest
+                      {conceptId && conceptsWithChangeRequest
                         ? getTranslateText(
-                            conceptsWithChangeRequest?.hits?.find(
-                              (concept) => concept.originaltBegrep === changeRequest.conceptId,
-                            )?.anbefaltTerm?.navn,
+                            conceptsWithChangeRequest?.hits?.find((concept) => concept.originaltBegrep === conceptId)
+                              ?.anbefaltTerm?.navn,
                           )
-                        : 'Forslag til nytt begrep'}
+                        : loc.suggestionForNewConcept}
                     </h2>
                     <div className={styles.text}>
-                      <p className={styles.time}>{convertTimestampToDateAndTime(changeRequest.timeForProposal)}</p>
+                      <p className={styles.time}>{convertTimestampToDateAndTime(timeForProposal)}</p>
                       <p className={styles.proposedBy}>
-                        {changeRequest.proposedBy.name
+                        {proposedBy.name
                           .split(' ')
                           .map((namePart) => capitalizeFirstLetter(namePart))
                           .join(' ')}
@@ -80,7 +85,7 @@ export const ChangeRequestsPage = ({ organization, changeRequests, conceptsWithC
                     </div>
                   </div>
                   <div className={styles.status}>
-                    <Tag>{changeRequest.status}</Tag>
+                    <Tag>{status}</Tag>
                   </div>
                 </div>
               </li>
@@ -110,13 +115,9 @@ export async function getServerSideProps({ req, params }) {
 
   const changeRequests: ChangeRequest[] = await getChangeRequests(catalogId, `${token.access_token}`)
     .then((response) => {
-      if (!response.ok) {
-        throw new Error(`getChangeRequests failed with status ${response.status}`);
-      }
       return response.json();
     })
     .catch((error) => {
-      console.error('Error:', error);
       throw error;
     });
 
