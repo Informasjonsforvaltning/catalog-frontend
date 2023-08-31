@@ -236,7 +236,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
     // Not itself, not child, null to remove parent
     return (
       codes
-        ?.filter((code: Code) => code.id !== currentCode.id && code.parentID !== currentCode.id)
+        ?.filter((code: Code) => code.id !== currentCode?.id && code.parentID !== currentCode.id)
         .map((code) => ({
           label: `${getTranslateText(code.name)}`,
           value: `${code.id}`,

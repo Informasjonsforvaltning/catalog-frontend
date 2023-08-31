@@ -37,6 +37,7 @@ import { authOptions } from '../api/auth/[...nextauth]';
 import { useCatalogDesign } from '../../context/catalog-design';
 import { InferGetServerSidePropsType } from 'next';
 import { Chip } from '@digdir/design-system-react';
+import { FilterTypes } from 'apps/concept-catalog/context/search/state';
 
 export const SearchPage = ({
   organization,
@@ -117,10 +118,24 @@ export const SearchPage = ({
     setCurrentPage(page.selected);
   };
 
-  const removeFilter = (filterName, filterType: string) => {
+  const removeFilter = (filterName, filterType: FilterTypes) => {
     let updatedFilters = null;
-    if (filterType !== 'assignedUser') {
+    const internalFieldsCopy = { ...searchState.filters.internalFields };
+
+    if (filterType !== 'assignedUser' && filterType !== 'internalFields') {
       updatedFilters = searchState.filters[filterType].filter((name) => name !== filterName);
+    }
+
+    if (filterType === 'internalFields') {
+      if (internalFieldsCopy.hasOwnProperty(filterName.key)) {
+        internalFieldsCopy[filterName.key] = internalFieldsCopy[filterName.key].filter(
+          (value) => value !== filterName.value,
+        );
+      }
+
+      if (internalFieldsCopy[filterName.key].length === 0) {
+        delete internalFieldsCopy[filterName.key];
+      }
     }
 
     switch (filterType) {
@@ -135,6 +150,9 @@ export const SearchPage = ({
         break;
       case 'subject':
         searchDispatch(action('SET_SUBJECTS_FILTER', { filters: { subject: updatedFilters } }));
+        break;
+      case 'internalFields':
+        searchDispatch(action('SET_INTERNAL_FIELDS_FILTER', { filters: { internalFields: internalFieldsCopy } }));
         break;
       default:
         break;
@@ -273,6 +291,19 @@ export const SearchPage = ({
                         {filter === 'published' ? loc.publicationState.published : loc.publicationState.unpublished}
                       </Chip.Removable>
                     ))}
+                  {searchState.filters.internalFields &&
+                    Object.entries(searchState.filters.internalFields).map(([key, values], index) => {
+                      return values.map((value, innerIndex) => (
+                        <Chip.Removable
+                          key={`internalFields-${index}-${innerIndex}`}
+                          onClick={() => {
+                            removeFilter({ key: key, value: value }, 'internalFields');
+                          }}
+                        >
+                          {`${key}: ${value}`}
+                        </Chip.Removable>
+                      ));
+                    })}
                 </Chip.Group>
               </div>
             </div>
