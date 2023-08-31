@@ -13,10 +13,8 @@ exports[`SearchHit should render SearchHit with undefined input successfully 1`]
           class="titleRow"
         />
         <p
-          class="greyFont"
-        >
-          Brødsmuler - Ikke klart i backend 
-        </p>
+          class="greyFont subject"
+        />
       </div>
       <div
         class="metaData"
@@ -24,6 +22,14 @@ exports[`SearchHit should render SearchHit with undefined input successfully 1`]
         <p>
           Sist endret
             
+        </p>
+        <p
+          class="dot"
+        >
+          •
+        </p>
+        <p>
+          Ikke publisert
         </p>
       </div>
       <div

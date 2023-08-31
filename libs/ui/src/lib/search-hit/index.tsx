@@ -1,25 +1,42 @@
 import {
+  convertCodeListToTreeNodes,
+  ensureStringArray,
   formatISO,
+  getPath,
   localization,
   getTranslateText as translate,
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
+import cn from 'classnames';
 import styles from './search-hit.module.css';
-import { Concept } from '@catalog-frontend/types';
 import Link from 'next/link';
 import { Tag } from '../tag';
-import { loadComponents } from 'next/dist/server/load-components';
+import { CodeList, Concept } from '@catalog-frontend/types';
 
 interface Props {
   catalogId: string;
   searchHit: Concept;
+  subjectCodeList?: CodeList;
 }
 
-const SearchHit = ({ catalogId, searchHit }: Props) => {
+const SearchHit = ({ catalogId, searchHit, subjectCodeList }: Props) => {
   const Title = () => {
     const title = translate(searchHit?.anbefaltTerm?.navn);
     return <span>{title ? title : localization.concept.noName}</span>;
+  };
+
+  const Subject = () => {
+    if (subjectCodeList && searchHit?.fagområdeKoder?.[0]) {
+      const path = getPath(convertCodeListToTreeNodes(subjectCodeList), searchHit.fagområdeKoder[0]);
+      return <p className={cn(styles.greyFont, styles.subject)}>{path.map((item) => item.label).join(' - ')}</p>;
+    }
+
+    return (
+      <p className={cn(styles.greyFont, styles.subject)}>
+        {ensureStringArray(translate(searchHit.fagområde)).join(' ')}
+      </p>
+    );
   };
 
   return (
@@ -41,7 +58,7 @@ const SearchHit = ({ catalogId, searchHit }: Props) => {
           {searchHit?.status && <Tag>{searchHit.status}</Tag>}
         </div>
 
-        <p className={styles.greyFont}>Brødsmuler - Ikke klart i backend </p>
+        <Subject />
       </div>
 
       <div className={styles.metaData}>
@@ -56,12 +73,12 @@ const SearchHit = ({ catalogId, searchHit }: Props) => {
           </p>
         )}
 
-        {searchHit?.erPublisert && (
-          <>
-            <p className={styles.dot}>•</p>
-            <p>{localization.publicationState.publishedInFDK}</p>
-          </>
-        )}
+        <p className={styles.dot}>•</p>
+        <p>
+          {searchHit?.erPublisert
+            ? localization.publicationState.publishedInFDK
+            : localization.publicationState.unpublished}
+        </p>
       </div>
 
       <div className={styles.rowSpaceBetween}>

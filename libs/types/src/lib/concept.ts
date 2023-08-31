@@ -114,7 +114,7 @@ export interface Concept {
   ansvarligVirksomhet: { id: string };
   merknad?: Record<string, string[]>;
   eksempel?: Record<string, string[]>;
-  fagområde?: TekstMedSpraakKode;
+  fagområde?: Record<string, string[]>;
   fagområdeKoder?: string[];
   bruksområde?: Record<string, string[]>;
   omfang?: UriText | null;

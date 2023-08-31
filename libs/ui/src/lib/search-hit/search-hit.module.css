@@ -22,6 +22,7 @@
 
 .metaData {
   display: flex;
+  align-items: center;
   color: #2d3741;
   font-size: 16px;
   line-height: 16px;
@@ -42,12 +43,20 @@
 
 .dot {
   font-size: 25px;
-  padding: 2.5px 5px 0px 5px;
+  padding: 0.2em;
 }
 
 .greyFont {
   color: #969ba0;
   font-size: 16px;
+}
+
+.subject {
+  text-overflow: ellipsis;
+  max-width: 300px;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 0 1em 0 1em;
 }
 
 .titleRow {

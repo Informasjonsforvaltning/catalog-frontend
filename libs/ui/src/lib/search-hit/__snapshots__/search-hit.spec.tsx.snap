@@ -34,10 +34,8 @@ exports[`SearchHit should render SearchHit successfully 1`] = `
           </div>
         </div>
         <p
-          class="greyFont"
-        >
-          Brødsmuler - Ikke klart i backend 
-        </p>
+          class="greyFont subject"
+        />
       </div>
       <div
         class="metaData"
@@ -48,6 +46,14 @@ exports[`SearchHit should render SearchHit successfully 1`] = `
         </p>
         <p>
           16. januar 2023
+        </p>
+        <p
+          class="dot"
+        >
+          •
+        </p>
+        <p>
+          Ikke publisert
         </p>
       </div>
       <div
