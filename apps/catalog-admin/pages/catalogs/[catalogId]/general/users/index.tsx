@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styles from './users.module.css';
 import { Accordion, TextField, Heading } from '@digdir/design-system-react';
-import { Button, PageBanner, SearchField } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, Button, PageBanner, SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { localization } from '@catalog-frontend/utils';
+import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useGetUsers, useCreateUser, useDeleteUser, useUpdateUser } from '../../../../../hooks/users';
 import { useRouter } from 'next/router';
 import { AssignedUser } from '@catalog-frontend/types';
@@ -73,8 +73,26 @@ export const CodeListsPage = () => {
     }
   };
 
+  const breadcrumbList = catalogId
+    ? ([
+        {
+          href: `/catalogs/${catalogId}`,
+          text: getTranslateText(localization.catalogAdmin.catalogAdmin),
+        },
+        {
+          href: `/catalogs/${catalogId}/general`,
+          text: getTranslateText(localization.general),
+        },
+        {
+          href: `/catalogs/${catalogId}/general/users`,
+          text: getTranslateText(localization.catalogAdmin.userList),
+        },
+      ] as BreadcrumbType[])
+    : [];
+
   return (
     <>
+      <Breadcrumbs breadcrumbList={breadcrumbList} />
       <PageBanner
         title={localization.catalogType.concept}
         subtitle={'Skatteetaten'}

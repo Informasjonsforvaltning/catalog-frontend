@@ -1,16 +1,26 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { Card } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, Card } from '@catalog-frontend/ui';
 
 import styles from './style.module.css';
-import { localization } from '@catalog-frontend/utils';
+import { getTranslateText, localization } from '@catalog-frontend/utils';
 
 export const CatalogsAdminPage = () => {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
 
+  const breadcrumbList = catalogId
+    ? ([
+        {
+          href: `/catalogs/${catalogId}`,
+          text: getTranslateText(localization.catalogAdmin.catalogAdmin),
+        },
+      ] as BreadcrumbType[])
+    : [];
+
   return (
     <>
+      <Breadcrumbs breadcrumbList={breadcrumbList} />
       <div>
         <div className={styles.card}>
           <Card

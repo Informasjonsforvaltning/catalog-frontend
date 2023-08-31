@@ -123,6 +123,7 @@ export const nb = {
   },
 
   catalogAdmin: {
+    catalogAdmin: 'Administrasjonsgrensesnitt',
     internalFields: 'Interne felt',
     editableFields: 'Editerbare felt',
     codeList: 'Kodeliste',

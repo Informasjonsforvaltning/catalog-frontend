@@ -3,9 +3,9 @@ import { useAdminState } from '../../../../../context/admin';
 import { ColorPicker } from '../../../../../components/color-picker';
 import { ImageUploader } from '../../../../../components/image-uploader';
 import styles from './design.module.css';
-import { Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
 import { Heading, HelpText, TextField } from '@digdir/design-system-react';
-import { hasOrganizationReadPermission, localization } from '@catalog-frontend/utils';
+import { getTranslateText, hasOrganizationReadPermission, localization } from '@catalog-frontend/utils';
 import { getToken } from 'next-auth/jwt';
 import { Design, Organization } from '@catalog-frontend/types';
 import { getOrganization } from '@catalog-frontend/data-access';
@@ -65,11 +65,28 @@ const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
     }
   }, [dbDesign]);
 
+  const breadcrumbList = catalogId
+    ? ([
+        {
+          href: `/catalogs/${catalogId}`,
+          text: getTranslateText(localization.catalogAdmin.catalogAdmin),
+        },
+        {
+          href: `/catalogs/${catalogId}/general`,
+          text: getTranslateText(localization.general),
+        },
+        {
+          href: `/catalogs/${catalogId}/general/design`,
+          text: getTranslateText(localization.catalogAdmin.design),
+        },
+      ] as BreadcrumbType[])
+    : [];
+
   return (
     <>
+      <Breadcrumbs breadcrumbList={breadcrumbList} />
       <div className={styles.center}>
         <div className={styles.container}>
-          <Breadcrumbs baseURI={FDK_REGISTRATION_BASE_URI} />
           <div className={styles.heading}>
             <Heading size='xlarge'>{localization.catalogAdmin.general}</Heading>
           </div>
