@@ -1,12 +1,12 @@
 import React, { FC } from 'react';
 import CheckboxTree, { Node, OnCheckNode } from 'react-checkbox-tree';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
-import cn from 'classnames';
 
 import classes from './checkbox-tree.module.css';
 import { Select } from '@catalog-frontend/ui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckSquare, faSquare } from '@fortawesome/free-regular-svg-icons';
+import { getPath } from '@catalog-frontend/utils';
 
 export interface TreeNode {
   value: string;
@@ -31,55 +31,12 @@ const getSearchOptions = (nodes?: TreeNode[]) => {
   return options;
 };
 
-const findPathInNode = (treeNode: TreeNode, targetValue: string) => {
-  const path: string[] = [];
-
-  const dfs = (tn: TreeNode, v: string) => {
-    if (!tn) {
-      return false;
-    }
-
-    path.push(tn.value);
-
-    if (tn.value === v) {
-      return true;
-    }
-
-    if (tn.children?.length) {
-      for (let index = 0; index < tn.children.length; index++) {
-        if (dfs(tn.children[index], v)) {
-          return true;
-        }
-      }
-    }
-
-    path.pop();
-    return false;
-  };
-
-  dfs(treeNode, targetValue);
-  return path.slice(); // Return a shallow copy of the path array
-};
-
-const getPath = (nodes?: TreeNode[], checkedValue?: string) => {
-  if (nodes && checkedValue) {
-    for (let index = 0; index < nodes.length; index++) {
-      const path = findPathInNode(nodes[index], checkedValue);
-      if (path.length > 0) {
-        return path;
-      }
-    }
-  }
-
-  return [];
-};
-
 export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck }) => {
   const [checked, setChecked] = React.useState<string[]>([]);
   const [expanded, setExpanded] = React.useState<string[]>([]);
 
   const handleChecked = ({ value }) => {
-    const path = getPath(nodes, value);
+    const path = getPath(nodes, value).map((item) => item.value);
     if (checked.includes(value)) {
       const newChecked = path.slice(0, -1);
       setExpanded(newChecked);
@@ -108,7 +65,7 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck }) => {
   };
   const handleSearchOnChange = (value: any) => {
     if (value !== null) {
-      const path = getPath(nodes, value);
+      const path = getPath(nodes, value).map((item) => item.value);
       setExpanded(path);
       setChecked(path);
       onCheck?.(path);

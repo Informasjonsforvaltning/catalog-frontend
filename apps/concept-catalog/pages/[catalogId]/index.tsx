@@ -148,6 +148,10 @@ export const SearchPage = ({
 
   const design = useCatalogDesign();
 
+  const subjectCodeList = codeListsResult?.codeLists?.find(
+    (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
+  );
+
   useEffect(() => {
     setCurrentPage(0);
   }, [searchTerm, selectedFieldOption, searchState]);
@@ -245,9 +249,7 @@ export const SearchPage = ({
             <div className={styles.gridContainer}>
               <SearchFilter
                 internalFields={fieldsResult?.internal}
-                subjectCodeList={codeListsResult?.codeLists?.find(
-                  (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
-                )}
+                subjectCodeList={subjectCodeList}
               />
               {status === 'loading' || createConcept.status === 'loading' || importConcepts.status === 'loading' ? (
                 <Spinner />
@@ -255,6 +257,7 @@ export const SearchPage = ({
                 <SearchHitContainer
                   data={data}
                   catalogId={catalogId}
+                  subjectCodeList={subjectCodeList}
                 />
               )}
             </div>

@@ -110,7 +110,7 @@ const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Conc
     },
     merknad: mapRowToLanguageValueList(csvMap, 'merknad'),
     eksempel: mapRowToLanguageValueList(csvMap, 'eksempel'),
-    fagområde: mapRowToLanguageValue(csvMap, 'fagområde'),
+    fagområde: mapRowToLanguageValueList(csvMap, 'fagområde'),
     bruksområde: mapRowToLanguageValueList(csvMap, 'bruksområde'),
     gyldigFom: mapToSingleValue(csvMap, 'gyldigfom'),
     gyldigTom: mapToSingleValue(csvMap, 'gyldigtom'),
