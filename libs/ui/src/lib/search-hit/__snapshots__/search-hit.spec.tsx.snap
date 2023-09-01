@@ -23,15 +23,6 @@ exports[`SearchHit should render SearchHit successfully 1`] = `
               </span>
             </h2>
           </a>
-          <div
-            class="container utkast"
-          >
-            <p
-              class="text"
-            >
-              Utkast
-            </p>
-          </div>
         </div>
         <p
           class="greyFont subject"

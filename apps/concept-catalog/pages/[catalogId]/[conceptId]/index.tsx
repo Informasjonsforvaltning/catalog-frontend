@@ -312,7 +312,7 @@ export const ConceptPage = ({
                 </Link>
               </div>
               <div className={cn(classes.status)}>
-                <Tag>{revision?.status}</Tag>
+                <Tag>{revision?.statusURI}</Tag>
               </div>
             </div>
           </InfoCard.Item>
@@ -359,7 +359,7 @@ export const ConceptPage = ({
         {deleteConcept.status !== 'loading' && (
           <>
             <div className={cn(classes.status)}>
-              <Tag>{concept?.status}</Tag>
+              <Tag>{concept?.statusURI}</Tag>
             </div>
             <div className={classes.languages}>
               <ToggleButtonGroup

@@ -2,13 +2,19 @@ import { memo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Accordion } from '@digdir/design-system-react';
 import { Select } from '@catalog-frontend/ui';
-import { AssignedUser, CodeList, InternalField, Status } from '@catalog-frontend/types';
-import { convertCodeListToTreeNodes, getTranslateText, localization as loc } from '@catalog-frontend/utils';
+import { AssignedUser, CodeList, InternalField } from '@catalog-frontend/types';
+import {
+  capitalizeFirstLetter,
+  convertCodeListToTreeNodes,
+  getTranslateText,
+  localization as loc,
+} from '@catalog-frontend/utils';
 import { action, useSearchDispatch, useSearchState } from '../../context/search';
 import { PublishedFilterType } from '../../context/search/state';
 import styles from './search-filter.module.css';
 import { CheckboxGroupFilter } from './checkbox-group-filter';
 import { AccordionItem, AccordionItemProps } from '../accordion-item';
+import { useGetConceptStatuses } from '../../hooks/reference-data';
 import { useGetUsers } from '../../hooks/users';
 import { CheckboxTreeFilter } from './checkbox-tree-filter';
 
@@ -25,11 +31,12 @@ const SearchFilter = ({ internalFields, subjectCodeList }: Props) => {
   const assignedUserState = searchState.filters.assignedUser;
   const subjectState = searchState.filters.subject;
 
-  const statusItems = [
-    { value: 'utkast' as Status, label: loc.status.draft },
-    { value: 'høring' as Status, label: loc.status.hearing },
-    { value: 'godkjent' as Status, label: loc.status.approved },
-  ];
+  const { data: statusResponse } = useGetConceptStatuses();
+  const statusItems =
+    statusResponse?.conceptStatuses?.map((s) => ({
+      value: s.uri,
+      label: capitalizeFirstLetter(getTranslateText(s.label) as string),
+    })) ?? [];
   const publicationStateItems = [
     { value: 'published' as PublishedFilterType, label: loc.publicationState.published },
     { value: 'unpublished' as PublishedFilterType, label: loc.publicationState.unpublished },
@@ -39,7 +46,7 @@ const SearchFilter = ({ internalFields, subjectCodeList }: Props) => {
   const assignedUserItems: AssignedUser[] = getUsers?.users;
 
   const handleOnStatusChange = (names: string[]) => {
-    searchDispatch(action('SET_CONCEPT_STATUS_FILTER', { filters: { status: names.map((name) => name as Status) } }));
+    searchDispatch(action('SET_CONCEPT_STATUS_FILTER', { filters: { status: names.map((name) => name as string) } }));
   };
 
   const handlePublicationOnChange = (names: string[]) =>
@@ -87,7 +94,7 @@ const SearchFilter = ({ internalFields, subjectCodeList }: Props) => {
     {
       header: loc.conceptStatus,
       content: (
-        <CheckboxGroupFilter<Status>
+        <CheckboxGroupFilter<string>
           items={statusItems}
           filterName='status'
           onChange={handleOnStatusChange}

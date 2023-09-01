@@ -8,3 +8,4 @@ export * from './lib/user';
 export * from './lib/internal-field';
 export * from './lib/code-list';
 export * from './lib/language';
+export * from './lib/reference-data';

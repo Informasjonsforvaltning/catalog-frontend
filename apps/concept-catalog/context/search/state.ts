@@ -1,4 +1,4 @@
-import { AssignedUser, Status } from '@catalog-frontend/types';
+import { AssignedUser } from '@catalog-frontend/types';
 
 export type PublishedFilterType = 'published' | 'unpublished';
 export type FilterTypes = 'published' | 'status' | 'assignedUser' | 'subject' | 'internalFields';
@@ -10,7 +10,7 @@ export type InternalFieldFilterType = {
 
 export interface SearchFilters {
   published?: PublishedFilterType[];
-  status?: Status[];
+  status?: string[];
   assignedUser?: AssignedUser;
   subject?: string[];
   internalFields?: Record<string, string[]>;

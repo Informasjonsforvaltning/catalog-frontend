@@ -9,20 +9,20 @@
   margin-top: 1px;
 }
 
-.godkjent {
+.gjeldende {
   background-color: #f3fcf5;
   border-color: #06893a;
 }
-.utkast {
+.frarådet {
   background-color: #ffe6e6;
   border-color: #c30000;
 }
 
-.publisert {
+.kandidat {
   background-color: #e6f1f8;
   border-color: #005b82;
 }
-.høring {
+.utkast {
   background-color: #fff9f0;
   border-color: #d47b00;
 }
