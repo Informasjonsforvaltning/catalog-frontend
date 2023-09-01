@@ -1,5 +1,4 @@
 import { createConcept, importConcepts } from '@catalog-frontend/data-access';
-import { Status } from '@catalog-frontend/types';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getToken } from 'next-auth/jwt';
 
@@ -26,7 +25,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       anbefaltTerm: {
         navn: { nb: '' },
       },
-      status: 'utkast' as Status,
       ansvarligVirksomhet: {
         id: slug as string,
       },

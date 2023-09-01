@@ -1,7 +1,7 @@
 import { readString } from 'react-papaparse';
 import type { ParseResult } from 'papaparse';
 
-import { Concept, Status } from '@catalog-frontend/types';
+import { Concept } from '@catalog-frontend/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { validOrganizationNumber } from '@catalog-frontend/utils';
 
@@ -124,7 +124,6 @@ const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Conc
       harEpost: mapToSingleValue(csvMap, 'kontaktpunkt_epost'),
       harTelefon: mapToSingleValue(csvMap, 'kontaktpunkt_telefon'),
     },
-    status: (mapToSingleValue(csvMap, 'status') ?? 'utkast') as Status,
     tildeltBruker: {
       id: mapToSingleValue(csvMap, 'tildeltBruker_id') ?? '',
     },

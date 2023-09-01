@@ -31,6 +31,7 @@ import SearchFilter from '../../components/search-filter';
 import { useCreateConcept } from '../../hooks/concepts';
 import { getAllCodeLists, getFields, getOrganization } from '@catalog-frontend/data-access';
 import { useImportConcepts } from '../../hooks/import';
+import { useGetConceptStatuses } from '../../hooks/reference-data';
 import { action, useSearchDispatch, useSearchState } from '../../context/search';
 import { Session, getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
@@ -101,6 +102,7 @@ export const SearchPage = ({
   const pageSubtitle = organization?.name ?? catalogId;
   const fieldOptions = getSelectOptions(loc.search.fields);
   const sortOptions = getSelectOptions(loc.search.sortOptions);
+  const { data: conceptStatusResponse } = useGetConceptStatuses();
 
   const breadcrumbList = catalogId
     ? ([
@@ -336,6 +338,7 @@ export const SearchPage = ({
                   data={data}
                   catalogId={catalogId}
                   subjectCodeList={subjectCodeList}
+                  conceptStatuses={conceptStatusResponse.conceptStatuses}
                 />
               )}
             </div>

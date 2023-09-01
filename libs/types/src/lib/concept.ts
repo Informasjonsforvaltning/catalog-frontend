@@ -126,7 +126,7 @@ export interface Concept {
   gjeldendeRevisjon?: string;
   seOgså: string[];
   erstattesAv?: string[];
-  status?: Status | null;
+  statusURI?: string | null;
   erSistPublisert?: boolean;
   revisjonAvSistPublisert?: boolean;
   endringslogelement?: Endringslogelement;
@@ -188,7 +188,7 @@ export interface QueryFilters {
     value: boolean;
   };
   status?: {
-    value: Status[];
+    value: string[];
   };
   originalId?: {
     value: string[];
@@ -221,8 +221,6 @@ export interface ChangeRequest {
 }
 
 export type SearchableField = 'anbefaltTerm' | 'frarådetTerm' | 'tillattTerm' | 'definisjon' | 'merknad';
-
-export type Status = 'utkast' | 'godkjent' | 'høring' | 'publisert';
 
 export interface ConceptSearchFulltextHit {
   id: string;

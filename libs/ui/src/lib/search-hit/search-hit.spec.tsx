@@ -8,7 +8,6 @@ describe('SearchHit', () => {
       <SearchHit
         searchHit={{
           id: 'bec18f0d-389e-4fa3-970d-23c1196cbe00',
-          status: 'utkast',
           erPublisert: false,
           anbefaltTerm: {
             navn: {

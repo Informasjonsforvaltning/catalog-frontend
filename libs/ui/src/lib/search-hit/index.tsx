@@ -12,15 +12,17 @@ import cn from 'classnames';
 import styles from './search-hit.module.css';
 import Link from 'next/link';
 import { Tag } from '../tag';
-import { CodeList, Concept } from '@catalog-frontend/types';
+import { CodeList, Concept, ReferenceDataCode } from '@catalog-frontend/types';
 
 interface Props {
   catalogId: string;
   searchHit: Concept;
   subjectCodeList?: CodeList;
+  conceptStatuses?: ReferenceDataCode[];
 }
 
-const SearchHit = ({ catalogId, searchHit, subjectCodeList }: Props) => {
+const SearchHit = ({ catalogId, searchHit, subjectCodeList, conceptStatuses }: Props) => {
+  const conceptStatus = translate(conceptStatuses?.find((s) => s.uri === searchHit.statusURI)?.label) as string;
   const Title = () => {
     const title = translate(searchHit?.anbefaltTerm?.navn);
     return <span>{title ? title : localization.concept.noName}</span>;
@@ -55,7 +57,7 @@ const SearchHit = ({ catalogId, searchHit, subjectCodeList }: Props) => {
             </Link>
           )}
 
-          {searchHit?.status && <Tag>{searchHit.status}</Tag>}
+          {conceptStatus && <Tag>{conceptStatus}</Tag>}
         </div>
 
         <Subject />
