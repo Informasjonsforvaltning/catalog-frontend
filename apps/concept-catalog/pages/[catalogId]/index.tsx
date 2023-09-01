@@ -37,7 +37,7 @@ import { authOptions } from '../api/auth/[...nextauth]';
 import { useCatalogDesign } from '../../context/catalog-design';
 import { InferGetServerSidePropsType } from 'next';
 import { Chip } from '@digdir/design-system-react';
-import { FilterTypes } from 'apps/concept-catalog/context/search/state';
+import { FilterTypes } from '../../context/search/state';
 
 export const SearchPage = ({
   organization,
@@ -68,6 +68,8 @@ export const SearchPage = ({
   const subjectCodeList = codeListsResult?.codeLists?.find(
     (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
   );
+
+  const getInternalFields = (fieldId) => fieldsResult?.internal?.find((field) => field.id === fieldId);
 
   const { status, data, refetch } = useSearchConcepts({
     catalogId,
@@ -120,21 +122,19 @@ export const SearchPage = ({
 
   const removeFilter = (filterName, filterType: FilterTypes) => {
     let updatedFilters = null;
-    const internalFieldsCopy = { ...searchState.filters.internalFields };
 
     if (filterType !== 'assignedUser' && filterType !== 'internalFields') {
       updatedFilters = searchState.filters[filterType].filter((name) => name !== filterName);
     }
 
     if (filterType === 'internalFields') {
-      if (internalFieldsCopy.hasOwnProperty(filterName.key)) {
-        internalFieldsCopy[filterName.key] = internalFieldsCopy[filterName.key].filter(
-          (value) => value !== filterName.value,
-        );
+      updatedFilters = { ...searchState.filters.internalFields };
+      if (updatedFilters[filterName.key] !== undefined) {
+        updatedFilters[filterName.key] = updatedFilters[filterName.key].filter((value) => value !== filterName.value);
       }
 
-      if (internalFieldsCopy[filterName.key].length === 0) {
-        delete internalFieldsCopy[filterName.key];
+      if (updatedFilters[filterName.key].length === 0) {
+        delete updatedFilters[filterName.key];
       }
     }
 
@@ -152,7 +152,7 @@ export const SearchPage = ({
         searchDispatch(action('SET_SUBJECTS_FILTER', { filters: { subject: updatedFilters } }));
         break;
       case 'internalFields':
-        searchDispatch(action('SET_INTERNAL_FIELDS_FILTER', { filters: { internalFields: internalFieldsCopy } }));
+        searchDispatch(action('SET_INTERNAL_FIELDS_FILTER', { filters: { internalFields: updatedFilters } }));
         break;
       default:
         break;
@@ -300,7 +300,7 @@ export const SearchPage = ({
                             removeFilter({ key: key, value: value }, 'internalFields');
                           }}
                         >
-                          {`${key}: ${value}`}
+                          {`${getTranslateText(getInternalFields(key).label)}: ${value === 'true' ? loc.yes : loc.no}`}
                         </Chip.Removable>
                       ));
                     })}

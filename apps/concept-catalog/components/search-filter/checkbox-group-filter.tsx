@@ -1,5 +1,6 @@
 import { Checkbox } from '@catalog-frontend/ui';
 import { useSearchState } from '../../context/search';
+import _ from 'lodash';
 
 type CheckboxGroupFilterItem<T> = {
   value: T;
@@ -18,7 +19,7 @@ export const CheckboxGroupFilter = <T,>({ items, filterName, onChange }: Props<T
   return (
     <Checkbox.Group
       onChange={onChange}
-      value={searchState.filters[filterName]}
+      value={_.get(searchState.filters, filterName)}
     >
       {items.map(({ value, label }) => (
         <Checkbox

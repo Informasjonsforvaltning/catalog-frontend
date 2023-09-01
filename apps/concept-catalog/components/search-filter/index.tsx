@@ -139,7 +139,7 @@ const SearchFilter = ({ internalFields, subjectCodeList }: Props) => {
                 label: loc.no,
               },
             ]}
-            filterName={field.id}
+            filterName={`internalFields.${field.id}`}
             onChange={(value) => handleInternalFieldChange(field.id, value)}
           />
         ),
