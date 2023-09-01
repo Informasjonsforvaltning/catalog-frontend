@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { NodeApi, NodeRendererProps, Tree, TreeApi } from 'react-arborist';
+import { NodeApi, NodeRendererProps, Tree } from 'react-arborist';
 import { TabsAddIcon, TabsRemoveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
 import styles from './code-list-editor.module.css';
@@ -27,7 +27,6 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
   const { updatedCodeLists } = adminContext;
   const codeListInContext = updatedCodeLists.find((codeList) => codeList.id === dbCodeList.id);
 
-  const [tree, setTree] = useState<TreeApi<Data> | null | undefined>(null);
   const [selectedCode, setSelectedCode] = useState<Code>(undefined);
   const [isEditViewOpen, setIsEditViewOpen] = useState(false);
 
@@ -270,7 +269,6 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
             <div>
               <Tree<Data>
                 data={treeData}
-                ref={(t) => setTree(t)}
                 selectionFollowsFocus={false}
                 padding={15}
                 rowHeight={30}

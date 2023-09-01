@@ -5,20 +5,17 @@ import { ImageUploader } from '../../../../../components/image-uploader';
 import styles from './design.module.css';
 import { BreadcrumbType, Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
 import { Heading, HelpText, TextField } from '@digdir/design-system-react';
-import { getTranslateText, hasOrganizationReadPermission, localization } from '@catalog-frontend/utils';
-import { getToken } from 'next-auth/jwt';
-import { Design, Organization } from '@catalog-frontend/types';
-import { getOrganization } from '@catalog-frontend/data-access';
+import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { Design } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
 import { textRegexWithNumbers } from '@catalog-frontend/utils';
 import { useGetDesign, useGetLogo, useUpdateDesign } from '../../../../../hooks/design';
 import { compare } from 'fast-json-patch';
 
-const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
+const DesignPage = () => {
   const adminContext = useAdminState();
   const router = useRouter();
   const catalogId = `${router.query.catalogId}`;
-  const pageSubtitle = organization.organization?.name || catalogId;
 
   const { backgroundColor, fontColor, logo } = adminContext;
   const [isTextInputValid, setIsTextInputValid] = useState(false);
@@ -29,6 +26,9 @@ const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
 
   const { data: getLogo } = useGetLogo(catalogId);
   const dbLogo = getLogo;
+
+  const { orgName } = adminContext;
+  const pageSubtitle = orgName || catalogId;
 
   const [imageLabel, setImageLabel] = useState('');
   const updateDesign = useUpdateDesign(catalogId);
@@ -95,13 +95,13 @@ const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
           {!dbDesign?.backgroundColor && !dbDesign?.fontColor && !dbDesign?.hasLogo ? (
             <PageBanner
               title={localization.catalogType.concept}
-              subtitle={pageSubtitle}
+              subtitle={String(getTranslateText(pageSubtitle))}
             />
           ) : (
             <>
               <PageBanner
-                title={'Begrepskatalogen (admin)'}
-                subtitle={pageSubtitle}
+                title={'Intern Begrepskatalog'}
+                subtitle={String(getTranslateText(pageSubtitle))}
                 logoDescription={dbDesign?.hasLogo && dbDesign?.logoDescription}
                 backgroundColor={backgroundColor || dbDesign?.backgroundColor || '#FFFFFF'}
                 fontColor={fontColor || dbDesign?.fontColor || '#2D3741'}
@@ -171,25 +171,5 @@ const DesignPage = ({ organization, FDK_REGISTRATION_BASE_URI }) => {
     </>
   );
 };
-
-export async function getServerSideProps({ req, params }) {
-  const token = await getToken({ req });
-  const { catalogId } = params;
-
-  const hasPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
-  if (!hasPermission) {
-    return {
-      notFound: true,
-    };
-  }
-
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
-  return {
-    props: {
-      organization,
-      FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
-    },
-  };
-}
 
 export default DesignPage;

@@ -16,6 +16,7 @@ import {
 } from '../../../../../hooks/internal-fields';
 import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
 import { compare } from 'fast-json-patch';
+import { Banner } from '../../../../../components/banner';
 
 const fieldTypeOptions: { [key: string]: SelectOption } = {
   shortText: { label: 'Kort tekst', value: 'text_short' },
@@ -96,7 +97,7 @@ export const InternalFieldsPage = () => {
   };
 
   const handleUpdateDbInternalField = (fieldId: string) => {
-    const updatedField: InternalField | undefined = updatedFieldsList.find((field) => field.id === fieldId)!;
+    const updatedField: InternalField | undefined = updatedFieldsList.find((field) => field.id === fieldId!); //Sjekk dette
     const dbField: InternalField | undefined = dbFields.find((field) => field.id === fieldId)!;
 
     if (!updatedField || !dbField) {
@@ -159,6 +160,7 @@ export const InternalFieldsPage = () => {
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Banner />
       <div className={styles.center}>
         <div className={styles.page}>
           <div className={styles.topButtonRow}>
