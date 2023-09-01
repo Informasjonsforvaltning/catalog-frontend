@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './style.module.css';
-import { Card } from '@catalog-frontend/ui';
+import { Breadcrumbs, Card } from '@catalog-frontend/ui';
 import { Session, getServerSession } from 'next-auth';
 import { getToken } from 'next-auth/jwt';
 import { getResourceRoles } from '@catalog-frontend/utils';
@@ -12,6 +12,7 @@ import { InferGetServerSidePropsType } from 'next';
 export function Index({ organizations }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
+      <Breadcrumbs />
       <div>
         <div className={styles.card}>
           {organizations.length === 0 && <div>Du har ikke tilgang</div>}

@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import styles from './internal-fields.module.css';
 import { Accordion, Checkbox, Heading, TextField } from '@digdir/design-system-react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { Button, Select } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, Button, Select } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { CodeList, InternalField, FieldType, SelectOption } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
@@ -139,144 +139,164 @@ export const InternalFieldsPage = () => {
     );
   };
 
+  const breadcrumbList = catalogId
+    ? ([
+        {
+          href: `/catalogs/${catalogId}`,
+          text: getTranslateText(localization.catalogAdmin.catalogAdmin),
+        },
+        {
+          href: `/catalogs/${catalogId}/concepts`,
+          text: getTranslateText(localization.catalogType.concept),
+        },
+        {
+          href: `/catalogs/${catalogId}/concepts/internal-fields`,
+          text: getTranslateText(localization.catalogAdmin.internalFields),
+        },
+      ] as BreadcrumbType[])
+    : [];
+
   return (
-    <div className={styles.center}>
-      <div className={styles.page}>
-        <div className={styles.topButtonRow}>
-          <Button
-            className={styles.createButton}
-            icon={<PlusCircleIcon title='' />}
-            onClick={handleCreateInternalField}
-          >
-            {localization.catalogAdmin.create.newInternalField}
-          </Button>
-        </div>
+    <>
+      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <div className={styles.center}>
+        <div className={styles.page}>
+          <div className={styles.topButtonRow}>
+            <Button
+              className={styles.createButton}
+              icon={<PlusCircleIcon title='' />}
+              onClick={handleCreateInternalField}
+            >
+              {localization.catalogAdmin.create.newInternalField}
+            </Button>
+          </div>
 
-        <div className={`${styles.row} ${styles.pb0_5}`}>
-          <Heading
-            level={2}
-            size='xsmall'
-          >
-            {localization.catalogAdmin.internalFields}
-          </Heading>
-        </div>
+          <div className={`${styles.row} ${styles.pb0_5}`}>
+            <Heading
+              level={2}
+              size='xsmall'
+            >
+              {localization.catalogAdmin.internalFields}
+            </Heading>
+          </div>
 
-        <div className={styles.pageContent}>
-          {dbFields &&
-            dbFields.map((field) => (
-              <Accordion
-                key={field.id}
-                border={true}
-                className={styles.accordion}
-              >
-                <Accordion.Item
-                  ref={newAccordionRef}
-                  open={
-                    getTranslateText(field.label).includes(`Nytt felt ${getNextFieldNumber(dbFields) - 1}`)
-                      ? accordionIsOpen
-                      : undefined
-                  }
+          <div className={styles.pageContent}>
+            {dbFields &&
+              dbFields.map((field) => (
+                <Accordion
+                  key={field.id}
+                  border={true}
+                  className={styles.accordion}
                 >
-                  <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
-                    <h2 className={styles.label}>{getTranslateText(field.label)}</h2>
-                  </Accordion.Header>
+                  <Accordion.Item
+                    ref={newAccordionRef}
+                    open={
+                      getTranslateText(field.label).includes(`Nytt felt ${getNextFieldNumber(dbFields) - 1}`)
+                        ? accordionIsOpen
+                        : undefined
+                    }
+                  >
+                    <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
+                      <h2 className={styles.label}>{getTranslateText(field.label)}</h2>
+                    </Accordion.Header>
 
-                  <Accordion.Content>
-                    <div className={styles.accordionContent}>
-                      <div className={styles.field}>
-                        <TextField
-                          label={localization.catalogAdmin.fieldNameDescription}
-                          value={String(
-                            getTranslateText((updatedFieldsList.find((f) => f.id === field.id) || field)?.label),
-                          )}
-                          required
-                          type='text'
-                          isValid={validateLabelField(
-                            String(
-                              getTranslateText((updatedFieldsList.find((f) => f.id === field.id) || field)?.label),
-                            ),
-                          )}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            updateFieldsListState(field.id, event.target.value, undefined, undefined);
-                          }}
-                        />
-                      </div>
-
-                      <div className={styles.field}>
-                        <Select
-                          label={localization.catalogAdmin.fieldTypeDescription}
-                          options={Object.values(fieldTypeOptions)}
-                          value={(updatedFieldsList.find((f) => f.id === field.id) || field)?.type}
-                          onChange={(value) => {
-                            updateFieldsListState(field.id, undefined, value as FieldType, undefined);
-                          }}
-                        />
-                      </div>
-
-                      {(updatedFieldsList.find((f) => f.id === field.id) || field)?.type == 'code_list' && (
+                    <Accordion.Content>
+                      <div className={styles.accordionContent}>
                         <div className={styles.field}>
-                          <Select
-                            label={localization.catalogAdmin.chooseCodeList}
-                            options={codeListsOptions()}
-                            value={(updatedFieldsList.find((f) => f.id === field.id) || field)?.codeListId}
-                            onChange={(value) => {
-                              updateFieldsListState(field.id, undefined, undefined, value);
+                          <TextField
+                            label={localization.catalogAdmin.fieldNameDescription}
+                            value={String(
+                              getTranslateText((updatedFieldsList.find((f) => f.id === field.id) || field)?.label),
+                            )}
+                            required
+                            type='text'
+                            isValid={validateLabelField(
+                              String(
+                                getTranslateText((updatedFieldsList.find((f) => f.id === field.id) || field)?.label),
+                              ),
+                            )}
+                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                              updateFieldsListState(field.id, event.target.value, undefined, undefined);
                             }}
                           />
                         </div>
-                      )}
 
-                      {(updatedFieldsList.find((f) => f.id === field.id) || field)?.type == 'boolean' && (
-                        <>
+                        <div className={styles.field}>
+                          <Select
+                            label={localization.catalogAdmin.fieldTypeDescription}
+                            options={Object.values(fieldTypeOptions)}
+                            value={(updatedFieldsList.find((f) => f.id === field.id) || field)?.type}
+                            onChange={(value) => {
+                              updateFieldsListState(field.id, undefined, value as FieldType, undefined);
+                            }}
+                          />
+                        </div>
+
+                        {(updatedFieldsList.find((f) => f.id === field.id) || field)?.type == 'code_list' && (
                           <div className={styles.field}>
-                            <Checkbox
-                              onChange={(e) => {
-                                updateFieldsListState(field.id, undefined, undefined, undefined, e.target.checked);
-                                setCheckboxState(e.target.checked);
+                            <Select
+                              label={localization.catalogAdmin.chooseCodeList}
+                              options={codeListsOptions()}
+                              value={(updatedFieldsList.find((f) => f.id === field.id) || field)?.codeListId}
+                              onChange={(value) => {
+                                updateFieldsListState(field.id, undefined, undefined, value);
                               }}
-                              value={''}
-                              checked={
-                                (updatedFieldsList.find((f) => f.id === field.id) || field)?.enableFilter ||
-                                checkboxState
-                              }
-                            >
-                              {localization.catalogAdmin.enableFilter}
-                            </Checkbox>
+                            />
                           </div>
-                        </>
-                      )}
+                        )}
 
-                      <div className={styles.field}>
-                        <div className={styles.accordionButtons}>
-                          <div className={styles.saveButton}>
+                        {(updatedFieldsList.find((f) => f.id === field.id) || field)?.type == 'boolean' && (
+                          <>
+                            <div className={styles.field}>
+                              <Checkbox
+                                onChange={(e) => {
+                                  updateFieldsListState(field.id, undefined, undefined, undefined, e.target.checked);
+                                  setCheckboxState(e.target.checked);
+                                }}
+                                value={''}
+                                checked={
+                                  (updatedFieldsList.find((f) => f.id === field.id) || field)?.enableFilter ||
+                                  checkboxState
+                                }
+                              >
+                                {localization.catalogAdmin.enableFilter}
+                              </Checkbox>
+                            </div>
+                          </>
+                        )}
+
+                        <div className={styles.field}>
+                          <div className={styles.accordionButtons}>
+                            <div className={styles.saveButton}>
+                              <Button
+                                fullWidth={true}
+                                size='small'
+                                onClick={() => handleUpdateDbInternalField(field.id)}
+                              >
+                                {localization.button.save}
+                              </Button>
+                            </div>
+
                             <Button
-                              fullWidth={true}
+                              color='danger'
                               size='small'
-                              onClick={() => handleUpdateDbInternalField(field.id)}
+                              onClick={() => {
+                                handleDeleteInternalField(field.id);
+                              }}
                             >
-                              {localization.button.save}
+                              {localization.button.delete}
                             </Button>
                           </div>
-
-                          <Button
-                            color='danger'
-                            size='small'
-                            onClick={() => {
-                              handleDeleteInternalField(field.id);
-                            }}
-                          >
-                            {localization.button.delete}
-                          </Button>
                         </div>
                       </div>
-                    </div>
-                  </Accordion.Content>
-                </Accordion.Item>
-              </Accordion>
-            ))}
+                    </Accordion.Content>
+                  </Accordion.Item>
+                </Accordion>
+              ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

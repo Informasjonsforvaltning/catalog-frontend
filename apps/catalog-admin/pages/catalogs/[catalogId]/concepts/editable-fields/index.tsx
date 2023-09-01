@@ -1,7 +1,7 @@
 import styles from './editable-fields.module.css';
 import { Heading } from '@digdir/design-system-react';
-import { Button, PageBanner, Select } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
+import { BreadcrumbType, Breadcrumbs, Button, PageBanner, Select } from '@catalog-frontend/ui';
+import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { CodeList } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
 
@@ -52,8 +52,26 @@ export function EditableFields() {
     );
   };
 
+  const breadcrumbList = catalogId
+    ? ([
+        {
+          href: `/catalogs/${catalogId}`,
+          text: getTranslateText(localization.catalogAdmin.catalogAdmin),
+        },
+        {
+          href: `/catalogs/${catalogId}/concepts`,
+          text: getTranslateText(localization.catalogType.concept),
+        },
+        {
+          href: `/catalogs/${catalogId}/concepts/editable-fields`,
+          text: getTranslateText(localization.catalogAdmin.editableFields),
+        },
+      ] as BreadcrumbType[])
+    : [];
+
   return (
     <>
+      <Breadcrumbs breadcrumbList={breadcrumbList} />
       <PageBanner
         title='Hva skal stå her?'
         subtitle='Rognan og revisjon'

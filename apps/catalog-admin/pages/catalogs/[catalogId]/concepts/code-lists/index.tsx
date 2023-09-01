@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import styles from './code-lists.module.css';
 import { Accordion, TextField, Heading } from '@digdir/design-system-react';
-import { Button, PageBanner, SearchField, UploadButton } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, Button, PageBanner, SearchField, UploadButton } from '@catalog-frontend/ui';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 import { useRouter } from 'next/router';
 import {
@@ -11,7 +11,7 @@ import {
   useUpdateCodeList,
 } from '../../../../../hooks/code-lists';
 import { CodeList } from '@catalog-frontend/types';
-import { localization } from '@catalog-frontend/utils';
+import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { CodeListEditor } from '../../../../../components/code-list-editor';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
 import { compare } from 'fast-json-patch';
@@ -107,8 +107,26 @@ const CodeListsPage = () => {
     return lenght + 1;
   }
 
+  const breadcrumbList = catalogId
+    ? ([
+        {
+          href: `/catalogs/${catalogId}`,
+          text: getTranslateText(localization.catalogAdmin.catalogAdmin),
+        },
+        {
+          href: `/catalogs/${catalogId}/concepts`,
+          text: getTranslateText(localization.catalogType.concept),
+        },
+        {
+          href: `/catalogs/${catalogId}/concepts/code-lists`,
+          text: getTranslateText(localization.catalogAdmin.codeLists),
+        },
+      ] as BreadcrumbType[])
+    : [];
+
   return (
     <>
+      <Breadcrumbs breadcrumbList={breadcrumbList} />
       <PageBanner
         title={localization.catalogType.concept}
         subtitle={'Skatteetaten'}
