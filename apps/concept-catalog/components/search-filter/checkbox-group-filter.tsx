@@ -24,7 +24,7 @@ export const CheckboxGroupFilter = <T,>({ items, filterName, onChange }: Props<T
       {items.map(({ value, label }) => (
         <Checkbox
           key={`checkbox-item-${value}`}
-          value={value as string}
+          value={`${value}`}
         >
           {label}
         </Checkbox>

@@ -132,10 +132,6 @@ export const SearchPage = ({
       if (updatedFilters[filterName.key] !== undefined) {
         updatedFilters[filterName.key] = updatedFilters[filterName.key].filter((value) => value !== filterName.value);
       }
-
-      if (updatedFilters[filterName.key].length === 0) {
-        delete updatedFilters[filterName.key];
-      }
     }
 
     switch (filterType) {
