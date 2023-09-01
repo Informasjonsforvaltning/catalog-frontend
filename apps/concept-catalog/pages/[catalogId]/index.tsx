@@ -251,7 +251,10 @@ export const SearchPage = ({
                 onSearchSubmit={onSearchSubmit}
               />
               <div className={styles.chips}>
-                <Chip.Group size='small'>
+                <Chip.Group
+                  size='small'
+                  className={styles.wrap}
+                >
                   {searchState.filters.subject &&
                     searchState.filters.subject?.map((filter, index) => (
                       <Chip.Removable
