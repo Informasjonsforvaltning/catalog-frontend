@@ -78,7 +78,16 @@
 
 .secondRowContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-top: 1rem;
   margin-bottom: 3rem;
+}
+
+.chips {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.wrap {
+  flex-wrap: wrap;
 }

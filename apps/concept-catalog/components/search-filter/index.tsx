@@ -22,7 +22,8 @@ const SearchFilter = ({ internalFields, subjectCodeList }: Props) => {
   const catalogId = `${router.query?.catalogId}`;
   const searchDispatch = useSearchDispatch();
   const searchState = useSearchState();
-  const [assignedUserIdValue, setAssignedUserIdValue] = useState('');
+  const assignedUserState = searchState.filters.assignedUser;
+  const subjectState = searchState.filters.subject;
 
   const statusItems = [
     { value: 'utkast' as Status, label: loc.status.draft },
@@ -51,7 +52,6 @@ const SearchFilter = ({ internalFields, subjectCodeList }: Props) => {
   const handleOnAssignedChange = (userId: string) => {
     const assignedUser: AssignedUser = assignedUserItems.find((item) => item.id === userId);
     searchDispatch(action('SET_ASSIGNED_USER_FILTER', { filters: { assignedUser } }));
-    setAssignedUserIdValue(assignedUser.id);
   };
 
   const handleInternalFieldChange = (fieldId: string, value: string[]) => {
@@ -80,6 +80,7 @@ const SearchFilter = ({ internalFields, subjectCodeList }: Props) => {
         <CheckboxTreeFilter
           nodes={convertCodeListToTreeNodes(subjectCodeList)}
           onCheck={handleSubjectOnCheck}
+          filters={subjectState}
         />
       ),
     },
@@ -101,7 +102,7 @@ const SearchFilter = ({ internalFields, subjectCodeList }: Props) => {
             assignedUserItems ? [...assignedUserItems.map((item) => ({ label: item.name, value: item.id }))] : []
           }
           onChange={handleOnAssignedChange}
-          value={assignedUserIdValue}
+          value={assignedUserState?.id}
         />
       ),
     },
@@ -138,7 +139,7 @@ const SearchFilter = ({ internalFields, subjectCodeList }: Props) => {
                 label: loc.no,
               },
             ]}
-            filterName={field.id}
+            filterName={`internalFields.${field.id}`}
             onChange={(value) => handleInternalFieldChange(field.id, value)}
           />
         ),

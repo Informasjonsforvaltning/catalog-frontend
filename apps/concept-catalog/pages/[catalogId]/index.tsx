@@ -8,10 +8,11 @@ import {
   UploadButton,
   PageBanner,
   SearchField,
-  Chips,
   SearchHitContainer,
 } from '@catalog-frontend/ui';
 import {
+  capitalizeFirstLetter,
+  getTranslateText,
   hasOrganizationReadPermission,
   hasOrganizationWritePermission,
   hasSystemAdminPermission,
@@ -30,11 +31,13 @@ import SearchFilter from '../../components/search-filter';
 import { useCreateConcept } from '../../hooks/concepts';
 import { getAllCodeLists, getFields, getOrganization } from '@catalog-frontend/data-access';
 import { useImportConcepts } from '../../hooks/import';
-import { useSearchDispatch, useSearchState } from '../../context/search';
+import { action, useSearchDispatch, useSearchState } from '../../context/search';
 import { Session, getServerSession } from 'next-auth';
 import { authOptions } from '../api/auth/[...nextauth]';
 import { useCatalogDesign } from '../../context/catalog-design';
 import { InferGetServerSidePropsType } from 'next';
+import { Chip } from '@digdir/design-system-react';
+import { FilterTypes } from '../../context/search/state';
 
 export const SearchPage = ({
   organization,
@@ -61,6 +64,12 @@ export const SearchPage = ({
     [SortOption.RECOMMENDED_TERM_AÅ]: { field: 'ANBEFALT_TERM_NB', direction: 'ASC' },
     [SortOption.RECOMMENDED_TERM_ÅA]: { field: 'ANBEFALT_TERM_NB', direction: 'DESC' },
   };
+
+  const subjectCodeList = codeListsResult?.codeLists?.find(
+    (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
+  );
+
+  const getInternalFields = (fieldId) => fieldsResult?.internal?.find((field) => field.id === fieldId);
 
   const { status, data, refetch } = useSearchConcepts({
     catalogId,
@@ -111,14 +120,39 @@ export const SearchPage = ({
     setCurrentPage(page.selected);
   };
 
-  const removeFilter = (name: string) => {
-    const filters = searchState.filters.published?.filter(function (filterName) {
-      return filterName !== name;
-    });
-    searchDispatch({
-      type: 'SET_PUBLICATION_STATE_FILTER',
-      payload: { filters: { published: filters.map((name) => name) } },
-    });
+  const removeFilter = (filterName, filterType: FilterTypes) => {
+    let updatedFilters = null;
+
+    if (filterType !== 'assignedUser' && filterType !== 'internalFields') {
+      updatedFilters = searchState.filters[filterType].filter((name) => name !== filterName);
+    }
+
+    if (filterType === 'internalFields') {
+      updatedFilters = { ...searchState.filters.internalFields };
+      if (updatedFilters[filterName.key] !== undefined) {
+        updatedFilters[filterName.key] = updatedFilters[filterName.key].filter((value) => value !== filterName.value);
+      }
+    }
+
+    switch (filterType) {
+      case 'published':
+        searchDispatch(action('SET_PUBLICATION_STATE_FILTER', { filters: { published: updatedFilters } }));
+        break;
+      case 'status':
+        searchDispatch(action('SET_CONCEPT_STATUS_FILTER', { filters: { status: updatedFilters } }));
+        break;
+      case 'assignedUser':
+        searchDispatch(action('SET_ASSIGNED_USER_FILTER', { filters: { assignedUser: null } }));
+        break;
+      case 'subject':
+        searchDispatch(action('SET_SUBJECTS_FILTER', { filters: { subject: updatedFilters } }));
+        break;
+      case 'internalFields':
+        searchDispatch(action('SET_INTERNAL_FIELDS_FILTER', { filters: { internalFields: updatedFilters } }));
+        break;
+      default:
+        break;
+    }
   };
 
   const onSearchSubmit = (term = searchTerm) => {
@@ -148,10 +182,6 @@ export const SearchPage = ({
 
   const design = useCatalogDesign();
 
-  const subjectCodeList = codeListsResult?.codeLists?.find(
-    (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
-  );
-
   useEffect(() => {
     setCurrentPage(0);
   }, [searchTerm, selectedFieldOption, searchState]);
@@ -177,16 +207,6 @@ export const SearchPage = ({
       <div className='container'>
         <div className={styles.pageContainer}>
           <div className={styles.secondRowContainer}>
-            <Chips size='small'>
-              {searchState.filters.published?.map((filter, index) => (
-                <Chips.Removable
-                  key={index}
-                  onClick={() => removeFilter(filter)}
-                >
-                  {filter === 'published' ? loc.publicationState.published : loc.publicationState.unpublished}
-                </Chips.Removable>
-              ))}
-            </Chips>
             <div className={styles.buttonsContainer}>
               <Button
                 variant='outline'
@@ -224,11 +244,69 @@ export const SearchPage = ({
           </div>
 
           <div className={styles.searchRowContainer}>
-            <SearchField
-              ariaLabel={loc.search.searchInAllFields}
-              placeholder={loc.search.searchInAllFields}
-              onSearchSubmit={onSearchSubmit}
-            />
+            <div>
+              <SearchField
+                ariaLabel={loc.search.searchInAllFields}
+                placeholder={loc.search.searchInAllFields}
+                onSearchSubmit={onSearchSubmit}
+              />
+              <div className={styles.chips}>
+                <Chip.Group
+                  size='small'
+                  className={styles.wrap}
+                >
+                  {searchState.filters.subject &&
+                    searchState.filters.subject?.map((filter, index) => (
+                      <Chip.Removable
+                        key={`subject-${index}`}
+                        onClick={() => removeFilter(filter, 'subject')}
+                      >
+                        {getTranslateText(subjectCodeList.codes.find((c) => c.id === Number(filter))?.name)}
+                      </Chip.Removable>
+                    ))}
+                  {searchState.filters?.status &&
+                    searchState.filters?.status.map((filter, index) => (
+                      <Chip.Removable
+                        key={`status-${index}`}
+                        onClick={() => removeFilter(filter, 'status')}
+                      >
+                        {capitalizeFirstLetter(filter)}
+                      </Chip.Removable>
+                    ))}
+                  {searchState.filters.assignedUser && (
+                    <Chip.Removable
+                      key={`${searchState.filters.assignedUser}`}
+                      onClick={() => removeFilter(searchState.filters?.assignedUser?.name, 'assignedUser')}
+                    >
+                      {searchState.filters?.assignedUser?.name}
+                    </Chip.Removable>
+                  )}
+                  {searchState.filters.published &&
+                    searchState.filters.published?.map((filter, index) => (
+                      <Chip.Removable
+                        key={`published-${index}`}
+                        onClick={() => removeFilter(filter, 'published')}
+                      >
+                        {filter === 'published' ? loc.publicationState.published : loc.publicationState.unpublished}
+                      </Chip.Removable>
+                    ))}
+                  {searchState.filters.internalFields &&
+                    Object.entries(searchState.filters.internalFields).map(([key, values], index) => {
+                      return values.map((value, innerIndex) => (
+                        <Chip.Removable
+                          key={`internalFields-${index}-${innerIndex}`}
+                          onClick={() => {
+                            removeFilter({ key: key, value: value }, 'internalFields');
+                          }}
+                        >
+                          {`${getTranslateText(getInternalFields(key).label)}: ${value === 'true' ? loc.yes : loc.no}`}
+                        </Chip.Removable>
+                      ));
+                    })}
+                </Chip.Group>
+              </div>
+            </div>
+
             <div className={styles.searchOptions}>
               <Select
                 label={loc.search.searchField}
@@ -262,7 +340,7 @@ export const SearchPage = ({
               )}
             </div>
 
-            {data?.hits.length > 0 && (
+            {data?.hits?.length > 0 && (
               <Pagination
                 onPageChange={changePage}
                 forcePage={currentPage}

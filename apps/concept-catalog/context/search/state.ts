@@ -1,6 +1,7 @@
 import { AssignedUser, Status } from '@catalog-frontend/types';
 
 export type PublishedFilterType = 'published' | 'unpublished';
+export type FilterTypes = 'published' | 'status' | 'assignedUser' | 'subject' | 'internalFields';
 
 export type InternalFieldFilterType = {
   id: string;
@@ -19,4 +20,12 @@ export interface SearchState {
   filters: SearchFilters;
 }
 
-export const DefaultSearchState = { filters: {} };
+export const DefaultSearchState: SearchState = {
+  filters: {
+    published: [],
+    status: [],
+    assignedUser: null,
+    subject: [],
+    internalFields: null,
+  },
+};
