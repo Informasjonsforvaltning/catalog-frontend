@@ -232,17 +232,17 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
     throw new Error('Function not implemented.');
   }
 
-  const possibleParentCodes = (codes: Code[], currentCode: Code) => {
+  const possibleParentCodes = (codes, currentCode) => {
     // Not itself, not child, null to remove parent
-    return (
-      codes
-        ?.filter((code: Code) => code.id !== currentCode?.id && code.parentID !== currentCode.id)
-        .map((code) => ({
-          label: `${getTranslateText(code.name)}`,
-          value: `${code.id}`,
-        }))
-        .concat([{ label: 'Ingen overordnet kode', value: null }]) ?? []
-    );
+    return currentCode
+      ? codes
+          ?.filter((code) => code.id !== currentCode.id && code.parentID !== currentCode.id)
+          .map((code) => ({
+            label: `${getTranslateText(code.name)}`,
+            value: `${code.id}`,
+          }))
+          .concat([{ label: 'Ingen overordnet kode', value: null }]) ?? []
+      : [];
   };
 
   const updateCodeName = (field: 'nb' | 'nn' | 'en', value: string) => {
