@@ -97,7 +97,7 @@ export const InternalFieldsPage = () => {
   };
 
   const handleUpdateDbInternalField = (fieldId: string) => {
-    const updatedField: InternalField | undefined = updatedFieldsList.find((field) => field.id === fieldId!); //Sjekk dette
+    const updatedField: InternalField | undefined = updatedFieldsList.find((field) => field.id === fieldId)!;
     const dbField: InternalField | undefined = dbFields.find((field) => field.id === fieldId)!;
 
     if (!updatedField || !dbField) {
