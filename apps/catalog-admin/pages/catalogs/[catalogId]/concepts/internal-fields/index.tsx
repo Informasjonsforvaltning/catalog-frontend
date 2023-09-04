@@ -36,7 +36,6 @@ export const InternalFieldsPage = () => {
   const deleteInternalField = useDeleteInternalField(catalogId);
   const updateInternalField = useUpdateInternalField(catalogId);
   const [accordionIsOpen, setAccordionIsOpen] = useState(false);
-  const [checkboxState, setCheckboxState] = useState(false);
 
   const getNextFieldNumber = (fields: InternalField[]): number => (fields ? fields.length : 0) + 1;
 
@@ -251,13 +250,9 @@ export const InternalFieldsPage = () => {
                               <Checkbox
                                 onChange={(e) => {
                                   updateFieldsListState(field.id, undefined, undefined, undefined, e.target.checked);
-                                  setCheckboxState(e.target.checked);
                                 }}
                                 value={''}
-                                checked={
-                                  (updatedFieldsList.find((f) => f.id === field.id) || field)?.enableFilter ||
-                                  checkboxState
-                                }
+                                checked={(updatedFieldsList.find((f) => f.id === field.id) || field)?.enableFilter}
                               >
                                 {localization.catalogAdmin.enableFilter}
                               </Checkbox>
