@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Design } from '@catalog-frontend/types';
 import { getTranslateText } from '@catalog-frontend/utils';
 import { useAdminState } from '../../context/admin';
-import { useCatalogDesign } from 'apps/catalog-admin/context/catalog-design';
+import { useCatalogDesign } from '../../context/catalog-design';
 
 export const Banner = () => {
   const router = useRouter();

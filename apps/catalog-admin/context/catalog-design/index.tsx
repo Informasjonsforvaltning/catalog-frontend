@@ -2,7 +2,7 @@ import { createContext, type ReactNode, useContext } from 'react';
 
 import { useGetDesign } from '../../hooks/design';
 import { useRouter } from 'next/router';
-import { Design } from '../../../../libs/types/src/lib/design';
+import { Design } from '@catalog-frontend/types';
 
 interface ContextProps {
   design?: Design;
