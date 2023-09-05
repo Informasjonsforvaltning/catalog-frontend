@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styles from './code-lists.module.css';
 import { Accordion, TextField, Heading } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, PageBanner, SearchField, UploadButton } from '@catalog-frontend/ui';
@@ -26,13 +26,22 @@ const CodeListsPage = () => {
   const adminDispatch = useAdminDispatch();
   const adminContext = useAdminState();
   const { updatedCodeLists } = adminContext;
+  const [search, setSearch] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   const { data: getAllCodeLists } = useGetAllCodeLists({
     catalogId: catalogId,
   });
+  const dbCodeLists = getAllCodeLists?.codeLists || [];
+
+  useEffect(() => {
+    const filteredCodeLists = dbCodeLists.filter((codeList) => codeList.name.toLowerCase().includes(search.toLowerCase()));
+
+    setSearchResults(filteredCodeLists);
+  }, [dbCodeLists, search]);
 
   const newCodeList = {
-    name: 'Ny kodeliste ' + getNextNewCodeListNumber(getAllCodeLists?.codeLists),
+    name: 'Ny kodeliste ' + getNextNewCodeListNumber(dbCodeLists),
     description: '',
     codes: [],
   };
@@ -54,7 +63,7 @@ const CodeListsPage = () => {
 
   const handleUpdateDbCodeList = (codeListId: string) => {
     const updatedCodeList = updatedCodeLists.find((codeList) => codeList.id === codeListId);
-    const dbCodeList = getAllCodeLists.codeLists.find((codeList) => codeList.id === codeListId);
+    const dbCodeList = dbCodeLists.find((codeList) => codeList.id === codeListId);
     const diff = compare(dbCodeList, updatedCodeList);
 
     if (diff) {
@@ -81,7 +90,7 @@ const CodeListsPage = () => {
         adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
       }
     } else {
-      const codeListToUpdate = getAllCodeLists.codeLists.find((codeList) => codeList.id === codeListId);
+      const codeListToUpdate = dbCodeLists.find((codeList) => codeList.id === codeListId);
 
       if (codeListToUpdate) {
         const updatedCodeList = {
@@ -137,6 +146,7 @@ const CodeListsPage = () => {
             <SearchField
               ariaLabel={'Søkefelt kodeliste'}
               placeholder='Søk etter kodeliste...'
+              onSearchSubmit={(search) => setSearch(search)}
             />
             <div className={styles.buttons}>
               <div className={styles.buttons}>
@@ -164,8 +174,8 @@ const CodeListsPage = () => {
             {localization.catalogAdmin.codeLists}
           </Heading>
           <div className={styles.content}>
-            {getAllCodeLists &&
-              getAllCodeLists.codeLists?.map((data: CodeList, index: number) => (
+            {searchResults &&
+              searchResults?.map((codeList: CodeList, index: number) => (
                 <Accordion
                   key={index}
                   border={true}
@@ -174,17 +184,17 @@ const CodeListsPage = () => {
                   <Accordion.Item
                     ref={newAccordionRef}
                     open={
-                      data.name.includes(`Ny kodeliste ${getNextNewCodeListNumber(getAllCodeLists.codeLists) - 1}`)
+                      codeList.name.includes(`Ny kodeliste ${getNextNewCodeListNumber(dbCodeLists) - 1}`)
                         ? accordionIsOpen
                         : undefined
                     }
                   >
                     <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
-                      <h1 className={styles.label}>{data.name}</h1>
-                      <p className={styles.description}> {data.description} </p>
+                      <h1 className={styles.label}>{codeList.name}</h1>
+                      <p className={styles.description}> {codeList.description} </p>
                     </Accordion.Header>
                     <Accordion.Content>
-                      <p className={styles.id}>ID: {data.id}</p>
+                      <p className={styles.id}>ID: {codeList.id}</p>
                     </Accordion.Content>
 
                     <Accordion.Content>
@@ -193,27 +203,27 @@ const CodeListsPage = () => {
                           <TextField
                             label={localization.name}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                              handleCodeListUpdate(data.id, event.target.value, undefined);
+                              handleCodeListUpdate(codeList.id, event.target.value, undefined);
                             }}
-                            value={(updatedCodeLists.find((c) => c.id === data.id) || data)?.name}
+                            value={(updatedCodeLists.find((c) => c.id === codeList.id) || codeList)?.name}
                           />
                         </div>
                         <div className={styles.textField}>
                           <TextField
                             label={localization.description}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                              handleCodeListUpdate(data.id, undefined, event.target.value);
+                              handleCodeListUpdate(codeList.id, undefined, event.target.value);
                             }}
-                            value={(updatedCodeLists.find((c) => c.id === data.id) || data)?.description}
+                            value={(updatedCodeLists.find((c) => c.id === codeList.id) || codeList)?.description}
                           />
                         </div>
                       </div>
 
-                      <CodeListEditor dbCodeList={data} />
+                      <CodeListEditor dbCodeList={codeList} />
                       <div className={styles.formButtons}>
-                        <Button onClick={() => handleUpdateDbCodeList(data.id)}>{localization.saveEdits}</Button>
+                        <Button onClick={() => handleUpdateDbCodeList(codeList.id)}>{localization.saveEdits}</Button>
                         <Button
-                          onClick={(e) => handleDeleteCodeList(data.id, e)}
+                          onClick={(e) => handleDeleteCodeList(codeList.id, e)}
                           color='danger'
                         >
                           {localization.catalogAdmin.deleteCodeList}
