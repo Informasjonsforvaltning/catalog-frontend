@@ -7,6 +7,7 @@ import { Banner } from '../../../components/banner';
 import { useAdminDispatch } from '../../../context/admin';
 import { Organization } from '@catalog-frontend/types';
 import { getOrganization } from '@catalog-frontend/data-access';
+import { useEffect } from 'react';
 
 export const CatalogsAdminPage = ({ organization }) => {
   const router = useRouter();
@@ -22,7 +23,9 @@ export const CatalogsAdminPage = ({ organization }) => {
       ] as BreadcrumbType[])
     : [];
 
-  adminDispatch({ type: 'SET_ORG_NAME', payload: { orgName: organization.prefLabel } });
+  useEffect(() => {
+    adminDispatch({ type: 'SET_ORG_NAME', payload: { orgName: organization.prefLabel } });
+  }, [organization.prefLabel]);
 
   return (
     <>
