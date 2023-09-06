@@ -196,7 +196,11 @@ export const nb = {
   },
 
   concept: {
+    id: 'ID',
     replacedBy: 'Erstattet av',
+    createdBy: 'Opprettet av',
+    created: 'Opprettet',
+    lastUpdated: 'Sist oppdatert',
     note: 'Merknad',
     example: 'Eksempel',
     publicDefinition: 'Folkelig forklaring',
@@ -208,6 +212,9 @@ export const nb = {
     internalField: 'Interne felt',
     confirmDelete: 'Er du sikker du ønsker å slette begrepet?',
     noName: 'Uten navn',
+    version: 'Versjon',
+    validPeriod: 'Gyldighetsperiode',
+    fromTo: 'Fra - til',
   },
 
   changeRequest: {
