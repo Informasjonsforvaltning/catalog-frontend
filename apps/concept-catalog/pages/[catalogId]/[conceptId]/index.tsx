@@ -167,7 +167,7 @@ export const ConceptPage = ({
   ];
 
   const infoData2 = [
-    ['ID', concept?.id],
+    [localization.concept.id, concept?.id],
     [
       localization.publicationState.state,
       concept?.erPublisert
@@ -179,10 +179,13 @@ export const ConceptPage = ({
           })}`
         : localization.publicationState.unpublished,
     ],
-    ['Versjon', `${concept?.versjonsnr.major}.${concept?.versjonsnr.minor}.${concept?.versjonsnr.patch}`],
-    ['Gyldighet', `Fra/til: ${concept?.gyldigFom} - ${concept?.gyldigTom}`],
     [
-      'Sist oppdatert',
+      localization.concept.version,
+      `${concept?.versjonsnr.major}.${concept?.versjonsnr.minor}.${concept?.versjonsnr.patch}`,
+    ],
+    [localization.concept.validPeriod, `${localization.concept.fromTo}: ${concept?.gyldigFom} - ${concept?.gyldigTom}`],
+    [
+      localization.concept.lastUpdated,
       formatISO(concept?.endringslogelement?.endringstidspunkt, {
         weekday: 'long',
         year: 'numeric',
@@ -191,7 +194,7 @@ export const ConceptPage = ({
       }) ?? '',
     ],
     [
-      'Opprettet',
+      localization.concept.created,
       formatISO(concept?.opprettet, {
         weekday: 'long',
         year: 'numeric',
@@ -199,7 +202,8 @@ export const ConceptPage = ({
         day: 'numeric',
       }) ?? '',
     ],
-    ['Opprettet av', concept?.opprettetAv ?? ''],
+    [localization.concept.createdBy, concept?.opprettetAv ?? ''],
+    [localization.concept.abbreviation, concept?.abbreviatedLabel],
   ];
 
   const handleLanguageChange = (lang) => {

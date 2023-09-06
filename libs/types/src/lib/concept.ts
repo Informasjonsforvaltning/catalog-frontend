@@ -137,6 +137,7 @@ export interface Concept {
   opprettet?: string;
   opprettetAv?: string;
   interneFelt?: Record<string, { value: string }>;
+  abbreviatedLabel?: string;
 }
 
 export interface SkosConcept {
