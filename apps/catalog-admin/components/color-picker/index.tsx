@@ -32,12 +32,12 @@ export const ColorPicker = ({ type }: ColorPicker) => {
   }, [inputColor]);
 
   useEffect(() => {
-    if (dbDesign?.backgroundColor !== undefined && type === 'background') {
+    if (dbDesign?.fontColor !== null && dbDesign?.fontColor !== undefined && type === 'background') {
       setInputColor(dbDesign?.backgroundColor);
       setIsValidInput(colorRegex.test(dbDesign?.backgroundColor));
     }
 
-    if (dbDesign?.fontColor !== undefined && type === 'font') {
+    if (dbDesign?.fontColor !== null && dbDesign?.fontColor !== undefined && type === 'font') {
       setInputColor(dbDesign?.fontColor);
       setIsValidInput(colorRegex.test(dbDesign?.fontColor));
     }
