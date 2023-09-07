@@ -18,7 +18,7 @@ const DesignPage = () => {
   const catalogId = `${router.query.catalogId}`;
 
   const { backgroundColor, fontColor, logo } = adminContext;
-  const [isTextInputValid, setIsTextInputValid] = useState(false);
+  const [isTextInputValid, setIsTextInputValid] = useState(true);
   const [disableTextField, setDisableTextField] = useState(true);
 
   const { data: getDesign } = useGetDesign(catalogId);
@@ -56,14 +56,13 @@ const DesignPage = () => {
   useEffect(() => {
     const hasValidLabel = dbDesign?.hasLogo ? textRegexWithNumbers.test(dbDesign.logoDescription) : false;
     setDisableTextField(!(logo || (dbDesign && dbDesign.hasLogo) || hasValidLabel));
-    setIsTextInputValid(hasValidLabel);
   }, [logo, dbLogo, dbDesign]);
 
   useEffect(() => {
-    if (dbDesign?.logoDescription !== undefined) {
+    if (dbDesign?.logoDescription !== undefined && dbDesign?.logoDescription !== null) {
       setImageLabel(dbDesign.logoDescription);
     }
-  }, [dbDesign]);
+  }, [dbDesign?.logoDescription]);
 
   const breadcrumbList = catalogId
     ? ([
@@ -92,24 +91,16 @@ const DesignPage = () => {
           </div>
 
           <h2 className={styles.subheading}>{localization.catalogAdmin.preview}</h2>
-          {!dbDesign?.backgroundColor && !dbDesign?.fontColor && !dbDesign?.hasLogo ? (
+          <>
             <PageBanner
-              title={localization.catalogType.concept}
+              title={'Intern Begrepskatalog'}
               subtitle={String(getTranslateText(pageSubtitle))}
+              logoDescription={dbDesign?.hasLogo && dbDesign?.logoDescription}
+              backgroundColor={backgroundColor || dbDesign?.backgroundColor || '#FFFFFF'}
+              fontColor={fontColor || dbDesign?.fontColor || '#2D3741'}
+              logo={logo || (dbDesign?.hasLogo && `/api/design/${catalogId}/logo`) || null}
             />
-          ) : (
-            <>
-              <PageBanner
-                title={'Intern Begrepskatalog'}
-                subtitle={String(getTranslateText(pageSubtitle))}
-                logoDescription={dbDesign?.hasLogo && dbDesign?.logoDescription}
-                backgroundColor={backgroundColor || dbDesign?.backgroundColor || '#FFFFFF'}
-                fontColor={fontColor || dbDesign?.fontColor || '#2D3741'}
-                logo={logo || (dbDesign?.hasLogo && `/api/design/${catalogId}/logo`) || null}
-              />
-            </>
-          )}
-
+          </>
           <h2 className={styles.subheading}>{localization.catalogAdmin.customizeDesign}</h2>
 
           <div className={styles.backgroundContainer}>
