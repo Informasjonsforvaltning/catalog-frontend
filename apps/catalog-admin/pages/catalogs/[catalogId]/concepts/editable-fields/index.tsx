@@ -1,6 +1,6 @@
 import styles from './editable-fields.module.css';
 import { Heading } from '@digdir/design-system-react';
-import { BreadcrumbType, Breadcrumbs, Button, PageBanner, Select } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, Button, Select } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { CodeList } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
@@ -9,6 +9,7 @@ import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
 import { useGetInternalFields, useUpdateEditableFields } from '../../../../../hooks/internal-fields';
 import { useState } from 'react';
 import { compare } from 'fast-json-patch';
+import { Banner } from '../../../../../components/banner';
 
 export function EditableFields() {
   const router = useRouter();
@@ -72,10 +73,7 @@ export function EditableFields() {
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
-      <PageBanner
-        title='Hva skal stå her?'
-        subtitle='Rognan og revisjon'
-      />
+      <Banner />
       <div className={styles.center}>
         <div className={styles.heading}>
           <Heading

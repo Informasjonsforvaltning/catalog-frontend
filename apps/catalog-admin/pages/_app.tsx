@@ -9,6 +9,7 @@ import '@altinn/figma-design-tokens/dist/tokens.css';
 import '@digdir/design-system-tokens/brand/digdir/tokens.css';
 import { AdminContextProvider } from '../context/admin';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { CatalogDesignContextProvider } from '../context/catalog-design';
 
 const CustomApp: FC<AppProps<{ session: Session }>> = ({ Component, pageProps: { session, ...pageProps } }) => {
   const queryClient = new QueryClient();
@@ -16,16 +17,19 @@ const CustomApp: FC<AppProps<{ session: Session }>> = ({ Component, pageProps: {
     <AdminContextProvider>
       <SessionProvider session={session}>
         <QueryClientProvider client={queryClient}>
-          <Head>
-            <title>{localization.catalogType.concept}</title>
-            <link
-              rel='shortcut icon'
-              href='/favicon.ico'
-            />
-          </Head>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <CatalogDesignContextProvider>
+            <Head>
+              <title>{localization.catalogType.concept}</title>
+              <link
+                rel='shortcut icon'
+                href='/favicon.ico'
+              />
+            </Head>
+
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </CatalogDesignContextProvider>
         </QueryClientProvider>
       </SessionProvider>
     </AdminContextProvider>

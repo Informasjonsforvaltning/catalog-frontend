@@ -3,6 +3,7 @@ import styles from './concepts.module.css';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { Banner } from '../../../../components/banner';
 
 export const ConceptsPage = () => {
   const router = useRouter();
@@ -24,6 +25,7 @@ export const ConceptsPage = () => {
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Banner />
       <div className={styles.container}>
         <Card
           title={localization.catalogAdmin.codeList}

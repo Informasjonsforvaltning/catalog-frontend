@@ -2,6 +2,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getToken } from 'next-auth/jwt';
 import httpProxy from 'http-proxy';
+import { getDesignLogo } from '@catalog-frontend/data-access';
 
 export const config = {
   api: {
@@ -18,6 +19,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const { catalogId } = req.query;
+
+  if (req.method === 'GET') {
+    try {
+      const response = await getDesignLogo(`${catalogId}`, `${token?.access_token}`);
+      if (response.status !== 200) {
+        return res.status(response.status).send('Failed to get design logo');
+      }
+
+      res.setHeader('Content-Type', response.headers.get('Content-Type'));
+      res.setHeader('Content-Disposition', response.headers.get('Content-Disposition'));
+      res.setHeader('Cache-Control', response.headers.get('Cache-Control'));
+      res.end(Buffer.from(await response.arrayBuffer()));
+    } catch (error) {
+      res.status(500).send('Failed to get design logo');
+    }
+    return;
+  }
 
   new Promise((resolve, reject) => {
     req.url = `${catalogId}/design/logo`;

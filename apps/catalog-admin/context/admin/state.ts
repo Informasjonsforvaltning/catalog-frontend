@@ -5,6 +5,7 @@ export interface AdminState {
   fontColor?: string;
   logo?: string;
   updatedCodeLists?: CodeList[];
+  orgName?: string;
 }
 
 export const DefaultAdminState = {
@@ -12,4 +13,5 @@ export const DefaultAdminState = {
   fontColor: null,
   logo: null,
   updatedCodeLists: [],
+  orgName: null,
 };

@@ -1,4 +1,4 @@
-import { deleteLogo, getDesign, getDesignLogo, patchDesign, postDesignLogo } from '@catalog-frontend/data-access';
+import { getDesign, patchDesign } from '@catalog-frontend/data-access';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getToken } from 'next-auth/jwt';
 

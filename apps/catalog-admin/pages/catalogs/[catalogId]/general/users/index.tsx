@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './users.module.css';
 import { Accordion, TextField, Heading } from '@digdir/design-system-react';
-import { BreadcrumbType, Breadcrumbs, Button, PageBanner, SearchField } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, Button, SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useGetUsers, useCreateUser, useDeleteUser, useUpdateUser } from '../../../../../hooks/users';
@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { AssignedUser } from '@catalog-frontend/types';
 import { compare } from 'fast-json-patch';
 import { textRegex, telephoneNumberRegex, emailRegex } from '@catalog-frontend/utils';
+import { Banner } from '../../../../../components/banner';
 
 export const CodeListsPage = () => {
   const router = useRouter();
@@ -93,10 +94,7 @@ export const CodeListsPage = () => {
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
-      <PageBanner
-        title={localization.catalogType.concept}
-        subtitle={'Skatteetaten'}
-      />
+      <Banner />
       <div className={styles.center}>
         <div className={styles.page}>
           <div className={styles.row}>

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './code-lists.module.css';
 import { Accordion, TextField, Heading } from '@digdir/design-system-react';
-import { BreadcrumbType, Breadcrumbs, Button, PageBanner, SearchField, UploadButton } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, Button, SearchField, UploadButton } from '@catalog-frontend/ui';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 import { useRouter } from 'next/router';
 import {
@@ -15,6 +15,7 @@ import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { CodeListEditor } from '../../../../../components/code-list-editor';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
 import { compare } from 'fast-json-patch';
+import { Banner } from '../../../../../components/banner';
 
 const CodeListsPage = () => {
   const router = useRouter();
@@ -136,10 +137,7 @@ const CodeListsPage = () => {
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
-      <PageBanner
-        title={localization.catalogType.concept}
-        subtitle={'Skatteetaten'}
-      />
+      <Banner />
       <div className={styles.center}>
         <div className={styles.page}>
           <div className={styles.row}>
