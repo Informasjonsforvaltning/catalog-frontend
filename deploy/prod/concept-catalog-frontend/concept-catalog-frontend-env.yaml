@@ -60,3 +60,8 @@ spec:
                 secretKeyRef:
                   name: commonurl-prod
                   key: FDK_REGISTRATION_BASE_URI
+            - name: REFERENCE_DATA_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-prod
+                  key: FDK_REFERENCE_DATA_BASE_URI
