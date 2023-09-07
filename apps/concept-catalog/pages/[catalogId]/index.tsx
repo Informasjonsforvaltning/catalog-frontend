@@ -28,7 +28,6 @@ import styles from './search-page.module.css';
 import { getToken } from 'next-auth/jwt';
 import { FileImportIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import SearchFilter from '../../components/search-filter';
-import { useCreateConcept } from '../../hooks/concepts';
 import { getAllCodeLists, getFields, getOrganization } from '@catalog-frontend/data-access';
 import { useImportConcepts } from '../../hooks/import';
 import { useGetConceptStatuses } from '../../hooks/reference-data';
@@ -49,7 +48,6 @@ export const SearchPage = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const catalogId = `${router.query.catalogId}`;
-  const createConcept = useCreateConcept(catalogId);
   const pageNumber: number = textToNumber(router.query.page as string, 0);
 
   const searchState = useSearchState();
@@ -182,6 +180,12 @@ export const SearchPage = ({
     }
   };
 
+  const onCreateConceptClick = () => {
+    if (validOrganizationNumber(catalogId)) {
+      router.push(`/${catalogId}/new`);
+    }
+  };
+
   const design = useCatalogDesign();
 
   useEffect(() => {
@@ -219,7 +223,7 @@ export const SearchPage = ({
               {hasWritePermission && (
                 <>
                   <Button
-                    onClick={() => createConcept.mutate()}
+                    onClick={onCreateConceptClick}
                     icon={<PlusCircleIcon fontSize='1.5rem' />}
                   >
                     {loc.button.createConcept}
@@ -331,7 +335,7 @@ export const SearchPage = ({
                 internalFields={fieldsResult?.internal}
                 subjectCodeList={subjectCodeList}
               />
-              {status === 'loading' || createConcept.status === 'loading' || importConcepts.status === 'loading' ? (
+              {status === 'loading' || importConcepts.status === 'loading' ? (
                 <Spinner />
               ) : (
                 <SearchHitContainer
