@@ -70,3 +70,8 @@ spec:
                 secretKeyRef:
                   name: commonurl-staging
                   key: FDK_REGISTRATION_BASE_URI
+            - name: REFERENCE_DATA_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: FDK_REFERENCE_DATA_BASE_URI
