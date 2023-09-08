@@ -2,7 +2,7 @@ import { memo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Accordion } from '@digdir/design-system-react';
 import { Select } from '@catalog-frontend/ui';
-import { AssignedUser, CodeList, InternalField } from '@catalog-frontend/types';
+import { AssignedUser, CodeList, InternalField, ReferenceDataCode } from '@catalog-frontend/types';
 import {
   capitalizeFirstLetter,
   convertCodeListToTreeNodes,
@@ -14,16 +14,16 @@ import { PublishedFilterType } from '../../context/search/state';
 import styles from './search-filter.module.css';
 import { CheckboxGroupFilter } from './checkbox-group-filter';
 import { AccordionItem, AccordionItemProps } from '../accordion-item';
-import { useGetConceptStatuses } from '../../hooks/reference-data';
 import { useGetUsers } from '../../hooks/users';
 import { CheckboxTreeFilter } from './checkbox-tree-filter';
 
 interface Props {
   internalFields?: InternalField[];
   subjectCodeList?: CodeList;
+  conceptStatuses?: ReferenceDataCode[];
 }
 
-const SearchFilter = ({ internalFields, subjectCodeList }: Props) => {
+const SearchFilter = ({ internalFields, subjectCodeList, conceptStatuses }: Props) => {
   const router = useRouter();
   const catalogId = `${router.query?.catalogId}`;
   const searchDispatch = useSearchDispatch();
@@ -31,9 +31,8 @@ const SearchFilter = ({ internalFields, subjectCodeList }: Props) => {
   const assignedUserState = searchState.filters.assignedUser;
   const subjectState = searchState.filters.subject;
 
-  const { data: statusResponse } = useGetConceptStatuses();
   const statusItems =
-    statusResponse?.conceptStatuses?.map((s) => ({
+    conceptStatuses?.map((s) => ({
       value: s.uri,
       label: capitalizeFirstLetter(getTranslateText(s.label) as string),
     })) ?? [];
