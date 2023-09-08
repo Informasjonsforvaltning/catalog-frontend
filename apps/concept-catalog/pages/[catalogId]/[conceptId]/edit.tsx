@@ -1,4 +1,3 @@
-import { getToken } from 'next-auth/jwt';
 import { hasOrganizationWritePermission, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../../api/auth/[...nextauth]';
@@ -14,8 +13,7 @@ export async function getServerSideProps({ req, res, params }) {
   }
 
   const session = await getServerSession(req, res, authOptions);
-  const token = await getToken({ req });
-  if (!(session?.user && Date.now() < token?.expires_at * 1000)) {
+  if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
     return {
       redirect: {
         permanent: false,
@@ -24,7 +22,7 @@ export async function getServerSideProps({ req, res, params }) {
     };
   }
 
-  const hasWritePermission = token && hasOrganizationWritePermission(token.access_token, catalogId);
+  const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
   if (!hasWritePermission) {
     return {
       redirect: {

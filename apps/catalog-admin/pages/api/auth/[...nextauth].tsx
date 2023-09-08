@@ -26,6 +26,8 @@ export const authOptions = {
         image: null,
       };
 
+      session.accessToken = token.access_token;
+      session.accessTokenExpiresAt = token.expires_at;
       if (token.error) {
         session.error = token.error;
       }

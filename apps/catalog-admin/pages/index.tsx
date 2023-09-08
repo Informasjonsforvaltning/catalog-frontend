@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './style.module.css';
 import { Breadcrumbs, Card } from '@catalog-frontend/ui';
 import { Session, getServerSession } from 'next-auth';
-import { getToken } from 'next-auth/jwt';
 import { getResourceRoles } from '@catalog-frontend/utils';
 import { getOrganizations } from '@catalog-frontend/data-access';
 import { Organization } from '@catalog-frontend/types';
@@ -31,9 +30,8 @@ export function Index({ organizations }: InferGetServerSidePropsType<typeof getS
 
 export async function getServerSideProps({ req, res, params }) {
   const session: Session = await getServerSession(req, res, authOptions);
-  const token = await getToken({ req });
 
-  if (!(session?.user && Date.now() < token?.expires_at * 1000)) {
+  if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
     return {
       redirect: {
         permanent: false,
@@ -42,7 +40,7 @@ export async function getServerSideProps({ req, res, params }) {
     };
   }
 
-  const resourceRoles = getResourceRoles(token.access_token);
+  const resourceRoles = getResourceRoles(`${session?.accessToken}`);
   const organiztionIdsWithAdminRole = resourceRoles
     .filter((role) => role.resource === 'organization' && role.role === 'admin')
     .map((role) => role.resourceId);

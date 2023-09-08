@@ -1,14 +1,15 @@
 import { searchConceptsForCatalog } from '@catalog-frontend/data-access';
 import { ErrorResponse, SearchConceptResponse } from '@catalog-frontend/types';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getToken } from 'next-auth/jwt';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse<SearchConceptResponse | ErrorResponse>,
 ) {
-  const token = await getToken({ req });
-  if (!token || (token?.expires_at && token?.expires_at < Date.now() / 1000)) {
+  const session = await getServerSession(req, res, authOptions);
+  if (!session || session?.accessTokenExpiresAt < Date.now() / 1000) {
     return res.status(401).send({ error: 'Unauthorized' });
   }
 
@@ -16,7 +17,7 @@ export default async function handler(
 
   try {
     const { catalogId, query: searchQuery } = JSON.parse(req.body);
-    const response = await searchConceptsForCatalog(catalogId, searchQuery, `${token.access_token}`);
+    const response = await searchConceptsForCatalog(catalogId, searchQuery, `${session.accessToken}`);
     if (response.status !== 200) {
       console.error('Failed to search concepts', await response.text());
       return res.status(response.status).send({ error: 'Failed to search concepts' });

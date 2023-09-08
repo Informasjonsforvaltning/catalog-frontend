@@ -1,6 +1,8 @@
 import jwtDecode from 'jwt-decode';
-import { getToken } from 'next-auth/jwt';
+import { getServerSession } from 'next-auth';
+import { getSession } from 'next-auth/react';
 import { NextResponse } from 'next/server';
+import { authOptions } from './pages/api/auth/[...nextauth]';
 
 export interface ResourceRole {
   resource: string;
@@ -25,6 +27,10 @@ function getCatalogId(url: string): string | null {
 }
 
 const getAuthorities = (token: string): string => {
+  if (!token) {
+    return '';
+  }
+
   const tokenDecoded = jwtDecode(token);
   return (tokenDecoded && (tokenDecoded as any).authorities) || '';
 };
@@ -44,16 +50,12 @@ export const hasOrganizationRole = (token: string, { orgNr, role }: Organization
 export const hasOrganizationAdminPermission = (token: string, orgNr: string): boolean =>
   hasOrganizationRole(token, { orgNr, role: 'admin' });
 
-export async function middleware(req: any) {
+export async function middleware(req: any, res: any) {
   const catalogId = getCatalogId(req.nextUrl.pathname);
 
   if (catalogId) {
-    const secret = process.env.NEXT_AUTH_SECRET;
-    const token = await getToken({
-      req: req,
-      secret: secret,
-    });
-    const hasPermission = token && hasOrganizationAdminPermission(token.access_token, catalogId);
+    const session = await getServerSession(req, res, authOptions);
+    const hasPermission = session && hasOrganizationAdminPermission(session.accessToken, catalogId);
 
     if (!hasPermission) {
       return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access`, req.url));
