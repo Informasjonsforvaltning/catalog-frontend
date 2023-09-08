@@ -30,6 +30,7 @@ import {
   getAllCodeLists,
   getConcept,
   getConceptRevisions,
+  getConceptStatuses,
   getFields,
   getOrganization,
   getUsers,
@@ -54,7 +55,6 @@ import classes from './concept-page.module.css';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../hooks/comments';
 import { useGetHistory } from '../../../hooks/history';
 import { useDeleteConcept } from '../../../hooks/concepts';
-import { useGetConceptStatuses } from '../../../hooks/reference-data';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
 import { useCatalogDesign } from '../../../context/catalog-design';
@@ -118,6 +118,7 @@ export const ConceptPage = ({
   username,
   organization,
   concept,
+  conceptStatuses,
   revisions,
   replacedConcepts,
   hasWritePermission,
@@ -131,7 +132,6 @@ export const ConceptPage = ({
   const [updateCommentText, setUpdateCommentText] = useState<MapType>({});
   const router = useRouter();
   const catalogId = (router.query.catalogId as string) ?? '';
-  const { data: statusResponse } = useGetConceptStatuses();
 
   const { status: getCommentsStatus, data: getCommentsData } = useGetComments({
     orgNumber: catalogId,
@@ -208,13 +208,9 @@ export const ConceptPage = ({
     [localization.concept.abbreviation, concept?.abbreviatedLabel],
   ];
 
-
   const findStatusLabel = (statusURI) => {
-    return translate(
-      statusResponse?.conceptStatuses
-        ?.find((s) => s.uri === statusURI)
-        ?.label) as string;
-  }
+    return translate(conceptStatuses?.find((s) => s.uri === statusURI)?.label) as string;
+  };
 
   const handleLanguageChange = (lang) => {
     setLanguage(lang);
@@ -716,6 +712,10 @@ export async function getServerSideProps({ req, res, params }) {
     };
   }
 
+  const conceptStatuses = await getConceptStatuses()
+    .then((response) => response.json())
+    .then((body) => body?.conceptStatuses ?? []);
+
   const getReplacedConcepts = async () => {
     if (concept?.erstattesAv?.length === 0) {
       return [];
@@ -755,6 +755,7 @@ export async function getServerSideProps({ req, res, params }) {
       replacedConcepts,
       fieldsResult,
       codeListsResult,
+      conceptStatuses,
       usersResult,
       hasWritePermission,
       FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
