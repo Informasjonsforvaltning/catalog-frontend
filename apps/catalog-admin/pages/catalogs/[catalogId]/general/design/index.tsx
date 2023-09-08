@@ -87,7 +87,7 @@ const DesignPage = () => {
       <div className={styles.center}>
         <div className={styles.container}>
           <div className={styles.heading}>
-            <Heading size='xlarge'>{localization.catalogAdmin.general}</Heading>
+            <Heading size='xlarge'>{localization.catalogAdmin.design}</Heading>
           </div>
 
           <h2 className={styles.subheading}>{localization.catalogAdmin.preview}</h2>
