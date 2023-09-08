@@ -1,7 +1,6 @@
 import { useId, useState } from 'react';
 import { InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
-import { getToken } from 'next-auth/jwt';
 import Link from 'next/link';
 import {
   PageBanner,
@@ -59,6 +58,7 @@ import { authOptions } from '../../api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
 import { useCatalogDesign } from '../../../context/catalog-design';
 import _ from 'lodash';
+import { getToken } from 'next-auth/jwt';
 
 type MapType = {
   [id: string]: string;
@@ -682,7 +682,7 @@ export async function getServerSideProps({ req, res, params }) {
     return { notFound: true };
   }
 
-  if (!(session?.user && Date.now() < token?.expires_at * 1000)) {
+  if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
     return {
       redirect: {
         permanent: false,
@@ -692,8 +692,8 @@ export async function getServerSideProps({ req, res, params }) {
   }
 
   const hasReadPermission =
-    (token && hasOrganizationReadPermission(token.access_token, catalogId)) ||
-    hasSystemAdminPermission(token.access_token);
+    session &&
+    (hasOrganizationReadPermission(session?.accessToken, catalogId) || hasSystemAdminPermission(session?.accessToken));
   if (!hasReadPermission) {
     return {
       redirect: {
@@ -703,7 +703,7 @@ export async function getServerSideProps({ req, res, params }) {
     };
   }
 
-  const concept: Concept | null = await getConcept(conceptId, `${token?.access_token}`).then((response) => {
+  const concept: Concept | null = await getConcept(conceptId, `${session?.accessToken}`).then((response) => {
     return response.json();
   });
   if (!concept) {
@@ -729,20 +729,20 @@ export async function getServerSideProps({ req, res, params }) {
       : [];
   };
 
-  const hasWritePermission = token && hasOrganizationWritePermission(token.access_token, catalogId);
+  const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
   const replacedConcepts = await getReplacedConcepts();
   const username: string = token && getUsername(token.id_token);
   const organization: Organization = await getOrganization(catalogId).then((response) => response.json());
-  const revisions: Concept[] | null = await getConceptRevisions(conceptId, `${token.access_token}`).then(
+  const revisions: Concept[] | null = await getConceptRevisions(conceptId, `${session?.accessToken}`).then(
     (response) => response.json() || null,
   );
-  const fieldsResult: FieldsResult = await getFields(catalogId, `${token.access_token}`).then((response) =>
+  const fieldsResult: FieldsResult = await getFields(catalogId, `${session?.accessToken}`).then((response) =>
     response.json(),
   );
-  const codeListsResult: CodeListsResult = await getAllCodeLists(catalogId, `${token.access_token}`).then((response) =>
-    response.json(),
+  const codeListsResult: CodeListsResult = await getAllCodeLists(catalogId, `${session?.accessToken}`).then(
+    (response) => response.json(),
   );
-  const usersResult: UsersResult = await getUsers(catalogId, `${token.access_token}`).then((response) =>
+  const usersResult: UsersResult = await getUsers(catalogId, `${session?.accessToken}`).then((response) =>
     response.json(),
   );
 

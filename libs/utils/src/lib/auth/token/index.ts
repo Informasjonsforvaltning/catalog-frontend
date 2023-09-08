@@ -20,11 +20,17 @@ export interface AuthConfiguration {
 }
 
 export const getUsername = (token: string): string => {
+  if (!token) {
+    return '';
+  }
   const tokenDecoded = jwtDecode(token);
   return ((tokenDecoded && (tokenDecoded as any).user_name) as string) || '';
 };
 
 const getAuthorities = (token: string): string => {
+  if (!token) {
+    return '';
+  }
   const tokenDecoded = jwtDecode(token);
   return ((tokenDecoded && (tokenDecoded as any).authorities) as string) || '';
 };

@@ -1,13 +1,13 @@
 import { createComment, deleteComment, getComments, updateComment } from '@catalog-frontend/data-access';
 import { ErrorResponse } from '@catalog-frontend/types';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { getToken } from 'next-auth/jwt';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '../auth/[...nextauth]';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Comment[] | string | ErrorResponse>) {
-  const token = await getToken({ req });
-  if (!token || (token?.expires_at && token?.expires_at < Date.now() / 1000)) {
-    res.status(401).send({ error: 'Unauthorized' });
-    return;
+  const session = await getServerSession(req, res, authOptions);
+  if (!session || session?.accessTokenExpiresAt < Date.now() / 1000) {
+    return res.status(401).send({ error: 'Unauthorized' });
   }
 
   const { slug } = req.query;
@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     if (req.method == 'GET') {
       try {
-        const response = await getComments(orgNumber as string, topicId as string, `${token?.access_token}`);
+        const response = await getComments(orgNumber as string, topicId as string, `${session?.accessToken}`);
         if (response.status !== 200) {
           return res.status(response.status).send({ error: 'Failed to create concept' });
         }
@@ -29,7 +29,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       const { comment } = JSON.parse(req.body);
 
       try {
-        const response = await createComment(orgNumber as string, topicId as string, comment, `${token?.access_token}`);
+        const response = await createComment(
+          orgNumber as string,
+          topicId as string,
+          comment,
+          `${session?.accessToken}`,
+        );
         if (response.status !== 200) {
           return res.status(response.status).send({ error: 'Failed to create comment' });
         }
@@ -46,7 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           topicId as string,
           commentId,
           comment,
-          `${token?.access_token}`,
+          `${session?.accessToken}`,
         );
         if (response.status !== 200) {
           return res.status(response.status).send({ error: 'Failed to update comment' });
@@ -61,7 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
           orgNumber as string,
           topicId as string,
           commentId,
-          `${token?.access_token}`,
+          `${session?.accessToken}`,
         );
         if (response.status !== 200) {
           return res.status(response.status).send({ error: 'Failed to delete comment' });

@@ -15,6 +15,8 @@ import { getToken } from 'next-auth/jwt';
 import styles from './change-requests-page.module.css';
 import { useRouter } from 'next/router';
 import { Heading } from '@digdir/design-system-react';
+import { Session, getServerSession } from 'next-auth';
+import { authOptions } from '../../api/auth/[...nextauth]';
 
 export const ChangeRequestsPage = ({ organization, changeRequests, conceptsWithChangeRequest }) => {
   const pageSubtitle = organization?.name ?? '';
@@ -97,11 +99,11 @@ export const ChangeRequestsPage = ({ organization, changeRequests, conceptsWithC
   );
 };
 
-export async function getServerSideProps({ req, params }) {
-  const token = await getToken({ req });
+export async function getServerSideProps({ req, res, params }) {
+  const session: Session = await getServerSession(req, res, authOptions);
   const { catalogId } = params;
 
-  const hasPermission = token && hasOrganizationReadPermission(token.access_token, catalogId);
+  const hasPermission = session && hasOrganizationReadPermission(session?.accessToken, catalogId);
   if (!hasPermission) {
     return {
       redirect: {
@@ -113,7 +115,7 @@ export async function getServerSideProps({ req, params }) {
 
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
-  const changeRequests: ChangeRequest[] = await getChangeRequests(catalogId, `${token.access_token}`)
+  const changeRequests: ChangeRequest[] = await getChangeRequests(catalogId, `${session.accessToken}`)
     .then((response) => {
       return response.json();
     })
@@ -136,7 +138,7 @@ export async function getServerSideProps({ req, params }) {
     filters: { originalId: { value: originalIds } },
   };
 
-  const response = await searchConceptsForCatalog(catalogId, searchQuery, token.access_token);
+  const response = await searchConceptsForCatalog(catalogId, searchQuery, session?.accessToken);
   const conceptsWithChangeRequest: Concept[] = await response.json();
 
   return {

@@ -25,7 +25,6 @@ import { CodeListsResult, FieldsResult, Organization, QuerySort, SearchableField
 import { useEffect, useState } from 'react';
 import { getFields as getSearchFields, getSelectOptions, useSearchConcepts, SortOption } from '../../hooks/search';
 import styles from './search-page.module.css';
-import { getToken } from 'next-auth/jwt';
 import { FileImportIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import SearchFilter from '../../components/search-filter';
 import { getAllCodeLists, getConceptStatuses, getFields, getOrganization } from '@catalog-frontend/data-access';
@@ -363,14 +362,13 @@ export const SearchPage = ({
 
 export async function getServerSideProps({ req, res, params }) {
   const session: Session = await getServerSession(req, res, authOptions);
-  const token = await getToken({ req });
   const { catalogId } = params;
 
   if (!validOrganizationNumber(catalogId)) {
     return { notFound: true };
   }
 
-  if (!(session?.user && Date.now() < token?.expires_at * 1000)) {
+  if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
     return {
       redirect: {
         permanent: false,
@@ -380,8 +378,8 @@ export async function getServerSideProps({ req, res, params }) {
   }
 
   const hasReadPermission =
-    (token && hasOrganizationReadPermission(token.access_token, catalogId)) ||
-    hasSystemAdminPermission(token.access_token);
+    session &&
+    (hasOrganizationReadPermission(session?.accessToken, catalogId) || hasSystemAdminPermission(session.accessToken));
   if (!hasReadPermission) {
     return {
       redirect: {
@@ -391,14 +389,14 @@ export async function getServerSideProps({ req, res, params }) {
     };
   }
 
-  const hasWritePermission = token && hasOrganizationWritePermission(token.access_token, catalogId);
+  const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
-  const fieldsResult: FieldsResult = await getFields(catalogId, `${token.access_token}`).then((response) =>
+  const fieldsResult: FieldsResult = await getFields(catalogId, `${session?.accessToken}`).then((response) =>
     response.json(),
   );
-  const codeListsResult: CodeListsResult = await getAllCodeLists(catalogId, `${token.access_token}`).then((response) =>
-    response.json(),
+  const codeListsResult: CodeListsResult = await getAllCodeLists(catalogId, `${session?.accessToken}`).then(
+    (response) => response.json(),
   );
 
   const conceptStatuses = await getConceptStatuses()
