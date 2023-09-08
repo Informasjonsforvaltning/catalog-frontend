@@ -23,6 +23,8 @@ export const CodeListsPage = () => {
 
   const newUser: AssignedUser = {
     name: 'Ny bruker ' + getNextUserNumber(getUsers?.users),
+    telephoneNumber: undefined,
+    email: '',
   };
 
   function getNextUserNumber(users: AssignedUser[]): number {
@@ -48,7 +50,16 @@ export const CodeListsPage = () => {
     const diff = dbUser && updatedUser ? compare(dbUser, updatedUser) : null;
 
     if (diff) {
-      updateUser.mutate({ beforeUpdateUser: dbUser, updatedUser: updatedUser });
+      updateUser
+        .mutateAsync({ beforeUpdateUser: dbUser, updatedUser: updatedUser })
+        .then(() => {
+          alert(localization.alert.success);
+        })
+        .catch(() => {
+          alert(localization.alert.fail);
+        });
+    } else {
+      console.log('No changes detected.');
     }
   };
 
@@ -163,7 +174,10 @@ export const CodeListsPage = () => {
                           isValid={telephoneNumberRegex.test(
                             String((updatedUserList.find((c) => c.id === user.id) || user)?.telephoneNumber),
                           )}
-                          value={String((updatedUserList.find((c) => c.id === user.id) || user)?.telephoneNumber)}
+                          value={
+                            String((updatedUserList.find((c) => c.id === user.id) || user)?.telephoneNumber) ||
+                            undefined
+                          }
                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             updateUserState(user.id, undefined, undefined, Number(event.target.value));
                           }}
