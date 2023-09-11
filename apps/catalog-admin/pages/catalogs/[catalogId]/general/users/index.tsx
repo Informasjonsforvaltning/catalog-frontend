@@ -3,12 +3,11 @@ import styles from './users.module.css';
 import { Accordion, TextField, Heading } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { getTranslateText, localization, textRegex, telephoneNumberRegex, emailRegex } from '@catalog-frontend/utils';
 import { useGetUsers, useCreateUser, useDeleteUser, useUpdateUser } from '../../../../../hooks/users';
 import { useRouter } from 'next/router';
 import { AssignedUser } from '@catalog-frontend/types';
 import { compare } from 'fast-json-patch';
-import { textRegex, telephoneNumberRegex, emailRegex } from '@catalog-frontend/utils';
 import { Banner } from '../../../../../components/banner';
 
 export const CodeListsPage = () => {
@@ -21,17 +20,13 @@ export const CodeListsPage = () => {
   const deleteUser = useDeleteUser(catalogId);
   const updateUser = useUpdateUser(catalogId);
   const [accordionIsOpen, setAccordionIsOpen] = useState(false);
+  const nextUserNumber = (getUsers?.users?.length ?? 0) + 1;
 
   const newUser: AssignedUser = {
-    name: 'Ny bruker ' + getNextUserNumber(getUsers?.users),
+    name: 'Ny bruker ' + nextUserNumber,
     telephoneNumber: '',
     email: '',
   };
-
-  function getNextUserNumber(users: AssignedUser[]): number {
-    const lenght = users ? users?.length : 0;
-    return lenght + 1;
-  }
 
   const handleCreateUser = () => {
     createUser.mutate(newUser);
@@ -144,7 +139,7 @@ export const CodeListsPage = () => {
                 className={styles.accordion}
               >
                 <Accordion.Item
-                  open={user.name.includes(`Ny bruker ${getNextUserNumber(dbUsers) - 1}`) ? accordionIsOpen : undefined}
+                  open={user.name.includes(`Ny bruker ${nextUserNumber - 1}`) ? accordionIsOpen : undefined}
                 >
                   <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
                     <h1 className={styles.label}>{user.name}</h1>
