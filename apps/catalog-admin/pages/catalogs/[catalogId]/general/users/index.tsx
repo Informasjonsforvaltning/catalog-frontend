@@ -20,6 +20,7 @@ export const CodeListsPage = () => {
   const createUser = useCreateUser(catalogId);
   const deleteUser = useDeleteUser(catalogId);
   const updateUser = useUpdateUser(catalogId);
+  const [accordionIsOpen, setAccordionIsOpen] = useState(false);
 
   const newUser: AssignedUser = {
     name: 'Ny bruker ' + getNextUserNumber(getUsers?.users),
@@ -34,6 +35,7 @@ export const CodeListsPage = () => {
 
   const handleCreateUser = () => {
     createUser.mutate(newUser);
+    setAccordionIsOpen(true);
   };
 
   const handleDeleteUser = (userId: string) => {
@@ -141,8 +143,10 @@ export const CodeListsPage = () => {
                 border={true}
                 className={styles.accordion}
               >
-                <Accordion.Item>
-                  <Accordion.Header>
+                <Accordion.Item
+                  open={user.name.includes(`Ny bruker ${getNextUserNumber(dbUsers) - 1}`) ? accordionIsOpen : undefined}
+                >
+                  <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
                     <h1 className={styles.label}>{user.name}</h1>
                   </Accordion.Header>
                   <Accordion.Content>
