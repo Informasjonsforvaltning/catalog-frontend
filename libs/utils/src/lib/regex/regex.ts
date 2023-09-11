@@ -10,7 +10,7 @@ export const textRegexWithNumbers =
   /^[a-zA-Z0-9àáâäãåąčćęèéêëėæįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$/u;
 
 /* Must be a valid email address or empty*/
-export const emailRegex = /^(?:[\w-]+@[\w-]+\.[\w-]{2,4})?$/;
+export const emailRegex = /^(?:[\w.-]+@[\w-]+\.[\w-]{2,4})?$/;
 
 /* Must be a valid telephone number, optionally starting with + */
-export const telephoneNumberRegex = /^(\+?[1-9][0-9]{7,14})?$/;
+export const telephoneNumberRegex = /^(?:[+\d\s]*)$/;

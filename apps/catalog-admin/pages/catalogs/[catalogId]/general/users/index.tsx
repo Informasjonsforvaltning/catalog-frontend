@@ -23,7 +23,7 @@ export const CodeListsPage = () => {
 
   const newUser: AssignedUser = {
     name: 'Ny bruker ' + getNextUserNumber(getUsers?.users),
-    telephoneNumber: undefined,
+    telephoneNumber: '',
     email: '',
   };
 
@@ -63,7 +63,7 @@ export const CodeListsPage = () => {
     }
   };
 
-  const updateUserState = (userId: string, newName?: string, newEmail?: string, newTelephoneNumber?: number) => {
+  const updateUserState = (userId: string, newName?: string, newEmail?: string, newTelephoneNumber?: string) => {
     const updatedUserListIndex = updatedUserList.findIndex((user) => user.id === userId);
     const userToUpdate =
       updatedUserListIndex !== -1 ? updatedUserList[updatedUserListIndex] : dbUsers.find((user) => user.id === userId);
@@ -84,6 +84,8 @@ export const CodeListsPage = () => {
       setUpdatedUserList(updatedUserListsCopy);
     }
   };
+
+  const findUserById = (userId: string) => updatedUserList.find((user) => user.id === userId);
 
   const breadcrumbList = catalogId
     ? ([
@@ -147,20 +149,20 @@ export const CodeListsPage = () => {
                     <div className={styles.codeListInfo}>
                       <div className={styles.textField}>
                         <TextField
-                          isValid={textRegex.test((updatedUserList.find((c) => c.id === user.id) || user)?.name)}
+                          isValid={textRegex.test((findUserById(user.id) || user)?.name)}
                           label='Navn'
                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             updateUserState(user.id, event.target.value);
                           }}
-                          value={(updatedUserList.find((c) => c.id === user.id) || user)?.name}
+                          value={(findUserById(user.id) || user)?.name}
                         />
                       </div>
                       <div className={styles.textField}>
                         <TextField
-                          isValid={emailRegex.test((updatedUserList.find((c) => c.id === user.id) || user)?.email)}
+                          isValid={emailRegex.test((findUserById(user.id) || user)?.email)}
                           label='E-post'
                           inputMode='email'
-                          value={(updatedUserList.find((c) => c.id === user.id) || user)?.email}
+                          value={(findUserById(user.id) || user)?.email}
                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             updateUserState(user.id, undefined, event.target.value, undefined);
                           }}
@@ -171,15 +173,10 @@ export const CodeListsPage = () => {
                           label='Telefonnummer'
                           type='tel'
                           inputMode='tel'
-                          isValid={telephoneNumberRegex.test(
-                            String((updatedUserList.find((c) => c.id === user.id) || user)?.telephoneNumber),
-                          )}
-                          value={
-                            String((updatedUserList.find((c) => c.id === user.id) || user)?.telephoneNumber) ||
-                            undefined
-                          }
+                          isValid={telephoneNumberRegex.test((findUserById(user.id) || user)?.telephoneNumber)}
+                          value={(findUserById(user.id) || user)?.telephoneNumber}
                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            updateUserState(user.id, undefined, undefined, Number(event.target.value));
+                            updateUserState(user.id, undefined, undefined, event.target.value);
                           }}
                         />
                       </div>
