@@ -51,7 +51,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
   function getNextId(codes: Code[]): number {
     let maxId = 0;
     for (const code of codes) {
-      if (code.id > maxId) {
+      if (code.id > maxId && code.id !== undefined) {
         maxId = code.id;
       }
     }
@@ -248,7 +248,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
     setSelectedCode((prevSelectedCode) => ({
       ...prevSelectedCode,
       name: {
-        ...prevSelectedCode.name,
+        ...prevSelectedCode?.name,
         [field]: value,
       },
     }));
