@@ -36,7 +36,9 @@ const CodeListsPage = () => {
   const dbCodeLists = getAllCodeLists?.codeLists || [];
 
   useEffect(() => {
-    const filteredCodeLists = dbCodeLists.filter((codeList) => codeList.name.toLowerCase().includes(search.toLowerCase()));
+    const filteredCodeLists = dbCodeLists.filter((codeList) =>
+      codeList.name.toLowerCase().includes(search.toLowerCase()),
+    );
 
     setSearchResults(filteredCodeLists);
   }, [dbCodeLists, search]);
@@ -147,22 +149,13 @@ const CodeListsPage = () => {
               onSearchSubmit={(search) => setSearch(search)}
             />
             <div className={styles.buttons}>
-              <div className={styles.buttons}>
-                <Button
-                  className={styles.createButton}
-                  icon={<PlusCircleIcon />}
-                  onClick={handleCreateCodeList}
-                >
-                  {localization.catalogAdmin.createCodeList}
-                </Button>
-              </div>
-              <UploadButton
-                className={styles.importButton}
-                icon={<FileImportIcon />}
-                variant='outline'
+              <Button
+                className={styles.createButton}
+                icon={<PlusCircleIcon />}
+                onClick={handleCreateCodeList}
               >
-                {localization.catalogAdmin.importCodeList}
-              </UploadButton>
+                {localization.catalogAdmin.createCodeList}
+              </Button>
             </div>
           </div>
           <Heading

@@ -3,7 +3,7 @@ export interface AssignedUser {
   catalogId?: string;
   name?: string;
   email?: string;
-  telephoneNumber?: number;
+  telephoneNumber?: string;
 }
 
 export interface UsersResult {

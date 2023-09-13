@@ -3,12 +3,11 @@ import styles from './users.module.css';
 import { Accordion, TextField, Heading } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { getTranslateText, localization, textRegex, telephoneNumberRegex, emailRegex } from '@catalog-frontend/utils';
 import { useGetUsers, useCreateUser, useDeleteUser, useUpdateUser } from '../../../../../hooks/users';
 import { useRouter } from 'next/router';
 import { AssignedUser } from '@catalog-frontend/types';
 import { compare } from 'fast-json-patch';
-import { textRegex, telephoneNumberRegex, emailRegex } from '@catalog-frontend/utils';
 import { Banner } from '../../../../../components/banner';
 
 export const CodeListsPage = () => {
@@ -20,18 +19,18 @@ export const CodeListsPage = () => {
   const createUser = useCreateUser(catalogId);
   const deleteUser = useDeleteUser(catalogId);
   const updateUser = useUpdateUser(catalogId);
+  const [accordionIsOpen, setAccordionIsOpen] = useState(false);
+  const nextUserNumber = (getUsers?.users?.length ?? 0) + 1;
 
   const newUser: AssignedUser = {
-    name: 'Ny bruker ' + getNextUserNumber(getUsers?.users),
+    name: 'Ny bruker ' + nextUserNumber,
+    telephoneNumber: '',
+    email: '',
   };
-
-  function getNextUserNumber(users: AssignedUser[]): number {
-    const lenght = users ? users?.length : 0;
-    return lenght + 1;
-  }
 
   const handleCreateUser = () => {
     createUser.mutate(newUser);
+    setAccordionIsOpen(true);
   };
 
   const handleDeleteUser = (userId: string) => {
@@ -48,11 +47,20 @@ export const CodeListsPage = () => {
     const diff = dbUser && updatedUser ? compare(dbUser, updatedUser) : null;
 
     if (diff) {
-      updateUser.mutate({ beforeUpdateUser: dbUser, updatedUser: updatedUser });
+      updateUser
+        .mutateAsync({ beforeUpdateUser: dbUser, updatedUser: updatedUser })
+        .then(() => {
+          alert(localization.alert.success);
+        })
+        .catch(() => {
+          alert(localization.alert.fail);
+        });
+    } else {
+      console.log('No changes detected.');
     }
   };
 
-  const updateUserState = (userId: string, newName?: string, newEmail?: string, newTelephoneNumber?: number) => {
+  const updateUserState = (userId: string, newName?: string, newEmail?: string, newTelephoneNumber?: string) => {
     const updatedUserListIndex = updatedUserList.findIndex((user) => user.id === userId);
     const userToUpdate =
       updatedUserListIndex !== -1 ? updatedUserList[updatedUserListIndex] : dbUsers.find((user) => user.id === userId);
@@ -73,6 +81,8 @@ export const CodeListsPage = () => {
       setUpdatedUserList(updatedUserListsCopy);
     }
   };
+
+  const findUserById = (userId: string) => updatedUserList.find((user) => user.id === userId);
 
   const breadcrumbList = catalogId
     ? ([
@@ -128,28 +138,30 @@ export const CodeListsPage = () => {
                 border={true}
                 className={styles.accordion}
               >
-                <Accordion.Item>
-                  <Accordion.Header>
+                <Accordion.Item
+                  open={user.name.includes(`Ny bruker ${nextUserNumber - 1}`) ? accordionIsOpen : undefined}
+                >
+                  <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
                     <h1 className={styles.label}>{user.name}</h1>
                   </Accordion.Header>
                   <Accordion.Content>
                     <div className={styles.codeListInfo}>
                       <div className={styles.textField}>
                         <TextField
-                          isValid={textRegex.test((updatedUserList.find((c) => c.id === user.id) || user)?.name)}
+                          isValid={textRegex.test((findUserById(user.id) || user)?.name)}
                           label='Navn'
                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             updateUserState(user.id, event.target.value);
                           }}
-                          value={(updatedUserList.find((c) => c.id === user.id) || user)?.name}
+                          value={(findUserById(user.id) || user)?.name}
                         />
                       </div>
                       <div className={styles.textField}>
                         <TextField
-                          isValid={emailRegex.test((updatedUserList.find((c) => c.id === user.id) || user)?.email)}
+                          isValid={emailRegex.test((findUserById(user.id) || user)?.email)}
                           label='E-post'
                           inputMode='email'
-                          value={(updatedUserList.find((c) => c.id === user.id) || user)?.email}
+                          value={(findUserById(user.id) || user)?.email}
                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                             updateUserState(user.id, undefined, event.target.value, undefined);
                           }}
@@ -160,12 +172,10 @@ export const CodeListsPage = () => {
                           label='Telefonnummer'
                           type='tel'
                           inputMode='tel'
-                          isValid={telephoneNumberRegex.test(
-                            String((updatedUserList.find((c) => c.id === user.id) || user)?.telephoneNumber),
-                          )}
-                          value={String((updatedUserList.find((c) => c.id === user.id) || user)?.telephoneNumber)}
+                          isValid={telephoneNumberRegex.test((findUserById(user.id) || user)?.telephoneNumber)}
+                          value={(findUserById(user.id) || user)?.telephoneNumber}
                           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            updateUserState(user.id, undefined, undefined, Number(event.target.value));
+                            updateUserState(user.id, undefined, undefined, event.target.value);
                           }}
                         />
                       </div>
