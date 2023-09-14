@@ -27,6 +27,7 @@ export const nb = {
   ok: 'Ok',
   description: 'Beskrivelse',
   name: 'Navn',
+  manageCatalog: 'Administrere katalog',
 
   language: {
     nb: 'Bokmål',

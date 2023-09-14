@@ -19,7 +19,7 @@ const CustomApp: FC<AppProps<{ session: Session }>> = ({ Component, pageProps: {
         <QueryClientProvider client={queryClient}>
           <CatalogDesignContextProvider>
             <Head>
-              <title>{localization.catalogType.concept}</title>
+              <title>{localization.manageCatalog}</title>
               <link
                 rel='shortcut icon'
                 href='/favicon.ico'
