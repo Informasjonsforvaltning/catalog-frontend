@@ -70,7 +70,16 @@ const CodeListsPage = () => {
     const diff = compare(dbCodeList, updatedCodeList);
 
     if (diff) {
-      updateCodeList.mutate({ oldCodeList: dbCodeList, newCodeList: updatedCodeList });
+      updateCodeList
+        .mutateAsync({ oldCodeList: dbCodeList, newCodeList: updatedCodeList })
+        .then(() => {
+          alert(localization.alert.success);
+        })
+        .catch(() => {
+          alert(localization.alert.fail);
+        });
+    } else {
+      console.log('No changes detected.');
     }
   };
 

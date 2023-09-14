@@ -29,7 +29,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
   const codesInContext = codeListInContext?.codes || dbCodeList.codes || [];
 
   const [selectedCode, setSelectedCode] = useState<Code>(undefined);
-  const [isEditViewOpen, setIsEditViewOpen] = useState<Boolean>(false);
+  const [isEditViewOpen, setIsEditViewOpen] = useState<boolean>(false);
 
   // Functions for updating the code list
 
