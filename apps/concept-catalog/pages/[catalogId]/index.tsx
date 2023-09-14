@@ -370,17 +370,11 @@ export const SearchPage = ({
                   subjectCodeList={subjectCodeList}
                   conceptStatuses={conceptStatuses}
                   onLabelClick={onLabelClick}
+                  onPageChange={changePage}
+                  forcePage={currentPage}
                 />
               )}
             </div>
-
-            {data?.hits?.length > 0 && (
-              <Pagination
-                onPageChange={changePage}
-                forcePage={currentPage}
-                pageCount={data?.page?.totalPages ?? 0}
-              />
-            )}
           </div>
         </div>
       </div>

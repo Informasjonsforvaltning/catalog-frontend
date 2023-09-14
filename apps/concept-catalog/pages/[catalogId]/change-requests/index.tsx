@@ -86,9 +86,11 @@ export const ChangeRequestsPage = ({ organization, changeRequests, conceptsWithC
                       </p>
                     </div>
                   </div>
-                  <div className={styles.status}>
-                    <Tag>{status}</Tag>
-                  </div>
+                  {status && (
+                    <div className={styles.status}>
+                      <Tag>{status}</Tag>
+                    </div>
+                  )}
                 </div>
               </li>
             ))}

@@ -313,28 +313,35 @@ export const ConceptPage = ({
   const RevisionsTab = () => {
     return (
       <InfoCard>
-        {revisions?.map((revision) => (
-          <InfoCard.Item key={`revision-${revision.id}`}>
-            <div className={classes.revision}>
-              <div>
-                v{revision?.versjonsnr.major}.{revision?.versjonsnr.minor}.{revision?.versjonsnr.patch}
+        {revisions?.map((revision) => {
+          const status = findStatusLabel(revision?.statusURI);
+          return (
+            <InfoCard.Item key={`revision-${revision.id}`}>
+              <div className={classes.revision}>
+                <div>
+                  v{revision?.versjonsnr.major}.{revision?.versjonsnr.minor}.{revision?.versjonsnr.patch}
+                </div>
+                <div>
+                  <Link
+                    href={
+                      validOrganizationNumber(catalogId) && validUUID(revision.id)
+                        ? `/${catalogId}/${revision.id}`
+                        : '#'
+                    }
+                    className={classes.versionTitle}
+                  >
+                    {getTitle(translate(revision?.anbefaltTerm?.navn))}
+                  </Link>
+                </div>
+                {status && (
+                  <div className={cn(classes.status)}>
+                    <Tag>{status}</Tag>
+                  </div>
+                )}
               </div>
-              <div>
-                <Link
-                  href={
-                    validOrganizationNumber(catalogId) && validUUID(revision.id) ? `/${catalogId}/${revision.id}` : '#'
-                  }
-                  className={classes.versionTitle}
-                >
-                  {getTitle(translate(revision?.anbefaltTerm?.navn))}
-                </Link>
-              </div>
-              <div className={cn(classes.status)}>
-                <Tag>{findStatusLabel(revision?.statusURI)}</Tag>
-              </div>
-            </div>
-          </InfoCard.Item>
-        ))}
+            </InfoCard.Item>
+          );
+        })}
       </InfoCard>
     );
   };
@@ -351,6 +358,8 @@ export const ConceptPage = ({
         },
       ] as BreadcrumbType[])
     : [];
+
+  const status = findStatusLabel(concept?.statusURI);
 
   return (
     <>
@@ -376,9 +385,11 @@ export const ConceptPage = ({
         {deleteConcept.status === 'loading' && <Spinner />}
         {deleteConcept.status !== 'loading' && (
           <>
-            <div className={cn(classes.status)}>
-              <Tag>{findStatusLabel(concept?.statusURI)}</Tag>
-            </div>
+            {status && (
+              <div className={cn(classes.status)}>
+                <Tag>{status}</Tag>
+              </div>
+            )}
             <div className={classes.languages}>
               <ToggleButtonGroup
                 items={languageOptions}
@@ -722,7 +733,9 @@ export async function getServerSideProps({ req, res, params }) {
 
   const conceptStatuses = await getConceptStatuses()
     .then((response) => response.json())
-    .then((body) => body?.conceptStatuses ?? []);
+    .then((body) => {
+      return body?.conceptStatuses ?? [];
+    });
 
   const getReplacedConcepts = async () => {
     if (concept?.erstattesAv?.length === 0) {
