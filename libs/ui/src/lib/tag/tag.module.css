@@ -1,43 +1,32 @@
-.container {
-  border: solid 1px;
-  border-color: #969ba0;
-  border-radius: 2px;
-  width: fit-content;
-  height: fit-content;
-  padding: 1px 8px;
-  margin-left: 15px;
-  margin-top: 1px;
-}
-
 .gjeldende {
-  background-color: #f3fcf5;
-  border-color: #06893a;
+  --fdsc-tag-background: #f3fcf5 !important;
+  --fdsc-tag-border: #06893a !important;
 }
 .frarådet {
-  background-color: #ffe6e6;
-  border-color: #c30000;
+  --fdsc-tag-background: #ffe6e6 !important;
+  --fdsc-tag-border: #c30000 !important;
 }
 
 .kandidat {
-  background-color: #e6f1f8;
-  border-color: #005b82;
+  --fdsc-tag-background: #e6f1f8 !important;
+  --fdsc-tag-border: #005b82 !important;
 }
 .utkast {
-  background-color: #fff9f0;
-  border-color: #d47b00;
+  --fdsc-tag-background: #fff9f0 !important;
+  --fdsc-tag-border: #d47b00 !important;
 }
 
 .open {
-  background-color: #f3fcf5;
-  border-color: #06893a;
+  --fdsc-tag-background: #f3fcf5 !important;
+  --fdsc-tag-border: #06893a !important;
 }
 
 .accepted {
-  background-color: #fff9f0;
-  border-color: #d47b00;
+  --fdsc-tag-background: #fff9f0 !important;
+  --fdsc-tag-border: #d47b00 !important;
 }
 
 .rejected {
-  background-color: #ffe6e6;
-  border-color: #c30000;
+  --fdsc-tag-background: #ffe6e6 !important;
+  --fdsc-tag-border: #c30000 !important;
 }

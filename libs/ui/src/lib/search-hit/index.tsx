@@ -59,7 +59,11 @@ const SearchHit = ({ catalogId, searchHit, subjectCodeList, conceptStatuses, onL
             </Link>
           )}
 
-          {conceptStatus && <Tag>{conceptStatus}</Tag>}
+          {conceptStatus && (
+            <div className={styles.status}>
+              <Tag>{conceptStatus}</Tag>
+            </div>
+          )}
         </div>
 
         <Subject />

@@ -1,8 +1,8 @@
 import { ArrowLeftIcon, ArrowRightIcon } from '@navikt/aksel-icons';
-import ReactPaginate from 'react-paginate';
+import ReactPaginate, { ReactPaginateProps } from 'react-paginate';
 import styles from './pagination.module.css';
 
-export const Pagination = ({ ...rest }) => (
+export const Pagination = ({ ...rest }: ReactPaginateProps) => (
   <ReactPaginate
     {...rest}
     pageCount={rest.pageCount}
