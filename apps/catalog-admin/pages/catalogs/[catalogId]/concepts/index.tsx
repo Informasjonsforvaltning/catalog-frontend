@@ -4,6 +4,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Banner } from '../../../../components/banner';
+import { serverSidePropsWithAdminPermissions } from '../../../../utils/auth';
 
 export const ConceptsPage = () => {
   const router = useRouter();
@@ -48,5 +49,9 @@ export const ConceptsPage = () => {
     </>
   );
 };
+
+export async function getServerSideProps(props) {
+  return serverSidePropsWithAdminPermissions(props);
+}
 
 export default ConceptsPage;

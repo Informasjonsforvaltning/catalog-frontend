@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { textRegexWithNumbers } from '@catalog-frontend/utils';
 import { useGetDesign, useGetLogo, useUpdateDesign } from '../../../../../hooks/design';
 import { compare } from 'fast-json-patch';
+import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
 
 const DesignPage = () => {
   const adminContext = useAdminState();
@@ -162,5 +163,9 @@ const DesignPage = () => {
     </>
   );
 };
+
+export async function getServerSideProps(props) {
+  return serverSidePropsWithAdminPermissions(props);
+}
 
 export default DesignPage;

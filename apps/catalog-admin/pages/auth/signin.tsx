@@ -1,4 +1,4 @@
-import { CenterContainer, PageBanner, Spinner } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner, Spinner } from '@catalog-frontend/ui';
 import { localization, validOrganizationNumber } from '@catalog-frontend/utils';
 import { Heading } from '@digdir/design-system-react';
 import { Session } from 'next-auth';
@@ -9,29 +9,47 @@ import { useEffect } from 'react';
 const needLogin = (session, status, router) =>
   (session?.error === 'RefreshAccessTokenError' || status === 'unauthenticated') && router.pathname !== '/auth/signout';
 
-export const SignIn = () => {
+export const SignIn = ({ FDK_REGISTRATION_BASE_URI }) => {
   const router = useRouter();
   const { data, status } = useSession();
   const session: Session = data;
-  const catalogId = router.query.catalogId as string;
+  const callbackUrl = router.query.callbackUrl as string;
+
+  const breadcrumbList = [
+    {
+      href: `#`,
+      text: localization.auth.login,
+    },
+  ] as BreadcrumbType[];
 
   useEffect(() => {
-    if (validOrganizationNumber(catalogId)) {
+    const parts = callbackUrl?.split('/');
+    let securedUrl = null;
+    if (parts?.length >= 3) {
+      const orgNumber = validOrganizationNumber(parts[2]) ? parts[2] : '0';
+      securedUrl = `/catalogs/${orgNumber}`;
+    } else {
+      securedUrl = '/';
+    }
+
+    if (securedUrl) {
       if (needLogin(session, status, router)) {
-        signIn('keycloak', { callbackUrl: catalogId ? `/${catalogId}` : '/' });
-      } else if (catalogId) {
-        router.push(`/${catalogId}`);
+        signIn('keycloak', { callbackUrl: `${securedUrl}` });
       } else {
-        router.push(`/`);
+        router.push(`${securedUrl}`);
       }
     }
-  }, [session, status, router, catalogId]);
+  }, [session, status, router, callbackUrl]);
 
   return (
     <>
+      <Breadcrumbs
+        baseURI={FDK_REGISTRATION_BASE_URI}
+        breadcrumbList={breadcrumbList}
+      />
       <PageBanner
-        title=''
-        subtitle=''
+        title={localization.catalogType.concept}
+        subtitle={localization.auth.login}
       />
       <CenterContainer>
         <Heading
@@ -49,5 +67,13 @@ export const SignIn = () => {
     </>
   );
 };
+
+export async function getServerSideProps() {
+  return {
+    props: {
+      FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
+    },
+  };
+}
 
 export default SignIn;

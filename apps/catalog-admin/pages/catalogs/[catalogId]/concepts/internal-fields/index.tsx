@@ -17,6 +17,7 @@ import {
 import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
 import { compare } from 'fast-json-patch';
 import { Banner } from '../../../../../components/banner';
+import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
 
 const fieldTypeOptions: { [key: string]: SelectOption } = {
   shortText: { label: 'Kort tekst', value: 'text_short' },
@@ -296,5 +297,9 @@ export const InternalFieldsPage = () => {
     </>
   );
 };
+
+export async function getServerSideProps(props) {
+  return serverSidePropsWithAdminPermissions(props);
+}
 
 export default InternalFieldsPage;

@@ -7,6 +7,7 @@ import { getOrganizations } from '@catalog-frontend/data-access';
 import { Organization } from '@catalog-frontend/types';
 import { authOptions } from './api/auth/[...nextauth]';
 import { InferGetServerSidePropsType } from 'next';
+import { serverSidePropsWithAdminPermissions } from '../utils/auth';
 
 export function Index({ organizations }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
@@ -35,7 +36,7 @@ export async function getServerSideProps({ req, res, params }) {
     return {
       redirect: {
         permanent: false,
-        destination: `/auth/signin`,
+        destination: `/auth/signin?callbackUrl=${encodeURIComponent(req.url)}`,
       },
     };
   }

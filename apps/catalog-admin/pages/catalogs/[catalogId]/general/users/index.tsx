@@ -10,6 +10,7 @@ import { AssignedUser } from '@catalog-frontend/types';
 import { compare } from 'fast-json-patch';
 import { textRegex, telephoneNumberRegex, emailRegex } from '@catalog-frontend/utils';
 import { Banner } from '../../../../../components/banner';
+import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
 
 export const CodeListsPage = () => {
   const router = useRouter();
@@ -189,5 +190,9 @@ export const CodeListsPage = () => {
     </>
   );
 };
+
+export async function getServerSideProps(props) {
+  return serverSidePropsWithAdminPermissions(props);
+}
 
 export default CodeListsPage;
