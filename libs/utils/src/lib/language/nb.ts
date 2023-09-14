@@ -166,6 +166,7 @@ export const nb = {
       codeList: 'Administrer kodeliste',
       design: 'Administrer organisasjonsspesifikt design',
       userList: 'Administrer brukerliste',
+      catalogAdmin: 'Administrere begrepskatalog',
     },
     designHelpText: {
       logo: 'Tillatte filtyper er SVG og PNG.',
