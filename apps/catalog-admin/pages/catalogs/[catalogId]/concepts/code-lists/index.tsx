@@ -16,6 +16,7 @@ import { CodeListEditor } from '../../../../../components/code-list-editor';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
 import { compare } from 'fast-json-patch';
 import { Banner } from '../../../../../components/banner';
+import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
 
 const CodeListsPage = () => {
   const router = useRouter();
@@ -230,5 +231,9 @@ const CodeListsPage = () => {
     </>
   );
 };
+
+export async function getServerSideProps(props) {
+  return serverSidePropsWithAdminPermissions(props);
+}
 
 export default CodeListsPage;

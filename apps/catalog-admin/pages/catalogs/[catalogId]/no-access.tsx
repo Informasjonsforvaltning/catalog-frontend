@@ -3,7 +3,7 @@ import { localization } from '@catalog-frontend/utils';
 import { Heading } from '@digdir/design-system-react';
 import { useRouter } from 'next/router';
 
-export const NoAccess = ({ REGISTRATION_HOST }) => {
+export const NoAccess = ({ FDK_REGISTRATION_BASE_URI }) => {
   const router = useRouter();
   const catalogId = router.asPath.substring(1, 10);
 
@@ -19,7 +19,7 @@ export const NoAccess = ({ REGISTRATION_HOST }) => {
   return (
     <>
       <Breadcrumbs
-        baseURI={REGISTRATION_HOST}
+        baseURI={FDK_REGISTRATION_BASE_URI}
         breadcrumbList={breadcrumbList}
       />
       <PageBanner
@@ -41,7 +41,7 @@ export const NoAccess = ({ REGISTRATION_HOST }) => {
 export async function getServerSideProps() {
   return {
     props: {
-      REGISTRATION_HOST: process.env.REGISTRATION_HOST,
+      FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
     },
   };
 }

@@ -10,6 +10,7 @@ import { useGetInternalFields, useUpdateEditableFields } from '../../../../../ho
 import { useState } from 'react';
 import { compare } from 'fast-json-patch';
 import { Banner } from '../../../../../components/banner';
+import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
 
 export function EditableFields() {
   const router = useRouter();
@@ -119,6 +120,10 @@ export function EditableFields() {
       </div>
     </>
   );
+}
+
+export async function getServerSideProps(props) {
+  return serverSidePropsWithAdminPermissions(props);
 }
 
 export default EditableFields;

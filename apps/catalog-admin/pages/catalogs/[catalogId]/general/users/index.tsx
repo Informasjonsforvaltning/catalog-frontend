@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { AssignedUser } from '@catalog-frontend/types';
 import { compare } from 'fast-json-patch';
 import { Banner } from '../../../../../components/banner';
+import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
 
 export const CodeListsPage = () => {
   const router = useRouter();
@@ -199,5 +200,9 @@ export const CodeListsPage = () => {
     </>
   );
 };
+
+export async function getServerSideProps(props) {
+  return serverSidePropsWithAdminPermissions(props);
+}
 
 export default CodeListsPage;

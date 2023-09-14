@@ -8,6 +8,7 @@ import { useAdminDispatch } from '../../../context/admin';
 import { Organization } from '@catalog-frontend/types';
 import { getOrganization } from '@catalog-frontend/data-access';
 import { useEffect } from 'react';
+import { serverSidePropsWithAdminPermissions } from '../../../utils/auth';
 
 export const CatalogsAdminPage = ({ organization }) => {
   const router = useRouter();
@@ -49,15 +50,15 @@ export const CatalogsAdminPage = ({ organization }) => {
   );
 };
 
-export async function getServerSideProps({ params }) {
-  const { catalogId } = params;
+export async function getServerSideProps({ req, res, params }) {
+  return serverSidePropsWithAdminPermissions({ req, res, params }, async () => {
+    const { catalogId } = params;
 
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
-  return {
-    props: {
+    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+    return {
       organization,
-    },
-  };
+    };
+  });
 }
 
 export default CatalogsAdminPage;
