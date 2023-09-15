@@ -215,6 +215,7 @@ export const nb = {
     version: 'Versjon',
     validPeriod: 'Gyldighetsperiode',
     fromTo: 'Fra - til',
+    label: 'Merkelapp',
   },
 
   changeRequest: {

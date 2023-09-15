@@ -13,15 +13,17 @@ import styles from './search-hit.module.css';
 import Link from 'next/link';
 import { Tag } from '../tag';
 import { CodeList, Concept, ReferenceDataCode } from '@catalog-frontend/types';
+import { Chip } from '@digdir/design-system-react';
 
 interface Props {
   catalogId: string;
   searchHit: Concept;
   subjectCodeList?: CodeList;
   conceptStatuses?: ReferenceDataCode[];
+  onLabelClick?: (label: string) => void;
 }
 
-const SearchHit = ({ catalogId, searchHit, subjectCodeList, conceptStatuses }: Props) => {
+const SearchHit = ({ catalogId, searchHit, subjectCodeList, conceptStatuses, onLabelClick }: Props) => {
   const conceptStatus = translate(conceptStatuses?.find((s) => s.uri === searchHit.statusURI)?.label) as string;
   const Title = () => {
     const title = translate(searchHit?.anbefaltTerm?.navn);
@@ -102,6 +104,20 @@ const SearchHit = ({ catalogId, searchHit, subjectCodeList, conceptStatuses }: P
         {searchHit?.tildeltBruker && <p className={styles.greyFont}>{searchHit.tildeltBruker.id}</p>}
       </div>
       {searchHit?.definisjon && <p className={styles.description}>{translate(searchHit?.definisjon?.tekst)}</p>}
+      {searchHit?.merkelapp && (
+        <div className={styles.rowSpaceBetween}>
+          <Chip.Group size='xsmall'>
+            {searchHit?.merkelapp.map((label) => (
+              <Chip.Toggle
+                key={`label-${label}`}
+                onClick={() => onLabelClick?.(label)}
+              >
+                {label}
+              </Chip.Toggle>
+            ))}
+          </Chip.Group>
+        </div>
+      )}
     </div>
   );
 };

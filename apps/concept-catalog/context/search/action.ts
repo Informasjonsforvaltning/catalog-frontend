@@ -7,7 +7,8 @@ export type ACTION_TYPE =
   | 'SET_CONCEPT_STATUS_FILTER'
   | 'SET_ASSIGNED_USER_FILTER'
   | 'SET_SUBJECTS_FILTER'
-  | 'SET_INTERNAL_FIELDS_FILTER';
+  | 'SET_INTERNAL_FIELDS_FILTER'
+  | 'SET_LABEL_FILTER';
 
 // add new payload types here as needed
 export type ACTION_PAYLOAD = SearchState;

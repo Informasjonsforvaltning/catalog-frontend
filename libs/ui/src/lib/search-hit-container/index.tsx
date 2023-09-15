@@ -8,9 +8,10 @@ type Props = {
   catalogId: string;
   subjectCodeList?: CodeList;
   conceptStatuses?: ReferenceDataCode[];
+  onLabelClick?: (label: string) => void;
 };
 
-const SearchHitContainer = ({ data, catalogId, subjectCodeList, conceptStatuses }: Props) => (
+const SearchHitContainer = ({ data, catalogId, subjectCodeList, conceptStatuses, onLabelClick }: Props) => (
   <div className={styles.searchHitsContainer}>
     {data?.hits.length === 0 && <div className={styles.noHits}>{loc.search.noHits}</div>}
     {data?.hits.map((concept: Concept) => (
@@ -23,6 +24,7 @@ const SearchHitContainer = ({ data, catalogId, subjectCodeList, conceptStatuses 
           catalogId={catalogId}
           subjectCodeList={subjectCodeList}
           conceptStatuses={conceptStatuses}
+          onLabelClick={onLabelClick}
         />
       </div>
     ))}
