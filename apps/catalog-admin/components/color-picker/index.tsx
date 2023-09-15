@@ -53,7 +53,7 @@ export const ColorPicker = ({ type }: ColorPicker) => {
         <TextField
           className={styles.textField}
           isValid={isValidInput}
-          value={inputColor}
+          value={inputColor || '#FFFFFF'}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setInputColor(event.target.value);
             setIsValidInput(colorRegex.test(event.target.value));
