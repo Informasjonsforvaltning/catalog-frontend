@@ -59,6 +59,7 @@ import { getServerSession } from 'next-auth';
 import { useCatalogDesign } from '../../../context/catalog-design';
 import _ from 'lodash';
 import { getToken } from 'next-auth/jwt';
+import { prepareStatusList } from '@catalog-frontend/utils';
 
 type MapType = {
   [id: string]: string;
@@ -735,7 +736,8 @@ export async function getServerSideProps({ req, res, params }) {
     .then((response) => response.json())
     .then((body) => {
       return body?.conceptStatuses ?? [];
-    });
+    })
+    .then((statuses) => prepareStatusList(statuses));
 
   const getReplacedConcepts = async () => {
     if (concept?.erstattesAv?.length === 0) {

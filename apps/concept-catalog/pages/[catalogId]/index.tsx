@@ -36,6 +36,7 @@ import { useCatalogDesign } from '../../context/catalog-design';
 import { InferGetServerSidePropsType } from 'next';
 import { Chip } from '@digdir/design-system-react';
 import { FilterType } from '../../context/search/state';
+import { prepareStatusList } from '@catalog-frontend/utils';
 
 export const SearchPage = ({
   organization,
@@ -423,7 +424,8 @@ export async function getServerSideProps({ req, res, params }) {
 
   const conceptStatuses = await getConceptStatuses()
     .then((response) => response.json())
-    .then((body) => body?.conceptStatuses ?? []);
+    .then((body) => body?.conceptStatuses ?? [])
+    .then((statuses) => prepareStatusList(statuses));
 
   return {
     props: {

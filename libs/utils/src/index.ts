@@ -14,3 +14,4 @@ export * from './lib/functions';
 export * from './lib/validation/change-requests-id';
 export * from './lib/regex/regex';
 export * from './lib/code-list';
+export * from './lib/reference-data';
