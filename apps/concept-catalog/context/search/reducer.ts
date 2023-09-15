@@ -28,6 +28,10 @@ export const reducer = produce((state: SearchState, action: ACTION): SearchState
       state.filters.assignedUser = action.payload.filters?.assignedUser;
       return state;
     }
+    case 'SET_LABEL_FILTER': {
+      state.filters.label = action.payload.filters?.label;
+      return state;
+    }
     default:
       throw new Error(`Unknown action type ${action.type}`);
   }

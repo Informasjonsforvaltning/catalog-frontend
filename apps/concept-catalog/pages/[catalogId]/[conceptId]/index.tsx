@@ -187,6 +187,14 @@ export const ConceptPage = ({
     ],
     [localization.concept.validPeriod, `${localization.concept.fromTo}: ${concept?.gyldigFom} - ${concept?.gyldigTom}`],
     [
+      localization.concept.label,
+      <ul key='label-list'>
+        {concept?.merkelapp?.map((label) => (
+          <li key={`label-${label}`}>{label}</li>
+        ))}
+      </ul>,
+    ],
+    [
       localization.concept.lastUpdated,
       formatISO(concept?.endringslogelement?.endringstidspunkt, {
         weekday: 'long',

@@ -35,7 +35,7 @@ import { authOptions } from '../api/auth/[...nextauth]';
 import { useCatalogDesign } from '../../context/catalog-design';
 import { InferGetServerSidePropsType } from 'next';
 import { Chip } from '@digdir/design-system-react';
-import { FilterTypes } from '../../context/search/state';
+import { FilterType } from '../../context/search/state';
 
 export const SearchPage = ({
   organization,
@@ -89,6 +89,9 @@ export const SearchPage = ({
       searchState.filters.subject?.length > 0 && {
         subject: { value: searchState.filters.subject },
       },
+      searchState.filters.label?.length > 0 && {
+        label: { value: searchState.filters.label },
+      },
       Object.keys(searchState.filters.internalFields ?? {}).length > 0 && {
         internalFields: { value: searchState.filters.internalFields },
       },
@@ -118,7 +121,7 @@ export const SearchPage = ({
     setCurrentPage(page.selected);
   };
 
-  const removeFilter = (filterName, filterType: FilterTypes) => {
+  const removeFilter = (filterName, filterType: FilterType) => {
     let updatedFilters = null;
 
     if (filterType !== 'assignedUser' && filterType !== 'internalFields') {
@@ -147,6 +150,9 @@ export const SearchPage = ({
         break;
       case 'internalFields':
         searchDispatch(action('SET_INTERNAL_FIELDS_FILTER', { filters: { internalFields: updatedFilters } }));
+        break;
+      case 'label':
+        searchDispatch(action('SET_LABEL_FILTER', { filters: { label: updatedFilters } }));
         break;
       default:
         break;
@@ -182,6 +188,18 @@ export const SearchPage = ({
     if (validOrganizationNumber(catalogId)) {
       router.push(`/${catalogId}/new`);
     }
+  };
+
+  const onLabelClick = (label: string) => {
+    let currentLabels = searchState.filters['label'] ?? [];
+    if (!currentLabels.includes(label)) {
+      currentLabels = [...currentLabels, label];
+    }
+    searchDispatch(
+      action('SET_LABEL_FILTER', {
+        filters: { label: currentLabels },
+      }),
+    );
   };
 
   const design = useCatalogDesign();
@@ -268,6 +286,15 @@ export const SearchPage = ({
                         {getTranslateText(subjectCodeList.codes.find((c) => c.id === Number(filter))?.name)}
                       </Chip.Removable>
                     ))}
+                  {searchState.filters.label &&
+                    searchState.filters.label?.map((filter, index) => (
+                      <Chip.Removable
+                        key={`label-${index}`}
+                        onClick={() => removeFilter(filter, 'label')}
+                      >
+                        {filter}
+                      </Chip.Removable>
+                    ))}
                   {searchState.filters?.status &&
                     searchState.filters?.status.map((filter, index) => (
                       <Chip.Removable
@@ -342,6 +369,7 @@ export const SearchPage = ({
                   catalogId={catalogId}
                   subjectCodeList={subjectCodeList}
                   conceptStatuses={conceptStatuses}
+                  onLabelClick={onLabelClick}
                 />
               )}
             </div>
