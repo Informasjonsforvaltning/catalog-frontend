@@ -4,7 +4,7 @@ import { ColorPicker } from '../../../../../components/color-picker';
 import { ImageUploader } from '../../../../../components/image-uploader';
 import styles from './design.module.css';
 import { BreadcrumbType, Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
-import { Heading, HelpText, TextField } from '@digdir/design-system-react';
+import { Heading, HelpText, Label, TextField } from '@digdir/design-system-react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Design } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
@@ -69,7 +69,7 @@ const DesignPage = () => {
     ? ([
         {
           href: `/catalogs/${catalogId}`,
-          text: getTranslateText(localization.catalogAdmin.catalogAdmin),
+          text: getTranslateText(localization.catalogAdmin.manage.catalogAdmin),
         },
         {
           href: `/catalogs/${catalogId}/general`,
@@ -90,8 +90,10 @@ const DesignPage = () => {
           <div className={styles.heading}>
             <Heading size='xlarge'>{localization.catalogAdmin.design}</Heading>
           </div>
+          <div className={styles.subheading}>
+            <Label>{localization.catalogAdmin.preview}</Label>
+          </div>
 
-          <h2 className={styles.subheading}>{localization.catalogAdmin.preview}</h2>
           <>
             <PageBanner
               title={'Intern Begrepskatalog'}
@@ -102,12 +104,14 @@ const DesignPage = () => {
               logo={logo || (dbDesign?.hasLogo && `/api/design/${catalogId}/logo`) || null}
             />
           </>
-          <h2 className={styles.subheading}>{localization.catalogAdmin.customizeDesign}</h2>
+          <div className={styles.subheading}>
+            <Label className={styles.subheading}>{localization.catalogAdmin.customizeDesign}</Label>
+          </div>
 
           <div className={styles.backgroundContainer}>
             <div className={styles.imageUploader}>
               <div className={styles.label}>
-                <h3>{localization.catalogAdmin.logo}</h3>
+                <Label>{localization.catalogAdmin.logo}</Label>
                 <HelpText title={localization.catalogAdmin.designHelpText.helpTextDescription.logo}>
                   {localization.catalogAdmin.designHelpText.logo}
                 </HelpText>
@@ -115,7 +119,7 @@ const DesignPage = () => {
               <ImageUploader />
             </div>
             <div className={styles.label}>
-              <h3>{localization.catalogAdmin.descriptionLogo}</h3>
+              <Label>{localization.catalogAdmin.descriptionLogo}</Label>
               <HelpText title={localization.catalogAdmin.designHelpText.helpTextDescription.logoDescription}>
                 {localization.catalogAdmin.designHelpText.logoDescription}
               </HelpText>
@@ -137,7 +141,7 @@ const DesignPage = () => {
             <div className={styles.colorPickers}>
               <div>
                 <div className={styles.label}>
-                  <h3>{localization.catalogAdmin.backgroundColor}</h3>
+                  <Label>{localization.catalogAdmin.backgroundColor}</Label>
                   <HelpText title={localization.catalogAdmin.designHelpText.helpTextDescription.backgroundColor}>
                     {localization.catalogAdmin.designHelpText.backgroundColor}
                   </HelpText>
@@ -146,7 +150,7 @@ const DesignPage = () => {
               </div>
               <div>
                 <div className={styles.label}>
-                  <h3>{localization.catalogAdmin.fontColor}</h3>
+                  <Label>{localization.catalogAdmin.fontColor}</Label>
                   <HelpText title={localization.catalogAdmin.designHelpText.helpTextDescription.fontColor}>
                     {localization.catalogAdmin.designHelpText.fontColor}
                   </HelpText>

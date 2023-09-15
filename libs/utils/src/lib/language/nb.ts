@@ -27,6 +27,7 @@ export const nb = {
   ok: 'Ok',
   description: 'Beskrivelse',
   name: 'Navn',
+  manageCatalog: 'Administrere katalog',
 
   language: {
     nb: 'Bokmål',
@@ -161,11 +162,12 @@ export const nb = {
         'Oversikt over beskrivelser av datasett, begrep, apier og informasjonmodeller. Innholdet blir levert av ulike virksomheter, offentlige og private.',
     },
     manage: {
-      internalFields: 'Administrer interne felt',
+      internalFields: 'Her kan du legge til, endre og fjerne interne felt som er spesifikke for din virksomhet.',
       editableFields: 'Administrer editerbare felt',
       codeList: 'Administrer kodeliste',
       design: 'Administrer organisasjonsspesifikt design',
       userList: 'Administrer brukerliste',
+      catalogAdmin: 'Administrere begrepskatalog',
     },
     designHelpText: {
       logo: 'Tillatte filtyper er SVG og PNG.',

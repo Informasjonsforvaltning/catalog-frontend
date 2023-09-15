@@ -1,7 +1,7 @@
 import { PageBanner } from '@catalog-frontend/ui';
 import { useRouter } from 'next/router';
 import { Design } from '@catalog-frontend/types';
-import { getTranslateText } from '@catalog-frontend/utils';
+import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useAdminState } from '../../context/admin';
 import { useCatalogDesign } from '../../context/catalog-design';
 
@@ -15,7 +15,7 @@ export const Banner = () => {
 
   return (
     <PageBanner
-      title={'Intern Begrepskatalog'}
+      title={String(getTranslateText(localization.catalogAdmin.manage.catalogAdmin))}
       subtitle={String(getTranslateText(orgName))}
       logoDescription={dbDesign?.hasLogo && dbDesign?.logoDescription}
       backgroundColor={dbDesign?.backgroundColor}

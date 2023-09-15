@@ -14,7 +14,7 @@ export const ConceptsPage = () => {
     ? ([
         {
           href: `/catalogs/${catalogId}`,
-          text: getTranslateText(localization.catalogAdmin.catalogAdmin),
+          text: getTranslateText(localization.catalogAdmin.manage.catalogAdmin),
         },
         {
           href: `/catalogs/${catalogId}/concepts`,

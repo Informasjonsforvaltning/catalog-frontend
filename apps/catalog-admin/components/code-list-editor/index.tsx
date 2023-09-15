@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NodeApi, NodeRendererProps, Tree } from 'react-arborist';
 import { TabsAddIcon, TabsRemoveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
@@ -26,32 +26,17 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
   const adminContext = useAdminState();
   const { updatedCodeLists } = adminContext;
   const codeListInContext = updatedCodeLists.find((codeList) => codeList.id === dbCodeList.id);
+  const codesInContext = codeListInContext?.codes || dbCodeList.codes || [];
 
   const [selectedCode, setSelectedCode] = useState<Code>(undefined);
-  const [isEditViewOpen, setIsEditViewOpen] = useState(false);
-
-  const combinedListOfCodes = (): Code[] => {
-    // To show codes from both db and context
-    const codesInContext: Code[] = codeListInContext?.codes || [];
-    const codesInDb: Code[] = dbCodeList.codes || [];
-
-    const combinedCodes: Code[] = [...codesInContext];
-
-    codesInDb.forEach((codeDb: Code) => {
-      const isDuplicate: boolean = codesInContext.some((codeContext: Code) => codeContext.id === codeDb.id);
-      if (!isDuplicate) {
-        combinedCodes.push(codeDb);
-      }
-    });
-    return combinedCodes;
-  };
+  const [isEditViewOpen, setIsEditViewOpen] = useState<boolean>(false);
 
   // Functions for updating the code list
 
   function getNextId(codes: Code[]): number {
     let maxId = 0;
     for (const code of codes) {
-      if (code.id > maxId) {
+      if (code.id > maxId && code.id !== undefined) {
         maxId = code.id;
       }
     }
@@ -65,7 +50,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
 
   const createNewCode = () => {
     const newCode = {
-      id: getNextId(combinedListOfCodes()),
+      id: getNextId(codesInContext),
       name: { nb: '', nn: '', en: '' },
       parentID: null,
     };
@@ -74,16 +59,22 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
   };
 
   const removeCodeFromCodeList = (codeId: number) => {
-    const filteredCodes = codeListInContext.codes.filter((code) => code.id !== codeId);
-    const updatedCodeList = { ...codeListInContext, codes: filteredCodes };
-    const updatedCodeListsCopy = [...updatedCodeLists];
-    const index = updatedCodeListsCopy.findIndex((codeList) => codeList.id === updatedCodeList.id);
+    const filteredCodes = codesInContext.filter((code) => code.id !== codeId);
+    const updatedCodeList: CodeList = { ...dbCodeList, codes: filteredCodes };
 
-    if (index !== -1) {
-      updatedCodeListsCopy[index] = updatedCodeList;
+    let codeListsToBeSaved = [];
+    if (updatedCodeLists.length > 0) {
+      const updatedCodeListsCopy = [...updatedCodeLists];
+      const index = updatedCodeListsCopy.findIndex((codeList) => codeList.id === updatedCodeList.id);
+      if (index !== -1) {
+        updatedCodeListsCopy[index] = updatedCodeList;
+      }
+      codeListsToBeSaved = updatedCodeListsCopy;
+    } else {
+      codeListsToBeSaved.push(updatedCodeList);
     }
 
-    adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
+    adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: codeListsToBeSaved } });
   };
 
   const updateListOfCodes = (codeId: number): Code[] => {
@@ -156,7 +147,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
     return null;
   };
 
-  const treeData = combinedListOfCodes().reduce((accumulator, currentValue) => {
+  const treeData = codesInContext.reduce((accumulator, currentValue) => {
     const parent = findParent(currentValue.parentID, accumulator);
     if (parent) {
       parent.children = [...(parent.children ?? []), { id: `${currentValue.id}`, name: currentValue.name.nb }];
@@ -218,7 +209,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
   }
 
   const handleOnClick = (node: NodeApi<Data>) => {
-    setSelectedCode(combinedListOfCodes()?.find((code) => code.id === Number.parseInt(node.data.id)));
+    setSelectedCode(codesInContext?.find((code) => code.id === Number.parseInt(node.data.id)));
   };
 
   function handleOnMove(args: {
@@ -248,7 +239,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
     setSelectedCode((prevSelectedCode) => ({
       ...prevSelectedCode,
       name: {
-        ...prevSelectedCode.name,
+        ...prevSelectedCode?.name,
         [field]: value,
       },
     }));
@@ -336,7 +327,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
               <div className={styles.codeListEditor}>
                 <Select
                   label={localization.catalogAdmin.parentCode}
-                  options={possibleParentCodes(combinedListOfCodes(), selectedCode)}
+                  options={possibleParentCodes(codesInContext, selectedCode)}
                   value={`${selectedCode?.parentID}`}
                   onChange={updateCodeParent}
                 />

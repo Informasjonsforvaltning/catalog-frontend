@@ -71,7 +71,16 @@ const CodeListsPage = () => {
     const diff = compare(dbCodeList, updatedCodeList);
 
     if (diff) {
-      updateCodeList.mutate({ oldCodeList: dbCodeList, newCodeList: updatedCodeList });
+      updateCodeList
+        .mutateAsync({ oldCodeList: dbCodeList, newCodeList: updatedCodeList })
+        .then(() => {
+          alert(localization.alert.success);
+        })
+        .catch(() => {
+          alert(localization.alert.fail);
+        });
+    } else {
+      console.log('No changes detected.');
     }
   };
 
@@ -124,7 +133,7 @@ const CodeListsPage = () => {
     ? ([
         {
           href: `/catalogs/${catalogId}`,
-          text: getTranslateText(localization.catalogAdmin.catalogAdmin),
+          text: getTranslateText(localization.catalogAdmin.manage.catalogAdmin),
         },
         {
           href: `/catalogs/${catalogId}/concepts`,
