@@ -156,15 +156,13 @@ export const nb = {
     searchFieldCodeList: 'Søkefelt kodeliste',
     enableFilter: 'Aktiver filter',
     description: {
-      general:
-        'Oversikt over beskrivelser av datasett, begrep, apier og informasjonmodeller. Innholdet blir levert av ulike virksomheter, offentlige og private.',
-      conceptCatalog:
-        'Oversikt over beskrivelser av datasett, begrep, apier og informasjonmodeller. Innholdet blir levert av ulike virksomheter, offentlige og private.',
+      general: 'Her kan du administrere innstillinger og innhold på tvers av katalogene.',
+      conceptCatalog: 'Her kan du administrere innstillinger og innhold for begrepskatalogen.',
     },
     manage: {
       internalFields: 'Her kan du legge til, endre og fjerne interne felt som er spesifikke for din virksomhet.',
-      editableFields: 'Administrer editerbare felt',
-      codeList: 'Administrer kodeliste',
+      editableFields: 'Her kan du velge kodelister for felt som publiseres eksternt, som fagområde.',
+      codeList: 'Her kan du administrere kodelistene som brukes av interne og editerbare felt.',
       design: 'Administrer organisasjonsspesifikt design',
       userList: 'Administrer brukerliste',
       catalogAdmin: 'Administrere begrepskatalog',
