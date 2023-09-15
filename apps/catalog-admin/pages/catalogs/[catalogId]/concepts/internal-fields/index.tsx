@@ -1,13 +1,13 @@
 import React, { useRef, useState } from 'react';
 import styles from './internal-fields.module.css';
-import { Accordion, Checkbox, Heading, TextField } from '@digdir/design-system-react';
+import { Accordion, Checkbox, Heading, HelpText, TextField } from '@digdir/design-system-react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { BreadcrumbType, Breadcrumbs, Button, Select } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { CodeList, InternalField, FieldType, SelectOption } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
 import { textRegexWithNumbers } from '@catalog-frontend/utils';
-
+import cn from 'classnames';
 import {
   useGetInternalFields,
   useCreateInternalField,
@@ -249,7 +249,7 @@ export const InternalFieldsPage = () => {
 
                         {(updatedFieldsList.find((f) => f.id === field.id) || field)?.type == 'boolean' && (
                           <>
-                            <div className={styles.field}>
+                            <div className={cn(styles.field, styles.row)}>
                               <Checkbox
                                 onChange={(e) => {
                                   updateFieldsListState(field.id, undefined, undefined, undefined, e.target.checked);
@@ -259,6 +259,12 @@ export const InternalFieldsPage = () => {
                               >
                                 {localization.catalogAdmin.enableFilter}
                               </Checkbox>
+                              <HelpText
+                                placement='right'
+                                title={localization.catalogAdmin.manage.enableFilter}
+                              >
+                                {localization.catalogAdmin.manage.enableFilter}
+                              </HelpText>
                             </div>
                           </>
                         )}

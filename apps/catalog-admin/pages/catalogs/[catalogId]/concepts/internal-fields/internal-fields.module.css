@@ -60,6 +60,13 @@
   flex-direction: column;
 }
 
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+}
+
 .page {
   width: 90%;
   max-width: 1320px;

@@ -166,6 +166,7 @@ export const nb = {
       design: 'Administrer organisasjonsspesifikt design',
       userList: 'Administrer brukerliste',
       catalogAdmin: 'Administrere begrepskatalog',
+      enableFilter: 'Gjør det mulig å filtrere på feltet i søk i intern begrepskatalog.',
     },
     designHelpText: {
       logo: 'Tillatte filtyper er SVG og PNG.',
