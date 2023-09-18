@@ -134,15 +134,13 @@ export const CodeListsPage = ({ organization }) => {
             Brukerliste
           </Heading>
           {dbUsers &&
-            dbUsers.map((user: AssignedUser, index) => (
+            dbUsers.map((user: AssignedUser, index: number) => (
               <Accordion
                 key={index}
                 border={true}
                 className={styles.accordion}
               >
-                <Accordion.Item
-                  open={user.name.includes(`Ny bruker ${nextUserNumber - 1}`) ? accordionIsOpen : undefined}
-                >
+                <Accordion.Item defaultOpen={index === dbUsers.length - 1 ? accordionIsOpen : false}>
                   <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
                     <h1 className={styles.label}>{user.name}</h1>
                   </Accordion.Header>

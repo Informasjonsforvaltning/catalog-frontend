@@ -185,7 +185,7 @@ export const InternalFieldsPage = ({ organization }) => {
 
           <div className={styles.pageContent}>
             {dbFields &&
-              dbFields.map((field) => (
+              dbFields.map((field: InternalField, index: number) => (
                 <Accordion
                   key={field.id}
                   border={true}
@@ -193,11 +193,7 @@ export const InternalFieldsPage = ({ organization }) => {
                 >
                   <Accordion.Item
                     ref={newAccordionRef}
-                    open={
-                      getTranslateText(field.label).includes(`Nytt felt ${getNextFieldNumber(dbFields) - 1}`)
-                        ? accordionIsOpen
-                        : undefined
-                    }
+                    defaultOpen={index === dbFields.length - 1 ? accordionIsOpen : false}
                   >
                     <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
                       <h2 className={styles.label}>{getTranslateText(field.label)}</h2>

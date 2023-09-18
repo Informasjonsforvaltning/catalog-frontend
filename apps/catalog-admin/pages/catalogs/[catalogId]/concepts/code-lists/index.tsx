@@ -185,11 +185,7 @@ const CodeListsPage = ({ organization }) => {
                 >
                   <Accordion.Item
                     ref={newAccordionRef}
-                    open={
-                      codeList.name.includes(`Ny kodeliste ${getNextNewCodeListNumber(dbCodeLists) - 1}`)
-                        ? accordionIsOpen
-                        : undefined
-                    }
+                    defaultOpen={index === searchResults.length - 1 ? accordionIsOpen : false}
                   >
                     <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
                       <h1 className={styles.label}>{codeList.name}</h1>
