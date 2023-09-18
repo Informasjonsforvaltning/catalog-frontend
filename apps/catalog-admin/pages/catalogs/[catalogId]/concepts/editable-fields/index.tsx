@@ -2,7 +2,7 @@ import styles from './editable-fields.module.css';
 import { Heading } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, Select } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { CodeList } from '@catalog-frontend/types';
+import { CodeList, Organization } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
 
 import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
@@ -11,8 +11,9 @@ import { useState } from 'react';
 import { compare } from 'fast-json-patch';
 import { Banner } from '../../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
+import { getOrganization } from '@catalog-frontend/data-access';
 
-export function EditableFields() {
+export function EditableFields({ organization }) {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
   const { data: getAllCodeLists } = useGetAllCodeLists({ catalogId });
@@ -74,7 +75,7 @@ export function EditableFields() {
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
-      <Banner />
+      <Banner orgName={organization?.prefLabel} />
       <div className={styles.center}>
         <div className={styles.heading}>
           <Heading
@@ -122,8 +123,16 @@ export function EditableFields() {
   );
 }
 
-export async function getServerSideProps(props) {
-  return serverSidePropsWithAdminPermissions(props);
+export async function getServerSideProps({ req, res, params }) {
+  return serverSidePropsWithAdminPermissions({ req, res, params }, async () => {
+    const { catalogId } = params;
+
+    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+
+    return {
+      organization,
+    };
+  });
 }
 
 export default EditableFields;

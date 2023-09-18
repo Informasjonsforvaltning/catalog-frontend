@@ -4,7 +4,7 @@ import { Accordion, Checkbox, Heading, HelpText, TextField } from '@digdir/desig
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { BreadcrumbType, Breadcrumbs, Button, Select } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { CodeList, InternalField, FieldType, SelectOption } from '@catalog-frontend/types';
+import { CodeList, InternalField, FieldType, SelectOption, Organization } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
 import { textRegexWithNumbers } from '@catalog-frontend/utils';
 import cn from 'classnames';
@@ -18,6 +18,7 @@ import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
 import { compare } from 'fast-json-patch';
 import { Banner } from '../../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
+import { getOrganization } from '@catalog-frontend/data-access';
 
 const fieldTypeOptions: { [key: string]: SelectOption } = {
   shortText: { label: 'Kort tekst', value: 'text_short' },
@@ -26,7 +27,7 @@ const fieldTypeOptions: { [key: string]: SelectOption } = {
   codelist: { label: 'Kodeliste', value: 'code_list' },
 };
 
-export const InternalFieldsPage = () => {
+export const InternalFieldsPage = ({ organization }) => {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
 
@@ -160,7 +161,7 @@ export const InternalFieldsPage = () => {
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
-      <Banner />
+      <Banner orgName={organization?.prefLabel} />
       <div className={styles.center}>
         <div className={styles.page}>
           <div className={styles.topButtonRow}>
@@ -304,8 +305,15 @@ export const InternalFieldsPage = () => {
   );
 };
 
-export async function getServerSideProps(props) {
-  return serverSidePropsWithAdminPermissions(props);
-}
+export async function getServerSideProps({ req, res, params }) {
+  return serverSidePropsWithAdminPermissions({ req, res, params }, async () => {
+    const { catalogId } = params;
 
+    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+
+    return {
+      organization,
+    };
+  });
+}
 export default InternalFieldsPage;

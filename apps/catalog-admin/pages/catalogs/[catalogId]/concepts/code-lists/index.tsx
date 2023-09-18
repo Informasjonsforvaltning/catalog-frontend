@@ -10,15 +10,16 @@ import {
   useGetAllCodeLists,
   useUpdateCodeList,
 } from '../../../../../hooks/code-lists';
-import { CodeList } from '@catalog-frontend/types';
+import { CodeList, Organization } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { CodeListEditor } from '../../../../../components/code-list-editor';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
 import { compare } from 'fast-json-patch';
 import { Banner } from '../../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
+import { getOrganization } from '@catalog-frontend/data-access';
 
-const CodeListsPage = () => {
+const CodeListsPage = ({ organization }) => {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
   const createCodeList = useCreateCodeList(catalogId);
@@ -149,7 +150,7 @@ const CodeListsPage = () => {
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
-      <Banner />
+      <Banner orgName={organization?.prefLabel} />
       <div className={styles.center}>
         <div className={styles.page}>
           <div className={styles.row}>
@@ -241,8 +242,16 @@ const CodeListsPage = () => {
   );
 };
 
-export async function getServerSideProps(props) {
-  return serverSidePropsWithAdminPermissions(props);
+export async function getServerSideProps({ req, res, params }) {
+  return serverSidePropsWithAdminPermissions({ req, res, params }, async () => {
+    const { catalogId } = params;
+
+    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+
+    return {
+      organization,
+    };
+  });
 }
 
 export default CodeListsPage;

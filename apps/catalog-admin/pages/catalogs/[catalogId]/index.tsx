@@ -4,16 +4,13 @@ import { BreadcrumbType, Breadcrumbs, Card } from '@catalog-frontend/ui';
 import styles from './style.module.css';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Banner } from '../../../components/banner';
-import { useAdminDispatch } from '../../../context/admin';
 import { Organization } from '@catalog-frontend/types';
 import { getOrganization } from '@catalog-frontend/data-access';
-import { useEffect } from 'react';
 import { serverSidePropsWithAdminPermissions } from '../../../utils/auth';
 
 export const CatalogsAdminPage = ({ organization }) => {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
-  const adminDispatch = useAdminDispatch();
 
   const breadcrumbList = catalogId
     ? ([
@@ -24,15 +21,11 @@ export const CatalogsAdminPage = ({ organization }) => {
       ] as BreadcrumbType[])
     : [];
 
-  useEffect(() => {
-    adminDispatch({ type: 'SET_ORG_NAME', payload: { orgName: organization.prefLabel } });
-  }, [organization.prefLabel]);
-
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <div>
-        <Banner />
+        <Banner orgName={organization?.prefLabel} />
         <div className={styles.card}>
           <Card
             title={localization.general}
@@ -55,6 +48,7 @@ export async function getServerSideProps({ req, res, params }) {
     const { catalogId } = params;
 
     const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+
     return {
       organization,
     };

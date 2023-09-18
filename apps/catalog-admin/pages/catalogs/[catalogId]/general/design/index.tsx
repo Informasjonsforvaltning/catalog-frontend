@@ -6,14 +6,15 @@ import styles from './design.module.css';
 import { BreadcrumbType, Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
 import { Heading, HelpText, Label, TextField } from '@digdir/design-system-react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Design } from '@catalog-frontend/types';
+import { Design, Organization } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
 import { textRegexWithNumbers } from '@catalog-frontend/utils';
 import { useGetDesign, useGetLogo, useUpdateDesign } from '../../../../../hooks/design';
 import { compare } from 'fast-json-patch';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
+import { getOrganization } from '@catalog-frontend/data-access';
 
-const DesignPage = () => {
+const DesignPage = ({ organization }) => {
   const adminContext = useAdminState();
   const router = useRouter();
   const catalogId = `${router.query.catalogId}`;
@@ -27,9 +28,6 @@ const DesignPage = () => {
 
   const { data: getLogo } = useGetLogo(catalogId);
   const dbLogo = getLogo;
-
-  const { orgName } = adminContext;
-  const pageSubtitle = orgName || catalogId;
 
   const [imageLabel, setImageLabel] = useState('');
   const updateDesign = useUpdateDesign(catalogId);
@@ -97,7 +95,7 @@ const DesignPage = () => {
           <>
             <PageBanner
               title={'Intern Begrepskatalog'}
-              subtitle={String(getTranslateText(pageSubtitle))}
+              subtitle={String(getTranslateText(organization?.prefLabel))}
               logoDescription={dbDesign?.hasLogo && dbDesign?.logoDescription}
               backgroundColor={backgroundColor || dbDesign?.backgroundColor || '#FFFFFF'}
               fontColor={fontColor || dbDesign?.fontColor || '#2D3741'}
@@ -168,8 +166,16 @@ const DesignPage = () => {
   );
 };
 
-export async function getServerSideProps(props) {
-  return serverSidePropsWithAdminPermissions(props);
+export async function getServerSideProps({ req, res, params }) {
+  return serverSidePropsWithAdminPermissions({ req, res, params }, async () => {
+    const { catalogId } = params;
+
+    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+
+    return {
+      organization,
+    };
+  });
 }
 
 export default DesignPage;
