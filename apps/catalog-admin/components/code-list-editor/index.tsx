@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { NodeApi, NodeRendererProps, Tree } from 'react-arborist';
 import { TabsAddIcon, TabsRemoveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
 import styles from './code-list-editor.module.css';
 import { Button, InfoCard, Select } from '@catalog-frontend/ui';
-import { TextField, Button as FdsButton } from '@digdir/design-system-react';
+import { TextField, Button as FdsButton, SingleSelectOption } from '@digdir/design-system-react';
 import { Code, CodeList } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useAdminDispatch, useAdminState } from '../../context/admin';
@@ -143,7 +143,6 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
         }
       }
     }
-
     return null;
   };
 
@@ -212,28 +211,45 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
     setSelectedCode(codesInContext?.find((code) => code.id === Number.parseInt(node.data.id)));
   };
 
-  function handleOnMove(args: {
-    dragIds: string[];
-    dragNodes: NodeApi<Data>[];
-    parentId: string;
-    parentNode: NodeApi<Data>;
-    index: number;
-  }): void | Promise<void> {
-    throw new Error('Function not implemented.');
+  const getCurrentLevel = (codes, currentCode) => {
+    let level = 0;
+    let parent = currentCode;
+
+    while (parent && parent.parentID !== null) {
+      parent = codes.find((code) => code.id === parent.parentID);
+      level++;
+    }
+
+    return level;
+  };
+
+  function findRelatedCodes(codes, codeId, depth = 0, maxDepth = 4) {
+    if (depth > maxDepth) {
+      return [];
+    }
+    const relatedCodes = codes.filter((code) => code.parentID === codeId);
+    const descendants = relatedCodes.flatMap((relatedCode) =>
+      findRelatedCodes(codes, relatedCode.id, depth + 1, maxDepth),
+    );
+
+    return [...relatedCodes, ...descendants];
   }
 
-  const possibleParentCodes = (codes, currentCode) => {
-    // Not itself, not child, null to remove parent
-    return currentCode
-      ? codes
-          ?.filter((code) => code.id !== currentCode.id && code.parentID !== currentCode.id)
-          .map((code) => ({
-            label: `${getTranslateText(code.name)}`,
-            value: `${code.id}`,
-          }))
-          .concat([{ label: 'Ingen overordnet kode', value: null }]) ?? []
-      : [];
-  };
+  function possibleParentCodes(codes: Code[], codeId: number): SingleSelectOption[] {
+    const relatedCodes = findRelatedCodes(codes, codeId);
+    return codes
+      .filter((code: Code) => {
+        return (
+          code.id !== codeId && // Not itself
+          !relatedCodes.includes(code) && // Not children of the code
+          getCurrentLevel(codes, code) < 3 // Not codes with level higher than 4
+        );
+      })
+      .map((code: Code) => ({
+        label: String(getTranslateText(code.name)),
+        value: code.id.toString(),
+      }));
+  }
 
   const updateCodeName = (field: 'nb' | 'nn' | 'en', value: string) => {
     setSelectedCode((prevSelectedCode) => ({
@@ -267,7 +283,6 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
                 width={453}
                 onActivate={handleOnClick}
                 onClick={() => setIsEditViewOpen(true)}
-                onMove={handleOnMove}
                 disableEdit
               >
                 {Node}
@@ -327,7 +342,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
               <div className={styles.codeListEditor}>
                 <Select
                   label={localization.catalogAdmin.parentCode}
-                  options={possibleParentCodes(codesInContext, selectedCode)}
+                  options={possibleParentCodes(codesInContext, selectedCode.id)}
                   value={`${selectedCode?.parentID}`}
                   onChange={updateCodeParent}
                 />
