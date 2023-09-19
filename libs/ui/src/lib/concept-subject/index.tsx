@@ -9,7 +9,7 @@ interface Props {
   className?: string;
 }
 
-const ConceptSubject = ({ concept, subjectCodeList, className }: Props) => {
+export const ConceptSubject = ({ concept, subjectCodeList, className }: Props) => {
   if (subjectCodeList && concept?.fagområdeKoder?.[0]) {
     const path = getPath(convertCodeListToTreeNodes(subjectCodeList), concept.fagområdeKoder[0]);
     return <p className={cn(styles.subject, className)}>{path.map((item) => item.label).join(' - ')}</p>;
