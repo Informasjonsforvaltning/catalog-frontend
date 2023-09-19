@@ -1,8 +1,5 @@
 import {
-  convertCodeListToTreeNodes,
-  ensureStringArray,
   formatISO,
-  getPath,
   localization,
   getTranslateText as translate,
   validOrganizationNumber,
@@ -14,6 +11,7 @@ import Link from 'next/link';
 import { Tag } from '../tag';
 import { CodeList, Concept, ReferenceDataCode } from '@catalog-frontend/types';
 import { Chip } from '@digdir/design-system-react';
+import ConceptSubject from '../concept-subject';
 
 interface Props {
   catalogId: string;
@@ -28,19 +26,6 @@ const SearchHit = ({ catalogId, searchHit, subjectCodeList, conceptStatuses, onL
   const Title = () => {
     const title = translate(searchHit?.anbefaltTerm?.navn);
     return <span>{title ? title : localization.concept.noName}</span>;
-  };
-
-  const Subject = () => {
-    if (subjectCodeList && searchHit?.fagområdeKoder?.[0]) {
-      const path = getPath(convertCodeListToTreeNodes(subjectCodeList), searchHit.fagområdeKoder[0]);
-      return <p className={cn(styles.greyFont, styles.subject)}>{path.map((item) => item.label).join(' - ')}</p>;
-    }
-
-    return (
-      <p className={cn(styles.greyFont, styles.subject)}>
-        {ensureStringArray(translate(searchHit.fagområde)).join(' ')}
-      </p>
-    );
   };
 
   return (
@@ -66,7 +51,11 @@ const SearchHit = ({ catalogId, searchHit, subjectCodeList, conceptStatuses, onL
           )}
         </div>
 
-        <Subject />
+        <ConceptSubject
+          className={cn(styles.greyFont, styles.subject)}
+          concept={searchHit}
+          subjectCodeList={subjectCodeList}
+        />
       </div>
 
       <div className={styles.metaData}>
