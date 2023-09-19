@@ -51,7 +51,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
   const createNewCode = () => {
     const newCode = {
       id: getNextId(codesInContext),
-      name: { nb: '', nn: '', en: '' },
+      name: { nb: 'Ny kode', nn: '', en: '' },
       parentID: null,
     };
 
@@ -282,7 +282,12 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
                 height={441}
                 width={453}
                 onActivate={handleOnClick}
-                onClick={() => setIsEditViewOpen(true)}
+                onClick={() => {
+                  setIsEditViewOpen(true);
+                  if (selectedCode === undefined) {
+                    createNewCode();
+                  }
+                }}
                 disableEdit
               >
                 {Node}
@@ -342,7 +347,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
               <div className={styles.codeListEditor}>
                 <Select
                   label={localization.catalogAdmin.parentCode}
-                  options={possibleParentCodes(codesInContext, selectedCode.id)}
+                  options={possibleParentCodes(codesInContext, selectedCode?.id)}
                   value={`${selectedCode?.parentID}`}
                   onChange={updateCodeParent}
                 />
