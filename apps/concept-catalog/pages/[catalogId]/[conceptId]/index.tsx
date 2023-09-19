@@ -6,6 +6,7 @@ import {
   PageBanner,
   Breadcrumbs,
   BreadcrumbType,
+  ConceptSubject,
   InfoCard,
   DetailHeading,
   Spinner,
@@ -290,22 +291,19 @@ export const ConceptPage = ({
   };
 
   const design = useCatalogDesign();
+
   const getTitle = (text: string | string[]) => (text ? text : localization.concept.noName);
   const getDetailSubtitle = () => {
-    const subjectCodes =
-      codeListsResult?.codeLists?.find((codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId)?.codes ??
-      [];
-    return [
-      ...ensureStringArray(translate(concept?.fagområde, language)),
-      ...(concept?.fagområdeKoder?.map((id) =>
-        translate(subjectCodes.find((code) => `${code.id}` === id)?.name, language),
-      ) ?? []),
-    ].map((item, index) => (
-      <>
-        {index > 0 && <span>&nbsp;&#x2022;&nbsp;</span>}
-        <span key={`fagområde-${item}`}>{item}</span>
-      </>
-    ));
+    const subjectCodeList = codeListsResult?.codeLists?.find(
+      (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
+    );
+
+    return (
+      <ConceptSubject
+        concept={concept}
+        subjectCodeList={subjectCodeList}
+      />
+    );
   };
 
   const newCommentButtonId = useId();
