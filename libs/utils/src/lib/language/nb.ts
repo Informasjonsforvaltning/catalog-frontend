@@ -14,6 +14,7 @@ export const nb = {
   error: 'Feil',
   somethingWentWrong: 'Beklager, noe gikk galt. Prøv på nytt litt senere.',
   allCatalogs: 'Alle kataloger',
+  chooseOrganizaiton: 'Velg virksomhet',
   catalogType: { concept: 'Begrepskatalog', dataset: 'Datasettkatalogen' },
   dataVillage: ['Datalandsbyen', 'Lenke til Datalandsbyen'],
   harvestData: ['Høste data', 'Lenke til å høste data'],
