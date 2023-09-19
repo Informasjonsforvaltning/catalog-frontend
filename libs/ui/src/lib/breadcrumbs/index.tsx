@@ -18,10 +18,10 @@ const Breadcrumbs = ({ baseURI, breadcrumbList }: BreadcrumbsProps) => {
       <StyledBreadcrumbs>
         <span>
           <ExternalLink
-            aria-label={localization.allCatalogs}
+            aria-label={localization.chooseOrganizaiton}
             href={baseURI || '/'}
           >
-            {localization.allCatalogs}
+            {localization.chooseOrganizaiton}
           </ExternalLink>
           {breadcrumbList &&
             breadcrumbList.map((breadcrumb, i) => {

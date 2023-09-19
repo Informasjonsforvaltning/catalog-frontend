@@ -4,7 +4,7 @@ import { colorRegex } from '@catalog-frontend/utils';
 import { Design } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
 import { useGetDesign } from '../../hooks/design';
-import { AdminContextProvider, useAdminDispatch } from '../../context/admin';
+import { AdminContextProvider, useAdminDispatch, useAdminState } from '../../context/admin';
 import styles from './color-picker.module.css';
 
 interface ColorPicker {
@@ -22,6 +22,17 @@ export const ColorPicker = ({ type }: ColorPicker) => {
   const [isValidInput, setIsValidInput] = useState(null);
 
   const adminDispatch = useAdminDispatch();
+
+  const adminContext = useAdminState();
+  const { backgroundColor, fontColor } = adminContext;
+
+  useEffect(() => {
+    if (type === 'background') {
+      setInputColor(backgroundColor);
+    } else {
+      setInputColor(fontColor);
+    }
+  }, []);
 
   useEffect(() => {
     if (type === 'background') {

@@ -1,13 +1,13 @@
 import React, { useRef, useState } from 'react';
 import styles from './internal-fields.module.css';
-import { Accordion, Checkbox, Heading, TextField } from '@digdir/design-system-react';
+import { Accordion, Checkbox, Heading, HelpText, TextField } from '@digdir/design-system-react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { BreadcrumbType, Breadcrumbs, Button, Select } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { CodeList, InternalField, FieldType, SelectOption } from '@catalog-frontend/types';
+import { CodeList, InternalField, FieldType, SelectOption, Organization } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
 import { textRegexWithNumbers } from '@catalog-frontend/utils';
-
+import cn from 'classnames';
 import {
   useGetInternalFields,
   useCreateInternalField,
@@ -18,6 +18,7 @@ import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
 import { compare } from 'fast-json-patch';
 import { Banner } from '../../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
+import { getOrganization } from '@catalog-frontend/data-access';
 
 const fieldTypeOptions: { [key: string]: SelectOption } = {
   shortText: { label: 'Kort tekst', value: 'text_short' },
@@ -26,7 +27,7 @@ const fieldTypeOptions: { [key: string]: SelectOption } = {
   codelist: { label: 'Kodeliste', value: 'code_list' },
 };
 
-export const InternalFieldsPage = () => {
+export const InternalFieldsPage = ({ organization }) => {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
 
@@ -160,7 +161,7 @@ export const InternalFieldsPage = () => {
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
-      <Banner />
+      <Banner orgName={organization?.prefLabel} />
       <div className={styles.center}>
         <div className={styles.page}>
           <div className={styles.topButtonRow}>
@@ -184,7 +185,7 @@ export const InternalFieldsPage = () => {
 
           <div className={styles.pageContent}>
             {dbFields &&
-              dbFields.map((field) => (
+              dbFields.map((field: InternalField, index: number) => (
                 <Accordion
                   key={field.id}
                   border={true}
@@ -192,11 +193,7 @@ export const InternalFieldsPage = () => {
                 >
                   <Accordion.Item
                     ref={newAccordionRef}
-                    open={
-                      getTranslateText(field.label).includes(`Nytt felt ${getNextFieldNumber(dbFields) - 1}`)
-                        ? accordionIsOpen
-                        : undefined
-                    }
+                    defaultOpen={index === dbFields.length - 1 ? accordionIsOpen : false}
                   >
                     <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
                       <h2 className={styles.label}>{getTranslateText(field.label)}</h2>
@@ -249,7 +246,7 @@ export const InternalFieldsPage = () => {
 
                         {(updatedFieldsList.find((f) => f.id === field.id) || field)?.type == 'boolean' && (
                           <>
-                            <div className={styles.field}>
+                            <div className={cn(styles.field, styles.row)}>
                               <Checkbox
                                 onChange={(e) => {
                                   updateFieldsListState(field.id, undefined, undefined, undefined, e.target.checked);
@@ -259,6 +256,12 @@ export const InternalFieldsPage = () => {
                               >
                                 {localization.catalogAdmin.enableFilter}
                               </Checkbox>
+                              <HelpText
+                                placement='right'
+                                title={localization.catalogAdmin.manage.enableFilter}
+                              >
+                                {localization.catalogAdmin.manage.enableFilter}
+                              </HelpText>
                             </div>
                           </>
                         )}
@@ -298,8 +301,15 @@ export const InternalFieldsPage = () => {
   );
 };
 
-export async function getServerSideProps(props) {
-  return serverSidePropsWithAdminPermissions(props);
-}
+export async function getServerSideProps({ req, res, params }) {
+  return serverSidePropsWithAdminPermissions({ req, res, params }, async () => {
+    const { catalogId } = params;
 
+    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+
+    return {
+      organization,
+    };
+  });
+}
 export default InternalFieldsPage;

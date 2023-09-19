@@ -6,12 +6,13 @@ import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { getTranslateText, localization, textRegex, telephoneNumberRegex, emailRegex } from '@catalog-frontend/utils';
 import { useGetUsers, useCreateUser, useDeleteUser, useUpdateUser } from '../../../../../hooks/users';
 import { useRouter } from 'next/router';
-import { AssignedUser } from '@catalog-frontend/types';
+import { AssignedUser, Organization } from '@catalog-frontend/types';
 import { compare } from 'fast-json-patch';
 import { Banner } from '../../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
+import { getOrganization } from '@catalog-frontend/data-access';
 
-export const CodeListsPage = () => {
+export const CodeListsPage = ({ organization }) => {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
 
@@ -105,7 +106,7 @@ export const CodeListsPage = () => {
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
-      <Banner />
+      <Banner orgName={organization?.prefLabel} />
       <div className={styles.center}>
         <div className={styles.page}>
           <div className={styles.row}>
@@ -133,15 +134,13 @@ export const CodeListsPage = () => {
             Brukerliste
           </Heading>
           {dbUsers &&
-            dbUsers.map((user: AssignedUser, index) => (
+            dbUsers.map((user: AssignedUser, index: number) => (
               <Accordion
                 key={index}
                 border={true}
                 className={styles.accordion}
               >
-                <Accordion.Item
-                  open={user.name.includes(`Ny bruker ${nextUserNumber - 1}`) ? accordionIsOpen : undefined}
-                >
+                <Accordion.Item defaultOpen={index === dbUsers.length - 1 ? accordionIsOpen : false}>
                   <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
                     <h1 className={styles.label}>{user.name}</h1>
                   </Accordion.Header>
@@ -201,8 +200,16 @@ export const CodeListsPage = () => {
   );
 };
 
-export async function getServerSideProps(props) {
-  return serverSidePropsWithAdminPermissions(props);
+export async function getServerSideProps({ req, res, params }) {
+  return serverSidePropsWithAdminPermissions({ req, res, params }, async () => {
+    const { catalogId } = params;
+
+    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+
+    return {
+      organization,
+    };
+  });
 }
 
 export default CodeListsPage;

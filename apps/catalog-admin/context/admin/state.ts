@@ -5,13 +5,11 @@ export interface AdminState {
   fontColor?: string;
   logo?: string;
   updatedCodeLists?: CodeList[];
-  orgName?: string;
 }
 
 export const DefaultAdminState = {
-  backgroundColor: null,
-  fontColor: null,
+  backgroundColor: '#FFFFFF',
+  fontColor: '#2D3741',
   logo: null,
   updatedCodeLists: [],
-  orgName: null,
 };

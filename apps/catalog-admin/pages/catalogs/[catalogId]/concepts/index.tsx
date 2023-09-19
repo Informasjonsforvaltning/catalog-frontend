@@ -5,8 +5,10 @@ import { useRouter } from 'next/router';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Banner } from '../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../utils/auth';
+import { Organization } from '@catalog-frontend/types';
+import { getOrganization } from '@catalog-frontend/data-access';
 
-export const ConceptsPage = () => {
+export const ConceptsPage = ({ organization }) => {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
 
@@ -26,7 +28,7 @@ export const ConceptsPage = () => {
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
-      <Banner />
+      <Banner orgName={organization?.prefLabel} />
       <div className={styles.container}>
         <Card
           title={localization.catalogAdmin.codeList}
@@ -50,8 +52,16 @@ export const ConceptsPage = () => {
   );
 };
 
-export async function getServerSideProps(props) {
-  return serverSidePropsWithAdminPermissions(props);
+export async function getServerSideProps({ req, res, params }) {
+  return serverSidePropsWithAdminPermissions({ req, res, params }, async () => {
+    const { catalogId } = params;
+
+    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+
+    return {
+      organization,
+    };
+  });
 }
 
 export default ConceptsPage;
