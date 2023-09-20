@@ -211,7 +211,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
     setSelectedCode(codesInContext?.find((code) => code.id === Number.parseInt(node.data.id)));
   };
 
-  const getCurrentLevel = (codes, currentCode) => {
+  const getCurrentLevel = (codes: Code[], currentCode: Code) => {
     let level = 0;
     let parent = currentCode;
 
@@ -223,7 +223,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
     return level;
   };
 
-  function findRelatedCodes(codes, codeId, depth = 0, maxDepth = 4) {
+  function findRelatedCodes(codes: Code[], codeId: number, depth = 0, maxDepth = 4) {
     if (depth > maxDepth) {
       return [];
     }

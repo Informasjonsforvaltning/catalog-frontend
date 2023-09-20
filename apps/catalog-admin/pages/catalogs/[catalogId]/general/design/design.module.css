@@ -26,10 +26,10 @@
   flex-direction: column;
   background-color: white;
   border: 1px solid #d5d7d9;
-  border-radius: 0px 0px 8px 8px;
+  border-radius: 8px;
   align-self: center;
   padding: 67px;
-  margin: 67px;
+  margin: 67px 67px 20px 57px;
   margin-left: 0px;
   margin-top: 0px;
 }
@@ -81,14 +81,6 @@
   margin-bottom: 43px;
 }
 
-.line {
-  background-color: #dfe1e2;
-  width: 800px;
-  height: 1px;
-  margin-top: 52px;
-  margin-bottom: 52px;
-}
-
 .imageUploader {
   margin-bottom: 70px;
 }
@@ -96,4 +88,11 @@
 .breadcrumbs {
   padding-left: 0px;
   margin-left: 0px;
+}
+
+.infoBox {
+  background-color: #e6eff8;
+  border-radius: 8px;
+  padding: 15px 30px;
+  margin-bottom: 30px;
 }

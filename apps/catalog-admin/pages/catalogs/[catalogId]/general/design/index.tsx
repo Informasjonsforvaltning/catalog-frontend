@@ -4,7 +4,7 @@ import { ColorPicker } from '../../../../../components/color-picker';
 import { ImageUploader } from '../../../../../components/image-uploader';
 import styles from './design.module.css';
 import { BreadcrumbType, Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
-import { Heading, HelpText, Label, TextField } from '@digdir/design-system-react';
+import { Alert, Heading, Label, TextField } from '@digdir/design-system-react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Design, Organization } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
@@ -89,12 +89,12 @@ const DesignPage = ({ organization }) => {
             <Heading size='xlarge'>{localization.catalogAdmin.design}</Heading>
           </div>
           <div className={styles.subheading}>
-            <Label>{localization.catalogAdmin.preview}</Label>
+            <Heading size='small'>{localization.catalogAdmin.preview}</Heading>
           </div>
 
           <>
             <PageBanner
-              title={'Intern Begrepskatalog'}
+              title={'Administrere Begrepskatalog'}
               subtitle={String(getTranslateText(organization?.prefLabel))}
               logoDescription={dbDesign?.hasLogo && dbDesign?.logoDescription}
               backgroundColor={backgroundColor || dbDesign?.backgroundColor || '#FFFFFF'}
@@ -103,24 +103,20 @@ const DesignPage = ({ organization }) => {
             />
           </>
           <div className={styles.subheading}>
-            <Label className={styles.subheading}>{localization.catalogAdmin.customizeDesign}</Label>
+            <Heading size='small'>{localization.catalogAdmin.customizeDesign}</Heading>
           </div>
 
           <div className={styles.backgroundContainer}>
             <div className={styles.imageUploader}>
-              <div className={styles.label}>
+              <div className={styles.infoBox}>
                 <Label>{localization.catalogAdmin.logo}</Label>
-                <HelpText title={localization.catalogAdmin.designHelpText.helpTextDescription.logo}>
-                  {localization.catalogAdmin.designHelpText.logo}
-                </HelpText>
+                <p>{localization.catalogAdmin.designHelpText.logo}</p>
               </div>
               <ImageUploader />
             </div>
-            <div className={styles.label}>
+            <div className={styles.infoBox}>
               <Label>{localization.catalogAdmin.descriptionLogo}</Label>
-              <HelpText title={localization.catalogAdmin.designHelpText.helpTextDescription.logoDescription}>
-                {localization.catalogAdmin.designHelpText.logoDescription}
-              </HelpText>
+              <p>{localization.catalogAdmin.designHelpText.logoDescription}</p>
             </div>
             <div className={styles.textFieldContainer}>
               <TextField
@@ -135,23 +131,22 @@ const DesignPage = ({ organization }) => {
                 disabled={disableTextField}
               />
             </div>
-            <div className={styles.line}></div>
+          </div>
+          <div className={styles.backgroundContainer}>
+            <div className={styles.infoBox}>
+              <Label>{localization.catalogAdmin.colors}</Label>
+              <p>{localization.catalogAdmin.designHelpText.colors}</p>
+            </div>
             <div className={styles.colorPickers}>
               <div>
                 <div className={styles.label}>
                   <Label>{localization.catalogAdmin.backgroundColor}</Label>
-                  <HelpText title={localization.catalogAdmin.designHelpText.helpTextDescription.backgroundColor}>
-                    {localization.catalogAdmin.designHelpText.backgroundColor}
-                  </HelpText>
                 </div>
                 <ColorPicker type='background' />
               </div>
               <div>
                 <div className={styles.label}>
                   <Label>{localization.catalogAdmin.fontColor}</Label>
-                  <HelpText title={localization.catalogAdmin.designHelpText.helpTextDescription.fontColor}>
-                    {localization.catalogAdmin.designHelpText.fontColor}
-                  </HelpText>
                 </div>
                 <ColorPicker type='font' />
               </div>
