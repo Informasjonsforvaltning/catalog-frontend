@@ -264,7 +264,6 @@ export const ConceptPage = ({
         ]
       : []),
     ...(concept?.opprettetAv ? [[localization.concept.createdBy, concept.opprettetAv]] : []),
-    ...(concept?.abbreviatedLabel ? [[localization.concept.abbreviation, concept.abbreviatedLabel]] : []),
   ];
 
   const findStatusLabel = (statusURI) => {
@@ -538,8 +537,20 @@ export const ConceptPage = ({
                       )}
                     </InfoCard.Item>
                   )}
-                  {!(_.isEmpty(concept?.tillattTerm) && _.isEmpty(concept?.frarådetTerm)) && (
+                  {!(
+                    _.isEmpty(concept?.tillattTerm) &&
+                    _.isEmpty(concept?.frarådetTerm) &&
+                    _.isEmpty(concept?.abbreviatedLabel)
+                  ) && (
                     <InfoCard.Item>
+                      {!_.isEmpty(concept?.abbreviatedLabel) && (
+                        <div className={classes.termsRow}>
+                          <h3>{`${localization.concept.abbreviation}:`}</h3>
+                          <ul>
+                            <li>{concept?.abbreviatedLabel}</li>
+                          </ul>
+                        </div>
+                      )}
                       {!_.isEmpty(concept?.tillattTerm) && (
                         <div className={classes.termsRow}>
                           <h3>{`${localization.concept.allowedTerm}:`}</h3>

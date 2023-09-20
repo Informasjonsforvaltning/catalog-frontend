@@ -155,7 +155,8 @@
 
 .termsRow > *:first-child {
   width: 150px;
-  font-weight: 700;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 a.versionTitle {
