@@ -1,6 +1,5 @@
 import {
   Breadcrumbs,
-  Pagination,
   Select,
   Spinner,
   BreadcrumbType,
@@ -84,6 +83,22 @@ export const SearchPage = ({
 
   const getInternalFields = (fieldId) => fieldsResult?.internal?.find((field) => field.id === fieldId);
 
+  const getSubjectFilterWithChildren = (subjects) => {
+    // Fetch lowest level code and add its children to the filter
+    // Subjects will always be a path like: Code 1 -> Code 1.1 -> Code 1.1.1
+    // The lowest level code will always be the last code in the path, Code 1.1.1 in this example.
+    if (subjects.length > 0) {
+      const lowestLevelCodeId = subjects[subjects.length - 1];
+      const codes = [
+        ...subjects,
+        ...(subjectCodeList?.codes.filter((code) => `${code.parentID}` === lowestLevelCodeId).map((code) => code.id) ??
+          []),
+      ];
+      return codes;
+    }
+    return [];
+  };
+
   const { status, data, refetch } = useSearchConcepts({
     catalogId,
     searchTerm,
@@ -102,7 +117,7 @@ export const SearchPage = ({
         assignedUser: { value: [searchState.filters.assignedUser.id] },
       },
       searchState.filters.subject?.length > 0 && {
-        subject: { value: searchState.filters.subject },
+        subject: { value: getSubjectFilterWithChildren(searchState.filters.subject) },
       },
       searchState.filters.label?.length > 0 && {
         label: { value: searchState.filters.label },
