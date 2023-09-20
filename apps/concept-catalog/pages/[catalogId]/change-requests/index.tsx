@@ -11,7 +11,6 @@ import {
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
-import { getToken } from 'next-auth/jwt';
 import styles from './change-requests-page.module.css';
 import { useRouter } from 'next/router';
 import { Heading } from '@digdir/design-system-react';

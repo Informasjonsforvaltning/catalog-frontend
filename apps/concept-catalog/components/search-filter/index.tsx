@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import { useRouter } from 'next/router';
 import { Accordion } from '@digdir/design-system-react';
 import { Select } from '@catalog-frontend/ui';

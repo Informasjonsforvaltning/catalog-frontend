@@ -1,7 +1,6 @@
 import { FC, ChangeEvent, useState, KeyboardEvent } from 'react';
 import { Input, SearchField as StyledSearchField, SvgWrapper } from './styled';
 import MagnifyingGlassSVG from './MagnifyingGlass.svg';
-import { on } from 'events';
 
 type IconPoseType = 'left' | 'right' | undefined;
 

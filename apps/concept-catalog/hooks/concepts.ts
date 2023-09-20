@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import { useMutation } from '@tanstack/react-query';
-import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
-import { signIn } from 'next-auth/react';
+import { validOrganizationNumber } from '@catalog-frontend/utils';
 
 export const useDeleteConcept = (catalogId: string) => {
   const router = useRouter();
