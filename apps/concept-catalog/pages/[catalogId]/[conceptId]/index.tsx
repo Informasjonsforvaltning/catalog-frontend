@@ -170,7 +170,7 @@ export const ConceptPage = ({
     { value: 'en', label: 'English' },
   ];
 
-  const infoData2 = [
+  const infoDataColumnRight = [
     [localization.concept.id, concept?.id],
     [
       localization.publicationState.state,
@@ -187,35 +187,76 @@ export const ConceptPage = ({
       localization.concept.version,
       `${concept?.versjonsnr.major}.${concept?.versjonsnr.minor}.${concept?.versjonsnr.patch}`,
     ],
-    [localization.concept.validPeriod, `${localization.concept.fromTo}: ${concept?.gyldigFom} - ${concept?.gyldigTom}`],
-    [
-      localization.concept.label,
-      <ul key='label-list'>
-        {concept?.merkelapp?.map((label) => (
-          <li key={`label-${label}`}>{label}</li>
-        ))}
-      </ul>,
-    ],
-    [
-      localization.concept.lastUpdated,
-      formatISO(concept?.endringslogelement?.endringstidspunkt, {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }) ?? '',
-    ],
-    [
-      localization.concept.created,
-      formatISO(concept?.opprettet, {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }) ?? '',
-    ],
-    [localization.concept.createdBy, concept?.opprettetAv ?? ''],
-    [localization.concept.abbreviation, concept?.abbreviatedLabel],
+    ...(concept?.gyldigFom || concept?.gyldigTom
+      ? [
+          [
+            localization.concept.validPeriod,
+            <>
+              {concept?.gyldigFom && (
+                <>
+                  <span className={classes.greyFont}>{localization.fromAndIncluding}: </span>
+                  {`${formatISO(concept?.gyldigFom, {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}`}
+                </>
+              )}
+              {concept?.gyldigFom && concept?.gyldigTom && <br />}
+              {concept?.gyldigTom && (
+                <>
+                  <span className={classes.greyFont}>{localization.toAndIncluding}: </span>
+                  {`${formatISO(concept?.gyldigTom, {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}`}
+                </>
+              )}
+            </>,
+          ],
+        ]
+      : []),
+    ...(!_.isEmpty(concept?.merkelapp)
+      ? [
+          [
+            localization.concept.label,
+            <ul key='label-list'>
+              {concept?.merkelapp?.map((label) => (
+                <li key={`label-${label}`}>{label}</li>
+              ))}
+            </ul>,
+          ],
+        ]
+      : []),
+    ...(concept?.endringslogelement?.endringstidspunkt
+      ? [
+          [
+            localization.concept.lastUpdated,
+            formatISO(concept?.endringslogelement?.endringstidspunkt, {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            }) ?? '',
+          ],
+        ]
+      : []),
+    ...(concept?.opprettet
+      ? [
+          [
+            localization.concept.created,
+            formatISO(concept?.opprettet, {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            }) ?? '',
+          ],
+        ]
+      : []),
+    ...(concept?.opprettetAv ? [[localization.concept.createdBy, concept.opprettetAv]] : []),
+    ...(concept?.abbreviatedLabel ? [[localization.concept.abbreviation, concept.abbreviatedLabel]] : []),
   ];
 
   const findStatusLabel = (statusURI) => {
@@ -455,8 +496,8 @@ export const ConceptPage = ({
                     <InfoCard.Item label={`${localization.concept.publicDefinition}:`}>
                       <div>{translate(concept?.folkeligForklaring?.tekst ?? '', language)}</div>
                       {concept?.folkeligForklaring?.kildebeskrivelse?.kilde.length > 0 && (
-                        <div className={cn(classes.source)}>
-                          <div>Kilde:</div>
+                        <div className={cn(classes.source, classes.paddingTop05)}>
+                          <div>{localization.concept.source}:</div>
                           <div>
                             <ul>
                               {concept?.folkeligForklaring?.kildebeskrivelse?.kilde?.map((kilde, i) => (
@@ -474,8 +515,8 @@ export const ConceptPage = ({
                     <InfoCard.Item label={`${localization.concept.specialistDefinition}:`}>
                       <div>{translate(concept?.rettsligForklaring?.tekst ?? '', language)}</div>
                       {concept?.rettsligForklaring?.kildebeskrivelse?.kilde.length > 0 && (
-                        <div className={cn(classes.source)}>
-                          <div>Kilde:</div>
+                        <div className={cn(classes.source, classes.paddingTop05)}>
+                          <div>{localization.concept.source}:</div>
                           <div>
                             <ul>
                               {concept?.rettsligForklaring?.kildebeskrivelse?.kilde?.map((kilde, i) => (
@@ -670,7 +711,7 @@ export const ConceptPage = ({
               </div>
 
               <InfoCard size='small'>
-                {infoData2.map(([label, value]) => (
+                {infoDataColumnRight.map(([label, value]) => (
                   <InfoCard.Item
                     key={`info-data-${label}`}
                     label={label}
