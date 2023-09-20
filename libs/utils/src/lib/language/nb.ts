@@ -29,6 +29,8 @@ export const nb = {
   description: 'Beskrivelse',
   name: 'Navn',
   manageCatalog: 'Administrere katalog',
+  fromAndIncluding: 'Fra og med',
+  toAndIncluding: 'Til og med',
 
   language: {
     nb: 'Bokmål',
@@ -209,8 +211,8 @@ export const nb = {
     noName: 'Uten navn',
     version: 'Versjon',
     validPeriod: 'Gyldighetsperiode',
-    fromTo: 'Fra - til',
     label: 'Merkelapp',
+    source: 'Kilde',
   },
 
   changeRequest: {

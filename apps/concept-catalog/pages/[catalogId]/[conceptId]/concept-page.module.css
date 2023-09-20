@@ -51,10 +51,18 @@
   margin: 1em 0 2em 0;
 }
 
+.paddingTop05 {
+  padding-top: 0.5rem;
+}
+
 .definition > h3,
 .source,
 .source a {
   font-size: 14px;
+}
+
+.greyFont {
+  color: #6c737a;
 }
 
 .source {
