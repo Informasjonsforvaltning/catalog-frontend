@@ -38,7 +38,7 @@ const CodeListsPage = ({ organization }) => {
   const dbCodeLists = getAllCodeLists?.codeLists || [];
 
   useEffect(() => {
-    const filteredCodeLists = dbCodeLists.filter((codeList) =>
+    const filteredCodeLists = dbCodeLists.filter((codeList: CodeList) =>
       codeList.name.toLowerCase().includes(search.toLowerCase()),
     );
 
