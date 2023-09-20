@@ -7,6 +7,7 @@ import { Banner } from '../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../utils/auth';
 import { Organization } from '@catalog-frontend/types';
 import { getOrganization } from '@catalog-frontend/data-access';
+import { DatabaseIcon, PencilWritingIcon, RectangleSectionsIcon } from '@navikt/aksel-icons';
 
 export const ConceptsPage = ({ organization }) => {
   const router = useRouter();
@@ -31,11 +32,18 @@ export const ConceptsPage = ({ organization }) => {
       <Banner orgName={organization?.prefLabel} />
       <div className={styles.container}>
         <Card
-          title={localization.catalogAdmin.codeList}
+          icon={
+            <DatabaseIcon
+              title='a11y-title'
+              fontSize='3rem'
+            />
+          }
+          title={localization.catalogAdmin.codeLists}
           body={localization.catalogAdmin.manage.codeList}
           href={`/catalogs/${catalogId}/concepts/code-lists`}
         />
         <Card
+          icon={<RectangleSectionsIcon fontSize='3rem' />}
           title={localization.catalogAdmin.internalFields}
           body={localization.catalogAdmin.manage.internalFields}
           href={`/catalogs/${catalogId}/concepts/internal-fields`}
@@ -43,6 +51,7 @@ export const ConceptsPage = ({ organization }) => {
       </div>
       <div className={styles.container}>
         <Card
+          icon={<PencilWritingIcon fontSize='3rem' />}
           title={localization.catalogAdmin.editableFields}
           body={localization.catalogAdmin.manage.editableFields}
           href={`/catalogs/${catalogId}/concepts/editable-fields`}

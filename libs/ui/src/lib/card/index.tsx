@@ -4,15 +4,16 @@ interface Card {
   title?: string;
   body?: string;
   href?: string;
+  icon?: React.ReactElement;
 }
 
-export function Card({ title, body, href }: Card) {
+export function Card({ title, body, href, icon }: Card) {
   return (
     <a
       href={href ? href : ''}
       className={styles.card}
     >
-      <div className={styles.icon}></div>
+      <div className={styles.icon}>{icon}</div>
       <h2 className={styles.title}>{title}</h2>
       <p className={styles.body}>{body}</p>
       <ArrowRightIcon

@@ -7,6 +7,7 @@ import { Banner } from '../../../components/banner';
 import { Organization } from '@catalog-frontend/types';
 import { getOrganization } from '@catalog-frontend/data-access';
 import { serverSidePropsWithAdminPermissions } from '../../../utils/auth';
+import { InformationSquareIcon, TableIcon } from '@navikt/aksel-icons';
 
 export const CatalogsAdminPage = ({ organization }) => {
   const router = useRouter();
@@ -28,11 +29,18 @@ export const CatalogsAdminPage = ({ organization }) => {
         <Banner orgName={organization?.prefLabel} />
         <div className={styles.card}>
           <Card
+            icon={<InformationSquareIcon fontSize='3rem' />}
             title={localization.general}
             body={localization.catalogAdmin.description.general}
             href={`/catalogs/${catalogId}/general`}
           />
           <Card
+            icon={
+              <TableIcon
+                title='a11y-title'
+                fontSize='3rem'
+              />
+            }
             title={localization.catalogType.concept}
             body={localization.catalogAdmin.description.conceptCatalog}
             href={`/catalogs/${catalogId}/concepts`}
