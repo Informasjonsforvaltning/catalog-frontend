@@ -23,11 +23,15 @@ describe('SearchHit', () => {
             endringstidspunkt: '2023-01-16T14:29:28.768+01:00',
           },
 
-          tildeltBruker: {
-            id: 'John Doe',
-          },
+          assignedUser: 'assignedUserId',
         }}
         catalogId={''}
+        subjectCodeList={[]}
+        conceptStatuses={[]}
+        assignableUsers={[]}
+        onLabelClick={() => {
+          return;
+        }}
       />,
     );
     expect(baseElement).toBeTruthy();

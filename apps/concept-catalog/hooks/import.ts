@@ -124,9 +124,7 @@ const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Conc
       harEpost: mapToSingleValue(csvMap, 'kontaktpunkt_epost'),
       harTelefon: mapToSingleValue(csvMap, 'kontaktpunkt_telefon'),
     },
-    tildeltBruker: {
-      id: mapToSingleValue(csvMap, 'tildeltBruker_id') ?? '',
-    },
+    assignedUser: mapToSingleValue(csvMap, 'tildeltBruker_id') ?? '',
   };
 };
 

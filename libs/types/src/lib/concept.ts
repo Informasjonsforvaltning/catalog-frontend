@@ -131,7 +131,7 @@ export interface Concept {
   erSistPublisert?: boolean;
   revisjonAvSistPublisert?: boolean;
   endringslogelement?: Endringslogelement;
-  tildeltBruker?: AssignedUser;
+  assignedUser?: string;
   begrepsRelasjon?: Relasjon[];
   erPublisert?: boolean;
   publiseringsTidspunkt?: string;
