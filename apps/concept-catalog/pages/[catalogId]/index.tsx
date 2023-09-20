@@ -21,13 +21,26 @@ import {
   validOrganizationNumber,
 } from '@catalog-frontend/utils';
 import { useRouter } from 'next/router';
-import { CodeListsResult, FieldsResult, Organization, QuerySort, SearchableField } from '@catalog-frontend/types';
+import {
+  CodeListsResult,
+  FieldsResult,
+  Organization,
+  QuerySort,
+  SearchableField,
+  UsersResult,
+} from '@catalog-frontend/types';
 import { useEffect, useState } from 'react';
 import { getFields as getSearchFields, getSelectOptions, useSearchConcepts, SortOption } from '../../hooks/search';
 import styles from './search-page.module.css';
 import { FileImportIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import SearchFilter from '../../components/search-filter';
-import { getAllCodeLists, getConceptStatuses, getFields, getOrganization } from '@catalog-frontend/data-access';
+import {
+  getAllCodeLists,
+  getConceptStatuses,
+  getFields,
+  getOrganization,
+  getUsers,
+} from '@catalog-frontend/data-access';
 import { useImportConcepts } from '../../hooks/import';
 import { action, useSearchDispatch, useSearchState } from '../../context/search';
 import { Session, getServerSession } from 'next-auth';
@@ -43,6 +56,7 @@ export const SearchPage = ({
   hasWritePermission,
   fieldsResult,
   codeListsResult,
+  usersResult,
   conceptStatuses,
   FDK_REGISTRATION_BASE_URI,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
@@ -370,6 +384,7 @@ export const SearchPage = ({
                   catalogId={catalogId}
                   subjectCodeList={subjectCodeList}
                   conceptStatuses={conceptStatuses}
+                  assignableUsers={usersResult?.users ?? []}
                   onLabelClick={onLabelClick}
                   onPageChange={changePage}
                   forcePage={currentPage}
@@ -422,6 +437,10 @@ export async function getServerSideProps({ req, res, params }) {
     (response) => response.json(),
   );
 
+  const usersResult: UsersResult = await getUsers(catalogId, `${session?.accessToken}`).then((response) =>
+    response.json(),
+  );
+
   const conceptStatuses = await getConceptStatuses()
     .then((response) => response.json())
     .then((body) => body?.conceptStatuses ?? [])
@@ -433,6 +452,7 @@ export async function getServerSideProps({ req, res, params }) {
       hasWritePermission,
       fieldsResult,
       codeListsResult,
+      usersResult,
       conceptStatuses,
       FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
     },

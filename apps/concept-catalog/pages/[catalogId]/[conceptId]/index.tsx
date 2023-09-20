@@ -217,6 +217,14 @@ export const ConceptPage = ({
           ],
         ]
       : []),
+    ...(concept?.assignedUser
+      ? [
+          [
+            localization.assigned,
+            usersResult?.users?.find((user) => user.id === concept.assignedUser)?.name ?? localization.unknown,
+          ],
+        ]
+      : []),
     ...(!_.isEmpty(concept?.merkelapp)
       ? [
           [

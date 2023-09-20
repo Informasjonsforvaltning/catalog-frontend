@@ -31,6 +31,7 @@ export const nb = {
   manageCatalog: 'Administrere katalog',
   fromAndIncluding: 'Fra og med',
   toAndIncluding: 'Til og med',
+  unknown: 'Ukjent',
 
   language: {
     nb: 'Bokmål',

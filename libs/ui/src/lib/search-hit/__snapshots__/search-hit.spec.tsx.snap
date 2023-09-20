@@ -25,7 +25,7 @@ exports[`SearchHit should render SearchHit successfully 1`] = `
           </a>
         </div>
         <p
-          class="greyFont subject"
+          class="subject greyFont subject"
         />
       </div>
       <div
@@ -53,7 +53,7 @@ exports[`SearchHit should render SearchHit successfully 1`] = `
         <p
           class="greyFont"
         >
-          John Doe
+          Ukjent
         </p>
       </div>
       <p

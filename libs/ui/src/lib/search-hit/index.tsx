@@ -9,19 +9,27 @@ import cn from 'classnames';
 import styles from './search-hit.module.css';
 import Link from 'next/link';
 import { Tag } from '../tag';
-import { CodeList, Concept, ReferenceDataCode } from '@catalog-frontend/types';
+import { AssignedUser, CodeList, Concept, ReferenceDataCode } from '@catalog-frontend/types';
 import { Chip } from '@digdir/design-system-react';
 import ConceptSubject from '../concept-subject';
 
 interface Props {
   catalogId: string;
   searchHit: Concept;
-  subjectCodeList?: CodeList;
-  conceptStatuses?: ReferenceDataCode[];
-  onLabelClick?: (label: string) => void;
+  subjectCodeList: CodeList;
+  assignableUsers: AssignedUser[];
+  conceptStatuses: ReferenceDataCode[];
+  onLabelClick: (label: string) => void;
 }
 
-const SearchHit = ({ catalogId, searchHit, subjectCodeList, conceptStatuses, onLabelClick }: Props) => {
+const SearchHit = ({
+  catalogId,
+  searchHit,
+  subjectCodeList,
+  conceptStatuses,
+  assignableUsers,
+  onLabelClick,
+}: Props) => {
   const conceptStatus = translate(conceptStatuses?.find((s) => s.uri === searchHit.statusURI)?.label) as string;
   const Title = () => {
     const title = translate(searchHit?.anbefaltTerm?.navn);
@@ -94,7 +102,11 @@ const SearchHit = ({ catalogId, searchHit, subjectCodeList, conceptStatuses, onL
             </p>
           </div>
         )}
-        {searchHit?.tildeltBruker && <p className={styles.greyFont}>{searchHit.tildeltBruker.id}</p>}
+        {searchHit?.assignedUser && (
+          <p className={styles.greyFont}>
+            {assignableUsers?.find((user) => user.id === searchHit.assignedUser)?.name ?? localization.unknown}
+          </p>
+        )}
       </div>
       {searchHit?.definisjon && <p className={styles.description}>{translate(searchHit?.definisjon?.tekst)}</p>}
       {searchHit?.merkelapp && (
