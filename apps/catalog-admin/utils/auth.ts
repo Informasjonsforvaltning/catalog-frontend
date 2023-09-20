@@ -2,14 +2,15 @@ import { hasOrganizationAdminPermission, validOrganizationNumber } from '@catalo
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../pages/api/auth/[...nextauth]';
 
-export const serverSidePropsWithAdminPermissions = async ({ req, res, params }, props?: () => Promise<any>) => {
+export const serverSidePropsWithAdminPermissions = async ({ req, res, params }, props?: (token) => Promise<any>) => {
   const { catalogId } = params;
+  const session = await getServerSession(req, res, authOptions);
+  const accessToken = session?.accessToken;
 
   if (!validOrganizationNumber(catalogId)) {
     return { notFound: true };
   }
 
-  const session = await getServerSession(req, res, authOptions);
   if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
     return {
       redirect: {
@@ -30,6 +31,6 @@ export const serverSidePropsWithAdminPermissions = async ({ req, res, params }, 
   }
 
   return {
-    props: props?.() ?? {},
+    props: props?.({ accessToken }) ?? {},
   };
 };

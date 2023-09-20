@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styles from './code-lists.module.css';
 import { Accordion, TextField, Heading } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, SearchField, UploadButton } from '@catalog-frontend/ui';
-import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { useRouter } from 'next/router';
 import {
   useCreateCodeList,
@@ -10,16 +10,16 @@ import {
   useGetAllCodeLists,
   useUpdateCodeList,
 } from '../../../../../hooks/code-lists';
-import { CodeList, Organization } from '@catalog-frontend/types';
+import { CodeList, Fields, Organization } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { CodeListEditor } from '../../../../../components/code-list-editor';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
 import { compare } from 'fast-json-patch';
 import { Banner } from '../../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
-import { getOrganization } from '@catalog-frontend/data-access';
+import { getFields, getOrganization } from '@catalog-frontend/data-access';
 
-const CodeListsPage = ({ organization }) => {
+const CodeListsPage = ({ organization, codeListsInUse }) => {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
   const createCodeList = useCreateCodeList(catalogId);
@@ -119,9 +119,13 @@ const CodeListsPage = ({ organization }) => {
     }
   };
 
-  const handleDeleteCodeList = (codeListId, event) => {
-    if (window.confirm(localization.codeList.confirmDelete)) {
-      deleteCodeList.mutate(codeListId);
+  const handleDeleteCodeList = (codeListId: string) => {
+    if (!codeListsInUse.includes(codeListId)) {
+      if (window.confirm(localization.codeList.confirmDelete)) {
+        deleteCodeList.mutate(codeListId);
+      }
+    } else {
+      window.alert('Kan ikke slette en kodeliste som er i bruk');
     }
   };
 
@@ -221,7 +225,7 @@ const CodeListsPage = ({ organization }) => {
                       <div className={styles.formButtons}>
                         <Button onClick={() => handleUpdateDbCodeList(codeList.id)}>{localization.saveEdits}</Button>
                         <Button
-                          onClick={(e) => handleDeleteCodeList(codeList.id, e)}
+                          onClick={() => handleDeleteCodeList(codeList.id)}
                           color='danger'
                         >
                           {localization.catalogAdmin.deleteCodeList}
@@ -239,13 +243,26 @@ const CodeListsPage = ({ organization }) => {
 };
 
 export async function getServerSideProps({ req, res, params }) {
-  return serverSidePropsWithAdminPermissions({ req, res, params }, async () => {
+  return serverSidePropsWithAdminPermissions({ req, res, params }, async (token) => {
     const { catalogId } = params;
 
     const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+    const { internal, editable }: Fields = await getFields(catalogId, token.accessToken).then((res) => res.json());
+    const codeListsInUse = [];
+
+    internal.forEach((field) => {
+      if (field.codeListId !== null) {
+        codeListsInUse.push(field.codeListId);
+      }
+    });
+
+    if (editable?.domainCodeListId !== null) {
+      codeListsInUse.push(editable.domainCodeListId);
+    }
 
     return {
       organization,
+      codeListsInUse,
     };
   });
 }

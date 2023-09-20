@@ -1,6 +1,3 @@
-import { ChangeRequest } from '@catalog-frontend/types';
-import { Operation } from 'fast-json-patch';
-
 const path = `${process.env.CONCEPT_CATALOG_BASE_URI}`;
 
 export const getChangeRequests = async (catalogId: string, accessToken: string) => {

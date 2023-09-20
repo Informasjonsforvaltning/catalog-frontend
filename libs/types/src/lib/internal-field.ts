@@ -4,6 +4,11 @@ export type FieldType = 'text_short' | 'text_long' | 'boolean' | 'code_list' | '
 
 export type FieldLocation = 'main_column' | 'right_column';
 
+export interface Fields {
+  internal: InternalField[];
+  editable: EditableFields;
+}
+
 export interface InternalField {
   id?: string;
   catalogId?: string;
