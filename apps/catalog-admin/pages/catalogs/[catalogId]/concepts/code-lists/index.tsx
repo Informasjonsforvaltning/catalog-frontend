@@ -27,8 +27,7 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
   const updateCodeList = useUpdateCodeList(catalogId);
   const [accordionIsOpen, setAccordionIsOpen] = useState(false);
   const adminDispatch = useAdminDispatch();
-  const adminContext = useAdminState();
-  const { updatedCodeLists } = adminContext;
+  const { updatedCodeLists } = useAdminState();
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
@@ -43,7 +42,7 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
     );
 
     setSearchResults(filteredCodeLists);
-  }, [dbCodeLists, search]);
+  }, [getAllCodeLists, search]);
 
   const newCodeList = {
     name: 'Ny kodeliste ' + getNextNewCodeListNumber(dbCodeLists),
@@ -86,7 +85,7 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
   };
 
   const handleCodeListUpdate = (codeListId: string, newName?: string, newDescription?: string) => {
-    const indexInUpdatedCodeLists = updatedCodeLists.findIndex((code) => code.id === codeListId);
+    const indexInUpdatedCodeLists = updatedCodeLists.findIndex((codeList) => codeList.id === codeListId);
 
     if (indexInUpdatedCodeLists !== -1) {
       const codeListToUpdate = updatedCodeLists[indexInUpdatedCodeLists];
@@ -221,7 +220,7 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
                         </div>
                       </div>
 
-                      <CodeListEditor dbCodeList={codeList} />
+                      <CodeListEditor codeList={codeList} />
                       <div className={styles.formButtons}>
                         <Button onClick={() => handleUpdateDbCodeList(codeList.id)}>{localization.saveEdits}</Button>
                         <Button

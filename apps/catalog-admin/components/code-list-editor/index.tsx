@@ -5,28 +5,27 @@ import cn from 'classnames';
 import styles from './code-list-editor.module.css';
 import { Button, InfoCard, Select } from '@catalog-frontend/ui';
 import { TextField, Button as FdsButton, SingleSelectOption } from '@digdir/design-system-react';
-import { Code, CodeList } from '@catalog-frontend/types';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { Code, CodeList, TreeNode } from '@catalog-frontend/types';
+import {
+  convertCodeListToTreeNodes,
+  getAllChildrenCodes,
+  getTranslateText,
+  localization,
+} from '@catalog-frontend/utils';
 import { useAdminDispatch, useAdminState } from '../../context/admin';
 
 const INDENT_STEP = 15;
 
-type Data = {
-  id: string;
-  name: string;
-  children?: Data[];
-};
-
 export interface Props {
-  dbCodeList: CodeList;
+  codeList: CodeList;
 }
 
-export const CodeListEditor = ({ dbCodeList }: Props) => {
+export const CodeListEditor = ({ codeList: dbCodeList }: Props) => {
   const adminDispatch = useAdminDispatch();
-  const adminContext = useAdminState();
-  const { updatedCodeLists } = adminContext;
+  const { updatedCodeLists } = useAdminState();
   const codeListInContext = updatedCodeLists.find((codeList) => codeList.id === dbCodeList.id);
-  const codesInContext = codeListInContext?.codes || dbCodeList.codes || [];
+  const currentCodeList = codeListInContext ?? dbCodeList;
+  const currentCodes = currentCodeList?.codes ?? [];
 
   const [selectedCode, setSelectedCode] = useState<Code>(undefined);
   const [isEditViewOpen, setIsEditViewOpen] = useState<boolean>(false);
@@ -50,7 +49,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
 
   const createNewCode = () => {
     const newCode = {
-      id: getNextId(codesInContext),
+      id: getNextId(currentCodes),
       name: { nb: 'Ny kode', nn: '', en: '' },
       parentID: null,
     };
@@ -58,105 +57,46 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
     setSelectedCode(newCode);
   };
 
-  const removeCodeFromCodeList = (codeId: number) => {
-    const filteredCodes = codesInContext.filter((code) => code.id !== codeId);
-    const updatedCodeList: CodeList = { ...dbCodeList, codes: filteredCodes };
-
-    let codeListsToBeSaved = [];
-    if (updatedCodeLists.length > 0) {
-      const updatedCodeListsCopy = [...updatedCodeLists];
-      const index = updatedCodeListsCopy.findIndex((codeList) => codeList.id === updatedCodeList.id);
-      if (index !== -1) {
-        updatedCodeListsCopy[index] = updatedCodeList;
-      }
-      codeListsToBeSaved = updatedCodeListsCopy;
+  const updateCodeListInContext = (codeList: CodeList) => {
+    const codeListIndex = updatedCodeLists.findIndex((item: CodeList) => item.id === codeList.id);
+    let codeLists = [...updatedCodeLists];
+    if (codeListIndex !== -1) {
+      // Code list already exists in context
+      codeLists[codeListIndex] = codeList;
     } else {
-      codeListsToBeSaved.push(updatedCodeList);
+      // Code list does not exist in context
+      codeLists = [...updatedCodeLists, codeList];
     }
-
-    adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: codeListsToBeSaved } });
+    adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: codeLists } });
   };
 
-  const updateListOfCodes = (codeId: number): Code[] => {
-    const codes: Code[] = codeListInContext?.codes || dbCodeList.codes || [];
-    const updatedCodes: Code[] = [...codes];
-    const codeContextIndex: number = codes.findIndex((code: Code) => code.id === codeId);
+  const updateCodes = (codeId: number): Code[] => {
+    const codeIndex = currentCodes.findIndex((code: Code) => code.id === codeId);
 
-    if (codeContextIndex !== -1) {
-      // Code exists
-      const codeToBeUpdated: Code = codes[codeContextIndex];
-      const updatedCode: Code = {
-        ...codeToBeUpdated,
-        name: selectedCode.name ?? codeToBeUpdated.name,
-        parentID: selectedCode.parentID ?? codeToBeUpdated.parentID,
-      };
-
-      updatedCodes[codeContextIndex] = updatedCode;
-      return updatedCodes;
+    if (codeIndex !== -1) {
+      const codes = [...currentCodes];
+      codes[codeIndex] = selectedCode;
+      return codes;
     }
-    return [...updatedCodes, selectedCode]; // Add the selected code if it does not already exist
+    return [...currentCodes, selectedCode]; // Add the selected code if it does not already exist
   };
 
   const handleCodeUpdate = (codeId: number) => {
-    const contextCodeListIndex: number = updatedCodeLists.findIndex((item: CodeList) => item.id === dbCodeList.id);
-
-    if (contextCodeListIndex !== -1) {
-      // Code list already exists in context
-
-      const codeListToUpdateInContext: CodeList = updatedCodeLists[contextCodeListIndex];
-      const updatedListOfCodes: Code[] = updateListOfCodes(codeId);
-      const updatedCodeList: CodeList = {
-        ...codeListToUpdateInContext,
-        codes: selectedCode !== undefined ? updatedListOfCodes : codeListToUpdateInContext.codes,
-      };
-
-      const updatedCodeListsCopy: CodeList[] = [...updatedCodeLists];
-      updatedCodeListsCopy[contextCodeListIndex] = updatedCodeList;
-
-      adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
-    } else {
-      // Code list does not exist in context
-
-      const updatedCodeList: CodeList = {
-        ...dbCodeList,
-        codes: selectedCode !== undefined ? updateListOfCodes(codeId) : dbCodeList.codes,
-      };
-
-      const updatedCodeListsCopy: CodeList[] = [...updatedCodeLists, updatedCodeList];
-      adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
-    }
+    updateCodeListInContext({
+      ...currentCodeList,
+      codes: updateCodes(codeId),
+    });
   };
 
-  // Functions related to the tree component
-
-  const findParent = (id: number, data: Data[]) => {
-    const parent = data.find((item) => item.id === `${id}`);
-    if (parent) {
-      return parent;
-    }
-
-    for (const item of data) {
-      if (item.children) {
-        const result = findParent(id, item.children);
-        if (result) {
-          return result;
-        }
-      }
-    }
-    return null;
+  const handleCodeRemove = (codeId: number) => {
+    const allChildrenCodes = getAllChildrenCodes(codeId, currentCodeList);
+    updateCodeListInContext({
+      ...currentCodeList,
+      codes: currentCodes.filter((code) => !(code.id === codeId || allChildrenCodes.includes(code))),
+    });
   };
 
-  const treeData = codesInContext.reduce((accumulator, currentValue) => {
-    const parent = findParent(currentValue.parentID, accumulator);
-    if (parent) {
-      parent.children = [...(parent.children ?? []), { id: `${currentValue.id}`, name: currentValue.name.nb }];
-    } else {
-      accumulator.push({ id: `${currentValue.id}`, name: currentValue.name.nb });
-    }
-    return accumulator;
-  }, []);
-
-  const Node = ({ node, style, dragHandle }: NodeRendererProps<Data>) => {
+  const Node = ({ node, style, dragHandle }: NodeRendererProps<TreeNode>) => {
     const indentSize = Number.parseFloat(`${style.paddingLeft || 0}`);
     return (
       <div
@@ -171,17 +111,17 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
         </div>
 
         <FolderIcon node={node} />
-        <span className={styles.text}>{node.isEditing ? <Input node={node} /> : node.data.name}</span>
+        <span className={styles.text}>{node.isEditing ? <Input node={node} /> : node.data.label}</span>
       </div>
     );
   };
 
-  function Input({ node }: { node: NodeApi<Data> }) {
+  function Input({ node }: { node: NodeApi<TreeNode> }) {
     return (
       <input
         autoFocus
         type='text'
-        defaultValue={node.data.name}
+        defaultValue={node.data.label}
         onFocus={(e) => e.currentTarget.select()}
         onBlur={() => node.reset()}
         onKeyDown={(e) => {
@@ -192,7 +132,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
     );
   }
 
-  function FolderIcon({ node }: { node: NodeApi<Data> }) {
+  function FolderIcon({ node }: { node: NodeApi<TreeNode> }) {
     if (node.isLeaf) return <span></span>;
     return (
       <span>
@@ -207,8 +147,8 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
     );
   }
 
-  const handleOnClick = (node: NodeApi<Data>) => {
-    setSelectedCode(codesInContext?.find((code) => code.id === Number.parseInt(node.data.id)));
+  const handleOnClick = (node: NodeApi<TreeNode>) => {
+    setSelectedCode(currentCodes?.find((code) => code.id === Number.parseInt(node.data.value)));
   };
 
   const getCurrentLevel = (codes: Code[], currentCode: Code) => {
@@ -235,7 +175,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
     return [...relatedCodes, ...descendants];
   }
 
-  function possibleParentCodes(codes: Code[], codeId: number): SingleSelectOption[] {
+  function availableParentCodes(codes: Code[], codeId: number): SingleSelectOption[] {
     const relatedCodes = findRelatedCodes(codes, codeId);
     return codes
       .filter((code: Code) => {
@@ -274,8 +214,9 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
         <InfoCard className={styles.codeTree}>
           <InfoCard.Item>
             <div>
-              <Tree<Data>
-                data={treeData}
+              <Tree<TreeNode>
+                data={convertCodeListToTreeNodes(currentCodeList)}
+                idAccessor={(node) => node.value}
                 selectionFollowsFocus={false}
                 padding={15}
                 rowHeight={30}
@@ -284,9 +225,6 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
                 onActivate={handleOnClick}
                 onClick={() => {
                   setIsEditViewOpen(true);
-                  if (selectedCode === undefined) {
-                    createNewCode();
-                  }
                 }}
                 disableEdit
               >
@@ -347,7 +285,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
               <div className={styles.codeListEditor}>
                 <Select
                   label={localization.catalogAdmin.parentCode}
-                  options={possibleParentCodes(codesInContext, selectedCode?.id)}
+                  options={availableParentCodes(currentCodes, selectedCode?.id)}
                   value={`${selectedCode?.parentID}`}
                   onChange={updateCodeParent}
                 />
@@ -365,7 +303,7 @@ export const CodeListEditor = ({ dbCodeList }: Props) => {
                 <Button
                   color='danger'
                   onClick={() => {
-                    removeCodeFromCodeList(selectedCode.id);
+                    handleCodeRemove(selectedCode.id);
                     setIsEditViewOpen(false);
                   }}
                 >
