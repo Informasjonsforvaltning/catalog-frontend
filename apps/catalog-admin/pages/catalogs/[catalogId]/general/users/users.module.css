@@ -20,20 +20,9 @@
   --fds-typography-label-medium: Heebo;
 }
 
-.content {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-
 .buttons {
   display: flex;
   gap: 26px;
-}
-
-.formButtons {
-  composes: buttons;
-  margin: 37px;
 }
 
 .center {
@@ -56,19 +45,4 @@
 .label {
   font-weight: bold;
   font-size: 20px;
-}
-
-.textField {
-  padding-bottom: 20px;
-}
-
-.id {
-  font-size: 20px;
-  padding-bottom: 37px;
-}
-
-.codeListInfo {
-  width: 640px;
-  margin: 37px;
-  gap: 37px;
 }

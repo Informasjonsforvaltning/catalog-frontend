@@ -1,100 +1,43 @@
 import React, { useEffect, useState } from 'react';
-import styles from './users.module.css';
-import { Accordion, TextField, Heading } from '@digdir/design-system-react';
-import { BreadcrumbType, Breadcrumbs, Button, SearchField } from '@catalog-frontend/ui';
+import { Accordion, Heading, Button } from '@digdir/design-system-react';
+import { BreadcrumbType, Breadcrumbs, SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { getTranslateText, localization, textRegex, telephoneNumberRegex, emailRegex } from '@catalog-frontend/utils';
-import { useGetUsers, useCreateUser, useDeleteUser, useUpdateUser } from '../../../../../hooks/users';
+import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { useGetUsers } from '../../../../../hooks/users';
 import { useRouter } from 'next/router';
 import { AssignedUser, Organization } from '@catalog-frontend/types';
-import { compare } from 'fast-json-patch';
 import { Banner } from '../../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
 import { getOrganization } from '@catalog-frontend/data-access';
+import { UserEditor } from '../../../../../components/user-editor';
+import { useAdminDispatch, useAdminState } from 'apps/catalog-admin/context/admin';
+
+import styles from './users.module.css';
 
 export const CodeListsPage = ({ organization }) => {
   const router = useRouter();
-  const catalogId: string = `${router.query.catalogId}` ?? '';
+  const catalogId = `${router.query.catalogId}` ?? '';
 
   const { data: getUsers } = useGetUsers(catalogId);
   const dbUsers = getUsers?.users;
-  const createUser = useCreateUser(catalogId);
-  const deleteUser = useDeleteUser(catalogId);
-  const updateUser = useUpdateUser(catalogId);
-  const [accordionIsOpen, setAccordionIsOpen] = useState(false);
-  const nextUserNumber = (getUsers?.users?.length ?? 0) + 1;
+
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+
+  const adminDispatch = useAdminDispatch();
+  const adminContext = useAdminState();
+  const { showUserEditor } = adminContext;
 
   useEffect(() => {
     const filteredCodeLists = dbUsers?.filter((user: AssignedUser) =>
       user.name.toLowerCase().includes(search.toLowerCase()),
     );
-
     setSearchResults(filteredCodeLists);
   }, [dbUsers, search]);
 
-  const newUser: AssignedUser = {
-    name: 'Ny bruker ' + nextUserNumber,
-    telephoneNumber: '',
-    email: '',
-  };
-
   const handleCreateUser = () => {
-    createUser.mutate(newUser);
-    setAccordionIsOpen(true);
+    adminDispatch({ type: 'SET_SHOW_USER_EDITOR', payload: { showUserEditor: true } });
   };
-
-  const handleDeleteUser = (userId: string) => {
-    if (window.confirm('Er du sikker på at du vil slette denne brukeren?')) {
-      deleteUser.mutate(userId);
-    }
-  };
-
-  const [updatedUserList, setUpdatedUserList] = useState<AssignedUser[]>([]);
-
-  const handleUpdateUser = (userId: string) => {
-    const updatedUser = updatedUserList.find((user) => user.id === userId);
-    const dbUser: AssignedUser = getUsers.users.find((user: AssignedUser) => user.id === userId);
-    const diff = dbUser && updatedUser ? compare(dbUser, updatedUser) : null;
-
-    if (diff) {
-      updateUser
-        .mutateAsync({ beforeUpdateUser: dbUser, updatedUser: updatedUser })
-        .then(() => {
-          alert(localization.alert.success);
-        })
-        .catch(() => {
-          alert(localization.alert.fail);
-        });
-    } else {
-      console.log('No changes detected.');
-    }
-  };
-
-  const updateUserState = (userId: string, newName?: string, newEmail?: string, newTelephoneNumber?: string) => {
-    const updatedUserListIndex = updatedUserList.findIndex((user) => user.id === userId);
-    const userToUpdate =
-      updatedUserListIndex !== -1 ? updatedUserList[updatedUserListIndex] : dbUsers.find((user) => user.id === userId);
-    const updatedUserListsCopy = [...updatedUserList];
-
-    if (userToUpdate) {
-      const updatedUser = {
-        ...userToUpdate,
-        name: newName !== undefined ? newName : userToUpdate.name,
-        email: newEmail !== undefined ? newEmail : userToUpdate.email,
-        telephoneNumber: newTelephoneNumber !== undefined ? newTelephoneNumber : userToUpdate.telephoneNumber,
-      };
-      if (updatedUserListIndex !== -1) {
-        updatedUserListsCopy[updatedUserListIndex] = updatedUser;
-      } else {
-        updatedUserListsCopy.push(updatedUser);
-      }
-      setUpdatedUserList(updatedUserListsCopy);
-    }
-  };
-
-  const findUserById = (userId: string) => updatedUserList.find((user) => user.id === userId);
 
   const breadcrumbList = catalogId
     ? ([
@@ -121,20 +64,18 @@ export const CodeListsPage = ({ organization }) => {
         <div className={styles.page}>
           <div className={styles.row}>
             <SearchField
-              ariaLabel={''}
+              ariaLabel=''
               placeholder='Søk etter bruker...'
               onSearchSubmit={(search) => setSearch(search)}
             />
             <div className={styles.buttons}>
-              <div className={styles.buttons}>
-                <Button
-                  className={styles.createButton}
-                  icon={<PlusCircleIcon />}
-                  onClick={handleCreateUser}
-                >
-                  {localization.catalogAdmin.addUser}
-                </Button>
-              </div>
+              <Button
+                className={styles.createButton}
+                icon={<PlusCircleIcon />}
+                onClick={handleCreateUser}
+              >
+                {localization.catalogAdmin.addUser}
+              </Button>
             </div>
           </div>
 
@@ -144,6 +85,26 @@ export const CodeListsPage = ({ organization }) => {
           >
             Brukerliste
           </Heading>
+          {showUserEditor && (
+            <Accordion
+              key={'create-editor'}
+              border={true}
+              className={styles.accordion}
+            >
+              <Accordion.Item defaultOpen={showUserEditor}>
+                <Accordion.Header>
+                  <Heading
+                    size='small'
+                    className={styles.label}
+                    level={3}
+                  ></Heading>
+                </Accordion.Header>
+                <Accordion.Content>
+                  <UserEditor type={'create'} />
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
+          )}
           {searchResults &&
             searchResults.map((user: AssignedUser, index: number) => (
               <Accordion
@@ -151,56 +112,12 @@ export const CodeListsPage = ({ organization }) => {
                 border={true}
                 className={styles.accordion}
               >
-                <Accordion.Item defaultOpen={index === dbUsers.length - 1 ? accordionIsOpen : false}>
-                  <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
+                <Accordion.Item>
+                  <Accordion.Header>
                     <h1 className={styles.label}>{user.name}</h1>
                   </Accordion.Header>
                   <Accordion.Content>
-                    <div className={styles.codeListInfo}>
-                      <div className={styles.textField}>
-                        <TextField
-                          isValid={textRegex.test((findUserById(user.id) || user)?.name)}
-                          label='Navn'
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            updateUserState(user.id, event.target.value);
-                          }}
-                          value={(findUserById(user.id) || user)?.name}
-                        />
-                      </div>
-                      <div className={styles.textField}>
-                        <TextField
-                          isValid={emailRegex.test((findUserById(user.id) || user)?.email)}
-                          label='E-post'
-                          inputMode='email'
-                          value={(findUserById(user.id) || user)?.email}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            updateUserState(user.id, undefined, event.target.value, undefined);
-                          }}
-                        />
-                      </div>
-                      <div className={styles.textField}>
-                        <TextField
-                          label='Telefonnummer'
-                          type='tel'
-                          inputMode='tel'
-                          isValid={telephoneNumberRegex.test((findUserById(user.id) || user)?.telephoneNumber)}
-                          value={(findUserById(user.id) || user)?.telephoneNumber}
-                          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                            updateUserState(user.id, undefined, undefined, event.target.value);
-                          }}
-                        />
-                      </div>
-                    </div>
-
-                    <div className={styles.formButtons}>
-                      <Button onClick={() => handleUpdateUser(user.id)}>Lagre</Button>
-                      <Button
-                        color='danger'
-                        onClick={() => handleDeleteUser(user.id)}
-                      >
-                        Slett
-                      </Button>
-                    </div>
+                    <UserEditor user={user} />
                   </Accordion.Content>
                 </Accordion.Item>
               </Accordion>
