@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './users.module.css';
 import { Accordion, TextField, Heading } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, SearchField } from '@catalog-frontend/ui';
@@ -23,6 +23,16 @@ export const CodeListsPage = ({ organization }) => {
   const updateUser = useUpdateUser(catalogId);
   const [accordionIsOpen, setAccordionIsOpen] = useState(false);
   const nextUserNumber = (getUsers?.users?.length ?? 0) + 1;
+  const [search, setSearch] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+
+  useEffect(() => {
+    const filteredCodeLists = dbUsers?.filter((user: AssignedUser) =>
+      user.name.toLowerCase().includes(search.toLowerCase()),
+    );
+
+    setSearchResults(filteredCodeLists);
+  }, [dbUsers, search]);
 
   const newUser: AssignedUser = {
     name: 'Ny bruker ' + nextUserNumber,
@@ -45,7 +55,7 @@ export const CodeListsPage = ({ organization }) => {
 
   const handleUpdateUser = (userId: string) => {
     const updatedUser = updatedUserList.find((user) => user.id === userId);
-    const dbUser: AssignedUser = getUsers.users.find((user) => user.id === userId);
+    const dbUser: AssignedUser = getUsers.users.find((user: AssignedUser) => user.id === userId);
     const diff = dbUser && updatedUser ? compare(dbUser, updatedUser) : null;
 
     if (diff) {
@@ -113,6 +123,7 @@ export const CodeListsPage = ({ organization }) => {
             <SearchField
               ariaLabel={''}
               placeholder='Søk etter bruker...'
+              onSearchSubmit={(search) => setSearch(search)}
             />
             <div className={styles.buttons}>
               <div className={styles.buttons}>
@@ -133,8 +144,8 @@ export const CodeListsPage = ({ organization }) => {
           >
             Brukerliste
           </Heading>
-          {dbUsers &&
-            dbUsers.map((user: AssignedUser, index: number) => (
+          {searchResults &&
+            searchResults.map((user: AssignedUser, index: number) => (
               <Accordion
                 key={index}
                 border={true}
