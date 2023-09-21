@@ -202,7 +202,7 @@ export const nb = {
     note: 'Merknad',
     example: 'Eksempel',
     publicDefinition: 'Folkelig forklaring',
-    specialistDefinition: 'Rettslig forklaring',
+    specialistDefinition: 'Definisjon for spesialister',
     allowedTerm: 'Tillatt term',
     notRecommendedTerm: 'Frarådet term',
     abbreviation: 'Forkortelse',

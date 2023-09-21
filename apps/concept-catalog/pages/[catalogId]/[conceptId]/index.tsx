@@ -518,15 +518,15 @@ export const ConceptPage = ({
                       )}
                     </InfoCard.Item>
                   )}
-                  {concept?.rettsligForklaring && (
+                  {concept?.definisjonForSpesialister && (
                     <InfoCard.Item label={`${localization.concept.specialistDefinition}:`}>
-                      <div>{translate(concept?.rettsligForklaring?.tekst ?? '', language)}</div>
-                      {concept?.rettsligForklaring?.kildebeskrivelse?.kilde.length > 0 && (
+                      <div>{translate(concept?.definisjonForSpesialister?.tekst ?? '', language)}</div>
+                      {concept?.definisjonForSpesialister?.kildebeskrivelse?.kilde.length > 0 && (
                         <div className={cn(classes.source, classes.paddingTop05)}>
                           <div>{localization.concept.source}:</div>
                           <div>
                             <ul>
-                              {concept?.rettsligForklaring?.kildebeskrivelse?.kilde?.map((kilde, i) => (
+                              {concept?.definisjonForSpesialister?.kildebeskrivelse?.kilde?.map((kilde, i) => (
                                 <li key={`kilde-${i}`}>
                                   {kilde.uri ? <a href={kilde.uri}>{kilde.tekst}</a> : <span>{kilde.tekst}</span>}
                                 </li>

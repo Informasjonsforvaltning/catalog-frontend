@@ -110,7 +110,7 @@ export interface Concept {
   anbefaltTerm?: AnbefaltTerm;
   definisjon?: Definisjon;
   folkeligForklaring?: Definisjon;
-  rettsligForklaring?: Definisjon;
+  definisjonForSpesialister?: Definisjon;
   ansvarligVirksomhet: { id: string };
   merknad?: Record<string, string[]>;
   merkelapp?: string[];
