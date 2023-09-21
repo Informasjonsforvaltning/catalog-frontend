@@ -109,8 +109,8 @@ export interface Concept {
   revisjonAv?: string;
   anbefaltTerm?: AnbefaltTerm;
   definisjon?: Definisjon;
-  folkeligForklaring?: Definisjon;
-  rettsligForklaring?: Definisjon;
+  definisjonForAllmennheten?: Definisjon;
+  definisjonForSpesialister?: Definisjon;
   ansvarligVirksomhet: { id: string };
   merknad?: Record<string, string[]>;
   merkelapp?: string[];

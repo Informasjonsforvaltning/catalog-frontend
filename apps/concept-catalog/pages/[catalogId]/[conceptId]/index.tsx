@@ -499,15 +499,15 @@ export const ConceptPage = ({
                       <span>{translate(concept?.eksempel, language)}</span>
                     </InfoCard.Item>
                   )}
-                  {!_.isEmpty(concept?.folkeligForklaring?.tekst) && (
+                  {!_.isEmpty(concept?.definisjonForAllmennheten?.tekst) && (
                     <InfoCard.Item label={`${localization.concept.publicDefinition}:`}>
-                      <div>{translate(concept?.folkeligForklaring?.tekst ?? '', language)}</div>
-                      {concept?.folkeligForklaring?.kildebeskrivelse?.kilde.length > 0 && (
+                      <div>{translate(concept?.definisjonForAllmennheten?.tekst ?? '', language)}</div>
+                      {concept?.definisjonForAllmennheten?.kildebeskrivelse?.kilde.length > 0 && (
                         <div className={cn(classes.source, classes.paddingTop05)}>
                           <div>{localization.concept.source}:</div>
                           <div>
                             <ul>
-                              {concept?.folkeligForklaring?.kildebeskrivelse?.kilde?.map((kilde, i) => (
+                              {concept?.definisjonForAllmennheten?.kildebeskrivelse?.kilde?.map((kilde, i) => (
                                 <li key={`kilde-${i}`}>
                                   {kilde.uri ? <a href={kilde.uri}>{kilde.tekst}</a> : <span>{kilde.tekst}</span>}
                                 </li>
@@ -518,15 +518,15 @@ export const ConceptPage = ({
                       )}
                     </InfoCard.Item>
                   )}
-                  {concept?.rettsligForklaring && (
+                  {concept?.definisjonForSpesialister && (
                     <InfoCard.Item label={`${localization.concept.specialistDefinition}:`}>
-                      <div>{translate(concept?.rettsligForklaring?.tekst ?? '', language)}</div>
-                      {concept?.rettsligForklaring?.kildebeskrivelse?.kilde.length > 0 && (
+                      <div>{translate(concept?.definisjonForSpesialister?.tekst ?? '', language)}</div>
+                      {concept?.definisjonForSpesialister?.kildebeskrivelse?.kilde.length > 0 && (
                         <div className={cn(classes.source, classes.paddingTop05)}>
                           <div>{localization.concept.source}:</div>
                           <div>
                             <ul>
-                              {concept?.rettsligForklaring?.kildebeskrivelse?.kilde?.map((kilde, i) => (
+                              {concept?.definisjonForSpesialister?.kildebeskrivelse?.kilde?.map((kilde, i) => (
                                 <li key={`kilde-${i}`}>
                                   {kilde.uri ? <a href={kilde.uri}>{kilde.tekst}</a> : <span>{kilde.tekst}</span>}
                                 </li>
