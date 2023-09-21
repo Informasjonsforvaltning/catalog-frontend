@@ -518,7 +518,8 @@ export const ConceptPage = ({
                       )}
                     </InfoCard.Item>
                   )}
-                  {concept?.definisjonForSpesialister && (
+
+                  {!_.isEmpty(concept?.definisjonForSpesialister) && (
                     <InfoCard.Item label={`${localization.concept.specialistDefinition}:`}>
                       <div>{translate(concept?.definisjonForSpesialister?.tekst ?? '', language)}</div>
                       {concept?.definisjonForSpesialister?.kildebeskrivelse?.kilde.length > 0 && (
