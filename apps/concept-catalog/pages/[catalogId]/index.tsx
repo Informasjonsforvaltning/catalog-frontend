@@ -11,6 +11,7 @@ import {
 } from '@catalog-frontend/ui';
 import {
   capitalizeFirstLetter,
+  getTranslateText as translate,
   getTranslateText,
   hasOrganizationReadPermission,
   hasOrganizationWritePermission,
@@ -331,7 +332,9 @@ export const SearchPage = ({
                         key={`status-${index}`}
                         onClick={() => removeFilter(filter, 'status')}
                       >
-                        {capitalizeFirstLetter(filter)}
+                        {capitalizeFirstLetter(
+                          translate(conceptStatuses?.find((s) => s.uri === filter)?.label) as string,
+                        )}
                       </Chip.Removable>
                     ))}
                   {searchState.filters.assignedUser && (
