@@ -499,15 +499,15 @@ export const ConceptPage = ({
                       <span>{translate(concept?.eksempel, language)}</span>
                     </InfoCard.Item>
                   )}
-                  {!_.isEmpty(concept?.folkeligForklaring?.tekst) && (
+                  {!_.isEmpty(concept?.definisjonForAllmennheten?.tekst) && (
                     <InfoCard.Item label={`${localization.concept.publicDefinition}:`}>
-                      <div>{translate(concept?.folkeligForklaring?.tekst ?? '', language)}</div>
-                      {concept?.folkeligForklaring?.kildebeskrivelse?.kilde.length > 0 && (
+                      <div>{translate(concept?.definisjonForAllmennheten?.tekst ?? '', language)}</div>
+                      {concept?.definisjonForAllmennheten?.kildebeskrivelse?.kilde.length > 0 && (
                         <div className={cn(classes.source, classes.paddingTop05)}>
                           <div>{localization.concept.source}:</div>
                           <div>
                             <ul>
-                              {concept?.folkeligForklaring?.kildebeskrivelse?.kilde?.map((kilde, i) => (
+                              {concept?.definisjonForAllmennheten?.kildebeskrivelse?.kilde?.map((kilde, i) => (
                                 <li key={`kilde-${i}`}>
                                   {kilde.uri ? <a href={kilde.uri}>{kilde.tekst}</a> : <span>{kilde.tekst}</span>}
                                 </li>

@@ -58,7 +58,7 @@ const createCsvMap = (header: string[], data: string[]) => {
 
 const mapKilde = (
   csvMap: Record<string, string[]>,
-  type: 'definisjon' | 'folkeligForklaring' | 'definisjonForSpesialister',
+  type: 'definisjon' | 'definisjonForAllmennheten' | 'definisjonForSpesialister',
 ) => {
   const forholdTilKilde = mapToSingleValue(csvMap, `${type}Forholdtilkilde`);
   if (forholdTilKilde && forholdTilKilde?.toLowerCase() === 'egendefinert') {
@@ -100,9 +100,9 @@ const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Conc
       tekst: mapRowToLanguageValue(csvMap, 'definisjon'),
       kildebeskrivelse: mapKilde(csvMap, 'definisjon'),
     },
-    folkeligForklaring: {
-      tekst: mapRowToLanguageValue(csvMap, 'folkeligForklaring'),
-      kildebeskrivelse: mapKilde(csvMap, 'folkeligForklaring'),
+    definisjonForAllmennheten: {
+      tekst: mapRowToLanguageValue(csvMap, 'definisjonForAllmennheten'),
+      kildebeskrivelse: mapKilde(csvMap, 'definisjonForAllmennheten'),
     },
     definisjonForSpesialister: {
       tekst: mapRowToLanguageValue(csvMap, 'definisjonForSpesialister'),

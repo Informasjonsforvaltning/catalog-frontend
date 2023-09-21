@@ -201,7 +201,7 @@ export const nb = {
     lastUpdated: 'Sist oppdatert',
     note: 'Merknad',
     example: 'Eksempel',
-    publicDefinition: 'Folkelig forklaring',
+    publicDefinition: 'Definisjon for allmennheten',
     specialistDefinition: 'Definisjon for spesialister',
     allowedTerm: 'Tillatt term',
     notRecommendedTerm: 'Frarådet term',
