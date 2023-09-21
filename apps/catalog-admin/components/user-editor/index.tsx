@@ -3,8 +3,8 @@ import { Button, TextField } from '@digdir/design-system-react';
 import { useRouter } from 'next/router';
 import { compare } from 'fast-json-patch';
 import { emailRegex, localization, telephoneNumberRegex, textRegex } from '@catalog-frontend/utils';
-import { useCreateUser, useDeleteUser, useGetUsers, useUpdateUser } from 'apps/catalog-admin/hooks/users';
-import { useAdminDispatch } from 'apps/catalog-admin/context/admin';
+import { useCreateUser, useDeleteUser, useGetUsers, useUpdateUser } from '../../hooks/users';
+import { useAdminDispatch } from '../../context/admin';
 import { AssignedUser } from '@catalog-frontend/types';
 import styles from './user-editor.module.css';
 
@@ -36,7 +36,7 @@ export const UserEditor = ({ user, type }: UserEditorProps) => {
     }
   };
 
-  let newUserTemplate: AssignedUser = {
+  const newUserTemplate: AssignedUser = {
     name: '',
     telephoneNumber: '',
     email: '',
@@ -91,7 +91,6 @@ export const UserEditor = ({ user, type }: UserEditorProps) => {
   };
 
   const handleCreateUser = () => {
-    updateUser;
     createUser
       .mutateAsync(newUser)
       .then(() => {

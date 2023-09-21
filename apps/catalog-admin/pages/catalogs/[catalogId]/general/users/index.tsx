@@ -10,7 +10,7 @@ import { Banner } from '../../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
 import { getOrganization } from '@catalog-frontend/data-access';
 import { UserEditor } from '../../../../../components/user-editor';
-import { useAdminDispatch, useAdminState } from 'apps/catalog-admin/context/admin';
+import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
 
 import styles from './users.module.css';
 
