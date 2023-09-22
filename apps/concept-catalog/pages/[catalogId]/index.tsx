@@ -331,7 +331,9 @@ export const SearchPage = ({
                         key={`status-${index}`}
                         onClick={() => removeFilter(filter, 'status')}
                       >
-                        {capitalizeFirstLetter(filter)}
+                        {capitalizeFirstLetter(
+                          getTranslateText(conceptStatuses?.find((s) => s.uri === filter)?.label) as string,
+                        )}
                       </Chip.Removable>
                     ))}
                   {searchState.filters.assignedUser && (
