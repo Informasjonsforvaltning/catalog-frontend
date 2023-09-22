@@ -11,7 +11,7 @@ export const prepareStatusList = (conceptStatuses: ReferenceDataCode[]) => {
     },
   } as ReferenceDataCode;
 
-  const editedStatuses = conceptStatuses.map((code) => {
+  const overriddenStatuses = conceptStatuses.map((code) => {
     if (code.code === 'WAITING') {
       code.label = {
         en: 'waiting',
@@ -21,12 +21,12 @@ export const prepareStatusList = (conceptStatuses: ReferenceDataCode[]) => {
     }
     return code;
   });
-  editedStatuses.push(rejected);
+  overriddenStatuses.push(rejected);
 
   const utilizedCodes: ReferenceDataCode[] = [];
 
   ['DRAFT', 'CANDIDATE', 'WAITING', 'CURRENT', 'RETIRED', 'REJECTED'].forEach((code) => {
-    const utilized = editedStatuses.find((status) => status.code === code);
+    const utilized = overriddenStatuses.find((status) => status.code === code);
     if (utilized) utilizedCodes.push(utilized);
   });
 
