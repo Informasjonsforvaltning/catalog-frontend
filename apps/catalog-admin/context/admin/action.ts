@@ -8,13 +8,15 @@ export type ACTION_TYPE =
   | 'SET_FONT_COLOR'
   | 'SET_LOGO'
   | 'SET_CODE_LISTS'
-  | 'SET_SHOW_USER_EDITOR';
+  | 'SET_SHOW_USER_EDITOR'
+  | 'SET_SHOW_INTERNAL_FIELD_EDITOR';
 
 // add new payload types here as needed
 export type ACTION_PAYLOAD =
   | AdminState
   | ({ backgroundColor: string } & { fontColor: string } & { logo: string } & { updatedCodeLists: CodeList[] } & {
       showUserEditor: boolean;
+      showInternalFieldEditor: boolean;
     });
 
 export type ACTION = { type: ACTION_TYPE; payload: ACTION_PAYLOAD };
