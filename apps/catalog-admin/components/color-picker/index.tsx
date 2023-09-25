@@ -32,6 +32,7 @@ export const ColorPicker = ({ type }: ColorPicker) => {
     } else {
       setInputColor(fontColor);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -40,7 +41,8 @@ export const ColorPicker = ({ type }: ColorPicker) => {
     } else if (type === 'font') {
       adminDispatch({ type: 'SET_FONT_COLOR', payload: { fontColor: inputColor } });
     }
-  }, [inputColor]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [adminDispatch]);
 
   useEffect(() => {
     if (dbDesign?.fontColor !== null && dbDesign?.fontColor !== undefined && type === 'background') {
@@ -52,6 +54,7 @@ export const ColorPicker = ({ type }: ColorPicker) => {
       setInputColor(dbDesign?.fontColor);
       setIsValidInput(colorRegex.test(dbDesign?.fontColor));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dbDesign]);
 
   return (
