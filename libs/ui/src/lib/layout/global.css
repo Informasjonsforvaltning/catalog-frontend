@@ -1,7 +1,6 @@
 /* This is a global stylesheet */
 
 html * {
-  font-family: Heebo, sans-serif !important;
   font-display: swap;
   font-size: 16;
   -webkit-font-smoothing: antialiased;
