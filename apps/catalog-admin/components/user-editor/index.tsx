@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, TextField } from '@digdir/design-system-react';
+import { Button, Textfield } from '@digdir/design-system-react';
 import { useRouter } from 'next/router';
 import { compare } from 'fast-json-patch';
 import { emailRegex, localization, telephoneNumberRegex, textRegex } from '@catalog-frontend/utils';
@@ -105,8 +105,12 @@ export const UserEditor = ({ user, type }: UserEditorProps) => {
   return (
     <div className={styles.codeListInfo}>
       <div className={styles.textField}>
-        <TextField
-          isValid={textRegex.test((findUserById(user?.id) || user)?.name || newUser.name)}
+        <Textfield
+          error={
+            textRegex.test((findUserById(user?.id) || user)?.name || newUser.name)
+              ? null
+              : localization.validation.invalidValue
+          }
           label='Navn'
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             type === 'create'
@@ -117,8 +121,12 @@ export const UserEditor = ({ user, type }: UserEditorProps) => {
         />
       </div>
       <div className={styles.textField}>
-        <TextField
-          isValid={emailRegex.test((findUserById(user?.id) || user)?.email || newUser.email)}
+        <Textfield
+          error={
+            emailRegex.test((findUserById(user?.id) || user)?.email || newUser.email)
+              ? null
+              : localization.validation.invalidValue
+          }
           label='E-post'
           inputMode='email'
           value={(findUserById(user?.id) || user)?.email}
@@ -130,13 +138,15 @@ export const UserEditor = ({ user, type }: UserEditorProps) => {
         />
       </div>
       <div className={styles.textField}>
-        <TextField
+        <Textfield
           label='Telefonnummer'
           type='tel'
           inputMode='tel'
-          isValid={telephoneNumberRegex.test(
-            (findUserById(user?.id) || user)?.telephoneNumber || newUser.telephoneNumber,
-          )}
+          error={
+            telephoneNumberRegex.test((findUserById(user?.id) || user)?.telephoneNumber || newUser.telephoneNumber)
+              ? null
+              : localization.validation.invalidValue
+          }
           value={(findUserById(user?.id) || user)?.telephoneNumber}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             type === 'create'

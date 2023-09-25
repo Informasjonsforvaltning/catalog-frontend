@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 import styles from './internal-field.module.css';
 import { Button, Select } from '@catalog-frontend/ui';
-import { TextField, Checkbox, HelpText } from '@digdir/design-system-react';
+import { Textfield, Checkbox, HelpText } from '@digdir/design-system-react';
 import { CodeList, EditorType, FieldType, InternalField, SelectOption } from '@catalog-frontend/types';
 import { getTranslateText, localization, textRegexWithNumbers } from '@catalog-frontend/utils';
 import { useAdminDispatch } from '../../context/admin';
@@ -149,18 +149,24 @@ export const InternalFieldEditor = ({ field, type }: Props) => {
     <>
       <div className={styles.accordionContent}>
         <div className={styles.field}>
-          <TextField
+          <Textfield
             label={localization.catalogAdmin.fieldNameDescription}
             value={String(
               getTranslateText((updatedFieldsList.find((f) => f.id === field.id) || field)?.label || newField?.label),
             )}
             required
             type='text'
-            isValid={validateLabelField(
-              String(
-                getTranslateText((updatedFieldsList.find((f) => f.id === field.id) || field)?.label || newField?.label),
-              ),
-            )}
+            error={
+              validateLabelField(
+                String(
+                  getTranslateText(
+                    (updatedFieldsList.find((f) => f.id === field.id) || field)?.label || newField?.label,
+                  ),
+                ),
+              )
+                ? null
+                : localization.validation.invalidValue
+            }
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               type === 'create'
                 ? setNewField((prevField) => ({
