@@ -7,6 +7,6 @@
 }
 
 .accordion {
-  width: 20rem;
+  flex-grow: 1;
   box-sizing: border-box;
 }
