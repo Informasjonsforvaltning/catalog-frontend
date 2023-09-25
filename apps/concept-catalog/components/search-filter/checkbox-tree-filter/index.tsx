@@ -6,7 +6,9 @@ import classes from './checkbox-tree.module.css';
 import { Select } from '@catalog-frontend/ui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckSquare, faSquare } from '@fortawesome/free-regular-svg-icons';
-import { getPath } from '@catalog-frontend/utils';
+import { getPath, localization } from '@catalog-frontend/utils';
+import { Button } from '@digdir/design-system-react';
+import { ChevronDownDoubleIcon, ChevronUpDoubleIcon } from '@navikt/aksel-icons';
 
 export interface TreeNode {
   value: string;
@@ -35,6 +37,7 @@ const getSearchOptions = (nodes?: TreeNode[]) => {
 export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
   const [checked, setChecked] = React.useState<string[]>([]);
   const [expanded, setExpanded] = React.useState<string[]>([]);
+  const [collapsed, setCollapsed] = React.useState(true);
 
   useEffect(() => {
     setChecked(filters);
@@ -88,7 +91,7 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
         onChange={handleSearchOnChange}
       />
       <CheckboxTree
-        nodes={nodes.map((node) => ({ ...node, className: classes.checkbox })) ?? []}
+        nodes={(collapsed ? nodes.slice(0, 10) : nodes).map((node) => ({ ...node, className: classes.checkbox })) ?? []}
         checked={checked}
         expanded={expanded}
         onClick={handleOnClick}
@@ -119,6 +122,15 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
           ),
         }}
       />
+      {nodes && nodes.length > 10 && (
+        <Button
+          variant='quiet'
+          icon={collapsed ? <ChevronDownDoubleIcon /> : <ChevronUpDoubleIcon />}
+          onClick={() => setCollapsed(!collapsed)}
+        >
+          {collapsed ? localization.showMore : localization.showLess}
+        </Button>
+      )}
     </div>
   );
 };

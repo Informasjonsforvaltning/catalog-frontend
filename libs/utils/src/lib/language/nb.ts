@@ -32,6 +32,8 @@ export const nb = {
   fromAndIncluding: 'Fra og med',
   toAndIncluding: 'Til og med',
   unknown: 'Ukjent',
+  showMore: 'Vis flere',
+  showLess: 'Vis færre',
 
   language: {
     nb: 'Bokmål',
