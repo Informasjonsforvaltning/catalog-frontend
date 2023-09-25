@@ -6,6 +6,7 @@ export interface AdminState {
   logo?: string;
   updatedCodeLists?: CodeList[];
   showUserEditor?: boolean;
+  showInternalFieldEditor?: boolean;
 }
 
 export const DefaultAdminState = {
@@ -14,4 +15,5 @@ export const DefaultAdminState = {
   logo: null,
   updatedCodeLists: [],
   showUserEditor: false,
+  showInternalFieldEditor: false,
 };

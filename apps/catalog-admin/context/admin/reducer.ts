@@ -24,7 +24,9 @@ export const reducer = produce((state: AdminState, action: ACTION): AdminState =
     case 'SET_SHOW_USER_EDITOR': {
       return { ...state, showUserEditor: action.payload.showUserEditor };
     }
-
+    case 'SET_SHOW_INTERNAL_FIELD_EDITOR': {
+      return { ...state, showInternalFieldEditor: action.payload.showInternalFieldEditor };
+    }
     default:
       throw new Error(`Unknown action type ${action.type}`);
   }
