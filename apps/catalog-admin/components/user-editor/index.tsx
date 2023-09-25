@@ -30,9 +30,9 @@ export const UserEditor = ({ user, type }: UserEditorProps) => {
 
   const findUserById = (userId: string) => updatedUserList.find((user) => user?.id === userId);
 
-  const handleDeleteUser = (userId: string) => {
-    if (window.confirm(localization.alert.deleteUser)) {
-      deleteUser.mutate(userId);
+  const handleDeleteUser = (user: AssignedUser) => {
+    if (window.confirm(`${localization.alert.deleteUser} ${user?.name}`)) {
+      deleteUser.mutate(user?.id);
     }
   };
 
@@ -64,7 +64,7 @@ export const UserEditor = ({ user, type }: UserEditorProps) => {
           alert(localization.alert.fail);
         });
     } else {
-      console.log('No changes detected.');
+      alert(localization.alert.noChanges);
     }
   };
 
@@ -157,9 +157,9 @@ export const UserEditor = ({ user, type }: UserEditorProps) => {
         ) : (
           <Button
             color='danger'
-            onClick={() => handleDeleteUser(user?.id)}
+            onClick={() => handleDeleteUser(user)}
           >
-            Slett
+            {localization.button.delete}
           </Button>
         )}
       </div>
