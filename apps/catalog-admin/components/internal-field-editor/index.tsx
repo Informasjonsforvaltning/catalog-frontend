@@ -75,7 +75,7 @@ export const InternalFieldEditor = ({ field, type }: Props) => {
     const dbField: InternalField | undefined = dbFields.find((field) => field.id === fieldId)!;
 
     if (!updatedField || !dbField) {
-      console.error(`Field with id ${fieldId} not found`);
+      window.alert(localization.alert.noChanges);
       return;
     }
 
@@ -84,14 +84,14 @@ export const InternalFieldEditor = ({ field, type }: Props) => {
     if (diff) {
       updateInternalField
         .mutateAsync({ beforeUpdateField: dbField, updatedField: updatedField })
-        .then((data) => {
+        .then(() => {
           alert(localization.alert.success);
         })
-        .catch((error) => {
+        .catch(() => {
           alert(localization.alert.fail);
         });
     } else {
-      console.log('No changes detected.');
+      window.alert(localization.alert.noChanges);
     }
   };
 
