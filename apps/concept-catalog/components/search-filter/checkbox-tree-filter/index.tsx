@@ -84,6 +84,11 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
     handleChecked(node);
   };
 
+  const getIndexOfCheckedNode = () => {
+    const index = nodes.findIndex((item) => checked.includes(item.value));
+    return index === -1 ? 0 : index;
+  };
+
   return (
     <div>
       <Select
@@ -91,7 +96,12 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
         onChange={handleSearchOnChange}
       />
       <CheckboxTree
-        nodes={(collapsed ? nodes.slice(0, 10) : nodes).map((node) => ({ ...node, className: classes.checkbox })) ?? []}
+        nodes={
+          (collapsed ? nodes.slice(getIndexOfCheckedNode(), getIndexOfCheckedNode() + 10) : nodes).map((node) => ({
+            ...node,
+            className: classes.checkbox,
+          })) ?? []
+        }
         checked={checked}
         expanded={expanded}
         onClick={handleOnClick}
