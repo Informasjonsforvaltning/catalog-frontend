@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import { Inter } from 'next/font/google';
 import { localization } from '@catalog-frontend/utils';
 import type { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
@@ -10,6 +11,8 @@ import '@digdir/design-system-tokens/brand/digdir/tokens.css';
 import { AdminContextProvider } from '../context/admin';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { CatalogDesignContextProvider } from '../context/catalog-design';
+
+const font = Inter({ subsets: ['latin'] });
 
 const CustomApp: FC<AppProps<{ session: Session }>> = ({ Component, pageProps: { session, ...pageProps } }) => {
   const queryClient = new QueryClient();
@@ -26,7 +29,7 @@ const CustomApp: FC<AppProps<{ session: Session }>> = ({ Component, pageProps: {
               />
             </Head>
 
-            <Layout>
+            <Layout className={font.className}>
               <Component {...pageProps} />
             </Layout>
           </CatalogDesignContextProvider>

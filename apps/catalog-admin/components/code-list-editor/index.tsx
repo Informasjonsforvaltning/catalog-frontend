@@ -4,14 +4,14 @@ import { TabsAddIcon, TabsRemoveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
 import styles from './code-list-editor.module.css';
 import { Button, InfoCard, Select } from '@catalog-frontend/ui';
-import { TextField, Button as FdsButton, SingleSelectOption } from '@digdir/design-system-react';
-import { Code, CodeList, TreeNode } from '@catalog-frontend/types';
 import {
   convertCodeListToTreeNodes,
   getAllChildrenCodes,
   getTranslateText,
   localization,
 } from '@catalog-frontend/utils';
+import { Textfield, Button as FdsButton, SingleSelectOption } from '@digdir/design-system-react';
+import { Code, CodeList, TreeNode } from '@catalog-frontend/types';
 import { useAdminDispatch, useAdminState } from '../../context/admin';
 
 const INDENT_STEP = 15;
@@ -256,7 +256,7 @@ export const CodeListEditor = ({ codeList: dbCodeList }: Props) => {
             <div className={styles.codeId}>ID: {selectedCode?.id}</div>
             <InfoCard.Item className={styles.codeListEditor}>
               <div className={styles.codeListEditor}>
-                <TextField
+                <Textfield
                   label={localization.catalogAdmin.codeName.nb}
                   value={selectedCode?.name?.nb}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -265,7 +265,7 @@ export const CodeListEditor = ({ codeList: dbCodeList }: Props) => {
                 />
               </div>
               <div className={styles.codeListEditor}>
-                <TextField
+                <Textfield
                   label={localization.catalogAdmin.codeName.nn}
                   value={selectedCode?.name?.nn}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -274,7 +274,7 @@ export const CodeListEditor = ({ codeList: dbCodeList }: Props) => {
                 />
               </div>
               <div className={styles.codeListEditor}>
-                <TextField
+                <Textfield
                   label={localization.catalogAdmin.codeName.en}
                   value={selectedCode?.name?.en}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {

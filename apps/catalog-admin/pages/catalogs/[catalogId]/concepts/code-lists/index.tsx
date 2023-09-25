@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './code-lists.module.css';
-import { Accordion, TextField, Heading } from '@digdir/design-system-react';
+import { Accordion, Textfield, Heading } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { useRouter } from 'next/router';
@@ -201,7 +201,7 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
                     <Accordion.Content>
                       <div className={styles.codeListInfo}>
                         <div className={styles.textField}>
-                          <TextField
+                          <Textfield
                             label={localization.name}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                               handleCodeListUpdate(codeList.id, event.target.value, undefined);
@@ -210,7 +210,7 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
                           />
                         </div>
                         <div className={styles.textField}>
-                          <TextField
+                          <Textfield
                             label={localization.description}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                               handleCodeListUpdate(codeList.id, undefined, event.target.value);

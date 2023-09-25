@@ -50,7 +50,7 @@ import {
 } from '@catalog-frontend/types';
 import { ChatIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
-import { Accordion, Tabs, TextArea } from '@digdir/design-system-react';
+import { Accordion, Tabs, Textarea } from '@digdir/design-system-react';
 import classes from './concept-page.module.css';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../hooks/comments';
 import { useGetHistory } from '../../../hooks/history';
@@ -610,8 +610,7 @@ export const ConceptPage = ({
                           ) : (
                             <>
                               <div className={classes.bottomSpacingSmall}>
-                                <TextArea
-                                  resize='vertical'
+                                <Textarea
                                   value={newCommentText}
                                   onChange={handleNewCommentChange}
                                   rows={5}
@@ -645,8 +644,7 @@ export const ConceptPage = ({
                                           <span>{formatISO(comment?.createdDate)}</span>
                                         </div>
                                         {isCommentInEditMode(comment?.id) ? (
-                                          <TextArea
-                                            resize='vertical'
+                                          <Textarea
                                             value={updateCommentText[comment?.id]}
                                             onChange={(e) => handleUpdateCommentChange(comment.id, e)}
                                             rows={5}

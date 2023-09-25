@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Accordion, Heading, Button } from '@digdir/design-system-react';
-import { BreadcrumbType, Breadcrumbs, SearchField } from '@catalog-frontend/ui';
+import { Accordion, Heading } from '@digdir/design-system-react';
+import { BreadcrumbType, Breadcrumbs, Button, SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useGetUsers } from '../../../../../hooks/users';
@@ -117,7 +117,7 @@ export const CodeListsPage = ({ organization }) => {
                     <h1 className={styles.label}>{user.name}</h1>
                   </Accordion.Header>
                   <Accordion.Content>
-                    <UserEditor user={user} />
+                    <UserEditor user={user} />                   
                   </Accordion.Content>
                 </Accordion.Item>
               </Accordion>
