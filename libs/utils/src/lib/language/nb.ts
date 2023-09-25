@@ -254,4 +254,8 @@ export const nb = {
     publishedInFDK: 'Publisert i Felles Datakatalog',
     unpublished: 'Ikke publisert',
   },
+
+  validation: {
+    invalidValue: 'Ugyldig verdi',
+  },
 };

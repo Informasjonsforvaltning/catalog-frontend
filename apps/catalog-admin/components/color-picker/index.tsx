@@ -1,6 +1,6 @@
-import { TextField } from '@digdir/design-system-react';
+import { Textfield } from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
-import { colorRegex } from '@catalog-frontend/utils';
+import { colorRegex, localization } from '@catalog-frontend/utils';
 import { Design } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';
 import { useGetDesign } from '../../hooks/design';
@@ -61,9 +61,9 @@ export const ColorPicker = ({ type }: ColorPicker) => {
           className={styles.color}
           style={{ background: inputColor }}
         />
-        <TextField
+        <Textfield
           className={styles.textField}
-          isValid={isValidInput}
+          error={!isValidInput && localization.validation.invalidValue}
           value={inputColor}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setInputColor(event.target.value);
