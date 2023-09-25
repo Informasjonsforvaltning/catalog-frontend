@@ -7,7 +7,7 @@ import { Select } from '@catalog-frontend/ui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckSquare, faSquare } from '@fortawesome/free-regular-svg-icons';
 import { getPath, localization } from '@catalog-frontend/utils';
-import { Button } from '@digdir/design-system-react';
+import { Button, Heading, Label } from '@digdir/design-system-react';
 import { ChevronDownDoubleIcon, ChevronUpDoubleIcon } from '@navikt/aksel-icons';
 
 export interface TreeNode {
@@ -100,6 +100,15 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
           (collapsed ? nodes.slice(getIndexOfCheckedNode(), getIndexOfCheckedNode() + 10) : nodes).map((node) => ({
             ...node,
             className: classes.checkbox,
+            label: (
+              <Label
+                as='span'
+                size='small'
+                weight='regular'
+              >
+                {node.label}
+              </Label>
+            ),
           })) ?? []
         }
         checked={checked}
