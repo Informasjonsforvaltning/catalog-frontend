@@ -1,0 +1,15 @@
+.formButtons {
+  display: flex;
+  gap: 26px;
+  margin: 37px 0px;
+}
+
+.textField {
+  padding-bottom: 20px;
+}
+
+.codeListInfo {
+  width: 640px;
+  margin: 37px;
+  gap: 37px;
+}

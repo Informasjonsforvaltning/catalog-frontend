@@ -130,7 +130,9 @@ export const nb = {
   alert: {
     success: 'Oppdatering vellykket!',
     fail: 'Oppdatering feilet.',
-    notValidFile: 'Innholdet i filet er ikke gyldig.',
+    notValidFile: 'Innholdet i filen er ikke gyldig.',
+    deleteUser: 'Er du sikker på at du vil slette denne brukeren?',
+    noChanges: 'Ingen endringer funnet.',
   },
 
   catalogAdmin: {

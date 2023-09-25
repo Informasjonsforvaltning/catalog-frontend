@@ -5,6 +5,7 @@ export interface AdminState {
   fontColor?: string;
   logo?: string;
   updatedCodeLists?: CodeList[];
+  showUserEditor?: boolean;
 }
 
 export const DefaultAdminState = {
@@ -12,4 +13,5 @@ export const DefaultAdminState = {
   fontColor: '#2D3741',
   logo: null,
   updatedCodeLists: [],
+  showUserEditor: false,
 };

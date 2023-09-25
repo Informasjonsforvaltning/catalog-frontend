@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styles from './code-lists.module.css';
 import { Accordion, TextField, Heading } from '@digdir/design-system-react';
-import { BreadcrumbType, Breadcrumbs, Button, SearchField, UploadButton } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, Button, SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { useRouter } from 'next/router';
 import {

@@ -4,7 +4,7 @@ import { ColorPicker } from '../../../../../components/color-picker';
 import { ImageUploader } from '../../../../../components/image-uploader';
 import styles from './design.module.css';
 import { BreadcrumbType, Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
-import { Alert, Heading, Label, TextField } from '@digdir/design-system-react';
+import { Heading, Label, TextField } from '@digdir/design-system-react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Design, Organization } from '@catalog-frontend/types';
 import { useRouter } from 'next/router';

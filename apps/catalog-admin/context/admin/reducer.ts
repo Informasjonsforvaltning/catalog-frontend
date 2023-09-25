@@ -21,6 +21,9 @@ export const reducer = produce((state: AdminState, action: ACTION): AdminState =
     case 'SET_CODE_LISTS': {
       return { ...state, updatedCodeLists: action.payload.updatedCodeLists };
     }
+    case 'SET_SHOW_USER_EDITOR': {
+      return { ...state, showUserEditor: action.payload.showUserEditor };
+    }
 
     default:
       throw new Error(`Unknown action type ${action.type}`);
