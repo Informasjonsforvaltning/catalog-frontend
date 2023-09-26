@@ -117,7 +117,7 @@ export const CodeListsPage = ({ organization }) => {
                     <h1 className={styles.label}>{user.name}</h1>
                   </Accordion.Header>
                   <Accordion.Content>
-                    <UserEditor user={user} />                   
+                    <UserEditor user={user} />
                   </Accordion.Content>
                 </Accordion.Item>
               </Accordion>
