@@ -65,6 +65,11 @@
   color: #6c737a;
 }
 
+.contact {
+  display: flex;
+  align-items: center;
+}
+
 .source {
   display: flex;
   gap: 0.5rem;
