@@ -31,7 +31,7 @@ const getSearchOptions = (nodes?: TreeNode[]) => {
     });
   }
 
-  return options;
+  return options.sort((a, b) => a.label.localeCompare(b.label));
 };
 
 export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
@@ -73,6 +73,11 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
       const path = getPath(nodes, value).map((item) => item.value);
       setExpanded(path);
       onCheck?.(path);
+
+      const index = nodes.findIndex((item) => checked.includes(item.value));
+      if (index >= 9 && collapsed) {
+        setCollapsed(false);
+      }
     }
   };
 
@@ -84,11 +89,6 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
     handleChecked(node);
   };
 
-  const getIndexOfCheckedNode = () => {
-    const index = nodes.findIndex((item) => checked.includes(item.value));
-    return index === -1 ? 0 : index;
-  };
-
   return (
     <div>
       <Select
@@ -97,7 +97,7 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
       />
       <CheckboxTree
         nodes={
-          (collapsed ? nodes.slice(getIndexOfCheckedNode(), getIndexOfCheckedNode() + 10) : nodes).map((node) => ({
+          (collapsed ? nodes.slice(0, 10) : nodes).map((node) => ({
             ...node,
             className: classes.checkbox,
             label: (
