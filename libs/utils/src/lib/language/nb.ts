@@ -218,6 +218,7 @@ export const nb = {
     validPeriod: 'Gyldighetsperiode',
     label: 'Merkelapp',
     source: 'Kilde',
+    contactInformation: 'Kontaktinformasjon',
   },
 
   changeRequest: {

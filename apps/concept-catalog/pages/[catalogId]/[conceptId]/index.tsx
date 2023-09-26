@@ -48,7 +48,7 @@ import {
   CodeListsResult,
   UsersResult,
 } from '@catalog-frontend/types';
-import { ChatIcon } from '@navikt/aksel-icons';
+import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
 import { Accordion, Tabs, Textarea } from '@digdir/design-system-react';
 import classes from './concept-page.module.css';
@@ -193,25 +193,53 @@ export const ConceptPage = ({
             localization.concept.validPeriod,
             <>
               {concept?.gyldigFom && (
-                <>
+                <div>
                   <span className={classes.greyFont}>{localization.fromAndIncluding}: </span>
                   {`${formatISO(concept?.gyldigFom, {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
                   })}`}
-                </>
+                </div>
               )}
-              {concept?.gyldigFom && concept?.gyldigTom && <br />}
               {concept?.gyldigTom && (
-                <>
+                <div>
                   <span className={classes.greyFont}>{localization.toAndIncluding}: </span>
                   {`${formatISO(concept?.gyldigTom, {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
                   })}`}
-                </>
+                </div>
+              )}
+            </>,
+          ],
+        ]
+      : []),
+    ...(concept?.kontaktpunkt?.harEpost || concept?.kontaktpunkt?.harTelefon
+      ? [
+          [
+            localization.concept.contactInformation,
+            <>
+              {concept?.kontaktpunkt?.harEpost && (
+                <div
+                  key='contact'
+                  className={classes.contact}
+                >
+                  <EnvelopeClosedIcon />
+                  &nbsp;
+                  {concept?.kontaktpunkt?.harEpost}
+                </div>
+              )}
+              {concept?.kontaktpunkt?.harTelefon && (
+                <div
+                  key='contact'
+                  className={classes.contact}
+                >
+                  <PhoneIcon />
+                  &nbsp;
+                  {concept?.kontaktpunkt?.harTelefon}
+                </div>
               )}
             </>,
           ],
