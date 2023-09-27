@@ -42,7 +42,7 @@ export const ColorPicker = ({ type }: ColorPicker) => {
       adminDispatch({ type: 'SET_FONT_COLOR', payload: { fontColor: inputColor } });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [adminDispatch]);
+  }, [inputColor]);
 
   useEffect(() => {
     if (dbDesign?.fontColor !== null && dbDesign?.fontColor !== undefined && type === 'background') {
