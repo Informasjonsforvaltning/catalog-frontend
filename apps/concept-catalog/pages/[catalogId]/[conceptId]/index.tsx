@@ -740,7 +740,7 @@ export const ConceptPage = ({
                                           <div>
                                             {operation.op} - {operation.path}
                                           </div>
-                                          <div>{`${operation.value}`}</div>
+                                          <div>{JSON.stringify(operation.value)}</div>
                                         </div>
                                       ))}
                                     </Accordion.Content>
