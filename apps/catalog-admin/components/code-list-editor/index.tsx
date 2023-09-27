@@ -102,7 +102,7 @@ export const CodeListEditor = ({ codeList, codeListsInUse, type }: Props) => {
       .mutateAsync(newCodeList)
       .then(() => {
         alert(localization.alert.success);
-        handleCancel;
+        handleCancel();
       })
       .catch(() => {
         alert(localization.alert.fail);
