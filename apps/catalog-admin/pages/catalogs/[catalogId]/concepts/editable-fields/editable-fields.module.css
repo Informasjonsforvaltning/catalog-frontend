@@ -8,7 +8,7 @@
 }
 
 .field {
-  composes: field from '../internal-fields/internal-fields.module.css';
+  composes: field from '../../../../../components/internal-field-editor/internal-field.module.css';
 }
 
 .accordion {
@@ -26,15 +26,15 @@
 }
 
 .row {
-  composes: row from '../internal-fields/internal-fields.module.css';
+  composes: row from '../../../../../components/internal-field-editor/internal-field.module.css';
 }
 
 .accordionButtons {
-  composes: accordionButtons from '../internal-fields/internal-fields.module.css';
+  composes: accordionButtons from '../../../../../components/internal-field-editor/internal-field.module.css';
 }
 
 .saveButton {
-  composes: saveButton from '../internal-fields/internal-fields.module.css';
+  composes: saveButton from '../../../../../components/internal-field-editor/internal-field.module.css';
 }
 
 .heading {
