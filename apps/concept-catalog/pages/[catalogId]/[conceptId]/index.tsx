@@ -491,19 +491,22 @@ export const ConceptPage = ({
                   </div>
                 )}
               </div>
-              {hasWritePermission && (
-                <div className={classes.actionButtons}>
-                  <Button onClick={handleEditConcept}>Rediger</Button>
-                  {!concept?.erPublisert && (
-                    <Button
-                      color={'danger'}
-                      onClick={handleDeleteConcept}
-                    >
-                      Slett
-                    </Button>
-                  )}
-                </div>
-              )}
+
+              <div className={classes.actionButtons}>
+                {hasWritePermission && (
+                  <>
+                    <Button onClick={handleEditConcept}>Rediger</Button>
+                    {!concept?.erPublisert && (
+                      <Button
+                        color={'danger'}
+                        onClick={handleDeleteConcept}
+                      >
+                        Slett
+                      </Button>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
             <div className={cn(classes.twoColumnRow, classes.bottomSpace)}>
               <div>
