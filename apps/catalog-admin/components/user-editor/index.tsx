@@ -162,7 +162,7 @@ export const UserEditor = ({ user, type }: UserEditorProps) => {
             color='danger'
             onClick={handleCancel}
           >
-            Avbryt
+            {localization.button.delete}
           </Button>
         ) : (
           <Button

@@ -36,11 +36,6 @@
   gap: 26px;
 }
 
-.formButtons {
-  composes: buttons;
-  margin: 37px;
-}
-
 .center {
   display: flex;
   align-items: center;
@@ -67,10 +62,6 @@
   width: 640px;
   margin: 37px;
   gap: 37px;
-}
-
-.textField {
-  padding-bottom: 20px;
 }
 
 .id {

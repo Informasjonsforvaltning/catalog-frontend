@@ -1,4 +1,4 @@
-import { CodeList } from '@catalog-frontend/types';
+import { Code, CodeList } from '@catalog-frontend/types';
 
 export interface AdminState {
   backgroundColor?: string;
@@ -7,6 +7,8 @@ export interface AdminState {
   updatedCodeLists?: CodeList[];
   showUserEditor?: boolean;
   showInternalFieldEditor?: boolean;
+  showCodeListEditor?: boolean;
+  updatedCodes?: Record<string, Code[]>;
 }
 
 export const DefaultAdminState = {
@@ -16,4 +18,6 @@ export const DefaultAdminState = {
   updatedCodeLists: [],
   showUserEditor: false,
   showInternalFieldEditor: false,
+  showCodeListEditor: false,
+  updatedCodes: null,
 };

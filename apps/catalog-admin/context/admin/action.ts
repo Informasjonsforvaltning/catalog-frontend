@@ -1,4 +1,4 @@
-import { CodeList } from '@catalog-frontend/types';
+import { Code, CodeList } from '@catalog-frontend/types';
 import { AdminState } from './state';
 
 // add new action types here as needed: E.g. 'POPULATE' | 'UPDATE'
@@ -9,14 +9,17 @@ export type ACTION_TYPE =
   | 'SET_LOGO'
   | 'SET_CODE_LISTS'
   | 'SET_SHOW_USER_EDITOR'
-  | 'SET_SHOW_INTERNAL_FIELD_EDITOR';
+  | 'SET_SHOW_INTERNAL_FIELD_EDITOR'
+  | 'SET_SHOW_CODE_LIST_EDITOR'
+  | 'SET_UPDATED_CODES';
 
 // add new payload types here as needed
 export type ACTION_PAYLOAD =
   | AdminState
   | ({ backgroundColor: string } & { fontColor: string } & { logo: string } & { updatedCodeLists: CodeList[] } & {
       showUserEditor: boolean;
-      showInternalFieldEditor: boolean;
+    } & { showInternalFieldEditor: boolean } & { showCodeListEditor: boolean } & {
+      updatedCodes: Record<string, Code[]>;
     });
 
 export type ACTION = { type: ACTION_TYPE; payload: ACTION_PAYLOAD };

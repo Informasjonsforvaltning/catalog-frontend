@@ -84,7 +84,7 @@ const SearchFilter = ({ internalFields, subjectCodeList, conceptStatuses }: Prop
       header: loc.subjectArea,
       content: (
         <CheckboxTreeFilter
-          nodes={convertCodeListToTreeNodes(subjectCodeList)}
+          nodes={convertCodeListToTreeNodes(subjectCodeList?.codes)}
           onCheck={handleSubjectOnCheck}
           filters={subjectState}
         />
