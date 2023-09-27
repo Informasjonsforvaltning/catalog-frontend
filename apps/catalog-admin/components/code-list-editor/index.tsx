@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './code-list-editor.module.css';
 import { Button } from '@catalog-frontend/ui';
-import { TextField } from '@digdir/design-system-react';
+import { Textfield } from '@digdir/design-system-react';
 import { CodeList, EditorType } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
 import { useAdminDispatch, useAdminState } from '../../context/admin';
@@ -141,7 +141,7 @@ export const CodeListEditor = ({ codeList, codeListsInUse, type }: Props) => {
     <>
       <div className={styles.codeListInfo}>
         <div className={styles.textField}>
-          <TextField
+          <Textfield
             label={localization.name}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               type === 'create'
@@ -155,7 +155,7 @@ export const CodeListEditor = ({ codeList, codeListsInUse, type }: Props) => {
           />
         </div>
         <div className={styles.textField}>
-          <TextField
+          <Textfield
             label={localization.description}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               type === 'create'
