@@ -43,7 +43,7 @@ export const CodeListsPage = ({ organization }) => {
     ? ([
         {
           href: `/catalogs/${catalogId}`,
-          text: getTranslateText(localization.catalogAdmin.manage.catalogAdmin),
+          text: getTranslateText(localization.manageCatalog),
         },
         {
           href: `/catalogs/${catalogId}/general`,
@@ -105,6 +105,8 @@ export const CodeListsPage = ({ organization }) => {
               </Accordion.Item>
             </Accordion>
           )}
+
+          {searchResults?.length < 1 && <Heading size='medium'>{localization.search.noHits}</Heading>}
           {searchResults &&
             searchResults.map((user: AssignedUser, index: number) => (
               <Accordion
@@ -114,12 +116,7 @@ export const CodeListsPage = ({ organization }) => {
               >
                 <Accordion.Item>
                   <Accordion.Header>
-                    <Heading
-                      size='xsmall'
-                      className={styles.label}
-                    >
-                      {user.name}
-                    </Heading>
+                    <Heading size='xsmall'>{user.name}</Heading>
                   </Accordion.Header>
                   <Accordion.Content>
                     <UserEditor user={user} />

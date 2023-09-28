@@ -67,7 +67,7 @@ const DesignPage = ({ organization }) => {
     ? ([
         {
           href: `/catalogs/${catalogId}`,
-          text: getTranslateText(localization.catalogAdmin.manage.catalogAdmin),
+          text: getTranslateText(localization.manageCatalog),
         },
         {
           href: `/catalogs/${catalogId}/general`,
@@ -83,6 +83,7 @@ const DesignPage = ({ organization }) => {
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
+
       <div className={styles.center}>
         <div className={styles.container}>
           <div className={styles.heading}>

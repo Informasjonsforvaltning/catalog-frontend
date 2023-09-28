@@ -17,7 +17,7 @@ export const CatalogsAdminPage = ({ organization }) => {
     ? ([
         {
           href: `/catalogs/${catalogId}`,
-          text: getTranslateText(localization.catalogAdmin.manage.catalogAdmin),
+          text: getTranslateText(localization.manageCatalog),
         },
       ] as BreadcrumbType[])
     : [];
