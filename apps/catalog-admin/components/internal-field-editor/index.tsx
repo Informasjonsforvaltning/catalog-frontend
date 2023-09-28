@@ -260,7 +260,7 @@ export const InternalFieldEditor = ({ field, type }: Props) => {
                 color='danger'
                 onClick={handleCancel}
               >
-                Avbryt
+                {localization.button.delete}
               </Button>
             ) : (
               <Button

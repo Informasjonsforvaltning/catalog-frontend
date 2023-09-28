@@ -91,6 +91,8 @@ export const nb = {
     bin: 'Søppelkasse',
     removeFilter: 'Fjern filter',
     save: 'Lagre',
+    cancel: 'Avbryt',
+    removeFromCodeList: 'Fjern fra kodeliste',
   },
 
   dropdown: {
@@ -135,6 +137,8 @@ export const nb = {
     notValidFile: 'Innholdet i filen er ikke gyldig.',
     deleteUser: 'Er du sikker på at du vil slette denne brukeren?',
     noChanges: 'Ingen endringer funnet.',
+    deleteInternalField: 'Er du sikker på at du ønsker å slette feltet?',
+    codeListInUse: 'Kan ikke slette en kodeliste som er i bruk.',
   },
 
   catalogAdmin: {

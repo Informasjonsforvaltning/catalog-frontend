@@ -1,0 +1,114 @@
+.editorContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  margin-left: 37px;
+}
+
+.codeTree {
+  border-radius: 5px;
+  flex-basis: 50%;
+}
+
+.node {
+  position: relative;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  margin: 0 20px;
+  height: 100%;
+}
+
+.node:global(.willReceiveDrop) {
+  background: #bbb;
+}
+
+.node:global(.isSelected) {
+  background: rgb(20, 127, 250, 0.5);
+  color: white;
+  border-radius: 0;
+}
+
+.node:global(.isSelectedStart) {
+  border-radius: 5px 5px 0 0;
+}
+
+.node:global(.isSelectedEnd) {
+  border-radius: 0 0 5px 5px;
+}
+
+.node:global(.isSelectedStart.isSelectedEnd) {
+  border-radius: 5px;
+}
+
+.indentLines {
+  --indent-size: 15px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  display: none;
+  align-items: flex-start;
+  height: 100%;
+}
+
+.indentLines > div {
+  height: 100%;
+  padding-left: 10px;
+  border-right: 1px solid #ccc;
+  margin-right: calc(var(--indent-size) - 10px - 1px);
+}
+
+.text {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.node:global(.isInternal) {
+  cursor: pointer;
+}
+
+.buttonRow {
+  display: flex;
+  gap: 20px;
+}
+
+.toggleButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.header {
+  display: flex;
+  padding: 0px 7px 20px 37px;
+  border: solid 1px #d5d7d9;
+  border-bottom: 0px;
+  background-color: #e6eff8;
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
+}
+
+.codeListEditor {
+  padding-bottom: 20px;
+}
+
+.headerText {
+  padding-top: 20px;
+  width: 100px;
+}
+
+.xmark {
+  display: flex;
+  padding-left: 200px;
+  padding-top: 7px;
+}
+
+.codeId {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 7px;
+  border-left: solid 1px #d5d7d9;
+  border-right: solid 1px #d5d7d9;
+}

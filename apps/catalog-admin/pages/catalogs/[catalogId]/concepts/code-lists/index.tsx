@@ -1,33 +1,26 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './code-lists.module.css';
-import { Accordion, Textfield, Heading } from '@digdir/design-system-react';
+import { Accordion, Heading } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { useRouter } from 'next/router';
-import {
-  useCreateCodeList,
-  useDeleteCodeList,
-  useGetAllCodeLists,
-  useUpdateCodeList,
-} from '../../../../../hooks/code-lists';
+import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
 import { CodeList, Fields, Organization } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { CodeListEditor } from '../../../../../components/code-list-editor';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
-import { compare } from 'fast-json-patch';
 import { Banner } from '../../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
 import { getFields, getOrganization } from '@catalog-frontend/data-access';
+import CodeListEditor from '../../../../../components/code-list-editor';
 
 const CodeListsPage = ({ organization, codeListsInUse }) => {
   const router = useRouter();
   const catalogId: string = `${router.query.catalogId}` ?? '';
-  const createCodeList = useCreateCodeList(catalogId);
-  const deleteCodeList = useDeleteCodeList(catalogId);
-  const updateCodeList = useUpdateCodeList(catalogId);
-  const [accordionIsOpen, setAccordionIsOpen] = useState(false);
+
   const adminDispatch = useAdminDispatch();
-  const { updatedCodeLists } = useAdminState();
+  const adminContext = useAdminState();
+  const { showCodeListEditor, updatedCodes } = adminContext;
+
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
 
@@ -44,94 +37,19 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
     setSearchResults(filteredCodeLists);
   }, [getAllCodeLists, search]);
 
-  const newCodeList = {
-    name: 'Ny kodeliste ' + getNextNewCodeListNumber(dbCodeLists),
-    description: '',
-    codes: [],
-  };
+  useEffect(() => {
+    // Adds a copy of the codes in context
+    const updatedCodesAccumulator = { ...updatedCodes };
 
-  const newAccordionRef = useRef(null);
-
-  const handleCreateCodeList = () => {
-    createCodeList.mutate(newCodeList, {
-      onSuccess: () => {
-        setAccordionIsOpen(true);
-        newAccordionRef.current?.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-          inline: 'nearest',
-        });
-      },
+    dbCodeLists.forEach((codeList: CodeList) => {
+      updatedCodesAccumulator[codeList.id] = codeList?.codes;
     });
-  };
 
-  const handleUpdateDbCodeList = (codeListId: string) => {
-    const updatedCodeList = updatedCodeLists.find((codeList) => codeList.id === codeListId);
-    const dbCodeList = dbCodeLists.find((codeList) => codeList.id === codeListId);
-    const diff = compare(dbCodeList, updatedCodeList);
-
-    if (diff) {
-      updateCodeList
-        .mutateAsync({ oldCodeList: dbCodeList, newCodeList: updatedCodeList })
-        .then(() => {
-          alert(localization.alert.success);
-        })
-        .catch(() => {
-          alert(localization.alert.fail);
-        });
-    } else {
-      console.log('No changes detected.');
-    }
-  };
-
-  const handleCodeListUpdate = (codeListId: string, newName?: string, newDescription?: string) => {
-    const indexInUpdatedCodeLists = updatedCodeLists.findIndex((codeList) => codeList.id === codeListId);
-
-    if (indexInUpdatedCodeLists !== -1) {
-      const codeListToUpdate = updatedCodeLists[indexInUpdatedCodeLists];
-
-      if (codeListToUpdate) {
-        const updatedCodeList = {
-          ...codeListToUpdate,
-          name: newName !== undefined ? newName : codeListToUpdate.name,
-          description: newDescription !== undefined ? newDescription : codeListToUpdate.description,
-        };
-
-        const updatedCodeListsCopy = [...updatedCodeLists];
-        updatedCodeListsCopy[indexInUpdatedCodeLists] = updatedCodeList;
-
-        adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
-      }
-    } else {
-      const codeListToUpdate = dbCodeLists.find((codeList) => codeList.id === codeListId);
-
-      if (codeListToUpdate) {
-        const updatedCodeList = {
-          ...codeListToUpdate,
-          name: newName !== undefined ? newName : codeListToUpdate.name,
-          description: newDescription !== undefined ? newDescription : codeListToUpdate.description,
-        };
-
-        const updatedCodeListsCopy = [...updatedCodeLists, updatedCodeList];
-        adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
-      }
-    }
-  };
-
-  const handleDeleteCodeList = (codeListId: string) => {
-    if (!codeListsInUse.includes(codeListId)) {
-      if (window.confirm(localization.codeList.confirmDelete)) {
-        deleteCodeList.mutate(codeListId);
-      }
-    } else {
-      window.alert('Kan ikke slette en kodeliste som er i bruk');
-    }
-  };
-
-  function getNextNewCodeListNumber(codeLists: CodeList[]): number {
-    const lenght = codeLists ? codeLists?.length : 0;
-    return lenght + 1;
-  }
+    adminDispatch({
+      type: 'SET_UPDATED_CODES',
+      payload: { updatedCodes: updatedCodesAccumulator },
+    });
+  }, [dbCodeLists]);
 
   const breadcrumbList = catalogId
     ? ([
@@ -149,6 +67,14 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
         },
       ] as BreadcrumbType[])
     : [];
+
+  const handleCreateCodeList = () => {
+    adminDispatch({ type: 'SET_SHOW_CODE_LIST_EDITOR', payload: { showCodeListEditor: true } });
+    adminDispatch({
+      type: 'SET_UPDATED_CODES',
+      payload: { updatedCodes: { ...updatedCodes, ['0']: [] } },
+    });
+  };
 
   return (
     <>
@@ -179,6 +105,23 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
             {localization.catalogAdmin.codeLists}
           </Heading>
           <div className={styles.content}>
+            {showCodeListEditor && (
+              <Accordion
+                key={'codeList-create-edtior'}
+                border={true}
+                className={styles.accordion}
+              >
+                <Accordion.Item defaultOpen={showCodeListEditor}>
+                  <Accordion.Header>
+                    <Heading size='small'></Heading>
+                  </Accordion.Header>
+
+                  <Accordion.Content>
+                    <CodeListEditor type='create' />
+                  </Accordion.Content>
+                </Accordion.Item>
+              </Accordion>
+            )}
             {searchResults &&
               searchResults?.map((codeList: CodeList, index: number) => (
                 <Accordion
@@ -186,11 +129,8 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
                   border={true}
                   className={styles.accordion}
                 >
-                  <Accordion.Item
-                    ref={newAccordionRef}
-                    defaultOpen={index === searchResults.length - 1 ? accordionIsOpen : false}
-                  >
-                    <Accordion.Header onClick={() => setAccordionIsOpen((prevState) => !prevState)}>
+                  <Accordion.Item>
+                    <Accordion.Header>
                       <h1 className={styles.label}>{codeList.name}</h1>
                       <p className={styles.description}> {codeList.description} </p>
                     </Accordion.Header>
@@ -199,37 +139,10 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
                     </Accordion.Content>
 
                     <Accordion.Content>
-                      <div className={styles.codeListInfo}>
-                        <div className={styles.textField}>
-                          <Textfield
-                            label={localization.name}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                              handleCodeListUpdate(codeList.id, event.target.value, undefined);
-                            }}
-                            value={(updatedCodeLists.find((c) => c.id === codeList.id) || codeList)?.name}
-                          />
-                        </div>
-                        <div className={styles.textField}>
-                          <Textfield
-                            label={localization.description}
-                            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                              handleCodeListUpdate(codeList.id, undefined, event.target.value);
-                            }}
-                            value={(updatedCodeLists.find((c) => c.id === codeList.id) || codeList)?.description}
-                          />
-                        </div>
-                      </div>
-
-                      <CodeListEditor codeList={codeList} />
-                      <div className={styles.formButtons}>
-                        <Button onClick={() => handleUpdateDbCodeList(codeList.id)}>{localization.saveEdits}</Button>
-                        <Button
-                          onClick={() => handleDeleteCodeList(codeList.id)}
-                          color='danger'
-                        >
-                          {localization.catalogAdmin.deleteCodeList}
-                        </Button>
-                      </div>
+                      <CodeListEditor
+                        codeList={codeList}
+                        codeListsInUse={codeListsInUse}
+                      />
                     </Accordion.Content>
                   </Accordion.Item>
                 </Accordion>
@@ -247,6 +160,7 @@ export async function getServerSideProps({ req, res, params }) {
 
     const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
     const { internal, editable }: Fields = await getFields(catalogId, token.accessToken).then((res) => res.json());
+
     const codeListsInUse = [];
 
     internal.forEach((field) => {

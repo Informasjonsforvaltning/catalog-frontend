@@ -19,7 +19,7 @@ export const ColorPicker = ({ type }: ColorPicker) => {
   const dbDesign: Design = getDesign;
 
   const [inputColor, setInputColor] = useState('');
-  const [isValidInput, setIsValidInput] = useState(null);
+  const [isValidInput, setIsValidInput] = useState(true);
 
   const adminDispatch = useAdminDispatch();
 
