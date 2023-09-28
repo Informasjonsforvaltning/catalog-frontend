@@ -32,12 +32,7 @@ export const ConceptsPage = ({ organization }) => {
       <Banner orgName={organization?.prefLabel} />
       <div className={styles.container}>
         <Card
-          icon={
-            <DatabaseIcon
-              title='a11y-title'
-              fontSize='3rem'
-            />
-          }
+          icon={<DatabaseIcon fontSize='3rem' />}
           title={localization.catalogAdmin.codeLists}
           body={localization.catalogAdmin.manage.codeList}
           href={`/catalogs/${catalogId}/concepts/code-lists`}

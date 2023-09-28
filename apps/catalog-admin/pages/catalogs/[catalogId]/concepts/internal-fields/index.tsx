@@ -1,5 +1,6 @@
 import React from 'react';
 import styles from './internal-fields.module.css';
+import sharedStyles from '../../../../shared-style.module.css';
 import { Accordion, Heading } from '@digdir/design-system-react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { BreadcrumbType, Breadcrumbs, Button } from '@catalog-frontend/ui';
@@ -49,8 +50,8 @@ export const InternalFieldsPage = ({ organization }) => {
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <Banner orgName={organization?.prefLabel} />
-      <div className={styles.center}>
-        <div className={styles.page}>
+      <div className={sharedStyles.center}>
+        <div className={sharedStyles.pageContent}>
           <div className={styles.topButtonRow}>
             <Button
               className={styles.createButton}
@@ -72,7 +73,7 @@ export const InternalFieldsPage = ({ organization }) => {
               <Accordion
                 key={'create-editor'}
                 border={true}
-                className={styles.accordion}
+                className={sharedStyles.accordionSpacing}
               >
                 <Accordion.Item defaultOpen={showInternalFieldEditor}>
                   <Accordion.Header>
@@ -93,7 +94,7 @@ export const InternalFieldsPage = ({ organization }) => {
                 <Accordion
                   key={field.id}
                   border={true}
-                  className={styles.accordion}
+                  className={sharedStyles.accordionSpacing}
                 >
                   <Accordion.Item>
                     <Accordion.Header>

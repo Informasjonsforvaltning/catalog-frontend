@@ -16,8 +16,6 @@
 
 .accordion {
   margin-bottom: 25px;
-  font-family: Heebo, sans-serif;
-  --fds-typography-paragraph-small: Heebo;
   width: 100%;
 }
 

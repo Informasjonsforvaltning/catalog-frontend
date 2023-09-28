@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styles from './code-lists.module.css';
+import sharedStyles from '../../../../shared-style.module.css';
 import { Accordion, Heading } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
@@ -80,8 +81,8 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <Banner orgName={organization?.prefLabel} />
-      <div className={styles.center}>
-        <div className={styles.page}>
+      <div className={sharedStyles.center}>
+        <div className={sharedStyles.pageContent}>
           <div className={styles.row}>
             <SearchField
               ariaLabel={'Søkefelt kodeliste'}
@@ -109,7 +110,7 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
               <Accordion
                 key={'codeList-create-edtior'}
                 border={true}
-                className={styles.accordion}
+                className={sharedStyles.accordionSpacing}
               >
                 <Accordion.Item defaultOpen={showCodeListEditor}>
                   <Accordion.Header>
@@ -127,7 +128,7 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
                 <Accordion
                   key={index}
                   border={true}
-                  className={styles.accordion}
+                  className={styles.accordionSpacing}
                 >
                   <Accordion.Item>
                     <Accordion.Header>

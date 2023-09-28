@@ -13,6 +13,7 @@ import { UserEditor } from '../../../../../components/user-editor';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
 
 import styles from './users.module.css';
+import sharedStyles from '../../../../shared-style.module.css';
 
 export const CodeListsPage = ({ organization }) => {
   const router = useRouter();
@@ -60,8 +61,8 @@ export const CodeListsPage = ({ organization }) => {
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <Banner orgName={organization?.prefLabel} />
-      <div className={styles.center}>
-        <div className={styles.page}>
+      <div className={sharedStyles.center}>
+        <div className={sharedStyles.pageContent}>
           <div className={styles.row}>
             <SearchField
               ariaLabel=''
@@ -89,13 +90,12 @@ export const CodeListsPage = ({ organization }) => {
             <Accordion
               key={'create-editor'}
               border={true}
-              className={styles.accordion}
+              className={sharedStyles.accordionSpacing}
             >
               <Accordion.Item defaultOpen={showUserEditor}>
                 <Accordion.Header>
                   <Heading
                     size='xsmall'
-                    className={styles.label}
                     level={3}
                   ></Heading>
                 </Accordion.Header>
@@ -110,7 +110,7 @@ export const CodeListsPage = ({ organization }) => {
               <Accordion
                 key={index}
                 border={true}
-                className={styles.accordion}
+                className={styles.accordionSpacing}
               >
                 <Accordion.Item>
                   <Accordion.Header>

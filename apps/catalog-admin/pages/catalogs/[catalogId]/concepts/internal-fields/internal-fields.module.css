@@ -4,8 +4,6 @@
 }
 
 .accordion {
-  font-family: Heebo, sans-serif;
-  --fds-typography-paragraph-small: Heebo;
   border-radius: 1em;
   width: inherit;
 }

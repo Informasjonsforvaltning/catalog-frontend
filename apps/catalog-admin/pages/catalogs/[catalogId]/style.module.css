@@ -6,3 +6,22 @@
   margin-bottom: 32px;
   flex-wrap: wrap;
 }
+
+.center {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.pageContent {
+  width: 90%;
+  max-width: 1320px;
+  min-height: 100%;
+  padding-bottom: 6em;
+  padding-top: 4em;
+}
+
+.accordionSpacing {
+  margin-bottom: 25px;
+  width: 100%;
+}
