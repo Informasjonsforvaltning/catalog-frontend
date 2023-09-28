@@ -76,6 +76,11 @@ export const CodesEditor = ({ codeList: dbCodeList }: Props) => {
   };
 
   const updateAndAddCode = (code: Code, codeList?: CodeList) => {
+    if (code.name.nb === '') {
+      window.alert(localization.alert.codeMustHaveName);
+      return;
+    }
+
     const codeListId = codeList?.id || '0';
     const existingCodes = updatedCodes[codeListId] ? [...updatedCodes[codeListId]] : [];
     const index = existingCodes.findIndex((c) => c.id === code.id);
