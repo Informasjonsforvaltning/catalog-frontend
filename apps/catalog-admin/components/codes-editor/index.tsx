@@ -152,7 +152,7 @@ export const CodesEditor = ({ codeList: dbCodeList }: Props) => {
   }
 
   function FolderIcon({ node }: { node: NodeApi<TreeNode> }) {
-    if (node.isLeaf) return <span></span>;
+    if (node.isLeaf) return <span style={{ width: '20px' }}></span>;
     return (
       <span>
         <button
