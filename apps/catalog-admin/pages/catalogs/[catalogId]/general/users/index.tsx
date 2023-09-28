@@ -94,7 +94,7 @@ export const CodeListsPage = ({ organization }) => {
               <Accordion.Item defaultOpen={showUserEditor}>
                 <Accordion.Header>
                   <Heading
-                    size='small'
+                    size='xsmall'
                     className={styles.label}
                     level={3}
                   ></Heading>
@@ -114,7 +114,12 @@ export const CodeListsPage = ({ organization }) => {
               >
                 <Accordion.Item>
                   <Accordion.Header>
-                    <h1 className={styles.label}>{user.name}</h1>
+                    <Heading
+                      size='xsmall'
+                      className={styles.label}
+                    >
+                      {user.name}
+                    </Heading>
                   </Accordion.Header>
                   <Accordion.Content>
                     <UserEditor user={user} />
