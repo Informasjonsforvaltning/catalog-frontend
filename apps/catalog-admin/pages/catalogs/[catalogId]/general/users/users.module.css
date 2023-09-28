@@ -5,19 +5,11 @@
   margin-top: 48px;
 }
 
-.createButton {
-  --component-button-filled-primary-color-background-default: #2d3741;
-}
-
 .accordion {
   margin-bottom: 25px;
   font-family: Heebo, sans-serif;
   --fds-typography-paragraph-small: Heebo;
   width: 100%;
-}
-
-.label {
-  --fds-typography-label-medium: Heebo;
 }
 
 .buttons {

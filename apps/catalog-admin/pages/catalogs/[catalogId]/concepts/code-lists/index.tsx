@@ -131,7 +131,12 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
                 >
                   <Accordion.Item>
                     <Accordion.Header>
-                      <h1 className={styles.label}>{codeList.name}</h1>
+                      <Heading
+                        size='xsmall'
+                        className={styles.label}
+                      >
+                        {codeList.name}
+                      </Heading>
                       <p className={styles.description}> {codeList.description} </p>
                     </Accordion.Header>
                     <Accordion.Content>

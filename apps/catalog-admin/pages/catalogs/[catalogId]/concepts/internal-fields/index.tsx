@@ -98,7 +98,7 @@ export const InternalFieldsPage = ({ organization }) => {
                   <Accordion.Item>
                     <Accordion.Header>
                       <Heading
-                        size='small'
+                        size='xsmall'
                         className={styles.label}
                       >
                         {getTranslateText(field.label)}
