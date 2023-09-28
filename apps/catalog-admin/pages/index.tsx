@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from './style.module.css';
+import styles from './shared-style.module.css';
 import { Breadcrumbs, Card } from '@catalog-frontend/ui';
 import { Session, getServerSession } from 'next-auth';
 import { getResourceRoles } from '@catalog-frontend/utils';

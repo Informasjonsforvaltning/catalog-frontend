@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { BreadcrumbType, Breadcrumbs, Card } from '@catalog-frontend/ui';
 
-import styles from './style.module.css';
+import styles from '../../shared-style.module.css';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Banner } from '../../../components/banner';
 import { Organization } from '@catalog-frontend/types';
