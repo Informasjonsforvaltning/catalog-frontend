@@ -12,6 +12,7 @@ import {
 import {
   capitalizeFirstLetter,
   getTranslateText,
+  hasOrganizationAdminPermission,
   hasOrganizationReadPermission,
   hasOrganizationWritePermission,
   hasSystemAdminPermission,
@@ -53,6 +54,7 @@ import { prepareStatusList } from '@catalog-frontend/utils';
 export const SearchPage = ({
   organization,
   hasWritePermission,
+  hasAdminPermission,
   fieldsResult,
   codeListsResult,
   usersResult,
@@ -267,30 +269,30 @@ export const SearchPage = ({
                 {loc.changeRequest.seeChangeRequests}
               </Button>
               {hasWritePermission && (
-                <>
-                  <Button
-                    onClick={onCreateConceptClick}
-                    icon={<PlusCircleIcon fontSize='1.5rem' />}
-                  >
-                    {loc.button.createConcept}
-                  </Button>
-                  <UploadButton
-                    variant='outline'
-                    icon={<FileImportIcon fontSize='1.5rem' />}
-                    allowedMimeTypes={[
-                      'text/csv',
-                      'text/x-csv',
-                      'text/plain',
-                      'application/csv',
-                      'application/x-csv',
-                      'application/vnd.ms-excel',
-                      'application/json',
-                    ]}
-                    onUpload={onImportUpload}
-                  >
-                    {loc.button.importConcept}
-                  </UploadButton>
-                </>
+                <Button
+                  onClick={onCreateConceptClick}
+                  icon={<PlusCircleIcon fontSize='1.5rem' />}
+                >
+                  {loc.button.createConcept}
+                </Button>
+              )}
+              {hasAdminPermission && (
+                <UploadButton
+                  variant='outline'
+                  icon={<FileImportIcon fontSize='1.5rem' />}
+                  allowedMimeTypes={[
+                    'text/csv',
+                    'text/x-csv',
+                    'text/plain',
+                    'application/csv',
+                    'application/x-csv',
+                    'application/vnd.ms-excel',
+                    'application/json',
+                  ]}
+                  onUpload={onImportUpload}
+                >
+                  {loc.button.importConcept}
+                </UploadButton>
               )}
             </div>
           </div>
@@ -445,6 +447,7 @@ export async function getServerSideProps({ req, res, params }) {
   }
 
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
+  const hasAdminPermission = session && hasOrganizationAdminPermission(session?.accessToken, catalogId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
   const fieldsResult: FieldsResult = await getFields(catalogId, `${session?.accessToken}`).then((response) =>
@@ -467,6 +470,7 @@ export async function getServerSideProps({ req, res, params }) {
     props: {
       organization,
       hasWritePermission,
+      hasAdminPermission,
       fieldsResult,
       codeListsResult,
       usersResult,
