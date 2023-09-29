@@ -13,7 +13,7 @@ import { UserEditor } from '../../../../../components/user-editor';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
 
 import styles from './users.module.css';
-import { PageLayout } from 'apps/catalog-admin/components/page-layout';
+import { PageLayout } from '../../../../../components/page-layout';
 
 export const CodeListsPage = ({ organization }) => {
   const router = useRouter();

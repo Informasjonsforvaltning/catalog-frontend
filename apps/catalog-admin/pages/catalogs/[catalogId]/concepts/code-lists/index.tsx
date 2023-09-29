@@ -12,7 +12,7 @@ import { Banner } from '../../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
 import { getFields, getOrganization } from '@catalog-frontend/data-access';
 import CodeListEditor from '../../../../../components/code-list-editor';
-import { PageLayout } from 'apps/catalog-admin/components/page-layout';
+import { PageLayout } from '../../../../../components/page-layout';
 
 const CodeListsPage = ({ organization, codeListsInUse }) => {
   const router = useRouter();

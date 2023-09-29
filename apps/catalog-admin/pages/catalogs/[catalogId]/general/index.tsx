@@ -1,5 +1,4 @@
 import { BreadcrumbType, Breadcrumbs, Card } from '@catalog-frontend/ui';
-import styles from '../../../shared-style.module.css';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { getTranslateText, localization } from '@catalog-frontend/utils';

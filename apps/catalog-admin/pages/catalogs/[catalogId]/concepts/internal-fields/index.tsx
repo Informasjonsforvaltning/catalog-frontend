@@ -12,7 +12,7 @@ import { getOrganization } from '@catalog-frontend/data-access';
 import { useGetInternalFields } from '../../../../../hooks/internal-fields';
 import { InternalFieldEditor } from '../../../../../components/internal-field-editor';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
-import { PageLayout } from 'apps/catalog-admin/components/page-layout';
+import { PageLayout } from '../../../../../components/page-layout';
 
 export const InternalFieldsPage = ({ organization }) => {
   const router = useRouter();

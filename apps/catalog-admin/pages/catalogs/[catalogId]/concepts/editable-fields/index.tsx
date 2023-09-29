@@ -12,7 +12,7 @@ import { compare } from 'fast-json-patch';
 import { Banner } from '../../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
 import { getOrganization } from '@catalog-frontend/data-access';
-import { PageLayout } from 'apps/catalog-admin/components/page-layout';
+import { PageLayout } from '../../../../../components/page-layout';
 
 export function EditableFields({ organization }) {
   const router = useRouter();
