@@ -1,3 +1,9 @@
+.editorContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
+
 .codeTree {
   border-radius: 5px;
   flex-basis: 50%;
@@ -62,6 +68,11 @@
   cursor: pointer;
 }
 
+.buttonRow {
+  display: flex;
+  gap: 20px;
+}
+
 .toggleButton {
   background: none;
   border: none;
@@ -76,6 +87,10 @@
   background-color: #e6eff8;
   border-top-left-radius: 7px;
   border-top-right-radius: 7px;
+}
+
+.codeListEditor {
+  padding-bottom: 20px;
 }
 
 .headerText {
