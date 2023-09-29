@@ -1,7 +1,11 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import styles from './page-layout.module.css';
 
-export const PageLayout = ({ children }: React.PropsWithChildren<React.ReactNode>) => {
+interface LayoutProps {
+  children: ReactNode;
+}
+
+export const PageLayout = ({ children }: LayoutProps) => {
   return (
     <>
       <div className='center'>
