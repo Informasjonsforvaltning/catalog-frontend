@@ -13,7 +13,7 @@ export function Index({ organizations }: InferGetServerSidePropsType<typeof getS
     <>
       <Breadcrumbs />
       <div>
-        <div className={styles.card}>
+        <div className='card'>
           {organizations.length === 0 && <div>Du har ikke tilgang</div>}
           {organizations.map((organization) => (
             <Card

@@ -11,6 +11,7 @@ import '@digdir/design-system-tokens/brand/digdir/tokens.css';
 import { AdminContextProvider } from '../context/admin';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { CatalogDesignContextProvider } from '../context/catalog-design';
+import './global.css';
 
 const font = Inter({ subsets: ['latin'] });
 

@@ -147,132 +147,126 @@ export const InternalFieldEditor = ({ field, type }: Props) => {
 
   return (
     <>
-      <div className={styles.accordionContent}>
-        <div className={styles.field}>
-          <Textfield
-            label={localization.catalogAdmin.fieldNameDescription}
-            value={String(
-              getTranslateText((updatedFieldsList.find((f) => f.id === field.id) || field)?.label || newField?.label),
-            )}
-            required
-            type='text'
-            error={
-              validateLabelField(
-                String(
-                  getTranslateText(
-                    (updatedFieldsList.find((f) => f.id === field.id) || field)?.label || newField?.label,
-                  ),
-                ),
-              )
-                ? null
-                : localization.validation.invalidValue
-            }
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              type === 'create'
-                ? setNewField((prevField) => ({
-                    ...prevField,
-                    label: { nb: event.target.value },
-                  }))
-                : updateFieldsListState(field.id, event.target.value, undefined, undefined);
-            }}
-          />
-        </div>
+      <div className='accordionField'>
+        <Textfield
+          label={localization.catalogAdmin.fieldNameDescription}
+          value={String(
+            getTranslateText((updatedFieldsList.find((f) => f.id === field.id) || field)?.label || newField?.label),
+          )}
+          required
+          type='text'
+          error={
+            validateLabelField(
+              String(
+                getTranslateText((updatedFieldsList.find((f) => f.id === field.id) || field)?.label || newField?.label),
+              ),
+            )
+              ? null
+              : localization.validation.invalidValue
+          }
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            type === 'create'
+              ? setNewField((prevField) => ({
+                  ...prevField,
+                  label: { nb: event.target.value },
+                }))
+              : updateFieldsListState(field.id, event.target.value, undefined, undefined);
+          }}
+        />
+      </div>
 
-        <div className={styles.field}>
+      <div className='accordionField'>
+        <Select
+          label={localization.catalogAdmin.fieldTypeDescription}
+          options={Object.values(fieldTypeOptions)}
+          value={(updatedFieldsList.find((f) => f.id === field.id) || field)?.type || newField?.type}
+          onChange={(value) => {
+            type === 'create'
+              ? setNewField((prevField) => ({
+                  ...prevField,
+                  type: value as FieldType,
+                }))
+              : updateFieldsListState(field.id, undefined, value as FieldType, undefined);
+          }}
+        />
+      </div>
+
+      {((updatedFieldsList.find((f) => f.id === field.id) || field)?.type === 'code_list' ||
+        newField?.type === 'code_list') && (
+        <div className='accordionField'>
           <Select
-            label={localization.catalogAdmin.fieldTypeDescription}
-            options={Object.values(fieldTypeOptions)}
-            value={(updatedFieldsList.find((f) => f.id === field.id) || field)?.type || newField?.type}
+            label={localization.catalogAdmin.chooseCodeList}
+            options={codeListsOptions()}
+            value={(updatedFieldsList.find((f) => f.id === field.id) || field)?.codeListId || newField?.codeListId}
             onChange={(value) => {
-              type === 'create'
-                ? setNewField((prevField) => ({
-                    ...prevField,
-                    type: value as FieldType,
-                  }))
-                : updateFieldsListState(field.id, undefined, value as FieldType, undefined);
+              if (type === 'create') {
+                setNewField((prevField) => ({
+                  ...prevField,
+                  codeListId: value,
+                }));
+              } else {
+                updateFieldsListState(field.id, undefined, undefined, value);
+              }
             }}
           />
         </div>
+      )}
 
-        {((updatedFieldsList.find((f) => f.id === field.id) || field)?.type === 'code_list' ||
-          newField?.type === 'code_list') && (
-          <div className={styles.field}>
-            <Select
-              label={localization.catalogAdmin.chooseCodeList}
-              options={codeListsOptions()}
-              value={(updatedFieldsList.find((f) => f.id === field.id) || field)?.codeListId || newField?.codeListId}
-              onChange={(value) => {
-                if (type === 'create') {
-                  setNewField((prevField) => ({
-                    ...prevField,
-                    codeListId: value,
-                  }));
-                } else {
-                  updateFieldsListState(field.id, undefined, undefined, value);
-                }
+      {((updatedFieldsList.find((f) => f.id === field.id) || field)?.type == 'boolean' ||
+        newField?.type === 'boolean') && (
+        <>
+          <div className={cn('accordionField', styles.row)}>
+            <Checkbox
+              onChange={(e) => {
+                type === 'create'
+                  ? setNewField((prevField) => ({
+                      ...prevField,
+                      enableFilter: e.target.checked,
+                    }))
+                  : updateFieldsListState(field.id, undefined, undefined, undefined, e.target.checked);
               }}
-            />
+              value={''}
+              checked={(updatedFieldsList.find((f) => f.id === field.id) || field)?.enableFilter}
+            >
+              {localization.catalogAdmin.enableFilter}
+            </Checkbox>
+            <HelpText
+              placement='right'
+              title={localization.catalogAdmin.manage.enableFilter}
+            >
+              {localization.catalogAdmin.manage.enableFilter}
+            </HelpText>
           </div>
-        )}
+        </>
+      )}
 
-        {((updatedFieldsList.find((f) => f.id === field.id) || field)?.type == 'boolean' ||
-          newField?.type === 'boolean') && (
-          <>
-            <div className={cn(styles.field, styles.row)}>
-              <Checkbox
-                onChange={(e) => {
-                  type === 'create'
-                    ? setNewField((prevField) => ({
-                        ...prevField,
-                        enableFilter: e.target.checked,
-                      }))
-                    : updateFieldsListState(field.id, undefined, undefined, undefined, e.target.checked);
-                }}
-                value={''}
-                checked={(updatedFieldsList.find((f) => f.id === field.id) || field)?.enableFilter}
-              >
-                {localization.catalogAdmin.enableFilter}
-              </Checkbox>
-              <HelpText
-                placement='right'
-                title={localization.catalogAdmin.manage.enableFilter}
-              >
-                {localization.catalogAdmin.manage.enableFilter}
-              </HelpText>
-            </div>
-          </>
-        )}
-
-        <div className={styles.field}>
-          <div className={styles.accordionButtons}>
-            <div className={styles.saveButton}>
-              <Button
-                fullWidth={true}
-                onClick={() =>
-                  type === 'create' ? handleCreateInternalField() : handleUpdateDbInternalField(field.id)
-                }
-              >
-                {localization.button.save}
-              </Button>
-            </div>
-            {type === 'create' ? (
-              <Button
-                color='danger'
-                onClick={handleCancel}
-              >
-                {localization.button.delete}
-              </Button>
-            ) : (
-              <Button
-                color='danger'
-                onClick={() => {
-                  handleDeleteInternalField(field.id);
-                }}
-              >
-                {localization.button.delete}
-              </Button>
-            )}
+      <div className='accordionField'>
+        <div className='editorButtons'>
+          <div className={styles.saveButton}>
+            <Button
+              fullWidth={true}
+              onClick={() => (type === 'create' ? handleCreateInternalField() : handleUpdateDbInternalField(field.id))}
+            >
+              {localization.button.save}
+            </Button>
           </div>
+          {type === 'create' ? (
+            <Button
+              color='danger'
+              onClick={handleCancel}
+            >
+              {localization.button.cancel}
+            </Button>
+          ) : (
+            <Button
+              color='danger'
+              onClick={() => {
+                handleDeleteInternalField(field.id);
+              }}
+            >
+              {localization.button.delete}
+            </Button>
+          )}
         </div>
       </div>
     </>

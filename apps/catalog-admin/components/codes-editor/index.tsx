@@ -213,107 +213,105 @@ export const CodesEditor = ({ codeList: dbCodeList }: Props) => {
 
   return (
     <>
-      <div className={styles.editorContainer}>
-        <InfoCard className={styles.codeTree}>
-          <InfoCard.Item>
-            <div>
-              <Tree<TreeNode>
-                data={convertCodeListToTreeNodes(codes)}
-                idAccessor={(node) => node.value}
-                selectionFollowsFocus={false}
-                padding={15}
-                rowHeight={30}
-                height={441}
-                width={453}
-                onActivate={handleOnClick}
-                disableEdit
-              >
-                {Node}
-              </Tree>
-              <FdsButton
-                onClick={() => {
-                  createNewCode();
-                  setIsEditViewOpen(true);
+      <InfoCard className={styles.codeTree}>
+        <InfoCard.Item>
+          <div>
+            <Tree<TreeNode>
+              data={convertCodeListToTreeNodes(codes)}
+              idAccessor={(node) => node.value}
+              selectionFollowsFocus={false}
+              padding={15}
+              rowHeight={30}
+              height={441}
+              width={453}
+              onActivate={handleOnClick}
+              disableEdit
+            >
+              {Node}
+            </Tree>
+            <FdsButton
+              onClick={() => {
+                createNewCode();
+                setIsEditViewOpen(true);
+              }}
+              variant='outline'
+            >
+              {localization.catalogAdmin.createCode}
+            </FdsButton>
+          </div>
+        </InfoCard.Item>
+      </InfoCard>
+      {isEditViewOpen && (
+        <InfoCard>
+          <div className={styles.header}>
+            <p className={styles.headerText}>{localization.catalogAdmin.editCode}</p>
+            <XMarkIcon
+              fontSize='1.5rem'
+              className={styles.xmark}
+              title={localization.catalogAdmin.closeEdit}
+              onClick={() => setIsEditViewOpen(false)}
+            />
+          </div>
+          <div className={styles.codeId}>ID: {selectedCode?.id}</div>
+          <InfoCard.Item className='editorSpacing'>
+            <div className='editorSpacing'>
+              <Textfield
+                label={localization.catalogAdmin.codeName.nb}
+                value={selectedCode?.name?.nb}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  updateCodeName('nb', event.target.value);
                 }}
-                variant='outline'
+              />
+            </div>
+            <div className='editorSpacing'>
+              <Textfield
+                label={localization.catalogAdmin.codeName.nn}
+                value={selectedCode?.name?.nn}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  updateCodeName('nn', event.target.value);
+                }}
+              />
+            </div>
+            <div className='editorSpacing'>
+              <Textfield
+                label={localization.catalogAdmin.codeName.en}
+                value={selectedCode?.name?.en}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  updateCodeName('en', event.target.value);
+                }}
+              />
+            </div>
+            <div className='editorSpacing'>
+              <Select
+                label={localization.catalogAdmin.parentCode}
+                options={codes ? availableParentCodes(codes, selectedCode?.id) : []}
+                value={`${selectedCode?.parentID}`}
+                onChange={updateCodeParent}
+              />
+            </div>
+
+            <div className='editorButtons'>
+              <Button
+                onClick={() => {
+                  updateAndAddCode(selectedCode, currentCodeList);
+                  setIsEditViewOpen(false);
+                }}
               >
-                {localization.catalogAdmin.createCode}
-              </FdsButton>
+                {localization.ok}
+              </Button>
+              <Button
+                color='danger'
+                onClick={() => {
+                  removeCode(selectedCode.id, currentCodeList);
+                  setIsEditViewOpen(false);
+                }}
+              >
+                {localization.button.removeFromCodeList}
+              </Button>
             </div>
           </InfoCard.Item>
         </InfoCard>
-        {isEditViewOpen && (
-          <InfoCard>
-            <div className={styles.header}>
-              <p className={styles.headerText}>{localization.catalogAdmin.editCode}</p>
-              <XMarkIcon
-                fontSize='1.5rem'
-                className={styles.xmark}
-                title={localization.catalogAdmin.closeEdit}
-                onClick={() => setIsEditViewOpen(false)}
-              />
-            </div>
-            <div className={styles.codeId}>ID: {selectedCode?.id}</div>
-            <InfoCard.Item className={styles.codeListEditor}>
-              <div className={styles.codeListEditor}>
-                <Textfield
-                  label={localization.catalogAdmin.codeName.nb}
-                  value={selectedCode?.name?.nb}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    updateCodeName('nb', event.target.value);
-                  }}
-                />
-              </div>
-              <div className={styles.codeListEditor}>
-                <Textfield
-                  label={localization.catalogAdmin.codeName.nn}
-                  value={selectedCode?.name?.nn}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    updateCodeName('nn', event.target.value);
-                  }}
-                />
-              </div>
-              <div className={styles.codeListEditor}>
-                <Textfield
-                  label={localization.catalogAdmin.codeName.en}
-                  value={selectedCode?.name?.en}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    updateCodeName('en', event.target.value);
-                  }}
-                />
-              </div>
-              <div className={styles.codeListEditor}>
-                <Select
-                  label={localization.catalogAdmin.parentCode}
-                  options={codes ? availableParentCodes(codes, selectedCode?.id) : []}
-                  value={`${selectedCode?.parentID}`}
-                  onChange={updateCodeParent}
-                />
-              </div>
-
-              <div className={styles.buttonRow}>
-                <Button
-                  onClick={() => {
-                    updateAndAddCode(selectedCode, currentCodeList);
-                    setIsEditViewOpen(false);
-                  }}
-                >
-                  {localization.ok}
-                </Button>
-                <Button
-                  color='danger'
-                  onClick={() => {
-                    removeCode(selectedCode.id, currentCodeList);
-                    setIsEditViewOpen(false);
-                  }}
-                >
-                  {localization.button.removeFromCodeList}
-                </Button>
-              </div>
-            </InfoCard.Item>
-          </InfoCard>
-        )}
-      </div>
+      )}
     </>
   );
 };

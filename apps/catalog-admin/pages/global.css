@@ -1,0 +1,57 @@
+.card {
+  display: flex;
+  gap: 32px;
+  justify-content: center;
+  margin-top: 32px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+/* Editors */
+
+.editorStructure {
+  width: 640px;
+  margin: 37px;
+  gap: 37px;
+}
+
+.editorSpacing {
+  padding-bottom: 20px;
+}
+
+.editorButtons {
+  display: flex;
+  gap: 26px;
+  margin-top: 37px;
+}
+
+/* Accordions */
+
+.accordionField {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2em 2em;
+  gap: 1em;
+}
+
+.accordionWidth {
+  width: 100%;
+}
+
+.accordionStructure {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  gap: 1em;
+}
+
+/* General */
+
+.center {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}

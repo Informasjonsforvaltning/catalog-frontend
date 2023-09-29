@@ -4,37 +4,3 @@
   margin-bottom: 87px;
   margin-top: 48px;
 }
-
-.accordion {
-  margin-bottom: 25px;
-  font-family: Heebo, sans-serif;
-  --fds-typography-paragraph-small: Heebo;
-  width: 100%;
-}
-
-.buttons {
-  display: flex;
-  gap: 26px;
-}
-
-.center {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-
-.page {
-  width: 1200px;
-  min-height: 100%;
-}
-
-@media screen and (max-width: 1200px) {
-  .page {
-    width: 100%;
-  }
-}
-
-.label {
-  font-weight: bold;
-  font-size: 20px;
-}

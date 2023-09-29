@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import { BreadcrumbType, Breadcrumbs, Card } from '@catalog-frontend/ui';
 
-import styles from '../../shared-style.module.css';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Banner } from '../../../components/banner';
 import { Organization } from '@catalog-frontend/types';
@@ -27,7 +26,7 @@ export const CatalogsAdminPage = ({ organization }) => {
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <div>
         <Banner orgName={organization?.prefLabel} />
-        <div className={styles.card}>
+        <div className='card'>
           <Card
             icon={<InformationSquareIcon fontSize='3rem' />}
             title={localization.general}

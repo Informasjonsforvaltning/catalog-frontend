@@ -7,39 +7,10 @@
   border: 1px solid #ccc;
 }
 
-.field {
-  composes: field from '../../../../../components/internal-field-editor/internal-field.module.css';
-}
-
-.accordion {
-  composes: accordion from '../internal-fields/internal-fields.module.css';
-}
-
-.page-content {
-  composes: page-content from '../internal-fields/internal-fields.module.css';
-  padding: 37px;
-}
-
-.center {
-  composes: center from '../internal-fields/internal-fields.module.css';
-  margin: 37px;
-}
-
-.row {
-  composes: row from '../../../../../components/internal-field-editor/internal-field.module.css';
-}
-
-.accordionButtons {
-  composes: accordionButtons from '../../../../../components/internal-field-editor/internal-field.module.css';
-}
-
-.saveButton {
-  composes: saveButton from '../../../../../components/internal-field-editor/internal-field.module.css';
-}
-
 .heading {
   max-width: 1320px;
   width: 90%;
   display: flex;
   justify-content: flex-start;
+  margin-top: 37px;
 }

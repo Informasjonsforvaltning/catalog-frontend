@@ -12,6 +12,7 @@ import { compare } from 'fast-json-patch';
 import { Banner } from '../../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
 import { getOrganization } from '@catalog-frontend/data-access';
+import { PageLayout } from 'apps/catalog-admin/components/page-layout';
 
 export function EditableFields({ organization }) {
   const router = useRouter();
@@ -76,7 +77,7 @@ export function EditableFields({ organization }) {
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <Banner orgName={organization?.prefLabel} />
-      <div className={styles.center}>
+      <PageLayout>
         <div className={styles.heading}>
           <Heading
             level={2}
@@ -89,7 +90,7 @@ export function EditableFields({ organization }) {
         <div className={styles.page}>
           <div className={styles.pageContent}>
             <div>
-              <div className={styles.field}>
+              <div className='accordionField'>
                 <p>Fagområde:</p>
 
                 <Select
@@ -102,23 +103,21 @@ export function EditableFields({ organization }) {
                 />
               </div>
 
-              <div className={styles.field}>
+              <div className='accordionField'>
                 <div className={styles.accordionButtons}>
-                  <div className={styles.saveButton}>
-                    <Button
-                      fullWidth={true}
-                      size='small'
-                      onClick={() => handleUpdateDbCodeListId()}
-                    >
-                      {localization.button.save}
-                    </Button>
-                  </div>
+                  <Button
+                    fullWidth={true}
+                    size='small'
+                    onClick={() => handleUpdateDbCodeListId()}
+                  >
+                    {localization.button.save}
+                  </Button>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </PageLayout>
     </>
   );
 }

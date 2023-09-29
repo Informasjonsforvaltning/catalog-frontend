@@ -138,39 +138,37 @@ export const CodeListEditor = ({ codeList, codeListsInUse, type }: Props) => {
   };
 
   return (
-    <>
-      <div className={styles.codeListInfo}>
-        <div className={styles.textField}>
-          <Textfield
-            label={localization.name}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              type === 'create'
-                ? setNewCodeList((prevCodeList) => ({
-                    ...prevCodeList,
-                    name: event.target.value,
-                  }))
-                : handleCodeListUpdate(codeList.id, event.target.value, undefined);
-            }}
-            value={(updatedCodeLists.find((c) => c.id === codeList.id) || codeList)?.name || newCodeList?.name}
-          />
-        </div>
-        <div className={styles.textField}>
-          <Textfield
-            label={localization.description}
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              type === 'create'
-                ? setNewCodeList((prevCodeList) => ({ ...prevCodeList, description: event.target.value }))
-                : handleCodeListUpdate(codeList.id, undefined, event.target.value);
-            }}
-            value={
-              (updatedCodeLists.find((c) => c.id === codeList.id) || codeList)?.description || newCodeList?.description
-            }
-          />
-        </div>
+    <div className='editorStructure'>
+      <div className='editorSpacing'>
+        <Textfield
+          label={localization.name}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            type === 'create'
+              ? setNewCodeList((prevCodeList) => ({
+                  ...prevCodeList,
+                  name: event.target.value,
+                }))
+              : handleCodeListUpdate(codeList.id, event.target.value, undefined);
+          }}
+          value={(updatedCodeLists.find((c) => c.id === codeList.id) || codeList)?.name || newCodeList?.name}
+        />
+      </div>
+      <div className='editorSpacing'>
+        <Textfield
+          label={localization.description}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            type === 'create'
+              ? setNewCodeList((prevCodeList) => ({ ...prevCodeList, description: event.target.value }))
+              : handleCodeListUpdate(codeList.id, undefined, event.target.value);
+          }}
+          value={
+            (updatedCodeLists.find((c) => c.id === codeList.id) || codeList)?.description || newCodeList?.description
+          }
+        />
       </div>
 
       <CodesEditor codeList={codeList} />
-      <div className={styles.formButtons}>
+      <div className='editorButtons'>
         <Button onClick={() => (type === 'create' ? handleCreateCodeList() : handleUpdateDbCodeList(codeList.id))}>
           {localization.saveEdits}
         </Button>
@@ -192,7 +190,7 @@ export const CodeListEditor = ({ codeList, codeListsInUse, type }: Props) => {
           </Button>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

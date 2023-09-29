@@ -12,6 +12,7 @@ import { getOrganization } from '@catalog-frontend/data-access';
 import { useGetInternalFields } from '../../../../../hooks/internal-fields';
 import { InternalFieldEditor } from '../../../../../components/internal-field-editor';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
+import { PageLayout } from 'apps/catalog-admin/components/page-layout';
 
 export const InternalFieldsPage = ({ organization }) => {
   const router = useRouter();
@@ -49,71 +50,69 @@ export const InternalFieldsPage = ({ organization }) => {
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <Banner orgName={organization?.prefLabel} />
-      <div className={styles.center}>
-        <div className={styles.page}>
-          <div className={styles.topButtonRow}>
-            <Button
-              className={styles.createButton}
-              icon={<PlusCircleIcon title='' />}
-              onClick={handleCreateInternalField}
-            >
-              {localization.catalogAdmin.create.newInternalField}
-            </Button>
-          </div>
 
-          <Heading
-            level={2}
-            size='xsmall'
+      <PageLayout>
+        <div className={styles.topButtonRow}>
+          <Button
+            icon={<PlusCircleIcon title='' />}
+            onClick={handleCreateInternalField}
           >
-            {localization.catalogAdmin.internalFields}
-          </Heading>
-          <div className={styles.pageContent}>
-            {showInternalFieldEditor && (
+            {localization.catalogAdmin.create.newInternalField}
+          </Button>
+        </div>
+
+        <Heading
+          level={2}
+          size='xsmall'
+        >
+          {localization.catalogAdmin.internalFields}
+        </Heading>
+        <div className='accordionStructure'>
+          {showInternalFieldEditor && (
+            <Accordion
+              key={'create-editor'}
+              border={true}
+              className='accordionWidth'
+            >
+              <Accordion.Item defaultOpen={showInternalFieldEditor}>
+                <Accordion.Header>
+                  <Heading
+                    size='small'
+                    className={styles.label}
+                    level={3}
+                  ></Heading>
+                </Accordion.Header>
+                <Accordion.Content>
+                  <InternalFieldEditor type={'create'} />
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
+          )}
+          {dbFields &&
+            dbFields.map((field: InternalField) => (
               <Accordion
-                key={'create-editor'}
+                key={field.id}
                 border={true}
-                className={styles.accordion}
+                className='accordionWidth'
               >
-                <Accordion.Item defaultOpen={showInternalFieldEditor}>
+                <Accordion.Item>
                   <Accordion.Header>
                     <Heading
-                      size='small'
+                      size='xsmall'
                       className={styles.label}
-                      level={3}
-                    ></Heading>
+                    >
+                      {getTranslateText(field.label)}
+                    </Heading>
                   </Accordion.Header>
+
                   <Accordion.Content>
-                    <InternalFieldEditor type={'create'} />
+                    <InternalFieldEditor field={field} />
                   </Accordion.Content>
                 </Accordion.Item>
               </Accordion>
-            )}
-            {dbFields &&
-              dbFields.map((field: InternalField) => (
-                <Accordion
-                  key={field.id}
-                  border={true}
-                  className={styles.accordion}
-                >
-                  <Accordion.Item>
-                    <Accordion.Header>
-                      <Heading
-                        size='xsmall'
-                        className={styles.label}
-                      >
-                        {getTranslateText(field.label)}
-                      </Heading>
-                    </Accordion.Header>
-
-                    <Accordion.Content>
-                      <InternalFieldEditor field={field} />
-                    </Accordion.Content>
-                  </Accordion.Item>
-                </Accordion>
-              ))}
-          </div>
+            ))}
         </div>
-      </div>
+      </PageLayout>
     </>
   );
 };

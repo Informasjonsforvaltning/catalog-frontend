@@ -30,7 +30,7 @@ export const ConceptsPage = ({ organization }) => {
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <Banner orgName={organization?.prefLabel} />
-      <div className={styles.card}>
+      <div className='card'>
         <Card
           icon={
             <DatabaseIcon
@@ -49,7 +49,7 @@ export const ConceptsPage = ({ organization }) => {
           href={`/catalogs/${catalogId}/concepts/internal-fields`}
         />
       </div>
-      <div className={styles.card}>
+      <div className='card'>
         <Card
           icon={<PencilWritingIcon fontSize='3rem' />}
           title={localization.catalogAdmin.editableFields}

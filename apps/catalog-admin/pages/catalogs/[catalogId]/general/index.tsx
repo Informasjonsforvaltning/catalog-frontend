@@ -30,7 +30,7 @@ export const ConceptsPage = ({ organization }) => {
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <Banner orgName={organization?.prefLabel} />
-      <div className={styles.card}>
+      <div className='card'>
         <Card
           icon={<PaletteIcon fontSize='3rem' />}
           title={localization.catalogAdmin.design}

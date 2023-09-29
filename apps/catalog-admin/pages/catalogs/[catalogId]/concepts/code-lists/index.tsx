@@ -12,6 +12,7 @@ import { Banner } from '../../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
 import { getFields, getOrganization } from '@catalog-frontend/data-access';
 import CodeListEditor from '../../../../../components/code-list-editor';
+import { PageLayout } from 'apps/catalog-admin/components/page-layout';
 
 const CodeListsPage = ({ organization, codeListsInUse }) => {
   const router = useRouter();
@@ -80,81 +81,73 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <Banner orgName={organization?.prefLabel} />
-      <div className={styles.center}>
-        <div className={styles.page}>
-          <div className={styles.row}>
-            <SearchField
-              ariaLabel={'Søkefelt kodeliste'}
-              placeholder='Søk etter kodeliste...'
-              onSearchSubmit={(search) => setSearch(search)}
-            />
-            <div className={styles.buttons}>
-              <Button
-                className={styles.createButton}
-                icon={<PlusCircleIcon />}
-                onClick={handleCreateCodeList}
-              >
-                {localization.catalogAdmin.createCodeList}
-              </Button>
-            </div>
+      <PageLayout>
+        <div className={styles.row}>
+          <SearchField
+            ariaLabel={'Søkefelt kodeliste'}
+            placeholder='Søk etter kodeliste...'
+            onSearchSubmit={(search) => setSearch(search)}
+          />
+          <div className={styles.buttons}>
+            <Button
+              icon={<PlusCircleIcon />}
+              onClick={handleCreateCodeList}
+            >
+              {localization.catalogAdmin.createCodeList}
+            </Button>
           </div>
-          <Heading
-            level={2}
-            size='xsmall'
-          >
-            {localization.catalogAdmin.codeLists}
-          </Heading>
-          <div className={styles.content}>
-            {showCodeListEditor && (
+        </div>
+        <Heading
+          level={2}
+          size='xsmall'
+        >
+          {localization.catalogAdmin.codeLists}
+        </Heading>
+        <div className='accordionStructure'>
+          {showCodeListEditor && (
+            <Accordion
+              key={'codeList-create-edtior'}
+              border={true}
+              className='accordionWidth'
+            >
+              <Accordion.Item defaultOpen={showCodeListEditor}>
+                <Accordion.Header>
+                  <Heading size='small'></Heading>
+                </Accordion.Header>
+
+                <Accordion.Content>
+                  <CodeListEditor type='create' />
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
+          )}
+          {searchResults &&
+            searchResults?.map((codeList: CodeList, index: number) => (
               <Accordion
-                key={'codeList-create-edtior'}
+                key={index}
                 border={true}
-                className={styles.accordion}
+                className='accordionWidth'
               >
-                <Accordion.Item defaultOpen={showCodeListEditor}>
+                <Accordion.Item>
                   <Accordion.Header>
-                    <Heading size='small'></Heading>
+                    <Heading size='xsmall'>{codeList.name}</Heading>
+                    <p className={styles.description}> {codeList.description} </p>
                   </Accordion.Header>
+                  <Accordion.Content>
+                    <p className={styles.id}>ID: {codeList.id}</p>
+                  </Accordion.Content>
 
                   <Accordion.Content>
-                    <CodeListEditor type='create' />
+                    <CodeListEditor
+                      codeList={codeList}
+                      codeListsInUse={codeListsInUse}
+                    />
                   </Accordion.Content>
                 </Accordion.Item>
               </Accordion>
-            )}
-            {searchResults &&
-              searchResults?.map((codeList: CodeList, index: number) => (
-                <Accordion
-                  key={index}
-                  border={true}
-                  className={styles.accordion}
-                >
-                  <Accordion.Item>
-                    <Accordion.Header>
-                      <Heading
-                        size='xsmall'
-                        className={styles.label}
-                      >
-                        {codeList.name}
-                      </Heading>
-                      <p className={styles.description}> {codeList.description} </p>
-                    </Accordion.Header>
-                    <Accordion.Content>
-                      <p className={styles.id}>ID: {codeList.id}</p>
-                    </Accordion.Content>
-
-                    <Accordion.Content>
-                      <CodeListEditor
-                        codeList={codeList}
-                        codeListsInUse={codeListsInUse}
-                      />
-                    </Accordion.Content>
-                  </Accordion.Item>
-                </Accordion>
-              ))}
-          </div>
+            ))}
         </div>
-      </div>
+      </PageLayout>
     </>
   );
 };

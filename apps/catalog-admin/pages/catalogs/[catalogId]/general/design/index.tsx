@@ -13,6 +13,7 @@ import { useGetDesign, useGetLogo, useUpdateDesign } from '../../../../../hooks/
 import { compare } from 'fast-json-patch';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
 import { getOrganization } from '@catalog-frontend/data-access';
+import { PageLayout } from 'apps/catalog-admin/components/page-layout';
 
 const DesignPage = ({ organization }) => {
   const adminContext = useAdminState();
@@ -84,80 +85,78 @@ const DesignPage = ({ organization }) => {
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
 
-      <div className={styles.center}>
-        <div className={styles.container}>
-          <div className={styles.heading}>
-            <Heading size='xlarge'>{localization.catalogAdmin.design}</Heading>
-          </div>
-          <div className={styles.subheading}>
-            <Heading size='small'>{localization.catalogAdmin.preview}</Heading>
-          </div>
+      <PageLayout>
+        <div className={styles.heading}>
+          <Heading size='xlarge'>{localization.catalogAdmin.design}</Heading>
+        </div>
+        <div className={styles.subheading}>
+          <Heading size='small'>{localization.catalogAdmin.preview}</Heading>
+        </div>
 
-          <>
-            <PageBanner
-              title={'Administrere Begrepskatalog'}
-              subtitle={String(getTranslateText(organization?.prefLabel))}
-              logoDescription={dbDesign?.hasLogo && dbDesign?.logoDescription}
-              backgroundColor={backgroundColor || dbDesign?.backgroundColor || '#FFFFFF'}
-              fontColor={fontColor || dbDesign?.fontColor || '#2D3741'}
-              logo={logo || (dbDesign?.hasLogo && `/api/design/${catalogId}/logo`) || null}
+        <>
+          <PageBanner
+            title={'Administrere Begrepskatalog'}
+            subtitle={String(getTranslateText(organization?.prefLabel))}
+            logoDescription={dbDesign?.hasLogo && dbDesign?.logoDescription}
+            backgroundColor={backgroundColor || dbDesign?.backgroundColor || '#FFFFFF'}
+            fontColor={fontColor || dbDesign?.fontColor || '#2D3741'}
+            logo={logo || (dbDesign?.hasLogo && `/api/design/${catalogId}/logo`) || null}
+          />
+        </>
+        <div className={styles.subheading}>
+          <Heading size='small'>{localization.catalogAdmin.customizeDesign}</Heading>
+        </div>
+
+        <div className={styles.backgroundContainer}>
+          <div className={styles.imageUploader}>
+            <div className={styles.infoBox}>
+              <Label>{localization.catalogAdmin.logo}</Label>
+              <p>{localization.catalogAdmin.designHelpText.logo}</p>
+            </div>
+            <ImageUploader />
+          </div>
+          <div className={styles.infoBox}>
+            <Label>{localization.catalogAdmin.descriptionLogo}</Label>
+            <p>{localization.catalogAdmin.designHelpText.logoDescription}</p>
+          </div>
+          <div className={styles.textFieldContainer}>
+            <Textfield
+              className={styles.textField}
+              error={!isTextInputValid && localization.validation.invalidValue}
+              value={imageLabel}
+              onChange={(event) => {
+                setImageLabel(event.target.value);
+                setIsTextInputValid(textRegexWithNumbers.test(event.target.value));
+              }}
+              required={true}
+              disabled={disableTextField}
             />
-          </>
-          <div className={styles.subheading}>
-            <Heading size='small'>{localization.catalogAdmin.customizeDesign}</Heading>
-          </div>
-
-          <div className={styles.backgroundContainer}>
-            <div className={styles.imageUploader}>
-              <div className={styles.infoBox}>
-                <Label>{localization.catalogAdmin.logo}</Label>
-                <p>{localization.catalogAdmin.designHelpText.logo}</p>
-              </div>
-              <ImageUploader />
-            </div>
-            <div className={styles.infoBox}>
-              <Label>{localization.catalogAdmin.descriptionLogo}</Label>
-              <p>{localization.catalogAdmin.designHelpText.logoDescription}</p>
-            </div>
-            <div className={styles.textFieldContainer}>
-              <Textfield
-                className={styles.textField}
-                error={!isTextInputValid && localization.validation.invalidValue}
-                value={imageLabel}
-                onChange={(event) => {
-                  setImageLabel(event.target.value);
-                  setIsTextInputValid(textRegexWithNumbers.test(event.target.value));
-                }}
-                required={true}
-                disabled={disableTextField}
-              />
-            </div>
-          </div>
-          <div className={styles.backgroundContainer}>
-            <div className={styles.infoBox}>
-              <Label>{localization.catalogAdmin.colors}</Label>
-              <p>{localization.catalogAdmin.designHelpText.colors}</p>
-            </div>
-            <div className={styles.colorPickers}>
-              <div>
-                <div className={styles.label}>
-                  <Label>{localization.catalogAdmin.backgroundColor}</Label>
-                </div>
-                <ColorPicker type='background' />
-              </div>
-              <div>
-                <div className={styles.label}>
-                  <Label>{localization.catalogAdmin.fontColor}</Label>
-                </div>
-                <ColorPicker type='font' />
-              </div>
-            </div>
-            <div>
-              <Button onClick={() => handleUpdateDbDesign()}>{localization.save}</Button>
-            </div>
           </div>
         </div>
-      </div>
+        <div className={styles.backgroundContainer}>
+          <div className={styles.infoBox}>
+            <Label>{localization.catalogAdmin.colors}</Label>
+            <p>{localization.catalogAdmin.designHelpText.colors}</p>
+          </div>
+          <div className={styles.colorPickers}>
+            <div>
+              <div className={styles.label}>
+                <Label>{localization.catalogAdmin.backgroundColor}</Label>
+              </div>
+              <ColorPicker type='background' />
+            </div>
+            <div>
+              <div className={styles.label}>
+                <Label>{localization.catalogAdmin.fontColor}</Label>
+              </div>
+              <ColorPicker type='font' />
+            </div>
+          </div>
+          <div>
+            <Button onClick={() => handleUpdateDbDesign()}>{localization.save}</Button>
+          </div>
+        </div>
+      </PageLayout>
     </>
   );
 };
