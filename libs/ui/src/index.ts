@@ -23,3 +23,5 @@ export * from './lib/checkbox-group';
 export * from './lib/list';
 export * from './lib/search-hit-container';
 export * from './lib/custom-error';
+export * from './lib/key-value-list';
+export * from './lib/key-value-list-item';

@@ -10,3 +10,9 @@ export const hashCode = (s: string) => {
   for (i = 0, h = 0; i < s.length; i++) h = (Math.imul(31, h) + s.charCodeAt(i)) | 0;
   return h;
 };
+
+export const isObjectNullUndefinedEmpty = (object: any | null | undefined) =>
+  object === undefined ||
+  object === null ||
+  Object.keys(object).length === 0 ||
+  Object.values(object).every((x) => x === null || x === '');

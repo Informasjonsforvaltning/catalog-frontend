@@ -1,4 +1,5 @@
-import { AssignedUser } from './user';
+import { EntityEnum, LanguageCodes } from './enums';
+import { Organization } from './organization';
 
 export interface ErrorMessage {
   name?: string;
@@ -141,6 +142,55 @@ export interface Concept {
   abbreviatedLabel?: string;
 }
 
+export interface ConceptDefinition {
+  text?: Partial<TextLanguage>;
+  remark?: Partial<TextLanguage>;
+  sources?: Array<{ text?: string; uri?: string }>;
+  range?: { text?: Partial<TextLanguage>; uri?: string };
+  sourceRelationship?: string;
+}
+
+export interface Harvest {
+  firstHarvested: string;
+  lastHarvested: string;
+}
+
+interface ConceptContactPoint {
+  email: string;
+  telephone: string;
+}
+
+export interface ConceptSubject {
+  label?: Partial<TextLanguage>;
+}
+
+export interface ResponseEntity {
+  id: string;
+  type: EntityEnum.CONCEPT;
+  uri: string;
+  identifier: string;
+  prefLabel: Partial<TextLanguage>;
+  altLabel?: Partial<TextLanguage>[];
+  hiddenLabel?: Partial<TextLanguage>[];
+  definition?: ConceptDefinition;
+  publisher: Partial<Organization>;
+  example: Partial<TextLanguage>;
+  subject?: Partial<ConceptSubject>[];
+  application?: Partial<TextLanguage>[];
+  harvest?: Partial<Harvest>;
+  contactPoint?: Partial<ConceptContactPoint>;
+  validFromIncluding?: string;
+  validToIncluding?: string;
+  seeAlso?: string[];
+  isReplacedBy?: string[];
+  replaces?: string[];
+  associativeRelation?: Partial<AssociativeRelation>[];
+  partitiveRelation?: Partial<PartitiveRelation>[];
+  genericRelation?: Partial<GenericRelation>[];
+  created?: string;
+  memberOf?: string[];
+}
+
 export interface SkosConcept {
   id: string;
   identifier: string;
@@ -230,4 +280,43 @@ export interface ConceptSearchFulltextHit {
   uri: string;
   publisher?: PublisherRdf;
   prefLabel: TekstMedSpraakKode;
+}
+
+export interface TextLanguage {
+  [LanguageCodes.nb]: string;
+  [LanguageCodes.nn]: string;
+  [LanguageCodes.en]: string;
+  [LanguageCodes.no]: string;
+  [LanguageCodes.none]: string;
+}
+
+export interface AssociativeRelation {
+  description: Partial<TextLanguage>;
+  related: string;
+}
+
+export interface PartitiveRelation {
+  description: Partial<TextLanguage>;
+  hasPart: string;
+  isPartOf: string;
+}
+
+export interface GenericRelation {
+  divisioncriterion: Partial<TextLanguage>;
+  generalizes: string;
+  specializes: string;
+}
+
+export interface SkosConcept {
+  id: string;
+  identifier: string;
+  prefLabel: {
+    nb?: string;
+    nn?: string;
+    en?: string;
+  };
+  definition: {
+    text?: string;
+  };
+  publisher: Publisher;
 }
