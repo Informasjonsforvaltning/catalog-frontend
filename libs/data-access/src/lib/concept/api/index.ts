@@ -1,4 +1,6 @@
-import { Concept, SearchConceptQuery } from '@catalog-frontend/types';
+import { Concept, Relasjon, SearchConceptQuery, SkosConcept } from '@catalog-frontend/types';
+import { searchConceptsByIdentifiers } from '../../search-fulltext/api';
+import { isObjectNullUndefinedEmpty } from '@catalog-frontend/utils';
 
 export const conceptCatalogApiCall = async (
   method: 'GET' | 'POST' | 'DELETE',
@@ -38,3 +40,71 @@ export const importConcepts = (concepts: Omit<Concept, 'id'>[], accessToken: str
 
 export const deleteConcept = (conceptId: string, accessToken: string) =>
   conceptCatalogApiCall('DELETE', `/begreper/${conceptId}`, null, accessToken);
+
+export const extractConcepts = (searchResponse: any) => searchResponse?.hits ?? [];
+
+const hasRelatedConcepts = (concept: Concept): boolean => {
+  if (!isObjectNullUndefinedEmpty(concept.begrepsRelasjon)) return true;
+  if (!isObjectNullUndefinedEmpty(concept.seOgså)) return true;
+  if (!isObjectNullUndefinedEmpty(concept.erstattesAv)) return true;
+  return false;
+};
+
+export const getConceptRelations = (concept: Concept): Relasjon[] => {
+  if (!hasRelatedConcepts(concept)) return [];
+
+  const conceptRelations: Relasjon[] = [];
+
+  if (concept.begrepsRelasjon) {
+    conceptRelations.push(...concept.begrepsRelasjon.filter((relasjon) => !isObjectNullUndefinedEmpty(relasjon)));
+  }
+
+  if (concept.seOgså) {
+    if (Array.isArray(concept.seOgså)) {
+      conceptRelations.push(...concept.seOgså.map((uri): Relasjon => ({ relatertBegrep: uri, relasjon: 'seOgså' })));
+    } else {
+      conceptRelations.push({ relatertBegrep: concept.seOgså, relasjon: 'seOgså' });
+    }
+  }
+
+  if (concept.erstattesAv) {
+    conceptRelations.push(
+      ...concept.erstattesAv.map((uri): Relasjon => ({ relatertBegrep: uri, relasjon: 'erstattesAv' })),
+    );
+  }
+
+  return conceptRelations;
+};
+
+export const getRelatedConcepts = async (concept: Concept): Promise<SkosConcept[]> => {
+  if (!hasRelatedConcepts(concept)) return [];
+
+  const relatedConceptsUris = [];
+
+  if (concept.begrepsRelasjon)
+    relatedConceptsUris.push(
+      ...concept.begrepsRelasjon
+        .map((relasjon) => relasjon.relatertBegrep)
+        .filter((value) => value !== null && value !== undefined),
+    );
+
+  if (concept.seOgså) {
+    if (Array.isArray(concept.seOgså)) {
+      relatedConceptsUris.push(...concept.seOgså);
+    } else {
+      relatedConceptsUris.push(concept.seOgså);
+    }
+  }
+
+  if (concept.erstattesAv) {
+    relatedConceptsUris.push(...concept.erstattesAv);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  const relatedConcepts = await searchConceptsByIdentifiers(relatedConceptsUris)
+    .then(async (response) => await (response instanceof Response && response.ok ? response.json() : []))
+    .then((body) => extractConcepts(body));
+
+  return relatedConcepts;
+};

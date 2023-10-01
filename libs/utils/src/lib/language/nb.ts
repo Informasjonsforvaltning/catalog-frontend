@@ -222,6 +222,21 @@ export const nb = {
     validPeriod: 'Gyldighetsperiode',
     label: 'Merkelapp',
     source: 'Kilde',
+    relatedConcepts: 'Relaterte begreper ({conceptCount})',
+    associativeRelation: 'Assosiativ relasjon',
+    partitiveRelation: 'Partitiv relasjon',
+    isPartOf: 'Er del av',
+    hasPart: 'Inngår i',
+    genericRelation: 'Generisk relasjon',
+    generalizes: 'Underordnet',
+    specializes: 'Overordnet',
+    seeAlso: 'Se også',
+    isReplacedBy: 'Erstattes av',
+  },
+
+  validity: {
+    expired: 'Utgått',
+    willBeValid: 'blir gyldig',
     contactInformation: 'Kontaktinformasjon',
   },
 

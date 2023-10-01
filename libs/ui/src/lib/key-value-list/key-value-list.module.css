@@ -1,0 +1,9 @@
+.keyValueList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.keyValueList:nth-of-type(n + 2) {
+  margin-top: 10px;
+}

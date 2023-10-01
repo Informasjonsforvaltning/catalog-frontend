@@ -4,6 +4,9 @@ interface Props {
   body?: any;
 }
 
+const mapSorting = ({ sortfield }: any) =>
+  sortfield === 'harvest.firstHarvested' ? { field: 'harvest.firstHarvested', direction: 'desc' } : undefined;
+
 const mapFilters = ({ identifier }: any) => {
   const filters: any = [];
   if (identifier) {
@@ -18,13 +21,13 @@ const mapFilters = ({ identifier }: any) => {
   return filters.length > 0 ? filters : undefined;
 };
 
-const paramsToSearchBody = ({ q, ...params }: any) => {
-  const body = {
-    q,
-    filters: mapFilters(params),
-  };
-  return body;
-};
+export const paramsToSearchBody = ({ q, page, size, ...params }: any) => ({
+  q,
+  page: page ? Number(page) : undefined,
+  size,
+  sorting: mapSorting(params),
+  filters: mapFilters(params),
+});
 
 const searchFullTextApi = ({ path, method, body }: Props) =>
   fetch(`${process.env.FULLTEXT_SEARCH_BASE_URI}${path}`, {
@@ -36,7 +39,7 @@ const searchFullTextApi = ({ path, method, body }: Props) =>
       body,
     },
     ...(body && { body: JSON.stringify(body) }),
-  });
+  }).catch((e) => console.error(`Error fetching ${path.slice(1)} from fulltext-search-api:\n`, e));
 
 export const searchConceptsByIdentifiers = (identifiers: string[]) =>
   searchFullTextApi({

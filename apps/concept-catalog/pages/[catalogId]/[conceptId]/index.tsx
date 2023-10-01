@@ -29,12 +29,13 @@ import {
 import {
   getAllCodeLists,
   getConcept,
+  getConceptRelations,
   getConceptRevisions,
   getConceptStatuses,
   getFields,
   getOrganization,
+  getRelatedConcepts,
   getUsers,
-  searchConceptsByIdentifiers,
 } from '@catalog-frontend/data-access';
 import {
   Concept,
@@ -47,6 +48,8 @@ import {
   FieldsResult,
   CodeListsResult,
   UsersResult,
+  Relasjon,
+  SkosConcept,
 } from '@catalog-frontend/types';
 import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
@@ -61,6 +64,7 @@ import { useCatalogDesign } from '../../../context/catalog-design';
 import _ from 'lodash';
 import { getToken } from 'next-auth/jwt';
 import { prepareStatusList } from '@catalog-frontend/utils';
+import RelatedConcepts from '../../../components/related-concepts';
 
 type MapType = {
   [id: string]: string;
@@ -122,12 +126,13 @@ export const ConceptPage = ({
   concept,
   conceptStatuses,
   revisions,
-  replacedConcepts,
   hasWritePermission,
   fieldsResult,
   codeListsResult,
   usersResult,
   FDK_REGISTRATION_BASE_URI,
+  relatedConcepts,
+  conceptRelations,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [language, setLanguage] = useState('nb');
   const [newCommentText, setNewCommentText] = useState('');
@@ -511,15 +516,6 @@ export const ConceptPage = ({
             <div className={cn(classes.twoColumnRow, classes.bottomSpace)}>
               <div>
                 <InfoCard>
-                  {!_.isEmpty(replacedConcepts) && (
-                    <InfoCard.Item label={`${localization.concept.replacedBy}:`}>
-                      <ul>
-                        {replacedConcepts.map((concept, i) => (
-                          <li key={`replacedConcept-${i}`}>{translate(concept.prefLabel, language)}</li>
-                        ))}
-                      </ul>
-                    </InfoCard.Item>
-                  )}
                   {!_.isEmpty(concept?.merknad) && (
                     <InfoCard.Item label={`${localization.concept.note}:`}>
                       <span>{translate(concept?.merknad, language)}</span>
@@ -611,6 +607,21 @@ export const ConceptPage = ({
                           )}
                         </div>
                       )}
+                    </InfoCard.Item>
+                  )}
+                  {!_.isEmpty(relatedConcepts) && (
+                    <InfoCard.Item
+                      label={`${localization.formatString(localization.concept.relatedConcepts, {
+                        conceptCount: conceptRelations.length,
+                      })}`}
+                    >
+                      <RelatedConcepts
+                        title={getTitle(translate(concept?.anbefaltTerm?.navn))}
+                        conceptRelations={conceptRelations}
+                        relatedConcepts={relatedConcepts}
+                        validFromIncluding={concept?.gyldigFom}
+                        validToIncluding={concept?.gyldigTom}
+                      />
                     </InfoCard.Item>
                   )}
                   {!_.isEmpty(concept?.omfang) && (
@@ -816,7 +827,7 @@ export async function getServerSideProps({ req, res, params }) {
   }
 
   const concept: Concept | null = await getConcept(conceptId, `${session?.accessToken}`).then((response) => {
-    return response.json();
+    if (response.ok) return response.json();
   });
   if (!concept) {
     return {
@@ -831,21 +842,7 @@ export async function getServerSideProps({ req, res, params }) {
     })
     .then((statuses) => prepareStatusList(statuses));
 
-  const getReplacedConcepts = async () => {
-    if (concept?.erstattesAv?.length === 0) {
-      return [];
-    }
-
-    const searchConceptsResponse = await searchConceptsByIdentifiers(concept?.erstattesAv).then((response) => {
-      return response.json();
-    });
-    return searchConceptsResponse instanceof Response && searchConceptsResponse.status === 200
-      ? (await searchConceptsResponse?.json())?.hits ?? []
-      : [];
-  };
-
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
-  const replacedConcepts = await getReplacedConcepts();
   const username: string = token && getUsername(token.id_token);
   const organization: Organization = await getOrganization(catalogId).then((response) => response.json());
   const revisions: Concept[] | null = await getConceptRevisions(conceptId, `${session?.accessToken}`).then(
@@ -861,18 +858,22 @@ export async function getServerSideProps({ req, res, params }) {
     response.json(),
   );
 
+  const relatedConcepts: SkosConcept[] = await getRelatedConcepts(concept);
+  const conceptRelations: Relasjon[] = getConceptRelations(concept);
+
   return {
     props: {
       username,
       organization,
       concept,
       revisions,
-      replacedConcepts,
       fieldsResult,
       codeListsResult,
       conceptStatuses,
       usersResult,
       hasWritePermission,
+      relatedConcepts,
+      conceptRelations,
       FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
     },
   };
