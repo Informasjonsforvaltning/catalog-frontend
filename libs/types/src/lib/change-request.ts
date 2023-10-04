@@ -1,4 +1,4 @@
-import { JsonPatchOperation } from './history';
+import { JsonPatchOperation } from './json-patch';
 
 type ChangeRequestStatus = 'OPEN' | 'REJECTED' | 'ACCEPTED';
 

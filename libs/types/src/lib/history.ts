@@ -1,10 +1,5 @@
+import { JsonPatchOperation } from './json-patch';
 import { AssignedUser } from './user';
-
-export interface JsonPatchOperation {
-  op: string;
-  path: string;
-  value: string;
-}
 
 export interface UpdateList {
   updates: Update[];
