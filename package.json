@@ -11,6 +11,7 @@
     "test": "yarn run affected:test",
     "test-all": "nx run-many --target=test --all",
     "lint": "yarn run affected:lint",
+    "lint-all": "yarn nx run-many --target=lint --skip-nx-cache --verbose",
     "affected:build": "nx affected -t build",
     "affected:e2e": "nx affected -t e2e",
     "affected:test": "nx affected -t test",
