@@ -1,0 +1,45 @@
+.pageContainer {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  width: 80%;
+  margin: 0 auto;
+  padding: 1.6rem 0;
+  overflow-wrap: break-word;
+}
+
+.pageTitle {
+  font-size: 1.5rem;
+  font-weight: 500;
+  padding-bottom: 0.5rem;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding-bottom: 2em;
+}
+
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.bottomlineContainer {
+  padding-top: 4em;
+  padding-bottom: 3em;
+}
+
+.helpTexts {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+}
+
+.languages {
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+  width: 450px;
+}

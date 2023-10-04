@@ -21,7 +21,7 @@ export const ChangeRequestsPage = ({ organization, changeRequests, conceptsWithC
   const pageSubtitle = organization?.name ?? '';
   const router = useRouter();
 
-  const handleNewConceptSuggestion = () => {
+  const handleNewConceptSuggestionClick = () => {
     const catalogId = router.query.catalogId.toString();
     if (validOrganizationNumber(catalogId)) {
       router.push(`/${catalogId}/change-requests/new`);
@@ -47,7 +47,7 @@ export const ChangeRequestsPage = ({ organization, changeRequests, conceptsWithC
       />
       <div className='container'>
         <div className={styles.buttonsContainer}>
-          <Button onClick={handleNewConceptSuggestion}>{loc.suggestionForNewConcept}</Button>
+          <Button onClick={handleNewConceptSuggestionClick}>{loc.suggestionForNewConcept}</Button>
         </div>
         <Heading
           level={2}

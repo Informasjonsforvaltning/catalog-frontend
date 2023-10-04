@@ -1,0 +1,22 @@
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  align-items: center;
+}
+
+.currentValue {
+  composes: currentValue from '../form-fields.module.css';
+}
+
+.container {
+  composes: containerWithLanguage from '../form-fields.module.css';
+}
+
+.inputContainer {
+  composes: inputContainer from '../form-fields.module.css';
+}
+
+.noValueText {
+  composes: noValueText from '../form-fields.module.css';
+}
