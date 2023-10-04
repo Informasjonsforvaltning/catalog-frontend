@@ -1,5 +1,6 @@
+import { ChangeRequest } from '@catalog-frontend/types';
 import { validOrganizationNumber } from '@catalog-frontend/utils';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 export const useGetChangeRequests = (catalogId: string) => {
   return useQuery({
@@ -20,5 +21,21 @@ export const useGetChangeRequests = (catalogId: string) => {
       return response.json();
     },
     refetchOnWindowFocus: false,
+  });
+};
+
+export const useCreateChangeRequest = ({ catalogId }) => {
+  return useMutation({
+    mutationFn: async (changeRequest: ChangeRequest) => {
+      return Promise.reject('Not implemented');
+    },
+  });
+};
+
+export const useUpdateChangeRequest = ({ catalogId, changeRequestId }) => {
+  return useMutation({
+    mutationFn: async (changeRequest: ChangeRequest) => {
+      return Promise.reject('Not implemented');
+    },
   });
 };

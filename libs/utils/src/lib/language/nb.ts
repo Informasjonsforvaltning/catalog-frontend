@@ -93,6 +93,9 @@ export const nb = {
     save: 'Lagre',
     cancel: 'Avbryt',
     removeFromCodeList: 'Fjern fra kodeliste',
+    send: 'Send inn',
+    deleteWithFormat: 'Slett {text}',
+    addWithFormat: 'Legg til ny {text}',
   },
 
   dropdown: {
@@ -203,14 +206,17 @@ export const nb = {
 
   concept: {
     id: 'ID',
+    concept: 'Begrep',
     replacedBy: 'Erstattet av',
     createdBy: 'Opprettet av',
     created: 'Opprettet',
     lastUpdated: 'Sist oppdatert',
     note: 'Merknad',
+    definition: 'Definisjon',
     example: 'Eksempel',
     publicDefinition: 'Definisjon for allmennheten',
     specialistDefinition: 'Definisjon for spesialister',
+    preferredTerm: 'Anbefalt term',
     allowedTerm: 'Tillatt term',
     notRecommendedTerm: 'Frarådet term',
     abbreviation: 'Forkortelse',
@@ -238,11 +244,16 @@ export const nb = {
     expired: 'Utgått',
     willBeValid: 'blir gyldig',
     contactInformation: 'Kontaktinformasjon',
+    relationToSource: 'Forhold til kilde',
+    formFieldLabel: '{fieldType} på {lang}',
   },
 
   changeRequest: {
     changeRequest: 'Endringsforslag',
     seeChangeRequests: 'Se alle endringsforslag',
+    existingValue: 'Eksisterende {fieldType} på {lang}',
+    proposedChange: 'Forslag til ny {fieldType} på {lang}',
+    noValue: 'Ingen verdi',
   },
 
   comment: {

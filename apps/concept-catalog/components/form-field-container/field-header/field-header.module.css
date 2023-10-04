@@ -1,0 +1,19 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5em 2em;
+  background: #e6eff8;
+  border-radius: 8px;
+  gap: 0.25em;
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+.subtitle {
+  font-size: 1rem;
+  font-weight: 500;
+  gap: 1em;
+}
