@@ -1,7 +1,7 @@
 import { getChangeRequests } from '@catalog-frontend/data-access';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]';
+import { authOptions } from '../../auth/[...nextauth]';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session = await getServerSession(req, res, authOptions);
@@ -11,12 +11,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   res.status(200);
 
-  const { slug } = req.query;
-  const [catalogId] = slug;
+  const { catalogId } = req.query;
 
   if (req.method == 'GET') {
     try {
-      const response = await getChangeRequests(catalogId, `${session?.accessToken}`);
+      const response = await getChangeRequests(`${catalogId}`, `${session?.accessToken}`);
       if (response.status !== 200) {
         return res.status(response.status).send({ error: 'Failed to get change requests' });
       }
