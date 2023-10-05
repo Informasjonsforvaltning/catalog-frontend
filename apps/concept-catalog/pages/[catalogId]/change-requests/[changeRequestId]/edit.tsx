@@ -1,4 +1,4 @@
-import { getOrganization, getConcept } from '@catalog-frontend/data-access';
+import { getOrganization, getConcept, getChangeRequest } from '@catalog-frontend/data-access';
 import { Organization, Concept, ChangeRequest } from '@catalog-frontend/types';
 import { hasOrganizationReadPermission, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { authOptions } from '../../../api/auth/[...nextauth]';
@@ -33,11 +33,22 @@ const ChangeRequestEditPage = ({
 };
 
 export async function getServerSideProps({ req, res, params }) {
-  const session: Session = await getServerSession(req, res, authOptions);
   const { catalogId, changeRequestId } = params;
+  if (!validOrganizationNumber(catalogId) || !validUUID(changeRequestId)) {
+    return { notFound: true };
+  }
+
+  const session: Session = await getServerSession(req, res, authOptions);
+  if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: `/auth/signin?callbackUrl=/${catalogId}/change-requests/${changeRequestId}/edit`,
+      },
+    };
+  }
 
   const hasPermission = session && hasOrganizationReadPermission(session?.accessToken, catalogId);
-
   if (!hasPermission) {
     return {
       redirect: {
@@ -45,10 +56,6 @@ export async function getServerSideProps({ req, res, params }) {
         destination: `/${catalogId}/no-access`,
       },
     };
-  }
-
-  if (!validOrganizationNumber(catalogId) || !validUUID(changeRequestId)) {
-    return { notFound: true };
   }
 
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
@@ -59,14 +66,13 @@ export async function getServerSideProps({ req, res, params }) {
     seOgså: [],
   };
 
-  // TODO: Fetch change request from API
-  const changeRequest: ChangeRequest = {
-    id: null,
-    catalogId: catalogId,
-    conceptId: null,
-    status: 'OPEN',
-    operations: [],
-  };
+  const changeRequest: ChangeRequest = await getChangeRequest(catalogId, changeRequestId, `${session.accessToken}`)
+    .then((response) => {
+      return response.json();
+    })
+    .catch((error) => {
+      throw error;
+    });
 
   if (changeRequest.conceptId && validUUID(changeRequest.conceptId)) {
     originalConcept = await getConcept(changeRequest.conceptId, `${session.accessToken}`)
