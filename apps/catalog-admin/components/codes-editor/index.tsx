@@ -59,9 +59,10 @@ export const CodesEditor = ({ codeList: dbCodeList }: Props) => {
   };
 
   const updateCodeParent = (value: string) => {
+    const convertedValue = value !== null ? +value : null;
     setSelectedCode((prevSelectedCode) => ({
       ...prevSelectedCode,
-      parentID: +value,
+      parentID: convertedValue,
     }));
   };
 
@@ -203,15 +204,16 @@ export const CodesEditor = ({ codeList: dbCodeList }: Props) => {
       .map((code: Code) => ({
         label: String(getTranslateText(code.name)),
         value: code.id.toString(),
-      }));
+      }))
+      .concat({ label: localization.catalogAdmin.noParentCode, value: null });
   }
 
   return (
     <>
       <div className={styles.editorContainer}>
-        <InfoCard className={styles.codeTree}>
+        <InfoCard>
           <InfoCard.Item>
-            <div>
+            <div className={styles.codeTree}>
               <Tree<TreeNode>
                 data={convertCodeListToTreeNodes(codes)}
                 idAccessor={(node) => node.value}
