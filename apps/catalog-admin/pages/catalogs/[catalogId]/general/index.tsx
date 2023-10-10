@@ -1,5 +1,4 @@
 import { BreadcrumbType, Breadcrumbs, Card } from '@catalog-frontend/ui';
-import styles from './general.module.css';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
@@ -17,7 +16,7 @@ export const ConceptsPage = ({ organization }) => {
     ? ([
         {
           href: `/catalogs/${catalogId}`,
-          text: getTranslateText(localization.catalogAdmin.manage.catalogAdmin),
+          text: getTranslateText(localization.manageCatalog),
         },
         {
           href: `/catalogs/${catalogId}/general`,
@@ -30,7 +29,7 @@ export const ConceptsPage = ({ organization }) => {
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <Banner orgName={organization?.prefLabel} />
-      <div className={styles.container}>
+      <div className='card'>
         <Card
           icon={<PaletteIcon fontSize='3rem' />}
           title={localization.catalogAdmin.design}

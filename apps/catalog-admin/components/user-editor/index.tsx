@@ -6,7 +6,6 @@ import { emailRegex, localization, telephoneNumberRegex, textRegex } from '@cata
 import { useCreateUser, useDeleteUser, useGetUsers, useUpdateUser } from '../../hooks/users';
 import { useAdminDispatch } from '../../context/admin';
 import { AssignedUser } from '@catalog-frontend/types';
-import styles from './user-editor.module.css';
 
 type EditorType = 'create' | 'update';
 
@@ -103,8 +102,8 @@ export const UserEditor = ({ user, type }: UserEditorProps) => {
   };
 
   return (
-    <div className={styles.codeListInfo}>
-      <div className={styles.textField}>
+    <div className='editorStructure'>
+      <div className='editorSpacing'>
         <Textfield
           error={
             textRegex.test((findUserById(user?.id) || user)?.name || newUser.name)
@@ -120,7 +119,7 @@ export const UserEditor = ({ user, type }: UserEditorProps) => {
           value={(findUserById(user?.id) || user)?.name}
         />
       </div>
-      <div className={styles.textField}>
+      <div className='editorSpacing'>
         <Textfield
           error={
             emailRegex.test((findUserById(user?.id) || user)?.email || newUser.email)
@@ -137,7 +136,7 @@ export const UserEditor = ({ user, type }: UserEditorProps) => {
           }}
         />
       </div>
-      <div className={styles.textField}>
+      <div className='editorSpacing'>
         <Textfield
           label='Telefonnummer'
           type='tel'
@@ -155,7 +154,7 @@ export const UserEditor = ({ user, type }: UserEditorProps) => {
           }}
         />
       </div>
-      <div className={styles.formButtons}>
+      <div className='editorButtons'>
         <Button onClick={() => (type === 'create' ? handleCreateUser() : handleUpdateUser(user?.id))}>Lagre</Button>
         {type === 'create' ? (
           <Button

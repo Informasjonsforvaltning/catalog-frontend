@@ -1,30 +1,6 @@
-.field {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
-  padding: 2em 2em;
-  gap: 1em;
-}
-
 .row {
   display: flex;
+  flex-direction: row;
   justify-content: flex-start;
-}
-
-.row {
-  display: flex;
-  flex-direction: row;
-  justify-content: left;
   align-items: center;
-}
-
-.accordionButtons {
-  display: flex;
-  flex-direction: row;
-  gap: 1em;
-}
-
-.saveButton {
-  min-width: 7em;
 }

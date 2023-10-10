@@ -17,21 +17,6 @@
   display: none;
 }
 
-.label {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  width: 203px;
-  height: 48px;
-  background: #2d3741;
-  border: 1px solid #2d3741;
-  border-radius: 4px;
-  color: white;
-  font-size: 18px;
-  margin-top: 21px;
-}
-
 .filename {
   max-width: 170px;
   display: flex;

@@ -1,5 +1,4 @@
 import { BreadcrumbType, Breadcrumbs, Card } from '@catalog-frontend/ui';
-import styles from './concepts.module.css';
 import React from 'react';
 import { useRouter } from 'next/router';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
@@ -30,7 +29,7 @@ export const ConceptsPage = ({ organization }) => {
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <Banner orgName={organization?.prefLabel} />
-      <div className={styles.container}>
+      <div className='card'>
         <Card
           icon={
             <DatabaseIcon
@@ -49,7 +48,7 @@ export const ConceptsPage = ({ organization }) => {
           href={`/catalogs/${catalogId}/concepts/internal-fields`}
         />
       </div>
-      <div className={styles.container}>
+      <div className='card'>
         <Card
           icon={<PencilWritingIcon fontSize='3rem' />}
           title={localization.catalogAdmin.editableFields}

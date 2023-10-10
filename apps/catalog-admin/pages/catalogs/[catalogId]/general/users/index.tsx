@@ -13,6 +13,7 @@ import { UserEditor } from '../../../../../components/user-editor';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
 
 import styles from './users.module.css';
+import { PageLayout } from '../../../../../components/page-layout';
 
 export const CodeListsPage = ({ organization }) => {
   const router = useRouter();
@@ -43,7 +44,7 @@ export const CodeListsPage = ({ organization }) => {
     ? ([
         {
           href: `/catalogs/${catalogId}`,
-          text: getTranslateText(localization.catalogAdmin.manage.catalogAdmin),
+          text: getTranslateText(localization.manageCatalog),
         },
         {
           href: `/catalogs/${catalogId}/general`,
@@ -60,42 +61,43 @@ export const CodeListsPage = ({ organization }) => {
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <Banner orgName={organization?.prefLabel} />
-      <div className={styles.center}>
-        <div className={styles.page}>
-          <div className={styles.row}>
-            <SearchField
-              ariaLabel=''
-              placeholder='Søk etter bruker...'
-              onSearchSubmit={(search) => setSearch(search)}
-            />
-            <div className={styles.buttons}>
-              <Button
-                className={styles.createButton}
-                icon={<PlusCircleIcon />}
-                onClick={handleCreateUser}
-              >
-                {localization.catalogAdmin.addUser}
-              </Button>
-            </div>
-          </div>
 
-          <Heading
-            level={2}
-            size='xsmall'
-          >
-            Brukerliste
-          </Heading>
+      <PageLayout>
+        <div className={styles.row}>
+          <SearchField
+            ariaLabel=''
+            placeholder='Søk etter bruker...'
+            onSearchSubmit={(search) => setSearch(search)}
+          />
+          <div className='editorButtons'>
+            <Button
+              className={styles.createButton}
+              icon={<PlusCircleIcon />}
+              onClick={handleCreateUser}
+            >
+              {localization.catalogAdmin.addUser}
+            </Button>
+          </div>
+        </div>
+
+        <Heading
+          level={2}
+          size='xsmall'
+        >
+          Brukerliste
+        </Heading>
+
+        <div className='accordionStructure'>
           {showUserEditor && (
             <Accordion
               key={'create-editor'}
               border={true}
-              className={styles.accordion}
+              className='accordionWidth'
             >
               <Accordion.Item defaultOpen={showUserEditor}>
                 <Accordion.Header>
                   <Heading
                     size='xsmall'
-                    className={styles.label}
                     level={3}
                   ></Heading>
                 </Accordion.Header>
@@ -105,21 +107,18 @@ export const CodeListsPage = ({ organization }) => {
               </Accordion.Item>
             </Accordion>
           )}
+
+          {searchResults?.length < 1 && <Heading size='medium'>{localization.search.noHits}</Heading>}
           {searchResults &&
             searchResults.map((user: AssignedUser, index: number) => (
               <Accordion
                 key={index}
                 border={true}
-                className={styles.accordion}
+                className='accordionWidth'
               >
                 <Accordion.Item>
                   <Accordion.Header>
-                    <Heading
-                      size='xsmall'
-                      className={styles.label}
-                    >
-                      {user.name}
-                    </Heading>
+                    <Heading size='xsmall'>{user.name}</Heading>
                   </Accordion.Header>
                   <Accordion.Content>
                     <UserEditor user={user} />
@@ -128,7 +127,7 @@ export const CodeListsPage = ({ organization }) => {
               </Accordion>
             ))}
         </div>
-      </div>
+      </PageLayout>
     </>
   );
 };

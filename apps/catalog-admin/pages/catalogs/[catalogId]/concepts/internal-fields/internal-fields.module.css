@@ -1,17 +1,10 @@
 .topButtonRow {
   display: flex;
   justify-content: flex-end;
-}
-
-.accordion {
-  font-family: Heebo, sans-serif;
-  --fds-typography-paragraph-small: Heebo;
-  border-radius: 1em;
-  width: inherit;
+  margin-top: 37px;
 }
 
 .label {
-  --fds-typography-label-medium: Heebo;
   font-weight: 500;
   font-size: 1.2em;
 }
@@ -22,12 +15,6 @@
   flex-direction: column;
   width: 100%;
   gap: 1em;
-}
-
-.center {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
 }
 
 .page {

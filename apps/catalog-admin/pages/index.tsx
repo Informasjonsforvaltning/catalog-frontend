@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './style.module.css';
 import { Breadcrumbs, Card } from '@catalog-frontend/ui';
 import { Session, getServerSession } from 'next-auth';
 import { getResourceRoles } from '@catalog-frontend/utils';
@@ -13,7 +12,7 @@ export function Index({ organizations }: InferGetServerSidePropsType<typeof getS
     <>
       <Breadcrumbs />
       <div>
-        <div className={styles.card}>
+        <div className='card'>
           {organizations.length === 0 && <div>Du har ikke tilgang</div>}
           {organizations.map((organization) => (
             <Card
