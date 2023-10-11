@@ -59,10 +59,10 @@ export const CodesEditor = ({ codeList: dbCodeList }: Props) => {
   };
 
   const updateCodeParent = (value: string) => {
-    const convertedValue = value !== null ? +value : null;
+    const valueAsNumber = value !== null ? +value : null;
     setSelectedCode((prevSelectedCode) => ({
       ...prevSelectedCode,
-      parentID: convertedValue,
+      parentID: valueAsNumber,
     }));
   };
 
@@ -220,7 +220,7 @@ export const CodesEditor = ({ codeList: dbCodeList }: Props) => {
                 selectionFollowsFocus={false}
                 padding={15}
                 rowHeight={30}
-                height={441}
+                height={462}
                 width={453}
                 onActivate={handleOnClick}
                 disableEdit
