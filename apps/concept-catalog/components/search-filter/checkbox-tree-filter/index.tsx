@@ -38,12 +38,15 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
   const [checked, setChecked] = React.useState<string[]>([]);
   const [expanded, setExpanded] = React.useState<string[]>([]);
   const [collapsed, setCollapsed] = React.useState(true);
+  const [searchOption, setSearchOption] = React.useState('');
 
   useEffect(() => {
     setChecked(filters);
   }, [filters]);
 
   const handleChecked = ({ value }) => {
+    setSearchOption('');
+
     const path = getPath(nodes, value).map((item) => item.value);
     if (checked.includes(value)) {
       const newChecked = path.slice(0, -1);
@@ -70,11 +73,12 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
   };
   const handleSearchOnChange = (value: any) => {
     if (value !== null) {
+      setSearchOption(value);
       const path = getPath(nodes, value).map((item) => item.value);
       setExpanded(path);
       onCheck?.(path);
 
-      const index = nodes.findIndex((item) => checked.includes(item.value));
+      const index = nodes.findIndex((item) => item.value === path[0]);
       if (index >= 9 && collapsed) {
         setCollapsed(false);
       }
@@ -92,6 +96,7 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
   return (
     <div>
       <Select
+        value={searchOption}
         options={getSearchOptions(nodes)}
         onChange={handleSearchOnChange}
       />
