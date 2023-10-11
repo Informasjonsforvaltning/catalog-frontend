@@ -50,6 +50,7 @@ import { InferGetServerSidePropsType } from 'next';
 import { Chip } from '@digdir/design-system-react';
 import { FilterType } from '../../context/search/state';
 import { prepareStatusList } from '@catalog-frontend/utils';
+import _ from 'lodash';
 
 export const SearchPage = ({
   organization,
@@ -110,6 +111,12 @@ export const SearchPage = ({
     return [];
   };
 
+  const internalFieldFilter = Object.keys(searchState.filters.internalFields ?? {}).reduce((result, key) => {
+    return !_.isEmpty(searchState.filters.internalFields[key])
+      ? { ...result, ...{ [key]: searchState.filters.internalFields[key] } }
+      : result;
+  }, {});
+
   const { status, data, refetch } = useSearchConcepts({
     catalogId,
     searchTerm,
@@ -133,8 +140,10 @@ export const SearchPage = ({
       searchState.filters.label?.length > 0 && {
         label: { value: searchState.filters.label },
       },
-      Object.keys(searchState.filters.internalFields ?? {}).length > 0 && {
-        internalFields: { value: searchState.filters.internalFields },
+      Object.keys(internalFieldFilter ?? {}).length > 0 && {
+        internalFields: {
+          value: internalFieldFilter,
+        },
       },
     ),
   });
