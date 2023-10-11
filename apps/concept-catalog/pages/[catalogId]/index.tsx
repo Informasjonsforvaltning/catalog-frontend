@@ -85,17 +85,26 @@ export const SearchPage = ({
 
   const getInternalFields = (fieldId) => fieldsResult?.internal?.find((field) => field.id === fieldId);
 
+  const getSubjectChildren = (subjectId: number) => {
+    const children = [];
+    subjectCodeList?.codes
+      .filter((code) => code.parentID === subjectId)
+      .map((code) => code.id)
+      .forEach((childId) => {
+        children.push(childId);
+        children.concat(getSubjectChildren(childId));
+      });
+
+    return children;
+  };
+
   const getSubjectFilterWithChildren = (subjects) => {
     // Fetch lowest level code and add its children to the filter
     // Subjects will always be a path like: Code 1 -> Code 1.1 -> Code 1.1.1
     // The lowest level code will always be the last code in the path, Code 1.1.1 in this example.
     if (subjects.length > 0) {
       const lowestLevelCodeId = subjects[subjects.length - 1];
-      const codes = [
-        ...subjects,
-        ...(subjectCodeList?.codes.filter((code) => `${code.parentID}` === lowestLevelCodeId).map((code) => code.id) ??
-          []),
-      ];
+      const codes = [...subjects, ...getSubjectChildren(+lowestLevelCodeId)];
       return codes;
     }
     return [];
