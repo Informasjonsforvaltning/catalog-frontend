@@ -9,3 +9,9 @@ export interface ChangeRequest {
   status: ChangeRequestStatus;
   operations: JsonPatchOperation[];
 }
+
+export interface ChangeRequestUpdateBody {
+  conceptId?: string;
+  operations: JsonPatchOperation[];
+  title: string;
+}
