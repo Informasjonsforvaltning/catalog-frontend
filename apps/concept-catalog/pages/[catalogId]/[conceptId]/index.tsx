@@ -516,17 +516,17 @@ export const ConceptPage = ({
             <div className={cn(classes.twoColumnRow, classes.bottomSpace)}>
               <div>
                 <InfoCard>
-                  {!_.isEmpty(concept?.merknad) && (
+                  {!_.isEmpty(translate(concept?.merknad, language)) && (
                     <InfoCard.Item label={`${localization.concept.note}:`}>
                       <span>{translate(concept?.merknad, language)}</span>
                     </InfoCard.Item>
                   )}
-                  {!_.isEmpty(concept?.eksempel) && (
+                  {!_.isEmpty(translate(concept?.eksempel, language)) && (
                     <InfoCard.Item label={`${localization.concept.example}:`}>
                       <span>{translate(concept?.eksempel, language)}</span>
                     </InfoCard.Item>
                   )}
-                  {!_.isEmpty(concept?.definisjonForAllmennheten?.tekst) && (
+                  {!_.isEmpty(translate(concept?.definisjonForAllmennheten?.tekst ?? '', language)) && (
                     <InfoCard.Item label={`${localization.concept.publicDefinition}:`}>
                       <div>{translate(concept?.definisjonForAllmennheten?.tekst ?? '', language)}</div>
                       {concept?.definisjonForAllmennheten?.kildebeskrivelse?.kilde.length > 0 && (
@@ -546,7 +546,7 @@ export const ConceptPage = ({
                     </InfoCard.Item>
                   )}
 
-                  {!_.isEmpty(concept?.definisjonForSpesialister?.tekst) && (
+                  {!_.isEmpty(translate(concept?.definisjonForSpesialister?.tekst ?? '', language)) && (
                     <InfoCard.Item label={`${localization.concept.specialistDefinition}:`}>
                       <div>{translate(concept?.definisjonForSpesialister?.tekst ?? '', language)}</div>
                       {concept?.definisjonForSpesialister?.kildebeskrivelse?.kilde.length > 0 && (
@@ -566,8 +566,8 @@ export const ConceptPage = ({
                     </InfoCard.Item>
                   )}
                   {!(
-                    _.isEmpty(concept?.tillattTerm) &&
-                    _.isEmpty(concept?.frarådetTerm) &&
+                    _.isEmpty(ensureStringArray(translate(concept?.tillattTerm, language))) &&
+                    _.isEmpty(ensureStringArray(translate(concept?.frarådetTerm, language))) &&
                     _.isEmpty(concept?.abbreviatedLabel)
                   ) && (
                     <InfoCard.Item>
@@ -579,32 +579,24 @@ export const ConceptPage = ({
                           </ul>
                         </div>
                       )}
-                      {!_.isEmpty(concept?.tillattTerm) && (
+                      {!_.isEmpty(ensureStringArray(translate(concept?.tillattTerm, language))) && (
                         <div className={classes.termsRow}>
                           <h3>{`${localization.concept.allowedTerm}:`}</h3>
-                          {ensureStringArray(translate(concept?.tillattTerm, language)).length > 0 ? (
-                            <ul>
-                              {ensureStringArray(translate(concept?.tillattTerm, language)).map((term, i) => (
-                                <li key={`allowedTerm-${i}`}>{term}</li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <span>Ingen term</span>
-                          )}
+                          <ul>
+                            {ensureStringArray(translate(concept?.tillattTerm, language)).map((term, i) => (
+                              <li key={`allowedTerm-${i}`}>{term}</li>
+                            ))}
+                          </ul>
                         </div>
                       )}
-                      {!_.isEmpty(concept?.frarådetTerm) && (
+                      {!_.isEmpty(ensureStringArray(translate(concept?.frarådetTerm, language))) && (
                         <div className={classes.termsRow}>
                           <h3>{`${localization.concept.notRecommendedTerm}:`}</h3>
-                          {ensureStringArray(translate(concept?.frarådetTerm, language)).length > 0 ? (
-                            <ul>
-                              {ensureStringArray(translate(concept?.frarådetTerm, language)).map((term, i) => (
-                                <li key={`notRecommendedTerm-${i}`}>{term}</li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <span>Ingen term</span>
-                          )}
+                          <ul>
+                            {ensureStringArray(translate(concept?.frarådetTerm, language)).map((term, i) => (
+                              <li key={`notRecommendedTerm-${i}`}>{term}</li>
+                            ))}
+                          </ul>
                         </div>
                       )}
                     </InfoCard.Item>
