@@ -1,5 +1,5 @@
 import { getOrganization } from '@catalog-frontend/data-access';
-import { Organization, ChangeRequest, Concept } from '@catalog-frontend/types';
+import { Organization, Concept, ChangeRequestUpdateBody } from '@catalog-frontend/types';
 import { hasOrganizationReadPermission, validOrganizationNumber } from '@catalog-frontend/utils';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { Session, getServerSession } from 'next-auth';
@@ -31,7 +31,6 @@ const NewConceptSuggestion = ({
 
 export async function getServerSideProps({ req, res, params }) {
   const FDK_REGISTRATION_BASE_URI = process.env.FDK_REGISTRATION_BASE_URI;
-
   const { catalogId } = params;
 
   const session: Session = await getServerSession(req, res, authOptions);
@@ -45,7 +44,6 @@ export async function getServerSideProps({ req, res, params }) {
   }
 
   const hasPermission = session && hasOrganizationReadPermission(session?.accessToken, catalogId);
-
   if (!hasPermission) {
     return {
       redirect: {
@@ -61,31 +59,30 @@ export async function getServerSideProps({ req, res, params }) {
 
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
-  const changeRequest: ChangeRequest = {
-    id: '',
-    catalogId: catalogId,
+  const newChangeRequest: ChangeRequestUpdateBody = {
     conceptId: null,
-    status: 'OPEN',
     operations: [],
+    title: '',
   };
-  const originalConcept: Concept = {
+
+  const emptyOriginalConcept: Concept = {
     id: null,
     ansvarligVirksomhet: { id: organization.organizationId },
     seOgså: [],
   };
 
   const changeRequestAsConcept = jsonpatch.applyPatch(
-    jsonpatch.deepClone(originalConcept),
-    jsonpatch.deepClone(changeRequest.operations),
+    jsonpatch.deepClone(emptyOriginalConcept),
+    jsonpatch.deepClone(newChangeRequest.operations),
     false,
   ).newDocument;
 
   return {
     props: {
       organization,
-      changeRequest,
+      changeRequest: newChangeRequest,
       changeRequestAsConcept,
-      originalConcept,
+      originalConcept: emptyOriginalConcept,
       showOriginal: false,
       FDK_REGISTRATION_BASE_URI,
     },
