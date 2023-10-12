@@ -106,7 +106,7 @@ export const convertCodeListToTreeNodes = (codes: Code[] | undefined): TreeNode[
 
 export const getAllChildrenCodes = (codeId: number, codeList: CodeList) => {
   const children: Code[] = [];
-  (codeList.codes?.filter((code) => code.parentID === codeId) ?? []).forEach((code) => {
+  (codeList?.codes?.filter((code) => code.parentID === codeId) ?? []).forEach((code) => {
     children.push(code);
     children.push(...getAllChildrenCodes(code.id, codeList));
   });
