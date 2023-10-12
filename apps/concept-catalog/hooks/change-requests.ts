@@ -1,6 +1,8 @@
-import { ChangeRequest } from '@catalog-frontend/types';
-import { validOrganizationNumber } from '@catalog-frontend/utils';
+import { ChangeRequestUpdateBody } from '@catalog-frontend/types';
+import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { error } from 'console';
+import { useRouter } from 'next/router';
 
 export const useGetChangeRequests = (catalogId: string) => {
   return useQuery({
@@ -25,16 +27,47 @@ export const useGetChangeRequests = (catalogId: string) => {
 };
 
 export const useCreateChangeRequest = ({ catalogId }) => {
+  const router = useRouter();
+
   return useMutation({
-    mutationFn: async (changeRequest: ChangeRequest) => {
-      return Promise.reject('Not implemented');
+    mutationFn: async (changeRequest: ChangeRequestUpdateBody) => {
+      const conceptId = changeRequest.conceptId;
+      if (!validOrganizationNumber(catalogId)) {
+        return Promise.reject('Invalid catalog id');
+      }
+      if (conceptId != null || !validUUID(conceptId)) {
+        return Promise.reject('Invalid concept id for change request');
+      }
+
+      const response = await fetch(`/api/change-requests/${catalogId}/createChangeRequest`, {
+        method: 'POST',
+        body: JSON.stringify(changeRequest),
+      });
+
+      if (response.status === 401) {
+        return Promise.reject('Unauthorized');
+      }
+
+      return response;
+    },
+    onSuccess: (data) => {
+      data
+        .json()
+        .then(({ changeRequestId }) => {
+          if (validOrganizationNumber(catalogId) && validUUID(changeRequestId)) {
+            router
+              .push(`/${catalogId}/change-requests/${changeRequestId}/edit`)
+              .catch((err) => console.error('Failed to navigate to change request page: ', err));
+          }
+        })
+        .catch((err) => console.error(err));
     },
   });
 };
 
 export const useUpdateChangeRequest = ({ catalogId, changeRequestId }) => {
   return useMutation({
-    mutationFn: async (changeRequest: ChangeRequest) => {
+    mutationFn: async (changeRequest: ChangeRequestUpdateBody) => {
       return Promise.reject('Not implemented');
     },
   });

@@ -4,7 +4,13 @@ import { useCatalogDesign } from '../../../../context/catalog-design';
 import { localization as loc, getTranslateText as translate } from '@catalog-frontend/utils';
 import styles from './change-request-page.module.css';
 import { useState } from 'react';
-import { ChangeRequest, Concept, ISOLanguage, JsonPatchOperation } from '@catalog-frontend/types';
+import {
+  ChangeRequest,
+  ChangeRequestUpdateBody,
+  Concept,
+  ISOLanguage,
+  JsonPatchOperation,
+} from '@catalog-frontend/types';
 import { FieldArray, Form, Formik } from 'formik';
 import { ConceptFormField } from '../../../../components/form-field-container';
 import { TextAreaField } from '../../../../components/form-fields/text-area-field';
@@ -37,12 +43,10 @@ export const ChangeRequestPage = ({
 
   const handleSubmit = (values: Concept) => {
     setIsSubmitting(true);
-    const changeRequestFromConcept: ChangeRequest = {
-      id: changeRequestId,
-      catalogId: catalogId,
-      status: 'OPEN',
+    const changeRequestFromConcept: ChangeRequestUpdateBody = {
       conceptId: changeRequest.conceptId,
       operations: jsonpatch.compare(originalConcept, values) as JsonPatchOperation[],
+      title: '',
     };
 
     changeRequestMutateHook.mutateAsync(changeRequestFromConcept).catch((error) => {

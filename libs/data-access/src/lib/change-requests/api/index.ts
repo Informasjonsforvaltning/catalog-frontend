@@ -23,3 +23,16 @@ export const getChangeRequest = async (catalogId: string, changeRequestId: strin
   };
   return await fetch(resource, options);
 };
+
+export const createChangeRequest = async (body: any, catalogId: string, accessToken: string) => {
+  const resource = `${path}/${catalogId}/endringsforslag`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: body,
+  };
+  return await fetch(resource, options);
+};
