@@ -11,3 +11,4 @@ export * from './lib/language';
 export * from './lib/reference-data';
 export * from './lib/editor';
 export * from './lib/json-patch';
+export * from './lib/change-request';

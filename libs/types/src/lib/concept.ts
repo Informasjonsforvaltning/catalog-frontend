@@ -1,6 +1,5 @@
 import { EntityEnum, LanguageCodes } from './enums';
 import { Organization } from './organization';
-import { JsonPatchOperation } from './json-patch';
 
 export interface ErrorMessage {
   name?: string;
@@ -263,17 +262,7 @@ export interface SearchConceptResponse {
   page: ConceptHitPage;
 }
 
-export interface ChangeRequest {
-  id: string;
-  conceptId?: string;
-  catalogId: string;
-  status: ChangeRequestStatus;
-  operations: JsonPatchOperation[];
-}
-
 export type SearchableField = 'anbefaltTerm' | 'frarådetTerm' | 'tillattTerm' | 'definisjon' | 'merknad';
-
-export type ChangeRequestStatus = 'OPEN' | 'ACCEPTED' | 'REJECTED';
 
 export interface ConceptSearchFulltextHit {
   id: string;
