@@ -6,6 +6,32 @@ import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
+function secureCallbackUrl(callbackUrl: string): string | null {
+  const parts = callbackUrl.split('/');
+  let securedUrl = null;
+  if (parts.length >= 2) {
+    const orgNumber = parts[1];
+    securedUrl = validOrganizationNumber(orgNumber) ? `/${orgNumber}` : null;
+  }
+
+  if (securedUrl && parts.length >= 3 && parts[2] === 'change-requests') {
+    securedUrl += '/change-requests';
+    if (parts.length === 4) {
+      const changeRequestIdOrNew = validUUID(parts[3]) || parts[3] === 'new' ? parts[3] : '';
+      securedUrl += `/${changeRequestIdOrNew}`;
+    } else if (parts.length === 5 && validUUID(parts[3])) {
+      const changeRequestId = parts[3];
+      const pageType = parts[4] == 'edit' ? 'edit' : '';
+      securedUrl += `/${changeRequestId}/${pageType}`;
+    }
+  } else if (securedUrl && parts.length === 3) {
+    const conceptId = parts[2];
+    securedUrl += validUUID(conceptId) ? `/${conceptId}` : '';
+  }
+
+  return securedUrl;
+}
+
 const needLogin = (session, status, router) =>
   (session?.error === 'RefreshAccessTokenError' || status === 'unauthenticated') && router.pathname !== '/auth/signout';
 
@@ -23,16 +49,7 @@ export const SignIn = ({ FDK_REGISTRATION_BASE_URI }) => {
   ] as BreadcrumbType[];
 
   useEffect(() => {
-    const parts = callbackUrl.split('/');
-    let securedUrl = null;
-    if (parts.length === 2) {
-      const orgNumber = validOrganizationNumber(parts[1]) ? parts[1] : '0';
-      securedUrl = `/${orgNumber}`;
-    } else if (parts.length === 3) {
-      const orgNumber = validOrganizationNumber(parts[1]) ? parts[1] : '0';
-      const conceptId = validUUID(parts[2]) ? parts[2] : '0';
-      securedUrl = `/${orgNumber}/${conceptId}`;
-    }
+    const securedUrl = secureCallbackUrl(callbackUrl);
 
     if (securedUrl) {
       if (needLogin(session, status, router)) {
