@@ -35,6 +35,14 @@ export async function getServerSideProps({ req, res, params }) {
   const { catalogId } = params;
 
   const session: Session = await getServerSession(req, res, authOptions);
+  if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: `/auth/signin?callbackUrl=/${catalogId}/change-requests/new`,
+      },
+    };
+  }
 
   const hasPermission = session && hasOrganizationReadPermission(session?.accessToken, catalogId);
 
