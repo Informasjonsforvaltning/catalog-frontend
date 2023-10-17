@@ -4,20 +4,13 @@ import { useCatalogDesign } from '../../../../context/catalog-design';
 import { localization as loc, getTranslateText as translate } from '@catalog-frontend/utils';
 import styles from './change-request-page.module.css';
 import { useState } from 'react';
-import {
-  ChangeRequest,
-  ChangeRequestUpdateBody,
-  Concept,
-  ISOLanguage,
-  JsonPatchOperation,
-} from '@catalog-frontend/types';
+import { Concept, ISOLanguage } from '@catalog-frontend/types';
 import { FieldArray, Form, Formik } from 'formik';
 import { ConceptFormField } from '../../../../components/form-field-container';
 import { TextAreaField } from '../../../../components/form-fields/text-area-field';
 import { RelationToSource } from '../../../../components/form-fields/relation-to-source';
 import { SourceForDefinitionField } from '../../../../components/form-fields/source-for-definition';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
-import jsonpatch from 'fast-json-patch';
 
 const languageOptions = [
   { value: 'nb', label: 'Norsk bokmål' },
@@ -25,14 +18,14 @@ const languageOptions = [
   { value: 'en', label: 'English' },
 ];
 
-export const ChangeRequestPage = ({
+export const ChangeRequestForm = ({
   FDK_REGISTRATION_BASE_URI,
   organization,
   changeRequest,
   changeRequestAsConcept,
   originalConcept,
   showOriginal = false,
-  changeRequestMutateHook,
+  submitHandler,
 }) => {
   const changeRequestId = changeRequest.id;
   const catalogId = organization?.organizationId;
@@ -43,16 +36,7 @@ export const ChangeRequestPage = ({
 
   const handleSubmit = (values: Concept) => {
     setIsSubmitting(true);
-    const changeRequestFromConcept: ChangeRequestUpdateBody = {
-      conceptId: changeRequest.conceptId,
-      operations: jsonpatch.compare(originalConcept, values) as JsonPatchOperation[],
-      title: '',
-    };
-
-    changeRequestMutateHook.mutateAsync(changeRequestFromConcept).catch((error) => {
-      alert('Fail');
-    });
-
+    submitHandler(values);
     setIsSubmitting(false);
   };
 
@@ -335,4 +319,4 @@ export const ChangeRequestPage = ({
   );
 };
 
-export default ChangeRequestPage;
+export default ChangeRequestForm;
