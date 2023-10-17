@@ -41,6 +41,9 @@ export const importConcepts = (concepts: Omit<Concept, 'id'>[], accessToken: str
 export const deleteConcept = (conceptId: string, accessToken: string) =>
   conceptCatalogApiCall('DELETE', `/begreper/${conceptId}`, null, accessToken);
 
+export const publishConcept = (conceptId: string, accessToken: string) =>
+  conceptCatalogApiCall('POST', `/begreper/${conceptId}/publish`, null, accessToken);
+
 export const extractConcepts = (searchResponse: any) => searchResponse?.hits ?? [];
 
 const hasRelatedConcepts = (concept: Concept): boolean => {
