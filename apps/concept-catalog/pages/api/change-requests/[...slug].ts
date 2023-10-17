@@ -1,4 +1,4 @@
-import { createChangeRequest, getChangeRequests } from '@catalog-frontend/data-access';
+import { createChangeRequest, getChangeRequests, updateChangeRequest } from '@catalog-frontend/data-access';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]';
@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   res.status(200);
 
   const { slug } = req.query;
-  const [catalogId, postType] = slug;
+  const [catalogId, postType, changeRequestId] = slug;
 
   if (req.method == 'GET') {
     try {
@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const response = await createChangeRequest(req.body, `${catalogId}`, `${session?.accessToken}`);
       if (response.status !== 201) {
-        return res.status(response.status).send({ error: 'Failed to create change requests' });
+        return res.status(response.status).send({ error: 'Failed to create change request' });
       }
       const changeRequestId = response?.headers?.get('location').split('/').pop();
       res.status(200).send({ changeRequestId });
@@ -37,7 +37,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(500).send({ error: 'Failed to create change request' });
     }
   } else if (req.method == 'POST' && postType == 'updateChangeRequest') {
-    return res.status(404).send('Not implemented');
+    try {
+      const response = await updateChangeRequest(
+        req.body,
+        `${catalogId}`,
+        `${changeRequestId}`,
+        `${session?.accessToken}`,
+      );
+      if (response.status !== 200) {
+        res.status(response.status).send({ error: 'Failed to update change request' });
+      }
+    } catch (error) {
+      res.status(500).send({ error: 'Failed to update change request' });
+    }
+    res.send(200);
   } else {
     return res.status(400).send('');
   }

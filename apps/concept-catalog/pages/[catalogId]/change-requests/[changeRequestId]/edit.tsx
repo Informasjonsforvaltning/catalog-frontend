@@ -1,11 +1,18 @@
 import { getOrganization, getConcept, getChangeRequest } from '@catalog-frontend/data-access';
-import { Organization, Concept, ChangeRequest } from '@catalog-frontend/types';
+import {
+  Organization,
+  Concept,
+  ChangeRequest,
+  ChangeRequestUpdateBody,
+  JsonPatchOperation,
+} from '@catalog-frontend/types';
 import { hasOrganizationReadPermission, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { authOptions } from '../../../api/auth/[...nextauth]';
 import { Session, getServerSession } from 'next-auth';
-import { ChangeRequestPage } from './_change-request-form';
+import { ChangeRequestForm } from './_change-request-form';
 import jsonpatch from 'fast-json-patch';
 import { useUpdateChangeRequest } from '../../../../hooks/change-requests';
+import { useRouter } from 'next/router';
 
 const ChangeRequestEditPage = ({
   FDK_REGISTRATION_BASE_URI,
@@ -15,19 +22,35 @@ const ChangeRequestEditPage = ({
   originalConcept,
   showOriginal,
 }) => {
+  const router = useRouter();
   const changeRequestMutateHook = useUpdateChangeRequest({
-    catalogId: organization,
+    catalogId: organization.organizationId,
     changeRequestId: changeRequest.id,
   });
+
+  const submitHandler = (values: Concept) => {
+    const changeRequestFromConcept: ChangeRequestUpdateBody = {
+      conceptId: changeRequest.conceptId,
+      operations: jsonpatch.compare(originalConcept, values) as JsonPatchOperation[],
+      title: '',
+    };
+
+    changeRequestMutateHook.mutate(changeRequestFromConcept, {
+      onSuccess: () => {
+        router.reload();
+      },
+    });
+  };
+
   return (
-    <ChangeRequestPage
+    <ChangeRequestForm
       FDK_REGISTRATION_BASE_URI={FDK_REGISTRATION_BASE_URI}
       organization={organization}
       changeRequest={changeRequest}
       changeRequestAsConcept={changeRequestAsConcept}
       originalConcept={originalConcept}
       showOriginal={showOriginal}
-      changeRequestMutateHook={changeRequestMutateHook}
+      submitHandler={submitHandler}
     />
   );
 };

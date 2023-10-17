@@ -1,7 +1,6 @@
 import { ChangeRequestUpdateBody } from '@catalog-frontend/types';
 import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { error } from 'console';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 
 export const useGetChangeRequests = (catalogId: string) => {
@@ -60,15 +59,38 @@ export const useCreateChangeRequest = ({ catalogId }) => {
               .catch((err) => console.error('Failed to navigate to change request page: ', err));
           }
         })
-        .catch((err) => console.error(err));
+        .catch((err) => console.error(`Failed to create change request: ${err}`));
     },
   });
 };
 
 export const useUpdateChangeRequest = ({ catalogId, changeRequestId }) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (changeRequest: ChangeRequestUpdateBody) => {
-      return Promise.reject('Not implemented');
+      if (!validOrganizationNumber(catalogId)) {
+        return Promise.reject('Invalid catalog id');
+      }
+      if (!validUUID(changeRequestId)) {
+        return Promise.reject('Invalid change request id');
+      }
+
+      const response = await fetch(`/api/change-requests/${catalogId}/updateChangeRequest/${changeRequestId}`, {
+        method: 'POST',
+        body: JSON.stringify(changeRequest),
+      });
+
+      if (response.status === 401) {
+        return Promise.reject('Unauthorized');
+      }
+
+      if (response.status !== 200) {
+        return Promise.reject('Error when updating change request');
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getChangeRequests', catalogId] });
     },
   });
 };
