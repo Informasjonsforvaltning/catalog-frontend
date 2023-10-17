@@ -214,6 +214,8 @@ export const nb = {
     lastUpdated: 'Sist oppdatert',
     note: 'Merknad',
     definition: 'Definisjon',
+    source: 'Kilde',
+    selfDefined: 'Egendefinert',
     example: 'Eksempel',
     publicDefinition: 'Definisjon for allmennheten',
     specialistDefinition: 'Definisjon for spesialister',
@@ -284,7 +286,9 @@ export const nb = {
     description: 'Publiseringstilstand forteller om et begrep er publisert i Felles Datakatalog eller ikke.',
     published: 'Publisert',
     publishedInFDK: 'Publisert i Felles Datakatalog',
+    unpublishedInFDK: 'Ikke publisert i Felles Datakatalog',
     unpublished: 'Ikke publisert',
+    confirmPublish: 'Er du sikker på at du vil publisere begrepet?',
   },
 
   validation: {

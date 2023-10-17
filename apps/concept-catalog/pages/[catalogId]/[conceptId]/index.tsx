@@ -53,11 +53,11 @@ import {
 } from '@catalog-frontend/types';
 import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
-import { Accordion, Tabs, Textarea } from '@digdir/design-system-react';
+import { Accordion, Switch, Tabs, Textarea } from '@digdir/design-system-react';
 import classes from './concept-page.module.css';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../hooks/comments';
 import { useGetHistory } from '../../../hooks/history';
-import { useDeleteConcept } from '../../../hooks/concepts';
+import { useDeleteConcept, usePublishConcept } from '../../../hooks/concepts';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
 import { useCatalogDesign } from '../../../context/catalog-design';
@@ -137,6 +137,8 @@ export const ConceptPage = ({
   const [language, setLanguage] = useState('nb');
   const [newCommentText, setNewCommentText] = useState('');
   const [updateCommentText, setUpdateCommentText] = useState<MapType>({});
+  const [isPublished, setIsPublished] = useState(concept?.erPublisert);
+  const [publishedDate, setPublishedDate] = useState(concept?.publiseringsTidspunkt);
   const router = useRouter();
   const catalogId = (router.query.catalogId as string) ?? '';
 
@@ -145,6 +147,7 @@ export const ConceptPage = ({
     topicId: concept?.id,
   });
 
+  const publishConcept = usePublishConcept(catalogId);
   const deleteConcept = useDeleteConcept(catalogId);
 
   const createComment = useCreateComment({
@@ -167,6 +170,19 @@ export const ConceptPage = ({
     resourceId: concept?.id,
   });
 
+  const handleOnChangePublished = (e) => {
+    if (e.target.checked) {
+      if (window.confirm(localization.publicationState.confirmPublish)) {
+        publishConcept.mutate(concept?.id, {
+          onSuccess(data) {
+            setIsPublished(data.erPublisert);
+            setPublishedDate(data.publiseringsTidspunkt);
+          },
+        });
+      }
+    }
+  };
+
   const pageSubtitle = organization?.name ?? catalogId;
 
   const languageOptions = [
@@ -179,14 +195,28 @@ export const ConceptPage = ({
     [localization.concept.id, concept?.id],
     [
       localization.publicationState.state,
-      concept?.erPublisert
-        ? `${localization.publicationState.publishedInFDK} ${formatISO(concept?.publiseringsTidspunkt, {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          })}`
-        : localization.publicationState.unpublished,
+      <>
+        <Switch
+          value='published'
+          size='small'
+          position='right'
+          readOnly={isPublished}
+          checked={isPublished}
+          onChange={handleOnChangePublished}
+        >
+          {localization.publicationState.published}
+        </Switch>
+        <div className={classes.greyFont}>
+          {isPublished
+            ? `${localization.publicationState.publishedInFDK} ${formatISO(publishedDate, {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}`
+            : localization.publicationState.unpublished}
+        </div>
+      </>,
     ],
     [
       localization.concept.version,
@@ -481,17 +511,22 @@ export const ConceptPage = ({
               <div className={classes.definition}>
                 <h3>Definisjon:</h3>
                 <div>{translate(concept?.definisjon?.tekst ?? '', language)}</div>
-                {concept?.definisjon?.kildebeskrivelse?.kilde.length > 0 && (
+                {(concept?.definisjon?.kildebeskrivelse?.forholdTilKilde === 'egendefinert' ||
+                  concept?.definisjon?.kildebeskrivelse?.kilde.length > 0) && (
                   <div className={cn(classes.source)}>
-                    <div>Kilde:</div>
+                    <div>{localization.concept.source}:</div>
                     <div>
-                      <ul>
-                        {concept?.definisjon?.kildebeskrivelse?.kilde?.map((kilde, i) => (
-                          <li key={`kilde-${i}`}>
-                            {kilde.uri ? <a href={kilde.uri}>{kilde.tekst}</a> : <span>{kilde.tekst}</span>}
-                          </li>
-                        ))}
-                      </ul>
+                      {concept?.definisjon?.kildebeskrivelse?.forholdTilKilde === 'egendefinert' ? (
+                        localization.concept.selfDefined
+                      ) : (
+                        <ul>
+                          {concept?.definisjon?.kildebeskrivelse?.kilde?.map((kilde, i) => (
+                            <li key={`kilde-${i}`}>
+                              {kilde.uri ? <a href={kilde.uri}>{kilde.tekst}</a> : <span>{kilde.tekst}</span>}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </div>
                   </div>
                 )}
