@@ -34,6 +34,7 @@ export const nb = {
   unknown: 'Ukjent',
   showMore: 'Vis flere',
   showLess: 'Vis færre',
+  title: 'Tittel',
 
   language: {
     nb: 'Bokmål',
