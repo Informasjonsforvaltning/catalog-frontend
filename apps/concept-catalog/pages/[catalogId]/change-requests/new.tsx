@@ -17,11 +17,11 @@ const NewConceptSuggestion = ({
 }) => {
   const changeRequestMutateHook = useCreateChangeRequest({ catalogId: organization.organizationId });
 
-  const submitHandler = (values: Concept) => {
+  const submitHandler = (values: Concept, title: string) => {
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
       conceptId: changeRequest.conceptId,
       operations: jsonpatch.compare(originalConcept, values) as JsonPatchOperation[],
-      title: '',
+      title: title,
     };
     changeRequestMutateHook.mutate(changeRequestFromConcept);
   };

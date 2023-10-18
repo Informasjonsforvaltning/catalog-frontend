@@ -1,7 +1,7 @@
-import { Checkbox } from '@digdir/design-system-react';
+import { Checkbox, Heading, Textfield } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
 import { useCatalogDesign } from '../../../../context/catalog-design';
-import { localization as loc, getTranslateText as translate } from '@catalog-frontend/utils';
+import { localization as loc } from '@catalog-frontend/utils';
 import styles from './change-request-page.module.css';
 import { useState } from 'react';
 import { Concept, ISOLanguage } from '@catalog-frontend/types';
@@ -30,13 +30,14 @@ export const ChangeRequestForm = ({
   const changeRequestId = changeRequest.id;
   const catalogId = organization?.organizationId;
   const pageSubtitle = organization?.name ?? organization.id;
+  const [changeRequestTitle, setChangeRequestTitle] = useState<string>(changeRequest.title ?? '');
 
   const [selectedLanguages, setSelectedLanguages] = useState<ISOLanguage[]>(['nb', 'nn', 'en']);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = (values: Concept) => {
     setIsSubmitting(true);
-    submitHandler(values);
+    submitHandler(values, changeRequestTitle);
     setIsSubmitting(false);
   };
 
@@ -47,16 +48,6 @@ export const ChangeRequestForm = ({
     newSelectedLangs.sort((a, b) => sortKey.indexOf(a) - sortKey.indexOf(b));
     setSelectedLanguages(newSelectedLangs as ISOLanguage[]);
   };
-
-  const getTitle = (text: string | string[]) => (text ? text : loc.concept.noName);
-  let changeRequestTitle = '';
-  if (changeRequestId) {
-    changeRequestTitle = changeRequestAsConcept?.anbefaltTerm?.navn
-      ? getTitle(translate(changeRequestAsConcept?.anbefaltTerm?.navn))
-      : changeRequestId;
-  } else {
-    changeRequestTitle = loc.suggestionForNewConcept;
-  }
 
   const breadcrumbList = changeRequestId
     ? ([
@@ -110,7 +101,20 @@ export const ChangeRequestForm = ({
               ))}
             </Checkbox.Group>
           </div>
-          <h1 className={styles.pageTitle}>{changeRequestTitle}</h1>
+          <Heading
+            level={2}
+            size='xsmall'
+            className={styles.pageTitle}
+          >
+            {changeRequestTitle}
+          </Heading>
+          <Textfield
+            className={styles.pageTitle}
+            type='text'
+            value={changeRequestTitle}
+            label={loc.title}
+            onChange={(e) => setChangeRequestTitle(e.target.value)}
+          />
           <Formik
             initialValues={changeRequestAsConcept}
             onSubmit={(values) => {
