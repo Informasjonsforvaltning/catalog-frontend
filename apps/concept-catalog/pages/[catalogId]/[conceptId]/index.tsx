@@ -76,12 +76,13 @@ interface InterneFeltProps {
   codeLists: CodeList[];
   users: AssignedUser[];
   location: 'main_column' | 'right_column';
+  language: string;
 }
 
-const InterneFelt = ({ concept, fields, codeLists, users, location }: InterneFeltProps) => {
+const InterneFelt = ({ concept, fields, codeLists, users, location, language }: InterneFeltProps) => {
   const getCodeName = (codeListId: string, codeId: string) => {
     const codeList = codeLists.find((codeList) => codeList.id === codeListId);
-    return translate(codeList?.codes.find((code) => `${code.id}` === codeId)?.name);
+    return translate(codeList?.codes.find((code) => `${code.id}` === codeId)?.name, language);
   };
 
   const getUserName = (userId: string) => {
@@ -101,14 +102,14 @@ const InterneFelt = ({ concept, fields, codeLists, users, location }: InterneFel
       };
     })
     .filter((field) => field !== null && field.location === location)
-    .sort((a, b) => `${translate(a.label)}`.localeCompare(`${translate(b.label)}`));
+    .sort((a, b) => `${translate(a.label, language)}`.localeCompare(`${translate(b.label, language)}`));
 
   return (
     <>
       {filteredFields.map((field) => (
         <InfoCard.Item
           key={`internalField-${field.id}`}
-          label={`${translate(field.label)}:`}
+          label={`${translate(field.label, language)}:`}
         >
           {(field.type === 'text_short' || field.type === 'text_long') && <span>{field.value}</span>}
           {field.type === 'boolean' && <span>{field.value ? localization.yes : localization.no}</span>}
@@ -330,7 +331,7 @@ export const ConceptPage = ({
   ];
 
   const findStatusLabel = (statusURI) => {
-    return translate(conceptStatuses?.find((s) => s.uri === statusURI)?.label) as string;
+    return translate(conceptStatuses?.find((s) => s.uri === statusURI)?.label, language) as string;
   };
 
   const handleLanguageChange = (lang) => {
@@ -440,7 +441,7 @@ export const ConceptPage = ({
                     }
                     className={classes.versionTitle}
                   >
-                    {getTitle(translate(revision?.anbefaltTerm?.navn))}
+                    {getTitle(translate(revision?.anbefaltTerm?.navn, language))}
                   </Link>
                 </div>
                 {status && (
@@ -488,18 +489,18 @@ export const ConceptPage = ({
       <div className='container'>
         <DetailHeading
           className={classes.detailHeading}
-          headingTitle={<h2>{getTitle(translate(concept?.anbefaltTerm?.navn))}</h2>}
+          headingTitle={
+            <div className={cn(classes.status)}>
+              <h2>{getTitle(translate(concept?.anbefaltTerm?.navn, language))}</h2>
+              {status && <Tag>{status}</Tag>}
+            </div>
+          }
           subtitle={getDetailSubtitle()}
         />
 
         {deleteConcept.status === 'loading' && <Spinner />}
         {deleteConcept.status !== 'loading' && (
           <>
-            {status && (
-              <div className={cn(classes.status)}>
-                <Tag>{status}</Tag>
-              </div>
-            )}
             <div className={classes.languages}>
               <ToggleButtonGroup
                 items={languageOptions}
@@ -643,7 +644,7 @@ export const ConceptPage = ({
                       })}`}
                     >
                       <RelatedConcepts
-                        title={getTitle(translate(concept?.anbefaltTerm?.navn))}
+                        title={getTitle(translate(concept?.anbefaltTerm?.navn, language))}
                         conceptRelations={conceptRelations}
                         relatedConcepts={relatedConcepts}
                         validFromIncluding={concept?.gyldigFom}
@@ -666,6 +667,7 @@ export const ConceptPage = ({
                     users={usersResult.users}
                     concept={concept}
                     location='main_column'
+                    language={language}
                   />
                 </InfoCard>
 
@@ -813,6 +815,7 @@ export const ConceptPage = ({
                   users={usersResult.users}
                   concept={concept}
                   location='right_column'
+                  language={language}
                 />
               </InfoCard>
             </div>
