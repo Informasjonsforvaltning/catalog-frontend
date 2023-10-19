@@ -230,7 +230,6 @@ export const nb = {
     version: 'Versjon',
     validPeriod: 'Gyldighetsperiode',
     label: 'Merkelapp',
-    source: 'Kilde',
     relatedConcepts: 'Relaterte begreper ({conceptCount})',
     associativeRelation: 'Assosiativ relasjon',
     partitiveRelation: 'Partitiv relasjon',
