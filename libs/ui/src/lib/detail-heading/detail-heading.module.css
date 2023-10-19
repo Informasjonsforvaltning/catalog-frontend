@@ -1,10 +1,7 @@
 .detailHeading {
   display: flex;
   flex-direction: column;
-  padding: 2rem;
-  background-color: #d5edf2;
   color: #2d3741;
-  border-radius: 4px;
 }
 
 .title {
