@@ -6,6 +6,9 @@ import { Session, getServerSession } from 'next-auth';
 import { ChangeRequestForm } from './[changeRequestId]/_change-request-form';
 import jsonpatch from 'fast-json-patch';
 import { useCreateChangeRequest } from '../../../hooks/change-requests';
+import { localization as loc } from '@catalog-frontend/utils';
+import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
+import { useCatalogDesign } from '../../../context/catalog-design';
 
 const NewConceptSuggestion = ({
   FDK_REGISTRATION_BASE_URI,
@@ -15,8 +18,10 @@ const NewConceptSuggestion = ({
   originalConcept,
   showOriginal,
 }) => {
-  const changeRequestMutateHook = useCreateChangeRequest({ catalogId: organization.organizationId });
+  const catalogId = organization.organizationId;
+  const pageSubtitle = organization?.name ?? organization.id;
 
+  const changeRequestMutateHook = useCreateChangeRequest({ catalogId: catalogId });
   const submitHandler = (values: Concept, title: string) => {
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
       conceptId: changeRequest.conceptId,
@@ -26,16 +31,45 @@ const NewConceptSuggestion = ({
     changeRequestMutateHook.mutate(changeRequestFromConcept);
   };
 
+  const breadcrumbList = [
+    {
+      href: `/${catalogId}`,
+      text: loc.concept.concept,
+    },
+    {
+      href: `/${catalogId}/change-requests`,
+      text: loc.changeRequest.changeRequest,
+    },
+    {
+      href: `/${catalogId}/change-requests/new`,
+      text: loc.suggestionForNewConcept,
+    },
+  ] as BreadcrumbType[];
+
+  const design = useCatalogDesign();
+
   return (
-    <ChangeRequestForm
-      FDK_REGISTRATION_BASE_URI={FDK_REGISTRATION_BASE_URI}
-      organization={organization}
-      changeRequest={changeRequest}
-      changeRequestAsConcept={changeRequestAsConcept}
-      originalConcept={originalConcept}
-      showOriginal={showOriginal}
-      submitHandler={submitHandler}
-    />
+    <>
+      <Breadcrumbs
+        baseURI={FDK_REGISTRATION_BASE_URI}
+        breadcrumbList={breadcrumbList}
+      />
+      <PageBanner
+        title={loc.catalogType.concept}
+        subtitle={pageSubtitle}
+        fontColor={design?.fontColor}
+        backgroundColor={design?.backgroundColor}
+        logo={design?.hasLogo && `/api/catalog-admin/${catalogId}/design/logo`}
+        logoDescription={design?.logoDescription}
+      />
+      <ChangeRequestForm
+        changeRequest={changeRequest}
+        changeRequestAsConcept={changeRequestAsConcept}
+        originalConcept={originalConcept}
+        showOriginal={showOriginal}
+        submitHandler={submitHandler}
+      />
+    </>
   );
 };
 
