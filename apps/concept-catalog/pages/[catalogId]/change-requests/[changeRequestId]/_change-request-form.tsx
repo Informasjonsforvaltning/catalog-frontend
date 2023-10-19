@@ -1,6 +1,5 @@
 import { Checkbox, Heading, Textfield } from '@digdir/design-system-react';
-import { BreadcrumbType, Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
-import { useCatalogDesign } from '../../../../context/catalog-design';
+import { Button } from '@catalog-frontend/ui';
 import { localization as loc } from '@catalog-frontend/utils';
 import styles from './change-request-page.module.css';
 import { useState } from 'react';
@@ -19,17 +18,12 @@ const languageOptions = [
 ];
 
 export const ChangeRequestForm = ({
-  FDK_REGISTRATION_BASE_URI,
-  organization,
   changeRequest,
   changeRequestAsConcept,
   originalConcept,
   showOriginal = false,
   submitHandler,
 }) => {
-  const changeRequestId = changeRequest.id;
-  const catalogId = organization?.organizationId;
-  const pageSubtitle = organization?.name ?? organization.id;
   const [changeRequestTitle, setChangeRequestTitle] = useState<string>(changeRequest.title ?? '');
 
   const [selectedLanguages, setSelectedLanguages] = useState<ISOLanguage[]>(['nb', 'nn', 'en']);
@@ -49,39 +43,8 @@ export const ChangeRequestForm = ({
     setSelectedLanguages(newSelectedLangs as ISOLanguage[]);
   };
 
-  const breadcrumbList = changeRequestId
-    ? ([
-        {
-          href: `/${catalogId}`,
-          text: loc.concept.concept,
-        },
-        {
-          href: `/${catalogId}/change-requests`,
-          text: loc.changeRequest.changeRequest,
-        },
-        {
-          href: `/${catalogId}/change-requests/${changeRequestId}`,
-          text: changeRequestTitle,
-        },
-      ] as BreadcrumbType[])
-    : [];
-
-  const design = useCatalogDesign();
-
   return (
     <>
-      <Breadcrumbs
-        baseURI={FDK_REGISTRATION_BASE_URI}
-        breadcrumbList={breadcrumbList}
-      />
-      <PageBanner
-        title={loc.catalogType.concept}
-        subtitle={pageSubtitle}
-        fontColor={design?.fontColor}
-        backgroundColor={design?.backgroundColor}
-        logo={design?.hasLogo && `/api/catalog-admin/${catalogId}/design/logo`}
-        logoDescription={design?.logoDescription}
-      />
       <div className='container'>
         <div className={styles.pageContainer}>
           <div className={styles.languages}>
