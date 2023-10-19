@@ -1,6 +1,6 @@
 .detailHeading {
   margin-top: 3rem;
-  margin-bottom: 1rem;
+  margin-bottom: 5rem;
 }
 
 .languages {
@@ -10,7 +10,8 @@
 
 .status {
   display: flex;
-  justify-content: right;
+  align-items: center;
+  gap: 1rem;
 }
 
 .twoColumnRow {
