@@ -45,3 +45,9 @@
   padding-top: 10px;
   padding-bottom: 37px;
 }
+
+.emptyListMessage {
+  display: flex;
+  padding: 4em 0em;
+  justify-content: center;
+}
