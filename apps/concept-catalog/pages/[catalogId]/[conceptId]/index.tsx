@@ -601,8 +601,8 @@ export const ConceptPage = ({
                     </InfoCard.Item>
                   )}
                   {!(
-                    _.isEmpty(ensureStringArray(translate(concept?.tillattTerm, language))) &&
-                    _.isEmpty(ensureStringArray(translate(concept?.frarådetTerm, language))) &&
+                    _.isEmpty(translate(concept?.tillattTerm, language)) &&
+                    _.isEmpty(translate(concept?.frarådetTerm, language)) &&
                     _.isEmpty(concept?.abbreviatedLabel)
                   ) && (
                     <InfoCard.Item>
@@ -614,7 +614,7 @@ export const ConceptPage = ({
                           </ul>
                         </div>
                       )}
-                      {!_.isEmpty(ensureStringArray(translate(concept?.tillattTerm, language))) && (
+                      {!_.isEmpty(translate(concept?.tillattTerm, language)) && (
                         <div className={classes.termsRow}>
                           <h3>{`${localization.concept.allowedTerm}:`}</h3>
                           <ul>
@@ -624,7 +624,7 @@ export const ConceptPage = ({
                           </ul>
                         </div>
                       )}
-                      {!_.isEmpty(ensureStringArray(translate(concept?.frarådetTerm, language))) && (
+                      {!_.isEmpty(translate(concept?.frarådetTerm, language)) && (
                         <div className={classes.termsRow}>
                           <h3>{`${localization.concept.notRecommendedTerm}:`}</h3>
                           <ul>
