@@ -258,6 +258,7 @@ export const nb = {
     existingValue: 'Eksisterende {fieldType} på {lang}',
     proposedChange: 'Forslag til ny {fieldType} på {lang}',
     noValue: 'Ingen verdi',
+    noChangeRequestsFound: 'Her var det ingen endringsforslag',
   },
 
   comment: {

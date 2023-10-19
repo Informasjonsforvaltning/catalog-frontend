@@ -43,60 +43,66 @@ export const ChangeRequestsPage = ({ organization, changeRequests, conceptsWithC
         >
           {loc.changeRequest.changeRequest}
         </Heading>
-        <div className={styles.listWrapper}>
-          <ul className={styles.list}>
-            {changeRequests.map(({ id, title, catalogId, conceptId, timeForProposal, proposedBy, status }) => (
-              <li
-                key={id}
-                itemID={id}
-                className={styles.listItem}
-              >
-                <div className={styles.listContent}>
-                  <div>
-                    <Link
-                      href={
-                        validOrganizationNumber(catalogId) &&
-                        validUUID(id) &&
-                        changeRequests.find(({ id: changeRequestId }) => changeRequestId === id)
-                          ? `/${catalogId}/change-requests/${id}`
-                          : '#'
-                      }
-                    >
-                      <Heading
-                        level={3}
-                        size='xsmall'
-                        className={styles.heading}
+        {changeRequests.length > 0 ? (
+          <div className={styles.listWrapper}>
+            <ul className={styles.list}>
+              {changeRequests.map(({ id, title, catalogId, conceptId, timeForProposal, proposedBy, status }) => (
+                <li
+                  key={id}
+                  itemID={id}
+                  className={styles.listItem}
+                >
+                  <div className={styles.listContent}>
+                    <div>
+                      <Link
+                        href={
+                          validOrganizationNumber(catalogId) &&
+                          validUUID(id) &&
+                          changeRequests.find(({ id: changeRequestId }) => changeRequestId === id)
+                            ? `/${catalogId}/change-requests/${id}`
+                            : '#'
+                        }
                       >
-                        {title ||
-                          (conceptId && conceptsWithChangeRequest
-                            ? getTranslateText(
-                                conceptsWithChangeRequest?.hits?.find(
-                                  (concept) => concept.originaltBegrep === conceptId,
-                                )?.anbefaltTerm?.navn,
-                              )
-                            : loc.suggestionForNewConcept)}
-                      </Heading>
-                    </Link>
-                    <div className={styles.text}>
-                      <p>{convertTimestampToDateAndTime(timeForProposal)}</p>
-                      <p>
-                        {proposedBy.name
-                          .split(' ')
-                          .map((namePart) => capitalizeFirstLetter(namePart))
-                          .join(' ')}
-                      </p>
+                        <Heading
+                          level={3}
+                          size='xsmall'
+                          className={styles.heading}
+                        >
+                          {title ||
+                            (conceptId && conceptsWithChangeRequest
+                              ? getTranslateText(
+                                  conceptsWithChangeRequest?.hits?.find(
+                                    (concept) => concept.originaltBegrep === conceptId,
+                                  )?.anbefaltTerm?.navn,
+                                )
+                              : loc.suggestionForNewConcept)}
+                        </Heading>
+                      </Link>
+                      <div className={styles.text}>
+                        <p>{convertTimestampToDateAndTime(timeForProposal)}</p>
+                        <p>
+                          {proposedBy.name
+                            .split(' ')
+                            .map((namePart) => capitalizeFirstLetter(namePart))
+                            .join(' ')}
+                        </p>
+                      </div>
                     </div>
+                    {status && (
+                      <div className={styles.status}>
+                        <Tag>{status}</Tag>
+                      </div>
+                    )}
                   </div>
-                  {status && (
-                    <div className={styles.status}>
-                      <Tag>{status}</Tag>
-                    </div>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className={styles.emptyListMessage}>
+            <p>{loc.changeRequest.noChangeRequestsFound}</p>
+          </div>
+        )}
       </div>
     </>
   );
