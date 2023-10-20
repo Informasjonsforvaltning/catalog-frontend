@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styles from './code-lists.module.css';
 import { Accordion, Heading } from '@digdir/design-system-react';
-import { BreadcrumbType, Breadcrumbs, Button, SearchField } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, Button, SearchField, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { useRouter } from 'next/router';
 import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
@@ -20,15 +20,18 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
 
   const adminDispatch = useAdminDispatch();
   const adminContext = useAdminState();
-  const { showCodeListEditor, updatedCodes } = adminContext;
+  const { showCodeListEditor, updatedCodeLists, updatedCodes } = adminContext;
 
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [isCodeChanged, setIsCodeChanged] = useState(false);
 
   const { data: getAllCodeLists } = useGetAllCodeLists({
     catalogId: catalogId,
   });
   const dbCodeLists = getAllCodeLists?.codeLists || [];
+
+  useWarnIfUnsavedChanges(updatedCodeLists?.length > 0 || isCodeChanged);
 
   useEffect(() => {
     const filteredCodeLists = dbCodeLists.filter((codeList: CodeList) =>
@@ -141,6 +144,7 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
                     <CodeListEditor
                       codeList={codeList}
                       codeListsInUse={codeListsInUse}
+                      onChange={() => setIsCodeChanged(true)}
                     />
                   </Accordion.Content>
                 </Accordion.Item>
