@@ -22,14 +22,19 @@ const GenericRelations = ({ genericRelations, relatedConceptsMap, catalogId }: P
               <div>
                 <span>{localization.concept.genericRelation}</span>
               </div>
-              <div>
-                <span>
-                  {relatedConcept.relasjonsType === 'overordnet'
-                    ? localization.concept.generalizes
-                    : localization.concept.specializes}
-                </span>
-                <span>{` (${getTranslateText(inndelingskriterium)})`}</span>
-              </div>
+              {getTranslateText(inndelingskriterium) && (
+                <div>
+                  <span>
+                    {relatedConcept.relasjonsType === 'overordnet'
+                      ? localization.concept.generalizes
+                      : localization.concept.specializes}
+                  </span>
+
+                  <span>{` (${localization.concept.divisionCriterion}: ${getTranslateText(
+                    inndelingskriterium,
+                  )})`}</span>
+                </div>
+              )}
             </div>
           }
           value={<a href={relatedConcept.identifier}>{getTranslateText(relatedConcept.prefLabel)}</a>}

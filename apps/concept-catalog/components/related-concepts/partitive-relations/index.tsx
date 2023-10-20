@@ -22,10 +22,16 @@ const PartitiveRelations = ({ partitiveRelations, relatedConceptsMap, catalogId 
               <div>
                 <div>
                   <p>{localization.concept.partitiveRelation}</p>
-                  <span>
-                    {relasjonsType === 'erDelAv' ? localization.concept.isPartOf : localization.concept.hasPart}
-                  </span>
-                  <span>{` (${getTranslateText(inndelingskriterium)})`}</span>
+                  {getTranslateText(inndelingskriterium) && (
+                    <>
+                      <span>
+                        {relasjonsType === 'erDelAv' ? localization.concept.isPartOf : localization.concept.hasPart}
+                      </span>
+                      <span>{` (${localization.concept.divisionCriterion}: ${getTranslateText(
+                        inndelingskriterium,
+                      )})`}</span>
+                    </>
+                  )}
                 </div>
               </div>
             }

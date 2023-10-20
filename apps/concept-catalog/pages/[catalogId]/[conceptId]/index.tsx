@@ -65,6 +65,7 @@ import _ from 'lodash';
 import { getToken } from 'next-auth/jwt';
 import { prepareStatusList } from '@catalog-frontend/utils';
 import RelatedConcepts from '../../../components/related-concepts';
+import Definition from '../../../components/definition';
 
 type MapType = {
   [id: string]: string;
@@ -252,35 +253,7 @@ export const ConceptPage = ({
           ],
         ]
       : []),
-    ...(concept?.kontaktpunkt?.harEpost || concept?.kontaktpunkt?.harTelefon
-      ? [
-          [
-            localization.concept.contactInformation,
-            <>
-              {concept?.kontaktpunkt?.harEpost && (
-                <div
-                  key='contact'
-                  className={classes.contact}
-                >
-                  <EnvelopeClosedIcon />
-                  &nbsp;
-                  {concept?.kontaktpunkt?.harEpost}
-                </div>
-              )}
-              {concept?.kontaktpunkt?.harTelefon && (
-                <div
-                  key='contact'
-                  className={classes.contact}
-                >
-                  <PhoneIcon />
-                  &nbsp;
-                  {concept?.kontaktpunkt?.harTelefon}
-                </div>
-              )}
-            </>,
-          ],
-        ]
-      : []),
+
     ...(concept?.assignedUser
       ? [
           [
@@ -328,10 +301,39 @@ export const ConceptPage = ({
         ]
       : []),
     ...(concept?.opprettetAv ? [[localization.concept.createdBy, concept.opprettetAv]] : []),
+    ...(concept?.kontaktpunkt?.harEpost || concept?.kontaktpunkt?.harTelefon
+      ? [
+          [
+            localization.concept.contactInformation,
+            <>
+              {concept?.kontaktpunkt?.harEpost && (
+                <div
+                  key='contact'
+                  className={classes.contact}
+                >
+                  <EnvelopeClosedIcon />
+                  &nbsp;
+                  {concept?.kontaktpunkt?.harEpost}
+                </div>
+              )}
+              {concept?.kontaktpunkt?.harTelefon && (
+                <div
+                  key='contact'
+                  className={classes.contact}
+                >
+                  <PhoneIcon />
+                  &nbsp;
+                  {concept?.kontaktpunkt?.harTelefon}
+                </div>
+              )}
+            </>,
+          ],
+        ]
+      : []),
   ];
 
   const findStatusLabel = (statusURI) => {
-    return translate(conceptStatuses?.find((s) => s.uri === statusURI)?.label, language) as string;
+    return translate(conceptStatuses?.find((s) => s.uri === statusURI)?.label) as string;
   };
 
   const handleLanguageChange = (lang) => {
@@ -501,38 +503,16 @@ export const ConceptPage = ({
         {deleteConcept.status === 'loading' && <Spinner />}
         {deleteConcept.status !== 'loading' && (
           <>
-            <div className={classes.languages}>
-              <ToggleButtonGroup
-                items={languageOptions}
-                onChange={handleLanguageChange}
-                selectedValue={language}
-              />
-            </div>
             <div className={classes.twoColumnRow}>
-              <div className={classes.definition}>
-                <h3>Definisjon:</h3>
-                <div>{translate(concept?.definisjon?.tekst ?? '', language)}</div>
-                {(concept?.definisjon?.kildebeskrivelse?.forholdTilKilde === 'egendefinert' ||
-                  concept?.definisjon?.kildebeskrivelse?.kilde.length > 0) && (
-                  <div className={cn(classes.source)}>
-                    <div>{localization.concept.source}:</div>
-                    <div>
-                      {concept?.definisjon?.kildebeskrivelse?.forholdTilKilde === 'egendefinert' ? (
-                        localization.concept.selfDefined
-                      ) : (
-                        <ul>
-                          {concept?.definisjon?.kildebeskrivelse?.kilde?.map((kilde, i) => (
-                            <li key={`kilde-${i}`}>
-                              {kilde.uri ? <a href={kilde.uri}>{kilde.tekst}</a> : <span>{kilde.tekst}</span>}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  </div>
-                )}
+              <div>
+                <div className={classes.languages}>
+                  <ToggleButtonGroup
+                    items={languageOptions}
+                    onChange={handleLanguageChange}
+                    selectedValue={language}
+                  />
+                </div>
               </div>
-
               <div className={classes.actionButtons}>
                 {hasWritePermission && (
                   <>
@@ -552,6 +532,31 @@ export const ConceptPage = ({
             <div className={cn(classes.twoColumnRow, classes.bottomSpace)}>
               <div>
                 <InfoCard>
+                  {!_.isEmpty(translate(concept?.definisjon?.tekst ?? '', language)) && (
+                    <InfoCard.Item label={`${localization.concept.definition}:`}>
+                      <Definition
+                        definition={concept?.definisjon}
+                        language={language}
+                      />
+                    </InfoCard.Item>
+                  )}
+                  {!_.isEmpty(translate(concept?.definisjonForAllmennheten?.tekst ?? '', language)) && (
+                    <InfoCard.Item label={`${localization.concept.publicDefinition}:`}>
+                      <Definition
+                        definition={concept?.definisjonForAllmennheten}
+                        language={language}
+                      />
+                    </InfoCard.Item>
+                  )}
+
+                  {!_.isEmpty(translate(concept?.definisjonForSpesialister?.tekst ?? '', language)) && (
+                    <InfoCard.Item label={`${localization.concept.specialistDefinition}:`}>
+                      <Definition
+                        definition={concept?.definisjonForSpesialister}
+                        language={language}
+                      />
+                    </InfoCard.Item>
+                  )}
                   {!_.isEmpty(translate(concept?.merknad, language)) && (
                     <InfoCard.Item label={`${localization.concept.note}:`}>
                       <span>{translate(concept?.merknad, language)}</span>
@@ -562,79 +567,27 @@ export const ConceptPage = ({
                       <span>{translate(concept?.eksempel, language)}</span>
                     </InfoCard.Item>
                   )}
-                  {!_.isEmpty(translate(concept?.definisjonForAllmennheten?.tekst ?? '', language)) && (
-                    <InfoCard.Item label={`${localization.concept.publicDefinition}:`}>
-                      <div>{translate(concept?.definisjonForAllmennheten?.tekst ?? '', language)}</div>
-                      {concept?.definisjonForAllmennheten?.kildebeskrivelse?.kilde.length > 0 && (
-                        <div className={cn(classes.source, classes.paddingTop05)}>
-                          <div>{localization.concept.source}:</div>
-                          <div>
-                            <ul>
-                              {concept?.definisjonForAllmennheten?.kildebeskrivelse?.kilde?.map((kilde, i) => (
-                                <li key={`kilde-${i}`}>
-                                  {kilde.uri ? <a href={kilde.uri}>{kilde.tekst}</a> : <span>{kilde.tekst}</span>}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-                      )}
+                  {!_.isEmpty(translate(concept?.abbreviatedLabel, language)) && (
+                    <InfoCard.Item label={`${localization.concept.example}:`}>
+                      <span>{translate(concept?.abbreviatedLabel, language)}</span>
                     </InfoCard.Item>
                   )}
-
-                  {!_.isEmpty(translate(concept?.definisjonForSpesialister?.tekst ?? '', language)) && (
-                    <InfoCard.Item label={`${localization.concept.specialistDefinition}:`}>
-                      <div>{translate(concept?.definisjonForSpesialister?.tekst ?? '', language)}</div>
-                      {concept?.definisjonForSpesialister?.kildebeskrivelse?.kilde.length > 0 && (
-                        <div className={cn(classes.source, classes.paddingTop05)}>
-                          <div>{localization.concept.source}:</div>
-                          <div>
-                            <ul>
-                              {concept?.definisjonForSpesialister?.kildebeskrivelse?.kilde?.map((kilde, i) => (
-                                <li key={`kilde-${i}`}>
-                                  {kilde.uri ? <a href={kilde.uri}>{kilde.tekst}</a> : <span>{kilde.tekst}</span>}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        </div>
-                      )}
+                  {!_.isEmpty(translate(concept?.tillattTerm, language)) && (
+                    <InfoCard.Item label={`${localization.concept.allowedTerm}:`}>
+                      <ul>
+                        {ensureStringArray(translate(concept?.tillattTerm, language)).map((term, i) => (
+                          <li key={`allowedTerm-${i}`}>{term}</li>
+                        ))}
+                      </ul>
                     </InfoCard.Item>
                   )}
-                  {!(
-                    _.isEmpty(translate(concept?.tillattTerm, language)) &&
-                    _.isEmpty(translate(concept?.frarådetTerm, language)) &&
-                    _.isEmpty(concept?.abbreviatedLabel)
-                  ) && (
-                    <InfoCard.Item>
-                      {!_.isEmpty(concept?.abbreviatedLabel) && (
-                        <div className={classes.termsRow}>
-                          <h3>{`${localization.concept.abbreviation}:`}</h3>
-                          <ul>
-                            <li>{concept?.abbreviatedLabel}</li>
-                          </ul>
-                        </div>
-                      )}
-                      {!_.isEmpty(translate(concept?.tillattTerm, language)) && (
-                        <div className={classes.termsRow}>
-                          <h3>{`${localization.concept.allowedTerm}:`}</h3>
-                          <ul>
-                            {ensureStringArray(translate(concept?.tillattTerm, language)).map((term, i) => (
-                              <li key={`allowedTerm-${i}`}>{term}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
-                      {!_.isEmpty(translate(concept?.frarådetTerm, language)) && (
-                        <div className={classes.termsRow}>
-                          <h3>{`${localization.concept.notRecommendedTerm}:`}</h3>
-                          <ul>
-                            {ensureStringArray(translate(concept?.frarådetTerm, language)).map((term, i) => (
-                              <li key={`notRecommendedTerm-${i}`}>{term}</li>
-                            ))}
-                          </ul>
-                        </div>
-                      )}
+                  {!_.isEmpty(translate(concept?.frarådetTerm, language)) && (
+                    <InfoCard.Item label={`${localization.concept.notRecommendedTerm}:`}>
+                      <ul>
+                        {ensureStringArray(translate(concept?.frarådetTerm, language)).map((term, i) => (
+                          <li key={`notRecommendedTerm-${i}`}>{term}</li>
+                        ))}
+                      </ul>
                     </InfoCard.Item>
                   )}
                   {!_.isEmpty(relatedConcepts) && (
