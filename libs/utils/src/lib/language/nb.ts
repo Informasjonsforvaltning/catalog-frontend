@@ -240,12 +240,13 @@ export const nb = {
     specializes: 'Overordnet',
     seeAlso: 'Se også',
     isReplacedBy: 'Erstattes av',
+    divisionCriterion: 'Inndelingskriterium',
   },
 
   validity: {
     expired: 'Utgått',
     willBeValid: 'blir gyldig',
-    contactInformation: 'Kontaktinformasjon',
+    contactInformation: 'Kontaktinformasjon for eksterne',
     relationToSource: 'Forhold til kilde',
     formFieldLabel: '{fieldType} på {lang}',
   },

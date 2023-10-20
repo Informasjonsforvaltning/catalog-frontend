@@ -1,0 +1,13 @@
+.source {
+  padding-top: 0.5rem;
+}
+
+.source ul > li {
+  display: inline-block;
+  margin-right: 0.5rem;
+}
+
+.source,
+.source a {
+  color: #6c737a;
+}
