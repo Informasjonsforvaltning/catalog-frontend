@@ -25,3 +25,4 @@ export * from './lib/search-hit-container';
 export * from './lib/custom-error';
 export * from './lib/key-value-list';
 export * from './lib/key-value-list-item';
+export * from './lib/use-warn-if-unsaved-changes';

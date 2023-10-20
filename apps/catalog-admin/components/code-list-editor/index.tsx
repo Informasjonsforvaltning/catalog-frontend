@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import styles from './code-list-editor.module.css';
 import { Button } from '@catalog-frontend/ui';
 import { Textfield } from '@digdir/design-system-react';
-import { CodeList, EditorType } from '@catalog-frontend/types';
+import { Code, CodeList, EditorType } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
 import { useAdminDispatch, useAdminState } from '../../context/admin';
 import { useCreateCodeList, useDeleteCodeList, useGetAllCodeLists, useUpdateCodeList } from '../../hooks/code-lists';
@@ -14,9 +13,10 @@ export interface Props {
   codeList?: CodeList;
   codeListsInUse?: string[];
   type?: EditorType;
+  onChange?: (code: Code) => void;
 }
 
-export const CodeListEditor = ({ codeList, codeListsInUse, type }: Props) => {
+export const CodeListEditor = ({ codeList, codeListsInUse, type, onChange }: Props) => {
   const adminDispatch = useAdminDispatch();
   const { updatedCodeLists, updatedCodes } = useAdminState();
 
@@ -167,7 +167,10 @@ export const CodeListEditor = ({ codeList, codeListsInUse, type }: Props) => {
         />
       </div>
 
-      <CodesEditor codeList={codeList} />
+      <CodesEditor
+        codeList={codeList}
+        onChange={onChange}
+      />
       <div className='editorButtons'>
         <Button onClick={() => (type === 'create' ? handleCreateCodeList() : handleUpdateDbCodeList(codeList.id))}>
           {localization.saveEdits}

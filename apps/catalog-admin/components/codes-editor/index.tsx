@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NodeApi, NodeRendererProps, Tree } from 'react-arborist';
 import { TabsAddIcon, TabsRemoveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
@@ -19,9 +19,10 @@ const INDENT_STEP = 15;
 export interface Props {
   codeList: CodeList;
   type?: EditorType;
+  onChange?: (code: Code) => void;
 }
 
-export const CodesEditor = ({ codeList: dbCodeList }: Props) => {
+export const CodesEditor = ({ codeList: dbCodeList, onChange }: Props) => {
   const adminDispatch = useAdminDispatch();
   const { updatedCodeLists, updatedCodes } = useAdminState();
 
@@ -207,6 +208,16 @@ export const CodesEditor = ({ codeList: dbCodeList }: Props) => {
       }))
       .concat({ label: localization.catalogAdmin.noParentCode, value: null });
   }
+
+  useEffect(() => {
+    if (
+      onChange &&
+      selectedCode &&
+      !(dbCodeList?.codes === updatedCodes[dbCodeList?.id] && dbCodeList?.codes?.includes(selectedCode))
+    ) {
+      onChange(selectedCode);
+    }
+  }, [onChange, selectedCode, dbCodeList, updatedCodes]);
 
   return (
     <>
