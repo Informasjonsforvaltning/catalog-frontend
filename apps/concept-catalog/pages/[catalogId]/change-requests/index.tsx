@@ -1,6 +1,6 @@
 import { getChangeRequests, getOrganization, searchConceptsForCatalog } from '@catalog-frontend/data-access';
 import { ChangeRequest, Concept, Organization, SearchConceptQuery } from '@catalog-frontend/types';
-import { Button, PageBanner, Tag } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, Button, PageBanner, Tag } from '@catalog-frontend/ui';
 import {
   capitalizeFirstLetter,
   convertTimestampToDateAndTime,
@@ -16,7 +16,12 @@ import { Heading, Link } from '@digdir/design-system-react';
 import { Session, getServerSession } from 'next-auth';
 import { authOptions } from '../../api/auth/[...nextauth]';
 
-export const ChangeRequestsPage = ({ organization, changeRequests, conceptsWithChangeRequest }) => {
+export const ChangeRequestsPage = ({
+  organization,
+  changeRequests,
+  conceptsWithChangeRequest,
+  FDK_REGISTRATION_BASE_URI,
+}) => {
   const pageSubtitle = organization?.name ?? '';
   const router = useRouter();
 
@@ -27,8 +32,24 @@ export const ChangeRequestsPage = ({ organization, changeRequests, conceptsWithC
     }
   };
 
+  const catalogId = organization.organizationId;
+  const breadcrumbList = [
+    {
+      href: `/${catalogId}`,
+      text: loc.concept.concept,
+    },
+    {
+      href: `/${catalogId}/change-requests`,
+      text: loc.changeRequest.changeRequest,
+    },
+  ] as BreadcrumbType[];
+
   return (
     <>
+      <Breadcrumbs
+        baseURI={FDK_REGISTRATION_BASE_URI}
+        breadcrumbList={breadcrumbList}
+      />
       <PageBanner
         title={loc.catalogType.concept}
         subtitle={pageSubtitle}
@@ -158,12 +179,14 @@ export async function getServerSideProps({ req, res, params }) {
 
   const response = await searchConceptsForCatalog(catalogId, searchQuery, session?.accessToken);
   const conceptsWithChangeRequest: Concept[] = await response.json();
+  const FDK_REGISTRATION_BASE_URI = process.env.FDK_REGISTRATION_BASE_URI;
 
   return {
     props: {
       organization,
       changeRequests,
       conceptsWithChangeRequest,
+      FDK_REGISTRATION_BASE_URI,
     },
   };
 }
