@@ -3290,6 +3290,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@swc/plugin-styled-components@npm:^1.5.67":
+  version: 1.5.92
+  resolution: "@swc/plugin-styled-components@npm:1.5.92"
+  checksum: dbf6993039d8fef2b1d0e818b2c6436a86648609cd3813794b31483af2e2707fb28c74372afea2818061213fc66ea75f82c27533487bd42d971432d46c7b52d5
+  languageName: node
+  linkType: hard
+
 "@tanstack/query-core@npm:4.29.25":
   version: 4.29.25
   resolution: "@tanstack/query-core@npm:4.29.25"
@@ -4880,6 +4887,7 @@ __metadata:
     "@svgr/webpack": ^8.0.1
     "@swc/core": ^1.3.42
     "@swc/jest": 0.2.26
+    "@swc/plugin-styled-components": ^1.5.67
     "@tanstack/react-query": ^4.29.12
     "@testing-library/react": 14.0.0
     "@types/jest": ^29.5.0
@@ -4928,7 +4936,7 @@ __metadata:
     react-paginate: ^8.2.0
     react-papaparse: ^4.1.0
     styled-components: 5.3.11
-    ts-jest: ^29.0.5
+    ts-jest: ^29.1.0
     ts-node: 10.9.1
     tslib: ^2.3.0
     typescript: ~5.1.3
@@ -11917,7 +11925,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-jest@npm:^29.0.5":
+"ts-jest@npm:^29.1.0":
   version: 29.1.1
   resolution: "ts-jest@npm:29.1.1"
   dependencies:
