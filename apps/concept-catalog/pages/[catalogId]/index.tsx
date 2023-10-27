@@ -252,6 +252,10 @@ export const SearchPage = ({
     );
   };
 
+  const showChangeRequests = ['localhost', 'staging', 'demo'].some((environment) =>
+    window?.location.hostname.includes(environment),
+  );
+
   const design = useCatalogDesign();
 
   useEffect(() => {
@@ -280,12 +284,14 @@ export const SearchPage = ({
         <div className={styles.pageContainer}>
           <div className={styles.secondRowContainer}>
             <div className={styles.buttonsContainer}>
-              <Button
-                variant='outline'
-                onClick={onSeeChangeRequests}
-              >
-                {loc.changeRequest.seeChangeRequests}
-              </Button>
+              {showChangeRequests && (
+                <Button
+                  variant='outline'
+                  onClick={onSeeChangeRequests}
+                >
+                  {loc.changeRequest.seeChangeRequests}
+                </Button>
+              )}
               {hasWritePermission && (
                 <Button
                   onClick={onCreateConceptClick}
