@@ -111,3 +111,7 @@
   border-left: solid 1px #d5d7d9;
   border-right: solid 1px #d5d7d9;
 }
+
+.noFolderIcon {
+  padding-left: 30px;
+}
