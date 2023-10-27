@@ -149,7 +149,7 @@ export const CodesEditor = ({ codeList: dbCodeList, onChange }: Props) => {
   }
 
   function FolderIcon({ node }: { node: NodeApi<TreeNode> }) {
-    if (node.isLeaf) return <span></span>;
+    if (node.isLeaf) return <span className={styles.noFolderIcon}></span>;
     return (
       <span>
         <button
@@ -235,6 +235,7 @@ export const CodesEditor = ({ codeList: dbCodeList, onChange }: Props) => {
                 width={453}
                 onActivate={handleOnClick}
                 disableEdit
+                indent={20}
               >
                 {Node}
               </Tree>
