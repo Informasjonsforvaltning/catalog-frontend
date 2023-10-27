@@ -136,24 +136,6 @@ export const UserEditor = ({ user, type }: UserEditorProps) => {
           }}
         />
       </div>
-      <div className='editorSpacing'>
-        <Textfield
-          label='Telefonnummer'
-          type='tel'
-          inputMode='tel'
-          error={
-            telephoneNumberRegex.test((findUserById(user?.id) || user)?.telephoneNumber || newUser.telephoneNumber)
-              ? null
-              : localization.validation.invalidValue
-          }
-          value={(findUserById(user?.id) || user)?.telephoneNumber}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            type === 'create'
-              ? setNewUser({ name: newUser.name, email: newUser.email, telephoneNumber: event.target.value })
-              : updateUserState(user?.id, undefined, undefined, event.target.value);
-          }}
-        />
-      </div>
       <div className='editorButtons'>
         <Button onClick={() => (type === 'create' ? handleCreateUser() : handleUpdateUser(user?.id))}>Lagre</Button>
         {type === 'create' ? (
