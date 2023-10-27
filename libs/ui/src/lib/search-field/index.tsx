@@ -20,7 +20,7 @@ const SearchField: FC<SearchFieldProps> = ({
   ariaLabel,
   startIcon,
   endIcon = <MagnifyingGlassSVG />,
-  placeholder = 'Input placeholder ...',
+  placeholder = '',
   error = false,
   onSearchSubmit,
 }) => {
