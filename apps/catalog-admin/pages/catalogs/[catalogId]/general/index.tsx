@@ -38,8 +38,8 @@ export const ConceptsPage = ({ organization }) => {
         />
         <Card
           icon={<PersonIcon fontSize='3rem' />}
-          title={localization.catalogAdmin.userList}
-          body={localization.catalogAdmin.manage.userList}
+          title={localization.catalogAdmin.usernameList}
+          body={localization.catalogAdmin.manage.usernameList}
           href={`/catalogs/${catalogId}/general/users`}
         />
       </div>

@@ -52,7 +52,7 @@ export const CodeListsPage = ({ organization }) => {
         },
         {
           href: `/catalogs/${catalogId}/general/users`,
-          text: getTranslateText(localization.catalogAdmin.userList),
+          text: getTranslateText(localization.catalogAdmin.usernameList),
         },
       ] as BreadcrumbType[])
     : [];
@@ -65,8 +65,8 @@ export const CodeListsPage = ({ organization }) => {
       <PageLayout>
         <div className={styles.row}>
           <SearchField
-            ariaLabel=''
-            placeholder='Søk etter bruker...'
+            ariaLabel={localization.search.searchForUsername}
+            placeholder={localization.search.searchForUsername}
             onSearchSubmit={(search) => setSearch(search)}
           />
           <div className='editorButtons'>
@@ -84,7 +84,7 @@ export const CodeListsPage = ({ organization }) => {
           level={2}
           size='xsmall'
         >
-          Brukerliste
+          {localization.catalogAdmin.usernameList}
         </Heading>
 
         <div className='accordionStructure'>

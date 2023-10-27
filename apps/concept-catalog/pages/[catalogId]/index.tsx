@@ -318,8 +318,8 @@ export const SearchPage = ({
           <div className={styles.searchRowContainer}>
             <div>
               <SearchField
-                ariaLabel={loc.search.searchInAllFields}
-                placeholder={loc.search.searchInAllFields}
+                ariaLabel={loc.search.search}
+                placeholder={loc.search.search}
                 onSearchSubmit={onSearchSubmit}
               />
               <div className={styles.chips}>

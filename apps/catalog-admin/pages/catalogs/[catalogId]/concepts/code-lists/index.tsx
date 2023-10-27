@@ -87,7 +87,7 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
       <PageLayout>
         <div className={styles.row}>
           <SearchField
-            ariaLabel={'Søkefelt kodeliste'}
+            ariaLabel='Søkefelt kodeliste'
             placeholder='Søk etter kodeliste...'
             onSearchSubmit={(search) => setSearch(search)}
           />
