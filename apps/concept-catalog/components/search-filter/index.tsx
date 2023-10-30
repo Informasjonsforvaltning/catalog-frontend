@@ -80,38 +80,50 @@ const SearchFilter = ({ internalFields, subjectCodeList, conceptStatuses }: Prop
   };
 
   const accordionItemContents: AccordionItemProps[] = [
-    {
-      header: loc.subjectArea,
-      content: (
-        <CheckboxTreeFilter
-          nodes={convertCodeListToTreeNodes(subjectCodeList?.codes)}
-          onCheck={handleSubjectOnCheck}
-          filters={subjectState}
-        />
-      ),
-    },
-    {
-      header: loc.conceptStatus,
-      content: (
-        <CheckboxGroupFilter<string>
-          items={statusItems}
-          filterName='status'
-          onChange={handleOnStatusChange}
-        />
-      ),
-    },
-    {
-      header: loc.assigned,
-      content: (
-        <Select
-          options={
-            assignedUserItems ? [...assignedUserItems.map((item) => ({ label: item.name, value: item.id }))] : []
-          }
-          onChange={handleOnAssignedChange}
-          value={assignedUserState?.id}
-        />
-      ),
-    },
+    ...(subjectCodeList?.codes.length > 0
+      ? [
+          {
+            header: loc.subjectArea,
+            content: (
+              <CheckboxTreeFilter
+                nodes={convertCodeListToTreeNodes(subjectCodeList?.codes)}
+                onCheck={handleSubjectOnCheck}
+                filters={subjectState}
+              />
+            ),
+          },
+        ]
+      : []),
+    ...(statusItems?.length > 0
+      ? [
+          {
+            header: loc.conceptStatus,
+            content: (
+              <CheckboxGroupFilter<string>
+                items={statusItems}
+                filterName='status'
+                onChange={handleOnStatusChange}
+              />
+            ),
+          },
+        ]
+      : []),
+    ...(assignedUserItems?.length > 0
+      ? [
+          {
+            header: loc.assigned,
+            content: (
+              <Select
+                options={
+                  assignedUserItems ? [...assignedUserItems.map((item) => ({ label: item.name, value: item.id }))] : []
+                }
+                onChange={handleOnAssignedChange}
+                value={assignedUserState?.id}
+              />
+            ),
+          },
+        ]
+      : []),
     {
       header: loc.publicationState.state,
       content: (
