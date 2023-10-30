@@ -15,6 +15,7 @@ import { useRouter } from 'next/router';
 import { Heading, Link } from '@digdir/design-system-react';
 import { Session, getServerSession } from 'next-auth';
 import { authOptions } from '../../api/auth/[...nextauth]';
+import { useCatalogDesign } from '../../../context/catalog-design';
 
 export const ChangeRequestsPage = ({
   organization,
@@ -44,6 +45,8 @@ export const ChangeRequestsPage = ({
     },
   ] as BreadcrumbType[];
 
+  const design = useCatalogDesign();
+
   return (
     <>
       <Breadcrumbs
@@ -53,6 +56,10 @@ export const ChangeRequestsPage = ({
       <PageBanner
         title={loc.catalogType.concept}
         subtitle={pageSubtitle}
+        fontColor={design?.fontColor}
+        backgroundColor={design?.backgroundColor}
+        logo={design?.hasLogo && `/api/catalog-admin/${catalogId}/design/logo`}
+        logoDescription={design?.logoDescription}
       />
       <div className='container'>
         <div className={styles.buttonsContainer}>
