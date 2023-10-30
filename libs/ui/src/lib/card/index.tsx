@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import styles from './card.module.css';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
 interface Card {
@@ -9,7 +10,7 @@ interface Card {
 
 export function Card({ title, body, href, icon }: Card) {
   return (
-    <a
+    <Link
       href={href ? href : ''}
       className={styles.card}
     >
@@ -20,7 +21,7 @@ export function Card({ title, body, href, icon }: Card) {
         className={styles.arrowIcon}
         title='arrow-right button'
       />
-    </a>
+    </Link>
   );
 }
 

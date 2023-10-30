@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@catalog-frontend/ui';
 import { Textfield } from '@digdir/design-system-react';
-import { Code, CodeList, EditorType } from '@catalog-frontend/types';
+import { CodeList, EditorType } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
 import { useAdminDispatch, useAdminState } from '../../context/admin';
 import { useCreateCodeList, useDeleteCodeList, useGetAllCodeLists, useUpdateCodeList } from '../../hooks/code-lists';
@@ -13,10 +13,10 @@ export interface Props {
   codeList?: CodeList;
   codeListsInUse?: string[];
   type?: EditorType;
-  onChange?: (code: Code) => void;
+  dirty?: (dirty: boolean) => void;
 }
 
-export const CodeListEditor = ({ codeList, codeListsInUse, type, onChange }: Props) => {
+export const CodeListEditor = ({ codeList, codeListsInUse, type, dirty }: Props) => {
   const adminDispatch = useAdminDispatch();
   const { updatedCodeLists, updatedCodes } = useAdminState();
 
@@ -48,6 +48,12 @@ export const CodeListEditor = ({ codeList, codeListsInUse, type, onChange }: Pro
       }));
     }
   }, [updatedCodes]);
+
+  useEffect(() => {
+    if (dirty) {
+      dirty(newCodeList.name !== '' || newCodeList.description !== '');
+    }
+  }, [newCodeList]);
 
   const handleDeleteCodeList = (codeListId: string) => {
     if (!codeListsInUse.includes(codeListId)) {
@@ -121,8 +127,7 @@ export const CodeListEditor = ({ codeList, codeListsInUse, type, onChange }: Pro
 
     if (updatedCodeListCopy && dbCodeList) {
       const diff = compare(dbCodeList, updatedCodeListCopy);
-
-      if (diff) {
+      if (diff.length > 0) {
         updateCodeList
           .mutateAsync({ oldCodeList: dbCodeList, newCodeList: updatedCodeListCopy })
           .then(() => {
@@ -169,7 +174,7 @@ export const CodeListEditor = ({ codeList, codeListsInUse, type, onChange }: Pro
 
       <CodesEditor
         codeList={codeList}
-        onChange={onChange}
+        dirty={dirty}
       />
       <div className='editorButtons'>
         <Button onClick={() => (type === 'create' ? handleCreateCodeList() : handleUpdateDbCodeList(codeList.id))}>
