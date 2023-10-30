@@ -1,4 +1,4 @@
-import { useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { InferGetServerSidePropsType } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -476,6 +476,11 @@ export const ConceptPage = ({
     : [];
 
   const status = findStatusLabel(concept?.statusURI);
+
+  useEffect(() => {
+    setIsPublished(concept?.erPublisert);
+    setPublishedDate(concept?.publiseringsTidspunkt);
+  }, [concept]);
 
   return (
     <>
