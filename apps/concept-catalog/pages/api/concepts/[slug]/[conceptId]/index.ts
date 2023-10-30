@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (response.status !== 200) {
         return res.status(response.status).send({ error: 'Failed to delete concept' });
       }
-      return res.status(response?.status).send(response?.text);
+      return res.status(response?.status).send(await response?.text());
     } catch (err) {
       return res.status(500).send({ error: 'Failed to delete concept' });
     }
