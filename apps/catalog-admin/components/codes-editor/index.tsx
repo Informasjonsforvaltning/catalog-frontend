@@ -13,16 +13,17 @@ import {
   localization,
 } from '@catalog-frontend/utils';
 import { useAdminDispatch, useAdminState } from '../../context/admin';
+import { compare } from 'fast-json-patch';
 
 const INDENT_STEP = 15;
 
 export interface Props {
   codeList: CodeList;
+  dirty: (dirty: boolean) => void;
   type?: EditorType;
-  onChange?: (code: Code) => void;
 }
 
-export const CodesEditor = ({ codeList: dbCodeList, onChange }: Props) => {
+export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   const adminDispatch = useAdminDispatch();
   const { updatedCodeLists, updatedCodes } = useAdminState();
 
@@ -33,7 +34,16 @@ export const CodesEditor = ({ codeList: dbCodeList, onChange }: Props) => {
   const [selectedCode, setSelectedCode] = useState<Code>(undefined);
   const [isEditViewOpen, setIsEditViewOpen] = useState<boolean>(false);
 
-  function getNextId(codes: Code[]): number {
+  const setDirtyState = () => {
+    if (dirty) {
+      const isDirty =
+        compare(dbCodeList?.codes ?? [], updatedCodes[dbCodeList?.id] ?? []).length > 0 ||
+        (selectedCode && !dbCodeList?.codes?.includes(selectedCode));
+      dirty(isDirty);
+    }
+  };
+
+  const getNextId = (codes: Code[]): number => {
     if (codes) {
       let maxId = 0;
       for (const code of codes) {
@@ -47,7 +57,7 @@ export const CodesEditor = ({ codeList: dbCodeList, onChange }: Props) => {
       }
       return maxId;
     }
-  }
+  };
 
   const updateCodeName = (field: 'nb' | 'nn' | 'en', value: string) => {
     setSelectedCode((prevSelectedCode) => ({
@@ -68,13 +78,11 @@ export const CodesEditor = ({ codeList: dbCodeList, onChange }: Props) => {
   };
 
   const createNewCode = () => {
-    const newCode = {
+    setSelectedCode({
       id: getNextId(codes) || 0,
       name: { nb: 'Ny kode', nn: '', en: '' },
       parentID: null,
-    };
-
-    setSelectedCode(newCode);
+    });
   };
 
   const updateAndAddCode = (code: Code, codeList?: CodeList) => {
@@ -104,6 +112,7 @@ export const CodesEditor = ({ codeList: dbCodeList, onChange }: Props) => {
 
     updatedCodesCopy[codeListId] = codes.filter((code) => !(code.id === codeId || allChildrenCodes.includes(code)));
 
+    setSelectedCode(undefined);
     adminDispatch({
       type: 'SET_UPDATED_CODES',
       payload: { updatedCodes: updatedCodesCopy },
@@ -210,14 +219,8 @@ export const CodesEditor = ({ codeList: dbCodeList, onChange }: Props) => {
   }
 
   useEffect(() => {
-    if (
-      onChange &&
-      selectedCode &&
-      !(dbCodeList?.codes === updatedCodes[dbCodeList?.id] && dbCodeList?.codes?.includes(selectedCode))
-    ) {
-      onChange(selectedCode);
-    }
-  }, [onChange, selectedCode, dbCodeList, updatedCodes]);
+    setDirtyState();
+  }, [selectedCode]);
 
   return (
     <>

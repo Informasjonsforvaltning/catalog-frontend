@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from './code-lists.module.css';
 import { Accordion, Heading } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, SearchField, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
@@ -13,6 +13,7 @@ import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
 import { getFields, getOrganization } from '@catalog-frontend/data-access';
 import CodeListEditor from '../../../../../components/code-list-editor';
 import { PageLayout } from '../../../../../components/page-layout';
+import { compare } from 'fast-json-patch';
 
 const CodeListsPage = ({ organization, codeListsInUse }) => {
   const router = useRouter();
@@ -23,28 +24,29 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
   const { showCodeListEditor, updatedCodeLists, updatedCodes } = adminContext;
 
   const [search, setSearch] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [isCodeChanged, setIsCodeChanged] = useState(false);
+  const [dirtyCodeLists, setDirtyCodeLists] = useState([]);
 
   const { data: getAllCodeLists } = useGetAllCodeLists({
     catalogId: catalogId,
   });
-  const dbCodeLists = getAllCodeLists?.codeLists || [];
+  const dbCodeLists = useMemo(() => getAllCodeLists?.codeLists || [], [getAllCodeLists]);
 
-  useWarnIfUnsavedChanges(updatedCodeLists?.length > 0 || isCodeChanged);
+  const filteredCodeLists = () =>
+    dbCodeLists.filter((codeList: CodeList) => codeList.name.toLowerCase().includes(search.toLowerCase()));
 
-  useEffect(() => {
-    const filteredCodeLists = dbCodeLists.filter((codeList: CodeList) =>
-      codeList.name.toLowerCase().includes(search.toLowerCase()),
-    );
-
-    setSearchResults(filteredCodeLists);
-  }, [getAllCodeLists, search]);
+  useWarnIfUnsavedChanges(
+    updatedCodeLists.some((codeList) => {
+      const dbCodeList = dbCodeLists.find((list) => list.id === codeList.id);
+      if (!dbCodeList) {
+        return true;
+      }
+      return compare(dbCodeList, codeList).length > 0;
+    }) || dirtyCodeLists.length > 0,
+  );
 
   useEffect(() => {
     // Adds a copy of the codes in context
     const updatedCodesAccumulator = { ...updatedCodes };
-
     dbCodeLists.forEach((codeList: CodeList) => {
       updatedCodesAccumulator[codeList.id] = codeList?.codes;
     });
@@ -53,6 +55,7 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
       type: 'SET_UPDATED_CODES',
       payload: { updatedCodes: updatedCodesAccumulator },
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dbCodeLists]);
 
   const breadcrumbList = catalogId
@@ -124,8 +127,8 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
               </Accordion.Item>
             </Accordion>
           )}
-          {searchResults &&
-            searchResults?.map((codeList: CodeList, index: number) => (
+          {filteredCodeLists() &&
+            filteredCodeLists()?.map((codeList: CodeList, index: number) => (
               <Accordion
                 key={index}
                 border={true}
@@ -144,7 +147,17 @@ const CodeListsPage = ({ organization, codeListsInUse }) => {
                     <CodeListEditor
                       codeList={codeList}
                       codeListsInUse={codeListsInUse}
-                      onChange={() => setIsCodeChanged(true)}
+                      dirty={(dirty) =>
+                        setDirtyCodeLists((prev) => {
+                          if (dirty && !prev.includes(codeList.id)) {
+                            return [...prev, codeList.id];
+                          }
+                          if (!dirty) {
+                            return prev.filter((id) => id !== codeList.id);
+                          }
+                          return prev;
+                        })
+                      }
                     />
                   </Accordion.Content>
                 </Accordion.Item>
