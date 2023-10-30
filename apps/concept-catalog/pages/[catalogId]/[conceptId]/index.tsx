@@ -54,6 +54,7 @@ import {
 import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
 import { Accordion, Switch, Tabs, Textarea } from '@digdir/design-system-react';
+import _ from 'lodash';
 import classes from './concept-page.module.css';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../hooks/comments';
 import { useGetHistory } from '../../../hooks/history';
@@ -61,7 +62,6 @@ import { useDeleteConcept, usePublishConcept } from '../../../hooks/concepts';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
 import { useCatalogDesign } from '../../../context/catalog-design';
-import _ from 'lodash';
 import { getToken } from 'next-auth/jwt';
 import { prepareStatusList } from '@catalog-frontend/utils';
 import RelatedConcepts from '../../../components/related-concepts';
@@ -107,17 +107,20 @@ const InterneFelt = ({ concept, fields, codeLists, users, location, language }: 
 
   return (
     <>
-      {filteredFields.map((field) => (
-        <InfoCard.Item
-          key={`internalField-${field.id}`}
-          label={`${translate(field.label, language)}:`}
-        >
-          {(field.type === 'text_short' || field.type === 'text_long') && <span>{field.value}</span>}
-          {field.type === 'boolean' && <span>{field.value ? localization.yes : localization.no}</span>}
-          {field.type === 'user_list' && <span>{getUserName(field.value)}</span>}
-          {field.type === 'code_list' && <span>{getCodeName(field.codeListId, field.value)}</span>}
-        </InfoCard.Item>
-      ))}
+      {filteredFields.map(
+        (field) =>
+          !_.isEmpty(field.value) && (
+            <InfoCard.Item
+              key={`internalField-${field.id}`}
+              label={`${translate(field.label, language)}:`}
+            >
+              {(field.type === 'text_short' || field.type === 'text_long') && <span>{field.value}</span>}
+              {field.type === 'boolean' && <span>{field.value === 'true' ? localization.yes : localization.no}</span>}
+              {field.type === 'user_list' && <span>{getUserName(field.value)}</span>}
+              {field.type === 'code_list' && <span>{getCodeName(field.codeListId, field.value)}</span>}
+            </InfoCard.Item>
+          ),
+      )}
     </>
   );
 };
