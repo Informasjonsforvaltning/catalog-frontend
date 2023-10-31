@@ -29,6 +29,7 @@ export const nb = {
   description: 'Beskrivelse',
   name: 'Navn',
   manageCatalog: 'Administrere katalog',
+  manageCatalogs: 'Administrere kataloger',
   fromAndIncluding: 'Fra og med',
   toAndIncluding: 'Til og med',
   unknown: 'Ukjent',

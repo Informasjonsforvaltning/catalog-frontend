@@ -148,6 +148,13 @@ const MenuButton = styled.button`
   color: currentColor;
   cursor: pointer;
   font-size: 1em;
+  padding-bottom: 10px;
+`;
+
+const CatalogAdminHeaderLink = styled.a`
+  display: flex;
+  justify-content: flex-start;
+  text-decoration: none;
 `;
 
 const Menu = styled.ul`
@@ -211,4 +218,5 @@ export default {
   Menu,
   DropdownMenuItem,
   ExpandIconWrapper,
+  CatalogAdminHeaderLink,
 };

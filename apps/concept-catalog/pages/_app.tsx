@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { AppProps } from 'next/app';
+import App, { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
 import type { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
@@ -14,7 +14,11 @@ import CatalogLayout from '../components/catalog-layout';
 
 const font = Inter({ subsets: ['latin'] });
 
-const CustomApp: FC<AppProps<{ session: Session }>> = ({ Component, pageProps: { session, ...pageProps } }) => {
+type TProps = Pick<AppProps, 'Component' | 'pageProps'> & {
+  catalogAdminUrl?: string;
+};
+
+const CustomApp = ({ Component, pageProps: { session, ...pageProps }, catalogAdminUrl }: TProps) => {
   const queryClient = new QueryClient();
 
   return (
@@ -30,7 +34,10 @@ const CustomApp: FC<AppProps<{ session: Session }>> = ({ Component, pageProps: {
               />
             </Head>
 
-            <CatalogLayout className={font.className}>
+            <CatalogLayout
+              className={font.className}
+              catalogAdminUrl={catalogAdminUrl}
+            >
               <Component {...pageProps} />
             </CatalogLayout>
           </CatalogDesignContextProvider>
@@ -38,6 +45,13 @@ const CustomApp: FC<AppProps<{ session: Session }>> = ({ Component, pageProps: {
       </SessionProvider>
     </SearchContextProvider>
   );
+};
+
+CustomApp.getInitialProps = async () => {
+  const catalogAdminUrl = `${process.env.CATALOG_ADMIN_BASE_URI}`;
+  return {
+    catalogAdminUrl,
+  };
 };
 
 export default CustomApp;
