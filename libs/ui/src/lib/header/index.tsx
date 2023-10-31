@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react';
-import { localization } from '@catalog-frontend/utils';
+import { hasOrganizationAdminPermission, localization } from '@catalog-frontend/utils';
 import Icon from '../icon';
 import UserIcon from './images/user-icon.svg';
 import { Menu, Trigger } from '../dropdown-menu';
@@ -29,9 +29,10 @@ export interface HeaderProps {
    * @type {string}
    */
   backgroundColor?: string;
+  catalogAdminUrl?: string;
 }
 
-export const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo, fontColor, backgroundColor }) => {
+export const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo, fontColor, backgroundColor, catalogAdminUrl }) => {
   const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
 
   const openDropdownMenu = () => setIsDropdownMenuOpen(true);
@@ -40,6 +41,8 @@ export const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo, fontColor, backg
   const router = useRouter();
   const { data: session } = useSession();
   const userDisplayName = session?.user?.name;
+  const accessToken = session?.accessToken;
+  const catalogId = `${router.query.catalogId}`;
 
   const handleLogout = () => {
     router.push('/api/auth/logout');
@@ -82,6 +85,16 @@ export const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo, fontColor, backg
                         <span>{localization.auth.logout}</span>
                       </SC.MenuButton>
                     </li>
+                    {hasOrganizationAdminPermission(accessToken, catalogId) && (
+                      <>
+                        <hr />
+                        <li>
+                          <SC.CatalogAdminHeaderLink href={catalogAdminUrl}>
+                            {localization.manageCatalogs}
+                          </SC.CatalogAdminHeaderLink>
+                        </li>
+                      </>
+                    )}
                   </SC.Menu>
                 </Menu>
               )}

@@ -17,15 +17,17 @@ interface LayoutProps {
   className?: string;
   fontColor?: string;
   backgroundColor?: string;
+  catalogAdminUrl?: string;
 }
 
-export const Layout = ({ children, className, fontColor, backgroundColor }: LayoutProps) => {
+export const Layout = ({ children, className, fontColor, backgroundColor, catalogAdminUrl }: LayoutProps) => {
   return (
     <div className={cn(style.layout, className)}>
       <RouteGuard>
         <Header
           fontColor={fontColor}
           backgroundColor={backgroundColor}
+          catalogAdminUrl={catalogAdminUrl}
         />
         <main className={style.main}>
           <ErrorBoundary>{children}</ErrorBoundary>
