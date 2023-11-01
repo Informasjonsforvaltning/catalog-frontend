@@ -24,6 +24,7 @@ export const ChangeRequestForm = ({
   submitHandler,
 }) => {
   const [changeRequestTitle, setChangeRequestTitle] = useState<string>(changeRequest.title ?? '');
+  const [editTitleFlag, setEditTitleFlag] = useState<boolean>(false);
 
   const [selectedLanguages, setSelectedLanguages] = useState<ISOLanguage[]>(['nb', 'nn', 'en']);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -63,20 +64,44 @@ export const ChangeRequestForm = ({
               ))}
             </Checkbox.Group>
           </div>
-          <Heading
-            level={2}
-            size='xsmall'
-            className={styles.pageTitle}
-          >
-            {changeRequestTitle}
-          </Heading>
-          <Textfield
-            className={styles.pageTitle}
-            type='text'
-            value={changeRequestTitle}
-            label={loc.title}
-            onChange={(e) => setChangeRequestTitle(e.target.value)}
-          />
+          <div className={styles.titleContainer}>
+            {editTitleFlag ? (
+              <Textfield
+                type='text'
+                value={changeRequestTitle}
+                label={loc.title}
+                onChange={(e) => setChangeRequestTitle(e.target.value)}
+                size='medium'
+              />
+            ) : (
+              <Heading
+                level={2}
+                size='xsmall'
+                className={styles.pageTitleText}
+              >
+                {changeRequestTitle}
+              </Heading>
+            )}
+            {editTitleFlag ? (
+              <Button
+                variant='outline'
+                color='secondary'
+                onClick={() => {
+                  setEditTitleFlag(false);
+                }}
+              >
+                {loc.button.close}
+              </Button>
+            ) : (
+              <Button
+                variant='outline'
+                color='secondary'
+                onClick={() => setEditTitleFlag(true)}
+              >
+                {loc.changeRequest.editTitle}
+              </Button>
+            )}
+          </div>
           <Formik
             initialValues={changeRequestAsConcept}
             onSubmit={(values) => {
