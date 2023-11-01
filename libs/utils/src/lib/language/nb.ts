@@ -99,6 +99,7 @@ export const nb = {
     send: 'Send inn',
     deleteWithFormat: 'Slett {text}',
     addWithFormat: 'Legg til ny {text}',
+    close: 'Lukk',
   },
 
   dropdown: {
@@ -263,6 +264,7 @@ export const nb = {
     noValue: 'Ingen verdi',
     noChangeRequestsFound: 'Her var det ingen endringsforslag',
     edit: 'Rediger',
+    editTitle: 'Rediger tittel',
     editSources: 'Rediger kilder',
     sourceTitle: 'Tittel på kilde',
     sourceLink: 'Lenke til kilde',

@@ -8,10 +8,18 @@
   overflow-wrap: break-word;
 }
 
-.pageTitle {
+.pageTitleText {
   font-size: 1.5rem;
   font-weight: 500;
-  padding-bottom: 0.5rem;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 1.5em;
+  min-height: 96px;
 }
 
 .formContainer {
