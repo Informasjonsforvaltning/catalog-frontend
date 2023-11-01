@@ -1,0 +1,25 @@
+.currentValue {
+  composes: currentValue from '../form-fields.module.css';
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.editContentHeading {
+  display: flex;
+  margin: 0 -2em;
+  flex-direction: column;
+  padding: 1em 2em;
+  background: #e6eff8;
+  border-radius: 8px;
+  font-weight: 500;
+}

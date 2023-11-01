@@ -21,12 +21,6 @@
   padding-bottom: 2em;
 }
 
-.listContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 2em;
-}
-
 .bottomlineContainer {
   padding-top: 4em;
   padding-bottom: 3em;
