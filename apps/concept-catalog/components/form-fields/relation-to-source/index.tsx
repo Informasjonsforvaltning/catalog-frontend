@@ -4,7 +4,7 @@ import { localization as loc } from '@catalog-frontend/utils';
 import { Field } from 'formik';
 import styles from './relation-to-source.module.css';
 
-const relationToSourceOptions: SingleSelectOption[] = [
+export const relationToSourceOptions: SingleSelectOption[] = [
   { label: 'Egendefinert', value: 'egendefinert' },
   { label: 'Basert på kilde', value: 'basertPaaKilde' },
   { label: 'Sitat fra kilde', value: 'sitatFraKilde' },

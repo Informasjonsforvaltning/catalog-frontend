@@ -258,10 +258,14 @@ export const nb = {
     changeRequest: 'Endringsforslag',
     seeChangeRequests: 'Se alle endringsforslag',
     existingValue: 'Eksisterende {fieldType} på {lang}',
+    existingContent: 'Eksisterende innhold',
     proposedChange: 'Forslag til ny {fieldType} på {lang}',
     noValue: 'Ingen verdi',
     noChangeRequestsFound: 'Her var det ingen endringsforslag',
     edit: 'Rediger',
+    editSources: 'Rediger kilder',
+    sourceTitle: 'Tittel på kilde',
+    sourceLink: 'Lenke til kilde',
   },
 
   comment: {
