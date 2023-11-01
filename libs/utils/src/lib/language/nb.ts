@@ -244,14 +244,14 @@ export const nb = {
     seeAlso: 'Se også',
     isReplacedBy: 'Erstattes av',
     divisionCriterion: 'Inndelingskriterium',
+    contactInformation: 'Kontaktinformasjon for eksterne',
+    relationToSource: 'Forhold til kilde',
+    formFieldLabel: '{fieldType} på {lang}',
   },
 
   validity: {
     expired: 'Utgått',
     willBeValid: 'blir gyldig',
-    contactInformation: 'Kontaktinformasjon for eksterne',
-    relationToSource: 'Forhold til kilde',
-    formFieldLabel: '{fieldType} på {lang}',
   },
 
   changeRequest: {
