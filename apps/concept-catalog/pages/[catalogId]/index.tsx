@@ -228,12 +228,6 @@ export const SearchPage = ({
     });
   };
 
-  const onSeeChangeRequests = () => {
-    if (validOrganizationNumber(catalogId)) {
-      router.push(`${catalogId}/change-requests`);
-    }
-  };
-
   const onCreateConceptClick = () => {
     if (validOrganizationNumber(catalogId)) {
       router.push(`/${catalogId}/new`);
@@ -251,10 +245,6 @@ export const SearchPage = ({
       }),
     );
   };
-
-  const showChangeRequests = ['localhost', 'staging', 'demo'].some((environment) =>
-    window?.location.hostname.includes(environment),
-  );
 
   const design = useCatalogDesign();
 
@@ -284,14 +274,6 @@ export const SearchPage = ({
         <div className={styles.pageContainer}>
           <div className={styles.secondRowContainer}>
             <div className={styles.buttonsContainer}>
-              {showChangeRequests && (
-                <Button
-                  variant='outline'
-                  onClick={onSeeChangeRequests}
-                >
-                  {loc.changeRequest.seeChangeRequests}
-                </Button>
-              )}
               {hasWritePermission && (
                 <Button
                   onClick={onCreateConceptClick}

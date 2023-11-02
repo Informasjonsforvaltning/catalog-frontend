@@ -62,9 +62,6 @@ export const ChangeRequestsPage = ({
         logoDescription={design?.logoDescription}
       />
       <div className='container'>
-        <div className={styles.buttonsContainer}>
-          <Button onClick={handleNewConceptSuggestionClick}>{loc.suggestionForNewConcept}</Button>
-        </div>
         <Heading
           level={2}
           size='xsmall'
