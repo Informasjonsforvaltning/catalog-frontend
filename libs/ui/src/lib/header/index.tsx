@@ -7,9 +7,10 @@ import UserIcon from './images/user-icon.svg';
 import FDKLogo from './images/fdk-publishing-logo-negative.svg';
 import FDKLogoDemo from './images/fdk-publishing-logo-negative-demo.svg';
 import DropdownMenu, { Menu, Trigger } from '../dropdown-menu';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import styles from './header.module.css';
+import { LeaveIcon } from '@navikt/aksel-icons';
 
 export interface HeaderProps {
   /**
@@ -34,10 +35,9 @@ export interface HeaderProps {
    */
   backgroundColor?: string;
   catalogAdminUrl?: string;
-  catalogId?: string;
 }
 
-const Header: FC<HeaderProps> = ({ catalogId, homeUrl, useDemoLogo, fontColor, backgroundColor, catalogAdminUrl }) => {
+const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo, fontColor, backgroundColor, catalogAdminUrl }) => {
   const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
 
   const openDropdownMenu = () => setIsDropdownMenuOpen(true);
@@ -48,6 +48,9 @@ const Header: FC<HeaderProps> = ({ catalogId, homeUrl, useDemoLogo, fontColor, b
   const userDisplayName = session?.user?.name;
   const accessToken = session?.accessToken;
 
+  const params = useParams();
+  const catalogId = params.catalogId;
+
   const handleLogout = () => {
     router.push('/api/auth/logout');
   };
@@ -57,65 +60,56 @@ const Header: FC<HeaderProps> = ({ catalogId, homeUrl, useDemoLogo, fontColor, b
       className={styles.header}
       style={{ color: fontColor ?? '#fff', background: backgroundColor ?? '#2d3741' }}
     >
-      <div className='container'>
-        <nav className={styles.navigation}>
-          <a
-            href={homeUrl}
-            aria-label='Gå til hovedsiden'
-            className={styles.logo}
+      <div className={styles.headerContainer}>
+        <a
+          href={homeUrl}
+          aria-label='Gå til hovedsiden'
+          className={styles.logo}
+        >
+          {useDemoLogo ? <FDKLogoDemo /> : <FDKLogo />}
+        </a>
+        {userDisplayName && (
+          <DropdownMenu
+            className={styles.dropdownMenu}
+            isOpen={isDropdownMenuOpen}
+            onClose={closeDropdownMenu}
           >
-            {useDemoLogo ? <FDKLogoDemo /> : <FDKLogo />}
-          </a>
-          {userDisplayName && (
-            <DropdownMenu
-              className={styles.dropdownMenu}
-              isOpen={isDropdownMenuOpen}
-              onClose={closeDropdownMenu}
-            >
-              <Trigger>
-                <button
-                  className={styles.menuButton}
-                  onClick={openDropdownMenu}
-                >
-                  <div className={styles.menuButtonContent}>
-                    <UserIcon />
-                    <span className={styles.menuButtonContentSpan}>{userDisplayName}</span>
-                    <div className={styles.expandIconWrapper}>
-                      <Icon name='chevronDownStroke' />
-                    </div>
+            <Trigger>
+              <button
+                className={styles.menuButton}
+                onClick={openDropdownMenu}
+              >
+                <div className={styles.menuButtonContent}>
+                  <UserIcon />
+                  <span className={styles.menuButtonContentSpan}>{userDisplayName}</span>
+                  <div className={styles.expandIconWrapper}>
+                    <Icon name='chevronDownStroke' />
                   </div>
-                </button>
-              </Trigger>
-              {handleLogout && (
-                <Menu>
-                  <ul className={styles.menu}>
-                    <li>
-                      <button
-                        className={styles.menuButton}
-                        onClick={handleLogout}
-                      >
-                        <span>{localization.auth.logout}</span>
-                      </button>
-                    </li>
-                    {hasOrganizationAdminPermission(accessToken, catalogId) && (
-                      <>
-                        <hr />
-                        <li>
-                          <a
-                            className={styles.catalogAdminHeaderLink}
-                            href={catalogAdminUrl}
-                          >
-                            {localization.manageCatalogs}
-                          </a>
-                        </li>
-                      </>
-                    )}
-                  </ul>
-                </Menu>
-              )}
-            </DropdownMenu>
-          )}
-        </nav>
+                </div>
+              </button>
+            </Trigger>
+            {handleLogout && (
+              <Menu>
+                <ul className={styles.menu}>
+                  {hasOrganizationAdminPermission(accessToken, String(catalogId)) && (
+                    <>
+                      <li className={styles.catalogAdminHeaderLink}>
+                        <a href={catalogAdminUrl}>{localization.manageCatalogs}</a>
+                      </li>
+                    </>
+                  )}
+                  <button
+                    onClick={handleLogout}
+                    className={styles.logoutButton}
+                  >
+                    <LeaveIcon className={styles.logoutIcon} />
+                    <span>{localization.auth.logout}</span>
+                  </button>
+                </ul>
+              </Menu>
+            )}
+          </DropdownMenu>
+        )}
       </div>
     </header>
   );
