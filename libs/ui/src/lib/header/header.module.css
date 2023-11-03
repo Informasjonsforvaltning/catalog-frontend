@@ -12,6 +12,21 @@
   z-index: 1000;
 }
 
+.headerContainer {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  overflow-wrap: break-word;
+  padding: 0px 15px;
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .headerContainer {
+    max-width: 1140px;
+  }
+}
+
 .navigation {
   align-items: center;
   display: flex;
@@ -53,12 +68,22 @@
   white-space: nowrap;
 }
 
+.logoutIcon {
+  height: 20px;
+  width: 20px;
+  padding-right: 5px;
+}
+
 .logoutButton {
   background-color: transparent;
   border: none;
   cursor: pointer;
   padding: 0;
   white-space: nowrap;
+  color: #0062ba;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
 }
 
 .buttonLabel {
@@ -99,6 +124,7 @@
 }
 
 .dropdownMenu {
+  display: inline-block;
   color: currentColor;
 }
 
@@ -112,10 +138,13 @@
   outline: none;
   color: currentColor;
   cursor: pointer;
-  padding-bottom: 10px;
 }
 
 .catalogAdminHeaderLink {
+  padding-bottom: 15px;
+}
+
+.catalogAdminHeaderLink > a {
   display: flex;
   justify-content: flex-start;
   text-decoration: none;
@@ -128,7 +157,7 @@
   color: #121619;
   list-style: none;
   padding: 1em;
-  overflow: hidden;
+  position: absolute;
 }
 
 .menu > li > a {
