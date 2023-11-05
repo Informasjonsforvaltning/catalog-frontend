@@ -1,3 +1,5 @@
+'use client';
+
 import { FC } from 'react';
 import { localization as loc } from '@catalog-frontend/utils';
 import styles from './existing-sources.module.css';

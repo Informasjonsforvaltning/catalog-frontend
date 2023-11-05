@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -27,12 +27,12 @@ import { Concept, Comment, Update, CodeList, InternalField, AssignedUser } from 
 import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
 import { Accordion, Switch, Tabs, Textarea } from '@digdir/design-system-react';
+import _ from 'lodash';
 import classes from './concept-page.module.css';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../hooks/comments';
 import { useGetHistory } from '../../../hooks/history';
 import { useDeleteConcept, usePublishConcept } from '../../../hooks/concepts';
 import { useCatalogDesign } from '../../../context/catalog-design';
-import _ from 'lodash';
 import RelatedConcepts from '../../../components/related-concepts';
 import Definition from '../../../components/definition';
 
@@ -445,6 +445,11 @@ export const ConceptPageClient = ({
     : [];
 
   const status = findStatusLabel(concept?.statusURI);
+
+  useEffect(() => {
+    setIsPublished(concept?.erPublisert);
+    setPublishedDate(concept?.publiseringsTidspunkt);
+  }, [concept]);
 
   return (
     <>

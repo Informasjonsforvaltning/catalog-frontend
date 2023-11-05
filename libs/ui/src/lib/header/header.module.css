@@ -121,7 +121,13 @@
   outline: none;
   color: currentColor;
   cursor: pointer;
-  font-size: 1em;
+  padding-bottom: 10px;
+}
+
+.catalogAdminHeaderLink {
+  display: flex;
+  justify-content: flex-start;
+  text-decoration: none;
 }
 
 .menu {
