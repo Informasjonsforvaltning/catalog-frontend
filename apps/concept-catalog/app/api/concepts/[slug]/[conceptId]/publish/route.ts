@@ -1,5 +1,5 @@
 import { publishConcept } from '@catalog-frontend/data-access';
-import { authOptions } from '../../../../auth/[...nextauth]/route';
+import { authOptions } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 
 export async function POST({ params }: { params: { conceptId: string } }) {

@@ -1,12 +1,11 @@
-import { hasOrganizationWritePermission, validOrganizationNumber } from '@catalog-frontend/utils';
+import { authOptions, hasOrganizationWritePermission, validOrganizationNumber } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../api/auth/[...nextauth]/route';
 import { RedirectType, redirect } from 'next/navigation';
 
 export const NewPage = async ({ params }) => {
   const { catalogId } = params;
   if (!validOrganizationNumber(catalogId)) {
-    return { notFound: true };
+    redirect(`/not-found`, RedirectType.replace);
   }
 
   const session = await getServerSession(authOptions);

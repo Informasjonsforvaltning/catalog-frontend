@@ -2,6 +2,7 @@
 
 import { Spinner } from '@catalog-frontend/ui';
 import { localization, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
+import { Heading as DSHeading } from '@digdir/design-system-react';
 import { Session } from 'next-auth';
 import { signIn, useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -9,7 +10,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 const needLogin = (session: Session | null, status: string, pathname: string) =>
   (session?.error === 'RefreshAccessTokenError' || status === 'unauthenticated') && pathname !== '/auth/signout';
 
-export const HeadingContent = () => {
+export const Heading = () => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -39,13 +40,16 @@ export const HeadingContent = () => {
   return (
     <>
       {needLogin(session, status, pathname) && (
-        <>
+        <DSHeading
+          level={2}
+          size='small'
+        >
           <div>{localization.auth.loggingIn}</div>
           <Spinner />)
-        </>
+        </DSHeading>
       )}
     </>
   );
 };
 
-export default HeadingContent;
+export default Heading;

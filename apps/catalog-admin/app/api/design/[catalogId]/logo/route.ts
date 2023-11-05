@@ -1,15 +1,7 @@
 import { getDesignLogo } from '@catalog-frontend/data-access';
+import { authOptions } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../auth/[...nextauth]/route';
 import { NextRequest } from 'next/server';
-
-export const config = {
-  api: {
-    // Enable `externalResolver` option in Next.js
-    externalResolver: true,
-    bodyParser: false,
-  },
-};
 
 export async function handler(req: NextRequest, { params }: { params: { catalogId: string } }) {
   const session = await getServerSession(authOptions);

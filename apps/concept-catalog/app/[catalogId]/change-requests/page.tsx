@@ -1,6 +1,5 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../api/auth/[...nextauth]/route';
-import { hasOrganizationReadPermission } from '@catalog-frontend/utils';
+import { authOptions, hasOrganizationReadPermission } from '@catalog-frontend/utils';
 import { ChangeRequest, Concept, Organization, SearchConceptQuery } from '@catalog-frontend/types';
 import { getChangeRequests, getOrganization, searchConceptsForCatalog } from '@catalog-frontend/data-access';
 import { RedirectType, redirect } from 'next/navigation';
