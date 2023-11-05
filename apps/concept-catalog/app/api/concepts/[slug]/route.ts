@@ -13,7 +13,7 @@ async function handler(req: NextRequest, { params }: { params: { slug: string } 
 
   if (req.method === 'POST' && slug === 'import') {
     try {
-      const concepts = JSON.parse(req.body);
+      const concepts = JSON.parse(await req.json());
       const response = await importConcepts(concepts, session?.accessToken);
       return new Response(JSON.stringify(response), { status: response.status });
     } catch (error) {

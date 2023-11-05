@@ -4,7 +4,6 @@ import { Textfield } from '@digdir/design-system-react';
 import { useEffect, useState } from 'react';
 import { colorRegex, localization } from '@catalog-frontend/utils';
 import { Design } from '@catalog-frontend/types';
-import { useRouter } from 'next/navigation';
 import { useGetDesign } from '../../hooks/design';
 import { AdminContextProvider, useAdminDispatch, useAdminState } from '../../context/admin';
 import styles from './color-picker.module.css';
@@ -13,10 +12,7 @@ interface ColorPicker {
   type: 'background' | 'font';
 }
 
-export const ColorPicker = ({ type }: ColorPicker) => {
-  const router = useRouter();
-  const catalogId = `${router.query.catalogId}`;
-
+export const ColorPicker = (catalogId, { type }: ColorPicker) => {
   const { data: getDesign } = useGetDesign(catalogId);
   const dbDesign: Design = getDesign;
 

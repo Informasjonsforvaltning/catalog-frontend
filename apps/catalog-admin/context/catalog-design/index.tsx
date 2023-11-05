@@ -18,11 +18,12 @@ CatalogDesignContext.displayName = 'CatalogDesignContext';
 interface ProviderProps {
   children: ReactNode;
   design?: Design;
+  catalogId: string;
 }
 
 const CatalogDesignContextProvider = ({ children }: ProviderProps) => {
   const router = useRouter();
-  const { data: design } = useGetDesign(router.query.catalogId);
+  const { data: design } = useGetDesign(catalogId);
 
   return <CatalogDesignContext.Provider value={{ design }}>{children}</CatalogDesignContext.Provider>;
 };

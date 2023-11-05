@@ -28,12 +28,10 @@ const fieldTypeOptions: { [key: string]: SelectOption } = {
 export interface Props {
   field?: InternalField;
   type?: EditorType;
+  catalogId: string;
 }
 
-export const InternalFieldEditor = ({ field, type }: Props) => {
-  const router = useRouter();
-  const catalogId: string = `${router.query.catalogId}` ?? '';
-
+export const InternalFieldEditor = ({ catalogId, field, type }: Props) => {
   const { data: getInternalFields } = useGetInternalFields(catalogId);
   const dbFields = getInternalFields?.internal;
 
