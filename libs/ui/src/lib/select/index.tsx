@@ -1,3 +1,5 @@
+'use client';
+
 import { Select as DigdirSelect, SelectProps } from '@digdir/design-system-react';
 import styles from './style.module.css';
 

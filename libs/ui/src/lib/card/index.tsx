@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import styles from './card.module.css';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
@@ -8,7 +10,7 @@ interface Card {
   icon?: React.ReactElement;
 }
 
-export function Card({ title, body, href, icon }: Card) {
+const Card = ({ title, body, href, icon }: Card) => {
   return (
     <Link
       href={href ? href : ''}
@@ -23,6 +25,6 @@ export function Card({ title, body, href, icon }: Card) {
       />
     </Link>
   );
-}
+};
 
-export default Card;
+export { Card };

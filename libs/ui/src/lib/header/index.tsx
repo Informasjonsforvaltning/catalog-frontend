@@ -1,11 +1,15 @@
-import React, { FC, useState } from 'react';
+'use client';
+
+import { FC, useState } from 'react';
 import { hasOrganizationAdminPermission, localization } from '@catalog-frontend/utils';
 import Icon from '../icon';
 import UserIcon from './images/user-icon.svg';
-import { Menu, Trigger } from '../dropdown-menu';
-import SC from './styled';
-import { useRouter } from 'next/router';
+import FDKLogo from './images/fdk-publishing-logo-negative.svg';
+import FDKLogoDemo from './images/fdk-publishing-logo-negative-demo.svg';
+import DropdownMenu, { Menu, Trigger } from '../dropdown-menu';
+import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import styles from './header.module.css';
 
 export interface HeaderProps {
   /**
@@ -32,7 +36,7 @@ export interface HeaderProps {
   catalogAdminUrl?: string;
 }
 
-export const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo, fontColor, backgroundColor, catalogAdminUrl }) => {
+const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo, catalogAdminUrl }) => {
   const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
 
   const openDropdownMenu = () => setIsDropdownMenuOpen(true);
@@ -49,41 +53,46 @@ export const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo, fontColor, backg
   };
 
   return (
-    <SC.Header
-      fontColor={fontColor}
-      background={backgroundColor}
-    >
+    <header className={styles.header}>
       <div className='container'>
-        <SC.Navigation>
+        <nav className={styles.navigation}>
           <a
             href={homeUrl}
             aria-label='Gå til hovedsiden'
+            className={styles.logo}
           >
-            {useDemoLogo ? <SC.LogoDemo /> : <SC.Logo />}
+            {useDemoLogo ? <FDKLogoDemo /> : <FDKLogo />}
           </a>
           {userDisplayName && (
-            <SC.DropdownMenu
+            <DropdownMenu
+              className={styles.dropdownMenu}
               isOpen={isDropdownMenuOpen}
               onClose={closeDropdownMenu}
             >
               <Trigger>
-                <SC.MenuButton onClick={openDropdownMenu}>
-                  <SC.MenuButtonContent>
+                <button
+                  className={styles.menuButton}
+                  onClick={openDropdownMenu}
+                >
+                  <div className={styles.menuButtonContent}>
                     <UserIcon />
-                    <SC.MenuButtonContentSpan>{userDisplayName}</SC.MenuButtonContentSpan>
-                    <SC.ExpandIconWrapper>
+                    <span className={styles.menuButtonContentSpan}>{userDisplayName}</span>
+                    <div className={styles.expandIconWrapper}>
                       <Icon name='chevronDownStroke' />
-                    </SC.ExpandIconWrapper>
-                  </SC.MenuButtonContent>
-                </SC.MenuButton>
+                    </div>
+                  </div>
+                </button>
               </Trigger>
               {handleLogout && (
                 <Menu>
-                  <SC.Menu>
+                  <ul className={styles.menu}>
                     <li>
-                      <SC.MenuButton onClick={handleLogout}>
+                      <button
+                        className={styles.menuButton}
+                        onClick={handleLogout}
+                      >
                         <span>{localization.auth.logout}</span>
-                      </SC.MenuButton>
+                      </button>
                     </li>
                     {hasOrganizationAdminPermission(accessToken, catalogId) && (
                       <>
@@ -95,15 +104,15 @@ export const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo, fontColor, backg
                         </li>
                       </>
                     )}
-                  </SC.Menu>
+                  </ul>
                 </Menu>
               )}
-            </SC.DropdownMenu>
+            </DropdownMenu>
           )}
-        </SC.Navigation>
+        </nav>
       </div>
-    </SC.Header>
+    </header>
   );
 };
 
-export default Header;
+export { Header };

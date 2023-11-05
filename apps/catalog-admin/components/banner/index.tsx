@@ -1,5 +1,5 @@
 import { PageBanner } from '@catalog-frontend/ui';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Design } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useCatalogDesign } from '../../context/catalog-design';

@@ -1,3 +1,5 @@
+'use client';
+
 import { ChangeEvent, FC, useId, useRef } from 'react';
 import { ButtonProps } from '@digdir/design-system-react';
 import Button from './button';
@@ -7,7 +9,7 @@ export interface UploadButtonProps extends ButtonProps {
   onUpload?: (event: ChangeEvent) => void;
 }
 
-export const UploadButton: FC<UploadButtonProps> = ({ children, allowedMimeTypes, onUpload, ...props }: any) => {
+const UploadButton: FC<UploadButtonProps> = ({ children, allowedMimeTypes, onUpload, ...props }: any) => {
   const ref = useRef<HTMLInputElement>(null);
   const buttonId = useId();
 
@@ -34,4 +36,4 @@ export const UploadButton: FC<UploadButtonProps> = ({ children, allowedMimeTypes
   );
 };
 
-export default UploadButton;
+export { UploadButton };

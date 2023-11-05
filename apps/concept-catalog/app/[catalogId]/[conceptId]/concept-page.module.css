@@ -1,0 +1,177 @@
+.detailHeading {
+  margin-top: 3rem;
+  margin-bottom: 5rem;
+}
+
+.languages {
+  margin-bottom: 2rem;
+  width: 450px;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.twoColumnRow {
+  display: flex;
+  justify-content: stretch;
+  gap: 2em;
+}
+
+.twoColumnRow a {
+  color: #0062ba;
+}
+
+.twoColumnRow > *:first-child {
+  flex-grow: 1;
+}
+
+.twoColumnRow > *:last-child {
+  min-width: 330px;
+  max-width: 330px;
+}
+
+.bottomSpace {
+  margin-bottom: 3rem;
+}
+
+.actionButtons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  gap: 1rem;
+  margin: 0em 0 1em 0;
+}
+
+.paddingTop05 {
+  padding-top: 0.5rem;
+}
+
+.greyFont {
+  color: #6c737a;
+}
+
+.contact {
+  display: flex;
+  align-items: center;
+}
+
+.source {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tabs {
+  margin-top: 2rem;
+}
+
+.tabs > div > div {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.revision {
+  display: flex;
+  align-items: center;
+}
+
+.revision a {
+  color: #0062ba;
+}
+
+.revision > div:not(:last-child) {
+  padding-right: 2rem;
+}
+
+.revision > div:last-child {
+  flex-grow: 1;
+}
+
+.bottomSpacingSmall {
+  margin-bottom: 1rem;
+}
+
+.bottomSpacingLarge {
+  margin-bottom: 3rem;
+}
+
+.commentsHeader {
+  font-size: 20px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.commentsHeader > svg {
+  margin-right: 0.5rem;
+}
+
+.comment {
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.commentUser {
+  margin-bottom: 1rem;
+}
+
+.commentUser > span {
+  color: #6e7479;
+  margin-left: 1rem;
+}
+
+.commentActions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.termsRow {
+  display: flex;
+}
+
+.termsRow:not(:last-of-type) {
+  margin-bottom: 1rem;
+}
+
+.termsRow > *:first-child {
+  width: 150px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+a.versionTitle {
+  color: #2d3741;
+  font-size: 24px;
+  text-decoration-line: underline;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+.historyHeader span:first-of-type {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.historyHeader span:first-of-type > span {
+  white-space: nowrap;
+}
+
+.historyHeader span:first-of-type > span:first-of-type {
+  font-weight: 700;
+}
+
+.historyOperation {
+  padding: 1rem;
+}
+
+.historyOperation:not(:last-of-type) {
+  margin-bottom: 1rem;
+}
+
+.historyOperation:nth-of-type(2n) {
+  background-color: #eeeeeeb6;
+}

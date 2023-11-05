@@ -1,0 +1,181 @@
+.header {
+  background: '#2d3741';
+  border-bottom: 1px solid rgb(230, 230, 230);
+  box-shadow: #969ba0 0px 0px 10px -5px;
+  color: '#fff';
+  display: flex;
+  font-size: 16px;
+  justify-content: center;
+  padding: 0.5rem 0;
+  height: 74px;
+  width: 100%;
+  z-index: 1000;
+}
+
+.navigation {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  overflow-wrap: break-word;
+  width: 100%;
+}
+
+.logo * {
+  height: 45px;
+}
+
+.logo * > path {
+  fill: #000;
+}
+
+.logoDemo * {
+  height: 45px;
+}
+
+.logoDemo * > path {
+  fill: #000;
+}
+
+.logoDemo * > .st1 {
+  fill: #f2e1d5;
+}
+
+.menuButtonContent {
+  align-items: center;
+  display: flex;
+}
+
+.menuButtonContent > svg {
+  height: 25px;
+  margin-right: 0.3em;
+}
+
+.menuButtonContent > svg > * {
+  stroke: currentColor;
+}
+
+.menuButtonContentSpan {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logoutButton {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.buttonLabel {
+  color: currentColor;
+  font-size: 1.6em;
+  padding: 0em 0.5em;
+}
+
+.menuItems {
+  display: none;
+  margin: 0;
+  color: currentColor;
+}
+
+.menuItems > li:nth-of-type(n + 2) {
+  margin-left: 1.6em;
+}
+
+.menuItem {
+  list-style-type: none;
+}
+
+.menuItem > * {
+  color: currentColor;
+}
+
+.menuItem > a {
+  text-decoration: none;
+}
+
+.menuItem > * div {
+  border: none;
+  padding: 0;
+}
+
+.menuItem > * div > svg {
+  margin-left: 0.3rem;
+}
+
+.dropdownMenu {
+  display: flex;
+  color: currentColor;
+}
+
+.menuButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  appearance: none;
+  background: none;
+  border: none;
+  outline: none;
+  color: currentColor;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.menu {
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+  color: #121619;
+  list-style: none;
+  padding: 1em;
+  overflow: hidden;
+}
+
+.menu > li > a {
+  display: block;
+  margin-top: 1rem;
+  white-space: pre;
+}
+
+.menu > li > a:hover {
+  background: #fff;
+}
+
+.menu > li > a > div {
+  border-bottom: none;
+}
+
+.dropdownMenuItem {
+  display: none;
+  list-style-type: none;
+}
+
+@media (max-width: 900px) {
+  .logo {
+    height: calc(35px + (55 - 35) * ((100vw - 320px) / (900 - 320)));
+  }
+  .logoDemo {
+    height: calc(35px + (55 - 35) * ((100vw - 320px) / (900 - 320)));
+  }
+  .menuButtonContentSpan {
+    max-width: 155px;
+  }
+  .menuItems {
+    display: flex;
+  }
+  .dropdownMenuItem {
+    display: flex;
+  }
+}
+
+.expandIconWrapper > svg {
+  width: 16px;
+  margin-left: 0.3em;
+}
+
+.expandIconWrapper > svg * {
+  stroke: currentColor;
+}

@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { Button } from '@catalog-frontend/ui';
 import { Textfield } from '@digdir/design-system-react';
@@ -6,7 +8,7 @@ import { localization } from '@catalog-frontend/utils';
 import { useAdminDispatch, useAdminState } from '../../context/admin';
 import { useCreateCodeList, useDeleteCodeList, useGetAllCodeLists, useUpdateCodeList } from '../../hooks/code-lists';
 import { compare } from 'fast-json-patch';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import CodesEditor from '../codes-editor';
 
 export interface Props {
@@ -22,7 +24,7 @@ export const CodeListEditor = ({ codeList, codeListsInUse, type, dirty }: Props)
 
   const router = useRouter();
 
-  const catalogId: string = `${router.query.catalogId}` ?? '';
+  const catalogId = `${router.query.catalogId}`;
   const createCodeList = useCreateCodeList(catalogId);
   const deleteCodeList = useDeleteCodeList(catalogId);
   const updateCodeList = useUpdateCodeList(catalogId);

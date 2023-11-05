@@ -1,7 +1,7 @@
 import { ChangeRequestUpdateBody } from '@catalog-frontend/types';
 import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export const useGetChangeRequests = (catalogId: string) => {
   return useQuery({
