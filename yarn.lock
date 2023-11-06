@@ -4961,7 +4961,6 @@ __metadata:
     react-localization: ^1.0.19
     react-paginate: ^8.2.0
     react-papaparse: ^4.1.0
-    styled-components: 5.3.11
     ts-jest: ^29.1.0
     ts-node: 10.9.1
     tslib: ^2.3.0
@@ -12217,7 +12216,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ts-jest@npm:^29.0.5":
+"ts-jest@npm:^29.1.0":
   version: 29.1.1
   resolution: "ts-jest@npm:29.1.1"
   dependencies:
