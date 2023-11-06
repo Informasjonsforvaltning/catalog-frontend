@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test.use({ storageState: 'playwright/.auth/admin.json' });
+test.use({ storageState: 'apps/concept-catalog-e2e/playwright/.auth/admin.json' });
 
 test('search', async ({ page }) => {
   await page.goto(`/${process.env.USER_ADMIN_CATALOG_ID}`);

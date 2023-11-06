@@ -36,9 +36,10 @@ export default defineConfig({
   projects: [
     ...(config.projects?.map((project) => ({
       ...project,
-      dependencies: [...(project.dependencies ?? []), 'setup'],
+      dependencies: [...(project.dependencies ?? []), 'init'],
     })) ?? []),
     // Setup project
     { name: 'setup', testMatch: /.*\.setup\.ts/ },
+    { name: 'init', testMatch: /.*\.init\.ts/, dependencies: ['setup'] },
   ],
 });

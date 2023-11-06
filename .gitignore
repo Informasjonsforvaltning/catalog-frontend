@@ -37,7 +37,7 @@ yarn-error.log*
 *.tsbuildinfo
 
 # Playwright
-/playwright/**
+/**/playwright/**
 
 # Nx 
 .nx/**
