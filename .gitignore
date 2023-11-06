@@ -36,6 +36,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
+# Playwright
+/playwright/**
+
+# Nx 
+.nx/**
+
 # Next.js
 .next
 
