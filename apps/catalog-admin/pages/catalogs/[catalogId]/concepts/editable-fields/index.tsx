@@ -1,9 +1,11 @@
+'use client';
+
 import styles from './editable-fields.module.css';
 import { Heading } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, Select } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { CodeList, Organization } from '@catalog-frontend/types';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
 import { useGetInternalFields, useUpdateEditableFields } from '../../../../../hooks/internal-fields';

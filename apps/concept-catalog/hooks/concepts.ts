@@ -1,22 +1,22 @@
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 
 const callConceptApi = async (catalogId: string, conceptId: string, path: string, method: string) => {
   if (!validOrganizationNumber(catalogId)) {
-    return Promise.reject('Invalid catalog id');
+    return Promise.reject(new Error('Invalid catalog id'));
   }
   if (!validUUID(conceptId)) {
-    return Promise.reject('Invalid concept id');
+    return Promise.reject(new Error('Invalid concept id'));
   }
 
   const response = await fetch(`/api/concepts/${catalogId}/${conceptId}/${path}`, { method });
 
   if (response.status === 401) {
-    return Promise.reject('Unauthorized');
+    return Promise.reject(new Error('Unauthorized'));
   }
 
-  return response.json();
+  return await response.json();
 };
 
 export const usePublishConcept = (catalogId: string) => {
@@ -37,7 +37,7 @@ export const useDeleteConcept = (catalogId: string) => {
     },
     onSuccess() {
       if (validOrganizationNumber(catalogId)) {
-        router.push(`/${catalogId}`).catch((err) => console.error('Failed to navigate to search page: ', err));
+        router.push(`/${catalogId}`);
       }
     },
   });

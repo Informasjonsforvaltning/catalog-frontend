@@ -1,7 +1,9 @@
+'use client';
+
 import { createContext, type ReactNode, useContext } from 'react';
 
 import { useGetCatalogDesign } from '../../hooks/catalog-admin';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Design } from '@catalog-frontend/types';
 
 interface ContextProps {

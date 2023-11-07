@@ -1,3 +1,5 @@
+'use client';
+
 import { Accordion } from '@digdir/design-system-react';
 import React, { ReactNode, useState } from 'react';
 

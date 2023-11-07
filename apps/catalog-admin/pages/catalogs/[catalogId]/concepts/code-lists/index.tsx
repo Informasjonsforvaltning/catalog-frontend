@@ -1,9 +1,11 @@
+'use client';
+
 import React, { useEffect, useMemo, useState } from 'react';
 import styles from './code-lists.module.css';
 import { Accordion, Heading } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, SearchField, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
 import { CodeList, Fields, Organization } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';

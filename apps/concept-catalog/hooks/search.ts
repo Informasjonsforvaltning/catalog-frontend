@@ -1,3 +1,5 @@
+'use client';
+
 import { QueryFilters, QuerySort, SearchableField } from '@catalog-frontend/types';
 import { SingleSelectOption } from '@digdir/design-system-react';
 import { useQuery } from '@tanstack/react-query';

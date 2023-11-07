@@ -2,7 +2,7 @@ import { AssignedUser, CodeList, Concept, ReferenceDataCode } from '@catalog-fro
 import { SearchHit } from '../search-hit';
 import { localization as loc } from '@catalog-frontend/utils';
 import styles from './search-hit-container.module.css';
-import Pagination from '../pagination';
+import { Pagination } from '../pagination';
 
 type Props = {
   data: any;

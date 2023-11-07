@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Layout } from '@catalog-frontend/ui';
 import { useCatalogDesign } from '../../context/catalog-design';

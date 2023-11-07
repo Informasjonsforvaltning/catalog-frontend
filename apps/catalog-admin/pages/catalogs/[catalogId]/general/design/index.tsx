@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useEffect, useState } from 'react';
 import { useAdminState } from '../../../../../context/admin';
 import { ColorPicker } from '../../../../../components/color-picker';
@@ -5,10 +7,9 @@ import { ImageUploader } from '../../../../../components/image-uploader';
 import styles from './design.module.css';
 import { BreadcrumbType, Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
 import { Heading, Label, Textfield } from '@digdir/design-system-react';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { getTranslateText, localization, textRegexWithNumbers } from '@catalog-frontend/utils';
 import { Design, Organization } from '@catalog-frontend/types';
-import { useRouter } from 'next/router';
-import { textRegexWithNumbers } from '@catalog-frontend/utils';
+import { useRouter } from 'next/navigation';
 import { useGetDesign, useGetLogo, useUpdateDesign } from '../../../../../hooks/design';
 import { compare } from 'fast-json-patch';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';

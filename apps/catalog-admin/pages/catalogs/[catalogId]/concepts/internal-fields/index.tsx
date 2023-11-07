@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import styles from './internal-fields.module.css';
 import { Accordion, Heading } from '@digdir/design-system-react';
@@ -5,7 +7,7 @@ import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { BreadcrumbType, Breadcrumbs, Button } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { InternalField, Organization } from '@catalog-frontend/types';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Banner } from '../../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';
 import { getOrganization } from '@catalog-frontend/data-access';

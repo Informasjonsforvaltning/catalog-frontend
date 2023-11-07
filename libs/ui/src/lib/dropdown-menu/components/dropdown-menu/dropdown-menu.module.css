@@ -1,0 +1,22 @@
+.dropdownMenu {
+  position: relative;
+}
+
+.trigger {
+  cursor: pointer;
+}
+
+.trigger * {
+  color: inherit;
+}
+
+.menu {
+  position: absolute;
+  top: 3.5rem;
+  right: 1rem;
+  z-index: 1000;
+}
+
+.menu * {
+  color: inherit;
+}

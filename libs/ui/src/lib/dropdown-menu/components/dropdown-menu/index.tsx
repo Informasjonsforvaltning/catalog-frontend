@@ -1,6 +1,7 @@
-import React, { FC, useRef, useEffect, PropsWithChildren, HTMLAttributes, Children, isValidElement } from 'react';
+'use client';
 
-import SC from './styled';
+import { FC, useRef, useEffect, PropsWithChildren, HTMLAttributes, Children, isValidElement } from 'react';
+import styles from './dropdown-menu.module.css';
 
 import Trigger from '../trigger';
 import Menu from '../menu';
@@ -54,13 +55,19 @@ export const DropdownMenu: FC<PropsWithChildren<Props>> = ({ isOpen, onClose, ch
   }, [onClose]);
 
   return (
-    <SC.DropdownMenu
+    <nav
+      className={styles.dropdownMenu}
       {...props}
       ref={dropdownMenuElement}
     >
-      <SC.Trigger onClick={isOpen ? onClose : undefined}>{triggerChild}</SC.Trigger>
-      {isOpen && <SC.Menu>{menuChild}</SC.Menu>}
-    </SC.DropdownMenu>
+      <div
+        className={styles.trigger}
+        onClick={isOpen ? onClose : undefined}
+      >
+        {triggerChild}
+      </div>
+      {isOpen && <div className={styles.menu}>{menuChild}</div>}
+    </nav>
   );
 };
 

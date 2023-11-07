@@ -1,8 +1,9 @@
+'use client';
+
 import { ArrowLeftIcon, ArrowRightIcon } from '@navikt/aksel-icons';
 import ReactPaginate, { ReactPaginateProps } from 'react-paginate';
 import styles from './pagination.module.css';
-
-export const Pagination = ({ ...rest }: ReactPaginateProps) => (
+const Pagination = ({ ...rest }: ReactPaginateProps) => (
   <ReactPaginate
     {...rest}
     pageCount={rest.pageCount}
@@ -19,4 +20,4 @@ export const Pagination = ({ ...rest }: ReactPaginateProps) => (
   />
 );
 
-export default Pagination;
+export { Pagination };

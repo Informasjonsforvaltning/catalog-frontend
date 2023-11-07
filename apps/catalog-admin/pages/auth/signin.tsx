@@ -1,9 +1,11 @@
+'use client';
+
 import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner, Spinner } from '@catalog-frontend/ui';
 import { localization, validOrganizationNumber } from '@catalog-frontend/utils';
 import { Heading } from '@digdir/design-system-react';
 import { Session } from 'next-auth';
 import { signIn, useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
 const needLogin = (session, status, router) =>

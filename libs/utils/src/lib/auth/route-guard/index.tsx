@@ -1,7 +1,9 @@
+'use client';
+
 /* eslint-disable react/jsx-no-useless-fragment */
 import { Session } from 'next-auth';
 import { signIn, useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 import { useEffect } from 'react';
 
 interface RouteGuardProps {
@@ -18,7 +20,7 @@ interface UseSessionProps {
 }
 
 export const RouteGuard = ({ children }: RouteGuardProps) => {
-  const router = useRouter();
+  const pathname = usePathname();
   const { data: session, status }: UseSessionProps = useSession();
 
   const allowed = !!session?.user;
@@ -26,11 +28,11 @@ export const RouteGuard = ({ children }: RouteGuardProps) => {
   useEffect(() => {
     if (
       (session?.error === 'RefreshAccessTokenError' || status === 'unauthenticated') &&
-      router.pathname !== '/auth/signout'
+      pathname !== '/auth/signout'
     ) {
       signIn('keycloak');
     }
-  }, [session, status, router]);
+  }, [session, status, pathname]);
 
   if (allowed) {
     return <>{children}</>;

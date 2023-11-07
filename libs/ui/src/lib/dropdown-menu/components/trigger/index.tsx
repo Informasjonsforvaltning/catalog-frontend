@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren } from 'react';
 
 export const Trigger: FC<PropsWithChildren> = ({ children }) => (
   // eslint-disable-next-line react/jsx-no-useless-fragment

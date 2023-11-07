@@ -1,5 +1,7 @@
+'use client';
+
 import { memo } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Accordion } from '@digdir/design-system-react';
 import { Select } from '@catalog-frontend/ui';
 import { AssignedUser, CodeList, InternalField, ReferenceDataCode } from '@catalog-frontend/types';

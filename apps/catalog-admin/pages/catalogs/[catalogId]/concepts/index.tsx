@@ -1,6 +1,6 @@
 import { BreadcrumbType, Breadcrumbs, Card } from '@catalog-frontend/ui';
 import React from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Banner } from '../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../utils/auth';

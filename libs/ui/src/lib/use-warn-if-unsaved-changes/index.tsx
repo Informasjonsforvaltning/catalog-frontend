@@ -1,3 +1,5 @@
+'use client';
+
 import Router from 'next/router';
 import { useEffect } from 'react';
 
@@ -15,7 +17,7 @@ const beforeRouteHandler = (url: string) => {
   }
 };
 
-export const useWarnIfUnsavedChanges = (unsavedChanges: boolean) => {
+const useWarnIfUnsavedChanges = (unsavedChanges: boolean) => {
   useEffect(() => {
     if (unsavedChanges) {
       window.addEventListener('beforeunload', beforeUnloadHandler);
@@ -31,4 +33,4 @@ export const useWarnIfUnsavedChanges = (unsavedChanges: boolean) => {
   }, [unsavedChanges]);
 };
 
-export default useWarnIfUnsavedChanges;
+export { useWarnIfUnsavedChanges };

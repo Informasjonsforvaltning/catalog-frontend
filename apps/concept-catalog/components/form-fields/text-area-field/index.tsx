@@ -1,3 +1,5 @@
+'use client';
+
 import { FC } from 'react';
 import styles from './text-area-field.module.css';
 import { Field } from 'formik';

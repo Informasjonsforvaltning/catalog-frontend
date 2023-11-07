@@ -1,6 +1,8 @@
+'use client';
+
 import { FC, ChangeEvent, useState, KeyboardEvent } from 'react';
-import { Input, SearchField as StyledSearchField, SvgWrapper } from './styled';
 import MagnifyingGlassSVG from './MagnifyingGlass.svg';
+import styles from './search-field.module.css';
 
 type IconPoseType = 'left' | 'right' | undefined;
 
@@ -13,7 +15,7 @@ interface SearchFieldProps {
   startIcon?: JSX.Element;
   endIcon?: JSX.Element;
   iconPos?: IconPoseType;
-  onSearchSubmit?: (inputValue: string) => void | any;
+  onSearchSubmit?: (inputValue: string) => void | undefined;
 }
 
 const SearchField: FC<SearchFieldProps> = ({
@@ -44,13 +46,10 @@ const SearchField: FC<SearchFieldProps> = ({
   };
 
   return (
-    <StyledSearchField
-      ariaLabel=''
-      error={error}
-      iconPos={startIcon ? 'left' : endIcon ? 'right' : undefined}
-    >
-      {startIcon}
-      <Input
+    <div className={styles.searchField}>
+      {startIcon && <span className={styles.leftSvg}>{startIcon}</span>}
+      <input
+        className={styles.input}
         aria-label={ariaLabel}
         placeholder={conditionalPlaceholder}
         type='search'
@@ -58,8 +57,15 @@ const SearchField: FC<SearchFieldProps> = ({
         onInput={onInput}
         onKeyUp={onSubmit}
       />
-      <SvgWrapper onClick={(e) => onSubmit('clicked')}>{endIcon}</SvgWrapper>
-    </StyledSearchField>
+      {endIcon && (
+        <figure
+          className={styles.svgWrapper}
+          onClick={(e) => onSubmit('clicked')}
+        >
+          {endIcon}
+        </figure>
+      )}
+    </div>
   );
 };
 

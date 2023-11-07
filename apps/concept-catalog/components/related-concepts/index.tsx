@@ -3,12 +3,12 @@ import { Relasjon, SkosConcept, TextLanguage } from '@catalog-frontend/types';
 import { KeyValueList } from '@catalog-frontend/ui';
 import AssociativeRelations from './associative-relations';
 import PartitiveRelations from './partitive-relations';
-import { useRouter } from 'next/router';
 import GenericRelations from './generic-relations';
 import SeeAlso from './see-also';
 import IsReplacedBy from './is-replaced-by';
 
 interface Props {
+  catalogId: string;
   conceptRelations: Relasjon[];
   relatedConcepts: SkosConcept[];
   validFromIncluding: string | undefined;
@@ -16,9 +16,14 @@ interface Props {
   title: Partial<TextLanguage>;
 }
 
-const RelatedConcepts = ({ conceptRelations, relatedConcepts, validToIncluding, validFromIncluding, title }: Props) => {
-  const router = useRouter();
-  const catalogId = router.query.catalogId as string;
+const RelatedConcepts = ({
+  catalogId,
+  conceptRelations,
+  relatedConcepts,
+  validToIncluding,
+  validFromIncluding,
+  title,
+}: Props) => {
   const associativeRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'assosiativ') ?? [];
   const partitiveRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'partitiv') ?? [];
   const genericRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'generisk') ?? [];

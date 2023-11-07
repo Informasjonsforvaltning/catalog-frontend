@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import cn from 'classnames';
 import styles from './internal-field.module.css';
@@ -14,7 +16,7 @@ import {
   useDeleteInternalField,
   useUpdateInternalField,
 } from '../../hooks/internal-fields';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const fieldTypeOptions: { [key: string]: SelectOption } = {
   shortText: { label: 'Kort tekst', value: 'text_short' },

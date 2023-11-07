@@ -1,0 +1,76 @@
+import {
+  hasOrganizationAdminPermission,
+  hasOrganizationReadPermission,
+  hasOrganizationWritePermission,
+  hasSystemAdminPermission,
+  validOrganizationNumber,
+  prepareStatusList,
+} from '@catalog-frontend/utils';
+import { CodeListsResult, FieldsResult, Organization, UsersResult } from '@catalog-frontend/types';
+import {
+  getAllCodeLists,
+  getConceptStatuses,
+  getFields,
+  getOrganization,
+  getUsers,
+} from '@catalog-frontend/data-access';
+import { Session, getServerSession } from 'next-auth';
+import { authOptions } from '../api/auth/[...nextauth]/route';
+import { SearchPageClient } from './search-page-client';
+import { RedirectType, redirect } from 'next/navigation';
+
+const SearchPage = async ({ params }) => {
+  const session: Session | null = await getServerSession(authOptions);
+  const { catalogId } = params;
+
+  if (!validOrganizationNumber(catalogId)) {
+    return { notFound: true };
+  }
+
+  if (!(session?.user && session?.accessTokenExpiresAt && Date.now() < session?.accessTokenExpiresAt * 1000)) {
+    redirect(`/auth/signin?callbackUrl=/${catalogId}`);
+  }
+
+  const hasReadPermission =
+    session?.accessToken &&
+    (hasOrganizationReadPermission(session?.accessToken, catalogId) || hasSystemAdminPermission(session.accessToken));
+  if (!hasReadPermission) {
+    redirect(`/${catalogId}/no-access`, RedirectType.replace);
+  }
+
+  const hasWritePermission = session?.accessToken && hasOrganizationWritePermission(session.accessToken, catalogId);
+  const hasAdminPermission = session?.accessToken && hasOrganizationAdminPermission(session.accessToken, catalogId);
+  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+
+  const fieldsResult: FieldsResult = await getFields(catalogId, `${session?.accessToken}`).then((response) =>
+    response.json(),
+  );
+  const codeListsResult: CodeListsResult = await getAllCodeLists(catalogId, `${session?.accessToken}`).then(
+    (response) => response.json(),
+  );
+
+  const usersResult: UsersResult = await getUsers(catalogId, `${session?.accessToken}`).then((response) =>
+    response.json(),
+  );
+
+  const conceptStatuses = await getConceptStatuses()
+    .then((response) => response.json())
+    .then((body) => body?.conceptStatuses ?? [])
+    .then((statuses) => prepareStatusList(statuses));
+
+  const clientProps = {
+    catalogId,
+    organization,
+    hasWritePermission,
+    hasAdminPermission,
+    fieldsResult,
+    codeListsResult,
+    usersResult,
+    conceptStatuses,
+    FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
+  };
+
+  return <SearchPageClient {...clientProps} />;
+};
+
+export default SearchPage;
