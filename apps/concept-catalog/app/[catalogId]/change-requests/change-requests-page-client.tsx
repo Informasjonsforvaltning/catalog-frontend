@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, PageBanner, Tag } from '@catalog-frontend/ui';
+import { PageBanner, Tag } from '@catalog-frontend/ui';
 import {
   capitalizeFirstLetter,
   convertTimestampToDateAndTime,
@@ -13,16 +13,11 @@ import {
 import styles from './change-requests-page.module.css';
 import { useRouter } from 'next/navigation';
 import { Heading } from '@digdir/design-system-react';
+import { useCatalogDesign } from '../../../context/catalog-design';
 
 export const ChangeRequestsPageClient = ({ catalogId, organization, changeRequests, conceptsWithChangeRequest }) => {
   const pageSubtitle = organization?.name ?? '';
   const router = useRouter();
-
-  const handleNewConceptSuggestionClick = () => {
-    if (validOrganizationNumber(catalogId)) {
-      router.push(`/${catalogId}/change-requests/new`);
-    }
-  };
 
   const handleListItemClick = ({ id: changeRequestId }) => {
     if (
@@ -34,16 +29,19 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, changeReques
     }
   };
 
+  const design = useCatalogDesign();
+
   return (
     <>
       <PageBanner
         title={loc.catalogType.concept}
         subtitle={pageSubtitle}
+        fontColor={design?.fontColor}
+        backgroundColor={design?.backgroundColor}
+        logo={design?.hasLogo && `/api/catalog-admin/${catalogId}/design/logo`}
+        logoDescription={design?.logoDescription}
       />
       <div className='container'>
-        <div className={styles.buttonsContainer}>
-          <Button onClick={handleNewConceptSuggestionClick}>{loc.suggestionForNewConcept}</Button>
-        </div>
         <Heading
           level={2}
           size='xsmall'

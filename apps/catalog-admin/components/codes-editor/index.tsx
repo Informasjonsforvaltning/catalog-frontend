@@ -144,6 +144,8 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   };
 
   function Input({ node }: { node: NodeApi<TreeNode> }) {
+    if (node.isLeaf) return <span className={styles.noFolderIcon}></span>;
+
     return (
       <input
         autoFocus

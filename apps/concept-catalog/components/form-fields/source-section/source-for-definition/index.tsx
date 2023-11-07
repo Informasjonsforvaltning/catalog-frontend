@@ -19,33 +19,31 @@ export const SourceForDefinitionField: FC<Props> = ({
   deleteClickHandler,
 }) => {
   return (
-    <>
-      <div className={styles.container}>
-        <div className={styles.row}>
-          <Field
-            name={sourceTitleFieldName}
-            as={Textfield}
-            label={'Tittel på kilde'}
-            rows={1}
-            cols={20}
-          />
-          <Field
-            name={sourceUriFieldName}
-            as={Textfield}
-            label={'Lenke til kilde'}
-            rows={1}
-            cols={20}
-          />
-          <Button
-            color='danger'
-            icon={<TrashIcon />}
-            size='small'
-            onClick={deleteClickHandler}
-          >
-            {loc.formatString(loc.button.deleteWithFormat, { text: loc.concept.source.toLowerCase() })}
-          </Button>
-        </div>
+    <div className={styles.container}>
+      <div className={styles.row}>
+        <Field
+          name={sourceTitleFieldName}
+          as={Textfield}
+          label={'Tittel på kilde'}
+          rows={1}
+          cols={20}
+        />
+        <Field
+          name={sourceUriFieldName}
+          as={Textfield}
+          label={'Lenke til kilde'}
+          rows={1}
+          cols={20}
+        />
+        <Button
+          color='danger'
+          icon={<TrashIcon />}
+          size='small'
+          onClick={deleteClickHandler}
+        >
+          {loc.formatString(loc.button.deleteWithFormat, { text: loc.concept.source.toLowerCase() })}
+        </Button>
       </div>
-    </>
+    </div>
   );
 };

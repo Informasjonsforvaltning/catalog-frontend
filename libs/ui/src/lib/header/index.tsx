@@ -98,9 +98,12 @@ const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo, catalogAdminUrl }) => {
                       <>
                         <hr />
                         <li>
-                          <SC.CatalogAdminHeaderLink href={catalogAdminUrl}>
+                          <a
+                            className={styles.catalogAdminHeaderLink}
+                            href={catalogAdminUrl}
+                          >
                             {localization.manageCatalogs}
-                          </SC.CatalogAdminHeaderLink>
+                          </a>
                         </li>
                       </>
                     )}
