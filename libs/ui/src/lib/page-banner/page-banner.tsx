@@ -1,3 +1,7 @@
+'use client';
+
+import EllipseSVG from './svg/ellipse-1.svg';
+import RectangleSVG from './svg/rectangle-1.svg';
 import style from './page-banner.module.css';
 
 interface PageBannerProps {
@@ -18,7 +22,11 @@ const PageBanner = ({ title, subtitle, fontColor, backgroundColor, logo, logoDes
         ...(backgroundColor ? { background: backgroundColor } : {}),
       }}
     >
-      {!logo && <div className={style.svgEllipse}></div>}
+      {!logo && (
+        <div className={style.svgEllipse}>
+          <EllipseSVG />
+        </div>
+      )}
       <div className='container'>
         <div className={style.contentContainer}>
           {logo && (
@@ -37,7 +45,11 @@ const PageBanner = ({ title, subtitle, fontColor, backgroundColor, logo, logoDes
           </div>
         </div>
       </div>
-      {!logo && <div className={style.svgRectangle}></div>}
+      {!logo && (
+        <div className={style.svgRectangle}>
+          <RectangleSVG />
+        </div>
+      )}
     </div>
   );
 };

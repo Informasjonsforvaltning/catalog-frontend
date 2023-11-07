@@ -37,7 +37,7 @@ export interface HeaderProps {
   catalogId?: string;
 }
 
-const Header: FC<HeaderProps> = ({ catalogId, homeUrl, useDemoLogo, catalogAdminUrl }) => {
+const Header: FC<HeaderProps> = ({ catalogId, homeUrl, useDemoLogo, fontColor, backgroundColor, catalogAdminUrl }) => {
   const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
 
   const openDropdownMenu = () => setIsDropdownMenuOpen(true);
@@ -53,7 +53,10 @@ const Header: FC<HeaderProps> = ({ catalogId, homeUrl, useDemoLogo, catalogAdmin
   };
 
   return (
-    <header className={styles.header}>
+    <header
+      className={styles.header}
+      style={{ color: fontColor ?? '#fff', background: backgroundColor ?? '#2d3741' }}
+    >
       <div className='container'>
         <nav className={styles.navigation}>
           <a

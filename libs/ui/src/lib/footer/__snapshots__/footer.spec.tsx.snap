@@ -6,6 +6,9 @@ exports[`Footer should render successfully 1`] = `
     <footer
       class="footer"
     >
+      <svgrurl
+        class="illustration"
+      />
       <div
         class="content"
       >
@@ -49,12 +52,22 @@ exports[`Footer should render successfully 1`] = `
             class="link"
             href="mailto:fellesdatakatalog@digdir.no"
           >
+            <span
+              class="icon"
+            >
+              <svgrurl />
+            </span>
             fellesdatakatalog@digdir.no
           </a>
           <a
             class="link"
             href="https://twitter.com/datakatalogen?ref_src=twsrc%5Etfw%7Ctwcamp%5Eembeddedtimeline%7Ctwterm%5Eprofile%3Adatakatalogen&ref_url=https%3A%2F%2Ffellesdatakatalog.digdir.no%2F"
           >
+            <span
+              class="icon"
+            >
+              <svgrurl />
+            </span>
             Twitter
           </a>
         </div>
