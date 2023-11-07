@@ -3,15 +3,13 @@ import { authOptions } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import { NextRequest } from 'next/server';
 
-async function handler(req: NextRequest, { params }: { params: { slug: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { slug: string } }) {
   const session = await getServerSession(authOptions);
   if (!session || session?.accessTokenExpiresAt < Date.now() / 1000) {
     return new Response('Unauthorized', { status: 401 });
   }
-
   const { slug } = params;
-
-  if (req.method == 'GET' && slug?.length === 2 && slug[1] === 'design') {
+  if (slug?.length === 2 && slug[1] === 'design') {
     try {
       const response = await getDesign(slug[0], `${session?.accessToken}`);
       if (response.status !== 200) {
@@ -22,7 +20,7 @@ async function handler(req: NextRequest, { params }: { params: { slug: string } 
     } catch (error) {
       return new Response('Failed to get design logo', { status: 500 });
     }
-  } else if (req.method == 'GET' && slug?.length === 3 && slug[1] === 'design' && slug[2] === 'logo') {
+  } else if (slug?.length === 3 && slug[1] === 'design' && slug[2] === 'logo') {
     try {
       const response = await getDesignLogo(slug[0], `${session?.accessToken}`);
       if (response.status !== 200) {
@@ -43,5 +41,3 @@ async function handler(req: NextRequest, { params }: { params: { slug: string } 
     return new Response('Unauthorized', { status: 401 });
   }
 }
-
-export { handler as GET, handler as POST };

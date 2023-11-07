@@ -3,7 +3,7 @@ import { authOptions } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import { NextRequest } from 'next/server';
 
-export async function handler(req: NextRequest, { params }: { params: { slug: string } }) {
+export async function GET(req: NextRequest, { params }: { params: { slug: string } }) {
   const session = await getServerSession(authOptions);
   if (!session || session?.accessTokenExpiresAt < Date.now() / 1000) {
     return new Response('Unauthorized', { status: 401 });
@@ -11,7 +11,7 @@ export async function handler(req: NextRequest, { params }: { params: { slug: st
 
   const { slug } = params;
 
-  if (req.method == 'GET' && slug?.length == 2) {
+  if (slug?.length == 2) {
     const [catalogId, resourceId] = slug;
 
     try {
@@ -29,5 +29,3 @@ export async function handler(req: NextRequest, { params }: { params: { slug: st
     return new Response('Unauthorized', { status: 401 });
   }
 }
-
-export { handler as GET, handler as POST };

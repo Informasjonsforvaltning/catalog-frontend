@@ -33,13 +33,13 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   const currentCodeList = codeListInContext ?? dbCodeList;
   const codes = updatedCodes ? updatedCodes[dbCodeList?.id] || updatedCodes['0'] : [];
 
-  const [selectedCode, setSelectedCode] = useState<Code>(undefined);
+  const [selectedCode, setSelectedCode] = useState<Code>();
   const [isEditViewOpen, setIsEditViewOpen] = useState<boolean>(false);
 
   const setDirtyState = () => {
     if (dirty) {
       const isDirty =
-        compare(dbCodeList?.codes ?? [], updatedCodes ? updatedCodes[dbCodeList?.id] : []).length > 0 ||
+        compare(dbCodeList?.codes ?? [], updatedCodes[dbCodeList?.id] ?? []).length > 0 ||
         (selectedCode && !dbCodeList?.codes?.includes(selectedCode));
       dirty(isDirty);
     }
