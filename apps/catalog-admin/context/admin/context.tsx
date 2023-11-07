@@ -1,3 +1,5 @@
+'use client';
+
 import { createContext, useReducer, type ReactNode, useContext } from 'react';
 
 import { reducer } from './reducer';
