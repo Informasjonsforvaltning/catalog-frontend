@@ -113,12 +113,11 @@ export interface Concept {
   definisjonForAllmennheten?: Definisjon;
   definisjonForSpesialister?: Definisjon;
   ansvarligVirksomhet: { id: string };
-  merknad?: Record<string, string[]>;
+  merknad?: Record<string, string>;
   merkelapp?: string[];
-  eksempel?: Record<string, string[]>;
+  eksempel?: Record<string, string>;
   fagområde?: Record<string, string[]>;
   fagområdeKoder?: string[];
-  bruksområde?: Record<string, string[]>;
   omfang?: UriText | null;
   tillattTerm?: Record<string, string[]>;
   frarådetTerm?: Record<string, string[]>;

@@ -20,7 +20,12 @@ const UploadButton: FC<UploadButtonProps> = ({ children, allowedMimeTypes, onUpl
         id={buttonId}
         aria-controls={ref.current?.id}
         aria-haspopup='true'
-        onClick={() => ref.current?.click()}
+        onClick={() => {
+          if (ref.current) {
+            ref.current.value = '';
+            ref.current.click();
+          }
+        }}
       >
         {children}
       </Button>
