@@ -292,7 +292,9 @@ export const ConceptPageClient = ({
                 >
                   <EnvelopeClosedIcon />
                   &nbsp;
-                  {concept?.kontaktpunkt?.harEpost}
+                  <span>
+                    <a href={`mailto:${concept.kontaktpunkt.harEpost}`}>{concept.kontaktpunkt.harEpost}</a>
+                  </span>
                 </div>
               )}
               {concept?.kontaktpunkt?.harTelefon && (
@@ -302,7 +304,7 @@ export const ConceptPageClient = ({
                 >
                   <PhoneIcon />
                   &nbsp;
-                  {concept?.kontaktpunkt?.harTelefon}
+                  <span>{concept.kontaktpunkt.harTelefon}</span>
                 </div>
               )}
             </>,

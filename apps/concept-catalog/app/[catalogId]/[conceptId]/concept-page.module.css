@@ -58,6 +58,15 @@
   align-items: center;
 }
 
+.contact > svg {
+  min-width: 1rem;
+}
+
+.contact > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .source {
   display: flex;
   gap: 0.5rem;
