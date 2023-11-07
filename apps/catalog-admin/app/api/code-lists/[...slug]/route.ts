@@ -1,6 +1,6 @@
 import { createCodeList, deleteCodeList, getAllCodeLists, patchCodeList } from '@catalog-frontend/data-access';
+import { authOptions } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]/route';
 
 interface Props {
   params: {

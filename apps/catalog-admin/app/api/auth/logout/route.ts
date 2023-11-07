@@ -1,6 +1,6 @@
+import { authOptions } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import { getToken } from 'next-auth/jwt';
-import { authOptions } from '../[...nextauth]/route';
 import { NextRequest, NextResponse } from 'next/server';
 
 const handler = async (req: NextRequest) => {

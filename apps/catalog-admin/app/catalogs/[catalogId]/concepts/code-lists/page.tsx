@@ -3,7 +3,7 @@ import { checkAdminPermissions } from '../../../../../utils/auth';
 import { getFields, getOrganization } from '@catalog-frontend/data-access';
 import { getServerSession } from 'next-auth';
 import CodeListsPageClient from './code-list-page-client';
-import { authOptions } from 'apps/catalog-admin/app/api/auth/[...nextauth]/route';
+import { authOptions } from '@catalog-frontend/utils';
 
 const CodeListsPage = async ({ params }) => {
   const { catalogId } = params;

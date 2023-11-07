@@ -1,7 +1,7 @@
 import { getDesign, patchDesign } from '@catalog-frontend/data-access';
+import { authOptions } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import { NextRequest } from 'next/server';
-import { authOptions } from '../../../auth/[...nextauth]/route';
 
 export async function handler(req: NextRequest, { params }: { params: { catalogId: string } }) {
   const session = await getServerSession(authOptions);

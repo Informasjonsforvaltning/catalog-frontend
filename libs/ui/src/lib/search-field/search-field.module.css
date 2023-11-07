@@ -9,21 +9,6 @@
   border: 1px solid #121619;
   border-radius: 0.2rem;
   align-self: flex-end;
-  /* ${({ error }) =>
-    error &&
-    css`
-      input {
-        color: #803353;
-      }
-      input::placeholder {
-        color: #803353;
-      }
-      border-color: #803353;
-      background-color: #f7f0f3;
-      :hover {
-        border-color: #803353;
-      }
-    `} */
 }
 
 .searchField:hover {
@@ -53,6 +38,10 @@
 
 .svgWrapper {
   display: contents;
+}
+
+.svgWrapper > svg {
+  min-width: 4rem;
 }
 
 .svgWrapper:hover {

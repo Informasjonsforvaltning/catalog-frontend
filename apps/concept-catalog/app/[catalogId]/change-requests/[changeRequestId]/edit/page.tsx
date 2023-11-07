@@ -1,15 +1,20 @@
 import { getOrganization, getConcept, getChangeRequest } from '@catalog-frontend/data-access';
 import { Organization, Concept, ChangeRequest } from '@catalog-frontend/types';
-import { hasOrganizationReadPermission, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
+import {
+  authOptions,
+  hasOrganizationReadPermission,
+  validOrganizationNumber,
+  validUUID,
+} from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import jsonpatch from 'fast-json-patch';
-import { authOptions } from '../../../../api/auth/[...nextauth]/route';
 import ChangeRequestEditPageClient from './change-request-edit-page-client';
+import { RedirectType, redirect } from 'next/navigation';
 
 const ChangeRequestEditPage = async ({ params }) => {
   const { catalogId, changeRequestId } = params;
   if (!validOrganizationNumber(catalogId) || !validUUID(changeRequestId)) {
-    return { notFound: true };
+    redirect(`/not-found`, RedirectType.replace);
   }
 
   const session = await getServerSession(authOptions);

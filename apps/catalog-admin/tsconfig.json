@@ -26,7 +26,8 @@
     "**/*.jsx",
     "next-env.d.ts",
     "components/image-uploader/image-uploader.spec.tsx.disabled",
-    "../../apps/catalog-admin/.next/types/**/*.ts"
+    "../../apps/catalog-admin/.next/types/**/*.ts",
+    "../../dist/apps/catalog-admin/.next/types/**/*.ts"
   ],
   "exclude": ["node_modules", "jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"]
 }

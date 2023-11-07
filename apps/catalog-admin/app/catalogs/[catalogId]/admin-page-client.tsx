@@ -5,6 +5,7 @@ import { BreadcrumbType, Breadcrumbs, Card } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Banner } from '../../../components/banner';
 import { InformationSquareIcon, TableIcon } from '@navikt/aksel-icons';
+import styles from './admin-page.module.css';
 
 export const AdminPageClient = ({ organization, catalogId }) => {
   const breadcrumbList = catalogId
@@ -21,7 +22,7 @@ export const AdminPageClient = ({ organization, catalogId }) => {
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <div>
         <Banner orgName={organization?.prefLabel} />
-        <div className='card'>
+        <div className={styles.cardsContainer}>
           <Card
             icon={<InformationSquareIcon fontSize='3rem' />}
             title={localization.general}

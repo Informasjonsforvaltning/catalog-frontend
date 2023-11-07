@@ -34,9 +34,10 @@ export interface HeaderProps {
    */
   backgroundColor?: string;
   catalogAdminUrl?: string;
+  catalogId?: string;
 }
 
-const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo, catalogAdminUrl }) => {
+const Header: FC<HeaderProps> = ({ catalogId, homeUrl, useDemoLogo, catalogAdminUrl }) => {
   const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
 
   const openDropdownMenu = () => setIsDropdownMenuOpen(true);
@@ -46,7 +47,6 @@ const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo, catalogAdminUrl }) => {
   const { data: session } = useSession();
   const userDisplayName = session?.user?.name;
   const accessToken = session?.accessToken;
-  const catalogId = `${router.query.catalogId}`;
 
   const handleLogout = () => {
     router.push('/api/auth/logout');

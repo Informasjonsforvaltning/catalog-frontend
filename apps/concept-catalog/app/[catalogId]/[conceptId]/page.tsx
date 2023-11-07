@@ -6,6 +6,7 @@ import {
   hasSystemAdminPermission,
   hasOrganizationWritePermission,
   prepareStatusList,
+  authOptions,
 } from '@catalog-frontend/utils';
 import {
   getAllCodeLists,
@@ -28,9 +29,8 @@ import {
   SkosConcept,
 } from '@catalog-frontend/types';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../api/auth/[...nextauth]/route';
 import ConceptPageClient from './concept-page-client';
-import { redirect } from 'next/navigation';
+import { RedirectType, redirect } from 'next/navigation';
 import { getTokenFromServer } from '../../api/auth/jwt/route';
 
 const ConceptPage = async ({ params }) => {
@@ -40,7 +40,7 @@ const ConceptPage = async ({ params }) => {
   const { catalogId, conceptId } = params;
 
   if (!(validOrganizationNumber(catalogId) && validUUID(conceptId))) {
-    return { notFound: true };
+    redirect(`/not-found`, RedirectType.replace);
   }
 
   if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
@@ -58,9 +58,7 @@ const ConceptPage = async ({ params }) => {
     if (response.ok) return response.json();
   });
   if (!concept) {
-    return {
-      notFound: true,
-    };
+    redirect(`/not-found`, RedirectType.replace);
   }
 
   const conceptStatuses = await getConceptStatuses()

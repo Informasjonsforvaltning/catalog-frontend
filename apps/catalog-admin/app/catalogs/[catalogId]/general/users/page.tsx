@@ -1,6 +1,6 @@
 import { Organization } from '@catalog-frontend/types';
 import { getOrganization } from '@catalog-frontend/data-access';
-import { checkAdminPermissions } from 'apps/catalog-admin/utils/auth';
+import { checkAdminPermissions } from '../../../../../utils/auth';
 import UsersPageClient from './users-page-client';
 
 export const UsersPage = async ({ params }) => {

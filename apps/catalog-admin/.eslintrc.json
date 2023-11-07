@@ -1,41 +1,19 @@
 {
-  "extends": [
-    "plugin:@nrwl/nx/react-typescript",
-    "next",
-    "next/core-web-vitals",
-    "../../.eslintrc.json"
-  ],
-  "ignorePatterns": [
-    "!**/*",
-    ".next/**/*"
-  ],
+  "extends": ["plugin:@nrwl/nx/react-typescript", "next", "next/core-web-vitals", "../../.eslintrc.json"],
+  "ignorePatterns": ["!**/*", ".next/**/*"],
   "overrides": [
     {
-      "files": [
-        "*.ts",
-        "*.tsx",
-        "*.js",
-        "*.jsx"
-      ],
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
       "rules": {
-        "@next/next/no-html-link-for-pages": [
-          "error",
-          "apps/catalog-admin/pages"
-        ]
+        "@next/next/no-html-link-for-pages": ["error", "apps/catalog-admin/app"]
       }
     },
     {
-      "files": [
-        "*.ts",
-        "*.tsx"
-      ],
+      "files": ["*.ts", "*.tsx"],
       "rules": {}
     },
     {
-      "files": [
-        "*.js",
-        "*.jsx"
-      ],
+      "files": ["*.js", "*.jsx"],
       "rules": {}
     }
   ],
