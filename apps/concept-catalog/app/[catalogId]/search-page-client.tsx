@@ -108,30 +108,29 @@ export const SearchPageClient = ({
     page: currentPage,
     fields: getSearchFields(selectedFieldOption),
     sort: sortMappings[selectedSortOption],
-    filters: Object.assign(
-      {},
-      searchState.filters.status?.length &&
+    filters: {
+      ...(searchState.filters.status?.length &&
         searchState.filters.status.length > 0 && {
           status: { value: searchState.filters.status },
-        },
-      searchState.filters.published?.length === 1 && {
+        }),
+      ...(searchState.filters.published?.length === 1 && {
         published: { value: searchState.filters.published.includes('published') },
-      },
-      searchState.filters.assignedUser && {
+      }),
+      ...(searchState.filters.assignedUser && {
         assignedUser: { value: [searchState.filters.assignedUser.id] },
-      },
-      searchState.filters.subject?.length &&
+      }),
+      ...(searchState.filters.subject?.length &&
         searchState.filters.subject.length > 0 && {
           subject: { value: getSubjectFilterWithChildren(searchState.filters.subject) },
-        },
-      searchState.filters.label?.length &&
+        }),
+      ...(searchState.filters.label?.length &&
         searchState.filters.label.length > 0 && {
           label: { value: searchState.filters.label },
-        },
-      Object.keys(searchState.filters.internalFields ?? {}).length > 0 && {
+        }),
+      ...(Object.keys(searchState.filters.internalFields ?? {}).length > 0 && {
         internalFields: { value: searchState.filters.internalFields },
-      },
-    ),
+      }),
+    },
   });
 
   const importConcepts = useImportConcepts(catalogId);
@@ -176,7 +175,7 @@ export const SearchPageClient = ({
         searchDispatch(action('SET_CONCEPT_STATUS_FILTER', { filters: { status: updatedFilters } }));
         break;
       case 'assignedUser':
-        searchDispatch(action('SET_ASSIGNED_USER_FILTER', { filters: { assignedUser: null } }));
+        searchDispatch(action('SET_ASSIGNED_USER_FILTER', { filters: { assignedUser: undefined } }));
         break;
       case 'subject':
         searchDispatch(action('SET_SUBJECTS_FILTER', { filters: { subject: updatedFilters } }));
@@ -239,6 +238,11 @@ export const SearchPageClient = ({
     refetch().catch((error) => console.error('refetch() failed: ', error));
   }, [currentPage, selectedSortOption, refetch]);
 
+  let logo: string | undefined;
+  if (design?.hasLogo) {
+    logo = `/api/catalog-admin/${catalogId}/design/logo`;
+  }
+
   return (
     <>
       <Breadcrumbs
@@ -250,7 +254,7 @@ export const SearchPageClient = ({
         subtitle={pageSubtitle}
         fontColor={design?.fontColor}
         backgroundColor={design?.backgroundColor}
-        logo={design?.hasLogo && `/api/catalog-admin/${catalogId}/design/logo`}
+        logo={logo}
         logoDescription={design?.logoDescription}
       />
       <div className='container'>
@@ -380,6 +384,7 @@ export const SearchPageClient = ({
           <div>
             <div className={styles.gridContainer}>
               <SearchFilter
+                catalogId={catalogId}
                 internalFields={fieldsResult?.internal}
                 subjectCodeList={subjectCodeList}
                 conceptStatuses={conceptStatuses}

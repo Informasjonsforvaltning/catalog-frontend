@@ -58,19 +58,19 @@ const SearchPage = async ({ params }) => {
     .then((body) => body?.conceptStatuses ?? [])
     .then((statuses) => prepareStatusList(statuses));
 
-  const clientProps = {
-    catalogId,
-    organization,
-    hasWritePermission,
-    hasAdminPermission,
-    fieldsResult,
-    codeListsResult,
-    usersResult,
-    conceptStatuses,
-    FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
-  };
-
-  return <SearchPageClient {...clientProps} />;
+  return (
+    <SearchPageClient
+      catalogId={catalogId}
+      organization={organization}
+      hasWritePermission={!!hasWritePermission}
+      hasAdminPermission={!!hasAdminPermission}
+      fieldsResult={fieldsResult}
+      codeListsResult={codeListsResult}
+      usersResult={usersResult}
+      conceptStatuses={conceptStatuses}
+      FDK_REGISTRATION_BASE_URI={`${process.env.FDK_REGISTRATION_BASE_URI}`}
+    />
+  );
 };
 
 export default SearchPage;
