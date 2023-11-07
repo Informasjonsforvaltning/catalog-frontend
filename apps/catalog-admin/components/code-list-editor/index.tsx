@@ -8,7 +8,6 @@ import { localization } from '@catalog-frontend/utils';
 import { useAdminDispatch, useAdminState } from '../../context/admin';
 import { useCreateCodeList, useDeleteCodeList, useGetAllCodeLists, useUpdateCodeList } from '../../hooks/code-lists';
 import { compare } from 'fast-json-patch';
-import { useRouter } from 'next/navigation';
 import CodesEditor from '../codes-editor';
 
 export interface Props {
@@ -16,15 +15,13 @@ export interface Props {
   codeListsInUse?: string[];
   type?: EditorType;
   dirty?: (dirty: boolean) => void;
+  catalogId: string;
 }
 
-export const CodeListEditor = ({ codeList, codeListsInUse, type, dirty }: Props) => {
+export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirty }: Props) => {
   const adminDispatch = useAdminDispatch();
   const { updatedCodeLists, updatedCodes } = useAdminState();
 
-  const router = useRouter();
-
-  const catalogId = `${router.query.catalogId}`;
   const createCodeList = useCreateCodeList(catalogId);
   const deleteCodeList = useDeleteCodeList(catalogId);
   const updateCodeList = useUpdateCodeList(catalogId);

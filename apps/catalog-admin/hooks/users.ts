@@ -1,8 +1,13 @@
 import { AssignedUser } from '@catalog-frontend/types';
-import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
+import {
+  validOrganizationNumber,
+  validUUID,
+  textRegex,
+  emailRegex,
+  telephoneNumberRegex,
+} from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { compare } from 'fast-json-patch';
-import { textRegex, emailRegex, telephoneNumberRegex } from '@catalog-frontend/utils';
 
 export const useGetUsers = (catalogId: string) => {
   return useQuery({

@@ -6,7 +6,7 @@ export const validateImageFile = (file: File | null): Promise<boolean> => {
       resolve(false);
       return;
     }
-    if (!file.name.match(/\.(svg|png)$/)) {
+    if (!RegExp(/\.(svg|png)$/).exec(file.name)) {
       resolve(false);
       return;
     }
