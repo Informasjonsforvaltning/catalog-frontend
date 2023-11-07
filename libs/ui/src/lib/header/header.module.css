@@ -24,16 +24,8 @@
   height: 45px;
 }
 
-.logo * > path {
-  fill: #000;
-}
-
 .logoDemo * {
   height: 45px;
-}
-
-.logoDemo * > path {
-  fill: #000;
 }
 
 .logoDemo * > .st1 {
