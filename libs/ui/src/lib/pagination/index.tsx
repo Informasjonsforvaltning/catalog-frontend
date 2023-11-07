@@ -1,23 +1,32 @@
 'use client';
 
-import { ArrowLeftIcon, ArrowRightIcon } from '@navikt/aksel-icons';
-import ReactPaginate, { ReactPaginateProps } from 'react-paginate';
+import { Pagination as DSPagination } from '@digdir/design-system-react';
 import styles from './pagination.module.css';
-const Pagination = ({ ...rest }: ReactPaginateProps) => (
-  <ReactPaginate
-    {...rest}
-    pageCount={rest.pageCount}
-    previousLabel={<ArrowLeftIcon />}
-    nextLabel={<ArrowRightIcon />}
-    breakLabel='...'
-    marginPagesDisplayed={1}
-    pageRangeDisplayed={2}
-    pageLinkClassName={styles.pageLink}
-    containerClassName={styles.paginationContainer}
-    activeClassName={styles.active}
-    previousClassName={styles.arrowIcon}
-    nextClassName={styles.arrowIcon}
-  />
-);
+
+interface Props {
+  onPageChange(selectedItem: { selected: number }): void;
+  totalPages: number;
+  currentPage: number;
+}
+
+const Pagination = ({ onPageChange, totalPages, currentPage }: Props) => {
+  const handleOnChange = (selectedItem: number) => {
+    onPageChange({ selected: selectedItem - 1 });
+  };
+
+  return (
+    <DSPagination
+      className={styles.paginationContainer}
+      currentPage={currentPage + 1}
+      totalPages={totalPages}
+      onChange={handleOnChange}
+      nextLabel='Neste'
+      previousLabel='Forrige'
+      itemLabel={(num) => `Side ${num}}`}
+      size='small'
+      compact={true}
+    />
+  );
+};
 
 export { Pagination };
