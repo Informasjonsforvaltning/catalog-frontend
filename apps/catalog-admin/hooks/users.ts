@@ -36,7 +36,7 @@ export const useCreateUser = (catalogId: string) => {
         return Promise.reject('Invalid organization number');
       }
 
-      if (user.name.length === 0) {
+      if (user?.name?.length === 0) {
         return Promise.reject('User must have a name');
       }
       const response = await fetch(`/api/users/${catalogId}`, {
@@ -46,7 +46,7 @@ export const useCreateUser = (catalogId: string) => {
         }),
         cache: 'no-store',
       });
-      return response.json();
+      return response;
     },
 
     onSuccess: () => {

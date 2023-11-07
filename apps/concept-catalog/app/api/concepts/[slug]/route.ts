@@ -13,7 +13,7 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
 
   if (req.method === 'POST' && slug === 'import') {
     try {
-      const concepts = JSON.parse(await req.json());
+      const concepts = await req.json();
       const response = await importConcepts(concepts, session?.accessToken);
       return new Response(JSON.stringify(response), { status: response.status });
     } catch (error) {

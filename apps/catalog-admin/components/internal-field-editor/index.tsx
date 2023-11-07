@@ -16,7 +16,6 @@ import {
   useDeleteInternalField,
   useUpdateInternalField,
 } from '../../hooks/internal-fields';
-import { useRouter } from 'next/navigation';
 
 const fieldTypeOptions: { [key: string]: SelectOption } = {
   shortText: { label: 'Kort tekst', value: 'text_short' },
@@ -71,8 +70,8 @@ export const InternalFieldEditor = ({ catalogId, field, type }: Props) => {
   };
 
   const handleUpdateDbInternalField = (fieldId: string) => {
-    const updatedField: InternalField | undefined = updatedFieldsList.find((field) => field.id === fieldId)!;
-    const dbField: InternalField | undefined = dbFields.find((field) => field.id === fieldId)!;
+    const updatedField: InternalField | undefined = updatedFieldsList.find((field) => field.id === fieldId);
+    const dbField: InternalField | undefined = dbFields.find((field: { id: string }) => field.id === fieldId)!;
 
     if (!updatedField || !dbField) {
       window.alert(localization.alert.noChanges);

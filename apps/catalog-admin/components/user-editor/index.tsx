@@ -69,15 +69,17 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
   const updateUserState = (userId: string, newName?: string, newEmail?: string, newTelephoneNumber?: string) => {
     const updatedUserListIndex = updatedUserList.findIndex((user) => user?.id === userId);
     const userToUpdate =
-      updatedUserListIndex !== -1 ? updatedUserList[updatedUserListIndex] : dbUsers.find((user) => user?.id === userId);
+      updatedUserListIndex !== -1
+        ? updatedUserList[updatedUserListIndex]
+        : dbUsers?.find((user) => user?.id === userId);
     const updatedUserListsCopy = [...updatedUserList];
 
     if (userToUpdate) {
       const updatedUser = {
         ...userToUpdate,
-        name: newName !== undefined ? newName : userToUpdate.name,
-        email: newEmail !== undefined ? newEmail : userToUpdate.email,
-        telephoneNumber: newTelephoneNumber !== undefined ? newTelephoneNumber : userToUpdate.telephoneNumber,
+        name: newName ?? userToUpdate.name,
+        email: newEmail ?? userToUpdate.email,
+        telephoneNumber: newTelephoneNumber ?? userToUpdate.telephoneNumber,
       };
       if (updatedUserListIndex !== -1) {
         updatedUserListsCopy[updatedUserListIndex] = updatedUser;

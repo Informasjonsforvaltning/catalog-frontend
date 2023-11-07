@@ -31,13 +31,13 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }) => {
     dbCodeLists.filter((codeList: CodeList) => codeList.name.toLowerCase().includes(search.toLowerCase()));
 
   useWarnIfUnsavedChanges(
-    updatedCodeLists.some((codeList) => {
+    updatedCodeLists?.some((codeList) => {
       const dbCodeList = dbCodeLists.find((list) => list.id === codeList.id);
       if (!dbCodeList) {
         return true;
       }
       return compare(dbCodeList, codeList).length > 0;
-    }) || dirtyCodeLists.length > 0,
+    }) ?? dirtyCodeLists.length > 0,
   );
 
   useEffect(() => {

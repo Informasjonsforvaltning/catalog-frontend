@@ -16,3 +16,4 @@ export * from './lib/regex/regex';
 export * from './lib/code-list';
 export * from './lib/reference-data';
 export * from './lib/auth/auth-options';
+export * from './lib/auth/helpers';

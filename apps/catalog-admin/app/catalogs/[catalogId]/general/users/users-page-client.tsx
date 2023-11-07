@@ -122,7 +122,7 @@ export const UsersPageClient = ({ catalogId, organization }) => {
                   <Accordion.Content>
                     <UserEditor
                       user={user}
-                      catalogId={''}
+                      catalogId={catalogId}
                     />
                   </Accordion.Content>
                 </Accordion.Item>
