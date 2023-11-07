@@ -1,6 +1,5 @@
 import { readString } from 'react-papaparse';
 import type { ParseResult } from 'papaparse';
-
 import { Concept } from '@catalog-frontend/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { validOrganizationNumber } from '@catalog-frontend/utils';
@@ -16,7 +15,7 @@ const mapToSingleValue = (csvMap: Record<string, string[]>, key: string) => {
 
 const mapRowToLanguageValue = (csvMap: Record<string, string[]>, columnName: string): Record<string, string> => {
   return Object.entries(csvMap).reduce((prev, [key, [value]]) => {
-    if (value && key.startsWith(columnName)) {
+    if (value && key.startsWith(`${columnName}:`)) {
       const [field, language] = key.split(':');
 
       return { ...prev, ...(field && { [language ?? 'nb']: value }) };
@@ -28,7 +27,7 @@ const mapRowToLanguageValue = (csvMap: Record<string, string[]>, columnName: str
 
 const mapRowToLanguageValueList = (csvMap: Record<string, string[]>, columnName: string): Record<string, string[]> => {
   return Object.entries(csvMap).reduce((prev, [key, [value]]) => {
-    if (value && key.startsWith(columnName)) {
+    if (value && key.startsWith(`${columnName}:`)) {
       const [field, language] = key.split(':');
 
       return {
@@ -58,9 +57,9 @@ const createCsvMap = (header: string[], data: string[]) => {
 
 const mapKilde = (
   csvMap: Record<string, string[]>,
-  type: 'definisjon' | 'definisjonForAllmennheten' | 'definisjonForSpesialister',
+  type: 'definisjon' | 'definisjon_for_allmennheten' | 'definisjon_for_spesialister',
 ) => {
-  const forholdTilKilde = mapToSingleValue(csvMap, `${type}Forholdtilkilde`);
+  const forholdTilKilde = mapToSingleValue(csvMap, `${type}:forhold_til_kilde`);
   if (forholdTilKilde && forholdTilKilde?.toLowerCase() === 'egendefinert') {
     return {
       forholdTilKilde,
@@ -68,7 +67,7 @@ const mapKilde = (
     };
   }
 
-  const formatterteKilder = csvMap[`${type}Kilde`]?.map((kilde) => {
+  const formatterteKilder = csvMap[`${type}:kilde`]?.map((kilde) => {
     const [tekst, uri] = kilde.split('|');
     if (!tekst && !uri) {
       throw new Error(`Kilder skal være på følgende format "kilde|uri", men var følgende:  ${kilde}`);
@@ -85,46 +84,47 @@ const mapKilde = (
 
 const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Concept, 'id' | 'ansvarligVirksomhet'> => {
   const csvMap = createCsvMap(columnHeaders, data);
+  const version = mapToSingleValue(csvMap, 'versjon') || '0.1.0';
+
   return {
-    originaltBegrep: mapToSingleValue(csvMap, 'originaltBegrep') ?? '',
+    originaltBegrep: mapToSingleValue(csvMap, 'originalt_begrep') ?? '',
     versjonsnr: {
-      major: parseInt(mapToSingleValue(csvMap, 'major') ?? '0', 10),
-      minor: parseInt(mapToSingleValue(csvMap, 'minor') ?? '0', 10),
-      patch: parseInt(mapToSingleValue(csvMap, 'patch') ?? '0', 10),
+      major: parseInt(version.split('.')?.[0] ?? '0', 10),
+      minor: parseInt(version.split('.')?.[1] ?? '0', 10),
+      patch: parseInt(version.split('.')?.[2] ?? '0', 10),
     },
     revisjonAv: mapToSingleValue(csvMap, 'revisjonAv') ?? '',
-    anbefaltTerm: { navn: mapRowToLanguageValue(csvMap, 'anbefaltterm') },
-    tillattTerm: mapRowToLanguageValueList(csvMap, 'tillattterm'),
-    frarådetTerm: mapRowToLanguageValueList(csvMap, 'frarådetterm'),
+    anbefaltTerm: { navn: mapRowToLanguageValue(csvMap, 'anbefalt_term') },
+    tillattTerm: mapRowToLanguageValueList(csvMap, 'tillatt_term'),
+    frarådetTerm: mapRowToLanguageValueList(csvMap, 'frarådet_term'),
     definisjon: {
       tekst: mapRowToLanguageValue(csvMap, 'definisjon'),
       kildebeskrivelse: mapKilde(csvMap, 'definisjon'),
     },
     definisjonForAllmennheten: {
-      tekst: mapRowToLanguageValue(csvMap, 'definisjonForAllmennheten'),
-      kildebeskrivelse: mapKilde(csvMap, 'definisjonForAllmennheten'),
+      tekst: mapRowToLanguageValue(csvMap, 'definisjon_for_allmennheten'),
+      kildebeskrivelse: mapKilde(csvMap, 'definisjon_for_allmennheten'),
     },
     definisjonForSpesialister: {
-      tekst: mapRowToLanguageValue(csvMap, 'definisjonForSpesialister'),
-      kildebeskrivelse: mapKilde(csvMap, 'definisjonForSpesialister'),
+      tekst: mapRowToLanguageValue(csvMap, 'definisjon_for_spesialister'),
+      kildebeskrivelse: mapKilde(csvMap, 'definisjon_for_spesialister'),
     },
-    merknad: mapRowToLanguageValueList(csvMap, 'merknad'),
-    eksempel: mapRowToLanguageValueList(csvMap, 'eksempel'),
+    merknad: mapRowToLanguageValue(csvMap, 'merknad'),
+    eksempel: mapRowToLanguageValue(csvMap, 'eksempel'),
     fagområde: mapRowToLanguageValueList(csvMap, 'fagområde'),
-    bruksområde: mapRowToLanguageValueList(csvMap, 'bruksområde'),
-    gyldigFom: mapToSingleValue(csvMap, 'gyldigfom'),
-    gyldigTom: mapToSingleValue(csvMap, 'gyldigtom'),
+    gyldigFom: mapToSingleValue(csvMap, 'gyldig_fom'),
+    gyldigTom: mapToSingleValue(csvMap, 'gyldig_tom'),
 
     omfang: {
-      uri: mapToSingleValue(csvMap, 'omfang_uri'),
-      tekst: mapToSingleValue(csvMap, 'omfang_tekst'),
+      uri: mapToSingleValue(csvMap, 'verdiområde:uri'),
+      tekst: mapToSingleValue(csvMap, 'verdiområde:tekst'),
     },
-    seOgså: csvMap?.seogså?.[0]?.split('|') ?? [],
+    seOgså: mapToSingleValue(csvMap, 'se_også')?.split('|') ?? [],
     kontaktpunkt: {
-      harEpost: mapToSingleValue(csvMap, 'kontaktpunkt_epost'),
-      harTelefon: mapToSingleValue(csvMap, 'kontaktpunkt_telefon'),
+      harEpost: mapToSingleValue(csvMap, 'kontaktpunkt:epost'),
+      harTelefon: mapToSingleValue(csvMap, 'kontaktpunkt:telefon'),
     },
-    assignedUser: mapToSingleValue(csvMap, 'tildeltBruker_id') ?? '',
+    assignedUser: mapToSingleValue(csvMap, 'tildelt_bruker_id') ?? '',
   };
 };
 
@@ -164,15 +164,21 @@ export const useImportConcepts = (catalogId: string) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ['importConcepts'],
-    mutationFn: async (content: string) => {
+    mutationFn: async (file: File) => {
       if (!validOrganizationNumber(catalogId)) {
         return Promise.reject('Invalid catalog id');
       }
 
-      const parsedText =
-        (await attemptToParseJsonFile(content)) ??
-        (await attemptToParseCsvFile(content)) ??
-        (await Promise.resolve([]));
+      const content = await file.text();
+      let parsedText = [];
+      if (file.type === 'application/json') {
+        parsedText = await attemptToParseJsonFile(content);
+      } else if (file.type === 'text/csv') {
+        parsedText = await attemptToParseCsvFile(content);
+      } else {
+        Promise.reject('Invalid file type');
+      }
+
       const concepts = parsedText?.map(
         (concept) =>
           ({
@@ -192,7 +198,12 @@ export const useImportConcepts = (catalogId: string) => {
           return Promise.reject('Unauthorized');
         }
 
-        return response;
+        if (response.status > 399) {
+          const errorMessage = await response.text();
+          return Promise.reject(errorMessage);
+        }
+
+        return Promise.resolve();
       }
 
       return Promise.reject('Canceled');

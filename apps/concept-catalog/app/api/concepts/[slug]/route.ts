@@ -11,7 +11,13 @@ export const POST = async (req: NextRequest, { params }: { params: { slug: strin
     try {
       const concepts = await req.json();
       const response = await importConcepts(concepts, session?.accessToken);
-      return new Response(JSON.stringify(response), { status: response.status });
+
+      if (response.status > 399) {
+        const error = await response.json();
+        return new Response(error?.message ?? 'Failed to import concept', { status: response.status });
+      } else {
+        return new Response('', { status: response.status });
+      }
     } catch (error) {
       console.error(error);
       return new Response('Failed to import concept', { status: 500 });

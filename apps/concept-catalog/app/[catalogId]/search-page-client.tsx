@@ -205,9 +205,7 @@ export const SearchPageClient = ({
   };
 
   const onImportUpload = (event) => {
-    event.target.files[0].text().then((text) => {
-      importConcepts.mutate(text);
-    });
+    importConcepts.mutate(event.target.files[0], { onError: (error) => alert('Import failed: ' + error) });
   };
 
   const onCreateConceptClick = () => {
