@@ -2,6 +2,7 @@ import { Layout, NextAuthProvider, ReactQueryClientProvider } from '@catalog-fro
 import { localization } from '@catalog-frontend/utils';
 import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import './global.css';
 
 export const metadata: Metadata = {
   title: localization.catalogType.admin,
