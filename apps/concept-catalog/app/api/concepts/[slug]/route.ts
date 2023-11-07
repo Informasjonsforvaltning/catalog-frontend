@@ -3,7 +3,7 @@ import { authOptions } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import { NextRequest } from 'next/server';
 
-async function handler(req: NextRequest, { params }: { params: { slug: string } }) {
+export async function POST(req: NextRequest, { params }: { params: { slug: string } }) {
   const session = await getServerSession(authOptions);
   if (!session || session?.accessTokenExpiresAt < Date.now() / 1000) {
     return new Response('Unauthorized', { status: 401 });
@@ -44,5 +44,3 @@ async function handler(req: NextRequest, { params }: { params: { slug: string } 
 
   return new Response('Invalid request', { status: 400 });
 }
-
-export { handler as GET, handler as POST, handler as PUT, handler as DELETE };
