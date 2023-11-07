@@ -1,6 +1,6 @@
 import { getUsers } from '@catalog-frontend/data-access';
+import { authOptions } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]/route';
 
 export async function handler({ params }: { params: { slug: string } }) {
   const session = await getServerSession(authOptions);

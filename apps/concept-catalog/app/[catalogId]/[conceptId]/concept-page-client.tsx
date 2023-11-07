@@ -361,9 +361,7 @@ export const ConceptPageClient = ({
     const revision = revisions?.find((revision) => !revision.erPublisert);
     const id = revision ? revision.id : concept?.id;
     if (validOrganizationNumber(catalogId) && validUUID(id)) {
-      router
-        .push(`/${catalogId}/${id}/edit`)
-        .catch((err) => console.error('Failed to navigate to concept edit page: ', err));
+      router.push(`/${catalogId}/${id}/edit`);
     }
   };
 

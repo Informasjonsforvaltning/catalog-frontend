@@ -5,6 +5,7 @@ import {
   hasSystemAdminPermission,
   validOrganizationNumber,
   prepareStatusList,
+  authOptions,
 } from '@catalog-frontend/utils';
 import { CodeListsResult, FieldsResult, Organization, UsersResult } from '@catalog-frontend/types';
 import {
@@ -15,7 +16,6 @@ import {
   getUsers,
 } from '@catalog-frontend/data-access';
 import { Session, getServerSession } from 'next-auth';
-import { authOptions } from '../api/auth/[...nextauth]/route';
 import { SearchPageClient } from './search-page-client';
 import { RedirectType, redirect } from 'next/navigation';
 
@@ -24,7 +24,7 @@ const SearchPage = async ({ params }) => {
   const { catalogId } = params;
 
   if (!validOrganizationNumber(catalogId)) {
-    return { notFound: true };
+    redirect(`/not-found`, RedirectType.replace);
   }
 
   if (!(session?.user && session?.accessTokenExpiresAt && Date.now() < session?.accessTokenExpiresAt * 1000)) {

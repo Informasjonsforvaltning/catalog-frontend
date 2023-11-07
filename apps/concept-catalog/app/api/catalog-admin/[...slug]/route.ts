@@ -1,6 +1,6 @@
 import { getDesign, getDesignLogo } from '@catalog-frontend/data-access';
+import { authOptions } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../auth/[...nextauth]/route';
 import { NextRequest } from 'next/server';
 
 async function handler(req: NextRequest, { params }: { params: { slug: string } }) {

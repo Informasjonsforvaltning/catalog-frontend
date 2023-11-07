@@ -31,7 +31,6 @@
   justify-content: stretch;
   justify-content: space-between;
   margin-bottom: 1rem;
-  gap: 5rem;
 }
 
 .searchRowContainer > div:first-of-type {
@@ -42,6 +41,10 @@
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+.searchOptions > span {
+  min-width: 15rem;
 }
 
 .buttonsContainer {

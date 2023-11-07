@@ -1,9 +1,8 @@
 import { getOrganization } from '@catalog-frontend/data-access';
 import { Organization, Concept, ChangeRequestUpdateBody } from '@catalog-frontend/types';
-import { hasOrganizationReadPermission, validOrganizationNumber } from '@catalog-frontend/utils';
+import { authOptions, hasOrganizationReadPermission, validOrganizationNumber } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import jsonpatch from 'fast-json-patch';
-import { authOptions } from '../../../api/auth/[...nextauth]/route';
 import { RedirectType, redirect } from 'next/navigation';
 import NewConceptSuggestionClient from './new-concept-suggestion-client';
 
@@ -22,7 +21,7 @@ const NewConceptSuggestion = async ({ params }) => {
   }
 
   if (!validOrganizationNumber(catalogId)) {
-    return { notFound: true };
+    redirect(`/not-found`, RedirectType.replace);
   }
 
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());

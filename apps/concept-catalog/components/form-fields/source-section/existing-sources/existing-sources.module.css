@@ -9,7 +9,7 @@
 }
 
 .existingValue {
-  composes: currentValue from '../form-fields.module.css';
+  composes: currentValue from '../../form-fields.module.css';
 }
 
 .sourceEntry {

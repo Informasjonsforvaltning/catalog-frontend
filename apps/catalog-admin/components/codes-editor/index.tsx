@@ -29,7 +29,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   const adminDispatch = useAdminDispatch();
   const { updatedCodeLists, updatedCodes } = useAdminState();
 
-  const codeListInContext = updatedCodeLists.find((codeList) => codeList.id === dbCodeList.id);
+  const codeListInContext = updatedCodeLists?.find((codeList) => codeList.id === dbCodeList.id);
   const currentCodeList = codeListInContext ?? dbCodeList;
   const codes = updatedCodes ? updatedCodes[dbCodeList?.id] || updatedCodes['0'] : [];
 
@@ -39,7 +39,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   const setDirtyState = () => {
     if (dirty) {
       const isDirty =
-        compare(dbCodeList?.codes ?? [], updatedCodes[dbCodeList?.id] ?? []).length > 0 ||
+        compare(dbCodeList?.codes ?? [], updatedCodes ? updatedCodes[dbCodeList?.id] : []).length > 0 ||
         (selectedCode && !dbCodeList?.codes?.includes(selectedCode));
       dirty(isDirty);
     }

@@ -5,6 +5,7 @@ import React from 'react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Banner } from '../../../../components/banner';
 import { PaletteIcon, PersonIcon } from '@navikt/aksel-icons';
+import styles from './general-page.module.css';
 
 export const GeneralPageClient = ({ catalogId, organization }) => {
   const breadcrumbList = catalogId
@@ -24,7 +25,7 @@ export const GeneralPageClient = ({ catalogId, organization }) => {
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <Banner orgName={organization?.prefLabel} />
-      <div className='card'>
+      <div className={styles.cardsContainer}>
         <Card
           icon={<PaletteIcon fontSize='3rem' />}
           title={localization.catalogAdmin.design}

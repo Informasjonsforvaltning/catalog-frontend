@@ -1,12 +1,16 @@
-import { hasOrganizationWritePermission, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
+import {
+  authOptions,
+  hasOrganizationWritePermission,
+  validOrganizationNumber,
+  validUUID,
+} from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../../../api/auth/[...nextauth]/route';
-import { redirect } from 'next/navigation';
+import { RedirectType, redirect } from 'next/navigation';
 
 export async function EditPage({ params }) {
   const { catalogId, conceptId } = params;
   if (!(validOrganizationNumber(catalogId) && validUUID(conceptId))) {
-    return { notFound: true };
+    redirect(`/not-found`, RedirectType.replace);
   }
 
   const session = await getServerSession(authOptions);

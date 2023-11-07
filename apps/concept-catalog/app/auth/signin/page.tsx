@@ -1,9 +1,8 @@
 import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Heading } from '@digdir/design-system-react';
-import HeadingContent from './heading-content';
+import Heading from './heading';
 
-export const SignIn = ({ FDK_REGISTRATION_BASE_URI }) => {
+export const SignIn = () => {
   const breadcrumbList = [
     {
       href: `#`,
@@ -14,7 +13,7 @@ export const SignIn = ({ FDK_REGISTRATION_BASE_URI }) => {
   return (
     <>
       <Breadcrumbs
-        baseURI={FDK_REGISTRATION_BASE_URI}
+        baseURI={process.env.FDK_REGISTRATION_BASE_URI}
         breadcrumbList={breadcrumbList}
       />
       <PageBanner
@@ -22,12 +21,7 @@ export const SignIn = ({ FDK_REGISTRATION_BASE_URI }) => {
         subtitle={localization.auth.login}
       />
       <CenterContainer>
-        <Heading
-          level={2}
-          size='small'
-        >
-          <HeadingContent />
-        </Heading>
+        <Heading />
       </CenterContainer>
     </>
   );

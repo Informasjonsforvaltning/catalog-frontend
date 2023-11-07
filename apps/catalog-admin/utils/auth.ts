@@ -1,13 +1,12 @@
-import { hasOrganizationAdminPermission, validOrganizationNumber } from '@catalog-frontend/utils';
+import { authOptions, hasOrganizationAdminPermission, validOrganizationNumber } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../app/api/auth/[...nextauth]/route';
-import { redirect } from 'next/navigation';
+import { RedirectType, redirect } from 'next/navigation';
 
 export const checkAdminPermissions = async (catalogId: string) => {
   const session = await getServerSession(authOptions);
 
   if (!validOrganizationNumber(catalogId)) {
-    return { notFound: true };
+    redirect(`/not-found`, RedirectType.replace);
   }
 
   if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
