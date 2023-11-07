@@ -1,3 +1,5 @@
+'use client';
+
 import { Button as DigdirButton } from '@digdir/design-system-react';
 import cn from './button.module.css';
 

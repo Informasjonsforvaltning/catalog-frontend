@@ -4,7 +4,7 @@ import { BreadcrumbType, Breadcrumbs, Button, SearchField } from '@catalog-front
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useGetUsers } from '../../../../../hooks/users';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { AssignedUser, Organization } from '@catalog-frontend/types';
 import { Banner } from '../../../../../components/banner';
 import { serverSidePropsWithAdminPermissions } from '../../../../../utils/auth';

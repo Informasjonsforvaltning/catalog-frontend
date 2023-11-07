@@ -1,3 +1,5 @@
+'use client';
+
 import { FC } from 'react';
 import { Select, SingleSelectOption } from '@digdir/design-system-react';
 import { localization as loc } from '@catalog-frontend/utils';

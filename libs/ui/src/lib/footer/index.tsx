@@ -2,9 +2,6 @@ import { FC } from 'react';
 import Link from '../link';
 
 import styles from './footer.module.css';
-import EmailIcon from './images/email.svg';
-import TwitterIcon from './images/twitter.svg';
-import Illustration from './images/illustration.svg';
 import { localization } from '@catalog-frontend/utils';
 
 export interface FooterProps {
@@ -25,7 +22,6 @@ export const Footer: FC<FooterProps> = ({ fontColor, backgroundColor }) => (
     className={styles.footer}
     style={{ ...(fontColor ? { color: fontColor } : {}), ...(backgroundColor ? { background: backgroundColor } : {}) }}
   >
-    <Illustration className={styles.illustration} />
     <div className={styles.content}>
       <div className={styles.column}>{localization.footer.digdirManagesNationalDataCatalog}</div>
       <div className={styles.column}>
@@ -37,16 +33,8 @@ export const Footer: FC<FooterProps> = ({ fontColor, backgroundColor }) => (
         </Link>
       </div>
       <div className={styles.column}>
-        <Link
-          href='mailto:fellesdatakatalog@digdir.no'
-          icon={<EmailIcon />}
-        >
-          fellesdatakatalog@digdir.no
-        </Link>
-        <Link
-          href='https://twitter.com/datakatalogen?ref_src=twsrc%5Etfw%7Ctwcamp%5Eembeddedtimeline%7Ctwterm%5Eprofile%3Adatakatalogen&ref_url=https%3A%2F%2Ffellesdatakatalog.digdir.no%2F'
-          icon={<TwitterIcon />}
-        >
+        <Link href='mailto:fellesdatakatalog@digdir.no'>fellesdatakatalog@digdir.no</Link>
+        <Link href='https://twitter.com/datakatalogen?ref_src=twsrc%5Etfw%7Ctwcamp%5Eembeddedtimeline%7Ctwterm%5Eprofile%3Adatakatalogen&ref_url=https%3A%2F%2Ffellesdatakatalog.digdir.no%2F'>
           {localization.footer.twitter}
         </Link>
       </div>

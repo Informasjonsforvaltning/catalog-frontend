@@ -3,7 +3,7 @@ import { TrashIcon, UploadIcon } from '@navikt/aksel-icons';
 import { localization } from '@catalog-frontend/utils';
 import { UploadButton } from '@catalog-frontend/ui';
 import { validateImageFile } from '@catalog-frontend/utils';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useDeleteLogo, useGetLogo, useUpdateLogo } from '../../hooks/design';
 import { useAdminDispatch } from '../../context/admin';
 import styles from './image-uploader.module.css';

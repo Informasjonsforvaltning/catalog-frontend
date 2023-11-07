@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { Footer } from '../footer';
-import Header from '../header';
+import { Header } from '../header';
 import { RouteGuard } from '@catalog-frontend/utils';
 import cn from 'classnames';
 

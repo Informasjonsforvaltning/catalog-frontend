@@ -1,6 +1,6 @@
 import { hashCode, localization } from '@catalog-frontend/utils';
-import StyledBreadcrumbs, { InternalLink, ExternalLink, Separator, DeactiveLink } from './styled';
-
+import styles from './breadcrumbs.module.css';
+import Link from 'next/link';
 export type BreadcrumbType = {
   href: string;
   text: string;
@@ -15,29 +15,34 @@ export interface BreadcrumbsProps {
 const Breadcrumbs = ({ baseURI, breadcrumbList }: BreadcrumbsProps) => {
   return (
     <div className='container'>
-      <StyledBreadcrumbs>
+      <nav className={styles.breadcrumbs}>
         <span>
-          <ExternalLink
+          <a
+            className={styles.link}
             aria-label={localization.chooseOrganizaiton}
-            href={baseURI || '/'}
+            href={baseURI ?? '/'}
           >
             {localization.chooseOrganizaiton}
-          </ExternalLink>
-          {breadcrumbList &&
-            breadcrumbList.map((breadcrumb, i) => {
-              return (
-                <span key={hashCode(breadcrumb.href)}>
-                  <Separator>{'>'}</Separator>
-                  {i === breadcrumbList.length - 1 ? (
-                    <DeactiveLink>{breadcrumb.text}</DeactiveLink>
-                  ) : (
-                    <InternalLink href={breadcrumb.href}>{breadcrumb.text}</InternalLink>
-                  )}
-                </span>
-              );
-            })}
+          </a>
+          {breadcrumbList?.map((breadcrumb, i) => {
+            return (
+              <span key={hashCode(breadcrumb.href)}>
+                <span className={styles.separator}>{'>'}</span>
+                {i === breadcrumbList.length - 1 ? (
+                  <span className={styles.deactiveLink}>{breadcrumb.text}</span>
+                ) : (
+                  <Link
+                    href={breadcrumb.href}
+                    className={styles.link}
+                  >
+                    {breadcrumb.text}
+                  </Link>
+                )}
+              </span>
+            );
+          })}
         </span>
-      </StyledBreadcrumbs>
+      </nav>
     </div>
   );
 };
