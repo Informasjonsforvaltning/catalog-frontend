@@ -1,13 +1,15 @@
+'use client';
+
 import { FC } from 'react';
 import styles from './source-section.module.css';
 import { localization as loc } from '@catalog-frontend/utils';
 import { Definisjon, Kilde } from '@catalog-frontend/types';
-import { ExistingSources } from './existing-sources';
-import { RelationToSource } from './relation-to-source';
 import { FieldArray } from 'formik';
 import { SourceForDefinitionField } from './source-for-definition';
 import { Button } from '@digdir/design-system-react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { RelationToSource } from './relation-to-source';
+import { ExistingSources } from './existing-sources';
 
 interface Props {
   fieldName: string;

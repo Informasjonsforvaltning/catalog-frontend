@@ -211,12 +211,6 @@ export const SearchPageClient = ({
     });
   };
 
-  const onSeeChangeRequests = () => {
-    if (validOrganizationNumber(catalogId)) {
-      router.push(`${catalogId}/change-requests`);
-    }
-  };
-
   const onCreateConceptClick = () => {
     if (validOrganizationNumber(catalogId)) {
       router.push(`/${catalogId}/new`);
@@ -263,12 +257,6 @@ export const SearchPageClient = ({
         <div className={styles.pageContainer}>
           <div className={styles.secondRowContainer}>
             <div className={styles.buttonsContainer}>
-              <Button
-                variant='outline'
-                onClick={onSeeChangeRequests}
-              >
-                {loc.changeRequest.seeChangeRequests}
-              </Button>
               {hasWritePermission && (
                 <Button
                   onClick={onCreateConceptClick}
@@ -301,8 +289,8 @@ export const SearchPageClient = ({
           <div className={styles.searchRowContainer}>
             <div>
               <SearchField
-                ariaLabel={loc.search.searchInAllFields}
-                placeholder={loc.search.searchInAllFields}
+                ariaLabel={loc.search.search}
+                placeholder={loc.search.search}
                 onSearchSubmit={onSearchSubmit}
               />
               <div className={styles.chips}>
@@ -397,7 +385,7 @@ export const SearchPageClient = ({
                 conceptStatuses={conceptStatuses}
               />
               {status === 'loading' || importConcepts.status === 'loading' ? (
-                <Spinner />
+                <Spinner title='Loading' />
               ) : (
                 <SearchHitContainer
                   data={data}

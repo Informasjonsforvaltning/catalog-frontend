@@ -1,20 +1,19 @@
 'use client';
 
-import { Checkbox } from '@digdir/design-system-react';
+import { Checkbox, Heading, Textfield } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
 import { useCatalogDesign } from '../../../../context/catalog-design';
-import { localization as loc, getTranslateText as translate } from '@catalog-frontend/utils';
+import { localization as loc } from '@catalog-frontend/utils';
 
 import { useState } from 'react';
 import { ChangeRequest, Concept, ISOLanguage, JsonPatchOperation } from '@catalog-frontend/types';
-import { FieldArray, Form, Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import { ConceptFormField } from '../../../../components/form-field-container';
 import { TextAreaField } from '../../../../components/form-fields/text-area-field';
-import { RelationToSource } from '../../../../components/form-fields/relation-to-source';
-import { SourceForDefinitionField } from '../../../../components/form-fields/source-for-definition';
-import { PlusCircleIcon } from '@navikt/aksel-icons';
+
 import jsonpatch from 'fast-json-patch';
 import styles from './change-request-page.module.css';
+import { SourceSection } from '../../../..//components/form-fields/source-section';
 
 const languageOptions = [
   { value: 'nb', label: 'Norsk bokmål' },
@@ -34,6 +33,8 @@ export const ChangeRequestForm = ({
   const changeRequestId = changeRequest.id;
   const catalogId = organization?.organizationId;
   const pageSubtitle = organization?.name ?? organization?.id;
+  const [changeRequestTitle, setChangeRequestTitle] = useState<string>(changeRequest.title ?? '');
+  const [editTitleFlag, setEditTitleFlag] = useState<boolean>(false);
 
   const [selectedLanguages, setSelectedLanguages] = useState<ISOLanguage[]>(['nb', 'nn', 'en']);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -62,16 +63,6 @@ export const ChangeRequestForm = ({
     newSelectedLangs.sort((a, b) => sortKey.indexOf(a) - sortKey.indexOf(b));
     setSelectedLanguages(newSelectedLangs as ISOLanguage[]);
   };
-
-  const getTitle = (text: string | string[]) => (text ? text : loc.concept.noName);
-  let changeRequestTitle = '';
-  if (changeRequestId) {
-    changeRequestTitle = changeRequestAsConcept?.anbefaltTerm?.navn
-      ? getTitle(translate(changeRequestAsConcept?.anbefaltTerm?.navn))
-      : changeRequestId;
-  } else {
-    changeRequestTitle = loc.suggestionForNewConcept;
-  }
 
   const breadcrumbList = changeRequestId
     ? ([
@@ -125,7 +116,44 @@ export const ChangeRequestForm = ({
               ))}
             </Checkbox.Group>
           </div>
-          <h1 className={styles.pageTitle}>{changeRequestTitle}</h1>
+          <div className={styles.titleContainer}>
+            {editTitleFlag ? (
+              <Textfield
+                type='text'
+                value={changeRequestTitle}
+                label={loc.title}
+                onChange={(e) => setChangeRequestTitle(e.target.value)}
+                size='medium'
+              />
+            ) : (
+              <Heading
+                level={2}
+                size='xsmall'
+                className={styles.pageTitleText}
+              >
+                {changeRequestTitle}
+              </Heading>
+            )}
+            {editTitleFlag ? (
+              <Button
+                variant='outline'
+                color='secondary'
+                onClick={() => {
+                  setEditTitleFlag(false);
+                }}
+              >
+                {loc.button.close}
+              </Button>
+            ) : (
+              <Button
+                variant='outline'
+                color='secondary'
+                onClick={() => setEditTitleFlag(true)}
+              >
+                {loc.changeRequest.editTitle}
+              </Button>
+            )}
+          </div>
           <Formik
             initialValues={changeRequestAsConcept}
             onSubmit={(values) => {
@@ -170,34 +198,12 @@ export const ChangeRequestForm = ({
                     title={loc.conceptHelptexts.kildeTilDefinisjonTitle}
                     subtitle={loc.conceptHelptexts.kildeTilDefinisjonDescription}
                   >
-                    <RelationToSource fieldName={'definisjon.kildebeskrivelse.forholdTilKilde'} />
-                    <FieldArray name='definisjon.kildebeskrivelse.kilde'>
-                      {(arrayHelpers) => (
-                        <>
-                          <div className={styles.listContainer}>
-                            {values.definisjon?.kildebeskrivelse?.kilde?.map((_, index) => (
-                              <SourceForDefinitionField
-                                key={`${index}`}
-                                sourceTitleFieldName={`definisjon.kildebeskrivelse.kilde[${index}].tekst`}
-                                sourceUriFieldName={`definisjon.kildebeskrivelse.kilde[${index}].uri`}
-                                deleteClickHandler={() => arrayHelpers.remove(index)}
-                              />
-                            ))}
-                          </div>
-                          <div>
-                            <Button
-                              icon={<PlusCircleIcon />}
-                              color='secondary'
-                              variant='filled'
-                              size='small'
-                              onClick={() => arrayHelpers.push({ uri: '', tekst: '' })}
-                            >
-                              {loc.formatString(loc.button.addWithFormat, { text: loc.concept.source.toLowerCase() })}
-                            </Button>
-                          </div>
-                        </>
-                      )}
-                    </FieldArray>
+                    <SourceSection
+                      fieldName='definisjon.kildebeskrivelse'
+                      definisjon={values.definisjon}
+                      originalSources={originalConcept?.definisjon?.kildebeskrivelse}
+                      showOriginal={showOriginal}
+                    />
                   </ConceptFormField>
                   <ConceptFormField
                     title={loc.conceptHelptexts.folkeligForklaringTitle}
@@ -206,9 +212,9 @@ export const ChangeRequestForm = ({
                     {selectedLanguages.map((language) => (
                       <TextAreaField
                         key={language}
-                        fieldName={`folkeligForklaring.tekst.${language}`}
+                        fieldName={`definisjonForAllmennheten.tekst.${language}`}
                         fieldType={loc.concept.publicDefinition.toLowerCase()}
-                        originalText={originalConcept.folkeligForklaring?.tekst[language]}
+                        originalText={originalConcept?.definisjonForAllmennheten?.tekst[language]}
                         language={language}
                         rows={6}
                         showOriginal={showOriginal}
@@ -219,34 +225,12 @@ export const ChangeRequestForm = ({
                     title={loc.conceptHelptexts.folkeligForklaringKildeTitle}
                     subtitle={loc.conceptHelptexts.folkeligForklaringKildeDescription}
                   >
-                    <RelationToSource fieldName={'folkeligForklaring.kildebeskrivelse.forholdTilKilde'} />
-                    <FieldArray name='folkeligForklaring.kildebeskrivelse.kilde'>
-                      {(arrayHelpers) => (
-                        <>
-                          <div className={styles.listContainer}>
-                            {values?.folkeligForklaring?.kildebeskrivelse?.kilde?.map((_, index) => (
-                              <SourceForDefinitionField
-                                key={`${index}`}
-                                sourceTitleFieldName={`folkeligForklaring.kildebeskrivelse.kilde[${index}].tekst`}
-                                sourceUriFieldName={`folkeligForklaring.kildebeskrivelse.kilde[${index}].uri`}
-                                deleteClickHandler={() => arrayHelpers.remove(index)}
-                              />
-                            ))}
-                          </div>
-                          <div>
-                            <Button
-                              icon={<PlusCircleIcon />}
-                              color='secondary'
-                              variant='filled'
-                              size='small'
-                              onClick={() => arrayHelpers.push({ uri: '', tekst: '' })}
-                            >
-                              {loc.formatString(loc.button.addWithFormat, { text: loc.concept.source.toLowerCase() })}
-                            </Button>
-                          </div>
-                        </>
-                      )}
-                    </FieldArray>
+                    <SourceSection
+                      fieldName='definisjonForAllmennheten.kildebeskrivelse'
+                      definisjon={values.definisjonForAllmennheten}
+                      originalSources={originalConcept?.definisjonForAllmennheten?.kildebeskrivelse}
+                      showOriginal={showOriginal}
+                    />
                   </ConceptFormField>
                   <ConceptFormField
                     title={loc.conceptHelptexts.rettsligForklaringTitle}
@@ -257,7 +241,7 @@ export const ChangeRequestForm = ({
                         key={language}
                         fieldName={`rettsligForklaring.tekst.${language}`}
                         fieldType={loc.concept.publicDefinition.toLowerCase()}
-                        originalText={originalConcept.rettsligForklaring?.tekst[language]}
+                        originalText={originalConcept?.rettsligForklaring?.tekst[language]}
                         language={language}
                         rows={6}
                         showOriginal={showOriginal}
@@ -268,34 +252,12 @@ export const ChangeRequestForm = ({
                     title={loc.conceptHelptexts.rettsligForklaringKildeTitle}
                     subtitle={loc.conceptHelptexts.rettsligForklaringKildeDescription}
                   >
-                    <RelationToSource fieldName={'rettsligForklaring.kildebeskrivelse.forholdTilKilde'} />
-                    <FieldArray name='rettsligForklaring.kildebeskrivelse.kilde'>
-                      {(arrayHelpers) => (
-                        <>
-                          <div className={styles.listContainer}>
-                            {values.rettsligForklaring?.kildebeskrivelse?.kilde?.map((_, index) => (
-                              <SourceForDefinitionField
-                                key={`${index}`}
-                                sourceTitleFieldName={`rettsligForklaring.kildebeskrivelse.kilde[${index}].tekst`}
-                                sourceUriFieldName={`rettsligForklaring.kildebeskrivelse.kilde[${index}].uri`}
-                                deleteClickHandler={() => arrayHelpers.remove(index)}
-                              />
-                            ))}
-                          </div>
-                          <div>
-                            <Button
-                              icon={<PlusCircleIcon />}
-                              color='secondary'
-                              variant='filled'
-                              size='small'
-                              onClick={() => arrayHelpers.push({ uri: '', tekst: '' })}
-                            >
-                              {loc.formatString(loc.button.addWithFormat, { text: loc.concept.source.toLowerCase() })}
-                            </Button>
-                          </div>
-                        </>
-                      )}
-                    </FieldArray>
+                    <SourceSection
+                      fieldName='definisjonForSpesialister.kildebeskrivelse'
+                      definisjon={values.definisjonForSpesialister}
+                      originalSources={originalConcept?.definisjonForSpesialister?.kildebeskrivelse}
+                      showOriginal={showOriginal}
+                    />
                   </ConceptFormField>
                   <ConceptFormField
                     title={loc.conceptHelptexts.merknadTitle}

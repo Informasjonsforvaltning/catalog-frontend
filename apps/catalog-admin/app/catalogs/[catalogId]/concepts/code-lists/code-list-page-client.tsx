@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from './code-lists.module.css';
 import { Accordion, Heading } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, SearchField, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
@@ -12,6 +12,7 @@ import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
 import { Banner } from '../../../../../components/banner';
 import CodeListEditor from '../../../../../components/code-list-editor';
 import { PageLayout } from '../../../../../components/page-layout';
+import { compare } from 'fast-json-patch';
 
 const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }) => {
   const adminDispatch = useAdminDispatch();
@@ -19,23 +20,25 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }) => {
   const { showCodeListEditor, updatedCodeLists, updatedCodes } = adminContext;
 
   const [search, setSearch] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [isCodeChanged, setIsCodeChanged] = useState(false);
+  const [dirtyCodeLists, setDirtyCodeLists] = useState([]);
 
   const { data: getAllCodeLists } = useGetAllCodeLists({
     catalogId: catalogId,
   });
-  const dbCodeLists = getAllCodeLists?.codeLists || [];
+  const dbCodeLists = useMemo(() => getAllCodeLists?.codeLists || [], [getAllCodeLists]);
 
-  useWarnIfUnsavedChanges(updatedCodeLists?.length > 0 || isCodeChanged);
+  const filteredCodeLists = () =>
+    dbCodeLists.filter((codeList: CodeList) => codeList.name.toLowerCase().includes(search.toLowerCase()));
 
-  useEffect(() => {
-    const filteredCodeLists = dbCodeLists.filter((codeList: CodeList) =>
-      codeList.name.toLowerCase().includes(search.toLowerCase()),
-    );
-
-    setSearchResults(filteredCodeLists);
-  }, [getAllCodeLists, search]);
+  useWarnIfUnsavedChanges(
+    updatedCodeLists.some((codeList) => {
+      const dbCodeList = dbCodeLists.find((list) => list.id === codeList.id);
+      if (!dbCodeList) {
+        return true;
+      }
+      return compare(dbCodeList, codeList).length > 0;
+    }) || dirtyCodeLists.length > 0,
+  );
 
   useEffect(() => {
     // Adds a copy of the codes in context
@@ -123,8 +126,8 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }) => {
               </Accordion.Item>
             </Accordion>
           )}
-          {searchResults &&
-            searchResults?.map((codeList: CodeList, index: number) => (
+          {filteredCodeLists() &&
+            filteredCodeLists()?.map((codeList: CodeList, index: number) => (
               <Accordion
                 key={index}
                 border={true}
@@ -143,8 +146,18 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }) => {
                     <CodeListEditor
                       codeList={codeList}
                       codeListsInUse={codeListsInUse}
-                      onChange={() => setIsCodeChanged(true)}
                       catalogId={catalogId}
+                      dirty={(dirty) =>
+                        setDirtyCodeLists((prev) => {
+                          if (dirty && !prev.includes(codeList.id)) {
+                            return [...prev, codeList.id];
+                          }
+                          if (!dirty) {
+                            return prev.filter((id) => id !== codeList.id);
+                          }
+                          return prev;
+                        })
+                      }
                     />
                   </Accordion.Content>
                 </Accordion.Item>
