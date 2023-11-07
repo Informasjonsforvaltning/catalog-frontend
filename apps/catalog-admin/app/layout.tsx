@@ -3,6 +3,7 @@ import { localization } from '@catalog-frontend/utils';
 import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './global.css';
+import { AdminContextProvider } from '../context/admin';
 
 export const metadata: Metadata = {
   title: localization.catalogType.admin,
@@ -16,9 +17,11 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang={localization.getLanguage()}>
       <body>
         <NextAuthProvider>
-          <ReactQueryClientProvider>
-            <Layout className={font.className}>{children}</Layout>
-          </ReactQueryClientProvider>
+          <AdminContextProvider>
+            <ReactQueryClientProvider>
+              <Layout className={font.className}>{children}</Layout>
+            </ReactQueryClientProvider>
+          </AdminContextProvider>
         </NextAuthProvider>
       </body>
     </html>
