@@ -21,7 +21,14 @@ export const reducer = produce((state: SearchState, action: ACTION): SearchState
       return state;
     }
     case 'SET_INTERNAL_FIELDS_FILTER': {
-      state.filters.internalFields = action.payload.filters?.internalFields;
+      const internalFields = action.payload.filters?.internalFields;
+      if (internalFields) {
+        if (Object.values(internalFields).some((field) => field.length > 0)) {
+          state.filters.internalFields = internalFields;
+        } else {
+          delete state.filters.internalFields;
+        }
+      }
       return state;
     }
     case 'SET_ASSIGNED_USER_FILTER': {
