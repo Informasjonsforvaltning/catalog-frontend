@@ -1,7 +1,6 @@
 'use client';
 
 import { memo } from 'react';
-import { useRouter } from 'next/navigation';
 import { Accordion } from '@digdir/design-system-react';
 import { Select } from '@catalog-frontend/ui';
 import { AssignedUser, CodeList, InternalField, ReferenceDataCode } from '@catalog-frontend/types';
@@ -23,11 +22,10 @@ interface Props {
   internalFields?: InternalField[];
   subjectCodeList?: CodeList;
   conceptStatuses?: ReferenceDataCode[];
+  catalogId: string;
 }
 
-const SearchFilter = ({ internalFields, subjectCodeList, conceptStatuses }: Props) => {
-  const router = useRouter();
-  const catalogId = `${router.query?.catalogId}`;
+const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatuses }: Props) => {
   const searchDispatch = useSearchDispatch();
   const searchState = useSearchState();
   const assignedUserState = searchState.filters.assignedUser;
@@ -47,7 +45,11 @@ const SearchFilter = ({ internalFields, subjectCodeList, conceptStatuses }: Prop
   const assignedUserItems: AssignedUser[] = getUsers?.users;
 
   const handleOnStatusChange = (names: string[]) => {
-    searchDispatch(action('SET_CONCEPT_STATUS_FILTER', { filters: { status: names.map((name) => name as string) } }));
+    searchDispatch(
+      action('SET_CONCEPT_STATUS_FILTER', {
+        filters: { status: names.map((name) => name) },
+      }),
+    );
   };
 
   const handlePublicationOnChange = (names: string[]) =>
@@ -58,7 +60,7 @@ const SearchFilter = ({ internalFields, subjectCodeList, conceptStatuses }: Prop
     );
 
   const handleOnAssignedChange = (userId: string) => {
-    const assignedUser: AssignedUser = assignedUserItems.find((item) => item.id === userId);
+    const assignedUser: AssignedUser | undefined = assignedUserItems.find((item) => item.id === userId);
     searchDispatch(action('SET_ASSIGNED_USER_FILTER', { filters: { assignedUser } }));
   };
 
