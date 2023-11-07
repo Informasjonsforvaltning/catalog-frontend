@@ -540,7 +540,7 @@ export const ConceptPageClient = ({
                     </InfoCard.Item>
                   )}
                   {!_.isEmpty(translate(concept?.abbreviatedLabel, language)) && (
-                    <InfoCard.Item label={`${localization.concept.example}:`}>
+                    <InfoCard.Item label={`${localization.concept.abbreviation}:`}>
                       <span>{translate(concept?.abbreviatedLabel, language)}</span>
                     </InfoCard.Item>
                   )}

@@ -1,0 +1,159 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import styles from './code-lists.module.css';
+import { Accordion, Heading } from '@digdir/design-system-react';
+import { BreadcrumbType, Breadcrumbs, Button, SearchField, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
+import { CodeList } from '@catalog-frontend/types';
+import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
+import { Banner } from '../../../../../components/banner';
+import CodeListEditor from '../../../../../components/code-list-editor';
+import { PageLayout } from '../../../../../components/page-layout';
+
+const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }) => {
+  const adminDispatch = useAdminDispatch();
+  const adminContext = useAdminState();
+  const { showCodeListEditor, updatedCodeLists, updatedCodes } = adminContext;
+
+  const [search, setSearch] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isCodeChanged, setIsCodeChanged] = useState(false);
+
+  const { data: getAllCodeLists } = useGetAllCodeLists({
+    catalogId: catalogId,
+  });
+  const dbCodeLists = getAllCodeLists?.codeLists || [];
+
+  useWarnIfUnsavedChanges(updatedCodeLists?.length > 0 || isCodeChanged);
+
+  useEffect(() => {
+    const filteredCodeLists = dbCodeLists.filter((codeList: CodeList) =>
+      codeList.name.toLowerCase().includes(search.toLowerCase()),
+    );
+
+    setSearchResults(filteredCodeLists);
+  }, [getAllCodeLists, search]);
+
+  useEffect(() => {
+    // Adds a copy of the codes in context
+    const updatedCodesAccumulator = { ...updatedCodes };
+
+    dbCodeLists.forEach((codeList: CodeList) => {
+      updatedCodesAccumulator[codeList.id] = codeList?.codes;
+    });
+
+    adminDispatch({
+      type: 'SET_UPDATED_CODES',
+      payload: { updatedCodes: updatedCodesAccumulator },
+    });
+  }, [dbCodeLists]);
+
+  const breadcrumbList = catalogId
+    ? ([
+        {
+          href: `/catalogs/${catalogId}`,
+          text: getTranslateText(localization.catalogAdmin.manage.catalogAdmin),
+        },
+        {
+          href: `/catalogs/${catalogId}/concepts`,
+          text: getTranslateText(localization.catalogType.concept),
+        },
+        {
+          href: `/catalogs/${catalogId}/concepts/code-lists`,
+          text: getTranslateText(localization.catalogAdmin.codeLists),
+        },
+      ] as BreadcrumbType[])
+    : [];
+
+  const handleCreateCodeList = () => {
+    adminDispatch({ type: 'SET_SHOW_CODE_LIST_EDITOR', payload: { showCodeListEditor: true } });
+    adminDispatch({
+      type: 'SET_UPDATED_CODES',
+      payload: { updatedCodes: { ...updatedCodes, ['0']: [] } },
+    });
+  };
+
+  return (
+    <>
+      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Banner orgName={organization?.prefLabel} />
+      <PageLayout>
+        <div className={styles.row}>
+          <SearchField
+            ariaLabel='Søkefelt kodeliste'
+            placeholder='Søk etter kodeliste...'
+            onSearchSubmit={(search) => setSearch(search)}
+          />
+          <div className={styles.buttons}>
+            <Button
+              icon={<PlusCircleIcon />}
+              onClick={handleCreateCodeList}
+            >
+              {localization.catalogAdmin.createCodeList}
+            </Button>
+          </div>
+        </div>
+        <Heading
+          level={2}
+          size='xsmall'
+        >
+          {localization.catalogAdmin.codeLists}
+        </Heading>
+        <div className='accordionStructure'>
+          {showCodeListEditor && (
+            <Accordion
+              key={'codeList-create-edtior'}
+              border={true}
+              className='accordionWidth'
+            >
+              <Accordion.Item defaultOpen={showCodeListEditor}>
+                <Accordion.Header>
+                  <Heading size='small'></Heading>
+                </Accordion.Header>
+
+                <Accordion.Content>
+                  <CodeListEditor
+                    type='create'
+                    catalogId={catalogId}
+                  />
+                </Accordion.Content>
+              </Accordion.Item>
+            </Accordion>
+          )}
+          {searchResults &&
+            searchResults?.map((codeList: CodeList, index: number) => (
+              <Accordion
+                key={index}
+                border={true}
+                className='accordionWidth'
+              >
+                <Accordion.Item>
+                  <Accordion.Header>
+                    <Heading size='xsmall'>{codeList.name}</Heading>
+                    <p className={styles.description}> {codeList.description} </p>
+                  </Accordion.Header>
+                  <Accordion.Content>
+                    <p className={styles.id}>ID: {codeList.id}</p>
+                  </Accordion.Content>
+
+                  <Accordion.Content>
+                    <CodeListEditor
+                      codeList={codeList}
+                      codeListsInUse={codeListsInUse}
+                      onChange={() => setIsCodeChanged(true)}
+                      catalogId={catalogId}
+                    />
+                  </Accordion.Content>
+                </Accordion.Item>
+              </Accordion>
+            ))}
+        </div>
+      </PageLayout>
+    </>
+  );
+};
+
+export default CodeListsPageClient;

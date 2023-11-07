@@ -15,7 +15,11 @@ export const nb = {
   somethingWentWrong: 'Beklager, noe gikk galt. Prøv på nytt litt senere.',
   allCatalogs: 'Alle kataloger',
   chooseOrganizaiton: 'Velg virksomhet',
-  catalogType: { concept: 'Begrepskatalog', dataset: 'Datasettkatalogen' },
+  catalogType: {
+    concept: 'Begrepskatalog',
+    dataset: 'Datasettkatalogen',
+    admin: 'Administrasjonsgrensesnitt',
+  },
   dataVillage: ['Datalandsbyen', 'Lenke til Datalandsbyen'],
   harvestData: ['Høste data', 'Lenke til å høste data'],
   registerData: ['Registrere data', 'Lenke til å registrere data'],

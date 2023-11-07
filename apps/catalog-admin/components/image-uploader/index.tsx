@@ -1,23 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { TrashIcon, UploadIcon } from '@navikt/aksel-icons';
-import { localization } from '@catalog-frontend/utils';
-import { UploadButton } from '@catalog-frontend/ui';
-import { validateImageFile } from '@catalog-frontend/utils';
-import { useRouter } from 'next/navigation';
+import { localization, validateImageFile } from '@catalog-frontend/utils';
 import { useDeleteLogo, useGetLogo, useUpdateLogo } from '../../hooks/design';
 import { useAdminDispatch } from '../../context/admin';
 import styles from './image-uploader.module.css';
+import { UploadButton } from '@catalog-frontend/ui';
 
 const allowedFileTypes = ['image/x-png', 'image/svg+xml'];
 
-export function ImageUploader() {
-  const [image, setImage] = useState(null);
+export function ImageUploader({ catalogId }) {
+  const [image, setImage] = useState(undefined);
   const [fileName, setFileName] = useState(null);
   const adminDispatch = useAdminDispatch();
-
-  const router = useRouter();
-  const catalogId = `${router.query.catalogId}`;
-
   const { data: getLogo } = useGetLogo(catalogId);
   const dbLogo = getLogo && getLogo.body;
   const dbFileName = getLogo && getLogo.headers.get('Content-Disposition').match(/filename="([^"]+)"/)[1];
@@ -41,7 +35,7 @@ export function ImageUploader() {
 
   useEffect(() => {
     setFileName(dbFileName);
-  }, [dbLogo]);
+  }, [dbFileName, dbLogo]);
 
   const handleDeleteLogo = () => {
     if (window.confirm('Er du sikker på at du ønsker å slette logoen?')) {
@@ -50,7 +44,7 @@ export function ImageUploader() {
   };
 
   const resetImage = () => {
-    setFileName(undefined);
+    setFileName(null);
     setImage(undefined);
     if (dbLogo) {
       handleDeleteLogo();

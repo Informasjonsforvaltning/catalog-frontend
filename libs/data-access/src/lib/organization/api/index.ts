@@ -15,7 +15,7 @@ export const getOrganizations = async (organizationIds: string[]) => {
 };
 
 export const getOrganization = async (organizationId: string) => {
-  if (organizationId.match(/^\d{9}$/)) {
+  if (RegExp(/^\d{9}$/).exec(organizationId)) {
     const resource = `${process.env.ORGANIZATION_CATALOG_BASE_URI}/organizations/${organizationId}`;
     const options = {
       headers: {

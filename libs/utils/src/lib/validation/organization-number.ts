@@ -1,3 +1,3 @@
 export const validOrganizationNumber = (organizationNumber: string) => {
-  return organizationNumber?.match(/^\d{9}$/) !== null;
+  return RegExp(/^\d{9}$/).exec(organizationNumber) !== null;
 };

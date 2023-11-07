@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import { Button, Textfield } from '@digdir/design-system-react';
-import { useRouter } from 'next/navigation';
 import { compare } from 'fast-json-patch';
 import { emailRegex, localization, telephoneNumberRegex, textRegex } from '@catalog-frontend/utils';
 import { useCreateUser, useDeleteUser, useGetUsers, useUpdateUser } from '../../hooks/users';
@@ -14,12 +13,10 @@ type EditorType = 'create' | 'update';
 interface UserEditorProps {
   user?: AssignedUser;
   type?: EditorType;
+  catalogId: string;
 }
 
-export const UserEditor = ({ user, type }: UserEditorProps) => {
-  const router = useRouter();
-  const catalogId: string = `${router.query.catalogId}` ?? '';
-
+export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
   const { data: getUsers } = useGetUsers(catalogId);
   const dbUsers = getUsers?.users;
 
