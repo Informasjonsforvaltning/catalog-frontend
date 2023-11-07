@@ -12,7 +12,7 @@ type Props = {
   assignableUsers: AssignedUser[];
   onLabelClick: (label: string) => void;
   onPageChange(selectedItem: { selected: number }): void;
-  forcePage?: number | undefined;
+  forcePage?: number;
 };
 
 const SearchHitContainer = ({
@@ -24,32 +24,48 @@ const SearchHitContainer = ({
   onLabelClick,
   onPageChange,
   forcePage,
-}: Props) => (
-  <div className={styles.searchHitsContainer}>
-    {data?.hits.length === 0 && <div className={styles.noHits}>{loc.search.noHits}</div>}
-    {data?.hits.map((concept: Concept) => (
-      <div
-        className={styles.searchHitContainer}
-        key={concept.id}
-      >
-        <SearchHit
-          searchHit={concept}
-          catalogId={catalogId}
-          subjectCodeList={subjectCodeList}
-          conceptStatuses={conceptStatuses}
-          assignableUsers={assignableUsers}
-          onLabelClick={onLabelClick}
+}: Props) => {
+  let currentPage = 0;
+  let totalPage = 0;
+
+  if (data?.page) {
+    const page = data.page;
+    if (page.totalPages) {
+      totalPage = page.totalPages;
+    }
+    if (page.currentPage) {
+      currentPage = page.currentPage;
+    }
+  }
+
+  return (
+    <div className={styles.searchHitsContainer}>
+      {data?.hits.length === 0 && <div className={styles.noHits}>{loc.search.noHits}</div>}
+      {data?.hits.map((concept: Concept) => (
+        <div
+          className={styles.searchHitContainer}
+          key={concept.id}
+        >
+          <SearchHit
+            searchHit={concept}
+            catalogId={catalogId}
+            subjectCodeList={subjectCodeList}
+            conceptStatuses={conceptStatuses}
+            assignableUsers={assignableUsers}
+            onLabelClick={onLabelClick}
+          />
+        </div>
+      ))}
+      {data?.hits?.length > 0 && (
+        <Pagination
+          onPageChange={onPageChange}
+          forcePage={forcePage}
+          totalPages={totalPage}
+          currentPage={currentPage}
         />
-      </div>
-    ))}
-    {data?.hits?.length > 0 && (
-      <Pagination
-        onPageChange={onPageChange}
-        forcePage={forcePage}
-        pageCount={data?.page?.totalPages ?? 0}
-      />
-    )}
-  </div>
-);
+      )}
+    </div>
+  );
+};
 
 export { SearchHitContainer };
