@@ -8,20 +8,15 @@ export const conceptCatalogApiCall = async (
   body: any,
   accessToken: string,
 ) =>
-  await fetch(
-    `${process.env.CONCEPT_CATALOG_BASE_URI}${path}`,
-    Object.assign(
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          'Content-Type': 'application/json',
-        },
-        method,
-        cache: 'no-cache' as RequestCache,
-      },
-      body ? { body: JSON.stringify(body) } : {},
-    ),
-  );
+  await fetch(`${process.env.CONCEPT_CATALOG_BASE_URI}${path}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method,
+    cache: 'no-cache' as RequestCache,
+    ...(body ? { body: JSON.stringify(body) } : {}),
+  });
 
 export const searchConceptsForCatalog = (catalogId: string, query: SearchConceptQuery, accessToken: string) =>
   conceptCatalogApiCall('POST', `/begreper/search?orgNummer=${catalogId}`, query, accessToken);

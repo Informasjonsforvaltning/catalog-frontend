@@ -31,12 +31,9 @@ import {
 import { getServerSession } from 'next-auth';
 import ConceptPageClient from './concept-page-client';
 import { RedirectType, redirect } from 'next/navigation';
-import { getTokenFromServer } from '../../api/auth/jwt/route';
 
 const ConceptPage = async ({ params }) => {
   const session = await getServerSession(authOptions);
-  const token = session && getTokenFromServer();
-
   const { catalogId, conceptId } = params;
 
   if (!(validOrganizationNumber(catalogId) && validUUID(conceptId))) {
@@ -69,7 +66,7 @@ const ConceptPage = async ({ params }) => {
     .then((statuses) => prepareStatusList(statuses));
 
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
-  const username = token && getUsername(token.id_token);
+  const username = session && getUsername(session?.accessToken);
   const organization: Organization = await getOrganization(catalogId).then((response) => response.json());
   const revisions: Concept[] | null = await getConceptRevisions(conceptId, `${session?.accessToken}`).then(
     (response) => response.json() || null,
