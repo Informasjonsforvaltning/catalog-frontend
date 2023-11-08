@@ -5,7 +5,7 @@ import cn from 'classnames';
 import styles from './internal-field.module.css';
 import { Button, Select } from '@catalog-frontend/ui';
 import { Textfield, Checkbox, HelpText } from '@digdir/design-system-react';
-import { CodeList, EditorType, FieldType, InternalField, SelectOption } from '@catalog-frontend/types';
+import { CodeList, FieldType, InternalField, InternalFieldTemplate, SelectOption } from '@catalog-frontend/types';
 import { getTranslateText, localization, textRegexWithNumbers } from '@catalog-frontend/utils';
 import { useAdminDispatch } from '../../context/admin';
 import { useGetAllCodeLists } from '../../hooks/code-lists';
@@ -26,7 +26,6 @@ const fieldTypeOptions: { [key: string]: SelectOption } = {
 
 export interface Props {
   field?: InternalField;
-  type?: EditorType;
   catalogId: string;
 }
 
@@ -43,7 +42,7 @@ export const InternalFieldEditor = ({ catalogId, field, type }: Props) => {
 
   const adminDispatch = useAdminDispatch();
 
-  const newFieldTemplate: InternalField = {
+  const newFieldTemplate: InternalFieldTemplate = {
     label: { nb: '' },
     type: undefined,
     location: 'main_column',
@@ -51,7 +50,7 @@ export const InternalFieldEditor = ({ catalogId, field, type }: Props) => {
   };
 
   const [updatedFieldsList, setUpdatedFieldsList] = React.useState<InternalField[]>([]);
-  const [newField, setNewField] = useState<InternalField>(newFieldTemplate);
+  const [newField, setNewField] = useState<InternalFieldTemplate>(newFieldTemplate);
 
   const handleCreateInternalField = () => {
     createInternalField
@@ -107,7 +106,7 @@ export const InternalFieldEditor = ({ catalogId, field, type }: Props) => {
   const codeListsOptions = () => {
     return (
       dbCodeLists?.map((codeList: CodeList) => ({
-        value: codeList.id,
+        value: codeList.id || '',
         label: codeList.name,
       })) || []
     );
@@ -150,26 +149,28 @@ export const InternalFieldEditor = ({ catalogId, field, type }: Props) => {
         <Textfield
           label={localization.catalogAdmin.fieldNameDescription}
           value={String(
-            getTranslateText((updatedFieldsList.find((f) => f.id === field.id) || field)?.label || newField?.label),
+            getTranslateText((updatedFieldsList.find((f) => f.id === field?.id) || field)?.label || newField?.label),
           )}
           required
           type='text'
           error={
             validateLabelField(
               String(
-                getTranslateText((updatedFieldsList.find((f) => f.id === field.id) || field)?.label || newField?.label),
+                getTranslateText(
+                  (updatedFieldsList.find((f) => f.id === field?.id) || field)?.label || newField?.label,
+                ),
               ),
             )
               ? null
               : localization.validation.invalidValue
           }
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            type === 'create'
-              ? setNewField((prevField) => ({
+            field
+              ? updateFieldsListState(field.id, event.target.value, undefined, undefined)
+              : setNewField((prevField) => ({
                   ...prevField,
                   label: { nb: event.target.value },
-                }))
-              : updateFieldsListState(field.id, event.target.value, undefined, undefined);
+                }));
           }}
         />
       </div>
@@ -178,54 +179,54 @@ export const InternalFieldEditor = ({ catalogId, field, type }: Props) => {
         <Select
           label={localization.catalogAdmin.fieldTypeDescription}
           options={Object.values(fieldTypeOptions)}
-          value={(updatedFieldsList.find((f) => f.id === field.id) || field)?.type || newField?.type}
+          value={(updatedFieldsList.find((f) => f.id === field?.id) || field)?.type || newField?.type}
           onChange={(value) => {
-            type === 'create'
-              ? setNewField((prevField) => ({
+            field
+              ? updateFieldsListState(field?.id, undefined, value as FieldType, undefined)
+              : setNewField((prevField) => ({
                   ...prevField,
                   type: value as FieldType,
-                }))
-              : updateFieldsListState(field.id, undefined, value as FieldType, undefined);
+                }));
           }}
         />
       </div>
 
-      {((updatedFieldsList.find((f) => f.id === field.id) || field)?.type === 'code_list' ||
+      {((updatedFieldsList.find((f) => f.id === field?.id) || field)?.type === 'code_list' ||
         newField?.type === 'code_list') && (
         <div className='accordionField'>
           <Select
             label={localization.catalogAdmin.chooseCodeList}
             options={codeListsOptions()}
-            value={(updatedFieldsList.find((f) => f.id === field.id) || field)?.codeListId || newField?.codeListId}
+            value={(updatedFieldsList.find((f) => f.id === field?.id) || field)?.codeListId || newField?.codeListId}
             onChange={(value) => {
-              if (type === 'create') {
+              if (field) {
+                updateFieldsListState(field?.id, undefined, undefined, value);
+              } else {
                 setNewField((prevField) => ({
                   ...prevField,
                   codeListId: value,
                 }));
-              } else {
-                updateFieldsListState(field.id, undefined, undefined, value);
               }
             }}
           />
         </div>
       )}
 
-      {((updatedFieldsList.find((f) => f.id === field.id) || field)?.type == 'boolean' ||
+      {((updatedFieldsList.find((f) => f.id === field?.id) || field)?.type == 'boolean' ||
         newField?.type === 'boolean') && (
         <>
           <div className={cn('accordionField', styles.row)}>
             <Checkbox
               onChange={(e) => {
-                type === 'create'
-                  ? setNewField((prevField) => ({
+                field
+                  ? updateFieldsListState(field?.id, undefined, undefined, undefined, e.target.checked)
+                  : setNewField((prevField) => ({
                       ...prevField,
                       enableFilter: e.target.checked,
-                    }))
-                  : updateFieldsListState(field.id, undefined, undefined, undefined, e.target.checked);
+                    }));
               }}
               value={''}
-              checked={(updatedFieldsList.find((f) => f.id === field.id) || field)?.enableFilter}
+              checked={(updatedFieldsList.find((f) => f.id === field?.id) || field)?.enableFilter}
             >
               {localization.catalogAdmin.enableFilter}
             </Checkbox>
@@ -244,26 +245,26 @@ export const InternalFieldEditor = ({ catalogId, field, type }: Props) => {
           <div className={styles.saveButton}>
             <Button
               fullWidth={true}
-              onClick={() => (type === 'create' ? handleCreateInternalField() : handleUpdateDbInternalField(field.id))}
+              onClick={() => (field ? handleUpdateDbInternalField(field?.id) : handleCreateInternalField())}
             >
               {localization.button.save}
             </Button>
           </div>
-          {type === 'create' ? (
+          {field ? (
+            <Button
+              color='danger'
+              onClick={() => {
+                handleDeleteInternalField(field?.id);
+              }}
+            >
+              {localization.button.delete}
+            </Button>
+          ) : (
             <Button
               color='danger'
               onClick={handleCancel}
             >
               {localization.button.cancel}
-            </Button>
-          ) : (
-            <Button
-              color='danger'
-              onClick={() => {
-                handleDeleteInternalField(field.id);
-              }}
-            >
-              {localization.button.delete}
             </Button>
           )}
         </div>
