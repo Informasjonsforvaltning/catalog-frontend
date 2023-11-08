@@ -1,8 +1,7 @@
 import { EditableFields, InternalField } from '@catalog-frontend/types';
-import { getTranslateText, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
+import { getTranslateText, validOrganizationNumber, validUUID, textRegexWithNumbers } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { compare } from 'fast-json-patch';
-import { textRegexWithNumbers } from '@catalog-frontend/utils';
 
 const validateLabelField = (label: string) => {
   return textRegexWithNumbers.test(label);
@@ -50,7 +49,7 @@ export const useCreateInternalField = (catalogId: string) => {
         }),
         cache: 'no-store',
       });
-      return response.json();
+      return response;
     },
 
     onSuccess: () => {

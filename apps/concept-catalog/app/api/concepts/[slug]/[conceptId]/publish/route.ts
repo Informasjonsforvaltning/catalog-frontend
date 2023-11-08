@@ -12,9 +12,8 @@ export async function POST(request: NextRequest, { params }: { params: { concept
   try {
     const response = await publishConcept(conceptId, session?.accessToken as string);
     if (response.status !== 200) {
-      return new Response('Failed to publish concept', { status: response.status });
+      throw new Error();
     }
-
     const jsonResponse = await response.json();
     return new Response(JSON.stringify(jsonResponse), { status: response?.status });
   } catch (err) {

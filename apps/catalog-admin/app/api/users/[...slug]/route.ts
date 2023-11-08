@@ -17,7 +17,7 @@ export async function GET(req: NextRequest, { params }: Props) {
   try {
     const response = await getUsers(catalogId, `${session?.accessToken}`);
     if (response.status !== 200) {
-      return new Response('Failed to get user list', { status: response.status });
+      throw new Error();
     }
     const jsonResponse = await response.json();
     return new Response(JSON.stringify(jsonResponse), { status: response.status });
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest, { params }: Props) {
     const { user } = await req.json();
     const response = await createUser(user, `${session?.accessToken}`, catalogId);
     if (response.status !== 201) {
-      return new Response('Failed to create user', { status: response.status });
+      throw new Error();
     }
     return new Response('Created user', { status: response.status });
   } catch (error) {
@@ -53,7 +53,7 @@ export async function PATCH(req: NextRequest, { params }: Props) {
     const { diff } = await req.json();
     const response = await patchUser(catalogId, userId, `${session?.accessToken}`, diff);
     if (response?.status !== 200) {
-      return new Response('Failed to update user', { status: response?.status });
+      throw new Error();
     }
     const jsonResponse = await response.json();
     return new Response(JSON.stringify(jsonResponse), { status: response.status });
@@ -70,9 +70,9 @@ export async function DELETE(req: NextRequest, { params }: Props) {
   try {
     const response = await deleteUser(catalogId, userId, `${session?.accessToken}`);
     if (response.status !== 204) {
-      return new Response('Failed to delete user', { status: response.status });
+      throw new Error();
     }
-    return new Response('User deleted', { status: response.status });
+    return new Response('User deleted', { status: 200 });
   } catch (error) {
     return new Response('Failed to delete user', { status: 500 });
   }

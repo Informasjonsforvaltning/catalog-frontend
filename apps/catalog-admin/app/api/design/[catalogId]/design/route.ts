@@ -10,7 +10,7 @@ export async function GET(req: NextRequest, { params }: { params: { catalogId: s
   try {
     const response = await getDesign(`${catalogId}`, `${session?.accessToken}`);
     if (response.status !== 200) {
-      return new Response('Failed to get design', { status: response.status });
+      throw new Error();
     }
 
     const jsonResponse = await response.json();
@@ -29,7 +29,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { catalogId:
     const response = await patchDesign(`${catalogId}`, `${session?.accessToken}`, diff);
 
     if (response?.status !== 200) {
-      return new Response('Failed to update design', { status: response?.status });
+      throw new Error();
     }
     const jsonResponse = await response.json();
     return new Response(JSON.stringify(jsonResponse), { status: response.status });

@@ -40,7 +40,7 @@ export const useCreateCodeList = (catalogId: string) => {
         }),
         cache: 'no-store',
       });
-      return response.json();
+      return response;
     },
 
     onSuccess: () => {
