@@ -29,7 +29,7 @@ export interface Props {
   catalogId: string;
 }
 
-export const InternalFieldEditor = ({ catalogId, field, type }: Props) => {
+export const InternalFieldEditor = ({ catalogId, field }: Props) => {
   const { data: getInternalFields } = useGetInternalFields(catalogId);
   const dbFields = getInternalFields?.internal;
 
