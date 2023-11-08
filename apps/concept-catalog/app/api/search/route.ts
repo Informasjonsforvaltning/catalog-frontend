@@ -3,7 +3,7 @@ import { authOptions, validateSession } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import { NextRequest } from 'next/server';
 
-export async function POST(req: NextRequest) {
+export const POST = async (req: NextRequest) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   try {
@@ -17,4 +17,4 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     return new Response('Failed to search concepts', { status: 500 });
   }
-}
+};

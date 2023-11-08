@@ -3,7 +3,7 @@ import { authOptions, validateSession } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import { NextRequest } from 'next/server';
 
-export async function GET(req: NextRequest, { params }: { params: { catalogId: string } }) {
+export const GET = async (req: NextRequest, { params }: { params: { catalogId: string } }) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   const { catalogId } = params;
@@ -22,4 +22,4 @@ export async function GET(req: NextRequest, { params }: { params: { catalogId: s
   } catch (error) {
     return new Response('Failed to get design logo', { status: 500 });
   }
-}
+};

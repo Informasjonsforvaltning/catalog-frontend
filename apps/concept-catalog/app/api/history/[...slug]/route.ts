@@ -3,13 +3,12 @@ import { authOptions, validateSession } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import { NextRequest } from 'next/server';
 
-export async function GET(req: NextRequest, { params }: { params: { slug: string } }) {
+export const GET = async (req: NextRequest, { params }: { params: { slug: string } }) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   const { slug } = params;
   if (slug?.length == 2) {
     const [catalogId, resourceId] = slug;
-
     try {
       const response = await getHistory(catalogId, resourceId, `${session?.accessToken}`);
       if (response.status !== 200) {
@@ -23,4 +22,4 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
   } else {
     return new Response('Unauthorized', { status: 401 });
   }
-}
+};

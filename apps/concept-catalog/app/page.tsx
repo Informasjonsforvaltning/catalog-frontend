@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
-const App = async () => {
+const Home = async () => {
   redirect(`${process.env.FDK_REGISTRATION_BASE_URI}`);
 };
 
-export default App;
+export default Home;

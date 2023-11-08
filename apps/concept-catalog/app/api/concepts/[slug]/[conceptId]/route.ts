@@ -3,7 +3,7 @@ import { authOptions } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import { NextRequest } from 'next/server';
 
-export async function DELETE(req: NextRequest, { params }) {
+export const DELETE = async (req: NextRequest, { params }) => {
   const session = await getServerSession(authOptions);
   if (!session || session?.accessTokenExpiresAt < Date.now() / 1000) {
     return new Response('Unauthorized', { status: 401 });
@@ -18,4 +18,4 @@ export async function DELETE(req: NextRequest, { params }) {
   } catch (err) {
     return new Response('Failed to delete concept', { status: 500 });
   }
-}
+};
