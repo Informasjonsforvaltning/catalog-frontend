@@ -12,7 +12,7 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
   try {
     const response = await getChangeRequests(`${catalogId}`, `${session?.accessToken}`);
     if (response.status !== 200) {
-      return new Response('Failed to get change requests', { status: response.status });
+      throw new Error();
     }
     const jsonResponse = await response.json();
     return new Response(JSON.stringify(jsonResponse), { status: response.status });
@@ -24,15 +24,14 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
 export async function POST(req: NextRequest, { params }: { params: { slug: string } }) {
   const session = await getServerSession(authOptions);
   await validateSession(session);
-
   const { slug } = params;
   const [catalogId, postType, changeRequestId] = slug;
-
   if (postType == 'createChangeRequest') {
     try {
-      const response = await createChangeRequest(req.body, `${catalogId}`, `${session?.accessToken}`);
+      const reqBody = await req.json();
+      const response = await createChangeRequest(reqBody, `${catalogId}`, `${session?.accessToken}`);
       if (response.status !== 201) {
-        return new Response('Failed to create change request', { status: response.status });
+        throw new Error();
       }
       const changeRequestId = response?.headers?.get('location')?.split('/').pop();
       return new Response(JSON.stringify(changeRequestId), { status: response.status });
@@ -41,15 +40,17 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
     }
   } else if (postType == 'updateChangeRequest') {
     try {
+      const reqBody = await req.json();
       const response = await updateChangeRequest(
-        req.body,
+        reqBody,
         `${catalogId}`,
         `${changeRequestId}`,
         `${session?.accessToken}`,
       );
       if (response.status !== 200) {
-        return new Response('Failed to update change request', { status: response.status });
+        throw new Error();
       }
+      return new Response('Updated change requests', { status: response.status });
     } catch (error) {
       return new Response('Failed to update change request', { status: 500 });
     }

@@ -1,17 +1,13 @@
 import { createConcept, importConcepts } from '@catalog-frontend/data-access';
-import { authOptions } from '@catalog-frontend/utils';
+import { authOptions, validateSession } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import { NextRequest } from 'next/server';
 
 export async function POST(req: NextRequest, { params }: { params: { slug: string } }) {
   const session = await getServerSession(authOptions);
-  if (!session || session?.accessTokenExpiresAt < Date.now() / 1000) {
-    return new Response('Unauthorized', { status: 401 });
-  }
-
+  await validateSession(session);
   const { slug } = params;
-
-  if (req.method === 'POST' && slug === 'import') {
+  if (slug === 'import') {
     try {
       const concepts = await req.json();
       const response = await importConcepts(concepts, session?.accessToken);
@@ -20,7 +16,7 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
       console.error(error);
       return new Response('Failed to import concept', { status: 500 });
     }
-  } else if (req.method === 'POST') {
+  } else {
     const drafConcept = {
       anbefaltTerm: {
         navn: { nb: '' },
@@ -33,7 +29,7 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
     try {
       const response = await createConcept(drafConcept, session?.accessToken);
       if (response.status !== 201) {
-        return new Response('Failed to create concept', { status: response.status });
+        throw new Error();
       }
       const conceptId = response?.headers?.get('location')?.split('/').pop();
       return new Response(JSON.stringify(conceptId), { status: 200 });
@@ -41,6 +37,4 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
       return new Response('Failed to create concept', { status: 500 });
     }
   }
-
-  return new Response('Invalid request', { status: 400 });
 }

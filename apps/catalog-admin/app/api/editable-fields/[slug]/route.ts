@@ -13,7 +13,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { slug: stri
     const response = await patchEditableFields(catalogId, `${session?.accessToken}`, diff);
 
     if (response?.status !== 200) {
-      return new Response('Failed to update editable field', { status: response?.status });
+      throw new Error();
     }
     const jsonResponse = await response.json();
     return new Response(JSON.stringify(jsonResponse), { status: response.status });
