@@ -3,7 +3,7 @@ import { authOptions, validateSession } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import { NextRequest } from 'next/server';
 
-export async function GET(req: NextRequest, { params }: { params: { slug: string } }) {
+export const GET = async (req: NextRequest, { params }: { params: { slug: string } }) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   const { slug } = params;
@@ -19,9 +19,9 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
   } catch (error) {
     return new Response('Failed to get change requests', { status: 500 });
   }
-}
+};
 
-export async function POST(req: NextRequest, { params }: { params: { slug: string } }) {
+export const POST = async (req: NextRequest, { params }: { params: { slug: string } }) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   const { slug } = params;
@@ -55,4 +55,4 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
       return new Response('Failed to update change request', { status: 500 });
     }
   }
-}
+};

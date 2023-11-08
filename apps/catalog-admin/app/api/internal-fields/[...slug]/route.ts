@@ -3,7 +3,7 @@ import { authOptions, validateSession } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import { NextRequest } from 'next/server';
 
-export async function GET(req: NextRequest, { params }: { params: { slug: string[] } }) {
+export const GET = async (req: NextRequest, { params }: { params: { slug: string[] } }) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   const { slug } = params;
@@ -18,9 +18,9 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
   } catch (error) {
     return new Response('Failed to get internal fields', { status: 500 });
   }
-}
+};
 
-export async function POST(req: NextRequest, { params }: { params: { slug: string[] } }) {
+export const POST = async (req: NextRequest, { params }: { params: { slug: string[] } }) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   const { slug } = params;
@@ -35,9 +35,9 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
   } catch (error) {
     return new Response('Failed to create internal field', { status: 500 });
   }
-}
+};
 
-export async function PATCH(req: NextRequest, { params }: { params: { slug: string[] } }) {
+export const PATCH = async (req: NextRequest, { params }: { params: { slug: string[] } }) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   const { slug } = params;
@@ -53,9 +53,9 @@ export async function PATCH(req: NextRequest, { params }: { params: { slug: stri
   } catch (error) {
     return new Response('Failed to update internal field', { status: 500 });
   }
-}
+};
 
-export async function DELETE(req: NextRequest, { params }: { params: { slug: string[] } }) {
+export const DELETE = async (req: NextRequest, { params }: { params: { slug: string[] } }) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   const { slug } = params;
@@ -69,4 +69,4 @@ export async function DELETE(req: NextRequest, { params }: { params: { slug: str
   } catch (error) {
     return new Response('Failed to delete internal field', { status: 500 });
   }
-}
+};

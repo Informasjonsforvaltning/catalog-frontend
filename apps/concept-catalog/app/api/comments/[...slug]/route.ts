@@ -3,7 +3,7 @@ import { authOptions, validateSession } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import { NextRequest } from 'next/server';
 
-export async function GET(req: NextRequest, { params }: { params: { slug: string } }) {
+export const GET = async (req: NextRequest, { params }: { params: { slug: string } }) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
 
@@ -24,9 +24,9 @@ export async function GET(req: NextRequest, { params }: { params: { slug: string
   } else {
     return new Response('Unauthorized', { status: 401 });
   }
-}
+};
 
-export async function POST(req: NextRequest, { params }: { params: { slug: string } }) {
+export const POST = async (req: NextRequest, { params }: { params: { slug: string } }) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   const { slug } = params;
@@ -45,9 +45,9 @@ export async function POST(req: NextRequest, { params }: { params: { slug: strin
   } else {
     return new Response('Unauthorized', { status: 401 });
   }
-}
+};
 
-export async function PUT(req: NextRequest, { params }: { params: { slug: string } }) {
+export const PUT = async (req: NextRequest, { params }: { params: { slug: string } }) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   const { slug } = params;
@@ -67,9 +67,9 @@ export async function PUT(req: NextRequest, { params }: { params: { slug: string
   } else {
     return new Response('Unauthorized', { status: 401 });
   }
-}
+};
 
-export async function DELETE(req: NextRequest, { params }: { params: { slug: string } }) {
+export const DELETE = async (req: NextRequest, { params }: { params: { slug: string } }) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   const { slug } = params;
@@ -87,4 +87,4 @@ export async function DELETE(req: NextRequest, { params }: { params: { slug: str
   } else {
     return new Response('Unauthorized', { status: 401 });
   }
-}
+};

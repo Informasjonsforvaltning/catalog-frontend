@@ -9,7 +9,7 @@ interface Props {
   };
 }
 
-export async function GET(req, { params }: Props) {
+export const GET = async (req, { params }: Props) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   const { slug } = params;
@@ -24,9 +24,9 @@ export async function GET(req, { params }: Props) {
   } catch (error) {
     return new Response('Failed to get code lists', { status: 500 });
   }
-}
+};
 
-export async function POST(req, { params }: Props) {
+export const POST = async (req, { params }: Props) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   const { slug } = params;
@@ -41,9 +41,9 @@ export async function POST(req, { params }: Props) {
   } catch (error) {
     return new Response('Failed to create code list', { status: 500 });
   }
-}
+};
 
-export async function PATCH(req, { params }: Props) {
+export const PATCH = async (req, { params }: Props) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   const { slug } = params;
@@ -59,9 +59,9 @@ export async function PATCH(req, { params }: Props) {
   } catch (error) {
     return new Response('Failed to update code list', { status: 500 });
   }
-}
+};
 
-export async function DELETE(req: NextRequest, { params }: Props) {
+export const DELETE = async (req: NextRequest, { params }: Props) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   const { slug } = params;
@@ -76,4 +76,4 @@ export async function DELETE(req: NextRequest, { params }: Props) {
     console.log('in delete catch');
     return new Response('Failed to delete code list', { status: 500 });
   }
-}
+};

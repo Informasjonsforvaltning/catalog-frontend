@@ -3,7 +3,7 @@ import { authOptions, validateSession } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import { NextRequest } from 'next/server';
 
-export async function PATCH(req: NextRequest, { params }: { params: { slug: string } }) {
+export const PATCH = async (req: NextRequest, { params }: { params: { slug: string } }) => {
   const session = await getServerSession(authOptions);
   validateSession(session);
   const slug = params;
@@ -20,4 +20,4 @@ export async function PATCH(req: NextRequest, { params }: { params: { slug: stri
   } catch (error) {
     return new Response('Failed to update editable field', { status: 500 });
   }
-}
+};

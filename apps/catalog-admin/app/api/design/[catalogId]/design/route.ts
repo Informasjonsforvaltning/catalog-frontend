@@ -3,7 +3,7 @@ import { authOptions, validateSession } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import { NextRequest } from 'next/server';
 
-export async function GET(req: NextRequest, { params }: { params: { catalogId: string } }) {
+export const GET = async (req: NextRequest, { params }: { params: { catalogId: string } }) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   const { catalogId } = params;
@@ -18,9 +18,9 @@ export async function GET(req: NextRequest, { params }: { params: { catalogId: s
   } catch (error) {
     return new Response('Failed to get design', { status: 500 });
   }
-}
+};
 
-export async function PATCH(req: NextRequest, { params }: { params: { catalogId: string } }) {
+export const PATCH = async (req: NextRequest, { params }: { params: { catalogId: string } }) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   const { catalogId } = params;
@@ -36,4 +36,4 @@ export async function PATCH(req: NextRequest, { params }: { params: { catalogId:
   } catch (error) {
     return new Response('Failed to update design', { status: 500 });
   }
-}
+};

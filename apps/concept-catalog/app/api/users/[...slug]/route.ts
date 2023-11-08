@@ -3,7 +3,7 @@ import { authOptions, validateSession } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import { NextRequest } from 'next/server';
 
-export async function GET(request: NextRequest, { params }: { params: { slug: string[] } }) {
+export const GET = async (request: NextRequest, { params }: { params: { slug: string[] } }) => {
   const session = await getServerSession(authOptions);
   await validateSession(session);
 
@@ -20,4 +20,4 @@ export async function GET(request: NextRequest, { params }: { params: { slug: st
   } catch (error) {
     return new Response('Failed to get user list', { status: 500 });
   }
-}
+};
