@@ -9,12 +9,15 @@ export interface Fields {
   editable: EditableFields;
 }
 
-export interface InternalField {
-  id?: string;
+export interface InternalField extends InternalFieldTemplate {
+  id: string;
+}
+
+export interface InternalFieldTemplate {
   catalogId?: string;
   label?: MultiLanguageText;
   description?: MultiLanguageText;
-  type: FieldType;
+  type?: FieldType;
   enableFilter?: boolean;
   location?: FieldLocation;
   codeListId?: string;

@@ -79,10 +79,7 @@ export const InternalFieldsPageClient = ({ catalogId, organization }) => {
                   ></Heading>
                 </Accordion.Header>
                 <Accordion.Content>
-                  <InternalFieldEditor
-                    type={'create'}
-                    catalogId={catalogId}
-                  />
+                  <InternalFieldEditor catalogId={catalogId} />
                 </Accordion.Content>
               </Accordion.Item>
             </Accordion>
