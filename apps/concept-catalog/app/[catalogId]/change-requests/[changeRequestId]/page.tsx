@@ -1,3 +1,5 @@
-export default function ChangeRequestDetailsPage() {
+const ChangeRequestDetailsPage = () => {
   return <></>;
-}
+};
+
+export default ChangeRequestDetailsPage;
