@@ -1,6 +1,7 @@
 import { test as init, expect } from '@playwright/test';
 
 init.use({ storageState: 'apps/concept-catalog-e2e/playwright/.auth/admin.json' });
+init.describe.configure({ mode: 'serial' });
 
 init('remove all concepts', async ({ page }) => {
   page.on('dialog', async (dialog) => {
@@ -11,14 +12,20 @@ init('remove all concepts', async ({ page }) => {
   await page.goto(`/${process.env.USER_ADMIN_CATALOG_ID}`);
   do {
     await page.waitForURL(`/${process.env.USER_ADMIN_CATALOG_ID}`);
-    await page.locator('[class*="search-hit-container_searchHitsContainer"]').waitFor({ state: 'visible' });
-    if ((await page.locator('a:near(h2)').count()) > 0) {
-      await page.locator('a:near(h2)').first().click();
-      await page.getByRole('button', { name: 'Slett' }).click();
+    await page.locator('[class*="search-hit-container_searchHitsContainer__"]').waitFor({ state: 'visible' });
+    if ((await page.locator('[class*="search-hit_titleRow__"]').count()) > 0) {
+      await page.locator('[class*="search-hit_titleRow__"] > a').first().click();
+
+      if ((await page.locator('button:has-text("Slett")').count()) > 0) {
+        await page.getByRole('button', { name: 'Slett' }).click();
+      } else {
+        await page.getByRole('tab', { name: 'Versjoner' }).click();
+        await page.getByLabel('Versjoner').getByRole('link').last().click();
+      }
       await page.waitForURL(`/${process.env.USER_ADMIN_CATALOG_ID}`);
-      await page.locator('[class*="search-hit-container_searchHitsContainer"]').waitFor({ state: 'visible' });
+      await page.locator('[class*="search-hit-container_searchHitsContainer__"]').waitFor({ state: 'visible' });
     }
-  } while ((await page.locator('a:near(h2)').count()) > 0);
+  } while ((await page.locator('[class*="search-hit_titleRow__"]').count()) > 0);
 });
 
 init('create concept gress', async ({ page }) => {
