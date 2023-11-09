@@ -4,15 +4,16 @@ import { authOptions, getResourceRoles } from '@catalog-frontend/utils';
 import { Session, getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation';
 import AppPageClient from './app-page-client';
+import { cookies } from 'next/headers';
 
 const Home = async () => {
   const session: Session | null = await getServerSession(authOptions);
 
   if (!session) redirect('/auth/signin');
   if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
-    redirect(
-      `/auth/signin?callbackUrl=${encodeURIComponent(process.env.NEXT_PUBLIC_CATALOG_ADMIN_BASE_URI as string)}`,
-    );
+    const cookieStore = cookies();
+    const callbackUrl = cookieStore.get('next-auth.callback-url')?.value ?? '';
+    redirect(`/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
   }
 
   const resourceRoles = getResourceRoles(`${session?.accessToken}`);
