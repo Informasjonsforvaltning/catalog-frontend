@@ -9,14 +9,16 @@ init('remove all concepts', async ({ page }) => {
   });
 
   await page.goto(`/${process.env.USER_ADMIN_CATALOG_ID}`);
-  await page.getByRole('img', { name: 'Loading' }).waitFor({ state: 'hidden' });
-
-  while (await page.getByLabel('Page 1 is your current page').isVisible()) {
-    await page.locator('a:near(h2)').first().click();
-    await page.getByRole('button', { name: 'Slett' }).click();
-    await page.waitForURL(`/${process.env.USER_ADMIN_CATALOG_ID}`, { timeout: 30000 });
-    await page.getByRole('img', { name: 'Loading' }).waitFor({ state: 'hidden' });
-  }
+  do {
+    await page.waitForURL(`/${process.env.USER_ADMIN_CATALOG_ID}`);
+    await page.locator('[class*="search-hit-container_searchHitsContainer"]').waitFor({ state: 'visible' });
+    if ((await page.locator('a:near(h2)').count()) > 0) {
+      await page.locator('a:near(h2)').first().click();
+      await page.getByRole('button', { name: 'Slett' }).click();
+      await page.waitForURL(`/${process.env.USER_ADMIN_CATALOG_ID}`);
+      await page.locator('[class*="search-hit-container_searchHitsContainer"]').waitFor({ state: 'visible' });
+    }
+  } while ((await page.locator('a:near(h2)').count()) > 0);
 });
 
 init('create concept gress', async ({ page }) => {
@@ -85,6 +87,7 @@ init('create concept gress', async ({ page }) => {
     .nth(1)
     .click();
   await page.locator('textarea[name="eksempel\\.nb"]').fill('Engelsk raigress (Lolium perenne)');
+
   await page
     .locator('form div')
     .filter({ hasText: 'Bruk av begrepetBegrepsstatusStatus for begrepet. Undersøk hvilke statuser som s' })
@@ -181,6 +184,17 @@ init('create concept fisk with all languages', async ({ page }) => {
     .fill(
       'Uthaug fisk tar vare på gamle tradisjoner innen foredling av sildeprodukter. Varespekteret selges fra den røde brygge på Uthaug og fra salgsbiler på torg og martna rundt om i Norge. Her får du produkter som spekesildfilet, røkt sild, kryddersildfilet og appetittfilet.',
     );
+  await page
+    .locator('textarea[name="definisjonForSpesialister\\.tekst\\.nn"]')
+    .fill(
+      'Uthaug fisk tek vare på gamle tradisjonar innan foredling av sildeprodukter. Varespekteret blir selt frå den raude bryggja på Uthaug og frå salsbilar på torg og martna rundt om i Noreg. Her får du produkt som spekesildfilet, røykt sild, kryddersildfilet og appetittfilet.',
+    );
+  await page
+    .locator('textarea[name="definisjonForSpesialister\\.tekst\\.en"]')
+    .fill(
+      'Uthaug fish takes care of old traditions in the processing of herring products. The range of goods is sold from the red wharf at Uthaug and from sales vans at squares and martna around Norway. Here you get products such as cured herring fillet, smoked herring, seasoned herring fillet and appetizing fillet.',
+    );
+
   await page.locator('input:near(:text("Forhold til kilde"))').nth(2).click();
   await page.locator('#react-select-4-option-1').getByText('Basert på kilde').click();
   await page.getByRole('button', { name: 'Legg til ny kilde' }).nth(1).click();
@@ -191,38 +205,91 @@ init('create concept fisk with all languages', async ({ page }) => {
     .locator('input[name="definisjonForSpesialister\\.kildebeskrivelse\\.kilde\\[0\\]\\.uri"]')
     .fill('https://www.matriketmidt.no/produsenter/oerland/uthaug-fisk/');
   await page.locator('textarea[name="merknad\\.nb"]').fill('havbruk');
+  await page.locator('textarea[name="merknad\\.nn"]').fill('havbruk');
+  await page.locator('textarea[name="merknad\\.en"]').fill('aquaculture');
+
   await page.getByRole('button', { name: 'Tillatt og frarådet term' }).click();
   await page
-    .locator('form div')
-    .filter({ hasText: 'Tillatt og frarådet termTillatt termTerm som blir sett på som egnet for begrepet' })
-    .getByRole('textbox')
+    .locator('div:nth-child(2) > .fdk-form-label > .fdk-reg-input-tags > span > .react-tagsinput-input')
     .first()
     .fill('laks');
   await page
-    .locator('form div')
-    .filter({ hasText: 'Tillatt og frarådet termTillatt termTerm som blir sett på som egnet for begrepet' })
-    .getByRole('textbox')
-    .nth(1)
+    .locator('div:nth-child(2) > .fdk-form-label > .fdk-reg-input-tags > span > .react-tagsinput-input')
+    .first()
+    .press('Enter');
+  await page
+    .locator('div:nth-child(3) > .fdk-form-label > .fdk-reg-input-tags > span > .react-tagsinput-input')
+    .first()
+    .fill('laks');
+  await page
+    .locator('div:nth-child(3) > .fdk-form-label > .fdk-reg-input-tags > span > .react-tagsinput-input')
+    .first()
+    .press('Enter');
+  await page
+    .locator('div:nth-child(4) > .fdk-form-label > .fdk-reg-input-tags > span > .react-tagsinput-input')
+    .first()
+    .fill('salmon');
+  await page
+    .locator('div:nth-child(4) > .fdk-form-label > .fdk-reg-input-tags > span > .react-tagsinput-input')
+    .first()
+    .press('Enter');
+  await page
+    .locator(
+      'div:nth-child(2) > div:nth-child(2) > .fdk-form-label > .fdk-reg-input-tags > span > .react-tagsinput-input',
+    )
     .fill('skalldyr');
+  await page
+    .locator(
+      'div:nth-child(2) > div:nth-child(2) > .fdk-form-label > .fdk-reg-input-tags > span > .react-tagsinput-input',
+    )
+    .press('Enter');
+  await page
+    .locator(
+      'div:nth-child(2) > div:nth-child(3) > .fdk-form-label > .fdk-reg-input-tags > span > .react-tagsinput-input',
+    )
+    .fill('skaldyr');
+  await page
+    .locator(
+      'div:nth-child(2) > div:nth-child(3) > .fdk-form-label > .fdk-reg-input-tags > span > .react-tagsinput-input',
+    )
+    .press('Enter');
+  await page
+    .locator(
+      'div:nth-child(2) > div:nth-child(4) > .fdk-form-label > .fdk-reg-input-tags > span > .react-tagsinput-input',
+    )
+    .fill('shellfish');
+  await page
+    .locator(
+      'div:nth-child(2) > div:nth-child(4) > .fdk-form-label > .fdk-reg-input-tags > span > .react-tagsinput-input',
+    )
+    .press('Enter');
 
   await page.getByRole('button', { name: 'Bruk av begrepet' }).click();
-  await page.getByText('Utkast').click();
+  await page.locator('input:near(:text("Utkast"))').click();
   await page.getByText('Gjeldende', { exact: true }).click();
-  await page.locator('input[name="omfang\\.uri"]').fill('https://www.youtube.com/watch?v=VHv3y0ZM62U');
-  await page.locator('input[name="omfang\\.tekst"]').fill('Mads Hansen og Ida Fladen kveles av surstrømming!');
-
   await page
     .locator('form div')
     .filter({ hasText: 'Bruk av begrepetBegrepsstatusStatus for begrepet. Undersøk hvilke statuser som s' })
-    .getByRole('textbox')
-    .nth(1)
-    .click();
-  await page
-    .locator('form div')
-    .filter({ hasText: 'Bruk av begrepetBegrepsstatusStatus for begrepet. Undersøk hvilke statuser som s' })
-    .getByRole('textbox')
+    .locator('input[type="text"]')
     .nth(1)
     .fill('Biologisk mangfold');
+  await page
+    .locator('form div')
+    .filter({ hasText: 'Bruk av begrepetBegrepsstatusStatus for begrepet. Undersøk hvilke statuser som s' })
+    .locator('input[type="text"]')
+    .nth(2)
+    .fill('Biologisk mangfald');
+  await page
+    .locator('form div')
+    .filter({ hasText: 'Bruk av begrepetBegrepsstatusStatus for begrepet. Undersøk hvilke statuser som s' })
+    .locator('input[type="text"]')
+    .nth(3)
+    .fill('Biodiversity');
+  await page.locator('textarea[name="eksempel\\.nb"]').fill('Øret');
+  await page.locator('textarea[name="eksempel\\.nn"]').fill('Øret');
+  await page.locator('textarea[name="eksempel\\.en"]').fill('Trout');
+  await page.locator('input[name="omfang\\.uri"]').fill('https://www.youtube.com/watch?v=VHv3y0ZM62U');
+  await page.locator('input[name="omfang\\.tekst"]').fill('Mads Hansen og Ida Fladen kveles av surstrømming!');
 
   await page.getByText('GyldighetGyldig f.o.m.Her registrerer du datoen som begrepet skal gjelde fra og ').click();
 
@@ -256,14 +323,18 @@ init('create concept fisk with all languages', async ({ page }) => {
     )
     .fill('31.12.3000');
   await page.getByRole('button', { name: 'Kontaktinformasjon' }).click();
-  await page.locator('input[name="kontaktpunkt\\.harEpost"]').fill('gress@fellesdatakatalog.digdir.no');
+  await page.locator('input[name="kontaktpunkt\\.harEpost"]').fill('fisk@fellesdatakatalog.digdir.no');
   await page.locator('input[name="kontaktpunkt\\.harTelefon"]').fill('123456789');
-  await page.locator('input[name="abbreviatedLabel"]').fill('GRS');
+
+  await page.locator('input[name="abbreviatedLabel"]').fill('FSK');
+  await page.locator('input[name="versjonsnr\\.major"]').fill('1');
+  await page.locator('input[name="versjonsnr\\.minor"]').fill('1');
+  await page.locator('input[name="versjonsnr\\.patch"]').fill('2');
   await page
     .locator('form div')
     .filter({ hasText: 'Interne opplysningerOpplysningene under er til intern bruk og vil ikke publisere' })
     .getByRole('textbox')
     .nth(4)
-    .fill('flora');
+    .fill('fauna');
   await page.getByRole('button', { name: 'Lagre' }).click();
 });
