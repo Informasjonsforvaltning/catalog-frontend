@@ -73,7 +73,6 @@ export const DELETE = async (req: NextRequest, { params }: Props) => {
     }
     return new Response('Code list deleted', { status: 200 });
   } catch (error) {
-    console.log('in delete catch');
     return new Response('Failed to delete code list', { status: 500 });
   }
 };
