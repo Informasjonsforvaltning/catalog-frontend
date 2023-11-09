@@ -55,7 +55,7 @@ export const useCreateComment = ({ orgNumber, topicId }) => {
         return Promise.reject('Unauthorized');
       }
 
-      return response.json();
+      return response;
     },
     onSuccess: () => {
       // Invalidate and refetch
