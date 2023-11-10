@@ -1,0 +1,34 @@
+name: End-to-end test
+
+on:
+  pull_request:
+    types: [ready_for_review, opened, reopened, synchronize]
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    name: End-to-end test
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          # We need to fetch all branches and commits so that Nx affected has a base to compare against.
+          fetch-depth: 0
+
+      - uses: nrwl/nx-set-shas@v3
+      - run: yarn install --frozen-lockfile
+
+      - name: Caching Nx
+        uses: actions/cache@v3
+        with:
+          path: node_modules/.cache
+          key: cache-nx-${{ hashFiles('yarn.lock') }}
+
+      - run: yarn run affected:e2e --configuration=ci
