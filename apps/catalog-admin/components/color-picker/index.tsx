@@ -9,10 +9,11 @@ import { AdminContextProvider, useAdminDispatch, useAdminState } from '../../con
 import styles from './color-picker.module.css';
 
 interface ColorPicker {
+  catalogId: string;
   type: 'background' | 'font';
 }
 
-export const ColorPicker = (catalogId, { type }: ColorPicker) => {
+export const ColorPicker = ({ catalogId, type }: ColorPicker) => {
   const { data: getDesign } = useGetDesign(catalogId);
   const dbDesign: Design = getDesign;
 
