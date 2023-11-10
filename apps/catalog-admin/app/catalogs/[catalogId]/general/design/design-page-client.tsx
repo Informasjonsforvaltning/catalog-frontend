@@ -88,17 +88,14 @@ const DesignPageClient = ({ catalogId, organization }) => {
         <div className={styles.subheading}>
           <Heading size='small'>{localization.catalogAdmin.preview}</Heading>
         </div>
-
-        <>
-          <PageBanner
-            title={'Administrere Begrepskatalog'}
-            subtitle={String(getTranslateText(organization?.prefLabel))}
-            logoDescription={dbDesign?.hasLogo && dbDesign?.logoDescription}
-            backgroundColor={backgroundColor || dbDesign?.backgroundColor || '#FFFFFF'}
-            fontColor={fontColor || dbDesign?.fontColor || '#2D3741'}
-            logo={logo || (dbDesign?.hasLogo && `/api/design/${catalogId}/logo`) || null}
-          />
-        </>
+        <PageBanner
+          title={'Administrere Begrepskatalog'}
+          subtitle={String(getTranslateText(organization?.prefLabel))}
+          logoDescription={dbDesign?.hasLogo && dbDesign?.logoDescription}
+          backgroundColor={(backgroundColor ?? dbDesign?.backgroundColor) || '#FFFFFF'}
+          fontColor={fontColor ?? dbDesign?.fontColor ?? '#2D3741'}
+          logo={logo || (dbDesign?.hasLogo && `/api/design/${catalogId}/logo`) || null}
+        />
         <div className={styles.subheading}>
           <Heading size='small'>{localization.catalogAdmin.customizeDesign}</Heading>
         </div>
@@ -139,13 +136,19 @@ const DesignPageClient = ({ catalogId, organization }) => {
               <div className={styles.label}>
                 <Label>{localization.catalogAdmin.backgroundColor}</Label>
               </div>
-              <ColorPicker type='background' />
+              <ColorPicker
+                catalogId={catalogId}
+                type={'background'}
+              />
             </div>
             <div>
               <div className={styles.label}>
                 <Label>{localization.catalogAdmin.fontColor}</Label>
               </div>
-              <ColorPicker type='font' />
+              <ColorPicker
+                catalogId={catalogId}
+                type='font'
+              />
             </div>
           </div>
           <div>
