@@ -91,6 +91,7 @@ export const nb = {
     addDataset: 'Legg til ny datasettbeskrivelse',
     createConcept: 'Nytt begrep',
     importConcept: 'Importer',
+    edit: 'Rediger',
     delete: 'Slett',
     expandAll: 'Vis alle felter',
     harvestDataset: 'Høst spesifikasjon fra katalog',

@@ -165,6 +165,7 @@ export const ConceptPageClient = ({
   };
 
   const pageSubtitle = organization?.name ?? catalogId;
+  const isLatestRevision = !revisions?.find((revision) => revision.id === concept?.id);
 
   const languageOptions = [
     { value: 'nb', label: 'Norsk bokmål' },
@@ -500,13 +501,13 @@ export const ConceptPageClient = ({
               <div className={classes.actionButtons}>
                 {hasWritePermission && (
                   <>
-                    <Button onClick={handleEditConcept}>Rediger</Button>
-                    {!concept?.erPublisert && (
+                    <Button onClick={handleEditConcept}>{localization.button.edit}</Button>
+                    {isLatestRevision && (
                       <Button
                         color={'danger'}
                         onClick={handleDeleteConcept}
                       >
-                        Slett
+                        {localization.button.delete}
                       </Button>
                     )}
                   </>
