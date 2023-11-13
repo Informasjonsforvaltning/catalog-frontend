@@ -16,7 +16,7 @@ spec:
             - name: NEXTAUTH_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: service-catalog-frontend-staging
+                  name: service-catalog-frontend
                   key: NEXTAUTH_SECRET
             - name: KEYCLOAK_ID
               value: service-catalog-frontend
@@ -29,12 +29,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: sso-client-credentials
-                  key: SERVICE-CATALOG_FRONTEND
-            - name: SERVICE-CATALOG_BASE_URI
+                  key: SERVICE_CATALOG_FRONTEND
+            - name: SERVICE_CATALOG_BASE_URI
               valueFrom:
                 secretKeyRef:
                   name: commonurl-staging
-                  key: SERVICE-CATALOG_BASE_URI
+                  key: SERVICE_CATALOG_BASE_URI
             - name: CATALOG_COMMENTS_SERVICE_BASE_URI
               valueFrom:
                 secretKeyRef:
@@ -55,11 +55,11 @@ spec:
                 secretKeyRef:
                   name: commonurl-staging
                   key: ORGANIZATION_CATALOG_BASE_URI
-            - name: SERVICE-CATALOG_GUI_BASE_URI
+            - name: SERVICE_CATALOG_GUI_BASE_URI
               valueFrom:
                 secretKeyRef:
                   name: commonurl-staging
-                  key: SERVICE-CATALOGUE_GUI_BASE_URI
+                  key: SERVICE_CATALOG_GUI_BASE_URI
             - name: FULLTEXT_SEARCH_BASE_URI
               valueFrom:
                 secretKeyRef:
