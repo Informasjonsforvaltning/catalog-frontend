@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test.use({ storageState: 'apps/concept-catalog-e2e/playwright/.auth/read.json' });
 
 test('search', async ({ page }) => {
-  await page.goto(`/${process.env.USER_ADMIN_CATALOG_ID}`);
+  await page.goto(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`);
   await page.getByPlaceholder('Søk').click();
   await page.getByPlaceholder('Søk').fill('virveldyr');
   await page.getByPlaceholder('Søk').press('Enter');
@@ -12,7 +12,7 @@ test('search', async ({ page }) => {
 });
 
 test('filter by status', async ({ page }) => {
-  await page.goto(`/${process.env.USER_ADMIN_CATALOG_ID}`);
+  await page.goto(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`);
   await page.getByRole('button', { name: 'Begrepsstatus' }).click();
   await page.getByLabel('Utkast').check();
   await expect(page.locator('a:near(h2)')).toHaveCount(1);
@@ -47,7 +47,7 @@ test('filter by status', async ({ page }) => {
 });
 
 // test('filter by assigned', async ({ page }) => {
-//   await page.goto(`/${process.env.USER_ADMIN_CATALOG_ID}`);
+//   await page.goto(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`);
 //   await page.getByRole('button', { name: 'Tildelt' }).click();
 //   await page
 //     .locator('div')
@@ -72,7 +72,7 @@ test('filter by status', async ({ page }) => {
 // });
 
 test('filter by published', async ({ page }) => {
-  await page.goto(`/${process.env.USER_ADMIN_CATALOG_ID}`);
+  await page.goto(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`);
   await page.getByRole('button', { name: 'Publiseringstilstand' }).click();
 
   await page.locator('label').filter({ hasText: 'Publisert' }).click();

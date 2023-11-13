@@ -9,9 +9,9 @@ init('remove all concepts', async ({ page }) => {
     await dialog.accept();
   });
 
-  await page.goto(`/${process.env.USER_ADMIN_CATALOG_ID}`);
+  await page.goto(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`);
   do {
-    await page.waitForURL(`/${process.env.USER_ADMIN_CATALOG_ID}`);
+    await page.waitForURL(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`);
     await page.locator('[class*="search-hit-container_searchHitsContainer__"]').waitFor({ state: 'visible' });
     if ((await page.locator('[class*="search-hit_titleRow__"]').count()) > 0) {
       await page.locator('[class*="search-hit_titleRow__"] > a').first().click();
@@ -22,14 +22,14 @@ init('remove all concepts', async ({ page }) => {
         await page.getByRole('tab', { name: 'Versjoner' }).click();
         await page.getByLabel('Versjoner').getByRole('link').last().click();
       }
-      await page.waitForURL(`/${process.env.USER_ADMIN_CATALOG_ID}`);
+      await page.waitForURL(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`);
       await page.locator('[class*="search-hit-container_searchHitsContainer__"]').waitFor({ state: 'visible' });
     }
   } while ((await page.locator('[class*="search-hit_titleRow__"]').count()) > 0);
 });
 
 init('create concept gress', async ({ page }) => {
-  await page.goto(`/${process.env.USER_ADMIN_CATALOG_ID}`);
+  await page.goto(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`);
   await expect(page.getByRole('button', { name: 'Nytt begrep' })).toBeVisible();
   await page.getByRole('button', { name: 'Nytt begrep' }).click();
   await page.locator('input[name="anbefaltTerm\\.navn\\.nb"]').fill('Gress');
@@ -144,7 +144,7 @@ init('create concept gress', async ({ page }) => {
 });
 
 init('create concept fisk with all languages', async ({ page }) => {
-  await page.goto(`/${process.env.USER_ADMIN_CATALOG_ID}`);
+  await page.goto(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`);
   await expect(page.getByRole('button', { name: 'Nytt begrep' })).toBeVisible();
   await page.getByRole('button', { name: 'Nytt begrep' }).click();
 

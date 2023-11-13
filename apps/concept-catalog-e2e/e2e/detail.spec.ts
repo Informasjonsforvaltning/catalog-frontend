@@ -4,7 +4,7 @@ import { formatISO } from '../../../libs/utils/src/lib/date/format';
 test.use({ storageState: 'apps/concept-catalog-e2e/playwright/.auth/admin.json' });
 
 test('show detail info', async ({ page }) => {
-  await page.goto(`/${process.env.USER_ADMIN_CATALOG_ID}`);
+  await page.goto(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`);
   await page.getByPlaceholder('Søk').click();
   await page.getByPlaceholder('Søk').fill('fisk');
   await page.getByPlaceholder('Søk').press('Enter');
@@ -56,11 +56,11 @@ test('show detail info', async ({ page }) => {
 });
 
 test('manage comments', async ({ page }) => {
-  await page.goto(`/${process.env.USER_ADMIN_CATALOG_ID}`);
+  await page.goto(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`);
 });
 
 test('show history', async ({ page }) => {
-  await page.goto(`/${process.env.USER_ADMIN_CATALOG_ID}`);
+  await page.goto(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`);
 
   await page.getByRole('tab', { name: 'Endringshistorikk' }).click();
   await page.getByRole('button', { name: 'LAMA LEDENDE' }).click();
@@ -70,7 +70,7 @@ test('show history', async ({ page }) => {
 });
 
 test('show versions', async ({ page }) => {
-  await page.goto(`/${process.env.USER_ADMIN_CATALOG_ID}`);
+  await page.goto(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`);
   await page.getByPlaceholder('Søk').click();
   await page.getByPlaceholder('Søk').fill('fisk');
   await page.getByPlaceholder('Søk').press('Enter');
