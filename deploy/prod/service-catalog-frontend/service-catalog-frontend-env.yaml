@@ -59,7 +59,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: commonurl-prod
-                  key: SERVICE_CATALOGUE_GUI_BASE_URI
+                  key: SERVICE_CATALOG_GUI_BASE_URI
             - name: FULLTEXT_SEARCH_BASE_URI
               valueFrom:
                 secretKeyRef:
