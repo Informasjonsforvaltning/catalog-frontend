@@ -78,7 +78,7 @@ export const SearchPageClient = ({
   const getInternalFields = (fieldId) => fieldsResult?.internal?.find((field) => field.id === fieldId);
 
   const getSubjectChildren = (subjectId: number) => {
-    const children = [];
+    const children: number[] = [];
     subjectCodeList?.codes
       ?.filter((code) => code.parentID === subjectId)
       .map((code) => code.id)
@@ -147,10 +147,9 @@ export const SearchPageClient = ({
       ] as BreadcrumbType[])
     : [];
 
-  const changePage = (page: { selected: number }) => {
-    router.push(`${catalogId}?page=${page.selected}`);
-
-    setCurrentPage(page.selected);
+  const onPageChange = (page: number) => {
+    router.push(`${catalogId}?page=${page - 1}`);
+    setCurrentPage(page - 1);
   };
 
   const removeFilter = (filterName, filterType: FilterType) => {
@@ -397,7 +396,7 @@ export const SearchPageClient = ({
                   conceptStatuses={conceptStatuses}
                   assignableUsers={usersResult?.users ?? []}
                   onLabelClick={onLabelClick}
-                  onPageChange={changePage}
+                  onPageChange={onPageChange}
                   forcePage={currentPage}
                 />
               )}

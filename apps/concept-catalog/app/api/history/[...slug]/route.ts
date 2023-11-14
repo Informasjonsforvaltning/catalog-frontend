@@ -9,8 +9,11 @@ export const GET = async (req: NextRequest, { params }: { params: { slug: string
   const { slug } = params;
   if (slug?.length == 2) {
     const [catalogId, resourceId] = slug;
+    const page = req.nextUrl.searchParams.get('page') ?? 1;
+    const size = req.nextUrl.searchParams.get('size') ?? 10;
+
     try {
-      const response = await getHistory(catalogId, resourceId, `${session?.accessToken}`);
+      const response = await getHistory(catalogId, resourceId, `${session?.accessToken}`, +page, +size);
       if (response.status !== 200) {
         throw new Error();
       }

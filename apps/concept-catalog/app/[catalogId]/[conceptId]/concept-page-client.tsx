@@ -14,6 +14,7 @@ import {
   Tag,
   Button,
   ToggleButtonGroup,
+  Pagination,
 } from '@catalog-frontend/ui';
 import {
   localization,
@@ -139,10 +140,16 @@ export const ConceptPageClient = ({
     topicId: concept?.id,
   });
 
+  const [historyCurrentPage, setHistoryCurrentPage] = useState(1);
   const { status: getHistoryStatus, data: getHistoryData } = useGetHistory({
     catalogId,
     resourceId: concept?.id,
+    page: historyCurrentPage,
   });
+
+  const handleHistoryPageChange = (page) => {
+    setHistoryCurrentPage(page);
+  };
 
   const handleOnChangePublished = (e) => {
     if (e.target.checked) {
@@ -460,7 +467,7 @@ export const ConceptPageClient = ({
         subtitle={pageSubtitle}
         fontColor={design?.fontColor}
         backgroundColor={design?.backgroundColor}
-        logo={design?.hasLogo && `/api/catalog-admin/${catalogId}/design/logo`}
+        logo={design?.hasLogo ? `/api/catalog-admin/${catalogId}/design/logo` : undefined}
         logoDescription={design?.logoDescription}
       />
       <div className='container'>
@@ -692,30 +699,40 @@ export const ConceptPageClient = ({
                           ) : getHistoryData.updates?.length === 0 ? (
                             <span>{localization.history.noChanges}</span>
                           ) : (
-                            <Accordion>
-                              {getHistoryData.updates?.length > 0 &&
-                                getHistoryData.updates.map((update: Update, i) => (
-                                  <Accordion.Item key={`history-${update.id}`}>
-                                    <Accordion.Header className={classes.historyHeader}>
-                                      <span>{update.person.name}</span>
-                                      <span>{formatISO(update.datetime)}</span>
-                                    </Accordion.Header>
-                                    <Accordion.Content>
-                                      {update.operations?.map((operation, i) => (
-                                        <div
-                                          key={`operation-${i}`}
-                                          className={classes.historyOperation}
-                                        >
-                                          <div>
-                                            {operation.op} - {operation.path}
+                            <>
+                              <Accordion>
+                                {getHistoryData.updates?.length > 0 &&
+                                  getHistoryData.updates.map((update: Update, i) => (
+                                    <Accordion.Item key={`history-${update.id}`}>
+                                      <Accordion.Header className={classes.historyHeader}>
+                                        <span>{update.person.name}</span>
+                                        <span>{formatISO(update.datetime)}</span>
+                                      </Accordion.Header>
+                                      <Accordion.Content>
+                                        {update.operations?.map((operation, i) => (
+                                          <div
+                                            key={`operation-${i}`}
+                                            className={classes.historyOperation}
+                                          >
+                                            <div>
+                                              {operation.op} - {operation.path}
+                                            </div>
+                                            <div>{JSON.stringify(operation.value)}</div>
                                           </div>
-                                          <div>{JSON.stringify(operation.value)}</div>
-                                        </div>
-                                      ))}
-                                    </Accordion.Content>
-                                  </Accordion.Item>
-                                ))}
-                            </Accordion>
+                                        ))}
+                                      </Accordion.Content>
+                                    </Accordion.Item>
+                                  ))}
+                              </Accordion>
+                              {getHistoryData.updates?.length > 0 && (
+                                <Pagination
+                                  className={classes.historyPagination}
+                                  onChange={handleHistoryPageChange}
+                                  totalPages={getHistoryData.pagination.totalPages ?? 0}
+                                  currentPage={historyCurrentPage}
+                                />
+                              )}
+                            </>
                           ),
                         name: 'Endringshistorikk',
                       },

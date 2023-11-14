@@ -11,7 +11,7 @@ type Props = {
   conceptStatuses: ReferenceDataCode[];
   assignableUsers: AssignedUser[];
   onLabelClick: (label: string) => void;
-  onPageChange(selectedItem: { selected: number }): void;
+  onPageChange(selectedItem: number): void;
   forcePage?: number;
 };
 
@@ -58,10 +58,9 @@ const SearchHitContainer = ({
       ))}
       {data?.hits?.length > 0 && (
         <Pagination
-          onPageChange={onPageChange}
-          forcePage={forcePage}
+          onChange={onPageChange}
           totalPages={totalPage}
-          currentPage={currentPage}
+          currentPage={currentPage + 1}
         />
       )}
     </div>

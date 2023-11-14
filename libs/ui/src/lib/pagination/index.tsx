@@ -1,32 +1,28 @@
 'use client';
 
 import { Pagination as DSPagination } from '@digdir/design-system-react';
+import cn from 'classnames';
 import styles from './pagination.module.css';
 
 interface Props {
-  onPageChange(selectedItem: { selected: number }): void;
+  onChange(selectedItem: number): void;
   totalPages: number;
   currentPage: number;
+  className?: string;
 }
 
-const Pagination = ({ onPageChange, totalPages, currentPage }: Props) => {
-  const handleOnChange = (selectedItem: number) => {
-    onPageChange({ selected: selectedItem - 1 });
-  };
-
-  return (
-    <DSPagination
-      className={styles.paginationContainer}
-      currentPage={currentPage + 1}
-      totalPages={totalPages}
-      onChange={handleOnChange}
-      nextLabel='Neste'
-      previousLabel='Forrige'
-      itemLabel={(num) => `Side ${num}}`}
-      size='small'
-      compact={true}
-    />
-  );
-};
+const Pagination = ({ onChange, totalPages, currentPage, className }: Props) => (
+  <DSPagination
+    className={cn(className, styles.paginationContainer)}
+    currentPage={currentPage}
+    totalPages={totalPages}
+    onChange={onChange}
+    nextLabel='Neste'
+    previousLabel='Forrige'
+    itemLabel={(num) => `Side ${num}}`}
+    size='small'
+    compact={true}
+  />
+);
 
 export { Pagination };
