@@ -9,3 +9,4 @@ export * from './lib/code-list/api';
 export * from './lib/users/api';
 export * from './lib/internal-fields/api';
 export * from './lib/change-requests/api';
+export * from './lib/public-services/api';
