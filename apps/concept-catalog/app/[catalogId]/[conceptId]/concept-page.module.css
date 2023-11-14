@@ -175,3 +175,7 @@ a.versionTitle {
 .historyOperation:nth-of-type(2n) {
   background-color: #eeeeeeb6;
 }
+
+.historyPagination {
+  margin-top: 1rem;
+}
