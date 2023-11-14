@@ -13,7 +13,7 @@ const nextConfig = {
     svgr: false,
   },
   env: {
-    CONCEPT_CATALOG_BASE_URI: process.env.CONCEPT_CATALOG_BASE_URI,
+    SERVICE_CATALOG_BASE_URI: process.env.SERVICE_CATALOG_BASE_URI,
   },
   webpack(config) {
     // Grab the existing rule that handles SVG imports
