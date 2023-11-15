@@ -16,7 +16,7 @@ spec:
             - name: NEXTAUTH_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: service-catalog-frontend-demo
+                  name: service-catalog-frontend
                   key: NEXTAUTH_SECRET
             - name: KEYCLOAK_ID
               value: service-catalog-frontend
