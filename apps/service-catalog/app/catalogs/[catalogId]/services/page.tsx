@@ -1,4 +1,4 @@
-export default async function Index() {
+export default async function ServicePage() {
   return (
     <div>
       <h1>Tjenestekatalog</h1>

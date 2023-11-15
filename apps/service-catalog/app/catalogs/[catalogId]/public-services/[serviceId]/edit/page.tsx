@@ -1,4 +1,4 @@
-export default async function Index() {
+export default async function EditPublicServicePage() {
   return (
     <div>
       <h1>Rediger offentlig tjeneste</h1>
