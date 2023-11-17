@@ -1,4 +1,4 @@
-import { Layout, NextAuthProvider, ReactQueryClientProvider } from '@catalog-frontend/ui';
+import { Layout, NextAuthProvider } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Metadata } from 'next';
 import { Inter } from 'next/font/google';

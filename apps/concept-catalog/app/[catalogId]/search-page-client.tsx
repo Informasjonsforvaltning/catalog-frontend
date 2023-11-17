@@ -29,6 +29,7 @@ import { useImportConcepts } from '../../hooks/import';
 
 import styles from './search-page.module.css';
 import { useRouter, useSearchParams } from 'next/navigation';
+import ConceptSearchHits from '../../components/concept-search-hits';
 
 interface Props {
   catalogId: string;
@@ -54,7 +55,7 @@ export const SearchPageClient = ({
   FDK_REGISTRATION_BASE_URI,
 }: Props) => {
   const searchParams = useSearchParams();
-  const pageNumber: number = textToNumber(searchParams.get('page') as string, 0);
+  const pageNumber: number = textToNumber(searchParams.get('page') as string);
 
   const router = useRouter();
   const searchState = useSearchState();
@@ -242,7 +243,6 @@ export const SearchPageClient = ({
   if (design?.hasLogo) {
     logo = `/api/catalog-admin/${catalogId}/design/logo`;
   }
-
   return (
     <>
       <Breadcrumbs
@@ -393,13 +393,19 @@ export const SearchPageClient = ({
                 <Spinner title='Loading' />
               ) : (
                 <SearchHitContainer
-                  data={data}
-                  catalogId={catalogId}
-                  subjectCodeList={subjectCodeList}
-                  conceptStatuses={conceptStatuses}
-                  assignableUsers={usersResult?.users ?? []}
-                  onLabelClick={onLabelClick}
                   onPageChange={onPageChange}
+                  noSearchHits={data.hits.length < 1}
+                  paginationInfo={data?.page}
+                  searchHits={
+                    <ConceptSearchHits
+                      catalogId={catalogId}
+                      data={data}
+                      conceptStatuses={conceptStatuses}
+                      subjectCodeList={subjectCodeList}
+                      assignableUsers={usersResult?.users ?? []}
+                      onLabelClick={onLabelClick}
+                    />
+                  }
                 />
               )}
             </div>

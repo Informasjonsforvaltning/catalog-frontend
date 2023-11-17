@@ -1,0 +1,13 @@
+.searchHitCard {
+  margin: 0;
+  margin-bottom: 1rem;
+  max-width: 90rem;
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .searchHitCard {
+    display: flex;
+    width: 100%;
+  }
+}
