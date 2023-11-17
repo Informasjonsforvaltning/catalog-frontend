@@ -21,7 +21,7 @@ const Pagination = ({ onChange, totalPages, currentPage, className }: Props) => 
     previousLabel='Forrige'
     itemLabel={(num) => `Side ${num}}`}
     size='small'
-    compact={true}
+    compact={false}
   />
 );
 

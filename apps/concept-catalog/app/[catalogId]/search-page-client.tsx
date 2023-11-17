@@ -232,8 +232,11 @@ export const SearchPageClient = ({
   }, [searchTerm, selectedFieldOption, searchState]);
 
   useEffect(() => {
+    if (currentPage !== pageNumber) {
+      setCurrentPage(pageNumber);
+    }
     refetch().catch((error) => console.error('refetch() failed: ', error));
-  }, [currentPage, selectedSortOption, refetch]);
+  }, [currentPage, selectedSortOption, refetch, pageNumber]);
 
   let logo: string | undefined;
   if (design?.hasLogo) {
@@ -397,7 +400,6 @@ export const SearchPageClient = ({
                   assignableUsers={usersResult?.users ?? []}
                   onLabelClick={onLabelClick}
                   onPageChange={onPageChange}
-                  forcePage={currentPage}
                 />
               )}
             </div>

@@ -12,7 +12,6 @@ type Props = {
   assignableUsers: AssignedUser[];
   onLabelClick: (label: string) => void;
   onPageChange(selectedItem: number): void;
-  forcePage?: number;
 };
 
 const SearchHitContainer = ({
@@ -23,7 +22,6 @@ const SearchHitContainer = ({
   assignableUsers,
   onLabelClick,
   onPageChange,
-  forcePage,
 }: Props) => {
   let currentPage = 0;
   let totalPage = 0;
