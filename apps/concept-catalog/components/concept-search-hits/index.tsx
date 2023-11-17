@@ -17,7 +17,6 @@ import { Chip } from '@digdir/design-system-react';
 interface Props {
   catalogId: string;
   data: any;
-  language?: string;
   conceptStatuses?: ReferenceDataCode[];
   subjectCodeList?: CodeList;
   assignableUsers?: any[];
@@ -94,8 +93,6 @@ const ConceptSearchHits: React.FC<Props> = ({
     </>
   );
 
-  console.log(conceptStatuses);
-
   return (
     <>
       {data?.hits &&
@@ -113,11 +110,13 @@ const ConceptSearchHits: React.FC<Props> = ({
               titleHref={
                 validOrganizationNumber(catalogId) && validUUID(concept.id) ? `/${catalogId}/${concept.id}` : '#'
               }
-            />
-            <ConceptSubject
-              className={cn(styles.greyFont, styles.subject)}
-              concept={concept}
-              subjectCodeList={subjectCodeList}
+              conceptSubject={
+                <ConceptSubject
+                  className={cn(styles.greyFont, styles.subject)}
+                  concept={concept}
+                  subjectCodeList={subjectCodeList}
+                />
+              }
             />
           </div>
         ))}

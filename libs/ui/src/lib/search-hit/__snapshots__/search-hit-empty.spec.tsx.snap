@@ -11,30 +11,18 @@ exports[`SearchHit should render SearchHit with undefined input successfully 1`]
       >
         <div
           class="titleRow"
-        />
-        <p
-          class="subject greyFont subject"
-        />
-      </div>
-      <div
-        class="metaData"
-      >
-        <p>
-          Sist endret
-            
-        </p>
-        <p
-          class="dot"
         >
-          •
-        </p>
-        <p>
-          Ikke publisert
-        </p>
+          <a
+            href=""
+          >
+            <h2
+              class="title"
+            >
+              Uten navn
+            </h2>
+          </a>
+        </div>
       </div>
-      <div
-        class="rowSpaceBetween"
-      />
     </div>
   </div>
 </body>
