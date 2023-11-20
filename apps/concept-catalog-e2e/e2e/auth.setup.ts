@@ -11,7 +11,7 @@ setup('authenticate as user with admin role', async ({ page }) => {
   await page.getByRole('link', { name: 'TestID på nivå høyt Lag din egen testbruker " / "' }).click();
   await page.getByLabel('Personidentifikator (syntetisk)').fill(`${process.env.E2E_AUTH_ADMIN_ID}`);
   await page.getByRole('button', { name: 'Autentiser' }).click();
-  await page.waitForURL(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`, { timeout: 30000 });
+  await page.locator('[class*="search-hit-container_searchHitsContainer__"]').waitFor({ state: 'visible' });
   await expect(page.getByRole('button', { name: 'Nytt begrep' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Importer' })).toBeVisible();
   await expect(page.getByPlaceholder('Søk')).toBeVisible();
@@ -29,7 +29,7 @@ setup('authenticate as user with write role', async ({ page }) => {
   await page.getByRole('link', { name: 'TestID på nivå høyt Lag din egen testbruker " / "' }).click();
   await page.getByLabel('Personidentifikator (syntetisk)').fill(`${process.env.E2E_AUTH_WRITE_ID}`);
   await page.getByRole('button', { name: 'Autentiser' }).click();
-  await page.waitForURL(`/${process.env.E2E_AUTH_WRITE_CATALOG_ID}`, { timeout: 30000 });
+  await page.locator('[class*="search-hit-container_searchHitsContainer__"]').waitFor({ state: 'visible' });
   await expect(page.getByRole('button', { name: 'Nytt begrep' })).toBeVisible();
   await expect(page.getByRole('button', { name: 'Importer' })).toBeVisible({ visible: false });
   await expect(page.getByPlaceholder('Søk')).toBeVisible();
@@ -46,7 +46,7 @@ setup('authenticate as user with read role', async ({ page }) => {
   await page.getByRole('link', { name: 'TestID på nivå høyt Lag din egen testbruker " / "' }).click();
   await page.getByLabel('Personidentifikator (syntetisk)').fill(`${process.env.E2E_AUTH_READ_ID}`);
   await page.getByRole('button', { name: 'Autentiser' }).click();
-  await page.waitForURL(`/${process.env.E2E_AUTH_READ_CATALOG_ID}`, { timeout: 30000 });
+  await page.locator('[class*="search-hit-container_searchHitsContainer__"]').waitFor({ state: 'visible' });
   await expect(page.getByRole('button', { name: 'Nytt begrep' })).toBeVisible({ visible: false });
   await expect(page.getByRole('button', { name: 'Importer' })).toBeVisible({ visible: false });
   await expect(page.getByPlaceholder('Søk')).toBeVisible();

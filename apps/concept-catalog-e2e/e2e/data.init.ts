@@ -9,21 +9,25 @@ init('remove all concepts', async ({ page }) => {
     await dialog.accept();
   });
 
-  await page.goto(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`);
   do {
-    await page.waitForURL(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`);
+    try {
+      await page.goto(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`, { timeout: 60000 });
+    } catch (e) {
+      console.log('try again');
+      await page.goto(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`, { timeout: 60000 });
+    }
     await page.locator('[class*="search-hit-container_searchHitsContainer__"]').waitFor({ state: 'visible' });
+
     if ((await page.locator('[class*="search-hit_titleRow__"]').count()) > 0) {
       await page.locator('[class*="search-hit_titleRow__"] > a').first().click();
 
       if ((await page.locator('button:has-text("Slett")').count()) > 0) {
         await page.getByRole('button', { name: 'Slett' }).click();
+        await page.locator('[class*="search-hit-container_searchHitsContainer__"]').waitFor({ state: 'visible' });
       } else {
-        await page.getByRole('tab', { name: 'Versjoner' }).click();
-        await page.getByLabel('Versjoner').getByRole('link').last().click();
+        //await page.getByRole('tab', { name: 'Versjoner' }).click();
+        //await page.getByLabel('Versjoner').getByRole('link').last().click();
       }
-      await page.waitForURL(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`);
-      await page.locator('[class*="search-hit-container_searchHitsContainer__"]').waitFor({ state: 'visible' });
     }
   } while ((await page.locator('[class*="search-hit_titleRow__"]').count()) > 0);
 });

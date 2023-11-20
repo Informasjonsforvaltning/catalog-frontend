@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { SearchPage } from './services/pages/search.page';
 
 test.use({ storageState: 'apps/concept-catalog-e2e/playwright/.auth/read.json' });
 
@@ -12,8 +13,10 @@ test('search', async ({ page }) => {
 });
 
 test('filter by status', async ({ page }) => {
-  await page.goto(`/${process.env.E2E_AUTH_ADMIN_CATALOG_ID}`);
-  await page.getByRole('button', { name: 'Begrepsstatus' }).click();
+  const searchPage = new SearchPage(page);
+  searchPage.goto('admin');
+
+  searchPage.statusFilterClick();
   await page.getByLabel('Utkast').check();
   await expect(page.locator('a:near(h2)')).toHaveCount(1);
   await expect(page.locator('a:near(h2)')).toContainText('Gress');
