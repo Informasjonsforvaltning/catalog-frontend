@@ -136,7 +136,7 @@ export const ChangeRequestForm = ({
             )}
             {editTitleFlag ? (
               <Button
-                variant='outline'
+                variant='secondary'
                 color='secondary'
                 onClick={() => {
                   setEditTitleFlag(false);
@@ -146,7 +146,7 @@ export const ChangeRequestForm = ({
               </Button>
             ) : (
               <Button
-                variant='outline'
+                variant='secondary'
                 color='secondary'
                 onClick={() => setEditTitleFlag(true)}
               >

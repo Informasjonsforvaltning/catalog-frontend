@@ -271,7 +271,7 @@ export const SearchPageClient = ({
               )}
               {hasAdminPermission && (
                 <UploadButton
-                  variant='outline'
+                  variant='secondary'
                   icon={<FileImportIcon fontSize='1.5rem' />}
                   allowedMimeTypes={[
                     'text/csv',

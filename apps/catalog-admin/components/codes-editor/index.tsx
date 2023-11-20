@@ -251,7 +251,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
                   createNewCode();
                   setIsEditViewOpen(true);
                 }}
-                variant='outline'
+                variant='secondary'
               >
                 {localization.catalogAdmin.createCode}
               </FdsButton>

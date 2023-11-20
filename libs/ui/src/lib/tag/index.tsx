@@ -14,7 +14,7 @@ const Tag = ({ children }: TagProps) => {
       <FdsTag
         className={styles[children ? `${children}`.toLocaleLowerCase() : '']}
         size='small'
-        variant='outlined'
+        variant='secondary'
       >
         {children && capitalizeFirstLetter(`${children}`)}
       </FdsTag>

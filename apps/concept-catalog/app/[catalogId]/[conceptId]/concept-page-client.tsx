@@ -13,7 +13,6 @@ import {
   Spinner,
   Tag,
   Button,
-  ToggleButtonGroup,
   Pagination,
 } from '@catalog-frontend/ui';
 import {
@@ -27,7 +26,7 @@ import {
 import { Concept, Comment, Update, CodeList, InternalField, AssignedUser } from '@catalog-frontend/types';
 import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
-import { Accordion, Switch, Tabs, Textarea } from '@digdir/design-system-react';
+import { Accordion, Switch, Tabs, Textarea, ToggleGroup } from '@digdir/design-system-react';
 import _ from 'lodash';
 import classes from './concept-page.module.css';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../hooks/comments';
@@ -488,11 +487,14 @@ export const ConceptPageClient = ({
             <div className={classes.twoColumnRow}>
               <div>
                 <div className={classes.languages}>
-                  <ToggleButtonGroup
-                    items={languageOptions}
+                  <ToggleGroup
                     onChange={handleLanguageChange}
-                    selectedValue={language}
-                  />
+                    value={languageOptions.find((option) => option.value === language)?.label}
+                  >
+                    {languageOptions.map((item) => (
+                      <ToggleGroup.Item key={item.value}>{item.label}</ToggleGroup.Item>
+                    ))}
+                  </ToggleGroup>
                 </div>
               </div>
               <div className={classes.actionButtons}>
@@ -608,140 +610,139 @@ export const ConceptPageClient = ({
                 </InfoCard>
 
                 <div className={classes.tabs}>
-                  <Tabs
-                    items={[
-                      {
-                        content:
-                          getCommentsStatus == 'loading' ? (
-                            <Spinner size='medium' />
-                          ) : (
-                            <>
-                              <div className={classes.bottomSpacingSmall}>
-                                <Textarea
-                                  value={newCommentText}
-                                  onChange={handleNewCommentChange}
-                                  rows={5}
-                                  aria-labelledby={newCommentButtonId}
-                                  aria-describedby={newCommentButtonId}
-                                />
-                              </div>
-                              <div className={classes.bottomSpacingLarge}>
-                                <Button
-                                  id={newCommentButtonId}
-                                  disabled={newCommentText?.length === 0}
-                                  onClick={() => handleCreateComment()}
+                  <Tabs>
+                    <Tabs.List>
+                      <Tabs.Tab value={localization.comment.comments}>{localization.comment.comments}</Tabs.Tab>
+                      <Tabs.Tab value={localization.changeHistory}>{localization.changeHistory}</Tabs.Tab>
+                      <Tabs.Tab value={localization.concept.versions}>{localization.concept.versions}</Tabs.Tab>
+                    </Tabs.List>
+                    <Tabs.Content value={localization.comment.comments}>
+                      {getCommentsStatus == 'loading' ? (
+                        <Spinner size='medium' />
+                      ) : (
+                        <>
+                          <div className={classes.bottomSpacingSmall}>
+                            <Textarea
+                              value={newCommentText}
+                              onChange={handleNewCommentChange}
+                              rows={5}
+                              aria-labelledby={newCommentButtonId}
+                              aria-describedby={newCommentButtonId}
+                            />
+                          </div>
+                          <div className={classes.bottomSpacingLarge}>
+                            <Button
+                              id={newCommentButtonId}
+                              disabled={newCommentText?.length === 0}
+                              onClick={() => handleCreateComment()}
+                            >
+                              Legg til kommentar
+                            </Button>
+                          </div>
+                          <div>
+                            <div className={classes.commentsHeader}>
+                              <ChatIcon />
+                              Kommentarer ({getCommentsData?.length})
+                            </div>
+                            {getCommentsData?.length > 0 &&
+                              getCommentsData.map((comment: Comment, i) => (
+                                <InfoCard
+                                  key={`comment-${comment.id}`}
+                                  className={classes.comment}
                                 >
-                                  Legg til kommentar
-                                </Button>
-                              </div>
-                              <div>
-                                <div className={classes.commentsHeader}>
-                                  <ChatIcon />
-                                  Kommentarer ({getCommentsData?.length})
-                                </div>
-                                {getCommentsData.length > 0 &&
-                                  getCommentsData.map((comment: Comment, i) => (
-                                    <InfoCard
-                                      key={`comment-${comment.id}`}
-                                      className={classes.comment}
-                                    >
-                                      <InfoCard.Item>
-                                        <div className={classes.commentUser}>
-                                          {comment?.user.name}
-                                          <span>{formatISO(comment?.createdDate)}</span>
-                                        </div>
-                                        {isCommentInEditMode(comment?.id) ? (
-                                          <Textarea
-                                            value={updateCommentText[comment?.id]}
-                                            onChange={(e) => handleUpdateCommentChange(comment.id, e)}
-                                            rows={5}
-                                          />
-                                        ) : (
-                                          <div>
-                                            {comment?.comment.split('\n').map((ln, i) => (
-                                              <span key={`comment-${comment?.id}-${i}`}>
-                                                {ln}
-                                                <br />
-                                              </span>
-                                            ))}
-                                          </div>
-                                        )}
-                                        {comment.user.id === username && (
-                                          <div className={classes.commentActions}>
-                                            <Button
-                                              variant='outline'
-                                              onClick={() => handleUpdateComment(comment)}
-                                            >
-                                              {isCommentInEditMode(comment.id)
-                                                ? localization.comment.saveComment
-                                                : localization.comment.editComment}
-                                            </Button>
-                                            <Button
-                                              variant='outline'
-                                              onClick={(e) => handleDeleteComment(comment.id, e)}
-                                            >
-                                              {localization.comment.deleteComment}
-                                            </Button>
-                                          </div>
-                                        )}
-                                      </InfoCard.Item>
-                                    </InfoCard>
-                                  ))}
-                              </div>
-                            </>
-                          ),
-                        name: localization.comment.comments,
-                      },
-                      {
-                        content:
-                          getHistoryStatus == 'loading' ? (
-                            <Spinner size='medium' />
-                          ) : getHistoryData.updates?.length === 0 ? (
-                            <span>{localization.history.noChanges}</span>
-                          ) : (
-                            <>
-                              <Accordion>
-                                {getHistoryData.updates?.length > 0 &&
-                                  getHistoryData.updates.map((update: Update, i) => (
-                                    <Accordion.Item key={`history-${update.id}`}>
-                                      <Accordion.Header className={classes.historyHeader}>
-                                        <span>{update.person.name}</span>
-                                        <span>{formatISO(update.datetime)}</span>
-                                      </Accordion.Header>
-                                      <Accordion.Content>
-                                        {update.operations?.map((operation, i) => (
-                                          <div
-                                            key={`operation-${i}`}
-                                            className={classes.historyOperation}
-                                          >
-                                            <div>
-                                              {operation.op} - {operation.path}
-                                            </div>
-                                            <div>{JSON.stringify(operation.value)}</div>
-                                          </div>
+                                  <InfoCard.Item>
+                                    <div className={classes.commentUser}>
+                                      {comment?.user.name}
+                                      <span>{formatISO(comment?.createdDate)}</span>
+                                    </div>
+                                    {isCommentInEditMode(comment?.id) ? (
+                                      <Textarea
+                                        value={updateCommentText[comment?.id]}
+                                        onChange={(e) => handleUpdateCommentChange(comment.id, e)}
+                                        rows={5}
+                                      />
+                                    ) : (
+                                      <div>
+                                        {comment?.comment.split('\n').map((ln, i) => (
+                                          <span key={`comment-${comment?.id}-${i}`}>
+                                            {ln}
+                                            <br />
+                                          </span>
                                         ))}
-                                      </Accordion.Content>
-                                    </Accordion.Item>
-                                  ))}
-                              </Accordion>
-                              {getHistoryData.updates?.length > 0 && (
-                                <Pagination
-                                  className={classes.historyPagination}
-                                  onChange={handleHistoryPageChange}
-                                  totalPages={getHistoryData.pagination.totalPages ?? 0}
-                                  currentPage={historyCurrentPage}
-                                />
-                              )}
-                            </>
-                          ),
-                        name: 'Endringshistorikk',
-                      },
-                      {
-                        content: <RevisionsTab />,
-                        name: 'Versjoner',
-                      },
-                    ]}
-                  />
+                                      </div>
+                                    )}
+                                    {comment.user.id === username && (
+                                      <div className={classes.commentActions}>
+                                        <Button
+                                          variant='secondary'
+                                          onClick={() => handleUpdateComment(comment)}
+                                        >
+                                          {isCommentInEditMode(comment.id)
+                                            ? localization.comment.saveComment
+                                            : localization.comment.editComment}
+                                        </Button>
+                                        <Button
+                                          variant='secondary'
+                                          onClick={(e) => handleDeleteComment(comment.id, e)}
+                                        >
+                                          {localization.comment.deleteComment}
+                                        </Button>
+                                      </div>
+                                    )}
+                                  </InfoCard.Item>
+                                </InfoCard>
+                              ))}
+                          </div>
+                        </>
+                      )}
+                    </Tabs.Content>
+                    <Tabs.Content value={localization.changeHistory}>
+                      {getHistoryStatus == 'loading' ? (
+                        <Spinner size='medium' />
+                      ) : getHistoryData?.updates?.length === 0 ? (
+                        <span>{localization.history.noChanges}</span>
+                      ) : (
+                        <>
+                          <Accordion>
+                            {getHistoryData.updates?.length > 0 &&
+                              getHistoryData.updates.map((update: Update, i) => (
+                                <Accordion.Item key={`history-${update.id}`}>
+                                  <Accordion.Header className={classes.historyHeader}>
+                                    <span>{update.person.name}</span>
+                                    <span>{formatISO(update.datetime)}</span>
+                                  </Accordion.Header>
+                                  <Accordion.Content>
+                                    {update.operations?.map((operation, i) => (
+                                      <div
+                                        key={`operation-${i}`}
+                                        className={classes.historyOperation}
+                                      >
+                                        <div>
+                                          {operation.op} - {operation.path}
+                                        </div>
+                                        <div>{JSON.stringify(operation.value)}</div>
+                                      </div>
+                                    ))}
+                                  </Accordion.Content>
+                                </Accordion.Item>
+                              ))}
+                          </Accordion>
+                          {getHistoryData.updates?.length > 0 && (
+                            <Pagination
+                              className={classes.historyPagination}
+                              onChange={handleHistoryPageChange}
+                              totalPages={getHistoryData.pagination.totalPages ?? 0}
+                              currentPage={historyCurrentPage}
+                            />
+                          )}
+                        </>
+                      )}
+                      ,
+                    </Tabs.Content>
+                    <Tabs.Content value={localization.concept.versions}>
+                      <RevisionsTab />
+                    </Tabs.Content>
+                  </Tabs>
                 </div>
               </div>
 
