@@ -17,7 +17,7 @@ export const SignIn = () => {
         breadcrumbList={breadcrumbList}
       />
       <PageBanner
-        title={localization.catalogType.concept}
+        title={localization.catalogType.service}
         subtitle={localization.auth.login}
       />
       <CenterContainer>

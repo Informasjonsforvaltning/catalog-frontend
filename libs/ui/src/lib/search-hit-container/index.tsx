@@ -4,7 +4,7 @@ import { Pagination } from '../pagination';
 import { ReactNode } from 'react';
 
 type Props = {
-  onPageChange(selectedItem: number): void;
+  onPageChange?(selectedItem: number): void;
   searchHits: ReactNode | undefined;
   paginationInfo?: any;
   noSearchHits: boolean;
@@ -13,9 +13,9 @@ type Props = {
 const SearchHitContainer = ({ onPageChange, searchHits, paginationInfo, noSearchHits }: Props) => {
   return (
     <div className={styles.searchHitsContainer}>
-      {noSearchHits && <div className={styles.noHits}>{loc.search.noHits}</div>}
+      {(noSearchHits || noSearchHits === undefined) && <div className={styles.noHits}>{loc.search.noHits}</div>}
       {searchHits}
-      {!noSearchHits && paginationInfo && (
+      {!noSearchHits && paginationInfo && onPageChange && (
         <Pagination
           onChange={onPageChange}
           totalPages={paginationInfo.totalPages}

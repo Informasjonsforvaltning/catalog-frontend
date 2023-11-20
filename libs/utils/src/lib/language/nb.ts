@@ -19,6 +19,7 @@ export const nb = {
     concept: 'Begrepskatalog',
     dataset: 'Datasettkatalogen',
     admin: 'Administrasjonsgrensesnitt',
+    service: 'Tjenestekatalog',
   },
   dataVillage: ['Datalandsbyen', 'Lenke til Datalandsbyen'],
   harvestData: ['Høste data', 'Lenke til å høste data'],

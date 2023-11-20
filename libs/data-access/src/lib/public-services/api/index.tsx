@@ -1,4 +1,4 @@
-const path = `${process.env.SERVICE_CATALOG_SERVICE_BASE_URI}`;
+const path = `${process.env.SERVICE_CATALOG_BASE_URI}`;
 
 export const getAllPublicServices = async (catalogId: string, accessToken: string) => {
   const resource = `${path}/catalogs/${catalogId}/public-services`;

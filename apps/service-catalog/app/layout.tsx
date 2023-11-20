@@ -4,8 +4,8 @@ import { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
 export const metadata: Metadata = {
-  title: localization.catalogType.concept,
-  description: localization.catalogType.concept,
+  title: localization.catalogType.service,
+  description: localization.catalogType.service,
 };
 
 const font = Inter({ subsets: ['latin'] });

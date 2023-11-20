@@ -19,7 +19,7 @@ export const SignOut = () => {
   return (
     <>
       <PageBanner
-        title={localization.catalogType.concept}
+        title={localization.catalogType.service}
         subtitle={localization.auth.logout}
       />
       <CenterContainer>
