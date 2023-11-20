@@ -1,14 +1,13 @@
 'use client';
 
 import { Checkbox, Heading, Textfield } from '@digdir/design-system-react';
-import { BreadcrumbType, Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, Button, FormFieldCard, PageBanner } from '@catalog-frontend/ui';
 import { useCatalogDesign } from '../../../../context/catalog-design';
 import { localization as loc } from '@catalog-frontend/utils';
 
 import { useState } from 'react';
 import { ChangeRequest, Concept, ISOLanguage, JsonPatchOperation } from '@catalog-frontend/types';
 import { Form, Formik } from 'formik';
-import { ConceptFormField } from '../../../../components/form-field-container';
 import { TextAreaField } from '../../../../components/form-fields/text-area-field';
 
 import jsonpatch from 'fast-json-patch';
@@ -163,7 +162,7 @@ export const ChangeRequestForm = ({
             {({ values }) => (
               <Form>
                 <div className={styles.formContainer}>
-                  <ConceptFormField
+                  <FormFieldCard
                     title={loc.conceptHelptexts.anbefaltTermTitle}
                     subtitle={loc.conceptHelptexts.anbefaltTermDescription}
                   >
@@ -177,8 +176,8 @@ export const ChangeRequestForm = ({
                         showOriginal={showOriginal}
                       />
                     ))}
-                  </ConceptFormField>
-                  <ConceptFormField
+                  </FormFieldCard>
+                  <FormFieldCard
                     title={loc.conceptHelptexts.definisjonTitle}
                     subtitle={loc.conceptHelptexts.definisjonDescription}
                   >
@@ -193,8 +192,8 @@ export const ChangeRequestForm = ({
                         showOriginal={showOriginal}
                       />
                     ))}
-                  </ConceptFormField>
-                  <ConceptFormField
+                  </FormFieldCard>
+                  <FormFieldCard
                     title={loc.conceptHelptexts.kildeTilDefinisjonTitle}
                     subtitle={loc.conceptHelptexts.kildeTilDefinisjonDescription}
                   >
@@ -204,8 +203,8 @@ export const ChangeRequestForm = ({
                       originalSources={originalConcept?.definisjon?.kildebeskrivelse}
                       showOriginal={showOriginal}
                     />
-                  </ConceptFormField>
-                  <ConceptFormField
+                  </FormFieldCard>
+                  <FormFieldCard
                     title={loc.conceptHelptexts.folkeligForklaringTitle}
                     subtitle={loc.conceptHelptexts.folkeligForklaringDescription}
                   >
@@ -220,8 +219,8 @@ export const ChangeRequestForm = ({
                         showOriginal={showOriginal}
                       />
                     ))}
-                  </ConceptFormField>
-                  <ConceptFormField
+                  </FormFieldCard>
+                  <FormFieldCard
                     title={loc.conceptHelptexts.folkeligForklaringKildeTitle}
                     subtitle={loc.conceptHelptexts.folkeligForklaringKildeDescription}
                   >
@@ -231,8 +230,8 @@ export const ChangeRequestForm = ({
                       originalSources={originalConcept?.definisjonForAllmennheten?.kildebeskrivelse}
                       showOriginal={showOriginal}
                     />
-                  </ConceptFormField>
-                  <ConceptFormField
+                  </FormFieldCard>
+                  <FormFieldCard
                     title={loc.conceptHelptexts.rettsligForklaringTitle}
                     subtitle={loc.conceptHelptexts.rettsligForklaringDescription}
                   >
@@ -247,8 +246,8 @@ export const ChangeRequestForm = ({
                         showOriginal={showOriginal}
                       />
                     ))}
-                  </ConceptFormField>
-                  <ConceptFormField
+                  </FormFieldCard>
+                  <FormFieldCard
                     title={loc.conceptHelptexts.rettsligForklaringKildeTitle}
                     subtitle={loc.conceptHelptexts.rettsligForklaringKildeDescription}
                   >
@@ -258,8 +257,8 @@ export const ChangeRequestForm = ({
                       originalSources={originalConcept?.definisjonForSpesialister?.kildebeskrivelse}
                       showOriginal={showOriginal}
                     />
-                  </ConceptFormField>
-                  <ConceptFormField
+                  </FormFieldCard>
+                  <FormFieldCard
                     title={loc.conceptHelptexts.merknadTitle}
                     subtitle={loc.conceptHelptexts.merknadDescription}
                   >
@@ -274,7 +273,7 @@ export const ChangeRequestForm = ({
                         showOriginal={showOriginal}
                       />
                     ))}
-                  </ConceptFormField>
+                  </FormFieldCard>
                 </div>
 
                 <div className={styles.bottomlineContainer}>
