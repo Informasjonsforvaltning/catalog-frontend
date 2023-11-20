@@ -165,6 +165,7 @@ export const ConceptPageClient = ({
   };
 
   const pageSubtitle = organization?.name ?? catalogId;
+  const isLatestRevision = !revisions?.find((revision) => revision.id === concept?.id);
 
   const languageOptions = [
     { value: 'nb', label: 'Norsk bokmål' },
@@ -292,7 +293,9 @@ export const ConceptPageClient = ({
                 >
                   <EnvelopeClosedIcon />
                   &nbsp;
-                  {concept?.kontaktpunkt?.harEpost}
+                  <span>
+                    <a href={`mailto:${concept.kontaktpunkt.harEpost}`}>{concept.kontaktpunkt.harEpost}</a>
+                  </span>
                 </div>
               )}
               {concept?.kontaktpunkt?.harTelefon && (
@@ -302,7 +305,7 @@ export const ConceptPageClient = ({
                 >
                   <PhoneIcon />
                   &nbsp;
-                  {concept?.kontaktpunkt?.harTelefon}
+                  <span>{concept.kontaktpunkt.harTelefon}</span>
                 </div>
               )}
             </>,
@@ -498,13 +501,13 @@ export const ConceptPageClient = ({
               <div className={classes.actionButtons}>
                 {hasWritePermission && (
                   <>
-                    <Button onClick={handleEditConcept}>Rediger</Button>
-                    {!concept?.erPublisert && (
+                    <Button onClick={handleEditConcept}>{localization.button.edit}</Button>
+                    {isLatestRevision && (
                       <Button
                         color={'danger'}
                         onClick={handleDeleteConcept}
                       >
-                        Slett
+                        {localization.button.delete}
                       </Button>
                     )}
                   </>

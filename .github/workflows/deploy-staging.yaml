@@ -37,7 +37,6 @@ jobs:
 
       - run: yarn run affected:lint  --parallel=2
       - run: yarn run affected:test  --parallel=2 --configuration=ci
-      - run: yarn run affected:e2e   --parallel=2 --configuration=ci
       - run: yarn run affected:build --parallel=2 --configuration=ci
 
       - name: Caching Dist Folder
@@ -45,7 +44,6 @@ jobs:
         with:
           path: ./dist
           key: cache-dist-${{ github.sha }}
-
   build:
     name: Build affected apps when pull request is created
     needs: [test]

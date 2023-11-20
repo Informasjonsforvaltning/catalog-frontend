@@ -1,5 +1,5 @@
-import { useRouter } from 'next/navigation';
-import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 
 const callConceptApi = async (catalogId: string, conceptId: string, path: string, method: string) => {
@@ -16,19 +16,20 @@ const callConceptApi = async (catalogId: string, conceptId: string, path: string
     return Promise.reject(new Error('Unauthorized'));
   }
 
-  return await response.json();
+  return response;
 };
 
 export const usePublishConcept = (catalogId: string) => {
   const mutation = useMutation({
     mutationKey: ['publishConcept'],
-    mutationFn: async (conceptId: string) => callConceptApi(catalogId, conceptId, 'publish', 'POST'),
+    mutationFn: async (conceptId: string) => (await callConceptApi(catalogId, conceptId, 'publish', 'POST')).json(),
   });
   return mutation;
 };
 
 export const useDeleteConcept = (catalogId: string) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationKey: ['deleteConcept'],
@@ -36,6 +37,7 @@ export const useDeleteConcept = (catalogId: string) => {
       callConceptApi(catalogId, conceptId, '', 'DELETE');
     },
     onSuccess() {
+      queryClient.invalidateQueries({ queryKey: ['searchConcepts'] });
       if (validOrganizationNumber(catalogId)) {
         router.push(`/${catalogId}`);
       }
