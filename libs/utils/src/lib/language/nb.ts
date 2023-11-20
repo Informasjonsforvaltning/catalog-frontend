@@ -40,6 +40,7 @@ export const nb = {
   showMore: 'Vis flere',
   showLess: 'Vis færre',
   title: 'Tittel',
+  changeHistory: 'Endringshistorikk',
 
   language: {
     nb: 'Bokmål',
@@ -236,6 +237,7 @@ export const nb = {
     confirmDelete: 'Er du sikker du ønsker å slette begrepet?',
     noName: 'Uten navn',
     version: 'Versjon',
+    versions: 'Versjoner',
     validPeriod: 'Gyldighetsperiode',
     label: 'Merkelapp',
     relatedConcepts: 'Relaterte begreper ({conceptCount})',
