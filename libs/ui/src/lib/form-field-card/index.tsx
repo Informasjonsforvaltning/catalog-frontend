@@ -7,12 +7,12 @@ interface Props extends PropsWithChildren {
   subtitle?: string;
 }
 
-export const ConceptFormField: FC<PropsWithChildren<Props>> = ({ title, subtitle, children }) => {
+export const FormFieldCard: FC<PropsWithChildren<Props>> = ({ title, subtitle, children }) => {
   return (
     <div className={styles.container}>
       <FieldHeader
-        title={title}
-        subtitle={subtitle}
+        title={title ?? ''}
+        subtitle={subtitle ?? ''}
       />
       <div className={styles.content}>{children}</div>
     </div>
