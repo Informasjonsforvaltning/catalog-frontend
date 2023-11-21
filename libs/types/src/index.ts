@@ -13,4 +13,3 @@ export * from './lib/editor';
 export * from './lib/json-patch';
 export * from './lib/change-request';
 export * from './lib/service';
-export * from './lib/params';
