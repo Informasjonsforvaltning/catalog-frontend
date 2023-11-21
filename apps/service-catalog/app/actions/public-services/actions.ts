@@ -67,7 +67,7 @@ export async function deletePublicService(catalogId: string, serviceId: string) 
     }
     success = true;
   } catch (error) {
-    throw new Error('Noe feil');
+    throw new Error();
   } finally {
     if (success) {
       revalidatePath(`/catalogs/${catalogId}/public-services`);
