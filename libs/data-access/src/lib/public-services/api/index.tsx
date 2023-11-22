@@ -2,7 +2,7 @@ import { Service } from '@catalog-frontend/types';
 
 const path = `${process.env.SERVICE_CATALOG_BASE_URI}`;
 
-export const getAllPublicServices = async (catalogId: string, accessToken: string) => {
+export const handleGetAllPublicServices = async (catalogId: string, accessToken: string) => {
   const resource = `${path}/catalogs/${catalogId}/public-services`;
   const options = {
     headers: {
@@ -13,7 +13,11 @@ export const getAllPublicServices = async (catalogId: string, accessToken: strin
   return await fetch(resource, options);
 };
 
-export const createPublicService = async (publicService: Partial<Service>, catalogId: string, accessToken: string) => {
+export const handleCreatePublicService = async (
+  publicService: Partial<Service>,
+  catalogId: string,
+  accessToken: string,
+) => {
   const resource = `${path}/catalogs/${catalogId}/public-services`;
   const options = {
     headers: {
@@ -22,6 +26,18 @@ export const createPublicService = async (publicService: Partial<Service>, catal
     },
     method: 'POST',
     body: JSON.stringify(publicService),
+  };
+  return await fetch(resource, options);
+};
+
+export const handleDeletePublicService = async (catalogId: string, serviceId: string, accessToken: string) => {
+  const resource = `${path}/catalogs/${catalogId}/public-services/${serviceId}`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'DELETE',
   };
   return await fetch(resource, options);
 };

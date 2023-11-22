@@ -2,15 +2,12 @@
 
 import { Tag, Textarea, Textfield } from '@digdir/design-system-react';
 import { Button, FormFieldCard } from '@catalog-frontend/ui';
-
 import { localization } from '@catalog-frontend/utils';
-
 import { Service } from '@catalog-frontend/types';
-
 import styles from './service-form.module.css';
-
 import { TrashIcon } from '@navikt/aksel-icons';
-import { createNewPublicService } from '../../actions/public-services/actions';
+import { createPublicService, deletePublicService } from '../../actions/public-services/actions';
+import { useRouter } from 'next/navigation';
 
 type ServiceFormProps = {
   catalogId: string;
@@ -18,67 +15,76 @@ type ServiceFormProps = {
 };
 
 export const ServiceForm = ({ catalogId, service }: ServiceFormProps) => {
-  const createPublicService = createNewPublicService.bind(null, catalogId);
+  const createNewPublicService = createPublicService.bind(null, catalogId);
+  const router = useRouter();
+
+  const handleDelete = () => {
+    if (service) {
+      if (window.confirm(localization.serviceCatalog.form.confirmDelete)) {
+        deletePublicService(catalogId, service.id);
+      }
+    }
+  };
 
   return (
     <>
       <div className='container'>
-        <div className={styles.pageContainer}>
-          <form action={createPublicService}>
-            <div className={styles.formContainer}>
-              <FormFieldCard
-                title={localization.title}
-                subtitle='Egenskapen brukes å til oppgi navn til en tjeneste'
-              >
-                <div>
-                  <Textfield
-                    defaultValue={service?.title.nb}
-                    label={
-                      <div>
-                        <p>Tekst på bokmål</p>
-                        <Tag
-                          variant='secondary'
-                          color='first'
-                          size='small'
-                        >
-                          Må fylles ut
-                        </Tag>
-                      </div>
-                    }
-                    type='text'
-                    name='title.nb'
-                  />
-                </div>
-              </FormFieldCard>
-              <FormFieldCard
-                title={localization.description}
-                subtitle='Egenskapen brukes til å oppgi en tekstlig beskrivelse av tjenesten'
-              >
-                <Textarea name='description.nb' />
-              </FormFieldCard>
-            </div>
+        <form action={createNewPublicService}>
+          <div className={styles.formCard}>
+            <FormFieldCard
+              title={localization.title}
+              subtitle={localization.serviceCatalog.form.titleSubtitle}
+            >
+              <div>
+                <Textfield
+                  defaultValue={service?.title.nb}
+                  label={
+                    <div>
+                      <p>{localization.serviceCatalog.form.titleLabel}</p>
+                      <Tag
+                        variant='secondary'
+                        color='first'
+                        size='small'
+                      >
+                        Må fylles ut
+                      </Tag>
+                    </div>
+                  }
+                  type='text'
+                  name='title.nb'
+                />
+              </div>
+            </FormFieldCard>
+          </div>
+          <FormFieldCard
+            title={localization.description}
+            subtitle={localization.serviceCatalog.form.descriptionSubtitle}
+          >
+            <Textarea name='description.nb' />
+          </FormFieldCard>
 
-            <div>
-              <Button type='submit'>Lagre tjeneste</Button>
-              {service ? (
-                <Button
-                  color='danger'
-                  variant='secondary'
-                >
-                  <TrashIcon fontSize='1.5rem' />
-                  Slett tjeneste
-                </Button>
-              ) : (
-                <Button
-                  color='danger'
-                  variant='secondary'
-                >
-                  Avbryt
-                </Button>
-              )}
-            </div>
-          </form>
-        </div>
+          <div className={styles.buttonRow}>
+            <Button type='submit'>{localization.serviceCatalog.form.save}</Button>
+            {service ? (
+              <Button
+                color='danger'
+                variant='secondary'
+                onClick={() => handleDelete()}
+              >
+                <TrashIcon fontSize='1.5rem' />
+                {localization.serviceCatalog.form.delete}
+              </Button>
+            ) : (
+              <Button
+                color='danger'
+                variant='secondary'
+                onClick={() => router.push(`/catalogs/${catalogId}/public-services`)}
+              >
+                {localization.button.cancel}
+              </Button>
+            )}
+          </div>
+        </form>
       </div>
     </>
   );
