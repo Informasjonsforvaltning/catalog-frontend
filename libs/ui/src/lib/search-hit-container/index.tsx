@@ -17,7 +17,7 @@ const SearchHitContainer = ({ onPageChange, searchHits, paginationInfo, noSearch
       {searchHits}
       {!noSearchHits && paginationInfo && onPageChange && (
         <Pagination
-          onChange={() => onPageChange}
+          onChange={onPageChange}
           totalPages={paginationInfo.totalPages}
           currentPage={paginationInfo.currentPage + 1}
         />

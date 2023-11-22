@@ -312,4 +312,15 @@ export const nb = {
   validation: {
     invalidValue: 'Ugyldig verdi',
   },
+
+  serviceCatalog: {
+    form: {
+      titleLabel: 'Tekst på bokmål',
+      titleSubtitle: 'Egenskapen brukes å til oppgi navn til en tjeneste',
+      descriptionSubtitle: 'Egenskapen brukes til å oppgi en tekstlig beskrivelse av tjenesten',
+      save: 'Lagre tjeneste',
+      delete: 'Slett tjeneste',
+      confirmDelete: 'Er du sikker på at du vil slette tjenesten?',
+    },
+  },
 };

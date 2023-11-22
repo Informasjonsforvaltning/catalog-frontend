@@ -29,6 +29,7 @@ export default async function PublicServiceSearchHitsPage({ params }: Params) {
                 <SearchHit
                   title={getTranslateText(service.title)}
                   description={getTranslateText(service.description)}
+                  titleHref={`/catalogs/${catalogId}/public-services/${service.id}/edit`}
                 />
               </div>
             ))

@@ -1,0 +1,15 @@
+.cancelLink {
+  text-decoration: none;
+}
+
+.formCard {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+
+.buttonRow {
+  display: flex;
+  gap: 15px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
