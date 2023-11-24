@@ -6,7 +6,11 @@ import { localization } from '@catalog-frontend/utils';
 import { Service } from '@catalog-frontend/types';
 import styles from './service-form.module.css';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { createPublicService, deletePublicService } from '../../actions/public-services/actions';
+import {
+  createPublicService,
+  deletePublicService,
+  updatePublicService,
+} from '../../app/actions/public-services/actions';
 import { useRouter } from 'next/navigation';
 
 type ServiceFormProps = {
@@ -15,7 +19,10 @@ type ServiceFormProps = {
 };
 
 export const ServiceForm = ({ catalogId, service }: ServiceFormProps) => {
-  const createNewPublicService = createPublicService.bind(null, catalogId);
+  const savePublicService = service
+    ? updatePublicService.bind(null, catalogId, service)
+    : createPublicService.bind(null, catalogId);
+
   const router = useRouter();
 
   const handleDelete = () => {
@@ -29,7 +36,7 @@ export const ServiceForm = ({ catalogId, service }: ServiceFormProps) => {
   return (
     <>
       <div className='container'>
-        <form action={createNewPublicService}>
+        <form action={savePublicService}>
           <div className={styles.formCard}>
             <FormFieldCard
               title={localization.title}
