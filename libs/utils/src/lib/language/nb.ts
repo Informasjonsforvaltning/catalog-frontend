@@ -15,6 +15,8 @@ export const nb = {
   somethingWentWrong: 'Beklager, noe gikk galt. Prøv på nytt litt senere.',
   allCatalogs: 'Alle kataloger',
   chooseOrganizaiton: 'Velg virksomhet',
+  services: 'Tjenester',
+  publicServices: 'Offentlige tjenester',
   catalogType: {
     concept: 'Begrepskatalog',
     dataset: 'Datasettkatalogen',
