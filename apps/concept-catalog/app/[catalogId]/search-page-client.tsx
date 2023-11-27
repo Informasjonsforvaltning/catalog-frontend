@@ -4,6 +4,7 @@ import { SearchableField, QuerySort } from '@catalog-frontend/types';
 import {
   BreadcrumbType,
   Breadcrumbs,
+  Button,
   PageBanner,
   UploadButton,
   SearchField,
@@ -16,7 +17,7 @@ import {
   capitalizeFirstLetter,
   localization as loc,
 } from '@catalog-frontend/utils';
-import { Button, Chip, Select, Spinner } from '@digdir/design-system-react';
+import { Chip, Select, Spinner } from '@digdir/design-system-react';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 
 import { useState, useEffect } from 'react';

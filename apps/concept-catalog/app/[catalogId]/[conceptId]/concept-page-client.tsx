@@ -489,10 +489,16 @@ export const ConceptPageClient = ({
                 <div className={classes.languages}>
                   <ToggleGroup
                     onChange={handleLanguageChange}
-                    value={languageOptions.find((option) => option.value === language)?.label}
+                    value={language}
+                    size='small'
                   >
                     {languageOptions.map((item) => (
-                      <ToggleGroup.Item key={item.value}>{item.label}</ToggleGroup.Item>
+                      <ToggleGroup.Item
+                        key={item.value}
+                        value={item.value}
+                      >
+                        {item.label}
+                      </ToggleGroup.Item>
                     ))}
                   </ToggleGroup>
                 </div>
@@ -610,7 +616,10 @@ export const ConceptPageClient = ({
                 </InfoCard>
 
                 <div className={classes.tabs}>
-                  <Tabs>
+                  <Tabs
+                    defaultValue={localization.comment.comments}
+                    size='small'
+                  >
                     <Tabs.List>
                       <Tabs.Tab value={localization.comment.comments}>{localization.comment.comments}</Tabs.Tab>
                       <Tabs.Tab value={localization.changeHistory}>{localization.changeHistory}</Tabs.Tab>
