@@ -25,5 +25,18 @@
 
 .container {
   width: 80%;
-  padding-top: 20px;
+  padding-top: 2rem;
+  max-width: 1010px;
+}
+
+.headingContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding-bottom: 1rem;
+  padding-top: 5rem;
+  align-items: flex-end;
+}
+.button {
+  width: fit-content;
 }

@@ -314,6 +314,8 @@ export const nb = {
   },
 
   serviceCatalog: {
+    searchHitsTitle: 'Listevisning',
+    infoAboutService: 'Informasjon om tjenesten',
     form: {
       titleLabel: 'Tekst på bokmål',
       titleSubtitle: 'Egenskapen brukes å til oppgi navn til en tjeneste',
@@ -321,6 +323,7 @@ export const nb = {
       save: 'Lagre tjeneste',
       delete: 'Slett tjeneste',
       confirmDelete: 'Er du sikker på at du vil slette tjenesten?',
+      new: 'Opprett ny tjeneste',
     },
   },
 };

@@ -5,6 +5,8 @@ import { getPublicServices } from '../../../actions/public-services/actions';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import styles from './public-service-page.module.css';
 import { getOrganization } from '@catalog-frontend/data-access';
+import { Button, Heading } from '@digdir/design-system-react';
+import Link from 'next/link';
 
 export default async function PublicServiceSearchHitsPage({ params }: Params) {
   const { catalogId } = params;
@@ -18,6 +20,17 @@ export default async function PublicServiceSearchHitsPage({ params }: Params) {
         subtitle={getTranslateText(organization.prefLabel).toString()}
       />
       <div className={styles.container}>
+        <div className={styles.headingContainer}>
+          <Heading size='medium'>{localization.serviceCatalog.searchHitsTitle}</Heading>
+          <Button
+            as={Link}
+            href={`/catalogs/${catalogId}/public-services/new`}
+            className={styles.button}
+          >
+            {localization.serviceCatalog.form.new}
+          </Button>
+        </div>
+
         <SearchHitContainer
           searchHits={
             services &&
