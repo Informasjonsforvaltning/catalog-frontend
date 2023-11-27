@@ -277,6 +277,7 @@ export const nb = {
     editSources: 'Rediger kilder',
     sourceTitle: 'Tittel på kilde',
     sourceLink: 'Lenke til kilde',
+    noName: 'Uten navn',
   },
 
   comment: {

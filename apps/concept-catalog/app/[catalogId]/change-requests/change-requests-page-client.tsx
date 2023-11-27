@@ -4,28 +4,23 @@ import { PageBanner, Tag } from '@catalog-frontend/ui';
 import {
   capitalizeFirstLetter,
   convertTimestampToDateAndTime,
-  getTranslateText,
   localization as loc,
-  validChangeRequestId,
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
 import styles from './change-requests-page.module.css';
 import { useRouter } from 'next/navigation';
-import { Heading } from '@digdir/design-system-react';
+import { Button, Heading, Link } from '@digdir/design-system-react';
 import { useCatalogDesign } from '../../../context/catalog-design';
+import cn from 'classnames';
 
-export const ChangeRequestsPageClient = ({ catalogId, organization, changeRequests, conceptsWithChangeRequest }) => {
+export const ChangeRequestsPageClient = ({ catalogId, organization, changeRequests }) => {
   const pageSubtitle = organization?.name ?? '';
   const router = useRouter();
 
-  const handleListItemClick = ({ id: changeRequestId }) => {
-    if (
-      validOrganizationNumber(catalogId) &&
-      validUUID(changeRequestId) &&
-      validChangeRequestId(changeRequests, changeRequestId)
-    ) {
-      router.push(`/${catalogId}/change-requests/${changeRequestId}`);
+  const handleNewConceptSuggestionClick = () => {
+    if (validOrganizationNumber(catalogId)) {
+      router.push(`/${catalogId}/change-requests/new`);
     }
   };
 
@@ -38,10 +33,13 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, changeReques
         subtitle={pageSubtitle}
         fontColor={design?.fontColor}
         backgroundColor={design?.backgroundColor}
-        logo={design?.hasLogo && `/api/catalog-admin/${catalogId}/design/logo`}
+        logo={design?.hasLogo ? `/api/catalog-admin/${catalogId}/design/logo` : undefined}
         logoDescription={design?.logoDescription}
       />
       <div className='container'>
+        <div className={styles.buttonsContainer}>
+          <Button onClick={handleNewConceptSuggestionClick}>{loc.suggestionForNewConcept}</Button>
+        </div>
         <Heading
           level={2}
           size='xsmall'
@@ -50,27 +48,35 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, changeReques
         </Heading>
         <div className={styles.listWrapper}>
           <ul className={styles.list}>
-            {changeRequests.map(({ id, catalogId, conceptId, timeForProposal, proposedBy, status }) => (
+            {changeRequests.map(({ id, title, catalogId, timeForProposal, proposedBy, status }) => (
               <li
                 key={id}
                 itemID={id}
                 title={catalogId}
                 className={styles.listItem}
-                onClick={() => handleListItemClick(id)}
               >
                 <div className={styles.listContent}>
                   <div>
-                    <h2 className={styles.heading}>
-                      {conceptId && conceptsWithChangeRequest
-                        ? getTranslateText(
-                            conceptsWithChangeRequest?.hits?.find((concept) => concept.originaltBegrep === conceptId)
-                              ?.anbefaltTerm?.navn,
-                          )
-                        : loc.suggestionForNewConcept}
-                    </h2>
+                    <Heading
+                      level={3}
+                      size={'xsmall'}
+                    >
+                      <Link
+                        href={
+                          validOrganizationNumber(catalogId) &&
+                          validUUID(id) &&
+                          changeRequests.find(({ id: changeRequestId }) => changeRequestId === id)
+                            ? `/${catalogId}/change-requests/${id}`
+                            : '#'
+                        }
+                        className={title ? styles.heading : cn(styles.heading, styles.noName)}
+                      >
+                        {title || `(${loc.changeRequest.noName})`}
+                      </Link>
+                    </Heading>
                     <div className={styles.text}>
-                      <p className={styles.time}>{convertTimestampToDateAndTime(timeForProposal)}</p>
-                      <p className={styles.proposedBy}>
+                      <p>{convertTimestampToDateAndTime(timeForProposal)}</p>
+                      <p>
                         {proposedBy.name
                           .split(' ')
                           .map((namePart) => capitalizeFirstLetter(namePart))
