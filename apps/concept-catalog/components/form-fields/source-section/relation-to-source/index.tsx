@@ -14,17 +14,28 @@ export const relationToSourceOptions: SingleSelectOption[] = [
 
 interface Props {
   fieldName: string;
+  readOnly?: boolean;
 }
 
-export const RelationToSource: FC<Props> = ({ fieldName }) => {
+export const RelationToSource: FC<Props> = ({ fieldName, readOnly }) => {
   return (
     <div className={styles.fieldContainer}>
-      <Field
-        name={fieldName}
-        as={Select}
-        label={loc.concept.relationToSource}
-        options={relationToSourceOptions}
-      />
+      {readOnly ? (
+        <p>
+          {loc.concept.relationToSource}:
+          <Field
+            name={fieldName}
+            as='span'
+          />
+        </p>
+      ) : (
+        <Field
+          name={fieldName}
+          as={Select}
+          label={loc.concept.relationToSource}
+          options={relationToSourceOptions}
+        />
+      )}
     </div>
   );
 };

@@ -76,7 +76,6 @@ const ChangeRequestEditPageClient = ({
       />
       <ChangeRequestForm
         changeRequestAsConcept={changeRequestAsConcept}
-        originalConcept={originalConcept}
         readOnly={false}
         submitHandler={submitHandler}
       />

@@ -5,10 +5,6 @@
   align-items: flex-end;
 }
 
-.currentValue {
-  composes: currentValue from '../../form-fields.module.css';
-}
-
 .container {
   composes: containerWithLanguage from '../../form-fields.module.css';
 }
