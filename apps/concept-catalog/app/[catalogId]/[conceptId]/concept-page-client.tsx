@@ -9,11 +9,11 @@ import {
   BreadcrumbType,
   ConceptSubject,
   InfoCard,
-  DetailHeading,
   Spinner,
   Tag,
   Button,
   Pagination,
+  DetailsPageLayout,
 } from '@catalog-frontend/ui';
 import {
   localization,
@@ -26,7 +26,7 @@ import {
 import { Concept, Comment, Update, CodeList, InternalField, AssignedUser } from '@catalog-frontend/types';
 import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
-import { Accordion, Switch, Tabs, Textarea, ToggleGroup } from '@digdir/design-system-react';
+import { Accordion, Switch, Tabs, Textarea } from '@digdir/design-system-react';
 import _ from 'lodash';
 import classes from './concept-page.module.css';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../hooks/comments';
@@ -164,12 +164,6 @@ export const ConceptPageClient = ({
   };
 
   const pageSubtitle = organization?.name ?? catalogId;
-
-  const languageOptions = [
-    { value: 'nb', label: 'Norsk bokmål' },
-    { value: 'nn', label: 'Norsk nynorsk' },
-    { value: 'en', label: 'English' },
-  ];
 
   const infoDataColumnRight = [
     [localization.concept.id, concept?.id],
@@ -455,6 +449,264 @@ export const ConceptPageClient = ({
     setPublishedDate(concept?.publiseringsTidspunkt);
   }, [concept]);
 
+  const MainColumn = () => (
+    <div>
+      <InfoCard>
+        {!_.isEmpty(translate(concept?.definisjon?.tekst ?? '', language)) && (
+          <InfoCard.Item label={`${localization.concept.definition}:`}>
+            <Definition
+              definition={concept?.definisjon}
+              language={language}
+            />
+          </InfoCard.Item>
+        )}
+        {!_.isEmpty(translate(concept?.definisjonForAllmennheten?.tekst ?? '', language)) && (
+          <InfoCard.Item label={`${localization.concept.publicDefinition}:`}>
+            <Definition
+              definition={concept?.definisjonForAllmennheten}
+              language={language}
+            />
+          </InfoCard.Item>
+        )}
+
+        {!_.isEmpty(translate(concept?.definisjonForSpesialister?.tekst ?? '', language)) && (
+          <InfoCard.Item label={`${localization.concept.specialistDefinition}:`}>
+            <Definition
+              definition={concept?.definisjonForSpesialister}
+              language={language}
+            />
+          </InfoCard.Item>
+        )}
+        {!_.isEmpty(translate(concept?.merknad, language)) && (
+          <InfoCard.Item label={`${localization.concept.note}:`}>
+            <span>{translate(concept?.merknad, language)}</span>
+          </InfoCard.Item>
+        )}
+        {!_.isEmpty(translate(concept?.eksempel, language)) && (
+          <InfoCard.Item label={`${localization.concept.example}:`}>
+            <span>{translate(concept?.eksempel, language)}</span>
+          </InfoCard.Item>
+        )}
+        {!_.isEmpty(translate(concept?.abbreviatedLabel, language)) && (
+          <InfoCard.Item label={`${localization.concept.abbreviation}:`}>
+            <span>{translate(concept?.abbreviatedLabel, language)}</span>
+          </InfoCard.Item>
+        )}
+        {!_.isEmpty(translate(concept?.tillattTerm, language)) && (
+          <InfoCard.Item label={`${localization.concept.allowedTerm}:`}>
+            <ul>
+              {ensureStringArray(translate(concept?.tillattTerm, language)).map((term, i) => (
+                <li key={`allowedTerm-${i}`}>{term}</li>
+              ))}
+            </ul>
+          </InfoCard.Item>
+        )}
+        {!_.isEmpty(translate(concept?.frarådetTerm, language)) && (
+          <InfoCard.Item label={`${localization.concept.notRecommendedTerm}:`}>
+            <ul>
+              {ensureStringArray(translate(concept?.frarådetTerm, language)).map((term, i) => (
+                <li key={`notRecommendedTerm-${i}`}>{term}</li>
+              ))}
+            </ul>
+          </InfoCard.Item>
+        )}
+        {!_.isEmpty(relatedConcepts) && (
+          <InfoCard.Item
+            label={`${localization.formatString(localization.concept.relatedConcepts, {
+              conceptCount: conceptRelations.length,
+            })}`}
+          >
+            <RelatedConcepts
+              catalogId={catalogId}
+              title={getTitle(translate(concept?.anbefaltTerm?.navn, language))}
+              conceptRelations={conceptRelations}
+              relatedConcepts={relatedConcepts}
+              validFromIncluding={concept?.gyldigFom}
+              validToIncluding={concept?.gyldigTom}
+            />
+          </InfoCard.Item>
+        )}
+        {!_.isEmpty(concept?.omfang) && (
+          <InfoCard.Item label={`${localization.concept.valueDomain}:`}>
+            {concept?.omfang?.uri ? (
+              <Link href={concept?.omfang?.uri}>{concept?.omfang?.tekst}</Link>
+            ) : (
+              <span>{concept?.omfang?.tekst}</span>
+            )}
+          </InfoCard.Item>
+        )}
+        <InterneFelt
+          fields={fieldsResult.internal}
+          codeLists={codeListsResult.codeLists}
+          users={usersResult.users}
+          concept={concept}
+          location='main_column'
+          language={language}
+        />
+      </InfoCard>
+
+      <div className={classes.tabs}>
+        <Tabs
+          defaultValue={localization.comment.comments}
+          size='small'
+        >
+          <Tabs.List>
+            <Tabs.Tab value={localization.comment.comments}>{localization.comment.comments}</Tabs.Tab>
+            <Tabs.Tab value={localization.changeHistory}>{localization.changeHistory}</Tabs.Tab>
+            <Tabs.Tab value={localization.concept.versions}>{localization.concept.versions}</Tabs.Tab>
+          </Tabs.List>
+          <Tabs.Content value={localization.comment.comments}>
+            {getCommentsStatus == 'loading' ? (
+              <Spinner size='medium' />
+            ) : (
+              <>
+                <div className={classes.bottomSpacingSmall}>
+                  <Textarea
+                    value={newCommentText}
+                    onChange={handleNewCommentChange}
+                    rows={5}
+                    aria-labelledby={newCommentButtonId}
+                    aria-describedby={newCommentButtonId}
+                  />
+                </div>
+                <div className={classes.bottomSpacingLarge}>
+                  <Button
+                    id={newCommentButtonId}
+                    disabled={newCommentText?.length === 0}
+                    onClick={() => handleCreateComment()}
+                  >
+                    Legg til kommentar
+                  </Button>
+                </div>
+                <div>
+                  <div className={classes.commentsHeader}>
+                    <ChatIcon />
+                    Kommentarer ({getCommentsData?.length})
+                  </div>
+                  {getCommentsData?.length > 0 &&
+                    getCommentsData.map((comment: Comment, i) => (
+                      <InfoCard
+                        key={`comment-${comment.id}`}
+                        className={classes.comment}
+                      >
+                        <InfoCard.Item>
+                          <div className={classes.commentUser}>
+                            {comment?.user.name}
+                            <span>{formatISO(comment?.createdDate)}</span>
+                          </div>
+                          {isCommentInEditMode(comment?.id) ? (
+                            <Textarea
+                              value={updateCommentText[comment?.id]}
+                              onChange={(e) => handleUpdateCommentChange(comment.id, e)}
+                              rows={5}
+                            />
+                          ) : (
+                            <div>
+                              {comment?.comment.split('\n').map((ln, i) => (
+                                <span key={`comment-${comment?.id}-${i}`}>
+                                  {ln}
+                                  <br />
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          {comment.user.id === username && (
+                            <div className={classes.commentActions}>
+                              <Button
+                                variant='secondary'
+                                onClick={() => handleUpdateComment(comment)}
+                              >
+                                {isCommentInEditMode(comment.id)
+                                  ? localization.comment.saveComment
+                                  : localization.comment.editComment}
+                              </Button>
+                              <Button
+                                variant='secondary'
+                                onClick={(e) => handleDeleteComment(comment.id, e)}
+                              >
+                                {localization.comment.deleteComment}
+                              </Button>
+                            </div>
+                          )}
+                        </InfoCard.Item>
+                      </InfoCard>
+                    ))}
+                </div>
+              </>
+            )}
+          </Tabs.Content>
+          <Tabs.Content value={localization.changeHistory}>
+            {getHistoryStatus == 'loading' ? (
+              <Spinner size='medium' />
+            ) : getHistoryData?.updates?.length === 0 ? (
+              <span>{localization.history.noChanges}</span>
+            ) : (
+              <>
+                <Accordion>
+                  {getHistoryData.updates?.length > 0 &&
+                    getHistoryData.updates.map((update: Update, i) => (
+                      <Accordion.Item key={`history-${update.id}`}>
+                        <Accordion.Header className={classes.historyHeader}>
+                          <span>{update.person.name}</span>
+                          <span>{formatISO(update.datetime)}</span>
+                        </Accordion.Header>
+                        <Accordion.Content>
+                          {update.operations?.map((operation, i) => (
+                            <div
+                              key={`operation-${i}`}
+                              className={classes.historyOperation}
+                            >
+                              <div>
+                                {operation.op} - {operation.path}
+                              </div>
+                              <div>{JSON.stringify(operation.value)}</div>
+                            </div>
+                          ))}
+                        </Accordion.Content>
+                      </Accordion.Item>
+                    ))}
+                </Accordion>
+                {getHistoryData.updates?.length > 0 && (
+                  <Pagination
+                    className={classes.historyPagination}
+                    onChange={handleHistoryPageChange}
+                    totalPages={getHistoryData.pagination.totalPages ?? 0}
+                    currentPage={historyCurrentPage}
+                  />
+                )}
+              </>
+            )}
+          </Tabs.Content>
+          <Tabs.Content value={localization.concept.versions}>
+            <RevisionsTab />
+          </Tabs.Content>
+        </Tabs>
+      </div>
+    </div>
+  );
+
+  const RightColumn = () => (
+    <InfoCard size='small'>
+      {infoDataColumnRight.map(([label, value]) => (
+        <InfoCard.Item
+          key={`info-data-${label}`}
+          label={label}
+          labelColor='light'
+        >
+          <span>{value}</span>
+        </InfoCard.Item>
+      ))}
+      <InterneFelt
+        fields={fieldsResult.internal}
+        codeLists={codeListsResult.codeLists}
+        users={usersResult.users}
+        concept={concept}
+        location='right_column'
+        language={language}
+      />
+    </InfoCard>
+  );
+
   return (
     <>
       <Breadcrumbs
@@ -469,315 +721,38 @@ export const ConceptPageClient = ({
         logo={design?.hasLogo ? `/api/catalog-admin/${catalogId}/design/logo` : undefined}
         logoDescription={design?.logoDescription}
       />
-      <div className='container'>
-        <DetailHeading
-          className={classes.detailHeading}
-          headingTitle={
-            <div className={cn(classes.status)}>
-              <h2>{getTitle(translate(concept?.anbefaltTerm?.navn, language))}</h2>
-              {status && <Tag>{status}</Tag>}
-            </div>
-          }
-          subtitle={getDetailSubtitle()}
-        />
 
-        {deleteConcept.status === 'loading' && <Spinner />}
-        {deleteConcept.status !== 'loading' && (
-          <>
-            <div className={classes.twoColumnRow}>
-              <div>
-                <div className={classes.languages}>
-                  <ToggleGroup
-                    onChange={handleLanguageChange}
-                    value={language}
-                    size='small'
+      <DetailsPageLayout
+        headingTitle={
+          <div className={cn(classes.status)}>
+            <h2>{getTitle(translate(concept?.anbefaltTerm?.navn, language))}</h2>
+            {status && <Tag>{status}</Tag>}
+          </div>
+        }
+        headingSubtitle={getDetailSubtitle()}
+        loading={deleteConcept.status === 'loading'}
+        handleLanguageChange={handleLanguageChange}
+        language={language}
+        mainColumn={<MainColumn />}
+        rightColumn={<RightColumn />}
+        buttons={
+          <div className={classes.actionButtons}>
+            {hasWritePermission && (
+              <>
+                <Button onClick={handleEditConcept}>Rediger</Button>
+                {!concept?.erPublisert && (
+                  <Button
+                    color={'danger'}
+                    onClick={handleDeleteConcept}
                   >
-                    {languageOptions.map((item) => (
-                      <ToggleGroup.Item
-                        key={item.value}
-                        value={item.value}
-                      >
-                        {item.label}
-                      </ToggleGroup.Item>
-                    ))}
-                  </ToggleGroup>
-                </div>
-              </div>
-              <div className={classes.actionButtons}>
-                {hasWritePermission && (
-                  <>
-                    <Button onClick={handleEditConcept}>Rediger</Button>
-                    {!concept?.erPublisert && (
-                      <Button
-                        color={'danger'}
-                        onClick={handleDeleteConcept}
-                      >
-                        Slett
-                      </Button>
-                    )}
-                  </>
+                    Slett
+                  </Button>
                 )}
-              </div>
-            </div>
-            <div className={cn(classes.twoColumnRow, classes.bottomSpace)}>
-              <div>
-                <InfoCard>
-                  {!_.isEmpty(translate(concept?.definisjon?.tekst ?? '', language)) && (
-                    <InfoCard.Item label={`${localization.concept.definition}:`}>
-                      <Definition
-                        definition={concept?.definisjon}
-                        language={language}
-                      />
-                    </InfoCard.Item>
-                  )}
-                  {!_.isEmpty(translate(concept?.definisjonForAllmennheten?.tekst ?? '', language)) && (
-                    <InfoCard.Item label={`${localization.concept.publicDefinition}:`}>
-                      <Definition
-                        definition={concept?.definisjonForAllmennheten}
-                        language={language}
-                      />
-                    </InfoCard.Item>
-                  )}
-
-                  {!_.isEmpty(translate(concept?.definisjonForSpesialister?.tekst ?? '', language)) && (
-                    <InfoCard.Item label={`${localization.concept.specialistDefinition}:`}>
-                      <Definition
-                        definition={concept?.definisjonForSpesialister}
-                        language={language}
-                      />
-                    </InfoCard.Item>
-                  )}
-                  {!_.isEmpty(translate(concept?.merknad, language)) && (
-                    <InfoCard.Item label={`${localization.concept.note}:`}>
-                      <span>{translate(concept?.merknad, language)}</span>
-                    </InfoCard.Item>
-                  )}
-                  {!_.isEmpty(translate(concept?.eksempel, language)) && (
-                    <InfoCard.Item label={`${localization.concept.example}:`}>
-                      <span>{translate(concept?.eksempel, language)}</span>
-                    </InfoCard.Item>
-                  )}
-                  {!_.isEmpty(translate(concept?.abbreviatedLabel, language)) && (
-                    <InfoCard.Item label={`${localization.concept.abbreviation}:`}>
-                      <span>{translate(concept?.abbreviatedLabel, language)}</span>
-                    </InfoCard.Item>
-                  )}
-                  {!_.isEmpty(translate(concept?.tillattTerm, language)) && (
-                    <InfoCard.Item label={`${localization.concept.allowedTerm}:`}>
-                      <ul>
-                        {ensureStringArray(translate(concept?.tillattTerm, language)).map((term, i) => (
-                          <li key={`allowedTerm-${i}`}>{term}</li>
-                        ))}
-                      </ul>
-                    </InfoCard.Item>
-                  )}
-                  {!_.isEmpty(translate(concept?.frarådetTerm, language)) && (
-                    <InfoCard.Item label={`${localization.concept.notRecommendedTerm}:`}>
-                      <ul>
-                        {ensureStringArray(translate(concept?.frarådetTerm, language)).map((term, i) => (
-                          <li key={`notRecommendedTerm-${i}`}>{term}</li>
-                        ))}
-                      </ul>
-                    </InfoCard.Item>
-                  )}
-                  {!_.isEmpty(relatedConcepts) && (
-                    <InfoCard.Item
-                      label={`${localization.formatString(localization.concept.relatedConcepts, {
-                        conceptCount: conceptRelations.length,
-                      })}`}
-                    >
-                      <RelatedConcepts
-                        catalogId={catalogId}
-                        title={getTitle(translate(concept?.anbefaltTerm?.navn, language))}
-                        conceptRelations={conceptRelations}
-                        relatedConcepts={relatedConcepts}
-                        validFromIncluding={concept?.gyldigFom}
-                        validToIncluding={concept?.gyldigTom}
-                      />
-                    </InfoCard.Item>
-                  )}
-                  {!_.isEmpty(concept?.omfang) && (
-                    <InfoCard.Item label={`${localization.concept.valueDomain}:`}>
-                      {concept?.omfang?.uri ? (
-                        <Link href={concept?.omfang?.uri}>{concept?.omfang?.tekst}</Link>
-                      ) : (
-                        <span>{concept?.omfang?.tekst}</span>
-                      )}
-                    </InfoCard.Item>
-                  )}
-                  <InterneFelt
-                    fields={fieldsResult.internal}
-                    codeLists={codeListsResult.codeLists}
-                    users={usersResult.users}
-                    concept={concept}
-                    location='main_column'
-                    language={language}
-                  />
-                </InfoCard>
-
-                <div className={classes.tabs}>
-                  <Tabs
-                    defaultValue={localization.comment.comments}
-                    size='small'
-                  >
-                    <Tabs.List>
-                      <Tabs.Tab value={localization.comment.comments}>{localization.comment.comments}</Tabs.Tab>
-                      <Tabs.Tab value={localization.changeHistory}>{localization.changeHistory}</Tabs.Tab>
-                      <Tabs.Tab value={localization.concept.versions}>{localization.concept.versions}</Tabs.Tab>
-                    </Tabs.List>
-                    <Tabs.Content value={localization.comment.comments}>
-                      {getCommentsStatus == 'loading' ? (
-                        <Spinner size='medium' />
-                      ) : (
-                        <>
-                          <div className={classes.bottomSpacingSmall}>
-                            <Textarea
-                              value={newCommentText}
-                              onChange={handleNewCommentChange}
-                              rows={5}
-                              aria-labelledby={newCommentButtonId}
-                              aria-describedby={newCommentButtonId}
-                            />
-                          </div>
-                          <div className={classes.bottomSpacingLarge}>
-                            <Button
-                              id={newCommentButtonId}
-                              disabled={newCommentText?.length === 0}
-                              onClick={() => handleCreateComment()}
-                            >
-                              Legg til kommentar
-                            </Button>
-                          </div>
-                          <div>
-                            <div className={classes.commentsHeader}>
-                              <ChatIcon />
-                              Kommentarer ({getCommentsData?.length})
-                            </div>
-                            {getCommentsData?.length > 0 &&
-                              getCommentsData.map((comment: Comment, i) => (
-                                <InfoCard
-                                  key={`comment-${comment.id}`}
-                                  className={classes.comment}
-                                >
-                                  <InfoCard.Item>
-                                    <div className={classes.commentUser}>
-                                      {comment?.user.name}
-                                      <span>{formatISO(comment?.createdDate)}</span>
-                                    </div>
-                                    {isCommentInEditMode(comment?.id) ? (
-                                      <Textarea
-                                        value={updateCommentText[comment?.id]}
-                                        onChange={(e) => handleUpdateCommentChange(comment.id, e)}
-                                        rows={5}
-                                      />
-                                    ) : (
-                                      <div>
-                                        {comment?.comment.split('\n').map((ln, i) => (
-                                          <span key={`comment-${comment?.id}-${i}`}>
-                                            {ln}
-                                            <br />
-                                          </span>
-                                        ))}
-                                      </div>
-                                    )}
-                                    {comment.user.id === username && (
-                                      <div className={classes.commentActions}>
-                                        <Button
-                                          variant='secondary'
-                                          onClick={() => handleUpdateComment(comment)}
-                                        >
-                                          {isCommentInEditMode(comment.id)
-                                            ? localization.comment.saveComment
-                                            : localization.comment.editComment}
-                                        </Button>
-                                        <Button
-                                          variant='secondary'
-                                          onClick={(e) => handleDeleteComment(comment.id, e)}
-                                        >
-                                          {localization.comment.deleteComment}
-                                        </Button>
-                                      </div>
-                                    )}
-                                  </InfoCard.Item>
-                                </InfoCard>
-                              ))}
-                          </div>
-                        </>
-                      )}
-                    </Tabs.Content>
-                    <Tabs.Content value={localization.changeHistory}>
-                      {getHistoryStatus == 'loading' ? (
-                        <Spinner size='medium' />
-                      ) : getHistoryData?.updates?.length === 0 ? (
-                        <span>{localization.history.noChanges}</span>
-                      ) : (
-                        <>
-                          <Accordion>
-                            {getHistoryData.updates?.length > 0 &&
-                              getHistoryData.updates.map((update: Update, i) => (
-                                <Accordion.Item key={`history-${update.id}`}>
-                                  <Accordion.Header className={classes.historyHeader}>
-                                    <span>{update.person.name}</span>
-                                    <span>{formatISO(update.datetime)}</span>
-                                  </Accordion.Header>
-                                  <Accordion.Content>
-                                    {update.operations?.map((operation, i) => (
-                                      <div
-                                        key={`operation-${i}`}
-                                        className={classes.historyOperation}
-                                      >
-                                        <div>
-                                          {operation.op} - {operation.path}
-                                        </div>
-                                        <div>{JSON.stringify(operation.value)}</div>
-                                      </div>
-                                    ))}
-                                  </Accordion.Content>
-                                </Accordion.Item>
-                              ))}
-                          </Accordion>
-                          {getHistoryData.updates?.length > 0 && (
-                            <Pagination
-                              className={classes.historyPagination}
-                              onChange={handleHistoryPageChange}
-                              totalPages={getHistoryData.pagination.totalPages ?? 0}
-                              currentPage={historyCurrentPage}
-                            />
-                          )}
-                        </>
-                      )}
-                      ,
-                    </Tabs.Content>
-                    <Tabs.Content value={localization.concept.versions}>
-                      <RevisionsTab />
-                    </Tabs.Content>
-                  </Tabs>
-                </div>
-              </div>
-
-              <InfoCard size='small'>
-                {infoDataColumnRight.map(([label, value]) => (
-                  <InfoCard.Item
-                    key={`info-data-${label}`}
-                    label={label}
-                    labelColor='light'
-                  >
-                    <span>{value}</span>
-                  </InfoCard.Item>
-                ))}
-                <InterneFelt
-                  fields={fieldsResult.internal}
-                  codeLists={codeListsResult.codeLists}
-                  users={usersResult.users}
-                  concept={concept}
-                  location='right_column'
-                  language={language}
-                />
-              </InfoCard>
-            </div>
-          </>
-        )}
-      </div>
+              </>
+            )}
+          </div>
+        }
+      />
     </>
   );
 };

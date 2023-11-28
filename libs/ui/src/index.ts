@@ -27,4 +27,5 @@ export * from './lib/key-value-list-item';
 export * from './lib/next-auth-provider';
 export * from './lib/react-query-client-provider';
 export * from './lib/use-warn-if-unsaved-changes';
+export * from './lib/details-page-layout';
 export * from './lib/form-field-card';
