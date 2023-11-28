@@ -13,7 +13,7 @@ import { ExistingSources } from './existing-sources';
 
 interface Props {
   fieldName: string;
-  definisjon: Definisjon;
+  definisjon?: Definisjon;
   originalSources?: {
     forholdTilKilde: string;
     kilde: Kilde[];

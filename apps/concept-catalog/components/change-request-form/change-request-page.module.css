@@ -4,22 +4,13 @@
   flex-direction: column;
   width: 80%;
   margin: 0 auto;
-  padding: 1.6rem 0;
+  padding: 3rem 0;
   overflow-wrap: break-word;
 }
 
 .pageTitleText {
   font-size: 1.5rem;
   font-weight: 500;
-}
-
-.titleContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding-bottom: 1.5em;
-  min-height: 96px;
 }
 
 .formContainer {
@@ -38,10 +29,4 @@
   display: flex;
   flex-direction: row;
   gap: 0.5em;
-}
-
-.languages {
-  padding-top: 2rem;
-  padding-bottom: 3rem;
-  width: 450px;
 }

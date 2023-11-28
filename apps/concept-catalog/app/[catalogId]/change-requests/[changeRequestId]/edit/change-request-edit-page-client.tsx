@@ -16,7 +16,6 @@ const ChangeRequestEditPageClient = ({
   changeRequest,
   changeRequestAsConcept,
   originalConcept,
-  showOriginal,
 }) => {
   const router = useRouter();
   const catalogId = organization.organizationId;
@@ -26,11 +25,11 @@ const ChangeRequestEditPageClient = ({
     catalogId: organization.organizationId,
     changeRequestId: changeRequest.id,
   });
-  const submitHandler = (values: Concept, title: string) => {
+  const submitHandler = (values: Concept) => {
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
       conceptId: changeRequest.conceptId,
       operations: jsonpatch.compare(originalConcept, values) as JsonPatchOperation[],
-      title: title,
+      title: originalConcept.prefLabel?.nb ?? '',
     };
 
     changeRequestMutateHook.mutate(changeRequestFromConcept, {
@@ -76,12 +75,9 @@ const ChangeRequestEditPageClient = ({
         logoDescription={design?.logoDescription}
       />
       <ChangeRequestForm
-        FDK_REGISTRATION_BASE_URI={FDK_REGISTRATION_BASE_URI}
-        organization={organization}
-        changeRequest={changeRequest}
         changeRequestAsConcept={changeRequestAsConcept}
         originalConcept={originalConcept}
-        showOriginal={showOriginal}
+        readOnly={false}
         submitHandler={submitHandler}
       />
     </>

@@ -14,17 +14,17 @@ const NewConceptSuggestionClient = ({
   changeRequest,
   changeRequestAsConcept,
   originalConcept,
-  showOriginal,
 }) => {
   const catalogId = organization.organizationId;
   const pageSubtitle = organization?.name ?? organization.id;
 
   const changeRequestMutateHook = useCreateChangeRequest({ catalogId: catalogId });
-  const submitHandler = (values: Concept, title: string) => {
+  const submitHandler = (values: Concept) => {
+    const anbefaltTerm = values.anbefaltTerm?.navn.nb || values.anbefaltTerm?.navn.nn || values.anbefaltTerm?.navn.en;
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
       conceptId: changeRequest.conceptId,
       operations: jsonpatch.compare(originalConcept, values) as JsonPatchOperation[],
-      title: title,
+      title: anbefaltTerm || '',
     };
     changeRequestMutateHook.mutate(changeRequestFromConcept);
   };
@@ -61,12 +61,9 @@ const NewConceptSuggestionClient = ({
         logoDescription={design?.logoDescription}
       />
       <ChangeRequestForm
-        FDK_REGISTRATION_BASE_URI={FDK_REGISTRATION_BASE_URI}
-        organization={organization}
-        changeRequest={changeRequest}
         changeRequestAsConcept={changeRequestAsConcept}
         originalConcept={originalConcept}
-        showOriginal={showOriginal}
+        readOnly={false}
         submitHandler={submitHandler}
       />
     </>
