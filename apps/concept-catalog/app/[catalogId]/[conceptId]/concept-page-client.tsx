@@ -166,7 +166,7 @@ export const ConceptPageClient = ({
   const pageSubtitle = organization?.name ?? catalogId;
 
   const infoDataColumnRight = [
-    [localization.concept.id, concept?.id],
+    [localization.id, concept?.id],
     [
       localization.publicationState.state,
       <>

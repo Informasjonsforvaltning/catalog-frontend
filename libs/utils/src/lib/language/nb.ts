@@ -15,6 +15,7 @@ export const nb = {
   somethingWentWrong: 'Beklager, noe gikk galt. Prøv på nytt litt senere.',
   allCatalogs: 'Alle kataloger',
   chooseOrganizaiton: 'Velg virksomhet',
+  id: 'ID',
   services: 'Tjenester',
   publicServices: 'Offentlige tjenester',
   catalogType: {
@@ -218,7 +219,6 @@ export const nb = {
   },
 
   concept: {
-    id: 'ID',
     concept: 'Begrep',
     replacedBy: 'Erstattet av',
     createdBy: 'Opprettet av',
