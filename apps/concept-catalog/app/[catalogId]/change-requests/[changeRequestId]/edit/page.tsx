@@ -40,7 +40,7 @@ const ChangeRequestEditPage = async ({ params }) => {
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
   let originalConcept: Concept = {
-    id: null,
+    id: '',
     ansvarligVirksomhet: { id: organization.organizationId },
     seOgså: [],
   };

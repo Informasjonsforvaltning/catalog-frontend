@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 
 import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
 import { useCatalogDesign } from '../../../../../context/catalog-design';
-import ChangeRequestForm from '../change-request-form';
+import ChangeRequestForm from '../../../../../components/change-request-form/change-request-form';
 
 const ChangeRequestEditPageClient = ({
   FDK_REGISTRATION_BASE_URI,
@@ -35,7 +35,7 @@ const ChangeRequestEditPageClient = ({
 
     changeRequestMutateHook.mutate(changeRequestFromConcept, {
       onSuccess: () => {
-        router.reload();
+        router.refresh();
       },
     });
   };
@@ -72,10 +72,12 @@ const ChangeRequestEditPageClient = ({
         subtitle={pageSubtitle}
         fontColor={design?.fontColor}
         backgroundColor={design?.backgroundColor}
-        logo={design?.hasLogo && `/api/catalog-admin/${catalogId}/design/logo`}
+        logo={design?.hasLogo ? `/api/catalog-admin/${catalogId}/design/logo` : undefined}
         logoDescription={design?.logoDescription}
       />
       <ChangeRequestForm
+        FDK_REGISTRATION_BASE_URI={FDK_REGISTRATION_BASE_URI}
+        organization={organization}
         changeRequest={changeRequest}
         changeRequestAsConcept={changeRequestAsConcept}
         originalConcept={originalConcept}

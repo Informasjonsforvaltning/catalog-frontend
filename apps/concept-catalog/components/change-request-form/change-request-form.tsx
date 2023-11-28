@@ -2,17 +2,16 @@
 
 import { Checkbox, Heading, Textfield } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, FormFieldCard, PageBanner } from '@catalog-frontend/ui';
-import { useCatalogDesign } from '../../../../context/catalog-design';
+import { useCatalogDesign } from '../../context/catalog-design';
 import { localization as loc } from '@catalog-frontend/utils';
 
 import { useState } from 'react';
-import { ChangeRequest, Concept, ISOLanguage, JsonPatchOperation } from '@catalog-frontend/types';
+import { Concept, ISOLanguage } from '@catalog-frontend/types';
 import { Form, Formik } from 'formik';
-import { TextAreaField } from '../../../../components/form-fields/text-area-field';
+import { TextAreaField } from '../form-fields/text-area-field';
 
-import jsonpatch from 'fast-json-patch';
 import styles from './change-request-page.module.css';
-import { SourceSection } from '../../../..//components/form-fields/source-section';
+import { SourceSection } from '../form-fields/source-section';
 
 const languageOptions = [
   { value: 'nb', label: 'Norsk bokmål' },
@@ -27,7 +26,7 @@ export const ChangeRequestForm = ({
   changeRequestAsConcept,
   originalConcept,
   showOriginal = false,
-  changeRequestMutateHook,
+  submitHandler,
 }) => {
   const changeRequestId = changeRequest.id;
   const catalogId = organization?.organizationId;
@@ -40,18 +39,7 @@ export const ChangeRequestForm = ({
 
   const handleSubmit = (values: Concept) => {
     setIsSubmitting(true);
-    const changeRequestFromConcept: ChangeRequest = {
-      id: changeRequestId,
-      catalogId: catalogId,
-      status: 'OPEN',
-      conceptId: changeRequest.conceptId,
-      operations: jsonpatch.compare(originalConcept, values) as JsonPatchOperation[],
-    };
-
-    changeRequestMutateHook.mutateAsync(changeRequestFromConcept).catch((error) => {
-      alert('Fail');
-    });
-
+    submitHandler(values);
     setIsSubmitting(false);
   };
 
@@ -82,6 +70,8 @@ export const ChangeRequestForm = ({
 
   const design = useCatalogDesign();
 
+  const numRowsTextField = 4;
+
   return (
     <>
       <Breadcrumbs
@@ -93,7 +83,7 @@ export const ChangeRequestForm = ({
         subtitle={pageSubtitle}
         fontColor={design?.fontColor}
         backgroundColor={design?.backgroundColor}
-        logo={design?.hasLogo && `/api/catalog-admin/${catalogId}/design/logo`}
+        logo={design?.hasLogo ? `/api/catalog-admin/${catalogId}/design/logo` : undefined}
         logoDescription={design?.logoDescription}
       />
       <div className='container'>
@@ -188,7 +178,7 @@ export const ChangeRequestForm = ({
                         fieldType={loc.concept.definition.toLowerCase()}
                         originalText={originalConcept.definisjon?.tekst[language]}
                         language={language}
-                        rows={6}
+                        rows={numRowsTextField}
                         showOriginal={showOriginal}
                       />
                     ))}
@@ -215,7 +205,7 @@ export const ChangeRequestForm = ({
                         fieldType={loc.concept.publicDefinition.toLowerCase()}
                         originalText={originalConcept?.definisjonForAllmennheten?.tekst[language]}
                         language={language}
-                        rows={6}
+                        rows={numRowsTextField}
                         showOriginal={showOriginal}
                       />
                     ))}
@@ -242,7 +232,7 @@ export const ChangeRequestForm = ({
                         fieldType={loc.concept.publicDefinition.toLowerCase()}
                         originalText={originalConcept?.rettsligForklaring?.tekst[language]}
                         language={language}
-                        rows={6}
+                        rows={numRowsTextField}
                         showOriginal={showOriginal}
                       />
                     ))}
@@ -269,7 +259,7 @@ export const ChangeRequestForm = ({
                         fieldType={loc.concept.note.toLowerCase()}
                         originalText={originalConcept?.merknad?.get(language)}
                         language={language}
-                        rows={6}
+                        rows={numRowsTextField}
                         showOriginal={showOriginal}
                       />
                     ))}
