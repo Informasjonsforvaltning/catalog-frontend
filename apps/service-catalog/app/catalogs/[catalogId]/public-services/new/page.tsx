@@ -1,5 +1,5 @@
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import ServiceForm from '../../../../../components/service-form';
+import { BasicServiceForm } from '../../../../../components/basic-service-form';
 import { Heading } from '@digdir/design-system-react';
 import { PageBanner } from '@catalog-frontend/ui';
 import { Organization } from '@catalog-frontend/types';
@@ -24,7 +24,10 @@ export default async function NewPublicServicePage({ params }: Params) {
         >
           {localization.serviceCatalog.infoAboutService}
         </Heading>
-        <ServiceForm catalogId={catalogId} />
+        <BasicServiceForm
+          catalogId={catalogId}
+          type='public-services'
+        />
       </div>
     </>
   );

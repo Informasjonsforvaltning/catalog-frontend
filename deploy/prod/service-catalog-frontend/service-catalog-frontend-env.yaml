@@ -75,3 +75,8 @@ spec:
                 secretKeyRef:
                   name: commonurl-prod
                   key: FDK_REFERENCE_DATA_BASE_URI
+            - name: SERVICE_CATALOG_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-prod
+                  key: SERVICE_CATALOG_BASE_URI

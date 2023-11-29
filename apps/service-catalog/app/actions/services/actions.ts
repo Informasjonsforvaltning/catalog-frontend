@@ -1,12 +1,12 @@
 'use server';
 
 import {
-  handleCreatePublicService,
-  handleDeletePublicService,
-  handleGetAllPublicServices,
-  handleGetPublicServiceById,
-  handlePublishPublicService,
-  handleUpdatePublicService,
+  handleCreateService,
+  handleDeleteService,
+  handleGetAllServices,
+  handleGetServiceById,
+  handlePublishService,
+  handleUpdateService,
 } from '@catalog-frontend/data-access';
 import { Service, ServiceToBeCreated } from '@catalog-frontend/types';
 import { authOptions, validateSession } from '@catalog-frontend/utils';
@@ -15,11 +15,11 @@ import { getServerSession } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
-export async function getPublicServices(catalogId: string) {
+export async function getServices(catalogId: string) {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   try {
-    const response = await handleGetAllPublicServices(catalogId, `${session?.accessToken}`);
+    const response = await handleGetAllServices(catalogId, `${session?.accessToken}`);
     if (response.status !== 200) {
       throw new Error();
     }
@@ -30,11 +30,11 @@ export async function getPublicServices(catalogId: string) {
   }
 }
 
-export async function getPublicServiceById(catalogId: string, serviceId: string) {
+export async function getServiceById(catalogId: string, serviceId: string) {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   try {
-    const response = await handleGetPublicServiceById(catalogId, serviceId, `${session?.accessToken}`);
+    const response = await handleGetServiceById(catalogId, serviceId, `${session?.accessToken}`);
     if (response.status !== 200) {
       throw new Error();
     }
@@ -45,8 +45,8 @@ export async function getPublicServiceById(catalogId: string, serviceId: string)
   }
 }
 
-export async function createPublicService(catalogId: string, formData: FormData) {
-  const newPublicService: ServiceToBeCreated = {
+export async function createService(catalogId: string, formData: FormData) {
+  const newService: ServiceToBeCreated = {
     catalogId: catalogId,
     title: {
       nb: formData.get('title.nb'),
@@ -60,7 +60,7 @@ export async function createPublicService(catalogId: string, formData: FormData)
   await validateSession(session);
   let success = false;
   try {
-    const response = await handleCreatePublicService(newPublicService, catalogId, `${session?.accessToken}`);
+    const response = await handleCreateService(newService, catalogId, `${session?.accessToken}`);
     if (response.status !== 201) {
       throw new Error();
     }
@@ -69,18 +69,18 @@ export async function createPublicService(catalogId: string, formData: FormData)
     return;
   } finally {
     if (success) {
-      revalidatePath(`/catalogs/${catalogId}/public-services`);
-      redirect(`/catalogs/${catalogId}/public-services`);
+      revalidatePath(`/catalogs/${catalogId}/services`);
+      redirect(`/catalogs/${catalogId}/services`);
     }
   }
 }
 
-export async function deletePublicService(catalogId: string, serviceId: string) {
+export async function deleteService(catalogId: string, serviceId: string) {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   let success = false;
   try {
-    const response = await handleDeletePublicService(catalogId, serviceId, `${session?.accessToken}`);
+    const response = await handleDeleteService(catalogId, serviceId, `${session?.accessToken}`);
     if (response.status !== 204) {
       throw new Error();
     }
@@ -89,32 +89,32 @@ export async function deletePublicService(catalogId: string, serviceId: string) 
     throw new Error();
   } finally {
     if (success) {
-      revalidatePath(`/catalogs/${catalogId}/public-services`);
-      redirect(`/catalogs/${catalogId}/public-services`);
+      revalidatePath(`/catalogs/${catalogId}/services`);
+      redirect(`/catalogs/${catalogId}/services`);
     }
   }
 }
 
-export async function updatePublicService(catalogId: string, oldPublicService: Service, formData: FormData) {
-  const updatedPublicService = { ...oldPublicService };
-  updatedPublicService.title = {
-    ...updatedPublicService.title,
+export async function updateService(catalogId: string, oldService: Service, formData: FormData) {
+  const updatedService = { ...oldService };
+  updatedService.title = {
+    ...updatedService.title,
     nb: formData.get('title.nb'),
   };
 
-  updatedPublicService.description = {
-    ...updatedPublicService.description,
+  updatedService.description = {
+    ...updatedService.description,
     nb: formData.get('description.nb'),
   };
 
-  const diff = compare(oldPublicService, updatedPublicService);
+  const diff = compare(oldService, updatedService);
   let success = false;
 
   const session = await getServerSession(authOptions);
   await validateSession(session);
 
   try {
-    const response = await handleUpdatePublicService(catalogId, oldPublicService.id, diff, `${session?.accessToken}`);
+    const response = await handleUpdateService(catalogId, oldService.id, diff, `${session?.accessToken}`);
     if (response.status !== 200) {
       throw new Error();
     }
@@ -123,19 +123,19 @@ export async function updatePublicService(catalogId: string, oldPublicService: S
     return;
   } finally {
     if (success) {
-      revalidatePath(`/catalogs/${catalogId}/public-services`);
-      revalidatePath(`/catalogs/${catalogId}/public-services/${oldPublicService.id}`);
-      redirect(`/catalogs/${catalogId}/public-services`);
+      revalidatePath(`/catalogs/${catalogId}/services`);
+      revalidatePath(`/catalogs/${catalogId}/services/${oldService.id}`);
+      redirect(`/catalogs/${catalogId}/services`);
     }
   }
 }
 
-export async function publishPublicService(catalogId: string, serviceId: string) {
+export async function publishService(catalogId: string, serviceId: string) {
   const session = await getServerSession(authOptions);
   await validateSession(session);
   let success = false;
   try {
-    const response = await handlePublishPublicService(catalogId, serviceId, `${session?.accessToken}`);
+    const response = await handlePublishService(catalogId, serviceId, `${session?.accessToken}`);
     if (response.status !== 200) {
       throw new Error();
     }
@@ -144,7 +144,7 @@ export async function publishPublicService(catalogId: string, serviceId: string)
     throw new Error();
   } finally {
     if (success) {
-      revalidatePath(`/catalogs/${catalogId}/public-services/${serviceId}`);
+      revalidatePath(`/catalogs/${catalogId}/services/${serviceId}`);
     }
   }
 }

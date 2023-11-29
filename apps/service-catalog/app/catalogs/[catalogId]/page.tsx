@@ -20,7 +20,10 @@ export default async function CatalogPage({ params }: Params) {
           title={localization.publicServices}
           href={`/catalogs/${catalogId}/public-services`}
         />
-        <Card title={localization.services} />
+        <Card
+          title={localization.services}
+          href={`/catalogs/${catalogId}/services`}
+        />
       </div>
     </>
   );

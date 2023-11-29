@@ -3,18 +3,18 @@ import { Organization, Service } from '@catalog-frontend/types';
 import { DetailsPageLayout, InfoCard, PageBanner } from '@catalog-frontend/ui';
 import { authOptions, getTranslateText, hasOrganizationWritePermission, localization } from '@catalog-frontend/utils';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import { getPublicServiceById } from '../../../../actions/public-services/actions';
+import { getServiceById } from '../../../../actions/services/actions';
 import _ from 'lodash';
 import { Button } from '@digdir/design-system-react';
-import styles from './public-service-details-page.module.css';
+import styles from './service-details-page.module.css';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import { DeleteServiceButton } from '../../../../../components/buttons';
 import PublishSwitch from '../../../../../components/publish-switch';
 
-export default async function PublicServiceDetailsPage({ params }: Params) {
+export default async function ServiceDetailsPage({ params }: Params) {
   const { catalogId, serviceId } = params;
-  const service: Service = await getPublicServiceById(catalogId, serviceId);
+  const service: Service = await getServiceById(catalogId, serviceId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const session = await getServerSession(authOptions);
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
@@ -28,7 +28,7 @@ export default async function PublicServiceDetailsPage({ params }: Params) {
           label={localization.id}
           labelColor='light'
         >
-          <span>{service?.id}</span>
+          <span>{service.id}</span>
         </InfoCard.Item>
 
         <InfoCard.Item
@@ -40,7 +40,7 @@ export default async function PublicServiceDetailsPage({ params }: Params) {
             catalogId={catalogId}
             serviceId={serviceId}
             isPublished={service?.published ?? false}
-            type='public-services'
+            type='services'
           />
           <div className={styles.greyFont}>
             {service?.published
@@ -79,7 +79,7 @@ export default async function PublicServiceDetailsPage({ params }: Params) {
               <Button
                 size='small'
                 as={Link}
-                href={`/catalogs/${catalogId}/public-services/${serviceId}/edit`}
+                href={`/catalogs/${catalogId}/services/${serviceId}/edit`}
               >
                 Rediger
               </Button>
@@ -87,7 +87,7 @@ export default async function PublicServiceDetailsPage({ params }: Params) {
               <DeleteServiceButton
                 catalogId={catalogId}
                 serviceId={serviceId}
-                type='public-services'
+                type='services'
               />
             </div>
           )
