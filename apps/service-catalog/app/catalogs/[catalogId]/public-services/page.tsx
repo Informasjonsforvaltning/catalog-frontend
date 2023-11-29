@@ -43,6 +43,11 @@ export default async function PublicServiceSearchHitsPage({ params }: Params) {
                   title={getTranslateText(service?.title)}
                   description={getTranslateText(service?.description)}
                   titleHref={`/catalogs/${catalogId}/public-services/${service?.id}`}
+                  content={
+                    service.published
+                      ? localization.publicationState.publishedInFDK
+                      : localization.publicationState.unpublished
+                  }
                 />
               </div>
             ))

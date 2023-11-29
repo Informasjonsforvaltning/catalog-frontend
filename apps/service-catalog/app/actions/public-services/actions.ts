@@ -5,6 +5,7 @@ import {
   handleDeletePublicService,
   handleGetAllPublicServices,
   handleGetPublicServiceById,
+  handlePublishPublicService,
   handleUpdatePublicService,
 } from '@catalog-frontend/data-access';
 import { Service, ServiceToBeCreated } from '@catalog-frontend/types';
@@ -126,6 +127,25 @@ export async function updatePublicService(catalogId: string, oldPublicService: S
       revalidatePath(`/catalogs/${catalogId}/public-services`);
       revalidatePath(`/catalogs/${catalogId}/public-services/${oldPublicService.id}`);
       redirect(`/catalogs/${catalogId}/public-services`);
+    }
+  }
+}
+
+export async function publishPublicService(catalogId: string, serviceId: string) {
+  const session = await getServerSession(authOptions);
+  await validateSession(session);
+  let success = false;
+  try {
+    const response = await handlePublishPublicService(catalogId, serviceId, `${session?.accessToken}`);
+    if (response.status !== 200) {
+      throw new Error();
+    }
+    success = true;
+  } catch (error) {
+    throw new Error();
+  } finally {
+    if (success) {
+      revalidatePath(`/catalogs/${catalogId}/public-services/${serviceId}`);
     }
   }
 }
