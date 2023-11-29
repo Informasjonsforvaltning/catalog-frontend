@@ -12,20 +12,32 @@ import {
   updatePublicService,
 } from '../../app/actions/public-services/actions';
 import { useRouter } from 'next/navigation';
+import { createService, deleteService, updateService } from '../../app/actions/services/actions';
 
 type ServiceFormProps = {
   catalogId: string;
   service?: Service;
+  type: 'public-services' | 'services';
 };
 
-export const ServiceForm = ({ catalogId, service }: ServiceFormProps) => {
+export const BasicServiceForm = ({ catalogId, service, type }: ServiceFormProps) => {
+  const router = useRouter();
+
+  const saveService = service ? updateService.bind(null, catalogId, service) : createService.bind(null, catalogId);
+
   const savePublicService = service
     ? updatePublicService.bind(null, catalogId, service)
     : createPublicService.bind(null, catalogId);
 
-  const router = useRouter();
+  const handleDeleteService = () => {
+    if (service) {
+      if (window.confirm(localization.serviceCatalog.form.confirmDelete)) {
+        deleteService(catalogId, service.id);
+      }
+    }
+  };
 
-  const handleDelete = () => {
+  const handleDeletePublicService = () => {
     if (service) {
       if (window.confirm(localization.serviceCatalog.form.confirmDelete)) {
         deletePublicService(catalogId, service.id);
@@ -36,7 +48,7 @@ export const ServiceForm = ({ catalogId, service }: ServiceFormProps) => {
   return (
     <>
       <div className='container'>
-        <form action={savePublicService}>
+        <form action={type === 'services' ? saveService : savePublicService}>
           <div className={styles.formCard}>
             <FormFieldCard
               title={localization.title}
@@ -76,7 +88,7 @@ export const ServiceForm = ({ catalogId, service }: ServiceFormProps) => {
               <Button
                 color='danger'
                 variant='secondary'
-                onClick={() => handleDelete()}
+                onClick={() => (type === 'services' ? handleDeleteService() : handleDeletePublicService())}
               >
                 <TrashIcon fontSize='1.5rem' />
                 {localization.serviceCatalog.form.delete}
@@ -85,7 +97,7 @@ export const ServiceForm = ({ catalogId, service }: ServiceFormProps) => {
               <Button
                 color='danger'
                 variant='secondary'
-                onClick={() => router.push(`/catalogs/${catalogId}/public-services`)}
+                onClick={() => router.push(`/catalogs/${catalogId}/${type}`)}
               >
                 {localization.button.cancel}
               </Button>
@@ -97,4 +109,4 @@ export const ServiceForm = ({ catalogId, service }: ServiceFormProps) => {
   );
 };
 
-export default ServiceForm;
+export default BasicServiceForm;

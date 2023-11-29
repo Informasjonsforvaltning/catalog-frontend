@@ -3,7 +3,7 @@ import { Organization, Service } from '@catalog-frontend/types';
 import { Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { getPublicServiceById } from '../../../../../actions/public-services/actions';
-import ServiceForm from '../../../../../../components/service-form';
+import { BasicServiceForm } from '../../../../../../components/basic-service-form';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import styles from './public-service-edit-page.module.css';
 import { Heading } from '@digdir/design-system-react';
@@ -27,9 +27,10 @@ export default async function EditPublicServicePage({ params }: Params) {
         >
           {localization.serviceCatalog.infoAboutService}
         </Heading>
-        <ServiceForm
+        <BasicServiceForm
           catalogId={catalogId}
           service={service}
+          type='public-services'
         />
       </div>
     </div>
