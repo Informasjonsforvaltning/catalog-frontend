@@ -71,3 +71,15 @@ export const handleUpdatePublicService = async (
   };
   return await fetch(resource, options);
 };
+
+export const handlePublishPublicService = async (catalogId: string, serviceId: string, accessToken: string) => {
+  const resource = `${path}/catalogs/${catalogId}/public-services/${serviceId}/publish`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+  };
+  return await fetch(resource, options);
+};

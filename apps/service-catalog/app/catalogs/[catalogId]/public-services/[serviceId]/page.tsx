@@ -3,13 +3,14 @@ import { Organization, Service } from '@catalog-frontend/types';
 import { DetailsPageLayout, InfoCard, PageBanner } from '@catalog-frontend/ui';
 import { authOptions, getTranslateText, hasOrganizationWritePermission, localization } from '@catalog-frontend/utils';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import { deletePublicService, getPublicServiceById } from '../../../../actions/public-services/actions';
+import { getPublicServiceById } from '../../../../actions/public-services/actions';
 import _ from 'lodash';
-import { Button, Switch } from '@digdir/design-system-react';
+import { Button } from '@digdir/design-system-react';
 import styles from './public-service-details-page.module.css';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import { DeletePublicServiceButton } from '../../../../../components/buttons';
+import PublishSwitch from '../../../../../components/publish-switch';
 
 export default async function EditPublicServicePage({ params }: Params) {
   const { catalogId, serviceId } = params;
@@ -19,7 +20,6 @@ export default async function EditPublicServicePage({ params }: Params) {
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
 
   const language = 'nb';
-
   const RightColumn = () => (
     <div>
       <InfoCard>
@@ -36,17 +36,13 @@ export default async function EditPublicServicePage({ params }: Params) {
           label={localization.publicationState.state}
           labelColor='light'
         >
-          <Switch
-            value='published'
-            size='small'
-            position='right'
-            readOnly={service?.isPublished}
-            checked={service?.isPublished}
-          >
-            {localization.publicationState.published}
-          </Switch>
+          <PublishSwitch
+            catalogId={catalogId}
+            serviceId={serviceId}
+            isPublished={service.published ?? false}
+          />
           <div className={styles.greyFont}>
-            {service?.isPublished
+            {service?.published
               ? localization.publicationState.publishedInFDK
               : localization.publicationState.unpublished}
           </div>

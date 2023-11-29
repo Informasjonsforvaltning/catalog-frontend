@@ -8,5 +8,5 @@ export interface ServiceToBeCreated {
   catalogId: string;
   title: MultiLanguageText;
   description?: MultiLanguageText;
-  isPublished?: boolean;
+  published?: boolean;
 }

@@ -316,6 +316,7 @@ export const nb = {
   },
 
   serviceCatalog: {
+    confirmPublish: 'Er du sikker på at du vil publisere tjenesten?',
     searchHitsTitle: 'Listevisning',
     infoAboutService: 'Informasjon om tjenesten',
     form: {
