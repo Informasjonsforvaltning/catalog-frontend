@@ -19,7 +19,12 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <NextAuthProvider>
           <AdminContextProvider>
             <ReactQueryClientProvider>
-              <Layout className={font.className}>{children}</Layout>
+              <Layout
+                catalogAdminUrl={process.env.CATALOG_ADMIN_BASE_URI}
+                className={font.className}
+              >
+                {children}
+              </Layout>
             </ReactQueryClientProvider>
           </AdminContextProvider>
         </NextAuthProvider>
