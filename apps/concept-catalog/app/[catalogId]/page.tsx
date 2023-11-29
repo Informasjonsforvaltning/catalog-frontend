@@ -24,7 +24,7 @@ const SearchPage = async ({ params }) => {
   const { catalogId } = params;
 
   if (!validOrganizationNumber(catalogId)) {
-    redirect(`/not-found`, RedirectType.replace);
+    redirect(`${process.env.FDK_REGISTRATION_BASE_URI}`, RedirectType.replace);
   }
 
   if (!(session?.user && session?.accessTokenExpiresAt && Date.now() < session?.accessTokenExpiresAt * 1000)) {
