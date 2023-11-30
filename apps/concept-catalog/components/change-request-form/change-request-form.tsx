@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, FormFieldCard, LanguageIndicator } from '@catalog-frontend/ui';
+import { Button, FormFieldCard } from '@catalog-frontend/ui';
 import { localization as loc } from '@catalog-frontend/utils';
 
 import { FC, useState } from 'react';
@@ -60,7 +60,7 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, readOnly,
                             lang: loc.language[language]?.toLowerCase(),
                           })}
                           cols={NUM_COLS_TEXT_FIELD}
-                          rows={NUM_ROWS_TEXT_FIELD}
+                          rows={1}
                           readOnly={readOnly}
                         />
                       </div>
