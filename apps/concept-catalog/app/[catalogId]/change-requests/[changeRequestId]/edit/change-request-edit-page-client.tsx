@@ -26,10 +26,15 @@ const ChangeRequestEditPageClient = ({
     changeRequestId: changeRequest.id,
   });
   const submitHandler = (values: Concept) => {
+    const changeRequestTitle =
+      originalConcept.anbefaltTerm?.navn?.nb ||
+      originalConcept.anbefaltTerm?.navn?.nn ||
+      originalConcept.anbefaltTerm?.navn?.en ||
+      '';
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
       conceptId: changeRequest.conceptId,
       operations: jsonpatch.compare(originalConcept, values) as JsonPatchOperation[],
-      title: originalConcept.prefLabel?.nb ?? '',
+      title: changeRequestTitle,
     };
 
     changeRequestMutateHook.mutate(changeRequestFromConcept, {
