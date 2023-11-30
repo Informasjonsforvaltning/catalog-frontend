@@ -23,7 +23,7 @@ export const SourceForDefinitionField: FC<Props> = ({
   numColsInputField = 20,
 }) => {
   return (
-    <div className={styles.container}>
+    <div>
       <div className={styles.row}>
         <Field
           name={sourceTitleFieldName}

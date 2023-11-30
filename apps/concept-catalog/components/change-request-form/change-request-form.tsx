@@ -8,7 +8,7 @@ import { Concept, ISOLanguage } from '@catalog-frontend/types';
 import { Field, Form, Formik } from 'formik';
 
 import styles from './change-request-page.module.css';
-import { SourceSection } from '../form-fields/source-section';
+import { SourceSection } from '../source-section';
 import { Textarea } from '@digdir/design-system-react';
 
 interface Props {
@@ -17,7 +17,7 @@ interface Props {
   submitHandler: (values: Concept) => void;
 }
 
-const NUM_ROWS_TEXT_FIELD = 4;
+const NUM_ROWS_TEXT_FIELD = 3;
 const NUM_COLS_TEXT_FIELD = 90;
 
 export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, readOnly, submitHandler }) => {

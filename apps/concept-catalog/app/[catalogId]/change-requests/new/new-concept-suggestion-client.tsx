@@ -62,7 +62,6 @@ const NewConceptSuggestionClient = ({
       />
       <ChangeRequestForm
         changeRequestAsConcept={changeRequestAsConcept}
-        originalConcept={originalConcept}
         readOnly={false}
         submitHandler={submitHandler}
       />
