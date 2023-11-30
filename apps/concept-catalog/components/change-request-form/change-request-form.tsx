@@ -49,8 +49,8 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, readOnly,
                   >
                     {selectedLanguages.map((language) => (
                       <div
-                        className={styles.inputFieldRow}
                         key={language}
+                        className={styles.inputFieldRow}
                       >
                         <Field
                           name={`anbefaltTerm.navn.${language}`}
@@ -137,17 +137,22 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, readOnly,
                     subtitle={loc.conceptHelptexts.definisjonForSpesialisterDescription}
                   >
                     {selectedLanguages.map((language) => (
-                      <Field
-                        name={`definisjonForSpesialister.tekst.${language}`}
-                        as={Textarea}
-                        label={loc.formatString(loc.concept.formFieldLabel, {
-                          fieldType: loc.concept.specialistDefinition,
-                          lang: loc.language[language]?.toLowerCase(),
-                        })}
-                        cols={NUM_COLS_TEXT_FIELD}
-                        rows={NUM_ROWS_TEXT_FIELD}
-                        readOnly={readOnly}
-                      />
+                      <div
+                        key={language}
+                        className={styles.inputFieldRow}
+                      >
+                        <Field
+                          name={`definisjonForSpesialister.tekst.${language}`}
+                          as={Textarea}
+                          label={loc.formatString(loc.concept.formFieldLabel, {
+                            fieldType: loc.concept.specialistDefinition,
+                            lang: loc.language[language]?.toLowerCase(),
+                          })}
+                          cols={NUM_COLS_TEXT_FIELD}
+                          rows={NUM_ROWS_TEXT_FIELD}
+                          readOnly={readOnly}
+                        />
+                      </div>
                     ))}
                   </FormFieldCard>
                   <FormFieldCard
@@ -165,7 +170,10 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, readOnly,
                     subtitle={loc.conceptHelptexts.merknadDescription}
                   >
                     {selectedLanguages.map((language) => (
-                      <>
+                      <div
+                        key={language}
+                        className={styles.inputFieldRow}
+                      >
                         <Field
                           name={`merknad.tekst.${language}`}
                           as={Textarea}
@@ -177,7 +185,7 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, readOnly,
                           rows={NUM_ROWS_TEXT_FIELD}
                           readOnly={readOnly}
                         />
-                      </>
+                      </div>
                     ))}
                   </FormFieldCard>
                 </div>
