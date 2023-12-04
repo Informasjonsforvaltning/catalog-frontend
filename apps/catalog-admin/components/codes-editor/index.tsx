@@ -242,7 +242,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
                 width={453}
                 onActivate={handleOnClick}
                 disableEdit
-                indent={20}
+                indent={45}
               >
                 {Node}
               </Tree>
