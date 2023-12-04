@@ -117,12 +117,13 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
     newLabel?: string,
     newType?: FieldType,
     newCodeList?: string,
-    enableFilter?: boolean,
+    enableFilter?: string[],
   ) => {
     const updatedFieldIndex = updatedFieldsList.findIndex((field) => field.id === fieldId);
     const fieldToUpdate: InternalField =
       updatedFieldIndex !== -1 ? updatedFieldsList[updatedFieldIndex] : dbFields.find((field) => field.id === fieldId);
     const updatedFieldsListCopy = [...updatedFieldsList];
+    const enableFilterBoolean = enableFilter && enableFilter?.length > 0 && enableFilter[0] === 'enableFilter';
 
     if (fieldToUpdate) {
       const updatedField = {
@@ -130,7 +131,7 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
         label: newLabel !== undefined ? { nb: newLabel } : fieldToUpdate.label,
         type: newType !== undefined ? newType : fieldToUpdate.type,
         codeListId: newCodeList !== undefined ? newCodeList : fieldToUpdate.codeListId,
-        enableFilter: enableFilter,
+        enableFilter: enableFilterBoolean,
       };
 
       if (updatedFieldIndex !== -1) {
@@ -216,20 +217,22 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
         newField?.type === 'boolean') && (
         <>
           <div className={cn('accordionField', styles.row)}>
-            <Checkbox
-              onChange={(e) => {
+            <Checkbox.Group
+              onChange={(filters) => {
                 field
-                  ? updateFieldsListState(field?.id, undefined, undefined, undefined, e.target.checked)
+                  ? updateFieldsListState(field?.id, undefined, undefined, undefined, filters)
                   : setNewField((prevField) => ({
                       ...prevField,
-                      enableFilter: e.target.checked,
+                      enableFilter: filters.length > 0,
                     }));
               }}
-              value={''}
-              checked={(updatedFieldsList.find((f) => f.id === field?.id) || field)?.enableFilter}
+              defaultValue={
+                (updatedFieldsList.find((f) => f.id === field?.id) || field)?.enableFilter ? ['enableFilter'] : []
+              }
             >
-              {localization.catalogAdmin.enableFilter}
-            </Checkbox>
+              <Checkbox value='enableFilter'>{localization.catalogAdmin.enableFilter}</Checkbox>
+            </Checkbox.Group>
+
             <HelpText
               placement='right'
               title={localization.catalogAdmin.manage.enableFilter}
