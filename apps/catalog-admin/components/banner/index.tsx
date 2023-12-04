@@ -1,17 +1,21 @@
 'use client';
 
 import { PageBanner } from '@catalog-frontend/ui';
-import { Design } from '@catalog-frontend/types';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useCatalogDesign } from '../../context/catalog-design';
 
-export const Banner = (orgName, catalogId) => {
-  const dbDesign: Design | undefined = useCatalogDesign();
+export interface BannerProps {
+  title: string;
+  orgName?: string;
+  catalogId: string;
+}
+
+export const Banner = ({ title, orgName, catalogId }: BannerProps) => {
+  const dbDesign = useCatalogDesign();
 
   return (
     <PageBanner
-      title={String(localization.catalogAdmin.manage.catalogAdmin)}
-      subtitle={String(getTranslateText(orgName.orgName))}
+      title={title}
+      subtitle={orgName ?? ''}
       logoDescription={(dbDesign?.hasLogo && dbDesign?.logoDescription) || ''}
       backgroundColor={dbDesign?.backgroundColor}
       fontColor={dbDesign?.fontColor}

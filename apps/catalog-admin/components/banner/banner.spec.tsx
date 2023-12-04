@@ -11,7 +11,11 @@ describe('ColorPicker', () => {
     const queryClient = new QueryClient();
     const { baseElement } = render(
       <QueryClientProvider client={queryClient}>
-        <Banner />
+        <Banner
+          title='title'
+          orgName='my organization'
+          catalogId='123456789'
+        />
       </QueryClientProvider>,
     );
 

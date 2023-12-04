@@ -12,19 +12,22 @@ import { getTranslateText, localization, textRegexWithNumbers } from '@catalog-f
 import { useGetDesign, useGetLogo, useUpdateDesign } from '../../../../../hooks/design';
 import { compare } from 'fast-json-patch';
 import { PageLayout } from '../../../../../components/page-layout';
+import { Organization } from '@catalog-frontend/types';
 
-const DesignPageClient = ({ catalogId, organization }) => {
+export interface DesignPageClientProps {
+  catalogId: string;
+  organization: Organization;
+}
+
+const DesignPageClient = ({ catalogId, organization }: DesignPageClientProps) => {
   const adminContext = useAdminState();
 
   const { backgroundColor, fontColor, logo } = adminContext;
   const [isTextInputValid, setIsTextInputValid] = useState(true);
   const [disableTextField, setDisableTextField] = useState(true);
 
-  const { data: getDesign } = useGetDesign(catalogId);
-  const dbDesign = getDesign;
-
-  const { data: getLogo } = useGetLogo(catalogId);
-  const dbLogo = getLogo;
+  const { data: dbDesign } = useGetDesign(catalogId);
+  const { data: dbLogo } = useGetLogo(catalogId);
 
   const [imageLabel, setImageLabel] = useState('');
   const updateDesign = useUpdateDesign(catalogId);
@@ -92,8 +95,8 @@ const DesignPageClient = ({ catalogId, organization }) => {
           <Heading size='small'>{localization.catalogAdmin.preview}</Heading>
         </div>
         <PageBanner
-          title={'Administrere Begrepskatalog'}
-          subtitle={String(getTranslateText(organization?.prefLabel))}
+          title={localization.manageCatalog}
+          subtitle={`${getTranslateText(organization?.prefLabel)}`}
           logoDescription={(dbDesign?.hasLogo && dbDesign?.logoDescription) || ''}
           backgroundColor={(backgroundColor ?? dbDesign?.backgroundColor) || '#FFFFFF'}
           fontColor={fontColor ?? dbDesign?.fontColor ?? '#2D3741'}

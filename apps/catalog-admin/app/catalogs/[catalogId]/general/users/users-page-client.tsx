@@ -6,7 +6,7 @@ import { BreadcrumbType, Breadcrumbs, Button, SearchField } from '@catalog-front
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useGetUsers } from '../../../../../hooks/users';
-import { AssignedUser } from '@catalog-frontend/types';
+import { AssignedUser, Organization } from '@catalog-frontend/types';
 import { Banner } from '../../../../../components/banner';
 import { UserEditor } from '../../../../../components/user-editor';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
@@ -14,7 +14,12 @@ import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
 import styles from './users.module.css';
 import { PageLayout } from '../../../../../components/page-layout';
 
-export const UsersPageClient = ({ catalogId, organization }) => {
+export interface UsersPageClientProps {
+  catalogId: string;
+  organization: Organization;
+}
+
+export const UsersPageClient = ({ catalogId, organization }: UsersPageClientProps) => {
   const { data: getUsers } = useGetUsers(catalogId);
   const dbUsers = getUsers?.users;
 
@@ -27,7 +32,7 @@ export const UsersPageClient = ({ catalogId, organization }) => {
 
   useEffect(() => {
     const filteredCodeLists = dbUsers?.filter((user: AssignedUser) =>
-      user.name.toLowerCase().includes(search.toLowerCase()),
+      user.name?.toLowerCase().includes(search.toLowerCase()),
     );
     setSearchResults(filteredCodeLists);
   }, [dbUsers, search]);
@@ -48,7 +53,7 @@ export const UsersPageClient = ({ catalogId, organization }) => {
         },
         {
           href: `/catalogs/${catalogId}/general/users`,
-          text: getTranslateText(localization.catalogAdmin.usernameList),
+          text: getTranslateText(localization.catalogAdmin.username),
         },
       ] as BreadcrumbType[])
     : [];
@@ -56,7 +61,11 @@ export const UsersPageClient = ({ catalogId, organization }) => {
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
-      <Banner orgName={organization?.prefLabel} />
+      <Banner
+        title={localization.manageCatalog}
+        orgName={`${getTranslateText(organization?.prefLabel)}`}
+        catalogId={catalogId}
+      />
 
       <PageLayout>
         <div className={styles.row}>
@@ -80,7 +89,7 @@ export const UsersPageClient = ({ catalogId, organization }) => {
           level={2}
           size='xsmall'
         >
-          {localization.catalogAdmin.usernameList}
+          {localization.catalogAdmin.username}
         </Heading>
 
         <div className='accordionStructure'>

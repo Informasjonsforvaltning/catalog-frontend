@@ -6,13 +6,19 @@ import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Banner } from '../../../components/banner';
 import { InformationSquareIcon, TableIcon } from '@navikt/aksel-icons';
 import styles from './admin-page.module.css';
+import { Organization } from '@catalog-frontend/types';
 
-export const AdminPageClient = ({ organization, catalogId }) => {
+export interface AdminPageClientProps {
+  organization: Organization;
+  catalogId: string;
+}
+
+export const AdminPageClient = ({ organization, catalogId }: AdminPageClientProps) => {
   const breadcrumbList = catalogId
     ? ([
         {
           href: `/catalogs/${catalogId}`,
-          text: getTranslateText(localization.manageCatalog),
+          text: localization.manageCatalog,
         },
       ] as BreadcrumbType[])
     : [];
@@ -21,7 +27,11 @@ export const AdminPageClient = ({ organization, catalogId }) => {
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <div>
-        <Banner orgName={organization?.prefLabel} />
+        <Banner
+          title={localization.manageCatalog}
+          orgName={`${getTranslateText(organization?.prefLabel)}`}
+          catalogId={catalogId}
+        />
         <div className={styles.cardsContainer}>
           <Card
             icon={<InformationSquareIcon fontSize='3rem' />}

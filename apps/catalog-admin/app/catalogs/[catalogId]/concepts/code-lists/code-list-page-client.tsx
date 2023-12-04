@@ -6,7 +6,7 @@ import { Accordion, Heading } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, SearchField, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
-import { CodeList } from '@catalog-frontend/types';
+import { CodeList, Organization } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
 import { Banner } from '../../../../../components/banner';
@@ -14,13 +14,19 @@ import CodeListEditor from '../../../../../components/code-list-editor';
 import { PageLayout } from '../../../../../components/page-layout';
 import { compare } from 'fast-json-patch';
 
-const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }) => {
+export interface CodeListsPageClientProps {
+  catalogId: string;
+  organization: Organization;
+  codeListsInUse: string[];
+}
+
+const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }: CodeListsPageClientProps) => {
   const adminDispatch = useAdminDispatch();
   const adminContext = useAdminState();
   const { showCodeListEditor, updatedCodeLists, updatedCodes } = adminContext;
 
   const [search, setSearch] = useState('');
-  const [dirtyCodeLists, setDirtyCodeLists] = useState([]);
+  const [dirtyCodeLists, setDirtyCodeLists] = useState<string[]>([]);
 
   const { data: getAllCodeLists } = useGetAllCodeLists({
     catalogId: catalogId,
@@ -45,7 +51,9 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }) => {
     const updatedCodesAccumulator = { ...updatedCodes };
 
     dbCodeLists.forEach((codeList: CodeList) => {
-      updatedCodesAccumulator[codeList.id] = codeList?.codes;
+      if (codeList) {
+        updatedCodesAccumulator[codeList.id ?? ''] = codeList?.codes ?? [];
+      }
     });
 
     adminDispatch({
@@ -58,7 +66,7 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }) => {
     ? ([
         {
           href: `/catalogs/${catalogId}`,
-          text: localization.catalogAdmin.manage.catalogAdmin,
+          text: localization.manageCatalog,
         },
         {
           href: `/catalogs/${catalogId}/concepts`,
@@ -82,7 +90,11 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }) => {
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
-      <Banner orgName={organization?.prefLabel} />
+      <Banner
+        title={localization.catalogAdmin.manage.conceptCatalog}
+        orgName={`${getTranslateText(organization?.prefLabel)}`}
+        catalogId={catalogId}
+      />
       <PageLayout>
         <div className={styles.row}>
           <SearchField
@@ -149,8 +161,8 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }) => {
                       catalogId={catalogId}
                       dirty={(dirty) =>
                         setDirtyCodeLists((prev) => {
-                          if (dirty && !prev.includes(codeList.id)) {
-                            return [...prev, codeList.id];
+                          if (dirty && !prev.includes(codeList.id ?? '')) {
+                            return [...prev, codeList.id ?? ''];
                           }
                           if (!dirty) {
                             return prev.filter((id) => id !== codeList.id);
