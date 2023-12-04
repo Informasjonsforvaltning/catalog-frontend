@@ -102,55 +102,57 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
         options={getSearchOptions(nodes)}
         onChange={handleSearchOnChange}
       />
-      <CheckboxTree
-        nodes={
-          (collapsed ? nodes?.slice(0, 10) : nodes)?.map((node) => ({
-            ...node,
-            className: classes.checkbox,
-            label: (
-              <Label
-                as='span'
-                size='small'
-                weight='regular'
-              >
-                {node.label}
-              </Label>
+      <div className={classes.pt1}>
+        <CheckboxTree
+          nodes={
+            (collapsed ? nodes?.slice(0, 10) : nodes)?.map((node) => ({
+              ...node,
+              className: classes.checkbox,
+              label: (
+                <Label
+                  as='span'
+                  size='small'
+                  weight='regular'
+                >
+                  {node.label}
+                </Label>
+              ),
+            })) ?? []
+          }
+          checked={checked}
+          expanded={expanded}
+          onClick={handleOnClick}
+          onCheck={handleOnCheck}
+          onExpand={(exp) => setExpanded(exp)}
+          noCascade
+          expandDisabled
+          icons={{
+            parentClose: null,
+            parentOpen: null,
+            leaf: null,
+            halfCheck: null,
+            expandClose: null,
+            expandOpen: null,
+            expandAll: null,
+            collapseAll: null,
+            check: (
+              <FontAwesomeIcon
+                className={classes.checkboxIcon}
+                icon={faCheckSquare}
+              />
             ),
-          })) ?? []
-        }
-        checked={checked}
-        expanded={expanded}
-        onClick={handleOnClick}
-        onCheck={handleOnCheck}
-        onExpand={(exp) => setExpanded(exp)}
-        noCascade
-        expandDisabled
-        icons={{
-          parentClose: null,
-          parentOpen: null,
-          leaf: null,
-          halfCheck: null,
-          expandClose: null,
-          expandOpen: null,
-          expandAll: null,
-          collapseAll: null,
-          check: (
-            <FontAwesomeIcon
-              className={classes.checkboxIcon}
-              icon={faCheckSquare}
-            />
-          ),
-          uncheck: (
-            <FontAwesomeIcon
-              className={classes.checkboxIcon}
-              icon={faSquare}
-            />
-          ),
-        }}
-      />
+            uncheck: (
+              <FontAwesomeIcon
+                className={classes.checkboxIcon}
+                icon={faSquare}
+              />
+            ),
+          }}
+        />
+      </div>
       {nodes && nodes.length > 10 && (
         <Button
-          variant='quiet'
+          variant='tertiary'
           icon={collapsed ? <ChevronDownDoubleIcon /> : <ChevronUpDoubleIcon />}
           onClick={() => setCollapsed(!collapsed)}
         >

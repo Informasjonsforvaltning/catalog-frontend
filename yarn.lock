@@ -1587,9 +1587,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/design-system-react@npm:^0.37.0":
-  version: 0.37.0
-  resolution: "@digdir/design-system-react@npm:0.37.0"
+"@digdir/design-system-react@npm:^0.38.0":
+  version: 0.38.0
+  resolution: "@digdir/design-system-react@npm:0.38.0"
   dependencies:
     "@altinn/figma-design-tokens": ^6.0.1
     "@digdir/design-system-tokens": ^0.10.0
@@ -1600,7 +1600,7 @@ __metadata:
   peerDependencies:
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
-  checksum: b8f5dbf5db8bb2289a21735e624cce30e427d7232c3c426e0fd2aab076324cda32f3f538d610a2f9e376796ced1d76171f7f7331326a094369765c4e4a080dc2
+  checksum: f47caccb90c68ef8e8e3f33e9dc5540a4c1b8c7d9ab32c081ac8b0fdccbb725a21ed7eeed5caa1ed842bb999e3ea831f136195d7ab0c7035e503a91c8f6d3912
   languageName: node
   linkType: hard
 
@@ -4929,7 +4929,7 @@ __metadata:
   dependencies:
     "@altinn/figma-design-tokens": ^6.0.1
     "@babel/preset-react": ^7.18.6
-    "@digdir/design-system-react": ^0.37.0
+    "@digdir/design-system-react": ^0.38.0
     "@digdir/design-system-tokens": ^0.10.0
     "@fellesdatakatalog/icons": ^0.8.3
     "@fortawesome/fontawesome-svg-core": ^6.4.2
