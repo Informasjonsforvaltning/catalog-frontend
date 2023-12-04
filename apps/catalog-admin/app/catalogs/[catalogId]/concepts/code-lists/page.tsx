@@ -7,15 +7,17 @@ import { authOptions } from '@catalog-frontend/utils';
 
 const CodeListsPage = async ({ params }) => {
   const { catalogId } = params;
-  checkAdminPermissions(catalogId);
+
   const session = await getServerSession(authOptions);
+  checkAdminPermissions({ session, catalogId, path: '/concepts/code-lists' });
+
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const { internal, editable }: Fields = await getFields(catalogId, session.accessToken).then((res) => res.json());
 
-  const codeListsInUse = [];
+  const codeListsInUse: string[] = [];
 
   internal.forEach((field) => {
-    if (field.codeListId !== null) {
+    if (field.codeListId != null) {
       codeListsInUse.push(field.codeListId);
     }
   });

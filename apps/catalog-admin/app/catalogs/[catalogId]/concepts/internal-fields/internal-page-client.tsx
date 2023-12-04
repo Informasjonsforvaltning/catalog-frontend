@@ -29,15 +29,15 @@ export const InternalFieldsPageClient = ({ catalogId, organization }) => {
     ? ([
         {
           href: `/catalogs/${catalogId}`,
-          text: getTranslateText(localization.catalogAdmin.manage.catalogAdmin),
+          text: localization.catalogAdmin.manage.catalogAdmin,
         },
         {
           href: `/catalogs/${catalogId}/concepts`,
-          text: getTranslateText(localization.catalogType.concept),
+          text: localization.catalogType.concept,
         },
         {
           href: `/catalogs/${catalogId}/concepts/internal-fields`,
-          text: getTranslateText(localization.catalogAdmin.internalFields),
+          text: localization.catalogAdmin.internalFields,
         },
       ] as BreadcrumbType[])
     : [];

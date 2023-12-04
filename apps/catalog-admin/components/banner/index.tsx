@@ -6,16 +6,16 @@ import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useCatalogDesign } from '../../context/catalog-design';
 
 export const Banner = (orgName, catalogId) => {
-  const dbDesign: Design = useCatalogDesign();
+  const dbDesign: Design | undefined = useCatalogDesign();
 
   return (
     <PageBanner
-      title={String(getTranslateText(localization.catalogAdmin.manage.catalogAdmin))}
+      title={String(localization.catalogAdmin.manage.catalogAdmin)}
       subtitle={String(getTranslateText(orgName.orgName))}
-      logoDescription={dbDesign?.hasLogo && dbDesign?.logoDescription}
+      logoDescription={(dbDesign?.hasLogo && dbDesign?.logoDescription) || ''}
       backgroundColor={dbDesign?.backgroundColor}
       fontColor={dbDesign?.fontColor}
-      logo={dbDesign?.hasLogo && `/api/design/${catalogId}/logo`}
+      logo={(dbDesign?.hasLogo && `/api/design/${catalogId}/logo`) || undefined}
     />
   );
 };

@@ -1,14 +1,12 @@
-'use client';
-
 import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Heading } from '@digdir/design-system-react';
 
-const NoAccess = () => {
+const NotFound = async ({ params }) => {
   const breadcrumbList = [
     {
       href: `#`,
-      text: localization.noAccess,
+      text: localization.notFound,
     },
   ] as BreadcrumbType[];
 
@@ -16,19 +14,19 @@ const NoAccess = () => {
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <PageBanner
-        title={localization.manageCatalogs}
-        subtitle={localization.noAccess}
+        title={localization.catalogType.concept}
+        subtitle={localization.notFound}
       />
       <CenterContainer>
         <Heading
           level={2}
           size='small'
         >
-          {localization.youHaveNoAccess}
+          {localization.didNotFoundPage}
         </Heading>
       </CenterContainer>
     </>
   );
 };
 
-export default NoAccess;
+export default NotFound;

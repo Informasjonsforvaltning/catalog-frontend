@@ -8,7 +8,7 @@ import styles from './design.module.css';
 import { BreadcrumbType, Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
 import { Heading, Label, Textfield } from '@digdir/design-system-react';
 import { getTranslateText, localization, textRegexWithNumbers } from '@catalog-frontend/utils';
-import { Design } from '@catalog-frontend/types';
+
 import { useGetDesign, useGetLogo, useUpdateDesign } from '../../../../../hooks/design';
 import { compare } from 'fast-json-patch';
 import { PageLayout } from '../../../../../components/page-layout';
@@ -21,7 +21,7 @@ const DesignPageClient = ({ catalogId, organization }) => {
   const [disableTextField, setDisableTextField] = useState(true);
 
   const { data: getDesign } = useGetDesign(catalogId);
-  const dbDesign: Design = getDesign;
+  const dbDesign = getDesign;
 
   const { data: getLogo } = useGetLogo(catalogId);
   const dbLogo = getLogo;
@@ -34,23 +34,26 @@ const DesignPageClient = ({ catalogId, organization }) => {
       backgroundColor: backgroundColor,
       fontColor: fontColor,
       logoDescription: imageLabel,
-      hasLogo: dbDesign.hasLogo,
+      hasLogo: dbDesign?.hasLogo,
     };
 
-    const diff = compare(dbDesign, newDesign);
+    const diff = compare(dbDesign ?? {}, newDesign);
 
     if (diff) {
       updateDesign
-        .mutateAsync({ oldDesign: dbDesign, newDesign: newDesign })
+        .mutateAsync({ oldDesign: dbDesign ?? {}, newDesign: newDesign })
         .then(() => alert(localization.alert.success))
-        .catch(() => alert(localization.alert.fail));
+        .catch((e) => {
+          console.error('Updating design failed: ', e);
+          alert(localization.alert.fail);
+        });
     } else {
       console.log('No changes detected.');
     }
   };
 
   useEffect(() => {
-    const hasValidLabel = dbDesign?.hasLogo ? textRegexWithNumbers.test(dbDesign.logoDescription) : false;
+    const hasValidLabel = dbDesign?.hasLogo ? textRegexWithNumbers.test(dbDesign?.logoDescription ?? '') : false;
     setDisableTextField(!(logo || (dbDesign && dbDesign.hasLogo) || hasValidLabel));
   }, [logo, dbLogo, dbDesign]);
 
@@ -91,10 +94,10 @@ const DesignPageClient = ({ catalogId, organization }) => {
         <PageBanner
           title={'Administrere Begrepskatalog'}
           subtitle={String(getTranslateText(organization?.prefLabel))}
-          logoDescription={dbDesign?.hasLogo && dbDesign?.logoDescription}
+          logoDescription={(dbDesign?.hasLogo && dbDesign?.logoDescription) || ''}
           backgroundColor={(backgroundColor ?? dbDesign?.backgroundColor) || '#FFFFFF'}
           fontColor={fontColor ?? dbDesign?.fontColor ?? '#2D3741'}
-          logo={logo || (dbDesign?.hasLogo && `/api/design/${catalogId}/logo`) || null}
+          logo={logo || (dbDesign?.hasLogo && `/api/design/${catalogId}/logo`) || ''}
         />
         <div className={styles.subheading}>
           <Heading size='small'>{localization.catalogAdmin.customizeDesign}</Heading>

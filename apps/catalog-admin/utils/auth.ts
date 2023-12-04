@@ -1,19 +1,32 @@
-import { authOptions, hasOrganizationAdminPermission, validOrganizationNumber } from '@catalog-frontend/utils';
-import { getServerSession } from 'next-auth';
+import { hasOrganizationAdminPermission, validOrganizationNumber } from '@catalog-frontend/utils';
+import { Session } from 'next-auth';
 import { RedirectType, redirect } from 'next/navigation';
 
-export const checkAdminPermissions = async (catalogId: string) => {
-  const session = await getServerSession(authOptions);
+interface CheckAuthenticatedProps {
+  session: Session | null | undefined;
+  callbackUrl: string;
+}
 
+interface CheckAdminPermissionsProps {
+  session: Session | null | undefined;
+  catalogId: string;
+  path?: string;
+}
+
+export const checkAuthenticated = async ({ session, callbackUrl }: CheckAuthenticatedProps) => {
+  if (!(session?.user && Date.now() < (session?.accessTokenExpiresAt ?? 0) * 1000)) {
+    redirect(`/auth/signin?callbackUrl=${callbackUrl}`);
+  }
+};
+
+export const checkAdminPermissions = async ({ session, catalogId, path }: CheckAdminPermissionsProps) => {
   if (!validOrganizationNumber(catalogId)) {
     redirect(`/not-found`, RedirectType.replace);
   }
 
-  if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
-    redirect(`/auth/signin?callbackUrl=/catalogs/${catalogId}`);
-  }
+  checkAuthenticated({ session, callbackUrl: `/catalogs/${catalogId}${path ?? ''}` });
 
-  const hasAdminPermission = session && hasOrganizationAdminPermission(session?.accessToken, catalogId);
+  const hasAdminPermission = session?.accessToken && hasOrganizationAdminPermission(session.accessToken, catalogId);
   if (!hasAdminPermission) {
     redirect(`/catalogs/${catalogId}/no-access`);
   }

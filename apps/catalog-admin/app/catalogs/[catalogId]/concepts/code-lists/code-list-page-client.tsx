@@ -58,15 +58,15 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }) => {
     ? ([
         {
           href: `/catalogs/${catalogId}`,
-          text: getTranslateText(localization.catalogAdmin.manage.catalogAdmin),
+          text: localization.catalogAdmin.manage.catalogAdmin,
         },
         {
           href: `/catalogs/${catalogId}/concepts`,
-          text: getTranslateText(localization.catalogType.concept),
+          text: localization.catalogType.concept,
         },
         {
           href: `/catalogs/${catalogId}/concepts/code-lists`,
-          text: getTranslateText(localization.catalogAdmin.codeLists),
+          text: localization.catalogAdmin.codeLists,
         },
       ] as BreadcrumbType[])
     : [];

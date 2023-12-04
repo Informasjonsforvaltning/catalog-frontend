@@ -57,15 +57,15 @@ export function EditableFieldsClient({ catalogId, organization }) {
     ? ([
         {
           href: `/catalogs/${catalogId}`,
-          text: getTranslateText(localization.catalogAdmin.manage.catalogAdmin),
+          text: localization.catalogAdmin.manage.catalogAdmin,
         },
         {
           href: `/catalogs/${catalogId}/concepts`,
-          text: getTranslateText(localization.catalogType.concept),
+          text: localization.catalogType.concept,
         },
         {
           href: `/catalogs/${catalogId}/concepts/editable-fields`,
-          text: getTranslateText(localization.catalogAdmin.editableFields),
+          text: localization.catalogAdmin.editableFields,
         },
       ] as BreadcrumbType[])
     : [];

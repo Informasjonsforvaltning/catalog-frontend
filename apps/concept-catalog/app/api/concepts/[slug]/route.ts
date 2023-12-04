@@ -19,7 +19,7 @@ export const POST = async (req: NextRequest, { params }: { params: { slug: strin
         return new Response('', { status: response.status });
       }
     } catch (error) {
-      console.error(error);
+      console.error('Failed to import concept', error);
       return new Response('Failed to import concept', { status: 500 });
     }
   } else {

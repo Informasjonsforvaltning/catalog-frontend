@@ -8,6 +8,10 @@ const NoAccess = async ({ params }) => {
   const breadcrumbList = catalogId
     ? ([
         {
+          href: `/${catalogId}`,
+          text: localization.catalogType.concept,
+        },
+        {
           href: `#`,
           text: localization.noAccess,
         },
@@ -22,7 +26,7 @@ const NoAccess = async ({ params }) => {
       />
       <PageBanner
         title={localization.catalogType.concept}
-        subtitle={localization.error}
+        subtitle={localization.noAccess}
       />
       <CenterContainer>
         <Heading

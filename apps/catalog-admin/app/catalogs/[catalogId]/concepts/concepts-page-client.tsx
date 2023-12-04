@@ -2,7 +2,7 @@
 
 import { BreadcrumbType, Breadcrumbs, Card } from '@catalog-frontend/ui';
 import React from 'react';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { localization } from '@catalog-frontend/utils';
 import { Banner } from '../../../../components/banner';
 import { DatabaseIcon, PencilWritingIcon, RectangleSectionsIcon } from '@navikt/aksel-icons';
 import styles from './concepts-page.module.css';
@@ -12,11 +12,11 @@ export const ConceptsPageClient = ({ catalogId, organization }) => {
     ? ([
         {
           href: `/catalogs/${catalogId}`,
-          text: getTranslateText(localization.catalogAdmin.manage.catalogAdmin),
+          text: localization.catalogAdmin.manage.catalogAdmin,
         },
         {
           href: `/catalogs/${catalogId}/concepts`,
-          text: getTranslateText(localization.catalogType.concept),
+          text: localization.catalogType.concept,
         },
       ] as BreadcrumbType[])
     : [];

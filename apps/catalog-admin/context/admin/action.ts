@@ -16,7 +16,9 @@ export type ACTION_TYPE =
 // add new payload types here as needed
 export type ACTION_PAYLOAD =
   | AdminState
-  | ({ backgroundColor: string } & { fontColor: string } & { logo: string } & { updatedCodeLists: CodeList[] } & {
+  | ({ backgroundColor: string } & { fontColor: string } & { logo: string | null | undefined } & {
+      updatedCodeLists: CodeList[];
+    } & {
       showUserEditor: boolean;
     } & { showInternalFieldEditor: boolean } & { showCodeListEditor: boolean } & {
       updatedCodes: Record<string, Code[]>;

@@ -3,7 +3,7 @@ import { Code, CodeList } from '@catalog-frontend/types';
 export interface AdminState {
   backgroundColor?: string;
   fontColor?: string;
-  logo?: string;
+  logo?: string | null | undefined;
   updatedCodeLists?: CodeList[];
   showUserEditor?: boolean;
   showInternalFieldEditor?: boolean;
