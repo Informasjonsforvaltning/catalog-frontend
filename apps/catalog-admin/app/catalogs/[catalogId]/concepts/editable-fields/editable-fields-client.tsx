@@ -4,7 +4,7 @@ import styles from './editable-fields.module.css';
 import { Heading } from '@digdir/design-system-react';
 import { BreadcrumbType, Breadcrumbs, Button, Select } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { CodeList } from '@catalog-frontend/types';
+import { CodeList, Organization } from '@catalog-frontend/types';
 
 import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
 import { useGetInternalFields, useUpdateEditableFields } from '../../../../../hooks/internal-fields';
@@ -13,16 +13,21 @@ import { compare } from 'fast-json-patch';
 import { Banner } from '../../../../../components/banner';
 import { PageLayout } from '../../../../../components/page-layout';
 
-export function EditableFieldsClient({ catalogId, organization }) {
+export interface EditableFieldsClientProps {
+  catalogId: string;
+  organization: Organization;
+}
+
+export function EditableFieldsClient({ catalogId, organization }: EditableFieldsClientProps) {
   const { data: getAllCodeLists } = useGetAllCodeLists({ catalogId });
   const dbCodeLists: CodeList[] = getAllCodeLists?.codeLists;
   const { data: getInternalFields } = useGetInternalFields(catalogId);
   const dbEditableFields = getInternalFields?.editable;
-  const [updatedCodeListId, setUpdatedCodeListId] = useState<string>(null);
+  const [updatedCodeListId, setUpdatedCodeListId] = useState<string>();
   const updateCodeListId = useUpdateEditableFields(catalogId);
 
   const handleUpdateDbCodeListId = () => {
-    const newField = { catalogId: catalogId, domainCodeListId: updatedCodeListId };
+    const newField = { catalogId: catalogId, domainCodeListId: updatedCodeListId ?? '' };
     const diff = compare(dbEditableFields, newField);
 
     if (diff) {
@@ -47,7 +52,7 @@ export function EditableFieldsClient({ catalogId, organization }) {
   const codeListsOptions = () => {
     return (
       dbCodeLists?.map((codeList: CodeList) => ({
-        value: codeList.id,
+        value: codeList.id ?? '',
         label: codeList.name,
       })) || []
     );
@@ -57,7 +62,7 @@ export function EditableFieldsClient({ catalogId, organization }) {
     ? ([
         {
           href: `/catalogs/${catalogId}`,
-          text: localization.catalogAdmin.manage.catalogAdmin,
+          text: localization.manageCatalog,
         },
         {
           href: `/catalogs/${catalogId}/concepts`,
@@ -73,7 +78,11 @@ export function EditableFieldsClient({ catalogId, organization }) {
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
-      <Banner orgName={organization?.prefLabel} />
+      <Banner
+        title={localization.catalogAdmin.manage.conceptCatalog}
+        orgName={`${getTranslateText(organization?.prefLabel)}`}
+        catalogId={catalogId}
+      />
       <PageLayout>
         <div className={styles.heading}>
           <Heading

@@ -6,14 +6,19 @@ import { Accordion, Heading } from '@digdir/design-system-react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { BreadcrumbType, Breadcrumbs, Button } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { InternalField } from '@catalog-frontend/types';
+import { InternalField, Organization } from '@catalog-frontend/types';
 import { Banner } from '../../../../../components/banner';
 import { useGetInternalFields } from '../../../../../hooks/internal-fields';
 import { InternalFieldEditor } from '../../../../../components/internal-field-editor';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
 import { PageLayout } from '../../../../../components/page-layout';
 
-export const InternalFieldsPageClient = ({ catalogId, organization }) => {
+export interface InternalFieldsPageClientProps {
+  catalogId: string;
+  organization: Organization;
+}
+
+export const InternalFieldsPageClient = ({ catalogId, organization }: InternalFieldsPageClientProps) => {
   const { data: getInternalFields } = useGetInternalFields(catalogId);
   const dbFields = getInternalFields?.internal;
 
@@ -29,7 +34,7 @@ export const InternalFieldsPageClient = ({ catalogId, organization }) => {
     ? ([
         {
           href: `/catalogs/${catalogId}`,
-          text: localization.catalogAdmin.manage.catalogAdmin,
+          text: localization.manageCatalog,
         },
         {
           href: `/catalogs/${catalogId}/concepts`,
@@ -45,7 +50,11 @@ export const InternalFieldsPageClient = ({ catalogId, organization }) => {
   return (
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
-      <Banner orgName={organization?.prefLabel} />
+      <Banner
+        title={localization.catalogAdmin.manage.conceptCatalog}
+        orgName={`${getTranslateText(organization?.prefLabel)}`}
+        catalogId={catalogId}
+      />
 
       <PageLayout>
         <div className={styles.topButtonRow}>
