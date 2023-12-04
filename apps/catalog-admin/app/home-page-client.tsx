@@ -2,7 +2,7 @@
 
 import { Breadcrumbs, Card } from '@catalog-frontend/ui';
 
-const AppPageClient = ({ organizations }) => {
+const HomePageClient = ({ organizations }) => {
   return (
     <>
       <Breadcrumbs />
@@ -22,4 +22,4 @@ const AppPageClient = ({ organizations }) => {
   );
 };
 
-export default AppPageClient;
+export default HomePageClient;

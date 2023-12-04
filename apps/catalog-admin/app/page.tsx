@@ -1,20 +1,13 @@
 import { getOrganizations } from '@catalog-frontend/data-access';
 import { Organization } from '@catalog-frontend/types';
 import { authOptions, getResourceRoles } from '@catalog-frontend/utils';
-import { Session, getServerSession } from 'next-auth';
-import { redirect } from 'next/navigation';
-import AppPageClient from './app-page-client';
-import { cookies } from 'next/headers';
+import HomePageClient from './home-page-client';
+import { checkAuthenticated } from '../utils/auth';
+import { getServerSession } from 'next-auth';
 
 const Home = async () => {
-  const session: Session | null = await getServerSession(authOptions);
-
-  if (!session) redirect('/auth/signin');
-  if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
-    const cookieStore = cookies();
-    const callbackUrl = cookieStore.get('next-auth.callback-url')?.value ?? '';
-    redirect(`/auth/signin?callbackUrl=${encodeURIComponent(callbackUrl)}`);
-  }
+  const session = await getServerSession(authOptions);
+  checkAuthenticated({ session, callbackUrl: '/' });
 
   const resourceRoles = getResourceRoles(`${session?.accessToken}`);
   const organiztionIdsWithAdminRole = resourceRoles
@@ -26,7 +19,7 @@ const Home = async () => {
     organizations = await getOrganizations(organiztionIdsWithAdminRole).then((res) => res.json());
   }
 
-  return <AppPageClient organizations={organizations} />;
+  return <HomePageClient organizations={organizations} />;
 };
 
 export default Home;

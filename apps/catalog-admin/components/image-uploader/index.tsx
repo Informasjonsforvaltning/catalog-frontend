@@ -9,12 +9,12 @@ import { UploadButton } from '@catalog-frontend/ui';
 const allowedFileTypes = ['image/x-png', 'image/svg+xml'];
 
 export function ImageUploader({ catalogId }) {
-  const [image, setImage] = useState(undefined);
-  const [fileName, setFileName] = useState(null);
+  const [image, setImage] = useState<string | null | undefined>();
+  const [fileName, setFileName] = useState<string | null | undefined>(null);
   const adminDispatch = useAdminDispatch();
   const { data: getLogo } = useGetLogo(catalogId);
-  const dbLogo = getLogo && getLogo.body;
-  const dbFileName = getLogo && getLogo.headers.get('Content-Disposition').match(/filename="([^"]+)"/)[1];
+  const dbLogo = getLogo?.body;
+  const dbFileName = getLogo?.headers?.get('Content-Disposition')?.match(/filename="([^"]+)"/)?.[1];
 
   const updateLogo = useUpdateLogo(catalogId);
   const deleteLogo = useDeleteLogo(catalogId);
@@ -45,7 +45,7 @@ export function ImageUploader({ catalogId }) {
 
   const resetImage = () => {
     setFileName(null);
-    setImage(undefined);
+    setImage(null);
     if (dbLogo) {
       handleDeleteLogo();
     }

@@ -33,15 +33,15 @@ export const useUpdateDesign = (catalogId: string) => {
         throw new Error('Invalid organization number');
       }
 
-      if (!colorRegex.test(newDesign.fontColor)) {
+      if (!colorRegex.test(newDesign.fontColor ?? '')) {
         throw new Error('Invalid font color format');
       }
 
-      if (!colorRegex.test(newDesign.backgroundColor)) {
+      if (!colorRegex.test(newDesign.backgroundColor ?? '')) {
         throw new Error('Invalid background color format');
       }
 
-      if (!textRegexWithNumbers.test(newDesign.logoDescription)) {
+      if (!textRegexWithNumbers.test(newDesign.logoDescription ?? '')) {
         throw new Error('Invalid logo description');
       }
 
@@ -53,6 +53,7 @@ export const useUpdateDesign = (catalogId: string) => {
         });
 
         if (!response.ok) {
+          console.error('Failed to update design', response.status, response.statusText);
           throw new Error('Failed to update design');
         }
         return response;
@@ -67,10 +68,12 @@ export const useUpdateDesign = (catalogId: string) => {
   );
 };
 
+type LogoResult = { body: string; headers: Headers } | null;
+
 export const useGetLogo = (catalogId: string) =>
-  useQuery<{ body: string; headers: Headers }>({
+  useQuery<LogoResult, Error>({
     queryKey: ['getLogo', catalogId],
-    queryFn: async () => {
+    queryFn: async (): Promise<LogoResult> => {
       if (!validOrganizationNumber(catalogId)) {
         return Promise.reject('Invalid organization number');
       }
@@ -85,7 +88,7 @@ export const useGetLogo = (catalogId: string) =>
 
       if (response.status === 401) {
         signIn('keycloak');
-        return;
+        return null;
       }
 
       const responseBody = await response.text();
