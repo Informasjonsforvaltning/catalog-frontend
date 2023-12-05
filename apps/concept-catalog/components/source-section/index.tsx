@@ -6,9 +6,9 @@ import { localization as loc } from '@catalog-frontend/utils';
 import { Definisjon } from '@catalog-frontend/types';
 import { FieldArray } from 'formik';
 import { SourceForDefinitionField } from './source-for-definition';
-import { Button } from '@digdir/design-system-react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { RelationToSource } from './relation-to-source';
+import { Button } from '@catalog-frontend/ui';
 
 interface Props {
   fieldName: string;
@@ -39,8 +39,7 @@ export const SourceSection: FC<Props> = ({ fieldName, definisjon, readOnly }) =>
                 <Button
                   icon={<PlusCircleIcon />}
                   color='second'
-                  variant='secondary'
-                  size='small'
+                  variant='tertiary'
                   onClick={() => arrayHelpers.push({ uri: '', tekst: '' })}
                 >
                   {loc.formatString(loc.button.addWithFormat, { text: loc.concept.source.toLowerCase() })}

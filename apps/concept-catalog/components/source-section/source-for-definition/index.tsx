@@ -3,9 +3,10 @@
 import { FC } from 'react';
 import styles from './source-for-definition.module.css';
 import { Field } from 'formik';
-import { Button, Textfield } from '@digdir/design-system-react';
+import { Textfield } from '@digdir/design-system-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { localization as loc } from '@catalog-frontend/utils';
+import { Button } from '@catalog-frontend/ui';
 
 interface Props {
   sourceTitleFieldName: string;
@@ -44,9 +45,8 @@ export const SourceForDefinitionField: FC<Props> = ({
         {!readOnly && (
           <Button
             color='danger'
-            variant='secondary'
+            variant='tertiary'
             icon={<TrashIcon />}
-            size='small'
             onClick={deleteClickHandler}
           >
             {loc.formatString(loc.button.deleteWithFormat, { text: loc.concept.source.toLowerCase() })}

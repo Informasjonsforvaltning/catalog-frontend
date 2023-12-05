@@ -1,6 +1,6 @@
 'use client';
 
-import { PageBanner, Tag } from '@catalog-frontend/ui';
+import { Button, PageBanner, Tag } from '@catalog-frontend/ui';
 import {
   capitalizeFirstLetter,
   convertTimestampToDateAndTime,
@@ -10,7 +10,7 @@ import {
 } from '@catalog-frontend/utils';
 import styles from './change-requests-page.module.css';
 import { useRouter } from 'next/navigation';
-import { Button, Heading, Link } from '@digdir/design-system-react';
+import { Heading, Link } from '@digdir/design-system-react';
 import { useCatalogDesign } from '../../../context/catalog-design';
 import cn from 'classnames';
 
