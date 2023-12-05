@@ -9,6 +9,7 @@ import {
   UploadButton,
   SearchField,
   SearchHitContainer,
+  Spinner,
 } from '@catalog-frontend/ui';
 import {
   textToNumber,
@@ -17,7 +18,7 @@ import {
   capitalizeFirstLetter,
   localization as loc,
 } from '@catalog-frontend/utils';
-import { Chip, Select, Spinner } from '@digdir/design-system-react';
+import { Chip, Select } from '@digdir/design-system-react';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 
 import { useState, useEffect } from 'react';
@@ -391,7 +392,7 @@ export const SearchPageClient = ({
                 conceptStatuses={conceptStatuses}
               />
               {status === 'loading' || importConcepts.status === 'loading' ? (
-                <Spinner title='Loading' />
+                <Spinner />
               ) : (
                 <SearchHitContainer
                   onPageChange={onPageChange}

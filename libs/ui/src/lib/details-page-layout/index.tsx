@@ -2,10 +2,11 @@
 
 import { HTMLAttributes, ReactNode } from 'react';
 import styles from './details-page.module.css';
-import { Spinner, ToggleGroup } from '@digdir/design-system-react';
+import { ToggleGroup } from '@digdir/design-system-react';
 
 import cn from 'classnames';
 import { DetailHeading } from '../detail-heading';
+import { Spinner } from '../spinner';
 
 interface DetailsPageLayoutProps extends HTMLAttributes<HTMLDivElement> {
   mainColumn?: ReactNode;
@@ -41,7 +42,7 @@ const DetailsPageLayout = ({
         headingTitle={headingTitle}
         subtitle={headingSubtitle}
       />
-      {loading && <Spinner title={'Laster'} />}
+      {loading && <Spinner />}
       {!loading && (
         <>
           <div className={styles.buttonRow}>
