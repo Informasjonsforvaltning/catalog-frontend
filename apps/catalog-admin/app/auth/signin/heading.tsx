@@ -45,7 +45,7 @@ export const Heading = () => {
           size='small'
         >
           <div>{localization.auth.loggingIn}</div>
-          <Spinner />)
+          <Spinner />
         </DSHeading>
       )}
     </>
