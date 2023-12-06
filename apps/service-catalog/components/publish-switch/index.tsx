@@ -10,9 +10,10 @@ type ServiceFormProps = {
   serviceId: string;
   isPublished: boolean;
   type: 'public-services' | 'services';
+  disabled?: boolean;
 };
 
-export const PublishSwitch = ({ catalogId, serviceId, isPublished, type }: ServiceFormProps) => {
+export const PublishSwitch = ({ catalogId, serviceId, isPublished, type, disabled = false }: ServiceFormProps) => {
   const handlePublishPublicService = () => {
     if (window.confirm(localization.serviceCatalog.confirmPublish)) {
       publishPublicService(catalogId, serviceId);
@@ -35,6 +36,7 @@ export const PublishSwitch = ({ catalogId, serviceId, isPublished, type }: Servi
         readOnly={isPublished}
         checked={isPublished}
         onChange={() => (type === 'services' ? handlePublishService() : handlePublishPublicService())}
+        disabled={disabled}
       >
         {localization.publicationState.published}
       </Switch>

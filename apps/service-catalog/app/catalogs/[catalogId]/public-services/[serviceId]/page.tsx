@@ -41,7 +41,9 @@ export default async function PublicServiceDetailsPage({ params }: Params) {
             serviceId={serviceId}
             isPublished={service?.published ?? false}
             type='public-services'
+            disabled={!hasWritePermission}
           />
+
           <div className={styles.greyFont}>
             {service?.published
               ? localization.publicationState.publishedInFDK

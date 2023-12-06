@@ -41,6 +41,7 @@ export default async function ServiceDetailsPage({ params }: Params) {
             serviceId={serviceId}
             isPublished={service?.published ?? false}
             type='services'
+            disabled={!hasWritePermission}
           />
           <div className={styles.greyFont}>
             {service?.published
