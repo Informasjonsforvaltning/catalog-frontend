@@ -11,10 +11,16 @@ import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import { DeleteServiceButton } from '../../../../../components/buttons';
 import PublishSwitch from '../../../../../components/publish-switch';
+import { RedirectType, redirect } from 'next/navigation';
 
 export default async function ServiceDetailsPage({ params }: Params) {
   const { catalogId, serviceId } = params;
-  const service: Service = await getServiceById(catalogId, serviceId);
+
+  const service: Service | null = await getServiceById(catalogId, serviceId);
+  if (!service) {
+    redirect(`/not-found`, RedirectType.replace);
+  }
+
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const session = await getServerSession(authOptions);
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
