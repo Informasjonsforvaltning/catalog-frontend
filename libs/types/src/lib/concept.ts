@@ -104,7 +104,7 @@ export interface Relasjon {
 }
 
 export interface Concept {
-  id: string;
+  id: string | null;
   originaltBegrep?: string;
   versjonsnr?: Version | null;
   revisjonAv?: string;

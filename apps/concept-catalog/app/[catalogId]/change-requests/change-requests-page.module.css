@@ -36,6 +36,10 @@
   color: #2d3741;
 }
 
+.noName {
+  font-style: italic;
+}
+
 .heading {
   padding-bottom: 10px;
   color: #2d3741;

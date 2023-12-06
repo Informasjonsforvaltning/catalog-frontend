@@ -6,7 +6,7 @@ import { useCreateChangeRequest } from '../../../../hooks/change-requests';
 import { localization as loc } from '@catalog-frontend/utils';
 import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
 import { useCatalogDesign } from '../../../../context/catalog-design';
-import ChangeRequestForm from '../[changeRequestId]/change-request-form';
+import ChangeRequestForm from '../../../../components/change-request-form/change-request-form';
 
 const NewConceptSuggestionClient = ({
   FDK_REGISTRATION_BASE_URI,
@@ -14,17 +14,17 @@ const NewConceptSuggestionClient = ({
   changeRequest,
   changeRequestAsConcept,
   originalConcept,
-  showOriginal,
 }) => {
   const catalogId = organization.organizationId;
   const pageSubtitle = organization?.name ?? organization.id;
 
   const changeRequestMutateHook = useCreateChangeRequest({ catalogId: catalogId });
-  const submitHandler = (values: Concept, title: string) => {
+  const submitHandler = (values: Concept) => {
+    const anbefaltTerm = values.anbefaltTerm?.navn.nb || values.anbefaltTerm?.navn.nn || values.anbefaltTerm?.navn.en;
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
       conceptId: changeRequest.conceptId,
       operations: jsonpatch.compare(originalConcept, values) as JsonPatchOperation[],
-      title: title,
+      title: anbefaltTerm || '',
     };
     changeRequestMutateHook.mutate(changeRequestFromConcept);
   };
@@ -57,14 +57,12 @@ const NewConceptSuggestionClient = ({
         subtitle={pageSubtitle}
         fontColor={design?.fontColor}
         backgroundColor={design?.backgroundColor}
-        logo={design?.hasLogo && `/api/catalog-admin/${catalogId}/design/logo`}
+        logo={design?.hasLogo ? `/api/catalog-admin/${catalogId}/design/logo` : undefined}
         logoDescription={design?.logoDescription}
       />
       <ChangeRequestForm
-        changeRequest={changeRequest}
         changeRequestAsConcept={changeRequestAsConcept}
-        originalConcept={originalConcept}
-        showOriginal={showOriginal}
+        readOnly={false}
         submitHandler={submitHandler}
       />
     </>

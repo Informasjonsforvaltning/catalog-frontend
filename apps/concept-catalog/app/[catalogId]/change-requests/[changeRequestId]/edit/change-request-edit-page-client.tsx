@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 
 import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
 import { useCatalogDesign } from '../../../../../context/catalog-design';
-import ChangeRequestForm from '../change-request-form';
+import ChangeRequestForm from '../../../../../components/change-request-form/change-request-form';
 
 const ChangeRequestEditPageClient = ({
   FDK_REGISTRATION_BASE_URI,
@@ -16,7 +16,6 @@ const ChangeRequestEditPageClient = ({
   changeRequest,
   changeRequestAsConcept,
   originalConcept,
-  showOriginal,
 }) => {
   const router = useRouter();
   const catalogId = organization.organizationId;
@@ -26,16 +25,21 @@ const ChangeRequestEditPageClient = ({
     catalogId: organization.organizationId,
     changeRequestId: changeRequest.id,
   });
-  const submitHandler = (values: Concept, title: string) => {
+  const submitHandler = (values: Concept) => {
+    const changeRequestTitle =
+      originalConcept.anbefaltTerm?.navn?.nb ||
+      originalConcept.anbefaltTerm?.navn?.nn ||
+      originalConcept.anbefaltTerm?.navn?.en ||
+      '';
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
       conceptId: changeRequest.conceptId,
       operations: jsonpatch.compare(originalConcept, values) as JsonPatchOperation[],
-      title: title,
+      title: changeRequestTitle,
     };
 
     changeRequestMutateHook.mutate(changeRequestFromConcept, {
       onSuccess: () => {
-        router.reload();
+        router.refresh();
       },
     });
   };
@@ -72,14 +76,12 @@ const ChangeRequestEditPageClient = ({
         subtitle={pageSubtitle}
         fontColor={design?.fontColor}
         backgroundColor={design?.backgroundColor}
-        logo={design?.hasLogo && `/api/catalog-admin/${catalogId}/design/logo`}
+        logo={design?.hasLogo ? `/api/catalog-admin/${catalogId}/design/logo` : undefined}
         logoDescription={design?.logoDescription}
       />
       <ChangeRequestForm
-        changeRequest={changeRequest}
         changeRequestAsConcept={changeRequestAsConcept}
-        originalConcept={originalConcept}
-        showOriginal={showOriginal}
+        readOnly={false}
         submitHandler={submitHandler}
       />
     </>

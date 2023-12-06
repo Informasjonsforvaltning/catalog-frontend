@@ -1,0 +1,6 @@
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+  align-items: flex-end;
+}

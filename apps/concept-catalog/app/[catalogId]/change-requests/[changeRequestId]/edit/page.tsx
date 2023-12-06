@@ -74,7 +74,6 @@ const ChangeRequestEditPage = async ({ params }) => {
     changeRequest,
     changeRequestAsConcept,
     originalConcept,
-    showOriginal: true,
   };
   return <ChangeRequestEditPageClient {...clientProps} />;
 };
