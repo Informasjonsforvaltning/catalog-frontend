@@ -32,7 +32,7 @@ export const createChangeRequest = async (body: any, catalogId: string, accessTo
       'Content-Type': 'application/json',
     },
     method: 'POST',
-    body: body,
+    body: JSON.stringify(body),
   };
   return await fetch(resource, options);
 };
@@ -50,7 +50,7 @@ export const updateChangeRequest = async (
       'Content-Type': 'application/json',
     },
     method: 'POST',
-    body: body,
+    body: JSON.stringify(body),
   };
   return await fetch(resource, options);
 };

@@ -1,8 +1,11 @@
-export interface AssignedUser {
+export interface UserName {
   id?: string;
-  catalogId?: string;
   name?: string;
   email?: string;
+}
+
+export interface AssignedUser extends UserName {
+  catalogId?: string;
   telephoneNumber?: string;
 }
 

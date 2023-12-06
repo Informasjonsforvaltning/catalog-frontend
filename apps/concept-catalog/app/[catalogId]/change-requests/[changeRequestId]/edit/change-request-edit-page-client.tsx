@@ -1,25 +1,33 @@
 'use client';
 
-import { Concept, ChangeRequestUpdateBody, JsonPatchOperation } from '@catalog-frontend/types';
-import { localization as loc } from '@catalog-frontend/utils';
+import {
+  Concept,
+  ChangeRequestUpdateBody,
+  JsonPatchOperation,
+  Organization,
+  ChangeRequest,
+} from '@catalog-frontend/types';
 import jsonpatch from 'fast-json-patch';
 import { useUpdateChangeRequest } from '../../../../../hooks/change-requests';
 import { useRouter } from 'next/navigation';
 
-import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
-import { useCatalogDesign } from '../../../../../context/catalog-design';
 import ChangeRequestForm from '../../../../../components/change-request-form/change-request-form';
+import { FC } from 'react';
 
-const ChangeRequestEditPageClient = ({
-  FDK_REGISTRATION_BASE_URI,
+interface Props {
+  organization: Organization;
+  changeRequest: ChangeRequest;
+  changeRequestAsConcept: Concept;
+  originalConcept: Concept;
+}
+
+const ChangeRequestEditPageClient: FC<Props> = ({
   organization,
   changeRequest,
   changeRequestAsConcept,
   originalConcept,
 }) => {
   const router = useRouter();
-  const catalogId = organization.organizationId;
-  const pageSubtitle = organization?.name ?? organization.id;
 
   const changeRequestMutateHook = useUpdateChangeRequest({
     catalogId: organization.organizationId,
@@ -32,7 +40,7 @@ const ChangeRequestEditPageClient = ({
       originalConcept.anbefaltTerm?.navn?.en ||
       '';
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
-      conceptId: changeRequest.conceptId,
+      conceptId: originalConcept.id,
       operations: jsonpatch.compare(originalConcept, values) as JsonPatchOperation[],
       title: changeRequestTitle,
     };
@@ -44,47 +52,12 @@ const ChangeRequestEditPageClient = ({
     });
   };
 
-  const breadcrumbList = [
-    {
-      href: `/${catalogId}`,
-      text: loc.concept.concept,
-    },
-    {
-      href: `/${catalogId}/change-requests`,
-      text: loc.changeRequest.changeRequest,
-    },
-    {
-      href: `/${catalogId}/change-requests/${changeRequest.id}`,
-      text: changeRequest.title,
-    },
-    {
-      href: `/${catalogId}/change-requests/${changeRequest.id}/edit`,
-      text: loc.changeRequest.edit,
-    },
-  ] as BreadcrumbType[];
-
-  const design = useCatalogDesign();
-
   return (
-    <>
-      <Breadcrumbs
-        baseURI={FDK_REGISTRATION_BASE_URI}
-        breadcrumbList={breadcrumbList}
-      />
-      <PageBanner
-        title={loc.catalogType.concept}
-        subtitle={pageSubtitle}
-        fontColor={design?.fontColor}
-        backgroundColor={design?.backgroundColor}
-        logo={design?.hasLogo ? `/api/catalog-admin/${catalogId}/design/logo` : undefined}
-        logoDescription={design?.logoDescription}
-      />
-      <ChangeRequestForm
-        changeRequestAsConcept={changeRequestAsConcept}
-        readOnly={false}
-        submitHandler={submitHandler}
-      />
-    </>
+    <ChangeRequestForm
+      changeRequestAsConcept={changeRequestAsConcept}
+      readOnly={false}
+      submitHandler={submitHandler}
+    />
   );
 };
 
