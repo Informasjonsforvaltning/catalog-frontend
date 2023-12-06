@@ -1,17 +1,21 @@
 import { JsonPatchOperation } from './json-patch';
+import { UserName } from './user';
 
 type ChangeRequestStatus = 'OPEN' | 'REJECTED' | 'ACCEPTED';
 
 export interface ChangeRequest {
-  id: string;
-  conceptId?: string;
+  id: string | null;
+  conceptId?: string | null;
   catalogId: string;
   status: ChangeRequestStatus;
   operations: JsonPatchOperation[];
+  proposedBy?: UserName;
+  timeForProposal?: string;
+  title: string;
 }
 
 export interface ChangeRequestUpdateBody {
-  conceptId?: string;
+  conceptId: string | null;
   operations: JsonPatchOperation[];
   title: string;
 }

@@ -1,15 +1,19 @@
 import { getOrganization, getConcept, getChangeRequest } from '@catalog-frontend/data-access';
 import { Organization, Concept, ChangeRequest } from '@catalog-frontend/types';
+import { BreadcrumbType, Breadcrumbs } from '@catalog-frontend/ui';
 import {
   authOptions,
   hasOrganizationReadPermission,
   validOrganizationNumber,
   validUUID,
+  localization as loc,
 } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import jsonpatch from 'fast-json-patch';
 import ChangeRequestEditPageClient from './change-request-edit-page-client';
 import { RedirectType, redirect } from 'next/navigation';
+
+import { Banner } from '../../../../../components/banner';
 
 const ChangeRequestEditPage = async ({ params }) => {
   const { catalogId, changeRequestId } = params;
@@ -68,14 +72,49 @@ const ChangeRequestEditPage = async ({ params }) => {
     jsonpatch.deepClone(changeRequest.operations),
     false,
   ).newDocument;
+
+  const pageSubtitle = organization?.name ?? organization.organizationId;
+
+  const breadcrumbList = [
+    {
+      href: `/${catalogId}`,
+      text: loc.concept.concept,
+    },
+    {
+      href: `/${catalogId}/change-requests`,
+      text: loc.changeRequest.changeRequest,
+    },
+    {
+      href: `/${catalogId}/change-requests/${changeRequest.id}`,
+      text: changeRequest.title,
+    },
+    {
+      href: `/${catalogId}/change-requests/${changeRequest.id}/edit`,
+      text: loc.changeRequest.edit,
+    },
+  ] as BreadcrumbType[];
+
   const clientProps = {
-    FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
-    organization,
+    organization: organization,
     changeRequest,
     changeRequestAsConcept,
     originalConcept,
   };
-  return <ChangeRequestEditPageClient {...clientProps} />;
+
+  return (
+    <>
+      <Breadcrumbs
+        baseURI={process.env.FDK_REGISTRATION_BASE_URI}
+        breadcrumbList={breadcrumbList}
+      />
+      <Banner
+        title={loc.catalogType.concept}
+        subtitle={pageSubtitle}
+        catalogId={catalogId}
+      />
+      <ChangeRequestEditPageClient {...clientProps} />
+    </>
+  );
 };
 
 export default ChangeRequestEditPage;
