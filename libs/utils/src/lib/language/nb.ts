@@ -109,6 +109,7 @@ export const nb = {
     deleteWithFormat: 'Slett {text}',
     addWithFormat: 'Legg til ny {text}',
     close: 'Lukk',
+    addRelation: 'Legg til relasjon',
   },
 
   dropdown: {
@@ -328,6 +329,9 @@ export const nb = {
       delete: 'Slett tjeneste',
       confirmDelete: 'Er du sikker på at du vil slette tjenesten?',
       new: 'Opprett ny tjeneste',
+      produces: 'Produserer',
+      descriptionProduces:
+        'Egenskapen brukes til å referere til en eller flere instanser av tjenesteresultat som beskriver resultat av tjenesten.',
     },
   },
 };

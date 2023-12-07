@@ -4,7 +4,7 @@ import { Operation } from 'fast-json-patch';
 const path = `${process.env.SERVICE_CATALOG_BASE_URI}`;
 
 export const handleGetAllServices = async (catalogId: string, accessToken: string) => {
-  const resource = `${path}/catalogs/${catalogId}/services`;
+  const resource = `${path}/internal/catalogs/${catalogId}/services`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -15,7 +15,7 @@ export const handleGetAllServices = async (catalogId: string, accessToken: strin
 };
 
 export const handleGetServiceById = async (catalogId: string, serviceId: string, accessToken: string) => {
-  const resource = `${path}/catalogs/${catalogId}/services/${serviceId}`;
+  const resource = `${path}/internal/catalogs/${catalogId}/services/${serviceId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -26,7 +26,7 @@ export const handleGetServiceById = async (catalogId: string, serviceId: string,
 };
 
 export const handleCreateService = async (Service: Partial<Service>, catalogId: string, accessToken: string) => {
-  const resource = `${path}/catalogs/${catalogId}/services`;
+  const resource = `${path}/internal/catalogs/${catalogId}/services`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -39,7 +39,7 @@ export const handleCreateService = async (Service: Partial<Service>, catalogId: 
 };
 
 export const handleDeleteService = async (catalogId: string, serviceId: string, accessToken: string) => {
-  const resource = `${path}/catalogs/${catalogId}/services/${serviceId}`;
+  const resource = `${path}/internal/catalogs/${catalogId}/services/${serviceId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -56,7 +56,7 @@ export const handleUpdateService = async (
   patchOperations: Operation[],
   accessToken: string,
 ) => {
-  const resource = `${path}/catalogs/${catalogId}/services/${serviceId}`;
+  const resource = `${path}/internal/catalogs/${catalogId}/services/${serviceId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -69,7 +69,7 @@ export const handleUpdateService = async (
 };
 
 export const handlePublishService = async (catalogId: string, serviceId: string, accessToken: string) => {
-  const resource = `${path}/catalogs/${catalogId}/services/${serviceId}/publish`;
+  const resource = `${path}/internal/catalogs/${catalogId}/services/${serviceId}/publish`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,

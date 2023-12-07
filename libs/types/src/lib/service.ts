@@ -2,10 +2,19 @@ import { MultiLanguageText } from './language';
 
 export interface Service extends ServiceToBeCreated {
   id: string;
-  catalogId: string;
+  published: boolean;
+  produces: Output[];
 }
 
 export interface ServiceToBeCreated {
   title: MultiLanguageText;
   description?: MultiLanguageText;
+  produces?: Output[];
+}
+
+export interface Output {
+  identifier: string;
+  title?: MultiLanguageText;
+  description?: MultiLanguageText;
+  language?: string[];
 }

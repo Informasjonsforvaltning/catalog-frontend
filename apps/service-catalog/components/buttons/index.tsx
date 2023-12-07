@@ -3,14 +3,16 @@ import { localization } from '@catalog-frontend/utils';
 import { Button } from '@digdir/design-system-react';
 import { deletePublicService } from '../../app/actions/public-services/actions';
 import { deleteService } from '../../app/actions/services/actions';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
+import styles from './buttons.module.css';
 
-type ServiceFormProps = {
+type DeleteProps = {
   catalogId: string;
   serviceId: string;
   type: 'services' | 'public-services';
 };
 
-export const DeleteServiceButton = ({ catalogId, serviceId, type }: ServiceFormProps) => {
+export const DeleteServiceButton = ({ catalogId, serviceId, type }: DeleteProps) => {
   const handleDelete = () => {
     if (window.confirm(localization.serviceCatalog.form.confirmDelete)) {
       type === 'public-services' ? deletePublicService(catalogId, serviceId) : deleteService(catalogId, serviceId);
@@ -24,6 +26,25 @@ export const DeleteServiceButton = ({ catalogId, serviceId, type }: ServiceFormP
       onClick={handleDelete}
     >
       {localization.button.delete}
+    </Button>
+  );
+};
+
+type AddProps = {
+  onClick: () => void;
+  children: string;
+};
+
+export const AddButton = ({ onClick, children }: AddProps) => {
+  return (
+    <Button
+      className={styles.addButton}
+      icon={<PlusCircleIcon />}
+      size='small'
+      type='button'
+      onClick={onClick}
+    >
+      {children}
     </Button>
   );
 };
