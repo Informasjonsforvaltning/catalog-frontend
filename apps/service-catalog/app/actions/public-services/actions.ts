@@ -11,6 +11,7 @@ import {
 import { Service, ServiceToBeCreated } from '@catalog-frontend/types';
 import { authOptions, validateSession } from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
+import convertEmptyToNull from 'libs/utils/src/lib/object-manipulation';
 import { getServerSession } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -45,17 +46,8 @@ export async function getPublicServiceById(catalogId: string, serviceId: string)
   }
 }
 
-export async function createPublicService(catalogId: string, formData: FormData) {
-  const newPublicService: ServiceToBeCreated = {
-    catalogId: catalogId,
-    title: {
-      nb: formData.get('title.nb'),
-    },
-    description: {
-      nb: formData.get('description.nb'),
-    },
-  };
-
+export async function createPublicService(catalogId: string, values: ServiceToBeCreated) {
+  const newPublicService = convertEmptyToNull(values);
   const session = await getServerSession(authOptions);
   await validateSession(session);
   let success = false;
@@ -95,18 +87,8 @@ export async function deletePublicService(catalogId: string, serviceId: string) 
   }
 }
 
-export async function updatePublicService(catalogId: string, oldPublicService: Service, formData: FormData) {
-  const updatedPublicService = { ...oldPublicService };
-  updatedPublicService.title = {
-    ...updatedPublicService.title,
-    nb: formData.get('title.nb'),
-  };
-
-  updatedPublicService.description = {
-    ...updatedPublicService.description,
-    nb: formData.get('description.nb'),
-  };
-
+export async function updatePublicService(catalogId: string, oldPublicService: Service, values: Service) {
+  const updatedPublicService = convertEmptyToNull(values);
   const diff = compare(oldPublicService, updatedPublicService);
   let success = false;
 
