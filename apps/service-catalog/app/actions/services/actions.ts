@@ -11,6 +11,8 @@ import {
 import { Service, ServiceToBeCreated } from '@catalog-frontend/types';
 import { authOptions, removeEmptyValues, validateSession } from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
+import convertEmptyToNull from 'libs/utils/src/lib/object-manipulation';
+import _ from 'lodash';
 import { getServerSession } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
