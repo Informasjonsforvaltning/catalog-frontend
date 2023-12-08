@@ -39,6 +39,12 @@
         "jest": true
       },
       "rules": {}
+    },
+    {
+      "files": ["middleware.ts"],
+      "rules": {
+        "@nrwl/nx/enforce-module-boundaries": "off" // Due to dynamic code evaluation not beeing available in Middlewares
+      }
     }
   ]
 }

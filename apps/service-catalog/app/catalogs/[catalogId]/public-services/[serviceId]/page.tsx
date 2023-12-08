@@ -11,10 +11,15 @@ import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import { DeleteServiceButton } from '../../../../../components/buttons';
 import PublishSwitch from '../../../../../components/publish-switch';
+import { RedirectType, redirect } from 'next/navigation';
 
 export default async function PublicServiceDetailsPage({ params }: Params) {
   const { catalogId, serviceId } = params;
-  const service: Service = await getPublicServiceById(catalogId, serviceId);
+
+  const service: Service | null = await getPublicServiceById(catalogId, serviceId);
+  if (!service) {
+    redirect(`/not-found`, RedirectType.replace);
+  }
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const session = await getServerSession(authOptions);
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
@@ -41,7 +46,9 @@ export default async function PublicServiceDetailsPage({ params }: Params) {
             serviceId={serviceId}
             isPublished={service?.published ?? false}
             type='public-services'
+            disabled={!hasWritePermission}
           />
+
           <div className={styles.greyFont}>
             {service?.published
               ? localization.publicationState.publishedInFDK
