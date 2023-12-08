@@ -9,9 +9,8 @@ import {
   handleUpdatePublicService,
 } from '@catalog-frontend/data-access';
 import { Service, ServiceToBeCreated } from '@catalog-frontend/types';
-import { authOptions, validateSession } from '@catalog-frontend/utils';
+import { authOptions, validateSession, removeEmptyValues } from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
-import convertEmptyToNull from 'libs/utils/src/lib/object-manipulation';
 import { getServerSession } from 'next-auth';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -47,7 +46,7 @@ export async function getPublicServiceById(catalogId: string, serviceId: string)
 }
 
 export async function createPublicService(catalogId: string, values: ServiceToBeCreated) {
-  const newPublicService = convertEmptyToNull(values);
+  const newPublicService = removeEmptyValues(values);
   const session = await getServerSession(authOptions);
   await validateSession(session);
   let success = false;
@@ -88,8 +87,18 @@ export async function deletePublicService(catalogId: string, serviceId: string) 
 }
 
 export async function updatePublicService(catalogId: string, oldPublicService: Service, values: Service) {
-  const updatedPublicService = convertEmptyToNull(values);
-  const diff = compare(oldPublicService, updatedPublicService);
+  const updatedService = removeEmptyValues(values);
+
+  const updatedPublicServiceMerged = {
+    ...oldPublicService,
+    title: updatedService.title,
+    description: updatedService.description,
+    produces: updatedService.produces,
+    contactPoints: updatedService.contactPoints,
+  };
+
+  const diff = compare(oldPublicService, updatedPublicServiceMerged);
+
   let success = false;
 
   const session = await getServerSession(authOptions);

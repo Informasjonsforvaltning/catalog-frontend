@@ -45,6 +45,10 @@ export const nb = {
   showLess: 'Vis færre',
   title: 'Tittel',
   changeHistory: 'Endringshistorikk',
+  email: 'E-post',
+  telephone: 'Telefon',
+  homepage: 'Hjemmeside',
+  category: 'Kategori',
 
   language: {
     nb: 'Bokmål',
@@ -321,6 +325,7 @@ export const nb = {
     confirmPublish: 'Er du sikker på at du vil publisere tjenesten?',
     searchHitsTitle: 'Listevisning',
     infoAboutService: 'Informasjon om tjenesten',
+    contactPoint: 'Kontaktpunkt',
     form: {
       titleLabel: 'Tekst på bokmål',
       titleSubtitle: 'Egenskapen brukes å til oppgi navn til en tjeneste',

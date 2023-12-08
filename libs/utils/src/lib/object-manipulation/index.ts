@@ -1,12 +1,25 @@
 import _ from 'lodash';
 
-const convertEmptyToNull = (obj: Record<string, any>): Record<string, any> => {
-  return _.mapValues(obj, (value) => {
-    if (typeof value === 'object' && value !== null) {
-      return convertEmptyToNull(value); // Recursively process nested objects
-    }
-    return value === '' ? null : value; // Replace empty string with null
-  });
-};
+export const removeEmptyValues = (obj: any): any => {
+  if (Array.isArray(obj)) {
+    return obj.map((value) =>
+      typeof value === 'object' && value !== null
+        ? removeEmptyValues(value) // Recursively process nested objects in arrays
+        : value !== ''
+        ? value
+        : undefined,
+    );
+  }
 
-export default convertEmptyToNull;
+  if (typeof obj === 'object' && obj !== null) {
+    return _.mapValues(
+      _.omitBy(obj, (value) => value === ''), // Omit key-value pairs where the value is an empty string
+      (value) =>
+        typeof value === 'object' && value !== null
+          ? removeEmptyValues(value) // Recursively process nested objects in objects
+          : value,
+    );
+  }
+
+  return obj;
+};

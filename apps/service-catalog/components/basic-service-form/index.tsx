@@ -3,7 +3,7 @@
 import { Textarea, Textfield } from '@digdir/design-system-react';
 import { Button, FormFieldCard } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Output, Service, ServiceToBeCreated } from '@catalog-frontend/types';
+import { Output, Service } from '@catalog-frontend/types';
 import styles from './service-form.module.css';
 import { TrashIcon } from '@navikt/aksel-icons';
 import {
@@ -15,6 +15,7 @@ import { useRouter } from 'next/navigation';
 import { createService, deleteService, updateService } from '../../app/actions/services/actions';
 import { Field, FieldArray, Form, Formik } from 'formik';
 import { AddButton } from '../buttons';
+import { serviceTemplate, emptyProduces } from './service-template';
 
 type ServiceFormProps = {
   catalogId: string;
@@ -24,6 +25,7 @@ type ServiceFormProps = {
 
 export const BasicServiceForm = ({ catalogId, service, type }: ServiceFormProps) => {
   const router = useRouter();
+  const initalValues = serviceTemplate(service);
 
   const handleProducesIds = (values: any) => {
     const serviceCopy = { ...values };
@@ -66,28 +68,12 @@ export const BasicServiceForm = ({ catalogId, service, type }: ServiceFormProps)
     type === 'services' ? saveService(values) : savePublicService(values);
   }
 
-  const serviceTemplate: ServiceToBeCreated = {
-    title: {
-      nb: '',
-    },
-    description: {
-      nb: '',
-    },
-    produces: [
-      {
-        title: { nb: '' },
-        description: { nb: '' },
-        identifier: '0',
-      },
-    ],
-  };
-
   return (
     <>
       <div className='container'>
         <Formik
           onSubmit={(values) => handleSubmit(values)}
-          initialValues={service ? service : serviceTemplate}
+          initialValues={initalValues}
         >
           {({ values }) => (
             <Form>
@@ -122,7 +108,7 @@ export const BasicServiceForm = ({ catalogId, service, type }: ServiceFormProps)
                   {(arrayHelpers: any) => (
                     <>
                       {values.produces &&
-                        values?.produces.map((_, index) => (
+                        values?.produces.map((_, index: number) => (
                           <div
                             key={`produces-${index}`}
                             className={styles.fieldArray}
@@ -131,13 +117,13 @@ export const BasicServiceForm = ({ catalogId, service, type }: ServiceFormProps)
                               name={`produces[${index}].title.nb`}
                               label={localization.title}
                               as={Textfield}
-                              className={styles.pb1}
+                              className={styles.pb2}
                             />
                             <Field
                               name={`produces[${index}].description.nb`}
                               label={localization.description}
                               as={Textfield}
-                              className={styles.pb1}
+                              className={styles.pb2}
                             />
 
                             <Button
@@ -151,19 +137,44 @@ export const BasicServiceForm = ({ catalogId, service, type }: ServiceFormProps)
                             </Button>
                           </div>
                         ))}
-                      <AddButton
-                        onClick={() =>
-                          arrayHelpers.push({
-                            title: { nb: '' },
-                            description: { nb: '' },
-                          })
-                        }
-                      >
+                      <AddButton onClick={() => arrayHelpers.push(emptyProduces[0])}>
                         {localization.button.addRelation}
                       </AddButton>
                     </>
                   )}
                 </FieldArray>
+              </FormFieldCard>
+              <FormFieldCard title={localization.serviceCatalog.contactPoint}>
+                <div>
+                  <Field
+                    name={'contactPoints[0].category.nb'}
+                    label={localization.category}
+                    as={Textfield}
+                    className={styles.pb2}
+                    type='text'
+                  />
+                  <Field
+                    name={'contactPoints[0].email'}
+                    label={localization.email}
+                    as={Textfield}
+                    className={styles.pb2}
+                    type='email'
+                  />
+                  <Field
+                    name={'contactPoints[0].telephone'}
+                    label={localization.telephone}
+                    as={Textfield}
+                    className={styles.pb2}
+                    type='tel'
+                  />
+                  <Field
+                    name={'contactPoints[0].contactPage'}
+                    label={localization.homepage}
+                    as={Textfield}
+                    className={styles.pb2}
+                    type='text'
+                  />
+                </div>
               </FormFieldCard>
 
               <div className={styles.buttonRow}>

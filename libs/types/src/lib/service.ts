@@ -10,6 +10,7 @@ export interface ServiceToBeCreated {
   title: MultiLanguageText;
   description?: MultiLanguageText;
   produces?: Output[];
+  contactPoints?: ContactPoint[];
 }
 
 export interface Output {
@@ -17,4 +18,11 @@ export interface Output {
   title?: MultiLanguageText;
   description?: MultiLanguageText;
   language?: string[];
+}
+
+export interface ContactPoint {
+  category: MultiLanguageText;
+  email: string;
+  telephone: string;
+  contactPage: string;
 }
