@@ -79,3 +79,15 @@ export const handlePublishService = async (catalogId: string, serviceId: string,
   };
   return await fetch(resource, options);
 };
+
+export const handleUnpublishService = async (catalogId: string, serviceId: string, accessToken: string) => {
+  const resource = `${path}/internal/catalogs/${catalogId}/services/${serviceId}/unpublish`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+  };
+  return await fetch(resource, options);
+};
