@@ -50,6 +50,7 @@ const contactPointTemplate = (contactPoint: ContactPoint): ContactPoint | null =
 export const serviceTemplate = (service: Service | undefined): ServiceToBeCreated => {
   const title = (service && service.title?.nb) || '';
   const description = (service && service.description?.nb) || '';
+  const homepage = (service && service.homepage) || '';
   const produces =
     service && service.produces
       ? (service.produces.map((produce) => producesTemplate(produce as Output)).filter((cp) => cp !== null) as Output[])
@@ -67,5 +68,6 @@ export const serviceTemplate = (service: Service | undefined): ServiceToBeCreate
     description: { nb: description },
     produces,
     contactPoints,
+    homepage,
   };
 };

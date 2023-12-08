@@ -95,6 +95,7 @@ export async function updatePublicService(catalogId: string, oldPublicService: S
     description: updatedService.description,
     produces: updatedService.produces,
     contactPoints: updatedService.contactPoints,
+    homepage: updatedService.homepage,
   };
 
   const diff = compare(oldPublicService, updatedPublicServiceMerged);
