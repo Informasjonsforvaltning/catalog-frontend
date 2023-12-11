@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { DeleteServiceButton } from '../../../../../components/buttons';
 import PublishSwitch from '../../../../../components/publish-switch';
 import { RedirectType, redirect } from 'next/navigation';
+import BasicServiceFormInfoCardItems from '../../../../../components/basic-form-info-card-items';
 
 export default async function ServiceDetailsPage({ params }: Params) {
   const { catalogId, serviceId } = params;
@@ -71,11 +72,10 @@ export default async function ServiceDetailsPage({ params }: Params) {
         mainColumn={
           <InfoCard>
             {!_.isEmpty(getTranslateText(service?.description ?? '', language)) && (
-              <InfoCard.Item label={`${localization.description}:`}>
-                <div>
-                  <p>{getTranslateText(service?.description ?? '', language)}</p>
-                </div>
-              </InfoCard.Item>
+              <BasicServiceFormInfoCardItems
+                service={service}
+                language={language}
+              />
             )}
           </InfoCard>
         }

@@ -101,7 +101,7 @@ export const BasicServiceForm = ({ catalogId, service, type }: ServiceFormProps)
               </FormFieldCard>
 
               <FormFieldCard
-                title={localization.serviceCatalog.form.produces}
+                title={localization.serviceCatalog.produces}
                 subtitle={localization.serviceCatalog.form.descriptionProduces}
               >
                 <FieldArray name={`produces`}>

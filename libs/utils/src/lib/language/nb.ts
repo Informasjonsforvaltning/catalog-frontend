@@ -48,6 +48,7 @@ export const nb = {
   email: 'E-post',
   telephone: 'Telefon',
   homepage: 'Hjemmeside',
+  contactPage: 'Kontaktside',
   category: 'Kategori',
 
   language: {
@@ -326,6 +327,7 @@ export const nb = {
     searchHitsTitle: 'Listevisning',
     infoAboutService: 'Informasjon om tjenesten',
     contactPoint: 'Kontaktpunkt',
+    produces: 'Produserer',
     form: {
       titleLabel: 'Tekst på bokmål',
       titleSubtitle: 'Egenskapen brukes å til oppgi navn til en tjeneste',
@@ -334,7 +336,6 @@ export const nb = {
       delete: 'Slett tjeneste',
       confirmDelete: 'Er du sikker på at du vil slette tjenesten?',
       new: 'Opprett ny tjeneste',
-      produces: 'Produserer',
       descriptionProduces:
         'Egenskapen brukes til å referere til en eller flere instanser av tjenesteresultat som beskriver resultat av tjenesten.',
     },
