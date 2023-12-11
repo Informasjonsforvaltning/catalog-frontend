@@ -10,8 +10,9 @@ import { getServerSession } from 'next-auth';
 import jsonpatch from 'fast-json-patch';
 import { RedirectType, redirect } from 'next/navigation';
 import NewConceptSuggestionClient from './new-concept-suggestion-client';
-import { BreadcrumbType, Breadcrumbs } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, DetailHeading } from '@catalog-frontend/ui';
 import { Banner } from '../../../../components/banner';
+import styles from '../change-requests-page.module.css';
 
 const NewConceptSuggestion = async ({ params }) => {
   const { catalogId } = params;
@@ -86,7 +87,13 @@ const NewConceptSuggestion = async ({ params }) => {
         subtitle={pageSubtitle}
         catalogId={catalogId}
       />
-      <NewConceptSuggestionClient {...clientProps} />
+      <div className='container'>
+        <DetailHeading
+          headingTitle={<h1>{loc.suggestionForNewConcept}</h1>}
+          className={styles.detailHeading}
+        />
+        <NewConceptSuggestionClient {...clientProps} />
+      </div>
     </>
   );
 };

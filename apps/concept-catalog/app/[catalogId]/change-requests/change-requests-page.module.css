@@ -55,3 +55,8 @@
   padding: 4em 0em;
   justify-content: center;
 }
+
+.detailHeading {
+  margin-top: 3rem;
+  margin-bottom: 5rem;
+}

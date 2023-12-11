@@ -1,19 +1,22 @@
 import { getOrganization, getConcept, getChangeRequest } from '@catalog-frontend/data-access';
 import { Organization, Concept, ChangeRequest } from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, DetailHeading } from '@catalog-frontend/ui';
 import {
   authOptions,
   hasOrganizationReadPermission,
   validOrganizationNumber,
   validUUID,
   localization as loc,
+  formatISO,
 } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import jsonpatch from 'fast-json-patch';
 import ChangeRequestEditPageClient from './change-request-edit-page-client';
 import { RedirectType, redirect } from 'next/navigation';
-
+import styles from '../../change-requests-page.module.css';
 import { Banner } from '../../../../../components/banner';
+import { Link } from '@digdir/design-system-react';
+import NextLink from 'next/link';
 
 const ChangeRequestEditPage = async ({ params }) => {
   const { catalogId, changeRequestId } = params;
@@ -94,6 +97,31 @@ const ChangeRequestEditPage = async ({ params }) => {
     },
   ] as BreadcrumbType[];
 
+  const subtitle = `${
+    changeRequest?.timeForProposal &&
+    formatISO(changeRequest?.timeForProposal, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    })
+  } - ${changeRequest.proposedBy?.name}`;
+
+  const headingTitle = changeRequest.conceptId ? (
+    <h1>
+      <NextLink
+        href={`/${catalogId}/${changeRequest.conceptId}`}
+        passHref
+        legacyBehavior
+      >
+        <Link>{changeRequest.title}</Link>
+      </NextLink>
+    </h1>
+  ) : (
+    <h1>{changeRequest.title}</h1>
+  );
+
   const clientProps = {
     organization: organization,
     changeRequest,
@@ -112,7 +140,14 @@ const ChangeRequestEditPage = async ({ params }) => {
         subtitle={pageSubtitle}
         catalogId={catalogId}
       />
-      <ChangeRequestEditPageClient {...clientProps} />
+      <div className='container'>
+        <DetailHeading
+          headingTitle={headingTitle}
+          subtitle={subtitle}
+          className={styles.detailHeading}
+        />
+        <ChangeRequestEditPageClient {...clientProps} />
+      </div>
     </>
   );
 };
