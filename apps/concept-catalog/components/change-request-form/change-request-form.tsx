@@ -32,179 +32,175 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, readOnly,
 
   return (
     <>
-      <div className='container'>
-        <div className={styles.pageContainer}>
-          <Formik
-            initialValues={changeRequestAsConcept}
-            onSubmit={(values) => {
-              handleSubmit(values);
-            }}
-          >
-            {({ values }) => (
-              <Form>
-                <div className={styles.formContainer}>
-                  <FormFieldCard
-                    title={loc.conceptHelptexts.anbefaltTermTitle}
-                    subtitle={loc.conceptHelptexts.anbefaltTermDescription}
+      <Formik
+        initialValues={changeRequestAsConcept}
+        onSubmit={(values) => {
+          handleSubmit(values);
+        }}
+      >
+        {({ values }) => (
+          <Form>
+            <div className={styles.formContainer}>
+              <FormFieldCard
+                title={loc.conceptHelptexts.anbefaltTermTitle}
+                subtitle={loc.conceptHelptexts.anbefaltTermDescription}
+              >
+                {selectedLanguages.map((language) => (
+                  <div
+                    key={language}
+                    className={styles.inputFieldRow}
                   >
-                    {selectedLanguages.map((language) => (
-                      <div
-                        key={language}
-                        className={styles.inputFieldRow}
-                      >
-                        <Field
-                          name={`anbefaltTerm.navn.${language}`}
-                          as={Textarea}
-                          label={loc.formatString(loc.concept.formFieldLabel, {
-                            fieldType: loc.concept.preferredTerm,
-                            lang: loc.language[language]?.toLowerCase(),
-                          })}
-                          cols={NUM_COLS_TEXT_FIELD}
-                          rows={1}
-                          readOnly={readOnly}
-                        />
-                      </div>
-                    ))}
-                  </FormFieldCard>
-                  <FormFieldCard
-                    title={loc.conceptHelptexts.definisjonTitle}
-                    subtitle={loc.conceptHelptexts.definisjonDescription}
-                  >
-                    {selectedLanguages.map((language) => (
-                      <div
-                        key={language}
-                        className={styles.inputFieldRow}
-                      >
-                        <Field
-                          name={`definisjon.tekst.${language}`}
-                          as={Textarea}
-                          label={loc.formatString(loc.concept.formFieldLabel, {
-                            fieldType: loc.concept.definition,
-                            lang: loc.language[language]?.toLowerCase(),
-                          })}
-                          cols={NUM_COLS_TEXT_FIELD}
-                          rows={NUM_ROWS_TEXT_FIELD}
-                          readOnly={readOnly}
-                        />
-                      </div>
-                    ))}
-                  </FormFieldCard>
-                  <FormFieldCard
-                    title={loc.conceptHelptexts.kildeTilDefinisjonTitle}
-                    subtitle={loc.conceptHelptexts.kildeTilDefinisjonDescription}
-                  >
-                    <SourceSection
-                      fieldName='definisjon.kildebeskrivelse'
-                      definisjon={values.definisjon}
+                    <Field
+                      name={`anbefaltTerm.navn.${language}`}
+                      as={Textarea}
+                      label={loc.formatString(loc.concept.formFieldLabel, {
+                        fieldType: loc.concept.preferredTerm,
+                        lang: loc.language[language]?.toLowerCase(),
+                      })}
+                      cols={NUM_COLS_TEXT_FIELD}
+                      rows={1}
                       readOnly={readOnly}
                     />
-                  </FormFieldCard>
-                  <FormFieldCard
-                    title={loc.conceptHelptexts.definisjonForAllmennhetenTitle}
-                    subtitle={loc.conceptHelptexts.definisjonForAllmennhetenDescription}
+                  </div>
+                ))}
+              </FormFieldCard>
+              <FormFieldCard
+                title={loc.conceptHelptexts.definisjonTitle}
+                subtitle={loc.conceptHelptexts.definisjonDescription}
+              >
+                {selectedLanguages.map((language) => (
+                  <div
+                    key={language}
+                    className={styles.inputFieldRow}
                   >
-                    {selectedLanguages.map((language) => (
-                      <div
-                        key={language}
-                        className={styles.inputFieldRow}
-                      >
-                        <Field
-                          name={`definisjonForAllmennheten.tekst.${language}`}
-                          as={Textarea}
-                          label={loc.formatString(loc.concept.formFieldLabel, {
-                            fieldType: loc.concept.publicDefinition,
-                            lang: loc.language[language]?.toLowerCase(),
-                          })}
-                          cols={NUM_COLS_TEXT_FIELD}
-                          rows={NUM_ROWS_TEXT_FIELD}
-                          readOnly={readOnly}
-                        />
-                      </div>
-                    ))}
-                  </FormFieldCard>
-                  <FormFieldCard
-                    title={loc.conceptHelptexts.definisjonForAllmennhetenKildeTitle}
-                    subtitle={loc.conceptHelptexts.definisjonForAllmennhetenKildeDescription}
-                  >
-                    <SourceSection
-                      fieldName='definisjonForAllmennheten.kildebeskrivelse'
-                      definisjon={values.definisjonForAllmennheten}
+                    <Field
+                      name={`definisjon.tekst.${language}`}
+                      as={Textarea}
+                      label={loc.formatString(loc.concept.formFieldLabel, {
+                        fieldType: loc.concept.definition,
+                        lang: loc.language[language]?.toLowerCase(),
+                      })}
+                      cols={NUM_COLS_TEXT_FIELD}
+                      rows={NUM_ROWS_TEXT_FIELD}
                       readOnly={readOnly}
                     />
-                  </FormFieldCard>
-                  <FormFieldCard
-                    title={loc.conceptHelptexts.definisjonForSpesialisterTitle}
-                    subtitle={loc.conceptHelptexts.definisjonForSpesialisterDescription}
+                  </div>
+                ))}
+              </FormFieldCard>
+              <FormFieldCard
+                title={loc.conceptHelptexts.kildeTilDefinisjonTitle}
+                subtitle={loc.conceptHelptexts.kildeTilDefinisjonDescription}
+              >
+                <SourceSection
+                  fieldName='definisjon.kildebeskrivelse'
+                  definisjon={values.definisjon}
+                  readOnly={readOnly}
+                />
+              </FormFieldCard>
+              <FormFieldCard
+                title={loc.conceptHelptexts.definisjonForAllmennhetenTitle}
+                subtitle={loc.conceptHelptexts.definisjonForAllmennhetenDescription}
+              >
+                {selectedLanguages.map((language) => (
+                  <div
+                    key={language}
+                    className={styles.inputFieldRow}
                   >
-                    {selectedLanguages.map((language) => (
-                      <div
-                        key={language}
-                        className={styles.inputFieldRow}
-                      >
-                        <Field
-                          name={`definisjonForSpesialister.tekst.${language}`}
-                          as={Textarea}
-                          label={loc.formatString(loc.concept.formFieldLabel, {
-                            fieldType: loc.concept.specialistDefinition,
-                            lang: loc.language[language]?.toLowerCase(),
-                          })}
-                          cols={NUM_COLS_TEXT_FIELD}
-                          rows={NUM_ROWS_TEXT_FIELD}
-                          readOnly={readOnly}
-                        />
-                      </div>
-                    ))}
-                  </FormFieldCard>
-                  <FormFieldCard
-                    title={loc.conceptHelptexts.definisjonForSpesialisterKildeTitle}
-                    subtitle={loc.conceptHelptexts.definisjonForSpesialisterKildeDescription}
-                  >
-                    <SourceSection
-                      fieldName='definisjonForSpesialister.kildebeskrivelse'
-                      definisjon={values.definisjonForSpesialister}
+                    <Field
+                      name={`definisjonForAllmennheten.tekst.${language}`}
+                      as={Textarea}
+                      label={loc.formatString(loc.concept.formFieldLabel, {
+                        fieldType: loc.concept.publicDefinition,
+                        lang: loc.language[language]?.toLowerCase(),
+                      })}
+                      cols={NUM_COLS_TEXT_FIELD}
+                      rows={NUM_ROWS_TEXT_FIELD}
                       readOnly={readOnly}
                     />
-                  </FormFieldCard>
-                  <FormFieldCard
-                    title={loc.conceptHelptexts.merknadTitle}
-                    subtitle={loc.conceptHelptexts.merknadDescription}
+                  </div>
+                ))}
+              </FormFieldCard>
+              <FormFieldCard
+                title={loc.conceptHelptexts.definisjonForAllmennhetenKildeTitle}
+                subtitle={loc.conceptHelptexts.definisjonForAllmennhetenKildeDescription}
+              >
+                <SourceSection
+                  fieldName='definisjonForAllmennheten.kildebeskrivelse'
+                  definisjon={values.definisjonForAllmennheten}
+                  readOnly={readOnly}
+                />
+              </FormFieldCard>
+              <FormFieldCard
+                title={loc.conceptHelptexts.definisjonForSpesialisterTitle}
+                subtitle={loc.conceptHelptexts.definisjonForSpesialisterDescription}
+              >
+                {selectedLanguages.map((language) => (
+                  <div
+                    key={language}
+                    className={styles.inputFieldRow}
                   >
-                    {selectedLanguages.map((language) => (
-                      <div
-                        key={language}
-                        className={styles.inputFieldRow}
-                      >
-                        <Field
-                          name={`merknad.tekst.${language}`}
-                          as={Textarea}
-                          label={loc.formatString(loc.concept.formFieldLabel, {
-                            fieldType: loc.concept.note,
-                            lang: loc.language[language]?.toLowerCase(),
-                          })}
-                          cols={NUM_COLS_TEXT_FIELD}
-                          rows={NUM_ROWS_TEXT_FIELD}
-                          readOnly={readOnly}
-                        />
-                      </div>
-                    ))}
-                  </FormFieldCard>
-                </div>
+                    <Field
+                      name={`definisjonForSpesialister.tekst.${language}`}
+                      as={Textarea}
+                      label={loc.formatString(loc.concept.formFieldLabel, {
+                        fieldType: loc.concept.specialistDefinition,
+                        lang: loc.language[language]?.toLowerCase(),
+                      })}
+                      cols={NUM_COLS_TEXT_FIELD}
+                      rows={NUM_ROWS_TEXT_FIELD}
+                      readOnly={readOnly}
+                    />
+                  </div>
+                ))}
+              </FormFieldCard>
+              <FormFieldCard
+                title={loc.conceptHelptexts.definisjonForSpesialisterKildeTitle}
+                subtitle={loc.conceptHelptexts.definisjonForSpesialisterKildeDescription}
+              >
+                <SourceSection
+                  fieldName='definisjonForSpesialister.kildebeskrivelse'
+                  definisjon={values.definisjonForSpesialister}
+                  readOnly={readOnly}
+                />
+              </FormFieldCard>
+              <FormFieldCard
+                title={loc.conceptHelptexts.merknadTitle}
+                subtitle={loc.conceptHelptexts.merknadDescription}
+              >
+                {selectedLanguages.map((language) => (
+                  <div
+                    key={language}
+                    className={styles.inputFieldRow}
+                  >
+                    <Field
+                      name={`merknad.tekst.${language}`}
+                      as={Textarea}
+                      label={loc.formatString(loc.concept.formFieldLabel, {
+                        fieldType: loc.concept.note,
+                        lang: loc.language[language]?.toLowerCase(),
+                      })}
+                      cols={NUM_COLS_TEXT_FIELD}
+                      rows={NUM_ROWS_TEXT_FIELD}
+                      readOnly={readOnly}
+                    />
+                  </div>
+                ))}
+              </FormFieldCard>
+            </div>
 
-                <div className={styles.bottomlineContainer}>
-                  <Button
-                    color='first'
-                    className={styles.button}
-                    type='submit'
-                    disabled={isSubmitting}
-                  >
-                    {loc.button.send}
-                  </Button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </div>
-      </div>
+            <div className={styles.bottomlineContainer}>
+              <Button
+                color='first'
+                className={styles.button}
+                type='submit'
+                disabled={isSubmitting}
+              >
+                {loc.button.send}
+              </Button>
+            </div>
+          </Form>
+        )}
+      </Formik>
     </>
   );
 };
