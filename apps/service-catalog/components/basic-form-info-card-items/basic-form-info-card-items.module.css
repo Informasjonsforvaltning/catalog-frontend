@@ -1,0 +1,9 @@
+.heading {
+  padding-top: 1.5rem;
+}
+
+.content {
+  display: flex;
+  gap: 0.3rem;
+  padding-top: 1rem;
+}
