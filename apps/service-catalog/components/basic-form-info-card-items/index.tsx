@@ -12,6 +12,7 @@ type Props = {
 export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
   const produces = service?.produces || [];
   const contactPoint = service?.contactPoints && service?.contactPoints[0];
+  const homepage = service?.homepage;
 
   return (
     <>
@@ -86,6 +87,7 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
           ))}
         </InfoCard.Item>
       )}
+      {homepage && <InfoCard.Item label={`${localization.homepage}:`}>{homepage}</InfoCard.Item>}
     </>
   );
 };

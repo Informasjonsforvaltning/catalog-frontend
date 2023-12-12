@@ -169,12 +169,25 @@ export const BasicServiceForm = ({ catalogId, service, type }: ServiceFormProps)
                   />
                   <Field
                     name={'contactPoints[0].contactPage'}
-                    label={localization.homepage}
+                    label={localization.contactPage}
                     as={Textfield}
                     className={styles.pb2}
                     type='text'
                   />
                 </div>
+              </FormFieldCard>
+
+              <FormFieldCard
+                title={localization.homepage}
+                subtitle={localization.serviceCatalog.form.homepageDescription}
+              >
+                <Field
+                  name={'homepage'}
+                  label={localization.serviceCatalog.form.homepageLabel}
+                  as={Textfield}
+                  className={styles.pb2}
+                  type='text'
+                />
               </FormFieldCard>
 
               <div className={styles.buttonRow}>

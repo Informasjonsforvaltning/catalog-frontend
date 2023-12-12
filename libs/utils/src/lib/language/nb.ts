@@ -338,6 +338,8 @@ export const nb = {
       new: 'Opprett ny tjeneste',
       descriptionProduces:
         'Egenskapen brukes til å referere til en eller flere instanser av tjenesteresultat som beskriver resultat av tjenesten.',
+      homepageLabel: 'Lenke til hjemmeside',
+      homepageDescription: 'Egenskapen brukes til å referere til hjemmesiden til tjenesten.',
     },
   },
 };

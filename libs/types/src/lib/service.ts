@@ -11,6 +11,7 @@ export interface ServiceToBeCreated {
   description?: MultiLanguageText;
   produces?: Output[];
   contactPoints?: ContactPoint[];
+  homepage?: string;
 }
 
 export interface Output {
