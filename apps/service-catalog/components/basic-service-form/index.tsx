@@ -1,9 +1,9 @@
 'use client';
 
-import { Textarea, Textfield } from '@digdir/design-system-react';
+import { NativeSelect, Textarea, Textfield } from '@digdir/design-system-react';
 import { Button, FormFieldCard } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { Output, Service, ServiceToBeCreated } from '@catalog-frontend/types';
+import { localization, getTranslateText } from '@catalog-frontend/utils';
+import { Output, ReferenceDataCode, Service } from '@catalog-frontend/types';
 import styles from './service-form.module.css';
 import { TrashIcon } from '@navikt/aksel-icons';
 import {
@@ -21,9 +21,10 @@ type ServiceFormProps = {
   catalogId: string;
   service?: Service;
   type: 'public-services' | 'services';
+  statuses: ReferenceDataCode[];
 };
 
-export const BasicServiceForm = ({ catalogId, service, type }: ServiceFormProps) => {
+export const BasicServiceForm = ({ catalogId, service, type, statuses }: ServiceFormProps) => {
   const router = useRouter();
   const initalValues = serviceTemplate(service);
 
@@ -175,6 +176,22 @@ export const BasicServiceForm = ({ catalogId, service, type }: ServiceFormProps)
                     type='text'
                   />
                 </div>
+              </FormFieldCard>
+              <FormFieldCard title='Status'>
+                <Field
+                  as={NativeSelect}
+                  name='status'
+                >
+                  <option value={undefined}>Ingen status</option>
+                  {statuses.map((status) => (
+                    <option
+                      key={status.code}
+                      value={status.uri}
+                    >
+                      {getTranslateText(status.label)}
+                    </option>
+                  ))}
+                </Field>
               </FormFieldCard>
 
               <FormFieldCard

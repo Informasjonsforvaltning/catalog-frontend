@@ -2,8 +2,8 @@ import { MultiLanguageText } from './language';
 
 export interface Service extends ServiceToBeCreated {
   id: string;
+  catalogId: string;
   published: boolean;
-  produces: Output[];
 }
 
 export interface ServiceToBeCreated {
@@ -12,6 +12,7 @@ export interface ServiceToBeCreated {
   produces?: Output[];
   contactPoints?: ContactPoint[];
   homepage?: string;
+  status?: string;
 }
 
 export interface Output {
@@ -22,8 +23,8 @@ export interface Output {
 }
 
 export interface ContactPoint {
-  category: MultiLanguageText;
-  email: string;
-  telephone: string;
-  contactPage: string;
+  category?: MultiLanguageText;
+  email?: string;
+  telephone?: string;
+  contactPage?: string;
 }

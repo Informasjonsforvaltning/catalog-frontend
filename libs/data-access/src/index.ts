@@ -11,3 +11,4 @@ export * from './lib/internal-fields/api';
 export * from './lib/change-requests/api';
 export * from './lib/public-services/api';
 export * from './lib/services/api';
+export * from './lib/statuses/api';
