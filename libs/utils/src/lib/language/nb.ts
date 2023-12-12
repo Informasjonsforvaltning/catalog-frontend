@@ -324,6 +324,7 @@ export const nb = {
 
   serviceCatalog: {
     confirmPublish: 'Er du sikker på at du vil publisere tjenesten?',
+    confirmUnpublish: 'Er du sikker på at du vil avpublisere tjenesten?',
     searchHitsTitle: 'Listevisning',
     infoAboutService: 'Informasjon om tjenesten',
     contactPoint: 'Kontaktpunkt',

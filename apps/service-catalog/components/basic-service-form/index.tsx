@@ -3,7 +3,7 @@
 import { Textarea, Textfield } from '@digdir/design-system-react';
 import { Button, FormFieldCard } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Output, Service } from '@catalog-frontend/types';
+import { Output, Service, ServiceToBeCreated } from '@catalog-frontend/types';
 import styles from './service-form.module.css';
 import { TrashIcon } from '@navikt/aksel-icons';
 import {

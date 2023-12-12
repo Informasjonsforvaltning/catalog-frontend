@@ -1,9 +1,9 @@
 'use client';
 import { localization } from '@catalog-frontend/utils';
 import { Switch } from '@digdir/design-system-react';
-import { publishPublicService } from '../../app/actions/public-services/actions';
+import { publishPublicService, unpublishPublicService } from '../../app/actions/public-services/actions';
 import styles from './publish-switch.module.css';
-import { publishService } from '../../app/actions/services/actions';
+import { publishService, unpublishService } from '../../app/actions/services/actions';
 
 type ServiceFormProps = {
   catalogId: string;
@@ -15,14 +15,30 @@ type ServiceFormProps = {
 
 export const PublishSwitch = ({ catalogId, serviceId, isPublished, type, disabled = false }: ServiceFormProps) => {
   const handlePublishPublicService = () => {
-    if (window.confirm(localization.serviceCatalog.confirmPublish)) {
-      publishPublicService(catalogId, serviceId);
+    if (isPublished === false) {
+      if (window.confirm(localization.serviceCatalog.confirmPublish)) {
+        publishPublicService(catalogId, serviceId);
+      }
+    }
+
+    if (isPublished === true) {
+      if (window.confirm(localization.serviceCatalog.confirmUnpublish)) {
+        unpublishPublicService(catalogId, serviceId);
+      }
     }
   };
 
   const handlePublishService = () => {
-    if (window.confirm(localization.serviceCatalog.confirmPublish)) {
-      publishService(catalogId, serviceId);
+    if (isPublished === false) {
+      if (window.confirm(localization.serviceCatalog.confirmPublish)) {
+        publishService(catalogId, serviceId);
+      }
+    }
+
+    if (isPublished === true) {
+      if (window.confirm(localization.serviceCatalog.confirmUnpublish)) {
+        unpublishService(catalogId, serviceId);
+      }
     }
   };
 
@@ -33,7 +49,6 @@ export const PublishSwitch = ({ catalogId, serviceId, isPublished, type, disable
         value='published'
         size='small'
         position='right'
-        readOnly={isPublished}
         checked={isPublished}
         onChange={() => (type === 'services' ? handlePublishService() : handlePublishPublicService())}
         disabled={disabled}
