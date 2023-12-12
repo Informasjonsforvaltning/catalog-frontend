@@ -1,6 +1,6 @@
-import { getOrganization } from '@catalog-frontend/data-access';
-import { Organization, Service } from '@catalog-frontend/types';
-import { DetailsPageLayout, InfoCard, PageBanner } from '@catalog-frontend/ui';
+import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
+import { Organization, ReferenceDataCode, Service } from '@catalog-frontend/types';
+import { DetailsPageLayout, InfoCard, PageBanner, Tag } from '@catalog-frontend/ui';
 import { authOptions, getTranslateText, hasOrganizationWritePermission, localization } from '@catalog-frontend/utils';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getPublicServiceById } from '../../../../actions/public-services/actions';
@@ -24,6 +24,8 @@ export default async function PublicServiceDetailsPage({ params }: Params) {
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const session = await getServerSession(authOptions);
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
+  const statusesResponse = await getAdmsStatuses().then((res) => res.json());
+  const statuses: ReferenceDataCode[] = statusesResponse.statuses;
 
   const language = 'nb';
   const RightColumn = () => (
@@ -67,7 +69,14 @@ export default async function PublicServiceDetailsPage({ params }: Params) {
         subtitle={getTranslateText(organization?.prefLabel).toString()}
       />
       <DetailsPageLayout
-        headingTitle={getTranslateText(service?.title ?? '', language)}
+        headingTitle={
+          <div className={styles.status}>
+            <h2>{getTranslateText(service?.title ?? '', language)}</h2>
+            {service.status && (
+              <Tag>{getTranslateText(statuses.find((s) => s.uri === service?.status)?.label) as string}</Tag>
+            )}
+          </div>
+        }
         loading={false}
         mainColumn={
           <InfoCard>

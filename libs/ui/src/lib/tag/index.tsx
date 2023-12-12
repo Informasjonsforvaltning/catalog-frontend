@@ -12,7 +12,7 @@ const Tag = ({ children }: TagProps) => {
   return (
     <div>
       <FdsTag
-        className={styles[children ? `${children}`.toLocaleLowerCase() : '']}
+        className={styles[children ? `${children}`.toLocaleLowerCase().replace(/\s/g, '') : '']}
         size='small'
         variant='secondary'
       >

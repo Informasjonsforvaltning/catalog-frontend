@@ -63,11 +63,13 @@ export const serviceTemplate = (service: Service | undefined): ServiceToBeCreate
           .filter((cp) => cp !== null) as ContactPoint[])
       : emptyContactpoint;
 
+  const status = (service && service.status) || '';
   return {
     title: { nb: title },
     description: { nb: description },
     produces,
     contactPoints,
     homepage,
+    status,
   };
 };

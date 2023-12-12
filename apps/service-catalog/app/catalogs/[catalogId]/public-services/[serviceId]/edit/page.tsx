@@ -1,5 +1,5 @@
-import { getOrganization } from '@catalog-frontend/data-access';
-import { Organization, Service } from '@catalog-frontend/types';
+import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
+import { Organization, ReferenceDataCode, Service } from '@catalog-frontend/types';
 import { Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { getPublicServiceById } from '../../../../../actions/public-services/actions';
@@ -12,7 +12,8 @@ export default async function EditPublicServicePage({ params }: Params) {
   const { catalogId, serviceId } = params;
   const service: Service = await getPublicServiceById(catalogId, serviceId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
-
+  const statusesResponse = await getAdmsStatuses().then((res) => res.json());
+  const statuses: ReferenceDataCode[] = statusesResponse.statuses;
   return (
     <div>
       <Breadcrumbs />
@@ -31,6 +32,7 @@ export default async function EditPublicServicePage({ params }: Params) {
           catalogId={catalogId}
           service={service}
           type='public-services'
+          statuses={statuses}
         />
       </div>
     </div>
