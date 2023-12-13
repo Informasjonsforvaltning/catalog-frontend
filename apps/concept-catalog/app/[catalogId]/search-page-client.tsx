@@ -10,6 +10,7 @@ import {
   SearchField,
   SearchHitContainer,
   Spinner,
+  SearchHitsPageLayout,
 } from '@catalog-frontend/ui';
 import {
   textToNumber,
@@ -245,6 +246,74 @@ export const SearchPageClient = ({
   if (design?.hasLogo) {
     logo = `/api/catalog-admin/${catalogId}/design/logo`;
   }
+
+  const FilterChips = () => (
+    <div className={styles.chips}>
+      <Chip.Group
+        size='small'
+        className={styles.wrap}
+      >
+        {searchState.filters.subject &&
+          searchState.filters.subject?.map((filter, index) => (
+            <Chip.Removable
+              key={`subject-${index}`}
+              onClick={() => removeFilter(filter, 'subject')}
+            >
+              {getTranslateText(subjectCodeList.codes.find((c) => c.id === Number(filter))?.name)}
+            </Chip.Removable>
+          ))}
+        {searchState.filters.label &&
+          searchState.filters.label?.map((filter, index) => (
+            <Chip.Removable
+              key={`label-${index}`}
+              onClick={() => removeFilter(filter, 'label')}
+            >
+              {filter}
+            </Chip.Removable>
+          ))}
+        {searchState.filters?.status &&
+          searchState.filters?.status.map((filter, index) => (
+            <Chip.Removable
+              key={`status-${index}`}
+              onClick={() => removeFilter(filter, 'status')}
+            >
+              {capitalizeFirstLetter(getTranslateText(conceptStatuses?.find((s) => s.uri === filter)?.label) as string)}
+            </Chip.Removable>
+          ))}
+        {searchState.filters.assignedUser && (
+          <Chip.Removable
+            key={`${searchState.filters.assignedUser}`}
+            onClick={() => removeFilter(searchState.filters?.assignedUser?.name, 'assignedUser')}
+          >
+            {searchState.filters?.assignedUser?.name}
+          </Chip.Removable>
+        )}
+        {searchState.filters.published &&
+          searchState.filters.published?.map((filter, index) => (
+            <Chip.Removable
+              key={`published-${index}`}
+              onClick={() => removeFilter(filter, 'published')}
+            >
+              {filter === 'published' ? loc.publicationState.published : loc.publicationState.unpublished}
+            </Chip.Removable>
+          ))}
+        {searchState.filters.internalFields &&
+          Object.entries(searchState.filters.internalFields).map(([key, values], index) => {
+            return values.map((value, innerIndex) => (
+              <Chip.Removable
+                key={`internalFields-${index}-${innerIndex}`}
+                onClick={() => {
+                  removeFilter({ key: key, value: value }, 'internalFields');
+                }}
+              >
+                {`${getTranslateText(getInternalFields(key).label)}: ${value === 'true' ? loc.yes : loc.no}`}
+              </Chip.Removable>
+            ));
+          })}
+      </Chip.Group>
+    </div>
+  );
+
   return (
     <>
       <Breadcrumbs
@@ -259,112 +328,46 @@ export const SearchPageClient = ({
         logo={logo}
         logoDescription={design?.logoDescription}
       />
-      <div className='container'>
-        <div className={styles.pageContainer}>
-          <div className={styles.secondRowContainer}>
-            <div className={styles.buttonsContainer}>
-              {hasWritePermission && (
-                <Button
-                  onClick={onCreateConceptClick}
-                  icon={<PlusCircleIcon fontSize='1.5rem' />}
-                >
-                  {loc.button.createConcept}
-                </Button>
-              )}
-              {hasAdminPermission && (
-                <UploadButton
-                  variant='secondary'
-                  icon={<FileImportIcon fontSize='1.5rem' />}
-                  allowedMimeTypes={[
-                    'text/csv',
-                    'text/x-csv',
-                    'text/plain',
-                    'application/csv',
-                    'application/x-csv',
-                    'application/vnd.ms-excel',
-                    'application/json',
-                  ]}
-                  onUpload={onImportUpload}
-                >
-                  {loc.button.importConcept}
-                </UploadButton>
-              )}
-            </div>
-          </div>
-
-          <div className={styles.searchRowContainer}>
+      <SearchHitsPageLayout
+        buttonRow={
+          <>
+            {hasWritePermission && (
+              <Button
+                onClick={onCreateConceptClick}
+                icon={<PlusCircleIcon fontSize='1.5rem' />}
+              >
+                {loc.button.createConcept}
+              </Button>
+            )}
+            {hasAdminPermission && (
+              <UploadButton
+                variant='secondary'
+                icon={<FileImportIcon fontSize='1.5rem' />}
+                allowedMimeTypes={[
+                  'text/csv',
+                  'text/x-csv',
+                  'text/plain',
+                  'application/csv',
+                  'application/x-csv',
+                  'application/vnd.ms-excel',
+                  'application/json',
+                ]}
+                onUpload={onImportUpload}
+              >
+                {loc.button.importConcept}
+              </UploadButton>
+            )}
+          </>
+        }
+        searchRow={
+          <>
             <div>
               <SearchField
                 ariaLabel={loc.search.search}
                 placeholder={loc.search.search}
                 onSearchSubmit={onSearchSubmit}
               />
-              <div className={styles.chips}>
-                <Chip.Group
-                  size='small'
-                  className={styles.wrap}
-                >
-                  {searchState.filters.subject &&
-                    searchState.filters.subject?.map((filter, index) => (
-                      <Chip.Removable
-                        key={`subject-${index}`}
-                        onClick={() => removeFilter(filter, 'subject')}
-                      >
-                        {getTranslateText(subjectCodeList.codes.find((c) => c.id === Number(filter))?.name)}
-                      </Chip.Removable>
-                    ))}
-                  {searchState.filters.label &&
-                    searchState.filters.label?.map((filter, index) => (
-                      <Chip.Removable
-                        key={`label-${index}`}
-                        onClick={() => removeFilter(filter, 'label')}
-                      >
-                        {filter}
-                      </Chip.Removable>
-                    ))}
-                  {searchState.filters?.status &&
-                    searchState.filters?.status.map((filter, index) => (
-                      <Chip.Removable
-                        key={`status-${index}`}
-                        onClick={() => removeFilter(filter, 'status')}
-                      >
-                        {capitalizeFirstLetter(
-                          getTranslateText(conceptStatuses?.find((s) => s.uri === filter)?.label) as string,
-                        )}
-                      </Chip.Removable>
-                    ))}
-                  {searchState.filters.assignedUser && (
-                    <Chip.Removable
-                      key={`${searchState.filters.assignedUser}`}
-                      onClick={() => removeFilter(searchState.filters?.assignedUser?.name, 'assignedUser')}
-                    >
-                      {searchState.filters?.assignedUser?.name}
-                    </Chip.Removable>
-                  )}
-                  {searchState.filters.published &&
-                    searchState.filters.published?.map((filter, index) => (
-                      <Chip.Removable
-                        key={`published-${index}`}
-                        onClick={() => removeFilter(filter, 'published')}
-                      >
-                        {filter === 'published' ? loc.publicationState.published : loc.publicationState.unpublished}
-                      </Chip.Removable>
-                    ))}
-                  {searchState.filters.internalFields &&
-                    Object.entries(searchState.filters.internalFields).map(([key, values], index) => {
-                      return values.map((value, innerIndex) => (
-                        <Chip.Removable
-                          key={`internalFields-${index}-${innerIndex}`}
-                          onClick={() => {
-                            removeFilter({ key: key, value: value }, 'internalFields');
-                          }}
-                        >
-                          {`${getTranslateText(getInternalFields(key).label)}: ${value === 'true' ? loc.yes : loc.no}`}
-                        </Chip.Removable>
-                      ));
-                    })}
-                </Chip.Group>
-              </div>
+              <FilterChips />
             </div>
 
             <div className={styles.searchOptions}>
@@ -381,39 +384,38 @@ export const SearchPageClient = ({
                 value={selectedSortOption}
               />
             </div>
-          </div>
-
-          <div>
-            <div className={styles.gridContainer}>
-              <SearchFilter
-                catalogId={catalogId}
-                internalFields={fieldsResult?.internal}
-                subjectCodeList={subjectCodeList}
-                conceptStatuses={conceptStatuses}
-              />
-              {status === 'loading' || importConcepts.status === 'loading' ? (
-                <Spinner />
-              ) : (
-                <SearchHitContainer
-                  onPageChange={onPageChange}
-                  noSearchHits={data.hits.length < 1}
-                  paginationInfo={data?.page}
-                  searchHits={
-                    <ConceptSearchHits
-                      catalogId={catalogId}
-                      data={data}
-                      conceptStatuses={conceptStatuses}
-                      subjectCodeList={subjectCodeList}
-                      assignableUsers={usersResult?.users ?? []}
-                      onLabelClick={onLabelClick}
-                    />
-                  }
+          </>
+        }
+        leftColumn={
+          <SearchFilter
+            catalogId={catalogId}
+            internalFields={fieldsResult?.internal}
+            subjectCodeList={subjectCodeList}
+            conceptStatuses={conceptStatuses}
+          />
+        }
+        mainColumn={
+          status === 'loading' || importConcepts.status === 'loading' ? (
+            <Spinner />
+          ) : (
+            <SearchHitContainer
+              onPageChange={onPageChange}
+              noSearchHits={data.hits.length < 1}
+              paginationInfo={data?.page}
+              searchHits={
+                <ConceptSearchHits
+                  catalogId={catalogId}
+                  data={data}
+                  conceptStatuses={conceptStatuses}
+                  subjectCodeList={subjectCodeList}
+                  assignableUsers={usersResult?.users ?? []}
+                  onLabelClick={onLabelClick}
                 />
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+              }
+            />
+          )
+        }
+      />
     </>
   );
 };
