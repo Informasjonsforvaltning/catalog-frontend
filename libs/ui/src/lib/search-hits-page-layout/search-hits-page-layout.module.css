@@ -1,0 +1,59 @@
+.pageContainer {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1.6rem 0;
+  overflow-wrap: break-word;
+}
+
+.secondRowContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  margin-bottom: 3rem;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.searchRowContainer {
+  display: flex;
+  justify-content: stretch;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.searchRowContainer > div:first-of-type {
+  flex-grow: 1;
+}
+
+.gridContainer {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 24rem 1fr;
+  column-gap: 2rem;
+}
+
+@media (max-width: 900px) {
+  .searchRowContainer {
+    background-color: var(--ba);
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .buttonsContainer {
+    justify-content: center;
+  }
+
+  .gridContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
