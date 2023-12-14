@@ -2,9 +2,16 @@
   display: flex;
   flex-direction: column;
   padding: 1.5em 2em;
-  background: #e6eff8;
   border-radius: 8px;
   gap: 0.25em;
+}
+
+.header.second {
+  background: var(--fds-semantic-surface-second-light);
+}
+
+.header.third {
+  background: var(--fds-semantic-surface-third-light);
 }
 
 .title {

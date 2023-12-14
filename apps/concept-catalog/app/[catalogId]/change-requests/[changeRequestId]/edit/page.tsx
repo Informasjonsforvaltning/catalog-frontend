@@ -124,7 +124,7 @@ const ChangeRequestEditPage = async ({ params }) => {
   );
 
   const clientProps = {
-    organization: organization,
+    organization,
     changeRequest,
     changeRequestAsConcept,
     originalConcept,

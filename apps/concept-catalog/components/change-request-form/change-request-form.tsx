@@ -11,8 +11,11 @@ import styles from './change-request-page.module.css';
 import { SourceSection } from '../source-section';
 import { Textarea } from '@digdir/design-system-react';
 
+import _ from 'lodash';
+
 interface Props {
   changeRequestAsConcept: Concept;
+  originalConcept?: Concept;
   readOnly: boolean;
   submitHandler: (values: Concept) => void;
 }
@@ -20,7 +23,7 @@ interface Props {
 const NUM_ROWS_TEXT_FIELD = 3;
 const NUM_COLS_TEXT_FIELD = 90;
 
-export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, readOnly, submitHandler }) => {
+export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, originalConcept, readOnly, submitHandler }) => {
   const selectedLanguages: ISOLanguage[] = ['nb', 'nn', 'en'];
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -44,6 +47,9 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, readOnly,
               <FormFieldCard
                 title={loc.conceptHelptexts.anbefaltTermTitle}
                 subtitle={loc.conceptHelptexts.anbefaltTermDescription}
+                variant={
+                  originalConcept && _.isEqual(values.anbefaltTerm, originalConcept.anbefaltTerm) ? 'second' : undefined
+                }
               >
                 {selectedLanguages.map((language) => (
                   <div
@@ -67,6 +73,10 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, readOnly,
               <FormFieldCard
                 title={loc.conceptHelptexts.definisjonTitle}
                 subtitle={loc.conceptHelptexts.definisjonDescription}
+                variant={
+                  originalConcept &&
+                  (_.isEqual(values.definisjon?.tekst, originalConcept.definisjon?.tekst) ? 'second' : undefined)
+                }
               >
                 {selectedLanguages.map((language) => (
                   <div
@@ -90,6 +100,12 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, readOnly,
               <FormFieldCard
                 title={loc.conceptHelptexts.kildeTilDefinisjonTitle}
                 subtitle={loc.conceptHelptexts.kildeTilDefinisjonDescription}
+                variant={
+                  originalConcept &&
+                  (_.isEqual(values.definisjon?.kildebeskrivelse, originalConcept.definisjon?.kildebeskrivelse)
+                    ? 'second'
+                    : undefined)
+                }
               >
                 <SourceSection
                   fieldName='definisjon.kildebeskrivelse'
@@ -100,6 +116,12 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, readOnly,
               <FormFieldCard
                 title={loc.conceptHelptexts.definisjonForAllmennhetenTitle}
                 subtitle={loc.conceptHelptexts.definisjonForAllmennhetenDescription}
+                variant={
+                  originalConcept &&
+                  (_.isEqual(values.definisjonForAllmennheten?.tekst, originalConcept.definisjonForAllmennheten?.tekst)
+                    ? 'second'
+                    : undefined)
+                }
               >
                 {selectedLanguages.map((language) => (
                   <div
@@ -123,6 +145,15 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, readOnly,
               <FormFieldCard
                 title={loc.conceptHelptexts.definisjonForAllmennhetenKildeTitle}
                 subtitle={loc.conceptHelptexts.definisjonForAllmennhetenKildeDescription}
+                variant={
+                  originalConcept &&
+                  (_.isEqual(
+                    values.definisjonForAllmennheten?.kildebeskrivelse,
+                    originalConcept.definisjonForAllmennheten?.kildebeskrivelse,
+                  )
+                    ? 'second'
+                    : undefined)
+                }
               >
                 <SourceSection
                   fieldName='definisjonForAllmennheten.kildebeskrivelse'
@@ -133,6 +164,12 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, readOnly,
               <FormFieldCard
                 title={loc.conceptHelptexts.definisjonForSpesialisterTitle}
                 subtitle={loc.conceptHelptexts.definisjonForSpesialisterDescription}
+                variant={
+                  originalConcept &&
+                  (_.isEqual(values.definisjonForSpesialister?.tekst, originalConcept.definisjonForSpesialister?.tekst)
+                    ? 'second'
+                    : undefined)
+                }
               >
                 {selectedLanguages.map((language) => (
                   <div
@@ -156,6 +193,15 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, readOnly,
               <FormFieldCard
                 title={loc.conceptHelptexts.definisjonForSpesialisterKildeTitle}
                 subtitle={loc.conceptHelptexts.definisjonForSpesialisterKildeDescription}
+                variant={
+                  originalConcept &&
+                  (_.isEqual(
+                    values.definisjonForSpesialister?.kildebeskrivelse,
+                    originalConcept.definisjonForSpesialister?.kildebeskrivelse,
+                  )
+                    ? 'second'
+                    : undefined)
+                }
               >
                 <SourceSection
                   fieldName='definisjonForSpesialister.kildebeskrivelse'
@@ -166,6 +212,10 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, readOnly,
               <FormFieldCard
                 title={loc.conceptHelptexts.merknadTitle}
                 subtitle={loc.conceptHelptexts.merknadDescription}
+                variant={
+                  originalConcept &&
+                  (_.isEqual(values.merknad?.tekst, originalConcept.merknad?.tekst) ? 'second' : undefined)
+                }
               >
                 {selectedLanguages.map((language) => (
                   <div

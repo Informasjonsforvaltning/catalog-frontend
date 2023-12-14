@@ -52,13 +52,14 @@ const ChangeRequestEditPageClient: FC<Props> = ({
     });
   };
 
-  return (
-    <ChangeRequestForm
-      changeRequestAsConcept={changeRequestAsConcept}
-      readOnly={false}
-      submitHandler={submitHandler}
-    />
-  );
+  const clientProps = {
+    changeRequestAsConcept,
+    originalConcept,
+    readOnly: false,
+    submitHandler,
+  };
+
+  return <ChangeRequestForm {...clientProps} />;
 };
 
 export default ChangeRequestEditPageClient;

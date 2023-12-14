@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  Concept,
-  ChangeRequest,
-  ChangeRequestUpdateBody,
-  JsonPatchOperation,
-  Organization,
-} from '@catalog-frontend/types';
+import { Concept, ChangeRequestUpdateBody, JsonPatchOperation, Organization } from '@catalog-frontend/types';
 import jsonpatch from 'fast-json-patch';
 import { useCreateChangeRequest } from '../../../../hooks/change-requests';
 import ChangeRequestForm from '../../../../components/change-request-form/change-request-form';
