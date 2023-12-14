@@ -284,6 +284,8 @@ export const nb = {
     sourceTitle: 'Tittel på kilde',
     sourceLink: 'Lenke til kilde',
     noName: 'Uten navn',
+    alertInformation:
+      'Bare et utvalg av feltene til et begrep støttes av dette skjemaet. Det er bare feltene du redigerer som til slutt gjør endringer på begrepet, resten av begrepet forblir uendret.',
   },
 
   comment: {

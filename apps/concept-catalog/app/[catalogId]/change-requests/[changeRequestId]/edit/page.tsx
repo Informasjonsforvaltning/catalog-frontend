@@ -1,6 +1,6 @@
 import { getOrganization, getConcept, getChangeRequest } from '@catalog-frontend/data-access';
 import { Organization, Concept, ChangeRequest } from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs, DetailHeading } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, Button, DetailHeading } from '@catalog-frontend/ui';
 import {
   authOptions,
   hasOrganizationReadPermission,
@@ -15,8 +15,9 @@ import ChangeRequestEditPageClient from './change-request-edit-page-client';
 import { RedirectType, redirect } from 'next/navigation';
 import styles from '../../change-requests-page.module.css';
 import { Banner } from '../../../../../components/banner';
-import { Link } from '@digdir/design-system-react';
+import { Alert, Link } from '@digdir/design-system-react';
 import NextLink from 'next/link';
+import cn from 'classnames';
 
 const ChangeRequestEditPage = async ({ params }) => {
   const { catalogId, changeRequestId } = params;
@@ -140,7 +141,15 @@ const ChangeRequestEditPage = async ({ params }) => {
         subtitle={pageSubtitle}
         catalogId={catalogId}
       />
-      <div className='container'>
+      <div className={'container'}>
+        <div className={styles.topRow}>
+          <Alert
+            severity='info'
+            className={styles.alertInformation}
+          >
+            {loc.changeRequest.alertInformation}
+          </Alert>
+        </div>
         <DetailHeading
           headingTitle={headingTitle}
           subtitle={subtitle}
