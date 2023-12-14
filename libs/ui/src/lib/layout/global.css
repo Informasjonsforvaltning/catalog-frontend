@@ -15,7 +15,8 @@ body {
   padding: 0;
 }
 
-.container {
+.container,
+.formContainer {
   width: 100%;
   box-sizing: border-box;
   padding-right: 0.75rem;
@@ -31,6 +32,10 @@ body {
 @media (min-width: 1200px) {
   .container {
     max-width: 1140px;
+  }
+
+  .formContainer {
+    max-width: 864px;
   }
 }
 

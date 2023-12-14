@@ -141,7 +141,7 @@ const ChangeRequestEditPage = async ({ params }) => {
         subtitle={pageSubtitle}
         catalogId={catalogId}
       />
-      <div className={'container'}>
+      <div className={'formContainer'}>
         <div className={styles.topRow}>
           <Alert
             severity='info'
