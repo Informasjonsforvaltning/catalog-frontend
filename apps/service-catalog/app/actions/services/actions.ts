@@ -14,7 +14,7 @@ import { authOptions, removeEmptyValues, validateSession } from '@catalog-fronte
 import { compare } from 'fast-json-patch';
 import _ from 'lodash';
 import { getServerSession } from 'next-auth';
-import { revalidatePath } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export async function getServices(catalogId: string) {
@@ -62,7 +62,8 @@ export async function createService(catalogId: string, values: ServiceToBeCreate
     return;
   } finally {
     if (success) {
-      revalidatePath(`/catalogs/${catalogId}/services`);
+      revalidateTag('service');
+      revalidateTag('services');
       redirect(`/catalogs/${catalogId}/services`);
     }
   }
@@ -82,7 +83,7 @@ export async function deleteService(catalogId: string, serviceId: string) {
     throw new Error();
   } finally {
     if (success) {
-      revalidatePath(`/catalogs/${catalogId}/services`);
+      revalidateTag('services');
       redirect(`/catalogs/${catalogId}/services`);
     }
   }
@@ -118,8 +119,8 @@ export async function updateService(catalogId: string, oldService: Service, valu
     return;
   } finally {
     if (success) {
-      revalidatePath(`/catalogs/${catalogId}/services`);
-      revalidatePath(`/catalogs/${catalogId}/services/${oldService.id}`);
+      revalidateTag('service');
+      revalidateTag('services');
       redirect(`/catalogs/${catalogId}/services`);
     }
   }
@@ -139,7 +140,8 @@ export async function publishService(catalogId: string, serviceId: string) {
     throw new Error();
   } finally {
     if (success) {
-      revalidatePath(`/catalogs/${catalogId}/services/${serviceId}`);
+      revalidateTag('service');
+      revalidateTag('services');
     }
   }
 }
@@ -158,7 +160,8 @@ export async function unpublishService(catalogId: string, serviceId: string) {
     throw new Error();
   } finally {
     if (success) {
-      revalidatePath(`/catalogs/${catalogId}/services/${serviceId}`);
+      revalidateTag('service');
+      revalidateTag('services');
     }
   }
 }

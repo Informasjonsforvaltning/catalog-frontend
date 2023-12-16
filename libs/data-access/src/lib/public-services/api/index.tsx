@@ -10,6 +10,7 @@ export const handleGetAllPublicServices = async (catalogId: string, accessToken:
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
+    next: { tags: ['public-services'] },
   };
   return await fetch(resource, options);
 };
@@ -21,6 +22,7 @@ export const handleGetPublicServiceById = async (catalogId: string, serviceId: s
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
+    next: { tags: ['public-service'] },
   };
   return await fetch(resource, options);
 };

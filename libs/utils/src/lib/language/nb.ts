@@ -329,6 +329,7 @@ export const nb = {
     infoAboutService: 'Informasjon om tjenesten',
     contactPoint: 'Kontaktpunkt',
     produces: 'Produserer',
+    serviceStatus: 'Tjenestestatus',
     form: {
       titleLabel: 'Tekst på bokmål',
       titleSubtitle: 'Egenskapen brukes å til oppgi navn til en tjeneste',

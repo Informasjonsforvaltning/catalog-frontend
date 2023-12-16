@@ -10,6 +10,7 @@ export const handleGetAllServices = async (catalogId: string, accessToken: strin
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
+    next: { tags: ['services'] },
   };
   return await fetch(resource, options);
 };
@@ -21,6 +22,7 @@ export const handleGetServiceById = async (catalogId: string, serviceId: string,
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
+    next: { tags: ['service'] },
   };
   return await fetch(resource, options);
 };

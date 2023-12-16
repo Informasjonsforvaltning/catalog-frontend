@@ -13,7 +13,7 @@ import { Service, ServiceToBeCreated } from '@catalog-frontend/types';
 import { authOptions, validateSession, removeEmptyValues } from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
 import { getServerSession } from 'next-auth';
-import { revalidatePath } from 'next/cache';
+import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export async function getPublicServices(catalogId: string) {
@@ -61,7 +61,8 @@ export async function createPublicService(catalogId: string, values: ServiceToBe
     return;
   } finally {
     if (success) {
-      revalidatePath(`/catalogs/${catalogId}/public-services`);
+      revalidateTag('public-service');
+      revalidateTag('public-services');
       redirect(`/catalogs/${catalogId}/public-services`);
     }
   }
@@ -81,7 +82,7 @@ export async function deletePublicService(catalogId: string, serviceId: string) 
     throw new Error();
   } finally {
     if (success) {
-      revalidatePath(`/catalogs/${catalogId}/public-services`);
+      revalidateTag('public-services');
       redirect(`/catalogs/${catalogId}/public-services`);
     }
   }
@@ -117,8 +118,8 @@ export async function updatePublicService(catalogId: string, oldPublicService: S
     return;
   } finally {
     if (success) {
-      revalidatePath(`/catalogs/${catalogId}/public-services`);
-      revalidatePath(`/catalogs/${catalogId}/public-services/${oldPublicService.id}`);
+      revalidateTag('public-service');
+      revalidateTag('public-services');
       redirect(`/catalogs/${catalogId}/public-services`);
     }
   }
@@ -138,7 +139,8 @@ export async function publishPublicService(catalogId: string, serviceId: string)
     throw new Error();
   } finally {
     if (success) {
-      revalidatePath(`/catalogs/${catalogId}/public-services/${serviceId}`);
+      revalidateTag('public-service');
+      revalidateTag('public-services');
     }
   }
 }
@@ -157,7 +159,8 @@ export async function unpublishPublicService(catalogId: string, serviceId: strin
     throw new Error();
   } finally {
     if (success) {
-      revalidatePath(`/catalogs/${catalogId}/public-services/${serviceId}`);
+      revalidateTag('public-service');
+      revalidateTag('public-services');
     }
   }
 }

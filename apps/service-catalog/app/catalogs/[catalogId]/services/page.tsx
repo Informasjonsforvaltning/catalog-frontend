@@ -1,13 +1,11 @@
-import { Organization, Service } from '@catalog-frontend/types';
-import { PageBanner, SearchHit, SearchHitContainer } from '@catalog-frontend/ui';
+import { Organization, ReferenceDataCode, Service } from '@catalog-frontend/types';
+import { PageBanner } from '@catalog-frontend/ui';
 import { authOptions, getTranslateText, hasOrganizationWritePermission, localization } from '@catalog-frontend/utils';
+import { getServices } from '../../../actions/services/actions';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import styles from './service-page.module.css';
-import { getOrganization } from '@catalog-frontend/data-access';
-import { Button, Heading } from '@digdir/design-system-react';
-import Link from 'next/link';
-import { getServices } from '../../../../app/actions/services/actions';
+import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
 import { getServerSession } from 'next-auth';
+import ServicePageClient from './service-page-client';
 
 export default async function ServiceSearchHitsPage({ params }: Params) {
   const { catalogId } = params;
@@ -16,50 +14,21 @@ export default async function ServiceSearchHitsPage({ params }: Params) {
   const session = await getServerSession(authOptions);
   const hasWritePermission = await hasOrganizationWritePermission(session.accessToken, catalogId);
 
+  const statusesResponse = await getAdmsStatuses().then((res) => res.json());
+  const statuses: ReferenceDataCode[] = statusesResponse.statuses;
+
   return (
-    <div className={styles.center}>
+    <>
       <PageBanner
         title={localization.catalogType.service}
         subtitle={getTranslateText(organization.prefLabel).toString()}
       />
-      <div className={styles.container}>
-        <div className={styles.headingContainer}>
-          <Heading size='medium'>{localization.serviceCatalog.searchHitsTitle}</Heading>
-          {hasWritePermission && (
-            <Button
-              as={Link}
-              href={`/catalogs/${catalogId}/services/new`}
-              className={styles.button}
-            >
-              {localization.serviceCatalog.form.new}
-            </Button>
-          )}
-        </div>
-
-        <SearchHitContainer
-          searchHits={
-            services &&
-            services.map((service: Service) => (
-              <div
-                className={styles.searchHitCard}
-                key={service.id}
-              >
-                <SearchHit
-                  title={getTranslateText(service?.title)}
-                  description={getTranslateText(service?.description)}
-                  titleHref={`/catalogs/${catalogId}/services/${service?.id}`}
-                  content={
-                    service.published
-                      ? localization.publicationState.publishedInFDK
-                      : localization.publicationState.unpublished
-                  }
-                />
-              </div>
-            ))
-          }
-          noSearchHits={services?.length < 1 ?? true}
-        />
-      </div>
-    </div>
+      <ServicePageClient
+        services={services}
+        hasWritePermission={hasWritePermission}
+        statuses={statuses}
+        catalogId={catalogId}
+      />
+    </>
   );
 }

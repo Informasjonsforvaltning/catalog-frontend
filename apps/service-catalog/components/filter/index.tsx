@@ -1,32 +1,55 @@
 'use client';
-import { Accordion } from '@digdir/design-system-react';
-import styles from './filter.module.css';
+import { ReferenceDataCode } from '@catalog-frontend/types';
+import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { Accordion, Checkbox } from '@digdir/design-system-react';
 
-type Props = {};
+type Props = {
+  statuses: ReferenceDataCode[];
+  onStatusChange: (values: string[] | []) => void;
+  onPublicationStateChange: (values: string[] | []) => void;
+};
 
-export const Filter = ({}: Props) => {
+export const Filter = ({ statuses, onStatusChange, onPublicationStateChange }: Props) => {
+  const publicationStates = [
+    { name: localization.publicationState.published, value: 'true' },
+    { name: localization.publicationState.unpublished, value: 'false' },
+  ];
+
   return (
-    <>
-      <Accordion color='neutral'>
+    <div>
+      <Accordion border={true}>
         <Accordion.Item>
-          <Accordion.Header level={3}>Hvem kan registrere seg i Frivillighetsregisteret?</Accordion.Header>
+          <Accordion.Header level={3}>{localization.serviceCatalog.serviceStatus}</Accordion.Header>
           <Accordion.Content>
-            For å kunne bli registrert i Frivillighetsregisteret, må organisasjonen drive frivillig virksomhet. Det er
-            bare foreninger, stiftelser og aksjeselskap som kan registreres. Virksomheten kan ikke dele ut midler til
-            fysiske personer. Virksomheten må ha et styre.
+            <Checkbox.Group onChange={(values) => onStatusChange(values)}>
+              {statuses.map((status) => (
+                <Checkbox
+                  key={status.code}
+                  value={status.uri}
+                >
+                  {getTranslateText(status.label)}
+                </Checkbox>
+              ))}
+            </Checkbox.Group>
           </Accordion.Content>
         </Accordion.Item>
         <Accordion.Item>
-          <Accordion.Header level={3}>
-            Hvordan går jeg fram for å registrere i Frivillighetsregisteret?
-          </Accordion.Header>
+          <Accordion.Header level={3}>{localization.publicationState.state}</Accordion.Header>
           <Accordion.Content>
-            Virksomheten må være registrert i Enhetsregisteret før den kan bli registrert i Frivillighetsregisteret. Du
-            kan registrere i begge registrene samtidig i Samordnet registermelding.
+            <Checkbox.Group onChange={(values) => onPublicationStateChange(values)}>
+              {publicationStates.map((state) => (
+                <Checkbox
+                  key={state.name}
+                  value={state.value}
+                >
+                  {getTranslateText(state.name)}
+                </Checkbox>
+              ))}
+            </Checkbox.Group>
           </Accordion.Content>
         </Accordion.Item>
       </Accordion>
-    </>
+    </div>
   );
 };
 
