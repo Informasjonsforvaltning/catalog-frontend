@@ -74,6 +74,8 @@ export const nb = {
     search: 'Søk',
     searchForDataset: 'Søk etter datasettbeskrivelse',
     searchForUsername: 'Søk etter brukernavn...',
+    searchForService: 'Søk etter tjeneste...',
+    searchForPublicService: 'Søk etter offentlig tjeneste...',
     sort: 'Sortering',
     searchField: 'Søk i felt',
     searchInCatalogs: ['Søk i Felles datakatalog', 'Lenke til søk i felles datakatalog'],
