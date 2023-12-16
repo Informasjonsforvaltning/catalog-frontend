@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Button, Heading } from '@digdir/design-system-react';
+import { Button, Heading, Search } from '@digdir/design-system-react';
 import Link from 'next/link';
 import Filter from '../../../../components/filter';
 import { Service, ReferenceDataCode } from '@catalog-frontend/types';
@@ -20,23 +20,33 @@ const PublicServicePageClient = ({ services, hasWritePermission, catalogId, stat
   const [filteredServices, setFilteredServices] = useState(services);
   const [statusFilters, setStatusFilters] = useState<string[]>([]);
   const [publicationFilters, setPublicationFilters] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const filterServices = (statusFilters: string[], publicationFilters: string[]) => {
-    if (statusFilters.length === 0 && publicationFilters.length === 0) {
-      return services; // Return all services if both filters are empty
+  const filterServices = (statusFilters: string[], publicationFilters: string[], searchQuery: string) => {
+    let filtered = services;
+
+    if (statusFilters.length > 0) {
+      filtered = filtered.filter((service) => service.status && statusFilters.includes(service.status));
     }
 
-    return services.filter(
-      (service) =>
-        (statusFilters.length === 0 || (service.status && statusFilters.includes(service.status))) &&
-        (publicationFilters.length === 0 || publicationFilters.includes(String(service.published))),
-    );
+    if (publicationFilters.length > 0) {
+      filtered = filtered.filter((service) => publicationFilters.includes(String(service.published)));
+    }
+
+    if (searchQuery.trim() !== '') {
+      const searchResult = services.filter((service) =>
+        String(getTranslateText(service.title)).toLowerCase().includes(searchQuery.toLowerCase()),
+      );
+      filtered = filtered.filter((service) => searchResult.includes(service));
+    }
+
+    return filtered;
   };
 
   useEffect(() => {
-    const combinedFilteredServices = filterServices(statusFilters, publicationFilters);
+    const combinedFilteredServices = filterServices(statusFilters, publicationFilters, searchQuery);
     setFilteredServices(combinedFilteredServices);
-  }, [services, statusFilters, publicationFilters]);
+  }, [services, statusFilters, publicationFilters, searchQuery]);
 
   const handleStatusFilterChange = (filters: string[]) => {
     setStatusFilters(filters);
@@ -44,6 +54,10 @@ const PublicServicePageClient = ({ services, hasWritePermission, catalogId, stat
 
   const handlePublicationStateChange = (filters: string[]) => {
     setPublicationFilters(filters);
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
   };
 
   return (
@@ -60,11 +74,22 @@ const PublicServicePageClient = ({ services, hasWritePermission, catalogId, stat
       }
       searchRow={<Heading size='medium'>{localization.serviceCatalog.searchHitsTitle}</Heading>}
       leftColumn={
-        <Filter
-          onStatusChange={handleStatusFilterChange}
-          onPublicationStateChange={handlePublicationStateChange}
-          statuses={statuses}
-        />
+        <div>
+          <Search
+            className={styles.search}
+            error=''
+            label={localization.search.search}
+            placeholder={localization.search.searchForPublicService}
+            size='medium'
+            variant='simple'
+            onKeyUp={(event) => handleSearch(event.target.value)}
+          />
+          <Filter
+            onStatusChange={handleStatusFilterChange}
+            onPublicationStateChange={handlePublicationStateChange}
+            statuses={statuses}
+          />
+        </div>
       }
       mainColumn={
         <SearchHitContainer

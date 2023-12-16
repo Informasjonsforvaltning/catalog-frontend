@@ -1,42 +1,11 @@
-.searchHitCard {
+.searchHit {
   padding-bottom: 1rem;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
-.searchHitCard > div {
-  width: 100%;
-}
-
-@media (max-width: 900px) {
-  .searchHitCard {
-    display: flex;
-    width: 100%;
-  }
-}
-
-.center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.container {
-  width: 80%;
-  padding-top: 2rem;
-  max-width: 1010px;
-}
-
-.headingContainer {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
+.search {
   padding-bottom: 1rem;
-  padding-top: 5rem;
-  align-items: flex-end;
 }
-.button {
-  width: fit-content;
+
+.search > div > div > input {
+  border: 1px solid #d5d7d9 !important;
 }
