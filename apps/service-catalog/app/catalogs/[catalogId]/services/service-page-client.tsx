@@ -8,6 +8,7 @@ import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { SearchHit, SearchHitContainer, SearchHitsPageLayout } from '@catalog-frontend/ui';
 import styles from './service-page.module.css';
 import _ from 'lodash';
+import { AddButton } from 'apps/service-catalog/components/buttons';
 
 interface Props {
   services: Service[];
@@ -64,12 +65,12 @@ const ServicePageClient = ({ services, hasWritePermission, catalogId, statuses }
     <SearchHitsPageLayout
       buttonRow={
         hasWritePermission && (
-          <Button
+          <AddButton
             as={Link}
             href={`/catalogs/${catalogId}/services/new`}
           >
             {localization.serviceCatalog.form.new}
-          </Button>
+          </AddButton>
         )
       }
       searchRow={<Heading size='medium'>{localization.serviceCatalog.searchHitsTitle}</Heading>}

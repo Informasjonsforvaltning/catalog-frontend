@@ -80,7 +80,7 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
             <Form>
               <div className={styles.formCard}>
                 <FormFieldCard
-                  title={localization.title}
+                  title={localization.name}
                   subtitle={localization.serviceCatalog.form.titleSubtitle}
                 >
                   <Field

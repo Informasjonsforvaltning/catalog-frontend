@@ -35,7 +35,7 @@ type AddProps = {
   children: string;
 };
 
-export const AddButton = ({ onClick, children }: AddProps) => {
+export const AddButton = ({ onClick, children, ...props }: AddProps) => {
   return (
     <Button
       className={styles.addButton}
@@ -43,6 +43,7 @@ export const AddButton = ({ onClick, children }: AddProps) => {
       size='small'
       type='button'
       onClick={onClick}
+      {...props}
     >
       {children}
     </Button>

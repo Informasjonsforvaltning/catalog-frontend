@@ -338,12 +338,13 @@ export const nb = {
     serviceStatus: 'Tjenestestatus',
     form: {
       titleLabel: 'Tekst på bokmål',
-      titleSubtitle: 'Egenskapen brukes å til oppgi navn til en tjeneste',
-      descriptionSubtitle: 'Egenskapen brukes til å oppgi en tekstlig beskrivelse av tjenesten',
+      titleSubtitle: 'Navnet skal være kortfattet, kunne stå alene og gi mening.',
+      descriptionSubtitle: 'Beskrivelsen skal være kortfattet og formålet med tjenesten bør fremgå.',
       save: 'Lagre tjeneste',
       delete: 'Slett tjeneste',
       confirmDelete: 'Er du sikker på at du vil slette tjenesten?',
       new: 'Opprett ny tjeneste',
+      newPublic: 'Opprett ny offentlig tjeneste',
       descriptionProduces:
         'Egenskapen brukes til å referere til en eller flere instanser av tjenesteresultat som beskriver resultat av tjenesten.',
       homepageLabel: 'Lenke til hjemmeside',
