@@ -1,11 +1,32 @@
-import Link from 'next/link';
+import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner } from '@catalog-frontend/ui';
+import { localization } from '@catalog-frontend/utils';
+import { Heading } from '@digdir/design-system-react';
 
-export default function NotFound() {
+const NotFound = async ({ params }) => {
+  const breadcrumbList = [
+    {
+      href: `#`,
+      text: localization.notFound,
+    },
+  ] as BreadcrumbType[];
+
   return (
-    <div>
-      <h2>Not Found</h2>
-      <p>Could not find requested resource</p>
-      <Link href='/'>Return Home</Link>
-    </div>
+    <>
+      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <PageBanner
+        title={localization.catalogType.service}
+        subtitle={localization.notFound}
+      />
+      <CenterContainer>
+        <Heading
+          level={2}
+          size='small'
+        >
+          {localization.didNotFindPage}
+        </Heading>
+      </CenterContainer>
+    </>
   );
-}
+};
+
+export default NotFound;

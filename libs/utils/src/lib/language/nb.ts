@@ -10,7 +10,7 @@ export const nb = {
   noAccess: 'Ingen tilgang',
   youHaveNoAccess: 'Det ser ikke ut til at du har tilgang til denne siden.',
   notFound: 'Ikke funnet',
-  didNotFoundPage: 'Fant ikke siden du lette etter.',
+  didNotFindPage: 'Fant ikke siden du lette etter.',
   error: 'Feil',
   somethingWentWrong: 'Beklager, noe gikk galt. Prøv på nytt litt senere.',
   allCatalogs: 'Alle kataloger',
