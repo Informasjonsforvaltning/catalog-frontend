@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Button, Heading, Search } from '@digdir/design-system-react';
+import { Heading, Search } from '@digdir/design-system-react';
 import Link from 'next/link';
 import Filter from '../../../../components/filter';
 import { Service, ReferenceDataCode } from '@catalog-frontend/types';

@@ -36,24 +36,33 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
             <DividerLine />
 
             {contactPoint.email && (
-              <div className={styles.content}>
-                <Label size='small'>{`${localization.email}:`}</Label>
-                <Paragraph size='small'>{contactPoint.email}</Paragraph>
-              </div>
+              <Paragraph
+                size='small'
+                className={styles.content}
+              >
+                <p className={styles.bold}>{`${localization.email}:`}</p>
+                {contactPoint.email}
+              </Paragraph>
             )}
 
             {contactPoint.telephone && (
-              <div className={styles.content}>
-                <Label size='small'>{`${localization.telephone}:`}</Label>
-                <Paragraph size='small'>{contactPoint.telephone}</Paragraph>
-              </div>
+              <Paragraph
+                size='small'
+                className={styles.content}
+              >
+                <p className={styles.bold}>{`${localization.telephone}:`}</p>
+                {contactPoint.telephone}
+              </Paragraph>
             )}
 
             {contactPoint.contactPage && (
-              <div className={styles.content}>
-                <Label size='small'>{`${localization.contactPage}:`}</Label>
-                <Paragraph size='small'>{contactPoint.contactPage}</Paragraph>
-              </div>
+              <Paragraph
+                size='small'
+                className={styles.content}
+              >
+                <p className={styles.bold}>{`${localization.contactPage}:`}</p>
+                {contactPoint.contactPage}
+              </Paragraph>
             )}
           </div>
         </InfoCard.Item>
