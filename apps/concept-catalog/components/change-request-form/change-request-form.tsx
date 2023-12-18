@@ -17,7 +17,7 @@ interface Props {
   changeRequestAsConcept: Concept;
   originalConcept?: Concept;
   readOnly: boolean;
-  submitHandler: (values: Concept) => void;
+  submitHandler?: (values: Concept) => void;
 }
 
 const NUM_ROWS_TEXT_FIELD = 3;
@@ -29,7 +29,7 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, originalC
 
   const handleSubmit = (values: Concept) => {
     setIsSubmitting(true);
-    submitHandler(values);
+    submitHandler && submitHandler(values);
     setIsSubmitting(false);
   };
 
@@ -238,16 +238,18 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, originalC
               </FormFieldCard>
             </div>
 
-            <div className={styles.bottomlineContainer}>
-              <Button
-                color='first'
-                className={styles.button}
-                type='submit'
-                disabled={isSubmitting}
-              >
-                {loc.button.send}
-              </Button>
-            </div>
+            {!readOnly && (
+              <div className={styles.bottomlineContainer}>
+                <Button
+                  color='first'
+                  className={styles.button}
+                  type='submit'
+                  disabled={isSubmitting}
+                >
+                  {loc.button.send}
+                </Button>
+              </div>
+            )}
           </Form>
         )}
       </Formik>
