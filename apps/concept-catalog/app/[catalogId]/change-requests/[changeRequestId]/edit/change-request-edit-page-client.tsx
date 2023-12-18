@@ -18,7 +18,7 @@ interface Props {
   organization: Organization;
   changeRequest: ChangeRequest;
   changeRequestAsConcept: Concept;
-  originalConcept: Concept;
+  originalConcept?: Concept;
 }
 
 const ChangeRequestEditPageClient: FC<Props> = ({
@@ -29,19 +29,29 @@ const ChangeRequestEditPageClient: FC<Props> = ({
 }) => {
   const router = useRouter();
 
+  const emptyConcept: Concept = originalConcept || {
+    id: null,
+    ansvarligVirksomhet: { id: organization.organizationId },
+    seOgså: [],
+  };
+
   const changeRequestMutateHook = useUpdateChangeRequest({
     catalogId: organization.organizationId,
     changeRequestId: changeRequest.id,
   });
   const submitHandler = (values: Concept) => {
     const changeRequestTitle =
-      originalConcept.anbefaltTerm?.navn?.nb ||
-      originalConcept.anbefaltTerm?.navn?.nn ||
-      originalConcept.anbefaltTerm?.navn?.en ||
+      (originalConcept &&
+        (originalConcept.anbefaltTerm?.navn?.nb ||
+          originalConcept.anbefaltTerm?.navn?.nn ||
+          originalConcept.anbefaltTerm?.navn?.en)) ||
+      values.anbefaltTerm?.navn?.nb ||
+      values.anbefaltTerm?.navn?.nn ||
+      values.anbefaltTerm?.navn?.en ||
       '';
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
-      conceptId: originalConcept.id,
-      operations: jsonpatch.compare(originalConcept, values) as JsonPatchOperation[],
+      conceptId: originalConcept?.id || null,
+      operations: jsonpatch.compare(originalConcept || emptyConcept, values) as JsonPatchOperation[],
       title: changeRequestTitle,
     };
 
