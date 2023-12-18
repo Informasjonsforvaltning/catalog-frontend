@@ -272,6 +272,8 @@ export const nb = {
 
   changeRequest: {
     changeRequest: 'Endringsforslag',
+    accept: 'Godta',
+    reject: 'Avslå',
     seeChangeRequests: 'Se alle endringsforslag',
     existingValue: 'Eksisterende {fieldType} på {lang}',
     existingContent: 'Eksisterende innhold',

@@ -56,11 +56,6 @@
   justify-content: center;
 }
 
-.detailHeading {
-  margin-top: 5rem;
-  margin-bottom: 2rem;
-}
-
 .topRow {
   display: flex;
   flex-direction: row;
@@ -74,5 +69,5 @@
 
 .alertInformation {
   flex-grow: 1;
-  max-width: 36em;
+  flex-shrink: 2;
 }

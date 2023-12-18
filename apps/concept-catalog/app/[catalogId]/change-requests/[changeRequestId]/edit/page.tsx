@@ -17,7 +17,6 @@ import styles from '../../change-requests-page.module.css';
 import { Banner } from '../../../../../components/banner';
 import { Alert, Link } from '@digdir/design-system-react';
 import NextLink from 'next/link';
-import cn from 'classnames';
 
 const ChangeRequestEditPage = async ({ params }) => {
   const { catalogId, changeRequestId } = params;
@@ -150,11 +149,12 @@ const ChangeRequestEditPage = async ({ params }) => {
             {loc.changeRequest.alertInformation}
           </Alert>
         </div>
-        <DetailHeading
-          headingTitle={headingTitle}
-          subtitle={subtitle}
-          className={styles.detailHeading}
-        />
+        <div className={styles.topRow}>
+          <DetailHeading
+            headingTitle={headingTitle}
+            subtitle={subtitle}
+          />
+        </div>
         <ChangeRequestEditPageClient {...clientProps} />
       </div>
     </>
