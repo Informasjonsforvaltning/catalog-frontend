@@ -37,7 +37,7 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, changeReques
         logoDescription={design?.logoDescription}
       />
       <div className='container'>
-        <div className={styles.buttonsContainer}>
+        <div className={styles.newConceptSuggestionButton}>
           <Button onClick={handleNewConceptSuggestionClick}>{loc.suggestionForNewConcept}</Button>
         </div>
         <Heading

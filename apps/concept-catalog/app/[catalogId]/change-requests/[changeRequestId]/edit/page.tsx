@@ -1,6 +1,6 @@
 import { getOrganization, getConcept, getChangeRequest } from '@catalog-frontend/data-access';
 import { Organization, Concept, ChangeRequest } from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs, Button, DetailHeading } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, DetailHeading } from '@catalog-frontend/ui';
 import {
   authOptions,
   hasOrganizationReadPermission,
