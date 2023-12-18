@@ -22,7 +22,7 @@ const NotFound = async ({ params }) => {
           level={2}
           size='small'
         >
-          {localization.didNotFindPage}
+          {localization.notFoundPage}
         </Heading>
       </CenterContainer>
     </>

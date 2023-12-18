@@ -3,6 +3,7 @@ import { DividerLine, InfoCard } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Heading, Label, Paragraph } from '@digdir/design-system-react';
 import styles from './basic-form-info-card-items.module.css';
+import _ from 'lodash';
 
 type Props = {
   service?: Service;
@@ -14,16 +15,23 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
   const contactPoint = service?.contactPoints && service?.contactPoints[0];
   const homepage = service?.homepage;
 
+  // Check if all properties within an object are empty
+  const allPropertiesEmpty = (obj: any): boolean => {
+    return _.every(_.values(obj), _.isEmpty);
+  };
+
   return (
     <>
-      <InfoCard.Item label={`${localization.description}:`}>
-        {getTranslateText(service?.description ?? '', language)}
-      </InfoCard.Item>
+      {getTranslateText(service?.description) && (
+        <InfoCard.Item label={`${localization.description}:`}>
+          {getTranslateText(service?.description ?? '', language)}
+        </InfoCard.Item>
+      )}
 
-      {contactPoint && (
+      {contactPoint && !allPropertiesEmpty(contactPoint) && (
         <InfoCard.Item label={`${localization.serviceCatalog.contactPoint}:`}>
           <div>
-            {contactPoint.category.nb && (
+            {contactPoint?.category && !_.isEmpty(contactPoint.category) && (
               <Heading
                 size='xxsmall'
                 level={4}
@@ -67,7 +75,6 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
           </div>
         </InfoCard.Item>
       )}
-
       {produces?.length > 0 && (
         <InfoCard.Item label={`${localization.serviceCatalog.produces}:`}>
           {produces.map((produce, index) => (

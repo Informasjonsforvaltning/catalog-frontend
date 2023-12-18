@@ -24,22 +24,18 @@ export default withAuth(async function middleware(req: NextRequestWithAuth) {
     `/catalogs/${catalogId}/services/new`,
   ];
 
-  //CatalogId does not have correct format
   if (catalogId && !validOrganizationNumber(catalogId)) {
     return NextResponse.rewrite(new URL('/not-found/', req.url));
   }
 
-  // ServiceId does not have correct format
   if (serviceId && !validUUID(serviceId)) {
     return NextResponse.rewrite(new URL('/not-found/', req.url));
   }
 
-  // User do not have read permission in the catalog
   if (accessToken && catalogId && !hasOrganizationReadPermission(accessToken, catalogId)) {
     return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access/`, req.url));
   }
 
-  // User do not have write permission in the catalog
   if (
     accessToken &&
     catalogId &&

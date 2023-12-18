@@ -7,8 +7,7 @@ import { Service, ReferenceDataCode } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { SearchHit, SearchHitContainer, SearchHitsPageLayout } from '@catalog-frontend/ui';
 import styles from './service-page.module.css';
-import _ from 'lodash';
-import { AddButton } from 'apps/service-catalog/components/buttons';
+import { AddButton } from '../../../../components/buttons';
 
 interface Props {
   services: Service[];
@@ -47,7 +46,7 @@ const ServicePageClient = ({ services, hasWritePermission, catalogId, statuses }
   useEffect(() => {
     const combinedFilteredServices = filterServices(statusFilters, publicationFilters, searchQuery);
     setFilteredServices(combinedFilteredServices);
-  }, [services, statusFilters, publicationFilters, searchQuery]);
+  }, [statusFilters, publicationFilters, searchQuery]);
 
   const handleStatusFilterChange = (filters: string[]) => {
     setStatusFilters(filters);

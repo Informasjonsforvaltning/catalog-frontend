@@ -52,9 +52,9 @@ export const serviceTemplate = (service: Service | undefined): ServiceToBeCreate
   const description = (service && service.description?.nb) || '';
   const homepage = (service && service.homepage) || '';
   const produces =
-    service && service.produces
-      ? (service.produces.map((produce) => producesTemplate(produce as Output)).filter((cp) => cp !== null) as Output[])
-      : emptyProduces;
+    service &&
+    service.produces &&
+    (service.produces.map((produce) => producesTemplate(produce as Output)).filter((cp) => cp !== null) as Output[]);
 
   const contactPoints =
     service && service.contactPoints
