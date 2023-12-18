@@ -44,6 +44,7 @@ interface Props {
   usersResult: any;
   conceptStatuses: any;
   FDK_REGISTRATION_BASE_URI: string;
+  changeRequestEnabled?: boolean;
 }
 
 export const SearchPageClient = ({
@@ -56,6 +57,7 @@ export const SearchPageClient = ({
   usersResult,
   conceptStatuses,
   FDK_REGISTRATION_BASE_URI,
+  changeRequestEnabled,
 }: Props) => {
   const searchParams = useSearchParams();
   const pageNumber: number = textToNumber(searchParams.get('page') as string);
