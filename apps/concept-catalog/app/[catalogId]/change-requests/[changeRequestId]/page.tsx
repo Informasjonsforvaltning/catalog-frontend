@@ -1,6 +1,6 @@
 import { getOrganization, getConcept, getChangeRequest } from '@catalog-frontend/data-access';
 import { Organization, Concept, ChangeRequest } from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs, Button, DetailHeading } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, DetailHeading } from '@catalog-frontend/ui';
 import {
   authOptions,
   hasOrganizationReadPermission,
@@ -14,11 +14,11 @@ import { getServerSession } from 'next-auth';
 import jsonpatch from 'fast-json-patch';
 import { RedirectType, redirect } from 'next/navigation';
 import sharedStyle from '../change-requests-page.module.css';
-import style from './change-request-page.module.css';
 import { Banner } from '../../../../components/banner';
 import { Alert, Link } from '@digdir/design-system-react';
 import NextLink from 'next/link';
 import ChangeRequestForm from '../../../../components/change-request-form/change-request-form';
+import { ButtonRow } from '../../../../components/buttons/button-row';
 
 const ChangeRequestDetailsPage = async ({ params }) => {
   const { catalogId, changeRequestId } = params;
@@ -153,23 +153,13 @@ const ChangeRequestDetailsPage = async ({ params }) => {
             headingTitle={headingTitle}
             subtitle={subtitle}
           />
-          <div className={style.buttonsContainer}>
-            {hasWritePermission && <Button variant='primary'>{loc.changeRequest.accept}</Button>}
-            {hasWritePermission && (
-              <Button
-                variant='secondary'
-                color='danger'
-              >
-                {loc.changeRequest.reject}
-              </Button>
-            )}
-            <Button
-              variant='secondary'
-              color='second'
-            >
-              {loc.changeRequest.edit}
-            </Button>
-          </div>
+          {changeRequest.id && changeRequest.status == 'OPEN' && (
+            <ButtonRow
+              catalogId={catalogId}
+              changeRequestId={changeRequest.id}
+              hasWritePermission={hasWritePermission}
+            />
+          )}
         </div>
         <ChangeRequestForm {...clientProps} />
       </div>
