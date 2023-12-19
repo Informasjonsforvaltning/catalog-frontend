@@ -16,6 +16,7 @@ export interface FieldOptions {
 }
 
 export enum SortOption {
+  RELEVANCE = 'RELEVANCE',
   LAST_UPDATED_FIRST = 'LAST_UPDATED_FIRST',
   LAST_UPDATED_LAST = 'LAST_UPDATED_LAST',
   RECOMMENDED_TERM_AÅ = 'RECOMMENDED_TERM_AÅ',

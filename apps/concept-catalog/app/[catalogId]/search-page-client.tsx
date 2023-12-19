@@ -65,10 +65,11 @@ export const SearchPageClient = ({
   const searchDispatch = useSearchDispatch();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFieldOption, setSelectedFieldOption] = useState('alleFelter' as SearchableField | 'alleFelter');
-  const [selectedSortOption, setSelectedSortOption] = useState(SortOption.LAST_UPDATED_FIRST);
+  const [selectedSortOption, setSelectedSortOption] = useState(SortOption.RELEVANCE);
   const [currentPage, setCurrentPage] = useState(pageNumber);
 
-  const sortMappings: Record<SortOption, QuerySort> = {
+  const sortMappings: Record<SortOption, QuerySort | undefined> = {
+    [SortOption.RELEVANCE]: undefined,
     [SortOption.LAST_UPDATED_FIRST]: { field: 'SIST_ENDRET', direction: 'DESC' },
     [SortOption.LAST_UPDATED_LAST]: { field: 'SIST_ENDRET', direction: 'ASC' },
     [SortOption.RECOMMENDED_TERM_AÅ]: { field: 'ANBEFALT_TERM_NB', direction: 'ASC' },
