@@ -10,6 +10,7 @@ export const getChangeRequests = async (catalogId: string, accessToken: string) 
       'Content-Type': 'application/json',
     },
     method: 'GET',
+    next: { tags: ['concept-change-requests'] },
   };
   return await fetch(resource, options);
 };
@@ -27,6 +28,7 @@ export const searchChangeRequest = async (
       'Content-Type': 'application/json',
     },
     method: 'GET',
+    next: { tags: ['concept-change-requests'] },
   };
   return await fetch(resource, options);
 };
@@ -39,6 +41,7 @@ export const getChangeRequest = async (catalogId: string, changeRequestId: strin
       'Content-Type': 'application/json',
     },
     method: 'GET',
+    next: { tags: ['concept-change-request'] },
   };
   return await fetch(resource, options);
 };
@@ -70,6 +73,32 @@ export const updateChangeRequest = async (
     },
     method: 'POST',
     body: JSON.stringify(body),
+  };
+  return await fetch(resource, options);
+};
+
+export const acceptChangeRequest = async (catalogId: string, changeRequestId: string, accessToken: string) => {
+  const resource = `${path}/${catalogId}/endringsforslag/${changeRequestId}/accept`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: '{}',
+  };
+  return await fetch(resource, options);
+};
+
+export const rejectChangeRequest = async (catalogId: string, changeRequestId: string, accessToken: string) => {
+  const resource = `${path}/${catalogId}/endringsforslag/${changeRequestId}/reject`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: '{}',
   };
   return await fetch(resource, options);
 };
