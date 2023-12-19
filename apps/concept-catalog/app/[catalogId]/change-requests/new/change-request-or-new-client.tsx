@@ -12,12 +12,20 @@ interface Props {
   originalConcept: Concept;
 }
 
-const NewConceptSuggestionClient: FC<Props> = ({ organization, changeRequestAsConcept, originalConcept }) => {
+const ChangeRequestOrNewClient: FC<Props> = ({ organization, changeRequestAsConcept, originalConcept }) => {
   const catalogId = organization.organizationId;
 
-  const changeRequestMutateHook = useCreateChangeRequest({ catalogId: catalogId });
+  const changeRequestMutateHook = useCreateChangeRequest({
+    catalogId: catalogId,
+  });
   const submitHandler = (values: Concept) => {
-    const anbefaltTerm = values.anbefaltTerm?.navn.nb || values.anbefaltTerm?.navn.nn || values.anbefaltTerm?.navn.en;
+    const anbefaltTerm =
+      originalConcept.anbefaltTerm?.navn.nb ||
+      originalConcept.anbefaltTerm?.navn.nn ||
+      originalConcept.anbefaltTerm?.navn.en ||
+      values.anbefaltTerm?.navn.nb ||
+      values.anbefaltTerm?.navn.nn ||
+      values.anbefaltTerm?.navn.en;
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
       conceptId: originalConcept.id,
       operations: jsonpatch.compare(originalConcept, values) as JsonPatchOperation[],
@@ -35,4 +43,4 @@ const NewConceptSuggestionClient: FC<Props> = ({ organization, changeRequestAsCo
   );
 };
 
-export default NewConceptSuggestionClient;
+export default ChangeRequestOrNewClient;

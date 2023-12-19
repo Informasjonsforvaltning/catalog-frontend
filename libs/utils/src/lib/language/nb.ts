@@ -265,6 +265,7 @@ export const nb = {
     contactInformation: 'Kontaktinformasjon for eksterne',
     relationToSource: 'Forhold til kilde',
     formFieldLabel: '{fieldType} på {lang}',
+    suggestChanges: 'Foreslå endring',
   },
 
   validity: {
@@ -273,6 +274,7 @@ export const nb = {
   },
 
   changeRequest: {
+    newChangeRequest: 'Nytt endringsforslag',
     changeRequest: 'Endringsforslag',
     accept: 'Godta',
     reject: 'Avslå',

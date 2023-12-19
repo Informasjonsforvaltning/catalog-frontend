@@ -1,7 +1,7 @@
 import { ChangeRequestUpdateBody } from '@catalog-frontend/types';
 import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import { useRouter, redirect, RedirectType } from 'next/navigation';
 
 export const useGetChangeRequests = (catalogId: string) => {
   return useQuery({
@@ -30,11 +30,10 @@ export const useCreateChangeRequest = ({ catalogId }) => {
 
   return useMutation({
     mutationFn: async (changeRequest: ChangeRequestUpdateBody) => {
-      const conceptId = changeRequest.conceptId;
       if (!validOrganizationNumber(catalogId)) {
         return Promise.reject('Invalid catalog id');
       }
-      if (conceptId != null || !validUUID(conceptId)) {
+      if (changeRequest.conceptId !== null && !validUUID(changeRequest.conceptId)) {
         return Promise.reject('Invalid concept id for change request');
       }
 
@@ -47,19 +46,18 @@ export const useCreateChangeRequest = ({ catalogId }) => {
         return Promise.reject('Unauthorized');
       }
 
+      if (response.status !== 201) {
+        return Promise.reject('Error when creating change request');
+      }
+
       return response;
     },
     onSuccess: (data) => {
-      data
-        .json()
-        .then(({ changeRequestId }) => {
-          if (validOrganizationNumber(catalogId) && validUUID(changeRequestId)) {
-            router
-              .push(`/${catalogId}/change-requests/${changeRequestId}/edit`)
-              .catch((err) => console.error('Failed to navigate to change request page: ', err));
-          }
-        })
-        .catch((err) => console.error(`Failed to create change request: ${err}`));
+      data.json().then((changeRequestId) => {
+        if (validOrganizationNumber(catalogId) && validUUID(changeRequestId)) {
+          redirect(`/${catalogId}/change-requests/${changeRequestId}/edit`, RedirectType.replace);
+        }
+      });
     },
   });
 };

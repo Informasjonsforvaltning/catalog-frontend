@@ -1,7 +1,7 @@
 import { JsonPatchOperation } from './json-patch';
 import { UserName } from './user';
 
-type ChangeRequestStatus = 'OPEN' | 'REJECTED' | 'ACCEPTED';
+export type ChangeRequestStatus = 'OPEN' | 'REJECTED' | 'ACCEPTED';
 
 export interface ChangeRequest {
   id: string | null;
