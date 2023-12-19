@@ -107,6 +107,7 @@ export const ConceptPageClient = ({
   FDK_REGISTRATION_BASE_URI,
   relatedConcepts,
   conceptRelations,
+  changeRequestEnabled,
 }) => {
   const [language, setLanguage] = useState('nb');
   const [newCommentText, setNewCommentText] = useState('');
@@ -740,6 +741,20 @@ export const ConceptPageClient = ({
             {hasWritePermission && (
               <>
                 <Button onClick={handleEditConcept}>Rediger</Button>
+                {changeRequestEnabled && (
+                  <Link
+                    href={`/${catalogId}/change-requests/new?concept=${concept?.id}`}
+                    passHref
+                    legacyBehavior
+                  >
+                    <Button
+                      as='a'
+                      variant='secondary'
+                    >
+                      {localization.concept.suggestChanges}
+                    </Button>
+                  </Link>
+                )}
                 {!concept?.erPublisert && (
                   <Button
                     color={'danger'}

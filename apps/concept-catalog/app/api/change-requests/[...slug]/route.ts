@@ -31,7 +31,9 @@ export const POST = async (req: NextRequest, { params }: { params: { slug: strin
       const reqBody = await req.json();
       const response = await createChangeRequest(reqBody, `${catalogId}`, `${session?.accessToken}`);
       if (response.status !== 201) {
-        throw new Error();
+        throw new Error(
+          `Error when creating change request. Response status: ${response.status}, message: ${await response.text()}`,
+        );
       }
       const changeRequestId = response?.headers?.get('location')?.split('/').pop();
       return new Response(JSON.stringify(changeRequestId), { status: response.status });

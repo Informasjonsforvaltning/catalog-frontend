@@ -1,7 +1,26 @@
+import { ChangeRequestStatus } from '@catalog-frontend/types';
+
 const path = `${process.env.CONCEPT_CATALOG_BASE_URI}`;
 
 export const getChangeRequests = async (catalogId: string, accessToken: string) => {
   const resource = `${path}/${catalogId}/endringsforslag`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'GET',
+  };
+  return await fetch(resource, options);
+};
+
+export const searchChangeRequest = async (
+  catalogId: string,
+  conceptId: string,
+  accessToken: string,
+  status?: ChangeRequestStatus,
+) => {
+  const resource = `${path}/${catalogId}/endringsforslag?concept=${conceptId}` + (status ? `&status=${status}` : '');
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,

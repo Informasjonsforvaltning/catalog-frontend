@@ -33,6 +33,7 @@ import { useImportConcepts } from '../../hooks/import';
 import styles from './search-page.module.css';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ConceptSearchHits from '../../components/concept-search-hits';
+import Link from 'next/link';
 
 interface Props {
   catalogId: string;
@@ -334,6 +335,20 @@ export const SearchPageClient = ({
       <SearchHitsPageLayout
         buttonRow={
           <>
+            {changeRequestEnabled && (
+              <Link
+                href={`/${catalogId}/change-requests`}
+                passHref
+                legacyBehavior
+              >
+                <Button
+                  as='a'
+                  variant='secondary'
+                >
+                  {loc.changeRequest.changeRequest}
+                </Button>
+              </Link>
+            )}
             {hasWritePermission && (
               <Button
                 onClick={onCreateConceptClick}

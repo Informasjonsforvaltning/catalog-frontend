@@ -2,8 +2,13 @@
 
 import { Button as DigdirButton, ButtonProps } from '@digdir/design-system-react';
 import cn from './button.module.css';
+import { ElementType } from 'react';
 
-export const Button = ({ children, ...props }: ButtonProps) => (
+interface Props extends ButtonProps {
+  as?: ElementType;
+}
+
+export const Button = ({ children, ...props }: Props) => (
   <DigdirButton
     {...props}
     className={cn.button}
