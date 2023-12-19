@@ -92,6 +92,7 @@ export const nb = {
     },
 
     sortOptions: {
+      RELEVANCE: 'Relevans',
       LAST_UPDATED_FIRST: 'Sist endret først',
       LAST_UPDATED_LAST: 'Eldst først',
       RECOMMENDED_TERM_AÅ: 'Anbefalt term A-Å',
