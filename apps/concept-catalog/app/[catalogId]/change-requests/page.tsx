@@ -29,6 +29,7 @@ const ChangeRequestsPage = async ({ params }) => {
       catalogId={catalogId}
       organization={organization}
       changeRequests={changeRequests}
+      FDK_REGISTRATION_BASE_URI={process.env.FDK_REGISTRATION_BASE_URI}
     />
   );
 };
