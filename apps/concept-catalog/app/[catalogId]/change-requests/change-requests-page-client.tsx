@@ -1,6 +1,6 @@
 'use client';
 
-import { Button, PageBanner, Tag } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, Button, PageBanner, Tag } from '@catalog-frontend/ui';
 import {
   capitalizeFirstLetter,
   convertTimestampToDateAndTime,
@@ -14,7 +14,7 @@ import { Heading, Link } from '@digdir/design-system-react';
 import { useCatalogDesign } from '../../../context/catalog-design';
 import cn from 'classnames';
 
-export const ChangeRequestsPageClient = ({ catalogId, organization, changeRequests }) => {
+export const ChangeRequestsPageClient = ({ catalogId, organization, changeRequests, FDK_REGISTRATION_BASE_URI }) => {
   const pageSubtitle = organization?.name ?? '';
   const router = useRouter();
 
@@ -24,10 +24,25 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, changeReques
     }
   };
 
+  const breadcrumbList = [
+    {
+      href: `/${catalogId}`,
+      text: loc.concept.concept,
+    },
+    {
+      href: `/${catalogId}/change-requests`,
+      text: loc.changeRequest.changeRequest,
+    },
+  ] as BreadcrumbType[];
+
   const design = useCatalogDesign();
 
   return (
     <>
+      <Breadcrumbs
+        baseURI={FDK_REGISTRATION_BASE_URI}
+        breadcrumbList={breadcrumbList}
+      />
       <PageBanner
         title={loc.catalogType.concept}
         subtitle={pageSubtitle}
