@@ -15,6 +15,7 @@ interface SearchFieldProps {
   startIcon?: JSX.Element;
   endIcon?: JSX.Element;
   iconPos?: IconPoseType;
+  value?: string;
   onSearchSubmit?: (inputValue: string) => void | undefined;
 }
 
@@ -24,9 +25,10 @@ const SearchField: FC<SearchFieldProps> = ({
   endIcon = <MagnifyingGlassSVG />,
   placeholder = '',
   error = false,
+  value = '',
   onSearchSubmit,
 }) => {
-  const [inputValue, setInputValue] = useState('');
+  const [inputValue, setInputValue] = useState(value);
   const conditionalPlaceholder = error ? 'Invalid input' : placeholder;
 
   const onInput = (changeEvent: ChangeEvent<HTMLInputElement>) => {

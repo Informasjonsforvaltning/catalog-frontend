@@ -13,7 +13,6 @@ import {
   SearchHitsPageLayout,
 } from '@catalog-frontend/ui';
 import {
-  textToNumber,
   validOrganizationNumber,
   getTranslateText,
   capitalizeFirstLetter,
@@ -23,17 +22,18 @@ import { Chip, Select } from '@digdir/design-system-react';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 
 import { useState, useEffect } from 'react';
-import { action, useSearchDispatch, useSearchState } from '../../context/search';
+import Link from 'next/link';
+import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'next-usequerystate';
+
 import { SortOption, getSelectOptions, useSearchConcepts, getFields as getSearchFields } from '../../hooks/search';
 import SearchFilter from '../../components/search-filter';
 import { useCatalogDesign } from '../../context/catalog-design';
-import { FilterType } from '../../context/search/state';
 import { useImportConcepts } from '../../hooks/import';
-
 import styles from './search-page.module.css';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import ConceptSearchHits from '../../components/concept-search-hits';
-import Link from 'next/link';
+
+export type FilterType = 'published' | 'status' | 'assignedUser' | 'subject' | 'internalFields' | 'label';
 
 interface Props {
   catalogId: string;
@@ -60,16 +60,23 @@ export const SearchPageClient = ({
   FDK_REGISTRATION_BASE_URI,
   changeRequestEnabled,
 }: Props) => {
-  const searchParams = useSearchParams();
-  const pageNumber: number = textToNumber(searchParams.get('page') as string);
-
   const router = useRouter();
-  const searchState = useSearchState();
-  const searchDispatch = useSearchDispatch();
-  const [searchTerm, setSearchTerm] = useState('');
   const [selectedFieldOption, setSelectedFieldOption] = useState('alleFelter' as SearchableField | 'alleFelter');
   const [selectedSortOption, setSelectedSortOption] = useState(SortOption.RELEVANCE);
-  const [currentPage, setCurrentPage] = useState(pageNumber);
+  const [page, setPage] = useQueryState('page', parseAsInteger);
+  const [searchTerm, setSearchTerm] = useQueryState('search');
+  const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString));
+  const [filterPublicationState, setFilterPublicationState] = useQueryState(
+    'filter.pubState',
+    parseAsArrayOf(parseAsString),
+  );
+  const [filterAssignedUser, setFilterAssignedUser] = useQueryState('filter.assignedUser');
+  const [filterInternalFields, setFilterInternalFields] = useQueryState(
+    'filter.label',
+    parseAsJson<Record<string, string[]>>(),
+  );
+  const [filterLabel, setFilterLabel] = useQueryState('filter.label', parseAsArrayOf(parseAsString));
+  const [filterSubject, setFilterSubject] = useQueryState('filter.subject', parseAsArrayOf(parseAsString));
 
   const sortMappings: Record<SortOption, QuerySort | undefined> = {
     [SortOption.RELEVANCE]: undefined,
@@ -112,31 +119,28 @@ export const SearchPageClient = ({
 
   const { status, data, refetch } = useSearchConcepts({
     catalogId,
-    searchTerm,
-    page: currentPage,
+    searchTerm: searchTerm ?? '',
+    page: page ?? 0,
     fields: getSearchFields(selectedFieldOption),
     sort: sortMappings[selectedSortOption],
     filters: {
-      ...(searchState.filters.status?.length &&
-        searchState.filters.status.length > 0 && {
-          status: { value: searchState.filters.status },
-        }),
-      ...(searchState.filters.published?.length === 1 && {
-        published: { value: searchState.filters.published.includes('published') },
+      ...(filterStatus?.length && {
+        status: { value: filterStatus },
       }),
-      ...(searchState.filters.assignedUser && {
-        assignedUser: { value: [searchState.filters.assignedUser.id] },
+      ...(filterPublicationState?.length === 1 && {
+        published: { value: filterPublicationState.includes('published') },
       }),
-      ...(searchState.filters.subject?.length &&
-        searchState.filters.subject.length > 0 && {
-          subject: { value: getSubjectFilterWithChildren(searchState.filters.subject) },
-        }),
-      ...(searchState.filters.label?.length &&
-        searchState.filters.label.length > 0 && {
-          label: { value: searchState.filters.label },
-        }),
-      ...(Object.keys(searchState.filters.internalFields ?? {}).length > 0 && {
-        internalFields: { value: searchState.filters.internalFields },
+      ...(filterAssignedUser?.length && {
+        assignedUser: { value: [filterAssignedUser] },
+      }),
+      ...(filterSubject?.length && {
+        subject: { value: getSubjectFilterWithChildren(filterSubject) },
+      }),
+      ...(filterLabel?.length && {
+        label: { value: filterLabel },
+      }),
+      ...(Object.keys(filterInternalFields ?? {}).length > 0 && {
+        internalFields: { value: filterInternalFields },
       }),
     },
   });
@@ -145,6 +149,11 @@ export const SearchPageClient = ({
   const pageSubtitle = organization?.name ?? catalogId;
   const fieldOptions = getSelectOptions(loc.search.fields);
   const sortOptions = getSelectOptions(loc.search.sortOptions);
+
+  const getUsername = (userId: string) => {
+    const user = usersResult?.users?.find((u) => u.id === userId);
+    return user?.name ?? '';
+  };
 
   const breadcrumbList = catalogId
     ? ([
@@ -156,55 +165,47 @@ export const SearchPageClient = ({
     : [];
 
   const onPageChange = (page: number) => {
-    router.push(`${catalogId}?page=${page - 1}`);
-    setCurrentPage(page - 1);
+    setPage(page - 1);
   };
 
   const removeFilter = (filterName, filterType: FilterType) => {
-    let updatedFilters;
-
-    if (filterType !== 'assignedUser' && filterType !== 'internalFields') {
-      updatedFilters = searchState.filters[filterType]?.filter((name) => name !== filterName);
-    }
-
-    if (filterType === 'internalFields') {
-      updatedFilters = { ...searchState.filters.internalFields };
-      if (updatedFilters[filterName.key] !== undefined) {
-        updatedFilters[filterName.key] = updatedFilters[filterName.key].filter((value) => value !== filterName.value);
-      }
-    }
-
     switch (filterType) {
       case 'published':
-        searchDispatch(action('SET_PUBLICATION_STATE_FILTER', { filters: { published: updatedFilters } }));
+        setFilterPublicationState(filterPublicationState?.filter((name) => name !== filterName) ?? []);
         break;
       case 'status':
-        searchDispatch(action('SET_CONCEPT_STATUS_FILTER', { filters: { status: updatedFilters } }));
+        setFilterStatus(filterStatus?.filter((name) => name !== filterName) ?? []);
         break;
       case 'assignedUser':
-        searchDispatch(action('SET_ASSIGNED_USER_FILTER', { filters: { assignedUser: undefined } }));
+        setFilterAssignedUser('');
         break;
       case 'subject':
-        searchDispatch(action('SET_SUBJECTS_FILTER', { filters: { subject: updatedFilters } }));
+        setFilterSubject(filterSubject?.filter((name) => name !== filterName) ?? []);
         break;
-      case 'internalFields':
-        searchDispatch(action('SET_INTERNAL_FIELDS_FILTER', { filters: { internalFields: updatedFilters } }));
+      case 'internalFields': {
+        const newFilter = filterInternalFields ?? {};
+        if (newFilter[filterName.key] !== undefined) {
+          newFilter[filterName.key] = newFilter[filterName.key].filter((value) => value !== filterName.value);
+        }
+        setFilterInternalFields(newFilter);
         break;
+      }
       case 'label':
-        searchDispatch(action('SET_LABEL_FILTER', { filters: { label: updatedFilters } }));
+        setFilterLabel(filterLabel?.filter((name) => name !== filterName) ?? []);
         break;
       default:
         break;
     }
   };
 
-  const onSearchSubmit = (term = searchTerm) => {
-    setSearchTerm(term);
-    setCurrentPage(0);
+  const onSearchSubmit = (search) => {
+    setSearchTerm(search);
+    setPage(0);
   };
 
   const onFieldSelect = (field: SearchableField) => {
     setSelectedFieldOption(field);
+    setPage(0);
   };
 
   const onSortSelect = async (option: SortOption) => {
@@ -222,29 +223,18 @@ export const SearchPageClient = ({
   };
 
   const onLabelClick = (label: string) => {
-    let currentLabels = searchState.filters['label'] ?? [];
+    let currentLabels = filterLabel ?? [];
     if (!currentLabels.includes(label)) {
       currentLabels = [...currentLabels, label];
     }
-    searchDispatch(
-      action('SET_LABEL_FILTER', {
-        filters: { label: currentLabels },
-      }),
-    );
+    setFilterLabel(currentLabels);
   };
 
   const design = useCatalogDesign();
 
   useEffect(() => {
-    setCurrentPage(0);
-  }, [searchTerm, selectedFieldOption, searchState]);
-
-  useEffect(() => {
-    if (currentPage !== pageNumber) {
-      setCurrentPage(pageNumber);
-    }
     refetch().catch((error) => console.error('refetch() failed: ', error));
-  }, [currentPage, selectedSortOption, refetch, pageNumber]);
+  }, [selectedSortOption, refetch]);
 
   let logo: string | undefined;
   if (design?.hasLogo) {
@@ -257,52 +247,48 @@ export const SearchPageClient = ({
         size='small'
         className={styles.wrap}
       >
-        {searchState.filters.subject &&
-          searchState.filters.subject?.map((filter, index) => (
-            <Chip.Removable
-              key={`subject-${index}`}
-              onClick={() => removeFilter(filter, 'subject')}
-            >
-              {getTranslateText(subjectCodeList.codes.find((c) => c.id === Number(filter))?.name)}
-            </Chip.Removable>
-          ))}
-        {searchState.filters.label &&
-          searchState.filters.label?.map((filter, index) => (
-            <Chip.Removable
-              key={`label-${index}`}
-              onClick={() => removeFilter(filter, 'label')}
-            >
-              {filter}
-            </Chip.Removable>
-          ))}
-        {searchState.filters?.status &&
-          searchState.filters?.status.map((filter, index) => (
-            <Chip.Removable
-              key={`status-${index}`}
-              onClick={() => removeFilter(filter, 'status')}
-            >
-              {capitalizeFirstLetter(getTranslateText(conceptStatuses?.find((s) => s.uri === filter)?.label) as string)}
-            </Chip.Removable>
-          ))}
-        {searchState.filters.assignedUser && (
+        {filterSubject?.map((filter, index) => (
           <Chip.Removable
-            key={`${searchState.filters.assignedUser}`}
-            onClick={() => removeFilter(searchState.filters?.assignedUser?.name, 'assignedUser')}
+            key={`subject-${index}`}
+            onClick={() => removeFilter(filter, 'subject')}
           >
-            {searchState.filters?.assignedUser?.name}
+            {getTranslateText(subjectCodeList.codes.find((c) => c.id === Number(filter))?.name)}
+          </Chip.Removable>
+        ))}
+        {filterLabel?.map((filter, index) => (
+          <Chip.Removable
+            key={`label-${index}`}
+            onClick={() => removeFilter(filter, 'label')}
+          >
+            {filter}
+          </Chip.Removable>
+        ))}
+        {filterStatus?.map((filter, index) => (
+          <Chip.Removable
+            key={`status-${index}`}
+            onClick={() => removeFilter(filter, 'status')}
+          >
+            {capitalizeFirstLetter(getTranslateText(conceptStatuses?.find((s) => s.uri === filter)?.label) as string)}
+          </Chip.Removable>
+        ))}
+        {filterAssignedUser && (
+          <Chip.Removable
+            key={`${filterAssignedUser}`}
+            onClick={() => removeFilter(getUsername(filterAssignedUser), 'assignedUser')}
+          >
+            {getUsername(filterAssignedUser)}
           </Chip.Removable>
         )}
-        {searchState.filters.published &&
-          searchState.filters.published?.map((filter, index) => (
-            <Chip.Removable
-              key={`published-${index}`}
-              onClick={() => removeFilter(filter, 'published')}
-            >
-              {filter === 'published' ? loc.publicationState.published : loc.publicationState.unpublished}
-            </Chip.Removable>
-          ))}
-        {searchState.filters.internalFields &&
-          Object.entries(searchState.filters.internalFields).map(([key, values], index) => {
+        {filterPublicationState?.map((filter, index) => (
+          <Chip.Removable
+            key={`published-${index}`}
+            onClick={() => removeFilter(filter, 'published')}
+          >
+            {filter === 'published' ? loc.publicationState.published : loc.publicationState.unpublished}
+          </Chip.Removable>
+        ))}
+        {filterInternalFields &&
+          Object.entries(filterInternalFields).map(([key, values], index) => {
             return values.map((value, innerIndex) => (
               <Chip.Removable
                 key={`internalFields-${index}-${innerIndex}`}
@@ -384,6 +370,7 @@ export const SearchPageClient = ({
                 ariaLabel={loc.search.search}
                 placeholder={loc.search.search}
                 onSearchSubmit={onSearchSubmit}
+                value={searchTerm ?? ''}
               />
               <FilterChips />
             </div>
