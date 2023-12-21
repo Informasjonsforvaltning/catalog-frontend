@@ -3,7 +3,6 @@ import { localization } from '@catalog-frontend/utils';
 import { Metadata } from 'next';
 import CatalogLayout from '../components/catalog-layout';
 import { Inter } from 'next/font/google';
-import { SearchContextProvider } from '../context/search';
 
 export const metadata: Metadata = {
   title: localization.catalogType.concept,
@@ -18,16 +17,14 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang={localization.getLanguage()}>
       <body>
         <NextAuthProvider>
-          <SearchContextProvider>
-            <ReactQueryClientProvider>
-              <CatalogLayout
-                className={font.className}
-                catalogAdminUrl={catalogAdminUrl}
-              >
-                {children}
-              </CatalogLayout>
-            </ReactQueryClientProvider>
-          </SearchContextProvider>
+          <ReactQueryClientProvider>
+            <CatalogLayout
+              className={font.className}
+              catalogAdminUrl={catalogAdminUrl}
+            >
+              {children}
+            </CatalogLayout>
+          </ReactQueryClientProvider>
         </NextAuthProvider>
       </body>
     </html>

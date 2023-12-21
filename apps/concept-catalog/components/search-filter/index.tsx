@@ -10,14 +10,18 @@ import {
   getTranslateText,
   localization as loc,
 } from '@catalog-frontend/utils';
-import { action, useSearchDispatch, useSearchState } from '../../context/search';
-import { PublishedFilterType } from '../../context/search/state';
 import styles from './search-filter.module.css';
 import { CheckboxGroupFilter } from './checkbox-group-filter';
 import { AccordionItem, AccordionItemProps } from '../accordion-item';
 import { useGetUsers } from '../../hooks/users';
 import { CheckboxTreeFilter } from './checkbox-tree-filter';
+import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'next-usequerystate';
 
+export type PublishedFilterType = 'published' | 'unpublished';
+export type InternalFieldFilterType = {
+  id: string;
+  value: string;
+};
 interface Props {
   internalFields?: InternalField[];
   subjectCodeList?: CodeList;
@@ -26,10 +30,18 @@ interface Props {
 }
 
 const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatuses }: Props) => {
-  const searchDispatch = useSearchDispatch();
-  const searchState = useSearchState();
-  const assignedUserState = searchState.filters.assignedUser;
-  const subjectState = searchState.filters.subject;
+  const [, setPage] = useQueryState('page', parseAsInteger);
+  const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString));
+  const [filterPublicationState, setFilterPublicationState] = useQueryState(
+    'filter.pubState',
+    parseAsArrayOf(parseAsString),
+  );
+  const [filterAssignedUser, setFilterAssignedUser] = useQueryState('filter.assignedUser');
+  const [filterInternalFields, setFilterInternalFields] = useQueryState(
+    'filter.internalFields',
+    parseAsJson<Record<string, string[]>>(),
+  );
+  const [filterSubject, setFilterSubject] = useQueryState('filter.subject', parseAsArrayOf(parseAsString));
 
   const statusItems =
     conceptStatuses?.map((s) => ({
@@ -45,46 +57,38 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
   const assignedUserItems: AssignedUser[] = getUsers?.users;
 
   const handleOnStatusChange = (names: string[]) => {
-    searchDispatch(
-      action('SET_CONCEPT_STATUS_FILTER', {
-        filters: { status: names.map((name) => name) },
-      }),
-    );
+    setFilterStatus(names.map((name) => name));
+    setPage(0);
   };
 
-  const handlePublicationOnChange = (names: string[]) =>
-    searchDispatch(
-      action('SET_PUBLICATION_STATE_FILTER', {
-        filters: { published: names.map((name) => name as PublishedFilterType) },
-      }),
-    );
+  const handlePublicationOnChange = (names: string[]) => {
+    setFilterPublicationState(names.map((name) => name as PublishedFilterType));
+    setPage(0);
+  };
 
   const handleOnAssignedChange = (userId: string) => {
     const assignedUser: AssignedUser | undefined = assignedUserItems.find((item) => item.id === userId);
-    searchDispatch(action('SET_ASSIGNED_USER_FILTER', { filters: { assignedUser } }));
+    setFilterAssignedUser(assignedUser?.id ?? '');
+    setPage(0);
   };
 
   const handleInternalFieldChange = (fieldId: string, value: string[]) => {
-    searchDispatch(
-      action('SET_INTERNAL_FIELDS_FILTER', {
-        filters: {
-          internalFields: {
-            ...searchState.filters.internalFields,
-            ...{
-              [fieldId]: value,
-            },
-          },
-        },
-      }),
-    );
+    setFilterInternalFields({
+      ...filterInternalFields,
+      ...{
+        [fieldId]: value,
+      },
+    });
+    setPage(0);
   };
 
   const handleSubjectOnCheck = (values: string[]) => {
-    searchDispatch(action('SET_SUBJECTS_FILTER', { filters: { subject: values } }));
+    setFilterSubject(values);
+    setPage(0);
   };
 
   const accordionItemContents: AccordionItemProps[] = [
-    ...(subjectCodeList?.codes.length > 0
+    ...(subjectCodeList?.codes?.length
       ? [
           {
             header: loc.subjectArea,
@@ -92,7 +96,7 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
               <CheckboxTreeFilter
                 nodes={convertCodeListToTreeNodes(subjectCodeList?.codes)}
                 onCheck={handleSubjectOnCheck}
-                filters={subjectState}
+                filters={filterSubject ?? []}
               />
             ),
           },
@@ -105,8 +109,8 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
             content: (
               <CheckboxGroupFilter<string>
                 items={statusItems}
-                filterName='status'
                 onChange={handleOnStatusChange}
+                value={filterStatus ?? []}
               />
             ),
           },
@@ -119,10 +123,12 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
             content: (
               <Select
                 options={
-                  assignedUserItems ? [...assignedUserItems.map((item) => ({ label: item.name, value: item.id }))] : []
+                  assignedUserItems
+                    ? [...assignedUserItems.map((item) => ({ label: item.name ?? '', value: item.id ?? '' }))]
+                    : []
                 }
                 onChange={handleOnAssignedChange}
-                value={assignedUserState?.id}
+                value={filterAssignedUser ?? ''}
               />
             ),
           },
@@ -139,13 +145,13 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
           </p>
           <CheckboxGroupFilter<PublishedFilterType>
             items={publicationStateItems}
-            filterName='published'
             onChange={handlePublicationOnChange}
+            value={filterPublicationState ?? []}
           />
         </>
       ),
     },
-    ...internalFields
+    ...(internalFields ?? [])
       .filter((field) => field.enableFilter && field.type === 'boolean')
       .map((field) => ({
         header: getTranslateText(field.label),
@@ -161,8 +167,8 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
                 label: loc.no,
               },
             ]}
-            filterName={`internalFields.${field.id}`}
             onChange={(value) => handleInternalFieldChange(field.id, value)}
+            value={filterInternalFields?.[field.id] ?? []}
           />
         ),
       })),
