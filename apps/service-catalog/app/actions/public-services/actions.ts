@@ -51,11 +51,13 @@ export async function createPublicService(catalogId: string, values: ServiceToBe
   const session = await getServerSession(authOptions);
   await validateSession(session);
   let success = false;
+  let serviceId = undefined;
   try {
     const response = await handleCreatePublicService(newPublicService, catalogId, `${session?.accessToken}`);
     if (response.status !== 201) {
       throw new Error();
     }
+    serviceId = response?.headers?.get('location')?.split('/').pop();
     success = true;
   } catch (error) {
     return;
@@ -63,7 +65,7 @@ export async function createPublicService(catalogId: string, values: ServiceToBe
     if (success) {
       revalidateTag('public-service');
       revalidateTag('public-services');
-      redirect(`/catalogs/${catalogId}/public-services`);
+      redirect(`/catalogs/${catalogId}/public-services/${serviceId}`);
     }
   }
 }
@@ -120,7 +122,7 @@ export async function updatePublicService(catalogId: string, oldPublicService: S
     if (success) {
       revalidateTag('public-service');
       revalidateTag('public-services');
-      redirect(`/catalogs/${catalogId}/public-services`);
+      redirect(`/catalogs/${catalogId}/public-services/${oldPublicService.id}`);
     }
   }
 }

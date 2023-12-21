@@ -24,12 +24,18 @@ export default withAuth(async function middleware(req: NextRequestWithAuth) {
     `/catalogs/${catalogId}/services/new`,
   ];
 
-  // User do not have read permission in the catalog
+  if (catalogId && !validOrganizationNumber(catalogId)) {
+    return NextResponse.rewrite(new URL('/not-found/', req.url));
+  }
+
+  if (serviceId && !validUUID(serviceId)) {
+    return NextResponse.rewrite(new URL('/not-found/', req.url));
+  }
+
   if (accessToken && catalogId && !hasOrganizationReadPermission(accessToken, catalogId)) {
     return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access/`, req.url));
   }
 
-  // User do not have write permission in the catalog
   if (
     accessToken &&
     catalogId &&
@@ -37,10 +43,5 @@ export default withAuth(async function middleware(req: NextRequestWithAuth) {
     writePermissionsRoutes.includes(pathname)
   ) {
     return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access/`, req.url));
-  }
-
-  // CatalogId or serviceId does not have correct format
-  if (catalogId && serviceId && !(validOrganizationNumber(catalogId) && validUUID(serviceId))) {
-    return NextResponse.rewrite(new URL('/not-found/', req.url));
   }
 });

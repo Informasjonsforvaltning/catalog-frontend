@@ -3,6 +3,7 @@ import { DividerLine, InfoCard } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Heading, Label, Paragraph } from '@digdir/design-system-react';
 import styles from './basic-form-info-card-items.module.css';
+import _ from 'lodash';
 
 type Props = {
   service?: Service;
@@ -14,16 +15,23 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
   const contactPoint = service?.contactPoints && service?.contactPoints[0];
   const homepage = service?.homepage;
 
+  // Check if all properties within an object are empty
+  const allPropertiesEmpty = (obj: any): boolean => {
+    return _.every(_.values(obj), _.isEmpty);
+  };
+
   return (
     <>
-      <InfoCard.Item label={`${localization.description}:`}>
-        {getTranslateText(service?.description ?? '', language)}
-      </InfoCard.Item>
+      {getTranslateText(service?.description) && (
+        <InfoCard.Item label={`${localization.description}:`}>
+          {getTranslateText(service?.description ?? '', language)}
+        </InfoCard.Item>
+      )}
 
-      {contactPoint && (
+      {contactPoint && !allPropertiesEmpty(contactPoint) && (
         <InfoCard.Item label={`${localization.serviceCatalog.contactPoint}:`}>
           <div>
-            {contactPoint.category.nb && (
+            {contactPoint?.category && !_.isEmpty(contactPoint.category) && (
               <Heading
                 size='xxsmall'
                 level={4}
@@ -36,29 +44,37 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
             <DividerLine />
 
             {contactPoint.email && (
-              <div className={styles.content}>
-                <Label size='small'>{`${localization.email}:`}</Label>
-                <Paragraph size='small'>{contactPoint.email}</Paragraph>
-              </div>
+              <Paragraph
+                size='small'
+                className={styles.content}
+              >
+                <p className={styles.bold}>{`${localization.email}:`}</p>
+                {contactPoint.email}
+              </Paragraph>
             )}
 
             {contactPoint.telephone && (
-              <div className={styles.content}>
-                <Label size='small'>{`${localization.telephone}:`}</Label>
-                <Paragraph size='small'>{contactPoint.telephone}</Paragraph>
-              </div>
+              <Paragraph
+                size='small'
+                className={styles.content}
+              >
+                <p className={styles.bold}>{`${localization.telephone}:`}</p>
+                {contactPoint.telephone}
+              </Paragraph>
             )}
 
             {contactPoint.contactPage && (
-              <div className={styles.content}>
-                <Label size='small'>{`${localization.contactPage}:`}</Label>
-                <Paragraph size='small'>{contactPoint.contactPage}</Paragraph>
-              </div>
+              <Paragraph
+                size='small'
+                className={styles.content}
+              >
+                <p className={styles.bold}>{`${localization.contactPage}:`}</p>
+                {contactPoint.contactPage}
+              </Paragraph>
             )}
           </div>
         </InfoCard.Item>
       )}
-
       {produces?.length > 0 && (
         <InfoCard.Item label={`${localization.serviceCatalog.produces}:`}>
           {produces.map((produce, index) => (

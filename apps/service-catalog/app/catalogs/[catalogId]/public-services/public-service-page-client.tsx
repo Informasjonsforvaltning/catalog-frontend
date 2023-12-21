@@ -1,13 +1,13 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Button, Heading, Search } from '@digdir/design-system-react';
+import { Heading, Search } from '@digdir/design-system-react';
 import Link from 'next/link';
 import Filter from '../../../../components/filter';
 import { Service, ReferenceDataCode } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { SearchHit, SearchHitContainer, SearchHitsPageLayout } from '@catalog-frontend/ui';
 import styles from './public-service-page.module.css';
-import _ from 'lodash';
+import { AddButton } from '../../../../components/buttons';
 
 interface Props {
   services: Service[];
@@ -46,7 +46,7 @@ const PublicServicePageClient = ({ services, hasWritePermission, catalogId, stat
   useEffect(() => {
     const combinedFilteredServices = filterServices(statusFilters, publicationFilters, searchQuery);
     setFilteredServices(combinedFilteredServices);
-  }, [services, statusFilters, publicationFilters, searchQuery]);
+  }, [statusFilters, publicationFilters, searchQuery]);
 
   const handleStatusFilterChange = (filters: string[]) => {
     setStatusFilters(filters);
@@ -64,12 +64,12 @@ const PublicServicePageClient = ({ services, hasWritePermission, catalogId, stat
     <SearchHitsPageLayout
       buttonRow={
         hasWritePermission && (
-          <Button
+          <AddButton
             as={Link}
             href={`/catalogs/${catalogId}/public-services/new`}
           >
-            {localization.serviceCatalog.form.new}
-          </Button>
+            {localization.serviceCatalog.form.newPublic}
+          </AddButton>
         )
       }
       searchRow={<Heading size='medium'>{localization.serviceCatalog.searchHitsTitle}</Heading>}

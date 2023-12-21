@@ -4,7 +4,6 @@ import { DetailsPageLayout, InfoCard, PageBanner } from '@catalog-frontend/ui';
 import { authOptions, getTranslateText, hasOrganizationWritePermission, localization } from '@catalog-frontend/utils';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getServiceById } from '../../../../actions/services/actions';
-import _ from 'lodash';
 import { Button } from '@digdir/design-system-react';
 import styles from './service-details-page.module.css';
 import { getServerSession } from 'next-auth';
@@ -71,7 +70,7 @@ export default async function ServiceDetailsPage({ params }: Params) {
         loading={false}
         mainColumn={
           <InfoCard>
-            {!_.isEmpty(getTranslateText(service?.description ?? '', language)) && (
+            {service && (
               <BasicServiceFormInfoCardItems
                 service={service}
                 language={language}

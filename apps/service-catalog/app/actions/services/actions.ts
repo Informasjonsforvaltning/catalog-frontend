@@ -12,7 +12,6 @@ import {
 import { Service, ServiceToBeCreated } from '@catalog-frontend/types';
 import { authOptions, removeEmptyValues, validateSession } from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
-import _ from 'lodash';
 import { getServerSession } from 'next-auth';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -52,11 +51,13 @@ export async function createService(catalogId: string, values: ServiceToBeCreate
   const session = await getServerSession(authOptions);
   await validateSession(session);
   let success = false;
+  let serviceId = undefined;
   try {
     const response = await handleCreateService(newService, catalogId, `${session?.accessToken}`);
     if (response.status !== 201) {
       throw new Error();
     }
+    serviceId = response?.headers?.get('location')?.split('/').pop();
     success = true;
   } catch (error) {
     return;
@@ -64,7 +65,7 @@ export async function createService(catalogId: string, values: ServiceToBeCreate
     if (success) {
       revalidateTag('service');
       revalidateTag('services');
-      redirect(`/catalogs/${catalogId}/services`);
+      redirect(`/catalogs/${catalogId}/services/${serviceId}`);
     }
   }
 }
@@ -121,7 +122,7 @@ export async function updateService(catalogId: string, oldService: Service, valu
     if (success) {
       revalidateTag('service');
       revalidateTag('services');
-      redirect(`/catalogs/${catalogId}/services`);
+      redirect(`/catalogs/${catalogId}/services/${oldService.id}`);
     }
   }
 }
