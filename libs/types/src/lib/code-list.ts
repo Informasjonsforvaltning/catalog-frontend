@@ -4,11 +4,15 @@ export interface CodeListsResult {
   codeLists: CodeList[];
 }
 
-export interface CodeList {
-  id?: string;
+export interface CodeList extends CodeListToBeCreated {
+  id: string;
+  catalogId: string;
+}
+
+export interface CodeListToBeCreated {
   name: string;
-  catalogId?: string;
   description: string;
+  catalogId?: string;
   codes?: Code[];
 }
 

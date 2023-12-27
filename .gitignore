@@ -38,6 +38,7 @@ yarn-error.log*
 
 # Next.js
 .next
+.nx
 
 # yarn
 .yarn/*

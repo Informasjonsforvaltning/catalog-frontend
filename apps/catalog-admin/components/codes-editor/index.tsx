@@ -6,7 +6,7 @@ import { TabsAddIcon, TabsRemoveIcon, XMarkIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
 import styles from './codes-editor.module.css';
 import { Button, InfoCard, Select } from '@catalog-frontend/ui';
-import { Textfield, Button as FdsButton, SingleSelectOption } from '@digdir/design-system-react';
+import { Textfield, Button as FdsButton } from '@digdir/design-system-react';
 import { Code, CodeList, EditorType, TreeNode } from '@catalog-frontend/types';
 import {
   convertCodeListToTreeNodes,
@@ -62,21 +62,27 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   };
 
   const updateCodeName = (field: 'nb' | 'nn' | 'en', value: string) => {
-    setSelectedCode((prevSelectedCode) => ({
-      ...prevSelectedCode,
-      name: {
-        ...prevSelectedCode?.name,
-        [field]: value,
-      },
-    }));
+    setSelectedCode(
+      (prevSelectedCode) =>
+        prevSelectedCode && {
+          ...prevSelectedCode,
+          name: {
+            ...prevSelectedCode?.name,
+            [field]: value,
+          },
+        },
+    );
   };
 
   const updateCodeParent = (value: string) => {
-    const valueAsNumber = value !== null ? +value : null;
-    setSelectedCode((prevSelectedCode) => ({
-      ...prevSelectedCode,
-      parentID: valueAsNumber,
-    }));
+    const valueAsNumber = value !== 'noParent' ? +value : null;
+    setSelectedCode(
+      (prevSelectedCode) =>
+        prevSelectedCode && {
+          ...prevSelectedCode,
+          parentID: valueAsNumber,
+        },
+    );
   };
 
   const createNewCode = () => {
@@ -205,9 +211,9 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
     return [...relatedCodes, ...descendants];
   }
 
-  function availableParentCodes(codes: Code[], codeId: number): SingleSelectOption[] {
+  function availableParentCodes(codes: Code[], codeId: number) {
     const relatedCodes = findRelatedCodes(codes, codeId) || [];
-    return codes
+    const filterOptions = codes
       .filter((code: Code) => {
         return (
           code.id !== codeId && // Not itself
@@ -219,7 +225,16 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
         label: String(getTranslateText(code.name)),
         value: code.id.toString(),
       }))
-      .concat({ label: localization.catalogAdmin.noParentCode, value: null });
+      .concat({ label: localization.catalogAdmin.noParentCode, value: 'noParent' });
+
+    return filterOptions.map((option) => (
+      <option
+        key={`parentOption-${option.value}`}
+        value={option.value}
+      >
+        {option.label}
+      </option>
+    ));
   }
 
   useEffect(() => {
@@ -301,16 +316,19 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
               <div className={styles.codeListEditor}>
                 <Select
                   label={localization.catalogAdmin.parentCode}
-                  options={codes ? availableParentCodes(codes, selectedCode?.id) : []}
-                  value={`${selectedCode?.parentID}`}
-                  onChange={updateCodeParent}
-                />
+                  value={selectedCode && selectedCode.parentID !== undefined ? `${selectedCode.parentID}` : 'noParent'}
+                  onChange={(event) => {
+                    updateCodeParent(event.target.value);
+                  }}
+                >
+                  {codes && selectedCode ? availableParentCodes(codes, selectedCode.id) : []}
+                </Select>
               </div>
 
               <div className={styles.buttonRow}>
                 <Button
                   onClick={() => {
-                    updateAndAddCode(selectedCode, currentCodeList);
+                    selectedCode && updateAndAddCode(selectedCode, currentCodeList);
                     setIsEditViewOpen(false);
                   }}
                 >
@@ -319,7 +337,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
                 <Button
                   color='danger'
                   onClick={() => {
-                    removeCode(selectedCode.id, currentCodeList);
+                    selectedCode && removeCode(selectedCode.id, currentCodeList);
                     setIsEditViewOpen(false);
                   }}
                 >

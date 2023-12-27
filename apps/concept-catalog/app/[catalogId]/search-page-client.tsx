@@ -11,6 +11,7 @@ import {
   SearchHitContainer,
   Spinner,
   SearchHitsPageLayout,
+  Select,
 } from '@catalog-frontend/ui';
 import {
   validOrganizationNumber,
@@ -18,7 +19,7 @@ import {
   capitalizeFirstLetter,
   localization as loc,
 } from '@catalog-frontend/utils';
-import { Chip, Select } from '@digdir/design-system-react';
+import { Chip } from '@digdir/design-system-react';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 
 import { useState, useEffect } from 'react';
@@ -147,8 +148,22 @@ export const SearchPageClient = ({
 
   const importConcepts = useImportConcepts(catalogId);
   const pageSubtitle = organization?.name ?? catalogId;
-  const fieldOptions = getSelectOptions(loc.search.fields);
-  const sortOptions = getSelectOptions(loc.search.sortOptions);
+  const fieldOptions = getSelectOptions(loc.search.fields).map((opt) => (
+    <option
+      key={`fieldOption-${opt.value}`}
+      value={opt.value}
+    >
+      {opt.label}
+    </option>
+  ));
+  const sortOptions = getSelectOptions(loc.search.sortOptions).map((opt) => (
+    <option
+      key={`sortOption-${opt.value}`}
+      value={opt.value}
+    >
+      {opt.label}
+    </option>
+  ));
 
   const getUsername = (userId: string) => {
     const user = usersResult?.users?.find((u) => u.id === userId);
@@ -208,8 +223,8 @@ export const SearchPageClient = ({
     setPage(0);
   };
 
-  const onSortSelect = async (option: SortOption) => {
-    setSelectedSortOption(option);
+  const onSortSelect = async (optionValue: SortOption) => {
+    setSelectedSortOption(optionValue);
   };
 
   const onImportUpload = (event) => {
@@ -378,16 +393,17 @@ export const SearchPageClient = ({
             <div className={styles.searchOptions}>
               <Select
                 label={loc.search.searchField}
-                options={fieldOptions}
-                onChange={onFieldSelect}
-                value={selectedFieldOption}
-              />
+                onChange={(event) => onFieldSelect(event.target.value as SearchableField)}
+              >
+                {fieldOptions}
+              </Select>
               <Select
                 label={loc.search.sort}
-                options={sortOptions}
-                onChange={onSortSelect}
+                onChange={(event) => onSortSelect(event?.target.value as SortOption)}
                 value={selectedSortOption}
-              />
+              >
+                {sortOptions}
+              </Select>
             </div>
           </>
         }

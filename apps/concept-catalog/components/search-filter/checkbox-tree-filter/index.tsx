@@ -36,6 +36,19 @@ const getSearchOptions = (nodes?: TreeNode[]) => {
   return options.sort((a: { label: string }, b: { label: any }) => a.label.localeCompare(b.label));
 };
 
+const generateOptionElements = (nodes?: TreeNode[]): JSX.Element[] => {
+  const options = getSearchOptions(nodes);
+
+  return options.map((opt) => (
+    <option
+      value={opt.value}
+      key={`searchOption-${opt.value}`}
+    >
+      {opt.label}
+    </option>
+  ));
+};
+
 export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
   const [checked, setChecked] = React.useState<string[]>([]);
   const [expanded, setExpanded] = React.useState<string[]>([]);
@@ -99,9 +112,10 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
     <div>
       <Select
         value={searchOption}
-        options={getSearchOptions(nodes)}
-        onChange={handleSearchOnChange}
-      />
+        onChange={(event) => handleSearchOnChange(event.target.value)}
+      >
+        {generateOptionElements(nodes)}
+      </Select>
       <div className={classes.pt1}>
         <CheckboxTree
           nodes={
