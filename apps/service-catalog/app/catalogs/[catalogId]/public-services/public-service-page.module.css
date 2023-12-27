@@ -2,11 +2,3 @@
   padding-bottom: 1rem;
   width: 100%;
 }
-
-.search {
-  padding-bottom: 1rem;
-}
-
-.search > div > div > input {
-  border: 1px solid #d5d7d9 !important;
-}

@@ -76,13 +76,12 @@ const PublicServicePageClient = ({ services, hasWritePermission, catalogId, stat
       leftColumn={
         <div>
           <Search
-            className={styles.search}
             error=''
             label={localization.search.search}
             placeholder={localization.search.searchForPublicService}
             size='medium'
-            variant='simple'
-            onKeyUp={(event) => handleSearch(event.target.value)}
+            variant='primary'
+            onSearchClick={(value) => handleSearch(value)}
           />
           <Filter
             onStatusChange={handleStatusFilterChange}
