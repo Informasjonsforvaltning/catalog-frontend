@@ -3,7 +3,7 @@
 import { NativeSelect, Textarea, Textfield } from '@digdir/design-system-react';
 import { Button, FormFieldCard } from '@catalog-frontend/ui';
 import { localization, getTranslateText } from '@catalog-frontend/utils';
-import { Output, ReferenceDataCode, Service } from '@catalog-frontend/types';
+import { Output, ReferenceDataCode, Service, ServiceToBeCreated } from '@catalog-frontend/types';
 import styles from './service-form.module.css';
 import { TrashIcon } from '@navikt/aksel-icons';
 import {
@@ -28,25 +28,35 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
   const router = useRouter();
   const initalValues = serviceTemplate(service);
 
-  const handleProducesIds = (values: any) => {
+  const handleProducesIds = (values: ServiceToBeCreated | Service) => {
     const serviceCopy = { ...values };
     let counter = 0;
 
-    serviceCopy.produces.forEach((p: Output) => {
+    serviceCopy.produces?.forEach((p: Output) => {
       p.identifier = String(counter);
       counter++;
     });
     return serviceCopy;
   };
 
-  const saveService = (values: any) => {
-    const updatedService = handleProducesIds(values);
-    service ? updateService(catalogId, service, updatedService) : createService(catalogId, updatedService);
+  const saveService = (values: Service | ServiceToBeCreated) => {
+    let updatedService = values;
+    if (updatedService.produces) {
+      updatedService = handleProducesIds(values);
+    }
+    service
+      ? updateService(catalogId, service, updatedService as Service)
+      : createService(catalogId, updatedService as ServiceToBeCreated);
   };
 
-  const savePublicService = (values: any) => {
-    const updatedService = handleProducesIds(values);
-    service ? updatePublicService(catalogId, service, updatedService) : createPublicService(catalogId, updatedService);
+  const savePublicService = (values: Service | ServiceToBeCreated) => {
+    let updatedService = values;
+    if (updatedService.produces) {
+      updatedService = handleProducesIds(values);
+    }
+    service
+      ? updatePublicService(catalogId, service, updatedService as Service)
+      : createPublicService(catalogId, updatedService as ServiceToBeCreated);
   };
 
   const handleDeleteService = () => {
