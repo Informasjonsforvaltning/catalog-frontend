@@ -23,6 +23,7 @@ export const nb = {
     dataset: 'Datasettkatalogen',
     admin: 'Administrasjonsgrensesnitt',
     service: 'Tjenestekatalog',
+    publicService: 'Offentlig tjenestekatalog',
   },
   dataVillage: ['Datalandsbyen', 'Lenke til Datalandsbyen'],
   harvestData: ['Høste data', 'Lenke til å høste data'],
@@ -339,6 +340,8 @@ export const nb = {
     contactPoint: 'Kontaktpunkt',
     produces: 'Produserer',
     serviceStatus: 'Tjenestestatus',
+    editService: 'Rediger tjeneste',
+    editPublicService: 'Rediger offentlig tjeneste',
     form: {
       titleLabel: 'Tekst på bokmål',
       titleSubtitle: 'Navnet skal være kortfattet, kunne stå alene og gi mening.',

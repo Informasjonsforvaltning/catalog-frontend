@@ -1,5 +1,5 @@
 import { Organization, ReferenceDataCode, Service } from '@catalog-frontend/types';
-import { PageBanner } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
 import { authOptions, getTranslateText, hasOrganizationWritePermission, localization } from '@catalog-frontend/utils';
 import { getServices } from '../../../actions/services/actions';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
@@ -17,8 +17,16 @@ export default async function ServiceSearchHitsPage({ params }: Params) {
   const statusesResponse = await getAdmsStatuses().then((res) => res.json());
   const statuses: ReferenceDataCode[] = statusesResponse.statuses;
 
+  const breadcrumbList = [
+    {
+      href: `/catalogs/${catalogId}/services`,
+      text: localization.catalogType.service,
+    },
+  ] as BreadcrumbType[];
+
   return (
     <>
+      <Breadcrumbs breadcrumbList={breadcrumbList} />
       <PageBanner
         title={localization.catalogType.service}
         subtitle={getTranslateText(organization.prefLabel).toString()}

@@ -1,5 +1,5 @@
 import { Organization, ReferenceDataCode, Service } from '@catalog-frontend/types';
-import { PageBanner } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
 import { authOptions, getTranslateText, hasOrganizationWritePermission, localization } from '@catalog-frontend/utils';
 import { getPublicServices } from '../../../actions/public-services/actions';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
@@ -17,10 +17,18 @@ export default async function PublicServiceSearchHitsPage({ params }: Params) {
   const statusesResponse = await getAdmsStatuses().then((res) => res.json());
   const statuses: ReferenceDataCode[] = statusesResponse.statuses;
 
+  const breadcrumbList = [
+    {
+      href: `/catalogs/${catalogId}/public-services`,
+      text: localization.catalogType.publicService,
+    },
+  ] as BreadcrumbType[];
+
   return (
     <>
+      <Breadcrumbs breadcrumbList={breadcrumbList} />
       <PageBanner
-        title={localization.catalogType.service}
+        title={localization.catalogType.publicService}
         subtitle={getTranslateText(organization.prefLabel).toString()}
       />
       <PublicServicePageClient

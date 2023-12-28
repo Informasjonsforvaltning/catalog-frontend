@@ -1,7 +1,7 @@
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { BasicServiceForm } from '../../../../../components/basic-service-form';
 import { Heading } from '@digdir/design-system-react';
-import { PageBanner } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
 import { Organization, ReferenceDataCode } from '@catalog-frontend/types';
 import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
@@ -13,10 +13,22 @@ export default async function NewPublicServicePage({ params }: Params) {
   const statusesResponse = await getAdmsStatuses().then((res) => res.json());
   const statuses: ReferenceDataCode[] = statusesResponse.statuses;
 
+  const breadcrumbList = [
+    {
+      href: `/catalogs/${catalogId}/public-services`,
+      text: localization.catalogType.publicService,
+    },
+    {
+      href: `/catalogs/${catalogId}/public-services/new`,
+      text: localization.serviceCatalog.form.newPublic,
+    },
+  ] as BreadcrumbType[];
+
   return (
     <>
+      <Breadcrumbs breadcrumbList={breadcrumbList} />
       <PageBanner
-        title={localization.catalogType.service}
+        title={localization.catalogType.publicService}
         subtitle={getTranslateText(organization?.prefLabel).toString()}
       />
       <div className='container'>
