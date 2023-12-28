@@ -3,9 +3,5 @@
 }
 
 .search {
-  padding-bottom: 1rem;
-}
-
-.search > div > div > input {
-  border: 1px solid #d5d7d9 !important;
+  max-width: 24rem;
 }

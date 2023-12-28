@@ -37,15 +37,16 @@ type AddProps = {
 
 export const AddButton = ({ onClick, children, ...props }: AddProps) => {
   return (
-    <Button
-      className={styles.addButton}
-      icon={<PlusCircleIcon />}
-      size='small'
-      type='button'
-      onClick={onClick}
-      {...props}
-    >
-      {children}
-    </Button>
+    <div>
+      <Button
+        icon={<PlusCircleIcon />}
+        size='small'
+        type='button'
+        onClick={onClick}
+        {...props}
+      >
+        {children}
+      </Button>
+    </div>
   );
 };

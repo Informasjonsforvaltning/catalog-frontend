@@ -1,13 +1,14 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Heading, Search } from '@digdir/design-system-react';
+import { Search } from '@digdir/design-system-react';
 import Link from 'next/link';
 import Filter from '../../../../components/filter';
-import { Service, ReferenceDataCode } from '@catalog-frontend/types';
+import { Service, ReferenceDataCode, FilterType } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { SearchHit, SearchHitContainer, SearchHitsPageLayout } from '@catalog-frontend/ui';
 import styles from './service-page.module.css';
 import { AddButton } from '../../../../components/buttons';
+import FilterChips from '../../../../components/filter-chips';
 
 interface Props {
   services: Service[];
@@ -22,7 +23,7 @@ const ServicePageClient = ({ services, hasWritePermission, catalogId, statuses }
   const [publicationFilters, setPublicationFilters] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const filterServices = (statusFilters: string[], publicationFilters: string[], searchQuery: string) => {
+  const filterServices = () => {
     let filtered = services;
 
     if (statusFilters.length > 0) {
@@ -44,50 +45,60 @@ const ServicePageClient = ({ services, hasWritePermission, catalogId, statuses }
   };
 
   useEffect(() => {
-    const combinedFilteredServices = filterServices(statusFilters, publicationFilters, searchQuery);
-    setFilteredServices(combinedFilteredServices);
+    const filteredServices = filterServices();
+    setFilteredServices(filteredServices);
   }, [statusFilters, publicationFilters, searchQuery]);
 
-  const handleStatusFilterChange = (filters: string[]) => {
-    setStatusFilters(filters);
-  };
-
-  const handlePublicationStateChange = (filters: string[]) => {
-    setPublicationFilters(filters);
-  };
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
+  const removeFilter = (filterName: string, filterType: FilterType) => {
+    switch (filterType) {
+      case 'published':
+        setPublicationFilters(publicationFilters?.filter((name) => name !== filterName) ?? []);
+        break;
+      case 'status':
+        setStatusFilters(statusFilters?.filter((name) => name !== filterName) ?? []);
+        break;
+    }
   };
 
   return (
     <SearchHitsPageLayout
-      buttonRow={
-        hasWritePermission && (
-          <AddButton
-            as={Link}
-            href={`/catalogs/${catalogId}/services/new`}
-          >
-            {localization.serviceCatalog.form.new}
-          </AddButton>
-        )
+      searchRow={
+        <>
+          <div>
+            <Search
+              error=''
+              label={localization.search.search}
+              placeholder={localization.search.searchForService}
+              size='small'
+              variant='primary'
+              onSearchClick={(value) => setSearchQuery(value)}
+              className={styles.search}
+            />
+            <FilterChips
+              statusFilters={statusFilters}
+              publicationFilters={publicationFilters}
+              handleRemoveFilter={(filter: string, filterType: FilterType) => removeFilter(filter, filterType)}
+              statuses={statuses}
+            />
+          </div>
+          {hasWritePermission && (
+            <AddButton
+              as={Link}
+              href={`/catalogs/${catalogId}/services/new`}
+            >
+              {localization.serviceCatalog.form.new}
+            </AddButton>
+          )}
+        </>
       }
-      searchRow={<Heading size='medium'>{localization.serviceCatalog.searchHitsTitle}</Heading>}
       leftColumn={
         <div>
-          <Search
-            className={styles.search}
-            error=''
-            label={localization.search.search}
-            placeholder={localization.search.searchForService}
-            size='medium'
-            variant='simple'
-            onKeyUp={(event) => handleSearch(event.target.value)}
-          />
           <Filter
-            onStatusChange={handleStatusFilterChange}
-            onPublicationStateChange={handlePublicationStateChange}
+            onStatusChange={setStatusFilters}
+            onPublicationStateChange={setPublicationFilters}
             statuses={statuses}
+            statusFilters={statusFilters}
+            publicationState={publicationFilters}
           />
         </div>
       }
