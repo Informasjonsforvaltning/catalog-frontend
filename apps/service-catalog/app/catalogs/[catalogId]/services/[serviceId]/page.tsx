@@ -1,6 +1,6 @@
 import { getOrganization } from '@catalog-frontend/data-access';
 import { Organization, Service } from '@catalog-frontend/types';
-import { DetailsPageLayout, InfoCard, PageBanner } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, DetailsPageLayout, InfoCard, PageBanner } from '@catalog-frontend/ui';
 import { authOptions, getTranslateText, hasOrganizationWritePermission, localization } from '@catalog-frontend/utils';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getServiceById } from '../../../../actions/services/actions';
@@ -26,6 +26,18 @@ export default async function ServiceDetailsPage({ params }: Params) {
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
 
   const language = 'nb';
+
+  const breadcrumbList = [
+    {
+      href: `/catalogs/${catalogId}/services`,
+      text: localization.catalogType.service,
+    },
+    {
+      href: `/catalogs/${catalogId}/services/${serviceId}`,
+      text: getTranslateText(service.title),
+    },
+  ] as BreadcrumbType[];
+
   const RightColumn = () => (
     <div>
       <InfoCard>
@@ -61,6 +73,7 @@ export default async function ServiceDetailsPage({ params }: Params) {
 
   return (
     <>
+      <Breadcrumbs breadcrumbList={breadcrumbList} />
       <PageBanner
         title={localization.catalogType.service}
         subtitle={getTranslateText(organization?.prefLabel).toString()}
