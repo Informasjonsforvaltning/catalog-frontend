@@ -18,6 +18,7 @@ import { useAdminDispatch, useAdminState } from '../../context/admin';
 import { compare } from 'fast-json-patch';
 
 const INDENT_STEP = 15;
+const NO_PARENT = 'noParent';
 
 export interface Props {
   codeList: CodeList;
@@ -75,7 +76,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   };
 
   const updateCodeParent = (value: string) => {
-    const valueAsNumber = value !== 'noParent' ? +value : null;
+    const valueAsNumber = value !== NO_PARENT ? +value : null;
     setSelectedCode(
       (prevSelectedCode) =>
         prevSelectedCode && {
@@ -225,7 +226,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
         label: String(getTranslateText(code.name)),
         value: code.id.toString(),
       }))
-      .concat({ label: localization.catalogAdmin.noParentCode, value: 'noParent' });
+      .concat({ label: localization.catalogAdmin.noParentCode, value: NO_PARENT });
 
     return filterOptions.map((option) => (
       <option
@@ -316,7 +317,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
               <div className={styles.codeListEditor}>
                 <Select
                   label={localization.catalogAdmin.parentCode}
-                  value={selectedCode && selectedCode.parentID !== undefined ? `${selectedCode.parentID}` : 'noParent'}
+                  value={selectedCode && selectedCode.parentID !== undefined ? `${selectedCode.parentID}` : NO_PARENT}
                   onChange={(event) => {
                     updateCodeParent(event.target.value);
                   }}
