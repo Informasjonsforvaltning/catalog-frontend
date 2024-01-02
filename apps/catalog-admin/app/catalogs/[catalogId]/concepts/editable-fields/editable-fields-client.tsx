@@ -49,14 +49,14 @@ export function EditableFieldsClient({ catalogId, organization }: EditableFields
     }
   };
 
-  const codeListsOptions = () => {
-    return (
-      dbCodeLists?.map((codeList: CodeList) => ({
-        value: codeList.id ?? '',
-        label: codeList.name,
-      })) || []
-    );
-  };
+  const codeListsOptions = dbCodeLists?.map((codeList: CodeList) => (
+    <option
+      key={codeList.id}
+      value={codeList.id}
+    >
+      {codeList.name}
+    </option>
+  ));
 
   const breadcrumbList = catalogId
     ? ([
@@ -101,12 +101,13 @@ export function EditableFieldsClient({ catalogId, organization }: EditableFields
 
                 <Select
                   label={localization.catalogAdmin.chooseCodeList}
-                  options={codeListsOptions()}
-                  value={dbEditableFields?.domainCodeListId}
-                  onChange={(value) => {
-                    setUpdatedCodeListId(value);
+                  value={updatedCodeListId || dbEditableFields?.domainCodeListId}
+                  onChange={(event) => {
+                    setUpdatedCodeListId(event.target.value);
                   }}
-                />
+                >
+                  {codeListsOptions}
+                </Select>
               </div>
 
               <div className='accordionField'>

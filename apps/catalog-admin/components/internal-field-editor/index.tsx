@@ -5,7 +5,7 @@ import cn from 'classnames';
 import styles from './internal-field.module.css';
 import { Button, Select } from '@catalog-frontend/ui';
 import { Textfield, Checkbox, HelpText } from '@digdir/design-system-react';
-import { CodeList, FieldType, InternalField, InternalFieldTemplate, SelectOption } from '@catalog-frontend/types';
+import { CodeList, FieldType, InternalField, InternalFieldTemplate } from '@catalog-frontend/types';
 import { getTranslateText, localization, textRegexWithNumbers } from '@catalog-frontend/utils';
 import { useAdminDispatch } from '../../context/admin';
 import { useGetAllCodeLists } from '../../hooks/code-lists';
@@ -17,12 +17,12 @@ import {
   useUpdateInternalField,
 } from '../../hooks/internal-fields';
 
-const fieldTypeOptions: { [key: string]: SelectOption } = {
-  shortText: { label: 'Kort tekst', value: 'text_short' },
-  longText: { label: 'Lang tekst', value: 'text_long' },
-  boolean: { label: 'Boolsk verdi', value: 'boolean' },
-  codelist: { label: 'Kodeliste', value: 'code_list' },
-};
+const fieldTypeOptions = [
+  { label: 'Kort tekst', value: 'text_short' },
+  { label: 'Lang tekst', value: 'text_long' },
+  { label: 'Boolsk verdi', value: 'boolean' },
+  { label: 'Kodeliste', value: 'code_list' },
+];
 
 export interface Props {
   field?: InternalField;
@@ -103,14 +103,14 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
     return textRegexWithNumbers.test(label);
   };
 
-  const codeListsOptions = () => {
-    return (
-      dbCodeLists?.map((codeList: CodeList) => ({
-        value: codeList.id || '',
-        label: codeList.name,
-      })) || []
-    );
-  };
+  const codeListsOptions = dbCodeLists?.map((codeList: CodeList, index) => (
+    <option
+      key={`codelist-option-${index}`}
+      value={codeList.id}
+    >
+      {codeList.name}
+    </option>
+  ));
 
   const updateFieldsListState = (
     fieldId: string,
@@ -179,17 +179,25 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
       <div className='accordionField'>
         <Select
           label={localization.catalogAdmin.fieldTypeDescription}
-          options={Object.values(fieldTypeOptions)}
           value={(updatedFieldsList.find((f) => f.id === field?.id) || field)?.type || newField?.type}
-          onChange={(value) => {
+          onChange={(event) => {
             field
-              ? updateFieldsListState(field?.id, undefined, value as FieldType, undefined)
+              ? updateFieldsListState(field?.id, undefined, event.target.value as FieldType, undefined)
               : setNewField((prevField) => ({
                   ...prevField,
-                  type: value as FieldType,
+                  type: event.target.value as FieldType,
                 }));
           }}
-        />
+        >
+          {fieldTypeOptions.map((opt) => (
+            <option
+              key={`internal-field-type-${opt.value}`}
+              value={opt.value}
+            >
+              {opt.label}
+            </option>
+          ))}
+        </Select>
       </div>
 
       {((updatedFieldsList.find((f) => f.id === field?.id) || field)?.type === 'code_list' ||
@@ -197,19 +205,20 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
         <div className='accordionField'>
           <Select
             label={localization.catalogAdmin.chooseCodeList}
-            options={codeListsOptions()}
             value={(updatedFieldsList.find((f) => f.id === field?.id) || field)?.codeListId || newField?.codeListId}
             onChange={(value) => {
               if (field) {
-                updateFieldsListState(field?.id, undefined, undefined, value);
+                updateFieldsListState(field?.id, undefined, undefined, value.target.value);
               } else {
                 setNewField((prevField) => ({
                   ...prevField,
-                  codeListId: value,
+                  codeListId: value.target.value,
                 }));
               }
             }}
-          />
+          >
+            {codeListsOptions}
+          </Select>
         </div>
       )}
 

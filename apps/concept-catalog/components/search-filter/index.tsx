@@ -122,14 +122,20 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
             header: loc.assigned,
             content: (
               <Select
-                options={
-                  assignedUserItems
-                    ? [...assignedUserItems.map((item) => ({ label: item.name ?? '', value: item.id ?? '' }))]
-                    : []
-                }
-                onChange={handleOnAssignedChange}
+                onChange={(event) => handleOnAssignedChange(event.target.value)}
                 value={filterAssignedUser ?? ''}
-              />
+              >
+                {assignedUserItems
+                  ? assignedUserItems.map((item) => (
+                      <option
+                        key={item.id}
+                        value={item.id}
+                      >
+                        {item.name}
+                      </option>
+                    ))
+                  : []}
+              </Select>
             ),
           },
         ]
