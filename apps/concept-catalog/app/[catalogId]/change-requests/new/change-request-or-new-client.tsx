@@ -4,7 +4,7 @@ import { Concept, ChangeRequestUpdateBody, JsonPatchOperation, Organization } fr
 import jsonpatch from 'fast-json-patch';
 import { useCreateChangeRequest } from '../../../../hooks/change-requests';
 import ChangeRequestForm from '../../../../components/change-request-form/change-request-form';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 interface Props {
   organization: Organization;
@@ -15,10 +15,13 @@ interface Props {
 const ChangeRequestOrNewClient: FC<Props> = ({ organization, changeRequestAsConcept, originalConcept }) => {
   const catalogId = organization.organizationId;
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const changeRequestMutateHook = useCreateChangeRequest({
     catalogId: catalogId,
   });
-  const submitHandler = (values: Concept) => {
+  const submitHandler = async (values: Concept) => {
+    setIsSubmitting(true);
     const anbefaltTerm =
       originalConcept.anbefaltTerm?.navn.nb ||
       originalConcept.anbefaltTerm?.navn.nn ||
@@ -31,7 +34,11 @@ const ChangeRequestOrNewClient: FC<Props> = ({ organization, changeRequestAsConc
       operations: jsonpatch.compare(originalConcept, values) as JsonPatchOperation[],
       title: anbefaltTerm || '',
     };
-    changeRequestMutateHook.mutate(changeRequestFromConcept);
+    changeRequestMutateHook.mutate(changeRequestFromConcept, {
+      onSettled: () => {
+        setIsSubmitting(false);
+      },
+    });
   };
 
   return (
@@ -39,6 +46,7 @@ const ChangeRequestOrNewClient: FC<Props> = ({ organization, changeRequestAsConc
       changeRequestAsConcept={changeRequestAsConcept}
       readOnly={false}
       submitHandler={submitHandler}
+      isSubmitting={isSubmitting}
     />
   );
 };
