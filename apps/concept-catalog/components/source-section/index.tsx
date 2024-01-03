@@ -1,7 +1,7 @@
 'use client';
 
 import { FC } from 'react';
-import styles from './source-section.module.css';
+import style from './source-section.module.css';
 import { localization as loc } from '@catalog-frontend/utils';
 import { Definisjon } from '@catalog-frontend/types';
 import { FieldArray } from 'formik';
@@ -17,41 +17,45 @@ interface Props {
 }
 
 export const SourceSection: FC<Props> = ({ fieldName, definisjon, readOnly }) => {
+  const forholdTilKilde = definisjon?.kildebeskrivelse?.forholdTilKilde;
+
   return (
-    <div className={styles.container}>
+    <div className={style.container}>
       <RelationToSource
         readOnly={readOnly}
         fieldName={`${fieldName}.forholdTilKilde`}
       />
-      <FieldArray name={`${fieldName}.kilde`}>
-        {(arrayHelpers) => (
-          <>
-            <div className={styles.listContainer}>
-              {definisjon?.kildebeskrivelse?.kilde?.map((_, index) => (
-                <SourceForDefinitionField
-                  key={`${index}`}
-                  sourceTitleFieldName={`${fieldName}.kilde[${index}].tekst`}
-                  sourceUriFieldName={`${fieldName}.kilde[${index}].uri`}
-                  deleteClickHandler={() => arrayHelpers.remove(index)}
-                  readOnly={readOnly}
-                />
-              ))}
-            </div>
-            <div>
-              {!readOnly && (
-                <Button
-                  icon={<PlusCircleIcon />}
-                  color='second'
-                  variant='tertiary'
-                  onClick={() => arrayHelpers.push({ uri: '', tekst: '' })}
-                >
-                  {loc.formatString(loc.button.addWithFormat, { text: loc.concept.source.toLowerCase() })}
-                </Button>
-              )}
-            </div>
-          </>
-        )}
-      </FieldArray>
+      {forholdTilKilde && forholdTilKilde !== 'egendefinert' && (
+        <FieldArray name={`${fieldName}.kilde`}>
+          {(arrayHelpers) => (
+            <>
+              <div className={style.listContainer}>
+                {definisjon?.kildebeskrivelse?.kilde?.map((_, index) => (
+                  <SourceForDefinitionField
+                    key={`${index}`}
+                    sourceTitleFieldName={`${fieldName}.kilde[${index}].tekst`}
+                    sourceUriFieldName={`${fieldName}.kilde[${index}].uri`}
+                    deleteClickHandler={() => arrayHelpers.remove(index)}
+                    readOnly={readOnly}
+                  />
+                ))}
+              </div>
+              <div>
+                {!readOnly && (
+                  <Button
+                    icon={<PlusCircleIcon />}
+                    color='second'
+                    variant='tertiary'
+                    onClick={() => arrayHelpers.push({ uri: '', tekst: '' })}
+                  >
+                    {loc.formatString(loc.button.addWithFormat, { text: loc.concept.source.toLowerCase() })}
+                  </Button>
+                )}
+              </div>
+            </>
+          )}
+        </FieldArray>
+      )}
     </div>
   );
 };
