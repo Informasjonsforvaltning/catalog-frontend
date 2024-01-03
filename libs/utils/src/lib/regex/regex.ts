@@ -14,3 +14,5 @@ export const emailRegex = /^(?:[\w.-]+@[\w-]+\.[\w-]{2,4})?$/;
 
 /* Must be a valid telephone number, optionally starting with + */
 export const telephoneNumberRegex = /^(?:[+\d\s]*)$/;
+
+export const urlRegex = /^(https?:\/\/)?(www\.)?([a-zA-Z0-9-]+\.[a-zA-Z]{2,})(\/\S*)?$/;

@@ -16,13 +16,14 @@ import { createService, deleteService, updateService } from '../../app/actions/s
 import { Field, FieldArray, Form, Formik } from 'formik';
 import { AddButton } from '../buttons';
 import { serviceTemplate, emptyProduces } from './service-template';
+import { validationSchema } from './validation-schema';
 
-type ServiceFormProps = {
+interface ServiceFormProps {
   catalogId: string;
   service?: Service;
   type: 'public-services' | 'services';
   statuses: ReferenceDataCode[];
-};
+}
 
 export const BasicServiceForm = ({ catalogId, service, type, statuses }: ServiceFormProps) => {
   const router = useRouter();
@@ -85,8 +86,9 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
         <Formik
           onSubmit={(values) => handleSubmit(values)}
           initialValues={initalValues}
+          validationSchema={validationSchema}
         >
-          {({ values }) => (
+          {({ errors, values }) => (
             <Form>
               <div className={styles.formCard}>
                 <FormFieldCard
@@ -95,9 +97,10 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                 >
                   <Field
                     as={Textfield}
-                    label={<p>{localization.serviceCatalog.form.titleLabel}</p>}
+                    label={localization.serviceCatalog.form.titleLabel}
                     type='text'
                     name={'title.nb'}
+                    error={errors.title?.nb}
                   />
                 </FormFieldCard>
               </div>
@@ -129,12 +132,18 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                               label={localization.title}
                               as={Textfield}
                               className={styles.pb2}
+                              error={
+                                errors?.produces &&
+                                errors?.produces[index] &&
+                                (errors?.produces as any)[index].title?.nb
+                              }
                             />
                             <Field
                               name={`produces[${index}].description.nb`}
                               label={localization.description}
                               as={Textfield}
                               className={styles.pb2}
+                              error={(errors?.produces as any)?.[index]?.description?.nb}
                             />
 
                             <Button
@@ -163,6 +172,7 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                     as={Textfield}
                     className={styles.pb2}
                     type='text'
+                    error={errors.contactPoints && (errors.contactPoints as any)[0].category?.nb}
                   />
                   <Field
                     name={'contactPoints[0].email'}
@@ -170,6 +180,7 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                     as={Textfield}
                     className={styles.pb2}
                     type='email'
+                    error={errors.contactPoints && (errors.contactPoints as any)[0].email}
                   />
                   <Field
                     name={'contactPoints[0].telephone'}
@@ -177,6 +188,7 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                     as={Textfield}
                     className={styles.pb2}
                     type='tel'
+                    error={errors.contactPoints && (errors.contactPoints as any)[0].telephone}
                   />
                   <Field
                     name={'contactPoints[0].contactPage'}
@@ -184,6 +196,7 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                     as={Textfield}
                     className={styles.pb2}
                     type='text'
+                    error={errors.contactPoints && (errors.contactPoints as any)[0].contactPage}
                   />
                 </div>
               </FormFieldCard>
@@ -214,6 +227,7 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                   as={Textfield}
                   className={styles.pb2}
                   type='text'
+                  error={errors.homepage}
                 />
               </FormFieldCard>
 

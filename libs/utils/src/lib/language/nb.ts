@@ -330,6 +330,9 @@ export const nb = {
 
   validation: {
     invalidValue: 'Ugyldig verdi',
+    invalidEmail: 'Ugyldig epostadresse',
+    invalidUrl: 'Ugyldig nettaddresse',
+    invalidTlf: 'Ugyldig telefonnummer',
   },
 
   serviceCatalog: {
@@ -342,6 +345,10 @@ export const nb = {
     serviceStatus: 'Tjenestestatus',
     editService: 'Rediger tjeneste',
     editPublicService: 'Rediger offentlig tjeneste',
+    validation: {
+      title: 'Tjenesten må ha et navn',
+      titleProduce: 'Navn er påkrev for hver produserer',
+    },
     form: {
       titleLabel: 'Tekst på bokmål',
       titleSubtitle: 'Navnet skal være kortfattet, kunne stå alene og gi mening.',

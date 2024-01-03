@@ -48,7 +48,7 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
                 size='small'
                 className={styles.content}
               >
-                <p className={styles.bold}>{`${localization.email}:`}</p>
+                <span className={styles.bold}>{`${localization.email}:`}</span>
                 {contactPoint.email}
               </Paragraph>
             )}
@@ -58,7 +58,7 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
                 size='small'
                 className={styles.content}
               >
-                <p className={styles.bold}>{`${localization.telephone}:`}</p>
+                <span className={styles.bold}>{`${localization.telephone}:`}</span>
                 {contactPoint.telephone}
               </Paragraph>
             )}
@@ -68,7 +68,7 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
                 size='small'
                 className={styles.content}
               >
-                <p className={styles.bold}>{`${localization.contactPage}:`}</p>
+                <span className={styles.bold}>{`${localization.contactPage}:`}</span>
                 {contactPoint.contactPage}
               </Paragraph>
             )}
