@@ -19,7 +19,10 @@ interface Props {
 export const SourceSection: FC<Props> = ({ fieldName, definisjon, readOnly }) => {
   return (
     <div className={styles.container}>
-      <RelationToSource fieldName={`${fieldName}.forholdTilKilde`} />
+      <RelationToSource
+        readOnly={readOnly}
+        fieldName={`${fieldName}.forholdTilKilde`}
+      />
       <FieldArray name={`${fieldName}.kilde`}>
         {(arrayHelpers) => (
           <>
