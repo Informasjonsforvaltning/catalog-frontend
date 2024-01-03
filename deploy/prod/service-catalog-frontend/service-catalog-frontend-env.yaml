@@ -80,3 +80,18 @@ spec:
                 secretKeyRef:
                   name: commonurl-prod
                   key: SERVICE_CATALOG_BASE_URI
+            - name: ADMIN_GUI_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-prod
+                  key: ADMIN_GUI_BASE_URI
+            - name: FDK_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-prod
+                  key: FDK_BASE_URI
+            - name: FDK_COMMUNITY_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-prod
+                  key: FDK_COMMUNITY_BASE_URI

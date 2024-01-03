@@ -18,9 +18,23 @@ interface LayoutProps {
   fontColor?: string;
   backgroundColor?: string;
   catalogAdminUrl?: string;
+  fdkRegistrationBaseUrl?: string;
+  adminGuiBaseUrl?: string;
+  fdkCommunityBaseUrl?: string;
+  fdkBaseUrl?: string;
 }
 
-export const Layout = ({ children, className, fontColor, backgroundColor, catalogAdminUrl }: LayoutProps) => {
+export const Layout = ({
+  children,
+  className,
+  fontColor,
+  backgroundColor,
+  catalogAdminUrl,
+  fdkRegistrationBaseUrl,
+  adminGuiBaseUrl,
+  fdkCommunityBaseUrl,
+  fdkBaseUrl,
+}: LayoutProps) => {
   return (
     <div className={cn(style.layout, className)}>
       <RouteGuard>
@@ -28,6 +42,10 @@ export const Layout = ({ children, className, fontColor, backgroundColor, catalo
           fontColor={fontColor}
           backgroundColor={backgroundColor}
           catalogAdminUrl={catalogAdminUrl}
+          fdkRegistrationBaseUrl={fdkRegistrationBaseUrl}
+          adminGuiBaseUrl={adminGuiBaseUrl}
+          fdkCommunityBaseUrl={fdkCommunityBaseUrl}
+          fdkBaseUrl={fdkBaseUrl}
         />
         <main className={style.main}>
           <ErrorBoundary>{children}</ErrorBoundary>

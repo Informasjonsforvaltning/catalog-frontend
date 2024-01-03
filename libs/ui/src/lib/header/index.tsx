@@ -13,31 +13,51 @@ import styles from './header.module.css';
 import { LeaveIcon } from '@navikt/aksel-icons';
 
 export interface HeaderProps {
-  /**
-   * Url on logo
-   * @type {string}
-   */
   homeUrl?: string;
-  /**
-   * Use demo logo
-   * @type {boolean}
-   * @default {false}
-   */
-  useDemoLogo?: boolean;
-  /**
-   * font color
-   * @type {string}
-   */
-  fontColor?: string;
-  /**
-   * background color
-   * @type {string}
-   */
-  backgroundColor?: string;
+  adminGuiBaseUrl?: string;
   catalogAdminUrl?: string;
+  fdkBaseUrl?: string;
+  fdkCommunityBaseUrl?: string;
+  fdkRegistrationBaseUrl?: string;
+  useDemoLogo?: boolean;
+  fontColor?: string;
+  backgroundColor?: string;
 }
 
-const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo, fontColor, backgroundColor, catalogAdminUrl }) => {
+const Header: FC<HeaderProps> = ({
+  homeUrl,
+  adminGuiBaseUrl,
+  catalogAdminUrl,
+  fdkBaseUrl,
+  fdkCommunityBaseUrl,
+  fdkRegistrationBaseUrl,
+  useDemoLogo,
+  fontColor,
+  backgroundColor,
+}) => {
+  const urls = [
+    {
+      name: localization.header.registerData,
+      url: fdkRegistrationBaseUrl,
+      external: false,
+    },
+    {
+      name: localization.header.harvestData,
+      url: adminGuiBaseUrl,
+      external: false,
+    },
+    {
+      name: localization.header.dataCommunity,
+      url: fdkCommunityBaseUrl,
+      external: true,
+    },
+    {
+      name: localization.header.nationalDataCatalog,
+      url: fdkBaseUrl,
+      external: true,
+    },
+  ];
+
   const [isDropdownMenuOpen, setIsDropdownMenuOpen] = useState(false);
 
   const openDropdownMenu = () => setIsDropdownMenuOpen(true);
@@ -68,6 +88,19 @@ const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo, fontColor, backgroundCo
         >
           {useDemoLogo ? <FDKLogoDemo /> : <FDKLogo />}
         </a>
+        <ul className={styles.urlList}>
+          {urls.map((urlObject) => (
+            <li key={urlObject.name}>
+              <a
+                href={urlObject.url}
+                target={urlObject.external ? '_blank' : ''}
+                rel='noreferrer'
+              >
+                {urlObject.name}
+              </a>
+            </li>
+          ))}
+        </ul>
         {userDisplayName && (
           <DropdownMenu
             className={styles.dropdownMenu}
@@ -92,11 +125,9 @@ const Header: FC<HeaderProps> = ({ homeUrl, useDemoLogo, fontColor, backgroundCo
               <Menu>
                 <ul className={styles.menu}>
                   {hasOrganizationAdminPermission(accessToken, String(catalogId)) && (
-                    <>
-                      <li className={styles.catalogAdminHeaderLink}>
-                        <a href={catalogAdminUrl}>{localization.manageCatalogs}</a>
-                      </li>
-                    </>
+                    <li className={styles.catalogAdminHeaderLink}>
+                      <a href={catalogAdminUrl}>{localization.manageCatalogs}</a>
+                    </li>
                   )}
                   <button
                     onClick={handleLogout}

@@ -82,3 +82,18 @@ spec:
                   key: FDK_REFERENCE_DATA_BASE_URI
             - name: CHANGE_REQUEST_FEATURE_TOGGLE
               value: 'true'
+            - name: ADMIN_GUI_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: ADMIN_GUI_BASE_URI
+            - name: FDK_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: FDK_BASE_URI
+            - name: FDK_COMMUNITY_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: FDK_COMMUNITY_BASE_URI

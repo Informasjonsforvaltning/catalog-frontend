@@ -20,8 +20,12 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           <AdminContextProvider>
             <ReactQueryClientProvider>
               <Layout
-                catalogAdminUrl={process.env.CATALOG_ADMIN_BASE_URI}
                 className={font.className}
+                catalogAdminUrl={process.env.CATALOG_ADMIN_BASE_URI}
+                fdkRegistrationBaseUrl={process.env.FDK_REGISTRATION_BASE_URI}
+                adminGuiBaseUrl={process.env.ADMIN_GUI_BASE_URI}
+                fdkCommunityBaseUrl={process.env.FDK_COMMUNITY_BASE_URI}
+                fdkBaseUrl={process.env.FDK_BASE_URI}
               >
                 {children}
               </Layout>
