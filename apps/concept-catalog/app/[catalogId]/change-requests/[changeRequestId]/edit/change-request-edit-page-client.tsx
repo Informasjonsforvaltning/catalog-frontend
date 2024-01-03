@@ -12,7 +12,7 @@ import { useUpdateChangeRequest } from '../../../../../hooks/change-requests';
 import { useRouter } from 'next/navigation';
 
 import ChangeRequestForm from '../../../../../components/change-request-form/change-request-form';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 interface Props {
   organization: Organization;
@@ -29,6 +29,8 @@ const ChangeRequestEditPageClient: FC<Props> = ({
 }) => {
   const router = useRouter();
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const emptyConcept: Concept = originalConcept || {
     id: null,
     ansvarligVirksomhet: { id: organization.organizationId },
@@ -40,6 +42,7 @@ const ChangeRequestEditPageClient: FC<Props> = ({
     changeRequestId: changeRequest.id,
   });
   const submitHandler = (values: Concept) => {
+    setIsSubmitting(true);
     const changeRequestTitle =
       (originalConcept &&
         (originalConcept.anbefaltTerm?.navn?.nb ||
@@ -59,6 +62,9 @@ const ChangeRequestEditPageClient: FC<Props> = ({
       onSuccess: () => {
         router.refresh();
       },
+      onSettled: () => {
+        setIsSubmitting(false);
+      },
     });
   };
 
@@ -66,6 +72,7 @@ const ChangeRequestEditPageClient: FC<Props> = ({
     changeRequestAsConcept,
     originalConcept,
     readOnly: false,
+    isSubmitting,
     submitHandler,
   };
 

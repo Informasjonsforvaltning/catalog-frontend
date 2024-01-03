@@ -3,7 +3,7 @@
 import { Button, FormFieldCard } from '@catalog-frontend/ui';
 import { localization as loc, removeEmptyValues } from '@catalog-frontend/utils';
 
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { Concept, ISOLanguage } from '@catalog-frontend/types';
 import { Field, Form, Formik } from 'formik';
 
@@ -17,21 +17,21 @@ interface Props {
   changeRequestAsConcept: Concept;
   originalConcept?: Concept;
   readOnly: boolean;
+  isSubmitting?: boolean;
   submitHandler?: (values: Concept) => void;
 }
 
 const NUM_ROWS_TEXT_FIELD = 3;
 const NUM_COLS_TEXT_FIELD = 90;
 
-export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, originalConcept, readOnly, submitHandler }) => {
+export const ChangeRequestForm: FC<Props> = ({
+  changeRequestAsConcept,
+  originalConcept,
+  readOnly,
+  submitHandler,
+  isSubmitting,
+}) => {
   const selectedLanguages: ISOLanguage[] = ['nb', 'nn', 'en'];
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = (values: Concept) => {
-    setIsSubmitting(true);
-    submitHandler && submitHandler(values);
-    setIsSubmitting(false);
-  };
 
   const checkForChanges = (values: any, original: any): { color: 'second' | undefined; changed: boolean } => {
     if (!originalConcept) {
@@ -60,7 +60,7 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, originalC
       <Formik
         initialValues={changeRequestAsConcept}
         onSubmit={(values) => {
-          handleSubmit(values);
+          submitHandler && submitHandler(values);
         }}
       >
         {({ values }) => (
