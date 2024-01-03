@@ -309,3 +309,5 @@ export interface SkosConcept {
   };
   publisher: Publisher;
 }
+
+export type RelationshipWithSource = 'egendefinert' | 'basertPaaKilde' | 'sitatFraKilde';
