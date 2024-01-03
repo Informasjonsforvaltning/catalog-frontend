@@ -1,12 +1,12 @@
 .header {
-  background: '#2d3741';
+  background: #2d3741;
   border-bottom: 1px solid rgb(230, 230, 230);
   box-shadow: #969ba0 0px 0px 10px -5px;
-  color: '#fff';
+  color: #fff;
   display: flex;
   font-size: 16px;
   justify-content: center;
-  padding: 0.5rem 0;
+  padding: 2rem 0rem;
   height: 74px;
   width: 100%;
   z-index: 1000;
@@ -15,16 +15,9 @@
 .headerContainer {
   align-items: center;
   display: flex;
-  justify-content: space-between;
   overflow-wrap: break-word;
-  padding: 0px 15px;
   width: 100%;
-}
-
-@media (min-width: 768px) {
-  .headerContainer {
-    max-width: 1140px;
-  }
+  margin: 0 auto;
 }
 
 .navigation {
@@ -37,6 +30,7 @@
 
 .logo * {
   height: 45px;
+  margin-left: 0.75rem;
 }
 
 .logoDemo * {
@@ -126,6 +120,7 @@
 .dropdownMenu {
   display: inline-block;
   color: currentColor;
+  margin-right: 0.75rem;
 }
 
 .menuButton {
@@ -179,6 +174,28 @@
   list-style-type: none;
 }
 
+.urlList {
+  display: flex;
+  padding-left: 1rem;
+  padding-right: 2rem;
+  flex: 1 1 auto;
+  justify-content: flex-end;
+}
+
+.urlList > li {
+  font-size: 0.9rem;
+  margin-right: 1rem;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  line-height: 1.3;
+  cursor: pointer;
+  color: #fff;
+}
+
+.urlList > li > a {
+  color: #fff;
+}
+
 @media (max-width: 900px) {
   .logo {
     height: calc(35px + (55 - 35) * ((100vw - 320px) / (900 - 320)));
@@ -194,6 +211,18 @@
   }
   .dropdownMenuItem {
     display: flex;
+  }
+}
+
+@media (min-width: 1200px) {
+  .headerContainer {
+    max-width: 1140px;
+  }
+}
+
+@media (min-width: 1400px) {
+  .headerContainer {
+    max-width: 1320px;
   }
 }
 

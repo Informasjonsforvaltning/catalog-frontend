@@ -4,7 +4,15 @@ import React from 'react';
 import { Layout } from '@catalog-frontend/ui';
 import { useCatalogDesign } from '../../context/catalog-design';
 
-export const CatalogLayout = ({ children, className, catalogAdminUrl }) => {
+export const CatalogLayout = ({
+  children,
+  className,
+  catalogAdminUrl,
+  fdkRegistrationBaseUrl,
+  adminGuiBaseUrl,
+  fdkCommunityBaseUrl,
+  fdkBaseUrl,
+}) => {
   const design = useCatalogDesign();
 
   return (
@@ -13,6 +21,10 @@ export const CatalogLayout = ({ children, className, catalogAdminUrl }) => {
       backgroundColor={design?.backgroundColor}
       className={className}
       catalogAdminUrl={catalogAdminUrl}
+      fdkRegistrationBaseUrl={fdkRegistrationBaseUrl}
+      adminGuiBaseUrl={adminGuiBaseUrl}
+      fdkCommunityBaseUrl={fdkCommunityBaseUrl}
+      fdkBaseUrl={fdkBaseUrl}
     >
       {children}
     </Layout>

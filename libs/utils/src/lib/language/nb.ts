@@ -141,8 +141,8 @@ export const nb = {
   header: {
     registerData: 'Registrere data',
     harvestData: 'Høste data',
-    dataCommunity: 'Datalandsbyen',
-    nationalDataCatalog: 'Felles datakatalog',
+    dataCommunity: 'Gå til Datalandsbyen',
+    nationalDataCatalog: 'Gå til Felles datakatalog',
   },
 
   tag: {
