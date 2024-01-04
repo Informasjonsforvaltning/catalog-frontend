@@ -35,7 +35,7 @@ export const Filter = ({
             >
               {statuses.map((status) => (
                 <Checkbox
-                  key={status.code}
+                  key={`filter-${status.code}`}
                   value={status.uri}
                 >
                   {getTranslateText(status.label)}
