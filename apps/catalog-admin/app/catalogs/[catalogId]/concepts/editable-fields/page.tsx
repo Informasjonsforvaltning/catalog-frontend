@@ -9,14 +9,15 @@ import { getServerSession } from 'next-auth';
 const EditableFields = async ({ params }) => {
   const { catalogId } = params;
   const session = await getServerSession(authOptions);
-  checkAdminPermissions({ session, catalogId, path: '/concepts/editable-fields' });
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
-  return (
-    <EditableFieldsClient
-      organization={organization}
-      catalogId={catalogId}
-    />
-  );
+  if (checkAdminPermissions({ session, catalogId, path: '/concepts/editable-fields' })) {
+    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+    return (
+      <EditableFieldsClient
+        organization={organization}
+        catalogId={catalogId}
+      />
+    );
+  }
 };
 
 export default EditableFields;

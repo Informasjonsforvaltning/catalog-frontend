@@ -9,15 +9,16 @@ import { getServerSession } from 'next-auth';
 export async function InternalFieldsPage({ params }) {
   const { catalogId } = params;
   const session = await getServerSession(authOptions);
-  checkAdminPermissions({ session, catalogId, path: '/concepts/internal-fields' });
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+  if (checkAdminPermissions({ session, catalogId, path: '/concepts/internal-fields' })) {
+    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
-  return (
-    <InternalFieldsPageClient
-      organization={organization}
-      catalogId={catalogId}
-    />
-  );
+    return (
+      <InternalFieldsPageClient
+        organization={organization}
+        catalogId={catalogId}
+      />
+    );
+  }
 }
 
 export default InternalFieldsPage;

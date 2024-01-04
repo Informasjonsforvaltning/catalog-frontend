@@ -9,15 +9,16 @@ import { authOptions } from '@catalog-frontend/utils';
 const DesignPage = async ({ params }) => {
   const { catalogId } = params;
   const session = await getServerSession(authOptions);
-  checkAdminPermissions({ session, catalogId, path: '/general/design' });
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+  if (checkAdminPermissions({ session, catalogId, path: '/general/design' })) {
+    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
-  return (
-    <DesignPageClient
-      organization={organization}
-      catalogId={catalogId}
-    />
-  );
+    return (
+      <DesignPageClient
+        organization={organization}
+        catalogId={catalogId}
+      />
+    );
+  }
 };
 
 export default DesignPage;

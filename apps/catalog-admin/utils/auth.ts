@@ -13,21 +13,25 @@ interface CheckAdminPermissionsProps {
   path?: string;
 }
 
-export const checkAuthenticated = async ({ session, callbackUrl }: CheckAuthenticatedProps) => {
+export const checkAuthenticated = ({ session, callbackUrl }: CheckAuthenticatedProps) => {
   if (!(session?.user && Date.now() < (session?.accessTokenExpiresAt ?? 0) * 1000)) {
-    redirect(`/auth/signin?callbackUrl=${callbackUrl}`);
+    return redirect(`/auth/signin?callbackUrl=${callbackUrl}`);
   }
+
+  return true;
 };
 
-export const checkAdminPermissions = async ({ session, catalogId, path }: CheckAdminPermissionsProps) => {
+export const checkAdminPermissions = ({ session, catalogId, path }: CheckAdminPermissionsProps) => {
   if (!validOrganizationNumber(catalogId)) {
-    redirect(`/not-found`, RedirectType.replace);
+    return redirect(`/not-found`, RedirectType.replace);
   }
 
-  checkAuthenticated({ session, callbackUrl: `/catalogs/${catalogId}${path ?? ''}` });
-
-  const hasAdminPermission = session?.accessToken && hasOrganizationAdminPermission(session.accessToken, catalogId);
-  if (!hasAdminPermission) {
-    redirect(`/catalogs/${catalogId}/no-access`);
+  if (checkAuthenticated({ session, callbackUrl: `/catalogs/${catalogId}${path ?? ''}` })) {
+    const hasAdminPermission = session?.accessToken && hasOrganizationAdminPermission(session.accessToken, catalogId);
+    if (!hasAdminPermission) {
+      return redirect(`/catalogs/${catalogId}/no-access`);
+    }
   }
+
+  return true;
 };

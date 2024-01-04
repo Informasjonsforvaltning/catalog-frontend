@@ -7,19 +7,20 @@ import { getServerSession } from 'next-auth';
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
-  checkAuthenticated({ session, callbackUrl: '/' });
 
-  const resourceRoles = getResourceRoles(`${session?.accessToken}`);
-  const organiztionIdsWithAdminRole = resourceRoles
-    .filter((role) => role.resource === 'organization' && role.role === 'admin')
-    .map((role) => role.resourceId);
+  if (checkAuthenticated({ session, callbackUrl: '/' })) {
+    const resourceRoles = getResourceRoles(`${session?.accessToken}`);
+    const organiztionIdsWithAdminRole = resourceRoles
+      .filter((role) => role.resource === 'organization' && role.role === 'admin')
+      .map((role) => role.resourceId);
 
-  let organizations: Organization[] = [];
-  if (organiztionIdsWithAdminRole.length > 0) {
-    organizations = await getOrganizations(organiztionIdsWithAdminRole).then((res) => res.json());
+    let organizations: Organization[] = [];
+    if (organiztionIdsWithAdminRole.length > 0) {
+      organizations = await getOrganizations(organiztionIdsWithAdminRole).then((res) => res.json());
+    }
+
+    return <HomePageClient organizations={organizations} />;
   }
-
-  return <HomePageClient organizations={organizations} />;
 };
 
 export default Home;
