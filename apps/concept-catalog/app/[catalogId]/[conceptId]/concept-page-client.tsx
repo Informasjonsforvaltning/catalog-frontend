@@ -175,7 +175,7 @@ export const ConceptPageClient = ({
           value='published'
           size='small'
           position='right'
-          readOnly={isPublished}
+          readOnly={isPublished || !hasWritePermission}
           checked={isPublished}
           onChange={handleOnChangePublished}
         >
