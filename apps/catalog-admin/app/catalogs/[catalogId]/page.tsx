@@ -9,15 +9,16 @@ export const CatalogsAdminPage = async ({ params }) => {
   const { catalogId } = params;
 
   const session = await getServerSession(authOptions);
-  checkAdminPermissions({ session, catalogId });
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+  if (checkAdminPermissions({ session, catalogId })) {
+    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
-  return (
-    <AdminPageClient
-      organization={organization}
-      catalogId={catalogId}
-    />
-  );
+    return (
+      <AdminPageClient
+        organization={organization}
+        catalogId={catalogId}
+      />
+    );
+  }
 };
 
 export default CatalogsAdminPage;

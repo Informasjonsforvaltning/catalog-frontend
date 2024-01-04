@@ -8,15 +8,16 @@ import { authOptions } from '@catalog-frontend/utils';
 const ConceptsPage = async ({ params }) => {
   const { catalogId } = params;
   const session = await getServerSession(authOptions);
-  checkAdminPermissions({ session, catalogId, path: '/concepts' });
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+  if (checkAdminPermissions({ session, catalogId, path: '/concepts' })) {
+    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
-  return (
-    <ConceptsPageClient
-      organization={organization}
-      catalogId={catalogId}
-    />
-  );
+    return (
+      <ConceptsPageClient
+        organization={organization}
+        catalogId={catalogId}
+      />
+    );
+  }
 };
 
 export default ConceptsPage;

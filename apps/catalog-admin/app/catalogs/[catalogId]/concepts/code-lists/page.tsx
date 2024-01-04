@@ -9,30 +9,30 @@ const CodeListsPage = async ({ params }) => {
   const { catalogId } = params;
 
   const session = await getServerSession(authOptions);
-  checkAdminPermissions({ session, catalogId, path: '/concepts/code-lists' });
+  if (checkAdminPermissions({ session, catalogId, path: '/concepts/code-lists' })) {
+    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+    const { internal, editable }: Fields = await getFields(catalogId, session.accessToken).then((res) => res.json());
 
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
-  const { internal, editable }: Fields = await getFields(catalogId, session.accessToken).then((res) => res.json());
+    const codeListsInUse: string[] = [];
 
-  const codeListsInUse: string[] = [];
+    internal.forEach((field) => {
+      if (field.codeListId != null) {
+        codeListsInUse.push(field.codeListId);
+      }
+    });
 
-  internal.forEach((field) => {
-    if (field.codeListId != null) {
-      codeListsInUse.push(field.codeListId);
+    if (editable?.domainCodeListId !== null) {
+      codeListsInUse.push(editable.domainCodeListId);
     }
-  });
 
-  if (editable?.domainCodeListId !== null) {
-    codeListsInUse.push(editable.domainCodeListId);
+    return (
+      <CodeListsPageClient
+        organization={organization}
+        catalogId={catalogId}
+        codeListsInUse={codeListsInUse}
+      />
+    );
   }
-
-  return (
-    <CodeListsPageClient
-      organization={organization}
-      catalogId={catalogId}
-      codeListsInUse={codeListsInUse}
-    />
-  );
 };
 
 export default CodeListsPage;

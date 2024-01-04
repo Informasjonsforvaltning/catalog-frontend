@@ -9,15 +9,16 @@ import { authOptions } from '@catalog-frontend/utils';
 export const GeneralPage = async ({ params }) => {
   const { catalogId } = params;
   const session = await getServerSession(authOptions);
-  checkAdminPermissions({ session, catalogId, path: '/general' });
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+  if (checkAdminPermissions({ session, catalogId, path: '/general' })) {
+    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
-  return (
-    <GeneralPageClient
-      organization={organization}
-      catalogId={catalogId}
-    />
-  );
+    return (
+      <GeneralPageClient
+        organization={organization}
+        catalogId={catalogId}
+      />
+    );
+  }
 };
 
 export default GeneralPage;
