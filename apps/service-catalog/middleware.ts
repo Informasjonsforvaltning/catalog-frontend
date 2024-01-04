@@ -25,15 +25,15 @@ export default withAuth(async function middleware(req: NextRequestWithAuth) {
   ];
 
   if (catalogId && !validOrganizationNumber(catalogId)) {
-    return NextResponse.rewrite(new URL('/not-found/', req.url));
+    return NextResponse.rewrite(new URL('/not-found', req.url));
   }
 
   if (serviceId && !validUUID(serviceId)) {
-    return NextResponse.rewrite(new URL('/not-found/', req.url));
+    return NextResponse.rewrite(new URL('/not-found', req.url));
   }
 
   if (accessToken && catalogId && !hasOrganizationReadPermission(accessToken, catalogId)) {
-    return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access/`, req.url));
+    return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access`, req.url));
   }
 
   if (
@@ -42,6 +42,6 @@ export default withAuth(async function middleware(req: NextRequestWithAuth) {
     !hasOrganizationWritePermission(accessToken, catalogId) &&
     writePermissionsRoutes.includes(pathname)
   ) {
-    return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access/`, req.url));
+    return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access`, req.url));
   }
 });

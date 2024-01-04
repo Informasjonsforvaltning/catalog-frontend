@@ -1,75 +1,37 @@
-import { getOrganization } from '@catalog-frontend/data-access';
-import { Organization, Service } from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs, DetailsPageLayout, InfoCard, PageBanner } from '@catalog-frontend/ui';
+import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
+import { Organization, ReferenceDataCode, Service } from '@catalog-frontend/types';
+import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
 import { authOptions, getTranslateText, hasOrganizationWritePermission, localization } from '@catalog-frontend/utils';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getServiceById } from '../../../../actions/services/actions';
-import { Button } from '@digdir/design-system-react';
-import styles from './service-details-page.module.css';
+import _ from 'lodash';
 import { getServerSession } from 'next-auth';
-import Link from 'next/link';
-import { DeleteServiceButton } from '../../../../../components/buttons';
-import PublishSwitch from '../../../../../components/publish-switch';
 import { RedirectType, redirect } from 'next/navigation';
-import BasicServiceFormInfoCardItems from '../../../../../components/basic-form-info-card-items';
+import ServiceDetailsPageClient from './service-details-page-client';
 
-export default async function ServiceDetailsPage({ params }: Params) {
+export default async function PublicServiceDetailsPage({ params }: Params) {
   const { catalogId, serviceId } = params;
 
   const service: Service | null = await getServiceById(catalogId, serviceId);
   if (!service) {
     redirect(`/not-found`, RedirectType.replace);
   }
-
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const session = await getServerSession(authOptions);
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
-
-  const language = 'nb';
+  const statusesResponse = await getAdmsStatuses().then((res) => res.json());
+  const statuses: ReferenceDataCode[] = statusesResponse.statuses;
 
   const breadcrumbList = [
     {
       href: `/catalogs/${catalogId}/services`,
-      text: localization.catalogType.service,
+      text: localization.catalogType.publicService,
     },
     {
       href: `/catalogs/${catalogId}/services/${serviceId}`,
       text: getTranslateText(service.title),
     },
   ] as BreadcrumbType[];
-
-  const RightColumn = () => (
-    <div>
-      <InfoCard>
-        <InfoCard.Item
-          key={`info-data-${localization.id}`}
-          label={localization.id}
-          labelColor='light'
-        >
-          <span>{service.id}</span>
-        </InfoCard.Item>
-
-        <InfoCard.Item
-          key={`info-data-${localization.publicationState.state}`}
-          label={localization.publicationState.state}
-          labelColor='light'
-        >
-          <PublishSwitch
-            catalogId={catalogId}
-            serviceId={serviceId}
-            isPublished={service?.published ?? false}
-            type='services'
-            disabled={!hasWritePermission}
-          />
-          <div className={styles.greyFont}>
-            {service?.published
-              ? localization.publicationState.publishedInFDK
-              : localization.publicationState.unpublished}
-          </div>
-        </InfoCard.Item>
-      </InfoCard>
-    </div>
-  );
 
   return (
     <>
@@ -78,40 +40,13 @@ export default async function ServiceDetailsPage({ params }: Params) {
         title={localization.catalogType.service}
         subtitle={getTranslateText(organization?.prefLabel).toString()}
       />
-      <DetailsPageLayout
-        headingTitle={getTranslateText(service?.title ?? '', language)}
-        loading={false}
-        mainColumn={
-          <InfoCard>
-            {service && (
-              <BasicServiceFormInfoCardItems
-                service={service}
-                language={language}
-              />
-            )}
-          </InfoCard>
-        }
-        rightColumn={<RightColumn />}
-        buttons={
-          hasWritePermission && (
-            <div className={styles.actionButtons}>
-              <Button
-                size='small'
-                as={Link}
-                href={`/catalogs/${catalogId}/services/${serviceId}/edit`}
-              >
-                Rediger
-              </Button>
-
-              <DeleteServiceButton
-                catalogId={catalogId}
-                serviceId={serviceId}
-                type='services'
-              />
-            </div>
-          )
-        }
-      ></DetailsPageLayout>
+      <ServiceDetailsPageClient
+        service={service}
+        catalogId={catalogId}
+        serviceId={serviceId}
+        hasWritePermission={hasWritePermission}
+        statuses={statuses}
+      />
     </>
   );
 }

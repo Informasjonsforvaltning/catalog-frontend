@@ -350,7 +350,6 @@ export const nb = {
       titleProduce: 'Navn er påkrev for hver produserer',
     },
     form: {
-      titleLabel: 'Tekst på bokmål',
       titleSubtitle: 'Navnet skal være kortfattet, kunne stå alene og gi mening.',
       descriptionSubtitle: 'Beskrivelsen skal være kortfattet og formålet med tjenesten bør fremgå.',
       save: 'Lagre tjeneste',
