@@ -3,7 +3,7 @@
 import { NativeSelect, Textarea, Textfield } from '@digdir/design-system-react';
 import { Button, FormFieldCard } from '@catalog-frontend/ui';
 import { localization, getTranslateText } from '@catalog-frontend/utils';
-import { Output, ReferenceDataCode, Service, ServiceToBeCreated } from '@catalog-frontend/types';
+import { ISOLanguage, Output, ReferenceDataCode, Service, ServiceToBeCreated } from '@catalog-frontend/types';
 import styles from './service-form.module.css';
 import { TrashIcon } from '@navikt/aksel-icons';
 import {
@@ -24,6 +24,8 @@ interface ServiceFormProps {
   type: 'public-services' | 'services';
   statuses: ReferenceDataCode[];
 }
+
+const formLanguages: ISOLanguage[] = ['nb', 'nn', 'en'];
 
 export const BasicServiceForm = ({ catalogId, service, type, statuses }: ServiceFormProps) => {
   const router = useRouter();
@@ -104,23 +106,36 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                   title={localization.name}
                   subtitle={localization.serviceCatalog.form.titleSubtitle}
                 >
-                  <Field
-                    as={Textfield}
-                    label={localization.serviceCatalog.form.titleLabel}
-                    type='text'
-                    name={'title.nb'}
-                    error={errors.title?.nb}
-                  />
+                  {formLanguages.map((language) => (
+                    <Field
+                      as={Textfield}
+                      label={localization.formatString(localization.concept.formFieldLabel, {
+                        fieldType: localization.name,
+                        lang: localization.language[language]?.toLowerCase(),
+                      })}
+                      type='text'
+                      name={`title.${language}`}
+                      key={`name-${language}`}
+                      error={errors.title?.nb}
+                    />
+                  ))}
                 </FormFieldCard>
               </div>
               <FormFieldCard
                 title={localization.description}
                 subtitle={localization.serviceCatalog.form.descriptionSubtitle}
               >
-                <Field
-                  name='description.nb'
-                  as={Textarea}
-                />
+                {formLanguages.map((language) => (
+                  <Field
+                    name={`description.${language}`}
+                    as={Textarea}
+                    label={localization.formatString(localization.concept.formFieldLabel, {
+                      fieldType: localization.description,
+                      lang: localization.language[language]?.toLowerCase(),
+                    })}
+                    key={`descrption-${language}`}
+                  />
+                ))}
               </FormFieldCard>
 
               <FormFieldCard
@@ -136,24 +151,38 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                             key={`produces-${index}`}
                             className={styles.fieldArray}
                           >
-                            <Field
-                              name={`produces[${index}].title.nb`}
-                              label={localization.title}
-                              as={Textfield}
-                              className={styles.pb2}
-                              error={
-                                errors?.produces &&
-                                errors?.produces[index] &&
-                                (errors?.produces as any)[index].title?.nb
-                              }
-                            />
-                            <Field
-                              name={`produces[${index}].description.nb`}
-                              label={localization.description}
-                              as={Textfield}
-                              className={styles.pb2}
-                              error={(errors?.produces as any)?.[index]?.description?.nb}
-                            />
+                            {formLanguages.map((language) => (
+                              <div key={`produces-title-${index}-${language}`}>
+                                <Field
+                                  name={`produces[${index}].title.${language}`}
+                                  label={localization.formatString(localization.concept.formFieldLabel, {
+                                    fieldType: localization.name,
+                                    lang: localization.language[language]?.toLowerCase(),
+                                  })}
+                                  as={Textfield}
+                                  className={styles.pb2}
+                                  error={
+                                    errors?.produces &&
+                                    errors?.produces[index] &&
+                                    (errors?.produces as any)[index].title?.nb
+                                  }
+                                />
+                              </div>
+                            ))}
+                            {formLanguages.map((language) => (
+                              <div key={`produces-description-${index}-${language}`}>
+                                <Field
+                                  name={`produces[${index}].description.${language}`}
+                                  label={localization.formatString(localization.concept.formFieldLabel, {
+                                    fieldType: localization.description,
+                                    lang: localization.language[language]?.toLowerCase(),
+                                  })}
+                                  as={Textfield}
+                                  className={styles.pb2}
+                                  error={(errors?.produces as any)?.[index]?.description?.nb}
+                                />
+                              </div>
+                            ))}
 
                             <Button
                               type='button'
@@ -161,6 +190,7 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                               icon={<TrashIcon />}
                               color='danger'
                               onClick={() => arrayHelpers.remove(index)}
+                              key={`produces-button-${index}`}
                             >
                               {localization.button.delete}
                             </Button>
@@ -175,14 +205,20 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
               </FormFieldCard>
               <FormFieldCard title={localization.serviceCatalog.contactPoint}>
                 <div>
-                  <Field
-                    name={'contactPoints[0].category.nb'}
-                    label={localization.category}
-                    as={Textfield}
-                    className={styles.pb2}
-                    type='text'
-                    error={errors.contactPoints && (errors.contactPoints as any)[0].category?.nb}
-                  />
+                  {formLanguages.map((language) => (
+                    <Field
+                      name={`contactPoints[0].category.${language}`}
+                      label={localization.formatString(localization.concept.formFieldLabel, {
+                        fieldType: localization.category,
+                        lang: localization.language[language]?.toLowerCase(),
+                      })}
+                      as={Textfield}
+                      className={styles.pb2}
+                      type='text'
+                      key={`category-${language}`}
+                      error={errors.contactPoints && (errors.contactPoints as any)[0].category?.nb}
+                    />
+                  ))}
                   <Field
                     name={'contactPoints[0].email'}
                     label={localization.email}
@@ -217,7 +253,7 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                   <option value={undefined}>Ingen status</option>
                   {statuses.map((status) => (
                     <option
-                      key={status.code}
+                      key={`status-${status.code}`}
                       value={status.uri}
                     >
                       {getTranslateText(status.label)}

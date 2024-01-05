@@ -1,20 +1,22 @@
 import { ContactPoint, Output, Service, ServiceToBeCreated } from '@catalog-frontend/types';
 
 export const producesTemplate = (produce: Output): Output => {
-  const identifier = produce.identifier || '0';
-  const title = produce.title?.nb || '';
-  const description = produce.description?.nb || '';
+  const identifier = produce.identifier ?? '0';
 
   return {
     identifier,
-    title: { nb: title },
-    description: { nb: description },
+    title: { nb: produce.title?.nb ?? '', nn: produce.title?.nn ?? '', en: produce.title?.en ?? '' },
+    description: {
+      nb: produce.description?.nb ?? '',
+      nn: produce.description?.nn ?? '',
+      en: produce.description?.en ?? '',
+    },
   };
 };
 
 const emptyContactpoint: ContactPoint[] = [
   {
-    category: { nb: '' },
+    category: { nb: '', nn: '', en: '' },
     email: '',
     telephone: '',
     contactPage: '',
@@ -24,20 +26,23 @@ const emptyContactpoint: ContactPoint[] = [
 export const emptyProduces: Output[] = [
   {
     identifier: '0',
-    title: { nb: '' },
-    description: { nb: '' },
+    title: { nb: '', nn: '', en: '' },
+    description: { nb: '', nn: '', en: '' },
   },
 ];
 
 const contactPointTemplate = (contactPoint: ContactPoint): ContactPoint | null => {
   if (contactPoint) {
-    const category = contactPoint.category?.nb || '';
-    const email = contactPoint.email || '';
-    const telephone = contactPoint.telephone || '';
-    const contactPage = contactPoint.contactPage || '';
+    const email = contactPoint.email ?? '';
+    const telephone = contactPoint.telephone ?? '';
+    const contactPage = contactPoint.contactPage ?? '';
 
     return {
-      category: { nb: category },
+      category: {
+        nb: contactPoint.category?.nb ?? '',
+        nn: contactPoint.category?.nn ?? '',
+        en: contactPoint.category?.en ?? '',
+      },
       email,
       telephone,
       contactPage,
@@ -48,9 +53,7 @@ const contactPointTemplate = (contactPoint: ContactPoint): ContactPoint | null =
 };
 
 export const serviceTemplate = (service: Service | undefined): ServiceToBeCreated => {
-  const title = (service && service.title?.nb) || '';
-  const description = (service && service.description?.nb) || '';
-  const homepage = (service && service.homepage) || '';
+  const homepage = (service && service.homepage) ?? '';
   const produces =
     service &&
     service.produces &&
@@ -62,14 +65,20 @@ export const serviceTemplate = (service: Service | undefined): ServiceToBeCreate
           .map((cp) => contactPointTemplate(cp as ContactPoint))
           .filter((cp) => cp !== null) as ContactPoint[])
       : emptyContactpoint;
-
-  const status = (service && service.status) || '';
   return {
-    title: { nb: title },
-    description: { nb: description },
+    title: {
+      nb: (service && service.title?.nb) ?? '',
+      nn: (service && service.title?.nn) ?? '',
+      en: (service && service.title?.en) ?? '',
+    },
+    description: {
+      nb: (service && service.description?.nb) ?? '',
+      nn: (service && service.description?.nn) ?? '',
+      en: (service && service.description?.en) ?? '',
+    },
     produces,
     contactPoints,
     homepage,
-    status,
+    status: (service && service.status) ?? '',
   };
 };

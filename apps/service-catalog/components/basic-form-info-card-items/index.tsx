@@ -78,7 +78,7 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
       {produces?.length > 0 && (
         <InfoCard.Item label={`${localization.serviceCatalog.produces}:`}>
           {produces.map((produce, index) => (
-            <div key={index}>
+            <div key={`produces-details-${index}`}>
               {produce?.title && (
                 <>
                   <Heading
@@ -94,10 +94,13 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
               )}
 
               {produce?.description && (
-                <div className={styles.content}>
-                  <Label size='small'>{`${localization.description}:`}</Label>
-                  <Paragraph size='small'>{getTranslateText(produce?.description)}</Paragraph>
-                </div>
+                <Paragraph
+                  size='small'
+                  className={styles.content}
+                >
+                  <span className={styles.bold}>{`${localization.description}:`}</span>
+                  {getTranslateText(produce?.description)}
+                </Paragraph>
               )}
             </div>
           ))}
