@@ -10,7 +10,7 @@ import {
   handleUpdatePublicService,
 } from '@catalog-frontend/data-access';
 import { Service, ServiceToBeCreated } from '@catalog-frontend/types';
-import { authOptions, validateSession, removeEmptyValues } from '@catalog-frontend/utils';
+import { authOptions, validateSession, removeEmptyValues, localization } from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
 import { getServerSession } from 'next-auth';
 import { revalidateTag } from 'next/cache';
@@ -27,7 +27,7 @@ export async function getPublicServices(catalogId: string) {
     const jsonResponse = await response.json();
     return jsonResponse;
   } catch (error) {
-    return;
+    throw new Error();
   }
 }
 
@@ -42,7 +42,7 @@ export async function getPublicServiceById(catalogId: string, serviceId: string)
     const jsonResponse = await response.json();
     return jsonResponse;
   } catch (error) {
-    return;
+    throw new Error();
   }
 }
 
@@ -60,7 +60,7 @@ export async function createPublicService(catalogId: string, values: ServiceToBe
     serviceId = response?.headers?.get('location')?.split('/').pop();
     success = true;
   } catch (error) {
-    return;
+    throw new Error(localization.alert.fail);
   } finally {
     if (success) {
       revalidateTag('public-service');
@@ -81,7 +81,7 @@ export async function deletePublicService(catalogId: string, serviceId: string) 
     }
     success = true;
   } catch (error) {
-    throw new Error();
+    throw new Error(localization.alert.deleteFail);
   } finally {
     if (success) {
       revalidateTag('public-services');
@@ -105,6 +105,10 @@ export async function updatePublicService(catalogId: string, oldPublicService: S
 
   const diff = compare(oldPublicService, updatedPublicServiceMerged);
 
+  if (diff.length === 0) {
+    throw new Error(localization.alert.noChanges);
+  }
+
   let success = false;
 
   const session = await getServerSession(authOptions);
@@ -117,7 +121,7 @@ export async function updatePublicService(catalogId: string, oldPublicService: S
     }
     success = true;
   } catch (error) {
-    return;
+    throw new Error(localization.alert.fail);
   } finally {
     if (success) {
       revalidateTag('public-service');
@@ -138,7 +142,7 @@ export async function publishPublicService(catalogId: string, serviceId: string)
     }
     success = true;
   } catch (error) {
-    throw new Error();
+    throw new Error(localization.alert.publishFail);
   } finally {
     if (success) {
       revalidateTag('public-service');
@@ -158,7 +162,7 @@ export async function unpublishPublicService(catalogId: string, serviceId: strin
     }
     success = true;
   } catch (error) {
-    throw new Error();
+    throw new Error(localization.alert.unpublishFail);
   } finally {
     if (success) {
       revalidateTag('public-service');

@@ -166,6 +166,9 @@ export const nb = {
     deleteInternalField: 'Er du sikker på at du ønsker å slette feltet?',
     codeListInUse: 'Kan ikke slette en kodeliste som er i bruk.',
     codeMustHaveName: 'En kode må ha et navn på bokmål.',
+    deleteFail: 'Sletting mislyktes.',
+    publishFail: 'Publisering mislyktes.',
+    unpublishFail: 'Avpublisering mislyktes.',
   },
 
   catalogAdmin: {

@@ -14,30 +14,46 @@ type ServiceFormProps = {
 };
 
 export const PublishSwitch = ({ catalogId, serviceId, isPublished, type, disabled = false }: ServiceFormProps) => {
-  const handlePublishPublicService = () => {
+  const handlePublishPublicService = async () => {
     if (isPublished === false) {
       if (window.confirm(localization.serviceCatalog.confirmPublish)) {
-        publishPublicService(catalogId, serviceId);
+        try {
+          await publishPublicService(catalogId, serviceId);
+        } catch (error) {
+          window.alert(error);
+        }
       }
     }
 
     if (isPublished === true) {
       if (window.confirm(localization.serviceCatalog.confirmUnpublish)) {
-        unpublishPublicService(catalogId, serviceId);
+        try {
+          await unpublishPublicService(catalogId, serviceId);
+        } catch (error) {
+          window.alert(error);
+        }
       }
     }
   };
 
-  const handlePublishService = () => {
+  const handlePublishService = async () => {
     if (isPublished === false) {
       if (window.confirm(localization.serviceCatalog.confirmPublish)) {
-        publishService(catalogId, serviceId);
+        try {
+          await publishService(catalogId, serviceId);
+        } catch (error) {
+          window.alert(error);
+        }
       }
     }
 
     if (isPublished === true) {
       if (window.confirm(localization.serviceCatalog.confirmUnpublish)) {
-        unpublishService(catalogId, serviceId);
+        try {
+          await unpublishService(catalogId, serviceId);
+        } catch (error) {
+          window.alert(error);
+        }
       }
     }
   };

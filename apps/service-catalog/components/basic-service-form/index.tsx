@@ -40,14 +40,19 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
     return serviceCopy;
   };
 
-  const saveService = (values: Service | ServiceToBeCreated) => {
-    let updatedService = values;
-    if (updatedService.produces) {
-      updatedService = handleProducesIds(values);
+  const saveService = async (values: Service | ServiceToBeCreated) => {
+    try {
+      let updatedService = values;
+
+      if (updatedService.produces) {
+        updatedService = handleProducesIds(values);
+      }
+      service
+        ? await updateService(catalogId, service, updatedService as Service)
+        : await createService(catalogId, updatedService as ServiceToBeCreated);
+    } catch (error) {
+      window.alert(error);
     }
-    service
-      ? updateService(catalogId, service, updatedService as Service)
-      : createService(catalogId, updatedService as ServiceToBeCreated);
   };
 
   const savePublicService = (values: Service | ServiceToBeCreated) => {
@@ -60,10 +65,14 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
       : createPublicService(catalogId, updatedService as ServiceToBeCreated);
   };
 
-  const handleDeleteService = () => {
+  const handleDeleteService = async () => {
     if (service) {
       if (window.confirm(localization.serviceCatalog.form.confirmDelete)) {
-        deleteService(catalogId, service.id);
+        try {
+          await deleteService(catalogId, service.id);
+        } catch (error) {
+          window.alert(error);
+        }
       }
     }
   };
