@@ -1,15 +1,15 @@
 import { ContactPoint, Output, Service, ServiceToBeCreated } from '@catalog-frontend/types';
 
 export const producesTemplate = (produce: Output): Output => {
-  const identifier = produce.identifier || '0';
+  const identifier = produce.identifier ?? '0';
 
   return {
     identifier,
-    title: { nb: produce.title?.nb || '', nn: produce.title?.nn || '', en: produce.title?.en || '' },
+    title: { nb: produce.title?.nb ?? '', nn: produce.title?.nn ?? '', en: produce.title?.en ?? '' },
     description: {
-      nb: produce.description?.nb || '',
-      nn: produce.description?.nn || '',
-      en: produce.description?.en || '',
+      nb: produce.description?.nb ?? '',
+      nn: produce.description?.nn ?? '',
+      en: produce.description?.en ?? '',
     },
   };
 };
@@ -33,15 +33,15 @@ export const emptyProduces: Output[] = [
 
 const contactPointTemplate = (contactPoint: ContactPoint): ContactPoint | null => {
   if (contactPoint) {
-    const email = contactPoint.email || '';
-    const telephone = contactPoint.telephone || '';
-    const contactPage = contactPoint.contactPage || '';
+    const email = contactPoint.email ?? '';
+    const telephone = contactPoint.telephone ?? '';
+    const contactPage = contactPoint.contactPage ?? '';
 
     return {
       category: {
-        nb: contactPoint.category?.nb || '',
-        nn: contactPoint.category?.nn || '',
-        en: contactPoint.category?.en || '',
+        nb: contactPoint.category?.nb ?? '',
+        nn: contactPoint.category?.nn ?? '',
+        en: contactPoint.category?.en ?? '',
       },
       email,
       telephone,
@@ -53,7 +53,7 @@ const contactPointTemplate = (contactPoint: ContactPoint): ContactPoint | null =
 };
 
 export const serviceTemplate = (service: Service | undefined): ServiceToBeCreated => {
-  const homepage = (service && service.homepage) || '';
+  const homepage = (service && service.homepage) ?? '';
   const produces =
     service &&
     service.produces &&
@@ -67,18 +67,18 @@ export const serviceTemplate = (service: Service | undefined): ServiceToBeCreate
       : emptyContactpoint;
   return {
     title: {
-      nb: (service && service.title?.nb) || '',
-      nn: (service && service.title?.nn) || '',
-      en: (service && service.title?.en) || '',
+      nb: (service && service.title?.nb) ?? '',
+      nn: (service && service.title?.nn) ?? '',
+      en: (service && service.title?.en) ?? '',
     },
     description: {
-      nb: (service && service.description?.nb) || '',
-      nn: (service && service.description?.nn) || '',
-      en: (service && service.description?.en) || '',
+      nb: (service && service.description?.nb) ?? '',
+      nn: (service && service.description?.nn) ?? '',
+      en: (service && service.description?.en) ?? '',
     },
     produces,
     contactPoints,
     homepage,
-    status: (service && service.status) || '',
+    status: (service && service.status) ?? '',
   };
 };

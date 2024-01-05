@@ -52,7 +52,7 @@ const PublicServiceDetailsPageClient = ({
           <PublishSwitch
             catalogId={catalogId}
             serviceId={serviceId}
-            isPublished={service?.published ?? false}
+            isPublished={!!service?.published}
             type='public-services'
             disabled={!hasWritePermission}
           />
@@ -109,7 +109,7 @@ const PublicServiceDetailsPageClient = ({
           </div>
         )
       }
-    ></DetailsPageLayout>
+    />
   );
 };
 

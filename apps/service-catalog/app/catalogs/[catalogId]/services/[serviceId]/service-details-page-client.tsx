@@ -109,7 +109,7 @@ const ServiceDetailsPageClient = ({
           </div>
         )
       }
-    ></DetailsPageLayout>
+    />
   );
 };
 
