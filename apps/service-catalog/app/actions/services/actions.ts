@@ -10,7 +10,7 @@ import {
   handleUpdateService,
 } from '@catalog-frontend/data-access';
 import { Service, ServiceToBeCreated } from '@catalog-frontend/types';
-import { authOptions, removeEmptyValues, validateSession } from '@catalog-frontend/utils';
+import { authOptions, localization, removeEmptyValues, validateSession } from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
 import { getServerSession } from 'next-auth';
 import { revalidateTag } from 'next/cache';
@@ -27,7 +27,7 @@ export async function getServices(catalogId: string) {
     const jsonResponse = await response.json();
     return jsonResponse;
   } catch (error) {
-    return;
+    throw new Error();
   }
 }
 
@@ -42,7 +42,7 @@ export async function getServiceById(catalogId: string, serviceId: string) {
     const jsonResponse = await response.json();
     return jsonResponse;
   } catch (error) {
-    return;
+    throw new Error();
   }
 }
 
@@ -81,7 +81,7 @@ export async function deleteService(catalogId: string, serviceId: string) {
     }
     success = true;
   } catch (error) {
-    throw new Error();
+    throw new Error(localization.alert.deleteFail);
   } finally {
     if (success) {
       revalidateTag('services');
@@ -105,6 +105,10 @@ export async function updateService(catalogId: string, oldService: Service, valu
 
   const diff = compare(oldService, updatedServiceMerged);
 
+  if (diff.length === 0) {
+    throw new Error(localization.alert.noChanges);
+  }
+
   let success = false;
 
   const session = await getServerSession(authOptions);
@@ -117,7 +121,7 @@ export async function updateService(catalogId: string, oldService: Service, valu
     }
     success = true;
   } catch (error) {
-    return;
+    throw new Error(localization.alert.fail);
   } finally {
     if (success) {
       revalidateTag('service');
@@ -138,7 +142,7 @@ export async function publishService(catalogId: string, serviceId: string) {
     }
     success = true;
   } catch (error) {
-    throw new Error();
+    throw new Error(localization.alert.publishFail);
   } finally {
     if (success) {
       revalidateTag('service');
@@ -158,7 +162,7 @@ export async function unpublishService(catalogId: string, serviceId: string) {
     }
     success = true;
   } catch (error) {
-    throw new Error();
+    throw new Error(localization.alert.unpublishFail);
   } finally {
     if (success) {
       revalidateTag('service');
