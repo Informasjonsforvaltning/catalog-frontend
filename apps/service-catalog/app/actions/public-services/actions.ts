@@ -1,13 +1,13 @@
 'use server';
 
 import {
-  handleCreatePublicService,
-  handleDeletePublicService,
-  handleGetAllPublicServices,
-  handleGetPublicServiceById,
-  handlePublishPublicService,
-  handleUnpublishPublicService,
-  handleUpdatePublicService,
+  createPublicService as create,
+  deletePublicService as deletePS,
+  getAllPublicServices as getAll,
+  getPublicServiceById as getById,
+  publishPublicService as publish,
+  unpublishPublicService as unpublish,
+  updatePublicService as update,
 } from '@catalog-frontend/data-access';
 import { Service, ServiceToBeCreated } from '@catalog-frontend/types';
 import { authOptions, validateSession, removeEmptyValues, localization } from '@catalog-frontend/utils';
@@ -19,31 +19,26 @@ import { redirect } from 'next/navigation';
 export async function getPublicServices(catalogId: string) {
   const session = await getServerSession(authOptions);
   await validateSession(session);
-  try {
-    const response = await handleGetAllPublicServices(catalogId, `${session?.accessToken}`);
-    if (response.status !== 200) {
-      throw new Error();
-    }
-    const jsonResponse = await response.json();
-    return jsonResponse;
-  } catch (error) {
-    throw new Error();
+
+  const response = await getAll(catalogId, `${session?.accessToken}`);
+  if (response.status !== 200) {
+    throw new Error('getPublicServices failed with response code ' + response.status);
   }
+  const jsonResponse = await response.json();
+  return jsonResponse;
 }
 
 export async function getPublicServiceById(catalogId: string, serviceId: string) {
   const session = await getServerSession(authOptions);
   await validateSession(session);
-  try {
-    const response = await handleGetPublicServiceById(catalogId, serviceId, `${session?.accessToken}`);
-    if (response.status !== 200) {
-      throw new Error();
-    }
-    const jsonResponse = await response.json();
-    return jsonResponse;
-  } catch (error) {
-    throw new Error();
+  const response = await getById(catalogId, serviceId, `${session?.accessToken}`);
+
+  if (response.status !== 200) {
+    throw new Error('getPublicServiceById failed with response code ' + response.status);
   }
+
+  const jsonResponse = await response.json();
+  return jsonResponse;
 }
 
 export async function createPublicService(catalogId: string, values: ServiceToBeCreated) {
@@ -53,7 +48,7 @@ export async function createPublicService(catalogId: string, values: ServiceToBe
   let success = false;
   let serviceId = undefined;
   try {
-    const response = await handleCreatePublicService(newPublicService, catalogId, `${session?.accessToken}`);
+    const response = await create(newPublicService, catalogId, `${session?.accessToken}`);
     if (response.status !== 201) {
       throw new Error();
     }
@@ -75,7 +70,7 @@ export async function deletePublicService(catalogId: string, serviceId: string) 
   await validateSession(session);
   let success = false;
   try {
-    const response = await handleDeletePublicService(catalogId, serviceId, `${session?.accessToken}`);
+    const response = await deletePS(catalogId, serviceId, `${session?.accessToken}`);
     if (response.status !== 204) {
       throw new Error();
     }
@@ -115,7 +110,7 @@ export async function updatePublicService(catalogId: string, oldPublicService: S
   await validateSession(session);
 
   try {
-    const response = await handleUpdatePublicService(catalogId, oldPublicService.id, diff, `${session?.accessToken}`);
+    const response = await update(catalogId, oldPublicService.id, diff, `${session?.accessToken}`);
     if (response.status !== 200) {
       throw new Error();
     }
@@ -136,7 +131,7 @@ export async function publishPublicService(catalogId: string, serviceId: string)
   await validateSession(session);
   let success = false;
   try {
-    const response = await handlePublishPublicService(catalogId, serviceId, `${session?.accessToken}`);
+    const response = await publish(catalogId, serviceId, `${session?.accessToken}`);
     if (response.status !== 200) {
       throw new Error();
     }
@@ -156,7 +151,7 @@ export async function unpublishPublicService(catalogId: string, serviceId: strin
   await validateSession(session);
   let success = false;
   try {
-    const response = await handleUnpublishPublicService(catalogId, serviceId, `${session?.accessToken}`);
+    const response = await unpublish(catalogId, serviceId, `${session?.accessToken}`);
     if (response.status !== 200) {
       throw new Error();
     }

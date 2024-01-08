@@ -3,7 +3,7 @@ import { Operation } from 'fast-json-patch';
 
 const path = `${process.env.SERVICE_CATALOG_BASE_URI}`;
 
-export const handleGetAllServices = async (catalogId: string, accessToken: string) => {
+export const getAllServices = async (catalogId: string, accessToken: string) => {
   const resource = `${path}/internal/catalogs/${catalogId}/services`;
   const options = {
     headers: {
@@ -15,7 +15,7 @@ export const handleGetAllServices = async (catalogId: string, accessToken: strin
   return await fetch(resource, options);
 };
 
-export const handleGetServiceById = async (catalogId: string, serviceId: string, accessToken: string) => {
+export const getServiceById = async (catalogId: string, serviceId: string, accessToken: string) => {
   const resource = `${path}/internal/catalogs/${catalogId}/services/${serviceId}`;
   const options = {
     headers: {
@@ -27,7 +27,7 @@ export const handleGetServiceById = async (catalogId: string, serviceId: string,
   return await fetch(resource, options);
 };
 
-export const handleCreateService = async (Service: Partial<Service>, catalogId: string, accessToken: string) => {
+export const createService = async (Service: Partial<Service>, catalogId: string, accessToken: string) => {
   const resource = `${path}/internal/catalogs/${catalogId}/services`;
   const options = {
     headers: {
@@ -40,7 +40,7 @@ export const handleCreateService = async (Service: Partial<Service>, catalogId: 
   return await fetch(resource, options);
 };
 
-export const handleDeleteService = async (catalogId: string, serviceId: string, accessToken: string) => {
+export const deleteService = async (catalogId: string, serviceId: string, accessToken: string) => {
   const resource = `${path}/internal/catalogs/${catalogId}/services/${serviceId}`;
   const options = {
     headers: {
@@ -52,7 +52,7 @@ export const handleDeleteService = async (catalogId: string, serviceId: string, 
   return await fetch(resource, options);
 };
 
-export const handleUpdateService = async (
+export const updateService = async (
   catalogId: string,
   serviceId: string,
   patchOperations: Operation[],
@@ -70,7 +70,7 @@ export const handleUpdateService = async (
   return await fetch(resource, options);
 };
 
-export const handlePublishService = async (catalogId: string, serviceId: string, accessToken: string) => {
+export const publishService = async (catalogId: string, serviceId: string, accessToken: string) => {
   const resource = `${path}/internal/catalogs/${catalogId}/services/${serviceId}/publish`;
   const options = {
     headers: {
@@ -82,7 +82,7 @@ export const handlePublishService = async (catalogId: string, serviceId: string,
   return await fetch(resource, options);
 };
 
-export const handleUnpublishService = async (catalogId: string, serviceId: string, accessToken: string) => {
+export const unpublishService = async (catalogId: string, serviceId: string, accessToken: string) => {
   const resource = `${path}/internal/catalogs/${catalogId}/services/${serviceId}/unpublish`;
   const options = {
     headers: {
