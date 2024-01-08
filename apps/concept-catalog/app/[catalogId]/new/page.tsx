@@ -5,7 +5,7 @@ import { RedirectType, redirect } from 'next/navigation';
 export const NewPage = async ({ params }) => {
   const { catalogId } = params;
   if (!validOrganizationNumber(catalogId)) {
-    redirect(`/not-found`, RedirectType.replace);
+    redirect(`/notfound`, RedirectType.replace);
   }
 
   const session = await getServerSession(authOptions);

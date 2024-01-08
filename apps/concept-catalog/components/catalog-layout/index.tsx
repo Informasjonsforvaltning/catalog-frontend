@@ -1,8 +1,18 @@
 'use client';
 
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Layout } from '@catalog-frontend/ui';
 import { useCatalogDesign } from '../../context/catalog-design';
+
+interface CatalogLayoutProps {
+  children: ReactNode;
+  className?: string;
+  catalogAdminUrl?: string;
+  fdkRegistrationBaseUrl?: string;
+  adminGuiBaseUrl?: string;
+  fdkCommunityBaseUrl?: string;
+  fdkBaseUrl?: string;
+}
 
 export const CatalogLayout = ({
   children,
@@ -12,7 +22,7 @@ export const CatalogLayout = ({
   adminGuiBaseUrl,
   fdkCommunityBaseUrl,
   fdkBaseUrl,
-}) => {
+}: CatalogLayoutProps) => {
   const design = useCatalogDesign();
 
   return (

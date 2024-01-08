@@ -34,13 +34,13 @@ const ChangeRequestOrNew = async ({ params, searchParams }) => {
   }
 
   if (!validOrganizationNumber(catalogId)) {
-    redirect(`/not-found`, RedirectType.replace);
+    redirect(`/notfound`, RedirectType.replace);
   }
 
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
   if (conceptId && !validUUID(conceptId)) {
-    redirect(`/not-found`, RedirectType.replace);
+    redirect(`/notfound`, RedirectType.replace);
   }
 
   let originalConcept: Concept = {

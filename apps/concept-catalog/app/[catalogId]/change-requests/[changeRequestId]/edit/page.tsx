@@ -21,7 +21,7 @@ import NextLink from 'next/link';
 const ChangeRequestEditPage = async ({ params }) => {
   const { catalogId, changeRequestId } = params;
   if (!validOrganizationNumber(catalogId) || !validUUID(changeRequestId)) {
-    redirect(`/not-found`, RedirectType.replace);
+    redirect(`/notfound`, RedirectType.replace);
   }
 
   const session = await getServerSession(authOptions);

@@ -14,7 +14,7 @@ export default async function PublicServiceDetailsPage({ params }: Params) {
 
   const service: Service | null = await getPublicServiceById(catalogId, serviceId);
   if (!service) {
-    redirect(`/not-found`, RedirectType.replace);
+    redirect(`/notfound`, RedirectType.replace);
   }
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const session = await getServerSession(authOptions);

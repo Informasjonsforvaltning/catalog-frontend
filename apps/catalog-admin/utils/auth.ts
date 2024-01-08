@@ -23,7 +23,7 @@ export const checkAuthenticated = ({ session, callbackUrl }: CheckAuthenticatedP
 
 export const checkAdminPermissions = ({ session, catalogId, path }: CheckAdminPermissionsProps) => {
   if (!validOrganizationNumber(catalogId)) {
-    return redirect(`/not-found`, RedirectType.replace);
+    return redirect(`/notfound`, RedirectType.replace);
   }
 
   if (checkAuthenticated({ session, callbackUrl: `/catalogs/${catalogId}${path ?? ''}` })) {
