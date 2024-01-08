@@ -2,7 +2,7 @@ import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner } from '@catal
 import { localization } from '@catalog-frontend/utils';
 import { Heading } from '@digdir/design-system-react';
 
-const NotFound = async ({ params }) => {
+const NotFound = async () => {
   const breadcrumbList = [
     {
       href: `#`,
@@ -14,7 +14,7 @@ const NotFound = async ({ params }) => {
     <>
       <Breadcrumbs breadcrumbList={breadcrumbList} />
       <PageBanner
-        title={localization.catalogType.service}
+        title={localization.catalogType.concept}
         subtitle={localization.notFound}
       />
       <CenterContainer>

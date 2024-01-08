@@ -10,7 +10,7 @@ import { RedirectType, redirect } from 'next/navigation';
 export async function EditPage({ params }) {
   const { catalogId, conceptId } = params;
   if (!(validOrganizationNumber(catalogId) && validUUID(conceptId))) {
-    redirect(`/not-found`, RedirectType.replace);
+    redirect(`/notfound`, RedirectType.replace);
   }
 
   const session = await getServerSession(authOptions);

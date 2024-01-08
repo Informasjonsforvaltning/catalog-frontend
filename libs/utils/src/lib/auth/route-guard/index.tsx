@@ -23,12 +23,12 @@ export const RouteGuard = ({ children }: RouteGuardProps) => {
   const pathname = usePathname();
   const { data: session, status }: UseSessionProps = useSession();
 
-  const allowed = !!session?.user;
+  const allowed = ['/notfound'].includes(pathname) || !!session?.user;
 
   useEffect(() => {
     if (
       (session?.error === 'RefreshAccessTokenError' || status === 'unauthenticated') &&
-      pathname !== '/auth/signout'
+      !['/auth/signout', '/notfound'].includes(pathname)
     ) {
       signIn('keycloak');
     }

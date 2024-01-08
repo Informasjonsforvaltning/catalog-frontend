@@ -25,11 +25,11 @@ export default withAuth(async function middleware(req: NextRequestWithAuth) {
   ];
 
   if (catalogId && !validOrganizationNumber(catalogId)) {
-    return NextResponse.rewrite(new URL('/not-found', req.url));
+    return NextResponse.rewrite(new URL('/notfound', req.url));
   }
 
   if (serviceId && !validUUID(serviceId)) {
-    return NextResponse.rewrite(new URL('/not-found', req.url));
+    return NextResponse.rewrite(new URL('/notfound', req.url));
   }
 
   if (accessToken && catalogId && !hasOrganizationReadPermission(accessToken, catalogId)) {

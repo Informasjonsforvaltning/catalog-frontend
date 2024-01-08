@@ -37,7 +37,7 @@ const ConceptPage = async ({ params }) => {
   const { catalogId, conceptId } = params;
 
   if (!(validOrganizationNumber(catalogId) && validUUID(conceptId))) {
-    redirect(`/not-found`, RedirectType.replace);
+    redirect(`/notfound`, RedirectType.replace);
   }
 
   if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
@@ -55,7 +55,7 @@ const ConceptPage = async ({ params }) => {
     if (response.ok) return response.json();
   });
   if (!concept) {
-    redirect(`/not-found`, RedirectType.replace);
+    redirect(`/notfound`, RedirectType.replace);
   }
 
   const conceptStatuses = await getConceptStatuses()
