@@ -17,6 +17,7 @@ export const nb = {
   chooseOrganizaiton: 'Velg virksomhet',
   id: 'ID',
   services: 'Tjenester',
+  changed: 'Endret',
   publicServices: 'Offentlige tjenester',
   catalogType: {
     concept: 'Begrepskatalog',
