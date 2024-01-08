@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useId, useState } from 'react';
+import { FC, useEffect, useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -110,46 +110,13 @@ export const ConceptPageClient = ({
   changeRequestEnabled,
 }) => {
   const [language, setLanguage] = useState('nb');
-  const [newCommentText, setNewCommentText] = useState('');
-  const [updateCommentText, setUpdateCommentText] = useState<MapType>({});
   const [isPublished, setIsPublished] = useState(concept?.erPublisert);
   const [publishedDate, setPublishedDate] = useState(concept?.publiseringsTidspunkt);
   const router = useRouter();
   const catalogId = organization.organizationId ?? '';
 
-  const { status: getCommentsStatus, data: getCommentsData } = useGetComments({
-    orgNumber: catalogId,
-    topicId: concept?.id,
-  });
-
   const publishConcept = usePublishConcept(catalogId);
   const deleteConcept = useDeleteConcept(catalogId);
-
-  const createComment = useCreateComment({
-    orgNumber: catalogId,
-    topicId: concept?.id,
-  });
-
-  const updateComment = useUpdateComment({
-    orgNumber: catalogId,
-    topicId: concept?.id,
-  });
-
-  const deleteComment = useDeleteComment({
-    orgNumber: catalogId,
-    topicId: concept?.id,
-  });
-
-  const [historyCurrentPage, setHistoryCurrentPage] = useState(1);
-  const { status: getHistoryStatus, data: getHistoryData } = useGetHistory({
-    catalogId,
-    resourceId: concept?.id,
-    page: historyCurrentPage,
-  });
-
-  const handleHistoryPageChange = (page) => {
-    setHistoryCurrentPage(page);
-  };
 
   const handleOnChangePublished = (e) => {
     if (e.target.checked) {
@@ -313,51 +280,6 @@ export const ConceptPageClient = ({
     setLanguage(lang);
   };
 
-  const handleNewCommentChange = (event) => {
-    setNewCommentText(event.target.value);
-  };
-
-  const handleUpdateCommentChange = (commentId, event) => {
-    setUpdateCommentText({ ...updateCommentText, ...{ [commentId]: event.target.value } });
-  };
-
-  const handleCreateComment = () => {
-    createComment.mutate(newCommentText, {
-      onSuccess: () => {
-        setNewCommentText('');
-      },
-    });
-  };
-
-  const handleUpdateComment = ({ id, comment }) => {
-    if (updateCommentText[id]) {
-      updateComment.mutate(
-        { commentId: id, comment: updateCommentText[id] },
-        {
-          onSuccess: () => {
-            //Set comment back in read mode
-            setUpdateCommentText(
-              Object.keys(updateCommentText)
-                .filter((key) => key !== id)
-                .reduce((obj, key) => {
-                  obj[key] = updateCommentText[key];
-                  return obj;
-                }, {}),
-            );
-          },
-        },
-      );
-    } else {
-      setUpdateCommentText({ ...updateCommentText, ...{ [id]: comment } });
-    }
-  };
-
-  const handleDeleteComment = (id, event) => {
-    if (window.confirm(localization.comment.confirmDelete)) {
-      deleteComment.mutate(id);
-    }
-  };
-
   const handleEditConcept = () => {
     const revision = revisions?.find((revision) => !revision.erPublisert);
     const id = revision ? revision.id : concept?.id;
@@ -390,9 +312,6 @@ export const ConceptPageClient = ({
       />
     );
   };
-
-  const newCommentButtonId = useId();
-  const isCommentInEditMode = (id) => id in updateCommentText;
 
   const RevisionsTab = () => {
     return (
@@ -449,6 +368,212 @@ export const ConceptPageClient = ({
     setIsPublished(concept?.erPublisert);
     setPublishedDate(concept?.publiseringsTidspunkt);
   }, [concept]);
+
+  const CommentsTab: FC = () => {
+    const [newCommentText, setNewCommentText] = useState('');
+    const [updateCommentText, setUpdateCommentText] = useState<MapType>({});
+
+    const { status: getCommentsStatus, data: getCommentsData } = useGetComments({
+      orgNumber: catalogId,
+      topicId: concept?.id,
+    });
+
+    const createComment = useCreateComment({
+      orgNumber: catalogId,
+      topicId: concept?.id,
+    });
+
+    const updateComment = useUpdateComment({
+      orgNumber: catalogId,
+      topicId: concept?.id,
+    });
+
+    const deleteComment = useDeleteComment({
+      orgNumber: catalogId,
+      topicId: concept?.id,
+    });
+
+    const handleCreateComment = () => {
+      createComment.mutate(newCommentText, {
+        onSuccess: () => {
+          setNewCommentText('');
+        },
+      });
+    };
+
+    const handleUpdateComment = ({ id, comment }) => {
+      if (updateCommentText[id]) {
+        updateComment.mutate(
+          { commentId: id, comment: updateCommentText[id] },
+          {
+            onSuccess: () => {
+              //Set comment back in read mode
+              setUpdateCommentText(
+                Object.keys(updateCommentText)
+                  .filter((key) => key !== id)
+                  .reduce((obj, key) => {
+                    obj[key] = updateCommentText[key];
+                    return obj;
+                  }, {}),
+              );
+            },
+          },
+        );
+      } else {
+        setUpdateCommentText({ ...updateCommentText, ...{ [id]: comment } });
+      }
+    };
+
+    const handleDeleteComment = (id, event) => {
+      if (window.confirm(localization.comment.confirmDelete)) {
+        deleteComment.mutate(id);
+      }
+    };
+
+    const handleNewCommentChange = (event) => {
+      setNewCommentText(event.target.value);
+    };
+
+    const handleUpdateCommentChange = (commentId, event) => {
+      setUpdateCommentText({ ...updateCommentText, ...{ [commentId]: event.target.value } });
+    };
+
+    const newCommentButtonId = useId();
+    const isCommentInEditMode = (id) => id in updateCommentText;
+
+    return getCommentsStatus == 'loading' ? (
+      <Spinner size='medium' />
+    ) : (
+      <>
+        <div className={classes.bottomSpacingSmall}>
+          <Textarea
+            value={newCommentText}
+            onChange={handleNewCommentChange}
+            rows={5}
+            aria-labelledby={newCommentButtonId}
+            aria-describedby={newCommentButtonId}
+          />
+        </div>
+        <div className={classes.bottomSpacingLarge}>
+          <Button
+            id={newCommentButtonId}
+            disabled={newCommentText?.length === 0}
+            onClick={() => handleCreateComment()}
+          >
+            Legg til kommentar
+          </Button>
+        </div>
+        <div>
+          <div className={classes.commentsHeader}>
+            <ChatIcon />
+            Kommentarer ({getCommentsData?.length})
+          </div>
+          {getCommentsData?.length > 0 &&
+            getCommentsData.map((comment: Comment, i) => (
+              <InfoCard
+                key={`comment-${comment.id}`}
+                className={classes.comment}
+              >
+                <InfoCard.Item>
+                  <div className={classes.commentUser}>
+                    {comment?.user.name}
+                    <span>{formatISO(comment?.createdDate)}</span>
+                  </div>
+                  {isCommentInEditMode(comment?.id) ? (
+                    <Textarea
+                      value={updateCommentText[comment?.id]}
+                      onChange={(e) => handleUpdateCommentChange(comment.id, e)}
+                      rows={5}
+                    />
+                  ) : (
+                    <div>
+                      {comment?.comment.split('\n').map((ln, i) => (
+                        <span key={`comment-${comment?.id}-${i}`}>
+                          {ln}
+                          <br />
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {comment.user.id === username && (
+                    <div className={classes.commentActions}>
+                      <Button
+                        variant='secondary'
+                        onClick={() => handleUpdateComment(comment)}
+                      >
+                        {isCommentInEditMode(comment.id)
+                          ? localization.comment.saveComment
+                          : localization.comment.editComment}
+                      </Button>
+                      <Button
+                        variant='secondary'
+                        onClick={(e) => handleDeleteComment(comment.id, e)}
+                      >
+                        {localization.comment.deleteComment}
+                      </Button>
+                    </div>
+                  )}
+                </InfoCard.Item>
+              </InfoCard>
+            ))}
+        </div>
+      </>
+    );
+  };
+
+  const HistoryTab: FC = () => {
+    const [historyCurrentPage, setHistoryCurrentPage] = useState(1);
+    const { status: getHistoryStatus, data: getHistoryData } = useGetHistory({
+      catalogId,
+      resourceId: concept?.id,
+      page: historyCurrentPage,
+    });
+
+    const handleHistoryPageChange = (page) => {
+      setHistoryCurrentPage(page);
+    };
+
+    return getHistoryStatus == 'loading' ? (
+      <Spinner size='medium' />
+    ) : getHistoryData?.updates?.length === 0 ? (
+      <span>{localization.history.noChanges}</span>
+    ) : (
+      <>
+        <Accordion>
+          {getHistoryData.updates?.length > 0 &&
+            getHistoryData.updates.map((update: Update, i) => (
+              <Accordion.Item key={`history-${update.id}`}>
+                <Accordion.Header className={classes.historyHeader}>
+                  <span>{update.person.name}</span>
+                  <span>{formatISO(update.datetime)}</span>
+                </Accordion.Header>
+                <Accordion.Content>
+                  {update.operations?.map((operation, i) => (
+                    <div
+                      key={`operation-${i}`}
+                      className={classes.historyOperation}
+                    >
+                      <div>
+                        {operation.op} - {operation.path}
+                      </div>
+                      <div>{JSON.stringify(operation.value)}</div>
+                    </div>
+                  ))}
+                </Accordion.Content>
+              </Accordion.Item>
+            ))}
+        </Accordion>
+        {getHistoryData.updates?.length > 0 && (
+          <Pagination
+            className={classes.historyPagination}
+            onChange={handleHistoryPageChange}
+            totalPages={getHistoryData.pagination.totalPages ?? 0}
+            currentPage={historyCurrentPage}
+          />
+        )}
+      </>
+    );
+  };
 
   const MainColumn = () => (
     <div>
@@ -557,126 +682,10 @@ export const ConceptPageClient = ({
             <Tabs.Tab value={localization.concept.versions}>{localization.concept.versions}</Tabs.Tab>
           </Tabs.List>
           <Tabs.Content value={localization.comment.comments}>
-            {getCommentsStatus == 'loading' ? (
-              <Spinner size='medium' />
-            ) : (
-              <>
-                <div className={classes.bottomSpacingSmall}>
-                  <Textarea
-                    value={newCommentText}
-                    onChange={handleNewCommentChange}
-                    rows={5}
-                    aria-labelledby={newCommentButtonId}
-                    aria-describedby={newCommentButtonId}
-                  />
-                </div>
-                <div className={classes.bottomSpacingLarge}>
-                  <Button
-                    id={newCommentButtonId}
-                    disabled={newCommentText?.length === 0}
-                    onClick={() => handleCreateComment()}
-                  >
-                    Legg til kommentar
-                  </Button>
-                </div>
-                <div>
-                  <div className={classes.commentsHeader}>
-                    <ChatIcon />
-                    Kommentarer ({getCommentsData?.length})
-                  </div>
-                  {getCommentsData?.length > 0 &&
-                    getCommentsData.map((comment: Comment, i) => (
-                      <InfoCard
-                        key={`comment-${comment.id}`}
-                        className={classes.comment}
-                      >
-                        <InfoCard.Item>
-                          <div className={classes.commentUser}>
-                            {comment?.user.name}
-                            <span>{formatISO(comment?.createdDate)}</span>
-                          </div>
-                          {isCommentInEditMode(comment?.id) ? (
-                            <Textarea
-                              value={updateCommentText[comment?.id]}
-                              onChange={(e) => handleUpdateCommentChange(comment.id, e)}
-                              rows={5}
-                            />
-                          ) : (
-                            <div>
-                              {comment?.comment.split('\n').map((ln, i) => (
-                                <span key={`comment-${comment?.id}-${i}`}>
-                                  {ln}
-                                  <br />
-                                </span>
-                              ))}
-                            </div>
-                          )}
-                          {comment.user.id === username && (
-                            <div className={classes.commentActions}>
-                              <Button
-                                variant='secondary'
-                                onClick={() => handleUpdateComment(comment)}
-                              >
-                                {isCommentInEditMode(comment.id)
-                                  ? localization.comment.saveComment
-                                  : localization.comment.editComment}
-                              </Button>
-                              <Button
-                                variant='secondary'
-                                onClick={(e) => handleDeleteComment(comment.id, e)}
-                              >
-                                {localization.comment.deleteComment}
-                              </Button>
-                            </div>
-                          )}
-                        </InfoCard.Item>
-                      </InfoCard>
-                    ))}
-                </div>
-              </>
-            )}
+            <CommentsTab />
           </Tabs.Content>
           <Tabs.Content value={localization.changeHistory}>
-            {getHistoryStatus == 'loading' ? (
-              <Spinner size='medium' />
-            ) : getHistoryData?.updates?.length === 0 ? (
-              <span>{localization.history.noChanges}</span>
-            ) : (
-              <>
-                <Accordion>
-                  {getHistoryData.updates?.length > 0 &&
-                    getHistoryData.updates.map((update: Update, i) => (
-                      <Accordion.Item key={`history-${update.id}`}>
-                        <Accordion.Header className={classes.historyHeader}>
-                          <span>{update.person.name}</span>
-                          <span>{formatISO(update.datetime)}</span>
-                        </Accordion.Header>
-                        <Accordion.Content>
-                          {update.operations?.map((operation, i) => (
-                            <div
-                              key={`operation-${i}`}
-                              className={classes.historyOperation}
-                            >
-                              <div>
-                                {operation.op} - {operation.path}
-                              </div>
-                              <div>{JSON.stringify(operation.value)}</div>
-                            </div>
-                          ))}
-                        </Accordion.Content>
-                      </Accordion.Item>
-                    ))}
-                </Accordion>
-                {getHistoryData.updates?.length > 0 && (
-                  <Pagination
-                    className={classes.historyPagination}
-                    onChange={handleHistoryPageChange}
-                    totalPages={getHistoryData.pagination.totalPages ?? 0}
-                    currentPage={historyCurrentPage}
-                  />
-                )}
-              </>
-            )}
+            <HistoryTab />
           </Tabs.Content>
           <Tabs.Content value={localization.concept.versions}>
             <RevisionsTab />
