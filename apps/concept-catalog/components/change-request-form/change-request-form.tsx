@@ -1,7 +1,7 @@
 'use client';
 
 import { Button, FormFieldCard } from '@catalog-frontend/ui';
-import { localization as loc } from '@catalog-frontend/utils';
+import { localization as loc, removeEmptyValues } from '@catalog-frontend/utils';
 
 import { FC, useState } from 'react';
 import { Concept, ISOLanguage } from '@catalog-frontend/types';
@@ -33,6 +33,28 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, originalC
     setIsSubmitting(false);
   };
 
+  const checkForChanges = (values: any, original: any): { color: 'second' | undefined; changed: boolean } => {
+    if (!originalConcept) {
+      return { color: undefined, changed: false };
+    }
+
+    if (values === undefined && original === undefined) {
+      return { color: undefined, changed: false };
+    }
+
+    const valuesEmpty = values && Object.keys(removeEmptyValues(values)).length === 0;
+
+    if (valuesEmpty && original === undefined) {
+      return { color: undefined, changed: false };
+    }
+
+    if (values && !_.isEqual(values, original)) {
+      return { color: 'second', changed: true };
+    }
+
+    return { color: undefined, changed: false };
+  };
+
   return (
     <>
       <Formik
@@ -45,11 +67,13 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, originalC
           <Form>
             <div className={styles.formContainer}>
               <FormFieldCard
-                title={loc.conceptHelptexts.anbefaltTermTitle}
-                subtitle={loc.conceptHelptexts.anbefaltTermDescription}
-                variant={
-                  originalConcept && _.isEqual(values.anbefaltTerm, originalConcept.anbefaltTerm) ? 'second' : undefined
+                title={
+                  checkForChanges(values.anbefaltTerm, originalConcept?.anbefaltTerm).changed
+                    ? `${loc.conceptHelptexts.anbefaltTermTitle} (${loc.changed})`
+                    : loc.conceptHelptexts.anbefaltTermTitle
                 }
+                subtitle={loc.conceptHelptexts.anbefaltTermDescription}
+                variant={checkForChanges(values.anbefaltTerm, originalConcept?.anbefaltTerm).color}
               >
                 {selectedLanguages.map((language) => (
                   <div
@@ -71,12 +95,13 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, originalC
                 ))}
               </FormFieldCard>
               <FormFieldCard
-                title={loc.conceptHelptexts.definisjonTitle}
-                subtitle={loc.conceptHelptexts.definisjonDescription}
-                variant={
-                  originalConcept &&
-                  (_.isEqual(values.definisjon?.tekst, originalConcept.definisjon?.tekst) ? 'second' : undefined)
+                title={
+                  checkForChanges(values.definisjon?.tekst, originalConcept?.definisjon?.tekst).changed
+                    ? `${loc.conceptHelptexts.definisjonTitle} (${loc.changed})`
+                    : loc.conceptHelptexts.definisjonTitle
                 }
+                subtitle={loc.conceptHelptexts.definisjonDescription}
+                variant={checkForChanges(values.definisjon?.tekst, originalConcept?.definisjon?.tekst).color}
               >
                 {selectedLanguages.map((language) => (
                   <div
@@ -98,13 +123,16 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, originalC
                 ))}
               </FormFieldCard>
               <FormFieldCard
-                title={loc.conceptHelptexts.kildeTilDefinisjonTitle}
+                title={
+                  checkForChanges(values.definisjon?.kildebeskrivelse, originalConcept?.definisjon?.kildebeskrivelse)
+                    .changed
+                    ? `${loc.conceptHelptexts.kildeTilDefinisjonTitle} (${loc.changed})`
+                    : loc.conceptHelptexts.kildeTilDefinisjonTitle
+                }
                 subtitle={loc.conceptHelptexts.kildeTilDefinisjonDescription}
                 variant={
-                  originalConcept &&
-                  (_.isEqual(values.definisjon?.kildebeskrivelse, originalConcept.definisjon?.kildebeskrivelse)
-                    ? 'second'
-                    : undefined)
+                  checkForChanges(values.definisjon?.kildebeskrivelse, originalConcept?.definisjon?.kildebeskrivelse)
+                    .color
                 }
               >
                 <SourceSection
@@ -114,13 +142,20 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, originalC
                 />
               </FormFieldCard>
               <FormFieldCard
-                title={loc.conceptHelptexts.definisjonForAllmennhetenTitle}
+                title={
+                  checkForChanges(
+                    values.definisjonForAllmennheten?.tekst,
+                    originalConcept?.definisjonForAllmennheten?.tekst,
+                  ).changed
+                    ? `${loc.conceptHelptexts.definisjonForAllmennhetenTitle} (${loc.changed})`
+                    : loc.conceptHelptexts.definisjonForAllmennhetenTitle
+                }
                 subtitle={loc.conceptHelptexts.definisjonForAllmennhetenDescription}
                 variant={
-                  originalConcept &&
-                  (_.isEqual(values.definisjonForAllmennheten?.tekst, originalConcept.definisjonForAllmennheten?.tekst)
-                    ? 'second'
-                    : undefined)
+                  checkForChanges(
+                    values.definisjonForAllmennheten?.tekst,
+                    originalConcept?.definisjonForAllmennheten?.tekst,
+                  ).color
                 }
               >
                 {selectedLanguages.map((language) => (
@@ -143,16 +178,20 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, originalC
                 ))}
               </FormFieldCard>
               <FormFieldCard
-                title={loc.conceptHelptexts.definisjonForAllmennhetenKildeTitle}
+                title={
+                  checkForChanges(
+                    values.definisjonForAllmennheten?.kildebeskrivelse,
+                    originalConcept?.definisjonForAllmennheten?.kildebeskrivelse,
+                  ).changed
+                    ? `${loc.conceptHelptexts.definisjonForAllmennhetenKildeTitle} (${loc.changed})`
+                    : loc.conceptHelptexts.definisjonForAllmennhetenKildeTitle
+                }
                 subtitle={loc.conceptHelptexts.definisjonForAllmennhetenKildeDescription}
                 variant={
-                  originalConcept &&
-                  (_.isEqual(
+                  checkForChanges(
                     values.definisjonForAllmennheten?.kildebeskrivelse,
-                    originalConcept.definisjonForAllmennheten?.kildebeskrivelse,
-                  )
-                    ? 'second'
-                    : undefined)
+                    originalConcept?.definisjonForAllmennheten?.kildebeskrivelse,
+                  ).color
                 }
               >
                 <SourceSection
@@ -162,13 +201,20 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, originalC
                 />
               </FormFieldCard>
               <FormFieldCard
-                title={loc.conceptHelptexts.definisjonForSpesialisterTitle}
+                title={
+                  checkForChanges(
+                    values.definisjonForSpesialister?.tekst,
+                    originalConcept?.definisjonForSpesialister?.tekst,
+                  ).changed
+                    ? `${loc.conceptHelptexts.definisjonForSpesialisterTitle} (${loc.changed})`
+                    : loc.conceptHelptexts.definisjonForSpesialisterTitle
+                }
                 subtitle={loc.conceptHelptexts.definisjonForSpesialisterDescription}
                 variant={
-                  originalConcept &&
-                  (_.isEqual(values.definisjonForSpesialister?.tekst, originalConcept.definisjonForSpesialister?.tekst)
-                    ? 'second'
-                    : undefined)
+                  checkForChanges(
+                    values.definisjonForSpesialister?.tekst,
+                    originalConcept?.definisjonForSpesialister?.tekst,
+                  ).color
                 }
               >
                 {selectedLanguages.map((language) => (
@@ -191,16 +237,20 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, originalC
                 ))}
               </FormFieldCard>
               <FormFieldCard
-                title={loc.conceptHelptexts.definisjonForSpesialisterKildeTitle}
+                title={
+                  checkForChanges(
+                    values.definisjonForSpesialister?.kildebeskrivelse,
+                    originalConcept?.definisjonForSpesialister?.kildebeskrivelse,
+                  ).changed
+                    ? `${loc.conceptHelptexts.definisjonForSpesialisterKildeTitle} (${loc.changed})`
+                    : loc.conceptHelptexts.definisjonForSpesialisterKildeTitle
+                }
                 subtitle={loc.conceptHelptexts.definisjonForSpesialisterKildeDescription}
                 variant={
-                  originalConcept &&
-                  (_.isEqual(
+                  checkForChanges(
                     values.definisjonForSpesialister?.kildebeskrivelse,
-                    originalConcept.definisjonForSpesialister?.kildebeskrivelse,
-                  )
-                    ? 'second'
-                    : undefined)
+                    originalConcept?.definisjonForSpesialister?.kildebeskrivelse,
+                  ).color
                 }
               >
                 <SourceSection
@@ -210,12 +260,13 @@ export const ChangeRequestForm: FC<Props> = ({ changeRequestAsConcept, originalC
                 />
               </FormFieldCard>
               <FormFieldCard
-                title={loc.conceptHelptexts.merknadTitle}
-                subtitle={loc.conceptHelptexts.merknadDescription}
-                variant={
-                  originalConcept &&
-                  (_.isEqual(values.merknad?.tekst, originalConcept.merknad?.tekst) ? 'second' : undefined)
+                title={
+                  checkForChanges(values.merknad?.tekst, originalConcept?.merknad?.tekst).changed
+                    ? `${loc.conceptHelptexts.merknadTitle} (${loc.changed})`
+                    : loc.conceptHelptexts.merknadTitle
                 }
+                subtitle={loc.conceptHelptexts.merknadDescription}
+                variant={checkForChanges(values.merknad?.tekst, originalConcept?.merknad?.tekst).color}
               >
                 {selectedLanguages.map((language) => (
                   <div
