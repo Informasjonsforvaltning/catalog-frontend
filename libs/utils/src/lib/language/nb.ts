@@ -41,6 +41,7 @@ export const nb = {
   showLess: 'Vis færre',
   showMore: 'Vis flere',
   somethingWentWrong: 'Beklager, noe gikk galt. Prøv på nytt litt senere.',
+  status: 'Status',
   subjectArea: 'Fagområde',
   suggestionForNewConcept: 'Forslag til nytt begrep',
   telephone: 'Telefon',
@@ -301,6 +302,12 @@ export const nb = {
     seeChangeRequests: 'Se alle endringsforslag',
     sourceLink: 'Lenke til kilde',
     sourceTitle: 'Tittel på kilde',
+
+    status: {
+      accepted: 'Godtatt',
+      open: 'Åpen',
+      rejected: 'Avvist',
+    },
   },
 
   comment: {
@@ -317,12 +324,6 @@ export const nb = {
 
   history: {
     noChanges: 'Ingen endringer er gjort',
-  },
-
-  status: {
-    draft: 'Utkast',
-    approved: 'Godkjent',
-    hearing: 'Høring',
   },
 
   publicationState: {
