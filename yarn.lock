@@ -4958,7 +4958,7 @@ __metadata:
     lodash: ^4.17.21
     next: 14.0.4
     next-auth: ^4.24.5
-    next-usequerystate: ^1.13.2
+    nuqs: ^1.14.0
     nx: 16.3.2
     prettier: 2.8.8
     react: 18.2.0
@@ -9803,17 +9803,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"next-usequerystate@npm:^1.13.2":
-  version: 1.13.2
-  resolution: "next-usequerystate@npm:1.13.2"
-  dependencies:
-    mitt: ^3.0.1
-  peerDependencies:
-    next: ">=13.4 <14.0.2 || ^14.0.3"
-  checksum: 1fa45396f4b3dcd53214ea741265e565d8c040e38353280398b7ba27c7669c42173d2e90a793d7f69265479de5cac2376abf8a23bf8b75da2c08bac591713da8
-  languageName: node
-  linkType: hard
-
 "next@npm:14.0.4":
   version: 14.0.4
   resolution: "next@npm:14.0.4"
@@ -9989,6 +9978,17 @@ __metadata:
   dependencies:
     boolbase: ^1.0.0
   checksum: 5afc3dafcd1573b08877ca8e6148c52abd565f1d06b1eb08caf982e3fa289a82f2cae697ffb55b5021e146d60443f1590a5d6b944844e944714a5b549675bcd3
+  languageName: node
+  linkType: hard
+
+"nuqs@npm:^1.14.0":
+  version: 1.14.0
+  resolution: "nuqs@npm:1.14.0"
+  dependencies:
+    mitt: ^3.0.1
+  peerDependencies:
+    next: ">=13.4 <14.0.2 || ^14.0.3"
+  checksum: 686ad4f53d959eee55d08734e704da5809456593f44988da8990cb6aeae79c56316fdf5377e9e2b31addb416e186d799a28bf1f139b208f846a62f89c34e6b99
   languageName: node
   linkType: hard
 

@@ -5,7 +5,7 @@ import { getChangeRequests, getOrganization } from '@catalog-frontend/data-acces
 import { RedirectType, redirect } from 'next/navigation';
 import ChangeRequestsPageClient from './change-requests-page-client';
 
-const ChangeRequestsPage = async ({ params }) => {
+const ChangeRequestsPage = async ({ params, searchParams }) => {
   const session = await getServerSession(authOptions);
   const { catalogId } = params;
 
@@ -16,7 +16,7 @@ const ChangeRequestsPage = async ({ params }) => {
 
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
-  const changeRequests: ChangeRequest[] = await getChangeRequests(catalogId, `${session.accessToken}`)
+  const reponseData: ChangeRequest[] = await getChangeRequests(catalogId, `${session.accessToken}`)
     .then((response) => {
       return response.json();
     })
@@ -28,7 +28,7 @@ const ChangeRequestsPage = async ({ params }) => {
     <ChangeRequestsPageClient
       catalogId={catalogId}
       organization={organization}
-      changeRequests={changeRequests}
+      data={reponseData}
       FDK_REGISTRATION_BASE_URI={process.env.FDK_REGISTRATION_BASE_URI}
     />
   );
