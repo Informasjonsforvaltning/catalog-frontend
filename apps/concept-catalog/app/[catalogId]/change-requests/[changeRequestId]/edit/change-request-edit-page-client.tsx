@@ -7,6 +7,7 @@ import {
   Organization,
   ChangeRequest,
 } from '@catalog-frontend/types';
+import { updateDefinitionsIfEgendefinert } from '@catalog-frontend/utils';
 import jsonpatch from 'fast-json-patch';
 import { useUpdateChangeRequest } from '../../../../../hooks/change-requests';
 import { useRouter } from 'next/navigation';
@@ -52,9 +53,13 @@ const ChangeRequestEditPageClient: FC<Props> = ({
       values.anbefaltTerm?.navn?.nn ||
       values.anbefaltTerm?.navn?.en ||
       '';
+
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
-      conceptId: originalConcept?.id || null,
-      operations: jsonpatch.compare(originalConcept || emptyConcept, values) as JsonPatchOperation[],
+      conceptId: originalConcept?.id ?? null,
+      operations: jsonpatch.compare(
+        originalConcept || emptyConcept,
+        updateDefinitionsIfEgendefinert(values),
+      ) as JsonPatchOperation[],
       title: changeRequestTitle,
     };
 
