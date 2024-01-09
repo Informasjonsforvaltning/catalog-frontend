@@ -2151,9 +2151,9 @@ __metadata:
   linkType: hard
 
 "@navikt/aksel-icons@npm:^5.12.1":
-  version: 5.12.2
-  resolution: "@navikt/aksel-icons@npm:5.12.2"
-  checksum: 70de7497d14d9dde0a7c3e96621c965e398624857c08e53a43c05921baa7b23763c78587b1dbe4c38d2d3ae5e18a83318e5fbcf1ab0680fcd7363f8d5e34586f
+  version: 5.12.4
+  resolution: "@navikt/aksel-icons@npm:5.12.4"
+  checksum: d28ba26e249414058a542e8893c02b9ba3f8a0a3a30b06afaaefe26c5b1c352b1bb7e2f1ffee3746ae486c64230e35d3692b9ba146b9d2fc19d0007f215493a2
   languageName: node
   linkType: hard
 

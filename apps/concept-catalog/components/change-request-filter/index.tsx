@@ -1,19 +1,20 @@
 'use client';
 
-import { Accordion, AccordionItem, Radio } from '@digdir/design-system-react';
+import { Accordion, Checkbox, Radio } from '@digdir/design-system-react';
 import { localization } from '@catalog-frontend/utils';
 import styles from './change-request-filter.module.css';
-import { ItemType } from '@catalog-frontend/types';
+import { ItemType, Status } from '@catalog-frontend/types';
 
 interface Props {
   itemType: ItemType;
+  status: Status;
 }
 
-const ChangeRequestsFilter = ({ itemType }: Props) => {
+const ChangeRequestsFilter = ({ itemType, status }: Props) => {
   return (
     <div className={styles.accordionContainer}>
       <Accordion border>
-        <AccordionItem defaultOpen>
+        <Accordion.Item defaultOpen>
           <Accordion.Header level={3}>{localization.filter}</Accordion.Header>
           <Accordion.Content>
             <Radio.Group
@@ -31,7 +32,25 @@ const ChangeRequestsFilter = ({ itemType }: Props) => {
               ))}
             </Radio.Group>
           </Accordion.Content>
-        </AccordionItem>
+        </Accordion.Item>
+        <Accordion.Item defaultOpen>
+          <Accordion.Header level={3}>{localization.status}</Accordion.Header>
+          <Accordion.Content>
+            <Checkbox.Group
+              onChange={status.onChange}
+              size='small'
+            >
+              {status.options.map((statusItem) => (
+                <Checkbox
+                  key={statusItem.value}
+                  value={statusItem.value}
+                >
+                  {statusItem.label}
+                </Checkbox>
+              ))}
+            </Checkbox.Group>
+          </Accordion.Content>
+        </Accordion.Item>
       </Accordion>
     </div>
   );

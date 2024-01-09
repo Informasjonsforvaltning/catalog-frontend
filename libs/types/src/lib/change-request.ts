@@ -25,8 +25,19 @@ export type ItemTypeOption = {
   value: string;
 };
 
+export type StatusOption = {
+  label: string;
+  value: string;
+};
+
 export type ItemType = {
   options: ItemTypeOption[];
   selected: string;
   onChange: (selected: string) => void;
+};
+
+export type Status = {
+  options: StatusOption[];
+  selected: string[];
+  onChange: (selected: string[]) => void;
 };

@@ -15,7 +15,7 @@ import { Heading, Link } from '@digdir/design-system-react';
 import { useCatalogDesign } from '../../../context/catalog-design';
 import cn from 'classnames';
 import ChangeRequestFilter from '../../../components/change-request-filter';
-import { parseAsString, useQueryState } from 'nuqs';
+import { parseAsString, parseAsArrayOf, useQueryState } from 'nuqs';
 
 export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_REGISTRATION_BASE_URI }) => {
   const pageSubtitle = organization?.name ?? '';
@@ -50,19 +50,46 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
     },
   ];
 
+  const statusOptions = [
+    {
+      label: localization.changeRequest.status.accepted,
+      value: 'accepted',
+    },
+    {
+      label: localization.changeRequest.status.open,
+      value: 'open',
+    },
+    {
+      label: localization.changeRequest.status.rejected,
+      value: 'rejected',
+    },
+  ];
+
   const [filterItemType, setFilterItemType] = useQueryState(
     'filter.itemType',
     parseAsString.withDefault(itemTypeOptions[0].value),
   );
 
+  const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString).withDefault([]));
+
   const onItemTypeChange = (value: string) => {
     setFilterItemType(value);
+  };
+
+  const onStatusChange = (values: string[]) => {
+    setFilterStatus(values);
   };
 
   const itemType = {
     options: itemTypeOptions,
     selected: filterItemType,
     onChange: onItemTypeChange,
+  };
+
+  const status = {
+    options: statusOptions,
+    selected: filterStatus,
+    onChange: onStatusChange,
   };
 
   let listItems;
@@ -72,6 +99,10 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
     listItems = data.filter((item) => item.conceptId === null);
   } else {
     listItems = data;
+  }
+
+  if (filterStatus && filterStatus.length > 0) {
+    listItems = listItems.filter((item) => filterStatus.includes(item.status.toLowerCase()));
   }
 
   return (
@@ -100,7 +131,10 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
           >
             {loc.changeRequest.changeRequest}
           </Heading>
-          <ChangeRequestFilter itemType={itemType} />
+          <ChangeRequestFilter
+            itemType={itemType}
+            status={status}
+          />
           {listItems && listItems.length !== 0 ? (
             <div className={styles.listWrapper}>
               <ul className={styles.list}>
