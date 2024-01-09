@@ -95,12 +95,13 @@ export const SearchPageClient = ({
 
   const getSubjectChildren = (subjectId: number) => {
     const children: number[] = [];
+
     subjectCodeList?.codes
       ?.filter((code) => code.parentID === subjectId)
       .map((code) => code.id)
       .forEach((childId) => {
         children.push(childId);
-        children.concat(getSubjectChildren(childId));
+        children.push(...getSubjectChildren(childId));
       });
 
     return children;
@@ -112,7 +113,7 @@ export const SearchPageClient = ({
     // The lowest level code will always be the last code in the path, Code 1.1.1 in this example.
     if (subjects.length > 0) {
       const lowestLevelCodeId = subjects[subjects.length - 1];
-      const codes = [...subjects, ...getSubjectChildren(+lowestLevelCodeId)];
+      const codes = [lowestLevelCodeId, ...getSubjectChildren(+lowestLevelCodeId)];
       return codes;
     }
     return [];

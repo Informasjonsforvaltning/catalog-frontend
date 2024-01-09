@@ -57,6 +57,7 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
 
   useEffect(() => {
     setChecked(filters);
+    setExpanded(filters);
   }, [filters]);
 
   const handleChecked = ({ value }) => {
