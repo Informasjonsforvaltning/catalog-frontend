@@ -5,6 +5,7 @@ import jsonpatch from 'fast-json-patch';
 import { useCreateChangeRequest } from '../../../../hooks/change-requests';
 import ChangeRequestForm from '../../../../components/change-request-form/change-request-form';
 import { FC, useState } from 'react';
+import { updateDefinitionsIfEgendefinert } from '@catalog-frontend/utils';
 
 interface Props {
   organization: Organization;
@@ -31,8 +32,8 @@ const ChangeRequestOrNewClient: FC<Props> = ({ organization, changeRequestAsConc
       values.anbefaltTerm?.navn.en;
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
       conceptId: originalConcept.id,
-      operations: jsonpatch.compare(originalConcept, values) as JsonPatchOperation[],
-      title: anbefaltTerm || '',
+      operations: jsonpatch.compare(originalConcept, updateDefinitionsIfEgendefinert(values)) as JsonPatchOperation[],
+      title: anbefaltTerm ?? '',
     };
     changeRequestMutateHook.mutate(changeRequestFromConcept, {
       onSettled: () => {
