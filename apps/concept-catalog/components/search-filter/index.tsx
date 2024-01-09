@@ -15,7 +15,7 @@ import { CheckboxGroupFilter } from './checkbox-group-filter';
 import { AccordionItem, AccordionItemProps } from '../accordion-item';
 import { useGetUsers } from '../../hooks/users';
 import { CheckboxTreeFilter } from './checkbox-tree-filter';
-import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'next-usequerystate';
+import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'nuqs';
 
 export type PublishedFilterType = 'published' | 'unpublished';
 export type InternalFieldFilterType = {

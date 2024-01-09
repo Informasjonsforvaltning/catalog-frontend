@@ -71,3 +71,20 @@
   flex-grow: 1;
   flex-shrink: 2;
 }
+
+.filterAndListContainer {
+  display: grid;
+  width: 100%;
+  grid-template-columns: 24rem 1fr;
+  column-gap: 2rem;
+}
+
+.listHeading {
+  grid-column-start: 2;
+}
+
+.noHits {
+  justify-self: center;
+  align-self: center;
+  font-size: 24px;
+}

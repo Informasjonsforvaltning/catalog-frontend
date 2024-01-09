@@ -19,3 +19,14 @@ export interface ChangeRequestUpdateBody {
   operations: JsonPatchOperation[];
   title: string;
 }
+
+export type ItemTypeOption = {
+  label: string;
+  value: string;
+};
+
+export type ItemType = {
+  options: ItemTypeOption[];
+  selected: string;
+  onChange: (selected: string) => void;
+};

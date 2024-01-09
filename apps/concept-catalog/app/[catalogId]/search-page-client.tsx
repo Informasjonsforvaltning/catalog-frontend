@@ -24,7 +24,7 @@ import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'next-usequerystate';
+import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'nuqs';
 
 import { SortOption, getSelectOptions, useSearchConcepts, getFields as getSearchFields } from '../../hooks/search';
 import SearchFilter from '../../components/search-filter';
