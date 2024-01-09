@@ -182,6 +182,10 @@ export const SearchPageClient = ({
 
   const onPageChange = (page: number) => {
     setPage(page - 1);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   };
 
   const removeFilter = (filterName, filterType: FilterType) => {
