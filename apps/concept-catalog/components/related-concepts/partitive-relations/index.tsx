@@ -13,7 +13,7 @@ const PartitiveRelations = ({ partitiveRelations, relatedConceptsMap, catalogId 
   return (
     <>
       {partitiveRelations.map(({ inndelingskriterium, relasjonsType, relatertBegrep }) => {
-        const relatedConcept = relatedConceptsMap(relatertBegrep);
+        const relatedConcept = relatertBegrep && relatedConceptsMap(relatertBegrep);
         if (!relatedConcept) return undefined;
         return (
           <KeyValueListItem
@@ -22,15 +22,13 @@ const PartitiveRelations = ({ partitiveRelations, relatedConceptsMap, catalogId 
               <div>
                 <div>
                   <p>{localization.concept.partitiveRelation}</p>
+                  <span>
+                    {relasjonsType === 'erDelAv' ? localization.concept.isPartOf : localization.concept.hasPart}
+                  </span>
                   {getTranslateText(inndelingskriterium) && (
-                    <>
-                      <span>
-                        {relasjonsType === 'erDelAv' ? localization.concept.isPartOf : localization.concept.hasPart}
-                      </span>
-                      <span>{` (${localization.concept.divisionCriterion}: ${getTranslateText(
-                        inndelingskriterium,
-                      )})`}</span>
-                    </>
+                    <span>{` (${localization.concept.divisionCriterion}: ${getTranslateText(
+                      inndelingskriterium,
+                    )})`}</span>
                   )}
                 </div>
               </div>

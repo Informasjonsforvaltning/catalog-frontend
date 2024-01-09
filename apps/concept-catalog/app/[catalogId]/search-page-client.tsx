@@ -308,7 +308,7 @@ export const SearchPageClient = ({
           </Chip.Removable>
         ))}
         {filterInternalFields &&
-          Object.entries(filterInternalFields).map(([key, values], index) => {
+          Object.entries(filterInternalFields).map(([key, values]: [string, string[]], index) => {
             return values.map((value, innerIndex) => (
               <Chip.Removable
                 key={`internalFields-${index}-${innerIndex}`}

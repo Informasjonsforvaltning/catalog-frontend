@@ -12,7 +12,7 @@ interface Props {
 const GenericRelations = ({ genericRelations, relatedConceptsMap, catalogId }: Props) => (
   <>
     {genericRelations.map(({ relatertBegrep, inndelingskriterium }) => {
-      const relatedConcept = relatedConceptsMap(relatertBegrep);
+      const relatedConcept = relatertBegrep && relatedConceptsMap(relatertBegrep);
       if (!relatedConcept) return undefined;
       return (
         <KeyValueListItem
@@ -22,19 +22,19 @@ const GenericRelations = ({ genericRelations, relatedConceptsMap, catalogId }: P
               <div>
                 <span>{localization.concept.genericRelation}</span>
               </div>
-              {getTranslateText(inndelingskriterium) && (
-                <div>
-                  <span>
-                    {relatedConcept.relasjonsType === 'overordnet'
-                      ? localization.concept.generalizes
-                      : localization.concept.specializes}
-                  </span>
 
+              <div>
+                <span>
+                  {relatedConcept.relasjonsType === 'overordnet'
+                    ? localization.concept.generalizes
+                    : localization.concept.specializes}
+                </span>
+                {getTranslateText(inndelingskriterium) && (
                   <span>{` (${localization.concept.divisionCriterion}: ${getTranslateText(
                     inndelingskriterium,
                   )})`}</span>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           }
           value={<a href={relatedConcept.identifier}>{getTranslateText(relatedConcept.prefLabel)}</a>}
