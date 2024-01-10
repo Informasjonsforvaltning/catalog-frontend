@@ -1488,6 +1488,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.13.10":
+  version: 7.23.8
+  resolution: "@babel/runtime@npm:7.23.8"
+  dependencies:
+    regenerator-runtime: ^0.14.0
+  checksum: 0bd5543c26811153822a9f382fd39886f66825ff2a397a19008011376533747cd05c33a91f6248c0b8b0edf0448d7c167ebfba34786088f1b7eb11c65be7dfc3
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.22.5, @babel/template@npm:^7.3.3":
   version: 7.22.5
   resolution: "@babel/template@npm:7.22.5"
@@ -1587,26 +1596,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/design-system-react@npm:^0.42.0":
-  version: 0.42.0
-  resolution: "@digdir/design-system-react@npm:0.42.0"
+"@digdir/design-system-react@npm:^0.45.0":
+  version: 0.45.0
+  resolution: "@digdir/design-system-react@npm:0.45.0"
   dependencies:
     "@altinn/figma-design-tokens": ^6.0.1
-    "@digdir/design-system-tokens": ^0.11.0
+    "@digdir/design-system-tokens": ^0.12.0
     "@floating-ui/react": 0.26.4
-    "@navikt/aksel-icons": ^5.12.1
+    "@navikt/aksel-icons": ^5.12.2
+    "@radix-ui/react-slot": ^1.0.2
     react-number-format: 5.3.1
   peerDependencies:
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
-  checksum: a6946db43dec360c1057d737bf8d1b908aaedb1e2753083d93231495a1456a87c0ef8aa96c343fac4e698538df0bba356135d62847e28cba4c597bf4fdbc2cd5
+  checksum: 9a4ad4b221f847e96a2d0a62dd955812e44ca55ce2eb5001740b4bcc88fff37a54901d69929c332cab7ec52b1a82ea78642c2533c5f33bbcfad0bd465990fd21
   languageName: node
   linkType: hard
 
-"@digdir/design-system-tokens@npm:^0.11.0":
-  version: 0.11.0
-  resolution: "@digdir/design-system-tokens@npm:0.11.0"
-  checksum: 73e6aad8fb3267461803b4ad3da253c6a7da1ae2514f2783d8df7e04f93a21821f3f52b2db5633898c1759dcd14e074415851c1de8a67cb25e669b47d422e6ce
+"@digdir/design-system-tokens@npm:^0.12.0":
+  version: 0.12.0
+  resolution: "@digdir/design-system-tokens@npm:0.12.0"
+  checksum: 7089ba919876fc73e5f13c696426f3c3553b7f0ebb5e8785411fc0bbc6fd86385ddd46a65073232a115f4c479b1eb40f2c20c5d31546e301fdf0cdf7edc715f9
   languageName: node
   linkType: hard
 
@@ -2150,10 +2160,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^5.12.1":
-  version: 5.12.4
-  resolution: "@navikt/aksel-icons@npm:5.12.4"
-  checksum: d28ba26e249414058a542e8893c02b9ba3f8a0a3a30b06afaaefe26c5b1c352b1bb7e2f1ffee3746ae486c64230e35d3692b9ba146b9d2fc19d0007f215493a2
+"@navikt/aksel-icons@npm:^5.12.2":
+  version: 5.12.5
+  resolution: "@navikt/aksel-icons@npm:5.12.5"
+  checksum: c1d5da55365858159017628dca0c5a16717b72ea6383688fb7e5bc1e1b0910179104e5b6c22561aae2952a977e415446107ecd1536e5fd1cafa436bf8b84917a
   languageName: node
   linkType: hard
 
@@ -2920,6 +2930,37 @@ __metadata:
     picocolors: ^1.0.0
     tslib: ^2.6.0
   checksum: 24e04c121269317d259614cd32beea3af38277151c4002df5883c4be920b8e3490bb897748e844f9d46bf68230f86dabd4e8f093773130e7e60529a769a132fc
+  languageName: node
+  linkType: hard
+
+"@radix-ui/react-compose-refs@npm:1.0.1":
+  version: 1.0.1
+  resolution: "@radix-ui/react-compose-refs@npm:1.0.1"
+  dependencies:
+    "@babel/runtime": ^7.13.10
+  peerDependencies:
+    "@types/react": "*"
+    react: ^16.8 || ^17.0 || ^18.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 2b9a613b6db5bff8865588b6bf4065f73021b3d16c0a90b2d4c23deceeb63612f1f15de188227ebdc5f88222cab031be617a9dd025874c0487b303be3e5cc2a8
+  languageName: node
+  linkType: hard
+
+"@radix-ui/react-slot@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "@radix-ui/react-slot@npm:1.0.2"
+  dependencies:
+    "@babel/runtime": ^7.13.10
+    "@radix-ui/react-compose-refs": 1.0.1
+  peerDependencies:
+    "@types/react": "*"
+    react: ^16.8 || ^17.0 || ^18.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: edf5edf435ff594bea7e198bf16d46caf81b6fb559493acad4fa8c308218896136acb16f9b7238c788fd13e94a904f2fd0b6d834e530e4cae94522cdb8f77ce9
   languageName: node
   linkType: hard
 
@@ -4902,8 +4943,8 @@ __metadata:
   dependencies:
     "@altinn/figma-design-tokens": ^6.0.1
     "@babel/preset-react": ^7.18.6
-    "@digdir/design-system-react": ^0.42.0
-    "@digdir/design-system-tokens": ^0.11.0
+    "@digdir/design-system-react": ^0.45.0
+    "@digdir/design-system-tokens": ^0.12.0
     "@fellesdatakatalog/icons": ^0.8.3
     "@fortawesome/fontawesome-svg-core": ^6.4.2
     "@fortawesome/free-regular-svg-icons": ^6.4.2
@@ -11076,6 +11117,13 @@ __metadata:
   version: 0.13.11
   resolution: "regenerator-runtime@npm:0.13.11"
   checksum: 27481628d22a1c4e3ff551096a683b424242a216fee44685467307f14d58020af1e19660bf2e26064de946bad7eff28950eae9f8209d55723e2d9351e632bbb4
+  languageName: node
+  linkType: hard
+
+"regenerator-runtime@npm:^0.14.0":
+  version: 0.14.1
+  resolution: "regenerator-runtime@npm:0.14.1"
+  checksum: 9f57c93277b5585d3c83b0cf76be47b473ae8c6d9142a46ce8b0291a04bb2cf902059f0f8445dcabb3fb7378e5fe4bb4ea1e008876343d42e46d3b484534ce38
   languageName: node
   linkType: hard
 
