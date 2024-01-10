@@ -1,7 +1,7 @@
 import { ChangeRequestUpdateBody } from '@catalog-frontend/types';
 import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useRouter, redirect, RedirectType } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 export const useGetChangeRequests = (catalogId: string) => {
   return useQuery({
@@ -37,7 +37,7 @@ export const useCreateChangeRequest = ({ catalogId }) => {
         return Promise.reject('Invalid concept id for change request');
       }
 
-      const response = await fetch(`/api/change-requests/${catalogId}/createChangeRequest`, {
+      const response = await fetch(`/api/change-requests/${catalogId}`, {
         method: 'POST',
         body: JSON.stringify(changeRequest),
       });
@@ -74,8 +74,8 @@ export const useUpdateChangeRequest = ({ catalogId, changeRequestId }) => {
         return Promise.reject('Invalid change request id');
       }
 
-      const response = await fetch(`/api/change-requests/${catalogId}/updateChangeRequest/${changeRequestId}`, {
-        method: 'POST',
+      const response = await fetch(`/api/change-requests/${catalogId}/${changeRequestId}`, {
+        method: 'PUT',
         body: JSON.stringify(changeRequest),
       });
 

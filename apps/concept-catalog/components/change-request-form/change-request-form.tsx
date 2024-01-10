@@ -261,12 +261,12 @@ export const ChangeRequestForm: FC<Props> = ({
               </FormFieldCard>
               <FormFieldCard
                 title={
-                  checkForChanges(values.merknad?.tekst, originalConcept?.merknad?.tekst).changed
+                  checkForChanges(values.merknad, originalConcept?.merknad).changed
                     ? `${loc.conceptHelptexts.merknadTitle} (${loc.changed})`
                     : loc.conceptHelptexts.merknadTitle
                 }
                 subtitle={loc.conceptHelptexts.merknadDescription}
-                variant={checkForChanges(values.merknad?.tekst, originalConcept?.merknad?.tekst).color}
+                variant={checkForChanges(values.merknad, originalConcept?.merknad).color}
               >
                 {selectedLanguages.map((language) => (
                   <div
@@ -274,7 +274,7 @@ export const ChangeRequestForm: FC<Props> = ({
                     className={styles.inputFieldRow}
                   >
                     <Field
-                      name={`merknad.tekst.${language}`}
+                      name={`merknad.${language}`}
                       as={Textarea}
                       label={loc.formatString(loc.concept.formFieldLabel, {
                         fieldType: loc.concept.note,
