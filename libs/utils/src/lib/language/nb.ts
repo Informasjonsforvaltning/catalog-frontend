@@ -13,6 +13,7 @@ export const nb = {
   contactPage: 'Kontaktside',
   dataVillage: ['Datalandsbyen', 'Lenke til Datalandsbyen'],
   description: 'Beskrivelse',
+  edit: 'Rediger',
   email: 'E-post',
   error: 'Feil',
   filter: 'Filtrer',
@@ -113,6 +114,7 @@ export const nb = {
     createConcept: 'Nytt begrep',
     delete: 'Slett',
     deleteWithFormat: 'Slett {text}',
+    edit: 'Rediger',
     expandAll: 'Vis alle felter',
     harvestDataset: 'Høst spesifikasjon fra katalog',
     importConcept: 'Importer',
@@ -287,7 +289,6 @@ export const nb = {
     alertInformation:
       'Bare et utvalg av feltene til et begrep støttes av dette skjemaet. Det er bare feltene du redigerer som til slutt gjør endringer på begrepet, resten av begrepet forblir uendret.',
     changeRequest: 'Endringsforslag',
-    edit: 'Rediger',
     editSources: 'Rediger kilder',
     editTitle: 'Rediger tittel',
     existingContent: 'Eksisterende innhold',

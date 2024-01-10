@@ -10,23 +10,16 @@ import {
   validUUID,
 } from '@catalog-frontend/utils';
 import styles from './change-requests-page.module.css';
-import { useRouter } from 'next/navigation';
-import { Heading, Link } from '@digdir/design-system-react';
+import { Heading } from '@digdir/design-system-react';
 import { useCatalogDesign } from '../../../context/catalog-design';
 import cn from 'classnames';
 import ChangeRequestFilter from '../../../components/change-request-filter';
 import { parseAsString, parseAsArrayOf, useQueryState } from 'nuqs';
+import Link from 'next/link';
 
 export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_REGISTRATION_BASE_URI }) => {
   const pageSubtitle = organization?.name ?? '';
-  const router = useRouter();
   const design = useCatalogDesign();
-
-  const handleNewConceptSuggestionClick = () => {
-    if (validOrganizationNumber(catalogId)) {
-      router.push(`/${catalogId}/change-requests/new`);
-    }
-  };
 
   const breadcrumbList = [
     {
@@ -121,7 +114,12 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
       />
       <div className='container'>
         <div className={styles.newConceptSuggestionButton}>
-          <Button onClick={handleNewConceptSuggestionClick}>{loc.suggestionForNewConcept}</Button>
+          <Button
+            as={Link}
+            href={`/${catalogId}/change-requests/new`}
+          >
+            {loc.suggestionForNewConcept}
+          </Button>
         </div>
         <div className={styles.filterAndListContainer}>
           <Heading

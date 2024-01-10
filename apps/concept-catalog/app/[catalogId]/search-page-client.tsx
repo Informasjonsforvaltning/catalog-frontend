@@ -236,12 +236,6 @@ export const SearchPageClient = ({
     importConcepts.mutate(event.target.files[0], { onError: (error) => alert('Import failed: ' + error) });
   };
 
-  const onCreateConceptClick = () => {
-    if (validOrganizationNumber(catalogId)) {
-      router.push(`/${catalogId}/new`);
-    }
-  };
-
   const onLabelClick = (label: string) => {
     let currentLabels = filterLabel ?? [];
     if (!currentLabels.includes(label)) {
@@ -342,22 +336,18 @@ export const SearchPageClient = ({
         buttonRow={
           <>
             {changeRequestEnabled && (
-              <Link
+              <Button
+                as={Link}
                 href={`/${catalogId}/change-requests`}
-                passHref
-                legacyBehavior
+                variant='secondary'
               >
-                <Button
-                  as='a'
-                  variant='secondary'
-                >
-                  {loc.changeRequest.changeRequest}
-                </Button>
-              </Link>
+                {loc.changeRequest.changeRequest}
+              </Button>
             )}
             {hasWritePermission && (
               <Button
-                onClick={onCreateConceptClick}
+                as={Link}
+                href={`/${catalogId}/new`}
                 icon={<PlusCircleIcon fontSize='1.5rem' />}
               >
                 {loc.button.createConcept}

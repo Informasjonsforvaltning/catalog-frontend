@@ -1,14 +1,15 @@
 'use client';
 
-import { Button as DigdirButton, ButtonProps } from '@digdir/design-system-react';
+import { Button as DigdirButton, ButtonProps as DsButtonProps } from '@digdir/design-system-react';
 import cn from './button.module.css';
 import { ElementType } from 'react';
 
-interface Props extends ButtonProps {
+export interface ButtonProps extends DsButtonProps {
   as?: ElementType;
+  href?: string;
 }
 
-export const Button = ({ children, ...props }: Props) => (
+export const Button = ({ children, ...props }: ButtonProps) => (
   <DigdirButton
     {...props}
     className={cn.button}
