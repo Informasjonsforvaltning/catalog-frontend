@@ -11,7 +11,7 @@ import PublishSwitch from '../../../../../components/publish-switch';
 import BasicServiceFormInfoCardItems from '../../../../../components/basic-form-info-card-items';
 import { useState } from 'react';
 import styles from './service-details-page.module.css';
-import { Button } from '@digdir/design-system-react';
+import { Button } from '@catalog-frontend/ui';
 
 interface ServiceDetailsPageProps {
   service: Service;
@@ -98,7 +98,7 @@ const ServiceDetailsPageClient = ({
               as={Link}
               href={`/catalogs/${catalogId}/services/${serviceId}/edit`}
             >
-              Rediger
+              {localization.serviceCatalog.editService}
             </Button>
 
             <DeleteServiceButton

@@ -27,17 +27,13 @@ export const AcceptChangeRequestButton = ({ catalogId, changeRequestId }: Props)
   };
 
   return (
-    <>
-      {
-        <Button
-          variant='primary'
-          onClick={handleAccept}
-          disabled={isHandlingAction}
-        >
-          {loc.changeRequest.accept}
-        </Button>
-      }
-    </>
+    <Button
+      variant='primary'
+      onClick={handleAccept}
+      disabled={isHandlingAction}
+    >
+      {loc.changeRequest.accept}
+    </Button>
   );
 };
 
@@ -57,18 +53,14 @@ export const RejectChangeRequestButton = ({ catalogId, changeRequestId }: Props)
   };
 
   return (
-    <>
-      {
-        <Button
-          variant='secondary'
-          color='danger'
-          onClick={handleReject}
-          disabled={isHandlingAction}
-        >
-          {loc.changeRequest.reject}
-        </Button>
-      }
-    </>
+    <Button
+      variant='secondary'
+      color='danger'
+      onClick={handleReject}
+      disabled={isHandlingAction}
+    >
+      {loc.changeRequest.reject}
+    </Button>
   );
 };
 
@@ -78,22 +70,13 @@ export const EditChangeRequestButton = ({ catalogId, changeRequestId }: Props) =
   }
 
   return (
-    <>
-      {
-        <Link
-          href={`/${catalogId}/change-requests/${changeRequestId}/edit`}
-          passHref
-          legacyBehavior
-        >
-          <Button
-            variant='secondary'
-            color='second'
-            as='a'
-          >
-            {loc.changeRequest.edit}
-          </Button>
-        </Link>
-      }
-    </>
+    <Button
+      as={Link}
+      href={`/${catalogId}/change-requests/${changeRequestId}/edit`}
+      variant='secondary'
+      color='second'
+    >
+      {loc.button.edit}
+    </Button>
   );
 };

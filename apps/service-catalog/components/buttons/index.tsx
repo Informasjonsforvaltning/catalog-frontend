@@ -1,6 +1,6 @@
 'use client';
 import { localization } from '@catalog-frontend/utils';
-import { Button } from '@digdir/design-system-react';
+import { Button, ButtonProps } from '@catalog-frontend/ui';
 import { deletePublicService } from '../../app/actions/public-services/actions';
 import { deleteService } from '../../app/actions/services/actions';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
@@ -30,12 +30,7 @@ export const DeleteServiceButton = ({ catalogId, serviceId, type }: DeleteProps)
   );
 };
 
-type AddProps = {
-  onClick: () => void;
-  children: string;
-};
-
-export const AddButton = ({ onClick, children, ...props }: AddProps) => {
+export const AddButton = ({ onClick, children, ...props }: ButtonProps) => {
   return (
     <div>
       <Button
