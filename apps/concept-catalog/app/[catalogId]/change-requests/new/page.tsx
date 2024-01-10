@@ -61,19 +61,15 @@ const ChangeRequestOrNew = async ({ params, searchParams }) => {
       } else throw new Error('Error when searching for original concept');
     });
 
-    const existingChangeRequests: ChangeRequest[] = await searchChangeRequest(
+    const [existingChangeRequest]: [ChangeRequest] = await searchChangeRequest(
       catalogId,
       conceptId,
       session.accessToken,
       'OPEN',
     ).then((res) => res.json());
 
-    if (
-      existingChangeRequests.length > 0 &&
-      existingChangeRequests[0].id &&
-      existingChangeRequests[0].status === 'OPEN'
-    ) {
-      redirect(`/change-requests/${existingChangeRequests[0].id}/edit`, RedirectType.replace);
+    if (existingChangeRequest?.id && existingChangeRequest?.status === 'OPEN') {
+      redirect(`/${catalogId}/change-requests/${existingChangeRequest.id}/edit`, RedirectType.replace);
     }
   }
 
