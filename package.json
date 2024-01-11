@@ -6,6 +6,7 @@
     "nx": "nx",
     "start": "nx serve",
     "start:concept": "nx serve concept-catalog",
+    "start:service": "nx serve service-catalog",
     "build": "nx build",
     "build-all": "nx run-many --target=build --all",
     "test": "yarn run affected:test",
