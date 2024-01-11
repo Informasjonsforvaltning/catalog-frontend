@@ -359,6 +359,7 @@ export const nb = {
     invalidEmail: 'Ugyldig epostadresse',
     invalidUrl: 'Ugyldig nettaddresse',
     invalidTlf: 'Ugyldig telefonnummer',
+    nameRequired: 'Må ha navn',
   },
 
   serviceCatalog: {
