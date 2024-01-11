@@ -11,7 +11,8 @@ import PublishSwitch from '../../../../../components/publish-switch';
 import BasicServiceFormInfoCardItems from '../../../../../components/basic-form-info-card-items';
 import { useState } from 'react';
 import styles from './public-service-details-page.module.css';
-import { Button, Tag } from '@digdir/design-system-react';
+import { Tag } from '@digdir/design-system-react';
+import { Button } from '@catalog-frontend/ui';
 
 interface PublicServiceDetailsPageProps {
   service: Service;
