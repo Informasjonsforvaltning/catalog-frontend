@@ -21,7 +21,7 @@ const ChangeRequestOrNewClient: FC<Props> = ({ organization, changeRequestAsConc
   const changeRequestMutateHook = useCreateChangeRequest({
     catalogId: catalogId,
   });
-  const submitHandler = async (values: Concept) => {
+  const submitHandler = async ({ values }: { values: Concept }) => {
     setIsSubmitting(true);
     const anbefaltTerm =
       originalConcept.anbefaltTerm?.navn.nb ||
