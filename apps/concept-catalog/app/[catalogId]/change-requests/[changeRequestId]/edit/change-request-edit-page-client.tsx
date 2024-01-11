@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 
 import ChangeRequestForm from '../../../../../components/change-request-form/change-request-form';
 import { FC, useState } from 'react';
+import { FormikHelpers } from 'formik';
 
 interface Props {
   organization: Organization;
@@ -42,7 +43,7 @@ const ChangeRequestEditPageClient: FC<Props> = ({
     catalogId: organization.organizationId,
     changeRequestId: changeRequest.id,
   });
-  const submitHandler = (values: Concept) => {
+  const submitHandler = ({ values, formikHelpers }: { values: Concept; formikHelpers: FormikHelpers<Concept> }) => {
     setIsSubmitting(true);
     const changeRequestTitle =
       (originalConcept &&
@@ -66,6 +67,7 @@ const ChangeRequestEditPageClient: FC<Props> = ({
     changeRequestMutateHook.mutate(changeRequestFromConcept, {
       onSuccess: () => {
         router.refresh();
+        formikHelpers.resetForm({ values });
       },
       onSettled: () => {
         setIsSubmitting(false);
