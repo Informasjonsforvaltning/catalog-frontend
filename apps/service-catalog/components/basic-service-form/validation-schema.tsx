@@ -3,12 +3,12 @@ import * as Yup from 'yup';
 
 export const validationSchema = Yup.object().shape({
   title: Yup.object().shape({
-    nb: Yup.string().required(localization.serviceCatalog.validation.title),
+    nb: Yup.string().required(localization.validation.nameRequired),
   }),
   produces: Yup.array().of(
     Yup.object().shape({
       title: Yup.object().shape({
-        nb: Yup.string().required(localization.serviceCatalog.validation.titleProduce),
+        nb: Yup.string().required(localization.validation.nameRequired),
       }),
       description: Yup.object().shape({
         nb: Yup.string(),
