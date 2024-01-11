@@ -7,6 +7,7 @@ import {
   formatISO,
   validOrganizationNumber,
   validUUID,
+  getTagColorVariant,
 } from '@catalog-frontend/utils';
 import cn from 'classnames';
 import { ConceptSubject, SearchHit } from '@catalog-frontend/ui';
@@ -31,9 +32,11 @@ const ConceptSearchHits: React.FC<Props> = ({
   assignableUsers,
   onLabelClick,
 }: Props) => {
+  const findConceptStatus = (statusURI) => conceptStatuses?.find((s) => s.uri === statusURI);
+
   const ConceptLabels: React.FC<{ searchHit: Concept }> = ({ searchHit }) => (
     <div className={styles.rowSpaceBetween}>
-      <Chip.Group size='xsmall'>
+      <Chip.Group size='small'>
         {searchHit.merkelapp &&
           searchHit.merkelapp.map((label) => (
             <Chip.Toggle
@@ -106,7 +109,8 @@ const ConceptSearchHits: React.FC<Props> = ({
               description={translate(concept?.definisjon?.tekst)}
               labels={<ConceptLabels searchHit={concept} />}
               content={<ConceptPublishingInfo searchHit={concept} />}
-              status={translate(conceptStatuses?.find((s) => s.uri === concept.statusURI)?.label) as string}
+              status={translate(findConceptStatus(concept.statusURI)?.label) as string}
+              statusColor={getTagColorVariant(findConceptStatus(concept.statusURI)?.code)}
               titleHref={
                 validOrganizationNumber(catalogId) && validUUID(concept.id) ? `/${catalogId}/${concept.id}` : '#'
               }

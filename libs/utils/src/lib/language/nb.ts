@@ -42,6 +42,7 @@ export const nb = {
   showLess: 'Vis færre',
   showMore: 'Vis flere',
   somethingWentWrong: 'Beklager, noe gikk galt. Prøv på nytt litt senere.',
+  sorting: 'Sortering',
   status: 'Status',
   subjectArea: 'Fagområde',
   suggestionForNewConcept: 'Forslag til nytt begrep',
@@ -277,6 +278,15 @@ export const nb = {
     valueDomain: 'Verdiområde',
     version: 'Versjon',
     versions: 'Versjoner',
+
+    statusColors: {
+      DRAFT: 'second',
+      CANDIDATE: 'info',
+      WAITING: 'neutral',
+      CURRENT: 'success',
+      RETIRED: 'danger',
+      REJECTED: 'neutral',
+    },
   },
 
   validity: {
@@ -308,6 +318,13 @@ export const nb = {
       accepted: 'Godtatt',
       open: 'Åpen',
       rejected: 'Avvist',
+    },
+
+    sortOptions: {
+      TIME_FOR_PROPOSAL_ASC: 'Nyeste først',
+      TIME_FOR_PROPOSAL_DESC: 'Eldst først',
+      TITLE_ASC: 'Tittel A-Å',
+      TITLE_DESC: 'Tittel Å-A',
     },
   },
 

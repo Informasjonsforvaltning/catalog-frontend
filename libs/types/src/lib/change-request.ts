@@ -20,24 +20,19 @@ export interface ChangeRequestUpdateBody {
   title: string;
 }
 
-export type ItemTypeOption = {
-  label: string;
-  value: string;
-};
-
-export type StatusOption = {
+export type Option = {
   label: string;
   value: string;
 };
 
 export type ItemType = {
-  options: ItemTypeOption[];
+  options: Option[];
   selected: string;
   onChange: (selected: string) => void;
 };
 
 export type Status = {
-  options: StatusOption[];
+  options: Option[];
   selected: string[];
   onChange: (selected: string[]) => void;
 };

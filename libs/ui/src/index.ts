@@ -16,7 +16,6 @@ export * from './lib/language-indicator';
 export * from './lib/select';
 export * from './lib/spinner';
 export * from './lib/pagination';
-export * from './lib/tag';
 export * from './lib/card';
 export * from './lib/checkbox-group';
 export * from './lib/list';
