@@ -1,20 +1,20 @@
 'use client';
 
-import { BreadcrumbType, Breadcrumbs, Button, PageBanner, Tag } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
 import {
   capitalizeFirstLetter,
   convertTimestampToDateAndTime,
-  localization as loc,
   localization,
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
 import styles from './change-requests-page.module.css';
-import { Heading } from '@digdir/design-system-react';
+import { Heading, Tag } from '@digdir/design-system-react';
 import { useCatalogDesign } from '../../../context/catalog-design';
 import cn from 'classnames';
 import ChangeRequestFilter from '../../../components/change-request-filter';
 import { parseAsString, parseAsArrayOf, useQueryState } from 'nuqs';
+import ChangeRequestSort from '../../../components/change-request-sort';
 import Link from 'next/link';
 
 export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_REGISTRATION_BASE_URI }) => {
@@ -24,11 +24,11 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
   const breadcrumbList = [
     {
       href: `/${catalogId}`,
-      text: loc.concept.concept,
+      text: localization.concept.concept,
     },
     {
       href: `/${catalogId}/change-requests`,
-      text: loc.changeRequest.changeRequest,
+      text: localization.changeRequest.changeRequest,
     },
   ] as BreadcrumbType[];
 
@@ -45,18 +45,23 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
 
   const statusOptions = [
     {
-      label: localization.changeRequest.status.accepted,
-      value: 'accepted',
-    },
-    {
       label: localization.changeRequest.status.open,
       value: 'open',
+    },
+    {
+      label: localization.changeRequest.status.accepted,
+      value: 'accepted',
     },
     {
       label: localization.changeRequest.status.rejected,
       value: 'rejected',
     },
   ];
+
+  const sortOptions = Object.entries(localization.changeRequest.sortOptions ?? {}).map(([key, value]) => ({
+    label: value as string,
+    value: key,
+  }));
 
   const [filterItemType, setFilterItemType] = useQueryState(
     'filter.itemType',
@@ -65,12 +70,18 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
 
   const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString).withDefault([]));
 
+  const [sort, setSort] = useQueryState('sort', parseAsArrayOf(parseAsString).withDefault(['TIME_FOR_PROPOSAL_ASC']));
+
   const onItemTypeChange = (value: string) => {
     setFilterItemType(value);
   };
 
   const onStatusChange = (values: string[]) => {
     setFilterStatus(values);
+  };
+
+  const onSortChange = (e) => {
+    setSort([e.target.value]);
   };
 
   const itemType = {
@@ -98,6 +109,41 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
     listItems = listItems.filter((item) => filterStatus.includes(item.status.toLowerCase()));
   }
 
+  switch (sort[0]) {
+    case 'TIME_FOR_PROPOSAL_ASC':
+      listItems = listItems.sort((a, b) => (a.timeForProposal < b.timeForProposal ? 1 : -1));
+      break;
+    case 'TIME_FOR_PROPOSAL_DESC':
+      listItems = listItems.sort((a, b) => (a.timeForProposal > b.timeForProposal ? 1 : -1));
+      break;
+    case 'TITLE_ASC':
+      listItems = listItems.sort((a, b) => (a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1));
+      break;
+    case 'TITLE_DESC':
+      listItems = listItems.sort((a, b) => (a.title.toLowerCase() < b.title.toLowerCase() ? 1 : -1));
+      break;
+    default:
+      break;
+  }
+
+  const getTranslatedStatus = (status: string) =>
+    Object.entries(localization.changeRequest.status as Record<string, string>)
+      .find(([key]) => key === status.toLowerCase())?.[1]
+      .toString();
+
+  const getStatusColorVariant = (status: string) => {
+    switch (status.toLowerCase()) {
+      case 'open':
+        return 'warning';
+      case 'accepted':
+        return 'success';
+      case 'rejected':
+        return 'danger';
+      default:
+        return 'neutral';
+    }
+  };
+
   return (
     <>
       <Breadcrumbs
@@ -105,7 +151,7 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
         breadcrumbList={breadcrumbList}
       />
       <PageBanner
-        title={loc.catalogType.concept}
+        title={localization.catalogType.concept}
         subtitle={pageSubtitle}
         fontColor={design?.fontColor}
         backgroundColor={design?.backgroundColor}
@@ -118,17 +164,24 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
             as={Link}
             href={`/${catalogId}/change-requests/new`}
           >
-            {loc.suggestionForNewConcept}
+            {localization.suggestionForNewConcept}
           </Button>
         </div>
         <div className={styles.filterAndListContainer}>
-          <Heading
-            className={styles.listHeading}
-            level={2}
-            size='xsmall'
-          >
-            {loc.changeRequest.changeRequest}
-          </Heading>
+          <span className={styles.headingAndSortContainer}>
+            <Heading
+              level={2}
+              size='medium'
+              className={styles.listHeading}
+            >
+              {localization.changeRequest.changeRequest}
+            </Heading>
+            <ChangeRequestSort
+              options={sortOptions}
+              selected={sort}
+              onChange={onSortChange}
+            />
+          </span>
           <ChangeRequestFilter
             itemType={itemType}
             status={status}
@@ -159,7 +212,7 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
                             }
                             className={title ? styles.heading : cn(styles.heading, styles.noName)}
                           >
-                            {title || `(${loc.changeRequest.noName})`}
+                            {title ?? `(${localization.changeRequest.noName})`}
                           </Link>
                         </Heading>
                         <div className={styles.text}>
@@ -174,7 +227,12 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
                       </div>
                       {status && (
                         <div className={styles.status}>
-                          <Tag>{status}</Tag>
+                          <Tag
+                            color={getStatusColorVariant(status)}
+                            size='small'
+                          >
+                            {getTranslatedStatus(status)}
+                          </Tag>
                         </div>
                       )}
                     </div>
@@ -184,7 +242,7 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
             </div>
           ) : (
             <div className={styles.noHits}>
-              <p>{loc.changeRequest.noHits}</p>
+              <p>{localization.changeRequest.noHits}</p>
             </div>
           )}
         </div>

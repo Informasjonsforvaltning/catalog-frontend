@@ -31,7 +31,6 @@ import SearchFilter from '../../components/search-filter';
 import { useCatalogDesign } from '../../context/catalog-design';
 import { useImportConcepts } from '../../hooks/import';
 import styles from './search-page.module.css';
-import { useRouter } from 'next/navigation';
 import ConceptSearchHits from '../../components/concept-search-hits';
 
 export type FilterType = 'published' | 'status' | 'assignedUser' | 'subject' | 'internalFields' | 'label';
@@ -61,7 +60,6 @@ export const SearchPageClient = ({
   FDK_REGISTRATION_BASE_URI,
   changeRequestEnabled,
 }: Props) => {
-  const router = useRouter();
   const [selectedFieldOption, setSelectedFieldOption] = useState('alleFelter' as SearchableField | 'alleFelter');
   const [selectedSortOption, setSelectedSortOption] = useState(SortOption.RELEVANCE);
   const [page, setPage] = useQueryState('page', parseAsInteger);

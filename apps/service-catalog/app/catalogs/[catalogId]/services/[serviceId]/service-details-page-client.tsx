@@ -1,7 +1,7 @@
 'use client';
 import { ReferenceDataCode, Service } from '@catalog-frontend/types';
-import { DetailsPageLayout, InfoCard, Tag } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { DetailsPageLayout, InfoCard } from '@catalog-frontend/ui';
+import { getTagColorVariant, getTranslateText, localization } from '@catalog-frontend/utils';
 
 import _ from 'lodash';
 
@@ -11,7 +11,7 @@ import PublishSwitch from '../../../../../components/publish-switch';
 import BasicServiceFormInfoCardItems from '../../../../../components/basic-form-info-card-items';
 import { useState } from 'react';
 import styles from './service-details-page.module.css';
-import { Button } from '@catalog-frontend/ui';
+import { Button, Tag } from '@digdir/design-system-react';
 
 interface ServiceDetailsPageProps {
   service: Service;
@@ -32,6 +32,7 @@ const ServiceDetailsPageClient = ({
   const handleLanguageChange = (value: string) => {
     setLanguage(value);
   };
+  const findServiceStatus = () => statuses.find((s) => s.uri === service?.status);
 
   const RightColumn = () => (
     <div>
@@ -74,7 +75,9 @@ const ServiceDetailsPageClient = ({
         <div className={styles.status}>
           <h2>{getTranslateText(service?.title ?? '', language)}</h2>
           {service.status !== 'Ingen status' && (
-            <Tag>{getTranslateText(statuses.find((s) => s.uri === service?.status)?.label) as string}</Tag>
+            <Tag color={getTagColorVariant(findServiceStatus()?.code)}>
+              {getTranslateText(findServiceStatus()?.label) as string}
+            </Tag>
           )}
         </div>
       }

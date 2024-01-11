@@ -1,3 +1,5 @@
+import { localization } from '../language/localization';
+
 /**
  * Generally used to produce a uniq hash array items.
  * Unlike uniqId() of lodash, it garanties that an array
@@ -16,3 +18,13 @@ export const isObjectNullUndefinedEmpty = (object: any | null | undefined) =>
   object === null ||
   Object.keys(object).length === 0 ||
   Object.values(object).every((x) => x === null || x === '');
+
+/**
+ * Returns the color variant associated with a given concept status.
+ * @param status - The status value.
+ * @returns The color variant associated with the status, or 'neutral' if no match is found.
+ */
+export const getTagColorVariant = (status: string | undefined) =>
+  status
+    ? Object.entries(localization.concept.statusColors as Record<string, string>).find(([key]) => key === status)?.[1]
+    : 'neutral';

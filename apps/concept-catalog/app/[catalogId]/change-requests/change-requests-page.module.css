@@ -3,6 +3,7 @@
   justify-content: flex-end;
   margin-top: 3rem;
   margin-bottom: 3rem;
+  max-width: 1400px;
 }
 
 .listWrapper {
@@ -45,7 +46,7 @@
 }
 
 .heading {
-  padding-bottom: 10px;
+  padding-bottom: 1rem;
   color: #2d3741;
 }
 
@@ -78,8 +79,15 @@
   column-gap: 2rem;
 }
 
-.listHeading {
+.headingAndSortContainer {
+  display: flex;
+  justify-content: space-between;
   grid-column-start: 2;
+}
+
+.listHeading {
+  display: flex;
+  align-items: flex-end;
 }
 
 .noHits {

@@ -10,7 +10,6 @@ import {
   ConceptSubject,
   InfoCard,
   Spinner,
-  Tag,
   Button,
   Pagination,
   DetailsPageLayout,
@@ -22,11 +21,12 @@ import {
   validOrganizationNumber,
   validUUID,
   ensureStringArray,
+  getTagColorVariant,
 } from '@catalog-frontend/utils';
 import { Concept, Comment, Update, CodeList, InternalField, AssignedUser } from '@catalog-frontend/types';
 import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
-import { Accordion, Switch, Tabs, Textarea } from '@digdir/design-system-react';
+import { Accordion, Switch, Tabs, Tag, Textarea } from '@digdir/design-system-react';
 import _ from 'lodash';
 import classes from './concept-page.module.css';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../hooks/comments';
@@ -313,6 +313,11 @@ export const ConceptPageClient = ({
     );
   };
 
+  const getStatusFromURL = (item) => {
+    const urlParts = item?.statusURI.split('/');
+    return urlParts[urlParts.length - 1];
+  };
+
   const RevisionsTab = () => {
     return (
       <InfoCard>
@@ -338,7 +343,7 @@ export const ConceptPageClient = ({
                 </div>
                 {status && (
                   <div className={cn(classes.status)}>
-                    <Tag>{status}</Tag>
+                    <Tag color={getTagColorVariant(getStatusFromURL(revision))}>{status}</Tag>
                   </div>
                 )}
               </div>
@@ -736,7 +741,7 @@ export const ConceptPageClient = ({
         headingTitle={
           <div className={cn(classes.status)}>
             <h2>{getTitle(translate(concept?.anbefaltTerm?.navn, language))}</h2>
-            {status && <Tag>{status}</Tag>}
+            {status && <Tag color={getTagColorVariant(getStatusFromURL(concept))}>{status}</Tag>}
           </div>
         }
         headingSubtitle={getDetailSubtitle()}
