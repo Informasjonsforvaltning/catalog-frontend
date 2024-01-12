@@ -296,8 +296,6 @@ export const nb = {
 
   changeRequest: {
     accept: 'Godta',
-    alertInformation:
-      'Bare et utvalg av feltene til et begrep støttes av dette skjemaet. Det er bare feltene du redigerer som til slutt gjør endringer på begrepet, resten av begrepet forblir uendret.',
     changeRequest: 'Endringsforslag',
     editSources: 'Rediger kilder',
     editTitle: 'Rediger tittel',
@@ -318,7 +316,17 @@ export const nb = {
       changeRequestDescription: {
         heading: 'Hva er endringsforlag?',
         paragraph:
-          'Her ser du forslag til endringer av begrep. Endringsforslagene kan foreslås av alle brukere og godkjennes av skrivebrukere eller virksomhetsadministrator. Du kan også foreslå nye begrep ved å trykke på “Foreslå nytt begrep”.',
+          'Her ser du forslag til nye begrep og endringer av eksisterende begrep. Endringsforslagene kan foreslås av alle brukere og godkjennes av skrivebrukere eller virksomhetsadministrator. Du kan også foreslå nye begrep ved å trykke på “Foreslå nytt begrep”.',
+      },
+      newAlertInfo: {
+        heading: 'Om forslag til nytt begrep',
+        paragraph:
+          'Skjemaet inneholder bare utvalgte felt om begrepet.Når du har sendt inn forslag til nytt begrep må det godkjennes av en skrivebruker.',
+      },
+      editAlertInfo: {
+        heading: 'Om endringsforslag',
+        paragraph:
+          'Skjemaet inneholder bare utvalgte felt om begrepet.Når du har sendt inn forslag til endring må det godkjennes av en skrivebruker.',
       },
     },
 

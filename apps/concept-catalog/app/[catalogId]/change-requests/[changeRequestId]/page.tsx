@@ -6,7 +6,7 @@ import {
   hasOrganizationReadPermission,
   validOrganizationNumber,
   validUUID,
-  localization as loc,
+  localization,
   formatISO,
   hasOrganizationWritePermission,
 } from '@catalog-frontend/utils';
@@ -15,7 +15,7 @@ import jsonpatch from 'fast-json-patch';
 import { RedirectType, redirect } from 'next/navigation';
 import sharedStyle from '../change-requests-page.module.css';
 import { Banner } from '../../../../components/banner';
-import { Alert, Link } from '@digdir/design-system-react';
+import { Alert, Heading, Link, Paragraph } from '@digdir/design-system-react';
 import NextLink from 'next/link';
 import ChangeRequestForm from '../../../../components/change-request-form/change-request-form';
 import { ButtonRow } from '../../../../components/buttons/button-row';
@@ -85,11 +85,11 @@ const ChangeRequestDetailsPage = async ({ params }) => {
   const breadcrumbList = [
     {
       href: `/${catalogId}`,
-      text: loc.concept.concept,
+      text: localization.concept.concept,
     },
     {
       href: `/${catalogId}/change-requests`,
-      text: loc.changeRequest.changeRequest,
+      text: localization.changeRequest.changeRequest,
     },
     {
       href: `/${catalogId}/change-requests/${changeRequest.id}`,
@@ -135,17 +135,21 @@ const ChangeRequestDetailsPage = async ({ params }) => {
         breadcrumbList={breadcrumbList}
       />
       <Banner
-        title={loc.catalogType.concept}
+        title={localization.catalogType.concept}
         subtitle={pageSubtitle}
         catalogId={catalogId}
       />
       <div className={'formContainer'}>
         <div className={sharedStyle.topRow}>
-          <Alert
-            severity='info'
-            className={sharedStyle.alertInformation}
-          >
-            {loc.changeRequest.alertInformation}
+          <Alert severity='info'>
+            <Heading
+              level={2}
+              size='xsmall'
+              spacing
+            >
+              {localization.changeRequest.alert.editAlertInfo.heading}
+            </Heading>
+            <Paragraph>{localization.changeRequest.alert.editAlertInfo.paragraph}</Paragraph>
           </Alert>
         </div>
         <div className={sharedStyle.topRow}>

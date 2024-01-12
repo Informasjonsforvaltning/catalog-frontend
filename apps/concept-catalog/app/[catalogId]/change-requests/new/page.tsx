@@ -4,7 +4,7 @@ import {
   authOptions,
   hasOrganizationReadPermission,
   validOrganizationNumber,
-  localization as loc,
+  localization,
   validUUID,
   validateSession,
 } from '@catalog-frontend/utils';
@@ -15,6 +15,7 @@ import ChangeRequestOrNewClient from './change-request-or-new-client';
 import { BreadcrumbType, Breadcrumbs, DetailHeading } from '@catalog-frontend/ui';
 import { Banner } from '../../../../components/banner';
 import style from '../change-requests-page.module.css';
+import { Alert, Heading, Paragraph } from '@digdir/design-system-react';
 
 const ChangeRequestOrNew = async ({ params, searchParams }) => {
   const { catalogId } = params;
@@ -93,15 +94,15 @@ const ChangeRequestOrNew = async ({ params, searchParams }) => {
   const breadcrumbList = [
     {
       href: `/${catalogId}`,
-      text: loc.concept.concept,
+      text: localization.concept.concept,
     },
     {
       href: `/${catalogId}/change-requests`,
-      text: loc.changeRequest.changeRequest,
+      text: localization.changeRequest.changeRequest,
     },
     {
       href: `/${catalogId}/change-requests/new`,
-      text: conceptId ? loc.changeRequest.newChangeRequest : loc.suggestionForNewConcept,
+      text: conceptId ? localization.changeRequest.newChangeRequest : localization.suggestionForNewConcept,
     },
   ] as BreadcrumbType[];
 
@@ -118,14 +119,28 @@ const ChangeRequestOrNew = async ({ params, searchParams }) => {
         breadcrumbList={breadcrumbList}
       />
       <Banner
-        title={loc.catalogType.concept}
+        title={localization.catalogType.concept}
         subtitle={pageSubtitle}
         catalogId={catalogId}
       />
       <div className='formContainer'>
         <div className={style.topRow}>
+          <Alert severity='info'>
+            <Heading
+              level={2}
+              size='xsmall'
+              spacing
+            >
+              {localization.changeRequest.alert.newAlertInfo.heading}
+            </Heading>
+            <Paragraph>{localization.changeRequest.alert.newAlertInfo.paragraph}</Paragraph>
+          </Alert>
+        </div>
+        <div className={style.topRow}>
           <DetailHeading
-            headingTitle={<h1>{conceptId ? loc.changeRequest.newChangeRequest : loc.suggestionForNewConcept}</h1>}
+            headingTitle={
+              <h1>{conceptId ? localization.changeRequest.newChangeRequest : localization.suggestionForNewConcept}</h1>
+            }
           />
         </div>
         <ChangeRequestOrNewClient {...clientProps} />
