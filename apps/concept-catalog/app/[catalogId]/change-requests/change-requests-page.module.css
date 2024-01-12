@@ -75,7 +75,7 @@
 .filterAndListContainer {
   display: grid;
   width: 100%;
-  grid-template-columns: 24rem 1fr;
+  grid-template-columns: 17rem 1fr;
   column-gap: 2rem;
 }
 
@@ -94,4 +94,9 @@
   justify-self: center;
   align-self: center;
   font-size: 24px;
+}
+
+.alertContainer {
+  grid-column-start: 2;
+  margin-bottom: 3rem;
 }

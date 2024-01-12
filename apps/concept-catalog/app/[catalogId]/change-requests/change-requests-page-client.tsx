@@ -9,7 +9,7 @@ import {
   validUUID,
 } from '@catalog-frontend/utils';
 import styles from './change-requests-page.module.css';
-import { Heading, Tag } from '@digdir/design-system-react';
+import { Alert, Heading, Paragraph, Tag } from '@digdir/design-system-react';
 import { useCatalogDesign } from '../../../context/catalog-design';
 import cn from 'classnames';
 import ChangeRequestFilter from '../../../components/change-request-filter';
@@ -168,13 +168,27 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
           </Button>
         </div>
         <div className={styles.filterAndListContainer}>
+          <div className={styles.alertContainer}>
+            <Alert severity='info'>
+              <Heading
+                level={2}
+                size='xsmall'
+                spacing
+              >
+                {localization.changeRequest.alert.changeRequestDescription.heading}
+              </Heading>
+              <Paragraph>{localization.changeRequest.alert.changeRequestDescription.paragraph}</Paragraph>
+            </Alert>
+          </div>
           <span className={styles.headingAndSortContainer}>
             <Heading
               level={2}
               size='medium'
               className={styles.listHeading}
             >
-              {localization.changeRequest.changeRequest}
+              {filterItemType === 'changeRequest'
+                ? localization.changeRequest.changeRequest
+                : localization.suggestionForNewConcept}
             </Heading>
             <ChangeRequestSort
               options={sortOptions}
