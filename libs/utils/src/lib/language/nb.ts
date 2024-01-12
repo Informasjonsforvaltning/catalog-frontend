@@ -314,6 +314,14 @@ export const nb = {
     sourceLink: 'Lenke til kilde',
     sourceTitle: 'Tittel på kilde',
 
+    alert: {
+      changeRequestDescription: {
+        heading: 'Hva er endringsforlag?',
+        paragraph:
+          'Her ser du forslag til endringer av begrep. Endringsforslagene kan foreslås av alle brukere og godkjennes av skrivebrukere eller virksomhetsadministrator. Du kan også foreslå nye begrep ved å trykke på “Foreslå nytt begrep”.',
+      },
+    },
+
     status: {
       accepted: 'Godtatt',
       open: 'Åpen',
