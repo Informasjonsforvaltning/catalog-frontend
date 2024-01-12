@@ -11,8 +11,7 @@ import PublishSwitch from '../../../../../components/publish-switch';
 import BasicServiceFormInfoCardItems from '../../../../../components/basic-form-info-card-items';
 import { useState } from 'react';
 import styles from './public-service-details-page.module.css';
-import { Tag } from '@digdir/design-system-react';
-import { Button } from '@catalog-frontend/ui';
+import { Button, Tag } from '@digdir/design-system-react';
 
 interface PublicServiceDetailsPageProps {
   service: Service;
@@ -35,6 +34,8 @@ const PublicServiceDetailsPageClient = ({
   };
 
   const findServiceStatus = () => statuses.find((s) => s.uri === service?.status);
+
+  console.log('service', service);
 
   const RightColumn = () => (
     <div>
@@ -77,7 +78,7 @@ const PublicServiceDetailsPageClient = ({
       headingTitle={
         <div className={styles.status}>
           <h2>{getTranslateText(service?.title ?? '', language)}</h2>
-          {service.status !== 'Ingen status' && (
+          {service.status && (
             <Tag color={getTagColorVariant(findServiceStatus()?.code)}>
               {getTranslateText(findServiceStatus()?.label) as string}
             </Tag>
