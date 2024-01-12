@@ -296,6 +296,7 @@ export const nb = {
 
   changeRequest: {
     accept: 'Godta',
+    changed: 'Endret',
     changeRequest: 'Endringsforslag',
     editSources: 'Rediger kilder',
     editTitle: 'Rediger tittel',
@@ -314,7 +315,7 @@ export const nb = {
 
     alert: {
       changeRequestDescription: {
-        heading: 'Hva er endringsforlag?',
+        heading: 'Hva er endringsforslag?',
         paragraph:
           'Her ser du forslag til nye begrep og endringer av eksisterende begrep. Endringsforslagene kan foreslås av alle brukere og godkjennes av skrivebrukere eller virksomhetsadministrator. Du kan også foreslå nye begrep ved å trykke på “Foreslå nytt begrep”.',
       },
