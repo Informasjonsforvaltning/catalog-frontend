@@ -230,8 +230,11 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
                           </Link>
                         </Heading>
                         <div className={styles.text}>
-                          <p>{convertTimestampToDateAndTime(timeForProposal)}</p>
                           <p>
+                            {localization.concept.created}: {convertTimestampToDateAndTime(timeForProposal)}
+                          </p>
+                          <p>
+                            {localization.concept.createdBy}:{' '}
                             {proposedBy.name
                               .split(' ')
                               .map((namePart) => capitalizeFirstLetter(namePart))
