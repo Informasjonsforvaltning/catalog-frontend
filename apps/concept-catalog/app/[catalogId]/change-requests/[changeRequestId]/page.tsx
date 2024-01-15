@@ -97,7 +97,7 @@ const ChangeRequestDetailsPage = async ({ params }) => {
     },
   ] as BreadcrumbType[];
 
-  const subtitle = `${
+  const subtitle = `${loc.concept.created}: ${
     changeRequest?.timeForProposal &&
     formatISO(changeRequest?.timeForProposal, {
       year: 'numeric',
@@ -106,7 +106,7 @@ const ChangeRequestDetailsPage = async ({ params }) => {
       hour: '2-digit',
       minute: '2-digit',
     })
-  } - ${changeRequest.proposedBy?.name}`;
+  } - ${loc.concept.createdBy}: ${changeRequest.proposedBy?.name}`;
 
   const headingTitle = changeRequest.conceptId ? (
     <h1>
