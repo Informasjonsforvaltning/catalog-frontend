@@ -77,7 +77,7 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
 
   const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString).withDefault([]));
 
-  const [sort, setSort] = useQueryState('sort', parseAsArrayOf(parseAsString).withDefault(['TIME_FOR_PROPOSAL_ASC']));
+  const [sort, setSort] = useQueryState('sort', parseAsString.withDefault('TIME_FOR_PROPOSAL_ASC'));
 
   const onItemTypeChange = (value: string) => {
     setFilterItemType(value);
@@ -88,7 +88,7 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
   };
 
   const onSortChange = (e) => {
-    setSort([e.target.value]);
+    setSort(e.target.value);
   };
 
   const itemType = {

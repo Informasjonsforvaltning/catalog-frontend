@@ -65,7 +65,7 @@ const DetailsPageLayout = ({
                 </Select>
               </div>
             </div>
-            <div></div>
+            <div>&nbsp;</div>
           </div>
           <div className={cn(styles.twoColumnRow, styles.bottomSpace)}>
             {mainColumn}
