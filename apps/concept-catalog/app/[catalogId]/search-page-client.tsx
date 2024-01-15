@@ -13,12 +13,7 @@ import {
   SearchHitsPageLayout,
   Select,
 } from '@catalog-frontend/ui';
-import {
-  validOrganizationNumber,
-  getTranslateText,
-  capitalizeFirstLetter,
-  localization as loc,
-} from '@catalog-frontend/utils';
+import { getTranslateText, capitalizeFirstLetter, localization as loc } from '@catalog-frontend/utils';
 import { Chip } from '@digdir/design-system-react';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 
