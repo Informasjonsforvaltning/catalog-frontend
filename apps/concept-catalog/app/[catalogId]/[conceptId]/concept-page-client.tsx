@@ -13,6 +13,7 @@ import {
   Button,
   Pagination,
   DetailsPageLayout,
+  Tag,
 } from '@catalog-frontend/ui';
 import {
   localization,
@@ -21,12 +22,11 @@ import {
   validOrganizationNumber,
   validUUID,
   ensureStringArray,
-  getTagColorVariant,
 } from '@catalog-frontend/utils';
 import { Concept, Comment, Update, CodeList, InternalField, AssignedUser } from '@catalog-frontend/types';
 import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
-import { Accordion, Switch, Tabs, Tag, Textarea } from '@digdir/design-system-react';
+import { Accordion, Switch, Tabs, Textarea } from '@digdir/design-system-react';
 import _ from 'lodash';
 import classes from './concept-page.module.css';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../hooks/comments';
@@ -343,7 +343,10 @@ export const ConceptPageClient = ({
                 </div>
                 {status && (
                   <div className={cn(classes.status)}>
-                    <Tag color={getTagColorVariant(getStatusFromURL(revision))}>{status}</Tag>
+                    <Tag.ConceptStatus
+                      statusKey={getStatusFromURL(revision)}
+                      statusLabel={status}
+                    />
                   </div>
                 )}
               </div>
@@ -741,7 +744,12 @@ export const ConceptPageClient = ({
         headingTitle={
           <div className={cn(classes.status)}>
             <h2>{getTitle(translate(concept?.anbefaltTerm?.navn, language))}</h2>
-            {status && <Tag color={getTagColorVariant(getStatusFromURL(concept))}>{status}</Tag>}
+            {status && (
+              <Tag.ConceptStatus
+                statusKey={getStatusFromURL(concept)}
+                statusLabel={status}
+              />
+            )}
           </div>
         }
         headingSubtitle={getDetailSubtitle()}

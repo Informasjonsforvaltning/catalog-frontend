@@ -30,3 +30,4 @@ export * from './lib/details-page-layout';
 export * from './lib/form-field-card';
 export * from './lib/divider-line';
 export * from './lib/search-hits-page-layout';
+export * from './lib/tag';

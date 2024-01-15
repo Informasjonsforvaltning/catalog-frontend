@@ -7,10 +7,9 @@ import {
   formatISO,
   validOrganizationNumber,
   validUUID,
-  getTagColorVariant,
 } from '@catalog-frontend/utils';
 import cn from 'classnames';
-import { ConceptSubject, SearchHit } from '@catalog-frontend/ui';
+import { ConceptStatusTagProps, ConceptSubject, SearchHit, Tag } from '@catalog-frontend/ui';
 import Link from 'next/link';
 import styles from './concept-search-hits.module.css';
 import { Chip } from '@digdir/design-system-react';
@@ -109,8 +108,12 @@ const ConceptSearchHits: React.FC<Props> = ({
               description={translate(concept?.definisjon?.tekst)}
               labels={<ConceptLabels searchHit={concept} />}
               content={<ConceptPublishingInfo searchHit={concept} />}
-              status={translate(findConceptStatus(concept.statusURI)?.label) as string}
-              statusColor={getTagColorVariant(findConceptStatus(concept.statusURI)?.code)}
+              statusTag={
+                <Tag.ConceptStatus
+                  statusKey={findConceptStatus(concept.statusURI)?.code as ConceptStatusTagProps['statusKey']}
+                  statusLabel={translate(findConceptStatus(concept.statusURI)?.label) as string}
+                />
+              }
               titleHref={
                 validOrganizationNumber(catalogId) && validUUID(concept.id) ? `/${catalogId}/${concept.id}` : '#'
               }

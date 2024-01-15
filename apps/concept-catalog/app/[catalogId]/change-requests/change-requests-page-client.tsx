@@ -1,6 +1,13 @@
 'use client';
 
-import { BreadcrumbType, Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
+import {
+  BreadcrumbType,
+  Breadcrumbs,
+  Button,
+  ChangeRequestStatusTagProps,
+  PageBanner,
+  Tag,
+} from '@catalog-frontend/ui';
 import {
   capitalizeFirstLetter,
   convertTimestampToDateAndTime,
@@ -9,7 +16,7 @@ import {
   validUUID,
 } from '@catalog-frontend/utils';
 import styles from './change-requests-page.module.css';
-import { Alert, Heading, Paragraph, Tag } from '@digdir/design-system-react';
+import { Alert, Heading, Paragraph } from '@digdir/design-system-react';
 import { useCatalogDesign } from '../../../context/catalog-design';
 import cn from 'classnames';
 import ChangeRequestFilter from '../../../components/change-request-filter';
@@ -131,19 +138,6 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
       .find(([key]) => key === status.toLowerCase())?.[1]
       .toString();
 
-  const getStatusColorVariant = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'open':
-        return 'warning';
-      case 'accepted':
-        return 'success';
-      case 'rejected':
-        return 'danger';
-      default:
-        return 'neutral';
-    }
-  };
-
   return (
     <>
       <Breadcrumbs
@@ -244,12 +238,10 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
                       </div>
                       {status && (
                         <div className={styles.status}>
-                          <Tag
-                            color={getStatusColorVariant(status)}
-                            size='small'
-                          >
-                            {getTranslatedStatus(status)}
-                          </Tag>
+                          <Tag.ChangeRequestStatus
+                            statusKey={status}
+                            statusLabel={getTranslatedStatus(status) as ChangeRequestStatusTagProps['statusLabel']}
+                          />
                         </div>
                       )}
                     </div>
