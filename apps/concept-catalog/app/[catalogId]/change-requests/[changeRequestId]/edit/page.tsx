@@ -7,7 +7,7 @@ import {
   validOrganizationNumber,
   validUUID,
   formatISO,
-  localization,
+  localization as loc,
 } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import jsonpatch from 'fast-json-patch';
@@ -81,11 +81,11 @@ const ChangeRequestEditPage = async ({ params }) => {
   const breadcrumbList = [
     {
       href: `/${catalogId}`,
-      text: localization.concept.concept,
+      text: loc.concept.concept,
     },
     {
       href: `/${catalogId}/change-requests`,
-      text: localization.changeRequest.changeRequest,
+      text: loc.changeRequest.changeRequest,
     },
     {
       href: `/${catalogId}/change-requests/${changeRequest.id}`,
@@ -93,7 +93,7 @@ const ChangeRequestEditPage = async ({ params }) => {
     },
     {
       href: `/${catalogId}/change-requests/${changeRequest.id}/edit`,
-      text: localization.changeRequest.edit,
+      text: loc.changeRequest.edit,
     },
   ] as BreadcrumbType[];
 
@@ -136,7 +136,7 @@ const ChangeRequestEditPage = async ({ params }) => {
         breadcrumbList={breadcrumbList}
       />
       <Banner
-        title={localization.catalogType.concept}
+        title={loc.catalogType.concept}
         subtitle={pageSubtitle}
         catalogId={catalogId}
       />
@@ -148,9 +148,9 @@ const ChangeRequestEditPage = async ({ params }) => {
               size='xsmall'
               spacing
             >
-              {localization.changeRequest.alert.editAlertInfo.heading}
+              {loc.changeRequest.alert.editAlertInfo.heading}
             </Heading>
-            <Paragraph>{localization.changeRequest.alert.editAlertInfo.paragraph}</Paragraph>
+            <Paragraph>{loc.changeRequest.alert.editAlertInfo.paragraph}</Paragraph>
           </Alert>
         </div>
         <div className={styles.topRow}>

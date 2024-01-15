@@ -763,24 +763,26 @@ export const ConceptPageClient = ({
             {hasWritePermission && (
               <>
                 <Button onClick={handleEditConcept}>{localization.button.edit}</Button>
-                {changeRequestEnabled && (
-                  <Button
-                    as={Link}
-                    href={`/${catalogId}/change-requests/new?concept=${concept?.id}`}
-                    variant='secondary'
-                  >
-                    {localization.concept.suggestChanges}
-                  </Button>
-                )}
                 {!concept?.erPublisert && (
                   <Button
                     color={'danger'}
+                    variant='secondary'
                     onClick={handleDeleteConcept}
                   >
                     {localization.button.delete}
                   </Button>
                 )}
               </>
+            )}
+            {changeRequestEnabled && (
+              <Button
+                as={Link}
+                href={`/${catalogId}/change-requests/new?concept=${concept?.id}`}
+                variant='secondary'
+                fullWidth={false}
+              >
+                {localization.concept.suggestChanges}
+              </Button>
             )}
           </div>
         }

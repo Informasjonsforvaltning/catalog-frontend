@@ -7,6 +7,9 @@
   display: flex;
   justify-content: stretch;
   gap: 2em;
+}
+
+.twoColumnRow:last-child {
   padding-bottom: 20px;
 }
 
@@ -23,11 +26,6 @@
   max-width: 330px;
 }
 
-.languages {
-  margin-bottom: 2rem;
-  display: inline-block;
-}
-
 .bottomSpace {
   margin-bottom: 3rem;
 }
@@ -38,7 +36,7 @@
   align-items: flex-end;
 }
 
-.buttonRow {
+.actionsRow {
   display: flex;
   justify-content: space-between;
 }
