@@ -2,11 +2,11 @@
 
 import { HTMLAttributes, ReactNode } from 'react';
 import styles from './details-page.module.css';
-import { ToggleGroup } from '@digdir/design-system-react';
 
 import cn from 'classnames';
 import { DetailHeading } from '../detail-heading';
 import { Spinner } from '../spinner';
+import { Select } from '../select';
 
 interface DetailsPageLayoutProps extends HTMLAttributes<HTMLDivElement> {
   mainColumn?: ReactNode;
@@ -14,7 +14,7 @@ interface DetailsPageLayoutProps extends HTMLAttributes<HTMLDivElement> {
   headingTitle: ReactNode;
   headingSubtitle?: ReactNode;
   loading: boolean;
-  handleLanguageChange?: (lang: any) => void;
+  handleLanguageChange?: (lang: string) => void;
   language?: string;
   buttons?: ReactNode;
 }
@@ -45,24 +45,27 @@ const DetailsPageLayout = ({
       {loading && <Spinner />}
       {!loading && (
         <>
-          <div className={styles.buttonRow}>
-            <div className={styles.languages}>
-              <ToggleGroup
-                onChange={handleLanguageChange}
-                value={language}
-                size='small'
-              >
-                {languageOptions.map((item) => (
-                  <ToggleGroup.Item
-                    key={item.value}
-                    value={item.value}
-                  >
-                    {item.label}
-                  </ToggleGroup.Item>
-                ))}
-              </ToggleGroup>
+          <div className={styles.twoColumnRow}>
+            <div className={styles.actionsRow}>
+              <div className={styles.buttons}>{buttons}</div>
+              <div>
+                <Select
+                  onChange={(event) => handleLanguageChange?.(event.target.value)}
+                  value={language}
+                  size='small'
+                >
+                  {languageOptions.map((item) => (
+                    <option
+                      key={item.value}
+                      value={item.value}
+                    >
+                      {item.label}
+                    </option>
+                  ))}
+                </Select>
+              </div>
             </div>
-            <div className={styles.buttons}>{buttons}</div>
+            <div></div>
           </div>
           <div className={cn(styles.twoColumnRow, styles.bottomSpace)}>
             {mainColumn}

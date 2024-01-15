@@ -6,7 +6,7 @@ import {
   hasOrganizationReadPermission,
   validOrganizationNumber,
   validUUID,
-  localization,
+  localization as loc,
   formatISO,
   hasOrganizationWritePermission,
 } from '@catalog-frontend/utils';
@@ -85,11 +85,11 @@ const ChangeRequestDetailsPage = async ({ params }) => {
   const breadcrumbList = [
     {
       href: `/${catalogId}`,
-      text: localization.concept.concept,
+      text: loc.concept.concept,
     },
     {
       href: `/${catalogId}/change-requests`,
-      text: localization.changeRequest.changeRequest,
+      text: loc.changeRequest.changeRequest,
     },
     {
       href: `/${catalogId}/change-requests/${changeRequest.id}`,
@@ -135,7 +135,7 @@ const ChangeRequestDetailsPage = async ({ params }) => {
         breadcrumbList={breadcrumbList}
       />
       <Banner
-        title={localization.catalogType.concept}
+        title={loc.catalogType.concept}
         subtitle={pageSubtitle}
         catalogId={catalogId}
       />
@@ -147,9 +147,9 @@ const ChangeRequestDetailsPage = async ({ params }) => {
               size='xsmall'
               spacing
             >
-              {localization.changeRequest.alert.editAlertInfo.heading}
+              {loc.changeRequest.alert.editAlertInfo.heading}
             </Heading>
-            <Paragraph>{localization.changeRequest.alert.editAlertInfo.paragraph}</Paragraph>
+            <Paragraph>{loc.changeRequest.alert.editAlertInfo.paragraph}</Paragraph>
           </Alert>
         </div>
         <div className={sharedStyle.topRow}>
