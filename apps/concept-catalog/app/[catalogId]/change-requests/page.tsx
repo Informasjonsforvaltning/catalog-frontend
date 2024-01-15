@@ -5,7 +5,7 @@ import { getChangeRequests, getOrganization } from '@catalog-frontend/data-acces
 import { RedirectType, redirect } from 'next/navigation';
 import ChangeRequestsPageClient from './change-requests-page-client';
 
-const ChangeRequestsPage = async ({ params, searchParams }) => {
+const ChangeRequestsPage = async ({ params }) => {
   const session = await getServerSession(authOptions);
   const { catalogId } = params;
 
