@@ -7,7 +7,7 @@ import {
   Organization,
   ChangeRequest,
 } from '@catalog-frontend/types';
-import { updateDefinitionsIfEgendefinert } from '@catalog-frontend/utils';
+import { pruneEmptyProperties, updateDefinitionsIfEgendefinert } from '@catalog-frontend/utils';
 import jsonpatch from 'fast-json-patch';
 import { useUpdateChangeRequest } from '../../../../../hooks/change-requests';
 import { useRouter } from 'next/navigation';
@@ -43,6 +43,7 @@ const ChangeRequestEditPageClient: FC<Props> = ({
     catalogId: organization.organizationId,
     changeRequestId: changeRequest.id,
   });
+
   const submitHandler = ({ values, formikHelpers }: { values: Concept; formikHelpers: FormikHelpers<Concept> }) => {
     setIsSubmitting(true);
     const changeRequestTitle =
@@ -58,8 +59,8 @@ const ChangeRequestEditPageClient: FC<Props> = ({
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
       conceptId: originalConcept?.id ?? null,
       operations: jsonpatch.compare(
-        originalConcept || emptyConcept,
-        updateDefinitionsIfEgendefinert(values),
+        pruneEmptyProperties(originalConcept || emptyConcept),
+        pruneEmptyProperties(updateDefinitionsIfEgendefinert(values)),
       ) as JsonPatchOperation[],
       title: changeRequestTitle,
     };
