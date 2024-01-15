@@ -1,7 +1,9 @@
 ---
 name: Bug rapport
 about: Lag en bug rapport
-title: 'BUG: kort beskrivelse av problemet'
+title: '[Bug]: kort beskrivelse av problemet'
+labels: 'bug'
+projects: 'Informasjonsforvaltning/9'
 ---
 
 ## 🐛 Bug rapport
@@ -13,8 +15,3 @@ title: 'BUG: kort beskrivelse av problemet'
 ### Hvordan reprodusere?
 
 ### Forslag/Løsning [Valgfritt]
-
-### Sjekkliste (Sjekk av etter issue er laget)
-
-- [ ] Lagt til label for app: admin, concept, e.l.
-- [ ] Lagt i utviklingsbrettet (Project)
