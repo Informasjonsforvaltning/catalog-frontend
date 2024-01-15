@@ -5,7 +5,7 @@ import { ChangeEvent } from 'react';
 
 interface Props {
   options: Option[];
-  selected: string[];
+  selected: string;
   onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 
