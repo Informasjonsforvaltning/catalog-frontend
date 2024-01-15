@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Filter from '../../../../components/filter';
 import { Service, ReferenceDataCode, FilterType } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { SearchHit, SearchHitContainer, SearchHitsPageLayout } from '@catalog-frontend/ui';
+import { SearchHit, SearchHitContainer, SearchHitsPageLayout, ServiceStatusTagProps, Tag } from '@catalog-frontend/ui';
 import styles from './public-service-page.module.css';
 import { AddButton } from '../../../../components/buttons';
 import FilterChips from '../../../../components/filter-chips';
@@ -59,6 +59,8 @@ const PublicServicePageClient = ({ services, hasWritePermission, catalogId, stat
         break;
     }
   };
+
+  const findServiceStatus = (service: Service) => statuses.find((s) => s.uri === service?.status);
 
   return (
     <SearchHitsPageLayout
@@ -115,7 +117,14 @@ const PublicServicePageClient = ({ services, hasWritePermission, catalogId, stat
                   title={getTranslateText(service?.title)}
                   description={getTranslateText(service?.description)}
                   titleHref={`/catalogs/${catalogId}/public-services/${service?.id}`}
-                  status={getTranslateText(statuses.find((s) => s.uri === service?.status)?.label) as string}
+                  statusTag={
+                    service?.status && (
+                      <Tag.ServiceStatus
+                        statusKey={findServiceStatus(service)?.code as ServiceStatusTagProps['statusKey']}
+                        statusLabel={getTranslateText(findServiceStatus(service)?.label) as string}
+                      />
+                    )
+                  }
                   content={
                     service.published
                       ? localization.publicationState.publishedInFDK
