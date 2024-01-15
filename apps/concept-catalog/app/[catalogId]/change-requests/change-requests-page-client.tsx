@@ -212,7 +212,7 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
                             }
                             className={title ? styles.heading : cn(styles.heading, styles.noName)}
                           >
-                            {title ?? `(${localization.changeRequest.noName})`}
+                            {title || `(${localization.changeRequest.noName})`}
                           </Link>
                         </Heading>
                         <div className={styles.text}>
