@@ -93,7 +93,7 @@ const ChangeRequestEditPage = async ({ params }) => {
     },
     {
       href: `/${catalogId}/change-requests/${changeRequest.id}/edit`,
-      text: loc.changeRequest.edit,
+      text: loc.edit,
     },
   ] as BreadcrumbType[];
 
