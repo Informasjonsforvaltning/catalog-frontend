@@ -3,7 +3,6 @@ name: UX issue
 about: Lag et UX issue
 title: '[UX]: kort beskrivelse av problemet'
 labels: 'ux'
-projects: 'Informasjonsforvaltning/9'
 ---
 
 ## 🪄 UX rapport

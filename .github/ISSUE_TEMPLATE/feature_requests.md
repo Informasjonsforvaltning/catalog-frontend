@@ -1,9 +1,8 @@
 ---
 name: Feature forespørsel
-about: Ny feature
+about: Forespør en ny feature
 title: '[Feat]: kort beskrivelse av feature'
 labels: 'enhancement'
-projects: 'Informasjonsforvaltning/9'
 ---
 
 ## 🚀 Feature forespørsel
