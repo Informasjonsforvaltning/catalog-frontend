@@ -6,6 +6,7 @@ export const nb = {
   allCatalogs: 'Alle kataloger',
   assigned: 'Tildelt',
   category: 'Kategori',
+  changed: 'Endret',
   changeHistory: 'Endringshistorikk',
   chooseLanguage: 'Velg språk',
   chooseOrganizaiton: 'Velg virksomhet',
@@ -296,7 +297,6 @@ export const nb = {
 
   changeRequest: {
     accept: 'Godta',
-    changed: 'Endret',
     changeRequest: 'Endringsforslag',
     editSources: 'Rediger kilder',
     editTitle: 'Rediger tittel',
