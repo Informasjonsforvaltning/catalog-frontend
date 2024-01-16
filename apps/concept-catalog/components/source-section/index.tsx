@@ -2,7 +2,7 @@
 
 import { FC } from 'react';
 import style from './source-section.module.css';
-import { localization as loc } from '@catalog-frontend/utils';
+import { localization } from '@catalog-frontend/utils';
 import { Definisjon } from '@catalog-frontend/types';
 import { FieldArray } from 'formik';
 import { SourceForDefinitionField } from './source-for-definition';
@@ -48,7 +48,9 @@ export const SourceSection: FC<Props> = ({ fieldName, definisjon, readOnly }) =>
                     variant='tertiary'
                     onClick={() => arrayHelpers.push({ uri: '', tekst: '' })}
                   >
-                    {loc.formatString(loc.button.addWithFormat, { text: loc.concept.source.toLowerCase() })}
+                    {localization.formatString(localization.button.addWithFormat, {
+                      text: localization.concept.source.toLowerCase(),
+                    })}
                   </Button>
                 )}
               </div>

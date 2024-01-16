@@ -1,4 +1,4 @@
-import { localization as loc } from '@catalog-frontend/utils';
+import { localization } from '@catalog-frontend/utils';
 import styles from './search-hit-container.module.css';
 import { Pagination } from '../pagination';
 import { ReactNode } from 'react';
@@ -13,7 +13,9 @@ type Props = {
 const SearchHitContainer = ({ onPageChange, searchHits, paginationInfo, noSearchHits }: Props) => {
   return (
     <div className={styles.searchHitsContainer}>
-      {(noSearchHits || noSearchHits === undefined) && <div className={styles.noHits}>{loc.search.noHits}</div>}
+      {(noSearchHits || noSearchHits === undefined) && (
+        <div className={styles.noHits}>{localization.search.noHits}</div>
+      )}
       {searchHits}
       {!noSearchHits && paginationInfo && onPageChange && (
         <Pagination
