@@ -109,10 +109,12 @@ const ConceptSearchHits: React.FC<Props> = ({
               labels={<ConceptLabels searchHit={concept} />}
               content={<ConceptPublishingInfo searchHit={concept} />}
               statusTag={
-                <Tag.ConceptStatus
-                  statusKey={findConceptStatus(concept.statusURI)?.code as ConceptStatusTagProps['statusKey']}
-                  statusLabel={translate(findConceptStatus(concept.statusURI)?.label) as string}
-                />
+                concept?.statusURI && (
+                  <Tag.ConceptStatus
+                    statusKey={findConceptStatus(concept.statusURI)?.code as ConceptStatusTagProps['statusKey']}
+                    statusLabel={translate(findConceptStatus(concept.statusURI)?.label) as string}
+                  />
+                )
               }
               titleHref={
                 validOrganizationNumber(catalogId) && validUUID(concept.id) ? `/${catalogId}/${concept.id}` : '#'
