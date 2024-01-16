@@ -2,7 +2,7 @@
 
 import { Button } from '@catalog-frontend/ui';
 import { acceptChangeRequestAction, rejectChangeRequestAction } from '../../app/actions/change-requests/actions';
-import { localization as loc, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
+import { localization, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useState } from 'react';
 import Link from 'next/link';
 
@@ -32,7 +32,7 @@ export const AcceptChangeRequestButton = ({ catalogId, changeRequestId }: Props)
       onClick={handleAccept}
       disabled={isHandlingAction}
     >
-      {loc.changeRequest.accept}
+      {localization.changeRequest.accept}
     </Button>
   );
 };
@@ -59,7 +59,7 @@ export const RejectChangeRequestButton = ({ catalogId, changeRequestId }: Props)
       onClick={handleReject}
       disabled={isHandlingAction}
     >
-      {loc.changeRequest.reject}
+      {localization.changeRequest.reject}
     </Button>
   );
 };
@@ -76,7 +76,7 @@ export const EditChangeRequestButton = ({ catalogId, changeRequestId }: Props) =
       variant='secondary'
       color='second'
     >
-      {loc.button.edit}
+      {localization.button.edit}
     </Button>
   );
 };

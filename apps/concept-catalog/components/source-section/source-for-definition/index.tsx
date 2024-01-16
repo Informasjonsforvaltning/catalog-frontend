@@ -5,7 +5,7 @@ import styles from './source-for-definition.module.css';
 import { Field } from 'formik';
 import { Textfield } from '@digdir/design-system-react';
 import { TrashIcon } from '@navikt/aksel-icons';
-import { localization as loc } from '@catalog-frontend/utils';
+import { localization } from '@catalog-frontend/utils';
 import { Button } from '@catalog-frontend/ui';
 
 interface Props {
@@ -49,7 +49,9 @@ export const SourceForDefinitionField: FC<Props> = ({
             icon={<TrashIcon />}
             onClick={deleteClickHandler}
           >
-            {loc.formatString(loc.button.deleteWithFormat, { text: loc.concept.source.toLowerCase() })}
+            {localization.formatString(localization.button.deleteWithFormat, {
+              text: localization.concept.source.toLowerCase(),
+            })}
           </Button>
         )}
       </div>

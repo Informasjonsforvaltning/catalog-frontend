@@ -2,7 +2,7 @@
 
 import { FC, ReactNode } from 'react';
 import { Select } from '@catalog-frontend/ui';
-import { localization as loc } from '@catalog-frontend/utils';
+import { localization } from '@catalog-frontend/utils';
 import { Field } from 'formik';
 import styles from './relation-to-source.module.css';
 import { RelationshipWithSource } from '@catalog-frontend/types';
@@ -30,7 +30,7 @@ export const RelationToSource: FC<Props> = ({ fieldName, readOnly }) => {
         <Field
           name={fieldName}
           as={Select}
-          label={loc.concept.relationToSource}
+          label={localization.concept.relationToSource}
           size='small'
           readOnly={readOnly}
         >
