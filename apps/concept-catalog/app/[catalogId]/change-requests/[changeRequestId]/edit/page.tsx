@@ -149,7 +149,9 @@ const ChangeRequestEditPage = async ({ params }) => {
               size='xsmall'
               spacing
             >
-              {localization.changeRequest.alert.editAlertInfo.heading}
+              {originalConcept
+                ? localization.changeRequest.alert.editAlertInfo.heading
+                : localization.changeRequest.alert.newAlertInfo.heading}
             </Heading>
             <Paragraph>{localization.changeRequest.alert.editAlertInfo.paragraph}</Paragraph>
           </Alert>
