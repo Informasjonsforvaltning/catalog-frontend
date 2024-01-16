@@ -1,4 +1,5 @@
 import { Tag as DSTag, type TagProps as DSTagProps } from '@digdir/design-system-react';
+import { forwardRef } from 'react';
 
 enum ConceptStatusColors {
   DRAFT = 'second',
@@ -19,22 +20,17 @@ export type ConceptStatusTagProps = {
 const getColorFromStatusKey = (statusKey: StatusKey | undefined) =>
   statusKey ? ConceptStatusColors[statusKey.toLocaleUpperCase() as StatusKey] : 'neutral';
 
-export const ConceptStatusTag = ({
-  children,
-  statusKey,
-  statusLabel,
-  size = 'medium',
-  ...rest
-}: ConceptStatusTagProps) => {
-  return (
-    <DSTag
-      color={getColorFromStatusKey(statusKey)}
-      size={size}
-      {...rest}
-    >
-      {statusLabel}
-    </DSTag>
-  );
-};
-
-ConceptStatusTag.displayName = '';
+export const ConceptStatusTag = forwardRef<HTMLSpanElement, ConceptStatusTagProps>(
+  ({ children, statusKey, statusLabel, size = 'medium', ...rest }: ConceptStatusTagProps, ref) => {
+    return (
+      <DSTag
+        ref={ref}
+        color={getColorFromStatusKey(statusKey)}
+        size={size}
+        {...rest}
+      >
+        {statusLabel}
+      </DSTag>
+    );
+  },
+);

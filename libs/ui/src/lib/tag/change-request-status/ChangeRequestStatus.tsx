@@ -1,4 +1,5 @@
 import { Tag as DSTag, type TagProps as DSTagProps } from '@digdir/design-system-react';
+import { forwardRef } from 'react';
 
 export enum ChangeRequestStatusColors {
   OPEN = 'warning',
@@ -16,22 +17,17 @@ export type ChangeRequestStatusTagProps = {
 const getColorFromStatusKey = (statusKey: StatusKey | undefined) =>
   statusKey ? ChangeRequestStatusColors[statusKey.toLocaleUpperCase() as StatusKey] : 'neutral';
 
-export const ChangeRequestStatusTag = ({
-  children,
-  statusKey,
-  statusLabel,
-  size = 'medium',
-  ...rest
-}: ChangeRequestStatusTagProps) => {
-  return (
-    <DSTag
-      color={getColorFromStatusKey(statusKey)}
-      size={size}
-      {...rest}
-    >
-      {statusLabel}
-    </DSTag>
-  );
-};
-
-ChangeRequestStatusTag.displayName = '';
+export const ChangeRequestStatusTag = forwardRef<HTMLSpanElement, ChangeRequestStatusTagProps>(
+  ({ children, statusKey, statusLabel, size = 'medium', ...rest }: ChangeRequestStatusTagProps, ref) => {
+    return (
+      <DSTag
+        ref={ref}
+        color={getColorFromStatusKey(statusKey)}
+        size={size}
+        {...rest}
+      >
+        {statusLabel}
+      </DSTag>
+    );
+  },
+);
