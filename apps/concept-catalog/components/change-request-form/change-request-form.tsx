@@ -37,25 +37,11 @@ export const ChangeRequestForm: FC<Props> = ({
   const selectedLanguages: ISOLanguage[] = ['nb', 'nn', 'en'];
 
   const checkForChanges = (values: any, original: any): { color: 'second' | undefined; changed: boolean } => {
-    if (!originalConcept) {
-      return { color: undefined, changed: false };
-    }
-
-    if (values === undefined && original === undefined) {
-      return { color: undefined, changed: false };
-    }
-
-    const valuesEmpty = values && Object.keys(removeEmptyValues(values)).length === 0;
-
-    if (valuesEmpty && original === undefined) {
-      return { color: undefined, changed: false };
-    }
-
-    if (values && !_.isEqual(values, original)) {
+    if (originalConcept && values && Object.keys(removeEmptyValues(values)).length && !_.isEqual(values, original)) {
       return { color: 'second', changed: true };
+    } else {
+      return { color: undefined, changed: false };
     }
-
-    return { color: undefined, changed: false };
   };
 
   return (
