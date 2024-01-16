@@ -133,7 +133,9 @@ const ChangeRequestOrNew = async ({ params, searchParams }) => {
               size='xsmall'
               spacing
             >
-              {localization.changeRequest.alert.newAlertInfo.heading}
+              {originalConcept
+                ? localization.changeRequest.alert.editAlertInfo.heading
+                : localization.changeRequest.alert.newAlertInfo.heading}
             </Heading>
             <Paragraph>{localization.changeRequest.alert.newAlertInfo.paragraph}</Paragraph>
           </Alert>
