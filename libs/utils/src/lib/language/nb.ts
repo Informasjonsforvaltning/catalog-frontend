@@ -322,12 +322,12 @@ export const nb = {
       newAlertInfo: {
         heading: 'Om forslag til nytt begrep',
         paragraph:
-          'Skjemaet inneholder bare utvalgte felt om begrepet.Når du har sendt inn forslag til nytt begrep må det godkjennes av en skrivebruker.',
+          'Skjemaet inneholder bare utvalgte felt om begrepet. Når du har sendt inn forslag til nytt begrep må det godkjennes av en skrivebruker.',
       },
       editAlertInfo: {
         heading: 'Om endringsforslag',
         paragraph:
-          'Skjemaet inneholder bare utvalgte felt om begrepet.Når du har sendt inn forslag til endring må det godkjennes av en skrivebruker.',
+          'Skjemaet inneholder bare utvalgte felt om begrepet. Når du har sendt inn forslag til endring må det godkjennes av en skrivebruker.',
       },
     },
 
