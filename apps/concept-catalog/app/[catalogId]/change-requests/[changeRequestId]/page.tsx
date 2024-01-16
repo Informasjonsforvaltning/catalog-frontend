@@ -50,7 +50,7 @@ const ChangeRequestDetailsPage = async ({ params }) => {
 
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
-  let originalConcept: Concept = {
+  const baselineConcept: Concept = {
     id: null,
     ansvarligVirksomhet: { id: organization.organizationId },
     seOgså: [],
@@ -64,18 +64,19 @@ const ChangeRequestDetailsPage = async ({ params }) => {
       throw error;
     });
 
-  if (changeRequest.conceptId && validUUID(changeRequest.conceptId)) {
-    originalConcept = await getConcept(changeRequest.conceptId, `${session.accessToken}`)
-      .then((response) => {
-        return response.json();
-      })
-      .catch((error) => {
-        throw error;
-      });
-  }
+  const originalConcept =
+    changeRequest.conceptId && validUUID(changeRequest.conceptId)
+      ? await getConcept(changeRequest.conceptId, `${session.accessToken}`)
+          .then((response) => {
+            return response.json();
+          })
+          .catch((error) => {
+            throw error;
+          })
+      : undefined;
 
   const changeRequestAsConcept: Concept = jsonpatch.applyPatch(
-    jsonpatch.deepClone(originalConcept),
+    jsonpatch.deepClone(originalConcept || baselineConcept),
     jsonpatch.deepClone(changeRequest.operations),
     false,
   ).newDocument;

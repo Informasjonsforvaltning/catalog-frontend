@@ -10,7 +10,7 @@ import { pruneEmptyProperties, updateDefinitionsIfEgendefinert } from '@catalog-
 interface Props {
   organization: Organization;
   changeRequestAsConcept: Concept;
-  originalConcept: Concept;
+  originalConcept?: Concept;
 }
 
 const ChangeRequestOrNewClient: FC<Props> = ({ organization, changeRequestAsConcept, originalConcept }) => {
@@ -22,20 +22,26 @@ const ChangeRequestOrNewClient: FC<Props> = ({ organization, changeRequestAsConc
     catalogId: catalogId,
   });
 
+  const baselineConcept: Concept = {
+    id: null,
+    ansvarligVirksomhet: { id: organization.organizationId },
+    seOgså: [],
+  };
+
   const submitHandler = async ({ values }: { values: Concept }) => {
     setIsSubmitting(true);
     const anbefaltTerm =
-      originalConcept.anbefaltTerm?.navn.nb ||
-      originalConcept.anbefaltTerm?.navn.nn ||
-      originalConcept.anbefaltTerm?.navn.en ||
+      originalConcept?.anbefaltTerm?.navn.nb ||
+      originalConcept?.anbefaltTerm?.navn.nn ||
+      originalConcept?.anbefaltTerm?.navn.en ||
       values.anbefaltTerm?.navn.nb ||
       values.anbefaltTerm?.navn.nn ||
       values.anbefaltTerm?.navn.en;
 
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
-      conceptId: originalConcept.id,
+      conceptId: originalConcept?.id ?? null,
       operations: jsonpatch.compare(
-        pruneEmptyProperties(originalConcept),
+        pruneEmptyProperties(originalConcept || baselineConcept),
         pruneEmptyProperties(updateDefinitionsIfEgendefinert(values)),
       ) as JsonPatchOperation[],
       title: anbefaltTerm ?? '',

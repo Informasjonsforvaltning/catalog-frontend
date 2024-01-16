@@ -44,11 +44,13 @@ const ChangeRequestOrNew = async ({ params, searchParams }) => {
     redirect(`/notfound`, RedirectType.replace);
   }
 
-  let originalConcept: Concept = {
+  const baselineConcept: Concept = {
     id: null,
     ansvarligVirksomhet: { id: organization.organizationId },
     seOgså: [],
   };
+
+  let originalConcept: Concept | undefined = undefined;
 
   if (conceptId) {
     const session = await getServerSession(authOptions);
@@ -86,7 +88,7 @@ const ChangeRequestOrNew = async ({ params, searchParams }) => {
   };
 
   const changeRequestAsConcept = jsonpatch.applyPatch(
-    jsonpatch.deepClone(originalConcept),
+    jsonpatch.deepClone(originalConcept || baselineConcept),
     jsonpatch.deepClone(newChangeRequest.operations),
     false,
   ).newDocument;

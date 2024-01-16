@@ -7,7 +7,7 @@ import {
   validOrganizationNumber,
   validUUID,
   formatISO,
-  localization as loc,
+  localization,
 } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
 import jsonpatch from 'fast-json-patch';
@@ -46,7 +46,7 @@ const ChangeRequestEditPage = async ({ params }) => {
 
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
-  let originalConcept: Concept = {
+  const baselineConcept: Concept = {
     id: null,
     ansvarligVirksomhet: { id: organization.organizationId },
     seOgså: [],
@@ -60,18 +60,19 @@ const ChangeRequestEditPage = async ({ params }) => {
       throw error;
     });
 
-  if (changeRequest.conceptId && validUUID(changeRequest.conceptId)) {
-    originalConcept = await getConcept(changeRequest.conceptId, `${session.accessToken}`)
-      .then((response) => {
-        return response.json();
-      })
-      .catch((error) => {
-        throw error;
-      });
-  }
+  const originalConcept =
+    changeRequest.conceptId && validUUID(changeRequest.conceptId)
+      ? await getConcept(changeRequest.conceptId, `${session.accessToken}`)
+          .then((response) => {
+            return response.json();
+          })
+          .catch((error) => {
+            throw error;
+          })
+      : undefined;
 
   const changeRequestAsConcept: Concept = jsonpatch.applyPatch(
-    jsonpatch.deepClone(originalConcept),
+    jsonpatch.deepClone(originalConcept || baselineConcept),
     jsonpatch.deepClone(changeRequest.operations),
     false,
   ).newDocument;
@@ -81,11 +82,11 @@ const ChangeRequestEditPage = async ({ params }) => {
   const breadcrumbList = [
     {
       href: `/${catalogId}`,
-      text: loc.concept.concept,
+      text: localization.concept.concept,
     },
     {
       href: `/${catalogId}/change-requests`,
-      text: loc.changeRequest.changeRequest,
+      text: localization.changeRequest.changeRequest,
     },
     {
       href: `/${catalogId}/change-requests/${changeRequest.id}`,
@@ -93,7 +94,7 @@ const ChangeRequestEditPage = async ({ params }) => {
     },
     {
       href: `/${catalogId}/change-requests/${changeRequest.id}/edit`,
-      text: loc.changeRequest.edit,
+      text: localization.edit,
     },
   ] as BreadcrumbType[];
 
@@ -136,7 +137,7 @@ const ChangeRequestEditPage = async ({ params }) => {
         breadcrumbList={breadcrumbList}
       />
       <Banner
-        title={loc.catalogType.concept}
+        title={localization.catalogType.concept}
         subtitle={pageSubtitle}
         catalogId={catalogId}
       />
@@ -148,9 +149,9 @@ const ChangeRequestEditPage = async ({ params }) => {
               size='xsmall'
               spacing
             >
-              {loc.changeRequest.alert.editAlertInfo.heading}
+              {localization.changeRequest.alert.editAlertInfo.heading}
             </Heading>
-            <Paragraph>{loc.changeRequest.alert.editAlertInfo.paragraph}</Paragraph>
+            <Paragraph>{localization.changeRequest.alert.editAlertInfo.paragraph}</Paragraph>
           </Alert>
         </div>
         <div className={styles.topRow}>
