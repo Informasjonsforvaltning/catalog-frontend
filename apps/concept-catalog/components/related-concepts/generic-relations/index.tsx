@@ -26,8 +26,8 @@ const GenericRelations = ({ genericRelations, relatedConceptsMap, catalogId }: P
               <div>
                 <span>
                   {relatedConcept.relasjonsType === 'overordnet'
-                    ? localization.concept.generalizes
-                    : localization.concept.specializes}
+                    ? localization.concept.specializes
+                    : localization.concept.generalizes}
                 </span>
                 {getTranslateText(inndelingskriterium) && (
                   <span>{` (${localization.concept.divisionCriterion}: ${getTranslateText(
