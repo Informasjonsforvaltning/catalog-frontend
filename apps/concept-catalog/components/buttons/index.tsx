@@ -1,10 +1,9 @@
 'use client';
 
-import { Button } from '@catalog-frontend/ui';
+import { Button, Link } from '@catalog-frontend/ui';
 import { acceptChangeRequestAction, rejectChangeRequestAction } from '../../app/actions/change-requests/actions';
 import { localization, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useState } from 'react';
-import Link from 'next/link';
 
 interface Props {
   catalogId: string;

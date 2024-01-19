@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { Link } from '../proxy-provider';
 import styles from './card.module.css';
 import { ArrowRightIcon } from '@navikt/aksel-icons';
 interface Card {

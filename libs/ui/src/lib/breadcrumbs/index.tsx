@@ -1,6 +1,6 @@
 import { hashCode, localization } from '@catalog-frontend/utils';
 import styles from './breadcrumbs.module.css';
-import Link from 'next/link';
+import { Link } from '../proxy-provider/link';
 export type BreadcrumbType = {
   href: string;
   text: string;

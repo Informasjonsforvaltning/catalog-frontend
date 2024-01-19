@@ -7,10 +7,11 @@ import UserIcon from './images/user-icon.svg';
 import FDKLogo from './images/fdk-publishing-logo-negative.svg';
 import FDKLogoDemo from './images/fdk-publishing-logo-negative-demo.svg';
 import DropdownMenu, { Menu, Trigger } from '../dropdown-menu';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import styles from './header.module.css';
 import { LeaveIcon } from '@navikt/aksel-icons';
+import { useRouter } from '../proxy-provider';
 
 export interface HeaderProps {
   homeUrl?: string;

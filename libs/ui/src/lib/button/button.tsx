@@ -18,5 +18,3 @@ export const Button = ({ children, ...props }: ButtonProps) => (
     {children}
   </DigdirButton>
 );
-
-export default Button;

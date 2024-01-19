@@ -5,6 +5,7 @@ import {
   Breadcrumbs,
   Button,
   ChangeRequestStatusTagProps,
+  Link,
   PageBanner,
   Tag,
 } from '@catalog-frontend/ui';
@@ -22,7 +23,6 @@ import cn from 'classnames';
 import ChangeRequestFilter from '../../../components/change-request-filter';
 import { parseAsString, parseAsArrayOf, useQueryState } from 'nuqs';
 import ChangeRequestSort from '../../../components/change-request-sort';
-import Link from 'next/link';
 
 export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_REGISTRATION_BASE_URI }) => {
   const pageSubtitle = organization?.name ?? '';

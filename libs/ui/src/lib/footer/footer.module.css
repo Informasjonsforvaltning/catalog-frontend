@@ -76,7 +76,10 @@
 }
 
 .column > a {
+  display: flex;
+  gap: 0.5rem;
   text-decoration: none;
+  color: currentColor;
 }
 
 .column > a:hover {

@@ -29,9 +29,7 @@ describe('SearchHit', () => {
         subjectCodeList={[]}
         conceptStatuses={[]}
         assignableUsers={[]}
-        onLabelClick={() => {
-          return;
-        }}
+        onLabelClick={() => null}
       />,
     );
     expect(baseElement).toBeTruthy();

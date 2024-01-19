@@ -1,6 +1,6 @@
-import { useRouter } from 'next/navigation';
 import { useMutation } from '@tanstack/react-query';
 import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
+import { useRouter } from '@catalog-frontend/ui';
 
 const callConceptApi = async (catalogId: string, conceptId: string, path: string, method: string) => {
   if (!validOrganizationNumber(catalogId)) {

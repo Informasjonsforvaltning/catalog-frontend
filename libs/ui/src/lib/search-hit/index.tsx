@@ -1,8 +1,8 @@
 import { localization, getTranslateText as translate } from '@catalog-frontend/utils';
 import styles from './search-hit.module.css';
-import Link from 'next/link';
 import { ReactNode } from 'react';
 import { Url } from 'next/dist/shared/lib/router/router';
+import { Link } from '../proxy-provider';
 
 interface Props {
   title: string[] | string;

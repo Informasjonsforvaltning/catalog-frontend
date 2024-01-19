@@ -1,11 +1,11 @@
 'use client';
 
-import { Spinner } from '@catalog-frontend/ui';
+import { Spinner, useRouter } from '@catalog-frontend/ui';
 import { localization, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { Heading as DSHeading } from '@digdir/design-system-react';
 import { Session } from 'next-auth';
 import { signIn, useSession } from 'next-auth/react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 
 const needLogin = (session: Session | null, status: string, pathname: string) =>
   (session?.error === 'RefreshAccessTokenError' || status === 'unauthenticated') && pathname !== '/auth/signout';

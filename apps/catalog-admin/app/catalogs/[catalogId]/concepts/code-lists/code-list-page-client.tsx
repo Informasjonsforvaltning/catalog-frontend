@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import styles from './code-lists.module.css';
 import { Accordion, Heading } from '@digdir/design-system-react';
-import { BreadcrumbType, Breadcrumbs, Button, SearchField, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, Button, ProxyContext, SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
 import { CodeList, Organization } from '@catalog-frontend/types';
@@ -27,6 +27,7 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }: CodeLi
 
   const [search, setSearch] = useState('');
   const [dirtyCodeLists, setDirtyCodeLists] = useState<string[]>([]);
+  const [, setTips] = useContext(ProxyContext);
 
   const { data: getAllCodeLists } = useGetAllCodeLists({
     catalogId: catalogId,
@@ -36,15 +37,16 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }: CodeLi
   const filteredCodeLists = () =>
     dbCodeLists.filter((codeList: CodeList) => codeList.name.toLowerCase().includes(search.toLowerCase()));
 
-  useWarnIfUnsavedChanges(
+  const hasChanges =
     updatedCodeLists?.some((codeList) => {
       const dbCodeList = dbCodeLists.find((list) => list.id === codeList.id);
       if (!dbCodeList) {
         return true;
       }
       return compare(dbCodeList, codeList).length > 0;
-    }) ?? dirtyCodeLists.length > 0,
-  );
+    }) ?? dirtyCodeLists.length > 0;
+
+  setTips(hasChanges ? '' : undefined);
 
   useEffect(() => {
     // Adds a copy of the codes in context

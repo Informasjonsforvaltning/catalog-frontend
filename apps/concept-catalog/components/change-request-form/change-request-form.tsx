@@ -1,9 +1,9 @@
 'use client';
 
-import { Button, FormFieldCard, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
+import { Button, FormFieldCard, ProxyContext } from '@catalog-frontend/ui';
 import { localization as loc, removeEmptyValues } from '@catalog-frontend/utils';
 
-import { FC, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import { Concept, ISOLanguage } from '@catalog-frontend/types';
 import { Field, Form, Formik, FormikHelpers } from 'formik';
 
@@ -32,7 +32,9 @@ export const ChangeRequestForm: FC<Props> = ({
   isSubmitting,
 }) => {
   const [isDirty, setIsDirty] = useState(false);
-  useWarnIfUnsavedChanges(isDirty);
+  const [, setTips] = useContext(ProxyContext);
+
+  setTips(isDirty ? '' : undefined);
 
   const selectedLanguages: ISOLanguage[] = ['nb', 'nn', 'en'];
 

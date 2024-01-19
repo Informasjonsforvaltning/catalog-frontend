@@ -1,11 +1,17 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Search } from '@digdir/design-system-react';
-import Link from 'next/link';
 import Filter from '../../../../components/filter';
 import { Service, ReferenceDataCode, FilterType } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { SearchHit, SearchHitContainer, SearchHitsPageLayout, ServiceStatusTagProps, Tag } from '@catalog-frontend/ui';
+import {
+  Link,
+  SearchHit,
+  SearchHitContainer,
+  SearchHitsPageLayout,
+  ServiceStatusTagProps,
+  Tag,
+} from '@catalog-frontend/ui';
 import styles from './public-service-page.module.css';
 import { AddButton } from '../../../../components/buttons';
 import FilterChips from '../../../../components/filter-chips';

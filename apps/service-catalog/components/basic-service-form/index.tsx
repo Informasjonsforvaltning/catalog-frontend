@@ -1,7 +1,7 @@
 'use client';
 
 import { NativeSelect, Textarea, Textfield } from '@digdir/design-system-react';
-import { Button, FormFieldCard } from '@catalog-frontend/ui';
+import { Button, FormFieldCard, useRouter } from '@catalog-frontend/ui';
 import { localization, getTranslateText } from '@catalog-frontend/utils';
 import { ISOLanguage, Output, ReferenceDataCode, Service, ServiceToBeCreated } from '@catalog-frontend/types';
 import styles from './service-form.module.css';
@@ -11,7 +11,6 @@ import {
   deletePublicService,
   updatePublicService,
 } from '../../app/actions/public-services/actions';
-import { useRouter } from 'next/navigation';
 import { createService, deleteService, updateService } from '../../app/actions/services/actions';
 import { Field, FieldArray, Form, Formik } from 'formik';
 import { AddButton } from '../buttons';

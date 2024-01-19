@@ -2,13 +2,13 @@
 
 import { FC, useEffect, useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import {
   PageBanner,
   Breadcrumbs,
   BreadcrumbType,
   ConceptSubject,
   InfoCard,
+  Link,
   Spinner,
   Button,
   Pagination,
