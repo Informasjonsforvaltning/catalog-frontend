@@ -27,6 +27,7 @@ import { useCatalogDesign } from '../../context/catalog-design';
 import { useImportConcepts } from '../../hooks/import';
 import styles from './search-page.module.css';
 import ConceptSearchHits from '../../components/concept-search-hits';
+import _ from 'lodash';
 
 export type FilterType = 'published' | 'status' | 'assignedUser' | 'subject' | 'internalFields' | 'label';
 
@@ -66,7 +67,7 @@ export const SearchPageClient = ({
   );
   const [filterAssignedUser, setFilterAssignedUser] = useQueryState('filter.assignedUser');
   const [filterInternalFields, setFilterInternalFields] = useQueryState(
-    'filter.label',
+    'filter.internalFields',
     parseAsJson<Record<string, string[]>>(),
   );
   const [filterLabel, setFilterLabel] = useQueryState('filter.label', parseAsArrayOf(parseAsString));
@@ -135,7 +136,15 @@ export const SearchPageClient = ({
         label: { value: filterLabel },
       }),
       ...(Object.keys(filterInternalFields ?? {}).length > 0 && {
-        internalFields: { value: filterInternalFields },
+        internalFields: {
+          value: Object.keys(filterInternalFields ?? {}).reduce((result, key) => {
+            const value = filterInternalFields?.[key];
+            if (!_.isEmpty(value)) {
+              result[key] = value;
+            }
+            return result;
+          }, {}),
+        },
       }),
     },
   });
@@ -200,7 +209,7 @@ export const SearchPageClient = ({
         if (newFilter[filterName.key] !== undefined) {
           newFilter[filterName.key] = newFilter[filterName.key].filter((value) => value !== filterName.value);
         }
-        setFilterInternalFields(newFilter);
+        setFilterInternalFields({ ...newFilter });
         break;
       }
       case 'label':
