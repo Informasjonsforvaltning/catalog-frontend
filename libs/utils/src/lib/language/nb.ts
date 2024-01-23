@@ -253,7 +253,7 @@ export const nb = {
     formFieldLabel: '{fieldType} på {lang}',
     generalizes: 'Underordnet',
     genericRelation: 'Generisk relasjon',
-    hasPart: 'Inngår i',
+    hasPart: 'Omfatter',
     internalField: 'Interne felt',
     isPartOf: 'Er del av',
     isReplacedBy: 'Erstattes av',

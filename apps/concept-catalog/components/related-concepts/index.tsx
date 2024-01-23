@@ -37,14 +37,12 @@ const RelatedConcepts = ({
     <KeyValueList>
       {associativeRelations.length > 0 && (
         <AssociativeRelations
-          catalogId={catalogId}
           associativeRelations={associativeRelations}
           relatedConceptsMap={relatedConceptsMap}
         />
       )}
       {partitiveRelations.length > 0 && (
         <PartitiveRelations
-          catalogId={catalogId}
           partitiveRelations={partitiveRelations}
           relatedConceptsMap={relatedConceptsMap}
         />
@@ -53,7 +51,6 @@ const RelatedConcepts = ({
         <GenericRelations
           genericRelations={genericRelations}
           relatedConceptsMap={relatedConceptsMap}
-          catalogId={catalogId}
         />
       )}
       {isReplacedBy.length > 0 && (
@@ -61,7 +58,6 @@ const RelatedConcepts = ({
           title={title}
           isReplacedBy={isReplacedBy}
           relatedConceptsMap={relatedConceptsMap}
-          catalogId={catalogId}
         />
       )}
       {seeAlso.length > 0 && (
@@ -70,7 +66,6 @@ const RelatedConcepts = ({
           validToIncluding={validToIncluding}
           validFromIncluding={validFromIncluding}
           relatedConceptsMap={relatedConceptsMap}
-          catalogId={catalogId}
         />
       )}
     </KeyValueList>

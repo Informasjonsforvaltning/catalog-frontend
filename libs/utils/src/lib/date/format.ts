@@ -24,7 +24,7 @@ export const dateStringToDate = (dateString: string) => {
   return !isNaN(dateStringTimestamp) ? date : null;
 };
 
-export const formatDate = (date: Date) =>
+export const formatDate = (date: Date | null) =>
   date
     ? date
         .toLocaleDateString('nb-NO', {
@@ -41,6 +41,7 @@ const isDateSameDayAsNow = (date: Date) =>
   date.getMonth() === new Date().getMonth() &&
   date.getDate() === new Date().getDate();
 
-export const isDateBeforeToday = (date: Date) => date && date.getTime() < Date.now() && !isDateSameDayAsNow(date);
+export const isDateBeforeToday = (date: Date | null) =>
+  date && date.getTime() < Date.now() && !isDateSameDayAsNow(date);
 
-export const isDateAfterToday = (date: Date) => date && date.getTime() > Date.now() && !isDateSameDayAsNow(date);
+export const isDateAfterToday = (date: Date | null) => date && date.getTime() > Date.now() && !isDateSameDayAsNow(date);
