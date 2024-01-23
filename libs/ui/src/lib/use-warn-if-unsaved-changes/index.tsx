@@ -55,7 +55,6 @@ const useWarnIfUnsavedChanges = ({ enabled = true, unsavedChanges }: Props) => {
 
   useEffect(() => {
     if (!enabled) return;
-
     window.addEventListener('beforeunload', beforeUnloadHandler);
     window.document.addEventListener(clickType, clickHandler, { capture: true });
     return () => {
