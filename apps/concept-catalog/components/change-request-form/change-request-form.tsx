@@ -32,7 +32,7 @@ export const ChangeRequestForm: FC<Props> = ({
   isSubmitting,
 }) => {
   const [isDirty, setIsDirty] = useState(false);
-  useWarnIfUnsavedChanges(isDirty);
+  useWarnIfUnsavedChanges({ enabled: !readOnly, unsavedChanges: isDirty });
 
   const selectedLanguages: ISOLanguage[] = ['nb', 'nn', 'en'];
 
