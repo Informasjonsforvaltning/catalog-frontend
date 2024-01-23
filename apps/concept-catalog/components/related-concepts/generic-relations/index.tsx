@@ -6,12 +6,11 @@ import { Relasjon } from '@catalog-frontend/types';
 interface Props {
   genericRelations: Relasjon[];
   relatedConceptsMap: (identifier: string) => any;
-  catalogId: string;
 }
 
-const GenericRelations = ({ genericRelations, relatedConceptsMap, catalogId }: Props) => (
+const GenericRelations = ({ genericRelations, relatedConceptsMap }: Props) => (
   <>
-    {genericRelations.map(({ relatertBegrep, inndelingskriterium }) => {
+    {genericRelations.map(({ relatertBegrep, inndelingskriterium, relasjonsType }) => {
       const relatedConcept = relatertBegrep && relatedConceptsMap(relatertBegrep);
       if (!relatedConcept) return undefined;
       return (
@@ -25,9 +24,7 @@ const GenericRelations = ({ genericRelations, relatedConceptsMap, catalogId }: P
 
               <div>
                 <span>
-                  {relatedConcept.relasjonsType === 'overordnet'
-                    ? localization.concept.specializes
-                    : localization.concept.generalizes}
+                  {relasjonsType === 'overordnet' ? localization.concept.specializes : localization.concept.generalizes}
                 </span>
                 {getTranslateText(inndelingskriterium) && (
                   <span>{` (${localization.concept.divisionCriterion}: ${getTranslateText(

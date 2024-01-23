@@ -15,16 +15,15 @@ interface Props {
   validToIncluding: string | undefined;
   validFromIncluding: string | undefined;
   relatedConceptsMap: (identifier: string) => any;
-  catalogId: string;
 }
 
-const SeeAlso = ({ seeAlso, relatedConceptsMap, validFromIncluding, validToIncluding, catalogId }: Props) => (
+const SeeAlso = ({ seeAlso, relatedConceptsMap, validFromIncluding, validToIncluding }: Props) => (
   <>
     {seeAlso.map((relasjon) => {
       if (!relasjon) return undefined;
-      const hasExpired = isDateBeforeToday(dateStringToDate(formatDate(dateStringToDate(validToIncluding))));
-      const willBeValid = isDateAfterToday(dateStringToDate(formatDate(dateStringToDate(validFromIncluding))));
-      const relatedConcept = relatedConceptsMap(relasjon.relatertBegrep);
+      const hasExpired = isDateBeforeToday(dateStringToDate(formatDate(dateStringToDate(validToIncluding ?? ''))));
+      const willBeValid = isDateAfterToday(dateStringToDate(formatDate(dateStringToDate(validFromIncluding ?? ''))));
+      const relatedConcept = relatedConceptsMap(relasjon.relatertBegrep ?? '');
       if (relatedConcept) {
         return (
           <KeyValueListItem

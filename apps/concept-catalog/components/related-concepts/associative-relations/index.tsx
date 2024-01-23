@@ -5,10 +5,9 @@ import { KeyValueListItem } from '@catalog-frontend/ui';
 interface Props {
   associativeRelations: Relasjon[];
   relatedConceptsMap: (identifier: string) => any;
-  catalogId: string;
 }
 
-const AssociativeRelations = ({ associativeRelations, relatedConceptsMap, catalogId }: Props) => {
+const AssociativeRelations = ({ associativeRelations, relatedConceptsMap }: Props) => {
   return (
     <>
       {associativeRelations.map(({ beskrivelse, relatertBegrep = '' }) => {

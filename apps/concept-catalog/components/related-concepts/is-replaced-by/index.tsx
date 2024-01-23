@@ -7,13 +7,12 @@ interface Props {
   title: Partial<TextLanguage>;
   isReplacedBy: Relasjon[];
   relatedConceptsMap: (identifier: string) => any;
-  catalogId: string;
 }
 
-const IsReplacedBy = ({ title, isReplacedBy, relatedConceptsMap, catalogId }: Props) => (
+const IsReplacedBy = ({ title, isReplacedBy, relatedConceptsMap }: Props) => (
   <>
     {isReplacedBy.map((relasjon) => {
-      const relatedConcept = relatedConceptsMap(relasjon.relatertBegrep);
+      const relatedConcept = relatedConceptsMap(relasjon.relatertBegrep ?? '');
       if (relatedConcept) {
         return (
           <KeyValueListItem

@@ -6,10 +6,9 @@ import { getTranslateText, localization } from '@catalog-frontend/utils';
 interface Props {
   partitiveRelations: Relasjon[];
   relatedConceptsMap: (identifier: string) => any;
-  catalogId: string;
 }
 
-const PartitiveRelations = ({ partitiveRelations, relatedConceptsMap, catalogId }: Props) => {
+const PartitiveRelations = ({ partitiveRelations, relatedConceptsMap }: Props) => {
   return (
     <>
       {partitiveRelations.map(({ inndelingskriterium, relasjonsType, relatertBegrep }) => {
