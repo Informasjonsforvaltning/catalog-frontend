@@ -27,8 +27,12 @@ const RelatedConcepts = ({
   const associativeRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'assosiativ') ?? [];
   const partitiveRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'partitiv') ?? [];
   const genericRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'generisk') ?? [];
-  const seeAlso = conceptRelations.filter((relasjon) => relasjon.relasjon === 'seOgså') ?? [];
-  const isReplacedBy = conceptRelations.filter((relasjon) => relasjon.relasjon === 'erstattesAv') ?? [];
+  const seeAlso =
+    conceptRelations.filter((relasjon) => relasjon.relasjon === 'seOgså' || relasjon.relasjon === 'internSeOgså') ?? [];
+  const isReplacedBy =
+    conceptRelations.filter(
+      (relasjon) => relasjon.relasjon === 'erstattesAv' || relasjon.relasjon === 'internErstattesAv',
+    ) ?? [];
 
   const relatedConceptsMap = (identifier: string) =>
     relatedConcepts.find((concept) => concept.identifier === identifier);

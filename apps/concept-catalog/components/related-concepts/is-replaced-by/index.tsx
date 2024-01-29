@@ -11,12 +11,12 @@ interface Props {
 
 const IsReplacedBy = ({ title, isReplacedBy, relatedConceptsMap }: Props) => (
   <>
-    {isReplacedBy.map((relasjon) => {
+    {isReplacedBy.map((relasjon, index) => {
       const relatedConcept = relatedConceptsMap(relasjon.relatertBegrep ?? '');
       if (relatedConcept) {
         return (
           <KeyValueListItem
-            key={relatedConcept.id}
+            key={`IsReplacedBy-${index}`}
             property={
               <div>
                 <p>{localization.concept.isReplacedBy}</p>

@@ -15,6 +15,8 @@ import {
   getConceptRevisions,
   getConceptStatuses,
   getFields,
+  getInternalConceptRelations,
+  getInternalRelatedConcepts,
   getOrganization,
   getRelatedConcepts,
   getUsers,
@@ -81,8 +83,20 @@ const ConceptPage = async ({ params }) => {
     response.json(),
   );
 
+  const conceptToSkosConceptMapper = (relatedConcepts: Concept[]): SkosConcept[] => {
+    return relatedConcepts.map(({ id, anbefaltTerm, definisjon }) => ({
+      identifier: id,
+      prefLabel: anbefaltTerm?.navn,
+      definition: { text: definisjon?.tekst },
+    })) as SkosConcept[];
+  };
+
   const relatedConcepts: SkosConcept[] = await getRelatedConcepts(concept);
   const conceptRelations: Relasjon[] = getConceptRelations(concept);
+  const internalConceptRelations: Relasjon[] = getInternalConceptRelations(concept);
+  const internalRelatedConcepts: SkosConcept[] = conceptToSkosConceptMapper(
+    await getInternalRelatedConcepts(concept, session?.accessToken),
+  );
 
   const clientProps = {
     username,
@@ -96,6 +110,8 @@ const ConceptPage = async ({ params }) => {
     hasWritePermission,
     relatedConcepts,
     conceptRelations,
+    internalConceptRelations,
+    internalRelatedConcepts,
     FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
     changeRequestEnabled: process.env.CHANGE_REQUEST_FEATURE_TOGGLE === 'true',
   };
