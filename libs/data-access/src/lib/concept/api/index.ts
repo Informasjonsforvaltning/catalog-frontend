@@ -41,10 +41,32 @@ export const publishConcept = (conceptId: string, accessToken: string) =>
 
 export const extractConcepts = (searchResponse: any) => searchResponse?.hits ?? [];
 
+export const searchInternalConcepts = (catalogId: string, body: string[], accessToken: string): Promise<Response> =>
+  conceptCatalogApiCall(
+    'POST',
+    `/begreper/search?orgNummer=${catalogId}`,
+    {
+      filters: {
+        originalId: { value: body },
+      },
+      pagination: {
+        size: body.length,
+      },
+    },
+    accessToken,
+  );
+
 const hasRelatedConcepts = (concept: Concept): boolean => {
   if (!isObjectNullUndefinedEmpty(concept.begrepsRelasjon)) return true;
   if (!isObjectNullUndefinedEmpty(concept.seOgså)) return true;
   if (!isObjectNullUndefinedEmpty(concept.erstattesAv)) return true;
+  return false;
+};
+
+const hasRelatedInternalConcepts = (concept: Concept): boolean => {
+  if (!isObjectNullUndefinedEmpty(concept.internBegrepsRelasjon)) return true;
+  if (!isObjectNullUndefinedEmpty(concept.internSeOgså)) return true;
+  if (!isObjectNullUndefinedEmpty(concept.internErstattesAv)) return true;
   return false;
 };
 
@@ -105,4 +127,73 @@ export const getRelatedConcepts = async (concept: Concept): Promise<SkosConcept[
     .then((body) => extractConcepts(body));
 
   return relatedConcepts;
+};
+
+export const getInternalConceptRelations = (concept: Concept): Relasjon[] => {
+  if (!hasRelatedInternalConcepts(concept)) return [];
+
+  const internalConceptRelations: Relasjon[] = [];
+
+  if (concept.internBegrepsRelasjon) {
+    internalConceptRelations.push(
+      ...concept.internBegrepsRelasjon.filter((relasjon) => !isObjectNullUndefinedEmpty(relasjon)),
+    );
+  }
+
+  if (concept.internSeOgså) {
+    if (Array.isArray(concept.internSeOgså)) {
+      internalConceptRelations.push(
+        ...concept.internSeOgså.map((uri): Relasjon => ({ relatertBegrep: uri, relasjon: 'internSeOgså' })),
+      );
+    } else {
+      internalConceptRelations.push({ relatertBegrep: concept.internSeOgså, relasjon: 'internSeOgså' });
+    }
+  }
+
+  if (concept.internErstattesAv) {
+    internalConceptRelations.push(
+      ...concept.internErstattesAv.map((uri): Relasjon => ({ relatertBegrep: uri, relasjon: 'internErstattesAv' })),
+    );
+  }
+
+  return internalConceptRelations;
+};
+
+export const getInternalRelatedConcepts = async (concept: Concept, accessToken: string): Promise<Concept[]> => {
+  if (!hasRelatedInternalConcepts(concept)) return [];
+
+  const internalRelatedConceptsUris: string[] = [];
+
+  if (concept.internBegrepsRelasjon) {
+    internalRelatedConceptsUris.push(
+      ...concept.internBegrepsRelasjon
+        .map((relasjon) => relasjon.relatertBegrep)
+        .filter((value) => value !== null && value !== undefined)
+        .filter(Boolean)
+        .map((value) => value as string),
+    );
+  }
+
+  if (concept.internSeOgså) {
+    if (Array.isArray(concept.internSeOgså)) {
+      internalRelatedConceptsUris.push(...concept.internSeOgså);
+    } else {
+      internalRelatedConceptsUris.push(concept.internSeOgså);
+    }
+  }
+
+  if (concept.internErstattesAv) {
+    internalRelatedConceptsUris.push(...concept.internErstattesAv);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+
+  const internalRelatedConcepts =
+    internalRelatedConceptsUris &&
+    (await searchInternalConcepts(concept.ansvarligVirksomhet.id, internalRelatedConceptsUris, accessToken)
+      .then(async (response) => await (response instanceof Response && response.ok ? response.json() : []))
+      .then((body) => extractConcepts(body)));
+
+  return internalRelatedConcepts;
 };

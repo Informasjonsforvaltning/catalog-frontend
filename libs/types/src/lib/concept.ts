@@ -126,6 +126,9 @@ export interface Concept {
   gyldigTom?: string | null;
   gjeldendeRevisjon?: string;
   seOgså: string[];
+  internBegrepsRelasjon?: Relasjon[];
+  internSeOgså?: string[];
+  internErstattesAv?: string[];
   erstattesAv?: string[];
   statusURI?: string | null;
   erSistPublisert?: boolean;

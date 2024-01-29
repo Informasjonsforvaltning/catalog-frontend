@@ -15,7 +15,7 @@ const GenericRelations = ({ genericRelations, relatedConceptsMap }: Props) => (
       if (!relatedConcept) return undefined;
       return (
         <KeyValueListItem
-          key={relatedConcept.id}
+          key={`generic-relation-${relatedConcept.id}`}
           property={
             <div>
               <div>

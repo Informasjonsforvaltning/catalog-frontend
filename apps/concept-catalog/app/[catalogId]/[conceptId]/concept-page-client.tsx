@@ -107,6 +107,8 @@ export const ConceptPageClient = ({
   FDK_REGISTRATION_BASE_URI,
   relatedConcepts,
   conceptRelations,
+  internalConceptRelations,
+  internalRelatedConcepts,
   changeRequestEnabled,
 }) => {
   const [language, setLanguage] = useState('nb');
@@ -655,6 +657,22 @@ export const ConceptPageClient = ({
               title={getTitle(translate(concept?.anbefaltTerm?.navn, language))}
               conceptRelations={conceptRelations}
               relatedConcepts={relatedConcepts}
+              validFromIncluding={concept?.gyldigFom}
+              validToIncluding={concept?.gyldigTom}
+            />
+          </InfoCard.Item>
+        )}
+        {!_.isEmpty(internalRelatedConcepts) && (
+          <InfoCard.Item
+            label={`${localization.formatString(localization.concept.unpublishedRelatedConcepts, {
+              conceptCount: internalConceptRelations.length,
+            })}`}
+          >
+            <RelatedConcepts
+              catalogId={catalogId}
+              title={getTitle(translate(concept?.anbefaltTerm?.navn, language))}
+              conceptRelations={internalConceptRelations}
+              relatedConcepts={internalRelatedConcepts}
               validFromIncluding={concept?.gyldigFom}
               validToIncluding={concept?.gyldigTom}
             />

@@ -266,6 +266,7 @@ export const nb = {
     preferredTerm: 'Anbefalt term',
     publicDefinition: 'Definisjon for allmennheten',
     relatedConcepts: 'Relaterte begreper ({conceptCount})',
+    unpublishedRelatedConcepts: 'Relaterte begreper - upubliserte ({conceptCount})',
     relationToSource: 'Forhold til kilde',
     replacedBy: 'Erstattet av',
     seeAlso: 'Se også',

@@ -27,7 +27,7 @@ const SeeAlso = ({ seeAlso, relatedConceptsMap, validFromIncluding, validToInclu
       if (relatedConcept) {
         return (
           <KeyValueListItem
-            key={relatedConcept.id}
+            key={`seeAlso-${relatedConcept.id}`}
             property={localization.concept.seeAlso}
             value={
               <a href={relatedConcept.identifier}>
