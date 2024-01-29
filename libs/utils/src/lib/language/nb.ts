@@ -3,7 +3,7 @@
  */
 
 export const nb = {
-  allCatalogs: 'Alle kataloger',
+  allCatalogs: 'Alle',
   assigned: 'Tildelt',
   category: 'Kategori',
   changeHistory: 'Endringshistorikk',
