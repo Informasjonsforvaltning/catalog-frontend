@@ -41,7 +41,6 @@ interface Props {
   usersResult: any;
   conceptStatuses: any;
   FDK_REGISTRATION_BASE_URI: string;
-  changeRequestEnabled?: boolean;
 }
 
 export const SearchPageClient = ({
@@ -54,7 +53,6 @@ export const SearchPageClient = ({
   usersResult,
   conceptStatuses,
   FDK_REGISTRATION_BASE_URI,
-  changeRequestEnabled,
 }: Props) => {
   const [selectedFieldOption, setSelectedFieldOption] = useState('alleFelter' as SearchableField | 'alleFelter');
   const [selectedSortOption, setSelectedSortOption] = useState(SortOption.RELEVANCE);
@@ -337,15 +335,13 @@ export const SearchPageClient = ({
       <SearchHitsPageLayout
         buttonRow={
           <>
-            {changeRequestEnabled && (
-              <Button
-                as={Link}
-                href={`/${catalogId}/change-requests`}
-                variant='secondary'
-              >
-                {loc.changeRequest.changeRequest}
-              </Button>
-            )}
+            <Button
+              as={Link}
+              href={`/${catalogId}/change-requests`}
+              variant='secondary'
+            >
+              {loc.changeRequest.changeRequest}
+            </Button>
             {hasWritePermission && (
               <Button
                 as={Link}

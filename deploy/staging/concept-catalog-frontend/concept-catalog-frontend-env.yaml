@@ -80,8 +80,6 @@ spec:
                 secretKeyRef:
                   name: commonurl-staging
                   key: FDK_REFERENCE_DATA_BASE_URI
-            - name: CHANGE_REQUEST_FEATURE_TOGGLE
-              value: 'true'
             - name: ADMIN_GUI_BASE_URI
               valueFrom:
                 secretKeyRef:
