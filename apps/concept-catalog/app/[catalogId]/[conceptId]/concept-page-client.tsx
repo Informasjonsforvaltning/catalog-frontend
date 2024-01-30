@@ -109,7 +109,6 @@ export const ConceptPageClient = ({
   conceptRelations,
   internalConceptRelations,
   internalRelatedConcepts,
-  changeRequestEnabled,
 }) => {
   const [language, setLanguage] = useState('nb');
   const [isPublished, setIsPublished] = useState(concept?.erPublisert);
@@ -792,16 +791,14 @@ export const ConceptPageClient = ({
                 )}
               </>
             )}
-            {changeRequestEnabled && (
-              <Button
-                as={Link}
-                href={`/${catalogId}/change-requests/new?concept=${concept?.id}`}
-                variant='secondary'
-                fullWidth={false}
-              >
-                {localization.concept.suggestChanges}
-              </Button>
-            )}
+            <Button
+              as={Link}
+              href={`/${catalogId}/change-requests/new?concept=${concept?.id}`}
+              variant='secondary'
+              fullWidth={false}
+            >
+              {localization.concept.suggestChanges}
+            </Button>
           </div>
         }
       />

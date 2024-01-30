@@ -69,7 +69,6 @@ const SearchPage = async ({ params }) => {
       usersResult={usersResult}
       conceptStatuses={conceptStatuses}
       FDK_REGISTRATION_BASE_URI={`${process.env.FDK_REGISTRATION_BASE_URI}`}
-      changeRequestEnabled={process.env.CHANGE_REQUEST_FEATURE_TOGGLE === 'true'}
     />
   );
 };

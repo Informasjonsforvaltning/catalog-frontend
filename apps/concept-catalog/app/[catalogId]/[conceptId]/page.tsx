@@ -113,7 +113,6 @@ const ConceptPage = async ({ params }) => {
     internalConceptRelations,
     internalRelatedConcepts,
     FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
-    changeRequestEnabled: process.env.CHANGE_REQUEST_FEATURE_TOGGLE === 'true',
   };
 
   return <ConceptPageClient {...clientProps} />;
