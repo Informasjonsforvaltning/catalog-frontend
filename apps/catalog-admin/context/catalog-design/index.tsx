@@ -1,7 +1,7 @@
-import { createContext, type ReactNode, useContext } from 'react';
+import { createContext, type ReactNode } from 'react';
 
 import { useGetDesign } from '../../hooks/design';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Design } from '@catalog-frontend/types';
 
 interface ContextProps {
@@ -21,16 +21,11 @@ interface ProviderProps {
   catalogId: string;
 }
 
-const CatalogDesignContextProvider = ({ children }: ProviderProps) => {
-  const router = useRouter();
-  const { data: design } = useGetDesign(catalogId);
-
-  return <CatalogDesignContext.Provider value={{ design }}>{children}</CatalogDesignContext.Provider>;
-};
-
 const useCatalogDesign = () => {
-  const { design } = useContext(CatalogDesignContext);
+  const params = useParams();
+  const catalogId = params?.catalogId;
+  const { data: design } = useGetDesign(catalogId);
   return design;
 };
 
-export { CatalogDesignContextProvider, useCatalogDesign };
+export { useCatalogDesign };
