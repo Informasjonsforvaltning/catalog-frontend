@@ -107,10 +107,11 @@ export const useUpdateLogo = (catalogId: string) => {
       const formData = new FormData();
       formData.append('logo', file);
 
-      return await fetch(`/api/design/${catalogId}/logo`, {
+      const res = await fetch(`/api/design/${catalogId}/logo`, {
         method: 'POST',
         body: formData,
       });
+      return res;
     },
 
     onSuccess: () => {
@@ -133,7 +134,7 @@ export const useDeleteLogo = (catalogId: string) => {
         method: 'DELETE',
         cache: 'no-store',
       });
-
+      console.log('Delete response', response);
       return response;
     },
     onSuccess: () => {
