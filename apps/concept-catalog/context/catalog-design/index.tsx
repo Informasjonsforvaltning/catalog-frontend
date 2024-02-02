@@ -1,16 +1,17 @@
 'use client';
 
-import { createContext, type ReactNode, useContext } from 'react';
+import { createContext, type ReactNode } from 'react';
 
 import { useGetCatalogDesign } from '../../hooks/catalog-admin';
 import { Design } from '@catalog-frontend/types';
+import { useParams } from 'next/navigation';
 
 interface ContextProps {
   design?: Design;
 }
 
 const context: ContextProps = {
-  design: null,
+  design: undefined,
 };
 
 const CatalogDesignContext = createContext(context);
@@ -22,15 +23,10 @@ interface ProviderProps {
   catalogId: string;
 }
 
-const CatalogDesignContextProvider = ({ catalogId, children }: ProviderProps) => {
-  const { data: design } = useGetCatalogDesign(catalogId);
-
-  return <CatalogDesignContext.Provider value={{ design }}>{children}</CatalogDesignContext.Provider>;
-};
-
 const useCatalogDesign = () => {
-  const { design } = useContext(CatalogDesignContext);
+  const { catalogId } = useParams();
+  const { data: design } = useGetCatalogDesign(catalogId);
   return design;
 };
 
-export { CatalogDesignContextProvider, useCatalogDesign };
+export { useCatalogDesign };

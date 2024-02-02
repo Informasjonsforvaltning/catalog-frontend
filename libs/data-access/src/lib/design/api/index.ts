@@ -48,7 +48,8 @@ export const postDesignLogo = async (catalogId: string, accessToken: string, log
     method: 'POST',
     body: formData,
   };
-  return await fetch(resource, options);
+  const res = await fetch(resource, options);
+  return res;
 };
 
 export const deleteDesignLogo = async (catalogId: string, accessToken: string) => {

@@ -6,7 +6,7 @@ jest.mock('next/router', () => ({
   useRouter: jest.fn().mockReturnValue({ query: {} }),
 }));
 
-describe('ColorPicker', () => {
+describe('Banner', () => {
   it('should render successfully', () => {
     const queryClient = new QueryClient();
     const { baseElement } = render(

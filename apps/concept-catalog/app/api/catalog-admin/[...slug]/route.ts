@@ -27,8 +27,12 @@ export const GET = async (req: NextRequest, { params }: { params: { slug: string
       }
       const headers = {
         'Content-Type': response.headers.get('Content-Type') ?? 'application/json',
-        'Content-Disposition': response.headers.get('Content-Disposition'),
-        'Cache-Control': response.headers.get('Cache-Control'),
+        ...(response.headers.has('Content-Disposition')
+          ? { 'Content-Disposition': response.headers.get('Content-Disposition') ?? '' }
+          : {}),
+        ...(response.headers.has('Cache-Control')
+          ? { 'Cache-Control': response.headers.get('Cache-Control') ?? '' }
+          : {}),
       };
       const arrayBufferResponse = await response.arrayBuffer();
       return new Response(arrayBufferResponse, { status: response.status, headers });
