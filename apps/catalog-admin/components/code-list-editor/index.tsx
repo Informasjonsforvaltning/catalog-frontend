@@ -181,7 +181,7 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
         </Button>
         {type === 'create' ? (
           <Button
-            color='danger'
+            variant='secondary'
             onClick={handleCancel}
           >
             {localization.button.cancel}
