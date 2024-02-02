@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { NodeApi, NodeRendererProps, Tree } from 'react-arborist';
-import { TabsAddIcon, TabsRemoveIcon, XMarkIcon } from '@navikt/aksel-icons';
+import { TabsAddIcon, TabsRemoveIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
 import styles from './codes-editor.module.css';
 import { Button, InfoCard, Select } from '@catalog-frontend/ui';
@@ -321,11 +321,13 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
                 </Button>
                 <Button
                   color='danger'
+                  variant='secondary'
                   onClick={() => {
                     selectedCode && removeCode(selectedCode.id, currentCodeList);
                     setIsEditViewOpen(false);
                   }}
                 >
+                  <TrashIcon fontSize='1.5rem' />
                   {localization.button.removeFromCodeList}
                 </Button>
               </div>

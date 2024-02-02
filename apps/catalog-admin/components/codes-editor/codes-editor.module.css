@@ -106,8 +106,7 @@
 
 .codeId {
   display: flex;
-  justify-content: flex-end;
-  padding-right: 7px;
+  justify-content: center;
   border-left: solid 1px #d5d7d9;
   border-right: solid 1px #d5d7d9;
 }
