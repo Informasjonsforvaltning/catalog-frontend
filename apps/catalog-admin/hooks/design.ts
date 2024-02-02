@@ -134,7 +134,6 @@ export const useDeleteLogo = (catalogId: string) => {
         method: 'DELETE',
         cache: 'no-store',
       });
-      console.log('Delete response', response);
       return response;
     },
     onSuccess: () => {

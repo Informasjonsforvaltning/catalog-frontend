@@ -36,7 +36,6 @@ export const patchDesign = async (catalogId: string, accessToken: string, diff: 
 };
 
 export const postDesignLogo = async (catalogId: string, accessToken: string, logo: any) => {
-  console.log('Kjører');
   const resource = `${path}/${catalogId}/design/logo`;
 
   const formData = new FormData();
@@ -50,7 +49,6 @@ export const postDesignLogo = async (catalogId: string, accessToken: string, log
     body: formData,
   };
   const res = await fetch(resource, options);
-  console.log('res', res);
   return res;
 };
 
