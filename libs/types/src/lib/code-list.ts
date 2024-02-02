@@ -17,9 +17,9 @@ export interface CodeListToBeCreated {
 }
 
 export interface Code {
-  id: number;
+  id: string;
   name: MultiLanguageText;
-  parentID: number | null;
+  parentID: string | null;
 }
 
 export interface TreeNode {

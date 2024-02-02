@@ -16,6 +16,7 @@ import {
 } from '@catalog-frontend/utils';
 import { useAdminDispatch, useAdminState } from '../../context/admin';
 import { compare } from 'fast-json-patch';
+import { v4 as uuid } from 'uuid';
 
 const INDENT_STEP = 15;
 const NO_PARENT = 'noParent';
@@ -46,22 +47,6 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
     }
   };
 
-  const getNextId = (codes: Code[]): number => {
-    if (codes) {
-      let maxId = 0;
-      for (const code of codes) {
-        if (code.id > maxId && code.id !== undefined) {
-          maxId = code.id;
-        }
-      }
-
-      while (codes.some((code: Code) => code.id === maxId)) {
-        maxId++;
-      }
-      return maxId;
-    }
-  };
-
   const updateCodeName = (field: 'nb' | 'nn' | 'en', value: string) => {
     setSelectedCode(
       (prevSelectedCode) =>
@@ -76,19 +61,18 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   };
 
   const updateCodeParent = (value: string) => {
-    const valueAsNumber = value !== NO_PARENT ? +value : null;
     setSelectedCode(
       (prevSelectedCode) =>
         prevSelectedCode && {
           ...prevSelectedCode,
-          parentID: valueAsNumber,
+          parentID: value,
         },
     );
   };
 
   const createNewCode = () => {
     setSelectedCode({
-      id: getNextId(codes) || 0,
+      id: uuid(),
       name: { nb: 'Ny kode', nn: '', en: '' },
       parentID: null,
     });
@@ -114,7 +98,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
     });
   };
 
-  const removeCode = (codeId: number, codeList?: CodeList) => {
+  const removeCode = (codeId: string, codeList?: CodeList) => {
     const codeListId = codeList?.id || '0';
     const allChildrenCodes = getAllChildrenCodes(codeId, codeList);
     const updatedCodesCopy = { ...updatedCodes };
@@ -184,7 +168,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   }
 
   const handleOnClick = (node: NodeApi<TreeNode>) => {
-    setSelectedCode(codes?.find((code) => code.id === Number.parseInt(node.data.value)));
+    setSelectedCode(codes?.find((code) => code.id === node.data.value));
     setIsEditViewOpen(true);
   };
 
@@ -200,7 +184,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
     return level;
   };
 
-  function findRelatedCodes(codes: Code[], codeId: number, depth = 0, maxDepth = 4) {
+  function findRelatedCodes(codes: Code[], codeId: string, depth = 0, maxDepth = 4) {
     if (depth > maxDepth) {
       return [];
     }
@@ -212,7 +196,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
     return [...relatedCodes, ...descendants];
   }
 
-  function availableParentCodes(codes: Code[], codeId: number) {
+  function availableParentCodes(codes: Code[], codeId: string) {
     const relatedCodes = findRelatedCodes(codes, codeId) || [];
     const filterOptions = codes
       .filter((code: Code) => {
@@ -224,7 +208,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
       })
       .map((code: Code) => ({
         label: String(getTranslateText(code.name)),
-        value: code.id.toString(),
+        value: code.id,
       }))
       .concat({ label: localization.catalogAdmin.noParentCode, value: NO_PARENT });
 
