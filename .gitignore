@@ -48,3 +48,6 @@ yarn-error.log*
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+.editorconfig
+.gitattributes
+.yarn/releases/yarn-4.1.0.cjs

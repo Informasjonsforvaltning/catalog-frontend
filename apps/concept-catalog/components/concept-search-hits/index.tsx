@@ -73,17 +73,16 @@ const ConceptSearchHits: React.FC<Props> = ({
       <div className={styles.rowSpaceBetween}>
         {searchHit.gjeldendeRevisjon && (
           <div className={styles.metaData}>
-            <p>
-              <Link
-                href={
-                  validOrganizationNumber(catalogId) && validUUID(searchHit.gjeldendeRevisjon)
-                    ? `/${catalogId}/${searchHit.gjeldendeRevisjon}`
-                    : '#'
-                }
-              >
-                {localization.searchHit.underRevision}
-              </Link>
-            </p>
+            <Link
+              prefetch={false}
+              href={
+                validOrganizationNumber(catalogId) && validUUID(searchHit.gjeldendeRevisjon)
+                  ? `/${catalogId}/${searchHit.gjeldendeRevisjon}`
+                  : '#'
+              }
+            >
+              {localization.searchHit.underRevision}
+            </Link>
           </div>
         )}
         {searchHit?.assignedUser && (
@@ -117,7 +116,7 @@ const ConceptSearchHits: React.FC<Props> = ({
                 )
               }
               titleHref={
-                validOrganizationNumber(catalogId) && validUUID(concept.id) ? `/${catalogId}/${concept.id}` : '#'
+                validOrganizationNumber(catalogId) && validUUID(concept?.id) ? `/${catalogId}/${concept.id}` : '#'
               }
               conceptSubject={
                 <ConceptSubject
