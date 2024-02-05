@@ -121,24 +121,27 @@ const Header: FC<HeaderProps> = ({
                 </div>
               </button>
             </Trigger>
-            {handleLogout && (
-              <Menu>
-                <ul className={styles.menu}>
-                  {hasOrganizationAdminPermission(accessToken, String(catalogId)) && (
-                    <li className={styles.catalogAdminHeaderLink}>
-                      <a href={catalogAdminUrl}>{localization.manageCatalogs}</a>
-                    </li>
-                  )}
-                  <button
-                    onClick={handleLogout}
-                    className={styles.logoutButton}
-                  >
-                    <LeaveIcon className={styles.logoutIcon} />
-                    <span>{localization.auth.logout}</span>
-                  </button>
-                </ul>
-              </Menu>
-            )}
+
+            <Menu>
+              <ul className={styles.menu}>
+                {hasOrganizationAdminPermission(accessToken, String(catalogId)) && (
+                  <li className={styles.catalogAdminHeaderLink}>
+                    <a href={catalogAdminUrl}>{localization.manageCatalogs}</a>
+                  </li>
+                )}
+                {handleLogout && (
+                  <li>
+                    <button
+                      onClick={handleLogout}
+                      className={styles.logoutButton}
+                    >
+                      <LeaveIcon className={styles.logoutIcon} />
+                      <span>{localization.auth.logout}</span>
+                    </button>
+                  </li>
+                )}
+              </ul>
+            </Menu>
           </DropdownMenu>
         )}
       </div>

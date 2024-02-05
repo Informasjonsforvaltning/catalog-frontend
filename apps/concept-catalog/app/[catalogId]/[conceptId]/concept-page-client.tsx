@@ -332,6 +332,7 @@ export const ConceptPageClient = ({
                 </div>
                 <div>
                   <Link
+                    prefetch={false}
                     href={
                       validOrganizationNumber(catalogId) && validUUID(revision.id)
                         ? `/${catalogId}/${revision.id}`

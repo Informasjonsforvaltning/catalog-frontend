@@ -211,6 +211,7 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
                           size={'xsmall'}
                         >
                           <Link
+                            prefetch={false}
                             href={
                               validOrganizationNumber(catalogId) &&
                               validUUID(id) &&

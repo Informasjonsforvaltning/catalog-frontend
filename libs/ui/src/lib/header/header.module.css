@@ -162,7 +162,7 @@
 }
 
 .menu > li > a:hover {
-  background: #fff;
+  text-decoration: underline;
 }
 
 .menu > li > a > div {

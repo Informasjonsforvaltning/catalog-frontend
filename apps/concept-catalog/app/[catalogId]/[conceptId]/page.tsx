@@ -53,7 +53,7 @@ const ConceptPage = async ({ params }) => {
     redirect(`/${catalogId}/no-access`);
   }
 
-  const concept: Concept | null = await getConcept(conceptId, `${session?.accessToken}`).then((response) => {
+  const concept = await getConcept(conceptId, `${session?.accessToken}`).then((response) => {
     if (response.ok) return response.json();
   });
   if (!concept) {
@@ -69,6 +69,7 @@ const ConceptPage = async ({ params }) => {
 
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
   const username = session && getUsername(session?.accessToken);
+
   const organization: Organization = await getOrganization(catalogId).then((response) => response.json());
   const revisions: Concept[] | null = await getConceptRevisions(conceptId, `${session?.accessToken}`).then(
     (response) => response.json() || null,
