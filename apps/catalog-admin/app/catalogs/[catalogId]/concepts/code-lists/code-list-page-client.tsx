@@ -31,7 +31,7 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }: CodeLi
   const { data: getAllCodeLists } = useGetAllCodeLists({
     catalogId: catalogId,
   });
-  const dbCodeLists = useMemo(() => getAllCodeLists?.codeLists || [], [getAllCodeLists]);
+  const dbCodeLists = useMemo(() => getAllCodeLists?.codeLists ?? [], [getAllCodeLists]);
 
   const filteredCodeLists = () =>
     dbCodeLists.filter((codeList: CodeList) => codeList.name.toLowerCase().includes(search.toLowerCase()));
