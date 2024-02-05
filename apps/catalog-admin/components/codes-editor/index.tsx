@@ -22,8 +22,8 @@ const INDENT_STEP = 15;
 const NO_PARENT = 'noParent';
 
 export interface Props {
-  codeList: CodeList;
-  dirty: (dirty: boolean) => void;
+  codeList?: CodeList;
+  dirty?: (dirty: boolean) => void;
   type?: EditorType;
 }
 
@@ -31,9 +31,9 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   const adminDispatch = useAdminDispatch();
   const { updatedCodeLists, updatedCodes } = useAdminState();
 
-  const codeListInContext = updatedCodeLists?.find((codeList) => codeList.id === dbCodeList.id);
+  const codeListInContext = updatedCodeLists?.find((codeList) => codeList.id === dbCodeList?.id);
   const currentCodeList = codeListInContext ?? dbCodeList;
-  const codes = updatedCodes ? updatedCodes[dbCodeList?.id] || updatedCodes['0'] : [];
+  const codes = updatedCodes ? updatedCodes[dbCodeList?.id ?? ''] || updatedCodes['0'] : [];
 
   const [selectedCode, setSelectedCode] = useState<Code>();
   const [isEditViewOpen, setIsEditViewOpen] = useState<boolean>(false);
@@ -41,8 +41,8 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   const setDirtyState = () => {
     if (dirty) {
       const isDirty =
-        compare(dbCodeList?.codes ?? [], updatedCodes[dbCodeList?.id] ?? []).length > 0 ||
-        (selectedCode && !dbCodeList?.codes?.includes(selectedCode));
+        compare(dbCodeList?.codes ?? [], updatedCodes?.[dbCodeList?.id ?? ''] ?? []).length > 0 ||
+        (selectedCode ? !dbCodeList?.codes?.includes(selectedCode) : false);
       dirty(isDirty);
     }
   };
@@ -79,8 +79,8 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   };
 
   const updateAndAddCode = (code: Code, codeList?: CodeList) => {
-    const codeListId = codeList?.id || '0';
-    const existingCodes = updatedCodes[codeListId] ? [...updatedCodes[codeListId]] : [];
+    const codeListId = codeList?.id ?? '0';
+    const existingCodes = updatedCodes?.[codeListId] ? [...updatedCodes[codeListId]] : [];
     const index = existingCodes.findIndex((c) => c.id === code.id);
 
     if (index !== -1) {
@@ -174,10 +174,10 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
 
   const getCurrentLevel = (codes: Code[], currentCode: Code) => {
     let level = 0;
-    let parent = currentCode;
+    let parent: Code | undefined = currentCode;
 
     while (parent && parent.parentID !== null) {
-      parent = codes.find((code) => code.id === parent.parentID);
+      parent = codes.find((code) => code.id === parent?.parentID);
       level++;
     }
 
@@ -196,8 +196,8 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
     return [...relatedCodes, ...descendants];
   }
 
-  function availableParentCodes(codes: Code[], codeId: string) {
-    const relatedCodes = findRelatedCodes(codes, codeId) || [];
+  function availableParentCodes(codes: Code[], codeId: string | undefined) {
+    const relatedCodes = findRelatedCodes(codes, codeId ?? '') || [];
     const filterOptions = codes
       .filter((code: Code) => {
         return (
@@ -301,12 +301,12 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
               <div className={styles.codeListEditor}>
                 <Select
                   label={localization.catalogAdmin.parentCode}
-                  value={selectedCode && selectedCode.parentID !== undefined ? `${selectedCode.parentID}` : NO_PARENT}
+                  value={selectedCode?.parentID ? selectedCode.parentID : NO_PARENT}
                   onChange={(event) => {
                     updateCodeParent(event.target.value);
                   }}
                 >
-                  {codes && selectedCode ? availableParentCodes(codes, selectedCode.id) : []}
+                  {availableParentCodes(codes ?? [], selectedCode?.id)}
                 </Select>
               </div>
 

@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@catalog-frontend/ui';
 import { Textfield } from '@digdir/design-system-react';
-import { CodeList, EditorType } from '@catalog-frontend/types';
+import { Code, CodeList, EditorType } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
 import { useAdminDispatch, useAdminState } from '../../context/admin';
 import { useCreateCodeList, useDeleteCodeList, useGetAllCodeLists, useUpdateCodeList } from '../../hooks/code-lists';
@@ -29,9 +29,11 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
   const { data: getAllCodeLists } = useGetAllCodeLists({
     catalogId: catalogId,
   });
-  const dbCodeLists = getAllCodeLists?.codeLists || [];
+  const dbCodeLists = getAllCodeLists?.codeLists ?? [];
 
   const newCodeListTemplate = {
+    id: '',
+    catalogId: catalogId,
     name: '',
     description: '',
     codes: [],
@@ -55,7 +57,7 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
   }, [newCodeList]);
 
   const handleDeleteCodeList = (codeListId: string) => {
-    if (!codeListsInUse.includes(codeListId)) {
+    if (!codeListsInUse?.includes(codeListId)) {
       if (window.confirm(localization.codeList.confirmDelete)) {
         deleteCodeList.mutate(codeListId);
       }
@@ -64,11 +66,11 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
     }
   };
 
-  const handleCodeListUpdate = (codeListId: string, newName?: string, newDescription?: string) => {
-    const indexInUpdatedCodeLists = updatedCodeLists.findIndex((codeList) => codeList.id === codeListId);
+  const handleCodeListUpdate = (codeListId?: string, newName?: string, newDescription?: string) => {
+    const indexInUpdatedCodeLists = updatedCodeLists?.findIndex((codeList) => codeList.id === codeListId) ?? -1;
 
     if (indexInUpdatedCodeLists !== -1) {
-      const codeListToUpdate = updatedCodeLists[indexInUpdatedCodeLists];
+      const codeListToUpdate = updatedCodeLists?.[indexInUpdatedCodeLists];
 
       if (codeListToUpdate) {
         const updatedCodeList = {
@@ -92,7 +94,7 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
           description: newDescription !== undefined ? newDescription : codeListToUpdate.description,
         };
 
-        const updatedCodeListsCopy = [...updatedCodeLists, updatedCodeList];
+        const updatedCodeListsCopy = [...(updatedCodeLists || []), updatedCodeList];
         adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
       }
     }
@@ -116,8 +118,8 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
 
   const handleUpdateDbCodeList = (codeListId: string) => {
     const dbCodeList = dbCodeLists.find((codeList: CodeList) => codeList.id === codeListId);
-    const updatedCodeList = updatedCodeLists.find((codeList) => codeList.id === codeListId) || dbCodeList;
-    const newCodes = updatedCodes[codeListId];
+    const updatedCodeList = updatedCodeLists?.find((codeList) => codeList.id === codeListId) ?? dbCodeList;
+    const newCodes = updatedCodes?.[codeListId];
 
     const updatedCodeListCopy = {
       ...updatedCodeList,
@@ -152,9 +154,9 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
                   ...prevCodeList,
                   name: event.target.value,
                 }))
-              : handleCodeListUpdate(codeList.id, event.target.value, undefined);
+              : handleCodeListUpdate(codeList?.id, event.target.value, undefined);
           }}
-          value={(updatedCodeLists.find((c) => c.id === codeList.id) || codeList)?.name || newCodeList?.name}
+          value={(updatedCodeLists?.find((c) => c.id === codeList?.id) || codeList)?.name || newCodeList?.name}
         />
       </div>
       <div className='editorSpacing'>
@@ -163,10 +165,10 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             type === 'create'
               ? setNewCodeList((prevCodeList) => ({ ...prevCodeList, description: event.target.value }))
-              : handleCodeListUpdate(codeList.id, undefined, event.target.value);
+              : handleCodeListUpdate(codeList?.id, undefined, event.target.value);
           }}
           value={
-            (updatedCodeLists.find((c) => c.id === codeList.id) || codeList)?.description || newCodeList?.description
+            (updatedCodeLists?.find((c) => c.id === codeList?.id) || codeList)?.description || newCodeList?.description
           }
         />
       </div>
@@ -176,7 +178,9 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
         dirty={dirty}
       />
       <div className='editorButtons'>
-        <Button onClick={() => (type === 'create' ? handleCreateCodeList() : handleUpdateDbCodeList(codeList.id))}>
+        <Button
+          onClick={() => (type === 'create' ? handleCreateCodeList() : handleUpdateDbCodeList(codeList?.id ?? ''))}
+        >
           {localization.saveEdits}
         </Button>
         {type === 'create' ? (
@@ -190,7 +194,7 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
           <Button
             color='danger'
             onClick={() => {
-              handleDeleteCodeList(codeList.id);
+              handleDeleteCodeList(codeList?.id ?? '');
             }}
           >
             {localization.button.delete}

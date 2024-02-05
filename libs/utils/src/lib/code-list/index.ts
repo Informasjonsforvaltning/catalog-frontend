@@ -1,7 +1,7 @@
 import { Code, CodeList, TreeNode } from '@catalog-frontend/types';
 import { getTranslateText } from '../language/translateText';
 
-const findParent = (id: number, nodes: TreeNode[]): TreeNode | null => {
+const findParent = (id: string, nodes: TreeNode[]): TreeNode | null => {
   const parent = nodes.find((node) => node.value === `${id}`);
   if (parent) {
     return parent;
@@ -104,7 +104,7 @@ export const convertCodeListToTreeNodes = (codes: Code[] | undefined): TreeNode[
     return accumulator;
   }, [] as TreeNode[]) ?? [];
 
-export const getAllChildrenCodes = (codeId: string, codeList: CodeList) => {
+export const getAllChildrenCodes = (codeId: string, codeList: CodeList | undefined) => {
   const children: Code[] = [];
   (codeList?.codes?.filter((code) => code.parentID === codeId) ?? []).forEach((code) => {
     children.push(code);
