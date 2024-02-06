@@ -216,6 +216,7 @@ export const SearchPageClient = ({
       default:
         break;
     }
+    setPage(0);
   };
 
   const onSearchSubmit = (search) => {
@@ -242,6 +243,7 @@ export const SearchPageClient = ({
       currentLabels = [...currentLabels, label];
     }
     setFilterLabel(currentLabels);
+    setPage(0);
   };
 
   const design = useCatalogDesign();
