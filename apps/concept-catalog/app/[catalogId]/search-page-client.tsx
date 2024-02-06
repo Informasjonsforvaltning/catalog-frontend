@@ -268,7 +268,7 @@ export const SearchPageClient = ({
             key={`subject-${index}`}
             onClick={() => removeFilter(filter, 'subject')}
           >
-            {getTranslateText(subjectCodeList.codes.find((c) => c.id === Number(filter))?.name)}
+            {getTranslateText(subjectCodeList.codes.find((c) => c.id === filter)?.name)}
           </Chip.Removable>
         ))}
         {filterLabel?.map((filter, index) => (
