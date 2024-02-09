@@ -30,9 +30,11 @@ export const POST = async (req: NextRequest, { params }: { params: { slug: strin
     const reqBody = await req.json();
     const response = await createChangeRequest(reqBody, `${catalogId}`, `${session?.accessToken}`);
     if (response.status !== 201) {
-      throw new Error(
-        `Error when creating change request. Response status: ${response.status}, message: ${await response.text()}`,
-      );
+      const errorMsg = `Error when creating change request. Response status: ${
+        response.status
+      }, message: ${await response.text()}`;
+      console.error(errorMsg);
+      throw new Error(errorMsg);
     }
     const changeRequestId = response?.headers?.get('location')?.split('/').pop();
     return new Response(JSON.stringify(changeRequestId), { status: response.status });
@@ -57,9 +59,11 @@ export const PUT = async (req: NextRequest, { params }: { params: { slug: string
       `${session?.accessToken}`,
     );
     if (response.status !== 200) {
-      throw new Error(
-        `Error when updating change request. Response status: ${response.status}, message: ${await response.text()}`,
-      );
+      const errorMsg = `Error when updating change request. Response status: ${
+        response.status
+      }, message: ${await response.text()}`;
+      console.error(errorMsg);
+      throw new Error(errorMsg);
     }
     return new Response('Updated change requests', { status: response.status });
   } catch (error) {
