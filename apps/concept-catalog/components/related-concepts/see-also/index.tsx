@@ -1,12 +1,5 @@
 import React from 'react';
-import {
-  dateStringToDate,
-  formatDate,
-  getTranslateText,
-  isDateAfterToday,
-  isDateBeforeToday,
-  localization,
-} from '@catalog-frontend/utils';
+import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { KeyValueListItem } from '@catalog-frontend/ui';
 import { Relasjon } from '@catalog-frontend/types';
 
@@ -17,25 +10,17 @@ interface Props {
   relatedConceptsMap: (identifier: string) => any;
 }
 
-const SeeAlso = ({ seeAlso, relatedConceptsMap, validFromIncluding, validToIncluding }: Props) => (
+const SeeAlso = ({ seeAlso, relatedConceptsMap }: Props) => (
   <>
     {seeAlso.map((relasjon) => {
       if (!relasjon) return undefined;
-      const hasExpired = isDateBeforeToday(dateStringToDate(formatDate(dateStringToDate(validToIncluding ?? ''))));
-      const willBeValid = isDateAfterToday(dateStringToDate(formatDate(dateStringToDate(validFromIncluding ?? ''))));
       const relatedConcept = relatedConceptsMap(relasjon.relatertBegrep ?? '');
       if (relatedConcept) {
         return (
           <KeyValueListItem
             key={`seeAlso-${relatedConcept.id}`}
             property={localization.concept.seeAlso}
-            value={
-              <a href={relatedConcept.identifier}>
-                {getTranslateText(relatedConcept.prefLabel)}
-                {hasExpired && <>&nbsp;({localization.validity.expired})</>}
-                {!hasExpired && willBeValid && <>&nbsp;({localization.validity.willBeValid})</>}
-              </a>
-            }
+            value={<a href={relatedConcept.identifier}>{getTranslateText(relatedConcept.prefLabel)}</a>}
           />
         );
       } else {
