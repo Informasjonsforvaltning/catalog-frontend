@@ -58,8 +58,8 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
         .then(() => {
           alert(localization.alert.success);
         })
-        .catch(() => {
-          alert(localization.alert.fail);
+        .catch((error) => {
+          alert(`${localization.alert.fail}, ${error}`);
         });
     } else {
       alert(localization.alert.noChanges);

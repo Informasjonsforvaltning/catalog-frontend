@@ -1,11 +1,5 @@
 import { AssignedUser } from '@catalog-frontend/types';
-import {
-  validOrganizationNumber,
-  validUUID,
-  textRegex,
-  emailRegex,
-  telephoneNumberRegex,
-} from '@catalog-frontend/utils';
+import { validOrganizationNumber, validUUID, textRegex, emailRegex } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { compare } from 'fast-json-patch';
 
@@ -71,16 +65,12 @@ export const useUpdateUser = (catalogId: string) => {
         throw new Error('Invalid user id');
       }
 
-      if (!textRegex.test(updatedUser.name)) {
+      if (updatedUser.name && !textRegex.test(updatedUser.name)) {
         throw new Error('Invalid name');
       }
 
-      if (!emailRegex.test(updatedUser.email)) {
+      if (updatedUser.email && !emailRegex.test(updatedUser.email)) {
         throw new Error('Invalid email');
-      }
-
-      if (!telephoneNumberRegex.test(String(updatedUser.telephoneNumber))) {
-        throw new Error('Invalid telephone number');
       }
 
       if (diff) {
