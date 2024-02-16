@@ -204,7 +204,7 @@ export const nb = {
     chooseCodeList: 'Velg kodeliste',
     fieldNameDescription: 'Navn på felt',
     fieldTypeDescription: 'Type felt',
-
+    noListChosen: 'Ingen liste valgt',
     description: {
       conceptCatalog: 'Her kan du administrere innstillinger og innhold for begrepskatalogen.',
       general: 'Her kan du administrere innstillinger og innhold på tvers av katalogene.',
