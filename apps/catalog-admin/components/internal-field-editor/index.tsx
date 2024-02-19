@@ -103,14 +103,22 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
     return textRegexWithNumbers.test(label);
   };
 
-  const codeListsOptions = dbCodeLists?.map((codeList: CodeList, index) => (
+  const codeListsOptions = dbCodeLists?.map((codeList: CodeList, index) => [
     <option
-      key={`codelist-option-${index}`}
-      value={codeList.id}
+      key={'no-codelist'}
+      value={undefined}
     >
-      {codeList.name}
-    </option>
-  ));
+      {localization.catalogAdmin.noListChosen}
+    </option>,
+    ...(dbCodeLists?.map((codeList: CodeList, index) => (
+      <option
+        key={`codelist-option-${index}`}
+        value={codeList.id}
+      >
+        {codeList.name}
+      </option>
+    )) || []),
+  ]);
 
   const updateFieldsListState = (
     fieldId: string,
@@ -227,6 +235,7 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
         <>
           <div className={cn('accordionField', styles.row)}>
             <Checkbox.Group
+              legend=''
               onChange={(filters) => {
                 field
                   ? updateFieldsListState(field?.id, undefined, undefined, undefined, filters)

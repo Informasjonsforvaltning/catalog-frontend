@@ -49,14 +49,22 @@ export function EditableFieldsClient({ catalogId, organization }: EditableFields
     }
   };
 
-  const codeListsOptions = dbCodeLists?.map((codeList: CodeList) => (
+  const codeListsOptions = [
     <option
-      key={codeList.id}
-      value={codeList.id}
+      key={'no-codelist'}
+      value={undefined}
     >
-      {codeList.name}
-    </option>
-  ));
+      {localization.catalogAdmin.noListChosen}
+    </option>,
+    ...(dbCodeLists?.map((codeList: CodeList) => (
+      <option
+        key={codeList.id}
+        value={codeList.id}
+      >
+        {codeList.name}
+      </option>
+    )) || []),
+  ];
 
   const breadcrumbList = catalogId
     ? ([
