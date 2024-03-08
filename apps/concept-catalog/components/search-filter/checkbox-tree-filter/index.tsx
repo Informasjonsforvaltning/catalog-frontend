@@ -43,7 +43,7 @@ const generateOptionElements = (nodes?: TreeNode[]): JSX.Element[] => {
     <option
       key={'no-user-selected'}
       value={undefined}
-    ></option>,
+    />,
     ...(options.map((opt) => (
       <option
         value={opt.value}
