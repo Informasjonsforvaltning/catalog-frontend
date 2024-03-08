@@ -129,7 +129,7 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
                   <option
                     key={'no-user-selected'}
                     value={undefined}
-                  ></option>,
+                  />,
                   ...(assignedUserItems.map((item) => (
                     <option
                       key={item.id}
