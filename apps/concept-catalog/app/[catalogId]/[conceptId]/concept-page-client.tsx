@@ -147,7 +147,7 @@ export const ConceptPageClient = ({
           checked={isPublished}
           onChange={handleOnChangePublished}
         >
-          {localization.publicationState.published}
+          {isPublished ? localization.publicationState.published : localization.publicationState.unpublished}
         </Switch>
         <div className={classes.greyFont}>
           {isPublished
@@ -157,7 +157,7 @@ export const ConceptPageClient = ({
                 month: 'long',
                 day: 'numeric',
               })}`
-            : localization.publicationState.unpublished}
+            : ''}
         </div>
       </>,
     ],
