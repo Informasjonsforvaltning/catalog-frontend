@@ -39,14 +39,20 @@ const getSearchOptions = (nodes?: TreeNode[]) => {
 const generateOptionElements = (nodes?: TreeNode[]): JSX.Element[] => {
   const options = getSearchOptions(nodes);
 
-  return options.map((opt) => (
+  return [
     <option
-      value={opt.value}
-      key={`searchOption-${opt.value}`}
-    >
-      {opt.label}
-    </option>
-  ));
+      key={'no-user-selected'}
+      value={undefined}
+    ></option>,
+    ...(options.map((opt) => (
+      <option
+        value={opt.value}
+        key={`searchOption-${opt.value}`}
+      >
+        {opt.label}
+      </option>
+    )) || []),
+  ];
 };
 
 export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
