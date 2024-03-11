@@ -4,7 +4,6 @@ import { SearchableField, QuerySort } from '@catalog-frontend/types';
 import {
   BreadcrumbType,
   Breadcrumbs,
-  Button,
   PageBanner,
   UploadButton,
   SearchField,
@@ -12,6 +11,7 @@ import {
   Spinner,
   SearchHitsPageLayout,
   Select,
+  LinkButton,
 } from '@catalog-frontend/ui';
 import { getTranslateText, capitalizeFirstLetter, localization as loc } from '@catalog-frontend/utils';
 import { Chip } from '@digdir/design-system-react';
@@ -337,26 +337,23 @@ export const SearchPageClient = ({
       <SearchHitsPageLayout
         buttonRow={
           <>
-            <Button
-              as={Link}
+            <LinkButton
               href={`/${catalogId}/change-requests`}
               variant='secondary'
             >
               {loc.changeRequest.changeRequest}
-            </Button>
+            </LinkButton>
             {hasWritePermission && (
-              <Button
-                as={Link}
-                href={`/${catalogId}/new`}
-                icon={<PlusCircleIcon fontSize='1.5rem' />}
-              >
-                {loc.button.createConcept}
-              </Button>
+              <LinkButton href={`/${catalogId}/new`}>
+                <>
+                  <PlusCircleIcon fontSize='1.5rem' />
+                  <span>{loc.button.createConcept}</span>
+                </>
+              </LinkButton>
             )}
             {hasAdminPermission && (
               <UploadButton
                 variant='secondary'
-                icon={<FileImportIcon fontSize='1.5rem' />}
                 allowedMimeTypes={[
                   'text/csv',
                   'text/x-csv',
@@ -368,7 +365,8 @@ export const SearchPageClient = ({
                 ]}
                 onUpload={onImportUpload}
               >
-                {loc.button.importConcept}
+                <FileImportIcon fontSize='1.5rem' />
+                <span>{loc.button.importConcept}</span>
               </UploadButton>
             )}
           </>

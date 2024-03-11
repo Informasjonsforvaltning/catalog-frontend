@@ -1,7 +1,7 @@
 'use client';
 
-import { NativeSelect, Textarea, Textfield } from '@digdir/design-system-react';
-import { Button, FormFieldCard } from '@catalog-frontend/ui';
+import { Textarea, Textfield } from '@digdir/design-system-react';
+import { Button, FormFieldCard, Select } from '@catalog-frontend/ui';
 import { localization, getTranslateText } from '@catalog-frontend/utils';
 import { ISOLanguage, Output, ReferenceDataCode, Service, ServiceToBeCreated } from '@catalog-frontend/types';
 import styles from './service-form.module.css';
@@ -187,12 +187,14 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                             <Button
                               type='button'
                               variant='secondary'
-                              icon={<TrashIcon />}
                               color='danger'
                               onClick={() => arrayHelpers.remove(index)}
                               key={`produces-button-${index}`}
                             >
-                              {localization.button.delete}
+                              <>
+                                <TrashIcon />
+                                <span>{localization.button.delete}</span>
+                              </>
                             </Button>
                           </div>
                         ))}
@@ -247,7 +249,7 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
               </FormFieldCard>
               <FormFieldCard title='Status'>
                 <Field
-                  as={NativeSelect}
+                  as={Select}
                   name='status'
                 >
                   <option value={undefined}>Ingen status</option>

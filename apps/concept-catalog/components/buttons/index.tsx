@@ -1,10 +1,9 @@
 'use client';
 
-import { Button } from '@catalog-frontend/ui';
+import { Button, LinkButton } from '@catalog-frontend/ui';
 import { acceptChangeRequestAction, rejectChangeRequestAction } from '../../app/actions/change-requests/actions';
 import { localization, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useState } from 'react';
-import Link from 'next/link';
 
 interface Props {
   catalogId: string;
@@ -70,13 +69,12 @@ export const EditChangeRequestButton = ({ catalogId, changeRequestId }: Props) =
   }
 
   return (
-    <Button
-      as={Link}
+    <LinkButton
       href={`/${catalogId}/change-requests/${changeRequestId}/edit`}
       variant='secondary'
       color='second'
     >
       {localization.button.edit}
-    </Button>
+    </LinkButton>
   );
 };

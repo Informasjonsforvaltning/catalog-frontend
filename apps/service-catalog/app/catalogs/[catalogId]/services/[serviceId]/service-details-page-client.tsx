@@ -1,6 +1,6 @@
 'use client';
 import { ReferenceDataCode, Service } from '@catalog-frontend/types';
-import { Button, DetailsPageLayout, InfoCard, ServiceStatusTagProps, Tag } from '@catalog-frontend/ui';
+import { DetailsPageLayout, InfoCard, LinkButton, ServiceStatusTagProps, Tag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import _ from 'lodash';
 import Link from 'next/link';
@@ -94,13 +94,9 @@ const ServiceDetailsPageClient = ({
       buttons={
         hasWritePermission && (
           <div className={styles.actionButtons}>
-            <Button
-              size='small'
-              as={Link}
-              href={`/catalogs/${catalogId}/services/${serviceId}/edit`}
-            >
+            <LinkButton href={`/catalogs/${catalogId}/services/${serviceId}/edit`}>
               {localization.serviceCatalog.editService}
-            </Button>
+            </LinkButton>
 
             <DeleteServiceButton
               catalogId={catalogId}

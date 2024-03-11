@@ -125,11 +125,11 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
               className: classes.checkbox,
               label: (
                 <Label
-                  as='span'
+                  asChild
                   size='small'
                   weight='regular'
                 >
-                  {node.label}
+                  <span>{node.label}</span>
                 </Label>
               ),
             })) ?? []
@@ -168,9 +168,9 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
       {nodes && nodes.length > 10 && (
         <Button
           variant='tertiary'
-          icon={collapsed ? <ChevronDownDoubleIcon /> : <ChevronUpDoubleIcon />}
           onClick={() => setCollapsed(!collapsed)}
         >
+          {collapsed ? <ChevronDownDoubleIcon /> : <ChevronUpDoubleIcon />}
           {collapsed ? localization.showMore : localization.showLess}
         </Button>
       )}

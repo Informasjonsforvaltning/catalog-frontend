@@ -5,6 +5,7 @@ import {
   Breadcrumbs,
   Button,
   ChangeRequestStatusTagProps,
+  LinkButton,
   PageBanner,
   Tag,
 } from '@catalog-frontend/ui';
@@ -154,12 +155,7 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
       />
       <div className='container'>
         <div className={styles.newConceptSuggestionButton}>
-          <Button
-            as={Link}
-            href={`/${catalogId}/change-requests/new`}
-          >
-            {localization.suggestionForNewConcept}
-          </Button>
+          <LinkButton href={`/${catalogId}/change-requests/new`}>{localization.suggestionForNewConcept}</LinkButton>
         </div>
         <div className={styles.filterAndListContainer}>
           <div className={styles.alertContainer}>

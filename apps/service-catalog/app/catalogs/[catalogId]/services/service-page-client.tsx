@@ -84,11 +84,8 @@ const ServicePageClient = ({ services, hasWritePermission, catalogId, statuses }
             />
           </div>
           {hasWritePermission && (
-            <AddButton
-              as={Link}
-              href={`/catalogs/${catalogId}/services/new`}
-            >
-              {localization.serviceCatalog.form.new}
+            <AddButton asChild>
+              <Link href={`/catalogs/${catalogId}/services/new`}>{localization.serviceCatalog.form.new}</Link>
             </AddButton>
           )}
         </>

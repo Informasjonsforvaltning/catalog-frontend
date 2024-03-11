@@ -84,11 +84,10 @@ const PublicServicePageClient = ({ services, hasWritePermission, catalogId, stat
             />
           </div>
           {hasWritePermission && (
-            <AddButton
-              as={Link}
-              href={`/catalogs/${catalogId}/public-services/new`}
-            >
-              {localization.serviceCatalog.form.newPublic}
+            <AddButton asChild>
+              <Link href={`/catalogs/${catalogId}/public-services/new`}>
+                {localization.serviceCatalog.form.newPublic}
+              </Link>
             </AddButton>
           )}
         </>
