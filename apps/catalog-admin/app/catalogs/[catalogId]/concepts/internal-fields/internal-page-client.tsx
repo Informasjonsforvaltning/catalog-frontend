@@ -58,11 +58,11 @@ export const InternalFieldsPageClient = ({ catalogId, organization }: InternalFi
 
       <PageLayout>
         <div className={styles.topButtonRow}>
-          <Button
-            icon={<PlusCircleIcon title='' />}
-            onClick={handleCreateInternalField}
-          >
-            {localization.catalogAdmin.create.newInternalField}
+          <Button onClick={handleCreateInternalField}>
+            <>
+              <PlusCircleIcon title='' />
+              {localization.catalogAdmin.create.newInternalField}
+            </>
           </Button>
         </div>
 

@@ -77,10 +77,12 @@ export const UsersPageClient = ({ catalogId, organization }: UsersPageClientProp
           <div className='editorButtons'>
             <Button
               className={styles.createButton}
-              icon={<PlusCircleIcon />}
               onClick={handleCreateUser}
             >
-              {localization.catalogAdmin.addUser}
+              <>
+                <PlusCircleIcon />
+                {localization.catalogAdmin.addUser}
+              </>
             </Button>
           </div>
         </div>

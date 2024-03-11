@@ -103,14 +103,13 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }: CodeLi
             placeholder='Søk etter kodeliste...'
             onSearchSubmit={(search) => setSearch(search)}
           />
-          <div className={styles.buttons}>
-            <Button
-              icon={<PlusCircleIcon />}
-              onClick={handleCreateCodeList}
-            >
+
+          <Button onClick={handleCreateCodeList}>
+            <>
+              <PlusCircleIcon />
               {localization.catalogAdmin.createCodeList}
-            </Button>
-          </div>
+            </>
+          </Button>
         </div>
         <Heading
           level={2}

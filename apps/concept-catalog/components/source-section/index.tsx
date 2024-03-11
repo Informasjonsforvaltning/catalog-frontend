@@ -43,14 +43,16 @@ export const SourceSection: FC<Props> = ({ fieldName, definisjon, readOnly }) =>
               <div>
                 {!readOnly && (
                   <Button
-                    icon={<PlusCircleIcon />}
                     color='second'
                     variant='tertiary'
                     onClick={() => arrayHelpers.push({ uri: '', tekst: '' })}
                   >
-                    {localization.formatString(localization.button.addWithFormat, {
-                      text: localization.concept.source.toLowerCase(),
-                    })}
+                    <>
+                      <PlusCircleIcon />
+                      {localization.formatString(localization.button.addWithFormat, {
+                        text: localization.concept.source.toLowerCase(),
+                      })}
+                    </>
                   </Button>
                 )}
               </div>
