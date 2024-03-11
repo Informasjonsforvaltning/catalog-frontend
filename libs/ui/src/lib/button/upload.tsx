@@ -2,7 +2,7 @@
 
 import { ChangeEvent, FC, useId, useRef } from 'react';
 import { ButtonProps } from '@digdir/design-system-react';
-import Button from './button';
+import { Button } from './button';
 
 export interface UploadButtonProps extends ButtonProps {
   allowedMimeTypes?: string[];

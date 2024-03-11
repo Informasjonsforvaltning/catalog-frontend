@@ -1596,27 +1596,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/design-system-react@npm:^0.45.0":
-  version: 0.45.0
-  resolution: "@digdir/design-system-react@npm:0.45.0"
+"@digdir/design-system-react@npm:^0.51.3":
+  version: 0.51.3
+  resolution: "@digdir/design-system-react@npm:0.51.3"
   dependencies:
     "@altinn/figma-design-tokens": ^6.0.1
-    "@digdir/design-system-tokens": ^0.12.0
+    "@digdir/design-system-tokens": ^0.13.0
     "@floating-ui/react": 0.26.4
     "@navikt/aksel-icons": ^5.12.2
     "@radix-ui/react-slot": ^1.0.2
+    "@tanstack/react-virtual": ^3.0.1
     react-number-format: 5.3.1
   peerDependencies:
     react: ">=18.2.0"
     react-dom: ">=18.2.0"
-  checksum: 9a4ad4b221f847e96a2d0a62dd955812e44ca55ce2eb5001740b4bcc88fff37a54901d69929c332cab7ec52b1a82ea78642c2533c5f33bbcfad0bd465990fd21
+  checksum: 30f57940dfec7112529c4d93330825daed20ff9720999536ae571f6e12623072af1b4ca782d2fab42927ae33e7589b854b2d531664ac7dfd977f412f7d5d4bac
   languageName: node
   linkType: hard
 
-"@digdir/design-system-tokens@npm:^0.12.0":
-  version: 0.12.0
-  resolution: "@digdir/design-system-tokens@npm:0.12.0"
-  checksum: 7089ba919876fc73e5f13c696426f3c3553b7f0ebb5e8785411fc0bbc6fd86385ddd46a65073232a115f4c479b1eb40f2c20c5d31546e301fdf0cdf7edc715f9
+"@digdir/design-system-tokens@npm:^0.13.0":
+  version: 0.13.0
+  resolution: "@digdir/design-system-tokens@npm:0.13.0"
+  checksum: 9eef237f72b176224c19e0e61bec06f1fe0bbb9d678ec609a73db303b2ea8c5009c494b68f5e8c0949ced6374093d9bf9f170a017b103e8c3fdd272af04e248c
   languageName: node
   linkType: hard
 
@@ -3341,6 +3342,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tanstack/react-virtual@npm:^3.0.1":
+  version: 3.1.3
+  resolution: "@tanstack/react-virtual@npm:3.1.3"
+  dependencies:
+    "@tanstack/virtual-core": 3.1.3
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: f241baf92b4709c6c7dcf491fb6d22597fe87d8915c6f6bafb453337b754febaa5797163e106999e3b1a4aa8df33bb4ee677fe9e39cdda983deaaf4d93352427
+  languageName: node
+  linkType: hard
+
+"@tanstack/virtual-core@npm:3.1.3":
+  version: 3.1.3
+  resolution: "@tanstack/virtual-core@npm:3.1.3"
+  checksum: 7bc56869300775be40ca1961539af321bd115ca59fd5c48748f88c53690ed50cff99351d9ec2b063c75602291baa1d1815e3de1888ac6c850b563cfd1f05cc29
+  languageName: node
+  linkType: hard
+
 "@testing-library/dom@npm:^9.0.0":
   version: 9.3.1
   resolution: "@testing-library/dom@npm:9.3.1"
@@ -4950,8 +4970,8 @@ __metadata:
   dependencies:
     "@altinn/figma-design-tokens": ^6.0.1
     "@babel/preset-react": ^7.18.6
-    "@digdir/design-system-react": ^0.45.0
-    "@digdir/design-system-tokens": ^0.12.0
+    "@digdir/design-system-react": ^0.51.3
+    "@digdir/design-system-tokens": ^0.13.0
     "@fellesdatakatalog/icons": ^0.8.3
     "@fortawesome/fontawesome-svg-core": ^6.4.2
     "@fortawesome/free-regular-svg-icons": ^6.4.2

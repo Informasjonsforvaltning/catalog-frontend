@@ -14,6 +14,7 @@ import {
   Pagination,
   DetailsPageLayout,
   Tag,
+  LinkButton,
 } from '@catalog-frontend/ui';
 import {
   localization,
@@ -792,14 +793,13 @@ export const ConceptPageClient = ({
                 )}
               </>
             )}
-            <Button
-              as={Link}
+            <LinkButton
               href={`/${catalogId}/change-requests/new?concept=${concept?.id}`}
               variant='secondary'
               fullWidth={false}
             >
               {localization.concept.suggestChanges}
-            </Button>
+            </LinkButton>
           </div>
         }
       />
