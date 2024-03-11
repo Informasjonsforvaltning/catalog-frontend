@@ -34,12 +34,12 @@ export const AddButton = ({ onClick, children, ...props }: ButtonProps) => {
   return (
     <div>
       <Button
-        icon={<PlusCircleIcon />}
         size='small'
         type='button'
         onClick={onClick}
         {...props}
       >
+        <PlusCircleIcon />
         {children}
       </Button>
     </div>

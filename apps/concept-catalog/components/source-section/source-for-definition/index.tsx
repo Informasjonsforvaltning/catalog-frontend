@@ -46,12 +46,14 @@ export const SourceForDefinitionField: FC<Props> = ({
           <Button
             color='danger'
             variant='tertiary'
-            icon={<TrashIcon />}
             onClick={deleteClickHandler}
           >
-            {localization.formatString(localization.button.deleteWithFormat, {
-              text: localization.concept.source.toLowerCase(),
-            })}
+            <>
+              <TrashIcon />
+              {localization.formatString(localization.button.deleteWithFormat, {
+                text: localization.concept.source.toLowerCase(),
+              })}
+            </>
           </Button>
         )}
       </div>
