@@ -1,14 +1,20 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { Search } from '@digdir/design-system-react';
-import Link from 'next/link';
 import Filter from '../../../../components/filter';
 import { Service, ReferenceDataCode, FilterType } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { SearchHit, SearchHitContainer, SearchHitsPageLayout, ServiceStatusTagProps, Tag } from '@catalog-frontend/ui';
+import {
+  LinkButton,
+  SearchHit,
+  SearchHitContainer,
+  SearchHitsPageLayout,
+  ServiceStatusTagProps,
+  Tag,
+} from '@catalog-frontend/ui';
 import styles from './service-page.module.css';
-import { AddButton } from '../../../../components/buttons';
 import FilterChips from '../../../../components/filter-chips';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 
 interface Props {
   services: Service[];
@@ -84,9 +90,12 @@ const ServicePageClient = ({ services, hasWritePermission, catalogId, statuses }
             />
           </div>
           {hasWritePermission && (
-            <AddButton asChild>
-              <Link href={`/catalogs/${catalogId}/services/new`}>{localization.serviceCatalog.form.new}</Link>
-            </AddButton>
+            <div>
+              <LinkButton href={`/catalogs/${catalogId}/services/new`}>
+                <PlusCircleIcon />
+                {localization.serviceCatalog.form.new}
+              </LinkButton>
+            </div>
           )}
         </>
       }
