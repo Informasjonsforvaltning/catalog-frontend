@@ -32,6 +32,8 @@ export const Filter = ({
             <Checkbox.Group
               value={statusFilters}
               onChange={(values) => onStatusChange(values)}
+              hideLegend
+              legend={localization.serviceCatalog.serviceStatus}
             >
               {statuses.map((status) => (
                 <Checkbox
@@ -50,6 +52,8 @@ export const Filter = ({
             <Checkbox.Group
               value={publicationState}
               onChange={(values) => onPublicationStateChange(values)}
+              hideLegend
+              legend={localization.publicationState.state}
             >
               {publicationStates.map((state) => (
                 <Checkbox
