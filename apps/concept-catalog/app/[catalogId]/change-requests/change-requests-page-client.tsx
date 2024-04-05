@@ -13,6 +13,8 @@ import {
   capitalizeFirstLetter,
   convertTimestampToDateAndTime,
   localization,
+  sortAscending,
+  sortDescending,
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
@@ -78,7 +80,7 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
 
   const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString).withDefault([]));
 
-  const [sort, setSort] = useQueryState('sort', parseAsString.withDefault('TIME_FOR_PROPOSAL_ASC'));
+  const [sort, setSort] = useQueryState('sort', parseAsString.withDefault('TIME_FOR_PROPOSAL_DESC'));
 
   const onItemTypeChange = (value: string) => {
     setFilterItemType(value);
@@ -117,18 +119,18 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
     listItems = listItems.filter((item) => filterStatus.includes(item.status.toLowerCase()));
   }
 
-  switch (sort[0]) {
+  switch (sort) {
     case 'TIME_FOR_PROPOSAL_ASC':
-      listItems = listItems.sort((a, b) => (a.timeForProposal < b.timeForProposal ? 1 : -1));
+      listItems = listItems.sort((a, b) => sortAscending(a.timeForProposal, b.timeForProposal));
       break;
     case 'TIME_FOR_PROPOSAL_DESC':
-      listItems = listItems.sort((a, b) => (a.timeForProposal > b.timeForProposal ? 1 : -1));
+      listItems = listItems.sort((a, b) => sortDescending(a.timeForProposal, b.timeForProposal));
       break;
     case 'TITLE_ASC':
-      listItems = listItems.sort((a, b) => (a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1));
+      listItems = listItems.sort((a, b) => sortAscending(a.title.toLowerCase(), b.title.toLowerCase()));
       break;
     case 'TITLE_DESC':
-      listItems = listItems.sort((a, b) => (a.title.toLowerCase() < b.title.toLowerCase() ? 1 : -1));
+      listItems = listItems.sort((a, b) => sortDescending(a.title.toLowerCase(), b.title.toLowerCase()));
       break;
     default:
       break;

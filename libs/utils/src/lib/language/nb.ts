@@ -340,8 +340,8 @@ export const nb = {
     },
 
     sortOptions: {
-      TIME_FOR_PROPOSAL_ASC: 'Nyeste først',
-      TIME_FOR_PROPOSAL_DESC: 'Eldst først',
+      TIME_FOR_PROPOSAL_DESC: 'Nyeste først',
+      TIME_FOR_PROPOSAL_ASC: 'Eldst først',
       TITLE_ASC: 'Tittel A-Å',
       TITLE_DESC: 'Tittel Å-A',
     },
