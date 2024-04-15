@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SearchHit should render SearchHit with undefined input successfully 1`] = `
+exports[`SearchHit should render SearchHit with empty title successfully 1`] = `
 <body>
   <div>
     <div

@@ -22,7 +22,7 @@ const SearchHit = ({ title, description, content, statusTag, titleHref, conceptS
           <Link href={titleHref ?? ''}>
             <h2 className={styles.title}>{translate(title) ? translate(title) : localization.concept.noName}</h2>
           </Link>
-          {statusTag && <div className={styles.status}>{statusTag}</div>}
+          {statusTag && <div>{statusTag}</div>}
         </div>
         {conceptSubject}
       </div>
