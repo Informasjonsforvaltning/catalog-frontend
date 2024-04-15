@@ -8,9 +8,9 @@
   display: inline-block;
 }
 
-.status {
+.title {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   gap: 1rem;
 }
 

@@ -30,10 +30,8 @@
 
 .titleRow {
   display: flex;
-}
-
-.status {
-  margin-left: 1rem;
+  align-items: baseline;
+  gap: 1rem;
 }
 
 @media (max-width: 768px) {

@@ -8,7 +8,7 @@ export const POST = async (req: NextRequest) => {
   await validateSession(session);
   try {
     const { catalogId, query: searchQuery } = await req.json();
-    const response = await searchConceptsForCatalog(catalogId, searchQuery, `${session.accessToken}`);
+    const response = await searchConceptsForCatalog(catalogId, searchQuery, `${session?.accessToken}`);
     if (response.status !== 200) {
       throw new Error();
     }

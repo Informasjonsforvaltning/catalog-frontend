@@ -761,13 +761,15 @@ export const ConceptPageClient = ({
 
       <DetailsPageLayout
         headingTitle={
-          <div className={cn(classes.status)}>
+          <div className={cn(classes.title)}>
             <h2>{getTitle(translate(concept?.anbefaltTerm?.navn, language))}</h2>
             {status && (
-              <Tag.ConceptStatus
-                statusKey={getStatusFromURL(concept)}
-                statusLabel={status}
-              />
+              <div>
+                <Tag.ConceptStatus
+                  statusKey={getStatusFromURL(concept)}
+                  statusLabel={status}
+                />
+              </div>
             )}
           </div>
         }
