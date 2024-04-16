@@ -487,7 +487,7 @@ export const ConceptPageClient = ({
               >
                 <InfoCard.Item>
                   <div className={classes.commentUser}>
-                    {comment?.user.name}
+                    {comment?.user?.name ?? localization.unknown}
                     <span>{formatISO(comment?.createdDate)}</span>
                   </div>
                   {isCommentInEditMode(comment?.id) ? (

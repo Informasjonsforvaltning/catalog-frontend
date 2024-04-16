@@ -6,6 +6,6 @@ export interface Comment {
   lastChangedDate: string;
   topicId: string;
   orgNumber: string;
-  user: AssignedUser;
+  user?: AssignedUser | null;
   comment: string;
 }
