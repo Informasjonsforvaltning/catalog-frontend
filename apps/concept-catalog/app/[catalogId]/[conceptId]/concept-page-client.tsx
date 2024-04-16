@@ -506,7 +506,7 @@ export const ConceptPageClient = ({
                       ))}
                     </div>
                   )}
-                  {comment.user.id === username && (
+                  {comment.user?.id === username && (
                     <div className={classes.commentActions}>
                       <Button
                         variant='secondary'
