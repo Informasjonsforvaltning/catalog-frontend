@@ -1,4 +1,8 @@
-import { hasOrganizationReadPermission, hasOrganizationWritePermission } from '../../libs/utils/src/lib/auth/token';
+import {
+  hasOrganizationReadPermission,
+  hasOrganizationWritePermission,
+  hasSystemAdminPermission,
+} from '../../libs/utils/src/lib/auth/token';
 import { validUUID } from '../../libs/utils/src/lib/validation/uuid';
 import { validOrganizationNumber } from '../../libs/utils/src/lib/validation/organization-number';
 
@@ -32,14 +36,18 @@ export default withAuth(async function middleware(req: NextRequestWithAuth) {
     return NextResponse.rewrite(new URL('/notfound', req.url));
   }
 
-  if (accessToken && catalogId && !hasOrganizationReadPermission(accessToken, catalogId)) {
+  if (
+    accessToken &&
+    catalogId &&
+    !(hasOrganizationReadPermission(accessToken, catalogId) || hasSystemAdminPermission(accessToken))
+  ) {
     return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access`, req.url));
   }
 
   if (
     accessToken &&
     catalogId &&
-    !hasOrganizationWritePermission(accessToken, catalogId) &&
+    !(hasOrganizationReadPermission(accessToken, catalogId) || hasSystemAdminPermission(accessToken)) &&
     writePermissionsRoutes.includes(pathname)
   ) {
     return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access`, req.url));
