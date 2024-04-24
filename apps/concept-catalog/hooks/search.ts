@@ -1,7 +1,7 @@
 'use client';
 
 import { QueryFilters, QuerySort, SearchableField } from '@catalog-frontend/types';
-import { SingleSelectOption } from '@digdir/design-system-react';
+import { SingleSelectOption } from '@digdir/designsystemet-react';
 import { useQuery } from '@tanstack/react-query';
 
 export type SortFields = 'SIST_ENDRET' | 'ANBEFALT_TERM_NB';

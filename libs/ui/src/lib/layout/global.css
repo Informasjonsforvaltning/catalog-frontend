@@ -5,6 +5,7 @@ html * {
   font-size: 16;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-family: inherit;
 }
 
 body {

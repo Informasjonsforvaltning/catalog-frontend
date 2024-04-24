@@ -12,7 +12,7 @@ import cn from 'classnames';
 import { ConceptStatusTagProps, ConceptSubject, SearchHit, Tag } from '@catalog-frontend/ui';
 import Link from 'next/link';
 import styles from './concept-search-hits.module.css';
-import { Chip } from '@digdir/design-system-react';
+import { Chip } from '@digdir/designsystemet-react';
 
 interface Props {
   catalogId: string;

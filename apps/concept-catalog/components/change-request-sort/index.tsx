@@ -1,6 +1,6 @@
 import { Option } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
-import { NativeSelect } from '@digdir/design-system-react';
+import { NativeSelect } from '@digdir/designsystemet-react';
 import { ChangeEvent } from 'react';
 
 interface Props {

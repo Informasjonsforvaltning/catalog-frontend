@@ -2,7 +2,7 @@
 
 import React from 'react';
 import styles from './internal-fields.module.css';
-import { Accordion, Heading } from '@digdir/design-system-react';
+import { Accordion, Heading } from '@digdir/designsystemet-react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { BreadcrumbType, Breadcrumbs, Button } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';

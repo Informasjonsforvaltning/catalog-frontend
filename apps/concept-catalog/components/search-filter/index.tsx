@@ -1,7 +1,7 @@
 'use client';
 
 import { memo } from 'react';
-import { Accordion } from '@digdir/design-system-react';
+import { Accordion } from '@digdir/designsystemet-react';
 import { Select } from '@catalog-frontend/ui';
 import { AssignedUser, CodeList, InternalField, ReferenceDataCode } from '@catalog-frontend/types';
 import {

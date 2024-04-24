@@ -2,7 +2,7 @@
 
 import { Spinner } from '@catalog-frontend/ui';
 import { localization, validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
-import { Heading as DSHeading } from '@digdir/design-system-react';
+import { Heading as DSHeading } from '@digdir/designsystemet-react';
 import { Session } from 'next-auth';
 import { signIn, useSession } from 'next-auth/react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';

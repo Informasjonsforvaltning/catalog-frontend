@@ -15,7 +15,7 @@ import ChangeRequestEditPageClient from './change-request-edit-page-client';
 import { RedirectType, redirect } from 'next/navigation';
 import styles from '../../change-requests-page.module.css';
 import { Banner } from '../../../../../components/banner';
-import { Alert, Heading, Link, Paragraph } from '@digdir/design-system-react';
+import { Alert, Heading, Link, Paragraph } from '@digdir/designsystemet-react';
 import NextLink from 'next/link';
 
 const ChangeRequestEditPage = async ({ params }) => {

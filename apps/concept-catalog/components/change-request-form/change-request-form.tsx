@@ -9,7 +9,7 @@ import { Field, Form, Formik, FormikHelpers } from 'formik';
 
 import styles from './change-request-page.module.css';
 import { SourceSection } from '../source-section';
-import { Textarea } from '@digdir/design-system-react';
+import { Textarea } from '@digdir/designsystemet-react';
 
 import _ from 'lodash';
 

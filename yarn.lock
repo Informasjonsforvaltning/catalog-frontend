@@ -19,13 +19,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@altinn/figma-design-tokens@npm:^6.0.1":
-  version: 6.0.1
-  resolution: "@altinn/figma-design-tokens@npm:6.0.1"
-  checksum: f87abb0d8e2c070987f7d37eddfc40a6f206ef307d7edc108eeb79cb3f734fcae434b28a89111d23d4c2d85d386d4cd0fc001175a70f773d3f3de7b943804afd
-  languageName: node
-  linkType: hard
-
 "@ampproject/remapping@npm:^2.2.0":
   version: 2.3.0
   resolution: "@ampproject/remapping@npm:2.3.0"
@@ -1590,28 +1583,34 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/design-system-react@npm:^0.51.3":
-  version: 0.51.3
-  resolution: "@digdir/design-system-react@npm:0.51.3"
+"@digdir/designsystemet-css@npm:0.6.0":
+  version: 0.6.0
+  resolution: "@digdir/designsystemet-css@npm:0.6.0"
   dependencies:
-    "@altinn/figma-design-tokens": ^6.0.1
-    "@digdir/design-system-tokens": ^0.13.0
-    "@floating-ui/react": 0.26.4
-    "@navikt/aksel-icons": ^5.12.2
-    "@radix-ui/react-slot": ^1.0.2
-    "@tanstack/react-virtual": ^3.0.1
-    react-number-format: 5.3.1
-  peerDependencies:
-    react: ">=18.2.0"
-    react-dom: ">=18.2.0"
-  checksum: 30f57940dfec7112529c4d93330825daed20ff9720999536ae571f6e12623072af1b4ca782d2fab42927ae33e7589b854b2d531664ac7dfd977f412f7d5d4bac
+    "@digdir/designsystemet-react": ^0.59.0
+  checksum: a8fb2bcf61788764c87c9643d2e34740a90560b72668afd181491d54f1b537f5b9fb718c672dc4f35e10cfa46572f758b79d22e6e514490eb03dc967a5cda25b
   languageName: node
   linkType: hard
 
-"@digdir/design-system-tokens@npm:^0.13.0":
-  version: 0.13.0
-  resolution: "@digdir/design-system-tokens@npm:0.13.0"
-  checksum: 9eef237f72b176224c19e0e61bec06f1fe0bbb9d678ec609a73db303b2ea8c5009c494b68f5e8c0949ced6374093d9bf9f170a017b103e8c3fdd272af04e248c
+"@digdir/designsystemet-react@npm:0.59.0, @digdir/designsystemet-react@npm:^0.59.0":
+  version: 0.59.0
+  resolution: "@digdir/designsystemet-react@npm:0.59.0"
+  dependencies:
+    "@floating-ui/react": 0.26.4
+    "@navikt/aksel-icons": ^5.12.2
+    "@radix-ui/react-slot": ^1.0.2
+    "@tanstack/react-virtual": ^3.2.0
+  peerDependencies:
+    react: ">=18.2.0"
+    react-dom: ">=18.2.0"
+  checksum: 92ce02a56729c28f1cd81bd062344f8579b1f5d04f10f3cfcdd8cbf82e069f2d0fcfd107be311fb0b5df8ee17d8d0a18bbe01a732ea8696ace945ac2fc786ad5
+  languageName: node
+  linkType: hard
+
+"@digdir/designsystemet-theme@npm:^0.15.3":
+  version: 0.15.3
+  resolution: "@digdir/designsystemet-theme@npm:0.15.3"
+  checksum: 7acfd7d8c56bcad4ee6f82fc9f56225d896a6761379b64a10c190c19970a43e17323a828d252de5bb34792eca215ff0e01e1ebfe2ba3130be03a48d4652bf4a9
   languageName: node
   linkType: hard
 
@@ -3197,7 +3196,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-virtual@npm:^3.0.1":
+"@tanstack/react-virtual@npm:^3.2.0":
   version: 3.4.0
   resolution: "@tanstack/react-virtual@npm:3.4.0"
   dependencies:
@@ -5321,10 +5320,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "catalog-frontend@workspace:."
   dependencies:
-    "@altinn/figma-design-tokens": ^6.0.1
     "@babel/preset-react": ^7.18.6
-    "@digdir/design-system-react": ^0.51.3
-    "@digdir/design-system-tokens": ^0.13.0
+    "@digdir/designsystemet-css": 0.6.0
+    "@digdir/designsystemet-react": 0.59.0
+    "@digdir/designsystemet-theme": ^0.15.3
     "@fellesdatakatalog/icons": ^0.8.3
     "@fortawesome/fontawesome-svg-core": ^6.4.2
     "@fortawesome/free-regular-svg-icons": ^6.4.2
@@ -12299,7 +12298,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.5.8, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.5.8, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -12567,18 +12566,6 @@ __metadata:
   peerDependencies:
     react: ^18.0.0 || ^17.0.0 || ^16.0.0 || ^15.6.0
   checksum: 0a2ee446223d653f2116226e92e1d401d07614b62820678d4d33d2c88b2486246e1c9b0d0b6464d16022ec8e1d6d1cf8f7f1bb55571de136387f9355d2a174a8
-  languageName: node
-  linkType: hard
-
-"react-number-format@npm:5.3.1":
-  version: 5.3.1
-  resolution: "react-number-format@npm:5.3.1"
-  dependencies:
-    prop-types: ^15.7.2
-  peerDependencies:
-    react: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^0.14 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: 316054bc8aa03d4fe5b283b1e498389393858728b69acc32e2546e9ce2e54e4e937ca4fdd0fa6e771f1b5f2d8b3c883cbc19c39799a27e91265c133d79103aaa
   languageName: node
   linkType: hard
 

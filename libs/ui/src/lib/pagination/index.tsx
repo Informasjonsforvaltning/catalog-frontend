@@ -1,6 +1,6 @@
 'use client';
 
-import { Pagination as DSPagination } from '@digdir/design-system-react';
+import { Pagination as DSPagination } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import styles from './pagination.module.css';
 

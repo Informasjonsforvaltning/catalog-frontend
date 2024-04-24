@@ -6,7 +6,7 @@ import { getServiceById } from '../../../../../actions/services/actions';
 import { BasicServiceForm } from '../../../../../../components/basic-service-form';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import styles from './service-edit-page.module.css';
-import { Heading } from '@digdir/design-system-react';
+import { Heading } from '@digdir/designsystemet-react';
 
 export default async function EditServicePage({ params }: Params) {
   const { catalogId, serviceId } = params;

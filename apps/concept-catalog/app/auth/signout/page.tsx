@@ -2,7 +2,7 @@
 
 import { CenterContainer, PageBanner, Spinner } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Heading } from '@digdir/design-system-react';
+import { Heading } from '@digdir/designsystemet-react';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';

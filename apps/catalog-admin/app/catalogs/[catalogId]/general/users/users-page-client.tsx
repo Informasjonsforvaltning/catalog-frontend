@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Accordion, Heading } from '@digdir/design-system-react';
+import { Accordion, Heading } from '@digdir/designsystemet-react';
 import { BreadcrumbType, Breadcrumbs, Button, SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { getTranslateText, localization } from '@catalog-frontend/utils';

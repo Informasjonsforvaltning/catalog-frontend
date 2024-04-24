@@ -1,6 +1,6 @@
 'use client';
 
-import { Accordion } from '@digdir/design-system-react';
+import { Accordion } from '@digdir/designsystemet-react';
 import React, { ReactNode, useState } from 'react';
 
 export type AccordionItemProps = {

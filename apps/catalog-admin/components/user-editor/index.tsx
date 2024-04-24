@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, Textfield } from '@digdir/design-system-react';
+import { Button, Textfield } from '@digdir/designsystemet-react';
 import { compare } from 'fast-json-patch';
 import { emailRegex, localization, telephoneNumberRegex, textRegex } from '@catalog-frontend/utils';
 import { useCreateUser, useDeleteUser, useGetUsers, useUpdateUser } from '../../hooks/users';

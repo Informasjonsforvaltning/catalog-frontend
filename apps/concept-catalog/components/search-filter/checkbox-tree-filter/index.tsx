@@ -9,7 +9,7 @@ import { Select } from '@catalog-frontend/ui';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckSquare, faSquare } from '@fortawesome/free-regular-svg-icons';
 import { getPath, localization } from '@catalog-frontend/utils';
-import { Button, Label } from '@digdir/design-system-react';
+import { Button, Label } from '@digdir/designsystemet-react';
 import { ChevronDownDoubleIcon, ChevronUpDoubleIcon } from '@navikt/aksel-icons';
 
 export interface TreeNode {

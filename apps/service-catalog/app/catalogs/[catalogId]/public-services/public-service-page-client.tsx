@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Search } from '@digdir/design-system-react';
+import { Search } from '@digdir/designsystemet-react';
 import Filter from '../../../../components/filter';
 import { Service, ReferenceDataCode, FilterType } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';

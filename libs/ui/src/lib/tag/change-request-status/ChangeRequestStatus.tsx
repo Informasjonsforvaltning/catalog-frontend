@@ -1,4 +1,4 @@
-import { Tag as DSTag, type TagProps as DSTagProps } from '@digdir/design-system-react';
+import { Tag as DSTag, type TagProps as DSTagProps } from '@digdir/designsystemet-react';
 import { forwardRef } from 'react';
 
 export enum ChangeRequestStatusColors {
