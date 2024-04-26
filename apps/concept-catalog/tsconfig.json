@@ -26,7 +26,8 @@
     "**/*.jsx",
     "next-env.d.ts",
     "../../apps/concept-catalog/.next/types/**/*.ts",
-    "../../dist/apps/concept-catalog/.next/types/**/*.ts"
+    "../../dist/apps/concept-catalog/.next/types/**/*.ts",
+    ".next/types/**/*.ts"
   ],
   "exclude": ["node_modules", "jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"]
 }
