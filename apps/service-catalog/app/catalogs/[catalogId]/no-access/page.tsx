@@ -1,6 +1,6 @@
 import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Heading } from '@digdir/design-system-react';
+import { Heading } from '@digdir/designsystemet-react';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 
 const NoAccess = async ({ params }: Params) => {

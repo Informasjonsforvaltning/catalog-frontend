@@ -1,7 +1,7 @@
 'use client';
 import { FilterType, ReferenceDataCode } from '@catalog-frontend/types';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Chip } from '@digdir/design-system-react';
+import { Chip } from '@digdir/designsystemet-react';
 import styles from './filter-chips.module.css';
 
 interface Props {

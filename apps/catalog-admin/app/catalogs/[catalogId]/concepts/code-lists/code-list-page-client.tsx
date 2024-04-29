@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import styles from './code-lists.module.css';
-import { Accordion, Heading } from '@digdir/design-system-react';
+import { Accordion, Heading } from '@digdir/designsystemet-react';
 import { BreadcrumbType, Breadcrumbs, Button, SearchField, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { useGetAllCodeLists } from '../../../../../hooks/code-lists';

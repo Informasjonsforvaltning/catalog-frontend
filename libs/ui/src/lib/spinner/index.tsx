@@ -1,7 +1,7 @@
 'use client';
 
 import { FC } from 'react';
-import { Spinner as SpinnerBase } from '@digdir/design-system-react';
+import { Spinner as SpinnerBase } from '@digdir/designsystemet-react';
 import { localization } from '@catalog-frontend/utils';
 import classes from './spinner.module.css';
 

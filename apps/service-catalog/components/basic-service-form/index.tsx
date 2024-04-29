@@ -1,6 +1,6 @@
 'use client';
 
-import { Textarea, Textfield } from '@digdir/design-system-react';
+import { Textarea, Textfield } from '@digdir/designsystemet-react';
 import { Button, FormFieldCard, Select } from '@catalog-frontend/ui';
 import { localization, getTranslateText } from '@catalog-frontend/utils';
 import { ISOLanguage, Output, ReferenceDataCode, Service, ServiceToBeCreated } from '@catalog-frontend/types';

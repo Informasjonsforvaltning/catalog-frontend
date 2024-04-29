@@ -4,7 +4,7 @@ import { localization } from '@catalog-frontend/utils';
 import { Component, ErrorInfo, ReactNode } from 'react';
 import { Breadcrumbs, BreadcrumbType } from '../breadcrumbs';
 import { PageBanner } from '../page-banner';
-import { Heading } from '@digdir/design-system-react';
+import { Heading } from '@digdir/designsystemet-react';
 import { CenterContainer } from '../center-container';
 
 interface Props {

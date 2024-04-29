@@ -15,7 +15,7 @@ import ChangeRequestOrNewClient from './change-request-or-new-client';
 import { BreadcrumbType, Breadcrumbs, DetailHeading } from '@catalog-frontend/ui';
 import { Banner } from '../../../../components/banner';
 import style from '../change-requests-page.module.css';
-import { Alert, Heading, Paragraph } from '@digdir/design-system-react';
+import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
 
 const ChangeRequestOrNew = async ({ params, searchParams }) => {
   const { catalogId } = params;

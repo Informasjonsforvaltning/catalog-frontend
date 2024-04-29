@@ -2,7 +2,7 @@
 
 import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Heading } from '@digdir/design-system-react';
+import { Heading } from '@digdir/designsystemet-react';
 
 const NoAccess = () => {
   const breadcrumbList = [

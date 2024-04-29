@@ -6,7 +6,7 @@ import { TabsAddIcon, TabsRemoveIcon, TrashIcon, XMarkIcon } from '@navikt/aksel
 import cn from 'classnames';
 import styles from './codes-editor.module.css';
 import { Button, InfoCard, Select } from '@catalog-frontend/ui';
-import { Textfield, Button as FdsButton } from '@digdir/design-system-react';
+import { Textfield, Button as FdsButton } from '@digdir/designsystemet-react';
 import { Code, CodeList, EditorType, TreeNode } from '@catalog-frontend/types';
 import {
   convertCodeListToTreeNodes,

@@ -1,7 +1,7 @@
 import { Service } from '@catalog-frontend/types';
 import { DividerLine, InfoCard } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Heading, Label, Paragraph } from '@digdir/design-system-react';
+import { Heading, Label, Paragraph } from '@digdir/designsystemet-react';
 import styles from './basic-form-info-card-items.module.css';
 import _ from 'lodash';
 

@@ -14,7 +14,7 @@ import {
   LinkButton,
 } from '@catalog-frontend/ui';
 import { getTranslateText, capitalizeFirstLetter, localization as loc } from '@catalog-frontend/utils';
-import { Chip } from '@digdir/design-system-react';
+import { Chip } from '@digdir/designsystemet-react';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 
 import { useState, useEffect } from 'react';

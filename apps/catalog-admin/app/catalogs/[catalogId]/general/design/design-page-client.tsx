@@ -6,7 +6,7 @@ import { ColorPicker } from '../../../../../components/color-picker';
 import { ImageUploader } from '../../../../../components/image-uploader';
 import styles from './design.module.css';
 import { BreadcrumbType, Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
-import { Heading, Label, Textfield } from '@digdir/design-system-react';
+import { Heading, Label, Textfield } from '@digdir/designsystemet-react';
 import { getTranslateText, localization, textRegexWithNumbers } from '@catalog-frontend/utils';
 
 import { useGetDesign, useGetLogo, useUpdateDesign } from '../../../../../hooks/design';

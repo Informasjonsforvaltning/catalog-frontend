@@ -3,7 +3,7 @@
 import { FC } from 'react';
 import styles from './source-for-definition.module.css';
 import { Field } from 'formik';
-import { Textfield } from '@digdir/design-system-react';
+import { Textfield } from '@digdir/designsystemet-react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import { localization } from '@catalog-frontend/utils';
 import { Button } from '@catalog-frontend/ui';

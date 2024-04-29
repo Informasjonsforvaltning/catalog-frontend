@@ -1,4 +1,4 @@
-import { Button as DigdirButton, ButtonProps as DsButtonProps } from '@digdir/design-system-react';
+import { Button as DigdirButton, ButtonProps as DsButtonProps } from '@digdir/designsystemet-react';
 import cn from './button.module.css';
 import Link from 'next/link';
 

@@ -1,6 +1,6 @@
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { BasicServiceForm } from '../../../../../components/basic-service-form';
-import { Heading } from '@digdir/design-system-react';
+import { Heading } from '@digdir/designsystemet-react';
 import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
 import { Organization, ReferenceDataCode } from '@catalog-frontend/types';
 import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';

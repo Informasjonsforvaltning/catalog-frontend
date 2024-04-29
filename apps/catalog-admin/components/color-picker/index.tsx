@@ -1,6 +1,6 @@
 'use client';
 
-import { Textfield } from '@digdir/design-system-react';
+import { Textfield } from '@digdir/designsystemet-react';
 import { useEffect, useState } from 'react';
 import { colorRegex, localization } from '@catalog-frontend/utils';
 import { Design } from '@catalog-frontend/types';

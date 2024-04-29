@@ -1,6 +1,6 @@
 'use client';
 
-import { Accordion, Checkbox, Radio } from '@digdir/design-system-react';
+import { Accordion, Checkbox, Radio } from '@digdir/designsystemet-react';
 import { localization } from '@catalog-frontend/utils';
 import styles from './change-request-filter.module.css';
 import { ItemType, Status } from '@catalog-frontend/types';

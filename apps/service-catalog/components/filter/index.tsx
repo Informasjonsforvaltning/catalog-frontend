@@ -1,7 +1,7 @@
 'use client';
 import { ReferenceDataCode } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Accordion, Checkbox } from '@digdir/design-system-react';
+import { Accordion, Checkbox } from '@digdir/designsystemet-react';
 
 type Props = {
   statuses: ReferenceDataCode[];

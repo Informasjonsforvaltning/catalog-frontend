@@ -1,6 +1,6 @@
 'use client';
 import { localization } from '@catalog-frontend/utils';
-import { Switch } from '@digdir/design-system-react';
+import { Switch } from '@digdir/designsystemet-react';
 import { publishPublicService, unpublishPublicService } from '../../app/actions/public-services/actions';
 import styles from './publish-switch.module.css';
 import { publishService, unpublishService } from '../../app/actions/services/actions';
