@@ -4,9 +4,6 @@ import { Header } from '../header';
 import { RouteGuard } from '@catalog-frontend/utils';
 import cn from 'classnames';
 
-import './reset.css';
-import '@digdir/designsystemet-theme';
-import '@digdir/designsystemet-css';
 import './global.css';
 
 import style from './layout.module.css';
