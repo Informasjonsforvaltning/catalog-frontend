@@ -4001,10 +4001,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:20.2.5":
-  version: 20.2.5
-  resolution: "@types/node@npm:20.2.5"
-  checksum: 38ce7c7e9d76880dc632f71d71e0d5914fcda9d5e9a7095d6c339abda55ca4affb0f2a882aeb29398f8e09d2c5151f0b6586c81c8ccdfe529c34b1ea3337425e
+"@types/node@npm:20.12.8":
+  version: 20.12.8
+  resolution: "@types/node@npm:20.12.8"
+  dependencies:
+    undici-types: ~5.26.4
+  checksum: 84d4876d95792a9567d2cc5a2c48db7028c397820e842cd65e2f848c23dd4b868b7131bda8eb66a1729d4944289070153d6180048de5bd155b35de421283c433
   languageName: node
   linkType: hard
 
@@ -5796,7 +5798,7 @@ __metadata:
     "@testing-library/react": 14.0.0
     "@types/jest": ^29.5.0
     "@types/lodash": ^4.14.195
-    "@types/node": 20.2.5
+    "@types/node": 20.12.8
     "@types/react": 18.2.7
     "@types/react-dom": 18.2.4
     "@types/react-is": 18.2.0
