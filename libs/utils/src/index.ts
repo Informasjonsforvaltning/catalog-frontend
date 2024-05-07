@@ -1,6 +1,5 @@
 export * from './lib/auth/auth-options';
 export * from './lib/auth/helpers';
-export * from './lib/auth/route-guard';
 export * from './lib/auth/token';
 export * from './lib/code-list';
 export * from './lib/concept';

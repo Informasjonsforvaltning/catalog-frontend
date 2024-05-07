@@ -28,7 +28,7 @@ const refreshToken = async (token: any) => {
     return {
       ...token, // Keep the previous token properties
       access_token: tokens.access_token,
-      expires_at: Math.floor(Date.now() / 1000 + tokens.expires_in),
+      expires_at: Math.floor(Date.now() / 1000 + Number(tokens.expires_in)),
       // Fall back to old refresh token, but note that
       // many providers may only allow using a refresh token once.
       refresh_token: tokens.refresh_token ?? token.refresh_token,

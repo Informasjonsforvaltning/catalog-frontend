@@ -22,13 +22,6 @@ const ChangeRequestOrNew = async ({ params, searchParams }) => {
   const { concept: conceptId } = searchParams;
 
   const session = await getServerSession(authOptions);
-  if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
-    const callbackUrl = conceptId
-      ? `/auth/signin?callbackUrl=/${catalogId}/change-requests/new?concept=${conceptId}`
-      : `/auth/signin?callbackUrl=/${catalogId}/change-requests/new`;
-    redirect(callbackUrl, RedirectType.replace);
-  }
-
   const hasPermission = session && hasOrganizationReadPermission(session?.accessToken, catalogId);
   if (!hasPermission) {
     redirect(`/${catalogId}/no-access`, RedirectType.replace);

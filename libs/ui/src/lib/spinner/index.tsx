@@ -6,14 +6,15 @@ import { localization } from '@catalog-frontend/utils';
 import classes from './spinner.module.css';
 
 export interface SpinnerProps {
+  title?: string;
   size?: 'xxsmall' | 'xsmall' | 'small' | 'medium' | 'large' | 'xlarge';
 }
 
-const Spinner: FC<SpinnerProps> = ({ size = 'xlarge' }) => {
+const Spinner: FC<SpinnerProps> = ({ title = localization.loading, size = 'xlarge' }) => {
   return (
     <div className={classes.spinner}>
       <SpinnerBase
-        title={localization.loading}
+        title={title}
         size={size}
       />
     </div>
