@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { Footer } from '../footer';
 import { Header } from '../header';
-import { RouteGuard } from '@catalog-frontend/utils';
 import cn from 'classnames';
 
 import './global.css';
@@ -34,24 +33,22 @@ export const Layout = ({
 }: LayoutProps) => {
   return (
     <div className={cn(style.layout, className)}>
-      <RouteGuard>
-        <Header
-          fontColor={fontColor}
-          backgroundColor={backgroundColor}
-          catalogAdminUrl={catalogAdminUrl}
-          fdkRegistrationBaseUrl={fdkRegistrationBaseUrl}
-          adminGuiBaseUrl={adminGuiBaseUrl}
-          fdkCommunityBaseUrl={fdkCommunityBaseUrl}
-          fdkBaseUrl={fdkBaseUrl}
-        />
-        <main className={style.main}>
-          <ErrorBoundary>{children}</ErrorBoundary>
-        </main>
-        <Footer
-          fontColor={fontColor}
-          backgroundColor={backgroundColor}
-        />
-      </RouteGuard>
+      <Header
+        fontColor={fontColor}
+        backgroundColor={backgroundColor}
+        catalogAdminUrl={catalogAdminUrl}
+        fdkRegistrationBaseUrl={fdkRegistrationBaseUrl}
+        adminGuiBaseUrl={adminGuiBaseUrl}
+        fdkCommunityBaseUrl={fdkCommunityBaseUrl}
+        fdkBaseUrl={fdkBaseUrl}
+      />
+      <main className={style.main}>
+        <ErrorBoundary>{children}</ErrorBoundary>
+      </main>
+      <Footer
+        fontColor={fontColor}
+        backgroundColor={backgroundColor}
+      />
     </div>
   );
 };

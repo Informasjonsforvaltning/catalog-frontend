@@ -16,7 +16,7 @@ export const useGetDesign = (catalogId) =>
       });
 
       if (response.status === 401) {
-        return signIn('keycloak');
+        return null;
       }
       return response.json();
     },
@@ -87,7 +87,6 @@ export const useGetLogo = (catalogId: string) =>
       }
 
       if (response.status === 401) {
-        signIn('keycloak');
         return null;
       }
 

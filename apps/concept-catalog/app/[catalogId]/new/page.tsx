@@ -9,10 +9,6 @@ export const NewPage = async ({ params }) => {
   }
 
   const session = await getServerSession(authOptions);
-  if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
-    redirect(`/auth/signin?callbackUrl=/${catalogId}`, RedirectType.replace);
-  }
-
   const hasWritePermission = session && hasOrganizationWritePermission(session.accessToken, catalogId);
   if (!hasWritePermission) {
     redirect(`/${catalogId}/no-access`, RedirectType.replace);

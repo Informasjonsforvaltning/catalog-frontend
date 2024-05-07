@@ -1,6 +1,13 @@
-import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner } from '@catalog-frontend/ui';
+import {
+  BreadcrumbType,
+  Breadcrumbs,
+  CenterContainer,
+  KeycloakSignin,
+  PageBanner,
+  Spinner,
+} from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import Heading from './heading';
+import { Suspense } from 'react';
 
 export const SignIn = () => {
   const breadcrumbList = [
@@ -21,7 +28,9 @@ export const SignIn = () => {
         subtitle={localization.auth.login}
       />
       <CenterContainer>
-        <Heading />
+        <Suspense fallback={<Spinner />}>
+          <KeycloakSignin />
+        </Suspense>
       </CenterContainer>
     </>
   );

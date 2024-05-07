@@ -27,15 +27,6 @@ const ChangeRequestDetailsPage = async ({ params }) => {
   }
 
   const session = await getServerSession(authOptions);
-  if (!(session?.user && Date.now() < (session?.accessTokenExpiresAt ?? 0) * 1000)) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: `/auth/signin?callbackUrl=/${catalogId}/change-requests/${changeRequestId}/edit`,
-      },
-    };
-  }
-
   const hasReadPermission = session && hasOrganizationReadPermission(session?.accessToken, catalogId);
   if (!hasReadPermission) {
     return {

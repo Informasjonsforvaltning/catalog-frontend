@@ -47,10 +47,6 @@ const ConceptPage = async ({ params }) => {
     redirect(`/notfound`, RedirectType.replace);
   }
 
-  if (!(session?.user && Date.now() < (session?.accessTokenExpiresAt ?? 0) * 1000)) {
-    redirect(`/auth/signin?callbackUrl=/${catalogId}/${conceptId}`);
-  }
-
   const hasReadPermission =
     session &&
     (hasOrganizationReadPermission(session?.accessToken, catalogId) || hasSystemAdminPermission(session?.accessToken));

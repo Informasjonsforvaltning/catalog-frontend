@@ -27,10 +27,6 @@ const SearchPage = async ({ params }) => {
     redirect(`/notfound`, RedirectType.replace);
   }
 
-  if (!(session?.user && session?.accessTokenExpiresAt && Date.now() < session?.accessTokenExpiresAt * 1000)) {
-    redirect(`/auth/signin?callbackUrl=/${catalogId}`);
-  }
-
   const hasReadPermission =
     session?.accessToken &&
     (hasOrganizationReadPermission(session?.accessToken, catalogId) || hasSystemAdminPermission(session.accessToken));

@@ -14,10 +14,6 @@ export async function EditPage({ params }) {
   }
 
   const session = await getServerSession(authOptions);
-  if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
-    redirect(`/auth/signin?callbackUrl=/${catalogId}/${conceptId}`);
-  }
-
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
   if (!hasWritePermission) {
     redirect(`/${catalogId}/no-access`);
