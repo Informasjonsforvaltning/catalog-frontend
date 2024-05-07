@@ -1,5 +1,5 @@
 import React from 'react';
-import { Relasjon, SkosConcept, TextLanguage } from '@catalog-frontend/types';
+import { Relasjon, Search, TextLanguage } from '@catalog-frontend/types';
 import { KeyValueList } from '@catalog-frontend/ui';
 import AssociativeRelations from './associative-relations';
 import PartitiveRelations from './partitive-relations';
@@ -7,10 +7,12 @@ import GenericRelations from './generic-relations';
 import SeeAlso from './see-also';
 import IsReplacedBy from './is-replaced-by';
 
+type SearchObject = Search.SearchObject;
+
 interface Props {
   catalogId: string;
   conceptRelations: Relasjon[];
-  relatedConcepts: SkosConcept[];
+  relatedConcepts: SearchObject[];
   validFromIncluding: string | undefined;
   validToIncluding: string | undefined;
   title: Partial<TextLanguage>;
@@ -34,8 +36,7 @@ const RelatedConcepts = ({
       (relasjon) => relasjon.relasjon === 'erstattesAv' || relasjon.relasjon === 'internErstattesAv',
     ) ?? [];
 
-  const relatedConceptsMap = (identifier: string) =>
-    relatedConcepts.find((concept) => concept.identifier === identifier);
+  const relatedConceptsMap = (identifier: string) => relatedConcepts.find((concept) => concept.uri === identifier);
 
   return (
     <KeyValueList>

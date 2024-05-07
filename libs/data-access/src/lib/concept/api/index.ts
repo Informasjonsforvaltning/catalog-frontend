@@ -1,6 +1,8 @@
-import { Concept, Relasjon, SearchConceptQuery, SkosConcept } from '@catalog-frontend/types';
-import { searchConceptsByIdentifiers } from '../../search-fulltext/api';
+import { Concept, Relasjon, SearchConceptQuery, Search } from '@catalog-frontend/types';
+import { searchConceptsByUri } from '../../search/api';
 import { isObjectNullUndefinedEmpty } from '@catalog-frontend/utils';
+
+type SearchObject = Search.SearchObject;
 
 export const conceptCatalogApiCall = async (
   method: 'GET' | 'POST' | 'DELETE',
@@ -39,9 +41,13 @@ export const deleteConcept = (conceptId: string, accessToken: string) =>
 export const publishConcept = (conceptId: string, accessToken: string) =>
   conceptCatalogApiCall('POST', `/begreper/${conceptId}/publish`, null, accessToken);
 
-export const extractConcepts = (searchResponse: any) => searchResponse?.hits ?? [];
+export const extractHits = (searchResponse: any) => searchResponse?.hits ?? [];
 
-export const searchInternalConcepts = (catalogId: string, body: string[], accessToken: string): Promise<Response> =>
+export const searchInternalConcepts = (
+  catalogId: string,
+  body: string[],
+  accessToken: string | null | undefined,
+): Promise<Response> =>
   conceptCatalogApiCall(
     'POST',
     `/begreper/search?orgNummer=${catalogId}`,
@@ -53,7 +59,7 @@ export const searchInternalConcepts = (catalogId: string, body: string[], access
         size: body.length,
       },
     },
-    accessToken,
+    accessToken ?? '',
   );
 
 const hasRelatedConcepts = (concept: Concept): boolean => {
@@ -96,7 +102,7 @@ export const getConceptRelations = (concept: Concept): Relasjon[] => {
   return conceptRelations;
 };
 
-export const getRelatedConcepts = async (concept: Concept): Promise<SkosConcept[]> => {
+export const getRelatedConcepts = async (concept: Concept): Promise<SearchObject[]> => {
   if (!hasRelatedConcepts(concept)) return [];
 
   const relatedConceptsUris = [];
@@ -122,9 +128,20 @@ export const getRelatedConcepts = async (concept: Concept): Promise<SkosConcept[
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  const relatedConcepts = await searchConceptsByIdentifiers(relatedConceptsUris)
-    .then(async (response) => await (response instanceof Response && response.ok ? response.json() : []))
-    .then((body) => extractConcepts(body));
+  const relatedConcepts = await searchConceptsByUri(relatedConceptsUris)
+    .then(async (response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        console.error('Failed to fetch related concepts:', response.status, response.statusText);
+        return [];
+      }
+    })
+    .then((body) => extractHits(body))
+    .catch((error) => {
+      console.error('Failed to fetch related concepts', error);
+      return [];
+    });
 
   return relatedConcepts;
 };
@@ -159,7 +176,10 @@ export const getInternalConceptRelations = (concept: Concept): Relasjon[] => {
   return internalConceptRelations;
 };
 
-export const getInternalRelatedConcepts = async (concept: Concept, accessToken: string): Promise<Concept[]> => {
+export const getInternalRelatedConcepts = async (
+  concept: Concept,
+  accessToken: string | null | undefined,
+): Promise<Concept[]> => {
   if (!hasRelatedInternalConcepts(concept)) return [];
 
   const internalRelatedConceptsUris: string[] = [];
@@ -193,7 +213,7 @@ export const getInternalRelatedConcepts = async (concept: Concept, accessToken: 
     internalRelatedConceptsUris &&
     (await searchInternalConcepts(concept.ansvarligVirksomhet.id, internalRelatedConceptsUris, accessToken)
       .then(async (response) => await (response instanceof Response && response.ok ? response.json() : []))
-      .then((body) => extractConcepts(body)));
+      .then((body) => extractHits(body)));
 
   return internalRelatedConcepts;
 };

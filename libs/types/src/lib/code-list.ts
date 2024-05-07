@@ -1,4 +1,4 @@
-import { MultiLanguageText } from './language';
+import { LocalizedStrings } from './localization';
 
 export interface CodeListsResult {
   codeLists: CodeList[];
@@ -18,7 +18,7 @@ export interface CodeListToBeCreated {
 
 export interface Code {
   id: string;
-  name: MultiLanguageText;
+  name: LocalizedStrings;
   parentID: string | null;
 }
 

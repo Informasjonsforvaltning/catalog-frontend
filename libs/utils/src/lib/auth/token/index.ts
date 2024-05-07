@@ -19,7 +19,9 @@ export interface AuthConfiguration {
   silentCheckSsoRedirectUri?: string;
 }
 
-export const getUsername = (token: string): string => {
+type Token = string | null | undefined;
+
+export const getUsername = (token: Token): string => {
   if (!token) {
     return '';
   }
@@ -27,7 +29,7 @@ export const getUsername = (token: string): string => {
   return ((tokenDecoded && (tokenDecoded as any).user_name) as string) || '';
 };
 
-const getAuthorities = (token: string): string => {
+const getAuthorities = (token: Token): string => {
   if (!token) {
     return '';
   }
@@ -35,37 +37,37 @@ const getAuthorities = (token: string): string => {
   return ((tokenDecoded && (tokenDecoded as any).authorities) as string) || '';
 };
 
-export const getResourceRoles = (token: string): ResourceRole[] =>
+export const getResourceRoles = (token: Token): ResourceRole[] =>
   getAuthorities(token)
     .split(',')
     .map((authorityDescriptor) => authorityDescriptor.split(':'))
     .map(([resource, resourceId, role]) => ({ resource, resourceId, role }));
 
-export const hasResourceRole = (token: string, { resource, resourceId, role }: ResourceRole): boolean =>
+export const hasResourceRole = (token: Token, { resource, resourceId, role }: ResourceRole): boolean =>
   !!getResourceRoles(token).find((r) => r.resource === resource && r.resourceId === resourceId && r.role === role);
 
-export const hasOrganizationRole = (token: string, { orgNr, role }: OrganizationRole): boolean =>
+export const hasOrganizationRole = (token: Token, { orgNr, role }: OrganizationRole): boolean =>
   hasResourceRole(token, { resource: 'organization', resourceId: orgNr, role });
 
-export const hasOrganizationReadPermission = (token: string, orgNr: string): boolean => {
+export const hasOrganizationReadPermission = (token: Token, orgNr: string): boolean => {
   const roles = getResourceRoles(token);
   return roles?.find(({ resource, resourceId }) => resource === 'organization' && resourceId === orgNr) !== undefined;
 };
 
-export const hasOrganizationWritePermission = (token: string, orgNr: string): boolean =>
+export const hasOrganizationWritePermission = (token: Token, orgNr: string): boolean =>
   hasOrganizationRole(token, { orgNr, role: 'admin' }) || hasOrganizationRole(token, { orgNr, role: 'write' });
 
-export const hasOrganizationAdminPermission = (token: string, orgNr: string) =>
+export const hasOrganizationAdminPermission = (token: Token, orgNr: string) =>
   hasOrganizationRole(token, { orgNr, role: 'admin' });
 
-export const hasSystemAdminPermission = (token: string) =>
+export const hasSystemAdminPermission = (token: Token) =>
   hasResourceRole(token, {
     resource: 'system',
     resourceId: 'root',
     role: 'admin',
   });
 
-export const isReadOnlyUser = (token: string, orgNr: string): boolean =>
+export const isReadOnlyUser = (token: Token, orgNr: string): boolean =>
   hasOrganizationReadPermission(token, orgNr) &&
   !(
     hasOrganizationWritePermission(token, orgNr) ||
