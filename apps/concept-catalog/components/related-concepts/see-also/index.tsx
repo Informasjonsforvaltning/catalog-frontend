@@ -20,7 +20,7 @@ const SeeAlso = ({ seeAlso, relatedConceptsMap }: Props) => (
           <KeyValueListItem
             key={`seeAlso-${relatedConcept.id}`}
             property={localization.concept.seeAlso}
-            value={<a href={relatedConcept.identifier}>{getTranslateText(relatedConcept.prefLabel)}</a>}
+            value={<a href={relatedConcept.uri}>{getTranslateText(relatedConcept.title)}</a>}
           />
         );
       } else {

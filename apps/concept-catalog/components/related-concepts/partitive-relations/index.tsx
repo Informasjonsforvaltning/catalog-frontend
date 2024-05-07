@@ -32,7 +32,7 @@ const PartitiveRelations = ({ partitiveRelations, relatedConceptsMap }: Props) =
                 </div>
               </div>
             }
-            value={<a href={relatedConcept.identifier}>{getTranslateText(relatedConcept.prefLabel)}</a>}
+            value={<a href={relatedConcept.uri}>{getTranslateText(relatedConcept.title)}</a>}
           />
         );
       })}

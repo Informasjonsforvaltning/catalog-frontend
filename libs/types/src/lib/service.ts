@@ -1,4 +1,4 @@
-import { MultiLanguageText } from './language';
+import { LocalizedStrings } from './localization';
 
 export interface Service extends ServiceToBeCreated {
   id: string;
@@ -7,8 +7,8 @@ export interface Service extends ServiceToBeCreated {
 }
 
 export interface ServiceToBeCreated {
-  title: MultiLanguageText;
-  description?: MultiLanguageText;
+  title: LocalizedStrings;
+  description?: LocalizedStrings;
   produces?: Output[];
   contactPoints?: ContactPoint[];
   homepage?: string;
@@ -17,13 +17,13 @@ export interface ServiceToBeCreated {
 
 export interface Output {
   identifier: string;
-  title?: MultiLanguageText;
-  description?: MultiLanguageText;
+  title?: LocalizedStrings;
+  description?: LocalizedStrings;
   language?: string[];
 }
 
 export interface ContactPoint {
-  category?: MultiLanguageText;
+  category?: LocalizedStrings;
   email?: string;
   telephone?: string;
   contactPage?: string;

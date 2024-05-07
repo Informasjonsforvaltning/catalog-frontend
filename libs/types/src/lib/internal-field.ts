@@ -1,4 +1,4 @@
-import { MultiLanguageText } from './language';
+import { LocalizedStrings } from './localization';
 
 export type FieldType = 'text_short' | 'text_long' | 'boolean' | 'code_list' | 'user_list';
 
@@ -15,8 +15,8 @@ export interface InternalField extends InternalFieldTemplate {
 
 export interface InternalFieldTemplate {
   catalogId?: string;
-  label?: MultiLanguageText;
-  description?: MultiLanguageText;
+  label?: LocalizedStrings;
+  description?: LocalizedStrings;
   type?: FieldType;
   enableFilter?: boolean;
   location?: FieldLocation;

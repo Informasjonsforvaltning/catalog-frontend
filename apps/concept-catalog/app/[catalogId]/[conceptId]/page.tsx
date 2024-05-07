@@ -29,10 +29,13 @@ import {
   UsersResult,
   Relasjon,
   SkosConcept,
+  Search,
 } from '@catalog-frontend/types';
 import { getServerSession } from 'next-auth';
 import ConceptPageClient from './concept-page-client';
 import { RedirectType, redirect } from 'next/navigation';
+
+type SearchObject = Search.SearchObject;
 
 const ConceptPage = async ({ params }) => {
   const session = await getServerSession(authOptions);
@@ -42,7 +45,7 @@ const ConceptPage = async ({ params }) => {
     redirect(`/notfound`, RedirectType.replace);
   }
 
-  if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
+  if (!(session?.user && Date.now() < (session?.accessTokenExpiresAt ?? 0) * 1000)) {
     redirect(`/auth/signin?callbackUrl=/${catalogId}/${conceptId}`);
   }
 
@@ -92,7 +95,7 @@ const ConceptPage = async ({ params }) => {
     })) as SkosConcept[];
   };
 
-  const relatedConcepts: SkosConcept[] = await getRelatedConcepts(concept);
+  const relatedConcepts: SearchObject[] = await getRelatedConcepts(concept);
   const conceptRelations: Relasjon[] = getConceptRelations(concept);
   const internalConceptRelations: Relasjon[] = getInternalConceptRelations(concept);
   const internalRelatedConcepts: SkosConcept[] = conceptToSkosConceptMapper(

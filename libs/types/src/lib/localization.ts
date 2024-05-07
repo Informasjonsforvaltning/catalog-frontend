@@ -1,6 +1,7 @@
-export interface MultiLanguageText {
+export interface LocalizedStrings {
   nb?: any;
   nn?: any;
+  no?: any;
   en?: any;
 }
 
