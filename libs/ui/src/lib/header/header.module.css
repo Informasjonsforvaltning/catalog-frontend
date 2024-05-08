@@ -82,7 +82,6 @@
 
 .buttonLabel {
   color: currentColor;
-  font-size: 1.6em;
   padding: 0em 0.5em;
 }
 
@@ -133,6 +132,7 @@
   outline: none;
   color: currentColor;
   cursor: pointer;
+  font-size: inherit;
 }
 
 .catalogAdminHeaderLink {
@@ -183,7 +183,6 @@
 }
 
 .urlList > li {
-  font-size: 0.9rem;
   margin-right: 1rem;
   text-decoration: underline;
   text-underline-offset: 4px;
