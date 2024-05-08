@@ -13,10 +13,6 @@
   padding-bottom: 20px;
 }
 
-.twoColumnRow a {
-  color: #0062ba;
-}
-
 .twoColumnRow > *:first-child {
   flex-grow: 1;
 }
