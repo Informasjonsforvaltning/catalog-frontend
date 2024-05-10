@@ -1,10 +1,11 @@
-import { Relasjon } from '@catalog-frontend/types';
+import { Relasjon, RelatedConcept } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { KeyValueListItem } from '@catalog-frontend/ui';
+import { Link } from '@digdir/designsystemet-react';
 
 interface Props {
   associativeRelations: Relasjon[];
-  relatedConceptsMap: (identifier: string) => any;
+  relatedConceptsMap: (identifier: string) => RelatedConcept | undefined;
 }
 
 const AssociativeRelations = ({ associativeRelations, relatedConceptsMap }: Props) => {
@@ -26,7 +27,7 @@ const AssociativeRelations = ({ associativeRelations, relatedConceptsMap }: Prop
                   </div>
                 </div>
               }
-              value={<a href={relatedConcept.uri}>{getTranslateText(relatedConcept.title)}</a>}
+              value={<Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title)}</Link>}
             />
           );
         }

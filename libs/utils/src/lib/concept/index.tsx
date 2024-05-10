@@ -47,3 +47,7 @@ export const pruneEmptyProperties = (obj: any, reduceAsArray = false): any => {
         return { ...acc, [key]: obj[key] };
       }, {});
 };
+
+export const getConceptIdFromRdfUri = (baseUri: string | undefined, uri: string | undefined): string | undefined => {
+  return baseUri && uri?.startsWith(baseUri) ? uri?.split('/').pop() : undefined;
+};

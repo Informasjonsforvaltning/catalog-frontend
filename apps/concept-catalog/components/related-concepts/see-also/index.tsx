@@ -1,13 +1,14 @@
 import React from 'react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { KeyValueListItem } from '@catalog-frontend/ui';
-import { Relasjon } from '@catalog-frontend/types';
+import { Relasjon, RelatedConcept } from '@catalog-frontend/types';
+import { Link } from '@digdir/designsystemet-react';
 
 interface Props {
   seeAlso: Relasjon[];
-  validToIncluding: string | undefined;
-  validFromIncluding: string | undefined;
-  relatedConceptsMap: (identifier: string) => any;
+  validToIncluding: string | null | undefined;
+  validFromIncluding: string | null | undefined;
+  relatedConceptsMap: (identifier: string) => RelatedConcept | undefined;
 }
 
 const SeeAlso = ({ seeAlso, relatedConceptsMap }: Props) => (
@@ -20,7 +21,7 @@ const SeeAlso = ({ seeAlso, relatedConceptsMap }: Props) => (
           <KeyValueListItem
             key={`seeAlso-${relatedConcept.id}`}
             property={localization.concept.seeAlso}
-            value={<a href={relatedConcept.uri}>{getTranslateText(relatedConcept.title)}</a>}
+            value={<Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title)}</Link>}
           />
         );
       } else {

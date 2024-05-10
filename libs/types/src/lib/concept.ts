@@ -1,4 +1,5 @@
-import { EntityEnum, LanguageCodes } from './enums';
+import { LocalizedStrings } from './localization';
+import { EntityEnum } from './enums';
 import { Organization } from './organization';
 
 export interface ErrorMessage {
@@ -63,25 +64,15 @@ export interface ContactDetails {
 }
 
 export interface AnbefaltTerm {
-  navn: TekstMedSpraakKode;
+  navn: LocalizedStrings;
 }
 
 export interface Definisjon {
-  tekst: TekstMedSpraakKode;
+  tekst: LocalizedStrings;
   kildebeskrivelse?: {
     forholdTilKilde: string;
     kilde: Kilde[];
   } | null;
-}
-
-export interface TekstMedSpraakKode {
-  [kode: string]: string;
-}
-
-export interface Navn {
-  nb?: any;
-  nn?: any;
-  en?: any;
 }
 
 export interface Version {
@@ -98,10 +89,19 @@ export interface Endringslogelement {
 export interface Relasjon {
   relasjon?: string;
   relasjonsType?: string;
-  beskrivelse?: TekstMedSpraakKode;
-  inndelingskriterium?: TekstMedSpraakKode;
+  beskrivelse?: LocalizedStrings;
+  inndelingskriterium?: LocalizedStrings;
   relatertBegrep?: string;
 }
+
+export type RelatedConcept = {
+  id: string;
+  identifier: string;
+  href: string;
+  externalHref: boolean;
+  title: LocalizedStrings;
+  description: LocalizedStrings;
+};
 
 export interface Concept {
   id: string | null;
@@ -145,10 +145,10 @@ export interface Concept {
 }
 
 export interface ConceptDefinition {
-  text?: Partial<TextLanguage>;
-  remark?: Partial<TextLanguage>;
+  text?: LocalizedStrings;
+  remark?: LocalizedStrings;
   sources?: Array<{ text?: string; uri?: string }>;
-  range?: { text?: Partial<TextLanguage>; uri?: string };
+  range?: { text?: LocalizedStrings; uri?: string };
   sourceRelationship?: string;
 }
 
@@ -163,7 +163,7 @@ interface ConceptContactPoint {
 }
 
 export interface ConceptSubject {
-  label?: Partial<TextLanguage>;
+  label?: LocalizedStrings;
 }
 
 export interface ResponseEntity {
@@ -171,14 +171,14 @@ export interface ResponseEntity {
   type: EntityEnum.CONCEPT;
   uri: string;
   identifier: string;
-  prefLabel: Partial<TextLanguage>;
-  altLabel?: Partial<TextLanguage>[];
-  hiddenLabel?: Partial<TextLanguage>[];
+  prefLabel: LocalizedStrings;
+  altLabel?: LocalizedStrings[];
+  hiddenLabel?: LocalizedStrings[];
   definition?: ConceptDefinition;
   publisher: Partial<Organization>;
-  example: Partial<TextLanguage>;
+  example: LocalizedStrings;
   subject?: Partial<ConceptSubject>[];
-  application?: Partial<TextLanguage>[];
+  application?: LocalizedStrings[];
   harvest?: Partial<Harvest>;
   contactPoint?: Partial<ConceptContactPoint>;
   validFromIncluding?: string;
@@ -215,14 +215,14 @@ export interface Collection {
 export interface Publisher {
   organizationId?: string;
   name?: string;
-  prefLabel?: TekstMedSpraakKode;
+  prefLabel?: LocalizedStrings;
 }
 
 export interface PublisherRdf {
   id: string;
   uri: string;
   name?: string;
-  prefLabel?: TekstMedSpraakKode;
+  prefLabel?: LocalizedStrings;
 }
 
 export interface ConceptHitPage {
@@ -271,46 +271,24 @@ export interface ConceptSearchFulltextHit {
   identifier: string[];
   uri: string;
   publisher?: PublisherRdf;
-  prefLabel: TekstMedSpraakKode;
-}
-
-export interface TextLanguage {
-  [LanguageCodes.nb]: string;
-  [LanguageCodes.nn]: string;
-  [LanguageCodes.en]: string;
-  [LanguageCodes.no]: string;
-  [LanguageCodes.none]: string;
+  prefLabel: LocalizedStrings;
 }
 
 export interface AssociativeRelation {
-  description: Partial<TextLanguage>;
+  description: LocalizedStrings;
   related: string;
 }
 
 export interface PartitiveRelation {
-  description: Partial<TextLanguage>;
+  description: LocalizedStrings;
   hasPart: string;
   isPartOf: string;
 }
 
 export interface GenericRelation {
-  divisioncriterion: Partial<TextLanguage>;
+  divisioncriterion: LocalizedStrings;
   generalizes: string;
   specializes: string;
-}
-
-export interface SkosConcept {
-  id: string;
-  identifier: string;
-  prefLabel: {
-    nb?: string;
-    nn?: string;
-    en?: string;
-  };
-  definition: {
-    text?: string;
-  };
-  publisher: Publisher;
 }
 
 export type RelationshipWithSource = 'egendefinert' | 'basertPaaKilde' | 'sitatFraKilde';

@@ -27,7 +27,7 @@ const ChangeRequestDetailsPage = async ({ params }) => {
   }
 
   const session = await getServerSession(authOptions);
-  if (!(session?.user && Date.now() < session?.accessTokenExpiresAt * 1000)) {
+  if (!(session?.user && Date.now() < (session?.accessTokenExpiresAt ?? 0) * 1000)) {
     return {
       redirect: {
         permanent: false,

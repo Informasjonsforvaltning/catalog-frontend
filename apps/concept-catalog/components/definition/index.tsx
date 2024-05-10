@@ -2,6 +2,7 @@ import { Definisjon } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import cn from 'classnames';
 import classes from './definition.module.css';
+import { Link } from '@digdir/designsystemet-react';
 
 interface Props {
   definition: Definisjon;
@@ -13,7 +14,7 @@ export const Definition = ({ definition, language }: Props) => {
     <>
       <div>{getTranslateText(definition?.tekst ?? '', language)}</div>
       {(definition?.kildebeskrivelse?.forholdTilKilde === 'egendefinert' ||
-        definition?.kildebeskrivelse?.kilde.length > 0) && (
+        definition?.kildebeskrivelse?.kilde.length !== 0) && (
         <div className={cn(classes.source)}>
           <div>{localization.concept.source}:</div>
           <div>
@@ -23,7 +24,7 @@ export const Definition = ({ definition, language }: Props) => {
               <ul>
                 {definition?.kildebeskrivelse?.kilde?.map((kilde, i) => (
                   <li key={`kilde-${i}`}>
-                    {kilde.uri ? <a href={kilde.uri}>{kilde.tekst}</a> : <span>{kilde.tekst}</span>}
+                    {kilde.uri ? <Link href={kilde.uri}>{kilde.tekst}</Link> : <span>{kilde.tekst}</span>}
                   </li>
                 ))}
               </ul>
