@@ -1,162 +1,145 @@
-import { getOrganization, getConcept, getChangeRequest } from '@catalog-frontend/data-access';
-import { Organization, Concept, ChangeRequest } from '@catalog-frontend/types';
+import { getChangeRequest, getConcept, getOrganization } from '@catalog-frontend/data-access';
+import { ChangeRequest, Concept, Organization } from '@catalog-frontend/types';
 import { BreadcrumbType, Breadcrumbs, DetailHeading } from '@catalog-frontend/ui';
-import {
-  authOptions,
-  hasOrganizationReadPermission,
-  validOrganizationNumber,
-  validUUID,
-  formatISO,
-  localization,
-} from '@catalog-frontend/utils';
-import { getServerSession } from 'next-auth';
-import jsonpatch from 'fast-json-patch';
-import ChangeRequestEditPageClient from './change-request-edit-page-client';
-import { RedirectType, redirect } from 'next/navigation';
-import styles from '../../change-requests-page.module.css';
-import { Banner } from '../../../../../components/banner';
+import { formatISO, localization, validUUID } from '@catalog-frontend/utils';
 import { Alert, Heading, Link, Paragraph } from '@digdir/designsystemet-react';
+import jsonpatch from 'fast-json-patch';
 import NextLink from 'next/link';
+import { Banner } from '../../../../../components/banner';
+import { withReadProtectedPage } from '../../../../../utils/auth';
+import styles from '../../change-requests-page.module.css';
+import ChangeRequestEditPageClient from './change-request-edit-page-client';
 
-const ChangeRequestEditPage = async ({ params }) => {
-  const { catalogId, changeRequestId } = params;
-  if (!validOrganizationNumber(catalogId) || !validUUID(changeRequestId)) {
-    redirect(`/notfound`, RedirectType.replace);
-  }
+const ChangeRequestEditPage = withReadProtectedPage(
+  ({ catalogId, changeRequestId }) => `/${catalogId}/change-requests/${changeRequestId}/edit`,
+  async ({ catalogId, changeRequestId, session }) => {
+    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
-  const session = await getServerSession(authOptions);
-  const hasPermission = session && hasOrganizationReadPermission(session?.accessToken, catalogId);
-  if (!hasPermission) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: `/${catalogId}/no-access`,
-      },
+    const baselineConcept: Concept = {
+      id: null,
+      ansvarligVirksomhet: { id: organization.organizationId },
+      seOgså: [],
     };
-  }
 
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+    const changeRequest: ChangeRequest = await getChangeRequest(
+      catalogId,
+      `${changeRequestId}`,
+      `${session.accessToken}`,
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .catch((error) => {
+        throw error;
+      });
 
-  const baselineConcept: Concept = {
-    id: null,
-    ansvarligVirksomhet: { id: organization.organizationId },
-    seOgså: [],
-  };
+    const originalConcept =
+      changeRequest.conceptId && validUUID(changeRequest.conceptId)
+        ? await getConcept(changeRequest.conceptId, `${session.accessToken}`)
+            .then((response) => {
+              return response.json();
+            })
+            .catch((error) => {
+              throw error;
+            })
+        : undefined;
 
-  const changeRequest: ChangeRequest = await getChangeRequest(catalogId, changeRequestId, `${session.accessToken}`)
-    .then((response) => {
-      return response.json();
-    })
-    .catch((error) => {
-      throw error;
-    });
+    const changeRequestAsConcept: Concept = jsonpatch.applyPatch(
+      jsonpatch.deepClone(originalConcept || baselineConcept),
+      jsonpatch.deepClone(changeRequest.operations),
+      false,
+    ).newDocument;
 
-  const originalConcept =
-    changeRequest.conceptId && validUUID(changeRequest.conceptId)
-      ? await getConcept(changeRequest.conceptId, `${session.accessToken}`)
-          .then((response) => {
-            return response.json();
-          })
-          .catch((error) => {
-            throw error;
-          })
-      : undefined;
+    const pageSubtitle = organization?.name ?? organization.organizationId;
 
-  const changeRequestAsConcept: Concept = jsonpatch.applyPatch(
-    jsonpatch.deepClone(originalConcept || baselineConcept),
-    jsonpatch.deepClone(changeRequest.operations),
-    false,
-  ).newDocument;
+    const breadcrumbList = [
+      {
+        href: `/${catalogId}`,
+        text: localization.concept.concept,
+      },
+      {
+        href: `/${catalogId}/change-requests`,
+        text: localization.changeRequest.changeRequest,
+      },
+      {
+        href: `/${catalogId}/change-requests/${changeRequest.id}`,
+        text: changeRequest.title,
+      },
+      {
+        href: `/${catalogId}/change-requests/${changeRequest.id}/edit`,
+        text: localization.edit,
+      },
+    ] as BreadcrumbType[];
 
-  const pageSubtitle = organization?.name ?? organization.organizationId;
+    const subtitle = `${localization.concept.created}: ${
+      changeRequest?.timeForProposal &&
+      formatISO(changeRequest?.timeForProposal, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      })
+    } - ${localization.concept.createdBy}: ${changeRequest.proposedBy?.name}`;
 
-  const breadcrumbList = [
-    {
-      href: `/${catalogId}`,
-      text: localization.concept.concept,
-    },
-    {
-      href: `/${catalogId}/change-requests`,
-      text: localization.changeRequest.changeRequest,
-    },
-    {
-      href: `/${catalogId}/change-requests/${changeRequest.id}`,
-      text: changeRequest.title,
-    },
-    {
-      href: `/${catalogId}/change-requests/${changeRequest.id}/edit`,
-      text: localization.edit,
-    },
-  ] as BreadcrumbType[];
+    const headingTitle = changeRequest.conceptId ? (
+      <h1>
+        <NextLink
+          href={`/${catalogId}/${changeRequest.conceptId}`}
+          passHref
+          legacyBehavior
+        >
+          <Link>{changeRequest.title}</Link>
+        </NextLink>
+      </h1>
+    ) : (
+      <h1>{changeRequest.title}</h1>
+    );
 
-  const subtitle = `${localization.concept.created}: ${
-    changeRequest?.timeForProposal &&
-    formatISO(changeRequest?.timeForProposal, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    })
-  } - ${localization.concept.createdBy}: ${changeRequest.proposedBy?.name}`;
+    const clientProps = {
+      organization,
+      changeRequest,
+      changeRequestAsConcept,
+      originalConcept,
+    };
 
-  const headingTitle = changeRequest.conceptId ? (
-    <h1>
-      <NextLink
-        href={`/${catalogId}/${changeRequest.conceptId}`}
-        passHref
-        legacyBehavior
-      >
-        <Link>{changeRequest.title}</Link>
-      </NextLink>
-    </h1>
-  ) : (
-    <h1>{changeRequest.title}</h1>
-  );
-
-  const clientProps = {
-    organization,
-    changeRequest,
-    changeRequestAsConcept,
-    originalConcept,
-  };
-
-  return (
-    <>
-      <Breadcrumbs
-        baseURI={process.env.FDK_REGISTRATION_BASE_URI}
-        breadcrumbList={breadcrumbList}
-      />
-      <Banner
-        title={localization.catalogType.concept}
-        subtitle={pageSubtitle}
-        catalogId={catalogId}
-      />
-      <div className={'formContainer'}>
-        <div className={styles.topRow}>
-          <Alert severity='info'>
-            <Heading
-              level={2}
-              size='xsmall'
-              spacing
-            >
-              {originalConcept
-                ? localization.changeRequest.alert.editAlertInfo.heading
-                : localization.changeRequest.alert.newAlertInfo.heading}
-            </Heading>
-            <Paragraph>{localization.changeRequest.alert.editAlertInfo.paragraph}</Paragraph>
-          </Alert>
+    return (
+      <>
+        <Breadcrumbs
+          baseURI={process.env.FDK_REGISTRATION_BASE_URI}
+          breadcrumbList={breadcrumbList}
+        />
+        <Banner
+          title={localization.catalogType.concept}
+          subtitle={pageSubtitle}
+          catalogId={catalogId}
+        />
+        <div className={'formContainer'}>
+          <div className={styles.topRow}>
+            <Alert severity='info'>
+              <Heading
+                level={2}
+                size='xsmall'
+                spacing
+              >
+                {originalConcept
+                  ? localization.changeRequest.alert.editAlertInfo.heading
+                  : localization.changeRequest.alert.newAlertInfo.heading}
+              </Heading>
+              <Paragraph>{localization.changeRequest.alert.editAlertInfo.paragraph}</Paragraph>
+            </Alert>
+          </div>
+          <div className={styles.topRow}>
+            <DetailHeading
+              headingTitle={headingTitle}
+              subtitle={subtitle}
+            />
+          </div>
+          <ChangeRequestEditPageClient {...clientProps} />
         </div>
-        <div className={styles.topRow}>
-          <DetailHeading
-            headingTitle={headingTitle}
-            subtitle={subtitle}
-          />
-        </div>
-        <ChangeRequestEditPageClient {...clientProps} />
-      </div>
-    </>
-  );
-};
+      </>
+    );
+  },
+);
 
 export default ChangeRequestEditPage;

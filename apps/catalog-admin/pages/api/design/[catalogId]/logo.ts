@@ -14,9 +14,9 @@ export const config = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getServerSession(req, res, authOptions);
+  const session: any = await getServerSession(req, res, authOptions);
   if (!session || session?.accessTokenExpiresAt < Date.now() / 1000) {
-    return res.status(401).send({ error: 'Unauthorized' });
+    return res.status(401).send('Unauthorized');
   }
 
   const { catalogId } = req.query;

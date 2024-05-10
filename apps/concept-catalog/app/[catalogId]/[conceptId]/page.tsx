@@ -1,14 +1,4 @@
-import {
-  hasOrganizationReadPermission,
-  getUsername,
-  validOrganizationNumber,
-  validUUID,
-  hasSystemAdminPermission,
-  hasOrganizationWritePermission,
-  prepareStatusList,
-  authOptions,
-  getConceptIdFromRdfUri,
-} from '@catalog-frontend/utils';
+import { getConceptIdFromRdfUri, getUsername, prepareStatusList } from '@catalog-frontend/utils';
 import {
   getAllCodeLists,
   getConcept,
@@ -29,61 +19,44 @@ import {
   CodeListsResult,
   UsersResult,
   Relasjon,
-  SkosConcept,
-  Search,
   RelatedConcept,
 } from '@catalog-frontend/types';
-import { getServerSession } from 'next-auth';
 import ConceptPageClient from './concept-page-client';
 import { RedirectType, redirect } from 'next/navigation';
+import { withReadProtectedPage } from '../../../utils/auth';
 
-type SearchObject = Search.SearchObject;
+const ConceptPage = withReadProtectedPage(
+  ({ catalogId, conceptId }) => `/${catalogId}/${conceptId}`,
+  async ({ catalogId, conceptId, session, hasWritePermission }) => {
+    const concept = await getConcept(`${conceptId}`, `${session?.accessToken}`).then((response) => {
+      if (response.ok) return response.json();
+    });
+    if (!concept) {
+      redirect(`/notfound`, RedirectType.replace);
+    }
 
-const ConceptPage = async ({ params }) => {
-  const session = await getServerSession(authOptions);
-  const { catalogId, conceptId } = params;
+    const conceptStatuses = await getConceptStatuses()
+      .then((response) => response.json())
+      .then((body) => {
+        return body?.conceptStatuses ?? [];
+      })
+      .then((statuses) => prepareStatusList(statuses));
 
-  if (!(validOrganizationNumber(catalogId) && validUUID(conceptId))) {
-    redirect(`/notfound`, RedirectType.replace);
-  }
+    const username = session && getUsername(session?.accessToken);
 
-  const hasReadPermission =
-    session &&
-    (hasOrganizationReadPermission(session?.accessToken, catalogId) || hasSystemAdminPermission(session?.accessToken));
-  if (!hasReadPermission) {
-    redirect(`/${catalogId}/no-access`);
-  }
-
-  const concept = await getConcept(conceptId, `${session?.accessToken}`).then((response) => {
-    if (response.ok) return response.json();
-  });
-  if (!concept) {
-    redirect(`/notfound`, RedirectType.replace);
-  }
-
-  const conceptStatuses = await getConceptStatuses()
-    .then((response) => response.json())
-    .then((body) => {
-      return body?.conceptStatuses ?? [];
-    })
-    .then((statuses) => prepareStatusList(statuses));
-
-  const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
-  const username = session && getUsername(session?.accessToken);
-
-  const organization: Organization = await getOrganization(catalogId).then((response) => response.json());
-  const revisions: Concept[] | null = await getConceptRevisions(conceptId, `${session?.accessToken}`).then(
-    (response) => response.json() || null,
-  );
-  const fieldsResult: FieldsResult = await getFields(catalogId, `${session?.accessToken}`).then((response) =>
-    response.json(),
-  );
-  const codeListsResult: CodeListsResult = await getAllCodeLists(catalogId, `${session?.accessToken}`).then(
-    (response) => response.json(),
-  );
-  const usersResult: UsersResult = await getUsers(catalogId, `${session?.accessToken}`).then((response) =>
-    response.json(),
-  );
+    const organization: Organization = await getOrganization(catalogId).then((response) => response.json());
+    const revisions: Concept[] | null = await getConceptRevisions(`${conceptId}`, `${session?.accessToken}`).then(
+      (response) => response.json() || null,
+    );
+    const fieldsResult: FieldsResult = await getFields(catalogId, `${session?.accessToken}`).then((response) =>
+      response.json(),
+    );
+    const codeListsResult: CodeListsResult = await getAllCodeLists(catalogId, `${session?.accessToken}`).then(
+      (response) => response.json(),
+    );
+    const usersResult: UsersResult = await getUsers(catalogId, `${session?.accessToken}`).then((response) =>
+      response.json(),
+    );
 
   const conceptRelations: Relasjon[] = getConceptRelations(concept);
   const internalConceptRelations: Relasjon[] = getInternalConceptRelations(concept);
@@ -134,6 +107,6 @@ const ConceptPage = async ({ params }) => {
   };
 
   return <ConceptPageClient {...clientProps} />;
-};
+});
 
 export default ConceptPage;

@@ -18,7 +18,6 @@ import { Chip } from '@digdir/designsystemet-react';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'nuqs';
 
 import { SortOption, getSelectOptions, useSearchConcepts, getFields as getSearchFields } from '../../hooks/search';

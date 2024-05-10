@@ -1,15 +1,11 @@
 import { Fields, Organization } from '@catalog-frontend/types';
-import { checkAdminPermissions } from '../../../../../utils/auth';
+import { withProtectedPage } from '../../../../../utils/auth';
 import { getFields, getOrganization } from '@catalog-frontend/data-access';
-import { getServerSession } from 'next-auth';
 import CodeListsPageClient from './code-list-page-client';
-import { authOptions } from '@catalog-frontend/utils';
 
-const CodeListsPage = async ({ params }) => {
-  const { catalogId } = params;
-
-  const session = await getServerSession(authOptions);
-  if (checkAdminPermissions({ session, catalogId, path: '/concepts/code-lists' })) {
+export default withProtectedPage(
+  ({ catalogId }) => `/catalogs/${catalogId}/concepts/code-lists`,
+  async ({ catalogId, session }) => {
     const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
     const { internal, editable }: Fields = await getFields(catalogId, session.accessToken).then((res) => res.json());
 
@@ -32,7 +28,5 @@ const CodeListsPage = async ({ params }) => {
         codeListsInUse={codeListsInUse}
       />
     );
-  }
-};
-
-export default CodeListsPage;
+  },
+);

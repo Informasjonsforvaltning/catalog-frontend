@@ -10,15 +10,13 @@ import {
   updateService as update,
 } from '@catalog-frontend/data-access';
 import { Service, ServiceToBeCreated } from '@catalog-frontend/types';
-import { authOptions, localization, removeEmptyValues, validateSession } from '@catalog-frontend/utils';
+import { getValidSessionForAction, localization, removeEmptyValues } from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
-import { getServerSession } from 'next-auth';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export async function getServices(catalogId: string) {
-  const session = await getServerSession(authOptions);
-  await validateSession(session);
+  const session = await getValidSessionForAction();
 
   const response = await getAll(catalogId, `${session?.accessToken}`);
   if (response.status !== 200) {
@@ -29,8 +27,7 @@ export async function getServices(catalogId: string) {
 }
 
 export async function getServiceById(catalogId: string, serviceId: string) {
-  const session = await getServerSession(authOptions);
-  await validateSession(session);
+  const session = await getValidSessionForAction();
   const response = await getById(catalogId, serviceId, `${session?.accessToken}`);
 
   if (response.status !== 200) {
@@ -43,8 +40,7 @@ export async function getServiceById(catalogId: string, serviceId: string) {
 
 export async function createService(catalogId: string, values: ServiceToBeCreated) {
   const newService = removeEmptyValues(values);
-  const session = await getServerSession(authOptions);
-  await validateSession(session);
+  const session = await getValidSessionForAction();
   let success = false;
   let serviceId = undefined;
   try {
@@ -66,8 +62,7 @@ export async function createService(catalogId: string, values: ServiceToBeCreate
 }
 
 export async function deleteService(catalogId: string, serviceId: string) {
-  const session = await getServerSession(authOptions);
-  await validateSession(session);
+  const session = await getValidSessionForAction();
   let success = false;
   try {
     const response = await removeService(catalogId, serviceId, `${session?.accessToken}`);
@@ -106,8 +101,7 @@ export async function updateService(catalogId: string, oldService: Service, valu
 
   let success = false;
 
-  const session = await getServerSession(authOptions);
-  await validateSession(session);
+  const session = await getValidSessionForAction();
 
   try {
     const response = await update(catalogId, oldService.id, diff, `${session?.accessToken}`);
@@ -127,8 +121,7 @@ export async function updateService(catalogId: string, oldService: Service, valu
 }
 
 export async function publishService(catalogId: string, serviceId: string) {
-  const session = await getServerSession(authOptions);
-  await validateSession(session);
+  const session = await getValidSessionForAction();
   let success = false;
   try {
     const response = await publish(catalogId, serviceId, `${session?.accessToken}`);
@@ -147,8 +140,7 @@ export async function publishService(catalogId: string, serviceId: string) {
 }
 
 export async function unpublishService(catalogId: string, serviceId: string) {
-  const session = await getServerSession(authOptions);
-  await validateSession(session);
+  const session = await getValidSessionForAction();
   let success = false;
   try {
     const response = await unpublish(catalogId, serviceId, `${session?.accessToken}`);

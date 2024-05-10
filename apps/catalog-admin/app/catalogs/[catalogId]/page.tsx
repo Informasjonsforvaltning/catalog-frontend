@@ -1,15 +1,11 @@
 import { Organization } from '@catalog-frontend/types';
 import { getOrganization } from '@catalog-frontend/data-access';
-import { checkAdminPermissions } from '../../../utils/auth';
+import { withProtectedPage } from '../../../utils/auth';
 import AdminPageClient from './admin-page-client';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@catalog-frontend/utils';
 
-export const CatalogsAdminPage = async ({ params }) => {
-  const { catalogId } = params;
-
-  const session = await getServerSession(authOptions);
-  if (checkAdminPermissions({ session, catalogId })) {
+export default withProtectedPage(
+  ({ catalogId }) => `/catalogs/${catalogId}`,
+  async ({ catalogId }) => {
     const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
     return (
@@ -18,7 +14,5 @@ export const CatalogsAdminPage = async ({ params }) => {
         catalogId={catalogId}
       />
     );
-  }
-};
-
-export default CatalogsAdminPage;
+  },
+);

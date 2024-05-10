@@ -1,11 +1,15 @@
 import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
 import { Organization, ReferenceDataCode, Service } from '@catalog-frontend/types';
 import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
-import { authOptions, getTranslateText, hasOrganizationWritePermission, localization } from '@catalog-frontend/utils';
+import {
+  getTranslateText,
+  getValidSession,
+  hasOrganizationWritePermission,
+  localization,
+} from '@catalog-frontend/utils';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getPublicServiceById } from '../../../../actions/public-services/actions';
 import _ from 'lodash';
-import { getServerSession } from 'next-auth';
 import { RedirectType, redirect } from 'next/navigation';
 import PublicServiceDetailsPageClient from './public-service-details-page-client';
 
@@ -17,7 +21,10 @@ export default async function PublicServiceDetailsPage({ params }: Params) {
     redirect(`/notfound`, RedirectType.replace);
   }
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
-  const session = await getServerSession(authOptions);
+  const session = await getValidSession({
+    signInPath: '/auth/signin',
+    callbackUrl: `/catalogs/${catalogId}/public-services/${serviceId}`,
+  });
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
   const statusesResponse = await getAdmsStatuses().then((res) => res.json());
   const statuses: ReferenceDataCode[] = statusesResponse.statuses;
