@@ -1,11 +1,12 @@
 import React from 'react';
-import { Relasjon } from '@catalog-frontend/types';
+import { Relasjon, RelatedConcept } from '@catalog-frontend/types';
 import { KeyValueListItem } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { Link } from '@digdir/designsystemet-react';
 
 interface Props {
   partitiveRelations: Relasjon[];
-  relatedConceptsMap: (identifier: string) => any;
+  relatedConceptsMap: (identifier: string) => RelatedConcept | undefined;
 }
 
 const PartitiveRelations = ({ partitiveRelations, relatedConceptsMap }: Props) => {
@@ -32,7 +33,7 @@ const PartitiveRelations = ({ partitiveRelations, relatedConceptsMap }: Props) =
                 </div>
               </div>
             }
-            value={<a href={relatedConcept.uri}>{getTranslateText(relatedConcept.title)}</a>}
+            value={<Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title)}</Link>}
           />
         );
       })}

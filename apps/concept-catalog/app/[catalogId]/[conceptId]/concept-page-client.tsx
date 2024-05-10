@@ -24,7 +24,18 @@ import {
   validUUID,
   ensureStringArray,
 } from '@catalog-frontend/utils';
-import { Concept, Comment, Update, CodeList, InternalField, AssignedUser } from '@catalog-frontend/types';
+import {
+  Concept,
+  Comment,
+  Update,
+  CodeList,
+  InternalField,
+  AssignedUser,
+  Organization,
+  ReferenceDataCode,
+  Relasjon,
+  RelatedConcept,
+} from '@catalog-frontend/types';
 import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
 import { Accordion, Switch, Tabs, Textarea } from '@digdir/designsystemet-react';
@@ -41,14 +52,40 @@ type MapType = {
   [id: string]: string;
 };
 
-interface InterneFeltProps {
+type InterneFeltProps = {
   concept: Concept;
   fields: InternalField[];
   codeLists: CodeList[];
   users: AssignedUser[];
   location: 'main_column' | 'right_column';
   language: string;
-}
+};
+
+type ConceptPageClientProps = {
+  username: string;
+  organization: Organization;
+  concept: Concept;
+  conceptStatuses: ReferenceDataCode[];
+  revisions: Concept[] | null;
+  hasWritePermission: boolean;
+  fieldsResult: {
+    internal: InternalField[];
+    editable: {
+      domainCodeListId: string;
+    };
+  };
+  codeListsResult: {
+    codeLists: CodeList[];
+  };
+  usersResult: {
+    users: AssignedUser[];
+  };
+  conceptRelations: Relasjon[];
+  internalConceptRelations: Relasjon[];
+  relatedConcepts: RelatedConcept[];
+  internalRelatedConcepts: RelatedConcept[];
+  FDK_REGISTRATION_BASE_URI?: string;
+};
 
 const InterneFelt = ({ concept, fields, codeLists, users, location, language }: InterneFeltProps) => {
   const getCodeName = (codeListId: string, codeId: string) => {
@@ -105,12 +142,12 @@ export const ConceptPageClient = ({
   fieldsResult,
   codeListsResult,
   usersResult,
-  FDK_REGISTRATION_BASE_URI,
   relatedConcepts,
   conceptRelations,
   internalConceptRelations,
   internalRelatedConcepts,
-}) => {
+  FDK_REGISTRATION_BASE_URI,
+}: ConceptPageClientProps) => {
   const [language, setLanguage] = useState('nb');
   const [isPublished, setIsPublished] = useState(concept?.erPublisert);
   const [publishedDate, setPublishedDate] = useState(concept?.publiseringsTidspunkt);
@@ -123,7 +160,7 @@ export const ConceptPageClient = ({
   const handleOnChangePublished = (e) => {
     if (e.target.checked) {
       if (window.confirm(localization.publicationState.confirmPublish)) {
-        publishConcept.mutate(concept?.id, {
+        publishConcept.mutate(concept?.id as string, {
           onSuccess(data) {
             setIsPublished(data.erPublisert);
             setPublishedDate(data.publiseringsTidspunkt);
@@ -152,19 +189,24 @@ export const ConceptPageClient = ({
         </Switch>
         <div className={classes.greyFont}>
           {isPublished
-            ? `${localization.publicationState.publishedInFDK} ${formatISO(publishedDate, {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}`
+            ? `${localization.publicationState.publishedInFDK}${
+                publishedDate
+                  ? ' ' +
+                    formatISO(publishedDate, {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })
+                  : ''
+              }`
             : ''}
         </div>
       </>,
     ],
     [
       localization.concept.version,
-      `${concept?.versjonsnr.major}.${concept?.versjonsnr.minor}.${concept?.versjonsnr.patch}`,
+      `${concept?.versjonsnr?.major}.${concept?.versjonsnr?.minor}.${concept?.versjonsnr?.patch}`,
     ],
     ...(concept?.gyldigFom || concept?.gyldigTom
       ? [
@@ -294,7 +336,7 @@ export const ConceptPageClient = ({
     if (window.confirm(localization.concept.confirmDelete)) {
       const revision = revisions?.find((revision) => !revision.erPublisert);
       if (revision) {
-        deleteConcept.mutate(revision.id);
+        deleteConcept.mutate(revision.id as string);
       }
     }
   };
@@ -329,7 +371,7 @@ export const ConceptPageClient = ({
             <InfoCard.Item key={`revision-${revision.id}`}>
               <div className={classes.revision}>
                 <div>
-                  v{revision?.versjonsnr.major}.{revision?.versjonsnr.minor}.{revision?.versjonsnr.patch}
+                  v{revision?.versjonsnr?.major}.{revision?.versjonsnr?.minor}.{revision?.versjonsnr?.patch}
                 </div>
                 <div>
                   <Link
@@ -589,7 +631,7 @@ export const ConceptPageClient = ({
   const MainColumn = () => (
     <div>
       <InfoCard>
-        {!_.isEmpty(translate(concept?.definisjon?.tekst ?? '', language)) && (
+        {!_.isEmpty(translate(concept?.definisjon?.tekst ?? '', language)) && !_.isEmpty(concept?.definisjon) && (
           <InfoCard.Item label={`${localization.concept.definition}:`}>
             <Definition
               definition={concept?.definisjon}
@@ -597,23 +639,25 @@ export const ConceptPageClient = ({
             />
           </InfoCard.Item>
         )}
-        {!_.isEmpty(translate(concept?.definisjonForAllmennheten?.tekst ?? '', language)) && (
-          <InfoCard.Item label={`${localization.concept.publicDefinition}:`}>
-            <Definition
-              definition={concept?.definisjonForAllmennheten}
-              language={language}
-            />
-          </InfoCard.Item>
-        )}
+        {!_.isEmpty(translate(concept?.definisjonForAllmennheten?.tekst ?? '', language)) &&
+          !_.isEmpty(concept?.definisjonForAllmennheten) && (
+            <InfoCard.Item label={`${localization.concept.publicDefinition}:`}>
+              <Definition
+                definition={concept?.definisjonForAllmennheten}
+                language={language}
+              />
+            </InfoCard.Item>
+          )}
 
-        {!_.isEmpty(translate(concept?.definisjonForSpesialister?.tekst ?? '', language)) && (
-          <InfoCard.Item label={`${localization.concept.specialistDefinition}:`}>
-            <Definition
-              definition={concept?.definisjonForSpesialister}
-              language={language}
-            />
-          </InfoCard.Item>
-        )}
+        {!_.isEmpty(translate(concept?.definisjonForSpesialister?.tekst ?? '', language)) &&
+          !_.isEmpty(concept?.definisjonForSpesialister) && (
+            <InfoCard.Item label={`${localization.concept.specialistDefinition}:`}>
+              <Definition
+                definition={concept?.definisjonForSpesialister}
+                language={language}
+              />
+            </InfoCard.Item>
+          )}
         {!_.isEmpty(translate(concept?.merknad, language)) && (
           <InfoCard.Item label={`${localization.concept.note}:`}>
             <span>{translate(concept?.merknad, language)}</span>
@@ -654,7 +698,6 @@ export const ConceptPageClient = ({
             })}`}
           >
             <RelatedConcepts
-              catalogId={catalogId}
               title={getTitle(translate(concept?.anbefaltTerm?.navn, language))}
               conceptRelations={conceptRelations}
               relatedConcepts={relatedConcepts}
@@ -670,7 +713,6 @@ export const ConceptPageClient = ({
             })}`}
           >
             <RelatedConcepts
-              catalogId={catalogId}
               title={getTitle(translate(concept?.anbefaltTerm?.navn, language))}
               conceptRelations={internalConceptRelations}
               relatedConcepts={internalRelatedConcepts}

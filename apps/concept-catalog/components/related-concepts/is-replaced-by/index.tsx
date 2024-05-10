@@ -1,12 +1,13 @@
 import React from 'react';
-import { Relasjon, TextLanguage } from '@catalog-frontend/types';
+import { Relasjon, RelatedConcept, LocalizedStrings } from '@catalog-frontend/types';
 import { KeyValueListItem } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { Link } from '@digdir/designsystemet-react';
 
 interface Props {
-  title: Partial<TextLanguage>;
+  title: LocalizedStrings;
   isReplacedBy: Relasjon[];
-  relatedConceptsMap: (identifier: string) => any;
+  relatedConceptsMap: (identifier: string) => RelatedConcept | undefined;
 }
 
 const IsReplacedBy = ({ title, isReplacedBy, relatedConceptsMap }: Props) => (
@@ -23,7 +24,7 @@ const IsReplacedBy = ({ title, isReplacedBy, relatedConceptsMap }: Props) => (
                 <p>{getTranslateText(title)}</p>
               </div>
             }
-            value={<a href={relatedConcept.uri}>{getTranslateText(relatedConcept.title)}</a>}
+            value={<Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title)}</Link>}
           />
         );
       } else {

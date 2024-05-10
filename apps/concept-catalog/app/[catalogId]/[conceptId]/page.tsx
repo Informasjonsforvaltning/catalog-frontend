@@ -7,6 +7,7 @@ import {
   hasOrganizationWritePermission,
   prepareStatusList,
   authOptions,
+  getConceptIdFromRdfUri,
 } from '@catalog-frontend/utils';
 import {
   getAllCodeLists,
@@ -30,6 +31,7 @@ import {
   Relasjon,
   SkosConcept,
   Search,
+  RelatedConcept,
 } from '@catalog-frontend/types';
 import { getServerSession } from 'next-auth';
 import ConceptPageClient from './concept-page-client';
@@ -87,19 +89,35 @@ const ConceptPage = async ({ params }) => {
     response.json(),
   );
 
-  const conceptToSkosConceptMapper = (relatedConcepts: Concept[]): SkosConcept[] => {
-    return relatedConcepts.map(({ id, anbefaltTerm, definisjon }) => ({
-      identifier: id,
-      prefLabel: anbefaltTerm?.navn,
-      definition: { text: definisjon?.tekst },
-    })) as SkosConcept[];
-  };
-
-  const relatedConcepts: SearchObject[] = await getRelatedConcepts(concept);
   const conceptRelations: Relasjon[] = getConceptRelations(concept);
   const internalConceptRelations: Relasjon[] = getInternalConceptRelations(concept);
-  const internalRelatedConcepts: SkosConcept[] = conceptToSkosConceptMapper(
-    await getInternalRelatedConcepts(concept, session?.accessToken),
+  const relatedConcepts: RelatedConcept[] = (await getRelatedConcepts(concept)).map(
+    ({ id, uri, title, description, organization }) => {
+      const isInternal = organization?.id === catalogId;
+      const internalId = getConceptIdFromRdfUri(process.env.CONCEPT_CATALOG_BASE_URI, uri);
+
+      return {
+        id,
+        title,
+        description,
+        identifier: uri,
+        externalHref: !isInternal,
+        href: isInternal && internalId ? `/${catalogId}/${internalId}` : `${process.env.FDK_BASE_URI}/concepts/${id}`,
+      } as RelatedConcept;
+    },
+  );
+  const internalRelatedConcepts: RelatedConcept[] = (
+    await getInternalRelatedConcepts(concept, session?.accessToken)
+  ).map(
+    ({ id, anbefaltTerm, definisjon }) =>
+      ({
+        id,
+        title: anbefaltTerm?.navn,
+        description: definisjon?.tekst,
+        identifier: id,
+        externalHref: false,
+        href: `/${catalogId}/${id}`,
+      } as RelatedConcept),
   );
 
   const clientProps = {

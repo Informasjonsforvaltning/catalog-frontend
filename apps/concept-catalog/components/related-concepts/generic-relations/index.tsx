@@ -1,11 +1,12 @@
 import React from 'react';
 import { KeyValueListItem } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Relasjon } from '@catalog-frontend/types';
+import { Relasjon, RelatedConcept } from '@catalog-frontend/types';
+import { Link } from '@digdir/designsystemet-react';
 
 interface Props {
   genericRelations: Relasjon[];
-  relatedConceptsMap: (identifier: string) => any;
+  relatedConceptsMap: (identifier: string) => RelatedConcept | undefined;
 }
 
 const GenericRelations = ({ genericRelations, relatedConceptsMap }: Props) => (
@@ -34,7 +35,7 @@ const GenericRelations = ({ genericRelations, relatedConceptsMap }: Props) => (
               </div>
             </div>
           }
-          value={<a href={relatedConcept.uri}>{getTranslateText(relatedConcept.title)}</a>}
+          value={<Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title)}</Link>}
         />
       );
     })}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Relasjon, Search, TextLanguage } from '@catalog-frontend/types';
+import { Relasjon, RelatedConcept, LocalizedStrings } from '@catalog-frontend/types';
 import { KeyValueList } from '@catalog-frontend/ui';
 import AssociativeRelations from './associative-relations';
 import PartitiveRelations from './partitive-relations';
@@ -7,25 +7,15 @@ import GenericRelations from './generic-relations';
 import SeeAlso from './see-also';
 import IsReplacedBy from './is-replaced-by';
 
-type SearchObject = Search.SearchObject;
-
 interface Props {
-  catalogId: string;
   conceptRelations: Relasjon[];
-  relatedConcepts: SearchObject[];
-  validFromIncluding: string | undefined;
-  validToIncluding: string | undefined;
-  title: Partial<TextLanguage>;
+  relatedConcepts: RelatedConcept[];
+  validFromIncluding: string | null | undefined;
+  validToIncluding: string | null | undefined;
+  title: LocalizedStrings;
 }
 
-const RelatedConcepts = ({
-  catalogId,
-  conceptRelations,
-  relatedConcepts,
-  validToIncluding,
-  validFromIncluding,
-  title,
-}: Props) => {
+const RelatedConcepts = ({ conceptRelations, relatedConcepts, validToIncluding, validFromIncluding, title }: Props) => {
   const associativeRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'assosiativ') ?? [];
   const partitiveRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'partitiv') ?? [];
   const genericRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'generisk') ?? [];
@@ -36,7 +26,8 @@ const RelatedConcepts = ({
       (relasjon) => relasjon.relasjon === 'erstattesAv' || relasjon.relasjon === 'internErstattesAv',
     ) ?? [];
 
-  const relatedConceptsMap = (identifier: string) => relatedConcepts.find((concept) => concept.uri === identifier);
+  const relatedConceptsMap = (identifier: string) =>
+    relatedConcepts.find((concept) => concept.identifier === identifier);
 
   return (
     <KeyValueList>
