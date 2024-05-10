@@ -9,7 +9,9 @@ const KeycloakSignin = () => {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl') ?? '/';
 
-  signIn('keycloak', { callbackUrl });
+  if (typeof window !== 'undefined') {
+    signIn('keycloak', { callbackUrl });
+  }
 
   return <Spinner title={localization.auth.loggingIn} />;
 };

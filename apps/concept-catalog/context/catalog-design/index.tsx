@@ -17,12 +17,6 @@ const context: ContextProps = {
 const CatalogDesignContext = createContext(context);
 CatalogDesignContext.displayName = 'CatalogDesignContext';
 
-interface ProviderProps {
-  children: ReactNode;
-  design?: Design;
-  catalogId: string;
-}
-
 const useCatalogDesign = () => {
   const { catalogId } = useParams();
   const { data: design } = useGetCatalogDesign(catalogId);

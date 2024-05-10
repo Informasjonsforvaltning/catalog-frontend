@@ -1,11 +1,10 @@
 import { getOrganizations } from '@catalog-frontend/data-access';
 import { Organization } from '@catalog-frontend/types';
-import { authOptions, getResourceRoles } from '@catalog-frontend/utils';
+import { getResourceRoles, getValidSession } from '@catalog-frontend/utils';
 import HomePageClient from './home-page-client';
-import { getServerSession } from 'next-auth';
 
 const Home = async () => {
-  const session = await getServerSession(authOptions);
+  const session = await getValidSession({ signInPath: '/auth/signin', callbackUrl: `/` });
   const resourceRoles = getResourceRoles(`${session?.accessToken}`);
   const organiztionIdsWithAdminRole = resourceRoles
     .filter((role) => role.resource === 'organization' && role.role === 'admin')

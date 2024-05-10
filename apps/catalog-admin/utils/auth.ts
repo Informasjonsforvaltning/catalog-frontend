@@ -1,22 +1,26 @@
-import { hasOrganizationAdminPermission, validOrganizationNumber } from '@catalog-frontend/utils';
-import { Session } from 'next-auth';
+import { getValidSession, hasOrganizationAdminPermission, validOrganizationNumber } from '@catalog-frontend/utils';
 import { RedirectType, redirect } from 'next/navigation';
 
-interface CheckAdminPermissionsProps {
-  session: Session | null | undefined;
-  catalogId: string;
-  path?: string;
-}
+type PagePathProps = ({ catalogId }) => string;
+type RenderProps = ({ catalogId, session }) => Promise<any>;
 
-export const checkAdminPermissions = ({ session, catalogId, path }: CheckAdminPermissionsProps) => {
-  if (!validOrganizationNumber(catalogId)) {
-    return redirect(`/notfound`, RedirectType.replace);
-  }
+export const withProtectedPage = (pagePath: PagePathProps, render: RenderProps) => {
+  return async ({ params }) => {
+    const { catalogId } = params;
+    if (!validOrganizationNumber(catalogId)) {
+      redirect(`/notfound`, RedirectType.replace);
+    }
 
-  const hasAdminPermission = session?.accessToken && hasOrganizationAdminPermission(session.accessToken, catalogId);
-  if (!hasAdminPermission) {
-    return redirect(`/catalogs/${catalogId}/no-access`);
-  }
+    const session = await getValidSession({
+      signInPath: '/auth/signin',
+      callbackUrl: pagePath(catalogId),
+    });
 
-  return true;
+    const hasAdminPermission = session?.accessToken && hasOrganizationAdminPermission(session.accessToken, catalogId);
+    if (!hasAdminPermission) {
+      return redirect(`/catalogs/${catalogId}/no-access`);
+    }
+
+    return await render({ catalogId, session });
+  };
 };

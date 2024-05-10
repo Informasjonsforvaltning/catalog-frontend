@@ -3,7 +3,6 @@
 import {
   BreadcrumbType,
   Breadcrumbs,
-  Button,
   ChangeRequestStatusTagProps,
   LinkButton,
   PageBanner,
@@ -18,14 +17,14 @@ import {
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
-import styles from './change-requests-page.module.css';
 import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
-import { useCatalogDesign } from '../../../context/catalog-design';
 import cn from 'classnames';
-import ChangeRequestFilter from '../../../components/change-request-filter';
-import { parseAsString, parseAsArrayOf, useQueryState } from 'nuqs';
-import ChangeRequestSort from '../../../components/change-request-sort';
 import Link from 'next/link';
+import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
+import ChangeRequestFilter from '../../../components/change-request-filter';
+import ChangeRequestSort from '../../../components/change-request-sort';
+import { useCatalogDesign } from '../../../context/catalog-design';
+import styles from './change-requests-page.module.css';
 
 export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_REGISTRATION_BASE_URI }) => {
   const pageSubtitle = organization?.name ?? '';

@@ -1,4 +1,5 @@
 {
+  "composite": true,
   "compilerOptions": {
     "jsx": "react-jsx",
     "allowJs": false,

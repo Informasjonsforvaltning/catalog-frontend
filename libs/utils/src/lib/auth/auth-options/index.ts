@@ -35,11 +35,15 @@ const refreshToken = async (token: any) => {
     };
   } catch (error) {
     // The error property will be used client-side to handle the refresh token error
+    console.error('Failed to refresh access token:', error);
     return { ...token, error: 'RefreshAccessTokenError' as const };
   }
 };
 
 export const authOptions: AuthOptions = {
+  session: {
+    strategy: 'jwt',
+  },
   providers: [
     KeycloakProvider({
       clientId: process.env.KEYCLOAK_ID ?? '',

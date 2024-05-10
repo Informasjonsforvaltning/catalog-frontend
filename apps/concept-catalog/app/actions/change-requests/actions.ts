@@ -1,27 +1,23 @@
 'use server';
 
 import {
-  authOptions,
+  getValidSessionForAction,
   hasOrganizationWritePermission,
   validOrganizationNumber,
   validUUID,
-  validateSession,
 } from '@catalog-frontend/utils';
-import { getServerSession } from 'next-auth';
 import { acceptChangeRequest, rejectChangeRequest } from '@catalog-frontend/data-access';
 import { revalidateTag } from 'next/cache';
 
 export async function acceptChangeRequestAction(catalogId: string, changeRequestId: string) {
-  const session = await getServerSession(authOptions);
-  await validateSession(session);
-
+  const session = await getValidSessionForAction();
   if (!validOrganizationNumber(catalogId)) throw new Error('Invalid catalogId');
   if (!validUUID(changeRequestId)) throw new Error('Invalid changeRequestId');
   if (!hasOrganizationWritePermission(session.accessToken, catalogId))
     throw new Error('User does not have write permission for this catalog');
 
   try {
-    const response = await acceptChangeRequest(catalogId, changeRequestId, `${session?.accessToken}`);
+    await acceptChangeRequest(catalogId, changeRequestId, `${session?.accessToken}`);
   } catch (error) {
     throw new Error(error);
   } finally {
@@ -31,16 +27,14 @@ export async function acceptChangeRequestAction(catalogId: string, changeRequest
 }
 
 export async function rejectChangeRequestAction(catalogId: string, changeRequestId: string) {
-  const session = await getServerSession(authOptions);
-  await validateSession(session);
-
+  const session = await getValidSessionForAction();
   if (!validOrganizationNumber(catalogId)) throw new Error('Invalid catalogId');
   if (!validUUID(changeRequestId)) throw new Error('Invalid changeRequestId');
   if (!hasOrganizationWritePermission(session.accessToken, catalogId))
     throw new Error('User does not have write permission for this catalog');
 
   try {
-    const response = await rejectChangeRequest(catalogId, changeRequestId, `${session?.accessToken}`);
+    await rejectChangeRequest(catalogId, changeRequestId, `${session?.accessToken}`);
   } catch (error) {
     throw new Error(error);
   } finally {
