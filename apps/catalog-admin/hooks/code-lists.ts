@@ -53,8 +53,8 @@ export const useCreateCodeList = (catalogId: string) => {
 export const useUpdateCodeList = (catalogId: string) => {
   const queryClient = useQueryClient();
 
-  return useMutation(
-    async ({ oldCodeList, newCodeList }: { oldCodeList: CodeList; newCodeList: CodeList }) => {
+  return useMutation({
+    mutationFn: async ({ oldCodeList, newCodeList }: { oldCodeList: CodeList; newCodeList: CodeList }) => {
       const diff = compare(oldCodeList, newCodeList);
 
       if (!validOrganizationNumber(catalogId)) {
@@ -81,13 +81,11 @@ export const useUpdateCodeList = (catalogId: string) => {
         return response;
       }
     },
-    {
-      onSuccess: () => {
-        // Invalidate and refetch
-        queryClient.invalidateQueries(['getAllCodeLists', catalogId]);
-      },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['getAllCodeLists', catalogId] });
     },
-  );
+  });
 };
 
 export const useDeleteCodeList = (catalogId: string) => {

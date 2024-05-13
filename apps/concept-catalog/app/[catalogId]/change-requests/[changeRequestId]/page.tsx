@@ -9,7 +9,7 @@ import { Alert, Heading, Link, Paragraph } from '@digdir/designsystemet-react';
 import NextLink from 'next/link';
 import ChangeRequestForm from '../../../../components/change-request-form/change-request-form';
 import { ButtonRow } from '../../../../components/buttons/button-row';
-import { withReadProtectedPage } from 'apps/concept-catalog/utils/auth';
+import { withReadProtectedPage } from '../../../../utils/auth';
 
 const ChangeRequestDetailsPage = withReadProtectedPage(
   ({ catalogId, changeRequestId }) => `/${catalogId}/change-requests/${changeRequestId}`,

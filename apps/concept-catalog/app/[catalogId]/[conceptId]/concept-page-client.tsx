@@ -250,11 +250,7 @@ export const ConceptPageClient = ({
       ? [
           [
             localization.concept.label,
-            <ul key='label-list'>
-              {concept?.merkelapp?.map((label) => (
-                <li key={`label-${label}`}>{label}</li>
-              ))}
-            </ul>,
+            <ul key='label-list'>{concept?.merkelapp?.map((label) => <li key={`label-${label}`}>{label}</li>)}</ul>,
           ],
         ]
       : []),
@@ -494,7 +490,7 @@ export const ConceptPageClient = ({
     const newCommentButtonId = useId();
     const isCommentInEditMode = (id) => id in updateCommentText;
 
-    return getCommentsStatus == 'loading' ? (
+    return getCommentsStatus == 'pending' ? (
       <Spinner size='medium' />
     ) : (
       <>
@@ -586,7 +582,7 @@ export const ConceptPageClient = ({
       setHistoryCurrentPage(page);
     };
 
-    return getHistoryStatus == 'loading' ? (
+    return getHistoryStatus === 'pending' ? (
       <Spinner size='medium' />
     ) : getHistoryData?.updates?.length === 0 ? (
       <span>{localization.history.noChanges}</span>
@@ -816,7 +812,7 @@ export const ConceptPageClient = ({
           </div>
         }
         headingSubtitle={getDetailSubtitle()}
-        loading={deleteConcept.status === 'loading'}
+        loading={deleteConcept.status === 'pending'}
         handleLanguageChange={handleLanguageChange}
         language={language}
         mainColumn={<MainColumn />}

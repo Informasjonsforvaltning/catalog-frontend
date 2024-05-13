@@ -62,8 +62,14 @@ export const useCreateInternalField = (catalogId: string) => {
 export const useUpdateInternalField = (catalogId: string) => {
   const queryClient = useQueryClient();
 
-  return useMutation(
-    async ({ beforeUpdateField, updatedField }: { beforeUpdateField: InternalField; updatedField: InternalField }) => {
+  return useMutation({
+    mutationFn: async ({
+      beforeUpdateField,
+      updatedField,
+    }: {
+      beforeUpdateField: InternalField;
+      updatedField: InternalField;
+    }) => {
       const diff = compare(beforeUpdateField, updatedField);
 
       if (!validOrganizationNumber(catalogId)) {
@@ -99,13 +105,11 @@ export const useUpdateInternalField = (catalogId: string) => {
         return response;
       }
     },
-    {
-      onSuccess: () => {
-        // Invalidate and refetch
-        queryClient.invalidateQueries(['getInternalFields', catalogId]);
-      },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['getInternalFields', catalogId] });
     },
-  );
+  });
 };
 
 export const useDeleteInternalField = (catalogId: string) => {
@@ -134,8 +138,14 @@ export const useDeleteInternalField = (catalogId: string) => {
 export const useUpdateEditableFields = (catalogId: string) => {
   const queryClient = useQueryClient();
 
-  return useMutation(
-    async ({ beforeUpdate, afterUpdate }: { beforeUpdate: EditableFields; afterUpdate: EditableFields }) => {
+  return useMutation({
+    mutationFn: async ({
+      beforeUpdate,
+      afterUpdate,
+    }: {
+      beforeUpdate: EditableFields;
+      afterUpdate: EditableFields;
+    }) => {
       const diff = compare(beforeUpdate, afterUpdate);
 
       if (!validOrganizationNumber(catalogId)) {
@@ -157,11 +167,9 @@ export const useUpdateEditableFields = (catalogId: string) => {
         return response;
       }
     },
-    {
-      onSuccess: () => {
-        // Invalidate and refetch
-        queryClient.invalidateQueries(['getInternalFields', catalogId]);
-      },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['getInternalFields', catalogId] });
     },
-  );
+  });
 };

@@ -408,7 +408,7 @@ export const SearchPageClient = ({
           />
         }
         mainColumn={
-          status === 'loading' || importConcepts.status === 'loading' ? (
+          status === 'pending' || importConcepts.status === 'pending' ? (
             <Spinner />
           ) : (
             <SearchHitContainer

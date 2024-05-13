@@ -53,8 +53,14 @@ export const useCreateUser = (catalogId: string) => {
 export const useUpdateUser = (catalogId: string) => {
   const queryClient = useQueryClient();
 
-  return useMutation(
-    async ({ beforeUpdateUser, updatedUser }: { beforeUpdateUser: AssignedUser; updatedUser: AssignedUser }) => {
+  return useMutation({
+    mutationFn: async ({
+      beforeUpdateUser,
+      updatedUser,
+    }: {
+      beforeUpdateUser: AssignedUser;
+      updatedUser: AssignedUser;
+    }) => {
       const diff = compare(beforeUpdateUser, updatedUser);
 
       if (!validOrganizationNumber(catalogId)) {
@@ -89,13 +95,11 @@ export const useUpdateUser = (catalogId: string) => {
         return response;
       }
     },
-    {
-      onSuccess: () => {
-        // Invalidate and refetch
-        queryClient.invalidateQueries(['getUsers', catalogId]);
-      },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['getUsers', catalogId] });
     },
-  );
+  });
 };
 
 export const useDeleteUser = (catalogId: string) => {
