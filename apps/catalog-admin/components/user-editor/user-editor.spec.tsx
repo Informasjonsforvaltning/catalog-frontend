@@ -11,7 +11,7 @@ describe('UserEditor', () => {
     const queryClient = new QueryClient();
     const { baseElement } = render(
       <QueryClientProvider client={queryClient}>
-        <UserEditor />
+        <UserEditor catalogId='12345' />
       </QueryClientProvider>,
     );
 

@@ -25,8 +25,8 @@ export const useGetDesign = (catalogId) =>
 export const useUpdateDesign = (catalogId: string) => {
   const queryClient = useQueryClient();
 
-  return useMutation(
-    async ({ oldDesign, newDesign }: { oldDesign: Design; newDesign: Design }) => {
+  return useMutation({
+    mutationFn: async ({ oldDesign, newDesign }: { oldDesign: Design; newDesign: Design }) => {
       const diff = compare(oldDesign, newDesign);
 
       if (!validOrganizationNumber(catalogId)) {
@@ -59,13 +59,11 @@ export const useUpdateDesign = (catalogId: string) => {
         return response;
       }
     },
-    {
-      onSuccess: () => {
-        // Invalidate and refetch
-        queryClient.invalidateQueries(['getDesign', catalogId]);
-      },
+    onSuccess: () => {
+      // Invalidate and refetch
+      queryClient.invalidateQueries({ queryKey: ['getDesign', catalogId] });
     },
-  );
+  });
 };
 
 type LogoResult = { body: string; headers: Headers } | null;
@@ -115,7 +113,7 @@ export const useUpdateLogo = (catalogId: string) => {
 
     onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries(['getLogo', catalogId]);
+      queryClient.invalidateQueries({ queryKey: ['getLogo', catalogId] });
     },
   });
 };
