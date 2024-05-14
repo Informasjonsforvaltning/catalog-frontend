@@ -2,6 +2,70 @@
 
 exports[`Header should render successfully 1`] = `
 <body>
-  <div />
+  <div>
+    <header
+      class="header"
+      style="color: rgb(255, 255, 255); background: rgb(45, 55, 65);"
+    >
+      <div
+        class="headerContainer"
+      >
+        <a
+          aria-label="Gå til hovedsiden"
+          class="logo"
+        >
+          <svgrurl />
+        </a>
+        <ul
+          class="urlList"
+        >
+          <li>
+            <a
+              rel="noreferrer"
+              target=""
+            >
+              Registrere data
+            </a>
+          </li>
+          <li>
+            <a
+              rel="noreferrer"
+              target=""
+            >
+              Høste data
+            </a>
+          </li>
+          <li>
+            <a
+              rel="noreferrer"
+              target="_blank"
+            >
+              Gå til Datalandsbyen
+            </a>
+          </li>
+          <li>
+            <a
+              rel="noreferrer"
+              target="_blank"
+            >
+              Gå til Felles datakatalog
+            </a>
+          </li>
+        </ul>
+        <button
+          aria-expanded="false"
+          aria-haspopup="menu"
+          class="triggerButton"
+        >
+          <svgrurl />
+          <span
+            class="triggerButtonSpan"
+          >
+            John Doe
+          </span>
+        </button>
+      </div>
+    </header>
+  </div>
 </body>
 `;
