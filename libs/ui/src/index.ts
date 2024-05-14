@@ -4,7 +4,6 @@ export * from './lib/center-container';
 export * from './lib/concept-subject';
 export * from './lib/info-card';
 export * from './lib/detail-heading';
-export * from './lib/dropdown-menu';
 export * from './lib/footer';
 export * from './lib/header';
 export * from './lib/icon';
