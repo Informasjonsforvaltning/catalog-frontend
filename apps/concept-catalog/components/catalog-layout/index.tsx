@@ -24,7 +24,6 @@ export const CatalogLayout = ({
   fdkBaseUrl,
 }: CatalogLayoutProps) => {
   const design = useCatalogDesign();
-  console.log('CatalogLayout', design);
 
   return (
     <Layout
