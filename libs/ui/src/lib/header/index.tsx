@@ -66,7 +66,7 @@ const Header: FC<HeaderProps> = ({
   const catalogId = params.catalogId;
 
   const handleLogout = () => {
-    router.push('/api/auth/logout');
+    window.location.href = '/api/auth/logout';
   };
 
   return (
