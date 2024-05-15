@@ -84,7 +84,7 @@ export const SearchPageClient = ({
 
   const getInternalFields = (fieldId) => fieldsResult?.internal?.find((field) => field.id === fieldId);
 
-  const getSubjectChildren = (subjectId: number) => {
+  const getSubjectChildren = (subjectId: string) => {
     const children: number[] = [];
 
     subjectCodeList?.codes
@@ -104,7 +104,7 @@ export const SearchPageClient = ({
     // The lowest level code will always be the last code in the path, Code 1.1.1 in this example.
     if (subjects.length > 0) {
       const lowestLevelCodeId = subjects[subjects.length - 1];
-      const codes = [lowestLevelCodeId, ...getSubjectChildren(+lowestLevelCodeId)];
+      const codes = [lowestLevelCodeId, ...getSubjectChildren(lowestLevelCodeId)];
       return codes;
     }
     return [];
