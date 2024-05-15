@@ -52,6 +52,7 @@ export const nb = {
   unknown: 'Ukjent',
   yes: 'Ja',
   youHaveNoAccess: 'Det ser ikke ut til at du har tilgang til denne siden.',
+  allUsers: 'Alle brukere',
 
   catalogType: {
     admin: 'Administrasjonsgrensesnitt',
