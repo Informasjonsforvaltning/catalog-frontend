@@ -2035,7 +2035,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@digdir/designsystemet-react@npm:0.59.0, @digdir/designsystemet-react@npm:^0.59.0":
+"@digdir/designsystemet-react@npm:0.61.0":
+  version: 0.61.0
+  resolution: "@digdir/designsystemet-react@npm:0.61.0"
+  dependencies:
+    "@floating-ui/react": 0.26.12
+    "@navikt/aksel-icons": ^5.12.2
+    "@radix-ui/react-slot": ^1.0.2
+    "@tanstack/react-virtual": ^3.2.0
+  peerDependencies:
+    react: ">=18.3.1"
+    react-dom: ">=18.3.1"
+  checksum: 9c0742e1c176aa8c1ecd98a58d23df8283906fec1ef7e7eb0d8c302f593934fd528df5c251982edc22e5d0474c423a9af81f2fed75988c245dba2daed6898ced
+  languageName: node
+  linkType: hard
+
+"@digdir/designsystemet-react@npm:^0.59.0":
   version: 0.59.0
   resolution: "@digdir/designsystemet-react@npm:0.59.0"
   dependencies:
@@ -2151,7 +2166,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@floating-ui/react-dom@npm:^2.0.3":
+"@floating-ui/react-dom@npm:^2.0.0, @floating-ui/react-dom@npm:^2.0.3":
   version: 2.0.9
   resolution: "@floating-ui/react-dom@npm:2.0.9"
   dependencies:
@@ -2160,6 +2175,20 @@ __metadata:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
   checksum: f7a05c90955c713fc2851f74f87bdde9bd91df5f264f061f489bd3b6ce74c78dda204c3e71a09adc56b64f5324f2c2f23c01382e5ec897ee7e8e5235c41b45a9
+  languageName: node
+  linkType: hard
+
+"@floating-ui/react@npm:0.26.12":
+  version: 0.26.12
+  resolution: "@floating-ui/react@npm:0.26.12"
+  dependencies:
+    "@floating-ui/react-dom": ^2.0.0
+    "@floating-ui/utils": ^0.2.0
+    tabbable: ^6.0.0
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: cb3c20937ae1ba2217321432a5fb7c8455b25e6060a6bb9fa93489a27a0f643a63583a7ce303279098b85db5d1beb87bb0ec3fd0d17e9971aed5518851e6deed
   languageName: node
   linkType: hard
 
@@ -5629,7 +5658,7 @@ __metadata:
   dependencies:
     "@babel/preset-react": ^7.24.1
     "@digdir/designsystemet-css": 0.6.0
-    "@digdir/designsystemet-react": 0.59.0
+    "@digdir/designsystemet-react": 0.61.0
     "@digdir/designsystemet-theme": ^0.15.3
     "@fellesdatakatalog/icons": ^0.8.5
     "@fortawesome/fontawesome-svg-core": ^6.5.2
@@ -14604,7 +14633,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tabbable@npm:^6.0.1":
+"tabbable@npm:^6.0.0, tabbable@npm:^6.0.1":
   version: 6.2.0
   resolution: "tabbable@npm:6.2.0"
   checksum: f8440277d223949272c74bb627a3371be21735ca9ad34c2570f7e1752bd646ccfc23a9d8b1ee65d6561243f4134f5fbbf1ad6b39ac3c4b586554accaff4a1300
