@@ -35,7 +35,7 @@
   "private": true,
   "dependencies": {
     "@digdir/designsystemet-css": "0.6.0",
-    "@digdir/designsystemet-react": "0.59.0",
+    "@digdir/designsystemet-react": "0.62.0",
     "@digdir/designsystemet-theme": "^0.15.3",
     "@fellesdatakatalog/icons": "^0.8.5",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
