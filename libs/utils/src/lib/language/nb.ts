@@ -260,7 +260,7 @@ export const nb = {
     isPartOf: 'Er del av',
     isReplacedBy: 'Erstattes av',
     label: 'Merkelapp',
-    lastUpdated: 'Sist oppdatert',
+    dateLastUpdated: 'Dato sist oppdatert',
     noName: 'Uten navn',
     notRecommendedTerm: 'Frarådet term',
     note: 'Merknad',

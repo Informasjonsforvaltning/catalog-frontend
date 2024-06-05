@@ -257,7 +257,7 @@ export const ConceptPageClient = ({
     ...(concept?.endringslogelement?.endringstidspunkt
       ? [
           [
-            localization.concept.lastUpdated,
+            localization.concept.dateLastUpdated,
             formatISO(concept?.endringslogelement?.endringstidspunkt, {
               weekday: 'long',
               year: 'numeric',
