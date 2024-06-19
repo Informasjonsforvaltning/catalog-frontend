@@ -1,4 +1,5 @@
 import { Concept, Definisjon } from '@catalog-frontend/types';
+import { conceptIdFromUriRegex } from '../regex/regex';
 
 export const removeSourceIfEgendefinert = (def?: Definisjon): Definisjon | undefined => {
   if (!def) {
@@ -50,4 +51,9 @@ export const pruneEmptyProperties = (obj: any, reduceAsArray = false): any => {
 
 export const getConceptIdFromRdfUri = (baseUri: string | undefined, uri: string | undefined): string | undefined => {
   return baseUri && uri?.startsWith(baseUri) ? uri?.split('/').pop() : undefined;
+};
+
+export const getUniqueConceptIdsFromUris = (uris: string[]): string[] => {
+  const ids = uris.map((uri) => uri.match(conceptIdFromUriRegex)?.[1]).filter((id): id is string => !!id);
+  return [...new Set(ids)];
 };
