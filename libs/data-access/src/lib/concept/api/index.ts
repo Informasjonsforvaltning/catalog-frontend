@@ -1,6 +1,6 @@
-import { Concept, Relasjon, SearchConceptQuery, Search } from '@catalog-frontend/types';
+import { Concept, Relasjon, SearchConceptQuery, Search, RelatedConcept } from '@catalog-frontend/types';
 import { searchConceptsByUri } from '../../search/api';
-import { isObjectNullUndefinedEmpty } from '@catalog-frontend/utils';
+import { getUniqueConceptIdsFromUris, isObjectNullUndefinedEmpty } from '@catalog-frontend/utils';
 
 type SearchObject = Search.SearchObject;
 
@@ -76,7 +76,7 @@ const hasRelatedInternalConcepts = (concept: Concept): boolean => {
   return false;
 };
 
-export const getConceptRelations = (concept: Concept): Relasjon[] => {
+export const getPublishedConceptRelations = (concept: Concept): Relasjon[] => {
   if (!hasRelatedConcepts(concept)) return [];
 
   const conceptRelations: Relasjon[] = [];
@@ -102,7 +102,10 @@ export const getConceptRelations = (concept: Concept): Relasjon[] => {
   return conceptRelations;
 };
 
-export const getRelatedConcepts = async (concept: Concept): Promise<SearchObject[]> => {
+export const getPublishedRelatedConcepts = async (
+  concept: Concept,
+  accessToken: string | null | undefined,
+): Promise<RelatedConcept[]> => {
   if (!hasRelatedConcepts(concept)) return [];
 
   const relatedConceptsUris = [];
@@ -126,27 +129,80 @@ export const getRelatedConcepts = async (concept: Concept): Promise<SearchObject
     relatedConceptsUris.push(...concept.erstattesAv);
   }
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  const relatedConcepts = await searchConceptsByUri(relatedConceptsUris)
-    .then(async (response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        console.error('Failed to fetch related concepts:', response.status, response.statusText);
-        return [];
-      }
-    })
-    .then((body) => extractHits(body))
-    .catch((error) => {
-      console.error('Failed to fetch related concepts', error);
-      return [];
-    });
+  const filteredUris = relatedConceptsUris.filter((uri): uri is string => uri !== undefined && uri !== null);
 
-  return relatedConcepts;
+  const internalUris: string[] = [];
+  const externalUris: string[] = [];
+
+  filteredUris.forEach((uri: string) => {
+    if (uri.includes('concept-catalog') && uri.includes(concept.ansvarligVirksomhet.id)) {
+      internalUris.push(uri);
+    } else {
+      externalUris.push(uri);
+    }
+  });
+
+  const relatedExternalConcepts = await fetchExternaRelatedlConcepts(externalUris);
+  const relatedInternalConcepts = await fetchInternalRelatedConcepts(
+    concept.ansvarligVirksomhet.id,
+    getUniqueConceptIdsFromUris(internalUris),
+    accessToken,
+  );
+
+  return [...relatedInternalConcepts, ...relatedExternalConcepts];
 };
 
-export const getInternalConceptRelations = (concept: Concept): Relasjon[] => {
+const fetchExternaRelatedlConcepts = async (uris: string[]): Promise<RelatedConcept[]> => {
+  if (uris.length === 0) return [];
+
+  try {
+    const response = await searchConceptsByUri(uris);
+    if (!response.ok) throw new Error(`Failed to fetch related concepts: ${response.statusText}`);
+
+    const body = await response.json();
+    const relatedExternalConcepts: SearchObject[] = extractHits(body);
+    return relatedExternalConcepts.map(({ id, uri, title, description }) => ({
+      id,
+      title,
+      description,
+      identifier: uri,
+      externalHref: true,
+      href: `${process.env.FDK_BASE_URI}/concepts/${id}`,
+    })) as RelatedConcept[];
+  } catch (error) {
+    console.error('Failed to fetch related concepts', error);
+    return [];
+  }
+};
+
+const fetchInternalRelatedConcepts = async (
+  catalogId: string,
+  internalConceptIds: string[],
+  accessToken: string | null | undefined,
+): Promise<RelatedConcept[]> => {
+  if (internalConceptIds.length === 0) return [];
+
+  try {
+    const response = await searchInternalConcepts(catalogId, internalConceptIds, accessToken);
+    if (!response.ok) throw new Error(`Failed to fetch internal concepts: ${response.statusText}`);
+
+    const body = await response.json();
+    const relatedInternalConcepts: Concept[] = extractHits(body);
+    return relatedInternalConcepts.map(({ id, anbefaltTerm, definisjon, originaltBegrep }) => ({
+      id,
+      title: anbefaltTerm?.navn,
+      description: definisjon?.tekst,
+      identifier: originaltBegrep,
+      externalHref: false,
+      href: `/${catalogId}/${id}`,
+    })) as RelatedConcept[];
+  } catch (error) {
+    console.error('Failed to fetch internal concepts', error);
+    return [];
+  }
+};
+
+export const getUnpublishedConceptRelations = (concept: Concept): Relasjon[] => {
   if (!hasRelatedInternalConcepts(concept)) return [];
 
   const internalConceptRelations: Relasjon[] = [];
@@ -176,16 +232,16 @@ export const getInternalConceptRelations = (concept: Concept): Relasjon[] => {
   return internalConceptRelations;
 };
 
-export const getInternalRelatedConcepts = async (
+export const getUnpublishedRelatedConcepts = async (
   concept: Concept,
   accessToken: string | null | undefined,
-): Promise<Concept[]> => {
+): Promise<RelatedConcept[]> => {
   if (!hasRelatedInternalConcepts(concept)) return [];
 
-  const internalRelatedConceptsUris: string[] = [];
+  const unpublishedRelatedConceptsIds: string[] = [];
 
   if (concept.internBegrepsRelasjon) {
-    internalRelatedConceptsUris.push(
+    unpublishedRelatedConceptsIds.push(
       ...concept.internBegrepsRelasjon
         .map((relasjon) => relasjon.relatertBegrep)
         .filter((value) => value !== null && value !== undefined)
@@ -196,24 +252,23 @@ export const getInternalRelatedConcepts = async (
 
   if (concept.internSeOgså) {
     if (Array.isArray(concept.internSeOgså)) {
-      internalRelatedConceptsUris.push(...concept.internSeOgså);
+      unpublishedRelatedConceptsIds.push(...concept.internSeOgså);
     } else {
-      internalRelatedConceptsUris.push(concept.internSeOgså);
+      unpublishedRelatedConceptsIds.push(concept.internSeOgså);
     }
   }
 
   if (concept.internErstattesAv) {
-    internalRelatedConceptsUris.push(...concept.internErstattesAv);
+    unpublishedRelatedConceptsIds.push(...concept.internErstattesAv);
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
 
-  const internalRelatedConcepts =
-    internalRelatedConceptsUris &&
-    (await searchInternalConcepts(concept.ansvarligVirksomhet.id, internalRelatedConceptsUris, accessToken)
-      .then(async (response) => await (response instanceof Response && response.ok ? response.json() : []))
-      .then((body) => extractHits(body)));
-
+  const internalRelatedConcepts = fetchInternalRelatedConcepts(
+    concept.ansvarligVirksomhet.id,
+    unpublishedRelatedConceptsIds,
+    accessToken,
+  );
   return internalRelatedConcepts;
 };

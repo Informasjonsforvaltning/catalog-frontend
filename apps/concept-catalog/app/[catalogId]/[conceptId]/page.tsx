@@ -1,15 +1,15 @@
-import { getConceptIdFromRdfUri, getUsername, prepareStatusList } from '@catalog-frontend/utils';
+import { getUsername, prepareStatusList } from '@catalog-frontend/utils';
 import {
   getAllCodeLists,
   getConcept,
-  getConceptRelations,
+  getPublishedConceptRelations,
   getConceptRevisions,
   getConceptStatuses,
   getFields,
-  getInternalConceptRelations,
-  getInternalRelatedConcepts,
+  getUnpublishedConceptRelations,
+  getUnpublishedRelatedConcepts,
   getOrganization,
-  getRelatedConcepts,
+  getPublishedRelatedConcepts,
   getUsers,
 } from '@catalog-frontend/data-access';
 import {
@@ -58,55 +58,33 @@ const ConceptPage = withReadProtectedPage(
       response.json(),
     );
 
-  const conceptRelations: Relasjon[] = getConceptRelations(concept);
-  const internalConceptRelations: Relasjon[] = getInternalConceptRelations(concept);
-  const relatedConcepts: RelatedConcept[] = (await getRelatedConcepts(concept)).map(
-    ({ id, uri, title, description, organization }) => {
-      const isInternal = organization?.id === catalogId;
-      const internalId = getConceptIdFromRdfUri(process.env.CONCEPT_CATALOG_BASE_URI, uri);
+    const conceptRelations: Relasjon[] = getPublishedConceptRelations(concept);
+    const internalConceptRelations: Relasjon[] = getUnpublishedConceptRelations(concept);
+    const relatedConcepts: RelatedConcept[] = await getPublishedRelatedConcepts(concept, session?.accessToken);
+    const internalRelatedConcepts: RelatedConcept[] = await getUnpublishedRelatedConcepts(
+      concept,
+      session?.accessToken,
+    );
 
-      return {
-        id,
-        title,
-        description,
-        identifier: uri,
-        externalHref: !isInternal,
-        href: isInternal && internalId ? `/${catalogId}/${internalId}` : `${process.env.FDK_BASE_URI}/concepts/${id}`,
-      } as RelatedConcept;
-    },
-  );
-  const internalRelatedConcepts: RelatedConcept[] = (
-    await getInternalRelatedConcepts(concept, session?.accessToken)
-  ).map(
-    ({ id, anbefaltTerm, definisjon }) =>
-      ({
-        id,
-        title: anbefaltTerm?.navn,
-        description: definisjon?.tekst,
-        identifier: id,
-        externalHref: false,
-        href: `/${catalogId}/${id}`,
-      } as RelatedConcept),
-  );
+    const clientProps = {
+      username,
+      organization,
+      concept,
+      revisions,
+      fieldsResult,
+      codeListsResult,
+      conceptStatuses,
+      usersResult,
+      hasWritePermission,
+      relatedConcepts,
+      conceptRelations,
+      internalConceptRelations,
+      internalRelatedConcepts,
+      FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
+    };
 
-  const clientProps = {
-    username,
-    organization,
-    concept,
-    revisions,
-    fieldsResult,
-    codeListsResult,
-    conceptStatuses,
-    usersResult,
-    hasWritePermission,
-    relatedConcepts,
-    conceptRelations,
-    internalConceptRelations,
-    internalRelatedConcepts,
-    FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
-  };
-
-  return <ConceptPageClient {...clientProps} />;
-});
+    return <ConceptPageClient {...clientProps} />;
+  },
+);
 
 export default ConceptPage;

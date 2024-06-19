@@ -6,6 +6,7 @@ import PartitiveRelations from './partitive-relations';
 import GenericRelations from './generic-relations';
 import SeeAlso from './see-also';
 import IsReplacedBy from './is-replaced-by';
+import { conceptIdFromUriRegex } from '@catalog-frontend/utils';
 
 interface Props {
   conceptRelations: Relasjon[];
@@ -26,8 +27,13 @@ const RelatedConcepts = ({ conceptRelations, relatedConcepts, validToIncluding, 
       (relasjon) => relasjon.relasjon === 'erstattesAv' || relasjon.relasjon === 'internErstattesAv',
     ) ?? [];
 
-  const relatedConceptsMap = (identifier: string) =>
-    relatedConcepts.find((concept) => concept.identifier === identifier);
+  const relatedConceptsMap = (identifier: string) => {
+    const result = relatedConcepts.find(
+      (concept) =>
+        concept.identifier === identifier || concept.identifier === identifier.match(conceptIdFromUriRegex)?.[1],
+    );
+    return result;
+  };
 
   return (
     <KeyValueList>

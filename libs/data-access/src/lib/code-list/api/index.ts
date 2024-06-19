@@ -1,5 +1,4 @@
 import { CodeList } from '@catalog-frontend/types';
-import _ from 'lodash';
 import { Operation } from 'fast-json-patch';
 
 const path = `${process.env.CATALOG_ADMIN_SERVICE_BASE_URI}`;
