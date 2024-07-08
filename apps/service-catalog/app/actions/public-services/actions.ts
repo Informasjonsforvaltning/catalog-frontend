@@ -17,7 +17,6 @@ import { redirect } from 'next/navigation';
 
 export async function getPublicServices(catalogId: string) {
   const session = await getValidSessionForAction();
-
   const response = await getAll(catalogId, `${session?.accessToken}`);
   if (response.status !== 200) {
     throw new Error('getPublicServices failed with response code ' + response.status);
