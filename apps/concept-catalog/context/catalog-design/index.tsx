@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, type ReactNode } from 'react';
+import { createContext } from 'react';
 
 import { useGetCatalogDesign } from '../../hooks/catalog-admin';
 import { Design } from '@catalog-frontend/types';

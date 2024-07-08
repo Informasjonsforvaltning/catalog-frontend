@@ -2,15 +2,12 @@
 import { ReferenceDataCode, Service } from '@catalog-frontend/types';
 import { Button, DetailsPageLayout, InfoCard, LinkButton, ServiceStatusTagProps, Tag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-
-import _ from 'lodash';
-
-import Link from 'next/link';
 import { DeleteServiceButton } from '../../../../../components/buttons';
 import PublishSwitch from '../../../../../components/publish-switch';
 import BasicServiceFormInfoCardItems from '../../../../../components/basic-form-info-card-items';
 import { useState } from 'react';
 import styles from './public-service-details-page.module.css';
+import _ from 'lodash';
 
 interface PublicServiceDetailsPageProps {
   service: Service;

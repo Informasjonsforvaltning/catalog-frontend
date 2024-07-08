@@ -25,7 +25,7 @@ export default async function EditPublicServicePage({ params }: Params) {
       text: getTranslateText(service.title),
     },
     {
-      href: `/catalogs/${catalogId}/public-services/${serviceId}`,
+      href: `/catalogs/${catalogId}/public-services/${serviceId}/edit`,
       text: localization.serviceCatalog.editPublicService,
     },
   ] as BreadcrumbType[];

@@ -8,10 +8,10 @@ import { useEffect } from 'react';
 
 const KeycloakSignin = () => {
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') ?? '/';
+  const callbackUrl = searchParams.get('callbackUrl');
 
   useEffect(() => {
-    signIn('keycloak', { callbackUrl });
+    signIn('keycloak', callbackUrl ? { callbackUrl } : {});
   }, [callbackUrl]);
 
   return <Spinner title={localization.auth.loggingIn} />;

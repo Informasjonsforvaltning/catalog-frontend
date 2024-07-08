@@ -2,7 +2,6 @@ import { Design } from '@catalog-frontend/types';
 import { colorRegex, textRegexWithNumbers, validOrganizationNumber } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { compare } from 'fast-json-patch';
-import { signIn } from 'next-auth/react';
 
 export const useGetDesign = (catalogId) =>
   useQuery<Design>({

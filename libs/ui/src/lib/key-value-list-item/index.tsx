@@ -1,4 +1,4 @@
-import React, { memo, FC, PropsWithChildren, ReactNode } from 'react';
+import React, { FC, PropsWithChildren, ReactNode } from 'react';
 import classes from './key-value-list-item.module.css';
 
 interface Props {

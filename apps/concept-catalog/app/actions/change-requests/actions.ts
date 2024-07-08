@@ -1,16 +1,17 @@
 'use server';
 
 import {
-  getValidSessionForAction,
+  getValidSession,
   hasOrganizationWritePermission,
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
 import { acceptChangeRequest, rejectChangeRequest } from '@catalog-frontend/data-access';
 import { revalidateTag } from 'next/cache';
+import { headers } from 'next/headers';
 
 export async function acceptChangeRequestAction(catalogId: string, changeRequestId: string) {
-  const session = await getValidSessionForAction();
+  const session = await getValidSession();
   if (!validOrganizationNumber(catalogId)) throw new Error('Invalid catalogId');
   if (!validUUID(changeRequestId)) throw new Error('Invalid changeRequestId');
   if (!hasOrganizationWritePermission(session.accessToken, catalogId))
@@ -27,7 +28,7 @@ export async function acceptChangeRequestAction(catalogId: string, changeRequest
 }
 
 export async function rejectChangeRequestAction(catalogId: string, changeRequestId: string) {
-  const session = await getValidSessionForAction();
+  const session = await getValidSession();
   if (!validOrganizationNumber(catalogId)) throw new Error('Invalid catalogId');
   if (!validUUID(changeRequestId)) throw new Error('Invalid changeRequestId');
   if (!hasOrganizationWritePermission(session.accessToken, catalogId))

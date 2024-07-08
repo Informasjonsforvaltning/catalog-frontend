@@ -12,7 +12,6 @@ export const withProtectedPage = (pagePath: PagePathProps, render: RenderProps) 
     }
 
     const session = await getValidSession({
-      signInPath: '/auth/signin',
       callbackUrl: pagePath(catalogId),
     });
 

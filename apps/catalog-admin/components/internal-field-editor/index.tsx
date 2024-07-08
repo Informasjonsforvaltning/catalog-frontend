@@ -69,8 +69,8 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
   };
 
   const handleUpdateDbInternalField = (fieldId: string) => {
-    const updatedField: InternalField | undefined = updatedFieldsList.find((field) => field.id === fieldId);
-    const dbField: InternalField | undefined = dbFields.find((field: { id: string }) => field.id === fieldId)!;
+    const updatedField: InternalField | undefined | null = updatedFieldsList.find((field) => field.id === fieldId);
+    const dbField: InternalField | undefined | null = dbFields.find((field: { id: string }) => field.id === fieldId)!;
 
     if (!updatedField || !dbField) {
       window.alert(localization.alert.noChanges);

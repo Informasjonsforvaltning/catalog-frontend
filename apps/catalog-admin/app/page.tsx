@@ -4,7 +4,7 @@ import { getResourceRoles, getValidSession } from '@catalog-frontend/utils';
 import HomePageClient from './home-page-client';
 
 const Home = async () => {
-  const session = await getValidSession({ signInPath: '/auth/signin', callbackUrl: `/` });
+  const session = await getValidSession({ callbackUrl: `/` });
   const resourceRoles = getResourceRoles(`${session?.accessToken}`);
   const organiztionIdsWithAdminRole = resourceRoles
     .filter((role) => role.resource === 'organization' && role.role === 'admin')

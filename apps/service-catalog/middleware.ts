@@ -1,3 +1,6 @@
+import { NextResponse } from 'next/server';
+import { NextRequestWithAuth, withAuth } from 'next-auth/middleware';
+
 import {
   hasOrganizationReadPermission,
   hasOrganizationWritePermission,
@@ -6,9 +9,6 @@ import {
 } from '../../libs/utils/src/lib/auth/token';
 import { validUUID } from '../../libs/utils/src/lib/validation/uuid';
 import { validOrganizationNumber } from '../../libs/utils/src/lib/validation/organization-number';
-
-import { NextResponse } from 'next/server';
-import { NextRequestWithAuth, withAuth } from 'next-auth/middleware';
 
 export const config = {
   matcher: '/catalogs/:path*',
@@ -31,34 +31,34 @@ export default withAuth(
     ];
 
     if (catalogId && !validOrganizationNumber(catalogId)) {
-      return NextResponse.rewrite(new URL('/notfound', req.url));
+      return NextResponse.rewrite(new URL('/notfound', process.env.NEXTAUTH_URL));
     }
 
     if (serviceId && !validUUID(serviceId)) {
-      return NextResponse.rewrite(new URL('/notfound', req.url));
+      return NextResponse.rewrite(new URL('/notfound', process.env.NEXTAUTH_URL));
     }
 
-    if (pathname != 'notfound' && !pathname.includes('auth')) {
-      if (
-        accessToken &&
-        catalogId &&
-        !(hasOrganizationReadPermission(accessToken, catalogId) || hasSystemAdminPermission(accessToken))
-      ) {
-        return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access`, req.url));
-      }
+    if ((await validateOidcUserSession(accessToken)) !== true) {
+      return NextResponse.rewrite(
+        new URL(`/auth/signin?callbackUrl=${req.nextUrl.pathname}`, process.env.NEXTAUTH_URL),
+      );
+    }
 
-      if (
-        accessToken &&
-        catalogId &&
-        !(hasOrganizationReadPermission(accessToken, catalogId) || hasSystemAdminPermission(accessToken)) &&
-        writePermissionsRoutes.includes(pathname)
-      ) {
-        return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access`, req.url));
-      }
+    if (
+      accessToken &&
+      catalogId &&
+      !(hasOrganizationReadPermission(accessToken, catalogId) || hasSystemAdminPermission(accessToken))
+    ) {
+      return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access`, process.env.NEXTAUTH_URL));
+    }
 
-      if (!(accessToken && (await validateOidcUserSession(accessToken)))) {
-        return NextResponse.rewrite(new URL(`/auth/signin?callbackUrl=${req.url}`, req.url));
-      }
+    if (
+      accessToken &&
+      catalogId &&
+      !hasOrganizationWritePermission(accessToken, catalogId) &&
+      writePermissionsRoutes.includes(pathname)
+    ) {
+      return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access`, process.env.NEXTAUTH_URL));
     }
   },
   {
