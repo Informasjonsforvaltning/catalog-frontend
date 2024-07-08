@@ -13,14 +13,14 @@ import PublicServicePageClient from './public-service-page-client';
 
 export default async function PublicServiceSearchHitsPage({ params }: Params) {
   const { catalogId } = params;
-  const services: Service[] = await getPublicServices(catalogId);
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+
   const session = await getValidSession({
-    signInPath: '/auth/signin',
     callbackUrl: `/catalogs/${catalogId}/public-services`,
   });
-  const hasWritePermission = await hasOrganizationWritePermission(session.accessToken, catalogId);
 
+  const services: Service[] = await getPublicServices(catalogId);
+  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+  const hasWritePermission = await hasOrganizationWritePermission(session.accessToken, catalogId);
   const statusesResponse = await getAdmsStatuses().then((res) => res.json());
   const statuses: ReferenceDataCode[] = statusesResponse.statuses;
 

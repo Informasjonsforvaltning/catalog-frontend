@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button } from '@catalog-frontend/ui';
 import { Textfield } from '@digdir/designsystemet-react';
-import { Code, CodeList, EditorType } from '@catalog-frontend/types';
+import { CodeList, EditorType } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
 import { useAdminDispatch, useAdminState } from '../../context/admin';
 import { useCreateCodeList, useDeleteCodeList, useGetAllCodeLists, useUpdateCodeList } from '../../hooks/code-lists';

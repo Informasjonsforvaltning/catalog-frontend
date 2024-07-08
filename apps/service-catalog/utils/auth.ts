@@ -7,13 +7,12 @@ import {
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
+import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { RedirectType, redirect } from 'next/navigation';
 
 type PageParams = {
   catalogId: string;
-  conceptId?: string | undefined | null;
-  changeRequestId?: string | undefined | null;
-  conceptIdSearch?: string | undefined | null;
+  serviceId?: string | undefined | null;
 };
 type PagePath = (params: PageParams) => string;
 type Render = (
@@ -21,22 +20,21 @@ type Render = (
 ) => Promise<any>;
 
 const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', render: Render) => {
-  return async ({ params, searchParams }) => {
-    const { catalogId, conceptId, changeRequestId } = params;
-    const { concept: conceptIdSearch } = searchParams;
+  return async ({ params }: Params) => {
+    const { catalogId, serviceId } = params;
 
     if (!validOrganizationNumber(catalogId)) {
       redirect(`/notfound`, RedirectType.replace);
     }
 
-    [conceptId, conceptIdSearch, changeRequestId].forEach((param) => {
+    [serviceId].forEach((param) => {
       if (params[param] && !validUUID(params[param])) {
         return redirect(`/notfound`, RedirectType.replace);
       }
     });
 
     const session = await getValidSession({
-      callbackUrl: pagePath({ catalogId, conceptId, conceptIdSearch, changeRequestId }),
+      callbackUrl: pagePath({ catalogId, serviceId }),
     });
 
     const hasReadPermission =
@@ -55,9 +53,7 @@ const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', re
 
     return await render({
       catalogId,
-      conceptId,
-      changeRequestId,
-      conceptIdSearch,
+      serviceId,
       session,
       hasWritePermission,
       hasAdminPermission,

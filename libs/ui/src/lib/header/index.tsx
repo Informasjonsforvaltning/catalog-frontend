@@ -1,6 +1,6 @@
 'use client';
 
-import { FC, useState } from 'react';
+import { FC } from 'react';
 import { hasOrganizationAdminPermission, localization } from '@catalog-frontend/utils';
 import UserIcon from './images/user-icon.svg';
 import FDKLogo from './images/fdk-publishing-logo-negative.svg';
@@ -57,7 +57,6 @@ const Header: FC<HeaderProps> = ({
     },
   ];
 
-  const router = useRouter();
   const { data: session } = useSession();
   const userDisplayName = session?.user?.name;
   const accessToken = (session as any)?.accessToken;
@@ -111,14 +110,12 @@ const Header: FC<HeaderProps> = ({
                       className={styles.dropDownItem}
                       asChild
                     >
-                      {hasOrganizationAdminPermission(accessToken, String(catalogId)) && (
-                        <a
-                          href={catalogAdminUrl}
-                          className={styles.dropDownItem}
-                        >
-                          {localization.manageCatalogs}
-                        </a>
-                      )}
+                      <a
+                        href={catalogAdminUrl}
+                        className={styles.dropDownItem}
+                      >
+                        {localization.manageCatalogs}
+                      </a>
                     </DropdownMenu.Item>
                   </DropdownMenu.Group>
                   <Divider />

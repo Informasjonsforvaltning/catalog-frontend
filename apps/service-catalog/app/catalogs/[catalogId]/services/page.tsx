@@ -13,9 +13,10 @@ import ServicePageClient from './service-page-client';
 
 export default async function ServiceSearchHitsPage({ params }: Params) {
   const { catalogId } = params;
+  const session = await getValidSession({ callbackUrl: `/catalogs/${catalogId}/services` });
+
   const services: Service[] = await getServices(catalogId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
-  const session = await getValidSession({ signInPath: '/auth/signin', callbackUrl: `/catalogs/${catalogId}/services` });
   const hasWritePermission = await hasOrganizationWritePermission(session.accessToken, catalogId);
 
   const statusesResponse = await getAdmsStatuses().then((res) => res.json());
