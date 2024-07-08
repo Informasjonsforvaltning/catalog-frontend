@@ -9,8 +9,8 @@ import { CenterContainer } from '../center-container';
 
 interface Props {
   children?: ReactNode;
-  FDK_REGISTRATION_BASE_URI?: string;
-  catalogId?: string;
+  fdkRegistrationBaseUrl?: string | undefined;
+  title?: string | undefined;
 }
 
 interface State {
@@ -18,13 +18,13 @@ interface State {
 }
 
 class ErrorBoundary extends Component<Props, State> {
-  private FDK_REGISTRATION_BASE_URI: string | undefined;
-  private catalogId: string | undefined;
+  private fdkRegistrationBaseUrl: string | undefined;
+  private title: string | undefined;
 
   constructor(props: Props) {
     super(props);
-    this.FDK_REGISTRATION_BASE_URI = props.FDK_REGISTRATION_BASE_URI;
-    this.catalogId = props.catalogId;
+    this.fdkRegistrationBaseUrl = props.fdkRegistrationBaseUrl;
+    this.title = props.title;
   }
 
   public state: State = {
@@ -42,25 +42,16 @@ class ErrorBoundary extends Component<Props, State> {
 
   public render() {
     if (this.state.hasError) {
-      const breadcrumbList = this.catalogId
-        ? ([
-            {
-              href: `/${this.catalogId}`,
-              text: localization.catalogType.concept,
-            },
-          ] as BreadcrumbType[])
-        : [];
-
       const pageSubtitle = 'Feil';
 
       return (
         <>
           <Breadcrumbs
-            baseURI={this.FDK_REGISTRATION_BASE_URI}
-            breadcrumbList={breadcrumbList}
+            baseURI={this.fdkRegistrationBaseUrl}
+            breadcrumbList={[]}
           />
           <PageBanner
-            title={localization.catalogType.concept}
+            title={this.title ?? 'Feil'}
             subtitle={pageSubtitle}
           />
           <CenterContainer>

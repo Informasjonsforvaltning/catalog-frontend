@@ -20,6 +20,7 @@ interface LayoutProps {
   adminGuiBaseUrl?: string;
   fdkCommunityBaseUrl?: string;
   fdkBaseUrl?: string;
+  catalogTitle?: string;
 }
 
 export const Layout = ({
@@ -32,6 +33,7 @@ export const Layout = ({
   adminGuiBaseUrl,
   fdkCommunityBaseUrl,
   fdkBaseUrl,
+  catalogTitle,
 }: LayoutProps) => {
   return (
     <div className={cn(style.layout, className)}>
@@ -45,7 +47,12 @@ export const Layout = ({
         fdkBaseUrl={fdkBaseUrl}
       />
       <main className={style.main}>
-        <ErrorBoundary>{children}</ErrorBoundary>
+        <ErrorBoundary
+          fdkRegistrationBaseUrl={fdkRegistrationBaseUrl}
+          title={catalogTitle}
+        >
+          {children}
+        </ErrorBoundary>
       </main>
       <Footer
         fontColor={fontColor}
