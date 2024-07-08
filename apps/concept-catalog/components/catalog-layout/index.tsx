@@ -3,6 +3,7 @@
 import React, { ReactNode } from 'react';
 import { Layout } from '@catalog-frontend/ui';
 import { useCatalogDesign } from '../../context/catalog-design';
+import { localization } from '@catalog-frontend/utils';
 
 interface CatalogLayoutProps {
   children: ReactNode;
@@ -35,6 +36,7 @@ export const CatalogLayout = ({
       adminGuiBaseUrl={adminGuiBaseUrl}
       fdkCommunityBaseUrl={fdkCommunityBaseUrl}
       fdkBaseUrl={fdkBaseUrl}
+      catalogTitle={localization.catalogType.concept}
     >
       {children}
     </Layout>
