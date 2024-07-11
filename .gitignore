@@ -23,12 +23,13 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
+*.log
 
 # local env files
 .env*
 /**/*/.env*
 !**/.env*.example
-
+!**/.env*.e2e
 
 # vercel
 .vercel

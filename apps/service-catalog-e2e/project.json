@@ -1,0 +1,10 @@
+{
+  "name": "service-catalog-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/service-catalog-e2e/src",
+  "projectType": "application",
+  "tags": [],
+  "implicitDependencies": ["service-catalog"],
+  "// targets": "to see all targets run: nx show project service-catalog-e2e --web",
+  "targets": {}
+}
