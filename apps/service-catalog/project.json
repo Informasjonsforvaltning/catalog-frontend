@@ -30,6 +30,10 @@
           "buildTarget": "service-catalog:build:development",
           "dev": true
         },
+        "e2e": {
+          "buildTarget": "service-catalog:build:development",
+          "dev": true
+        },
         "production": {
           "buildTarget": "service-catalog:build:production",
           "dev": false
