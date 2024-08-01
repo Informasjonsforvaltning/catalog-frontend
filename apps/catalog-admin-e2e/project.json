@@ -5,6 +5,12 @@
   "projectType": "application",
   "targets": {
     "e2e": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "yarn kill-port 4200 && yarn nx cypress catalog-admin-e2e"
+      }
+    },
+    "cypress": {
       "executor": "@nrwl/cypress:cypress",
       "options": {
         "cypressConfig": "apps/catalog-admin-e2e/cypress.config.ts",

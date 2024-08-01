@@ -52,3 +52,5 @@ yarn-error.log*
 .editorconfig
 .gitattributes
 .yarn/releases/yarn-4.1.0.cjs
+
+**/.playwright
