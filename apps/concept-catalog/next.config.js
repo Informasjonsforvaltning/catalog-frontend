@@ -1,6 +1,6 @@
 //@ts-check
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports
 const { withNx } = require('@nrwl/next/plugins/with-nx');
 
 /**
