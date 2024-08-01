@@ -1,6 +1,9 @@
 import { Service, ServiceToBeCreated } from '../../../../libs/types/src';
 
-export const SERVICE_1: ServiceToBeCreated = {
+export const SERVICE_1: Service = {
+  id: null,
+  catalogId: null,
+  published: false,
   title: {
     nb: 'Test service 1 nb',
     nn: 'Test service 1 nn',
@@ -55,7 +58,10 @@ export const SERVICE_1: ServiceToBeCreated = {
   status: 'http://purl.org/adms/status/Completed',
 };
 
-export const SERVICE_2: ServiceToBeCreated = {
+export const SERVICE_2: Service = {
+  id: null,
+  catalogId: null,
+  published: false,
   title: {
     nb: 'Test service 2 nb',
     nn: 'Test service 2 nn',
@@ -110,7 +116,10 @@ export const SERVICE_2: ServiceToBeCreated = {
   status: 'http://purl.org/adms/status/Deprecated',
 };
 
-export const SERVICE_3: ServiceToBeCreated = {
+export const SERVICE_3: Service = {
+  id: null,
+  catalogId: null,
+  published: false,
   title: {
     nb: 'Test service 3 nb',
     nn: 'Test service 3 nn',

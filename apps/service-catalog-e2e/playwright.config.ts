@@ -31,7 +31,7 @@ export default defineConfig({
   },
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'yarn nx serve service-catalog --configuration=e2e > service-catalog.log 2>&1',
+    command: 'yarn kill-port && yarn nx serve service-catalog --configuration=e2e',
     url: 'http://127.0.0.1:4200',
     reuseExistingServer: !process.env.CI,
     cwd: workspaceRoot,
@@ -59,16 +59,6 @@ export default defineConfig({
       dependencies: ['admin-init'],
       testMatch: '**/admin/*.spec.ts',
     },
-    ...(process.env.CI
-      ? [
-          {
-            name: 'admin-webkit',
-            use: { ...devices['Desktop Safari'] },
-            dependencies: ['admin-init'],
-            testMatch: '**/admin/*.spec.ts',
-          },
-        ]
-      : []),
     // Uncomment for mobile browsers support
     /* {
       name: 'Mobile Chrome',

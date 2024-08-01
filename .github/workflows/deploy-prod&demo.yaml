@@ -35,9 +35,18 @@ jobs:
           echo "matrix={\"appname\":$(yarn --silent run matrix)}" >> $GITHUB_OUTPUT
           echo "changed=$(yarn --silent run matrix)" >> $GITHUB_OUTPUT
 
+      - run: yarn playwright install
       - run: yarn run affected:lint   --parallel=2
       - run: yarn run affected:test   --configuration=ci --parallel=2
-      - run: yarn run affected:e2e    --configuration=ci
+      - run: yarn run affected:e2e    --configuration=ci --parallel=1
+        env:
+          E2E_AUTH_ADMIN_ID: ${{ secrets.E2E_AUTH_ADMIN_ID }}
+          E2E_AUTH_READ_ID: ${{ secrets.E2E_AUTH_READ_ID }}
+          E2E_AUTH_WRITE_ID: ${{ secrets.E2E_AUTH_WRITE_ID }}
+          E2E_CATALOG_ID: ${{ secrets.E2E_CATALOG_ID }}
+          E2E_KEYCLOAK_ID_SERVICE_CATALOG_FRONTEND: ${{ secrets.E2E_KEYCLOAK_ID_SERVICE_CATALOG_FRONTEND }}
+          E2E_KEYCLOAK_SECRET_SERVICE_CATALOG_FRONTEND: ${{ secrets.E2E_KEYCLOAK_SECRET_SERVICE_CATALOG_FRONTEND }}
+          E2E_NEXTAUTH_SECRET: ${{ secrets.E2E_NEXTAUTH_SECRET }}
       - run: yarn run affected:build  --configuration=ci --parallel=2
 
       - name: Caching Dist Folder

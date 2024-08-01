@@ -3,6 +3,7 @@ import type AxeBuilder from '@axe-core/playwright';
 import { ALL_SERVICES } from '../data/services';
 import { Service, ServiceToBeCreated } from '../../../../libs/types/src';
 import { getParentLocator, getStatusText } from '../utils/helpers';
+import { ALL } from 'dns';
 
 export default class ServicesPage {
   url: string;
@@ -33,6 +34,7 @@ export default class ServicesPage {
 
   // Helpers
   async createService(service: ServiceToBeCreated) {
+    console.log(`Create new service with title ${service.title.nb}`);
     await this.goto();
 
     // Name and description
@@ -74,6 +76,7 @@ export default class ServicesPage {
     // Save service
     await this.page.getByRole('button', { name: 'Lagre tjeneste' }).click();
     await this.page.waitForTimeout(100);
+    console.log(`Saved service with title ${service.title.nb}`);
   }
 
   async deleteService(url: string) {
@@ -147,6 +150,10 @@ export default class ServicesPage {
     for (const service of ALL_SERVICES) {
       await this.createService(service);
     }
+    // Wait for the list to update after deletion
+    await this.page.waitForTimeout(500); // Adjust the timeout based on your application's response time
+    await this.goto();
+    await this.expectSearchResults(ALL_SERVICES);
   }
 
   public async expectFiltersToBeVisible() {
