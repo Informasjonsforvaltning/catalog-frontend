@@ -1,5 +1,5 @@
-import { test } from '../../fixtures/basePage';
+import { runTest } from '../../fixtures/basePage';
 
-test('login as admin user', async ({ loginPage }) => {
+runTest('login as admin user', async ({ loginPage }) => {
   await loginPage.loginAsAdmin();
 });

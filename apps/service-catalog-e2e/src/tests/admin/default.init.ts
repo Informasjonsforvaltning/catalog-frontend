@@ -1,9 +1,6 @@
-import { test as init } from '../../fixtures/basePage';
-import { adminAuthFile } from '../../utils/helpers';
+import { test as init, runTestAsAdmin as initAsAdmin } from '../../fixtures/basePage';
 
-init.use({ storageState: adminAuthFile });
-
-init('delete all existing services and create new', async ({ loginPage, servicesPage }) => {
+initAsAdmin('delete all existing services and create new', async ({ servicesPage }) => {
   // set timeout to 120 seconds
   init.setTimeout(120 * 1000);
 
@@ -12,7 +9,7 @@ init('delete all existing services and create new', async ({ loginPage, services
   await init.step('Create services', () => servicesPage.createServices());
 });
 
-init('delete all existing public services and create new', async ({ loginPage, publicServicesPage }) => {
+initAsAdmin('delete all existing public services and create new', async ({ publicServicesPage }) => {
   // set timeout to 120 seconds
   init.setTimeout(120 * 1000);
 

@@ -1,9 +1,6 @@
-import { test } from '../../fixtures/basePage';
-import { adminAuthFile } from '../../utils/helpers';
+import { runTestAsAdmin } from '../../fixtures/basePage';
 
-test.use({ storageState: adminAuthFile });
-
-test('the home page should redirect us to registration portal', async ({ loginPage, homePage }) => {
+runTestAsAdmin('the home page should redirect us to registration portal', async ({ homePage }) => {
   await homePage.goto();
   await homePage.checkIfRedirectedToRegistrationPortal();
 });
