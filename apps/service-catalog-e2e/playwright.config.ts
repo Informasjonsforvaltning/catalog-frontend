@@ -28,6 +28,8 @@ export default defineConfig({
       {
         outputFile: 'service-catalog-ctrf-report.json',
         outputDir: path.resolve(__dirname, '../../reports'),
+        appName: 'service-catalog',
+        testEnvironment: 'staging',
       },
     ],
   ],
