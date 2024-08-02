@@ -1,0 +1,34 @@
+{
+  "results": {
+    "tool": {
+      "name": "playwright"
+    },
+    "summary": {
+      "tests": 1,
+      "passed": 0,
+      "failed": 1,
+      "pending": 0,
+      "skipped": 0,
+      "other": 0,
+      "start": 1722586323741,
+      "stop": 1722586508499,
+      "suites": 0
+    },
+    "tests": [
+      {
+        "name": "login as admin user",
+        "status": "failed",
+        "duration": 60012,
+        "start": 1722586448,
+        "stop": 1722586508,
+        "rawStatus": "timedOut",
+        "tags": [],
+        "type": "e2e",
+        "filePath": "/Users/jeffreiffers/Digdir/catalog-frontend/apps/service-catalog-e2e/src/tests/admin/loginPage.setup.ts",
+        "retries": 2,
+        "flaky": false,
+        "suite": "admin-login > src/tests/admin/loginPage.setup.ts"
+      }
+    ]
+  }
+}
