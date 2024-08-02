@@ -47,6 +47,12 @@ jobs:
           E2E_KEYCLOAK_ID_SERVICE_CATALOG_FRONTEND: ${{ secrets.E2E_KEYCLOAK_ID_SERVICE_CATALOG_FRONTEND }}
           E2E_KEYCLOAK_SECRET_SERVICE_CATALOG_FRONTEND: ${{ secrets.E2E_KEYCLOAK_SECRET_SERVICE_CATALOG_FRONTEND }}
           E2E_NEXTAUTH_SECRET: ${{ secrets.E2E_NEXTAUTH_SECRET }}
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
       - run: yarn run affected:build  --configuration=ci --parallel=2
 
       - name: Caching Dist Folder
