@@ -21,7 +21,16 @@ dotenv.config({ path: path.resolve(__dirname, '.env.test') });
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: __dirname }),
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
-  reporter: process.env.CI ? 'github' : 'list',
+  reporter: [
+    ['list'], // You can combine multiple reporters
+    [
+      'playwright-ctrf-json-reporter',
+      {
+        outputFile: 'service-catalog-ctrf-report.json',
+        outputDir: path.resolve(__dirname, '../../reports'),
+      },
+    ],
+  ],
   retries: 2,
   timeout: 60 * 1000,
   use: {

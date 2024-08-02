@@ -6435,6 +6435,7 @@ __metadata:
     npm: ^10.8.2
     nuqs: ^1.17.4
     nx: 19.4.2
+    playwright-ctrf-json-reporter: ^0.0.15
     postcss-flexbugs-fixes: ^5.0.2
     postcss-import: ^16.1.0
     postcss-preset-env: ^9.5.14
@@ -13825,6 +13826,13 @@ __metadata:
   bin:
     playwright-core: cli.js
   checksum: cecb58877b2c643403d7a72c24a7aa0fdd087a3c7f9a5ea5403851336ea831d8e304b1f159aacbbabd12e5c47eaac054333746c9e5431ec07b13d64dbf3b50ec
+  languageName: node
+  linkType: hard
+
+"playwright-ctrf-json-reporter@npm:^0.0.15":
+  version: 0.0.15
+  resolution: "playwright-ctrf-json-reporter@npm:0.0.15"
+  checksum: 0f56d746582bb8794217fcdc52b8866d77f600e3e60e9eb576262cb154e12434f1e633e26be045b019524bb2ef8e2098926c7d1b3a900d966ff4012e06301799
   languageName: node
   linkType: hard
 
