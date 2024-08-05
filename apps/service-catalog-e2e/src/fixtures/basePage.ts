@@ -7,34 +7,11 @@ import { adminAuthFile, generateAccessibilityBuilder } from '../utils/helpers';
 
 const PREFIX_TEXT = 'concept-catalog: ';
 export const test = base.extend<{
-  _autoAttachMetadata: any;
   loginPage: any;
   homePage: any;
   servicesPage: any;
   publicServicesPage: any;
 }>({
-  _autoAttachMetadata: [
-    async ({ browser, browserName }, use, testInfo) => {
-      // BEFORE: Generate an attachment for the test with the required info
-
-      await testInfo.attach('metadata.json', {
-        body: JSON.stringify({
-          name: browserName,
-          version: browser.version(),
-        }),
-      });
-
-      // ---------------------------------------------------------
-      await use(/** our test doesn't need this fixture direcly */);
-      // ---------------------------------------------------------
-
-      // AFTER: There's nothing to cleanup in this fixutre
-    },
-    {
-      auto: true,
-    },
-  ],
-
   loginPage: async ({ page, context }, use) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
     const loginPage = new LoginPage(page, context, accessibilityBuilder);

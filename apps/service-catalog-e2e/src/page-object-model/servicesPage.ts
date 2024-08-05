@@ -1,9 +1,8 @@
 import { expect, Page, BrowserContext } from '@playwright/test';
 import type AxeBuilder from '@axe-core/playwright';
+import { Service, ServiceToBeCreated } from '@catalog-frontend/types';
 import { ALL_SERVICES } from '../data/services';
-import { Service, ServiceToBeCreated } from '../../../../libs/types/src';
 import { getParentLocator, getStatusText } from '../utils/helpers';
-import { ALL } from 'dns';
 
 export default class ServicesPage {
   url: string;
@@ -38,7 +37,7 @@ export default class ServicesPage {
     await this.goto();
 
     // Name and description
-    await this.page.getByRole('link', { name: 'Opprett ny tjeneste' }).click();
+    await this.page.getByRole('link', { name: 'Opprett ny tjeneste' }).click({ timeout: 5000 });
     await this.page.getByLabel('Navn på bokmål').fill(service.title.nb);
     await this.page.getByLabel('Navn på nynorsk').fill(service.title.nn);
     await this.page.getByLabel('Navn på engelsk').fill(service.title.en);
@@ -75,13 +74,14 @@ export default class ServicesPage {
 
     // Save service
     await this.page.getByRole('button', { name: 'Lagre tjeneste' }).click();
-    await this.page.waitForTimeout(100);
+    await expect(this.page.getByRole('button', { name: 'Lagre tjeneste' })).toBeHidden({ timeout: 5000 });
     console.log(`Saved service with title ${service.title.nb}`);
   }
 
   async deleteService(url: string) {
     await this.page.goto(url);
     await this.page.getByRole('button', { name: 'Slett' }).click();
+    await expect(this.page.getByRole('button', { name: 'Slett' })).toBeHidden({ timeout: 5000 });
   }
 
   public async goto() {
@@ -118,6 +118,7 @@ export default class ServicesPage {
       await dialog.accept();
     });
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       // Get the list of items
       const promises = (await this.page.getByRole('link').all()).map(async (link) => {
@@ -139,9 +140,6 @@ export default class ServicesPage {
 
       // Click the delete button for the first item
       await this.deleteService(items[0]);
-
-      // Wait for the list to update after deletion
-      await this.page.waitForTimeout(500); // Adjust the timeout based on your application's response time
       await this.goto();
     }
   }
@@ -150,8 +148,6 @@ export default class ServicesPage {
     for (const service of ALL_SERVICES) {
       await this.createService(service);
     }
-    // Wait for the list to update after deletion
-    await this.page.waitForTimeout(500); // Adjust the timeout based on your application's response time
     await this.goto();
     await this.expectSearchResults(ALL_SERVICES);
   }
@@ -174,7 +170,7 @@ export default class ServicesPage {
 
   public async expectSearchResults(expected: Service[], notExpected: Service[] = []) {
     for (let i = 0; i < expected.length; i++) {
-      await expect(this.page.getByText(expected[i].title.nb, { exact: true })).toBeVisible();
+      await expect(this.page.getByText(expected[i].title.nb, { exact: true })).toBeVisible({ timeout: 5000 });
       await expect(this.page.getByText(expected[i].description.nb, { exact: true })).toBeVisible();
 
       const rowLocator = getParentLocator(this.page.getByText(expected[i].title.nb, { exact: true }), 4);
