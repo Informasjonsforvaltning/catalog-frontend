@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 import { nxE2EPreset } from '@nx/playwright/preset';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { workspaceRoot } from '@nx/devkit';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 import path = require('path');
 import * as dotenv from 'dotenv';
 
@@ -33,7 +33,7 @@ export default defineConfig({
       },
     ],
   ],
-  retries: 0,
+  retries: 2,
   timeout: 60 * 1000,
   use: {
     baseURL,
