@@ -40,8 +40,30 @@ Run `yarn nx g @nrwl/next:component my-new-component --project=ui` to add a new 
 
 ## Testing
 
+### Unit tests
+
 ```
 yarn nx test concept-catalog
+```
+
+### E2E tests
+
+Set up the environment variables in the `.env` file in the root of the project.
+
+```
+E2E_AUTH_ADMIN_ID=
+E2E_AUTH_READ_ID=
+E2E_AUTH_WRITE_ID=
+E2E_CATALOG_ID=
+E2E_KEYCLOAK_ID_SERVICE_CATALOG_FRONTEND=
+E2E_KEYCLOAK_SECRET_SERVICE_CATALOG_FRONTEND=
+E2E_NEXTAUTH_SECRET=
+```
+
+Run tests with the following command:
+
+```
+yarn nx e2e service-catalog-e2e --ui
 ```
 
 ## Linting
