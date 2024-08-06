@@ -1,7 +1,7 @@
 'use client';
 
 import { Textarea, Textfield } from '@digdir/designsystemet-react';
-import { Button, FormFieldCard, Select } from '@catalog-frontend/ui';
+import { Button, FormContainer, Select } from '@catalog-frontend/ui';
 import { localization, getTranslateText } from '@catalog-frontend/utils';
 import { ISOLanguage, Output, ReferenceDataCode, Service, ServiceToBeCreated } from '@catalog-frontend/types';
 import styles from './service-form.module.css';
@@ -28,7 +28,7 @@ const formLanguages: ISOLanguage[] = ['nb', 'nn', 'en'];
 
 export const BasicServiceForm = ({ catalogId, service, type, statuses }: ServiceFormProps) => {
   const router = useRouter();
-  const initalValues = serviceTemplate(service);
+  const initialValues = serviceTemplate(service);
 
   const handleProducesIds = (values: ServiceToBeCreated | Service) => {
     const serviceCopy = { ...values };
@@ -91,39 +91,38 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
   }
 
   return (
-    <>
-      <div className='container'>
-        <Formik
-          onSubmit={(values) => handleSubmit(values)}
-          initialValues={initalValues}
-          validationSchema={validationSchema}
-        >
-          {({ errors, values }) => (
-            <Form>
-              <div className={styles.formCard}>
-                <FormFieldCard
+    <div className='container'>
+      <Formik
+        onSubmit={(values) => handleSubmit(values)}
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+      >
+        {({ errors, values }) => (
+          <Form>
+            <div className={styles.formCard}>
+              <FormContainer variant='third'>
+                <FormContainer.Header
                   title={localization.name}
                   subtitle={localization.serviceCatalog.form.titleSubtitle}
-                >
-                  {formLanguages.map((language) => (
-                    <Field
-                      as={Textfield}
-                      label={localization.formatString(localization.concept.formFieldLabel, {
-                        fieldType: localization.name,
-                        lang: localization.language[language]?.toLowerCase(),
-                      })}
-                      type='text'
-                      name={`title.${language}`}
-                      key={`name-${language}`}
-                      error={errors.title?.nb}
-                    />
-                  ))}
-                </FormFieldCard>
-              </div>
-              <FormFieldCard
-                title={localization.description}
-                subtitle={localization.serviceCatalog.form.descriptionSubtitle}
-              >
+                />
+                {formLanguages.map((language) => (
+                  <Field
+                    as={Textfield}
+                    label={localization.formatString(localization.concept.formFieldLabel, {
+                      fieldType: localization.name,
+                      lang: localization.language[language]?.toLowerCase(),
+                    })}
+                    type='text'
+                    name={`title.${language}`}
+                    key={`name-${language}`}
+                    error={errors.title?.nb}
+                  />
+                ))}
+
+                <FormContainer.Header
+                  title={localization.description}
+                  subtitle={localization.serviceCatalog.form.descriptionSubtitle}
+                />
                 {formLanguages.map((language) => (
                   <Field
                     name={`description.${language}`}
@@ -132,20 +131,19 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                       fieldType: localization.description,
                       lang: localization.language[language]?.toLowerCase(),
                     })}
-                    key={`descrption-${language}`}
+                    key={`description-${language}`}
                   />
                 ))}
-              </FormFieldCard>
 
-              <FormFieldCard
-                title={localization.serviceCatalog.produces}
-                subtitle={localization.serviceCatalog.form.descriptionProduces}
-              >
+                <FormContainer.Header
+                  title={localization.serviceCatalog.produces}
+                  subtitle={localization.serviceCatalog.form.descriptionProduces}
+                />
                 <FieldArray name={`produces`}>
                   {(arrayHelpers: any) => (
                     <>
                       {values.produces &&
-                        values?.produces.map((_, index: number) => (
+                        values.produces.map((_, index: number) => (
                           <div
                             key={`produces-${index}`}
                             className={styles.fieldArray}
@@ -208,8 +206,8 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                     </>
                   )}
                 </FieldArray>
-              </FormFieldCard>
-              <FormFieldCard title={localization.serviceCatalog.contactPoint}>
+
+                <FormContainer.Header title={localization.serviceCatalog.contactPoint} />
                 <div>
                   {formLanguages.map((language) => (
                     <Field
@@ -250,8 +248,8 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                     error={errors.contactPoints && (errors.contactPoints as any)[0].contactPage}
                   />
                 </div>
-              </FormFieldCard>
-              <FormFieldCard title='Status'>
+
+                <FormContainer.Header title='Status' />
                 <Field
                   as={Select}
                   name='status'
@@ -266,12 +264,11 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                     </option>
                   ))}
                 </Field>
-              </FormFieldCard>
 
-              <FormFieldCard
-                title={localization.homepage}
-                subtitle={localization.serviceCatalog.form.homepageDescription}
-              >
+                <FormContainer.Header
+                  title={localization.homepage}
+                  subtitle={localization.serviceCatalog.form.homepageDescription}
+                />
                 <Field
                   name={'homepage'}
                   label={localization.serviceCatalog.form.homepageLabel}
@@ -280,7 +277,7 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                   type='text'
                   error={errors.homepage}
                 />
-              </FormFieldCard>
+              </FormContainer>
 
               <div className={styles.buttonRow}>
                 <Button type='submit'>{localization.serviceCatalog.form.save}</Button>
@@ -307,11 +304,11 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                   </Button>
                 )}
               </div>
-            </Form>
-          )}
-        </Formik>
-      </div>
-    </>
+            </div>
+          </Form>
+        )}
+      </Formik>
+    </div>
   );
 };
 
