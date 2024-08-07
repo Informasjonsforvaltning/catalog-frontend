@@ -36,3 +36,14 @@
   display: flex;
   justify-content: space-between;
 }
+
+.headingTitle {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.heading {
+  padding-bottom: 5rem;
+  padding-top: 3rem;
+}

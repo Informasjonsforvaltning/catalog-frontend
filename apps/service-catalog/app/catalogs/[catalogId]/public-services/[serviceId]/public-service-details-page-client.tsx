@@ -69,31 +69,30 @@ const PublicServiceDetailsPageClient = ({
     <DetailsPageLayout
       handleLanguageChange={handleLanguageChange}
       language={language}
-      headingTitle={
-        <div className={styles.status}>
-          <h2>{getTranslateText(service?.title ?? '', language)}</h2>
-          {service?.status && (
-            <Tag.ServiceStatus
-              statusKey={findServiceStatus()?.code as ServiceStatusTagProps['statusKey']}
-              statusLabel={getTranslateText(findServiceStatus()?.label) as string}
-            />
-          )}
-        </div>
+      headingTitle={getTranslateText(service?.title ?? '', language)}
+      headingTag={
+        <Tag.ServiceStatus
+          statusKey={findServiceStatus()?.code as ServiceStatusTagProps['statusKey']}
+          statusLabel={getTranslateText(findServiceStatus()?.label) as string}
+        />
       }
       loading={false}
-      mainColumn={
-        <InfoCard>
-          {!_.isEmpty(getTranslateText(service?.description ?? '', language)) && (
-            <BasicServiceFormInfoCardItems
-              service={service}
-              language={language}
-            />
-          )}
-        </InfoCard>
-      }
-      rightColumn={<RightColumn />}
-      buttons={
-        hasWritePermission && (
+    >
+      <DetailsPageLayout.Left>
+        {
+          <InfoCard>
+            {!_.isEmpty(getTranslateText(service?.description ?? '', language)) && (
+              <BasicServiceFormInfoCardItems
+                service={service}
+                language={language}
+              />
+            )}
+          </InfoCard>
+        }
+      </DetailsPageLayout.Left>
+      <DetailsPageLayout.Right>{<RightColumn />}</DetailsPageLayout.Right>
+      <DetailsPageLayout.Buttons>
+        {hasWritePermission && (
           <div className={styles.actionButtons}>
             <LinkButton href={`/catalogs/${catalogId}/public-services/${serviceId}/edit`}>
               {localization.serviceCatalog.editPublicService}
@@ -105,9 +104,9 @@ const PublicServiceDetailsPageClient = ({
               type='public-services'
             />
           </div>
-        )
-      }
-    />
+        )}
+      </DetailsPageLayout.Buttons>
+    </DetailsPageLayout>
   );
 };
 
