@@ -7,7 +7,6 @@ import {
   PageBanner,
   Breadcrumbs,
   BreadcrumbType,
-  ConceptSubject,
   InfoCard,
   Spinner,
   Button,
@@ -23,6 +22,7 @@ import {
   validOrganizationNumber,
   validUUID,
   ensureStringArray,
+  getConceptSubject,
 } from '@catalog-frontend/utils';
 import {
   Concept,
@@ -345,12 +345,7 @@ export const ConceptPageClient = ({
       (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
     );
 
-    return (
-      <ConceptSubject
-        concept={concept}
-        subjectCodeList={subjectCodeList}
-      />
-    );
+    return getConceptSubject(concept, subjectCodeList);
   };
 
   const getStatusFromURL = (item) => {
@@ -798,26 +793,25 @@ export const ConceptPageClient = ({
       />
 
       <DetailsPageLayout
-        headingTitle={
-          <div className={cn(classes.title)}>
-            <h2>{getTitle(translate(concept?.anbefaltTerm?.navn, language))}</h2>
-            {status && (
-              <div>
-                <Tag.ConceptStatus
-                  statusKey={getStatusFromURL(concept)}
-                  statusLabel={status}
-                />
-              </div>
-            )}
-          </div>
-        }
-        headingSubtitle={getDetailSubtitle()}
         loading={deleteConcept.status === 'pending'}
         handleLanguageChange={handleLanguageChange}
         language={language}
-        mainColumn={<MainColumn />}
-        rightColumn={<RightColumn />}
-        buttons={
+        headingTitle={getTitle(translate(concept?.anbefaltTerm?.navn, language))}
+        headingTag={
+          <Tag.ConceptStatus
+            statusKey={getStatusFromURL(concept)}
+            statusLabel={status}
+          />
+        }
+        headingSubtitle={getDetailSubtitle()}
+      >
+        <DetailsPageLayout.Left>
+          <MainColumn />
+        </DetailsPageLayout.Left>
+        <DetailsPageLayout.Right>
+          <RightColumn />
+        </DetailsPageLayout.Right>
+        <DetailsPageLayout.Buttons>
           <div className={classes.actionButtons}>
             {hasWritePermission && (
               <>
@@ -841,8 +835,8 @@ export const ConceptPageClient = ({
               {localization.concept.suggestChanges}
             </LinkButton>
           </div>
-        }
-      />
+        </DetailsPageLayout.Buttons>
+      </DetailsPageLayout>
     </>
   );
 };

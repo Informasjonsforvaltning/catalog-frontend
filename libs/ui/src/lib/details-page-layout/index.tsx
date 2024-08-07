@@ -1,18 +1,18 @@
 'use client';
 
-import { HTMLAttributes, ReactNode } from 'react';
+import { HTMLAttributes, ReactNode, Children, isValidElement } from 'react';
 import styles from './details-page.module.css';
 
 import cn from 'classnames';
 import { DetailHeading } from '../detail-heading';
 import { Spinner } from '../spinner';
 import { Select } from '../select';
+import { Heading, Ingress } from '@digdir/designsystemet-react';
 
 interface DetailsPageLayoutProps extends HTMLAttributes<HTMLDivElement> {
-  mainColumn?: ReactNode;
-  rightColumn?: ReactNode;
-  headingTitle: ReactNode;
-  headingSubtitle?: ReactNode;
+  headingTitle: string | string[];
+  headingSubtitle?: string;
+  headingTag?: ReactNode;
   loading: boolean;
   handleLanguageChange?: (lang: string) => void;
   language?: string;
@@ -20,34 +20,40 @@ interface DetailsPageLayoutProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const DetailsPageLayout = ({
-  mainColumn,
-  rightColumn,
   headingTitle,
   headingSubtitle,
+  headingTag,
   loading,
   handleLanguageChange,
   language,
-  buttons,
-}: DetailsPageLayoutProps) => {
+  children,
+}: DetailsPageLayoutProps & { children: ReactNode }) => {
   const languageOptions = [
     { value: 'nb', label: 'Norsk bokmål' },
     { value: 'nn', label: 'Norsk nynorsk' },
     { value: 'en', label: 'English' },
   ];
 
+  const childrenArray = Children.toArray(children);
+  const leftChild = childrenArray.find((child) => isValidElement(child) && child.type === DetailsPageLayout.Left);
+  const rightChild = childrenArray.find((child) => isValidElement(child) && child.type === DetailsPageLayout.Right);
+  const buttonsChild = childrenArray.find((child) => isValidElement(child) && child.type === DetailsPageLayout.Buttons);
+
   return (
     <div className='container'>
-      <DetailHeading
-        className={styles.detailHeading}
-        headingTitle={headingTitle}
-        subtitle={headingSubtitle}
-      />
+      <div className={styles.heading}>
+        <div className={styles.headingTitle}>
+          <Heading size='lg'>{headingTitle}</Heading>
+          <span>{headingTag}</span>
+        </div>
+        <Ingress size='xs'>{headingSubtitle}</Ingress>
+      </div>
       {loading && <Spinner />}
       {!loading && (
         <>
           <div className={styles.twoColumnRow}>
             <div className={styles.actionsRow}>
-              <div className={styles.buttons}>{buttons}</div>
+              <div className={styles.buttons}>{buttonsChild}</div>
               <div>
                 <Select
                   onChange={(event) => handleLanguageChange?.(event.target.value)}
@@ -68,13 +74,23 @@ const DetailsPageLayout = ({
             <div>&nbsp;</div>
           </div>
           <div className={cn(styles.twoColumnRow, styles.bottomSpace)}>
-            {mainColumn}
-            {rightColumn}
+            {leftChild}
+            {rightChild}
           </div>
         </>
       )}
     </div>
   );
 };
+
+const Left = ({ children }: { children: ReactNode }) => <div className={styles.mainColumn}>{children}</div>;
+
+const Right = ({ children }: { children: ReactNode }) => <div className={styles.rightColumn}>{children}</div>;
+
+const Buttons = ({ children }: { children: ReactNode }) => <div>{children}</div>;
+
+DetailsPageLayout.Left = Left;
+DetailsPageLayout.Right = Right;
+DetailsPageLayout.Buttons = Buttons;
 
 export { DetailsPageLayout };

@@ -1,4 +1,5 @@
 'use client';
+
 import { ReferenceDataCode, Service } from '@catalog-frontend/types';
 import { DetailsPageLayout, InfoCard, LinkButton, ServiceStatusTagProps, Tag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
@@ -25,9 +26,11 @@ const ServiceDetailsPageClient = ({
   statuses,
 }: ServiceDetailsPageProps) => {
   const [language, setLanguage] = useState('nb');
+
   const handleLanguageChange = (value: string) => {
     setLanguage(value);
   };
+
   const findServiceStatus = () => statuses.find((s) => s.uri === service?.status);
 
   const RightColumn = () => (
@@ -63,23 +66,21 @@ const ServiceDetailsPageClient = ({
       </InfoCard>
     </div>
   );
+
   return (
     <DetailsPageLayout
       handleLanguageChange={handleLanguageChange}
       language={language}
-      headingTitle={
-        <div className={styles.status}>
-          <h2>{getTranslateText(service?.title ?? '', language)}</h2>
-          {service.status && (
-            <Tag.ServiceStatus
-              statusKey={findServiceStatus()?.code as ServiceStatusTagProps['statusKey']}
-              statusLabel={getTranslateText(findServiceStatus()?.label) as string}
-            />
-          )}
-        </div>
+      headingTitle={getTranslateText(service?.title ?? '', language)}
+      headingTag={
+        <Tag.ServiceStatus
+          statusKey={findServiceStatus()?.code as ServiceStatusTagProps['statusKey']}
+          statusLabel={getTranslateText(findServiceStatus()?.label) as string}
+        />
       }
       loading={false}
-      mainColumn={
+    >
+      <DetailsPageLayout.Left>
         <InfoCard>
           {!_.isEmpty(getTranslateText(service?.description ?? '', language)) && (
             <BasicServiceFormInfoCardItems
@@ -88,10 +89,12 @@ const ServiceDetailsPageClient = ({
             />
           )}
         </InfoCard>
-      }
-      rightColumn={<RightColumn />}
-      buttons={
-        hasWritePermission && (
+      </DetailsPageLayout.Left>
+      <DetailsPageLayout.Right>
+        <RightColumn />
+      </DetailsPageLayout.Right>
+      <DetailsPageLayout.Buttons>
+        {hasWritePermission && (
           <div className={styles.actionButtons}>
             <LinkButton href={`/catalogs/${catalogId}/services/${serviceId}/edit`}>
               {localization.serviceCatalog.editService}
@@ -103,9 +106,9 @@ const ServiceDetailsPageClient = ({
               type='services'
             />
           </div>
-        )
-      }
-    />
+        )}
+      </DetailsPageLayout.Buttons>
+    </DetailsPageLayout>
   );
 };
 
