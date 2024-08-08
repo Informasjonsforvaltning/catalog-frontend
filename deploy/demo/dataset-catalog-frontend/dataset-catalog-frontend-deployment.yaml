@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dataset-catalog-frontend
+  labels:
+    app: dataset-catalog-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dataset-catalog-frontend
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: dataset-catalog-frontend
+      annotations:
+        prometheus.io/scrape: 'false'
+    spec:
+      containers:
+        - name: dataset-catalog-frontend
+          image: dataset-catalog-frontend
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/ping
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+            initialDelaySeconds: 20
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/ping
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+            initialDelaySeconds: 20
+          resources:
+            requests:
+              cpu: 25m
+              memory: 500Mi
