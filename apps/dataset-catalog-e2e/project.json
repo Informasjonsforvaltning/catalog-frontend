@@ -1,9 +1,0 @@
-{
-  "name": "dataset-catalog-e2e",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/dataset-catalog-e2e/src",
-  "tags": [],
-  "implicitDependencies": ["dataset-catalog"],
-  "// targets": "to see all targets run: nx show project dataset-catalog-e2e --web",
-  "targets": {}
-}
