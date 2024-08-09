@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dataset-catalog-frontend
+  labels:
+    app: dataset-catalog-frontend
+spec:
+  template:
+    spec:
+      containers:
+        - name: dataset-catalog-frontend
+          env:
+            - name: NEXTAUTH_URL
+              value: https://datasettkatalog.staging.fellesdatakatalog.digdir.no
+            - name: NEXTAUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: dataset-catalog-frontend
+                  key: NEXTAUTH_SECRET
+            - name: KEYCLOAK_ID
+              value: dataset-catalog-frontend
+            - name: KEYCLOAK_ISSUER
+              valueFrom:
+                secretKeyRef:
+                  name: sso-staging
+                  key: SSO_OIDC_ISSUER
+            - name: KEYCLOAK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sso-client-credentials
+                  key: DATASET_CATALOG_FRONTEND
+            - name: DATASET_CATALOG_FRONTEND
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: DATASET_CATALOG_FRONTEND
+            - name: CATALOG_ADMIN_SERVICE_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: CATALOG_ADMIN_SERVICE_BASE_URI
+            - name: CATALOG_ADMIN_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: CATALOG_ADMIN_BASE_URI
+            - name: ORGANIZATION_CATALOG_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: ORGANIZATION_CATALOG_BASE_URI
+            - name: REFERENCE_DATA_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: FDK_REFERENCE_DATA_BASE_URI
+            - name: ADMIN_GUI_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: ADMIN_GUI_BASE_URI
+            - name: FDK_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: FDK_BASE_URI
