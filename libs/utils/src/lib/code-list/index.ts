@@ -69,7 +69,7 @@ export const convertCodeListToTreeNodes = (codes: Code[] | undefined): TreeNode[
     // Remove the node from the accumulator if it exists
     accumulator = accumulator.filter((node) => node.value !== `${currentValue.id}`);
 
-    if (currentValue.parentID !== null) {
+    if (currentValue.parentID !== null && currentValue.parentID !== 'noParent') {
       let parent = findParent(currentValue.parentID, accumulator);
       if (!parent) {
         const parentCode = codes.find((code) => code.id === currentValue.parentID);
