@@ -1,0 +1,72 @@
+{
+  "name": "data-service-catalog",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/data-service-catalog",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/next:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/data-service-catalog"
+      },
+      "configurations": {
+        "development": {
+          "outputPath": "apps/data-service-catalog"
+        },
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/next:server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "data-service-catalog:build",
+        "dev": true
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "data-service-catalog:build:development",
+          "dev": true
+        },
+        "e2e": {
+          "buildTarget": "data-service-catalog:build:development",
+          "dev": true
+        },
+        "production": {
+          "buildTarget": "data-service-catalog:build:production",
+          "dev": false
+        }
+      }
+    },
+    "export": {
+      "executor": "@nx/next:export",
+      "options": {
+        "buildTarget": "data-service-catalog:build:production"
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/data-service-catalog/jest.config.ts",
+        "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/data-service-catalog/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  },
+  "tags": []
+}

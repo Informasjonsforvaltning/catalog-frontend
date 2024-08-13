@@ -19,6 +19,7 @@
       "@catalog-frontend/types": ["libs/types/src/index.ts"],
       "@catalog-frontend/ui": ["libs/ui/src/index.ts"],
       "@catalog-frontend/utils": ["libs/utils/src/index.ts"],
+      "@catalog-frontend/utils/*": ["libs/utils/*"],
       "react": ["./node_modules/@types/react"]
     }
   },
