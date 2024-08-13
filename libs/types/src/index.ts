@@ -15,3 +15,4 @@ export * from './lib/change-request';
 export * as Search from './lib/search';
 export * from './lib/service';
 export * from './lib/filters';
+export * from './lib/dataset';
