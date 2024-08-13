@@ -6,7 +6,7 @@ import { Accordion, Heading } from '@digdir/designsystemet-react';
 import { BreadcrumbType, Breadcrumbs, Button, SearchField, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
-import { CodeList, Organization } from '@catalog-frontend/types';
+import { Code, CodeList, Organization } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
 import { Banner } from '../../../../../components/banner';
@@ -27,24 +27,34 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }: CodeLi
 
   const [search, setSearch] = useState('');
   const [dirtyCodeLists, setDirtyCodeLists] = useState<string[]>([]);
+  const [initialCodes, setInitialCodes] = useState<{ [key: string]: Code[] }>({});
 
   const { data: getAllCodeLists } = useGetAllCodeLists({
     catalogId: catalogId,
   });
   const dbCodeLists = useMemo(() => getAllCodeLists?.codeLists ?? [], [getAllCodeLists]);
 
+  useEffect(() => {
+    if (Object.keys(initialCodes).length === 0) {
+      setInitialCodes({ ...updatedCodes });
+    }
+  }, [updatedCodes]);
+
   const filteredCodeLists = () =>
     dbCodeLists.filter((codeList: CodeList) => codeList.name.toLowerCase().includes(search.toLowerCase()));
 
+  const unsavedCodeChanges = () => {
+    return updatedCodes && initialCodes ? compare(updatedCodes, initialCodes).length > 0 : false;
+  };
+
+  const unsavedCodeListChanges = () => {
+    return updatedCodeLists ? updatedCodeLists?.length > 0 : false;
+  };
+
+  console.log(dirtyCodeLists);
+
   useWarnIfUnsavedChanges({
-    unsavedChanges:
-      updatedCodeLists?.some((codeList) => {
-        const dbCodeList = dbCodeLists.find((list) => list.id === codeList.id);
-        if (!dbCodeList) {
-          return true;
-        }
-        return compare(dbCodeList, codeList).length > 0;
-      }) ?? dirtyCodeLists.length > 0,
+    unsavedChanges: unsavedCodeChanges() || unsavedCodeListChanges() || dirtyCodeLists.length > 0,
   });
 
   useEffect(() => {
