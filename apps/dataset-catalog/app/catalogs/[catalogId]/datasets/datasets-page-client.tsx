@@ -15,8 +15,6 @@ interface Props {
 }
 
 const DatasetsPageClient = ({ datasets }: Props) => {
-  console.log(datasets);
-
   return (
     <div className={styles.container}>
       <SearchHitsPageLayout
