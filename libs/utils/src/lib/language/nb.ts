@@ -53,6 +53,9 @@ export const nb = {
   yes: 'Ja',
   youHaveNoAccess: 'Det ser ikke ut til at du har tilgang til denne siden.',
   allUsers: 'Alle brukere',
+  type: 'Type',
+  lastChanged: 'Sist endret',
+  noName: 'Uten navn',
 
   catalogType: {
     admin: 'Administrasjonsgrensesnitt',
@@ -60,6 +63,16 @@ export const nb = {
     dataset: 'Datasettkatalogen',
     publicService: 'Offentlig tjenestekatalog',
     service: 'Tjenestekatalog',
+  },
+
+  resourceType: {
+    dataset: 'Datasett',
+    dataService: 'Datatjeneste',
+    concept: 'Begrep',
+    informationModel: 'Informasjonsmodell',
+    service: 'Tjeneste',
+    publicService: 'Offentlig tjeneste',
+    event: 'Hendelse',
   },
 
   language: {
@@ -406,6 +419,14 @@ export const nb = {
       save: 'Lagre tjeneste',
       titleLabel: 'Tekst på bokmål',
       titleSubtitle: 'Navnet skal være kortfattet, kunne stå alene og gi mening.',
+    },
+  },
+  datasetCatalog: {
+    series: 'Datasettserie',
+    status: {
+      PUBLISH: 'Publisert',
+      APPROVE: 'Godkjent',
+      DRAFT: 'Utkast',
     },
   },
 };
