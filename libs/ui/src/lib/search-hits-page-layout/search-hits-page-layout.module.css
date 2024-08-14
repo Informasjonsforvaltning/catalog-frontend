@@ -35,7 +35,7 @@
 .gridContainer {
   display: grid;
   width: 100%;
-  grid-template-columns: 24rem 1fr;
+  grid-template-columns: 21rem 1fr;
   column-gap: 2rem;
 }
 

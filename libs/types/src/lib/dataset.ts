@@ -1,10 +1,11 @@
+import { PublicationStatus } from './enums';
 import { LocalizedStrings } from './localization';
 
 export interface Dataset {
   id: string;
   catalogId: string;
   _lastModified: string;
-  registrationStatus?: string;
+  registrationStatus?: PublicationStatus;
   concepts?: {
     uri: string;
     prefLabel: LocalizedStrings;
