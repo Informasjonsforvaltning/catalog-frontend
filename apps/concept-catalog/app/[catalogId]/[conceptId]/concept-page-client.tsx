@@ -348,9 +348,14 @@ export const ConceptPageClient = ({
     return getConceptSubject(concept, subjectCodeList);
   };
 
-  const getStatusFromURL = (item) => {
-    const urlParts = item?.statusURI.split('/');
-    return urlParts[urlParts.length - 1];
+  const getStatusFromURL = (item: { statusURI?: string } | null) => {
+    if (item?.statusURI && typeof item.statusURI === 'string') {
+      const urlParts = item.statusURI.split('/');
+      if (urlParts.length > 0) {
+        return urlParts[urlParts.length - 1];
+      }
+    }
+    return null;
   };
 
   const RevisionsTab = () => {
