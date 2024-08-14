@@ -51,7 +51,6 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }: CodeLi
     return updatedCodeLists ? updatedCodeLists?.length > 0 : false;
   };
 
-  console.log(dirtyCodeLists);
 
   useWarnIfUnsavedChanges({
     unsavedChanges: unsavedCodeChanges() || unsavedCodeListChanges() || dirtyCodeLists.length > 0,
