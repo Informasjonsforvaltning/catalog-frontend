@@ -428,5 +428,6 @@ export const nb = {
       APPROVE: 'Godkjent',
       DRAFT: 'Utkast',
     },
+    searchDataset: 'Søk etter datasettbeskrivelse',
   },
 };
