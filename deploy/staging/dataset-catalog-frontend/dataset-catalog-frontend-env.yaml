@@ -65,3 +65,8 @@ spec:
                 secretKeyRef:
                   name: commonurl-staging
                   key: FDK_BASE_URI
+            - name: DATASET_CATALOG_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-staging
+                  key: DATASET_CATALOG_BASE_URI
