@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useState, useEffect } from 'react';
 import { Dataset } from '@catalog-frontend/types';
 import styles from './datasets-page.module.css';
@@ -71,25 +72,23 @@ const DatasetsPageClient = ({ datasets }: Props) => {
 
   return (
     <div className={styles.container}>
-      <SearchHitsPageLayout
-        searchRow={
-          <>
-            <div className={styles.searchContainer}>
-              <div className={styles.search}>
-                <Paragraph>{localization.datasetCatalog.searchDataset}</Paragraph>
-                <Search
-                  variant='primary'
-                  placeholder={localization.search.search}
-                  onSearchClick={handleSearch}
-                  onKeyDown={handleSearchKeyDown}
-                />
-              </div>
+      <SearchHitsPageLayout>
+        <SearchHitsPageLayout.SearchRow>
+          <div className={styles.searchContainer}>
+            <div className={styles.search}>
+              <Paragraph>{localization.datasetCatalog.searchDataset}</Paragraph>
+              <Search
+                variant='primary'
+                placeholder={localization.search.search}
+                onSearchClick={handleSearch}
+                onKeyDown={handleSearchKeyDown}
+              />
             </div>
-          </>
-        }
-        leftColumn={
+          </div>
+        </SearchHitsPageLayout.SearchRow>
+        <SearchHitsPageLayout.LeftColumn>
           <div className={styles.leftColumn}>
-            <div className={styles.paragraph}>
+            <div>
               <Paragraph>Legg til...</Paragraph>
               <Select onChange={handleSelectChange}>
                 <option value='blank'>{`${localization.choose}...`}</option>
@@ -97,11 +96,15 @@ const DatasetsPageClient = ({ datasets }: Props) => {
                 <option value='datasetSeries'>{localization.resourceType.datasetSeries}</option>
               </Select>
             </div>
+
             <Filter onStatusChange={handleStatusChange} />
           </div>
-        }
-        mainColumn={<SearchHitTable datasets={filteredDatasets} />}
-      />
+        </SearchHitsPageLayout.LeftColumn>
+
+        <SearchHitsPageLayout.MainColumn>
+          <SearchHitTable datasets={filteredDatasets} />
+        </SearchHitsPageLayout.MainColumn>
+      </SearchHitsPageLayout>
     </div>
   );
 };

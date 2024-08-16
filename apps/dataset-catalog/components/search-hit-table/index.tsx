@@ -12,6 +12,7 @@ import {
 } from '@catalog-frontend/utils';
 import { Dataset } from '@catalog-frontend/types';
 import { useEffect, useState } from 'react';
+import styles from './search-hit-table.module.css';
 
 export interface BannerProps {
   datasets: Dataset[];
@@ -65,6 +66,7 @@ export const SearchHitTable = ({ datasets }: BannerProps) => {
     <Table
       zebra
       border
+      className={styles.table}
     >
       <Table.Head>
         <Table.Row>

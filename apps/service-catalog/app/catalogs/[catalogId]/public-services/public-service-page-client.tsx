@@ -69,39 +69,35 @@ const PublicServicePageClient = ({ services, hasWritePermission, catalogId, stat
   const findServiceStatus = (service: Service) => statuses.find((s) => s.uri === service?.status);
 
   return (
-    <SearchHitsPageLayout
-      searchRow={
-        <>
+    <SearchHitsPageLayout>
+      <SearchHitsPageLayout.SearchRow>
+        <div>
+          <Search
+            error=''
+            label={localization.search.search}
+            placeholder={localization.search.searchForPublicService}
+            size='small'
+            variant='primary'
+            onSearchClick={(value) => setSearchQuery(value)}
+            className={styles.search}
+          />
+          <FilterChips
+            statusFilters={statusFilters}
+            publicationFilters={publicationFilters}
+            handleRemoveFilter={(filter: string, filterType: FilterType) => removeFilter(filter, filterType)}
+            statuses={statuses}
+          />
+        </div>
+        {hasWritePermission && (
           <div>
-            <Search
-              error=''
-              label={localization.search.search}
-              placeholder={localization.search.searchForPublicService}
-              size='small'
-              variant='primary'
-              onSearchClick={(value) => setSearchQuery(value)}
-              className={styles.search}
-            />
-            <FilterChips
-              statusFilters={statusFilters}
-              publicationFilters={publicationFilters}
-              handleRemoveFilter={(filter: string, filterType: FilterType) => removeFilter(filter, filterType)}
-              statuses={statuses}
-            />
+            <LinkButton href={`/catalogs/${catalogId}/public-services/new`}>
+              <PlusCircleIcon />
+              {localization.serviceCatalog.form.newPublic}
+            </LinkButton>
           </div>
-          {hasWritePermission && (
-            <div>
-              <LinkButton href={`/catalogs/${catalogId}/public-services/new`}>
-                <>
-                  <PlusCircleIcon />
-                  {localization.serviceCatalog.form.newPublic}
-                </>
-              </LinkButton>
-            </div>
-          )}
-        </>
-      }
-      leftColumn={
+        )}
+      </SearchHitsPageLayout.SearchRow>
+      <SearchHitsPageLayout.LeftColumn>
         <div>
           <Filter
             onStatusChange={setStatusFilters}
@@ -111,8 +107,8 @@ const PublicServicePageClient = ({ services, hasWritePermission, catalogId, stat
             publicationState={publicationFilters}
           />
         </div>
-      }
-      mainColumn={
+      </SearchHitsPageLayout.LeftColumn>
+      <SearchHitsPageLayout.MainColumn>
         <SearchHitContainer
           searchHits={
             filteredServices &&
@@ -144,8 +140,8 @@ const PublicServicePageClient = ({ services, hasWritePermission, catalogId, stat
           }
           noSearchHits={filteredServices?.length < 1 ?? true}
         />
-      }
-    />
+      </SearchHitsPageLayout.MainColumn>
+    </SearchHitsPageLayout>
   );
 };
 
