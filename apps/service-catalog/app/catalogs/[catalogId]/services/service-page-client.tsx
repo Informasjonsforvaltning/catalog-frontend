@@ -69,81 +69,83 @@ const ServicePageClient = ({ services, hasWritePermission, catalogId, statuses }
   const findServiceStatus = (service: Service) => statuses.find((s) => s.uri === service?.status);
 
   return (
-    <SearchHitsPageLayout
-      searchRow={
-        <>
-          <div>
-            <Search
-              error=''
-              label={localization.search.search}
-              placeholder={localization.search.searchForService}
-              size='small'
-              variant='primary'
-              onSearchClick={(value) => setSearchQuery(value)}
-              className={styles.search}
-            />
-            <FilterChips
-              statusFilters={statusFilters}
-              publicationFilters={publicationFilters}
-              handleRemoveFilter={(filter: string, filterType: FilterType) => removeFilter(filter, filterType)}
-              statuses={statuses}
-            />
-          </div>
-          {hasWritePermission && (
-            <div>
-              <LinkButton href={`/catalogs/${catalogId}/services/new`}>
-                <PlusCircleIcon />
-                {localization.serviceCatalog.form.new}
-              </LinkButton>
-            </div>
-          )}
-        </>
-      }
-      leftColumn={
+    <SearchHitsPageLayout>
+      <SearchHitsPageLayout.SearchRow>
         <div>
-          <Filter
-            onStatusChange={setStatusFilters}
-            onPublicationStateChange={setPublicationFilters}
-            statuses={statuses}
+          <Search
+            error=''
+            label={localization.search.search}
+            placeholder={localization.search.searchForService}
+            size='small'
+            variant='primary'
+            onSearchClick={(value) => setSearchQuery(value)}
+            className={styles.search}
+          />
+          <FilterChips
             statusFilters={statusFilters}
-            publicationState={publicationFilters}
+            publicationFilters={publicationFilters}
+            handleRemoveFilter={(filter: string, filterType: FilterType) => removeFilter(filter, filterType)}
+            statuses={statuses}
           />
         </div>
-      }
-      mainColumn={
-        <SearchHitContainer
-          searchHits={
-            filteredServices &&
-            filteredServices.map((service: Service) => (
-              <div
-                key={service.id}
-                className={styles.searchHit}
-              >
-                <SearchHit
-                  title={getTranslateText(service?.title)}
-                  description={getTranslateText(service?.description)}
-                  titleHref={`/catalogs/${catalogId}/services/${service?.id}`}
-                  statusTag={
-                    service?.status && (
-                      <Tag.ServiceStatus
-                        statusKey={findServiceStatus(service)?.code as ServiceStatusTagProps['statusKey']}
-                        statusLabel={getTranslateText(findServiceStatus(service)?.label) as string}
-                      />
-                    )
-                  }
-                  content={
-                    service.published
-                      ? localization.publicationState.publishedInFDK
-                      : localization.publicationState.unpublished
-                  }
-                />
-              </div>
-            ))
-          }
-          noSearchHits={filteredServices?.length < 1 ?? true}
-        />
-      }
-    />
+        {hasWritePermission && (
+          <div>
+            <LinkButton href={`/catalogs/${catalogId}/services/new`}>
+              <PlusCircleIcon />
+              {localization.serviceCatalog.form.new}
+            </LinkButton>
+          </div>
+        )}
+      </SearchHitsPageLayout.SearchRow>
+      <SearchHitsPageLayout.LeftColumn>
+        {
+          <div>
+            <Filter
+              onStatusChange={setStatusFilters}
+              onPublicationStateChange={setPublicationFilters}
+              statuses={statuses}
+              statusFilters={statusFilters}
+              publicationState={publicationFilters}
+            />
+          </div>
+        }
+      </SearchHitsPageLayout.LeftColumn>
+      <SearchHitsPageLayout.MainColumn>
+        {
+          <SearchHitContainer
+            searchHits={
+              filteredServices &&
+              filteredServices.map((service: Service) => (
+                <div
+                  key={service.id}
+                  className={styles.searchHit}
+                >
+                  <SearchHit
+                    title={getTranslateText(service?.title)}
+                    description={getTranslateText(service?.description)}
+                    titleHref={`/catalogs/${catalogId}/services/${service?.id}`}
+                    statusTag={
+                      service?.status && (
+                        <Tag.ServiceStatus
+                          statusKey={findServiceStatus(service)?.code as ServiceStatusTagProps['statusKey']}
+                          statusLabel={getTranslateText(findServiceStatus(service)?.label) as string}
+                        />
+                      )
+                    }
+                    content={
+                      service.published
+                        ? localization.publicationState.publishedInFDK
+                        : localization.publicationState.unpublished
+                    }
+                  />
+                </div>
+              ))
+            }
+            noSearchHits={filteredServices?.length < 1 ?? true}
+          />
+        }
+      </SearchHitsPageLayout.MainColumn>
+    </SearchHitsPageLayout>
   );
 };
 

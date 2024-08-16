@@ -4,7 +4,6 @@ import { HTMLAttributes, ReactNode, Children, isValidElement } from 'react';
 import styles from './details-page.module.css';
 
 import cn from 'classnames';
-import { DetailHeading } from '../detail-heading';
 import { Spinner } from '../spinner';
 import { Select } from '../select';
 import { Heading, Ingress } from '@digdir/designsystemet-react';

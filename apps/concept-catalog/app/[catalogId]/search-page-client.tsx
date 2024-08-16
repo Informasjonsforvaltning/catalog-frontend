@@ -333,8 +333,8 @@ export const SearchPageClient = ({
         logo={logo}
         logoDescription={design?.logoDescription}
       />
-      <SearchHitsPageLayout
-        buttonRow={
+      <SearchHitsPageLayout>
+        <SearchHitsPageLayout.ButtonRow>
           <>
             <LinkButton
               href={`/${catalogId}/change-requests`}
@@ -369,46 +369,44 @@ export const SearchPageClient = ({
               </UploadButton>
             )}
           </>
-        }
-        searchRow={
-          <>
-            <div>
-              <SearchField
-                ariaLabel={loc.search.search}
-                placeholder={loc.search.search}
-                onSearchSubmit={onSearchSubmit}
-                value={searchTerm ?? ''}
-              />
-              <FilterChips />
-            </div>
+        </SearchHitsPageLayout.ButtonRow>
+        <SearchHitsPageLayout.SearchRow>
+          <div>
+            <SearchField
+              ariaLabel={loc.search.search}
+              placeholder={loc.search.search}
+              onSearchSubmit={onSearchSubmit}
+              value={searchTerm ?? ''}
+            />
+            <FilterChips />
+          </div>
 
-            <div className={styles.searchOptions}>
-              <Select
-                label={loc.search.searchField}
-                onChange={(event) => onFieldSelect(event.target.value as SearchableField)}
-              >
-                {fieldOptions}
-              </Select>
-              <Select
-                label={loc.search.sort}
-                onChange={(event) => onSortSelect(event?.target.value as SortOption)}
-                value={selectedSortOption}
-              >
-                {sortOptions}
-              </Select>
-            </div>
-          </>
-        }
-        leftColumn={
+          <div className={styles.searchOptions}>
+            <Select
+              label={loc.search.searchField}
+              onChange={(event) => onFieldSelect(event.target.value as SearchableField)}
+            >
+              {fieldOptions}
+            </Select>
+            <Select
+              label={loc.search.sort}
+              onChange={(event) => onSortSelect(event?.target.value as SortOption)}
+              value={selectedSortOption}
+            >
+              {sortOptions}
+            </Select>
+          </div>
+        </SearchHitsPageLayout.SearchRow>
+        <SearchHitsPageLayout.LeftColumn>
           <SearchFilter
             catalogId={catalogId}
             internalFields={fieldsResult?.internal}
             subjectCodeList={subjectCodeList}
             conceptStatuses={conceptStatuses}
           />
-        }
-        mainColumn={
-          status === 'pending' || importConcepts.status === 'pending' ? (
+        </SearchHitsPageLayout.LeftColumn>
+        <SearchHitsPageLayout.MainColumn>
+          {status === 'pending' || importConcepts.status === 'pending' ? (
             <Spinner />
           ) : (
             <SearchHitContainer
@@ -426,9 +424,9 @@ export const SearchPageClient = ({
                 />
               }
             />
-          )
-        }
-      />
+          )}
+        </SearchHitsPageLayout.MainColumn>
+      </SearchHitsPageLayout>
     </>
   );
 };
