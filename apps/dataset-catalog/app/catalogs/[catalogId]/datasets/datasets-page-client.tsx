@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Dataset } from '@catalog-frontend/types';
 import styles from './datasets-page.module.css';
 
-import { SearchHitsPageLayout } from '@catalog-frontend/ui';
+import { SearchHitsPageLayout, Select } from '@catalog-frontend/ui';
 import { SearchHitTable } from '../../../../components/search-hit-table';
 import { Filter } from '../../../../components/filter';
 import { Paragraph, Search } from '@digdir/designsystemet-react';
@@ -57,6 +57,18 @@ const DatasetsPageClient = ({ datasets }: Props) => {
     }
   };
 
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = e.target.value;
+
+    if (typeof window !== 'undefined') {
+      if (selectedValue === 'dataset') {
+        window.location.href = '/catalogs/974760673/datasets/new';
+      } else if (selectedValue === 'datasetSeries') {
+        window.location.href = '/catalogs/974760673/datasets/series/new';
+      }
+    }
+  };
+
   return (
     <div className={styles.container}>
       <SearchHitsPageLayout
@@ -76,7 +88,15 @@ const DatasetsPageClient = ({ datasets }: Props) => {
           </>
         }
         leftColumn={
-          <div>
+          <div className={styles.leftColumn}>
+            <div className={styles.paragraph}>
+              <Paragraph>Legg til...</Paragraph>
+              <Select onChange={handleSelectChange}>
+                <option value='blank'>{`${localization.choose}...`}</option>
+                <option value='dataset'>{localization.resourceType.dataset}</option>
+                <option value='datasetSeries'>{localization.resourceType.datasetSeries}</option>
+              </Select>
+            </div>
             <Filter onStatusChange={handleStatusChange} />
           </div>
         }

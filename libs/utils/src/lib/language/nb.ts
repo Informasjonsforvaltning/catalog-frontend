@@ -56,6 +56,7 @@ export const nb = {
   type: 'Type',
   lastChanged: 'Sist endret',
   noName: 'Uten navn',
+  choose: 'Velg',
 
   catalogType: {
     admin: 'Administrasjonsgrensesnitt',
@@ -67,6 +68,7 @@ export const nb = {
 
   resourceType: {
     dataset: 'Datasett',
+    datasetSeries: 'Datasettserie',
     dataService: 'Datatjeneste',
     concept: 'Begrep',
     informationModel: 'Informasjonsmodell',
