@@ -103,7 +103,7 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
     return textRegexWithNumbers.test(label);
   };
 
-  const codeListsOptions = dbCodeLists?.map((codeList: CodeList, index) => [
+  const codeListsOptions = [
     <option
       key={'no-codelist'}
       value={undefined}
@@ -118,7 +118,7 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
         {codeList.name}
       </option>
     )) || []),
-  ]);
+  ];
 
   const updateFieldsListState = (
     fieldId: string,
