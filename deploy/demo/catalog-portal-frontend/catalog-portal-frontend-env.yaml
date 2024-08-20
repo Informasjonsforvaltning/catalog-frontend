@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-portal-frontend
+  labels:
+    app: catalog-portal-frontend
+spec:
+  template:
+    spec:
+      containers:
+        - name: catalog-portal-frontend
+          env:
+            - name: NEXTAUTH_URL
+              value: https://catalog-portal.demo.fellesdatakatalog.digdir.no
+            - name: NEXTAUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: catalog-portal-frontend
+                  key: NEXTAUTH_SECRET
+            - name: KEYCLOAK_ID
+              value: catalog-portal-frontend
+            - name: KEYCLOAK_ISSUER
+              valueFrom:
+                secretKeyRef:
+                  name: sso-demo
+                  key: SSO_OIDC_ISSUER
+            - name: KEYCLOAK_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: sso-client-credentials
+                  key: DATASET_CATALOG_FRONTEND
+            - name: CATALOG_ADMIN_SERVICE_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-demo
+                  key: CATALOG_ADMIN_SERVICE_BASE_URI
+            - name: CATALOG_ADMIN_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-demo
+                  key: CATALOG_ADMIN_BASE_URI
+            - name: ORGANIZATION_CATALOG_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-demo
+                  key: ORGANIZATION_CATALOG_BASE_URI
+            - name: ADMIN_GUI_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-demo
+                  key: ADMIN_GUI_BASE_URI
+            - name: FDK_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-demo
+                  key: FDK_BASE_URI
+            - name: DATASET_CATALOG_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl-demo
+                  key: DATASET_CATALOG_BASE_URI
