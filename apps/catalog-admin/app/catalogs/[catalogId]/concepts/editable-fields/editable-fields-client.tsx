@@ -2,7 +2,7 @@
 
 import styles from './editable-fields.module.css';
 import { Heading } from '@digdir/designsystemet-react';
-import { BreadcrumbType, Breadcrumbs, Button, Select } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, Button, Select, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { CodeList, Organization } from '@catalog-frontend/types';
 
@@ -25,17 +25,20 @@ export function EditableFieldsClient({ catalogId, organization }: EditableFields
   const dbEditableFields = getInternalFields?.editable;
   const [updatedCodeListId, setUpdatedCodeListId] = useState<string>();
   const updateCodeListId = useUpdateEditableFields(catalogId);
+  const unsavedChanges = !!(updatedCodeListId && updatedCodeListId !== dbEditableFields?.domainCodeListId);
+
+  useWarnIfUnsavedChanges({ unsavedChanges: unsavedChanges });
 
   const handleUpdateDbCodeListId = () => {
     const newField = { catalogId: catalogId, domainCodeListId: updatedCodeListId ?? '' };
     const diff = compare(dbEditableFields, newField);
 
-    if (diff) {
-      if (updatedCodeListId === undefined) {
-        console.error('Invalid data: updateCodeListId is undefined.');
-        return;
-      }
+    if (updatedCodeListId === undefined) {
+      window.alert(localization.alert.noChanges);
+      return;
+    }
 
+    if (diff) {
       updateCodeListId
         .mutateAsync({ beforeUpdate: dbEditableFields, afterUpdate: newField })
         .then(() => {
@@ -45,7 +48,7 @@ export function EditableFieldsClient({ catalogId, organization }: EditableFields
           alert(localization.alert.fail);
         });
     } else {
-      console.log('No changes detected.');
+      window.alert(localization.alert.noChanges);
     }
   };
 
