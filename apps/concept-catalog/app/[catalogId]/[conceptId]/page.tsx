@@ -31,7 +31,8 @@ const ConceptPage = withReadProtectedPage(
     const concept = await getConcept(`${conceptId}`, `${session?.accessToken}`).then((response) => {
       if (response.ok) return response.json();
     });
-    if (!concept) {
+
+    if (!concept || concept.ansvarligVirksomhet?.id !== catalogId) {
       redirect(`/notfound`, RedirectType.replace);
     }
 
