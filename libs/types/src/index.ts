@@ -1,3 +1,4 @@
+export * from './lib/data-service';
 export * from './lib/design';
 export * from './lib/comment';
 export * from './lib/concept';
