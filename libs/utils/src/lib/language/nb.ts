@@ -433,4 +433,10 @@ export const nb = {
     },
     searchDataset: 'Søk etter datasettbeskrivelse',
   },
+  dataServiceCatalog: {
+    status: {
+      PUBLISHED: 'Publisert',
+      DRAFT: 'Utkast',
+    },
+  },
 };

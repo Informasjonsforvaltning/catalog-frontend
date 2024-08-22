@@ -1,0 +1,15 @@
+.search {
+  width: 60%;
+}
+
+.searchContainer {
+  justify-content: center;
+  display: flex;
+  padding-bottom: 4rem;
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
