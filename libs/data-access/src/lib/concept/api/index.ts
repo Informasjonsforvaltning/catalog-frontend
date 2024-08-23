@@ -272,3 +272,6 @@ export const getUnpublishedRelatedConcepts = async (
   );
   return internalRelatedConcepts;
 };
+
+export const getAllConceptCatalogs = (accessToken: string) =>
+  conceptCatalogApiCall('GET', `/begrepssamlinger`, null, accessToken);

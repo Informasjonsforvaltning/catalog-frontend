@@ -93,3 +93,15 @@ export const unpublishDataset = async (catalogId: string, datasetId: string, acc
   };
   return await fetch(resource, options);
 };
+
+export const getAllDatasetCatalogs = async (accessToken: string) => {
+  const resource = `${path}/catalogs`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    next: { tags: ['dataset-catalogs'] },
+  };
+  return await fetch(resource, options);
+};

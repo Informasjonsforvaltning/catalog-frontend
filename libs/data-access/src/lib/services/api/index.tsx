@@ -93,3 +93,15 @@ export const unpublishService = async (catalogId: string, serviceId: string, acc
   };
   return await fetch(resource, options);
 };
+
+export const getAllServiceCatalogs = async (accessToken: string) => {
+  const resource = `${path}/internal/catalogs/count`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+  };
+
+  return await fetch(resource, options);
+};

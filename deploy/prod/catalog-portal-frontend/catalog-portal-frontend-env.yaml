@@ -29,7 +29,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: sso-client-credentials
-                  key: DATASET_CATALOG_FRONTEND
+                  key: CATALOG_PORTAL_FRONTEND
             - name: CATALOG_ADMIN_SERVICE_BASE_URI
               valueFrom:
                 secretKeyRef:
