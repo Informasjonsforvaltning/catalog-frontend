@@ -1,0 +1,51 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-portal-frontend
+  labels:
+    app: catalog-portal-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalog-portal-frontend
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: catalog-portal-frontend
+      annotations:
+        prometheus.io/scrape: 'false'
+    spec:
+      containers:
+        - name: catalog-portal-frontend
+          image: catalog-portal-frontend
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/ping
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+            initialDelaySeconds: 20
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/ping
+              port: 8080
+              scheme: HTTP
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
+            initialDelaySeconds: 20
+          resources:
+            requests:
+              cpu: 25m
+              memory: 500Mi
