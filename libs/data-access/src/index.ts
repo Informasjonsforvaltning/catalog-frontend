@@ -13,3 +13,5 @@ export * from './lib/public-services/api';
 export * from './lib/services/api';
 export * from './lib/statuses/api';
 export * from './lib/datasets/api';
+export * from './lib/data-service/api';
+export * from './lib/records-of-processing-activities/api';

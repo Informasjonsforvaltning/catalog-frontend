@@ -1,5 +1,5 @@
 'use client';
 
 export default function Index() {
-  return <p>catalog-portal</p>;
+  return <div className='container'>Hva blir det her</div>;
 }
