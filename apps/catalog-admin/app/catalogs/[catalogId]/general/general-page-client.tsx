@@ -1,6 +1,6 @@
 'use client';
 
-import { BreadcrumbType, Breadcrumbs, Card } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, NavigationCard } from '@catalog-frontend/ui';
 import React from 'react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Banner } from '../../../../components/banner';
@@ -36,13 +36,13 @@ export const GeneralPageClient = ({ catalogId, organization }: GeneralPageClient
         catalogId={catalogId}
       />
       <div className={styles.cardsContainer}>
-        <Card
+        <NavigationCard
           icon={<PaletteIcon fontSize='3rem' />}
           title={localization.catalogAdmin.design}
           body={localization.catalogAdmin.manage.design}
           href={`/catalogs/${catalogId}/general/design`}
         />
-        <Card
+        <NavigationCard
           icon={<PersonIcon fontSize='3rem' />}
           title={localization.catalogAdmin.username}
           body={localization.catalogAdmin.manage.username}

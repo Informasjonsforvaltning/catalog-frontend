@@ -1,6 +1,6 @@
 'use client';
 
-import { BreadcrumbType, Breadcrumbs, Card } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, NavigationCard } from '@catalog-frontend/ui';
 
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Banner } from '../../../components/banner';
@@ -33,13 +33,13 @@ export const AdminPageClient = ({ organization, catalogId }: AdminPageClientProp
           catalogId={catalogId}
         />
         <div className={styles.cardsContainer}>
-          <Card
+          <NavigationCard
             icon={<InformationSquareIcon fontSize='3rem' />}
             title={localization.general}
             body={localization.catalogAdmin.description.general}
             href={`/catalogs/${catalogId}/general`}
           />
-          <Card
+          <NavigationCard
             icon={
               <TableIcon
                 title='a11y-title'
