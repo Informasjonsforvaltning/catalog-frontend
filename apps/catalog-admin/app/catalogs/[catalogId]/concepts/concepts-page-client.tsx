@@ -1,6 +1,6 @@
 'use client';
 
-import { BreadcrumbType, Breadcrumbs, Card } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, NavigationCard } from '@catalog-frontend/ui';
 import React from 'react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Banner } from '../../../../components/banner';
@@ -37,7 +37,7 @@ export const ConceptsPageClient = ({ catalogId, organization }: ConceptsPageClie
       />
       <div className={styles.cardsContainer}>
         <div className={styles.cardsGrid}>
-          <Card
+          <NavigationCard
             icon={
               <DatabaseIcon
                 title='a11y-title'
@@ -48,13 +48,13 @@ export const ConceptsPageClient = ({ catalogId, organization }: ConceptsPageClie
             body={localization.catalogAdmin.manage.codeList}
             href={`/catalogs/${catalogId}/concepts/code-lists`}
           />
-          <Card
+          <NavigationCard
             icon={<RectangleSectionsIcon fontSize='3rem' />}
             title={localization.catalogAdmin.internalFields}
             body={localization.catalogAdmin.manage.internalFields}
             href={`/catalogs/${catalogId}/concepts/internal-fields`}
           />
-          <Card
+          <NavigationCard
             icon={<PencilWritingIcon fontSize='3rem' />}
             title={localization.catalogAdmin.editableFields}
             body={localization.catalogAdmin.manage.editableFields}

@@ -16,7 +16,7 @@ export * from './lib/language-indicator';
 export * from './lib/select';
 export * from './lib/spinner';
 export * from './lib/pagination';
-export * from './lib/card';
+export * from './lib/navigation-card';
 export * from './lib/checkbox-group';
 export * from './lib/list';
 export * from './lib/search-hit-container';
