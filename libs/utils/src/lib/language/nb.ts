@@ -61,10 +61,11 @@ export const nb = {
   catalogType: {
     admin: 'Administrasjonsgrensesnitt',
     concept: 'Begrepskatalog',
-    dataset: 'Datasettkatalogen',
+    dataset: 'Datasettkatalog',
     dataService: 'Datatjenestekatalogen',
     publicService: 'Offentlig tjenestekatalog',
     service: 'Tjenestekatalog',
+    recordsOfProcessingActivities: 'Behandlingsoversikt',
   },
 
   resourceType: {
@@ -76,6 +77,14 @@ export const nb = {
     service: 'Tjeneste',
     publicService: 'Offentlig tjeneste',
     event: 'Hendelse',
+  },
+  descriptionType: {
+    dataset: 'datasettbeskrivelser',
+    dataService: 'API-beskrivelser',
+    concept: 'begreper',
+    service: 'tjenestebeskrivelser',
+    publicService: 'offentlige tjenestebeskrivelser',
+    recordsOfProcessingActivities: 'behandlingsaktiviteter',
   },
 
   language: {
