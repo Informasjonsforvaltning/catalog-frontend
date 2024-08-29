@@ -16,7 +16,7 @@ export const SignOut = () => {
   return (
     <>
       <PageBanner
-        title={localization.catalogType.dataset}
+        title={localization.allCatalogs}
         subtitle={localization.auth.logout}
       />
       <CenterContainer>

@@ -13,8 +13,9 @@ import {
   getDataServiceCatalogs,
   getDatasetCatalogs,
   getServiceCatalogs,
+  getServiceMessages,
 } from '../actions/actions';
-import { getOrganizations } from '@catalog-frontend/data-access';
+import { getOrganizations, ServiceMessageEntity } from '@catalog-frontend/data-access';
 import { Heading, Link } from '@digdir/designsystemet-react';
 import {
   ConceptCatalog,
@@ -26,7 +27,7 @@ import {
   ServiceCatalog,
 } from '@catalog-frontend/types';
 import React from 'react';
-import { Breadcrumbs, NavigationCard } from '@catalog-frontend/ui';
+import { Breadcrumbs, NavigationCard, ServiceMessages } from '@catalog-frontend/ui';
 import styles from './catalogs.module.css';
 import { CompassIcon, ChatElipsisIcon, CodeIcon, FilesIcon, GavelSoundBlockIcon } from '@navikt/aksel-icons';
 
@@ -91,7 +92,7 @@ const getAllCatalogsByOrgId = (
 };
 
 const DatasetSearchHitsPage: React.FC<{ params: Params }> = async () => {
-  const session = await getValidSession({ callbackUrl: `/catalogs/` });
+  const session = await getValidSession({ callbackUrl: `/catalogs` });
   const datasetCatalogs = await getDatasetCatalogs();
   const dataServiceCatalogs = await getDataServiceCatalogs();
   const conceptCatalogs = await getConceptCatalogs();
@@ -101,23 +102,23 @@ const DatasetSearchHitsPage: React.FC<{ params: Params }> = async () => {
   const organizationIds = getOrganizationsIds(session.accessToken);
   const organizations = await getOrganizations(organizationIds).then((res) => res.json());
   const recordsOfProcessingActivities = await getAllProcesssingActivitiesCatalogs();
+  const serviceMessages: ServiceMessageEntity[] = await getServiceMessages();
 
   return (
-    <>
+    <div className='container'>
       <Breadcrumbs baseURI={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} />
-      {organizations.map(async (org: Organization) => (
-        <div
-          key={org.organizationId}
-          className='container'
-        >
+      <ServiceMessages serviceMessages={serviceMessages} />
+
+      {organizations.map((org: Organization) => (
+        <div key={`org-section-${org.organizationId}`}>
           <Heading
             className={styles.heading}
             size='lg'
           >
             {getTranslateText(org.prefLabel)}
           </Heading>
-          {((await hasOrganizationWritePermission(session.accessToken, org.organizationId)) ||
-            (await hasSystemAdminPermission(session.accessToken))) && (
+          {(hasOrganizationWritePermission(session.accessToken, org.organizationId) ||
+            hasSystemAdminPermission(session.accessToken)) && (
             <Link
               className={styles.link}
               href={`${process.env.FDK_REGISTRATION_BASE_URI}/terms-and-conditions/${org.organizationId}`}
@@ -134,8 +135,8 @@ const DatasetSearchHitsPage: React.FC<{ params: Params }> = async () => {
               publicServiceCatalogs,
               serviceCatalogs,
               recordsOfProcessingActivities,
-            ).map((catalog) => (
-              <>
+            ).map((catalog, index) => (
+              <div key={`catalog-collection-${index}`}>
                 {isDatasetCatalog(catalog) && catalog.datasetCount > 0 && (
                   <div key={`datasetCatalog-${catalog.id}`}>
                     <NavigationCard
@@ -227,12 +228,12 @@ const DatasetSearchHitsPage: React.FC<{ params: Params }> = async () => {
                     />
                   </div>
                 )}
-              </>
+              </div>
             ))}
           </div>
         </div>
       ))}
-    </>
+    </div>
   );
 };
 

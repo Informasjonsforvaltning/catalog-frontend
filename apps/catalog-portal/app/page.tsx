@@ -1,5 +1,9 @@
-'use client';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-export default function Index() {
-  return <div className='container'>Hva blir det her</div>;
-}
+const Home = () => {
+  cookies();
+  redirect(`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`);
+};
+
+export default Home;
