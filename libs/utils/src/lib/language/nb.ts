@@ -62,7 +62,7 @@ export const nb = {
     admin: 'Administrasjonsgrensesnitt',
     concept: 'Begrepskatalog',
     dataset: 'Datasettkatalog',
-    dataService: 'Datatjenestekatalogen',
+    dataService: 'Datatjenestekatalog',
     publicService: 'Offentlig tjenestekatalog',
     service: 'Tjenestekatalog',
     recordsOfProcessingActivities: 'Behandlingsoversikt',
