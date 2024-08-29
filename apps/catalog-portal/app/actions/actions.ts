@@ -59,6 +59,7 @@ export async function getServiceCatalogs(): Promise<ServiceCatalogs> {
 
   jsonResponse.forEach((item) => {
     if (item.serviceCount !== undefined) {
+      // add the catalog if it has services
       serviceCatalogs.push({
         catalogId: item.catalogId,
         serviceCount: item.serviceCount,

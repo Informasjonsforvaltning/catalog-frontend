@@ -1,4 +1,4 @@
-const path = `${process.env.DATA_SERVICE_CATALOG_BASE_URI}`;
+const path = `${process.env.DATASERVICE_CATALOG_BASE_URI}`;
 
 export const getAllDataServices = async (catalogId: string, accessToken: string) => {
   const resource = `${path}/catalogs/${catalogId}/dataservices`;
@@ -19,7 +19,18 @@ export const getDataserviceById = async (catalogId: string, dataServiceId: strin
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
-    next: { tags: ['data-services'] },
+    next: { tags: ['data-service'] },
+  };
+  return await fetch(resource, options);
+};
+
+export const getAllDataServiceCatalogs = async (accessToken: string) => {
+  const resource = `${path}/catalogs`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
   };
   return await fetch(resource, options);
 };

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import styles from './navigation-card.module.css';
-import { Heading, Card as CardBase, Paragraph } from '@digdir/designsystemet-react';
+import { Heading, Card as CardBase, Paragraph, Card } from '@digdir/designsystemet-react';
 interface Card {
   title?: string;
   body?: string;
@@ -30,7 +30,7 @@ const NavigationCard = ({ title, body, href, icon }: Card) => {
           >
             {title}
           </Heading>
-          <Paragraph className={styles.body}>{body}</Paragraph>
+          <CardBase.Content className={styles.body}>{body}</CardBase.Content>
         </Link>
       ) : (
         <div className={styles.card}>

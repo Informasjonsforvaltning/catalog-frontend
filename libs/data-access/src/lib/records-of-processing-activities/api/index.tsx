@@ -6,7 +6,7 @@ export const getAllProcessingActivities = async (accessToken: string) => {
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      Accept: 'application/json',
     },
   };
   return await fetch(resource, options);
