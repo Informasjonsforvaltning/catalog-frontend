@@ -31,3 +31,4 @@ export * from './lib/form-container';
 export * from './lib/divider-line';
 export * from './lib/search-hits-page-layout';
 export * from './lib/tag';
+export * from './lib/service-messages';

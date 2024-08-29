@@ -57,6 +57,8 @@ export const nb = {
   lastChanged: 'Sist endret',
   noName: 'Uten navn',
   choose: 'Velg',
+  serviceMessageError: 'Kunne ikke laste inn tjenestemeldinger. Vennligst prøv igjen senere.',
+  serviceMessageSeeMore: 'Se detaljert driftsmelding for mer informasjon.',
 
   catalogType: {
     admin: 'Administrasjonsgrensesnitt',

@@ -1,0 +1,16 @@
+overwrite: true
+hooks:
+  afterOneFileWrite:
+    - prettier --write
+generates:
+  ./libs/data-access/src/lib/strapi/generated/graphql.ts:
+    schema: https://cms.staging.fellesdatakatalog.digdir.no/graphql
+    documents: './libs/**/*.graphql'
+    config:
+      withHooks: true
+      withComponent: false
+      withHOC: false
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo

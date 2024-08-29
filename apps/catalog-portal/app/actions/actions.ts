@@ -6,6 +6,7 @@ import {
   getAllConceptCatalogs,
   getAllServiceCatalogs,
   getAllProcessingActivities,
+  getAllServiceMessages,
 } from '@catalog-frontend/data-access';
 import { ServiceCatalogItem, ServiceCatalogs } from '@catalog-frontend/types';
 import { getValidSession } from '@catalog-frontend/utils';
@@ -88,4 +89,13 @@ export async function getAllProcesssingActivitiesCatalogs() {
   }
   const jsonResponse = await response.json();
   return jsonResponse;
+}
+
+export async function getServiceMessages() {
+  const response = await getAllServiceMessages();
+  if (response.status !== 200) {
+    throw new Error('getServiceMessages failed with response code ' + response.status);
+  }
+
+  return response.data.data.serviceMessages.data;
 }
