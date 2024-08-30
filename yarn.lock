@@ -6786,7 +6786,7 @@ __metadata:
     next-auth: "npm:^4.24.7"
     npm: "npm:^10.8.2"
     nuqs: "npm:^1.17.4"
-    nx: "npm:19.6.3"
+    nx: "npm:19.6.4"
     playwright-core: "npm:^1.46.1"
     playwright-ctrf-json-reporter: "npm:^0.0.15"
     postcss: "npm:^8.4.41"
