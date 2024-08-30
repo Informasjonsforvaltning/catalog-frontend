@@ -1,8 +1,7 @@
 import {
-  getOrganizationsIds,
   getTranslateText,
   getValidSession,
-  hasOrganizationWritePermission,
+  hasNonSystemAccessForOrg,
   hasSystemAdminPermission,
   localization,
 } from '@catalog-frontend/utils';
@@ -31,78 +30,49 @@ import { Breadcrumbs, NavigationCard, ServiceMessages } from '@catalog-frontend/
 import styles from './catalogs.module.css';
 import { CompassIcon, ChatElipsisIcon, CodeIcon, FilesIcon, GavelSoundBlockIcon } from '@navikt/aksel-icons';
 
-const isDatasetCatalog = (catalog: any): catalog is DatasetCatalog => 'datasetCount' in catalog;
-const isDataServiceCatalog = (catalog: any): catalog is DataServiceCatalog => 'dataServiceCount' in catalog;
-const isConceptCatalog = (catalog: any): catalog is ConceptCatalog => 'antallBegrep' in catalog;
-const isPublicServiceCatalog = (catalog: any): catalog is PublicServiceCatalog => 'publicServiceCount' in catalog;
-const isServiceCatalog = (catalog: any): catalog is ServiceCatalog => 'serviceCount' in catalog;
-const isRecordOfProccessingActivity = (catalog: any): catalog is RecordOfProcessingActivities =>
-  'recordCount' in catalog;
-
-const getDatasetCatalogsByOrgId = (orgId: string, datasetCatalogs: DatasetCatalog[]): DatasetCatalog[] => {
-  return datasetCatalogs.filter((catalog) => catalog.id === orgId);
-};
-
-const getDataServiceCatalogsByOrgId = (
-  orgId: string,
-  dataServiceCatalogs: DataServiceCatalog[],
-): DataServiceCatalog[] => {
-  return dataServiceCatalogs.filter((catalog) => catalog.id === orgId);
-};
-
-const getConceptCatalogsByOrgId = (orgId: string, conceptCatalogs: ConceptCatalog[]): ConceptCatalog[] => {
-  return conceptCatalogs.filter((catalog) => catalog.id === orgId);
-};
-
-const getPublicServiceCatalogsByOrgId = (
-  orgId: string,
-  publicServiceCatalogs: PublicServiceCatalog[],
-): PublicServiceCatalog[] => {
-  return publicServiceCatalogs.filter((catalog) => catalog.catalogId === orgId);
-};
-
-const getServiceCatalogsByOrgId = (orgId: string, serviceCatalogs: ServiceCatalog[]): ServiceCatalog[] => {
-  return serviceCatalogs.filter((catalog) => catalog.catalogId === orgId);
-};
-
-const getRecordsOfProcessingActivitiesByOrgId = (
-  orgId: string,
-  records: { organizationId: string; recordCount: number }[],
-) => {
-  return records.filter((record) => record.organizationId === orgId);
-};
-
-const getAllCatalogsByOrgId = (
-  orgId: string,
-  datasetCatalogs: DatasetCatalog[],
-  dataServiceCatalogs: DataServiceCatalog[],
-  conceptCatalogs: ConceptCatalog[],
-  publicServiceCatalogs: PublicServiceCatalog[],
-  serviceCatalogs: ServiceCatalog[],
-  recordsOfProcessingActivities: RecordOfProcessingActivities[],
-) => {
-  return [
-    ...getDatasetCatalogsByOrgId(orgId, datasetCatalogs),
-    ...getDataServiceCatalogsByOrgId(orgId, dataServiceCatalogs),
-    ...getConceptCatalogsByOrgId(orgId, conceptCatalogs),
-    ...getPublicServiceCatalogsByOrgId(orgId, publicServiceCatalogs),
-    ...getServiceCatalogsByOrgId(orgId, serviceCatalogs),
-    ...getRecordsOfProcessingActivitiesByOrgId(orgId, recordsOfProcessingActivities),
-  ];
-};
-
-const DatasetSearchHitsPage: React.FC<{ params: Params }> = async () => {
+const CatalogPortalPage: React.FC<{ params: Params }> = async () => {
   const session = await getValidSession({ callbackUrl: `/catalogs` });
-  const datasetCatalogs = await getDatasetCatalogs();
-  const dataServiceCatalogs = await getDataServiceCatalogs();
-  const conceptCatalogs = await getConceptCatalogs();
+  const datasetCatalogs: DatasetCatalog[] = await getDatasetCatalogs();
+  const dataServiceCatalogs: DataServiceCatalog[] = await getDataServiceCatalogs();
+  const conceptCatalogs: ConceptCatalog[] = await getConceptCatalogs();
   const allServiceCatalogs = await getServiceCatalogs();
-  const publicServiceCatalogs = allServiceCatalogs.publicServiceCatalogs;
-  const serviceCatalogs = allServiceCatalogs.serviceCatalogs;
-  const organizationIds = getOrganizationsIds(session.accessToken);
-  const organizations = await getOrganizations(organizationIds).then((res) => res.json());
-  const recordsOfProcessingActivities = await getAllProcesssingActivitiesCatalogs();
+  const publicServiceCatalogs: PublicServiceCatalog[] = allServiceCatalogs.publicServiceCatalogs;
+  const serviceCatalogs: ServiceCatalog[] = allServiceCatalogs.serviceCatalogs;
+  const recordsOfProcessingActivities: RecordOfProcessingActivities[] = await getAllProcesssingActivitiesCatalogs();
   const serviceMessages: ServiceMessageEntity[] = await getServiceMessages();
+
+  const getDatasetCatalogByOrgId = (orgId: string): DatasetCatalog | undefined =>
+    datasetCatalogs.find((catalog) => catalog.id === orgId);
+
+  const getDataServiceCatalogByOrgId = (orgId: string): DataServiceCatalog | undefined =>
+    dataServiceCatalogs.find((catalog) => catalog.id === orgId);
+
+  const getConceptCatalogByOrgId = (orgId: string): ConceptCatalog | undefined =>
+    conceptCatalogs.find((catalog) => catalog.id === orgId);
+
+  const getPublicServiceCatalogByOrgId = (orgId: string): PublicServiceCatalog | undefined =>
+    publicServiceCatalogs.find((catalog) => catalog.catalogId === orgId);
+
+  const getServiceCatalogByOrgId = (orgId: string): ServiceCatalog | undefined =>
+    serviceCatalogs.find((catalog) => catalog.catalogId === orgId);
+
+  const getRecordsOfProcessingActivityByOrgId = (orgId: string): RecordOfProcessingActivities | undefined =>
+    recordsOfProcessingActivities.find((record) => record.organizationId === orgId);
+
+  const getAllUniqueOrgIds = (): string[] => {
+    const orgIdsSet = new Set<string>();
+    datasetCatalogs.forEach((catalog) => orgIdsSet.add(catalog.publisher.id));
+    conceptCatalogs.forEach((catalog) => orgIdsSet.add(catalog.id));
+    publicServiceCatalogs.forEach((catalog) => orgIdsSet.add(catalog.catalogId));
+    serviceCatalogs.forEach((catalog) => orgIdsSet.add(catalog.catalogId));
+    dataServiceCatalogs.forEach((catalog) => orgIdsSet.add(catalog.id));
+    recordsOfProcessingActivities.forEach((catalog) => orgIdsSet.add(catalog.organizationId));
+
+    return Array.from(orgIdsSet);
+  };
+
+  const organizationIds = getAllUniqueOrgIds();
+  const organizations = await getOrganizations(organizationIds).then((res) => res.json());
 
   return (
     <div className='container'>
@@ -117,8 +87,7 @@ const DatasetSearchHitsPage: React.FC<{ params: Params }> = async () => {
           >
             {getTranslateText(org.prefLabel)}
           </Heading>
-          {(hasOrganizationWritePermission(session.accessToken, org.organizationId) ||
-            hasSystemAdminPermission(session.accessToken)) && (
+          {hasNonSystemAccessForOrg(session.accessToken, org.organizationId) && (
             <Link
               className={styles.link}
               href={`${process.env.FDK_REGISTRATION_BASE_URI}/terms-and-conditions/${org.organizationId}`}
@@ -127,109 +96,89 @@ const DatasetSearchHitsPage: React.FC<{ params: Params }> = async () => {
             </Link>
           )}
           <div className={styles.cards}>
-            {getAllCatalogsByOrgId(
-              org.organizationId,
-              datasetCatalogs,
-              dataServiceCatalogs,
-              conceptCatalogs,
-              publicServiceCatalogs,
-              serviceCatalogs,
-              recordsOfProcessingActivities,
-            ).map((catalog, index) => (
-              <div key={`catalog-collection-${index}`}>
-                {isDatasetCatalog(catalog) && catalog.datasetCount > 0 && (
-                  <div key={`datasetCatalog-${catalog.id}`}>
-                    <NavigationCard
-                      key={catalog.id}
-                      icon={
-                        <FilesIcon
-                          title='Files icon'
-                          fontSize='2.5rem'
-                        />
-                      }
-                      title={localization.catalogType.dataset}
-                      body={`${catalog.datasetCount} ${localization.descriptionType.dataset}`}
-                      href={`${process.env.FDK_REGISTRATION_BASE_URI}/catalogs/${catalog.id}/datasets`}
-                    />
-                  </div>
-                )}
-                {isDataServiceCatalog(catalog) && catalog.dataServiceCount > 0 && (
-                  <div key={`dataServiceCatalog-${catalog.id}`}>
-                    <NavigationCard
-                      icon={
-                        <CodeIcon
-                          title='Code icon'
-                          fontSize='2.5rem'
-                        />
-                      }
-                      title={localization.catalogType.dataService}
-                      body={`${catalog.dataServiceCount} ${localization.descriptionType.dataService}`}
-                      href={`${process.env.DATASERVICE_CATALOG_BASE_URI}/${catalog.id}`}
-                    />
-                  </div>
-                )}
-                {isConceptCatalog(catalog) && catalog.antallBegrep > 0 && (
-                  <div key={`conceptCatalog-${catalog.id}`}>
-                    <NavigationCard
-                      icon={
-                        <ChatElipsisIcon
-                          title='Elipsis icon'
-                          fontSize='2.5rem'
-                        />
-                      }
-                      title={localization.catalogType.concept}
-                      body={`${catalog.antallBegrep} ${localization.descriptionType.concept}`}
-                      href={`${process.env.CONCEPT_CATALOG_FRONTEND}/${catalog.id}`}
-                    />
-                  </div>
-                )}
-                {isPublicServiceCatalog(catalog) && catalog.publicServiceCount > 0 && (
-                  <div key={`publicServiceCatalog-${catalog.catalogId}`}>
-                    <NavigationCard
-                      icon={
-                        <CompassIcon
-                          title='Compass icon'
-                          fontSize='2.5rem'
-                        />
-                      }
-                      title={localization.catalogType.publicService}
-                      body={`${catalog.publicServiceCount} ${localization.descriptionType.publicService}`}
-                      href={`${process.env.SERVICE_CATALOG_GUI_BASE_URI}/catalogs/${catalog.catalogId}/public-services`}
-                    />
-                  </div>
-                )}
-                {isServiceCatalog(catalog) && catalog.serviceCount > 0 && (
-                  <div key={`serviceCatalog-${catalog.catalogId}`}>
-                    <NavigationCard
-                      icon={
-                        <CompassIcon
-                          title='Compass icon'
-                          fontSize='2.5rem'
-                        />
-                      }
-                      title={localization.catalogType.service}
-                      body={`${catalog.serviceCount} ${localization.descriptionType.service}`}
-                      href={`${process.env.SERVICE_CATALOG_GUI_BASE_URI}/catalogs/${catalog.catalogId}/services`}
-                    />
-                  </div>
-                )}
-                {isRecordOfProccessingActivity(catalog) && catalog.recordCount > 0 && (
-                  <div key={`recordOfProcessingActivities-${catalog.organizationId}`}>
-                    <NavigationCard
-                      icon={
-                        <GavelSoundBlockIcon
-                          title='Gavel Sound Block Icon'
-                          fontSize='2.5rem'
-                        />
-                      }
-                      title={localization.catalogType.recordsOfProcessingActivities}
-                      body={`${catalog.recordCount} ${localization.descriptionType.recordsOfProcessingActivities}`}
-                      href={`${process.env.RECORDS_OF_PROCESSING_ACTIVITIES_GUI_BASE_URI}/${catalog.organizationId}`}
-                    />
-                  </div>
-                )}
-              </div>
-            ))}
+            <div key={`datasetCatalog-${org.organizationId}`}>
+              <NavigationCard
+                icon={
+                  <FilesIcon
+                    title='Files icon'
+                    fontSize='2.5rem'
+                  />
+                }
+                title={localization.catalogType.dataset}
+                body={`${getDatasetCatalogByOrgId(org.organizationId)?.datasetCount ?? localization.none} ${localization.descriptionType.dataset}`}
+                href={`${process.env.FDK_REGISTRATION_BASE_URI}/catalogs/${org.organizationId}/datasets`}
+              />
+            </div>
+
+            <div key={`dataServiceCatalog-${org.organizationId}`}>
+              <NavigationCard
+                icon={
+                  <CodeIcon
+                    title='Code icon'
+                    fontSize='2.5rem'
+                  />
+                }
+                title={localization.catalogType.dataService}
+                body={`${getDataServiceCatalogByOrgId(org.organizationId)?.dataServiceCount ?? localization.none} ${localization.descriptionType.dataService}`}
+                href={`${process.env.DATASERVICE_CATALOG_BASE_URI}/${org.organizationId}`}
+              />
+            </div>
+
+            <div key={`conceptCatalog-${org.organizationId}`}>
+              <NavigationCard
+                icon={
+                  <ChatElipsisIcon
+                    title='Elipsis icon'
+                    fontSize='2.5rem'
+                  />
+                }
+                title={localization.catalogType.concept}
+                body={`${getConceptCatalogByOrgId(org.organizationId)?.antallBegrep ?? localization.none} ${localization.descriptionType.concept}`}
+                href={`${process.env.CONCEPT_CATALOG_FRONTEND}/${org.organizationId}`}
+              />
+            </div>
+
+            <div key={`publicServiceCatalog-${org.organizationId}`}>
+              <NavigationCard
+                icon={
+                  <CompassIcon
+                    title='Compass icon'
+                    fontSize='2.5rem'
+                  />
+                }
+                title={localization.catalogType.publicService}
+                body={`${getPublicServiceCatalogByOrgId(org.organizationId)?.publicServiceCount ?? localization.none} ${localization.descriptionType.publicService}`}
+                href={`${process.env.SERVICE_CATALOG_GUI_BASE_URI}/catalogs/${org.organizationId}/public-services`}
+              />
+            </div>
+
+            <div key={`serviceCatalog-${org.organizationId}`}>
+              <NavigationCard
+                icon={
+                  <CompassIcon
+                    title='Compass icon'
+                    fontSize='2.5rem'
+                  />
+                }
+                title={localization.catalogType.service}
+                body={`${getServiceCatalogByOrgId(org.organizationId)?.serviceCount ?? localization.none} ${localization.descriptionType.service}`}
+                href={`${process.env.SERVICE_CATALOG_GUI_BASE_URI}/catalogs/${org.organizationId}/services`}
+              />
+            </div>
+
+            <div key={`recordOfProcessingActivities-${org.organizationId}`}>
+              <NavigationCard
+                icon={
+                  <GavelSoundBlockIcon
+                    title='Gavel Sound Block Icon'
+                    fontSize='2.5rem'
+                  />
+                }
+                title={localization.catalogType.recordsOfProcessingActivities}
+                body={`${getRecordsOfProcessingActivityByOrgId(org.organizationId)?.recordCount ?? localization.none} ${localization.descriptionType.recordsOfProcessingActivities}`}
+                href={`${process.env.RECORDS_OF_PROCESSING_ACTIVITIES_GUI_BASE_URI}/${org.organizationId}`}
+              />
+            </div>
           </div>
         </div>
       ))}
@@ -237,4 +186,4 @@ const DatasetSearchHitsPage: React.FC<{ params: Params }> = async () => {
   );
 };
 
-export default DatasetSearchHitsPage;
+export default CatalogPortalPage;
