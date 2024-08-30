@@ -33,6 +33,7 @@ export const nb = {
   noAccess: 'Ingen tilgang',
   notFound: 'Ikke funnet',
   notFoundPage: 'Fant ikke siden du lette etter.',
+  none: 'Ingen',
   ok: 'Ok',
   publicServices: 'Offentlige tjenester',
   registerData: ['Registrere data', 'Lenke til å registrere data'],

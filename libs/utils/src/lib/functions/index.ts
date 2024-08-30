@@ -18,14 +18,3 @@ export const isObjectNullUndefinedEmpty = (object: any | null | undefined) =>
   object === null ||
   Object.keys(object).length === 0 ||
   Object.values(object).every((x) => x === null || x === '');
-
-export const getOrganizationsIds = (accessToken: string): string[] => {
-  // @ts-expect-error .authorities gives type error, but exists in the object
-  const orgRoles: string = jwtDecode(accessToken).authorities;
-  const ids = orgRoles
-    .split(',')
-    .map((item) => item.split(':')[1])
-    .filter((part) => /^\d+$/.test(part));
-
-  return Array.from(new Set(ids));
-};

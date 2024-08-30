@@ -82,3 +82,11 @@ export const validateOidcUserSession = async (token: Token): Promise<boolean> =>
   });
   return response.ok;
 };
+
+export const hasNonSystemAccessForOrg = (token: Token, orgId: string): boolean => {
+  return (
+    hasOrganizationAdminPermission(token, orgId) ||
+    hasOrganizationWritePermission(token, orgId) ||
+    hasOrganizationReadPermission(token, orgId)
+  );
+};
