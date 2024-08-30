@@ -79,7 +79,7 @@
     "@axe-core/playwright": "^4.9.1",
     "@babel/core": "^7.25.2",
     "@babel/preset-react": "^7.24.1",
-    "@nx/cypress": "19.6.3",
+    "@nx/cypress": "19.6.4",
     "@nx/devkit": "19.6.3",
     "@nx/eslint": "19.6.3",
     "@nx/eslint-plugin": "19.6.3",

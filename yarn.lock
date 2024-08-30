@@ -3223,12 +3223,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/cypress@npm:19.6.3":
-  version: 19.6.3
-  resolution: "@nrwl/cypress@npm:19.6.3"
+"@nrwl/cypress@npm:19.6.4":
+  version: 19.6.4
+  resolution: "@nrwl/cypress@npm:19.6.4"
   dependencies:
-    "@nx/cypress": "npm:19.6.3"
-  checksum: 10/0125e773bbce08941f1da1708485fa3eba3213ac44b2662b3d4eab7b6767045302b0408f8ffcad0c2a31a5ffe67151d9857c837397a92c0218a5487eb8cb4b25
+    "@nx/cypress": "npm:19.6.4"
+  checksum: 10/646a727485257da8d368d2b8d06d44e05f21cc5e97caecea6172ddd77827b3021b7698c614d4c88ebe106a8ff8ca8eb7d340abb615017f7a221e3d52f31411e4
   languageName: node
   linkType: hard
 
@@ -3382,14 +3382,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx/cypress@npm:19.6.3":
-  version: 19.6.3
-  resolution: "@nx/cypress@npm:19.6.3"
+"@nx/cypress@npm:19.6.4":
+  version: 19.6.4
+  resolution: "@nx/cypress@npm:19.6.4"
   dependencies:
-    "@nrwl/cypress": "npm:19.6.3"
-    "@nx/devkit": "npm:19.6.3"
-    "@nx/eslint": "npm:19.6.3"
-    "@nx/js": "npm:19.6.3"
+    "@nrwl/cypress": "npm:19.6.4"
+    "@nx/devkit": "npm:19.6.4"
+    "@nx/eslint": "npm:19.6.4"
+    "@nx/js": "npm:19.6.4"
     "@phenomnomnominal/tsquery": "npm:~5.0.1"
     detect-port: "npm:^1.5.1"
     tslib: "npm:^2.3.0"
@@ -3398,7 +3398,7 @@ __metadata:
   peerDependenciesMeta:
     cypress:
       optional: true
-  checksum: 10/e47fd5bc600b8de5b9279675f67b081b522367d7baba54f7ae1d558c3d5d7eb3b0f16bad7912d323e1ef4bead7952aa71e94856496987f389c9f5a8fc903be11
+  checksum: 10/029af84539ec045c28f3f0da6692c57363126a905f8f60241a10e61fde1a231acd8278eb5d1dc157b52eec77a7322e8a09aa7da286172aa2d21f3d497a743f4e
   languageName: node
   linkType: hard
 
@@ -6724,7 +6724,7 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": "npm:^6.6.0"
     "@fortawesome/react-fontawesome": "npm:^0.2.2"
     "@navikt/aksel-icons": "npm:^6.16.2"
-    "@nx/cypress": "npm:19.6.3"
+    "@nx/cypress": "npm:19.6.4"
     "@nx/devkit": "npm:19.6.3"
     "@nx/eslint": "npm:19.6.3"
     "@nx/eslint-plugin": "npm:19.6.3"
