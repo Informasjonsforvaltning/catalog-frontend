@@ -3250,12 +3250,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nrwl/eslint-plugin-nx@npm:19.6.3":
-  version: 19.6.3
-  resolution: "@nrwl/eslint-plugin-nx@npm:19.6.3"
+"@nrwl/eslint-plugin-nx@npm:19.6.4":
+  version: 19.6.4
+  resolution: "@nrwl/eslint-plugin-nx@npm:19.6.4"
   dependencies:
-    "@nx/eslint-plugin": "npm:19.6.3"
-  checksum: 10/c25f602a4e8181bd5758ca650098a691d452e3e21f3de3d364e386bef49042d526fa85774dae6f70a41d652be789b6411f16f2a6adbb5b0d6e84145ab55daf3b
+    "@nx/eslint-plugin": "npm:19.6.4"
+  checksum: 10/e542b7aa7c87c7a90dea9468bbf4bccb4fb5c41186821fdb809be484a5cfc6bc75790b318420e2713a14874cafb83d77872e19d713c676f793c55738b73d6ed5
   languageName: node
   linkType: hard
 
@@ -3440,13 +3440,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx/eslint-plugin@npm:19.6.3":
-  version: 19.6.3
-  resolution: "@nx/eslint-plugin@npm:19.6.3"
+"@nx/eslint-plugin@npm:19.6.4":
+  version: 19.6.4
+  resolution: "@nx/eslint-plugin@npm:19.6.4"
   dependencies:
-    "@nrwl/eslint-plugin-nx": "npm:19.6.3"
-    "@nx/devkit": "npm:19.6.3"
-    "@nx/js": "npm:19.6.3"
+    "@nrwl/eslint-plugin-nx": "npm:19.6.4"
+    "@nx/devkit": "npm:19.6.4"
+    "@nx/js": "npm:19.6.4"
     "@typescript-eslint/type-utils": "npm:^7.16.0"
     "@typescript-eslint/utils": "npm:^7.16.0"
     chalk: "npm:^4.1.0"
@@ -3460,7 +3460,7 @@ __metadata:
   peerDependenciesMeta:
     eslint-config-prettier:
       optional: true
-  checksum: 10/d504e461965ccd64a78e9db270a6dd0578d8c9fa8c0e02c822a71995aebc411e8cb1dd6520e70ca347ea30da1b53c7fa0d9bb9dd7bc611eea7671ab063a25aea
+  checksum: 10/e1e3f8e2ecc1c0e9e675aa08aef3891ec9893b58a1cb92f8b610a1e81c8110731c9777df0fdfbd5396de446625198ddd4fb0e7fa4db73dba244d4a1d23bbea54
   languageName: node
   linkType: hard
 
@@ -6727,7 +6727,7 @@ __metadata:
     "@nx/cypress": "npm:19.6.3"
     "@nx/devkit": "npm:19.6.3"
     "@nx/eslint": "npm:19.6.3"
-    "@nx/eslint-plugin": "npm:19.6.3"
+    "@nx/eslint-plugin": "npm:19.6.4"
     "@nx/jest": "npm:19.6.3"
     "@nx/js": "npm:19.6.3"
     "@nx/next": "npm:19.6.3"
