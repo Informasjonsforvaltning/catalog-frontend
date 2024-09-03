@@ -24,7 +24,11 @@ export const Definition = ({ definition, language }: Props) => {
               <ul>
                 {definition?.kildebeskrivelse?.kilde?.map((kilde, i) => (
                   <li key={`kilde-${i}`}>
-                    {kilde.uri ? <Link href={kilde.uri}>{kilde.tekst}</Link> : <span>{kilde.tekst}</span>}
+                    {kilde.uri ? (
+                      <Link href={kilde.uri}>{kilde.tekst ? kilde.tekst : kilde.uri}</Link>
+                    ) : (
+                      <span>{kilde.tekst}</span>
+                    )}
                   </li>
                 ))}
               </ul>
