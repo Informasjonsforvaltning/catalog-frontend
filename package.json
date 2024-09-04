@@ -57,7 +57,7 @@
     "json-patch-es6": "^2.0.9",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
-    "next": "14.2.3",
+    "next": "14.2.7",
     "next-auth": "^4.24.7",
     "nuqs": "^1.17.4",
     "postcss": "^8.4.41",
