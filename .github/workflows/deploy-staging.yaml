@@ -49,10 +49,10 @@ jobs:
           E2E_NEXTAUTH_SECRET: ${{ secrets.E2E_NEXTAUTH_SECRET }}
       - name: Merge CTRF reports
         run: npx ctrf merge reports
-        if: always()
+        if: ${{ hashFiles('reports/') != '' }}
       - name: Run CTRF annotations
         run: npx github-actions-ctrf reports/ctrf-report.json
-        if: always()
+        if: ${{ hashFiles('reports/') != '' }}
       - run: yarn run affected:build --configuration=ci
 
       - name: Caching Dist Folder
