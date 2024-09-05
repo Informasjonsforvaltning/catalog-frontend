@@ -2,6 +2,7 @@ import { expect, Page, BrowserContext } from '@playwright/test';
 import type AxeBuilder from '@axe-core/playwright';
 import { adminAuthFile, readAuthFile, writeAuthFile } from '../utils/helpers';
 
+const PREFIX_TEXT = 'catalog-portal: ';
 export default class LoginPage {
   page: Page;
   context: BrowserContext;

@@ -1,22 +1,23 @@
 import { test as base } from '@playwright/test';
-import HomePage from '../page-object-model/homePage';
+import CatalogPortalPage from '../page-object-model/catalogPortalPage';
 import LoginPage from '../page-object-model/loginPage';
 import { adminAuthFile, generateAccessibilityBuilder } from '../utils/helpers';
 
 const PREFIX_TEXT = 'catalog-portal: ';
 export const test = base.extend<{
   loginPage: any;
-  homePage: any;
+  catalogPortalPage: any;
 }>({
   loginPage: async ({ page, context }, use) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
     const loginPage = new LoginPage(page, context, accessibilityBuilder);
+    await page.goto('/catalogs');
     await use(loginPage);
   },
-  homePage: async ({ page, context }, use) => {
+  catalogPortalPage: async ({ page, context }, use) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
-    const homePage = new HomePage(page, context, accessibilityBuilder);
-    await use(homePage);
+    const catalogPortalPage = new CatalogPortalPage(page, context, accessibilityBuilder);
+    await use(catalogPortalPage);
   },
 });
 
