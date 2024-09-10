@@ -50,10 +50,14 @@ export const ServiceMessages = ({ serviceMessages }: ServiceMessagesProps) => {
             </Heading>
             <Paragraph>
               <span>
-                {`${short_description} ${description} `}
-                <Link href={`${process.env.FDK_BASE_URI}/publishing/service-messages/${message.id}`}>
-                  {localization.serviceMessageSeeMore}
-                </Link>
+                {`${short_description} `}
+                {description ? (
+                  <Link href={`${process.env.FDK_BASE_URI}/publishing/service-messages/${message.id}`}>
+                    {`${localization.serviceMessageSeeMore}`}
+                  </Link>
+                ) : (
+                  ''
+                )}
               </span>
             </Paragraph>
           </Alert>

@@ -4,6 +4,9 @@ import {
   hasNonSystemAccessForOrg,
   hasSystemAdminPermission,
   localization,
+  OrganizationRole,
+  sortAscending,
+  sortDescending,
 } from '@catalog-frontend/utils';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import {
@@ -72,14 +75,17 @@ const CatalogPortalPage: React.FC<{ params: Params }> = async () => {
   };
 
   const organizationIds = getAllUniqueOrgIds();
-  const organizations = await getOrganizations(organizationIds).then((res) => res.json());
+  const organizations: Organization[] = await getOrganizations(organizationIds).then((res) => res.json());
+  const sortedOrganization = organizations.sort((a, b) =>
+    sortAscending(getTranslateText(a.prefLabel).toString(), getTranslateText(b.prefLabel).toString()),
+  );
 
   return (
     <div className='container'>
       <Breadcrumbs baseURI={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} />
       <ServiceMessages serviceMessages={serviceMessages} />
 
-      {organizations.map((org: Organization) => (
+      {sortedOrganization.map((org: Organization) => (
         <div key={`org-section-${org.organizationId}`}>
           <Heading
             className={styles.heading}
@@ -105,7 +111,7 @@ const CatalogPortalPage: React.FC<{ params: Params }> = async () => {
                   />
                 }
                 title={localization.catalogType.dataset}
-                body={`${getDatasetCatalogByOrgId(org.organizationId)?.datasetCount ?? localization.none} ${localization.descriptionType.dataset}`}
+                body={`${getDatasetCatalogByOrgId(org.organizationId)?.datasetCount && getDatasetCatalogByOrgId(org.organizationId)?.datasetCount !== 0 ? getDatasetCatalogByOrgId(org.organizationId)?.datasetCount : localization.none} ${localization.descriptionType.dataset}`}
                 href={`${process.env.FDK_REGISTRATION_BASE_URI}/catalogs/${org.organizationId}/datasets`}
               />
             </div>
@@ -146,8 +152,9 @@ const CatalogPortalPage: React.FC<{ params: Params }> = async () => {
                     fontSize='2.5rem'
                   />
                 }
-                title={localization.catalogType.publicService}
-                body={`${getPublicServiceCatalogByOrgId(org.organizationId)?.publicServiceCount ?? localization.none} ${localization.descriptionType.publicService}`}
+                title={localization.catalogType.service}
+                subtitle={localization.resourceType.publicServices}
+                body={`${getPublicServiceCatalogByOrgId(org.organizationId)?.publicServiceCount ?? localization.none} ${localization.descriptionType.service}`}
                 href={`${process.env.SERVICE_CATALOG_GUI_BASE_URI}/catalogs/${org.organizationId}/public-services`}
               />
             </div>
@@ -161,6 +168,7 @@ const CatalogPortalPage: React.FC<{ params: Params }> = async () => {
                   />
                 }
                 title={localization.catalogType.service}
+                subtitle={localization.resourceType.services}
                 body={`${getServiceCatalogByOrgId(org.organizationId)?.serviceCount ?? localization.none} ${localization.descriptionType.service}`}
                 href={`${process.env.SERVICE_CATALOG_GUI_BASE_URI}/catalogs/${org.organizationId}/services`}
               />

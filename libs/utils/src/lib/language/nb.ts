@@ -4,6 +4,7 @@
 
 export const nb = {
   allCatalogs: 'Alle kataloger',
+  catalogOverview: 'Katalogoversikt',
   assigned: 'Tildelt',
   category: 'Kategori',
   changeHistory: 'Endringshistorikk',
@@ -35,7 +36,6 @@ export const nb = {
   notFoundPage: 'Fant ikke siden du lette etter.',
   none: 'Ingen',
   ok: 'Ok',
-  publicServices: 'Offentlige tjenester',
   registerData: ['Registrere data', 'Lenke til å registrere data'],
   save: 'Lagre',
   saveEdits: 'Lagre endringer',
@@ -66,7 +66,6 @@ export const nb = {
     concept: 'Begrepskatalog',
     dataset: 'Datasettkatalog',
     dataService: 'Datatjenestekatalog',
-    publicService: 'Offentlig tjenestekatalog',
     service: 'Tjenestekatalog',
     recordsOfProcessingActivities: 'Behandlingsoversikt',
   },
@@ -78,15 +77,16 @@ export const nb = {
     concept: 'Begrep',
     informationModel: 'Informasjonsmodell',
     service: 'Tjeneste',
+    services: 'Tjenester',
+    publicServices: 'Offentlige tjenester',
     publicService: 'Offentlig tjeneste',
     event: 'Hendelse',
   },
   descriptionType: {
     dataset: 'datasettbeskrivelser',
-    dataService: 'API-beskrivelser',
-    concept: 'begreper',
+    dataService: 'datatjenestebeskrivelser',
+    concept: 'begrepsbeskrivelser',
     service: 'tjenestebeskrivelser',
-    publicService: 'offentlige tjenestebeskrivelser',
     recordsOfProcessingActivities: 'behandlingsaktiviteter',
   },
 
