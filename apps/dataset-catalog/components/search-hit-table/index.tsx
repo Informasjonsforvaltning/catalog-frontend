@@ -16,9 +16,10 @@ import styles from './search-hit-table.module.css';
 
 export interface BannerProps {
   datasets: Dataset[];
+  DATASET_CATALOG_BASE_URI?: string;
 }
 
-export const SearchHitTable = ({ datasets }: BannerProps) => {
+export const SearchHitTable = ({ datasets, DATASET_CATALOG_BASE_URI }: BannerProps) => {
   const [sortedDatasets, setSortedDatasets] = useState<Dataset[]>(datasets);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [sortKey, setSortKey] = useState<'title' | 'type' | 'lastChanged' | 'status'>('title');
@@ -100,7 +101,11 @@ export const SearchHitTable = ({ datasets }: BannerProps) => {
         {sortedDatasets.map((dataset) => (
           <Table.Row key={dataset.id}>
             <Table.Cell>
-              {dataset.uri && <Link href={dataset.uri}>{dataset.title?.nb || localization.noName}</Link>}
+              {dataset && (
+                <Link href={`${DATASET_CATALOG_BASE_URI}/catalogs/${dataset.catalogId}/datasets/${dataset.id}/edit`}>
+                  {dataset.title?.nb || localization.noName}
+                </Link>
+              )}
             </Table.Cell>
             <Table.Cell>
               {dataset.specializedType === 'SERIES'

@@ -100,13 +100,12 @@ export async function updateService(catalogId: string, oldService: Service, valu
   }
 
   let success = false;
-
   const session = await getValidSession();
 
   try {
     const response = await update(catalogId, oldService.id, diff, `${session?.accessToken}`);
     if (response.status !== 200) {
-      throw new Error();
+      throw new Error(`${response.statusText}`);
     }
     success = true;
   } catch (error) {

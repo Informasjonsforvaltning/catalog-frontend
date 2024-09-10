@@ -71,7 +71,7 @@ const CatalogPortalPage: React.FC<{ params: Params }> = async () => {
 
   const getAllUniqueOrgIds = (): string[] => {
     const orgIdsSet = new Set<string>();
-    datasetCatalogs.forEach((catalog) => orgIdsSet.add(catalog.publisher.id));
+    datasetCatalogs.forEach((catalog) => orgIdsSet.add(catalog.id));
     conceptCatalogs.forEach((catalog) => orgIdsSet.add(catalog.id));
     publicServiceCatalogs.forEach((catalog) => orgIdsSet.add(catalog.catalogId));
     serviceCatalogs.forEach((catalog) => orgIdsSet.add(catalog.catalogId));

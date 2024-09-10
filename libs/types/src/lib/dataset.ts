@@ -1,38 +1,24 @@
-import { PublicationStatus } from './enums';
+import type { PublicationStatus } from './enums';
 import { LocalizedStrings } from './localization';
 
-export interface Dataset {
+export interface Dataset extends DatasetToBeCreated {
   id: string;
   catalogId: string;
   _lastModified: string;
-  registrationStatus?: PublicationStatus;
-  concepts?: {
-    uri: string;
-    prefLabel: LocalizedStrings;
-  }[];
-  uri: string;
-  title?: LocalizedStrings;
-  description?: LocalizedStrings;
-  keyword?: string[];
-  publisher?: {
-    uri: string;
-    id: string;
-    name: string;
-  };
-  landingPage?: string[];
-  references?: {
-    referenceType?: {
-      code: string;
-      prefLabel: LocalizedStrings;
-    };
-    source?: {
-      uri: string;
-      prefLabel: LocalizedStrings;
-    };
-  }[];
-  relations?: {
-    uri: string;
-    prefLabel?: LocalizedStrings;
-  }[];
+}
+export interface DatasetToBeCreated {
+  title: LocalizedStrings;
+  description: LocalizedStrings;
+  registrationStatus: PublicationStatus;
   specializedType?: 'SERIES' | undefined;
+  // Tilgangsnivå
+  accessRights: UriWIthLabel;
+  legalBasisForProcessing?: UriWIthLabel[];
+  legalBasisForAccess?: UriWIthLabel[];
+  legalBasisForRestriction?: UriWIthLabel[];
+}
+
+export interface UriWIthLabel {
+  uri?: string;
+  prefLabel?: LocalizedStrings;
 }

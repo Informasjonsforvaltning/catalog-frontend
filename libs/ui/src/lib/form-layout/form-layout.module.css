@@ -1,0 +1,26 @@
+.buttonsRow {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.heading {
+  padding-bottom: 3rem;
+  padding-left: 21.5%;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+}
+
+.content {
+  display: flex;
+  gap: 2rem;
+  padding-top: 1rem;
+}
+
+.layout {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}

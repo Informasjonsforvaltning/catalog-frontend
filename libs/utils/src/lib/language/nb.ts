@@ -183,6 +183,8 @@ export const nb = {
     approve: 'Godkjent',
     draft: 'Utkast',
     publish: 'Publisert',
+    required: 'Må fylles ut',
+    recommended: 'Anbefalt',
   },
 
   searchHit: {
@@ -199,9 +201,10 @@ export const nb = {
     noChanges: 'Ingen endringer funnet.',
     notValidFile: 'Innholdet i filen er ikke gyldig.',
     success: 'Oppdatering vellykket!',
-    unsavedChanges: 'Changes you made may not be saved.',
+    unsavedChanges: 'Du har ulagrede endringer. Er du sikker på at du vil forlate siden?',
+    updateFailed: 'Oppdatering mislyktes. Prøv igjen senere.',
+    deleteFailed: 'Kunne ikke slette. Prøv igjen senere.',
   },
-
   catalogAdmin: {
     addUser: 'Legg til nytt brukernavn',
     backgroundColor: 'Bakgrunnsfarge',
