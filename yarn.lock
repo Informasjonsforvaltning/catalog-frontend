@@ -7441,7 +7441,7 @@ __metadata:
     babel-jest: "npm:^29.7.0"
     babel-plugin-styled-components: "npm:2.1.4"
     classnames: "npm:^2.5.1"
-    cypress: "npm:^13.13.3"
+    cypress: "npm:^13.14.2"
     eslint: "npm:8.57.0"
     eslint-config-next: "npm:14.2.7"
     eslint-config-prettier: "npm:9.1.0"
@@ -8509,7 +8509,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cypress@npm:^13.13.3":
+"cypress@npm:^13.14.2":
   version: 13.14.2
   resolution: "cypress@npm:13.14.2"
   dependencies:
