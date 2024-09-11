@@ -7,11 +7,19 @@ import {
   getAllServiceCatalogs,
   getAllProcessingActivities,
   getAllServiceMessages,
+  ServiceMessageEntity,
 } from '@catalog-frontend/data-access';
-import { ServiceCatalogItem, ServiceCatalogs } from '@catalog-frontend/types';
+import {
+  ConceptCatalog,
+  DataServiceCatalog,
+  DatasetCatalog,
+  RecordOfProcessingActivities,
+  ServiceCatalogItem,
+  ServiceCatalogs,
+} from '@catalog-frontend/types';
 import { getValidSession } from '@catalog-frontend/utils';
 
-export async function getDatasetCatalogs() {
+export async function getDatasetCatalogs(): Promise<DatasetCatalog[]> {
   const session = await getValidSession();
   const response = await getAllDatasetCatalogs(`${session?.accessToken}`);
 
@@ -23,7 +31,7 @@ export async function getDatasetCatalogs() {
   return jsonResponse._embedded.catalogs;
 }
 
-export async function getDataServiceCatalogs() {
+export async function getDataServiceCatalogs(): Promise<DataServiceCatalog[]> {
   const session = await getValidSession();
   const response = await getAllDataServiceCatalogs(`${session?.accessToken}`);
 
@@ -34,7 +42,7 @@ export async function getDataServiceCatalogs() {
   return jsonResponse;
 }
 
-export async function getConceptCatalogs() {
+export async function getConceptCatalogs(): Promise<ConceptCatalog[]> {
   const session = await getValidSession();
   const response = await getAllConceptCatalogs(`${session?.accessToken}`);
 
@@ -81,7 +89,7 @@ export async function getServiceCatalogs(): Promise<ServiceCatalogs> {
   };
 }
 
-export async function getAllProcesssingActivitiesCatalogs() {
+export async function getAllProcesssingActivitiesCatalogs(): Promise<RecordOfProcessingActivities[]> {
   const session = await getValidSession();
   const response = await getAllProcessingActivities(`${session?.accessToken}`);
   if (response.status !== 200) {
@@ -91,11 +99,10 @@ export async function getAllProcesssingActivitiesCatalogs() {
   return jsonResponse;
 }
 
-export async function getServiceMessages() {
+export async function getServiceMessages(): Promise<ServiceMessageEntity[]> {
   const response = await getAllServiceMessages();
   if (response.status !== 200) {
     throw new Error('getServiceMessages failed with response code ' + response.status);
   }
-
   return response.data.data.serviceMessages.data;
 }

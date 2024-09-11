@@ -169,14 +169,13 @@ export const nb = {
     digdirManagesNationalDataCatalog: 'Digitaliseringsdirektoratet forvalter Felles datakatalog.',
     privacyStatement: 'Personvernerklæring',
     termsOfUse: 'Bruksvilkår',
-    twitter: 'Twitter',
   },
 
   header: {
     registerData: 'Registrere data',
     harvestData: 'Høste data',
-    dataCommunity: 'Gå til Datalandsbyen',
-    nationalDataCatalog: 'Gå til Felles datakatalog',
+    dataCommunity: 'Datalandsbyen',
+    nationalDataCatalog: 'Data.norge.no',
   },
 
   tag: {

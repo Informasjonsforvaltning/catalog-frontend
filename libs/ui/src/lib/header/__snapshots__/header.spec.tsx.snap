@@ -24,7 +24,11 @@ exports[`Header should render successfully 1`] = `
               rel="noreferrer"
               target=""
             >
-              Registrere data
+              <span
+                class="externalLink"
+              >
+                Registrere data
+              </span>
             </a>
           </li>
           <li>
@@ -32,7 +36,11 @@ exports[`Header should render successfully 1`] = `
               rel="noreferrer"
               target=""
             >
-              Høste data
+              <span
+                class="externalLink"
+              >
+                Høste data
+              </span>
             </a>
           </li>
           <li>
@@ -40,7 +48,37 @@ exports[`Header should render successfully 1`] = `
               rel="noreferrer"
               target="_blank"
             >
-              Gå til Datalandsbyen
+              <span
+                class="externalLink"
+              >
+                Data.norge.no
+                <span
+                  class="icon"
+                >
+                  <svg
+                    aria-labelledby="title-r0"
+                    fill="none"
+                    focusable="false"
+                    height="1em"
+                    role="img"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <title
+                      id="title-r0"
+                    >
+                      ExternalLinkIcon
+                    </title>
+                    <path
+                      clip-rule="evenodd"
+                      d="M20.532 3.471A.75.75 0 0 1 20.75 4v7.5a.75.75 0 0 1-1.5 0V5.81l-8.72 8.72a.75.75 0 1 1-1.06-1.06l8.72-8.72H12.5a.75.75 0 0 1 0-1.5H20c.206 0 .393.083.529.218l.001.002zM4.75 9A.25.25 0 0 1 5 8.75h7a.75.75 0 0 0 0-1.5H5A1.75 1.75 0 0 0 3.25 9v10c0 .966.784 1.75 1.75 1.75h10A1.75 1.75 0 0 0 16.75 19v-7a.75.75 0 0 0-1.5 0v7a.25.25 0 0 1-.25.25H5a.25.25 0 0 1-.25-.25z"
+                      fill="currentColor"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
+                </span>
+              </span>
             </a>
           </li>
           <li>
@@ -48,7 +86,37 @@ exports[`Header should render successfully 1`] = `
               rel="noreferrer"
               target="_blank"
             >
-              Gå til Felles datakatalog
+              <span
+                class="externalLink"
+              >
+                Datalandsbyen
+                <span
+                  class="icon"
+                >
+                  <svg
+                    aria-labelledby="title-r1"
+                    fill="none"
+                    focusable="false"
+                    height="1em"
+                    role="img"
+                    viewBox="0 0 24 24"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <title
+                      id="title-r1"
+                    >
+                      ExternalLinkIcon
+                    </title>
+                    <path
+                      clip-rule="evenodd"
+                      d="M20.532 3.471A.75.75 0 0 1 20.75 4v7.5a.75.75 0 0 1-1.5 0V5.81l-8.72 8.72a.75.75 0 1 1-1.06-1.06l8.72-8.72H12.5a.75.75 0 0 1 0-1.5H20c.206 0 .393.083.529.218l.001.002zM4.75 9A.25.25 0 0 1 5 8.75h7a.75.75 0 0 0 0-1.5H5A1.75 1.75 0 0 0 3.25 9v10c0 .966.784 1.75 1.75 1.75h10A1.75 1.75 0 0 0 16.75 19v-7a.75.75 0 0 0-1.5 0v7a.25.25 0 0 1-.25.25H5a.25.25 0 0 1-.25-.25z"
+                      fill="currentColor"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
+                </span>
+              </span>
             </a>
           </li>
         </ul>

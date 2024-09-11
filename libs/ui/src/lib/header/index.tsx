@@ -1,14 +1,13 @@
 'use client';
 
 import { FC } from 'react';
-import { hasOrganizationAdminPermission, localization } from '@catalog-frontend/utils';
+import { getResourceRoles, localization } from '@catalog-frontend/utils';
 import UserIcon from './images/user-icon.svg';
 import FDKLogo from './images/fdk-publishing-logo-negative.svg';
 import FDKLogoDemo from './images/fdk-publishing-logo-negative-demo.svg';
-import { useParams, useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import styles from './header.module.css';
-import { LeaveIcon } from '@navikt/aksel-icons';
+import { ExternalLinkIcon, LeaveIcon } from '@navikt/aksel-icons';
 import { Divider, DropdownMenu } from '@digdir/designsystemet-react';
 
 export interface HeaderProps {
@@ -46,13 +45,13 @@ const Header: FC<HeaderProps> = ({
       external: false,
     },
     {
-      name: localization.header.dataCommunity,
-      url: fdkCommunityBaseUrl,
+      name: localization.header.nationalDataCatalog,
+      url: fdkBaseUrl,
       external: true,
     },
     {
-      name: localization.header.nationalDataCatalog,
-      url: fdkBaseUrl,
+      name: localization.header.dataCommunity,
+      url: fdkCommunityBaseUrl,
       external: true,
     },
   ];
@@ -60,9 +59,7 @@ const Header: FC<HeaderProps> = ({
   const { data: session } = useSession();
   const userDisplayName = session?.user?.name;
   const accessToken = (session as any)?.accessToken;
-
-  const params = useParams();
-  const catalogId = params.catalogId;
+  const resourceRoles = getResourceRoles(accessToken);
 
   const handleLogout = () => {
     window.location.href = '/api/auth/logout';
@@ -89,7 +86,16 @@ const Header: FC<HeaderProps> = ({
                 target={urlObject.external ? '_blank' : ''}
                 rel='noreferrer'
               >
-                {urlObject.name}
+                <span className={styles.externalLink}>
+                  {urlObject.name}
+                  {urlObject.external ? (
+                    <span className={styles.icon}>
+                      <ExternalLinkIcon title='ExternalLinkIcon' />
+                    </span>
+                  ) : (
+                    ''
+                  )}
+                </span>
               </a>
             </li>
           ))}
@@ -103,7 +109,7 @@ const Header: FC<HeaderProps> = ({
               </button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
-              {hasOrganizationAdminPermission(accessToken, String(catalogId)) && (
+              {resourceRoles.some((role) => role.role === 'admin') && (
                 <>
                   <DropdownMenu.Group>
                     <DropdownMenu.Item
