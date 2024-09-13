@@ -19,10 +19,10 @@ const Breadcrumbs = ({ baseURI, breadcrumbList }: BreadcrumbsProps) => {
         <span>
           <a
             className={styles.link}
-            aria-label={localization.chooseOrganizaiton}
+            aria-label={localization.catalogOverview}
             href={baseURI ?? '/'}
           >
-            {localization.chooseOrganizaiton}
+            {localization.catalogOverview}
           </a>
           {breadcrumbList?.map((breadcrumb, i) => {
             return (

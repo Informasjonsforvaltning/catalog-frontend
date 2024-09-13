@@ -1,6 +1,7 @@
 .card {
   max-width: 30rem;
   min-width: 26.3rem;
+  min-height: 13.6rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -19,4 +20,5 @@
 
 .heading {
   text-align: center;
+  padding-bottom: 0.3rem;
 }

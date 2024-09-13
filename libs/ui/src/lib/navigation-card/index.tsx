@@ -2,15 +2,16 @@
 
 import Link from 'next/link';
 import styles from './navigation-card.module.css';
-import { Heading, Card as CardBase, Paragraph, Card } from '@digdir/designsystemet-react';
+import { Heading, Card as CardBase, Paragraph, Card, Label } from '@digdir/designsystemet-react';
 interface Card {
   title?: string;
   body?: string;
   href?: string;
   icon?: React.ReactElement;
+  subtitle?: string;
 }
 
-const NavigationCard = ({ title, body, href, icon }: Card) => {
+const NavigationCard = ({ title, body, href, icon, subtitle }: Card) => {
   return (
     <CardBase
       color='third'
@@ -30,6 +31,7 @@ const NavigationCard = ({ title, body, href, icon }: Card) => {
           >
             {title}
           </Heading>
+          <Label>{subtitle}</Label>
           <CardBase.Content className={styles.body}>{body}</CardBase.Content>
         </Link>
       ) : (
