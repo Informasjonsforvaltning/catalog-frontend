@@ -24,7 +24,8 @@ export async function getDatasetCatalogs(): Promise<DatasetCatalog[]> {
   const response = await getAllDatasetCatalogs(`${session?.accessToken}`);
 
   if (response.status !== 200) {
-    throw new Error('getDatasetCatalogs failed with response code ' + response.status);
+    console.error('getDatasetCatalogs failed with response code ' + response.status);
+    return [];
   }
 
   const jsonResponse = await response.json();
@@ -36,7 +37,8 @@ export async function getDataServiceCatalogs(): Promise<DataServiceCatalog[]> {
   const response = await getAllDataServiceCatalogs(`${session?.accessToken}`);
 
   if (response.status !== 200) {
-    throw new Error('getDataServiceCatalogs failed with response code ' + response.status);
+    console.error('getDataServiceCatalogs failed with response code ' + response.status);
+    return [];
   }
   const jsonResponse = await response.json();
   return jsonResponse;
@@ -47,7 +49,8 @@ export async function getConceptCatalogs(): Promise<ConceptCatalog[]> {
   const response = await getAllConceptCatalogs(`${session?.accessToken}`);
 
   if (response.status !== 200) {
-    throw new Error('getConceptCatalogs failed with response code ' + response.status);
+    console.error('getConceptCatalogs failed with response code ' + response.status);
+    return [];
   }
   const jsonResponse = await response.json();
   return jsonResponse;
@@ -89,11 +92,12 @@ export async function getServiceCatalogs(): Promise<ServiceCatalogs> {
   };
 }
 
-export async function getAllProcesssingActivitiesCatalogs(): Promise<RecordOfProcessingActivities[]> {
+export async function getAllProcessingActivitiesCatalogs(): Promise<RecordOfProcessingActivities[]> {
   const session = await getValidSession();
   const response = await getAllProcessingActivities(`${session?.accessToken}`);
   if (response.status !== 200) {
-    throw new Error('getAllProcesssingActivitiesCatalogs failed with response code ' + response.status);
+    console.error('getAllProcessingActivitiesCatalogs failed with response code ' + response.status);
+    return [];
   }
   const jsonResponse = await response.json();
   return jsonResponse;
@@ -102,7 +106,8 @@ export async function getAllProcesssingActivitiesCatalogs(): Promise<RecordOfPro
 export async function getServiceMessages(): Promise<ServiceMessageEntity[]> {
   const response = await getAllServiceMessages();
   if (response.status !== 200) {
-    throw new Error('getServiceMessages failed with response code ' + response.status);
+    console.error('getServiceMessages failed with response code ' + response.status);
+    return [];
   }
   return response.data.data.serviceMessages.data;
 }

@@ -7,7 +7,7 @@ import {
 } from '@catalog-frontend/utils';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import {
-  getAllProcesssingActivitiesCatalogs,
+  getAllProcessingActivitiesCatalogs,
   getConceptCatalogs,
   getDataServiceCatalogs,
   getDatasetCatalogs,
@@ -44,7 +44,7 @@ const CatalogPortalPage: React.FC<{ params: Params }> = async () => {
     getDataServiceCatalogs(),
     getConceptCatalogs(),
     getServiceCatalogs(),
-    getAllProcesssingActivitiesCatalogs(),
+    getAllProcessingActivitiesCatalogs(),
     getServiceMessages(),
   ]);
 
