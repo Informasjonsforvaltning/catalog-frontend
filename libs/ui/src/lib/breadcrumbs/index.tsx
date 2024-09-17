@@ -20,7 +20,7 @@ const Breadcrumbs = ({ baseURI, breadcrumbList }: BreadcrumbsProps) => {
           <a
             className={styles.link}
             aria-label={localization.catalogOverview}
-            href={baseURI ?? '/'}
+            href={baseURI ?? `${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
           >
             {localization.catalogOverview}
           </a>

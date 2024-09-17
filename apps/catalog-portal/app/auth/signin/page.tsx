@@ -20,11 +20,11 @@ export const SignIn = () => {
   return (
     <>
       <Breadcrumbs
-        baseURI={process.env.FDK_REGISTRATION_BASE_URI}
+        baseURI={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
         breadcrumbList={breadcrumbList}
       />
       <PageBanner
-        title={localization.allCatalogs}
+        title={localization.catalogOverview}
         subtitle={localization.auth.login}
       />
       <CenterContainer>

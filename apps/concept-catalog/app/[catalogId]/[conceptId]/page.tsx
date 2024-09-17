@@ -81,7 +81,7 @@ const ConceptPage = withReadProtectedPage(
       conceptRelations,
       internalConceptRelations,
       internalRelatedConcepts,
-      FDK_REGISTRATION_BASE_URI: process.env.FDK_REGISTRATION_BASE_URI,
+      CATALOG_PORTAL_BASE_URI: `${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`,
     };
 
     return <ConceptPageClient {...clientProps} />;

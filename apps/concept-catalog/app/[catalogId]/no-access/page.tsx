@@ -21,7 +21,7 @@ const NoAccess = async ({ params }) => {
   return (
     <>
       <Breadcrumbs
-        baseURI={process.env.FDK_REGISTRATION_BASE_URI}
+        baseURI={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
         breadcrumbList={breadcrumbList}
       />
       <PageBanner

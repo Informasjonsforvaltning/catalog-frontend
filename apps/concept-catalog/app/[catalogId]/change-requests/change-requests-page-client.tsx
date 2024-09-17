@@ -26,7 +26,7 @@ import ChangeRequestSort from '../../../components/change-request-sort';
 import { useCatalogDesign } from '../../../context/catalog-design';
 import styles from './change-requests-page.module.css';
 
-export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_REGISTRATION_BASE_URI }) => {
+export const ChangeRequestsPageClient = ({ catalogId, organization, data }) => {
   const pageSubtitle = organization?.name ?? '';
   const design = useCatalogDesign();
 
@@ -142,10 +142,7 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, FDK_RE
 
   return (
     <>
-      <Breadcrumbs
-        baseURI={FDK_REGISTRATION_BASE_URI}
-        breadcrumbList={breadcrumbList}
-      />
+      <Breadcrumbs breadcrumbList={breadcrumbList} />
       <PageBanner
         title={localization.catalogType.concept}
         subtitle={pageSubtitle}

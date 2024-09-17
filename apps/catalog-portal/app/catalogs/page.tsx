@@ -141,7 +141,7 @@ const CatalogPortalPage: React.FC<{ params: Params }> = async () => {
               <NavigationCard
                 title={localization.catalogType.service}
                 subtitle={localization.resourceType.publicServices}
-                body={`${getPublicServiceCatalogByOrgId(org.organizationId)?.publicServiceCount ?? localization.none} ${localization.descriptionType.service}`}
+                body={`${getPublicServiceCatalogByOrgId(org.organizationId)?.publicServiceCount && getPublicServiceCatalogByOrgId(org.organizationId)?.publicServiceCount !== 0 ? getDatasetCatalogByOrgId(org.organizationId)?.datasetCount : localization.none} ${localization.descriptionType.service}`}
                 href={`${process.env.SERVICE_CATALOG_GUI_BASE_URI}/catalogs/${org.organizationId}/public-services`}
               />
             </div>
@@ -150,7 +150,7 @@ const CatalogPortalPage: React.FC<{ params: Params }> = async () => {
               <NavigationCard
                 title={localization.catalogType.service}
                 subtitle={localization.resourceType.services}
-                body={`${getServiceCatalogByOrgId(org.organizationId)?.serviceCount ?? localization.none} ${localization.descriptionType.service}`}
+                body={`${getServiceCatalogByOrgId(org.organizationId)?.serviceCount && getServiceCatalogByOrgId(org.organizationId)?.serviceCount !== 0 ? getDatasetCatalogByOrgId(org.organizationId)?.datasetCount : localization.none} ${localization.descriptionType.service}`}
                 href={`${process.env.SERVICE_CATALOG_GUI_BASE_URI}/catalogs/${org.organizationId}/services`}
               />
             </div>

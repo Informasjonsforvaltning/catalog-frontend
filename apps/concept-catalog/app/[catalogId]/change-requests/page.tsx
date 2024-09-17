@@ -21,7 +21,7 @@ const ChangeRequestsPage = withReadProtectedPage(
         catalogId={catalogId}
         organization={organization}
         data={reponseData}
-        FDK_REGISTRATION_BASE_URI={process.env.FDK_REGISTRATION_BASE_URI}
+        CATALOG_PORTAL_BASE_URI={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
     );
   },
