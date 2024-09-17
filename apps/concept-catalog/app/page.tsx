@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 const Home = async () => {
   // NOTICE: Call cookies() to opt into dynamic rendering
   cookies();
-  redirect(`${process.env.FDK_REGISTRATION_BASE_URI}`);
+  redirect(`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`);
 };
 
 export default Home;

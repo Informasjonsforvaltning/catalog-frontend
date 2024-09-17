@@ -3,7 +3,6 @@
  */
 
 export const nb = {
-  allCatalogs: 'Alle kataloger',
   catalogOverview: 'Katalogoversikt',
   assigned: 'Tildelt',
   category: 'Kategori',
@@ -67,6 +66,7 @@ export const nb = {
     dataset: 'Datasettkatalog',
     dataService: 'Datatjenestekatalog',
     service: 'Tjenestekatalog',
+    publicService: 'Tjenestekatalog - offentlige tjenester',
     recordsOfProcessingActivities: 'Behandlingsoversikt',
   },
 

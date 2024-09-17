@@ -28,6 +28,6 @@ export default class HomePage {
 
   public async checkIfRedirectedToRegistrationPortal() {
     await this.page.waitForTimeout(5000);
-    await this.page.waitForURL(/.*registrering/);
+    await this.page.waitForURL(/.*catalog-portal/);
   }
 }
