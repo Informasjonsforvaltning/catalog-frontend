@@ -14,12 +14,12 @@ export default class CatalogPortalPage {
   }
 
   // Locators
-  datasetCatalog = () => this.page.getByRole('link', { name: 'Files icon Datasettkatalog 0' });
-  dataServiceCatalog = () => this.page.getByRole('link', { name: 'Code icon Datatjenestekatalog' });
-  conceptCatalog = () => this.page.getByRole('link', { name: 'Elipsis icon Begrepskatalog 2' });
-  publicServiceCatalog = () => this.page.getByRole('link', { name: 'Compass icon Offentlig' });
-  serviceCatalog = () => this.page.getByRole('link', { name: 'Compass icon Tjenestekatalog' });
-  recordsOfProcessingActivities = () => this.page.getByRole('link', { name: 'Gavel Sound Block Icon' });
+  datasetCatalog = () => this.page.getByRole('link', { name: 'Datasettkatalog Ingen' })
+  dataServiceCatalog = () => this.page.getByRole('link', { name: 'Datatjenestekatalog Ingen' })
+  conceptCatalog = () => this.page.getByRole('link', { name: 'Begrepskatalog 2' })
+  publicServiceCatalog = () => this.page.getByRole('link', { name: 'Tjenestekatalog Offentlige' })
+  serviceCatalog = () => this.page.getByRole('link', { name: 'Tjenestekatalog Tjenester 3' })
+  recordsOfProcessingActivities = () => this.page.getByRole('link', { name: 'Behandlingsoversikt Ingen' })
 
   termsOfUse = () => this.page.getByRole('main').getByRole('link', { name: 'Bruksvilkår' });
 
