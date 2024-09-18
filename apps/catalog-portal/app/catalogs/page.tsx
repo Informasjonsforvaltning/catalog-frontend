@@ -89,12 +89,16 @@ const CatalogPortalPage: React.FC<{ params: Params }> = async () => {
 
   return (
     <div className='container'>
-      <Breadcrumbs baseURI={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} />
+      <Breadcrumbs
+        data-testid='catalog-portal-breadcrumbs'
+        baseURI={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+      />
       <ServiceMessages serviceMessages={serviceMessages} />
 
       {sortedOrganization.map((org: Organization) => (
         <div key={`org-section-${org.organizationId}`}>
           <Heading
+            data-testid='catalog-portal-heading'
             className={styles.heading}
             size='lg'
           >

@@ -5,7 +5,7 @@ import ServicesPage from '../page-object-model/servicesPage';
 import PublicServicesPage from '../page-object-model/publicServicesPage';
 import { adminAuthFile, generateAccessibilityBuilder } from '../utils/helpers';
 
-const PREFIX_TEXT = 'concept-catalog: ';
+const PREFIX_TEXT = 'service-catalog: ';
 export const test = base.extend<{
   loginPage: any;
   homePage: any;
