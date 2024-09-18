@@ -143,5 +143,5 @@
     "axios": "^1.7.4",
     "micromatch": "^4.0.8"
   },
-  "packageManager": "yarn@4.4.0"
+  "packageManager": "yarn@4.5.0"
 }
