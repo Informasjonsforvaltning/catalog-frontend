@@ -112,7 +112,7 @@
     "babel-jest": "^29.7.0",
     "babel-plugin-styled-components": "2.1.4",
     "cypress": "^13.14.2",
-    "eslint": "8.57.0",
+    "eslint": "9.11.0",
     "eslint-config-next": "14.2.7",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-cypress": "3.5.0",
