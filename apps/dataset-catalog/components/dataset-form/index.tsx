@@ -38,7 +38,7 @@ export const DatasetForm = ({ initialValues, submitType }: Props) => {
   };
 
   const handleDelete = () => {
-    if (window.confirm(localization.datasetFormNb.alert.confirmDelete)) {
+    if (window.confirm(localization.datasetForm.alert.confirmDelete)) {
       try {
         deleteDataset(catalogId.toString(), datasetId.toString());
       } catch (error) {
@@ -73,7 +73,7 @@ export const DatasetForm = ({ initialValues, submitType }: Props) => {
               <FormContainer>
                 <FormContainer.Header
                   title={localization.title}
-                  subtitle={localization.datasetFormNb.helptext.title}
+                  subtitle={localization.datasetForm.helptext.title}
                 />
 
                 <Field
@@ -81,29 +81,29 @@ export const DatasetForm = ({ initialValues, submitType }: Props) => {
                   name='title.nb'
                   label={
                     <TitleWithTag
-                      title={localization.datasetFormNb.fieldLabel.title}
+                      title={localization.datasetForm.fieldLabel.title}
                       tagTitle={localization.tag.required}
                     />
                   }
                 />
                 <FormContainer.Header
-                  title={localization.datasetFormNb.heading.description}
-                  subtitle={localization.datasetFormNb.helptext.description}
+                  title={localization.datasetForm.heading.description}
+                  subtitle={localization.datasetForm.helptext.description}
                 />
                 <Field
                   as={Textarea}
                   name='description.nb'
                   label={
                     <TitleWithTag
-                      title={localization.datasetFormNb.fieldLabel.description}
+                      title={localization.datasetForm.fieldLabel.description}
                       tagTitle={localization.tag.required}
                     />
                   }
                 />
 
                 <FormContainer.Header
-                  title={localization.datasetFormNb.accessRights}
-                  subtitle={localization.datasetFormNb.helptext.accessRights}
+                  title={localization.datasetForm.accessRights}
+                  subtitle={localization.datasetForm.helptext.accessRights}
                 />
                 <Field
                   as={Radio.Group}
@@ -111,15 +111,15 @@ export const DatasetForm = ({ initialValues, submitType }: Props) => {
                   size='md'
                   legend={
                     <TitleWithTag
-                      title={localization.datasetFormNb.accessRights}
+                      title={localization.datasetForm.accessRights}
                       tagColor='third'
                       tagTitle={localization.tag.recommended}
                     />
                   }
                 >
-                  <Radio value={AccessRights.PUBLIC}>{localization.datasetFormNb.accessRight.public}</Radio>
-                  <Radio value={AccessRights.RESTRICTED}>{localization.datasetFormNb.accessRight.restricted}</Radio>
-                  <Radio value={AccessRights.NON_PUBLIC}>{localization.datasetFormNb.accessRight.nonPublic}</Radio>
+                  <Radio value={AccessRights.PUBLIC}>{localization.datasetForm.accessRight.public}</Radio>
+                  <Radio value={AccessRights.RESTRICTED}>{localization.datasetForm.accessRight.restricted}</Radio>
+                  <Radio value={AccessRights.NON_PUBLIC}>{localization.datasetForm.accessRight.nonPublic}</Radio>
                 </Field>
               </FormContainer>
             </FormLayout>

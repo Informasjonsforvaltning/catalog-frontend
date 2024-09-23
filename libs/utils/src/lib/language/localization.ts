@@ -8,7 +8,7 @@ interface LocaleStrings extends LocalizedStringsMethods {
 }
 
 export const localization: LocaleStrings = new LocalizedStrings({
-  nb: { ...nb, conceptHelptexts: { ...conceptHelptextsNb }, datasetFormNb: { ...datasetFormNb } },
+  nb: { ...nb, conceptHelptexts: { ...conceptHelptextsNb }, datasetForm: { ...datasetFormNb } },
 });
 
 localization.setLanguage('nb');
