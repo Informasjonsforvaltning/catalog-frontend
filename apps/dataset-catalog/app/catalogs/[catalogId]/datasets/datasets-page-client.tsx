@@ -103,10 +103,7 @@ const DatasetsPageClient = ({ datasets, catalogId }: Props) => {
         </SearchHitsPageLayout.LeftColumn>
 
         <SearchHitsPageLayout.MainColumn>
-          <SearchHitTable
-            datasets={filteredDatasets}
-            DATASET_CATALOG_BASE_URI={process.env.DATASET_CATALOG_BASE_URI}
-          />
+          <SearchHitTable datasets={filteredDatasets} />
         </SearchHitsPageLayout.MainColumn>
       </SearchHitsPageLayout>
     </div>
