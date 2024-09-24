@@ -13,9 +13,10 @@ import { localization } from '@catalog-frontend/utils';
 interface Props {
   datasets: Dataset[];
   hasWritePermission: boolean;
+  catalogId: string;
 }
 
-const DatasetsPageClient = ({ datasets }: Props) => {
+const DatasetsPageClient = ({ datasets, catalogId }: Props) => {
   const [filteredDatasets, setFilteredDatasets] = useState<Dataset[]>(datasets);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
@@ -63,9 +64,9 @@ const DatasetsPageClient = ({ datasets }: Props) => {
 
     if (typeof window !== 'undefined') {
       if (selectedValue === 'dataset') {
-        window.location.href = '/catalogs/974760673/datasets/new';
+        window.location.href = `/catalogs/${catalogId}/datasets/new`;
       } else if (selectedValue === 'datasetSeries') {
-        window.location.href = '/catalogs/974760673/datasets/series/new';
+        window.location.href = `/catalogs/${catalogId}/datasets/series/new`;
       }
     }
   };

@@ -1,7 +1,7 @@
 import React, { FC, PropsWithChildren, ReactElement } from 'react';
 import styles from './form-container.module.css';
 import cn from 'classnames';
-import { Heading } from '@digdir/designsystemet-react';
+import { Heading, Paragraph } from '@digdir/designsystemet-react';
 
 interface Props extends PropsWithChildren {
   variant?: 'second' | 'third';
@@ -34,7 +34,7 @@ const Header: FC<HeaderProps> = ({ title, subtitle, variant }) => {
   return (
     <div className={cn(styles.header, backgroundColor)}>
       <Heading className={styles.title}>{title}</Heading>
-      <p className={styles.subtitle}>{subtitle}</p>
+      <Paragraph className={styles.subtitle}>{subtitle}</Paragraph>
     </div>
   );
 };

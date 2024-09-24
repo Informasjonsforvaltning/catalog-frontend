@@ -15,7 +15,7 @@ export const getAllDatasets = async (catalogId: string, accessToken: string) => 
   return await fetch(resource, options);
 };
 
-export const getDatasetById = async (catalogId: string, datasetId: string, accessToken: string) => {
+export const getById = async (catalogId: string, datasetId: string, accessToken: string) => {
   const resource = `${path}/catalogs/${catalogId}/datasets/${datasetId}`;
   const options = {
     headers: {
@@ -27,7 +27,7 @@ export const getDatasetById = async (catalogId: string, datasetId: string, acces
   return await fetch(resource, options);
 };
 
-export const createDataset = async (Dataset: Partial<Dataset>, catalogId: string, accessToken: string) => {
+export const postDataset = async (Dataset: Partial<Dataset>, catalogId: string, accessToken: string) => {
   const resource = `${path}/catalogs/${catalogId}/datasets`;
   const options = {
     headers: {

@@ -37,6 +37,7 @@ export default async function DatasetSearchHitsPage({ params }: Params) {
       <DatasetsPageClient
         datasets={datasets}
         hasWritePermission={hasWritePermission}
+        catalogId={catalogId}
       />
     </>
   );

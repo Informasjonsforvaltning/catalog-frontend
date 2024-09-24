@@ -32,3 +32,5 @@ export * from './lib/divider-line';
 export * from './lib/search-hits-page-layout';
 export * from './lib/tag';
 export * from './lib/service-messages';
+export * from './lib/form-layout';
+export * from './lib/title-with-tag';

@@ -100,7 +100,11 @@ export const SearchHitTable = ({ datasets }: BannerProps) => {
         {sortedDatasets.map((dataset) => (
           <Table.Row key={dataset.id}>
             <Table.Cell>
-              {dataset.uri && <Link href={dataset.uri}>{dataset.title?.nb || localization.noName}</Link>}
+              {dataset && (
+                <Link href={`/catalogs/${dataset.catalogId}/datasets/${dataset.id}/edit`}>
+                  {dataset.title?.nb || localization.noName}
+                </Link>
+              )}
             </Table.Cell>
             <Table.Cell>
               {dataset.specializedType === 'SERIES'
