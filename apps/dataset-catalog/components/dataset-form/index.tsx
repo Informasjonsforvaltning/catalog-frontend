@@ -1,5 +1,4 @@
 'use client';
-
 import { localization } from '@catalog-frontend/utils';
 import { Button, Radio, Textarea, Textfield } from '@digdir/designsystemet-react';
 import { AccessRights, Dataset, DatasetToBeCreated } from '@catalog-frontend/types';
@@ -9,6 +8,7 @@ import { useParams } from 'next/navigation';
 import { createDataset, deleteDataset, updateDataset } from '../../app/actions/actions';
 import { datasetTemplate } from './dataset-initial-values';
 import { useState } from 'react';
+import { datasetValidationSchema } from './validation-schema';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
@@ -50,14 +50,28 @@ export const DatasetForm = ({ initialValues, submitType }: Props) => {
   return (
     <Formik
       initialValues={datasetTemplate(initialValues as Dataset)}
-      onSubmit={
-        submitType === 'create' ? (values) => handleCreate(values) : (values) => handleUpdate(values as Dataset)
-      }
+      validationSchema={datasetValidationSchema}
+      validateOnChange={true}
+      validateOnBlur={true}
+      onSubmit={(values, { setSubmitting }) => {
+        submitType === 'create' ? handleCreate(values) : handleUpdate(values as Dataset);
+        setSubmitting(false);
+      }}
     >
-      {({ errors, values, dirty, handleSubmit }) => {
+      {({ errors, values, dirty, handleSubmit, isValid }) => {
         setTimeout(() => setIsDirty(dirty), 0);
+
         return (
-          <Form onSubmit={handleSubmit}>
+          <Form
+            onSubmit={(e) => {
+              if (!isValid) {
+                e.preventDefault();
+                window.alert(localization.datasetForm.alert.formError);
+              } else {
+                handleSubmit(e);
+              }
+            }}
+          >
             <FormLayout>
               <FormLayout.ButtonsRow>
                 <Button type='submit'>{localization.button.save}</Button>
@@ -85,6 +99,7 @@ export const DatasetForm = ({ initialValues, submitType }: Props) => {
                       tagTitle={localization.tag.required}
                     />
                   }
+                  error={errors?.title?.nb}
                 />
                 <FormContainer.Header
                   title={localization.datasetForm.heading.description}
@@ -99,6 +114,7 @@ export const DatasetForm = ({ initialValues, submitType }: Props) => {
                       tagTitle={localization.tag.required}
                     />
                   }
+                  error={errors?.description?.nb}
                 />
 
                 <FormContainer.Header
