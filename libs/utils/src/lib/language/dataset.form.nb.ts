@@ -20,5 +20,12 @@ export const datasetFormNb = {
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
+    formError: 'Du har feil i skjemaet. Rett opp i disse før du kan lagre.',
+  },
+  validation: {
+    title: 'Tittelen må være minst 3 karakterer lang',
+    titleRequired: 'Tittel er påkrevd',
+    descriptionRequired: 'Beskrivelse er påkrevd',
+    description: 'Beskrivelsen må være minst 5 karakterer lang',
   },
 };
