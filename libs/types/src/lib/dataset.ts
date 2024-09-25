@@ -16,6 +16,7 @@ export interface DatasetToBeCreated {
   legalBasisForProcessing?: UriWIthLabel[];
   legalBasisForAccess?: UriWIthLabel[];
   legalBasisForRestriction?: UriWIthLabel[];
+  landingPage?: string[];
 }
 
 export interface UriWIthLabel {

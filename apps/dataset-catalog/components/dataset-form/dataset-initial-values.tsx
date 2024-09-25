@@ -17,6 +17,10 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     },
     accessRights: { uri: dataset?.accessRights?.uri ?? AccessRights.PUBLIC },
     registrationStatus: dataset.registrationStatus,
+    landingPage:
+      dataset.landingPage && dataset?.landingPage?.length > 0 && dataset.landingPage.every((page) => page !== null)
+        ? dataset.landingPage
+        : [''],
   };
 };
 
@@ -34,5 +38,6 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     },
     accessRights: { uri: '', prefLabel: { nb: '' } },
     registrationStatus: PublicationStatus.DRAFT,
+    landingPage: [''],
   };
 };

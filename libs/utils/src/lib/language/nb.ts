@@ -13,6 +13,7 @@ export const nb = {
   contactPage: 'Kontaktside',
   dataVillage: ['Datalandsbyen', 'Lenke til Datalandsbyen'],
   description: 'Beskrivelse',
+  link: 'Lenke',
   edit: 'Rediger',
   email: 'E-post',
   error: 'Feil',
@@ -153,6 +154,7 @@ export const nb = {
     removeFromCodeList: 'Fjern fra kodeliste',
     save: 'Lagre',
     send: 'Send inn',
+    addUrl: 'Legg til lenke',
   },
 
   dropdown: {
