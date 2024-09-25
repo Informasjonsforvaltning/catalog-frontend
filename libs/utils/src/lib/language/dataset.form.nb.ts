@@ -5,9 +5,13 @@ export const datasetFormNb = {
     title: 'Tittelen skal være kortfattet, kunne stå alene og gi mening. Forkortelser skal skrives helt ut.',
     description:
       'Beskrivelsen skal være kortfattet. Det bør fremgå hvilke opplysninger som utgjør kjernen i datasettet, samt formålet til datasettet.',
+    landingPage:
+      'Lenken kan referere til registerets hjemmeside, eller en samleside som beskriver innhold, struktur, tilgang, nedlasting, bruk og/eller søk.',
   },
   heading: {
     description: 'Beskrivelse av datasettet',
+    landingPage: 'Lenke til mer informasjon om datasettet',
+    titleAndDescription: 'Tittel og beskrivelse',
   },
   accessRight: {
     public: 'Allmenn tilgang',
@@ -27,5 +31,6 @@ export const datasetFormNb = {
     titleRequired: 'Tittel er påkrevd',
     descriptionRequired: 'Beskrivelse er påkrevd',
     description: 'Beskrivelsen må være minst 5 karakterer lang',
+    url: 'Lenken er ikke gyldig',
   },
 };

@@ -1,6 +1,5 @@
 import React, { Children, isValidElement, ReactNode } from 'react';
 import styles from './form-layout.module.css';
-import { Card, Checkbox } from '@digdir/designsystemet-react';
 
 interface FormLayoutProps {
   title?: ReactNode;
