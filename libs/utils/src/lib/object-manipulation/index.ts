@@ -6,8 +6,8 @@ export const removeEmptyValues = (obj: any): any => {
       typeof value === 'object' && value !== null
         ? removeEmptyValues(value) // Recursively process nested objects in arrays
         : value !== ''
-        ? value
-        : undefined,
+          ? value
+          : undefined,
     );
   }
 
@@ -22,4 +22,28 @@ export const removeEmptyValues = (obj: any): any => {
   }
 
   return obj;
+};
+
+export const trimObjectWhitespace = (obj: any): any => {
+  if (Array.isArray(obj)) {
+    return obj.map((value) =>
+      typeof value === 'object' && value !== null
+        ? trimObjectWhitespace(value) // Recursively process nested objects in arrays
+        : typeof value === 'string'
+          ? value.trim() // Trim strings in arrays
+          : value,
+    );
+  }
+
+  if (typeof obj === 'object' && obj !== null) {
+    return _.mapValues(obj, (value) =>
+      typeof value === 'object' && value !== null
+        ? trimObjectWhitespace(value) // Recursively process nested objects in objects
+        : typeof value === 'string'
+          ? value.trim() // Trim strings in objects
+          : value,
+    );
+  }
+
+  return typeof obj === 'string' ? obj.trim() : obj; // Trim root-level strings if necessary
 };
