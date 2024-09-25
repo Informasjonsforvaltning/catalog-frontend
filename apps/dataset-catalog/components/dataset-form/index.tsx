@@ -1,5 +1,5 @@
 'use client';
-import { localization } from '@catalog-frontend/utils';
+import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button, Radio, Textarea, Textfield } from '@digdir/designsystemet-react';
 import { AccessRights, Dataset, DatasetToBeCreated } from '@catalog-frontend/types';
 import { FormLayout, FormContainer, TitleWithTag, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
@@ -54,7 +54,8 @@ export const DatasetForm = ({ initialValues, submitType }: Props) => {
       validateOnChange={true}
       validateOnBlur={true}
       onSubmit={(values, { setSubmitting }) => {
-        submitType === 'create' ? handleCreate(values) : handleUpdate(values as Dataset);
+        const trimmedValues = trimObjectWhitespace(values);
+        submitType === 'create' ? handleCreate(trimmedValues) : handleUpdate(trimmedValues as Dataset);
         setSubmitting(false);
       }}
     >
