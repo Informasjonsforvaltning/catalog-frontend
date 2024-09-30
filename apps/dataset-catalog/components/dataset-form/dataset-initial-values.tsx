@@ -16,6 +16,9 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
       en: (dataset && dataset.description?.en) ?? '',
     },
     accessRights: { uri: dataset?.accessRights?.uri ?? AccessRights.PUBLIC },
+    legalBasisForAccess: dataset?.legalBasisForAccess ?? [{ uri: '', prefLabel: { nb: '' } }],
+    legalBasisForProcessing: dataset?.legalBasisForProcessing ?? [{ uri: '', prefLabel: { nb: '' } }],
+    legalBasisForRestriction: dataset?.legalBasisForRestriction ?? [{ uri: '', prefLabel: { nb: '' } }],
     registrationStatus: dataset.registrationStatus,
     landingPage:
       dataset.landingPage && dataset?.landingPage?.length > 0 && dataset.landingPage.every((page) => page !== null)
@@ -36,8 +39,11 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
       nn: '',
       en: '',
     },
-    accessRights: { uri: '', prefLabel: { nb: '' } },
     registrationStatus: PublicationStatus.DRAFT,
     landingPage: [''],
+    accessRights: { uri: '' },
+    legalBasisForAccess: [{ uri: '', prefLabel: { nb: '' } }],
+    legalBasisForProcessing: [{ uri: '', prefLabel: { nb: '' } }],
+    legalBasisForRestriction: [{ uri: '', prefLabel: { nb: '' } }],
   };
 };

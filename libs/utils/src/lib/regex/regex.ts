@@ -15,6 +15,7 @@ export const emailRegex = /^(?:[\w.-]+@[\w-]+\.[\w-]{2,4})?$/;
 /* Must be a valid telephone number, optionally starting with + */
 export const telephoneNumberRegex = /^(?:[+\d\s]*)$/;
 
-export const urlRegex = /^(https?:\/\/|www\.)[^\s/$.?#].[^\s]*$/;
+/* Must start with https:// */
+export const httpsRegex = /^https:\/\//;
 
 export const conceptIdFromUriRegex = /\/([0-9a-fA-F-]{36})$/;

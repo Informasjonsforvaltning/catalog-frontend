@@ -11,8 +11,7 @@ export interface DatasetToBeCreated {
   description: LocalizedStrings;
   registrationStatus: PublicationStatus;
   specializedType?: 'SERIES' | undefined;
-  // Tilgangsnivå
-  accessRights: UriWIthLabel;
+  accessRights?: UriWIthLabel;
   legalBasisForProcessing?: UriWIthLabel[];
   legalBasisForAccess?: UriWIthLabel[];
   legalBasisForRestriction?: UriWIthLabel[];
