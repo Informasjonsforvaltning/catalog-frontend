@@ -1,15 +1,16 @@
 'use client';
 import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Heading, Radio } from '@digdir/designsystemet-react';
-import { AccessRights, Dataset, DatasetToBeCreated } from '@catalog-frontend/types';
-import { FormLayout, FormContainer, TitleWithTag, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
-import { Formik, Form, Field } from 'formik';
+import { Button } from '@digdir/designsystemet-react';
+import { Dataset, DatasetToBeCreated } from '@catalog-frontend/types';
+import { FormLayout, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
+import { Formik, Form } from 'formik';
 import { useParams } from 'next/navigation';
 import { createDataset, deleteDataset, updateDataset } from '../../app/actions/actions';
 import { datasetTemplate } from './dataset-initial-values';
 import { useState } from 'react';
 import { datasetValidationSchema } from './validation-schema';
 import { TitleSection } from './dataset-from-title-section';
+import { AccessRightsSection } from './dataset-form-access-rights.section';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
@@ -87,31 +88,10 @@ export const DatasetForm = ({ initialValues, submitType }: Props) => {
               </FormLayout.ButtonsRow>
               <div>
                 <TitleSection errors={errors} />
-                <div>
-                  <Heading size='sm'>Tilgangsnivå</Heading>
-                  <FormContainer>
-                    <FormContainer.Header
-                      title={localization.datasetForm.accessRights}
-                      subtitle={localization.datasetForm.helptext.accessRights}
-                    />
-                    <Field
-                      as={Radio.Group}
-                      name='accessRights.uri'
-                      size='md'
-                      legend={
-                        <TitleWithTag
-                          title={localization.datasetForm.accessRights}
-                          tagColor='third'
-                          tagTitle={localization.tag.recommended}
-                        />
-                      }
-                    >
-                      <Radio value={AccessRights.PUBLIC}>{localization.datasetForm.accessRight.public}</Radio>
-                      <Radio value={AccessRights.RESTRICTED}>{localization.datasetForm.accessRight.restricted}</Radio>
-                      <Radio value={AccessRights.NON_PUBLIC}>{localization.datasetForm.accessRight.nonPublic}</Radio>
-                    </Field>
-                  </FormContainer>
-                </div>
+                <AccessRightsSection
+                  values={values}
+                  errors={errors}
+                />
               </div>
             </FormLayout>
           </Form>

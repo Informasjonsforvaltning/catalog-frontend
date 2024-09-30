@@ -1,4 +1,4 @@
-import { localization, urlRegex } from '@catalog-frontend/utils';
+import { httpsRegex, localization } from '@catalog-frontend/utils';
 import * as Yup from 'yup';
 
 export const datasetValidationSchema = Yup.object().shape({
@@ -12,5 +12,31 @@ export const datasetValidationSchema = Yup.object().shape({
       .min(5, localization.datasetForm.validation.description)
       .required(localization.datasetForm.validation.descriptionRequired),
   }),
-  landingPage: Yup.array().of(Yup.string().matches(urlRegex, localization.datasetForm.validation.url)),
+  landingPage: Yup.array().of(
+    Yup.string().matches(httpsRegex, localization.validation.invalidProtocol).url(localization.validation.invalidUrl),
+  ),
+
+  legalBasisForRestriction: Yup.array().of(
+    Yup.object().shape({
+      uri: Yup.string()
+        .matches(httpsRegex, localization.validation.invalidProtocol)
+        .url(localization.validation.invalidUrl),
+    }),
+  ),
+
+  legalBasisForProcessing: Yup.array().of(
+    Yup.object().shape({
+      uri: Yup.string()
+        .matches(httpsRegex, localization.validation.invalidProtocol)
+        .url(localization.validation.invalidUrl),
+    }),
+  ),
+
+  legalBasisForAccess: Yup.array().of(
+    Yup.object().shape({
+      uri: Yup.string()
+        .matches(httpsRegex, localization.validation.invalidProtocol)
+        .url(localization.validation.invalidUrl),
+    }),
+  ),
 });

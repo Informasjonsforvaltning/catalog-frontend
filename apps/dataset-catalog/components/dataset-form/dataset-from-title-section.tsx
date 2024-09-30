@@ -2,7 +2,7 @@ import { Dataset } from '@catalog-frontend/types';
 import { FormContainer, TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Heading, Textfield, Textarea, Button } from '@digdir/designsystemet-react';
-import { PlusCircleIcon } from '@navikt/aksel-icons';
+import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { Field, FieldArray, FormikErrors } from 'formik';
 
 type TitleSectionProps = {
@@ -67,6 +67,15 @@ export const TitleSection = ({ errors }: TitleSectionProps) => {
                       as={Textfield}
                       error={errors?.landingPage?.[index]}
                     />
+                    <Button
+                      type='button'
+                      onClick={() => arrayHelpers.remove(index)}
+                      variant='tertiary'
+                      color='danger'
+                    >
+                      <MinusCircleIcon />
+                      {localization.remove}
+                    </Button>
                   </div>
                 ))}
               <div>
