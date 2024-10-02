@@ -91,7 +91,7 @@
     "@nx/playwright": "19.8.2",
     "@nx/react": "19.8.2",
     "@nx/web": "19.8.2",
-    "@nx/workspace": "19.8.2",
+    "@nx/workspace": "19.8.3",
     "@playwright/test": "^1.47.2",
     "@svgr/webpack": "^8.1.0",
     "@swc-node/register": "~1.10.9",
