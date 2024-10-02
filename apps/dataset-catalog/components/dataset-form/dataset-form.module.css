@@ -1,0 +1,11 @@
+.combobox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

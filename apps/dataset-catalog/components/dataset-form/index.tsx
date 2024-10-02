@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { datasetValidationSchema } from './validation-schema';
 import { TitleSection } from './dataset-from-title-section';
 import { AccessRightsSection } from './dataset-form-access-rights.section';
+import TemaSection from './dataset-form-tema-section';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
@@ -92,6 +93,7 @@ export const DatasetForm = ({ initialValues, submitType }: Props) => {
                   values={values}
                   errors={errors}
                 />
+                <TemaSection />
               </div>
             </FormLayout>
           </Form>
