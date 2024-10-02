@@ -1,0 +1,16 @@
+.combobox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.chip > ul {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

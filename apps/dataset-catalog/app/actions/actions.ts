@@ -6,6 +6,8 @@ import {
   getById,
   postDataset,
   updateDataset as update,
+  getLosThemes as losThemes,
+  getDataThemes as dataThemes,
 } from '@catalog-frontend/data-access';
 import { Dataset, DatasetToBeCreated } from '@catalog-frontend/types';
 import { getValidSession, localization, removeEmptyValues } from '@catalog-frontend/utils';
@@ -36,13 +38,25 @@ export async function getDatasetById(catalogId: string, datasetId: string): Prom
   return jsonResponse;
 }
 
+const convertListToObjectStructure = (uriList: string[]) => {
+  return uriList.map((uri) => ({ uri }));
+};
+
 export async function createDataset(values: DatasetToBeCreated, catalogId: string) {
-  const newDataset = removeEmptyValues(values);
+  const newDataset = {
+    ...values,
+    theme: [
+      ...(values.losThemeList ? convertListToObjectStructure(values.losThemeList) : []),
+      ...(values.euThemeList ? convertListToObjectStructure(values.euThemeList) : []),
+    ],
+  };
+  const datasetNoEmptyValues = removeEmptyValues(newDataset);
+
   const session = await getValidSession();
   let success = false;
   let datasetId = undefined;
   try {
-    const response = await postDataset(newDataset, catalogId, `${session?.accessToken}`);
+    const response = await postDataset(datasetNoEmptyValues, catalogId, `${session?.accessToken}`);
     if (response.status !== 201) {
       throw new Error();
     }
@@ -79,7 +93,15 @@ export async function deleteDataset(catalogId: string, datasetId: string) {
 }
 
 export async function updateDataset(catalogId: string, initialDataset: Dataset, values: Dataset) {
-  const diff = compare(initialDataset, removeEmptyValues(values));
+  const updatedDataset = removeEmptyValues({
+    ...values,
+    theme: [
+      ...(values.losThemeList ? convertListToObjectStructure(values.losThemeList) : []),
+      ...(values.euThemeList ? convertListToObjectStructure(values.euThemeList) : []),
+    ],
+  });
+
+  const diff = compare(initialDataset, updatedDataset);
 
   if (diff.length === 0) {
     throw new Error(localization.alert.noChanges);
@@ -104,4 +126,26 @@ export async function updateDataset(catalogId: string, initialDataset: Dataset, 
     revalidateTag('datasets');
     redirect(`/catalogs/${catalogId}/datasets/${initialDataset.id}`);
   }
+}
+
+export async function getLosThemes() {
+  const session = await getValidSession();
+
+  const response = await losThemes(`${session?.accessToken}`);
+  if (response.status !== 200) {
+    throw new Error('getLosThemes failed with response code ' + response.status);
+  }
+  const jsonResponse = await response.json();
+  return jsonResponse.losNodes;
+}
+
+export async function getDataThemes() {
+  const session = await getValidSession();
+
+  const response = await dataThemes(`${session?.accessToken}`);
+  if (response.status !== 200) {
+    throw new Error('getDataThemes failed with response code ' + response.status);
+  }
+  const jsonResponse = await response.json();
+  return jsonResponse.dataThemes;
 }

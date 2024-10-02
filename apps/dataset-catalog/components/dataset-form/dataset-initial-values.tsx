@@ -24,6 +24,8 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
       dataset.landingPage && dataset?.landingPage?.length > 0 && dataset.landingPage.every((page) => page !== null)
         ? dataset.landingPage
         : [''],
+    losThemeList: dataset.theme ? dataset.theme.filter((t) => t.uri.includes('/los/')).map((t) => t.uri) : [],
+    euThemeList: dataset.theme ? dataset.theme.filter((t) => t.uri.includes('/data-theme/')).map((t) => t.uri) : [],
   };
 };
 
@@ -45,5 +47,7 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     legalBasisForAccess: [{ uri: '', prefLabel: { nb: '' } }],
     legalBasisForProcessing: [{ uri: '', prefLabel: { nb: '' } }],
     legalBasisForRestriction: [{ uri: '', prefLabel: { nb: '' } }],
+    losThemeList: [],
+    euThemeList: [],
   };
 };
