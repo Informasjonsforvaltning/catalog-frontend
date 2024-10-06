@@ -25,7 +25,7 @@ export const getAllServiceMessages = async () => {
 
   if (!res.ok) {
     console.error(`Error: ${res.status} ${res.statusText}`);
-    throw new Error(`Failed to fetch service messages: ${res.statusText}`);
+    console.error(`Failed to fetch service messages: ${res.statusText}`);
   }
   const result = await res.json();
   return {
