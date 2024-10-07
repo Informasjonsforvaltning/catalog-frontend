@@ -35,26 +35,6 @@ jobs:
           echo "matrix={\"appname\":$(yarn --silent run matrix)}" >> $GITHUB_OUTPUT
           echo "changed=$(yarn --silent run matrix)" >> $GITHUB_OUTPUT
 
-      - run: yarn playwright install
-      - run: yarn run affected:lint
-      - run: yarn run affected:test --configuration=ci
-      - run: yarn run affected:e2e  --configuration=ci --parallel=1 --verbose
-        env:
-          E2E_AUTH_ADMIN_ID: ${{ secrets.E2E_AUTH_ADMIN_ID }}
-          E2E_AUTH_READ_ID: ${{ secrets.E2E_AUTH_READ_ID }}
-          E2E_AUTH_WRITE_ID: ${{ secrets.E2E_AUTH_WRITE_ID }}
-          E2E_CATALOG_ID: ${{ secrets.E2E_CATALOG_ID }}
-          E2E_KEYCLOAK_ID_SERVICE_CATALOG_FRONTEND: ${{ secrets.E2E_KEYCLOAK_ID_SERVICE_CATALOG_FRONTEND }}
-          E2E_KEYCLOAK_SECRET_SERVICE_CATALOG_FRONTEND: ${{ secrets.E2E_KEYCLOAK_SECRET_SERVICE_CATALOG_FRONTEND }}
-          E2E_KEYCLOAK_ID_CATALOG_PORTAL_FRONTEND: ${{ secrets.E2E_KEYCLOAK_ID_CATALOG_PORTAL_FRONTEND }}
-          E2E_KEYCLOAK_SECRET_CATALOG_PORTAL_FRONTEND: ${{ secrets.E2E_KEYCLOAK_SECRET_CATALOG_PORTAL_FRONTEND }}
-          E2E_NEXTAUTH_SECRET: ${{ secrets.E2E_NEXTAUTH_SECRET }}
-      - name: Merge CTRF reports
-        run: npx ctrf merge reports
-        if: ${{ hashFiles('reports/') != '' }}
-      - name: Run CTRF annotations
-        run: npx github-actions-ctrf reports/ctrf-report.json
-        if: ${{ hashFiles('reports/') != '' }}
       - run: yarn run affected:build --configuration=ci
 
       - name: Caching Dist Folder

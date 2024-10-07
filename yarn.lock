@@ -3705,10 +3705,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@navikt/aksel-icons@npm:^7.1.0":
-  version: 7.1.0
-  resolution: "@navikt/aksel-icons@npm:7.1.0"
-  checksum: 10/ba4aaec28929b07a6fa8c1a4bfc1ea6089b1a5aee03ef5bda963e2bcab6ac20003672cef1e65047fb51108d22eb30415337e7c49ad085e6618c9da67bc3d299e
+"@navikt/aksel-icons@npm:^7.1.2":
+  version: 7.1.2
+  resolution: "@navikt/aksel-icons@npm:7.1.2"
+  checksum: 10/241ba347dd68b9deaa12a2e6c66566d3a60c0cf7c3b9294ecae0899e3b460f128d805a7d2dcd41f9d7340c10b0af1378610532d83ea1e53958803cc896d548b7
   languageName: node
   linkType: hard
 
@@ -7721,7 +7721,7 @@ __metadata:
     "@fortawesome/react-fontawesome": "npm:^0.2.2"
     "@graphql-codegen/cli": "npm:^5.0.2"
     "@graphql-codegen/typescript-react-apollo": "npm:^4.3.2"
-    "@navikt/aksel-icons": "npm:^7.1.0"
+    "@navikt/aksel-icons": "npm:^7.1.2"
     "@nx/cypress": "npm:19.8.3"
     "@nx/devkit": "npm:19.8.3"
     "@nx/eslint": "npm:19.7.2"
