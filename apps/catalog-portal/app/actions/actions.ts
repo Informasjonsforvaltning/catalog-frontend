@@ -7,7 +7,7 @@ import {
   getAllServiceCatalogs,
   getAllProcessingActivities,
   getAllServiceMessages,
-  ServiceMessageEntity,
+  ServiceMessage,
 } from '@catalog-frontend/data-access';
 import {
   ConceptCatalog,
@@ -103,11 +103,11 @@ export async function getAllProcessingActivitiesCatalogs(): Promise<RecordOfProc
   return jsonResponse;
 }
 
-export async function getServiceMessages(): Promise<ServiceMessageEntity[]> {
+export async function getServiceMessages(): Promise<ServiceMessage[]> {
   const response = await getAllServiceMessages();
   if (response.status !== 200) {
     console.error('getServiceMessages failed with response code ' + response.status);
     return [];
   }
-  return response.data.data.serviceMessages.data;
+  return response.data.data.serviceMessages;
 }
