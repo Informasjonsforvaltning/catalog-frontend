@@ -8,11 +8,10 @@ export type BreadcrumbType = {
 
 /* eslint-disable-next-line */
 export interface BreadcrumbsProps {
-  baseURI?: string;
   breadcrumbList?: BreadcrumbType[];
 }
 
-const Breadcrumbs = ({ baseURI, breadcrumbList }: BreadcrumbsProps) => {
+const Breadcrumbs = ({ breadcrumbList }: BreadcrumbsProps) => {
   return (
     <div className='container'>
       <nav className={styles.breadcrumbs}>
@@ -20,7 +19,7 @@ const Breadcrumbs = ({ baseURI, breadcrumbList }: BreadcrumbsProps) => {
           <a
             className={styles.link}
             aria-label={localization.catalogOverview}
-            href={baseURI ?? `${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+            href={`${process.env.NEXT_PUBLIC_CATALOG_PORTAL_BASE_URI}/catalogs`}
           >
             {localization.catalogOverview}
           </a>

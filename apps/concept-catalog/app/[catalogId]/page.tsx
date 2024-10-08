@@ -41,7 +41,6 @@ const SearchPage = withReadProtectedPage(
         codeListsResult={codeListsResult}
         usersResult={usersResult}
         conceptStatuses={conceptStatuses}
-        CATALOG_PORTAL_BASE_URI={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
     );
   },

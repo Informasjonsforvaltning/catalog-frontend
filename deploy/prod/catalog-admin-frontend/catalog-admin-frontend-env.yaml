@@ -35,11 +35,11 @@ spec:
                 secretKeyRef:
                   name: commonurl-prod
                   key: CATALOG_ADMIN_SERVICE_BASE_URI
-            - name: NEXT_PUBLIC_CATALOG_ADMIN_BASE_URI
+            - name: CATALOG_ADMIN_BASE_URI
               valueFrom:
                 secretKeyRef:
                   name: commonurl-prod
-                  key: FDK_REGISTRATION_BASE_URI
+                  key: CATALOG_ADMIN_BASE_URI
             - name: CATALOG_COMMENTS_SERVICE_BASE_URI
               valueFrom:
                 secretKeyRef:
@@ -75,7 +75,7 @@ spec:
                 secretKeyRef:
                   name: commonurl-prod
                   key: FDK_COMMUNITY_BASE_URI
-            - name: CATALOG_PORTAL_BASE_URI
+            - name: NEXT_PUBLIC_CATALOG_PORTAL_BASE_URI
               valueFrom:
                 secretKeyRef:
                   name: commonurl-prod

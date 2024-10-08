@@ -50,7 +50,7 @@ spec:
                 secretKeyRef:
                   name: commonurl-demo
                   key: FDK_BASE_URI
-            - name: CATALOG_PORTAL_BASE_URI
+            - name: NEXT_PUBLIC_CATALOG_PORTAL_BASE_URI
               valueFrom:
                 secretKeyRef:
                   name: commonurl-demo
