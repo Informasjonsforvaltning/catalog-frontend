@@ -19,4 +19,3 @@ export * from './lib/filters';
 export * from './lib/dataset';
 export * from './lib/enums';
 export * from './lib/catalogs';
-export * from './lib/theme';
