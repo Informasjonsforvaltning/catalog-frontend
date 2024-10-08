@@ -84,7 +84,6 @@ type ConceptPageClientProps = {
   internalConceptRelations: Relasjon[];
   relatedConcepts: RelatedConcept[];
   internalRelatedConcepts: RelatedConcept[];
-  CATALOG_PORTAL_BASE_URI?: string;
 };
 
 const InterneFelt = ({ concept, fields, codeLists, users, location, language }: InterneFeltProps) => {
@@ -146,7 +145,6 @@ export const ConceptPageClient = ({
   conceptRelations,
   internalConceptRelations,
   internalRelatedConcepts,
-  CATALOG_PORTAL_BASE_URI,
 }: ConceptPageClientProps) => {
   const [language, setLanguage] = useState('nb');
   const [isPublished, setIsPublished] = useState(concept?.erPublisert);
@@ -785,7 +783,6 @@ export const ConceptPageClient = ({
   return (
     <>
       <Breadcrumbs
-        baseURI={CATALOG_PORTAL_BASE_URI}
         breadcrumbList={breadcrumbList}
       />
       <PageBanner

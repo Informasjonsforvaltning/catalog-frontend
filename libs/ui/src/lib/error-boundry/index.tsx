@@ -47,7 +47,6 @@ class ErrorBoundary extends Component<Props, State> {
       return (
         <>
           <Breadcrumbs
-            baseURI={this.fdkRegistrationBaseUrl}
             breadcrumbList={[]}
           />
           <PageBanner

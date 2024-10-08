@@ -20,7 +20,6 @@ export const SignIn = () => {
   return (
     <>
       <Breadcrumbs
-        baseURI={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
         breadcrumbList={breadcrumbList}
       />
       <PageBanner

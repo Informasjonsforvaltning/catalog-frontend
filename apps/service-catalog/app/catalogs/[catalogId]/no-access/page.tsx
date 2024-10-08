@@ -18,7 +18,6 @@ const NoAccess = async ({ params }: Params) => {
   return (
     <>
       <Breadcrumbs
-        baseURI={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
         breadcrumbList={breadcrumbList}
       />
       <PageBanner

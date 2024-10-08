@@ -21,7 +21,6 @@ const ChangeRequestsPage = withReadProtectedPage(
         catalogId={catalogId}
         organization={organization}
         data={reponseData}
-        CATALOG_PORTAL_BASE_URI={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
     );
   },
