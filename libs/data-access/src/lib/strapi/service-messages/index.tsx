@@ -25,10 +25,14 @@ export const getAllServiceMessages = async () => {
 
   if (!res.ok) {
     console.error(`Error: ${res.status} ${res.statusText}`);
+    return {
+      status: res.status,
+      data: null,
+    };
   }
-  const result = await res.json();
+ 
   return {
     status: res.status,
-    data: result,
+    data: await res.json(),
   };
 };
