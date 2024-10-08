@@ -1,4 +1,4 @@
-import { ServiceMessageEntity } from '@catalog-frontend/data-access';
+import { ServiceMessage } from '@catalog-frontend/data-access';
 import { Alert, Heading, Link, Paragraph } from '@digdir/designsystemet-react';
 import styles from './service-messages.module.css';
 import { localization } from '@catalog-frontend/utils';
@@ -6,7 +6,7 @@ import { localization } from '@catalog-frontend/utils';
 type Severity = 'success' | 'danger' | 'info' | 'warning';
 
 interface ServiceMessagesProps {
-  serviceMessages: ServiceMessageEntity[];
+  serviceMessages: ServiceMessage[];
 }
 
 const isValidDateRange = (validFrom: string, validTo: string): boolean => {
@@ -30,7 +30,7 @@ export const ServiceMessages = ({ serviceMessages }: ServiceMessagesProps) => {
   return (
     <div className={styles.container}>
       {serviceMessages?.map((message) => {
-        const { valid_from, valid_to, message_type, title, short_description, description } = message.attributes || {};
+        const { documentId, valid_from, valid_to, message_type, title, short_description, description } = message || {};
 
         if (!valid_from || !valid_to || !isValidDateRange(valid_from, valid_to)) {
           return null;
@@ -39,7 +39,7 @@ export const ServiceMessages = ({ serviceMessages }: ServiceMessagesProps) => {
         return (
           <Alert
             severity={getSeverity(message_type)}
-            key={message.id}
+            key={documentId}
           >
             <Heading
               level={2}
@@ -52,7 +52,7 @@ export const ServiceMessages = ({ serviceMessages }: ServiceMessagesProps) => {
               <span>
                 {`${short_description} `}
                 {description ? (
-                  <Link href={`${process.env.FDK_BASE_URI}/publishing/service-messages/${message.id}`}>
+                  <Link href={`${process.env.FDK_BASE_URI}/publishing/service-messages/${documentId}`}>
                     {`${localization.serviceMessageSeeMore}`}
                   </Link>
                 ) : (
