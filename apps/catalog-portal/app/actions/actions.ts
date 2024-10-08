@@ -109,5 +109,5 @@ export async function getServiceMessages(): Promise<ServiceMessage[]> {
     console.error('getServiceMessages failed with response code ' + response.status);
     return [];
   }
-  return response.data.data.serviceMessages.data;
+  return response.data?.serviceMessages;
 }
