@@ -4,13 +4,23 @@ import { DatasetForm } from '../../../../../../components/dataset-form';
 
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Organization } from '@catalog-frontend/types';
-import { getOrganization } from '@catalog-frontend/data-access';
+import { DataTheme, LosTheme, Organization, ReferenceDataCode } from '@catalog-frontend/types';
+import { getDatasetTypes, getDataThemes, getLosThemes, getOrganization } from '@catalog-frontend/data-access';
 
 export default async function EditDatasetPage({ params }: Params) {
   const { catalogId, datasetId } = params;
   const dataset = await getDatasetById(catalogId, datasetId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+
+  const [losThemesResponse, dataThemesResponse, datasetTypesResponse] = await Promise.all([
+    getLosThemes().then((res) => res.json()),
+    getDataThemes().then((res) => res.json()),
+    getDatasetTypes().then((res) => res.json()),
+  ]);
+
+  const losThemes: LosTheme[] = losThemesResponse.losNodes;
+  const dataThemes: DataTheme[] = dataThemesResponse.dataThemes;
+  const datasetTypes: ReferenceDataCode[] = datasetTypesResponse.datasetTypes;
 
   const breadcrumbList = [
     {
@@ -38,6 +48,9 @@ export default async function EditDatasetPage({ params }: Params) {
         <DatasetForm
           initialValues={dataset}
           submitType={'update'}
+          losThemes={losThemes}
+          dataThemes={dataThemes}
+          datasetTypes={datasetTypes}
         ></DatasetForm>
       </div>
     </>
