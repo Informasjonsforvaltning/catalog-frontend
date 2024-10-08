@@ -1,7 +1,7 @@
 'use client';
 import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button } from '@digdir/designsystemet-react';
-import { Dataset, DatasetToBeCreated } from '@catalog-frontend/types';
+import { Dataset, DatasetToBeCreated, DataTheme, LosTheme, ReferenceDataCode } from '@catalog-frontend/types';
 import { FormLayout, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
 import { Formik, Form } from 'formik';
 import { useParams } from 'next/navigation';
@@ -11,14 +11,17 @@ import { useState } from 'react';
 import { datasetValidationSchema } from './validation-schema';
 import { TitleSection } from './dataset-from-title-section';
 import { AccessRightsSection } from './dataset-form-access-rights.section';
-import TemaSection from './dataset-form-tema-section';
+import ThemeSection from './dataset-form-theme-section';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
   submitType: 'create' | 'update';
+  losThemes: LosTheme[];
+  dataThemes: DataTheme[];
+  datasetTypes: ReferenceDataCode[];
 };
 
-export const DatasetForm = ({ initialValues, submitType }: Props) => {
+export const DatasetForm = ({ initialValues, submitType, losThemes, dataThemes, datasetTypes }: Props) => {
   const { catalogId, datasetId } = useParams();
   const [isDirty, setIsDirty] = useState(false);
 
@@ -93,7 +96,10 @@ export const DatasetForm = ({ initialValues, submitType }: Props) => {
                   values={values}
                   errors={errors}
                 />
-                <TemaSection />
+                <ThemeSection
+                  losThemes={losThemes}
+                  dataThemes={dataThemes}
+                />
               </div>
             </FormLayout>
           </Form>
