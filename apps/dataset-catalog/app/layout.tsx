@@ -1,7 +1,6 @@
 import { Layout, NextAuthProvider, ReactQueryClientProvider } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Metadata } from 'next';
-import { ThemesProvider } from './context/themes';
 
 export const metadata: Metadata = {
   title: localization.catalogType.dataset,
