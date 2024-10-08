@@ -1,7 +1,7 @@
 import { AccessRights, Dataset } from '@catalog-frontend/types';
 import { FormContainer, TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Button, Heading, NativeSelect, Radio, Textfield } from '@digdir/designsystemet-react';
+import { Button, Heading, NativeSelect, Textfield } from '@digdir/designsystemet-react';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { Field, FieldArray, FormikErrors, FormikHelpers } from 'formik';
 
