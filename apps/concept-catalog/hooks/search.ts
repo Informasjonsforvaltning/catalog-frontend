@@ -4,7 +4,7 @@ import { QueryFilters, QuerySort, SearchableField } from '@catalog-frontend/type
 import { SingleSelectOption } from '@digdir/designsystemet-react';
 import { useQuery } from '@tanstack/react-query';
 
-export type SortFields = 'SIST_ENDRET' | 'ANBEFALT_TERM_NB';
+export type SortFields = 'SIST_ENDRET' | 'ANBEFALT_TERM';
 export type SortDirection = 'ASC' | 'DESC';
 
 export interface FieldOptions {
