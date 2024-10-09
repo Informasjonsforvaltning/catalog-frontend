@@ -44,6 +44,6 @@ export const datasetFormNb = {
     descriptionRequired: 'Beskrivelse er påkrevd.',
     description: 'Beskrivelsen må være minst 5 karakterer lang.',
     url: `Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’ og inneholder et gyldig toppdomene (f.eks. ‘.no’).`,
-    euTheme: 'Minst et EU-tema må være valgt.',
+    euTheme: 'Minst ett EU-tema må være valgt.',
   },
 };
