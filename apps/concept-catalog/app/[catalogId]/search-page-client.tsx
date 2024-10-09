@@ -72,8 +72,8 @@ export const SearchPageClient = ({
     [SortOption.RELEVANCE]: undefined,
     [SortOption.LAST_UPDATED_FIRST]: { field: 'SIST_ENDRET', direction: 'DESC' },
     [SortOption.LAST_UPDATED_LAST]: { field: 'SIST_ENDRET', direction: 'ASC' },
-    [SortOption.RECOMMENDED_TERM_AÅ]: { field: 'ANBEFALT_TERM_NB', direction: 'ASC' },
-    [SortOption.RECOMMENDED_TERM_ÅA]: { field: 'ANBEFALT_TERM_NB', direction: 'DESC' },
+    [SortOption.RECOMMENDED_TERM_AÅ]: { field: 'ANBEFALT_TERM', direction: 'ASC' },
+    [SortOption.RECOMMENDED_TERM_ÅA]: { field: 'ANBEFALT_TERM', direction: 'DESC' },
   };
 
   const subjectCodeList = codeListsResult?.codeLists?.find(
