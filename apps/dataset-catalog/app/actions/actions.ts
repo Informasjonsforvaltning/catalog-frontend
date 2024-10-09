@@ -41,7 +41,6 @@ const convertListToObjectStructure = (uriList: string[]) => {
 };
 
 export async function createDataset(values: DatasetToBeCreated, catalogId: string) {
-  console.log(values.losThemeList && convertListToObjectStructure(values.losThemeList));
   const newDataset = {
     ...values,
     theme: [
