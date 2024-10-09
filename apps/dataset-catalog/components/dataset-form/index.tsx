@@ -12,6 +12,7 @@ import { datasetValidationSchema } from './validation-schema';
 import { TitleSection } from './dataset-from-title-section';
 import { AccessRightsSection } from './dataset-form-access-rights.section';
 import ThemeSection from './dataset-form-theme-section';
+import { TypeSection } from './dataset-form-type-sections';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
@@ -100,6 +101,7 @@ export const DatasetForm = ({ initialValues, submitType, losThemes, dataThemes, 
                   losThemes={losThemes}
                   dataThemes={dataThemes}
                 />
+                <TypeSection datasetTypes={datasetTypes} />
               </div>
             </FormLayout>
           </Form>
