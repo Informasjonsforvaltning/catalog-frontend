@@ -26,6 +26,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
         : [''],
     losThemeList: dataset.theme ? dataset.theme.filter((t) => t.uri.includes('/los/')).map((t) => t.uri) : [],
     euThemeList: dataset.theme ? dataset.theme.filter((t) => t.uri.includes('/data-theme/')).map((t) => t.uri) : [],
+    type: dataset.type ?? '',
   };
 };
 
@@ -49,5 +50,6 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     legalBasisForRestriction: [{ uri: '', prefLabel: { nb: '' } }],
     losThemeList: [],
     euThemeList: [],
+    type: '',
   };
 };

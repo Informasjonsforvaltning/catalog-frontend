@@ -13,6 +13,7 @@ export const nb = {
   contactPage: 'Kontaktside',
   dataVillage: ['Datalandsbyen', 'Lenke til Datalandsbyen'],
   description: 'Beskrivelse',
+  code: 'Kode',
   link: 'Lenke',
   edit: 'Rediger',
   email: 'E-post',
