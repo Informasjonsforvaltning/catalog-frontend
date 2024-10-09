@@ -11,6 +11,7 @@ export const datasetFormNb = {
     legalBasisForAccess: 'Angi referanse til relevant lov eller forskrift. Helst til lovdata på paragrafnivå.',
     theme: 'Velg tema(er) som beskriver inneholdet i datasettet.',
     parentTheme: 'Overordnet tema',
+    type: 'Refererer til EU publication office sine datasett-typer.',
   },
   heading: {
     description: 'Beskrivelse av datasettet',
@@ -33,6 +34,7 @@ export const datasetFormNb = {
     title: 'Tittel (Norsk bokmål)',
     losTheme: 'Velg tema, kategorier og emner',
     euTheme: 'Velg EU-tema(er)',
+    type: 'Velg type',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
