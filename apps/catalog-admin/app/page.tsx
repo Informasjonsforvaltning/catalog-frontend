@@ -15,7 +15,7 @@ const Home = async () => {
     organizations = await getOrganizations(organiztionIdsWithAdminRole).then((res) => res.json());
   }
 
-  return <HomePageClient organizations={organizations} />;
+  return <HomePageClient organizations={organizations} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}`}/>;
 };
 
 export default Home;

@@ -14,7 +14,7 @@ enum ConceptStatusColors {
 export type StatusKey = keyof typeof ConceptStatusColors;
 
 export type ConceptStatusTagProps = {
-  statusKey: StatusKey;
+  statusKey: StatusKey | undefined;
   statusLabel: string;
 } & DSTagProps;
 

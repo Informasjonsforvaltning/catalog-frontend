@@ -22,6 +22,7 @@ const NoAccess = async ({ params }) => {
     <>
       <Breadcrumbs
         breadcrumbList={breadcrumbList}
+        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
       <PageBanner
         title={localization.catalogType.concept}

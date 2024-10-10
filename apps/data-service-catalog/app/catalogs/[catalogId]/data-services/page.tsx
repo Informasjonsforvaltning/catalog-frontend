@@ -28,7 +28,7 @@ export default async function DataServicesSearchHits({ params }) {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} />
       <PageBanner
         title={localization.catalogType.dataService}
         subtitle={getTranslateText(organization.prefLabel).toString()}

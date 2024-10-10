@@ -18,9 +18,10 @@ export interface CodeListsPageClientProps {
   catalogId: string;
   organization: Organization;
   codeListsInUse: string[];
+  catalogPortalUrl: string;
 }
 
-const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }: CodeListsPageClientProps) => {
+const CodeListsPageClient = ({ catalogId, organization, codeListsInUse, catalogPortalUrl }: CodeListsPageClientProps) => {
   const adminDispatch = useAdminDispatch();
   const adminContext = useAdminState();
   const { showCodeListEditor, updatedCodeLists, updatedCodes } = adminContext;
@@ -99,7 +100,7 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse }: CodeLi
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={catalogPortalUrl}  />
       <Banner
         title={localization.catalogAdmin.manage.conceptCatalog}
         orgName={`${getTranslateText(organization?.prefLabel)}`}

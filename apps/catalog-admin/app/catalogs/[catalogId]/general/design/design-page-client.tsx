@@ -17,9 +17,10 @@ import { Organization } from '@catalog-frontend/types';
 export interface DesignPageClientProps {
   catalogId: string;
   organization: Organization;
+  catalogPortalUrl: string;
 }
 
-const DesignPageClient = ({ catalogId, organization }: DesignPageClientProps) => {
+const DesignPageClient = ({ catalogId, organization, catalogPortalUrl }: DesignPageClientProps) => {
   const adminContext = useAdminState();
 
   const { backgroundColor, fontColor, logo } = adminContext;
@@ -85,7 +86,7 @@ const DesignPageClient = ({ catalogId, organization }: DesignPageClientProps) =>
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={catalogPortalUrl} />
 
       <PageLayout>
         <div className={styles.heading}>

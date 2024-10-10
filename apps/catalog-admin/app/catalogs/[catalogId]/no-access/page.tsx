@@ -1,5 +1,3 @@
-'use client';
-
 import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Heading } from '@digdir/designsystemet-react';
@@ -14,7 +12,7 @@ const NoAccess = () => {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} />
       <PageBanner
         title={localization.manageCatalogs}
         subtitle={localization.noAccess}

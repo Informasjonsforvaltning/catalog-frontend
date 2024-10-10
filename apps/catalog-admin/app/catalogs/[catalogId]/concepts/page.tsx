@@ -12,6 +12,7 @@ export default withProtectedPage(
       <ConceptsPageClient
         organization={organization}
         catalogId={catalogId}
+        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
     );
   },

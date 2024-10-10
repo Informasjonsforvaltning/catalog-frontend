@@ -32,7 +32,7 @@ export default async function EditServicePage({ params }: Params) {
 
   return (
     <div>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} />
       <PageBanner
         title={localization.catalogType.service}
         subtitle={getTranslateText(organization?.prefLabel).toString()}

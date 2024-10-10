@@ -11,9 +11,10 @@ import { Organization } from '@catalog-frontend/types';
 export interface AdminPageClientProps {
   organization: Organization;
   catalogId: string;
+  catalogPortalUrl: string;
 }
 
-export const AdminPageClient = ({ organization, catalogId }: AdminPageClientProps) => {
+export const AdminPageClient = ({ organization, catalogId, catalogPortalUrl }: AdminPageClientProps) => {
   const breadcrumbList = catalogId
     ? ([
         {
@@ -25,7 +26,7 @@ export const AdminPageClient = ({ organization, catalogId }: AdminPageClientProp
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={catalogPortalUrl} />
       <div>
         <Banner
           title={localization.manageCatalog}
