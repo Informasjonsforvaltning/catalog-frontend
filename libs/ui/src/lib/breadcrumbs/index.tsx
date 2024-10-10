@@ -1,6 +1,7 @@
 import { hashCode, localization } from '@catalog-frontend/utils';
 import styles from './breadcrumbs.module.css';
 import Link from 'next/link';
+import { cookies } from 'next/headers';
 export type BreadcrumbType = {
   href: string;
   text: string;
@@ -12,6 +13,9 @@ export interface BreadcrumbsProps {
 }
 
 const Breadcrumbs = ({ breadcrumbList }: BreadcrumbsProps) => {
+  // Opt-in dynamic rendering
+  cookies();
+
   return (
     <div className='container'>
       <nav className={styles.breadcrumbs}>
