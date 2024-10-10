@@ -1,4 +1,4 @@
-import { Strapi } from '@catalog-frontend/data-access';
+import { StrapiGraphql } from '@catalog-frontend/data-access';
 import { Alert, Heading, Link, Paragraph } from '@digdir/designsystemet-react';
 import styles from './service-messages.module.css';
 import { localization } from '@catalog-frontend/utils';
@@ -6,7 +6,7 @@ import { localization } from '@catalog-frontend/utils';
 type Severity = 'success' | 'danger' | 'info' | 'warning';
 
 interface ServiceMessagesProps {
-  serviceMessages: Strapi.ServiceMessage[];
+  serviceMessages: StrapiGraphql.ServiceMessage[];
 }
 
 const isValidDateRange = (validFrom: string, validTo: string): boolean => {
