@@ -12,6 +12,7 @@ export default withProtectedPage(
       <UsersPageClient
         organization={organization}
         catalogId={catalogId}
+        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
     );
   },

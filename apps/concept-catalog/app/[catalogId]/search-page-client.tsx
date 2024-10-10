@@ -39,6 +39,7 @@ interface Props {
   codeListsResult: any;
   usersResult: any;
   conceptStatuses: any;
+  catalogPortalUrl: string;
 }
 
 export const SearchPageClient = ({
@@ -50,6 +51,7 @@ export const SearchPageClient = ({
   codeListsResult,
   usersResult,
   conceptStatuses,
+  catalogPortalUrl
 }: Props) => {
   const [selectedFieldOption, setSelectedFieldOption] = useState('alleFelter' as SearchableField | 'alleFelter');
   const [selectedSortOption, setSelectedSortOption] = useState(SortOption.RELEVANCE);
@@ -321,6 +323,7 @@ export const SearchPageClient = ({
     <>
       <Breadcrumbs
         breadcrumbList={breadcrumbList}
+        catalogPortalUrl={catalogPortalUrl}
       />
       <PageBanner
         title={loc.catalogType.concept}

@@ -7,11 +7,12 @@ import {
   PageBanner,
   Breadcrumbs,
   BreadcrumbType,
+  ConceptStatusTagProps,
   InfoCard,
   Spinner,
   Button,
   Pagination,
-  DetailsPageLayout,
+  DetailsPageLayout,  
   Tag,
   LinkButton,
 } from '@catalog-frontend/ui';
@@ -84,6 +85,7 @@ type ConceptPageClientProps = {
   internalConceptRelations: Relasjon[];
   relatedConcepts: RelatedConcept[];
   internalRelatedConcepts: RelatedConcept[];
+  catalogPortalUrl: string;
 };
 
 const InterneFelt = ({ concept, fields, codeLists, users, location, language }: InterneFeltProps) => {
@@ -145,6 +147,7 @@ export const ConceptPageClient = ({
   conceptRelations,
   internalConceptRelations,
   internalRelatedConcepts,
+  catalogPortalUrl
 }: ConceptPageClientProps) => {
   const [language, setLanguage] = useState('nb');
   const [isPublished, setIsPublished] = useState(concept?.erPublisert);
@@ -346,14 +349,14 @@ export const ConceptPageClient = ({
     return getConceptSubject(concept, subjectCodeList);
   };
 
-  const getStatusFromURL = (item: { statusURI?: string } | null) => {
-    if (item?.statusURI && typeof item.statusURI === 'string') {
-      const urlParts = item.statusURI.split('/');
+  const getStatusFromURL = (statusURI?: string | null) => {
+    if (statusURI && typeof statusURI === 'string') {
+      const urlParts = statusURI.split('/');
       if (urlParts.length > 0) {
-        return urlParts[urlParts.length - 1];
+        return urlParts[urlParts.length - 1] as ConceptStatusTagProps["statusKey"];
       }
     }
-    return null;
+    return undefined;
   };
 
   const RevisionsTab = () => {
@@ -383,7 +386,7 @@ export const ConceptPageClient = ({
                 {status && (
                   <div className={cn(classes.status)}>
                     <Tag.ConceptStatus
-                      statusKey={getStatusFromURL(revision)}
+                      statusKey={getStatusFromURL(revision?.statusURI)}
                       statusLabel={status}
                     />
                   </div>
@@ -784,6 +787,7 @@ export const ConceptPageClient = ({
     <>
       <Breadcrumbs
         breadcrumbList={breadcrumbList}
+        catalogPortalUrl={catalogPortalUrl}
       />
       <PageBanner
         title={localization.catalogType.concept}
@@ -801,7 +805,7 @@ export const ConceptPageClient = ({
         headingTitle={getTitle(translate(concept?.anbefaltTerm?.navn, language))}
         headingTag={
           <Tag.ConceptStatus
-            statusKey={getStatusFromURL(concept)}
+            statusKey={getStatusFromURL(concept?.statusURI)}
             statusLabel={status}
           />
         }

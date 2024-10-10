@@ -48,6 +48,7 @@ class ErrorBoundary extends Component<Props, State> {
         <>
           <Breadcrumbs
             breadcrumbList={[]}
+            catalogPortalUrl={`${this.fdkRegistrationBaseUrl}/catalogs`}
           />
           <PageBanner
             title={this.title ?? 'Feil'}

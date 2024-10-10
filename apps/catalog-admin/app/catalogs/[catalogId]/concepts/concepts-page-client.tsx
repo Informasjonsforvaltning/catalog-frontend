@@ -11,9 +11,10 @@ import { Organization } from '@catalog-frontend/types';
 export interface ConceptsPageClientProps {
   organization: Organization;
   catalogId: string;
+  catalogPortalUrl: string;
 }
 
-export const ConceptsPageClient = ({ catalogId, organization }: ConceptsPageClientProps) => {
+export const ConceptsPageClient = ({ catalogId, organization, catalogPortalUrl }: ConceptsPageClientProps) => {
   const breadcrumbList = catalogId
     ? ([
         {
@@ -29,7 +30,7 @@ export const ConceptsPageClient = ({ catalogId, organization }: ConceptsPageClie
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={catalogPortalUrl}  />
       <Banner
         title={localization.catalogAdmin.manage.conceptCatalog}
         orgName={`${getTranslateText(organization?.prefLabel)}`}

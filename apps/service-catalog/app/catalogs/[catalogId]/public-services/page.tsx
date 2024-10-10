@@ -33,7 +33,7 @@ export default async function PublicServiceSearchHitsPage({ params }: Params) {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}/>
       <PageBanner
         title={localization.catalogType.publicService}
         subtitle={getTranslateText(organization.prefLabel).toString()}

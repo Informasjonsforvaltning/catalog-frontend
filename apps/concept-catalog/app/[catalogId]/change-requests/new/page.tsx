@@ -86,6 +86,7 @@ const ChangeRequestOrNew = withReadProtectedPage(
       <>
         <Breadcrumbs
           breadcrumbList={breadcrumbList}
+          catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
         />
         <Banner
           title={localization.catalogType.concept}

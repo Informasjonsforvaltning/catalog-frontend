@@ -26,6 +26,7 @@ export default withProtectedPage(
         organization={organization}
         catalogId={catalogId}
         codeListsInUse={codeListsInUse}
+        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
     );
   },

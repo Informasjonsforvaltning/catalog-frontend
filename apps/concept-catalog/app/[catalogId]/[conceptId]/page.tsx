@@ -81,6 +81,7 @@ const ConceptPage = withReadProtectedPage(
       conceptRelations,
       internalConceptRelations,
       internalRelatedConcepts,
+      catalogPortalUrl: `${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`
     };
 
     return <ConceptPageClient {...clientProps} />;

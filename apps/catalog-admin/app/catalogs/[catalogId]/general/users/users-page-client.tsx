@@ -17,9 +17,10 @@ import { PageLayout } from '../../../../../components/page-layout';
 export interface UsersPageClientProps {
   catalogId: string;
   organization: Organization;
+  catalogPortalUrl: string;
 }
 
-export const UsersPageClient = ({ catalogId, organization }: UsersPageClientProps) => {
+export const UsersPageClient = ({ catalogId, organization, catalogPortalUrl }: UsersPageClientProps) => {
   const { data: getUsers } = useGetUsers(catalogId);
   const dbUsers = getUsers?.users;
 
@@ -60,7 +61,7 @@ export const UsersPageClient = ({ catalogId, organization }: UsersPageClientProp
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={catalogPortalUrl} />
       <Banner
         title={localization.manageCatalog}
         orgName={`${getTranslateText(organization?.prefLabel)}`}

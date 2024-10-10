@@ -20,7 +20,7 @@ export const SignIn = () => {
   return (
     <>
       <Breadcrumbs
-        breadcrumbList={breadcrumbList}
+        breadcrumbList={breadcrumbList} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
       <PageBanner
         title={localization.catalogType.concept}

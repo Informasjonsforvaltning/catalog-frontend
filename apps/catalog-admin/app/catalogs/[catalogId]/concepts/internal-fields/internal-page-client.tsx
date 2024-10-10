@@ -16,9 +16,10 @@ import { PageLayout } from '../../../../../components/page-layout';
 export interface InternalFieldsPageClientProps {
   catalogId: string;
   organization: Organization;
+  catalogPortalUrl: string;
 }
 
-export const InternalFieldsPageClient = ({ catalogId, organization }: InternalFieldsPageClientProps) => {
+export const InternalFieldsPageClient = ({ catalogId, organization, catalogPortalUrl }: InternalFieldsPageClientProps) => {
   const { data: getInternalFields } = useGetInternalFields(catalogId);
   const dbFields = getInternalFields?.internal;
 
@@ -49,7 +50,7 @@ export const InternalFieldsPageClient = ({ catalogId, organization }: InternalFi
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={catalogPortalUrl} />
       <Banner
         title={localization.catalogAdmin.manage.conceptCatalog}
         orgName={`${getTranslateText(organization?.prefLabel)}`}

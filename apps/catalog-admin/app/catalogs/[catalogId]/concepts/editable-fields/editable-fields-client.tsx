@@ -16,9 +16,10 @@ import { PageLayout } from '../../../../../components/page-layout';
 export interface EditableFieldsClientProps {
   catalogId: string;
   organization: Organization;
+  catalogPortalUrl: string;
 }
 
-export function EditableFieldsClient({ catalogId, organization }: EditableFieldsClientProps) {
+export function EditableFieldsClient({ catalogId, organization, catalogPortalUrl }: EditableFieldsClientProps) {
   const { data: getAllCodeLists } = useGetAllCodeLists({ catalogId });
   const dbCodeLists: CodeList[] = getAllCodeLists?.codeLists;
   const { data: getInternalFields } = useGetInternalFields(catalogId);
@@ -88,7 +89,7 @@ export function EditableFieldsClient({ catalogId, organization }: EditableFields
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={catalogPortalUrl}  />
       <Banner
         title={localization.catalogAdmin.manage.conceptCatalog}
         orgName={`${getTranslateText(organization?.prefLabel)}`}

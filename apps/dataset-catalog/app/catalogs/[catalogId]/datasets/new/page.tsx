@@ -34,7 +34,7 @@ export default async function NewDatasetPage({ params }: Params) {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} />
+      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} />
       <PageBanner
         title={localization.catalogType.dataset}
         subtitle={getTranslateText(organization.prefLabel).toString()}

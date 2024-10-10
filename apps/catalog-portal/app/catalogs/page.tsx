@@ -91,6 +91,8 @@ const CatalogPortalPage: React.FC<{ params: Params }> = async () => {
     <div className='container'>
       <Breadcrumbs
         data-testid='catalog-portal-breadcrumbs'
+        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} 
+
       />
       <ServiceMessages serviceMessages={serviceMessages} />
 
