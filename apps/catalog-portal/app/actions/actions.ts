@@ -7,7 +7,7 @@ import {
   getAllServiceCatalogs,
   getAllProcessingActivities,
   getAllServiceMessages,
-  Strapi,
+  StrapiGraphql,
 } from '@catalog-frontend/data-access';
 import {
   ConceptCatalog,
@@ -56,7 +56,18 @@ export async function getServiceCatalogs(): Promise<ServiceCatalogs> {
   };
 }
 
-export async function getServiceMessages(): Promise<Strapi.ServiceMessage[]> {
+export async function getAllProcessingActivitiesCatalogs(): Promise<RecordOfProcessingActivities[]> {
+  const session = await getValidSession();
+  const response = await getAllProcessingActivities(`${session?.accessToken}`);
+  if (response.status !== 200) {
+    console.error('getAllProcessingActivitiesCatalogs failed with response code ' + response.status);
+    return [];
+  }
+  const jsonResponse = await response.json();
+  return jsonResponse;
+}
+
+export async function getServiceMessages(): Promise<StrapiGraphql.ServiceMessage[]> {
   const response = await getAllServiceMessages();
   if (response.status !== 200) {
     console.error('getServiceMessages failed with response code ' + response.status);
