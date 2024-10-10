@@ -39,4 +39,7 @@ export const datasetValidationSchema = Yup.object().shape({
         .url(localization.validation.invalidUrl),
     }),
   ),
+  euThemeList: Yup.array()
+    .min(1, localization.datasetForm.validation.euTheme)
+    .required(localization.datasetForm.validation.euTheme),
 });

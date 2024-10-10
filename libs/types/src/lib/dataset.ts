@@ -16,6 +16,9 @@ export interface DatasetToBeCreated {
   legalBasisForAccess?: UriWIthLabel[];
   legalBasisForRestriction?: UriWIthLabel[];
   landingPage?: string[];
+  theme?: { uri: string }[];
+  losThemeList?: string[]; // An array of los theme uris used as helper values for Formik. This property is not part of the db object.
+  euThemeList?: string[]; // An array of eu theme uris used as helper values for Formik. This property is not part of the db object.
 }
 
 export interface UriWIthLabel {

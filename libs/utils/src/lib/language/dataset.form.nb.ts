@@ -9,6 +9,8 @@ export const datasetFormNb = {
     legalBasisForRestriction: 'Angi referanse til relevant lov eller forskrift. Helst til lovdata på paragrafnivå.',
     legalBasisForProcessing: 'Angi referanse til relevant lov eller forskrift, samtykke eller nødvendighetsvurdering.',
     legalBasisForAccess: 'Angi referanse til relevant lov eller forskrift. Helst til lovdata på paragrafnivå.',
+    theme: 'Velg tema(er) som beskriver inneholdet i datasettet.',
+    parentTheme: 'Overordnet tema',
   },
   heading: {
     description: 'Beskrivelse av datasettet',
@@ -18,6 +20,8 @@ export const datasetFormNb = {
     legalBasisForRestriction: 'Skjermingshjemmel',
     legalBasisForProcessing: 'Behandlingsgrunnlag',
     legalBasisForAccess: 'Utleveringshjemmel',
+    losTheme: 'LOS-tema og emner',
+    euTheme: 'EU-tema',
   },
   accessRight: {
     public: 'Allmenn tilgang',
@@ -27,6 +31,8 @@ export const datasetFormNb = {
   fieldLabel: {
     description: 'Beskrivelse av datasettet (Norsk bokmål)',
     title: 'Tittel (Norsk bokmål)',
+    losTheme: 'Velg tema, kategorier og emner',
+    euTheme: 'Velg EU-tema(er)',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
@@ -38,5 +44,6 @@ export const datasetFormNb = {
     descriptionRequired: 'Beskrivelse er påkrevd.',
     description: 'Beskrivelsen må være minst 5 karakterer lang.',
     url: `Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’ og inneholder et gyldig toppdomene (f.eks. ‘.no’).`,
+    euTheme: 'Minst ett EU-tema må være valgt.',
   },
 };

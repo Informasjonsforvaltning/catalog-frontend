@@ -90,9 +90,9 @@ const DatasetsPageClient = ({ datasets, catalogId }: Props) => {
         <SearchHitsPageLayout.LeftColumn>
           <div className={styles.leftColumn}>
             <div>
-              <Paragraph>Legg til...</Paragraph>
+              <Paragraph>{`${localization.add}...`}</Paragraph>
               <Select onChange={handleSelectChange}>
-                <option value='blank'>{`${localization.choose}...`}</option>
+                <option value=''>{`${localization.choose}...`}</option>
                 <option value='dataset'>{localization.resourceType.dataset}</option>
                 <option value='datasetSeries'>{localization.resourceType.datasetSeries}</option>
               </Select>

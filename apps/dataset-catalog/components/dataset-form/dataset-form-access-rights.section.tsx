@@ -31,7 +31,7 @@ export const AccessRightsSection = ({ errors, values }: AccessRightsSectionProps
               label={
                 <TitleWithTag
                   title={localization.access}
-                  tagColor='third'
+                  tagColor='info'
                   tagTitle={localization.tag.recommended}
                 />
               }

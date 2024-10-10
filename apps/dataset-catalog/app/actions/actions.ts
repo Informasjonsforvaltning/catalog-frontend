@@ -36,13 +36,25 @@ export async function getDatasetById(catalogId: string, datasetId: string): Prom
   return jsonResponse;
 }
 
+const convertListToObjectStructure = (uriList: string[]) => {
+  return uriList.map((uri) => ({ uri: uri }));
+};
+
 export async function createDataset(values: DatasetToBeCreated, catalogId: string) {
-  const newDataset = removeEmptyValues(values);
+  const newDataset = {
+    ...values,
+    theme: [
+      ...(values.losThemeList ? convertListToObjectStructure(values.losThemeList) : []),
+      ...(values.euThemeList ? convertListToObjectStructure(values.euThemeList) : []),
+    ],
+  };
+  const datasetNoEmptyValues = removeEmptyValues(newDataset);
+
   const session = await getValidSession();
   let success = false;
   let datasetId = undefined;
   try {
-    const response = await postDataset(newDataset, catalogId, `${session?.accessToken}`);
+    const response = await postDataset(datasetNoEmptyValues, catalogId, `${session?.accessToken}`);
     if (response.status !== 201) {
       throw new Error();
     }
@@ -79,7 +91,15 @@ export async function deleteDataset(catalogId: string, datasetId: string) {
 }
 
 export async function updateDataset(catalogId: string, initialDataset: Dataset, values: Dataset) {
-  const diff = compare(initialDataset, removeEmptyValues(values));
+  const updatedDataset = removeEmptyValues({
+    ...values,
+    theme: [
+      ...(values.losThemeList ? convertListToObjectStructure(values.losThemeList) : []),
+      ...(values.euThemeList ? convertListToObjectStructure(values.euThemeList) : []),
+    ],
+  });
+
+  const diff = compare(initialDataset, updatedDataset);
 
   if (diff.length === 0) {
     throw new Error(localization.alert.noChanges);
