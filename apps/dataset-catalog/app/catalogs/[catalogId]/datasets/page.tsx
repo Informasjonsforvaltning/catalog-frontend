@@ -18,7 +18,7 @@ export default async function DatasetSearchHitsPage({ params }: Params) {
 
   const datasets: Dataset[] = await getDatasets(catalogId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
-  const hasWritePermission = await hasOrganizationWritePermission(session.accessToken, catalogId);
+  const hasWritePermission = hasOrganizationWritePermission(session.accessToken, catalogId);
 
   const breadcrumbList = [
     {
