@@ -40,6 +40,25 @@ const convertListToObjectStructure = (uriList: string[]) => {
   return uriList.map((uri) => ({ uri: uri }));
 };
 
+function reverseTransformDictList(inputDict: {
+  nn?: string[];
+  nb?: string[];
+  en?: string[];
+}): { nn?: string; nb?: string; en?: string }[] {
+  const outputList: { nn?: string; nb?: string; en?: string }[] = [];
+  const allowedKeys: (keyof typeof inputDict)[] = ['nn', 'nb', 'en']; // predefined keys
+
+  allowedKeys.forEach((key) => {
+    if (inputDict[key]) {
+      inputDict[key]!.forEach((value) => {
+        outputList.push({ [key]: value });
+      });
+    }
+  });
+
+  return outputList;
+}
+
 export async function createDataset(values: DatasetToBeCreated, catalogId: string) {
   const newDataset = {
     ...values,
@@ -47,6 +66,7 @@ export async function createDataset(values: DatasetToBeCreated, catalogId: strin
       ...(values.losThemeList ? convertListToObjectStructure(values.losThemeList) : []),
       ...(values.euThemeList ? convertListToObjectStructure(values.euThemeList) : []),
     ],
+    keyword: values?.keywordList ? reverseTransformDictList(values?.keywordList) : '',
   };
   const datasetNoEmptyValues = removeEmptyValues(newDataset);
 
@@ -97,6 +117,7 @@ export async function updateDataset(catalogId: string, initialDataset: Dataset, 
       ...(values.losThemeList ? convertListToObjectStructure(values.losThemeList) : []),
       ...(values.euThemeList ? convertListToObjectStructure(values.euThemeList) : []),
     ],
+    keyword: values?.keywordList ? reverseTransformDictList(values?.keywordList) : '',
   });
 
   const diff = compare(initialDataset, updatedDataset);
