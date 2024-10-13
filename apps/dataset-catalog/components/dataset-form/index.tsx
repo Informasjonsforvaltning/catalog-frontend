@@ -10,9 +10,11 @@ import { datasetTemplate } from './dataset-initial-values';
 import { useState } from 'react';
 import { datasetValidationSchema } from './validation-schema';
 import { TitleSection } from './dataset-from-title-section';
-import { AccessRightsSection } from './dataset-form-access-rights.section';
+import { AccessRightsSection } from './dataset-form-access-rights-section';
 import ThemeSection from './dataset-form-theme-section';
 import { TypeSection } from './dataset-form-type-sections';
+import { ConceptSection } from './dataset-form-concept-section';
+import { Suggestion } from 'libs/types/src/lib/search';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
@@ -20,6 +22,7 @@ type Props = {
   losThemes: LosTheme[];
   dataThemes: DataTheme[];
   datasetTypes: ReferenceDataCode[];
+  conceptSuggestions: Suggestion[];
 };
 
 export const DatasetForm = ({ initialValues, submitType, losThemes, dataThemes, datasetTypes }: Props) => {
@@ -102,6 +105,7 @@ export const DatasetForm = ({ initialValues, submitType, losThemes, dataThemes, 
                   dataThemes={dataThemes}
                 />
                 <TypeSection datasetTypes={datasetTypes} />
+                <ConceptSection />
               </div>
             </FormLayout>
           </Form>

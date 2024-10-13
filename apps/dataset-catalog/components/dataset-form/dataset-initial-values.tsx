@@ -27,8 +27,25 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     losThemeList: dataset.theme ? dataset.theme.filter((t) => t.uri.includes('/los/')).map((t) => t.uri) : [],
     euThemeList: dataset.theme ? dataset.theme.filter((t) => t.uri.includes('/data-theme/')).map((t) => t.uri) : [],
     type: dataset.type ?? '',
+    keywordList: dataset.keyword ? transformDictList(dataset.keyword) : { nb: [] },
   };
 };
+
+function transformDictList(inputList: { [key: string]: string }[]): { [key: string]: string[] } {
+  const outputDict: { [key: string]: string[] } = {};
+
+  inputList.forEach((item) => {
+    for (const key in item) {
+      if (outputDict[key]) {
+        outputDict[key].push(item[key]);
+      } else {
+        outputDict[key] = [item[key]];
+      }
+    }
+  });
+
+  return outputDict;
+}
 
 export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
   return {
@@ -51,5 +68,6 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     losThemeList: [],
     euThemeList: [],
     type: '',
+    keywordList: { nb: [] },
   };
 };
