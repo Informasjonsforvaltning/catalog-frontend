@@ -18,6 +18,8 @@ export interface DatasetToBeCreated {
   landingPage?: string[];
   theme?: { uri: string }[];
   type?: string;
+  keyword?: LocalizedStrings[];
+  keywordList?: { nb?: string[]; nn?: string[]; en?: string[] };
   losThemeList?: string[]; // An array of los theme uris used as helper values for Formik. This property is not part of the db object.
   euThemeList?: string[]; // An array of eu theme uris used as helper values for Formik. This property is not part of the db object.
 }
