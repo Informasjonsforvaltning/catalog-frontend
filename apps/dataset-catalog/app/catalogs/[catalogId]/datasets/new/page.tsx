@@ -10,6 +10,7 @@ export default async function NewDatasetPage({ params }: Params) {
   const initialValues = datasetToBeCreatedTemplate();
   const { catalogId } = params;
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+  const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
 
   const [losThemesResponse, dataThemesResponse, datasetTypesResponse] = await Promise.all([
     getLosThemes().then((res) => res.json()),
@@ -46,6 +47,7 @@ export default async function NewDatasetPage({ params }: Params) {
           losThemes={losThemes}
           dataThemes={dataThemes}
           datasetTypes={datasetTypes}
+          searchEnv={searchEnv}
         ></DatasetForm>
       </div>
     </>

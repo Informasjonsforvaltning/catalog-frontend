@@ -1,4 +1,5 @@
 import { LocalizedStrings } from './localization';
+import { ReferenceDataCode } from './reference-data';
 
 export type SearchFilter<T> = {
   value: T;
@@ -12,7 +13,7 @@ export type QueryFields = {
 
 export type SearchOperation = {
   query?: string;
-  fields: QueryFields;
+  fields?: QueryFields;
   filters?: {
     openData?: SearchFilter<boolean>;
     accessRights?: SearchFilter<string>;
@@ -68,7 +69,7 @@ export type SearchObject = {
   losTheme?: LosNode[];
   organization?: Organization;
   provenance?: ReferenceDataCode;
-  searchType: 'CONCEPT' | 'DATASET' | 'DATA_SERVICE' | 'INFORMATION_MODEL' | 'SERVICE' | 'EVENT';
+  searchType: SearchType;
   spatial?: ReferenceDataCode[];
   title?: LocalizedStrings;
   relations?: Relation[];
@@ -110,12 +111,6 @@ export type RelationType =
   | 'isRequiredBy'
   | 'source';
 
-export type ReferenceDataCode = {
-  uri?: string;
-  code?: string;
-  prefLabel?: LocalizedStrings;
-};
-
 export type Organization = {
   id?: string;
   uri?: string;
@@ -148,3 +143,14 @@ export type EuDataTheme = {
   title?: LocalizedStrings;
   code?: string;
 };
+
+export interface Suggestion {
+  id: string;
+  title?: LocalizedStrings;
+  description?: LocalizedStrings;
+  uri: string;
+  organization?: Organization;
+  searchType: SearchType;
+}
+
+export type SearchType = 'CONCEPT' | 'DATASET' | 'DATA_SERVICE' | 'INFORMATION_MODEL' | 'SERVICE' | 'EVENT';

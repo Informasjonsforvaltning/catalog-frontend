@@ -9,6 +9,7 @@ import { getDatasetTypes, getDataThemes, getLosThemes, getOrganization } from '@
 
 export default async function EditDatasetPage({ params }: Params) {
   const { catalogId, datasetId } = params;
+  const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const dataset = await getDatasetById(catalogId, datasetId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
@@ -51,6 +52,7 @@ export default async function EditDatasetPage({ params }: Params) {
           losThemes={losThemes}
           dataThemes={dataThemes}
           datasetTypes={datasetTypes}
+          searchEnv={searchEnv}
         ></DatasetForm>
       </div>
     </>
