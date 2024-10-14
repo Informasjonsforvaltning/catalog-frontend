@@ -1,7 +1,7 @@
 import { Dataset, DataTheme, LosTheme, Option } from '@catalog-frontend/types';
 import { FormContainer, TitleWithTag } from '@catalog-frontend/ui';
 
-import { Combobox, Spinner } from '@digdir/designsystemet-react';
+import { Combobox } from '@digdir/designsystemet-react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Field, useFormikContext } from 'formik';
 import styles from './dataset-form.module.css';

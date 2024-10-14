@@ -1,4 +1,5 @@
 import { AccessRights, Dataset, DatasetToBeCreated, PublicationStatus } from '@catalog-frontend/types';
+import { groupByKeys } from '@catalog-frontend/utils';
 
 export const datasetTemplate = (dataset: Dataset): Dataset => {
   return {
@@ -27,25 +28,10 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     losThemeList: dataset.theme ? dataset.theme.filter((t) => t.uri.includes('/los/')).map((t) => t.uri) : [],
     euThemeList: dataset.theme ? dataset.theme.filter((t) => t.uri.includes('/data-theme/')).map((t) => t.uri) : [],
     type: dataset.type ?? '',
-    keywordList: dataset.keyword ? transformDictList(dataset.keyword) : { nb: [] },
+    keywordList: dataset.keyword ? groupByKeys(dataset.keyword) : { nb: [] },
+    conceptList: dataset.concepts ? dataset.concepts.map((concept) => concept.uri) : [],
   };
 };
-
-function transformDictList(inputList: { [key: string]: string }[]): { [key: string]: string[] } {
-  const outputDict: { [key: string]: string[] } = {};
-
-  inputList.forEach((item) => {
-    for (const key in item) {
-      if (outputDict[key]) {
-        outputDict[key].push(item[key]);
-      } else {
-        outputDict[key] = [item[key]];
-      }
-    }
-  });
-
-  return outputDict;
-}
 
 export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
   return {
@@ -69,5 +55,6 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     euThemeList: [],
     type: '',
     keywordList: { nb: [] },
+    conceptList: [],
   };
 };

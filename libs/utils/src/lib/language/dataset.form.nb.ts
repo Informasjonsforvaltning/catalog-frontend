@@ -12,6 +12,9 @@ export const datasetFormNb = {
     theme: 'Velg tema(er) som beskriver inneholdet i datasettet.',
     parentTheme: 'Overordnet tema',
     type: 'Refererer til EU publication office sine datasett-typer.',
+    concept: 'Referanse til sentrale begrep som er viktige for å forstå og tolke datasettet.',
+    keyword: 'Inneholder emneord (eller tag) som beskriver datasettet.',
+    seachConcept: 'Søk etter begrep...',
   },
   heading: {
     description: 'Beskrivelse av datasettet',
@@ -23,6 +26,7 @@ export const datasetFormNb = {
     legalBasisForAccess: 'Utleveringshjemmel',
     losTheme: 'LOS-tema og emner',
     euTheme: 'EU-tema',
+    concept: 'Begrep og emneord',
   },
   accessRight: {
     public: 'Allmenn tilgang',
@@ -35,6 +39,8 @@ export const datasetFormNb = {
     losTheme: 'Velg tema, kategorier og emner',
     euTheme: 'Velg EU-tema(er)',
     type: 'Velg type',
+    concept: 'Legg inn begreper',
+    keyword: { nb: 'Emneord (norsk bokmål)', nn: 'Emneord (norsk nynorsk)', en: 'Emneord (engelsk)' },
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',

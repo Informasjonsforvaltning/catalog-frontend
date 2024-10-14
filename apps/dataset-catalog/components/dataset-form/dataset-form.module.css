@@ -18,3 +18,9 @@
   white-space: nowrap;
   height: fit-content;
 }
+
+.comboboxOption {
+  display: grid;
+  grid-template-columns: 20% 55% 20%;
+  gap: 2.5%;
+}
