@@ -25,7 +25,7 @@ export const AccessRightsSection = ({ errors, values }: AccessRightsSectionProps
           subtitle={localization.datasetForm.helptext.accessRights}
         />
         <Field name='accessRights.uri'>
-          {({ field }: { field: any; form: FormikHelpers<Dataset> }) => (
+          {({ field, form }: { field: any; form: FormikHelpers<Dataset> }) => (
             <NativeSelect
               {...field}
               label={

@@ -8,7 +8,13 @@ import {
   updateDataset as update,
 } from '@catalog-frontend/data-access';
 import { Dataset, DatasetToBeCreated } from '@catalog-frontend/types';
-import { getValidSession, localization, removeEmptyValues } from '@catalog-frontend/utils';
+import {
+  convertListToListOfObjects,
+  getValidSession,
+  localization,
+  removeEmptyValues,
+  transformToLocalizedStrings,
+} from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -36,37 +42,15 @@ export async function getDatasetById(catalogId: string, datasetId: string): Prom
   return jsonResponse;
 }
 
-const convertListToObjectStructure = (uriList: string[]) => {
-  return uriList.map((uri) => ({ uri: uri }));
-};
-
-function reverseTransformDictList(inputDict: {
-  nn?: string[];
-  nb?: string[];
-  en?: string[];
-}): { nn?: string; nb?: string; en?: string }[] {
-  const outputList: { nn?: string; nb?: string; en?: string }[] = [];
-  const allowedKeys: (keyof typeof inputDict)[] = ['nn', 'nb', 'en']; // predefined keys
-
-  allowedKeys.forEach((key) => {
-    if (inputDict[key]) {
-      inputDict[key]!.forEach((value) => {
-        outputList.push({ [key]: value });
-      });
-    }
-  });
-
-  return outputList;
-}
-
 export async function createDataset(values: DatasetToBeCreated, catalogId: string) {
   const newDataset = {
     ...values,
     theme: [
-      ...(values.losThemeList ? convertListToObjectStructure(values.losThemeList) : []),
-      ...(values.euThemeList ? convertListToObjectStructure(values.euThemeList) : []),
+      ...(values.losThemeList ? convertListToListOfObjects(values.losThemeList, 'uri') : []),
+      ...(values.euThemeList ? convertListToListOfObjects(values.euThemeList, 'uri') : []),
     ],
-    keyword: values?.keywordList ? reverseTransformDictList(values?.keywordList) : '',
+    keyword: values?.keywordList ? transformToLocalizedStrings(values?.keywordList) : '',
+    concepts: values?.conceptList ? convertListToListOfObjects(values.conceptList, 'uri') : [],
   };
   const datasetNoEmptyValues = removeEmptyValues(newDataset);
 
@@ -114,10 +98,11 @@ export async function updateDataset(catalogId: string, initialDataset: Dataset, 
   const updatedDataset = removeEmptyValues({
     ...values,
     theme: [
-      ...(values.losThemeList ? convertListToObjectStructure(values.losThemeList) : []),
-      ...(values.euThemeList ? convertListToObjectStructure(values.euThemeList) : []),
+      ...(values.losThemeList ? convertListToListOfObjects(values.losThemeList, 'uri') : []),
+      ...(values.euThemeList ? convertListToListOfObjects(values.euThemeList, 'uri') : []),
     ],
-    keyword: values?.keywordList ? reverseTransformDictList(values?.keywordList) : '',
+    keyword: values?.keywordList ? transformToLocalizedStrings(values?.keywordList) : '',
+    concepts: values?.conceptList ? convertListToListOfObjects(values.conceptList, 'uri') : [],
   });
 
   const diff = compare(initialDataset, updatedDataset);

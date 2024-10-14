@@ -1,15 +1,77 @@
 'use client';
-import { Dataset } from '@catalog-frontend/types';
+import { Dataset, Search } from '@catalog-frontend/types';
 import { FormContainer, TitleWithTag } from '@catalog-frontend/ui';
-import { Heading, Textfield, Chip, Button } from '@digdir/designsystemet-react';
-import { useFormikContext } from 'formik';
+import { Heading, Textfield, Chip, Button, Combobox } from '@digdir/designsystemet-react';
+import { Field, useFormikContext } from 'formik';
+import { useEffect, useState } from 'react';
+import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
+import { searchConceptSuggestions } from '@catalog-frontend/data-access';
 import styles from './dataset-form.module.css';
-import { useState } from 'react';
-import { localization } from '@catalog-frontend/utils';
 
-export const ConceptSection = () => {
+interface Props {
+  searchEnv: string; // Environment variable to search service
+}
+
+export const ConceptSection = ({ searchEnv }: Props) => {
   const { setFieldValue, values } = useFormikContext<Dataset>();
   const [inputValue, setInputValue] = useState<string>('');
+  const [suggestions, setSuggestions] = useState<Search.Suggestion[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [selectedSuggestions, setSelectedSuggestions] = useState<Search.Suggestion[]>([]);
+
+  useEffect(() => {
+    const fetchConceptsByUri = async () => {
+      if (!values.conceptList?.length) return;
+
+      setLoading(true);
+      const searchOperation: Search.SearchOperation = {
+        filters: { uri: { value: values.conceptList } },
+      };
+
+      try {
+        const response = await fetch(`${searchEnv}/search/concepts`, {
+          headers: { 'Content-Type': 'application/json' },
+          method: 'POST',
+          body: JSON.stringify(searchOperation),
+        });
+
+        if (!response.ok) {
+          throw new Error(`${response.statusText}`);
+        }
+
+        const data = await response.json();
+        setSelectedSuggestions(data.hits);
+        setSuggestions(data.hits);
+      } catch (error) {
+        console.error('Error fetching search suggestions:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchConceptsByUri();
+  }, [values.conceptList]);
+
+  const searchSuggestions = (input: string) => {
+    if (!input) return;
+    setLoading(true);
+    searchConceptSuggestions(searchEnv, input)
+      .then((response) => response.json())
+      .then((data) => {
+        const mergedSuggestions = [
+          ...new Map(
+            [...selectedSuggestions, ...data.suggestions].map((suggestion) => [suggestion.uri, suggestion]),
+          ).values(), // remove duplicates
+        ];
+        setSuggestions(mergedSuggestions);
+      })
+      .catch((error) => {
+        console.error('Error fetching concept suggestions:', error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
   const addKeyword = () => {
     if (inputValue && !values.keywordList?.nb?.includes(inputValue)) {
@@ -38,6 +100,38 @@ export const ConceptSection = () => {
           subtitle={localization.datasetForm.helptext.concept}
         />
 
+        {((values.conceptList && suggestions.length > 0) || values.conceptList?.length === 0) && (
+          <>
+            <TitleWithTag
+              title={localization.datasetForm.fieldLabel.concept}
+              tagTitle={localization.tag.recommended}
+              tagColor='info'
+            />
+            <Combobox
+              onValueChange={(selectedValues: string[]) => setFieldValue('conceptList', selectedValues)}
+              onChange={(input: any) => searchSuggestions(input.target.value)}
+              loading={loading}
+              multiple
+              value={values.conceptList}
+              placeholder={localization.datasetForm.helptext.searchConcept}
+            >
+              {suggestions.map((suggestion) => (
+                <Combobox.Option
+                  value={suggestion.uri}
+                  key={suggestion.id}
+                  displayValue={capitalizeFirstLetter(getTranslateText(suggestion.title) as string) ?? suggestion.uri}
+                >
+                  <div className={styles.comboboxOption}>
+                    <div>{capitalizeFirstLetter(getTranslateText(suggestion.title) as string) ?? suggestion.uri}</div>
+                    <div>{capitalizeFirstLetter(getTranslateText(suggestion.description) as string)}</div>
+                    <div>{getTranslateText(suggestion.organization?.prefLabel)}</div>
+                  </div>
+                </Combobox.Option>
+              ))}
+            </Combobox>
+          </>
+        )}
+
         <FormContainer.Header
           title='Emneord'
           subtitle={localization.datasetForm.helptext.keyword}
@@ -52,7 +146,6 @@ export const ConceptSection = () => {
                   tagColor='info'
                 />
               }
-              name='keywordList.nb'
               type='text'
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
@@ -69,15 +162,14 @@ export const ConceptSection = () => {
           </div>
         </div>
         <Chip.Group>
-          {values.keywordList?.nb &&
-            values.keywordList.nb.map((value: string) => (
-              <Chip.Removable
-                key={value}
-                onClick={() => removeKeyword(value)}
-              >
-                {value}
-              </Chip.Removable>
-            ))}
+          {values.keywordList?.nb?.map((value: string) => (
+            <Chip.Removable
+              key={value}
+              onClick={() => removeKeyword(value)}
+            >
+              {value}
+            </Chip.Removable>
+          ))}
         </Chip.Group>
       </FormContainer>
     </div>

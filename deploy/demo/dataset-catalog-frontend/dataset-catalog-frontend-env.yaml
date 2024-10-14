@@ -75,8 +75,8 @@ spec:
                 secretKeyRef:
                   name: commonurl-demo
                   key: DATASET_CATALOG_BASE_URI
-            - name: NEXT_PUBLIC_CATALOG_PORTAL_BASE_URI
+            - name: FDK_SEARCH_SERVICE_BASE_URI
               valueFrom:
                 secretKeyRef:
                   name: commonurl-demo
-                  key: CATALOG_PORTAL_BASE_URI
+                  key: FDK_SEARCH_SERVICE_BASE_URI
