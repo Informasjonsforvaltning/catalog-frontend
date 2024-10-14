@@ -27,14 +27,14 @@ export default async function NewDatasetPage({ params }: Params) {
     datasetTypesResponse,
     provenanceStatementsResponse,
     frequenciesResponse,
-    languageResponse
+    languageResponse,
   ] = await Promise.all([
     getLosThemes().then((res) => res.json()),
     getDataThemes().then((res) => res.json()),
     getDatasetTypes().then((res) => res.json()),
     getProvenanceStatements().then((res) => res.json()),
     getFrequencies().then((res) => res.json()),
-    getLanguages().then((res) => res.json())
+    getLanguages().then((res) => res.json()),
   ]);
 
   const referenceData = {
@@ -43,7 +43,7 @@ export default async function NewDatasetPage({ params }: Params) {
     datasetTypes: datasetTypesResponse.datasetTypes,
     provenanceStatements: provenanceStatementsResponse.provenanceStatements,
     frequencies: frequenciesResponse.frequencies,
-    languages: languageResponse.linguisticSystems
+    languages: languageResponse.linguisticSystems,
   };
 
   const breadcrumbList = [
@@ -59,7 +59,10 @@ export default async function NewDatasetPage({ params }: Params) {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} />
+      <Breadcrumbs
+        breadcrumbList={breadcrumbList}
+        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+      />
       <PageBanner
         title={localization.catalogType.dataset}
         subtitle={getTranslateText(organization.prefLabel).toString()}

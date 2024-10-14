@@ -34,13 +34,13 @@ export interface DatasetToBeCreated {
   spatial?: ReferenceDataCode[];
   temporal?: DateRange[];
   issued?: string;
-  language?: ReferenceDataCode[]
+  language?: ReferenceDataCode[];
   // Arrays of uris used as helper values for Formik. These properties is not part of the db object.
   losThemeList?: string[];
   euThemeList?: string[];
   conceptList?: string[];
   spatialList?: string[];
-  languageList?: string[]
+  languageList?: string[];
 }
 
 export interface UriWithLabel {

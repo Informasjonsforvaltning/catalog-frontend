@@ -82,7 +82,7 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     hasAvailabilityAnnotation: { hasBody: { nb: '' } },
     spatialList: [],
     temporal: [{ startDate: '', endDate: '' }],
-    issued: '', 
-    languageList: []
+    issued: '',
+    languageList: [],
   };
 };
