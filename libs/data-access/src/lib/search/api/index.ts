@@ -33,3 +33,13 @@ export const searchConceptsByUri = (uri: string[]) => {
     searchOperation,
   });
 };
+
+export const searchConceptSuggestions = (env: string, query: string) => {
+  const path = `suggestions/concepts?q=${query}`;
+  return fetch(`${env}/${path}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'GET',
+  });
+};
