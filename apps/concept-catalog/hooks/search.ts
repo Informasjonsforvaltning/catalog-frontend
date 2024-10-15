@@ -1,7 +1,7 @@
 'use client';
 
 import { QueryFilters, QuerySort, SearchableField } from '@catalog-frontend/types';
-import { SingleSelectOption } from '@digdir/designsystemet-react';
+import { SelectOption } from '@catalog-frontend/ui';
 import { useQuery } from '@tanstack/react-query';
 
 export type SortFields = 'SIST_ENDRET' | 'ANBEFALT_TERM';
@@ -57,7 +57,7 @@ export const getFields = (field: SearchableField | 'alleFelter' | 'alleTermer'):
   return { ...getNegatedFields(), [field]: true };
 };
 
-export const getSelectOptions = (object: any): SingleSelectOption[] => {
+export const getSelectOptions = (object: any): SelectOption[] => {
   if (!object) return [];
   const sortKeys = Object.keys(object);
   const sortValues = Object.values(object);
@@ -65,6 +65,7 @@ export const getSelectOptions = (object: any): SingleSelectOption[] => {
     value: key,
     label: sortValues[index] as string,
   }));
+
   return options;
 };
 
