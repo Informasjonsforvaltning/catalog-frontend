@@ -28,11 +28,6 @@ export interface EditableFields {
   domainCodeListId: string;
 }
 
-export interface SelectOption {
-  label: string;
-  value: FieldType;
-}
-
 export interface FieldsResult {
   editable: EditableFields;
   internal: InternalField[];

@@ -1,12 +1,17 @@
 'use client';
 
-import { NativeSelect as DigdirSelect, NativeSelectProps } from '@digdir/designsystemet-react';
+import { NativeSelect, NativeSelectProps } from '@digdir/designsystemet-react';
 import styles from './style.module.css';
+
+export type SelectOption = {
+  label: string;
+  value: string;
+}
 
 export const Select = (props: NativeSelectProps) => {
   return (
     <div className={styles.select}>
-      <DigdirSelect {...props} />
+      <NativeSelect {...props} />
     </div>
   );
 };
