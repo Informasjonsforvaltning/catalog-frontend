@@ -8,7 +8,13 @@ import {
   updateDataset as update,
 } from '@catalog-frontend/data-access';
 import { Dataset, DatasetToBeCreated } from '@catalog-frontend/types';
-import { getValidSession, localization, removeEmptyValues } from '@catalog-frontend/utils';
+import {
+  convertListToObjectStructure,
+  getValidSession,
+  localization,
+  removeEmptyValues,
+  transformToLocalizedStrings,
+} from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -36,17 +42,15 @@ export async function getDatasetById(catalogId: string, datasetId: string): Prom
   return jsonResponse;
 }
 
-const convertListToObjectStructure = (uriList: string[]) => {
-  return uriList.map((uri) => ({ uri: uri }));
-};
-
 export async function createDataset(values: DatasetToBeCreated, catalogId: string) {
   const newDataset = {
     ...values,
     theme: [
-      ...(values.losThemeList ? convertListToObjectStructure(values.losThemeList) : []),
-      ...(values.euThemeList ? convertListToObjectStructure(values.euThemeList) : []),
+      ...(values.losThemeList ? convertListToObjectStructure(values.losThemeList, 'uri') : []),
+      ...(values.euThemeList ? convertListToObjectStructure(values.euThemeList, 'uri') : []),
     ],
+    keyword: values?.keywordList ? transformToLocalizedStrings(values?.keywordList) : '',
+    concepts: values?.conceptList ? convertListToObjectStructure(values.conceptList, 'uri') : [],
   };
   const datasetNoEmptyValues = removeEmptyValues(newDataset);
 
@@ -66,7 +70,7 @@ export async function createDataset(values: DatasetToBeCreated, catalogId: strin
     if (success) {
       revalidateTag('dataset');
       revalidateTag('datasets');
-      redirect(`/catalogs/${catalogId}/dataset/${datasetId}`);
+      redirect(`/catalogs/${catalogId}/datasets/${datasetId}`);
     }
   }
 }
@@ -94,9 +98,11 @@ export async function updateDataset(catalogId: string, initialDataset: Dataset, 
   const updatedDataset = removeEmptyValues({
     ...values,
     theme: [
-      ...(values.losThemeList ? convertListToObjectStructure(values.losThemeList) : []),
-      ...(values.euThemeList ? convertListToObjectStructure(values.euThemeList) : []),
+      ...(values.losThemeList ? convertListToObjectStructure(values.losThemeList, 'uri') : []),
+      ...(values.euThemeList ? convertListToObjectStructure(values.euThemeList, 'uri') : []),
     ],
+    keyword: values?.keywordList ? transformToLocalizedStrings(values?.keywordList) : '',
+    concepts: values?.conceptList ? convertListToObjectStructure(values.conceptList, 'uri') : [],
   });
 
   const diff = compare(initialDataset, updatedDataset);

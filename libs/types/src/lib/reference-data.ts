@@ -1,4 +1,4 @@
-import { UriWIthLabel } from './dataset';
+import { UriWithLabel } from './dataset';
 import { LocalizedStrings } from './localization';
 
 export interface ReferenceDataCode {
@@ -30,7 +30,7 @@ export interface DataTheme {
   code?: string;
   label: LocalizedStrings;
   startUse?: string;
-  conceptSchema?: UriWIthLabel;
+  conceptSchema?: UriWithLabel;
 }
 
 export interface FileType {
@@ -44,4 +44,12 @@ export interface MediaType {
   subType: string;
   type: string;
   uri: string;
+}
+
+export interface ReferenceData {
+  losThemes: LosTheme[];
+  dataThemes: DataTheme[];
+  provenanceStatements: ReferenceDataCode[];
+  datasetTypes: ReferenceDataCode[];
+  frequencies: ReferenceDataCode[];
 }
