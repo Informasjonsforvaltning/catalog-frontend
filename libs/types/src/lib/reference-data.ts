@@ -1,4 +1,4 @@
-import { UriWIthLabel } from './dataset';
+import { UriWithLabel } from './dataset';
 import { LocalizedStrings } from './localization';
 
 export interface ReferenceDataCode {
@@ -30,7 +30,7 @@ export interface DataTheme {
   code?: string;
   label: LocalizedStrings;
   startUse?: string;
-  conceptSchema?: UriWIthLabel;
+  conceptSchema?: UriWithLabel;
 }
 
 export interface FileType {

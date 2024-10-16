@@ -19,6 +19,13 @@ export const datasetFormNb = {
     frequency: 'Hvor ofte datasettet har nytt innhold.',
     lastUpdated: 'Dato for når innholdet i datasettet sist er endret.',
     actuality: 'Avvik eller tilleggsopplysninger om oppdateringsfrekvens',
+    standard:
+      'Oppgi om datasettet er i henhold til gitt(e) standard(er), spesifikasjon(er) eller implementasjonsregler.',
+    content: 'Innhold',
+    relevance: 'Dersom det er bruksområder datasettet er spesielt egnet for eller ikke egnet for, bør det oppgis her.',
+    completeness: 'Dersom datasettet ikke innholder alle objekter som nevnt i formålet, bør det oppgis her.',
+    accuracy: 'Dersom datasettets innhold ikke er i samsvar med formålet, bør det oppgis her.',
+    availability: 'Dersom datasettets tilgangsnivå har avvik eller tilleggsopplysninger, bør det oppgis her.',
   },
   heading: {
     description: 'Beskrivelse av datasettet',
@@ -36,6 +43,12 @@ export const datasetFormNb = {
     frequency: 'Oppdateringsfrekvens',
     lastUpdated: 'Sist oppdatert',
     actuality: 'Aktualitet',
+    standard: 'Standard',
+    content: 'Innhold',
+    relevance: 'Relevans',
+    completeness: 'Kompletthet',
+    accuracy: 'Nøyaktighet',
+    availability: 'Tilgjengelighet',
   },
   accessRight: {
     public: 'Allmenn tilgang',
