@@ -10,9 +10,10 @@ import { datasetTemplate } from './dataset-initial-values';
 import { useState } from 'react';
 import { datasetValidationSchema } from './validation-schema';
 import { TitleSection } from './dataset-from-title-section';
-import { AccessRightsSection } from './dataset-form-access-rights.section';
+import { AccessRightsSection } from './dataset-form-access-rights-section';
 import ThemeSection from './dataset-form-theme-section';
 import { TypeSection } from './dataset-form-type-sections';
+import { ConceptSection } from './dataset-form-concept-section';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
@@ -20,9 +21,10 @@ type Props = {
   losThemes: LosTheme[];
   dataThemes: DataTheme[];
   datasetTypes: ReferenceDataCode[];
+  searchEnv: string; // Environment variable to search service
 };
 
-export const DatasetForm = ({ initialValues, submitType, losThemes, dataThemes, datasetTypes }: Props) => {
+export const DatasetForm = ({ initialValues, submitType, losThemes, dataThemes, datasetTypes, searchEnv }: Props) => {
   const { catalogId, datasetId } = useParams();
   const [isDirty, setIsDirty] = useState(false);
 
@@ -102,6 +104,7 @@ export const DatasetForm = ({ initialValues, submitType, losThemes, dataThemes, 
                   dataThemes={dataThemes}
                 />
                 <TypeSection datasetTypes={datasetTypes} />
+                <ConceptSection searchEnv={searchEnv} />
               </div>
             </FormLayout>
           </Form>

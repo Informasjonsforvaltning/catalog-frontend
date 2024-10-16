@@ -1,4 +1,5 @@
 import { AccessRights, Dataset, DatasetToBeCreated, PublicationStatus } from '@catalog-frontend/types';
+import { groupByKeys } from '@catalog-frontend/utils';
 
 export const datasetTemplate = (dataset: Dataset): Dataset => {
   return {
@@ -27,6 +28,8 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     losThemeList: dataset.theme ? dataset.theme.filter((t) => t.uri.includes('/los/')).map((t) => t.uri) : [],
     euThemeList: dataset.theme ? dataset.theme.filter((t) => t.uri.includes('/data-theme/')).map((t) => t.uri) : [],
     type: dataset.type ?? '',
+    keywordList: dataset.keyword ? groupByKeys(dataset.keyword) : { nb: [] },
+    conceptList: dataset.concepts ? dataset.concepts.map((concept) => concept.uri) : [],
   };
 };
 
@@ -51,5 +54,7 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     losThemeList: [],
     euThemeList: [],
     type: '',
+    keywordList: { nb: [] },
+    conceptList: [],
   };
 };

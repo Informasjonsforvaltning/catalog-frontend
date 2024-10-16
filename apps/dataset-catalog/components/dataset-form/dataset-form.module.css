@@ -3,3 +3,24 @@
   flex-direction: column;
   gap: 0.5rem;
 }
+
+.bottomRow {
+  display: flex;
+  align-items: flex-end;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.button {
+  display: flex;
+  white-space: nowrap;
+  height: fit-content;
+}
+
+.comboboxOption {
+  display: grid;
+  grid-template-columns: 20% 55% 20%;
+  gap: 2.5%;
+}
