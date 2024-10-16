@@ -70,7 +70,7 @@ export async function createDataset(values: DatasetToBeCreated, catalogId: strin
     if (success) {
       revalidateTag('dataset');
       revalidateTag('datasets');
-      redirect(`/catalogs/${catalogId}/dataset/${datasetId}`);
+      redirect(`/catalogs/${catalogId}/datasets/${datasetId}`);
     }
   }
 }

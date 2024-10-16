@@ -2,7 +2,7 @@
 import { Dataset, Search } from '@catalog-frontend/types';
 import { FormContainer, TitleWithTag } from '@catalog-frontend/ui';
 import { Heading, Textfield, Chip, Button, Combobox } from '@digdir/designsystemet-react';
-import { Field, useFormikContext } from 'formik';
+import { useFormikContext } from 'formik';
 import { useEffect, useState } from 'react';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
 import { searchConceptSuggestions } from '@catalog-frontend/data-access';
@@ -50,7 +50,7 @@ export const ConceptSection = ({ searchEnv }: Props) => {
     };
 
     fetchConceptsByUri();
-  }, [values.conceptList]);
+  }, [values.conceptList, searchEnv]);
 
   const searchSuggestions = (input: string) => {
     if (!input) return;
