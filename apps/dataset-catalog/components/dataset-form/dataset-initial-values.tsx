@@ -34,6 +34,11 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     accrualPeriodicity: { uri: dataset?.accrualPeriodicity?.uri ?? '' },
     modified: dataset.modified ?? '',
     hasCurrentnessAnnotation: { hasBody: { nb: dataset.hasCurrentnessAnnotation?.hasBody?.nb ?? '' } },
+    conformsTo: dataset?.conformsTo ?? [{ prefLabel: { nb: '' }, uri: '' }],
+    hasRelevanceAnnotation: { hasBody: { nb: dataset.hasRelevanceAnnotation?.hasBody?.nb ?? '' } },
+    hasCompletenessAnnotation: { hasBody: { nb: dataset.hasCompletenessAnnotation?.hasBody?.nb ?? '' } },
+    hasAccuracyAnnotation: { hasBody: { nb: dataset.hasAccuracyAnnotation?.hasBody?.nb ?? '' } },
+    hasAvailabilityAnnotation: { hasBody: { nb: dataset.hasAvailabilityAnnotation?.hasBody?.nb ?? '' } },
   };
 };
 
@@ -64,5 +69,10 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     accrualPeriodicity: { uri: '' },
     modified: '',
     hasCurrentnessAnnotation: { hasBody: { nb: '' } },
+    conformsTo: [{ prefLabel: { nb: '' }, uri: '' }],
+    hasRelevanceAnnotation: { hasBody: { nb: '' } },
+    hasCompletenessAnnotation: { hasBody: { nb: '' } },
+    hasAccuracyAnnotation: { hasBody: { nb: '' } },
+    hasAvailabilityAnnotation: { hasBody: { nb: '' } },
   };
 };
