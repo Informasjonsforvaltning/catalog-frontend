@@ -30,6 +30,10 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     type: dataset.type ?? '',
     keywordList: dataset.keyword ? groupByKeys(dataset.keyword) : { nb: [] },
     conceptList: dataset.concepts ? dataset.concepts.map((concept) => concept.uri) : [],
+    provenance: { uri: dataset?.provenance?.uri ?? '' },
+    accrualPeriodicity: { uri: dataset?.accrualPeriodicity?.uri ?? '' },
+    modified: dataset.modified ?? '',
+    hasCurrentnessAnnotation: { hasBody: { nb: dataset.hasCurrentnessAnnotation?.hasBody?.nb ?? '' } },
   };
 };
 
@@ -56,5 +60,9 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     type: '',
     keywordList: { nb: [] },
     conceptList: [],
+    provenance: { uri: '' },
+    accrualPeriodicity: { uri: '' },
+    modified: '',
+    hasCurrentnessAnnotation: { hasBody: { nb: '' } },
   };
 };

@@ -15,6 +15,10 @@ export const datasetFormNb = {
     concept: 'Referanse til sentrale begrep som er viktige for å forstå og tolke datasettet.',
     keyword: 'Inneholder emneord (eller tag) som beskriver datasettet.',
     seachConcept: 'Søk etter begrep...',
+    provenance: 'Hvor opplysningene er hentet fra.',
+    frequency: 'Hvor ofte datasettet har nytt innhold.',
+    lastUpdated: 'Dato for når innholdet i datasettet sist er endret.',
+    actuality: 'Avvik eller tilleggsopplysninger om oppdateringsfrekvens',
   },
   heading: {
     description: 'Beskrivelse av datasettet',
@@ -27,6 +31,11 @@ export const datasetFormNb = {
     losTheme: 'LOS-tema og emner',
     euTheme: 'EU-tema',
     concept: 'Begrep og emneord',
+    provenanceAndFrequency: 'Opphav og ferskhet',
+    provenance: 'Opphav',
+    frequency: 'Oppdateringsfrekvens',
+    lastUpdated: 'Sist oppdatert',
+    actuality: 'Aktualitet',
   },
   accessRight: {
     public: 'Allmenn tilgang',

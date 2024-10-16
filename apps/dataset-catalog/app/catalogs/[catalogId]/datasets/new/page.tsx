@@ -3,8 +3,15 @@ import { DatasetForm } from '../../../../../components/dataset-form';
 import { datasetToBeCreatedTemplate } from '../../../../../components/dataset-form/dataset-initial-values';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { DataTheme, LosTheme, Organization, ReferenceDataCode } from '@catalog-frontend/types';
-import { getDatasetTypes, getDataThemes, getLosThemes, getOrganization } from '@catalog-frontend/data-access';
+import { Organization } from '@catalog-frontend/types';
+import {
+  getDatasetTypes,
+  getDataThemes,
+  getFrequencies,
+  getLosThemes,
+  getOrganization,
+  getProvenanceStatements,
+} from '@catalog-frontend/data-access';
 
 export default async function NewDatasetPage({ params }: Params) {
   const initialValues = datasetToBeCreatedTemplate();
@@ -12,15 +19,27 @@ export default async function NewDatasetPage({ params }: Params) {
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
 
-  const [losThemesResponse, dataThemesResponse, datasetTypesResponse] = await Promise.all([
+  const [
+    losThemesResponse,
+    dataThemesResponse,
+    datasetTypesResponse,
+    provenanceStatementsResponse,
+    frequenciesResponse,
+  ] = await Promise.all([
     getLosThemes().then((res) => res.json()),
     getDataThemes().then((res) => res.json()),
     getDatasetTypes().then((res) => res.json()),
+    getProvenanceStatements().then((res) => res.json()),
+    getFrequencies().then((res) => res.json()),
   ]);
 
-  const losThemes: LosTheme[] = losThemesResponse.losNodes;
-  const dataThemes: DataTheme[] = dataThemesResponse.dataThemes;
-  const datasetTypes: ReferenceDataCode[] = datasetTypesResponse.datasetTypes;
+  const referenceData = {
+    losThemes: losThemesResponse.losNodes,
+    dataThemes: dataThemesResponse.dataThemes,
+    datasetTypes: datasetTypesResponse.datasetTypes,
+    provenanceStatements: provenanceStatementsResponse.provenanceStatements,
+    frequencies: frequenciesResponse.frequencies,
+  };
 
   const breadcrumbList = [
     {
@@ -44,9 +63,7 @@ export default async function NewDatasetPage({ params }: Params) {
         <DatasetForm
           initialValues={initialValues}
           submitType={'create'}
-          losThemes={losThemes}
-          dataThemes={dataThemes}
-          datasetTypes={datasetTypes}
+          referenceData={referenceData}
           searchEnv={searchEnv}
         ></DatasetForm>
       </div>
