@@ -1,7 +1,14 @@
 'use client';
 import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button } from '@digdir/designsystemet-react';
-import { Dataset, DatasetToBeCreated, DataTheme, LosTheme, ReferenceDataCode } from '@catalog-frontend/types';
+import {
+  Dataset,
+  DatasetToBeCreated,
+  DataTheme,
+  LosTheme,
+  ReferenceData,
+  ReferenceDataCode,
+} from '@catalog-frontend/types';
 import { FormLayout, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
 import { Formik, Form } from 'formik';
 import { useParams } from 'next/navigation';
@@ -14,19 +21,19 @@ import { AccessRightsSection } from './dataset-form-access-rights-section';
 import ThemeSection from './dataset-form-theme-section';
 import { TypeSection } from './dataset-form-type-sections';
 import { ConceptSection } from './dataset-form-concept-section';
+import { ProvenanceSection } from './dataset-form-provenance-section';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
   submitType: 'create' | 'update';
-  losThemes: LosTheme[];
-  dataThemes: DataTheme[];
-  datasetTypes: ReferenceDataCode[];
   searchEnv: string; // Environment variable to search service
+  referenceData: ReferenceData;
 };
 
-export const DatasetForm = ({ initialValues, submitType, losThemes, dataThemes, datasetTypes, searchEnv }: Props) => {
+export const DatasetForm = ({ initialValues, submitType, referenceData, searchEnv }: Props) => {
   const { catalogId, datasetId } = useParams();
   const [isDirty, setIsDirty] = useState(false);
+  const { losThemes, dataThemes, provenanceStatements, datasetTypes, frequencies } = referenceData;
 
   useWarnIfUnsavedChanges({ unsavedChanges: isDirty });
 
@@ -105,6 +112,7 @@ export const DatasetForm = ({ initialValues, submitType, losThemes, dataThemes, 
                 />
                 <TypeSection datasetTypes={datasetTypes} />
                 <ConceptSection searchEnv={searchEnv} />
+                <ProvenanceSection data={{ provenanceStatements, frequencies }} />
               </div>
             </FormLayout>
           </Form>

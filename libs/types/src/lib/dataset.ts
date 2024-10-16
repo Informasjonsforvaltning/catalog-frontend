@@ -1,5 +1,6 @@
 import type { PublicationStatus } from './enums';
 import { LocalizedStrings } from './localization';
+import { ReferenceDataCode } from './reference-data';
 
 export interface Dataset extends DatasetToBeCreated {
   id: string;
@@ -21,9 +22,14 @@ export interface DatasetToBeCreated {
   keyword?: LocalizedStrings[];
   keywordList?: { nb?: string[]; nn?: string[]; en?: string[] };
   concepts?: [{ uri: string }];
-  losThemeList?: string[]; // An array of los theme uris used as helper values for Formik. This property is not part of the db object.
-  euThemeList?: string[]; // An array of eu theme uris used as helper values for Formik. This property is not part of the db object.
-  conceptList?: string[]; // An array of eu concept uris used as helper values for Formik. This property is not part of the db object.
+  provenance?: ReferenceDataCode;
+  accrualPeriodicity?: ReferenceDataCode;
+  modified?: string;
+  hasCurrentnessAnnotation: { hasBody: LocalizedStrings };
+  // Arrays of uris used as helper values for Formik. These properties is not part of the db object.
+  losThemeList?: string[];
+  euThemeList?: string[];
+  conceptList?: string[];
 }
 
 export interface UriWIthLabel {

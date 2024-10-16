@@ -45,3 +45,11 @@ export interface MediaType {
   type: string;
   uri: string;
 }
+
+export interface ReferenceData {
+  losThemes: LosTheme[];
+  dataThemes: DataTheme[];
+  provenanceStatements: ReferenceDataCode[];
+  datasetTypes: ReferenceDataCode[];
+  frequencies: ReferenceDataCode[];
+}
