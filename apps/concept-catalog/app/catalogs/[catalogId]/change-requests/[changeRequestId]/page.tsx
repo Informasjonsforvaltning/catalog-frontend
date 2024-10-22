@@ -4,12 +4,12 @@ import { BreadcrumbType, Breadcrumbs, DetailHeading } from '@catalog-frontend/ui
 import { validUUID, localization, formatISO, conceptIsHigherVersion } from '@catalog-frontend/utils';
 import jsonpatch from 'fast-json-patch';
 import sharedStyle from '../change-requests-page.module.css';
-import { Banner } from '../../../../components/banner';
+import { Banner } from '../../../../../components/banner';
 import { Alert, Heading, Link, Paragraph } from '@digdir/designsystemet-react';
 import NextLink from 'next/link';
-import ChangeRequestForm from '../../../../components/change-request-form/change-request-form';
-import { ButtonRow } from '../../../../components/buttons/button-row';
-import { withReadProtectedPage } from '../../../../utils/auth';
+import ChangeRequestForm from '../../../../../components/change-request-form/change-request-form';
+import { ButtonRow } from '../../../../../components/buttons/button-row';
+import { withReadProtectedPage } from '../../../../../utils/auth';
 
 const ChangeRequestDetailsPage = withReadProtectedPage(
   ({ catalogId, changeRequestId }) => `/${catalogId}/change-requests/${changeRequestId}`,

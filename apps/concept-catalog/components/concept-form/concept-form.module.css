@@ -1,0 +1,10 @@
+.combobox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tabContent {
+  padding-left: 0;
+  padding-right: 0;
+}

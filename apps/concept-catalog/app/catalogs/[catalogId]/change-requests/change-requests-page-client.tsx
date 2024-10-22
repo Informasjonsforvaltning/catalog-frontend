@@ -21,9 +21,9 @@ import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import Link from 'next/link';
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
-import ChangeRequestFilter from '../../../components/change-request-filter';
-import ChangeRequestSort from '../../../components/change-request-sort';
-import { useCatalogDesign } from '../../../context/catalog-design';
+import ChangeRequestFilter from '../../../../components/change-request-filter';
+import ChangeRequestSort from '../../../../components/change-request-sort';
+import { useCatalogDesign } from '../../../../context/catalog-design';
 import styles from './change-requests-page.module.css';
 
 export const ChangeRequestsPageClient = ({ catalogId, organization, data, catalogPortalUrl }) => {

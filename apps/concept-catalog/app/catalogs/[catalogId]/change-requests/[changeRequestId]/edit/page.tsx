@@ -5,8 +5,8 @@ import { formatISO, conceptIsHigherVersion, localization, validUUID } from '@cat
 import { Alert, Heading, Link, Paragraph } from '@digdir/designsystemet-react';
 import jsonpatch from 'fast-json-patch';
 import NextLink from 'next/link';
-import { Banner } from '../../../../../components/banner';
-import { withReadProtectedPage } from '../../../../../utils/auth';
+import { Banner } from '../../../../../../components/banner';
+import { withReadProtectedPage } from '../../../../../../utils/auth';
 import styles from '../../change-requests-page.module.css';
 import ChangeRequestEditPageClient from './change-request-edit-page-client';
 
