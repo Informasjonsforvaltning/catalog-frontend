@@ -39,6 +39,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     hasCompletenessAnnotation: { hasBody: { nb: dataset.hasCompletenessAnnotation?.hasBody?.nb ?? '' } },
     hasAccuracyAnnotation: { hasBody: { nb: dataset.hasAccuracyAnnotation?.hasBody?.nb ?? '' } },
     hasAvailabilityAnnotation: { hasBody: { nb: dataset.hasAvailabilityAnnotation?.hasBody?.nb ?? '' } },
+    spatialList: dataset.spatial ? dataset.spatial.map((spatial) => spatial.uri) : [],
   };
 };
 
@@ -74,5 +75,6 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     hasCompletenessAnnotation: { hasBody: { nb: '' } },
     hasAccuracyAnnotation: { hasBody: { nb: '' } },
     hasAvailabilityAnnotation: { hasBody: { nb: '' } },
+    spatialList: [],
   };
 };
