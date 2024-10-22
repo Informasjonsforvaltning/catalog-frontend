@@ -116,7 +116,7 @@ const ConceptSearchHits: React.FC<Props> = ({
                 )
               }
               titleHref={
-                validOrganizationNumber(catalogId) && validUUID(concept?.id) ? `/${catalogId}/${concept.id}` : '#'
+                validOrganizationNumber(catalogId) && validUUID(concept?.id) ? `/catalogs/${catalogId}/concepts/${concept.id}` : '#'
               }
               conceptSubject={
                 <ConceptSubject

@@ -1,19 +1,18 @@
-import { getOrganization, getConcept, getChangeRequest } from '@catalog-frontend/data-access';
-import { Organization, Concept, ChangeRequest } from '@catalog-frontend/types';
+import { getChangeRequest, getConcept, getOrganization } from '@catalog-frontend/data-access';
+import { ChangeRequest, Concept, Organization } from '@catalog-frontend/types';
 import { BreadcrumbType, Breadcrumbs, DetailHeading } from '@catalog-frontend/ui';
-import { validUUID, localization, formatISO } from '@catalog-frontend/utils';
-import jsonpatch from 'fast-json-patch';
-import sharedStyle from '../change-requests-page.module.css';
-import { Banner } from '../../../../components/banner';
+import { formatISO, localization, validUUID } from '@catalog-frontend/utils';
 import { Alert, Heading, Link, Paragraph } from '@digdir/designsystemet-react';
+import jsonpatch from 'fast-json-patch';
 import NextLink from 'next/link';
-import ChangeRequestForm from '../../../../components/change-request-form/change-request-form';
-import { ButtonRow } from '../../../../components/buttons/button-row';
-import { withReadProtectedPage } from '../../../../utils/auth';
+import { Banner } from '../../../../../../components/banner';
+import { withReadProtectedPage } from '../../../../../../utils/auth';
+import styles from '../../change-requests-page.module.css';
+import ChangeRequestEditPageClient from './change-request-edit-page-client';
 
-const ChangeRequestDetailsPage = withReadProtectedPage(
-  ({ catalogId, changeRequestId }) => `/${catalogId}/change-requests/${changeRequestId}`,
-  async ({ catalogId, changeRequestId, session, hasWritePermission }) => {
+const ChangeRequestEditPage = withReadProtectedPage(
+  ({ catalogId, changeRequestId }) => `/${catalogId}/change-requests/${changeRequestId}/edit`,
+  async ({ catalogId, changeRequestId, session }) => {
     const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
     const baselineConcept: Concept = {
@@ -66,6 +65,10 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
         href: `/${catalogId}/change-requests/${changeRequest.id}`,
         text: changeRequest.title,
       },
+      {
+        href: `/${catalogId}/change-requests/${changeRequest.id}/edit`,
+        text: localization.edit,
+      },
     ] as BreadcrumbType[];
 
     const subtitle = `${localization.concept.created}: ${
@@ -94,9 +97,10 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
     );
 
     const clientProps = {
+      organization,
+      changeRequest,
       changeRequestAsConcept,
       originalConcept,
-      readOnly: true,
     };
 
     return (
@@ -111,7 +115,7 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
           catalogId={catalogId}
         />
         <div className={'formContainer'}>
-          <div className={sharedStyle.topRow}>
+          <div className={styles.topRow}>
             <Alert severity='info'>
               <Heading
                 level={2}
@@ -125,24 +129,17 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
               <Paragraph>{localization.changeRequest.alert.editAlertInfo.paragraph}</Paragraph>
             </Alert>
           </div>
-          <div className={sharedStyle.topRow}>
+          <div className={styles.topRow}>
             <DetailHeading
               headingTitle={headingTitle}
               subtitle={subtitle}
             />
-            {changeRequest.id && changeRequest.status == 'OPEN' && (
-              <ButtonRow
-                catalogId={catalogId}
-                changeRequestId={changeRequest.id}
-                hasWritePermission={hasWritePermission}
-              />
-            )}
           </div>
-          <ChangeRequestForm {...clientProps} />
+          <ChangeRequestEditPageClient {...clientProps} />
         </div>
       </>
     );
   },
 );
 
-export default ChangeRequestDetailsPage;
+export default ChangeRequestEditPage;
