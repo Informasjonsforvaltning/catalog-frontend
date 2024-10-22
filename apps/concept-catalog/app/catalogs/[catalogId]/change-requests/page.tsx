@@ -1,7 +1,7 @@
 import { ChangeRequest, Organization } from '@catalog-frontend/types';
 import { getChangeRequests, getOrganization } from '@catalog-frontend/data-access';
 import ChangeRequestsPageClient from './change-requests-page-client';
-import { withReadProtectedPage } from '../../../utils/auth';
+import { withReadProtectedPage } from '../../../../utils/auth';
 
 const ChangeRequestsPage = withReadProtectedPage(
   ({ catalogId }) => `/${catalogId}/change-requests`,

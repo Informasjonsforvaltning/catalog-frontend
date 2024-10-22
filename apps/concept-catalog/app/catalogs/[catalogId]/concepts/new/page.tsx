@@ -1,5 +1,5 @@
 import { RedirectType, redirect } from 'next/navigation';
-import { withWriteProtectedPage } from '../../../utils/auth';
+import { withWriteProtectedPage } from '../../../../utils/auth';
 
 export const NewPage = withWriteProtectedPage(
   ({ catalogId }) => `/${catalogId}/new`,

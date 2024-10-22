@@ -1,11 +1,12 @@
 import { Concept, Relasjon, SearchConceptQuery, Search, RelatedConcept } from '@catalog-frontend/types';
 import { searchConceptsByUri } from '../../search/api';
 import { getUniqueConceptIdsFromUris, isObjectNullUndefinedEmpty } from '@catalog-frontend/utils';
+import { Operation } from 'fast-json-patch';
 
 type SearchObject = Search.SearchObject;
 
 export const conceptCatalogApiCall = async (
-  method: 'GET' | 'POST' | 'DELETE',
+  method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
   path: string,
   body: any,
   accessToken: string,
@@ -31,6 +32,9 @@ export const getConceptRevisions = (conceptId: string, accessToken: string) =>
 
 export const createConcept = (concept: Partial<Concept>, accessToken: string) =>
   conceptCatalogApiCall('POST', `/begreper`, concept, accessToken);
+
+export const patchConcept = (conceptId:string, patchOperations: Operation[], accessToken: string) =>
+  conceptCatalogApiCall('PATCH', `/begreper/${conceptId}`, patchOperations, accessToken);
 
 export const importConcepts = (concepts: Omit<Concept, 'id'>[], accessToken: string) =>
   conceptCatalogApiCall('POST', `/begreper/import`, concepts, accessToken);

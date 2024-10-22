@@ -8,7 +8,7 @@ import {
   getUsers,
 } from '@catalog-frontend/data-access';
 import { SearchPageClient } from './search-page-client';
-import { withReadProtectedPage } from '../../utils/auth';
+import { withReadProtectedPage } from '../../../../utils/auth';
 
 const SearchPage = withReadProtectedPage(
   ({ catalogId }) => `/${catalogId}`,
