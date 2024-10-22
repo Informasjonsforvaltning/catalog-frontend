@@ -23,7 +23,7 @@ import {
 } from '@catalog-frontend/types';
 import ConceptPageClient from './concept-page-client';
 import { RedirectType, redirect } from 'next/navigation';
-import { withReadProtectedPage } from '../../../utils/auth';
+import { withReadProtectedPage } from '../../../../../utils/auth';
 
 const ConceptPage = withReadProtectedPage(
   ({ catalogId, conceptId }) => `/${catalogId}/${conceptId}`,

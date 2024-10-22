@@ -20,12 +20,17 @@ import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 import { useState, useEffect } from 'react';
 import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'nuqs';
 
-import { SortOption, getSelectOptions, useSearchConcepts, getFields as getSearchFields } from '../../hooks/search';
-import SearchFilter from '../../components/search-filter';
-import { useCatalogDesign } from '../../context/catalog-design';
-import { useImportConcepts } from '../../hooks/import';
+import {
+  SortOption,
+  getSelectOptions,
+  useSearchConcepts,
+  getFields as getSearchFields,
+} from '../../../../hooks/search';
+import SearchFilter from '../../../../components/search-filter';
+import { useCatalogDesign } from '../../../../context/catalog-design';
+import { useImportConcepts } from '../../../../hooks/import';
 import styles from './search-page.module.css';
-import ConceptSearchHits from '../../components/concept-search-hits';
+import ConceptSearchHits from '../../../../components/concept-search-hits';
 import _ from 'lodash';
 
 export type FilterType = 'published' | 'status' | 'assignedUser' | 'subject' | 'internalFields' | 'label';
