@@ -9,10 +9,10 @@ import {
 } from '@catalog-frontend/types';
 import { pruneEmptyProperties, updateDefinitionsIfEgendefinert } from '@catalog-frontend/utils';
 import jsonpatch from 'fast-json-patch';
-import { useUpdateChangeRequest } from '../../../../../hooks/change-requests';
+import { useUpdateChangeRequest } from '../../../../../../hooks/change-requests';
 import { useRouter } from 'next/navigation';
 
-import ChangeRequestForm from '../../../../../components/change-request-form/change-request-form';
+import ChangeRequestForm from '../../../../../../components/change-request-form/change-request-form';
 import { FC, useState } from 'react';
 import { FormikHelpers } from 'formik';
 
