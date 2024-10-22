@@ -42,12 +42,12 @@ import cn from 'classnames';
 import { Accordion, Chip, Switch, Tabs, Textarea } from '@digdir/designsystemet-react';
 import _ from 'lodash';
 import classes from './concept-page.module.css';
-import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../hooks/comments';
-import { useGetHistory } from '../../../hooks/history';
-import { useDeleteConcept, usePublishConcept } from '../../../hooks/concepts';
-import { useCatalogDesign } from '../../../context/catalog-design';
-import RelatedConcepts from '../../../components/related-concepts';
-import Definition from '../../../components/definition';
+import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../../../hooks/comments';
+import { useGetHistory } from '../../../../../hooks/history';
+import { useDeleteConcept, usePublishConcept } from '../../../../../hooks/concepts';
+import { useCatalogDesign } from '../../../../../context/catalog-design';
+import RelatedConcepts from '../../../../../components/related-concepts';
+import Definition from '../../../../../components/definition';
 
 type MapType = {
   [id: string]: string;
@@ -336,7 +336,7 @@ export const ConceptPageClient = ({
     const revision = revisions?.find((revision) => !revision.erPublisert);
     const id = revision ? revision.id : concept?.id;
     if (validOrganizationNumber(catalogId) && validUUID(id)) {
-      router.push(`/${catalogId}/${id}/edit`);
+      router.push(`/catalogs/${catalogId}/concepts/${id}/edit`);
     }
   };
 
