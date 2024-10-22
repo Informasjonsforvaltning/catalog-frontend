@@ -109,6 +109,12 @@ export const nb = {
     loggingOut: 'Logger ut...',
   },
 
+  spatial: {
+    municipality: 'Kommune',
+    country: 'Nasjon',
+    county: 'Fylke',
+  },
+
   search: {
     noHits: 'Ditt søk ga ingen treff',
     search: 'Søk',
