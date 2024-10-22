@@ -17,6 +17,7 @@ import {
 export default async function EditDatasetPage({ params }: Params) {
   const { catalogId, datasetId } = params;
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
+  const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
   const dataset = await getDatasetById(catalogId, datasetId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
@@ -69,6 +70,7 @@ export default async function EditDatasetPage({ params }: Params) {
           initialValues={dataset}
           submitType={'update'}
           searchEnv={searchEnv}
+          referenceDataEnv={referenceDataEnv}
           referenceData={referenceData}
         ></DatasetForm>
       </div>

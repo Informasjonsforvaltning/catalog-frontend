@@ -1,0 +1,21 @@
+query Search($req: SearchRequest!) {
+  search(req: $req) {
+    uri
+    code
+    label {
+      nb
+    }
+    type
+  }
+}
+
+query FindByURIsRequest($req: FindByURIsRequest!) {
+  findByURIs(req: $req) {
+    uri
+    code
+    label {
+      nb
+    }
+    type
+  }
+}

@@ -18,6 +18,7 @@ export default async function NewDatasetPage({ params }: Params) {
   const { catalogId } = params;
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
+  const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
 
   const [
     losThemesResponse,
@@ -65,6 +66,7 @@ export default async function NewDatasetPage({ params }: Params) {
           submitType={'create'}
           referenceData={referenceData}
           searchEnv={searchEnv}
+          referenceDataEnv={referenceDataEnv}
         ></DatasetForm>
       </div>
     </>

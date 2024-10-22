@@ -31,10 +31,12 @@ export interface DatasetToBeCreated {
   hasAvailabilityAnnotation?: { hasBody: LocalizedStrings };
   hasAccuracyAnnotation?: { hasBody: LocalizedStrings };
   conformsTo?: UriWithLabel[];
+  spatial?: ReferenceDataCode[];
   // Arrays of uris used as helper values for Formik. These properties is not part of the db object.
   losThemeList?: string[];
   euThemeList?: string[];
   conceptList?: string[];
+  spatialList?: string[];
 }
 
 export interface UriWithLabel {

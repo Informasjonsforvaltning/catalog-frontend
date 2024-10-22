@@ -3,9 +3,10 @@ hooks:
   afterOneFileWrite:
     - prettier --write
 generates:
+  # Service messages
   ./libs/data-access/src/lib/strapi/generated/graphql.ts:
     schema: https://cms.staging.fellesdatakatalog.digdir.no/graphql
-    documents: './libs/**/*.graphql'
+    documents: './libs/data-access/src/lib/strapi/graphql/service-message.graphql'
     config:
       withHooks: true
       withComponent: false
@@ -14,3 +15,15 @@ generates:
       - typescript
       - typescript-operations
       - typescript-react-apollo
+
+  # Reference-data
+  ./libs/data-access/src/lib/reference-data/generated/graphql.ts:
+    schema: https://raw.githubusercontent.com/Informasjonsforvaltning/fdk-reference-data/refs/heads/main/src/main/resources/graphql/schema.graphqls
+    documents: './libs/data-access/src/lib/reference-data/graphql/administrative-units.graphql'
+    config:
+      withHooks: true
+      withComponent: false
+      withHOC: false
+    plugins:
+      - typescript
+      - typescript-operations
