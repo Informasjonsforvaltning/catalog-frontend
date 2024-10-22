@@ -5,10 +5,10 @@ import jsonpatch from 'fast-json-patch';
 import { RedirectType, redirect } from 'next/navigation';
 import ChangeRequestOrNewClient from './change-request-or-new-client';
 import { BreadcrumbType, Breadcrumbs, DetailHeading } from '@catalog-frontend/ui';
-import { Banner } from '../../../../components/banner';
+import { Banner } from '../../../../../components/banner';
 import style from '../change-requests-page.module.css';
 import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
-import { withReadProtectedPage } from '../../../../utils/auth';
+import { withReadProtectedPage } from '../../../../../utils/auth';
 
 const ChangeRequestOrNew = withReadProtectedPage(
   ({ catalogId, conceptIdSearch }) =>

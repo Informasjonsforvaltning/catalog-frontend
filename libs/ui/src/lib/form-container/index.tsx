@@ -3,21 +3,23 @@ import styles from './form-container.module.css';
 import cn from 'classnames';
 import { Heading, Paragraph } from '@digdir/designsystemet-react';
 
+type Variant = 'default' | 'secondary';
+
 interface Props extends PropsWithChildren {
-  variant?: 'second' | 'third';
+  variant?: Variant;
 }
 
 interface HeaderProps {
   title: string;
   subtitle?: string;
-  variant?: 'second' | 'third';
+  variant?: Variant;
 }
 
 const FormContainer: FC<PropsWithChildren<Props>> & {
   Header: FC<HeaderProps>;
-} = ({ variant, children }) => {
+} = ({ variant = 'default', children }) => {
   return (
-    <div className={`${styles.container} ${variant && styles[variant]}`}>
+    <div className={cn(styles.container, styles[variant])}>
       {React.Children.map(children, (child) =>
         React.isValidElement(child) && child.type === Header ? (
           <div className={styles.headerWrapper}>{child}</div>
@@ -29,10 +31,9 @@ const FormContainer: FC<PropsWithChildren<Props>> & {
   );
 };
 
-const Header: FC<HeaderProps> = ({ title, subtitle, variant }) => {
-  const backgroundColor = styles[variant || 'third'];
+const Header: FC<HeaderProps> = ({ title, subtitle, variant = 'default' }) => {
   return (
-    <div className={cn(styles.header, backgroundColor)}>
+    <div className={cn(styles.header, styles[variant])}>
       <Heading className={styles.title}>{title}</Heading>
       <Paragraph className={styles.subtitle}>{subtitle}</Paragraph>
     </div>
