@@ -1,19 +1,20 @@
 'use client';
 import { AddButton, DeleteButton, FormContainer, TitleWithTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Button, Combobox, Heading, Textfield } from '@digdir/designsystemet-react';
+import { Combobox, Heading, Textfield, Checkbox, Tag } from '@digdir/designsystemet-react';
 import { useMemo, useState } from 'react';
 import { useSearchAdministrativeUnits, useSearchAdministrativeUnitsByUri } from '../../hooks/useReferenceDataSearch';
 import { Field, FieldArray, useFormikContext } from 'formik';
-import { Dataset } from '@catalog-frontend/types';
+import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
 import { debounce } from 'lodash';
 import styles from './dataset-form.module.css';
 
 interface Props {
   envVariable: string;
+  languages: ReferenceDataCode[];
 }
 
-export const GeographySection = ({ envVariable }: Props) => {
+export const GeographySection = ({ envVariable, languages }: Props) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const { values, setFieldValue } = useFormikContext<Dataset>();
 
@@ -34,6 +35,19 @@ export const GeographySection = ({ envVariable }: Props) => {
     if (uri.includes('fylke')) return localization.spatial.country;
     if (uri.includes('nasjon')) return localization.spatial.country;
     return '';
+  };
+
+  const translateCode = (code: any) => {
+    switch (code) {
+      case 'NOR':
+        return 'Norsk';
+      case 'SMI':
+        return 'Samisk';
+      case 'ENG':
+        return 'Engelsk';
+      default:
+        return '';
+    }
   };
 
   return (
@@ -133,10 +147,30 @@ export const GeographySection = ({ envVariable }: Props) => {
           title={localization.datasetForm.heading.releaseDate}
           subtitle={localization.datasetForm.helptext.releaseDate}
         />
+        <Field
+          className={styles.date}
+          as={Textfield}
+          type='date'
+          name='issued'
+        />
         <FormContainer.Header
           title={localization.datasetForm.heading.language}
           subtitle={localization.datasetForm.helptext.language}
         />
+        <Checkbox.Group
+          error=''
+          legend='Velg...'
+          size='md'
+        >
+          {languages.map((lang) => (
+            <Checkbox
+              key={lang.uri}
+              value={lang.uri}
+            >
+              {getTranslateText(lang.label)}
+            </Checkbox>
+          ))}
+        </Checkbox.Group>
       </FormContainer>
     </div>
   );

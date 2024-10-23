@@ -29,7 +29,7 @@ type Props = {
 export const DatasetForm = ({ initialValues, submitType, referenceData, searchEnv, referenceDataEnv }: Props) => {
   const { catalogId, datasetId } = useParams();
   const [isDirty, setIsDirty] = useState(false);
-  const { losThemes, dataThemes, provenanceStatements, datasetTypes, frequencies } = referenceData;
+  const { losThemes, dataThemes, provenanceStatements, datasetTypes, frequencies, languages } = referenceData;
 
   useWarnIfUnsavedChanges({ unsavedChanges: isDirty });
 
@@ -108,7 +108,10 @@ export const DatasetForm = ({ initialValues, submitType, referenceData, searchEn
                 />
                 <TypeSection datasetTypes={datasetTypes} />
                 <ConceptSection searchEnv={searchEnv} />
-                <GeographySection envVariable={referenceDataEnv} />
+                <GeographySection
+                  envVariable={referenceDataEnv}
+                  languages={languages}
+                />
                 <ProvenanceSection data={{ provenanceStatements, frequencies }} />
                 <ContentSection />
               </div>
