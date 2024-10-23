@@ -5,6 +5,7 @@ import styles from './data-services-page.module.css';
 
 import { SearchHitsPageLayout } from '@catalog-frontend/ui';
 import { SearchHitTable } from '../../../../components/search-hit-table';
+import { StatusFilter } from '../../../../components/status-filter';
 import React, { useState, useEffect } from "react";
 import {Paragraph, Search} from "@digdir/designsystemet-react";
 import { localization } from "@catalog-frontend/utils";
@@ -17,10 +18,15 @@ interface Props {
 const DataServicesPageClient = ({ dataServices }: Props) => {
   const [filteredDataServices, setFilteredDataServices] = useState<DataService[]>(dataServices);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
 
   useEffect(() => {
     const filteredDataServices = () => {
       let filtered = dataServices;
+
+      if (selectedStatus !== 'ALL') {
+        filtered = filtered.filter((dataService) => dataService.status === selectedStatus);
+      }
 
       if (searchQuery) {
         const lowercasedQuery = searchQuery.toLowerCase();
@@ -35,7 +41,11 @@ const DataServicesPageClient = ({ dataServices }: Props) => {
     };
 
     filteredDataServices();
-  }, [dataServices, searchQuery]);
+  }, [dataServices, selectedStatus, searchQuery]);
+
+  const handleStatusChange = (status: string) => {
+    setSelectedStatus(status);
+  };
 
   const handleSearch = (value: string) => {
     setSearchQuery(value);
@@ -65,7 +75,8 @@ const DataServicesPageClient = ({ dataServices }: Props) => {
           </div>
         </SearchHitsPageLayout.SearchRow>
         <SearchHitsPageLayout.LeftColumn>
-          <div className={styles.leftColumn}></div>
+          <Paragraph>{`${localization.add}...`}</Paragraph>
+          <StatusFilter onStatusChange={handleStatusChange} />
         </SearchHitsPageLayout.LeftColumn>
         <SearchHitsPageLayout.MainColumn>
           <SearchHitTable dataServices={filteredDataServices}/>
