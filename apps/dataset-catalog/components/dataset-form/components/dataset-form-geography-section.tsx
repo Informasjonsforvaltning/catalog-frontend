@@ -3,11 +3,11 @@ import { AddButton, DeleteButton, FormContainer, TitleWithTag } from '@catalog-f
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Combobox, Heading, Textfield, Checkbox, Tag } from '@digdir/designsystemet-react';
 import { useMemo, useState } from 'react';
-import { useSearchAdministrativeUnits, useSearchAdministrativeUnitsByUri } from '../../hooks/useReferenceDataSearch';
+import { useSearchAdministrativeUnits, useSearchAdministrativeUnitsByUri } from '../../../hooks/useReferenceDataSearch';
 import { Field, FieldArray, useFormikContext } from 'formik';
 import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
 import { debounce } from 'lodash';
-import styles from './dataset-form.module.css';
+import styles from '../dataset-form.module.css';
 
 interface Props {
   envVariable: string;

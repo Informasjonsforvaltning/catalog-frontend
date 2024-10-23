@@ -9,14 +9,14 @@ import { createDataset, deleteDataset, updateDataset } from '../../app/actions/a
 import { datasetTemplate } from './dataset-initial-values';
 import { useState } from 'react';
 import { datasetValidationSchema } from './validation-schema';
-import { TitleSection } from './dataset-from-title-section';
-import { AccessRightsSection } from './dataset-form-access-rights-section';
-import ThemeSection from './dataset-form-theme-section';
-import { TypeSection } from './dataset-form-type-sections';
-import { ConceptSection } from './dataset-form-concept-section';
-import { ProvenanceSection } from './dataset-form-provenance-section';
-import { ContentSection } from './dataset-form-content-section';
-import { GeographySection } from './dataset-form-geography-section';
+import { TitleSection } from './components/dataset-from-title-section';
+import { AccessRightsSection } from './components/dataset-form-access-rights-section';
+import ThemeSection from './components/dataset-form-theme-section';
+import { TypeSection } from './components/dataset-form-type-section';
+import { ConceptSection } from './components/dataset-form-concept-section';
+import { ProvenanceSection } from './components/dataset-form-provenance-section';
+import { ContentSection } from './components/dataset-form-content-section';
+import { GeographySection } from './components/dataset-form-geography-section';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;

@@ -4,7 +4,7 @@ import { FormContainer, TitleWithTag } from '@catalog-frontend/ui';
 import { Combobox } from '@digdir/designsystemet-react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Field, useFormikContext } from 'formik';
-import styles from './dataset-form.module.css';
+import styles from '../dataset-form.module.css';
 
 type Props = {
   losThemes: LosTheme[];
