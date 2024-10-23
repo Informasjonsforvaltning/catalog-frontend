@@ -176,3 +176,14 @@ export const getAdministrativeUnitsByUri = async (uriList: string[], envVariable
 
   return data;
 };
+
+export const getLanguages = async () => {
+  const resource = `${process.env.FDK_BASE_URI}/reference-data/linguistic-systems`;
+  const options = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'GET',
+  };
+  return await fetch(resource, options);
+};

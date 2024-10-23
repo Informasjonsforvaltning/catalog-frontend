@@ -9,6 +9,7 @@ import {
   getDatasetTypes,
   getDataThemes,
   getFrequencies,
+  getLanguages,
   getLosThemes,
   getOrganization,
   getProvenanceStatements,
@@ -27,12 +28,14 @@ export default async function EditDatasetPage({ params }: Params) {
     datasetTypesResponse,
     provenanceStatementsResponse,
     frequenciesResponse,
+    languagesResponse,
   ] = await Promise.all([
     getLosThemes().then((res) => res.json()),
     getDataThemes().then((res) => res.json()),
     getDatasetTypes().then((res) => res.json()),
     getProvenanceStatements().then((res) => res.json()),
     getFrequencies().then((res) => res.json()),
+    getLanguages().then((res) => res.json()),
   ]);
 
   const referenceData = {
@@ -41,6 +44,7 @@ export default async function EditDatasetPage({ params }: Params) {
     datasetTypes: datasetTypesResponse.datasetTypes,
     provenanceStatements: provenanceStatementsResponse.provenanceStatements,
     frequencies: frequenciesResponse.frequencies,
+    languages: languagesResponse.linguisticSystems,
   };
 
   const breadcrumbList = [

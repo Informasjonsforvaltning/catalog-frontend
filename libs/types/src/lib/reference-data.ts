@@ -52,4 +52,5 @@ export interface ReferenceData {
   provenanceStatements: ReferenceDataCode[];
   datasetTypes: ReferenceDataCode[];
   frequencies: ReferenceDataCode[];
+  languages: ReferenceDataCode[];
 }
