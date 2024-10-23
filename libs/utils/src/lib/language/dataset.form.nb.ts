@@ -29,7 +29,7 @@ export const datasetFormNb = {
     spatial: 'Søk etter geografisk område fra Administrative enheter (Kartverket) og velg fra nedtrekksliste.',
     temporal: 'Tidsrommet datasettet dekker dersom det kun har innhold fra visse perioder',
     releaseDate: 'Når innholdet i datasettet ble/blir tilgjengeliggjort',
-    language: 'Hovedspråket innholdet i datasettet er skrevet på.',
+    language: 'Språkene innholdet i datasettet er skrevet på.',
   },
   heading: {
     description: 'Beskrivelse av datasettet',

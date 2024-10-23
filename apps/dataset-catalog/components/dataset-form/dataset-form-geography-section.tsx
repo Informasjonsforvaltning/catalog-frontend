@@ -1,21 +1,23 @@
 'use client';
 import { AddButton, DeleteButton, FormContainer, TitleWithTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Combobox, Heading, Textfield } from '@digdir/designsystemet-react';
+import { Checkbox, Combobox, Heading, Textfield } from '@digdir/designsystemet-react';
 import { useCallback, useState } from 'react';
 import { useSearchAdministrativeUnits, useSearchAdministrativeUnitsByUri } from '../../hooks/useReferenceDataSearch';
 import { Field, FieldArray, useFormikContext } from 'formik';
-import { Dataset } from '@catalog-frontend/types';
-import { debounce } from 'lodash';
+import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
+import { debounce, sortBy } from 'lodash';
 import styles from './dataset-form.module.css';
 
 interface Props {
   envVariable: string;
+  languages: ReferenceDataCode[];
 }
 
-export const GeographySection = ({ envVariable }: Props) => {
+export const GeographySection = ({ envVariable, languages }: Props) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const { values, setFieldValue } = useFormikContext<Dataset>();
+  const langNOR = languages.filter((lang) => lang.code === 'NOR')[0];
 
   const { data: searchHits, isLoading: isSearching } = useSearchAdministrativeUnits(searchTerm, envVariable);
   const { data: selectedValues, isLoading: isLoadingselectedValues } = useSearchAdministrativeUnitsByUri(
@@ -37,6 +39,16 @@ export const GeographySection = ({ envVariable }: Props) => {
     if (uri.includes('nasjon')) return localization.spatial.country;
     return '';
   };
+  const customLanguageOrder = [
+    'http://publications.europa.eu/resource/authority/language/NOB',
+    'http://publications.europa.eu/resource/authority/language/NNO',
+    'http://publications.europa.eu/resource/authority/language/ENG',
+    'http://publications.europa.eu/resource/authority/language/SMI',
+  ];
+
+  const sortedLanguages = sortBy(languages, (item) => {
+    return customLanguageOrder.indexOf(item.uri);
+  });
 
   const comboboxOptions = [
     // Combines selectedValues and searchHits, and add uri's for values not found in selectedValues
@@ -69,7 +81,7 @@ export const GeographySection = ({ envVariable }: Props) => {
         />
         {!isLoadingselectedValues && (
           <Combobox
-            loading={isSearching || isLoadingselectedValues}
+            loading={isSearching}
             onChange={handleSearchChange}
             placeholder={`${localization.search.search}...`}
             virtual
@@ -147,10 +159,40 @@ export const GeographySection = ({ envVariable }: Props) => {
           title={localization.datasetForm.heading.releaseDate}
           subtitle={localization.datasetForm.helptext.releaseDate}
         />
+        <Field
+          className={styles.date}
+          as={Textfield}
+          type='date'
+          name='issued'
+        />
         <FormContainer.Header
           title={localization.datasetForm.heading.language}
           subtitle={localization.datasetForm.helptext.language}
         />
+        <Checkbox.Group
+          legend={`${localization.choose}...`}
+          onChange={(values) => setFieldValue('languageList', values)}
+          value={values.languageList}
+        >
+          {values.languageList && values.languageList.includes('NOR') && (
+            <Checkbox
+              key={langNOR.uri}
+              value={langNOR.uri}
+            >
+              {getTranslateText(langNOR.label)}
+            </Checkbox>
+          )}
+          {sortedLanguages
+            .filter((lang) => lang.code !== 'NOR')
+            .map((lang) => (
+              <Checkbox
+                key={lang.uri}
+                value={lang.uri}
+              >
+                {getTranslateText(lang.label)}
+              </Checkbox>
+            ))}
+        </Checkbox.Group>
       </FormContainer>
     </div>
   );

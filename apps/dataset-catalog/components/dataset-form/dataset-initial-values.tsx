@@ -2,7 +2,6 @@ import { AccessRights, Dataset, DatasetToBeCreated, PublicationStatus } from '@c
 import { groupByKeys } from '@catalog-frontend/utils';
 
 export const datasetTemplate = (dataset: Dataset): Dataset => {
-  console.log(dataset.theme);
   return {
     id: dataset?.id ?? '',
     catalogId: dataset?.catalogId ?? '',
@@ -44,6 +43,8 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     hasAvailabilityAnnotation: { hasBody: { nb: dataset.hasAvailabilityAnnotation?.hasBody?.nb ?? '' } },
     spatialList: dataset.spatial ? dataset.spatial.map((spatial) => spatial.uri) : [],
     temporal: dataset.temporal ?? [{ startDate: '', endDate: '' }],
+    issued: dataset.issued ?? '',
+    languageList: dataset.language ? dataset.language.map((lang) => lang.uri) : [],
   };
 };
 
@@ -81,5 +82,7 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     hasAvailabilityAnnotation: { hasBody: { nb: '' } },
     spatialList: [],
     temporal: [{ startDate: '', endDate: '' }],
+    issued: '', 
+    languageList: []
   };
 };

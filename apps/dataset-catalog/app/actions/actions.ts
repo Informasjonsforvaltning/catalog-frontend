@@ -52,6 +52,7 @@ export async function createDataset(values: DatasetToBeCreated, catalogId: strin
     keyword: values?.keywordList ? transformToLocalizedStrings(values?.keywordList) : '',
     concepts: values?.conceptList ? convertListToListOfObjects(values.conceptList, 'uri') : [],
     spatial: values?.spatialList ? convertListToListOfObjects(values.spatialList, 'uri') : [],
+    language: values.languageList ? convertListToListOfObjects(values.languageList, 'uri') : [],
   };
   const datasetNoEmptyValues = removeEmptyValues(newDataset);
 
@@ -105,6 +106,7 @@ export async function updateDataset(catalogId: string, initialDataset: Dataset, 
     keyword: values?.keywordList ? transformToLocalizedStrings(values?.keywordList) : '',
     concepts: values?.conceptList ? convertListToListOfObjects(values.conceptList, 'uri') : [],
     spatial: values?.spatialList ? convertListToListOfObjects(values.spatialList, 'uri') : [],
+    language: values.languageList ? convertListToListOfObjects(values.languageList, 'uri') : [],
   });
 
   const diff = compare(initialDataset, updatedDataset);
