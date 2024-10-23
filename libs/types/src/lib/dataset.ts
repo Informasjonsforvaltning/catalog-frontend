@@ -32,6 +32,7 @@ export interface DatasetToBeCreated {
   hasAccuracyAnnotation?: { hasBody: LocalizedStrings };
   conformsTo?: UriWithLabel[];
   spatial?: ReferenceDataCode[];
+  temporal?: DateRange[];
   // Arrays of uris used as helper values for Formik. These properties is not part of the db object.
   losThemeList?: string[];
   euThemeList?: string[];
@@ -42,4 +43,9 @@ export interface DatasetToBeCreated {
 export interface UriWithLabel {
   uri?: string;
   prefLabel?: LocalizedStrings;
+}
+
+interface DateRange {
+  startDate?: string;
+  endDate?: string;
 }

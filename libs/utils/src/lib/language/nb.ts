@@ -34,6 +34,8 @@ export const nb = {
   name: 'Navn',
   nameAndConcept: 'Navn og begrep',
   no: 'Nei',
+  to: 'Til',
+  from: 'Fra',
   access: 'Tilgang',
   noAccess: 'Ingen tilgang',
   notFound: 'Ikke funnet',
