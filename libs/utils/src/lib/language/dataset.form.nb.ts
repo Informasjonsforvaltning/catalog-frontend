@@ -87,4 +87,7 @@ export const datasetFormNb = {
     euTheme: 'Minst ett EU-tema må være valgt.',
     searchString: 'Ingen treff. Søkestrengen må inneholde minst to bokstaver.',
   },
+  button: {
+    addDate: 'Legg til tidsperiode',
+  },
 };

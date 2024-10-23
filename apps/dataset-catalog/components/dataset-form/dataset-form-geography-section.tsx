@@ -1,12 +1,13 @@
 'use client';
-import { FormContainer } from '@catalog-frontend/ui';
+import { AddButton, DeleteButton, FormContainer, TitleWithTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Combobox, Heading } from '@digdir/designsystemet-react';
+import { Combobox, Heading, Textfield } from '@digdir/designsystemet-react';
 import { useCallback, useState } from 'react';
 import { useSearchAdministrativeUnits, useSearchAdministrativeUnitsByUri } from '../../hooks/useReferenceDataSearch';
-import { useFormikContext } from 'formik';
+import { Field, FieldArray, useFormikContext } from 'formik';
 import { Dataset } from '@catalog-frontend/types';
 import { debounce } from 'lodash';
+import styles from './dataset-form.module.css';
 
 interface Props {
   envVariable: string;
@@ -96,6 +97,51 @@ export const GeographySection = ({ envVariable }: Props) => {
         <FormContainer.Header
           title={localization.datasetForm.heading.temporal}
           subtitle={localization.datasetForm.helptext.temporal}
+        />
+        <FieldArray
+          name='temporal'
+          render={({ remove, push }) => (
+            <div>
+              {values.temporal &&
+                values.temporal.map((_, index) => (
+                  <div
+                    className={styles.date}
+                    key={index}
+                  >
+                    <Field
+                      as={Textfield}
+                      label={
+                        <TitleWithTag
+                          title={localization.from}
+                          tagColor='info'
+                          tagTitle={localization.tag.recommended}
+                        />
+                      }
+                      type='date'
+                      name={`temporal.${index}.startDate`}
+                    />
+                    <Field
+                      as={Textfield}
+                      label={
+                        <TitleWithTag
+                          title={localization.to}
+                          tagColor='info'
+                          tagTitle={localization.tag.recommended}
+                        />
+                      }
+                      type='date'
+                      name={`temporal.${index}.endDate`}
+                    />
+                    <DeleteButton onClick={() => remove(index)} />
+                  </div>
+                ))}
+              <div className={styles.fitContent}>
+                <AddButton onClick={() => push({ startDate: '', endDate: '' })}>
+                  {localization.datasetForm.button.addDate}
+                </AddButton>
+              </div>
+            </div>
+          )}
         />
         <FormContainer.Header
           title={localization.datasetForm.heading.releaseDate}
