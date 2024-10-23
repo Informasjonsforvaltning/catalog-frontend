@@ -459,5 +459,6 @@ export const nb = {
       PUBLISHED: 'Publisert',
       DRAFT: 'Utkast',
     },
+    searchDataService: 'Søk etter datatjenestebeskrivelse',
   },
 };
