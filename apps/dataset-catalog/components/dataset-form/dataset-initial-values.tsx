@@ -40,6 +40,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     hasAccuracyAnnotation: { hasBody: { nb: dataset.hasAccuracyAnnotation?.hasBody?.nb ?? '' } },
     hasAvailabilityAnnotation: { hasBody: { nb: dataset.hasAvailabilityAnnotation?.hasBody?.nb ?? '' } },
     spatialList: dataset.spatial ? dataset.spatial.map((spatial) => spatial.uri) : [],
+    temporal: dataset.temporal ?? [{ startDate: '', endDate: '' }],
   };
 };
 
@@ -76,5 +77,6 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     hasAccuracyAnnotation: { hasBody: { nb: '' } },
     hasAvailabilityAnnotation: { hasBody: { nb: '' } },
     spatialList: [],
+    temporal: [{ startDate: '', endDate: '' }],
   };
 };
