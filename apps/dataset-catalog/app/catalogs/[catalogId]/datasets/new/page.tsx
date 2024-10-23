@@ -1,6 +1,6 @@
 import { Breadcrumbs, BreadcrumbType, PageBanner } from '@catalog-frontend/ui';
 import { DatasetForm } from '../../../../../components/dataset-form';
-import { datasetToBeCreatedTemplate } from '../../../../../components/dataset-form/dataset-initial-values';
+import { datasetToBeCreatedTemplate } from '../../../../../components/dataset-form/utils/dataset-initial-values';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Organization } from '@catalog-frontend/types';
