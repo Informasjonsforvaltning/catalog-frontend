@@ -42,4 +42,12 @@ export const datasetValidationSchema = Yup.object().shape({
   euThemeList: Yup.array()
     .min(1, localization.datasetForm.validation.euTheme)
     .required(localization.datasetForm.validation.euTheme),
+
+  conformsTo: Yup.array().of(
+    Yup.object().shape({
+      uri: Yup.string()
+        .matches(httpsRegex, localization.validation.invalidProtocol)
+        .url(localization.validation.invalidUrl),
+    }),
+  ),
 });

@@ -1,14 +1,7 @@
 'use client';
 import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button } from '@digdir/designsystemet-react';
-import {
-  Dataset,
-  DatasetToBeCreated,
-  DataTheme,
-  LosTheme,
-  ReferenceData,
-  ReferenceDataCode,
-} from '@catalog-frontend/types';
+import { Dataset, DatasetToBeCreated, ReferenceData } from '@catalog-frontend/types';
 import { FormLayout, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
 import { Formik, Form } from 'formik';
 import { useParams } from 'next/navigation';
@@ -22,6 +15,7 @@ import ThemeSection from './dataset-form-theme-section';
 import { TypeSection } from './dataset-form-type-sections';
 import { ConceptSection } from './dataset-form-concept-section';
 import { ProvenanceSection } from './dataset-form-provenance-section';
+import { ContentSection } from './dataset-form-content-section';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
@@ -113,6 +107,7 @@ export const DatasetForm = ({ initialValues, submitType, referenceData, searchEn
                 <TypeSection datasetTypes={datasetTypes} />
                 <ConceptSection searchEnv={searchEnv} />
                 <ProvenanceSection data={{ provenanceStatements, frequencies }} />
+                <ContentSection />
               </div>
             </FormLayout>
           </Form>
