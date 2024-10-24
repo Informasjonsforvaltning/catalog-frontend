@@ -45,6 +45,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     spatialList: dataset.spatial ? dataset.spatial.map((spatial) => spatial.uri) : [],
     temporal: dataset.temporal ?? [{ startDate: '', endDate: '' }],
     issued: dataset.issued ?? '',
+    languageList: dataset.language ? dataset.language.map((lang) => lang.uri) : [],
   };
 };
 
@@ -82,6 +83,7 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     hasAvailabilityAnnotation: { hasBody: { nb: '' } },
     spatialList: [],
     temporal: [{ startDate: '', endDate: '' }],
-    issued: '',
+    issued: '', 
+    languageList: []
   };
 };

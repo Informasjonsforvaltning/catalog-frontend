@@ -6,7 +6,7 @@ import { useMemo, useState } from 'react';
 import { useSearchAdministrativeUnits, useSearchAdministrativeUnitsByUri } from '../../hooks/useReferenceDataSearch';
 import { Field, FieldArray, useFormikContext } from 'formik';
 import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
-import { debounce } from 'lodash';
+import { debounce, sortBy } from 'lodash';
 import styles from './dataset-form.module.css';
 
 interface Props {
@@ -17,6 +17,7 @@ interface Props {
 export const GeographySection = ({ envVariable, languages }: Props) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const { values, setFieldValue } = useFormikContext<Dataset>();
+  const langNOR = languages.filter(lang => lang.code === 'NOR')[0]
 
   const { data: searchHits, isLoading: isSearching } = useSearchAdministrativeUnits(searchTerm, envVariable);
   const { data: selectedValues, isLoading: isLoadingselectedValues } = useSearchAdministrativeUnitsByUri(
@@ -36,6 +37,16 @@ export const GeographySection = ({ envVariable, languages }: Props) => {
     if (uri.includes('nasjon')) return localization.spatial.country;
     return '';
   };
+const customLanguageOrder = [
+    "http://publications.europa.eu/resource/authority/language/NOB",
+    "http://publications.europa.eu/resource/authority/language/NNO",
+    "http://publications.europa.eu/resource/authority/language/ENG",
+    "http://publications.europa.eu/resource/authority/language/SMI"
+];
+
+  const sortedLanguages = sortBy(languages, (item) => {
+    return customLanguageOrder.indexOf(item.uri);
+});
 
   const comboboxOptions = [
     // Combines selectedValues and searchHits, and add uri's for values not found in selectedValues
@@ -157,11 +168,19 @@ export const GeographySection = ({ envVariable, languages }: Props) => {
           subtitle={localization.datasetForm.helptext.language}
         />
         <Checkbox.Group
-          error=''
-          legend='Velg...'
-          size='md'
+          legend={`${localization.choose}...`}
+          onChange={(values) => setFieldValue('languageList', values)}
+          value={values.languageList}
         >
-          {languages.map((lang) => (
+          {values.languageList && values.languageList.includes('http://publications.europa.eu/resource/authority/language/NOR') &&
+          <Checkbox
+              key={langNOR.uri}
+              value={langNOR.uri}
+            >
+              {getTranslateText(langNOR.label)}
+            </Checkbox>
+          }
+          {sortedLanguages.filter(lang => lang.code !== 'NOR').map((lang) => (
             <Checkbox
               key={lang.uri}
               value={lang.uri}
