@@ -114,6 +114,7 @@ export const DatasetForm = ({ initialValues, submitType, referenceData, searchEn
                 />
                 <ProvenanceSection data={{ provenanceStatements, frequencies }} />
                 <ContentSection />
+                <InformationModelSection searchEnv={searchEnv} />
               </div>
             </FormLayout>
           </Form>

@@ -45,6 +45,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     temporal: dataset.temporal ?? [{ startDate: '', endDate: '' }],
     issued: dataset.issued ?? '',
     languageList: dataset.language ? dataset.language.map((lang) => lang.uri) : [],
+    informationModelList: dataset.informationModel ? dataset.informationModel.map((item) => item.uri) : [],
   };
 };
 

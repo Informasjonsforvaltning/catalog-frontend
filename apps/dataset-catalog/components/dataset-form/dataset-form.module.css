@@ -21,7 +21,7 @@
 
 .comboboxOption {
   display: grid;
-  grid-template-columns: 20% 55% 20%;
+  grid-template-columns: 22% 50% 22%;
   gap: 2.5%;
 }
 

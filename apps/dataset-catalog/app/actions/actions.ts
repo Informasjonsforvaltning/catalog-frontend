@@ -53,9 +53,9 @@ export async function createDataset(values: DatasetToBeCreated, catalogId: strin
     concepts: values?.conceptList ? convertListToListOfObjects(values.conceptList, 'uri') : [],
     spatial: values?.spatialList ? convertListToListOfObjects(values.spatialList, 'uri') : [],
     language: values.languageList ? convertListToListOfObjects(values.languageList, 'uri') : [],
+    informationModel: values.informationModelList ? convertListToListOfObjects(values.informationModelList, 'uri') : [],
   };
   const datasetNoEmptyValues = removeEmptyValues(newDataset);
-
   const session = await getValidSession();
   let success = false;
   let datasetId = undefined;
@@ -107,6 +107,7 @@ export async function updateDataset(catalogId: string, initialDataset: Dataset, 
     concepts: values?.conceptList ? convertListToListOfObjects(values.conceptList, 'uri') : [],
     spatial: values?.spatialList ? convertListToListOfObjects(values.spatialList, 'uri') : [],
     language: values.languageList ? convertListToListOfObjects(values.languageList, 'uri') : [],
+    informationModel: values.informationModelList ? convertListToListOfObjects(values.informationModelList, 'uri') : [],
   });
 
   const diff = compare(initialDataset, updatedDataset);
