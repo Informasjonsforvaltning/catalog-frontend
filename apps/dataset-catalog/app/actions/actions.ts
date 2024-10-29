@@ -59,6 +59,7 @@ export async function createDataset(values: DatasetToBeCreated, catalogId: strin
     })),
   };
   const datasetNoEmptyValues = removeEmptyValues(newDataset);
+
   const session = await getValidSession();
   let success = false;
   let datasetId = undefined;
