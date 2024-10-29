@@ -32,9 +32,12 @@ export const useSearchInformationModelsByUri = (searchEnv: string, uriList: stri
   return useQuery({
     queryKey: ['searchInformationModelsByUri', uriList],
     queryFn: async () => {
+      if (uriList.length === 0) {
+        return [];
+      }
       const res = await searchResourcesWithFilter(searchEnv, 'informationmodels', searchOperation);
       const data = await res.json();
-      return data.hits;
+      return data.hits as Search.SearchObject[];
     },
     enabled: !!uriList && !!searchEnv,
   });

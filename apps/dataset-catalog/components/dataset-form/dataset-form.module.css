@@ -25,12 +25,18 @@
   gap: 2.5%;
 }
 
-.date {
+.fieldArrayRow {
   display: grid;
   grid-template-columns: 40% 40% 10%;
   gap: 3%;
-  align-items: flex-end;
+  align-items: flex-start;
   padding-bottom: 2rem;
+}
+
+.buttonContainer {
+  display: flex;
+  height: 79.4px;
+  align-items: flex-end;
 }
 
 .fitContent {

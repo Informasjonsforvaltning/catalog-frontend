@@ -78,6 +78,8 @@ export const datasetFormNb = {
     concept: 'Legg inn begreper',
     keyword: { nb: 'Emneord (norsk bokmål)', nn: 'Emneord (norsk nynorsk)', en: 'Emneord (engelsk)' },
     geography: 'Søk etter geografisk område',
+    informationModelTitle: 'Tittel på informasjonsmodell',
+    informationModelUrl: 'URL til informasjonsmodell',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',

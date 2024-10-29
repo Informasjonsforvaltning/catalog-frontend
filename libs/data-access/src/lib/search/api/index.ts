@@ -44,16 +44,6 @@ export const searchConceptSuggestions = (env: string, query: string) => {
   });
 };
 
-// export const searchInformationModelSuggestions = (env: string, query: string) => {
-//   const path = `suggestions/informationmodels?q=${query}`;
-//   return fetch(`${env}/${path}`, {
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//     method: 'GET',
-//   });
-// };
-
 export const searchSuggestions = async (
   searchEnv: string,
   query?: string,

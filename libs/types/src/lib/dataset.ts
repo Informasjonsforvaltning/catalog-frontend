@@ -35,6 +35,8 @@ export interface DatasetToBeCreated {
   temporal?: DateRange[];
   issued?: string;
   language?: ReferenceDataCode[];
+  informationModel?: UriWithLabel[];
+  informationModelsFromFDK?: string[];
   // Arrays of uris used as helper values for Formik. These properties is not part of the db object.
   losThemeList?: string[];
   euThemeList?: string[];
