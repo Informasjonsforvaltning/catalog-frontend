@@ -72,7 +72,7 @@ export const datasetFormNb = {
     type: 'Velg type',
     concept: 'Legg inn begreper',
     keyword: { nb: 'Emneord (norsk bokmål)', nn: 'Emneord (norsk nynorsk)', en: 'Emneord (engelsk)' },
-    geography: 'Søk ettet geografisk område',
+    geography: 'Søk etter geografisk område',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
