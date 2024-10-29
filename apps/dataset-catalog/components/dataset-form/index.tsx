@@ -16,18 +16,20 @@ import { TypeSection } from './dataset-form-type-sections';
 import { ConceptSection } from './dataset-form-concept-section';
 import { ProvenanceSection } from './dataset-form-provenance-section';
 import { ContentSection } from './dataset-form-content-section';
+import { GeographySection } from './dataset-form-geography-section';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
   submitType: 'create' | 'update';
   searchEnv: string; // Environment variable to search service
+  referenceDataEnv: string; // Environment variable to reference data
   referenceData: ReferenceData;
 };
 
-export const DatasetForm = ({ initialValues, submitType, referenceData, searchEnv }: Props) => {
+export const DatasetForm = ({ initialValues, submitType, referenceData, searchEnv, referenceDataEnv }: Props) => {
   const { catalogId, datasetId } = useParams();
   const [isDirty, setIsDirty] = useState(false);
-  const { losThemes, dataThemes, provenanceStatements, datasetTypes, frequencies } = referenceData;
+  const { losThemes, dataThemes, provenanceStatements, datasetTypes, frequencies, languages } = referenceData;
 
   useWarnIfUnsavedChanges({ unsavedChanges: isDirty });
 
@@ -106,6 +108,10 @@ export const DatasetForm = ({ initialValues, submitType, referenceData, searchEn
                 />
                 <TypeSection datasetTypes={datasetTypes} />
                 <ConceptSection searchEnv={searchEnv} />
+                <GeographySection
+                  envVariable={referenceDataEnv}
+                  languages={languages}
+                />
                 <ProvenanceSection data={{ provenanceStatements, frequencies }} />
                 <ContentSection />
               </div>

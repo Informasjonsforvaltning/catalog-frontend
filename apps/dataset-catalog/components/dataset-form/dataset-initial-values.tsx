@@ -25,8 +25,10 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
       dataset.landingPage && dataset?.landingPage?.length > 0 && dataset.landingPage.every((page) => page !== null)
         ? dataset.landingPage
         : [''],
-    losThemeList: dataset.theme ? dataset.theme.filter((t) => t.uri.includes('/los/')).map((t) => t.uri) : [],
-    euThemeList: dataset.theme ? dataset.theme.filter((t) => t.uri.includes('/data-theme/')).map((t) => t.uri) : [],
+    losThemeList: dataset.theme ? dataset.theme.filter((t) => t.uri && t.uri.includes('/los/')).map((t) => t.uri) : [],
+    euThemeList: dataset.theme
+      ? dataset.theme.filter((t) => t.uri && t.uri.includes('/data-theme/')).map((t) => t.uri)
+      : [],
     type: dataset.type ?? '',
     keywordList: dataset.keyword ? groupByKeys(dataset.keyword) : { nb: [] },
     conceptList: dataset.concepts ? dataset.concepts.map((concept) => concept.uri) : [],
@@ -39,6 +41,10 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     hasCompletenessAnnotation: { hasBody: { nb: dataset.hasCompletenessAnnotation?.hasBody?.nb ?? '' } },
     hasAccuracyAnnotation: { hasBody: { nb: dataset.hasAccuracyAnnotation?.hasBody?.nb ?? '' } },
     hasAvailabilityAnnotation: { hasBody: { nb: dataset.hasAvailabilityAnnotation?.hasBody?.nb ?? '' } },
+    spatialList: dataset.spatial ? dataset.spatial.map((spatial) => spatial.uri) : [],
+    temporal: dataset.temporal ?? [{ startDate: '', endDate: '' }],
+    issued: dataset.issued ?? '',
+    languageList: dataset.language ? dataset.language.map((lang) => lang.uri) : [],
   };
 };
 
@@ -74,5 +80,9 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     hasCompletenessAnnotation: { hasBody: { nb: '' } },
     hasAccuracyAnnotation: { hasBody: { nb: '' } },
     hasAvailabilityAnnotation: { hasBody: { nb: '' } },
+    spatialList: [],
+    temporal: [{ startDate: '', endDate: '' }],
+    issued: '', 
+    languageList: []
   };
 };

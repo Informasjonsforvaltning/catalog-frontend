@@ -24,3 +24,15 @@
   grid-template-columns: 20% 55% 20%;
   gap: 2.5%;
 }
+
+.date {
+  display: grid;
+  grid-template-columns: 40% 40% 10%;
+  gap: 3%;
+  align-items: flex-end;
+  padding-bottom: 2rem;
+}
+
+.fitContent {
+  width: fit-content;
+}

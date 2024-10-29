@@ -34,6 +34,8 @@ export const nb = {
   name: 'Navn',
   nameAndConcept: 'Navn og begrep',
   no: 'Nei',
+  to: 'Til',
+  from: 'Fra',
   access: 'Tilgang',
   noAccess: 'Ingen tilgang',
   notFound: 'Ikke funnet',
@@ -107,6 +109,12 @@ export const nb = {
     logout: 'Logg ut',
     loggingIn: 'Logger inn...',
     loggingOut: 'Logger ut...',
+  },
+
+  spatial: {
+    municipality: 'Kommune',
+    country: 'Nasjon',
+    county: 'Fylke',
   },
 
   search: {

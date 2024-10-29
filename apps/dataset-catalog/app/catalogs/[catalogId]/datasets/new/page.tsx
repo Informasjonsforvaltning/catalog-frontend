@@ -8,6 +8,7 @@ import {
   getDatasetTypes,
   getDataThemes,
   getFrequencies,
+  getLanguages,
   getLosThemes,
   getOrganization,
   getProvenanceStatements,
@@ -18,6 +19,7 @@ export default async function NewDatasetPage({ params }: Params) {
   const { catalogId } = params;
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
+  const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
 
   const [
     losThemesResponse,
@@ -25,12 +27,14 @@ export default async function NewDatasetPage({ params }: Params) {
     datasetTypesResponse,
     provenanceStatementsResponse,
     frequenciesResponse,
+    languageResponse
   ] = await Promise.all([
     getLosThemes().then((res) => res.json()),
     getDataThemes().then((res) => res.json()),
     getDatasetTypes().then((res) => res.json()),
     getProvenanceStatements().then((res) => res.json()),
     getFrequencies().then((res) => res.json()),
+    getLanguages().then((res) => res.json())
   ]);
 
   const referenceData = {
@@ -39,6 +43,7 @@ export default async function NewDatasetPage({ params }: Params) {
     datasetTypes: datasetTypesResponse.datasetTypes,
     provenanceStatements: provenanceStatementsResponse.provenanceStatements,
     frequencies: frequenciesResponse.frequencies,
+    languages: languageResponse.linguisticSystems
   };
 
   const breadcrumbList = [
@@ -65,6 +70,7 @@ export default async function NewDatasetPage({ params }: Params) {
           submitType={'create'}
           referenceData={referenceData}
           searchEnv={searchEnv}
+          referenceDataEnv={referenceDataEnv}
         ></DatasetForm>
       </div>
     </>

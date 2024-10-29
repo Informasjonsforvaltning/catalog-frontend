@@ -18,7 +18,7 @@ export const getAllServiceMessages = async () => {
     },
     body,
     method: 'POST',
-    cache: 'no-cache' as RequestCache,
+    cache: 'default' as RequestCache,
   };
 
   const res = await fetch(resource, options);
@@ -30,7 +30,7 @@ export const getAllServiceMessages = async () => {
       data: null,
     };
   }
- 
+
   return {
     status: res.status,
     data: await res.json(),

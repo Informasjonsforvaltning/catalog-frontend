@@ -114,6 +114,7 @@ export const ConceptSection = ({ searchEnv }: Props) => {
               multiple
               value={values.conceptList}
               placeholder={localization.datasetForm.helptext.searchConcept}
+              filter={() => true} // Deactivate filter, handled by backend
             >
               {suggestions.map((suggestion) => (
                 <Combobox.Option

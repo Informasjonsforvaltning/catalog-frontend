@@ -26,6 +26,10 @@ export const datasetFormNb = {
     completeness: 'Dersom datasettet ikke innholder alle objekter som nevnt i formålet, bør det oppgis her.',
     accuracy: 'Dersom datasettets innhold ikke er i samsvar med formålet, bør det oppgis her.',
     availability: 'Dersom datasettets tilgangsnivå har avvik eller tilleggsopplysninger, bør det oppgis her.',
+    spatial: 'Søk etter geografisk område fra Administrative enheter (Kartverket) og velg fra nedtrekksliste.',
+    temporal: 'Tidsrommet datasettet dekker dersom det kun har innhold fra visse perioder',
+    releaseDate: 'Når innholdet i datasettet ble/blir tilgjengeliggjort',
+    language: 'Språkene innholdet i datasettet er skrevet på.',
   },
   heading: {
     description: 'Beskrivelse av datasettet',
@@ -49,6 +53,11 @@ export const datasetFormNb = {
     completeness: 'Kompletthet',
     accuracy: 'Nøyaktighet',
     availability: 'Tilgjengelighet',
+    geography: 'Geografi, tid og språk',
+    spatial: 'Geografisk avgrensning',
+    temporal: 'Tidsmessig avgrenset til',
+    releaseDate: 'Utgivelsesdato',
+    language: 'Språk',
   },
   accessRight: {
     public: 'Allmenn tilgang',
@@ -63,6 +72,7 @@ export const datasetFormNb = {
     type: 'Velg type',
     concept: 'Legg inn begreper',
     keyword: { nb: 'Emneord (norsk bokmål)', nn: 'Emneord (norsk nynorsk)', en: 'Emneord (engelsk)' },
+    geography: 'Søk etter geografisk område',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
@@ -75,5 +85,9 @@ export const datasetFormNb = {
     description: 'Beskrivelsen må være minst 5 karakterer lang.',
     url: `Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’ og inneholder et gyldig toppdomene (f.eks. ‘.no’).`,
     euTheme: 'Minst ett EU-tema må være valgt.',
+    searchString: 'Ingen treff. Søkestrengen må inneholde minst to bokstaver.',
+  },
+  button: {
+    addDate: 'Legg til tidsperiode',
   },
 };
