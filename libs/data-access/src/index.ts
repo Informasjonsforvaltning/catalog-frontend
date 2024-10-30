@@ -18,3 +18,4 @@ export * from './lib/data-service/api';
 export * from './lib/records-of-processing-activities/api';
 export * from './lib/strapi/generated/graphql';
 export * from './lib/strapi/service-messages';
+export * from './lib/enhetsregisteret';
