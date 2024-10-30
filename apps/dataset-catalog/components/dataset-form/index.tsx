@@ -17,6 +17,7 @@ import { ConceptSection } from './components/dataset-form-concept-section';
 import { ProvenanceSection } from './components/dataset-form-provenance-section';
 import { ContentSection } from './components/dataset-form-content-section';
 import { GeographySection } from './components/dataset-form-geography-section';
+import { InformationModelSection } from './components/dataset-form-information-model-section';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
@@ -114,6 +115,7 @@ export const DatasetForm = ({ initialValues, submitType, referenceData, searchEn
                 />
                 <ProvenanceSection data={{ provenanceStatements, frequencies }} />
                 <ContentSection />
+                <InformationModelSection searchEnv={searchEnv} />
               </div>
             </FormLayout>
           </Form>

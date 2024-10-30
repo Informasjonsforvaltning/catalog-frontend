@@ -35,7 +35,7 @@ export const GeographySection = ({ envVariable, languages }: Props) => {
 
   const getLocationType = (uri: string): string => {
     if (uri.includes('kommune')) return localization.spatial.municipality;
-    if (uri.includes('fylke')) return localization.spatial.country;
+    if (uri.includes('fylke')) return localization.spatial.county;
     if (uri.includes('nasjon')) return localization.spatial.country;
     return '';
   };
@@ -117,7 +117,7 @@ export const GeographySection = ({ envVariable, languages }: Props) => {
               {values.temporal &&
                 values.temporal.map((_, index) => (
                   <div
-                    className={styles.date}
+                    className={styles.fieldArrayRow}
                     key={index}
                   >
                     <Field
@@ -160,7 +160,7 @@ export const GeographySection = ({ envVariable, languages }: Props) => {
           subtitle={localization.datasetForm.helptext.releaseDate}
         />
         <Field
-          className={styles.date}
+          className={styles.fieldArrayRow}
           as={Textfield}
           type='date'
           name='issued'

@@ -50,4 +50,11 @@ export const datasetValidationSchema = Yup.object().shape({
         .url(localization.validation.invalidUrl),
     }),
   ),
+  informationModel: Yup.array().of(
+    Yup.object().shape({
+      uri: Yup.string()
+        .matches(httpsRegex, localization.validation.invalidProtocol)
+        .url(localization.validation.invalidUrl),
+    }),
+  ),
 });

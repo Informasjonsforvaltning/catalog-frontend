@@ -43,3 +43,32 @@ export const searchConceptSuggestions = (env: string, query: string) => {
     method: 'GET',
   });
 };
+
+export const searchSuggestions = async (
+  searchEnv: string,
+  query?: string,
+  resourceType?: string,
+): Promise<Response> => {
+  const path = `suggestions/${resourceType}?q=${query}`;
+  return fetch(`${searchEnv}/${path}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'GET',
+  });
+};
+
+export const searchResourcesWithFilter = async (
+  searchEnv: string,
+  resourceType?: string,
+  body?: SearchOperation,
+): Promise<Response> => {
+  const path = `search/${resourceType}`;
+  return fetch(`${searchEnv}/${path}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify(body),
+  });
+};

@@ -57,7 +57,7 @@ export type BucketCount = {
 
 export type SearchObject = {
   id: string;
-  uri?: string;
+  uri: string;
   accessRights?: ReferenceDataCode;
   catalog?: Catalog;
   dataTheme?: EuDataTheme;

@@ -30,6 +30,8 @@ export const datasetFormNb = {
     temporal: 'Tidsrommet datasettet dekker dersom det kun har innhold fra visse perioder',
     releaseDate: 'Når innholdet i datasettet ble/blir tilgjengeliggjort',
     language: 'Språkene innholdet i datasettet er skrevet på.',
+    informationModelFDK: 'Søk etter informasonsmodeller fra Felles datakatalog og velg fra nedtrekksliste.',
+    informationModelOther: 'Legg til informasjonsmodell via lenke.',
   },
   heading: {
     description: 'Beskrivelse av datasettet',
@@ -58,6 +60,9 @@ export const datasetFormNb = {
     temporal: 'Tidsmessig avgrenset til',
     releaseDate: 'Utgivelsesdato',
     language: 'Språk',
+    informationModel: 'I samsvar med informasjonsmodell',
+    informationModelFDK: 'Informasjonsmodell fra Felles datakatalog',
+    informationModelOther: 'Informasjonsmodell fra andre kilder',
   },
   accessRight: {
     public: 'Allmenn tilgang',
@@ -73,6 +78,8 @@ export const datasetFormNb = {
     concept: 'Legg inn begreper',
     keyword: { nb: 'Emneord (norsk bokmål)', nn: 'Emneord (norsk nynorsk)', en: 'Emneord (engelsk)' },
     geography: 'Søk etter geografisk område',
+    informationModelTitle: 'Tittel på informasjonsmodell',
+    informationModelUrl: 'URL til informasjonsmodell',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
@@ -89,5 +96,6 @@ export const datasetFormNb = {
   },
   button: {
     addDate: 'Legg til tidsperiode',
+    addInformationModel: 'Legg til informasjonsmodell',
   },
 };
