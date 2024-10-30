@@ -19,3 +19,7 @@ export const telephoneNumberRegex = /^(?:[+\d\s]*)$/;
 export const httpsRegex = /^https:\/\//;
 
 export const conceptIdFromUriRegex = /\/([0-9a-fA-F-]{36})$/;
+
+export const onlyNumbersRegex = /^\d+$/;
+
+export const containsNonNumberRegex = /[^\d]/;

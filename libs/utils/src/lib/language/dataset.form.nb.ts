@@ -32,6 +32,7 @@ export const datasetFormNb = {
     language: 'Språkene innholdet i datasettet er skrevet på.',
     informationModelFDK: 'Søk etter informasonsmodeller fra Felles datakatalog og velg fra nedtrekksliste.',
     informationModelOther: 'Legg til informasjonsmodell via lenke.',
+    qualifiedAttributions: 'Søk på organisasjoner eller oppgi organisasjonsnummer.',
   },
   heading: {
     description: 'Beskrivelse av datasettet',
@@ -63,6 +64,7 @@ export const datasetFormNb = {
     informationModel: 'I samsvar med informasjonsmodell',
     informationModelFDK: 'Informasjonsmodell fra Felles datakatalog',
     informationModelOther: 'Informasjonsmodell fra andre kilder',
+    qualifiedAttributions: 'Innholdsleverandører',
   },
   accessRight: {
     public: 'Allmenn tilgang',
@@ -97,5 +99,8 @@ export const datasetFormNb = {
   button: {
     addDate: 'Legg til tidsperiode',
     addInformationModel: 'Legg til informasjonsmodell',
+  },
+  errors: {
+    qualifiedAttributions: 'Kunne ikke hente enheter.',
   },
 };

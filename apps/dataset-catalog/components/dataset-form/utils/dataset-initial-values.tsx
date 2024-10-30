@@ -47,6 +47,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     languageList: dataset.language ? dataset.language.map((lang) => lang.uri) : [],
     informationModelsFromFDK: dataset.informationModelsFromFDK ?? [],
     informationModel: dataset.informationModel ?? [{ prefLabel: { nb: '' }, uri: '' }],
+    qualifiedAttributions: dataset.qualifiedAttributions ?? [],
   };
 };
 
@@ -88,5 +89,6 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     languageList: [],
     informationModelsFromFDK: [],
     informationModel: [{ prefLabel: { nb: '' }, uri: '' }],
+    qualifiedAttributions: [],
   };
 };
