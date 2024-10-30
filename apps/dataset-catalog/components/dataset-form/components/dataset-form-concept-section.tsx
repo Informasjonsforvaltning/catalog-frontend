@@ -6,7 +6,7 @@ import { useFormikContext } from 'formik';
 import { useEffect, useState } from 'react';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
 import { searchConceptSuggestions } from '@catalog-frontend/data-access';
-import styles from './dataset-form.module.css';
+import styles from '../dataset-form.module.css';
 
 interface Props {
   searchEnv: string; // Environment variable to search service
