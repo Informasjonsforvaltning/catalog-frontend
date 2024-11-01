@@ -12,7 +12,7 @@ import {
   Spinner,
   Button,
   Pagination,
-  DetailsPageLayout,  
+  DetailsPageLayout,
   Tag,
   LinkButton,
 } from '@catalog-frontend/ui';
@@ -147,7 +147,7 @@ export const ConceptPageClient = ({
   conceptRelations,
   internalConceptRelations,
   internalRelatedConcepts,
-  catalogPortalUrl
+  catalogPortalUrl,
 }: ConceptPageClientProps) => {
   const [language, setLanguage] = useState('nb');
   const [isPublished, setIsPublished] = useState(concept?.erPublisert);
@@ -174,7 +174,7 @@ export const ConceptPageClient = ({
   const pageSubtitle = organization?.name ?? catalogId;
 
   const infoDataColumnRight = [
-    [localization.id, concept?.id],
+    [localization.conceptId, concept?.originaltBegrep],
     [
       localization.publicationState.state,
       <>
@@ -353,7 +353,7 @@ export const ConceptPageClient = ({
     if (statusURI && typeof statusURI === 'string') {
       const urlParts = statusURI.split('/');
       if (urlParts.length > 0) {
-        return urlParts[urlParts.length - 1] as ConceptStatusTagProps["statusKey"];
+        return urlParts[urlParts.length - 1] as ConceptStatusTagProps['statusKey'];
       }
     }
     return undefined;
@@ -365,7 +365,11 @@ export const ConceptPageClient = ({
         {revisions?.map((revision) => {
           const status = findStatusLabel(revision?.statusURI);
           return (
-            <InfoCard.Item key={`revision-${revision.id}`}>
+            <InfoCard.Item
+              key={`revision-${revision.id}`}
+              label={`${localization.versionId} ${revision.id}`}
+              labelColor='light'
+            >
               <div className={classes.revision}>
                 <div>
                   v{revision?.versjonsnr?.major}.{revision?.versjonsnr?.minor}.{revision?.versjonsnr?.patch}
