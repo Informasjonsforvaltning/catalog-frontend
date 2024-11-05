@@ -12,7 +12,7 @@ export const getAllDataServices = async (catalogId: string, accessToken: string)
   return await fetch(resource, options);
 };
 
-export const getDataserviceById = async (catalogId: string, dataServiceId: string, accessToken: string) => {
+export const getDataServiceById = async (catalogId: string, dataServiceId: string, accessToken: string) => {
   const resource = `${path}/catalogs/${catalogId}/dataservices/${dataServiceId}`;
   const options = {
     headers: {
@@ -31,6 +31,18 @@ export const getAllDataServiceCatalogs = async (accessToken: string) => {
       Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     },
+  };
+  return await fetch(resource, options);
+};
+
+export const deleteDataService = async (catalogId: string, dataServiceId: string, accessToken: string) => {
+  const resource = `${path}/catalogs/${catalogId}/dataservices/${dataServiceId}`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'DELETE',
   };
   return await fetch(resource, options);
 };
