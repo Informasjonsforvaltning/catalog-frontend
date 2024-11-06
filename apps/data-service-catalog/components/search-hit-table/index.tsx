@@ -1,6 +1,6 @@
 'use client';
 
-import { Table } from '@digdir/designsystemet-react';
+import { Link, Table } from '@digdir/designsystemet-react';
 import {
   dateStringToDate,
   formatDate,
@@ -94,7 +94,11 @@ export const SearchHitTable = ({ dataServices }: BannerProps) => {
       <Table.Body>
         {sortedDataServices.map((dataService) => (
           <Table.Row key={dataService.id}>
-            <Table.Cell>{getTranslateText(dataService.title)}</Table.Cell>
+            <Table.Cell>
+              <Link href={`/catalogs/${dataService.organizationId}/data-services/${dataService.id}/edit`}>
+                {getTranslateText(dataService.title)}
+              </Link>
+            </Table.Cell>
             <Table.Cell>{formatDate(dateStringToDate(dataService.modified))}</Table.Cell>
             <Table.Cell>{dataService.status && localization.dataServiceCatalog.status[dataService.status]}</Table.Cell>
           </Table.Row>
