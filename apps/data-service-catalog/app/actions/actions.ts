@@ -29,7 +29,7 @@ export async function getDataService(catalogId: string, dataServiceId: string): 
   }
 
   const jsonResponse = await response.json();
-  return jsonResponse;
+  return jsonResponse as DataService;
 }
 
 export async function deleteDataService(catalogId: string, dataServiceId: string) {
