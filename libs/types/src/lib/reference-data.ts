@@ -33,19 +33,6 @@ export interface DataTheme {
   conceptSchema?: UriWithLabel;
 }
 
-export interface FileType {
-  code: string;
-  mediaType: string;
-  uri: string;
-}
-
-export interface MediaType {
-  name: string;
-  subType: string;
-  type: string;
-  uri: string;
-}
-
 export interface ReferenceData {
   losThemes: LosTheme[];
   dataThemes: DataTheme[];

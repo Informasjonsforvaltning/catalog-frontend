@@ -29,9 +29,12 @@ export const GeographySection = ({ envVariable, languages }: Props) => {
     setSearchTerm(term);
   }, 300);
 
-  const handleSearchChange = useCallback((input: any) => {
-    debouncedSetSearchTerm(input.target.value);
-  }, []);
+  const handleSearchChange = useCallback(
+    (input: any) => {
+      debouncedSetSearchTerm(input.target.value);
+    },
+    [searchTerm],
+  );
 
   const getLocationType = (uri: string): string => {
     if (uri.includes('kommune')) return localization.spatial.municipality;

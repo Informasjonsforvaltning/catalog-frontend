@@ -19,6 +19,7 @@ import { ContentSection } from './components/dataset-form-content-section';
 import { GeographySection } from './components/dataset-form-geography-section';
 import { InformationModelSection } from './components/dataset-form-information-model-section';
 import { QualifiedAttributionsSection } from './components/dataset-form-qualified-attributions-section';
+import { ExampleDataSection } from './components/dataset-form-example-data-section';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
@@ -118,6 +119,7 @@ export const DatasetForm = ({ initialValues, submitType, referenceData, searchEn
                 <ContentSection />
                 <InformationModelSection searchEnv={searchEnv} />
                 <QualifiedAttributionsSection />
+                <ExampleDataSection referenceDataEnv={referenceDataEnv} />
               </div>
             </FormLayout>
           </Form>
