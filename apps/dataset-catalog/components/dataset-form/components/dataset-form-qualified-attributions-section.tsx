@@ -8,7 +8,7 @@ import { debounce } from 'lodash';
 import { useCallback, useState } from 'react';
 
 export const QualifiedAttributionsSection = () => {
-  const { setFieldValue, values, errors } = useFormikContext<Dataset>();
+  const { setFieldValue, values } = useFormikContext<Dataset>();
 
   const [searchTerm, setSearchTerm] = useState('');
   const { data: selectedEnheter, isLoading } = useSearchEnheterByOrgNmbs(values.qualifiedAttributions);
@@ -22,7 +22,7 @@ export const QualifiedAttributionsSection = () => {
         setSearchTerm(term);
       }
     }, 300),
-    [],
+    [searchTerm],
   );
 
   const comboboxOptions = [

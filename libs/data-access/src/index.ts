@@ -5,6 +5,7 @@ export * from './lib/catalog-history/api';
 export * from './lib/concept/api';
 export * from './lib/organization/api';
 export * from './lib/reference-data/api';
+export * from './lib/reference-data/generated/graphql';
 export * from './lib/search/api';
 export * from './lib/code-list/api';
 export * from './lib/users/api';

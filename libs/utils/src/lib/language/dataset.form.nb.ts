@@ -65,6 +65,7 @@ export const datasetFormNb = {
     informationModelFDK: 'Informasjonsmodell fra Felles datakatalog',
     informationModelOther: 'Informasjonsmodell fra andre kilder',
     qualifiedAttributions: 'Innholdsleverandører',
+    exampleData: 'Eksempeldata',
   },
   accessRight: {
     public: 'Allmenn tilgang',

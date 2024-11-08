@@ -458,6 +458,8 @@ export type RoleType = {
 
 export enum SearchAlternative {
   AdministrativeEnheter = 'ADMINISTRATIVE_ENHETER',
+  EuFileTypes = 'EU_FILE_TYPES',
+  IanaMediaTypes = 'IANA_MEDIA_TYPES',
 }
 
 export type SearchHit = {

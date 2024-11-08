@@ -101,7 +101,7 @@ export const getMediaTypes = async () => {
   return await fetch(resource, options);
 };
 
-export const getAdministrativeUnits = async (searchQuery: string, envVariable: string) => {
+export const searchReferenceData = async (searchQuery: string, envVariable: string, types: SearchAlternative[]) => {
   const resource = `${envVariable}/reference-data/graphql`;
 
   const body = JSON.stringify({
@@ -112,6 +112,9 @@ export const getAdministrativeUnits = async (searchQuery: string, envVariable: s
           code
           label {
             nb
+            en
+            nn
+            no
           }
           type
         }
@@ -120,7 +123,7 @@ export const getAdministrativeUnits = async (searchQuery: string, envVariable: s
     variables: {
       req: {
         query: searchQuery,
-        types: [SearchAlternative.AdministrativeEnheter],
+        types: types,
       },
     } as SearchQueryVariables,
   });
@@ -138,7 +141,7 @@ export const getAdministrativeUnits = async (searchQuery: string, envVariable: s
   return data;
 };
 
-export const getAdministrativeUnitsByUri = async (uriList: string[], envVariable: string) => {
+export const searchReferenceDataByUri = async (uriList: string[], envVariable: string, types: SearchAlternative[]) => {
   const resource = `${envVariable}/reference-data/graphql`;
 
   const body = JSON.stringify({
@@ -149,6 +152,9 @@ export const getAdministrativeUnitsByUri = async (uriList: string[], envVariable
           code
           label {
             nb
+            en
+            nn
+            no
           }
           type
         }
@@ -157,7 +163,7 @@ export const getAdministrativeUnitsByUri = async (uriList: string[], envVariable
     variables: {
       req: {
         uris: uriList,
-        types: [SearchAlternative.AdministrativeEnheter],
+        types: types,
       },
     } as FindByUrIsRequestQueryVariables,
   });

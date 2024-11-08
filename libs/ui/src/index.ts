@@ -34,3 +34,4 @@ export * from './lib/tag';
 export * from './lib/service-messages';
 export * from './lib/form-layout';
 export * from './lib/title-with-tag';
+export * from './lib/formik-search-combobox';

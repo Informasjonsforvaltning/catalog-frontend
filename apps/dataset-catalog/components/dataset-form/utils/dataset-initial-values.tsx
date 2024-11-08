@@ -48,6 +48,17 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     informationModelsFromFDK: dataset.informationModelsFromFDK ?? [],
     informationModel: dataset.informationModel ?? [{ prefLabel: { nb: '' }, uri: '' }],
     qualifiedAttributions: dataset.qualifiedAttributions ?? [],
+    sample: dataset.sample ?? [
+      {
+        description: {
+          nb: '',
+        },
+        downloadURL: [],
+        accessURL: [],
+        format: [],
+        mediaType: [],
+      },
+    ],
   };
 };
 
@@ -90,5 +101,16 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     informationModelsFromFDK: [],
     informationModel: [{ prefLabel: { nb: '' }, uri: '' }],
     qualifiedAttributions: [],
+    sample: [
+      {
+        description: {
+          nb: '',
+        },
+        downloadURL: [],
+        accessURL: [],
+        format: [],
+        mediaType: [],
+      },
+    ],
   };
 };
