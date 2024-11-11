@@ -89,6 +89,7 @@ export const ExampleDataSection = ({ referenceDataEnv }: Props) => {
           querySearchHits={mediaTypes ?? []}
           formikValues={values?.sample?.[0]?.mediaType ?? []}
           loading={loadingSelectedMediaTypes || searchingMediaTypes}
+          virtual
         />
 
         <FormContainer.Header

@@ -27,11 +27,11 @@ export const ProvenanceSection = ({ data }: Props) => {
           subtitle={localization.datasetForm.helptext.provenance}
         />
         <Combobox
-          value={[values?.provenance?.uri ?? '']}
+          value={values?.provenance?.uri ? [values?.provenance?.uri] : []}
           placeholder={`${localization.search.search}...`}
           onValueChange={(value: string[]) => setFieldValue('provenance.uri', value.toString())}
         >
-          <Combobox.Option value=''>{`${localization.choose}...`}</Combobox.Option>
+          <Combobox.Empty>{`${localization.choose}...`}</Combobox.Empty>
           {provenanceStatements.map((item) => (
             <Combobox.Option
               value={item.uri}
@@ -41,6 +41,7 @@ export const ProvenanceSection = ({ data }: Props) => {
             </Combobox.Option>
           ))}
         </Combobox>
+
         <FormContainer.Header
           title={localization.datasetForm.heading.frequency}
           subtitle={localization.datasetForm.helptext.frequency}
