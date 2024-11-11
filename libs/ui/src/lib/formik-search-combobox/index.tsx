@@ -38,22 +38,31 @@ export function FormikSearchCombobox({
     ).values(),
   ];
 
+  const getDescription = (item: ReferenceDataCode) =>
+    item.uri.includes('geonorge') ? getLocationType(item.uri) : item.code;
+
+  const getLocationType = (uri: string): string => {
+    if (uri.includes('kommune')) return localization.spatial.municipality;
+    if (uri.includes('fylke')) return localization.spatial.county;
+    if (uri.includes('nasjon')) return localization.spatial.country;
+    return '';
+  };
+
   return (
     <Combobox
       {...rest}
       placeholder={`${localization.search.search}...`}
-      virtual={virtual}
       multiple
       filter={() => true} // disable filter
     >
       <Combobox.Empty>{`${localization.search.noHits}... `}</Combobox.Empty>
-      {comboboxOptions.map((type) => (
+      {comboboxOptions.map((item) => (
         <Combobox.Option
-          key={type.uri}
-          value={type.uri}
-          description={virtual ? type.code : ''}
+          key={item.uri}
+          value={item.uri}
+          description={virtual ? getDescription(item) : ''}
         >
-          {type.label ? getTranslateText(type.label) : type.uri}
+          {item.label ? getTranslateText(item.label) : item.uri}
         </Combobox.Option>
       ))}
     </Combobox>

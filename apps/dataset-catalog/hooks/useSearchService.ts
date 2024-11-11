@@ -14,17 +14,6 @@ export const useSearchInformationModelsSuggestions = (searchEnv: string, searchQ
   });
 };
 
-export const useSearchConceptSuggestions = (searchEnv: string, searchQuery?: string) => {
-  return useQuery({
-    queryKey: ['searchConceptSuggestions', searchQuery],
-    queryFn: async () => {
-      const data = await searchSuggestions(searchEnv, searchQuery, 'concepts');
-      return data.json();
-    },
-    enabled: !!searchQuery && !!searchEnv,
-  });
-};
-
 export const useSearchInformationModelsByUri = (searchEnv: string, uriList: string[]) => {
   const searchOperation: Search.SearchOperation = {
     filters: { uri: { value: uriList } },
@@ -36,6 +25,36 @@ export const useSearchInformationModelsByUri = (searchEnv: string, uriList: stri
         return [];
       }
       const res = await searchResourcesWithFilter(searchEnv, 'informationmodels', searchOperation);
+      const data = await res.json();
+      return data.hits as Search.SearchObject[];
+    },
+    enabled: !!uriList && !!searchEnv,
+  });
+};
+
+export const useSearchConceptSuggestions = (searchEnv: string, searchQuery?: string) => {
+  return useQuery({
+    queryKey: ['searchConceptSuggestions', 'searchQuery', searchQuery],
+    queryFn: async () => {
+      const res = await searchSuggestions(searchEnv, searchQuery, 'concepts');
+      const data = await res.json();
+      return data.suggestions;
+    },
+    enabled: !!searchQuery && !!searchEnv,
+  });
+};
+
+export const useSearchConceptsByUri = (searchEnv: string, uriList: string[]) => {
+  const searchOperation: Search.SearchOperation = {
+    filters: { uri: { value: uriList } },
+  };
+  return useQuery({
+    queryKey: ['searchConceptSuggestions', 'uriList', uriList],
+    queryFn: async () => {
+      if (uriList.length === 0) {
+        return [];
+      }
+      const res = await searchResourcesWithFilter(searchEnv, 'concepts', searchOperation);
       const data = await res.json();
       return data.hits as Search.SearchObject[];
     },

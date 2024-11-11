@@ -1,7 +1,7 @@
 'use client';
-import { AddButton, DeleteButton, FormContainer, TitleWithTag } from '@catalog-frontend/ui';
+import { AddButton, DeleteButton, FormContainer, FormikSearchCombobox, TitleWithTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Checkbox, Combobox, Heading, Textfield } from '@digdir/designsystemet-react';
+import { Checkbox, Heading, Textfield } from '@digdir/designsystemet-react';
 import { useCallback, useState } from 'react';
 import { useSearchAdministrativeUnits, useSearchAdministrativeUnitsByUri } from '../../../hooks/useReferenceDataSearch';
 import { Field, FieldArray, useFormikContext } from 'formik';
@@ -20,10 +20,7 @@ export const GeographySection = ({ envVariable, languages }: Props) => {
   const langNOR = languages.filter((lang) => lang.code === 'NOR')[0];
 
   const { data: searchHits, isLoading: isSearching } = useSearchAdministrativeUnits(searchTerm, envVariable);
-  const { data: selectedValues, isLoading: isLoadingselectedValues } = useSearchAdministrativeUnitsByUri(
-    values?.spatialList,
-    envVariable,
-  );
+  const { data: selectedValues } = useSearchAdministrativeUnitsByUri(values?.spatialList, envVariable);
 
   const debouncedSetSearchTerm = debounce((term: string) => {
     setSearchTerm(term);
@@ -36,12 +33,6 @@ export const GeographySection = ({ envVariable, languages }: Props) => {
     [searchTerm],
   );
 
-  const getLocationType = (uri: string): string => {
-    if (uri.includes('kommune')) return localization.spatial.municipality;
-    if (uri.includes('fylke')) return localization.spatial.county;
-    if (uri.includes('nasjon')) return localization.spatial.country;
-    return '';
-  };
   const customLanguageOrder = [
     'http://publications.europa.eu/resource/authority/language/NOB',
     'http://publications.europa.eu/resource/authority/language/NNO',
@@ -52,22 +43,6 @@ export const GeographySection = ({ envVariable, languages }: Props) => {
   const sortedLanguages = sortBy(languages, (item) => {
     return customLanguageOrder.indexOf(item.uri);
   });
-
-  const comboboxOptions = [
-    // Combines selectedValues and searchHits, and add uri's for values not found in selectedValues
-    ...new Map(
-      [
-        ...(selectedValues ?? []),
-        ...(searchHits ?? []),
-        ...(values.spatialList ?? []).map((uri) => ({
-          uri,
-          label:
-            (selectedValues?.find((item) => item.uri === uri) || searchHits?.find((item) => item.uri === uri))?.label ??
-            null,
-        })),
-      ].map((spatial) => [spatial.uri, spatial]),
-    ).values(),
-  ];
 
   return (
     <div>
@@ -82,33 +57,16 @@ export const GeographySection = ({ envVariable, languages }: Props) => {
           title={localization.datasetForm.heading.spatial}
           subtitle={localization.datasetForm.helptext.spatial}
         />
-        {!isLoadingselectedValues && (
-          <Combobox
-            loading={isSearching}
-            onChange={handleSearchChange}
-            placeholder={`${localization.search.search}...`}
-            virtual
-            multiple
-            onValueChange={(selectedValues) => setFieldValue('spatialList', selectedValues)}
-            value={values.spatialList || []}
-            filter={() => true} // Deactivates filter. Filtering is handled in the backend.
-          >
-            <Combobox.Empty>
-              {searchTerm.length < 2
-                ? localization.datasetForm.validation.searchString
-                : `${localization.search.noHits}...`}
-            </Combobox.Empty>
-            {comboboxOptions.map((location) => (
-              <Combobox.Option
-                value={location.uri}
-                key={location.uri}
-                description={getLocationType(location.uri)}
-              >
-                {location.label ? getTranslateText(location.label) : location.uri}
-              </Combobox.Option>
-            ))}
-          </Combobox>
-        )}
+        <FormikSearchCombobox
+          selectedValuesSearchHits={selectedValues ?? []}
+          querySearchHits={searchHits ?? []}
+          formikValues={values.spatialList ?? []}
+          onChange={handleSearchChange}
+          onValueChange={(selectedValues) => setFieldValue('spatialList', selectedValues)}
+          value={values.spatialList || []}
+          virtual
+          loading={isSearching}
+        />
         <FormContainer.Header
           title={localization.datasetForm.heading.temporal}
           subtitle={localization.datasetForm.helptext.temporal}
