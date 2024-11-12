@@ -132,6 +132,7 @@ export interface Concept {
   erstattesAv?: string[];
   statusURI?: string | null;
   erSistPublisert?: boolean;
+  sistPublisertId?: string;
   revisjonAvSistPublisert?: boolean;
   endringslogelement?: Endringslogelement;
   assignedUser?: string;

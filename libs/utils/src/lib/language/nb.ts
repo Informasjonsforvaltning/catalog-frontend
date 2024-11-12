@@ -204,7 +204,7 @@ export const nb = {
 
   searchHit: {
     lastEdited: 'Sist endret',
-    underRevision: 'Under revidering',
+    lastPublished: 'Gå til publisert versjon',
   },
 
   alert: {
