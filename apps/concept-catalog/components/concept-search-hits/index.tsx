@@ -71,17 +71,17 @@ const ConceptSearchHits: React.FC<Props> = ({
         </p>
       </div>
       <div className={styles.rowSpaceBetween}>
-        {searchHit.gjeldendeRevisjon && (
+        {searchHit.sistPublisertId && !searchHit?.erPublisert && (
           <div className={styles.metaData}>
             <Link
               prefetch={false}
               href={
-                validOrganizationNumber(catalogId) && validUUID(searchHit.gjeldendeRevisjon)
-                  ? `/${catalogId}/${searchHit.gjeldendeRevisjon}`
+                validOrganizationNumber(catalogId) && validUUID(searchHit.sistPublisertId)
+                  ? `/${catalogId}/${searchHit.sistPublisertId}`
                   : '#'
               }
             >
-              {localization.searchHit.underRevision}
+              {localization.searchHit.lastPublished}
             </Link>
           </div>
         )}
