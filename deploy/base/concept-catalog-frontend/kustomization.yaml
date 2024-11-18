@@ -6,5 +6,5 @@ resources:
   - concept-catalog-frontend-service.yaml
 images:
   - name: concept-catalog-frontend
-    newName: eu.gcr.io/digdir-fdk-infra/concept-catalog-frontend
+    newName: ghcr.io/informasjonsforvaltning/catalog-frontend/concept-catalog-frontend
     newTag: $(GIT_COMMIT_SHA)
