@@ -6,5 +6,5 @@ resources:
   - catalog-portal-frontend-service.yaml
 images:
   - name: catalog-portal-frontend
-    newName: eu.gcr.io/digdir-fdk-infra/catalog-portal-frontend
+    newName: ghcr.io/informasjonsforvaltning/catalog-frontend/catalog-portal-frontend
     newTag: $(GIT_COMMIT_SHA)

@@ -6,5 +6,5 @@ resources:
   - dataset-catalog-frontend-service.yaml
 images:
   - name: dataset-catalog-frontend
-    newName: eu.gcr.io/digdir-fdk-infra/dataset-catalog-frontend
+    newName: ghcr.io/informasjonsforvaltning/catalog-frontend/dataset-catalog-frontend
     newTag: $(GIT_COMMIT_SHA)

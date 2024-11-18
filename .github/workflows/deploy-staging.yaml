@@ -72,6 +72,7 @@ jobs:
     uses: Informasjonsforvaltning/workflows/.github/workflows/build-push.yaml@main
     with:
       app_name: ${{ matrix.appname }}-frontend
+      monorepo_app: true
       environment: staging
       build_env: true
       build_env_name: BINARY
@@ -81,7 +82,6 @@ jobs:
       dockerfile: apps/${{ matrix.appname }}/Dockerfile
     secrets:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      GCP_SA_DIGDIR_FDK_GCR_KEY: ${{ secrets.GCP_SA_DIGDIR_FDK_GCR_KEY }}
 
   deploy:
     name: Deploy affected apps to staging environment with reusable workflow
