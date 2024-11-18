@@ -2,9 +2,10 @@ import { Breadcrumbs, BreadcrumbType, PageBanner } from '@catalog-frontend/ui';
 import { DatasetForm } from '../../../../../components/dataset-form';
 import { datasetToBeCreatedTemplate } from '../../../../../components/dataset-form/utils/dataset-initial-values';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { getTranslateText, getValidSession, localization } from '@catalog-frontend/utils';
 import { Organization } from '@catalog-frontend/types';
 import {
+  getAllDatasetSeries,
   getDatasetTypes,
   getDataThemes,
   getFrequencies,
@@ -20,6 +21,9 @@ export default async function NewDatasetPage({ params }: Params) {
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
+  const session = await getValidSession();
+  const accessToken = session?.accessToken;
+  const datasetSeries = await getAllDatasetSeries(catalogId, accessToken).then((res) => res.json());
 
   const [
     losThemesResponse,
@@ -74,6 +78,7 @@ export default async function NewDatasetPage({ params }: Params) {
           referenceData={referenceData}
           searchEnv={searchEnv}
           referenceDataEnv={referenceDataEnv}
+          datasetSeries={datasetSeries._embedded.datasets}
         ></DatasetForm>
       </div>
     </>

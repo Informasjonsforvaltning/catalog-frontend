@@ -39,6 +39,9 @@ export interface DatasetToBeCreated {
   informationModelsFromFDK?: string[];
   qualifiedAttributions?: string[];
   sample?: Sample[];
+  references?: Reference[];
+  relations?: UriWithLabel[];
+  inSeries?: string;
   // Arrays of uris used as helper values for Formik. These properties is not part of the db object.
   losThemeList?: string[];
   euThemeList?: string[];
@@ -63,4 +66,14 @@ interface Sample {
   format?: string[];
   mediaType?: string[];
   description?: LocalizedStrings;
+}
+export interface Reference {
+  referenceType: { code: string };
+  source: { uri: string };
+}
+
+export interface DatasetSerie {
+  title: string;
+  uri: string;
+  id: string;
 }

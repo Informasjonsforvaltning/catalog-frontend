@@ -20,7 +20,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     landingPage:
       dataset.landingPage && dataset?.landingPage?.length > 0 && dataset.landingPage.every((page) => page !== null)
         ? dataset.landingPage
-        : [''],
+        : [],
     losThemeList: dataset.theme ? dataset.theme.filter((t) => t.uri && t.uri.includes('/los/')).map((t) => t.uri) : [],
     euThemeList: dataset.theme
       ? dataset.theme.filter((t) => t.uri && t.uri.includes('/data-theme/')).map((t) => t.uri)
@@ -55,6 +55,9 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
         mediaType: [],
       },
     ],
+    references: dataset.references ?? [{ source: { uri: '' }, referenceType: { code: '' } }],
+    relations: dataset.relations ?? [{ uri: '', prefLabel: { nb: '' } }],
+    inSeries: dataset.inSeries ?? '',
   };
 };
 
@@ -71,7 +74,7 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
       en: '',
     },
     registrationStatus: PublicationStatus.DRAFT,
-    landingPage: [''],
+    landingPage: [],
     accessRights: { uri: '' },
     legalBasisForAccess: [{ uri: '', prefLabel: { nb: '' } }],
     legalBasisForProcessing: [{ uri: '', prefLabel: { nb: '' } }],
@@ -108,5 +111,8 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
         mediaType: [],
       },
     ],
+    references: [{ source: { uri: '' }, referenceType: { code: '' } }],
+    relations: [{ uri: '', prefLabel: { nb: '' } }],
+    inSeries: '',
   };
 };
