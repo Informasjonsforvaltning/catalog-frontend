@@ -39,7 +39,7 @@ const ChangeRequestOrNewClient: FC<Props> = ({ organization, changeRequestAsConc
       values.anbefaltTerm?.navn.en;
 
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
-      conceptId: originalConcept?.id ?? null,
+      conceptId: originalConcept?.originaltBegrep ?? null,
       operations: jsonpatch.compare(
         pruneEmptyProperties(originalConcept || baselineConcept),
         pruneEmptyProperties(updateDefinitionsIfEgendefinert(values)),

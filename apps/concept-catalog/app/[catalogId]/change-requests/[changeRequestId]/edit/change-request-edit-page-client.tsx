@@ -57,7 +57,7 @@ const ChangeRequestEditPageClient: FC<Props> = ({
       '';
 
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
-      conceptId: originalConcept?.id ?? null,
+      conceptId: originalConcept?.originaltBegrep ?? null,
       operations: jsonpatch.compare(
         pruneEmptyProperties(originalConcept || emptyConcept),
         pruneEmptyProperties(updateDefinitionsIfEgendefinert(values)),

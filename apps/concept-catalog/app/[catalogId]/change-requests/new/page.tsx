@@ -32,12 +32,16 @@ const ChangeRequestOrNew = withReadProtectedPage(
         } else throw new Error('Error when searching for original concept');
       });
 
-      const [existingChangeRequest]: [ChangeRequest] = await searchChangeRequest(
-        catalogId,
-        `${conceptIdSearch}`,
-        session.accessToken,
-        'OPEN',
-      ).then((res) => res.json());
+        let existingChangeRequest: ChangeRequest | undefined = undefined;
+
+        if (originalConcept?.originaltBegrep) {
+            [existingChangeRequest] = await searchChangeRequest(
+                catalogId,
+                `${originalConcept?.originaltBegrep}`,
+                session.accessToken,
+                'OPEN',
+            ).then((res) => res.json());
+        }
 
       if (existingChangeRequest?.id && existingChangeRequest?.status === 'OPEN') {
         redirect(`/${catalogId}/change-requests/${existingChangeRequest.id}/edit`, RedirectType.replace);
