@@ -1,0 +1,26 @@
+.dialog {
+    max-width: 1000px;
+    overflow: hidden;
+}
+
+.content {
+    margin: var(--fds-spacing-8);
+    padding: var(--fds-spacing-8);
+    border: 1px solid var(--fds-semantic-border-neutral-subtle);
+    border-radius: var(--fds-border_radius-medium);
+    height: calc(100vh - 400px);
+}
+
+
+
+.sourceTable {
+    display: flex;
+    & > * {
+        flex-grow: 1;
+    }
+}
+
+.buttonRow {
+    display: flex;
+    margin-top: 1rem;
+}

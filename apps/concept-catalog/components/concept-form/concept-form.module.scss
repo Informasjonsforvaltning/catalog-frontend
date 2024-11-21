@@ -1,0 +1,110 @@
+.combobox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tabContent {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.fieldSet {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  &:not(first-child) {
+    padding-top: 1rem 0;
+  }
+}
+
+.divider {
+  padding: 1rem 0;
+
+}
+
+.tableRowActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.whiteSpaceNoWrap {
+  white-space: nowrap;
+}
+
+
+
+.definitionHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  & > div {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    
+    &:first-child {
+      gap: 0.5rem;
+    }
+  }
+}
+
+.definitionContent {
+  display: flex;
+
+  & div:last-child {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  & > * {
+    background-color: inherit;
+  }
+}
+
+.periodSection {
+  display: flex;
+  gap: 1rem;
+  & > svg {
+    padding-top: 2.5rem;
+  }
+}
+
+.contactSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.buttonRow {
+  display: flex;
+}
+
+.errorMessage {
+  font-size: 0.8rem;
+}
+
+.stickyFooterBar {
+  position: sticky;
+  bottom: 0px;  
+  background-color: #fff;  
+  border-top: 1px solid rgb(230, 230, 230);
+  box-shadow: #969ba0 0px 0px 10px -5px;
+  z-index: 10;
+}
+
+.stickyFooterContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 1rem;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 1rem;
+}

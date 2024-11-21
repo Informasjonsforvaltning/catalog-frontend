@@ -1,11 +1,11 @@
 import React from 'react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { KeyValueListItem } from '@catalog-frontend/ui';
-import { Relasjon, RelatedConcept } from '@catalog-frontend/types';
+import { UnionRelation, RelatedConcept } from '@catalog-frontend/types';
 import { Link } from '@digdir/designsystemet-react';
 
 interface Props {
-  seeAlso: Relasjon[];
+  seeAlso: UnionRelation[];
   validToIncluding: string | null | undefined;
   validFromIncluding: string | null | undefined;
   relatedConceptsMap: (identifier: string) => RelatedConcept | undefined;

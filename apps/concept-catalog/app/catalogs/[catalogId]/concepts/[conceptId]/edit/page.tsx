@@ -1,10 +1,13 @@
-import { getConcept, getOrganization } from '@catalog-frontend/data-access';
+import { getAllCodeLists, getConcept, getConceptStatuses, getFields, getOrganization, getUsers } from '@catalog-frontend/data-access';
 import { redirect, RedirectType } from 'next/navigation';
-import { Breadcrumbs, BreadcrumbType, PageBanner } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Organization } from '@catalog-frontend/types';
+import { Breadcrumbs, BreadcrumbType, Button, PageBanner } from '@catalog-frontend/ui';
+import { getTranslateText, localization, prepareStatusList } from '@catalog-frontend/utils';
+import { CodeListsResult, ConceptStatuses, FieldsResult, Organization, UsersResult } from '@catalog-frontend/types';
 import { withWriteProtectedPage } from '../../../../../../utils/auth';
 import ConceptForm from '../../../../../../components/concept-form';
+
+import { Alert } from '@digdir/designsystemet-react';
+import { EditPage } from './edit-page.client';
 
 export default withWriteProtectedPage(
   ({ catalogId, conceptId }) => `/${catalogId}/${conceptId}/edit`,
@@ -16,7 +19,22 @@ export default withWriteProtectedPage(
       return redirect(`/notfound`, RedirectType.replace);
     }
 
+    const conceptStatuses = await getConceptStatuses()
+      .then((response) => response.json())
+      .then((body) => body?.conceptStatuses ?? [])
+      .then((statuses) => prepareStatusList(statuses));
+      
     const organization: Organization = await getOrganization(catalogId).then((response) => response.json());
+    const codeListsResult: CodeListsResult = await getAllCodeLists(catalogId, `${session?.accessToken}`).then(
+      (response) => response.json(),
+    );
+    const fieldsResult: FieldsResult = await getFields(catalogId, `${session?.accessToken}`).then((response) =>
+      response.json(),
+    );
+    const usersResult: UsersResult = await getUsers(catalogId, `${session?.accessToken}`).then((response) =>
+      response.json(),
+    );
+    
     const getTitle = (text: string | string[]) => (text ? text : localization.concept.noName);
     const breadcrumbList = catalogId
       ? ([
@@ -36,19 +54,16 @@ export default withWriteProtectedPage(
       : [];
 
     return (
-      <>
-        <Breadcrumbs
-          breadcrumbList={breadcrumbList}
-          catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
-        />
-        <PageBanner
-          title={localization.catalogType.concept}
-          subtitle={getTranslateText(organization.prefLabel).toString()}
-        />
-        <div className='container'>
-          <ConceptForm concept={concept} />
-        </div>
-      </>
+      <EditPage
+        catalogId={catalogId}
+        breadcrumbList={breadcrumbList}
+        organization={organization}
+        concept={concept}
+        conceptStatuses={conceptStatuses}
+        codeListsResult={codeListsResult}
+        fieldsResult={fieldsResult}
+        usersResult={usersResult}
+      />
     );
   },
 );

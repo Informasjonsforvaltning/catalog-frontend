@@ -1,6 +1,6 @@
 'use client';
 
-import { QueryFilters, QuerySort, SearchableField } from '@catalog-frontend/types';
+import { QueryFilters, QuerySort, SearchableField, SearchConceptResponse } from '@catalog-frontend/types';
 import { SelectOption } from '@catalog-frontend/ui';
 import { useQuery } from '@tanstack/react-query';
 
@@ -29,6 +29,7 @@ export interface PageUpdate {
   fields: FieldOptions;
   sort?: QuerySort;
   filters?: QueryFilters;
+  enabled?: boolean;
 }
 
 export const fields = {
@@ -69,7 +70,7 @@ export const getSelectOptions = (object: any): SelectOption[] => {
   return options;
 };
 
-export const useSearchConcepts = ({ catalogId, searchTerm, page, fields, sort, filters }: PageUpdate) => {
+export const useSearchConcepts = ({ catalogId, searchTerm, page, fields, sort, filters, enabled }: PageUpdate) => {
   const hitsPerPage = 5;
   const body = {
     catalogId,
@@ -85,7 +86,7 @@ export const useSearchConcepts = ({ catalogId, searchTerm, page, fields, sort, f
     },
   };
 
-  return useQuery({
+  return useQuery<SearchConceptResponse>({
     queryKey: ['searchConcepts', body],
     queryFn: async () => {
       const response = await fetch('/api/search', {
@@ -99,5 +100,6 @@ export const useSearchConcepts = ({ catalogId, searchTerm, page, fields, sort, f
 
       return response.json();
     },
+    enabled,
   });
 };
