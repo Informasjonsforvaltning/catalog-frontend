@@ -1,5 +1,5 @@
-import { ContactDetails, RelationTypeEnum } from '@catalog-frontend/types';
-import { compareVersion, getTranslateText, localization, versionToString } from '@catalog-frontend/utils';
+import { RelationTypeEnum } from '@catalog-frontend/types';
+import { compareVersion, localization, versionToString } from '@catalog-frontend/utils';
 import { DateTime } from 'luxon';
 import * as Yup from 'yup';
 import { nb } from 'yup-locales';

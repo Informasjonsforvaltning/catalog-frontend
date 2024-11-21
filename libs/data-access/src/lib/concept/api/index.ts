@@ -67,14 +67,14 @@ export const searchInternalConcepts = (
   );
 
 const hasRelatedConcepts = (concept: Concept): boolean => {
-  if (!isObjectNullUndefinedEmpty(concept.begrepsRelasjon)) return true;
+  if (!isObjectNullUndefinedEmpty(concept.begrepsRelation)) return true;
   if (!isObjectNullUndefinedEmpty(concept.seOgså)) return true;
   if (!isObjectNullUndefinedEmpty(concept.erstattesAv)) return true;
   return false;
 };
 
 const hasRelatedInternalConcepts = (concept: Concept): boolean => {
-  if (!isObjectNullUndefinedEmpty(concept.internBegrepsRelasjon)) return true;
+  if (!isObjectNullUndefinedEmpty(concept.internBegrepsRelation)) return true;
   if (!isObjectNullUndefinedEmpty(concept.internSeOgså)) return true;
   if (!isObjectNullUndefinedEmpty(concept.internErstattesAv)) return true;
   return false;
@@ -85,8 +85,8 @@ export const getPublishedConceptRelations = (concept: Concept): UnionRelation[] 
 
   const conceptRelations: UnionRelation[] = [];
 
-  if (concept.begrepsRelasjon) {
-    conceptRelations.push(...concept.begrepsRelasjon.filter((relasjon) => !isObjectNullUndefinedEmpty(relasjon)));
+  if (concept.begrepsRelation) {
+    conceptRelations.push(...concept.begrepsRelation.filter((relasjon) => !isObjectNullUndefinedEmpty(relasjon)));
   }
 
   if (concept.seOgså) {
@@ -116,9 +116,9 @@ export const getPublishedRelatedConcepts = async (
 
   const relatedConceptsUris = [];
 
-  if (concept.begrepsRelasjon)
+  if (concept.begrepsRelation)
     relatedConceptsUris.push(
-      ...concept.begrepsRelasjon
+      ...concept.begrepsRelation
         .map((relasjon) => relasjon.relatertBegrep)
         .filter((value) => value !== null && value !== undefined),
     );
@@ -213,9 +213,9 @@ export const getUnpublishedConceptRelations = (concept: Concept): UnionRelation[
 
   const internalConceptRelations: UnionRelation[] = [];
 
-  if (concept.internBegrepsRelasjon) {
+  if (concept.internBegrepsRelation) {
     internalConceptRelations.push(
-      ...concept.internBegrepsRelasjon.filter((relasjon) => !isObjectNullUndefinedEmpty(relasjon)),
+      ...concept.internBegrepsRelation.filter((relasjon) => !isObjectNullUndefinedEmpty(relasjon)),
     );
   }
 
@@ -248,9 +248,9 @@ export const getUnpublishedRelatedConcepts = async (
 
   const unpublishedRelatedConceptsIds: string[] = [];
 
-  if (concept.internBegrepsRelasjon) {
+  if (concept.internBegrepsRelation) {
     unpublishedRelatedConceptsIds.push(
-      ...concept.internBegrepsRelasjon
+      ...concept.internBegrepsRelation
         .map((relasjon) => relasjon.relatertBegrep)
         .filter((value) => value !== null && value !== undefined)
         .filter(Boolean)
