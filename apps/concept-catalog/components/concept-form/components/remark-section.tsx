@@ -7,7 +7,7 @@ export const RemarkSection = () => {
     <Box>
       <FormikLanguageFieldset
         name='merknad'
-        as={TextareaWithPrefix}        
+        as={TextareaWithPrefix}      
         legend={
           <TitleWithTag
             title={localization.conceptForm.fieldLabel.remark}

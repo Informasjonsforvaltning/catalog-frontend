@@ -4,7 +4,6 @@ import { BreadcrumbType } from '@catalog-frontend/ui';
 import { getTranslateText, localization, prepareStatusList } from '@catalog-frontend/utils';
 import { CodeListsResult, FieldsResult, Organization, UsersResult } from '@catalog-frontend/types';
 import { withWriteProtectedPage } from '../../../../../../utils/auth';
-
 import { EditPage } from './edit-page.client';
 
 export default withWriteProtectedPage(
