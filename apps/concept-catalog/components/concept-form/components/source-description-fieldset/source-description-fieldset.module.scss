@@ -1,0 +1,27 @@
+.sourceDescription {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.languageButtons {
+  display: flex;
+
+  :global(.fds-btn) {
+    margin: 0.5rem 0;
+  }
+}
+
+table.sourceTable {
+  & td {
+    padding: 0 0.2rem;
+    &:last-of-type {
+      width: 1rem;
+    }
+
+    :global(.fds-btn) {
+      position: relative;
+      top: 0.8rem;
+    }
+  }
+}

@@ -4,6 +4,8 @@ import { Concept } from '@catalog-frontend/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { validOrganizationNumber } from '@catalog-frontend/utils';
 
+type ConceptImport = Omit<Concept, 'id' | 'ansvarligVirksomhet'>;
+
 const mapToSingleValue = (csvMap: Record<string, string[]>, key: string) => {
   const value = csvMap[key];
   if (value && value.length !== 1) {
@@ -128,7 +130,7 @@ const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Conc
   };
 };
 
-const attemptToParseJsonFile = (text: string): Promise<Omit<Concept, 'id' | 'ansvarligVirksomhet'>[]> => {
+const attemptToParseJsonFile = (text: string): Promise<ConceptImport[]> => {
   return new Promise((resolve, reject) => {
     try {
       const json = JSON.parse(text);
@@ -140,7 +142,7 @@ const attemptToParseJsonFile = (text: string): Promise<Omit<Concept, 'id' | 'ans
   });
 };
 
-const attemptToParseCsvFile = (text: string): Promise<Omit<Concept, 'id' | 'ansvarligVirksomhet'>[]> => {
+const attemptToParseCsvFile = (text: string): Promise<ConceptImport[]> => {
   return new Promise((resolve, reject) => {
     try {
       readString(text, {
@@ -170,7 +172,8 @@ export const useImportConcepts = (catalogId: string) => {
       }
 
       const content = await file.text();
-      let parsedText = [];
+      let parsedText: ConceptImport[] = [];
+      
       if (file.type === 'application/json') {
         parsedText = await attemptToParseJsonFile(content);
       } else if (file.type === 'text/csv') {
@@ -192,7 +195,7 @@ export const useImportConcepts = (catalogId: string) => {
           `Du er i ferd med å importere ${concepts.length} begreper. Dette vil opprette nye begreper i katalogen. Fortsette?`,
         )
       ) {
-        const response = await fetch('/api/concepts/import', { method: 'POST', body: JSON.stringify(concepts) });
+        const response = await fetch(`/api/catalogs/${catalogId}/concepts/import`, { method: 'POST', body: JSON.stringify(concepts) });
 
         if (response.status === 401) {
           return Promise.reject('Unauthorized');

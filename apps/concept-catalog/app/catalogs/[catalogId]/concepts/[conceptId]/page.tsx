@@ -18,7 +18,7 @@ import {
   FieldsResult,
   CodeListsResult,
   UsersResult,
-  Relasjon,
+  UnionRelation,
   RelatedConcept,
 } from '@catalog-frontend/types';
 import ConceptPageClient from './concept-page-client';
@@ -59,8 +59,8 @@ const ConceptPage = withReadProtectedPage(
       response.json(),
     );
 
-    const conceptRelations: Relasjon[] = getPublishedConceptRelations(concept);
-    const internalConceptRelations: Relasjon[] = getUnpublishedConceptRelations(concept);
+    const conceptRelations: UnionRelation[] = getPublishedConceptRelations(concept);
+    const internalConceptRelations: UnionRelation[] = getUnpublishedConceptRelations(concept);
     const relatedConcepts: RelatedConcept[] = await getPublishedRelatedConcepts(concept, session?.accessToken);
     const internalRelatedConcepts: RelatedConcept[] = await getUnpublishedRelatedConcepts(
       concept,
@@ -81,7 +81,7 @@ const ConceptPage = withReadProtectedPage(
       conceptRelations,
       internalConceptRelations,
       internalRelatedConcepts,
-      catalogPortalUrl: `${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`
+      catalogPortalUrl: `${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`,
     };
 
     return <ConceptPageClient {...clientProps} />;

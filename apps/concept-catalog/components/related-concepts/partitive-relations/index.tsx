@@ -1,11 +1,11 @@
 import React from 'react';
-import { Relasjon, RelatedConcept } from '@catalog-frontend/types';
+import { UnionRelation, RelatedConcept } from '@catalog-frontend/types';
 import { KeyValueListItem } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Link } from '@digdir/designsystemet-react';
 
 interface Props {
-  partitiveRelations: Relasjon[];
+  partitiveRelations: UnionRelation[];
   relatedConceptsMap: (identifier: string) => RelatedConcept | undefined;
 }
 

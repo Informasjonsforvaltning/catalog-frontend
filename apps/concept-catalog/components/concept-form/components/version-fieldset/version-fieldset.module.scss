@@ -1,0 +1,8 @@
+.versionFieldset {
+    display: flex;
+    gap: 1rem;
+
+    & :global(.fds-textfield) {
+        width: 8rem;
+    }
+}
