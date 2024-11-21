@@ -390,7 +390,7 @@ export const ConceptPageClient = ({
                     prefetch={false}
                     href={
                       validOrganizationNumber(catalogId) && validUUID(revision.id)
-                        ? `/${catalogId}/${revision.id}`
+                        ? `/catalogs/${catalogId}/concepts/${revision.id}`
                         : '#'
                     }
                     className={classes.versionTitle}
@@ -417,11 +417,11 @@ export const ConceptPageClient = ({
   const breadcrumbList = catalogId
     ? ([
         {
-          href: `/${catalogId}`,
+          href: `/catalogs/${catalogId}`,
           text: localization.catalogType.concept,
         },
         {
-          href: `/${catalogId}/${concept?.id}`,
+          href: `/catalogs/${catalogId}/concepts/${concept?.id}`,
           text: getTitle(translate(concept?.anbefaltTerm?.navn, language)),
         },
       ] as BreadcrumbType[])
@@ -849,7 +849,7 @@ export const ConceptPageClient = ({
               </>
             )}
             <LinkButton
-              href={`/${catalogId}/change-requests/new?concept=${concept?.id}`}
+              href={`/catalogs/${catalogId}/change-requests/new?concept=${concept?.id}`}
               variant='secondary'
               fullWidth={false}
             >

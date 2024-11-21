@@ -8,7 +8,7 @@ const NoAccess = async ({ params }) => {
   const breadcrumbList = catalogId
     ? ([
         {
-          href: `/${catalogId}`,
+          href: `/catalogs/${catalogId}`,
           text: localization.catalogType.concept,
         },
         {

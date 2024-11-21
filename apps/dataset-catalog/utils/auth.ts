@@ -41,12 +41,12 @@ const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', re
       session?.accessToken &&
       (hasOrganizationReadPermission(session?.accessToken, catalogId) || hasSystemAdminPermission(session.accessToken));
     if (!hasReadPermission) {
-      redirect(`/${catalogId}/no-access`, RedirectType.replace);
+      redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
 
     const hasWritePermission = session?.accessToken && hasOrganizationWritePermission(session.accessToken, catalogId);
     if (!hasWritePermission && permissions === 'write') {
-      redirect(`/${catalogId}/no-access`, RedirectType.replace);
+      redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
 
     const hasAdminPermission = session?.accessToken && hasOrganizationAdminPermission(session.accessToken, catalogId);

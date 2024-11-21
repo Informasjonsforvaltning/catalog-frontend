@@ -34,30 +34,47 @@ type Props = {
   usersResult: UsersResult;
 };
 
-const notifications = [
-  <Alert
-    key={1}
-    size='sm'
-    severity='warning'
-  >
-    Du har ulagrede endringer
-  </Alert>,
-  <Alert
-    key={2}
-    size='sm'
-    severity='info'
-  >
-    Du har en annen info melding
-  </Alert>,
+const getNotifications = ({ isValid, hasUnsavedChanges }) => [
+  ...(isValid
+    ? []
+    : [
+        <Alert
+          key={1}
+          size='sm'
+          severity='danger'
+        >
+          Skjemaet inneholder feil eller manglende informasjon. Vennligst kontroller feltene markert med rød tekst og
+          prøv igjen.
+        </Alert>,
+      ]),
+  ...(hasUnsavedChanges
+    ? [
+        <Alert
+          key={1}
+          size='sm'
+          severity='warning'
+        >
+          Du har ulagrede endringer
+        </Alert>,
+      ]
+    : []),
 ];
 
 const mapPropsToValues = (concept: Concept) => {
-  return concept;
+  return {
+    ...concept,
+    versjonsnr: {
+      major: `${concept.versjonsnr?.major}`,
+      minor: `${concept.versjonsnr?.minor}`,
+      patch: `${concept.versjonsnr?.patch}`
+    }
+  };
 };
 
 const ConceptForm = ({ concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }: Props) => {
   const { catalogId, conceptId } = useParams();
-  const [submitted, setSubmitted] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isCanceled, setIsCanceled] = useState(false);
 
   const router = useRouter();
 
@@ -82,6 +99,7 @@ const ConceptForm = ({ concept, conceptStatuses, codeListsResult, fieldsResult, 
   };
 
   const handleCancel = () => {
+    setIsCanceled(true);
     router.push(concept.id ? `/catalogs/${catalogId}/concepts/${concept.id}` : `/catalogs/${catalogId}/concepts`);
   };
 
@@ -89,30 +107,20 @@ const ConceptForm = ({ concept, conceptStatuses, codeListsResult, fieldsResult, 
     <Formik
       initialValues={mapPropsToValues(concept)}
       validationSchema={conceptSchema}
-      validateOnChange={submitted}
-      validateOnBlur={submitted}
+      validateOnChange={isSubmitted}
+      validateOnBlur={isSubmitted}
       onSubmit={(values, { setSubmitting }) => {
         const trimmedValues = trimObjectWhitespace(values);
 
-        console.log('submit', trimmedValues);
+       // console.log('submit', trimmedValues);
 
         conceptId === null ? handleCreate(trimmedValues) : handleUpdate(trimmedValues as Concept);
         setSubmitting(false);
-        setSubmitted(true);
+        setIsSubmitted(true);
       }}
     >
       {({ errors, values, isValid, isSubmitting, isValidating, submitForm }) => {
-        if (!isValid) {
-          notifications.push(
-            <Alert
-              size='sm'
-              severity='danger'
-            >
-              Skjema inneholder valideringsfeil
-            </Alert>,
-          );
-        }
-
+        const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
         return (
           <>
             <div className='container'>
@@ -218,7 +226,7 @@ const ConceptForm = ({ concept, conceptStatuses, codeListsResult, fieldsResult, 
                     <Button
                       size='sm'
                       type='button'
-                      disabled={isSubmitting || isValidating}
+                      disabled={isSubmitting || isValidating || isCanceled}
                       onClick={() => {
                         submitForm();
                         console.log('valid', isValid, 'errors', errors, 'values', values);
@@ -228,6 +236,7 @@ const ConceptForm = ({ concept, conceptStatuses, codeListsResult, fieldsResult, 
                     </Button>
                     <Button
                       size='sm'
+                      disabled={isCanceled}
                       onClick={handleCancel}
                       variant='secondary'
                     >
@@ -235,7 +244,7 @@ const ConceptForm = ({ concept, conceptStatuses, codeListsResult, fieldsResult, 
                     </Button>
                   </div>
                 </div>
-                <NotificationCarousel notifications={notifications} />
+                {notifications.length > 0 && <NotificationCarousel notifications={notifications} />}
               </div>
             </div>
           </>
