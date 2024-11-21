@@ -3,25 +3,20 @@ import {
   Box,
   Button,
   Card,
-  Chip,
   ErrorMessage,
   Fieldset,
   Heading,
-  HelpText,
-  List,
   Paragraph,
   Popover,
-  Table,
   Tag,
 } from '@digdir/designsystemet-react';
-import { FieldArray, useFormikContext } from 'formik';
+import { useFormikContext } from 'formik';
 import styles from '../concept-form.module.scss';
-import { PencilWritingIcon, PlusCircleIcon, PlusIcon, TrashIcon } from '@navikt/aksel-icons';
+import { PencilWritingIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { DefinitionModal } from './definition-modal';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { TitleWithTag } from '@catalog-frontend/ui';
-import { set } from 'lodash';
 import { HelpMarkdown } from './help-markdown';
 
 export const DefinitionSection = () => {

@@ -1,4 +1,4 @@
-import { Code, Concept, TreeNode } from '@catalog-frontend/types';
+import { Code, Concept } from '@catalog-frontend/types';
 import { TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Combobox, HelpText, Paragraph } from '@digdir/designsystemet-react';
