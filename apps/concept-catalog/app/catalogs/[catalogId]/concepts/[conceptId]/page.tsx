@@ -26,7 +26,7 @@ import { RedirectType, redirect } from 'next/navigation';
 import { withReadProtectedPage } from '../../../../../utils/auth';
 
 const ConceptPage = withReadProtectedPage(
-  ({ catalogId, conceptId }) => `/${catalogId}/${conceptId}`,
+  ({ catalogId, conceptId }) => `/catalogs/${catalogId}/concepts/${conceptId}`,
   async ({ catalogId, conceptId, session, hasWritePermission }) => {
     const concept = await getConcept(`${conceptId}`, `${session?.accessToken}`).then((response) => {
       if (response.ok) return response.json();

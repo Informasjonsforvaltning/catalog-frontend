@@ -12,7 +12,7 @@ import { ButtonRow } from '../../../../../components/buttons/button-row';
 import { withReadProtectedPage } from '../../../../../utils/auth';
 
 const ChangeRequestDetailsPage = withReadProtectedPage(
-  ({ catalogId, changeRequestId }) => `/${catalogId}/change-requests/${changeRequestId}`,
+  ({ catalogId, changeRequestId }) => `/catalogs/${catalogId}/change-requests/${changeRequestId}`,
   async ({ catalogId, changeRequestId, session, hasWritePermission }) => {
     const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
@@ -55,15 +55,15 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
 
     const breadcrumbList = [
       {
-        href: `/${catalogId}`,
+        href: `/catalogs/${catalogId}`,
         text: localization.concept.concept,
       },
       {
-        href: `/${catalogId}/change-requests`,
+        href: `/catalogs/${catalogId}/change-requests`,
         text: localization.changeRequest.changeRequest,
       },
       {
-        href: `/${catalogId}/change-requests/${changeRequest.id}`,
+        href: `/catalogs/${catalogId}/change-requests/${changeRequest.id}`,
         text: changeRequest.title,
       },
     ] as BreadcrumbType[];
@@ -82,7 +82,7 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
     const headingTitle = changeRequest.conceptId ? (
       <h1>
         <NextLink
-          href={`/${catalogId}/${changeRequest.conceptId}`}
+          href={`/catalogs/${catalogId}/change-requests/${changeRequest.conceptId}`}
           passHref
           legacyBehavior
         >

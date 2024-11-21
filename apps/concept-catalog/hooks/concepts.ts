@@ -37,7 +37,7 @@ export const useDeleteConcept = (catalogId: string) => {
     },
     onSuccess() {
       if (validOrganizationNumber(catalogId)) {
-        router.push(`/${catalogId}`);
+        router.push(`/catalogs/${catalogId}`);
       }
     },
   });

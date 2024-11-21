@@ -70,7 +70,7 @@ export const EditChangeRequestButton = ({ catalogId, changeRequestId }: Props) =
 
   return (
     <LinkButton
-      href={`/${catalogId}/change-requests/${changeRequestId}/edit`}
+      href={`/catalogs/${catalogId}/change-requests/${changeRequestId}/edit`}
       variant='secondary'
       color='second'
     >

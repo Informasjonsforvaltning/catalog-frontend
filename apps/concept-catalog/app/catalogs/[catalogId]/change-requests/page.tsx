@@ -4,7 +4,7 @@ import ChangeRequestsPageClient from './change-requests-page-client';
 import { withReadProtectedPage } from '../../../../utils/auth';
 
 const ChangeRequestsPage = withReadProtectedPage(
-  ({ catalogId }) => `/${catalogId}/change-requests`,
+  ({ catalogId }) => `/catalogs/${catalogId}/change-requests`,
   async ({ catalogId, session }) => {
     const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 

@@ -48,13 +48,15 @@ export const NotificationCarousel = ({ controlsPosition = 'right', notifications
   );
 
   useEffect(() => {
-    const timer = setInterval(nextNotification, interval);
-    return () => clearInterval(timer); // Cleanup on unmount
+    if(notifications.length > 1) {
+      const timer = setInterval(nextNotification, interval);
+      return () => clearInterval(timer); // Cleanup on unmount
+    }
   }, [interval, notifications.length]);
 
   return (
     <div className={styles.carouselContainer}>
-      {controlsPosition === 'left' && (
+      {notifications.length > 1 && controlsPosition === 'left' && (
         <Controls />
       )}
       <div
@@ -66,7 +68,7 @@ export const NotificationCarousel = ({ controlsPosition = 'right', notifications
       >
         {notifications[currentIndex]}
       </div>
-      {controlsPosition === 'right' && (
+      {notifications.length > 1 && controlsPosition === 'right' && (
         <Controls />
       )}
     </div>
