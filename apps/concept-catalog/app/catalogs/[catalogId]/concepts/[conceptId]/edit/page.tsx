@@ -1,12 +1,10 @@
 import { getAllCodeLists, getConcept, getConceptStatuses, getFields, getOrganization, getUsers } from '@catalog-frontend/data-access';
 import { redirect, RedirectType } from 'next/navigation';
-import { Breadcrumbs, BreadcrumbType, Button, PageBanner } from '@catalog-frontend/ui';
+import { BreadcrumbType } from '@catalog-frontend/ui';
 import { getTranslateText, localization, prepareStatusList } from '@catalog-frontend/utils';
-import { CodeListsResult, ConceptStatuses, FieldsResult, Organization, UsersResult } from '@catalog-frontend/types';
+import { CodeListsResult, FieldsResult, Organization, UsersResult } from '@catalog-frontend/types';
 import { withWriteProtectedPage } from '../../../../../../utils/auth';
-import ConceptForm from '../../../../../../components/concept-form';
 
-import { Alert } from '@digdir/designsystemet-react';
 import { EditPage } from './edit-page.client';
 
 export default withWriteProtectedPage(

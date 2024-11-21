@@ -1,16 +1,14 @@
 import { Concept } from '@catalog-frontend/types';
-import { Box, Fieldset, Combobox, Textfield, CheckboxGroup, Checkbox } from '@digdir/designsystemet-react';
-import { FastField, Field, useFormikContext } from 'formik';
-import { values } from 'lodash';
+import { Box, Fieldset, Textfield, CheckboxGroup, Checkbox } from '@digdir/designsystemet-react';
+import { FastField, useFormikContext } from 'formik';
 import { useState } from 'react';
-import { TextareaWithPrefix } from './texarea';
 import { TitleWithTag } from '@catalog-frontend/ui';
 import styles from '../concept-form.module.scss';
 import { localization } from '@catalog-frontend/utils';
 import { HelpMarkdown } from './help-markdown';
 
 export const ContactSection = () => {
-  const { errors, values, setFieldValue } = useFormikContext<Concept>();
+  const { errors, values } = useFormikContext<Concept>();
   const [selectedFields, setSelectedFields] = useState<string[]>([
     ...(values.kontaktpunkt?.harEpost ? ['email'] : []),
     ...(values.kontaktpunkt?.harTelefon ? ['phone'] : []),
