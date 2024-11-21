@@ -13,7 +13,7 @@ interface Props {
 export function TitleWithTag({ title, tagTitle, tagColor = 'warning', tagSize = 'small' }: Props) {
   return (
     <div className={styles.container}>
-      {typeof title === 'string' ? <Label>{title}</Label> : title}
+      {typeof title === 'string' ? <Label size='sm'>{title}</Label> : title}
       {tagTitle && (
         <Tag
         color={tagColor}

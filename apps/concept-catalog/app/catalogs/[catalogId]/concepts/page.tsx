@@ -11,7 +11,7 @@ import { SearchPageClient } from './search-page-client';
 import { withReadProtectedPage } from '../../../../utils/auth';
 
 const SearchPage = withReadProtectedPage(
-  ({ catalogId }) => `/${catalogId}`,
+  ({ catalogId }) => `/catalogs/${catalogId}`,
   async ({ catalogId, session, hasWritePermission, hasAdminPermission }) => {
     const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 

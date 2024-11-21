@@ -12,7 +12,7 @@ import { withReadProtectedPage } from '../../../../../utils/auth';
 
 const ChangeRequestOrNew = withReadProtectedPage(
   ({ catalogId, conceptIdSearch }) =>
-    `/${catalogId}/change-requests/new${conceptIdSearch ? `?conceptId=${conceptIdSearch}` : ''}`,
+    `/catalogs/${catalogId}/change-requests/new${conceptIdSearch ? `?conceptId=${conceptIdSearch}` : ''}`,
   async ({ catalogId, conceptIdSearch, session }) => {
     const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
     const baselineConcept: Concept = {
@@ -44,7 +44,7 @@ const ChangeRequestOrNew = withReadProtectedPage(
         }
 
       if (existingChangeRequest?.id && existingChangeRequest?.status === 'OPEN') {
-        redirect(`/${catalogId}/change-requests/${existingChangeRequest.id}/edit`, RedirectType.replace);
+        redirect(`/catalogs/${catalogId}/change-requests/${existingChangeRequest.id}/edit`, RedirectType.replace);
       }
     }
 
@@ -67,15 +67,15 @@ const ChangeRequestOrNew = withReadProtectedPage(
 
     const breadcrumbList = [
       {
-        href: `/${catalogId}`,
+        href: `/catalogs/${catalogId}`,
         text: localization.concept.concept,
       },
       {
-        href: `/${catalogId}/change-requests`,
+        href: `/catalogs/${catalogId}/change-requests`,
         text: localization.changeRequest.changeRequest,
       },
       {
-        href: `/${catalogId}/change-requests/new`,
+        href: `/catalogs/${catalogId}/change-requests/new`,
         text: conceptIdSearch ? localization.changeRequest.newChangeRequest : localization.suggestionForNewConcept,
       },
     ] as BreadcrumbType[];

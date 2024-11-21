@@ -11,7 +11,7 @@ import styles from '../../change-requests-page.module.css';
 import ChangeRequestEditPageClient from './change-request-edit-page-client';
 
 const ChangeRequestEditPage = withReadProtectedPage(
-  ({ catalogId, changeRequestId }) => `/${catalogId}/change-requests/${changeRequestId}/edit`,
+  ({ catalogId, changeRequestId }) => `/catalogs/${catalogId}/change-requests/${changeRequestId}/edit`,
   async ({ catalogId, changeRequestId, session }) => {
     const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
@@ -54,19 +54,19 @@ const ChangeRequestEditPage = withReadProtectedPage(
 
     const breadcrumbList = [
       {
-        href: `/${catalogId}`,
+        href: `/catalogs/${catalogId}`,
         text: localization.concept.concept,
       },
       {
-        href: `/${catalogId}/change-requests`,
+        href: `/catalogs/${catalogId}/change-requests`,
         text: localization.changeRequest.changeRequest,
       },
       {
-        href: `/${catalogId}/change-requests/${changeRequest.id}`,
+        href: `/catalogs/${catalogId}/change-requests/${changeRequest.id}`,
         text: changeRequest.title,
       },
       {
-        href: `/${catalogId}/change-requests/${changeRequest.id}/edit`,
+        href: `/catalogs/${catalogId}/change-requests/${changeRequest.id}/edit`,
         text: localization.edit,
       },
     ] as BreadcrumbType[];
@@ -85,7 +85,7 @@ const ChangeRequestEditPage = withReadProtectedPage(
     const headingTitle = changeRequest.conceptId ? (
       <h1>
         <NextLink
-          href={`/${catalogId}/${changeRequest.conceptId}`}
+          href={`/catalogs/${catalogId}/change-requests/${changeRequest.conceptId}`}
           passHref
           legacyBehavior
         >

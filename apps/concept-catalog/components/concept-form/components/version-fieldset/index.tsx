@@ -1,19 +1,17 @@
 import { Textfield } from '@digdir/designsystemet-react';
 import styles from './version-fieldset.module.scss';
-import { useFormikContext } from 'formik';
+import { FastField } from 'formik';
 
 export type VersionFieldsetProps = {
     name: string;
 };
 
-export const VersionFieldset = <T,>({ name }) => {
-  const { values } = useFormikContext<T>();
-
+export const VersionFieldset = ({ name }) => {
   return (
     <fieldset className={styles.versionFieldset}>
-      <Textfield label='Major' size='sm' value={values[`${name}.major`]} />
-      <Textfield label='Minor' size='sm' value={values[`${name}.minor`]} />
-      <Textfield label='Patch' size='sm' value={values[`${name}.patch`]} />
+      <FastField  as={Textfield} type='number' label='Major' size='sm' name={`${name}.major`} />      
+      <FastField  as={Textfield}  type='number' label='Minor' size='sm' name={`${name}.minor`} />
+      <FastField  as={Textfield}  type='number' label='Patch' size='sm' name={`${name}.patch`} />
     </fieldset>
   );
 };

@@ -1,13 +1,14 @@
 import { Box, Textfield } from '@digdir/designsystemet-react';
-import styles from '../concept-form.module.scss';
 import { MinusIcon } from '@navikt/aksel-icons';
+import { FastField } from 'formik';
+import styles from '../concept-form.module.scss';
 
 export const PeriodSection = () => {
   return (
     <Box className={styles.periodSection}>
-      <Textfield type='date' size='sm' label='Gyldig fra og med' />
+      <FastField as={Textfield} type='date' name='gyldigFom' size='sm' label='Gyldig fra og med' />
       <MinusIcon title="a11y-title" fontSize="1rem" />
-      <Textfield type='date' size='sm' label='Gyldig til og med'/>      
+      <FastField as={Textfield} type='date' name='gyldigTom' size='sm' label='Gyldig til og med'/>      
     </Box>
   );
 };

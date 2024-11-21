@@ -2,7 +2,7 @@
 
 import React, { FC, useEffect } from 'react';
 import { FastField, Field, useFormikContext } from 'formik';
-import { AssignedUser, CodeList, InternalField } from '@catalog-frontend/types';
+import { AssignedUser, CodeList, Concept, InternalField } from '@catalog-frontend/types';
 import { capitalizeFirstLetter, getTranslateText } from '@catalog-frontend/utils';
 import {
   Box,
@@ -24,12 +24,13 @@ export type InternalSectionProps = {
   codeLists: CodeList[];
 };
 
-const renderInternalField = (
-  internalField: InternalField,
-  values: any,
-  userList: AssignedUser[],
-  codeLists: CodeList[],
-) => {
+const renderInternalField = ({
+  values,
+  setFieldValue,
+  internalField,  
+  userList,
+  codeLists,
+}) => {
   const Legend = () => (
     <TitleWithTag
       title={
@@ -141,7 +142,7 @@ const renderInternalField = (
 };
 
 export const InternalSection = ({ internalFields, userList, codeLists }: InternalSectionProps) => {
-  const { errors, values } = useFormikContext();
+  const { errors, values, setFieldValue } = useFormikContext<Concept>();
 
   return (
     <Box>
@@ -165,8 +166,9 @@ export const InternalSection = ({ internalFields, userList, codeLists }: Interna
         }
       >
         <Combobox
-          name='assignedUser'
           size='sm'
+          value={values.assignedUser ? [values.assignedUser] : []}
+          onValueChange={(val) => setFieldValue('assignedUser', val[0])}
         >
           <Combobox.Empty>Fant ingen treff</Combobox.Empty>
           {userList?.map((user) => {
@@ -211,10 +213,10 @@ export const InternalSection = ({ internalFields, userList, codeLists }: Interna
           error={errors?.['abbreviatedLabel']}
         />
       </Fieldset>
-      {internalFields?.map((field) => (
-        <div key={field.id}>
+      {internalFields?.map((internalField) => (
+        <div key={internalField.id}>
           <FieldsetDivider />
-          {renderInternalField(field, values, userList, codeLists)}
+          {renderInternalField({internalField, values, setFieldValue, userList, codeLists})}
         </div>
       ))}
     </Box>
