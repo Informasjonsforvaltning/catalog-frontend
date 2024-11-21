@@ -14,6 +14,7 @@
 
 .headerContainer {
   align-items: center;
+  justify-content: space-between;
   display: flex;
   overflow-wrap: break-word;
   width: 100%;
@@ -54,7 +55,7 @@
   color: inherit;
 }
 
-.logoutIcon {
+.icon {
   height: 20px;
   width: 20px;
   padding-right: 5px;
@@ -120,6 +121,10 @@
   }
 }
 
+.menuButton {
+  color: currentColor;
+}
+
 .externalLink {
   display: flex;
   align-items: center;
@@ -128,7 +133,24 @@
   gap: 0.1rem;
 }
 
-.icon {
-  display: flex;
-  align-items: center;
+.userInfo {
+  & div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    & span:last-child {
+      font-style: italic;
+      color: var(--fds-semantic-text-neutral-subtle);
+    }
+  }
+
+  :global(.fds-btn) {
+    color: var(--fds-semantic-text-neutral-default);
+    &:hover {
+      background-color: inherit;
+      cursor: inherit;
+      color: inherit
+    }
+  }
 }

@@ -7,19 +7,21 @@ type Variant = 'default' | 'secondary';
 
 interface Props extends PropsWithChildren {
   variant?: Variant;
+  className?: string;
 }
 
 interface HeaderProps {
+  id: string;
   title: string;
   subtitle?: string;
-  variant?: Variant;
+  variant?: Variant;  
 }
 
 const FormContainer: FC<PropsWithChildren<Props>> & {
   Header: FC<HeaderProps>;
-} = ({ variant = 'default', children }) => {
+} = ({ variant = 'default', className, children }) => {
   return (
-    <div className={cn(styles.container, styles[variant])}>
+    <div className={cn(styles.container, styles[variant], className)}>
       {React.Children.map(children, (child) =>
         React.isValidElement(child) && child.type === Header ? (
           <div className={styles.headerWrapper}>{child}</div>
@@ -31,9 +33,9 @@ const FormContainer: FC<PropsWithChildren<Props>> & {
   );
 };
 
-const Header: FC<HeaderProps> = ({ title, subtitle, variant = 'default' }) => {
+const Header: FC<HeaderProps> = ({ id, title, subtitle, variant = 'default' }) => {
   return (
-    <div className={cn(styles.header, styles[variant])}>
+    <div id={id} className={cn(styles.header, styles[variant])}>
       <Heading className={styles.title}>{title}</Heading>
       <Paragraph className={styles.subtitle}>{subtitle}</Paragraph>
     </div>

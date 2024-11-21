@@ -61,6 +61,7 @@ export interface UriText {
 export interface ContactDetails {
   harEpost?: string;
   harTelefon?: string;
+  harSkjema?: string;
 }
 
 export interface AnbefaltTerm {
@@ -86,12 +87,28 @@ export interface Endringslogelement {
   endringstidspunkt: string;
 }
 
-export interface Relasjon {
-  relasjon?: string;
-  relasjonsType?: string;
+export type UnionRelation = {
+  relasjon?: UnionRelationTypeEnum;
+  relasjonsType?: UnionRelationSubtypeEnum;
   beskrivelse?: LocalizedStrings;
   inndelingskriterium?: LocalizedStrings;
   relatertBegrep?: string;
+  internal?: boolean
+};
+
+export enum UnionRelationTypeEnum {
+  ASSOSIATIV = 'assosiativ',
+  GENERISK = 'generisk',
+  PARTITIV = 'partitiv',
+  SE_OGSÅ = 'seOgså',
+  ERSTATTES_AV = 'erstattesAv',
+}
+
+export enum UnionRelationSubtypeEnum {
+  OVERORDNET = 'overordnet',
+  UNDERORDNET = 'underordnet',
+  ER_DEL_AV = 'erDelAv',
+  OMFATTER = 'omfatter',
 }
 
 export type RelatedConcept = {
@@ -126,7 +143,7 @@ export interface Concept {
   gyldigTom?: string | null;
   gjeldendeRevisjon?: string;
   seOgså: string[];
-  internBegrepsRelasjon?: Relasjon[];
+  internBegrepsRelasjon?: UnionRelation[];
   internSeOgså?: string[];
   internErstattesAv?: string[];
   erstattesAv?: string[];
@@ -136,7 +153,7 @@ export interface Concept {
   revisjonAvSistPublisert?: boolean;
   endringslogelement?: Endringslogelement;
   assignedUser?: string;
-  begrepsRelasjon?: Relasjon[];
+  begrepsRelasjon?: UnionRelation[];
   erPublisert?: boolean;
   publiseringsTidspunkt?: string;
   opprettet?: string;

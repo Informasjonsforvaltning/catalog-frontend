@@ -202,6 +202,8 @@ export const nb = {
     harvestData: 'Høste data',
     dataCommunity: 'Datalandsbyen',
     nationalDataCatalog: 'Data.norge.no',
+    contactUs: 'Kontakt oss',
+    menu: 'Meny'
   },
 
   tag: {
@@ -300,7 +302,7 @@ export const nb = {
 
   concept: {
     abbreviation: 'Forkortelse',
-    allowedTerm: 'Tillatt term',
+    altLabel: 'Tillatt term',
     associativeRelation: 'Assosiativ relasjon',
     concept: 'Begrep',
     confirmDelete: 'Er du sikker du ønsker å slette begrepet?',
@@ -320,8 +322,8 @@ export const nb = {
     label: 'Merkelapp',
     dateLastUpdated: 'Dato sist oppdatert',
     noName: 'Uten navn',
-    notRecommendedTerm: 'Frarådet term',
-    note: 'Merknad',
+    hiddenLabel: 'Frarådet term',
+    remark: 'Merknad',
     partitiveRelation: 'Partitiv relasjon',
     preferredTerm: 'Anbefalt term',
     publicDefinition: 'Definisjon for allmennheten',

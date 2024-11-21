@@ -21,6 +21,7 @@ interface LayoutProps {
   fdkCommunityBaseUrl?: string;
   fdkBaseUrl?: string;
   catalogTitle?: string;
+  displayFooter?: boolean;
 }
 
 export const Layout = ({
@@ -34,6 +35,7 @@ export const Layout = ({
   fdkCommunityBaseUrl,
   fdkBaseUrl,
   catalogTitle,
+  displayFooter = true
 }: LayoutProps) => {
   return (
     <div className={cn(style.layout, className)}>
@@ -54,10 +56,12 @@ export const Layout = ({
           {children}
         </ErrorBoundary>
       </main>
-      <Footer
+      {displayFooter && (
+        <Footer
         fontColor={fontColor}
         backgroundColor={backgroundColor}
       />
+      )}      
     </div>
   );
 };
