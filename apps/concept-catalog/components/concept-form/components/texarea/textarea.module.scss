@@ -1,0 +1,31 @@
+.textareaWithPrefix {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fds-spacing-2);
+  
+    & .prefix {
+      border: 1px solid var(--fds-semantic-border-neutral-default);
+      border-top-left-radius: var(--fds-border_radius-medium);
+      border-top-right-radius: var(--fds-border_radius-medium);
+      padding: 0;
+      background: var(--fds-semantic-surface-neutral-subtle);
+      color: var(--fds-semantic-border-neutral-default);
+      display: flex;
+      justify-content: space-between;
+  
+      & > p {
+        padding: 0.65rem var(--fds-spacing-4);
+        color: var(--fds-semantic-border-neutral-default);
+      }
+  
+      & > * {
+        background-color: transparent;
+       }
+    }
+  
+    :global(.fds-textarea__input) {
+      border-top: 0;
+      border-radius: 0;
+    }
+  }
+  

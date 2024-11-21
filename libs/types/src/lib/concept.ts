@@ -93,6 +93,22 @@ export type Relation = {
   beskrivelse?: LocalizedStrings;
   inndelingskriterium?: LocalizedStrings;
   relatertBegrep?: string;
+  internal?: boolean
+};
+
+export enum UnionRelationTypeEnum {
+  ASSOSIATIV = 'assosiativ',
+  GENERISK = 'generisk',
+  PARTITIV = 'partitiv',
+  SE_OGSÅ = 'seOgså',
+  ERSTATTES_AV = 'erstattesAv',
+}
+
+export enum UnionRelationSubtypeEnum {
+  OVERORDNET = 'overordnet',
+  UNDERORDNET = 'underordnet',
+  ER_DEL_AV = 'erDelAv',
+  OMFATTER = 'omfatter',
 }
 
 export type UnionRelation = Relation & {
