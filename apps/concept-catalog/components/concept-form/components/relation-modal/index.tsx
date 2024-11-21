@@ -1,13 +1,7 @@
-import { TitleWithTag } from '@catalog-frontend/ui';
-import { Button, Fieldset, HelpText, Modal, Radio } from '@digdir/designsystemet-react';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { Button, Modal } from '@digdir/designsystemet-react';
+import { ReactNode, useRef, useState } from 'react';
 import styles from './relation-modal.module.scss';
-import { LanguageFieldset } from '../language-fieldset';
-import { TextareaWithPrefix } from '../texarea';
-import { localization } from '@catalog-frontend/utils';
-import { FieldsetDivider } from '../fieldset-divider';
-import { SourceDescriptionFieldset } from '../source-description-fieldset';
-import { Form, Formik } from 'formik';
+import { Formik } from 'formik';
 import { UnionRelation, UnionRelationTypeEnum,  } from '@catalog-frontend/types';
 import { unionRelationSchema } from '../../validation-schema';
 import { RelationFieldset } from '../relation-fieldset';

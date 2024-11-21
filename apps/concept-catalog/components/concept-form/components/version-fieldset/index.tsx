@@ -1,4 +1,4 @@
-import { Box, Textfield } from '@digdir/designsystemet-react';
+import { Textfield } from '@digdir/designsystemet-react';
 import styles from './version-fieldset.module.scss';
 import { useFormikContext } from 'formik';
 
@@ -7,7 +7,7 @@ export type VersionFieldsetProps = {
 };
 
 export const VersionFieldset = <T,>({ name }) => {
-  const { errors, values, setFieldValue } = useFormikContext<T>();
+  const { values } = useFormikContext<T>();
 
   return (
     <fieldset className={styles.versionFieldset}>

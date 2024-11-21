@@ -3,10 +3,10 @@
 import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { CodeListsResult, Concept, FieldsResult, ReferenceDataCode, UsersResult } from '@catalog-frontend/types';
 import { Button, FormLayout } from '@catalog-frontend/ui';
-import { Formik, Form, FormikProps } from 'formik';
+import { Formik, Form } from 'formik';
 import { useParams, useRouter } from 'next/navigation';
 import { createConcept, updateConcept } from '../../app/actions/concept/actions';
-import { forwardRef, Ref, useState } from 'react';
+import { useState } from 'react';
 import { conceptSchema } from './validation-schema';
 import { TermSection } from './components/term-section';
 import { DefinitionSection } from './components/definition-section';
@@ -36,12 +36,14 @@ type Props = {
 
 const notifications = [
   <Alert
+    key={1}
     size='sm'
     severity='warning'
   >
     Du har ulagrede endringer
   </Alert>,
   <Alert
+    key={2}
     size='sm'
     severity='info'
   >

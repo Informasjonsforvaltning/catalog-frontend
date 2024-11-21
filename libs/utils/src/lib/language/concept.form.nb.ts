@@ -10,7 +10,25 @@ Representasjon av et begrep ved et uttrykk som beskriver det og atskiller det fr
     contactInfo: `Egenskapen brukes til å oppgi kontaktpunkt som kan nås ved f.eks. spørsmål om begrepet.
 
 Det er mulig å velge flere kontaktpunkter (e-post, telefonnummer og kontaktskjema).
-`
+`,
+    relation: `
+Et begrep kan ha relasjoner til andre begreper. En relasjon består av to begreper pluss en
+betydning som kan uttrykkes med tekst eller type. Det finnes tre hovedgrupper av relasjoner:
+generiske, partitive og assosiative.
+
+__Generisk:__ enten det begrepet som dette begrepet spesialiserer, eller det begrepet som dette
+begrepet generaliserer
+
+__Partitiv:__ enten det begrepet som dette begrepet er del av, eller det begrepet som dette begrepet
+inneholder
+
+__Assosiativ:__ det begrepet som dette begrepet er relatert til, og med relasjonstype, eventuelt
+uttrykt som begrepets relasjonsrolle overfor det andre begrepet
+
+Relasjon _Se også_ og _Erstattes av_ er predefinerte assosiative relasjoner.
+`,
+    relationLevel: `Eksempler på ofte brukte relasjonsroller for begreper i assosiative relasjoner: 
+    _har nært samsvar med_, _har eksakt samsvar med_.`
   },
   heading: {
     term: '1. Term'
