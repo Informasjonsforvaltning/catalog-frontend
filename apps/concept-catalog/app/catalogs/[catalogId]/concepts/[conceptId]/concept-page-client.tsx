@@ -34,14 +34,14 @@ import {
   AssignedUser,
   Organization,
   ReferenceDataCode,
-  Relasjon,
+  UnionRelation,
   RelatedConcept,
 } from '@catalog-frontend/types';
 import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
 import { Accordion, Chip, Switch, Tabs, Textarea } from '@digdir/designsystemet-react';
 import _ from 'lodash';
-import classes from './concept-page.module.css';
+import classes from './concept-page.module.scss';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../../../hooks/comments';
 import { useGetHistory } from '../../../../../hooks/history';
 import { useDeleteConcept, usePublishConcept } from '../../../../../hooks/concepts';
@@ -81,8 +81,8 @@ type ConceptPageClientProps = {
   usersResult: {
     users: AssignedUser[];
   };
-  conceptRelations: Relasjon[];
-  internalConceptRelations: Relasjon[];
+  conceptRelations: UnionRelation[];
+  internalConceptRelations: UnionRelation[];
   relatedConcepts: RelatedConcept[];
   internalRelatedConcepts: RelatedConcept[];
   catalogPortalUrl: string;
@@ -671,7 +671,7 @@ export const ConceptPageClient = ({
             </InfoCard.Item>
           )}
         {!_.isEmpty(translate(concept?.merknad, language)) && (
-          <InfoCard.Item title={`${localization.concept.note}:`}>
+          <InfoCard.Item title={`${localization.concept.remark}:`}>
             <span>{translate(concept?.merknad, language)}</span>
           </InfoCard.Item>
         )}
@@ -686,19 +686,19 @@ export const ConceptPageClient = ({
           </InfoCard.Item>
         )}
         {!_.isEmpty(translate(concept?.tillattTerm, language)) && (
-          <InfoCard.Item title={`${localization.concept.allowedTerm}:`}>
+          <InfoCard.Item title={`${localization.concept.altLabel}:`}>
             <ul>
               {ensureStringArray(translate(concept?.tillattTerm, language)).map((term, i) => (
-                <li key={`allowedTerm-${i}`}>{term}</li>
+                <li key={`altLabel-${i}`}>{term}</li>
               ))}
             </ul>
           </InfoCard.Item>
         )}
         {!_.isEmpty(translate(concept?.frarådetTerm, language)) && (
-          <InfoCard.Item title={`${localization.concept.notRecommendedTerm}:`}>
+          <InfoCard.Item title={`${localization.concept.hiddenLabel}:`}>
             <ul>
               {ensureStringArray(translate(concept?.frarådetTerm, language)).map((term, i) => (
-                <li key={`notRecommendedTerm-${i}`}>{term}</li>
+                <li key={`hiddenLabel-${i}`}>{term}</li>
               ))}
             </ul>
           </InfoCard.Item>

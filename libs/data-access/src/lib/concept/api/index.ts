@@ -1,4 +1,4 @@
-import { Concept, Relasjon, SearchConceptQuery, Search, RelatedConcept } from '@catalog-frontend/types';
+import { Concept, UnionRelation, SearchConceptQuery, Search, RelatedConcept, UnionRelationTypeEnum } from '@catalog-frontend/types';
 import { searchConceptsByUri } from '../../search/api';
 import { getUniqueConceptIdsFromUris, isObjectNullUndefinedEmpty } from '@catalog-frontend/utils';
 import { Operation } from 'fast-json-patch';
@@ -33,7 +33,7 @@ export const getConceptRevisions = (conceptId: string, accessToken: string) =>
 export const createConcept = (concept: Partial<Concept>, accessToken: string) =>
   conceptCatalogApiCall('POST', `/begreper`, concept, accessToken);
 
-export const patchConcept = (conceptId:string, patchOperations: Operation[], accessToken: string) =>
+export const patchConcept = (conceptId: string, patchOperations: Operation[], accessToken: string) =>
   conceptCatalogApiCall('PATCH', `/begreper/${conceptId}`, patchOperations, accessToken);
 
 export const importConcepts = (concepts: Omit<Concept, 'id'>[], accessToken: string) =>
@@ -67,39 +67,41 @@ export const searchInternalConcepts = (
   );
 
 const hasRelatedConcepts = (concept: Concept): boolean => {
-  if (!isObjectNullUndefinedEmpty(concept.begrepsRelasjon)) return true;
+  if (!isObjectNullUndefinedEmpty(concept.begrepsRelation)) return true;
   if (!isObjectNullUndefinedEmpty(concept.seOgså)) return true;
   if (!isObjectNullUndefinedEmpty(concept.erstattesAv)) return true;
   return false;
 };
 
 const hasRelatedInternalConcepts = (concept: Concept): boolean => {
-  if (!isObjectNullUndefinedEmpty(concept.internBegrepsRelasjon)) return true;
+  if (!isObjectNullUndefinedEmpty(concept.internBegrepsRelation)) return true;
   if (!isObjectNullUndefinedEmpty(concept.internSeOgså)) return true;
   if (!isObjectNullUndefinedEmpty(concept.internErstattesAv)) return true;
   return false;
 };
 
-export const getPublishedConceptRelations = (concept: Concept): Relasjon[] => {
+export const getPublishedConceptRelations = (concept: Concept): UnionRelation[] => {
   if (!hasRelatedConcepts(concept)) return [];
 
-  const conceptRelations: Relasjon[] = [];
+  const conceptRelations: UnionRelation[] = [];
 
-  if (concept.begrepsRelasjon) {
-    conceptRelations.push(...concept.begrepsRelasjon.filter((relasjon) => !isObjectNullUndefinedEmpty(relasjon)));
+  if (concept.begrepsRelation) {
+    conceptRelations.push(...concept.begrepsRelation.filter((relasjon) => !isObjectNullUndefinedEmpty(relasjon)));
   }
 
   if (concept.seOgså) {
     if (Array.isArray(concept.seOgså)) {
-      conceptRelations.push(...concept.seOgså.map((uri): Relasjon => ({ relatertBegrep: uri, relasjon: 'seOgså' })));
+      conceptRelations.push(
+        ...concept.seOgså.map((uri): UnionRelation => ({ relatertBegrep: uri, relasjon: UnionRelationTypeEnum.SE_OGSÅ })),
+      );
     } else {
-      conceptRelations.push({ relatertBegrep: concept.seOgså, relasjon: 'seOgså' });
+      conceptRelations.push({ relatertBegrep: concept.seOgså, relasjon: UnionRelationTypeEnum.SE_OGSÅ });
     }
   }
 
   if (concept.erstattesAv) {
     conceptRelations.push(
-      ...concept.erstattesAv.map((uri): Relasjon => ({ relatertBegrep: uri, relasjon: 'erstattesAv' })),
+      ...concept.erstattesAv.map((uri): UnionRelation => ({ relatertBegrep: uri, relasjon: UnionRelationTypeEnum.ERSTATTES_AV })),
     );
   }
 
@@ -114,9 +116,9 @@ export const getPublishedRelatedConcepts = async (
 
   const relatedConceptsUris = [];
 
-  if (concept.begrepsRelasjon)
+  if (concept.begrepsRelation)
     relatedConceptsUris.push(
-      ...concept.begrepsRelasjon
+      ...concept.begrepsRelation
         .map((relasjon) => relasjon.relatertBegrep)
         .filter((value) => value !== null && value !== undefined),
     );
@@ -206,30 +208,32 @@ const fetchInternalRelatedConcepts = async (
   }
 };
 
-export const getUnpublishedConceptRelations = (concept: Concept): Relasjon[] => {
+export const getUnpublishedConceptRelations = (concept: Concept): UnionRelation[] => {
   if (!hasRelatedInternalConcepts(concept)) return [];
 
-  const internalConceptRelations: Relasjon[] = [];
+  const internalConceptRelations: UnionRelation[] = [];
 
-  if (concept.internBegrepsRelasjon) {
+  if (concept.internBegrepsRelation) {
     internalConceptRelations.push(
-      ...concept.internBegrepsRelasjon.filter((relasjon) => !isObjectNullUndefinedEmpty(relasjon)),
+      ...concept.internBegrepsRelation.filter((relasjon) => !isObjectNullUndefinedEmpty(relasjon)),
     );
   }
 
   if (concept.internSeOgså) {
     if (Array.isArray(concept.internSeOgså)) {
       internalConceptRelations.push(
-        ...concept.internSeOgså.map((uri): Relasjon => ({ relatertBegrep: uri, relasjon: 'internSeOgså' })),
+        ...concept.internSeOgså.map((uri): UnionRelation => ({ relatertBegrep: uri, relasjon: UnionRelationTypeEnum.SE_OGSÅ, internal: true })),
       );
     } else {
-      internalConceptRelations.push({ relatertBegrep: concept.internSeOgså, relasjon: 'internSeOgså' });
+      internalConceptRelations.push({ relatertBegrep: concept.internSeOgså, relasjon: UnionRelationTypeEnum.SE_OGSÅ, internal: true });
     }
   }
 
   if (concept.internErstattesAv) {
     internalConceptRelations.push(
-      ...concept.internErstattesAv.map((uri): Relasjon => ({ relatertBegrep: uri, relasjon: 'internErstattesAv' })),
+      ...concept.internErstattesAv.map(
+        (uri): UnionRelation => ({ relatertBegrep: uri, relasjon: UnionRelationTypeEnum.ERSTATTES_AV, internal: true }),
+      ),
     );
   }
 
@@ -244,9 +248,9 @@ export const getUnpublishedRelatedConcepts = async (
 
   const unpublishedRelatedConceptsIds: string[] = [];
 
-  if (concept.internBegrepsRelasjon) {
+  if (concept.internBegrepsRelation) {
     unpublishedRelatedConceptsIds.push(
-      ...concept.internBegrepsRelasjon
+      ...concept.internBegrepsRelation
         .map((relasjon) => relasjon.relatertBegrep)
         .filter((value) => value !== null && value !== undefined)
         .filter(Boolean)
