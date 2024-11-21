@@ -55,7 +55,7 @@ export const useCreateChangeRequest = ({ catalogId }) => {
     onSuccess: (data) => {
       data.json().then((changeRequestId) => {
         if (validOrganizationNumber(catalogId) && validUUID(changeRequestId)) {
-          router.push(`/${catalogId}/change-requests/${changeRequestId}/edit`);
+          router.push(`/catalogs/${catalogId}/change-requests/${changeRequestId}/edit`);
         }
       });
     },

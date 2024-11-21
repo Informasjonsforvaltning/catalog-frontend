@@ -1,4 +1,4 @@
-import { UnionRelationTypeEnum } from '@catalog-frontend/types';
+import { ContactDetails, UnionRelationTypeEnum } from '@catalog-frontend/types';
 import { compareVersion, localization } from '@catalog-frontend/utils';
 import { DateTime } from 'luxon';
 import * as Yup from 'yup';
@@ -193,8 +193,13 @@ export const conceptSchema = Yup.object().shape({
       uri: Yup.string().nullable().url(localization.conceptForm.validation.url),
     }),
   kontaktpunkt: Yup.object()
-    .nullable()
-    .shape({
+  .test(
+    'contact-test',
+    'Minst en av kontaktfeltene må fylles ut.',
+    (value: any) => {
+      return value.harEpost || value.harTelefon;
+    })  
+  .shape({
       harEpost: Yup.string().nullable().email(localization.conceptForm.validation.email),
       harTelefon: Yup.string()
         .nullable()

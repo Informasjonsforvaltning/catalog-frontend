@@ -32,11 +32,11 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, catalo
 
   const breadcrumbList = [
     {
-      href: `/${catalogId}`,
+      href: `/catalogs/${catalogId}`,
       text: localization.concept.concept,
     },
     {
-      href: `/${catalogId}/change-requests`,
+      href: `/catalogs/${catalogId}/change-requests`,
       text: localization.changeRequest.changeRequest,
     },
   ] as BreadcrumbType[];
@@ -153,7 +153,7 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, catalo
       />
       <div className='container'>
         <div className={styles.newConceptSuggestionButton}>
-          <LinkButton href={`/${catalogId}/change-requests/new`}>{localization.suggestionForNewConcept}</LinkButton>
+          <LinkButton href={`/catalogs/${catalogId}/change-requests/new`}>{localization.suggestionForNewConcept}</LinkButton>
         </div>
         <div className={styles.filterAndListContainer}>
           <div className={styles.alertContainer}>
@@ -210,7 +210,7 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, catalo
                               validOrganizationNumber(catalogId) &&
                               validUUID(id) &&
                               listItems.find(({ id: changeRequestId }) => changeRequestId === id)
-                                ? `/${catalogId}/change-requests/${id}`
+                                ? `/catalogs/${catalogId}/change-requests/${id}`
                                 : '#'
                             }
                             className={title ? styles.heading : cn(styles.heading, styles.noName)}

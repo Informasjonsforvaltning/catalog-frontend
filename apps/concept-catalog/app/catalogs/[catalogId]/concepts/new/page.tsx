@@ -1,10 +1,10 @@
 import { RedirectType, redirect } from 'next/navigation';
-import { withWriteProtectedPage } from '../../../../utils/auth';
+import { withWriteProtectedPage } from '../../../../../utils/auth';
 
 export const NewPage = withWriteProtectedPage(
-  ({ catalogId }) => `/${catalogId}/new`,
+  ({ catalogId }) => `/catalogs/${catalogId}/concepts/new`,
   async ({ catalogId }) => {
-    redirect(`${process.env.CONCEPT_CATALOG_GUI_BASE_URI}/${catalogId}/new`, RedirectType.push);
+    //redirect(`${process.env.CONCEPT_CATALOG_GUI_BASE_URI}/${catalogId}/new`, RedirectType.push);
   },
 );
 

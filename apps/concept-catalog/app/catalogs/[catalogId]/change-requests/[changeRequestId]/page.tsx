@@ -1,4 +1,4 @@
-import { getOrganization, getConcept, getChangeRequest, getConceptRevisions } from '@catalog-frontend/data-access';
+import { getOrganization, getChangeRequest, getConceptRevisions } from '@catalog-frontend/data-access';
 import { Organization, Concept, ChangeRequest } from '@catalog-frontend/types';
 import { BreadcrumbType, Breadcrumbs, DetailHeading } from '@catalog-frontend/ui';
 import { validUUID, localization, formatISO, conceptIsHigherVersion } from '@catalog-frontend/utils';
@@ -12,7 +12,7 @@ import { ButtonRow } from '../../../../../components/buttons/button-row';
 import { withReadProtectedPage } from '../../../../../utils/auth';
 
 const ChangeRequestDetailsPage = withReadProtectedPage(
-  ({ catalogId, changeRequestId }) => `/${catalogId}/change-requests/${changeRequestId}`,
+  ({ catalogId, changeRequestId }) => `/catalogs/${catalogId}/change-requests/${changeRequestId}`,
   async ({ catalogId, changeRequestId, session, hasWritePermission }) => {
     const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
@@ -57,15 +57,15 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
 
     const breadcrumbList = [
       {
-        href: `/${catalogId}`,
+        href: `/catalogs/${catalogId}`,
         text: localization.concept.concept,
       },
       {
-        href: `/${catalogId}/change-requests`,
+        href: `/catalogs/${catalogId}/change-requests`,
         text: localization.changeRequest.changeRequest,
       },
       {
-        href: `/${catalogId}/change-requests/${changeRequest.id}`,
+        href: `/catalogs/${catalogId}/change-requests/${changeRequest.id}`,
         text: changeRequest.title,
       },
     ] as BreadcrumbType[];
@@ -84,7 +84,7 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
     const headingTitle = originalConcept?.id ? (
       <h1>
         <NextLink
-          href={`/${catalogId}/${originalConcept.id}`}
+          href={`/catalogs/${catalogId}/change-requests/${originalConcept.id}`}
           passHref
           legacyBehavior
         >
