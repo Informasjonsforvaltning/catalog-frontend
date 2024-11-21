@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 import styles from './internal-field.module.css';
 import { Button, Select } from '@catalog-frontend/ui';
-import { Textfield, Checkbox, HelpText } from '@digdir/designsystemet-react';
+import { Textfield, Checkbox, HelpText, Paragraph } from '@digdir/designsystemet-react';
 import { CodeList, FieldType, InternalField, InternalFieldTemplate } from '@catalog-frontend/types';
 import { getTranslateText, localization, textRegexWithNumbers } from '@catalog-frontend/utils';
 import { useAdminDispatch } from '../../context/admin';
@@ -254,8 +254,9 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
             <HelpText
               placement='right'
               title={localization.catalogAdmin.manage.enableFilter}
+              type='button'
             >
-              {localization.catalogAdmin.manage.enableFilter}
+              <Paragraph size='sm'>{localization.catalogAdmin.manage.enableFilter}</Paragraph>
             </HelpText>
           </div>
         </>

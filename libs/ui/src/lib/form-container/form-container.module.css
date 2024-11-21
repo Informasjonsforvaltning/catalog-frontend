@@ -5,14 +5,15 @@
   background: #fff;
   border: 1px solid #d5d7d9;
   border-radius: 8px;
+  flex-grow: 1;
 }
 
 .content {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 2em 2em;
-  gap: 2em;
+  padding: 0rem 2rem;
+  gap: 2rem;
 }
 
 .headerWrapper {

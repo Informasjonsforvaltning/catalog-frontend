@@ -1,28 +1,26 @@
-import { Label, Tag } from '@digdir/designsystemet-react';
+import { Label, Tag, TagProps } from '@digdir/designsystemet-react';
 import styles from './title-with-tag.module.css';
 import { ReactNode } from 'react';
 
 interface Props {
   title: ReactNode | string;
-  tagTitle: string;
-  tagColor?: TagColor;
-  tagSize?: TagSize;
+  tagTitle?: string;
+  tagColor?: TagProps['color'];
+  tagSize?: TagProps['size'];
 }
 
-type TagColor = 'first' | 'second' | 'success' | 'danger' | 'third' | 'neutral' | 'info' | 'warning';
-
-type TagSize = 'sm' | 'md' | 'lg' | 'small' | 'medium' | 'large';
 
 export function TitleWithTag({ title, tagTitle, tagColor = 'warning', tagSize = 'sm' }: Props) {
   return (
     <div className={styles.container}>
-      {typeof title === 'string' ? <Label size='sm'>{title}</Label> : title}
-      <Tag
+      {typeof title === 'string' ? <Label size={tagSize}>{title}</Label> : title}
+      {tagTitle && (
+        <Tag
         color={tagColor}
         size={tagSize}
       >
         {tagTitle}
-      </Tag>
+      </Tag>)}
     </div>
   );
 }

@@ -1,39 +1,188 @@
-import { Concept } from '@catalog-frontend/types';
-import { FormContainer, TitleWithTag } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { Heading, Textfield, Textarea } from '@digdir/designsystemet-react';
-import { FastField, Field, FormikErrors } from 'formik';
+import { Concept, Definisjon, ISOLanguage } from '@catalog-frontend/types';
+import {
+  Box,
+  Button,
+  Card,
+  Chip,
+  ErrorMessage,
+  Fieldset,
+  Heading,
+  HelpText,
+  List,
+  Paragraph,
+  Popover,
+  Table,
+  Tag,
+} from '@digdir/designsystemet-react';
+import { FieldArray, useFormikContext } from 'formik';
+import styles from '../concept-form.module.scss';
+import { PencilWritingIcon, PlusCircleIcon, PlusIcon, TrashIcon } from '@navikt/aksel-icons';
+import { useState } from 'react';
+import { DefinitionModal } from './definition-modal';
+import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { TitleWithTag } from '@catalog-frontend/ui';
+import { set } from 'lodash';
+import { HelpMarkdown } from './help-markdown';
 
-type DefinitionSectionProps = {
-  headingTitle: string;
-};
+export const DefinitionSection = () => {
+  const { errors, values, setFieldValue } = useFormikContext<Concept>();
+  const [open, setOpen] = useState(false);
 
-export const DefinitionSection = ({ headingTitle }: DefinitionSectionProps) => {
+  const definitions = ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'];
+  const allowedLanguages = Object.freeze<ISOLanguage[]>(['nb', 'nn', 'en']);
+
   return (
-    <div>
-      <Heading
-        size='sm'
-        spacing
-      >
-        {headingTitle}
-      </Heading>
-      <FormContainer>
-        <FormContainer.Header
-          title={localization.title}
-          subtitle={localization.datasetForm.helptext.title}
-        />
-        <FastField
-          as={Textarea}
-          name='definisjon.nb'
-          label={
+    <Box>
+      <Box className={styles.fieldSet}>
+        <Fieldset
+          legend={
             <TitleWithTag
-              title={localization.datasetForm.fieldLabel.description}
+              title={
+                <>
+                  Definisjon
+                  <HelpMarkdown
+                    title={'Hjelpetekst definisjon'}
+                    type='button'
+                    size='sm'
+                    placement='right-end'
+                  >
+                    {localization.conceptForm.helpText.definition}
+                  </HelpMarkdown>
+                </>
+              }
               tagTitle={localization.tag.required}
             />
           }
-          error={errors?.definisjon?.text?.nb}
-        />
-      </FormContainer>
-    </div>
+        >
+          {Object.keys(errors).some((value) =>
+            ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(value),
+          ) && (
+            <ErrorMessage>Minst en definisjon må være definert!</ErrorMessage>
+          )}
+        </Fieldset>
+
+        {definitions
+          .filter((name) => values[name])
+          .map((name) => {
+            const def: Definisjon = values[name];
+            return (
+              def && (
+                <Card
+                  key={name}
+                  color='neutral'
+                >
+                  <Card.Header className={styles.definitionHeader}>
+                    <div>
+                      <Heading
+                        level={3}
+                        size='xxsmall'
+                      >
+                        {localization.conceptForm.fieldLabel.definitionTargetGroupFull[name]}
+                      </Heading>
+                      <Popover
+                        open={open}
+                        onClose={() => setOpen(false)}
+                        placement='top'
+                        size='md'
+                        variant='default'
+                      >
+                        <Popover.Trigger asChild>
+                          <Tag
+                            size='sm'
+                            color='second'
+                            onMouseEnter={() => setOpen(true)}
+                            onMouseOut={() => setOpen(false)}
+                          >
+                            {`${def.kildebeskrivelse?.kilde?.length ? def.kildebeskrivelse?.kilde.length : 'Ingen'} ${localization.conceptForm.fieldLabel.sources.toLowerCase()}`}
+                          </Tag>
+                        </Popover.Trigger>
+                        <Popover.Content>
+                          <ul>
+                            {def.kildebeskrivelse?.kilde.map((source, index) => (
+                              <li key={index}>{source.tekst || source.uri}</li>
+                            ))}
+                          </ul>
+                        </Popover.Content>
+                      </Popover>
+                    </div>
+                    <div>
+                      <DefinitionModal
+                        initialDefinition={def}
+                        header={localization.conceptForm.fieldLabel.definitionTargetGroupFull[name] as string}
+                        trigger={
+                          <Button
+                            variant='tertiary'
+                            size='sm'
+                          >
+                            <PencilWritingIcon
+                              title='Rediger'
+                              fontSize='1.5rem'
+                            />
+                            Rediger
+                          </Button>
+                        }
+                        onSucces={(updatedDef) => setFieldValue(name, updatedDef)}
+                      />
+
+                      <Button
+                        variant='tertiary'
+                        size='sm'
+                        color='danger'
+                        onClick={() => setFieldValue(name, undefined)}
+                      >
+                        <TrashIcon
+                          title='Slett'
+                          fontSize='1.5rem'
+                        />
+                        Slett
+                      </Button>
+                    </div>
+                  </Card.Header>
+                  <Card.Content className={styles.definitionContent}>
+                    <Paragraph>{getTranslateText(def.tekst)}</Paragraph>
+                    <Box>
+                      {allowedLanguages
+                        .filter((lang) => def.tekst[lang])
+                        .map((lang) => (
+                          <Tag
+                            key={lang}
+                            size='sm'
+                            color='third'
+                          >
+                            {localization.language[lang]}
+                          </Tag>
+                        ))}
+                    </Box>
+                  </Card.Content>
+                </Card>
+              )
+            );
+          })}
+      </Box>
+      <Box className={styles.buttonRow}>
+        {definitions
+          .filter((name) => !values[name])
+          .map((name) => (
+            <DefinitionModal
+              key={name}
+              header={localization.conceptForm.fieldLabel.definitionTargetGroup[name]}
+              trigger={
+                <Button
+                  variant='tertiary'
+                  color='first'
+                  size='sm'
+                >
+                  <PlusCircleIcon
+                    aria-hidden
+                    fontSize='1rem'
+                  />
+                  {localization.conceptForm.fieldLabel.definitionTargetGroup[name]}
+                </Button>
+              }
+              onSucces={(def) => setFieldValue(name, def)}
+            />
+          ))}
+      </Box>
+    </Box>
   );
 };

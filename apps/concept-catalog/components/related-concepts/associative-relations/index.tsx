@@ -1,10 +1,10 @@
-import { Relasjon, RelatedConcept } from '@catalog-frontend/types';
+import { UnionRelation, RelatedConcept } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { KeyValueListItem } from '@catalog-frontend/ui';
 import { Link } from '@digdir/designsystemet-react';
 
 interface Props {
-  associativeRelations: Relasjon[];
+  associativeRelations: UnionRelation[];
   relatedConceptsMap: (identifier: string) => RelatedConcept | undefined;
 }
 
