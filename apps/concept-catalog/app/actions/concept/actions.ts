@@ -48,8 +48,8 @@ export async function deleteConcept(catalogId: string, conceptId: string) {
     throw new Error(localization.alert.deleteFail);
   } finally {
     if (success) {
-      revalidateTag('datasets');
-      redirect(`/catalogs/${catalogId}/datasets`);
+      revalidateTag('concepts');
+      redirect(`/catalogs/${catalogId}/concepts`);
     }
   }
 }

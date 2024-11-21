@@ -1,7 +1,7 @@
 import { Code, Concept } from '@catalog-frontend/types';
 import { TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Combobox, HelpText, Paragraph } from '@digdir/designsystemet-react';
+import { Combobox, Fieldset, HelpText, Paragraph } from '@digdir/designsystemet-react';
 import { FastField, useFormikContext } from 'formik';
 import styles from '../concept-form.module.scss';
 import { ReactNode } from 'react';
@@ -10,7 +10,7 @@ type SubjectSectionProps = {
   codes: Code[] | undefined;
 };
 export const SubjectSection = ({ codes }: SubjectSectionProps) => {
-  const { errors } = useFormikContext<Concept>();
+  const { errors, values, setFieldValue } = useFormikContext<Concept>();
 
   const getParentPath = (code: Code, path: string[] = []) => {
     if (code.parentID) {
@@ -23,12 +23,12 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
     return path.reverse();
   };
 
-  const SubjectCombobox = ({ label, value }: { label: ReactNode; value: string[] }) => (
+  const SubjectCombobox = ({ value }: { label: ReactNode; value: string[] }) => (
     <Combobox
       multiple
       size='sm'
-      value={[]}
-      label={label}
+      value={values.fagområdeKoder}
+      onValueChange={(value) => setFieldValue('fagområdeKoder', value)}
     >
       <Combobox.Empty>Fant ingen treff</Combobox.Empty>
       {codes?.map((code, index, array) => {
@@ -49,10 +49,7 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
   return (
     <div>
       <div className={styles.fieldSet}>
-        <FastField
-          as={SubjectCombobox}
-          name='fagområde'
-          label={
+        <Fieldset legend={
             <TitleWithTag
               title={
                 <>
@@ -72,9 +69,13 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
               tagTitle={localization.tag.recommended}
               tagColor='info'
             />
-          }
+          }>
+        <FastField
+          as={SubjectCombobox}
+          name='fagområde'
           error={errors?.fagområde}
         />
+        </Fieldset>
       </div>
     </div>
   );
