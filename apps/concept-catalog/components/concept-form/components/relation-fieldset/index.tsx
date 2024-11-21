@@ -3,20 +3,19 @@ import { Option, UnionRelation, UnionRelationSubtypeEnum, UnionRelationTypeEnum 
 import { useFormikContext } from 'formik';
 import {
   Box,
-  Checkbox,
   Combobox,
   Fieldset,
   HelpText,
   Paragraph,
   Radio,
-  ToggleGroup,
 } from '@digdir/designsystemet-react';
 import styles from './relation-fieldset.module.scss';
 import { TitleWithTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { SortOption, useSearchConcepts } from 'apps/concept-catalog/hooks/search';
+import { useSearchConcepts } from '../../../../hooks/search';
 import { FieldsetDivider } from '../fieldset-divider';
 import { LanguageFieldset } from '../language-fieldset';
+import { HelpMarkdown } from '../help-markdown';
 
 const relationTypes = Object.keys(UnionRelationTypeEnum)
   .filter((item) => {
@@ -105,37 +104,14 @@ export const RelationFieldset = ({ catalogId }) => {
               title={
                 <>
                   {localization.conceptForm.fieldLabel.relation}
-                  <HelpText
+                  <HelpMarkdown
                     title={localization.conceptForm.fieldLabel.relation}
                     type='button'
                     size='sm'
                     placement='right-end'
                   >
-                    <Paragraph size='sm'>
-                      Et begrep kan ha relasjoner til andre begreper. En relasjon består av to begreper pluss en
-                      betydning som kan uttrykkes med tekst eller type. Det finnes tre hovedgrupper av relasjoner:
-                      generiske, partitive og assosiative.
-                    </Paragraph>
-                    <br />
-                    <Paragraph size='sm'>
-                      Generisk: enten det begrepet som dette begrepet spesialiserer, eller det begrepet som dette
-                      begrepet generaliserer
-                    </Paragraph>
-                    <br />
-                    <Paragraph size='sm'>
-                      Partitiv: enten det begrepet som dette begrepet er del av, eller det begrepet som dette begrepet
-                      inneholder
-                    </Paragraph>
-                    <br />
-                    <Paragraph size='sm'>
-                      Assosiativ: det begrepet som dette begrepet er relatert til, og med relasjonstype, eventuelt
-                      uttrykt som begrepets relasjonsrolle overfor det andre begrepet
-                    </Paragraph>
-                    <br />
-                    <Paragraph size='sm'>
-                      Relasjon 'Se også' og 'Erstattes av' er predefinerte assosiative relasjoner.
-                    </Paragraph>
-                  </HelpText>
+                    {localization.conceptForm.helpText.relation}
+                  </HelpMarkdown>
                 </>
               }
               tagColor='second'
@@ -240,16 +216,13 @@ export const RelationFieldset = ({ catalogId }) => {
               title={
                 <>
                   Relasjonsrolle
-                  <HelpText
+                  <HelpMarkdown
                     title={localization.conceptForm.fieldLabel.relationLevel}
                     type='button'
                     size='sm'
                   >
-                    <Paragraph size='sm'>
-                      Eksempler på ofte brukte relasjonsroller for begreper i assosiative relasjoner: 'har nært samsvar
-                      med', 'har eksakt samsvar med'
-                    </Paragraph>
-                  </HelpText>
+                    {localization.conceptForm.helpText.relationLevel}
+                  </HelpMarkdown>
                 </>
               }
             />

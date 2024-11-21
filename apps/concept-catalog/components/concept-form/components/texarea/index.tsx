@@ -1,4 +1,4 @@
-import { Box, Button, Paragraph, Textarea, TextareaProps } from '@digdir/designsystemet-react';
+import { Box, Textarea, TextareaProps } from '@digdir/designsystemet-react';
 import stylesLabel from '@digdir/designsystemet-css/label.css';
 import styles from './textarea.module.scss';
 import classNames from 'classnames';

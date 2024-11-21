@@ -1,14 +1,14 @@
 import { TitleWithTag } from '@catalog-frontend/ui';
-import { Button, Fieldset, HelpText, Modal, Paragraph, Radio } from '@digdir/designsystemet-react';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { Button, HelpText, Modal, Paragraph } from '@digdir/designsystemet-react';
+import { ReactNode, useRef, useState } from 'react';
 import styles from './definition-modal.module.scss';
 import { LanguageFieldset } from '../language-fieldset';
 import { TextareaWithPrefix } from '../texarea';
 import { localization } from '@catalog-frontend/utils';
 import { FieldsetDivider } from '../fieldset-divider';
 import { SourceDescriptionFieldset } from '../source-description-fieldset';
-import { Form, Formik } from 'formik';
-import { Concept, Definisjon } from '@catalog-frontend/types';
+import { Formik } from 'formik';
+import { Definisjon } from '@catalog-frontend/types';
 import { definitionSchema } from '../../validation-schema';
 
 export type DefinitionModalProps = {
