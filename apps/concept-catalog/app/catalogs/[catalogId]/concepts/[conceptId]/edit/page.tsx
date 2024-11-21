@@ -8,7 +8,7 @@ import { withWriteProtectedPage } from '../../../../../../utils/auth';
 import { EditPage } from './edit-page.client';
 
 export default withWriteProtectedPage(
-  ({ catalogId, conceptId }) => `/${catalogId}/${conceptId}/edit`,
+  ({ catalogId, conceptId }) => `/catalogs//${catalogId}/concepts/${conceptId}/edit`,
   async ({ catalogId, conceptId, session }) => {
     const concept = await getConcept(`${conceptId}`, `${session?.accessToken}`).then((response) => {
       if (response.ok) return response.json();

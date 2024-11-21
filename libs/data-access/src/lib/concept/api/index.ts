@@ -200,7 +200,7 @@ const fetchInternalRelatedConcepts = async (
       description: definisjon?.tekst,
       identifier: originaltBegrep,
       externalHref: false,
-      href: `/${catalogId}/${id}`,
+      href: `/catalogs/${catalogId}/concepts/${id}`,
     })) as RelatedConcept[];
   } catch (error) {
     console.error('Failed to fetch internal concepts', error);

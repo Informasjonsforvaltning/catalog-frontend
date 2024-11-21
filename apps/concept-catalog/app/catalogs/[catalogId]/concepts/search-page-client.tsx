@@ -178,7 +178,7 @@ export const SearchPageClient = ({
   const breadcrumbList = catalogId
     ? ([
         {
-          href: `/${catalogId}`,
+          href: `/catalogs/${catalogId}`,
           text: loc.catalogType.concept,
         },
       ] as BreadcrumbType[])
@@ -342,13 +342,13 @@ export const SearchPageClient = ({
         <SearchHitsPageLayout.ButtonRow>
           <>
             <LinkButton
-              href={`/${catalogId}/change-requests`}
+              href={`/catalogs/${catalogId}/change-requests`}
               variant='secondary'
             >
               {loc.changeRequest.changeRequest}
             </LinkButton>
             {hasWritePermission && (
-              <LinkButton href={`/${catalogId}/new`}>
+              <LinkButton href={`/catalogs/${catalogId}/concepts/new`}>
                 <>
                   <PlusCircleIcon fontSize='1.5rem' />
                   <span>{loc.button.createConcept}</span>
