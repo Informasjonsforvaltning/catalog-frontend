@@ -39,7 +39,7 @@ import {
 } from '@catalog-frontend/types';
 import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
-import { Accordion, Switch, Tabs, Textarea } from '@digdir/designsystemet-react';
+import { Accordion, Chip, Switch, Tabs, Textarea } from '@digdir/designsystemet-react';
 import _ from 'lodash';
 import classes from './concept-page.module.css';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../hooks/comments';
@@ -251,7 +251,18 @@ export const ConceptPageClient = ({
       ? [
           [
             localization.concept.label,
-            <ul key='label-list'>{concept?.merkelapp?.map((label) => <li key={`label-${label}`}>{label}</li>)}</ul>,
+            <ul key='label-list'>
+              {concept?.merkelapp?.map((label) => (
+                <li key={`label-${label}`}>
+                  <Chip.Toggle
+                    key={`label-${label}`}
+                    onClick={() => router.push(`/${catalogId}?filter.label=${label}`)}
+                  >
+                    {label}
+                  </Chip.Toggle>
+                </li>
+              ))}
+            </ul>,
           ],
         ]
       : []),
