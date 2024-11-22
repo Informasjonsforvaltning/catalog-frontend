@@ -8,30 +8,35 @@ import { localization } from '@catalog-frontend/utils';
 import { HelpMarkdown } from './help-markdown';
 
 export const ContactSection = () => {
-  const { errors, values } = useFormikContext<Concept>();
+  const { errors, values, setFieldValue } = useFormikContext<Concept>();
   const [selectedFields, setSelectedFields] = useState<string[]>([
-    ...(values.kontaktpunkt?.harEpost ? ['email'] : []),
-    ...(values.kontaktpunkt?.harTelefon ? ['phone'] : []),
-    ...(values.kontaktpunkt?.harSkjema ? ['form'] : []),
+    ...(values.kontaktpunkt?.harEpost ? ['harEpost'] : []),
+    ...(values.kontaktpunkt?.harTelefon ? ['harTelefon'] : []),
+    ...(values.kontaktpunkt?.harSkjema ? ['harSkjema'] : []),
   ]);
 
   const contactOptions = [
     {
       label: 'E-post',
-      value: 'email',
+      value: 'harEpost',
     },
     {
       label: 'Telefonnummer',
-      value: 'phone',
+      value: 'harTelefon',
     },
     {
       label: 'Kontaktskjema',
-      value: 'form',
+      value: 'harSkjema',
     },
   ];
 
   const handleContactChange = (value: string[]) => {
     setSelectedFields(value);
+    contactOptions.forEach(option => {
+      if(!value.includes(option.value)) {
+        setFieldValue(`kontaktpunkt.${option.value}`, null);
+      }
+    })
   };
 
   return (
@@ -64,7 +69,7 @@ export const ContactSection = () => {
           </Checkbox>
         ))}
       </CheckboxGroup>
-      {selectedFields.includes('email') && (
+      {selectedFields.includes('harEpost') && (
         <Fieldset
           legend={<TitleWithTag title={'E-postadresse'} />}
           size='sm'
@@ -76,7 +81,7 @@ export const ContactSection = () => {
           />
         </Fieldset>
       )}
-      {selectedFields.includes('phone') && (
+      {selectedFields.includes('harTelefon') && (
         <FastField
           as={Textfield}
           name='kontaktpunkt.harTelefon'
@@ -84,7 +89,7 @@ export const ContactSection = () => {
           label={<TitleWithTag title={'Telefonnummer'} />}
         />
       )}
-      {selectedFields.includes('form') && (
+      {selectedFields.includes('harSkjema') && (
         <FastField
           as={Textfield}
           name='kontaktpunkt.harSkjema'
