@@ -21,7 +21,7 @@ import { HelpMarkdown } from './help-markdown';
 
 export const DefinitionSection = () => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<Record<number, boolean>>({});
 
   const definitions = ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'];
   const allowedLanguages = Object.freeze<ISOLanguage[]>(['nb', 'nn', 'en']);
@@ -58,7 +58,7 @@ export const DefinitionSection = () => {
 
         {definitions
           .filter((name) => values[name])
-          .map((name) => {
+          .map((name, index) => {
             const def: Definisjon = values[name];
             return (
               def && (
@@ -75,8 +75,8 @@ export const DefinitionSection = () => {
                         {localization.conceptForm.fieldLabel.definitionTargetGroupFull[name]}
                       </Heading>
                       <Popover
-                        open={open}
-                        onClose={() => setOpen(false)}
+                        open={open[index]}
+                        onClose={() => setOpen({...open, [index]: false})}
                         placement='top'
                         size='md'
                         variant='default'
@@ -85,8 +85,8 @@ export const DefinitionSection = () => {
                           <Tag
                             size='sm'
                             color='second'
-                            onMouseEnter={() => setOpen(true)}
-                            onMouseOut={() => setOpen(false)}
+                            onMouseEnter={() => def.kildebeskrivelse?.kilde?.length && setOpen({...open, [index]: true})}
+                            onMouseOut={() => setOpen({...open, [index]: false})}
                           >
                             {`${def.kildebeskrivelse?.kilde?.length ? def.kildebeskrivelse?.kilde.length : 'Ingen'} ${localization.conceptForm.fieldLabel.sources.toLowerCase()}`}
                           </Tag>

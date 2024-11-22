@@ -10,6 +10,9 @@ export const VersionSection = () => {
   return (
     <Box>
       <VersionFieldset name='versjonsnr' />
+      {/**
+       * TODO Version note will be available as a modal dialog at a later stage.
+       * 
       <FieldsetDivider />
       <LanguageFieldset
         name='versjonsNote'
@@ -34,6 +37,7 @@ export const VersionSection = () => {
           />
         }
       />
+       */}
     </Box>
   );
 };
