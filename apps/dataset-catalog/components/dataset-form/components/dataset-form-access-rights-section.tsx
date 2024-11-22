@@ -1,9 +1,10 @@
 import { AccessRights, Dataset } from '@catalog-frontend/types';
-import { FormContainer, TitleWithTag } from '@catalog-frontend/ui';
+import { AddButton, FormContainer, FormikLanguageFieldset, TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Button, Heading, NativeSelect, Textfield } from '@digdir/designsystemet-react';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import { Field, FieldArray, FormikErrors, FormikHelpers } from 'formik';
+import FieldsetWithDelete from '../../fieldset-with-delete';
 
 type AccessRightsSectionProps = {
   errors: FormikErrors<Dataset>;
@@ -12,11 +13,7 @@ type AccessRightsSectionProps = {
 
 export const AccessRightsSection = ({ errors, values }: AccessRightsSectionProps) => {
   return (
-    <div>
-      {/* <FormContainer.Header
-          title={localization.datasetForm.heading.accessRights}
-          subtitle={localization.datasetForm.helptext.accessRights}
-        /> */}
+    <>
       <Field name='accessRights.uri'>
         {({ field, form }: { field: any; form: FormikHelpers<Dataset> }) => (
           <NativeSelect
@@ -49,39 +46,22 @@ export const AccessRightsSection = ({ errors, values }: AccessRightsSectionProps
               <>
                 {values.legalBasisForRestriction?.map((_, index) => (
                   <div key={index}>
-                    <Field
-                      name={`legalBasisForRestriction[${index}].prefLabel.nb`}
+                    <FormikLanguageFieldset
+                      name={`legalBasisForRestriction[${index}].prefLabel`}
                       as={Textfield}
-                      label={localization.title}
                     />
-                    <Field
-                      name={`legalBasisForRestriction[${index}].uri`}
-                      as={Textfield}
-                      label={localization.link}
-                      // @ts-expect-error uri exsists in object legalBasisForRestriction
-                      error={errors?.legalBasisForRestriction?.[index]?.uri}
-                    />
-                    <Button
-                      type='button'
-                      onClick={() => remove(index)}
-                      variant='tertiary'
-                      color='danger'
-                    >
-                      <MinusCircleIcon />
-                      {localization.remove}
-                    </Button>
+                    <FieldsetWithDelete onDelete={() => remove(index)}>
+                      <Field
+                        name={`legalBasisForRestriction[${index}].uri`}
+                        as={Textfield}
+                        label={localization.link}
+                        // @ts-expect-error uri exsists in object legalBasisForRestriction
+                        error={errors?.legalBasisForRestriction?.[index]?.uri}
+                      />
+                    </FieldsetWithDelete>
                   </div>
                 ))}
-                <div>
-                  <Button
-                    type='button'
-                    onClick={() => push({ prefLabel: { nb: '' }, uri: '' })}
-                    variant='tertiary'
-                  >
-                    <PlusCircleIcon />
-                    {localization.add}
-                  </Button>
-                </div>
+                <AddButton onClick={() => push({ prefLabel: { nb: '' }, uri: '' })} />
               </>
             )}
           </FieldArray>
@@ -181,6 +161,6 @@ export const AccessRightsSection = ({ errors, values }: AccessRightsSectionProps
           </FieldArray>
         </>
       )}
-    </div>
+    </>
   );
 };

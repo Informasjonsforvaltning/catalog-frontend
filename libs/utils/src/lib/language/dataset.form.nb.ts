@@ -74,6 +74,7 @@ export const datasetFormNb = {
     relationsDataset: 'Relasjoner til datasett',
     relationDatasetSeries: 'Relasjoner til datasettserier',
     relatedResources: 'Relaterte ressurser',
+    distribution: 'Distribusjon',
   },
   accessRight: {
     public: 'Allmenn tilgang',
@@ -96,6 +97,12 @@ export const datasetFormNb = {
     relationType: 'Relasjonstype',
     datasetSeries: 'Datasettserie',
     choseRelation: 'Velg relasjon',
+    standard: 'Standard',
+    distributionLink: 'Lenke til dokumentasjon av distribusjonen',
+    license: 'Lisens',
+    accessService: 'Tilgangstjeneste',
+    downloadUrl: 'Nedlastingslenke',
+    accessUrl: 'Tilgangslenke',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
@@ -109,10 +116,14 @@ export const datasetFormNb = {
     url: `Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’ og inneholder et gyldig toppdomene (f.eks. ‘.no’).`,
     euTheme: 'Minst ett EU-tema må være valgt.',
     searchString: 'Ingen treff. Søkestrengen må inneholde minst to bokstaver.',
+    accessURL: 'Tilgangslenke er påkrevd.',
   },
   button: {
     addDate: 'Legg til tidsperiode',
     addInformationModel: 'Legg til informasjonsmodell',
+    addStandard: 'Legg til standard',
+    addDistribution: 'Legg til distribusjon',
+    updateDistribution: 'Oppdater distribusjon',
   },
   errors: {
     qualifiedAttributions: 'Kunne ikke hente enheter.',

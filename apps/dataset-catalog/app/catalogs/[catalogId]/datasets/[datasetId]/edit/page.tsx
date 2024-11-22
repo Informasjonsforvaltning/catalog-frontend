@@ -12,6 +12,7 @@ import {
   getFrequencies,
   getLanguages,
   getLosThemes,
+  getOpenLicenses,
   getOrganization,
   getProvenanceStatements,
 } from '@catalog-frontend/data-access';
@@ -32,7 +33,8 @@ export default async function EditDatasetPage({ params }: Params) {
     datasetTypesResponse,
     provenanceStatementsResponse,
     frequenciesResponse,
-    languagesResponse,
+    languageResponse,
+    licenceResponse,
   ] = await Promise.all([
     getLosThemes().then((res) => res.json()),
     getDataThemes().then((res) => res.json()),
@@ -40,6 +42,7 @@ export default async function EditDatasetPage({ params }: Params) {
     getProvenanceStatements().then((res) => res.json()),
     getFrequencies().then((res) => res.json()),
     getLanguages().then((res) => res.json()),
+    getOpenLicenses().then((res) => res.json()),
   ]);
 
   const referenceData = {
@@ -48,7 +51,8 @@ export default async function EditDatasetPage({ params }: Params) {
     datasetTypes: datasetTypesResponse.datasetTypes,
     provenanceStatements: provenanceStatementsResponse.provenanceStatements,
     frequencies: frequenciesResponse.frequencies,
-    languages: languagesResponse.linguisticSystems,
+    languages: languageResponse.linguisticSystems,
+    openLicenses: licenceResponse.openLicenses,
   };
 
   const breadcrumbList = [

@@ -49,6 +49,8 @@ export const nb = {
   services: 'Tjenester',
   showLess: 'Vis færre',
   showMore: 'Vis flere',
+  seeMore: 'Se mer',
+  seeLess: 'Se mindre',
   somethingWentWrong: 'Beklager, noe gikk galt. Prøv på nytt litt senere.',
   sorting: 'Sortering',
   status: 'Status',
@@ -426,6 +428,7 @@ export const nb = {
     invalidProtocol: `Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’.`,
     invalidTlf: 'Ugyldig telefonnummer',
     nameRequired: 'Må ha navn',
+    accessURLRequired: 'Tilgangslenke må fylles ut.',
   },
 
   serviceCatalog: {

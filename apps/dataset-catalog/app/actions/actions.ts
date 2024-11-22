@@ -53,6 +53,10 @@ export async function createDataset(values: DatasetToBeCreated, catalogId: strin
     concepts: values?.conceptList ? convertListToListOfObjects(values.conceptList, 'uri') : [],
     spatial: values?.spatialList ? convertListToListOfObjects(values.spatialList, 'uri') : [],
     language: values.languageList ? convertListToListOfObjects(values.languageList, 'uri') : [],
+    distribution: values.distribution?.map((dist) => ({
+      ...dist,
+      accessService: dist.accessServiceList ? convertListToListOfObjects(dist.accessServiceList, 'uri') : [],
+    })),
   };
   const datasetNoEmptyValues = removeEmptyValues(newDataset);
 
@@ -107,6 +111,10 @@ export async function updateDataset(catalogId: string, initialDataset: Dataset, 
     concepts: values?.conceptList ? convertListToListOfObjects(values.conceptList, 'uri') : [],
     spatial: values?.spatialList ? convertListToListOfObjects(values.spatialList, 'uri') : [],
     language: values.languageList ? convertListToListOfObjects(values.languageList, 'uri') : [],
+    distribution: values.distribution?.map((dist) => ({
+      ...dist,
+      accessService: dist.accessServiceList ? convertListToListOfObjects(dist.accessServiceList, 'uri') : [],
+    })),
   });
 
   const diff = compare(initialDataset, updatedDataset);

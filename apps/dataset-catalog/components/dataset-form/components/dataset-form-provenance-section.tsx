@@ -1,8 +1,8 @@
 'use client';
 import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
-import { FormContainer } from '@catalog-frontend/ui';
+import { FormContainer, FormikLanguageFieldset, TextareaWithPrefix } from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Heading, Combobox, Textfield, Textarea } from '@digdir/designsystemet-react';
+import { Heading, Combobox, Textfield, Textarea, Label } from '@digdir/designsystemet-react';
 import { Field, useFormikContext } from 'formik';
 
 interface Props {
@@ -14,7 +14,7 @@ export const ProvenanceSection = ({ data }: Props) => {
   const { provenanceStatements, frequencies } = data;
 
   return (
-    <div>
+    <>
       <Combobox
         value={values?.provenance?.uri ? [values?.provenance?.uri] : []}
         placeholder={`${localization.search.search}...`}
@@ -56,12 +56,11 @@ export const ProvenanceSection = ({ data }: Props) => {
         type='date'
         label={localization.datasetForm.heading.lastUpdated}
       />
-
-      <Field
-        as={Textarea}
-        name='hasCurrentnessAnnotation.hasBody.nb'
-        label={localization.datasetForm.heading.actuality}
-      ></Field>
-    </div>
+      <FormikLanguageFieldset
+        as={TextareaWithPrefix}
+        name='hasCurrentnessAnnotation.hasBody'
+        legend={localization.datasetForm.heading.actuality}
+      />
+    </>
   );
 };

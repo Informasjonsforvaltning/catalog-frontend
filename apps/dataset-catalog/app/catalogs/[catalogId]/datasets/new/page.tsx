@@ -11,6 +11,7 @@ import {
   getFrequencies,
   getLanguages,
   getLosThemes,
+  getOpenLicenses,
   getOrganization,
   getProvenanceStatements,
 } from '@catalog-frontend/data-access';
@@ -32,6 +33,7 @@ export default async function NewDatasetPage({ params }: Params) {
     provenanceStatementsResponse,
     frequenciesResponse,
     languageResponse,
+    licenceResponse,
   ] = await Promise.all([
     getLosThemes().then((res) => res.json()),
     getDataThemes().then((res) => res.json()),
@@ -39,6 +41,7 @@ export default async function NewDatasetPage({ params }: Params) {
     getProvenanceStatements().then((res) => res.json()),
     getFrequencies().then((res) => res.json()),
     getLanguages().then((res) => res.json()),
+    getOpenLicenses().then((res) => res.json()),
   ]);
 
   const referenceData = {
@@ -48,6 +51,7 @@ export default async function NewDatasetPage({ params }: Params) {
     provenanceStatements: provenanceStatementsResponse.provenanceStatements,
     frequencies: frequenciesResponse.frequencies,
     languages: languageResponse.linguisticSystems,
+    openLicenses: licenceResponse.openLicenses,
   };
 
   const breadcrumbList = [

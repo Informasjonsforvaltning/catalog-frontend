@@ -14,6 +14,17 @@ export const useSearchInformationModelsSuggestions = (searchEnv: string, searchQ
   });
 };
 
+export const useSearchConceptSuggestions = (searchEnv: string, searchQuery?: string) => {
+  return useQuery({
+    queryKey: ['searchConceptSuggestions', searchQuery],
+    queryFn: async () => {
+      const data = await searchSuggestions(searchEnv, searchQuery, 'concepts');
+      return data.json();
+    },
+    enabled: !!searchQuery && !!searchEnv,
+  });
+};
+
 export const useSearchInformationModelsByUri = (searchEnv: string, uriList: string[]) => {
   const searchOperation: Search.SearchOperation = {
     filters: { uri: { value: uriList } },
@@ -32,15 +43,35 @@ export const useSearchInformationModelsByUri = (searchEnv: string, uriList: stri
   });
 };
 
-export const useSearchConceptSuggestions = (searchEnv: string, searchQuery?: string) => {
+// Dataservices
+
+export const useSearchDataServiceSuggestions = (searchEnv: string, searchQuery?: string) => {
   return useQuery({
-    queryKey: ['searchConceptSuggestions', 'searchQuery', searchQuery],
+    queryKey: ['searchDataServiceSuggestions', searchQuery],
     queryFn: async () => {
-      const res = await searchSuggestions(searchEnv, searchQuery, 'concepts');
+      const res = await searchSuggestions(searchEnv, searchQuery, 'dataservices');
       const data = await res.json();
       return data.suggestions;
     },
     enabled: !!searchQuery && !!searchEnv,
+  });
+};
+
+export const useSearchDataServiceByUri = (searchEnv: string, uriList: string[]) => {
+  const searchOperation: Search.SearchOperation = {
+    filters: { uri: { value: uriList } },
+  };
+  return useQuery({
+    queryKey: ['searchDataServicesByUri', uriList],
+    queryFn: async () => {
+      if (uriList.length === 0) {
+        return [];
+      }
+      const res = await searchResourcesWithFilter(searchEnv, 'dataservices', searchOperation);
+      const data = await res.json();
+      return data.hits as Search.SearchObject[];
+    },
+    enabled: !!uriList && !!searchEnv,
   });
 };
 
