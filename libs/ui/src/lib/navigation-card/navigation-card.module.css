@@ -9,6 +9,10 @@
   padding: 1.5rem;
 }
 
+.cardBase {
+  height: 100%;
+}
+
 .body {
   padding-top: 1rem;
   text-align: center;

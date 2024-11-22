@@ -15,7 +15,7 @@ import {
   getServiceMessages,
 } from '../actions/actions';
 import { getOrganizations } from '@catalog-frontend/data-access';
-import { Heading, Link } from '@digdir/designsystemet-react';
+import { Alert, Heading, Link } from '@digdir/designsystemet-react';
 import {
   ConceptCatalog,
   DataServiceCatalog,
@@ -91,8 +91,7 @@ const CatalogPortalPage: React.FC<{ params: Params }> = async () => {
     <div className='container'>
       <Breadcrumbs
         data-testid='catalog-portal-breadcrumbs'
-        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} 
-
+        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
       <ServiceMessages serviceMessages={serviceMessages} />
 
@@ -159,9 +158,22 @@ const CatalogPortalPage: React.FC<{ params: Params }> = async () => {
             <div key={`recordOfProcessingActivities-${org.organizationId}`}>
               <NavigationCard
                 title={localization.catalogType.recordsOfProcessingActivities}
-                body={`${getRecordsOfProcessingActivityByOrgId(org.organizationId)?.recordCount ?? localization.none} ${localization.descriptionType.recordsOfProcessingActivities}`}
+                body={
+                  <>
+                    <span className={styles.behandlingsoversikt}>
+                      {`${getRecordsOfProcessingActivityByOrgId(org.organizationId)?.recordCount ?? localization.none} ${localization.descriptionType.recordsOfProcessingActivities}`}
+                    </span>
+                    <Alert
+                      severity='warning'
+                      size='small'
+                      className={styles.warning}
+                    >
+                      Legges ned 31. mars 2025
+                    </Alert>
+                  </>
+                }
                 href={`${process.env.RECORDS_OF_PROCESSING_ACTIVITIES_GUI_BASE_URI}/${org.organizationId}`}
-              />
+              ></NavigationCard>
             </div>
           </div>
         </div>
