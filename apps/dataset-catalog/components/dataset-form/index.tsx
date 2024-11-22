@@ -21,6 +21,7 @@ import { InformationModelSection } from './components/dataset-form-information-m
 import { QualifiedAttributionsSection } from './components/dataset-form-qualified-attributions-section';
 import { ExampleDataSection } from './components/dataset-form-example-data-section';
 import { RelationsSection } from './components/dataset-form-relations-section';
+import { DistributionSection } from './components/dataset-from-distribution/dataset-form-distribution-section';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
@@ -41,7 +42,8 @@ export const DatasetForm = ({
 }: Props) => {
   const { catalogId, datasetId } = useParams();
   const [isDirty, setIsDirty] = useState(false);
-  const { losThemes, dataThemes, provenanceStatements, datasetTypes, frequencies, languages } = referenceData;
+  const { losThemes, dataThemes, provenanceStatements, datasetTypes, frequencies, languages, openLicenses } =
+    referenceData;
 
   useWarnIfUnsavedChanges({ unsavedChanges: isDirty });
 
@@ -212,6 +214,16 @@ export const DatasetForm = ({
                 <RelationsSection
                   searchEnv={searchEnv}
                   datasetSeries={datasetSeries}
+                />
+              </FormLayout.Section>
+              <FormLayout.Section
+                id='distribution-section'
+                title={localization.datasetForm.heading.distribution}
+              >
+                <DistributionSection
+                  referenceDataEnv={referenceDataEnv}
+                  searchEnv={searchEnv}
+                  openLicenses={openLicenses}
                 />
               </FormLayout.Section>
             </FormLayout>

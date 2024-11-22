@@ -97,7 +97,7 @@ export const ConceptSection = ({ searchEnv }: Props) => {
           <Textfield
             label={
               <TitleWithTag
-                // title={localization.datasetForm.fieldLabel.keyword.nb}
+                title={localization.datasetForm.fieldLabel.keyword}
                 tagTitle={localization.tag.recommended}
                 tagColor='info'
               />

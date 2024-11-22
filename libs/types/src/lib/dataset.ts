@@ -42,6 +42,7 @@ export interface DatasetToBeCreated {
   references?: Reference[];
   relations?: UriWithLabel[];
   inSeries?: string;
+  distribution?: Distribution[];
   // Arrays of uris used as helper values for Formik. These properties is not part of the db object.
   losThemeList?: string[];
   euThemeList?: string[];
@@ -76,4 +77,18 @@ export interface DatasetSeries {
   title: string;
   uri: string;
   id: string;
+}
+export interface Distribution {
+  title?: LocalizedStrings;
+  description?: LocalizedStrings;
+  downloadURL?: string[];
+  accessURL?: string[];
+  format?: string[];
+  mediaType?: string[];
+  license?: { uri: string; code: string };
+  conformsTo?: UriWithLabel[];
+  page?: [{ uri: string }];
+  accessService?: [{ uri: string }];
+  // Arrays of uris used as helper values for Formik. These properties is not part of the db object.
+  accessServiceList?: string[];
 }

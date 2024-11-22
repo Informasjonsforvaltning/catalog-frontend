@@ -7,4 +7,5 @@ export interface DataService {
   modified: string;
   status: string;
   organizationId: string;
+  uri: string;
 }

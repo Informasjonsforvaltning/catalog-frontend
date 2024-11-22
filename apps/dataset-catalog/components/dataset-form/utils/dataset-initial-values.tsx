@@ -1,4 +1,4 @@
-import { AccessRights, Dataset, DatasetToBeCreated, PublicationStatus } from '@catalog-frontend/types';
+import { AccessRights, Dataset, DatasetToBeCreated, Distribution, PublicationStatus } from '@catalog-frontend/types';
 import { groupByKeys } from '@catalog-frontend/utils';
 
 export const datasetTemplate = (dataset: Dataset): Dataset => {
@@ -58,6 +58,10 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     references: dataset.references ?? [{ source: { uri: '' }, referenceType: { code: '' } }],
     relations: dataset.relations ?? [{ uri: '', prefLabel: { nb: '' } }],
     inSeries: dataset.inSeries ?? '',
+    distribution: dataset.distribution?.map((dist) => ({
+      ...dist,
+      accessServiceList: dist.accessService?.map((service) => service.uri) || [],
+    })),
   };
 };
 
@@ -114,5 +118,26 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     references: [{ source: { uri: '' }, referenceType: { code: '' } }],
     relations: [{ uri: '', prefLabel: { nb: '' } }],
     inSeries: '',
+    distribution: [],
   };
+};
+
+export const distributionTemplate = (dist: Distribution | undefined) => {
+  return dist
+    ? {
+        ...dist,
+        accessServiceList: dist.accessService?.map((service) => service.uri) || [],
+      }
+    : {
+        title: { nb: '' },
+        description: { nb: '' },
+        downloadURL: [],
+        accessURL: [],
+        format: [],
+        mediaType: [],
+        licenseList: [],
+        conformsTo: [{ uri: '', prefLabel: { nb: '' } }],
+        pageList: [],
+        accessServiceList: [],
+      };
 };

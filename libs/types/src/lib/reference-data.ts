@@ -40,4 +40,5 @@ export interface ReferenceData {
   datasetTypes: ReferenceDataCode[];
   frequencies: ReferenceDataCode[];
   languages: ReferenceDataCode[];
+  openLicenses: ReferenceDataCode[];
 }

@@ -1,0 +1,60 @@
+.field {
+  padding-bottom: 1.5rem;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.list {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.standard {
+  display: grid;
+  grid-template-columns: 43% 43% 10%;
+  gap: 2%;
+  padding-bottom: 1.5rem;
+}
+
+.button {
+  width: fit-content;
+}
+
+.add {
+  display: flex;
+  height: fit-content;
+  align-items: center;
+}
+
+.format {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.buttons {
+  display: flex;
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tags {
+  display: flex;
+  gap: 1rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  max-width: 963px;
+  flex-wrap: wrap;
+}
+
+.dialog {
+  max-width: 1000px;
+  overflow: hidden;
+}

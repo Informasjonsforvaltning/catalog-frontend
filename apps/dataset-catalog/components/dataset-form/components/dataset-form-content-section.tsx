@@ -1,6 +1,6 @@
 'use client';
 import { Dataset } from '@catalog-frontend/types';
-import { AddButton, FormContainer } from '@catalog-frontend/ui';
+import { AddButton, FormContainer, FormikLanguageFieldset, TextareaWithPrefix } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Heading, Textfield, Textarea, Button, Label, HelpText, Fieldset } from '@digdir/designsystemet-react';
 import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
@@ -47,28 +47,32 @@ export const ContentSection = () => {
         )}
       </FieldArray>
 
-      <Field
-        as={Textarea}
+      <FormikLanguageFieldset
+        as={TextareaWithPrefix}
         name='hasRelevanceAnnotation.hasBody.nb'
-        label={localization.datasetForm.heading.relevance}
+        legend={localization.datasetForm.heading.relevance}
+        requiredLanguages={['nb']}
       />
 
-      <Field
-        as={Textarea}
-        name='hasCompletenessAnnotation.hasBody.nb'
-        label={localization.datasetForm.heading.completeness}
+      <FormikLanguageFieldset
+        as={TextareaWithPrefix}
+        name='hasCompletenessAnnotation.hasBody'
+        legend={localization.datasetForm.heading.completeness}
+        requiredLanguages={['nb']}
       />
 
-      <Field
-        as={Textarea}
-        name='hasCompletenessAnnotation.hasBody.nb'
-        label={localization.datasetForm.heading.accuracy}
+      <FormikLanguageFieldset
+        as={TextareaWithPrefix}
+        name='hasCompletenessAnnotation.hasBody.'
+        legend={localization.datasetForm.heading.accuracy}
+        requiredLanguages={['nb']}
       />
 
-      <Field
-        as={Textarea}
-        name='hasAvailabilityAnnotation.hasBody.nb'
-        label={localization.datasetForm.heading.availability}
+      <FormikLanguageFieldset
+        as={TextareaWithPrefix}
+        name='hasAvailabilityAnnotation.hasBody'
+        legend={localization.datasetForm.heading.availability}
+        requiredLanguages={['nb']}
       />
     </div>
   );
