@@ -5,7 +5,7 @@ import styles from './navigation-card.module.css';
 import { Heading, Card as CardBase, Paragraph, Card, Label } from '@digdir/designsystemet-react';
 interface Card {
   title?: string;
-  body?: string;
+  body?: React.ReactElement | string;
   href?: string;
   icon?: React.ReactElement;
   subtitle?: string;
@@ -17,6 +17,7 @@ const NavigationCard = ({ title, body, href, icon, subtitle }: Card) => {
       color='third'
       isLink={Boolean(href)}
       asChild={Boolean(href)}
+      className={styles.cardBase}
     >
       {href ? (
         <Link
