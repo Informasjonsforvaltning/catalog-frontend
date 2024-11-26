@@ -93,7 +93,7 @@ export type UnionRelation = {
   beskrivelse?: LocalizedStrings;
   inndelingskriterium?: LocalizedStrings;
   relatertBegrep?: string;
-  internal?: boolean
+  internal?: boolean;
 };
 
 export enum UnionRelationTypeEnum {
