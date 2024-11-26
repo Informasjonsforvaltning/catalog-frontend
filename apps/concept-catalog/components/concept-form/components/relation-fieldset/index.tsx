@@ -7,7 +7,7 @@ import { TitleWithTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useSearchConcepts as useSearchInternalConcepts, useDataNorgeSearchConcepts } from '../../../../hooks/search';
 import { FieldsetDivider } from '../fieldset-divider';
-import { LanguageFieldset } from '../language-fieldset';
+import { FormikLanguageFieldset } from '../formik-language-fieldset';
 import { HelpMarkdown } from '../help-markdown';
 
 const relationTypes = Object.keys(UnionRelationTypeEnum)
@@ -195,7 +195,7 @@ export const RelationFieldset = ({ catalogId }) => {
               </Combobox>
             </Fieldset>
           </Box>
-          <LanguageFieldset
+          <FormikLanguageFieldset
             name='inndelingskriterium'
             legend={
               <TitleWithTag
@@ -224,7 +224,7 @@ export const RelationFieldset = ({ catalogId }) => {
         </>
       )}
       {values.relasjon === UnionRelationTypeEnum.ASSOSIATIV && (
-        <LanguageFieldset
+        <FormikLanguageFieldset
           name='beskrivelse'
           legend={
             <TitleWithTag
