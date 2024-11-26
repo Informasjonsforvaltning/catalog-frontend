@@ -28,7 +28,11 @@ uttrykt som begrepets relasjonsrolle overfor det andre begrepet
 Relasjon _Se også_ og _Erstattes av_ er predefinerte assosiative relasjoner.
 `,
     relationLevel: `Eksempler på ofte brukte relasjonsroller for begreper i assosiative relasjoner: 
-    _har nært samsvar med_, _har eksakt samsvar med_.`
+    _har nært samsvar med_, _har eksakt samsvar med_.`,
+    relatedConcept: `
+Begynn å skrive i søkefeltet, og du vil få opp en liste med forslag basert på ditt søk. Klikk på ønsket begrep for å knytte det til det nåværende begrepet.
+
+Velg _Egen definert_ om du har en lenke til begrepet.`
   },
   heading: {
     term: '1. Term'
