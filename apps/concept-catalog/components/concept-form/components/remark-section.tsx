@@ -1,13 +1,13 @@
 import { TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Box } from '@digdir/designsystemet-react';
-import { LanguageFieldset } from './language-fieldset';
-import { TextareaWithPrefix } from './texarea';
+import { FormikLanguageFieldset } from './formik-language-fieldset';
+import { TextareaWithPrefix } from './texarea-with-prefix';
 
 export const RemarkSection = () => {
   return (
     <Box>
-      <LanguageFieldset
+      <FormikLanguageFieldset
         name='merknad'
         as={TextareaWithPrefix}        
         legend={

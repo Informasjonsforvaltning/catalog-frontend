@@ -1,12 +1,12 @@
 import { ReactNode } from 'react';
 import { localization } from '@catalog-frontend/utils';
 import { Fieldset, Button, Box, Paragraph, Textfield } from '@digdir/designsystemet-react';
-import { FastField, Field, useFormikContext } from 'formik';
+import { FastField, useFormikContext } from 'formik';
 
-import styles from './language-fieldset.module.scss';
+import styles from './formik-language-fieldset.module.scss';
 import { ISOLanguage } from '@catalog-frontend/types';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { TextareaWithPrefix, TextareaWithPrefixProps } from '../texarea';
+import { TextareaWithPrefix } from '../texarea-with-prefix';
 
 type LanuguageFieldsetProps = {
   legend?: ReactNode;
@@ -17,7 +17,7 @@ type LanuguageFieldsetProps = {
 
 const allowedLanguages = Object.freeze<ISOLanguage[]>(['nb', 'nn', 'en']);
 
-export const LanguageFieldset = <T,>({
+export const FormikLanguageFieldset = <T,>({
   legend,
   name,
   requiredLanguages,

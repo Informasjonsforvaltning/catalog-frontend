@@ -2,8 +2,8 @@ import { TitleWithTag } from '@catalog-frontend/ui';
 import { Button, HelpText, Modal, Paragraph } from '@digdir/designsystemet-react';
 import { ReactNode, useRef, useState } from 'react';
 import styles from './definition-modal.module.scss';
-import { LanguageFieldset } from '../language-fieldset';
-import { TextareaWithPrefix } from '../texarea';
+import { FormikLanguageFieldset } from '../formik-language-fieldset';
+import { TextareaWithPrefix } from '../texarea-with-prefix';
 import { localization } from '@catalog-frontend/utils';
 import { FieldsetDivider } from '../fieldset-divider';
 import { SourceDescriptionFieldset } from '../source-description-fieldset';
@@ -48,7 +48,7 @@ export const DefinitionModal = ({ initialDefinition, header, trigger, onSucces }
               <>
                 <Modal.Header>{header}</Modal.Header>
                 <Modal.Content className={styles.content}>
-                  <LanguageFieldset
+                  <FormikLanguageFieldset
                     name='tekst'
                     as={TextareaWithPrefix}
                     requiredLanguages={['nb']}
