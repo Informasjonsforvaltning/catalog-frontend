@@ -1,0 +1,19 @@
+.markdownContent {
+  font: var(--fds-typography-paragraph-small);
+
+  p {
+    margin-bottom: var(--fds-spacing-2);
+  }
+
+  li {
+    margin-bottom: var(--fds-spacing-1);
+  }
+
+  strong {
+    font-weight: 700;
+  }
+
+  em {
+    font-style: italic;
+  }
+}

@@ -89,7 +89,7 @@ export const DatasetForm = ({ initialValues, submitType, referenceData, searchEn
             }}
           >
             <FormLayout>
-              <FormLayout.ButtonsRow>
+              {/* <FormLayout.ButtonsRow>
                 <Button type='submit'>{localization.button.save}</Button>
                 <Button
                   variant='secondary'
@@ -98,7 +98,7 @@ export const DatasetForm = ({ initialValues, submitType, referenceData, searchEn
                 >
                   {localization.button.delete}
                 </Button>
-              </FormLayout.ButtonsRow>
+              </FormLayout.ButtonsRow> */}
               <div>
                 <TitleSection errors={errors} />
                 <AccessRightsSection
