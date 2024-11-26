@@ -470,4 +470,8 @@ export const nb = {
     },
     searchDataService: 'Søk etter datatjenestebeskrivelse',
   },
+
+  icon: {
+    trash: 'Søppelikon'
+  }
 };

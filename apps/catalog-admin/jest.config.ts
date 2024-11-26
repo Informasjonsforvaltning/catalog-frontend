@@ -3,8 +3,9 @@ export default {
   displayName: 'catalog-admin',
   preset: '../../jest.preset.js',
   moduleNameMapper: {
-    '\\.(css|less)$': '<rootDir>/__mocks__/styleMock.js',
-    '@digdir/designsystemet-(theme|css)$': '<rootDir>/__mocks__/styleMock.js',
+    '\\.(css|less)$': '<rootDir>/__mocks__/emptyMock.js',
+    '@digdir/designsystemet-(theme|css)$': '<rootDir>/__mocks__/emptyMock.js',
+    'react-markdown': '<rootDir>/__mocks__/emptyMock.js',
   },
   transform: {
     '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nrwl/react/plugins/jest',

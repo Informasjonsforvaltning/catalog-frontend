@@ -41,7 +41,7 @@ export const DataServiceForm = ({ initialValues }: Props) => {
         return (
           <Form onSubmit={handleSubmit}>
             <FormLayout>
-              <FormLayout.ButtonsRow>
+              {/* <FormLayout.ButtonsRow>
                 <Button type='submit'>{localization.button.save}</Button>
                 <Button
                   variant='secondary'
@@ -50,7 +50,7 @@ export const DataServiceForm = ({ initialValues }: Props) => {
                 >
                   {localization.button.delete}
                 </Button>
-              </FormLayout.ButtonsRow>
+              </FormLayout.ButtonsRow> */}
               <div>
                 <TitleSection errors={errors} />
               </div>

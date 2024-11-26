@@ -1,0 +1,131 @@
+.buttonsRow {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.heading {
+  padding-bottom: 3rem;
+  padding-left: 21.5%;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+}
+
+.grid {
+  display: flex;
+  gap: 2rem;
+  padding-top: 1rem;
+}
+
+.layout {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  flex-grow: 1;
+}
+
+.sideMenu {
+  position: sticky;
+  top: 1rem;
+  overflow:hidden;
+  min-width: 265px;
+  padding: 1rem;
+  border-radius:0.5rem;
+  border:1px solid #ddd;
+  background:white;
+}
+
+.sideMenu ol {  
+  list-style: none;
+
+  li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      &.active {
+        background-color: var(--fds-semantic-surface-third-light);
+        border-left: 4px solid var(--fds-semantic-surface-action-default);
+
+        :global(.fds-link) {
+          color: black;
+        }
+      }
+
+      & .required {
+        font-size: small;
+        color: var(  --fds-semantic-border-neutral-default);
+        font-style: italic;
+      }
+
+      &:hover {
+        border-left: 4px solid var(--fds-semantic-surface-action-default);
+        background: var(--fds-semantic-surface-action-first-no_fill-hover)
+      }
+
+      :global(.fds-link) {
+          display:block;
+          padding:0.6rem 0.8rem;
+          text-decoration:none;
+          font-size: medium;
+          width: 100%;
+
+          &:visited {
+            color: inherit;
+          }
+
+          &:hover {
+              background: var(--fds-semantic-surface-action-first-no_fill-hover)
+          }
+      }
+  }
+}
+
+.sideMenuHeading {
+  padding-bottom: 1rem;
+}
+
+.section { 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #fff;
+  border: 1px solid #d5d7d9;
+  border-radius: 8px;
+  flex-grow: 1;
+}
+
+.sectionHeading {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5em 2em;
+  gap: 0.25em;
+  background: var(--fds-semantic-surface-third-light);
+}
+
+.sectionHeadingTitle {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+ 
+.sectionHeadingSubtitle {
+  font-size: 1rem;
+  font-weight: 500;
+  gap: 1em;
+}
+
+.sectionContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1rem 2rem;
+  gap: 2rem;
+}
