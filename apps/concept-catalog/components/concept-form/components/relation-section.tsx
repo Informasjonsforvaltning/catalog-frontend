@@ -5,15 +5,18 @@ import styles from '../concept-form.module.scss';
 import { PencilWritingIcon, PlusIcon, TrashIcon } from '@navikt/aksel-icons';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { RelationModal } from './relation-modal';
-import { useSearchConcepts } from '../../../hooks/search';
+import { useSearchConcepts as useSearchInternalConcepts, useDataNorgeSearchConcepts } from '../../../hooks/search';
 
 export const RelationSection = ({ catalogId }) => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
 
   const relations: UnionRelation[] = [
-    ...(values['begrepsRelasjon'] ?? []),
+    ...(values['begrepsRelasjon']?.map((rel) => ({ ...rel })) ?? []),
     ...(values['seOgså']
-      ? values['seOgså'].map((concept) => ({ relasjon: UnionRelationTypeEnum.SE_OGSÅ, relatertBegrep: concept }))
+      ? values['seOgså'].map((concept) => ({
+          relasjon: UnionRelationTypeEnum.SE_OGSÅ,
+          relatertBegrep: concept,
+        }))
       : []),
     ...(values['erstattesAv']
       ? values['erstattesAv'].map((concept) => ({
@@ -21,7 +24,7 @@ export const RelationSection = ({ catalogId }) => {
           relatertBegrep: concept,
         }))
       : []),
-    ...(values['internBegrepsRelasjon'] ? values.internBegrepsRelasjon.map((rel) => ({ internal: true, ...rel })) : []),
+    ...(values['internBegrepsRelasjon'] ? values.internBegrepsRelasjon.map((rel) => ({ ...rel, internal: true })) : []),
     ...(values['internSeOgså']
       ? values['internSeOgså'].map((concept) => ({
           relasjon: UnionRelationTypeEnum.SE_OGSÅ,
@@ -38,7 +41,7 @@ export const RelationSection = ({ catalogId }) => {
       : []),
   ];
 
-  const { data: internalConcepts, isLoading: isLoadingInternalConcepts } = useSearchConcepts({
+  const { data: internalConcepts, isLoading: isLoadingInternalConcepts } = useSearchInternalConcepts({
     catalogId,
     searchTerm: '',
     page: 0,
@@ -56,13 +59,31 @@ export const RelationSection = ({ catalogId }) => {
     },
   });
 
+  const { data: externalConcepts, isLoading: isLoadingExternalConcepts } = useDataNorgeSearchConcepts({
+    searchOperation: {
+      filters: {
+        uri: { value: relations.filter((rel) => !rel.internal).map((rel) => rel.relatertBegrep as string) },
+      },
+      fields: {
+        title: false,
+        description: false,
+        keyword: false,
+      },
+      pagination: {
+        page: 0,
+        size: 100,
+      },
+    },
+  });
+
   const resolveRelatedConceptTitle = (relation: UnionRelation) => {
     if (relation.internal) {
       const match = internalConcepts?.hits.find((hit) => hit.originaltBegrep === relation.relatertBegrep);
-      return match ? getTranslateText(match.anbefaltTerm?.navn) : 'Ukjent';
+      return match ? getTranslateText(match.anbefaltTerm?.navn) : relation.relatertBegrep;
+    } else {
+      const match = externalConcepts?.hits.find((hit) => hit.uri === relation.relatertBegrep);
+      return match ? getTranslateText(match.title) : relation.relatertBegrep;
     }
-
-    return 'Ukjent';
   };
 
   const getFieldname = (rel: UnionRelation) => {

@@ -67,14 +67,14 @@ export const searchInternalConcepts = (
   );
 
 const hasRelatedConcepts = (concept: Concept): boolean => {
-  if (!isObjectNullUndefinedEmpty(concept.begrepsRelation)) return true;
+  if (!isObjectNullUndefinedEmpty(concept.begrepsRelasjon)) return true;
   if (!isObjectNullUndefinedEmpty(concept.seOgså)) return true;
   if (!isObjectNullUndefinedEmpty(concept.erstattesAv)) return true;
   return false;
 };
 
 const hasRelatedInternalConcepts = (concept: Concept): boolean => {
-  if (!isObjectNullUndefinedEmpty(concept.internBegrepsRelation)) return true;
+  if (!isObjectNullUndefinedEmpty(concept.internBegrepsRelasjon)) return true;
   if (!isObjectNullUndefinedEmpty(concept.internSeOgså)) return true;
   if (!isObjectNullUndefinedEmpty(concept.internErstattesAv)) return true;
   return false;
@@ -85,8 +85,8 @@ export const getPublishedConceptRelations = (concept: Concept): UnionRelation[] 
 
   const conceptRelations: UnionRelation[] = [];
 
-  if (concept.begrepsRelation) {
-    conceptRelations.push(...concept.begrepsRelation.filter((relasjon) => !isObjectNullUndefinedEmpty(relasjon)));
+  if (concept.begrepsRelasjon) {
+    conceptRelations.push(...concept.begrepsRelasjon.filter((relasjon) => !isObjectNullUndefinedEmpty(relasjon)));
   }
 
   if (concept.seOgså) {
@@ -116,9 +116,9 @@ export const getPublishedRelatedConcepts = async (
 
   const relatedConceptsUris = [];
 
-  if (concept.begrepsRelation)
+  if (concept.begrepsRelasjon)
     relatedConceptsUris.push(
-      ...concept.begrepsRelation
+      ...concept.begrepsRelasjon
         .map((relasjon) => relasjon.relatertBegrep)
         .filter((value) => value !== null && value !== undefined),
     );
@@ -213,26 +213,26 @@ export const getUnpublishedConceptRelations = (concept: Concept): UnionRelation[
 
   const internalConceptRelations: UnionRelation[] = [];
 
-  if (concept.internBegrepsRelation) {
+  if (concept.internBegrepsRelasjon) {
     internalConceptRelations.push(
-      ...concept.internBegrepsRelation.filter((relasjon) => !isObjectNullUndefinedEmpty(relasjon)),
+      ...concept.internBegrepsRelasjon.filter((relasjon) => !isObjectNullUndefinedEmpty(relasjon)),
     );
   }
 
   if (concept.internSeOgså) {
     if (Array.isArray(concept.internSeOgså)) {
       internalConceptRelations.push(
-        ...concept.internSeOgså.map((uri): UnionRelation => ({ relatertBegrep: uri, relasjon: UnionRelationTypeEnum.SE_OGSÅ, internal: true })),
+        ...concept.internSeOgså.map((uri): UnionRelation => ({ relatertBegrep: uri, internal: true, relasjon: UnionRelationTypeEnum.SE_OGSÅ })),
       );
     } else {
-      internalConceptRelations.push({ relatertBegrep: concept.internSeOgså, relasjon: UnionRelationTypeEnum.SE_OGSÅ, internal: true });
+      internalConceptRelations.push({ relatertBegrep: concept.internSeOgså, internal: true, relasjon: UnionRelationTypeEnum.SE_OGSÅ });
     }
   }
 
   if (concept.internErstattesAv) {
     internalConceptRelations.push(
       ...concept.internErstattesAv.map(
-        (uri): UnionRelation => ({ relatertBegrep: uri, relasjon: UnionRelationTypeEnum.ERSTATTES_AV, internal: true }),
+        (uri): UnionRelation => ({ relatertBegrep: uri, internal: true, relasjon: UnionRelationTypeEnum.ERSTATTES_AV }),
       ),
     );
   }
@@ -248,9 +248,9 @@ export const getUnpublishedRelatedConcepts = async (
 
   const unpublishedRelatedConceptsIds: string[] = [];
 
-  if (concept.internBegrepsRelation) {
+  if (concept.internBegrepsRelasjon) {
     unpublishedRelatedConceptsIds.push(
-      ...concept.internBegrepsRelation
+      ...concept.internBegrepsRelasjon
         .map((relasjon) => relasjon.relatertBegrep)
         .filter((value) => value !== null && value !== undefined)
         .filter(Boolean)
@@ -269,9 +269,6 @@ export const getUnpublishedRelatedConcepts = async (
   if (concept.internErstattesAv) {
     unpublishedRelatedConceptsIds.push(...concept.internErstattesAv);
   }
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
 
   const internalRelatedConcepts = fetchInternalRelatedConcepts(
     concept.ansvarligVirksomhet.id,

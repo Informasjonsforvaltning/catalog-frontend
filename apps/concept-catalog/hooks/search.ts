@@ -1,6 +1,7 @@
 'use client';
 
-import { QueryFilters, QuerySort, SearchableField, SearchConceptResponse } from '@catalog-frontend/types';
+import { searchConcepts, searchConceptsByUri } from '@catalog-frontend/data-access';
+import { QueryFilters, QuerySort, SearchableField, SearchConceptResponse, Search } from '@catalog-frontend/types';
 import { SelectOption } from '@catalog-frontend/ui';
 import { useQuery } from '@tanstack/react-query';
 
@@ -98,6 +99,32 @@ export const useSearchConcepts = ({ catalogId, searchTerm, page, fields, sort, f
         return Promise.reject('Unauthorized');
       }
 
+      return response.json();
+    },
+    enabled,
+  });
+};
+
+export const useDataNorgeSearchConcepts = ({
+  searchOperation,
+  enabled,
+}: {
+  searchOperation: Search.SearchOperation;
+  enabled?: boolean;
+}) => {
+  return useQuery<Search.SearchResult>({
+    queryKey: ['searchExternalConcept', searchOperation],
+    queryFn: async () => {
+      const resource = '/api/data-norge/search';
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify(searchOperation),
+      };
+
+      const response = await fetch(resource, options);
       return response.json();
     },
     enabled,

@@ -1,18 +1,11 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { Option, UnionRelation, UnionRelationSubtypeEnum, UnionRelationTypeEnum } from '@catalog-frontend/types';
-import { useFormikContext } from 'formik';
-import {
-  Box,
-  Combobox,
-  Fieldset,
-  HelpText,
-  Paragraph,
-  Radio,
-} from '@digdir/designsystemet-react';
+import { FastField, useFormikContext } from 'formik';
+import { Box, Combobox, Fieldset, HelpText, Paragraph, Radio, Textfield } from '@digdir/designsystemet-react';
 import styles from './relation-fieldset.module.scss';
 import { TitleWithTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { useSearchConcepts } from '../../../../hooks/search';
+import { useSearchConcepts as useSearchInternalConcepts, useDataNorgeSearchConcepts } from '../../../../hooks/search';
 import { FieldsetDivider } from '../fieldset-divider';
 import { LanguageFieldset } from '../language-fieldset';
 import { HelpMarkdown } from '../help-markdown';
@@ -31,14 +24,9 @@ const relationSubtypes = Object.keys(UnionRelationSubtypeEnum)
 
 export const RelationFieldset = ({ catalogId }) => {
   const { errors, values, setFieldValue } = useFormikContext<UnionRelation>();
-  const [searchTarget, setSearchTarget] = useState(values.internal ? 'internal' : 'external');
   const [search, setSearch] = useState('');
 
-  const {
-    status,
-    data: internalConcepts,
-    refetch,
-  } = useSearchConcepts({
+  const { data: internalConcepts } = useSearchInternalConcepts({
     catalogId,
     searchTerm: search,
     page: 0,
@@ -49,9 +37,36 @@ export const RelationFieldset = ({ catalogId }) => {
       definisjon: false,
       merknad: false,
     },
-    enabled: searchTarget === 'internal',
+    filters: search ? undefined : {
+      originalId: {
+        value: values.relatertBegrep ? [values.relatertBegrep] : [],
+      },
+    }
   });
 
+  const { data: externalConcepts } = useDataNorgeSearchConcepts({
+    searchOperation: {
+      query: search,
+      fields: {
+        title: true
+      },
+      filters: search ? undefined : {
+        uri: {
+          value: values.relatertBegrep ? [values.relatertBegrep] : []
+        }
+      }
+    }
+  });
+
+  console.log( externalConcepts?.hits, values.relatertBegrep);
+  const defaultRelatedConceptType = values.internal
+    ? 'internal'
+    : externalConcepts?.hits.find((hit) => hit.uri === values.relatertBegrep)
+      ? 'external'
+      : 'custom';
+  
+  const [relatedConceptType, setRelatedConceptType] = useState<string>(defaultRelatedConceptType);
+  
   const relationTypeOptions = relationTypes.map((item) => ({
     label: localization.conceptForm.fieldLabel.relationTypes[item],
     value: item,
@@ -91,8 +106,8 @@ export const RelationFieldset = ({ catalogId }) => {
   };
 
   useEffect(() => {
-    setFieldValue('internal', searchTarget === 'internal');
-  }, [searchTarget]);
+    setFieldValue('internal', relatedConceptType === 'internal');
+  }, [relatedConceptType]);
 
   return (
     <Box className={styles.root}>
@@ -237,16 +252,13 @@ export const RelationFieldset = ({ catalogId }) => {
             title={
               <>
                 {localization.conceptForm.fieldLabel.relatedConcept}
-                <HelpText
+                <HelpMarkdown
                   title={localization.conceptForm.fieldLabel.relatedConcept}
                   type='button'
                   size='sm'
                 >
-                  <Paragraph size='sm'>
-                    Begynn å skrive i søkefeltet, og du vil få opp en liste med forslag basert på ditt søk. Klikk på
-                    ønsket begrep for å knytte det til det nåværende begrepet.
-                  </Paragraph>
-                </HelpText>
+                  {localization.conceptForm.helpText.relatedConcept}
+                </HelpMarkdown>
               </>
             }
             tagColor='second'
@@ -257,30 +269,49 @@ export const RelationFieldset = ({ catalogId }) => {
         <Radio.Group
           legend=''
           size='sm'
-          value={searchTarget}
-          onChange={setSearchTarget}
+          value={relatedConceptType}
+          onChange={setRelatedConceptType}
         >
-          <Radio value='external'>Søk på data.norge.no</Radio>
           <Radio value='internal'>Søk i egen katalog</Radio>
+          <Radio value='external'>Søk på data.norge.no</Radio>
+          <Radio value='custom'>Egen definert</Radio>
         </Radio.Group>
-        <Combobox
-          size='sm'
-          portal={false}
-          onChange={handleSearchConceptChange}
-          onValueChange={handleRelatedConceptChange}
-          error={errors.relatertBegrep}
-        >
-          <Combobox.Empty>Fant ingen treff</Combobox.Empty>
-          {values.internal &&
-            internalConcepts?.hits.map((concept) => (
-              <Combobox.Option
-                key={concept.originaltBegrep as string}
-                value={concept.originaltBegrep as string}
-              >
-                {getTranslateText(concept.anbefaltTerm?.navn) as string}
-              </Combobox.Option>
-            ))}
-        </Combobox>
+        {(relatedConceptType === 'external' || relatedConceptType === 'internal') && (
+          <Combobox
+            size='sm'
+            portal={false}
+            onChange={handleSearchConceptChange}
+            onValueChange={handleRelatedConceptChange}
+            error={errors.relatertBegrep}
+          >
+            <Combobox.Empty>Fant ingen treff</Combobox.Empty>
+            {values.internal &&
+              internalConcepts?.hits.map((concept) => (
+                <Combobox.Option
+                  key={concept.originaltBegrep as string}
+                  value={concept.originaltBegrep as string}
+                >
+                  {getTranslateText(concept.anbefaltTerm?.navn) as string}
+                </Combobox.Option>
+              ))}
+              {!values.internal &&
+              externalConcepts?.hits.map((concept) => (
+                <Combobox.Option
+                  key={concept.id as string}
+                  value={concept.uri as string}
+                  description={getTranslateText(concept.organization?.prefLabel) as string}
+                >
+                  {getTranslateText(concept.title) as string}
+                </Combobox.Option>
+              ))}
+          </Combobox>
+        )}
+        {relatedConceptType === 'custom' && (
+          <FastField
+            name='relatertBegrep'
+            as={Textfield}
+          />
+        )}
       </Fieldset>
     </Box>
   );
