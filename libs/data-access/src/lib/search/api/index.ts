@@ -2,7 +2,13 @@ import { Search } from '@catalog-frontend/types';
 
 type SearchOperation = Search.SearchOperation;
 
-const searchApi = ({ path, searchOperation }: { path: string; searchOperation?: SearchOperation }) => {
+const searchApi = ({
+  path,
+  searchOperation,
+}: {
+  path: string;
+  searchOperation?: SearchOperation;
+}) => {
   return fetch(`${process.env.FDK_SEARCH_SERVICE_BASE_URI}/search${path}`, {
     headers: {
       'Content-Type': 'application/json',
@@ -28,6 +34,10 @@ export const searchConceptsByUri = (uri: string[]) => {
     },
   };
 
+  return searchConcepts(searchOperation);
+};
+
+export const searchConcepts = (searchOperation: SearchOperation) => {
   return searchApi({
     path: '/concepts',
     searchOperation,
