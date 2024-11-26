@@ -1,13 +1,13 @@
 import { TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Box, HelpText, Paragraph } from '@digdir/designsystemet-react';
-import { LanguageFieldset } from './language-fieldset';
+import { FormikLanguageFieldset } from './formik-language-fieldset';
 import { FieldsetDivider } from './fieldset-divider';
 
 export const TermSection = () => {
   return (
     <Box>
-      <LanguageFieldset
+      <FormikLanguageFieldset
         name='anbefaltTerm.navn'
         legend={
           <TitleWithTag
@@ -31,7 +31,7 @@ export const TermSection = () => {
         requiredLanguages={['nb', 'nn']}
       />
       <FieldsetDivider />
-      <LanguageFieldset
+      <FormikLanguageFieldset
         name='tillatTerm'
         legend={
           <TitleWithTag
@@ -55,7 +55,7 @@ export const TermSection = () => {
         }
       />
       <FieldsetDivider />
-      <LanguageFieldset
+      <FormikLanguageFieldset
         name='frarådetTerm'
         legend={
           <TitleWithTag
