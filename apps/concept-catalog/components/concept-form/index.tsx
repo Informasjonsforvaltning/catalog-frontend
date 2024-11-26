@@ -26,7 +26,7 @@ import { Alert } from '@digdir/designsystemet-react';
 import styles from './concept-form.module.scss';
 
 type Props = {
-  catalogId: string;
+  catalogId: string;  
   concept: Concept;
   conceptStatuses: ReferenceDataCode[];
   codeListsResult: CodeListsResult;
