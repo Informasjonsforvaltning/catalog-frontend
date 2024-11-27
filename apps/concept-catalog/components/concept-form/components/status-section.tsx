@@ -1,11 +1,11 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { useFormikContext } from 'formik';
+import { Box, HelpText, Link, Paragraph, Radio } from '@digdir/designsystemet-react';
 import { Concept } from '@catalog-frontend/types';
 import { TitleWithTag } from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Box, HelpText, Link, Paragraph, Radio } from '@digdir/designsystemet-react';
-import { useFormikContext } from 'formik';
-import { useEffect, useState } from 'react';
 
 export const StatusSection = ({ conceptStatuses }) => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();

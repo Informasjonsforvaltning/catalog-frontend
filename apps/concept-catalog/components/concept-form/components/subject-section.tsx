@@ -1,10 +1,11 @@
+import { ReactNode } from 'react';
+import { FastField, useFormikContext } from 'formik';
+import { Combobox, Fieldset, HelpText, Paragraph } from '@digdir/designsystemet-react';
 import { Code, Concept } from '@catalog-frontend/types';
 import { TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Combobox, Fieldset, HelpText, Paragraph } from '@digdir/designsystemet-react';
-import { FastField, useFormikContext } from 'formik';
 import styles from '../concept-form.module.scss';
-import { ReactNode } from 'react';
+
 
 type SubjectSectionProps = {
   codes: Code[] | undefined;

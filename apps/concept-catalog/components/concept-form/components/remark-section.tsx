@@ -1,8 +1,6 @@
-import { TitleWithTag } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
 import { Box } from '@digdir/designsystemet-react';
-import { FormikLanguageFieldset } from './formik-language-fieldset';
-import { TextareaWithPrefix } from './texarea-with-prefix';
+import { FormikLanguageFieldset, TextareaWithPrefix, TitleWithTag } from '@catalog-frontend/ui';
+import { localization } from '@catalog-frontend/utils';
 
 export const RemarkSection = () => {
   return (

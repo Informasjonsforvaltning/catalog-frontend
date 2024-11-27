@@ -13,6 +13,7 @@ export const EditPage = ({
   codeListsResult,
   fieldsResult,
   usersResult,
+  catalogPortalBaseUri
 }) => {
   
 
@@ -20,7 +21,7 @@ export const EditPage = ({
     <>
       <Breadcrumbs
         breadcrumbList={breadcrumbList}
-        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+        catalogPortalUrl={`${catalogPortalBaseUri}/catalogs`}
       />
       <PageBanner
         title={localization.catalogType.concept}

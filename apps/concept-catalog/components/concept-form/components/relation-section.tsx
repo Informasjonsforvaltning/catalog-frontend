@@ -1,14 +1,14 @@
-import { Concept, UnionRelation, UnionRelationTypeEnum } from '@catalog-frontend/types';
-import { Button, Skeleton, Table } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
-import styles from '../concept-form.module.scss';
 import { PencilWritingIcon, PlusIcon, TrashIcon } from '@navikt/aksel-icons';
+import { Button, Skeleton, Table } from '@digdir/designsystemet-react';
+import { Concept, UnionRelation, UnionRelationTypeEnum } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { RelationModal } from './relation-modal';
 import { useSearchConcepts as useSearchInternalConcepts, useDataNorgeSearchConcepts } from '../../../hooks/search';
+import { RelationModal } from './relation-modal';
+import styles from '../concept-form.module.scss';
 
 export const RelationSection = ({ catalogId }) => {
-  const { errors, values, setFieldValue } = useFormikContext<Concept>();
+  const { values, setFieldValue } = useFormikContext<Concept>();
 
   const relations: UnionRelation[] = [
     ...(values['begrepsRelasjon']?.map((rel) => ({ ...rel })) ?? []),
@@ -107,6 +107,8 @@ export const RelationSection = ({ catalogId }) => {
         relationValue = rel.relatertBegrep;
       }
 
+      console.log("handleChangeRelation", relationValue, name, index);
+
       if (name) {
         if (index === undefined) {
           if (!values[name]) {
@@ -133,7 +135,7 @@ export const RelationSection = ({ catalogId }) => {
     setFieldValue(name, relations);
   };
 
-  if (isLoadingInternalConcepts) {
+  if (isLoadingInternalConcepts || isLoadingExternalConcepts) {
     return (
       <Skeleton.Rectangle
         height='100px'

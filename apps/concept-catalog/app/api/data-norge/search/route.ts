@@ -13,6 +13,7 @@ export const POST = async (req: NextRequest) => {
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), { status: response.status });
     } catch (error) {
+      console.error(error);
       return new Response('Failed to search concepts on data.norge', { status: 500 });
     }
   });
