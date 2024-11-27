@@ -1,7 +1,7 @@
 'use client';
 import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button } from '@digdir/designsystemet-react';
-import { Dataset, DatasetSerie, DatasetToBeCreated, ReferenceData } from '@catalog-frontend/types';
+import { Dataset, DatasetSeries, DatasetToBeCreated, ReferenceData } from '@catalog-frontend/types';
 import { FormLayout, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
 import { Formik, Form } from 'formik';
 import { useParams } from 'next/navigation';
@@ -28,7 +28,7 @@ type Props = {
   searchEnv: string; // Environment variable to search service
   referenceDataEnv: string; // Environment variable to reference data
   referenceData: ReferenceData;
-  datasetSeries: DatasetSerie[];
+  datasetSeries: DatasetSeries[];
 };
 
 export const DatasetForm = ({

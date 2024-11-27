@@ -9,7 +9,7 @@ import { useSearchDatasetsByUri, useSearchDatasetSuggestions } from '../../../ho
 
 type TitleSectionProps = {
   searchEnv: string;
-  datasetSeries: DatasetSerie[];
+  datasetSeries: DatasetSeries[];
 };
 
 export const RelationsSection = ({ searchEnv, datasetSeries }: TitleSectionProps) => {

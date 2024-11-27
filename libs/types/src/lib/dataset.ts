@@ -72,7 +72,7 @@ export interface Reference {
   source: { uri: string };
 }
 
-export interface DatasetSerie {
+export interface DatasetSeries {
   title: string;
   uri: string;
   id: string;
