@@ -2,7 +2,7 @@
 import { Dataset } from '@catalog-frontend/types';
 import { FormContainer, FormikSearchCombobox } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Heading, Textfield, Textarea } from '@digdir/designsystemet-react';
+import { Heading, Textfield, Textarea, Label } from '@digdir/designsystemet-react';
 import {
   useSearchFileTypeByUri,
   useSearchFileTypes,
@@ -39,69 +39,45 @@ export const ExampleDataSection = ({ referenceDataEnv }: Props) => {
   );
 
   return (
-    <div>
-      <Heading
-        size='sm'
-        spacing
-      >
-        {localization.datasetForm.heading.exampleData}
-      </Heading>
-      <FormContainer>
-        <FormContainer.Header
-          title='Nedlastningslenke'
-          subtitle={localization.datasetForm.helptext.status}
-        />
-        <Field
-          name={`sample[0].downloadURL`}
-          as={Textfield}
-          label='Nedlastninglenke'
-        />
-        <Field
-          name={`sample[0].accessURL`}
-          as={Textfield}
-          label='Tilgangslenke'
-        />
-        <FormContainer.Header
-          title='Format'
-          subtitle={localization.datasetForm.helptext.fileTypes}
-        />
+    <>
+      <Field
+        name={`sample[0].downloadURL`}
+        as={Textfield}
+        label={localization.datasetForm.fieldLabel.downloadURL}
+      />
+      <Field
+        name={`sample[0].accessURL`}
+        as={Textfield}
+        label={localization.datasetForm.fieldLabel.accessURL}
+      />
 
-        <FormikSearchCombobox
-          onChange={(event) => setSearchQueryFileTypes(event.target.value)}
-          onValueChange={(selectedValues: string[]) => setFieldValue(`sample[0].format`, selectedValues)}
-          value={(values?.sample && values?.sample[0]?.format) || []}
-          selectedValuesSearchHits={selectedFileTypes ?? []}
-          querySearchHits={fileTypes ?? []}
-          formikValues={values?.sample?.[0]?.format ?? []}
-          loading={loadingSelectedFileTypes || searchingFileTypes}
-        />
+      <FormikSearchCombobox
+        onChange={(event) => setSearchQueryFileTypes(event.target.value)}
+        onValueChange={(selectedValues: string[]) => setFieldValue(`sample[0].format`, selectedValues)}
+        value={(values?.sample && values?.sample[0]?.format) || []}
+        selectedValuesSearchHits={selectedFileTypes ?? []}
+        querySearchHits={fileTypes ?? []}
+        formikValues={values?.sample?.[0]?.format ?? []}
+        loading={loadingSelectedFileTypes || searchingFileTypes}
+        label={localization.datasetForm.fieldLabel.format}
+      />
+      <FormikSearchCombobox
+        onChange={(event) => setSearchQueryMediaTypes(event.target.value)}
+        onValueChange={(selectedValues: string[]) => setFieldValue(`sample[0].mediaType`, selectedValues)}
+        value={(values?.sample && values?.sample[0]?.mediaType) || []}
+        selectedValuesSearchHits={selectedMediaTypes ?? []}
+        querySearchHits={mediaTypes ?? []}
+        formikValues={values?.sample?.[0]?.mediaType ?? []}
+        loading={loadingSelectedMediaTypes || searchingMediaTypes}
+        virtual
+        label={localization.datasetForm.fieldLabel.mediaTypes}
+      />
 
-        <FormContainer.Header
-          title='Media type'
-          subtitle={localization.datasetForm.helptext.mediaTypes}
-        />
-
-        <FormikSearchCombobox
-          onChange={(event) => setSearchQueryMediaTypes(event.target.value)}
-          onValueChange={(selectedValues: string[]) => setFieldValue(`sample[0].mediaType`, selectedValues)}
-          value={(values?.sample && values?.sample[0]?.mediaType) || []}
-          selectedValuesSearchHits={selectedMediaTypes ?? []}
-          querySearchHits={mediaTypes ?? []}
-          formikValues={values?.sample?.[0]?.mediaType ?? []}
-          loading={loadingSelectedMediaTypes || searchingMediaTypes}
-          virtual
-        />
-
-        <FormContainer.Header
-          title={localization.description}
-          subtitle={localization.datasetForm.helptext.status}
-        />
-        <Field
-          as={Textarea}
-          label={localization.description}
-          name={`sample[0].description.nb`}
-        />
-      </FormContainer>
-    </div>
+      <Field
+        as={Textarea}
+        label={localization.description}
+        name={`sample[0].description.nb`}
+      />
+    </>
   );
 };

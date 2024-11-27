@@ -42,12 +42,8 @@ export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
   };
 
   return (
-    <FormContainer>
-      <FormContainer.Header
-        title={localization.datasetForm.heading.losTheme}
-        subtitle={localization.datasetForm.helptext.theme}
-      />
-      <>
+    <>
+      <div>
         <div className={styles.combobox}>
           <TitleWithTag
             title={localization.datasetForm.fieldLabel.losTheme}
@@ -77,12 +73,12 @@ export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
             ))}
           </Field>
         </div>
-      </>
-      <FormContainer.Header
+      </div>
+      {/* <FormContainer.Header
         title={localization.datasetForm.heading.euTheme}
         subtitle={localization.datasetForm.helptext.theme}
-      />
-      <>
+      /> */}
+      <div>
         <div className={styles.combobox}>
           <TitleWithTag
             title={localization.datasetForm.fieldLabel.euTheme}
@@ -110,8 +106,8 @@ export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
               ))}
           </Field>
         </div>
-      </>
-    </FormContainer>
+      </div>
+    </>
   );
 };
 

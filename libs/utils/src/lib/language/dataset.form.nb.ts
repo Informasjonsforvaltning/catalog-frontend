@@ -66,6 +66,7 @@ export const datasetFormNb = {
     informationModelOther: 'Informasjonsmodell fra andre kilder',
     qualifiedAttributions: 'Innholdsleverandører',
     exampleData: 'Eksempeldata',
+    type: 'Type',
   },
   accessRight: {
     public: 'Allmenn tilgang',
@@ -73,16 +74,17 @@ export const datasetFormNb = {
     nonPublic: 'Ikke-allmenn tilgang',
   },
   fieldLabel: {
-    description: 'Beskrivelse av datasettet (Norsk bokmål)',
-    title: 'Tittel (Norsk bokmål)',
     losTheme: 'Velg tema, kategorier og emner',
     euTheme: 'Velg EU-tema(er)',
     type: 'Velg type',
     concept: 'Legg inn begreper',
-    keyword: { nb: 'Emneord (norsk bokmål)', nn: 'Emneord (norsk nynorsk)', en: 'Emneord (engelsk)' },
     geography: 'Søk etter geografisk område',
     informationModelTitle: 'Tittel på informasjonsmodell',
     informationModelUrl: 'URL til informasjonsmodell',
+    mediaTypes: 'Mediatyper',
+    format: 'Format',
+    accessURL: 'Tilgangslenke',
+    downloadURL: 'Nedlastingslenke',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
