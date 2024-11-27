@@ -36,6 +36,7 @@ export * from './lib/search-hits-page-layout';
 export * from './lib/select';
 export * from './lib/service-messages';
 export * from './lib/spinner';
+export * from './lib/sticky-footer-bar';
 export * from './lib/tag';
 export * from './lib/textarea-with-prefix';
 export * from './lib/title-with-tag';
