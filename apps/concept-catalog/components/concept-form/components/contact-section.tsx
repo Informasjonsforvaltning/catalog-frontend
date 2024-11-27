@@ -1,11 +1,10 @@
-import { Concept } from '@catalog-frontend/types';
-import { Box, Fieldset, Textfield, CheckboxGroup, Checkbox } from '@digdir/designsystemet-react';
-import { FastField, useFormikContext } from 'formik';
 import { useState } from 'react';
-import { TitleWithTag } from '@catalog-frontend/ui';
-import styles from '../concept-form.module.scss';
+import { FastField, useFormikContext } from 'formik';
+import { Box, Fieldset, Textfield, CheckboxGroup, Checkbox } from '@digdir/designsystemet-react';
+import { Concept } from '@catalog-frontend/types';
+import { HelpMarkdown, TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { HelpMarkdown } from './help-markdown';
+import styles from '../concept-form.module.scss';
 
 export const ContactSection = () => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();

@@ -1,10 +1,5 @@
-import { Box, HelpText, Paragraph } from '@digdir/designsystemet-react';
-import { LanguageFieldset } from './language-fieldset';
-import { TextareaWithPrefix } from './texarea';
-import { FieldsetDivider } from './fieldset-divider';
+import { Box } from '@digdir/designsystemet-react';
 import { VersionFieldset } from './version-fieldset';
-import { localization } from '@catalog-frontend/utils';
-import { TitleWithTag } from '@catalog-frontend/ui';
 
 export const VersionSection = () => {
   return (

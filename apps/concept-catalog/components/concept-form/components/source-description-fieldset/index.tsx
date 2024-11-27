@@ -1,13 +1,10 @@
-import { ReactNode, useEffect, useRef, useState } from 'react';
-import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Fieldset, Textfield, Button, HelpText, Radio, Box, Paragraph } from '@digdir/designsystemet-react';
+import { useEffect, useState } from 'react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
-
-import styles from './source-description-fieldset.module.scss';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { FieldsetDivider } from '../fieldset-divider';
+import { Fieldset, Textfield, Button, HelpText, Radio, Box, Paragraph } from '@digdir/designsystemet-react';
 import { TitleWithTag } from '@catalog-frontend/ui';
-import { ErrorMessage } from '../error-message';
+import { localization } from '@catalog-frontend/utils';
+import styles from './source-description-fieldset.module.scss';
 
 type SourceDescriptionFieldsetProps = {
   name: string;
