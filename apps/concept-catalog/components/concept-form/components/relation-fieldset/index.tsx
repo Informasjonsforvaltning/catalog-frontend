@@ -57,7 +57,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
   const [search, setSearch] = useState('');
   const [searchTriggered, setSearchTriggered] = useState(false);
 
-  const { data: internalConcepts } = useSearchInternalConcepts({
+  const { data: internalConcepts, status: internalStatus } = useSearchInternalConcepts({
     catalogId,
     searchTerm: search,
     page: 0,
@@ -70,7 +70,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
     },
   });
 
-  const { data: externalConcepts } = useDataNorgeSearchConcepts({
+  const { data: externalConcepts, status: externalStatus } = useDataNorgeSearchConcepts({
     searchOperation: {
       query: search,
       fields: {
@@ -124,6 +124,10 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
 
   useEffect(() => {
     setFieldValue('internal', relatedConceptType === 'internal');
+    if(relatedConcept.length > 0) {
+      setRelatedConcept(() => []);
+    }
+    
   }, [relatedConceptType]);
 
   useEffect(() => {
