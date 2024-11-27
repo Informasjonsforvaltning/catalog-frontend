@@ -1,9 +1,7 @@
 'use client';
 
-import React, { FC, useEffect } from 'react';
-import { FastField, Field, useFormikContext } from 'formik';
-import { AssignedUser, CodeList, Concept, InternalField } from '@catalog-frontend/types';
-import { capitalizeFirstLetter, getTranslateText } from '@catalog-frontend/utils';
+import React, {  } from 'react';
+import { FastField, useFormikContext } from 'formik';
 import {
   Box,
   Checkbox,
@@ -14,9 +12,9 @@ import {
   Textarea,
   Textfield,
 } from '@digdir/designsystemet-react';
-import { TitleWithTag } from '@catalog-frontend/ui';
-import styles from '../../concept-form.module.scss';
-import { FieldsetDivider } from '../fieldset-divider';
+import { AssignedUser, CodeList, Concept, InternalField } from '@catalog-frontend/types';
+import { capitalizeFirstLetter, getTranslateText } from '@catalog-frontend/utils';
+import { FieldsetDivider, TitleWithTag } from '@catalog-frontend/ui';
 
 export type InternalSectionProps = {
   internalFields: InternalField[];

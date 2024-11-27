@@ -1,14 +1,13 @@
+'use client';
+
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Option, UnionRelation, UnionRelationSubtypeEnum, UnionRelationTypeEnum } from '@catalog-frontend/types';
 import { FastField, useFormikContext } from 'formik';
 import { Box, Combobox, Fieldset, HelpText, Paragraph, Radio, Textfield } from '@digdir/designsystemet-react';
-import styles from './relation-fieldset.module.scss';
-import { TitleWithTag } from '@catalog-frontend/ui';
+import { FieldsetDivider, FormikLanguageFieldset, HelpMarkdown, TitleWithTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { Option, UnionRelation, UnionRelationSubtypeEnum, UnionRelationTypeEnum } from '@catalog-frontend/types';
 import { useSearchConcepts as useSearchInternalConcepts, useDataNorgeSearchConcepts } from '../../../../hooks/search';
-import { FieldsetDivider } from '../fieldset-divider';
-import { FormikLanguageFieldset } from '../formik-language-fieldset';
-import { HelpMarkdown } from '../help-markdown';
+import styles from './relation-fieldset.module.scss';
 
 const relationTypes = Object.keys(UnionRelationTypeEnum)
   .filter((item) => {
@@ -25,8 +24,13 @@ const relationSubtypes = Object.keys(UnionRelationSubtypeEnum)
 export const RelationFieldset = ({ catalogId }) => {
   const { errors, values, setFieldValue } = useFormikContext<UnionRelation>();
   const [search, setSearch] = useState('');
+  const [relatedConcept, setRelatedConcept] = useState<string[]>([]);
+  const [relatedConceptType, setRelatedConceptType] = useState<string>('internal');
+  const [initialFetched, setInitialFetched] = useState(false);
+  const [internalEnabled, setInternalEnabled] = useState(true);
+  const [externalEnabled, setExternalEnabled] = useState(true);
 
-  const { data: internalConcepts } = useSearchInternalConcepts({
+  const { data: internalConcepts, status: internalStatus } = useSearchInternalConcepts({
     catalogId,
     searchTerm: search,
     page: 0,
@@ -37,36 +41,32 @@ export const RelationFieldset = ({ catalogId }) => {
       definisjon: false,
       merknad: false,
     },
-    filters: search ? undefined : {
-      originalId: {
-        value: values.relatertBegrep ? [values.relatertBegrep] : [],
-      },
-    }
+    filters:
+      search.trim().length === 0 && values.relatertBegrep?.length
+        ? {
+            originalId: {
+              value: [values.relatertBegrep as string],
+            },
+          }
+        : undefined,
+    enabled: internalEnabled,
   });
 
-  const { data: externalConcepts } = useDataNorgeSearchConcepts({
+  const { data: externalConcepts, status: externalStatus } = useDataNorgeSearchConcepts({
     searchOperation: {
       query: search,
-      fields: {
-        title: true
-      },
-      filters: search ? undefined : {
-        uri: {
-          value: values.relatertBegrep ? [values.relatertBegrep] : []
-        }
-      }
-    }
+      filters:
+        relatedConceptType !== 'custom' && search.trim().length === 0 && values.relatertBegrep?.length
+          ? {
+              uri: {
+                value: [values.relatertBegrep as string],
+              },
+            }
+          : undefined,
+    },
+    enabled: externalEnabled,
   });
 
-  console.log( externalConcepts?.hits, values.relatertBegrep);
-  const defaultRelatedConceptType = values.internal
-    ? 'internal'
-    : externalConcepts?.hits.find((hit) => hit.uri === values.relatertBegrep)
-      ? 'external'
-      : 'custom';
-  
-  const [relatedConceptType, setRelatedConceptType] = useState<string>(defaultRelatedConceptType);
-  
   const relationTypeOptions = relationTypes.map((item) => ({
     label: localization.conceptForm.fieldLabel.relationTypes[item],
     value: item,
@@ -97,7 +97,9 @@ export const RelationFieldset = ({ catalogId }) => {
     setFieldValue('relasjonsType', value[0]);
   };
 
-  const handleSearchConceptChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleSearchConceptChange = (event: ChangeEvent<HTMLInputElement>) => {    
+    setInternalEnabled(true);
+    setExternalEnabled(true);
     setSearch(event.target.value);
   };
 
@@ -105,9 +107,53 @@ export const RelationFieldset = ({ catalogId }) => {
     setFieldValue('relatertBegrep', value[0]);
   };
 
+  const handleCustomRelatedConceptChange = (e) => {
+    setInternalEnabled(false);
+    setExternalEnabled(false);
+    setRelatedConcept([e.target.value]);
+  }
+  
   useEffect(() => {
     setFieldValue('internal', relatedConceptType === 'internal');
+    if(relatedConcept.length > 0) {
+      setRelatedConcept(() => []);
+    }
+    
   }, [relatedConceptType]);
+
+  useEffect(() => {
+    setFieldValue('relatertBegrep', relatedConcept);
+  }, [relatedConcept]);
+
+  useEffect(() => {
+    if (internalStatus === 'success' && externalStatus === 'success' && !initialFetched) {
+      setInitialFetched(() => true);
+      setInternalEnabled(() => false);
+      setExternalEnabled(() => false);
+
+      const selectedRelatedConceptType = internalConcepts?.hits.find((hit) => hit.id === values.relatertBegrep)
+        ? 'internal'
+        : externalConcepts?.hits.find((hit) => hit.uri === values.relatertBegrep)
+          ? 'external'
+          : 'custom';
+
+      console.log(
+        'initialFetched triggered',
+        internalConcepts,
+        externalConcepts,
+        selectedRelatedConceptType,
+        values.relatertBegrep,
+      );
+
+      setRelatedConceptType(selectedRelatedConceptType);
+      setRelatedConcept(
+        values.relatertBegrep &&
+          (selectedRelatedConceptType === 'internal' || selectedRelatedConceptType === 'external')
+          ? [values.relatertBegrep]
+          : [],
+      );
+    }
+  }, [internalStatus, externalStatus, initialFetched]);
 
   return (
     <Box className={styles.root}>
@@ -280,12 +326,13 @@ export const RelationFieldset = ({ catalogId }) => {
           <Combobox
             size='sm'
             portal={false}
+            value={relatedConcept}
             onChange={handleSearchConceptChange}
             onValueChange={handleRelatedConceptChange}
             error={errors.relatertBegrep}
           >
             <Combobox.Empty>Fant ingen treff</Combobox.Empty>
-            {values.internal &&
+            {relatedConceptType === 'internal' &&
               internalConcepts?.hits.map((concept) => (
                 <Combobox.Option
                   key={concept.originaltBegrep as string}
@@ -294,7 +341,7 @@ export const RelationFieldset = ({ catalogId }) => {
                   {getTranslateText(concept.anbefaltTerm?.navn) as string}
                 </Combobox.Option>
               ))}
-              {!values.internal &&
+            {relatedConceptType === 'external' &&
               externalConcepts?.hits.map((concept) => (
                 <Combobox.Option
                   key={concept.id as string}
@@ -307,9 +354,9 @@ export const RelationFieldset = ({ catalogId }) => {
           </Combobox>
         )}
         {relatedConceptType === 'custom' && (
-          <FastField
-            name='relatertBegrep'
-            as={Textfield}
+          <Textfield
+            value={relatedConcept[0]}
+            onChange={handleCustomRelatedConceptChange}
           />
         )}
       </Fieldset>
