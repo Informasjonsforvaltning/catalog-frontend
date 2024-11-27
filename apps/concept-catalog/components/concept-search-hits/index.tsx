@@ -69,10 +69,9 @@ const ConceptSearchHits: React.FC<Props> = ({
             ? localization.publicationState.publishedInFDK
             : localization.publicationState.unpublished}
         </p>
-      </div>
-      <div className={styles.rowSpaceBetween}>
         {searchHit.sistPublisertId && !searchHit?.erPublisert && (
-          <div className={styles.metaData}>
+          <>
+            <p className={styles.dot}>•</p>
             <Link
               prefetch={false}
               href={
@@ -83,8 +82,10 @@ const ConceptSearchHits: React.FC<Props> = ({
             >
               {localization.searchHit.lastPublished}
             </Link>
-          </div>
+          </>
         )}
+      </div>
+      <div className={styles.rowSpaceBetween}>
         {searchHit?.assignedUser && (
           <p className={styles.greyFont}>
             {assignableUsers?.find((user) => user.id === searchHit.assignedUser)?.name ?? localization.unknown}
