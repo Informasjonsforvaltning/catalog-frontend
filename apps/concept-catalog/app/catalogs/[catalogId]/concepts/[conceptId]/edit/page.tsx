@@ -61,6 +61,7 @@ export default withWriteProtectedPage(
         codeListsResult={codeListsResult}
         fieldsResult={fieldsResult}
         usersResult={usersResult}
+        catalogPortalBaseUri={process.env.CATALOG_PORTAL_BASE_URI}
       />
     );
   },

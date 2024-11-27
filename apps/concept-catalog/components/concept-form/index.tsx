@@ -1,12 +1,14 @@
 'use client';
 
-import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { CodeListsResult, Concept, FieldsResult, ReferenceDataCode, UsersResult } from '@catalog-frontend/types';
-import { Button, FormLayout } from '@catalog-frontend/ui';
+import { useState } from 'react';
+import classNames from 'classnames';
 import { Formik, Form } from 'formik';
 import { useParams, useRouter } from 'next/navigation';
+import { Alert } from '@digdir/designsystemet-react';
+import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
+import { CodeListsResult, Concept, FieldsResult, ReferenceDataCode, UsersResult } from '@catalog-frontend/types';
+import { Button, FormLayout, NotificationCarousel } from '@catalog-frontend/ui';
 import { createConcept, updateConcept } from '../../app/actions/concept/actions';
-import { useState } from 'react';
 import { conceptSchema } from './validation-schema';
 import { TermSection } from './components/term-section';
 import { DefinitionSection } from './components/definition-section';
@@ -20,9 +22,6 @@ import { VersionSection } from './components/version-section';
 import { PeriodSection } from './components/period-section';
 import { InternalSection } from './components/internal-section';
 import { ContactSection } from './components/contact-section';
-import classNames from 'classnames';
-import NotificationCarousel from './components/notification-carousel';
-import { Alert } from '@digdir/designsystemet-react';
 import styles from './concept-form.module.scss';
 
 type Props = {
@@ -63,10 +62,12 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
 const mapPropsToValues = (concept: Concept) => {
   return {
     ...concept,
+    gyldigFom: concept.gyldigFom ?? '',
+    gyldigTom: concept.gyldigTom ?? '',
     versjonsnr: {
-      major: `${concept.versjonsnr?.major}`,
-      minor: `${concept.versjonsnr?.minor}`,
-      patch: `${concept.versjonsnr?.patch}`
+      major: concept.versjonsnr?.major ?? '',
+      minor: concept.versjonsnr?.minor ?? '',
+      patch: concept.versjonsnr?.patch ?? ''
     }
   };
 };

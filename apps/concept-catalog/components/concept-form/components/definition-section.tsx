@@ -16,8 +16,7 @@ import { PencilWritingIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icon
 import { useState } from 'react';
 import { DefinitionModal } from './definition-modal';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { TitleWithTag } from '@catalog-frontend/ui';
-import { HelpMarkdown } from './help-markdown';
+import { HelpMarkdown, TitleWithTag } from '@catalog-frontend/ui';
 
 export const DefinitionSection = () => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
