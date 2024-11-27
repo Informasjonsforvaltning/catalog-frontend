@@ -123,6 +123,8 @@ export const RelationSection = ({ catalogId }) => {
         relationValue = rel.relatertBegrep;
       }
 
+      console.log("handleChangeRelation", relationValue, name, index);
+
       if (name) {
         if (index === undefined) {
           if (!values[name]) {
