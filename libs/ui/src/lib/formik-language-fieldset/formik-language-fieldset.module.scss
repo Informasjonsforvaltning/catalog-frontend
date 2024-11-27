@@ -3,8 +3,7 @@
     align-items: flex-end;
     padding-bottom: 0.4rem;
   
-    :global(.fds-textfield),
-    :global(.fds-texarea) {
+    & > *:first-child {
       flex-grow: 1;
     }
   

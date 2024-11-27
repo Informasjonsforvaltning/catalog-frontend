@@ -1,6 +1,6 @@
+import { FastField } from 'formik';
 import { Textfield } from '@digdir/designsystemet-react';
 import styles from './version-fieldset.module.scss';
-import { FastField } from 'formik';
 
 export type VersionFieldsetProps = {
     name: string;

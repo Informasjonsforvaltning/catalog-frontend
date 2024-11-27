@@ -1,15 +1,12 @@
-import { TitleWithTag } from '@catalog-frontend/ui';
-import { Button, HelpText, Modal, Paragraph } from '@digdir/designsystemet-react';
 import { ReactNode, useRef, useState } from 'react';
-import styles from './definition-modal.module.scss';
-import { FormikLanguageFieldset } from '../formik-language-fieldset';
-import { TextareaWithPrefix } from '../texarea-with-prefix';
-import { localization } from '@catalog-frontend/utils';
-import { FieldsetDivider } from '../fieldset-divider';
-import { SourceDescriptionFieldset } from '../source-description-fieldset';
 import { Formik } from 'formik';
+import { Button, HelpText, Modal, Paragraph } from '@digdir/designsystemet-react';
+import { FieldsetDivider, FormikLanguageFieldset, TextareaWithPrefix, TitleWithTag } from '@catalog-frontend/ui';
 import { Definisjon } from '@catalog-frontend/types';
+import { localization } from '@catalog-frontend/utils';
+import { SourceDescriptionFieldset } from '../source-description-fieldset';
 import { definitionSchema } from '../../validation-schema';
+import styles from './definition-modal.module.scss';
 
 export type DefinitionModalProps = {
   trigger: ReactNode;

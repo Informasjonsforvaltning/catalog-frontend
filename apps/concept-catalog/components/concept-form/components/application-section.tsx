@@ -1,10 +1,9 @@
-import { Concept } from '@catalog-frontend/types';
-import { TitleWithTag } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { HelpText, Paragraph, Textfield } from '@digdir/designsystemet-react';
 import { FastField, useFormikContext } from 'formik';
+import { HelpText, Paragraph, Textfield } from '@digdir/designsystemet-react';
+import { Concept } from '@catalog-frontend/types';
+import { FieldsetDivider, TitleWithTag } from '@catalog-frontend/ui';
+import { localization } from '@catalog-frontend/utils';
 import styles from '../concept-form.module.scss';
-import { FieldsetDivider } from './fieldset-divider';
 
 export const ApplicationSection = () => {
   const { errors } = useFormikContext<Concept>();

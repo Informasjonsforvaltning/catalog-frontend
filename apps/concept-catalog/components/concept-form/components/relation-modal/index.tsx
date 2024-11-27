@@ -1,10 +1,11 @@
-import { Button, Modal } from '@digdir/designsystemet-react';
+
 import { ReactNode, useRef, useState } from 'react';
-import styles from './relation-modal.module.scss';
 import { Formik } from 'formik';
+import { Button, Modal } from '@digdir/designsystemet-react';
 import { UnionRelation, UnionRelationTypeEnum,  } from '@catalog-frontend/types';
 import { unionRelationSchema } from '../../validation-schema';
 import { RelationFieldset } from '../relation-fieldset';
+import styles from './relation-modal.module.scss';
 
 export type RelationModalProps = {
   catalogId: string;
