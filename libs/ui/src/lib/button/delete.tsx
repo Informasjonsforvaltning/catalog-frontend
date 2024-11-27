@@ -8,6 +8,7 @@ const DeleteButton = ({ children = localization.button.delete, ...props }: Butto
     asChild
     variant='tertiary'
     color='danger'
+    // style={{ width: 'fit-content' }}
   >
     <span>
       <TrashIcon />

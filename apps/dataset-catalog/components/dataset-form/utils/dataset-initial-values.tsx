@@ -8,13 +8,9 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     _lastModified: dataset?._lastModified,
     title: {
       nb: (dataset && dataset.title?.nb) ?? '',
-      nn: (dataset && dataset.title?.nn) ?? '',
-      en: (dataset && dataset.title?.en) ?? '',
     },
     description: {
       nb: (dataset && dataset.description?.nb) ?? '',
-      nn: (dataset && dataset.description?.nn) ?? '',
-      en: (dataset && dataset.description?.en) ?? '',
     },
     accessRights: { uri: dataset?.accessRights?.uri ?? AccessRights.PUBLIC },
     legalBasisForAccess: dataset?.legalBasisForAccess ?? [{ uri: '', prefLabel: { nb: '' } }],

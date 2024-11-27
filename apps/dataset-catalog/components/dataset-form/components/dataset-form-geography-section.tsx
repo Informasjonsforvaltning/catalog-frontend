@@ -1,13 +1,14 @@
 'use client';
 import { AddButton, DeleteButton, FormContainer, FormikSearchCombobox, TitleWithTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Checkbox, Heading, Textfield } from '@digdir/designsystemet-react';
+import { Checkbox, Heading, Label, Textfield } from '@digdir/designsystemet-react';
 import { useCallback, useState } from 'react';
 import { useSearchAdministrativeUnits, useSearchAdministrativeUnitsByUri } from '../../../hooks/useReferenceDataSearch';
 import { Field, FieldArray, useFormikContext } from 'formik';
 import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
 import { debounce, sortBy } from 'lodash';
 import styles from '../dataset-form.module.css';
+import FieldsetWithDelete from '../../fieldset-with-delete';
 
 interface Props {
   envVariable: string;
@@ -45,116 +46,96 @@ export const GeographySection = ({ envVariable, languages }: Props) => {
   });
 
   return (
-    <div>
-      <Heading
-        size='sm'
-        spacing
+    <>
+      <FormikSearchCombobox
+        selectedValuesSearchHits={selectedValues ?? []}
+        querySearchHits={searchHits ?? []}
+        formikValues={values.spatialList ?? []}
+        onChange={handleSearchChange}
+        onValueChange={(selectedValues) => setFieldValue('spatialList', selectedValues)}
+        value={values.spatialList || []}
+        virtual
+        loading={isSearching}
+        label={localization.datasetForm.heading.spatial}
+      />
+      <FieldArray
+        name='temporal'
+        render={({ remove, push }) => (
+          <div>
+            <Label> {localization.datasetForm.heading.temporal}</Label>
+            {values.temporal &&
+              values.temporal.map((_, index) => (
+                <FieldsetWithDelete
+                  onDelete={() => remove(index)}
+                  key={`fieldset-${index}`}
+                >
+                  <Field
+                    as={Textfield}
+                    label={
+                      <TitleWithTag
+                        title={localization.from}
+                        tagColor='info'
+                        tagTitle={localization.tag.recommended}
+                      />
+                    }
+                    type='date'
+                    name={`temporal.${index}.startDate`}
+                  />
+                  <Field
+                    as={Textfield}
+                    label={
+                      <TitleWithTag
+                        title={localization.to}
+                        tagColor='info'
+                        tagTitle={localization.tag.recommended}
+                      />
+                    }
+                    type='date'
+                    name={`temporal.${index}.endDate`}
+                  />
+                </FieldsetWithDelete>
+              ))}
+
+            <AddButton onClick={() => push({ startDate: '', endDate: '' })}>
+              {localization.datasetForm.button.addDate}
+            </AddButton>
+          </div>
+        )}
+      />
+
+      <Field
+        // className={styles.fieldArrayRow}
+        as={Textfield}
+        type='date'
+        name='issued'
+        label={localization.datasetForm.heading.releaseDate}
+      />
+
+      <Checkbox.Group
+        //legend={`${localization.choose}...`}
+        onChange={(values) => setFieldValue('languageList', values)}
+        value={values.languageList}
+        legend={localization.datasetForm.heading.language}
       >
-        {localization.datasetForm.heading.geography}
-      </Heading>
-      <FormContainer>
-        <FormContainer.Header
-          title={localization.datasetForm.heading.spatial}
-          subtitle={localization.datasetForm.helptext.spatial}
-        />
-        <FormikSearchCombobox
-          selectedValuesSearchHits={selectedValues ?? []}
-          querySearchHits={searchHits ?? []}
-          formikValues={values.spatialList ?? []}
-          onChange={handleSearchChange}
-          onValueChange={(selectedValues) => setFieldValue('spatialList', selectedValues)}
-          value={values.spatialList || []}
-          virtual
-          loading={isSearching}
-        />
-        <FormContainer.Header
-          title={localization.datasetForm.heading.temporal}
-          subtitle={localization.datasetForm.helptext.temporal}
-        />
-        <FieldArray
-          name='temporal'
-          render={({ remove, push }) => (
-            <div>
-              {values.temporal &&
-                values.temporal.map((_, index) => (
-                  <div
-                    className={styles.fieldArrayRow}
-                    key={index}
-                  >
-                    <Field
-                      as={Textfield}
-                      label={
-                        <TitleWithTag
-                          title={localization.from}
-                          tagColor='info'
-                          tagTitle={localization.tag.recommended}
-                        />
-                      }
-                      type='date'
-                      name={`temporal.${index}.startDate`}
-                    />
-                    <Field
-                      as={Textfield}
-                      label={
-                        <TitleWithTag
-                          title={localization.to}
-                          tagColor='info'
-                          tagTitle={localization.tag.recommended}
-                        />
-                      }
-                      type='date'
-                      name={`temporal.${index}.endDate`}
-                    />
-                    <DeleteButton onClick={() => remove(index)} />
-                  </div>
-                ))}
-              <div className={styles.fitContent}>
-                <AddButton onClick={() => push({ startDate: '', endDate: '' })}>
-                  {localization.datasetForm.button.addDate}
-                </AddButton>
-              </div>
-            </div>
-          )}
-        />
-        <FormContainer.Header
-          title={localization.datasetForm.heading.releaseDate}
-          subtitle={localization.datasetForm.helptext.releaseDate}
-        />
-        <Field
-          className={styles.fieldArrayRow}
-          as={Textfield}
-          type='date'
-          name='issued'
-        />
-        <FormContainer.Header
-          title={localization.datasetForm.heading.language}
-          subtitle={localization.datasetForm.helptext.language}
-        />
-        <Checkbox.Group
-          legend={`${localization.choose}...`}
-          onChange={(values) => setFieldValue('languageList', values)}
-          value={values.languageList}
-        >
-          {values.languageList && values.languageList.includes('NOR') && (
+        {values.languageList && values.languageList.includes('NOR') && (
+          <Checkbox
+            key={langNOR.uri}
+            value={langNOR.uri}
+          >
+            {getTranslateText(langNOR.label)}
+          </Checkbox>
+        )}
+        {sortedLanguages
+          .filter((lang) => lang.code !== 'NOR')
+          .map((lang) => (
             <Checkbox
-              key={langNOR.uri}
-              value={langNOR.uri}
+              key={lang.uri}
+              value={lang.uri}
             >
-              {getTranslateText(langNOR.label)}
+              {getTranslateText(lang.label)}
             </Checkbox>
-          )}
-          {sortedLanguages
-            .filter((lang) => lang.code !== 'NOR')
-            .map((lang) => (
-              <Checkbox
-                key={lang.uri}
-                value={lang.uri}
-              >
-                {getTranslateText(lang.label)}
-              </Checkbox>
-            ))}
-        </Checkbox.Group>
-      </FormContainer>
-    </div>
+          ))}
+      </Checkbox.Group>
+    </>
   );
 };

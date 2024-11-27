@@ -1,97 +1,67 @@
 import { Dataset } from '@catalog-frontend/types';
-import { FormContainer, TitleWithTag } from '@catalog-frontend/ui';
+import { AddButton, FormikLanguageFieldset, TextareaWithPrefix, TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Heading, Textfield, Textarea, Button } from '@digdir/designsystemet-react';
-import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { Field, FieldArray, FormikErrors } from 'formik';
+import { Textfield, Fieldset } from '@digdir/designsystemet-react';
+import { Field, FieldArray, useFormikContext } from 'formik';
+import FieldsetWithDelete from '../../fieldset-with-delete';
+import { FieldsetDivider } from '@catalog-frontend/ui';
 
-type TitleSectionProps = {
-  errors: FormikErrors<Dataset>;
-};
-
-export const TitleSection = ({ errors }: TitleSectionProps) => {
+export const TitleSection = () => {
+  const errors = useFormikContext<Dataset>()?.errors;
   return (
-    <div>
-      <Heading
-        size='sm'
-        spacing
+    <>
+      <Fieldset
+        legend={
+          <TitleWithTag
+            title={localization.title}
+            tagTitle={localization.tag.required}
+          />
+        }
       >
-        {localization.datasetForm.heading.titleAndDescription}
-      </Heading>
-      <FormContainer>
-        <FormContainer.Header
-          title={localization.title}
-          subtitle={localization.datasetForm.helptext.title}
-        />
-        <Field
+        <FormikLanguageFieldset
+          name={'title'}
           as={Textfield}
-          name='title.nb'
-          label={
-            <TitleWithTag
-              title={localization.datasetForm.fieldLabel.title}
-              tagTitle={localization.tag.required}
-            />
-          }
-          error={errors?.title?.nb}
+          requiredLanguages={['nb']}
         />
-        <FormContainer.Header
-          title={localization.datasetForm.heading.description}
-          subtitle={localization.datasetForm.helptext.description}
+      </Fieldset>
+      <Fieldset
+        legend={
+          <TitleWithTag
+            title={localization.description}
+            tagTitle={localization.tag.required}
+          />
+        }
+      >
+        <FormikLanguageFieldset
+          name='description'
+          as={TextareaWithPrefix}
+          requiredLanguages={['nb']}
         />
-        <Field
-          as={Textarea}
-          name='description.nb'
-          label={
-            <TitleWithTag
-              title={localization.datasetForm.fieldLabel.description}
-              tagTitle={localization.tag.required}
-            />
-          }
-          error={errors?.description?.nb}
-        />
+      </Fieldset>
 
-        <FormContainer.Header
-          title={localization.datasetForm.heading.landingPage}
-          subtitle={localization.datasetForm.helptext.landingPage}
-        />
+      <FieldsetDivider />
 
-        <FieldArray name='landingPage'>
-          {(arrayHelpers) => (
-            <>
-              {arrayHelpers.form.values.landingPage &&
-                arrayHelpers.form.values.landingPage.map((_: string, index: number) => (
-                  <div key={`landingPage-${index}`}>
+      <FieldArray name='landingPage'>
+        {(arrayHelpers) => (
+          <>
+            {arrayHelpers.form.values.landingPage &&
+              arrayHelpers.form.values.landingPage.map((_: string, index: number) => (
+                <div key={`landingPage-${index}`}>
+                  <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
                     <Field
                       name={`landingPage[${index}]`}
-                      label={localization.link}
+                      label={localization.datasetForm.heading.landingPage}
                       as={Textfield}
                       error={errors?.landingPage?.[index]}
                     />
-                    <Button
-                      type='button'
-                      onClick={() => arrayHelpers.remove(index)}
-                      variant='tertiary'
-                      color='danger'
-                    >
-                      <MinusCircleIcon />
-                      {localization.remove}
-                    </Button>
-                  </div>
-                ))}
-              <div>
-                <Button
-                  type='button'
-                  onClick={() => arrayHelpers.push('')}
-                  variant='tertiary'
-                >
-                  <PlusCircleIcon />
-                  {localization.button.addUrl}
-                </Button>
-              </div>
-            </>
-          )}
-        </FieldArray>
-      </FormContainer>
-    </div>
+                  </FieldsetWithDelete>
+                </div>
+              ))}
+
+            <AddButton onClick={() => arrayHelpers.push('')}>{localization.button.addUrl}</AddButton>
+          </>
+        )}
+      </FieldArray>
+    </>
   );
 };

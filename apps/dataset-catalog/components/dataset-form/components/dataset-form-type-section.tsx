@@ -13,38 +13,26 @@ export const TypeSection = ({ datasetTypes }: Props) => {
   const { setFieldValue, values } = useFormikContext<Dataset>();
   return (
     <div>
-      <Heading
-        size='sm'
-        spacing
+      <Field
+        as={Combobox}
+        name='type'
+        value={[values.type]}
+        virtual
+        label={localization.datasetForm.fieldLabel.type}
+        placeholder={`${localization.search.search}...`}
+        onValueChange={(value: string[]) => setFieldValue('type', value.toString())}
       >
-        {localization.type}
-      </Heading>
-      <FormContainer>
-        <FormContainer.Header
-          title={localization.type}
-          subtitle={localization.datasetForm.helptext.type}
-        />
-        <Field
-          as={Combobox}
-          name='type'
-          value={[values.type]}
-          virtual
-          label={localization.datasetForm.fieldLabel.type}
-          placeholder={`${localization.search.search}...`}
-          onValueChange={(value: string[]) => setFieldValue('type', value.toString())}
-        >
-          <Combobox.Option value={''}>{`${localization.choose}...`}</Combobox.Option>
-          {datasetTypes.map((type) => (
-            <Combobox.Option
-              value={type.uri}
-              key={type.uri}
-              description={`${localization.code}: ${type.code}`}
-            >
-              {getTranslateText(type?.label)}
-            </Combobox.Option>
-          ))}
-        </Field>
-      </FormContainer>
+        <Combobox.Option value={''}>{`${localization.choose}...`}</Combobox.Option>
+        {datasetTypes.map((type) => (
+          <Combobox.Option
+            value={type.uri}
+            key={type.uri}
+            description={`${localization.code}: ${type.code}`}
+          >
+            {getTranslateText(type?.label)}
+          </Combobox.Option>
+        ))}
+      </Field>
     </div>
   );
 };
