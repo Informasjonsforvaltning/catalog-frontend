@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Dataset, DatasetSerie } from '@catalog-frontend/types';
+import { Dataset, DatasetSeries } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, FormContainer } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Heading, Combobox, Textfield } from '@digdir/designsystemet-react';
