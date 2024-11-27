@@ -1,8 +1,6 @@
-import { TitleWithTag } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
 import { Box, HelpText, Paragraph } from '@digdir/designsystemet-react';
-import { FormikLanguageFieldset } from './formik-language-fieldset';
-import { FieldsetDivider } from './fieldset-divider';
+import { FieldsetDivider, FormikLanguageFieldset, TitleWithTag } from '@catalog-frontend/ui';
+import { localization } from '@catalog-frontend/utils';
 
 export const TermSection = () => {
   return (
