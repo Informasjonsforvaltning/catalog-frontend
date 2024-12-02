@@ -40,4 +40,3 @@ export * from './lib/tag';
 export * from './lib/textarea-with-prefix';
 export * from './lib/title-with-tag';
 export * from './lib/use-warn-if-unsaved-changes';
-export * from './lib/fieldset-divider';

@@ -89,10 +89,7 @@ export const DatasetForm = ({ initialValues, submitType, referenceData, searchEn
             }}
           >
             <FormLayout>
-              <FormLayout.Section
-                title='save'
-                id='save'
-              >
+              {/* <FormLayout.ButtonsRow>
                 <Button type='submit'>{localization.button.save}</Button>
                 <Button
                   variant='secondary'
@@ -101,101 +98,29 @@ export const DatasetForm = ({ initialValues, submitType, referenceData, searchEn
                 >
                   {localization.button.delete}
                 </Button>
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='title-section'
-                title={localization.datasetForm.heading.titleAndDescription}
-                required
-              >
-                <TitleSection />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='access-right-section'
-                title={localization.datasetForm.heading.accessRights}
-              >
+              </FormLayout.ButtonsRow> */}
+              <div>
+                <TitleSection errors={errors} />
                 <AccessRightsSection
                   values={values}
                   errors={errors}
                 />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='tema-section'
-                title={localization.datasetForm.heading.losTheme}
-                subtitle=''
-                required
-              >
                 <ThemeSection
                   losThemes={losThemes}
                   dataThemes={dataThemes}
                 />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='type-section'
-                title={localization.datasetForm.heading.type}
-              >
                 <TypeSection datasetTypes={datasetTypes} />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='concept-section'
-                title={localization.datasetForm.heading.concept}
-                subtitle=''
-              >
                 <ConceptSection searchEnv={searchEnv} />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='geography-section'
-                title={localization.datasetForm.heading.geography}
-                subtitle=''
-              >
                 <GeographySection
                   envVariable={referenceDataEnv}
                   languages={languages}
                 />
-              </FormLayout.Section>
-              <FormLayout.Section
-                id='provenance-section'
-                title={localization.datasetForm.heading.provenanceAndFrequency}
-                subtitle=''
-              >
                 <ProvenanceSection data={{ provenanceStatements, frequencies }} />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='content-section'
-                title={localization.datasetForm.heading.content}
-                subtitle=''
-              >
                 <ContentSection />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='information-model-section'
-                title={localization.datasetForm.heading.informationModel}
-                subtitle=''
-              >
                 <InformationModelSection searchEnv={searchEnv} />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='qualified-attributions-section'
-                title={localization.datasetForm.heading.qualifiedAttributions}
-                subtitle=''
-              >
                 <QualifiedAttributionsSection />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='example-data-section'
-                title={localization.datasetForm.heading.exampleData}
-              >
                 <ExampleDataSection referenceDataEnv={referenceDataEnv} />
-              </FormLayout.Section>
+              </div>
             </FormLayout>
           </Form>
         );
