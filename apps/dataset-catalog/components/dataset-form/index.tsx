@@ -1,7 +1,7 @@
 'use client';
 import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button } from '@digdir/designsystemet-react';
-import { Dataset, DatasetToBeCreated, ReferenceData } from '@catalog-frontend/types';
+import { Dataset, DatasetSeries, DatasetToBeCreated, ReferenceData } from '@catalog-frontend/types';
 import { FormLayout, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
 import { Formik, Form } from 'formik';
 import { useParams } from 'next/navigation';
@@ -20,6 +20,7 @@ import { GeographySection } from './components/dataset-form-geography-section';
 import { InformationModelSection } from './components/dataset-form-information-model-section';
 import { QualifiedAttributionsSection } from './components/dataset-form-qualified-attributions-section';
 import { ExampleDataSection } from './components/dataset-form-example-data-section';
+import { RelationsSection } from './components/dataset-form-relations-section';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
@@ -27,9 +28,17 @@ type Props = {
   searchEnv: string; // Environment variable to search service
   referenceDataEnv: string; // Environment variable to reference data
   referenceData: ReferenceData;
+  datasetSeries: DatasetSeries[];
 };
 
-export const DatasetForm = ({ initialValues, submitType, referenceData, searchEnv, referenceDataEnv }: Props) => {
+export const DatasetForm = ({
+  initialValues,
+  submitType,
+  referenceData,
+  searchEnv,
+  referenceDataEnv,
+  datasetSeries,
+}: Props) => {
   const { catalogId, datasetId } = useParams();
   const [isDirty, setIsDirty] = useState(false);
   const { losThemes, dataThemes, provenanceStatements, datasetTypes, frequencies, languages } = referenceData;
@@ -195,6 +204,15 @@ export const DatasetForm = ({ initialValues, submitType, referenceData, searchEn
                 title={localization.datasetForm.heading.exampleData}
               >
                 <ExampleDataSection referenceDataEnv={referenceDataEnv} />
+              </FormLayout.Section>
+              <FormLayout.Section
+                id='relation-section'
+                title={localization.datasetForm.heading.relations}
+              >
+                <RelationsSection
+                  searchEnv={searchEnv}
+                  datasetSeries={datasetSeries}
+                />
               </FormLayout.Section>
             </FormLayout>
           </Form>

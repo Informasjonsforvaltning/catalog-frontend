@@ -105,3 +105,15 @@ export const getAllDatasetCatalogs = async (accessToken: string) => {
   };
   return await fetch(resource, options);
 };
+
+export const getAllDatasetSeries = async (catalogId: string, accessToken: string) => {
+  const resource = `${path}/catalogs/${catalogId}/datasets?specializedType=SERIES`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    next: { tags: ['datasetSeries'] },
+  };
+  return await fetch(resource, options);
+};

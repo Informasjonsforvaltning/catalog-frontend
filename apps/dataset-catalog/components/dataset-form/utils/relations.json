@@ -1,0 +1,102 @@
+[
+  {
+    "code": "hasVersion",
+    "uriAsPrefix": "dct:hasVersion",
+    "label": {
+      "nn": "Har versjon",
+      "nb": "Har versjon",
+      "en": "Has version"
+    },
+    "uri": "http://purl.org/dc/terms/hasVersion"
+  },
+  {
+    "code": "isVersionOf",
+    "uriAsPrefix": "dct:isVersionOf",
+    "label": {
+      "nn": "Er versjon av",
+      "nb": "Er versjon av",
+      "en": "Is version of"
+    },
+    "uri": "http://purl.org/dc/terms/isVersionOf"
+  },
+  {
+    "code": "isPartOf",
+    "uriAsPrefix": "dct:isPartOf",
+    "label": {
+      "nn": "Er del av",
+      "nb": "Er en del av",
+      "en": "Is part of"
+    },
+    "uri": "http://purl.org/dc/terms/isPartOf"
+  },
+  {
+    "code": "hasPart",
+    "uriAsPrefix": "dct:hasPart",
+    "label": {
+      "nn": "Har del",
+      "nb": "Har del",
+      "en": "Has part"
+    },
+    "uri": "http://purl.org/dc/terms/hasPart"
+  },
+  {
+    "code": "isReferencedBy",
+    "uriAsPrefix": "dct:isReferencedBy",
+    "label": {
+      "nn": "Er referert av",
+      "nb": "Er referert av",
+      "en": "Is referenced by"
+    },
+    "uri": "http://purl.org/dc/terms/isReferencedBy"
+  },
+  {
+    "code": "references",
+    "uriAsPrefix": "dct:references",
+    "label": {
+      "nn": "Refererar",
+      "nb": "Refererer",
+      "en": "References"
+    },
+    "uri": "http://purl.org/dc/terms/references"
+  },
+  {
+    "code": "isReplacedBy",
+    "uriAsPrefix": "dct:isReplacedBy",
+    "label": {
+      "nn": "Er erstatta av",
+      "nb": "Er erstattet av",
+      "en": "Is replaced by"
+    },
+    "uri": "http://purl.org/dc/terms/isReplacedBy"
+  },
+  {
+    "code": "replaces",
+    "uriAsPrefix": "dct:replaces",
+    "label": {
+      "nn": "Erstatter",
+      "nb": "Erstatter",
+      "en": "Replaces"
+    },
+    "uri": "http://purl.org/dc/terms/replaces"
+  },
+  {
+    "code": "relation",
+    "uriAsPrefix": "dct:relation",
+    "label": {
+      "nn": "Er relatert til",
+      "nb": "Er relatert til",
+      "en": "Has relation to"
+    },
+    "uri": "http://purl.org/dc/terms/relation"
+  },
+  {
+    "code": "source",
+    "uriAsPrefix": "dct:source",
+    "label": {
+      "nn": "Kjelde",
+      "nb": "Kilde",
+      "en": "Source"
+    },
+    "uri": "http://purl.org/dc/terms/source"
+  }
+]

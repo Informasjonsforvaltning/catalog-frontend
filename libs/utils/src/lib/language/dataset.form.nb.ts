@@ -33,6 +33,9 @@ export const datasetFormNb = {
     informationModelFDK: 'Søk etter informasonsmodeller fra Felles datakatalog og velg fra nedtrekksliste.',
     informationModelOther: 'Legg til informasjonsmodell via lenke.',
     qualifiedAttributions: 'Søk på organisasjoner eller oppgi organisasjonsnummer.',
+    relationsDataset: 'Oppgi relaterte datasett',
+    relationDatasetSeries: 'Oppgi relaterte datasettserier.',
+    relatedResources: 'Oppgi relaterte ressurser.',
   },
   heading: {
     description: 'Beskrivelse av datasettet',
@@ -67,6 +70,10 @@ export const datasetFormNb = {
     qualifiedAttributions: 'Innholdsleverandører',
     exampleData: 'Eksempeldata',
     type: 'Type',
+    relations: 'Relasjoner',
+    relationsDataset: 'Relasjoner til datasett',
+    relationDatasetSeries: 'Relasjoner til datasettserier',
+    relatedResources: 'Relaterte ressurser',
   },
   accessRight: {
     public: 'Allmenn tilgang',
@@ -85,6 +92,10 @@ export const datasetFormNb = {
     format: 'Format',
     accessURL: 'Tilgangslenke',
     downloadURL: 'Nedlastingslenke',
+    dataset: 'Datasett',
+    relationType: 'Relasjonstype',
+    datasetSeries: 'Datasettserie',
+    choseRelation: 'Velg relasjon',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',

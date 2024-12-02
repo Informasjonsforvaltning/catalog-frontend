@@ -3,9 +3,10 @@ import { getDatasetById } from '../../../../../actions/actions';
 import { DatasetForm } from '../../../../../../components/dataset-form';
 
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { getTranslateText, getValidSession, localization } from '@catalog-frontend/utils';
 import { Organization } from '@catalog-frontend/types';
 import {
+  getAllDatasetSeries,
   getDatasetTypes,
   getDataThemes,
   getFrequencies,
@@ -21,6 +22,9 @@ export default async function EditDatasetPage({ params }: Params) {
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
   const dataset = await getDatasetById(catalogId, datasetId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+  const session = await getValidSession();
+  const accessToken = session?.accessToken;
+  const datasetSeries = await getAllDatasetSeries(catalogId, accessToken).then((res) => res.json());
 
   const [
     losThemesResponse,
@@ -79,6 +83,7 @@ export default async function EditDatasetPage({ params }: Params) {
           searchEnv={searchEnv}
           referenceDataEnv={referenceDataEnv}
           referenceData={referenceData}
+          datasetSeries={datasetSeries._embedded.datasets}
         ></DatasetForm>
       </div>
     </>
