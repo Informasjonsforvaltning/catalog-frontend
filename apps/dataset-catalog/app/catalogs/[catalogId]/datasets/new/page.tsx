@@ -75,16 +75,14 @@ export default async function NewDatasetPage({ params }: Params) {
         title={localization.catalogType.dataset}
         subtitle={getTranslateText(organization.prefLabel).toString()}
       />
-      <div className='container'>
-        <DatasetForm
-          initialValues={initialValues}
-          submitType={'create'}
-          referenceData={referenceData}
-          searchEnv={searchEnv}
-          referenceDataEnv={referenceDataEnv}
-          datasetSeries={datasetSeries._embedded.datasets}
-        ></DatasetForm>
-      </div>
+      <DatasetForm
+        initialValues={initialValues}
+        submitType={'create'}
+        referenceData={referenceData}
+        searchEnv={searchEnv}
+        referenceDataEnv={referenceDataEnv}
+        datasetSeries={datasetSeries._embedded.datasets}
+      ></DatasetForm>
     </>
   );
 }

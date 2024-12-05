@@ -1,13 +1,12 @@
 'use client';
-import { AddButton, DeleteButton, FormContainer, FormikSearchCombobox, TitleWithTag } from '@catalog-frontend/ui';
+import { AddButton, FormikSearchCombobox, TitleWithTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Checkbox, Heading, Label, Textfield } from '@digdir/designsystemet-react';
+import { Checkbox, Label, Textfield } from '@digdir/designsystemet-react';
 import { useCallback, useState } from 'react';
 import { useSearchAdministrativeUnits, useSearchAdministrativeUnitsByUri } from '../../../hooks/useReferenceDataSearch';
 import { Field, FieldArray, useFormikContext } from 'formik';
 import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
 import { debounce, sortBy } from 'lodash';
-import styles from '../dataset-form.module.css';
 import FieldsetWithDelete from '../../fieldset-with-delete';
 
 interface Props {

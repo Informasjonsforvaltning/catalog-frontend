@@ -227,6 +227,8 @@ export const nb = {
     unsavedChanges: 'Du har ulagrede endringer. Er du sikker på at du vil forlate siden?',
     updateFailed: 'Oppdatering mislyktes. Prøv igjen senere.',
     deleteFailed: 'Kunne ikke slette. Prøv igjen senere.',
+    formError: 'Skjemaet har feil eller mangler. Sjekk feltene markert i rødt og prøv igjen.',
+    formUnsavedChanges: 'Skjemaet har ulagrede endringer.'
   },
   catalogAdmin: {
     addUser: 'Legg til nytt brukernavn',
@@ -481,6 +483,6 @@ export const nb = {
   },
 
   icon: {
-    trash: 'Søppelikon'
-  }
+    trash: 'Søppelikon',
+  },
 };
