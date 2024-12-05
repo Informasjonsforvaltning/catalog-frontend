@@ -41,7 +41,6 @@ export const ApplicationSection = () => {
           }
           error={errors?.omfang?.tekst}
         />
-        <FieldsetDivider />
         <FastField
           as={Textfield}
           size='sm'

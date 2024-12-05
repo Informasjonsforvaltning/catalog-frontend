@@ -1,6 +1,5 @@
 .dialog {
     max-width: 800px;
-    overflow: hidden;
 }
 
 .content {
@@ -10,8 +9,6 @@
     border-radius: var(--fds-border_radius-medium);
     height: calc(100vh - 400px);
 }
-
-
 
 .sourceTable {
     display: flex;

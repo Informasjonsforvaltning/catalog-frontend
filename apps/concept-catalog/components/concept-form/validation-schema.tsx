@@ -1,4 +1,4 @@
-import { ContactDetails, UnionRelationTypeEnum } from '@catalog-frontend/types';
+import { ContactDetails, RelationTypeEnum } from '@catalog-frontend/types';
 import { compareVersion, localization } from '@catalog-frontend/utils';
 import { DateTime } from 'luxon';
 import * as Yup from 'yup';
@@ -125,12 +125,12 @@ export const definitionSchema = Yup.object()
     },
   }).nullable();
 
-export const unionRelationSchema = Yup.object().shape({
+export const relationSchema = Yup.object().shape({
     relasjon: Yup.string().required('Feltet må fylles ut'),
     relasjonsType: Yup.string()
       .nullable()
       .when('relasjon', (relasjon) => {
-        if (`${relasjon}` === UnionRelationTypeEnum.PARTITIV || `${relasjon}` === UnionRelationTypeEnum.GENERISK) {
+        if (`${relasjon}` === RelationTypeEnum.PARTITIV || `${relasjon}` === RelationTypeEnum.GENERISK) {
           return Yup.string().required();
         }
         return Yup.string().notRequired();
@@ -234,25 +234,15 @@ export const conceptSchema = Yup.object().shape({
         });
       },
     }),
-  seOgså: Yup.array().of(Yup.string().nullable()).nullable(),
-  internSeOgså: Yup.array().of(Yup.string().nullable()).nullable(),
-  erstattesAv: Yup.array().of(Yup.string().nullable()).nullable(),
-  internErstattesAv: Yup.array().of(Yup.string().nullable()).nullable(),
+  internSeOgså: Yup.array().of(Yup.string()).nullable(),
+  internErstattesAv: Yup.array().of(Yup.string()).nullable(),
+  internBegrepsRelation: Yup.array()
+    .of(relationSchema)
+    .nullable(),
+  seOgså: Yup.array().of(Yup.string()).nullable(),
+  erstattesAv: Yup.array().of(Yup.string()).nullable(),
   begrepsRelation: Yup.array()
-    .of(
-      Yup.object().shape({
-        relasjon: Yup.string().required('Feltet må fylles ut'),
-        relasjonsType: Yup.string()
-          .nullable()
-          .when('relasjon', (relasjon) => {
-            if (`${relasjon}` === UnionRelationTypeEnum.PARTITIV || `${relasjon}` === UnionRelationTypeEnum.GENERISK) {
-              return Yup.string().required();
-            }
-            return Yup.string().notRequired();
-          }),
-        relatertBegrep: Yup.string().required(),
-      }),
-    )
+    .of(relationSchema)
     .nullable(),
   versjonsnr: Yup.object()
     .test(
@@ -262,6 +252,7 @@ export const conceptSchema = Yup.object().shape({
         context.parent.id
           ? getRevisions({ catalogId: context.parent.ansvarligVirksomhet.id, conceptId: context.parent.id })
               .then((revisions) => {
+                // TODO check if erSistPublisert fremdeles finnes på revision
                 const latestPublishedRevision = revisions.find((rev) => rev.erSistPublisert);
                 return (
                   compareVersion(
