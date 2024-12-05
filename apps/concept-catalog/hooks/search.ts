@@ -1,6 +1,5 @@
 'use client';
 
-import { searchConcepts, searchConceptsByUri } from '@catalog-frontend/data-access';
 import { QueryFilters, QuerySort, SearchableField, SearchConceptResponse, Search } from '@catalog-frontend/types';
 import { SelectOption } from '@catalog-frontend/ui';
 import { useQuery } from '@tanstack/react-query';

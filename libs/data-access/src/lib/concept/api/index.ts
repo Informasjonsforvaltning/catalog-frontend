@@ -1,4 +1,4 @@
-import { Concept, UnionRelation, SearchConceptQuery, Search, RelatedConcept, UnionRelationTypeEnum } from '@catalog-frontend/types';
+import { Concept, UnionRelation, SearchConceptQuery, Search, RelatedConcept, RelationTypeEnum } from '@catalog-frontend/types';
 import { searchConceptsByUri } from '../../search/api';
 import { getUniqueConceptIdsFromUris, isObjectNullUndefinedEmpty } from '@catalog-frontend/utils';
 import { Operation } from 'fast-json-patch';
@@ -92,16 +92,16 @@ export const getPublishedConceptRelations = (concept: Concept): UnionRelation[] 
   if (concept.seOgså) {
     if (Array.isArray(concept.seOgså)) {
       conceptRelations.push(
-        ...concept.seOgså.map((uri): UnionRelation => ({ relatertBegrep: uri, relasjon: UnionRelationTypeEnum.SE_OGSÅ })),
+        ...concept.seOgså.map((uri): UnionRelation => ({ relatertBegrep: uri, relasjon: RelationTypeEnum.SE_OGSÅ })),
       );
     } else {
-      conceptRelations.push({ relatertBegrep: concept.seOgså, relasjon: UnionRelationTypeEnum.SE_OGSÅ });
+      conceptRelations.push({ relatertBegrep: concept.seOgså, relasjon: RelationTypeEnum.SE_OGSÅ });
     }
   }
 
   if (concept.erstattesAv) {
     conceptRelations.push(
-      ...concept.erstattesAv.map((uri): UnionRelation => ({ relatertBegrep: uri, relasjon: UnionRelationTypeEnum.ERSTATTES_AV })),
+      ...concept.erstattesAv.map((uri): UnionRelation => ({ relatertBegrep: uri, relasjon: RelationTypeEnum.ERSTATTES_AV })),
     );
   }
 
@@ -222,17 +222,17 @@ export const getUnpublishedConceptRelations = (concept: Concept): UnionRelation[
   if (concept.internSeOgså) {
     if (Array.isArray(concept.internSeOgså)) {
       internalConceptRelations.push(
-        ...concept.internSeOgså.map((uri): UnionRelation => ({ relatertBegrep: uri, internal: true, relasjon: UnionRelationTypeEnum.SE_OGSÅ })),
+        ...concept.internSeOgså.map((uri): UnionRelation => ({ relatertBegrep: uri, internal: true, relasjon: RelationTypeEnum.SE_OGSÅ })),
       );
     } else {
-      internalConceptRelations.push({ relatertBegrep: concept.internSeOgså, internal: true, relasjon: UnionRelationTypeEnum.SE_OGSÅ });
+      internalConceptRelations.push({ relatertBegrep: concept.internSeOgså, internal: true, relasjon: RelationTypeEnum.SE_OGSÅ });
     }
   }
 
   if (concept.internErstattesAv) {
     internalConceptRelations.push(
       ...concept.internErstattesAv.map(
-        (uri): UnionRelation => ({ relatertBegrep: uri, internal: true, relasjon: UnionRelationTypeEnum.ERSTATTES_AV }),
+        (uri): UnionRelation => ({ relatertBegrep: uri, internal: true, relasjon: RelationTypeEnum.ERSTATTES_AV }),
       ),
     );
   }
