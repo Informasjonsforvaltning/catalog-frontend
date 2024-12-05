@@ -117,6 +117,12 @@ export const nb = {
     loggingOut: 'Logger ut...',
   },
 
+  userRole: {
+    adminRole: 'Virksomhetsadministrator',
+    writerRole: 'Skrivebruker',
+    readerRole: 'Lesebruker'
+  },
+
   spatial: {
     municipality: 'Kommune',
     country: 'Nasjon',
