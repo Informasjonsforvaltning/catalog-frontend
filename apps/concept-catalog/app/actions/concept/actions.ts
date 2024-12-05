@@ -60,9 +60,6 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
   }
 
   const diff = compare(initialConcept, values);
-
-  console.log("diff", diff);
-
   if (diff.length === 0) {
     throw new Error(localization.alert.noChanges);
   }
