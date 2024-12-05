@@ -1,39 +1,36 @@
+.actionButtons {
+  display: flex;
+  gap: 1rem;
+}
+
+.buttonRow {
+  display: flex;
+}
+
 .combobox {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.tabContent {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.fieldSet {
+.contactSection {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 1rem;
+}
 
-  &:not(first-child) {
-    padding-top: 1rem 0;
+.definitionContent {
+  display: flex;
+
+  & div:last-child {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  & > * {
+    background-color: inherit;
   }
 }
-
-.divider {
-  padding: 1rem 0;
-
-}
-
-.tableRowActions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.whiteSpaceNoWrap {
-  white-space: nowrap;
-}
-
-
 
 .definitionHeader {
   display: flex;
@@ -52,17 +49,28 @@
   }
 }
 
-.definitionContent {
-  display: flex;
+.divider {
+  padding: 1rem 0;
+}
 
-  & div:last-child {
-    display: flex;
-    gap: 0.5rem;
+.errorMessage {
+  font-size: 0.8rem;
+}
+
+.fieldSet {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  &:not(first-child) {
+    padding-top: 1rem 0;
   }
-  
-  & > * {
-    background-color: inherit;
-  }
+}
+
+.internalSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .periodSection {
@@ -71,20 +79,6 @@
   & > svg {
     padding-top: 2.5rem;
   }
-}
-
-.contactSection {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.buttonRow {
-  display: flex;
-}
-
-.errorMessage {
-  font-size: 0.8rem;
 }
 
 .stickyFooterBar {
@@ -104,7 +98,20 @@
   padding: 2rem 1rem;
 }
 
-.actionButtons {
+.tabContent {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.table {
+  padding-bottom: 0.8rem;
+}
+
+.tableRowActions {
   display: flex;
-  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.whiteSpaceNoWrap {
+  white-space: nowrap;
 }

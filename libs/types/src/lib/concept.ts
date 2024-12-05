@@ -87,16 +87,19 @@ export interface Endringslogelement {
   endringstidspunkt: string;
 }
 
-export type UnionRelation = {
-  relasjon?: UnionRelationTypeEnum;
-  relasjonsType?: UnionRelationSubtypeEnum;
+export type Relation = {
+  relasjon?: RelationTypeEnum;
+  relasjonsType?: RelationSubtypeEnum;
   beskrivelse?: LocalizedStrings;
   inndelingskriterium?: LocalizedStrings;
   relatertBegrep?: string;
+}
+
+export type UnionRelation = Relation & {
   internal?: boolean;
 };
 
-export enum UnionRelationTypeEnum {
+export enum RelationTypeEnum {
   ASSOSIATIV = 'assosiativ',
   GENERISK = 'generisk',
   PARTITIV = 'partitiv',
@@ -104,7 +107,7 @@ export enum UnionRelationTypeEnum {
   ERSTATTES_AV = 'erstattesAv',
 }
 
-export enum UnionRelationSubtypeEnum {
+export enum RelationSubtypeEnum {
   OVERORDNET = 'overordnet',
   UNDERORDNET = 'underordnet',
   ER_DEL_AV = 'erDelAv',
@@ -112,12 +115,13 @@ export enum UnionRelationSubtypeEnum {
 }
 
 export type RelatedConcept = {
-  id: string;
-  identifier: string;
-  href: string;
-  externalHref: boolean;
+  id?: string;
+  identifier?: string;
+  href?: string;
+  externalHref?: boolean;
   title: LocalizedStrings;
-  description: LocalizedStrings;
+  description?: LocalizedStrings;
+  custom?: boolean;
 };
 
 export interface Concept {
@@ -141,19 +145,16 @@ export interface Concept {
   kontaktpunkt?: ContactDetails | null;
   gyldigFom?: string | null;
   gyldigTom?: string | null;
-  gjeldendeRevisjon?: string;
   seOgså: string[];
-  internBegrepsRelasjon?: UnionRelation[];
+  internBegrepsRelasjon?: Relation[];
   internSeOgså?: string[];
   internErstattesAv?: string[];
   erstattesAv?: string[];
   statusURI?: string | null;
-  erSistPublisert?: boolean;
   sistPublisertId?: string;
-  revisjonAvSistPublisert?: boolean;
   endringslogelement?: Endringslogelement;
   assignedUser?: string;
-  begrepsRelasjon?: UnionRelation[];
+  begrepsRelasjon?: Relation[];
   erPublisert?: boolean;
   publiseringsTidspunkt?: string;
   opprettet?: string;

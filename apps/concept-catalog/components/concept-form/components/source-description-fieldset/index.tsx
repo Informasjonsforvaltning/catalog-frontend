@@ -102,7 +102,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
                           size='sm'
                           name={`${name}.kilde.${index}.tekst`}
                           aria-label={''}
-                          placeholder='Navn til lenke'
+                          placeholder='Kildebeskrivelse'
                           error={errors?.[name]?.kilde[index]?.tekst}
                         />
                       </td>
