@@ -2,8 +2,8 @@
 import { ReactNode, useRef, useState } from 'react';
 import { Formik } from 'formik';
 import { Button, Modal } from '@digdir/designsystemet-react';
-import { UnionRelation, UnionRelationTypeEnum,  } from '@catalog-frontend/types';
-import { unionRelationSchema } from '../../validation-schema';
+import { RelatedConcept, UnionRelation, RelationTypeEnum,  } from '@catalog-frontend/types';
+import { relationSchema } from '../../validation-schema';
 import { RelationFieldset } from '../relation-fieldset';
 import styles from './relation-modal.module.scss';
 
@@ -12,12 +12,13 @@ export type RelationModalProps = {
   trigger: ReactNode;
   header: string;
   initialRelation?: UnionRelation;
+  initialRelatedConcept?: RelatedConcept
   onSucces: (rel: UnionRelation) => void;
 };
 
-const defaultRelation: UnionRelation = { relasjon: UnionRelationTypeEnum.ASSOSIATIV, internal: true };
+const defaultRelation: UnionRelation = { relasjon: RelationTypeEnum.ASSOSIATIV, internal: true };
 
-export const RelationModal = ({ catalogId, initialRelation, header, trigger, onSucces }: RelationModalProps) => {
+export const RelationModal = ({ catalogId, initialRelation, initialRelatedConcept, header, trigger, onSucces }: RelationModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [submitted, setSubmitted] = useState(false);
   
@@ -27,12 +28,15 @@ export const RelationModal = ({ catalogId, initialRelation, header, trigger, onS
       <Modal.Dialog
         ref={modalRef}
         className={styles.dialog}
+        style={{
+          overflow: 'visible'
+        }}
       >
         <Formik
           initialValues={
             initialRelation || defaultRelation
           }
-          validationSchema={unionRelationSchema}
+          validationSchema={relationSchema}
           validateOnChange={submitted}
           validateOnBlur={submitted}
           onSubmit={(values, { setSubmitting }) => {
@@ -42,12 +46,12 @@ export const RelationModal = ({ catalogId, initialRelation, header, trigger, onS
             modalRef.current?.close();
           }}
         >
-          {({ errors, handleSubmit, isValid, isSubmitting, submitForm }) => {
+          {({ isSubmitting, submitForm }) => {
             return (
               <>
-                <Modal.Header>{header}</Modal.Header>
+                <Modal.Header closeButton={false}>{header}</Modal.Header>
                 <Modal.Content className={styles.content}>
-                  <RelationFieldset catalogId={catalogId} />
+                  <RelationFieldset catalogId={catalogId} initialRelatedConcept={initialRelatedConcept} />
                 </Modal.Content>
                 <Modal.Footer>
                   <Button

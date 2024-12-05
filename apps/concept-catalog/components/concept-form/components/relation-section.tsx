@@ -1,7 +1,7 @@
 import { useFormikContext } from 'formik';
-import { PencilWritingIcon, PlusIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Skeleton, Table } from '@digdir/designsystemet-react';
-import { Concept, UnionRelation, UnionRelationTypeEnum } from '@catalog-frontend/types';
+import { PencilWritingIcon, PlusCircleIcon, PlusIcon, TrashIcon } from '@navikt/aksel-icons';
+import { Box, Button, Skeleton, Table } from '@digdir/designsystemet-react';
+import { Concept, RelatedConcept, UnionRelation, RelationTypeEnum } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useSearchConcepts as useSearchInternalConcepts, useDataNorgeSearchConcepts } from '../../../hooks/search';
 import { RelationModal } from './relation-modal';
@@ -14,27 +14,27 @@ export const RelationSection = ({ catalogId }) => {
     ...(values['begrepsRelasjon']?.map((rel) => ({ ...rel })) ?? []),
     ...(values['seOgså']
       ? values['seOgså'].map((concept) => ({
-          relasjon: UnionRelationTypeEnum.SE_OGSÅ,
+          relasjon: RelationTypeEnum.SE_OGSÅ,
           relatertBegrep: concept,
         }))
       : []),
     ...(values['erstattesAv']
       ? values['erstattesAv'].map((concept) => ({
-          relasjon: UnionRelationTypeEnum.ERSTATTES_AV,
+          relasjon: RelationTypeEnum.ERSTATTES_AV,
           relatertBegrep: concept,
         }))
       : []),
     ...(values['internBegrepsRelasjon'] ? values.internBegrepsRelasjon.map((rel) => ({ ...rel, internal: true })) : []),
     ...(values['internSeOgså']
       ? values['internSeOgså'].map((concept) => ({
-          relasjon: UnionRelationTypeEnum.SE_OGSÅ,
+          relasjon: RelationTypeEnum.SE_OGSÅ,
           relatertBegrep: concept,
           internal: true,
         }))
       : []),
     ...(values['internErstattesAv']
       ? values['internErstattesAv'].map((concept) => ({
-          relasjon: UnionRelationTypeEnum.ERSTATTES_AV,
+          relasjon: RelationTypeEnum.ERSTATTES_AV,
           relatertBegrep: concept,
           internal: true,
         }))
@@ -76,21 +76,31 @@ export const RelationSection = ({ catalogId }) => {
     },
   });
 
-  const resolveRelatedConceptTitle = (relation: UnionRelation) => {
+  const resolveRelatedConcept = (relation: UnionRelation): RelatedConcept | undefined => {
     if (relation.internal) {
       const match = internalConcepts?.hits.find((hit) => hit.originaltBegrep === relation.relatertBegrep);
-      return match ? getTranslateText(match.anbefaltTerm?.navn) : relation.relatertBegrep;
+      return match ? {
+        id: relation.relatertBegrep,
+        title: match.anbefaltTerm?.navn,         
+      } as RelatedConcept : undefined;  
     } else {
       const match = externalConcepts?.hits.find((hit) => hit.uri === relation.relatertBegrep);
-      return match ? getTranslateText(match.title) : relation.relatertBegrep;
+      return match ? {
+        href: relation.relatertBegrep,
+        title: match.title,
+      } as RelatedConcept : {
+        href: relation.relatertBegrep,
+        custom: true,
+        title: { nb: relation.relatertBegrep }
+      } as RelatedConcept;  
     }
   };
 
   const getFieldname = (rel: UnionRelation) => {
     let name: string | undefined = undefined;
-    if (rel.relasjon === UnionRelationTypeEnum.SE_OGSÅ) {
+    if (rel.relasjon === RelationTypeEnum.SE_OGSÅ) {
       name = rel.internal ? 'internSeOgså' : 'seOgså';
-    } else if (rel.relasjon === UnionRelationTypeEnum.ERSTATTES_AV) {
+    } else if (rel.relasjon === RelationTypeEnum.ERSTATTES_AV) {
       name = rel.internal ? 'internErstattesAv' : 'erstattesAv';
     } else {
       name = rel.internal ? 'internBegrepsRelasjon' : 'begrepsRelasjon';
@@ -102,12 +112,16 @@ export const RelationSection = ({ catalogId }) => {
   const handleChangeRelation = (rel: UnionRelation, index?: number) => {
     if (rel.relatertBegrep) {
       const name: string | undefined = getFieldname(rel);
-      let relationValue: any = rel;
-      if (rel.relasjon === UnionRelationTypeEnum.SE_OGSÅ || rel.relasjon === UnionRelationTypeEnum.ERSTATTES_AV) {
+      let relationValue: any = {
+        relasjon: rel.relasjon,
+        relasjonsType: rel.relasjonsType,
+        beskrivelse: rel.beskrivelse,
+        inndelingskriterium: rel.inndelingskriterium,
+        relatertBegrep: rel.relatertBegrep
+      };
+      if (rel.relasjon === RelationTypeEnum.SE_OGSÅ || rel.relasjon === RelationTypeEnum.ERSTATTES_AV) {
         relationValue = rel.relatertBegrep;
       }
-
-      console.log("handleChangeRelation", relationValue, name, index);
 
       if (name) {
         if (index === undefined) {
@@ -145,9 +159,9 @@ export const RelationSection = ({ catalogId }) => {
   }
 
   return (
-    <div>
-      <div className={styles.fieldSet}>
-        <Table size='sm'>
+    <Box>
+      <Box className={styles.fieldSet}>
+        <Table size='sm' className={styles.table}>
           <Table.Head>
             <Table.Row>
               <Table.HeaderCell>Relasjon</Table.HeaderCell>
@@ -161,13 +175,14 @@ export const RelationSection = ({ catalogId }) => {
                 <Table.Cell>
                   {localization.conceptForm.fieldLabel.relationTypes[relation.relasjon as string]}
                 </Table.Cell>
-                <Table.Cell>{resolveRelatedConceptTitle(relation)}</Table.Cell>
+                <Table.Cell>{getTranslateText(resolveRelatedConcept(relation)?.title)}</Table.Cell>
                 <Table.Cell>
                   <div className={styles.tableRowActions}>
                     <RelationModal
                       header={'Rediger relasjon'}
                       catalogId={catalogId}
                       initialRelation={relation}
+                      initialRelatedConcept={resolveRelatedConcept(relation)}
                       trigger={
                         <Button
                           variant='tertiary'
@@ -201,8 +216,8 @@ export const RelationSection = ({ catalogId }) => {
             ))}
           </Table.Body>
         </Table>
-      </div>
-      <div>
+      </Box>
+      <Box className={styles.buttonRow}>
         <RelationModal
           header={'Ny relasjon'}
           catalogId={catalogId}
@@ -212,16 +227,16 @@ export const RelationSection = ({ catalogId }) => {
               color='first'
               size='sm'
             >
-              <PlusIcon
+              <PlusCircleIcon
                 aria-hidden
-                fontSize='1.5rem'
+                fontSize='1rem'
               />
               Legg til relasjon
             </Button>
           }
           onSucces={(values) => handleChangeRelation(values)}
         />
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 };

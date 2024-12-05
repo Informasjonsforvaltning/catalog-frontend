@@ -3,8 +3,8 @@
 import { useState } from 'react';
 import classNames from 'classnames';
 import { Formik, Form } from 'formik';
-import { useParams, useRouter } from 'next/navigation';
-import { Alert } from '@digdir/designsystemet-react';
+import { useRouter } from 'next/navigation';
+import { Alert, Spinner } from '@digdir/designsystemet-react';
 import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { CodeListsResult, Concept, FieldsResult, ReferenceDataCode, UsersResult } from '@catalog-frontend/types';
 import { Button, FormLayout, NotificationCarousel } from '@catalog-frontend/ui';
@@ -25,7 +25,7 @@ import { ContactSection } from './components/contact-section';
 import styles from './concept-form.module.scss';
 
 type Props = {
-  catalogId: string;  
+  catalogId: string;
   concept: Concept;
   conceptStatuses: ReferenceDataCode[];
   codeListsResult: CodeListsResult;
@@ -67,13 +67,50 @@ const mapPropsToValues = (concept: Concept) => {
     versjonsnr: {
       major: concept.versjonsnr?.major ?? '',
       minor: concept.versjonsnr?.minor ?? '',
-      patch: concept.versjonsnr?.patch ?? ''
-    }
+      patch: concept.versjonsnr?.patch ?? '',
+    },
   };
 };
 
-const ConceptForm = ({ concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }: Props) => {
-  const { catalogId, conceptId } = useParams();
+const pruneEmptyProperties = (obj: any, reduceAsArray = false) => {
+  if (!obj) {
+    return null;
+  }
+  const filteredKeys = Object.keys(obj).filter(
+    (key) => obj[key] != null && obj[key] !== '' && (Array.isArray(obj[key]) ? obj[key].length !== 0 : true),
+  );
+
+  return reduceAsArray
+    ? filteredKeys.reduce((acc, key) => {
+        if (typeof obj[key] === 'object') {
+          const prunedObject = pruneEmptyProperties(obj[key]);
+          return Object.keys(prunedObject).length === 0 ? acc : [...acc, prunedObject];
+        }
+        return [...acc, obj[key]];
+      }, [] as any[])
+    : filteredKeys.reduce((acc, key) => {
+        if (typeof obj[key] === 'object') {
+          const isArray = Array.isArray(obj[key]);
+          const prunedObject = pruneEmptyProperties(obj[key], isArray);
+          return Object.keys(prunedObject).length === 0 ? acc : { ...acc, [key]: prunedObject };
+        }
+        return { ...acc, [key]: obj[key] };
+      }, {});
+};
+
+export const preProcessValues = (orgId: string, values: any): Concept => {
+  const { ansvarligVirksomhet, kontaktpunkt, omfang, ...rest } = values;
+
+  return trimObjectWhitespace({
+    ...rest,
+    gyldigTom: values.gyldigTom?.length ? values.gyldigTom : null,
+    omfang: pruneEmptyProperties(omfang),
+    kontaktpunkt: pruneEmptyProperties(kontaktpunkt),
+    ansvarligVirksomhet: ansvarligVirksomhet || { id: orgId },
+  });
+};
+
+const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }: Props) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
 
@@ -83,8 +120,8 @@ const ConceptForm = ({ concept, conceptStatuses, codeListsResult, fieldsResult, 
     (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
   );
 
-  const handleCreate = (values: Concept) => {
-    createConcept(values, catalogId.toString());
+  const handleCreate = async (values: Concept) => {
+    await createConcept(values, catalogId.toString());
   };
 
   const handleUpdate = async (values: Concept) => {
@@ -95,7 +132,7 @@ const ConceptForm = ({ concept, conceptStatuses, codeListsResult, fieldsResult, 
         window.alert(`${localization.alert.updateFailed} ${error}`);
       }
     } else {
-      handleCreate(values);
+      await handleCreate(values);
     }
   };
 
@@ -110,12 +147,9 @@ const ConceptForm = ({ concept, conceptStatuses, codeListsResult, fieldsResult, 
       validationSchema={conceptSchema}
       validateOnChange={isSubmitted}
       validateOnBlur={isSubmitted}
-      onSubmit={(values, { setSubmitting }) => {
-        const trimmedValues = trimObjectWhitespace(values);
-
-       // console.log('submit', trimmedValues);
-
-        conceptId === null ? handleCreate(trimmedValues) : handleUpdate(trimmedValues as Concept);
+      onSubmit={async (values, { setSubmitting }) => {
+        const preProcessed = preProcessValues(catalogId, values);
+        concept.id === null ? await handleCreate(preProcessed) : await handleUpdate(preProcessed);
         setSubmitting(false);
         setIsSubmitted(true);
       }}
@@ -214,6 +248,7 @@ const ConceptForm = ({ concept, conceptStatuses, codeListsResult, fieldsResult, 
                     id='contact'
                     title='Kontaktinformasjon'
                     subtitle='Her registrerer du datoen som begrepet skal gjelde fra og med og til og med.'
+                    required
                   >
                     <ContactSection />
                   </FormLayout.Section>
@@ -233,11 +268,11 @@ const ConceptForm = ({ concept, conceptStatuses, codeListsResult, fieldsResult, 
                         console.log('valid', isValid, 'errors', errors, 'values', values);
                       }}
                     >
-                      Lagre
+                      {isSubmitting ? <Spinner title='Lagrer' size='sm' /> : 'Lagre'}
                     </Button>
                     <Button
                       size='sm'
-                      disabled={isCanceled}
+                      disabled={isSubmitting || isValidating || isCanceled}
                       onClick={handleCancel}
                       variant='secondary'
                     >

@@ -27,6 +27,9 @@ export const DefinitionModal = ({ initialDefinition, header, trigger, onSucces }
       <Modal.Dialog
         ref={modalRef}
         className={styles.dialog}
+        style={{
+          overflow: 'visible'
+        }}
       >
         <Formik
           initialValues={initialDefinition || defaultDefinition}

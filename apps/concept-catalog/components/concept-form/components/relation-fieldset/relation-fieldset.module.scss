@@ -6,4 +6,7 @@
 
 .flex {
     display: flex;
+    & > * {
+        flex-grow: 1;
+    }
 }

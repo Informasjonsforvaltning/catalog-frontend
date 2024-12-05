@@ -61,6 +61,8 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
 
   const diff = compare(initialConcept, values);
 
+  console.log("diff", diff);
+
   if (diff.length === 0) {
     throw new Error(localization.alert.noChanges);
   }
@@ -76,6 +78,7 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
     success = true;
   } catch (error) {
     console.error(`${localization.alert.fail} ${error}`);
+    console.log(diff);
     throw new Error(`Noe gikk galt, prøv igjen...`);
   }
 
