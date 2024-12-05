@@ -1,11 +1,17 @@
 'use client';
 import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button } from '@digdir/designsystemet-react';
-import { Dataset, DatasetSeries, DatasetToBeCreated, ReferenceData } from '@catalog-frontend/types';
-import { FormLayout, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
+import { Alert, Button, Switch } from '@digdir/designsystemet-react';
+import { Dataset, DatasetSeries, DatasetToBeCreated, ReferenceData, PublicationStatus } from '@catalog-frontend/types';
+import {
+  FormLayout,
+  HelpMarkdown,
+  NotificationCarousel,
+  StickyFooterBar,
+  useWarnIfUnsavedChanges,
+} from '@catalog-frontend/ui';
 import { Formik, Form } from 'formik';
 import { useParams } from 'next/navigation';
-import { createDataset, deleteDataset, updateDataset } from '../../app/actions/actions';
+import { createDataset, updateDataset } from './../../app/actions/actions';
 import { datasetTemplate } from './utils/dataset-initial-values';
 import { useState } from 'react';
 import { datasetValidationSchema } from './utils/validation-schema';
@@ -23,6 +29,8 @@ import { ExampleDataSection } from './components/dataset-form-example-data-secti
 import { RelationsSection } from './components/dataset-form-relations-section';
 import { DistributionSection } from './components/dataset-from-distribution/dataset-form-distribution-section';
 import { ContactPointSection } from './components/dataset-form-contact-point-section';
+import styles from './dataset-form.module.css';
+import { useRouter } from 'next/navigation';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
@@ -64,15 +72,41 @@ export const DatasetForm = ({
     }
   };
 
-  const handleDelete = () => {
-    if (window.confirm(localization.datasetForm.alert.confirmDelete)) {
-      try {
-        deleteDataset(catalogId.toString(), datasetId.toString());
-      } catch (error) {
-        window.alert(localization.alert.deleteFailed);
-      }
-    }
+  const router = useRouter();
+
+  const handleCancel = () => {
+    router.push(datasetId ? `/catalogs/${catalogId}/datasets/${datasetId}` : `/catalogs/${catalogId}/datasets`);
   };
+
+  type Notifications = {
+    isValid: boolean;
+    hasUnsavedChanges: boolean;
+  };
+
+  const getNotifications = ({ isValid, hasUnsavedChanges }: Notifications) => [
+    ...(isValid
+      ? []
+      : [
+          <Alert
+            key={1}
+            size='sm'
+            severity='danger'
+          >
+            {localization.alert.formError}
+          </Alert>,
+        ]),
+    ...(hasUnsavedChanges
+      ? [
+          <Alert
+            key={1}
+            size='sm'
+            severity='warning'
+          >
+            {localization.alert.formUnsavedChanges}
+          </Alert>,
+        ]
+      : []),
+  ];
 
   return (
     <Formik
@@ -86,156 +120,188 @@ export const DatasetForm = ({
         setSubmitting(false);
       }}
     >
-      {({ errors, values, dirty, handleSubmit, isValid }) => {
+      {({ errors, values, dirty, handleSubmit, isValid, setFieldValue }) => {
         setTimeout(() => setIsDirty(dirty), 0);
+        const notifications = getNotifications({ isValid, hasUnsavedChanges: dirty });
 
         return (
-          <Form
-            onSubmit={(e) => {
-              if (!isValid) {
-                e.preventDefault();
-                window.alert(localization.datasetForm.alert.formError);
-              } else {
-                handleSubmit(e);
-              }
-            }}
-          >
-            <FormLayout>
-              <FormLayout.Section
-                title='save'
-                id='save'
-              >
-                <Button type='submit'>{localization.button.save}</Button>
-                <Button
-                  variant='secondary'
-                  color='danger'
-                  onClick={handleDelete}
+          <>
+            <Form
+              className='container'
+              onSubmit={(e) => {
+                if (!isValid) {
+                  e.preventDefault();
+                  window.alert(localization.datasetForm.alert.formError);
+                } else {
+                  handleSubmit(e);
+                }
+              }}
+            >
+              <FormLayout>
+                <FormLayout.Section
+                  id='title-section'
+                  title={localization.datasetForm.heading.titleAndDescription}
+                  required
                 >
-                  {localization.button.delete}
+                  <TitleSection />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='access-right-section'
+                  title={localization.datasetForm.heading.accessRights}
+                >
+                  <AccessRightsSection
+                    values={values}
+                    errors={errors}
+                  />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='tema-section'
+                  title={localization.datasetForm.heading.losTheme}
+                  subtitle=''
+                  required
+                >
+                  <ThemeSection
+                    losThemes={losThemes}
+                    dataThemes={dataThemes}
+                  />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='type-section'
+                  title={localization.datasetForm.heading.type}
+                >
+                  <TypeSection datasetTypes={datasetTypes} />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='concept-section'
+                  title={localization.datasetForm.heading.concept}
+                  subtitle=''
+                >
+                  <ConceptSection searchEnv={searchEnv} />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='geography-section'
+                  title={localization.datasetForm.heading.geography}
+                  subtitle=''
+                >
+                  <GeographySection
+                    envVariable={referenceDataEnv}
+                    languages={languages}
+                  />
+                </FormLayout.Section>
+                <FormLayout.Section
+                  id='provenance-section'
+                  title={localization.datasetForm.heading.provenanceAndFrequency}
+                  subtitle=''
+                >
+                  <ProvenanceSection data={{ provenanceStatements, frequencies }} />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='content-section'
+                  title={localization.datasetForm.heading.content}
+                  subtitle=''
+                >
+                  <ContentSection />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='information-model-section'
+                  title={localization.datasetForm.heading.informationModel}
+                  subtitle=''
+                >
+                  <InformationModelSection searchEnv={searchEnv} />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='qualified-attributions-section'
+                  title={localization.datasetForm.heading.qualifiedAttributions}
+                  subtitle=''
+                >
+                  <QualifiedAttributionsSection />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='example-data-section'
+                  title={localization.datasetForm.heading.exampleData}
+                >
+                  <ExampleDataSection referenceDataEnv={referenceDataEnv} />
+                </FormLayout.Section>
+                <FormLayout.Section
+                  id='relation-section'
+                  title={localization.datasetForm.heading.relations}
+                >
+                  <RelationsSection
+                    searchEnv={searchEnv}
+                    datasetSeries={datasetSeries}
+                  />
+                </FormLayout.Section>
+                <FormLayout.Section
+                  id='distribution-section'
+                  title={localization.datasetForm.heading.distribution}
+                >
+                  <DistributionSection
+                    referenceDataEnv={referenceDataEnv}
+                    searchEnv={searchEnv}
+                    openLicenses={openLicenses}
+                  />
+                </FormLayout.Section>
+              </FormLayout>
+            </Form>
+
+            <StickyFooterBar>
+              <div className={styles.buttonContainer}>
+                <Button
+                  type='submit'
+                  size='sm'
+                  disabled={!isDirty}
+                  onClick={() => {
+                    handleSubmit();
+                  }}
+                >
+                  {localization.save}
                 </Button>
-              </FormLayout.Section>
 
-              <FormLayout.Section
-                id='title-section'
-                title={localization.datasetForm.heading.titleAndDescription}
-                required
-              >
-                <TitleSection />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='access-right-section'
-                title={localization.datasetForm.heading.accessRights}
-              >
-                <AccessRightsSection
-                  values={values}
-                  errors={errors}
-                />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='tema-section'
-                title={localization.datasetForm.heading.losTheme}
-                subtitle=''
-                required
-              >
-                <ThemeSection
-                  losThemes={losThemes}
-                  dataThemes={dataThemes}
-                />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='type-section'
-                title={localization.datasetForm.heading.type}
-              >
-                <TypeSection datasetTypes={datasetTypes} />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='concept-section'
-                title={localization.datasetForm.heading.concept}
-                subtitle=''
-              >
-                <ConceptSection searchEnv={searchEnv} />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='geography-section'
-                title={localization.datasetForm.heading.geography}
-                subtitle=''
-              >
-                <GeographySection
-                  envVariable={referenceDataEnv}
-                  languages={languages}
-                />
-              </FormLayout.Section>
-              <FormLayout.Section
-                id='provenance-section'
-                title={localization.datasetForm.heading.provenanceAndFrequency}
-                subtitle=''
-              >
-                <ProvenanceSection data={{ provenanceStatements, frequencies }} />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='content-section'
-                title={localization.datasetForm.heading.content}
-                subtitle=''
-              >
-                <ContentSection />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='information-model-section'
-                title={localization.datasetForm.heading.informationModel}
-                subtitle=''
-              >
-                <InformationModelSection searchEnv={searchEnv} />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='qualified-attributions-section'
-                title={localization.datasetForm.heading.qualifiedAttributions}
-                subtitle=''
-              >
-                <QualifiedAttributionsSection />
-              </FormLayout.Section>
-
-              <FormLayout.Section
-                id='example-data-section'
-                title={localization.datasetForm.heading.exampleData}
-              >
-                <ExampleDataSection referenceDataEnv={referenceDataEnv} />
-              </FormLayout.Section>
-              <FormLayout.Section
-                id='relation-section'
-                title={localization.datasetForm.heading.relations}
-              >
-                <RelationsSection
-                  searchEnv={searchEnv}
-                  datasetSeries={datasetSeries}
-                />
-              </FormLayout.Section>
-              <FormLayout.Section
-                id='distribution-section'
-                title={localization.datasetForm.heading.distribution}
-              >
-                <DistributionSection
-                  referenceDataEnv={referenceDataEnv}
-                  searchEnv={searchEnv}
-                  openLicenses={openLicenses}
-                />
-              </FormLayout.Section>
-              <FormLayout.Section
-                id='contact-point-section'
-                title='Kontaktpunkt'
-                required
-              >
-                <ContactPointSection />
-              </FormLayout.Section>
-            </FormLayout>
-          </Form>
+                <Button
+                  type='button'
+                  size='sm'
+                  variant='secondary'
+                  onClick={() => {
+                    setIsDirty(false);
+                    handleCancel();
+                  }}
+                >
+                  {localization.button.cancel}
+                </Button>
+                <div className={styles.verticalLine}></div>
+                <Switch
+                  position='left'
+                  size='sm'
+                  checked={values.registrationStatus === PublicationStatus.APPROVE}
+                  onChange={(event) => {
+                    const isChecked = event.target.checked;
+                    const status = isChecked ? PublicationStatus.APPROVE : PublicationStatus.DRAFT;
+                    setFieldValue('registrationStatus', status);
+                  }}
+                >
+                  <div className={styles.buttonContainer}>
+                    {localization.tag.approve}
+                    <HelpMarkdown
+                      size='sm'
+                      title={'Registeringsstatus'}
+                    >
+                      {localization.datasetForm.helptext.statusSwitch}
+                    </HelpMarkdown>
+                  </div>
+                </Switch>
+              </div>
+              <NotificationCarousel notifications={notifications} />
+            </StickyFooterBar>
+          </>
         );
       }}
     </Formik>

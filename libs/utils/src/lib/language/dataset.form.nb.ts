@@ -38,6 +38,8 @@ export const datasetFormNb = {
     relatedResources: 'Oppgi relaterte ressurser.',
     contactPoint:
       'Et kontaktpunkt er informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller støtte knyttet til datasettet. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.',
+    statusSwitch:
+      'Toggelen bestemmer om begrepsbeskrivelsen blir lagret med status “Godkjent” eller som et “Utkast”. Husk å lagre skjemaet for å oppdatere status.',
   },
   heading: {
     description: 'Beskrivelse av datasettet',

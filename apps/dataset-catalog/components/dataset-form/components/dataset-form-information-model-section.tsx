@@ -1,8 +1,8 @@
 'use client';
 import { Dataset } from '@catalog-frontend/types';
-import { AddButton, DeleteButton, FormContainer } from '@catalog-frontend/ui';
+import { AddButton } from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Heading, Combobox, Textfield, Label, Fieldset } from '@digdir/designsystemet-react';
+import { Combobox, Textfield, Fieldset } from '@digdir/designsystemet-react';
 import {
   useSearchInformationModelsByUri,
   useSearchInformationModelsSuggestions,
