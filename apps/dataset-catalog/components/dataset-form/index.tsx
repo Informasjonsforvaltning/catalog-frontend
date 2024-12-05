@@ -1,8 +1,8 @@
 'use client';
 import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button } from '@digdir/designsystemet-react';
+import { Alert, Button } from '@digdir/designsystemet-react';
 import { Dataset, DatasetSeries, DatasetToBeCreated, ReferenceData } from '@catalog-frontend/types';
-import { FormLayout, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
+import { FormLayout, NotificationCarousel, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
 import { Formik, Form } from 'formik';
 import { useParams } from 'next/navigation';
 import { createDataset, deleteDataset, updateDataset } from '../../app/actions/actions';
@@ -22,6 +22,8 @@ import { QualifiedAttributionsSection } from './components/dataset-form-qualifie
 import { ExampleDataSection } from './components/dataset-form-example-data-section';
 import { RelationsSection } from './components/dataset-form-relations-section';
 import { DistributionSection } from './components/dataset-from-distribution/dataset-form-distribution-section';
+import StickyFooterBar from 'libs/ui/src/lib/sticky-footer-bar';
+import styles from './dataset-form.module.css';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
@@ -73,6 +75,23 @@ export const DatasetForm = ({
     }
   };
 
+  const notifications = [
+    <Alert
+      key={1}
+      size='sm'
+      severity='warning'
+    >
+      Du har ulagrede endringer
+    </Alert>,
+    <Alert
+      key={2}
+      size='sm'
+      severity='info'
+    >
+      Du har en annen info melding
+    </Alert>,
+  ];
+
   return (
     <Formik
       initialValues={datasetTemplate(initialValues as Dataset)}
@@ -89,145 +108,157 @@ export const DatasetForm = ({
         setTimeout(() => setIsDirty(dirty), 0);
 
         return (
-          <Form
-            onSubmit={(e) => {
-              if (!isValid) {
-                e.preventDefault();
-                window.alert(localization.datasetForm.alert.formError);
-              } else {
-                handleSubmit(e);
-              }
-            }}
-          >
-            <FormLayout>
-              <FormLayout.Section
-                title='save'
-                id='save'
-              >
-                <Button type='submit'>{localization.button.save}</Button>
-                <Button
-                  variant='secondary'
-                  color='danger'
-                  onClick={handleDelete}
+          <>
+            <Form
+              onSubmit={(e) => {
+                if (!isValid) {
+                  e.preventDefault();
+                  window.alert(localization.datasetForm.alert.formError);
+                } else {
+                  handleSubmit(e);
+                }
+              }}
+            >
+              <FormLayout>
+                <FormLayout.Section
+                  title='save'
+                  id='save'
                 >
-                  {localization.button.delete}
-                </Button>
-              </FormLayout.Section>
+                  <Button type='submit'>{localization.button.save}</Button>
+                  <Button
+                    variant='secondary'
+                    color='danger'
+                    onClick={handleDelete}
+                  >
+                    {localization.button.delete}
+                  </Button>
+                </FormLayout.Section>
 
-              <FormLayout.Section
-                id='title-section'
-                title={localization.datasetForm.heading.titleAndDescription}
-                required
-              >
-                <TitleSection />
-              </FormLayout.Section>
+                <FormLayout.Section
+                  id='title-section'
+                  title={localization.datasetForm.heading.titleAndDescription}
+                  required
+                >
+                  <TitleSection />
+                </FormLayout.Section>
 
-              <FormLayout.Section
-                id='access-right-section'
-                title={localization.datasetForm.heading.accessRights}
-              >
-                <AccessRightsSection
-                  values={values}
-                  errors={errors}
-                />
-              </FormLayout.Section>
+                <FormLayout.Section
+                  id='access-right-section'
+                  title={localization.datasetForm.heading.accessRights}
+                >
+                  <AccessRightsSection
+                    values={values}
+                    errors={errors}
+                  />
+                </FormLayout.Section>
 
-              <FormLayout.Section
-                id='tema-section'
-                title={localization.datasetForm.heading.losTheme}
-                subtitle=''
-                required
-              >
-                <ThemeSection
-                  losThemes={losThemes}
-                  dataThemes={dataThemes}
-                />
-              </FormLayout.Section>
+                <FormLayout.Section
+                  id='tema-section'
+                  title={localization.datasetForm.heading.losTheme}
+                  subtitle=''
+                  required
+                >
+                  <ThemeSection
+                    losThemes={losThemes}
+                    dataThemes={dataThemes}
+                  />
+                </FormLayout.Section>
 
-              <FormLayout.Section
-                id='type-section'
-                title={localization.datasetForm.heading.type}
-              >
-                <TypeSection datasetTypes={datasetTypes} />
-              </FormLayout.Section>
+                <FormLayout.Section
+                  id='type-section'
+                  title={localization.datasetForm.heading.type}
+                >
+                  <TypeSection datasetTypes={datasetTypes} />
+                </FormLayout.Section>
 
-              <FormLayout.Section
-                id='concept-section'
-                title={localization.datasetForm.heading.concept}
-                subtitle=''
-              >
-                <ConceptSection searchEnv={searchEnv} />
-              </FormLayout.Section>
+                <FormLayout.Section
+                  id='concept-section'
+                  title={localization.datasetForm.heading.concept}
+                  subtitle=''
+                >
+                  <ConceptSection searchEnv={searchEnv} />
+                </FormLayout.Section>
 
-              <FormLayout.Section
-                id='geography-section'
-                title={localization.datasetForm.heading.geography}
-                subtitle=''
-              >
-                <GeographySection
-                  envVariable={referenceDataEnv}
-                  languages={languages}
-                />
-              </FormLayout.Section>
-              <FormLayout.Section
-                id='provenance-section'
-                title={localization.datasetForm.heading.provenanceAndFrequency}
-                subtitle=''
-              >
-                <ProvenanceSection data={{ provenanceStatements, frequencies }} />
-              </FormLayout.Section>
+                <FormLayout.Section
+                  id='geography-section'
+                  title={localization.datasetForm.heading.geography}
+                  subtitle=''
+                >
+                  <GeographySection
+                    envVariable={referenceDataEnv}
+                    languages={languages}
+                  />
+                </FormLayout.Section>
+                <FormLayout.Section
+                  id='provenance-section'
+                  title={localization.datasetForm.heading.provenanceAndFrequency}
+                  subtitle=''
+                >
+                  <ProvenanceSection data={{ provenanceStatements, frequencies }} />
+                </FormLayout.Section>
 
-              <FormLayout.Section
-                id='content-section'
-                title={localization.datasetForm.heading.content}
-                subtitle=''
-              >
-                <ContentSection />
-              </FormLayout.Section>
+                <FormLayout.Section
+                  id='content-section'
+                  title={localization.datasetForm.heading.content}
+                  subtitle=''
+                >
+                  <ContentSection />
+                </FormLayout.Section>
 
-              <FormLayout.Section
-                id='information-model-section'
-                title={localization.datasetForm.heading.informationModel}
-                subtitle=''
-              >
-                <InformationModelSection searchEnv={searchEnv} />
-              </FormLayout.Section>
+                <FormLayout.Section
+                  id='information-model-section'
+                  title={localization.datasetForm.heading.informationModel}
+                  subtitle=''
+                >
+                  <InformationModelSection searchEnv={searchEnv} />
+                </FormLayout.Section>
 
-              <FormLayout.Section
-                id='qualified-attributions-section'
-                title={localization.datasetForm.heading.qualifiedAttributions}
-                subtitle=''
-              >
-                <QualifiedAttributionsSection />
-              </FormLayout.Section>
+                <FormLayout.Section
+                  id='qualified-attributions-section'
+                  title={localization.datasetForm.heading.qualifiedAttributions}
+                  subtitle=''
+                >
+                  <QualifiedAttributionsSection />
+                </FormLayout.Section>
 
-              <FormLayout.Section
-                id='example-data-section'
-                title={localization.datasetForm.heading.exampleData}
-              >
-                <ExampleDataSection referenceDataEnv={referenceDataEnv} />
-              </FormLayout.Section>
-              <FormLayout.Section
-                id='relation-section'
-                title={localization.datasetForm.heading.relations}
-              >
-                <RelationsSection
-                  searchEnv={searchEnv}
-                  datasetSeries={datasetSeries}
-                />
-              </FormLayout.Section>
-              <FormLayout.Section
-                id='distribution-section'
-                title={localization.datasetForm.heading.distribution}
-              >
-                <DistributionSection
-                  referenceDataEnv={referenceDataEnv}
-                  searchEnv={searchEnv}
-                  openLicenses={openLicenses}
-                />
-              </FormLayout.Section>
-            </FormLayout>
-          </Form>
+                <FormLayout.Section
+                  id='example-data-section'
+                  title={localization.datasetForm.heading.exampleData}
+                >
+                  <ExampleDataSection referenceDataEnv={referenceDataEnv} />
+                </FormLayout.Section>
+                <FormLayout.Section
+                  id='relation-section'
+                  title={localization.datasetForm.heading.relations}
+                >
+                  <RelationsSection
+                    searchEnv={searchEnv}
+                    datasetSeries={datasetSeries}
+                  />
+                </FormLayout.Section>
+                <FormLayout.Section
+                  id='distribution-section'
+                  title={localization.datasetForm.heading.distribution}
+                >
+                  <DistributionSection
+                    referenceDataEnv={referenceDataEnv}
+                    searchEnv={searchEnv}
+                    openLicenses={openLicenses}
+                  />
+                </FormLayout.Section>
+              </FormLayout>
+            </Form>
+
+            <StickyFooterBar>
+              <div className={styles.StickyFooterBar}>
+                <NotificationCarousel notifications={notifications} />
+                <div className={styles.buttonContainer}>
+                  <Button type='submit'>{'Lagre som utkast'}</Button>
+                  <Button type='submit'>{'Godkjenn og lagre'}</Button>
+                </div>
+              </div>
+            </StickyFooterBar>
+          </>
         );
       }}
     </Formik>
