@@ -73,10 +73,7 @@ export const DistributionModal = ({
     distribution?.accessServiceList ?? [],
   );
 
-  const { data: dataServices, isLoading: isLoadingDataServices } = useSearchDataServiceSuggestions(
-    searchEnv,
-    searchDataServicesQuery,
-  );
+  const { data: dataServices } = useSearchDataServiceSuggestions(searchEnv, searchDataServicesQuery);
 
   const comboboxOptions = [
     // Combine selectedDataServices and dataServices, adding missing URIs

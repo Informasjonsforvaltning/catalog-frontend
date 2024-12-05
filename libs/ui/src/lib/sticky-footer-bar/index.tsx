@@ -5,11 +5,9 @@ import styles from './sticky-footer-bar.module.css';
 const StickyFooterBar = ({ children }: PropsWithChildren) => {
   return (
     <div className={styles.stickyFooterBar}>
-      <div className={classNames('container', styles.stickyFooterContent)}>
-        {children}
-      </div>
+      <div className={classNames('container', styles.stickyFooterContent)}>{children}</div>
     </div>
   );
 };
 
-export default StickyFooterBar;
+export { StickyFooterBar };
