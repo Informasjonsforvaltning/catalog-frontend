@@ -1,7 +1,7 @@
 'use client';
 
 import { FC } from 'react';
-import { getResourceRoles, localization } from '@catalog-frontend/utils';
+import { getResourceRoles, hasOrganizationAdminPermission, hasOrganizationReadPermission, hasOrganizationWritePermission, localization } from '@catalog-frontend/utils';
 import FDKLogo from './images/fdk-publishing-logo-negative.svg';
 import FDKLogoDemo from './images/fdk-publishing-logo-negative-demo.svg';
 import { useSession } from 'next-auth/react';
@@ -9,13 +9,13 @@ import styles from './header.module.scss';
 import { ExternalLinkIcon, LeaveIcon, MenuHamburgerIcon, PersonIcon } from '@navikt/aksel-icons';
 import { Button, Divider, DropdownMenu } from '@digdir/designsystemet-react';
 import classNames from 'classnames';
+import { useParams } from 'next/navigation';
 
 export interface HeaderProps {
   homeUrl?: string;
   adminGuiBaseUrl?: string;
   catalogAdminUrl?: string;
   fdkBaseUrl?: string;
-  fdkCommunityBaseUrl?: string;
   fdkRegistrationBaseUrl?: string;
   useDemoLogo?: boolean;
   fontColor?: string;
@@ -27,7 +27,6 @@ const Header: FC<HeaderProps> = ({
   adminGuiBaseUrl,
   catalogAdminUrl,
   fdkBaseUrl,
-  fdkCommunityBaseUrl,
   fdkRegistrationBaseUrl,
   useDemoLogo,
   fontColor,
@@ -80,10 +79,25 @@ const Header: FC<HeaderProps> = ({
     ],
   ];
 
+  const { catalogId } = useParams();
   const { data: session } = useSession();
   const userDisplayName = session?.user?.name;
   const accessToken = (session as any)?.accessToken;
   const resourceRoles = getResourceRoles(accessToken);
+
+  const userRole = (() => {
+    if(hasOrganizationAdminPermission(accessToken, `${catalogId}`)) {
+      return localization.userRole.adminRole;
+    }
+    if(hasOrganizationWritePermission(accessToken, `${catalogId}`)) {
+      return localization.userRole.writerRole;
+    }
+    if(hasOrganizationReadPermission(accessToken, `${catalogId}`)) {
+      return localization.userRole.readerRole;
+    }
+
+    return null;
+  })();
 
   const handleLogout = () => {
     window.location.href = '/api/auth/logout';
@@ -127,7 +141,7 @@ const Header: FC<HeaderProps> = ({
                       <PersonIcon fontSize='1.3rem' />
                       {userDisplayName}
                     </span>
-                    <span>Virsomhetsadministrator</span>
+                    {userRole && <span>{userRole}</span>}
                   </div>
                 </DropdownMenu.Item>
                 <Divider />
