@@ -1,7 +1,7 @@
 'use client';
 
-import React, {  } from 'react';
-import { FastField, useFormikContext } from 'formik';
+import React from 'react';
+import { FastField, FormikErrors, useFormikContext } from 'formik';
 import {
   Box,
   Checkbox,
@@ -14,7 +14,9 @@ import {
 } from '@digdir/designsystemet-react';
 import { AssignedUser, CodeList, Concept, InternalField } from '@catalog-frontend/types';
 import { capitalizeFirstLetter, getTranslateText } from '@catalog-frontend/utils';
-import { FieldsetDivider, TitleWithTag } from '@catalog-frontend/ui';
+import { TitleWithTag } from '@catalog-frontend/ui';
+import styles from '../../concept-form.module.scss';
+import { getParentPath } from '../../../../utils/codeList';
 
 export type InternalSectionProps = {
   internalFields: InternalField[];
@@ -25,9 +27,15 @@ export type InternalSectionProps = {
 const renderInternalField = ({
   values,
   setFieldValue,
-  internalField,  
+  internalField,
   userList,
   codeLists,
+}: {
+  values: Concept;
+  setFieldValue: (field: string, value: any, validate?: boolean) => Promise<void | FormikErrors<Concept>>;
+  internalField: InternalField;
+  userList: AssignedUser[];
+  codeLists: CodeList[];
 }) => {
   const Legend = () => (
     <TitleWithTag
@@ -49,6 +57,7 @@ const renderInternalField = ({
   );
 
   const name = `interneFelt[${internalField.id}].value`;
+  const fieldValue = values.interneFelt?.[internalField.id]?.value;
 
   if (internalField.type === 'text_short') {
     return (
@@ -85,9 +94,10 @@ const renderInternalField = ({
         legend={<Legend />}
         size='sm'
       >
-        <FastField
-          name={name}
-          as={Checkbox}
+        <Checkbox
+          value={internalField.id}
+          checked={fieldValue === 'true'}
+          onChange={(e) => setFieldValue(name, e.target.checked ? 'true' : 'false')}
         />
       </Fieldset>
     );
@@ -117,24 +127,35 @@ const renderInternalField = ({
     );
   }
 
-  //   if (internalField.type === 'code_list') {
-  //     const codeListNodes = convertCodeListToTreeNodes(
-  //       codeLists?.filter(
-  //         codeList => codeList.id === internalField.codeListId
-  //       )?.[0]
-  //     );
-
-  //     return (
-  //       <>
-  //         <Help />
-  //         <Field
-  //           name={name}
-  //           component={CheckboxTreeField}
-  //           nodes={codeListNodes}
-  //         />
-  //       </>
-  //     );
-  //   }
+  if (internalField.type === 'code_list') {
+    const codes = codeLists.find((list) => list.id === internalField.codeListId)?.codes;
+    return (
+      <Fieldset
+        legend={<Legend />}
+        size='sm'
+      >
+        <Combobox
+          size='sm'
+          value={fieldValue ? [fieldValue] : []}
+          onValueChange={(value) => setFieldValue(name, value[0])}
+        >
+          <Combobox.Empty>Fant ingen treff</Combobox.Empty>
+          {codes?.map((code) => {
+            const parentPath = getParentPath(code, codes);
+            return (
+              <Combobox.Option
+                key={code.id}
+                value={code.id}
+                description={parentPath.length > 0 ? `Overordnet: ${parentPath.join(' - ')}` : ''}
+              >
+                {getTranslateText(code.name)}
+              </Combobox.Option>
+            );
+          })}
+        </Combobox>
+      </Fieldset>
+    );
+  }
 
   return null;
 };
@@ -143,7 +164,7 @@ export const InternalSection = ({ internalFields, userList, codeLists }: Interna
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
 
   return (
-    <Box>
+    <Box className={styles.internalSection}>
       <Fieldset
         size='sm'
         legend={
@@ -181,7 +202,6 @@ export const InternalSection = ({ internalFields, userList, codeLists }: Interna
           })}
         </Combobox>
       </Fieldset>
-      <FieldsetDivider />
       <Fieldset
         size='sm'
         legend={
@@ -213,8 +233,7 @@ export const InternalSection = ({ internalFields, userList, codeLists }: Interna
       </Fieldset>
       {internalFields?.map((internalField) => (
         <div key={internalField.id}>
-          <FieldsetDivider />
-          {renderInternalField({internalField, values, setFieldValue, userList, codeLists})}
+          {renderInternalField({ internalField, values, setFieldValue, userList, codeLists })}
         </div>
       ))}
     </Box>
