@@ -16,7 +16,7 @@ const catalogTests = [
   {
     name: 'concept catalog',
     locator: 'conceptCatalog',
-    url: `https://begrepskatalog.staging.fellesdatakatalog.digdir.no/${orgId}`,
+    url: `https://begrepskatalog.staging.fellesdatakatalog.digdir.no/catalogs/${orgId}`,
   },
   {
     name: 'service catalog',
