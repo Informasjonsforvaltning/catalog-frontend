@@ -56,6 +56,7 @@ export const RelationModal = ({ catalogId, initialRelation, initialRelatedConcep
                 <Modal.Footer>
                   <Button
                     type='button'
+                    size='sm'
                     disabled={isSubmitting}
                     onClick={() => {
                       submitForm();
@@ -66,6 +67,7 @@ export const RelationModal = ({ catalogId, initialRelation, initialRelatedConcep
                   <Button
                     variant='secondary'
                     type='button'
+                    size='sm'
                     onClick={() => modalRef.current?.close()}
                     disabled={isSubmitting}
                   >
