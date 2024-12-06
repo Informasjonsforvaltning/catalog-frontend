@@ -25,6 +25,16 @@ export const DefinitionSection = () => {
   const definitions = ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'];
   const allowedLanguages = Object.freeze<ISOLanguage[]>(['nb', 'nn', 'en']);
 
+  const prepareInitialValues = (def: Definisjon): Definisjon => {
+    return {
+      ...def,
+      kildebeskrivelse: {
+        forholdTilKilde: def.kildebeskrivelse?.forholdTilKilde ?? 'egendefinert',
+        kilde: def.kildebeskrivelse?.kilde ?? []
+      }
+    }
+  };
+
   return (
     <Box>
       <Box className={styles.fieldSet}>
@@ -101,7 +111,7 @@ export const DefinitionSection = () => {
                     </div>
                     <div>
                       <DefinitionModal
-                        initialDefinition={def}
+                        initialDefinition={prepareInitialValues(def)}
                         header={localization.conceptForm.fieldLabel.definitionTargetGroupFull[name] as string}
                         trigger={
                           <Button

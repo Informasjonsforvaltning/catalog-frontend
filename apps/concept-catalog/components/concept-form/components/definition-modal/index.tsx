@@ -82,6 +82,7 @@ export const DefinitionModal = ({ initialDefinition, header, trigger, onSucces }
                 <Modal.Footer>
                   <Button
                     type='button'
+                    size='sm'
                     disabled={isSubmitting}
                     onClick={() => {
                       console.log('submit form', isValid, errors);
@@ -93,6 +94,7 @@ export const DefinitionModal = ({ initialDefinition, header, trigger, onSucces }
                   <Button
                     variant='secondary'
                     type='button'
+                    size='sm'
                     onClick={() => modalRef.current?.close()}
                     disabled={isSubmitting}
                   >
