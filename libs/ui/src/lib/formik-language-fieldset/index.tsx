@@ -53,8 +53,7 @@ export const FormikLanguageFieldset = ({
             as={renderAs}
             name={`${name}.${lang}`}
             size='sm'
-            aria-label={localization.language[lang]}
-            
+            aria-label={localization.language[lang]}            
             error={errors?.[name]?.[lang]}
             {...(renderAs === TextareaWithPrefix
               ? {

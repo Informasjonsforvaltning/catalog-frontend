@@ -41,6 +41,10 @@
   border-radius:0.5rem;
   border:1px solid #ddd;
   background:white;
+  
+  @media only screen and (max-width: 767px) {
+    display: none;
+  }
 }
 
 .sideMenu ol {  
