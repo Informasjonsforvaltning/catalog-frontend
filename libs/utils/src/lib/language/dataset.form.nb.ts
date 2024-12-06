@@ -36,6 +36,8 @@ export const datasetFormNb = {
     relationsDataset: 'Oppgi relaterte datasett',
     relationDatasetSeries: 'Oppgi relaterte datasettserier.',
     relatedResources: 'Oppgi relaterte ressurser.',
+    contactPoint:
+      'Et kontaktpunkt er informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller støtte knyttet til datasettet. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.',
   },
   heading: {
     description: 'Beskrivelse av datasettet',
@@ -75,6 +77,7 @@ export const datasetFormNb = {
     relationDatasetSeries: 'Relasjoner til datasettserier',
     relatedResources: 'Relaterte ressurser',
     distribution: 'Distribusjon',
+    contactPoint: 'Kontaktpunkt',
   },
   accessRight: {
     public: 'Allmenn tilgang',
