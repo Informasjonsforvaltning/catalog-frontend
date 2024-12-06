@@ -124,7 +124,7 @@ const CatalogPortalPage: React.FC<{ params: Params }> = async () => {
               <NavigationCard
                 title={localization.catalogType.concept}
                 body={`${getConceptCatalogByOrgId(org.organizationId)?.antallBegrep ?? localization.none} ${localization.descriptionType.concept}`}
-                href={`${process.env.CONCEPT_CATALOG_FRONTEND}/catalogs/${org.organizationId}`}
+                href={`${process.env.CONCEPT_CATALOG_FRONTEND}/catalogs/${org.organizationId}/concepts`}
               />
             </div>
 
