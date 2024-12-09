@@ -46,9 +46,9 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
             <TitleWithTag
               title={
                 <>
-                  Fagområde
+                  {localization.conceptForm.fieldLabel.subjectLabel}
                   <HelpText
-                    title='Fagområde'
+                    title={localization.conceptForm.fieldLabel.subjectLabel}
                     size='sm'
                     type='button'
                   >

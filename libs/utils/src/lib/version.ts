@@ -44,3 +44,6 @@ export const compareVersion = (
   }
   return 0;
 };
+
+export const versionToString = (version?: Version | null) => 
+  `${version?.major}.${version?.minor}.${version?.patch}`;

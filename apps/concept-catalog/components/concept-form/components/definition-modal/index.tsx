@@ -50,6 +50,7 @@ export const DefinitionModal = ({ initialDefinition, header, trigger, onSucces }
                 <Modal.Content className={styles.content}>
                   <FormikLanguageFieldset
                     name='tekst'
+                    errorFieldLabel='Definisjon'
                     as={TextareaWithPrefix}
                     requiredLanguages={['nb']}
                     legend={

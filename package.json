@@ -74,7 +74,8 @@
     "react-papaparse": "^4.4.0",
     "tslib": "^2.7.0",
     "ws": "^8.18.0",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "yup-locales": "^1.2.28"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",
