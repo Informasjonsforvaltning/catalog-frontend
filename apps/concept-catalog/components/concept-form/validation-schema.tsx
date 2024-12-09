@@ -1,7 +1,10 @@
 import { ContactDetails, RelationTypeEnum } from '@catalog-frontend/types';
-import { compareVersion, localization } from '@catalog-frontend/utils';
+import { compareVersion, getTranslateText, localization, versionToString } from '@catalog-frontend/utils';
 import { DateTime } from 'luxon';
 import * as Yup from 'yup';
+import { nb } from 'yup-locales';
+
+Yup.setLocale(nb);
 
 const getRevisions = async ({ catalogId, conceptId }) => {
   const response = await fetch(`/api/catalogs/${catalogId}/concepts/${conceptId}/revisions`);
@@ -20,13 +23,14 @@ const isValidUrl = (value) => {
   }
 };
 
-const tekstMedSpraakKodeArray = Yup.object()
-  .nullable()
-  .shape({
-    nb: Yup.array().of(Yup.string()).nullable(),
-    nn: Yup.array().of(Yup.string()).nullable(),
-    en: Yup.array().of(Yup.string()).nullable(),
-  });
+const tekstMedSpraakKodeArray = (label: string) =>
+  Yup.object()
+    .nullable()
+    .shape({
+      nb: Yup.array().of(Yup.string()).nullable().label(`${label} (${localization.language.nb})`),
+      nn: Yup.array().of(Yup.string()).nullable().label(`${label} (${localization.language.nn})`),
+      en: Yup.array().of(Yup.string()).nullable().label(`${label} (${localization.language.en})`),
+    });
 
 const kilde = Yup.array()
   .of(
@@ -35,7 +39,7 @@ const kilde = Yup.array()
         .nullable()
         .test({
           test(value) {
-            const isRequired = this.parent.forholdTilKilde !== 'egendefinert';
+            const isRequired = !this.parent.uri;
 
             if (isRequired && (!value || value.length < 3)) {
               return this.createError({
@@ -51,7 +55,7 @@ const kilde = Yup.array()
         .nullable()
         .test({
           test(value) {
-            const isRequired = this.parent.forholdTilKilde !== 'egendefinert';
+            const isRequired = !this.parent.tekst;
 
             if (isRequired && !isValidUrl(value)) {
               return this.createError({
@@ -63,6 +67,18 @@ const kilde = Yup.array()
         }),
     }),
   )
+  .test({
+    test(value) {
+      const isRequired = this.parent.forholdTilKilde !== 'egendefinert';
+
+      if (isRequired && !value?.length) {
+        return this.createError({
+          message: localization.conceptForm.validation.minOneSource,
+        });
+      }
+      return true;
+    },
+  })
   .nullable();
 
 export const definitionSchema = Yup.object()
@@ -105,10 +121,12 @@ export const definitionSchema = Yup.object()
         },
       }),
     }),
-    kildebeskrivelse: Yup.object().nullable().shape({
-      forholdTilKilde: Yup.string().nullable(),
-      kilde,
-    }),
+    kildebeskrivelse: Yup.object()
+      .shape({
+        forholdTilKilde: Yup.string(),
+        kilde,
+      })
+      .nullable(),
   })
   .test({
     test() {
@@ -123,68 +141,42 @@ export const definitionSchema = Yup.object()
       }
       return true;
     },
-  }).nullable();
+  })
+  .nullable();
 
 export const relationSchema = Yup.object().shape({
-    relasjon: Yup.string().required('Feltet må fylles ut'),
-    relasjonsType: Yup.string()
-      .nullable()
-      .when('relasjon', (relasjon) => {
-        if (`${relasjon}` === RelationTypeEnum.PARTITIV || `${relasjon}` === RelationTypeEnum.GENERISK) {
-          return Yup.string().required();
-        }
-        return Yup.string().notRequired();
-      }),
-    relatertBegrep: Yup.string().required(),
-  });  
+  relasjon: Yup.string().required('Feltet må fylles ut'),
+  relasjonsType: Yup.string()
+    .nullable()
+    .when('relasjon', (relasjon) => {
+      if (`${relasjon}` === RelationTypeEnum.PARTITIV || `${relasjon}` === RelationTypeEnum.GENERISK) {
+        return Yup.string().required();
+      }
+      return Yup.string().notRequired();
+    }),
+  relatertBegrep: Yup.string().required(),
+});
 
 export const conceptSchema = Yup.object().shape({
   anbefaltTerm: Yup.object().shape({
     navn: Yup.object().shape({
-      nb: Yup.string().test({
-        test() {
-          const { nb, nn, en } = this.parent;
-          if (!nb && !nn && !en) {
-            return this.createError({
-              message: localization.conceptForm.validation.required,
-              path: this.path,
-            });
-          }
-          return true;
-        },
-      }),
-      nn: Yup.string().test({
-        test() {
-          const { nb, nn, en } = this.parent;
-          if (!nb && !nn && !en) {
-            return this.createError({
-              message: localization.conceptForm.validation.required,
-              path: this.path,
-            });
-          }
-          return true;
-        },
-      }),
-      en: Yup.string().test({
-        test() {
-          const { nb, nn, en } = this.parent;
-          if (!nb && !nn && !en) {
-            return this.createError({
-              message: localization.conceptForm.validation.required,
-              path: this.path,
-            });
-          }
-          return true;
-        },
-      }),
+      nb: Yup.string()
+        .required()
+        .label(`${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.nb})`),
+      nn: Yup.string()
+        .required()
+        .label(`${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.nn})`),
+      en: Yup.string()
+        .nullable()
+        .label(`${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.en})`),
     }),
   }),
-  tillattTerm: tekstMedSpraakKodeArray,
-  frarådetTerm: tekstMedSpraakKodeArray,
+  tillattTerm: tekstMedSpraakKodeArray(localization.conceptForm.fieldLabel.altLabel),
+  frarådetTerm: tekstMedSpraakKodeArray(localization.conceptForm.fieldLabel.hiddenLabel),
   definisjon: definitionSchema,
   definisjonForAllmennheten: definitionSchema,
   definisjonForSpesialister: definitionSchema,
-  fagområde: tekstMedSpraakKodeArray,
+  fagområde: tekstMedSpraakKodeArray(localization.conceptForm.fieldLabel.subjectLabel),
   statusURI: Yup.string().nullable(),
   omfang: Yup.object()
     .nullable()
@@ -193,13 +185,10 @@ export const conceptSchema = Yup.object().shape({
       uri: Yup.string().nullable().url(localization.conceptForm.validation.url),
     }),
   kontaktpunkt: Yup.object()
-  .test(
-    'contact-test',
-    'Minst en av kontaktfeltene må fylles ut.',
-    (value: any) => {
-      return value.harEpost || value.harTelefon;
-    })  
-  .shape({
+    .test('contact-test', 'Minst en av kontaktfeltene må fylles ut.', (value: any) => {
+      return value !== null && (value.harEpost || value.harTelefon);
+    })
+    .shape({
       harEpost: Yup.string().nullable().email(localization.conceptForm.validation.email),
       harTelefon: Yup.string()
         .nullable()
@@ -207,7 +196,8 @@ export const conceptSchema = Yup.object().shape({
           message: localization.conceptForm.validation.phone,
           excludeEmptyString: true,
         }),
-    }),
+    })
+    .nullable(),
   gyldigFom: Yup.mixed()
     .nullable()
     .test({
@@ -236,34 +226,35 @@ export const conceptSchema = Yup.object().shape({
     }),
   internSeOgså: Yup.array().of(Yup.string()).nullable(),
   internErstattesAv: Yup.array().of(Yup.string()).nullable(),
-  internBegrepsRelation: Yup.array()
-    .of(relationSchema)
-    .nullable(),
+  internBegrepsRelation: Yup.array().of(relationSchema).nullable(),
   seOgså: Yup.array().of(Yup.string()).nullable(),
   erstattesAv: Yup.array().of(Yup.string()).nullable(),
-  begrepsRelation: Yup.array()
-    .of(relationSchema)
-    .nullable(),
+  begrepsRelation: Yup.array().of(relationSchema).nullable(),
   versjonsnr: Yup.object()
-    .test(
-      'version-check',
-      'Version must be minimum 0.1.0 and greater than latest published version',
-      (value, context) =>
-        context.parent.id
-          ? getRevisions({ catalogId: context.parent.ansvarligVirksomhet.id, conceptId: context.parent.id })
-              .then((revisions) => {
-                // TODO check if erSistPublisert fremdeles finnes på revision
-                const latestPublishedRevision = revisions.find((rev) => rev.erSistPublisert);
-                return (
-                  compareVersion(
-                    latestPublishedRevision?.id !== context.parent.id ? latestPublishedRevision?.versjonsnr : null,
-                    value as any,
-                  ) < 0
-                );
-              })
-              .catch(() => false)
-          : compareVersion({ major: 0, minor: 1, patch: 0 }, value as any) <= 0,
-    )
+    .test({
+      async test(value) {
+        if (this.parent.id) {
+          const revisions = (
+            await getRevisions({ catalogId: this.parent.ansvarligVirksomhet.id, conceptId: this.parent.id })
+          )
+            .filter((rev) => rev.id !== this.parent.id)
+            .sort((a, b) => -compareVersion(a.versjonsnr, b.versjonsnr));
+          if (compareVersion(revisions[0]?.versjonsnr, value as any) >= 0) {
+            return this.createError({
+              message: localization.formatString(localization.conceptForm.validation.version, { min: versionToString(revisions[0]?.versjonsnr) }) as string,
+            });
+          }
+        }
+
+        if (compareVersion({ major: 0, minor: 1, patch: 0 }, value as any) > 0) {
+          return this.createError({
+            message: localization.formatString(localization.conceptForm.validation.version, { min: '0.0.x' }) as string,
+          });
+        }
+
+        return true;
+      },
+    })
     .shape({
       major: Yup.number(),
       minor: Yup.number(),

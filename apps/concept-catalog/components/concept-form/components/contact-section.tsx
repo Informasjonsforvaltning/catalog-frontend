@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FastField, useFormikContext } from 'formik';
-import { Box, Fieldset, Textfield, CheckboxGroup, Checkbox } from '@digdir/designsystemet-react';
+import { Box, Fieldset, Textfield, CheckboxGroup, Checkbox, ErrorMessage } from '@digdir/designsystemet-react';
 import { Concept } from '@catalog-frontend/types';
 import { HelpMarkdown, TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
@@ -56,7 +56,6 @@ export const ContactSection = () => {
             tagTitle={localization.tag.required}
           />
         }
-        error={errors?.kontaktpunkt}
         onChange={handleContactChange}
       >
         {contactOptions.map((option) => (
@@ -77,6 +76,7 @@ export const ContactSection = () => {
             as={Textfield}
             name='kontaktpunkt.harEpost'
             size='sm'
+            error={errors?.kontaktpunkt?.['harEpost']}
           />
         </Fieldset>
       )}
@@ -86,6 +86,7 @@ export const ContactSection = () => {
           name='kontaktpunkt.harTelefon'
           size='sm'
           label={<TitleWithTag title={'Telefonnummer'} />}
+          error={errors?.kontaktpunkt?.['harTelefon']}
         />
       )}
       {selectedFields.includes('harSkjema') && (
@@ -94,8 +95,10 @@ export const ContactSection = () => {
           name='kontaktpunkt.harSkjema'
           size='sm'
           label={<TitleWithTag title={'Contactskjema'} />}
+          error={errors?.kontaktpunkt?.['harSkjema']}
         />
       )}
+      {typeof errors?.kontaktpunkt === 'string' ? <ErrorMessage size='sm'>{errors?.kontaktpunkt}</ErrorMessage> : undefined}
     </Box>
   );
 };

@@ -452,7 +452,7 @@ export const nb = {
     invalidProtocol: `Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’.`,
     invalidPhone: 'Ugyldig telefonnummer.',
     nameRequired: 'Må ha navn',
-    accessURLRequired: 'Tilgangslenke må fylles ut.',
+    accessURLRequired: 'Tilgangslenke må fylles ut.',    
   },
 
   serviceCatalog: {
