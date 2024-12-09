@@ -96,8 +96,7 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
           <div>
             {values.informationModel &&
               values.informationModel.map((_, index) => (
-                <>
-                  <Label></Label>
+                <div key={`informationmodel-${index}`}>
                   <Fieldset legend={localization.datasetForm.heading.informationModelOther}>
                     <FieldsetWithDelete
                       key={index}
@@ -117,7 +116,7 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
                       />
                     </FieldsetWithDelete>
                   </Fieldset>
-                </>
+                </div>
               ))}
 
             <AddButton onClick={() => push('informationModel')}>

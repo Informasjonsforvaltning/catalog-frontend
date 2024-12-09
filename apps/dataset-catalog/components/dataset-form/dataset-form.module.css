@@ -42,3 +42,7 @@
 .fitContent {
   width: fit-content;
 }
+
+.field {
+  padding: 0.5rem 0;
+}
