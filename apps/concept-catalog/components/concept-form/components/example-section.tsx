@@ -7,6 +7,7 @@ export const ExampleSection = () => {
     <Box>
       <FormikLanguageFieldset
         name='eksempel'
+        errorFieldLabel='Eksempel'
         as={TextareaWithPrefix}
         legend={<TitleWithTag title={localization.conceptForm.fieldLabel.example} />}
       />

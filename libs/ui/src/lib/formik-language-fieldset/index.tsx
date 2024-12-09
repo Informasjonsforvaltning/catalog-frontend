@@ -2,17 +2,19 @@
 
 import { ReactNode } from 'react';
 import { localization } from '@catalog-frontend/utils';
-import { Fieldset, Button, Box, Paragraph, Textfield } from '@digdir/designsystemet-react';
+import { Fieldset, Button, Box, Paragraph, Textfield, ErrorMessage } from '@digdir/designsystemet-react';
 import { FastField, useFormikContext } from 'formik';
 
 import styles from './formik-language-fieldset.module.scss';
 import { ISOLanguage, LocalizedStrings } from '@catalog-frontend/types';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { TextareaWithPrefix } from '../textarea-with-prefix';
+import _ from 'lodash';
 
 type LanuguageFieldsetProps = {
   legend?: ReactNode;
   name: string;
+  errorFieldLabel: string;
   requiredLanguages?: Omit<ISOLanguage, 'no'>[];
   as?: typeof Textfield | typeof TextareaWithPrefix;
 };
@@ -22,6 +24,7 @@ const allowedLanguages = Object.freeze<ISOLanguage[]>(['nb', 'nn', 'en']);
 export const FormikLanguageFieldset = ({
   legend,
   name,
+  errorFieldLabel,
   requiredLanguages,
   as: renderAs = Textfield,
 }: LanuguageFieldsetProps) => {
@@ -41,9 +44,15 @@ export const FormikLanguageFieldset = ({
   });
 
   const visibleLanguageButtons = allowedLanguages.filter((lang) => !visibleLanguageFields.includes(lang));
+  const languagesWithError = allowedLanguages
+    .filter((lang) => _.get(errors, `${name}.${lang}`))
+    .map((lang) => localization.language[lang]);
 
   return (
-    <Fieldset legend={legend} size='sm'>
+    <Fieldset
+      legend={legend}
+      size='sm'
+    >
       {visibleLanguageFields.map((lang) => (
         <div
           key={lang}
@@ -53,8 +62,8 @@ export const FormikLanguageFieldset = ({
             as={renderAs}
             name={`${name}.${lang}`}
             size='sm'
-            aria-label={localization.language[lang]}            
-            error={errors?.[name]?.[lang]}
+            aria-label={localization.language[lang]}
+            error={Boolean(_.get(errors, `${name}.${lang}`))}
             {...(renderAs === TextareaWithPrefix
               ? {
                   cols: 80,
@@ -119,6 +128,13 @@ export const FormikLanguageFieldset = ({
           </Button>
         ))}
       </div>
+
+      {languagesWithError.length > 0 && (
+        <ErrorMessage
+          size='sm'
+          error
+        >{`${localization.formatString(localization.conceptForm.validation.languageRequired, { label: errorFieldLabel, language: languagesWithError.join(', ') })}`}</ErrorMessage>
+      )}
     </Fieldset>
   );
 };
