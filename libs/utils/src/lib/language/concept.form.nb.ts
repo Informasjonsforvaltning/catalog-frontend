@@ -32,16 +32,35 @@ Relasjon _Se også_ og _Erstattes av_ er predefinerte assosiative relasjoner.
     relatedConcept: `
 Begynn å skrive i søkefeltet, og du vil få opp en liste med forslag basert på ditt søk. Klikk på ønsket begrep for å knytte det til det nåværende begrepet.
 
-Velg _Egen definert_ om du har en lenke til begrepet.`
+Velg _Egen definert_ om du har en lenke til begrepet.`,
+    relationToSource: `
+__Egen definert:__ Innholdet er egenutviklet og basert på egne analyser eller vurderinger, uten direkte referanse til eksterne kilder.
+
+__Basert på kilde:__ Innholdet er inspirert av eller bygger på en spesifikk kilde, men inneholder omformulerte eller videreutviklede ideer.
+
+__Sitat fra kilde:__ Innholdet er et direkte sitat eller nøyaktig gjengivelse fra en kilde, og må derfor oppgis med nøyaktig kildehenvisning.`,
+    sources: `Du må ha minst én kilde, som kan bestå av en kildebeskrivelse, en URI, eller begge deler.`
   },
-  heading: {
-    term: '1. Term'
-  },
+  section: {
+    termTitle: 'Term',
+    termSubtitle: 'Termen blir sett på som best egnet for begrepet.',
+    definitionTitle: 'Definisjon',
+    definitionSubtitle: 'En definisjon skal være en kort forklaring som tydelig avgrenser til andre, nærliggende begrep, evt. tydeliggjør forskjellen mellom dette begrepet og andre nærliggende begrep.',
+    remarkTitle: 'Merknad',
+    remarkSubtitle: 'Tillegsopplysninger som begrepets betydning som ikke hører hjemme i definisjonsfeltet.',
+    subjectTitle: 'Fagområde',
+    subjectSubtitle: 'Et fagområde er et spesialisert kunnskapsområde som begrepet tilhører.',
+    exampleTitle: 'Eksempel',
+    exampleSubtitle: 'Konkrete tilfeller av begrepet.',
+    applicationTitle: 'Verdiområde',
+    applicationSubtitle: 'Lovlig verdiområde for begrepet.'
+  },  
   fieldLabel: {
    
     prefLabel: 'Anbefalt term',
     altLabel: 'Tillat term',
     hiddenLabel: 'Frarådet term',
+    subjectLabel: 'Fagområde',
     remark: 'Merknad',
     example: 'Eksempel',
     description: 'Beskrivelse',
@@ -87,6 +106,9 @@ Velg _Egen definert_ om du har en lenke til begrepet.`
     minLength: 'Verdien må være minst {length} karakterer lang.',
     required: 'Feltet er påkrevd.',
     invalidUrl: `Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’ og inneholder et gyldig toppdomene (f.eks. ‘.no’).`,
+    minOneSource: 'Du må ha minst en kilde',
+    version: 'Versjon må være større en v{min}',
+    languageRequired: '{label} ({language}) er påkrevd'
   },
   
 };

@@ -24,6 +24,7 @@ import {
   validUUID,
   ensureStringArray,
   getConceptSubject,
+  versionToString,
 } from '@catalog-frontend/utils';
 import {
   Concept,
@@ -207,7 +208,7 @@ export const ConceptPageClient = ({
     ],
     [
       localization.concept.version,
-      `${concept?.versjonsnr?.major}.${concept?.versjonsnr?.minor}.${concept?.versjonsnr?.patch}`,
+      versionToString(concept?.versjonsnr),
     ],
     ...(concept?.gyldigFom || concept?.gyldigTom
       ? [
@@ -383,7 +384,7 @@ export const ConceptPageClient = ({
             >
               <div className={classes.revision}>
                 <div>
-                  v{revision?.versjonsnr?.major}.{revision?.versjonsnr?.minor}.{revision?.versjonsnr?.patch}
+                  v{versionToString(revision?.versjonsnr)}
                 </div>
                 <div>
                   <Link
