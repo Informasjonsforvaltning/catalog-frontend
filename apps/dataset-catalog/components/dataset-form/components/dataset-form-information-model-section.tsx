@@ -1,8 +1,8 @@
 'use client';
 import { Dataset } from '@catalog-frontend/types';
-import { AddButton, DeleteButton, FormContainer } from '@catalog-frontend/ui';
+import { AddButton } from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Heading, Combobox, Textfield, Label, Fieldset } from '@digdir/designsystemet-react';
+import { Combobox, Textfield, Fieldset } from '@digdir/designsystemet-react';
 import {
   useSearchInformationModelsByUri,
   useSearchInformationModelsSuggestions,
@@ -96,28 +96,28 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
           <div>
             {values.informationModel &&
               values.informationModel.map((_, index) => (
-                <>
-                  <Label></Label>
-                  <Fieldset legend={localization.datasetForm.heading.informationModelOther}>
-                    <FieldsetWithDelete
-                      key={index}
-                      onDelete={() => remove(index)}
-                    >
-                      <Field
-                        as={Textfield}
-                        name={`informationModel[${index}].prefLabel.nb`}
-                        label={localization.datasetForm.fieldLabel.informationModelTitle}
-                      />
-                      <Field
-                        as={Textfield}
-                        name={`informationModel[${index}].uri`}
-                        label={localization.datasetForm.fieldLabel.informationModelUrl}
-                        // @ts-expect-error: uri exists on the object
-                        error={errors.informationModel?.[index]?.uri || ''}
-                      />
-                    </FieldsetWithDelete>
-                  </Fieldset>
-                </>
+                <Fieldset
+                  legend={localization.datasetForm.heading.informationModelOther}
+                  key={`informationmodel-${index}`}
+                >
+                  <FieldsetWithDelete
+                    key={index}
+                    onDelete={() => remove(index)}
+                  >
+                    <Field
+                      as={Textfield}
+                      name={`informationModel[${index}].prefLabel.nb`}
+                      label={localization.datasetForm.fieldLabel.informationModelTitle}
+                    />
+                    <Field
+                      as={Textfield}
+                      name={`informationModel[${index}].uri`}
+                      label={localization.datasetForm.fieldLabel.informationModelUrl}
+                      // @ts-expect-error: uri exists on the object
+                      error={errors.informationModel?.[index]?.uri || ''}
+                    />
+                  </FieldsetWithDelete>
+                </Fieldset>
               ))}
 
             <AddButton onClick={() => push('informationModel')}>

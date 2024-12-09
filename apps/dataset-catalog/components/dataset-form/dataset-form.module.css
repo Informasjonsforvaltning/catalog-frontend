@@ -35,10 +35,24 @@
 
 .buttonContainer {
   display: flex;
-  height: 79.4px;
-  align-items: flex-end;
+  gap: 0.5rem;
+  align-items: center;
 }
 
 .fitContent {
   width: fit-content;
+}
+
+.stickyFooterBar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+}
+
+.footerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Optional: Center items vertically if needed */
+  width: 100%;
 }
