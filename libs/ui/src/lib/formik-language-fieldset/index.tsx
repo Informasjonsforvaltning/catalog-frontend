@@ -10,12 +10,13 @@ import { ISOLanguage, LocalizedStrings } from '@catalog-frontend/types';
 import { TextareaWithPrefix } from '../textarea-with-prefix';
 import _ from 'lodash';
 import { AddButton, DeleteButton } from '../button';
+import _ from 'lodash';
 
 type LanuguageFieldsetProps = {
   legend?: ReactNode;
   name: string;
   errorMessage?: string;
-  errorArgs?: object;
+  errorFieldLabel: string;
   requiredLanguages?: Omit<ISOLanguage, 'no'>[];
   as?: typeof Textfield | typeof TextareaWithPrefix;
   multiple?: boolean;
@@ -27,7 +28,7 @@ export const FormikLanguageFieldset = ({
   legend,
   name,
   errorMessage,
-  errorArgs,
+  errorFieldLabel,
   requiredLanguages,
   as: renderAs = Textfield,
   multiple = false,
@@ -70,7 +71,7 @@ export const FormikLanguageFieldset = ({
   const languagesWithError = allowedLanguages
     .filter((lang) => _.get(errors, `${name}.${lang}`))
     .map((lang) => localization.language[lang]);
-
+  
   return (
     <Fieldset
       legend={legend}
@@ -166,8 +167,8 @@ export const FormikLanguageFieldset = ({
           error
         >
           {errorMessage
-            ? `${localization.formatString(errorMessage, { ...errorArgs, language: languagesWithError.join(', ') })}`
-            : 'This field ({language}) is required'}
+            ? `${localization.formatString(errorMessage, { label: errorFieldLabel, language: languagesWithError.join(', ') })}`
+            : `This field (${languagesWithError.join(', ')}) is required`}
         </ErrorMessage>
       )}
     </Fieldset>

@@ -103,6 +103,7 @@ export const preProcessValues = (orgId: string, values: any): Concept => {
 
   return trimObjectWhitespace({
     ...rest,
+    gyldigFom: values.gyldigFom?.length ? values.gyldigFom : null,
     gyldigTom: values.gyldigTom?.length ? values.gyldigTom : null,
     omfang: pruneEmptyProperties(omfang),
     kontaktpunkt: pruneEmptyProperties(kontaktpunkt),
@@ -163,45 +164,45 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                 <FormLayout>
                   <FormLayout.Section
                     id='term'
-                    title='Term'
-                    subtitle='Termen blir sett på som best egnet for begrepet. '
+                    title={localization.conceptForm.section.termTitle}
+                    subtitle={localization.conceptForm.section.termSubtitle}
                     required
                   >
                     <TermSection />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='definition'
-                    title='Definisjon'
-                    subtitle='En definisjon skal være en kort forklaring som tydelig avgrenser til andre, nærliggende begrep, evt. tydeliggjør forskjellen mellom dette begrepet og andre nærliggende begrep.'
+                    title={localization.conceptForm.section.definitionTitle}
+                    subtitle={localization.conceptForm.section.definitionSubtitle}
                     required
                   >
                     <DefinitionSection />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='remark'
-                    title='Merknad'
-                    subtitle='Tillegsopplysninger som begrepets betydning som ikke hører hjemme i definisjonsfeltet.'
+                    title={localization.conceptForm.section.remarkTitle}
+                    subtitle={localization.conceptForm.section.remarkSubtitle}
                   >
                     <RemarkSection />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='subject'
-                    title='Fagområde'
-                    subtitle='Et fagområde er et spesialisert kunnskapsområde som begrepet tilhører.'
+                    title={localization.conceptForm.section.subjectTitle}
+                    subtitle={localization.conceptForm.section.subjectSubtitle}
                   >
                     <SubjectSection codes={subjectCodeList?.codes} />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='example'
-                    title='Eksempel'
-                    subtitle='Konkrete tilfeller av begrepet.'
+                    title={localization.conceptForm.section.exampleTitle}
+                    subtitle={localization.conceptForm.section.exampleTitle}
                   >
                     <ExampleSection />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='application'
-                    title='Verdiområde'
-                    subtitle='Lovlig verdiområde for begrepet.'
+                    title={localization.conceptForm.section.applicationTitle}
+                    subtitle={localization.conceptForm.section.applicationSubtitle}
                   >
                     <ApplicationSection />
                   </FormLayout.Section>

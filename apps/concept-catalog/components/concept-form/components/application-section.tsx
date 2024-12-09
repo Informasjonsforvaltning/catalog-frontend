@@ -1,7 +1,7 @@
 import { FastField, useFormikContext } from 'formik';
 import { HelpText, Paragraph, Textfield } from '@digdir/designsystemet-react';
 import { Concept } from '@catalog-frontend/types';
-import { FieldsetDivider, TitleWithTag } from '@catalog-frontend/ui';
+import { TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import styles from '../concept-form.module.scss';
 
@@ -39,14 +39,14 @@ export const ApplicationSection = () => {
               }
             />
           }
-          error={errors?.omfang?.tekst}
+          error={errors?.omfang?.['tekst']}
         />
         <FastField
           as={Textfield}
           size='sm'
           name='omfang.uri'
           label={<TitleWithTag title='Lenke til referanse' />}
-          error={errors?.omfang?.uri}
+          error={errors?.omfang?.['uri']}
         />
       </div>
     </div>
