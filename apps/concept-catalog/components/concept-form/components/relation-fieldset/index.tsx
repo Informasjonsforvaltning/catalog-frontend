@@ -315,6 +315,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
           </Box>
           <FormikLanguageFieldset
             name='inndelingskriterium'
+            errorFieldLabel='Inndelingskriterium'
             legend={
               <TitleWithTag
                 title={
@@ -344,6 +345,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
       {values.relasjon === RelationTypeEnum.ASSOSIATIV && (
         <FormikLanguageFieldset
           name='beskrivelse'
+          errorFieldLabel='Beskrivelse'
           legend={
             <TitleWithTag
               title={

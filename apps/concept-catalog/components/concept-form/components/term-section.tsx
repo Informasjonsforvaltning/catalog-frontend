@@ -7,6 +7,7 @@ export const TermSection = () => {
     <Box>
       <FormikLanguageFieldset
         name='anbefaltTerm.navn'
+        errorFieldLabel={localization.conceptForm.fieldLabel.prefLabel}
         legend={
           <TitleWithTag
             title={
@@ -31,6 +32,7 @@ export const TermSection = () => {
       <FieldsetDivider />
       <FormikLanguageFieldset
         name='tillatTerm'
+        errorFieldLabel={localization.conceptForm.fieldLabel.altLabel}
         legend={
           <TitleWithTag
             title={
@@ -55,6 +57,7 @@ export const TermSection = () => {
       <FieldsetDivider />
       <FormikLanguageFieldset
         name='frarådetTerm'
+        errorFieldLabel={localization.conceptForm.fieldLabel.hiddenLabel}
         legend={
           <TitleWithTag
             title={
