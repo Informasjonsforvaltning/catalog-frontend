@@ -5,13 +5,7 @@ import { useFormikContext } from 'formik';
 import { Box, Combobox, Fieldset, HelpText, Paragraph, Radio, Textfield } from '@digdir/designsystemet-react';
 import { FieldsetDivider, FormikLanguageFieldset, HelpMarkdown, TitleWithTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import {
-  Option,
-  RelatedConcept,
-  UnionRelation,
-  RelationSubtypeEnum,
-  RelationTypeEnum,
-} from '@catalog-frontend/types';
+import { Option, RelatedConcept, UnionRelation, RelationSubtypeEnum, RelationTypeEnum } from '@catalog-frontend/types';
 import { useSearchConcepts as useSearchInternalConcepts, useDataNorgeSearchConcepts } from '../../../../hooks/search';
 import styles from './relation-fieldset.module.scss';
 
@@ -100,9 +94,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
     if (values.relasjon === RelationTypeEnum.GENERISK) {
       return option.value !== RelationSubtypeEnum.ER_DEL_AV && option.value !== RelationSubtypeEnum.OMFATTER;
     } else if (values.relasjon === RelationTypeEnum.PARTITIV) {
-      return (
-        option.value !== RelationSubtypeEnum.OVERORDNET && option.value !== RelationSubtypeEnum.UNDERORDNET
-      );
+      return option.value !== RelationSubtypeEnum.OVERORDNET && option.value !== RelationSubtypeEnum.UNDERORDNET;
     }
     return true;
   };
@@ -256,7 +248,11 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
           size='sm'
           portal={false}
           error={errors?.relasjon}
-          value={values.relasjon ? [values.relasjon] : []}
+          value={
+            values.relasjon && relationTypeOptions.find((type) => type.value === values.relasjon)
+              ? [values.relasjon]
+              : []
+          }
           onValueChange={handleRelationTypeChange}
         >
           {relationTypeOptions.map((rel) => (
@@ -297,7 +293,11 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
               <Combobox
                 size='sm'
                 portal={false}
-                value={values.relasjonsType ? [values.relasjonsType] : []}
+                value={
+                  values.relasjonsType && relationSubtypeOptions.find((type) => type.value === values.relasjonsType)
+                    ? [values.relasjonsType]
+                    : []
+                }
                 filter={filterRelationSubtype}
                 error={errors?.relasjonsType}
                 onValueChange={handleRelationSubtypeChange}

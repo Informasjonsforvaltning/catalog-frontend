@@ -109,11 +109,13 @@ const renderInternalField = ({
         legend={<Legend />}
         size='sm'
       >
-        <FastField
-          name={name}
-          as={Combobox}
+        <Combobox
+          size='sm'
           placeholder={'select user'}
+          value={fieldValue && userList?.find((u) => u.id === fieldValue) ? [fieldValue] : []}
+          onValueChange={(value) => setFieldValue(name, value[0])}
         >
+          <Combobox.Empty>Fant ingen treff</Combobox.Empty>
           {userList.map(({ id, name: userName }) => (
             <Combobox.Option
               key={id ?? ''}
@@ -122,13 +124,14 @@ const renderInternalField = ({
               {userName}
             </Combobox.Option>
           ))}
-        </FastField>
+        </Combobox>
       </Fieldset>
     );
   }
 
   if (internalField.type === 'code_list') {
     const codes = codeLists.find((list) => list.id === internalField.codeListId)?.codes;
+
     return (
       <Fieldset
         legend={<Legend />}
@@ -136,7 +139,7 @@ const renderInternalField = ({
       >
         <Combobox
           size='sm'
-          value={fieldValue ? [fieldValue] : []}
+          value={fieldValue && codes?.find((code) => code.id === fieldValue) ? [fieldValue] : []}
           onValueChange={(value) => setFieldValue(name, value[0])}
         >
           <Combobox.Empty>Fant ingen treff</Combobox.Empty>
@@ -186,7 +189,11 @@ export const InternalSection = ({ internalFields, userList, codeLists }: Interna
       >
         <Combobox
           size='sm'
-          value={values.assignedUser ? [values.assignedUser] : []}
+          value={
+            values.assignedUser && userList?.find((user) => user.id === values.assignedUser)
+              ? [values.assignedUser]
+              : []
+          }
           onValueChange={(val) => setFieldValue('assignedUser', val[0])}
         >
           <Combobox.Empty>Fant ingen treff</Combobox.Empty>
