@@ -15,8 +15,7 @@ import { createDataset, updateDataset } from './../../app/actions/actions';
 import { datasetTemplate } from './utils/dataset-initial-values';
 import { useState } from 'react';
 import { datasetValidationSchema } from './utils/validation-schema';
-import { TitleSection } from './components/dataset-from-title-section';
-import { AccessRightsSection } from './components/dataset-form-access-rights-section';
+import { AboutSection } from './components/about-section';
 import ThemeSection from './components/dataset-form-theme-section';
 import { TypeSection } from './components/dataset-form-type-section';
 import { ConceptSection } from './components/dataset-form-concept-section';
@@ -142,19 +141,7 @@ export const DatasetForm = ({
                   id='title-section'
                   title={localization.datasetForm.heading.titleAndDescription}
                   required
-                >
-                  <TitleSection />
-                </FormLayout.Section>
-
-                <FormLayout.Section
-                  id='access-right-section'
-                  title={localization.datasetForm.heading.accessRights}
-                >
-                  <AccessRightsSection
-                    values={values}
-                    errors={errors}
-                  />
-                </FormLayout.Section>
+                ></FormLayout.Section>
 
                 <FormLayout.Section
                   id='tema-section'

@@ -10,10 +10,10 @@ import { useState } from 'react';
 export const ContactPointSection = () => {
   const { setFieldValue, values, errors } = useFormikContext<Dataset>();
   const [selectedFields, setSelectedFields] = useState<string[]>([
-    ...(values.contactPoint?.[0].email ? ['email'] : []),
-    ...(values.contactPoint?.[0].hasTelephone ? ['hasTelephone'] : []),
-    ...(values.contactPoint?.[0].organizationUnit ? ['organizationUnit'] : []),
-    ...(values.contactPoint?.[0].hasURL ? ['hasURL'] : []),
+    ...(values.contactPoint?.[0]?.email ? ['email'] : []),
+    ...(values.contactPoint?.[0]?.hasTelephone ? ['hasTelephone'] : []),
+    ...(values.contactPoint?.[0]?.organizationUnit ? ['organizationUnit'] : []),
+    ...(values.contactPoint?.[0]?.hasURL ? ['hasURL'] : []),
   ]);
 
   const contactPointOptions = [

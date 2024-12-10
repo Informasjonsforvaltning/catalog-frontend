@@ -102,14 +102,6 @@ export const GeographySection = ({ envVariable, languages }: Props) => {
         )}
       />
 
-      <Field
-        // className={styles.fieldArrayRow}
-        as={Textfield}
-        type='date'
-        name='issued'
-        label={localization.datasetForm.heading.releaseDate}
-      />
-
       <Checkbox.Group
         //legend={`${localization.choose}...`}
         onChange={(values) => setFieldValue('languageList', values)}
