@@ -14,30 +14,7 @@ type SubjectSectionProps = {
 export const SubjectSection = ({ codes }: SubjectSectionProps) => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
 
-  
-
-  const SubjectCombobox = ({ value }: { label: ReactNode; value: string[] }) => (
-    <Combobox
-      multiple
-      size='sm'
-      value={values.fagområdeKoder}
-      onValueChange={(value) => setFieldValue('fagområdeKoder', value)}
-    >
-      <Combobox.Empty>Fant ingen treff</Combobox.Empty>
-      {codes?.map((code, index, array) => {
-        const parentPath = getParentPath(code, codes);
-        return (
-          <Combobox.Option
-            key={code.id}
-            value={code.id}
-            description={parentPath.length > 0 ? `Overordnet: ${parentPath.join(' - ')}` : ''}
-          >
-            {code.name.nb}
-          </Combobox.Option>
-        );
-      })}
-    </Combobox>
-  );
+  const selected = values.fagområdeKoder?.filter(v => codes?.find(code => code.id === v));
 
   return (
     <div>
@@ -63,11 +40,27 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
               tagColor='info'
             />
           }>
-        <FastField
-          as={SubjectCombobox}
-          name='fagområde'
-          error={errors?.fagområde}
-        />
+          <Combobox
+            multiple
+            size='sm'
+            value={selected ?? []}
+            onValueChange={(value) => setFieldValue('fagområdeKoder', value)}
+            error={errors.fagområdeKoder}
+          >
+            <Combobox.Empty>Fant ingen treff</Combobox.Empty>
+            {codes?.map((code) => {
+              const parentPath = getParentPath(code, codes);
+              return (
+                <Combobox.Option
+                  key={code.id}
+                  value={code.id}
+                  description={parentPath.length > 0 ? `Overordnet: ${parentPath.join(' - ')}` : ''}
+                >
+                  {code.name.nb}
+                </Combobox.Option>
+              );
+            })}
+          </Combobox>
         </Fieldset>
       </div>
     </div>

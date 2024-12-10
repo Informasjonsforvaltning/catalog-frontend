@@ -125,42 +125,42 @@ export type RelatedConcept = {
 };
 
 export interface Concept {
-  id: string | null;
-  originaltBegrep?: string;
-  versjonsnr?: Version | null;
-  revisjonAv?: string;
+  abbreviatedLabel?: string;
   anbefaltTerm?: AnbefaltTerm;
+  ansvarligVirksomhet: { id: string };
+  assignedUser?: string;
+  begrepsRelasjon?: Relation[];
   definisjon?: Definisjon;
   definisjonForAllmennheten?: Definisjon;
   definisjonForSpesialister?: Definisjon;
-  ansvarligVirksomhet: { id: string };
-  merknad?: Record<string, string>;
-  merkelapp?: string[];
+  endringslogelement?: Endringslogelement;
+  erstattesAv?: string[];
   eksempel?: Record<string, string>;
   fagområde?: Record<string, string[]>;
   fagområdeKoder?: string[];
-  omfang?: UriText | null;
-  tillattTerm?: Record<string, string[]>;
   frarådetTerm?: Record<string, string[]>;
-  kontaktpunkt?: ContactDetails | null;
   gyldigFom?: string | null;
   gyldigTom?: string | null;
-  seOgså: string[];
+  id: string | null;
   internBegrepsRelasjon?: Relation[];
-  internSeOgså?: string[];
   internErstattesAv?: string[];
-  erstattesAv?: string[];
-  statusURI?: string | null;
-  sistPublisertId?: string;
-  endringslogelement?: Endringslogelement;
-  assignedUser?: string;
-  begrepsRelasjon?: Relation[];
-  erPublisert?: boolean;
-  publiseringsTidspunkt?: string;
+  interneFelt?: Record<string, { value: string }>;
+  internSeOgså?: string[];
+  kontaktpunkt?: ContactDetails | null;
+  merkelapp?: string[];
+  merknad?: Record<string, string>;
+  omfang?: UriText | null;
   opprettet?: string;
   opprettetAv?: string;
-  interneFelt?: Record<string, { value: string }>;
-  abbreviatedLabel?: string;
+  originaltBegrep?: string;
+  publiseringsTidspunkt?: string;
+  seOgså: string[];
+  sistPublisertId?: string;
+  statusURI?: string | null;
+  tillattTerm?: Record<string, string[]>;
+  versjonsnr?: Version | null;
+  erPublisert?: boolean;
+  revisjonAv?: string;
 }
 
 export interface ConceptDefinition {
