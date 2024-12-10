@@ -1,17 +1,12 @@
 import { AccessRights, Dataset } from '@catalog-frontend/types';
-import { AddButton, FormContainer, FormikLanguageFieldset, TitleWithTag } from '@catalog-frontend/ui';
+import { TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Button, Heading, NativeSelect, Textfield } from '@digdir/designsystemet-react';
-import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { Field, FieldArray, FormikErrors, FormikHelpers } from 'formik';
-import FieldsetWithDelete from '../../fieldset-with-delete';
+import { Divider, NativeSelect } from '@digdir/designsystemet-react';
+import { Field, FormikHelpers, useFormikContext } from 'formik';
+import { UriWithLabelFieldsetTable } from './uri-with-label-field-set-table';
 
-type AccessRightsSectionProps = {
-  errors: FormikErrors<Dataset>;
-  values: Dataset;
-};
-
-export const AccessRightsSection = ({ errors, values }: AccessRightsSectionProps) => {
+export const AccessRightsSection = () => {
+  const { values } = useFormikContext<Dataset>();
   return (
     <>
       <Field name='accessRights.uri'>
@@ -37,128 +32,27 @@ export const AccessRightsSection = ({ errors, values }: AccessRightsSectionProps
       {(values.accessRights?.uri === AccessRights.RESTRICTED ||
         values.accessRights?.uri === AccessRights.NON_PUBLIC) && (
         <>
-          <FormContainer.Header
-            title={localization.datasetForm.heading.legalBasisForRestriction}
-            subtitle={localization.datasetForm.helptext.legalBasisForRestriction}
-          />
-          <FieldArray name='legalBasisForRestriction'>
-            {({ remove, push }) => (
-              <>
-                {values.legalBasisForRestriction?.map((_, index) => (
-                  <div key={index}>
-                    <FormikLanguageFieldset
-                      name={`legalBasisForRestriction[${index}].prefLabel`}
-                      as={Textfield}
-                    />
-                    <FieldsetWithDelete onDelete={() => remove(index)}>
-                      <Field
-                        name={`legalBasisForRestriction[${index}].uri`}
-                        as={Textfield}
-                        label={localization.link}
-                        // @ts-expect-error uri exsists in object legalBasisForRestriction
-                        error={errors?.legalBasisForRestriction?.[index]?.uri}
-                      />
-                    </FieldsetWithDelete>
-                  </div>
-                ))}
-                <AddButton onClick={() => push({ prefLabel: { nb: '' }, uri: '' })} />
-              </>
-            )}
-          </FieldArray>
-
-          <FormContainer.Header
-            title={localization.datasetForm.heading.legalBasisForProcessing}
-            subtitle={localization.datasetForm.helptext.legalBasisForProcessing}
+          <UriWithLabelFieldsetTable
+            values={values.legalBasisForRestriction}
+            fieldName={'legalBasisForRestriction'}
           />
 
-          <FieldArray name='legalBasisForProcessing'>
-            {({ remove, push }) => (
-              <>
-                {values.legalBasisForProcessing?.map((_, index) => (
-                  <div key={index}>
-                    <Field
-                      name={`legalBasisForProcessing[${index}].prefLabel.nb`}
-                      as={Textfield}
-                      label={localization.title}
-                    />
-                    <Field
-                      name={`legalBasisForProcessing[${index}].uri`}
-                      as={Textfield}
-                      label={localization.link}
-                      // @ts-expect-error uri exsists in object legalBasisForProcessing
-                      error={errors?.legalBasisForProcessing?.[index]?.uri}
-                    />
-                    <Button
-                      type='button'
-                      onClick={() => remove(index)}
-                      variant='tertiary'
-                      color='danger'
-                    >
-                      <MinusCircleIcon />
-                      {localization.remove}
-                    </Button>
-                  </div>
-                ))}
-                <div>
-                  <Button
-                    type='button'
-                    onClick={() => push({ prefLabel: { nb: '' }, uri: '' })}
-                    variant='tertiary'
-                  >
-                    <PlusCircleIcon />
-                    {localization.add}
-                  </Button>
-                </div>
-              </>
-            )}
-          </FieldArray>
+          <div>
+            <Divider color='subtle' />
+          </div>
 
-          <FormContainer.Header
-            title={localization.datasetForm.heading.legalBasisForAccess}
-            subtitle={localization.datasetForm.helptext.legalBasisForAccess}
+          <UriWithLabelFieldsetTable
+            values={values.legalBasisForProcessing}
+            fieldName={'legalBasisForProcessing'}
           />
+          <div>
+            <Divider color='subtle' />
+          </div>
 
-          <FieldArray name='legalBasisForAccess'>
-            {({ remove, push }) => (
-              <>
-                {values.legalBasisForAccess?.map((_, index) => (
-                  <div key={index}>
-                    <Field
-                      name={`legalBasisForAccess[${index}].prefLabel.nb`}
-                      as={Textfield}
-                      label={localization.title}
-                    />
-                    <Field
-                      name={`legalBasisForAccess[${index}].uri`}
-                      as={Textfield}
-                      label={localization.link}
-                      // @ts-expect-error uri exsists in object legalBasisForAccess
-                      error={errors?.legalBasisForAccess?.[index]?.uri}
-                    />
-                    <Button
-                      type='button'
-                      onClick={() => remove(index)}
-                      variant='tertiary'
-                      color='danger'
-                    >
-                      <MinusCircleIcon />
-                      {localization.remove}
-                    </Button>
-                  </div>
-                ))}
-                <div>
-                  <Button
-                    type='button'
-                    onClick={() => push({ prefLabel: { nb: '' }, uri: '' })}
-                    variant='tertiary'
-                  >
-                    <PlusCircleIcon />
-                    {localization.add}
-                  </Button>
-                </div>
-              </>
-            )}
-          </FieldArray>
+          <UriWithLabelFieldsetTable
+            values={values.legalBasisForAccess}
+            fieldName={'legalBasisForAccess'}
+          />
         </>
       )}
     </>
