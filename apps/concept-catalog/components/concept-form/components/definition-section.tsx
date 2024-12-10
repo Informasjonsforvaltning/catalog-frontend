@@ -102,7 +102,7 @@ export const DefinitionSection = () => {
                         </Popover.Trigger>
                         <Popover.Content>
                           <ul>
-                            {def.kildebeskrivelse?.kilde.map((source, index) => (
+                            {def.kildebeskrivelse?.kilde?.map((source, index) => (
                               <li key={index}>{source.tekst || source.uri}</li>
                             ))}
                           </ul>
