@@ -102,3 +102,9 @@ export const distributionSectionSchema = Yup.object().shape({
     }),
   ),
 });
+
+export const uriWithLabelSchema = Yup.object().shape({
+  uri: Yup.string()
+    .matches(httpsRegex, localization.validation.invalidProtocol)
+    .url(localization.validation.invalidUrl),
+});
