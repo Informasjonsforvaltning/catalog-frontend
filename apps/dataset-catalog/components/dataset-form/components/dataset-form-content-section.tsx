@@ -1,49 +1,20 @@
 'use client';
 import { Dataset } from '@catalog-frontend/types';
-import { AddButton, FormContainer, FormikLanguageFieldset, TextareaWithPrefix } from '@catalog-frontend/ui';
+import { FormikLanguageFieldset, TextareaWithPrefix } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Heading, Textfield, Textarea, Button, Label, HelpText, Fieldset } from '@digdir/designsystemet-react';
-import { MinusCircleIcon, PlusCircleIcon } from '@navikt/aksel-icons';
-import { Field, FieldArray, useFormikContext } from 'formik';
-import FieldsetWithDelete from '../../fieldset-with-delete';
-import styles from '../dataset-form.module.css';
+import { useFormikContext } from 'formik';
+import { UriWithLabelFieldsetTable } from './uri-with-label-field-set-table';
 
 export const ContentSection = () => {
-  const { errors, values } = useFormikContext<Dataset>();
-
+  const { values } = useFormikContext<Dataset>();
   return (
-    <div>
-      <FieldArray name='conformsTo'>
-        {({ push, remove }) => (
-          <>
-            <Fieldset legend={localization.datasetForm.heading.standard}>
-              {values.conformsTo &&
-                values.conformsTo.map((_, index) => (
-                  <div key={index}>
-                    <FieldsetWithDelete onDelete={() => remove(index)}>
-                      <Field
-                        as={Textfield}
-                        name={`conformsTo[${index}].prefLabel.nb`}
-                        label={localization.title}
-                      />
-                      <Field
-                        as={Textfield}
-                        name={`conformsTo[${index}].uri`}
-                        label={localization.link}
-                        // @ts-expect-error: uri exists on the object
-                        error={errors.conformsTo?.[index]?.uri || ''}
-                      />
-                    </FieldsetWithDelete>
-                  </div>
-                ))}
-
-              <AddButton onClick={() => push({ prefLabel: { nb: '' }, uri: '' })}>
-                {localization.button.addUrl}
-              </AddButton>
-            </Fieldset>
-          </>
-        )}
-      </FieldArray>
+    <>
+      <div>
+        <UriWithLabelFieldsetTable
+          values={values.conformsTo}
+          fieldName={'conformsTo'}
+        />
+      </div>
 
       <FormikLanguageFieldset
         as={TextareaWithPrefix}
@@ -72,6 +43,6 @@ export const ContentSection = () => {
         legend={localization.datasetForm.heading.availability}
         requiredLanguages={['nb']}
       />
-    </div>
+    </>
   );
 };
