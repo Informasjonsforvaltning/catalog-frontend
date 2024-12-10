@@ -103,6 +103,7 @@ export const datasetFormNb = {
     legalBasisForRestriction: 'Skjermingshjemmel',
     legalBasisForProcessing: 'Behandlingsgrunnlag',
     legalBasisForAccess: 'Utleveringshjemmel',
+    legalBasis: 'Juridisk grunnlag',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
