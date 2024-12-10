@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { Formik, Form } from 'formik';
 import { useRouter } from 'next/navigation';
 import { Alert, Spinner } from '@digdir/designsystemet-react';
-import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
+import { localization, replaceNulls, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { CodeListsResult, Concept, FieldsResult, ReferenceDataCode, UsersResult } from '@catalog-frontend/types';
 import { Button, FormLayout, NotificationCarousel } from '@catalog-frontend/ui';
 import { createConcept, updateConcept } from '../../app/actions/concept/actions';
@@ -59,19 +59,6 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
     : []),
 ];
 
-const mapPropsToValues = (concept: Concept) => {
-  return {
-    ...concept,
-    gyldigFom: concept.gyldigFom ?? '',
-    gyldigTom: concept.gyldigTom ?? '',
-    versjonsnr: {
-      major: concept.versjonsnr?.major ?? '',
-      minor: concept.versjonsnr?.minor ?? '',
-      patch: concept.versjonsnr?.patch ?? '',
-    },
-  };
-};
-
 const pruneEmptyProperties = (obj: any, reduceAsArray = false) => {
   if (!obj) {
     return null;
@@ -116,6 +103,27 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
   const [isCanceled, setIsCanceled] = useState(false);
 
   const router = useRouter();
+
+  const mapPropsToValues = (concept: Concept) => {
+    return ({
+      ...concept,
+      abbreviatedLabel: concept.abbreviatedLabel ?? '',
+      anbefaltTerm: concept.anbefaltTerm ?? { navn: null },
+      assignedUser: concept.assignedUser ?? '',
+      gyldigFom: concept.gyldigFom ?? '',
+      gyldigTom: concept.gyldigTom ?? '',
+      interneFelt: fieldsResult.internal.reduce((acc, field) => {
+        acc[field.id] = { value: concept.interneFelt?.[field.id] ?? '' };
+        return acc;
+      }, {}),
+      omfang: concept.omfang ?? { uri: '', tekst: '' },
+      versjonsnr: {
+        major: concept.versjonsnr?.major ?? '',
+        minor: concept.versjonsnr?.minor ?? '',
+        patch: concept.versjonsnr?.patch ?? '',
+      }
+    });
+  };
 
   const subjectCodeList = codeListsResult?.codeLists?.find(
     (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
@@ -266,7 +274,6 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                       disabled={isSubmitting || isValidating || isCanceled}
                       onClick={() => {
                         submitForm();
-                        console.log('valid', isValid, 'errors', errors, 'values', values);
                       }}
                     >
                       {isSubmitting ? <Spinner title='Lagrer' size='sm' /> : 'Lagre'}
