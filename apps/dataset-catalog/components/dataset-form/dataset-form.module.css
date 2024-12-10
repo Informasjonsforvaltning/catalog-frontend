@@ -42,3 +42,7 @@
 .fitContent {
   width: fit-content;
 }
+
+.buttonSet {
+  display: flex;
+}

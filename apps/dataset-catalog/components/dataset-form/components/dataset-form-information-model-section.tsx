@@ -1,17 +1,16 @@
 'use client';
 import { Dataset } from '@catalog-frontend/types';
-import { AddButton, DeleteButton, FormContainer } from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Heading, Combobox, Textfield, Label, Fieldset } from '@digdir/designsystemet-react';
+import { Combobox } from '@digdir/designsystemet-react';
 import {
   useSearchInformationModelsByUri,
   useSearchInformationModelsSuggestions,
 } from '../../../hooks/useSearchService';
-import { Field, FieldArray, useFormikContext } from 'formik';
+import { useFormikContext } from 'formik';
 import { debounce } from 'lodash';
 import { useCallback, useState } from 'react';
 import styles from '../dataset-form.module.css';
-import FieldsetWithDelete from '../../fieldset-with-delete';
+import { UriWithLabelFieldsetTable } from './uri-with-label-field-set-table';
 
 interface Props {
   searchEnv: string;
@@ -90,41 +89,9 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
         </Combobox>
       )}
 
-      <FieldArray
-        name='informationModel'
-        render={({ remove, push }) => (
-          <div>
-            {values.informationModel &&
-              values.informationModel.map((_, index) => (
-                <>
-                  <Label></Label>
-                  <Fieldset legend={localization.datasetForm.heading.informationModelOther}>
-                    <FieldsetWithDelete
-                      key={index}
-                      onDelete={() => remove(index)}
-                    >
-                      <Field
-                        as={Textfield}
-                        name={`informationModel[${index}].prefLabel.nb`}
-                        label={localization.datasetForm.fieldLabel.informationModelTitle}
-                      />
-                      <Field
-                        as={Textfield}
-                        name={`informationModel[${index}].uri`}
-                        label={localization.datasetForm.fieldLabel.informationModelUrl}
-                        // @ts-expect-error: uri exists on the object
-                        error={errors.informationModel?.[index]?.uri || ''}
-                      />
-                    </FieldsetWithDelete>
-                  </Fieldset>
-                </>
-              ))}
-
-            <AddButton onClick={() => push('informationModel')}>
-              {localization.datasetForm.button.addInformationModel}
-            </AddButton>
-          </div>
-        )}
+      <UriWithLabelFieldsetTable
+        values={values.informationModel}
+        fieldName={'informationModel'}
       />
     </>
   );

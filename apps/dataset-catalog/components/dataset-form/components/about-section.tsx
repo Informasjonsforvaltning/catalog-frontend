@@ -1,12 +1,12 @@
 import { Dataset } from '@catalog-frontend/types';
-import { AddButton, FormikLanguageFieldset, TextareaWithPrefix, TitleWithTag } from '@catalog-frontend/ui';
+import { FormikLanguageFieldset, TextareaWithPrefix, TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Textfield, Fieldset } from '@digdir/designsystemet-react';
-import { Field, FieldArray, useFormikContext } from 'formik';
-import FieldsetWithDelete from '../../fieldset-with-delete';
+import { Field, useFormikContext } from 'formik';
 import { FieldsetDivider } from '@catalog-frontend/ui';
+import { AccessRightsForm } from './access-rights.tsx/dataset-form-access-rights-section';
 
-export const TitleSection = () => {
+export const AboutSection = () => {
   const errors = useFormikContext<Dataset>()?.errors;
   return (
     <>
@@ -40,8 +40,18 @@ export const TitleSection = () => {
       </Fieldset>
 
       <FieldsetDivider />
+      <AccessRightsForm />
 
-      <FieldArray name='landingPage'>
+      <FieldsetDivider />
+
+      <Field
+        as={Textfield}
+        type='date'
+        name='issued'
+        label={localization.datasetForm.heading.releaseDate}
+      />
+
+      {/* <FieldArray name='landingPage'>
         {(arrayHelpers) => (
           <>
             {arrayHelpers.form.values.landingPage &&
@@ -61,7 +71,7 @@ export const TitleSection = () => {
             <AddButton onClick={() => arrayHelpers.push('')}>{localization.button.addUrl}</AddButton>
           </>
         )}
-      </FieldArray>
+      </FieldArray> */}
     </>
   );
 };
