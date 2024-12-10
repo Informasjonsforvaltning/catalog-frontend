@@ -61,6 +61,7 @@ export interface UriText {
 export interface ContactDetails {
   harEpost?: string;
   harTelefon?: string;
+  harSkjema?: string;
 }
 
 export interface AnbefaltTerm {
@@ -86,63 +87,80 @@ export interface Endringslogelement {
   endringstidspunkt: string;
 }
 
-export interface Relasjon {
-  relasjon?: string;
-  relasjonsType?: string;
+export type Relation = {
+  relasjon?: RelationTypeEnum;
+  relasjonsType?: RelationSubtypeEnum;
   beskrivelse?: LocalizedStrings;
   inndelingskriterium?: LocalizedStrings;
   relatertBegrep?: string;
 }
 
+export type UnionRelation = Relation & {
+  internal?: boolean;
+};
+
+export enum RelationTypeEnum {
+  ASSOSIATIV = 'assosiativ',
+  GENERISK = 'generisk',
+  PARTITIV = 'partitiv',
+  SE_OGSÅ = 'seOgså',
+  ERSTATTES_AV = 'erstattesAv',
+}
+
+export enum RelationSubtypeEnum {
+  OVERORDNET = 'overordnet',
+  UNDERORDNET = 'underordnet',
+  ER_DEL_AV = 'erDelAv',
+  OMFATTER = 'omfatter',
+}
+
 export type RelatedConcept = {
-  id: string;
-  identifier: string;
-  href: string;
-  externalHref: boolean;
+  id?: string;
+  identifier?: string;
+  href?: string;
+  externalHref?: boolean;
   title: LocalizedStrings;
-  description: LocalizedStrings;
+  description?: LocalizedStrings;
+  custom?: boolean;
 };
 
 export interface Concept {
-  id: string | null;
-  originaltBegrep?: string;
-  versjonsnr?: Version | null;
-  revisjonAv?: string;
+  abbreviatedLabel?: string;
   anbefaltTerm?: AnbefaltTerm;
+  ansvarligVirksomhet: { id: string };
+  assignedUser?: string;
+  begrepsRelasjon?: Relation[];
   definisjon?: Definisjon;
   definisjonForAllmennheten?: Definisjon;
   definisjonForSpesialister?: Definisjon;
-  ansvarligVirksomhet: { id: string };
-  merknad?: Record<string, string>;
-  merkelapp?: string[];
+  endringslogelement?: Endringslogelement;
+  erstattesAv?: string[];
   eksempel?: Record<string, string>;
   fagområde?: Record<string, string[]>;
   fagområdeKoder?: string[];
-  omfang?: UriText | null;
-  tillattTerm?: Record<string, string[]>;
   frarådetTerm?: Record<string, string[]>;
-  kontaktpunkt?: ContactDetails | null;
   gyldigFom?: string | null;
   gyldigTom?: string | null;
-  gjeldendeRevisjon?: string;
-  seOgså: string[];
-  internBegrepsRelasjon?: Relasjon[];
-  internSeOgså?: string[];
+  id: string | null;
+  internBegrepsRelasjon?: Relation[];
   internErstattesAv?: string[];
-  erstattesAv?: string[];
-  statusURI?: string | null;
-  erSistPublisert?: boolean;
-  sistPublisertId?: string;
-  revisjonAvSistPublisert?: boolean;
-  endringslogelement?: Endringslogelement;
-  assignedUser?: string;
-  begrepsRelasjon?: Relasjon[];
-  erPublisert?: boolean;
-  publiseringsTidspunkt?: string;
+  interneFelt?: Record<string, { value: string }>;
+  internSeOgså?: string[];
+  kontaktpunkt?: ContactDetails | null;
+  merkelapp?: string[];
+  merknad?: Record<string, string>;
+  omfang?: UriText | null;
   opprettet?: string;
   opprettetAv?: string;
-  interneFelt?: Record<string, { value: string }>;
-  abbreviatedLabel?: string;
+  originaltBegrep?: string;
+  publiseringsTidspunkt?: string;
+  seOgså: string[];
+  sistPublisertId?: string;
+  statusURI?: string | null;
+  tillattTerm?: Record<string, string[]>;
+  versjonsnr?: Version | null;
+  erPublisert?: boolean;
+  revisjonAv?: string;
 }
 
 export interface ConceptDefinition {
