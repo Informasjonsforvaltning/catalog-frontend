@@ -1,0 +1,10 @@
+{
+  "name": "concept-catalog-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/concept-catalog-e2e/src",
+  "projectType": "application",
+  "tags": [],
+  "implicitDependencies": ["concept-catalog"],
+  "// targets": "to see all targets run: nx show project concept-catalog-e2e --web",
+  "targets": {}
+}
