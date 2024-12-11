@@ -43,6 +43,7 @@ export interface DatasetToBeCreated {
   relations?: UriWithLabel[];
   inSeries?: string;
   distribution?: Distribution[];
+  contactPoint: DatasetContactPoint[];
   // Arrays of uris used as helper values for Formik. These properties is not part of the db object.
   losThemeList?: string[];
   euThemeList?: string[];
@@ -91,4 +92,10 @@ export interface Distribution {
   accessService?: [{ uri: string }];
   // Arrays of uris used as helper values for Formik. These properties is not part of the db object.
   accessServiceList?: string[];
+}
+interface DatasetContactPoint {
+  email?: string;
+  hasTelephone?: string;
+  hasURL?: string;
+  organizationUnit?: string;
 }

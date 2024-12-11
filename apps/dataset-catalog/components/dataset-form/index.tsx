@@ -22,6 +22,7 @@ import { QualifiedAttributionsSection } from './components/dataset-form-qualifie
 import { ExampleDataSection } from './components/dataset-form-example-data-section';
 import { RelationsSection } from './components/dataset-form-relations-section';
 import { DistributionSection } from './components/dataset-from-distribution/dataset-form-distribution-section';
+import { ContactPointSection } from './components/dataset-form-contact-point-section';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
@@ -225,6 +226,13 @@ export const DatasetForm = ({
                   searchEnv={searchEnv}
                   openLicenses={openLicenses}
                 />
+              </FormLayout.Section>
+              <FormLayout.Section
+                id='contact-point-section'
+                title='Kontaktpunkt'
+                required
+              >
+                <ContactPointSection />
               </FormLayout.Section>
             </FormLayout>
           </Form>

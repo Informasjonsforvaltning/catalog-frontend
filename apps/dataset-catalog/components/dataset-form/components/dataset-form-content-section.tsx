@@ -19,24 +19,22 @@ export const ContentSection = () => {
             <Fieldset legend={localization.datasetForm.heading.standard}>
               {values.conformsTo &&
                 values.conformsTo.map((_, index) => (
-                  <>
-                    <div key={index}>
-                      <FieldsetWithDelete onDelete={() => remove(index)}>
-                        <Field
-                          as={Textfield}
-                          name={`conformsTo[${index}].prefLabel.nb`}
-                          label={localization.title}
-                        />
-                        <Field
-                          as={Textfield}
-                          name={`conformsTo[${index}].uri`}
-                          label={localization.link}
-                          // @ts-expect-error: uri exists on the object
-                          error={errors.conformsTo?.[index]?.uri || ''}
-                        />
-                      </FieldsetWithDelete>
-                    </div>
-                  </>
+                  <div key={index}>
+                    <FieldsetWithDelete onDelete={() => remove(index)}>
+                      <Field
+                        as={Textfield}
+                        name={`conformsTo[${index}].prefLabel.nb`}
+                        label={localization.title}
+                      />
+                      <Field
+                        as={Textfield}
+                        name={`conformsTo[${index}].uri`}
+                        label={localization.link}
+                        // @ts-expect-error: uri exists on the object
+                        error={errors.conformsTo?.[index]?.uri || ''}
+                      />
+                    </FieldsetWithDelete>
+                  </div>
                 ))}
 
               <AddButton onClick={() => push({ prefLabel: { nb: '' }, uri: '' })}>

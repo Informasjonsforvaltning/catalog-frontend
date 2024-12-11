@@ -1,4 +1,4 @@
-import { httpsRegex, localization } from '@catalog-frontend/utils';
+import { httpsRegex, localization, telephoneNumberRegex } from '@catalog-frontend/utils';
 import * as Yup from 'yup';
 
 export const datasetValidationSchema = Yup.object().shape({
@@ -62,6 +62,15 @@ export const datasetValidationSchema = Yup.object().shape({
       uri: Yup.string()
         .matches(httpsRegex, localization.validation.invalidProtocol)
         .url(localization.validation.invalidUrl),
+    }),
+  ),
+  contactPoint: Yup.array().of(
+    Yup.object().shape({
+      hasURL: Yup.string()
+        .matches(httpsRegex, localization.validation.invalidProtocol)
+        .url(localization.validation.invalidUrl),
+      email: Yup.string().email(localization.validation.invalidEmail),
+      hasTelephone: Yup.string().matches(telephoneNumberRegex, localization.validation.invalidTlf),
     }),
   ),
 });

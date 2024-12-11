@@ -62,6 +62,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
       ...dist,
       accessServiceList: dist.accessService?.map((service) => service.uri) || [],
     })),
+    contactPoint: dataset.contactPoint ?? {},
   };
 };
 
@@ -119,6 +120,7 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     relations: [{ uri: '', prefLabel: { nb: '' } }],
     inSeries: '',
     distribution: [],
+    contactPoint: {},
   };
 };
 

@@ -120,6 +120,12 @@ export const nb = {
     county: 'Fylke',
   },
 
+  contactPoint: {
+    contactInformation: 'Kontaktinformasjon',
+    organizationUnit: 'Kontaktpunkt',
+    form: 'Kontaktskjema',
+  },
+
   search: {
     noHits: 'Ditt søk ga ingen treff',
     search: 'Søk',
