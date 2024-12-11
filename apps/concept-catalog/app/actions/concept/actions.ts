@@ -8,17 +8,78 @@ import {
 import { Concept } from '@catalog-frontend/types';
 import { getValidSession, localization, removeEmptyValues } from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
+import _ from 'lodash';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
 
+const metaDataFieldsToOmit = [
+  'endringslogelement',
+  'ansvarligVirksomhet',
+  'revisjonAvSistPublisert',
+  'erSistPublisert',
+  'originaltBegrep',
+  'id',
+  'revisjonAv'
+];
+
+const clearValues = (object: any, path: string) => {
+  const fields = path.split('.');
+  const currentField = fields.shift();
+
+  if (object && currentField) {
+    if (currentField.endsWith('[]')) {
+      const value = _.get(object, currentField.replace('[]', ''));
+      if (_.isArray(value)) {
+        _.forEach(value, item => {
+          clearValues(item, fields.join('.'));
+        });
+      }
+    } else if (fields.length > 0) {
+      clearValues(object[currentField], fields.join('.'));
+    } else {
+      const value = _.get(object, currentField);
+      if (value !== undefined && _.isEmpty(value)) {
+        _.set(object, currentField, null);
+      }
+    }
+  }
+};
+
+// const stringsToArray = ({ nb, nn, en }) => ({
+//   ...(nb && { nb: Array.isArray(nb) ? nb : [nb] }),
+//   ...(nn && { nn: Array.isArray(nn) ? nn : [nn] }),
+//   ...(en && { en: Array.isArray(en) ? en : [en] })
+// });
+
+const preProcessValues = (
+  orgId: string,
+  {
+    ansvarligVirksomhet,
+    merknad,
+    eksempel,
+    fagområde,
+    omfang,
+    kontaktpunkt,
+    ...conceptValues
+  }: Concept
+) => ({
+  ...conceptValues,
+  merknad,
+  eksempel,
+  //fagområde: fagområde ? stringsToArray(fagområde) : null,
+  omfang: removeEmptyValues(omfang),
+  kontaktpunkt: removeEmptyValues(kontaktpunkt),
+  ansvarligVirksomhet: ansvarligVirksomhet || { id: orgId }
+});
+
 export async function createConcept(values: Concept, catalogId: string) {
-  const conceptNoEmptyValues = removeEmptyValues(values);
+  const processedValues = preProcessValues(catalogId, values);
 
   const session = await getValidSession();
   let success = false;
   let conceptId: string | undefined = undefined;
   try {
-    const response = await createConceptApi(conceptNoEmptyValues, `${session?.accessToken}`);
+    const response = await createConceptApi(processedValues, `${session?.accessToken}`);
     if (response.status !== 201) {
       throw new Error();
     }
@@ -59,7 +120,31 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
     throw new Error('Concept id cannot be null');
   }
 
-  const diff = compare(initialConcept, values);
+  [
+    'definisjon.kildebeskrivelse.kilde[].uri',
+    'definisjonForAllmennheten.kildebeskrivelse.kilde[].uri',
+    'definisjonForSpesialister.kildebeskrivelse.kilde[].uri',
+    'fagområdeKoder',
+    'gyldigFom',
+    'gyldigTom',
+    'kontaktpunkt.harEpost',
+    'kontaktpunkt.harTelefon',
+    'omfang.uri'
+  ].forEach(field => {
+    clearValues(values, field);
+  });
+
+  const diff = compare(
+    _(initialConcept).omit(metaDataFieldsToOmit).omitBy(_.isNull).value(),
+    _({
+      ...initialConcept,
+      ...values
+    })
+      .omit(metaDataFieldsToOmit)
+      .omitBy(_.isNull)
+      .value()
+  );
+
   if (diff.length === 0) {
     throw new Error(localization.alert.noChanges);
   }
