@@ -57,7 +57,7 @@ export const getConceptIdFromRdfUri = (baseUri: string | undefined, uri: string 
 };
 
 export const getUniqueConceptIdsFromUris = (uris: string[]): string[] => {
-  const ids = uris.map((uri) => uri.match(conceptIdFromUriRegex)?.[1]).filter((id): id is string => !!id);
+  const ids = uris.map((uri) => uri?.match(conceptIdFromUriRegex)?.[1]).filter((id): id is string => !!id);
   return [...new Set(ids)];
 };
 
