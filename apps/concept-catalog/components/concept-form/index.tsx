@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { Formik, Form } from 'formik';
 import { useRouter } from 'next/navigation';
 import { Alert, Spinner } from '@digdir/designsystemet-react';
-import { localization, replaceNulls, trimObjectWhitespace } from '@catalog-frontend/utils';
+import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { CodeListsResult, Concept, FieldsResult, ReferenceDataCode, UsersResult } from '@catalog-frontend/types';
 import { Button, FormLayout, NotificationCarousel } from '@catalog-frontend/ui';
 import { createConcept, updateConcept } from '../../app/actions/concept/actions';
@@ -58,45 +58,6 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
       ]
     : []),
 ];
-
-const pruneEmptyProperties = (obj: any, reduceAsArray = false) => {
-  if (!obj) {
-    return null;
-  }
-  const filteredKeys = Object.keys(obj).filter(
-    (key) => obj[key] != null && obj[key] !== '' && (Array.isArray(obj[key]) ? obj[key].length !== 0 : true),
-  );
-
-  return reduceAsArray
-    ? filteredKeys.reduce((acc, key) => {
-        if (typeof obj[key] === 'object') {
-          const prunedObject = pruneEmptyProperties(obj[key]);
-          return Object.keys(prunedObject).length === 0 ? acc : [...acc, prunedObject];
-        }
-        return [...acc, obj[key]];
-      }, [] as any[])
-    : filteredKeys.reduce((acc, key) => {
-        if (typeof obj[key] === 'object') {
-          const isArray = Array.isArray(obj[key]);
-          const prunedObject = pruneEmptyProperties(obj[key], isArray);
-          return Object.keys(prunedObject).length === 0 ? acc : { ...acc, [key]: prunedObject };
-        }
-        return { ...acc, [key]: obj[key] };
-      }, {});
-};
-
-export const preProcessValues = (orgId: string, values: any): Concept => {
-  const { ansvarligVirksomhet, kontaktpunkt, omfang, ...rest } = values;
-
-  return trimObjectWhitespace({
-    ...rest,
-    gyldigFom: values.gyldigFom?.length ? values.gyldigFom : null,
-    gyldigTom: values.gyldigTom?.length ? values.gyldigTom : null,
-    omfang: pruneEmptyProperties(omfang),
-    kontaktpunkt: pruneEmptyProperties(kontaktpunkt),
-    ansvarligVirksomhet: ansvarligVirksomhet || { id: orgId },
-  });
-};
 
 const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }: Props) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -157,8 +118,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
       validateOnChange={isSubmitted}
       validateOnBlur={isSubmitted}
       onSubmit={async (values, { setSubmitting }) => {
-        const preProcessed = preProcessValues(catalogId, values);
-        concept.id === null ? await handleCreate(preProcessed) : await handleUpdate(preProcessed);
+        concept.id === null ? await handleCreate(values as Concept) : await handleUpdate(values as Concept);
         setSubmitting(false);
         setIsSubmitted(true);
       }}
