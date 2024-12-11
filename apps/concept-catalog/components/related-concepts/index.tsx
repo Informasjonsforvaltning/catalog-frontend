@@ -27,10 +27,10 @@ const RelatedConcepts = ({ conceptRelations, relatedConcepts, validToIncluding, 
       (relasjon) => relasjon.relasjon === 'erstattesAv' || relasjon.relasjon === 'internErstattesAv',
     ) ?? [];
 
-  const relatedConceptsMap = (identifier: string) => {
+  const relatedConceptsMap = (identifier: string | null) => {
     const result = relatedConcepts.find(
       (concept) =>
-        concept.identifier === identifier || concept.identifier === identifier.match(conceptIdFromUriRegex)?.[1],
+        concept.identifier === identifier || concept.identifier === identifier?.match(conceptIdFromUriRegex)?.[1],
     );
     return result;
   };
