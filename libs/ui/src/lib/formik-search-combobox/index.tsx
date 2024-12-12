@@ -54,6 +54,7 @@ export function FormikSearchCombobox({
       placeholder={`${localization.search.search}...`}
       multiple
       filter={() => true} // disable filter
+      size='sm'
     >
       <Combobox.Empty>{`${localization.search.noHits}... `}</Combobox.Empty>
       {comboboxOptions.map((item) => (

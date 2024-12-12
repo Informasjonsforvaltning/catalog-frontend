@@ -25,11 +25,11 @@ export interface DatasetToBeCreated {
   provenance?: ReferenceDataCode;
   accrualPeriodicity?: ReferenceDataCode;
   modified?: string;
-  hasCurrentnessAnnotation?: { hasBody: LocalizedStrings };
-  hasRelevanceAnnotation?: { hasBody: LocalizedStrings };
-  hasCompletenessAnnotation?: { hasBody: LocalizedStrings };
-  hasAvailabilityAnnotation?: { hasBody: LocalizedStrings };
-  hasAccuracyAnnotation?: { hasBody: LocalizedStrings };
+  hasCurrentnessAnnotation?: { hasBody?: LocalizedStrings };
+  hasRelevanceAnnotation?: { hasBody?: LocalizedStrings };
+  hasCompletenessAnnotation?: { hasBody?: LocalizedStrings };
+  hasAvailabilityAnnotation?: { hasBody?: LocalizedStrings };
+  hasAccuracyAnnotation?: { hasBody?: LocalizedStrings };
   conformsTo?: UriWithLabel[];
   spatial?: ReferenceDataCode[];
   temporal?: DateRange[];

@@ -11,6 +11,7 @@ import { uriWithLabelSchema } from '../utils/validation-schema';
 interface Props {
   values: UriWithLabel[] | undefined;
   fieldName: string;
+  showLabel?: boolean;
 }
 
 interface ModalProps {
@@ -25,12 +26,12 @@ const hasNoFieldValues = (values: UriWithLabel) => {
   return _.isEmpty(_.trim(values.uri)) && _.isEmpty(_.pickBy(values.prefLabel, _.identity));
 };
 
-export const UriWithLabelFieldsetTable = ({ fieldName, values }: Props) => {
+export const UriWithLabelFieldsetTable = ({ fieldName, values, showLabel = true }: Props) => {
   const { setFieldValue } = useFormikContext();
 
   return (
     <>
-      <Label>{localization.datasetForm.fieldLabel[fieldName]}</Label>
+      {showLabel ?? <Label size='sm'>{localization.datasetForm.fieldLabel[fieldName]}</Label>}
       {values && values?.length > 0 && !hasNoFieldValues(values[0]) && (
         <Table size='sm'>
           <Table.Head>
@@ -87,7 +88,13 @@ const FieldModal = ({ fieldName, template, type, onSuccess }: ModalProps) => {
   return (
     <>
       <Modal.Root>
-        <Modal.Trigger asChild>{type === 'edit' ? <EditButton /> : <AddButton />}</Modal.Trigger>
+        <Modal.Trigger asChild>
+          {type === 'edit' ? (
+            <EditButton />
+          ) : (
+            <AddButton>{`${localization.add} ${localization.datasetForm.fieldLabel?.[fieldName]?.toLowerCase()}`}</AddButton>
+          )}
+        </Modal.Trigger>
         <Modal.Dialog
           ref={modalRef}
           className={styles.dialog}

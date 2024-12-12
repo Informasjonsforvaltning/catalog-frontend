@@ -76,6 +76,8 @@ export const datasetFormNb = {
     relatedResources: 'Relaterte ressurser',
     distribution: 'Distribusjon',
     contactPoint: 'Kontaktpunkt',
+    about: 'Om datasettet',
+    details: 'Detaljer om datasett og innhold',
   },
   accessRight: {
     public: 'Allmenn tilgang',

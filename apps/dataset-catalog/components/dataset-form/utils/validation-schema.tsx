@@ -64,15 +64,13 @@ export const datasetValidationSchema = Yup.object().shape({
         .url(localization.validation.invalidUrl),
     }),
   ),
-  contactPoint: Yup.array().of(
-    Yup.object().shape({
-      hasURL: Yup.string()
-        .matches(httpsRegex, localization.validation.invalidProtocol)
-        .url(localization.validation.invalidUrl),
-      email: Yup.string().email(localization.validation.invalidEmail),
-      hasTelephone: Yup.string().matches(telephoneNumberRegex, localization.validation.invalidTlf),
-    }),
-  ),
+  // contactPoint: Yup.object().shape({
+  //   hasURL: Yup.string()
+  //     .matches(httpsRegex, localization.validation.invalidProtocol)
+  //     .url(localization.validation.invalidUrl),
+  //   email: Yup.string().email(localization.validation.invalidEmail),
+  //   hasTelephone: Yup.string().matches(telephoneNumberRegex, localization.validation.invalidTlf),
+  // }),
 });
 
 export const distributionSectionSchema = Yup.object().shape({
