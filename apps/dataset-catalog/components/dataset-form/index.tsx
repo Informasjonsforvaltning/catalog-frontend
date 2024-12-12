@@ -1,6 +1,6 @@
 'use client';
 import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Alert, Button, Switch } from '@digdir/designsystemet-react';
+import { Alert, Button, Spinner, Switch } from '@digdir/designsystemet-react';
 import { Dataset, DatasetSeries, DatasetToBeCreated, ReferenceData, PublicationStatus } from '@catalog-frontend/types';
 import {
   FormLayout,
@@ -11,25 +11,20 @@ import {
 } from '@catalog-frontend/ui';
 import { Formik, Form } from 'formik';
 import { useParams } from 'next/navigation';
-import { createDataset, updateDataset } from './../../app/actions/actions';
+import { createDataset, updateDataset } from '../../app/actions/actions';
 import { datasetTemplate } from './utils/dataset-initial-values';
 import { useState } from 'react';
 import { datasetValidationSchema } from './utils/validation-schema';
 import { AboutSection } from './components/about-section';
 import ThemeSection from './components/dataset-form-theme-section';
-import { TypeSection } from './components/dataset-form-type-section';
 import { ConceptSection } from './components/dataset-form-concept-section';
-import { ProvenanceSection } from './components/dataset-form-provenance-section';
-import { ContentSection } from './components/dataset-form-content-section';
-import { GeographySection } from './components/dataset-form-geography-section';
 import { InformationModelSection } from './components/dataset-form-information-model-section';
-import { QualifiedAttributionsSection } from './components/dataset-form-qualified-attributions-section';
-import { ExampleDataSection } from './components/dataset-form-example-data-section';
-import { RelationsSection } from './components/dataset-form-relations-section';
-import { DistributionSection } from './components/dataset-from-distribution/dataset-form-distribution-section';
+import { RelationsSection } from './components/relations-section/relations-section';
+import { DistributionSection } from './components/distribution-section/dataset-form-distribution-section';
 import { ContactPointSection } from './components/dataset-form-contact-point-section';
 import styles from './dataset-form.module.css';
 import { useRouter } from 'next/navigation';
+import { DetailsSection } from './components/details-section/details-section';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
@@ -40,18 +35,14 @@ type Props = {
   datasetSeries: DatasetSeries[];
 };
 
-export const DatasetForm = ({
-  initialValues,
-  submitType,
-  referenceData,
-  searchEnv,
-  referenceDataEnv,
-  datasetSeries,
-}: Props) => {
+export const DatasetForm = ({ initialValues, referenceData, searchEnv, referenceDataEnv, datasetSeries }: Props) => {
   const { catalogId, datasetId } = useParams();
   const [isDirty, setIsDirty] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isCanceled, setIsCanceled] = useState(false);
   const { losThemes, dataThemes, provenanceStatements, datasetTypes, frequencies, languages, openLicenses } =
     referenceData;
+  const router = useRouter();
 
   useWarnIfUnsavedChanges({ unsavedChanges: isDirty });
 
@@ -71,9 +62,8 @@ export const DatasetForm = ({
     }
   };
 
-  const router = useRouter();
-
   const handleCancel = () => {
+    setIsCanceled(true);
     router.push(datasetId ? `/catalogs/${catalogId}/datasets/${datasetId}` : `/catalogs/${catalogId}/datasets`);
   };
 
@@ -111,17 +101,18 @@ export const DatasetForm = ({
     <Formik
       initialValues={datasetTemplate(initialValues as Dataset)}
       validationSchema={datasetValidationSchema}
-      validateOnChange={true}
-      validateOnBlur={true}
-      onSubmit={(values, { setSubmitting }) => {
+      validateOnChange={isSubmitted}
+      validateOnBlur={isSubmitted}
+      onSubmit={async (values, { setSubmitting }) => {
         const trimmedValues = trimObjectWhitespace(values);
-        submitType === 'create' ? handleCreate(trimmedValues) : handleUpdate(trimmedValues as Dataset);
+        datasetId === null ? handleCreate(trimmedValues as Dataset) : await handleUpdate(trimmedValues as Dataset);
         setSubmitting(false);
+        setIsSubmitted(true);
       }}
     >
-      {({ errors, values, dirty, handleSubmit, isValid, setFieldValue }) => {
+      {({ setFieldValue, values, dirty, isValid, isSubmitting, isValidating, submitForm }) => {
         setTimeout(() => setIsDirty(dirty), 0);
-        const notifications = getNotifications({ isValid, hasUnsavedChanges: dirty });
+        const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
 
         return (
           <>
@@ -132,16 +123,18 @@ export const DatasetForm = ({
                   e.preventDefault();
                   window.alert(localization.datasetForm.alert.formError);
                 } else {
-                  handleSubmit(e);
+                  submitForm();
                 }
               }}
             >
               <FormLayout>
                 <FormLayout.Section
-                  id='title-section'
-                  title={localization.datasetForm.heading.titleAndDescription}
+                  id='about-section'
+                  title={localization.datasetForm.heading.about}
                   required
-                ></FormLayout.Section>
+                >
+                  <AboutSection />
+                </FormLayout.Section>
 
                 <FormLayout.Section
                   id='tema-section'
@@ -156,10 +149,34 @@ export const DatasetForm = ({
                 </FormLayout.Section>
 
                 <FormLayout.Section
-                  id='type-section'
-                  title={localization.datasetForm.heading.type}
+                  id='distribution-section'
+                  title={localization.datasetForm.heading.distribution}
                 >
-                  <TypeSection datasetTypes={datasetTypes} />
+                  <DistributionSection
+                    referenceDataEnv={referenceDataEnv}
+                    searchEnv={searchEnv}
+                    openLicenses={openLicenses}
+                  />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='details-section'
+                  title={localization.datasetForm.heading.details}
+                >
+                  <DetailsSection
+                    referenceDataEnv={referenceDataEnv}
+                    referenceData={referenceData}
+                  />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='relation-section'
+                  title={localization.datasetForm.heading.relations}
+                >
+                  <RelationsSection
+                    searchEnv={searchEnv}
+                    datasetSeries={datasetSeries}
+                  />
                 </FormLayout.Section>
 
                 <FormLayout.Section
@@ -171,32 +188,6 @@ export const DatasetForm = ({
                 </FormLayout.Section>
 
                 <FormLayout.Section
-                  id='geography-section'
-                  title={localization.datasetForm.heading.geography}
-                  subtitle=''
-                >
-                  <GeographySection
-                    envVariable={referenceDataEnv}
-                    languages={languages}
-                  />
-                </FormLayout.Section>
-                <FormLayout.Section
-                  id='provenance-section'
-                  title={localization.datasetForm.heading.provenanceAndFrequency}
-                  subtitle=''
-                >
-                  <ProvenanceSection data={{ provenanceStatements, frequencies }} />
-                </FormLayout.Section>
-
-                <FormLayout.Section
-                  id='content-section'
-                  title={localization.datasetForm.heading.content}
-                  subtitle=''
-                >
-                  <ContentSection />
-                </FormLayout.Section>
-
-                <FormLayout.Section
                   id='information-model-section'
                   title={localization.datasetForm.heading.informationModel}
                   subtitle=''
@@ -205,37 +196,11 @@ export const DatasetForm = ({
                 </FormLayout.Section>
 
                 <FormLayout.Section
-                  id='qualified-attributions-section'
-                  title={localization.datasetForm.heading.qualifiedAttributions}
-                  subtitle=''
+                  id='contact-point-section'
+                  title={localization.datasetForm.heading.contactPoint}
+                  required
                 >
-                  <QualifiedAttributionsSection />
-                </FormLayout.Section>
-
-                <FormLayout.Section
-                  id='example-data-section'
-                  title={localization.datasetForm.heading.exampleData}
-                >
-                  <ExampleDataSection referenceDataEnv={referenceDataEnv} />
-                </FormLayout.Section>
-                <FormLayout.Section
-                  id='relation-section'
-                  title={localization.datasetForm.heading.relations}
-                >
-                  <RelationsSection
-                    searchEnv={searchEnv}
-                    datasetSeries={datasetSeries}
-                  />
-                </FormLayout.Section>
-                <FormLayout.Section
-                  id='distribution-section'
-                  title={localization.datasetForm.heading.distribution}
-                >
-                  <DistributionSection
-                    referenceDataEnv={referenceDataEnv}
-                    searchEnv={searchEnv}
-                    openLicenses={openLicenses}
-                  />
+                  <ContactPointSection />
                 </FormLayout.Section>
               </FormLayout>
             </Form>
@@ -245,22 +210,27 @@ export const DatasetForm = ({
                 <Button
                   type='submit'
                   size='sm'
-                  disabled={!isDirty}
+                  disabled={isSubmitting || isValidating || isCanceled || !dirty}
                   onClick={() => {
-                    handleSubmit();
+                    submitForm();
                   }}
                 >
-                  {localization.save}
+                  {isSubmitting ? (
+                    <Spinner
+                      title='Lagrer'
+                      size='sm'
+                    />
+                  ) : (
+                    localization.save
+                  )}
                 </Button>
 
                 <Button
                   type='button'
                   size='sm'
                   variant='secondary'
-                  onClick={() => {
-                    setIsDirty(false);
-                    handleCancel();
-                  }}
+                  disabled={isSubmitting || isValidating || isCanceled}
+                  onClick={() => handleCancel()}
                 >
                   {localization.button.cancel}
                 </Button>
@@ -286,7 +256,7 @@ export const DatasetForm = ({
                   </div>
                 </Switch>
               </div>
-              <NotificationCarousel notifications={notifications} />
+              {notifications.length > 0 && <NotificationCarousel notifications={notifications} />}
             </StickyFooterBar>
           </>
         );

@@ -45,31 +45,28 @@ export const QualifiedAttributionsSection = () => {
   ];
 
   return (
-    <>
-      {!isLoading && (
-        <Combobox
-          onValueChange={(selectedValues: string[]) => setFieldValue('qualifiedAttributions', selectedValues)}
-          onChange={(input: any) => debouncedSearch(input.target.value)}
-          loading={searching}
-          multiple
-          value={values.qualifiedAttributions}
-          placeholder={`${localization.search.search}...`}
-          filter={() => true} // Deactivate filter, handled by backend
-          virtual
-          label={localization.datasetForm.heading.qualifiedAttributions}
+    <Combobox
+      size='sm'
+      onValueChange={(selectedValues: string[]) => setFieldValue('qualifiedAttributions', selectedValues)}
+      onChange={(input: any) => debouncedSearch(input.target.value)}
+      loading={searching}
+      multiple
+      value={values.qualifiedAttributions}
+      placeholder={`${localization.search.search}...`}
+      filter={() => true} // Deactivate filter, handled by backend
+      virtual
+      label={localization.datasetForm.heading.qualifiedAttributions}
+    >
+      <Combobox.Empty>{`${localization.search.noHits}...`}</Combobox.Empty>
+      {comboboxOptions.map((org) => (
+        <Combobox.Option
+          value={org.organisasjonsnummer}
+          key={org.organisasjonsnummer}
+          description={org.organisasjonsnummer}
         >
-          <Combobox.Empty>{`${localization.search.noHits}...`}</Combobox.Empty>
-          {comboboxOptions.map((org) => (
-            <Combobox.Option
-              value={org.organisasjonsnummer}
-              key={org.organisasjonsnummer}
-              description={org.organisasjonsnummer}
-            >
-              {org.navn}
-            </Combobox.Option>
-          ))}
-        </Combobox>
-      )}
-    </>
+          {org.navn}
+        </Combobox.Option>
+      ))}
+    </Combobox>
   );
 };

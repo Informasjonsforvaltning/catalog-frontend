@@ -137,7 +137,6 @@ const FieldModal = ({ template, formType, onSuccess, initialType = 'legalBasisFo
             validationSchema={uriWithLabelSchema}
             onSubmit={(formValues, { setSubmitting }) => {
               const trimmedValues = trimObjectWhitespace(formValues);
-              console.log('ny', { type: legalBasis, uriWithLabel: trimmedValues });
               onSuccess({ type: legalBasis, uriWithLabel: trimmedValues });
               setSubmitting(false);
               setSubmitted(true);

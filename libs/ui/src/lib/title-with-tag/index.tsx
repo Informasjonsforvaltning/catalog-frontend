@@ -13,10 +13,10 @@ type TagColor = 'first' | 'second' | 'success' | 'danger' | 'third' | 'neutral' 
 
 type TagSize = 'sm' | 'md' | 'lg' | 'small' | 'medium' | 'large';
 
-export function TitleWithTag({ title, tagTitle, tagColor = 'warning', tagSize = 'medium' }: Props) {
+export function TitleWithTag({ title, tagTitle, tagColor = 'warning', tagSize = 'sm' }: Props) {
   return (
     <div className={styles.container}>
-      {typeof title === 'string' ? <Label>{title}</Label> : title}
+      {typeof title === 'string' ? <Label size='sm'>{title}</Label> : title}
       <Tag
         color={tagColor}
         size={tagSize}
