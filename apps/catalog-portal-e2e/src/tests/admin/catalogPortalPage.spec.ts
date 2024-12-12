@@ -1,3 +1,4 @@
+/* eslint-disable playwright/no-standalone-expect */
 import { runTestAsAdmin, expect } from '../../fixtures/basePage';
 
 const orgId = process.env.E2E_CATALOG_ID;
