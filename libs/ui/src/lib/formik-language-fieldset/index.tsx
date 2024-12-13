@@ -1,8 +1,8 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { localization } from '@catalog-frontend/utils';
-import { Fieldset, Button, Box, Paragraph, Textfield, ErrorMessage } from '@digdir/designsystemet-react';
+import { Fieldset, Button, Box, Paragraph, Textfield, ErrorMessage, Chip } from '@digdir/designsystemet-react';
 import { FastField, useFormikContext } from 'formik';
 
 import styles from './formik-language-fieldset.module.scss';
@@ -17,6 +17,7 @@ type LanuguageFieldsetProps = {
   errorFieldLabel: string;
   requiredLanguages?: Omit<ISOLanguage, 'no'>[];
   as?: typeof Textfield | typeof TextareaWithPrefix;
+  multiple?: boolean;
 };
 
 const allowedLanguages = Object.freeze<ISOLanguage[]>(['nb', 'nn', 'en']);
@@ -27,15 +28,35 @@ export const FormikLanguageFieldset = ({
   errorFieldLabel,
   requiredLanguages,
   as: renderAs = Textfield,
+  multiple = false,
 }: LanuguageFieldsetProps) => {
-  const { errors, getFieldMeta, setFieldValue } = useFormikContext<Record<string, LocalizedStrings>>();
+  const { errors, values, getFieldMeta, setFieldValue } = useFormikContext<Record<string, LocalizedStrings>>();
+  const [textValue, setTextValue] = useState<Record<string, string>>({});
 
   const handleAddLanguage = (lang: string) => {
-    setFieldValue(`${name}.${lang}`, '');
+    setFieldValue(`${name}.${lang}`, multiple ? [] : '');
   };
 
   const handleRemoveLanguage = (lang: string) => {
     setFieldValue(`${name}.${lang}`, undefined);
+  };
+
+  const handleOnChangeTextValue = (value: string, lang: string) => {
+    setTextValue((prev) => ({ ...prev, ...{ [lang]: value } }));
+  };
+
+  const handleAddTextValue = (code: string, lang: string) => {
+    if(code === 'Enter') {
+      const textValues = [...(values?.[name]?.[lang] as string[]), textValue[lang]];
+      setFieldValue(`${name}.${lang}`, textValues);
+      setTextValue((prev) => ({ ...prev, ...{ [lang]: '' } }));
+    }    
+  };
+
+  const handleRemoveTextValue = (index: number, lang: string) => {
+    const textValues = [...(values?.[name]?.[lang] as string[])];
+    textValues.splice(index, 1);
+    setFieldValue(`${name}.${lang}`, textValues);
   };
 
   const visibleLanguageFields = allowedLanguages.filter((lang) => {
@@ -54,63 +75,98 @@ export const FormikLanguageFieldset = ({
       size='sm'
     >
       {visibleLanguageFields.map((lang) => (
-        <div
-          key={lang}
-          className={styles.languageField}
-        >
-          <FastField
-            as={renderAs}
-            name={`${name}.${lang}`}
-            size='sm'
-            aria-label={localization.language[lang]}
-            error={Boolean(_.get(errors, `${name}.${lang}`))}
-            {...(renderAs === TextareaWithPrefix
-              ? {
-                  cols: 80,
-                  prefix: (
-                    <>
-                      <Paragraph
-                        size='sm'
-                        variant='short'
-                      >
-                        {localization.language[lang]}
-                      </Paragraph>
-                      {!requiredLanguages?.includes(lang) && (
-                        <Box>
-                          <Button
-                            variant='tertiary'
+        <div key={lang}>
+          {multiple ? (
+            <>
+              <Box className={styles.languageField}>
+                <Textfield
+                  size='sm'
+                  aria-label={localization.language[lang]}
+                  prefix={localization.language[lang]}
+                  value={textValue[lang]}
+                  onChange={(e) => handleOnChangeTextValue(e.target.value, lang)}
+                  onKeyDown={(e) => handleAddTextValue(e.code, lang)}
+                />
+                <Button
+                  variant='tertiary'
+                  size='sm'
+                  color='danger'
+                  onClick={() => handleRemoveLanguage(lang)}
+                >
+                  <TrashIcon
+                    title={localization.icon.trash}
+                    fontSize='1.5rem'
+                  />
+                  {localization.button.delete}
+                </Button>
+              </Box>
+              <Chip.Group size="sm">
+              {(values?.[name]?.[lang] as string[] | undefined)?.map((v, i) => (
+                <Chip.Removable
+                  onClick={() => handleRemoveTextValue(i, lang)}
+                >
+                  {v}
+                </Chip.Removable>
+              ))}
+              </Chip.Group>
+            </>
+          ) : (
+            <Box className={styles.languageField}>
+              <FastField
+                as={renderAs}
+                name={`${name}.${lang}`}
+                size='sm'
+                aria-label={localization.language[lang]}
+                error={Boolean(_.get(errors, `${name}.${lang}`))}
+                {...(renderAs === TextareaWithPrefix
+                  ? {
+                      cols: 80,
+                      prefix: (
+                        <>
+                          <Paragraph
                             size='sm'
-                            color='danger'
-                            onClick={() => handleRemoveLanguage(lang)}
+                            variant='short'
                           >
-                            <TrashIcon
-                              title={localization.icon.trash}
-                              fontSize='1.5rem'
-                            />
-                            {localization.button.delete}
-                          </Button>
-                        </Box>
-                      )}
-                    </>
-                  ),
-                }
-              : {
-                  prefix: localization.language[lang],
-                })}
-          />
-          {!requiredLanguages?.includes(lang) && renderAs !== TextareaWithPrefix && (
-            <Button
-              variant='tertiary'
-              size='sm'
-              color='danger'
-              onClick={() => handleRemoveLanguage(lang)}
-            >
-              <TrashIcon
-                title={localization.button.delete}
-                fontSize='1.5rem'
+                            {localization.language[lang]}
+                          </Paragraph>
+                          {!requiredLanguages?.includes(lang) && (
+                            <Box>
+                              <Button
+                                variant='tertiary'
+                                size='sm'
+                                color='danger'
+                                onClick={() => handleRemoveLanguage(lang)}
+                              >
+                                <TrashIcon
+                                  title={localization.icon.trash}
+                                  fontSize='1.5rem'
+                                />
+                                {localization.button.delete}
+                              </Button>
+                            </Box>
+                          )}
+                        </>
+                      ),
+                    }
+                  : {
+                      prefix: localization.language[lang],
+                    })}
               />
-              {localization.button.delete}
-            </Button>
+              {!requiredLanguages?.includes(lang) && renderAs !== TextareaWithPrefix && (
+                <Button
+                  variant='tertiary'
+                  size='sm'
+                  color='danger'
+                  onClick={() => handleRemoveLanguage(lang)}
+                >
+                  <TrashIcon
+                    title={localization.button.delete}
+                    fontSize='1.5rem'
+                  />
+                  {localization.button.delete}
+                </Button>
+              )}
+            </Box>
           )}
         </div>
       ))}

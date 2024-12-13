@@ -141,8 +141,6 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
     clearValues(values, field);
   });
 
-  console.log("cleared", values);
-
   const diff = compare(
     _(initialConcept).omit(metaDataFieldsToOmit).value(),
     _({
