@@ -125,7 +125,7 @@ export type RelatedConcept = {
 };
 
 export interface Concept {
-  abbreviatedLabel?: string;
+  abbreviatedLabel?: string | null;
   anbefaltTerm?: AnbefaltTerm;
   ansvarligVirksomhet: { id: string };
   assignedUser?: string;

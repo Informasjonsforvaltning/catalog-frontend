@@ -65,25 +65,66 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
 
   const router = useRouter();
 
-  const mapPropsToValues = (concept: Concept) => {
+  const mapPropsToValues = ({
+    id,
+    anbefaltTerm = { navn: {} },
+    definisjon = { tekst: {}, kildebeskrivelse: undefined },
+    definisjonForAllmennheten = { tekst: {}, kildebeskrivelse: undefined },
+    definisjonForSpesialister = { tekst: {}, kildebeskrivelse: undefined },
+    merknad = {},
+    merkelapp = [],
+    tillattTerm = {},
+    frarådetTerm = {},
+    eksempel = {},
+    fagområde = {},
+    fagområdeKoder = [],
+    statusURI = undefined,
+    omfang = undefined,
+    kontaktpunkt = undefined,
+    gyldigFom = undefined,
+    gyldigTom = undefined,
+    seOgså = [],
+    internSeOgså = [],
+    erstattesAv = [],
+    internErstattesAv = [],
+    assignedUser = '',
+    abbreviatedLabel = undefined,
+    begrepsRelasjon = [],
+    internBegrepsRelasjon = [],
+    versjonsnr = { major: 0, minor: 0, patch: 0 },
+    interneFelt = {},
+    ...rest
+  }: Concept) => {
     return ({
-      ...concept,
-      abbreviatedLabel: concept.abbreviatedLabel ?? '',
-      anbefaltTerm: concept.anbefaltTerm ?? { navn: null },
-      assignedUser: concept.assignedUser ?? '',
-      gyldigFom: concept.gyldigFom ?? '',
-      gyldigTom: concept.gyldigTom ?? '',
-      interneFelt: fieldsResult.internal.reduce((acc, field) => {
-        acc[field.id] = { value: concept.interneFelt?.[field.id] ?? '' };
-        return acc;
-      }, {}),
-      omfang: concept.omfang ?? { uri: '', tekst: '' },
-      versjonsnr: {
-        major: concept.versjonsnr?.major ?? '',
-        minor: concept.versjonsnr?.minor ?? '',
-        patch: concept.versjonsnr?.patch ?? '',
-      }
-    });
+        id,
+        anbefaltTerm,
+        definisjon,
+        definisjonForAllmennheten,
+        definisjonForSpesialister,
+        merknad,
+        merkelapp,
+        tillattTerm,
+        frarådetTerm,
+        eksempel,
+        fagområde,
+        fagområdeKoder,
+        statusURI,
+        omfang,
+        kontaktpunkt,
+        gyldigFom,
+        gyldigTom,
+        seOgså,
+        internSeOgså,
+        erstattesAv,
+        internErstattesAv,
+        assignedUser,
+        abbreviatedLabel,
+        begrepsRelasjon,
+        internBegrepsRelasjon,
+        versjonsnr,
+        interneFelt,
+        ...rest
+      });
   };
 
   const subjectCodeList = codeListsResult?.codeLists?.find(
@@ -123,7 +164,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
         setIsSubmitted(true);
       }}
     >
-      {({ errors, values, isValid, isSubmitting, isValidating, submitForm }) => {
+      {({ errors, values, dirty, isValid, isSubmitting, isValidating, submitForm }) => {
         const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
         return (
           <>
@@ -231,7 +272,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     <Button
                       size='sm'
                       type='button'
-                      disabled={isSubmitting || isValidating || isCanceled}
+                      disabled={isSubmitting || isValidating || isCanceled || !dirty}
                       onClick={() => {
                         submitForm();
                       }}

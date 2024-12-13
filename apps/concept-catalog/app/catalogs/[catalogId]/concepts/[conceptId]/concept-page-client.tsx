@@ -111,7 +111,7 @@ const InterneFelt = ({ concept, fields, codeLists, users, location, language }: 
         value: concept?.interneFelt && concept?.interneFelt[fieldId].value,
       };
     })
-    .filter((field) => field !== null && field.location === location)
+    .filter((field) => field?.value !== null && field?.location === location)
     .sort((a, b) => `${translate(a?.label, language)}`.localeCompare(`${translate(b?.label, language)}`));
 
   return (
@@ -734,7 +734,7 @@ export const ConceptPageClient = ({
             />
           </InfoCard.Item>
         )}
-        {!_.isEmpty(concept?.omfang) && (
+        {!_.isEmpty(concept?.omfang?.uri) || !_.isEmpty(concept?.omfang?.tekst) && (
           <InfoCard.Item title={`${localization.concept.valueDomain}:`}>
             {concept?.omfang?.uri ? (
               <Link href={concept?.omfang?.uri}>{concept?.omfang?.tekst}</Link>

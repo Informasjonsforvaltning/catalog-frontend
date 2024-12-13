@@ -34,6 +34,17 @@ const clearValues = (object: any, path: string) => {
           clearValues(item, fields.join('.'));
         });
       }
+    } else if(currentField === '*') {
+      if(fields.length > 0) {
+        Object.keys(object).forEach(key => clearValues(_.get(object, key), fields.join('.')));
+      } else {
+        Object.keys(object).forEach(key => {
+          const value = _.get(object, key);
+          if (value !== undefined && _.isEmpty(value)) {
+            _.set(object, key, null);
+          }
+        });
+      }      
     } else if (fields.length > 0) {
       clearValues(object[currentField], fields.join('.'));
     } else {
@@ -44,12 +55,6 @@ const clearValues = (object: any, path: string) => {
     }
   }
 };
-
-// const stringsToArray = ({ nb, nn, en }) => ({
-//   ...(nb && { nb: Array.isArray(nb) ? nb : [nb] }),
-//   ...(nn && { nn: Array.isArray(nn) ? nn : [nn] }),
-//   ...(en && { en: Array.isArray(en) ? en : [en] })
-// });
 
 const preProcessValues = (
   orgId: string,
@@ -66,7 +71,6 @@ const preProcessValues = (
   ...conceptValues,
   merknad,
   eksempel,
-  //fagområde: fagområde ? stringsToArray(fagområde) : null,
   omfang: removeEmptyValues(omfang),
   kontaktpunkt: removeEmptyValues(kontaktpunkt),
   ansvarligVirksomhet: ansvarligVirksomhet || { id: orgId }
@@ -120,6 +124,8 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
     throw new Error('Concept id cannot be null');
   }
 
+  let conceptId: string | undefined = initialConcept.id;
+
   [
     'definisjon.kildebeskrivelse.kilde[].uri',
     'definisjonForAllmennheten.kildebeskrivelse.kilde[].uri',
@@ -129,21 +135,25 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
     'gyldigTom',
     'kontaktpunkt.harEpost',
     'kontaktpunkt.harTelefon',
-    'omfang.uri'
+    'interneFelt.*.value',
+    'omfang.*'
   ].forEach(field => {
     clearValues(values, field);
   });
 
+  console.log("cleared", values);
+
   const diff = compare(
-    _(initialConcept).omit(metaDataFieldsToOmit).omitBy(_.isNull).value(),
+    _(initialConcept).omit(metaDataFieldsToOmit).value(),
     _({
       ...initialConcept,
       ...values
     })
       .omit(metaDataFieldsToOmit)
-      .omitBy(_.isNull)
       .value()
   );
+
+  console.log("diff", diff);
 
   if (diff.length === 0) {
     throw new Error(localization.alert.noChanges);
@@ -154,10 +164,14 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
 
   try {
     const response = await patchConceptApi(initialConcept.id, diff, `${session?.accessToken}`);
-    if (response.status !== 200) {
+    if (response.status !== 200 && response.status !== 201) {
       throw new Error(`${response.status} ${response.statusText}`);
     }
+
     success = true;
+    if(response.status === 201) {
+      conceptId = response?.headers?.get('location')?.split('/').pop();
+    }    
   } catch (error) {
     console.error(`${localization.alert.fail} ${error}`);
     console.log(diff);
@@ -167,6 +181,6 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
   if (success) {
     revalidateTag('concept');
     revalidateTag('concepts');
-    redirect(`/catalogs/${catalogId}/concepts/${initialConcept.id}`);
+    redirect(`/catalogs/${catalogId}/concepts/${conceptId}`);
   }
 }
