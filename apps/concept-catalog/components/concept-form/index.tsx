@@ -168,6 +168,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
         return (
           <>
             <div className='container'>
+              {isSaveButtonClicked ? 'save button clicked' : 'save not clicked'}
               <Form>
                 <FormLayout>
                   <FormLayout.Section
