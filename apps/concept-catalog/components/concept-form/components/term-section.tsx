@@ -31,7 +31,7 @@ export const TermSection = () => {
       />
       <FieldsetDivider />
       <FormikLanguageFieldset
-        name='tillatTerm'
+        name='tillattTerm'
         errorFieldLabel={localization.conceptForm.fieldLabel.altLabel}
         legend={
           <TitleWithTag
@@ -53,6 +53,7 @@ export const TermSection = () => {
             tagColor='info'
           />
         }
+        multiple
       />
       <FieldsetDivider />
       <FormikLanguageFieldset
@@ -76,6 +77,7 @@ export const TermSection = () => {
             }
           />
         }
+        multiple
       />
     </Box>
   );
