@@ -70,6 +70,7 @@ export const nb = {
   relation: 'Relasjon',
   serviceMessageError: 'Kunne ikke laste inn tjenestemeldinger. Vennligst prøv igjen senere.',
   serviceMessageSeeMore: 'Se detaljert driftsmelding for mer informasjon.',
+  newConcept: 'Nytt begrep',
 
   catalogType: {
     admin: 'Administrasjonsgrensesnitt',

@@ -30,9 +30,9 @@ export const DefinitionSection = () => {
       ...def,
       kildebeskrivelse: {
         forholdTilKilde: def.kildebeskrivelse?.forholdTilKilde ?? 'egendefinert',
-        kilde: def.kildebeskrivelse?.kilde ?? []
-      }
-    }
+        kilde: def.kildebeskrivelse?.kilde ?? [],
+      },
+    };
   };
 
   return (
@@ -57,13 +57,7 @@ export const DefinitionSection = () => {
               tagTitle={localization.tag.required}
             />
           }
-        >
-          {Object.keys(errors).some((value) =>
-            ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(value),
-          ) && (
-            <ErrorMessage>Minst en definisjon må være definert!</ErrorMessage>
-          )}
-        </Fieldset>
+        />
 
         {definitions
           .filter((name) => values[name])
@@ -85,7 +79,7 @@ export const DefinitionSection = () => {
                       </Heading>
                       <Popover
                         open={open[index]}
-                        onClose={() => setOpen({...open, [index]: false})}
+                        onClose={() => setOpen({ ...open, [index]: false })}
                         placement='top'
                         size='md'
                         variant='default'
@@ -94,8 +88,10 @@ export const DefinitionSection = () => {
                           <Tag
                             size='sm'
                             color='second'
-                            onMouseEnter={() => def.kildebeskrivelse?.kilde?.length && setOpen({...open, [index]: true})}
-                            onMouseOut={() => setOpen({...open, [index]: false})}
+                            onMouseEnter={() =>
+                              def.kildebeskrivelse?.kilde?.length && setOpen({ ...open, [index]: true })
+                            }
+                            onMouseOut={() => setOpen({ ...open, [index]: false })}
                           >
                             {`${def.kildebeskrivelse?.kilde?.length ? def.kildebeskrivelse?.kilde.length : 'Ingen'} ${localization.conceptForm.fieldLabel.sources.toLowerCase()}`}
                           </Tag>
@@ -187,6 +183,11 @@ export const DefinitionSection = () => {
             />
           ))}
       </Box>
+
+      {Object.keys(errors).some((value) =>
+        ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(value),
+      ) && <ErrorMessage>Minst en definisjon må være definert!</ErrorMessage>}
+      
     </Box>
   );
 };
