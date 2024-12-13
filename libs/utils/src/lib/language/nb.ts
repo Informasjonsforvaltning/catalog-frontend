@@ -73,6 +73,7 @@ export const nb = {
   relations: 'Relasjoner',
   serviceMessageError: 'Kunne ikke laste inn tjenestemeldinger. Vennligst prøv igjen senere.',
   serviceMessageSeeMore: 'Se detaljert driftsmelding for mer informasjon.',
+  newConcept: 'Nytt begrep',
   helpText: 'Hjelpetekst',
   publisher: 'Utgiver',
 
