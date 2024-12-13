@@ -142,7 +142,8 @@ export const definitionSchema = Yup.object()
       return true;
     },
   })
-  .nullable();
+  .nullable()
+  .default(null);
 
 export const relationSchema = Yup.object().shape({
   relasjon: Yup.string().required('Feltet må fylles ut'),
