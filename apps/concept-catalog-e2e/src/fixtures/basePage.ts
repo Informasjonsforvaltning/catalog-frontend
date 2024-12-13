@@ -1,16 +1,14 @@
 import { test as base } from '@playwright/test';
 import HomePage from '../page-object-model/homePage';
 import LoginPage from '../page-object-model/loginPage';
-import ServicesPage from '../page-object-model/conceptsPage';
-import PublicServicesPage from '../page-object-model/publicServicesPage';
+import ConceptsPage from '../page-object-model/conceptsPage';
 import { adminAuthFile, generateAccessibilityBuilder } from '../utils/helpers';
 
-const PREFIX_TEXT = 'service-catalog: ';
+const PREFIX_TEXT = 'concept-catalog: ';
 export const test = base.extend<{
   loginPage: any;
   homePage: any;
-  servicesPage: any;
-  publicServicesPage: any;
+  conceptsPage: any;
 }>({
   loginPage: async ({ page, context }, use) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
@@ -22,16 +20,11 @@ export const test = base.extend<{
     const homePage = new HomePage(page, context, accessibilityBuilder);
     await use(homePage);
   },
-  servicesPage: async ({ page, context }, use) => {
+  conceptsPage: async ({ page, context }, use) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
-    const servicesPage = new ServicesPage(page, context, accessibilityBuilder);
-    await use(servicesPage);
-  },
-  publicServicesPage: async ({ page, context }, use) => {
-    const accessibilityBuilder = await generateAccessibilityBuilder(page);
-    const publicServicesPage = new PublicServicesPage(page, context, accessibilityBuilder);
-    await use(publicServicesPage);
-  },
+    const conceptsPage = new ConceptsPage(page, context, accessibilityBuilder);
+    await use(conceptsPage);
+  }
 });
 
 export const runTest = (name: string, fn: (any) => void) => {

@@ -1,49 +1,49 @@
-import { ALL_SERVICES, SERVICE_1, SERVICE_2, SERVICE_3 } from '../../data/services';
+import { ALL_CONCEPTS, CONCEPT_1, CONCEPT_2, CONCEPT_3 } from '../../data/concepts';
 import { runTestAsAdmin } from '../../fixtures/basePage';
 
-runTestAsAdmin('test if the search page renders correctly', async ({ servicesPage }) => {
-  await servicesPage.goto();
-  await servicesPage.expectFiltersToBeVisible();
-  await servicesPage.expectSearchResults(ALL_SERVICES);
+runTestAsAdmin('test if the search page renders correctly', async ({ conceptsPage }) => {
+  await conceptsPage.goto();
+  await conceptsPage.expectFiltersToBeVisible();
+  await conceptsPage.expectSearchResults(ALL_CONCEPTS);
 });
 
-runTestAsAdmin('test search', async ({ servicesPage }) => {
-  await servicesPage.goto();
-  await servicesPage.search('test service 2');
-  await servicesPage.expectSearchResults([SERVICE_2], [SERVICE_1, SERVICE_3]);
+runTestAsAdmin('test search', async ({ conceptsPage }) => {
+  await conceptsPage.goto();
+  await conceptsPage.search('test concept 2');
+  await conceptsPage.expectSearchResults([CONCEPT_2], [CONCEPT_1, CONCEPT_3]);
 
-  await servicesPage.clearSearch();
-  await servicesPage.expectSearchResults(ALL_SERVICES);
+  await conceptsPage.clearSearch();
+  await conceptsPage.expectSearchResults(ALL_CONCEPTS);
 });
 
-runTestAsAdmin('test status filter', async ({ servicesPage }) => {
-  await servicesPage.goto();
-  await servicesPage.filterStatusCompleted();
-  await servicesPage.expectSearchResults([SERVICE_1], [SERVICE_2, SERVICE_3]);
+runTestAsAdmin('test status filter', async ({ conceptsPage }) => {
+  await conceptsPage.goto();
+  await conceptsPage.filterStatusCompleted();
+  await conceptsPage.expectSearchResults([CONCEPT_1], [CONCEPT_2, CONCEPT_3]);
 
-  await servicesPage.clearFilters();
-  await servicesPage.filterStatusDeprecated();
-  await servicesPage.expectSearchResults([SERVICE_2], [SERVICE_1, SERVICE_3]);
+  await conceptsPage.clearFilters();
+  await conceptsPage.filterStatusDeprecated();
+  await conceptsPage.expectSearchResults([CONCEPT_2], [CONCEPT_1, CONCEPT_3]);
 
-  await servicesPage.clearFilters();
-  await servicesPage.filterStatusWithDrawn();
-  await servicesPage.expectSearchResults([SERVICE_3], [SERVICE_1, SERVICE_2]);
+  await conceptsPage.clearFilters();
+  await conceptsPage.filterStatusWithDrawn();
+  await conceptsPage.expectSearchResults([CONCEPT_3], [CONCEPT_1, CONCEPT_2]);
 
-  await servicesPage.clearFilters();
-  await servicesPage.filterStatusUnderDevelopment();
-  await servicesPage.expectSearchResults([]);
+  await conceptsPage.clearFilters();
+  await conceptsPage.filterStatusUnderDevelopment();
+  await conceptsPage.expectSearchResults([]);
 
-  await servicesPage.clearFilters();
-  await servicesPage.expectSearchResults(ALL_SERVICES);
+  await conceptsPage.clearFilters();
+  await conceptsPage.expectSearchResults(ALL_CONCEPTS);
 });
 
-runTestAsAdmin('test published state filter', async ({ servicesPage }) => {
-  await servicesPage.goto();
-  await servicesPage.filterPublished();
-  await servicesPage.expectSearchResults([]);
+runTestAsAdmin('test published state filter', async ({ conceptsPage }) => {
+  await conceptsPage.goto();
+  await conceptsPage.filterPublished();
+  await conceptsPage.expectSearchResults([]);
 
-  await servicesPage.clearFilters();
-  await servicesPage.expectSearchResults(ALL_SERVICES);
-  await servicesPage.filterNotPublished();
-  await servicesPage.expectSearchResults(ALL_SERVICES);
+  await conceptsPage.clearFilters();
+  await conceptsPage.expectSearchResults(ALL_CONCEPTS);
+  await conceptsPage.filterNotPublished();
+  await conceptsPage.expectSearchResults(ALL_CONCEPTS);
 });
