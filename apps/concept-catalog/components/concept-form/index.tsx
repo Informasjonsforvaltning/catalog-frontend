@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { Formik, Form } from 'formik';
 import { useRouter } from 'next/navigation';
 import { Alert, Spinner } from '@digdir/designsystemet-react';
-import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
+import { localization } from '@catalog-frontend/utils';
 import { CodeListsResult, Concept, FieldsResult, ReferenceDataCode, UsersResult } from '@catalog-frontend/types';
 import { Button, FormLayout, NotificationCarousel } from '@catalog-frontend/ui';
 import { createConcept, updateConcept } from '../../app/actions/concept/actions';
@@ -60,7 +60,7 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
 ];
 
 const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }: Props) => {
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSaveButtonClicked, setIsSaveButtonClicked] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
 
   const router = useRouter();
@@ -68,9 +68,9 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
   const mapPropsToValues = ({
     id,
     anbefaltTerm = { navn: {} },
-    definisjon = { tekst: {}, kildebeskrivelse: undefined },
-    definisjonForAllmennheten = { tekst: {}, kildebeskrivelse: undefined },
-    definisjonForSpesialister = { tekst: {}, kildebeskrivelse: undefined },
+    definisjon = undefined,
+    definisjonForAllmennheten = undefined,
+    definisjonForSpesialister = undefined,
     merknad = {},
     merkelapp = [],
     tillattTerm = {},
@@ -78,7 +78,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
     eksempel = {},
     fagområde = {},
     fagområdeKoder = [],
-    statusURI = undefined,
+    statusURI = 'http://publications.europa.eu/resource/authority/concept-status/DRAFT',
     omfang = undefined,
     kontaktpunkt = undefined,
     gyldigFom = undefined,
@@ -91,7 +91,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
     abbreviatedLabel = undefined,
     begrepsRelasjon = [],
     internBegrepsRelasjon = [],
-    versjonsnr = { major: 0, minor: 0, patch: 0 },
+    versjonsnr = { major: 0, minor: 1, patch: 0 },
     interneFelt = {},
     ...rest
   }: Concept) => {
@@ -156,12 +156,11 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
     <Formik
       initialValues={mapPropsToValues(concept)}
       validationSchema={conceptSchema}
-      validateOnChange={isSubmitted}
-      validateOnBlur={isSubmitted}
+      validateOnChange={isSaveButtonClicked}
+      validateOnBlur={isSaveButtonClicked}
       onSubmit={async (values, { setSubmitting }) => {
         concept.id === null ? await handleCreate(values as Concept) : await handleUpdate(values as Concept);
         setSubmitting(false);
-        setIsSubmitted(true);
       }}
     >
       {({ errors, values, dirty, isValid, isSubmitting, isValidating, submitForm }) => {
@@ -169,6 +168,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
         return (
           <>
             <div className='container'>
+              {isSaveButtonClicked ? 'save button clicked' : 'save not clicked'}
               <Form>
                 <FormLayout>
                   <FormLayout.Section
@@ -274,6 +274,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                       type='button'
                       disabled={isSubmitting || isValidating || isCanceled || !dirty}
                       onClick={() => {
+                        setIsSaveButtonClicked(true);
                         submitForm();
                       }}
                     >
