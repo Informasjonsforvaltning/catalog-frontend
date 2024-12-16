@@ -10,7 +10,7 @@ const callConceptApi = async (catalogId: string, conceptId: string, path: string
     return Promise.reject(new Error('Invalid concept id'));
   }
 
-  const response = await fetch(`/api/concepts/${catalogId}/${conceptId}/${path}`, { method });
+  const response = await fetch(`/api/catalogs/${catalogId}/concepts/${conceptId}/${path}`, { method });
 
   if (response.status === 401) {
     return Promise.reject(new Error('Unauthorized'));
