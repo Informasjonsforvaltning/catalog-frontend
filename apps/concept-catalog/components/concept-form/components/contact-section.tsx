@@ -11,7 +11,7 @@ export const ContactSection = () => {
   const [selectedFields, setSelectedFields] = useState<string[]>([
     ...(values.kontaktpunkt?.harEpost ? ['harEpost'] : []),
     ...(values.kontaktpunkt?.harTelefon ? ['harTelefon'] : []),
-    ...(values.kontaktpunkt?.harSkjema ? ['harSkjema'] : []),
+    //...(values.kontaktpunkt?.harSkjema ? ['harSkjema'] : []),
   ]);
 
   const contactOptions = [
@@ -23,10 +23,10 @@ export const ContactSection = () => {
       label: 'Telefonnummer',
       value: 'harTelefon',
     },
-    {
-      label: 'Kontaktskjema',
-      value: 'harSkjema',
-    },
+    // {
+    //   label: 'Kontaktskjema',
+    //   value: 'harSkjema',
+    // },
   ];
 
   const handleContactChange = (value: string[]) => {
