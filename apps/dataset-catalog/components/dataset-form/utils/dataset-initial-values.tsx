@@ -55,7 +55,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
         mediaType: [],
       },
     ],
-    references: dataset.references ?? [{ source: { uri: '' }, referenceType: { code: '' } }],
+    references: dataset?.references,
     relations: dataset.relations ?? [{ uri: '', prefLabel: { nb: '' } }],
     inSeries: dataset.inSeries ?? '',
     distribution: dataset.distribution?.map((dist) => ({
@@ -116,7 +116,7 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
         mediaType: [],
       },
     ],
-    references: [{ source: { uri: '' }, referenceType: { code: '' } }],
+    references: undefined,
     relations: [{ uri: '', prefLabel: { nb: '' } }],
     inSeries: '',
     distribution: [],

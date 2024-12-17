@@ -1,5 +1,5 @@
 import { Dataset, UriWithLabel } from '@catalog-frontend/types';
-import { AddButton, DeleteButton, EditButton, FormikLanguageFieldset } from '@catalog-frontend/ui';
+import { AddButton, DeleteButton, EditButton, FieldsetDivider, FormikLanguageFieldset } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button, Divider, Label, Modal, Radio, Table, Textfield } from '@digdir/designsystemet-react';
 import { FastField, Formik, useFormikContext } from 'formik';
@@ -7,6 +7,18 @@ import styles from '../../dataset-form.module.css';
 import { useRef, useState } from 'react';
 import _ from 'lodash';
 import { uriWithLabelSchema } from '../../utils/validation-schema';
+
+type LegalBasis = {
+  type: string;
+  uriWithLabel: UriWithLabel;
+};
+
+type ModalProps = {
+  formType: 'new' | 'edit';
+  onSuccess: (values: LegalBasis) => void;
+  template: UriWithLabel;
+  initialType?: string;
+};
 
 const hasNoFieldValues = (values: UriWithLabel) => {
   if (!values) return true;
@@ -36,26 +48,22 @@ export const AccessRightsUriTable = () => {
     })),
   ];
 
-  const getFieldName = (formValues: LegalBasis): string => {
-    const fieldMap: Record<string, UriWithLabel[]> = {
-      legalBasisForRestriction: values.legalBasisForRestriction ?? [],
-      legalBasisForProcessing: values.legalBasisForProcessing ?? [],
-      legalBasisForAccess: values.legalBasisForAccess ?? [],
-    };
+  const getField = (formValues: LegalBasis): string => {
+    const fieldValues =
+      {
+        legalBasisForRestriction: values.legalBasisForRestriction,
+        legalBasisForProcessing: values.legalBasisForProcessing,
+        legalBasisForAccess: values.legalBasisForAccess,
+      }[formValues.type] ?? [];
 
-    const fieldArray = fieldMap[formValues.type];
-    if (!fieldArray) {
-      throw new Error(`Invalid type: ${formValues.type}`);
-    }
+    const hasValues = fieldValues.length > 0 && !hasNoFieldValues(fieldValues[0]);
 
-    return fieldArray.length > 0 && !hasNoFieldValues(fieldArray[0])
-      ? `${formValues.type}[${fieldArray.length}]`
-      : `${formValues.type}[0]`;
+    return `${formValues.type}[${hasValues ? fieldValues.length : 0}]`;
   };
 
   return (
-    <div>
-      <Label>{localization.datasetForm.fieldLabel.legalBasis}</Label>
+    <>
+      <Label size='sm'>{localization.datasetForm.fieldLabel.legalBasis}</Label>
 
       {allLegalBases && allLegalBases?.length > 0 && !hasNoFieldValues(allLegalBases[0].uriWithLabel) && (
         <Table size='sm'>
@@ -98,24 +106,12 @@ export const AccessRightsUriTable = () => {
         <FieldModal
           template={{ prefLabel: { nb: '' }, uri: '' }}
           formType='new'
-          onSuccess={(formValues: LegalBasis) => setFieldValue(getFieldName(formValues), formValues.uriWithLabel)}
+          onSuccess={(formValues: LegalBasis) => setFieldValue(getField(formValues), formValues.uriWithLabel)}
         />
       </div>
-    </div>
+    </>
   );
 };
-
-type LegalBasis = {
-  type: string;
-  uriWithLabel: UriWithLabel;
-};
-
-interface ModalProps {
-  formType: 'new' | 'edit';
-  onSuccess: (values: LegalBasis) => void;
-  template: UriWithLabel;
-  initialType?: string;
-}
 
 const FieldModal = ({ template, formType, onSuccess, initialType = 'legalBasisForRestriction' }: ModalProps) => {
   const [submitted, setSubmitted] = useState(false);
@@ -176,9 +172,8 @@ const FieldModal = ({ template, formType, onSuccess, initialType = 'legalBasisFo
                     name='prefLabel'
                     legend={localization.title}
                   />
-                  <div>
-                    <Divider color='subtle' />
-                  </div>
+
+                  <FieldsetDivider />
 
                   <FastField
                     name='uri'

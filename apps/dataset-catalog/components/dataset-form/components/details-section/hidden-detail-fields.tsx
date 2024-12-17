@@ -10,6 +10,7 @@ import { QualifiedAttributionsSection } from '../dataset-form-qualified-attribut
 import FieldsetWithDelete from '../../../fieldset-with-delete';
 import { ToggleFieldButton } from '../toggle-field-button';
 import { UriWithLabelFieldsetTable } from '../uri-with-label-field-set-table';
+import { useMemo } from 'react';
 
 type Props = {
   datasetTypes: ReferenceDataCode[];
@@ -20,6 +21,46 @@ type Props = {
 export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequencies }: Props) => {
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
 
+  const datasetTypeOptions = useMemo(
+    () =>
+      datasetTypes.map((type) => (
+        <Combobox.Option
+          value={type.uri}
+          key={type.uri}
+          description={`${localization.code}: ${type.code}`}
+        >
+          {getTranslateText(type?.label)}
+        </Combobox.Option>
+      )),
+    [datasetTypes],
+  );
+
+  const provenanceOptions = useMemo(
+    () =>
+      provenanceStatements.map((item) => (
+        <Combobox.Option
+          value={item.uri}
+          key={item.uri}
+        >
+          {getTranslateText(item.label)}
+        </Combobox.Option>
+      )),
+    [provenanceStatements],
+  );
+
+  const frequencyOptions = useMemo(
+    () =>
+      frequencies.map((item) => (
+        <Combobox.Option
+          value={item.uri}
+          key={item.uri}
+        >
+          {capitalizeFirstLetter(getTranslateText(item.label).toString())}
+        </Combobox.Option>
+      )),
+    [frequencies],
+  );
+
   return (
     <>
       <div>
@@ -27,7 +68,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
           {(arrayHelpers) => (
             <>
               {arrayHelpers.form.values.landingPage &&
-                arrayHelpers.form.values.landingPage.map((_: string, index: number) => (
+                arrayHelpers.form.values.landingPage.map((index: number) => (
                   <div
                     key={`landingPage-${index}`}
                     className={styles.padding}
@@ -67,15 +108,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
           onValueChange={(value: string[]) => setFieldValue('type', value.toString())}
         >
           <Combobox.Option value={''}>{`${localization.choose}...`}</Combobox.Option>
-          {datasetTypes.map((type) => (
-            <Combobox.Option
-              value={type.uri}
-              key={type.uri}
-              description={`${localization.code}: ${type.code}`}
-            >
-              {getTranslateText(type?.label)}
-            </Combobox.Option>
-          ))}
+          {datasetTypeOptions}
         </Field>
       </ToggleFieldButton>
 
@@ -92,16 +125,10 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
           size='sm'
         >
           <Combobox.Empty>{`${localization.choose}...`}</Combobox.Empty>
-          {provenanceStatements.map((item) => (
-            <Combobox.Option
-              value={item.uri}
-              key={item.uri}
-            >
-              {getTranslateText(item.label)}
-            </Combobox.Option>
-          ))}
+          {provenanceOptions}
         </Combobox>
       </ToggleFieldButton>
+
       <ToggleFieldButton
         fieldName='accrualPeriodicity.uri'
         fieldValues={values?.accrualPeriodicity?.uri}
@@ -116,14 +143,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
           label={localization.datasetForm.heading.frequency}
         >
           <Combobox.Option value=''>{`${localization.choose}...`}</Combobox.Option>
-          {frequencies.map((item) => (
-            <Combobox.Option
-              value={item.uri}
-              key={item.uri}
-            >
-              {capitalizeFirstLetter(getTranslateText(item.label).toString())}
-            </Combobox.Option>
-          ))}
+          {frequencyOptions}
         </Combobox>
       </ToggleFieldButton>
 

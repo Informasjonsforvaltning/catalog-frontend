@@ -64,13 +64,6 @@ export const datasetValidationSchema = Yup.object().shape({
         .url(localization.validation.invalidUrl),
     }),
   ),
-  // contactPoint: Yup.object().shape({
-  //   hasURL: Yup.string()
-  //     .matches(httpsRegex, localization.validation.invalidProtocol)
-  //     .url(localization.validation.invalidUrl),
-  //   email: Yup.string().email(localization.validation.invalidEmail),
-  //   hasTelephone: Yup.string().matches(telephoneNumberRegex, localization.validation.invalidTlf),
-  // }),
 });
 
 export const distributionSectionSchema = Yup.object().shape({
@@ -105,4 +98,13 @@ export const uriWithLabelSchema = Yup.object().shape({
   uri: Yup.string()
     .matches(httpsRegex, localization.validation.invalidProtocol)
     .url(localization.validation.invalidUrl),
+});
+
+export const referenceSchema = Yup.object().shape({
+  referenceType: Yup.object().shape({
+    code: Yup.string().required('Relasjonstype må fylles ut.'),
+  }),
+  source: Yup.object().shape({
+    uri: Yup.string().required('Begge verdiene må fylles ut for å legge til en relasjon.'),
+  }),
 });

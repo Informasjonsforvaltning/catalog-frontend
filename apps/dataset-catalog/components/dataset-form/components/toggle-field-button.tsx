@@ -22,7 +22,7 @@ export const ToggleFieldButton = ({
   addValue = '',
   fieldValues,
 }: Props) => {
-  const { setFieldValue, values } = useFormikContext<Dataset>();
+  const { setFieldValue } = useFormikContext<Dataset>();
 
   const shouldShowField = useMemo(() => {
     if (fieldName === 'qualifiedAttributions' && _.isArray(fieldValues) && fieldValues.length === 0) {
@@ -39,7 +39,7 @@ export const ToggleFieldButton = ({
   };
 
   return (
-    <>
+    <div>
       {shouldShowField ? (
         hasDeleteButton ? (
           <FieldsetWithDelete
@@ -59,6 +59,6 @@ export const ToggleFieldButton = ({
           }}
         >{`${localization.add} ${fieldName}`}</AddButton>
       )}
-    </>
+    </div>
   );
 };

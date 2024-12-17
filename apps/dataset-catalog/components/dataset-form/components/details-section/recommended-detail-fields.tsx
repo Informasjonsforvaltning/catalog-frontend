@@ -50,7 +50,6 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
   return (
     <>
       <Checkbox.Group
-        //legend={`${localization.choose}...`}
         onChange={(values) => setFieldValue('languageList', values)}
         value={values.languageList}
         legend={

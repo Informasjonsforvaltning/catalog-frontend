@@ -1,8 +1,7 @@
 'use client';
 
 import { FieldsetDivider } from '@catalog-frontend/ui';
-import { useFormikContext } from 'formik';
-import { Dataset, ReferenceData } from '@catalog-frontend/types';
+import { ReferenceData } from '@catalog-frontend/types';
 import { RecommendedDetailFields } from './recommended-detail-fields';
 import { HiddenDetailFields } from './hidden-detail-fields';
 
@@ -20,13 +19,11 @@ export const DetailsSection = ({ referenceDataEnv, referenceData }: Props) => {
         languages={languages}
       />
       <FieldsetDivider />
-      <div>
-        <HiddenDetailFields
-          datasetTypes={datasetTypes}
-          provenanceStatements={provenanceStatements}
-          frequencies={frequencies}
-        />
-      </div>
+      <HiddenDetailFields
+        datasetTypes={datasetTypes}
+        provenanceStatements={provenanceStatements}
+        frequencies={frequencies}
+      />
     </>
   );
 };

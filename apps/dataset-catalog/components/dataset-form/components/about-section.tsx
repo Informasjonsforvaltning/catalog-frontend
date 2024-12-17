@@ -1,11 +1,10 @@
 import { Dataset } from '@catalog-frontend/types';
-import { AddButton, FormikLanguageFieldset, TextareaWithPrefix, TitleWithTag } from '@catalog-frontend/ui';
+import { FormikLanguageFieldset, TextareaWithPrefix, TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Textfield, Fieldset } from '@digdir/designsystemet-react';
-import { Field, FieldArray, useFormikContext } from 'formik';
+import { Field, useFormikContext } from 'formik';
 import { FieldsetDivider } from '@catalog-frontend/ui';
-import { AccessRightsForm } from './access-rights.tsx/dataset-form-access-rights-section';
-import FieldsetWithDelete from '../../fieldset-with-delete';
+import { AccessRightFields } from './access-rights.tsx/dataset-form-access-rights-section';
 
 export const AboutSection = () => {
   const errors = useFormikContext<Dataset>()?.errors;
@@ -41,7 +40,8 @@ export const AboutSection = () => {
       </Fieldset>
 
       <FieldsetDivider />
-      <AccessRightsForm />
+
+      <AccessRightFields />
 
       <FieldsetDivider />
 
