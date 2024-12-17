@@ -22,7 +22,7 @@ export const CONCEPT_1: Concept = {
   kontaktpunkt: {    
     harEpost: 'test1@example.com',
     harTelefon: '123456789',
-    harSkjema: 'https://test1.contactpage.com',
+    //harSkjema: 'https://test1.contactpage.com',
   },
   versjonsnr: {major: 0, minor: 1, patch: 0},
   merknad: {},
@@ -40,7 +40,7 @@ export const CONCEPT_1: Concept = {
   internSeOgså: [],
   internErstattesAv: [],
   erstattesAv: [],
-  statusURI: 'http://purl.org/adms/status/Completed',
+  statusURI: 'http://purl.org/adms/status/Draft',
   assignedUser: null,
   begrepsRelasjon: [],
   interneFelt: null,
@@ -72,7 +72,7 @@ export const CONCEPT_2: Concept = {
   kontaktpunkt: {    
     harEpost: 'test2@example.com',
     harTelefon: '123456789',
-    harSkjema: 'https://test2.contactpage.com',
+    //: 'https://test2.contactpage.com',
   },
   versjonsnr: {major: 1, minor: 2, patch: 1},
   merknad: {
@@ -111,7 +111,7 @@ export const CONCEPT_2: Concept = {
   internSeOgså: [],
   internErstattesAv: [],
   erstattesAv: [],
-  statusURI: 'http://purl.org/adms/status/Deprecated',
+  statusURI: 'http://purl.org/adms/status/Current',
   assignedUser: null,
   begrepsRelasjon: [],
   interneFelt: null,
@@ -143,7 +143,7 @@ export const CONCEPT_3: Concept = {
   kontaktpunkt: {    
     harEpost: 'test3@example.com',
     harTelefon: '123456789',
-    harSkjema: 'https://test3.contactpage.com',
+    //harSkjema: 'https://test3.contactpage.com',
   },
   versjonsnr: {major: 1, minor: 2, patch: 3},
   merknad: {
@@ -182,7 +182,7 @@ export const CONCEPT_3: Concept = {
   internSeOgså: [],
   internErstattesAv: [],
   erstattesAv: [],
-  statusURI: 'http://purl.org/adms/status/Withdrawn',
+  statusURI: 'http://purl.org/adms/status/Rejected',
   assignedUser: null,
   begrepsRelasjon: [],
   interneFelt: null,
