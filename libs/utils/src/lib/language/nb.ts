@@ -67,6 +67,7 @@ export const nb = {
   lastChanged: 'Sist endret',
   noName: 'Uten navn',
   choose: 'Velg',
+  relation: 'Relasjon',
   serviceMessageError: 'Kunne ikke laste inn tjenestemeldinger. Vennligst prøv igjen senere.',
   serviceMessageSeeMore: 'Se detaljert driftsmelding for mer informasjon.',
 
@@ -228,7 +229,7 @@ export const nb = {
     updateFailed: 'Oppdatering mislyktes. Prøv igjen senere.',
     deleteFailed: 'Kunne ikke slette. Prøv igjen senere.',
     formError: 'Skjemaet har feil eller mangler. Sjekk feltene markert i rødt og prøv igjen.',
-    formUnsavedChanges: 'Skjemaet har ulagrede endringer.'
+    formUnsavedChanges: 'Skjemaet har ulagrede endringer.',
   },
   catalogAdmin: {
     addUser: 'Legg til nytt brukernavn',

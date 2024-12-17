@@ -1,5 +1,5 @@
 import { UriWithLabel } from '@catalog-frontend/types';
-import { AddButton, DeleteButton, EditButton, FormikLanguageFieldset } from '@catalog-frontend/ui';
+import { AddButton, DeleteButton, EditButton, FieldsetDivider, FormikLanguageFieldset } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button, Divider, Label, Modal, Table, Textfield } from '@digdir/designsystemet-react';
 import { Field, Formik, useFormikContext } from 'formik';
@@ -50,7 +50,7 @@ export const UriWithLabelFieldsetTable = ({ fieldName, values, showLabel = true 
                   <span className={styles.buttonSet}>
                     <FieldModal
                       fieldName={fieldName}
-                      template={values[index]}
+                      template={item}
                       type={'edit'}
                       onSuccess={(updatedItem: UriWithLabel) => setFieldValue(`${fieldName}[${index}]`, updatedItem)}
                     />
@@ -126,10 +126,7 @@ const FieldModal = ({ fieldName, template, type, onSuccess }: ModalProps) => {
                     name='prefLabel'
                     legend={localization.title}
                   />
-                  <div>
-                    <Divider color='subtle' />
-                  </div>
-
+                  <FieldsetDivider />
                   <Field
                     name='uri'
                     as={Textfield}
