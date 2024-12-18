@@ -144,6 +144,7 @@ export const nb = {
     searchForUsername: 'Søk etter brukernavn...',
     searchInCatalogs: ['Søk i Felles datakatalog', 'Lenke til søk i felles datakatalog'],
     sort: 'Sortering',
+    clear: 'Tøm', 
 
     fields: {
       alleFelter: 'Alle felter',
