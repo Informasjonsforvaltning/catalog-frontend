@@ -42,7 +42,7 @@ export default class ConceptsPage {
 
   async deletedAllConcepts() {
     try {
-      await this.noResultsLocator().waitFor({ state: 'visible', timeout: 10000 });
+      await this.noResultsLocator().waitFor({ state: 'visible', timeout: 5000 });
       return await this.noResultsLocator().isVisible();
     } catch {
       return false;
