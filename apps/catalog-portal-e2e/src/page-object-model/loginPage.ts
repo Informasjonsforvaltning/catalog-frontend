@@ -20,8 +20,13 @@ export default class LoginPage {
   public async loginAsAdmin() {
     await this.page.goto(`/auth/signin?callbackUrl=/`);
 
-    if (await this.signInWithKeycloakButton().isVisible({ timeout: 1000 })) {
-      await this.signInWithKeycloakButton().click();
+    try {
+      await this.signInWithKeycloakButton().waitFor({ state: 'visible', timeout: 5000 });
+      if (await this.signInWithKeycloakButton().isVisible()) {
+        await this.signInWithKeycloakButton().click();
+      }
+    } catch {
+      // Just proceed
     }
 
     await this.page.getByRole('link', { name: 'Logg inn via ID-porten' }).click({ timeout: 5000 });
@@ -38,8 +43,13 @@ export default class LoginPage {
   public async loginAsWriteUser() {
     await this.page.goto(`/auth/signin?callbackUrl=/catalogs/${process.env.E2E_AUTH_WRITE_CATALOG_ID}/services`);
 
-    if (await this.signInWithKeycloakButton().isVisible({ timeout: 1000 })) {
-      await this.signInWithKeycloakButton().click();
+    try {
+      await this.signInWithKeycloakButton().waitFor({ state: 'visible', timeout: 5000 });
+      if (await this.signInWithKeycloakButton().isVisible()) {
+        await this.signInWithKeycloakButton().click();
+      }
+    } catch {
+      // Just proceed
     }
 
     await this.page.getByRole('link', { name: 'Logg inn via ID-porten' }).click({ timeout: 5000 });
@@ -56,10 +66,15 @@ export default class LoginPage {
   public async loginAsReadUser() {
     await this.page.goto(`/auth/signin?callbackUrl=/`);
 
-    if (await this.signInWithKeycloakButton().isVisible({ timeout: 1000 })) {
-      await this.signInWithKeycloakButton().click();
+    try {
+      await this.signInWithKeycloakButton().waitFor({ state: 'visible', timeout: 5000 });
+      if (await this.signInWithKeycloakButton().isVisible()) {
+        await this.signInWithKeycloakButton().click();
+      }
+    } catch {
+      // Just proceed
     }
-
+    
     await this.page.getByRole('link', { name: 'Logg inn via ID-porten' }).click({ timeout: 5000 });
     await this.page.getByRole('link', { name: 'TestID på nivå høyt Lag din egen testbruker " / "' }).click();
     await this.page.getByLabel('Personidentifikator (syntetisk)').fill(`${process.env.E2E_AUTH_READ_ID}`);
