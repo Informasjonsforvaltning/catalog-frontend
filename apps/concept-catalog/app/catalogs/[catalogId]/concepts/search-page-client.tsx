@@ -14,8 +14,8 @@ import {
   LinkButton,
 } from '@catalog-frontend/ui';
 import { getTranslateText, capitalizeFirstLetter, localization as loc } from '@catalog-frontend/utils';
-import { Chip } from '@digdir/designsystemet-react';
-import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
+import { Chip, Search } from '@digdir/designsystemet-react';
+import { PlusCircleIcon, FileImportIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
 
 import { useState, useEffect } from 'react';
 import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'nuqs';
@@ -56,7 +56,7 @@ export const SearchPageClient = ({
   codeListsResult,
   usersResult,
   conceptStatuses,
-  catalogPortalUrl
+  catalogPortalUrl,
 }: Props) => {
   const [selectedFieldOption, setSelectedFieldOption] = useState('alleFelter' as SearchableField | 'alleFelter');
   const [selectedSortOption, setSelectedSortOption] = useState(SortOption.RELEVANCE);
@@ -74,6 +74,8 @@ export const SearchPageClient = ({
   );
   const [filterLabel, setFilterLabel] = useQueryState('filter.label', parseAsArrayOf(parseAsString));
   const [filterSubject, setFilterSubject] = useQueryState('filter.subject', parseAsArrayOf(parseAsString));
+
+  const [searchValue, setSearchValue] = useState(searchTerm ?? '');
 
   const sortMappings: Record<SortOption, QuerySort | undefined> = {
     [SortOption.RELEVANCE]: undefined,
@@ -376,25 +378,17 @@ export const SearchPageClient = ({
           </>
         </SearchHitsPageLayout.ButtonRow>
         <SearchHitsPageLayout.SearchRow>
-          <div>
-            <SearchField
-              ariaLabel={loc.search.search}
-              placeholder={loc.search.search}
-              onSearchSubmit={onSearchSubmit}
-              value={searchTerm ?? ''}
-            />
-            <FilterChips />
-          </div>
-
           <div className={styles.searchOptions}>
             <Select
               label={loc.search.searchField}
+              size='sm'
               onChange={(event) => onFieldSelect(event.target.value as SearchableField)}
             >
               {fieldOptions}
             </Select>
             <Select
               label={loc.search.sort}
+              size='sm'
               onChange={(event) => onSortSelect(event?.target.value as SortOption)}
               value={selectedSortOption}
             >
@@ -403,6 +397,27 @@ export const SearchPageClient = ({
           </div>
         </SearchHitsPageLayout.SearchRow>
         <SearchHitsPageLayout.LeftColumn>
+          <div>
+            <Search
+              label={loc.search.search}
+              size='sm'
+              placeholder={loc.search.search}
+              clearButtonLabel={loc.search.clear}
+              searchButtonLabel={
+                <MagnifyingGlassIcon
+                  fontSize={'1em'}
+                  title={loc.search.search}
+                />
+              }
+              variant='primary'
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              onKeyDown={(e) => { if(e.code === 'Enter'){ onSearchSubmit(searchValue)} }}
+              onSearchClick={onSearchSubmit}
+              onClear={(value) => { setSearchValue(''); onSearchSubmit('');}}
+            />
+            <FilterChips />
+          </div>
           <SearchFilter
             catalogId={catalogId}
             internalFields={fieldsResult?.internal}
@@ -416,7 +431,7 @@ export const SearchPageClient = ({
           ) : (
             <SearchHitContainer
               onPageChange={onPageChange}
-              noSearchHits={data.hits.length < 1}
+              noSearchHits={!data?.hits?.length}
               paginationInfo={data?.page}
               searchHits={
                 <ConceptSearchHits
