@@ -10,34 +10,28 @@ export const AboutSection = () => {
   const errors = useFormikContext<Dataset>()?.errors;
   return (
     <>
-      <Fieldset
+      <FormikLanguageFieldset
+        name={'title'}
+        as={Textfield}
+        requiredLanguages={['nb']}
         legend={
           <TitleWithTag
             title={localization.title}
             tagTitle={localization.tag.required}
           />
         }
-      >
-        <FormikLanguageFieldset
-          name={'title'}
-          as={Textfield}
-          requiredLanguages={['nb']}
-        />
-      </Fieldset>
-      <Fieldset
+      />
+
+      <FormikLanguageFieldset
+        name='description'
+        as={TextareaWithPrefix}
         legend={
           <TitleWithTag
             title={localization.description}
             tagTitle={localization.tag.required}
           />
         }
-      >
-        <FormikLanguageFieldset
-          name='description'
-          as={TextareaWithPrefix}
-          requiredLanguages={['nb']}
-        />
-      </Fieldset>
+      />
 
       <FieldsetDivider />
 
