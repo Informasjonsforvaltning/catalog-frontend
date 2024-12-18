@@ -119,6 +119,7 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
     <div>
       <Select
         value={searchOption}
+        size='sm'
         onChange={(event) => handleSearchOnChange(event.target.value)}
       >
         {generateOptionElements(nodes)}
@@ -174,6 +175,7 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
       {nodes && nodes.length > 10 && (
         <Button
           variant='tertiary'
+          size='sm'
           onClick={() => setCollapsed(!collapsed)}
         >
           {collapsed ? <ChevronDownDoubleIcon /> : <ChevronUpDoubleIcon />}
