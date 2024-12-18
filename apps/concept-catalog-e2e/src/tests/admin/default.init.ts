@@ -1,6 +1,9 @@
 import { test as init, runTestAsAdmin as initAsAdmin } from '../../fixtures/basePage';
+import ConceptsPage from '../../page-object-model/conceptsPage';
 
-initAsAdmin('delete all existing concepts and create new', async ({ conceptsPage }) => {
+type TestProps = { conceptsPage: ConceptsPage };
+
+initAsAdmin('delete all existing concepts and create new', async ({ conceptsPage }: TestProps) => {
   // set timeout to 120 seconds
   init.setTimeout(120 * 1000);
 
