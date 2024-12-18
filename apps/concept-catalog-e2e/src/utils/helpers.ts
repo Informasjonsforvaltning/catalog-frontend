@@ -23,7 +23,7 @@ export const getStatusText = (uri: string): string => {
   }
 };
 
-export const getParentLocator = (locator: Locator, n: number = 1) => {
+export const getParentLocator = (locator: Locator, n = 1) => {
   let parent = locator;
   for (let i = 0; i < n; i++) {
     parent = parent.locator('..');
