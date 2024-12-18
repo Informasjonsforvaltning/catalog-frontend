@@ -12,7 +12,7 @@ const baseURL = process.env['BASE_URL'] || 'http://localhost:4200';
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-dotenv.config({ path: path.resolve(__dirname, '.env.test') });
+dotenv.config({ path: path.resolve(__dirname, '.env.e2e.local') });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
