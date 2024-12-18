@@ -124,9 +124,9 @@ export default class DetailPage {
   }
 
   async expectTabs() {
-    await expect(this.page.getByRole('button', { name: 'Kommentarer' })).toBeVisible();
-    await expect(this.page.getByRole('button', { name: 'Endringshistorikk' })).toBeVisible();
-    await expect(this.page.getByRole('button', { name: 'Versjoner' })).toBeVisible();
+    await expect(this.page.getByRole('tab', { name: 'Kommentarer' })).toBeVisible();
+    await expect(this.page.getByRole('tab', { name: 'Endringshistorikk' })).toBeVisible();
+    await expect(this.page.getByRole('tab', { name: 'Versjoner' })).toBeVisible();
   }
 
   async expectRightColumnContent(concept: Concept) {
