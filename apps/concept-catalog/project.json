@@ -30,6 +30,10 @@
           "buildTarget": "concept-catalog:build:development",
           "dev": true
         },
+        "e2e": {
+          "buildTarget": "concept-catalog:build:development",
+          "dev": true
+        },
         "production": {
           "buildTarget": "concept-catalog:build:production",
           "dev": false

@@ -123,6 +123,7 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
             content: (
               <Select
                 onChange={(event) => handleOnAssignedChange(event.target.value)}
+                size='sm'
                 value={filterAssignedUser ?? ''}
               >
                 {[

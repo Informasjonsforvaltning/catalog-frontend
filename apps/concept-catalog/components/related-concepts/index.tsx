@@ -1,5 +1,5 @@
 import React from 'react';
-import { Relasjon, RelatedConcept, LocalizedStrings } from '@catalog-frontend/types';
+import { UnionRelation, RelatedConcept, LocalizedStrings } from '@catalog-frontend/types';
 import { KeyValueList } from '@catalog-frontend/ui';
 import AssociativeRelations from './associative-relations';
 import PartitiveRelations from './partitive-relations';
@@ -9,7 +9,7 @@ import IsReplacedBy from './is-replaced-by';
 import { conceptIdFromUriRegex } from '@catalog-frontend/utils';
 
 interface Props {
-  conceptRelations: Relasjon[];
+  conceptRelations: UnionRelation[];
   relatedConcepts: RelatedConcept[];
   validFromIncluding: string | null | undefined;
   validToIncluding: string | null | undefined;
@@ -21,10 +21,10 @@ const RelatedConcepts = ({ conceptRelations, relatedConcepts, validToIncluding, 
   const partitiveRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'partitiv') ?? [];
   const genericRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'generisk') ?? [];
   const seeAlso =
-    conceptRelations.filter((relasjon) => relasjon.relasjon === 'seOgså' || relasjon.relasjon === 'internSeOgså') ?? [];
+    conceptRelations.filter((relasjon) => relasjon.relasjon === 'seOgså') ?? [];
   const isReplacedBy =
     conceptRelations.filter(
-      (relasjon) => relasjon.relasjon === 'erstattesAv' || relasjon.relasjon === 'internErstattesAv',
+      (relasjon) => relasjon.relasjon === 'erstattesAv',
     ) ?? [];
 
   const relatedConceptsMap = (identifier: string | null) => {

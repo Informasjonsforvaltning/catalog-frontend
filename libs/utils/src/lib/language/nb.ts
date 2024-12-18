@@ -69,6 +69,7 @@ export const nb = {
   choose: 'Velg',
   serviceMessageError: 'Kunne ikke laste inn tjenestemeldinger. Vennligst prøv igjen senere.',
   serviceMessageSeeMore: 'Se detaljert driftsmelding for mer informasjon.',
+  newConcept: 'Nytt begrep',
 
   catalogType: {
     admin: 'Administrasjonsgrensesnitt',
@@ -114,6 +115,12 @@ export const nb = {
     loggingOut: 'Logger ut...',
   },
 
+  userRole: {
+    adminRole: 'Virksomhetsadministrator',
+    writerRole: 'Skrivebruker',
+    readerRole: 'Lesebruker'
+  },
+
   spatial: {
     municipality: 'Kommune',
     country: 'Nasjon',
@@ -136,6 +143,7 @@ export const nb = {
     searchForUsername: 'Søk etter brukernavn...',
     searchInCatalogs: ['Søk i Felles datakatalog', 'Lenke til søk i felles datakatalog'],
     sort: 'Sortering',
+    clear: 'Tøm', 
 
     fields: {
       alleFelter: 'Alle felter',
@@ -199,6 +207,8 @@ export const nb = {
     harvestData: 'Høste data',
     dataCommunity: 'Datalandsbyen',
     nationalDataCatalog: 'Data.norge.no',
+    contactUs: 'Kontakt oss',
+    menu: 'Meny'
   },
 
   tag: {
@@ -297,7 +307,7 @@ export const nb = {
 
   concept: {
     abbreviation: 'Forkortelse',
-    allowedTerm: 'Tillatt term',
+    altLabel: 'Tillatt term',
     associativeRelation: 'Assosiativ relasjon',
     concept: 'Begrep',
     confirmDelete: 'Er du sikker du ønsker å slette begrepet?',
@@ -317,8 +327,8 @@ export const nb = {
     label: 'Merkelapp',
     dateLastUpdated: 'Dato sist oppdatert',
     noName: 'Uten navn',
-    notRecommendedTerm: 'Frarådet term',
-    note: 'Merknad',
+    hiddenLabel: 'Frarådet term',
+    remark: 'Merknad',
     partitiveRelation: 'Partitiv relasjon',
     preferredTerm: 'Anbefalt term',
     publicDefinition: 'Definisjon for allmennheten',
@@ -436,7 +446,7 @@ export const nb = {
     invalidProtocol: `Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’.`,
     invalidTlf: 'Ugyldig telefonnummer',
     nameRequired: 'Må ha navn',
-    accessURLRequired: 'Tilgangslenke må fylles ut.',
+    accessURLRequired: 'Tilgangslenke må fylles ut.',    
   },
 
   serviceCatalog: {
