@@ -3,14 +3,14 @@
 import { DataService, Distribution, ReferenceDataCode } from '@catalog-frontend/types';
 import {
   AddButton,
-  DeleteButton,
+  FieldsetDivider,
   FormikLanguageFieldset,
   FormikSearchCombobox,
   TextareaWithPrefix,
   TitleWithTag,
 } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Combobox, Divider, Label, Modal, Textfield } from '@digdir/designsystemet-react';
+import { Button, Combobox, Label, Modal, Textfield } from '@digdir/designsystemet-react';
 import {
   useSearchFileTypeByUri,
   useSearchFileTypes,
@@ -23,6 +23,7 @@ import { ReactNode, useRef, useState } from 'react';
 import styles from './distributions.module.css';
 import { distributionTemplate } from '../../utils/dataset-initial-values';
 import { distributionSectionSchema } from '../../utils/validation-schema';
+import FieldsetWithDelete from '../../../fieldset-with-delete';
 
 interface Props {
   trigger: ReactNode;
@@ -136,13 +137,13 @@ export const DistributionModal = ({
                         />
                       }
                     />
-                    <div>
-                      <Divider color='subtle' />
-                    </div>
+
+                    <FieldsetDivider />
 
                     <Field
                       name='accessURL[0]'
                       as={Textfield}
+                      size='sm'
                       label={
                         <TitleWithTag
                           title={localization.datasetForm.fieldLabel.accessUrl}
@@ -155,12 +156,13 @@ export const DistributionModal = ({
                     <Field
                       name='downloadURL[0]'
                       as={Textfield}
+                      size='sm'
                       label={localization.datasetForm.fieldLabel.downloadUrl}
                       error={errors?.downloadURL?.[0]}
                     />
-                    <Divider color='subtle' />
+                    <FieldsetDivider />
 
-                    <div className={styles.format}>
+                    <div className={styles.fieldContainer}>
                       <TitleWithTag
                         title={localization.datasetForm.fieldLabel.format}
                         tagTitle={localization.tag.recommended}
@@ -189,7 +191,7 @@ export const DistributionModal = ({
                       portal={false}
                       label={localization.datasetForm.fieldLabel.mediaTypes}
                     />
-                    <Divider color='subtle' />
+                    <FieldsetDivider />
 
                     {!isLoadingSelectedDataServices && (
                       <Combobox
@@ -200,6 +202,7 @@ export const DistributionModal = ({
                         onValueChange={(selectedValues) => setFieldValue('accessServiceList', selectedValues)}
                         label={localization.datasetForm.fieldLabel.accessService}
                         placeholder={`${localization.search.search}...`}
+                        size='sm'
                       >
                         {comboboxOptions.map((option) => (
                           <Combobox.Option
@@ -211,7 +214,8 @@ export const DistributionModal = ({
                         ))}
                       </Combobox>
                     )}
-                    <Divider color='subtle' />
+
+                    <FieldsetDivider />
 
                     <Combobox
                       label={localization.datasetForm.fieldLabel.license}
@@ -219,6 +223,7 @@ export const DistributionModal = ({
                       value={values?.license?.uri ? [values?.license.uri] : []}
                       portal={false}
                       onValueChange={(selectedValues) => setFieldValue('license.uri', selectedValues.toString())}
+                      size='sm'
                     >
                       {openLicenses.map((license) => (
                         <Combobox.Option
@@ -229,23 +234,25 @@ export const DistributionModal = ({
                         </Combobox.Option>
                       ))}
                     </Combobox>
-                    <Divider color='subtle' />
+                    <FieldsetDivider />
 
                     <FormikLanguageFieldset
                       as={TextareaWithPrefix}
                       legend={localization.description}
                       name='description'
                     />
-                    <Divider color='subtle' />
+                    <FieldsetDivider />
 
                     <Field
                       label={localization.datasetForm.fieldLabel.distributionLink}
                       as={Textfield}
                       name='page[0].uri'
+                      size='sm'
                       // @ts-expect-error: uri exists on the object
                       error={errors?.page?.[0]?.uri}
                     />
-                    <Divider color='subtle' />
+
+                    <FieldsetDivider />
 
                     <Label>{localization.datasetForm.fieldLabel.standard}</Label>
                     <FieldArray name='conformsTo'>
@@ -256,21 +263,24 @@ export const DistributionModal = ({
                               key={i}
                               className={styles.standard}
                             >
-                              <Field
-                                label={localization.title}
-                                as={Textfield}
-                                name={`conformsTo[${i}].prefLabel.nb`}
-                                className={styles.standardField}
-                              />
-                              <Field
-                                label={localization.link}
-                                as={Textfield}
-                                name={`conformsTo[${i}].uri`}
-                                // @ts-expect-error: uri exists on the object
-                                error={errors?.conformsTo?.[i]?.uri}
-                                className={styles.standardField}
-                              />
-                              <DeleteButton onClick={() => remove(i)} />
+                              <FieldsetWithDelete onDelete={() => remove(i)}>
+                                <Field
+                                  label={localization.title}
+                                  as={Textfield}
+                                  size='sm'
+                                  name={`conformsTo[${i}].prefLabel.nb`}
+                                  className={styles.standardField}
+                                />
+                                <Field
+                                  label={localization.link}
+                                  as={Textfield}
+                                  name={`conformsTo[${i}].uri`}
+                                  size='sm'
+                                  // @ts-expect-error: uri exists on the object
+                                  error={errors?.conformsTo?.[i]?.uri}
+                                  className={styles.standardField}
+                                />
+                              </FieldsetWithDelete>
                             </div>
                           ))}
                           <AddButton onClick={() => push({ uri: '', prefLabel: { nb: '' } })}>
@@ -286,6 +296,7 @@ export const DistributionModal = ({
                       type='button'
                       disabled={isSubmitting}
                       onClick={() => submitForm()}
+                      size='sm'
                     >
                       {type === 'new' ? localization.add : localization.datasetForm.button.updateDistribution}
                     </Button>
@@ -294,6 +305,7 @@ export const DistributionModal = ({
                       type='button'
                       onClick={() => modalRef.current?.close()}
                       disabled={isSubmitting}
+                      size='sm'
                     >
                       {localization.button.cancel}
                     </Button>

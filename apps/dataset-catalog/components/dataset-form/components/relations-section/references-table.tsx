@@ -4,7 +4,7 @@ import { Button, Combobox, Modal, Table } from '@digdir/designsystemet-react';
 import { useSearchDatasetsByUri, useSearchDatasetSuggestions } from '../../../../hooks/useSearchService';
 import { Formik, useFormikContext } from 'formik';
 import relations from '../../utils/relations.json';
-import { AddButton, DeleteButton, EditButton } from '@catalog-frontend/ui';
+import { AddButton, DeleteButton, EditButton, FieldsetDivider, LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { useState, useRef } from 'react';
 import { referenceSchema } from '../../utils/validation-schema';
 import _ from 'lodash';
@@ -37,7 +37,13 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
   const { data: selectedValues } = useSearchDatasetsByUri(searchEnv, getUriList());
 
   return (
-    <>
+    <div className={styles.fieldContainer}>
+      <LabelWithHelpTextAndTag
+        helpText={''}
+        helpTitle={''}
+      >
+        {'Relaterte datasett'}
+      </LabelWithHelpTextAndTag>
       {values?.references && _.compact(values?.references).length > 0 && (
         <Table size='sm'>
           <Table.Head>
@@ -60,7 +66,7 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
                       ref?.source?.uri}
                   </Table.Cell>
                   <Table.Cell>
-                    <div className={styles.buttonSet}>
+                    <div className={styles.set}>
                       <FieldModal
                         searchEnv={searchEnv}
                         template={ref}
@@ -76,6 +82,7 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
           </Table.Body>
         </Table>
       )}
+
       <div>
         <FieldModal
           searchEnv={searchEnv}
@@ -92,7 +99,7 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
           selectedUri={undefined}
         />
       </div>
-    </>
+    </div>
   );
 };
 
@@ -177,6 +184,7 @@ const FieldModal = ({ template, type, onSuccess, searchEnv, selectedUri }: Modal
                       </Combobox.Option>
                     ))}
                   </Combobox>
+                  <FieldsetDivider />
 
                   <Combobox
                     label={localization.datasetForm.fieldLabel.dataset}
@@ -208,6 +216,7 @@ const FieldModal = ({ template, type, onSuccess, searchEnv, selectedUri }: Modal
                     type='button'
                     disabled={isSubmitting || !dirty || hasNoFieldValues(values)}
                     onClick={() => submitForm()}
+                    size='sm'
                   >
                     {type === 'new' ? localization.add : localization.datasetForm.button.update}
                   </Button>
@@ -216,6 +225,7 @@ const FieldModal = ({ template, type, onSuccess, searchEnv, selectedUri }: Modal
                     type='button'
                     onClick={() => modalRef.current?.close()}
                     disabled={isSubmitting}
+                    size='sm'
                   >
                     {localization.button.cancel}
                   </Button>

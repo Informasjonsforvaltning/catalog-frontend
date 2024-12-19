@@ -32,7 +32,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     accrualPeriodicity: dataset?.accrualPeriodicity?.uri ? { uri: dataset?.accrualPeriodicity?.uri } : undefined,
     modified: dataset?.modified,
     hasCurrentnessAnnotation: { hasBody: dataset.hasCurrentnessAnnotation?.hasBody },
-    conformsTo: dataset?.conformsTo ?? [{ prefLabel: { nb: '' }, uri: '' }],
+    conformsTo: dataset?.conformsTo,
     hasRelevanceAnnotation: { hasBody: dataset?.hasRelevanceAnnotation?.hasBody },
     hasCompletenessAnnotation: { hasBody: dataset.hasCompletenessAnnotation?.hasBody },
     hasAccuracyAnnotation: { hasBody: dataset?.hasAccuracyAnnotation?.hasBody },
@@ -42,7 +42,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     issued: dataset.issued ?? '',
     languageList: dataset.language ? dataset.language.map((lang) => lang.uri) : [],
     informationModelsFromFDK: dataset.informationModelsFromFDK ?? [],
-    informationModel: dataset.informationModel ?? [{ prefLabel: { nb: '' }, uri: '' }],
+    informationModel: dataset?.informationModel,
     qualifiedAttributions: dataset?.qualifiedAttributions,
     sample: dataset.sample ?? [
       {
@@ -56,7 +56,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
       },
     ],
     references: dataset?.references,
-    relations: dataset.relations ?? [{ uri: '', prefLabel: { nb: '' } }],
+    relations: dataset?.relations,
     inSeries: dataset.inSeries ?? '',
     distribution: dataset.distribution?.map((dist) => ({
       ...dist,
@@ -93,7 +93,7 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     accrualPeriodicity: undefined,
     modified: undefined,
     hasCurrentnessAnnotation: undefined,
-    conformsTo: [{ prefLabel: { nb: '' }, uri: '' }],
+    conformsTo: undefined,
     hasRelevanceAnnotation: undefined,
     hasCompletenessAnnotation: undefined,
     hasAccuracyAnnotation: undefined,
@@ -103,7 +103,7 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     issued: '',
     languageList: [],
     informationModelsFromFDK: [],
-    informationModel: [{ prefLabel: { nb: '' }, uri: '' }],
+    informationModel: undefined,
     qualifiedAttributions: undefined,
     sample: [
       {
@@ -117,7 +117,7 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
       },
     ],
     references: undefined,
-    relations: [{ uri: '', prefLabel: { nb: '' } }],
+    relations: undefined,
     inSeries: '',
     distribution: [],
     contactPoint: [],
