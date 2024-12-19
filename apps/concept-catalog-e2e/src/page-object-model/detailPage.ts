@@ -79,25 +79,23 @@ export default class DetailPage {
   }
 
   getDefinitionSourceText(def: Definisjon) {
-    if(def.kildebeskrivelse.forholdTilKilde === 'egendefinert') {
-      return "Egendefinert";
+    if (def.kildebeskrivelse.forholdTilKilde === 'egendefinert') {
+      return 'Egendefinert';
     }
-    return "";
+    return '';
   }
 
   getVersionText(concept: Concept) {
-    return `${concept.versjonsnr.major}.${concept.versjonsnr.minor}.${concept.versjonsnr.patch}` 
+    return `${concept.versjonsnr.major}.${concept.versjonsnr.minor}.${concept.versjonsnr.patch}`;
   }
 
   async expectHeading(concept: Concept) {
     await expect(this.page.getByRole('heading', { name: concept.anbefaltTerm.navn.nb as string })).toBeVisible();
-    
+
     const statusTag = this.page.getByText(this.getStatusText(concept.statusURI), { exact: true });
     await expect(statusTag).toBeVisible();
-    
-    const backgroundColor = await statusTag.evaluate((el) =>
-      window.getComputedStyle(el).backgroundColor
-    );
+
+    const backgroundColor = await statusTag.evaluate((el) => window.getComputedStyle(el).backgroundColor);
     expect(backgroundColor).toBe(this.getStatusColor(concept.statusURI));
   }
 
@@ -109,7 +107,7 @@ export default class DetailPage {
 
   async expectLanguageCombobox() {
     const languageCombobox = this.page.getByRole('combobox');
-    await expect(languageCombobox).toBeVisible();    
+    await expect(languageCombobox).toBeVisible();
     await expect(languageCombobox).toHaveValue('nb');
   }
 
@@ -118,71 +116,154 @@ export default class DetailPage {
       this.page
         .locator('div')
         .filter({
-          hasText: new RegExp(`Definisjon:${concept.definisjon.tekst.nb as string}Kilde:${this.getDefinitionSourceText(concept.definisjon)}`),
-        }).nth(1)
+          hasText: new RegExp(
+            `Definisjon:${concept.definisjon.tekst.nb as string}Kilde:${this.getDefinitionSourceText(concept.definisjon)}`,
+          ),
+        })
+        .nth(1),
     ).toBeVisible();
 
-    if(concept.tillattTerm?.nb) {
-      await expect(
-        this.page
-          .locator('div')
-          .filter({
-            hasText: new RegExp(`Tillat term:${concept.tillattTerm.nb.join()}`),
-          }).nth(1)
-      ).toBeVisible();
-    }
+    await expect(
+      this.page
+        .locator('div')
+        .filter({
+          hasText: new RegExp(`Tillat term:${concept.tillattTerm?.nb.join()}`),
+        })
+        .nth(1),
+    ).toBeVisible({ visible: Boolean(concept.tillattTerm?.nb) });
     
-    if(concept.frarådetTerm?.nb) {
-      await expect(
-        this.page
-          .locator('div')
-          .filter({
-            hasText: new RegExp(`Frarådet term:${concept.frarådetTerm.nb.join()}`),
-          }).nth(1)
-      ).toBeVisible();
-    }
+    await expect(
+      this.page
+        .locator('div')
+        .filter({
+          hasText: new RegExp(`Frarådet term:${concept.frarådetTerm?.nb.join()}`),
+        })
+        .nth(1),
+    ).toBeVisible({ visible: Boolean(concept.frarådetTerm?.nb)});
+
+    await expect(
+      this.page
+        .locator('div')
+        .filter({
+          hasText: new RegExp(`Merknad:${concept.merknad.nb}`),
+        })
+        .nth(1),
+    ).toBeVisible({ visible: Boolean(concept.merknad.nb)});
+    
     //TODO other fields...
   }
 
-  async expectTabs() {
-    await expect(this.page.getByRole('tab', { name: 'Kommentarer' })).toBeVisible();
-    await expect(this.page.getByRole('tab', { name: 'Endringshistorikk' })).toBeVisible();
-    await expect(this.page.getByRole('tab', { name: 'Versjoner' })).toBeVisible();
+  async expectCommentsTab() {
+    const tab = this.page.getByRole('tab', { name: 'Kommentarer' });
+    await expect(tab).toBeVisible();
+    tab.click();
+
+    await expect(this.page.getByLabel('Legg til kommentar')).toBeVisible();
+    await expect(this.page.getByText('Kommentarer (0)')).toBeVisible();
+  }
+
+  async expectHistoryTab() {
+    const tab = this.page.getByRole('tab', { name: 'Endringshistorikk' });
+    await expect(tab).toBeVisible();
+    tab.click();
+
+    await expect(this.page.getByRole('button', { name: 'LAMA LEDENDE torsdag 19.' })).toBeVisible();
+  }
+
+  async expectVersionTab({ anbefaltTerm: { navn }, versjonsnr, statusURI }: Concept) {
+    const tab = this.page.getByRole('tab', { name: 'Versjoner' });
+    await expect(tab).toBeVisible();
+    tab.click();
+
+    await expect(
+      this.page
+        .locator('div')
+        .filter({
+          hasText: new RegExp(
+            `^Versjons-ID ([a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+)v${versjonsnr.major}\.${versjonsnr.minor}\.${versjonsnr.patch}${navn.nb}${this.getStatusText(statusURI)}$`,
+          ),
+        })
+        .nth(2),
+    ).toBeVisible();
   }
 
   async expectRightColumnContent(concept: Concept) {
-    await expect(this.page.getByRole('heading', { name: 'Begreps-ID'})).toBeVisible();
+    await expect(this.page.getByRole('heading', { name: 'Begreps-ID' })).toBeVisible();
     await expect(this.page.getByText(/^[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+$/)).toBeVisible();
 
-    await expect(this.page.getByRole('heading', { name: 'Publiseringstilstand'})).toBeVisible();
-    await expect(this.page.getByText(concept.erPublisert ? 'Publisert i felles datakatalog' : 'Ikke publisert')).toBeVisible();
+    await expect(this.page.getByRole('heading', { name: 'Publiseringstilstand' })).toBeVisible();
+    await expect(
+      this.page.getByText(concept.erPublisert ? 'Publisert i felles datakatalog' : 'Ikke publisert'),
+    ).toBeVisible();
 
-    await expect(this.page.getByRole('heading', { name: 'Versjon'})).toBeVisible();
+    await expect(this.page.getByRole('heading', { name: 'Versjon' })).toBeVisible();
     await expect(this.page.getByText(this.getVersionText(concept))).toBeVisible();
 
-    await expect(this.page.getByRole('heading', { name: 'Dato sist oppdatert'})).toBeVisible();
-    await expect(this.page.getByText(formatISO(new Date().toISOString(), {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }) ?? '',)).toBeVisible();
+    await expect(this.page.getByRole('heading', { name: 'Gyldighetsperiode' })).toBeVisible({ visible: Boolean(concept.gyldigFom || concept.gyldigTom)});
+    await expect(
+      this.page
+        .getByText(
+          formatISO(new Date(concept.gyldigFom).toISOString(), {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          }) ?? '',
+        ),
+    ).toBeVisible({ visible: Boolean(concept.gyldigFom)});
+
+    await expect(this.page.getByRole('heading', { name: 'Gyldighetsperiode' })).toBeVisible({ visible: Boolean(concept.gyldigFom || concept.gyldigTom)});
+    await expect(
+      this.page
+        .getByText(
+          formatISO(new Date(concept.gyldigTom).toISOString(), {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          }) ?? '',
+        ),
+    ).toBeVisible({ visible: Boolean(concept.gyldigTom)});
+
+    await expect(this.page.getByRole('heading', { name: 'Dato sist oppdatert' })).toBeVisible();
+    await expect(
+      this.page
+        .getByText(
+          formatISO(new Date().toISOString(), {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          }) ?? '',
+        )
+        .first(),
+    ).toBeVisible();
 
     await expect(this.page.getByRole('heading', { name: 'Opprettet', exact: true })).toBeVisible();
-    await expect(this.page.getByText(formatISO(new Date().toISOString(), {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }) ?? '',)).toBeVisible();
+    await expect(
+      this.page
+        .getByText(
+          formatISO(new Date().toISOString(), {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          }) ?? '',
+        )
+        .nth(1),
+    ).toBeVisible();
 
     await expect(this.page.getByRole('heading', { name: 'Opprettet av', exact: true })).toBeVisible();
     await expect(this.page.getByText('LAMA LEDENDE')).toBeVisible();
 
-    if(concept.kontaktpunkt?.harEpost || concept.kontaktpunkt?.harTelefon) {
-      await expect(this.page.getByRole('heading', { name: 'Kontaktinformasjon for eksterne'})).toBeVisible();
-      await expect(this.page.getByText(concept.kontaktpunkt.harEpost)).toBeVisible({ visible: Boolean(concept.kontaktpunkt.harEpost) });
-      await expect(this.page.getByText(concept.kontaktpunkt.harTelefon)).toBeVisible({ visible: Boolean(concept.kontaktpunkt.harTelefon) });      
+    if (concept.kontaktpunkt?.harEpost || concept.kontaktpunkt?.harTelefon) {
+      await expect(this.page.getByRole('heading', { name: 'Kontaktinformasjon for eksterne' })).toBeVisible();
+      await expect(this.page.getByText(concept.kontaktpunkt.harEpost)).toBeVisible({
+        visible: Boolean(concept.kontaktpunkt.harEpost),
+      });
+      await expect(this.page.getByText(concept.kontaktpunkt.harTelefon)).toBeVisible({
+        visible: Boolean(concept.kontaktpunkt.harTelefon),
+      });
     }
   }
 
@@ -192,6 +273,8 @@ export default class DetailPage {
     await this.expectHeading(concept);
     await this.expectLeftColumnContent(concept);
     await this.expectRightColumnContent(concept);
-    await this.expectTabs();
+    await this.expectCommentsTab();
+    await this.expectHistoryTab();
+    await this.expectVersionTab(concept);
   }
 }
