@@ -8,6 +8,7 @@ import styles from './distributions.module.css';
 import { useSearchDataServiceByUri } from '../../../../hooks/useSearchService';
 import { useSearchMediaTypeByUri } from '../../../../hooks/useReferenceDataSearch';
 import _ from 'lodash';
+import { FieldsetDivider } from '@catalog-frontend/ui';
 
 interface Props {
   index: number;
@@ -38,28 +39,33 @@ export const DistributionDetails = ({ index, searchEnv, referenceDataEnv, openLi
     <div>
       {distribution && (
         <div>
-          <Divider />
+          <FieldsetDivider />
           {distribution.description?.nb && (
             <div className={styles.field}>
-              <Label>{`${localization.description}:`}</Label>
-              <Paragraph>{distribution.description.nb}</Paragraph>
+              <Label size='sm'>{`${localization.description}:`}</Label>
+              <Paragraph size='sm'>{distribution.description.nb}</Paragraph>
             </div>
           )}
 
           {distribution.downloadURL && distribution.downloadURL.length > 0 && (
             <div className={styles.field}>
-              <Label>{`${localization.datasetForm.fieldLabel.downloadUrl}:`}</Label>
-              <Paragraph>{distribution?.downloadURL?.[0] ?? ''}</Paragraph>
+              <Label size='sm'>{`${localization.datasetForm.fieldLabel.downloadUrl}:`}</Label>
+              <Paragraph size='sm'>{distribution?.downloadURL?.[0] ?? ''}</Paragraph>
             </div>
           )}
 
           {distribution.mediaType && distribution.mediaType.length > 0 && (
             <div className={styles.field}>
-              <Label>{`${localization.datasetForm.fieldLabel.mediaTypes}:`}</Label>
+              <Label size='sm'>{`${localization.datasetForm.fieldLabel.mediaTypes}:`}</Label>
               <ul className={styles.list}>
                 {distribution?.mediaType?.map((uri) => (
                   <li key={uri}>
-                    <Tag color='third'>{(selectedMediaTypes?.find((type) => type.uri === uri) ?? {}).code ?? uri}</Tag>
+                    <Tag
+                      size='sm'
+                      color='third'
+                    >
+                      {(selectedMediaTypes?.find((type) => type.uri === uri) ?? {}).code ?? uri}
+                    </Tag>
                   </li>
                 ))}
               </ul>
@@ -68,7 +74,7 @@ export const DistributionDetails = ({ index, searchEnv, referenceDataEnv, openLi
 
           {distribution.accessServiceList && distribution.accessServiceList.length > 0 && (
             <div className={styles.field}>
-              <Label>{`${localization.datasetForm.fieldLabel.accessService}:`}</Label>
+              <Label size='sm'>{`${localization.datasetForm.fieldLabel.accessService}:`}</Label>
 
               <ul className={styles.list}>
                 {distribution.accessServiceList?.map((uri) => (
@@ -76,6 +82,7 @@ export const DistributionDetails = ({ index, searchEnv, referenceDataEnv, openLi
                     <Tag
                       key={uri}
                       color='third'
+                      size='sm'
                     >
                       {getTranslateText(selectedDataServices?.find((type) => type.uri === uri)?.title) ?? uri}
                     </Tag>
@@ -87,11 +94,9 @@ export const DistributionDetails = ({ index, searchEnv, referenceDataEnv, openLi
 
           {distribution.license?.uri && (
             <>
-              <Label>
-                <Label>{`${localization.datasetForm.fieldLabel.license}:`}</Label>
-              </Label>
+              <Label size='sm'>{`${localization.datasetForm.fieldLabel.license}:`}</Label>
               <div className={styles.field}>
-                <Paragraph>
+                <Paragraph size='sm'>
                   {getTranslateText(openLicenses.find((license) => license.uri === distribution.license?.uri)?.label)}
                 </Paragraph>
               </div>
@@ -100,7 +105,7 @@ export const DistributionDetails = ({ index, searchEnv, referenceDataEnv, openLi
 
           {distribution.conformsTo && hasConformsToValues && (
             <div className={styles.field}>
-              <Label>{`${localization.datasetForm.fieldLabel.standard}:`}</Label>
+              <Label size='sm'>{`${localization.datasetForm.fieldLabel.standard}:`}</Label>
 
               <Table size='sm'>
                 <Table.Head>
@@ -123,8 +128,8 @@ export const DistributionDetails = ({ index, searchEnv, referenceDataEnv, openLi
 
           {distribution.page && distribution.page?.[0].uri && (
             <div className={styles.field}>
-              <Label>{`${localization.datasetForm.fieldLabel.distributionLink}:`}</Label>
-              <Paragraph>{distribution?.page?.[0].uri}</Paragraph>
+              <Label size='sm'>{`${localization.datasetForm.fieldLabel.distributionLink}:`}</Label>
+              <Paragraph size='sm'>{distribution?.page?.[0].uri}</Paragraph>
             </div>
           )}
         </div>

@@ -4,6 +4,7 @@ import { localization } from '@catalog-frontend/utils';
 import { Card, Combobox } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 import { AccessRightsUriTable } from './access-rights-uri-table';
+import styles from '../../dataset-form.module.css';
 
 const accessRightsOptions = [
   { value: AccessRights.PUBLIC, label: localization.datasetForm.accessRight.public },
@@ -15,8 +16,8 @@ export const AccessRightFields = () => {
   const { values, setFieldValue } = useFormikContext<Dataset>();
 
   return (
-    <Card>
-      <div>
+    <Card className={styles.card}>
+      <div className={styles.fieldContainer}>
         <TitleWithTag
           title={localization.access}
           tagColor='info'

@@ -1,4 +1,4 @@
-.combobox {
+/* .combobox {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -19,11 +19,7 @@
   height: fit-content;
 }
 
-.comboboxOption {
-  display: grid;
-  grid-template-columns: 22% 50% 22%;
-  gap: 2.5%;
-}
+
 
 .fieldArrayRow {
   display: grid;
@@ -47,6 +43,10 @@
   padding: 0.5rem 0;
 }
 
+.buttonSet {
+  display: flex;
+} */
+
 .verticalLine {
   width: 1px;
   height: 4rem;
@@ -54,6 +54,45 @@
   margin: 0 0.5rem;
 }
 
-.buttonSet {
+.fieldContainer {
   display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.set {
+  display: flex;
+}
+
+.hiddenField {
+  padding-bottom: 1rem;
+  padding-top: 0.5rem;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.comboboxOption {
+  display: grid;
+  grid-template-columns: 22% 50% 22%;
+  gap: 2.5%;
+}
+
+.tagsButton {
+  display: flex;
+  align-items: flex-end;
+  width: fit-content;
+}
+
+.footerContent {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
 }

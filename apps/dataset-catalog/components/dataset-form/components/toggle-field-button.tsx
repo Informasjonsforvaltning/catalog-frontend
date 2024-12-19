@@ -4,6 +4,7 @@ import { localization } from '@catalog-frontend/utils';
 import { useFormikContext } from 'formik';
 import { PropsWithChildren, useMemo, useState } from 'react';
 import FieldsetWithDelete from '../../fieldset-with-delete';
+import styles from '../dataset-form.module.css';
 import _ from 'lodash';
 
 type Props = {
@@ -42,22 +43,24 @@ export const ToggleFieldButton = ({
     <div>
       {shouldShowField ? (
         hasDeleteButton ? (
-          <FieldsetWithDelete
-            onDelete={() => {
-              handleDelete();
-            }}
-          >
-            {children}
-          </FieldsetWithDelete>
+          <div className={styles.hiddenField}>
+            <FieldsetWithDelete
+              onDelete={() => {
+                handleDelete();
+              }}
+            >
+              {children}
+            </FieldsetWithDelete>
+          </div>
         ) : (
-          children
+          <div className={styles.hiddenField}>{children}</div>
         )
       ) : (
         <AddButton
           onClick={() => {
             setFieldValue(fieldName, addValue);
           }}
-        >{`${localization.add} ${fieldName}`}</AddButton>
+        >{`${localization.add} ${localization.datasetForm.hiddenFieldLabel[fieldName.split('.')[0]]}`}</AddButton>
       )}
     </div>
   );

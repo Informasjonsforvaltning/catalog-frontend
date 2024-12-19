@@ -47,12 +47,12 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
     <>
       <FieldArray name='distribution'>
         {() => (
-          <div>
+          <div className={styles.distributionContent}>
             {values.distribution?.map((_, index) => (
               <Card key={`distribusjon-${index}`}>
                 <div className={styles.heading}>
                   <Heading
-                    size='sm'
+                    size='xs'
                     spacing
                   >
                     {getTranslateText(values?.distribution?.[index]?.title) ?? ''}
@@ -83,7 +83,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                   </div>
                 </div>
                 {values?.distribution?.[index].accessURL && (
-                  <Label>{`${localization.datasetForm.fieldLabel.accessUrl}:`}</Label>
+                  <Label size='sm'>{`${localization.datasetForm.fieldLabel.accessUrl}:`}</Label>
                 )}
                 <Link href={values?.distribution?.[index].accessURL?.[0]}>
                   {values?.distribution?.[index].accessURL}
@@ -93,31 +93,35 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                     <Tag
                       key={uri}
                       color='third'
+                      size='sm'
                     >
                       {(selectedFileTypes?.find((format) => format.uri === uri) ?? {}).code ?? uri}
                     </Tag>
                   ))}
                 </div>
                 {showSeeMoreButton(values?.distribution?.[index]) && (
-                  <Button
-                    variant='tertiary'
-                    onClick={() => {
-                      setExpandedIndex(expandedIndex === index ? null : index);
-                    }}
-                    className={styles.button}
-                  >
-                    {expandedIndex === index ? (
-                      <>
-                        <ChevronUpIcon fontSize={'1.5rem'} />
-                        {localization.seeLess}
-                      </>
-                    ) : (
-                      <>
-                        <ChevronDownIcon fontSize={'1.5rem'} />
-                        {localization.seeMore}
-                      </>
-                    )}
-                  </Button>
+                  <div>
+                    <Button
+                      variant='tertiary'
+                      onClick={() => {
+                        setExpandedIndex(expandedIndex === index ? null : index);
+                      }}
+                      className={styles.button}
+                      size='sm'
+                    >
+                      {expandedIndex === index ? (
+                        <>
+                          <ChevronUpIcon fontSize={'1.3rem'} />
+                          {localization.seeLess}
+                        </>
+                      ) : (
+                        <>
+                          <ChevronDownIcon fontSize={'1.3rem'} />
+                          {localization.seeMore}
+                        </>
+                      )}
+                    </Button>
+                  </div>
                 )}
 
                 {expandedIndex === index && (
@@ -158,7 +162,12 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
               </div>
               {(!values?.distribution || values.distribution?.length === 0) && (
                 <div>
-                  <Tag color='info'>{localization.tag.recommended}</Tag>
+                  <Tag
+                    color='info'
+                    size='sm'
+                  >
+                    {localization.tag.recommended}
+                  </Tag>
                 </div>
               )}
             </div>

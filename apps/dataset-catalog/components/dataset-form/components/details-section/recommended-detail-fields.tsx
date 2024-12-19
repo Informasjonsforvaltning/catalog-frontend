@@ -1,5 +1,5 @@
 'use client';
-import { AddButton, FormikSearchCombobox, TitleWithTag } from '@catalog-frontend/ui';
+import { AddButton, FieldsetDivider, FormikSearchCombobox, TitleWithTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Checkbox, Label, Textfield } from '@digdir/designsystemet-react';
 import { useCallback, useState } from 'react';
@@ -11,6 +11,7 @@ import { Field, FieldArray, useFormikContext } from 'formik';
 import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
 import { debounce, sortBy } from 'lodash';
 import FieldsetWithDelete from '../../../fieldset-with-delete';
+import styles from '../../dataset-form.module.css';
 
 interface Props {
   referenceDataEnv: string;
@@ -80,7 +81,8 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
             </Checkbox>
           ))}
       </Checkbox.Group>
-      <div>
+      <FieldsetDivider />
+      <div className={styles.fieldContainer}>
         <TitleWithTag
           title={localization.datasetForm.heading.spatial}
           tagColor='info'
@@ -97,11 +99,12 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
           loading={isSearching}
         />
       </div>
+      <FieldsetDivider />
       <FieldArray
         name='temporal'
         render={({ remove, push }) => (
-          <div>
-            <Label> {localization.datasetForm.heading.temporal}</Label>
+          <div className={styles.fieldContainer}>
+            <Label size='sm'> {localization.datasetForm.heading.temporal}</Label>
             {values.temporal &&
               values.temporal.map((_, index) => (
                 <FieldsetWithDelete
