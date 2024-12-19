@@ -2,6 +2,7 @@ import { expect, Page, BrowserContext } from '@playwright/test';
 import type AxeBuilder from '@axe-core/playwright';
 import EditPage from './editPage';
 import { Concept, Definisjon } from '@catalog-frontend/types';
+import { formatISO } from '@catalog-frontend/utils';
 
 export default class DetailPage {
   url: string;
@@ -108,9 +109,8 @@ export default class DetailPage {
 
   async expectLanguageCombobox() {
     const languageCombobox = this.page.getByRole('combobox');
-    const languageValue = await languageCombobox.inputValue();
     await expect(languageCombobox).toBeVisible();    
-    await expect(languageValue).toBe('nb');
+    await expect(languageCombobox).toHaveValue('nb');
   }
 
   async expectLeftColumnContent(concept: Concept) {
@@ -121,6 +121,27 @@ export default class DetailPage {
           hasText: new RegExp(`Definisjon:${concept.definisjon.tekst.nb as string}Kilde:${this.getDefinitionSourceText(concept.definisjon)}`),
         }).nth(1)
     ).toBeVisible();
+
+    if(concept.tillattTerm?.nb) {
+      await expect(
+        this.page
+          .locator('div')
+          .filter({
+            hasText: new RegExp(`Tillat term:${concept.tillattTerm.nb.join()}`),
+          }).nth(1)
+      ).toBeVisible();
+    }
+    
+    if(concept.frarådetTerm?.nb) {
+      await expect(
+        this.page
+          .locator('div')
+          .filter({
+            hasText: new RegExp(`Frarådet term:${concept.frarådetTerm.nb.join()}`),
+          }).nth(1)
+      ).toBeVisible();
+    }
+    //TODO other fields...
   }
 
   async expectTabs() {
@@ -140,13 +161,23 @@ export default class DetailPage {
     await expect(this.page.getByText(this.getVersionText(concept))).toBeVisible();
 
     await expect(this.page.getByRole('heading', { name: 'Dato sist oppdatert'})).toBeVisible();
-    await expect(this.page.getByText(this.getVersionText(concept))).toBeVisible();
+    await expect(this.page.getByText(formatISO(new Date().toISOString(), {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }) ?? '',)).toBeVisible();
 
     await expect(this.page.getByRole('heading', { name: 'Opprettet', exact: true })).toBeVisible();
-    await expect(this.page.getByText(this.getVersionText(concept))).toBeVisible();
+    await expect(this.page.getByText(formatISO(new Date().toISOString(), {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }) ?? '',)).toBeVisible();
 
     await expect(this.page.getByRole('heading', { name: 'Opprettet av', exact: true })).toBeVisible();
-    await expect(this.page.getByText(this.getVersionText(concept))).toBeVisible();
+    await expect(this.page.getByText('LAMA LEDENDE')).toBeVisible();
 
     if(concept.kontaktpunkt?.harEpost || concept.kontaktpunkt?.harTelefon) {
       await expect(this.page.getByRole('heading', { name: 'Kontaktinformasjon for eksterne'})).toBeVisible();
