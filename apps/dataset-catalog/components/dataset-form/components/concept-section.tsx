@@ -1,12 +1,13 @@
 'use client';
 import { Dataset } from '@catalog-frontend/types';
-import { Heading, Textfield, Chip, Button, Combobox } from '@digdir/designsystemet-react';
+import { Textfield, Chip, Button, Combobox } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 import { useState } from 'react';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
 import styles from '../dataset-form.module.css';
 import { useSearchConceptsByUri, useSearchConceptSuggestions } from '../../../hooks/useSearchService';
-import { FormContainer, TitleWithTag } from '@catalog-frontend/ui';
+import { TitleWithTag } from '@catalog-frontend/ui';
+import classNames from 'classnames';
 
 interface Props {
   searchEnv: string; // Environment variable to search service
@@ -55,14 +56,15 @@ export const ConceptSection = ({ searchEnv }: Props) => {
   };
 
   return (
-    <div>
-      <>
+    <>
+      <div className={styles.fieldContainer}>
         <TitleWithTag
           title={localization.datasetForm.fieldLabel.concept}
           tagTitle={localization.tag.recommended}
           tagColor='info'
         />
         <Combobox
+          size='sm'
           onValueChange={(selectedValues: string[]) => setFieldValue('conceptList', selectedValues)}
           onChange={(input: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(input.target.value)}
           loading={searching}
@@ -90,11 +92,12 @@ export const ConceptSection = ({ searchEnv }: Props) => {
             </Combobox.Option>
           ))}
         </Combobox>
-      </>
+      </div>
 
-      <div className={styles.bottomRow}>
+      <div className={classNames(styles.set, styles.fullWidth)}>
         <div className={styles.fullWidth}>
           <Textfield
+            size='sm'
             label={
               <TitleWithTag
                 title={localization.datasetForm.fieldLabel.keyword}
@@ -113,11 +116,15 @@ export const ConceptSection = ({ searchEnv }: Props) => {
             }}
           />
         </div>
-        <div className={styles.button}>
-          <Button onClick={addKeyword}>{`${localization.add}...`}</Button>
+        <div className={styles.tagsButton}>
+          <Button
+            size='sm'
+            onClick={addKeyword}
+            variant='secondary'
+          >{`${localization.add}...`}</Button>
         </div>
       </div>
-      <Chip.Group>
+      <Chip.Group size='sm'>
         {values.keywordList?.nb?.map((value: string) => (
           <Chip.Removable
             key={value}
@@ -127,6 +134,6 @@ export const ConceptSection = ({ searchEnv }: Props) => {
           </Chip.Removable>
         ))}
       </Chip.Group>
-    </div>
+    </>
   );
 };

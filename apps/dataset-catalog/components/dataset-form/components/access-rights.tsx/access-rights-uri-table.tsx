@@ -1,7 +1,7 @@
 import { Dataset, UriWithLabel } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, EditButton, FieldsetDivider, FormikLanguageFieldset } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Divider, Label, Modal, Radio, Table, Textfield } from '@digdir/designsystemet-react';
+import { Button, Label, Modal, Radio, Table, Textfield } from '@digdir/designsystemet-react';
 import { FastField, Formik, useFormikContext } from 'formik';
 import styles from '../../dataset-form.module.css';
 import { useRef, useState } from 'react';
@@ -62,7 +62,7 @@ export const AccessRightsUriTable = () => {
   };
 
   return (
-    <>
+    <div className={styles.fieldContainer}>
       <Label size='sm'>{localization.datasetForm.fieldLabel.legalBasis}</Label>
 
       {allLegalBases && allLegalBases?.length > 0 && !hasNoFieldValues(allLegalBases[0].uriWithLabel) && (
@@ -84,7 +84,7 @@ export const AccessRightsUriTable = () => {
                     <Table.Cell>{item?.uriWithLabel.uri}</Table.Cell>
                     <Table.Cell>{localization.datasetForm.fieldLabel[item?.type]}</Table.Cell>
                     <Table.Cell>
-                      <span className={styles.buttonSet}>
+                      <span className={styles.set}>
                         <FieldModal
                           template={item.uriWithLabel}
                           formType='edit'
@@ -109,7 +109,7 @@ export const AccessRightsUriTable = () => {
           onSuccess={(formValues: LegalBasis) => setFieldValue(getField(formValues), formValues.uriWithLabel)}
         />
       </div>
-    </>
+    </div>
   );
 };
 
@@ -122,10 +122,7 @@ const FieldModal = ({ template, formType, onSuccess, initialType = 'legalBasisFo
     <>
       <Modal.Root>
         <Modal.Trigger asChild>{formType === 'edit' ? <EditButton /> : <AddButton />}</Modal.Trigger>
-        <Modal.Dialog
-          ref={modalRef}
-          className={styles.dialog}
-        >
+        <Modal.Dialog ref={modalRef}>
           <Formik
             initialValues={template}
             validateOnChange={submitted}
@@ -166,6 +163,8 @@ const FieldModal = ({ template, formType, onSuccess, initialType = 'legalBasisFo
                       </Radio>
                     ))}
                   </Radio.Group>
+
+                  <FieldsetDivider />
 
                   <FormikLanguageFieldset
                     as={Textfield}

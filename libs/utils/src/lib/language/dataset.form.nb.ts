@@ -87,7 +87,6 @@ export const datasetFormNb = {
   fieldLabel: {
     losTheme: 'Velg tema, kategorier og emner',
     euTheme: 'Velg EU-tema(er)',
-    type: 'Velg type',
     concept: 'Legg inn begreper',
     geography: 'Søk etter geografisk område',
     informationModelTitle: 'Tittel på informasjonsmodell',
@@ -111,6 +110,9 @@ export const datasetFormNb = {
     legalBasisForProcessing: 'Behandlingsgrunnlag',
     legalBasisForAccess: 'Utleveringshjemmel',
     legalBasis: 'Juridisk grunnlag',
+    relations: 'relatert ressurs',
+    informationModel: 'informasjonsmodell',
+    keyword: 'Søkeord',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
@@ -136,5 +138,17 @@ export const datasetFormNb = {
   },
   errors: {
     qualifiedAttributions: 'Kunne ikke hente enheter.',
+  },
+  hiddenFieldLabel: {
+    type: 'type',
+    provenance: 'opphav',
+    accrualPeriodicity: 'oppdateringsfrekvens',
+    modified: 'sist oppdatert',
+    hasCurrentnessAnnotation: 'aktualitet',
+    hasCompletenessAnnotation: 'kompletthet',
+    hasAccuracyAnnotation: 'nøyaktighet',
+    hasAvailabilityAnnotation: 'tilgjengelighet',
+    qualifiedAttributions: 'innholdsleverandører',
+    hasRelevanceAnnotation: 'relevans',
   },
 };

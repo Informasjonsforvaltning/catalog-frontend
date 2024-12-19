@@ -1,7 +1,7 @@
 import { UriWithLabel } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, EditButton, FieldsetDivider, FormikLanguageFieldset } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Divider, Label, Modal, Table, Textfield } from '@digdir/designsystemet-react';
+import { Button, Label, Modal, Table, Textfield } from '@digdir/designsystemet-react';
 import { Field, Formik, useFormikContext } from 'formik';
 import styles from '../dataset-form.module.css';
 import { useRef, useState } from 'react';
@@ -11,7 +11,7 @@ import { uriWithLabelSchema } from '../utils/validation-schema';
 interface Props {
   values: UriWithLabel[] | undefined;
   fieldName: string;
-  showLabel?: boolean;
+  label?: string;
 }
 
 interface ModalProps {
@@ -26,14 +26,17 @@ const hasNoFieldValues = (values: UriWithLabel) => {
   return _.isEmpty(_.trim(values.uri)) && _.isEmpty(_.pickBy(values.prefLabel, _.identity));
 };
 
-export const UriWithLabelFieldsetTable = ({ fieldName, values, showLabel = true }: Props) => {
+export const UriWithLabelFieldsetTable = ({ fieldName, values, label }: Props) => {
   const { setFieldValue } = useFormikContext();
 
   return (
-    <>
-      {showLabel ?? <Label size='sm'>{localization.datasetForm.fieldLabel[fieldName]}</Label>}
+    <div className={styles.fieldContainer}>
+      <Label size='sm'>{label}</Label>
       {values && values?.length > 0 && !hasNoFieldValues(values[0]) && (
-        <Table size='sm'>
+        <Table
+          size='sm'
+          className={styles.fullWidth}
+        >
           <Table.Head>
             <Table.Row>
               <Table.HeaderCell>{localization.title}</Table.HeaderCell>
@@ -47,7 +50,7 @@ export const UriWithLabelFieldsetTable = ({ fieldName, values, showLabel = true 
                 <Table.Cell>{getTranslateText(item?.prefLabel)}</Table.Cell>
                 <Table.Cell>{item?.uri}</Table.Cell>
                 <Table.Cell>
-                  <span className={styles.buttonSet}>
+                  <span className={styles.set}>
                     <FieldModal
                       fieldName={fieldName}
                       template={item}
@@ -77,7 +80,7 @@ export const UriWithLabelFieldsetTable = ({ fieldName, values, showLabel = true 
           }
         />
       </div>
-    </>
+    </div>
   );
 };
 
@@ -95,10 +98,7 @@ const FieldModal = ({ fieldName, template, type, onSuccess }: ModalProps) => {
             <AddButton>{`${localization.add} ${localization.datasetForm.fieldLabel?.[fieldName]?.toLowerCase()}`}</AddButton>
           )}
         </Modal.Trigger>
-        <Modal.Dialog
-          ref={modalRef}
-          className={styles.dialog}
-        >
+        <Modal.Dialog ref={modalRef}>
           <Formik
             initialValues={template}
             validateOnChange={submitted}
@@ -132,6 +132,7 @@ const FieldModal = ({ fieldName, template, type, onSuccess }: ModalProps) => {
                     as={Textfield}
                     label={localization.link}
                     error={errors?.uri}
+                    size='sm'
                   />
                 </Modal.Content>
 
@@ -140,6 +141,7 @@ const FieldModal = ({ fieldName, template, type, onSuccess }: ModalProps) => {
                     type='button'
                     disabled={isSubmitting || !dirty || hasNoFieldValues(values)}
                     onClick={() => submitForm()}
+                    size='sm'
                   >
                     {type === 'new' ? localization.add : localization.datasetForm.button.update}
                   </Button>
@@ -148,6 +150,7 @@ const FieldModal = ({ fieldName, template, type, onSuccess }: ModalProps) => {
                     type='button'
                     onClick={() => modalRef.current?.close()}
                     disabled={isSubmitting}
+                    size='sm'
                   >
                     {localization.button.cancel}
                   </Button>

@@ -63,6 +63,7 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
     <>
       {!isLoading && (
         <Combobox
+          size='sm'
           onValueChange={(selectedValues: string[]) => setFieldValue('informationModelsFromFDK', selectedValues)}
           onChange={(input: any) => debouncedSearch(input.target.value)}
           loading={searching}
@@ -93,6 +94,7 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
       <UriWithLabelFieldsetTable
         values={values.informationModel}
         fieldName={'informationModel'}
+        label='Informasjonsmodell fra andre kilder'
       />
     </>
   );
