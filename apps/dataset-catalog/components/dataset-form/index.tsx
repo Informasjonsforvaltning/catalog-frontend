@@ -16,12 +16,12 @@ import { datasetTemplate } from './utils/dataset-initial-values';
 import { useState } from 'react';
 import { datasetValidationSchema } from './utils/validation-schema';
 import { AboutSection } from './components/about-section';
-import ThemeSection from './components/dataset-form-theme-section';
-import { ConceptSection } from './components/dataset-form-concept-section';
-import { InformationModelSection } from './components/dataset-form-information-model-section';
+import ThemeSection from './components/theme-section';
+import { ConceptSection } from './components/concept-section';
+import { InformationModelSection } from './components/information-model-section';
 import { RelationsSection } from './components/relations-section/relations-section';
 import { DistributionSection } from './components/distribution-section/dataset-form-distribution-section';
-import { ContactPointSection } from './components/dataset-form-contact-point-section';
+import { ContactPointSection } from './components/contact-point-section';
 import styles from './dataset-form.module.css';
 import { useRouter } from 'next/navigation';
 import { DetailsSection } from './components/details-section/details-section';
@@ -206,7 +206,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
             </Form>
 
             <StickyFooterBar>
-              <div className={styles.buttonContainer}>
+              <div className={styles.footerContent}>
                 <Button
                   type='submit'
                   size='sm'
@@ -245,7 +245,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                     setFieldValue('registrationStatus', status);
                   }}
                 >
-                  <div className={styles.buttonContainer}>
+                  <div className={styles.footerContent}>
                     {localization.tag.approve}
                     <HelpMarkdown
                       size='sm'

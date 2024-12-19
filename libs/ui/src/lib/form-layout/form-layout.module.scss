@@ -35,57 +35,57 @@
 .sideMenu {
   position: sticky;
   top: 1rem;
-  overflow:hidden;
+  overflow: hidden;
   min-width: 265px;
   padding: 1rem;
-  border-radius:0.5rem;
-  border:1px solid #ddd;
-  background:white;
+  border-radius: 0.5rem;
+  border: 1px solid #ddd;
+  background: white;
 }
 
-.sideMenu ol {  
+.sideMenu ol {
   list-style: none;
 
   li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-      &.active {
-        background-color: var(--fds-semantic-surface-third-light);
-        border-left: 4px solid var(--fds-semantic-surface-action-default);
+    &.active {
+      background-color: var(--fds-semantic-surface-third-light);
+      border-left: 4px solid var(--fds-semantic-surface-action-default);
 
-        :global(.fds-link) {
-          color: black;
-        }
+      :global(.fds-link) {
+        color: black;
       }
+    }
 
-      & .required {
-        font-size: small;
-        color: var(  --fds-semantic-border-neutral-default);
-        font-style: italic;
+    & .required {
+      font-size: small;
+      color: var(--fds-semantic-border-neutral-default);
+      font-style: italic;
+    }
+
+    &:hover {
+      border-left: 4px solid var(--fds-semantic-surface-action-default);
+      background: var(--fds-semantic-surface-action-first-no_fill-hover);
+    }
+
+    :global(.fds-link) {
+      display: block;
+      padding: 0.6rem 0.8rem;
+      text-decoration: none;
+      font-size: medium;
+      width: 100%;
+
+      &:visited {
+        color: inherit;
       }
 
       &:hover {
-        border-left: 4px solid var(--fds-semantic-surface-action-default);
-        background: var(--fds-semantic-surface-action-first-no_fill-hover)
+        background: var(--fds-semantic-surface-action-first-no_fill-hover);
       }
-
-      :global(.fds-link) {
-          display:block;
-          padding:0.6rem 0.8rem;
-          text-decoration:none;
-          font-size: medium;
-          width: 100%;
-
-          &:visited {
-            color: inherit;
-          }
-
-          &:hover {
-              background: var(--fds-semantic-surface-action-first-no_fill-hover)
-          }
-      }
+    }
   }
 }
 
@@ -93,7 +93,7 @@
   padding-bottom: 1rem;
 }
 
-.section { 
+.section {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -115,7 +115,7 @@
   font-size: 1.5rem;
   font-weight: 500;
 }
- 
+
 .sectionHeadingSubtitle {
   font-size: 1rem;
   font-weight: 500;
@@ -126,6 +126,6 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 1rem 2rem;
+  padding: 1rem 2rem 2rem 2rem;
   gap: 2rem;
 }

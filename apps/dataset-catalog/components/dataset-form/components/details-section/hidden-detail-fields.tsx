@@ -6,7 +6,7 @@ import { Combobox, Textfield } from '@digdir/designsystemet-react';
 import { Field, FieldArray, useFormikContext } from 'formik';
 import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
 import styles from './details.module.css';
-import { QualifiedAttributionsSection } from '../dataset-form-qualified-attributions-section';
+import { QualifiedAttributionsSection } from '../qualified-attributions-section';
 import FieldsetWithDelete from '../../../fieldset-with-delete';
 import { ToggleFieldButton } from '../toggle-field-button';
 import { UriWithLabelFieldsetTable } from '../uri-with-label-field-set-table';
@@ -62,7 +62,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
   );
 
   return (
-    <>
+    <div>
       <div>
         <FieldArray name='landingPage'>
           {(arrayHelpers) => (
@@ -164,6 +164,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       <ToggleFieldButton
         fieldName='hasCurrentnessAnnotation.hasBody'
         fieldValues={values?.hasCurrentnessAnnotation?.hasBody}
+        addValue={{ nb: '' }}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
@@ -172,20 +173,15 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         />
       </ToggleFieldButton>
 
-      <ToggleFieldButton
+      <UriWithLabelFieldsetTable
+        values={values.conformsTo}
         fieldName={'conformsTo'}
-        fieldValues={values?.conformsTo}
-      >
-        <UriWithLabelFieldsetTable
-          values={values.conformsTo}
-          fieldName={'conformsTo'}
-          showLabel={false}
-        />
-      </ToggleFieldButton>
+      />
 
       <ToggleFieldButton
         fieldName='hasRelevanceAnnotation.hasBody'
         fieldValues={values?.hasRelevanceAnnotation?.hasBody}
+        addValue={{ nb: '' }}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
@@ -197,6 +193,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       <ToggleFieldButton
         fieldName='hasCompletenessAnnotation.hasBody'
         fieldValues={values?.hasCompletenessAnnotation?.hasBody}
+        addValue={{ nb: '' }}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
@@ -208,6 +205,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       <ToggleFieldButton
         fieldName='hasAccuracyAnnotation.hasBody'
         fieldValues={values?.hasAccuracyAnnotation?.hasBody}
+        addValue={{ nb: '' }}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
@@ -219,6 +217,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       <ToggleFieldButton
         fieldName='hasAvailabilityAnnotation.hasBody'
         fieldValues={values?.hasAvailabilityAnnotation?.hasBody}
+        addValue={{ nb: '' }}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
@@ -235,6 +234,6 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       >
         <QualifiedAttributionsSection />
       </ToggleFieldButton>
-    </>
+    </div>
   );
 };

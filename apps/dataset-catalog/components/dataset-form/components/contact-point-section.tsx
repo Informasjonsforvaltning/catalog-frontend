@@ -33,7 +33,7 @@ export const ContactPointSection = () => {
   };
 
   return (
-    <Box>
+    <>
       <CheckboxGroup
         className={styles.field}
         size='sm'
@@ -63,49 +63,51 @@ export const ContactPointSection = () => {
         ))}
       </CheckboxGroup>
 
-      {selectedFields.includes('email') && (
-        <Field
-          as={Textfield}
-          name='contactPoint[0].email'
-          size='sm'
-          label={localization.email}
-          className={styles.field}
-          // @ts-expect-error: email exists on the object
-          error={errors?.contactPoint?.[0]?.email}
-        />
-      )}
+      <div className={styles.fieldContainer}>
+        {selectedFields.includes('email') && (
+          <Field
+            as={Textfield}
+            name='contactPoint[0].email'
+            size='sm'
+            label={localization.email}
+            className={styles.field}
+            // @ts-expect-error: email exists on the object
+            error={errors?.contactPoint?.[0]?.email}
+          />
+        )}
 
-      {selectedFields.includes('hasTelephone') && (
-        <Field
-          as={Textfield}
-          name='contactPoint[0].hasTelephone'
-          size='sm'
-          label={localization.telephone}
-          className={styles.field}
-          // @ts-expect-error: hasTelephone exists on the object
-          error={errors?.contactPoint?.[0]?.hasTelephone}
-        />
-      )}
-      {selectedFields.includes('organizationUnit') && (
-        <Field
-          as={Textfield}
-          name='contactPoint[0].organizationUnit'
-          size='sm'
-          label={localization.contactPoint.organizationUnit}
-          className={styles.field}
-        />
-      )}
-      {selectedFields.includes('hasURL') && (
-        <Field
-          as={Textfield}
-          name='contactPoint[0].hasURL'
-          size='sm'
-          label={localization.contactPoint.form}
-          className={styles.field}
-          // @ts-expect-error: hasURL exists on the object
-          error={errors?.contactPoint?.[0]?.hasURL}
-        />
-      )}
-    </Box>
+        {selectedFields.includes('hasTelephone') && (
+          <Field
+            as={Textfield}
+            name='contactPoint[0].hasTelephone'
+            size='sm'
+            label={localization.telephone}
+            className={styles.field}
+            // @ts-expect-error: hasTelephone exists on the object
+            error={errors?.contactPoint?.[0]?.hasTelephone}
+          />
+        )}
+        {selectedFields.includes('organizationUnit') && (
+          <Field
+            as={Textfield}
+            name='contactPoint[0].organizationUnit'
+            size='sm'
+            label={localization.contactPoint.organizationUnit}
+            className={styles.field}
+          />
+        )}
+        {selectedFields.includes('hasURL') && (
+          <Field
+            as={Textfield}
+            name='contactPoint[0].hasURL'
+            size='sm'
+            label={localization.contactPoint.form}
+            className={styles.field}
+            // @ts-expect-error: hasURL exists on the object
+            error={errors?.contactPoint?.[0]?.hasURL}
+          />
+        )}
+      </div>
+    </>
   );
 };
