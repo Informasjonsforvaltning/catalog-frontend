@@ -2,13 +2,12 @@
 
 import { ReactNode, useState } from 'react';
 import { localization } from '@catalog-frontend/utils';
-import { Fieldset, Box, Paragraph, Textfield, ErrorMessage, Chip, Chip } from '@digdir/designsystemet-react';
+import { Fieldset, Box, Paragraph, Textfield, ErrorMessage, Chip } from '@digdir/designsystemet-react';
 import { FastField, useFormikContext } from 'formik';
 
 import styles from './formik-language-fieldset.module.scss';
 import { ISOLanguage, LocalizedStrings } from '@catalog-frontend/types';
 import { TextareaWithPrefix } from '../textarea-with-prefix';
-import _ from 'lodash';
 import { AddButton, DeleteButton } from '../button';
 import _ from 'lodash';
 
@@ -19,7 +18,6 @@ type LanuguageFieldsetProps = {
   errorFieldLabel: string;
   requiredLanguages?: Omit<ISOLanguage, 'no'>[];
   as?: typeof Textfield | typeof TextareaWithPrefix;
-  multiple?: boolean;
   multiple?: boolean;
 };
 
@@ -33,10 +31,8 @@ export const FormikLanguageFieldset = ({
   requiredLanguages,
   as: renderAs = Textfield,
   multiple = false,
-  multiple = false,
 }: LanuguageFieldsetProps) => {
-  const { errors, values, values, getFieldMeta, setFieldValue } = useFormikContext<Record<string, LocalizedStrings>>();
-  const [textValue, setTextValue] = useState<Record<string, string>>({});
+  const { errors, values, getFieldMeta, setFieldValue } = useFormikContext<Record<string, LocalizedStrings>>();
   const [textValue, setTextValue] = useState<Record<string, string>>({});
 
   const handleAddLanguage = (lang: string) => {
@@ -45,24 +41,6 @@ export const FormikLanguageFieldset = ({
 
   const handleRemoveLanguage = (lang: string) => {
     setFieldValue(`${name}.${lang}`, undefined);
-  };
-
-  const handleOnChangeTextValue = (value: string, lang: string) => {
-    setTextValue((prev) => ({ ...prev, ...{ [lang]: value } }));
-  };
-
-  const handleAddTextValue = (code: string, lang: string) => {
-    if(code === 'Enter') {
-      const textValues = [...(values?.[name]?.[lang] as string[]), textValue[lang]];
-      setFieldValue(`${name}.${lang}`, textValues);
-      setTextValue((prev) => ({ ...prev, ...{ [lang]: '' } }));
-    }    
-  };
-
-  const handleRemoveTextValue = (index: number, lang: string) => {
-    const textValues = [...(values?.[name]?.[lang] as string[])];
-    textValues.splice(index, 1);
-    setFieldValue(`${name}.${lang}`, textValues);
   };
 
   const handleOnChangeTextValue = (value: string, lang: string) => {
@@ -123,8 +101,8 @@ export const FormikLanguageFieldset = ({
                 />
 
                 <DeleteButton
-                  variant='tertiary'
-                  onClick={() => handleRemoveLanguage(lang)}
+                  onKeyDown={(e) => { if(e.code === 'Enter') { handleAddTextValue(lang) } }}
+                  onBlur={() => handleAddTextValue(lang)}
                 />
               </Box>
               <Chip.Group size='sm'>
