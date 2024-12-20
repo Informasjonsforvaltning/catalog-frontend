@@ -1,6 +1,7 @@
 import { expect, Page, BrowserContext } from '@playwright/test';
 import type AxeBuilder from '@axe-core/playwright';
-import { Concept } from '@catalog-frontend/types';
+import { Concept, RelationSubtypeEnum, RelationTypeEnum, UnionRelation } from '@catalog-frontend/types';
+import { ALL_RELATIONS } from '../data/relations';
 
 export default class EditPage {
   url: string;
@@ -47,12 +48,45 @@ export default class EditPage {
     }
   }
 
-  async addRelation(search, item) {
+  async addRelation(search, item, relation: UnionRelation) {
     await this.page.getByRole('button', { name: 'Legg til relasjon' }).click();
-    await this.page.getByText('Søk på data.norge.no').click();
+    if(relation.internal) {
+      await this.page.getByText('Søk i egen katalog').click();
+    } else {
+      await this.page.getByText('Søk på data.norge.no').click();
+    }
+    
     await this.page.getByRole('group', { name: 'Relatert begrep' }).getByRole('combobox').click();
     await this.page.locator('div').filter({ hasText: /^arrow upDismissFant ingen treffDismiss$/ }).locator('input').fill(search);
     await this.page.getByLabel(item).first().click();
+
+    await this.page.getByRole('group', { name: 'Relasjon' }).getByRole('combobox').click();
+    if(relation.relasjon === RelationTypeEnum.ASSOSIATIV) {
+      await this.page.getByLabel('Assosiativ').click();
+      await this.fillLanguageField(relation.beskrivelse, 'Relasjonsrolle', ['Bokmål', 'Nynorsk', 'Engelsk']);
+    } else if(relation.relasjon === RelationTypeEnum.GENERISK) {
+      await this.page.getByLabel('Generisk').click();
+      await this.page.getByRole('group', { name: 'Nivå' }).getByRole('combobox').click();
+      if(relation.relasjonsType === RelationSubtypeEnum.OVERORDNET) {
+        await this.page.getByLabel('Overordnet').click();
+      } else if(relation.relasjonsType === RelationSubtypeEnum.UNDERORDNET) {
+        await this.page.getByLabel('Underordnet').click();
+      }
+      await this.fillLanguageField(relation.inndelingskriterium, 'Inndelingskriterium', ['Bokmål', 'Nynorsk', 'Engelsk']);
+    } else if(relation.relasjon === RelationTypeEnum.PARTITIV) {
+      await this.page.getByLabel('Partitiv').click();
+      await this.page.getByRole('group', { name: 'Nivå' }).getByRole('combobox').click();
+      if(relation.relasjonsType === RelationSubtypeEnum.ER_DEL_AV) {
+        await this.page.getByLabel('Er del av').click();
+      } else if(relation.relasjonsType === RelationSubtypeEnum.OMFATTER) {
+        await this.page.getByLabel('Omfatter').click();
+      }
+      await this.fillLanguageField(relation.inndelingskriterium, 'Inndelingskriterium', ['Bokmål', 'Nynorsk', 'Engelsk']);
+    } else if(relation.relasjon === RelationTypeEnum.SE_OGSÅ) {
+      await this.page.getByLabel('Se også').click();
+    } else if(relation.relasjon === RelationTypeEnum.ERSTATTES_AV) {
+      await this.page.getByLabel('Erstattes av').click();
+    }   
     await this.page.getByRole('dialog').getByRole('button', { name: 'Legg til relasjon' }).click();
   }
 
@@ -97,8 +131,10 @@ export default class EditPage {
     await this.page.getByLabel('Lenke til referanse').fill(concept.omfang?.uri ?? '');
   
     // Add relation
-    await this.addRelation('enhet', 'enhetSkatteetaten');
-
+    for(let i=0; i<ALL_RELATIONS.length; i++) {
+      await this.addRelation('bolig', 'boligKomisk presis bille iks', ALL_RELATIONS[i]);  
+    }
+    
     // Internal fields
     await this.page.getByRole('combobox', { name: 'Hvem skal begrepet tildeles?' }).click();
     await this.page.getByLabel('Avery Quokka').click();
@@ -110,7 +146,7 @@ export default class EditPage {
         'Once upon a time, in a land of misty mountains and enchanted forests, a brave explorer named Ava set out on a quest to discover the mythical Crystal of Light. Through trials and triumphs, she learned the true power of courage and friendship.',
       );
 
-    await this.page.getByRole('group', { name: 'Has magical powers' }).getByRole('checkbox').check();  
+    await this.page.getByRole('group', { name: 'Has magical powers' }).getByRole('checkbox').check();  
     await this.page.getByRole('combobox', { name: 'Planet type' }).click();
     await this.page.getByLabel('Water planet').click();
 
