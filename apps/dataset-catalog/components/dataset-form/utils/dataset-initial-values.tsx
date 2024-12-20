@@ -52,7 +52,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
       ...dist,
       accessServiceList: dist.accessService?.map((service) => service.uri) || [],
     })),
-    contactPoint: dataset.contactPoint ?? {},
+    contactPoint: dataset.contactPoint ?? [],
   };
 };
 
@@ -100,7 +100,14 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     relations: undefined,
     inSeries: '',
     distribution: undefined,
-    contactPoint: [],
+    contactPoint: [
+      {
+        email: '',
+        hasTelephone: '',
+        hasURL: '',
+        organizationUnit: '',
+      },
+    ],
   };
 };
 
