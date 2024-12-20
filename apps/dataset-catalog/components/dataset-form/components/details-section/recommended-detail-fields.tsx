@@ -7,7 +7,7 @@ import {
   useSearchAdministrativeUnits,
   useSearchAdministrativeUnitsByUri,
 } from '../../../../hooks/useReferenceDataSearch';
-import { Field, FieldArray, useFormikContext } from 'formik';
+import { FastField, FieldArray, useFormikContext } from 'formik';
 import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
 import { debounce, sortBy } from 'lodash';
 import FieldsetWithDelete from '../../../fieldset-with-delete';
@@ -111,7 +111,7 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
                   onDelete={() => remove(index)}
                   key={`fieldset-${index}`}
                 >
-                  <Field
+                  <FastField
                     as={Textfield}
                     size='sm'
                     label={
@@ -124,7 +124,7 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
                     type='date'
                     name={`temporal.${index}.startDate`}
                   />
-                  <Field
+                  <FastField
                     as={Textfield}
                     size='sm'
                     label={

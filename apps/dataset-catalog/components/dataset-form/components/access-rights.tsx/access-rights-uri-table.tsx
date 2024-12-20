@@ -149,8 +149,7 @@ const FieldModal = ({ template, formType, onSuccess, initialType = 'legalBasisFo
                     size='sm'
                     legend={localization.type}
                     onChange={(val) => {
-                      const newType = val.toString();
-                      setLegalBasis(newType);
+                      setLegalBasis(val);
                     }}
                     defaultValue={legalBasis}
                   >

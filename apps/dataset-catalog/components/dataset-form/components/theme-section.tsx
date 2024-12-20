@@ -2,7 +2,7 @@ import { Dataset, DataTheme, LosTheme, Option } from '@catalog-frontend/types';
 import { TitleWithTag } from '@catalog-frontend/ui';
 import { Combobox } from '@digdir/designsystemet-react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Field, useFormikContext } from 'formik';
+import { FastField, useFormikContext } from 'formik';
 import styles from '../dataset-form.module.css';
 
 type Props = {
@@ -48,7 +48,7 @@ export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
           tagTitle={localization.tag.required}
         />
 
-        <Field
+        <FastField
           as={Combobox}
           multiple
           filter={containsFilter}
@@ -68,7 +68,7 @@ export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
                 {getTranslateText(eutheme.label)}
               </Combobox.Option>
             ))}
-        </Field>
+        </FastField>
       </div>
       <div className={styles.fieldContainer}>
         <TitleWithTag
@@ -77,7 +77,7 @@ export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
           tagColor='info'
         />
 
-        <Field
+        <FastField
           as={Combobox}
           name='losThemeList'
           value={values.losThemeList}
@@ -98,7 +98,7 @@ export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
               {getTranslateText(theme.name)}
             </Combobox.Option>
           ))}
-        </Field>
+        </FastField>
       </div>
     </>
   );

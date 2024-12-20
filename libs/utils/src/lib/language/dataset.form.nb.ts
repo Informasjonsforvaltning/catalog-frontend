@@ -113,6 +113,8 @@ export const datasetFormNb = {
     relations: 'relatert ressurs',
     informationModel: 'informasjonsmodell',
     keyword: 'Søkeord',
+    sample: 'Eksempeldata',
+    distribution: 'Distribusjon',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',

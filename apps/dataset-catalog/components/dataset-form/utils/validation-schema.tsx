@@ -67,9 +67,9 @@ export const datasetValidationSchema = Yup.object().shape({
 });
 
 export const distributionSectionSchema = Yup.object().shape({
-  title: Yup.object().shape({
-    nb: Yup.string().required(localization.validation.titleRequired),
-  }),
+  // title: Yup.object().shape({
+  //   nb: Yup.string().required(localization.validation.titleRequired),
+  // }),
   accessURL: Yup.array()
     .of(
       Yup.string().matches(httpsRegex, localization.validation.invalidProtocol).url(localization.validation.invalidUrl),

@@ -47,4 +47,4 @@ export function LabelWithHelpTextAndTag({
   );
 }
 
-export default { LabelWithHelpTextAndTag };
+export default LabelWithHelpTextAndTag;

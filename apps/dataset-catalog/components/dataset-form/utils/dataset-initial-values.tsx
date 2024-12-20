@@ -44,17 +44,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     informationModelsFromFDK: dataset.informationModelsFromFDK ?? [],
     informationModel: dataset?.informationModel,
     qualifiedAttributions: dataset?.qualifiedAttributions,
-    sample: dataset.sample ?? [
-      {
-        description: {
-          nb: '',
-        },
-        downloadURL: [],
-        accessURL: [],
-        format: [],
-        mediaType: [],
-      },
-    ],
+    sample: dataset?.sample,
     references: dataset?.references,
     relations: dataset?.relations,
     inSeries: dataset.inSeries ?? '',
@@ -105,21 +95,11 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     informationModelsFromFDK: [],
     informationModel: undefined,
     qualifiedAttributions: undefined,
-    sample: [
-      {
-        description: {
-          nb: '',
-        },
-        downloadURL: [],
-        accessURL: [],
-        format: [],
-        mediaType: [],
-      },
-    ],
+    sample: undefined,
     references: undefined,
     relations: undefined,
     inSeries: '',
-    distribution: [],
+    distribution: undefined,
     contactPoint: [],
   };
 };
