@@ -100,18 +100,18 @@ export default class EditPage {
     await this.addRelation('enhet', 'enhetSkatteetaten');
 
     // Internal fields
-    
-    await this.page.getByRole('textbox', { name: 'Forkortelse' }).fill(concept.abbreviatedLabel);
-    await this.page.getByRole('group', { name: 'Hvem skal begrepet tildeles?' }).getByRole('combobox').click();
+    await this.page.getByRole('combobox', { name: 'Hvem skal begrepet tildeles?' }).click();
     await this.page.getByLabel('Avery Quokka').click();
+    await this.page.getByRole('textbox', { name: 'Forkortelse' }).fill(concept.abbreviatedLabel);    
     await this.page.getByRole('textbox', { name: 'Pet name' }).fill('Fluffy');
     await this.page
       this.page.getByRole('textbox', { name: 'Adventure story' })
       .fill(
         'Once upon a time, in a land of misty mountains and enchanted forests, a brave explorer named Ava set out on a quest to discover the mythical Crystal of Light. Through trials and triumphs, she learned the true power of courage and friendship.',
       );
-    await this.page.getByRole('checkbox', { name: 'Has magical powers' }).check();  
-    await this.page.getByRole('group', { name: 'Planet type' }).getByRole('combobox').click();
+
+    await this.page.getByRole('group', { name: 'Has magical powers' }).getByRole('checkbox').check();  
+    await this.page.getByRole('combobox', { name: 'Planet type' }).click();
     await this.page.getByLabel('Water planet').click();
 
     // Status
