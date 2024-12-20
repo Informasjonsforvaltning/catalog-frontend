@@ -1,5 +1,5 @@
 export interface LocalizedStrings {
-  [kode: string]: string;
+  [code: string]: string | string[];
 }
 
 export type ISOLanguage = 'nb' | 'nn' | 'no' | 'en';
