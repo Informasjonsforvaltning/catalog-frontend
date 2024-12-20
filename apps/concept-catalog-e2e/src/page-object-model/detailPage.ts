@@ -1,8 +1,9 @@
 import { expect, Page, BrowserContext } from '@playwright/test';
 import type AxeBuilder from '@axe-core/playwright';
 import EditPage from './editPage';
-import { Concept, Definisjon } from '@catalog-frontend/types';
+import { Concept, Definisjon, RelationSubtypeEnum, RelationTypeEnum } from '@catalog-frontend/types';
 import { formatISO } from '@catalog-frontend/utils';
+import { ALL_RELATIONS } from '../data/relations';
 
 export default class DetailPage {
   url: string;
@@ -131,7 +132,7 @@ export default class DetailPage {
         })
         .nth(1),
     ).toBeVisible({ visible: Boolean(concept.tillattTerm?.nb) });
-    
+
     await expect(
       this.page
         .locator('div')
@@ -139,7 +140,7 @@ export default class DetailPage {
           hasText: new RegExp(`Frarådet term:${concept.frarådetTerm?.nb.join()}`),
         })
         .nth(1),
-    ).toBeVisible({ visible: Boolean(concept.frarådetTerm?.nb)});
+    ).toBeVisible({ visible: Boolean(concept.frarådetTerm?.nb) });
 
     await expect(
       this.page
@@ -148,9 +149,45 @@ export default class DetailPage {
           hasText: new RegExp(`Merknad:${concept.merknad.nb}`),
         })
         .nth(1),
-    ).toBeVisible({ visible: Boolean(concept.merknad.nb)});
-    
-    //TODO other fields...
+    ).toBeVisible({ visible: Boolean(concept.merknad.nb) });
+
+    await expect(this.page.getByText(`Forkortelse:${concept.abbreviatedLabel}`)).toBeVisible({
+      visible: Boolean(concept.abbreviatedLabel),
+    });
+
+    await expect(
+      this.page.getByRole('heading', { name: `Relaterte begreper (${ALL_RELATIONS.length})` }),
+    ).toBeVisible();
+    for (let i = 0; i < ALL_RELATIONS.length; i++) {
+      const rel = ALL_RELATIONS[i];
+      if (rel.relasjon === RelationTypeEnum.ASSOSIATIV) {
+        await expect(this.page.getByText(`Assosiativ relasjon${rel.beskrivelse.nb}${rel.name}`)).toBeVisible();
+      } else if (rel.relasjon === RelationTypeEnum.GENERISK) {
+        const subtype = rel.relasjonsType === RelationSubtypeEnum.OVERORDNET ? 'Overordnet' : 'Underordnet';
+        await expect(
+          this.page.getByText(
+            `Generisk relasjon${subtype} (Inndelingskriterium: ${rel.inndelingskriterium.nb})${rel.name}`,
+          ),
+        ).toBeVisible();
+      } else if (rel.relasjon === RelationTypeEnum.PARTITIV) {
+        const subtype = rel.relasjonsType === RelationSubtypeEnum.OMFATTER ? 'Omfatter' : 'Er del av';
+        await expect(
+          this.page.getByText(
+            `Partitiv relasjon${subtype} (Inndelingskriterium: ${rel.inndelingskriterium.nb})${rel.name}`,
+          ),
+        ).toBeVisible();
+      } else if (rel.relasjon === RelationTypeEnum.SE_OGSÅ) {
+        await expect(this.page.getByText(`Se også${rel.name}`)).toBeVisible();
+      } else if (rel.relasjon === RelationTypeEnum.ERSTATTES_AV) {
+        await expect(this.page.getByText(`Erstattes av${concept.anbefaltTerm.navn.nb}${rel.name}`)).toBeVisible();
+      }
+    }
+
+    await expect(this.page.getByText('Adventure story:Once upon a time')).toBeVisible();
+
+    await expect(this.page.getByText('Has magical powers:Ja')).toBeVisible();
+
+    await expect(this.page.getByText('Pet name:Fluffy')).toBeVisible();
   }
 
   async expectCommentsTab() {
@@ -167,7 +204,16 @@ export default class DetailPage {
     await expect(tab).toBeVisible();
     tab.click();
 
-    await expect(this.page.getByRole('button', { name: `LAMA LEDENDE ${formatISO(new Date().toISOString())}` })).toBeVisible();
+    await expect(
+      this.page.getByRole('button', {
+        name: `LAMA LEDENDE ${formatISO(new Date().toISOString(), {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })}`,
+      }),
+    ).toBeVisible();
   }
 
   async expectVersionTab({ anbefaltTerm: { navn }, versjonsnr, statusURI }: Concept) {
@@ -180,7 +226,7 @@ export default class DetailPage {
         .locator('div')
         .filter({
           hasText: new RegExp(
-            `^Versjons-ID ([a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+)v${versjonsnr.major}\.${versjonsnr.minor}\.${versjonsnr.patch}${navn.nb}${this.getStatusText(statusURI)}$`,
+            `^Versjons-ID ([a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+-[a-z0-9]+)v${versjonsnr.major}\\.${versjonsnr.minor}\\.${versjonsnr.patch}${navn.nb}${this.getStatusText(statusURI)}$`,
           ),
         })
         .nth(2),
@@ -199,31 +245,33 @@ export default class DetailPage {
     await expect(this.page.getByRole('heading', { name: 'Versjon' })).toBeVisible();
     await expect(this.page.getByText(this.getVersionText(concept))).toBeVisible();
 
-    await expect(this.page.getByRole('heading', { name: 'Gyldighetsperiode' })).toBeVisible({ visible: Boolean(concept.gyldigFom || concept.gyldigTom)});
+    await expect(this.page.getByRole('heading', { name: 'Gyldighetsperiode' })).toBeVisible({
+      visible: Boolean(concept.gyldigFom || concept.gyldigTom),
+    });
     await expect(
-      this.page
-        .getByText(
-          formatISO(new Date(concept.gyldigFom).toISOString(), {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          }) ?? '',
-        ),
-    ).toBeVisible({ visible: Boolean(concept.gyldigFom)});
+      this.page.getByText(
+        formatISO(new Date(concept.gyldigFom).toISOString(), {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }) ?? '',
+      ),
+    ).toBeVisible({ visible: Boolean(concept.gyldigFom) });
 
-    await expect(this.page.getByRole('heading', { name: 'Gyldighetsperiode' })).toBeVisible({ visible: Boolean(concept.gyldigFom || concept.gyldigTom)});
+    await expect(this.page.getByRole('heading', { name: 'Gyldighetsperiode' })).toBeVisible({
+      visible: Boolean(concept.gyldigFom || concept.gyldigTom),
+    });
     await expect(
-      this.page
-        .getByText(
-          formatISO(new Date(concept.gyldigTom).toISOString(), {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          }) ?? '',
-        ),
-    ).toBeVisible({ visible: Boolean(concept.gyldigTom)});
+      this.page.getByText(
+        formatISO(new Date(concept.gyldigTom).toISOString(), {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }) ?? '',
+      ),
+    ).toBeVisible({ visible: Boolean(concept.gyldigTom) });
 
     await expect(this.page.getByRole('heading', { name: 'Dato sist oppdatert' })).toBeVisible();
     await expect(
