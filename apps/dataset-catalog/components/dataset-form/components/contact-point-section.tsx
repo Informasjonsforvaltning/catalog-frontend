@@ -27,7 +27,7 @@ export const ContactPointSection = () => {
     setSelectedFields(value);
     contactPointOptions.forEach((option) => {
       if (!value.includes(option.value)) {
-        setFieldValue(`contactPoint.${option.value}`, null);
+        setFieldValue(`contactPoint[0].${option.value}`, '');
       }
     });
   };
@@ -38,6 +38,8 @@ export const ContactPointSection = () => {
         className={styles.field}
         size='sm'
         value={selectedFields}
+        // @ts-expect-error: the error exists
+        error={Array.isArray(errors?.contactPoint) && errors.contactPoint.length > 0 ? undefined : errors?.contactPoint}
         legend={
           <TitleWithTag
             title={
