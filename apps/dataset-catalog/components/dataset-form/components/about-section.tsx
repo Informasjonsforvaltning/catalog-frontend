@@ -8,7 +8,7 @@ import {
 } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Textfield, Label } from '@digdir/designsystemet-react';
-import { Field, useFormikContext } from 'formik';
+import { FastField, useFormikContext } from 'formik';
 import { FieldsetDivider } from '@catalog-frontend/ui';
 import { AccessRightFields } from './access-rights.tsx/dataset-form-access-rights-section';
 
@@ -63,7 +63,7 @@ export const AboutSection = () => {
 
       <FieldsetDivider />
 
-      <Field
+      <FastField
         as={Textfield}
         size='sm'
         type='date'

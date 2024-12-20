@@ -7,7 +7,8 @@ export interface Dataset extends DatasetToBeCreated {
   catalogId: string;
   _lastModified: string;
 }
-export interface DatasetToBeCreated {
+
+export type DatasetToBeCreated = {
   title: LocalizedStrings;
   description: LocalizedStrings;
   registrationStatus: PublicationStatus;
@@ -50,36 +51,36 @@ export interface DatasetToBeCreated {
   conceptList?: string[];
   spatialList?: string[];
   languageList?: string[];
-}
+};
 
-export interface UriWithLabel {
+export type UriWithLabel = {
   uri?: string;
   prefLabel?: LocalizedStrings;
-}
+};
 
-interface DateRange {
+type DateRange = {
   startDate?: string;
   endDate?: string;
-}
+};
 
-interface Sample {
+export type Sample = {
   downloadURL?: string[];
   accessURL?: string[];
   format?: string[];
   mediaType?: string[];
   description?: LocalizedStrings;
-}
-export interface Reference {
+};
+export type Reference = {
   referenceType: { code: string };
   source: { uri: string };
-}
+};
 
-export interface DatasetSeries {
+export type DatasetSeries = {
   title: string;
   uri: string;
   id: string;
-}
-export interface Distribution {
+};
+export type Distribution = {
   title?: LocalizedStrings;
   description?: LocalizedStrings;
   downloadURL?: string[];
@@ -92,10 +93,10 @@ export interface Distribution {
   accessService?: [{ uri: string }];
   // Arrays of uris used as helper values for Formik. These properties is not part of the db object.
   accessServiceList?: string[];
-}
-interface DatasetContactPoint {
+};
+type DatasetContactPoint = {
   email?: string;
   hasTelephone?: string;
   hasURL?: string;
   organizationUnit?: string;
-}
+};

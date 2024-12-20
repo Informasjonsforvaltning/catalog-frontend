@@ -2,7 +2,7 @@ import { UriWithLabel } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, EditButton, FieldsetDivider, FormikLanguageFieldset } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button, Label, Modal, Table, Textfield } from '@digdir/designsystemet-react';
-import { Field, Formik, useFormikContext } from 'formik';
+import { FastField, Formik, useFormikContext } from 'formik';
 import styles from '../dataset-form.module.css';
 import { useRef, useState } from 'react';
 import _ from 'lodash';
@@ -127,7 +127,7 @@ const FieldModal = ({ fieldName, template, type, onSuccess }: ModalProps) => {
                     legend={localization.title}
                   />
                   <FieldsetDivider />
-                  <Field
+                  <FastField
                     name='uri'
                     as={Textfield}
                     label={localization.link}

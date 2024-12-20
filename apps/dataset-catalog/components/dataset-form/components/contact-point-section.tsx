@@ -2,8 +2,8 @@
 import { Dataset } from '@catalog-frontend/types';
 import { HelpMarkdown, TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Textfield, Box, Checkbox, CheckboxGroup } from '@digdir/designsystemet-react';
-import { Field, useFormikContext } from 'formik';
+import { Textfield, Checkbox, CheckboxGroup } from '@digdir/designsystemet-react';
+import { FastField, useFormikContext } from 'formik';
 import styles from '../dataset-form.module.css';
 import { useState } from 'react';
 
@@ -65,7 +65,7 @@ export const ContactPointSection = () => {
 
       <div className={styles.fieldContainer}>
         {selectedFields.includes('email') && (
-          <Field
+          <FastField
             as={Textfield}
             name='contactPoint[0].email'
             size='sm'
@@ -77,7 +77,7 @@ export const ContactPointSection = () => {
         )}
 
         {selectedFields.includes('hasTelephone') && (
-          <Field
+          <FastField
             as={Textfield}
             name='contactPoint[0].hasTelephone'
             size='sm'
@@ -88,7 +88,7 @@ export const ContactPointSection = () => {
           />
         )}
         {selectedFields.includes('organizationUnit') && (
-          <Field
+          <FastField
             as={Textfield}
             name='contactPoint[0].organizationUnit'
             size='sm'
@@ -97,7 +97,7 @@ export const ContactPointSection = () => {
           />
         )}
         {selectedFields.includes('hasURL') && (
-          <Field
+          <FastField
             as={Textfield}
             name='contactPoint[0].hasURL'
             size='sm'
