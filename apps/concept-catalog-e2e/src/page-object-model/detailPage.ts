@@ -167,7 +167,7 @@ export default class DetailPage {
     await expect(tab).toBeVisible();
     tab.click();
 
-    await expect(this.page.getByRole('button', { name: 'LAMA LEDENDE torsdag 19.' })).toBeVisible();
+    await expect(this.page.getByRole('button', { name: `LAMA LEDENDE ${formatISO(new Date().toISOString())}` })).toBeVisible();
   }
 
   async expectVersionTab({ anbefaltTerm: { navn }, versjonsnr, statusURI }: Concept) {
