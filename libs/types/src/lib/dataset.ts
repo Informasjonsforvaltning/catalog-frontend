@@ -58,7 +58,7 @@ export type UriWithLabel = {
   prefLabel?: LocalizedStrings;
 };
 
-type DateRange = {
+export type DateRange = {
   startDate?: string;
   endDate?: string;
 };

@@ -22,7 +22,7 @@ export const ConceptSection = ({ searchEnv }: Props) => {
   const { data: selectedConcepts } = useSearchConceptsByUri(searchEnv, values.conceptList ?? []);
 
   const comboboxOptions = [
-    // Combine selectedValues, searchHits, and values (mapped with uri-only fallback)
+    // Safely handle the default values
     ...new Map(
       [
         ...(selectedConcepts ?? []),
