@@ -1,9 +1,8 @@
 'use client';
 
-import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
+import { Distribution, ReferenceDataCode } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Paragraph, Label, Tag, Divider, Table, TableBody } from '@digdir/designsystemet-react';
-import { useFormikContext } from 'formik';
+import { Paragraph, Label, Tag, Table, TableBody } from '@digdir/designsystemet-react';
 import styles from './distributions.module.css';
 import { useSearchDataServiceByUri } from '../../../../hooks/useSearchService';
 import { useSearchMediaTypeByUri } from '../../../../hooks/useReferenceDataSearch';
@@ -11,25 +10,16 @@ import _ from 'lodash';
 import { FieldsetDivider } from '@catalog-frontend/ui';
 
 interface Props {
-  index: number;
   searchEnv: string;
   referenceDataEnv: string;
   openLicenses: ReferenceDataCode[];
+  distribution: Distribution;
 }
 
-export const DistributionDetails = ({ index, searchEnv, referenceDataEnv, openLicenses }: Props) => {
-  const { values } = useFormikContext<Dataset>();
-  const distribution = values?.distribution?.[index];
+export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv, openLicenses }: Props) => {
+  const { data: selectedDataServices } = useSearchDataServiceByUri(searchEnv, distribution?.accessServiceList ?? []);
 
-  const { data: selectedDataServices, isLoading: isLoadingSelectedDataServices } = useSearchDataServiceByUri(
-    searchEnv,
-    distribution?.accessServiceList ?? [],
-  );
-
-  const { data: selectedMediaTypes, isLoading: loadingSelectedMediaTypes } = useSearchMediaTypeByUri(
-    distribution?.mediaType ?? [],
-    referenceDataEnv,
-  );
+  const { data: selectedMediaTypes } = useSearchMediaTypeByUri(distribution?.mediaType ?? [], referenceDataEnv);
 
   const hasConformsToValues = _.some(distribution?.conformsTo, (item) => {
     return _.trim(item.uri) || _.trim(_.get(item, 'prefLabel.nb'));
@@ -58,8 +48,8 @@ export const DistributionDetails = ({ index, searchEnv, referenceDataEnv, openLi
             <div className={styles.field}>
               <Label size='sm'>{`${localization.datasetForm.fieldLabel.mediaTypes}:`}</Label>
               <ul className={styles.list}>
-                {distribution?.mediaType?.map((uri) => (
-                  <li key={uri}>
+                {distribution?.mediaType?.map((uri, index) => (
+                  <li key={`mediatype-${uri}-${index}`}>
                     <Tag
                       size='sm'
                       color='third'
@@ -77,8 +67,8 @@ export const DistributionDetails = ({ index, searchEnv, referenceDataEnv, openLi
               <Label size='sm'>{`${localization.datasetForm.fieldLabel.accessService}:`}</Label>
 
               <ul className={styles.list}>
-                {distribution.accessServiceList?.map((uri) => (
-                  <li key={uri}>
+                {distribution.accessServiceList?.map((uri, i) => (
+                  <li key={`service-${uri}-${i}`}>
                     <Tag
                       key={uri}
                       color='third'
@@ -116,7 +106,7 @@ export const DistributionDetails = ({ index, searchEnv, referenceDataEnv, openLi
                 </Table.Head>
                 <TableBody>
                   {distribution.conformsTo.map((conform, index) => (
-                    <Table.Row key={index}>
+                    <Table.Row key={`conformsTo-${index}-${conform.uri}`}>
                       <Table.Cell>{getTranslateText(conform.prefLabel)}</Table.Cell>
                       <Table.Cell>{conform.uri}</Table.Cell>
                     </Table.Row>

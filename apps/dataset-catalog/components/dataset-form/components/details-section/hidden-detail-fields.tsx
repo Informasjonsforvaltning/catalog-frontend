@@ -3,7 +3,7 @@
 import { AddButton, FormikLanguageFieldset, TextareaWithPrefix } from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
 import { Combobox, Textfield } from '@digdir/designsystemet-react';
-import { Field, FieldArray, useFormikContext } from 'formik';
+import { FastField, FieldArray, useFormikContext } from 'formik';
 import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
 import styles from './details.module.css';
 import { QualifiedAttributionsSection } from '../qualified-attributions-section';
@@ -74,7 +74,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
                     className={styles.padding}
                   >
                     <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
-                      <Field
+                      <FastField
                         name={`landingPage[${index}]`}
                         label={localization.datasetForm.heading.landingPage}
                         as={Textfield}
@@ -98,7 +98,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         hasDeleteButton
         fieldValues={values?.type}
       >
-        <Field
+        <FastField
           as={Combobox}
           size='sm'
           value={[values.type]}
@@ -109,7 +109,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         >
           <Combobox.Option value={''}>{`${localization.choose}...`}</Combobox.Option>
           {datasetTypeOptions}
-        </Field>
+        </FastField>
       </ToggleFieldButton>
 
       <ToggleFieldButton
@@ -152,7 +152,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         fieldValues={values?.modified}
         hasDeleteButton
       >
-        <Field
+        <FastField
           as={Textfield}
           name='modified'
           type='date'

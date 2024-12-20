@@ -11,7 +11,10 @@ const DeleteButton = ({ children = localization.button.delete, ...props }: Butto
     {...props}
   >
     <span className={styles.withIcon}>
-      <TrashIcon fontSize={'1.3rem'} />
+      <TrashIcon
+        title={localization.icon.trash}
+        fontSize={'1.2rem'}
+      />
       {children}
     </span>
   </Button>
