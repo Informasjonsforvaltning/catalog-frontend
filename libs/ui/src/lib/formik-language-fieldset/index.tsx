@@ -43,7 +43,10 @@ export const FormikLanguageFieldset = ({
   const visibleLanguageButtons = allowedLanguages.filter((lang) => !visibleLanguageFields.includes(lang));
 
   return (
-    <Fieldset legend={legend} size='sm'>
+    <Fieldset
+      legend={legend}
+      size='sm'
+    >
       {visibleLanguageFields.map((lang) => (
         <div
           key={lang}
@@ -54,11 +57,10 @@ export const FormikLanguageFieldset = ({
             name={`${name}.${lang}`}
             size='sm'
             aria-label={localization.language[lang]}
-            
             error={errors?.[name]?.[lang]}
             {...(renderAs === TextareaWithPrefix
               ? {
-                  cols: 80,
+                  cols: 105,
                   prefix: (
                     <>
                       <Paragraph

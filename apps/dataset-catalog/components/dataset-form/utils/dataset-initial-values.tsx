@@ -32,7 +32,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     accrualPeriodicity: dataset?.accrualPeriodicity?.uri ? { uri: dataset?.accrualPeriodicity?.uri } : undefined,
     modified: dataset?.modified,
     hasCurrentnessAnnotation: { hasBody: dataset.hasCurrentnessAnnotation?.hasBody },
-    conformsTo: dataset?.conformsTo ?? [{ prefLabel: { nb: '' }, uri: '' }],
+    conformsTo: dataset?.conformsTo,
     hasRelevanceAnnotation: { hasBody: dataset?.hasRelevanceAnnotation?.hasBody },
     hasCompletenessAnnotation: { hasBody: dataset.hasCompletenessAnnotation?.hasBody },
     hasAccuracyAnnotation: { hasBody: dataset?.hasAccuracyAnnotation?.hasBody },
@@ -42,27 +42,17 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     issued: dataset.issued ?? '',
     languageList: dataset.language ? dataset.language.map((lang) => lang.uri) : [],
     informationModelsFromFDK: dataset.informationModelsFromFDK ?? [],
-    informationModel: dataset.informationModel ?? [{ prefLabel: { nb: '' }, uri: '' }],
+    informationModel: dataset?.informationModel,
     qualifiedAttributions: dataset?.qualifiedAttributions,
-    sample: dataset.sample ?? [
-      {
-        description: {
-          nb: '',
-        },
-        downloadURL: [],
-        accessURL: [],
-        format: [],
-        mediaType: [],
-      },
-    ],
+    sample: dataset?.sample,
     references: dataset?.references,
-    relations: dataset.relations ?? [{ uri: '', prefLabel: { nb: '' } }],
+    relations: dataset?.relations,
     inSeries: dataset.inSeries ?? '',
     distribution: dataset.distribution?.map((dist) => ({
       ...dist,
       accessServiceList: dist.accessService?.map((service) => service.uri) || [],
     })),
-    contactPoint: dataset.contactPoint ?? {},
+    contactPoint: dataset.contactPoint ?? [],
   };
 };
 
@@ -93,7 +83,7 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     accrualPeriodicity: undefined,
     modified: undefined,
     hasCurrentnessAnnotation: undefined,
-    conformsTo: [{ prefLabel: { nb: '' }, uri: '' }],
+    conformsTo: undefined,
     hasRelevanceAnnotation: undefined,
     hasCompletenessAnnotation: undefined,
     hasAccuracyAnnotation: undefined,
@@ -103,24 +93,21 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     issued: '',
     languageList: [],
     informationModelsFromFDK: [],
-    informationModel: [{ prefLabel: { nb: '' }, uri: '' }],
+    informationModel: undefined,
     qualifiedAttributions: undefined,
-    sample: [
+    sample: undefined,
+    references: undefined,
+    relations: undefined,
+    inSeries: '',
+    distribution: undefined,
+    contactPoint: [
       {
-        description: {
-          nb: '',
-        },
-        downloadURL: [],
-        accessURL: [],
-        format: [],
-        mediaType: [],
+        email: '',
+        hasTelephone: '',
+        hasURL: '',
+        organizationUnit: '',
       },
     ],
-    references: undefined,
-    relations: [{ uri: '', prefLabel: { nb: '' } }],
-    inSeries: '',
-    distribution: [],
-    contactPoint: [],
   };
 };
 

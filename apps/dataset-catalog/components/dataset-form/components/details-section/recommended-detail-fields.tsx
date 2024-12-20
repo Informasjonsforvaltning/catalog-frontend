@@ -1,5 +1,5 @@
 'use client';
-import { AddButton, FormikSearchCombobox, TitleWithTag } from '@catalog-frontend/ui';
+import { FieldsetDivider, FormikSearchCombobox, LabelWithHelpTextAndTag, TitleWithTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Checkbox, Label, Textfield } from '@digdir/designsystemet-react';
 import { useCallback, useState } from 'react';
@@ -7,10 +7,12 @@ import {
   useSearchAdministrativeUnits,
   useSearchAdministrativeUnitsByUri,
 } from '../../../../hooks/useReferenceDataSearch';
-import { Field, FieldArray, useFormikContext } from 'formik';
+import { FastField, FieldArray, useFormikContext } from 'formik';
 import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
 import { debounce, sortBy } from 'lodash';
 import FieldsetWithDelete from '../../../fieldset-with-delete';
+import styles from '../../dataset-form.module.css';
+import { TemporalModal } from './temporal-modal';
 
 interface Props {
   referenceDataEnv: string;
@@ -80,7 +82,8 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
             </Checkbox>
           ))}
       </Checkbox.Group>
-      <div>
+      <FieldsetDivider />
+      <div className={styles.fieldContainer}>
         <TitleWithTag
           title={localization.datasetForm.heading.spatial}
           tagColor='info'
@@ -97,51 +100,19 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
           loading={isSearching}
         />
       </div>
-      <FieldArray
-        name='temporal'
-        render={({ remove, push }) => (
-          <div>
-            <Label> {localization.datasetForm.heading.temporal}</Label>
-            {values.temporal &&
-              values.temporal.map((_, index) => (
-                <FieldsetWithDelete
-                  onDelete={() => remove(index)}
-                  key={`fieldset-${index}`}
-                >
-                  <Field
-                    as={Textfield}
-                    size='sm'
-                    label={
-                      <TitleWithTag
-                        title={localization.from}
-                        tagColor='info'
-                        tagTitle={localization.tag.recommended}
-                      />
-                    }
-                    type='date'
-                    name={`temporal.${index}.startDate`}
-                  />
-                  <Field
-                    as={Textfield}
-                    size='sm'
-                    label={
-                      <TitleWithTag
-                        title={localization.to}
-                        tagColor='info'
-                        tagTitle={localization.tag.recommended}
-                      />
-                    }
-                    type='date'
-                    name={`temporal.${index}.endDate`}
-                  />
-                </FieldsetWithDelete>
-              ))}
-
-            <AddButton onClick={() => push({ startDate: '', endDate: '' })}>
-              {localization.datasetForm.button.addDate}
-            </AddButton>
-          </div>
-        )}
+      <FieldsetDivider />
+      <TemporalModal
+        values={values.temporal}
+        label={
+          <LabelWithHelpTextAndTag
+            tagTitle={localization.tag.recommended}
+            tagColor='info'
+            helpText='tt'
+            helpTitle='hello'
+          >
+            {localization.datasetForm.heading.temporal}
+          </LabelWithHelpTextAndTag>
+        }
       />
     </>
   );

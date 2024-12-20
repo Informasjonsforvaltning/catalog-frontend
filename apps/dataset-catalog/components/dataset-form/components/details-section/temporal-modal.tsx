@@ -1,37 +1,34 @@
-import { UriWithLabel } from '@catalog-frontend/types';
-import { AddButton, DeleteButton, EditButton, FieldsetDivider, FormikLanguageFieldset } from '@catalog-frontend/ui';
-import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
+import { DateRange, UriWithLabel } from '@catalog-frontend/types';
+import { AddButton, DeleteButton, EditButton } from '@catalog-frontend/ui';
+import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button, Label, Modal, Table, Textfield } from '@digdir/designsystemet-react';
 import { FastField, Formik, useFormikContext } from 'formik';
-import styles from '../dataset-form.module.css';
-import { useRef, useState } from 'react';
+import styles from '../../dataset-form.module.css';
+import { ReactNode, useRef, useState } from 'react';
 import _ from 'lodash';
-import { uriWithLabelSchema } from '../utils/validation-schema';
 
 interface Props {
-  values: UriWithLabel[] | undefined;
-  fieldName: string;
-  label?: string;
+  values: DateRange[] | undefined;
+  label?: string | ReactNode;
 }
 
 interface ModalProps {
-  fieldName: string;
   type: 'new' | 'edit';
-  onSuccess: (values: UriWithLabel) => void;
-  template: UriWithLabel;
+  onSuccess: (values: DateRange) => void;
+  template: DateRange;
 }
 
-const hasNoFieldValues = (values: UriWithLabel) => {
+const hasNoFieldValues = (values: DateRange) => {
   if (!values) return true;
-  return _.isEmpty(_.trim(values.uri)) && _.isEmpty(_.pickBy(values.prefLabel, _.identity));
+  return _.isEmpty(values.startDate) && _.isEmpty(values.endDate);
 };
 
-export const UriWithLabelFieldsetTable = ({ fieldName, values, label }: Props) => {
+export const TemporalModal = ({ values, label }: Props) => {
   const { setFieldValue } = useFormikContext();
 
   return (
     <div className={styles.fieldContainer}>
-      <Label size='sm'>{label}</Label>
+      {typeof label === 'string' ? <Label size='sm'>{label}</Label> : label}
       {values && values?.length > 0 && !hasNoFieldValues(values[0]) && (
         <Table
           size='sm'
@@ -39,25 +36,24 @@ export const UriWithLabelFieldsetTable = ({ fieldName, values, label }: Props) =
         >
           <Table.Head>
             <Table.Row>
-              <Table.HeaderCell>{localization.title}</Table.HeaderCell>
-              <Table.HeaderCell>{localization.link}</Table.HeaderCell>
+              <Table.HeaderCell>{localization.from}</Table.HeaderCell>
+              <Table.HeaderCell>{localization.to}</Table.HeaderCell>
               <Table.HeaderCell />
             </Table.Row>
           </Table.Head>
           <Table.Body>
             {values?.map((item, index) => (
-              <Table.Row key={`${fieldName}-tableRow-${index}`}>
-                <Table.Cell>{getTranslateText(item?.prefLabel)}</Table.Cell>
-                <Table.Cell>{item?.uri}</Table.Cell>
+              <Table.Row key={`temporal-tableRow-${index}`}>
+                <Table.Cell>{item?.startDate}</Table.Cell>
+                <Table.Cell>{item?.endDate}</Table.Cell>
                 <Table.Cell>
                   <span className={styles.set}>
                     <FieldModal
-                      fieldName={fieldName}
                       template={item}
                       type={'edit'}
-                      onSuccess={(updatedItem: UriWithLabel) => setFieldValue(`${fieldName}[${index}]`, updatedItem)}
+                      onSuccess={(updatedItem: DateRange) => setFieldValue(`temporal[${index}]`, updatedItem)}
                     />
-                    <DeleteButton onClick={() => setFieldValue(`${fieldName}[${index}]`, undefined)} />
+                    <DeleteButton onClick={() => setFieldValue(`temporal[${index}]`, undefined)} />
                   </span>
                 </Table.Cell>
               </Table.Row>
@@ -67,14 +63,13 @@ export const UriWithLabelFieldsetTable = ({ fieldName, values, label }: Props) =
       )}
       <div>
         <FieldModal
-          fieldName={fieldName}
-          template={{ prefLabel: { nb: '' }, uri: '' }}
+          template={{ startDate: '', endDate: '' }}
           type={'new'}
           onSuccess={(formValues) =>
             setFieldValue(
               values && values?.length > 0 && !hasNoFieldValues(values[0])
-                ? `${fieldName}[${values?.length}]`
-                : `${fieldName}[0]`,
+                ? `temporal[${values?.length}]`
+                : `temporal[0]`,
               formValues,
             )
           }
@@ -84,7 +79,7 @@ export const UriWithLabelFieldsetTable = ({ fieldName, values, label }: Props) =
   );
 };
 
-const FieldModal = ({ fieldName, template, type, onSuccess }: ModalProps) => {
+const FieldModal = ({ template, type, onSuccess }: ModalProps) => {
   const [submitted, setSubmitted] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -92,18 +87,14 @@ const FieldModal = ({ fieldName, template, type, onSuccess }: ModalProps) => {
     <>
       <Modal.Root>
         <Modal.Trigger asChild>
-          {type === 'edit' ? (
-            <EditButton />
-          ) : (
-            <AddButton>{`${localization.add} ${localization.datasetForm.fieldLabel?.[fieldName]?.toLowerCase()}`}</AddButton>
-          )}
+          {type === 'edit' ? <EditButton /> : <AddButton>{localization.datasetForm.button.addDate}</AddButton>}
         </Modal.Trigger>
         <Modal.Dialog ref={modalRef}>
           <Formik
             initialValues={template}
             validateOnChange={submitted}
             validateOnBlur={submitted}
-            validationSchema={uriWithLabelSchema}
+            //validationSchema={uriWithLabelSchema}
             onSubmit={(formValues, { setSubmitting }) => {
               const trimmedValues = trimObjectWhitespace(formValues);
               onSuccess(trimmedValues);
@@ -115,24 +106,24 @@ const FieldModal = ({ fieldName, template, type, onSuccess }: ModalProps) => {
             {({ errors, isSubmitting, submitForm, values, dirty }) => (
               <>
                 <Modal.Header closeButton={false}>
-                  {type === 'edit'
-                    ? `${localization.edit} ${getTranslateText(localization.datasetForm.fieldLabel[fieldName])?.toString().toLowerCase()}`
-                    : `${localization.add} ${getTranslateText(localization.datasetForm.fieldLabel[fieldName])?.toString().toLowerCase()}`}
+                  {type === 'edit' ? `${localization.edit} ` : `${localization.add} `}
                 </Modal.Header>
 
                 <Modal.Content>
-                  <FormikLanguageFieldset
-                    as={Textfield}
-                    name='prefLabel'
-                    legend={localization.title}
-                  />
-                  <FieldsetDivider />
                   <FastField
-                    name='uri'
                     as={Textfield}
-                    label={localization.link}
-                    error={errors?.uri}
                     size='sm'
+                    label={localization.from}
+                    type='date'
+                    name={`startDate`}
+                  />
+
+                  <FastField
+                    as={Textfield}
+                    size='sm'
+                    label={localization.to}
+                    type='date'
+                    name={`endDate`}
                   />
                 </Modal.Content>
 

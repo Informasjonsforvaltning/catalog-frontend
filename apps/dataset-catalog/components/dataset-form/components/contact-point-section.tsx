@@ -2,8 +2,8 @@
 import { Dataset } from '@catalog-frontend/types';
 import { HelpMarkdown, TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Textfield, Box, Checkbox, CheckboxGroup } from '@digdir/designsystemet-react';
-import { Field, useFormikContext } from 'formik';
+import { Textfield, Checkbox, CheckboxGroup } from '@digdir/designsystemet-react';
+import { FastField, useFormikContext } from 'formik';
 import styles from '../dataset-form.module.css';
 import { useState } from 'react';
 
@@ -27,17 +27,19 @@ export const ContactPointSection = () => {
     setSelectedFields(value);
     contactPointOptions.forEach((option) => {
       if (!value.includes(option.value)) {
-        setFieldValue(`contactPoint.${option.value}`, null);
+        setFieldValue(`contactPoint[0].${option.value}`, '');
       }
     });
   };
 
   return (
-    <Box>
+    <>
       <CheckboxGroup
         className={styles.field}
         size='sm'
         value={selectedFields}
+        // @ts-expect-error: the error exists
+        error={Array.isArray(errors?.contactPoint) && errors.contactPoint.length > 0 ? undefined : errors?.contactPoint}
         legend={
           <TitleWithTag
             title={
@@ -63,49 +65,51 @@ export const ContactPointSection = () => {
         ))}
       </CheckboxGroup>
 
-      {selectedFields.includes('email') && (
-        <Field
-          as={Textfield}
-          name='contactPoint[0].email'
-          size='sm'
-          label={localization.email}
-          className={styles.field}
-          // @ts-expect-error: email exists on the object
-          error={errors?.contactPoint?.[0]?.email}
-        />
-      )}
+      <div className={styles.fieldContainer}>
+        {selectedFields.includes('email') && (
+          <FastField
+            as={Textfield}
+            name='contactPoint[0].email'
+            size='sm'
+            label={localization.email}
+            className={styles.field}
+            // @ts-expect-error: email exists on the object
+            error={errors?.contactPoint?.[0]?.email}
+          />
+        )}
 
-      {selectedFields.includes('hasTelephone') && (
-        <Field
-          as={Textfield}
-          name='contactPoint[0].hasTelephone'
-          size='sm'
-          label={localization.telephone}
-          className={styles.field}
-          // @ts-expect-error: hasTelephone exists on the object
-          error={errors?.contactPoint?.[0]?.hasTelephone}
-        />
-      )}
-      {selectedFields.includes('organizationUnit') && (
-        <Field
-          as={Textfield}
-          name='contactPoint[0].organizationUnit'
-          size='sm'
-          label={localization.contactPoint.organizationUnit}
-          className={styles.field}
-        />
-      )}
-      {selectedFields.includes('hasURL') && (
-        <Field
-          as={Textfield}
-          name='contactPoint[0].hasURL'
-          size='sm'
-          label={localization.contactPoint.form}
-          className={styles.field}
-          // @ts-expect-error: hasURL exists on the object
-          error={errors?.contactPoint?.[0]?.hasURL}
-        />
-      )}
-    </Box>
+        {selectedFields.includes('hasTelephone') && (
+          <FastField
+            as={Textfield}
+            name='contactPoint[0].hasTelephone'
+            size='sm'
+            label={localization.telephone}
+            className={styles.field}
+            // @ts-expect-error: hasTelephone exists on the object
+            error={errors?.contactPoint?.[0]?.hasTelephone}
+          />
+        )}
+        {selectedFields.includes('organizationUnit') && (
+          <FastField
+            as={Textfield}
+            name='contactPoint[0].organizationUnit'
+            size='sm'
+            label={localization.contactPoint.organizationUnit}
+            className={styles.field}
+          />
+        )}
+        {selectedFields.includes('hasURL') && (
+          <FastField
+            as={Textfield}
+            name='contactPoint[0].hasURL'
+            size='sm'
+            label={localization.contactPoint.form}
+            className={styles.field}
+            // @ts-expect-error: hasURL exists on the object
+            error={errors?.contactPoint?.[0]?.hasURL}
+          />
+        )}
+      </div>
+    </>
   );
 };

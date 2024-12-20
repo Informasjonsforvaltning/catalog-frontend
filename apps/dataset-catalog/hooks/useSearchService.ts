@@ -18,8 +18,9 @@ export const useSearchConceptSuggestions = (searchEnv: string, searchQuery?: str
   return useQuery({
     queryKey: ['searchConceptSuggestions', searchQuery],
     queryFn: async () => {
-      const data = await searchSuggestions(searchEnv, searchQuery, 'concepts');
-      return data.json();
+      const res = await searchSuggestions(searchEnv, searchQuery, 'concepts');
+      const data = await res.json();
+      return data?.suggestions;
     },
     enabled: !!searchQuery && !!searchEnv,
   });

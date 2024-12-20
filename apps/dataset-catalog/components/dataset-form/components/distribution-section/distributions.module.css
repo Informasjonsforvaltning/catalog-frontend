@@ -58,3 +58,15 @@
   max-width: 1000px;
   overflow: hidden;
 }
+
+.distributionContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.exampleHeading {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}

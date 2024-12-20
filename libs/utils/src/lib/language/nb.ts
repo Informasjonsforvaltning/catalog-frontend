@@ -435,7 +435,7 @@ export const nb = {
     invalidEmail: 'Ugyldig epostadresse',
     invalidUrl: `Ugyldig lenke. Vennligst sørg for at lenken har en gyldig adresse, og ender med et toppdomene (f.eks. ‘.no’).`,
     invalidProtocol: `Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’.`,
-    invalidTlf: 'Ugyldig telefonnummer',
+    invalidPhone: 'Ugyldig telefonnummer.',
     nameRequired: 'Må ha navn',
     accessURLRequired: 'Tilgangslenke må fylles ut.',
   },

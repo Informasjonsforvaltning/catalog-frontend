@@ -3,10 +3,10 @@
 import { AddButton, FormikLanguageFieldset, TextareaWithPrefix } from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
 import { Combobox, Textfield } from '@digdir/designsystemet-react';
-import { Field, FieldArray, useFormikContext } from 'formik';
+import { FastField, FieldArray, useFormikContext } from 'formik';
 import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
 import styles from './details.module.css';
-import { QualifiedAttributionsSection } from '../dataset-form-qualified-attributions-section';
+import { QualifiedAttributionsSection } from '../qualified-attributions-section';
 import FieldsetWithDelete from '../../../fieldset-with-delete';
 import { ToggleFieldButton } from '../toggle-field-button';
 import { UriWithLabelFieldsetTable } from '../uri-with-label-field-set-table';
@@ -62,7 +62,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
   );
 
   return (
-    <>
+    <div>
       <div>
         <FieldArray name='landingPage'>
           {(arrayHelpers) => (
@@ -74,7 +74,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
                     className={styles.padding}
                   >
                     <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
-                      <Field
+                      <FastField
                         name={`landingPage[${index}]`}
                         label={localization.datasetForm.heading.landingPage}
                         as={Textfield}
@@ -98,7 +98,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         hasDeleteButton
         fieldValues={values?.type}
       >
-        <Field
+        <FastField
           as={Combobox}
           size='sm'
           value={[values.type]}
@@ -109,7 +109,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         >
           <Combobox.Option value={''}>{`${localization.choose}...`}</Combobox.Option>
           {datasetTypeOptions}
-        </Field>
+        </FastField>
       </ToggleFieldButton>
 
       <ToggleFieldButton
@@ -152,7 +152,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         fieldValues={values?.modified}
         hasDeleteButton
       >
-        <Field
+        <FastField
           as={Textfield}
           name='modified'
           type='date'
@@ -164,6 +164,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       <ToggleFieldButton
         fieldName='hasCurrentnessAnnotation.hasBody'
         fieldValues={values?.hasCurrentnessAnnotation?.hasBody}
+        addValue={{ nb: '' }}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
@@ -172,20 +173,15 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         />
       </ToggleFieldButton>
 
-      <ToggleFieldButton
+      <UriWithLabelFieldsetTable
+        values={values.conformsTo}
         fieldName={'conformsTo'}
-        fieldValues={values?.conformsTo}
-      >
-        <UriWithLabelFieldsetTable
-          values={values.conformsTo}
-          fieldName={'conformsTo'}
-          showLabel={false}
-        />
-      </ToggleFieldButton>
+      />
 
       <ToggleFieldButton
         fieldName='hasRelevanceAnnotation.hasBody'
         fieldValues={values?.hasRelevanceAnnotation?.hasBody}
+        addValue={{ nb: '' }}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
@@ -197,6 +193,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       <ToggleFieldButton
         fieldName='hasCompletenessAnnotation.hasBody'
         fieldValues={values?.hasCompletenessAnnotation?.hasBody}
+        addValue={{ nb: '' }}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
@@ -208,6 +205,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       <ToggleFieldButton
         fieldName='hasAccuracyAnnotation.hasBody'
         fieldValues={values?.hasAccuracyAnnotation?.hasBody}
+        addValue={{ nb: '' }}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
@@ -219,6 +217,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       <ToggleFieldButton
         fieldName='hasAvailabilityAnnotation.hasBody'
         fieldValues={values?.hasAvailabilityAnnotation?.hasBody}
+        addValue={{ nb: '' }}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
@@ -235,6 +234,6 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       >
         <QualifiedAttributionsSection />
       </ToggleFieldButton>
-    </>
+    </div>
   );
 };

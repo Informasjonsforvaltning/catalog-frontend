@@ -14,14 +14,14 @@ import { useParams } from 'next/navigation';
 import { createDataset, updateDataset } from '../../app/actions/actions';
 import { datasetTemplate } from './utils/dataset-initial-values';
 import { useState } from 'react';
-import { datasetValidationSchema } from './utils/validation-schema';
+import { confirmedDatasetSchema, draftDatasetSchema } from './utils/validation-schema';
 import { AboutSection } from './components/about-section';
-import ThemeSection from './components/dataset-form-theme-section';
-import { ConceptSection } from './components/dataset-form-concept-section';
-import { InformationModelSection } from './components/dataset-form-information-model-section';
+import ThemeSection from './components/theme-section';
+import { ConceptSection } from './components/concept-section';
+import { InformationModelSection } from './components/information-model-section';
 import { RelationsSection } from './components/relations-section/relations-section';
 import { DistributionSection } from './components/distribution-section/dataset-form-distribution-section';
-import { ContactPointSection } from './components/dataset-form-contact-point-section';
+import { ContactPointSection } from './components/contact-point-section';
 import styles from './dataset-form.module.css';
 import { useRouter } from 'next/navigation';
 import { DetailsSection } from './components/details-section/details-section';
@@ -40,9 +40,9 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
   const [isDirty, setIsDirty] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
-  const { losThemes, dataThemes, provenanceStatements, datasetTypes, frequencies, languages, openLicenses } =
-    referenceData;
+  const { losThemes, dataThemes, openLicenses } = referenceData;
   const router = useRouter();
+  const [formStatus, setFormStatus] = useState(initialValues?.registrationStatus);
 
   useWarnIfUnsavedChanges({ unsavedChanges: isDirty });
 
@@ -60,6 +60,16 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
     } else {
       handleCreate(values);
     }
+  };
+
+  const handleSwitchChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    setFieldValue: (fieldName: string, value: string) => void,
+  ) => {
+    const isChecked = event.target.checked;
+    const status = isChecked ? PublicationStatus.APPROVE : PublicationStatus.DRAFT;
+    setFormStatus(status);
+    setFieldValue('registrationStatus', status);
   };
 
   const handleCancel = () => {
@@ -100,7 +110,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
   return (
     <Formik
       initialValues={datasetTemplate(initialValues as Dataset)}
-      validationSchema={datasetValidationSchema}
+      validationSchema={formStatus === PublicationStatus.APPROVE ? confirmedDatasetSchema : draftDatasetSchema}
       validateOnChange={isSubmitted}
       validateOnBlur={isSubmitted}
       onSubmit={async (values, { setSubmitting }) => {
@@ -113,7 +123,6 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
       {({ setFieldValue, values, dirty, isValid, isSubmitting, isValidating, submitForm }) => {
         setTimeout(() => setIsDirty(dirty), 0);
         const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
-
         return (
           <>
             <Form
@@ -206,7 +215,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
             </Form>
 
             <StickyFooterBar>
-              <div className={styles.buttonContainer}>
+              <div className={styles.footerContent}>
                 <Button
                   type='submit'
                   size='sm'
@@ -239,13 +248,9 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                   position='left'
                   size='sm'
                   checked={values.registrationStatus === PublicationStatus.APPROVE}
-                  onChange={(event) => {
-                    const isChecked = event.target.checked;
-                    const status = isChecked ? PublicationStatus.APPROVE : PublicationStatus.DRAFT;
-                    setFieldValue('registrationStatus', status);
-                  }}
+                  onChange={(event) => handleSwitchChange(event, setFieldValue)}
                 >
-                  <div className={styles.buttonContainer}>
+                  <div className={styles.footerContent}>
                     {localization.tag.approve}
                     <HelpMarkdown
                       size='sm'
