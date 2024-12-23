@@ -20,7 +20,7 @@ export type DatasetToBeCreated = {
   landingPage?: string[];
   theme?: { uri: string }[];
   type?: string;
-  keyword?: LocalizedStrings[];
+  keyword?: { [key: string]: string }[];
   keywordList?: { nb?: string[]; nn?: string[]; en?: string[] };
   concepts?: [{ uri: string }];
   provenance?: ReferenceDataCode;

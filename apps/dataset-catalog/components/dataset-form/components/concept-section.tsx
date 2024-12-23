@@ -1,13 +1,12 @@
 'use client';
 import { Dataset } from '@catalog-frontend/types';
-import { Textfield, Chip, Button, Combobox } from '@digdir/designsystemet-react';
+import { Combobox } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 import { useState } from 'react';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
 import styles from '../dataset-form.module.css';
 import { useSearchConceptsByUri, useSearchConceptSuggestions } from '../../../hooks/useSearchService';
-import { TitleWithTag } from '@catalog-frontend/ui';
-import classNames from 'classnames';
+import { FormikLanguageFieldset, TitleWithTag } from '@catalog-frontend/ui';
 
 interface Props {
   searchEnv: string; // Environment variable to search service
@@ -15,7 +14,6 @@ interface Props {
 
 export const ConceptSection = ({ searchEnv }: Props) => {
   const { setFieldValue, values } = useFormikContext<Dataset>();
-  const [inputValue, setInputValue] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const { data: searchHits, isLoading: searching } = useSearchConceptSuggestions(searchEnv, searchQuery);
@@ -42,22 +40,9 @@ export const ConceptSection = ({ searchEnv }: Props) => {
     ).values(),
   ];
 
-  const addKeyword = () => {
-    if (inputValue && !values.keywordList?.nb?.includes(inputValue)) {
-      const updatedKeywords = [...(values.keywordList?.nb || []), inputValue];
-      setFieldValue('keywordList.nb', updatedKeywords);
-      setInputValue('');
-    }
-  };
-
-  const removeKeyword = (keyword: string) => {
-    const updatedKeywords = values.keywordList?.nb?.filter((item: string) => item !== keyword) || [];
-    setFieldValue('keywordList.nb', updatedKeywords);
-  };
-
   return (
     <>
-      <div className={styles.fieldContainer}>
+      <>
         <TitleWithTag
           title={localization.datasetForm.fieldLabel.concept}
           tagTitle={localization.tag.recommended}
@@ -92,48 +77,19 @@ export const ConceptSection = ({ searchEnv }: Props) => {
             </Combobox.Option>
           ))}
         </Combobox>
-      </div>
+      </>
 
-      <div className={classNames(styles.set, styles.fullWidth)}>
-        <div className={styles.fullWidth}>
-          <Textfield
-            size='sm'
-            label={
-              <TitleWithTag
-                title={localization.datasetForm.fieldLabel.keyword}
-                tagTitle={localization.tag.recommended}
-                tagColor='info'
-              />
-            }
-            type='text'
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault();
-                addKeyword();
-              }
-            }}
+      <FormikLanguageFieldset
+        multiple
+        name={'keywordList'}
+        legend={
+          <TitleWithTag
+            title={localization.datasetForm.fieldLabel.keyword}
+            tagTitle={localization.tag.recommended}
+            tagColor='info'
           />
-        </div>
-        <div className={styles.tagsButton}>
-          <Button
-            size='sm'
-            onClick={addKeyword}
-            variant='secondary'
-          >{`${localization.add}...`}</Button>
-        </div>
-      </div>
-      <Chip.Group size='sm'>
-        {values.keywordList?.nb?.map((value: string) => (
-          <Chip.Removable
-            key={value}
-            onClick={() => removeKeyword(value)}
-          >
-            {value}
-          </Chip.Removable>
-        ))}
-      </Chip.Group>
+        }
+      />
     </>
   );
 };
