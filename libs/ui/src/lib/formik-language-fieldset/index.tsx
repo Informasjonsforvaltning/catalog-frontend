@@ -2,14 +2,14 @@
 
 import { ReactNode, useState } from 'react';
 import { localization } from '@catalog-frontend/utils';
-import { Fieldset, Button, Box, Paragraph, Textfield, ErrorMessage, Chip } from '@digdir/designsystemet-react';
+import { Fieldset, Box, Paragraph, Textfield, ErrorMessage, Chip } from '@digdir/designsystemet-react';
 import { FastField, useFormikContext } from 'formik';
 
 import styles from './formik-language-fieldset.module.scss';
 import { ISOLanguage, LocalizedStrings } from '@catalog-frontend/types';
-import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { TextareaWithPrefix } from '../textarea-with-prefix';
 import _ from 'lodash';
+import { AddButton, DeleteButton } from '../button';
 
 type LanuguageFieldsetProps = {
   legend?: ReactNode;
@@ -48,11 +48,11 @@ export const FormikLanguageFieldset = ({
   };
 
   const handleAddTextValue = (lang: string) => {
-    if(Boolean(textValue[lang]) === true) {
+    if (Boolean(textValue[lang]) === true) {
       const textValues = [...(values?.[name]?.[lang] as string[]), textValue[lang]];
       setFieldValue(`${name}.${lang}`, textValues);
       setTextValue((prev) => ({ ...prev, ...{ [lang]: '' } }));
-    } 
+    }
   };
 
   const handleRemoveTextValue = (index: number, lang: string) => {
@@ -87,39 +87,28 @@ export const FormikLanguageFieldset = ({
                   prefix={localization.language[lang]}
                   value={textValue[lang]}
                   onChange={(e) => handleOnChangeTextValue(e.target.value, lang)}
-                  onKeyDown={(e) => { if(e.code === 'Enter') { handleAddTextValue(lang) } }}
+                  onKeyDown={(e) => {
+                    if (e.code === 'Enter') {
+                      handleAddTextValue(lang);
+                    }
+                  }}
                   onBlur={() => handleAddTextValue(lang)}
                 />
-                <Button
+                <AddButton
                   variant='secondary'
-                  size='sm'
-                  color='second'
                   disabled={Boolean(textValue[lang]) === false}
                   onClick={() => handleAddTextValue(lang)}
-                >
-                  {localization.add}
-                </Button>
-                <Button
+                />
+
+                <DeleteButton
                   variant='tertiary'
-                  size='sm'
-                  color='danger'
                   onClick={() => handleRemoveLanguage(lang)}
-                >
-                  <TrashIcon
-                    title={localization.icon.trash}
-                    fontSize='1.5rem'
-                  />
-                  {localization.button.delete}
-                </Button>
+                />
               </Box>
-              <Chip.Group size="sm">
-              {(values?.[name]?.[lang] as string[] | undefined)?.map((v, i) => (
-                <Chip.Removable
-                  onClick={() => handleRemoveTextValue(i, lang)}
-                >
-                  {v}
-                </Chip.Removable>
-              ))}
+              <Chip.Group size='sm'>
+                {(values?.[name]?.[lang] as string[] | undefined)?.map((v, i) => (
+                  <Chip.Removable onClick={() => handleRemoveTextValue(i, lang)}>{v}</Chip.Removable>
+                ))}
               </Chip.Group>
             </>
           ) : (
@@ -132,7 +121,7 @@ export const FormikLanguageFieldset = ({
                 error={Boolean(_.get(errors, `${name}.${lang}`))}
                 {...(renderAs === TextareaWithPrefix
                   ? {
-                      cols: 80,
+                      cols: 110,
                       prefix: (
                         <>
                           <Paragraph
@@ -143,18 +132,7 @@ export const FormikLanguageFieldset = ({
                           </Paragraph>
                           {!requiredLanguages?.includes(lang) && (
                             <Box>
-                              <Button
-                                variant='tertiary'
-                                size='sm'
-                                color='danger'
-                                onClick={() => handleRemoveLanguage(lang)}
-                              >
-                                <TrashIcon
-                                  title={localization.icon.trash}
-                                  fontSize='1.5rem'
-                                />
-                                {localization.button.delete}
-                              </Button>
+                              <DeleteButton onClick={() => handleRemoveLanguage(lang)} />
                             </Box>
                           )}
                         </>
@@ -165,18 +143,7 @@ export const FormikLanguageFieldset = ({
                     })}
               />
               {!requiredLanguages?.includes(lang) && renderAs !== TextareaWithPrefix && (
-                <Button
-                  variant='tertiary'
-                  size='sm'
-                  color='danger'
-                  onClick={() => handleRemoveLanguage(lang)}
-                >
-                  <TrashIcon
-                    title={localization.button.delete}
-                    fontSize='1.5rem'
-                  />
-                  {localization.button.delete}
-                </Button>
+                <DeleteButton onClick={() => handleRemoveLanguage(lang)} />
               )}
             </Box>
           )}
@@ -184,16 +151,12 @@ export const FormikLanguageFieldset = ({
       ))}
       <div className={styles.languageButtons}>
         {visibleLanguageButtons.map((lang) => (
-          <Button
+          <AddButton
             key={lang}
-            variant='tertiary'
-            color='first'
-            size='sm'
             onClick={() => handleAddLanguage(lang)}
           >
-            <PlusCircleIcon fontSize='1rem' />
             {localization.language[lang] ?? '?'}
-          </Button>
+          </AddButton>
         ))}
       </div>
 
@@ -201,8 +164,11 @@ export const FormikLanguageFieldset = ({
         <ErrorMessage
           size='sm'
           error
-        >{errorMessage ? `${localization.formatString(errorMessage, { ...errorArgs, language: languagesWithError.join(', ') })}` : 
-        'This field ({language}) is required'}</ErrorMessage>
+        >
+          {errorMessage
+            ? `${localization.formatString(errorMessage, { ...errorArgs, language: languagesWithError.join(', ') })}`
+            : 'This field ({language}) is required'}
+        </ErrorMessage>
       )}
     </Fieldset>
   );

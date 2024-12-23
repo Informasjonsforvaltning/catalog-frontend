@@ -5,13 +5,13 @@ import styles from './button.module.css';
 
 const DeleteButton = ({ children = localization.button.delete, ...props }: ButtonProps) => (
   <Button
-    {...props}
     variant='tertiary'
     color='danger'
     size='sm'
+    {...props}
   >
     <span className={styles.withIcon}>
-      <TrashIcon fontSize={'1.2rem'} />
+      <TrashIcon fontSize={'1.3rem'} />
       {children}
     </span>
   </Button>
