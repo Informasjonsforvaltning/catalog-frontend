@@ -5,13 +5,13 @@ import styles from './button.module.css';
 
 const AddButton = ({ children = localization.add, ...props }: ButtonProps) => (
   <Button
-    {...props}
     variant='tertiary'
     className={styles.add}
     size='sm'
+    {...props}
   >
     <span className={styles.withIcon}>
-      <PlusCircleIcon fontSize={'1.2rem'} />
+      <PlusCircleIcon fontSize={'1.3rem'} />
       {children}
     </span>
   </Button>
