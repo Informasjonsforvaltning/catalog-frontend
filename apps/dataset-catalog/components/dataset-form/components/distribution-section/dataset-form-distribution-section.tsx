@@ -27,6 +27,7 @@ type FormikDistribution = {
 export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses }: Props) => {
   const { values, setFieldValue } = useFormikContext<Dataset>();
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+  const [expandedIndexExampleData, setExpandedIndexExampleData] = useState<number | null>(null);
 
   const getSelectedFileTypes = (): string[] => {
     const distributionFormats = values.distribution?.map((val) => val.format) || [];
@@ -213,12 +214,12 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
               <Button
                 variant='tertiary'
                 onClick={() => {
-                  setExpandedIndex(expandedIndex === index ? null : index);
+                  setExpandedIndexExampleData(expandedIndexExampleData === index ? null : index);
                 }}
                 className={styles.button}
                 size='sm'
               >
-                {expandedIndex === index ? (
+                {expandedIndexExampleData === index ? (
                   <>
                     <ChevronUpIcon fontSize='1.3rem' />
                     {localization.seeLess}
@@ -233,7 +234,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
             </div>
           )}
 
-          {expandedIndex === index && (
+          {expandedIndexExampleData === index && (
             <DistributionDetails
               distribution={item}
               searchEnv={searchEnv}
