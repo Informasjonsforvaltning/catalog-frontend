@@ -7,11 +7,11 @@ import {
   FieldsetDivider,
   FormikLanguageFieldset,
   FormikSearchCombobox,
+  LabelWithHelpTextAndTag,
   TextareaWithPrefix,
-  TitleWithTag,
 } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Card, Combobox, Label, Modal, Radio, Textfield } from '@digdir/designsystemet-react';
+import { Button, Card, Combobox, Fieldset, Modal, Radio, Textfield } from '@digdir/designsystemet-react';
 import {
   useSearchFileTypeByUri,
   useSearchFileTypes,
@@ -33,7 +33,7 @@ type Props = {
   onSuccess: (values: FormikDistribution) => void;
   initialValues: Partial<Distribution> | undefined;
   type: 'new' | 'edit';
-  initialDistributionType?: 'distribution' | 'exampledata';
+  initialDistributionType?: 'distribution' | 'sample';
 };
 
 type FormikDistribution = {
@@ -128,48 +128,60 @@ export const DistributionModal = ({
             modalRef.current?.close();
           }}
         >
-          {({ errors, isSubmitting, submitForm, values, dirty, setFieldValue }) => {
+          {({ errors, isSubmitting, submitForm, values, setFieldValue }) => {
             return (
               <>
                 {initialValues && (
                   <>
                     <Modal.Header closeButton={false}>
-                      {type === 'new' ? localization.datasetForm.button.addDistribution : localization.edit}
+                      {type === 'new'
+                        ? localization.datasetForm.button.addDistribution
+                        : `${localization.edit} ${localization.datasetForm.fieldLabel.distribution.toLowerCase()}`}
                     </Modal.Header>
 
                     <Modal.Content className={styles.modalContent}>
                       {type === 'new' && (
-                        <Radio.Group
-                          size='sm'
-                          legend={localization.type}
-                          onChange={(val) => {
-                            setDistributionType(val);
-                          }}
-                          value={distributionType}
-                        >
-                          {distributionTypes.map((type) => (
-                            <Radio
-                              key={type}
-                              value={type}
-                            >
-                              {localization.datasetForm.fieldLabel[type]}
-                            </Radio>
-                          ))}
-                        </Radio.Group>
+                        <>
+                          <Radio.Group
+                            size='sm'
+                            legend={
+                              <LabelWithHelpTextAndTag
+                                helpText={localization.datasetForm.helptext.distributionType}
+                                helpAriaLabel={localization.type}
+                              >
+                                {localization.type}
+                              </LabelWithHelpTextAndTag>
+                            }
+                            onChange={(val) => {
+                              setDistributionType(val);
+                            }}
+                            value={distributionType}
+                          >
+                            {distributionTypes.map((type) => (
+                              <Radio
+                                key={type}
+                                value={type}
+                              >
+                                {localization.datasetForm.fieldLabel[type]}
+                              </Radio>
+                            ))}
+                          </Radio.Group>
+                          <FieldsetDivider />
+                        </>
                       )}
 
                       {distributionType === 'distribution' && (
                         <>
-                          <FieldsetDivider />
                           <FormikLanguageFieldset
                             as={Textfield}
                             name='title'
                             legend={
-                              <TitleWithTag
-                                title={localization.title}
-                                tagTitle='Anbefalt'
+                              <LabelWithHelpTextAndTag
+                                tagTitle={localization.tag.recommended}
                                 tagColor='info'
-                              />
+                              >
+                                {localization.title}
+                              </LabelWithHelpTextAndTag>
                             }
                           />
                         </>
@@ -182,10 +194,13 @@ export const DistributionModal = ({
                         as={Textfield}
                         size='sm'
                         label={
-                          <TitleWithTag
-                            title={localization.datasetForm.fieldLabel.accessUrl}
+                          <LabelWithHelpTextAndTag
                             tagTitle={localization.tag.required}
-                          />
+                            helpAriaLabel={localization.datasetForm.fieldLabel.accessURL}
+                            helpText={localization.datasetForm.helptext.accessURL}
+                          >
+                            {localization.datasetForm.fieldLabel.accessURL}
+                          </LabelWithHelpTextAndTag>
                         }
                         error={errors?.accessURL?.[0]}
                       />
@@ -194,51 +209,34 @@ export const DistributionModal = ({
                         name='downloadURL[0]'
                         as={Textfield}
                         size='sm'
-                        label={localization.datasetForm.fieldLabel.downloadUrl}
+                        label={
+                          <LabelWithHelpTextAndTag
+                            helpAriaLabel={localization.datasetForm.fieldLabel.downloadURL}
+                            helpText={localization.datasetForm.helptext.downloadURL}
+                          >
+                            {localization.datasetForm.fieldLabel.downloadURL}
+                          </LabelWithHelpTextAndTag>
+                        }
                         error={errors?.downloadURL?.[0]}
-                      />
-                      <FieldsetDivider />
-
-                      <div className={styles.fieldContainer}>
-                        <TitleWithTag
-                          title={localization.datasetForm.fieldLabel.format}
-                          tagTitle={localization.tag.recommended}
-                          tagColor='info'
-                        />
-                        <FormikSearchCombobox
-                          onChange={(event) => setSearchQueryFileTypes(event.target.value)}
-                          onValueChange={(selectedValues) => setFieldValue('format', selectedValues)}
-                          value={values?.format || []}
-                          selectedValuesSearchHits={selectedFileTypes ?? []}
-                          querySearchHits={fileTypes ?? []}
-                          formikValues={initialValues?.format ?? []}
-                          loading={loadingSelectedFileTypes || searchingFileTypes}
-                          portal={false}
-                        />
-                      </div>
-
-                      <FormikSearchCombobox
-                        onChange={(event) => setSearchQueryMediaTypes(event.target.value)}
-                        onValueChange={(selectedValues) => setFieldValue('mediaType', selectedValues)}
-                        value={values?.mediaType || []}
-                        selectedValuesSearchHits={selectedMediaTypes ?? []}
-                        querySearchHits={mediaTypes ?? []}
-                        formikValues={initialValues?.mediaType ?? []}
-                        loading={loadingSelectedMediaTypes || searchingMediaTypes}
-                        portal={false}
-                        label={localization.datasetForm.fieldLabel.mediaTypes}
                       />
 
                       {!isLoadingSelectedDataServices && distributionType === 'distribution' && (
-                        <>
-                          <FieldsetDivider />
+                        <Fieldset
+                          legend={
+                            <LabelWithHelpTextAndTag
+                              helpAriaLabel={localization.datasetForm.fieldLabel.accessService}
+                              helpText={localization.datasetForm.helptext.accessService}
+                            >
+                              {localization.datasetForm.fieldLabel.accessService}
+                            </LabelWithHelpTextAndTag>
+                          }
+                        >
                           <Combobox
                             multiple
                             portal={false}
                             onChange={(event) => setSearchDataServicesQuery(event.target.value)}
                             value={[...(values.accessServiceList || []), ...(initialValues?.accessServiceList || [])]}
                             onValueChange={(selectedValues) => setFieldValue('accessServiceList', selectedValues)}
-                            label={localization.datasetForm.fieldLabel.accessService}
                             placeholder={`${localization.search.search}...`}
                             size='sm'
                           >
@@ -251,30 +249,91 @@ export const DistributionModal = ({
                               </Combobox.Option>
                             ))}
                           </Combobox>
-                        </>
+                        </Fieldset>
                       )}
+
+                      <FieldsetDivider />
+
+                      <Fieldset
+                        legend={
+                          <LabelWithHelpTextAndTag
+                            helpAriaLabel={localization.datasetForm.fieldLabel.format}
+                            helpText={localization.datasetForm.helptext.fileType}
+                            tagTitle={localization.tag.recommended}
+                            tagColor='info'
+                          >
+                            {localization.datasetForm.fieldLabel.format}
+                          </LabelWithHelpTextAndTag>
+                        }
+                      >
+                        <FormikSearchCombobox
+                          onChange={(event) => setSearchQueryFileTypes(event.target.value)}
+                          onValueChange={(selectedValues) => setFieldValue('format', selectedValues)}
+                          value={values?.format || []}
+                          selectedValuesSearchHits={selectedFileTypes ?? []}
+                          querySearchHits={fileTypes ?? []}
+                          formikValues={initialValues?.format ?? []}
+                          loading={loadingSelectedFileTypes || searchingFileTypes}
+                          portal={false}
+                        />
+                      </Fieldset>
+                      <Fieldset
+                        legend={
+                          <LabelWithHelpTextAndTag
+                            helpAriaLabel={localization.datasetForm.fieldLabel.mediaType}
+                            helpText={localization.datasetForm.helptext.mediaType}
+                          >
+                            {localization.datasetForm.fieldLabel.mediaType}
+                          </LabelWithHelpTextAndTag>
+                        }
+                      >
+                        <FormikSearchCombobox
+                          onChange={(event) => setSearchQueryMediaTypes(event.target.value)}
+                          onValueChange={(selectedValues) => setFieldValue('mediaType', selectedValues)}
+                          value={values?.mediaType || []}
+                          selectedValuesSearchHits={selectedMediaTypes ?? []}
+                          querySearchHits={mediaTypes ?? []}
+                          formikValues={initialValues?.mediaType ?? []}
+                          loading={loadingSelectedMediaTypes || searchingMediaTypes}
+                          portal={false}
+                        />
+                      </Fieldset>
 
                       {distributionType === 'distribution' && (
                         <>
                           <FieldsetDivider />
-                          <Combobox
-                            label={localization.datasetForm.fieldLabel.license}
-                            // @ts-expect-error: uri exists on the object
-                            value={values?.license?.uri ? [values?.license.uri] : []}
-                            portal={false}
-                            onValueChange={(selectedValues) => setFieldValue('license.uri', selectedValues.toString())}
-                            size='sm'
+                          <Fieldset
+                            legend={
+                              <LabelWithHelpTextAndTag
+                                tagTitle={localization.tag.recommended}
+                                tagColor='info'
+                                helpAriaLabel={localization.datasetForm.fieldLabel.license}
+                                helpText={localization.datasetForm.helptext.license}
+                              >
+                                {localization.datasetForm.fieldLabel.license}
+                              </LabelWithHelpTextAndTag>
+                            }
                           >
-                            {openLicenses &&
-                              openLicenses.map((license, i) => (
-                                <Combobox.Option
-                                  key={`licence-${license.uri}-${i}`}
-                                  value={license.uri}
-                                >
-                                  {getTranslateText(license.label)}
-                                </Combobox.Option>
-                              ))}
-                          </Combobox>
+                            <Combobox
+                              // @ts-expect-error: uri exists on the object
+                              value={values?.license?.uri ? [values?.license.uri] : []}
+                              portal={false}
+                              onValueChange={(selectedValues) =>
+                                setFieldValue('license.uri', selectedValues.toString())
+                              }
+                              size='sm'
+                            >
+                              {openLicenses &&
+                                openLicenses.map((license, i) => (
+                                  <Combobox.Option
+                                    key={`licence-${license.uri}-${i}`}
+                                    value={license.uri}
+                                  >
+                                    {getTranslateText(license.label)}
+                                  </Combobox.Option>
+                                ))}
+                            </Combobox>
+                          </Fieldset>
                         </>
                       )}
 
@@ -282,14 +341,27 @@ export const DistributionModal = ({
 
                       <FormikLanguageFieldset
                         as={TextareaWithPrefix}
-                        legend={localization.description}
+                        legend={
+                          <LabelWithHelpTextAndTag
+                            tagColor='info'
+                            tagTitle={localization.tag.recommended}
+                          >
+                            {localization.description}
+                          </LabelWithHelpTextAndTag>
+                        }
                         name='description'
                         requiredLanguages={['nb']}
                       />
-                      <FieldsetDivider />
 
                       <FastField
-                        label={localization.datasetForm.fieldLabel.distributionLink}
+                        label={
+                          <LabelWithHelpTextAndTag
+                            helpAriaLabel={localization.datasetForm.fieldLabel.distributionLink}
+                            helpText={localization.datasetForm.helptext.distributionLink}
+                          >
+                            {localization.datasetForm.fieldLabel.distributionLink}
+                          </LabelWithHelpTextAndTag>
+                        }
                         as={Textfield}
                         name='page[0].uri'
                         size='sm'
@@ -301,46 +373,56 @@ export const DistributionModal = ({
                         <>
                           <FieldsetDivider />
 
-                          <Label size='sm'>{localization.datasetForm.fieldLabel.standard}</Label>
-                          <FieldArray name='conformsTo'>
-                            {({ push, remove }) => (
-                              <>
-                                {values.conformsTo?.map((item, i) => (
-                                  <div
-                                    className={styles.add}
-                                    key={`conformsTo-${item.uri}-${i}`}
-                                  >
-                                    <Card>
-                                      <div>
-                                        <FormikLanguageFieldset
-                                          legend={localization.title}
-                                          as={Textfield}
-                                          name={`conformsTo[${i}].prefLabel`}
-                                          requiredLanguages={['nb']}
-                                        />
-                                      </div>
+                          <Fieldset
+                            legend={
+                              <LabelWithHelpTextAndTag
+                                helpAriaLabel={localization.datasetForm.fieldLabel.conformsTo}
+                                helpText={localization.datasetForm.helptext.distributionConformsTo}
+                              >
+                                {localization.datasetForm.fieldLabel.conformsTo}
+                              </LabelWithHelpTextAndTag>
+                            }
+                          >
+                            <FieldArray name='conformsTo'>
+                              {({ push, remove }) => (
+                                <>
+                                  {values.conformsTo?.map((item, i) => (
+                                    <div
+                                      className={styles.add}
+                                      key={`conformsTo-${item.uri}-${i}`}
+                                    >
+                                      <Card>
+                                        <div>
+                                          <FormikLanguageFieldset
+                                            legend={localization.title}
+                                            as={Textfield}
+                                            name={`conformsTo[${i}].prefLabel`}
+                                            requiredLanguages={['nb']}
+                                          />
+                                        </div>
 
-                                      <FastField
-                                        label={localization.link}
-                                        as={Textfield}
-                                        name={`conformsTo[${i}].uri`}
-                                        size='sm'
-                                        // @ts-expect-error: uri exists on the object
-                                        error={errors?.conformsTo?.[i]?.uri}
-                                        className={styles.standardField}
-                                      />
-                                    </Card>
-                                    <div>
-                                      <DeleteButton onClick={() => remove(i)} />
+                                        <FastField
+                                          label={localization.link}
+                                          as={Textfield}
+                                          name={`conformsTo[${i}].uri`}
+                                          size='sm'
+                                          // @ts-expect-error: uri exists on the object
+                                          error={errors?.conformsTo?.[i]?.uri}
+                                          className={styles.standardField}
+                                        />
+                                      </Card>
+                                      <div>
+                                        <DeleteButton onClick={() => remove(i)} />
+                                      </div>
                                     </div>
-                                  </div>
-                                ))}
-                                <AddButton onClick={() => push({ uri: '', prefLabel: { nb: '' } })}>
-                                  {localization.datasetForm.button.addStandard}
-                                </AddButton>
-                              </>
-                            )}
-                          </FieldArray>
+                                  ))}
+                                  <AddButton onClick={() => push({ uri: '', prefLabel: { nb: '' } })}>
+                                    {localization.datasetForm.button.addStandard}
+                                  </AddButton>
+                                </>
+                              )}
+                            </FieldArray>
+                          </Fieldset>
                         </>
                       )}
                     </Modal.Content>

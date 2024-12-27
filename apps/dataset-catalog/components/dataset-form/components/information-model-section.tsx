@@ -1,8 +1,8 @@
 'use client';
 import { Dataset } from '@catalog-frontend/types';
-import { AddButton } from '@catalog-frontend/ui';
+import { LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Combobox } from '@digdir/designsystemet-react';
+import { Combobox, Fieldset } from '@digdir/designsystemet-react';
 import {
   useSearchInformationModelsByUri,
   useSearchInformationModelsSuggestions,
@@ -62,39 +62,56 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
   return (
     <>
       {!isLoading && (
-        <Combobox
-          size='sm'
-          onValueChange={(selectedValues: string[]) => setFieldValue('informationModelsFromFDK', selectedValues)}
-          onChange={(input: any) => debouncedSearch(input.target.value)}
-          loading={searching}
-          multiple
-          value={values.informationModelsFromFDK}
-          placeholder={`${localization.search.search}...`}
-          filter={() => true} // Deactivate filter, handled by backend
-          label={localization.datasetForm.heading.informationModelFDK}
+        <Fieldset
+          legend={
+            <LabelWithHelpTextAndTag
+              helpAriaLabel={localization.datasetForm.fieldLabel.informationModelsFromFDK}
+              helpText={localization.datasetForm.helptext.informationModelsFromFDK}
+            >
+              {localization.datasetForm.fieldLabel.informationModelsFromFDK}
+            </LabelWithHelpTextAndTag>
+          }
         >
-          <Combobox.Empty>{`${localization.search.noHits}...`}</Combobox.Empty>
-          {comboboxOptions &&
-            comboboxOptions.map((suggestion) => (
-              <Combobox.Option
-                value={suggestion.uri}
-                key={suggestion.uri}
-                displayValue={capitalizeFirstLetter(getTranslateText(suggestion.title) as string) ?? suggestion.uri}
-              >
-                <div className={styles.comboboxOption}>
-                  <div>{capitalizeFirstLetter(getTranslateText(suggestion.title) as string) ?? suggestion.uri}</div>
-                  <div>{capitalizeFirstLetter(getTranslateText(suggestion.description) as string) ?? ''}</div>
-                  <div>{getTranslateText(suggestion.organization?.prefLabel) ?? ''}</div>
-                </div>
-              </Combobox.Option>
-            ))}
-        </Combobox>
+          <Combobox
+            size='sm'
+            onValueChange={(selectedValues: string[]) => setFieldValue('informationModelsFromFDK', selectedValues)}
+            onChange={(input: any) => debouncedSearch(input.target.value)}
+            loading={searching}
+            multiple
+            value={values.informationModelsFromFDK}
+            placeholder={`${localization.search.search}...`}
+            filter={() => true} // Deactivate filter, handled by backend
+          >
+            <Combobox.Empty>{`${localization.search.noHits}...`}</Combobox.Empty>
+            {comboboxOptions &&
+              comboboxOptions.map((suggestion) => (
+                <Combobox.Option
+                  value={suggestion.uri}
+                  key={suggestion.uri}
+                  displayValue={capitalizeFirstLetter(getTranslateText(suggestion.title) as string) ?? suggestion.uri}
+                >
+                  <div className={styles.comboboxOption}>
+                    <div>{capitalizeFirstLetter(getTranslateText(suggestion.title) as string) ?? suggestion.uri}</div>
+                    <div>{capitalizeFirstLetter(getTranslateText(suggestion.description) as string) ?? ''}</div>
+                    <div>{getTranslateText(suggestion.organization?.prefLabel) ?? ''}</div>
+                  </div>
+                </Combobox.Option>
+              ))}
+          </Combobox>
+        </Fieldset>
       )}
 
       <UriWithLabelFieldsetTable
         values={values.informationModel}
         fieldName={'informationModel'}
-        label='Informasjonsmodell fra andre kilder'
+        label={
+          <LabelWithHelpTextAndTag
+            helpAriaLabel={localization.datasetForm.fieldLabel.informationModel}
+            helpText={localization.datasetForm.helptext.informationModel}
+          >
+            {localization.datasetForm.fieldLabel.informationModel}
+          </LabelWithHelpTextAndTag>
+        }
       />
     </>
   );

@@ -1,7 +1,7 @@
 import { Dataset } from '@catalog-frontend/types';
-import { FormContainer } from '@catalog-frontend/ui';
+import { LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { containsNonNumberRegex, localization, onlyNumbersRegex } from '@catalog-frontend/utils';
-import { Heading, Combobox } from '@digdir/designsystemet-react';
+import { Combobox, Fieldset } from '@digdir/designsystemet-react';
 import { useSearchEnheter, useSearchEnheterByOrgNmbs } from '../../../hooks/useEnhetsregister';
 import { useFormikContext } from 'formik';
 import { debounce } from 'lodash';
@@ -45,28 +45,38 @@ export const QualifiedAttributionsSection = () => {
   ];
 
   return (
-    <Combobox
-      size='sm'
-      onValueChange={(selectedValues: string[]) => setFieldValue('qualifiedAttributions', selectedValues)}
-      onChange={(input: any) => debouncedSearch(input.target.value)}
-      loading={searching}
-      multiple
-      value={values.qualifiedAttributions}
-      placeholder={`${localization.search.search}...`}
-      filter={() => true} // Deactivate filter, handled by backend
-      virtual
-      label={localization.datasetForm.heading.qualifiedAttributions}
-    >
-      <Combobox.Empty>{`${localization.search.noHits}...`}</Combobox.Empty>
-      {comboboxOptions.map((org) => (
-        <Combobox.Option
-          value={org.organisasjonsnummer}
-          key={org.organisasjonsnummer}
-          description={org.organisasjonsnummer}
+    <Fieldset
+      legend={
+        <LabelWithHelpTextAndTag
+          helpAriaLabel={localization.datasetForm.fieldLabel.qualifiedAttributions}
+          helpText={localization.datasetForm.helptext.qualifiedAttributions}
         >
-          {org.navn}
-        </Combobox.Option>
-      ))}
-    </Combobox>
+          {localization.datasetForm.fieldLabel.qualifiedAttributions}
+        </LabelWithHelpTextAndTag>
+      }
+    >
+      <Combobox
+        size='sm'
+        onValueChange={(selectedValues: string[]) => setFieldValue('qualifiedAttributions', selectedValues)}
+        onChange={(input: any) => debouncedSearch(input.target.value)}
+        loading={searching}
+        multiple
+        value={values.qualifiedAttributions}
+        placeholder={`${localization.search.search}...`}
+        filter={() => true} // Deactivate filter, handled by backend
+        virtual
+      >
+        <Combobox.Empty>{`${localization.search.noHits}...`}</Combobox.Empty>
+        {comboboxOptions.map((org) => (
+          <Combobox.Option
+            value={org.organisasjonsnummer}
+            key={org.organisasjonsnummer}
+            description={org.organisasjonsnummer}
+          >
+            {org.navn}
+          </Combobox.Option>
+        ))}
+      </Combobox>
+    </Fieldset>
   );
 };

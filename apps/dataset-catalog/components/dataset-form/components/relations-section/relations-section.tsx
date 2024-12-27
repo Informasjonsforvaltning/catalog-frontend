@@ -1,7 +1,7 @@
 import { Dataset, DatasetSeries } from '@catalog-frontend/types';
 import { FieldsetDivider, LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Combobox, Label, Divider } from '@digdir/designsystemet-react';
+import { Combobox } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 import { UriWithLabelFieldsetTable } from '../uri-with-label-field-set-table';
 import { ReferenceTable } from './references-table';
@@ -21,10 +21,10 @@ export const RelationsSection = ({ searchEnv, datasetSeries }: Props) => {
       <FieldsetDivider />
       <div className={styles.fieldContainer}>
         <LabelWithHelpTextAndTag
-          helpText={''}
-          helpTitle={''}
+          helpText={localization.datasetForm.helptext.inSeries}
+          helpAriaLabel={localization.datasetForm.fieldLabel.inSeries}
         >
-          Relasjon til datasettserie
+          {localization.datasetForm.fieldLabel.inSeries}
         </LabelWithHelpTextAndTag>
 
         {datasetSeries && (
@@ -51,7 +51,12 @@ export const RelationsSection = ({ searchEnv, datasetSeries }: Props) => {
         <FieldsetDivider />
       </div>
       <div className={styles.fieldContainer}>
-        <Label size='sm'>{localization.datasetForm.heading.relatedResources}</Label>
+        <LabelWithHelpTextAndTag
+          helpText={localization.datasetForm.helptext.relations}
+          helpAriaLabel={localization.datasetForm.fieldLabel.relations}
+        >
+          {localization.datasetForm.fieldLabel.relations}
+        </LabelWithHelpTextAndTag>
         <UriWithLabelFieldsetTable
           values={values.relations}
           fieldName={'relations'}

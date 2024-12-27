@@ -1,16 +1,15 @@
 'use client';
 import { FieldsetDivider, FormikSearchCombobox, LabelWithHelpTextAndTag, TitleWithTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Checkbox, Label, Textfield } from '@digdir/designsystemet-react';
+import { Checkbox } from '@digdir/designsystemet-react';
 import { useCallback, useState } from 'react';
 import {
   useSearchAdministrativeUnits,
   useSearchAdministrativeUnitsByUri,
 } from '../../../../hooks/useReferenceDataSearch';
-import { FastField, FieldArray, useFormikContext } from 'formik';
+import { useFormikContext } from 'formik';
 import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
 import { debounce, sortBy } from 'lodash';
-import FieldsetWithDelete from '../../../fieldset-with-delete';
 import styles from '../../dataset-form.module.css';
 import { TemporalModal } from './temporal-modal';
 
@@ -55,11 +54,14 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
         onChange={(values) => setFieldValue('languageList', values)}
         value={values.languageList}
         legend={
-          <TitleWithTag
-            title={localization.datasetForm.heading.language}
+          <LabelWithHelpTextAndTag
             tagColor='info'
             tagTitle={localization.tag.recommended}
-          />
+            helpAriaLabel={localization.datasetForm.fieldLabel.language}
+            helpText={localization.datasetForm.helptext.language}
+          >
+            {localization.datasetForm.fieldLabel.language}
+          </LabelWithHelpTextAndTag>
         }
         size='sm'
       >
@@ -82,13 +84,19 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
             </Checkbox>
           ))}
       </Checkbox.Group>
+
       <FieldsetDivider />
+
       <div className={styles.fieldContainer}>
-        <TitleWithTag
-          title={localization.datasetForm.heading.spatial}
+        <LabelWithHelpTextAndTag
           tagColor='info'
           tagTitle={localization.tag.recommended}
-        />
+          helpAriaLabel={localization.datasetForm.fieldLabel.spatial}
+          helpText={localization.datasetForm.helptext.spatial}
+        >
+          {localization.datasetForm.fieldLabel.spatial}
+        </LabelWithHelpTextAndTag>
+
         <FormikSearchCombobox
           selectedValuesSearchHits={selectedValues ?? []}
           querySearchHits={searchHits ?? []}
@@ -107,10 +115,10 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
           <LabelWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
             tagColor='info'
-            helpText='tt'
-            helpTitle='hello'
+            helpText={localization.datasetForm.helptext.temporal}
+            helpAriaLabel={localization.datasetForm.fieldLabel.temporal}
           >
-            {localization.datasetForm.heading.temporal}
+            {localization.datasetForm.fieldLabel.temporal}
           </LabelWithHelpTextAndTag>
         }
       />

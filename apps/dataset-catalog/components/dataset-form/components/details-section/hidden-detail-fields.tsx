@@ -1,8 +1,8 @@
 'use client';
 
-import { AddButton, FormikLanguageFieldset, TextareaWithPrefix } from '@catalog-frontend/ui';
+import { AddButton, FormikLanguageFieldset, LabelWithHelpTextAndTag, TextareaWithPrefix } from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Combobox, Textfield } from '@digdir/designsystemet-react';
+import { Combobox, Fieldset, Textfield } from '@digdir/designsystemet-react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
 import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
 import styles from './details.module.css';
@@ -76,7 +76,18 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
                     <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
                       <FastField
                         name={`landingPage[${index}]`}
-                        label={localization.datasetForm.heading.landingPage}
+                        label={
+                          arrayHelpers.form.values.landingPage < 1 ? (
+                            <LabelWithHelpTextAndTag
+                              helpAriaLabel={localization.datasetForm.fieldLabel.landingPage}
+                              helpText={localization.datasetForm.helptext.landingPage}
+                            >
+                              {localization.datasetForm.fieldLabel.landingPage}
+                            </LabelWithHelpTextAndTag>
+                          ) : (
+                            ''
+                          )
+                        }
                         as={Textfield}
                         size='sm'
                         error={errors?.landingPage?.[index]}
@@ -86,7 +97,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
                 ))}
 
               <AddButton onClick={() => arrayHelpers.push('')}>
-                {`${localization.datasetForm.heading.landingPage}`}
+                {`${localization.datasetForm.fieldLabel.landingPage}`}
               </AddButton>
             </>
           )}
@@ -98,18 +109,28 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         hasDeleteButton
         fieldValues={values?.type}
       >
-        <FastField
-          as={Combobox}
-          size='sm'
-          value={[values.type]}
-          virtual
-          label={localization.datasetForm.fieldLabel.type}
-          placeholder={`${localization.search.search}...`}
-          onValueChange={(value: string[]) => setFieldValue('type', value.toString())}
+        <Fieldset
+          legend={
+            <LabelWithHelpTextAndTag
+              helpText={localization.datasetForm.helptext.type}
+              helpAriaLabel={localization.datasetForm.fieldLabel.type}
+            >
+              {localization.datasetForm.fieldLabel.type}
+            </LabelWithHelpTextAndTag>
+          }
         >
-          <Combobox.Option value={''}>{`${localization.choose}...`}</Combobox.Option>
-          {datasetTypeOptions}
-        </FastField>
+          <FastField
+            as={Combobox}
+            size='sm'
+            value={[values.type]}
+            virtual
+            placeholder={`${localization.search.search}...`}
+            onValueChange={(value: string[]) => setFieldValue('type', value.toString())}
+          >
+            <Combobox.Option value={''}>{`${localization.choose}...`}</Combobox.Option>
+            {datasetTypeOptions}
+          </FastField>
+        </Fieldset>
       </ToggleFieldButton>
 
       <ToggleFieldButton
@@ -117,16 +138,26 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         hasDeleteButton
         fieldValues={values?.provenance?.uri}
       >
-        <Combobox
-          value={values?.provenance?.uri ? [values?.provenance?.uri] : []}
-          placeholder={`${localization.search.search}...`}
-          onValueChange={(value: string[]) => setFieldValue('provenance.uri', value.toString())}
-          label={localization.datasetForm.heading.provenance}
-          size='sm'
+        <Fieldset
+          legend={
+            <LabelWithHelpTextAndTag
+              helpText={localization.datasetForm.helptext.provenance}
+              helpAriaLabel={localization.datasetForm.fieldLabel.provenance}
+            >
+              {localization.datasetForm.fieldLabel.provenance}
+            </LabelWithHelpTextAndTag>
+          }
         >
-          <Combobox.Empty>{`${localization.choose}...`}</Combobox.Empty>
-          {provenanceOptions}
-        </Combobox>
+          <Combobox
+            value={values?.provenance?.uri ? [values?.provenance?.uri] : []}
+            placeholder={`${localization.search.search}...`}
+            onValueChange={(value: string[]) => setFieldValue('provenance.uri', value.toString())}
+            size='sm'
+          >
+            <Combobox.Empty>{`${localization.choose}...`}</Combobox.Empty>
+            {provenanceOptions}
+          </Combobox>
+        </Fieldset>
       </ToggleFieldButton>
 
       <ToggleFieldButton
@@ -134,17 +165,27 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         fieldValues={values?.accrualPeriodicity?.uri}
         hasDeleteButton
       >
-        <Combobox
-          size='sm'
-          value={[values?.accrualPeriodicity?.uri ?? '']}
-          virtual
-          placeholder={`${localization.search.search}...`}
-          onValueChange={(value: string[]) => setFieldValue('accrualPeriodicity.uri', value.toString())}
-          label={localization.datasetForm.heading.frequency}
+        <Fieldset
+          legend={
+            <LabelWithHelpTextAndTag
+              helpAriaLabel={localization.datasetForm.fieldLabel.accrualPeriodicity}
+              helpText={localization.datasetForm.helptext.accrualPeriodicity}
+            >
+              {localization.datasetForm.fieldLabel.accrualPeriodicity}
+            </LabelWithHelpTextAndTag>
+          }
         >
-          <Combobox.Option value=''>{`${localization.choose}...`}</Combobox.Option>
-          {frequencyOptions}
-        </Combobox>
+          <Combobox
+            size='sm'
+            value={[values?.accrualPeriodicity?.uri ?? '']}
+            virtual
+            placeholder={`${localization.search.search}...`}
+            onValueChange={(value: string[]) => setFieldValue('accrualPeriodicity.uri', value.toString())}
+          >
+            <Combobox.Option value=''>{`${localization.choose}...`}</Combobox.Option>
+            {frequencyOptions}
+          </Combobox>
+        </Fieldset>
       </ToggleFieldButton>
 
       <ToggleFieldButton
@@ -156,7 +197,14 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
           as={Textfield}
           name='modified'
           type='date'
-          label={localization.datasetForm.heading.lastUpdated}
+          label={
+            <LabelWithHelpTextAndTag
+              helpAriaLabel={localization.datasetForm.fieldLabel.modified}
+              helpText={localization.datasetForm.helptext.modified}
+            >
+              {localization.datasetForm.fieldLabel.modified}
+            </LabelWithHelpTextAndTag>
+          }
           size='sm'
         />
       </ToggleFieldButton>
@@ -169,13 +217,28 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
           name='hasCurrentnessAnnotation.hasBody'
-          legend={localization.datasetForm.heading.actuality}
+          legend={
+            <LabelWithHelpTextAndTag
+              helpAriaLabel={localization.datasetForm.fieldLabel.hasCurrentnessAnnotation}
+              helpText={localization.datasetForm.helptext.hasCurrentnessAnnotation}
+            >
+              {localization.datasetForm.fieldLabel.hasCurrentnessAnnotation}
+            </LabelWithHelpTextAndTag>
+          }
         />
       </ToggleFieldButton>
 
       <UriWithLabelFieldsetTable
         values={values.conformsTo}
         fieldName={'conformsTo'}
+        label={
+          <LabelWithHelpTextAndTag
+            helpAriaLabel={localization.datasetForm.fieldLabel.conformsTo}
+            helpText={localization.datasetForm.helptext.conformsTo}
+          >
+            {localization.datasetForm.fieldLabel.conformsTo}
+          </LabelWithHelpTextAndTag>
+        }
       />
 
       <ToggleFieldButton
@@ -186,7 +249,14 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
           name='hasRelevanceAnnotation.hasBody'
-          legend={localization.datasetForm.heading.relevance}
+          legend={
+            <LabelWithHelpTextAndTag
+              helpAriaLabel={localization.datasetForm.fieldLabel.hasRelevanceAnnotation}
+              helpText={localization.datasetForm.helptext.hasRelevanceAnnotation}
+            >
+              {localization.datasetForm.fieldLabel.hasRelevanceAnnotation}
+            </LabelWithHelpTextAndTag>
+          }
         />
       </ToggleFieldButton>
 
@@ -198,7 +268,14 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
           name='hasCompletenessAnnotation.hasBody'
-          legend={localization.datasetForm.heading.completeness}
+          legend={
+            <LabelWithHelpTextAndTag
+              helpAriaLabel={localization.datasetForm.fieldLabel.hasCompletenessAnnotation}
+              helpText={localization.datasetForm.helptext.hasCompletenessAnnotation}
+            >
+              {localization.datasetForm.fieldLabel.hasCompletenessAnnotation}
+            </LabelWithHelpTextAndTag>
+          }
         />
       </ToggleFieldButton>
 
@@ -210,7 +287,14 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
           name='hasAccuracyAnnotation.hasBody'
-          legend={localization.datasetForm.heading.accuracy}
+          legend={
+            <LabelWithHelpTextAndTag
+              helpAriaLabel={localization.datasetForm.fieldLabel.hasAccuracyAnnotation}
+              helpText={localization.datasetForm.helptext.hasAccuracyAnnotation}
+            >
+              {localization.datasetForm.fieldLabel.hasAccuracyAnnotation}
+            </LabelWithHelpTextAndTag>
+          }
         />
       </ToggleFieldButton>
 
@@ -222,7 +306,14 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
           name='hasAvailabilityAnnotation.hasBody'
-          legend={localization.datasetForm.heading.availability}
+          legend={
+            <LabelWithHelpTextAndTag
+              helpAriaLabel={localization.datasetForm.fieldLabel.hasAvailabilityAnnotation}
+              helpText={localization.datasetForm.helptext.hasAvailabilityAnnotation}
+            >
+              {localization.datasetForm.fieldLabel.hasAvailabilityAnnotation}
+            </LabelWithHelpTextAndTag>
+          }
         />
       </ToggleFieldButton>
 
