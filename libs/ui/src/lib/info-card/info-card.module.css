@@ -33,14 +33,20 @@
   padding-top: 37px;
 }
 
-.label {
-  font-size: 14px;
-  font-weight: 500;
-  padding-bottom: 8px;
-}
-
 .light,
 .light a {
   font-weight: 400;
   color: #6c737a;
+}
+
+.set {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding-bottom: 0.5rem;
+}
+
+.wrap {
+  display: block;
+  word-break: break-word;
 }

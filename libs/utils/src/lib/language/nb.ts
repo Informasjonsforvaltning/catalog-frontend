@@ -68,6 +68,7 @@ export const nb = {
   noName: 'Uten navn',
   choose: 'Velg',
   relation: 'Relasjon',
+  relations: 'Relasjoner',
   serviceMessageError: 'Kunne ikke laste inn tjenestemeldinger. Vennligst prøv igjen senere.',
   serviceMessageSeeMore: 'Se detaljert driftsmelding for mer informasjon.',
 
@@ -422,12 +423,12 @@ export const nb = {
 
   publicationState: {
     confirmPublish: 'Er du sikker på at du vil publisere begrepet?',
-    description: 'Publiseringstilstand forteller om et begrep er publisert i Felles Datakatalog eller ikke.',
+    description: 'Publiseringstilstand forteller om et begrep er publisert på Data.Norge.no eller ikke.',
     published: 'Publisert',
-    publishedInFDK: 'Publisert i Felles Datakatalog',
+    publishedInFDK: 'Publisert på Data.Norge.no',
     state: 'Publiseringstilstand',
     unpublished: 'Ikke publisert',
-    unpublishedInFDK: 'Ikke publisert i Felles Datakatalog',
+    unpublishedInFDK: 'Ikke publisert på Data.Norge.no',
   },
 
   validation: {

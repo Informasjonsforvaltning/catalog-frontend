@@ -1,4 +1,4 @@
-import { DateRange, UriWithLabel } from '@catalog-frontend/types';
+import { DateRange } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, EditButton } from '@catalog-frontend/ui';
 import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button, Label, Modal, Table, Textfield } from '@digdir/designsystemet-react';

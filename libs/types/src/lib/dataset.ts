@@ -18,10 +18,9 @@ export type DatasetToBeCreated = {
   legalBasisForAccess?: UriWithLabel[];
   legalBasisForRestriction?: UriWithLabel[];
   landingPage?: string[];
-  theme?: { uri: string }[];
+  theme?: { uri: string }[]; // Both euTheme and losTheme
   type?: string;
   keyword?: { [key: string]: string }[];
-  keywordList?: { nb?: string[]; nn?: string[]; en?: string[] };
   concepts?: [{ uri: string }];
   provenance?: ReferenceDataCode;
   accrualPeriodicity?: ReferenceDataCode;
@@ -39,18 +38,19 @@ export type DatasetToBeCreated = {
   informationModel?: UriWithLabel[];
   informationModelsFromFDK?: string[];
   qualifiedAttributions?: string[];
-  sample?: Sample[];
+  sample?: Partial<Distribution>[];
   references?: Reference[];
   relations?: UriWithLabel[];
   inSeries?: string;
   distribution?: Distribution[];
   contactPoint: DatasetContactPoint[];
-  // Arrays of uris used as helper values for Formik. These properties is not part of the db object.
+  // Arrays of URIs used as helper values for Formik. These properties are not part of the database object.
   losThemeList?: string[];
   euThemeList?: string[];
   conceptList?: string[];
   spatialList?: string[];
   languageList?: string[];
+  keywordList?: { nb?: string[]; nn?: string[]; en?: string[] };
 };
 
 export type UriWithLabel = {
@@ -63,13 +63,6 @@ export type DateRange = {
   endDate?: string;
 };
 
-export type Sample = {
-  downloadURL?: string[];
-  accessURL?: string[];
-  format?: string[];
-  mediaType?: string[];
-  description?: LocalizedStrings;
-};
 export type Reference = {
   referenceType: { code: string };
   source: { uri: string };

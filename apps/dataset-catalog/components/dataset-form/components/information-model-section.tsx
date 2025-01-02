@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const InformationModelSection = ({ searchEnv }: Props) => {
-  const { setFieldValue, values, errors } = useFormikContext<Dataset>();
+  const { setFieldValue, values } = useFormikContext<Dataset>();
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const { data: informationModelSuggestions, isLoading: searching } = useSearchInformationModelsSuggestions(
