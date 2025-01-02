@@ -129,6 +129,7 @@ export const datasetFormNb = {
     informationModelsFromFDK: 'Informasjonsmodell fra Data.norge.no',
     informationModel: 'Informasjonsmodell fra andre kilder',
     sample: 'Eksempeldata',
+    datasetID: 'Datasett-ID'
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',

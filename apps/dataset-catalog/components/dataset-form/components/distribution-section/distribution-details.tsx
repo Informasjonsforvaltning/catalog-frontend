@@ -44,14 +44,14 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
 
           {distribution.downloadURL && distribution.downloadURL.length > 0 && (
             <div className={styles.field}>
-              <Label size='sm'>{`${localization.datasetForm.fieldLabel.downloadUrl}:`}</Label>
+              <Label size='sm'>{`${localization.datasetForm.fieldLabel.downloadURL}:`}</Label>
               <Paragraph size='sm'>{distribution?.downloadURL?.[0] ?? ''}</Paragraph>
             </div>
           )}
 
           {distribution.mediaType && distribution.mediaType.length > 0 && (
             <div className={styles.field}>
-              <Label size='sm'>{`${localization.datasetForm.fieldLabel.mediaTypes}:`}</Label>
+              <Label size='sm'>{`${localization.datasetForm.fieldLabel.mediaType}:`}</Label>
               <ul className={styles.list}>
                 {distribution?.mediaType?.map((uri, index) => (
                   <li key={`mediatype-${uri}-${index}`}>

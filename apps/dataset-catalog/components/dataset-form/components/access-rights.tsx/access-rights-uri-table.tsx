@@ -8,7 +8,7 @@ import {
   LabelWithHelpTextAndTag,
 } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Label, Modal, Radio, Table, Textfield } from '@digdir/designsystemet-react';
+import { Button, Modal, Radio, Table, Textfield } from '@digdir/designsystemet-react';
 import { FastField, Formik, useFormikContext } from 'formik';
 import styles from '../../dataset-form.module.css';
 import { useRef, useState } from 'react';

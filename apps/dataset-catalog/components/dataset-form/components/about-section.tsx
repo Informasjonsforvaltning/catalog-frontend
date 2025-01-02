@@ -7,7 +7,6 @@ import { FieldsetDivider } from '@catalog-frontend/ui';
 import { AccessRightFields } from './access-rights.tsx/dataset-form-access-rights-section';
 
 export const AboutSection = () => {
-  const errors = useFormikContext<Dataset>()?.errors;
   return (
     <>
       <FormikLanguageFieldset

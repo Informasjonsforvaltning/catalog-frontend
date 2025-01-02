@@ -1,5 +1,5 @@
 'use client';
-import { FieldsetDivider, FormikSearchCombobox, LabelWithHelpTextAndTag, TitleWithTag } from '@catalog-frontend/ui';
+import { FieldsetDivider, FormikSearchCombobox, LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Checkbox } from '@digdir/designsystemet-react';
 import { useCallback, useState } from 'react';

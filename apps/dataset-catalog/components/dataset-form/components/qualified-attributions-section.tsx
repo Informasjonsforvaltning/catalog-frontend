@@ -11,7 +11,7 @@ export const QualifiedAttributionsSection = () => {
   const { setFieldValue, values } = useFormikContext<Dataset>();
 
   const [searchTerm, setSearchTerm] = useState('');
-  const { data: selectedEnheter, isLoading } = useSearchEnheterByOrgNmbs(values.qualifiedAttributions);
+  const { data: selectedEnheter } = useSearchEnheterByOrgNmbs(values.qualifiedAttributions);
   const { data: enheter, isLoading: searching } = useSearchEnheter(searchTerm);
 
   const debouncedSearch = useCallback(
