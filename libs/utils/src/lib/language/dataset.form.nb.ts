@@ -14,7 +14,7 @@ export const datasetFormNb = {
 - **Skjermingshjemmel**: Referanse til lov eller forskrift som begrenser deling av datasettet (f.eks. offentlighetsloven, sikkerhetsloven).
 - **Behandlingsgrunnlag**: Lov, forskrift, samtykke eller nødvendighetsvurdering som grunnlag for behandling av personopplysninger.
 - **Utleveringshjemmel**: Henvisning til lov eller forskrift som gir offentlig virksomhet rett eller plikt til å utlevere opplysninger til private eller juridiske personer.`,
-    releaseDate: 'Dato for når innholdet i datasettet ble eller blir tilgjengeliggjort.',
+    issued: 'Dato for når innholdet i datasettet ble eller blir tilgjengeliggjort.',
     euTheme:
       'Velg ett eller flere hovedtema som beskriver innholdet i datasettet. Listen er fra EUs kontrollerte vokabular.',
     theme:
@@ -67,6 +67,8 @@ export const datasetFormNb = {
       'Emneord eller tagger beskriver sentralt innhold i datasettet, spesielt når begrepsdefinisjoner mangler eller når det brukes ord som folk ofte søker etter, men som ikke formelt er knyttet til datasettet.',
     concept:
       'Søk etter begrep som er publisert i Data.norge.no og velg fra nedtrekkslisten. Her legger du inn de begrepene som brukes i datasettet. Begrepene brukes til å si noe om hva informasjonen i datasettet betyr. Ved å henvise til gjennomarbeidede definisjoner som virksomheten selv er ansvarlig for å vedlikeholde, sikrer vi at det er tydelig hvordan et begrep brukt i datasettet skal forstås og at denne forståelsen til en hver tid er riktig og oppdatert.',
+    publish:
+      'Publiser datasettbeskrivelsen til Data.Norge.no. Den må være godkjent for å kunne publiseres. En beskrivelse kan ikke slettes så lenge den er publisert.',
   },
   heading: {
     about: 'Om datasettet',
@@ -84,9 +86,9 @@ export const datasetFormNb = {
     nonPublic: 'Ikke-allmenn tilgang',
   },
   fieldLabel: {
-    theme: 'Velg LOS-tema(er)',
-    euTheme: 'Velg hovedtema(er)',
-    concept: 'Legg inn begreper',
+    theme: 'LOS-tema(er)',
+    euTheme: 'Hovedtema(er)',
+    concept: 'Begreper',
     mediaType: 'Mediatyper',
     format: 'Format',
     accessURL: 'Tilgangslenke',
@@ -107,7 +109,7 @@ export const datasetFormNb = {
     keyword: 'Emneord',
     distribution: 'Distribusjon',
     distributions: 'Distribusjoner',
-    releaseDate: 'Utgivelsesdato',
+    issued: 'Utgivelsesdato',
     language: 'Språk',
     spatial: 'Dekningsområde',
     temporal: 'Tidsrom',
@@ -129,10 +131,13 @@ export const datasetFormNb = {
     informationModelsFromFDK: 'Informasjonsmodell fra Data.norge.no',
     informationModel: 'Informasjonsmodell fra andre kilder',
     sample: 'Eksempeldata',
+    datasetID: 'Datasett-ID',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
     formError: 'Du har feil i skjemaet. Rett opp i disse før du kan lagre.',
+    confirmUnpublish: 'Er du sikker på at du vil avpublisere datasettbeskrivelsen?',
+    confirmPublish: 'Er du sikkert på at du vil publisere datasettbeskrivelsen?',
   },
   validation: {
     title: 'Tittelen må være minst 3 karakterer lang.',
@@ -155,5 +160,10 @@ export const datasetFormNb = {
   },
   errors: {
     qualifiedAttributions: 'Kunne ikke hente enheter.',
+  },
+  status: {
+    DRAFT: 'Utkast',
+    PUBLISH: 'Publisert',
+    APPROVE: 'Godkjent',
   },
 };

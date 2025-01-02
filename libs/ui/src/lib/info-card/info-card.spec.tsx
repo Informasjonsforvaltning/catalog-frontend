@@ -1,7 +1,8 @@
-import React from 'react';
 import { render } from '@testing-library/react';
-
+import React from 'react';
 import InfoCard from './info-card';
+
+jest.mock('react-markdown', () => (props) => <div {...props} />);
 
 describe('CardList', () => {
   const cardList = (

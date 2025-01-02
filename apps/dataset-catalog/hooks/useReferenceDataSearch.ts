@@ -86,7 +86,7 @@ export const useSearchFileTypeByUri = (uriList: string[] | undefined, envVariabl
       const data: ReferenceDataCode[] = await searchReferenceDataByUri(uriList, envVariable, [
         SearchAlternative.EuFileTypes,
       ]);
-      return data;
+      return data as ReferenceDataCode[];
     },
     enabled: Array.isArray(uriList) && uriList.length > 0,
   });

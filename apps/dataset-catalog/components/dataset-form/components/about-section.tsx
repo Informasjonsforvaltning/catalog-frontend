@@ -1,13 +1,11 @@
-import { Dataset } from '@catalog-frontend/types';
 import { FormikLanguageFieldset, LabelWithHelpTextAndTag, TextareaWithPrefix } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Textfield } from '@digdir/designsystemet-react';
-import { FastField, useFormikContext } from 'formik';
+import { FastField } from 'formik';
 import { FieldsetDivider } from '@catalog-frontend/ui';
 import { AccessRightFields } from './access-rights.tsx/dataset-form-access-rights-section';
 
 export const AboutSection = () => {
-  const errors = useFormikContext<Dataset>()?.errors;
   return (
     <>
       <FormikLanguageFieldset
@@ -54,11 +52,11 @@ export const AboutSection = () => {
         label={
           <LabelWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
-            helpText={localization.datasetForm.helptext.releaseDate}
-            helpAriaLabel={localization.datasetForm.fieldLabel.releaseDate}
+            helpText={localization.datasetForm.helptext.issued}
+            helpAriaLabel={localization.datasetForm.fieldLabel.issued}
             tagColor='info'
           >
-            {localization.datasetForm.fieldLabel.releaseDate}
+            {localization.datasetForm.fieldLabel.issued}
           </LabelWithHelpTextAndTag>
         }
       />

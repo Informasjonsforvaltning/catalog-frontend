@@ -1,6 +1,8 @@
 import cn from 'classnames';
 import React, { forwardRef } from 'react';
 import classes from './info-card.module.css';
+import { HelpMarkdown } from '../help-markdown';
+import { Label } from '@digdir/designsystemet-react';
 
 export const labelColor = ['neutral', 'light'] as const;
 type LabelColor = (typeof labelColor)[number];
@@ -23,12 +25,18 @@ export interface InfoCardItemProps extends React.HTMLAttributes<HTMLDivElement> 
    * Should include one Accordion.Header and one Accordion.Content
    */
   children: React.ReactNode;
+
+  /**
+   * Helptext
+   **/
+
+  helpText?: string;
 }
 
 export type InfoCardItemType = React.ForwardRefExoticComponent<InfoCardItemProps & React.RefAttributes<HTMLDivElement>>;
 
 const InfoCardItem: InfoCardItemType = forwardRef(
-  ({ label, labelColor = 'neutral', labelLevel = 3, children, className, ...rest }, ref) => {
+  ({ label, labelColor = 'neutral', labelLevel = 3, children, className, helpText, ...rest }, ref) => {
     const HeadingTag = `h${labelLevel}` as React.ElementType;
 
     return (
@@ -38,8 +46,25 @@ const InfoCardItem: InfoCardItemType = forwardRef(
         {...rest}
       >
         <div>
-          {label && <HeadingTag className={cn(classes.label, classes[labelColor])}>{label}</HeadingTag>}
-          {children}
+          <span className={classes.set}>
+            {label && (
+              <Label
+                size='sm'
+                className={cn(classes[labelColor])}
+              >
+                {label}
+              </Label>
+            )}
+            {helpText && (
+              <HelpMarkdown
+                size='sm'
+                title={`helptext-${label}`}
+              >
+                {helpText}
+              </HelpMarkdown>
+            )}
+          </span>
+          <div className={classes.wrap}>{children}</div>
         </div>
       </div>
     );

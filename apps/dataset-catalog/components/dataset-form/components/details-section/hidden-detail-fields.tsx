@@ -62,7 +62,6 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
     [frequencies],
   );
 
-  console.log(_.every(values.conformsTo, _.isUndefined), values.conformsTo);
   return (
     <div>
       <div>
