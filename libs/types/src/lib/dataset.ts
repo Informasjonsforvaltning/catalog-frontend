@@ -21,7 +21,6 @@ export type DatasetToBeCreated = {
   theme?: { uri: string }[];
   type?: string;
   keyword?: { [key: string]: string }[];
-  keywordList?: { nb?: string[]; nn?: string[]; en?: string[] };
   concepts?: [{ uri: string }];
   provenance?: ReferenceDataCode;
   accrualPeriodicity?: ReferenceDataCode;
@@ -45,12 +44,13 @@ export type DatasetToBeCreated = {
   inSeries?: string;
   distribution?: Distribution[];
   contactPoint: DatasetContactPoint[];
-  // Arrays of uris used as helper values for Formik. These properties is not part of the db object.
+  // Arrays of URIs used as helper values for Formik. These properties are not part of the database object.
   losThemeList?: string[];
   euThemeList?: string[];
   conceptList?: string[];
   spatialList?: string[];
   languageList?: string[];
+  keywordList?: { nb?: string[]; nn?: string[]; en?: string[] };
 };
 
 export type UriWithLabel = {

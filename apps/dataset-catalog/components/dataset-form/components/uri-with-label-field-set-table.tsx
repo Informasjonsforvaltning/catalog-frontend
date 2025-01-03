@@ -4,14 +4,14 @@ import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-f
 import { Button, Label, Modal, Table, Textfield } from '@digdir/designsystemet-react';
 import { FastField, Formik, useFormikContext } from 'formik';
 import styles from '../dataset-form.module.css';
-import { useRef, useState } from 'react';
+import { ReactNode, useRef, useState } from 'react';
 import _ from 'lodash';
 import { uriWithLabelSchema } from '../utils/validation-schema';
 
 interface Props {
   values: UriWithLabel[] | undefined;
   fieldName: string;
-  label?: string;
+  label?: string | ReactNode;
 }
 
 interface ModalProps {
@@ -31,7 +31,7 @@ export const UriWithLabelFieldsetTable = ({ fieldName, values, label }: Props) =
 
   return (
     <div className={styles.fieldContainer}>
-      <Label size='sm'>{label}</Label>
+      {typeof label === 'string' ? <Label size='sm'>{label}</Label> : label}
       {values && values?.length > 0 && !hasNoFieldValues(values[0]) && (
         <Table
           size='sm'

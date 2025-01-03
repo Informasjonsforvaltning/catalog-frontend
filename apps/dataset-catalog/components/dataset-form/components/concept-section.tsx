@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
 import styles from '../dataset-form.module.css';
 import { useSearchConceptsByUri, useSearchConceptSuggestions } from '../../../hooks/useSearchService';
-import { FormikLanguageFieldset, TitleWithTag } from '@catalog-frontend/ui';
+import { FormikLanguageFieldset, LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
 
 interface Props {
   searchEnv: string; // Environment variable to search service
@@ -43,11 +43,15 @@ export const ConceptSection = ({ searchEnv }: Props) => {
   return (
     <>
       <>
-        <TitleWithTag
-          title={localization.datasetForm.fieldLabel.concept}
+        <LabelWithHelpTextAndTag
           tagTitle={localization.tag.recommended}
           tagColor='info'
-        />
+          helpAriaLabel={localization.datasetForm.fieldLabel.concept}
+          helpText={localization.datasetForm.helptext.concept}
+        >
+          {localization.datasetForm.fieldLabel.concept}
+        </LabelWithHelpTextAndTag>
+
         <Combobox
           size='sm'
           onValueChange={(selectedValues: string[]) => setFieldValue('conceptList', selectedValues)}
@@ -83,11 +87,14 @@ export const ConceptSection = ({ searchEnv }: Props) => {
         multiple
         name={'keywordList'}
         legend={
-          <TitleWithTag
-            title={localization.datasetForm.fieldLabel.keyword}
+          <LabelWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
             tagColor='info'
-          />
+            helpAriaLabel={localization.datasetForm.fieldLabel.keyword}
+            helpText={localization.datasetForm.helptext.keyword}
+          >
+            {localization.datasetForm.fieldLabel.keyword}
+          </LabelWithHelpTextAndTag>
         }
       />
     </>

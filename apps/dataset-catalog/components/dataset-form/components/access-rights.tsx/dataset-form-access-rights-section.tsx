@@ -1,7 +1,7 @@
 import { AccessRights, Dataset } from '@catalog-frontend/types';
-import { TitleWithTag } from '@catalog-frontend/ui';
+import { LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Card, Combobox } from '@digdir/designsystemet-react';
+import { Card, Combobox, Fieldset } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 import { AccessRightsUriTable } from './access-rights-uri-table';
 import styles from '../../dataset-form.module.css';
@@ -17,26 +17,34 @@ export const AccessRightFields = () => {
 
   return (
     <Card className={styles.card}>
-      <div className={styles.fieldContainer}>
-        <TitleWithTag
-          title={localization.access}
-          tagColor='info'
-          tagTitle={localization.tag.recommended}
-        />
-        <Combobox
-          size='sm'
-          value={[values.accessRights?.uri || AccessRights.PUBLIC]}
-          onValueChange={(values) => setFieldValue('accessRights.uri', values.toString())}
-        >
-          {accessRightsOptions.map((option) => (
-            <Combobox.Option
-              key={option.value}
-              value={option.value}
+      <div>
+        <Fieldset
+          legend={
+            <LabelWithHelpTextAndTag
+              helpAriaLabel={localization.access}
+              helpText={localization.datasetForm.helptext.accessRights}
+              tagColor='info'
+              tagTitle={localization.tag.recommended}
             >
-              {option.label}
-            </Combobox.Option>
-          ))}
-        </Combobox>
+              {localization.access}
+            </LabelWithHelpTextAndTag>
+          }
+        >
+          <Combobox
+            size='sm'
+            value={[values.accessRights?.uri || AccessRights.PUBLIC]}
+            onValueChange={(values) => setFieldValue('accessRights.uri', values.toString())}
+          >
+            {accessRightsOptions.map((option) => (
+              <Combobox.Option
+                key={option.value}
+                value={option.value}
+              >
+                {option.label}
+              </Combobox.Option>
+            ))}
+          </Combobox>
+        </Fieldset>
       </div>
 
       {(values.accessRights?.uri === AccessRights.RESTRICTED ||

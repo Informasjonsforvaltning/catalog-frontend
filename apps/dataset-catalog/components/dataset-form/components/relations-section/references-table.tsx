@@ -39,10 +39,10 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
   return (
     <div className={styles.fieldContainer}>
       <LabelWithHelpTextAndTag
-        helpText={''}
-        helpTitle={''}
+        helpText={localization.datasetForm.helptext.references}
+        helpAriaLabel={localization.datasetForm.fieldLabel.references}
       >
-        {'Relaterte datasett'}
+        {localization.datasetForm.fieldLabel.references}
       </LabelWithHelpTextAndTag>
       {values?.references && _.compact(values?.references).length > 0 && (
         <Table size='sm'>

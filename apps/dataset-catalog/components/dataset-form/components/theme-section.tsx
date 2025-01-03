@@ -1,5 +1,5 @@
 import { Dataset, DataTheme, LosTheme, Option } from '@catalog-frontend/types';
-import { TitleWithTag } from '@catalog-frontend/ui';
+import { LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { Combobox } from '@digdir/designsystemet-react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { FastField, useFormikContext } from 'formik';
@@ -43,10 +43,13 @@ export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
   return (
     <>
       <div className={styles.fieldContainer}>
-        <TitleWithTag
-          title={localization.datasetForm.fieldLabel.euTheme}
+        <LabelWithHelpTextAndTag
           tagTitle={localization.tag.required}
-        />
+          helpAriaLabel={localization.datasetForm.fieldLabel.euTheme}
+          helpText={localization.datasetForm.helptext.euTheme}
+        >
+          {localization.datasetForm.fieldLabel.euTheme}
+        </LabelWithHelpTextAndTag>
 
         <FastField
           as={Combobox}
@@ -71,11 +74,12 @@ export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
         </FastField>
       </div>
       <div className={styles.fieldContainer}>
-        <TitleWithTag
-          title={localization.datasetForm.fieldLabel.losTheme}
-          tagTitle={localization.tag.recommended}
-          tagColor='info'
-        />
+        <LabelWithHelpTextAndTag
+          helpAriaLabel={localization.datasetForm.fieldLabel.theme}
+          helpText={localization.datasetForm.helptext.theme}
+        >
+          {localization.datasetForm.fieldLabel.theme}
+        </LabelWithHelpTextAndTag>
 
         <FastField
           as={Combobox}
