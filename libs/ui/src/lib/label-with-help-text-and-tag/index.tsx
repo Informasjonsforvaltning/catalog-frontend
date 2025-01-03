@@ -8,7 +8,7 @@ type Props = {
   tagColor?: TagColor;
   tagSize?: TagSize;
   helpText?: string;
-  helpTitle?: string;
+  helpAriaLabel?: string;
 } & PropsWithChildren;
 
 type TagColor = 'first' | 'second' | 'success' | 'danger' | 'third' | 'neutral' | 'info' | 'warning';
@@ -22,19 +22,14 @@ export function LabelWithHelpTextAndTag({
   tagTitle,
   tagColor = 'warning',
   tagSize = 'sm',
-  helpTitle,
+  helpAriaLabel,
   helpText,
 }: Props) {
   return (
     <div className={styles.container}>
       {typeof children === 'string' ? <Label size='sm'>{children}</Label> : children}
 
-      {helpText && helpTitle && (
-        <HelpMarkdown
-          children={helpText}
-          title={helpTitle}
-        ></HelpMarkdown>
-      )}
+      {helpText && helpAriaLabel && <HelpMarkdown title={helpAriaLabel}>{helpText}</HelpMarkdown>}
       {tagTitle && (
         <Tag
           color={tagColor}

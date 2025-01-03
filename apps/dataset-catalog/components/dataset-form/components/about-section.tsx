@@ -1,13 +1,7 @@
 import { Dataset } from '@catalog-frontend/types';
-import {
-  FormikLanguageFieldset,
-  HelpMarkdown,
-  LabelWithHelpTextAndTag,
-  TextareaWithPrefix,
-  TitleWithTag,
-} from '@catalog-frontend/ui';
+import { FormikLanguageFieldset, LabelWithHelpTextAndTag, TextareaWithPrefix } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Textfield, Label } from '@digdir/designsystemet-react';
+import { Textfield } from '@digdir/designsystemet-react';
 import { FastField, useFormikContext } from 'formik';
 import { FieldsetDivider } from '@catalog-frontend/ui';
 import { AccessRightFields } from './access-rights.tsx/dataset-form-access-rights-section';
@@ -21,19 +15,13 @@ export const AboutSection = () => {
         as={Textfield}
         requiredLanguages={['nb']}
         legend={
-          <>
-            <TitleWithTag
-              title={
-                <>
-                  <Label size='sm'>{localization.title}</Label>
-                  <HelpMarkdown title={'Tittel'}>
-                    Tittelen skal være kortfattet, kunne stå alene og gi mening. Forkortelser skal skrives helt ut
-                  </HelpMarkdown>
-                </>
-              }
-              tagTitle={localization.tag.required}
-            />
-          </>
+          <LabelWithHelpTextAndTag
+            tagTitle={localization.tag.required}
+            helpAriaLabel={localization.title}
+            helpText={localization.datasetForm.helptext.title}
+          >
+            {localization.title}
+          </LabelWithHelpTextAndTag>
         }
       />
 
@@ -42,18 +30,13 @@ export const AboutSection = () => {
         as={TextareaWithPrefix}
         requiredLanguages={['nb']}
         legend={
-          <TitleWithTag
-            title={
-              <>
-                <Label size='sm'>{localization.description}</Label>
-                <HelpMarkdown title={'Beskrivelse'}>
-                  Beskrivelsen skal være kortfattet. Det bør fremgå hvilke opplysninger som utgjør kjernen i datasettet,
-                  samt formålet til datasettet.
-                </HelpMarkdown>
-              </>
-            }
+          <LabelWithHelpTextAndTag
+            helpText={localization.datasetForm.helptext.description}
+            helpAriaLabel={localization.description}
             tagTitle={localization.tag.required}
-          />
+          >
+            {localization.description}
+          </LabelWithHelpTextAndTag>
         }
       />
 
@@ -71,11 +54,11 @@ export const AboutSection = () => {
         label={
           <LabelWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
-            helpText='Hjelpetext'
-            helpTitle='Heisann'
+            helpText={localization.datasetForm.helptext.releaseDate}
+            helpAriaLabel={localization.datasetForm.fieldLabel.releaseDate}
             tagColor='info'
           >
-            {localization.datasetForm.heading.releaseDate}
+            {localization.datasetForm.fieldLabel.releaseDate}
           </LabelWithHelpTextAndTag>
         }
       />

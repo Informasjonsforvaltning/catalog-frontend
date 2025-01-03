@@ -2,7 +2,7 @@ import { Dataset } from '@catalog-frontend/types';
 import { AddButton } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { useFormikContext } from 'formik';
-import { PropsWithChildren, useMemo, useState } from 'react';
+import { PropsWithChildren, useMemo } from 'react';
 import FieldsetWithDelete from '../../fieldset-with-delete';
 import styles from '../dataset-form.module.css';
 import _ from 'lodash';
@@ -60,7 +60,7 @@ export const ToggleFieldButton = ({
           onClick={() => {
             setFieldValue(fieldName, addValue);
           }}
-        >{`${localization.add} ${localization.datasetForm.hiddenFieldLabel[fieldName.split('.')[0]]}`}</AddButton>
+        >{`${localization.add} ${localization.datasetForm.fieldLabel[fieldName.split('.')[0]].toLowerCase()}`}</AddButton>
       )}
     </div>
   );

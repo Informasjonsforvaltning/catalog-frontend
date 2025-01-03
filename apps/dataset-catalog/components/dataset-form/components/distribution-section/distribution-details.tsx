@@ -22,7 +22,12 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
   const { data: selectedMediaTypes } = useSearchMediaTypeByUri(distribution?.mediaType ?? [], referenceDataEnv);
 
   const hasConformsToValues = _.some(distribution?.conformsTo, (item) => {
-    return _.trim(item.uri) || _.trim(_.get(item, 'prefLabel.nb'));
+    const uri = item.uri || '';
+
+    const prefLabelNb = _.get(item, 'prefLabel.nb');
+    const prefLabelNbString = Array.isArray(prefLabelNb) ? prefLabelNb.join(' ') : prefLabelNb || '';
+
+    return _.trim(uri) || _.trim(prefLabelNbString);
   });
 
   return (
