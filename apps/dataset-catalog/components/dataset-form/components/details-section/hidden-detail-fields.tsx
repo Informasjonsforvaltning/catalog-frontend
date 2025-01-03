@@ -11,6 +11,7 @@ import FieldsetWithDelete from '../../../fieldset-with-delete';
 import { ToggleFieldButton } from '../toggle-field-button';
 import { UriWithLabelFieldsetTable } from '../uri-with-label-field-set-table';
 import { useMemo } from 'react';
+import _ from 'lodash';
 
 type Props = {
   datasetTypes: ReferenceDataCode[];
@@ -61,6 +62,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
     [frequencies],
   );
 
+  console.log(_.every(values.conformsTo, _.isUndefined), values.conformsTo);
   return (
     <div>
       <div>
@@ -232,12 +234,15 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         values={values.conformsTo}
         fieldName={'conformsTo'}
         label={
-          <LabelWithHelpTextAndTag
-            helpAriaLabel={localization.datasetForm.fieldLabel.conformsTo}
-            helpText={localization.datasetForm.helptext.conformsTo}
-          >
-            {localization.datasetForm.fieldLabel.conformsTo}
-          </LabelWithHelpTextAndTag>
+          !_.isEmpty(values.conformsTo) &&
+          _.some(values.conformsTo, (item) => !_.isUndefined(item)) && (
+            <LabelWithHelpTextAndTag
+              helpAriaLabel={localization.datasetForm.fieldLabel.conformsTo}
+              helpText={localization.datasetForm.helptext.conformsTo}
+            >
+              {localization.datasetForm.fieldLabel.conformsTo}
+            </LabelWithHelpTextAndTag>
+          )
         }
       />
 

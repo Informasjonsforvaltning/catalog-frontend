@@ -57,7 +57,7 @@ export const datasetFormNb = {
     references: 'Et datasett dette datasettet refererer til.',
     inSeries: 'Velg en datasettserie som dette datasettet er en del av.',
     relations: 'Beslektet ressurs, uten nærmere angivelse av type relasjon.',
-    informationModelsFromFDK: 'Informasjonsmodell fra felles datakatalog',
+    informationModelsFromFDK: 'Informasjonsmodell fra Data.norge.no',
     informationModel: 'Informasjonsmodell fra andre kilder',
     contactPoint:
       'Et kontaktpunkt er informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om datasettet. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.',
@@ -66,7 +66,7 @@ export const datasetFormNb = {
     keyword:
       'Emneord eller tagger beskriver sentralt innhold i datasettet, spesielt når begrepsdefinisjoner mangler eller når det brukes ord som folk ofte søker etter, men som ikke formelt er knyttet til datasettet.',
     concept:
-      'Søk etter begrep som er publisert i Felles begrepskatalog og velg fra nedtrekksliste. Her legger du inn de begrepene som brukes i datasettet. Begrepene brukes til å si noe om hva informasjonen i datasettet betyr. Ved å henvise til gjennomarbeidede definisjoner som virksomheten selv er ansvarlig for å vedlikeholde, sikrer vi at det er tydelig hvordan et begrep brukt i datasettet skal forstås og at denne forståelsen til en hver tid er riktig og oppdatert.',
+      'Søk etter begrep som er publisert i Data.norge.no og velg fra nedtrekkslisten. Her legger du inn de begrepene som brukes i datasettet. Begrepene brukes til å si noe om hva informasjonen i datasettet betyr. Ved å henvise til gjennomarbeidede definisjoner som virksomheten selv er ansvarlig for å vedlikeholde, sikrer vi at det er tydelig hvordan et begrep brukt i datasettet skal forstås og at denne forståelsen til en hver tid er riktig og oppdatert.',
   },
   heading: {
     about: 'Om datasettet',
@@ -126,7 +126,7 @@ export const datasetFormNb = {
     references: 'Relaterte datasett',
     inSeries: 'Relasjon til datasettserie',
     relations: 'Relaterte ressurser',
-    informationModelsFromFDK: 'Informasjonsmodell fra fellesdatakatalog',
+    informationModelsFromFDK: 'Informasjonsmodell fra Data.norge.no',
     informationModel: 'Informasjonsmodell fra andre kilder',
     sample: 'Eksempeldata',
   },
