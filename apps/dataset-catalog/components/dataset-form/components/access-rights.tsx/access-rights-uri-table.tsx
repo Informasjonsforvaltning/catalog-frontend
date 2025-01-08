@@ -1,5 +1,12 @@
 import { Dataset, UriWithLabel } from '@catalog-frontend/types';
-import { AddButton, DeleteButton, EditButton, FieldsetDivider, FormikLanguageFieldset } from '@catalog-frontend/ui';
+import {
+  AddButton,
+  DeleteButton,
+  EditButton,
+  FieldsetDivider,
+  FormikLanguageFieldset,
+  LabelWithHelpTextAndTag,
+} from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button, Label, Modal, Radio, Table, Textfield } from '@digdir/designsystemet-react';
 import { FastField, Formik, useFormikContext } from 'formik';
@@ -63,9 +70,14 @@ export const AccessRightsUriTable = () => {
 
   return (
     <div className={styles.fieldContainer}>
-      <Label size='sm'>{localization.datasetForm.fieldLabel.legalBasis}</Label>
+      <LabelWithHelpTextAndTag
+        helpAriaLabel={localization.datasetForm.fieldLabel.legalBasis}
+        helpText={localization.datasetForm.helptext.legalBasis}
+      >
+        {localization.datasetForm.fieldLabel.legalBasis}
+      </LabelWithHelpTextAndTag>
 
-      {allLegalBases && allLegalBases?.length > 0 && !hasNoFieldValues(allLegalBases[0].uriWithLabel) && (
+      {allLegalBases && allLegalBases?.length > 0 && !hasNoFieldValues(allLegalBases[0]?.uriWithLabel) && (
         <Table size='sm'>
           <Table.Head>
             <Table.Row>
@@ -147,7 +159,14 @@ const FieldModal = ({ template, formType, onSuccess, initialType = 'legalBasisFo
                 <Modal.Content>
                   <Radio.Group
                     size='sm'
-                    legend={localization.type}
+                    legend={
+                      <LabelWithHelpTextAndTag
+                        helpText={localization.datasetForm.helptext.legalBasisType}
+                        helpAriaLabel={localization.type}
+                      >
+                        {localization.type}
+                      </LabelWithHelpTextAndTag>
+                    }
                     onChange={(val) => {
                       setLegalBasis(val);
                     }}

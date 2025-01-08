@@ -20,7 +20,7 @@ import ThemeSection from './components/theme-section';
 import { ConceptSection } from './components/concept-section';
 import { InformationModelSection } from './components/information-model-section';
 import { RelationsSection } from './components/relations-section/relations-section';
-import { DistributionSection } from './components/distribution-section/dataset-form-distribution-section';
+import { DistributionSection } from './components/distribution-section/distribution-section';
 import { ContactPointSection } from './components/contact-point-section';
 import styles from './dataset-form.module.css';
 import { useRouter } from 'next/navigation';
@@ -159,7 +159,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
 
                 <FormLayout.Section
                   id='distribution-section'
-                  title={localization.datasetForm.heading.distribution}
+                  title={localization.datasetForm.heading.distributions}
                 >
                   <DistributionSection
                     referenceDataEnv={referenceDataEnv}

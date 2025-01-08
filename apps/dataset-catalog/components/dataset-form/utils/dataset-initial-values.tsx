@@ -26,8 +26,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
       ? dataset.theme.filter((t) => t.uri && t.uri.includes('/data-theme/')).map((t) => t.uri)
       : [],
     type: dataset?.type,
-    keywordList: dataset.keyword ? groupByKeys(dataset.keyword) : { nb: [] },
-    keyword: dataset.keyword ?? [{ nb: '' }],
+    keywordList: dataset.keyword ? groupByKeys(dataset?.keyword) : { nb: [] },
     conceptList: dataset.concepts ? dataset.concepts.map((concept) => concept.uri) : [],
     provenance: dataset?.provenance?.uri ? { uri: dataset?.provenance?.uri } : undefined,
     accrualPeriodicity: dataset?.accrualPeriodicity?.uri ? { uri: dataset?.accrualPeriodicity?.uri } : undefined,

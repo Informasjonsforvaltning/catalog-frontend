@@ -71,7 +71,20 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
 
   return (
     <>
-      {values?.distribution && <Heading size='xs'>Distribusjoner</Heading>}
+      {values?.distribution && (
+        <Heading
+          size='xs'
+          className={styles.list}
+        >
+          {localization.datasetForm.fieldLabel.distributions}
+          <Tag
+            size='sm'
+            color='info'
+          >
+            {localization.tag.recommended}
+          </Tag>
+        </Heading>
+      )}
       {values?.distribution?.map((item, index) => (
         <Card key={`distribusjon-${index}`}>
           <div className={styles.heading}>
@@ -108,7 +121,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
             </div>
           </div>
 
-          {item.accessURL && <Label size='sm'>{`${localization.datasetForm.fieldLabel.accessUrl}:`}</Label>}
+          {item.accessURL && <Label size='sm'>{`${localization.datasetForm.fieldLabel.accessURL}:`}</Label>}
           <Link href={item?.accessURL?.[0]}>{item?.accessURL?.[0]}</Link>
 
           <div className={styles.tags}>
@@ -169,7 +182,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
         <Card key={`sample-${index}`}>
           <div className={styles.heading}>
             <div className={styles.exampleHeading}>
-              {item.accessURL && <Label size='sm'>{`${localization.datasetForm.fieldLabel.accessUrl}: `}</Label>}
+              {item.accessURL && <Label size='sm'>{`${localization.datasetForm.fieldLabel.accessURL}: `}</Label>}
               <Link href={item?.accessURL?.[0]}>{item?.accessURL?.[0]}</Link>
             </div>
             <div className={styles.buttons}>
