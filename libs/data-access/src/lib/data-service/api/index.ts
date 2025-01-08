@@ -1,7 +1,19 @@
-const path = `${process.env.DATASERVICE_CATALOG_BASE_URI}`;
+const oldPath = `${process.env.DATASERVICE_CATALOG_BASE_URI}`;
+const path = `${process.env.DATA_SERVICE_CATALOG_BASE_URI}`;
+
+export const oldGetAllDataServiceCatalogs = async (accessToken: string) => {
+  const resource = `${oldPath}/catalogs`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+  };
+  return await fetch(resource, options);
+};
 
 export const getAllDataServices = async (catalogId: string, accessToken: string) => {
-  const resource = `${path}/catalogs/${catalogId}/dataservices`;
+  const resource = `${path}/internal/catalogs/${catalogId}/data-services`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -13,7 +25,7 @@ export const getAllDataServices = async (catalogId: string, accessToken: string)
 };
 
 export const getDataServiceById = async (catalogId: string, dataServiceId: string, accessToken: string) => {
-  const resource = `${path}/catalogs/${catalogId}/dataservices/${dataServiceId}`;
+  const resource = `${path}/internal/catalogs/${catalogId}/data-services/${dataServiceId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -25,7 +37,7 @@ export const getDataServiceById = async (catalogId: string, dataServiceId: strin
 };
 
 export const getAllDataServiceCatalogs = async (accessToken: string) => {
-  const resource = `${path}/catalogs`;
+  const resource = `${path}/internal/catalogs/count`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -36,7 +48,7 @@ export const getAllDataServiceCatalogs = async (accessToken: string) => {
 };
 
 export const deleteDataService = async (catalogId: string, dataServiceId: string, accessToken: string) => {
-  const resource = `${path}/catalogs/${catalogId}/dataservices/${dataServiceId}`;
+  const resource = `${path}/internal/catalogs/${catalogId}/data-services/${dataServiceId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,

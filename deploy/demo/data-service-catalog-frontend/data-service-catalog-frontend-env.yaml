@@ -70,11 +70,11 @@ spec:
                 secretKeyRef:
                   name: commonurl-demo
                   key: DATA_SERVICE_CATALOG_FRONTEND
-            - name: DATASERVICE_CATALOG_BASE_URI
+            - name: DATA_SERVICE_CATALOG_BASE_URI
               valueFrom:
                 secretKeyRef:
                   name: commonurl-demo
-                  key: DATASERVICE_CATALOG_BASE_URI
+                  key: DATA_SERVICE_CATALOG_BASE_URI
             - name: CATALOG_PORTAL_BASE_URI
               valueFrom:
                 secretKeyRef:

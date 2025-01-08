@@ -2,7 +2,7 @@
 
 import {
   getAllDatasetCatalogs,
-  getAllDataServiceCatalogs,
+  oldGetAllDataServiceCatalogs as getAllDataServiceCatalogs,
   getAllConceptCatalogs,
   getAllServiceCatalogs,
   getAllProcessingActivities,
