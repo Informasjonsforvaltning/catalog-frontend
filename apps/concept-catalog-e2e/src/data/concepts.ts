@@ -118,6 +118,76 @@ export const CONCEPT_2: Concept = {
   abbreviatedLabel: 'TC2'
 };
 
+export const CONCEPT_2_UPDATED = {
+  ...CONCEPT_2,
+  ...{
+    anbefaltTerm: {
+      navn: {
+        nb: 'Test concept 2 nb',
+        nn: 'Test concept 2 nn - updated',
+        en: 'Test concept 2 en - updated',
+      },
+    },
+    definisjon: {
+      tekst: { nb: 'This is a test concept 2 nb', nn: 'This is a test concept 2 nn - updated', en: 'This is a test concept 2 en - updated' },
+      kildebeskrivelse: {
+        forholdTilKilde: 'basertPaaKilde',
+        kilde: [{
+          tekst: 'Kilde concept 2 - updated',
+          uri: 'https://kilde.concept2.no/updated'
+        }]
+      }
+    },   
+    kontaktpunkt: {    
+      harEpost: 'test2@example-updated.com',
+      harTelefon: '123456781',
+      //: 'https://test2.contactpage.com',
+    },
+    versjonsnr: {major: 1, minor: 2, patch: 1},
+    merknad: {
+      nb: 'Merknad test concept 2 nb - updated',
+      nn: 'Merknad test concept 2 nn - updated',
+      en: 'Merknad test concept 2 en - updated',
+    },
+    merkelapp: [
+      'merkelapp1-updated', 'merkelapp2-updated'
+    ],
+    eksempel: {
+      nb: 'Eksempel test concept 2 nb - updated',
+      nn: 'Eksempel test concept 2 nn - updated',
+      en: 'Eksempel test concept 2 en - updated',
+    },
+    fagområde: null,
+    fagområdeKoder: null,
+    omfang: {
+      tekst: 'Omfang concept 2 - updated',
+      uri: 'https://omfang.concept2.no/updated'
+    },
+    tillattTerm: {
+      nb: ['tillat-term1 nb - updated', 'tillat-term2 nb - updated'],
+      nn: ['tillat-term1 nn - updated', 'tillat-term2 nn - updated'],
+      en: ['tillat-term1 en - updated', 'tillat-term2 en - updated'],
+    },
+    frarådetTerm: {
+      nb: ['frarådet-term1 nb - updated', 'frarådet-term2 nb - updated'],
+      nn: ['frarådet-term1 nn - updated', 'frarådet-term2 nn - updated'],
+      en: ['frarådet-term1 en - updated', 'frarådet-term2 en - updated'],
+    },
+    gyldigFom: '2199-01-01',
+    gyldigTom: '2299-01-01',
+    seOgså: [],
+    internBegrepsRelasjon: [],
+    internSeOgså: [],
+    internErstattesAv: [],
+    erstattesAv: [],
+    statusURI: 'http://publications.europa.eu/resource/authority/concept-status/CURRENT',
+    assignedUser: null,
+    begrepsRelasjon: [],
+    interneFelt: null,
+    abbreviatedLabel: 'TC2UPDATED'
+  }
+};
+
 export const CONCEPT_3: Concept = {
   id: null,
   anbefaltTerm: {

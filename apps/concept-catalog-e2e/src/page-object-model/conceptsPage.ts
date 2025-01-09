@@ -83,11 +83,16 @@ export default class ConceptsPage {
   }
 
   public async createConcepts() {
+    
+
     for (const concept of ALL_CONCEPTS) {
       await this.goto();
 
+      console.log(`Create new concept with title ${concept.anbefaltTerm.navn.nb}`);
+
       // Name and description
-      await this.page.getByRole('link', { name: 'Nytt begrep' }).click({ timeout: 5000 });
+      await this.page.getByRole('link', { name: 'Nytt begrep' }).click({ timeout: 10000 });
+      await this.editPage.expectMenu();
       await this.editPage.fillFormAndSave(concept);
     }
     await this.goto();
