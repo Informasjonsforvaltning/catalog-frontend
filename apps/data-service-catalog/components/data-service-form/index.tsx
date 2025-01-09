@@ -1,61 +1,110 @@
 'use client';
-import { localization } from '@catalog-frontend/utils';
-import { Button } from '@digdir/designsystemet-react';
-import { DataService } from '@catalog-frontend/types';
-import { FormLayout, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
+import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
+import { DataService, DataServiceToBeCreated } from '@catalog-frontend/types';
+import { FormLayout, StickyFooterBar, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
 import { Formik, Form } from 'formik';
 import { useState } from 'react';
 import { TitleSection } from './components/data-service-form-title-section';
-import { useParams } from 'next/navigation';
-import { deleteDataService } from '../../app/actions/actions';
+import { useParams, useRouter } from 'next/navigation';
+import { createDataService } from '../../app/actions/actions';
+import { Button } from '@digdir/designsystemet-react';
+import styles from './data-service-form.module.css';
+import { EndpointSection } from './components/data-service-form-endpoint-section';
 
 type Props = {
-  initialValues: DataService;
+  initialValues: DataService | DataServiceToBeCreated;
+  submitType: 'create' | 'update';
 };
 
-export const DataServiceForm = ({ initialValues }: Props) => {
+export const DataServiceForm = ({ initialValues, submitType }: Props) => {
   const { catalogId, dataServiceId } = useParams();
   const [isDirty, setIsDirty] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isCanceled, setIsCanceled] = useState(false);
+  const router = useRouter();
 
   useWarnIfUnsavedChanges({ unsavedChanges: isDirty });
 
-  const handleDelete = () => {
-    if (window.confirm(localization.dataServiceForm.alert.confirmDelete)) {
-      try {
-        deleteDataService(catalogId.toString(), dataServiceId.toString());
-      } catch (error) {
-        window.alert(localization.alert.deleteFailed);
-      }
+  const handleCreate = async (values: DataService) => {
+    await createDataService(catalogId.toString(), values);
+  };
+
+  const handleUpdate = async (values: DataService) => {
+    // TODO
+  };
+
+  const handleCancel = () => {
+    setIsCanceled(true);
+    router.push(
+      dataServiceId ? `/catalogs/${catalogId}/data-services/${dataServiceId}` : `/catalogs/${catalogId}/data-services`,
+    );
+  };
+
+  const handleSubmit = async (values: DataService) => {
+    if (submitType === 'create') {
+      await handleCreate(values);
+    } else {
+      await handleUpdate(values);
     }
   };
 
   return (
     <Formik
       initialValues={initialValues as DataService}
-      onSubmit={(values, { setSubmitting }) => {
+      onSubmit={async (values, { setSubmitting }) => {
+        await handleSubmit(trimObjectWhitespace(values) as DataService);
         setSubmitting(false);
+        setIsSubmitted(true);
       }}
     >
-      {({ errors, dirty, handleSubmit }) => {
+      {({ dirty, isSubmitting, isValidating, submitForm }) => {
         setTimeout(() => setIsDirty(dirty), 0);
         return (
-          <Form onSubmit={handleSubmit}>
-            <FormLayout>
-              {/* <FormLayout.ButtonsRow>
-                <Button type='submit'>{localization.button.save}</Button>
-                <Button
-                  variant='secondary'
-                  color='danger'
-                  onClick={handleDelete}
+          <>
+            <Form className='container'>
+              <FormLayout>
+                <FormLayout.Section
+                  id='title-section'
+                  title={localization.dataServiceForm.heading.titleAndDescription}
+                  required
                 >
-                  {localization.button.delete}
+                  <TitleSection />
+                </FormLayout.Section>
+                <FormLayout.Section
+                  id='endpoint-section'
+                  title={localization.dataServiceForm.heading.endpoint}
+                  required
+                >
+                  <EndpointSection />
+                </FormLayout.Section>
+              </FormLayout>
+            </Form>
+
+            <StickyFooterBar>
+              <div className={styles.footerContent}>
+                <Button
+                  type='submit'
+                  size='sm'
+                  disabled={isSubmitting || isValidating || isCanceled || !dirty}
+                  onClick={() => {
+                    submitForm();
+                  }}
+                >
+                  {localization.save}
                 </Button>
-              </FormLayout.ButtonsRow> */}
-              <div>
-                <TitleSection errors={errors} />
+
+                <Button
+                  type='button'
+                  size='sm'
+                  variant='secondary'
+                  disabled={isSubmitting || isValidating || isCanceled}
+                  onClick={() => handleCancel()}
+                >
+                  {localization.button.cancel}
+                </Button>
               </div>
-            </FormLayout>
-          </Form>
+            </StickyFooterBar>
+          </>
         );
       }}
     </Formik>

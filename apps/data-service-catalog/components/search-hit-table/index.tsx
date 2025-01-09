@@ -95,7 +95,7 @@ export const SearchHitTable = ({ dataServices }: BannerProps) => {
         {sortedDataServices.map((dataService) => (
           <Table.Row key={dataService.id}>
             <Table.Cell>
-              <Link href={`/catalogs/${dataService.organizationId}/data-services/${dataService.id}/edit`}>
+              <Link href={`/catalogs/${dataService.catalogId}/data-services/${dataService.id}/edit`}>
                 {getTranslateText(dataService.title)}
               </Link>
             </Table.Cell>

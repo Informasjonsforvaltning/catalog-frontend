@@ -76,7 +76,7 @@ export const nb = {
     admin: 'Administrasjonsgrensesnitt',
     concept: 'Begrepskatalog',
     dataset: 'Datasettkatalog',
-    dataService: 'Datatjenestekatalog',
+    dataService: 'API-katalog',
     service: 'Tjenestekatalog',
     publicService: 'Tjenestekatalog - offentlige tjenester',
     recordsOfProcessingActivities: 'Behandlingsoversikt',
@@ -85,7 +85,7 @@ export const nb = {
   resourceType: {
     dataset: 'Datasett',
     datasetSeries: 'Datasettserie',
-    dataService: 'Datatjeneste',
+    dataService: 'API',
     concept: 'Begrep',
     informationModel: 'Informasjonsmodell',
     service: 'Tjeneste',
@@ -96,7 +96,7 @@ export const nb = {
   },
   descriptionType: {
     dataset: 'datasettbeskrivelser',
-    dataService: 'datatjenestebeskrivelser',
+    dataService: 'API-beskrivelser',
     concept: 'begrepsbeskrivelser',
     service: 'tjenestebeskrivelser',
     recordsOfProcessingActivities: 'behandlingsaktiviteter',
@@ -481,7 +481,10 @@ export const nb = {
       PUBLISHED: 'Publisert',
       DRAFT: 'Utkast',
     },
-    searchDataService: 'Søk etter datatjenestebeskrivelse',
+    searchDataService: 'Søk etter API-beskrivelse',
+    button: {
+      newDataService: 'Legg til API-beskrivelse',
+    },
   },
 
   icon: {
