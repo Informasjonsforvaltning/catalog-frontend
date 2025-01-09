@@ -28,6 +28,11 @@ export default class DetailPage {
     await this.page.goto(url);
   }
 
+  public async editConcept() {
+    await this.page.getByRole('button', { name: 'Rediger' }).click();
+    await this.editPage.expectMenu();
+  }
+
   public async deleteConcept() {
     await this.page.getByRole('button', { name: 'Slett' }).click();
     await expect(this.page.getByRole('button', { name: 'Slett' })).toBeHidden({ timeout: 5000 });
@@ -128,7 +133,7 @@ export default class DetailPage {
       this.page
         .locator('div')
         .filter({
-          hasText: new RegExp(`Tillat term:${concept.tillattTerm?.nb.join()}`),
+          hasText: new RegExp(`Tillatt term:${concept.tillattTerm?.nb.join('')}`),
         })
         .nth(1),
     ).toBeVisible({ visible: Boolean(concept.tillattTerm?.nb) });
@@ -137,7 +142,7 @@ export default class DetailPage {
       this.page
         .locator('div')
         .filter({
-          hasText: new RegExp(`Frarådet term:${concept.frarådetTerm?.nb.join()}`),
+          hasText: new RegExp(`Frarådet term:${concept.frarådetTerm?.nb.join('')}`),
         })
         .nth(1),
     ).toBeVisible({ visible: Boolean(concept.frarådetTerm?.nb) });
@@ -182,7 +187,7 @@ export default class DetailPage {
         await expect(this.page.getByText(`Erstattes av${concept.anbefaltTerm.navn.nb}${rel.name}`)).toBeVisible();
       }
     }
-
+    
     await expect(this.page.getByText('Adventure story:Once upon a time')).toBeVisible();
 
     await expect(this.page.getByText('Has magical powers:Ja')).toBeVisible();
@@ -212,7 +217,7 @@ export default class DetailPage {
           month: 'long',
           day: 'numeric',
         })}`,
-      }),
+      }).first()
     ).toBeVisible();
   }
 
@@ -251,7 +256,6 @@ export default class DetailPage {
     await expect(
       this.page.getByText(
         formatISO(new Date(concept.gyldigFom).toISOString(), {
-          weekday: 'long',
           year: 'numeric',
           month: 'long',
           day: 'numeric',
@@ -265,7 +269,6 @@ export default class DetailPage {
     await expect(
       this.page.getByText(
         formatISO(new Date(concept.gyldigTom).toISOString(), {
-          weekday: 'long',
           year: 'numeric',
           month: 'long',
           day: 'numeric',
@@ -273,6 +276,9 @@ export default class DetailPage {
       ),
     ).toBeVisible({ visible: Boolean(concept.gyldigTom) });
 
+    await expect(this.page.getByRole('heading', { name: 'Tildelt' })).toBeVisible();
+    await expect(this.page.getByText('Avery Quokka')).toBeVisible();
+    
     await expect(this.page.getByRole('heading', { name: 'Dato sist oppdatert' })).toBeVisible();
     await expect(
       this.page
@@ -316,9 +322,9 @@ export default class DetailPage {
   }
 
   public async expectDetails(concept: Concept) {
-    await this.expectActionButtons();
-    await this.expectLanguageCombobox();
     await this.expectHeading(concept);
+    await this.expectActionButtons();
+    await this.expectLanguageCombobox();    
     await this.expectLeftColumnContent(concept);
     await this.expectRightColumnContent(concept);
     await this.expectCommentsTab();
