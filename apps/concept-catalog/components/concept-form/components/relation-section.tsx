@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import { PencilWritingIcon, PlusCircleIcon, PlusIcon, TrashIcon } from '@navikt/aksel-icons';
+import { PencilWritingIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button, Skeleton, Table } from '@digdir/designsystemet-react';
 import { Concept, RelatedConcept, UnionRelation, RelationTypeEnum } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
@@ -7,36 +7,44 @@ import { useSearchConcepts as useSearchInternalConcepts, useDataNorgeSearchConce
 import { RelationModal } from './relation-modal';
 import styles from '../concept-form.module.scss';
 
+type UnionRelationWithIndex = {
+  index: number;
+} & UnionRelation;
+
 export const RelationSection = ({ catalogId }) => {
   const { values, setFieldValue } = useFormikContext<Concept>();
 
-  const relations: UnionRelation[] = [
-    ...(values['begrepsRelasjon']?.map((rel) => ({ ...rel })) ?? []),
+  const relations: UnionRelationWithIndex[] = [
+    ...(values['begrepsRelasjon']?.map((rel, index) => ({ ...rel, index })) ?? []),
     ...(values['seOgså']
-      ? values['seOgså'].map((concept) => ({
+      ? values['seOgså'].map((concept, index) => ({
           relasjon: RelationTypeEnum.SE_OGSÅ,
           relatertBegrep: concept,
+          index
         }))
       : []),
     ...(values['erstattesAv']
-      ? values['erstattesAv'].map((concept) => ({
+      ? values['erstattesAv'].map((concept, index) => ({
           relasjon: RelationTypeEnum.ERSTATTES_AV,
           relatertBegrep: concept,
+          index
         }))
       : []),
-    ...(values['internBegrepsRelasjon'] ? values.internBegrepsRelasjon.map((rel) => ({ ...rel, internal: true })) : []),
+    ...(values['internBegrepsRelasjon'] ? values.internBegrepsRelasjon.map((rel,index) => ({ ...rel, internal: true, index })) : []),
     ...(values['internSeOgså']
-      ? values['internSeOgså'].map((concept) => ({
+      ? values['internSeOgså'].map((concept, index) => ({
           relasjon: RelationTypeEnum.SE_OGSÅ,
           relatertBegrep: concept,
           internal: true,
+          index
         }))
       : []),
     ...(values['internErstattesAv']
-      ? values['internErstattesAv'].map((concept) => ({
+      ? values['internErstattesAv'].map((concept, index) => ({
           relasjon: RelationTypeEnum.ERSTATTES_AV,
           relatertBegrep: concept,
           internal: true,
+          index
         }))
       : []),
   ];
@@ -172,8 +180,8 @@ export const RelationSection = ({ catalogId }) => {
             </Table.Row>
           </Table.Head>
           <Table.Body>
-            {relations?.map((relation, index) => (
-              <Table.Row key={index}>
+            {relations?.map((relation) => (
+              <Table.Row key={relation.index}>
                 <Table.Cell>
                   {localization.conceptForm.fieldLabel.relationTypes[relation.relasjon as string]}
                 </Table.Cell>
@@ -198,13 +206,13 @@ export const RelationSection = ({ catalogId }) => {
                           Rediger
                         </Button>
                       }
-                      onSucces={(values) => handleChangeRelation(values, index)}
+                      onSucces={(values) => handleChangeRelation(values, relation.index)}
                     />
                     <Button
                       variant='tertiary'
                       color='danger'
                       size='sm'
-                      onClick={() => handleRemoveRelation(relation, index)}
+                      onClick={() => handleRemoveRelation(relation, relation.index)}
                     >
                       <TrashIcon
                         aria-hidden

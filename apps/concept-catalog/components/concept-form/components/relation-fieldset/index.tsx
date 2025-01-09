@@ -173,6 +173,8 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
               size='sm'
               portal={false}
               value={relatedConcept}
+              label='Søk begrep'
+              hideLabel
               onChange={handleSearchConceptChange}
               onValueChange={handleRelatedConceptChange}
               error={errors.relatertBegrep}

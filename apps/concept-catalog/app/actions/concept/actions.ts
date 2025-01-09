@@ -142,12 +142,13 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
   });
 
   const diff = compare(
-    _(initialConcept).omit(metaDataFieldsToOmit).value(),
+    _(initialConcept).omit(metaDataFieldsToOmit).omitBy(_.isNull).value(),
     _({
       ...initialConcept,
       ...values
     })
       .omit(metaDataFieldsToOmit)
+      .omitBy(_.isNull)
       .value()
   );
 
