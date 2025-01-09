@@ -15,7 +15,7 @@ export default class CatalogPortalPage {
 
   // Locators
   datasetCatalog = () => this.page.getByRole('link', { name: /^Datasettkatalog/ });
-  dataServiceCatalog = () => this.page.getByRole('link', { name: /^Datatjenestekatalog/ });
+  dataServiceCatalog = () => this.page.getByRole('link', { name: /^API-katalog/ });
   conceptCatalog = () => this.page.getByRole('link', { name: /^Begrepskatalog/ });
   publicServiceCatalog = () => this.page.getByRole('link', { name: /^Tjenestekatalog Offentlige/ });
   serviceCatalog = () => this.page.getByRole('link', { name: /^Tjenestekatalog Tjenester/ });

@@ -1,3 +1,5 @@
+import { DataService } from '@catalog-frontend/types';
+
 const oldPath = `${process.env.DATASERVICE_CATALOG_BASE_URI}`;
 const path = `${process.env.DATA_SERVICE_CATALOG_BASE_URI}`;
 
@@ -32,6 +34,19 @@ export const getDataServiceById = async (catalogId: string, dataServiceId: strin
       'Content-Type': 'application/json',
     },
     next: { tags: ['data-service'] },
+  };
+  return await fetch(resource, options);
+};
+
+export const postDataService = async (dataService: Partial<DataService>, catalogId: string, accessToken: string) => {
+  const resource = `${path}/internal/catalogs/${catalogId}/data-services`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body: JSON.stringify(dataService),
   };
   return await fetch(resource, options);
 };

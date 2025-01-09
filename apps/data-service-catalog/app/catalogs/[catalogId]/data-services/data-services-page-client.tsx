@@ -3,19 +3,21 @@
 import { DataService } from '@catalog-frontend/types';
 import styles from './data-services-page.module.css';
 
-import { SearchHitsPageLayout } from '@catalog-frontend/ui';
+import { LinkButton, SearchHitsPageLayout } from '@catalog-frontend/ui';
 import { SearchHitTable } from '../../../../components/search-hit-table';
 import { StatusFilter } from '../../../../components/status-filter';
-import React, { useState, useEffect } from "react";
-import {Paragraph, Search} from "@digdir/designsystemet-react";
-import { localization } from "@catalog-frontend/utils";
+import React, { useState, useEffect } from 'react';
+import { Paragraph, Search } from '@digdir/designsystemet-react';
+import { localization } from '@catalog-frontend/utils';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 
 interface Props {
   dataServices: DataService[];
+  catalogId: string;
   hasWritePermission: boolean;
 }
 
-const DataServicesPageClient = ({ dataServices }: Props) => {
+const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission }: Props) => {
   const [filteredDataServices, setFilteredDataServices] = useState<DataService[]>(dataServices);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
@@ -31,9 +33,9 @@ const DataServicesPageClient = ({ dataServices }: Props) => {
       if (searchQuery) {
         const lowercasedQuery = searchQuery.toLowerCase();
         filtered = filtered.filter(
-            (dataService) =>
-                dataService.title?.nb?.toLowerCase().includes(lowercasedQuery) ||
-                dataService.description?.nb?.toLowerCase().includes(lowercasedQuery),
+          (dataService) =>
+            dataService.title?.nb?.toLowerCase().includes(lowercasedQuery) ||
+            dataService.description?.nb?.toLowerCase().includes(lowercasedQuery),
         );
       }
 
@@ -66,20 +68,28 @@ const DataServicesPageClient = ({ dataServices }: Props) => {
             <div className={styles.search}>
               <Paragraph>{localization.dataServiceCatalog.searchDataService}</Paragraph>
               <Search
-                  variant='primary'
-                  placeholder={localization.search.search}
-                  onSearchClick={handleSearch}
-                  onKeyDown={handleSearchKeyDown}
+                variant='primary'
+                placeholder={localization.search.search}
+                onSearchClick={handleSearch}
+                onKeyDown={handleSearchKeyDown}
               />
             </div>
           </div>
+          {hasWritePermission && (
+            <div>
+              <LinkButton href={`/catalogs/${catalogId}/data-services/new`}>
+                <PlusCircleIcon />
+                {localization.dataServiceCatalog.button.newDataService}
+              </LinkButton>
+            </div>
+          )}
         </SearchHitsPageLayout.SearchRow>
         <SearchHitsPageLayout.LeftColumn>
           <Paragraph>{`${localization.add}...`}</Paragraph>
           <StatusFilter onStatusChange={handleStatusChange} />
         </SearchHitsPageLayout.LeftColumn>
         <SearchHitsPageLayout.MainColumn>
-          <SearchHitTable dataServices={filteredDataServices}/>
+          <SearchHitTable dataServices={filteredDataServices} />
         </SearchHitsPageLayout.MainColumn>
       </SearchHitsPageLayout>
     </div>

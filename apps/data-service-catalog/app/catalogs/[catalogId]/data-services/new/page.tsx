@@ -3,13 +3,13 @@ import { getOrganization } from '@catalog-frontend/data-access';
 
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { getDataService } from '../../../../../actions/actions';
 import { Organization } from '@catalog-frontend/types';
-import DataServiceForm from '../../../../../../components/data-service-form';
+import DataServiceForm from '../../../../../components/data-service-form';
+import { dataServiceToBeCreatedTemplate } from '../../../../../components/data-service-form/utils/data-service-initial-values';
 
-export default async function EditDataServicePage({ params }: Params) {
-  const { catalogId, dataServiceId } = params;
-  const dataService = await getDataService(catalogId, dataServiceId);
+export default async function NewDataServicePage({ params }: Params) {
+  const { catalogId } = params;
+  const initialValues = dataServiceToBeCreatedTemplate();
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
   const breadcrumbList = [
@@ -18,12 +18,8 @@ export default async function EditDataServicePage({ params }: Params) {
       text: localization.catalogType.dataService,
     },
     {
-      href: `/catalogs/${catalogId}/data-services/${dataServiceId}`,
-      text: getTranslateText(dataService.title),
-    },
-    {
-      href: `/catalogs/${catalogId}/data-services/${dataServiceId}/edit`,
-      text: localization.edit,
+      href: `/catalogs/${catalogId}/data-services/new`,
+      text: localization.dataServiceCatalog.button.newDataService,
     },
   ] as BreadcrumbType[];
 
@@ -38,8 +34,8 @@ export default async function EditDataServicePage({ params }: Params) {
         subtitle={getTranslateText(organization.prefLabel).toString()}
       />
       <DataServiceForm
-        initialValues={dataService}
-        submitType={'update'}
+        initialValues={initialValues}
+        submitType={'create'}
       />
     </>
   );

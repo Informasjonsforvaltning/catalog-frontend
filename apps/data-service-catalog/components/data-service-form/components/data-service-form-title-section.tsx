@@ -1,54 +1,44 @@
 import { DataService } from '@catalog-frontend/types';
-import { FormContainer, TitleWithTag } from '@catalog-frontend/ui';
+import { FormikLanguageFieldset, LabelWithHelpTextAndTag, TextareaWithPrefix } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Heading, Textarea, Textfield } from '@digdir/designsystemet-react';
-import { Field, FormikErrors } from 'formik';
+import { Textfield } from '@digdir/designsystemet-react';
+import { useFormikContext } from 'formik';
 
-type TitleSectionProps = {
-  errors: FormikErrors<DataService>;
-};
-
-export const TitleSection = ({ errors }: TitleSectionProps) => {
+export const TitleSection = () => {
+  const errors = useFormikContext<DataService>()?.errors;
   return (
-    <div>
-      <Heading
-        size='sm'
-        spacing
-      >
-        {localization.dataServiceForm.heading.titleAndDescription}
-      </Heading>
-      <FormContainer>
-        <FormContainer.Header
-          title={localization.title}
-          subtitle={localization.dataServiceForm.helptext.title}
-        />
-        <Field
-          as={Textfield}
-          name='title.nb'
-          label={
-            <TitleWithTag
-              title={localization.dataServiceForm.fieldLabel.title}
-              tagTitle={localization.tag.required}
-            />
-          }
-          error={errors?.title?.nb}
-        />
-        <FormContainer.Header
-          title={localization.dataServiceForm.heading.description}
-          subtitle={localization.dataServiceForm.helptext.description}
-        />
-        <Field
-          as={Textarea}
-          name='description.nb'
-          label={
-            <TitleWithTag
-              title={localization.dataServiceForm.fieldLabel.description}
-              tagTitle={localization.tag.required}
-            />
-          }
-          error={errors?.description?.nb}
-        />
-      </FormContainer>
-    </div>
+    <>
+      <FormikLanguageFieldset
+        name={'title'}
+        as={Textfield}
+        requiredLanguages={['nb']}
+        legend={
+          <LabelWithHelpTextAndTag
+            tagTitle={localization.tag.required}
+            helpText={localization.dataServiceForm.helptext.title}
+            helpAriaLabel={localization.dataServiceForm.fieldLabel.title}
+            tagColor='info'
+          >
+            {localization.dataServiceForm.fieldLabel.title}
+          </LabelWithHelpTextAndTag>
+        }
+      />
+
+      <FormikLanguageFieldset
+        name='description'
+        as={TextareaWithPrefix}
+        requiredLanguages={['nb']}
+        legend={
+          <LabelWithHelpTextAndTag
+            tagTitle={localization.tag.required}
+            helpText={localization.dataServiceForm.helptext.description}
+            helpAriaLabel={localization.dataServiceForm.fieldLabel.description}
+            tagColor='info'
+          >
+            {localization.dataServiceForm.fieldLabel.description}
+          </LabelWithHelpTextAndTag>
+        }
+      />
+    </>
   );
 };
