@@ -7,6 +7,7 @@ export * from './lib/custom-error';
 export * from './lib/detail-heading';
 export * from './lib/details-page-layout';
 export * from './lib/divider-line';
+export * from './lib/fieldset-divider';
 export * from './lib/footer';
 export * from './lib/form-container';
 export * from './lib/form-layout';

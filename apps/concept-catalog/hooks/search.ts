@@ -1,6 +1,6 @@
 'use client';
 
-import { QueryFilters, QuerySort, SearchableField } from '@catalog-frontend/types';
+import { QueryFilters, QuerySort, SearchableField, SearchConceptResponse, Search } from '@catalog-frontend/types';
 import { SelectOption } from '@catalog-frontend/ui';
 import { useQuery } from '@tanstack/react-query';
 
@@ -29,6 +29,7 @@ export interface PageUpdate {
   fields: FieldOptions;
   sort?: QuerySort;
   filters?: QueryFilters;
+  enabled?: boolean;
 }
 
 export const fields = {
@@ -69,7 +70,7 @@ export const getSelectOptions = (object: any): SelectOption[] => {
   return options;
 };
 
-export const useSearchConcepts = ({ catalogId, searchTerm, page, fields, sort, filters }: PageUpdate) => {
+export const useSearchConcepts = ({ catalogId, searchTerm, page, fields, sort, filters, enabled }: PageUpdate) => {
   const hitsPerPage = 5;
   const body = {
     catalogId,
@@ -85,7 +86,7 @@ export const useSearchConcepts = ({ catalogId, searchTerm, page, fields, sort, f
     },
   };
 
-  return useQuery({
+  return useQuery<SearchConceptResponse>({
     queryKey: ['searchConcepts', body],
     queryFn: async () => {
       const response = await fetch('/api/search', {
@@ -99,5 +100,32 @@ export const useSearchConcepts = ({ catalogId, searchTerm, page, fields, sort, f
 
       return response.json();
     },
+    enabled,
+  });
+};
+
+export const useDataNorgeSearchConcepts = ({
+  searchOperation,
+  enabled,
+}: {
+  searchOperation: Search.SearchOperation;
+  enabled?: boolean;
+}) => {
+  return useQuery<Search.SearchResult>({
+    queryKey: ['searchExternalConcept', searchOperation],
+    queryFn: async () => {
+      const resource = '/api/data-norge/search';
+      const options = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body: JSON.stringify(searchOperation),
+      };
+
+      const response = await fetch(resource, options);
+      return response.json();
+    },
+    enabled,
   });
 };
