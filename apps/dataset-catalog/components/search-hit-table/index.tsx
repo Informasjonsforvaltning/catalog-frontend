@@ -41,7 +41,7 @@ export const SearchHitTable = ({ datasets }: BannerProps) => {
 
     switch (key) {
       case 'title':
-        return (a: Dataset, b: Dataset) => sortFn(a.title?.nb || '', b.title?.nb || '');
+        return (a: Dataset, b: Dataset) => sortFn(a.title?.nb?.toString() || '', b.title?.nb?.toString() || '');
       case 'type':
         return (a: Dataset, b: Dataset) => sortFn(a.specializedType || '', b.specializedType || '');
       case 'lastChanged':
@@ -101,7 +101,7 @@ export const SearchHitTable = ({ datasets }: BannerProps) => {
           <Table.Row key={dataset.id}>
             <Table.Cell>
               {dataset && (
-                <Link href={`/catalogs/${dataset.catalogId}/datasets/${dataset.id}/edit`}>
+                <Link href={`/catalogs/${dataset.catalogId}/datasets/${dataset.id}`}>
                   {dataset.title?.nb || localization.noName}
                 </Link>
               )}

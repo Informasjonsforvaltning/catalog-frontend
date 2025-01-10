@@ -149,6 +149,8 @@ export const datasetFormNb = {
     searchString: 'Ingen treff. Søkestrengen må inneholde minst to bokstaver.',
     accessURL: 'Tilgangslenke er påkrevd.',
     contactPoint: 'Minst et kontaktpunkt må fylles ut.',
+    accessURLrequired: 'Tilgangslenke må fylles ut.',
+    relation: 'Begge verdiene må fylles ut for å legge til en relasjon.',
   },
   button: {
     addDate: 'Legg til tidsperiode',

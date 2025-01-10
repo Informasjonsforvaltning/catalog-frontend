@@ -68,7 +68,10 @@ export async function createDataset(values: DatasetToBeCreated, catalogId: strin
     if (response.status !== 201) {
       throw new Error();
     }
-    datasetId = response?.headers?.get('location')?.split('/').pop();
+
+    const data = await response.json();
+    datasetId = data.id;
+
     success = true;
   } catch (error) {
     throw new Error(localization.alert.fail);
@@ -141,5 +144,25 @@ export async function updateDataset(catalogId: string, initialDataset: Dataset, 
     revalidateTag('dataset');
     revalidateTag('datasets');
     redirect(`/catalogs/${catalogId}/datasets/${initialDataset.id}`);
+  }
+}
+
+export async function publishDataset(catalogId: string, initialDataset: Dataset, values: Dataset) {
+  const diff = compare(initialDataset, values);
+
+  if (diff.length === 0) {
+    throw new Error(localization.alert.noChanges);
+  }
+
+  const session = await getValidSession();
+
+  try {
+    const response = await update(catalogId, initialDataset.id, diff, `${session?.accessToken}`);
+    if (response.status !== 200) {
+      throw new Error(`${response.status} ${response.statusText}`);
+    }
+  } catch (error) {
+    console.error(`${localization.alert.fail} ${error}`);
+    throw new Error(`Noe gikk galt, prøv igjen...`);
   }
 }

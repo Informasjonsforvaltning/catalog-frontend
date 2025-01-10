@@ -68,34 +68,33 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         <FieldArray name='landingPage'>
           {(arrayHelpers) => (
             <>
-              {arrayHelpers.form.values.landingPage &&
-                arrayHelpers.form.values.landingPage.map((index: number) => (
-                  <div
-                    key={`landingPage-${index}`}
-                    className={styles.padding}
-                  >
-                    <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
-                      <FastField
-                        name={`landingPage[${index}]`}
-                        label={
-                          arrayHelpers.form.values.landingPage < 1 ? (
-                            <LabelWithHelpTextAndTag
-                              helpAriaLabel={localization.datasetForm.fieldLabel.landingPage}
-                              helpText={localization.datasetForm.helptext.landingPage}
-                            >
-                              {localization.datasetForm.fieldLabel.landingPage}
-                            </LabelWithHelpTextAndTag>
-                          ) : (
-                            ''
-                          )
-                        }
-                        as={Textfield}
-                        size='sm'
-                        error={errors?.landingPage?.[index]}
-                      />
-                    </FieldsetWithDelete>
-                  </div>
-                ))}
+              {(arrayHelpers.form.values.landingPage || []).map((_: any, index: number) => (
+                <div
+                  key={`landingPage-${index}`}
+                  className={styles.padding}
+                >
+                  <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
+                    <FastField
+                      name={`landingPage[${index}]`}
+                      label={
+                        arrayHelpers.form.values.landingPage < 1 ? (
+                          <LabelWithHelpTextAndTag
+                            helpAriaLabel={localization.datasetForm.fieldLabel.landingPage}
+                            helpText={localization.datasetForm.helptext.landingPage}
+                          >
+                            {localization.datasetForm.fieldLabel.landingPage}
+                          </LabelWithHelpTextAndTag>
+                        ) : (
+                          ''
+                        )
+                      }
+                      as={Textfield}
+                      size='sm'
+                      error={errors?.landingPage?.[index]}
+                    />
+                  </FieldsetWithDelete>
+                </div>
+              ))}
 
               <AddButton onClick={() => arrayHelpers.push('')}>
                 {`${localization.datasetForm.fieldLabel.landingPage}`}
