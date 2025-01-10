@@ -18,9 +18,9 @@ interface LayoutProps {
   catalogAdminUrl?: string;
   fdkRegistrationBaseUrl?: string;
   adminGuiBaseUrl?: string;
-  fdkCommunityBaseUrl?: string;
   fdkBaseUrl?: string;
   catalogTitle?: string;
+  displayFooter?: boolean;
 }
 
 export const Layout = ({
@@ -31,9 +31,9 @@ export const Layout = ({
   catalogAdminUrl,
   fdkRegistrationBaseUrl,
   adminGuiBaseUrl,
-  fdkCommunityBaseUrl,
   fdkBaseUrl,
   catalogTitle,
+  displayFooter = true
 }: LayoutProps) => {
   return (
     <div className={cn(style.layout, className)}>
@@ -43,7 +43,6 @@ export const Layout = ({
         catalogAdminUrl={catalogAdminUrl}
         fdkRegistrationBaseUrl={fdkRegistrationBaseUrl}
         adminGuiBaseUrl={adminGuiBaseUrl}
-        fdkCommunityBaseUrl={fdkCommunityBaseUrl}
         fdkBaseUrl={fdkBaseUrl}
       />
       <main className={style.main}>
@@ -54,10 +53,12 @@ export const Layout = ({
           {children}
         </ErrorBoundary>
       </main>
-      <Footer
+      {displayFooter && (
+        <Footer
         fontColor={fontColor}
         backgroundColor={backgroundColor}
       />
+      )}      
     </div>
   );
 };

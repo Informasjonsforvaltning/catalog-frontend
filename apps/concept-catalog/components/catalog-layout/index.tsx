@@ -34,9 +34,9 @@ export const CatalogLayout = ({
       catalogAdminUrl={catalogAdminUrl}
       fdkRegistrationBaseUrl={fdkRegistrationBaseUrl}
       adminGuiBaseUrl={adminGuiBaseUrl}
-      fdkCommunityBaseUrl={fdkCommunityBaseUrl}
       fdkBaseUrl={fdkBaseUrl}
       catalogTitle={localization.catalogType.concept}
+      displayFooter={false}
     >
       {children}
     </Layout>
