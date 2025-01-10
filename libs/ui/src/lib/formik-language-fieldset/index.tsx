@@ -99,11 +99,7 @@ export const FormikLanguageFieldset = ({
                   disabled={Boolean(textValue[lang]) === false}
                   onClick={() => handleAddTextValue(lang)}
                 />
-
-                <DeleteButton
-                  onKeyDown={(e) => { if(e.code === 'Enter') { handleAddTextValue(lang) } }}
-                  onBlur={() => handleAddTextValue(lang)}
-                />
+                <DeleteButton onClick={() => handleRemoveLanguage(lang)} />
               </Box>
               <Chip.Group size='sm'>
                 {(values?.[name]?.[lang] as string[] | undefined)?.map((v, i) => (
