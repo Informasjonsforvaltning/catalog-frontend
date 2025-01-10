@@ -286,7 +286,7 @@ export default class EditPage {
   }
 
   public async expectMenu() {
-    await expect(this.page.getByRole('heading', { name: 'Innhold i skjema' })).toBeVisible({ timeout: 10000 });
+    await expect(this.page.getByRole('heading', { name: 'Innhold i skjema' })).toBeVisible();
     await expect(this.page.getByRole('list').getByText('Term (Må fylles ut)')).toBeVisible();
     await expect(this.page.getByRole('list').getByText('Definisjon (Må fylles ut)')).toBeVisible();
     await expect(this.page.getByRole('list').getByText('Merknad')).toBeVisible();
