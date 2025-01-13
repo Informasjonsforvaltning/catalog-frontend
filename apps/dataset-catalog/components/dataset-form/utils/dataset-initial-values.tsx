@@ -18,7 +18,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     legalBasisForRestriction: dataset?.legalBasisForRestriction ?? [],
     registrationStatus: dataset.registrationStatus,
     landingPage:
-      dataset.landingPage && dataset?.landingPage?.length > 0 && dataset.landingPage.every((page) => page !== null)
+      dataset.landingPage && dataset?.landingPage?.length > 0 && dataset.landingPage.every((page) => page !== undefined)
         ? dataset.landingPage
         : [],
     losThemeList: dataset.theme ? dataset.theme.filter((t) => t.uri && t.uri.includes('/los/')).map((t) => t.uri) : [],
@@ -116,12 +116,14 @@ export const distributionTemplate = (dist: Distribution | undefined) => {
   return dist
     ? {
         ...dist,
+        title: dist?.title ?? { nb: '' },
+        downloadURL: dist?.downloadURL && dist?.downloadURL[0] ? dist?.downloadURL : [''],
         accessServiceList: dist.accessService?.map((service) => service.uri) || [],
       }
     : {
         title: { nb: '' },
         description: { nb: '' },
-        downloadURL: [],
+        downloadURL: [''],
         accessURL: [],
         format: [],
         mediaType: [],

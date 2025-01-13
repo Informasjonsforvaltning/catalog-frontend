@@ -30,7 +30,7 @@ type Props = {
   referenceDataEnv: string;
   searchEnv: string;
   openLicenses?: ReferenceDataCode[];
-  onSuccess: (values: FormikDistribution) => void;
+  onSuccess: (values: Distribution, type: string) => void;
   initialValues: Partial<Distribution> | undefined;
   type: 'new' | 'edit';
   initialDistributionType?: 'distribution' | 'sample';
@@ -122,7 +122,7 @@ export const DistributionModal = ({
           validationSchema={distributionSectionSchema}
           onSubmit={(values, { setSubmitting }) => {
             const trimmedValues = trimObjectWhitespace(values);
-            onSuccess({ type: distributionType, values: trimmedValues });
+            onSuccess(trimmedValues, distributionType);
             setSubmitting(false);
             setSubmitted(true);
             modalRef.current?.close();
@@ -184,11 +184,9 @@ export const DistributionModal = ({
                               </LabelWithHelpTextAndTag>
                             }
                           />
+                          <FieldsetDivider />
                         </>
                       )}
-
-                      <FieldsetDivider />
-
                       <FastField
                         name='accessURL[0]'
                         as={Textfield}

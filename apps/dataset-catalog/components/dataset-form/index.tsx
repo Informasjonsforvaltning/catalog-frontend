@@ -247,7 +247,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                 <Switch
                   position='left'
                   size='sm'
-                  checked={values.registrationStatus === PublicationStatus.APPROVE}
+                  checked={values.registrationStatus !== PublicationStatus.DRAFT}
                   onChange={(event) => handleSwitchChange(event, setFieldValue)}
                 >
                   <div className={styles.footerContent}>

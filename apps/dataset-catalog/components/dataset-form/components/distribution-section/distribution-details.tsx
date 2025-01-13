@@ -42,7 +42,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
             </div>
           )}
 
-          {distribution.downloadURL && distribution.downloadURL.length > 0 && (
+          {distribution?.downloadURL && distribution?.downloadURL[0] && (
             <div className={styles.field}>
               <Label size='sm'>{`${localization.datasetForm.fieldLabel.downloadURL}:`}</Label>
               <Paragraph size='sm'>{distribution?.downloadURL?.[0] ?? ''}</Paragraph>

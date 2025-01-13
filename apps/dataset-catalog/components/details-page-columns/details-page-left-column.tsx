@@ -58,7 +58,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
           <Paragraph size='sm'>{getTranslateText(dataset?.description)} </Paragraph>
         </InfoCard.Item>
       )}
-      {dataset?.accessRights && (
+      {dataset?.accessRights && !_.isEmpty(dataset?.accessRights) && (
         <InfoCard.Item
           label={localization.access}
           className={styles.access}
@@ -67,7 +67,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </InfoCard.Item>
       )}
 
-      {dataset.theme && (
+      {dataset.theme && !_.isEmpty(dataset?.theme) && (
         <>
           <InfoCard.Item label={localization.datasetForm.fieldLabel.euTheme}>
             <li className={styles.list}>
@@ -104,35 +104,39 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </>
       )}
 
-      {dataset?.distribution && (
+      {dataset?.distribution && !_.isEmpty(dataset?.distribution) && (
         <InfoCard.Item label={localization.datasetForm.fieldLabel.distributions}>
-          {dataset.distribution.map((dist, index) => (
-            <DistributionDetailsCard
-              key={`distribution-${index}`}
-              distribution={dist}
-              searchEnv={searchEnv}
-              referenceDataEnv={referenceDataEnv}
-              openLicenses={referenceData.openLicenses}
-            />
-          ))}
+          <div className={styles.infoCardItems}>
+            {dataset.distribution.map((dist, index) => (
+              <DistributionDetailsCard
+                key={`distribution-${index}`}
+                distribution={dist}
+                searchEnv={searchEnv}
+                referenceDataEnv={referenceDataEnv}
+                openLicenses={referenceData.openLicenses}
+              />
+            ))}
+          </div>
         </InfoCard.Item>
       )}
 
       {dataset?.sample && (
         <InfoCard.Item label={localization.datasetForm.fieldLabel.sample}>
-          {dataset.sample.map((dist, index) => (
-            <DistributionDetailsCard
-              key={`sample-${index}`}
-              distribution={dist}
-              searchEnv={searchEnv}
-              referenceDataEnv={referenceDataEnv}
-              openLicenses={referenceData.openLicenses}
-            />
-          ))}
+          <div className={styles.infoCardItems}>
+            {dataset.sample.map((dist, index) => (
+              <DistributionDetailsCard
+                key={`sample-${index}`}
+                distribution={dist}
+                searchEnv={searchEnv}
+                referenceDataEnv={referenceDataEnv}
+                openLicenses={referenceData.openLicenses}
+              />
+            ))}
+          </div>
         </InfoCard.Item>
       )}
 
-      {dataset?.language && (
+      {dataset?.language && !_.isEmpty(dataset?.language) && (
         <InfoCard.Item label={localization.datasetForm.fieldLabel.language}>
           {dataset.language
             .map((lang) => {
@@ -143,7 +147,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
             .join(', ')}
         </InfoCard.Item>
       )}
-      {dataset?.spatial && (
+      {dataset?.spatial && !_.isEmpty(dataset?.spatial) && (
         <InfoCard.Item label={localization.datasetForm.fieldLabel.spatial}>
           {getTranslateText(dataset?.spatial?.map((area) => spatial?.find((item) => item.uri === area.uri)?.label))}
           {
@@ -155,7 +159,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </InfoCard.Item>
       )}
 
-      {dataset?.landingPage && (
+      {dataset?.landingPage && !_.isEmpty(dataset?.landingPage) && (
         <InfoCard.Item label={localization.datasetForm.fieldLabel.landingPage}>
           <div className={styles.infoCardItems}>
             {dataset?.landingPage.map((item) => <Paragraph key={item}>{item}</Paragraph>)}
@@ -163,7 +167,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </InfoCard.Item>
       )}
 
-      {Array.isArray(dataset.temporal) && dataset.temporal.length > 0 && (
+      {Array.isArray(dataset.temporal) && dataset.temporal.length > 0 && !_.isEmpty(dataset?.temporal[0]) && (
         <InfoCard.Item label={localization.datasetForm.fieldLabel.temporal}>
           <TemporalDetails temporal={dataset?.temporal} />
         </InfoCard.Item>
@@ -334,7 +338,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
           </li>
         </InfoCard.Item>
       )}
-      {!_.isEmpty(dataset?.keyword) && (
+      {dataset?.keyword && !_.isEmpty(dataset?.keyword[0]) && (
         <InfoCard.Item label={localization.datasetForm.fieldLabel.keyword}>
           <li className={styles.list}>
             {dataset.keyword?.map((item, index) => {
