@@ -17,7 +17,6 @@ export const EndpointSection = () => {
             tagTitle={localization.tag.required}
             helpText={localization.dataServiceForm.helptext.endpoint}
             helpAriaLabel={localization.dataServiceForm.fieldLabel.endpoint}
-            tagColor='info'
           >
             {localization.dataServiceForm.fieldLabel.endpoint}
           </LabelWithHelpTextAndTag>

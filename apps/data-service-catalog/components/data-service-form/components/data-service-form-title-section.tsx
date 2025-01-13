@@ -17,7 +17,6 @@ export const TitleSection = () => {
             tagTitle={localization.tag.required}
             helpText={localization.dataServiceForm.helptext.title}
             helpAriaLabel={localization.dataServiceForm.fieldLabel.title}
-            tagColor='info'
           >
             {localization.dataServiceForm.fieldLabel.title}
           </LabelWithHelpTextAndTag>
@@ -33,7 +32,6 @@ export const TitleSection = () => {
             tagTitle={localization.tag.required}
             helpText={localization.dataServiceForm.helptext.description}
             helpAriaLabel={localization.dataServiceForm.fieldLabel.description}
-            tagColor='info'
           >
             {localization.dataServiceForm.fieldLabel.description}
           </LabelWithHelpTextAndTag>
