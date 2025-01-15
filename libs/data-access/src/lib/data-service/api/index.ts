@@ -1,4 +1,5 @@
 import { DataService } from '@catalog-frontend/types';
+import { Operation } from 'fast-json-patch';
 
 const oldPath = `${process.env.DATASERVICE_CATALOG_BASE_URI}`;
 const path = `${process.env.DATA_SERVICE_CATALOG_BASE_URI}`;
@@ -70,6 +71,24 @@ export const deleteDataService = async (catalogId: string, dataServiceId: string
       'Content-Type': 'application/json',
     },
     method: 'DELETE',
+  };
+  return await fetch(resource, options);
+};
+
+export const updateDataService = async (
+  catalogId: string,
+  dataServiceId: string,
+  patchOperations: Operation[],
+  accessToken: string,
+) => {
+  const resource = `${path}/internal/catalogs/${catalogId}/data-services/${dataServiceId}`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'PATCH',
+    body: JSON.stringify(patchOperations),
   };
   return await fetch(resource, options);
 };

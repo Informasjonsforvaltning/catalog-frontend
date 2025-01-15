@@ -5,11 +5,13 @@ import {
   getAllDataServices,
   getDataServiceById,
   postDataService,
+  updateDataService as update,
 } from '@catalog-frontend/data-access';
 import { getValidSession, localization, removeEmptyValues } from '@catalog-frontend/utils';
 import { DataService, DataServiceToBeCreated } from '@catalog-frontend/types';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { compare } from 'fast-json-patch';
 
 export async function getDataServices(catalogId: string) {
   const session = await getValidSession();
@@ -72,5 +74,35 @@ export async function deleteDataService(catalogId: string, dataServiceId: string
       revalidateTag('data-services');
       redirect(`/catalogs/${catalogId}/data-services`);
     }
+  }
+}
+
+export async function updateDataService(catalogId: string, initialDataService: DataService, values: DataService) {
+  const updatedDataService = removeEmptyValues({ ...values });
+
+  const diff = compare(initialDataService, updatedDataService);
+
+  if (diff.length === 0) {
+    throw new Error(localization.alert.noChanges);
+  }
+
+  let success = false;
+  const session = await getValidSession();
+
+  try {
+    const response = await update(catalogId, initialDataService.id, diff, `${session?.accessToken}`);
+    if (response.status !== 200) {
+      throw new Error(`${response.status} ${response.statusText}`);
+    }
+    success = true;
+  } catch (error) {
+    console.error(`${localization.alert.fail} ${error}`);
+    throw new Error(`Noe gikk galt, prøv igjen...`);
+  }
+
+  if (success) {
+    revalidateTag('data-service');
+    revalidateTag('data-services');
+    redirect(`/catalogs/${catalogId}/data-services/${initialDataService.id}`);
   }
 }
