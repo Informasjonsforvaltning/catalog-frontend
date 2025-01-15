@@ -6,7 +6,7 @@ import { Formik, Form } from 'formik';
 import { useState } from 'react';
 import { TitleSection } from './components/data-service-form-title-section';
 import { useParams, useRouter } from 'next/navigation';
-import { createDataService } from '../../app/actions/actions';
+import { createDataService, updateDataService } from '../../app/actions/actions';
 import { Button } from '@digdir/designsystemet-react';
 import styles from './data-service-form.module.css';
 import { EndpointSection } from './components/data-service-form-endpoint-section';
@@ -30,7 +30,15 @@ export const DataServiceForm = ({ initialValues, submitType }: Props) => {
   };
 
   const handleUpdate = async (values: DataService) => {
-    // TODO
+    try {
+      if ('id' in initialValues) {
+        await updateDataService(catalogId.toString(), initialValues, values);
+      } else {
+        window.alert(`${localization.alert.updateFailed}`);
+      }
+    } catch (error) {
+      window.alert(`${localization.alert.updateFailed} ${error}`);
+    }
   };
 
   const handleCancel = () => {
