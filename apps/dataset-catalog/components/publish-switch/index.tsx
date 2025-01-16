@@ -2,7 +2,7 @@
 import { localization } from '@catalog-frontend/utils';
 import { Switch } from '@digdir/designsystemet-react';
 import styles from './publish-switch.module.css';
-import { updateDataset } from '../../app/actions/actions';
+import { publishDataset } from '../../app/actions/actions';
 import { Dataset, PublicationStatus } from '@catalog-frontend/types';
 
 type Props = {
@@ -20,7 +20,7 @@ export const PublishSwitch = ({ catalogId, dataset, disabled }: Props) => {
           registrationStatus: PublicationStatus.PUBLISH,
         };
         try {
-          await updateDataset(catalogId, dataset, publishedDataset);
+          await publishDataset(catalogId, dataset, publishedDataset);
         } catch (error) {
           window.alert(error);
         }
@@ -34,7 +34,7 @@ export const PublishSwitch = ({ catalogId, dataset, disabled }: Props) => {
           registrationStatus: PublicationStatus.APPROVE,
         };
         try {
-          await updateDataset(catalogId, dataset, approvedDataset);
+          await publishDataset(catalogId, dataset, approvedDataset);
         } catch (error) {
           window.alert(error);
         }

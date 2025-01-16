@@ -40,7 +40,10 @@ const contactPointConfirmValidationSchema = Yup.array()
 
 export const draftDatasetSchema = Yup.object().shape({
   landingPage: Yup.array().of(
-    Yup.string().matches(httpsRegex, localization.validation.invalidProtocol).url(localization.validation.invalidUrl),
+    Yup.string()
+      .nullable()
+      .matches(httpsRegex, localization.validation.invalidProtocol)
+      .url(localization.validation.invalidUrl),
   ),
 
   legalBasisForRestriction: Yup.array().of(
@@ -102,24 +105,29 @@ export const confirmedDatasetSchema = draftDatasetSchema.shape({
       .min(5, localization.datasetForm.validation.description)
       .required(localization.datasetForm.validation.descriptionRequired),
   }),
-  euThemeList: Yup.array()
-    .min(1, localization.datasetForm.validation.euTheme)
-    .required(localization.datasetForm.validation.euTheme),
+  euDataTheme: Yup.array()
+    .min(1, localization.datasetForm.validation.euDataTheme)
+    .required(localization.datasetForm.validation.euDataTheme),
   contactPoint: contactPointConfirmValidationSchema,
 });
 
 export const distributionSectionSchema = Yup.object().shape({
-  title: Yup.object().shape({
-    nb: Yup.string().required(localization.validation.titleRequired),
-  }),
   accessURL: Yup.array()
     .of(
-      Yup.string().matches(httpsRegex, localization.validation.invalidProtocol).url(localization.validation.invalidUrl),
+      Yup.string()
+        .required(localization.datasetForm.validation.accessURLrequired)
+        .matches(httpsRegex, localization.validation.invalidProtocol)
+        .url(localization.validation.invalidUrl),
     )
-    .required(localization.datasetForm.validation.titleRequired),
-  downloadURL: Yup.array().of(
-    Yup.string().matches(httpsRegex, localization.validation.invalidProtocol).url(localization.validation.accessURL),
-  ),
+    .min(1, localization.datasetForm.validation.accessURLrequired),
+  downloadURL: Yup.array()
+    .nullable()
+    .of(
+      Yup.string()
+        .nullable()
+        .matches(httpsRegex, localization.validation.invalidProtocol)
+        .url(localization.validation.invalidUrl),
+    ),
   conformsTo: Yup.array().of(
     Yup.object().shape({
       uri: Yup.string()
@@ -144,9 +152,9 @@ export const uriWithLabelSchema = Yup.object().shape({
 
 export const referenceSchema = Yup.object().shape({
   referenceType: Yup.object().shape({
-    code: Yup.string().required('Relasjonstype må fylles ut.'),
+    code: Yup.string().required(localization.datasetForm.validation.relation),
   }),
   source: Yup.object().shape({
-    uri: Yup.string().required('Begge verdiene må fylles ut for å legge til en relasjon.'),
+    uri: Yup.string().required(localization.datasetForm.validation.relation),
   }),
 });

@@ -7,35 +7,11 @@ import styles from '../dataset-form.module.css';
 
 type Props = {
   losThemes: LosTheme[];
-  dataThemes: DataTheme[];
+  euDataThemes: DataTheme[];
 };
 
-export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
+export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
   const { setFieldValue, values, errors } = useFormikContext<Dataset>();
-
-  const getNameFromLosPath = (path: string): string | string[] => {
-    const obj = losThemes?.find((obj) => obj.losPaths.includes(path));
-    return obj ? getTranslateText(obj.name) : [];
-  };
-
-  const getParentNames = (inputPaths: string[]): string => {
-    const results: string[] = [];
-
-    inputPaths.forEach((path) => {
-      const parts = path.split('/').slice(0, -1);
-      const parentPath = parts.slice(0, -1).join('/');
-      const childPath = parts.join('/');
-
-      const parentName = getNameFromLosPath(parentPath);
-      const childName = getNameFromLosPath(childPath);
-
-      const formattedResult = `${parentName} - ${childName}`;
-      results.push(formattedResult);
-    });
-
-    return `${localization.datasetForm.helptext.parentTheme}: ${results.join('; ')}`;
-  };
-
   const containsFilter = (inputValue: string, option: Option): boolean => {
     return option.label.toLowerCase().includes(inputValue.toLowerCase());
   };
@@ -45,10 +21,10 @@ export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
       <div className={styles.fieldContainer}>
         <LabelWithHelpTextAndTag
           tagTitle={localization.tag.required}
-          helpAriaLabel={localization.datasetForm.fieldLabel.euTheme}
-          helpText={localization.datasetForm.helptext.euTheme}
+          helpAriaLabel={localization.datasetForm.fieldLabel.euDataTheme}
+          helpText={localization.datasetForm.helptext.euDataTheme}
         >
-          {localization.datasetForm.fieldLabel.euTheme}
+          {localization.datasetForm.fieldLabel.euDataTheme}
         </LabelWithHelpTextAndTag>
 
         <FastField
@@ -56,40 +32,40 @@ export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
           multiple
           filter={containsFilter}
           placeholder={`${localization.search.search}...`}
-          error={errors.euThemeList}
-          value={values.euThemeList}
-          onValueChange={(values: string[]) => setFieldValue('euThemeList', values)}
+          error={errors.euDataTheme}
+          value={values.euDataTheme}
+          onValueChange={(values: string[]) => setFieldValue('euDataTheme', values)}
           size='sm'
         >
           <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-          {dataThemes &&
-            dataThemes.map((eutheme) => (
+          {euDataThemes &&
+            euDataThemes.map((theme) => (
               <Combobox.Option
-                key={eutheme.uri}
-                value={eutheme.uri}
+                key={theme.uri}
+                value={theme.uri}
               >
-                {getTranslateText(eutheme.label)}
+                {getTranslateText(theme.label)}
               </Combobox.Option>
             ))}
         </FastField>
       </div>
       <div className={styles.fieldContainer}>
         <LabelWithHelpTextAndTag
-          helpAriaLabel={localization.datasetForm.fieldLabel.theme}
-          helpText={localization.datasetForm.helptext.theme}
+          helpAriaLabel={localization.datasetForm.fieldLabel.losTheme}
+          helpText={localization.datasetForm.helptext.losTheme}
         >
-          {localization.datasetForm.fieldLabel.theme}
+          {localization.datasetForm.fieldLabel.losTheme}
         </LabelWithHelpTextAndTag>
 
         <FastField
           as={Combobox}
-          name='losThemeList'
-          value={values.losThemeList}
+          name='losTheme'
+          value={values.losTheme}
           multiple
           virtual
           filter={containsFilter}
           placeholder={`${localization.search.search}...`}
-          onValueChange={(values: string[]) => setFieldValue('losThemeList', values)}
+          onValueChange={(values: string[]) => setFieldValue('losTheme', values)}
           size='sm'
         >
           <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
@@ -97,7 +73,6 @@ export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
             <Combobox.Option
               key={theme.uri}
               value={theme.uri}
-              description={getParentNames(theme.losPaths)}
             >
               {getTranslateText(theme.name)}
             </Combobox.Option>

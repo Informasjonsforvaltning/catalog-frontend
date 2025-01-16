@@ -35,7 +35,7 @@ export default withAuth(
     }
 
     if (datasetId && !validUUID(datasetId)) {
-      return NextResponse.rewrite(new URL('/notfound', process.env.NEXTAUTH_URL));
+      return NextResponse.rewrite(new URL('/catalogs', process.env.NEXTAUTH_URL));
     }
 
     if ((await validateOidcUserSession(accessToken)) !== true) {
@@ -49,7 +49,7 @@ export default withAuth(
       catalogId &&
       !(hasOrganizationReadPermission(accessToken, catalogId) || hasSystemAdminPermission(accessToken))
     ) {
-      return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access`, process.env.NEXTAUTH_URL));
+      return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/datasets`, process.env.NEXTAUTH_URL));
     }
 
     if (
@@ -58,7 +58,7 @@ export default withAuth(
       !hasOrganizationWritePermission(accessToken, catalogId) &&
       writePermissionsRoutes.includes(pathname)
     ) {
-      return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access`, process.env.NEXTAUTH_URL));
+      return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/datasets`, process.env.NEXTAUTH_URL));
     }
   },
   {

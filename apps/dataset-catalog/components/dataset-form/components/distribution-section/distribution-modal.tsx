@@ -6,7 +6,6 @@ import {
   DeleteButton,
   FieldsetDivider,
   FormikLanguageFieldset,
-  FormikSearchCombobox,
   LabelWithHelpTextAndTag,
   TextareaWithPrefix,
 } from '@catalog-frontend/ui';
@@ -24,21 +23,17 @@ import { ReactNode, useRef, useState } from 'react';
 import styles from './distributions.module.css';
 import { distributionTemplate } from '../../utils/dataset-initial-values';
 import { distributionSectionSchema } from '../../utils/validation-schema';
+import FormikReferenceDataCombobox from '../../../../components/formik-reference-data-combobox';
 
 type Props = {
   trigger: ReactNode;
   referenceDataEnv: string;
   searchEnv: string;
   openLicenses?: ReferenceDataCode[];
-  onSuccess: (values: FormikDistribution) => void;
+  onSuccess: (values: Distribution, type: string) => void;
   initialValues: Partial<Distribution> | undefined;
   type: 'new' | 'edit';
   initialDistributionType?: 'distribution' | 'sample';
-};
-
-type FormikDistribution = {
-  type: string;
-  values: Partial<Distribution>;
 };
 
 export const DistributionModal = ({
@@ -52,8 +47,8 @@ export const DistributionModal = ({
   initialDistributionType = 'distribution',
 }: Props) => {
   const [distributionType, setDistributionType] = useState<string>(initialDistributionType);
-
   const distributionTypes = ['distribution', 'sample'];
+  const [selectedAccesServices, setSelectedAccessServices] = useState(initialValues?.accessServiceUris);
 
   const template = distributionTemplate(initialValues);
   const [submitted, setSubmitted] = useState(false);
@@ -82,18 +77,17 @@ export const DistributionModal = ({
 
   const { data: selectedDataServices, isLoading: isLoadingSelectedDataServices } = useSearchDataServiceByUri(
     searchEnv,
-    initialValues?.accessServiceList ?? [],
+    selectedAccesServices ?? [],
   );
 
   const { data: dataServices } = useSearchDataServiceSuggestions(searchEnv, searchDataServicesQuery);
 
   const comboboxOptions = [
-    // Combine selectedDataServices and dataServices, adding missing URIs
     ...new Map(
       [
         ...(selectedDataServices ?? []),
         ...(dataServices ?? []),
-        ...(initialValues?.accessServiceList ?? []).map((uri) => {
+        ...(initialValues?.accessServiceUris ?? []).map((uri) => {
           const foundItem =
             selectedDataServices?.find((item) => item.uri === uri) ||
             dataServices?.find((item: DataService) => item.uri === uri);
@@ -122,7 +116,7 @@ export const DistributionModal = ({
           validationSchema={distributionSectionSchema}
           onSubmit={(values, { setSubmitting }) => {
             const trimmedValues = trimObjectWhitespace(values);
-            onSuccess({ type: distributionType, values: trimmedValues });
+            onSuccess(trimmedValues, distributionType);
             setSubmitting(false);
             setSubmitted(true);
             modalRef.current?.close();
@@ -184,11 +178,9 @@ export const DistributionModal = ({
                               </LabelWithHelpTextAndTag>
                             }
                           />
+                          <FieldsetDivider />
                         </>
                       )}
-
-                      <FieldsetDivider />
-
                       <FastField
                         name='accessURL[0]'
                         as={Textfield}
@@ -235,17 +227,20 @@ export const DistributionModal = ({
                             multiple
                             portal={false}
                             onChange={(event) => setSearchDataServicesQuery(event.target.value)}
-                            value={[...(values.accessServiceList || []), ...(initialValues?.accessServiceList || [])]}
-                            onValueChange={(selectedValues) => setFieldValue('accessServiceList', selectedValues)}
+                            value={[...(values.accessServiceUris || []), ...(initialValues?.accessServiceUris || [])]}
+                            onValueChange={(selectedValues) => {
+                              setFieldValue('accessServiceUris', selectedValues);
+                              setSelectedAccessServices(selectedValues);
+                            }}
                             placeholder={`${localization.search.search}...`}
                             size='sm'
                           >
                             {comboboxOptions.map((option, i) => (
                               <Combobox.Option
                                 key={`distribution-${option.uri}-${i}`}
-                                value={option.uri}
+                                value={option.uri ?? option.description}
                               >
-                                {option.title ? getTranslateText(option.title) : option.uri}
+                                {option.title ? getTranslateText(option.title) : getTranslateText(option.description)}
                               </Combobox.Option>
                             ))}
                           </Combobox>
@@ -266,7 +261,7 @@ export const DistributionModal = ({
                           </LabelWithHelpTextAndTag>
                         }
                       >
-                        <FormikSearchCombobox
+                        <FormikReferenceDataCombobox
                           onChange={(event) => setSearchQueryFileTypes(event.target.value)}
                           onValueChange={(selectedValues) => setFieldValue('format', selectedValues)}
                           value={values?.format || []}
@@ -287,7 +282,7 @@ export const DistributionModal = ({
                           </LabelWithHelpTextAndTag>
                         }
                       >
-                        <FormikSearchCombobox
+                        <FormikReferenceDataCombobox
                           onChange={(event) => setSearchQueryMediaTypes(event.target.value)}
                           onValueChange={(selectedValues) => setFieldValue('mediaType', selectedValues)}
                           value={values?.mediaType || []}

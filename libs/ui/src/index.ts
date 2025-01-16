@@ -11,7 +11,6 @@ export * from './lib/footer';
 export * from './lib/form-container';
 export * from './lib/form-layout';
 export * from './lib/formik-language-fieldset';
-export * from './lib/formik-search-combobox';
 export * from './lib/header';
 export * from './lib/help-markdown';
 export * from './lib/icon';
