@@ -80,7 +80,7 @@ export const FormikLanguageFieldset = ({
         <div key={lang}>
           {multiple ? (
             <>
-              <Box className={styles.languageField}>
+              <Box key={lang} className={styles.languageField}>
                 <Textfield
                   size='sm'
                   aria-label={localization.language[lang]}
@@ -113,7 +113,7 @@ export const FormikLanguageFieldset = ({
               </Chip.Group>
             </>
           ) : (
-            <Box className={styles.languageField}>
+            <Box key={lang} className={styles.languageField}>
               <FastField
                 as={renderAs}
                 name={`${name}.${lang}`}

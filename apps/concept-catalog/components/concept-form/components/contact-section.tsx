@@ -16,11 +16,11 @@ export const ContactSection = () => {
 
   const contactOptions = [
     {
-      label: 'E-post',
+      label: localization.conceptForm.fieldLabel.emailAddress,
       value: 'harEpost',
     },
     {
-      label: 'Telefonnummer',
+      label: localization.conceptForm.fieldLabel.phoneNumber,
       value: 'harTelefon',
     },
     // {
@@ -48,7 +48,7 @@ export const ContactSection = () => {
             title={
               <>
                 Kontaktinformasjon
-                <HelpMarkdown title={'Hjelpetekst kontaktinformasjon'}>
+                <HelpMarkdown aria-label={'Hjelpetekst kontaktinformasjon'}>
                   {localization.conceptForm.helpText.contactInfo}
                 </HelpMarkdown>
               </>
@@ -69,7 +69,7 @@ export const ContactSection = () => {
       </CheckboxGroup>
       {selectedFields.includes('harEpost') && (
         <Fieldset
-          legend={<TitleWithTag title={'E-postadresse'} />}
+          legend={<TitleWithTag title={localization.conceptForm.fieldLabel.emailAddress} />}
           size='sm'
         >
           <FastField
@@ -85,7 +85,7 @@ export const ContactSection = () => {
           as={Textfield}
           name='kontaktpunkt.harTelefon'
           size='sm'
-          label={<TitleWithTag title={'Telefonnummer'} />}
+          label={<TitleWithTag title={localization.conceptForm.fieldLabel.phoneNumber} />}
           error={errors?.kontaktpunkt?.['harTelefon']}
         />
       )}
@@ -94,7 +94,7 @@ export const ContactSection = () => {
           as={Textfield}
           name='kontaktpunkt.harSkjema'
           size='sm'
-          label={<TitleWithTag title={'Contactskjema'} />}
+          label={<TitleWithTag title={localization.conceptForm.fieldLabel.contactForm} />}
           error={errors?.kontaktpunkt?.['harSkjema']}
         />
       )}

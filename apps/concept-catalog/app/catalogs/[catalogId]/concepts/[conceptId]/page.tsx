@@ -24,6 +24,7 @@ import {
 import ConceptPageClient from './concept-page-client';
 import { RedirectType, redirect } from 'next/navigation';
 import { withReadProtectedPage } from '../../../../../utils/auth';
+import { conceptSchema } from '../../../../../components/concept-form/validation-schema';
 
 const ConceptPage = withReadProtectedPage(
   ({ catalogId, conceptId }) => `/catalogs/${catalogId}/concepts/${conceptId}`,
@@ -67,6 +68,8 @@ const ConceptPage = withReadProtectedPage(
       session?.accessToken,
     );
 
+    const isValid = await conceptSchema({required: true, baseUri: 'http://localhost:4200'}).isValid(concept);
+
     const clientProps = {
       username,
       organization,
@@ -81,6 +84,7 @@ const ConceptPage = withReadProtectedPage(
       conceptRelations,
       internalConceptRelations,
       internalRelatedConcepts,
+      isValid,
       catalogPortalUrl: `${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`,
     };
 

@@ -15,6 +15,7 @@ import {
   DetailsPageLayout,
   Tag,
   LinkButton,
+  HelpMarkdown,
 } from '@catalog-frontend/ui';
 import {
   localization,
@@ -87,6 +88,7 @@ type ConceptPageClientProps = {
   relatedConcepts: RelatedConcept[];
   internalRelatedConcepts: RelatedConcept[];
   catalogPortalUrl: string;
+  isValid: boolean;
 };
 
 const InterneFelt = ({ concept, fields, codeLists, users, location, language }: InterneFeltProps) => {
@@ -149,6 +151,7 @@ export const ConceptPageClient = ({
   internalConceptRelations,
   internalRelatedConcepts,
   catalogPortalUrl,
+  isValid,
 }: ConceptPageClientProps) => {
   const [language, setLanguage] = useState('nb');
   const [isPublished, setIsPublished] = useState(concept?.erPublisert);
@@ -177,18 +180,42 @@ export const ConceptPageClient = ({
   const infoDataColumnRight = [
     [localization.conceptId, concept?.originaltBegrep],
     [
-      localization.publicationState.state,
+      <div
+        key='publicationState'
+        className={classes.publicationStateHeader}
+      >
+        {localization.publicationState.state}
+        {isValid ? (
+          <HelpMarkdown
+            aria-label='Info publisering'
+            severity='info'
+          >
+            Viktig! Når et begrep er publisert, kan det verken slettes eller avpubliseres, men kun endres. Sørg derfor for at alle
+            opplysninger er korrekte før publisering.
+          </HelpMarkdown>
+        ) : (
+          <HelpMarkdown
+            aria-label='Valideringsfeil'
+            severity='warning'
+          >
+            Publisering er ikke mulig fordi ett eller flere felt inneholder ugyldige eller manglende verdier. Rediger
+            begrepet og rett feilene for å publisere.
+          </HelpMarkdown>
+        )}
+      </div>,
       <>
-        <Switch
-          value='published'
-          size='small'
-          position='right'
-          readOnly={isPublished || !hasWritePermission}
-          checked={isPublished}
-          onChange={handleOnChangePublished}
-        >
-          {isPublished ? localization.publicationState.published : localization.publicationState.unpublished}
-        </Switch>
+        <div>
+          <Switch
+            value='published'
+            size='small'
+            position='right'
+            readOnly={isPublished || !hasWritePermission || !isValid}
+            checked={isPublished}
+            onChange={handleOnChangePublished}
+          >
+            {isPublished ? localization.publicationState.published : localization.publicationState.unpublished}
+          </Switch>
+        </div>
         <div className={classes.greyFont}>
           {isPublished
             ? `${localization.publicationState.publishedInFDK}${
@@ -206,10 +233,7 @@ export const ConceptPageClient = ({
         </div>
       </>,
     ],
-    [
-      localization.concept.version,
-      versionToString(concept?.versjonsnr),
-    ],
+    [localization.concept.version, versionToString(concept?.versjonsnr)],
     ...(concept?.gyldigFom || concept?.gyldigTom
       ? [
           [
@@ -383,9 +407,7 @@ export const ConceptPageClient = ({
               headingColor='light'
             >
               <div className={classes.revision}>
-                <div>
-                  v{versionToString(revision?.versjonsnr)}
-                </div>
+                <div>v{versionToString(revision?.versjonsnr)}</div>
                 <div>
                   <Link
                     prefetch={false}

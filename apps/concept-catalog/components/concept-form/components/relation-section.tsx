@@ -180,8 +180,8 @@ export const RelationSection = ({ catalogId }) => {
             </Table.Row>
           </Table.Head>
           <Table.Body>
-            {relations?.map((relation) => (
-              <Table.Row key={relation.index}>
+            {relations?.map((relation, index) => (
+              <Table.Row key={index}>
                 <Table.Cell>
                   {localization.conceptForm.fieldLabel.relationTypes[relation.relasjon as string]}
                 </Table.Cell>
