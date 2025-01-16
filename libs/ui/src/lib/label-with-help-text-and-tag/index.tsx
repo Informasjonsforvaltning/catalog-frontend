@@ -40,7 +40,7 @@ export function LabelWithHelpTextAndTag({
         children
       )}
 
-      {helpText && helpAriaLabel && <HelpMarkdown title={helpAriaLabel}>{helpText}</HelpMarkdown>}
+      {helpText && helpAriaLabel && <HelpMarkdown aria-label={helpAriaLabel}>{helpText}</HelpMarkdown>}
       {tagTitle && (
         <Tag
           color={tagColor}

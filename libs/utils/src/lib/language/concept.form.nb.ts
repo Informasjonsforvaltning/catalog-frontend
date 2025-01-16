@@ -96,7 +96,10 @@ __Sitat fra kilde:__ Innholdet er et direkte sitat eller nøyaktig gjengivelse f
     },
     relatedConcept: 'Relatert begrep',
     internalConcept: 'Internt begrep',
-    divisionCriterion: 'Inndelingskriterium'
+    divisionCriterion: 'Inndelingskriterium',
+    emailAddress: 'E-postadresse',
+    phoneNumber: 'Telefonnummer',
+    contactForm: 'Kontaktskjema'
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',

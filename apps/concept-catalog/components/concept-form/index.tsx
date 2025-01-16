@@ -4,7 +4,7 @@ import { useState } from 'react';
 import classNames from 'classnames';
 import { Formik, Form } from 'formik';
 import { useRouter } from 'next/navigation';
-import { Alert, Spinner } from '@digdir/designsystemet-react';
+import { Alert, Checkbox, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { localization } from '@catalog-frontend/utils';
 import { CodeListsResult, Concept, FieldsResult, ReferenceDataCode, UsersResult } from '@catalog-frontend/types';
 import { Button, FormLayout, NotificationCarousel } from '@catalog-frontend/ui';
@@ -62,6 +62,7 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
 const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }: Props) => {
   const [isSaveButtonClicked, setIsSaveButtonClicked] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
+  const [ignoreRequired, setIgnoreRequired] = useState(false);
 
   const router = useRouter();
 
@@ -155,7 +156,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
   return (
     <Formik
       initialValues={mapPropsToValues(concept)}
-      validationSchema={conceptSchema}
+      validationSchema={conceptSchema({ required: !ignoreRequired, baseUri: ''})}
       validateOnChange={isSaveButtonClicked}
       validateOnBlur={isSaveButtonClicked}
       onSubmit={async (values, { setSubmitting }) => {
@@ -163,13 +164,26 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
         setSubmitting(false);
       }}
     >
-      {({ errors, values, dirty, isValid, isSubmitting, isValidating, submitForm }) => {
+      {({ dirty, isValid, isSubmitting, isValidating, submitForm }) => {
         const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
         return (
           <>
             <div className='container'>
               <Form>
                 <FormLayout>
+                  <FormLayout.Options>
+                    <Paragraph>
+                    Som standard blir alle obligatoriske felt validert. For å kunne lagre uten å fylle ut obligatoriske felt, må du huke av i avkrysningsboksen nedenfor.
+                    </Paragraph>
+                    <Checkbox
+                      size='sm'
+                      value="ignoreRequired"
+                      checked={ignoreRequired}
+                      onChange={(e) => setIgnoreRequired(e.target.checked)}
+                    >
+                      Ignorer obligatoriske felt
+                      </Checkbox>
+                  </FormLayout.Options>
                   <FormLayout.Section
                     id='term'
                     title={localization.conceptForm.section.termTitle}

@@ -6,8 +6,8 @@ import { nb } from 'yup-locales';
 
 Yup.setLocale(nb);
 
-const getRevisions = async ({ catalogId, conceptId }) => {
-  const response = await fetch(`/api/catalogs/${catalogId}/concepts/${conceptId}/revisions`);
+const getRevisions = async ({ baseUri, catalogId, conceptId }) => {
+  const response = await fetch(`${baseUri}/api/catalogs/${catalogId}/concepts/${conceptId}/revisions`);
   if (response.status !== 200) {
     return [];
   }
@@ -81,7 +81,7 @@ const kilde = Yup.array()
   })
   .nullable();
 
-export const definitionSchema = Yup.object()
+export const definitionSchema = (required) => Yup.object()
   .shape({
     tekst: Yup.object().shape({
       nb: Yup.string().test({
@@ -132,7 +132,7 @@ export const definitionSchema = Yup.object()
     test() {
       if (this.parent) {
         const { definisjon, definisjonForAllmennheten, definisjonForSpesialister } = this.parent;
-        if (!(definisjon || definisjonForAllmennheten || definisjonForSpesialister)) {
+        if (required && !(definisjon || definisjonForAllmennheten || definisjonForSpesialister)) {
           return this.createError({
             message: localization.conceptForm.validation.required,
             path: this.path,
@@ -158,25 +158,27 @@ export const relationSchema = Yup.object().shape({
   relatertBegrep: Yup.string().required(),
 });
 
-export const conceptSchema = Yup.object().shape({
-  anbefaltTerm: Yup.object().shape({
-    navn: Yup.object().shape({
-      nb: Yup.string()
-        .required()
-        .label(`${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.nb})`),
-      nn: Yup.string()
-        .required()
-        .label(`${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.nn})`),
-      en: Yup.string()
-        .nullable()
-        .label(`${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.en})`),
-    }),
+const anbefaltTerm = Yup.object().shape({
+  navn: Yup.object().shape({
+    nb: Yup.string()
+      .required()
+      .label(`${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.nb})`),
+    nn: Yup.string()
+      .required()
+      .label(`${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.nn})`),
+    en: Yup.string()
+      .nullable()
+      .label(`${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.en})`),
   }),
+});
+
+export const conceptSchema = ({required, baseUri}) => Yup.object().shape({
+  anbefaltTerm,
   tillattTerm: tekstMedSpraakKodeArray(localization.conceptForm.fieldLabel.altLabel),
   frarådetTerm: tekstMedSpraakKodeArray(localization.conceptForm.fieldLabel.hiddenLabel),
-  definisjon: definitionSchema,
-  definisjonForAllmennheten: definitionSchema,
-  definisjonForSpesialister: definitionSchema,
+  definisjon: definitionSchema(required),
+  definisjonForAllmennheten: definitionSchema(required),
+  definisjonForSpesialister: definitionSchema(required),
   fagområde: tekstMedSpraakKodeArray(localization.conceptForm.fieldLabel.subjectLabel),
   statusURI: Yup.string().nullable(),
   omfang: Yup.object()
@@ -187,16 +189,18 @@ export const conceptSchema = Yup.object().shape({
     }),
   kontaktpunkt: Yup.object()
     .test('contact-test', 'Minst en av kontaktfeltene må fylles ut.', (value: any) => {
+      if(!required) return true;
       return value !== null && (value.harEpost || value.harTelefon);
     })
     .shape({
-      harEpost: Yup.string().nullable().email(localization.conceptForm.validation.email),
+      harEpost: Yup.string().nullable().email(localization.conceptForm.validation.email).label(localization.conceptForm.fieldLabel.emailAddress),
       harTelefon: Yup.string()
         .nullable()
         .matches(/^\+?(?:[0-9\s]){6,14}[0-9]$/i, {
           message: localization.conceptForm.validation.phone,
           excludeEmptyString: true,
-        }),
+        })
+        .label(localization.conceptForm.fieldLabel.phoneNumber),
     })
     .nullable(),
   gyldigFom: Yup.mixed()
@@ -236,7 +240,7 @@ export const conceptSchema = Yup.object().shape({
       async test(value) {
         if (this.parent.id) {
           const revisions = (
-            await getRevisions({ catalogId: this.parent.ansvarligVirksomhet.id, conceptId: this.parent.id })
+            await getRevisions({ baseUri, catalogId: this.parent.ansvarligVirksomhet.id, conceptId: this.parent.id })
           )
             .filter((rev) => rev.id !== this.parent.id)
             .sort((a, b) => -compareVersion(a.versjonsnr, b.versjonsnr));
