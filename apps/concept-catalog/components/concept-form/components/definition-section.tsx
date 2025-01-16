@@ -45,9 +45,8 @@ export const DefinitionSection = () => {
                 <>
                   Definisjon
                   <HelpMarkdown
-                    title={'Hjelpetekst definisjon'}
+                    aria-label={'Hjelpetekst definisjon'}
                     type='button'
-                    size='sm'
                     placement='right-end'
                   >
                     {localization.conceptForm.helpText.definition}

@@ -145,9 +145,8 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
                 <>
                   {localization.conceptForm.fieldLabel.relatedConcept}
                   <HelpMarkdown
-                    title={localization.conceptForm.fieldLabel.relatedConcept}
+                    aria-label={localization.conceptForm.fieldLabel.relatedConcept}
                     type='button'
-                    size='sm'
                   >
                     {localization.conceptForm.helpText.relatedConcept}
                   </HelpMarkdown>
@@ -236,9 +235,8 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
               <>
                 {localization.conceptForm.fieldLabel.relation}
                 <HelpMarkdown
-                  title={localization.conceptForm.fieldLabel.relation}
+                  aria-label={localization.conceptForm.fieldLabel.relation}
                   type='button'
-                  size='sm'
                   placement='right-end'
                 >
                   {localization.conceptForm.helpText.relation}
@@ -358,9 +356,8 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
                 <>
                   Relasjonsrolle
                   <HelpMarkdown
-                    title={localization.conceptForm.fieldLabel.relationLevel}
+                    aria-label={localization.conceptForm.fieldLabel.relationLevel}
                     type='button'
-                    size='sm'
                   >
                     {localization.conceptForm.helpText.relationLevel}
                   </HelpMarkdown>

@@ -58,9 +58,8 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
               <>
                 {localization.conceptForm.fieldLabel.relationToSource}
                 <HelpMarkdown
-                  title={localization.conceptForm.fieldLabel.relationToSource}
+                  aria-label={localization.conceptForm.fieldLabel.relationToSource}
                   type='button'
-                  size='sm'
                 >
                   {localization.conceptForm.helpText.relationToSource}
                 </HelpMarkdown>
@@ -90,9 +89,8 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
                 <>
                   {localization.conceptForm.fieldLabel.sources}
                   <HelpMarkdown
-                    title={localization.conceptForm.fieldLabel.sources}
+                    aria-label={localization.conceptForm.fieldLabel.sources}
                     type='button'
-                    size='sm'
                   >
                     {localization.conceptForm.helpText.sources}
                   </HelpMarkdown>
