@@ -18,7 +18,8 @@ export type DatasetToBeCreated = {
   legalBasisForAccess?: UriWithLabel[];
   legalBasisForRestriction?: UriWithLabel[];
   landingPage?: string[];
-  theme?: { uri: string }[]; // Both euTheme and losTheme
+  euDataTheme?: string[];
+  losTheme?: string[];
   type?: string;
   keyword?: { [key: string]: string }[];
   concepts?: [{ uri: string }];
@@ -83,9 +84,7 @@ export type Distribution = {
   license?: { uri: string; code: string };
   conformsTo?: UriWithLabel[];
   page?: [{ uri: string }];
-  accessService?: [{ uri: string }];
-  // Arrays of uris used as helper values for Formik. These properties is not part of the db object.
-  accessServiceList?: string[];
+  accessServiceUris?: string[];
 };
 type DatasetContactPoint = {
   email?: string;

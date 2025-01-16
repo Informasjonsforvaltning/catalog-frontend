@@ -17,7 +17,7 @@ export const ReferenceDataTags = ({ values, data }: Props) => {
 
   const renderTag = (uri: string) => {
     const label = dataMap.get(uri);
-    const displayText = capitalizeFirstLetter(getTranslateText(label)?.toString() ?? uri);
+    const displayText = capitalizeFirstLetter(getTranslateText(label)?.toString() || uri);
     return (
       <Tag
         size='sm'
@@ -33,5 +33,5 @@ export const ReferenceDataTags = ({ values, data }: Props) => {
     return <>{renderTag(values)}</>;
   }
 
-  return <ul className={styles.list}>{values.filter((item) => item.uri).map((item) => renderTag(item.uri!))}</ul>;
+  return <ul className={styles.list}>{values.map((item) => item?.uri && renderTag(item.uri))}</ul>;
 };

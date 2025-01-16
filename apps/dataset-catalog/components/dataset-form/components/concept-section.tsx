@@ -74,7 +74,11 @@ export const ConceptSection = ({ searchEnv }: Props) => {
               {getTranslateText(suggestion.organization?.prefLabel)}
 
               <div className={styles.comboboxOption}>
-                <div>{capitalizeFirstLetter(getTranslateText(suggestion.title) as string) ?? suggestion.uri}</div>
+                <div>
+                  {suggestion.title
+                    ? capitalizeFirstLetter(getTranslateText(suggestion.title) as string)
+                    : suggestion.uri}
+                </div>
                 <div>{capitalizeFirstLetter(getTranslateText(suggestion.description) as string)}</div>
                 <div>{getTranslateText(suggestion.organization?.prefLabel)}</div>
               </div>

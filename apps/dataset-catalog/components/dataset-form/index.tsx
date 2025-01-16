@@ -108,165 +108,167 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
   ];
 
   return (
-    <Formik
-      initialValues={datasetTemplate(initialValues as Dataset)}
-      validationSchema={formStatus === PublicationStatus.APPROVE ? confirmedDatasetSchema : draftDatasetSchema}
-      validateOnChange={isSubmitted}
-      validateOnBlur={isSubmitted}
-      onSubmit={async (values, { setSubmitting }) => {
-        const trimmedValues = trimObjectWhitespace(values);
-        datasetId === null ? handleCreate(trimmedValues as Dataset) : await handleUpdate(trimmedValues as Dataset);
-        setSubmitting(false);
-        setIsSubmitted(true);
-      }}
-    >
-      {({ setFieldValue, values, dirty, isValid, isSubmitting, isValidating, submitForm }) => {
-        setTimeout(() => setIsDirty(dirty), 0);
-        const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
-        return (
-          <>
-            <Form
-              className='container'
-              onSubmit={(e) => {
-                if (!isValid) {
-                  e.preventDefault();
-                  window.alert(localization.datasetForm.alert.formError);
-                } else {
-                  submitForm();
-                }
-              }}
-            >
-              <FormLayout>
-                <FormLayout.Section
-                  id='about-section'
-                  title={localization.datasetForm.heading.about}
-                  required
-                >
-                  <AboutSection />
-                </FormLayout.Section>
-
-                <FormLayout.Section
-                  id='tema-section'
-                  title={localization.datasetForm.heading.losTheme}
-                  subtitle=''
-                  required
-                >
-                  <ThemeSection
-                    losThemes={losThemes}
-                    dataThemes={dataThemes}
-                  />
-                </FormLayout.Section>
-
-                <FormLayout.Section
-                  id='distribution-section'
-                  title={localization.datasetForm.heading.distributions}
-                >
-                  <DistributionSection
-                    referenceDataEnv={referenceDataEnv}
-                    searchEnv={searchEnv}
-                    openLicenses={openLicenses}
-                  />
-                </FormLayout.Section>
-
-                <FormLayout.Section
-                  id='details-section'
-                  title={localization.datasetForm.heading.details}
-                >
-                  <DetailsSection
-                    referenceDataEnv={referenceDataEnv}
-                    referenceData={referenceData}
-                  />
-                </FormLayout.Section>
-
-                <FormLayout.Section
-                  id='relation-section'
-                  title={localization.datasetForm.heading.relations}
-                >
-                  <RelationsSection
-                    searchEnv={searchEnv}
-                    datasetSeries={datasetSeries}
-                  />
-                </FormLayout.Section>
-
-                <FormLayout.Section
-                  id='concept-section'
-                  title={localization.datasetForm.heading.concept}
-                  subtitle=''
-                >
-                  <ConceptSection searchEnv={searchEnv} />
-                </FormLayout.Section>
-
-                <FormLayout.Section
-                  id='information-model-section'
-                  title={localization.datasetForm.heading.informationModel}
-                  subtitle=''
-                >
-                  <InformationModelSection searchEnv={searchEnv} />
-                </FormLayout.Section>
-
-                <FormLayout.Section
-                  id='contact-point-section'
-                  title={localization.datasetForm.heading.contactPoint}
-                  required
-                >
-                  <ContactPointSection />
-                </FormLayout.Section>
-              </FormLayout>
-            </Form>
-
-            <StickyFooterBar>
-              <div className={styles.footerContent}>
-                <Button
-                  type='submit'
-                  size='sm'
-                  disabled={isSubmitting || isValidating || isCanceled || !dirty}
-                  onClick={() => {
+    <>
+      <Formik
+        initialValues={datasetTemplate(initialValues as Dataset)}
+        validationSchema={formStatus === PublicationStatus.APPROVE ? confirmedDatasetSchema : draftDatasetSchema}
+        validateOnChange={isSubmitted}
+        validateOnBlur={isSubmitted}
+        onSubmit={async (values, { setSubmitting }) => {
+          const trimmedValues = trimObjectWhitespace(values);
+          datasetId === null ? handleCreate(trimmedValues as Dataset) : await handleUpdate(trimmedValues as Dataset);
+          setSubmitting(false);
+          setIsSubmitted(true);
+        }}
+      >
+        {({ setFieldValue, values, dirty, isValid, isSubmitting, isValidating, submitForm }) => {
+          setTimeout(() => setIsDirty(dirty), 0);
+          const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
+          return (
+            <>
+              <Form
+                className='container'
+                onSubmit={(e) => {
+                  if (!isValid) {
+                    e.preventDefault();
+                    window.alert(localization.datasetForm.alert.formError);
+                  } else {
                     submitForm();
-                  }}
-                >
-                  {isSubmitting ? (
-                    <Spinner
-                      title='Lagrer'
-                      size='sm'
-                    />
-                  ) : (
-                    localization.save
-                  )}
-                </Button>
+                  }
+                }}
+              >
+                <FormLayout>
+                  <FormLayout.Section
+                    id='about-section'
+                    title={localization.datasetForm.heading.about}
+                    required
+                  >
+                    <AboutSection />
+                  </FormLayout.Section>
 
-                <Button
-                  type='button'
-                  size='sm'
-                  variant='secondary'
-                  disabled={isSubmitting || isValidating || isCanceled}
-                  onClick={() => handleCancel()}
-                >
-                  {localization.button.cancel}
-                </Button>
-                <div className={styles.verticalLine}></div>
-                <Switch
-                  position='left'
-                  size='sm'
-                  checked={values.registrationStatus === PublicationStatus.APPROVE}
-                  onChange={(event) => handleSwitchChange(event, setFieldValue)}
-                >
-                  <div className={styles.footerContent}>
-                    {localization.tag.approve}
-                    <HelpMarkdown
-                      size='sm'
-                      title={'Registeringsstatus'}
-                    >
-                      {localization.datasetForm.helptext.statusSwitch}
-                    </HelpMarkdown>
-                  </div>
-                </Switch>
-              </div>
-              {notifications.length > 0 && <NotificationCarousel notifications={notifications} />}
-            </StickyFooterBar>
-          </>
-        );
-      }}
-    </Formik>
+                  <FormLayout.Section
+                    id='tema-section'
+                    title={localization.datasetForm.heading.losTheme}
+                    subtitle=''
+                    required
+                  >
+                    <ThemeSection
+                      losThemes={losThemes}
+                      euDataThemes={dataThemes}
+                    />
+                  </FormLayout.Section>
+
+                  <FormLayout.Section
+                    id='distribution-section'
+                    title={localization.datasetForm.heading.distributions}
+                  >
+                    <DistributionSection
+                      referenceDataEnv={referenceDataEnv}
+                      searchEnv={searchEnv}
+                      openLicenses={openLicenses}
+                    />
+                  </FormLayout.Section>
+
+                  <FormLayout.Section
+                    id='details-section'
+                    title={localization.datasetForm.heading.details}
+                  >
+                    <DetailsSection
+                      referenceDataEnv={referenceDataEnv}
+                      referenceData={referenceData}
+                    />
+                  </FormLayout.Section>
+
+                  <FormLayout.Section
+                    id='relation-section'
+                    title={localization.datasetForm.heading.relations}
+                  >
+                    <RelationsSection
+                      searchEnv={searchEnv}
+                      datasetSeries={datasetSeries}
+                    />
+                  </FormLayout.Section>
+
+                  <FormLayout.Section
+                    id='concept-section'
+                    title={localization.datasetForm.heading.concept}
+                    subtitle=''
+                  >
+                    <ConceptSection searchEnv={searchEnv} />
+                  </FormLayout.Section>
+
+                  <FormLayout.Section
+                    id='information-model-section'
+                    title={localization.datasetForm.heading.informationModel}
+                    subtitle=''
+                  >
+                    <InformationModelSection searchEnv={searchEnv} />
+                  </FormLayout.Section>
+
+                  <FormLayout.Section
+                    id='contact-point-section'
+                    title={localization.datasetForm.heading.contactPoint}
+                    required
+                  >
+                    <ContactPointSection />
+                  </FormLayout.Section>
+                </FormLayout>
+              </Form>
+
+              <StickyFooterBar>
+                <div className={styles.footerContent}>
+                  <Button
+                    type='submit'
+                    size='sm'
+                    disabled={isSubmitting || isValidating || isCanceled || !dirty}
+                    onClick={() => {
+                      submitForm();
+                    }}
+                  >
+                    {isSubmitting ? (
+                      <Spinner
+                        title='Lagrer'
+                        size='sm'
+                      />
+                    ) : (
+                      localization.save
+                    )}
+                  </Button>
+
+                  <Button
+                    type='button'
+                    size='sm'
+                    variant='secondary'
+                    disabled={isSubmitting || isValidating || isCanceled}
+                    onClick={() => handleCancel()}
+                  >
+                    {localization.button.cancel}
+                  </Button>
+                  <div className={styles.verticalLine}></div>
+                  <Switch
+                    position='left'
+                    size='sm'
+                    checked={values.registrationStatus !== PublicationStatus.DRAFT}
+                    onChange={(event) => handleSwitchChange(event, setFieldValue)}
+                  >
+                    <div className={styles.footerContent}>
+                      {localization.tag.approve}
+                      <HelpMarkdown
+                        size='sm'
+                        title={'Registeringsstatus'}
+                      >
+                        {localization.datasetForm.helptext.statusSwitch}
+                      </HelpMarkdown>
+                    </div>
+                  </Switch>
+                </div>
+                {notifications.length > 0 && <NotificationCarousel notifications={notifications} />}
+              </StickyFooterBar>
+            </>
+          );
+        }}
+      </Formik>
+    </>
   );
 };
 

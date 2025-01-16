@@ -17,7 +17,7 @@ interface Props {
 }
 
 export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv, openLicenses }: Props) => {
-  const { data: selectedDataServices } = useSearchDataServiceByUri(searchEnv, distribution?.accessServiceList ?? []);
+  const { data: selectedDataServices } = useSearchDataServiceByUri(searchEnv, distribution?.accessServiceUris ?? []);
 
   const { data: selectedMediaTypes } = useSearchMediaTypeByUri(distribution?.mediaType ?? [], referenceDataEnv);
 
@@ -42,7 +42,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
             </div>
           )}
 
-          {distribution.downloadURL && distribution.downloadURL.length > 0 && (
+          {distribution?.downloadURL && distribution?.downloadURL[0] && (
             <div className={styles.field}>
               <Label size='sm'>{`${localization.datasetForm.fieldLabel.downloadURL}:`}</Label>
               <Paragraph size='sm'>{distribution?.downloadURL?.[0] ?? ''}</Paragraph>
@@ -67,22 +67,23 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
             </div>
           )}
 
-          {distribution.accessServiceList && distribution.accessServiceList.length > 0 && (
+          {distribution?.accessServiceUris && distribution.accessServiceUris.length > 0 && (
             <div className={styles.field}>
               <Label size='sm'>{`${localization.datasetForm.fieldLabel.accessService}:`}</Label>
-
               <ul className={styles.list}>
-                {distribution.accessServiceList?.map((uri, i) => (
-                  <li key={`service-${uri}-${i}`}>
-                    <Tag
-                      key={uri}
-                      color='third'
-                      size='sm'
-                    >
-                      {getTranslateText(selectedDataServices?.find((type) => type.uri === uri)?.title) ?? uri}
-                    </Tag>
-                  </li>
-                ))}
+                {distribution.accessServiceUris.map((uri, i) => {
+                  const match = selectedDataServices?.find((type) => type.uri === uri);
+                  return (
+                    <li key={`service-${uri}-${i}`}>
+                      <Tag
+                        color='info'
+                        size='sm'
+                      >
+                        {match ? getTranslateText(match?.title) : uri}
+                      </Tag>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           )}

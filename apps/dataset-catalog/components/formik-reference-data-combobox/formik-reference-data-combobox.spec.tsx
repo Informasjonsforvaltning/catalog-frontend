@@ -1,12 +1,12 @@
 import { render } from '@testing-library/react';
 
 import React from 'react';
-import FormikSearchCombobox from './index';
+import FormikReferenceDataCombobox from './index';
 
-describe('FormikSearchCombobox', () => {
+describe('FormikReferenceDataCombobox', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
-      <FormikSearchCombobox
+      <FormikReferenceDataCombobox
         selectedValuesSearchHits={[]}
         querySearchHits={[]}
         formikValues={[]}

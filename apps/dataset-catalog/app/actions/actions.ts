@@ -45,18 +45,10 @@ export async function getDatasetById(catalogId: string, datasetId: string): Prom
 export async function createDataset(values: DatasetToBeCreated, catalogId: string) {
   const newDataset = {
     ...values,
-    theme: [
-      ...(values.losThemeList ? convertListToListOfObjects(values.losThemeList, 'uri') : []),
-      ...(values.euThemeList ? convertListToListOfObjects(values.euThemeList, 'uri') : []),
-    ],
     keyword: values?.keywordList ? transformToLocalizedStrings(values?.keywordList) : '',
     concepts: values?.conceptList ? convertListToListOfObjects(values.conceptList, 'uri') : [],
     spatial: values?.spatialList ? convertListToListOfObjects(values.spatialList, 'uri') : [],
     language: values.languageList ? convertListToListOfObjects(values.languageList, 'uri') : [],
-    distribution: values.distribution?.map((dist) => ({
-      ...dist,
-      accessService: dist.accessServiceList ? convertListToListOfObjects(dist.accessServiceList, 'uri') : [],
-    })),
   };
   const datasetNoEmptyValues = removeEmptyValues(newDataset);
 
@@ -68,7 +60,10 @@ export async function createDataset(values: DatasetToBeCreated, catalogId: strin
     if (response.status !== 201) {
       throw new Error();
     }
-    datasetId = response?.headers?.get('location')?.split('/').pop();
+
+    const data = await response.json();
+    datasetId = data.id;
+
     success = true;
   } catch (error) {
     throw new Error(localization.alert.fail);
@@ -103,18 +98,10 @@ export async function deleteDataset(catalogId: string, datasetId: string) {
 export async function updateDataset(catalogId: string, initialDataset: Dataset, values: Dataset) {
   const updatedDataset = removeEmptyValues({
     ...values,
-    theme: [
-      ...(values.losThemeList ? convertListToListOfObjects(values.losThemeList, 'uri') : []),
-      ...(values.euThemeList ? convertListToListOfObjects(values.euThemeList, 'uri') : []),
-    ],
     keyword: values?.keywordList ? transformToLocalizedStrings(values?.keywordList) : '',
     concepts: values?.conceptList ? convertListToListOfObjects(values.conceptList, 'uri') : [],
     spatial: values?.spatialList ? convertListToListOfObjects(values.spatialList, 'uri') : [],
     language: values.languageList ? convertListToListOfObjects(values.languageList, 'uri') : [],
-    distribution: values.distribution?.map((dist) => ({
-      ...dist,
-      accessService: dist.accessServiceList ? convertListToListOfObjects(dist.accessServiceList, 'uri') : [],
-    })),
   });
 
   const diff = compare(initialDataset, updatedDataset);
@@ -141,5 +128,25 @@ export async function updateDataset(catalogId: string, initialDataset: Dataset, 
     revalidateTag('dataset');
     revalidateTag('datasets');
     redirect(`/catalogs/${catalogId}/datasets/${initialDataset.id}`);
+  }
+}
+
+export async function publishDataset(catalogId: string, initialDataset: Dataset, values: Dataset) {
+  const diff = compare(initialDataset, values);
+
+  if (diff.length === 0) {
+    throw new Error(localization.alert.noChanges);
+  }
+
+  const session = await getValidSession();
+
+  try {
+    const response = await update(catalogId, initialDataset.id, diff, `${session?.accessToken}`);
+    if (response.status !== 200) {
+      throw new Error(`${response.status} ${response.statusText}`);
+    }
+  } catch (error) {
+    console.error(`${localization.alert.fail} ${error}`);
+    throw new Error(`Noe gikk galt, prøv igjen...`);
   }
 }

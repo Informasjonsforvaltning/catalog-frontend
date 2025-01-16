@@ -15,9 +15,9 @@ export const datasetFormNb = {
 - **Behandlingsgrunnlag**: Lov, forskrift, samtykke eller nødvendighetsvurdering som grunnlag for behandling av personopplysninger.
 - **Utleveringshjemmel**: Henvisning til lov eller forskrift som gir offentlig virksomhet rett eller plikt til å utlevere opplysninger til private eller juridiske personer.`,
     issued: 'Dato for når innholdet i datasettet ble eller blir tilgjengeliggjort.',
-    euTheme:
+    euDataTheme:
       'Velg ett eller flere hovedtema som beskriver innholdet i datasettet. Listen er fra EUs kontrollerte vokabular.',
-    theme:
+    losTheme:
       'Velg ett eller flere LOS-temaer som beskriver datasettet. LOS-tema (Livsområdestruktur) er en norsk utvidelse av EUs kontrollerte vokabular for temaer. Dette gjør det mulig å tilpasse kategoriseringen til nasjonale behov.',
     distributionType:
       'En distribusjon beskriver hvordan man får tilgang til datasettet. Eksempeldata er en distribusjon som representerer et utdrag eller en delmengde av datasettet.',
@@ -86,8 +86,8 @@ export const datasetFormNb = {
     nonPublic: 'Ikke-allmenn tilgang',
   },
   fieldLabel: {
-    theme: 'LOS-tema(er)',
-    euTheme: 'Hovedtema(er)',
+    losTheme: 'LOS-tema(er)',
+    euDataTheme: 'Hovedtema(er)',
     concept: 'Begreper',
     mediaType: 'Mediatyper',
     format: 'Format',
@@ -145,10 +145,12 @@ export const datasetFormNb = {
     descriptionRequired: 'Beskrivelse er påkrevd.',
     description: 'Beskrivelsen må være minst 5 karakterer lang.',
     url: `Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’ og inneholder et gyldig toppdomene (f.eks. ‘.no’).`,
-    euTheme: 'Minst ett EU-tema må være valgt.',
+    euDataTheme: 'Minst ett EU-tema må være valgt.',
     searchString: 'Ingen treff. Søkestrengen må inneholde minst to bokstaver.',
     accessURL: 'Tilgangslenke er påkrevd.',
     contactPoint: 'Minst et kontaktpunkt må fylles ut.',
+    accessURLrequired: 'Tilgangslenke må fylles ut.',
+    relation: 'Begge verdiene må fylles ut for å legge til en relasjon.',
   },
   button: {
     addDate: 'Legg til tidsperiode',

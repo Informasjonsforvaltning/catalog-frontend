@@ -19,7 +19,7 @@ export const UriWithLabelTable = ({ values = [] }: Props) => {
       </Table.Head>
       <Table.Body>
         {values.map((item) => (
-          <Table.Row key={item.uri}>
+          <Table.Row key={`uri-with-label-table-${item.uri}`}>
             <Table.Cell>{getTranslateText(item.prefLabel)}</Table.Cell>
             <Table.Cell>{item.uri}</Table.Cell>
           </Table.Row>

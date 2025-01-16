@@ -107,7 +107,12 @@ export const FormikLanguageFieldset = ({
               </Box>
               <Chip.Group size='sm'>
                 {(values?.[name]?.[lang] as string[] | undefined)?.map((v, i) => (
-                  <Chip.Removable onClick={() => handleRemoveTextValue(i, lang)}>{v}</Chip.Removable>
+                  <Chip.Removable
+                    key={`chip-${i}`}
+                    onClick={() => handleRemoveTextValue(i, lang)}
+                  >
+                    {v}
+                  </Chip.Removable>
                 ))}
               </Chip.Group>
             </>

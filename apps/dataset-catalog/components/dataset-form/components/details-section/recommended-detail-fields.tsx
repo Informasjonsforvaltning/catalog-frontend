@@ -1,5 +1,5 @@
 'use client';
-import { FieldsetDivider, FormikSearchCombobox, LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { FieldsetDivider, LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Checkbox } from '@digdir/designsystemet-react';
 import { useCallback, useState } from 'react';
@@ -12,6 +12,7 @@ import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
 import { debounce, sortBy } from 'lodash';
 import styles from '../../dataset-form.module.css';
 import { TemporalModal } from './temporal-modal';
+import FormikReferenceDataCombobox from '../../../../components/formik-reference-data-combobox';
 
 interface Props {
   referenceDataEnv: string;
@@ -97,7 +98,7 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
           {localization.datasetForm.fieldLabel.spatial}
         </LabelWithHelpTextAndTag>
 
-        <FormikSearchCombobox
+        <FormikReferenceDataCombobox
           selectedValuesSearchHits={selectedValues ?? []}
           querySearchHits={searchHits ?? []}
           formikValues={values.spatialList ?? []}

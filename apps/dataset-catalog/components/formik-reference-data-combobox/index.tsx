@@ -11,7 +11,7 @@ interface Props extends ComboboxProps {
   virtual?: boolean;
 }
 
-export function FormikSearchCombobox({
+export function FormikReferenceDataCombobox({
   formikValues,
   selectedValuesSearchHits,
   querySearchHits,
@@ -70,4 +70,4 @@ export function FormikSearchCombobox({
   );
 }
 
-export default FormikSearchCombobox;
+export default FormikReferenceDataCombobox;

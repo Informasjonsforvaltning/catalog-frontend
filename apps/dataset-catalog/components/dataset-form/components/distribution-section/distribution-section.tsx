@@ -19,19 +19,14 @@ type Props = {
   openLicenses: ReferenceDataCode[];
 };
 
-type FormikDistribution = {
-  type: string;
-  values: Partial<Distribution>;
-};
-
 export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses }: Props) => {
   const { values, setFieldValue } = useFormikContext<Dataset>();
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [expandedIndexExampleData, setExpandedIndexExampleData] = useState<number | null>(null);
 
   const getSelectedFileTypes = (): string[] => {
-    const distributionFormats = values.distribution?.map((val) => val.format) || [];
-    const sampleFormats = values.sample?.map((val) => val.format) || [];
+    const distributionFormats = values.distribution?.map((val) => val?.format) || [];
+    const sampleFormats = values.sample?.map((val) => val?.format) || [];
     return [...distributionFormats, ...sampleFormats].flat().filter((item) => item !== undefined);
   };
 
@@ -45,8 +40,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
     if (
       distribution.downloadURL?.[0] ||
       distribution.mediaType?.[0] ||
-      distribution.accessServiceList?.[0] ||
-      distribution.accessService?.[0] ||
+      distribution.accessServiceUris?.[0] ||
       distribution.license?.uri ||
       distribution.description?.nb ||
       distribution.page?.[0]?.uri ||
@@ -57,213 +51,212 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
     return false;
   }
 
-  const getField = (formValues: FormikDistribution): string => {
-    const fieldValues =
-      {
-        distribution: values.distribution,
-        sample: values.sample,
-      }[formValues.type] ?? [];
+  type DistributionKey = 'distribution' | 'sample';
 
-    const hasValues = fieldValues.length > 0 && _.isEmpty(fieldValues[0]?.accessURL?.[0]);
-
-    return `${formValues.type}[${hasValues ? fieldValues.length : 0}]`;
+  const getField = (distributionType: string): string => {
+    const fieldValues = values[distributionType as DistributionKey] ?? [];
+    const hasValues = fieldValues.length > 0 && !_.isEmpty(fieldValues[0]?.accessURL?.[0]);
+    return `${distributionType}[${hasValues ? fieldValues.length : 0}]`;
   };
 
   return (
     <>
-      {values?.distribution && (
-        <Heading
-          size='xs'
-          className={styles.list}
+      <Heading
+        size='xs'
+        className={styles.list}
+      >
+        {localization.datasetForm.fieldLabel.distributions}
+        <Tag
+          size='sm'
+          color='info'
         >
-          {localization.datasetForm.fieldLabel.distributions}
-          <Tag
-            size='sm'
-            color='info'
-          >
-            {localization.tag.recommended}
-          </Tag>
-        </Heading>
-      )}
-      {values?.distribution?.map((item, index) => (
-        <Card key={`distribusjon-${index}`}>
-          <div className={styles.heading}>
-            <Heading
-              size='xs'
-              spacing
-            >
-              {getTranslateText(item.title) ?? ''}
-            </Heading>
-            <div className={styles.buttons}>
-              <DistributionModal
-                type='edit'
-                initialValues={item}
-                referenceDataEnv={referenceDataEnv}
+          {localization.tag.recommended}
+        </Tag>
+      </Heading>
+
+      {values?.distribution &&
+        !_.isEmpty(values?.distribution[0]) &&
+        values?.distribution?.map((item, index) => (
+          <Card key={`distribusjon-${index}`}>
+            <div className={styles.heading}>
+              <Heading
+                size='xs'
+                spacing
+              >
+                {getTranslateText(item?.title) ?? ''}
+              </Heading>
+              <div className={styles.buttons}>
+                <DistributionModal
+                  type='edit'
+                  initialValues={item}
+                  referenceDataEnv={referenceDataEnv}
+                  searchEnv={searchEnv}
+                  openLicenses={openLicenses}
+                  initialDistributionType='distribution'
+                  onSuccess={(updatedDist) => {
+                    setFieldValue(`distribution[${index}]`, updatedDist);
+                  }}
+                  trigger={
+                    <Button
+                      variant='tertiary'
+                      size='sm'
+                    >
+                      <PencilWritingIcon
+                        title='Rediger'
+                        fontSize='1.5rem'
+                      />
+                      {localization.button.edit}
+                    </Button>
+                  }
+                />
+                <DeleteButton onClick={() => setFieldValue(`distribution[${index}]`, undefined)} />
+              </div>
+            </div>
+
+            {item?.accessURL && <Label size='sm'>{`${localization.datasetForm.fieldLabel.accessURL}:`}</Label>}
+            <Link href={item?.accessURL?.[0]}>{item?.accessURL?.[0]}</Link>
+
+            <div className={styles.tags}>
+              {item?.format?.map((uri) => (
+                <Tag
+                  key={uri}
+                  color='third'
+                  size='sm'
+                >
+                  {(selectedFileTypes?.find((format) => format?.uri === uri) ?? {}).code ?? uri}
+                </Tag>
+              ))}
+            </div>
+
+            {showSeeMoreButton(item) && (
+              <div>
+                <Button
+                  variant='tertiary'
+                  onClick={() => {
+                    setExpandedIndex(expandedIndex === index ? null : index);
+                  }}
+                  className={styles.button}
+                  size='sm'
+                >
+                  {expandedIndex === index ? (
+                    <>
+                      <ChevronUpIcon fontSize='1.3rem' />
+                      {localization.seeLess}
+                    </>
+                  ) : (
+                    <>
+                      <ChevronDownIcon fontSize='1.3rem' />
+                      {localization.seeMore}
+                    </>
+                  )}
+                </Button>
+              </div>
+            )}
+
+            {expandedIndex === index && (
+              <DistributionDetails
+                distribution={item}
                 searchEnv={searchEnv}
+                referenceDataEnv={referenceDataEnv}
                 openLicenses={openLicenses}
-                onSuccess={(updatedDist: FormikDistribution) =>
-                  setFieldValue(`distribution[${index}]`, updatedDist.values)
-                }
-                trigger={
-                  <Button
-                    variant='tertiary'
-                    size='sm'
-                  >
-                    <PencilWritingIcon
-                      title='Rediger'
-                      fontSize='1.5rem'
-                    />
-                    {localization.button.edit}
-                  </Button>
-                }
               />
-              <DeleteButton onClick={() => setFieldValue(`distribution[${index}]`, undefined)} />
+            )}
+          </Card>
+        ))}
+
+      <>
+        <FieldsetDivider />
+        <Heading size='xs'>Eksempeldata</Heading>
+      </>
+      {values?.sample &&
+        values?.sample?.map((item, index) => (
+          <Card key={`sample-${index}`}>
+            <div className={styles.heading}>
+              <div className={styles.exampleHeading}>
+                {item?.accessURL && <Label size='sm'>{`${localization.datasetForm.fieldLabel.accessURL}: `}</Label>}
+                <Link href={item?.accessURL?.[0]}>{item?.accessURL?.[0]}</Link>
+              </div>
+              <div className={styles.buttons}>
+                <DistributionModal
+                  type='edit'
+                  initialValues={item}
+                  initialDistributionType='sample'
+                  referenceDataEnv={referenceDataEnv}
+                  searchEnv={searchEnv}
+                  onSuccess={(updatedDist: Distribution) => {
+                    setFieldValue(`sample[${index}]`, updatedDist);
+                  }}
+                  trigger={
+                    <Button
+                      variant='tertiary'
+                      size='sm'
+                    >
+                      <PencilWritingIcon
+                        title='Rediger'
+                        fontSize='1.5rem'
+                      />
+                      {localization.button.edit}
+                    </Button>
+                  }
+                />
+                <DeleteButton onClick={() => setFieldValue(`sample[${index}]`, undefined)} />
+              </div>
             </div>
-          </div>
 
-          {item.accessURL && <Label size='sm'>{`${localization.datasetForm.fieldLabel.accessURL}:`}</Label>}
-          <Link href={item?.accessURL?.[0]}>{item?.accessURL?.[0]}</Link>
-
-          <div className={styles.tags}>
-            {item?.format?.map((uri) => (
-              <Tag
-                key={uri}
-                color='third'
-                size='sm'
-              >
-                {(selectedFileTypes?.find((format) => format.uri === uri) ?? {}).code ?? uri}
-              </Tag>
-            ))}
-          </div>
-
-          {showSeeMoreButton(item) && (
-            <div>
-              <Button
-                variant='tertiary'
-                onClick={() => {
-                  setExpandedIndex(expandedIndex === index ? null : index);
-                }}
-                className={styles.button}
-                size='sm'
-              >
-                {expandedIndex === index ? (
-                  <>
-                    <ChevronUpIcon fontSize='1.3rem' />
-                    {localization.seeLess}
-                  </>
-                ) : (
-                  <>
-                    <ChevronDownIcon fontSize='1.3rem' />
-                    {localization.seeMore}
-                  </>
-                )}
-              </Button>
+            <div className={styles.tags}>
+              {item?.format?.map((uri) => (
+                <Tag
+                  key={uri}
+                  color='info'
+                  size='sm'
+                >
+                  {(selectedFileTypes?.find((format) => format?.uri === uri) ?? {}).code ?? uri}
+                </Tag>
+              ))}
             </div>
-          )}
 
-          {expandedIndex === index && (
-            <DistributionDetails
-              distribution={item}
-              searchEnv={searchEnv}
-              referenceDataEnv={referenceDataEnv}
-              openLicenses={openLicenses}
-            />
-          )}
-        </Card>
-      ))}
+            {showSeeMoreButton(item) && (
+              <div>
+                <Button
+                  variant='tertiary'
+                  onClick={() => {
+                    setExpandedIndexExampleData(expandedIndexExampleData === index ? null : index);
+                  }}
+                  className={styles.button}
+                  size='sm'
+                >
+                  {expandedIndexExampleData === index ? (
+                    <>
+                      <ChevronUpIcon fontSize='1.3rem' />
+                      {localization.seeLess}
+                    </>
+                  ) : (
+                    <>
+                      <ChevronDownIcon fontSize='1.3rem' />
+                      {localization.seeMore}
+                    </>
+                  )}
+                </Button>
+              </div>
+            )}
 
-      {values?.sample && (
-        <>
-          <FieldsetDivider />
-          <Heading size='xs'>Eksempeldata</Heading>
-        </>
-      )}
-      {values?.sample?.map((item, index) => (
-        <Card key={`sample-${index}`}>
-          <div className={styles.heading}>
-            <div className={styles.exampleHeading}>
-              {item.accessURL && <Label size='sm'>{`${localization.datasetForm.fieldLabel.accessURL}: `}</Label>}
-              <Link href={item?.accessURL?.[0]}>{item?.accessURL?.[0]}</Link>
-            </div>
-            <div className={styles.buttons}>
-              <DistributionModal
-                type='edit'
-                initialValues={item}
-                initialDistributionType='exampledata'
-                referenceDataEnv={referenceDataEnv}
+            {expandedIndexExampleData === index && (
+              <DistributionDetails
+                distribution={item}
                 searchEnv={searchEnv}
-                onSuccess={(updatedDist: FormikDistribution) => setFieldValue(`sample[${index}]`, updatedDist.values)}
-                trigger={
-                  <Button
-                    variant='tertiary'
-                    size='sm'
-                  >
-                    <PencilWritingIcon
-                      title='Rediger'
-                      fontSize='1.5rem'
-                    />
-                    {localization.button.edit}
-                  </Button>
-                }
+                referenceDataEnv={referenceDataEnv}
+                openLicenses={openLicenses}
               />
-              <DeleteButton onClick={() => setFieldValue(`sample[${index}]`, undefined)} />
-            </div>
-          </div>
-
-          <div className={styles.tags}>
-            {item?.format?.map((uri) => (
-              <Tag
-                key={uri}
-                color='third'
-                size='sm'
-              >
-                {(selectedFileTypes?.find((format) => format.uri === uri) ?? {}).code ?? uri}
-              </Tag>
-            ))}
-          </div>
-
-          {showSeeMoreButton(item) && (
-            <div>
-              <Button
-                variant='tertiary'
-                onClick={() => {
-                  setExpandedIndexExampleData(expandedIndexExampleData === index ? null : index);
-                }}
-                className={styles.button}
-                size='sm'
-              >
-                {expandedIndexExampleData === index ? (
-                  <>
-                    <ChevronUpIcon fontSize='1.3rem' />
-                    {localization.seeLess}
-                  </>
-                ) : (
-                  <>
-                    <ChevronDownIcon fontSize='1.3rem' />
-                    {localization.seeMore}
-                  </>
-                )}
-              </Button>
-            </div>
-          )}
-
-          {expandedIndexExampleData === index && (
-            <DistributionDetails
-              distribution={item}
-              searchEnv={searchEnv}
-              referenceDataEnv={referenceDataEnv}
-              openLicenses={openLicenses}
-            />
-          )}
-        </Card>
-      ))}
+            )}
+          </Card>
+        ))}
 
       <div className={styles.add}>
         <DistributionModal
           type={'new'}
           trigger={<AddButton>{localization.datasetForm.button.addDistribution}</AddButton>}
-          onSuccess={(formValues: FormikDistribution) => {
-            setFieldValue(getField(formValues), formValues.values);
+          onSuccess={(formValues: Distribution, distributionType) => {
+            setFieldValue(getField(distributionType), formValues);
           }}
           referenceDataEnv={referenceDataEnv}
           searchEnv={searchEnv}
@@ -277,20 +270,9 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
             mediaType: [],
             page: [{ uri: '' }],
             conformsTo: [{ uri: '', prefLabel: { nb: '' } }],
-            accessServiceList: [],
+            accessServiceUris: [],
           }}
         />
-
-        {(!values?.distribution || values.distribution?.length === 0) && (
-          <div>
-            <Tag
-              color='info'
-              size='sm'
-            >
-              {localization.tag.recommended}
-            </Tag>
-          </div>
-        )}
       </div>
     </>
   );

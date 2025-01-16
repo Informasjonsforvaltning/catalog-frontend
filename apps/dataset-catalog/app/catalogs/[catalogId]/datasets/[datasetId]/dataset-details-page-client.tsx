@@ -1,6 +1,6 @@
 'use client';
 
-import { Dataset, DatasetSeries, ReferenceData } from '@catalog-frontend/types';
+import { Dataset, DatasetSeries, PublicationStatus, ReferenceData } from '@catalog-frontend/types';
 import { DeleteButton, DetailsPageLayout, LinkButton } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useState } from 'react';
@@ -93,6 +93,7 @@ const DatasetDetailsPageClient = ({
             </LinkButton>
 
             <DeleteButton
+              disabled={dataset.registrationStatus === PublicationStatus.PUBLISH}
               variant='secondary'
               onClick={() => handleDeleteDataset()}
             />

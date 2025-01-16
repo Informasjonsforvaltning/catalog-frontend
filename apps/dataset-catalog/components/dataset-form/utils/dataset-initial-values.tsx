@@ -6,25 +6,19 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     id: dataset?.id ?? '',
     catalogId: dataset?.catalogId ?? '',
     _lastModified: dataset?._lastModified,
-    title: {
-      nb: (dataset && dataset.title?.nb) ?? '',
-    },
-    description: {
-      nb: (dataset && dataset.description?.nb) ?? '',
-    },
+    title: dataset.title ?? '',
+    description: dataset.description ?? '',
     accessRights: { uri: dataset?.accessRights?.uri ?? AccessRights.PUBLIC },
     legalBasisForAccess: dataset?.legalBasisForAccess ?? [],
     legalBasisForProcessing: dataset?.legalBasisForProcessing ?? [],
     legalBasisForRestriction: dataset?.legalBasisForRestriction ?? [],
     registrationStatus: dataset.registrationStatus,
     landingPage:
-      dataset.landingPage && dataset?.landingPage?.length > 0 && dataset.landingPage.every((page) => page !== null)
+      dataset.landingPage && dataset?.landingPage?.length > 0 && dataset.landingPage.every((page) => page !== undefined)
         ? dataset.landingPage
         : [],
-    losThemeList: dataset.theme ? dataset.theme.filter((t) => t.uri && t.uri.includes('/los/')).map((t) => t.uri) : [],
-    euThemeList: dataset.theme
-      ? dataset.theme.filter((t) => t.uri && t.uri.includes('/data-theme/')).map((t) => t.uri)
-      : [],
+    euDataTheme: dataset.euDataTheme ?? [],
+    losTheme: dataset.losTheme ?? [],
     type: dataset?.type,
     keywordList: dataset.keyword ? groupByKeys(dataset?.keyword) : { nb: [] },
     conceptList: dataset.concepts ? dataset.concepts.map((concept) => concept.uri) : [],
@@ -48,10 +42,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     references: dataset?.references,
     relations: dataset?.relations,
     inSeries: dataset.inSeries ?? '',
-    distribution: dataset.distribution?.map((dist) => ({
-      ...dist,
-      accessServiceList: dist.accessService?.map((service) => service.uri) || [],
-    })),
+    distribution: dataset?.distribution ?? [],
     contactPoint: dataset.contactPoint ?? [],
   };
 };
@@ -74,8 +65,8 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     legalBasisForAccess: [],
     legalBasisForProcessing: [],
     legalBasisForRestriction: [],
-    losThemeList: [],
-    euThemeList: [],
+    euDataTheme: [],
+    losTheme: [],
     type: undefined,
     keywordList: { nb: [] },
     keyword: [{ nb: '' }],
@@ -116,18 +107,19 @@ export const distributionTemplate = (dist: Distribution | undefined) => {
   return dist
     ? {
         ...dist,
-        accessServiceList: dist.accessService?.map((service) => service.uri) || [],
+        title: dist?.title ?? { nb: '' },
+        downloadURL: dist?.downloadURL && dist?.downloadURL[0] ? dist?.downloadURL : [''],
       }
     : {
         title: { nb: '' },
         description: { nb: '' },
-        downloadURL: [],
+        downloadURL: [''],
         accessURL: [],
         format: [],
         mediaType: [],
         licenseList: [],
         conformsTo: [{ uri: '', prefLabel: { nb: '' } }],
         pageList: [],
-        accessServiceList: [],
+        accessServiceUris: [],
       };
 };
