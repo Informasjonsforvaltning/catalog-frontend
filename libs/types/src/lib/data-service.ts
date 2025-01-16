@@ -8,8 +8,16 @@ export interface DataService extends DataServiceToBeCreated {
 export interface DataServiceToBeCreated {
   title: LocalizedStrings;
   description: LocalizedStrings;
-  modified: string;
-  status: string;
+  modified?: string;
+  status?: string;
   endpointUrl: string;
-  endpointDescriptions: string[];
+  endpointDescriptions?: string[];
+  contactPoint?: DataServiceContactPoint;
+}
+
+type DataServiceContactPoint = {
+  email?: string;
+  phone?: string;
+  url?: string;
+  organizationUnit?: string;
 }
