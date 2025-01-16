@@ -11,4 +11,5 @@ export interface DataServiceToBeCreated {
   modified: string;
   status: string;
   endpointUrl: string;
+  endpointDescriptions: string[];
 }

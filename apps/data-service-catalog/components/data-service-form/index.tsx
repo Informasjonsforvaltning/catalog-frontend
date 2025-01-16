@@ -4,12 +4,12 @@ import { DataService, DataServiceToBeCreated } from '@catalog-frontend/types';
 import { FormLayout, StickyFooterBar, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
 import { Formik, Form } from 'formik';
 import { useState } from 'react';
-import { TitleSection } from './components/data-service-form-title-section';
+import { TitleSection } from './components/title-section';
 import { useParams, useRouter } from 'next/navigation';
 import { createDataService, updateDataService } from '../../app/actions/actions';
 import { Button } from '@digdir/designsystemet-react';
 import styles from './data-service-form.module.css';
-import { EndpointSection } from './components/data-service-form-endpoint-section';
+import { EndpointSection } from './components/endpoint-section';
 
 type Props = {
   initialValues: DataService | DataServiceToBeCreated;

@@ -1,0 +1,20 @@
+.content {
+  display: flex;
+  align-items: flex-end;
+}
+
+.singleChild {
+  width: 100%;
+}
+
+.twoChildren {
+  display: grid;
+  grid-template-columns: 49% 49%;
+  gap: 2%;
+  width: 100%;
+}
+
+.deleteButton {
+  height: fit-content;
+  width: fit-content;
+}
