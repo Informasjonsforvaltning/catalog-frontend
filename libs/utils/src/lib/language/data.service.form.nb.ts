@@ -5,10 +5,13 @@ export const dataServiceFormNb = {
     endpoint: 'Rotplassering eller primært endepunkt for APIet.',
     endpointDescriptions:
       'Legg til lenke til spesifikasjon av APIet. F.eks OAS, Swagger, GraphQL eller lignende.',
+    contactPoint:
+      'Et kontaktpunkt er informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om datasettet. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.',
   },
   heading: {
     titleAndDescription: 'Tittel og beskrivelse',
     endpoint: 'Endepunkt',
+    contactPoint: 'Kontaktpunkt',
   },
   fieldLabel: {
     description: 'Beskrivelse av APIet',

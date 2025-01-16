@@ -10,6 +10,7 @@ import { createDataService, updateDataService } from '../../app/actions/actions'
 import { Button } from '@digdir/designsystemet-react';
 import styles from './data-service-form.module.css';
 import { EndpointSection } from './components/endpoint-section';
+import {ContactPointSection} from "./components/contact-point-section";
 
 type Props = {
   initialValues: DataService | DataServiceToBeCreated;
@@ -78,12 +79,21 @@ export const DataServiceForm = ({ initialValues, submitType }: Props) => {
                 >
                   <TitleSection />
                 </FormLayout.Section>
+
                 <FormLayout.Section
                   id='endpoint-section'
                   title={localization.dataServiceForm.heading.endpoint}
                   required
                 >
                   <EndpointSection />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='contact-point-section'
+                  title={localization.dataServiceForm.heading.contactPoint}
+                  required
+                >
+                  <ContactPointSection />
                 </FormLayout.Section>
               </FormLayout>
             </Form>

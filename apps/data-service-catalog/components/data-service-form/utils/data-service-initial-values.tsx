@@ -12,5 +12,6 @@ export const dataServiceToBeCreatedTemplate = (): DataServiceToBeCreated => {
     status: '',
     endpointUrl: '',
     endpointDescriptions: [],
+    contactPoint: undefined,
   };
 };
