@@ -2,7 +2,6 @@ import cn from 'classnames';
 import React, { forwardRef } from 'react';
 import classes from './info-card.module.css';
 import { HelpMarkdown } from '../help-markdown';
-import { Label } from '@digdir/designsystemet-react';
 
 export const labelColor = ['neutral', 'light'] as const;
 type LabelColor = (typeof labelColor)[number];
@@ -47,14 +46,8 @@ const InfoCardItem: InfoCardItemType = forwardRef(
       >
         <div>
           <span className={classes.set}>
-            {label && (
-              <Label
-                size='sm'
-                className={cn(classes[labelColor])}
-              >
-                {label}
-              </Label>
-            )}
+            {label && <HeadingTag className={cn(classes.fieldHeading, classes[labelColor])}>{label}</HeadingTag>}
+
             {helpText && (
               <HelpMarkdown
                 size='sm'
