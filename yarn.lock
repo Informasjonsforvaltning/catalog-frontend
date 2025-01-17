@@ -8634,6 +8634,7 @@ __metadata:
     webpack: "npm:^5.95.0"
     ws: "npm:^8.18.0"
     yup: "npm:^1.4.0"
+    yup-locales: "npm:^1.2.28"
   languageName: unknown
   linkType: soft
 
@@ -22141,6 +22142,13 @@ __metadata:
   version: 1.1.1
   resolution: "yocto-queue@npm:1.1.1"
   checksum: 10/f2e05b767ed3141e6372a80af9caa4715d60969227f38b1a4370d60bffe153c9c5b33a862905609afc9b375ec57cd40999810d20e5e10229a204e8bde7ef255c
+  languageName: node
+  linkType: hard
+
+"yup-locales@npm:^1.2.28":
+  version: 1.2.28
+  resolution: "yup-locales@npm:1.2.28"
+  checksum: 10/351a44f10a498a73dd5d9d61cfbec1bb1e975ee5538a1ec4811df8b8a6cb53fd627cc7b4c6fc7af257f50a2d1fe67c631fbcd14dae8c30d4db50f946c78a26a7
   languageName: node
   linkType: hard
 

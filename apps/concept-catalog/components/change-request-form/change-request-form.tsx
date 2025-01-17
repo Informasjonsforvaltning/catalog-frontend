@@ -274,7 +274,7 @@ export const ChangeRequestForm: FC<Props> = ({
                         name={`merknad.${language}`}
                         as={Textarea}
                         label={loc.formatString(loc.concept.formFieldLabel, {
-                          fieldType: loc.concept.note,
+                          fieldType: loc.concept.remark,
                           lang: loc.language[language]?.toLowerCase(),
                         })}
                         cols={NUM_COLS_TEXT_FIELD}

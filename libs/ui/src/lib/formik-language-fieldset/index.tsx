@@ -8,14 +8,14 @@ import { FastField, useFormikContext } from 'formik';
 import styles from './formik-language-fieldset.module.scss';
 import { ISOLanguage, LocalizedStrings } from '@catalog-frontend/types';
 import { TextareaWithPrefix } from '../textarea-with-prefix';
-import _ from 'lodash';
 import { AddButton, DeleteButton } from '../button';
+import _ from 'lodash';
 
 type LanuguageFieldsetProps = {
   legend?: ReactNode;
   name: string;
   errorMessage?: string;
-  errorArgs?: object;
+  errorFieldLabel: string;
   requiredLanguages?: Omit<ISOLanguage, 'no'>[];
   as?: typeof Textfield | typeof TextareaWithPrefix;
   multiple?: boolean;
@@ -27,7 +27,7 @@ export const FormikLanguageFieldset = ({
   legend,
   name,
   errorMessage,
-  errorArgs,
+  errorFieldLabel,
   requiredLanguages,
   as: renderAs = Textfield,
   multiple = false,
@@ -36,7 +36,7 @@ export const FormikLanguageFieldset = ({
   const [textValue, setTextValue] = useState<Record<string, string>>({});
 
   const handleAddLanguage = (lang: string) => {
-    setFieldValue(`${name}.${lang}`, multiple ? [] : '');
+    setFieldValue(`${name}.${lang}`, multiple ? [] : multiple ? [] : '');
   };
 
   const handleRemoveLanguage = (lang: string) => {
@@ -70,7 +70,7 @@ export const FormikLanguageFieldset = ({
   const languagesWithError = allowedLanguages
     .filter((lang) => _.get(errors, `${name}.${lang}`))
     .map((lang) => localization.language[lang]);
-
+  
   return (
     <Fieldset
       legend={legend}
@@ -101,8 +101,8 @@ export const FormikLanguageFieldset = ({
                 />
 
                 <DeleteButton
-                  variant='tertiary'
-                  onClick={() => handleRemoveLanguage(lang)}
+                  onKeyDown={(e) => { if(e.code === 'Enter') { handleAddTextValue(lang) } }}
+                  onBlur={() => handleAddTextValue(lang)}
                 />
               </Box>
               <Chip.Group size='sm'>
@@ -166,8 +166,8 @@ export const FormikLanguageFieldset = ({
           error
         >
           {errorMessage
-            ? `${localization.formatString(errorMessage, { ...errorArgs, language: languagesWithError.join(', ') })}`
-            : 'This field ({language}) is required'}
+            ? `${localization.formatString(errorMessage, { label: errorFieldLabel, language: languagesWithError.join(', ') })}`
+            : `This field (${languagesWithError.join(', ')}) is required`}
         </ErrorMessage>
       )}
     </Fieldset>
