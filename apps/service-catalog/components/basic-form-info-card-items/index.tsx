@@ -23,13 +23,13 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
   return (
     <>
       {getTranslateText(service?.description) && (
-        <InfoCard.Item label={`${localization.description}:`}>
+        <InfoCard.Item title={`${localization.description}:`}>
           {getTranslateText(service?.description ?? '', language)}
         </InfoCard.Item>
       )}
 
       {contactPoint && !allPropertiesEmpty(contactPoint) && (
-        <InfoCard.Item label={`${localization.serviceCatalog.contactPoint}:`}>
+        <InfoCard.Item title={`${localization.serviceCatalog.contactPoint}:`}>
           <div>
             {contactPoint?.category && !_.isEmpty(contactPoint.category) && (
               <Heading
@@ -76,7 +76,7 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
         </InfoCard.Item>
       )}
       {produces?.length > 0 && (
-        <InfoCard.Item label={`${localization.serviceCatalog.produces}:`}>
+        <InfoCard.Item title={`${localization.serviceCatalog.produces}:`}>
           {produces.map((produce, index) => (
             <div key={`produces-details-${index}`}>
               {produce?.title && (
@@ -106,7 +106,7 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
           ))}
         </InfoCard.Item>
       )}
-      {homepage && <InfoCard.Item label={`${localization.homepage}:`}>{homepage}</InfoCard.Item>}
+      {homepage && <InfoCard.Item title={`${localization.homepage}:`}>{homepage}</InfoCard.Item>}
     </>
   );
 };

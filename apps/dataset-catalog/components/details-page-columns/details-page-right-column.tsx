@@ -18,17 +18,17 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
     <InfoCard>
       <InfoCard.Item
         key={`info-data-${localization.id}`}
-        label={localization.datasetForm.fieldLabel.datasetID}
-        labelColor='light'
+        title={localization.datasetForm.fieldLabel.datasetID}
+        headingColor='light'
       >
         {dataset?.id}
       </InfoCard.Item>
 
       <InfoCard.Item
         key={`info-data-${localization.publicationState.state}`}
-        label={localization.publicationState.state}
+        title={localization.publicationState.state}
         helpText={localization.datasetForm.helptext.publish}
-        labelColor='light'
+        headingColor='light'
       >
         <PublishSwitch
           catalogId={dataset.catalogId}
@@ -41,8 +41,8 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
 
       {dataset?.issued && (
         <InfoCard.Item
-          label={localization.datasetForm.fieldLabel.issued}
-          labelColor='light'
+          title={localization.datasetForm.fieldLabel.issued}
+          headingColor='light'
         >
           {new Date(dataset.issued).toLocaleDateString('no-NO')}
         </InfoCard.Item>
@@ -50,8 +50,8 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
 
       {dataset?.contactPoint && !_.isEmpty(dataset?.contactPoint[0]) && (
         <InfoCard.Item
-          label={localization.concept.contactInformation}
-          labelColor='light'
+          title={localization.concept.contactInformation}
+          headingColor='light'
         >
           <div className={styles.contactPoints}>
             {dataset?.contactPoint[0].email && (
@@ -95,8 +95,8 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
 
       {dataset?.modified && (
         <InfoCard.Item
-          label={localization.datasetForm.helptext.modified.slice(0, -1)}
-          labelColor='light'
+          title={localization.datasetForm.helptext.modified.slice(0, -1)}
+          headingColor='light'
         >
           {new Date(dataset.modified).toLocaleDateString('no-NO')}
         </InfoCard.Item>

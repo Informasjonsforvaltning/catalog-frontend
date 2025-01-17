@@ -120,7 +120,7 @@ const InterneFelt = ({ concept, fields, codeLists, users, location, language }: 
           field && (
             <InfoCard.Item
               key={`internalField-${field.id}`}
-              label={`${translate(field.label, language)}:`}
+              title={`${translate(field.label, language)}:`}
             >
               {(field.type === 'text_short' || field.type === 'text_long') && <span>{field.value}</span>}
               {field.type === 'boolean' && <span>{field.value ? localization.yes : localization.no}</span>}
@@ -378,8 +378,8 @@ export const ConceptPageClient = ({
           return (
             <InfoCard.Item
               key={`revision-${revision.id}`}
-              label={`${localization.versionId} ${revision.id}`}
-              labelColor='light'
+              title={`${localization.versionId} ${revision.id}`}
+              headingColor='light'
             >
               <div className={classes.revision}>
                 <div>
@@ -644,7 +644,7 @@ export const ConceptPageClient = ({
     <div>
       <InfoCard>
         {!_.isEmpty(translate(concept?.definisjon?.tekst ?? '', language)) && !_.isEmpty(concept?.definisjon) && (
-          <InfoCard.Item label={`${localization.concept.definition}:`}>
+          <InfoCard.Item title={`${localization.concept.definition}:`}>
             <Definition
               definition={concept?.definisjon}
               language={language}
@@ -653,7 +653,7 @@ export const ConceptPageClient = ({
         )}
         {!_.isEmpty(translate(concept?.definisjonForAllmennheten?.tekst ?? '', language)) &&
           !_.isEmpty(concept?.definisjonForAllmennheten) && (
-            <InfoCard.Item label={`${localization.concept.publicDefinition}:`}>
+            <InfoCard.Item title={`${localization.concept.publicDefinition}:`}>
               <Definition
                 definition={concept?.definisjonForAllmennheten}
                 language={language}
@@ -663,7 +663,7 @@ export const ConceptPageClient = ({
 
         {!_.isEmpty(translate(concept?.definisjonForSpesialister?.tekst ?? '', language)) &&
           !_.isEmpty(concept?.definisjonForSpesialister) && (
-            <InfoCard.Item label={`${localization.concept.specialistDefinition}:`}>
+            <InfoCard.Item title={`${localization.concept.specialistDefinition}:`}>
               <Definition
                 definition={concept?.definisjonForSpesialister}
                 language={language}
@@ -671,22 +671,22 @@ export const ConceptPageClient = ({
             </InfoCard.Item>
           )}
         {!_.isEmpty(translate(concept?.merknad, language)) && (
-          <InfoCard.Item label={`${localization.concept.note}:`}>
+          <InfoCard.Item title={`${localization.concept.note}:`}>
             <span>{translate(concept?.merknad, language)}</span>
           </InfoCard.Item>
         )}
         {!_.isEmpty(translate(concept?.eksempel, language)) && (
-          <InfoCard.Item label={`${localization.concept.example}:`}>
+          <InfoCard.Item title={`${localization.concept.example}:`}>
             <span>{translate(concept?.eksempel, language)}</span>
           </InfoCard.Item>
         )}
         {!_.isEmpty(translate(concept?.abbreviatedLabel, language)) && (
-          <InfoCard.Item label={`${localization.concept.abbreviation}:`}>
+          <InfoCard.Item title={`${localization.concept.abbreviation}:`}>
             <span>{translate(concept?.abbreviatedLabel, language)}</span>
           </InfoCard.Item>
         )}
         {!_.isEmpty(translate(concept?.tillattTerm, language)) && (
-          <InfoCard.Item label={`${localization.concept.allowedTerm}:`}>
+          <InfoCard.Item title={`${localization.concept.allowedTerm}:`}>
             <ul>
               {ensureStringArray(translate(concept?.tillattTerm, language)).map((term, i) => (
                 <li key={`allowedTerm-${i}`}>{term}</li>
@@ -695,7 +695,7 @@ export const ConceptPageClient = ({
           </InfoCard.Item>
         )}
         {!_.isEmpty(translate(concept?.frarådetTerm, language)) && (
-          <InfoCard.Item label={`${localization.concept.notRecommendedTerm}:`}>
+          <InfoCard.Item title={`${localization.concept.notRecommendedTerm}:`}>
             <ul>
               {ensureStringArray(translate(concept?.frarådetTerm, language)).map((term, i) => (
                 <li key={`notRecommendedTerm-${i}`}>{term}</li>
@@ -705,7 +705,7 @@ export const ConceptPageClient = ({
         )}
         {!_.isEmpty(relatedConcepts) && (
           <InfoCard.Item
-            label={`${localization.formatString(localization.concept.relatedConcepts, {
+            title={`${localization.formatString(localization.concept.relatedConcepts, {
               conceptCount: conceptRelations.length,
             })}`}
           >
@@ -720,7 +720,7 @@ export const ConceptPageClient = ({
         )}
         {!_.isEmpty(internalRelatedConcepts) && (
           <InfoCard.Item
-            label={`${localization.formatString(localization.concept.unpublishedRelatedConcepts, {
+            title={`${localization.formatString(localization.concept.unpublishedRelatedConcepts, {
               conceptCount: internalConceptRelations.length,
             })}`}
           >
@@ -734,7 +734,7 @@ export const ConceptPageClient = ({
           </InfoCard.Item>
         )}
         {!_.isEmpty(concept?.omfang) && (
-          <InfoCard.Item label={`${localization.concept.valueDomain}:`}>
+          <InfoCard.Item title={`${localization.concept.valueDomain}:`}>
             {concept?.omfang?.uri ? (
               <Link href={concept?.omfang?.uri}>{concept?.omfang?.tekst}</Link>
             ) : (
@@ -781,8 +781,8 @@ export const ConceptPageClient = ({
       {infoDataColumnRight.map(([label, value]) => (
         <InfoCard.Item
           key={`info-data-${label}`}
-          label={label}
-          labelColor='light'
+          title={label}
+          headingColor='light'
         >
           <span>{value}</span>
         </InfoCard.Item>
