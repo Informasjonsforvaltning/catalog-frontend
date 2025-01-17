@@ -49,7 +49,7 @@
 }
 
 .greyFont {
-  color: #6c737a;
+  color: var(--fds-colors-grey-600);
 }
 
 .contact {
@@ -117,7 +117,7 @@
 }
 
 .commentUser > span {
-  color: #6e7479;
+  color: var(--fds-colors-grey-600);
   margin-left: 1rem;
 }
 
@@ -142,7 +142,7 @@
 }
 
 a.versionTitle {
-  color: #2d3741;
+  color: var(--fds-semantic-text-neutral-default);
   font-size: 24px;
   text-decoration-line: underline;
   font-weight: 700;
@@ -172,7 +172,7 @@ a.versionTitle {
 }
 
 .historyOperation:nth-of-type(2n) {
-  background-color: #eeeeeeb6;
+  background-color: var(--fds-semantic-surface-neutral-subtle);
 }
 
 .historyPagination {
