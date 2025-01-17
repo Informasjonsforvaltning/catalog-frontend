@@ -6,19 +6,22 @@
 .metaData {
   display: flex;
   align-items: center;
-  color: #2d3741;
+  color: var(--fds-semantic-text-neutral-default);;
   font-size: 16px;
   line-height: 16px;
   margin-bottom: 9px;
 }
 
 .metaData a {
-  color: #2d3741;
+  color: var(--fds-semantic-text-neutral-default);
 }
 
 .dot {
-  font-size: 25px;
-  padding: 0.2em;
+  background-color: var(--fds-semantic-text-neutral-default);
+  border-radius: var(--fds-border_radius-full);
+  width: var(--fds-spacing-1);
+  height: var(--fds-spacing-1);
+  margin: var(--fds-spacing-2);
 }
 
 .rowSpaceBetween {
@@ -27,7 +30,7 @@
 }
 
 .greyFont {
-  color: #969ba0;
+  color: var(--fds-colors-grey-600);
   font-size: 16px;
 }
 

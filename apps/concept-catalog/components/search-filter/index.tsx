@@ -94,6 +94,7 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
             header: loc.subjectArea,
             content: (
               <CheckboxTreeFilter
+                aria-label='Velg fagområde'
                 nodes={convertCodeListToTreeNodes(subjectCodeList?.codes)}
                 onCheck={handleSubjectOnCheck}
                 filters={filterSubject ?? []}
@@ -122,6 +123,7 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
             header: loc.assigned,
             content: (
               <Select
+                aria-label='Velg bruker'
                 onChange={(event) => handleOnAssignedChange(event.target.value)}
                 size='sm'
                 value={filterAssignedUser ?? ''}

@@ -6,7 +6,6 @@ import {
   Breadcrumbs,
   PageBanner,
   UploadButton,
-  SearchField,
   SearchHitContainer,
   Spinner,
   SearchHitsPageLayout,

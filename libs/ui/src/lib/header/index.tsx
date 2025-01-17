@@ -111,7 +111,7 @@ const Header: FC<HeaderProps> = ({
       <div className={styles.headerContainer}>
         <a
           href={homeUrl}
-          aria-label='Gå til hovedsiden'
+          title='Gå til hovedsiden'
           className={styles.logo}
         >
           {useDemoLogo ? <FDKLogoDemo /> : <FDKLogo />}

@@ -19,6 +19,8 @@ export interface TreeNode {
 }
 
 interface Props {
+  label?: string;
+  'aria-label'?: string;
   nodes?: TreeNode[];
   onCheck?: (value: string[]) => void;
   filters: string[];
@@ -55,7 +57,7 @@ const generateOptionElements = (nodes?: TreeNode[]): JSX.Element[] => {
   ];
 };
 
-export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
+export const CheckboxTreeFilter: FC<Props> = ({ label, 'aria-label': ariaLabel, nodes, onCheck, filters }) => {
   const [checked, setChecked] = React.useState<string[]>([]);
   const [expanded, setExpanded] = React.useState<string[]>([]);
   const [collapsed, setCollapsed] = React.useState(true);
@@ -107,10 +109,6 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
     }
   };
 
-  const handleOnClick = (node: OnCheckNode) => {
-    handleChecked(node);
-  };
-
   const handleOnCheck = (_values, node: OnCheckNode) => {
     handleChecked(node);
   };
@@ -118,6 +116,8 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
   return (
     <div>
       <Select
+        label={label}
+        aria-label={ariaLabel}
         value={searchOption}
         size='sm'
         onChange={(event) => handleSearchOnChange(event.target.value)}
@@ -143,7 +143,6 @@ export const CheckboxTreeFilter: FC<Props> = ({ nodes, onCheck, filters }) => {
           }
           checked={checked}
           expanded={expanded}
-          onClick={handleOnClick}
           onCheck={handleOnCheck}
           onExpand={(exp) => setExpanded(exp)}
           noCascade

@@ -6,7 +6,7 @@ type TestProps = { conceptsPage: ConceptsPage };
 
 runTestAsAdmin('test if the search page renders correctly', async ({ conceptsPage }: TestProps) => {
   await conceptsPage.goto();
-  //TODO await conceptsPage.checkAccessibility();
+  await conceptsPage.checkAccessibility();
   await conceptsPage.expectFiltersToBeVisible();
   await conceptsPage.expectSearchResults(ALL_CONCEPTS);
 });
