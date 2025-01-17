@@ -159,13 +159,17 @@ export const datasetFormNb = {
     addDistribution: 'Legg til distribusjon',
     updateDistribution: 'Oppdater distribusjon',
     update: 'Oppdater',
+    addDataset: 'Legg til datasett',
+    addDatasetSeries: 'Legg til datasettserie',
   },
   errors: {
     qualifiedAttributions: 'Kunne ikke hente enheter.',
   },
-  status: {
+  filter: {
     DRAFT: 'Utkast',
     PUBLISH: 'Publisert',
     APPROVE: 'Godkjent',
+    SERIES: 'Datasettserie',
+    DATASET: 'Datasett',
   },
 };

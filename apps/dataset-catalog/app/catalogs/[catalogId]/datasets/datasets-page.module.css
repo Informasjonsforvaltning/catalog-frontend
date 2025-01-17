@@ -1,15 +1,18 @@
-.search {
-  width: 60%;
-}
-
-.searchContainer {
-  justify-content: center;
-  display: flex;
-  padding-bottom: 4rem;
-}
-
 .leftColumn {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+}
+
+.select {
+  width: fit-content;
+}
+
+.set {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.greyFont {
+  color: #6c737a;
 }

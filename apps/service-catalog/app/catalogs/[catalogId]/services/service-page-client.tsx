@@ -141,7 +141,7 @@ const ServicePageClient = ({ services, hasWritePermission, catalogId, statuses }
                 </div>
               ))
             }
-            noSearchHits={filteredServices?.length < 1 ?? true}
+            noSearchHits={filteredServices?.length < 1 ? true : false}
           />
         }
       </SearchHitsPageLayout.MainColumn>

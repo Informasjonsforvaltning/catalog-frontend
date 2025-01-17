@@ -17,3 +17,7 @@ export enum AccessRights {
   RESTRICTED = 'http://publications.europa.eu/resource/authority/access-right/RESTRICTED',
   SENSITIVE = 'http://publications.europa.eu/resource/authority/access-right/SENSITIVE',
 }
+
+export enum SpecializedType {
+  SERIES = 'SERIES',
+}

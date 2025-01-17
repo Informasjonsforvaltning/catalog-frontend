@@ -8,7 +8,7 @@ import styles from './dataset-details-page.module.css';
 import { RightColumn } from '../../../../../components/details-page-columns/details-page-right-column';
 import { LeftColumn } from '../../../../../components/details-page-columns/details-page-left-column';
 import { deleteDataset } from '../../../../actions/actions';
-import { Tag } from '@digdir/designsystemet-react';
+import StatusTag from '../../../../../components/status-tag/index';
 
 interface datasetDetailsPageProps {
   dataset: Dataset;
@@ -49,24 +49,16 @@ const DatasetDetailsPageClient = ({
     }
   };
 
-  enum StatusColors {
-    DRAFT = 'second',
-    PUBLISH = 'success',
-    APPROVE = 'info',
-  }
-
   return (
     <DetailsPageLayout
       handleLanguageChange={handleLanguageChange}
       language={language}
       headingTitle={getTranslateText(dataset?.title ?? '', language)}
       headingTag={
-        <Tag
+        <StatusTag
           size='md'
-          color={StatusColors[dataset.registrationStatus]}
-        >
-          {localization.datasetForm.status[dataset.registrationStatus]}
-        </Tag>
+          datasetStatus={dataset.registrationStatus}
+        />
       }
       loading={false}
     >

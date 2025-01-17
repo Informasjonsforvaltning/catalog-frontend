@@ -1,28 +1,29 @@
 import { localization } from '@catalog-frontend/utils';
 import { Radio } from '@digdir/designsystemet-react';
-import styles from './filter.module.css';
-import { PublicationStatus } from '@catalog-frontend/types';
 
 type Props = {
   onStatusChange: (status: string) => void;
+  values: string[];
 };
 
-export const Filter = ({ onStatusChange }: Props) => {
+export const Filter = ({ onStatusChange, values }: Props) => {
   return (
-    <div className={styles.filter}>
-      <Radio.Group
-        error=''
-        legend='Filtrer på status'
-        size='md'
-        onChange={(value) => onStatusChange(value)}
-        defaultValue='ALL'
-      >
-        <Radio value='ALL'>{localization.tag.all}</Radio>
-        <Radio value={PublicationStatus.PUBLISH}>{localization.datasetCatalog.status.PUBLISH}</Radio>
-        <Radio value={PublicationStatus.APPROVE}>{localization.datasetCatalog.status.APPROVE}</Radio>
-        <Radio value={PublicationStatus.DRAFT}>{localization.datasetCatalog.status.DRAFT}</Radio>
-      </Radio.Group>
-    </div>
+    <Radio.Group
+      legend='Filtrer på status'
+      size='sm'
+      onChange={(value) => onStatusChange(value)}
+      defaultValue='ALL'
+    >
+      <Radio value='ALL'>{localization.tag.all}</Radio>
+      {values.map((val) => (
+        <Radio
+          value={val}
+          key={`radio-option-${val}`}
+        >
+          {localization.datasetForm?.filter?.[val]}
+        </Radio>
+      ))}
+    </Radio.Group>
   );
 };
 
