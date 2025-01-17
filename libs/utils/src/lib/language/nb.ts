@@ -155,6 +155,8 @@ export const nb = {
       LAST_UPDATED_LAST: 'Eldst først',
       RECOMMENDED_TERM_AÅ: 'Anbefalt term A-Å',
       RECOMMENDED_TERM_ÅA: 'Anbefalt term Å-A',
+      TITLE_ÅA: 'Tittel Å-A',
+      TITLE_AÅ: 'Tittel A-Å',
       RELEVANCE: 'Relevans',
     },
   },

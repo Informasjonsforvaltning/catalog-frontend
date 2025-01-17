@@ -26,7 +26,6 @@ export const AboutSection = () => {
       <FormikLanguageFieldset
         name='description'
         as={TextareaWithPrefix}
-        requiredLanguages={['nb']}
         legend={
           <LabelWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.description}
