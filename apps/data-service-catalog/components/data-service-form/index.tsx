@@ -10,14 +10,16 @@ import { createDataService, updateDataService } from '../../app/actions/actions'
 import { Button } from '@digdir/designsystemet-react';
 import styles from './data-service-form.module.css';
 import { EndpointSection } from './components/endpoint-section';
-import {ContactPointSection} from "./components/contact-point-section";
+import { ContactPointSection } from './components/contact-point-section';
+import { FormatSection } from './components/format-section';
 
 type Props = {
   initialValues: DataService | DataServiceToBeCreated;
   submitType: 'create' | 'update';
+  referenceDataEnv: string; // Environment variable to reference data
 };
 
-export const DataServiceForm = ({ initialValues, submitType }: Props) => {
+export const DataServiceForm = ({ initialValues, submitType, referenceDataEnv }: Props) => {
   const { catalogId, dataServiceId } = useParams();
   const [isDirty, setIsDirty] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -86,6 +88,13 @@ export const DataServiceForm = ({ initialValues, submitType }: Props) => {
                   required
                 >
                   <EndpointSection />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='format-section'
+                  title={localization.dataServiceForm.heading.format}
+                >
+                  <FormatSection referenceDataEnv={referenceDataEnv} />
                 </FormLayout.Section>
 
                 <FormLayout.Section

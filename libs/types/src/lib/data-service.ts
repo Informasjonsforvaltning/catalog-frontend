@@ -12,6 +12,8 @@ export interface DataServiceToBeCreated {
   status?: string;
   endpointUrl: string;
   endpointDescriptions?: string[];
+  mediaTypes?: string[];
+  formats?: string[];
   contactPoint?: DataServiceContactPoint;
 }
 
@@ -20,4 +22,4 @@ type DataServiceContactPoint = {
   phone?: string;
   url?: string;
   organizationUnit?: string;
-}
+};
