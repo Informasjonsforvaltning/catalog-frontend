@@ -42,7 +42,12 @@ const DetailsPageLayout = ({
     <div className='container'>
       <div className={styles.heading}>
         <div className={styles.headingTitle}>
-          <Heading size='lg'>{headingTitle}</Heading>
+          <Heading
+            level={2}
+            size='lg'
+          >
+            {headingTitle}
+          </Heading>
           <span>{headingTag}</span>
         </div>
         <Ingress size='xs'>{headingSubtitle}</Ingress>

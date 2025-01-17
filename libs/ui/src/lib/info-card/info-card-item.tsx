@@ -2,27 +2,44 @@ import cn from 'classnames';
 import React, { forwardRef } from 'react';
 import classes from './info-card.module.css';
 import { HelpMarkdown } from '../help-markdown';
-import { Label } from '@digdir/designsystemet-react';
+import { Heading } from '@digdir/designsystemet-react';
+import { localization } from '@catalog-frontend/utils';
 
-export const labelColor = ['neutral', 'light'] as const;
-type LabelColor = (typeof labelColor)[number];
+export const headingColor = ['neutral', 'light'] as const;
+type HeadingColor = (typeof headingColor)[number];
+type Size =
+  | '2xs'
+  | 'xs'
+  | 'sm'
+  | 'md'
+  | 'lg'
+  | 'xl'
+  | '2xl'
+  | 'xxsmall'
+  | 'xsmall'
+  | 'small'
+  | 'medium'
+  | 'large'
+  | 'xlarge'
+  | '2xlarge';
+
+type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
 export interface InfoCardItemProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
-   * Label
+   * Heading
    */
-  label?: string;
+  title?: string;
   /**
-   * Label color
+   * Heading color
    */
-  labelColor?: LabelColor;
+  headingColor?: HeadingColor;
   /**
-   * Label level
+   * Heading level
    */
-  labelLevel?: 1 | 2 | 3 | 4 | 5 | 6;
+  headingLevel?: HeadingLevel;
   /**
-   * Content in Accordion.Item
-   * Should include one Accordion.Header and one Accordion.Content
+   * Content in Item
    */
   children: React.ReactNode;
 
@@ -31,14 +48,19 @@ export interface InfoCardItemProps extends React.HTMLAttributes<HTMLDivElement> 
    **/
 
   helpText?: string;
+
+  /** Heading size **/
+
+  headingSize?: Size;
 }
 
 export type InfoCardItemType = React.ForwardRefExoticComponent<InfoCardItemProps & React.RefAttributes<HTMLDivElement>>;
 
 const InfoCardItem: InfoCardItemType = forwardRef(
-  ({ label, labelColor = 'neutral', labelLevel = 3, children, className, helpText, ...rest }, ref) => {
-    const HeadingTag = `h${labelLevel}` as React.ElementType;
-
+  (
+    { title, headingColor = 'neutral', children, className, helpText, headingSize = '2xs', headingLevel = 3, ...rest },
+    ref,
+  ) => {
     return (
       <div
         className={cn(classes.item, className)}
@@ -47,18 +69,20 @@ const InfoCardItem: InfoCardItemType = forwardRef(
       >
         <div>
           <span className={classes.set}>
-            {label && (
-              <Label
-                size='sm'
-                className={cn(classes[labelColor])}
+            {title && (
+              <Heading
+                level={headingLevel}
+                size={headingSize}
+                className={cn(classes.fieldHeading, classes[headingColor])}
               >
-                {label}
-              </Label>
+                {title}
+              </Heading>
             )}
+
             {helpText && (
               <HelpMarkdown
                 size='sm'
-                title={`helptext-${label}`}
+                title={`${localization.helpText} ${title}`}
               >
                 {helpText}
               </HelpMarkdown>

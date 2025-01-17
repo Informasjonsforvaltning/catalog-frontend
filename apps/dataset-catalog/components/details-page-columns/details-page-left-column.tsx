@@ -54,13 +54,13 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
   return (
     <InfoCard>
       {!_.isEmpty(dataset?.description) && (
-        <InfoCard.Item label={localization.description}>
+        <InfoCard.Item title={localization.description}>
           <Paragraph size='sm'>{getTranslateText(dataset?.description)} </Paragraph>
         </InfoCard.Item>
       )}
       {dataset?.accessRights && (
         <InfoCard.Item
-          label={localization.access}
+          title={localization.access}
           className={styles.access}
         >
           <AccessRightsDetails dataset={dataset} />
@@ -69,7 +69,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
 
       {dataset.theme && (
         <>
-          <InfoCard.Item label={localization.datasetForm.fieldLabel.euTheme}>
+          <InfoCard.Item title={localization.datasetForm.fieldLabel.euTheme}>
             <li className={styles.list}>
               {dataset.theme?.map((item) => {
                 const matchedTheme = referenceData.dataThemes.find((los) => los.uri === item.uri);
@@ -85,7 +85,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
               })}
             </li>
           </InfoCard.Item>
-          <InfoCard.Item label={localization.datasetForm.fieldLabel.theme}>
+          <InfoCard.Item title={localization.datasetForm.fieldLabel.theme}>
             <li className={styles.list}>
               {dataset.theme?.map((item) => {
                 const matchedTheme = referenceData.losThemes.find((los) => los.uri === item.uri);
@@ -105,7 +105,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       )}
 
       {dataset?.distribution && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.distributions}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.distributions}>
           {dataset.distribution.map((dist, index) => (
             <DistributionDetailsCard
               key={`distribution-${index}`}
@@ -119,7 +119,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       )}
 
       {dataset?.sample && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.sample}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.sample}>
           {dataset.sample.map((dist, index) => (
             <DistributionDetailsCard
               key={`sample-${index}`}
@@ -133,7 +133,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       )}
 
       {dataset?.language && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.language}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.language}>
           {dataset.language
             .map((lang) => {
               const matchedLang = referenceData?.languages?.find((item) => item.uri === lang.uri);
@@ -144,7 +144,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </InfoCard.Item>
       )}
       {dataset?.spatial && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.spatial}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.spatial}>
           {getTranslateText(dataset?.spatial?.map((area) => spatial?.find((item) => item.uri === area.uri)?.label))}
           {
             <ReferenceDataTags
@@ -156,7 +156,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       )}
 
       {dataset?.landingPage && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.landingPage}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.landingPage}>
           <div className={styles.infoCardItems}>
             {dataset?.landingPage.map((item) => <Paragraph key={item}>{item}</Paragraph>)}
           </div>
@@ -164,13 +164,13 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       )}
 
       {Array.isArray(dataset.temporal) && dataset.temporal.length > 0 && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.temporal}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.temporal}>
           <TemporalDetails temporal={dataset?.temporal} />
         </InfoCard.Item>
       )}
 
       {dataset?.type && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.type}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.type}>
           <ReferenceDataTags
             values={dataset?.type}
             data={referenceData.datasetTypes}
@@ -179,7 +179,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       )}
 
       {dataset?.provenance && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.provenance}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.provenance}>
           <ReferenceDataTags
             values={dataset?.provenance?.uri}
             data={referenceData.provenanceStatements}
@@ -188,7 +188,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       )}
 
       {(!_.isEmpty(dataset?.accrualPeriodicity) || !_.isEmpty(dataset?.hasCurrentnessAnnotation)) && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.accrualPeriodicity}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.accrualPeriodicity}>
           <div className={styles.infoCardItems}>
             <ReferenceDataTags
               values={dataset.accrualPeriodicity?.uri}
@@ -206,38 +206,38 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       )}
 
       {dataset?.conformsTo && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.conformsTo}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.conformsTo}>
           <UriWithLabelTable values={dataset?.conformsTo} />
         </InfoCard.Item>
       )}
 
       {!_.isEmpty(dataset?.hasRelevanceAnnotation) && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.hasRelevanceAnnotation}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.hasRelevanceAnnotation}>
           <Paragraph size='sm'>{getTranslateText(dataset?.hasRelevanceAnnotation?.hasBody)} </Paragraph>
         </InfoCard.Item>
       )}
 
       {!_.isEmpty(dataset?.hasCompletenessAnnotation) && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.hasCompletenessAnnotation}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.hasCompletenessAnnotation}>
           <Paragraph size='sm'>{getTranslateText(dataset?.hasCompletenessAnnotation?.hasBody)} </Paragraph>
         </InfoCard.Item>
       )}
 
       {!_.isEmpty(dataset?.hasAccuracyAnnotation) && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.hasAccuracyAnnotation}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.hasAccuracyAnnotation}>
           <Paragraph size='sm'>{getTranslateText(dataset?.hasAccuracyAnnotation?.hasBody)} </Paragraph>
         </InfoCard.Item>
       )}
 
       {!_.isEmpty(dataset?.hasAvailabilityAnnotation) && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.hasAvailabilityAnnotation}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.hasAvailabilityAnnotation}>
           <Paragraph size='sm'>{getTranslateText(dataset?.hasAvailabilityAnnotation?.hasBody)} </Paragraph>
         </InfoCard.Item>
       )}
       {dataset?.qualifiedAttributions &&
         dataset?.qualifiedAttributions.length > 0 &&
         !_.isEmpty(dataset?.qualifiedAttributions) && (
-          <InfoCard.Item label={localization.datasetForm.fieldLabel.qualifiedAttributions}>
+          <InfoCard.Item title={localization.datasetForm.fieldLabel.qualifiedAttributions}>
             <li className={styles.list}>
               {dataset?.qualifiedAttributions?.map((org) => {
                 const match =
@@ -257,7 +257,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
           </InfoCard.Item>
         )}
       {(!_.isEmpty(dataset.references) || !_.isEmpty(dataset.relations)) && (
-        <InfoCard.Item label={localization.relations}>
+        <InfoCard.Item title={localization.relations}>
           <div className={styles.infoCardItems}>
             {dataset?.references && _.compact(dataset?.references).length > 0 && (
               <Table size='sm'>
@@ -317,7 +317,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </InfoCard.Item>
       )}
       {!_.isEmpty(dataset.concepts) && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.concept}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.concept}>
           <li className={styles.list}>
             {dataset.concepts?.map((item) => {
               const match = concepts && concepts.find((concept) => concept.uri === item.uri);
@@ -335,7 +335,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </InfoCard.Item>
       )}
       {!_.isEmpty(dataset?.keyword) && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.keyword}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.keyword}>
           <li className={styles.list}>
             {dataset.keyword?.map((item, index) => {
               return item ? (
@@ -353,7 +353,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       )}
 
       {!_.isEmpty(dataset?.informationModelsFromFDK) && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.informationModelsFromFDK}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.informationModelsFromFDK}>
           <li className={styles.list}>
             {dataset.informationModelsFromFDK?.map((item) => {
               const match = informationModels && informationModels.find((model) => model.uri === item);
@@ -372,7 +372,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       )}
 
       {!_.isEmpty(dataset?.informationModel) && (
-        <InfoCard.Item label={localization.datasetForm.fieldLabel.informationModel}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.informationModel}>
           <UriWithLabelTable values={dataset?.informationModel} />
         </InfoCard.Item>
       )}

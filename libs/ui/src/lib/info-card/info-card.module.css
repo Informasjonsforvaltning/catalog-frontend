@@ -6,6 +6,10 @@
   padding: 37px;
 }
 
+.fieldHeading {
+  font-weight: 500;
+}
+
 .infoCard > .item:first-child {
   border-top-right-radius: 8px;
   border-top-left-radius: 8px;
@@ -43,9 +47,8 @@
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  padding-bottom: 0.5rem;
+  padding-bottom: 1rem;
 }
-
 .wrap {
   display: block;
   word-break: break-word;

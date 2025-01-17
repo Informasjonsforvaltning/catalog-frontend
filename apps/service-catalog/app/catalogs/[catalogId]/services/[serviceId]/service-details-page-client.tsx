@@ -38,16 +38,16 @@ const ServiceDetailsPageClient = ({
       <InfoCard>
         <InfoCard.Item
           key={`info-data-${localization.id}`}
-          label={localization.id}
-          labelColor='light'
+          title={localization.id}
+          headingColor='light'
         >
           <span>{service?.id}</span>
         </InfoCard.Item>
 
         <InfoCard.Item
           key={`info-data-${localization.publicationState.state}`}
-          label={localization.publicationState.state}
-          labelColor='light'
+          title={localization.publicationState.state}
+          headingColor='light'
         >
           <PublishSwitch
             catalogId={catalogId}
