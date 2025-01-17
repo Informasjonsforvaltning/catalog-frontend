@@ -5,9 +5,9 @@ import ConceptsPage from '../../page-object-model/conceptsPage';
 type TestProps = { conceptsPage: ConceptsPage };
 
 runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPage }: TestProps) => {
-  await conceptsPage.goto(); 
+  await conceptsPage.goto();  
   await conceptsPage.expectSearchResults(ALL_CONCEPTS);
   await conceptsPage.gotoDetailPage(CONCEPT_1);
-  //TODO await conceptsPage.detailPage.checkAccessibility();
+  await conceptsPage.detailPage.checkAccessibility();
   await conceptsPage.detailPage.expectDetails(CONCEPT_1);
 });
