@@ -1,7 +1,7 @@
 'use client';
 import { FieldsetDivider, LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Checkbox } from '@digdir/designsystemet-react';
+import { Checkbox, Combobox } from '@digdir/designsystemet-react';
 import { useCallback, useState } from 'react';
 import {
   useSearchAdministrativeUnits,
@@ -48,6 +48,35 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
   const sortedLanguages = sortBy(languages, (item) => {
     return customLanguageOrder.indexOf(item.uri);
   });
+
+  const getDescription = (item: ReferenceDataCode | undefined) =>
+    item ? (item.uri.includes('geonorge') ? getLocationType(item.uri) : item.code) : '';
+
+  const getLocationType = (uri: string): string => {
+    if (uri.includes('kommune')) return localization.spatial.municipality;
+    if (uri.includes('fylke')) return localization.spatial.county;
+    if (uri.includes('nasjon')) return localization.spatial.country;
+    return '';
+  };
+
+  const comboboxOptions: ReferenceDataCode[] = [
+    // Combine selectedValues, searchHits, and values (mapped with uri-only fallback)
+    ...new Map(
+      [
+        ...(selectedValues ?? []),
+        ...(searchHits ?? []),
+        ...(values.spatialList ?? []).map((uri) => {
+          const foundItem =
+            selectedValues?.find((item) => item.uri === uri) || searchHits?.find((item) => item.uri === uri);
+          return {
+            uri,
+            label: foundItem?.label ?? undefined,
+            code: getDescription(foundItem),
+          };
+        }),
+      ].map((item) => [item.uri, item]),
+    ).values(),
+  ];
 
   return (
     <>
@@ -98,16 +127,28 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
           {localization.datasetForm.fieldLabel.spatial}
         </LabelWithHelpTextAndTag>
 
-        <FormikReferenceDataCombobox
-          selectedValuesSearchHits={selectedValues ?? []}
-          querySearchHits={searchHits ?? []}
-          formikValues={values.spatialList ?? []}
+        <Combobox
+          placeholder={`${localization.search.search}...`}
+          multiple
+          filter={() => true} // disable filter
+          size='sm'
           onChange={handleSearchChange}
           onValueChange={(selectedValues) => setFieldValue('spatialList', selectedValues)}
           value={values.spatialList || []}
           virtual
           loading={isSearching}
-        />
+        >
+          <Combobox.Empty>{`${localization.search.noHits}... `}</Combobox.Empty>
+          {comboboxOptions.map((item) => (
+            <Combobox.Option
+              key={item.uri}
+              value={item.uri}
+              description={getDescription(item)}
+            >
+              {item.label ? getTranslateText(item.label) : item.uri}
+            </Combobox.Option>
+          ))}
+        </Combobox>
       </div>
       <FieldsetDivider />
       <TemporalModal
