@@ -8,7 +8,7 @@ interface Props extends ComboboxProps {
   selectedValuesSearchHits: ReferenceDataCode[];
   querySearchHits: ReferenceDataCode[];
   formikValues: string[];
-  virtual?: boolean;
+  showCodeAsDescription?: boolean;
 }
 
 export function FormikReferenceDataCombobox({
@@ -16,6 +16,7 @@ export function FormikReferenceDataCombobox({
   selectedValuesSearchHits,
   querySearchHits,
   virtual,
+  showCodeAsDescription = false,
   ...rest
 }: Props) {
   const comboboxOptions: ReferenceDataCode[] = [
@@ -38,30 +39,21 @@ export function FormikReferenceDataCombobox({
     ).values(),
   ];
 
-  const getDescription = (item: ReferenceDataCode) =>
-    item.uri.includes('geonorge') ? getLocationType(item.uri) : item.code;
-
-  const getLocationType = (uri: string): string => {
-    if (uri.includes('kommune')) return localization.spatial.municipality;
-    if (uri.includes('fylke')) return localization.spatial.county;
-    if (uri.includes('nasjon')) return localization.spatial.country;
-    return '';
-  };
-
   return (
     <Combobox
-      {...rest}
       placeholder={`${localization.search.search}...`}
       multiple
       filter={() => true} // disable filter
       size='sm'
+      virtual
+      {...rest}
     >
       <Combobox.Empty>{`${localization.search.noHits}... `}</Combobox.Empty>
       {comboboxOptions.map((item) => (
         <Combobox.Option
           key={item.uri}
           value={item.uri}
-          description={virtual ? getDescription(item) : ''}
+          description={showCodeAsDescription ? item?.code : ''}
         >
           {item.label ? getTranslateText(item.label) : item.uri}
         </Combobox.Option>

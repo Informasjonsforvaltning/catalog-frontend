@@ -43,3 +43,4 @@ export * from './lib/use-warn-if-unsaved-changes';
 export * from './lib/fieldset-divider';
 export * from './lib/sticky-footer-bar';
 export * from './lib/label-with-help-text-and-tag';
+export * from './lib/formik-reference-data-combobox';

@@ -36,6 +36,7 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
           value={values.euDataTheme}
           onValueChange={(values: string[]) => setFieldValue('euDataTheme', values)}
           size='sm'
+          virtual
         >
           <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
           {euDataThemes &&
@@ -62,11 +63,11 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
           name='losTheme'
           value={values.losTheme}
           multiple
-          virtual
           filter={containsFilter}
           placeholder={`${localization.search.search}...`}
           onValueChange={(values: string[]) => setFieldValue('losTheme', values)}
           size='sm'
+          virtual
         >
           <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
           {losThemes?.map((theme) => (

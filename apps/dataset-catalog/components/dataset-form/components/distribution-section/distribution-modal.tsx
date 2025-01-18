@@ -6,6 +6,7 @@ import {
   DeleteButton,
   FieldsetDivider,
   FormikLanguageFieldset,
+  FormikReferenceDataCombobox,
   LabelWithHelpTextAndTag,
   TextareaWithPrefix,
 } from '@catalog-frontend/ui';
@@ -23,7 +24,6 @@ import { ReactNode, useRef, useState } from 'react';
 import styles from './distributions.module.css';
 import { distributionTemplate } from '../../utils/dataset-initial-values';
 import { distributionSectionSchema } from '../../utils/validation-schema';
-import FormikReferenceDataCombobox from '../../../../components/formik-reference-data-combobox';
 
 type Props = {
   trigger: ReactNode;
