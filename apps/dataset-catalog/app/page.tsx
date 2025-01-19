@@ -1,10 +1,9 @@
-'use client';
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
 
-export default function Index() {
-  /*
-   * Replace the elements below with your own.
-   *
-   * Note: The corresponding styles are in the ./index.styled-components file.
-   */
-  return <>Her kommer redirect til registrering</>;
-}
+const Home = () => {
+  cookies();
+  redirect(`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`);
+};
+
+export default Home;
