@@ -5,7 +5,9 @@ import {
   EditButton,
   FieldsetDivider,
   FormikLanguageFieldset,
+  HelpMarkdown,
   LabelWithHelpTextAndTag,
+  FormHeading,
 } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button, Modal, Radio, Table, Textfield } from '@digdir/designsystemet-react';
@@ -71,12 +73,10 @@ export const AccessRightsUriTable = () => {
   return (
     <div className={styles.fieldContainer}>
       <div className={styles.set}>
-        <LabelWithHelpTextAndTag
-          helpAriaLabel={localization.datasetForm.fieldLabel.legalBasis}
-          helpText={localization.datasetForm.helptext.legalBasis}
-        >
-          {localization.datasetForm.fieldLabel.legalBasis}
-        </LabelWithHelpTextAndTag>
+        <FormHeading>{localization.datasetForm.fieldLabel.legalBasis}</FormHeading>
+        <HelpMarkdown aria-label={localization.datasetForm.fieldLabel.legalBasis}>
+          {localization.datasetForm.helptext.legalBasis}
+        </HelpMarkdown>
       </div>
 
       {allLegalBases && allLegalBases?.length > 0 && !hasNoFieldValues(allLegalBases[0]?.uriWithLabel) && (

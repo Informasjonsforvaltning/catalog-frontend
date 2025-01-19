@@ -1,7 +1,14 @@
 import { UriWithLabel } from '@catalog-frontend/types';
-import { AddButton, DeleteButton, EditButton, FieldsetDivider, FormikLanguageFieldset } from '@catalog-frontend/ui';
+import {
+  AddButton,
+  DeleteButton,
+  EditButton,
+  FieldsetDivider,
+  FormikLanguageFieldset,
+  FormHeading,
+} from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Heading, Modal, Table, Textfield } from '@digdir/designsystemet-react';
+import { Button, Modal, Table, Textfield } from '@digdir/designsystemet-react';
 import { FastField, Formik, useFormikContext } from 'formik';
 import styles from '../dataset-form.module.css';
 import { ReactNode, useRef, useState } from 'react';
@@ -31,7 +38,7 @@ export const UriWithLabelFieldsetTable = ({ fieldName, values, label }: Props) =
 
   return (
     <div className={styles.fieldContainer}>
-      {typeof label === 'string' ? <Heading size='2xs'>{label}</Heading> : label}
+      {typeof label === 'string' ? <FormHeading>{label}</FormHeading> : label}
       {values && values?.length > 0 && !hasNoFieldValues(values[0]) && (
         <Table
           size='sm'
