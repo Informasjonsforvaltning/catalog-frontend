@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useFormikContext } from 'formik';
-import { Button, Card, Heading, Label, Link, Tag } from '@digdir/designsystemet-react';
+import { Button, Card, Heading, Link, Tag } from '@digdir/designsystemet-react';
 import { ChevronDownIcon, ChevronUpIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { Dataset, Distribution, ReferenceDataCode } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, FieldsetDivider } from '@catalog-frontend/ui';
@@ -63,6 +63,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
     <>
       <Heading
         size='xs'
+        level={3}
         className={styles.list}
       >
         {localization.datasetForm.fieldLabel.distributions}
@@ -82,6 +83,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
               <Heading
                 size='xs'
                 spacing
+                level={4}
               >
                 {getTranslateText(item?.title) ?? ''}
               </Heading>
@@ -113,7 +115,12 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
               </div>
             </div>
 
-            {item?.accessURL && <Label size='sm'>{`${localization.datasetForm.fieldLabel.accessURL}:`}</Label>}
+            {item?.accessURL && (
+              <Heading
+                size='2xs'
+                level={4}
+              >{`${localization.datasetForm.fieldLabel.accessURL}:`}</Heading>
+            )}
             <Link href={item?.accessURL?.[0]}>{item?.accessURL?.[0]}</Link>
 
             <div className={styles.tags}>
@@ -166,14 +173,24 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
 
       <>
         <FieldsetDivider />
-        <Heading size='xs'>Eksempeldata</Heading>
+        <Heading
+          level={3}
+          size='xs'
+        >
+          {localization.datasetForm.fieldLabel.sample}
+        </Heading>
       </>
       {values?.sample &&
         values?.sample?.map((item, index) => (
           <Card key={`sample-${index}`}>
             <div className={styles.heading}>
               <div className={styles.exampleHeading}>
-                {item?.accessURL && <Label size='sm'>{`${localization.datasetForm.fieldLabel.accessURL}: `}</Label>}
+                {item?.accessURL && (
+                  <Heading
+                    size='2xs'
+                    level={4}
+                  >{`${localization.datasetForm.fieldLabel.accessURL}: `}</Heading>
+                )}
                 <Link href={item?.accessURL?.[0]}>{item?.accessURL?.[0]}</Link>
               </div>
               <div className={styles.buttons}>

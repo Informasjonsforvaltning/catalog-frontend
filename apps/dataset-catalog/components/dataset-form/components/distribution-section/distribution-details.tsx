@@ -2,7 +2,7 @@
 
 import { Distribution, ReferenceDataCode } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Paragraph, Label, Tag, Table, TableBody } from '@digdir/designsystemet-react';
+import { Paragraph, Tag, Table, TableBody, Heading } from '@digdir/designsystemet-react';
 import styles from './distributions.module.css';
 import { useSearchDataServiceByUri } from '../../../../hooks/useSearchService';
 import { useSearchMediaTypeByUri } from '../../../../hooks/useReferenceDataSearch';
@@ -37,21 +37,30 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
           <FieldsetDivider />
           {distribution.description?.nb && (
             <div className={styles.field}>
-              <Label size='sm'>{`${localization.description}:`}</Label>
+              <Heading
+                level={5}
+                size='2xs'
+              >{`${localization.description}:`}</Heading>
               <Paragraph size='sm'>{distribution.description.nb}</Paragraph>
             </div>
           )}
 
           {distribution?.downloadURL && distribution?.downloadURL[0] && (
             <div className={styles.field}>
-              <Label size='sm'>{`${localization.datasetForm.fieldLabel.downloadURL}:`}</Label>
+              <Heading
+                level={5}
+                size='2xs'
+              >{`${localization.datasetForm.fieldLabel.downloadURL}:`}</Heading>
               <Paragraph size='sm'>{distribution?.downloadURL?.[0] ?? ''}</Paragraph>
             </div>
           )}
 
           {distribution.mediaType && distribution.mediaType.length > 0 && (
             <div className={styles.field}>
-              <Label size='sm'>{`${localization.datasetForm.fieldLabel.mediaType}:`}</Label>
+              <Heading
+                level={5}
+                size='2xs'
+              >{`${localization.datasetForm.fieldLabel.mediaType}:`}</Heading>
               <ul className={styles.list}>
                 {distribution?.mediaType?.map((uri, index) => (
                   <li key={`mediatype-${uri}-${index}`}>
@@ -69,7 +78,10 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
 
           {distribution?.accessServiceUris && distribution.accessServiceUris.length > 0 && (
             <div className={styles.field}>
-              <Label size='sm'>{`${localization.datasetForm.fieldLabel.accessService}:`}</Label>
+              <Heading
+                level={5}
+                size='2xs'
+              >{`${localization.datasetForm.fieldLabel.accessService}:`}</Heading>
               <ul className={styles.list}>
                 {distribution.accessServiceUris.map((uri, i) => {
                   const match = selectedDataServices?.find((type) => type.uri === uri);
@@ -90,7 +102,10 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
 
           {distribution.license?.uri && (
             <>
-              <Label size='sm'>{`${localization.datasetForm.fieldLabel.license}:`}</Label>
+              <Heading
+                level={5}
+                size='2xs'
+              >{`${localization.datasetForm.fieldLabel.license}:`}</Heading>
               <div className={styles.field}>
                 <Paragraph size='sm'>
                   {getTranslateText(openLicenses.find((license) => license.uri === distribution.license?.uri)?.label)}
@@ -101,7 +116,10 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
 
           {distribution.conformsTo && hasConformsToValues && (
             <div className={styles.field}>
-              <Label size='sm'>{`${localization.datasetForm.fieldLabel.standard}:`}</Label>
+              <Heading
+                level={5}
+                size='2xs'
+              >{`${localization.datasetForm.fieldLabel.standard}:`}</Heading>
 
               <Table size='sm'>
                 <Table.Head>
@@ -124,7 +142,10 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
 
           {distribution.page && distribution.page?.[0].uri && (
             <div className={styles.field}>
-              <Label size='sm'>{`${localization.datasetForm.fieldLabel.distributionLink}:`}</Label>
+              <Heading
+                level={5}
+                size='2xs'
+              >{`${localization.datasetForm.fieldLabel.distributionLink}:`}</Heading>
               <Paragraph size='sm'>{distribution?.page?.[0].uri}</Paragraph>
             </div>
           )}

@@ -4,6 +4,7 @@ import { PropsWithChildren, ReactNode } from 'react';
 import { HelpMarkdown } from '../help-markdown';
 
 type Props = {
+  fieldId?: string; // Id to connect the label to the field. WCAG.
   tagTitle?: string;
   tagColor?: TagColor;
   tagSize?: TagSize;
@@ -24,10 +25,20 @@ export function LabelWithHelpTextAndTag({
   tagSize = 'sm',
   helpAriaLabel,
   helpText,
+  fieldId,
 }: Props) {
   return (
     <div className={styles.container}>
-      {typeof children === 'string' ? <Label size='sm'>{children}</Label> : children}
+      {typeof children === 'string' ? (
+        <Label
+          htmlFor={fieldId}
+          size='sm'
+        >
+          {children}
+        </Label>
+      ) : (
+        children
+      )}
 
       {helpText && helpAriaLabel && <HelpMarkdown title={helpAriaLabel}>{helpText}</HelpMarkdown>}
       {tagTitle && (

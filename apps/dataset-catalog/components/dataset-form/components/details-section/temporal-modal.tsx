@@ -1,7 +1,7 @@
 import { DateRange } from '@catalog-frontend/types';
-import { AddButton, DeleteButton, EditButton } from '@catalog-frontend/ui';
+import { AddButton, DeleteButton, EditButton, FormHeading } from '@catalog-frontend/ui';
 import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Label, Modal, Table, Textfield } from '@digdir/designsystemet-react';
+import { Button, Modal, Table, Textfield } from '@digdir/designsystemet-react';
 import { FastField, Formik, useFormikContext } from 'formik';
 import styles from '../../dataset-form.module.css';
 import { ReactNode, useRef, useState } from 'react';
@@ -28,7 +28,7 @@ export const TemporalModal = ({ values, label }: Props) => {
 
   return (
     <div className={styles.fieldContainer}>
-      {typeof label === 'string' ? <Label size='sm'>{label}</Label> : label}
+      {typeof label === 'string' ? <FormHeading>{label}</FormHeading> : label}
       {values && values?.length > 0 && !hasNoFieldValues(values[0]) && (
         <Table
           size='sm'
@@ -38,7 +38,7 @@ export const TemporalModal = ({ values, label }: Props) => {
             <Table.Row>
               <Table.HeaderCell>{localization.from}</Table.HeaderCell>
               <Table.HeaderCell>{localization.to}</Table.HeaderCell>
-              <Table.HeaderCell />
+              <Table.HeaderCell aria-label='Actions' />
             </Table.Row>
           </Table.Head>
           <Table.Body>
