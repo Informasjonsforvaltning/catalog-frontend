@@ -4,9 +4,10 @@ import { Table } from '@digdir/designsystemet-react';
 
 type Props = {
   values?: UriWithLabel[];
+  language?: string;
 };
 
-export const UriWithLabelTable = ({ values = [] }: Props) => {
+export const UriWithLabelTable = ({ values = [], language }: Props) => {
   if (values.length === 0) return null;
 
   return (
@@ -20,7 +21,7 @@ export const UriWithLabelTable = ({ values = [] }: Props) => {
       <Table.Body>
         {values.map((item) => (
           <Table.Row key={`uri-with-label-table-${item.uri}`}>
-            <Table.Cell>{getTranslateText(item.prefLabel)}</Table.Cell>
+            <Table.Cell>{getTranslateText(item.prefLabel, language)}</Table.Cell>
             <Table.Cell>{item.uri}</Table.Cell>
           </Table.Row>
         ))}

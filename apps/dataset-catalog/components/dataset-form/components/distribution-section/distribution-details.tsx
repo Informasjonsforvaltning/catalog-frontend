@@ -14,34 +14,25 @@ interface Props {
   referenceDataEnv: string;
   openLicenses: ReferenceDataCode[];
   distribution: Distribution;
+  language?: string;
 }
 
-export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv, openLicenses }: Props) => {
+export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv, openLicenses, language }: Props) => {
   const { data: selectedDataServices } = useSearchDataServiceByUri(searchEnv, distribution?.accessServiceUris ?? []);
-
   const { data: selectedMediaTypes } = useSearchMediaTypeByUri(distribution?.mediaType ?? [], referenceDataEnv);
-
-  const hasConformsToValues = _.some(distribution?.conformsTo, (item) => {
-    const uri = item.uri || '';
-
-    const prefLabelNb = _.get(item, 'prefLabel.nb');
-    const prefLabelNbString = Array.isArray(prefLabelNb) ? prefLabelNb.join(' ') : prefLabelNb || '';
-
-    return _.trim(uri) || _.trim(prefLabelNbString);
-  });
 
   return (
     <div>
       {distribution && (
         <div>
           <FieldsetDivider />
-          {distribution.description?.nb && (
+          {distribution?.description && (
             <div className={styles.field}>
               <Heading
                 level={5}
                 size='2xs'
               >{`${localization.description}:`}</Heading>
-              <Paragraph size='sm'>{distribution.description.nb}</Paragraph>
+              <Paragraph size='sm'>{getTranslateText(distribution?.description, language)}</Paragraph>
             </div>
           )}
 
@@ -91,7 +82,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
                         color='info'
                         size='sm'
                       >
-                        {match ? getTranslateText(match?.title) : uri}
+                        {match ? getTranslateText(match?.title, language) : uri}
                       </Tag>
                     </li>
                   );
@@ -108,13 +99,16 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
               >{`${localization.datasetForm.fieldLabel.license}:`}</Heading>
               <div className={styles.field}>
                 <Paragraph size='sm'>
-                  {getTranslateText(openLicenses.find((license) => license.uri === distribution.license?.uri)?.label)}
+                  {getTranslateText(
+                    openLicenses.find((license) => license.uri === distribution.license?.uri)?.label,
+                    language,
+                  )}
                 </Paragraph>
               </div>
             </>
           )}
 
-          {distribution.conformsTo && hasConformsToValues && (
+          {distribution?.conformsTo && !_.isEmpty(distribution.conformsTo[0]?.prefLabel) && (
             <div className={styles.field}>
               <Heading
                 level={5}
@@ -129,9 +123,9 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
                   </Table.Row>
                 </Table.Head>
                 <TableBody>
-                  {distribution.conformsTo.map((conform, index) => (
+                  {distribution?.conformsTo.map((conform, index) => (
                     <Table.Row key={`conformsTo-${index}-${conform.uri}`}>
-                      <Table.Cell>{getTranslateText(conform.prefLabel)}</Table.Cell>
+                      <Table.Cell>{getTranslateText(conform.prefLabel, language)}</Table.Cell>
                       <Table.Cell>{conform.uri}</Table.Cell>
                     </Table.Row>
                   ))}
