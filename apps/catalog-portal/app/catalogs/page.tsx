@@ -6,14 +6,7 @@ import {
   sortAscending,
 } from '@catalog-frontend/utils';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import {
-  getAllProcessingActivitiesCatalogs,
-  getConceptCatalogs,
-  getDataServiceCatalogs,
-  getDatasetCatalogs,
-  getServiceCatalogs,
-  getServiceMessages,
-} from '../actions/actions';
+import { getAllCatalogs, getServiceMessages } from '../actions/actions';
 import { getOrganizations } from '@catalog-frontend/data-access';
 import { Alert, Heading, Link } from '@digdir/designsystemet-react';
 import {
@@ -25,58 +18,56 @@ import {
   RecordOfProcessingActivities,
   ServiceCatalog,
 } from '@catalog-frontend/types';
-import React from 'react';
 import { Breadcrumbs, NavigationCard, ServiceMessages } from '@catalog-frontend/ui';
 import styles from './catalogs.module.css';
+import { redirect } from 'next/navigation';
+import _ from 'lodash';
 
 const CatalogPortalPage: React.FC<{ params: Params }> = async () => {
   const session = await getValidSession({ callbackUrl: `/catalogs` });
 
-  const [
+  const catalogData = await getAllCatalogs();
+  const serviceMessages = await getServiceMessages();
+
+  if (!catalogData) {
+    redirect('/no-access');
+  }
+
+  const {
     datasetCatalogs,
     dataServiceCatalogs,
     conceptCatalogs,
-    allServiceCatalogs,
+    publicServiceCatalogs,
+    serviceCatalogs,
     recordsOfProcessingActivities,
-    serviceMessages,
-  ] = await Promise.all([
-    getDatasetCatalogs(),
-    getDataServiceCatalogs(),
-    getConceptCatalogs(),
-    getServiceCatalogs(),
-    getAllProcessingActivitiesCatalogs(),
-    getServiceMessages(),
-  ]);
+  } = catalogData;
 
-  const publicServiceCatalogs: PublicServiceCatalog[] = allServiceCatalogs.publicServiceCatalogs;
-  const serviceCatalogs: ServiceCatalog[] = allServiceCatalogs.serviceCatalogs;
+  const getDatasetCatalogByOrgId = (orgId: string): DatasetCatalog | null | undefined =>
+    datasetCatalogs?.find((catalog) => catalog.id === orgId);
 
-  const getDatasetCatalogByOrgId = (orgId: string): DatasetCatalog | undefined =>
-    datasetCatalogs.find((catalog) => catalog.id === orgId);
+  const getDataServiceCatalogByOrgId = (orgId: string): DataServiceCatalog | null | undefined =>
+    dataServiceCatalogs?.find((catalog: DataServiceCatalog) => catalog.id === orgId);
 
-  const getDataServiceCatalogByOrgId = (orgId: string): DataServiceCatalog | undefined =>
-    dataServiceCatalogs.find((catalog) => catalog.id === orgId);
+  const getConceptCatalogByOrgId = (orgId: string): ConceptCatalog | null | undefined =>
+    conceptCatalogs?.find((catalog) => catalog.id === orgId);
 
-  const getConceptCatalogByOrgId = (orgId: string): ConceptCatalog | undefined =>
-    conceptCatalogs.find((catalog) => catalog.id === orgId);
+  const getPublicServiceCatalogByOrgId = (orgId: string): PublicServiceCatalog | null | undefined =>
+    publicServiceCatalogs?.find((catalog) => catalog.catalogId === orgId);
 
-  const getPublicServiceCatalogByOrgId = (orgId: string): PublicServiceCatalog | undefined =>
-    publicServiceCatalogs.find((catalog) => catalog.catalogId === orgId);
+  const getServiceCatalogByOrgId = (orgId: string): ServiceCatalog | null | undefined =>
+    serviceCatalogs?.find((catalog) => catalog.catalogId === orgId);
 
-  const getServiceCatalogByOrgId = (orgId: string): ServiceCatalog | undefined =>
-    serviceCatalogs.find((catalog) => catalog.catalogId === orgId);
-
-  const getRecordsOfProcessingActivityByOrgId = (orgId: string): RecordOfProcessingActivities | undefined =>
-    recordsOfProcessingActivities.find((record) => record.organizationId === orgId);
+  const getRecordsOfProcessingActivityByOrgId = (orgId: string): RecordOfProcessingActivities | null | undefined =>
+    recordsOfProcessingActivities?.find((record) => record.organizationId === orgId);
 
   const getAllUniqueOrgIds = (): string[] => {
     const orgIdsSet = new Set<string>();
-    datasetCatalogs.forEach((catalog) => orgIdsSet.add(catalog.id));
-    conceptCatalogs.forEach((catalog) => orgIdsSet.add(catalog.id));
-    publicServiceCatalogs.forEach((catalog) => orgIdsSet.add(catalog.catalogId));
-    serviceCatalogs.forEach((catalog) => orgIdsSet.add(catalog.catalogId));
-    dataServiceCatalogs.forEach((catalog) => orgIdsSet.add(catalog.id));
-    recordsOfProcessingActivities.forEach((catalog) => orgIdsSet.add(catalog.organizationId));
+    datasetCatalogs?.forEach((catalog) => orgIdsSet.add(catalog.id));
+    conceptCatalogs?.forEach((catalog) => orgIdsSet.add(catalog.id));
+    publicServiceCatalogs?.forEach((catalog) => orgIdsSet.add(catalog.catalogId));
+    serviceCatalogs?.forEach((catalog) => orgIdsSet.add(catalog.catalogId));
+    dataServiceCatalogs?.forEach((catalog: DataServiceCatalog) => orgIdsSet.add(catalog.id));
+    recordsOfProcessingActivities?.forEach((catalog) => orgIdsSet.add(catalog.organizationId));
 
     return Array.from(orgIdsSet);
   };
