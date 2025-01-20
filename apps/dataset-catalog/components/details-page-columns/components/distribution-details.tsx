@@ -11,9 +11,16 @@ type Props = {
   searchEnv: string;
   referenceDataEnv: string;
   openLicenses: ReferenceDataCode[];
+  language?: string;
 };
 
-export const DistributionDetailsCard = ({ distribution, searchEnv, referenceDataEnv, openLicenses }: Props) => {
+export const DistributionDetailsCard = ({
+  distribution,
+  searchEnv,
+  referenceDataEnv,
+  openLicenses,
+  language,
+}: Props) => {
   const { data: formats } = useSearchFileTypeByUri(distribution.format, referenceDataEnv);
 
   return (
@@ -22,7 +29,7 @@ export const DistributionDetailsCard = ({ distribution, searchEnv, referenceData
         {distribution?.title && !_.isEmpty(distribution?.title) && (
           <div>
             <Label size='sm'>{localization.title}</Label>
-            <p>{getTranslateText(distribution?.title)}</p>
+            <p>{getTranslateText(distribution?.title, language)}</p>
           </div>
         )}
 
@@ -45,7 +52,7 @@ export const DistributionDetailsCard = ({ distribution, searchEnv, referenceData
                     color='info'
                     key={item}
                   >
-                    {match ? getTranslateText(match?.label) : item}
+                    {match ? getTranslateText(match?.label, language) : item}
                   </Tag>
                 );
               })}
@@ -58,6 +65,7 @@ export const DistributionDetailsCard = ({ distribution, searchEnv, referenceData
         referenceDataEnv={referenceDataEnv}
         openLicenses={openLicenses}
         distribution={distribution}
+        language={language}
       />
     </Card>
   );

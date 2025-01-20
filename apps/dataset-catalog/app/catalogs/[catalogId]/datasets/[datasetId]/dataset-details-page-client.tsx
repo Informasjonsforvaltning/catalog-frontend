@@ -69,6 +69,7 @@ const DatasetDetailsPageClient = ({
           searchEnv={searchEnv}
           referenceData={referenceData}
           datasetSeries={datasetSeries}
+          language={language}
         />
       </DetailsPageLayout.Left>
       <DetailsPageLayout.Right>
