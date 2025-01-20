@@ -8,12 +8,15 @@ export const dataServiceFormNb = {
       'Et kontaktpunkt er informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om datasettet. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.',
     mediaTypes: 'Søk på og velg blant registrerte medietyper.',
     fileTypes: 'Søk på og velg blant registrerte filtyper.',
+    landingPage: 'Referanse til nettside som gir tilgang til APIet og/eller tilleggsinformasjon',
+    pages: 'Referanser til sider og/eller dokumenter som beskriver APIet',
   },
   heading: {
     titleAndDescription: 'Tittel og beskrivelse',
     endpoint: 'Endepunkt',
     contactPoint: 'Kontaktpunkt',
     format: 'Format',
+    pages: 'Landingsside og dokumentasjon',
   },
   fieldLabel: {
     description: 'Beskrivelse av APIet',
@@ -22,6 +25,8 @@ export const dataServiceFormNb = {
     endpointDescriptions: 'Endepunktsbeskrivelse',
     mediaTypes: 'Medietyper',
     fileTypes: 'Filtyper',
+    landingPage: 'Landingsside',
+    pages: 'Dokumentasjon',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette API-beskrivelsen?',
