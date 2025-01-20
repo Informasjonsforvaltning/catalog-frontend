@@ -45,7 +45,7 @@ export const ContactPointSection = () => {
             title={
               <>
                 {localization.datasetForm.heading.contactPoint}
-                <HelpMarkdown title={'Hjelpetekst kontaktinformasjon'}>
+                <HelpMarkdown aria-label={'Hjelpetekst kontaktinformasjon'}>
                   {localization.datasetForm.helptext.contactPoint}
                 </HelpMarkdown>
               </>

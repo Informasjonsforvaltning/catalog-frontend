@@ -29,7 +29,7 @@ export function LabelWithHelpTextAndTag({
     <div className={styles.container}>
       {typeof children === 'string' ? <Label size='sm'>{children}</Label> : children}
 
-      {helpText && helpAriaLabel && <HelpMarkdown title={helpAriaLabel}>{helpText}</HelpMarkdown>}
+      {helpText && helpAriaLabel && <HelpMarkdown aria-label={helpAriaLabel}>{helpText}</HelpMarkdown>}
       {tagTitle && (
         <Tag
           color={tagColor}

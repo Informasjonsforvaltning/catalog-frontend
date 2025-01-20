@@ -63,7 +63,7 @@ const ConceptSearchHits: React.FC<Props> = ({
           </p>
         )}
 
-        <p className={styles.dot}>•</p>
+        <span className={styles.dot}/>
         <p>
           {searchHit?.erPublisert
             ? localization.publicationState.publishedInFDK
@@ -71,7 +71,7 @@ const ConceptSearchHits: React.FC<Props> = ({
         </p>
         {searchHit.sistPublisertId && !searchHit?.erPublisert && (
           <>
-            <p className={styles.dot}>•</p>
+            <span className={styles.dot}/>
             <Link
               prefetch={false}
               href={
@@ -117,7 +117,7 @@ const ConceptSearchHits: React.FC<Props> = ({
                 )
               }
               titleHref={
-                validOrganizationNumber(catalogId) && validUUID(concept?.id) ? `/${catalogId}/${concept.id}` : '#'
+                validOrganizationNumber(catalogId) && validUUID(concept?.id) ? `/catalogs/${catalogId}/concepts/${concept.id}` : '#'
               }
               conceptSubject={
                 <ConceptSubject

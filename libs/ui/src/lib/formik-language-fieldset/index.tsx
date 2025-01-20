@@ -8,14 +8,14 @@ import { FastField, useFormikContext } from 'formik';
 import styles from './formik-language-fieldset.module.scss';
 import { ISOLanguage, LocalizedStrings } from '@catalog-frontend/types';
 import { TextareaWithPrefix } from '../textarea-with-prefix';
-import _ from 'lodash';
 import { AddButton, DeleteButton } from '../button';
+import _ from 'lodash';
 
 type LanuguageFieldsetProps = {
   legend?: ReactNode;
   name: string;
   errorMessage?: string;
-  errorArgs?: object;
+  errorFieldLabel: string;
   requiredLanguages?: Omit<ISOLanguage, 'no'>[];
   as?: typeof Textfield | typeof TextareaWithPrefix;
   multiple?: boolean;
@@ -27,7 +27,7 @@ export const FormikLanguageFieldset = ({
   legend,
   name,
   errorMessage,
-  errorArgs,
+  errorFieldLabel,
   requiredLanguages,
   as: renderAs = Textfield,
   multiple = false,
@@ -36,7 +36,7 @@ export const FormikLanguageFieldset = ({
   const [textValue, setTextValue] = useState<Record<string, string>>({});
 
   const handleAddLanguage = (lang: string) => {
-    setFieldValue(`${name}.${lang}`, multiple ? [] : '');
+    setFieldValue(`${name}.${lang}`, multiple ? [] : multiple ? [] : '');
   };
 
   const handleRemoveLanguage = (lang: string) => {
@@ -70,7 +70,7 @@ export const FormikLanguageFieldset = ({
   const languagesWithError = allowedLanguages
     .filter((lang) => _.get(errors, `${name}.${lang}`))
     .map((lang) => localization.language[lang]);
-
+  
   return (
     <Fieldset
       legend={legend}
@@ -80,7 +80,7 @@ export const FormikLanguageFieldset = ({
         <div key={lang}>
           {multiple ? (
             <>
-              <Box className={styles.languageField}>
+              <Box key={lang} className={styles.languageField}>
                 <Textfield
                   size='sm'
                   aria-label={localization.language[lang]}
@@ -99,11 +99,7 @@ export const FormikLanguageFieldset = ({
                   disabled={Boolean(textValue[lang]) === false}
                   onClick={() => handleAddTextValue(lang)}
                 />
-
-                <DeleteButton
-                  variant='tertiary'
-                  onClick={() => handleRemoveLanguage(lang)}
-                />
+                <DeleteButton onClick={() => handleRemoveLanguage(lang)} />
               </Box>
               <Chip.Group size='sm'>
                 {(values?.[name]?.[lang] as string[] | undefined)?.map((v, i) => (
@@ -117,7 +113,7 @@ export const FormikLanguageFieldset = ({
               </Chip.Group>
             </>
           ) : (
-            <Box className={styles.languageField}>
+            <Box key={lang} className={styles.languageField}>
               <FastField
                 as={renderAs}
                 name={`${name}.${lang}`}
@@ -171,8 +167,8 @@ export const FormikLanguageFieldset = ({
           error
         >
           {errorMessage
-            ? `${localization.formatString(errorMessage, { ...errorArgs, language: languagesWithError.join(', ') })}`
-            : 'This field ({language}) is required'}
+            ? `${localization.formatString(errorMessage, { label: errorFieldLabel, language: languagesWithError.join(', ') })}`
+            : `This field (${languagesWithError.join(', ')}) is required`}
         </ErrorMessage>
       )}
     </Fieldset>
