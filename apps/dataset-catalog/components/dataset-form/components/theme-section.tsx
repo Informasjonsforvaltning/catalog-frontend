@@ -23,11 +23,13 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
           tagTitle={localization.tag.required}
           helpAriaLabel={localization.datasetForm.fieldLabel.euDataTheme}
           helpText={localization.datasetForm.helptext.euDataTheme}
+          fieldId='euDataTheme-combobox'
         >
           {localization.datasetForm.fieldLabel.euDataTheme}
         </LabelWithHelpTextAndTag>
 
         <FastField
+          id='euDataTheme-combobox'
           as={Combobox}
           multiple
           filter={containsFilter}
@@ -54,13 +56,14 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
         <LabelWithHelpTextAndTag
           helpAriaLabel={localization.datasetForm.fieldLabel.losTheme}
           helpText={localization.datasetForm.helptext.losTheme}
+          fieldId='losTheme-combobox'
         >
           {localization.datasetForm.fieldLabel.losTheme}
         </LabelWithHelpTextAndTag>
 
         <FastField
+          id='losTheme-combobox'
           as={Combobox}
-          name='losTheme'
           value={values.losTheme}
           multiple
           filter={containsFilter}

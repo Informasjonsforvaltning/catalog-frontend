@@ -50,12 +50,14 @@ export const QualifiedAttributionsSection = () => {
         <LabelWithHelpTextAndTag
           helpAriaLabel={localization.datasetForm.fieldLabel.qualifiedAttributions}
           helpText={localization.datasetForm.helptext.qualifiedAttributions}
+          fieldId='qualifiedAttributions-combobox'
         >
           {localization.datasetForm.fieldLabel.qualifiedAttributions}
         </LabelWithHelpTextAndTag>
       }
     >
       <Combobox
+        id='qualifiedAttributions-combobox'
         size='sm'
         onValueChange={(selectedValues: string[]) => setFieldValue('qualifiedAttributions', selectedValues)}
         onChange={(input: any) => debouncedSearch(input.target.value)}

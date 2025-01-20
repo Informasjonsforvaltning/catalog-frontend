@@ -23,12 +23,14 @@ export const RelationsSection = ({ searchEnv, datasetSeries }: Props) => {
         <LabelWithHelpTextAndTag
           helpText={localization.datasetForm.helptext.inSeries}
           helpAriaLabel={localization.datasetForm.fieldLabel.inSeries}
+          fieldId='inSeries-combobox'
         >
           {localization.datasetForm.fieldLabel.inSeries}
         </LabelWithHelpTextAndTag>
 
         {datasetSeries && (
           <Combobox
+            id='inSeries-combobox'
             onValueChange={(value) => setFieldValue('inSeries', value.toString())}
             value={values.inSeries ? [values.inSeries] : []}
             initialValue={values?.inSeries ? [values?.inSeries] : []}

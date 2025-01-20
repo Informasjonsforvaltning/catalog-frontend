@@ -67,12 +67,14 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
             <LabelWithHelpTextAndTag
               helpAriaLabel={localization.datasetForm.fieldLabel.informationModelsFromFDK}
               helpText={localization.datasetForm.helptext.informationModelsFromFDK}
+              fieldId={'informationModelsFromFDK-combobox'}
             >
               {localization.datasetForm.fieldLabel.informationModelsFromFDK}
             </LabelWithHelpTextAndTag>
           }
         >
           <Combobox
+            id='informationModelsFromFDK-combobox'
             size='sm'
             onValueChange={(selectedValues: string[]) => setFieldValue('informationModelsFromFDK', selectedValues)}
             onChange={(input: any) => debouncedSearch(input.target.value)}

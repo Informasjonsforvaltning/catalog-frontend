@@ -114,12 +114,14 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
             <LabelWithHelpTextAndTag
               helpText={localization.datasetForm.helptext.type}
               helpAriaLabel={localization.datasetForm.fieldLabel.type}
+              fieldId='type-combobox'
             >
               {localization.datasetForm.fieldLabel.type}
             </LabelWithHelpTextAndTag>
           }
         >
           <FastField
+            id='type-combobox'
             as={Combobox}
             size='sm'
             value={[values.type]}
@@ -143,12 +145,14 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
             <LabelWithHelpTextAndTag
               helpText={localization.datasetForm.helptext.provenance}
               helpAriaLabel={localization.datasetForm.fieldLabel.provenance}
+              fieldId='provenance-combobox'
             >
               {localization.datasetForm.fieldLabel.provenance}
             </LabelWithHelpTextAndTag>
           }
         >
           <Combobox
+            id='provenance-combobox'
             value={values?.provenance?.uri ? [values?.provenance?.uri] : []}
             placeholder={`${localization.search.search}...`}
             onValueChange={(value: string[]) => setFieldValue('provenance.uri', value.toString())}
@@ -170,12 +174,14 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
             <LabelWithHelpTextAndTag
               helpAriaLabel={localization.datasetForm.fieldLabel.accrualPeriodicity}
               helpText={localization.datasetForm.helptext.accrualPeriodicity}
+              fieldId='accrualPeriodicity.uri-combobox'
             >
               {localization.datasetForm.fieldLabel.accrualPeriodicity}
             </LabelWithHelpTextAndTag>
           }
         >
           <Combobox
+            id='accrualPeriodicity.uri-combobox'
             size='sm'
             value={[values?.accrualPeriodicity?.uri ?? '']}
             virtual
