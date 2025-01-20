@@ -5,7 +5,9 @@ import {
   EditButton,
   FieldsetDivider,
   FormikLanguageFieldset,
+  HelpMarkdown,
   LabelWithHelpTextAndTag,
+  FormHeading,
 } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button, Modal, Radio, Table, Textfield } from '@digdir/designsystemet-react';
@@ -70,12 +72,12 @@ export const AccessRightsUriTable = () => {
 
   return (
     <div className={styles.fieldContainer}>
-      <LabelWithHelpTextAndTag
-        helpAriaLabel={localization.datasetForm.fieldLabel.legalBasis}
-        helpText={localization.datasetForm.helptext.legalBasis}
-      >
-        {localization.datasetForm.fieldLabel.legalBasis}
-      </LabelWithHelpTextAndTag>
+      <div className={styles.set}>
+        <FormHeading>{localization.datasetForm.fieldLabel.legalBasis}</FormHeading>
+        <HelpMarkdown title={localization.datasetForm.fieldLabel.legalBasis}>
+          {localization.datasetForm.helptext.legalBasis}
+        </HelpMarkdown>
+      </div>
 
       {allLegalBases && allLegalBases?.length > 0 && !hasNoFieldValues(allLegalBases[0]?.uriWithLabel) && (
         <Table size='sm'>
@@ -84,7 +86,7 @@ export const AccessRightsUriTable = () => {
               <Table.HeaderCell>{localization.title}</Table.HeaderCell>
               <Table.HeaderCell>{localization.link}</Table.HeaderCell>
               <Table.HeaderCell>{localization.type}</Table.HeaderCell>
-              <Table.HeaderCell />
+              <Table.HeaderCell aria-label='Actions' />
             </Table.Row>
           </Table.Head>
           <Table.Body>

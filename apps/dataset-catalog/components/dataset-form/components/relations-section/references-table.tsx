@@ -50,7 +50,7 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
             <Table.Row>
               <Table.HeaderCell>{localization.datasetForm.fieldLabel.relationType}</Table.HeaderCell>
               <Table.HeaderCell>{localization.datasetForm.fieldLabel.dataset}</Table.HeaderCell>
-              <Table.HeaderCell />
+              <Table.HeaderCell aria-label='Actions' />
             </Table.Row>
           </Table.Head>
           <Table.Body>
