@@ -1,5 +1,5 @@
 import { DataService } from '@catalog-frontend/types';
-import { FormikSearchCombobox, LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { FormikReferenceDataCombobox, LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Fieldset } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
@@ -51,7 +51,7 @@ export const FormatSection = ({ referenceDataEnv }: Props) => {
           </LabelWithHelpTextAndTag>
         }
       >
-        <FormikSearchCombobox
+        <FormikReferenceDataCombobox
           onChange={(event) => setSearchQueryFileTypes(event.target.value)}
           onValueChange={(selectedValues) => setFieldValue('formats', selectedValues)}
           value={values?.formats || []}
@@ -72,7 +72,7 @@ export const FormatSection = ({ referenceDataEnv }: Props) => {
           </LabelWithHelpTextAndTag>
         }
       >
-        <FormikSearchCombobox
+        <FormikReferenceDataCombobox
           onChange={(event) => setSearchQueryMediaTypes(event.target.value)}
           onValueChange={(selectedValues) => setFieldValue('mediaTypes', selectedValues)}
           value={values?.mediaTypes || []}
@@ -81,7 +81,7 @@ export const FormatSection = ({ referenceDataEnv }: Props) => {
           formikValues={values?.mediaTypes ?? []}
           loading={loadingSelectedMediaTypes || searchingMediaTypes}
           portal={false}
-          virtual={true}
+          showCodeAsDescription={true}
         />
       </Fieldset>
     </>

@@ -15,6 +15,8 @@ export interface DataServiceToBeCreated {
   endpointDescriptions?: string[];
   mediaTypes?: string[];
   formats?: string[];
+  landingPage?: string;
+  pages?: string[];
   contactPoint?: DataServiceContactPoint;
 }
 
