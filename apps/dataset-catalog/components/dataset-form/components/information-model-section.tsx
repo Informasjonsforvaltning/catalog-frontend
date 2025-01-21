@@ -83,6 +83,7 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
             value={values.informationModelsFromFDK}
             placeholder={`${localization.search.search}...`}
             filter={() => true} // Deactivate filter, handled by backend
+            virtual
           >
             <Combobox.Empty>{`${localization.search.noHits}...`}</Combobox.Empty>
             {comboboxOptions &&

@@ -36,6 +36,7 @@ export const AccessRightFields = () => {
             size='sm'
             value={[values.accessRights?.uri || AccessRights.PUBLIC]}
             onValueChange={(values) => setFieldValue('accessRights.uri', values.toString())}
+            virtual
           >
             {accessRightsOptions.map((option) => (
               <Combobox.Option

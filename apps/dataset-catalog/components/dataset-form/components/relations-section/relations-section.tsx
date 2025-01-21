@@ -36,6 +36,7 @@ export const RelationsSection = ({ searchEnv, datasetSeries }: Props) => {
             initialValue={values?.inSeries ? [values?.inSeries] : []}
             placeholder={`${localization.search.search}...`}
             size='sm'
+            virtual
           >
             <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
             {datasetSeries.map((dataset) => (

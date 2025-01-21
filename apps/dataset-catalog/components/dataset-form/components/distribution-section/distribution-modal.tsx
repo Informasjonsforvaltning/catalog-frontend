@@ -234,6 +234,7 @@ export const DistributionModal = ({
                             }}
                             placeholder={`${localization.search.search}...`}
                             size='sm'
+                            virtual
                           >
                             {comboboxOptions.map((option, i) => (
                               <Combobox.Option
@@ -317,6 +318,7 @@ export const DistributionModal = ({
                                 setFieldValue('license.uri', selectedValues.toString())
                               }
                               size='sm'
+                              virtual
                             >
                               {openLicenses &&
                                 openLicenses.map((license, i) => (
