@@ -381,10 +381,10 @@ export const DistributionModal = ({
                             <FieldArray name='conformsTo'>
                               {({ push, remove }) => (
                                 <>
-                                  {values.conformsTo?.map((item, i) => (
+                                  {values.conformsTo?.map((_, i) => (
                                     <div
                                       className={styles.add}
-                                      key={`conformsTo-${item.uri}-${i}`}
+                                      key={`conformsTo-${i}`}
                                     >
                                       <Card>
                                         <div>
@@ -395,15 +395,13 @@ export const DistributionModal = ({
                                             requiredLanguages={['nb']}
                                           />
                                         </div>
-
                                         <FastField
-                                          label={localization.link}
                                           as={Textfield}
-                                          name={`conformsTo[${i}].uri`}
                                           size='sm'
+                                          label={localization.link}
+                                          name={`conformsTo[${i}].uri`}
                                           // @ts-expect-error: uri exists on the object
                                           error={errors?.conformsTo?.[i]?.uri}
-                                          className={styles.standardField}
                                         />
                                       </Card>
                                       <div>

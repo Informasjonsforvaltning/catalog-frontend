@@ -1,6 +1,6 @@
 import { Distribution, ReferenceDataCode } from '@catalog-frontend/types';
 import { localization, getTranslateText } from '@catalog-frontend/utils';
-import { Card, Label, Tag } from '@digdir/designsystemet-react';
+import { Card, Heading, Tag } from '@digdir/designsystemet-react';
 import { DistributionDetails } from '../../dataset-form/components/distribution-section/distribution-details';
 import styles from '../details-columns.module.css';
 import { useSearchFileTypeByUri } from '../../../hooks/useReferenceDataSearch';
@@ -28,29 +28,44 @@ export const DistributionDetailsCard = ({
       <div className={styles.infoCardItems}>
         {distribution?.title && !_.isEmpty(distribution?.title) && (
           <div>
-            <Label size='sm'>{localization.title}</Label>
+            <Heading
+              level={4}
+              size='2xs'
+            >
+              {localization.title}
+            </Heading>
             <p>{getTranslateText(distribution?.title, language)}</p>
           </div>
         )}
 
         {distribution?.accessURL && (
           <div>
-            <Label size='sm'>{localization.datasetForm.fieldLabel.accessURL}</Label>
+            <Heading
+              level={4}
+              size='2xs'
+            >
+              {localization.datasetForm.fieldLabel.accessURL}
+            </Heading>
             <p>{distribution?.accessURL}</p>
           </div>
         )}
 
         {distribution?.format && !_.isEmpty(distribution.format) && (
           <div>
-            <Label size='sm'>{localization.datasetForm.fieldLabel.format}</Label>
+            <Heading
+              level={4}
+              size='2xs'
+            >
+              {localization.datasetForm.fieldLabel.format}
+            </Heading>
             <li className={styles.list}>
-              {distribution.format?.map((item: string) => {
+              {distribution.format?.map((item: string, index) => {
                 const match = formats && formats.find((format: any) => format.uri === item);
                 return (
                   <Tag
                     size='sm'
                     color='info'
-                    key={item}
+                    key={`distributionformat-${index}`}
                   >
                     {match ? getTranslateText(match?.label, language) : item}
                   </Tag>

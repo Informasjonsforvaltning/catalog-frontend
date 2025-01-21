@@ -1,8 +1,8 @@
 'use client';
 
 import { Distribution, ReferenceDataCode } from '@catalog-frontend/types';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Paragraph, Tag, Table, TableBody, Heading } from '@digdir/designsystemet-react';
+import { getTranslateText, localization, validUUID } from '@catalog-frontend/utils';
+import { Paragraph, Tag, Table, TableBody, Heading, Link } from '@digdir/designsystemet-react';
 import styles from './distributions.module.css';
 import { useSearchDataServiceByUri } from '../../../../hooks/useSearchService';
 import { useSearchMediaTypeByUri } from '../../../../hooks/useReferenceDataSearch';
@@ -21,6 +21,11 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
   const { data: selectedDataServices } = useSearchDataServiceByUri(searchEnv, distribution?.accessServiceUris ?? []);
   const { data: selectedMediaTypes } = useSearchMediaTypeByUri(distribution?.mediaType ?? [], referenceDataEnv);
 
+  type ResourceType = 'datasets' | 'information-models' | 'data-services' | 'concepts';
+  const getDataNorgeUri = (id: string | undefined, resourceType: ResourceType) => {
+    return validUUID(id) ? `${referenceDataEnv}/${resourceType}/${id}` : '/not-found';
+  };
+
   return (
     <div>
       {distribution && (
@@ -29,7 +34,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
           {distribution?.description && (
             <div className={styles.field}>
               <Heading
-                level={5}
+                level={4}
                 size='2xs'
               >{`${localization.description}:`}</Heading>
               <Paragraph size='sm'>{getTranslateText(distribution?.description, language)}</Paragraph>
@@ -39,7 +44,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
           {distribution?.downloadURL && distribution?.downloadURL[0] && (
             <div className={styles.field}>
               <Heading
-                level={5}
+                level={4}
                 size='2xs'
               >{`${localization.datasetForm.fieldLabel.downloadURL}:`}</Heading>
               <Paragraph size='sm'>{distribution?.downloadURL?.[0] ?? ''}</Paragraph>
@@ -49,7 +54,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
           {distribution.mediaType && distribution.mediaType.length > 0 && (
             <div className={styles.field}>
               <Heading
-                level={5}
+                level={4}
                 size='2xs'
               >{`${localization.datasetForm.fieldLabel.mediaType}:`}</Heading>
               <ul className={styles.list}>
@@ -70,31 +75,43 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
           {distribution?.accessServiceUris && distribution.accessServiceUris.length > 0 && (
             <div className={styles.field}>
               <Heading
-                level={5}
+                level={4}
                 size='2xs'
               >{`${localization.datasetForm.fieldLabel.accessService}:`}</Heading>
-              <ul className={styles.list}>
-                {distribution.accessServiceUris.map((uri, i) => {
-                  const match = selectedDataServices?.find((type) => type.uri === uri);
-                  return (
-                    <li key={`service-${uri}-${i}`}>
-                      <Tag
-                        color='info'
-                        size='sm'
-                      >
-                        {match ? getTranslateText(match?.title, language) : uri}
-                      </Tag>
-                    </li>
-                  );
-                })}
-              </ul>
+
+              <Table size='sm'>
+                <Table.Head>
+                  <Table.Row>
+                    <Table.HeaderCell>{localization.resourceType.dataService}</Table.HeaderCell>
+                    <Table.HeaderCell>{localization.publisher}</Table.HeaderCell>
+                  </Table.Row>
+                </Table.Head>
+                <Table.Body>
+                  {distribution.accessServiceUris &&
+                    distribution.accessServiceUris.map((uri, i) => {
+                      const match = selectedDataServices?.find((type) => type.uri === uri);
+                      return match ? (
+                        <Table.Row key={`accessSerivce-row-${i}`}>
+                          <Table.Cell>
+                            <Link href={getDataNorgeUri(match.id, 'data-services')}>
+                              {getTranslateText(match?.title, language) || localization.noTitleAvailable}
+                            </Link>
+                          </Table.Cell>
+                          <Table.Cell>{getTranslateText(match?.organization?.prefLabel)}</Table.Cell>
+                        </Table.Row>
+                      ) : (
+                        <></>
+                      );
+                    })}
+                </Table.Body>
+              </Table>
             </div>
           )}
 
           {distribution.license?.uri && (
             <>
               <Heading
-                level={5}
+                level={4}
                 size='2xs'
               >{`${localization.datasetForm.fieldLabel.license}:`}</Heading>
               <div className={styles.field}>
@@ -111,7 +128,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
           {distribution?.conformsTo && !_.isEmpty(distribution.conformsTo[0]?.prefLabel) && (
             <div className={styles.field}>
               <Heading
-                level={5}
+                level={4}
                 size='2xs'
               >{`${localization.datasetForm.fieldLabel.standard}:`}</Heading>
 
@@ -137,7 +154,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
           {distribution.page && distribution.page?.[0].uri && (
             <div className={styles.field}>
               <Heading
-                level={5}
+                level={4}
                 size='2xs'
               >{`${localization.datasetForm.fieldLabel.distributionLink}:`}</Heading>
               <Paragraph size='sm'>{distribution?.page?.[0].uri}</Paragraph>

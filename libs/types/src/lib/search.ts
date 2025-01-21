@@ -154,3 +154,4 @@ export interface Suggestion {
 }
 
 export type SearchType = 'CONCEPT' | 'DATASET' | 'DATA_SERVICE' | 'INFORMATION_MODEL' | 'SERVICE' | 'EVENT';
+export type ResourceType = 'concepts' | 'datasets' | 'data-services' | 'information-models';

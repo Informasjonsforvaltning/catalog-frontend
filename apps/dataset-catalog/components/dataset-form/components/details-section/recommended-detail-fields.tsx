@@ -12,7 +12,6 @@ import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
 import { debounce, sortBy } from 'lodash';
 import styles from '../../dataset-form.module.css';
 import { TemporalModal } from './temporal-modal';
-import FormikReferenceDataCombobox from '../../../../components/formik-reference-data-combobox';
 
 interface Props {
   referenceDataEnv: string;
