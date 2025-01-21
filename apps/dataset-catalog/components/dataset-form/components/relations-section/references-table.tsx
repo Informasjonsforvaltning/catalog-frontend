@@ -172,6 +172,7 @@ const FieldModal = ({ template, type, onSuccess, searchEnv, selectedUri }: Modal
                     portal={false}
                     size='sm'
                     error={errors?.referenceType?.code}
+                    virtual
                   >
                     <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
                     {relations.map((relation) => (
