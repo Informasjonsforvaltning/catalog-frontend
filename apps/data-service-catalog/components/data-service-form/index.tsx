@@ -13,6 +13,7 @@ import { EndpointSection } from './components/endpoint-section';
 import { ContactPointSection } from './components/contact-point-section';
 import { FormatSection } from './components/format-section';
 import {PagesSection} from "./components/pages-section";
+import {KeywordsSection} from "./components/keywords-section";
 
 type Props = {
   initialValues: DataService | DataServiceToBeCreated;
@@ -89,6 +90,13 @@ export const DataServiceForm = ({ initialValues, submitType, referenceDataEnv }:
                   required
                 >
                   <EndpointSection />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='keywords-section'
+                  title={localization.dataServiceForm.heading.keywords}
+                >
+                  <KeywordsSection />
                 </FormLayout.Section>
 
                 <FormLayout.Section
