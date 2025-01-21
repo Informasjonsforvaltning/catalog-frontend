@@ -52,13 +52,9 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
   return {
     title: {
       nb: '',
-      nn: '',
-      en: '',
     },
     description: {
       nb: '',
-      nn: '',
-      en: '',
     },
     registrationStatus: PublicationStatus.DRAFT,
     landingPage: [],
@@ -110,6 +106,7 @@ export const distributionTemplate = (dist: Distribution | undefined) => {
         ...dist,
         title: dist?.title ?? { nb: '' },
         downloadURL: dist?.downloadURL && dist?.downloadURL[0] ? dist?.downloadURL : [''],
+        conformsTo: !_.isEmpty(dist.conformsTo) ? dist.conformsTo : [{ uri: '', prefLabel: { nb: '' } }],
       }
     : {
         title: { nb: '' },

@@ -46,8 +46,6 @@ export type DatasetToBeCreated = {
   distribution?: Distribution[];
   contactPoint: DatasetContactPoint[];
   // Arrays of URIs used as helper values for Formik. These properties are not part of the database object.
-  losThemeList?: string[];
-  euThemeList?: string[];
   conceptList?: string[];
   spatialList?: string[];
   languageList?: string[];
