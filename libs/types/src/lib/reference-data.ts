@@ -42,3 +42,7 @@ export interface ReferenceData {
   languages: ReferenceDataCode[];
   openLicenses: ReferenceDataCode[];
 }
+
+export interface DataServiceReferenceData {
+  openLicenses: ReferenceDataCode[];
+}

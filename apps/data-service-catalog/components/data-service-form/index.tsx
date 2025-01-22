@@ -1,6 +1,6 @@
 'use client';
 import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { DataService, DataServiceToBeCreated } from '@catalog-frontend/types';
+import { DataService, DataServiceReferenceData, DataServiceToBeCreated } from '@catalog-frontend/types';
 import { FormLayout, StickyFooterBar, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
 import { Formik, Form } from 'formik';
 import { useState } from 'react';
@@ -13,6 +13,7 @@ import { EndpointSection } from './components/endpoint-section';
 import { ContactPointSection } from './components/contact-point-section';
 import { FormatSection } from './components/format-section';
 import { PagesSection } from './components/pages-section';
+import { AccessSection } from './components/access-section';
 import { DatasetSection } from './components/dataset-section';
 import { KeywordsSection } from './components/keywords-section';
 
@@ -20,10 +21,11 @@ type Props = {
   initialValues: DataService | DataServiceToBeCreated;
   submitType: 'create' | 'update';
   searchEnv: string; // Environment variable to search service
+  referenceData: DataServiceReferenceData;
   referenceDataEnv: string; // Environment variable to reference data
 };
 
-export const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceDataEnv }: Props) => {
+export const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, referenceDataEnv }: Props) => {
   const { catalogId, dataServiceId } = useParams();
   const [isDirty, setIsDirty] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -99,6 +101,13 @@ export const DataServiceForm = ({ initialValues, submitType, searchEnv, referenc
                   title={localization.dataServiceForm.heading.keywords}
                 >
                   <KeywordsSection />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='access-section'
+                  title={localization.access}
+                >
+                  <AccessSection openLicenses={referenceData.openLicenses} />
                 </FormLayout.Section>
 
                 <FormLayout.Section
