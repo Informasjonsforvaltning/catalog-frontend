@@ -31,7 +31,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
       {distribution && (
         <div>
           <FieldsetDivider />
-          {distribution?.description && (
+          {!_.isEmpty(distribution?.description) && (
             <div className={styles.field}>
               <Heading
                 level={4}
@@ -125,7 +125,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
             </>
           )}
 
-          {distribution?.conformsTo && !_.isEmpty(distribution.conformsTo[0]?.prefLabel) && (
+          {distribution?.conformsTo && !_.isEmpty(distribution.conformsTo[0]?.uri) && (
             <div className={styles.field}>
               <Heading
                 level={4}
@@ -151,7 +151,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
             </div>
           )}
 
-          {distribution.page && distribution.page?.[0].uri && (
+          {distribution?.page && distribution.page?.[0]?.uri && (
             <div className={styles.field}>
               <Heading
                 level={4}
