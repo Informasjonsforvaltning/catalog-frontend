@@ -1,6 +1,6 @@
-import {FormikLanguageFieldset, TitleWithTag} from "@catalog-frontend/ui";
-import {localization} from "@catalog-frontend/utils";
-import {HelpText, Paragraph} from "@digdir/designsystemet-react";
+import { FormikLanguageFieldset, TitleWithTag } from '@catalog-frontend/ui';
+import { localization } from '@catalog-frontend/utils';
+import { HelpText, Paragraph } from '@digdir/designsystemet-react';
 
 export const KeywordsSection = () => {
   return (
@@ -17,9 +17,7 @@ export const KeywordsSection = () => {
                   type='button'
                   size='sm'
                 >
-                  <Paragraph size='sm'>
-                    {localization.dataServiceForm.helptext.keywords}
-                  </Paragraph>
+                  <Paragraph size='sm'>{localization.dataServiceForm.helptext.keywords}</Paragraph>
                 </HelpText>
               </>
             }

@@ -10,7 +10,9 @@ export const dataServiceFormNb = {
     fileTypes: 'Søk på og velg blant registrerte filtyper.',
     landingPage: 'Referanse til nettside som gir tilgang til APIet og/eller tilleggsinformasjon',
     pages: 'Referanser til sider og/eller dokumenter som beskriver APIet',
-    keywords: 'Oppgi emneord (eller tag) som beskriver datatjenesten, f.eks. «eksempel», «datatjeneste» (bokmål) / "example", "data service" (Engelsk).',
+    servesDataset: 'Legg til en eller flere datasettbeskrivelse(r) som er tilknyttet APIet.',
+    keywords:
+      'Oppgi emneord (eller tag) som beskriver datatjenesten, f.eks. «eksempel», «datatjeneste» (bokmål) / "example", "data service" (Engelsk).',
   },
   heading: {
     titleAndDescription: 'Tittel og beskrivelse',
@@ -18,6 +20,7 @@ export const dataServiceFormNb = {
     contactPoint: 'Kontaktpunkt',
     format: 'Format',
     pages: 'Landingsside og dokumentasjon',
+    dataset: 'Tilknyttede datasettbeskrivelser',
     keywords: 'Emneord',
   },
   fieldLabel: {
@@ -29,6 +32,7 @@ export const dataServiceFormNb = {
     fileTypes: 'Filtyper',
     landingPage: 'Landingsside',
     pages: 'Dokumentasjon',
+    servesDataset: 'Søk etter og velg datasettbeskrivelse(r)',
     keywords: 'Emneord',
   },
   alert: {

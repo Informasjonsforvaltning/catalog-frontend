@@ -11,6 +11,7 @@ export default async function NewDataServicePage({ params }: Params) {
   const { catalogId } = params;
   const initialValues = dataServiceToBeCreatedTemplate();
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+  const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
 
   const breadcrumbList = [
@@ -36,6 +37,7 @@ export default async function NewDataServicePage({ params }: Params) {
       />
       <DataServiceForm
         initialValues={initialValues}
+        searchEnv={searchEnv}
         referenceDataEnv={referenceDataEnv}
         submitType={'create'}
       />

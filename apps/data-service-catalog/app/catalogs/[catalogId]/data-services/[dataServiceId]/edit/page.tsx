@@ -11,6 +11,7 @@ export default async function EditDataServicePage({ params }: Params) {
   const { catalogId, dataServiceId } = params;
   const dataService = await getDataService(catalogId, dataServiceId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+  const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
 
   const breadcrumbList = [
@@ -40,6 +41,7 @@ export default async function EditDataServicePage({ params }: Params) {
       />
       <DataServiceForm
         initialValues={dataService}
+        searchEnv={searchEnv}
         referenceDataEnv={referenceDataEnv}
         submitType={'update'}
       />

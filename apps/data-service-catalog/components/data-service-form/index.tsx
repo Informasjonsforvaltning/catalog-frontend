@@ -12,16 +12,18 @@ import styles from './data-service-form.module.css';
 import { EndpointSection } from './components/endpoint-section';
 import { ContactPointSection } from './components/contact-point-section';
 import { FormatSection } from './components/format-section';
-import {PagesSection} from "./components/pages-section";
-import {KeywordsSection} from "./components/keywords-section";
+import { PagesSection } from './components/pages-section';
+import { DatasetSection } from './components/dataset-section';
+import { KeywordsSection } from './components/keywords-section';
 
 type Props = {
   initialValues: DataService | DataServiceToBeCreated;
   submitType: 'create' | 'update';
+  searchEnv: string; // Environment variable to search service
   referenceDataEnv: string; // Environment variable to reference data
 };
 
-export const DataServiceForm = ({ initialValues, submitType, referenceDataEnv }: Props) => {
+export const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceDataEnv }: Props) => {
   const { catalogId, dataServiceId } = useParams();
   const [isDirty, setIsDirty] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -111,6 +113,13 @@ export const DataServiceForm = ({ initialValues, submitType, referenceDataEnv }:
                   title={localization.dataServiceForm.heading.pages}
                 >
                   <PagesSection />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='dataset-section'
+                  title={localization.dataServiceForm.heading.dataset}
+                >
+                  <DatasetSection searchEnv={searchEnv} />
                 </FormLayout.Section>
 
                 <FormLayout.Section
