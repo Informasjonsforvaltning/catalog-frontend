@@ -123,11 +123,13 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
           tagTitle={localization.tag.recommended}
           helpAriaLabel={localization.datasetForm.fieldLabel.spatial}
           helpText={localization.datasetForm.helptext.spatial}
+          fieldId='spatialList-combobox'
         >
           {localization.datasetForm.fieldLabel.spatial}
         </LabelWithHelpTextAndTag>
 
         <Combobox
+          id='spatialList-combobox'
           placeholder={`${localization.search.search}...`}
           multiple
           filter={() => true} // disable filter

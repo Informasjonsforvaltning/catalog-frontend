@@ -25,12 +25,14 @@ export const AccessRightFields = () => {
               helpText={localization.datasetForm.helptext.accessRights}
               tagColor='info'
               tagTitle={localization.tag.recommended}
+              fieldId='accessRights.uri-combobox'
             >
               {localization.access}
             </LabelWithHelpTextAndTag>
           }
         >
           <Combobox
+            id='accessRights.uri-combobox'
             size='sm'
             value={[values.accessRights?.uri || AccessRights.PUBLIC]}
             onValueChange={(values) => setFieldValue('accessRights.uri', values.toString())}
