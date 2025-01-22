@@ -66,7 +66,6 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     losTheme: [],
     type: undefined,
     keywordList: { nb: [] },
-    keyword: [{ nb: '' }],
     conceptList: [],
     provenance: undefined,
     accrualPeriodicity: undefined,

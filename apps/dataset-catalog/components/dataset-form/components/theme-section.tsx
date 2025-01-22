@@ -1,9 +1,8 @@
 import { Dataset, DataTheme, LosTheme, Option } from '@catalog-frontend/types';
 import { LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { Combobox } from '@digdir/designsystemet-react';
+import { Combobox, Fieldset } from '@digdir/designsystemet-react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { FastField, useFormikContext } from 'formik';
-import styles from '../dataset-form.module.css';
 
 type Props = {
   losThemes: LosTheme[];
@@ -18,16 +17,18 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
 
   return (
     <>
-      <div className={styles.fieldContainer}>
-        <LabelWithHelpTextAndTag
-          tagTitle={localization.tag.required}
-          helpAriaLabel={localization.datasetForm.fieldLabel.euDataTheme}
-          helpText={localization.datasetForm.helptext.euDataTheme}
-          fieldId='euDataTheme-combobox'
-        >
-          {localization.datasetForm.fieldLabel.euDataTheme}
-        </LabelWithHelpTextAndTag>
-
+      <Fieldset
+        legend={
+          <LabelWithHelpTextAndTag
+            tagTitle={localization.tag.required}
+            helpAriaLabel={localization.datasetForm.fieldLabel.euDataTheme}
+            helpText={localization.datasetForm.helptext.euDataTheme}
+            fieldId='euDataTheme-combobox'
+          >
+            {localization.datasetForm.fieldLabel.euDataTheme}
+          </LabelWithHelpTextAndTag>
+        }
+      >
         <FastField
           id='euDataTheme-combobox'
           as={Combobox}
@@ -38,7 +39,7 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
           value={values.euDataTheme}
           onValueChange={(values: string[]) => setFieldValue('euDataTheme', values)}
           size='sm'
-          virtual
+          portal={false}
         >
           <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
           {euDataThemes &&
@@ -51,16 +52,19 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
               </Combobox.Option>
             ))}
         </FastField>
-      </div>
-      <div className={styles.fieldContainer}>
-        <LabelWithHelpTextAndTag
-          helpAriaLabel={localization.datasetForm.fieldLabel.losTheme}
-          helpText={localization.datasetForm.helptext.losTheme}
-          fieldId='losTheme-combobox'
-        >
-          {localization.datasetForm.fieldLabel.losTheme}
-        </LabelWithHelpTextAndTag>
+      </Fieldset>
 
+      <Fieldset
+        legend={
+          <LabelWithHelpTextAndTag
+            helpAriaLabel={localization.datasetForm.fieldLabel.losTheme}
+            helpText={localization.datasetForm.helptext.losTheme}
+            fieldId='losTheme-combobox'
+          >
+            {localization.datasetForm.fieldLabel.losTheme}
+          </LabelWithHelpTextAndTag>
+        }
+      >
         <FastField
           id='losTheme-combobox'
           as={Combobox}
@@ -70,7 +74,6 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
           placeholder={`${localization.search.search}...`}
           onValueChange={(values: string[]) => setFieldValue('losTheme', values)}
           size='sm'
-          virtual
         >
           <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
           {losThemes?.map((theme) => (
@@ -82,7 +85,7 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
             </Combobox.Option>
           ))}
         </FastField>
-      </div>
+      </Fieldset>
     </>
   );
 };
