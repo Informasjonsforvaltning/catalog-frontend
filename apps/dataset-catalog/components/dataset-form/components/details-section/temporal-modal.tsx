@@ -1,7 +1,7 @@
 import { DateRange } from '@catalog-frontend/types';
-import { AddButton, DeleteButton, EditButton, FormHeading } from '@catalog-frontend/ui';
+import { AddButton, DeleteButton, EditButton } from '@catalog-frontend/ui';
 import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Modal, Table, Textfield } from '@digdir/designsystemet-react';
+import { Button, Heading, Modal, Table, Textfield } from '@digdir/designsystemet-react';
 import { FastField, Formik, useFormikContext } from 'formik';
 import styles from '../../dataset-form.module.css';
 import { ReactNode, useRef, useState } from 'react';
@@ -28,7 +28,7 @@ export const TemporalModal = ({ values, label }: Props) => {
 
   return (
     <div className={styles.fieldContainer}>
-      {typeof label === 'string' ? <FormHeading>{label}</FormHeading> : label}
+      {typeof label === 'string' ? <Heading size='2xs'>{label}</Heading> : label}
       {values && values?.length > 0 && !hasNoFieldValues(values[0]) && (
         <Table
           size='sm'
@@ -103,7 +103,7 @@ const FieldModal = ({ template, type, onSuccess }: ModalProps) => {
               modalRef.current?.close();
             }}
           >
-            {({ errors, isSubmitting, submitForm, values, dirty }) => (
+            {({ isSubmitting, submitForm, values, dirty }) => (
               <>
                 <Modal.Header closeButton={false}>
                   {type === 'edit' ? `${localization.edit} ` : `${localization.add} `}

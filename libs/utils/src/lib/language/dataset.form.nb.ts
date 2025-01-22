@@ -73,11 +73,11 @@ export const datasetFormNb = {
   heading: {
     about: 'Om datasettet',
     losTheme: 'Tema',
-    distributions: 'Distribusjon og eksempeldata',
-    details: 'Detaljer om datasett og innhold',
+    distributions: 'Distribusjon',
+    details: 'Detaljer',
     relations: 'Relasjoner',
     concept: 'Begrep og emneord',
-    informationModel: 'I samsvar med informasjonsmodell',
+    informationModel: 'Informasjonsmodell',
     contactPoint: 'Kontaktpunkt',
   },
   accessRight: {

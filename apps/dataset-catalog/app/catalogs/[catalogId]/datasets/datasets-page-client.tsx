@@ -27,7 +27,7 @@ interface Props {
 
 type SortTypes = 'titleAsc' | 'titleDesc' | 'lastChanged';
 
-const DatasetsPageClient = ({ datasets, catalogId }: Props) => {
+const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) => {
   const [filteredDatasets, setFilteredDatasets] = useState<Dataset[]>(datasets);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
@@ -124,22 +124,26 @@ const DatasetsPageClient = ({ datasets, catalogId }: Props) => {
             <option value='titleDesc'>{localization.search.sortOptions.TITLE_ÅA}</option>
           </NativeSelect>
         </SearchHitsPageLayout.SearchRow>
-        <SearchHitsPageLayout.ButtonRow>
-          <LinkButton
-            variant='primary'
-            href={`/catalogs/${catalogId}/datasets/new`}
-          >
-            <PlusCircleIcon fontSize='1.2rem' />
-            {localization.datasetForm.button.addDataset}
-          </LinkButton>
-          <LinkButton
-            variant='secondary'
-            href={`/catalogs/${catalogId}/datasets/series/new`}
-          >
-            <PlusCircleIcon fontSize='1.2rem' />
-            {localization.datasetForm.button.addDatasetSeries}
-          </LinkButton>
-        </SearchHitsPageLayout.ButtonRow>
+
+        {hasWritePermission && (
+          <SearchHitsPageLayout.ButtonRow>
+            <LinkButton
+              variant='primary'
+              href={`/catalogs/${catalogId}/datasets/new`}
+            >
+              <PlusCircleIcon fontSize='1.2rem' />
+              {localization.datasetForm.button.addDataset}
+            </LinkButton>
+            <LinkButton
+              variant='secondary'
+              href={`/catalogs/${catalogId}/datasets/series/new`}
+            >
+              <PlusCircleIcon fontSize='1.2rem' />
+              {localization.datasetForm.button.addDatasetSeries}
+            </LinkButton>
+          </SearchHitsPageLayout.ButtonRow>
+        )}
+
         <SearchHitsPageLayout.LeftColumn>
           <div className={styles.leftColumn}>
             <Search

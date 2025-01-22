@@ -60,7 +60,7 @@ export const DistributionDetailsCard = ({
             </Heading>
             <li className={styles.list}>
               {distribution.format?.map((item: string, index) => {
-                const match = formats && formats.find((format: any) => format.uri === item);
+                const match = formats && formats.find((format: any) => format?.uri === item);
                 return (
                   <Tag
                     size='sm'
