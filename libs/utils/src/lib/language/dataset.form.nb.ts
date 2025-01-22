@@ -80,11 +80,6 @@ export const datasetFormNb = {
     informationModel: 'Informasjonsmodell',
     contactPoint: 'Kontaktpunkt',
   },
-  accessRight: {
-    public: 'Allmenn tilgang',
-    restricted: 'Betinget tilgang',
-    nonPublic: 'Ikke-allmenn tilgang',
-  },
   fieldLabel: {
     losTheme: 'LOS-tema(er)',
     euDataTheme: 'Hovedtema(er)',

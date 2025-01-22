@@ -7,9 +7,10 @@ import { AccessRightsUriTable } from './access-rights-uri-table';
 import styles from '../../dataset-form.module.css';
 
 const accessRightsOptions = [
-  { value: AccessRights.PUBLIC, label: localization.datasetForm.accessRight.public },
-  { value: AccessRights.RESTRICTED, label: localization.datasetForm.accessRight.restricted },
-  { value: AccessRights.NON_PUBLIC, label: localization.datasetForm.accessRight.nonPublic },
+  { value: '', label: localization.accessRight.none },
+  { value: AccessRights.PUBLIC, label: localization.accessRight.public },
+  { value: AccessRights.RESTRICTED, label: localization.accessRight.restricted },
+  { value: AccessRights.NON_PUBLIC, label: localization.accessRight.nonPublic },
 ];
 
 export const AccessRightFields = () => {
@@ -34,7 +35,7 @@ export const AccessRightFields = () => {
           <Combobox
             id='accessRights.uri-combobox'
             size='sm'
-            value={[values.accessRights?.uri || AccessRights.PUBLIC]}
+            value={[values?.accessRights?.uri || '']}
             onValueChange={(values) => setFieldValue('accessRights.uri', values.toString())}
             virtual
           >

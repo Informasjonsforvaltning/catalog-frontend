@@ -496,4 +496,11 @@ export const nb = {
   icon: {
     trash: 'Søppelikon',
   },
+
+  accessRight: {
+    public: 'Allmenn tilgang',
+    restricted: 'Betinget tilgang',
+    nonPublic: 'Ikke-allmenn tilgang',
+    none: 'Ingen tilgangsrettighet valgt',
+  },
 };

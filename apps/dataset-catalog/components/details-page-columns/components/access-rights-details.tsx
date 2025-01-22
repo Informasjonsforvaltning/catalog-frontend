@@ -46,9 +46,9 @@ export const AccessRightsDetails = ({ dataset }: Props) => {
 
   const accessRightsOptions = useMemo(
     () => [
-      { value: AccessRights.PUBLIC, label: localization.datasetForm.accessRight.public },
-      { value: AccessRights.RESTRICTED, label: localization.datasetForm.accessRight.restricted },
-      { value: AccessRights.NON_PUBLIC, label: localization.datasetForm.accessRight.nonPublic },
+      { value: AccessRights.PUBLIC, label: localization.accessRight.public },
+      { value: AccessRights.RESTRICTED, label: localization.accessRight.restricted },
+      { value: AccessRights.NON_PUBLIC, label: localization.accessRight.nonPublic },
     ],
     [],
   );

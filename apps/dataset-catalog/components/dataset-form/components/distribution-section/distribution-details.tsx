@@ -58,8 +58,8 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
                 size='2xs'
               >{`${localization.datasetForm.fieldLabel.mediaType}:`}</Heading>
               <ul className={styles.list}>
-                {distribution?.mediaType?.map((uri, index) => (
-                  <li key={`mediatype-${uri}-${index}`}>
+                {distribution?.mediaType?.map((uri) => (
+                  <li key={`mediatype-${uri}`}>
                     <Tag
                       size='sm'
                       color='info'
@@ -88,10 +88,10 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
                 </Table.Head>
                 <Table.Body>
                   {distribution.accessServiceUris &&
-                    distribution.accessServiceUris.map((uri, i) => {
+                    distribution.accessServiceUris.map((uri) => {
                       const match = selectedDataServices?.find((type) => type.uri === uri);
                       return match ? (
-                        <Table.Row key={`accessSerivce-row-${i}`}>
+                        <Table.Row key={`accessSerivce-row-${uri}`}>
                           <Table.Cell>
                             <Link href={getDataNorgeUri(match.id, 'data-services')}>
                               {getTranslateText(match?.title, language) || localization.noTitleAvailable}
@@ -99,9 +99,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
                           </Table.Cell>
                           <Table.Cell>{getTranslateText(match?.organization?.prefLabel)}</Table.Cell>
                         </Table.Row>
-                      ) : (
-                        <></>
-                      );
+                      ) : null;
                     })}
                 </Table.Body>
               </Table>
@@ -140,8 +138,8 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
                   </Table.Row>
                 </Table.Head>
                 <TableBody>
-                  {distribution?.conformsTo.map((conform, index) => (
-                    <Table.Row key={`conformsTo-${index}-${conform.uri}`}>
+                  {distribution?.conformsTo.map((conform) => (
+                    <Table.Row key={`conformsTo-${conform.uri}`}>
                       <Table.Cell>{getTranslateText(conform.prefLabel, language)}</Table.Cell>
                       <Table.Cell>{conform.uri}</Table.Cell>
                     </Table.Row>
