@@ -108,7 +108,7 @@ export async function getAllCatalogs() {
   return isEmpty
     ? null
     : {
-        datasetCatalogs: (datasetCatalogs._embedded?.catalogs as DatasetCatalog[]) ?? null,
+        datasetCatalogs: datasetCatalogs._embedded ? (datasetCatalogs._embedded?.catalogs as DatasetCatalog[]) : null,
         dataServiceCatalogs: _.isEmpty(dataServiceCatalogs) ? null : dataServiceCatalogs,
         conceptCatalogs: _.isEmpty(conceptCatalogs) ? null : conceptCatalogs,
         recordsOfProcessingActivities: _.isEmpty(recordsOfProcessingActivities) ? null : recordsOfProcessingActivities,
