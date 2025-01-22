@@ -98,7 +98,7 @@ export async function getAllCatalogs() {
   const { serviceCatalogs, publicServiceCatalogs } = await getServiceCatalogs();
 
   const isEmpty =
-    (!datasetCatalogs?._embedded || datasetCatalogs.length === 0) &&
+    (!datasetCatalogs?._embedded || datasetCatalogs?._embedded?.catalogs.length === 0) &&
     (!dataServiceCatalogs || dataServiceCatalogs.length === 0) &&
     (!conceptCatalogs || conceptCatalogs.length === 0) &&
     (!recordsOfProcessingActivities || recordsOfProcessingActivities.length === 0) &&
