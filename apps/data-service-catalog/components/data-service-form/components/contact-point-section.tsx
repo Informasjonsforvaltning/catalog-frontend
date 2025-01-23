@@ -1,6 +1,6 @@
 'use client';
 import { DataService } from '@catalog-frontend/types';
-import { HelpMarkdown, TitleWithTag } from '@catalog-frontend/ui';
+import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Textfield, Checkbox, CheckboxGroup } from '@digdir/designsystemet-react';
 import { FastField, useFormikContext } from 'formik';
@@ -38,17 +38,12 @@ export const ContactPointSection = () => {
         size='sm'
         value={selectedFields}
         legend={
-          <TitleWithTag
-            title={
-              <>
-                {localization.dataServiceForm.heading.contactPoint}
-                <HelpMarkdown title={'Hjelpetekst kontaktinformasjon'}>
-                  {localization.dataServiceForm.helptext.contactPoint}
-                </HelpMarkdown>
-              </>
-            }
+          <TitleWithHelpTextAndTag
+            helpText={localization.dataServiceForm.helptext.contactPoint}
             tagTitle={localization.tag.required}
-          />
+          >
+            {localization.dataServiceForm.heading.contactPoint}
+          </TitleWithHelpTextAndTag>
         }
         onChange={handleContactChange}
       >

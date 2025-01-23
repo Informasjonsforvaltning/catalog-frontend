@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react';
 import { useFormikContext } from 'formik';
-import { Box, HelpText, Link, Paragraph, Radio } from '@digdir/designsystemet-react';
+import { Box, Radio } from '@digdir/designsystemet-react';
 import { Concept } from '@catalog-frontend/types';
-import { TitleWithTag } from '@catalog-frontend/ui';
+import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
 
 export const StatusSection = ({ conceptStatuses }) => {
@@ -20,30 +20,11 @@ export const StatusSection = ({ conceptStatuses }) => {
       <Radio.Group
         size='sm'
         legend={
-          <TitleWithTag
-            title={
-              <>
-                {localization.conceptForm.fieldLabel.status}
-                <HelpText
-                  title={localization.conceptForm.fieldLabel.status}
-                  type='button'
-                  size='sm'
-                >
-                  <Paragraph size='sm'>
-                    Egenskapen brukes til å oppgi status til et begrep. Begrepsstatus er basert på EUs kontrollerte
-                    vokabular{' '}
-                    <Link
-                      href='https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/concept-status'
-                      target='_blank'
-                    >
-                      Concept status
-                    </Link>
-                    .
-                  </Paragraph>
-                </HelpText>
-              </>
-            }
-          />
+          <TitleWithHelpTextAndTag
+            helpText={localization.conceptForm.helpText.status}
+            >
+              {localization.conceptForm.fieldLabel.status}
+          </TitleWithHelpTextAndTag>            
         }
         value={value}
         onChange={setValue}

@@ -5,13 +5,11 @@ import {
   Fieldset,
   Textfield,
   Button,
-  HelpText,
   Radio,
   Box,
-  Paragraph,
   ErrorMessage,
 } from '@digdir/designsystemet-react';
-import { HelpMarkdown, TitleWithTag } from '@catalog-frontend/ui';
+import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import styles from './source-description-fieldset.module.scss';
 import _ from 'lodash';
@@ -53,19 +51,11 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
       <Radio.Group
         size='sm'
         legend={
-          <TitleWithTag
-            title={
-              <>
-                {localization.conceptForm.fieldLabel.relationToSource}
-                <HelpMarkdown
-                  aria-label={localization.conceptForm.fieldLabel.relationToSource}
-                  type='button'
-                >
-                  {localization.conceptForm.helpText.relationToSource}
-                </HelpMarkdown>
-              </>
-            }
-          />
+          <TitleWithHelpTextAndTag
+            helpText={localization.conceptForm.helpText.relationToSource}
+          >
+            {localization.conceptForm.fieldLabel.relationToSource}
+          </TitleWithHelpTextAndTag>  
         }
         value={relationToSource}
         onChange={setRelationToSource}
@@ -84,21 +74,13 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
         <Fieldset
           size='sm'
           legend={
-            <TitleWithTag
-              title={
-                <>
-                  {localization.conceptForm.fieldLabel.sources}
-                  <HelpMarkdown
-                    aria-label={localization.conceptForm.fieldLabel.sources}
-                    type='button'
-                  >
-                    {localization.conceptForm.helpText.sources}
-                  </HelpMarkdown>
-                </>
-              }
+            <TitleWithHelpTextAndTag
+              helpText={localization.conceptForm.helpText.sources}
               tagColor='second'
               tagTitle={localization.tag.required}
-            />
+            >
+              {localization.conceptForm.fieldLabel.sources}
+            </TitleWithHelpTextAndTag>  
           }
         >
           <FieldArray

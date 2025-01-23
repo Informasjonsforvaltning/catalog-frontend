@@ -76,6 +76,7 @@ export const nb = {
   newConcept: 'Nytt begrep',
   helpText: 'Hjelpetekst',
   publisher: 'Utgiver',
+  helpWithCompleting: 'Hjelp til utfylling',
 
   catalogType: {
     admin: 'Administrasjonsgrensesnitt',

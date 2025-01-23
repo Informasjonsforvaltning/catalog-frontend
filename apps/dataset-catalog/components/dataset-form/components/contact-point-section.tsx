@@ -1,11 +1,11 @@
 'use client';
 import { Dataset } from '@catalog-frontend/types';
-import { HelpMarkdown, TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Textfield, Checkbox, CheckboxGroup } from '@digdir/designsystemet-react';
 import { FastField, useFormikContext } from 'formik';
 import styles from '../dataset-form.module.css';
 import { useState } from 'react';
+import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 
 export const ContactPointSection = () => {
   const { setFieldValue, values, errors } = useFormikContext<Dataset>();
@@ -41,17 +41,12 @@ export const ContactPointSection = () => {
         // @ts-expect-error: the error exists
         error={Array.isArray(errors?.contactPoint) && errors.contactPoint.length > 0 ? undefined : errors?.contactPoint}
         legend={
-          <TitleWithTag
-            title={
-              <>
-                {localization.datasetForm.heading.contactPoint}
-                <HelpMarkdown aria-label={'Hjelpetekst kontaktinformasjon'}>
-                  {localization.datasetForm.helptext.contactPoint}
-                </HelpMarkdown>
-              </>
-            }
+          <TitleWithHelpTextAndTag
+            helpText={localization.datasetForm.helptext.contactPoint}
             tagTitle={localization.tag.required}
-          />
+          >
+            {localization.datasetForm.heading.contactPoint}
+          </TitleWithHelpTextAndTag>
         }
         onChange={handleContactChange}
       >

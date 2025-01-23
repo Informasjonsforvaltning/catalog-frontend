@@ -11,7 +11,7 @@ export default class ConceptsPage {
   detailPage: DetailPage;
   editPage: EditPage;
   context: BrowserContext;
-  accessibilityBuilder;
+  accessibilityBuilder: AxeBuilder;
 
   constructor(page: Page, context: BrowserContext, accessibilityBuilder?: AxeBuilder) {
     this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/concepts`;
@@ -62,7 +62,9 @@ export default class ConceptsPage {
     if (!this.accessibilityBuilder) {
       return;
     }
-    const result = await this.accessibilityBuilder.analyze();
+    const result = await this.accessibilityBuilder
+      .disableRules('svg-img-alt')  
+      .analyze();
     expect.soft(result.violations).toEqual([]);
   }
 

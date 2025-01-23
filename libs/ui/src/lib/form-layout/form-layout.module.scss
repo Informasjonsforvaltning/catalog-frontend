@@ -54,21 +54,26 @@
     &.active {
       background-color: var(--fds-semantic-surface-third-light);
       border-left: 4px solid var(--fds-semantic-surface-action-default);
-
+      
       :global(.fds-link) {
+        color: black;
+      }
+
+      & .required {
         color: black;
       }
     }
 
     & .required {
-      font-size: small;
-      color: var(--fds-semantic-border-neutral-default);
+      font-size: small;      
       font-style: italic;
+      color: var(--fds-colors-grey-700);
     }
 
     &:hover {
       border-left: 4px solid var(--fds-semantic-surface-action-default);
       background: var(--fds-semantic-surface-action-first-no_fill-hover);
+      color: var(--fds-colors-gray-800);
     }
 
     :global(.fds-link) {

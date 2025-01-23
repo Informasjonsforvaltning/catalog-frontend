@@ -1,5 +1,5 @@
 import { AccessRights, Dataset } from '@catalog-frontend/types';
-import { LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Card, Combobox, Fieldset } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
@@ -21,7 +21,7 @@ export const AccessRightFields = () => {
       <div>
         <Fieldset
           legend={
-            <LabelWithHelpTextAndTag
+            <TitleWithHelpTextAndTag
               helpAriaLabel={localization.access}
               helpText={localization.datasetForm.helptext.accessRights}
               tagColor='info'
@@ -29,7 +29,7 @@ export const AccessRightFields = () => {
               fieldId='accessRights.uri-combobox'
             >
               {localization.access}
-            </LabelWithHelpTextAndTag>
+            </TitleWithHelpTextAndTag>
           }
         >
           <Combobox

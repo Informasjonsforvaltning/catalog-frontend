@@ -138,7 +138,7 @@ const Header: FC<HeaderProps> = ({
                 >
                   <div>
                     <span>
-                      <PersonIcon fontSize='1.3rem' />
+                      <PersonIcon fontSize='1.3rem' role='presentation' />
                       {userDisplayName}
                     </span>
                     {userRole && <span>{userRole}</span>}

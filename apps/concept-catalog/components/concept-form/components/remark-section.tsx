@@ -1,5 +1,9 @@
 import { Box } from '@digdir/designsystemet-react';
-import { FormikLanguageFieldset, TextareaWithPrefix, TitleWithTag } from '@catalog-frontend/ui';
+import {
+  FormikLanguageFieldset,
+  TextareaWithPrefix,
+  TitleWithHelpTextAndTag,
+} from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 
 export const RemarkSection = () => {
@@ -7,13 +11,14 @@ export const RemarkSection = () => {
     <Box>
       <FormikLanguageFieldset
         name='merknad'
-        as={TextareaWithPrefix}      
+        as={TextareaWithPrefix}
         legend={
-          <TitleWithTag
-            title={localization.conceptForm.fieldLabel.remark}
+          <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
             tagColor='info'
-          />
+          >
+            {localization.conceptForm.fieldLabel.remark}
+          </TitleWithHelpTextAndTag>
         }
       />
     </Box>

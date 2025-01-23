@@ -7,7 +7,7 @@ import {
   FieldsetDivider,
   FormikLanguageFieldset,
   FormikReferenceDataCombobox,
-  LabelWithHelpTextAndTag,
+  TitleWithHelpTextAndTag,
   TextareaWithPrefix,
 } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
@@ -139,12 +139,12 @@ export const DistributionModal = ({
                           <Radio.Group
                             size='sm'
                             legend={
-                              <LabelWithHelpTextAndTag
+                              <TitleWithHelpTextAndTag
                                 helpText={localization.datasetForm.helptext.distributionType}
                                 helpAriaLabel={localization.type}
                               >
                                 {localization.type}
-                              </LabelWithHelpTextAndTag>
+                              </TitleWithHelpTextAndTag>
                             }
                             onChange={(val) => {
                               setDistributionType(val);
@@ -170,12 +170,12 @@ export const DistributionModal = ({
                             as={Textfield}
                             name='title'
                             legend={
-                              <LabelWithHelpTextAndTag
+                              <TitleWithHelpTextAndTag
                                 tagTitle={localization.tag.recommended}
                                 tagColor='info'
                               >
                                 {localization.title}
-                              </LabelWithHelpTextAndTag>
+                              </TitleWithHelpTextAndTag>
                             }
                           />
                           <FieldsetDivider />
@@ -186,13 +186,13 @@ export const DistributionModal = ({
                         as={Textfield}
                         size='sm'
                         label={
-                          <LabelWithHelpTextAndTag
+                          <TitleWithHelpTextAndTag
                             tagTitle={localization.tag.required}
                             helpAriaLabel={localization.datasetForm.fieldLabel.accessURL}
                             helpText={localization.datasetForm.helptext.accessURL}
                           >
                             {localization.datasetForm.fieldLabel.accessURL}
-                          </LabelWithHelpTextAndTag>
+                          </TitleWithHelpTextAndTag>
                         }
                         error={errors?.accessURL?.[0]}
                       />
@@ -202,12 +202,12 @@ export const DistributionModal = ({
                         as={Textfield}
                         size='sm'
                         label={
-                          <LabelWithHelpTextAndTag
+                          <TitleWithHelpTextAndTag
                             helpAriaLabel={localization.datasetForm.fieldLabel.downloadURL}
                             helpText={localization.datasetForm.helptext.downloadURL}
                           >
                             {localization.datasetForm.fieldLabel.downloadURL}
-                          </LabelWithHelpTextAndTag>
+                          </TitleWithHelpTextAndTag>
                         }
                         error={errors?.downloadURL?.[0]}
                       />
@@ -215,12 +215,12 @@ export const DistributionModal = ({
                       {!isLoadingSelectedDataServices && distributionType === 'distribution' && (
                         <Fieldset
                           legend={
-                            <LabelWithHelpTextAndTag
+                            <TitleWithHelpTextAndTag
                               helpAriaLabel={localization.datasetForm.fieldLabel.accessService}
                               helpText={localization.datasetForm.helptext.accessService}
                             >
                               {localization.datasetForm.fieldLabel.accessService}
-                            </LabelWithHelpTextAndTag>
+                            </TitleWithHelpTextAndTag>
                           }
                         >
                           <Combobox
@@ -252,14 +252,14 @@ export const DistributionModal = ({
 
                       <Fieldset
                         legend={
-                          <LabelWithHelpTextAndTag
+                          <TitleWithHelpTextAndTag
                             helpAriaLabel={localization.datasetForm.fieldLabel.format}
                             helpText={localization.datasetForm.helptext.fileType}
                             tagTitle={localization.tag.recommended}
                             tagColor='info'
                           >
                             {localization.datasetForm.fieldLabel.format}
-                          </LabelWithHelpTextAndTag>
+                          </TitleWithHelpTextAndTag>
                         }
                       >
                         <FormikReferenceDataCombobox
@@ -275,12 +275,12 @@ export const DistributionModal = ({
                       </Fieldset>
                       <Fieldset
                         legend={
-                          <LabelWithHelpTextAndTag
+                          <TitleWithHelpTextAndTag
                             helpAriaLabel={localization.datasetForm.fieldLabel.mediaType}
                             helpText={localization.datasetForm.helptext.mediaType}
                           >
                             {localization.datasetForm.fieldLabel.mediaType}
-                          </LabelWithHelpTextAndTag>
+                          </TitleWithHelpTextAndTag>
                         }
                       >
                         <FormikReferenceDataCombobox
@@ -300,14 +300,14 @@ export const DistributionModal = ({
                           <FieldsetDivider />
                           <Fieldset
                             legend={
-                              <LabelWithHelpTextAndTag
+                              <TitleWithHelpTextAndTag
                                 tagTitle={localization.tag.recommended}
                                 tagColor='info'
                                 helpAriaLabel={localization.datasetForm.fieldLabel.license}
                                 helpText={localization.datasetForm.helptext.license}
                               >
                                 {localization.datasetForm.fieldLabel.license}
-                              </LabelWithHelpTextAndTag>
+                              </TitleWithHelpTextAndTag>
                             }
                           >
                             <Combobox
@@ -339,12 +339,12 @@ export const DistributionModal = ({
                       <FormikLanguageFieldset
                         as={TextareaWithPrefix}
                         legend={
-                          <LabelWithHelpTextAndTag
+                          <TitleWithHelpTextAndTag
                             tagColor='info'
                             tagTitle={localization.tag.recommended}
                           >
                             {localization.description}
-                          </LabelWithHelpTextAndTag>
+                          </TitleWithHelpTextAndTag>
                         }
                         name='description'
                         requiredLanguages={['nb']}
@@ -352,12 +352,12 @@ export const DistributionModal = ({
 
                       <FastField
                         label={
-                          <LabelWithHelpTextAndTag
+                          <TitleWithHelpTextAndTag
                             helpAriaLabel={localization.datasetForm.fieldLabel.distributionLink}
                             helpText={localization.datasetForm.helptext.distributionLink}
                           >
                             {localization.datasetForm.fieldLabel.distributionLink}
-                          </LabelWithHelpTextAndTag>
+                          </TitleWithHelpTextAndTag>
                         }
                         as={Textfield}
                         name='page[0].uri'
@@ -372,12 +372,12 @@ export const DistributionModal = ({
 
                           <Fieldset
                             legend={
-                              <LabelWithHelpTextAndTag
+                              <TitleWithHelpTextAndTag
                                 helpAriaLabel={localization.datasetForm.fieldLabel.conformsTo}
                                 helpText={localization.datasetForm.helptext.distributionConformsTo}
                               >
                                 {localization.datasetForm.fieldLabel.conformsTo}
-                              </LabelWithHelpTextAndTag>
+                              </TitleWithHelpTextAndTag>
                             }
                           >
                             <FieldArray name='conformsTo'>

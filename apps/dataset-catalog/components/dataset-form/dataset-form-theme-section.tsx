@@ -1,7 +1,7 @@
 import { Dataset, DataTheme, LosTheme, Option } from '@catalog-frontend/types';
-import { FormContainer, TitleWithTag } from '@catalog-frontend/ui';
+import { FormContainer, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 
-import { Combobox, Spinner } from '@digdir/designsystemet-react';
+import { Combobox } from '@digdir/designsystemet-react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Field, useFormikContext } from 'formik';
 import styles from './dataset-form.module.css';
@@ -49,16 +49,18 @@ export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
       />
       <>
         <div className={styles.combobox}>
-          <TitleWithTag
-            title={localization.datasetForm.fieldLabel.losTheme}
-            tagTitle={localization.tag.recommended}
-            tagColor='info'
-          />
-
           <Field
             as={Combobox}
             name='losThemeList'
             value={values.losThemeList}
+            label={
+              <TitleWithHelpTextAndTag
+                tagTitle={localization.tag.recommended}
+                tagColor='info'
+              >
+                {localization.datasetForm.fieldLabel.losTheme}
+              </TitleWithHelpTextAndTag>
+            }
             multiple
             virtual
             filter={containsFilter}
@@ -84,14 +86,14 @@ export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
       />
       <>
         <div className={styles.combobox}>
-          <TitleWithTag
-            title={localization.datasetForm.fieldLabel.euTheme}
-            tagTitle={localization.tag.required}
-          />
-
           <Field
             as={Combobox}
             multiple
+            label={
+              <TitleWithHelpTextAndTag tagTitle={localization.tag.required}>
+                {localization.datasetForm.fieldLabel.euTheme}
+              </TitleWithHelpTextAndTag>
+            }
             filter={containsFilter}
             placeholder={`${localization.search.search}...`}
             error={errors.euThemeList}

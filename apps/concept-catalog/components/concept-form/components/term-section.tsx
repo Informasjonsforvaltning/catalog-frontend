@@ -1,5 +1,5 @@
-import { Box, HelpText, Paragraph } from '@digdir/designsystemet-react';
-import { FieldsetDivider, FormikLanguageFieldset, TitleWithTag } from '@catalog-frontend/ui';
+import { Box } from '@digdir/designsystemet-react';
+import { FieldsetDivider, FormikLanguageFieldset, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 
 export const TermSection = () => {
@@ -7,75 +7,43 @@ export const TermSection = () => {
     <Box>
       <FormikLanguageFieldset
         name='anbefaltTerm.navn'
-        errorFieldLabel={localization.conceptForm.fieldLabel.prefLabel}
+        errorMessage={localization.conceptForm.validation.languageRequired}
+        errorArgs={{ label: localization.conceptForm.fieldLabel.prefLabel }}
         legend={
-          <TitleWithTag
-            title={
-              <>
-                {localization.conceptForm.fieldLabel.prefLabel}
-                <HelpText
-                  title={localization.conceptForm.fieldLabel.prefLabel}
-                  type='button'
-                  size='sm'
-                >
-                  <Paragraph size='sm'>
-                    Termen blir sett på som best egnet for begrepet og skal finnes på både bokmål og nynorsk.
-                  </Paragraph>
-                </HelpText>
-              </>
-            }
+          <TitleWithHelpTextAndTag
+            helpText={localization.conceptForm.helpText.prefLabel}
             tagTitle={localization.tag.required}
-          />
+          >
+            {localization.conceptForm.fieldLabel.prefLabel}
+          </TitleWithHelpTextAndTag>
         }
         requiredLanguages={['nb', 'nn']}
       />
       <FieldsetDivider />
       <FormikLanguageFieldset
         name='tillattTerm'
-        errorFieldLabel={localization.conceptForm.fieldLabel.altLabel}
+        errorMessage={localization.conceptForm.validation.languageRequired}
+        errorArgs={{ label: localization.conceptForm.fieldLabel.altLabel }}
         legend={
-          <TitleWithTag
-            title={
-              <>
-                {localization.conceptForm.fieldLabel.altLabel}
-                <HelpText
-                  title={localization.conceptForm.fieldLabel.altLabel}
-                  type='button'
-                  size='sm'
-                >
-                  <Paragraph size='sm'>
-                    Termen blir sett på som best egnet for begrepet, og som blir brukt i tillegg til en anbefalt term.
-                  </Paragraph>
-                </HelpText>
-              </>
-            }
+          <TitleWithHelpTextAndTag
+            helpText={localization.conceptForm.helpText.altLabel}
             tagTitle={localization.tag.recommended}
             tagColor='info'
-          />
+          >
+            {localization.conceptForm.fieldLabel.altLabel}
+          </TitleWithHelpTextAndTag>
         }
         multiple
       />
       <FieldsetDivider />
       <FormikLanguageFieldset
         name='frarådetTerm'
-        errorFieldLabel={localization.conceptForm.fieldLabel.hiddenLabel}
+        errorMessage={localization.conceptForm.validation.languageRequired}
+        errorArgs={{ label: localization.conceptForm.fieldLabel.hiddenLabel }}
         legend={
-          <TitleWithTag
-            title={
-              <>
-                {localization.conceptForm.fieldLabel.hiddenLabel}
-                <HelpText
-                  title={localization.conceptForm.fieldLabel.hiddenLabel}
-                  type='button'
-                  size='sm'
-                >
-                  <Paragraph size='sm'>
-                    Term som er synonym med en anbefalt term, men merket med betegnelsesstatus som ikke ønsket.
-                  </Paragraph>
-                </HelpText>
-              </>
-            }
-          />
+          <TitleWithHelpTextAndTag helpText={localization.conceptForm.helpText.hiddenLabel}>
+            {localization.conceptForm.fieldLabel.hiddenLabel}
+          </TitleWithHelpTextAndTag>
         }
         multiple
       />

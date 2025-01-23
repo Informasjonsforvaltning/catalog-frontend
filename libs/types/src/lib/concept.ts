@@ -213,7 +213,7 @@ export interface ResponseEntity {
   publisher: Partial<Organization>;
   example: LocalizedStrings;
   subject?: Partial<ConceptSubject>[];
-  application?: LocalizedStrings[];
+  range?: LocalizedStrings[];
   harvest?: Partial<Harvest>;
   contactPoint?: Partial<ConceptContactPoint>;
   validFromIncluding?: string;

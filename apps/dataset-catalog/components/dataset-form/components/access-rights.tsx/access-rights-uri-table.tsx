@@ -6,7 +6,7 @@ import {
   FieldsetDivider,
   FormikLanguageFieldset,
   HelpMarkdown,
-  LabelWithHelpTextAndTag,
+  TitleWithHelpTextAndTag,
   FormHeading,
 } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
@@ -162,12 +162,12 @@ const FieldModal = ({ template, formType, onSuccess, initialType = 'legalBasisFo
                   <Radio.Group
                     size='sm'
                     legend={
-                      <LabelWithHelpTextAndTag
+                      <TitleWithHelpTextAndTag
                         helpText={localization.datasetForm.helptext.legalBasisType}
                         helpAriaLabel={localization.type}
                       >
                         {localization.type}
-                      </LabelWithHelpTextAndTag>
+                      </TitleWithHelpTextAndTag>
                     }
                     onChange={(val) => {
                       setLegalBasis(val);

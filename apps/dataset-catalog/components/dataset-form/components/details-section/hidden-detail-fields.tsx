@@ -1,6 +1,6 @@
 'use client';
 
-import { AddButton, FormikLanguageFieldset, LabelWithHelpTextAndTag, TextareaWithPrefix } from '@catalog-frontend/ui';
+import { AddButton, FormikLanguageFieldset, TitleWithHelpTextAndTag, TextareaWithPrefix } from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
 import { Combobox, Fieldset, Textfield } from '@digdir/designsystemet-react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
@@ -78,12 +78,12 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
                       name={`landingPage[${index}]`}
                       label={
                         arrayHelpers.form.values.landingPage < 1 ? (
-                          <LabelWithHelpTextAndTag
+                          <TitleWithHelpTextAndTag
                             helpAriaLabel={localization.datasetForm.fieldLabel.landingPage}
                             helpText={localization.datasetForm.helptext.landingPage}
                           >
                             {localization.datasetForm.fieldLabel.landingPage}
-                          </LabelWithHelpTextAndTag>
+                          </TitleWithHelpTextAndTag>
                         ) : (
                           ''
                         )
@@ -111,13 +111,13 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       >
         <Fieldset
           legend={
-            <LabelWithHelpTextAndTag
+            <TitleWithHelpTextAndTag
               helpText={localization.datasetForm.helptext.type}
               helpAriaLabel={localization.datasetForm.fieldLabel.type}
               fieldId='type-combobox'
             >
               {localization.datasetForm.fieldLabel.type}
-            </LabelWithHelpTextAndTag>
+            </TitleWithHelpTextAndTag>
           }
         >
           <FastField
@@ -142,13 +142,13 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       >
         <Fieldset
           legend={
-            <LabelWithHelpTextAndTag
+            <TitleWithHelpTextAndTag
               helpText={localization.datasetForm.helptext.provenance}
               helpAriaLabel={localization.datasetForm.fieldLabel.provenance}
               fieldId='provenance-combobox'
             >
               {localization.datasetForm.fieldLabel.provenance}
-            </LabelWithHelpTextAndTag>
+            </TitleWithHelpTextAndTag>
           }
         >
           <Combobox
@@ -171,13 +171,13 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       >
         <Fieldset
           legend={
-            <LabelWithHelpTextAndTag
+            <TitleWithHelpTextAndTag
               helpAriaLabel={localization.datasetForm.fieldLabel.accrualPeriodicity}
               helpText={localization.datasetForm.helptext.accrualPeriodicity}
               fieldId='accrualPeriodicity.uri-combobox'
             >
               {localization.datasetForm.fieldLabel.accrualPeriodicity}
-            </LabelWithHelpTextAndTag>
+            </TitleWithHelpTextAndTag>
           }
         >
           <Combobox
@@ -204,12 +204,12 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
           name='modified'
           type='date'
           label={
-            <LabelWithHelpTextAndTag
+            <TitleWithHelpTextAndTag
               helpAriaLabel={localization.datasetForm.fieldLabel.modified}
               helpText={localization.datasetForm.helptext.modified}
             >
               {localization.datasetForm.fieldLabel.modified}
-            </LabelWithHelpTextAndTag>
+            </TitleWithHelpTextAndTag>
           }
           size='sm'
         />
@@ -224,12 +224,12 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
           as={TextareaWithPrefix}
           name='hasCurrentnessAnnotation.hasBody'
           legend={
-            <LabelWithHelpTextAndTag
+            <TitleWithHelpTextAndTag
               helpAriaLabel={localization.datasetForm.fieldLabel.hasCurrentnessAnnotation}
               helpText={localization.datasetForm.helptext.hasCurrentnessAnnotation}
             >
               {localization.datasetForm.fieldLabel.hasCurrentnessAnnotation}
-            </LabelWithHelpTextAndTag>
+            </TitleWithHelpTextAndTag>
           }
         />
       </ToggleFieldButton>
@@ -240,12 +240,12 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         label={
           !_.isEmpty(values.conformsTo) &&
           _.some(values.conformsTo, (item) => !_.isUndefined(item)) && (
-            <LabelWithHelpTextAndTag
+            <TitleWithHelpTextAndTag
               helpAriaLabel={localization.datasetForm.fieldLabel.conformsTo}
               helpText={localization.datasetForm.helptext.conformsTo}
             >
               {localization.datasetForm.fieldLabel.conformsTo}
-            </LabelWithHelpTextAndTag>
+            </TitleWithHelpTextAndTag>
           )
         }
       />
@@ -259,12 +259,12 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
           as={TextareaWithPrefix}
           name='hasRelevanceAnnotation.hasBody'
           legend={
-            <LabelWithHelpTextAndTag
+            <TitleWithHelpTextAndTag
               helpAriaLabel={localization.datasetForm.fieldLabel.hasRelevanceAnnotation}
               helpText={localization.datasetForm.helptext.hasRelevanceAnnotation}
             >
               {localization.datasetForm.fieldLabel.hasRelevanceAnnotation}
-            </LabelWithHelpTextAndTag>
+            </TitleWithHelpTextAndTag>
           }
         />
       </ToggleFieldButton>
@@ -278,12 +278,12 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
           as={TextareaWithPrefix}
           name='hasCompletenessAnnotation.hasBody'
           legend={
-            <LabelWithHelpTextAndTag
+            <TitleWithHelpTextAndTag
               helpAriaLabel={localization.datasetForm.fieldLabel.hasCompletenessAnnotation}
               helpText={localization.datasetForm.helptext.hasCompletenessAnnotation}
             >
               {localization.datasetForm.fieldLabel.hasCompletenessAnnotation}
-            </LabelWithHelpTextAndTag>
+            </TitleWithHelpTextAndTag>
           }
         />
       </ToggleFieldButton>
@@ -297,12 +297,12 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
           as={TextareaWithPrefix}
           name='hasAccuracyAnnotation.hasBody'
           legend={
-            <LabelWithHelpTextAndTag
+            <TitleWithHelpTextAndTag
               helpAriaLabel={localization.datasetForm.fieldLabel.hasAccuracyAnnotation}
               helpText={localization.datasetForm.helptext.hasAccuracyAnnotation}
             >
               {localization.datasetForm.fieldLabel.hasAccuracyAnnotation}
-            </LabelWithHelpTextAndTag>
+            </TitleWithHelpTextAndTag>
           }
         />
       </ToggleFieldButton>
@@ -316,12 +316,12 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
           as={TextareaWithPrefix}
           name='hasAvailabilityAnnotation.hasBody'
           legend={
-            <LabelWithHelpTextAndTag
+            <TitleWithHelpTextAndTag
               helpAriaLabel={localization.datasetForm.fieldLabel.hasAvailabilityAnnotation}
               helpText={localization.datasetForm.helptext.hasAvailabilityAnnotation}
             >
               {localization.datasetForm.fieldLabel.hasAvailabilityAnnotation}
-            </LabelWithHelpTextAndTag>
+            </TitleWithHelpTextAndTag>
           }
         />
       </ToggleFieldButton>

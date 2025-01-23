@@ -1,5 +1,5 @@
 import { DataService } from '@catalog-frontend/types';
-import { FormikLanguageFieldset, LabelWithHelpTextAndTag, TextareaWithPrefix } from '@catalog-frontend/ui';
+import { FormikLanguageFieldset, TitleWithHelpTextAndTag, TextareaWithPrefix } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Textfield } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
@@ -13,13 +13,13 @@ export const TitleSection = () => {
         as={Textfield}
         requiredLanguages={['nb']}
         legend={
-          <LabelWithHelpTextAndTag
+          <TitleWithHelpTextAndTag
             tagTitle={localization.tag.required}
             helpText={localization.dataServiceForm.helptext.title}
             helpAriaLabel={localization.dataServiceForm.fieldLabel.title}
           >
             {localization.dataServiceForm.fieldLabel.title}
-          </LabelWithHelpTextAndTag>
+          </TitleWithHelpTextAndTag>
         }
       />
 
@@ -28,13 +28,13 @@ export const TitleSection = () => {
         as={TextareaWithPrefix}
         requiredLanguages={['nb']}
         legend={
-          <LabelWithHelpTextAndTag
+          <TitleWithHelpTextAndTag
             tagTitle={localization.tag.required}
             helpText={localization.dataServiceForm.helptext.description}
             helpAriaLabel={localization.dataServiceForm.fieldLabel.description}
           >
             {localization.dataServiceForm.fieldLabel.description}
-          </LabelWithHelpTextAndTag>
+          </TitleWithHelpTextAndTag>
         }
       />
     </>
