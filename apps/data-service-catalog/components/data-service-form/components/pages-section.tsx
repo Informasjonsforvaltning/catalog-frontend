@@ -1,5 +1,5 @@
 import { DataService } from '@catalog-frontend/types';
-import { AddButton, LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { AddButton, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Textfield } from '@digdir/designsystemet-react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
@@ -15,12 +15,11 @@ export const PagesSection = () => {
         as={Textfield}
         size='sm'
         label={
-          <LabelWithHelpTextAndTag
+          <TitleWithHelpTextAndTag
             helpText={localization.dataServiceForm.helptext.landingPage}
-            helpAriaLabel={localization.dataServiceForm.fieldLabel.landingPage}
           >
             {localization.dataServiceForm.fieldLabel.landingPage}
-          </LabelWithHelpTextAndTag>
+          </TitleWithHelpTextAndTag>
         }
         error={errors?.landingPage}
       />
@@ -40,12 +39,11 @@ export const PagesSection = () => {
                         name={`pages[${index}]`}
                         label={
                           index < 1 ? (
-                            <LabelWithHelpTextAndTag
-                              helpAriaLabel={localization.dataServiceForm.fieldLabel.pages}
+                            <TitleWithHelpTextAndTag
                               helpText={localization.dataServiceForm.helptext.pages}
                             >
                               {localization.dataServiceForm.fieldLabel.pages}
-                            </LabelWithHelpTextAndTag>
+                            </TitleWithHelpTextAndTag>
                           ) : (
                             ''
                           )
