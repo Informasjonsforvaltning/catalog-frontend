@@ -1,4 +1,4 @@
-name: Deploy to staging
+name: E2E testing
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    name: Test and build
+    name: Test
     if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
