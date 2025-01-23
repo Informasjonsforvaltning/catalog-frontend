@@ -4,7 +4,7 @@ import { Button, Combobox, Modal, Table } from '@digdir/designsystemet-react';
 import { useSearchDatasetsByUri, useSearchDatasetSuggestions } from '../../../../hooks/useSearchService';
 import { Formik, useFormikContext } from 'formik';
 import relations from '../../utils/relations.json';
-import { AddButton, DeleteButton, EditButton, FieldsetDivider, LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { AddButton, DeleteButton, EditButton, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { useState, useRef } from 'react';
 import { referenceSchema } from '../../utils/validation-schema';
 import _ from 'lodash';
@@ -38,12 +38,12 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
 
   return (
     <div className={styles.fieldContainer}>
-      <LabelWithHelpTextAndTag
+      <TitleWithHelpTextAndTag
         helpText={localization.datasetForm.helptext.references}
         helpAriaLabel={localization.datasetForm.fieldLabel.references}
       >
         {localization.datasetForm.fieldLabel.references}
-      </LabelWithHelpTextAndTag>
+      </TitleWithHelpTextAndTag>
       {values?.references && _.compact(values?.references).length > 0 && (
         <Table size='sm'>
           <Table.Head>

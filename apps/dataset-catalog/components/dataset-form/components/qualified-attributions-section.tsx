@@ -1,5 +1,5 @@
 import { Dataset } from '@catalog-frontend/types';
-import { LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { containsNonNumberRegex, localization, onlyNumbersRegex } from '@catalog-frontend/utils';
 import { Combobox, Fieldset } from '@digdir/designsystemet-react';
 import { useSearchEnheter, useSearchEnheterByOrgNmbs } from '../../../hooks/useEnhetsregister';
@@ -47,13 +47,13 @@ export const QualifiedAttributionsSection = () => {
   return (
     <Fieldset
       legend={
-        <LabelWithHelpTextAndTag
+        <TitleWithHelpTextAndTag
           helpAriaLabel={localization.datasetForm.fieldLabel.qualifiedAttributions}
           helpText={localization.datasetForm.helptext.qualifiedAttributions}
           fieldId='qualifiedAttributions-combobox'
         >
           {localization.datasetForm.fieldLabel.qualifiedAttributions}
-        </LabelWithHelpTextAndTag>
+        </TitleWithHelpTextAndTag>
       }
     >
       <Combobox

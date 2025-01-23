@@ -1,6 +1,6 @@
 'use client';
 import { Dataset } from '@catalog-frontend/types';
-import { LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
 import { Combobox, Fieldset } from '@digdir/designsystemet-react';
 import {
@@ -64,13 +64,13 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
       {!isLoading && (
         <Fieldset
           legend={
-            <LabelWithHelpTextAndTag
+            <TitleWithHelpTextAndTag
               helpAriaLabel={localization.datasetForm.fieldLabel.informationModelsFromFDK}
               helpText={localization.datasetForm.helptext.informationModelsFromFDK}
               fieldId={'informationModelsFromFDK-combobox'}
             >
               {localization.datasetForm.fieldLabel.informationModelsFromFDK}
-            </LabelWithHelpTextAndTag>
+            </TitleWithHelpTextAndTag>
           }
         >
           <Combobox
@@ -108,12 +108,12 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
         values={values.informationModel}
         fieldName={'informationModel'}
         label={
-          <LabelWithHelpTextAndTag
+          <TitleWithHelpTextAndTag
             helpAriaLabel={localization.datasetForm.fieldLabel.informationModel}
             helpText={localization.datasetForm.helptext.informationModel}
           >
             {localization.datasetForm.fieldLabel.informationModel}
-          </LabelWithHelpTextAndTag>
+          </TitleWithHelpTextAndTag>
         }
       />
     </>

@@ -2,19 +2,10 @@
 
 import React from 'react';
 import { FastField, FormikErrors, useFormikContext } from 'formik';
-import {
-  Box,
-  Checkbox,
-  Combobox,
-  HelpText,
-  Label,
-  Paragraph,
-  Textarea,
-  Textfield,
-} from '@digdir/designsystemet-react';
+import { Box, Checkbox, Combobox, Textarea, Textfield } from '@digdir/designsystemet-react';
 import { AssignedUser, CodeList, Concept, InternalField } from '@catalog-frontend/types';
-import { capitalizeFirstLetter, getTranslateText } from '@catalog-frontend/utils';
-import { TitleWithTag } from '@catalog-frontend/ui';
+import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
+import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import styles from '../../concept-form.module.scss';
 import { getParentPath } from '../../../../utils/codeList';
 
@@ -38,22 +29,9 @@ const renderInternalField = ({
   codeLists: CodeList[];
 }) => {
   const FieldLabel = () => (
-    <TitleWithTag
-      title={
-        <>
-          <Label size='sm'>{capitalizeFirstLetter(getTranslateText(internalField.label) as string)}</Label>
-          {getTranslateText(internalField.description) && (
-            <HelpText
-              title={getTranslateText(internalField.label) as string}
-              type='button'
-              size='sm'
-            >
-              <Paragraph size='sm'>{getTranslateText(internalField.description)}</Paragraph>
-            </HelpText>
-          )}
-        </>
-      }
-    />
+    <TitleWithHelpTextAndTag helpText={getTranslateText(internalField.description) as string}>
+      {capitalizeFirstLetter(getTranslateText(internalField.label) as string)}
+    </TitleWithHelpTextAndTag>
   );
 
   const name = `interneFelt[${internalField.id}].value`;
@@ -90,8 +68,9 @@ const renderInternalField = ({
       >
         <Checkbox
           value={internalField.id}
-          checked={fieldValue === 'true'}
+          checked={fieldValue === 'true'}       
           onChange={(e) => setFieldValue(name, e.target.checked ? 'true' : 'false')}
+          aria-label={`${internalField.label}, ja eller nei`}
         />
       </Checkbox.Group>
     );
@@ -156,20 +135,9 @@ export const InternalSection = ({ internalFields, userList, codeLists }: Interna
     <Box className={styles.internalSection}>
       <Combobox
         label={
-          <TitleWithTag
-            title={
-              <>
-                <Label size='sm'>Hvem skal begrepet tildeles?</Label>
-                <HelpText
-                  title={''}
-                  type='button'
-                  size='sm'
-                >
-                  <Paragraph size='sm'>Velg personen som skal ha ansvaret for å følge opp begrepet.</Paragraph>
-                </HelpText>
-              </>
-            }
-          />
+          <TitleWithHelpTextAndTag helpText='Velg personen som skal ha ansvaret for å følge opp begrepet.'>
+            Hvem skal begrepet tildeles?
+          </TitleWithHelpTextAndTag>
         }
         size='sm'
         value={
@@ -193,24 +161,9 @@ export const InternalSection = ({ internalFields, userList, codeLists }: Interna
       <FastField
         as={Textfield}
         label={
-          <TitleWithTag
-            title={
-              <>
-                <Label size='sm'>Forkortelse</Label>
-                <HelpText
-                  title={'Hjelpetekst forkortelse'}
-                  type='button'
-                  size='sm'
-                >
-                  <Paragraph size='sm'>
-                    En forkortelse er en kortform av et ord eller en uttrykk, laget ved å fjerne noen av bokstavene for
-                    å gjøre det enklere og raskere å skrive. Forkortelser brukes ofte for å gjøre teksten kortere og mer
-                    oversiktlig.
-                  </Paragraph>
-                </HelpText>
-              </>
-            }
-          />
+          <TitleWithHelpTextAndTag helpText={localization.conceptForm.helpText.abbreviation}>
+            {localization.conceptForm.fieldLabel.abbreviationLabel}
+          </TitleWithHelpTextAndTag>          
         }
         name='abbreviatedLabel'
         error={errors?.['abbreviatedLabel']}

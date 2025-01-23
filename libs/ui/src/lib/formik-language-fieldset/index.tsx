@@ -15,7 +15,7 @@ type LanuguageFieldsetProps = {
   legend?: ReactNode;
   name: string;
   errorMessage?: string;
-  errorFieldLabel: string;
+  errorArgs?: object;
   requiredLanguages?: Omit<ISOLanguage, 'no'>[];
   as?: typeof Textfield | typeof TextareaWithPrefix;
   multiple?: boolean;
@@ -27,7 +27,7 @@ export const FormikLanguageFieldset = ({
   legend,
   name,
   errorMessage,
-  errorFieldLabel,
+  errorArgs,
   requiredLanguages,
   as: renderAs = Textfield,
   multiple = false,
@@ -37,6 +37,7 @@ export const FormikLanguageFieldset = ({
 
   const handleAddLanguage = (lang: string) => {
     setFieldValue(`${name}.${lang}`, multiple ? [] : multiple ? [] : '');
+
   };
 
   const handleRemoveLanguage = (lang: string) => {
@@ -167,7 +168,7 @@ export const FormikLanguageFieldset = ({
           error
         >
           {errorMessage
-            ? `${localization.formatString(errorMessage, { label: errorFieldLabel, language: languagesWithError.join(', ') })}`
+            ? `${localization.formatString(errorMessage, { ...(errorArgs ?? {}), language: languagesWithError.join(', ') })}`
             : `This field (${languagesWithError.join(', ')}) is required`}
         </ErrorMessage>
       )}

@@ -1,5 +1,5 @@
 'use client';
-import { FieldsetDivider, LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Checkbox, Combobox } from '@digdir/designsystemet-react';
 import { useCallback, useState } from 'react';
@@ -83,14 +83,14 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
         onChange={(values) => setFieldValue('languageList', values)}
         value={values.languageList}
         legend={
-          <LabelWithHelpTextAndTag
+          <TitleWithHelpTextAndTag
             tagColor='info'
             tagTitle={localization.tag.recommended}
             helpAriaLabel={localization.datasetForm.fieldLabel.language}
             helpText={localization.datasetForm.helptext.language}
           >
             {localization.datasetForm.fieldLabel.language}
-          </LabelWithHelpTextAndTag>
+          </TitleWithHelpTextAndTag>
         }
         size='sm'
       >
@@ -117,7 +117,7 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
       <FieldsetDivider />
 
       <div className={styles.fieldContainer}>
-        <LabelWithHelpTextAndTag
+        <TitleWithHelpTextAndTag
           tagColor='info'
           tagTitle={localization.tag.recommended}
           helpAriaLabel={localization.datasetForm.fieldLabel.spatial}
@@ -125,7 +125,7 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
           fieldId='spatialList-combobox'
         >
           {localization.datasetForm.fieldLabel.spatial}
-        </LabelWithHelpTextAndTag>
+        </TitleWithHelpTextAndTag>
 
         <Combobox
           id='spatialList-combobox'
@@ -155,14 +155,14 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
       <TemporalModal
         values={values.temporal}
         label={
-          <LabelWithHelpTextAndTag
+          <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
             tagColor='info'
             helpText={localization.datasetForm.helptext.temporal}
             helpAriaLabel={localization.datasetForm.fieldLabel.temporal}
           >
             {localization.datasetForm.fieldLabel.temporal}
-          </LabelWithHelpTextAndTag>
+          </TitleWithHelpTextAndTag>
         }
       />
     </>

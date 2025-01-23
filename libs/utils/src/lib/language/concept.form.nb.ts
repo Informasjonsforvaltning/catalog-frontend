@@ -1,16 +1,32 @@
 export const conceptFormNb = {
   helpText: {
-    prefLabel: 'Termen blir sett på som best egnet for begrepet.',
+    abbreviation: `
+En forkortelse er en kortform av et ord eller en uttrykk, laget ved å fjerne noen av bokstavene for 
+å gjøre det enklere og raskere å skrive. Forkortelser brukes ofte for å gjøre teksten kortere og mer 
+oversiktlig.`,
+    altLabel: 'Termen blir sett på som best egnet for begrepet, og som blir brukt i tillegg til en anbefalt term.',
+    hiddenLabel: 'Term som er synonym med en anbefalt term, men merket med betegnelsesstatus som ikke ønsket.',
     definition: `
 Representasjon av et begrep ved et uttrykk som beskriver det og atskiller det fra relaterte begreper.
 
 - __Uten målgruppe:__ Når definisjonen er generell og passer for alle uten spesiell tilpasning. 
 - __Spesialister:__ For definisjoner med avansert fagterminologi eller innsikt som krever spesifikk kunnskap om emnet. 
 - __Allmenheten:__ For en bredere gruppe, der definisjonen er tilpasset for å være lett forståelig for folk uten spesialkunnskap.`,
+    definitionText: `
+Gi en kort og presis forklaring av begrepet. Definisjonen skal tydelig beskrive hva
+begrepet betyr, slik at leseren raskt kan forstå innholdet. Unngå forkortelser og
+fagspesifikke uttrykk hvis definisjonen er ment for en generell målgruppe.`,
+    devisionCriterion: `
+Inndelingskriterium er en type kjennetegn brukt til å inndele et overbegrep i underbegreper.
+
+Eksempel: ‘tilkopling til datamaskin’ blir brukt som inndelingskriterium for å dele det
+generiske begrepet ‘datamus’ i spesifikke begreper som ‘kablet mus’ og ‘trådløs mus’.`,
     contactInfo: `Egenskapen brukes til å oppgi kontaktpunkt som kan nås ved f.eks. spørsmål om begrepet.
 
 Det er mulig å velge flere kontaktpunkter (e-post, telefonnummer og kontaktskjema).
 `,
+    prefLabel: `Termen blir sett på som best egnet for begrepet og skal finnes på både bokmål og nynorsk.`,
+    valueRange: `Egenskapen brukes til å oppgi verdiområde, oppgitt som tekst og/eller referanse til der dette er spesifisert.`,
     relation: `
 Et begrep kan ha relasjoner til andre begreper. En relasjon består av to begreper pluss en
 betydning som kan uttrykkes med tekst eller type. Det finnes tre hovedgrupper av relasjoner:
@@ -39,7 +55,21 @@ __Egen definert:__ Innholdet er egenutviklet og basert på egne analyser eller v
 __Basert på kilde:__ Innholdet er inspirert av eller bygger på en spesifikk kilde, men inneholder omformulerte eller videreutviklede ideer.
 
 __Sitat fra kilde:__ Innholdet er et direkte sitat eller nøyaktig gjengivelse fra en kilde, og må derfor oppgis med nøyaktig kildehenvisning.`,
-    sources: `Du må ha minst én kilde, som kan bestå av en kildebeskrivelse, en URI, eller begge deler.`
+    sources: `Du må ha minst én kilde, som kan bestå av en kildebeskrivelse, en URI, eller begge deler.`,
+    status: `
+Egenskapen brukes til å oppgi status til et begrep. Begrepsstatus er basert på EUs kontrollerte
+vokabular <a href="https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/concept-status)" target="_blank">Concept status</a>.`,
+    subject: `
+Fagområde (spesialkunnskapsfelt) kan representere en akademisk disiplin, et bruksområde, et
+produkt, en tjenestekjede eller lignende.`,
+    versionNumber: `
+Versjonsnummeret følger formatet 'major.minor.patch', hvor:
+- __Major__ økes ved store endringer som ikke er bakoverkompatible.
+- __Minor__ økes ved nye funksjoner eller forbedringer som er bakoverkompatible.
+- __Patch__ økes ved feilrettinger og mindre justeringer.
+
+Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og tredje feilretting.`,
+    versionNote: 'Egenskapen brukes til å oppgi versjonsnoter til en versjon av et begrep. Egenskapen bør gjentas når teksten finnes på flere skriftspråk.'
   },
   section: {
     termTitle: 'Term',
@@ -52,11 +82,11 @@ __Sitat fra kilde:__ Innholdet er et direkte sitat eller nøyaktig gjengivelse f
     subjectSubtitle: 'Et fagområde er et spesialisert kunnskapsområde som begrepet tilhører.',
     exampleTitle: 'Eksempel',
     exampleSubtitle: 'Konkrete tilfeller av begrepet.',
-    applicationTitle: 'Verdiområde',
-    applicationSubtitle: 'Lovlig verdiområde for begrepet.'
+    valueRangeTitle: 'Verdiområde',
+    valueRangeSubtitle: 'Lovlig verdiområde for begrepet.'
   },  
   fieldLabel: {
-   
+    abbreviationLabel: 'Forkortelse',
     prefLabel: 'Anbefalt term',
     altLabel: 'Tillat term',
     hiddenLabel: 'Frarådet term',
@@ -66,7 +96,7 @@ __Sitat fra kilde:__ Innholdet er et direkte sitat eller nøyaktig gjengivelse f
     description: 'Beskrivelse',
     status: 'Begrepsstatus',
     versionNote: 'Versjonsnote',
-    definisjon: 'Definisjon',
+    definition: 'Definisjon',
     definitionTargetGroup: {
       definisjon: 'Uten målgruppe',
       definisjonForAllmennheten: 'Allmennheten', 
@@ -79,8 +109,10 @@ __Sitat fra kilde:__ Innholdet er et direkte sitat eller nøyaktig gjengivelse f
     },
     relationToSource: 'Forhold til kilde',
     sources: 'Kilder',
+    source: 'Kilde',
     relation: 'Relasjon',
     relationLevel: 'Nivå',
+    relationRole: 'Relasjonsrolle',
     relationTypes: {
       assosiativ: 'Assosiativ',
       generisk: 'Generisk',
@@ -99,7 +131,8 @@ __Sitat fra kilde:__ Innholdet er et direkte sitat eller nøyaktig gjengivelse f
     divisionCriterion: 'Inndelingskriterium',
     emailAddress: 'E-postadresse',
     phoneNumber: 'Telefonnummer',
-    contactForm: 'Kontaktskjema'
+    contactForm: 'Kontaktskjema',
+    versionNumber: 'Versjonsnummer'
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',

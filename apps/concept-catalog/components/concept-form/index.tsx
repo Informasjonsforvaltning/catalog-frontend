@@ -16,7 +16,7 @@ import { RemarkSection } from './components/remark-section';
 import { SubjectSection } from './components/subject-section';
 import { ExampleSection } from './components/example-section';
 import { RelationSection } from './components/relation-section';
-import { ApplicationSection } from './components/application-section';
+import { ValueRangeSection } from './components/value-range-section';
 import { StatusSection } from './components/status-section';
 import { VersionSection } from './components/version-section';
 import { PeriodSection } from './components/period-section';
@@ -222,11 +222,11 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     <ExampleSection />
                   </FormLayout.Section>
                   <FormLayout.Section
-                    id='application'
-                    title={localization.conceptForm.section.applicationTitle}
-                    subtitle={localization.conceptForm.section.applicationSubtitle}
+                    id='valueRange'
+                    title={localization.conceptForm.section.valueRangeTitle}
+                    subtitle={localization.conceptForm.section.valueRangeSubtitle}
                   >
-                    <ApplicationSection />
+                    <ValueRangeSection />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='relation'
@@ -255,8 +255,8 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='version'
-                    title='Versjonsnummer'
-                    subtitle='Versjonsnummer består av tall i tre ledd: major.minor.patch. Eks: 1.0.0'
+                    title='Versjon'
+                    subtitle='En versjon representerer en spesifikk utgave eller oppdatering av et begrep, som reflekterer eventuelle endringer i definisjon, kontekst eller bruk over tid.'
                   >
                     <VersionSection />
                   </FormLayout.Section>

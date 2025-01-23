@@ -131,8 +131,6 @@ export const RelationSection = ({ catalogId }) => {
         relationValue = rel.relatertBegrep;
       }
 
-      console.log("handleChangeRelation", relationValue, name, index);
-
       if (name) {
         if (index === undefined) {
           if (!values[name]) {
@@ -176,7 +174,7 @@ export const RelationSection = ({ catalogId }) => {
             <Table.Row>
               <Table.HeaderCell>Relasjon</Table.HeaderCell>
               <Table.HeaderCell>Relatert begrep</Table.HeaderCell>
-              <Table.HeaderCell></Table.HeaderCell>
+              <Table.HeaderCell><span className='hide-text'>Akjsoner</span></Table.HeaderCell>
             </Table.Row>
           </Table.Head>
           <Table.Body>

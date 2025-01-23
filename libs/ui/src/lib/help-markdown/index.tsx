@@ -20,8 +20,8 @@ export type HelpTextProps = {
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "color">;
 
 export const HelpMarkdown = forwardRef<HTMLButtonElement, HelpTextProps>(
-  function HelpText(
-    { placement = "right", severity = "info", children, ...rest },
+  function HelpMarkdown(
+    { placement = "right-end", severity = "info", children, ...rest },
     ref
   ) {
 
@@ -40,7 +40,7 @@ export const HelpMarkdown = forwardRef<HTMLButtonElement, HelpTextProps>(
               {children}
             </Markdown>
           ) : (
-            <>{children}</>            
+            children            
           )}
         </Popover.Content>
       </Popover>

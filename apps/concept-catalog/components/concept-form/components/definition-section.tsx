@@ -1,4 +1,4 @@
-import { Concept, Definisjon, ISOLanguage } from '@catalog-frontend/types';
+import { Concept, Definisjon, ISOLanguage, Kilde } from '@catalog-frontend/types';
 import {
   Box,
   Button,
@@ -6,6 +6,7 @@ import {
   ErrorMessage,
   Fieldset,
   Heading,
+  Link,
   Paragraph,
   Popover,
   Tag,
@@ -16,7 +17,7 @@ import { PencilWritingIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icon
 import { useState } from 'react';
 import { DefinitionModal } from './definition-modal';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { HelpMarkdown, TitleWithTag } from '@catalog-frontend/ui';
+import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 
 export const DefinitionSection = () => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
@@ -35,26 +36,27 @@ export const DefinitionSection = () => {
     };
   };
 
+  const sourcesTagText = (sources: Kilde[] | undefined) => {
+    if(!sources?.length) {
+      return `Ingen ${localization.conceptForm.fieldLabel.sources.toLowerCase()}`;
+    } else if(sources.length === 1) {
+      return `1 ${localization.conceptForm.fieldLabel.source.toLowerCase()}`;
+    } else {
+      return `${sources.length} ${localization.conceptForm.fieldLabel.sources.toLowerCase()}`;
+    }
+  };
+
   return (
     <Box>
       <Box className={styles.fieldSet}>
         <Fieldset
           legend={
-            <TitleWithTag
-              title={
-                <>
-                  Definisjon
-                  <HelpMarkdown
-                    aria-label={'Hjelpetekst definisjon'}
-                    type='button'
-                    placement='right-end'
-                  >
-                    {localization.conceptForm.helpText.definition}
-                  </HelpMarkdown>
-                </>
-              }
+            <TitleWithHelpTextAndTag
+              helpText={localization.conceptForm.helpText.definition}
               tagTitle={localization.tag.required}
-            />
+            >
+              Definisjon
+            </TitleWithHelpTextAndTag>
           }
         />
 
@@ -76,33 +78,45 @@ export const DefinitionSection = () => {
                       >
                         {localization.conceptForm.fieldLabel.definitionTargetGroupFull[name]}
                       </Heading>
-                      <Popover
-                        open={open[index]}
-                        onClose={() => setOpen({ ...open, [index]: false })}
-                        placement='top'
-                        size='md'
-                        variant='default'
-                      >
-                        <Popover.Trigger asChild>
-                          <Tag
-                            size='sm'
-                            color='second'
-                            onMouseEnter={() =>
-                              def.kildebeskrivelse?.kilde?.length && setOpen({ ...open, [index]: true })
-                            }
-                            onMouseOut={() => setOpen({ ...open, [index]: false })}
-                          >
-                            {`${def.kildebeskrivelse?.kilde?.length ? def.kildebeskrivelse?.kilde.length : 'Ingen'} ${localization.conceptForm.fieldLabel.sources.toLowerCase()}`}
-                          </Tag>
-                        </Popover.Trigger>
-                        <Popover.Content>
-                          <ul>
-                            {def.kildebeskrivelse?.kilde?.map((source, index) => (
-                              <li key={index}>{source.tekst || source.uri}</li>
-                            ))}
-                          </ul>
-                        </Popover.Content>
-                      </Popover>
+
+                      {def.kildebeskrivelse?.kilde?.length ? (
+                        <Popover
+                          open={open[index]}
+                          onClose={() => setOpen({ ...open, [index]: false })}
+                          placement='top'
+                          size='md'
+                          variant='default'
+                        >
+                          <Popover.Trigger asChild>
+                            <Link>
+                              <Tag
+                                size='sm'
+                                color='second'
+                                onMouseEnter={() =>
+                                  def.kildebeskrivelse?.kilde?.length && setOpen({ ...open, [index]: true })
+                                }
+                                onMouseOut={() => setOpen({ ...open, [index]: false })}
+                              >
+                                {sourcesTagText(def.kildebeskrivelse?.kilde)}
+                              </Tag>
+                            </Link>
+                          </Popover.Trigger>
+                          <Popover.Content>
+                            <ul>
+                              {def.kildebeskrivelse?.kilde?.map((source, index) => (
+                                <li key={index}>{source.tekst || source.uri}</li>
+                              ))}
+                            </ul>
+                          </Popover.Content>
+                        </Popover>
+                      ) : (
+                        <Tag
+                          size='sm'
+                          color='second'
+                        >
+                          {sourcesTagText(def.kildebeskrivelse?.kilde)}
+                        </Tag>
+                      )}
                     </div>
                     <div>
                       <DefinitionModal
@@ -186,7 +200,6 @@ export const DefinitionSection = () => {
       {Object.keys(errors).some((value) =>
         ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(value),
       ) && <ErrorMessage>Minst en definisjon må være definert!</ErrorMessage>}
-      
     </Box>
   );
 };

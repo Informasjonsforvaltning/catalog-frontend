@@ -13,23 +13,11 @@ export const VersionSection = () => {
         name='versjonsNote'
         as={TextareaWithPrefix}
         legend={
-          <TitleWithTag
-            title={
-              <>
-                {localization.conceptForm.fieldLabel.versionNote}
-                <HelpText
-                  title={localization.conceptForm.fieldLabel.versionNote}
-                  type='button'
-                  size='sm'
-                >
-                  <Paragraph size='sm'>
-                    Egenskapen brukes til å oppgi versjonsnoter til en versjon av et begrep. Egenskapen bør gjentas når
-                    teksten finnes på flere skriftspråk.
-                  </Paragraph>
-                </HelpText>
-              </>
-            }
-          />
+          <TitleWithHelpTextAndTag
+            helpText={localization.conceptForm.helpText.versionNote}
+          >
+            {localization.conceptForm.fieldLabel.versionNote}
+          </TitleWithHelpTextAndTag>  
         }
       />
        */}

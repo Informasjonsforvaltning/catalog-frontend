@@ -1,7 +1,12 @@
 import { ReactNode, useRef, useState } from 'react';
 import { Formik } from 'formik';
-import { Button, HelpText, Modal, Paragraph } from '@digdir/designsystemet-react';
-import { FieldsetDivider, FormikLanguageFieldset, TextareaWithPrefix, TitleWithTag } from '@catalog-frontend/ui';
+import { Button, Modal } from '@digdir/designsystemet-react';
+import {
+  FieldsetDivider,
+  FormikLanguageFieldset,
+  TextareaWithPrefix,
+  TitleWithHelpTextAndTag,
+} from '@catalog-frontend/ui';
 import { Definisjon } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
 import { SourceDescriptionFieldset } from '../source-description-fieldset';
@@ -28,7 +33,7 @@ export const DefinitionModal = ({ initialDefinition, header, trigger, onSucces }
         ref={modalRef}
         className={styles.dialog}
         style={{
-          overflow: 'visible'
+          overflow: 'visible',
         }}
       >
         <Formik
@@ -50,31 +55,18 @@ export const DefinitionModal = ({ initialDefinition, header, trigger, onSucces }
                 <Modal.Content className={styles.content}>
                   <FormikLanguageFieldset
                     name='tekst'
-                    errorFieldLabel='Definisjon'
+                    errorMessage={localization.conceptForm.validation.languageRequired}
+                    errorArgs={{ label: 'Definisjon' }}
                     as={TextareaWithPrefix}
                     requiredLanguages={['nb']}
                     legend={
-                      <TitleWithTag
-                        title={
-                          <>
-                            Definisjon
-                            <HelpText
-                              title={'Hjelpetekst definisjon'}
-                              type='button'
-                              size='sm'
-                              placement='right-end'
-                            >
-                              <Paragraph size='sm'>
-                                Gi en kort og presis forklaring av begrepet. Definisjonen skal tydelig beskrive hva
-                                begrepet betyr, slik at leseren raskt kan forstå innholdet. Unngå forkortelser og
-                                fagspesifikke uttrykk hvis definisjonen er ment for en generell målgruppe.
-                              </Paragraph>
-                            </HelpText>
-                          </>
-                        }
+                      <TitleWithHelpTextAndTag
+                        helpText={localization.conceptForm.helpText.definitionText}
                         tagTitle={localization.tag.required}
                         tagColor='warning'
-                      />
+                      >
+                        {localization.conceptForm.fieldLabel.definition}
+                      </TitleWithHelpTextAndTag>
                     }
                   />
                   <FieldsetDivider />

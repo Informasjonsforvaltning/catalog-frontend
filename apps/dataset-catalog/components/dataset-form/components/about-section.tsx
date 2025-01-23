@@ -1,4 +1,4 @@
-import { FormikLanguageFieldset, LabelWithHelpTextAndTag, TextareaWithPrefix } from '@catalog-frontend/ui';
+import { FormikLanguageFieldset, TitleWithHelpTextAndTag, TextareaWithPrefix } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Textfield } from '@digdir/designsystemet-react';
 import { FastField } from 'formik';
@@ -13,13 +13,13 @@ export const AboutSection = () => {
         as={Textfield}
         requiredLanguages={['nb']}
         legend={
-          <LabelWithHelpTextAndTag
+          <TitleWithHelpTextAndTag
             tagTitle={localization.tag.required}
             helpAriaLabel={localization.title}
             helpText={localization.datasetForm.helptext.title}
           >
             {localization.title}
-          </LabelWithHelpTextAndTag>
+          </TitleWithHelpTextAndTag>
         }
       />
 
@@ -27,13 +27,13 @@ export const AboutSection = () => {
         name='description'
         as={TextareaWithPrefix}
         legend={
-          <LabelWithHelpTextAndTag
+          <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.description}
             helpAriaLabel={localization.description}
             tagTitle={localization.tag.required}
           >
             {localization.description}
-          </LabelWithHelpTextAndTag>
+          </TitleWithHelpTextAndTag>
         }
       />
 
@@ -49,14 +49,14 @@ export const AboutSection = () => {
         type='date'
         name='issued'
         label={
-          <LabelWithHelpTextAndTag
+          <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
             helpText={localization.datasetForm.helptext.issued}
             helpAriaLabel={localization.datasetForm.fieldLabel.issued}
             tagColor='info'
           >
             {localization.datasetForm.fieldLabel.issued}
-          </LabelWithHelpTextAndTag>
+          </TitleWithHelpTextAndTag>
         }
       />
     </>

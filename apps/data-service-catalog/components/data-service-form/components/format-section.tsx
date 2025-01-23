@@ -1,5 +1,5 @@
 import { DataService } from '@catalog-frontend/types';
-import { FormikReferenceDataCombobox, LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { FormikReferenceDataCombobox, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Fieldset } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
@@ -41,14 +41,13 @@ export const FormatSection = ({ referenceDataEnv }: Props) => {
     <>
       <Fieldset
         legend={
-          <LabelWithHelpTextAndTag
-            helpAriaLabel={localization.dataServiceForm.fieldLabel.fileTypes}
+          <TitleWithHelpTextAndTag
             helpText={localization.dataServiceForm.helptext.fileTypes}
             tagTitle={localization.tag.recommended}
             tagColor='info'
           >
             {localization.dataServiceForm.fieldLabel.fileTypes}
-          </LabelWithHelpTextAndTag>
+          </TitleWithHelpTextAndTag>
         }
       >
         <FormikReferenceDataCombobox
@@ -64,12 +63,11 @@ export const FormatSection = ({ referenceDataEnv }: Props) => {
       </Fieldset>
       <Fieldset
         legend={
-          <LabelWithHelpTextAndTag
-            helpAriaLabel={localization.dataServiceForm.fieldLabel.mediaTypes}
+          <TitleWithHelpTextAndTag
             helpText={localization.dataServiceForm.helptext.mediaTypes}
           >
             {localization.dataServiceForm.fieldLabel.mediaTypes}
-          </LabelWithHelpTextAndTag>
+          </TitleWithHelpTextAndTag>
         }
       >
         <FormikReferenceDataCombobox

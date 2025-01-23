@@ -1,6 +1,6 @@
 import { Dataset, DataTheme, LosTheme, Option } from '@catalog-frontend/types';
-import { LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { Combobox, Fieldset } from '@digdir/designsystemet-react';
+import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { Combobox } from '@digdir/designsystemet-react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { FastField, useFormikContext } from 'formik';
 
@@ -17,75 +17,62 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
 
   return (
     <>
-      <Fieldset
-        legend={
-          <LabelWithHelpTextAndTag
+      <FastField
+        id='euDataTheme-combobox'
+        as={Combobox}
+        multiple
+        label={
+          <TitleWithHelpTextAndTag
             tagTitle={localization.tag.required}
-            helpAriaLabel={localization.datasetForm.fieldLabel.euDataTheme}
             helpText={localization.datasetForm.helptext.euDataTheme}
-            fieldId='euDataTheme-combobox'
           >
             {localization.datasetForm.fieldLabel.euDataTheme}
-          </LabelWithHelpTextAndTag>
+          </TitleWithHelpTextAndTag>
         }
+        filter={containsFilter}
+        placeholder={`${localization.search.search}...`}
+        error={errors.euDataTheme}
+        value={values.euDataTheme}
+        onValueChange={(values: string[]) => setFieldValue('euDataTheme', values)}
+        size='sm'
+        portal={false}
       >
-        <FastField
-          id='euDataTheme-combobox'
-          as={Combobox}
-          multiple
-          filter={containsFilter}
-          placeholder={`${localization.search.search}...`}
-          error={errors.euDataTheme}
-          value={values.euDataTheme}
-          onValueChange={(values: string[]) => setFieldValue('euDataTheme', values)}
-          size='sm'
-          portal={false}
-        >
-          <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-          {euDataThemes &&
-            euDataThemes.map((theme) => (
-              <Combobox.Option
-                key={theme.uri}
-                value={theme.uri}
-              >
-                {getTranslateText(theme.label)}
-              </Combobox.Option>
-            ))}
-        </FastField>
-      </Fieldset>
-
-      <Fieldset
-        legend={
-          <LabelWithHelpTextAndTag
-            helpAriaLabel={localization.datasetForm.fieldLabel.losTheme}
-            helpText={localization.datasetForm.helptext.losTheme}
-            fieldId='losTheme-combobox'
-          >
-            {localization.datasetForm.fieldLabel.losTheme}
-          </LabelWithHelpTextAndTag>
-        }
-      >
-        <FastField
-          id='losTheme-combobox'
-          as={Combobox}
-          value={values.losTheme}
-          multiple
-          filter={containsFilter}
-          placeholder={`${localization.search.search}...`}
-          onValueChange={(values: string[]) => setFieldValue('losTheme', values)}
-          size='sm'
-        >
-          <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-          {losThemes?.map((theme) => (
+        <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
+        {euDataThemes &&
+          euDataThemes.map((theme) => (
             <Combobox.Option
               key={theme.uri}
               value={theme.uri}
             >
-              {getTranslateText(theme.name)}
+              {getTranslateText(theme.label)}
             </Combobox.Option>
           ))}
-        </FastField>
-      </Fieldset>
+      </FastField>
+      <FastField
+        id='losTheme-combobox'
+        as={Combobox}
+        value={values.losTheme}
+        multiple
+        label={
+          <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.losTheme}>
+            {localization.datasetForm.fieldLabel.losTheme}
+          </TitleWithHelpTextAndTag>
+        }
+        filter={containsFilter}
+        placeholder={`${localization.search.search}...`}
+        onValueChange={(values: string[]) => setFieldValue('losTheme', values)}
+        size='sm'
+      >
+        <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
+        {losThemes?.map((theme) => (
+          <Combobox.Option
+            key={theme.uri}
+            value={theme.uri}
+          >
+            {getTranslateText(theme.name)}
+          </Combobox.Option>
+        ))}
+      </FastField>
     </>
   );
 };

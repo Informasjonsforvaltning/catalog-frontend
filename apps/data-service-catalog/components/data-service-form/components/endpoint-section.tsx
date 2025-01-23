@@ -1,5 +1,5 @@
 import { DataService } from '@catalog-frontend/types';
-import { AddButton, LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { AddButton, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Textfield } from '@digdir/designsystemet-react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
@@ -15,13 +15,13 @@ export const EndpointSection = () => {
         as={Textfield}
         size='sm'
         label={
-          <LabelWithHelpTextAndTag
+          <TitleWithHelpTextAndTag
             tagTitle={localization.tag.required}
             helpText={localization.dataServiceForm.helptext.endpoint}
             helpAriaLabel={localization.dataServiceForm.fieldLabel.endpoint}
           >
             {localization.dataServiceForm.fieldLabel.endpoint}
-          </LabelWithHelpTextAndTag>
+          </TitleWithHelpTextAndTag>
         }
         error={errors?.endpointUrl}
       />
@@ -41,12 +41,12 @@ export const EndpointSection = () => {
                         name={`endpointDescriptions[${index}]`}
                         label={
                           index < 1 ? (
-                            <LabelWithHelpTextAndTag
+                            <TitleWithHelpTextAndTag
                               helpAriaLabel={localization.dataServiceForm.fieldLabel.endpointDescriptions}
                               helpText={localization.dataServiceForm.helptext.endpointDescriptions}
                             >
                               {localization.dataServiceForm.fieldLabel.endpointDescriptions}
-                            </LabelWithHelpTextAndTag>
+                            </TitleWithHelpTextAndTag>
                           ) : (
                             ''
                           )

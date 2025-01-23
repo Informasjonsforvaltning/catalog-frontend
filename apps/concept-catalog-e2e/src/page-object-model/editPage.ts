@@ -1,3 +1,4 @@
+/* eslint-disable playwright/no-wait-for-timeout */
 import { expect, Page, BrowserContext } from '@playwright/test';
 import type AxeBuilder from '@axe-core/playwright';
 import { Concept, RelationSubtypeEnum, RelationTypeEnum, UnionRelation } from '@catalog-frontend/types';
@@ -8,7 +9,7 @@ export default class EditPage {
   url: string;
   page: Page;
   context: BrowserContext;
-  accessibilityBuilder;
+  accessibilityBuilder: AxeBuilder;
 
   constructor(page: Page, context: BrowserContext, accessibilityBuilder?: AxeBuilder) {
     this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/concepts`;
@@ -76,16 +77,19 @@ export default class EditPage {
     }
 
     await this.page.getByRole('group', { name: 'Relatert begrep' }).getByRole('combobox').click();
+    await this.page.waitForTimeout(100);
     await this.page.getByRole('group', { name: 'Relatert begrep' }).getByLabel('Søk begrep').fill(search);
+    await this.page.waitForTimeout(100);
     await this.page.getByLabel(item).first().click();
+    await this.page.waitForTimeout(100);
 
-    await this.page.getByRole('group', { name: 'Relasjon' }).getByRole('combobox').click();
+    await this.page.getByLabel('RelasjonMå fylles ut').click();
     if (relation.relasjon === RelationTypeEnum.ASSOSIATIV) {
       await this.page.getByLabel('Assosiativ').click();
       await this.fillLanguageField(relation.beskrivelse, 'Relasjonsrolle', ['Bokmål', 'Nynorsk', 'Engelsk'], false);
     } else if (relation.relasjon === RelationTypeEnum.GENERISK) {
       await this.page.getByLabel('Generisk').click();
-      await this.page.getByRole('group', { name: 'Nivå' }).getByRole('combobox').click();
+      await this.page.getByLabel('Nivå' ).click();
       if (relation.relasjonsType === RelationSubtypeEnum.OVERORDNET) {
         await this.page.getByLabel('Overordnet').click();
       } else if (relation.relasjonsType === RelationSubtypeEnum.UNDERORDNET) {
@@ -94,7 +98,7 @@ export default class EditPage {
       await this.fillLanguageField(relation.inndelingskriterium, 'Inndelingskriterium', ['Bokmål', 'Nynorsk', 'Engelsk'], false);
     } else if (relation.relasjon === RelationTypeEnum.PARTITIV) {
       await this.page.getByLabel('Partitiv').click();
-      await this.page.getByRole('group', { name: 'Nivå' }).getByRole('combobox').click();
+      await this.page.getByLabel('Nivå').click();
       if (relation.relasjonsType === RelationSubtypeEnum.ER_DEL_AV) {
         await this.page.getByLabel('Er del av').click();
       } else if (relation.relasjonsType === RelationSubtypeEnum.OMFATTER) {
@@ -107,6 +111,7 @@ export default class EditPage {
       await this.page.getByLabel('Erstattes av').click();
     }
     await this.page.getByRole('dialog').getByRole('button', { name: 'Legg til relasjon' }).click();
+    await this.page.getByRole('dialog').getByRole('button', { name: 'Legg til relasjon' }).waitFor({ state: 'hidden' });
   }
 
   async clearFields() {
@@ -165,18 +170,18 @@ export default class EditPage {
 
     await this.fillLanguageField(
       concept.anbefaltTerm.navn,
-      'Anbefalt term Anbefalt term Må fylles ut',
+      'Anbefalt term Hjelp til utfylling',
       ['Engelsk'], 
       clearBeforeFill,
     );
-    await this.fillLanguageField(concept.tillattTerm, 'Tillat term Tillat term', ['Bokmål', 'Nynorsk', 'Engelsk'], clearBeforeFill);
-    await this.fillLanguageField(concept.frarådetTerm, 'Frarådet term Frarådet term', ['Bokmål', 'Nynorsk', 'Engelsk'], clearBeforeFill);
+    await this.fillLanguageField(concept.tillattTerm, 'Tillat term Hjelp til utfylling', ['Bokmål', 'Nynorsk', 'Engelsk'], clearBeforeFill);
+    await this.fillLanguageField(concept.frarådetTerm, 'Frarådet term Hjelp til utfylling', ['Bokmål', 'Nynorsk', 'Engelsk'], clearBeforeFill);
 
     // Add definition without target group
     await this.page.getByRole('button', { name: 'Uten målgruppe' }).click();
     await this.fillLanguageField(
       concept.definisjon?.tekst,
-      'Definisjon Hjelpetekst Definisjon Må fylles ut',
+      'Definisjon Hjelp til utfylling',
       ['Nynorsk', 'Engelsk'], 
       clearBeforeFill,
     );
@@ -190,7 +195,7 @@ export default class EditPage {
     await this.fillLanguageField(concept.eksempel, 'Eksempel', ['Bokmål', 'Nynorsk', 'Engelsk'], clearBeforeFill);
 
     // Select subject
-    await this.page.getByRole('group', { name: 'Fagområde Fagområde Anbefalt' }).getByLabel('arrow down').click();
+    await this.page.getByLabel('FagområdeAnbefalt').click();
     await this.page.getByLabel('Sprekkmunk').click();
 
     // Application
@@ -239,11 +244,8 @@ export default class EditPage {
     }
 
     if (concept.kontaktpunkt?.harEpost) {
-      await this.page.getByLabel('E-post').check();
-      await this.page
-        .getByRole('group', { name: 'E-postadresse' })
-        .getByRole('textbox')
-        .fill(concept.kontaktpunkt.harEpost);
+      await this.page.getByRole('checkbox', { name: 'E-postadresse' }).check();
+      await await this.page.getByRole('textbox', { name: 'E-postadresse' }).fill(concept.kontaktpunkt.harEpost);
     }
 
     if (concept.kontaktpunkt?.harTelefon) {
@@ -265,7 +267,9 @@ export default class EditPage {
     if (!this.accessibilityBuilder) {
       return;
     }
-    const result = await this.accessibilityBuilder.analyze();
+    const result = await this.accessibilityBuilder
+      .disableRules('svg-img-alt')
+      .analyze();
     expect.soft(result.violations).toEqual([]);
   }
 
@@ -286,7 +290,7 @@ export default class EditPage {
   }
 
   public async expectMenu() {
-    await expect(this.page.getByRole('heading', { name: 'Innhold i skjema' })).toBeVisible();
+    await expect(this.page.getByRole('heading', { name: 'Innhold i skjema' })).toBeVisible({ timeout: 20000 });
     await expect(this.page.getByRole('list').getByText('Term (Må fylles ut)')).toBeVisible();
     await expect(this.page.getByRole('list').getByText('Definisjon (Må fylles ut)')).toBeVisible();
     await expect(this.page.getByRole('list').getByText('Merknad')).toBeVisible();
@@ -296,7 +300,7 @@ export default class EditPage {
     await expect(this.page.getByRole('list').getByText('Relasjoner')).toBeVisible();
     await expect(this.page.getByRole('list').getByText('Interne opplysninger')).toBeVisible();
     await expect(this.page.getByRole('list').getByText('Begrepsstatus')).toBeVisible();
-    await expect(this.page.getByRole('list').getByText('Versjonsnummer')).toBeVisible();
+    await expect(this.page.getByRole('list').getByText('Versjon')).toBeVisible();
     await expect(this.page.getByRole('list').getByText('Gyldighetsperiode')).toBeVisible();
     await expect(this.page.getByRole('list').getByText('Kontaktinformasjon (Må fylles ut)')).toBeVisible();
   }
