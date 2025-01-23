@@ -1,7 +1,7 @@
-import { getOrganization, getConcept, getChangeRequest } from '@catalog-frontend/data-access';
+import { getOrganization, getConcept, getChangeRequest, getConceptRevisions } from '@catalog-frontend/data-access';
 import { Organization, Concept, ChangeRequest } from '@catalog-frontend/types';
 import { BreadcrumbType, Breadcrumbs, DetailHeading } from '@catalog-frontend/ui';
-import { validUUID, localization, formatISO } from '@catalog-frontend/utils';
+import { validUUID, localization, formatISO, conceptIsHigherVersion } from '@catalog-frontend/utils';
 import jsonpatch from 'fast-json-patch';
 import sharedStyle from '../change-requests-page.module.css';
 import { Banner } from '../../../../components/banner';
@@ -36,13 +36,15 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
 
     const originalConcept =
       changeRequest.conceptId && validUUID(changeRequest.conceptId)
-        ? await getConcept(changeRequest.conceptId, `${session.accessToken}`)
-            .then((response) => {
-              return response.json();
-            })
-            .catch((error) => {
-              throw error;
-            })
+        ? await getConceptRevisions(`${changeRequest.conceptId}`, `${session.accessToken}`).then((response) => {
+            if (response.ok) {
+              return response.json().then((revisions: Concept[]) => {
+                return revisions.reduce(function (prev, current) {
+                  return conceptIsHigherVersion(prev, current) ? prev : current;
+                });
+              });
+            } else throw new Error('Error when searching for original concept');
+          })
         : undefined;
 
     const changeRequestAsConcept: Concept = jsonpatch.applyPatch(
@@ -79,10 +81,10 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
       })
     } - ${localization.concept.createdBy}: ${changeRequest.proposedBy?.name}`;
 
-    const headingTitle = changeRequest.conceptId ? (
+    const headingTitle = originalConcept?.id ? (
       <h1>
         <NextLink
-          href={`/${catalogId}/${changeRequest.conceptId}`}
+          href={`/${catalogId}/${originalConcept.id}`}
           passHref
           legacyBehavior
         >
