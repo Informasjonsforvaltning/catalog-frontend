@@ -1,6 +1,6 @@
-import { getConcept, getOrganization, searchChangeRequest } from '@catalog-frontend/data-access';
+import { getConceptRevisions, getOrganization, searchChangeRequest } from '@catalog-frontend/data-access';
 import { Organization, Concept, ChangeRequest } from '@catalog-frontend/types';
-import { localization } from '@catalog-frontend/utils';
+import { conceptIsHigherVersion, localization } from '@catalog-frontend/utils';
 import jsonpatch from 'fast-json-patch';
 import { RedirectType, redirect } from 'next/navigation';
 import ChangeRequestOrNewClient from './change-request-or-new-client';
@@ -24,24 +24,28 @@ const ChangeRequestOrNew = withReadProtectedPage(
     let originalConcept: Concept | undefined = undefined;
 
     if (conceptIdSearch) {
-      originalConcept = await getConcept(`${conceptIdSearch}`, `${session.accessToken}`).then((response) => {
+      originalConcept = await getConceptRevisions(`${conceptIdSearch}`, `${session.accessToken}`).then((response) => {
         if (response.ok) {
-          return response.json();
+          return response.json().then((revisions: Concept[]) => {
+            return revisions.reduce(function (prev, current) {
+              return conceptIsHigherVersion(prev, current) ? prev : current;
+            });
+          });
         } else if (response.status === 404) {
           return originalConcept;
         } else throw new Error('Error when searching for original concept');
       });
 
-        let existingChangeRequest: ChangeRequest | undefined = undefined;
+      let existingChangeRequest: ChangeRequest | undefined = undefined;
 
-        if (originalConcept?.originaltBegrep) {
-            [existingChangeRequest] = await searchChangeRequest(
-                catalogId,
-                `${originalConcept?.originaltBegrep}`,
-                session.accessToken,
-                'OPEN',
-            ).then((res) => res.json());
-        }
+      if (originalConcept?.originaltBegrep) {
+        [existingChangeRequest] = await searchChangeRequest(
+          catalogId,
+          `${originalConcept?.originaltBegrep}`,
+          session.accessToken,
+          'OPEN',
+        ).then((res) => res.json());
+      }
 
       if (existingChangeRequest?.id && existingChangeRequest?.status === 'OPEN') {
         redirect(`/${catalogId}/change-requests/${existingChangeRequest.id}/edit`, RedirectType.replace);

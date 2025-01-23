@@ -69,3 +69,22 @@ export const getConceptSubject = (concept: Concept, subjectCodeList?: CodeList):
 
   return ensureStringArray(getTranslateText(concept.fagområde)).join(' ');
 };
+
+export const conceptIsHigherVersion = (concept: Concept, other: Concept): boolean => {
+  const major = concept.versjonsnr?.major ?? 0;
+  const otherMajor = other.versjonsnr?.major ?? 0;
+
+  const minor = concept.versjonsnr?.minor ?? 0;
+  const otherMinor = other.versjonsnr?.minor ?? 0;
+
+  const patch = concept.versjonsnr?.patch ?? 0;
+  const otherPatch = other.versjonsnr?.patch ?? 0;
+
+  if (major === otherMajor && minor === otherMinor) {
+    return patch > otherPatch;
+  } else if (major === otherMajor) {
+    return minor > otherMinor;
+  } else {
+    return major > otherMajor;
+  }
+};
