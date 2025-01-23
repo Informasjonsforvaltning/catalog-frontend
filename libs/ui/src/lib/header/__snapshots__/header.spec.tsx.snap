@@ -11,8 +11,8 @@ exports[`Header should render successfully 1`] = `
         class="headerContainer"
       >
         <a
-          aria-label="Gå til hovedsiden"
           class="logo"
+          title="Gå til hovedsiden"
         >
           <svgrurl />
         </a>
