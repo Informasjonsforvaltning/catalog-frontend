@@ -68,7 +68,10 @@ const ConceptPage = withReadProtectedPage(
       session?.accessToken,
     );
 
-    const isValid = await conceptSchema({required: true, baseUri: 'http://localhost:4200'}).isValid(concept);
+    const isValid = await conceptSchema({
+      required: true,
+      baseUri: process.env.CONCEPT_CATALOG_GUI_BASE_URI ?? 'http://localhost:4200',
+    }).isValid(concept);
 
     const clientProps = {
       username,
