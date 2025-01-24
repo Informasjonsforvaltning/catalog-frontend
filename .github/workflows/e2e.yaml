@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
 
       - uses: nrwl/nx-set-shas@v4
-      - run: yarn install --frozen-lockfile
+      - run: yarn install --immutable
 
       - name: Caching Nx
         uses: actions/cache@v4
