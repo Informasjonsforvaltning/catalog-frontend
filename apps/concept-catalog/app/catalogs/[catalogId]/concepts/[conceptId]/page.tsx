@@ -70,7 +70,7 @@ const ConceptPage = withReadProtectedPage(
 
     const isValid = await conceptSchema({
       required: true,
-      baseUri: process.env.CONCEPT_CATALOG_GUI_BASE_URI ?? 'http://localhost:4200',
+      baseUri: process.env.NODE_ENV === 'production' ? 'http://localhost:8080' : 'http://localhost:4200',
     }).isValid(concept);
 
     const clientProps = {
