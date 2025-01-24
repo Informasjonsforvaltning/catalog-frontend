@@ -1,4 +1,4 @@
-import { Concept, Definisjon, ISOLanguage } from '@catalog-frontend/types';
+import { Concept, Definisjon, ISOLanguage, Kilde } from '@catalog-frontend/types';
 import {
   Box,
   Button,
@@ -6,6 +6,7 @@ import {
   ErrorMessage,
   Fieldset,
   Heading,
+  Link,
   Paragraph,
   Popover,
   Tag,
@@ -67,6 +68,16 @@ export const DefinitionSection = () => {
     };
   };
 
+  const sourcesText = (sources: Kilde[] | undefined) => {
+    if (!sources?.length) {
+      return `${localization.none} ${localization.conceptForm.fieldLabel.sources.toLowerCase()}`;
+    } else if (sources.length === 1) {
+      return `1 ${localization.conceptForm.fieldLabel.source.toLowerCase()}`;
+    } else {
+      return `${sources.length} ${localization.conceptForm.fieldLabel.sources.toLowerCase()}`;
+    }
+  };
+
   return (
     <Box>
       <Box className={styles.fieldSet}>
@@ -109,33 +120,44 @@ export const DefinitionSection = () => {
                       >
                         {localization.conceptForm.fieldLabel.definitionTargetGroupFull[name]}
                       </Heading>
-                      <Popover
-                        open={open[index]}
-                        onClose={() => setOpen({ ...open, [index]: false })}
-                        placement='top'
-                        size='md'
-                        variant='default'
-                      >
-                        <Popover.Trigger asChild>
-                          <Tag
-                            size='sm'
-                            color='second'
-                            onMouseEnter={() =>
-                              def.kildebeskrivelse?.kilde?.length && setOpen({ ...open, [index]: true })
-                            }
-                            onMouseOut={() => setOpen({ ...open, [index]: false })}
-                          >
-                            {`${def.kildebeskrivelse?.kilde?.length ? def.kildebeskrivelse?.kilde.length : 'Ingen'} ${localization.conceptForm.fieldLabel.sources.toLowerCase()}`}
-                          </Tag>
-                        </Popover.Trigger>
-                        <Popover.Content>
-                          <ul>
-                            {def.kildebeskrivelse?.kilde?.map((source, index) => (
-                              <li key={index}>{source.tekst || source.uri}</li>
-                            ))}
-                          </ul>
-                        </Popover.Content>
-                      </Popover>
+                      {def.kildebeskrivelse?.kilde?.length ? (
+                        <Popover
+                          open={open[index]}
+                          onClose={() => setOpen({ ...open, [index]: false })}
+                          placement='top'
+                          size='md'
+                          variant='default'
+                        >
+                          <Popover.Trigger asChild>
+                            <Link>
+                              <Tag
+                                size='sm'
+                                color='second'
+                                onMouseEnter={() =>
+                                  def.kildebeskrivelse?.kilde?.length && setOpen({ ...open, [index]: true })
+                                }
+                                onMouseOut={() => setOpen({ ...open, [index]: false })}
+                              >
+                                {sourcesText(def.kildebeskrivelse?.kilde)}
+                              </Tag>
+                            </Link>
+                          </Popover.Trigger>
+                          <Popover.Content>
+                            <ul>
+                              {def.kildebeskrivelse?.kilde?.map((source, index) => (
+                                <li key={index}>{source.tekst || source.uri}</li>
+                              ))}
+                            </ul>
+                          </Popover.Content>
+                        </Popover>
+                      ) : (
+                        <Tag
+                          size='sm'
+                          color='second'
+                        >
+                          {sourcesText(def.kildebeskrivelse?.kilde)}
+                        </Tag>
+                      )}
                     </div>
                     <div>
                       <DefinitionModal
