@@ -158,22 +158,21 @@ export const relationSchema = Yup.object().shape({
   relatertBegrep: Yup.string().required(),
 });
 
-const anbefaltTerm = Yup.object().shape({
-  navn: Yup.object().shape({
-    nb: Yup.string()
-      .required()
-      .label(`${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.nb})`),
-    nn: Yup.string()
-      .required()
-      .label(`${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.nn})`),
-    en: Yup.string()
-      .nullable()
-      .label(`${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.en})`),
-  }),
-});
+const prefLabelNynorsk = Yup.string()
+  .label(`${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.nn})`);
 
 export const conceptSchema = ({required, baseUri}) => Yup.object().shape({
-  anbefaltTerm,
+  anbefaltTerm: Yup.object().shape({
+    navn: Yup.object().shape({
+      nb: Yup.string()
+        .required()
+        .label(`${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.nb})`),
+      nn: required ? prefLabelNynorsk.required() : prefLabelNynorsk,
+      en: Yup.string()
+        .nullable()
+        .label(`${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.en})`),
+    }),
+  }),
   tillattTerm: tekstMedSpraakKodeArray(localization.conceptForm.fieldLabel.altLabel),
   frarådetTerm: tekstMedSpraakKodeArray(localization.conceptForm.fieldLabel.hiddenLabel),
   definisjon: definitionSchema(required),
@@ -253,7 +252,7 @@ export const conceptSchema = ({required, baseUri}) => Yup.object().shape({
 
         if (compareVersion({ major: 0, minor: 1, patch: 0 }, value as any) > 0) {
           return this.createError({
-            message: localization.formatString(localization.conceptForm.validation.version, { min: '0.0.x' }) as string,
+            message: localization.formatString(localization.conceptForm.validation.version, { min: '0.1.0' }) as string,
           });
         }
 
