@@ -2,9 +2,10 @@
 
 import React, { Children, PropsWithChildren, ReactNode, useRef, useState } from 'react';
 import styles from './form-layout.module.scss';
-import { Alert, Heading, Link, Paragraph } from '@digdir/designsystemet-react';
+import { Alert, Heading, Link, Paragraph, Tag } from '@digdir/designsystemet-react';
 import { useIntersectionObserver } from '../intersection-observer';
 import classNames from 'classnames';
+import { localization } from '@catalog-frontend/utils';
 
 type FormLayoutProps = {
   title?: ReactNode;
@@ -20,6 +21,7 @@ type SectionProps = {
   title: string;
   subtitle?: string;
   required?: boolean;
+  error?: boolean;
 } & PropsWithChildren;
 
 type OptionsProps = PropsWithChildren;
@@ -91,19 +93,40 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
       <div className={styles.grid}>
         <div
           className={styles.sideMenu}
-          style={{ height: `${childrenArray.length * 2.4479 + 2.95}rem` }}
+          style={{ height: `${sectionArray.length * 2.4479 + 2.95}rem` }}
         >
           <SideMenu heading='Innhold i skjema'>
             {sectionArray.map((child, index) => {
-              const { id, title, required } = child.props as SectionProps;
+              const { id, title, required, error } = child.props as SectionProps;
               return (
                 <MenuItem
                   key={`menu-item-${id}`}
                   active={activeSection === id}
                   required={required}
                 >
-                  <Link onClick={() => handleNavClick(id, index)}>
-                    {title} {required && <span className={styles.required}>(Må fylles ut)</span>}
+                  <Link
+                    onClick={() => handleNavClick(id, index)}
+                    className={styles.sideMenuItem}
+                  >
+                    <span>
+                      {title}{' '}
+                      {required && (
+                        <span
+                          className={styles.required}
+                          aria-label={localization.conceptForm.validation.required}
+                        >
+                          *
+                        </span>
+                      )}
+                    </span>
+                    {error && (
+                    <Tag
+                      size='sm'
+                      color='danger'
+                      style={{ scale: 0.8, margin: '-0.25rem 0' }}
+                    >
+                      {localization.error}
+                    </Tag>)}
                   </Link>
                 </MenuItem>
               );

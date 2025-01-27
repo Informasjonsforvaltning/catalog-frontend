@@ -1,0 +1,19 @@
+.fieldBox {
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 0.4rem;
+
+  & > *:first-child {
+    flex-grow: 1;
+  }
+
+  :global(.fds-textfield__prefix) {
+    width: 7rem;
+  }
+}
+
+.buttons {
+  margin-left: 0.5rem;
+  justify-content: flex-start;
+  white-space: nowrap;
+}

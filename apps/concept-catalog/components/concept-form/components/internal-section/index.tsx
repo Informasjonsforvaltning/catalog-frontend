@@ -5,9 +5,10 @@ import { FastField, FormikErrors, useFormikContext } from 'formik';
 import { Box, Checkbox, Combobox, Textarea, Textfield } from '@digdir/designsystemet-react';
 import { AssignedUser, CodeList, Concept, InternalField } from '@catalog-frontend/types';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { AddButton, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import styles from '../../concept-form.module.scss';
 import { getParentPath } from '../../../../utils/codeList';
+import { FormikMultivalueTextfield } from 'libs/ui/src/lib/formik-multivalue-textfield';
 
 export type InternalSectionProps = {
   internalFields: InternalField[];
@@ -68,7 +69,7 @@ const renderInternalField = ({
       >
         <Checkbox
           value={internalField.id}
-          checked={fieldValue === 'true'}       
+          checked={fieldValue === 'true'}
           onChange={(e) => setFieldValue(name, e.target.checked ? 'true' : 'false')}
           aria-label={`${internalField.label}, ja eller nei`}
         />
@@ -163,11 +164,23 @@ export const InternalSection = ({ internalFields, userList, codeLists }: Interna
         label={
           <TitleWithHelpTextAndTag helpText={localization.conceptForm.helpText.abbreviation}>
             {localization.conceptForm.fieldLabel.abbreviationLabel}
-          </TitleWithHelpTextAndTag>          
+          </TitleWithHelpTextAndTag>
         }
+        size='sm'
         name='abbreviatedLabel'
         error={errors?.['abbreviatedLabel']}
       />
+
+      <FormikMultivalueTextfield
+        label={
+          <TitleWithHelpTextAndTag helpText={localization.conceptForm.helpText.labels}>
+            {localization.conceptForm.fieldLabel.labels}
+          </TitleWithHelpTextAndTag>
+        }
+        name='merkelapp'
+        error={errors?.['merkelapp']}
+      />
+
       {internalFields?.map((internalField) => (
         <div key={internalField.id}>
           {renderInternalField({ internalField, values, setFieldValue, userList, codeLists })}

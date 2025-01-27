@@ -25,6 +25,10 @@ generiske begrepet ‘datamus’ i spesifikke begreper som ‘kablet mus’ og �
 
 Det er mulig å velge flere kontaktpunkter (e-post, telefonnummer og kontaktskjema).
 `,
+    labels: `
+Dette feltet lar deg legge inn én eller flere merkelapper for å kategorisere eller organisere begrepene dine. 
+Hver merkelapp fungerer som en "tag" og kan brukes til å finne og sortere begreper senere. For å legge til 
+flere merkelapper, skriv inn en tekst og trykk Enter eller trykk på __Legg til__.`,
     prefLabel: `Termen blir sett på som best egnet for begrepet og skal finnes på både bokmål og nynorsk.`,
     valueRange: `Egenskapen brukes til å oppgi verdiområde, oppgitt som tekst og/eller referanse til der dette er spesifisert.`,
     relation: `
@@ -132,7 +136,8 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     emailAddress: 'E-postadresse',
     phoneNumber: 'Telefonnummer',
     contactForm: 'Kontaktskjema',
-    versionNumber: 'Versjonsnummer'
+    versionNumber: 'Versjonsnummer',
+    labels: 'Merkelapp'
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
@@ -140,7 +145,7 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
   },
   validation: {
     minLength: 'Verdien må være minst {length} karakterer lang.',
-    required: 'Feltet er påkrevd.',
+    required: 'Feltet må fylles ut.',
     invalidUrl: `Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’ og inneholder et gyldig toppdomene (f.eks. ‘.no’).`,
     minOneSource: 'Du må ha minst en kilde',
     version: 'Versjon må være større en v{min}',
