@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { localization } from '@catalog-frontend/utils';
 import { Fieldset, Box, Paragraph, Textfield, ErrorMessage, Chip } from '@digdir/designsystemet-react';
 import { FastField, useFormikContext } from 'formik';
@@ -10,6 +10,7 @@ import { ISOLanguage, LocalizedStrings } from '@catalog-frontend/types';
 import { TextareaWithPrefix } from '../textarea-with-prefix';
 import { AddButton, DeleteButton } from '../button';
 import _ from 'lodash';
+import React from 'react';
 
 type LanuguageFieldsetProps = {
   legend?: ReactNode;
@@ -34,10 +35,20 @@ export const FormikLanguageFieldset = ({
 }: LanuguageFieldsetProps) => {
   const { errors, values, getFieldMeta, setFieldValue } = useFormikContext<Record<string, LocalizedStrings>>();
   const [textValue, setTextValue] = useState<Record<string, string>>({});
+  const [focus, setFocus] = useState<string>();
+  const languageRefs = useRef(
+    allowedLanguages.reduce(
+      (acc, lang) => {
+        acc[lang] = React.createRef<HTMLInputElement>();
+        return acc;
+      },
+      {} as Record<string, React.RefObject<HTMLInputElement>>,
+    ),
+  );
 
   const handleAddLanguage = (lang: string) => {
     setFieldValue(`${name}.${lang}`, multiple ? [] : multiple ? [] : '');
-
+    setFocus(lang);
   };
 
   const handleRemoveLanguage = (lang: string) => {
@@ -71,7 +82,13 @@ export const FormikLanguageFieldset = ({
   const languagesWithError = allowedLanguages
     .filter((lang) => _.get(errors, `${name}.${lang}`))
     .map((lang) => localization.language[lang]);
-  
+
+  useEffect(() => {
+    if (focus) {
+      languageRefs.current[focus].current?.focus();
+    }
+  }, [focus]);
+
   return (
     <Fieldset
       legend={legend}
@@ -81,8 +98,12 @@ export const FormikLanguageFieldset = ({
         <div key={lang}>
           {multiple ? (
             <>
-              <Box key={lang} className={styles.languageField}>
+              <Box
+                key={lang}
+                className={styles.languageField}
+              >
                 <Textfield
+                  ref={languageRefs.current[lang]}
                   size='sm'
                   aria-label={localization.language[lang]}
                   prefix={localization.language[lang]}
@@ -114,9 +135,13 @@ export const FormikLanguageFieldset = ({
               </Chip.Group>
             </>
           ) : (
-            <Box key={lang} className={styles.languageField}>
+            <Box
+              key={lang}
+              className={styles.languageField}
+            >
               <FastField
                 as={renderAs}
+                ref={languageRefs.current[lang]}
                 name={`${name}.${lang}`}
                 size='sm'
                 aria-label={localization.language[lang]}
