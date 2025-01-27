@@ -127,7 +127,6 @@ export default class EditPage {
     }
 
     // The table is replaced with a skeleton when loading, so wait for the table to be visible
-    await this.page.getByRole('cell', { name: 'Relasjon' }).waitFor({ state: 'visible' });
     const relTable = getParentLocator(this.page.getByRole('cell', { name: 'Relasjon' }), 3);
     while(await relTable.getByRole('row').count() === 0 || await relTable.getByRole('row').count() > 1) {
       if(await relTable.getByRole('row').count() > 1) {
