@@ -1,3 +1,5 @@
+"use client";
+
 import { Box, Chip, ErrorMessage, Textfield, TextfieldProps } from '@digdir/designsystemet-react';
 import { AddButton, DeleteButton } from '../button';
 import { forwardRef, RefAttributes, useState } from 'react';
