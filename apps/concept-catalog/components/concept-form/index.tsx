@@ -41,6 +41,7 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
           key={1}
           size='sm'
           severity='danger'
+          style={{ background: 'none', border: 'none', padding: 0 }}
         >
           Skjemaet inneholder feil eller manglende informasjon. Vennligst kontroller feltene markert med rød tekst og
           prøv igjen.
@@ -52,6 +53,7 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
           key={1}
           size='sm'
           severity='warning'
+          style={{ background: 'none', border: 'none', padding: 0 }}
         >
           Du har ulagrede endringer
         </Alert>,
@@ -96,36 +98,36 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
     interneFelt = {},
     ...rest
   }: Concept) => {
-    return ({
-        id,
-        anbefaltTerm,
-        definisjon,
-        definisjonForAllmennheten,
-        definisjonForSpesialister,
-        merknad,
-        merkelapp,
-        tillattTerm,
-        frarådetTerm,
-        eksempel,
-        fagområde,
-        fagområdeKoder,
-        statusURI,
-        omfang,
-        kontaktpunkt,
-        gyldigFom,
-        gyldigTom,
-        seOgså,
-        internSeOgså,
-        erstattesAv,
-        internErstattesAv,
-        assignedUser,
-        abbreviatedLabel,
-        begrepsRelasjon,
-        internBegrepsRelasjon,
-        versjonsnr,
-        interneFelt,
-        ...rest
-      });
+    return {
+      id,
+      anbefaltTerm,
+      definisjon,
+      definisjonForAllmennheten,
+      definisjonForSpesialister,
+      merknad,
+      merkelapp,
+      tillattTerm,
+      frarådetTerm,
+      eksempel,
+      fagområde,
+      fagområdeKoder,
+      statusURI,
+      omfang,
+      kontaktpunkt,
+      gyldigFom,
+      gyldigTom,
+      seOgså,
+      internSeOgså,
+      erstattesAv,
+      internErstattesAv,
+      assignedUser,
+      abbreviatedLabel,
+      begrepsRelasjon,
+      internBegrepsRelasjon,
+      versjonsnr,
+      interneFelt,
+      ...rest,
+    };
   };
 
   const subjectCodeList = codeListsResult?.codeLists?.find(
@@ -156,7 +158,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
   return (
     <Formik
       initialValues={mapPropsToValues(concept)}
-      validationSchema={conceptSchema({ required: !ignoreRequired, baseUri: ''})}
+      validationSchema={conceptSchema({ required: !ignoreRequired, baseUri: '' })}
       validateOnChange={isSaveButtonClicked}
       validateOnBlur={isSaveButtonClicked}
       onSubmit={async (values, { setSubmitting }) => {
@@ -164,8 +166,10 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
         setSubmitting(false);
       }}
     >
-      {({ dirty, isValid, isSubmitting, isValidating, submitForm }) => {
+      {({ errors, dirty, isValid, isSubmitting, isValidating, submitForm }) => {
         const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
+        const hasError = (fields: (keyof Concept)[]) => fields.some((field) => Object.keys(errors).includes(field));
+
         return (
           <>
             <div className='container'>
@@ -173,22 +177,24 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                 <FormLayout>
                   <FormLayout.Options>
                     <Paragraph>
-                    Som standard blir alle obligatoriske felt validert. For å kunne lagre uten å fylle ut obligatoriske felt, må du huke av i avkrysningsboksen nedenfor.
+                      Som standard blir alle obligatoriske felt validert. For å kunne lagre uten å fylle ut
+                      obligatoriske felt, må du huke av i avkrysningsboksen nedenfor.
                     </Paragraph>
                     <Checkbox
                       size='sm'
-                      value="ignoreRequired"
+                      value='ignoreRequired'
                       checked={ignoreRequired}
                       onChange={(e) => setIgnoreRequired(e.target.checked)}
                     >
                       Ignorer obligatoriske felt
-                      </Checkbox>
+                    </Checkbox>
                   </FormLayout.Options>
                   <FormLayout.Section
                     id='term'
                     title={localization.conceptForm.section.termTitle}
                     subtitle={localization.conceptForm.section.termSubtitle}
                     required
+                    error={hasError(['anbefaltTerm', 'tillattTerm', 'frarådetTerm'])}
                   >
                     <TermSection />
                   </FormLayout.Section>
@@ -197,6 +203,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     title={localization.conceptForm.section.definitionTitle}
                     subtitle={localization.conceptForm.section.definitionSubtitle}
                     required
+                    error={hasError(['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'])}
                   >
                     <DefinitionSection />
                   </FormLayout.Section>
@@ -204,6 +211,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     id='remark'
                     title={localization.conceptForm.section.remarkTitle}
                     subtitle={localization.conceptForm.section.remarkSubtitle}
+                    error={hasError(['merknad'])}
                   >
                     <RemarkSection />
                   </FormLayout.Section>
@@ -211,6 +219,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     id='subject'
                     title={localization.conceptForm.section.subjectTitle}
                     subtitle={localization.conceptForm.section.subjectSubtitle}
+                    error={hasError(['fagområdeKoder'])}
                   >
                     <SubjectSection codes={subjectCodeList?.codes} />
                   </FormLayout.Section>
@@ -218,6 +227,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     id='example'
                     title={localization.conceptForm.section.exampleTitle}
                     subtitle={localization.conceptForm.section.exampleTitle}
+                    error={hasError(['eksempel'])}
                   >
                     <ExampleSection />
                   </FormLayout.Section>
@@ -225,6 +235,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     id='valueRange'
                     title={localization.conceptForm.section.valueRangeTitle}
                     subtitle={localization.conceptForm.section.valueRangeSubtitle}
+                    error={hasError(['omfang'])}
                   >
                     <ValueRangeSection />
                   </FormLayout.Section>
@@ -232,6 +243,14 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     id='relation'
                     title='Relasjoner'
                     subtitle='Relasjoner til begrepet.'
+                    error={hasError([
+                      'begrepsRelasjon',
+                      'erstattesAv',
+                      'seOgså',                      
+                      'internBegrepsRelasjon',
+                      'internErstattesAv',
+                      'internSeOgså',
+                    ])}
                   >
                     <RelationSection catalogId={catalogId} />
                   </FormLayout.Section>
@@ -239,6 +258,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     id='internal'
                     title='Interne opplysninger'
                     subtitle='Opplysningene under er til intern bruk og vil ikke publiseres ut i Felles datakatalog.'
+                    error={hasError(['interneFelt'])}
                   >
                     <InternalSection
                       codeLists={codeListsResult.codeLists}
@@ -250,6 +270,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     id='status'
                     title='Begrepsstatus'
                     subtitle='Status for begrepet. Undersøk hvilke statuser som skal brukes i din virksomhet.'
+                    error={hasError(['statusURI'])}
                   >
                     <StatusSection conceptStatuses={conceptStatuses} />
                   </FormLayout.Section>
@@ -257,6 +278,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     id='version'
                     title='Versjon'
                     subtitle='En versjon representerer en spesifikk utgave eller oppdatering av et begrep, som reflekterer eventuelle endringer i definisjon, kontekst eller bruk over tid.'
+                    error={hasError(['versjonsnr'])}
                   >
                     <VersionSection />
                   </FormLayout.Section>
@@ -264,6 +286,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     id='period'
                     title='Gyldighetsperiode'
                     subtitle='Her registrerer du datoen som begrepet skal gjelde fra og med og til og med.'
+                    error={hasError(['gyldigFom', 'gyldigTom'])}
                   >
                     <PeriodSection />
                   </FormLayout.Section>
@@ -272,6 +295,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     title='Kontaktinformasjon'
                     subtitle='Her registrerer du datoen som begrepet skal gjelde fra og med og til og med.'
                     required
+                    error={hasError(['kontaktpunkt'])}
                   >
                     <ContactSection />
                   </FormLayout.Section>
@@ -291,7 +315,14 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                         submitForm();
                       }}
                     >
-                      {isSubmitting ? <Spinner title='Lagrer' size='sm' /> : 'Lagre'}
+                      {isSubmitting ? (
+                        <Spinner
+                          title='Lagrer'
+                          size='sm'
+                        />
+                      ) : (
+                        'Lagre'
+                      )}
                     </Button>
                     <Button
                       size='sm'

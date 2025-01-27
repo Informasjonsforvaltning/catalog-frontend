@@ -2,8 +2,8 @@
 
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { localization } from '@catalog-frontend/utils';
-import { Fieldset, Box, Paragraph, Textfield, ErrorMessage, Chip } from '@digdir/designsystemet-react';
-import { FastField, useFormikContext } from 'formik';
+import { Fieldset, Box, Paragraph, Textfield, ErrorMessage } from '@digdir/designsystemet-react';
+import { useFormikContext } from 'formik';
 
 import styles from './formik-language-fieldset.module.scss';
 import { ISOLanguage, LocalizedStrings } from '@catalog-frontend/types';
@@ -11,6 +11,8 @@ import { TextareaWithPrefix } from '../textarea-with-prefix';
 import { AddButton, DeleteButton } from '../button';
 import _ from 'lodash';
 import React from 'react';
+import { FormikMultivalueTextfield } from '../formik-multivalue-textfield';
+import FastFieldWithRef from '../formik-fast-field-with-ref';
 
 type LanuguageFieldsetProps = {
   legend?: ReactNode;
@@ -33,16 +35,15 @@ export const FormikLanguageFieldset = ({
   as: renderAs = Textfield,
   multiple = false,
 }: LanuguageFieldsetProps) => {
-  const { errors, values, getFieldMeta, setFieldValue } = useFormikContext<Record<string, LocalizedStrings>>();
-  const [textValue, setTextValue] = useState<Record<string, string>>({});
-  const [focus, setFocus] = useState<string>();
+  const { errors, getFieldMeta, setFieldValue } = useFormikContext<Record<string, LocalizedStrings>>();
+  const [focus, setFocus] = useState<string | null>();
   const languageRefs = useRef(
     allowedLanguages.reduce(
       (acc, lang) => {
-        acc[lang] = React.createRef<HTMLInputElement>();
+        acc[lang] = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
         return acc;
       },
-      {} as Record<string, React.RefObject<HTMLInputElement>>,
+      {} as Record<string, React.RefObject<HTMLInputElement | HTMLTextAreaElement>>,
     ),
   );
 
@@ -53,24 +54,7 @@ export const FormikLanguageFieldset = ({
 
   const handleRemoveLanguage = (lang: string) => {
     setFieldValue(`${name}.${lang}`, undefined);
-  };
-
-  const handleOnChangeTextValue = (value: string, lang: string) => {
-    setTextValue((prev) => ({ ...prev, ...{ [lang]: value } }));
-  };
-
-  const handleAddTextValue = (lang: string) => {
-    if (Boolean(textValue[lang]) === true) {
-      const textValues = [...(values?.[name]?.[lang] as string[]), textValue[lang]];
-      setFieldValue(`${name}.${lang}`, textValues);
-      setTextValue((prev) => ({ ...prev, ...{ [lang]: '' } }));
-    }
-  };
-
-  const handleRemoveTextValue = (index: number, lang: string) => {
-    const textValues = [...(values?.[name]?.[lang] as string[])];
-    textValues.splice(index, 1);
-    setFieldValue(`${name}.${lang}`, textValues);
+    setFocus(null);
   };
 
   const visibleLanguageFields = allowedLanguages.filter((lang) => {
@@ -85,7 +69,7 @@ export const FormikLanguageFieldset = ({
 
   useEffect(() => {
     if (focus) {
-      languageRefs.current[focus].current?.focus();
+      languageRefs.current[focus]?.current?.focus();
     }
   }, [focus]);
 
@@ -97,53 +81,22 @@ export const FormikLanguageFieldset = ({
       {visibleLanguageFields.map((lang) => (
         <div key={lang}>
           {multiple ? (
-            <>
-              <Box
-                key={lang}
-                className={styles.languageField}
-              >
-                <Textfield
-                  ref={languageRefs.current[lang]}
-                  size='sm'
-                  aria-label={localization.language[lang]}
-                  prefix={localization.language[lang]}
-                  value={textValue[lang]}
-                  onChange={(e) => handleOnChangeTextValue(e.target.value, lang)}
-                  onKeyDown={(e) => {
-                    if (e.code === 'Enter') {
-                      handleAddTextValue(lang);
-                    }
-                  }}
-                  onBlur={() => handleAddTextValue(lang)}
-                />
-                <AddButton
-                  variant='secondary'
-                  disabled={Boolean(textValue[lang]) === false}
-                  onClick={() => handleAddTextValue(lang)}
-                />
-                <DeleteButton onClick={() => handleRemoveLanguage(lang)} />
-              </Box>
-              <Chip.Group size='sm'>
-                {(values?.[name]?.[lang] as string[] | undefined)?.map((v, i) => (
-                  <Chip.Removable
-                    key={`chip-${i}`}
-                    onClick={() => handleRemoveTextValue(i, lang)}
-                  >
-                    {v}
-                  </Chip.Removable>
-                ))}
-              </Chip.Group>
-            </>
+            <FormikMultivalueTextfield
+              ref={languageRefs.current[lang] as React.RefObject<HTMLInputElement>}
+              name={`${name}.${lang}`}
+              prefix={localization.language[lang]}
+              showDeleteButton
+              onDeleteButtonClicked={() => handleRemoveLanguage(lang)}
+              />
           ) : (
             <Box
               key={lang}
               className={styles.languageField}
             >
-              <FastField
+              <FastFieldWithRef
                 as={renderAs}
                 ref={languageRefs.current[lang]}
-                name={`${name}.${lang}`}
-                size='sm'
+                name={`${name}.${lang}`}                
                 aria-label={localization.language[lang]}
                 error={Boolean(_.get(errors, `${name}.${lang}`))}
                 {...(renderAs === TextareaWithPrefix
