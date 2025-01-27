@@ -32,7 +32,7 @@ const tekstMedSpraakKodeArray = (label: string) =>
       en: Yup.array().of(Yup.string()).nullable().label(`${label} (${localization.language.en})`),
     });
 
-const kilde = Yup.array()
+const kilde = (required) => Yup.array()
   .of(
     Yup.object().shape({
       tekst: Yup.string()
@@ -69,7 +69,7 @@ const kilde = Yup.array()
   )
   .test({
     test(value) {
-      const isRequired = this.parent.forholdTilKilde !== 'egendefinert';
+      const isRequired = required && this.parent.forholdTilKilde !== 'egendefinert';
 
       if (isRequired && !value?.length) {
         return this.createError({
@@ -124,7 +124,7 @@ export const definitionSchema = (required) => Yup.object()
     kildebeskrivelse: Yup.object()
       .shape({
         forholdTilKilde: Yup.string(),
-        kilde,
+        kilde: kilde(required),
       })
       .nullable(),
   })
