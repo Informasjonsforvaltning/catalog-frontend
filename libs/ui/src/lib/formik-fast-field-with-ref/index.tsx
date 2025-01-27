@@ -1,7 +1,9 @@
-import React, { forwardRef } from "react";
+"use client";
+
+import { forwardRef } from "react";
 import { FastField, FastFieldAttributes } from "formik";
-import { TextareaWithPrefix } from "../textarea-with-prefix";
 import { Textfield } from "@digdir/designsystemet-react";
+import { TextareaWithPrefix } from "../textarea-with-prefix";
 
 type FastFieldWithRefProps = {
     as?: typeof Textfield | typeof TextareaWithPrefix;
