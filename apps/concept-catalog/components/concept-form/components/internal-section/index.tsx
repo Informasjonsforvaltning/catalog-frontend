@@ -5,10 +5,9 @@ import { FastField, FormikErrors, useFormikContext } from 'formik';
 import { Box, Checkbox, Combobox, Textarea, Textfield } from '@digdir/designsystemet-react';
 import { AssignedUser, CodeList, Concept, InternalField } from '@catalog-frontend/types';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { AddButton, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { FormikMultivalueTextfield, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import styles from '../../concept-form.module.scss';
 import { getParentPath } from '../../../../utils/codeList';
-import { FormikMultivalueTextfield } from 'libs/ui/src/lib/formik-multivalue-textfield';
 
 export type InternalSectionProps = {
   internalFields: InternalField[];
