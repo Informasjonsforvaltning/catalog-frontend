@@ -16,7 +16,7 @@ export type RelationModalProps = {
   onSucces: (rel: UnionRelation) => void;
 };
 
-const defaultRelation: UnionRelation = { relasjon: RelationTypeEnum.ASSOSIATIV, internal: true };
+const defaultRelation: UnionRelation = { relasjon: undefined, internal: true };
 
 export const RelationModal = ({ catalogId, initialRelation, initialRelatedConcept, header, trigger, onSucces }: RelationModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
