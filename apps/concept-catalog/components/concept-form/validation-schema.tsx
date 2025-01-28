@@ -17,7 +17,7 @@ const getRevisions = async ({ baseUri, catalogId, conceptId }) => {
 const isValidUrl = (value) => {
   try {
     const url = new URL(value);
-    return url.protocol === 'http:' || url.protocol === 'https:';
+    return url.protocol === 'https:';
   } catch (e) {
     return false;
   }
@@ -44,7 +44,7 @@ const kilde = (required) => Yup.array()
             if (isRequired && (!value || value.length < 3)) {
               return this.createError({
                 message: localization.formatString(localization.conceptForm.validation.minLength, {
-                  length: '3',
+                  length: 3,
                 }) as string,
               });
             }
@@ -179,7 +179,7 @@ export const conceptSchema = ({required, baseUri}) => Yup.object().shape({
   definisjonForAllmennheten: definitionSchema(required),
   definisjonForSpesialister: definitionSchema(required),
   fagområde: tekstMedSpraakKodeArray(localization.conceptForm.fieldLabel.subjectLabel),
-  statusURI: Yup.string().nullable(),
+  statusURI: Yup.string().nullable().label(localization.conceptForm.fieldLabel.status),
   omfang: Yup.object()
     .nullable()
     .shape({
