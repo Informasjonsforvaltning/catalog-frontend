@@ -92,7 +92,7 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
   fieldLabel: {
     abbreviationLabel: 'Forkortelse',
     prefLabel: 'Anbefalt term',
-    altLabel: 'Tillat term',
+    altLabel: 'Tillatt term',
     hiddenLabel: 'Frarådet term',
     subjectLabel: 'Fagområde',
     remark: 'Merknad',

@@ -1,7 +1,7 @@
-import { useFormikContext } from 'formik';
-import { Combobox } from '@digdir/designsystemet-react';
+import { FastField, useFormikContext } from 'formik';
+import { Combobox, Textfield } from '@digdir/designsystemet-react';
 import { Code, Concept } from '@catalog-frontend/types';
-import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { FormikLanguageFieldset, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import styles from '../concept-form.module.scss';
 import { getParentPath } from '../../../utils/codeList';
@@ -17,37 +17,55 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
   return (
     <div>
       <div className={styles.fieldSet}>
-        <Combobox
-          multiple
-          size='sm'
-          hideClearButton
-          label={
-            <TitleWithHelpTextAndTag
-              tagTitle={localization.tag.recommended}
-              tagColor='info'
-              helpText={localization.conceptForm.helpText.subject}
-            >
-              {localization.conceptForm.fieldLabel.subjectLabel}
-            </TitleWithHelpTextAndTag>
-          }
-          value={selected ?? []}
-          onValueChange={(value) => setFieldValue('fagområdeKoder', value)}
-          error={errors.fagområdeKoder}
-        >
-          <Combobox.Empty>Fant ingen treff</Combobox.Empty>
-          {codes?.map((code) => {
-            const parentPath = getParentPath(code, codes);
-            return (
-              <Combobox.Option
-                key={code.id}
-                value={code.id}
-                description={parentPath.length > 0 ? `Overordnet: ${parentPath.join(' - ')}` : ''}
+        {codes === undefined ? (
+          <FormikLanguageFieldset
+            name='fagområde'
+            errorMessage={localization.conceptForm.validation.languageRequired}
+            errorArgs={{ label: localization.conceptForm.fieldLabel.subject }}
+            legend={
+              <TitleWithHelpTextAndTag
+                tagTitle={localization.tag.recommended}
+                tagColor='info'
+                helpText={localization.conceptForm.helpText.subject}
               >
-                {code.name.nb}
-              </Combobox.Option>
-            );
-          })}
-        </Combobox>
+                {localization.conceptForm.fieldLabel.subjectLabel}
+              </TitleWithHelpTextAndTag>
+            }
+            multiple
+          />
+        ) : (
+          <Combobox
+            multiple
+            size='sm'
+            hideClearButton
+            label={
+              <TitleWithHelpTextAndTag
+                tagTitle={localization.tag.recommended}
+                tagColor='info'
+                helpText={localization.conceptForm.helpText.subject}
+              >
+                {localization.conceptForm.fieldLabel.subjectLabel}
+              </TitleWithHelpTextAndTag>
+            }
+            value={selected ?? []}
+            onValueChange={(value) => setFieldValue('fagområdeKoder', value)}
+            error={errors.fagområdeKoder}
+          >
+            <Combobox.Empty>Fant ingen treff</Combobox.Empty>
+            {codes?.map((code) => {
+              const parentPath = getParentPath(code, codes);
+              return (
+                <Combobox.Option
+                  key={code.id}
+                  value={code.id}
+                  description={parentPath.length > 0 ? `Overordnet: ${parentPath.join(' - ')}` : ''}
+                >
+                  {code.name.nb}
+                </Combobox.Option>
+              );
+            })}
+          </Combobox>
+        )}
       </div>
     </div>
   );
