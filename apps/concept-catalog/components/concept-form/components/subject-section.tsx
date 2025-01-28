@@ -20,6 +20,7 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
         <Combobox
           multiple
           size='sm'
+          hideClearButton
           label={
             <TitleWithHelpTextAndTag
               tagTitle={localization.tag.recommended}
