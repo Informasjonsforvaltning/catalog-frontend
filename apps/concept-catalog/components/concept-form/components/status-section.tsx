@@ -9,7 +9,7 @@ import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-
 
 export const StatusSection = ({ conceptStatuses }) => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
-  const [value, setValue] = useState<string>(values.statusURI ?? conceptStatuses[0]);
+  const [value, setValue] = useState<string>(values.statusURI ?? conceptStatuses[0].uri);
 
   useEffect(() => {
     setFieldValue('statusURI', value);
