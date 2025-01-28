@@ -20,7 +20,7 @@ type SourceDescriptionFieldsetProps = {
 
 const relationshipToSources = [
   {
-    label: 'Egen definert',
+    label: 'Egendefinert',
     value: 'egendefinert',
   },
   {
