@@ -3,6 +3,11 @@
   margin-bottom: 5rem;
 }
 
+ul.labels {
+  display: flex;
+  gap: 0.25rem;
+}
+
 .languages {
   margin-bottom: 2rem;
   display: inline-block;

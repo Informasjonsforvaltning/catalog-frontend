@@ -276,12 +276,12 @@ export const ConceptPageClient = ({
       ? [
           [
             localization.concept.label,
-            <ul key='label-list'>
+            <ul key='label-list' className={classes.labels}>
               {concept?.merkelapp?.map((label) => (
                 <li key={`label-${label}`}>
                   <Chip.Toggle
                     key={`label-${label}`}
-                    onClick={() => router.push(`/${catalogId}?filter.label=${label}`)}
+                    onClick={() => router.push(`/catalogs/${catalogId}?filter.label=${label}`)}
                   >
                     {label}
                   </Chip.Toggle>
