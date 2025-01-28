@@ -43,6 +43,7 @@ const SideMenu = ({ heading, children }: SideMenuProps) => {
           }
         })}
       </ol>
+      <div className={styles.sideMenuFooter}>* Påkrevd</div>
     </div>
   );
 };
@@ -130,7 +131,7 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
                   </Link>
                 </MenuItem>
               );
-            })}
+            })}            
           </SideMenu>
         </div>
         <div className={styles.content}>

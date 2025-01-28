@@ -100,6 +100,13 @@
   padding-bottom: 1rem;
 }
 
+.sideMenuFooter {
+  padding-top: var(--fds-spacing-2);
+  font-size: small;
+  font-style: italic;
+  color: var(--fds-colors-grey-700);
+}
+
 .section {
   display: flex;
   flex-direction: column;

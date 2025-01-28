@@ -177,8 +177,8 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                 <FormLayout>
                   <FormLayout.Options>
                     <Paragraph>
-                      Som standard blir alle obligatoriske felt validert. For å kunne lagre uten å fylle ut
-                      obligatoriske felt, må du huke av i avkrysningsboksen nedenfor.
+                      Som standard blir alle påkrevde felt validert. For å kunne lagre uten å fylle ut
+                      påkrevde felt, må du huke av i avkrysningsboksen nedenfor.
                     </Paragraph>
                     <Checkbox
                       size='sm'
@@ -186,7 +186,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                       checked={ignoreRequired}
                       onChange={(e) => setIgnoreRequired(e.target.checked)}
                     >
-                      Ignorer obligatoriske felt
+                      Ignorer påkrevde felt
                     </Checkbox>
                   </FormLayout.Options>
                   <FormLayout.Section
