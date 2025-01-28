@@ -7,7 +7,7 @@ import {
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
-
+import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { RedirectType, redirect } from 'next/navigation';
 
 type PageParams = {
@@ -20,16 +20,16 @@ type Render = (
 ) => Promise<any>;
 
 const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', render: Render) => {
-  return async ({ params }) => {
+  return async ({ params }: Params) => {
     const { catalogId, dataServiceId } = params;
 
     if (!validOrganizationNumber(catalogId)) {
-      redirect(`/notfound`, RedirectType.replace);
+      redirect(`/catalogs/notfound`, RedirectType.replace);
     }
 
     [dataServiceId].forEach((param) => {
       if (params[param] && !validUUID(params[param])) {
-        return redirect(`/notfound`, RedirectType.replace);
+        return redirect(`/catalogs/notfound`, RedirectType.replace);
       }
     });
 
@@ -41,12 +41,12 @@ const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', re
       session?.accessToken &&
       (hasOrganizationReadPermission(session?.accessToken, catalogId) || hasSystemAdminPermission(session.accessToken));
     if (!hasReadPermission) {
-      redirect(`/${catalogId}/no-access`, RedirectType.replace);
+      redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
 
     const hasWritePermission = session?.accessToken && hasOrganizationWritePermission(session.accessToken, catalogId);
     if (!hasWritePermission && permissions === 'write') {
-      redirect(`/${catalogId}/no-access`, RedirectType.replace);
+      redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
 
     const hasAdminPermission = session?.accessToken && hasOrganizationAdminPermission(session.accessToken, catalogId);
