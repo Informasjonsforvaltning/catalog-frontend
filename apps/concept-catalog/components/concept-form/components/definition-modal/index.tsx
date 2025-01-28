@@ -58,7 +58,6 @@ export const DefinitionModal = ({ initialDefinition, header, trigger, onSucces }
                     errorMessage={localization.conceptForm.validation.languageRequired}
                     errorArgs={{ label: 'Definisjon' }}
                     as={TextareaWithPrefix}
-                    requiredLanguages={['nb']}
                     legend={
                       <TitleWithHelpTextAndTag
                         helpText={localization.conceptForm.helpText.definitionText}
