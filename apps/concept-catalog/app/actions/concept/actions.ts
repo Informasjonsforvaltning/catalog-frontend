@@ -17,6 +17,8 @@ const metaDataFieldsToOmit = [
   'ansvarligVirksomhet',
   'revisjonAvSistPublisert',
   'erSistPublisert',
+  'sistPublisertId',
+  'gjeldendeRevisjon',
   'originaltBegrep',
   'id',
   'revisjonAv'
@@ -130,7 +132,6 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
     'definisjon.kildebeskrivelse.kilde[].uri',
     'definisjonForAllmennheten.kildebeskrivelse.kilde[].uri',
     'definisjonForSpesialister.kildebeskrivelse.kilde[].uri',
-    'fagområdeKoder',
     'gyldigFom',
     'gyldigTom',
     'kontaktpunkt.harEpost',
@@ -148,7 +149,6 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
       ...values
     })
       .omit(metaDataFieldsToOmit)
-      .omitBy(_.isNull)
       .value()
   );
 

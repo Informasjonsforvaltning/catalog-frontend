@@ -85,6 +85,7 @@ export const FormikLanguageFieldset = ({
               ref={languageRefs.current[lang] as React.RefObject<HTMLInputElement>}
               name={`${name}.${lang}`}
               prefix={localization.language[lang]}
+              aria-label={localization.language[lang]}
               showDeleteButton
               onDeleteButtonClicked={() => handleRemoveLanguage(lang)}
               />

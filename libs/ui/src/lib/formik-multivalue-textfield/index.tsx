@@ -13,8 +13,7 @@ type FormikMultivalueTextfieldProps = {
   showError?: boolean;
   showDeleteButton?: boolean;
   onDeleteButtonClicked?: () => void;
-} & TextfieldProps &
-  RefAttributes<HTMLInputElement>;
+} & TextfieldProps;
 
 export const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueTextfieldProps>(
   ({ className, name, showError, showDeleteButton, onDeleteButtonClicked, ...props }, ref) => {

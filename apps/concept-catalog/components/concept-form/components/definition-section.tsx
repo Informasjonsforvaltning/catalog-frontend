@@ -182,7 +182,7 @@ export const DefinitionSection = () => {
                         variant='tertiary'
                         size='sm'
                         color='danger'
-                        onClick={() => setFieldValue(name, undefined)}
+                        onClick={() => setFieldValue(name, null)}
                       >
                         <TrashIcon
                           title='Slett'
