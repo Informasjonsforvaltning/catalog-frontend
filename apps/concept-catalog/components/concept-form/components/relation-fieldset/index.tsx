@@ -206,7 +206,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
           >
             <Radio value='internal'>Søk i egen katalog</Radio>
             <Radio value='external'>Søk på data.norge.no</Radio>
-            <Radio value='custom'>Egen definert</Radio>
+            <Radio value='custom'>Egendefinert</Radio>
           </Radio.Group>
           {(relatedConceptType === 'internal') && (
             <Combobox

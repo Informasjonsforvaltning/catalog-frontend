@@ -184,7 +184,7 @@ export default class EditPage {
       ['Bokmål', 'Nynorsk', 'Engelsk'], 
       clearBeforeFill,
     );
-    await this.page.getByRole('group', { name: 'Forhold til kilde' }).getByLabel('Egen definert').click();
+    await this.page.getByRole('group', { name: 'Forhold til kilde' }).getByLabel('Egendefinert').click();
     await this.page.getByRole('button', { name: 'Legg til definisjon' }).click();
 
     // Add remark
