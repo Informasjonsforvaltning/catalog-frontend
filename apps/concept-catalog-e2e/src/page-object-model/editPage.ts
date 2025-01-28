@@ -181,7 +181,7 @@ export default class EditPage {
     await this.fillLanguageField(
       concept.definisjon?.tekst,
       'Definisjon Hjelp til utfylling',
-      ['Nynorsk', 'Engelsk'], 
+      ['Bokmål', 'Nynorsk', 'Engelsk'], 
       clearBeforeFill,
     );
     await this.page.getByRole('group', { name: 'Forhold til kilde' }).getByLabel('Egen definert').click();
@@ -290,8 +290,8 @@ export default class EditPage {
 
   public async expectMenu() {
     await expect(this.page.getByRole('heading', { name: 'Innhold i skjema' })).toBeVisible({ timeout: 20000 });
-    await expect(this.page.getByRole('list').getByText('Term (Må fylles ut)')).toBeVisible();
-    await expect(this.page.getByRole('list').getByText('Definisjon (Må fylles ut)')).toBeVisible();
+    await expect(this.page.getByRole('list').getByText('Term *')).toBeVisible();
+    await expect(this.page.getByRole('list').getByText('Definisjon *')).toBeVisible();
     await expect(this.page.getByRole('list').getByText('Merknad')).toBeVisible();
     await expect(this.page.getByRole('list').getByText('Fagområde')).toBeVisible();
     await expect(this.page.getByRole('list').getByText('Eksempel')).toBeVisible();
@@ -301,6 +301,6 @@ export default class EditPage {
     await expect(this.page.getByRole('list').getByText('Begrepsstatus')).toBeVisible();
     await expect(this.page.getByRole('list').getByText('Versjon')).toBeVisible();
     await expect(this.page.getByRole('list').getByText('Gyldighetsperiode')).toBeVisible();
-    await expect(this.page.getByRole('list').getByText('Kontaktinformasjon (Må fylles ut)')).toBeVisible();
+    await expect(this.page.getByRole('list').getByText('Kontaktinformasjon *')).toBeVisible();
   }
 }

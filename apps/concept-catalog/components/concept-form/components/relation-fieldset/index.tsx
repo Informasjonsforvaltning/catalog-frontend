@@ -149,7 +149,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
 
   const handleRelationTypeChange = (value: string[]) => {
     setFieldValue('relasjon', value[0]);
-    setFieldValue('relasjonsType', undefined);
+    setFieldValue('relasjonsType', null);
   };
 
   const handleRelationSubtypeChange = (value: string[]) => {
