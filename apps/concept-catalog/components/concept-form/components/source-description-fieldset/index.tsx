@@ -97,7 +97,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
                           name={`${name}.kilde.${index}.tekst`}
                           aria-label={''}
                           placeholder='Kildebeskrivelse'
-                          error={errors?.[name]?.kilde[index]?.tekst}
+                          error={errors?.[name]?.kilde?.[index]?.tekst}
                         />
                       </td>
                       <td>
@@ -107,7 +107,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
                           name={`${name}.kilde.${index}.uri`}
                           aria-label={''}
                           placeholder='https://kilde.no'
-                          error={errors?.[name]?.kilde[index]?.uri}
+                          error={errors?.[name]?.kilde?.[index]?.uri}
                         />
                       </td>
                       <td>
