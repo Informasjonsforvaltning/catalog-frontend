@@ -185,13 +185,13 @@ export const ConceptPageClient = ({
         className={classes.publicationStateHeader}
       >
         {localization.publicationState.state}
-        {isValid ? (
+        {isValid || isPublished ? (
           <HelpMarkdown
             aria-label='Info publisering'
             severity='info'
           >
-            Viktig! Når et begrep er publisert, kan det verken slettes eller avpubliseres, men kun endres. Sørg derfor for at alle
-            opplysninger er korrekte før publisering.
+            {`Viktig! Når et begrep er publisert, kan det verken slettes eller avpubliseres, men kun endres.${isPublished ? '' :  
+            ' Sørg derfor for at alle opplysninger er korrekte før publisering.'}`}
           </HelpMarkdown>
         ) : (
           <HelpMarkdown
