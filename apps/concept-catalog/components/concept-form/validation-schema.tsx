@@ -146,16 +146,16 @@ export const definitionSchema = (required) => Yup.object()
   .default(null);
 
 export const relationSchema = Yup.object().shape({
-  relasjon: Yup.string().required('Feltet må fylles ut'),
+  relasjon: Yup.string().required().label(localization.conceptForm.fieldLabel.relation),
   relasjonsType: Yup.string()
-    .nullable()
+    .nullable()    
     .when('relasjon', (relasjon) => {
       if (`${relasjon}` === RelationTypeEnum.PARTITIV || `${relasjon}` === RelationTypeEnum.GENERISK) {
-        return Yup.string().required();
+        return Yup.string().required().label(localization.conceptForm.fieldLabel.relationLevel);
       }
-      return Yup.string().notRequired();
+      return Yup.string().notRequired().label(localization.conceptForm.fieldLabel.relationRole);
     }),
-  relatertBegrep: Yup.string().required(),
+  relatertBegrep: Yup.string().required().label(localization.conceptForm.fieldLabel.relatedConcept),
 });
 
 const prefLabelNynorsk = Yup.string()
