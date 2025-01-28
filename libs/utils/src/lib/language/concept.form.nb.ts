@@ -144,7 +144,7 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     formError: 'Du har feil i skjemaet. Rett opp i disse før du kan lagre.',
   },
   validation: {
-    minLength: 'Verdien må være minst {length} karakterer lang.',
+    minLength: 'Verdien må være minst {0} karakterer lang.',
     required: 'Feltet må fylles ut.',
     invalidUrl: `Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’ og inneholder et gyldig toppdomene (f.eks. ‘.no’).`,
     minOneSource: 'Du må ha minst en kilde',
