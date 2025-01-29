@@ -17,7 +17,7 @@ export const ValueRangeSection = () => {
           name='omfang.tekst'
           label={
             <TitleWithHelpTextAndTag helpText={localization.conceptForm.helpText.valueRange}>
-              {localization.conceptForm.fieldLabel.description}
+              {localization.conceptForm.fieldLabel.valueRangeDescription}
             </TitleWithHelpTextAndTag>
           }
           error={errors?.omfang?.['tekst']}
@@ -26,7 +26,7 @@ export const ValueRangeSection = () => {
           as={Textfield}
           size='sm'
           name='omfang.uri'
-          label={'Lenke til referanse'}
+          label={localization.conceptForm.fieldLabel.valueRangeLink}
           error={errors?.omfang?.['uri']}
         />
       </div>

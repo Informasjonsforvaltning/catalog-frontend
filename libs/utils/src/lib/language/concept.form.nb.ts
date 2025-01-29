@@ -137,7 +137,9 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     phoneNumber: 'Telefonnummer',
     contactForm: 'Kontaktskjema',
     versionNumber: 'Versjonsnummer',
-    labels: 'Merkelapp'
+    labels: 'Merkelapp',
+    valueRangeDescription: 'Beskrivelse',
+    valueRangeLink: 'Lenke til referanse'
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
