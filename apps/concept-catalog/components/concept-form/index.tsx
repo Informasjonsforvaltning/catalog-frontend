@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
-import { Formik, Form } from 'formik';
-import { useRouter } from 'next/navigation';
+import { Formik, Form, FormikProps } from 'formik';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Alert, Checkbox, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { localization } from '@catalog-frontend/utils';
 import { CodeListsResult, Concept, FieldsResult, ReferenceDataCode, UsersResult } from '@catalog-frontend/types';
@@ -61,12 +61,15 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
     : []),
 ];
 
-const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }: Props) => {
-  const [isSaveButtonClicked, setIsSaveButtonClicked] = useState(false);
-  const [isCanceled, setIsCanceled] = useState(false);
-  const [ignoreRequired, setIgnoreRequired] = useState(false);
-
+const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }: Props) => {  
   const router = useRouter();
+  const searchParams = useSearchParams()
+  const formikRef = useRef<FormikProps<Concept>>(null);
+  
+  const validateOnRender = Boolean(searchParams.get('validate'));
+  const [validateOnChange, setValidateOnChange] = useState(validateOnRender);
+  const [isCanceled, setIsCanceled] = useState(false);
+  const [ignoreRequired, setIgnoreRequired] = useState(false);  
 
   const mapPropsToValues = ({
     id,
@@ -155,18 +158,25 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
     router.push(concept.id ? `/catalogs/${catalogId}/concepts/${concept.id}` : `/catalogs/${catalogId}/concepts`);
   };
 
+  useEffect(() => {
+    if(validateOnRender) {
+      formikRef.current?.validateForm();
+    }    
+  }, []);
+
   return (
     <Formik
+      innerRef={formikRef}
       initialValues={mapPropsToValues(concept)}
       validationSchema={conceptSchema({ required: !ignoreRequired, baseUri: '' })}
-      validateOnChange={isSaveButtonClicked}
-      validateOnBlur={isSaveButtonClicked}
+      validateOnChange={validateOnChange}
+      validateOnBlur={validateOnChange}
       onSubmit={async (values, { setSubmitting }) => {
         concept.id === null ? await handleCreate(values as Concept) : await handleUpdate(values as Concept);
         setSubmitting(false);
       }}
     >
-      {({ errors, dirty, isValid, isSubmitting, isValidating, submitForm }) => {
+      {({ errors, dirty, isValid, isSubmitting, isValidating, submitForm, validateForm }) => {
         const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
         const hasError = (fields: (keyof Concept)[]) => fields.some((field) => Object.keys(errors).includes(field));
 
@@ -311,7 +321,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                       type='button'
                       disabled={isSubmitting || isValidating || isCanceled || !dirty}
                       onClick={() => {
-                        setIsSaveButtonClicked(true);
+                        setValidateOnChange(true);
                         submitForm();
                       }}
                     >

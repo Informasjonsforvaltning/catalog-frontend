@@ -198,8 +198,9 @@ export const ConceptPageClient = ({
             aria-label='Valideringsfeil'
             severity='warning'
           >
-            Publisering er ikke mulig fordi ett eller flere felt inneholder ugyldige eller manglende verdier. Rediger
-            begrepet og rett feilene for å publisere.
+            {`Publisering er ikke mulig fordi ett eller flere felt inneholder ugyldige eller manglende verdier. Klikk på 
+            [Rediger begrepet](/catalogs/${catalogId}/concepts/${concept?.id}/edit?validate=1) for å åpne skjemaet og se 
+            hvilke feil som må rettes for å publisere.`}
           </HelpMarkdown>
         )}
       </div>,
