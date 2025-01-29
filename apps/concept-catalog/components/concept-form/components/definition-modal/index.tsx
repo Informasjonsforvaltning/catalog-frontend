@@ -31,7 +31,7 @@ export const DefinitionModal = ({ initialDefinition, header, trigger, onSucces }
       <Modal.Trigger asChild>{trigger}</Modal.Trigger>
       <Modal.Dialog
         ref={modalRef}
-        className={styles.dialog}
+        className={styles.dialog}        
         style={{
           overflow: 'visible',
         }}
@@ -51,7 +51,7 @@ export const DefinitionModal = ({ initialDefinition, header, trigger, onSucces }
           {({ errors, handleSubmit, isValid, isSubmitting, submitForm }) => {
             return (
               <>
-                <Modal.Header>{header}</Modal.Header>
+                <Modal.Header closeButton={false}>{header}</Modal.Header>
                 <Modal.Content className={styles.content}>
                   <FormikLanguageFieldset
                     name='tekst'
