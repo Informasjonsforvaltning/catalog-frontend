@@ -15,6 +15,7 @@ export const dataServiceFormNb = {
     landingPage: 'Referanse til nettside som gir tilgang til APIet og/eller tilleggsinformasjon',
     pages: 'Referanser til sider og/eller dokumenter som beskriver APIet',
     license: 'Lisensen som APIet er gjort tilgjengelig under. Velges fra EUs kontrollerte vokabular _License_.',
+    status: 'Brukes til å oppgi tjenestens modenhet, velges fra EU’s kontrollerte vokabular _Distribution status_.',
     servesDataset: 'Legg til en eller flere datasettbeskrivelse(r) som er tilknyttet APIet.',
     keywords:
       'Oppgi emneord (eller tag) som beskriver datatjenesten, f.eks. «eksempel», «datatjeneste» (bokmål) / "example", "data service" (Engelsk).',
@@ -39,6 +40,7 @@ export const dataServiceFormNb = {
     landingPage: 'Landingsside',
     pages: 'Dokumentasjon',
     license: 'Lisens',
+    status: 'Status',
     servesDataset: 'Søk etter og velg datasettbeskrivelse(r)',
     keywords: 'Emneord',
   },
@@ -46,4 +48,5 @@ export const dataServiceFormNb = {
     confirmDelete: 'Er du sikker på at du vil slette API-beskrivelsen?',
   },
   noLicense: 'Ingen lisens valgt',
+  noStatus: 'Ingen status valgt',
 };

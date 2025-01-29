@@ -85,7 +85,7 @@ export const DataServiceForm = ({ initialValues, submitType, searchEnv, referenc
                   title={localization.dataServiceForm.heading.about}
                   required
                 >
-                  <AboutSection />
+                  <AboutSection statuses={referenceData.distributionStatuses} />
                 </FormLayout.Section>
 
                 <FormLayout.Section

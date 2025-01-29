@@ -24,6 +24,18 @@ export const getDatasetTypes = async () => {
   return await fetch(path, options);
 };
 
+export const getDistributionStatuses = async () => {
+  const path = `${process.env.FDK_BASE_URI}/reference-data/eu/distribution-statuses`;
+  const options = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'GET',
+    cache: 'no-cache' as RequestCache,
+  };
+  return await fetch(path, options);
+};
+
 export const getLosThemes = async () => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/los/themes-and-words`;
   const options = {

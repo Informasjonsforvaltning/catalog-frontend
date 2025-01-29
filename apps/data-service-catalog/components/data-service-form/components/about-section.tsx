@@ -1,8 +1,14 @@
 import { FormikLanguageFieldset, LabelWithHelpTextAndTag, TextareaWithPrefix } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { Textfield } from '@digdir/designsystemet-react';
+import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
+import { Combobox, Fieldset, Textfield } from '@digdir/designsystemet-react';
+import { useFormikContext } from 'formik';
+import { DataService, ReferenceDataCode } from '@catalog-frontend/types';
 
-export const AboutSection = () => {
+type Props = { statuses?: ReferenceDataCode[] };
+
+export const AboutSection = ({ statuses }: Props) => {
+  const { values, setFieldValue } = useFormikContext<DataService>();
+
   return (
     <>
       <FormikLanguageFieldset
@@ -31,6 +37,35 @@ export const AboutSection = () => {
           </LabelWithHelpTextAndTag>
         }
       />
+
+      <Fieldset
+        legend={
+          <LabelWithHelpTextAndTag
+            helpAriaLabel={localization.dataServiceForm.fieldLabel.status}
+            helpText={localization.dataServiceForm.helptext.status}
+          >
+            {localization.dataServiceForm.fieldLabel.status}
+          </LabelWithHelpTextAndTag>
+        }
+      >
+        <Combobox
+          value={[values?.status ?? '']}
+          portal={false}
+          onValueChange={(selectedValues) => setFieldValue('status', selectedValues.toString())}
+          size='sm'
+        >
+          <Combobox.Option value=''>{`${localization.dataServiceForm.noStatus}`}</Combobox.Option>
+          {statuses &&
+            statuses.map((statusRef, i) => (
+              <Combobox.Option
+                key={`licence-${statusRef.uri}-${i}`}
+                value={statusRef.uri}
+              >
+                {capitalizeFirstLetter(getTranslateText(statusRef.label)?.toString())}
+              </Combobox.Option>
+            ))}
+        </Combobox>
+      </Fieldset>
     </>
   );
 };
