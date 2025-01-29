@@ -173,7 +173,7 @@ export default class EditPage {
       ['Engelsk'], 
       clearBeforeFill,
     );
-    await this.fillLanguageField(concept.tillattTerm, 'Tillat term Hjelp til utfylling', ['Bokmål', 'Nynorsk', 'Engelsk'], clearBeforeFill);
+    await this.fillLanguageField(concept.tillattTerm, 'Tillatt term Hjelp til utfylling', ['Bokmål', 'Nynorsk', 'Engelsk'], clearBeforeFill);
     await this.fillLanguageField(concept.frarådetTerm, 'Frarådet term Hjelp til utfylling', ['Bokmål', 'Nynorsk', 'Engelsk'], clearBeforeFill);
 
     // Add definition without target group
