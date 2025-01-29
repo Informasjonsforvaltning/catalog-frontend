@@ -2,7 +2,7 @@
 
 import { FC, useEffect, useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import {
   PageBanner,
   Breadcrumbs,
@@ -41,7 +41,7 @@ import {
 } from '@catalog-frontend/types';
 import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
-import { Accordion, Chip, Switch, Tabs, Textarea } from '@digdir/designsystemet-react';
+import { Accordion, Chip, Link, Switch, Tabs, Textarea } from '@digdir/designsystemet-react';
 import _ from 'lodash';
 import classes from './concept-page.module.scss';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../../../hooks/comments';
@@ -410,7 +410,7 @@ export const ConceptPageClient = ({
               <div className={classes.revision}>
                 <div>v{versionToString(revision?.versjonsnr)}</div>
                 <div>
-                  <Link
+                  <NextLink
                     prefetch={false}
                     href={
                       validOrganizationNumber(catalogId) && validUUID(revision.id)
@@ -420,7 +420,7 @@ export const ConceptPageClient = ({
                     className={classes.versionTitle}
                   >
                     {getTitle(translate(revision?.anbefaltTerm?.navn, language))}
-                  </Link>
+                  </NextLink>
                 </div>
                 {status && (
                   <div className={cn(classes.status)}>
@@ -757,10 +757,10 @@ export const ConceptPageClient = ({
             />
           </InfoCard.Item>
         )}
-        {!_.isEmpty(concept?.omfang?.uri) || !_.isEmpty(concept?.omfang?.tekst) && (
+        {(!_.isEmpty(concept?.omfang?.uri) || !_.isEmpty(concept?.omfang?.tekst)) && (
           <InfoCard.Item title={`${localization.concept.valueDomain}:`}>
             {concept?.omfang?.uri ? (
-              <Link href={concept?.omfang?.uri}>{concept?.omfang?.tekst}</Link>
+              <Link href={concept?.omfang?.uri} target='_blank'>{concept?.omfang?.tekst || concept?.omfang?.uri}</Link>
             ) : (
               <span>{concept?.omfang?.tekst}</span>
             )}

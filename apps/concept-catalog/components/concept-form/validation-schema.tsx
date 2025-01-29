@@ -185,8 +185,8 @@ export const conceptSchema = ({ required, baseUri }) =>
     omfang: Yup.object()
       .nullable()
       .shape({
-        tekst: Yup.string().nullable(),
-        uri: Yup.string().nullable().url(localization.conceptForm.validation.url),
+        tekst: Yup.string().nullable().label(localization.conceptForm.fieldLabel.valueRangeDescription),
+        uri: Yup.string().nullable().url(localization.conceptForm.validation.url).label(localization.conceptForm.fieldLabel.valueRangeLink),
       }),
     kontaktpunkt: Yup.object()
       .test('contact-test', 'Minst en av kontaktfeltene må fylles ut.', (value: any) => {
