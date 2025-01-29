@@ -1,17 +1,13 @@
-import { DataService } from '@catalog-frontend/types';
 import { FormikLanguageFieldset, LabelWithHelpTextAndTag, TextareaWithPrefix } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Textfield } from '@digdir/designsystemet-react';
-import { useFormikContext } from 'formik';
 
-export const TitleSection = () => {
-  const errors = useFormikContext<DataService>()?.errors;
+export const AboutSection = () => {
   return (
     <>
       <FormikLanguageFieldset
         name={'title'}
         as={Textfield}
-        requiredLanguages={['nb']}
         legend={
           <LabelWithHelpTextAndTag
             tagTitle={localization.tag.required}
@@ -26,10 +22,8 @@ export const TitleSection = () => {
       <FormikLanguageFieldset
         name='description'
         as={TextareaWithPrefix}
-        requiredLanguages={['nb']}
         legend={
           <LabelWithHelpTextAndTag
-            tagTitle={localization.tag.required}
             helpText={localization.dataServiceForm.helptext.description}
             helpAriaLabel={localization.dataServiceForm.fieldLabel.description}
           >

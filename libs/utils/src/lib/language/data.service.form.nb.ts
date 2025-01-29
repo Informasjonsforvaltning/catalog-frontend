@@ -20,7 +20,7 @@ export const dataServiceFormNb = {
       'Oppgi emneord (eller tag) som beskriver datatjenesten, f.eks. «eksempel», «datatjeneste» (bokmål) / "example", "data service" (Engelsk).',
   },
   heading: {
-    titleAndDescription: 'Tittel og beskrivelse',
+    about: 'Om APIet',
     endpoint: 'Endepunkt',
     contactPoint: 'Kontaktpunkt',
     format: 'Format',

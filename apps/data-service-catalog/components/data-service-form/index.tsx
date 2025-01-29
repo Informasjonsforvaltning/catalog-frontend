@@ -4,7 +4,7 @@ import { DataService, DataServiceReferenceData, DataServiceToBeCreated } from '@
 import { FormLayout, StickyFooterBar, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
 import { Formik, Form } from 'formik';
 import { useState } from 'react';
-import { TitleSection } from './components/title-section';
+import { AboutSection } from './components/about-section';
 import { useParams, useRouter } from 'next/navigation';
 import { createDataService, updateDataService } from '../../app/actions/actions';
 import { Button } from '@digdir/designsystemet-react';
@@ -81,11 +81,11 @@ export const DataServiceForm = ({ initialValues, submitType, searchEnv, referenc
             <Form className='container'>
               <FormLayout>
                 <FormLayout.Section
-                  id='title-section'
-                  title={localization.dataServiceForm.heading.titleAndDescription}
+                  id='about-section'
+                  title={localization.dataServiceForm.heading.about}
                   required
                 >
-                  <TitleSection />
+                  <AboutSection />
                 </FormLayout.Section>
 
                 <FormLayout.Section
