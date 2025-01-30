@@ -12,7 +12,7 @@ import styles from './data-service-form.module.css';
 import { EndpointSection } from './components/endpoint-section';
 import { ContactPointSection } from './components/contact-point-section';
 import { FormatSection } from './components/format-section';
-import { PagesSection } from './components/pages-section';
+import { DetailsSection } from './components/details-section';
 import { AccessSection } from './components/access-section';
 import { DatasetSection } from './components/dataset-section';
 import { KeywordsSection } from './components/keywords-section';
@@ -118,10 +118,10 @@ export const DataServiceForm = ({ initialValues, submitType, searchEnv, referenc
                 </FormLayout.Section>
 
                 <FormLayout.Section
-                  id='pages-section'
-                  title={localization.dataServiceForm.heading.pages}
+                  id='details-section'
+                  title={localization.dataServiceForm.heading.details}
                 >
-                  <PagesSection />
+                  <DetailsSection />
                 </FormLayout.Section>
 
                 <FormLayout.Section

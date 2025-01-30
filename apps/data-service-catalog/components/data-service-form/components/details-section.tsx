@@ -4,9 +4,9 @@ import { localization } from '@catalog-frontend/utils';
 import { Fieldset, Textfield } from '@digdir/designsystemet-react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
 import FieldsetWithDelete from '../../fieldset-with-delete';
-import styles from './pages.module.css';
+import styles from './details.module.css';
 
-export const PagesSection = () => {
+export const DetailsSection = () => {
   const errors = useFormikContext<DataService>()?.errors;
   return (
     <>
