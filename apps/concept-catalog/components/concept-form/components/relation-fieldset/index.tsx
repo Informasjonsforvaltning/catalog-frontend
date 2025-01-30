@@ -91,10 +91,19 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
     value: item,
   }));
 
-  const relationSubtypeOptions = relationSubtypes.map((item) => ({
-    label: localization.conceptForm.fieldLabel.relationSubtypes[item],
-    value: item,
-  }));
+  const relationSubtypeOptions = relationSubtypes
+    .filter((subtype) => {
+      if (values.relasjon === RelationTypeEnum.PARTITIV) {
+        return subtype === RelationSubtypeEnum.ER_DEL_AV || subtype === RelationSubtypeEnum.OMFATTER;
+      } else if (values.relasjon === RelationTypeEnum.GENERISK) {
+        return subtype === RelationSubtypeEnum.OVERORDNET || subtype === RelationSubtypeEnum.UNDERORDNET;
+      }
+      return false;
+    })
+    .map((item) => ({
+      label: localization.conceptForm.fieldLabel.relationSubtypes[item],
+      value: item,
+    }));
 
   let internalRelatedConceptOptions: Option[] = [];
   let externalRelatedConceptOptions: Option[] = [];
@@ -111,8 +120,8 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
         value: initialRelatedConcept.id as string,
       },
     ];
-  } 
-  
+  }
+
   if (relatedConceptType === 'external' && searchTriggered) {
     externalRelatedConceptOptions =
       externalConcepts?.hits.map((concept) => ({
@@ -120,8 +129,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
         description: getTranslateText(concept.organization?.prefLabel) as string,
         value: concept.uri as string,
       })) ?? [];
-  } 
-  else if (relatedConceptType === 'external' && !searchTriggered && initialRelatedConcept) {
+  } else if (relatedConceptType === 'external' && !searchTriggered && initialRelatedConcept) {
     externalRelatedConceptOptions = [
       {
         label: getTranslateText(initialRelatedConcept.title) as string,
@@ -129,15 +137,6 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
       },
     ];
   }
-
-  const filterRelationSubtype = (inputValue: string, option: Option) => {
-    if (values.relasjon === RelationTypeEnum.GENERISK) {
-      return option.value !== RelationSubtypeEnum.ER_DEL_AV && option.value !== RelationSubtypeEnum.OMFATTER;
-    } else if (values.relasjon === RelationTypeEnum.PARTITIV) {
-      return option.value !== RelationSubtypeEnum.OVERORDNET && option.value !== RelationSubtypeEnum.UNDERORDNET;
-    }
-    return true;
-  };
 
   const handleRelatedConceptTypeChange = (value) => {
     setFieldValue('internal', value === 'internal');
@@ -172,11 +171,11 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
   };
 
   const internalRelatedConceptComboValue = () => {
-    return internalRelatedConceptOptions.find((option) => option.value === relatedConcept[0]) ? relatedConcept : []
-   };
+    return internalRelatedConceptOptions.find((option) => option.value === relatedConcept[0]) ? relatedConcept : [];
+  };
 
   const externalRelatedConceptComboValue = () => {
-    return externalRelatedConceptOptions.find((option) => option.value === relatedConcept[0]) ? relatedConcept : []
+    return externalRelatedConceptOptions.find((option) => option.value === relatedConcept[0]) ? relatedConcept : [];
   };
 
   useEffect(() => {
@@ -191,7 +190,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
           legend={
             <TitleWithHelpTextAndTag
               helpText={localization.conceptForm.helpText.relatedConcept}
-              tagColor='second'
+              tagColor='warning'
               tagTitle={localization.tag.required}
             >
               {localization.conceptForm.fieldLabel.relatedConcept}
@@ -208,7 +207,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
             <Radio value='external'>Søk på data.norge.no</Radio>
             <Radio value='custom'>Egendefinert</Radio>
           </Radio.Group>
-          {(relatedConceptType === 'internal') && (
+          {relatedConceptType === 'internal' && (
             <Combobox
               size='sm'
               portal={false}
@@ -231,7 +230,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
               ))}
             </Combobox>
           )}
-          {(relatedConceptType === 'external') && (
+          {relatedConceptType === 'external' && (
             <Combobox
               size='sm'
               portal={false}
@@ -269,7 +268,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
         label={
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.relation}
-            tagColor='second'
+            tagColor='warning'
             tagTitle={localization.tag.required}
           >
             {localization.conceptForm.fieldLabel.relation}
@@ -299,7 +298,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
             <Combobox
               label={
                 <TitleWithHelpTextAndTag
-                  tagColor='second'
+                  tagColor='warning'
                   tagTitle={localization.tag.required}
                 >
                   {localization.conceptForm.fieldLabel.relationLevel}
@@ -312,7 +311,6 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
                   ? [values.relasjonsType]
                   : []
               }
-              filter={filterRelationSubtype}
               error={errors?.relasjonsType}
               onValueChange={handleRelationSubtypeChange}
             >
@@ -333,8 +331,8 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
             legend={
               <TitleWithHelpTextAndTag
                 helpText={localization.conceptForm.helpText.devisionCriterion}
-                tagColor='second'
-                tagTitle={localization.tag.required}
+                tagTitle={localization.tag.recommended}
+                tagColor='info'
               >
                 {localization.conceptForm.fieldLabel.divisionCriterion}
               </TitleWithHelpTextAndTag>
