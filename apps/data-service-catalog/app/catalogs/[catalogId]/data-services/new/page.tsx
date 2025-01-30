@@ -1,5 +1,5 @@
 import { Breadcrumbs, BreadcrumbType, PageBanner } from '@catalog-frontend/ui';
-import {getDistributionStatuses, getOpenLicenses, getOrganization} from '@catalog-frontend/data-access';
+import { getDistributionStatuses, getOpenLicenses, getOrganization } from '@catalog-frontend/data-access';
 
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getTranslateText, localization } from '@catalog-frontend/utils';

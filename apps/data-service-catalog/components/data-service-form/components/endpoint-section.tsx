@@ -1,7 +1,7 @@
 import { DataService } from '@catalog-frontend/types';
-import { AddButton, LabelWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { AddButton, HelpMarkdown, LabelWithHelpTextAndTag, TitleWithTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Textfield } from '@digdir/designsystemet-react';
+import { Fieldset, Textfield } from '@digdir/designsystemet-react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
 import FieldsetWithDelete from '../../fieldset-with-delete';
 import styles from './endpoint.module.css';
@@ -26,7 +26,27 @@ export const EndpointSection = () => {
         error={errors?.endpointUrl}
       />
 
-      <div>
+      <Fieldset
+        size='sm'
+        legend={
+          <TitleWithTag
+            title={
+              <>
+                {localization.dataServiceForm.fieldLabel.endpointDescriptions}
+                <HelpMarkdown
+                  title={localization.dataServiceForm.fieldLabel.endpointDescriptions}
+                  type='button'
+                  size='sm'
+                >
+                  {localization.dataServiceForm.helptext.endpointDescriptions}
+                </HelpMarkdown>
+              </>
+            }
+            tagColor='info'
+            tagTitle={localization.tag.recommended}
+          />
+        }
+      >
         <FieldArray name='endpointDescriptions'>
           {(arrayHelpers) => (
             <>
@@ -39,18 +59,6 @@ export const EndpointSection = () => {
                     <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
                       <FastField
                         name={`endpointDescriptions[${index}]`}
-                        label={
-                          index < 1 ? (
-                            <LabelWithHelpTextAndTag
-                              helpAriaLabel={localization.dataServiceForm.fieldLabel.endpointDescriptions}
-                              helpText={localization.dataServiceForm.helptext.endpointDescriptions}
-                            >
-                              {localization.dataServiceForm.fieldLabel.endpointDescriptions}
-                            </LabelWithHelpTextAndTag>
-                          ) : (
-                            ''
-                          )
-                        }
                         as={Textfield}
                         size='sm'
                         error={errors?.endpointDescriptions?.[index]}
@@ -65,7 +73,7 @@ export const EndpointSection = () => {
             </>
           )}
         </FieldArray>
-      </div>
+      </Fieldset>
     </>
   );
 };
