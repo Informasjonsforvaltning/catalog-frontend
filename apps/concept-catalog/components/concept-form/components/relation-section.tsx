@@ -53,6 +53,7 @@ export const RelationSection = ({ catalogId }) => {
     catalogId,
     searchTerm: '',
     page: 0,
+    size: 100,
     fields: {
       anbefaltTerm: true,
       frarådetTerm: true,

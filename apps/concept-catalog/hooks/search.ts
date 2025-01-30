@@ -26,6 +26,7 @@ export interface PageUpdate {
   catalogId: string;
   searchTerm: string;
   page: number;
+  size?: number;
   fields: FieldOptions;
   sort?: QuerySort;
   filters?: QueryFilters;
@@ -70,15 +71,14 @@ export const getSelectOptions = (object: any): SelectOption[] => {
   return options;
 };
 
-export const useSearchConcepts = ({ catalogId, searchTerm, page, fields, sort, filters, enabled }: PageUpdate) => {
-  const hitsPerPage = 5;
+export const useSearchConcepts = ({ catalogId, searchTerm, page, size = 5, fields, sort, filters, enabled }: PageUpdate) => {
   const body = {
     catalogId,
     query: {
       query: searchTerm,
       pagination: {
         page: page ?? 0,
-        size: hitsPerPage,
+        size,
       },
       fields: fields,
       sort,
