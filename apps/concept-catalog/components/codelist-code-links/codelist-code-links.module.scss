@@ -1,0 +1,6 @@
+ul.list {
+    display: flex;    
+    & :global(.fds-link) {
+        color: var(--fds-semantic-text-neutral-subtle);
+    };
+}

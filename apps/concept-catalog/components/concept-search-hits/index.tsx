@@ -9,10 +9,11 @@ import {
   validUUID,
 } from '@catalog-frontend/utils';
 import cn from 'classnames';
-import { ConceptStatusTagProps, ConceptSubject, SearchHit, Tag } from '@catalog-frontend/ui';
+import { ConceptStatusTagProps, SearchHit, Tag } from '@catalog-frontend/ui';
 import Link from 'next/link';
 import styles from './concept-search-hits.module.css';
 import { Chip } from '@digdir/designsystemet-react';
+import ConceptSubject from '../concept-subject';
 
 interface Props {
   catalogId: string;
@@ -119,7 +120,7 @@ const ConceptSearchHits: React.FC<Props> = ({
               titleHref={
                 validOrganizationNumber(catalogId) && validUUID(concept?.id) ? `/catalogs/${catalogId}/concepts/${concept.id}` : '#'
               }
-              conceptSubject={
+              rightColumn={
                 <ConceptSubject
                   className={cn(styles.greyFont, styles.subject)}
                   concept={concept}

@@ -7,14 +7,14 @@ import { Url } from 'next/dist/shared/lib/router/router';
 interface Props {
   title: string[] | string;
   description?: string[] | string;
-  conceptSubject?: ReactNode;
+  rightColumn?: ReactNode;
   content?: ReactNode;
   titleHref?: Url;
   labels?: ReactNode;
   statusTag?: ReactNode;
 }
 
-const SearchHit = ({ title, description, content, statusTag, titleHref, conceptSubject, labels }: Props) => {
+const SearchHit = ({ title, description, content, statusTag, titleHref, rightColumn, labels }: Props) => {
   return (
     <div className={styles.container}>
       <div className={styles.rowSpaceBetween}>
@@ -24,7 +24,7 @@ const SearchHit = ({ title, description, content, statusTag, titleHref, conceptS
           </Link>
           {statusTag && <div>{statusTag}</div>}
         </div>
-        {conceptSubject}
+        {rightColumn}
       </div>
       {content}
       {description && <p className={styles.description}>{description}</p>}

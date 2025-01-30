@@ -62,6 +62,8 @@ export const getPath = (nodes?: TreeNode[], value?: string) => {
   return [];
 };
 
+
+
 export const convertCodeListToTreeNodes = (codes: Code[] | undefined): TreeNode[] =>
   codes?.reduce((accumulator, currentValue, _currentIndex, codes) => {
     // Use the tree node if it already exists in the accumulator
