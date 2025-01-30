@@ -14,9 +14,10 @@ interface Props {
   validFromIncluding: string | null | undefined;
   validToIncluding: string | null | undefined;
   title: LocalizedStrings;
+  language?: string;
 }
 
-const RelatedConcepts = ({ conceptRelations, relatedConcepts, validToIncluding, validFromIncluding, title }: Props) => {
+const RelatedConcepts = ({ conceptRelations, relatedConcepts, validToIncluding, validFromIncluding, title, language }: Props) => {
   const associativeRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'assosiativ') ?? [];
   const partitiveRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'partitiv') ?? [];
   const genericRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'generisk') ?? [];
@@ -41,18 +42,21 @@ const RelatedConcepts = ({ conceptRelations, relatedConcepts, validToIncluding, 
         <AssociativeRelations
           associativeRelations={associativeRelations}
           relatedConceptsMap={relatedConceptsMap}
+          language={language}
         />
       )}
       {partitiveRelations.length > 0 && (
         <PartitiveRelations
           partitiveRelations={partitiveRelations}
           relatedConceptsMap={relatedConceptsMap}
+          language={language}
         />
       )}
       {genericRelations.length > 0 && (
         <GenericRelations
           genericRelations={genericRelations}
           relatedConceptsMap={relatedConceptsMap}
+          language={language}
         />
       )}
       {isReplacedBy.length > 0 && (
@@ -60,6 +64,7 @@ const RelatedConcepts = ({ conceptRelations, relatedConcepts, validToIncluding, 
           title={title}
           isReplacedBy={isReplacedBy}
           relatedConceptsMap={relatedConceptsMap}
+          language={language}
         />
       )}
       {seeAlso.length > 0 && (
@@ -68,6 +73,7 @@ const RelatedConcepts = ({ conceptRelations, relatedConcepts, validToIncluding, 
           validToIncluding={validToIncluding}
           validFromIncluding={validFromIncluding}
           relatedConceptsMap={relatedConceptsMap}
+          language={language}
         />
       )}
     </KeyValueList>

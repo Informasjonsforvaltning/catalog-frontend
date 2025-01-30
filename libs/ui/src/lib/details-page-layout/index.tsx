@@ -10,7 +10,7 @@ import { Heading, Ingress } from '@digdir/designsystemet-react';
 
 interface DetailsPageLayoutProps extends HTMLAttributes<HTMLDivElement> {
   headingTitle: string | string[];
-  headingSubtitle?: string;
+  headingSubtitle?: ReactNode;
   headingTag?: ReactNode;
   loading: boolean;
   handleLanguageChange?: (lang: string) => void;

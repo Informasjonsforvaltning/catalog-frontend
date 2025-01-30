@@ -24,7 +24,6 @@ import {
   validOrganizationNumber,
   validUUID,
   ensureStringArray,
-  getConceptSubject,
   versionToString,
 } from '@catalog-frontend/utils';
 import {
@@ -50,6 +49,7 @@ import { useDeleteConcept, usePublishConcept } from '../../../../../hooks/concep
 import { useCatalogDesign } from '../../../../../context/catalog-design';
 import RelatedConcepts from '../../../../../components/related-concepts';
 import Definition from '../../../../../components/definition';
+import { CodeListCodeLinks } from '../../../../../components/codelist-code-links';
 
 type MapType = {
   [id: string]: string;
@@ -190,8 +190,9 @@ export const ConceptPageClient = ({
             aria-label='Info publisering'
             severity='info'
           >
-            {`Viktig! Når et begrep er publisert, kan det verken slettes eller avpubliseres, men kun endres.${isPublished ? '' :  
-            ' Sørg derfor for at alle opplysninger er korrekte før publisering.'}`}
+            {`Viktig! Når et begrep er publisert, kan det verken slettes eller avpubliseres, men kun endres.${
+              isPublished ? '' : ' Sørg derfor for at alle opplysninger er korrekte før publisering.'
+            }`}
           </HelpMarkdown>
         ) : (
           <HelpMarkdown
@@ -277,7 +278,10 @@ export const ConceptPageClient = ({
       ? [
           [
             localization.concept.label,
-            <ul key='label-list' className={classes.labels}>
+            <ul
+              key='label-list'
+              className={classes.labels}
+            >
               {concept?.merkelapp?.map((label) => (
                 <li key={`label-${label}`}>
                   <Chip.Toggle
@@ -378,12 +382,23 @@ export const ConceptPageClient = ({
   const design = useCatalogDesign();
 
   const getTitle = (text: string | string[]) => (text ? text : localization.concept.noName);
-  const getDetailSubtitle = () => {
+  const getDetailSubtitle = (lang) => {
     const subjectCodeList = codeListsResult?.codeLists?.find(
       (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
     );
 
-    return getConceptSubject(concept, subjectCodeList);
+    if (subjectCodeList && concept.fagområdeKoder) {
+      return (
+        <CodeListCodeLinks
+          codeList={subjectCodeList}
+          codes={concept?.fagområdeKoder}
+          catalogId={catalogId}
+          lang={lang}
+        />
+      );
+    }
+
+    return ensureStringArray(translate(concept.fagområde, lang)).join(', ');
   };
 
   const getStatusFromURL = (statusURI?: string | null) => {
@@ -739,6 +754,7 @@ export const ConceptPageClient = ({
               relatedConcepts={relatedConcepts}
               validFromIncluding={concept?.gyldigFom}
               validToIncluding={concept?.gyldigTom}
+              language={language}
             />
           </InfoCard.Item>
         )}
@@ -760,7 +776,12 @@ export const ConceptPageClient = ({
         {(!_.isEmpty(concept?.omfang?.uri) || !_.isEmpty(concept?.omfang?.tekst)) && (
           <InfoCard.Item title={`${localization.concept.valueDomain}:`}>
             {concept?.omfang?.uri ? (
-              <Link href={concept?.omfang?.uri} target='_blank'>{concept?.omfang?.tekst || concept?.omfang?.uri}</Link>
+              <Link
+                href={concept?.omfang?.uri}
+                target='_blank'
+              >
+                {concept?.omfang?.tekst || concept?.omfang?.uri}
+              </Link>
             ) : (
               <span>{concept?.omfang?.tekst}</span>
             )}
@@ -848,7 +869,7 @@ export const ConceptPageClient = ({
             statusLabel={status}
           />
         }
-        headingSubtitle={getDetailSubtitle()}
+        headingSubtitle={getDetailSubtitle(language)}
       >
         <DetailsPageLayout.Left>
           <MainColumn />

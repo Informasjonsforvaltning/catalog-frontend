@@ -3,6 +3,7 @@ import { conceptIdFromUriRegex } from '../regex/regex';
 import { ensureStringArray } from '../text/text';
 import { getTranslateText } from '../language/translateText';
 import { convertCodeListToTreeNodes, getPath } from '../code-list';
+import { Link } from '@digdir/designsystemet-react';
 
 export const removeSourceIfEgendefinert = (def?: Definisjon): Definisjon | undefined => {
   if (!def) {
@@ -59,15 +60,6 @@ export const getConceptIdFromRdfUri = (baseUri: string | undefined, uri: string 
 export const getUniqueConceptIdsFromUris = (uris: string[]): string[] => {
   const ids = uris.map((uri) => uri?.match(conceptIdFromUriRegex)?.[1]).filter((id): id is string => !!id);
   return [...new Set(ids)];
-};
-
-export const getConceptSubject = (concept: Concept, subjectCodeList?: CodeList): string => {
-  if (subjectCodeList && concept?.fagområdeKoder?.[0]) {
-    const path = getPath(convertCodeListToTreeNodes(subjectCodeList?.codes), concept.fagområdeKoder[0]);
-    return path.map((item) => item.label).join(' - ');
-  }
-
-  return ensureStringArray(getTranslateText(concept.fagområde)).join(' ');
 };
 
 export const conceptIsHigherVersion = (concept: Concept, other: Concept): boolean => {
