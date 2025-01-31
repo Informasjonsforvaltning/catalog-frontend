@@ -4,7 +4,7 @@ import styles from './version-fieldset.module.scss';
 import { Concept } from '@catalog-frontend/types';
 import _ from 'lodash';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
+import { compareVersion, localization } from '@catalog-frontend/utils';
 
 export type VersionFieldsetProps = {
   name: string;
@@ -27,6 +27,7 @@ export const VersionFieldset = ({ name }) => {
             as={Textfield}
             type='number'
             label='Major'
+            min='0'
             size='sm'
             name={`${name}.major`}
             error={typeof _.get(errors, name) === 'string'}
@@ -35,6 +36,7 @@ export const VersionFieldset = ({ name }) => {
             as={Textfield}
             type='number'
             label='Minor'
+            min='0'
             size='sm'
             name={`${name}.minor`}
             error={typeof _.get(errors, name) === 'string'}
@@ -43,6 +45,7 @@ export const VersionFieldset = ({ name }) => {
             as={Textfield}
             type='number'
             label='Patch'
+            min='0'
             size='sm'
             name={`${name}.patch`}
             error={typeof _.get(errors, name) === 'string'}
