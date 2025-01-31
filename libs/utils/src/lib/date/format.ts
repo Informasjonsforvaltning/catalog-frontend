@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+
 export const formatISO = (
   isoDate: string,
   options: Intl.DateTimeFormatOptions = {
@@ -45,3 +47,17 @@ export const isDateBeforeToday = (date: Date | null) =>
   date && date.getTime() < Date.now() && !isDateSameDayAsNow(date);
 
 export const isDateAfterToday = (date: Date | null) => date && date.getTime() > Date.now() && !isDateSameDayAsNow(date);
+
+export const parseDateTime = (value: any) => {
+  let dateTime = DateTime.fromJSDate(value);
+  if(dateTime.isValid) {
+    return dateTime;
+  } 
+  
+  dateTime = DateTime.fromFormat(value, 'yyyy-MM-dd');
+  if(dateTime.isValid) {
+    return dateTime;
+  }
+
+  return null;
+};
