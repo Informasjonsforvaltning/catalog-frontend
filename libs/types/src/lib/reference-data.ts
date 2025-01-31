@@ -46,4 +46,5 @@ export interface ReferenceData {
 export interface DataServiceReferenceData {
   openLicenses: ReferenceDataCode[];
   distributionStatuses: ReferenceDataCode[];
+  plannedAvailabilities: ReferenceDataCode[];
 }

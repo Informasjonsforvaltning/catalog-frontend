@@ -121,7 +121,7 @@ export const DataServiceForm = ({ initialValues, submitType, searchEnv, referenc
                   id='details-section'
                   title={localization.dataServiceForm.heading.details}
                 >
-                  <DetailsSection />
+                  <DetailsSection availabilities={referenceData.plannedAvailabilities} />
                 </FormLayout.Section>
 
                 <FormLayout.Section
