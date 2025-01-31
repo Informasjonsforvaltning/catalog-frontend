@@ -22,7 +22,6 @@ const IsReplacedBy = ({ title, isReplacedBy, relatedConceptsMap, language }: Pro
             property={
               <div>
                 <p>{localization.concept.isReplacedBy}</p>
-                <p>{getTranslateText(title)}</p>
               </div>
             }
             value={<Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title, language)}</Link>}
