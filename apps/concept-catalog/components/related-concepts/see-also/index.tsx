@@ -9,9 +9,10 @@ interface Props {
   validToIncluding: string | null | undefined;
   validFromIncluding: string | null | undefined;
   relatedConceptsMap: (identifier: string) => RelatedConcept | undefined;
+  language?: string;
 }
 
-const SeeAlso = ({ seeAlso, relatedConceptsMap }: Props) => (
+const SeeAlso = ({ seeAlso, relatedConceptsMap, language }: Props) => (
   <>
     {seeAlso.map((relasjon) => {
       if (!relasjon) return undefined;
@@ -21,7 +22,7 @@ const SeeAlso = ({ seeAlso, relatedConceptsMap }: Props) => (
           <KeyValueListItem
             key={`seeAlso-${relatedConcept.id}`}
             property={localization.concept.seeAlso}
-            value={<Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title)}</Link>}
+            value={<Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title, language)}</Link>}
           />
         );
       } else {

@@ -8,9 +8,10 @@ interface Props {
   title: LocalizedStrings;
   isReplacedBy: UnionRelation[];
   relatedConceptsMap: (identifier: string) => RelatedConcept | undefined;
+  language?: string;
 }
 
-const IsReplacedBy = ({ title, isReplacedBy, relatedConceptsMap }: Props) => (
+const IsReplacedBy = ({ title, isReplacedBy, relatedConceptsMap, language }: Props) => (
   <>
     {isReplacedBy.map((relasjon, index) => {
       const relatedConcept = relatedConceptsMap(relasjon.relatertBegrep ?? '');
@@ -24,7 +25,7 @@ const IsReplacedBy = ({ title, isReplacedBy, relatedConceptsMap }: Props) => (
                 <p>{getTranslateText(title)}</p>
               </div>
             }
-            value={<Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title)}</Link>}
+            value={<Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title, language)}</Link>}
           />
         );
       } else {

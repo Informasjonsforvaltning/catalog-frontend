@@ -2,7 +2,6 @@ import { UnionRelation, RelatedConcept } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { KeyValueListItem } from '@catalog-frontend/ui';
 import { Link } from '@digdir/designsystemet-react';
-import { LanguageIcon } from '@navikt/aksel-icons';
 
 interface Props {
   associativeRelations: UnionRelation[];
