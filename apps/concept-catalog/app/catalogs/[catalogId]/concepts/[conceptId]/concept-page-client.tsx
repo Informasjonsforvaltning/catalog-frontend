@@ -162,6 +162,11 @@ export const ConceptPageClient = ({
   const publishConcept = usePublishConcept(catalogId);
   const deleteConcept = useDeleteConcept(catalogId);
 
+  const handleLabelClick = (label) => {
+    const queryParams = new URLSearchParams({ 'filter.label': label }).toString();
+    router.push(`/catalogs/${catalogId}/concepts?${queryParams}`);
+  };
+
   const handleOnChangePublished = (e) => {
     if (e.target.checked) {
       if (window.confirm(localization.publicationState.confirmPublish)) {
@@ -286,7 +291,7 @@ export const ConceptPageClient = ({
                 <li key={`label-${label}`}>
                   <Chip.Toggle
                     key={`label-${label}`}
-                    onClick={() => router.push(`/catalogs/${catalogId}?filter.label=${label}`)}
+                    onClick={() => handleLabelClick(label)}
                   >
                     {label}
                   </Chip.Toggle>
