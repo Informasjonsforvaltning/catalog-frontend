@@ -16,6 +16,7 @@ import { DetailsSection } from './components/details-section';
 import { AccessSection } from './components/access-section';
 import { DatasetSection } from './components/dataset-section';
 import { KeywordsSection } from './components/keywords-section';
+import {VersionsSection} from "./components/versions-section";
 
 type Props = {
   initialValues: DataService | DataServiceToBeCreated;
@@ -94,6 +95,13 @@ export const DataServiceForm = ({ initialValues, submitType, searchEnv, referenc
                   required
                 >
                   <EndpointSection />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='versions-section'
+                  title={localization.dataServiceForm.heading.versions}
+                >
+                  <VersionsSection />
                 </FormLayout.Section>
 
                 <FormLayout.Section

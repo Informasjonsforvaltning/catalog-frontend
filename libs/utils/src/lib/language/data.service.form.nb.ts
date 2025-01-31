@@ -21,6 +21,7 @@ export const dataServiceFormNb = {
       'Oppgi emneord (eller tag) som beskriver datatjenesten, f.eks. «eksempel», «datatjeneste» (bokmål) / "example", "data service" (Engelsk).',
     availability:
       'Brukes til å angi hvor lenge det er planlagt å holde datatjenesten tilgjengelig, verdien velges fra EU’s kontrollerte vokabular _Planned availability_.',
+    versions: 'Brukes til å oppgi et versjonsnummer eller annen versjonsbetegnelse for APIet.',
   },
   heading: {
     about: 'Om APIet',
@@ -30,6 +31,7 @@ export const dataServiceFormNb = {
     details: 'Detaljer',
     dataset: 'Tilknyttede datasettbeskrivelser',
     keywords: 'Emneord',
+    versions: 'Versjoner',
   },
   fieldLabel: {
     description: 'Beskrivelse av APIet',
@@ -46,6 +48,7 @@ export const dataServiceFormNb = {
     servesDataset: 'Søk etter og velg datasettbeskrivelse(r)',
     keywords: 'Emneord',
     availability: 'Tilgjengelighet',
+    versions: 'Versjonsbetegnelse',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette API-beskrivelsen?',
