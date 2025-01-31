@@ -7,9 +7,10 @@ import { Link } from '@digdir/designsystemet-react';
 interface Props {
   genericRelations: UnionRelation[];
   relatedConceptsMap: (identifier: string) => RelatedConcept | undefined;
+  language?: string;
 }
 
-const GenericRelations = ({ genericRelations, relatedConceptsMap }: Props) => (
+const GenericRelations = ({ genericRelations, relatedConceptsMap, language }: Props) => (
   <>
     {genericRelations.map(({ relatertBegrep, inndelingskriterium, relasjonsType }) => {
       const relatedConcept = relatertBegrep && relatedConceptsMap(relatertBegrep);
@@ -27,15 +28,15 @@ const GenericRelations = ({ genericRelations, relatedConceptsMap }: Props) => (
                 <span>
                   {relasjonsType === 'overordnet' ? localization.concept.specializes : localization.concept.generalizes}
                 </span>
-                {getTranslateText(inndelingskriterium) && (
+                {getTranslateText(inndelingskriterium, language) && (
                   <span>{` (${localization.concept.divisionCriterion}: ${getTranslateText(
-                    inndelingskriterium,
+                    inndelingskriterium, language
                   )})`}</span>
                 )}
               </div>
             </div>
           }
-          value={<Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title)}</Link>}
+          value={<Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title, language)}</Link>}
         />
       );
     })}
