@@ -6,9 +6,8 @@ enum ConceptStatusColors {
   CANDIDATE = 'info',
   WAITING = 'neutral',
   CURRENT = 'success',
-  RETIRED = 'danger',
-  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
-  REJECTED = 'neutral',
+  RETIRED = 'third',
+  REJECTED = 'danger',
 }
 
 export type StatusKey = keyof typeof ConceptStatusColors;
