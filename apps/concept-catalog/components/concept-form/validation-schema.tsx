@@ -1,6 +1,5 @@
 import { RelationTypeEnum } from '@catalog-frontend/types';
-import { compareVersion, localization, versionToString } from '@catalog-frontend/utils';
-import { DateTime } from 'luxon';
+import { compareVersion, localization, parseDateTime, versionToString } from '@catalog-frontend/utils';
 import * as Yup from 'yup';
 import { nb } from 'yup-locales';
 
@@ -211,9 +210,15 @@ export const conceptSchema = ({ required, baseUri }) =>
       .nullable()
       .test({
         test(value) {
-          if (value == null || DateTime.fromJSDate(value).isValid || DateTime.fromFormat(value, 'yyyy-MM-dd').isValid) {
+          if (value == null) {
             return true;
           }
+
+          const fomDateTime = parseDateTime(value);
+          if(fomDateTime?.isValid) {
+            return true;
+          }
+
           return this.createError({
             message: localization.conceptForm.validation.date,
             path: this.path,
@@ -224,9 +229,21 @@ export const conceptSchema = ({ required, baseUri }) =>
       .nullable()
       .test({
         test(value) {
-          if (value == null || DateTime.fromJSDate(value).isValid || DateTime.fromFormat(value, 'yyyy-MM-dd').isValid) {
+          if (value === null) {
             return true;
           }
+
+          const tomDateTime = parseDateTime(value);
+          if(tomDateTime?.isValid) {
+            if(this.parent.gyldigFom === null) {
+              return true;
+            }
+            const fomDateTime = parseDateTime(this.parent.gyldigFom);
+            if(fomDateTime && (tomDateTime.toJSDate() >= fomDateTime?.toJSDate())) {
+              return true;
+            }
+          }
+
           return this.createError({
             message: localization.conceptForm.validation.date,
             path: this.path,
