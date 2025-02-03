@@ -3,6 +3,7 @@
 import { Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
 import { localization, getTranslateText } from '@catalog-frontend/utils';
 import ConceptForm from '../../../../../../components/concept-form';
+import { useCatalogDesign } from '../../../../../../context/catalog-design';
 
 export const EditPage = ({
   breadcrumbList,
@@ -16,7 +17,8 @@ export const EditPage = ({
   catalogPortalBaseUri
 }) => {
   
-
+  const design = useCatalogDesign();
+  
   return (
     <>
       <Breadcrumbs
@@ -26,6 +28,10 @@ export const EditPage = ({
       <PageBanner
         title={localization.catalogType.concept}
         subtitle={getTranslateText(organization.prefLabel).toString()}
+        fontColor={design?.fontColor}
+        backgroundColor={design?.backgroundColor}
+        logo={design?.hasLogo ? `/api/catalog-admin/${catalogId}/design/logo` : undefined}
+        logoDescription={design?.logoDescription}
       />
       <ConceptForm
           catalogId={catalogId}
