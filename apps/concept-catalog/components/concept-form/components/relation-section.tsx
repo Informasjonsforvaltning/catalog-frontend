@@ -118,9 +118,11 @@ export const RelationSection = ({ catalogId }) => {
     return name;
   };
 
-  const handleChangeRelation = (rel: UnionRelation, index?: number) => {
+  const handleChangeRelation = (rel: UnionRelation, prev?: UnionRelationWithIndex) => {
     if (rel.relatertBegrep) {
       const name: string | undefined = getFieldname(rel);
+      const prevName: string | undefined = prev ? getFieldname(prev) : undefined;
+
       let relationValue: any = {
         relasjon: rel.relasjon,
         relasjonsType: rel.relasjonsType,
@@ -133,28 +135,32 @@ export const RelationSection = ({ catalogId }) => {
       }
 
       if (name) {
-        if (index === undefined) {
+        if (prev?.index === undefined || name !== prevName) {
           if (!values[name]) {
             setFieldValue(name, [relationValue]);
           } else {
             setFieldValue(name, [...values[name], relationValue]);
           }
+
+          if(prev && name !== prevName) {
+            handleRemoveRelation(prev);
+          }
         } else {
           const relations = [...values[name]];
-          relations[index] = relationValue;
+          relations[prev.index] = relationValue;
           setFieldValue(name, relations);
         }
       }
     }
   };
 
-  const handleRemoveRelation = (rel: UnionRelation, index: number) => {
-    if (index < 0) {
+  const handleRemoveRelation = (rel: UnionRelationWithIndex) => {
+    if (rel.index < 0) {
       return;
     }
     const name: string | undefined = getFieldname(rel);
     const relations = [...values[name]];
-    relations.splice(index, 1);
+    relations.splice(rel.index, 1);
     setFieldValue(name, relations);
   };
 
@@ -205,13 +211,13 @@ export const RelationSection = ({ catalogId }) => {
                           Rediger
                         </Button>
                       }
-                      onSucces={(values) => handleChangeRelation(values, relation.index)}
+                      onSucces={(values) => handleChangeRelation(values, relation)}
                     />
                     <Button
                       variant='tertiary'
                       color='danger'
                       size='sm'
-                      onClick={() => handleRemoveRelation(relation, relation.index)}
+                      onClick={() => handleRemoveRelation(relation)}
                     >
                       <TrashIcon
                         aria-hidden
