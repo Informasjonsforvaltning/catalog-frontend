@@ -25,7 +25,6 @@ exports[`SearchHit should render SearchHit successfully 1`] = `
             Search hit status tag
           </div>
         </div>
-        Search hit concept subject
       </div>
       Search hit content
       <p
