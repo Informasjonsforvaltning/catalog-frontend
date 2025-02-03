@@ -1,5 +1,5 @@
 import { FastField, useFormikContext } from 'formik';
-import { Combobox, Textfield } from '@digdir/designsystemet-react';
+import { Alert, Combobox, Heading, Paragraph, Textfield } from '@digdir/designsystemet-react';
 import { Code, Concept } from '@catalog-frontend/types';
 import { FormikLanguageFieldset, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
@@ -17,6 +17,29 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
   return (
     <div>
       <div className={styles.fieldSet}>
+
+        {codes === undefined && values.fagområdeKoder?.length && (
+          <Alert severity='warning'>
+            <Heading level={3} size='xxsmall' spacing>
+              {localization.conceptForm.alert.warning}
+            </Heading>
+            <Paragraph size='sm'>
+              {localization.conceptForm.alert.codeListToText}
+            </Paragraph>
+          </Alert>
+        )}
+        
+        {codes !== undefined && values.fagområde?.length && (
+          <Alert severity='warning'>
+            <Heading level={3} size='xxsmall' spacing>
+              {localization.conceptForm.alert.warning}
+            </Heading>
+            <Paragraph size='sm'>
+              {localization.conceptForm.alert.textToCodeList}
+            </Paragraph>
+          </Alert>
+        )}
+
         {codes === undefined ? (
           <FormikLanguageFieldset
             name='fagområde'

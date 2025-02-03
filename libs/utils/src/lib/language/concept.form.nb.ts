@@ -144,6 +144,9 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
     formError: 'Du har feil i skjemaet. Rett opp i disse før du kan lagre.',
+    warning: 'Advarsel',
+    codeListToText: 'Virksomheten har byttet fra kodeliste til fritekst. Tidligere kodeliste verdier vil bli overskrevet ved lagring.',
+    textToCodeList: 'Virksomheten har byttet fra fritekst til kodeliste. Tidligere fritekst verdier vil bli overskrevet ved lagring.'
   },
   validation: {
     minLength: 'Verdien må være minst {0} karakterer lang.',
