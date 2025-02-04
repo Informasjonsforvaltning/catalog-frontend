@@ -77,7 +77,7 @@ const ConceptSearchHits: React.FC<Props> = ({
               prefetch={false}
               href={
                 validOrganizationNumber(catalogId) && validUUID(searchHit.sistPublisertId)
-                  ? `/${catalogId}/${searchHit.sistPublisertId}`
+                  ? `/catalogs/${catalogId}/concepts/${searchHit.sistPublisertId}`
                   : '#'
               }
             >
