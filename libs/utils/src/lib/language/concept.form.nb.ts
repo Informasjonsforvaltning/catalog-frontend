@@ -63,9 +63,10 @@ __Sitat fra kilde:__ Innholdet er et direkte sitat eller nøyaktig gjengivelse f
     status: `
 Egenskapen brukes til å oppgi status til et begrep. Begrepsstatus er basert på EUs kontrollerte
 vokabular <a href="https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/concept-status)" target="_blank">Concept status</a>.`,
-    subject: `
-Fagområde (spesialkunnskapsfelt) kan representere en akademisk disiplin, et bruksområde, et
-produkt, en tjenestekjede eller lignende.`,
+    subjectFree: `
+Fagområde (spesialkunnskapsfelt) kan beskrives fritt og kan representere en akademisk disiplin, et bruksområde, et produkt, en tjenestekjede eller lignende.`,
+    subjectCodeList: `
+Fagområde (spesialkunnskapsfelt) velges fra en forhåndsdefinert kodeliste forvaltet av virksomheten. Listen inneholder akademiske disipliner, bruksområder, produkter, tjenestekjeder og lignende.`,
     versionNumber: `
 Versjonsnummeret følger formatet 'major.minor.patch', hvor:
 - __Major__ økes ved store endringer som ikke er bakoverkompatible.
@@ -94,7 +95,8 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     prefLabel: 'Anbefalt term',
     altLabel: 'Tillatt term',
     hiddenLabel: 'Frarådet term',
-    subjectLabel: 'Fagområde',
+    subjectFree: 'Fagområde (beskriv fritt)',
+    subjectCodeList: 'Fagområde (velg fra liste)',
     remark: 'Merknad',
     example: 'Eksempel',
     description: 'Beskrivelse',
@@ -145,8 +147,8 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
     formError: 'Du har feil i skjemaet. Rett opp i disse før du kan lagre.',
     warning: 'Advarsel',
-    codeListToText: 'Virksomheten har byttet fra kodeliste til fritekst. Tidligere kodeliste verdier vil bli overskrevet ved lagring.',
-    textToCodeList: 'Virksomheten har byttet fra fritekst til kodeliste. Tidligere fritekst verdier vil bli overskrevet ved lagring.'
+    codeListToText: 'Virksomheten har byttet fra kodeliste til fritekst. Tidligere kodeliste verdier må slettes for å kunne lagre begrepet.',
+    textToCodeList: 'Virksomheten har byttet fra fritekst til kodeliste. Tidligere fritekst verdier må slettes for å kunne lagre begrepet.'
   },
   validation: {
     minLength: 'Verdien må være minst {0} karakterer lang.',
@@ -155,7 +157,8 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     minOneSource: 'Du må ha minst en kilde',
     version: 'Versjon må være større en v{min}',
     languageRequired: '{label} ({language}) er påkrevd',
-    date: 'Dato er ikke gyldig'
+    date: 'Dato er ikke gyldig',
+    subjectConflict: 'Det er ikke tillatt å ha både fagområde som fritekst og kodeliste.'
   },
   
 };

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 import { Box, Chip, ErrorMessage, Textfield, TextfieldProps } from '@digdir/designsystemet-react';
 import { AddButton, DeleteButton } from '../button';
-import { forwardRef, RefAttributes, useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { useFormikContext } from 'formik';
 import _ from 'lodash';
 import classNames from 'classnames';
@@ -12,11 +12,12 @@ type FormikMultivalueTextfieldProps = {
   name: string;
   showError?: boolean;
   showDeleteButton?: boolean;
+  readOnly?: boolean;
   onDeleteButtonClicked?: () => void;
 } & TextfieldProps;
 
 export const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueTextfieldProps>(
-  ({ className, name, showError, showDeleteButton, onDeleteButtonClicked, ...props }, ref) => {
+  ({ className, name, showError, showDeleteButton, readOnly, onDeleteButtonClicked, ...props }, ref) => {
     const { errors, values, setFieldValue } = useFormikContext<Record<string, string[]>>();
     const [inputValue, setInputValue] = useState<string>('');
 
@@ -25,6 +26,10 @@ export const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMult
     };
 
     const handleAddTextValue = () => {
+      if (readOnly) {
+        return;
+      }
+
       if (Boolean(inputValue) === true) {
         setFieldValue(name, [...(_.get(values, name) ?? []), inputValue]);
         setInputValue('');
@@ -32,6 +37,9 @@ export const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMult
     };
 
     const handleRemoveTextValue = (index: number) => {
+      if (readOnly) {
+        return;
+      }
       const newValues = [..._.get(values, name)];
       newValues.splice(index, 1);
       setFieldValue(name, newValues);
@@ -40,33 +48,37 @@ export const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMult
     return (
       <>
         <Box className={classNames(styles.fieldBox, className)}>
-          <Textfield
-            ref={ref}
-            size='sm'
-            value={inputValue}
-            onChange={(e) => handleOnChangeInputValue(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.code === 'Enter') {
-                handleAddTextValue();
-              }
-            }}
-            onBlur={() => handleAddTextValue()}
-            {...props}
-          />
-         
-            <AddButton
-            className={styles.buttons}
-              variant='secondary'
-              disabled={Boolean(inputValue) === false}
-              onClick={() => handleAddTextValue()}
-            />
-            {showDeleteButton && onDeleteButtonClicked && (
-              <DeleteButton
-              className={styles.buttons}
-                variant='tertiary'
-                onClick={() => onDeleteButtonClicked()}
+          {!readOnly && (
+            <>
+              <Textfield
+                ref={ref}
+                size='sm'
+                value={inputValue}
+                onChange={(e) => handleOnChangeInputValue(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.code === 'Enter') {
+                    handleAddTextValue();
+                  }
+                }}
+                onBlur={() => handleAddTextValue()}
+                readOnly={readOnly}
+                {...props}
               />
-            )}
+              <AddButton
+                className={styles.buttons}
+                variant='secondary'
+                disabled={readOnly || Boolean(inputValue) === false}
+                onClick={() => handleAddTextValue()}
+              />
+            </>
+          )}
+          {!readOnly && showDeleteButton && onDeleteButtonClicked && (
+            <DeleteButton
+              className={styles.buttons}
+              variant='tertiary'
+              onClick={() => onDeleteButtonClicked()}
+            />
+          )}
         </Box>
         <Chip.Group size='sm'>
           {_.get(values, name)?.map((v, i) => (
