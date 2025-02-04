@@ -22,6 +22,7 @@ type LanuguageFieldsetProps = {
   requiredLanguages?: Omit<ISOLanguage, 'no'>[];
   as?: typeof Textfield | typeof TextareaWithPrefix;
   multiple?: boolean;
+  readOnly?: boolean;
 };
 
 const allowedLanguages = Object.freeze<ISOLanguage[]>(['nb', 'nn', 'en']);
@@ -34,6 +35,7 @@ export const FormikLanguageFieldset = ({
   requiredLanguages,
   as: renderAs = Textfield,
   multiple = false,
+  readOnly = false
 }: LanuguageFieldsetProps) => {
   const { errors, getFieldMeta, setFieldValue } = useFormikContext<Record<string, LocalizedStrings>>();
   const [focus, setFocus] = useState<string | null>();
@@ -75,7 +77,9 @@ export const FormikLanguageFieldset = ({
 
   return (
     <Fieldset
+      className={styles.fieldset}
       legend={legend}
+      readOnly={readOnly}
       size='sm'
     >
       {visibleLanguageFields.map((lang) => (
@@ -88,6 +92,7 @@ export const FormikLanguageFieldset = ({
               aria-label={localization.language[lang]}
               showDeleteButton
               onDeleteButtonClicked={() => handleRemoveLanguage(lang)}
+              readOnly={readOnly}
               />
           ) : (
             <Box
@@ -100,6 +105,7 @@ export const FormikLanguageFieldset = ({
                 name={`${name}.${lang}`}                
                 aria-label={localization.language[lang]}
                 error={Boolean(_.get(errors, `${name}.${lang}`))}
+                readOnly={readOnly}
                 {...(renderAs === TextareaWithPrefix
                   ? {
                       cols: 110,
@@ -111,7 +117,7 @@ export const FormikLanguageFieldset = ({
                           >
                             {localization.language[lang]}
                           </Paragraph>
-                          {!requiredLanguages?.includes(lang) && (
+                          {!readOnly && !requiredLanguages?.includes(lang) && (
                             <Box>
                               <DeleteButton onClick={() => handleRemoveLanguage(lang)} />
                             </Box>
@@ -123,14 +129,15 @@ export const FormikLanguageFieldset = ({
                       prefix: localization.language[lang],
                     })}
               />
-              {!requiredLanguages?.includes(lang) && renderAs !== TextareaWithPrefix && (
+              {!readOnly && !requiredLanguages?.includes(lang) && renderAs !== TextareaWithPrefix && (
                 <DeleteButton onClick={() => handleRemoveLanguage(lang)} />
               )}
             </Box>
           )}
         </div>
       ))}
-      <div className={styles.languageButtons}>
+      {!readOnly && (
+        <div className={styles.languageButtons}>
         {visibleLanguageButtons.map((lang) => (
           <AddButton
             key={lang}
@@ -140,6 +147,7 @@ export const FormikLanguageFieldset = ({
           </AddButton>
         ))}
       </div>
+      )}      
 
       {languagesWithError.length > 0 && (
         <ErrorMessage

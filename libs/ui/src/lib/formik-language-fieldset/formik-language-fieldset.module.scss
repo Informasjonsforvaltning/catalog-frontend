@@ -1,3 +1,10 @@
+.fieldset {
+  & :global(.fds-fieldset__legend__content) {
+    align-items: center;
+    gap: var(--fds-spacing-1);
+  }
+}
+
 .languageField {
     display: flex;
     align-items: flex-end;

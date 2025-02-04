@@ -1,5 +1,6 @@
 import { RelationTypeEnum } from '@catalog-frontend/types';
 import { compareVersion, localization, parseDateTime, versionToString } from '@catalog-frontend/utils';
+import { isEmpty } from 'lodash';
 import * as Yup from 'yup';
 import { nb } from 'yup-locales';
 
@@ -179,7 +180,27 @@ export const conceptSchema = ({ required, baseUri }) =>
     definisjon: definitionSchema(required),
     definisjonForAllmennheten: definitionSchema(required),
     definisjonForSpesialister: definitionSchema(required),
-    fagområde: tekstMedSpraakKodeArray(localization.conceptForm.fieldLabel.subjectLabel),
+    fagområde: tekstMedSpraakKodeArray(localization.conceptForm.fieldLabel.subjectFree).test({
+      test(value) {
+        if(!isEmpty(value) && !isEmpty(this.parent.fagområdeKoder)) {
+          return this.createError({
+            message: localization.conceptForm.validation.subjectConflict,
+            path: this.path,
+          });
+        }
+        return true;
+      }
+    }),
+    fagområdeKoder: Yup.array().nullable().test({
+      test(value) {
+        if(!isEmpty(value) && !isEmpty(this.parent.fagområde)) {
+          return this.createError({
+            message: localization.conceptForm.validation.subjectConflict,
+            path: this.path,
+          });
+        }
+        return true;
+      }}),
     statusURI: Yup.string().nullable().label(localization.conceptForm.fieldLabel.status),
     omfang: Yup.object()
       .nullable()
