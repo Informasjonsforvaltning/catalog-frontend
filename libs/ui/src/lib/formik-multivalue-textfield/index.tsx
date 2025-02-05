@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Chip, ErrorMessage, Textfield, TextfieldProps } from '@digdir/designsystemet-react';
+import { Box, Chip, ErrorMessage, Label, Textfield, TextfieldProps } from '@digdir/designsystemet-react';
 import { AddButton, DeleteButton } from '../button';
 import { forwardRef, useState } from 'react';
 import { useFormikContext } from 'formik';
@@ -17,7 +17,7 @@ type FormikMultivalueTextfieldProps = {
 } & TextfieldProps;
 
 export const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueTextfieldProps>(
-  ({ className, name, showError, showDeleteButton, readOnly, onDeleteButtonClicked, ...props }, ref) => {
+  ({ className, name, showError, showDeleteButton, readOnly, label, onDeleteButtonClicked, ...props }, ref) => {
     const { errors, values, setFieldValue } = useFormikContext<Record<string, string[]>>();
     const [inputValue, setInputValue] = useState<string>('');
 
@@ -44,6 +44,8 @@ export const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMult
       newValues.splice(index, 1);
       setFieldValue(name, newValues);
     };
+
+    const ChipComponent = readOnly ? Chip.Toggle : Chip.Removable;
 
     return (
       <>
@@ -80,14 +82,20 @@ export const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMult
             />
           )}
         </Box>
+        {readOnly && label && (
+          <Label asChild>
+            <div>{label}</div>
+          </Label>
+        )}
         <Chip.Group size='sm'>
           {_.get(values, name)?.map((v, i) => (
-            <Chip.Removable
+            <ChipComponent
               key={`chip-${i}`}
               onClick={() => handleRemoveTextValue(i)}
+              disabled={readOnly}
             >
               {v}
-            </Chip.Removable>
+            </ChipComponent>
           ))}
         </Chip.Group>
         {showError && _.get(errors, name) && <ErrorMessage>{_.get(errors, name)}</ErrorMessage>}
