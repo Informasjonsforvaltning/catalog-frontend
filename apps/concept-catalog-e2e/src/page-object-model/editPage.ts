@@ -194,7 +194,7 @@ export default class EditPage {
     await this.fillLanguageField(concept.eksempel, 'Eksempel', ['Bokmål', 'Nynorsk', 'Engelsk'], clearBeforeFill);
 
     // Select subject
-    await this.page.getByLabel('FagområdeAnbefalt').click();
+    await this.page.getByLabel('Fagområde (velg fra liste)').click({ clickCount: 2});
     await this.page.getByLabel('Sprekkmunk').click();
 
     // Application
@@ -212,6 +212,12 @@ export default class EditPage {
     await this.page.getByRole('combobox', { name: 'Hvem skal begrepet tildeles?' }).click();
     await this.page.getByLabel('Avery Quokka').click();
     await this.page.getByRole('textbox', { name: 'Forkortelse' }).fill(concept.abbreviatedLabel);
+    
+    for (let i = 0; i < (concept.merkelapp?.length ?? 0); i++) {
+      await this.page.getByLabel('Merkelapp').fill(concept.merkelapp[i]);
+      await this.page.keyboard.press('Enter');
+    }
+    
     await this.page.getByRole('textbox', { name: 'Pet name' }).fill('Fluffy');
     await this.page;
     this.page
