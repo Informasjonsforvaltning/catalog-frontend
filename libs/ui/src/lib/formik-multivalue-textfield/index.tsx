@@ -88,7 +88,7 @@ export const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMult
             <div>{label}</div>
           </Label>
         )}
-        <Chip.Group size='sm'>
+        <Chip.Group size='sm' className={styles.chipGroup}>
           {_.get(values, name)?.map((v, i) => (
             <ChipComponent
               key={`chip-${i}`}
