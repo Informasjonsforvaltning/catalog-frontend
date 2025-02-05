@@ -64,6 +64,7 @@ export const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMult
                 }}
                 onBlur={() => handleAddTextValue()}
                 readOnly={readOnly}
+                label={label}
                 {...props}
               />
               <AddButton
