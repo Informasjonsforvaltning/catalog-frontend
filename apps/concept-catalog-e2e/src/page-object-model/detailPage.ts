@@ -186,7 +186,7 @@ export default class DetailPage {
       } else if (rel.relasjon === RelationTypeEnum.SE_OGSÅ) {
         await expect(this.page.getByText(`Se også${rel.name}`)).toBeVisible();
       } else if (rel.relasjon === RelationTypeEnum.ERSTATTES_AV) {
-        await expect(this.page.getByText(`Erstattes av${concept.anbefaltTerm.navn.nb}${rel.name}`)).toBeVisible();
+        await expect(this.page.getByText(`Erstattes av${rel.name}`)).toBeVisible();
       }
     }
     
