@@ -17,3 +17,8 @@
   justify-content: flex-start;
   white-space: nowrap;
 }
+
+.chipGroup {
+  display: flex;
+  flex-wrap: wrap;
+}
