@@ -231,7 +231,7 @@ export const conceptSchema = ({ required, baseUri }) =>
       .nullable()
       .test({
         test(value) {
-          if (value == null) {
+          if (!value) {
             return true;
           }
 
@@ -250,7 +250,7 @@ export const conceptSchema = ({ required, baseUri }) =>
       .nullable()
       .test({
         test(value) {
-          if (value === null) {
+          if (!value) {
             return true;
           }
 
