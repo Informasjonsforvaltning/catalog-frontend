@@ -49,6 +49,10 @@ export const isDateBeforeToday = (date: Date | null) =>
 export const isDateAfterToday = (date: Date | null) => date && date.getTime() > Date.now() && !isDateSameDayAsNow(date);
 
 export const parseDateTime = (value: any) => {
+  if(!value) {
+    return null;
+  }
+  
   let dateTime = DateTime.fromJSDate(value);
   if(dateTime.isValid) {
     return dateTime;
