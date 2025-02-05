@@ -36,7 +36,7 @@ const ConceptSearchHits: React.FC<Props> = ({
 
   const ConceptLabels: React.FC<{ searchHit: Concept }> = ({ searchHit }) => (
     <div className={styles.rowSpaceBetween}>
-      <Chip.Group size='small'>
+      <Chip.Group size='small' className={styles.chipGroup}>
         {searchHit.merkelapp &&
           searchHit.merkelapp.map((label) => (
             <Chip.Toggle
