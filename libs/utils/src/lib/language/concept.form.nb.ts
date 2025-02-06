@@ -1,72 +1,131 @@
 export const conceptFormNb = {
   helpText: {
     abbreviation: `
-En forkortelse er en kortform av et ord eller en uttrykk, laget ved å fjerne noen av bokstavene for 
-å gjøre det enklere og raskere å skrive. Forkortelser brukes ofte for å gjøre teksten kortere og mer 
-oversiktlig.`,
-    altLabel: 'Termen blir sett på som best egnet for begrepet, og som blir brukt i tillegg til en anbefalt term.',
-    hiddenLabel: 'Term som er synonym med en anbefalt term, men merket med betegnelsesstatus som ikke ønsket.',
+Forkortelse som brukes som kortform for anbefalt term for begrepet.`,
+    altLabel: `
+Andre termer som kan brukes om begrepet. Typiske eksempler er synonymer.
+
+En term skal i sin helhet skrives med små bokstaver, med unntak for egennavn. En term skal beskrives i ubestemt form entall, med mindre 
+begrepet som defineres betegnes med et flertallsord (f.eks. finansielle midler) eller det er særskilte grunner til å uttrykke termen i bestemt form.`,
+    assignedUser: `Personen som skal ha ansvaret for å følge opp begrepet.`,
+    hiddenLabel: `
+Termer som ikke ønskes brukt om begrepet.
+
+En term skal i sin helhet skrives med små bokstaver, med unntak for egennavn. En term skal beskrives i ubestemt form entall, med mindre begrepet som 
+defineres betegnes med et flertallsord (f.eks finansielle midler) eller det er særskilte grunner til å uttrykke termen i bestemt form.`,
     definition: `
-Representasjon av et begrep ved et uttrykk som beskriver det og atskiller det fra relaterte begreper.
+Definisjonen kan utformes for ulike målgrupper, men meningsinnholdet må være det samme. Det skal være minimum én definisjon, og maksimum én per skriftspråk og målgruppe.
 
-- __Uten målgruppe:__ Når definisjonen er generell og passer for alle uten spesiell tilpasning. 
-- __Spesialister:__ For definisjoner med avansert fagterminologi eller innsikt som krever spesifikk kunnskap om emnet. 
-- __Allmenheten:__ For en bredere gruppe, der definisjonen er tilpasset for å være lett forståelig for folk uten spesialkunnskap.`,
-    definitionText: `
-Gi en kort og presis forklaring av begrepet. Definisjonen skal tydelig beskrive hva
-begrepet betyr, slik at leseren raskt kan forstå innholdet. Unngå forkortelser og
-fagspesifikke uttrykk hvis definisjonen er ment for en generell målgruppe.`,
-    devisionCriterion: `
-Inndelingskriterium er en type kjennetegn brukt til å inndele et overbegrep i underbegreper.
+- __Uten målgruppe:__ Definisjonen er ikke tilpasset noen spesiell målgruppe. 
+- __Spesialister:__ Definisjonen er tilpasset personer med et visst kunnskapsnivå innen aktuelt fagområde.
+- __Allmenheten:__ Definisjonen er tilpasset for en bredere gruppe, og skal være lett å forstå for folk uten forkunnskaper innen aktuelt fagområde.`,
+    definitionTextWithoutTargetAudience: `
+Definisjonen skal være en kort og presis forklaring av begrepet. Den skal være tydelig og lett å forstå, og skal i sin helhet skrives med små bokstaver, 
+med unntak for egennavn.
 
-Eksempel: ‘tilkopling til datamaskin’ blir brukt som inndelingskriterium for å dele det
-generiske begrepet ‘datamus’ i spesifikke begreper som ‘kablet mus’ og ‘trådløs mus’.`,
-    contactInfo: `Egenskapen brukes til å oppgi kontaktpunkt som kan nås ved f.eks. spørsmål om begrepet.
+Definisjonen skal definere begrepet uten å bruke begrepet selv. Det kan være lurt å teste den i en setning, da den skal kunne erstatte termen uten at betydningen endres.
+Definisjonen skal skille begrepet fra andre begreper, ikke bare gi eksempler. Et spesialisert begrep beskrives ved å inkludere overordnet begrep og spesifikke kjennetegn 
+som skiller begrepet fra andre. Tilleggsinformasjon kan legges i merknadsfeltet, og skal ikke være del av selve definisjonen.`,
+    definitionTexSpecialists: `
+Definisjonen skal være kort og utformes slik at den gir nok informasjon til en spesialist innenfor faget.
 
-Det er mulig å velge flere kontaktpunkter (e-post, telefonnummer og kontaktskjema).
-`,
+Definisjonen skal definere begrepet uten å bruke begrepet selv. Det kan være lurt å teste den i en setning, da den skal kunne erstatte termen uten at betydningen endres.
+Definisjonen skal skille begrepet fra andre begreper, ikke bare gi eksempler. Et spesialisert begrep beskrives ved å inkludere overordnet begrep og spesifikke kjennetegn 
+som skiller begrepet fra andre. Tilleggsinformasjon kan legges i merknadsfeltet, og skal ikke være del av selve definisjonen.`,
+    definitionTextGeneralPublic: `
+Definisjonen skal være kort og utformes slik at det er lett for en uten forkunnskaper å forstå hva begrepet representerer. Definisjonen bør skrives i klarspråk, 
+og forkortelser og fagspesifikke uttrykk skal unngås.
+
+Definisjonen skal definere begrepet uten å bruke begrepet selv. Det kan være lurt å teste den i en setning, da den skal kunne erstatte termen uten at betydningen endres.
+Definisjonen skal skille begrepet fra andre begreper, ikke bare gi eksempler. Et spesialisert begrep beskrives ved å inkludere overordnet begrep og spesifikke kjennetegn 
+som skiller begrepet fra andre. Tilleggsinformasjon kan legges i merknadsfeltet, og skal ikke være del av selve definisjonen.`,
+    devisionCriterion: {
+      generisk: `
+Inndelingskriterium beskriver hva relasjonsinndelingen bygger på, f.eks.: kjennetegn som en bestemt egenskap, struktur, oppbygging, varighet e.l.
+
+Eksempler:
+
+- _Tilkopling til datamaskin blir brukt som inndelingskriterium for å dele det overordnede begrepet datamus i spesifikke begreper som kablet mus og trådløs mus._
+- _Geometrisk form blir brukt som inndelingskriterium for å dele det overordnede begrepet sikkerhetsskilt i spesifikke begreper som skilt for obligatorisk handling og skilt for sikkert forhold._`,
+      partitiv: `
+Inndelingskriterium beskriver hva relasjonsinndelingen bygger på, f.eks.: kjennetegn som en bestemt egenskap, struktur, oppbygging, varighet e.l.
+
+Eksempler:
+
+- _Funksjon blir brukt som inndelingskriterium for å dele helhetsbegrepet datamaskin i delbegreper som hovedkort, visningsenhet, strømforsyning, lagringsenhet og inndataenhet._`
+    }, 
+
+    contactInfo: `Det er mulig å legge til e-post eller telefonnummer som kontaktinformasjon. Minst en av disse må fylles ut.`,
     labels: `
-Dette feltet lar deg legge inn én eller flere merkelapper for å kategorisere eller organisere begrepene dine. 
-Hver merkelapp fungerer som en "tag" og kan brukes til å finne og sortere begreper senere. For å legge til 
-flere merkelapper, skriv inn en tekst og trykk Enter eller trykk på __Legg til__.`,
-    prefLabel: `Termen blir sett på som best egnet for begrepet og skal finnes på både bokmål og nynorsk.`,
-    valueRange: `Egenskapen brukes til å oppgi verdiområde, oppgitt som tekst og/eller referanse til der dette er spesifisert.`,
+Ord eller uttrykk som brukes for å gruppere begrep når dette er hensiktsmessig for virksomheten. Merkelapp kan brukes som et filter for å finne begrep som hører sammen.`,
+    period: `
+__Gyldig fra og med__ brukes når et begrep er gjeldende fra en gitt dato. Dersom begrepet ikke er gjeldende ved publiserings- eller registreringsdato, settes denne datoen frem i tid til den datoen begrepet skal gjelde fra.
+
+__Gyldig til og med__ brukes når et begrep ikke lenger skal brukes etter en gitt dato. Dersom et annet begrep skal brukes i stedet, 
+bør det legges til en erstattet av relasjon som peker på det nye begrepet.    `,
+    prefLabel: `
+Termen som blir ansett som best egnet for begrepet. Anbefalt term skal finnes på både bokmål og nynorsk.
+
+En term skal i sin helhet skrives med små bokstaver, med unntak for egennavn. En term skal beskrives i ubestemt form entall, 
+med mindre begrepet som defineres betegnes med et flertallsord (f.eks. finansielle midler) eller det er særskilte grunner til å uttrykke termen i bestemt form.`,
+    valueRange: `
+Verdiområde kan oppgis som tekst og/eller lenke til der dette er spesifisert. Verdiområde bør oppgis på flere språk når dette er mulig.
+
+Eksempler:
+et intervall (min-maks).`,
     relation: `
-Et begrep kan ha relasjoner til andre begreper. En relasjon består av to begreper pluss en
-betydning som kan uttrykkes med tekst eller type. Det finnes tre hovedgrupper av relasjoner:
-generiske, partitive og assosiative.
+Det finnes flere typer relasjoner. __Se også__ og __Erstattes av__ er direkte relasjoner uten mulighet for å utdype videre. 
+I tillegg finnes det tre mer uttrykksfulle relasjonstyper, som er Generisk, Partitiv og Assosiativ.
 
-__Generisk:__ enten det begrepet som dette begrepet spesialiserer, eller det begrepet som dette
-begrepet generaliserer
+__Generisk:__ Relasjon som beskriver begrepenes hierarkiske forhold til hverandre.
 
-__Partitiv:__ enten det begrepet som dette begrepet er del av, eller det begrepet som dette begrepet
-inneholder
+__Partitiv:__ Relasjon som beskriver begrepenes helhets- og delforhold til hverandre.
 
-__Assosiativ:__ det begrepet som dette begrepet er relatert til, og med relasjonstype, eventuelt
-uttrykt som begrepets relasjonsrolle overfor det andre begrepet
-
-Relasjon _Se også_ og _Erstattes av_ er predefinerte assosiative relasjoner.
+__Assosiativ:__ Relasjon som beskriver ikke-hierarkiske forhold mellom begrepene. Relasjonen kan spesifiseres ytterligere ved bruk av relasjonsrolle.
 `,
-    relationLevel: `Eksempler på ofte brukte relasjonsroller for begreper i assosiative relasjoner: 
-    _har nært samsvar med_, _har eksakt samsvar med_.`,
+    relationLevel: {
+      generisk: `
+__Overordnet__: Begrepet som redigeres er overordnet begrepet som det relateres til.
+
+__Underordnet__: Begrepet som redigeres er underordnet begrepet som det relateres til.    
+`,
+      partitiv: `
+__Er del av__: Begrepet som redigeres er del av begrepet det relateres til.
+
+__Omfatter__: Begrepet som redigeres omfatter begrepet det relateres til.
+`,
+    },
+    relationRole: `
+Relasjonsrollen begrepet som redigeres har overfor begrepet som det relateres til. 
+
+Eksempler: _har nært samsvar med, har eksakt samsvar med, muliggjør_.`,
     relatedConcept: `
-Begynn å skrive i søkefeltet, og du vil få opp en liste med forslag basert på ditt søk. Klikk på ønsket begrep for å knytte det til det nåværende begrepet.
+Først må det velges katalog for begrepet.
 
-Velg _Egen definert_ om du har en lenke til begrepet.`,
+__Virksomhetens eget begrep:__ Alle virksomhetens begrep i registreringsløsningen, uavhengig av publiseringstilstand.
+
+__Publisert begrep på data.norge.no:__ Alle publiserte begrep, inklusiv virksomhetens egne.
+
+__Begrep i annen begrepskatalog:__ Gyldig URI for begrep i en annen katalog utenfor data.norge.no. Begrepet må være 
+tilgjengelig som lenkede data (RDF), i henhold til SKOS-AP-NO.`,
     relationToSource: `
-__Egen definert:__ Innholdet er egenutviklet og basert på egne analyser eller vurderinger, uten direkte referanse til eksterne kilder.
+__Egendefinert:__ Definisjonen er ikke er hentet fra noen eksterne kilder.
 
-__Basert på kilde:__ Innholdet er inspirert av eller bygger på en spesifikk kilde, men inneholder omformulerte eller videreutviklede ideer.
+__Basert på kilde:__ Definisjonen bygger på en eller flere gitte kilder.
 
-__Sitat fra kilde:__ Innholdet er et direkte sitat eller nøyaktig gjengivelse fra en kilde, og må derfor oppgis med nøyaktig kildehenvisning.`,
+__Sitat fra kilde:__ Definisjonen er en ordrett gjengivelse fra en gitt kilde.`,
     sources: `Du må ha minst én kilde, som kan bestå av en kildebeskrivelse, en URI, eller begge deler.`,
     status: `
-Egenskapen brukes til å oppgi status til et begrep. Begrepsstatus er basert på EUs kontrollerte
-vokabular <a href="https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/concept-status)" target="_blank">Concept status</a>.`,
+Virksomheten skal ha egne rutiner på hvilke statuser som skal brukes og hva som er kriteriene for å sette de ulike statusene. Begrepsstatus er basert på EUs 
+kontrollerte vokabular [Concept status](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/concept-status).`,
     subjectFree: `
-Fagområde (spesialkunnskapsfelt) kan beskrives fritt og kan representere en akademisk disiplin, et bruksområde, et produkt, en tjenestekjede eller lignende.`,
+Fagområde kan beskrives fritt og kan representere en akademisk disiplin, et bruksområde, et produkt, en tjenestekjede eller lignende. Fagområde bør oppgis på flere språk når dette er mulig. Et begrep kan grupperes under flere fagområder.
+
+Hvis virksomheten ønsker å bruke kodeliste til å beskrive fagområde i stedet for fritekst, kan noen i virksomheten som har rollen virksomhetsadministrator legge til dette i administrasjonsgrensesnittet.`,
     subjectCodeList: `
-Fagområde (spesialkunnskapsfelt) velges fra en forhåndsdefinert kodeliste forvaltet av virksomheten. Listen inneholder akademiske disipliner, bruksområder, produkter, tjenestekjeder og lignende.`,
+Fagområde velges fra en forhåndsdefinert kodeliste forvaltet av virksomheten. Et begrep kan grupperes under flere fagområder.
+
+Hvis det er behov for flere koder eller endringer i listen, kan dette endres av noen i virksomheten som har rollen virksomhetsadministrator. Kodene i kodelisten kan oversettes til flere språk, dette gjøres av virksomhetsadministrator.`,
     versionNumber: `
 Versjonsnummeret følger formatet 'major.minor.patch', hvor:
 - __Major__ økes ved store endringer som ikke er bakoverkompatible.
@@ -78,20 +137,33 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
   },
   section: {
     termTitle: 'Term',
-    termSubtitle: 'Termen blir sett på som best egnet for begrepet.',
+    termSubtitle: 'Termer er ord eller uttrykk som setter navn på begreper.',
     definitionTitle: 'Definisjon',
-    definitionSubtitle: 'En definisjon skal være en kort forklaring som tydelig avgrenser til andre, nærliggende begrep, evt. tydeliggjør forskjellen mellom dette begrepet og andre nærliggende begrep.',
+    definitionSubtitle: 'Definisjoner er utsagn som tydelig beskriver meningsinnholdet i et begrep i et gitt fagområde.',
     remarkTitle: 'Merknad',
-    remarkSubtitle: 'Tillegsopplysninger som begrepets betydning som ikke hører hjemme i definisjonsfeltet.',
+    remarkSubtitle: 'Tilleggsopplysninger som tydeliggjør betydningen og bruken av begrepet.',
+    relationTitle: 'Relasjon',
+    relationSubtitle: 'Relasjoner til andre begrep.',
     subjectTitle: 'Fagområde',
-    subjectSubtitle: 'Et fagområde er et spesialisert kunnskapsområde som begrepet tilhører.',
+    subjectSubtitle: 'Spesialisert kunnskapsområde som begrepet grupperes under.',
     exampleTitle: 'Eksempel',
-    exampleSubtitle: 'Konkrete tilfeller av begrepet.',
+    exampleSubtitle: 'Eksempler på forekomster av begrepet.',
     valueRangeTitle: 'Verdiområde',
-    valueRangeSubtitle: 'Lovlig verdiområde for begrepet.'
+    valueRangeSubtitle: '',
+    internalTitle: 'Interne opplysninger',
+    internalSubtitle: 'Opplysningene under er til intern bruk og vil ikke publiseres ut til Data.norge.no. Interne felt kan legges til og redigeres i administrasjonsgrensesnittet.',
+    contactTitle: 'Kontaktinformasjon',
+    contactSubtitle: 'Kontaktinformasjonen til den delen av virksomheten som har ansvar for begrepsbeskrivelsen. Det skal ikke oppgis personlig kontaktinformasjon.',
+    conceptStatusTitle: 'Begrepsstatus',
+    conceptStatusSubtitle: 'Gjeldende status for begrepet.',
+    periodTitle: 'Gyldighetsperiode',
+    periodSubtitle: 'Datoene begrepet skal gjelde fra og med og/eller til og med.',
+    versionTitle: 'Versjon',
+    versionSubtitle: 'En versjon representerer en spesifikk utgave eller oppdatering av et begrep, som reflekterer eventuelle endringer i definisjon, kontekst eller bruk over tid.'
   },  
   fieldLabel: {
     abbreviationLabel: 'Forkortelse',
+    assignedUser: 'Hvem skal begrepet tildeles?',
     prefLabel: 'Anbefalt term',
     altLabel: 'Tillatt term',
     hiddenLabel: 'Frarådet term',
@@ -132,8 +204,14 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
       erDelAv: 'Er del av',
       omfatter: 'Omfatter'
     },
+    relatedConceptTypes: {
+      internal: 'Virksomhetens eget begrep',
+      external :'Publisert begrep på data.norge.no',
+      custom: 'Begrep i en annen begrepskatalog'
+    },
     relatedConcept: 'Relatert begrep',
     internalConcept: 'Internt begrep',
+    ignoreRequired: 'Ignorer påkrevde felt',
     divisionCriterion: 'Inndelingskriterium',
     emailAddress: 'E-postadresse',
     phoneNumber: 'Telefonnummer',
@@ -141,14 +219,16 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     versionNumber: 'Versjonsnummer',
     labels: 'Merkelapp',
     valueRangeDescription: 'Beskrivelse',
-    valueRangeLink: 'Lenke til referanse'
+    valueRangeLink: 'Lenke til referanse',
+    period: 'Gyldighetsperiode'
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
     formError: 'Du har feil i skjemaet. Rett opp i disse før du kan lagre.',
     warning: 'Advarsel',
     codeListToText: 'Virksomheten har byttet fra kodeliste til fritekst. Tidligere kodeliste verdier må slettes for å kunne lagre begrepet.',
-    textToCodeList: 'Virksomheten har byttet fra fritekst til kodeliste. Tidligere fritekst verdier må slettes for å kunne lagre begrepet.'
+    textToCodeList: 'Virksomheten har byttet fra fritekst til kodeliste. Tidligere fritekst verdier må slettes for å kunne lagre begrepet.',
+    ignoreRequired: 'I utgangspunktet er det krav om at alle påkrevde felt må fylles ut for å få lagret. Når avhukingsboksen er aktiv, må bare Anbefalt term på bokmål være fylt ut.'
   },
   validation: {
     minLength: 'Verdien må være minst {0} karakterer lang.',

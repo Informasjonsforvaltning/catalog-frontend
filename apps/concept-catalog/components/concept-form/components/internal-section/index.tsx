@@ -135,8 +135,8 @@ export const InternalSection = ({ internalFields, userList, codeLists }: Interna
     <Box className={styles.internalSection}>
       <Combobox
         label={
-          <TitleWithHelpTextAndTag helpText='Velg personen som skal ha ansvaret for å følge opp begrepet.'>
-            Hvem skal begrepet tildeles?
+          <TitleWithHelpTextAndTag helpText={localization.conceptForm.helpText.assignedUser}>
+            {localization.conceptForm.fieldLabel.assignedUser}
           </TitleWithHelpTextAndTag>
         }
         size='sm'

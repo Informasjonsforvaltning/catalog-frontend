@@ -24,7 +24,7 @@ export const StatusSection = ({ conceptStatuses }) => {
             helpText={localization.conceptForm.helpText.status}
             >
               {localization.conceptForm.fieldLabel.status}
-          </TitleWithHelpTextAndTag>            
+          </TitleWithHelpTextAndTag>
         }
         value={value}
         onChange={setValue}
