@@ -72,7 +72,7 @@ Termen som blir ansett som best egnet for begrepet. Anbefalt term skal finnes p�
 En term skal i sin helhet skrives med små bokstaver, med unntak for egennavn. En term skal beskrives i ubestemt form entall, 
 med mindre begrepet som defineres betegnes med et flertallsord (f.eks. finansielle midler) eller det er særskilte grunner til å uttrykke termen i bestemt form.`,
     valueRange: `
-Verdiområde kan oppgis som tekst og/eller lenke til der dette er spesifisert. Verdiområde bør oppgis på flere språk når dette er mulig.
+Verdiområde kan oppgis som tekst og/eller lenke til der dette er spesifisert.
 
 Eksempler:
 et intervall (min-maks).`,
