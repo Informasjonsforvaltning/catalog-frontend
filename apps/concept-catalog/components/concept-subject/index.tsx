@@ -12,7 +12,7 @@ interface Props {
 
 export const ConceptSubject = ({ concept, subjectCodeList, className }: Props) => {
   return (
-    <p className={cn(styles.subject, className)}>
+    <div className={cn(styles.subject, className)}>
       {subjectCodeList && concept.fagområdeKoder ? (
         <CodeListCodeLinks
           codeList={subjectCodeList}
@@ -22,7 +22,7 @@ export const ConceptSubject = ({ concept, subjectCodeList, className }: Props) =
       ) : (
         ensureStringArray(getTranslateText(concept.fagområde)).join(', ')
       )}
-    </p>
+    </div>
   );
 };
 
