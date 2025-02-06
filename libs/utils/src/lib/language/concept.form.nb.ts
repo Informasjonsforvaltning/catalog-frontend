@@ -19,26 +19,29 @@ Definisjonen kan utformes for ulike målgrupper, men meningsinnholdet må være 
 - __Uten målgruppe:__ Definisjonen er ikke tilpasset noen spesiell målgruppe. 
 - __Spesialister:__ Definisjonen er tilpasset personer med et visst kunnskapsnivå innen aktuelt fagområde.
 - __Allmenheten:__ Definisjonen er tilpasset for en bredere gruppe, og skal være lett å forstå for folk uten forkunnskaper innen aktuelt fagområde.`,
-    definitionTextWithoutTargetAudience: `
+    
+    definitionText: {
+      definisjon:`
 Definisjonen skal være en kort og presis forklaring av begrepet. Den skal være tydelig og lett å forstå, og skal i sin helhet skrives med små bokstaver, 
 med unntak for egennavn.
 
 Definisjonen skal definere begrepet uten å bruke begrepet selv. Det kan være lurt å teste den i en setning, da den skal kunne erstatte termen uten at betydningen endres.
 Definisjonen skal skille begrepet fra andre begreper, ikke bare gi eksempler. Et spesialisert begrep beskrives ved å inkludere overordnet begrep og spesifikke kjennetegn 
 som skiller begrepet fra andre. Tilleggsinformasjon kan legges i merknadsfeltet, og skal ikke være del av selve definisjonen.`,
-    definitionTexSpecialists: `
+      definisjonForSpesialister: `
 Definisjonen skal være kort og utformes slik at den gir nok informasjon til en spesialist innenfor faget.
 
 Definisjonen skal definere begrepet uten å bruke begrepet selv. Det kan være lurt å teste den i en setning, da den skal kunne erstatte termen uten at betydningen endres.
 Definisjonen skal skille begrepet fra andre begreper, ikke bare gi eksempler. Et spesialisert begrep beskrives ved å inkludere overordnet begrep og spesifikke kjennetegn 
 som skiller begrepet fra andre. Tilleggsinformasjon kan legges i merknadsfeltet, og skal ikke være del av selve definisjonen.`,
-    definitionTextGeneralPublic: `
+      definisjonForAllmennheten: `
 Definisjonen skal være kort og utformes slik at det er lett for en uten forkunnskaper å forstå hva begrepet representerer. Definisjonen bør skrives i klarspråk, 
 og forkortelser og fagspesifikke uttrykk skal unngås.
 
 Definisjonen skal definere begrepet uten å bruke begrepet selv. Det kan være lurt å teste den i en setning, da den skal kunne erstatte termen uten at betydningen endres.
 Definisjonen skal skille begrepet fra andre begreper, ikke bare gi eksempler. Et spesialisert begrep beskrives ved å inkludere overordnet begrep og spesifikke kjennetegn 
 som skiller begrepet fra andre. Tilleggsinformasjon kan legges i merknadsfeltet, og skal ikke være del av selve definisjonen.`,
+    },
     devisionCriterion: {
       generisk: `
 Inndelingskriterium beskriver hva relasjonsinndelingen bygger på, f.eks.: kjennetegn som en bestemt egenskap, struktur, oppbygging, varighet e.l.
@@ -142,7 +145,7 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     definitionSubtitle: 'Definisjoner er utsagn som tydelig beskriver meningsinnholdet i et begrep i et gitt fagområde.',
     remarkTitle: 'Merknad',
     remarkSubtitle: 'Tilleggsopplysninger som tydeliggjør betydningen og bruken av begrepet.',
-    relationTitle: 'Relasjon',
+    relationTitle: 'Relasjoner',
     relationSubtitle: 'Relasjoner til andre begrep.',
     subjectTitle: 'Fagområde',
     subjectSubtitle: 'Spesialisert kunnskapsområde som begrepet grupperes under.',
