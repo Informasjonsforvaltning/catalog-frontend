@@ -235,7 +235,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                   <FormLayout.Section
                     id='example'
                     title={localization.conceptForm.section.exampleTitle}
-                    subtitle={localization.conceptForm.section.exampleTitle}
+                    subtitle={localization.conceptForm.section.exampleSubtitle}
                     error={hasError(['eksempel'])}
                   >
                     <ExampleSection />
