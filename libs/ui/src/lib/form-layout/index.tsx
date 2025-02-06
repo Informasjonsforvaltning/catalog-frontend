@@ -92,10 +92,7 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
   return (
     <div className={styles.layout}>
       <div className={styles.grid}>
-        <div
-          className={styles.sideMenu}
-          style={{ height: `${sectionArray.length * 2.4479 + 2.95}rem` }}
-        >
+        <div className={styles.sideMenu}>
           <SideMenu heading='Innhold i skjema'>
             {sectionArray.map((child, index) => {
               const { id, title, required, error } = child.props as SectionProps;
@@ -121,17 +118,18 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
                       )}
                     </span>
                     {error && (
-                    <Tag
-                      size='sm'
-                      color='danger'
-                      style={{ scale: 0.8, margin: '-0.25rem 0' }}
-                    >
-                      {localization.error}
-                    </Tag>)}
+                      <Tag
+                        size='sm'
+                        color='danger'
+                        style={{ scale: 0.8, margin: '-0.25rem 0' }}
+                      >
+                        {localization.error}
+                      </Tag>
+                    )}
                   </Link>
                 </MenuItem>
               );
-            })}            
+            })}
           </SideMenu>
         </div>
         <div className={styles.content}>
