@@ -71,9 +71,9 @@ export default class EditPage {
   async addRelation(search, item, relation: UnionRelation) {
     await this.page.getByRole('button', { name: 'Legg til relasjon' }).click();
     if (relation.internal) {
-      await this.page.getByText('Søk i egen katalog').click();
+      await this.page.getByText('Virksomhetens eget begrep').click();
     } else {
-      await this.page.getByText('Søk på data.norge.no').click();
+      await this.page.getByText('Publisert begrep på data.norge.no').click();
     }
 
     await this.page.getByRole('group', { name: 'Relatert begrep' }).getByRole('combobox').click();
