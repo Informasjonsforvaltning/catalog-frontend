@@ -16,13 +16,14 @@ import styles from './definition-modal.module.scss';
 export type DefinitionModalProps = {
   trigger: ReactNode;
   header: string;
+  definitionHelpText?: string;
   initialDefinition?: Definisjon;
   onSucces: (def: Definisjon) => void;
 };
 
 const defaultDefinition: Definisjon = { tekst: {}, kildebeskrivelse: { forholdTilKilde: 'egendefinert', kilde: [] } };
 
-export const DefinitionModal = ({ initialDefinition, header, trigger, onSucces }: DefinitionModalProps) => {
+export const DefinitionModal = ({ initialDefinition, header, definitionHelpText, trigger, onSucces }: DefinitionModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [submitted, setSubmitted] = useState(false);
 
@@ -48,8 +49,8 @@ export const DefinitionModal = ({ initialDefinition, header, trigger, onSucces }
             modalRef.current?.close();
           }}
         >
-          {({ errors, handleSubmit, isValid, isSubmitting, submitForm }) => {
-            return (
+          {({ errors, isValid, isSubmitting, submitForm }) => {
+             return (
               <>
                 <Modal.Header closeButton={false}>{header}</Modal.Header>
                 <Modal.Content className={styles.content}>
@@ -60,7 +61,7 @@ export const DefinitionModal = ({ initialDefinition, header, trigger, onSucces }
                     as={TextareaWithPrefix}
                     legend={
                       <TitleWithHelpTextAndTag
-                        helpText={localization.conceptForm.helpText.definitionText}
+                        helpText={definitionHelpText}
                         tagTitle={localization.tag.required}
                         tagColor='warning'
                       >

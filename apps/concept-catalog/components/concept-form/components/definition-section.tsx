@@ -159,10 +159,11 @@ export const DefinitionSection = () => {
                         </Tag>
                       )}
                     </div>
-                    <div>
+                    <div>                    
                       <DefinitionModal
                         initialDefinition={prepareInitialValues(def)}
                         header={localization.conceptForm.fieldLabel.definitionTargetGroupFull[name] as string}
+                        definitionHelpText={localization.conceptForm.helpText.definitionText[name] as string}
                         trigger={
                           <Button
                             variant='tertiary'
@@ -220,6 +221,7 @@ export const DefinitionSection = () => {
             <DefinitionModal
               key={name}
               header={localization.conceptForm.fieldLabel.definitionTargetGroup[name]}
+              definitionHelpText={localization.conceptForm.helpText.definitionText[name]}
               trigger={
                 <Button
                   variant='tertiary'
