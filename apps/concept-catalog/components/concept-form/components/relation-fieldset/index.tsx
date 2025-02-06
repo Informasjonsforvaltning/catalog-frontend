@@ -10,12 +10,14 @@ import { useSearchConcepts as useSearchInternalConcepts, useDataNorgeSearchConce
 import styles from './relation-fieldset.module.scss';
 
 type RelatedConceptType = 'internal' | 'external' | 'custom';
+
 type Option = {
   label: string;
   description?: string;
   value: string;
 };
 
+const relatedConceptTypes: RelatedConceptType[] = ['internal', 'external', 'custom'];
 const relationTypes = Object.keys(RelationTypeEnum)
   .filter((item) => {
     return isNaN(Number(item));
@@ -203,9 +205,14 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
             value={relatedConceptType}
             onChange={handleRelatedConceptTypeChange}
           >
-            <Radio value='internal'>Søk i egen katalog</Radio>
-            <Radio value='external'>Søk på data.norge.no</Radio>
-            <Radio value='custom'>Egendefinert</Radio>
+            {relatedConceptTypes.map((type) => (
+              <Radio
+                key={type}
+                value={type}
+              >
+                {localization.conceptForm.fieldLabel.relatedConceptTypes[type]}
+              </Radio>
+            ))}
           </Radio.Group>
           {relatedConceptType === 'internal' && (
             <Combobox
@@ -300,6 +307,9 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
                 <TitleWithHelpTextAndTag
                   tagColor='warning'
                   tagTitle={localization.tag.required}
+                  helpText={
+                    localization.conceptForm.helpText.relationLevel[values.relasjon]
+                  }
                 >
                   {localization.conceptForm.fieldLabel.relationLevel}
                 </TitleWithHelpTextAndTag>
@@ -330,7 +340,9 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
             errorArgs={{ label: 'Inndelingskriterium' }}
             legend={
               <TitleWithHelpTextAndTag
-                helpText={localization.conceptForm.helpText.devisionCriterion}
+                helpText={
+                  localization.conceptForm.helpText.devisionCriterion[values.relasjon]
+                }
                 tagTitle={localization.tag.recommended}
                 tagColor='info'
               >
@@ -346,7 +358,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
           errorMessage={localization.conceptForm.validation.languageRequired}
           errorArgs={{ label: 'Beskrivelse' }}
           legend={
-            <TitleWithHelpTextAndTag helpText={localization.conceptForm.helpText.relationLevel}>
+            <TitleWithHelpTextAndTag helpText={localization.conceptForm.helpText.relationRole}>
               {localization.conceptForm.fieldLabel.relationRole}
             </TitleWithHelpTextAndTag>
           }

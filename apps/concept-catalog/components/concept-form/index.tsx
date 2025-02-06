@@ -187,8 +187,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                 <FormLayout>
                   <FormLayout.Options>
                     <Paragraph>
-                      Som standard blir alle påkrevde felt validert. For å kunne lagre uten å fylle ut
-                      påkrevde felt, må du huke av i avkrysningsboksen nedenfor.
+                     {localization.conceptForm.alert.ignoreRequired}
                     </Paragraph>
                     <Checkbox
                       size='sm'
@@ -196,7 +195,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                       checked={ignoreRequired}
                       onChange={(e) => setIgnoreRequired(e.target.checked)}
                     >
-                      Ignorer påkrevde felt
+                      {localization.conceptForm.fieldLabel.ignoreRequired}
                     </Checkbox>
                   </FormLayout.Options>
                   <FormLayout.Section
@@ -251,8 +250,8 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='relation'
-                    title='Relasjoner'
-                    subtitle='Relasjoner til begrepet.'
+                    title={localization.conceptForm.section.relationTitle}
+                    subtitle={localization.conceptForm.section.relationSubtitle}
                     error={hasError([
                       'begrepsRelasjon',
                       'erstattesAv',
@@ -266,8 +265,8 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='internal'
-                    title='Interne opplysninger'
-                    subtitle='Opplysningene under er til intern bruk og vil ikke publiseres ut i Felles datakatalog.'
+                    title={localization.conceptForm.section.internalTitle}
+                    subtitle={localization.conceptForm.section.internalSubtitle}
                     error={hasError(['interneFelt'])}
                   >
                     <InternalSection
@@ -278,32 +277,32 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='status'
-                    title='Begrepsstatus'
-                    subtitle='Status for begrepet. Undersøk hvilke statuser som skal brukes i din virksomhet.'
+                    title={localization.conceptForm.section.conceptStatusTitle}
+                    subtitle={localization.conceptForm.section.conceptStatusSubtitle}
                     error={hasError(['statusURI'])}
                   >
                     <StatusSection conceptStatuses={conceptStatuses} />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='version'
-                    title='Versjon'
-                    subtitle='En versjon representerer en spesifikk utgave eller oppdatering av et begrep, som reflekterer eventuelle endringer i definisjon, kontekst eller bruk over tid.'
+                    title={localization.conceptForm.section.versionTitle}
+                    subtitle={localization.conceptForm.section.versionSubtitle}
                     error={hasError(['versjonsnr'])}
                   >
                     <VersionSection />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='period'
-                    title='Gyldighetsperiode'
-                    subtitle='Her registrerer du datoen som begrepet skal gjelde fra og med og til og med.'
+                    title={localization.conceptForm.section.periodTitle}
+                    subtitle={localization.conceptForm.section.periodSubtitle}
                     error={hasError(['gyldigFom', 'gyldigTom'])}
                   >
                     <PeriodSection />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='contact'
-                    title='Kontaktinformasjon'
-                    subtitle='Her registrerer du datoen som begrepet skal gjelde fra og med og til og med.'
+                    title={localization.conceptForm.section.contactTitle}
+                    subtitle={localization.conceptForm.section.contactSubtitle}
                     required
                     error={hasError(['kontaktpunkt'])}
                   >
