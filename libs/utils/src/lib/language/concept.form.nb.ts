@@ -58,7 +58,7 @@ Eksempler:
 - _Funksjon blir brukt som inndelingskriterium for å dele helhetsbegrepet datamaskin i delbegreper som hovedkort, visningsenhet, strømforsyning, lagringsenhet og inndataenhet._`
     }, 
 
-    contactInfo: `Det er mulig å legge til e-post eller telefonnummer som kontaktinformasjon. Minst en av disse må fylles ut.`,
+    contactInfo: `Det er mulig å legge til e-post og telefonnummer som kontaktinformasjon. Minst en av disse må fylles ut.`,
     labels: `
 Ord eller uttrykk som brukes for å gruppere begrep når dette er hensiktsmessig for virksomheten. Merkelapp kan brukes som et filter for å finne begrep som hører sammen.`,
     period: `
@@ -110,7 +110,9 @@ __Virksomhetens eget begrep:__ Alle virksomhetens begrep i registreringsløsning
 __Publisert begrep på data.norge.no:__ Alle publiserte begrep, inklusiv virksomhetens egne.
 
 __Begrep i annen begrepskatalog:__ Gyldig URI for begrep i en annen katalog utenfor data.norge.no. Begrepet må være 
-tilgjengelig som lenkede data (RDF), i henhold til SKOS-AP-NO.`,
+tilgjengelig som lenkede data (RDF), i henhold til SKOS-AP-NO.
+
+Etter katalog er valgt, brukes feltet nedenfor til å enten søke i katalogen som er valgt eller skrive inn en URI for begrep i annen katalog`,
     relationToSource: `
 __Egendefinert:__ Definisjonen er ikke er hentet fra noen eksterne kilder.
 
