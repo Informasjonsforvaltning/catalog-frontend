@@ -151,6 +151,7 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
           key='fagområdeKoder'
           name='fagområdeKoder'
           label={codeListLabel}
+          showError
           readOnly
         />,
       );
