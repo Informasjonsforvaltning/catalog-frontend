@@ -58,7 +58,6 @@ const getRelatedConceptTypeStateValue = (relatedConcept?: RelatedConcept): Relat
 export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationFieldsetProps) => {
   const { errors, values, setFieldValue } = useFormikContext<UnionRelation>();
   const [relatedConcept, setRelatedConcept] = useState<string[]>(getRelatedConceptStateValue(initialRelatedConcept));
-  const [relatedConceptInputValue, setRelatedConceptInputValue] = useState('');
   const [relatedConceptType, setRelatedConceptType] = useState<RelatedConceptType>(
     getRelatedConceptTypeStateValue(initialRelatedConcept),
   );
@@ -106,6 +105,10 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
       label: localization.conceptForm.fieldLabel.relationSubtypes[item],
       value: item,
     }));
+  relationSubtypeOptions.unshift({
+    label: localization.conceptForm.fieldLabel.relationSubtypes['none'],
+    value: 'none',
+  })  
 
   let internalRelatedConceptOptions: Option[] = [];
   let externalRelatedConceptOptions: Option[] = [];
@@ -145,7 +148,6 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
 
     setRelatedConceptType(value as RelatedConceptType);
     setRelatedConcept([]);
-    setRelatedConceptInputValue('');
   };
 
   const handleRelationTypeChange = (value: string[]) => {
@@ -319,7 +321,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
               value={
                 values.relasjonsType && relationSubtypeOptions.find((type) => type.value === values.relasjonsType)
                   ? [values.relasjonsType]
-                  : []
+                  : ['none']
               }
               error={errors?.relasjonsType}
               onValueChange={handleRelationSubtypeChange}
