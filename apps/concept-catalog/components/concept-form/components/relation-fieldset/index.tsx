@@ -338,8 +338,6 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
           </Box>
           <FormikLanguageFieldset
             name='inndelingskriterium'
-            errorMessage={localization.conceptForm.validation.languageRequired}
-            errorArgs={{ label: 'Inndelingskriterium' }}
             legend={
               <TitleWithHelpTextAndTag
                 helpText={
@@ -357,8 +355,6 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
       {values.relasjon === RelationTypeEnum.ASSOSIATIV && (
         <FormikLanguageFieldset
           name='beskrivelse'
-          errorMessage={localization.conceptForm.validation.languageRequired}
-          errorArgs={{ label: 'Beskrivelse' }}
           legend={
             <TitleWithHelpTextAndTag helpText={localization.conceptForm.helpText.relationRole}>
               {localization.conceptForm.fieldLabel.relationRole}

@@ -56,8 +56,6 @@ export const DefinitionModal = ({ initialDefinition, header, definitionHelpText,
                 <Modal.Content className={styles.content}>
                   <FormikLanguageFieldset
                     name='tekst'
-                    errorMessage={localization.conceptForm.validation.languageRequired}
-                    errorArgs={{ label: 'Definisjon' }}
                     as={TextareaWithPrefix}
                     legend={
                       <TitleWithHelpTextAndTag
