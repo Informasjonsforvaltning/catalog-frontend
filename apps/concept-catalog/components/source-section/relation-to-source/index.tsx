@@ -13,9 +13,9 @@ export interface RelationshipWithSourceOptions {
 }
 
 export const relationToSourceOptions: RelationshipWithSourceOptions[] = [
-  { displayValue: 'Egendefinert', value: 'egendefinert' },
-  { displayValue: 'Basert på kilde', value: 'basertPaaKilde' },
-  { displayValue: 'Sitat fra kilde', value: 'sitatFraKilde' },
+  { displayValue: localization.concept.selfDefined, value: 'egendefinert' },
+  { displayValue: localization.concept.basedOnSource, value: 'basertPaaKilde' },
+  { displayValue: localization.concept.quoteFromSource, value: 'sitatFraKilde' },
 ];
 
 interface Props {

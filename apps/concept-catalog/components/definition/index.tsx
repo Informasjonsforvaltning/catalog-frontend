@@ -10,17 +10,27 @@ interface Props {
 }
 
 export const Definition = ({ definition, language }: Props) => {
+
+  const RelationToSource = () => {
+    if(definition?.kildebeskrivelse?.forholdTilKilde === 'egendefinert') {
+      return localization.concept.selfDefined;
+    } else if(definition?.kildebeskrivelse?.forholdTilKilde === 'basertPaaKilde') {
+      return `${localization.concept.basedOnSource}:`;
+    } else if(definition?.kildebeskrivelse?.forholdTilKilde === 'sitatFraKilde') {
+      return `${localization.concept.quoteFromSource}:`;
+    }
+    return null;
+  }
+
   return (
     <>
       <div>{getTranslateText(definition?.tekst ?? '', language)}</div>
       {(definition?.kildebeskrivelse?.forholdTilKilde === 'egendefinert' ||
         definition?.kildebeskrivelse?.kilde.length !== 0) && (
         <div className={cn(classes.source)}>
-          <div>{localization.concept.source}:</div>
+          <div><RelationToSource /></div>
           <div>
-            {definition?.kildebeskrivelse?.forholdTilKilde === 'egendefinert' ? (
-              localization.concept.selfDefined
-            ) : (
+            {definition?.kildebeskrivelse?.kilde.length !== 0 && (
               <ul>
                 {definition?.kildebeskrivelse?.kilde?.map((kilde, i) => (
                   <li key={`kilde-${i}`}>
