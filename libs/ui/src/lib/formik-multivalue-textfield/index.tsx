@@ -2,7 +2,7 @@
 
 import { Box, Chip, ErrorMessage, Label, Textfield, TextfieldProps } from '@digdir/designsystemet-react';
 import { AddButton, DeleteButton } from '../button';
-import { forwardRef, useState } from 'react';
+import { forwardRef, ReactNode, useState } from 'react';
 import { useFormikContext } from 'formik';
 import _ from 'lodash';
 import classNames from 'classnames';
@@ -10,15 +10,15 @@ import styles from './formik-multivalue-textfield.module.scss';
 
 type FormikMultivalueTextfieldProps = {
   name: string;
-  showError?: boolean;
   showDeleteButton?: boolean;
   readOnly?: boolean;
+  error?: ReactNode;
   onDeleteButtonClicked?: () => void;
 } & TextfieldProps;
 
 export const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueTextfieldProps>(
-  ({ className, name, showError, showDeleteButton, readOnly, label, onDeleteButtonClicked, ...props }, ref) => {
-    const { errors, values, setFieldValue } = useFormikContext<Record<string, string[]>>();
+  ({ className, name, showDeleteButton, readOnly, label, error, onDeleteButtonClicked, ...props }, ref) => {
+    const { values, setFieldValue } = useFormikContext<Record<string, string[]>>();
     const [inputValue, setInputValue] = useState<string>('');
 
     const handleOnChangeInputValue = (value: string) => {
@@ -65,6 +65,7 @@ export const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMult
                 onBlur={() => handleAddTextValue()}
                 readOnly={readOnly}
                 label={label}
+                error={Boolean(error)}
                 {...props}
               />
               <AddButton
@@ -99,7 +100,7 @@ export const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMult
             </ChipComponent>
           ))}
         </Chip.Group>
-        {showError && _.get(errors, name) && <ErrorMessage>{_.get(errors, name)}</ErrorMessage>}
+        {error && <ErrorMessage>{error}</ErrorMessage>}
       </>
     );
   },

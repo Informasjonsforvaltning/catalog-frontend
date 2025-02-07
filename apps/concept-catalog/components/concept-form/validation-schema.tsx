@@ -162,7 +162,7 @@ const prefLabelNynorsk = Yup.string().label(
   `${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.nn})`,
 );
 
-export const conceptSchema = ({ required, baseUri }) =>
+export const conceptSchema = ({ baseUri, required }) =>
   Yup.object().shape({
     anbefaltTerm: Yup.object().shape({
       navn: Yup.object().shape({
@@ -182,31 +182,38 @@ export const conceptSchema = ({ required, baseUri }) =>
     definisjonForSpesialister: definitionSchema(required),
     fagområde: tekstMedSpraakKodeArray(localization.conceptForm.fieldLabel.subjectFree).test({
       test(value) {
-        if(!isEmpty(value) && !isEmpty(this.parent.fagområdeKoder)) {
+        if (!isEmpty(value) && !isEmpty(this.parent.fagområdeKoder)) {
           return this.createError({
             message: localization.conceptForm.validation.subjectConflict,
             path: this.path,
           });
         }
         return true;
-      }
+      },
     }),
-    fagområdeKoder: Yup.array().nullable().test({
-      test(value) {
-        if(!isEmpty(value) && !isEmpty(this.parent.fagområde)) {
-          return this.createError({
-            message: localization.conceptForm.validation.subjectConflict,
-            path: this.path,
-          });
-        }
-        return true;
-      }}),
+    fagområdeKoder: Yup.array()
+      .nullable()
+      .label(localization.conceptForm.fieldLabel.subjectCodeList)
+      .test({
+        test(value) {
+          if (!isEmpty(value) && !isEmpty(this.parent.fagområde)) {
+            return this.createError({
+              message: localization.conceptForm.validation.subjectConflict,
+              path: this.path,
+            });
+          }
+          return true;
+        },
+      }),
     statusURI: Yup.string().nullable().label(localization.conceptForm.fieldLabel.status),
     omfang: Yup.object()
       .nullable()
       .shape({
         tekst: Yup.string().nullable().label(localization.conceptForm.fieldLabel.valueRangeDescription),
-        uri: Yup.string().nullable().url(localization.conceptForm.validation.url).label(localization.conceptForm.fieldLabel.valueRangeLink),
+        uri: Yup.string()
+          .nullable()
+          .url(localization.conceptForm.validation.url)
+          .label(localization.conceptForm.fieldLabel.valueRangeLink),
       }),
     kontaktpunkt: Yup.object()
       .test('contact-test', 'Minst en av kontaktfeltene må fylles ut.', (value: any) => {
@@ -236,7 +243,7 @@ export const conceptSchema = ({ required, baseUri }) =>
           }
 
           const fomDateTime = parseDateTime(value);
-          if(fomDateTime?.isValid) {
+          if (fomDateTime?.isValid) {
             return true;
           }
 
@@ -255,12 +262,12 @@ export const conceptSchema = ({ required, baseUri }) =>
           }
 
           const tomDateTime = parseDateTime(value);
-          if(tomDateTime?.isValid) {
-            if(this.parent.gyldigFom === null) {
+          if (tomDateTime?.isValid) {
+            if (this.parent.gyldigFom === null) {
               return true;
             }
             const fomDateTime = parseDateTime(this.parent.gyldigFom);
-            if(fomDateTime && (tomDateTime.toJSDate() >= fomDateTime?.toJSDate())) {
+            if (fomDateTime && tomDateTime.toJSDate() >= fomDateTime?.toJSDate()) {
               return true;
             }
           }
