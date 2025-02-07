@@ -7,8 +7,6 @@ export const TermSection = () => {
     <Box>
       <FormikLanguageFieldset
         name='anbefaltTerm.navn'
-        errorMessage={localization.conceptForm.validation.languageRequired}
-        errorArgs={{ label: localization.conceptForm.fieldLabel.prefLabel }}
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.prefLabel}
@@ -22,8 +20,6 @@ export const TermSection = () => {
       <FieldsetDivider />
       <FormikLanguageFieldset
         name='tillattTerm'
-        errorMessage={localization.conceptForm.validation.languageRequired}
-        errorArgs={{ label: localization.conceptForm.fieldLabel.altLabel }}
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.altLabel}
@@ -38,8 +34,6 @@ export const TermSection = () => {
       <FieldsetDivider />
       <FormikLanguageFieldset
         name='frarådetTerm'
-        errorMessage={localization.conceptForm.validation.languageRequired}
-        errorArgs={{ label: localization.conceptForm.fieldLabel.hiddenLabel }}
         legend={
           <TitleWithHelpTextAndTag helpText={localization.conceptForm.helpText.hiddenLabel}>
             {localization.conceptForm.fieldLabel.hiddenLabel}
