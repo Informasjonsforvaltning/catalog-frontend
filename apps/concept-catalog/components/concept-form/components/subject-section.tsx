@@ -82,10 +82,9 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
         <FormikLanguageFieldset
           key='fagområde'
           name='fagområde'
-          errorMessage={localization.conceptForm.validation.languageRequired}
-          errorArgs={{ label: localization.conceptForm.fieldLabel.subjectFree }}
           multiple
           readOnly={codeListActivated}
+          showError={!codeListActivated}
           legend={
             <TitleWithHelpTextAndTag
               {...(!codeListActivated
@@ -151,7 +150,6 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
           key='fagområdeKoder'
           name='fagområdeKoder'
           label={codeListLabel}
-          showError
           readOnly
         />,
       );
