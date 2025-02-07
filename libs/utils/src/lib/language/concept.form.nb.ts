@@ -207,7 +207,8 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
       overordnet: 'Overordnet',
       underordnet: 'Underordnet',
       erDelAv: 'Er del av',
-      omfatter: 'Omfatter'
+      omfatter: 'Omfatter',
+      none: 'Ingen nivå valgt'
     },
     relatedConceptTypes: {
       internal: 'Virksomhetens eget begrep',
