@@ -4,6 +4,7 @@ import EditPage from './editPage';
 import { Concept, Definisjon, RelationSubtypeEnum, RelationTypeEnum } from '@catalog-frontend/types';
 import { formatISO } from '@catalog-frontend/utils';
 import { ALL_RELATIONS } from '../data/relations';
+import { relationToSourceText } from '../utils/helpers';
 
 export default class DetailPage {
   url: string;
@@ -87,10 +88,8 @@ export default class DetailPage {
   }
 
   getDefinitionSourceText(def: Definisjon) {
-    if (def.kildebeskrivelse.forholdTilKilde === 'egendefinert') {
-      return 'Egendefinert';
-    }
-    return '';
+    const text = relationToSourceText(def.kildebeskrivelse.forholdTilKilde);
+    return def.kildebeskrivelse.forholdTilKilde === 'egendefinert' ? text : `${text}:`;
   }
 
   getVersionText(concept: Concept) {
@@ -125,7 +124,7 @@ export default class DetailPage {
         .locator('div')
         .filter({
           hasText: new RegExp(
-            `Definisjon:${concept.definisjon.tekst.nb as string}Kilde:${this.getDefinitionSourceText(concept.definisjon)}`,
+            `Definisjon:${concept.definisjon.tekst.nb as string}${this.getDefinitionSourceText(concept.definisjon)}`,
           ),
         })
         .nth(1),

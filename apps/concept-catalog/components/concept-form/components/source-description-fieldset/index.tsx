@@ -135,7 +135,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
                     size='sm'
                     type='button'
                     onClick={() => {
-                      arrayHelpers.push({ text: '', uri: '' });
+                      arrayHelpers.push({ text: undefined, uri: undefined });
                     }}
                   >
                     <PlusCircleIcon fontSize='1rem' />

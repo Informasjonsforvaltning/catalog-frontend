@@ -42,3 +42,14 @@ export const clearCombobox = async (page, label) => {
   await expect(page.getByLabel(label)).toHaveValue('');
   await page.getByLabel(label).press('Tab');
 };
+
+  export const relationToSourceText = (relationToSource) => {
+    if (relationToSource === 'egendefinert') {
+      return 'Egendefinert';
+    } else if (relationToSource === 'basertPaaKilde') {
+      return 'Basert på kilde';
+    } if (relationToSource === 'sitatFraKilde') {
+      return 'Sitat fra kilde';
+    }
+    return null;
+  }

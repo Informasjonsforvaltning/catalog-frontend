@@ -92,6 +92,7 @@ export async function createConcept(values: Concept, catalogId: string) {
     conceptId = response?.headers?.get('location')?.split('/').pop();
     success = true;
   } catch (error) {
+    console.error(error);
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
@@ -112,6 +113,7 @@ export async function deleteConcept(catalogId: string, conceptId: string) {
     }
     success = true;
   } catch (error) {
+    console.error(error);
     throw new Error(localization.alert.deleteFail);
   } finally {
     if (success) {
