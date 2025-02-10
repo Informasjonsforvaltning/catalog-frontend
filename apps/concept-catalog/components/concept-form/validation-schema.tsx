@@ -148,12 +148,11 @@ export const definitionSchema = (required) =>
 export const relationSchema = Yup.object().shape({
   relasjon: Yup.string().required().label(localization.conceptForm.fieldLabel.relation),
   relasjonsType: Yup.string()
-    .nullable()
     .when('relasjon', (relasjon) => {
       if (`${relasjon}` === RelationTypeEnum.PARTITIV || `${relasjon}` === RelationTypeEnum.GENERISK) {
         return Yup.string().required().label(localization.conceptForm.fieldLabel.relationLevel);
       }
-      return Yup.string().notRequired().label(localization.conceptForm.fieldLabel.relationRole);
+      return Yup.string().nullable().notRequired().label(localization.conceptForm.fieldLabel.relationRole);
     }),
   relatertBegrep: Yup.string().required().label(localization.conceptForm.fieldLabel.relatedConcept),
 });
