@@ -18,6 +18,7 @@ export interface DataServiceToBeCreated {
   keywords: LocalizedStrings;
   landingPage?: string;
   pages?: string[];
+  servesDataset?: string[];
   contactPoint?: DataServiceContactPoint;
 }
 
