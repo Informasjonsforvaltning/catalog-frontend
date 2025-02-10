@@ -12,7 +12,7 @@ export const dataServiceFormNb = {
     pages: 'Referanser til sider og/eller dokumenter som beskriver APIet',
   },
   heading: {
-    titleAndDescription: 'Tittel og beskrivelse',
+    about: 'Om APIet',
     endpoint: 'Endepunkt',
     contactPoint: 'Kontaktpunkt',
     format: 'Format',
