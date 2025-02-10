@@ -18,7 +18,6 @@ export const EndpointSection = () => {
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.required}
             helpText={localization.dataServiceForm.helptext.endpoint}
-            helpAriaLabel={localization.dataServiceForm.fieldLabel.endpoint}
           >
             {localization.dataServiceForm.fieldLabel.endpoint}
           </TitleWithHelpTextAndTag>
@@ -42,7 +41,8 @@ export const EndpointSection = () => {
                         label={
                           index < 1 ? (
                             <TitleWithHelpTextAndTag
-                              helpAriaLabel={localization.dataServiceForm.fieldLabel.endpointDescriptions}
+                              tagTitle={localization.tag.recommended}
+                              tagColor='info'
                               helpText={localization.dataServiceForm.helptext.endpointDescriptions}
                             >
                               {localization.dataServiceForm.fieldLabel.endpointDescriptions}
