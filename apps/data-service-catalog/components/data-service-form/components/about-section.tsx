@@ -34,6 +34,22 @@ export const AboutSection = () => {
           </TitleWithHelpTextAndTag>
         }
       />
+
+      <FieldsetDivider />
+
+      <FormikLanguageFieldset
+        name='keywords'
+        legend={
+          <TitleWithHelpTextAndTag
+            helpText={localization.dataServiceForm.helptext.keywords}
+            tagTitle={localization.tag.recommended}
+            tagColor='info'
+          >
+            {localization.dataServiceForm.fieldLabel.keywords}
+          </TitleWithHelpTextAndTag>
+        }
+        multiple
+      />
     </>
   );
 };
