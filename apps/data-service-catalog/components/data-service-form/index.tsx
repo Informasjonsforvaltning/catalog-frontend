@@ -13,14 +13,16 @@ import { EndpointSection } from './components/endpoint-section';
 import { ContactPointSection } from './components/contact-point-section';
 import { FormatSection } from './components/format-section';
 import { DocumentationSection } from './components/documentation-section';
+import { DatasetSection } from './components/dataset-section';
 
 type Props = {
   initialValues: DataService | DataServiceToBeCreated;
   submitType: 'create' | 'update';
+  searchEnv: string; // Environment variable to search service
   referenceDataEnv: string; // Environment variable to reference data
 };
 
-export const DataServiceForm = ({ initialValues, submitType, referenceDataEnv }: Props) => {
+const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceDataEnv }: Props) => {
   const { catalogId, dataServiceId } = useParams();
   const [isDirty, setIsDirty] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -63,7 +65,7 @@ export const DataServiceForm = ({ initialValues, submitType, referenceDataEnv }:
   return (
     <Formik
       initialValues={initialValues as DataService}
-      onSubmit={async (values, { setSubmitting }) => {
+      onSubmit={async (values: DataService, { setSubmitting }) => {
         await handleSubmit(trimObjectWhitespace(values) as DataService);
         setSubmitting(false);
         setIsSubmitted(true);
@@ -103,6 +105,13 @@ export const DataServiceForm = ({ initialValues, submitType, referenceDataEnv }:
                   title={localization.dataServiceForm.heading.format}
                 >
                   <FormatSection referenceDataEnv={referenceDataEnv} />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='dataset-section'
+                  title={localization.dataServiceForm.heading.dataset}
+                >
+                  <DatasetSection searchEnv={searchEnv} />
                 </FormLayout.Section>
 
                 <FormLayout.Section

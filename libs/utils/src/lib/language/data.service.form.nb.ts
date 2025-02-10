@@ -12,12 +12,14 @@ export const dataServiceFormNb = {
     pages: 'Referanser til sider og/eller dokumenter som beskriver APIet',
     keywords:
       'Oppgi emneord (eller tag) som beskriver datatjenesten, f.eks. _eksempel_, _datatjeneste_ (bokmål) / _example_, _data service_ (Engelsk).',
+    servesDataset: 'Brukes til å referere til datasett som datatjenesten kan distribuere.',
   },
   heading: {
     about: 'Om APIet',
     endpoint: 'Endepunkt',
     contactPoint: 'Kontaktpunkt',
     format: 'Format',
+    dataset: 'Tilgjengeliggjør datasett',
     documentation: 'Dokumentasjon',
   },
   fieldLabel: {
@@ -28,6 +30,7 @@ export const dataServiceFormNb = {
     mediaTypes: 'Medietyper',
     fileTypes: 'Filtyper',
     landingPage: 'Landingsside',
+    servesDataset: 'Datasett',
     pages: 'Annen dokumentasjon',
     keywords: 'Emneord',
   },
