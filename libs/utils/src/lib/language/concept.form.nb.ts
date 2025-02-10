@@ -235,7 +235,10 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     warning: 'Advarsel',
     codeListToText: 'Virksomheten har byttet fra kodeliste til fritekst. Tidligere kodeliste verdier må slettes for å kunne lagre begrepet.',
     textToCodeList: 'Virksomheten har byttet fra fritekst til kodeliste. Tidligere fritekst verdier må slettes for å kunne lagre begrepet.',
-    ignoreRequired: 'I utgangspunktet er det krav om at alle påkrevde felt må fylles ut for å få lagret. Når avhukingsboksen er aktiv, må bare Anbefalt term på bokmål være fylt ut.'
+    ignoreRequired: 'I utgangspunktet er det krav om at alle påkrevde felt må fylles ut for å få lagret. Når avhukingsboksen er aktiv, må bare Anbefalt term på bokmål være fylt ut.',
+    youHaveUnsavedChanges: 'Det finnes endringer som ikke har blitt lagret på begrepet:',
+    wantToRestoreChanges: 'Vil du gjenopprette?',
+    termNotDefined: 'Term ikke oppgitt'
   },
   validation: {
     minLength: 'Verdien må være minst {0} karakterer lang.',

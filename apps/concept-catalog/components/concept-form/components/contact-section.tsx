@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FastField, useFormikContext } from 'formik';
 import { Box, Textfield, CheckboxGroup, Checkbox, ErrorMessage } from '@digdir/designsystemet-react';
 import { Concept } from '@catalog-frontend/types';
@@ -8,11 +8,7 @@ import styles from '../concept-form.module.scss';
 
 export const ContactSection = () => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
-  const [selectedFields, setSelectedFields] = useState<string[]>([
-    ...(values.kontaktpunkt?.harEpost ? ['harEpost'] : []),
-    ...(values.kontaktpunkt?.harTelefon ? ['harTelefon'] : []),
-    //...(values.kontaktpunkt?.harSkjema ? ['harSkjema'] : []),
-  ]);
+  const [selectedFields, setSelectedFields] = useState<string[]>([]);
 
   const contactOptions = [
     {
@@ -33,6 +29,13 @@ export const ContactSection = () => {
       }
     });
   };
+
+  useEffect(() => {
+    setSelectedFields([
+      ...(values.kontaktpunkt?.harEpost ? ['harEpost'] : []),
+      ...(values.kontaktpunkt?.harTelefon ? ['harTelefon'] : []),
+    ]);
+  }, [values.kontaktpunkt])
 
   return (
     <Box className={styles.contactSection}>

@@ -5,9 +5,16 @@ import classNames from 'classnames';
 import { Formik, Form, FormikProps } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Alert, Checkbox, Paragraph, Spinner } from '@digdir/designsystemet-react';
-import { localization } from '@catalog-frontend/utils';
+import { formatISO, getTranslateText, localization } from '@catalog-frontend/utils';
 import { CodeListsResult, Concept, FieldsResult, ReferenceDataCode, UsersResult } from '@catalog-frontend/types';
-import { Button, FormLayout, NotificationCarousel } from '@catalog-frontend/ui';
+import {
+  Button,
+  FormLayout,
+  FormikAutoSaver,
+  FormikAutoSaverRef,
+  NotificationCarousel,
+  StorageData,
+} from '@catalog-frontend/ui';
 import { createConcept, updateConcept } from '../../app/actions/concept/actions';
 import { conceptSchema } from './validation-schema';
 import { TermSection } from './components/term-section';
@@ -61,15 +68,17 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
     : []),
 ];
 
-const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }: Props) => {  
+const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }: Props) => {
   const router = useRouter();
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<Concept>>(null);
-  
+  const autoSaveRef = useRef<FormikAutoSaverRef>(null);
+
+  const restoreOnRender = Boolean(searchParams.get('restore'));
   const validateOnRender = Boolean(searchParams.get('validate'));
   const [validateOnChange, setValidateOnChange] = useState(validateOnRender);
   const [isCanceled, setIsCanceled] = useState(false);
-  const [ignoreRequired, setIgnoreRequired] = useState(false);  
+  const [ignoreRequired, setIgnoreRequired] = useState(false);
 
   const mapPropsToValues = ({
     id,
@@ -154,14 +163,42 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
   };
 
   const handleCancel = () => {
+    // Discard stored data
+    autoSaveRef.current?.discard();
+
     setIsCanceled(true);
     router.push(concept.id ? `/catalogs/${catalogId}/concepts/${concept.id}` : `/catalogs/${catalogId}/concepts`);
   };
 
+  const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
+    const name = getTranslateText(values?.anbefaltTerm?.navn) || localization.conceptForm.alert.termNotDefined;
+    const lastChangedFormatted = formatISO(lastChanged, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+    return (
+      <>
+        <Paragraph size='sm'>{localization.conceptForm.alert.youHaveUnsavedChanges}</Paragraph>
+        <Paragraph size='sm'>
+          <span className={styles.bold}>{name}</span> ({lastChangedFormatted})
+        </Paragraph>
+        <Paragraph
+          size='sm'
+          className={styles.topMargin2}
+        >
+          {localization.conceptForm.alert.wantToRestoreChanges}
+        </Paragraph>
+      </>
+    );
+  };
+
   useEffect(() => {
-    if(validateOnRender) {
+    if (validateOnRender) {
       formikRef.current?.validateForm();
-    }    
+    }
   }, []);
 
   return (
@@ -174,21 +211,38 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
       onSubmit={async (values, { setSubmitting }) => {
         concept.id === null ? await handleCreate(values as Concept) : await handleUpdate(values as Concept);
         setSubmitting(false);
+        // Discard stored data
+        autoSaveRef.current?.discard();
       }}
     >
-      {({ errors, dirty, isValid, isSubmitting, isValidating, submitForm, validateForm }) => {
+      {({ errors, dirty, isValid, isSubmitting, isValidating, submitForm, setValues }) => {
         const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
         const hasError = (fields: (keyof Concept)[]) => fields.some((field) => Object.keys(errors).includes(field));
+
+        const handleRestoreConcept = (data: StorageData) => {
+          if (data?.values?.id !== concept.id) {
+            if (!data?.values?.id) {
+              return router.push(`/catalogs/${catalogId}/concepts/new?restore=1`);
+            }
+            return router.push(`/catalogs/${catalogId}/concepts/${data.values.id}/edit?restore=1`);
+          }
+          setValues(data.values);
+        };
 
         return (
           <>
             <div className='container'>
               <Form>
+                <FormikAutoSaver
+                  ref={autoSaveRef}
+                  storageKey='conceptForm'
+                  restoreOnRender={restoreOnRender}
+                  onRestore={handleRestoreConcept}
+                  confirmMessage={restoreConfirmMessage}
+                />
                 <FormLayout>
                   <FormLayout.Options>
-                    <Paragraph>
-                     {localization.conceptForm.alert.ignoreRequired}
-                    </Paragraph>
+                    <Paragraph>{localization.conceptForm.alert.ignoreRequired}</Paragraph>
                     <Checkbox
                       size='sm'
                       value='ignoreRequired'
@@ -255,7 +309,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     error={hasError([
                       'begrepsRelasjon',
                       'erstattesAv',
-                      'seOgså',                      
+                      'seOgså',
                       'internBegrepsRelasjon',
                       'internErstattesAv',
                       'internSeOgså',
