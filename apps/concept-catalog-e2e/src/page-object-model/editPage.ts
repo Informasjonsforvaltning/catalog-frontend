@@ -3,7 +3,7 @@ import { expect, Page, BrowserContext } from '@playwright/test';
 import type AxeBuilder from '@axe-core/playwright';
 import { Concept, RelationSubtypeEnum, RelationTypeEnum, UnionRelation } from '@catalog-frontend/types';
 import { ALL_RELATIONS } from '../data/relations';
-import { clearCombobox, getParentLocator } from '../utils/helpers';
+import { clearCombobox, getParentLocator, relationToSourceText } from '../utils/helpers';
 
 export default class EditPage {
   url: string;
@@ -184,7 +184,12 @@ export default class EditPage {
       ['Bokmål', 'Nynorsk', 'Engelsk'], 
       clearBeforeFill,
     );
-    await this.page.getByRole('group', { name: 'Forhold til kilde' }).getByLabel('Egendefinert').click();
+    await this.page.getByRole('group', { name: 'Forhold til kilde' }).getByLabel(relationToSourceText(concept.definisjon?.kildebeskrivelse?.forholdTilKilde)).click();
+    if(concept.definisjon?.kildebeskrivelse?.forholdTilKilde !== 'egendefinert') {
+      await this.page.getByRole('button', { name: 'Legg til kilde' }).click();
+      await this.page.getByRole('textbox', { name: 'Kildebeskrivelse' }).fill('Kilde');
+    }
+
     await this.page.getByRole('button', { name: 'Legg til definisjon' }).click();
 
     // Add remark

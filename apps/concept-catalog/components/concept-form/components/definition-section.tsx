@@ -129,18 +129,17 @@ export const DefinitionSection = () => {
                           variant='default'
                         >
                           <Popover.Trigger asChild>
-                            <Link>
-                              <Tag
-                                size='sm'
-                                color='second'
-                                onMouseEnter={() =>
-                                  def.kildebeskrivelse?.kilde?.length && setOpen({ ...open, [index]: true })
-                                }
-                                onMouseOut={() => setOpen({ ...open, [index]: false })}
-                              >
-                                {sourcesText(def.kildebeskrivelse?.kilde)}
-                              </Tag>
-                            </Link>
+                            <Tag
+                              role='button'
+                              size='sm'
+                              color='second'
+                              onMouseEnter={() =>
+                                def.kildebeskrivelse?.kilde?.length && setOpen({ ...open, [index]: true })
+                              }
+                              onMouseOut={() => setOpen({ ...open, [index]: false })}
+                            >
+                              {sourcesText(def.kildebeskrivelse?.kilde)}
+                            </Tag>
                           </Popover.Trigger>
                           <Popover.Content>
                             <ul>
@@ -159,7 +158,7 @@ export const DefinitionSection = () => {
                         </Tag>
                       )}
                     </div>
-                    <div>                    
+                    <div>
                       <DefinitionModal
                         initialDefinition={prepareInitialValues(def)}
                         header={localization.conceptForm.fieldLabel.definitionTargetGroupFull[name] as string}
