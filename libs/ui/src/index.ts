@@ -10,6 +10,7 @@ export * from './lib/fieldset-divider';
 export * from './lib/footer';
 export * from './lib/form-container';
 export * from './lib/form-layout';
+export * from './lib/formik-auto-saver';
 export * from './lib/formik-fast-field-with-ref';
 export * from './lib/formik-language-fieldset';
 export * from './lib/formik-multivalue-textfield';
