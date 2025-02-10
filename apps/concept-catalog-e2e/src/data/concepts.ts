@@ -22,7 +22,6 @@ export const CONCEPT_1: Concept = {
   kontaktpunkt: {    
     harEpost: 'test1@example.com',
     harTelefon: '123456789',
-    //harSkjema: 'https://test1.contactpage.com',
   },
   versjonsnr: {major: 0, minor: 1, patch: 0},
   merknad: {},
@@ -213,7 +212,6 @@ export const CONCEPT_3: Concept = {
   kontaktpunkt: {    
     harEpost: 'test3@example.com',
     harTelefon: '123456789',
-    //harSkjema: 'https://test3.contactpage.com',
   },
   versjonsnr: {major: 1, minor: 2, patch: 3},
   merknad: {

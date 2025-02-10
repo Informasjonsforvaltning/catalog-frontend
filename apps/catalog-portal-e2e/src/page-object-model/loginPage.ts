@@ -73,8 +73,7 @@ export default class LoginPage {
       }
     } catch {
       // Just proceed
-    }
-    
+    }    
     await this.page.getByRole('link', { name: 'Logg inn via ID-porten' }).click({ timeout: 5000 });
     await this.page.getByRole('link', { name: 'TestID på nivå høyt Lag din egen testbruker " / "' }).click();
     await this.page.getByLabel('Personidentifikator (syntetisk)').fill(`${process.env.E2E_AUTH_READ_ID}`);

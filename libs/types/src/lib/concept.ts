@@ -61,7 +61,6 @@ export interface UriText {
 export interface ContactDetails {
   harEpost?: string;
   harTelefon?: string;
-  //harSkjema?: string;
 }
 
 export interface AnbefaltTerm {

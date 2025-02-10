@@ -219,6 +219,7 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     internalConcept: 'Internt begrep',
     ignoreRequired: 'Ignorer påkrevde felt',
     divisionCriterion: 'Inndelingskriterium',
+    contactInfo: 'Kontaktinformasjon',
     emailAddress: 'E-postadresse',
     phoneNumber: 'Telefonnummer',
     contactForm: 'Kontaktskjema',

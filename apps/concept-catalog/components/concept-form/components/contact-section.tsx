@@ -23,10 +23,6 @@ export const ContactSection = () => {
       label: localization.conceptForm.fieldLabel.phoneNumber,
       value: 'harTelefon',
     },
-    // {
-    //   label: 'Kontaktskjema',
-    //   value: 'harSkjema',
-    // },
   ];
 
   const handleContactChange = (value: string[]) => {
@@ -48,7 +44,7 @@ export const ContactSection = () => {
             helpText={localization.conceptForm.helpText.contactInfo}
             tagTitle={localization.tag.required}
           >
-            Kontaktinformasjon
+            {localization.conceptForm.fieldLabel.contactInfo}
           </TitleWithHelpTextAndTag>
         }
         onChange={handleContactChange}
