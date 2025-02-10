@@ -18,7 +18,7 @@ export const dataServiceFormNb = {
     endpoint: 'Endepunkt',
     contactPoint: 'Kontaktpunkt',
     format: 'Format',
-    pages: 'Landingsside og dokumentasjon',
+    documentation: 'Dokumentasjon',
   },
   fieldLabel: {
     description: 'Beskrivelse av APIet',
@@ -28,7 +28,7 @@ export const dataServiceFormNb = {
     mediaTypes: 'Medietyper',
     fileTypes: 'Filtyper',
     landingPage: 'Landingsside',
-    pages: 'Dokumentasjon',
+    pages: 'Annen dokumentasjon',
     keywords: 'Emneord',
   },
   alert: {

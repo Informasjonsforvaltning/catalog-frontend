@@ -12,7 +12,7 @@ import styles from './data-service-form.module.css';
 import { EndpointSection } from './components/endpoint-section';
 import { ContactPointSection } from './components/contact-point-section';
 import { FormatSection } from './components/format-section';
-import { PagesSection } from './components/pages-section';
+import { DocumentationSection } from './components/documentation-section';
 
 type Props = {
   initialValues: DataService | DataServiceToBeCreated;
@@ -92,17 +92,17 @@ export const DataServiceForm = ({ initialValues, submitType, referenceDataEnv }:
                 </FormLayout.Section>
 
                 <FormLayout.Section
+                  id='documentation-section'
+                  title={localization.dataServiceForm.heading.documentation}
+                >
+                  <DocumentationSection />
+                </FormLayout.Section>
+
+                <FormLayout.Section
                   id='format-section'
                   title={localization.dataServiceForm.heading.format}
                 >
                   <FormatSection referenceDataEnv={referenceDataEnv} />
-                </FormLayout.Section>
-
-                <FormLayout.Section
-                  id='pages-section'
-                  title={localization.dataServiceForm.heading.pages}
-                >
-                  <PagesSection />
                 </FormLayout.Section>
 
                 <FormLayout.Section
