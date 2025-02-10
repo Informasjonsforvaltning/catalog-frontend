@@ -51,11 +51,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-  
+    
     &.active {
       background-color: var(--fds-semantic-surface-third-light);
       border-left: 4px solid var(--fds-semantic-surface-action-default);
-      
+
       :global(.fds-link) {
         color: black;
       }
@@ -66,7 +66,7 @@
     }
 
     & .required {
-      font-size: medium;      
+      font-size: medium;
       font-style: italic;
       color: var(--fds-colors-grey-700);
     }

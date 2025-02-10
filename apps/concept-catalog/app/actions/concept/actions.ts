@@ -173,7 +173,6 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
     }    
   } catch (error) {
     console.error(`${localization.alert.fail} ${error}`);
-    console.log(diff);
     throw new Error(`Noe gikk galt, prøv igjen...`);
   }
 
