@@ -10,6 +10,8 @@ export const dataServiceFormNb = {
     fileTypes: 'Søk på og velg blant registrerte filtyper.',
     landingPage: 'Referanse til nettside som gir tilgang til APIet og/eller tilleggsinformasjon',
     pages: 'Referanser til sider og/eller dokumenter som beskriver APIet',
+    keywords:
+      'Oppgi emneord (eller tag) som beskriver datatjenesten, f.eks. _eksempel_, _datatjeneste_ (bokmål) / _example_, _data service_ (Engelsk).',
   },
   heading: {
     about: 'Om APIet',
@@ -27,6 +29,7 @@ export const dataServiceFormNb = {
     fileTypes: 'Filtyper',
     landingPage: 'Landingsside',
     pages: 'Dokumentasjon',
+    keywords: 'Emneord',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette API-beskrivelsen?',
