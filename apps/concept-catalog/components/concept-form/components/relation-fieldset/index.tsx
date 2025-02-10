@@ -107,7 +107,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
     }));
   relationSubtypeOptions.unshift({
     label: localization.conceptForm.fieldLabel.relationSubtypes['none'],
-    value: 'none',
+    value: '',
   })  
 
   let internalRelatedConceptOptions: Option[] = [];
@@ -321,7 +321,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
               value={
                 values.relasjonsType && relationSubtypeOptions.find((type) => type.value === values.relasjonsType)
                   ? [values.relasjonsType]
-                  : ['none']
+                  : ['']
               }
               error={errors?.relasjonsType}
               onValueChange={handleRelationSubtypeChange}
