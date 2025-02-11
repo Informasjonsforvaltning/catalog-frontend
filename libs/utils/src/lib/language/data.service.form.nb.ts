@@ -4,12 +4,17 @@ export const dataServiceFormNb = {
     description: 'Beskrivelsen skal være kortfattet. Det bør fremgå hva som er formålet til APIet.',
     endpoint: 'Rotplassering eller primært endepunkt for APIet.',
     endpointDescriptions: 'Legg til lenke til spesifikasjon av APIet. F.eks OAS, Swagger, GraphQL eller lignende.',
+    accessRights: `Informasjon angående tilgang eller begrensninger basert på personvern, sikkerhet eller andre retningslinjer. Velg det mest restriktive tilgangsnivået som gjelder:
+      - **Allmenn tilgang**: Tilgjengelig for alle.
+      - **Betinget tilgang**: Tilgang krever oppfyllelse av bestemte betingelser.
+      - **Ikke-allmenn tilgang**: Begrenset til en spesifikk gruppe eller formål.`,
     contactPoint:
       'Et kontaktpunkt er informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om datasettet. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.',
     mediaTypes: 'Søk på og velg blant registrerte medietyper.',
     fileTypes: 'Søk på og velg blant registrerte filtyper.',
     landingPage: 'Referanse til nettside som gir tilgang til APIet og/eller tilleggsinformasjon',
     pages: 'Referanser til sider og/eller dokumenter som beskriver APIet',
+    license: 'Lisensen som APIet er gjort tilgjengelig under. Velges fra EUs kontrollerte vokabular _License_.',
     keywords:
       'Oppgi emneord (eller tag) som beskriver datatjenesten, f.eks. _eksempel_, _datatjeneste_ (bokmål) / _example_, _data service_ (Engelsk).',
     servesDataset: 'Brukes til å referere til datasett som datatjenesten kan distribuere.',
@@ -19,6 +24,7 @@ export const dataServiceFormNb = {
     endpoint: 'Endepunkt',
     contactPoint: 'Kontaktpunkt',
     format: 'Format',
+    access: 'Krav til bruk',
     dataset: 'Tilgjengeliggjør datasett',
     documentation: 'Dokumentasjon',
   },
@@ -27,14 +33,17 @@ export const dataServiceFormNb = {
     title: 'Tittel',
     endpoint: 'EndepunktURL',
     endpointDescriptions: 'Endepunktsbeskrivelse',
+    accessRights: 'Tilgangsrettigheter',
     mediaTypes: 'Medietyper',
     fileTypes: 'Filtyper',
     landingPage: 'Landingsside',
     servesDataset: 'Datasett',
     pages: 'Annen dokumentasjon',
+    license: 'Lisens',
     keywords: 'Emneord',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette API-beskrivelsen?',
   },
+  noLicense: 'Ingen lisens valgt',
 };
