@@ -1,5 +1,5 @@
 import { Breadcrumbs, BreadcrumbType, PageBanner } from '@catalog-frontend/ui';
-import { getOrganization } from '@catalog-frontend/data-access';
+import { getOpenLicenses, getOrganization } from '@catalog-frontend/data-access';
 
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
@@ -13,6 +13,12 @@ export default async function NewDataServicePage({ params }: Params) {
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
+
+  const [licenceResponse] = await Promise.all([getOpenLicenses().then((res) => res.json())]);
+
+  const referenceData = {
+    openLicenses: licenceResponse.openLicenses,
+  };
 
   const breadcrumbList = [
     {
@@ -38,6 +44,7 @@ export default async function NewDataServicePage({ params }: Params) {
       <DataServiceForm
         initialValues={initialValues}
         searchEnv={searchEnv}
+        referenceData={referenceData}
         referenceDataEnv={referenceDataEnv}
         submitType={'create'}
       />
