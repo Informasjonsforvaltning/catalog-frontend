@@ -39,6 +39,20 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  async redirects() {
+    return [
+      {
+        source: '/:catalogId(\\d{1,})/:conceptId*',
+        destination: '/catalogs/:catalogId/concepts/:conceptId*',
+        permanent: true,
+      },
+      {
+        source: '/:catalogId(\\d{1,})',
+        destination: '/catalogs/:catalogId/concepts',
+        permanent: true,
+      }
+    ]
+  },
 };
 
 module.exports = withNx(nextConfig);
