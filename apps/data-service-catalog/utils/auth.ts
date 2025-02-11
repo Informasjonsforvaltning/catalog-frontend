@@ -7,7 +7,6 @@ import {
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
-
 import { RedirectType, redirect } from 'next/navigation';
 
 type PageParams = {
@@ -24,12 +23,12 @@ const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', re
     const { catalogId, dataServiceId } = params;
 
     if (!validOrganizationNumber(catalogId)) {
-      redirect(`/notfound`, RedirectType.replace);
+      redirect(`/catalogs/notfound`, RedirectType.replace);
     }
 
     [dataServiceId].forEach((param) => {
       if (params[param] && !validUUID(params[param])) {
-        return redirect(`/notfound`, RedirectType.replace);
+        return redirect(`/catalogs/notfound`, RedirectType.replace);
       }
     });
 
