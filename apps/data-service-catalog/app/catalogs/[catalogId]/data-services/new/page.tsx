@@ -14,10 +14,10 @@ export default async function NewDataServicePage({ params }: Params) {
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
 
-  const [licenceResponse] = await Promise.all([getOpenLicenses().then((res) => res.json())]);
+  const [licenseResponse] = await Promise.all([getOpenLicenses().then((res) => res.json())]);
 
   const referenceData = {
-    openLicenses: licenceResponse.openLicenses,
+    openLicenses: licenseResponse.openLicenses,
   };
 
   const breadcrumbList = [
