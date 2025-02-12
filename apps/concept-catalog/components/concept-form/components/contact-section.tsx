@@ -5,6 +5,7 @@ import { Concept } from '@catalog-frontend/types';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import styles from '../concept-form.module.scss';
+import { isNil } from 'lodash';
 
 export const ContactSection = () => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
@@ -22,18 +23,19 @@ export const ContactSection = () => {
   ];
 
   const handleContactChange = (value: string[]) => {
-    setSelectedFields(value);
     contactOptions.forEach((option) => {
-      if (!value.includes(option.value)) {
-        setFieldValue(`kontaktpunkt.${option.value}`, null);
+      if(!value.includes(option.value)) {
+        setFieldValue(`kontaktpunkt.${option.value}`, null);  
+      } else if(isNil(values.kontaktpunkt?.[option.value])) {
+        setFieldValue(`kontaktpunkt.${option.value}`, '');  
       }
     });
   };
 
   useEffect(() => {
     setSelectedFields([
-      ...(values.kontaktpunkt?.harEpost ? ['harEpost'] : []),
-      ...(values.kontaktpunkt?.harTelefon ? ['harTelefon'] : []),
+      ...(!isNil(values.kontaktpunkt?.harEpost) ? ['harEpost'] : []),
+      ...(!isNil(values.kontaktpunkt?.harTelefon) ? ['harTelefon'] : []),
     ]);
   }, [values.kontaktpunkt])
 
