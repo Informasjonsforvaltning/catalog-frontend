@@ -34,7 +34,7 @@ export const AccessSection = ({ openLicenses }: Props) => {
           {openLicenses &&
             openLicenses.map((licenseRef, i) => (
               <Combobox.Option
-                key={`licence-${licenseRef.uri}-${i}`}
+                key={`license-${licenseRef.uri}-${i}`}
                 value={licenseRef.uri}
               >
                 {getTranslateText(licenseRef.label)}

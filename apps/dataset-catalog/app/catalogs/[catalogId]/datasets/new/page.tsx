@@ -33,7 +33,7 @@ export default async function NewDatasetPage({ params }: Params) {
     provenanceStatementsResponse,
     frequenciesResponse,
     languageResponse,
-    licenceResponse,
+    licenseResponse,
   ] = await Promise.all([
     getLosThemes().then((res) => res.json()),
     getDataThemes().then((res) => res.json()),
@@ -51,7 +51,7 @@ export default async function NewDatasetPage({ params }: Params) {
     provenanceStatements: provenanceStatementsResponse.provenanceStatements,
     frequencies: frequenciesResponse.frequencies,
     languages: languageResponse.linguisticSystems,
-    openLicenses: licenceResponse.openLicenses,
+    openLicenses: licenseResponse.openLicenses,
   };
 
   const breadcrumbList = [

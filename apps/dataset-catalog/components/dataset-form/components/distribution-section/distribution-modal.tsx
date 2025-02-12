@@ -323,7 +323,7 @@ export const DistributionModal = ({
                               {openLicenses &&
                                 openLicenses.map((license, i) => (
                                   <Combobox.Option
-                                    key={`licence-${license.uri}-${i}`}
+                                    key={`license-${license.uri}-${i}`}
                                     value={license.uri}
                                   >
                                     {getTranslateText(license.label)}
