@@ -255,11 +255,11 @@ export default class EditPage {
 
     if (concept.kontaktpunkt?.harEpost) {
       await this.page.getByRole('checkbox', { name: 'E-postadresse' }).check();
-      await await this.page.getByRole('textbox', { name: 'E-postadresse' }).fill(concept.kontaktpunkt.harEpost);
+      await this.page.getByRole('textbox', { name: 'E-postadresse' }).fill(concept.kontaktpunkt.harEpost);
     }
 
     if (concept.kontaktpunkt?.harTelefon) {
-      await this.page.getByLabel('Telefonnummer').check();
+      await this.page.getByRole('checkbox', { name: 'Telefonnummer' }).check();
       await this.page.getByRole('textbox', { name: 'Telefonnummer' }).fill(concept.kontaktpunkt.harTelefon);
     }
 
