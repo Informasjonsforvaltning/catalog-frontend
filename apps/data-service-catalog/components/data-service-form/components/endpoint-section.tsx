@@ -1,7 +1,7 @@
 import { DataService } from '@catalog-frontend/types';
 import { AddButton, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Textfield } from '@digdir/designsystemet-react';
+import { Fieldset, Textfield } from '@digdir/designsystemet-react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
 import FieldsetWithDelete from '../../fieldset-with-delete';
 import styles from './endpoint.module.css';
@@ -25,7 +25,18 @@ export const EndpointSection = () => {
         error={errors?.endpointUrl}
       />
 
-      <div>
+      <Fieldset
+        size='sm'
+        legend={
+          <TitleWithHelpTextAndTag
+            tagTitle={localization.tag.recommended}
+            tagColor='info'
+            helpText={localization.dataServiceForm.helptext.endpointDescriptions}
+          >
+            {localization.dataServiceForm.fieldLabel.endpointDescriptions}
+          </TitleWithHelpTextAndTag>
+        }
+      >
         <FieldArray name='endpointDescriptions'>
           {(arrayHelpers) => (
             <>
@@ -38,19 +49,6 @@ export const EndpointSection = () => {
                     <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
                       <FastField
                         name={`endpointDescriptions[${index}]`}
-                        label={
-                          index < 1 ? (
-                            <TitleWithHelpTextAndTag
-                              tagTitle={localization.tag.recommended}
-                              tagColor='info'
-                              helpText={localization.dataServiceForm.helptext.endpointDescriptions}
-                            >
-                              {localization.dataServiceForm.fieldLabel.endpointDescriptions}
-                            </TitleWithHelpTextAndTag>
-                          ) : (
-                            ''
-                          )
-                        }
                         as={Textfield}
                         size='sm'
                         error={errors?.endpointDescriptions?.[index]}
@@ -65,7 +63,7 @@ export const EndpointSection = () => {
             </>
           )}
         </FieldArray>
-      </div>
+      </Fieldset>
     </>
   );
 };
