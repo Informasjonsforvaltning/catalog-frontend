@@ -24,7 +24,7 @@ export const AuthSessionModal = ({ validatePath = '/api/auth/validate', signInPa
     if(pathName.includes(signInPath)) {
       return window.location.href = signInPath;
     } else {
-      return router.push(signInPath);
+      return router.push(`${signInPath}?callbackUrl=${window.location.href}`);
     }    
   };
 
