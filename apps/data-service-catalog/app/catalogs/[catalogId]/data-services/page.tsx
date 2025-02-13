@@ -7,7 +7,7 @@ import {
   localization,
 } from '@catalog-frontend/utils';
 
-import { getOrganization } from '@catalog-frontend/data-access';
+import {getDistributionStatuses, getOrganization} from '@catalog-frontend/data-access';
 import DataServicePageClient from './data-services-page-client';
 import { getDataServices } from '../../../actions/actions';
 
@@ -18,6 +18,10 @@ export default async function DataServicesSearchHits({ params }) {
   const dataServices: DataService[] = await getDataServices(catalogId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const hasWritePermission = await hasOrganizationWritePermission(session.accessToken, catalogId);
+
+  const distributionStatuses = await getDistributionStatuses()
+    .then((response) => response.json())
+    .then((body) => body?.distributionStatuses ?? []);
 
   const breadcrumbList = [
     {
@@ -40,6 +44,7 @@ export default async function DataServicesSearchHits({ params }) {
         dataServices={dataServices}
         catalogId={catalogId}
         hasWritePermission={hasWritePermission}
+        distributionStatuses={distributionStatuses}
       />
     </>
   );

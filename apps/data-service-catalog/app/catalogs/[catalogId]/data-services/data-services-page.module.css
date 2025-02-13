@@ -8,6 +8,11 @@
   padding-bottom: 4rem;
 }
 
+.set {
+  display: flex;
+  gap: 0.5rem;
+}
+
 .leftColumn {
   display: flex;
   flex-direction: column;

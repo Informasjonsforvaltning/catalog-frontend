@@ -3,6 +3,7 @@ import { LocalizedStrings } from './localization';
 export interface DataService extends DataServiceToBeCreated {
   id: string;
   catalogId: string;
+  published: boolean;
   uri: string;
 }
 
