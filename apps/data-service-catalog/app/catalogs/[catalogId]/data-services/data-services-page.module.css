@@ -22,3 +22,12 @@
 .select {
   width: fit-content;
 }
+
+.chips {
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}

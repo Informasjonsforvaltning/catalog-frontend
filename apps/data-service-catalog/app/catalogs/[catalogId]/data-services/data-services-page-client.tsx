@@ -11,10 +11,11 @@ import {
   Tag,
   DataServiceStatusTagProps,
 } from '@catalog-frontend/ui';
-import { StatusFilter } from '../../../../components/status-filter';
+import SearchFilter from '../../../../components/search-filter';
 import React, { useState, useEffect } from 'react';
-import { NativeSelect, Search } from '@digdir/designsystemet-react';
+import {Chip, NativeSelect, Search} from '@digdir/designsystemet-react';
 import {
+  capitalizeFirstLetter,
   dateStringToDate,
   formatDate,
   getTranslateText,
@@ -24,8 +25,11 @@ import {
   sortDescending,
 } from '@catalog-frontend/utils';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
+import {parseAsArrayOf, parseAsString, useQueryState} from "nuqs";
+import _ from 'lodash';
 
 type SortTypes = 'titleAsc' | 'titleDesc' | 'lastChanged';
+type FilterType = 'published' | 'status';
 
 interface Props {
   dataServices: DataService[];
@@ -37,8 +41,12 @@ interface Props {
 const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, distributionStatuses }: Props) => {
   const [filteredDataServices, setFilteredDataServices] = useState<DataService[]>(dataServices);
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
   const [sortType, setSortType] = useState<SortTypes | ''>('');
+  const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString));
+  const [filterPublicationState, setFilterPublicationState] = useQueryState(
+    'filter.pubState',
+    parseAsArrayOf(parseAsString),
+  );
 
   const getSortFunction = (sortKey: SortTypes) => {
     switch (sortKey) {
@@ -59,8 +67,12 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
     const filteredDataServices = () => {
       let filtered = dataServices;
 
-      if (selectedStatus !== 'ALL') {
-        filtered = filtered.filter((dataService) => dataService.status === selectedStatus);
+      if (!_.isEmpty(filterStatus)) {
+        filtered = filtered.filter((dataService) => dataService.status && filterStatus?.includes(dataService.status));
+      }
+
+      if (!_.isEmpty(filterPublicationState)) {
+        filtered = filtered.filter((dataService) => filterPublicationState?.includes(dataService.published ? 'published' : 'unpublished'));
       }
 
       if (searchQuery) {
@@ -80,13 +92,9 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
     };
 
     filteredDataServices();
-  }, [dataServices, selectedStatus, searchQuery, sortType]);
+  }, [dataServices, filterStatus, filterPublicationState, searchQuery, sortType]);
 
   const findDistributionStatus = (statusURI) => distributionStatuses?.find((s) => s.uri === statusURI);
-
-  const handleStatusChange = (status: string) => {
-    setSelectedStatus(status);
-  };
 
   const handleSearch = (value: string) => {
     setSearchQuery(value);
@@ -103,6 +111,45 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
     const value = event.target.value as SortTypes;
     setSortType(value);
   };
+
+  const removeFilter = (filterName, filterType: FilterType) => {
+    switch (filterType) {
+      case 'published':
+        setFilterPublicationState(filterPublicationState?.filter((name) => name !== filterName) ?? []);
+        break;
+      case 'status':
+        setFilterStatus(filterStatus?.filter((name) => name !== filterName) ?? []);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const FilterChips = () => (
+    <div className={styles.chips}>
+      <Chip.Group
+        size='small'
+        className={styles.wrap}
+      >
+        {filterStatus?.map((filter, index) => (
+          <Chip.Removable
+            key={`status-${index}`}
+            onClick={() => removeFilter(filter, 'status')}
+          >
+            {capitalizeFirstLetter(getTranslateText(distributionStatuses?.find((s) => s.uri === filter)?.label) as string)}
+          </Chip.Removable>
+        ))}
+        {filterPublicationState?.map((filter, index) => (
+          <Chip.Removable
+            key={`published-${index}`}
+            onClick={() => removeFilter(filter, 'published')}
+          >
+            {filter === 'published' ? localization.publicationState.published : localization.publicationState.unpublished}
+          </Chip.Removable>
+        ))}
+      </Chip.Group>
+    </div>
+  );
 
   return (
     <div className={styles.container}>
@@ -135,7 +182,8 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
             onSearchClick={handleSearch}
             onKeyDown={handleSearchKeyDown}
           />
-          <StatusFilter onStatusChange={handleStatusChange} />
+          <FilterChips />
+          <SearchFilter distributionStatuses={distributionStatuses} />
         </SearchHitsPageLayout.LeftColumn>
         <SearchHitsPageLayout.MainColumn>
           <SearchHitContainer
