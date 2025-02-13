@@ -1,5 +1,5 @@
 import { DataService } from '@catalog-frontend/types';
-import { AddButton, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { AddButton, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Fieldset, Textfield } from '@digdir/designsystemet-react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
@@ -24,6 +24,8 @@ export const EndpointSection = () => {
         }
         error={errors?.endpointUrl}
       />
+
+      <FieldsetDivider />
 
       <Fieldset
         size='sm'

@@ -1,5 +1,5 @@
 import { AccessRights, DataService, ReferenceDataCode } from '@catalog-frontend/types';
-import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Combobox, Fieldset } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
@@ -42,6 +42,8 @@ export const AccessSection = ({ openLicenses }: Props) => {
             ))}
         </Combobox>
       </Fieldset>
+
+      <FieldsetDivider />
 
       <Fieldset
         legend={
