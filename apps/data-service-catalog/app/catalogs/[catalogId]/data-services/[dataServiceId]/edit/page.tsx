@@ -2,22 +2,25 @@ import { Breadcrumbs, BreadcrumbType, PageBanner } from '@catalog-frontend/ui';
 import { getOpenLicenses, getOrganization } from '@catalog-frontend/data-access';
 
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { getDataService } from '../../../../../actions/actions';
+import { getTranslateText, getValidSession, localization } from '@catalog-frontend/utils';
+import { getDataServiceById } from '@catalog-frontend/data-access';
 import { Organization } from '@catalog-frontend/types';
 import DataServiceForm from '../../../../../../components/data-service-form';
 import { redirect, RedirectType } from 'next/navigation';
 
 export default async function EditDataServicePage({ params }: Params) {
   const { catalogId, dataServiceId } = params;
-  const dataService = await getDataService(catalogId, dataServiceId).catch((error) => console.log(error.message));
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
-  const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
-  const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
-
+  const session = await getValidSession({ callbackUrl: `/catalogs/${catalogId}/data-services/${dataServiceId}/edit` });
+  const dataService = await getDataServiceById(catalogId, dataServiceId, `${session?.accessToken}`).then((response) => {
+    if (response.ok) return response.json();
+  });
   if (!dataService || dataService.catalogId !== catalogId) {
     redirect(`/not-found`, RedirectType.replace);
   }
+
+  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+  const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
+  const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
 
   const [licenseResponse] = await Promise.all([getOpenLicenses().then((res) => res.json())]);
 
