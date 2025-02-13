@@ -114,7 +114,10 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
                   id='status-section'
                   title={localization.dataServiceForm.heading.status}
                 >
-                  <StatusSection statuses={referenceData.distributionStatuses} />
+                  <StatusSection
+                    statuses={referenceData.distributionStatuses}
+                    availabilities={referenceData.plannedAvailabilities}
+                  />
                 </FormLayout.Section>
 
                 <FormLayout.Section

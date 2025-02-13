@@ -91,6 +91,17 @@ export const getProvenanceStatements = async () => {
   return await fetch(resource, options);
 };
 
+export const getPlannedAvailabilities = async () => {
+  const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/planned-availabilities`;
+  const options = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'GET',
+  };
+  return await fetch(resource, options);
+};
+
 export const getFileTypes = async () => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/file-types`;
   const options = {
