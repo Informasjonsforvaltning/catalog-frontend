@@ -120,6 +120,9 @@ export const nb = {
     logout: 'Logg ut',
     loggingIn: 'Logger inn...',
     loggingOut: 'Logger ut...',
+    sessionExpiredTitle: 'Sesjonen har utløpt',
+    sessionExpired: 'Din sesjon har utløpt. Vennligst logg inn igjen for å fortsette. Velg "Avbryt", hvis du ønsker å forbli på siden.',
+    redirectedToLogin: 'Når du velger å forbli på siden, blir du sendt videre til innloggingssiden når du klikker på en lenke eller oppdaterer siden.'
   },
 
   userRole: {
