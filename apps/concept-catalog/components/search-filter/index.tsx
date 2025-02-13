@@ -154,7 +154,7 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
       content: (
         <>
           <p>
-            {loc.publicationState.description}
+            {loc.publicationState.descriptionConcept}
             <br />
             <br />
           </p>

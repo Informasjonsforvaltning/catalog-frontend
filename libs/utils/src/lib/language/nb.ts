@@ -443,8 +443,9 @@ export const nb = {
   },
 
   publicationState: {
-    confirmPublish: 'Er du sikker på at du vil publisere begrepet?',
-    description: 'Publiseringstilstand forteller om et begrep er publisert på Data.Norge.no eller ikke.',
+    confirmPublish: 'Er du sikker på at du vil publisere?',
+    descriptionConcept: 'Publiseringstilstand forteller om et begrep er publisert på Data.Norge.no eller ikke.',
+    descriptionDataService: 'Publiseringstilstand forteller om API-et er publisert på Data.Norge.no eller ikke.',
     published: 'Publisert',
     publishedInFDK: 'Publisert på Data.Norge.no',
     state: 'Publiseringstilstand',
