@@ -2,16 +2,20 @@ import { DataServiceToBeCreated } from '@catalog-frontend/types';
 
 export const dataServiceToBeCreatedTemplate = (): DataServiceToBeCreated => {
   return {
-    title: {
-      nb: '',
-    },
-    description: {
-      nb: '',
-    },
+    title: {},
+    description: {},
     modified: '',
     status: '',
     endpointUrl: '',
     endpointDescriptions: [],
-    contactPoint: undefined,
+    accessRights: '',
+    formats: [],
+    keywords: {},
+    landingPage: '',
+    pages: [],
+    license: '',
+    servesDataset: [],
+    contactPoint: {},
+    availability: '',
   };
 };
