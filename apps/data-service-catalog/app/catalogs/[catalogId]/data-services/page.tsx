@@ -7,7 +7,7 @@ import {
   localization,
 } from '@catalog-frontend/utils';
 
-import {getDistributionStatuses, getOrganization} from '@catalog-frontend/data-access';
+import { getDistributionStatuses, getOrganization } from '@catalog-frontend/data-access';
 import DataServicePageClient from './data-services-page-client';
 import { getDataServices } from '../../../actions/actions';
 
