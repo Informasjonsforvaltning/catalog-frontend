@@ -4,12 +4,7 @@ import { localization } from '@catalog-frontend/utils';
 import { Fieldset } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 import { useState } from 'react';
-import {
-  useSearchFileTypeByUri,
-  useSearchFileTypes,
-  useSearchMediaTypeByUri,
-  useSearchMediaTypes,
-} from '../../../hooks/useReferenceDataSearch';
+import { useSearchFileTypeByUri, useSearchFileTypes } from '../../../hooks/useReferenceDataSearch';
 
 type Props = {
   referenceDataEnv: string;
@@ -17,18 +12,7 @@ type Props = {
 
 export const FormatSection = ({ referenceDataEnv }: Props) => {
   const { setFieldValue, values } = useFormikContext<DataService>();
-  const [searchQueryMediaTypes, setSearchQueryMediaTypes] = useState<string>('');
   const [searchQueryFileTypes, setSearchQueryFileTypes] = useState<string>('');
-
-  const { data: mediaTypes, isLoading: searchingMediaTypes } = useSearchMediaTypes(
-    searchQueryMediaTypes,
-    referenceDataEnv,
-  );
-
-  const { data: selectedMediaTypes, isLoading: loadingSelectedMediaTypes } = useSearchMediaTypeByUri(
-    values?.mediaTypes ?? [],
-    referenceDataEnv,
-  );
 
   const { data: fileTypes, isLoading: searchingFileTypes } = useSearchFileTypes(searchQueryFileTypes, referenceDataEnv);
 
@@ -42,11 +26,11 @@ export const FormatSection = ({ referenceDataEnv }: Props) => {
       <Fieldset
         legend={
           <TitleWithHelpTextAndTag
-            helpText={localization.dataServiceForm.helptext.fileTypes}
+            helpText={localization.dataServiceForm.helptext.format}
             tagTitle={localization.tag.recommended}
             tagColor='info'
           >
-            {localization.dataServiceForm.fieldLabel.fileTypes}
+            {localization.dataServiceForm.fieldLabel.format}
           </TitleWithHelpTextAndTag>
         }
       >
@@ -59,27 +43,6 @@ export const FormatSection = ({ referenceDataEnv }: Props) => {
           formikValues={values?.formats ?? []}
           loading={loadingSelectedFileTypes || searchingFileTypes}
           portal={false}
-        />
-      </Fieldset>
-      <Fieldset
-        legend={
-          <TitleWithHelpTextAndTag
-            helpText={localization.dataServiceForm.helptext.mediaTypes}
-          >
-            {localization.dataServiceForm.fieldLabel.mediaTypes}
-          </TitleWithHelpTextAndTag>
-        }
-      >
-        <FormikReferenceDataCombobox
-          onChange={(event) => setSearchQueryMediaTypes(event.target.value)}
-          onValueChange={(selectedValues) => setFieldValue('mediaTypes', selectedValues)}
-          value={values?.mediaTypes || []}
-          selectedValuesSearchHits={selectedMediaTypes ?? []}
-          querySearchHits={mediaTypes ?? []}
-          formikValues={values?.mediaTypes ?? []}
-          loading={loadingSelectedMediaTypes || searchingMediaTypes}
-          portal={false}
-          showCodeAsDescription={true}
         />
       </Fieldset>
     </>

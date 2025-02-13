@@ -14,7 +14,6 @@ export interface DataServiceToBeCreated {
   endpointUrl: string;
   endpointDescriptions?: string[];
   accessRights?: string;
-  mediaTypes?: string[];
   formats?: string[];
   keywords: LocalizedStrings;
   landingPage?: string;
