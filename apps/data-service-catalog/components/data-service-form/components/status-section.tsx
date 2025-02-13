@@ -4,9 +4,12 @@ import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-
 import { Combobox, Fieldset } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 
-type Props = { statuses?: ReferenceDataCode[] };
+type Props = {
+  statuses?: ReferenceDataCode[];
+  availabilities?: ReferenceDataCode[];
+};
 
-export const StatusSection = ({ statuses }: Props) => {
+export const StatusSection = ({ statuses, availabilities }: Props) => {
   const { values, setFieldValue } = useFormikContext<DataService>();
 
   return (
@@ -32,6 +35,36 @@ export const StatusSection = ({ statuses }: Props) => {
                 value={statusRef.uri}
               >
                 {capitalizeFirstLetter(getTranslateText(statusRef.label)?.toString())}
+              </Combobox.Option>
+            ))}
+        </Combobox>
+      </Fieldset>
+
+      <Fieldset
+        legend={
+          <TitleWithHelpTextAndTag
+            helpText={localization.dataServiceForm.helptext.availability}
+            tagColor={'info'}
+            tagTitle={localization.tag.recommended}
+          >
+            {localization.dataServiceForm.fieldLabel.availability}
+          </TitleWithHelpTextAndTag>
+        }
+      >
+        <Combobox
+          value={[values?.availability ?? '']}
+          portal={false}
+          onValueChange={(selectedValues) => setFieldValue('availability', selectedValues.toString())}
+          size='sm'
+        >
+          <Combobox.Option value=''>{`${localization.dataServiceForm.noAvailability}`}</Combobox.Option>
+          {availabilities &&
+            availabilities.map((availabilityRef, i) => (
+              <Combobox.Option
+                key={`availability-${availabilityRef.uri}-${i}`}
+                value={availabilityRef.uri}
+              >
+                {capitalizeFirstLetter(getTranslateText(availabilityRef.label)?.toString())}
               </Combobox.Option>
             ))}
         </Combobox>

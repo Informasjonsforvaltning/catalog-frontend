@@ -22,6 +22,7 @@ export interface DataServiceToBeCreated {
   license?: string;
   servesDataset?: string[];
   contactPoint?: DataServiceContactPoint;
+  availability?: string;
 }
 
 type DataServiceContactPoint = {

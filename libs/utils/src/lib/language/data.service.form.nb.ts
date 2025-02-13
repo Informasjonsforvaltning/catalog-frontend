@@ -19,6 +19,8 @@ export const dataServiceFormNb = {
     keywords:
       'Oppgi emneord (eller tag) som beskriver datatjenesten, f.eks. _eksempel_, _datatjeneste_ (bokmål) / _example_, _data service_ (Engelsk).',
     servesDataset: 'Brukes til å referere til datasett som datatjenesten kan distribuere.',
+    availability:
+      'Brukes til å angi hvor lenge det er planlagt å holde datatjenesten tilgjengelig, verdien velges fra EU’s kontrollerte vokabular _Planned availability_.',
   },
   heading: {
     about: 'Om APIet',
@@ -44,10 +46,12 @@ export const dataServiceFormNb = {
     license: 'Lisens',
     status: 'Status',
     keywords: 'Emneord',
+    availability: 'Tilgjengelighet',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette API-beskrivelsen?',
   },
   noLicense: 'Ingen lisens valgt',
   noStatus: 'Ingen status valgt',
+  noAvailability: 'Ingen tilgjengelighet valgt',
 };
