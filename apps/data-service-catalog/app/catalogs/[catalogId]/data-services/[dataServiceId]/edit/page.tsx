@@ -1,5 +1,5 @@
 import { Breadcrumbs, BreadcrumbType, PageBanner } from '@catalog-frontend/ui';
-import { getOpenLicenses, getOrganization } from '@catalog-frontend/data-access';
+import { getDistributionStatuses, getOpenLicenses, getOrganization } from '@catalog-frontend/data-access';
 
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getTranslateText, getValidSession, localization } from '@catalog-frontend/utils';
@@ -22,9 +22,13 @@ export default async function EditDataServicePage({ params }: Params) {
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
 
-  const [licenseResponse] = await Promise.all([getOpenLicenses().then((res) => res.json())]);
+  const [licenseResponse, statusResponse] = await Promise.all([
+    getOpenLicenses().then((res) => res.json()),
+    getDistributionStatuses().then((res) => res.json()),
+  ]);
 
   const referenceData = {
+    distributionStatuses: statusResponse.distributionStatuses,
     openLicenses: licenseResponse.openLicenses,
   };
 

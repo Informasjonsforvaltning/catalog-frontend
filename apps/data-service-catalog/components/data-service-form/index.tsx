@@ -15,6 +15,7 @@ import { FormatSection } from './components/format-section';
 import { DocumentationSection } from './components/documentation-section';
 import { AccessSection } from './components/access-section';
 import { DatasetSection } from './components/dataset-section';
+import { StatusSection } from './components/status-section';
 
 type Props = {
   initialValues: DataService | DataServiceToBeCreated;
@@ -107,6 +108,13 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
                   title={localization.dataServiceForm.heading.access}
                 >
                   <AccessSection openLicenses={referenceData.openLicenses} />
+                </FormLayout.Section>
+
+                <FormLayout.Section
+                  id='status-section'
+                  title={localization.dataServiceForm.heading.status}
+                >
+                  <StatusSection statuses={referenceData.distributionStatuses} />
                 </FormLayout.Section>
 
                 <FormLayout.Section
