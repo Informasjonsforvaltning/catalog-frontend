@@ -3,7 +3,6 @@
 import {
   deleteDataService as removeDataService,
   getAllDataServices,
-  getDataServiceById,
   postDataService,
   updateDataService as update,
 } from '@catalog-frontend/data-access';
@@ -21,18 +20,6 @@ export async function getDataServices(catalogId: string) {
     throw new Error('getDataServices failed with response code ' + response.status);
   }
   return await response.json();
-}
-
-export async function getDataService(catalogId: string, dataServiceId: string): Promise<DataService> {
-  const session = await getValidSession();
-  const response = await getDataServiceById(catalogId, dataServiceId, `${session?.accessToken}`);
-
-  if (response.status !== 200) {
-    throw new Error('getDataService failed with response code ' + response.status);
-  }
-
-  const jsonResponse = await response.json();
-  return jsonResponse as DataService;
 }
 
 export async function createDataService(catalogId: string, values: DataServiceToBeCreated) {
