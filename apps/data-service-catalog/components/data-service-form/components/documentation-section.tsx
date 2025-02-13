@@ -1,7 +1,7 @@
 import { DataService } from '@catalog-frontend/types';
 import { AddButton, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Textfield } from '@digdir/designsystemet-react';
+import { Fieldset, Textfield } from '@digdir/designsystemet-react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
 import FieldsetWithDelete from '../../fieldset-with-delete';
 import styles from './documentation.module.css';
@@ -15,16 +15,21 @@ export const DocumentationSection = () => {
         as={Textfield}
         size='sm'
         label={
-          <TitleWithHelpTextAndTag
-            helpText={localization.dataServiceForm.helptext.landingPage}
-          >
+          <TitleWithHelpTextAndTag helpText={localization.dataServiceForm.helptext.landingPage}>
             {localization.dataServiceForm.fieldLabel.landingPage}
           </TitleWithHelpTextAndTag>
         }
         error={errors?.landingPage}
       />
 
-      <div>
+      <Fieldset
+        size='sm'
+        legend={
+          <TitleWithHelpTextAndTag helpText={localization.dataServiceForm.helptext.pages}>
+            {localization.dataServiceForm.fieldLabel.pages}
+          </TitleWithHelpTextAndTag>
+        }
+      >
         <FieldArray name='pages'>
           {(arrayHelpers) => (
             <>
@@ -37,17 +42,6 @@ export const DocumentationSection = () => {
                     <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
                       <FastField
                         name={`pages[${index}]`}
-                        label={
-                          index < 1 ? (
-                            <TitleWithHelpTextAndTag
-                              helpText={localization.dataServiceForm.helptext.pages}
-                            >
-                              {localization.dataServiceForm.fieldLabel.pages}
-                            </TitleWithHelpTextAndTag>
-                          ) : (
-                            ''
-                          )
-                        }
                         as={Textfield}
                         size='sm'
                         error={errors?.pages?.[index]}
@@ -62,7 +56,7 @@ export const DocumentationSection = () => {
             </>
           )}
         </FieldArray>
-      </div>
+      </Fieldset>
     </>
   );
 };
