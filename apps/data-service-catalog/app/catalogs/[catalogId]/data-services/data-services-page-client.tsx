@@ -3,21 +3,34 @@
 import { DataService } from '@catalog-frontend/types';
 import styles from './data-services-page.module.css';
 
-import { LinkButton, SearchHitsPageLayout } from '@catalog-frontend/ui';
-import { SearchHitTable } from '../../../../components/search-hit-table';
+import {
+  LinkButton,
+  SearchHit,
+  SearchHitContainer,
+  SearchHitsPageLayout,
+  Tag,
+  DataServiceStatusTagProps,
+} from '@catalog-frontend/ui';
 import { StatusFilter } from '../../../../components/status-filter';
 import React, { useState, useEffect } from 'react';
 import { Search } from '@digdir/designsystemet-react';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
+import {
+  dateStringToDate,
+  formatDate,
+  getTranslateText as translate,
+  getTranslateText,
+  localization
+} from '@catalog-frontend/utils';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 
 interface Props {
   dataServices: DataService[];
   catalogId: string;
   hasWritePermission: boolean;
+  distributionStatuses: any;
 }
 
-const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission }: Props) => {
+const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, distributionStatuses }: Props) => {
   const [filteredDataServices, setFilteredDataServices] = useState<DataService[]>(dataServices);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
@@ -44,6 +57,8 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission }:
 
     filteredDataServices();
   }, [dataServices, selectedStatus, searchQuery]);
+
+  const findDistributionStatus = (statusURI) => distributionStatuses?.find((s) => s.uri === statusURI);
 
   const handleStatusChange = (status: string) => {
     setSelectedStatus(status);
@@ -83,7 +98,41 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission }:
           <StatusFilter onStatusChange={handleStatusChange} />
         </SearchHitsPageLayout.LeftColumn>
         <SearchHitsPageLayout.MainColumn>
-          <SearchHitTable dataServices={filteredDataServices} />
+          <SearchHitContainer
+            searchHits={
+              filteredDataServices.length > 0
+                ? filteredDataServices.map((dataService: DataService) => (
+                  <div
+                    key={dataService.id}
+                    className={styles.searchHit}
+                  >
+                    <SearchHit
+                      title={getTranslateText(dataService?.title)}
+                      description={getTranslateText(dataService?.description)}
+                      titleHref={`/catalogs/${catalogId}/data-services/${dataService?.id}/edit`}
+                      statusTag={dataService.status && (<Tag.DataServiceStatus
+                        statusKey={findDistributionStatus(dataService.status)?.code as DataServiceStatusTagProps['statusKey']}
+                        statusLabel={translate(findDistributionStatus(dataService.status)?.label) as string}/>)}
+                      content={
+                        <>
+                          <div className={styles.set}>
+                            <p>
+                              {localization.lastChanged} {formatDate(dateStringToDate(dataService.modified ?? ''))}
+                            </p>
+                            <span>•</span>
+                            {dataService.published
+                              ? localization.publicationState.publishedInFDK
+                              : localization.publicationState.unpublished}
+                          </div>
+                        </>
+                      }
+                    />
+                  </div>
+                ))
+                : null
+            }
+            noSearchHits={!filteredDataServices || filteredDataServices.length === 0}
+          />
         </SearchHitsPageLayout.MainColumn>
       </SearchHitsPageLayout>
     </div>
