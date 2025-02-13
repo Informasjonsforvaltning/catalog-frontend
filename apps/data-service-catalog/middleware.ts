@@ -29,11 +29,11 @@ export default withAuth(
     ];
 
     if (catalogId && !validOrganizationNumber(catalogId)) {
-      return NextResponse.rewrite(new URL('/catalogs/notfound', process.env.NEXTAUTH_URL));
+      return NextResponse.rewrite(new URL('/not-found', process.env.NEXTAUTH_URL));
     }
 
     if (dataServiceId && !validUUID(dataServiceId)) {
-      return NextResponse.rewrite(new URL('/catalogs/notfound', process.env.NEXTAUTH_URL));
+      return NextResponse.rewrite(new URL('/not-found', process.env.NEXTAUTH_URL));
     }
 
     if ((await validateOidcUserSession(accessToken)) !== true) {

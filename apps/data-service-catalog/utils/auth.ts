@@ -23,12 +23,12 @@ const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', re
     const { catalogId, dataServiceId } = params;
 
     if (!validOrganizationNumber(catalogId)) {
-      redirect(`/catalogs/notfound`, RedirectType.replace);
+      redirect(`/not-found`, RedirectType.replace);
     }
 
     [dataServiceId].forEach((param) => {
       if (params[param] && !validUUID(params[param])) {
-        return redirect(`/catalogs/notfound`, RedirectType.replace);
+        return redirect(`/not-found`, RedirectType.replace);
       }
     });
 
