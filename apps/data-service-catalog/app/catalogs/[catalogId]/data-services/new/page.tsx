@@ -1,5 +1,6 @@
 import { Breadcrumbs, BreadcrumbType, PageBanner } from '@catalog-frontend/ui';
 import {
+  getCurrencies,
   getDistributionStatuses,
   getOpenLicenses,
   getOrganization,
@@ -19,16 +20,18 @@ export default async function NewDataServicePage({ params }: Params) {
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
 
-  const [licenseResponse, statusResponse, availabilitiesResponse] = await Promise.all([
+  const [licenseResponse, statusResponse, availabilitiesResponse, currenciesResponse] = await Promise.all([
     getOpenLicenses().then((res) => res.json()),
     getDistributionStatuses().then((res) => res.json()),
     getPlannedAvailabilities().then((res) => res.json()),
+    getCurrencies().then((res) => res.json()),
   ]);
 
   const referenceData = {
     openLicenses: licenseResponse.openLicenses,
     distributionStatuses: statusResponse.distributionStatuses,
     plannedAvailabilities: availabilitiesResponse.plannedAvailabilities,
+    currencies: currenciesResponse.currencies,
   };
 
   const breadcrumbList = [

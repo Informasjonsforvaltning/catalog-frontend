@@ -1,13 +1,11 @@
-import {ReferenceDataGraphql, searchReferenceData, searchReferenceDataByUri} from '@catalog-frontend/data-access';
-import {useQuery} from '@tanstack/react-query';
+import { ReferenceDataGraphql, searchReferenceData, searchReferenceDataByUri } from '@catalog-frontend/data-access';
+import { useQuery } from '@tanstack/react-query';
 
 export const useSearchFileTypes = (searchQuery: string, envVariable: string) => {
   return useQuery({
     queryKey: ['FileTypes', 'searchQuery', searchQuery],
     queryFn: async () => {
-      return await searchReferenceData(searchQuery, envVariable, [
-        ReferenceDataGraphql.SearchAlternative.EuFileTypes,
-      ]);
+      return await searchReferenceData(searchQuery, envVariable, [ReferenceDataGraphql.SearchAlternative.EuFileTypes]);
     },
     enabled: !!searchQuery,
   });
@@ -21,9 +19,7 @@ export const useSearchFileTypeByUri = (uriList: string[] | undefined, envVariabl
         return [];
       }
 
-      return await searchReferenceDataByUri(uriList, envVariable, [
-        ReferenceDataGraphql.SearchAlternative.EuFileTypes,
-      ]);
+      return await searchReferenceDataByUri(uriList, envVariable, [ReferenceDataGraphql.SearchAlternative.EuFileTypes]);
     },
     enabled: Array.isArray(uriList) && uriList.length > 0,
   });
