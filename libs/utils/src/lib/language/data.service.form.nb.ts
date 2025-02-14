@@ -20,6 +20,12 @@ export const dataServiceFormNb = {
     servesDataset: 'Brukes til å referere til datasett som datatjenesten kan distribuere.',
     availability:
       'Brukes til å angi hvor lenge det er planlagt å holde datatjenesten tilgjengelig, verdien velges fra EU’s kontrollerte vokabular _Planned availability_.',
+    costs: 'Brukes til å oppgi prisinfomasjonen og utrekningsgrunnlaget for ett eller flere gebyr for bruk av APIet.',
+    costDescription: 'Brukes til å oppgi en tekstlig beskrivelse av gebyret.',
+    costDocumentation:
+      'Brukes til å referere til en side eller et dokument som beskriver prismodell/beregningsgrunnlag. I tillegg til å dokumentere beregningsgrunnlaget, kan denne egenskapen brukes i tilfeller der det ikke bare er ett beløp, men en komplisert prismodell avhengig av f.eks. mengde data, hyppighet av oppslag/nedlasting osv. Selv om hverken beløp eller dokumentasjon er obligatorisk, SKAL minst én av dem brukes.',
+    costValue:
+      'Brukes til å oppgi gebyrbeløpet. Selv om hverken beløp eller dokumentasjon er obligatorisk, SKAL minst én av dem brukes. Valutaverdien velges fra EUs kontrollerte vokabular _Valuta_.',
   },
   heading: {
     about: 'Om API-et',
@@ -45,9 +51,15 @@ export const dataServiceFormNb = {
     status: 'Status',
     keywords: 'Emneord',
     availability: 'Tilgjengelighet',
+    costs: 'Gebyr',
+    costDocumentation: 'Dokumentasjon',
+    costValue: 'Beløp',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette API-beskrivelsen?',
+  },
+  button: {
+    update: 'Oppdater',
   },
   noLicense: 'Ingen lisens valgt',
   noStatus: 'Ingen status valgt',
