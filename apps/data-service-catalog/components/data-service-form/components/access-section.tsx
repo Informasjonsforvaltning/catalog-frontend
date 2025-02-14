@@ -3,6 +3,7 @@ import { FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Combobox, Fieldset } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
+import { CostsTable } from './costs-table';
 
 const accessRightsOptions = [
   { value: AccessRights.PUBLIC, label: localization.accessRight.public },
@@ -10,9 +11,12 @@ const accessRightsOptions = [
   { value: AccessRights.NON_PUBLIC, label: localization.accessRight.nonPublic },
 ];
 
-type Props = { openLicenses?: ReferenceDataCode[] };
+type Props = {
+  openLicenses?: ReferenceDataCode[];
+  currencies?: ReferenceDataCode[];
+};
 
-export const AccessSection = ({ openLicenses }: Props) => {
+export const AccessSection = ({ openLicenses, currencies }: Props) => {
   const { values, setFieldValue } = useFormikContext<DataService>();
 
   return (
@@ -68,6 +72,10 @@ export const AccessSection = ({ openLicenses }: Props) => {
           ))}
         </Combobox>
       </Fieldset>
+
+      <FieldsetDivider />
+
+      <CostsTable currencies={currencies} />
     </>
   );
 };

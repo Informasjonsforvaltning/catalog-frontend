@@ -23,6 +23,7 @@ export interface DataServiceToBeCreated {
   servesDataset?: string[];
   contactPoint?: DataServiceContactPoint;
   availability?: string;
+  costs?: DataServiceCost[];
 }
 
 type DataServiceContactPoint = {
@@ -30,4 +31,11 @@ type DataServiceContactPoint = {
   phone?: string;
   url?: string;
   organizationUnit?: string;
+};
+
+export type DataServiceCost = {
+  value?: number;
+  description?: LocalizedStrings;
+  documentation?: string[];
+  currency?: string;
 };

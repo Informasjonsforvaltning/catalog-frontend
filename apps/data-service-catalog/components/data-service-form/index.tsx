@@ -107,7 +107,10 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
                   id='access-section'
                   title={localization.dataServiceForm.heading.access}
                 >
-                  <AccessSection openLicenses={referenceData.openLicenses} />
+                  <AccessSection
+                    openLicenses={referenceData.openLicenses}
+                    currencies={referenceData.currencies}
+                  />
                 </FormLayout.Section>
 
                 <FormLayout.Section
