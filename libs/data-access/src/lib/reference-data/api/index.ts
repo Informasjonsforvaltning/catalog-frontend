@@ -102,6 +102,17 @@ export const getPlannedAvailabilities = async () => {
   return await fetch(resource, options);
 };
 
+export const getCurrencies = async () => {
+  const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/currencies`;
+  const options = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'GET',
+  };
+  return await fetch(resource, options);
+};
+
 export const getFileTypes = async () => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/file-types`;
   const options = {
