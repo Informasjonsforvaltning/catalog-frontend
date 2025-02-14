@@ -11,7 +11,6 @@ export const test = base.extend<{
   loginPage: async ({ page, context }, use) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
     const loginPage = new LoginPage(page, context, accessibilityBuilder);
-    await page.goto('/catalogs');
     await use(loginPage);
   },
   catalogPortalPage: async ({ page, context }, use) => {

@@ -85,8 +85,6 @@ export default class ConceptsPage {
   }
 
   public async createConcepts() {
-    
-
     for (const concept of ALL_CONCEPTS) {
       await this.goto();
 
@@ -96,6 +94,7 @@ export default class ConceptsPage {
       await this.page.getByRole('link', { name: 'Nytt begrep' }).click({ timeout: 10000 });
       await this.editPage.expectMenu();
       await this.editPage.fillFormAndSave(concept);
+      await this.detailPage.expectDetails(concept);
     }
     await this.goto();
     await this.expectSearchResults(ALL_CONCEPTS);
