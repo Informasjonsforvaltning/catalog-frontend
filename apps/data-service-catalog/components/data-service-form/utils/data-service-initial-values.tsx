@@ -17,5 +17,6 @@ export const dataServiceToBeCreatedTemplate = (): DataServiceToBeCreated => {
     servesDataset: [],
     contactPoint: {},
     availability: '',
+    costs: [],
   };
 };
