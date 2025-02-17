@@ -16,6 +16,7 @@ import { DocumentationSection } from './components/documentation-section';
 import { AccessSection } from './components/access-section';
 import { DatasetSection } from './components/dataset-section';
 import { StatusSection } from './components/status-section';
+import { dataServiceValidationSchema } from './utils/validation-schema';
 
 type Props = {
   initialValues: DataService | DataServiceToBeCreated;
@@ -28,7 +29,7 @@ type Props = {
 const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, referenceDataEnv }: Props) => {
   const { catalogId, dataServiceId } = useParams();
   const [isDirty, setIsDirty] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [validateOnChange, setValidateOnChange] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
   const router = useRouter();
 
@@ -68,14 +69,18 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
   return (
     <Formik
       initialValues={initialValues as DataService}
+      validationSchema={dataServiceValidationSchema}
+      validateOnChange={validateOnChange}
+      validateOnBlur={validateOnChange}
       onSubmit={async (values: DataService, { setSubmitting }) => {
         await handleSubmit(trimObjectWhitespace(values) as DataService);
         setSubmitting(false);
-        setIsSubmitted(true);
       }}
     >
-      {({ dirty, isSubmitting, isValidating, submitForm }) => {
+      {({ errors, dirty, isSubmitting, isValidating, submitForm }) => {
         setTimeout(() => setIsDirty(dirty), 0);
+        const hasError = (fields: (keyof DataService)[]) => fields.some((field) => Object.keys(errors).includes(field));
+
         return (
           <>
             <Form className='container'>
@@ -84,6 +89,7 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
                   id='about-section'
                   title={localization.dataServiceForm.heading.about}
                   required
+                  error={hasError(['title'])}
                 >
                   <AboutSection />
                 </FormLayout.Section>
@@ -92,6 +98,7 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
                   id='endpoint-section'
                   title={localization.dataServiceForm.heading.endpoint}
                   required
+                  error={hasError(['endpointUrl', 'endpointDescriptions'])}
                 >
                   <EndpointSection />
                 </FormLayout.Section>
@@ -99,6 +106,7 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
                 <FormLayout.Section
                   id='documentation-section'
                   title={localization.dataServiceForm.heading.documentation}
+                  error={hasError(['landingPage', 'pages'])}
                 >
                   <DocumentationSection />
                 </FormLayout.Section>
@@ -141,6 +149,7 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
                   id='contact-point-section'
                   title={localization.dataServiceForm.heading.contactPoint}
                   required
+                  error={hasError(['contactPoint'])}
                 >
                   <ContactPointSection />
                 </FormLayout.Section>
@@ -154,6 +163,7 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
                   size='sm'
                   disabled={isSubmitting || isValidating || isCanceled || !dirty}
                   onClick={() => {
+                    setValidateOnChange(true);
                     submitForm();
                   }}
                 >

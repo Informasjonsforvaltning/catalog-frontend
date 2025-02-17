@@ -125,7 +125,7 @@ export const nb = {
   userRole: {
     adminRole: 'Virksomhetsadministrator',
     writerRole: 'Skrivebruker',
-    readerRole: 'Lesebruker'
+    readerRole: 'Lesebruker',
   },
 
   spatial: {
@@ -219,7 +219,7 @@ export const nb = {
     dataCommunity: 'Datalandsbyen',
     nationalDataCatalog: 'Data.norge.no',
     contactUs: 'Kontakt oss',
-    menu: 'Meny'
+    menu: 'Meny',
   },
 
   tag: {
@@ -461,6 +461,10 @@ export const nb = {
     invalidPhone: 'Ugyldig telefonnummer.',
     nameRequired: 'Må ha navn',
     accessURLRequired: 'Tilgangslenke må fylles ut.',
+    endpointURLRequired: 'Endepunkt må fylles ut.',
+    oneLanguageRequired: 'Må fylles ut for minst ett språk.',
+    deleteFieldIfEmpty: 'Slett feltet hvis det ikke skal ha innhold.',
+    minOneField: 'Minst ett felt skal fylles ut.',
   },
 
   serviceCatalog: {
