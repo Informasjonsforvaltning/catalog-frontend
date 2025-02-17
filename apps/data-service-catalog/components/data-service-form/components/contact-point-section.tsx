@@ -2,9 +2,10 @@
 import { DataService } from '@catalog-frontend/types';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Textfield, Checkbox, CheckboxGroup } from '@digdir/designsystemet-react';
+import { Textfield, Checkbox, CheckboxGroup, ErrorMessage } from '@digdir/designsystemet-react';
 import { FastField, useFormikContext } from 'formik';
 import styles from '../data-service-form.module.css';
+import { get as lodashGet } from 'lodash';
 import { useState } from 'react';
 
 export const ContactPointSection = () => {
@@ -30,6 +31,15 @@ export const ContactPointSection = () => {
         setFieldValue(`contactPoint.${option.value}`, '');
       }
     });
+  };
+
+  const getErrors = () => {
+    return lodashGet(errors, 'contactPoint');
+  };
+
+  const hasMainLevelError = () => {
+    const contactErrors: any = getErrors();
+    return typeof contactErrors === 'string' || contactErrors instanceof String;
   };
 
   return (
@@ -96,6 +106,14 @@ export const ContactPointSection = () => {
             // @ts-expect-error: url exists on the object
             error={errors?.contactPoint?.url}
           />
+        )}
+        {hasMainLevelError() && (
+          <ErrorMessage
+            size='sm'
+            error
+          >
+            {getErrors()}
+          </ErrorMessage>
         )}
       </div>
     </>

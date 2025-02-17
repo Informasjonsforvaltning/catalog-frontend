@@ -28,6 +28,7 @@ import { isEmpty, isNumber } from 'lodash';
 import styles from '../data-service-form.module.css';
 import FieldsetWithDelete from '../../fieldset-with-delete';
 import { TrashIcon } from '@navikt/aksel-icons';
+import { costValidationSchema } from '../utils/validation-schema';
 
 const DEFAULT_CURRENCY = 'http://publications.europa.eu/resource/authority/currency/NOK';
 
@@ -42,11 +43,9 @@ type ModalProps = {
   currencies?: ReferenceDataCode[];
 };
 
-const hasNoFieldValues = (values: DataServiceCost) => {
+const hasNoValueOrDocs = (values: DataServiceCost) => {
   if (!values) return true;
-  return (
-    isEmpty(values.value) && isEmpty(values.description) && isEmpty(values.documentation) && isEmpty(values.currency)
-  );
+  return !isNumber(values.value) && isEmpty(values.documentation);
 };
 
 const sortCurrencies = (currencies?: ReferenceDataCode[]) => {
@@ -155,7 +154,7 @@ export const CostsTable = ({ currencies }: Props) => {
           currencies={sortedCurrencies}
           onSuccess={(formValues) =>
             setFieldValue(
-              values.costs && values?.costs.length > 0 && !hasNoFieldValues(values?.costs?.[0])
+              values.costs && values?.costs.length > 0 && !hasNoValueOrDocs(values?.costs?.[0])
                 ? `costs[${values?.costs?.length}]`
                 : `costs[0]`,
               formValues,
@@ -200,6 +199,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
             initialValues={template}
             validateOnChange={submitted}
             validateOnBlur={submitted}
+            validationSchema={costValidationSchema}
             onSubmit={(formValues: DataServiceCost, { setSubmitting }) => {
               const trimmedValues = trimObjectWhitespace(rmCurrencyIfNoValue(formValues));
               onSuccess(trimmedValues);
@@ -336,7 +336,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                 <Modal.Footer>
                   <Button
                     type='button'
-                    disabled={isSubmitting || !dirty || hasNoFieldValues(values)}
+                    disabled={isSubmitting || !dirty || hasNoValueOrDocs(values)}
                     onClick={() => submitForm()}
                     size='sm'
                   >
