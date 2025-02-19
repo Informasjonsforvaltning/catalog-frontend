@@ -13,7 +13,7 @@ import {
 } from '@catalog-frontend/ui';
 import SearchFilter from '../../../../components/search-filter';
 import React, { useState, useEffect } from 'react';
-import {Chip, NativeSelect, Search} from '@digdir/designsystemet-react';
+import { Chip, NativeSelect, Search } from '@digdir/designsystemet-react';
 import {
   capitalizeFirstLetter,
   dateStringToDate,
@@ -25,7 +25,7 @@ import {
   sortDescending,
 } from '@catalog-frontend/utils';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
-import {parseAsArrayOf, parseAsString, useQueryState} from "nuqs";
+import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
 import _ from 'lodash';
 
 type SortTypes = 'titleAsc' | 'titleDesc' | 'lastChanged';
@@ -72,7 +72,9 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
       }
 
       if (!_.isEmpty(filterPublicationState)) {
-        filtered = filtered.filter((dataService) => filterPublicationState?.includes(dataService.published ? 'published' : 'unpublished'));
+        filtered = filtered.filter((dataService) =>
+          filterPublicationState?.includes(dataService.published ? 'published' : 'unpublished'),
+        );
       }
 
       if (searchQuery) {
@@ -136,7 +138,9 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
             key={`status-${index}`}
             onClick={() => removeFilter(filter, 'status')}
           >
-            {capitalizeFirstLetter(getTranslateText(distributionStatuses?.find((s) => s.uri === filter)?.label) as string)}
+            {capitalizeFirstLetter(
+              getTranslateText(distributionStatuses?.find((s) => s.uri === filter)?.label) as string,
+            )}
           </Chip.Removable>
         ))}
         {filterPublicationState?.map((filter, index) => (
@@ -144,7 +148,9 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
             key={`published-${index}`}
             onClick={() => removeFilter(filter, 'published')}
           >
-            {filter === 'published' ? localization.publicationState.published : localization.publicationState.unpublished}
+            {filter === 'published'
+              ? localization.publicationState.published
+              : localization.publicationState.unpublished}
           </Chip.Removable>
         ))}
       </Chip.Group>
@@ -197,7 +203,7 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
                       <SearchHit
                         title={getTranslateText(dataService?.title)}
                         description={getTranslateText(dataService?.description)}
-                        titleHref={`/catalogs/${catalogId}/data-services/${dataService?.id}/edit`}
+                        titleHref={`/catalogs/${catalogId}/data-services/${dataService?.id}`}
                         statusTag={
                           dataService.status && (
                             <Tag.DataServiceStatus
