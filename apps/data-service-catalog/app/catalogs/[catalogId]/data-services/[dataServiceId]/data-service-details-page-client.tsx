@@ -7,6 +7,7 @@ import React, { useState } from 'react';
 import { deleteDataService } from '../../../../actions/actions';
 import styles from './data-service-details-page.module.css';
 import StatusTag from '../../../../../components/status-tag';
+import { LeftColumn } from '../../../../../components/details-page-columns/details-page-left-column';
 
 interface dataServiceDetailsPageProps {
   dataService: DataService;
@@ -66,6 +67,12 @@ const DataServiceDetailsPageClient = ({
           />
         </div>
       </DetailsPageLayout.Buttons>
+      <DetailsPageLayout.Left>
+        <LeftColumn
+          dataService={dataService}
+          language={language}
+        />
+      </DetailsPageLayout.Left>
     </DetailsPageLayout>
   );
 };

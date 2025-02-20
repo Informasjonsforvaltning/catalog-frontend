@@ -1,0 +1,11 @@
+.infoCardItems {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.list {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
