@@ -3,14 +3,7 @@
 import { DataService } from '@catalog-frontend/types';
 import styles from './data-services-page.module.css';
 
-import {
-  LinkButton,
-  SearchHit,
-  SearchHitContainer,
-  SearchHitsPageLayout,
-  Tag,
-  DataServiceStatusTagProps,
-} from '@catalog-frontend/ui';
+import { LinkButton, SearchHit, SearchHitContainer, SearchHitsPageLayout } from '@catalog-frontend/ui';
 import SearchFilter from '../../../../components/search-filter';
 import React, { useState, useEffect } from 'react';
 import { Chip, NativeSelect, Search } from '@digdir/designsystemet-react';
@@ -27,6 +20,7 @@ import {
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
 import _ from 'lodash';
+import StatusTag from '../../../../components/status-tag';
 
 type SortTypes = 'titleAsc' | 'titleDesc' | 'lastChanged';
 type FilterType = 'published' | 'status';
@@ -73,7 +67,7 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
 
       if (!_.isEmpty(filterPublicationState)) {
         filtered = filtered.filter((dataService) =>
-          filterPublicationState?.includes(dataService.published ? 'published' : 'unpublished'),
+          filterPublicationState?.includes(dataService?.published ? 'published' : 'unpublished'),
         );
       }
 
@@ -95,8 +89,6 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
 
     filteredDataServices();
   }, [dataServices, filterStatus, filterPublicationState, searchQuery, sortType]);
-
-  const findDistributionStatus = (statusURI) => distributionStatuses?.find((s) => s.uri === statusURI);
 
   const handleSearch = (value: string) => {
     setSearchQuery(value);
@@ -205,17 +197,11 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
                         description={getTranslateText(dataService?.description)}
                         titleHref={`/catalogs/${catalogId}/data-services/${dataService?.id}`}
                         statusTag={
-                          dataService.status && (
-                            <Tag.DataServiceStatus
-                              statusKey={
-                                findDistributionStatus(dataService.status)
-                                  ?.code as DataServiceStatusTagProps['statusKey']
-                              }
-                              statusLabel={
-                                getTranslateText(findDistributionStatus(dataService.status)?.label) as string
-                              }
-                            />
-                          )
+                          <StatusTag
+                            dataServiceStatus={dataService?.status}
+                            distributionStatuses={distributionStatuses}
+                            language={'nb'}
+                          />
                         }
                         content={
                           <>
