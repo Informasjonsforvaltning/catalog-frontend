@@ -1,11 +1,12 @@
 'use client';
 
 import { DataService, DataServiceReferenceData } from '@catalog-frontend/types';
-import { DataServiceStatusTagProps, DeleteButton, DetailsPageLayout, LinkButton, Tag } from '@catalog-frontend/ui';
+import { DeleteButton, DetailsPageLayout, LinkButton } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import React, { useState } from 'react';
 import { deleteDataService } from '../../../../actions/actions';
 import styles from './data-service-details-page.module.css';
+import StatusTag from '../../../../../components/status-tag';
 
 interface dataServiceDetailsPageProps {
   dataService: DataService;
@@ -30,7 +31,7 @@ const DataServiceDetailsPageClient = ({
     if (dataService) {
       if (window.confirm(localization.serviceCatalog.form.confirmDelete)) {
         try {
-          await deleteDataService(catalogId, dataService.id);
+          await deleteDataService(catalogId, dataService?.id);
         } catch (error) {
           window.alert(error);
         }
@@ -38,20 +39,17 @@ const DataServiceDetailsPageClient = ({
     }
   };
 
-  const findDistributionStatus = (statusURI) => referenceData.distributionStatuses?.find((s) => s.uri === statusURI);
-
   return (
     <DetailsPageLayout
       handleLanguageChange={handleLanguageChange}
       language={language}
       headingTitle={getTranslateText(dataService?.title, language)}
       headingTag={
-        dataService.status && (
-          <Tag.DataServiceStatus
-            statusKey={findDistributionStatus(dataService.status)?.code as DataServiceStatusTagProps['statusKey']}
-            statusLabel={getTranslateText(findDistributionStatus(dataService.status)?.label, language) as string}
-          />
-        )
+        <StatusTag
+          dataServiceStatus={dataService?.status}
+          distributionStatuses={referenceData.distributionStatuses}
+          language={language}
+        />
       }
       loading={false}
     >
@@ -62,7 +60,7 @@ const DataServiceDetailsPageClient = ({
           </LinkButton>
 
           <DeleteButton
-            disabled={dataService.published}
+            disabled={dataService?.published}
             variant='secondary'
             onClick={() => handleDeleteDataService()}
           />
