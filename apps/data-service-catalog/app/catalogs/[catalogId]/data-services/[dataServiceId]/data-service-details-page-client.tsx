@@ -71,6 +71,7 @@ const DataServiceDetailsPageClient = ({
       <DetailsPageLayout.Left>
         <LeftColumn
           dataService={dataService}
+          referenceData={referenceData}
           language={language}
         />
       </DetailsPageLayout.Left>

@@ -1,17 +1,19 @@
-import { DataService } from '@catalog-frontend/types';
+import { DataService, DataServiceReferenceData } from '@catalog-frontend/types';
 import styles from './details-columns.module.css';
 import { InfoCard } from '@catalog-frontend/ui';
 import { isEmpty } from 'lodash';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { List, Paragraph, Tag } from '@digdir/designsystemet-react';
+import { accessRights, getTranslateText, localization } from '@catalog-frontend/utils';
+import { Paragraph, Tag } from '@digdir/designsystemet-react';
 import { DetailsUrlList } from './components/details-url-list';
+import { ReferenceDataTag } from './components/reference-data-tag';
 
 type Props = {
   dataService: DataService;
+  referenceData: DataServiceReferenceData;
   language: string;
 };
 
-export const LeftColumn = ({ dataService, language }: Props) => {
+export const LeftColumn = ({ dataService, referenceData, language }: Props) => {
   return (
     <InfoCard>
       {!isEmpty(dataService?.description) && (
@@ -59,6 +61,36 @@ export const LeftColumn = ({ dataService, language }: Props) => {
       {!isEmpty(dataService?.pages) && (
         <InfoCard.Item title={localization.dataServiceForm.fieldLabel.pages}>
           <DetailsUrlList urls={dataService.pages} />
+        </InfoCard.Item>
+      )}
+
+      {!isEmpty(dataService?.license) && (
+        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.license}>
+          <ReferenceDataTag
+            referenceDataURI={dataService.license}
+            referenceDataCodes={referenceData.openLicenses}
+            language={language}
+          />
+        </InfoCard.Item>
+      )}
+
+      {!isEmpty(dataService?.accessRights) && (
+        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.accessRights}>
+          <ReferenceDataTag
+            referenceDataURI={dataService.accessRights}
+            referenceDataCodes={accessRights}
+            language={language}
+          />
+        </InfoCard.Item>
+      )}
+
+      {!isEmpty(dataService?.availability) && (
+        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.availability}>
+          <ReferenceDataTag
+            referenceDataURI={dataService.availability}
+            referenceDataCodes={referenceData.plannedAvailabilities}
+            language={language}
+          />
         </InfoCard.Item>
       )}
     </InfoCard>
