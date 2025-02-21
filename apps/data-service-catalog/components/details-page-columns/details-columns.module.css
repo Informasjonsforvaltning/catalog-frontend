@@ -9,3 +9,20 @@
   gap: 0.5rem;
   flex-wrap: wrap;
 }
+
+.contactPoints {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contactPoints > span {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.contactPoints > span > div {
+  display: flex;
+  align-items: center;
+}

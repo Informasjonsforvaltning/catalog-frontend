@@ -8,6 +8,7 @@ import { deleteDataService } from '../../../../actions/actions';
 import styles from './data-service-details-page.module.css';
 import StatusTag from '../../../../../components/status-tag';
 import { LeftColumn } from '../../../../../components/details-page-columns/details-page-left-column';
+import { RightColumn } from '../../../../../components/details-page-columns/details-page-right-column';
 
 interface dataServiceDetailsPageProps {
   dataService: DataService;
@@ -73,6 +74,9 @@ const DataServiceDetailsPageClient = ({
           language={language}
         />
       </DetailsPageLayout.Left>
+      <DetailsPageLayout.Right>
+        <RightColumn dataService={dataService} />
+      </DetailsPageLayout.Right>
     </DetailsPageLayout>
   );
 };
