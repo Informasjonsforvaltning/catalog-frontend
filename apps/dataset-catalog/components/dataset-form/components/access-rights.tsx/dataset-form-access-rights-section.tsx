@@ -20,20 +20,18 @@ export const AccessRightFields = () => {
     <Card className={styles.card}>
       <div>
         <Fieldset
+          size='sm'
           legend={
             <TitleWithHelpTextAndTag
-              helpAriaLabel={localization.access}
               helpText={localization.datasetForm.helptext.accessRights}
               tagColor='info'
               tagTitle={localization.tag.recommended}
-              fieldId='accessRights.uri-combobox'
             >
               {localization.access}
             </TitleWithHelpTextAndTag>
           }
         >
           <Combobox
-            id='accessRights.uri-combobox'
             size='sm'
             value={[values?.accessRights?.uri || '']}
             onValueChange={(values) => setFieldValue('accessRights.uri', values.toString())}

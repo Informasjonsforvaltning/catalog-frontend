@@ -46,18 +46,14 @@ export const QualifiedAttributionsSection = () => {
 
   return (
     <Fieldset
+      size='sm'
       legend={
-        <TitleWithHelpTextAndTag
-          helpAriaLabel={localization.datasetForm.fieldLabel.qualifiedAttributions}
-          helpText={localization.datasetForm.helptext.qualifiedAttributions}
-          fieldId='qualifiedAttributions-combobox'
-        >
+        <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.qualifiedAttributions}>
           {localization.datasetForm.fieldLabel.qualifiedAttributions}
         </TitleWithHelpTextAndTag>
       }
     >
       <Combobox
-        id='qualifiedAttributions-combobox'
         size='sm'
         onValueChange={(selectedValues: string[]) => setFieldValue('qualifiedAttributions', selectedValues)}
         onChange={(input: any) => debouncedSearch(input.target.value)}

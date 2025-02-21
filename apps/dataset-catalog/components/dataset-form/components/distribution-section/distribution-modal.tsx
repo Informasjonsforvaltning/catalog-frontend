@@ -139,10 +139,7 @@ export const DistributionModal = ({
                           <Radio.Group
                             size='sm'
                             legend={
-                              <TitleWithHelpTextAndTag
-                                helpText={localization.datasetForm.helptext.distributionType}
-                                helpAriaLabel={localization.type}
-                              >
+                              <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.distributionType}>
                                 {localization.type}
                               </TitleWithHelpTextAndTag>
                             }
@@ -188,7 +185,6 @@ export const DistributionModal = ({
                         label={
                           <TitleWithHelpTextAndTag
                             tagTitle={localization.tag.required}
-                            helpAriaLabel={localization.datasetForm.fieldLabel.accessURL}
                             helpText={localization.datasetForm.helptext.accessURL}
                           >
                             {localization.datasetForm.fieldLabel.accessURL}
@@ -202,10 +198,7 @@ export const DistributionModal = ({
                         as={Textfield}
                         size='sm'
                         label={
-                          <TitleWithHelpTextAndTag
-                            helpAriaLabel={localization.datasetForm.fieldLabel.downloadURL}
-                            helpText={localization.datasetForm.helptext.downloadURL}
-                          >
+                          <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.downloadURL}>
                             {localization.datasetForm.fieldLabel.downloadURL}
                           </TitleWithHelpTextAndTag>
                         }
@@ -214,11 +207,9 @@ export const DistributionModal = ({
 
                       {!isLoadingSelectedDataServices && distributionType === 'distribution' && (
                         <Fieldset
+                          size='sm'
                           legend={
-                            <TitleWithHelpTextAndTag
-                              helpAriaLabel={localization.datasetForm.fieldLabel.accessService}
-                              helpText={localization.datasetForm.helptext.accessService}
-                            >
+                            <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.accessService}>
                               {localization.datasetForm.fieldLabel.accessService}
                             </TitleWithHelpTextAndTag>
                           }
@@ -251,9 +242,9 @@ export const DistributionModal = ({
                       <FieldsetDivider />
 
                       <Fieldset
+                        size='sm'
                         legend={
                           <TitleWithHelpTextAndTag
-                            helpAriaLabel={localization.datasetForm.fieldLabel.format}
                             helpText={localization.datasetForm.helptext.fileType}
                             tagTitle={localization.tag.recommended}
                             tagColor='info'
@@ -274,11 +265,9 @@ export const DistributionModal = ({
                         />
                       </Fieldset>
                       <Fieldset
+                        size='sm'
                         legend={
-                          <TitleWithHelpTextAndTag
-                            helpAriaLabel={localization.datasetForm.fieldLabel.mediaType}
-                            helpText={localization.datasetForm.helptext.mediaType}
-                          >
+                          <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.mediaType}>
                             {localization.datasetForm.fieldLabel.mediaType}
                           </TitleWithHelpTextAndTag>
                         }
@@ -299,11 +288,11 @@ export const DistributionModal = ({
                         <>
                           <FieldsetDivider />
                           <Fieldset
+                            size='sm'
                             legend={
                               <TitleWithHelpTextAndTag
                                 tagTitle={localization.tag.recommended}
                                 tagColor='info'
-                                helpAriaLabel={localization.datasetForm.fieldLabel.license}
                                 helpText={localization.datasetForm.helptext.license}
                               >
                                 {localization.datasetForm.fieldLabel.license}
@@ -352,10 +341,7 @@ export const DistributionModal = ({
 
                       <FastField
                         label={
-                          <TitleWithHelpTextAndTag
-                            helpAriaLabel={localization.datasetForm.fieldLabel.distributionLink}
-                            helpText={localization.datasetForm.helptext.distributionLink}
-                          >
+                          <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.distributionLink}>
                             {localization.datasetForm.fieldLabel.distributionLink}
                           </TitleWithHelpTextAndTag>
                         }
@@ -371,9 +357,9 @@ export const DistributionModal = ({
                           <FieldsetDivider />
 
                           <Fieldset
+                            size='sm'
                             legend={
                               <TitleWithHelpTextAndTag
-                                helpAriaLabel={localization.datasetForm.fieldLabel.conformsTo}
                                 helpText={localization.datasetForm.helptext.distributionConformsTo}
                               >
                                 {localization.datasetForm.fieldLabel.conformsTo}
@@ -398,8 +384,8 @@ export const DistributionModal = ({
                                           />
                                         </div>
                                         <FastField
-                                          as={Textfield}
                                           size='sm'
+                                          as={Textfield}
                                           label={localization.link}
                                           name={`conformsTo[${i}].uri`}
                                           // @ts-expect-error: uri exists on the object

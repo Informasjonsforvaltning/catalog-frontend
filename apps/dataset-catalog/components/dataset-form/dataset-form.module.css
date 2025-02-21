@@ -47,3 +47,10 @@
   gap: 0.5rem;
   align-items: center;
 }
+
+.modalContent {
+  margin: var(--fds-spacing-8);
+  padding: var(--fds-spacing-8);
+  border: 1px solid var(--fds-semantic-border-neutral-subtle);
+  border-radius: var(--fds-border_radius-medium);
+}
