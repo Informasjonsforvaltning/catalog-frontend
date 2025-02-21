@@ -10,7 +10,7 @@ import {
   FormHeading,
 } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Modal, Radio, Table, Textfield } from '@digdir/designsystemet-react';
+import { Button, Fieldset, Modal, Radio, Table, Textfield } from '@digdir/designsystemet-react';
 import { FastField, Formik, useFormikContext } from 'formik';
 import styles from '../../dataset-form.module.css';
 import { useRef, useState } from 'react';
@@ -72,50 +72,52 @@ export const AccessRightsUriTable = () => {
 
   return (
     <div className={styles.fieldContainer}>
-      <div className={styles.set}>
-        <FormHeading>{localization.datasetForm.fieldLabel.legalBasis}</FormHeading>
-        <HelpMarkdown aria-label={localization.datasetForm.fieldLabel.legalBasis}>
-          {localization.datasetForm.helptext.legalBasis}
-        </HelpMarkdown>
-      </div>
-
-      {allLegalBases && allLegalBases?.length > 0 && !hasNoFieldValues(allLegalBases[0]?.uriWithLabel) && (
-        <Table size='sm'>
-          <Table.Head>
-            <Table.Row>
-              <Table.HeaderCell>{localization.title}</Table.HeaderCell>
-              <Table.HeaderCell>{localization.link}</Table.HeaderCell>
-              <Table.HeaderCell>{localization.type}</Table.HeaderCell>
-              <Table.HeaderCell aria-label='Actions' />
-            </Table.Row>
-          </Table.Head>
-          <Table.Body>
-            {allLegalBases.map(
-              (item, i) =>
-                item?.uriWithLabel && (
-                  <Table.Row key={`${item.type}-tableRow-${i}`}>
-                    <Table.Cell>{getTranslateText(item?.uriWithLabel.prefLabel)}</Table.Cell>
-                    <Table.Cell>{item?.uriWithLabel.uri}</Table.Cell>
-                    <Table.Cell>{localization.datasetForm.fieldLabel[item?.type]}</Table.Cell>
-                    <Table.Cell>
-                      <span className={styles.set}>
-                        <FieldModal
-                          template={item.uriWithLabel}
-                          formType='edit'
-                          onSuccess={(updatedItem: LegalBasis) =>
-                            setFieldValue(`${updatedItem.type}[${item.index}]`, updatedItem.uriWithLabel)
-                          }
-                          initialType={item.type}
-                        />
-                        <DeleteButton onClick={() => setFieldValue(`${item.type}[${item.index}]`, undefined)} />
-                      </span>
-                    </Table.Cell>
-                  </Table.Row>
-                ),
-            )}
-          </Table.Body>
-        </Table>
-      )}
+      <Fieldset
+        size='sm'
+        legend={
+          <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.legalBasis}>
+            {localization.datasetForm.fieldLabel.legalBasis}
+          </TitleWithHelpTextAndTag>
+        }
+      >
+        {allLegalBases && allLegalBases?.length > 0 && !hasNoFieldValues(allLegalBases[0]?.uriWithLabel) && (
+          <Table size='sm'>
+            <Table.Head>
+              <Table.Row>
+                <Table.HeaderCell>{localization.title}</Table.HeaderCell>
+                <Table.HeaderCell>{localization.link}</Table.HeaderCell>
+                <Table.HeaderCell>{localization.type}</Table.HeaderCell>
+                <Table.HeaderCell aria-label='Actions' />
+              </Table.Row>
+            </Table.Head>
+            <Table.Body>
+              {allLegalBases.map(
+                (item, i) =>
+                  item?.uriWithLabel && (
+                    <Table.Row key={`${item.type}-tableRow-${i}`}>
+                      <Table.Cell>{getTranslateText(item?.uriWithLabel.prefLabel)}</Table.Cell>
+                      <Table.Cell>{item?.uriWithLabel.uri}</Table.Cell>
+                      <Table.Cell>{localization.datasetForm.fieldLabel[item?.type]}</Table.Cell>
+                      <Table.Cell>
+                        <span className={styles.set}>
+                          <FieldModal
+                            template={item.uriWithLabel}
+                            formType='edit'
+                            onSuccess={(updatedItem: LegalBasis) =>
+                              setFieldValue(`${updatedItem.type}[${item.index}]`, updatedItem.uriWithLabel)
+                            }
+                            initialType={item.type}
+                          />
+                          <DeleteButton onClick={() => setFieldValue(`${item.type}[${item.index}]`, undefined)} />
+                        </span>
+                      </Table.Cell>
+                    </Table.Row>
+                  ),
+              )}
+            </Table.Body>
+          </Table>
+        )}
+      </Fieldset>
       <div>
         <FieldModal
           template={{ prefLabel: { nb: '' }, uri: '' }}

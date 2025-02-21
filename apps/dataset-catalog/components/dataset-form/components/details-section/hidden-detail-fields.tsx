@@ -77,7 +77,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
                     <FastField
                       name={`landingPage[${index}]`}
                       label={
-                        arrayHelpers.form.values.landingPage < 1 ? (
+                        index === 0 ? (
                           <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.landingPage}>
                             {localization.datasetForm.fieldLabel.landingPage}
                           </TitleWithHelpTextAndTag>
