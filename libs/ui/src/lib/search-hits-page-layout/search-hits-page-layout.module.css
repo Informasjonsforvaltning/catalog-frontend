@@ -23,13 +23,8 @@
 
 .searchRowContainer {
   display: flex;
-  justify-content: stretch;
-  justify-content: space-between;
+  justify-content: flex-end;
   margin-bottom: 1rem;
-}
-
-.searchRowContainer > div:first-of-type {
-  flex-grow: 1;
 }
 
 .gridContainer {
