@@ -54,6 +54,8 @@ export const dataServiceFormNb = {
     costs: 'Gebyr',
     costDocumentation: 'Dokumentasjon',
     costValue: 'Beløp',
+    dataServiceID: 'API-ID',
+    modified: 'Sist oppdatert',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette API-beskrivelsen?',
