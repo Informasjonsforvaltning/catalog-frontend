@@ -216,7 +216,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                     : `${localization.add} ${localization.dataServiceForm.fieldLabel.costs.toLowerCase()}`}
                 </Modal.Header>
 
-                <Modal.Content>
+                <Modal.Content className={styles.modalContent}>
                   <Fieldset
                     legend={
                       <TitleWithHelpTextAndTag

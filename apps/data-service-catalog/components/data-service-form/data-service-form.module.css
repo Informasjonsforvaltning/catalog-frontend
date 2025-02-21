@@ -61,3 +61,14 @@
     background-color: inherit;
   }
 }
+
+.modalContent {
+  margin: var(--fds-spacing-8);
+  padding: var(--fds-spacing-8);
+  border: 1px solid var(--fds-semantic-border-neutral-subtle);
+  border-radius: var(--fds-border_radius-medium);
+  height: calc(100vh - 400px);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
