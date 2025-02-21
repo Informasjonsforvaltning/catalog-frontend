@@ -158,14 +158,11 @@ const FieldModal = ({ template, formType, onSuccess, initialType = 'legalBasisFo
                     : `${localization.add} ${localization.datasetForm.fieldLabel.legalBasis.toLowerCase()}`}
                 </Modal.Header>
 
-                <Modal.Content>
+                <Modal.Content className={styles.modalContent}>
                   <Radio.Group
                     size='sm'
                     legend={
-                      <TitleWithHelpTextAndTag
-                        helpText={localization.datasetForm.helptext.legalBasisType}
-                        helpAriaLabel={localization.type}
-                      >
+                      <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.legalBasisType}>
                         {localization.type}
                       </TitleWithHelpTextAndTag>
                     }

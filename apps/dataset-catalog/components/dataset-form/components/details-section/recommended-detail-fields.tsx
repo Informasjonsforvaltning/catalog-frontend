@@ -86,7 +86,6 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
           <TitleWithHelpTextAndTag
             tagColor='info'
             tagTitle={localization.tag.recommended}
-            helpAriaLabel={localization.datasetForm.fieldLabel.language}
             helpText={localization.datasetForm.helptext.language}
           >
             {localization.datasetForm.fieldLabel.language}
@@ -120,15 +119,12 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
         <TitleWithHelpTextAndTag
           tagColor='info'
           tagTitle={localization.tag.recommended}
-          helpAriaLabel={localization.datasetForm.fieldLabel.spatial}
           helpText={localization.datasetForm.helptext.spatial}
-          fieldId='spatialList-combobox'
         >
           {localization.datasetForm.fieldLabel.spatial}
         </TitleWithHelpTextAndTag>
 
         <Combobox
-          id='spatialList-combobox'
           placeholder={`${localization.search.search}...`}
           multiple
           filter={() => true} // disable filter
@@ -159,7 +155,6 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
             tagTitle={localization.tag.recommended}
             tagColor='info'
             helpText={localization.datasetForm.helptext.temporal}
-            helpAriaLabel={localization.datasetForm.fieldLabel.temporal}
           >
             {localization.datasetForm.fieldLabel.temporal}
           </TitleWithHelpTextAndTag>

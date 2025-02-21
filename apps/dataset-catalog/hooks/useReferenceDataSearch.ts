@@ -1,4 +1,4 @@
-import { searchReferenceData, searchReferenceDataByUri, SearchAlternative } from '@catalog-frontend/data-access';
+import { searchReferenceData, searchReferenceDataByUri, ReferenceDataGraphql } from '@catalog-frontend/data-access';
 import { ReferenceDataCode } from '@catalog-frontend/types';
 import { useQuery } from '@tanstack/react-query';
 
@@ -7,7 +7,7 @@ export const useSearchAdministrativeUnits = (searchQuery: string, envVariable: s
     queryKey: ['ADMINISTRATIVE_ENHETER', searchQuery],
     queryFn: async () => {
       const data: ReferenceDataCode[] = await searchReferenceData(searchQuery, envVariable, [
-        SearchAlternative.AdministrativeEnheter,
+        ReferenceDataGraphql.SearchAlternative.AdministrativeEnheter,
       ]);
       return data;
     },
@@ -24,7 +24,7 @@ export const useSearchAdministrativeUnitsByUri = (uriList: string[] | undefined,
       }
 
       const data: ReferenceDataCode[] = await searchReferenceDataByUri(uriList, envVariable, [
-        SearchAlternative.AdministrativeEnheter,
+        ReferenceDataGraphql.SearchAlternative.AdministrativeEnheter,
       ]);
       return data;
     },
@@ -37,7 +37,7 @@ export const useSearchMediaTypes = (searchQuery: string, envVariable: string) =>
     queryKey: ['IANA_TYPES', 'searchQuery', searchQuery],
     queryFn: async () => {
       const data: ReferenceDataCode[] = await searchReferenceData(searchQuery, envVariable, [
-        SearchAlternative.IanaMediaTypes,
+        ReferenceDataGraphql.SearchAlternative.IanaMediaTypes,
       ]);
       return data;
     },
@@ -54,7 +54,7 @@ export const useSearchMediaTypeByUri = (uriList: string[] | undefined, envVariab
       }
 
       const data: ReferenceDataCode[] = await searchReferenceDataByUri(uriList, envVariable, [
-        SearchAlternative.IanaMediaTypes,
+        ReferenceDataGraphql.SearchAlternative.IanaMediaTypes,
       ]);
       return data;
     },
@@ -67,7 +67,7 @@ export const useSearchFileTypes = (searchQuery: string, envVariable: string) => 
     queryKey: ['FileTypes', 'searchQuery', searchQuery],
     queryFn: async () => {
       const data: ReferenceDataCode[] = await searchReferenceData(searchQuery, envVariable, [
-        SearchAlternative.EuFileTypes,
+        ReferenceDataGraphql.SearchAlternative.EuFileTypes,
       ]);
       return data;
     },
@@ -84,7 +84,7 @@ export const useSearchFileTypeByUri = (uriList: string[] | undefined, envVariabl
       }
 
       const data: ReferenceDataCode[] = await searchReferenceDataByUri(uriList, envVariable, [
-        SearchAlternative.EuFileTypes,
+        ReferenceDataGraphql.SearchAlternative.EuFileTypes,
       ]);
       return data as ReferenceDataCode[];
     },

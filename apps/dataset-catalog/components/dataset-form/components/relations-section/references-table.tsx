@@ -9,6 +9,7 @@ import { useState, useRef } from 'react';
 import { referenceSchema } from '../../utils/validation-schema';
 import _ from 'lodash';
 import styles from '../../dataset-form.module.css';
+import cn from 'classnames';
 
 type Props = {
   searchEnv: string;
@@ -38,10 +39,7 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
 
   return (
     <div className={styles.fieldContainer}>
-      <TitleWithHelpTextAndTag
-        helpText={localization.datasetForm.helptext.references}
-        helpAriaLabel={localization.datasetForm.fieldLabel.references}
-      >
+      <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.references}>
         {localization.datasetForm.fieldLabel.references}
       </TitleWithHelpTextAndTag>
       {values?.references && _.compact(values?.references).length > 0 && (
@@ -163,7 +161,7 @@ const FieldModal = ({ template, type, onSuccess, searchEnv, selectedUri }: Modal
                     : `${localization.add} ${localization.relation.toLowerCase()}`}
                 </Modal.Header>
 
-                <Modal.Content>
+                <Modal.Content className={cn(styles.modalContent, styles.fieldContainer)}>
                   <Combobox
                     label={localization.datasetForm.fieldLabel.relationType}
                     onValueChange={(value) => setFieldValue(`referenceType.code`, value.toString())}
@@ -185,7 +183,6 @@ const FieldModal = ({ template, type, onSuccess, searchEnv, selectedUri }: Modal
                       </Combobox.Option>
                     ))}
                   </Combobox>
-                  <FieldsetDivider />
 
                   <Combobox
                     label={localization.datasetForm.fieldLabel.dataset}

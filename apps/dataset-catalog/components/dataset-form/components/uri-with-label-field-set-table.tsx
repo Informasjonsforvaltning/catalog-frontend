@@ -12,7 +12,7 @@ import { Button, Modal, Table, Textfield } from '@digdir/designsystemet-react';
 import { FastField, Formik, useFormikContext } from 'formik';
 import styles from '../dataset-form.module.css';
 import { ReactNode, useRef, useState } from 'react';
-import _ from 'lodash';
+import { trim, isEmpty, pickBy, identity } from 'lodash';
 import { uriWithLabelSchema } from '../utils/validation-schema';
 
 interface Props {
@@ -30,7 +30,7 @@ interface ModalProps {
 
 const hasNoFieldValues = (values: UriWithLabel) => {
   if (!values) return true;
-  return _.isEmpty(_.trim(values.uri)) && _.isEmpty(_.pickBy(values.prefLabel, _.identity));
+  return isEmpty(trim(values.uri)) && isEmpty(pickBy(values.prefLabel, identity));
 };
 
 export const UriWithLabelFieldsetTable = ({ fieldName, values, label }: Props) => {
@@ -127,7 +127,7 @@ const FieldModal = ({ fieldName, template, type, onSuccess }: ModalProps) => {
                     : `${localization.add} ${getTranslateText(localization.datasetForm.fieldLabel[fieldName])?.toString().toLowerCase()}`}
                 </Modal.Header>
 
-                <Modal.Content>
+                <Modal.Content className={styles.modalContent}>
                   <FormikLanguageFieldset
                     as={Textfield}
                     name='prefLabel'

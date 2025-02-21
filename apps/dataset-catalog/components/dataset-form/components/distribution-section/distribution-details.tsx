@@ -6,7 +6,7 @@ import { Paragraph, Tag, Table, TableBody, Heading } from '@digdir/designsysteme
 import styles from './distributions.module.css';
 import { useSearchDataServiceByUri } from '../../../../hooks/useSearchService';
 import { useSearchMediaTypeByUri } from '../../../../hooks/useReferenceDataSearch';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 import { FieldsetDivider } from '@catalog-frontend/ui';
 
 interface Props {
@@ -22,6 +22,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
   const { data: selectedMediaTypes } = useSearchMediaTypeByUri(distribution?.mediaType ?? [], referenceDataEnv);
 
   type ResourceType = 'datasets' | 'information-models' | 'data-services' | 'concepts';
+
   const getDataNorgeUri = (id: string | undefined, resourceType: ResourceType) => {
     return validUUID(id) ? `${referenceDataEnv}/${resourceType}/${id}` : '/not-found';
   };
@@ -31,7 +32,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
       {distribution && (
         <div>
           <FieldsetDivider />
-          {!_.isEmpty(distribution?.description) && (
+          {!isEmpty(distribution?.description) && (
             <div className={styles.field}>
               <Heading
                 level={5}
@@ -113,7 +114,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
             </>
           )}
 
-          {distribution?.conformsTo && !_.isEmpty(distribution.conformsTo[0]?.uri) && (
+          {distribution?.conformsTo && !isEmpty(distribution.conformsTo[0]?.uri) && (
             <div className={styles.field}>
               <Heading
                 level={5}

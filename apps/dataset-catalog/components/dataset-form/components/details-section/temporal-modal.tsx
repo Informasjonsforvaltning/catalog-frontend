@@ -6,6 +6,8 @@ import { FastField, Formik, useFormikContext } from 'formik';
 import styles from '../../dataset-form.module.css';
 import { ReactNode, useRef, useState } from 'react';
 import _ from 'lodash';
+import { uriWithLabelSchema } from '../../utils/validation-schema';
+import cn from 'classnames';
 
 interface Props {
   values: DateRange[] | undefined;
@@ -94,7 +96,7 @@ const FieldModal = ({ template, type, onSuccess }: ModalProps) => {
             initialValues={template}
             validateOnChange={submitted}
             validateOnBlur={submitted}
-            //validationSchema={uriWithLabelSchema}
+            validationSchema={uriWithLabelSchema}
             onSubmit={(formValues, { setSubmitting }) => {
               const trimmedValues = trimObjectWhitespace(formValues);
               onSuccess(trimmedValues);
@@ -109,7 +111,7 @@ const FieldModal = ({ template, type, onSuccess }: ModalProps) => {
                   {type === 'edit' ? `${localization.edit} ` : `${localization.add} `}
                 </Modal.Header>
 
-                <Modal.Content>
+                <Modal.Content className={cn(styles.modalContent, styles.fieldContainer)}>
                   <FastField
                     as={Textfield}
                     size='sm'

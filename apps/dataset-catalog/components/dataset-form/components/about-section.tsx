@@ -15,7 +15,6 @@ export const AboutSection = () => {
         legend={
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.required}
-            helpAriaLabel={localization.title}
             helpText={localization.datasetForm.helptext.title}
           >
             {localization.title}
@@ -29,7 +28,6 @@ export const AboutSection = () => {
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.description}
-            helpAriaLabel={localization.description}
             tagTitle={localization.tag.required}
           >
             {localization.description}
@@ -52,7 +50,6 @@ export const AboutSection = () => {
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
             helpText={localization.datasetForm.helptext.issued}
-            helpAriaLabel={localization.datasetForm.fieldLabel.issued}
             tagColor='info'
           >
             {localization.datasetForm.fieldLabel.issued}

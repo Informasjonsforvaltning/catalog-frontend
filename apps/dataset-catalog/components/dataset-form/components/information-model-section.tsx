@@ -63,18 +63,14 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
     <>
       {!isLoading && (
         <Fieldset
+          size='sm'
           legend={
-            <TitleWithHelpTextAndTag
-              helpAriaLabel={localization.datasetForm.fieldLabel.informationModelsFromFDK}
-              helpText={localization.datasetForm.helptext.informationModelsFromFDK}
-              fieldId={'informationModelsFromFDK-combobox'}
-            >
+            <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.informationModelsFromFDK}>
               {localization.datasetForm.fieldLabel.informationModelsFromFDK}
             </TitleWithHelpTextAndTag>
           }
         >
           <Combobox
-            id='informationModelsFromFDK-combobox'
             size='sm'
             onValueChange={(selectedValues: string[]) => setFieldValue('informationModelsFromFDK', selectedValues)}
             onChange={(input: any) => debouncedSearch(input.target.value)}
@@ -108,10 +104,7 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
         values={values.informationModel}
         fieldName={'informationModel'}
         label={
-          <TitleWithHelpTextAndTag
-            helpAriaLabel={localization.datasetForm.fieldLabel.informationModel}
-            helpText={localization.datasetForm.helptext.informationModel}
-          >
+          <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.informationModel}>
             {localization.datasetForm.fieldLabel.informationModel}
           </TitleWithHelpTextAndTag>
         }

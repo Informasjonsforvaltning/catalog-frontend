@@ -46,15 +46,12 @@ export const ConceptSection = ({ searchEnv }: Props) => {
         <TitleWithHelpTextAndTag
           tagTitle={localization.tag.recommended}
           tagColor='info'
-          helpAriaLabel={localization.datasetForm.fieldLabel.concept}
           helpText={localization.datasetForm.helptext.concept}
-          fieldId='conceptList-combobox'
         >
           {localization.datasetForm.fieldLabel.concept}
         </TitleWithHelpTextAndTag>
 
         <Combobox
-          id='conceptList-combobox'
           size='sm'
           onValueChange={(selectedValues: string[]) => setFieldValue('conceptList', selectedValues)}
           onChange={(input: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(input.target.value)}
@@ -95,7 +92,6 @@ export const ConceptSection = ({ searchEnv }: Props) => {
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
             tagColor='info'
-            helpAriaLabel={localization.datasetForm.fieldLabel.keyword}
             helpText={localization.datasetForm.helptext.keyword}
           >
             {localization.datasetForm.fieldLabel.keyword}
