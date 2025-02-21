@@ -1,6 +1,6 @@
 'use client';
 
-import { DataService, DataServiceReferenceData } from '@catalog-frontend/types';
+import {DataService, DataServiceReferenceData, ReferenceDataCode} from '@catalog-frontend/types';
 import { DeleteButton, DetailsPageLayout, LinkButton } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import React, { useState } from 'react';
@@ -29,6 +29,8 @@ const DataServiceDetailsPageClient = ({
     setLanguage(value);
   };
 
+  const matchUriWithReferenceData = (uri: string, referenceList: ReferenceDataCode[]) => referenceList?.find((s) => s.uri === uri);
+
   const handleDeleteDataService = async () => {
     if (dataService) {
       if (window.confirm(localization.serviceCatalog.form.confirmDelete)) {
@@ -40,6 +42,9 @@ const DataServiceDetailsPageClient = ({
       }
     }
   };
+
+  const licenseCode = dataService?.license ? matchUriWithReferenceData(dataService.license, referenceData.openLicenses) : undefined;
+  const rightsCode = dataService?.accessRights ? matchUriWithReferenceData(dataService.accessRights, referenceData) : undefined;
 
   return (
     <DetailsPageLayout
@@ -71,6 +76,7 @@ const DataServiceDetailsPageClient = ({
       <DetailsPageLayout.Left>
         <LeftColumn
           dataService={dataService}
+          referenceData={referenceData}
           language={language}
         />
       </DetailsPageLayout.Left>
