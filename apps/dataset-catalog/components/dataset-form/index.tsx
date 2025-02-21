@@ -254,8 +254,8 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                     <div className={styles.footerContent}>
                       {localization.tag.approve}
                       <HelpMarkdown
-                        size='sm'
-                        title={'Registeringsstatus'}
+                        title={localization.datasetForm.fieldLabel.registrationStatus}
+                        aria-label={'statusSwitch'}
                       >
                         {localization.datasetForm.helptext.statusSwitch}
                       </HelpMarkdown>
