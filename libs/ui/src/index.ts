@@ -1,3 +1,4 @@
+export * from './lib/auth-session-modal';
 export * from './lib/breadcrumbs';
 export * from './lib/button';
 export * from './lib/center-container';
