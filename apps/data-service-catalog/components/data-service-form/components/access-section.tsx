@@ -1,15 +1,9 @@
-import { AccessRights, DataService, ReferenceDataCode } from '@catalog-frontend/types';
+import { DataService, ReferenceDataCode } from '@catalog-frontend/types';
 import { FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { accessRights, getTranslateText, localization } from '@catalog-frontend/utils';
 import { Combobox, Fieldset } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 import { CostsTable } from './costs-table';
-
-const accessRightsOptions = [
-  { value: AccessRights.PUBLIC, label: localization.accessRight.public },
-  { value: AccessRights.RESTRICTED, label: localization.accessRight.restricted },
-  { value: AccessRights.NON_PUBLIC, label: localization.accessRight.nonPublic },
-];
 
 type Props = {
   openLicenses?: ReferenceDataCode[];
@@ -62,12 +56,12 @@ export const AccessSection = ({ openLicenses, currencies }: Props) => {
           onValueChange={(values) => setFieldValue('accessRights', values.toString())}
         >
           <Combobox.Option value=''>{`${localization.accessRight.none}`}</Combobox.Option>
-          {accessRightsOptions.map((option) => (
+          {accessRights.map((option) => (
             <Combobox.Option
-              key={option.value}
-              value={option.value}
+              key={option.uri}
+              value={option.uri}
             >
-              {option.label}
+              {getTranslateText(option.label)}
             </Combobox.Option>
           ))}
         </Combobox>

@@ -1,5 +1,5 @@
-import { AccessRights, Dataset, DatasetToBeCreated, Distribution, PublicationStatus } from '@catalog-frontend/types';
-import { groupByKeys } from '@catalog-frontend/utils';
+import { Dataset, DatasetToBeCreated, Distribution, PublicationStatus } from '@catalog-frontend/types';
+import { accessRightPublic, groupByKeys } from '@catalog-frontend/utils';
 import _ from 'lodash';
 
 export const datasetTemplate = (dataset: Dataset): Dataset => {
@@ -9,7 +9,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     _lastModified: dataset?._lastModified,
     title: dataset.title ?? '',
     description: !_.isEmpty(dataset?.description) ? dataset.description : { nb: '' },
-    accessRights: { uri: dataset?.accessRights?.uri ?? AccessRights.PUBLIC },
+    accessRights: { uri: dataset?.accessRights?.uri ?? accessRightPublic.uri },
     legalBasisForAccess: dataset?.legalBasisForAccess ?? [],
     legalBasisForProcessing: dataset?.legalBasisForProcessing ?? [],
     legalBasisForRestriction: dataset?.legalBasisForRestriction ?? [],

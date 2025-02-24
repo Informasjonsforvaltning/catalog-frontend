@@ -32,3 +32,29 @@ export const prepareStatusList = (conceptStatuses: ReferenceDataCode[]) => {
 
   return utilizedCodes;
 };
+
+export const accessRightPublic: ReferenceDataCode = {
+  uri: 'http://publications.europa.eu/resource/authority/access-right/PUBLIC',
+  code: 'PUBLIC',
+  label: {
+    nb: 'Allmenn tilgang',
+  },
+};
+
+export const accessRightNonPublic: ReferenceDataCode = {
+  uri: 'http://publications.europa.eu/resource/authority/access-right/NON_PUBLIC',
+  code: 'NON_PUBLIC',
+  label: {
+    nb: 'Ikke-allmenn tilgang',
+  },
+};
+
+export const accessRightRestricted: ReferenceDataCode = {
+  uri: 'http://publications.europa.eu/resource/authority/access-right/RESTRICTED',
+  code: 'RESTRICTED',
+  label: {
+    nb: 'Betinget tilgang',
+  },
+};
+
+export const accessRights: ReferenceDataCode[] = [accessRightPublic, accessRightNonPublic, accessRightRestricted];
