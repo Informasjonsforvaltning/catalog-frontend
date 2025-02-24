@@ -1,17 +1,16 @@
-import { AccessRights, Dataset } from '@catalog-frontend/types';
+import { Dataset } from '@catalog-frontend/types';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
+import {
+  accessRightNonPublic,
+  accessRightRestricted,
+  accessRights,
+  getTranslateText,
+  localization,
+} from '@catalog-frontend/utils';
 import { Card, Combobox, Fieldset } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 import { AccessRightsUriTable } from './access-rights-uri-table';
 import styles from '../../dataset-form.module.css';
-
-const accessRightsOptions = [
-  { value: '', label: localization.accessRight.none },
-  { value: AccessRights.PUBLIC, label: localization.accessRight.public },
-  { value: AccessRights.RESTRICTED, label: localization.accessRight.restricted },
-  { value: AccessRights.NON_PUBLIC, label: localization.accessRight.nonPublic },
-];
 
 export const AccessRightFields = () => {
   const { values, setFieldValue } = useFormikContext<Dataset>();
@@ -37,20 +36,21 @@ export const AccessRightFields = () => {
             onValueChange={(values) => setFieldValue('accessRights.uri', values.toString())}
             virtual
           >
-            {accessRightsOptions.map((option) => (
+            <Combobox.Option value=''>{`${localization.dataServiceForm.noLicense}`}</Combobox.Option>
+            {accessRights.map((option) => (
               <Combobox.Option
-                key={option.value}
-                value={option.value}
+                key={option.uri}
+                value={option.uri}
               >
-                {option.label}
+                {getTranslateText(option.label)}
               </Combobox.Option>
             ))}
           </Combobox>
         </Fieldset>
       </div>
 
-      {(values.accessRights?.uri === AccessRights.RESTRICTED ||
-        values.accessRights?.uri === AccessRights.NON_PUBLIC) && <AccessRightsUriTable />}
+      {(values.accessRights?.uri === accessRightRestricted.uri ||
+        values.accessRights?.uri === accessRightNonPublic.uri) && <AccessRightsUriTable />}
     </Card>
   );
 };

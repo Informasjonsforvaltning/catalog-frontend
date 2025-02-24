@@ -518,9 +518,6 @@ export const nb = {
   },
 
   accessRight: {
-    public: 'Allmenn tilgang',
-    restricted: 'Betinget tilgang',
-    nonPublic: 'Ikke-allmenn tilgang',
     none: 'Ingen tilgangsrettighet valgt',
   },
 };
