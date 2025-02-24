@@ -1,6 +1,7 @@
 import { httpsRegex, localization, telephoneNumberRegex } from '@catalog-frontend/utils';
 import * as Yup from 'yup';
 import { nb } from 'yup-locales';
+import { isEmpty, isNumber } from 'lodash';
 
 Yup.setLocale(nb);
 
@@ -71,15 +72,33 @@ export const dataServiceValidationSchema = () =>
   });
 
 export const costValidationSchema = () =>
-  Yup.object().shape({
-    value: Yup.number().label(localization.dataServiceForm.fieldLabel.costValue).notRequired(),
-    documentation: Yup.array()
-      .label(localization.dataServiceForm.fieldLabel.costDocumentation)
-      .notRequired()
-      .of(
-        Yup.string()
-          .required(localization.validation.deleteFieldIfEmpty)
-          .matches(httpsRegex, localization.validation.invalidProtocol)
-          .url(localization.validation.invalidUrl),
-      ),
-  });
+  Yup.object().shape(
+    {
+      value: Yup.number()
+        .label(localization.dataServiceForm.fieldLabel.costValue)
+        .when('documentation', {
+          is: (documentation) => {
+            return isEmpty(documentation);
+          },
+          then: (valueSchema) =>
+            valueSchema.required(localization.dataServiceForm.validation.costValueRequiredWhenMissingDoc).nonNullable(),
+          otherwise: (valueSchema) => valueSchema.notRequired().nullable(),
+        }),
+      documentation: Yup.array()
+        .label(localization.dataServiceForm.fieldLabel.costDocumentation)
+        .of(
+          Yup.string()
+            .required(localization.validation.deleteFieldIfEmpty)
+            .matches(httpsRegex, localization.validation.invalidProtocol)
+            .url(localization.validation.invalidUrl),
+        )
+        .when('value', {
+          is: (value) => {
+            return !isNumber(value);
+          },
+          then: (docSchema) => docSchema.required().nonNullable(),
+          otherwise: (docSchema) => docSchema.notRequired().nullable(),
+        }),
+    },
+    [['value', 'documentation']],
+  );
