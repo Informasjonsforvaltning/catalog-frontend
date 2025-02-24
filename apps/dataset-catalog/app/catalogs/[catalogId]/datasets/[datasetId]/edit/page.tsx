@@ -1,6 +1,7 @@
 import { Breadcrumbs, BreadcrumbType, PageBanner } from '@catalog-frontend/ui';
 import { getDatasetById } from '../../../../../actions/actions';
 import { DatasetForm } from '../../../../../../components/dataset-form';
+import Banner from '../../../../../../components/banner';
 
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getTranslateText, getValidSession, localization } from '@catalog-frontend/utils';
@@ -76,10 +77,7 @@ export default async function EditDatasetPage({ params }: Params) {
         breadcrumbList={breadcrumbList}
         catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
-      <PageBanner
-        title={localization.catalogType.dataset}
-        subtitle={getTranslateText(organization.prefLabel).toString()}
-      />
+      <Banner catalogId={catalogId} />
 
       <DatasetForm
         initialValues={dataset}
