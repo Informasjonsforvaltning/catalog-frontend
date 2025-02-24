@@ -1,5 +1,12 @@
-import { AccessRights, Dataset, UriWithLabel } from '@catalog-frontend/types';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { Dataset, UriWithLabel } from '@catalog-frontend/types';
+import {
+  accessRightNonPublic,
+  accessRightPublic,
+  accessRightRestricted,
+  accessRights,
+  getTranslateText,
+  localization,
+} from '@catalog-frontend/utils';
 import { Card, Table, Tag } from '@digdir/designsystemet-react';
 import { useMemo } from 'react';
 import styles from '../details-columns.module.css';
@@ -45,11 +52,10 @@ export const AccessRightsDetails = ({ dataset }: Props) => {
   );
 
   const accessRightsOptions = useMemo(
-    () => [
-      { value: AccessRights.PUBLIC, label: localization.accessRight.public },
-      { value: AccessRights.RESTRICTED, label: localization.accessRight.restricted },
-      { value: AccessRights.NON_PUBLIC, label: localization.accessRight.nonPublic },
-    ],
+    () =>
+      accessRights.map((accessRight) => {
+        return { value: accessRight.uri, label: getTranslateText(accessRight.label) };
+      }),
     [],
   );
 
@@ -64,7 +70,7 @@ export const AccessRightsDetails = ({ dataset }: Props) => {
             {dataset.accessRights?.uri &&
               accessRightsOptions.find((option) => option.value === dataset.accessRights?.uri)?.label}
           </Tag>
-          {dataset?.accessRights.uri !== AccessRights.PUBLIC && allLegalBases.length > 0 && (
+          {dataset?.accessRights.uri !== accessRightPublic.uri && allLegalBases.length > 0 && (
             <Card>
               <h4>{localization.datasetForm.fieldLabel.legalBasis}</h4>
               <Table size='sm'>
