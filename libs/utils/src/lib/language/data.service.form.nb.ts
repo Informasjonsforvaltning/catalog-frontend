@@ -57,6 +57,9 @@ export const dataServiceFormNb = {
     dataServiceID: 'API-ID',
     modified: 'Sist oppdatert',
   },
+  validation: {
+    costValueRequiredWhenMissingDoc: 'Beløp er påkrevd når ingen dokumentasjon er oppgitt.',
+  },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette API-beskrivelsen?',
   },
