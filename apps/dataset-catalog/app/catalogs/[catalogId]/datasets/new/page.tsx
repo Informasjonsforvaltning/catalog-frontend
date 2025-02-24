@@ -1,9 +1,9 @@
-import { Breadcrumbs, BreadcrumbType, PageBanner } from '@catalog-frontend/ui';
+import { Breadcrumbs, BreadcrumbType } from '@catalog-frontend/ui';
 import { DatasetForm } from '../../../../../components/dataset-form';
+import Banner from '../../../../../components/banner';
 import { datasetToBeCreatedTemplate } from '../../../../../components/dataset-form/utils/dataset-initial-values';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import { getTranslateText, getValidSession, localization } from '@catalog-frontend/utils';
-import { Organization } from '@catalog-frontend/types';
+import { getValidSession, localization } from '@catalog-frontend/utils';
 import {
   getAllDatasetSeries,
   getDatasetTypes,
@@ -12,14 +12,12 @@ import {
   getLanguages,
   getLosThemes,
   getOpenLicenses,
-  getOrganization,
   getProvenanceStatements,
 } from '@catalog-frontend/data-access';
 
 export default async function NewDatasetPage({ params }: Params) {
   const initialValues = datasetToBeCreatedTemplate();
   const { catalogId } = params;
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
   const session = await getValidSession();
@@ -71,10 +69,7 @@ export default async function NewDatasetPage({ params }: Params) {
         breadcrumbList={breadcrumbList}
         catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
-      <PageBanner
-        title={localization.catalogType.dataset}
-        subtitle={getTranslateText(organization.prefLabel).toString()}
-      />
+      <Banner catalogId={catalogId} />
       <DatasetForm
         initialValues={initialValues}
         submitType={'create'}

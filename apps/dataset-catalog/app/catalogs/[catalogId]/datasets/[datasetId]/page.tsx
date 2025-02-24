@@ -20,6 +20,7 @@ import {
   getProvenanceStatements,
 } from '@catalog-frontend/data-access';
 import DatasetDetailsPageClient from './dataset-details-page-client';
+import Banner from '../../../../../components/banner/index';
 
 export default async function EditDatasetPage({ params }: Params) {
   const { catalogId, datasetId } = params;
@@ -82,10 +83,7 @@ export default async function EditDatasetPage({ params }: Params) {
         breadcrumbList={breadcrumbList}
         catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
-      <PageBanner
-        title={localization.catalogType.dataset}
-        subtitle={getTranslateText(organization.prefLabel).toString()}
-      />
+      <Banner catalogId={catalogId} />
       <div className='container'>
         <DatasetDetailsPageClient
           dataset={dataset}

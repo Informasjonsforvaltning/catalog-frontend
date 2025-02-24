@@ -1,4 +1,3 @@
-//import { deleteLogo, getDesign, getDesignLogo, patchDesign, postDesignLogo } from '@catalog-frontend/data-access';
 import { NextApiRequest, NextApiResponse } from 'next';
 import httpProxy from 'http-proxy';
 import { getDesignLogo } from '@catalog-frontend/data-access';

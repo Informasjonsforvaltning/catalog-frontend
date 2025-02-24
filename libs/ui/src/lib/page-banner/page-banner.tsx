@@ -1,5 +1,3 @@
-'use client';
-
 import EllipseSVG from './svg/ellipse-1.svg';
 import RectangleSVG from './svg/rectangle-1.svg';
 import style from './page-banner.module.css';
