@@ -7,15 +7,17 @@ import { Paragraph, Tag } from '@digdir/designsystemet-react';
 import { DetailsUrlList } from './components/details-url-list';
 import { ReferenceDataTag } from './components/reference-data-tag';
 import { FormatList } from './components/format-list';
+import { DatasetList } from './components/dataset-list';
 
 type Props = {
   dataService: DataService;
   referenceData: DataServiceReferenceData;
   language: string;
   referenceDataEnv: string;
+  searchEnv: string;
 };
 
-export const LeftColumn = ({ dataService, referenceData, language, referenceDataEnv }: Props) => {
+export const LeftColumn = ({ dataService, referenceData, language, referenceDataEnv, searchEnv }: Props) => {
   return (
     <InfoCard>
       {!isEmpty(dataService?.description) && (
@@ -101,6 +103,16 @@ export const LeftColumn = ({ dataService, referenceData, language, referenceData
           <FormatList
             formatURIs={dataService.formats}
             referenceDataEnv={referenceDataEnv}
+            language={language}
+          />
+        </InfoCard.Item>
+      )}
+
+      {!isEmpty(dataService?.servesDataset) && (
+        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.servesDataset}>
+          <DatasetList
+            datasetURIs={dataService.servesDataset}
+            searchEnv={searchEnv}
             language={language}
           />
         </InfoCard.Item>
