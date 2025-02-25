@@ -15,6 +15,7 @@ interface dataServiceDetailsPageProps {
   catalogId: string;
   dataServiceId: string;
   referenceData: DataServiceReferenceData;
+  referenceDataEnv: string;
 }
 
 const DataServiceDetailsPageClient = ({
@@ -22,6 +23,7 @@ const DataServiceDetailsPageClient = ({
   catalogId,
   dataServiceId,
   referenceData,
+  referenceDataEnv,
 }: dataServiceDetailsPageProps) => {
   const [language, setLanguage] = useState('nb');
 
@@ -73,6 +75,7 @@ const DataServiceDetailsPageClient = ({
           dataService={dataService}
           referenceData={referenceData}
           language={language}
+          referenceDataEnv={referenceDataEnv}
         />
       </DetailsPageLayout.Left>
       <DetailsPageLayout.Right>

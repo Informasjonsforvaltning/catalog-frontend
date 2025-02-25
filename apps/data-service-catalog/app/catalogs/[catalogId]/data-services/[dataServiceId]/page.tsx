@@ -25,6 +25,8 @@ export default async function EditDataServicePage({ params }: Params) {
 
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
+  const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
+
   const [licenseResponse, statusResponse, availabilitiesResponse, currenciesResponse] = await Promise.all([
     getOpenLicenses().then((res) => res.json()),
     getDistributionStatuses().then((res) => res.json()),
@@ -66,6 +68,7 @@ export default async function EditDataServicePage({ params }: Params) {
           catalogId={catalogId}
           dataServiceId={dataServiceId}
           referenceData={referenceData}
+          referenceDataEnv={referenceDataEnv}
         ></DataServiceDetailsPageClient>
       </div>
     </>
