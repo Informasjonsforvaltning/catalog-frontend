@@ -16,6 +16,7 @@ interface dataServiceDetailsPageProps {
   dataServiceId: string;
   referenceData: DataServiceReferenceData;
   referenceDataEnv: string;
+  searchEnv: string;
 }
 
 const DataServiceDetailsPageClient = ({
@@ -24,6 +25,7 @@ const DataServiceDetailsPageClient = ({
   dataServiceId,
   referenceData,
   referenceDataEnv,
+  searchEnv,
 }: dataServiceDetailsPageProps) => {
   const [language, setLanguage] = useState('nb');
 
@@ -76,6 +78,7 @@ const DataServiceDetailsPageClient = ({
           referenceData={referenceData}
           language={language}
           referenceDataEnv={referenceDataEnv}
+          searchEnv={searchEnv}
         />
       </DetailsPageLayout.Left>
       <DetailsPageLayout.Right>
