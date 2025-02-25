@@ -6,14 +6,16 @@ import { accessRights, getTranslateText, localization } from '@catalog-frontend/
 import { Paragraph, Tag } from '@digdir/designsystemet-react';
 import { DetailsUrlList } from './components/details-url-list';
 import { ReferenceDataTag } from './components/reference-data-tag';
+import { FormatList } from './components/format-list';
 
 type Props = {
   dataService: DataService;
   referenceData: DataServiceReferenceData;
   language: string;
+  referenceDataEnv: string;
 };
 
-export const LeftColumn = ({ dataService, referenceData, language }: Props) => {
+export const LeftColumn = ({ dataService, referenceData, language, referenceDataEnv }: Props) => {
   return (
     <InfoCard>
       {!isEmpty(dataService?.description) && (
@@ -89,6 +91,16 @@ export const LeftColumn = ({ dataService, referenceData, language }: Props) => {
           <ReferenceDataTag
             referenceDataURI={dataService.availability}
             referenceDataCodes={referenceData.plannedAvailabilities}
+            language={language}
+          />
+        </InfoCard.Item>
+      )}
+
+      {!isEmpty(dataService?.formats) && (
+        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.format}>
+          <FormatList
+            formatURIs={dataService.formats}
+            referenceDataEnv={referenceDataEnv}
             language={language}
           />
         </InfoCard.Item>
