@@ -1,13 +1,14 @@
-import { PageBanner } from '@catalog-frontend/ui';
 import { getDesign, getOrganization } from '@catalog-frontend/data-access';
-import { getTranslateText, getValidSession, localization } from '@catalog-frontend/utils';
+import { getTranslateText, getValidSession } from '@catalog-frontend/utils';
 import { Organization } from '@catalog-frontend/types';
+import { PageBanner } from './page-banner';
 
 export interface BannerProps {
   catalogId: string;
+  title: string;
 }
 
-const Banner = async ({ catalogId }: BannerProps) => {
+const DesignBanner = async ({ catalogId, title }: BannerProps) => {
   const session = await getValidSession();
   const accessToken = session?.accessToken;
 
@@ -20,14 +21,14 @@ const Banner = async ({ catalogId }: BannerProps) => {
 
   return (
     <PageBanner
-      title={localization.catalogType.dataset}
+      title={title}
       subtitle={getTranslateText(organization.prefLabel).toString()}
       fontColor={design?.fontColor}
       backgroundColor={design?.backgroundColor}
-      logo={design?.hasLogo ? `/api/catalog-admin/${catalogId}/design/logo` : undefined}
+      logo={design?.hasLogo ? `/api/design/${catalogId}/design/logo` : undefined} // OBS! The API-route needs to be added to each app
       logoDescription={design?.logoDescription}
     />
   );
 };
 
-export default Banner;
+export { DesignBanner };

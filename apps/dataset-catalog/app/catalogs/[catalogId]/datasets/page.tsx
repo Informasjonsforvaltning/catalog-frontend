@@ -1,7 +1,6 @@
 import { Dataset } from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
 import { getValidSession, hasOrganizationWritePermission, localization } from '@catalog-frontend/utils';
-import Banner from '../../../../components/banner';
 
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getDatasets } from '../../../actions/actions';
@@ -27,7 +26,10 @@ export default async function DatasetSearchHitsPage({ params }: Params) {
         breadcrumbList={breadcrumbList}
         catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
-      <Banner catalogId={catalogId} />
+      <DesignBanner
+        catalogId={catalogId}
+        title={localization.catalogType.dataset}
+      />
       <DatasetsPageClient
         datasets={datasets}
         hasWritePermission={hasWritePermission}

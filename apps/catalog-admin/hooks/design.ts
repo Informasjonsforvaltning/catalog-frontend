@@ -45,7 +45,7 @@ export const useUpdateDesign = (catalogId: string) => {
       }
 
       if (diff) {
-        const response = await fetch(`/api/design/${catalogId}/design`, {
+        const response = await fetch(`/api/design/${catalogId}`, {
           method: 'PATCH',
           body: JSON.stringify(diff),
           cache: 'no-store',

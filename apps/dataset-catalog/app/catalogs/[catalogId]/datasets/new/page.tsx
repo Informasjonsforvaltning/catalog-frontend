@@ -1,6 +1,5 @@
-import { Breadcrumbs, BreadcrumbType } from '@catalog-frontend/ui';
+import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
 import { DatasetForm } from '../../../../../components/dataset-form';
-import Banner from '../../../../../components/banner';
 import { datasetToBeCreatedTemplate } from '../../../../../components/dataset-form/utils/dataset-initial-values';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getValidSession, localization } from '@catalog-frontend/utils';
@@ -69,7 +68,10 @@ export default async function NewDatasetPage({ params }: Params) {
         breadcrumbList={breadcrumbList}
         catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
-      <Banner catalogId={catalogId} />
+      <DesignBanner
+        catalogId={catalogId}
+        title={localization.catalogType.dataset}
+      />
       <DatasetForm
         initialValues={initialValues}
         submitType={'create'}

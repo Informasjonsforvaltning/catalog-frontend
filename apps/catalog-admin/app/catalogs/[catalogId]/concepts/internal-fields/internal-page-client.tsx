@@ -4,10 +4,9 @@ import React from 'react';
 import styles from './internal-fields.module.css';
 import { Accordion, Heading } from '@digdir/designsystemet-react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { BreadcrumbType, Breadcrumbs, Button } from '@catalog-frontend/ui';
+import { Button } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { InternalField, Organization } from '@catalog-frontend/types';
-import { Banner } from '../../../../../components/banner';
+import { InternalField } from '@catalog-frontend/types';
 import { useGetInternalFields } from '../../../../../hooks/internal-fields';
 import { InternalFieldEditor } from '../../../../../components/internal-field-editor';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
@@ -15,11 +14,9 @@ import { PageLayout } from '../../../../../components/page-layout';
 
 export interface InternalFieldsPageClientProps {
   catalogId: string;
-  organization: Organization;
-  catalogPortalUrl: string;
 }
 
-export const InternalFieldsPageClient = ({ catalogId, organization, catalogPortalUrl }: InternalFieldsPageClientProps) => {
+export const InternalFieldsPageClient = ({ catalogId }: InternalFieldsPageClientProps) => {
   const { data: getInternalFields } = useGetInternalFields(catalogId);
   const dbFields = getInternalFields?.internal;
 
@@ -31,32 +28,8 @@ export const InternalFieldsPageClient = ({ catalogId, organization, catalogPorta
     adminDispatch({ type: 'SET_SHOW_INTERNAL_FIELD_EDITOR', payload: { showInternalFieldEditor: true } });
   };
 
-  const breadcrumbList = catalogId
-    ? ([
-        {
-          href: `/catalogs/${catalogId}`,
-          text: localization.manageCatalog,
-        },
-        {
-          href: `/catalogs/${catalogId}/concepts`,
-          text: localization.catalogType.concept,
-        },
-        {
-          href: `/catalogs/${catalogId}/concepts/internal-fields`,
-          text: localization.catalogAdmin.internalFields,
-        },
-      ] as BreadcrumbType[])
-    : [];
-
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={catalogPortalUrl} />
-      <Banner
-        title={localization.catalogAdmin.manage.conceptCatalog}
-        orgName={`${getTranslateText(organization?.prefLabel)}`}
-        catalogId={catalogId}
-      />
-
       <PageLayout>
         <div className={styles.topButtonRow}>
           <Button onClick={handleCreateInternalField}>

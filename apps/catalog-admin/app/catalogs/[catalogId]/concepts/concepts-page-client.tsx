@@ -1,41 +1,18 @@
 'use client';
 
-import { BreadcrumbType, Breadcrumbs, NavigationCard } from '@catalog-frontend/ui';
+import { NavigationCard } from '@catalog-frontend/ui';
 import React from 'react';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Banner } from '../../../../components/banner';
+import { localization } from '@catalog-frontend/utils';
 import { DatabaseIcon, PencilWritingIcon, RectangleSectionsIcon } from '@navikt/aksel-icons';
 import styles from './concepts-page.module.css';
-import { Organization } from '@catalog-frontend/types';
 
 export interface ConceptsPageClientProps {
-  organization: Organization;
   catalogId: string;
-  catalogPortalUrl: string;
 }
 
-export const ConceptsPageClient = ({ catalogId, organization, catalogPortalUrl }: ConceptsPageClientProps) => {
-  const breadcrumbList = catalogId
-    ? ([
-        {
-          href: `/catalogs/${catalogId}`,
-          text: localization.manageCatalog,
-        },
-        {
-          href: `/catalogs/${catalogId}/concepts`,
-          text: localization.catalogType.concept,
-        },
-      ] as BreadcrumbType[])
-    : [];
-
+export const ConceptsPageClient = ({ catalogId }: ConceptsPageClientProps) => {
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={catalogPortalUrl}  />
-      <Banner
-        title={localization.catalogAdmin.manage.conceptCatalog}
-        orgName={`${getTranslateText(organization?.prefLabel)}`}
-        catalogId={catalogId}
-      />
       <div className={styles.cardsContainer}>
         <div className={styles.cardsGrid}>
           <NavigationCard

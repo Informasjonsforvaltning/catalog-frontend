@@ -3,25 +3,22 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import styles from './code-lists.module.css';
 import { Accordion, Heading } from '@digdir/designsystemet-react';
-import { BreadcrumbType, Breadcrumbs, Button, SearchField, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
+import { Button, SearchField, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
-import { Code, CodeList, Organization } from '@catalog-frontend/types';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { Code, CodeList } from '@catalog-frontend/types';
+import { localization } from '@catalog-frontend/utils';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
-import { Banner } from '../../../../../components/banner';
 import CodeListEditor from '../../../../../components/code-list-editor';
 import { PageLayout } from '../../../../../components/page-layout';
 import { compare } from 'fast-json-patch';
 
 export interface CodeListsPageClientProps {
   catalogId: string;
-  organization: Organization;
   codeListsInUse: string[];
-  catalogPortalUrl: string;
 }
 
-const CodeListsPageClient = ({ catalogId, organization, codeListsInUse, catalogPortalUrl }: CodeListsPageClientProps) => {
+const CodeListsPageClient = ({ catalogId, codeListsInUse }: CodeListsPageClientProps) => {
   const adminDispatch = useAdminDispatch();
   const adminContext = useAdminState();
   const { showCodeListEditor, updatedCodeLists, updatedCodes } = adminContext;
@@ -52,7 +49,6 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse, catalogP
     return updatedCodeLists ? updatedCodeLists?.length > 0 : false;
   };
 
-
   useWarnIfUnsavedChanges({
     unsavedChanges: unsavedCodeChanges() || unsavedCodeListChanges() || dirtyCodeLists.length > 0,
   });
@@ -73,23 +69,6 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse, catalogP
     });
   }, [dbCodeLists]);
 
-  const breadcrumbList = catalogId
-    ? ([
-        {
-          href: `/catalogs/${catalogId}`,
-          text: localization.manageCatalog,
-        },
-        {
-          href: `/catalogs/${catalogId}/concepts`,
-          text: localization.catalogType.concept,
-        },
-        {
-          href: `/catalogs/${catalogId}/concepts/code-lists`,
-          text: localization.catalogAdmin.codeLists,
-        },
-      ] as BreadcrumbType[])
-    : [];
-
   const handleCreateCodeList = () => {
     adminDispatch({ type: 'SET_SHOW_CODE_LIST_EDITOR', payload: { showCodeListEditor: true } });
     adminDispatch({
@@ -100,12 +79,6 @@ const CodeListsPageClient = ({ catalogId, organization, codeListsInUse, catalogP
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={catalogPortalUrl}  />
-      <Banner
-        title={localization.catalogAdmin.manage.conceptCatalog}
-        orgName={`${getTranslateText(organization?.prefLabel)}`}
-        catalogId={catalogId}
-      />
       <PageLayout>
         <div className={styles.row}>
           <SearchField

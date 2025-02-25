@@ -1,4 +1,4 @@
-import { Breadcrumbs, BreadcrumbType, PageBanner } from '@catalog-frontend/ui';
+import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
 import { getDatasetById } from '../../../../actions/actions';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import {
@@ -7,7 +7,6 @@ import {
   hasOrganizationWritePermission,
   localization,
 } from '@catalog-frontend/utils';
-import { Organization } from '@catalog-frontend/types';
 import {
   getAllDatasetSeries,
   getDatasetTypes,
@@ -16,16 +15,13 @@ import {
   getLanguages,
   getLosThemes,
   getOpenLicenses,
-  getOrganization,
   getProvenanceStatements,
 } from '@catalog-frontend/data-access';
 import DatasetDetailsPageClient from './dataset-details-page-client';
-import Banner from '../../../../../components/banner/index';
 
 export default async function EditDatasetPage({ params }: Params) {
   const { catalogId, datasetId } = params;
   const dataset = await getDatasetById(catalogId, datasetId);
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
@@ -83,7 +79,10 @@ export default async function EditDatasetPage({ params }: Params) {
         breadcrumbList={breadcrumbList}
         catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
-      <Banner catalogId={catalogId} />
+      <DesignBanner
+        catalogId={catalogId}
+        title={localization.catalogType.dataset}
+      />
       <div className='container'>
         <DatasetDetailsPageClient
           dataset={dataset}
