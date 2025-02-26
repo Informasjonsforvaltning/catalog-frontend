@@ -1,13 +1,8 @@
-import { DataService, Organization } from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
-import {
-  getTranslateText,
-  getValidSession,
-  hasOrganizationWritePermission,
-  localization,
-} from '@catalog-frontend/utils';
+import { DataService } from '@catalog-frontend/types';
+import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
+import { getValidSession, hasOrganizationWritePermission, localization } from '@catalog-frontend/utils';
 
-import { getDistributionStatuses, getOrganization } from '@catalog-frontend/data-access';
+import { getDistributionStatuses } from '@catalog-frontend/data-access';
 import DataServicePageClient from './data-services-page-client';
 import { getDataServices } from '../../../actions/actions';
 
@@ -16,7 +11,6 @@ export default async function DataServicesSearchHits({ params }) {
   const session = await getValidSession({ callbackUrl: `/catalogs/${catalogId}/data-services` });
 
   const dataServices: DataService[] = await getDataServices(catalogId);
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const hasWritePermission = await hasOrganizationWritePermission(session.accessToken, catalogId);
 
   const distributionStatuses = await getDistributionStatuses()
@@ -36,9 +30,9 @@ export default async function DataServicesSearchHits({ params }) {
         breadcrumbList={breadcrumbList}
         catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
-      <PageBanner
+      <DesignBanner
         title={localization.catalogType.dataService}
-        subtitle={getTranslateText(organization.prefLabel).toString()}
+        catalogId={catalogId}
       />
       <DataServicePageClient
         dataServices={dataServices}

@@ -1,4 +1,4 @@
-import { Breadcrumbs, BreadcrumbType, PageBanner } from '@catalog-frontend/ui';
+import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import {
   getTranslateText,
@@ -6,13 +6,11 @@ import {
   hasOrganizationWritePermission,
   localization,
 } from '@catalog-frontend/utils';
-import { Organization } from '@catalog-frontend/types';
 import {
   getCurrencies,
   getDataServiceById,
   getDistributionStatuses,
   getOpenLicenses,
-  getOrganization,
   getPlannedAvailabilities,
 } from '@catalog-frontend/data-access';
 import { redirect, RedirectType } from 'next/navigation';
@@ -29,9 +27,6 @@ export default async function EditDataServicePage({ params }: Params) {
   }
 
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
-
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
-
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
 
@@ -66,9 +61,9 @@ export default async function EditDataServicePage({ params }: Params) {
         breadcrumbList={breadcrumbList}
         catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
-      <PageBanner
+      <DesignBanner
         title={localization.catalogType.dataService}
-        subtitle={getTranslateText(organization.prefLabel).toString()}
+        catalogId={catalogId}
       />
       <div className='container'>
         <DataServiceDetailsPageClient

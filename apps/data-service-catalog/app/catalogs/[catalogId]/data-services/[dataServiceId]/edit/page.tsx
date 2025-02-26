@@ -1,16 +1,14 @@
-import { Breadcrumbs, BreadcrumbType, PageBanner } from '@catalog-frontend/ui';
+import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
 import {
   getCurrencies,
   getDistributionStatuses,
   getOpenLicenses,
-  getOrganization,
   getPlannedAvailabilities,
 } from '@catalog-frontend/data-access';
 
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getTranslateText, getValidSession, localization } from '@catalog-frontend/utils';
 import { getDataServiceById } from '@catalog-frontend/data-access';
-import { Organization } from '@catalog-frontend/types';
 import DataServiceForm from '../../../../../../components/data-service-form';
 import { redirect, RedirectType } from 'next/navigation';
 
@@ -23,8 +21,6 @@ export default async function EditDataServicePage({ params }: Params) {
   if (!dataService || dataService.catalogId !== catalogId) {
     redirect(`/not-found`, RedirectType.replace);
   }
-
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
 
@@ -63,9 +59,9 @@ export default async function EditDataServicePage({ params }: Params) {
         breadcrumbList={breadcrumbList}
         catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
-      <PageBanner
+      <DesignBanner
         title={localization.catalogType.dataService}
-        subtitle={getTranslateText(organization.prefLabel).toString()}
+        catalogId={catalogId}
       />
       <DataServiceForm
         initialValues={dataService}
