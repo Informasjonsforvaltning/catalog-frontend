@@ -4,6 +4,8 @@ import {
   deleteDataService as removeDataService,
   getAllDataServices,
   postDataService,
+  publishDataService as publish,
+  unpublishDataService as unpublish,
   updateDataService as update,
 } from '@catalog-frontend/data-access';
 import { getValidSession, localization, removeEmptyValues } from '@catalog-frontend/utils';
@@ -91,5 +93,43 @@ export async function updateDataService(catalogId: string, initialDataService: D
     revalidateTag('data-service');
     revalidateTag('data-services');
     redirect(`/catalogs/${catalogId}/data-services/${initialDataService.id}`);
+  }
+}
+
+export async function publishDataService(catalogId: string, dataServiceId: string) {
+  const session = await getValidSession();
+  let success = false;
+  try {
+    const response = await publish(catalogId, dataServiceId, `${session?.accessToken}`);
+    if (response.status !== 200) {
+      throw new Error();
+    }
+    success = true;
+  } catch (error) {
+    throw new Error(localization.alert.deleteFail);
+  } finally {
+    if (success) {
+      revalidateTag('data-service');
+      revalidateTag('data-services');
+    }
+  }
+}
+
+export async function unpublishDataService(catalogId: string, dataServiceId: string) {
+  const session = await getValidSession();
+  let success = false;
+  try {
+    const response = await unpublish(catalogId, dataServiceId, `${session?.accessToken}`);
+    if (response.status !== 200) {
+      throw new Error();
+    }
+    success = true;
+  } catch (error) {
+    throw new Error(localization.alert.deleteFail);
+  } finally {
+    if (success) {
+      revalidateTag('data-service');
+      revalidateTag('data-services');
+    }
   }
 }
