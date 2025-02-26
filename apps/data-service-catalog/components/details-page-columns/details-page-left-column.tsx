@@ -8,6 +8,7 @@ import { DetailsUrlList } from './components/details-url-list';
 import { ReferenceDataTag } from './components/reference-data-tag';
 import { FormatList } from './components/format-list';
 import { DatasetList } from './components/dataset-list';
+import { CostList } from './components/cost-list';
 
 type Props = {
   dataService: DataService;
@@ -85,6 +86,12 @@ export const LeftColumn = ({ dataService, referenceData, language, referenceData
             referenceDataCodes={accessRights}
             language={language}
           />
+        </InfoCard.Item>
+      )}
+
+      {!isEmpty(dataService?.costs) && (
+        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.costs}>
+          <CostList costs={dataService.costs} />
         </InfoCard.Item>
       )}
 
