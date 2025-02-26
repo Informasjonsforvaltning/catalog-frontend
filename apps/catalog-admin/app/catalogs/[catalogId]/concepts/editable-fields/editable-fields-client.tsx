@@ -2,24 +2,21 @@
 
 import styles from './editable-fields.module.css';
 import { Heading } from '@digdir/designsystemet-react';
-import { BreadcrumbType, Breadcrumbs, Button, Select, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { CodeList, Organization } from '@catalog-frontend/types';
+import { Button, Select, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
+import { localization } from '@catalog-frontend/utils';
+import { CodeList } from '@catalog-frontend/types';
 
 import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
 import { useGetInternalFields, useUpdateEditableFields } from '../../../../../hooks/internal-fields';
 import { useState } from 'react';
 import { compare } from 'fast-json-patch';
-import { Banner } from '../../../../../components/banner';
 import { PageLayout } from '../../../../../components/page-layout';
 
 export interface EditableFieldsClientProps {
   catalogId: string;
-  organization: Organization;
-  catalogPortalUrl: string;
 }
 
-export function EditableFieldsClient({ catalogId, organization, catalogPortalUrl }: EditableFieldsClientProps) {
+export function EditableFieldsClient({ catalogId }: EditableFieldsClientProps) {
   const { data: getAllCodeLists } = useGetAllCodeLists({ catalogId });
   const dbCodeLists: CodeList[] = getAllCodeLists?.codeLists;
   const { data: getInternalFields } = useGetInternalFields(catalogId);
@@ -70,31 +67,8 @@ export function EditableFieldsClient({ catalogId, organization, catalogPortalUrl
     )) || []),
   ];
 
-  const breadcrumbList = catalogId
-    ? ([
-        {
-          href: `/catalogs/${catalogId}`,
-          text: localization.manageCatalog,
-        },
-        {
-          href: `/catalogs/${catalogId}/concepts`,
-          text: localization.catalogType.concept,
-        },
-        {
-          href: `/catalogs/${catalogId}/concepts/editable-fields`,
-          text: localization.catalogAdmin.editableFields,
-        },
-      ] as BreadcrumbType[])
-    : [];
-
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={catalogPortalUrl}  />
-      <Banner
-        title={localization.catalogAdmin.manage.conceptCatalog}
-        orgName={`${getTranslateText(organization?.prefLabel)}`}
-        catalogId={catalogId}
-      />
       <PageLayout>
         <div className={styles.heading}>
           <Heading

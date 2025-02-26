@@ -1,14 +1,8 @@
-import { Dataset, Organization } from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
-import {
-  getTranslateText,
-  getValidSession,
-  hasOrganizationWritePermission,
-  localization,
-} from '@catalog-frontend/utils';
+import { Dataset } from '@catalog-frontend/types';
+import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
+import { getValidSession, hasOrganizationWritePermission, localization } from '@catalog-frontend/utils';
 
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import { getOrganization } from '@catalog-frontend/data-access';
 import { getDatasets } from '../../../actions/actions';
 import DatasetsPageClient from './datasets-page-client';
 
@@ -17,7 +11,6 @@ export default async function DatasetSearchHitsPage({ params }: Params) {
   const session = await getValidSession({ callbackUrl: `/catalogs/${catalogId}/datasets` });
 
   const datasets: Dataset[] = await getDatasets(catalogId);
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const hasWritePermission = hasOrganizationWritePermission(session.accessToken, catalogId);
 
   const breadcrumbList = [
@@ -29,10 +22,13 @@ export default async function DatasetSearchHitsPage({ params }: Params) {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} />
-      <PageBanner
+      <Breadcrumbs
+        breadcrumbList={breadcrumbList}
+        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+      />
+      <DesignBanner
+        catalogId={catalogId}
         title={localization.catalogType.dataset}
-        subtitle={getTranslateText(organization.prefLabel).toString()}
       />
       <DatasetsPageClient
         datasets={datasets}

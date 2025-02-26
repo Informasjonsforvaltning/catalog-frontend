@@ -2,12 +2,11 @@
 
 import React, { useEffect, useState } from 'react';
 import { Accordion, Heading } from '@digdir/designsystemet-react';
-import { BreadcrumbType, Breadcrumbs, Button, SearchField } from '@catalog-frontend/ui';
+import { Button, SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { localization } from '@catalog-frontend/utils';
 import { useGetUsers } from '../../../../../hooks/users';
-import { AssignedUser, Organization } from '@catalog-frontend/types';
-import { Banner } from '../../../../../components/banner';
+import { AssignedUser } from '@catalog-frontend/types';
 import { UserEditor } from '../../../../../components/user-editor';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
 
@@ -16,11 +15,9 @@ import { PageLayout } from '../../../../../components/page-layout';
 
 export interface UsersPageClientProps {
   catalogId: string;
-  organization: Organization;
-  catalogPortalUrl: string;
 }
 
-export const UsersPageClient = ({ catalogId, organization, catalogPortalUrl }: UsersPageClientProps) => {
+export const UsersPageClient = ({ catalogId }: UsersPageClientProps) => {
   const { data: getUsers } = useGetUsers(catalogId);
   const dbUsers = getUsers?.users;
 
@@ -42,32 +39,8 @@ export const UsersPageClient = ({ catalogId, organization, catalogPortalUrl }: U
     adminDispatch({ type: 'SET_SHOW_USER_EDITOR', payload: { showUserEditor: true } });
   };
 
-  const breadcrumbList = catalogId
-    ? ([
-        {
-          href: `/catalogs/${catalogId}`,
-          text: getTranslateText(localization.manageCatalog),
-        },
-        {
-          href: `/catalogs/${catalogId}/general`,
-          text: getTranslateText(localization.general),
-        },
-        {
-          href: `/catalogs/${catalogId}/general/users`,
-          text: getTranslateText(localization.catalogAdmin.username),
-        },
-      ] as BreadcrumbType[])
-    : [];
-
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={catalogPortalUrl} />
-      <Banner
-        title={localization.manageCatalog}
-        orgName={`${getTranslateText(organization?.prefLabel)}`}
-        catalogId={catalogId}
-      />
-
       <PageLayout>
         <div className={styles.row}>
           <SearchField

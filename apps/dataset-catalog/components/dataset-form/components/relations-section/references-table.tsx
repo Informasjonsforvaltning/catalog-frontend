@@ -4,7 +4,7 @@ import { Button, Combobox, Modal, Table } from '@digdir/designsystemet-react';
 import { useSearchDatasetsByUri, useSearchDatasetSuggestions } from '../../../../hooks/useSearchService';
 import { Formik, useFormikContext } from 'formik';
 import relations from '../../utils/relations.json';
-import { AddButton, DeleteButton, EditButton, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { AddButton, DeleteButton, EditButton, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { useState, useRef } from 'react';
 import { referenceSchema } from '../../utils/validation-schema';
 import _ from 'lodash';

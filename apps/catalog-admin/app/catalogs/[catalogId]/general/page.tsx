@@ -1,20 +1,37 @@
 import React from 'react';
 import { withProtectedPage } from '../../../../utils/auth';
-import { Organization } from '@catalog-frontend/types';
-import { getOrganization } from '@catalog-frontend/data-access';
 import GeneralPageClient from './general-page-client';
+import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
 
 export default withProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/general`,
   async ({ catalogId }) => {
-    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+    const breadcrumbList = catalogId
+      ? ([
+          {
+            href: `/catalogs/${catalogId}`,
+            text: getTranslateText(localization.manageCatalog),
+          },
+          {
+            href: `/catalogs/${catalogId}/general`,
+            text: getTranslateText(localization.general),
+          },
+        ] as BreadcrumbType[])
+      : [];
 
     return (
-      <GeneralPageClient
-        organization={organization}
-        catalogId={catalogId}
-        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
-      />
+      <>
+        <Breadcrumbs
+          breadcrumbList={breadcrumbList}
+          catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+        />
+        <DesignBanner
+          title={localization.manageCatalog}
+          catalogId={catalogId}
+        />
+        <GeneralPageClient catalogId={catalogId} />
+      </>
     );
   },
 );

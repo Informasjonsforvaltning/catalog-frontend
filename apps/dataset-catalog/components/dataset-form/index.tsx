@@ -9,7 +9,7 @@ import {
   StickyFooterBar,
   useWarnIfUnsavedChanges,
 } from '@catalog-frontend/ui';
-import { Formik, Form, useFormikContext } from 'formik';
+import { Formik, Form } from 'formik';
 import { useParams } from 'next/navigation';
 import { createDataset, updateDataset } from '../../app/actions/actions';
 import { datasetTemplate } from './utils/dataset-initial-values';
@@ -25,7 +25,6 @@ import { ContactPointSection } from './components/contact-point-section';
 import styles from './dataset-form.module.css';
 import { useRouter } from 'next/navigation';
 import { DetailsSection } from './components/details-section/details-section';
-import { get as lodashGet } from 'lodash';
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
