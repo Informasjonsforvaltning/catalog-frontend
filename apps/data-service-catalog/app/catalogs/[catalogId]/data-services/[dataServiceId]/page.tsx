@@ -1,6 +1,11 @@
 import { Breadcrumbs, BreadcrumbType, PageBanner } from '@catalog-frontend/ui';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import { getTranslateText, getValidSession, localization } from '@catalog-frontend/utils';
+import {
+  getTranslateText,
+  getValidSession,
+  hasOrganizationWritePermission,
+  localization,
+} from '@catalog-frontend/utils';
 import { Organization } from '@catalog-frontend/types';
 import {
   getCurrencies,
@@ -22,6 +27,8 @@ export default async function EditDataServicePage({ params }: Params) {
   if (!dataService || dataService.catalogId !== catalogId) {
     redirect(`/not-found`, RedirectType.replace);
   }
+
+  const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
 
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
@@ -68,6 +75,7 @@ export default async function EditDataServicePage({ params }: Params) {
           dataService={dataService}
           catalogId={catalogId}
           dataServiceId={dataServiceId}
+          hasWritePermission={hasWritePermission}
           referenceData={referenceData}
           referenceDataEnv={referenceDataEnv}
           searchEnv={searchEnv}

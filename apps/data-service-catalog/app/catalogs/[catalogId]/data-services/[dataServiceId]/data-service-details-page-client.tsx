@@ -14,6 +14,7 @@ interface dataServiceDetailsPageProps {
   dataService: DataService;
   catalogId: string;
   dataServiceId: string;
+  hasWritePermission: boolean;
   referenceData: DataServiceReferenceData;
   referenceDataEnv: string;
   searchEnv: string;
@@ -23,6 +24,7 @@ const DataServiceDetailsPageClient = ({
   dataService,
   catalogId,
   dataServiceId,
+  hasWritePermission,
   referenceData,
   referenceDataEnv,
   searchEnv,
@@ -60,17 +62,19 @@ const DataServiceDetailsPageClient = ({
       loading={false}
     >
       <DetailsPageLayout.Buttons>
-        <div className={styles.set}>
-          <LinkButton href={`/catalogs/${catalogId}/data-services/${dataServiceId}/edit`}>
-            {localization.button.edit}
-          </LinkButton>
+        {hasWritePermission && (
+          <div className={styles.set}>
+            <LinkButton href={`/catalogs/${catalogId}/data-services/${dataServiceId}/edit`}>
+              {localization.button.edit}
+            </LinkButton>
 
-          <DeleteButton
-            disabled={dataService?.published}
-            variant='secondary'
-            onClick={() => handleDeleteDataService()}
-          />
-        </div>
+            <DeleteButton
+              disabled={dataService?.published}
+              variant='secondary'
+              onClick={() => handleDeleteDataService()}
+            />
+          </div>
+        )}
       </DetailsPageLayout.Buttons>
       <DetailsPageLayout.Left>
         <LeftColumn
@@ -82,7 +86,10 @@ const DataServiceDetailsPageClient = ({
         />
       </DetailsPageLayout.Left>
       <DetailsPageLayout.Right>
-        <RightColumn dataService={dataService} />
+        <RightColumn
+          dataService={dataService}
+          hasWritePermission={hasWritePermission}
+        />
       </DetailsPageLayout.Right>
     </DetailsPageLayout>
   );

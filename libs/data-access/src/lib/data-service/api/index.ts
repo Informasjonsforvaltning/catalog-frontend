@@ -92,3 +92,27 @@ export const updateDataService = async (
   };
   return await fetch(resource, options);
 };
+
+export const publishDataService = async (catalogId: string, dataServiceId: string, accessToken: string) => {
+  const resource = `${path}/internal/catalogs/${catalogId}/data-services/${dataServiceId}/publish`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+  };
+  return await fetch(resource, options);
+};
+
+export const unpublishDataService = async (catalogId: string, dataServiceId: string, accessToken: string) => {
+  const resource = `${path}/internal/catalogs/${catalogId}/data-services/${dataServiceId}/unpublish`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+  };
+  return await fetch(resource, options);
+};

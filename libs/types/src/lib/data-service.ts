@@ -4,6 +4,7 @@ export interface DataService extends DataServiceToBeCreated {
   id: string;
   catalogId: string;
   published: boolean;
+  publishedDate: string;
   uri: string;
 }
 
