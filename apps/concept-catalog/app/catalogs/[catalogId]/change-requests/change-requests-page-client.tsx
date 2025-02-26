@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  BreadcrumbType,
-  Breadcrumbs,
-  ChangeRequestStatusTagProps,
-  LinkButton,
-  PageBanner,
-  Tag,
-} from '@catalog-frontend/ui';
+import { ChangeRequestStatusTagProps, LinkButton, Tag } from '@catalog-frontend/ui';
 import {
   capitalizeFirstLetter,
   convertTimestampToDateAndTime,
@@ -23,24 +16,9 @@ import Link from 'next/link';
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
 import ChangeRequestFilter from '../../../../components/change-request-filter';
 import ChangeRequestSort from '../../../../components/change-request-sort';
-import { useCatalogDesign } from '../../../../context/catalog-design';
 import styles from './change-requests-page.module.css';
 
-export const ChangeRequestsPageClient = ({ catalogId, organization, data, catalogPortalUrl }) => {
-  const pageSubtitle = organization?.name ?? '';
-  const design = useCatalogDesign();
-
-  const breadcrumbList = [
-    {
-      href: `/catalogs/${catalogId}`,
-      text: localization.concept.concept,
-    },
-    {
-      href: `/catalogs/${catalogId}/change-requests`,
-      text: localization.changeRequest.changeRequest,
-    },
-  ] as BreadcrumbType[];
-
+export const ChangeRequestsPageClient = ({ catalogId, data }) => {
   const itemTypeOptions = [
     {
       label: localization.changeRequest.changeRequest,
@@ -142,18 +120,11 @@ export const ChangeRequestsPageClient = ({ catalogId, organization, data, catalo
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={catalogPortalUrl} />
-      <PageBanner
-        title={localization.catalogType.concept}
-        subtitle={pageSubtitle}
-        fontColor={design?.fontColor}
-        backgroundColor={design?.backgroundColor}
-        logo={design?.hasLogo ? `/api/catalog-admin/${catalogId}/design/logo` : undefined}
-        logoDescription={design?.logoDescription}
-      />
       <div className='container'>
         <div className={styles.newConceptSuggestionButton}>
-          <LinkButton href={`/catalogs/${catalogId}/change-requests/new`}>{localization.suggestionForNewConcept}</LinkButton>
+          <LinkButton href={`/catalogs/${catalogId}/change-requests/new`}>
+            {localization.suggestionForNewConcept}
+          </LinkButton>
         </div>
         <div className={styles.filterAndListContainer}>
           <div className={styles.alertContainer}>

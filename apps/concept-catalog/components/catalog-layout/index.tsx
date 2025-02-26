@@ -2,8 +2,9 @@
 
 import React, { ReactNode } from 'react';
 import { Layout } from '@catalog-frontend/ui';
-import { useCatalogDesign } from '../../context/catalog-design';
 import { localization } from '@catalog-frontend/utils';
+import { useParams } from 'next/navigation';
+import { useGetCatalogDesign } from '../../hooks/catalog-admin';
 
 interface CatalogLayoutProps {
   children: ReactNode;
@@ -13,6 +14,7 @@ interface CatalogLayoutProps {
   adminGuiBaseUrl?: string;
   fdkCommunityBaseUrl?: string;
   fdkBaseUrl?: string;
+  catalogAdminServiceUrl?: string;
 }
 
 export const CatalogLayout = ({
@@ -21,10 +23,11 @@ export const CatalogLayout = ({
   catalogAdminUrl,
   fdkRegistrationBaseUrl,
   adminGuiBaseUrl,
-  fdkCommunityBaseUrl,
   fdkBaseUrl,
+  catalogAdminServiceUrl,
 }: CatalogLayoutProps) => {
-  const design = useCatalogDesign();
+  const { catalogId } = useParams();
+  const { data: design } = useGetCatalogDesign(catalogId?.toString(), catalogAdminServiceUrl);
 
   return (
     <Layout

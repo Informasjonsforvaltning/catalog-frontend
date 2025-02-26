@@ -1,4 +1,4 @@
-import { getUsername, prepareStatusList } from '@catalog-frontend/utils';
+import { getTranslateText, getUsername, localization, prepareStatusList } from '@catalog-frontend/utils';
 import {
   getAllCodeLists,
   getConcept,
@@ -25,6 +25,7 @@ import ConceptPageClient from './concept-page-client';
 import { RedirectType, redirect } from 'next/navigation';
 import { withReadProtectedPage } from '../../../../../utils/auth';
 import { conceptSchema } from '../../../../../components/concept-form/validation-schema';
+import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
 
 const ConceptPage = withReadProtectedPage(
   ({ catalogId, conceptId }) => `/catalogs/${catalogId}/concepts/${conceptId}`,
@@ -91,7 +92,33 @@ const ConceptPage = withReadProtectedPage(
       catalogPortalUrl: `${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`,
     };
 
-    return <ConceptPageClient {...clientProps} />;
+    const getTitle = (text: string | string[]) => (text ? text : localization.concept.noName);
+    const breadcrumbList = catalogId
+      ? ([
+          {
+            href: `/catalogs/${catalogId}`,
+            text: localization.catalogType.concept,
+          },
+          {
+            href: `/catalogs/${catalogId}/concepts/${concept?.id}`,
+            text: getTitle(getTranslateText(concept?.anbefaltTerm?.navn)),
+          },
+        ] as BreadcrumbType[])
+      : [];
+
+    return (
+      <>
+        <Breadcrumbs
+          breadcrumbList={breadcrumbList}
+          catalogPortalUrl={process.env.CATALOG_PORTAL_BASE_URI ?? ''}
+        />
+        <DesignBanner
+          title={localization.catalogType.concept}
+          catalogId={catalogId}
+        />
+        <ConceptPageClient {...clientProps} />
+      </>
+    );
   },
 );
 

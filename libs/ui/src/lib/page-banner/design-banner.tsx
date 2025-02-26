@@ -1,4 +1,4 @@
-import { getDesign, getOrganization } from '@catalog-frontend/data-access';
+import { getDesign, getOrganization, getBase64DesignLogo } from '@catalog-frontend/data-access';
 import { getTranslateText, getValidSession } from '@catalog-frontend/utils';
 import { Organization } from '@catalog-frontend/types';
 import { PageBanner } from './page-banner';
@@ -18,6 +18,7 @@ const DesignBanner = async ({ catalogId, title }: BannerProps) => {
 
   const design = await getDesign(catalogId, accessToken).then((res) => res.json());
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+  const logoResponse = await getBase64DesignLogo(catalogId, accessToken);
 
   return (
     <PageBanner
@@ -25,7 +26,7 @@ const DesignBanner = async ({ catalogId, title }: BannerProps) => {
       subtitle={getTranslateText(organization.prefLabel).toString()}
       fontColor={design?.fontColor}
       backgroundColor={design?.backgroundColor}
-      logo={design?.hasLogo ? `/api/design/${catalogId}/design/logo` : undefined} // OBS! The API-route needs to be added to each app
+      logo={design?.hasLogo ? logoResponse : undefined}
       logoDescription={design?.logoDescription}
     />
   );

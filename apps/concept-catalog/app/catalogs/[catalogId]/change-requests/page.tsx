@@ -1,13 +1,13 @@
-import { ChangeRequest, Organization } from '@catalog-frontend/types';
-import { getChangeRequests, getOrganization } from '@catalog-frontend/data-access';
+import { ChangeRequest } from '@catalog-frontend/types';
+import { getChangeRequests } from '@catalog-frontend/data-access';
 import ChangeRequestsPageClient from './change-requests-page-client';
 import { withReadProtectedPage } from '../../../../utils/auth';
+import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
+import { localization } from '@catalog-frontend/utils';
 
 const ChangeRequestsPage = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/change-requests`,
   async ({ catalogId, session }) => {
-    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
-
     const reponseData: ChangeRequest[] = await getChangeRequests(catalogId, `${session.accessToken}`)
       .then((response) => {
         return response.json();
@@ -16,13 +16,32 @@ const ChangeRequestsPage = withReadProtectedPage(
         throw error;
       });
 
+    const breadcrumbList = [
+      {
+        href: `/catalogs/${catalogId}`,
+        text: localization.concept.concept,
+      },
+      {
+        href: `/catalogs/${catalogId}/change-requests`,
+        text: localization.changeRequest.changeRequest,
+      },
+    ] as BreadcrumbType[];
+
     return (
-      <ChangeRequestsPageClient
-        catalogId={catalogId}
-        organization={organization}
-        data={reponseData}
-        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
-      />
+      <>
+        <Breadcrumbs
+          breadcrumbList={breadcrumbList}
+          catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+        />
+        <DesignBanner
+          title={localization.catalogType.concept}
+          catalogId={catalogId}
+        />
+        <ChangeRequestsPageClient
+          catalogId={catalogId}
+          data={reponseData}
+        />
+      </>
     );
   },
 );

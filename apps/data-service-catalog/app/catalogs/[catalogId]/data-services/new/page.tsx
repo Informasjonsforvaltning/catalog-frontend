@@ -1,22 +1,19 @@
-import { Breadcrumbs, BreadcrumbType, PageBanner } from '@catalog-frontend/ui';
+import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
 import {
   getCurrencies,
   getDistributionStatuses,
   getOpenLicenses,
-  getOrganization,
   getPlannedAvailabilities,
 } from '@catalog-frontend/data-access';
 
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Organization } from '@catalog-frontend/types';
 import DataServiceForm from '../../../../../components/data-service-form';
 import { dataServiceToBeCreatedTemplate } from '../../../../../components/data-service-form/utils/data-service-initial-values';
+import { localization } from '@catalog-frontend/utils';
 
 export default async function NewDataServicePage({ params }: Params) {
   const { catalogId } = params;
   const initialValues = dataServiceToBeCreatedTemplate();
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
 
@@ -51,9 +48,9 @@ export default async function NewDataServicePage({ params }: Params) {
         breadcrumbList={breadcrumbList}
         catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
-      <PageBanner
+      <DesignBanner
         title={localization.catalogType.dataService}
-        subtitle={getTranslateText(organization.prefLabel).toString()}
+        catalogId={catalogId}
       />
       <DataServiceForm
         initialValues={initialValues}

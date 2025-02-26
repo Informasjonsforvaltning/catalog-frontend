@@ -4,7 +4,6 @@ import { FC, useEffect, useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import NextLink from 'next/link';
 import {
-  PageBanner,
   Breadcrumbs,
   BreadcrumbType,
   ConceptStatusTagProps,
@@ -16,6 +15,7 @@ import {
   Tag,
   LinkButton,
   HelpMarkdown,
+  DesignBanner,
 } from '@catalog-frontend/ui';
 import {
   localization,
@@ -46,7 +46,6 @@ import classes from './concept-page.module.scss';
 import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../../../hooks/comments';
 import { useGetHistory } from '../../../../../hooks/history';
 import { useDeleteConcept, usePublishConcept } from '../../../../../hooks/concepts';
-import { useCatalogDesign } from '../../../../../context/catalog-design';
 import RelatedConcepts from '../../../../../components/related-concepts';
 import Definition from '../../../../../components/definition';
 import { CodeListCodeLinks } from '../../../../../components/codelist-code-links';
@@ -150,7 +149,6 @@ export const ConceptPageClient = ({
   conceptRelations,
   internalConceptRelations,
   internalRelatedConcepts,
-  catalogPortalUrl,
   isValid,
 }: ConceptPageClientProps) => {
   const [language, setLanguage] = useState('nb');
@@ -179,8 +177,6 @@ export const ConceptPageClient = ({
       }
     }
   };
-
-  const pageSubtitle = organization?.name ?? catalogId;
 
   const infoDataColumnRight = [
     [localization.conceptId, concept?.originaltBegrep],
@@ -384,8 +380,6 @@ export const ConceptPageClient = ({
     }
   };
 
-  const design = useCatalogDesign();
-
   const getTitle = (text: string | string[]) => (text ? text : localization.concept.noName);
   const getDetailSubtitle = (lang) => {
     const subjectCodeList = codeListsResult?.codeLists?.find(
@@ -457,19 +451,6 @@ export const ConceptPageClient = ({
       </InfoCard>
     );
   };
-
-  const breadcrumbList = catalogId
-    ? ([
-        {
-          href: `/catalogs/${catalogId}`,
-          text: localization.catalogType.concept,
-        },
-        {
-          href: `/catalogs/${catalogId}/concepts/${concept?.id}`,
-          text: getTitle(translate(concept?.anbefaltTerm?.navn, language)),
-        },
-      ] as BreadcrumbType[])
-    : [];
 
   const status = findStatusLabel(concept?.statusURI);
 
@@ -850,19 +831,6 @@ export const ConceptPageClient = ({
 
   return (
     <>
-      <Breadcrumbs
-        breadcrumbList={breadcrumbList}
-        catalogPortalUrl={catalogPortalUrl}
-      />
-      <PageBanner
-        title={localization.catalogType.concept}
-        subtitle={pageSubtitle}
-        fontColor={design?.fontColor}
-        backgroundColor={design?.backgroundColor}
-        logo={design?.hasLogo ? `/api/catalog-admin/${catalogId}/design/logo` : undefined}
-        logoDescription={design?.logoDescription}
-      />
-
       <DetailsPageLayout
         loading={deleteConcept.status === 'pending'}
         handleLanguageChange={handleLanguageChange}

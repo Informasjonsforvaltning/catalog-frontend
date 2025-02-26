@@ -1,11 +1,10 @@
 import { getChangeRequest, getConceptRevisions, getOrganization } from '@catalog-frontend/data-access';
 import { ChangeRequest, Concept, Organization } from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs, DetailHeading } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, DesignBanner, DetailHeading } from '@catalog-frontend/ui';
 import { formatISO, conceptIsHigherVersion, localization, validUUID } from '@catalog-frontend/utils';
 import { Alert, Heading, Link, Paragraph } from '@digdir/designsystemet-react';
 import jsonpatch from 'fast-json-patch';
 import NextLink from 'next/link';
-import { Banner } from '../../../../../../components/banner';
 import { withReadProtectedPage } from '../../../../../../utils/auth';
 import styles from '../../change-requests-page.module.css';
 import ChangeRequestEditPageClient from './change-request-edit-page-client';
@@ -51,8 +50,6 @@ const ChangeRequestEditPage = withReadProtectedPage(
       jsonpatch.deepClone(changeRequest.operations),
       false,
     ).newDocument;
-
-    const pageSubtitle = organization?.name ?? organization.organizationId;
 
     const breadcrumbList = [
       {
@@ -111,9 +108,8 @@ const ChangeRequestEditPage = withReadProtectedPage(
           breadcrumbList={breadcrumbList}
           catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
         />
-        <Banner
+        <DesignBanner
           title={localization.catalogType.concept}
-          subtitle={pageSubtitle}
           catalogId={catalogId}
         />
         <div className={'formContainer'}>
