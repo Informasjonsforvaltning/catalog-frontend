@@ -10,15 +10,35 @@ const apiGetCall = async (resource: string, accessToken: string) => {
     },
     method: 'GET',
   };
-
   return await fetch(resource, options);
 };
 
-export const getDesign = async (catalogId: string, accessToken: string) =>
-  apiGetCall(`${path}/${catalogId}/design`, accessToken);
+export const getDesign = async (catalogId: string, accessToken: string, envVariable?: string) =>
+  apiGetCall(`${envVariable ?? path}/${catalogId}/design`, accessToken);
 
 export const getDesignLogo = async (catalogId: string, accessToken: string) =>
   apiGetCall(`${path}/${catalogId}/design/logo`, accessToken);
+
+export const getBase64DesignLogo = async (catalogId: string, accessToken: string) => {
+  const arrayBufferToBase64 = (buffer: ArrayBuffer) => {
+    let binary = '';
+    const bytes = new Uint8Array(buffer);
+    bytes.forEach((b) => (binary += String.fromCharCode(b)));
+    return `data:image/png;base64,${btoa(binary)}`;
+  };
+
+  try {
+    const response = await getDesignLogo(catalogId, accessToken);
+    if (response.status !== 200) {
+      throw new Error(`Failed to get design logo ${response.status}`);
+    }
+    const arrayBufferResponse = await response.arrayBuffer();
+
+    return arrayBufferToBase64(arrayBufferResponse);
+  } catch (error) {
+    console.error('Failed to get design logo', error);
+  }
+};
 
 export const patchDesign = async (catalogId: string, accessToken: string, diff: Operation[]) => {
   if (diff) {

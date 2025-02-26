@@ -4,8 +4,7 @@ import { conceptIsHigherVersion, localization } from '@catalog-frontend/utils';
 import jsonpatch from 'fast-json-patch';
 import { RedirectType, redirect } from 'next/navigation';
 import ChangeRequestOrNewClient from './change-request-or-new-client';
-import { BreadcrumbType, Breadcrumbs, DetailHeading } from '@catalog-frontend/ui';
-import { Banner } from '../../../../../components/banner';
+import { BreadcrumbType, Breadcrumbs, DesignBanner, DetailHeading } from '@catalog-frontend/ui';
 import style from '../change-requests-page.module.css';
 import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
 import { withReadProtectedPage } from '../../../../../utils/auth';
@@ -52,8 +51,6 @@ const ChangeRequestOrNew = withReadProtectedPage(
       }
     }
 
-    const pageSubtitle = organization?.name ?? organization.organizationId;
-
     const newChangeRequest: ChangeRequest = {
       id: null,
       conceptId: conceptIdSearch,
@@ -96,9 +93,8 @@ const ChangeRequestOrNew = withReadProtectedPage(
           breadcrumbList={breadcrumbList}
           catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
         />
-        <Banner
+        <DesignBanner
           title={localization.catalogType.concept}
-          subtitle={pageSubtitle}
           catalogId={catalogId}
         />
         <div className='formContainer'>

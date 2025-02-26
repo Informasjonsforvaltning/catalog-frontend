@@ -1,43 +1,28 @@
+import { getDesign } from '@catalog-frontend/data-access';
 import { Design } from '@catalog-frontend/types';
 import { validOrganizationNumber } from '@catalog-frontend/utils';
 import { useQuery } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 
-export const useGetCatalogDesign = (catalogId) =>
-  useQuery<Design>({
+export const useGetCatalogDesign = (catalogId: string, adminEnvVariable?: string) => {
+  const { data: session } = useSession();
+  const accessToken = session?.accessToken ?? '';
+
+  return useQuery<Design>({
     queryKey: ['getCatalogDesign', catalogId],
     queryFn: async () => {
       if (!validOrganizationNumber(catalogId)) {
-        return null;
+        throw new Error('Invalid catalog ID');
       }
 
-      const response = await fetch(`/api/catalog-admin/${catalogId}/design`, {
-        method: 'GET',
-      });
+      const response = await getDesign(catalogId, accessToken, adminEnvVariable);
 
       if (response.status === 401) {
-        return Promise.reject('Unauthorized');
+        throw new Error('Unauthorized');
       }
 
       return response.json();
     },
+    enabled: !!accessToken && !!catalogId,
   });
-
-export const useGetCatalogDesignLogo = (catalogId) =>
-  useQuery<string>({
-    queryKey: ['getCatalogDesignLogo', catalogId],
-    queryFn: async () => {
-      const response = await fetch(`/api/catalog-admin/${catalogId}/design/logo`, {
-        method: 'GET',
-      });
-
-      if (response.status === 404) {
-        return null;
-      }
-
-      if (response.status === 401) {
-        return Promise.reject('Unauthorized');
-      }
-
-      return response.text();
-    },
-  });
+};

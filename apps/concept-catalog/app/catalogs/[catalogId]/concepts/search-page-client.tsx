@@ -2,9 +2,6 @@
 
 import { SearchableField, QuerySort } from '@catalog-frontend/types';
 import {
-  BreadcrumbType,
-  Breadcrumbs,
-  PageBanner,
   UploadButton,
   SearchHitContainer,
   Spinner,
@@ -26,7 +23,6 @@ import {
   getFields as getSearchFields,
 } from '../../../../hooks/search';
 import SearchFilter from '../../../../components/search-filter';
-import { useCatalogDesign } from '../../../../context/catalog-design';
 import { useImportConcepts } from '../../../../hooks/import';
 import styles from './search-page.module.css';
 import ConceptSearchHits from '../../../../components/concept-search-hits';
@@ -36,26 +32,22 @@ export type FilterType = 'published' | 'status' | 'assignedUser' | 'subject' | '
 
 interface Props {
   catalogId: string;
-  organization: any;
   hasWritePermission: boolean;
   hasAdminPermission: boolean;
   fieldsResult: any;
   codeListsResult: any;
   usersResult: any;
   conceptStatuses: any;
-  catalogPortalUrl: string;
 }
 
 export const SearchPageClient = ({
   catalogId,
-  organization,
   hasWritePermission,
   hasAdminPermission,
   fieldsResult,
   codeListsResult,
   usersResult,
   conceptStatuses,
-  catalogPortalUrl,
 }: Props) => {
   const [selectedFieldOption, setSelectedFieldOption] = useState('alleFelter' as SearchableField | 'alleFelter');
   const [selectedSortOption, setSelectedSortOption] = useState(SortOption.RELEVANCE);
@@ -153,7 +145,6 @@ export const SearchPageClient = ({
   });
 
   const importConcepts = useImportConcepts(catalogId);
-  const pageSubtitle = organization?.name ?? catalogId;
   const fieldOptions = getSelectOptions(loc.search.fields).map((opt) => (
     <option
       key={`fieldOption-${opt.value}`}
@@ -175,15 +166,6 @@ export const SearchPageClient = ({
     const user = usersResult?.users?.find((u) => u.id === userId);
     return user?.name ?? '';
   };
-
-  const breadcrumbList = catalogId
-    ? ([
-        {
-          href: `/catalogs/${catalogId}`,
-          text: loc.catalogType.concept,
-        },
-      ] as BreadcrumbType[])
-    : [];
 
   const onPageChange = (page: number) => {
     setPage(page - 1);
@@ -251,16 +233,9 @@ export const SearchPageClient = ({
     setPage(0);
   };
 
-  const design = useCatalogDesign();
-
   useEffect(() => {
     refetch().catch((error) => console.error('refetch() failed: ', error));
   }, [selectedSortOption, refetch]);
-
-  let logo: string | undefined;
-  if (design?.hasLogo) {
-    logo = `/api/catalog-admin/${catalogId}/design/logo`;
-  }
 
   const FilterChips = () => (
     <div className={styles.chips}>
@@ -327,18 +302,6 @@ export const SearchPageClient = ({
 
   return (
     <>
-      <Breadcrumbs
-        breadcrumbList={breadcrumbList}
-        catalogPortalUrl={catalogPortalUrl}
-      />
-      <PageBanner
-        title={loc.catalogType.concept}
-        subtitle={pageSubtitle}
-        fontColor={design?.fontColor}
-        backgroundColor={design?.backgroundColor}
-        logo={logo}
-        logoDescription={design?.logoDescription}
-      />
       <SearchHitsPageLayout>
         <SearchHitsPageLayout.ButtonRow>
           <>
@@ -411,9 +374,16 @@ export const SearchPageClient = ({
               variant='primary'
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
-              onKeyDown={(e) => { if(e.code === 'Enter'){ onSearchSubmit(searchValue)} }}
+              onKeyDown={(e) => {
+                if (e.code === 'Enter') {
+                  onSearchSubmit(searchValue);
+                }
+              }}
               onSearchClick={onSearchSubmit}
-              onClear={(value) => { setSearchValue(''); onSearchSubmit('');}}
+              onClear={(value) => {
+                setSearchValue('');
+                onSearchSubmit('');
+              }}
             />
             <FilterChips />
           </div>
