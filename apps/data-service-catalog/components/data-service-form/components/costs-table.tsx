@@ -125,7 +125,7 @@ export const CostsTable = ({ currencies }: Props) => {
             </div>
           </Card.Content>
           <Card.Footer className={styles.costFooter}>
-            <Paragraph>{getTranslateText(item.description)}</Paragraph>
+            <Paragraph size={'sm'}>{getTranslateText(item.description)}</Paragraph>
             <Box>
               {allowedLanguages
                 .filter((lang) => Object.prototype.hasOwnProperty.call(item.description, lang))

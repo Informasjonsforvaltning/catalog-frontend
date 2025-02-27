@@ -1,7 +1,7 @@
 'use client';
 import { DataService } from '@catalog-frontend/types';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Combobox, Fieldset } from '@digdir/designsystemet-react';
+import { Box, Combobox, Fieldset } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 import { debounce } from 'lodash';
 import { useCallback, useState } from 'react';
@@ -49,7 +49,7 @@ export const DatasetSection = ({ searchEnv }: Props) => {
   );
 
   return (
-    <>
+    <Box>
       {!isLoading && (
         <Fieldset
           legend={
@@ -94,6 +94,6 @@ export const DatasetSection = ({ searchEnv }: Props) => {
           </Combobox>
         </Fieldset>
       )}
-    </>
+    </Box>
   );
 };

@@ -1,7 +1,7 @@
 import { DataService, ReferenceDataCode } from '@catalog-frontend/types';
 import { FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { accessRights, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Combobox, Fieldset } from '@digdir/designsystemet-react';
+import { Box, Combobox, Fieldset } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 import { CostsTable } from './costs-table';
 
@@ -14,7 +14,7 @@ export const AccessSection = ({ openLicenses, currencies }: Props) => {
   const { values, setFieldValue } = useFormikContext<DataService>();
 
   return (
-    <>
+    <Box>
       <Fieldset
         legend={
           <TitleWithHelpTextAndTag helpText={localization.dataServiceForm.helptext.license}>
@@ -70,6 +70,6 @@ export const AccessSection = ({ openLicenses, currencies }: Props) => {
       <FieldsetDivider />
 
       <CostsTable currencies={currencies} />
-    </>
+    </Box>
   );
 };

@@ -2,7 +2,7 @@
 import { DataService } from '@catalog-frontend/types';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Textfield, Checkbox, CheckboxGroup, ErrorMessage } from '@digdir/designsystemet-react';
+import { Textfield, Checkbox, CheckboxGroup, ErrorMessage, Box } from '@digdir/designsystemet-react';
 import { FastField, useFormikContext } from 'formik';
 import styles from '../data-service-form.module.css';
 import { get as lodashGet } from 'lodash';
@@ -43,7 +43,7 @@ export const ContactPointSection = () => {
   };
 
   return (
-    <>
+    <Box>
       <CheckboxGroup
         size='sm'
         value={selectedFields}
@@ -116,6 +116,6 @@ export const ContactPointSection = () => {
           </ErrorMessage>
         )}
       </div>
-    </>
+    </Box>
   );
 };
