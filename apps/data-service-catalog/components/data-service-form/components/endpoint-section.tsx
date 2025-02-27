@@ -1,7 +1,7 @@
 import { DataService } from '@catalog-frontend/types';
 import { AddButton, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Fieldset, Textfield } from '@digdir/designsystemet-react';
+import { Box, Fieldset, Textfield } from '@digdir/designsystemet-react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
 import FieldsetWithDelete from '../../fieldset-with-delete';
 import styles from '../data-service-form.module.css';
@@ -9,7 +9,7 @@ import styles from '../data-service-form.module.css';
 export const EndpointSection = () => {
   const errors = useFormikContext<DataService>()?.errors;
   return (
-    <>
+    <Box>
       <FastField
         name='endpointUrl'
         as={Textfield}
@@ -66,6 +66,6 @@ export const EndpointSection = () => {
           )}
         </FieldArray>
       </Fieldset>
-    </>
+    </Box>
   );
 };

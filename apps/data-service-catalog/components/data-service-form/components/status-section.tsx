@@ -1,7 +1,7 @@
 import { DataService, ReferenceDataCode } from '@catalog-frontend/types';
 import { FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Combobox, Fieldset } from '@digdir/designsystemet-react';
+import { Box, Combobox, Fieldset } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 
 type Props = {
@@ -13,7 +13,7 @@ export const StatusSection = ({ statuses, availabilities }: Props) => {
   const { values, setFieldValue } = useFormikContext<DataService>();
 
   return (
-    <>
+    <Box>
       <Fieldset
         legend={
           <TitleWithHelpTextAndTag helpText={localization.dataServiceForm.helptext.status}>
@@ -71,6 +71,6 @@ export const StatusSection = ({ statuses, availabilities }: Props) => {
             ))}
         </Combobox>
       </Fieldset>
-    </>
+    </Box>
   );
 };
