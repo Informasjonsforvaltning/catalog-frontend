@@ -80,6 +80,16 @@ export const datasetFormNb = {
     informationModel: 'Informasjonsmodell',
     contactPoint: 'Kontaktpunkt',
   },
+  subtitle: {
+    about: 'Om datasettet',
+    losTheme: 'Tema',
+    distributions: 'Distribusjon',
+    details: 'Detaljer',
+    relations: 'Relasjoner',
+    concept: 'Begrep og emneord',
+    informationModel: 'Informasjonsmodell',
+    contactPoint: 'Kontaktpunkt',
+  },
   fieldLabel: {
     losTheme: 'LOS-tema(er)',
     euDataTheme: 'Hovedtema(er)',
@@ -134,6 +144,7 @@ export const datasetFormNb = {
     formError: 'Du har feil i skjemaet. Rett opp i disse før du kan lagre.',
     confirmUnpublish: 'Er du sikker på at du vil avpublisere datasettbeskrivelsen?',
     confirmPublish: 'Er du sikkert på at du vil publisere datasettbeskrivelsen?',
+    youHaveUnsavedChanges: 'Det finnes endringer som ikke har blitt lagret på datasettbeskrivelsen:',
   },
   validation: {
     title: 'Tittelen må være minst 3 karakterer lang.',
