@@ -56,6 +56,7 @@ export const dataServiceFormNb = {
     costValue: 'Beløp',
     dataServiceID: 'API-ID',
     modified: 'Sist oppdatert',
+    contactFields: 'Kontaktinformasjon',
   },
   validation: {
     costValueRequiredWhenMissingDoc: 'Beløp er påkrevd når ingen dokumentasjon er oppgitt.',

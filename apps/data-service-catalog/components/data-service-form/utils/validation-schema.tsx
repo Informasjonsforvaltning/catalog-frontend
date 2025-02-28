@@ -61,13 +61,12 @@ export const dataServiceValidationSchema = () =>
           .matches(httpsRegex, localization.validation.invalidProtocol)
           .url(localization.validation.invalidUrl)
           .notRequired(),
-        organizationUnit: Yup.string().notRequired(),
       })
       .test('contact-has-at-least-one-field', localization.validation.minOneField, (contactPoint) => {
         if (!contactPoint) {
           return false;
         }
-        return !!(contactPoint.email || contactPoint.phone || contactPoint.url || contactPoint.organizationUnit);
+        return !!(contactPoint.email || contactPoint.phone || contactPoint.url);
       }),
   });
 

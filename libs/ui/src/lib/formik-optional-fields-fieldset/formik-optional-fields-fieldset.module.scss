@@ -1,0 +1,36 @@
+.fieldset {
+  & :global(.fds-fieldset__legend__content) {
+    align-items: center;
+    gap: var(--fds-spacing-1);
+  }
+}
+
+.field {
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 0.4rem;
+
+  & > *:first-child {
+    flex-grow: 1;
+  }
+
+  :global(.fds-textfield__prefix) {
+    width: 10rem;
+  }
+
+  :global(.fds-btn) {
+    margin-left: 0.5rem;
+
+    justify-content: flex-start;
+    white-space: nowrap;
+  }
+}
+
+.addButtons {
+  display: flex;
+  padding-top: 0;
+
+  :global(.fds-btn) {
+    padding: 0 0.5rem;
+  }
+}
