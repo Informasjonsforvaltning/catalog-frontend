@@ -31,7 +31,6 @@ type DataServiceContactPoint = {
   email?: string;
   phone?: string;
   url?: string;
-  organizationUnit?: string;
 };
 
 export type DataServiceCost = {

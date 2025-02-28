@@ -81,7 +81,6 @@ export const RightColumn = ({ dataService, hasWritePermission }: Props) => {
                 {dataService?.contactPoint.phone}
               </span>
             )}
-
             {dataService.contactPoint.url && (
               <span>
                 <div>
@@ -89,14 +88,6 @@ export const RightColumn = ({ dataService, hasWritePermission }: Props) => {
                 </div>
 
                 {dataService?.contactPoint.url}
-              </span>
-            )}
-            {dataService.contactPoint.organizationUnit && (
-              <span>
-                <div>
-                  <LinkIcon />
-                </div>
-                <div>{dataService.contactPoint.organizationUnit}</div>
               </span>
             )}
           </div>
