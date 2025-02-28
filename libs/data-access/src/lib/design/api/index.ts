@@ -32,17 +32,13 @@ export const getBase64DesignLogo = async (catalogId: string, accessToken: string
     if (response.status !== 200) {
       throw new Error(`Failed to get design logo: ${response.status}`);
     }
-
-    const contentType = response.headers.get('Content-Type');
-    if (!contentType) {
-      throw new Error('Missing Content-Type header');
-    }
+    const contentType = response.headers.get('Content-Type') || 'image/png';
 
     const arrayBufferResponse = await response.arrayBuffer();
     return arrayBufferToBase64(arrayBufferResponse, contentType);
   } catch (error) {
     console.error('Failed to get design logo:', error);
-    return null; // or handle fallback
+    return undefined;
   }
 };
 

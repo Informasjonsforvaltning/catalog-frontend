@@ -12,13 +12,9 @@ const DesignBanner = async ({ catalogId, title }: BannerProps) => {
   const session = await getValidSession();
   const accessToken = session?.accessToken;
 
-  if (!accessToken) {
-    throw new Error('Unauthorized: No access token');
-  }
-
   const design = await getDesign(catalogId, accessToken).then((res) => res.json());
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
-  const logoResponse = await getBase64DesignLogo(catalogId, accessToken);
+  const logoResponse = accessToken ? await getBase64DesignLogo(catalogId, accessToken) : undefined;
 
   return (
     <PageBanner
