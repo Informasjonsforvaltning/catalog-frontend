@@ -36,7 +36,10 @@ const ConceptSearchHits: React.FC<Props> = ({
 
   const ConceptLabels: React.FC<{ searchHit: Concept }> = ({ searchHit }) => (
     <div className={styles.rowSpaceBetween}>
-      <Chip.Group size='small' className={styles.chipGroup}>
+      <Chip.Group
+        size='small'
+        className={styles.chipGroup}
+      >
         {searchHit.merkelapp &&
           searchHit.merkelapp.map((label) => (
             <Chip.Toggle
@@ -64,7 +67,7 @@ const ConceptSearchHits: React.FC<Props> = ({
           </p>
         )}
 
-        <span className={styles.dot}/>
+        <span className={styles.dot} />
         <p>
           {searchHit?.erPublisert
             ? localization.publicationState.publishedInFDK
@@ -72,7 +75,7 @@ const ConceptSearchHits: React.FC<Props> = ({
         </p>
         {searchHit.sistPublisertId && !searchHit?.erPublisert && (
           <>
-            <span className={styles.dot}/>
+            <span className={styles.dot} />
             <Link
               prefetch={false}
               href={
@@ -118,7 +121,9 @@ const ConceptSearchHits: React.FC<Props> = ({
                 )
               }
               titleHref={
-                validOrganizationNumber(catalogId) && validUUID(concept?.id) ? `/catalogs/${catalogId}/concepts/${concept.id}` : '#'
+                validOrganizationNumber(catalogId) && validUUID(concept?.id)
+                  ? `/catalogs/${catalogId}/concepts/${concept.id}`
+                  : '#'
               }
               rightColumn={
                 <ConceptSubject

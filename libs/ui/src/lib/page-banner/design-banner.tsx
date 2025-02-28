@@ -19,6 +19,7 @@ const DesignBanner = async ({ catalogId, title }: BannerProps) => {
   const design = await getDesign(catalogId, accessToken).then((res) => res.json());
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const logoResponse = await getBase64DesignLogo(catalogId, accessToken);
+  const logo = logoResponse ? logoResponse : 'undefined';
 
   return (
     <PageBanner
@@ -26,7 +27,7 @@ const DesignBanner = async ({ catalogId, title }: BannerProps) => {
       subtitle={getTranslateText(organization.prefLabel).toString()}
       fontColor={design?.fontColor}
       backgroundColor={design?.backgroundColor}
-      logo={design?.hasLogo && logoResponse ? logoResponse : undefined}
+      logo={design?.hasLogo ? logo : undefined}
       logoDescription={design?.logoDescription}
     />
   );
