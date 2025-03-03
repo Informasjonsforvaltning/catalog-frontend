@@ -1,13 +1,24 @@
 import { DataService } from '@catalog-frontend/types';
-import { AddButton, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { AddButton, FastFieldWithRef, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Box, Fieldset, Textfield } from '@digdir/designsystemet-react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
 import FieldsetWithDelete from '../../fieldset-with-delete';
 import styles from '../data-service-form.module.css';
+import React, { useEffect, useState } from 'react';
 
 export const DocumentationSection = () => {
   const errors = useFormikContext<DataService>()?.errors;
+  const [focus, setFocus] = useState<boolean | null>();
+  const fieldRef = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
+
+  useEffect(() => {
+    if (focus) {
+      fieldRef?.current?.focus();
+      setFocus(false);
+    }
+  }, [focus, fieldRef]);
+
   return (
     <Box>
       <FastField
@@ -42,17 +53,23 @@ export const DocumentationSection = () => {
                     className={styles.padding}
                   >
                     <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
-                      <FastField
+                      <FastFieldWithRef
                         name={`pages[${index}]`}
                         as={Textfield}
                         size='sm'
+                        ref={fieldRef}
                         error={errors?.pages?.[index]}
                       />
                     </FieldsetWithDelete>
                   </div>
                 ))}
 
-              <AddButton onClick={() => arrayHelpers.push('')}>
+              <AddButton
+                onClick={() => {
+                  setFocus(true);
+                  arrayHelpers.push('');
+                }}
+              >
                 {`${localization.dataServiceForm.fieldLabel.pages}`}
               </AddButton>
             </>

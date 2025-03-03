@@ -14,7 +14,7 @@ import {
   Tag,
   Textfield,
 } from '@digdir/designsystemet-react';
-import { FastField, FieldArray, Formik, useFormikContext } from 'formik';
+import { FieldArray, Formik, useFormikContext } from 'formik';
 import {
   AddButton,
   EditButton,
@@ -23,8 +23,9 @@ import {
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
   DeleteButton,
+  FastFieldWithRef,
 } from '@catalog-frontend/ui';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { isEmpty, isNumber } from 'lodash';
 import styles from '../data-service-form.module.css';
 import FieldsetWithDelete from '../../fieldset-with-delete';
@@ -162,8 +163,22 @@ export const CostsTable = ({ currencies }: Props) => {
 
 const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
   const [validateOnChange, setValidateOnChange] = useState(false);
+  const [showValueField, setShowValueField] = useState(false);
+  const [focus, setFocus] = useState<string | null>();
   const modalRef = useRef<HTMLDialogElement>(null);
-  let showValueField = isNumber(template?.value);
+  const valueRef = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
+  const docRef = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
+
+  useEffect(() => {
+    if (focus === 'value') {
+      valueRef?.current?.focus();
+      setFocus(null);
+    }
+    if (focus === 'documentation') {
+      docRef?.current?.focus();
+      setFocus(null);
+    }
+  }, [focus, valueRef, docRef]);
 
   const rmCurrencyIfNoValue = (formValues: DataServiceCost) => {
     if (isNumber(formValues?.value)) {
@@ -225,12 +240,13 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                         </TitleWithHelpTextAndTag>
                       }
                     >
-                      {showValueField ? (
+                      {showValueField || isNumber(values?.value) ? (
                         <div className={styles.valueCurrencyFieldset}>
-                          <FastField
+                          <FastFieldWithRef
                             name='value'
                             as={Textfield}
                             size='sm'
+                            ref={valueRef}
                             type={'number'}
                           />
                           <Combobox
@@ -256,7 +272,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                             onClick={() => {
                               setFieldValue('value', undefined);
                               setFieldValue('currency', undefined);
-                              showValueField = false;
+                              setShowValueField(false);
                             }}
                           />
                         </div>
@@ -265,7 +281,8 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                           onClick={() => {
                             setFieldValue('value', '');
                             setFieldValue('currency', DEFAULT_CURRENCY);
-                            showValueField = true;
+                            setFocus('value');
+                            setShowValueField(true);
                           }}
                         >
                           {`${localization.dataServiceForm.fieldLabel.costValue}`}
@@ -304,17 +321,23 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                                   className={styles.padding}
                                 >
                                   <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
-                                    <FastField
+                                    <FastFieldWithRef
                                       name={`documentation[${index}]`}
                                       as={Textfield}
                                       size='sm'
+                                      ref={docRef}
                                       error={errors?.documentation?.[index]}
                                     />
                                   </FieldsetWithDelete>
                                 </div>
                               ))}
 
-                            <AddButton onClick={() => arrayHelpers.push('')}>
+                            <AddButton
+                              onClick={() => {
+                                arrayHelpers.push('');
+                                setFocus('documentation');
+                              }}
+                            >
                               {`${localization.dataServiceForm.fieldLabel.costDocumentation}`}
                             </AddButton>
                           </>

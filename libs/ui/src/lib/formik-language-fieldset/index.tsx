@@ -12,7 +12,7 @@ import { AddButton, DeleteButton } from '../button';
 import _ from 'lodash';
 import React from 'react';
 import { FormikMultivalueTextfield } from '../formik-multivalue-textfield';
-import FastFieldWithRef from '../formik-fast-field-with-ref';
+import { FastFieldWithRef } from '../formik-fast-field-with-ref';
 
 type LanuguageFieldsetProps = {
   legend?: ReactNode;
@@ -33,7 +33,7 @@ export const FormikLanguageFieldset = ({
   as: renderAs = Textfield,
   multiple = false,
   readOnly = false,
-  showError = true
+  showError = true,
 }: LanuguageFieldsetProps) => {
   const { errors, getFieldMeta, setFieldValue } = useFormikContext<Record<string, LocalizedStrings>>();
   const [focus, setFocus] = useState<string | null>();
