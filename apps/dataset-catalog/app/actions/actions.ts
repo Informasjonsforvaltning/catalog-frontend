@@ -12,6 +12,7 @@ import {
   convertListToListOfObjects,
   getValidSession,
   localization,
+  redirectToSignIn,
   removeEmptyValues,
   transformToLocalizedStrings,
 } from '@catalog-frontend/utils';
@@ -21,7 +22,9 @@ import { redirect } from 'next/navigation';
 
 export async function getDatasets(catalogId: string) {
   const session = await getValidSession();
-
+  if(!session) {
+    return redirectToSignIn();
+  }
   const response = await getAll(catalogId, `${session?.accessToken}`);
   if (response.status !== 200) {
     throw new Error('getDatasets failed with response code ' + response.status);
@@ -32,6 +35,9 @@ export async function getDatasets(catalogId: string) {
 
 export async function getDatasetById(catalogId: string, datasetId: string): Promise<Dataset> {
   const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn();
+  }
   const response = await getById(catalogId, datasetId, `${session?.accessToken}`);
 
   if (response.status !== 200) {
@@ -53,6 +59,9 @@ export async function createDataset(values: DatasetToBeCreated, catalogId: strin
   const datasetNoEmptyValues = removeEmptyValues(newDataset);
 
   const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn();
+  }
   let success = false;
   let datasetId = undefined;
   try {
@@ -78,6 +87,9 @@ export async function createDataset(values: DatasetToBeCreated, catalogId: strin
 
 export async function deleteDataset(catalogId: string, datasetId: string) {
   const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn();
+  }
   let success = false;
   try {
     const response = await removeDataset(catalogId, datasetId, `${session?.accessToken}`);
@@ -112,6 +124,9 @@ export async function updateDataset(catalogId: string, initialDataset: Dataset, 
 
   let success = false;
   const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn();
+  }
 
   try {
     const response = await update(catalogId, initialDataset.id, diff, `${session?.accessToken}`);
@@ -139,6 +154,9 @@ export async function publishDataset(catalogId: string, initialDataset: Dataset,
   }
 
   const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn();
+  }
 
   try {
     const response = await update(catalogId, initialDataset.id, diff, `${session?.accessToken}`);

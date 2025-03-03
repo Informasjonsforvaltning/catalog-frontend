@@ -8,7 +8,7 @@ import {
   unpublishDataService as unpublish,
   updateDataService as update,
 } from '@catalog-frontend/data-access';
-import { getValidSession, localization, removeEmptyValues } from '@catalog-frontend/utils';
+import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
 import { DataService, DataServiceToBeCreated } from '@catalog-frontend/types';
 import { revalidateTag } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -16,6 +16,9 @@ import { compare } from 'fast-json-patch';
 
 export async function getDataServices(catalogId: string) {
   const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn();
+  }
 
   const response = await getAllDataServices(catalogId, `${session?.accessToken}`);
   if (response.status !== 200) {
@@ -27,6 +30,9 @@ export async function getDataServices(catalogId: string) {
 export async function createDataService(catalogId: string, values: DataServiceToBeCreated) {
   const newDataService = removeEmptyValues(values);
   const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn();
+  }
   let success = false;
   let dataServiceId: undefined | string = undefined;
   try {
@@ -49,6 +55,9 @@ export async function createDataService(catalogId: string, values: DataServiceTo
 
 export async function deleteDataService(catalogId: string, dataServiceId: string) {
   const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn();
+  }
   let success = false;
   try {
     const response = await removeDataService(catalogId, dataServiceId, `${session?.accessToken}`);
@@ -77,6 +86,9 @@ export async function updateDataService(catalogId: string, initialDataService: D
 
   let success = false;
   const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn();
+  }
 
   try {
     const response = await update(catalogId, initialDataService.id, diff, `${session?.accessToken}`);

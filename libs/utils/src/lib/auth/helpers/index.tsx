@@ -20,17 +20,18 @@ export const withValidSessionForApi = async (next: (session: any) => Promise<Res
   return await next(session);
 };
 
-export const getValidSession = async (callback: SignInCallbackProps | undefined = undefined) => {
+export const getValidSession = async () => {
   const session: any = await getServerSession(authOptions);
   const valid = await isValidSessionAndToken(session);
-  if (!valid) {
-    if (callback) {
-      const { callbackUrl, callbackParams } = callback;
-      const callbackUrlWithParams = `${callbackUrl}${callbackParams ? '?' + new URLSearchParams(callbackParams) : ''}`;
-      redirect(`/auth/signin?callbackUrl=${callbackUrlWithParams}`);
-    } else {
-      redirect('/auth/signin');
-    }
+  return valid ? session : undefined;
+};
+
+export const redirectToSignIn = (callback: SignInCallbackProps | undefined = undefined) => {
+  if (callback) {
+    const { callbackUrl, callbackParams } = callback;
+    const callbackUrlWithParams = `${callbackUrl}${callbackParams ? '?' + new URLSearchParams(callbackParams) : ''}`;
+    redirect(`/auth/signin?callbackUrl=${callbackUrlWithParams}`);
+  } else {
+    redirect('/auth/signin');
   }
-  return session;
 };

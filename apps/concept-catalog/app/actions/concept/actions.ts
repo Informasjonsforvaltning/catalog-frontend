@@ -6,7 +6,7 @@ import {
   patchConcept as patchConceptApi
 } from '@catalog-frontend/data-access';
 import { Concept } from '@catalog-frontend/types';
-import { getValidSession, localization, removeEmptyValues } from '@catalog-frontend/utils';
+import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
 import _ from 'lodash';
 import { revalidateTag } from 'next/cache';
@@ -82,6 +82,9 @@ export async function createConcept(values: Concept, catalogId: string) {
   const processedValues = preProcessValues(catalogId, values);
 
   const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn();
+  }
   let success = false;
   let conceptId: string | undefined = undefined;
   try {
@@ -105,6 +108,9 @@ export async function createConcept(values: Concept, catalogId: string) {
 
 export async function deleteConcept(catalogId: string, conceptId: string) {
   const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn();
+  }
   let success = false;
   try {
     const response = await deleteConceptApi(conceptId, `${session?.accessToken}`);
@@ -160,6 +166,9 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
 
   let success = false;
   const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn();
+  }
 
   try {
     const response = await patchConceptApi(initialConcept.id, diff, `${session?.accessToken}`);
