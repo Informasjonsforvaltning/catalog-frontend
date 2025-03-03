@@ -4,62 +4,55 @@ import { forwardRef, ReactNode, useEffect, useImperativeHandle, useRef, useState
 import { useFormikContext } from 'formik';
 import { Button, Modal } from '@digdir/designsystemet-react';
 import { isEqual } from 'lodash';
-import { localization } from '@catalog-frontend/utils';
+import { CatalogStorage, localization } from '@catalog-frontend/utils';
 
-export type StorageData = {
+export type ConceptStorageData = {
   values: any;
   lastChanged: string;
 };
 
 export type FormikAutoSaverProps = {
-  storageKey: string;
+  storage: CatalogStorage<ConceptStorageData>;
   restoreOnRender?: boolean;
-  onRestore: (data: StorageData) => void;
-  confirmMessage: (data : StorageData) => ReactNode;  
+  onRestore: (data: ConceptStorageData) => void;
+  confirmMessage: (data : ConceptStorageData) => ReactNode;  
 };
 
 export type FormikAutoSaverRef = {
   discard: () => void;
 }
 
-export const FormikAutoSaver = forwardRef<FormikAutoSaverRef, FormikAutoSaverProps>(({ storageKey, onRestore, confirmMessage, restoreOnRender}: FormikAutoSaverProps, ref) => {
+export const FormikAutoSaver = forwardRef<FormikAutoSaverRef, FormikAutoSaverProps>(({ storage, onRestore, confirmMessage, restoreOnRender}: FormikAutoSaverProps, ref) => {
   const [modalContent, setModalContent] = useState<ReactNode>(null);
   const { initialValues, values, setValues } = useFormikContext<any>();
   const modalRef = useRef<HTMLDialogElement>(null);
-
-  const getStorageData = () => {
-    const savedData = localStorage.getItem(storageKey);
-    if (savedData) {
-      return JSON.parse(savedData);
-    }
-    return null;
-  }
-
+  
   const handleRestoreClick = () => {
-    if (onRestore) {
-      onRestore(getStorageData());
+    const data = storage.get();
+    if (onRestore && data) {
+      onRestore(data);
     } 
     modalRef?.current?.close();
   };
 
   const handleDiscardClick = () => {
-    localStorage.removeItem(storageKey);
+    storage.delete();
     modalRef.current?.close();
   };
 
   useImperativeHandle(ref, () => {
     return {
       discard() {
-        localStorage.removeItem(storageKey);
+        storage.delete();
       }
     };
   });
 
   // Load saved data from local storage on mount
   useEffect(() => {    
-    const data = getStorageData();
+    const data = storage.get();
     if (data) {
-      setModalContent(confirmMessage(getStorageData()));
+      setModalContent(confirmMessage(data));
       if(restoreOnRender) {
         setValues(data.values);
       } else {
@@ -71,7 +64,7 @@ export const FormikAutoSaver = forwardRef<FormikAutoSaverRef, FormikAutoSaverPro
   // Save form data to local storage on change
   useEffect(() => {
     if (!isEqual(initialValues, values)) {
-      localStorage.setItem(storageKey, JSON.stringify({ values, lastChanged: Date.now() }));
+      storage.set({ values, lastChanged: Date.now().toString() });
     }
   }, [values]);
 

@@ -5,15 +5,15 @@ import classNames from 'classnames';
 import { Formik, Form, FormikProps } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Alert, Checkbox, Paragraph, Spinner } from '@digdir/designsystemet-react';
-import { formatISO, getTranslateText, localization } from '@catalog-frontend/utils';
+import { CatalogLocalStorage, formatISO, getTranslateText, localization } from '@catalog-frontend/utils';
 import { CodeListsResult, Concept, FieldsResult, ReferenceDataCode, UsersResult } from '@catalog-frontend/types';
 import {
   Button,
+  ConceptStorageData,
   FormLayout,
   FormikAutoSaver,
   FormikAutoSaverRef,
   NotificationCarousel,
-  StorageData,
 } from '@catalog-frontend/ui';
 import { createConcept, updateConcept } from '../../app/actions/concept/actions';
 import { conceptSchema } from './validation-schema';
@@ -170,7 +170,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
     router.push(concept.id ? `/catalogs/${catalogId}/concepts/${concept.id}` : `/catalogs/${catalogId}/concepts`);
   };
 
-  const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
+  const restoreConfirmMessage = ({ values, lastChanged }: ConceptStorageData) => {
     const name = getTranslateText(values?.anbefaltTerm?.navn) || localization.conceptForm.alert.termNotDefined;
     const lastChangedFormatted = formatISO(lastChanged, {
       year: 'numeric',
@@ -219,7 +219,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
         const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
         const hasError = (fields: (keyof Concept)[]) => fields.some((field) => Object.keys(errors).includes(field));
 
-        const handleRestoreConcept = (data: StorageData) => {
+        const handleRestoreConcept = (data: ConceptStorageData) => {
           if (data?.values?.id !== concept.id) {
             if (!data?.values?.id) {
               return router.push(`/catalogs/${catalogId}/concepts/new?restore=1`);
@@ -235,7 +235,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
               <Form>
                 <FormikAutoSaver
                   ref={autoSaveRef}
-                  storageKey='conceptForm'
+                  storage={new CatalogLocalStorage<ConceptStorageData>({ key: 'conceptForm' })}
                   restoreOnRender={restoreOnRender}
                   onRestore={handleRestoreConcept}
                   confirmMessage={restoreConfirmMessage}

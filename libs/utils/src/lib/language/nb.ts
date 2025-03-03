@@ -122,7 +122,8 @@ export const nb = {
     loggingOut: 'Logger ut...',
     sessionExpiredTitle: 'Sesjonen har utløpt',
     sessionExpired: 'Din sesjon har utløpt på grunn av inaktivitet. For å fortsette arbeidet, vennligst logg inn på nytt. Hvis du ikke ønsker å logge inn nå, kan du avbryte og forbli på siden som utlogget.',
-    redirectedToLogin: 'Når du velger å forbli på siden, blir du sendt videre til innloggingssiden når du klikker på en lenke eller oppdaterer siden.'
+    sessionExpiredWithStorage: 'Din sesjon har utløpt på grunn av inaktivitet. Endringene dine er lagret lokalt. For å fortsette arbeidet, vennligst logg inn på nytt. Hvis du ikke ønsker å logge inn nå, kan du avbryte og forbli på siden som utlogget.',
+    redirectedToLogin: 'Når du velger å forbli på siden, blir du sendt videre til innloggingssiden når du klikker på en lenke eller oppdaterer siden.',    
   },
 
   userRole: {
@@ -522,5 +523,5 @@ export const nb = {
 
   accessRight: {
     none: 'Ingen tilgangsrettighet valgt',
-  },
+  }
 };
