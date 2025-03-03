@@ -4,6 +4,7 @@ import {
   hasOrganizationReadPermission,
   hasOrganizationWritePermission,
   hasSystemAdminPermission,
+  redirectToSignIn,
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
@@ -33,9 +34,12 @@ const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', re
       }
     });
 
-    const session = await getValidSession({
-      callbackUrl: pagePath({ catalogId, serviceId }),
-    });
+    const session = await getValidSession();
+    if(!session) {
+      return redirectToSignIn({
+        callbackUrl: pagePath({ catalogId, serviceId }),
+      });
+    }
 
     const hasReadPermission =
       session?.accessToken &&

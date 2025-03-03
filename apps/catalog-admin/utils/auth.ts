@@ -1,4 +1,4 @@
-import { getValidSession, hasOrganizationAdminPermission, validOrganizationNumber } from '@catalog-frontend/utils';
+import { getValidSession, hasOrganizationAdminPermission, redirectToSignIn, validOrganizationNumber } from '@catalog-frontend/utils';
 import { RedirectType, redirect } from 'next/navigation';
 
 type PagePathProps = ({ catalogId }) => string;
@@ -11,9 +11,12 @@ export const withProtectedPage = (pagePath: PagePathProps, render: RenderProps) 
       redirect(`/notfound`, RedirectType.replace);
     }
 
-    const session = await getValidSession({
-      callbackUrl: pagePath(catalogId),
-    });
+    const session = await getValidSession();
+    if(!session) {
+      return redirectToSignIn({
+        callbackUrl: pagePath(catalogId),
+      });
+    }
 
     const hasAdminPermission = session?.accessToken && hasOrganizationAdminPermission(session.accessToken, catalogId);
     if (!hasAdminPermission) {

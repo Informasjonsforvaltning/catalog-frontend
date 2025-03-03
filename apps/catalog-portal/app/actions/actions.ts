@@ -17,11 +17,15 @@ import {
   ServiceCatalogItem,
   ServiceCatalogs,
 } from '@catalog-frontend/types';
-import { getValidSession } from '@catalog-frontend/utils';
+import { getValidSession, redirectToSignIn } from '@catalog-frontend/utils';
 import _ from 'lodash';
 
 export async function getServiceCatalogs(): Promise<ServiceCatalogs> {
   const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn();
+  }
+
   const response = await getAllServiceCatalogs(`${session?.accessToken}`);
 
   if (response.status !== 200) {
@@ -58,6 +62,9 @@ export async function getServiceCatalogs(): Promise<ServiceCatalogs> {
 
 export async function getAllProcessingActivitiesCatalogs(): Promise<RecordOfProcessingActivities[]> {
   const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn();
+  }
   const response = await getAllProcessingActivities(`${session?.accessToken}`);
   if (response.status !== 200) {
     console.error('getAllProcessingActivitiesCatalogs failed with response code ' + response.status);
@@ -78,6 +85,9 @@ export async function getServiceMessages(): Promise<StrapiGraphql.ServiceMessage
 
 export async function getAllCatalogs() {
   const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn();
+  }
 
   const [
     datasetCatalogsResponse,
