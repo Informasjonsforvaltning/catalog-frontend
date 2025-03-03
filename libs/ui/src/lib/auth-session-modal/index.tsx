@@ -1,20 +1,24 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { Alert, Button, Modal, Paragraph } from '@digdir/designsystemet-react';
-import { localization } from '@catalog-frontend/utils';
+import { useEffect, useRef, useState } from 'react';
+import { Button, Modal, Paragraph } from '@digdir/designsystemet-react';
+import { CatalogLocalStorage, localization } from '@catalog-frontend/utils';
 import { useRouter, usePathname } from 'next/navigation';
 
 type LoginCheckerProps = {
   validatePath?: string;
   signInPath?: string;
+  storageKey?: string;
 };
 
-export const AuthSessionModal = ({ validatePath = '/api/auth/validate', signInPath = '/auth/signin' }: LoginCheckerProps) => {
+export const AuthSessionModal = ({ validatePath = '/api/auth/validate', signInPath = '/auth/signin', storageKey }: LoginCheckerProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const pathName = usePathname();
   const router = useRouter();
-
+  
+  const storage = storageKey ? new CatalogLocalStorage<any>({ key: storageKey }) : undefined;
+  const [hasStorageData, setHasStorageData] = useState(false);
+  
   const validateAuth = async () => {
     const res = await fetch(validatePath);
     return res.status === 200;
@@ -33,6 +37,8 @@ export const AuthSessionModal = ({ validatePath = '/api/auth/validate', signInPa
   };
 
   useEffect(() => {
+    setHasStorageData(storage?.get());
+
     const interval = setInterval(() => {
       validateAuth().then((valid) => {
         if(!valid) {
@@ -49,8 +55,9 @@ export const AuthSessionModal = ({ validatePath = '/api/auth/validate', signInPa
     <Modal ref={modalRef}>
       <Modal.Header closeButton={false}>{localization.auth.sessionExpiredTitle}</Modal.Header>
       <Modal.Content>
-        <Paragraph size='sm'>{localization.auth.sessionExpired}<br/><br/></Paragraph>
-        <Alert size='sm' severity='warning'>{localization.auth.redirectedToLogin}</Alert>
+        <Paragraph size='sm'>
+          {hasStorageData ? localization.auth.sessionExpiredWithStorage : localization.auth.sessionExpired}
+        </Paragraph>
       </Modal.Content>
       <Modal.Footer>
         <Button
@@ -70,5 +77,3 @@ export const AuthSessionModal = ({ validatePath = '/api/auth/validate', signInPa
     </Modal>
   );
 };
-
-export default AuthSessionModal;
