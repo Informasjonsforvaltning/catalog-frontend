@@ -465,6 +465,9 @@ export const nb = {
     oneLanguageRequired: 'Må fylles ut for minst ett språk.',
     deleteFieldIfEmpty: 'Slett feltet hvis det ikke skal ha innhold.',
     minOneField: 'Minst ett felt skal fylles ut.',
+    formError:
+      'Skjemaet inneholder feil eller manglende informasjon. Vennligst kontroller feltene markert med rød tekst og prøv igjen.',
+    unsavedChanges: 'Du har ulagrede endringer',
   },
 
   serviceCatalog: {

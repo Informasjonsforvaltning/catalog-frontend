@@ -1,6 +1,6 @@
 .verticalLine {
   width: 1px;
-  height: 4rem;
+  height: 2rem;
   background-color: #ccc;
   margin: 0 0.5rem;
 }
@@ -53,4 +53,10 @@
   padding: var(--fds-spacing-8);
   border: 1px solid var(--fds-semantic-border-neutral-subtle);
   border-radius: var(--fds-border_radius-medium);
+}
+
+.notification {
+  background: none;
+  border: none;
+  padding: 0;
 }
