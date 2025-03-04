@@ -95,16 +95,48 @@ export const draftDatasetSchema = Yup.object().shape({
 });
 
 export const confirmedDatasetSchema = draftDatasetSchema.shape({
-  title: Yup.object().shape({
-    nb: Yup.string()
-      .min(3, localization.datasetForm.validation.title)
-      .required(localization.datasetForm.validation.titleRequired),
-  }),
-  description: Yup.object().shape({
-    nb: Yup.string()
-      .min(5, localization.datasetForm.validation.description)
-      .required(localization.datasetForm.validation.descriptionRequired),
-  }),
+  title: Yup.object()
+    .shape({
+      nb: Yup.string()
+        .min(3, localization.datasetForm.validation.title)
+        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.nb})`)
+        .notRequired(),
+      nn: Yup.string()
+        .min(3, localization.datasetForm.validation.title)
+        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.nn})`)
+        .notRequired(),
+      en: Yup.string()
+        .min(3, localization.datasetForm.validation.title)
+        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.en})`)
+        .notRequired(),
+    })
+    .test('title-test', localization.validation.oneLanguageRequired, (title) => {
+      if (!title) {
+        return false;
+      }
+      return !!(title.nb || title.nn || title.en);
+    }),
+  description: Yup.object()
+    .shape({
+      nb: Yup.string()
+        .label(`${localization.datasetForm.fieldLabel.description} (${localization.language.nb})`)
+        .min(5, localization.datasetForm.validation.description)
+        .notRequired(),
+      nn: Yup.string()
+        .label(`${localization.datasetForm.fieldLabel.description} (${localization.language.nn})`)
+        .min(5, localization.datasetForm.validation.description)
+        .notRequired(),
+      en: Yup.string()
+        .label(`${localization.datasetForm.fieldLabel.description} (${localization.language.en})`)
+        .min(5, localization.datasetForm.validation.description)
+        .notRequired(),
+    })
+    .test('title-test', localization.validation.oneLanguageRequired, (title) => {
+      if (!title) {
+        return false;
+      }
+      return !!(title.nb || title.nn || title.en);
+    }),
   euDataTheme: Yup.array()
     .min(1, localization.datasetForm.validation.euDataTheme)
     .required(localization.datasetForm.validation.euDataTheme),
