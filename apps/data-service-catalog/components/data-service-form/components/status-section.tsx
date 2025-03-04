@@ -1,7 +1,7 @@
 import { DataService, ReferenceDataCode } from '@catalog-frontend/types';
 import { FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Box, Combobox, Fieldset } from '@digdir/designsystemet-react';
+import { Box, Radio } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 
 type Props = {
@@ -14,35 +14,32 @@ export const StatusSection = ({ statuses, availabilities }: Props) => {
 
   return (
     <Box>
-      <Fieldset
+      <Radio.Group
+        value={values?.status ?? ''}
         legend={
           <TitleWithHelpTextAndTag helpText={localization.dataServiceForm.helptext.status}>
             {localization.dataServiceForm.fieldLabel.status}
           </TitleWithHelpTextAndTag>
         }
+        onChange={(selectedValues) => setFieldValue('status', selectedValues.toString())}
+        size='sm'
       >
-        <Combobox
-          value={[values?.status ?? '']}
-          portal={false}
-          onValueChange={(selectedValues) => setFieldValue('status', selectedValues.toString())}
-          size='sm'
-        >
-          <Combobox.Option value=''>{`${localization.dataServiceForm.noStatus}`}</Combobox.Option>
-          {statuses &&
-            statuses.map((statusRef, i) => (
-              <Combobox.Option
-                key={`licence-${statusRef.uri}-${i}`}
-                value={statusRef.uri}
-              >
-                {capitalizeFirstLetter(getTranslateText(statusRef.label)?.toString())}
-              </Combobox.Option>
-            ))}
-        </Combobox>
-      </Fieldset>
+        <Radio value=''>{`${localization.dataServiceForm.noStatus}`}</Radio>
+        {statuses &&
+          statuses.map((statusRef, i) => (
+            <Radio
+              key={`licence-${statusRef.uri}-${i}`}
+              value={statusRef.uri}
+            >
+              {capitalizeFirstLetter(getTranslateText(statusRef.label)?.toString())}
+            </Radio>
+          ))}
+      </Radio.Group>
 
       <FieldsetDivider />
 
-      <Fieldset
+      <Radio.Group
+        value={values?.availability ?? ''}
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.dataServiceForm.helptext.availability}
@@ -52,25 +49,20 @@ export const StatusSection = ({ statuses, availabilities }: Props) => {
             {localization.dataServiceForm.fieldLabel.availability}
           </TitleWithHelpTextAndTag>
         }
+        onChange={(selectedValues) => setFieldValue('availability', selectedValues.toString())}
+        size='sm'
       >
-        <Combobox
-          value={[values?.availability ?? '']}
-          portal={false}
-          onValueChange={(selectedValues) => setFieldValue('availability', selectedValues.toString())}
-          size='sm'
-        >
-          <Combobox.Option value=''>{`${localization.dataServiceForm.noAvailability}`}</Combobox.Option>
-          {availabilities &&
-            availabilities.map((availabilityRef, i) => (
-              <Combobox.Option
-                key={`availability-${availabilityRef.uri}-${i}`}
-                value={availabilityRef.uri}
-              >
-                {capitalizeFirstLetter(getTranslateText(availabilityRef.label)?.toString())}
-              </Combobox.Option>
-            ))}
-        </Combobox>
-      </Fieldset>
+        <Radio value=''>{`${localization.dataServiceForm.noAvailability}`}</Radio>
+        {availabilities &&
+          availabilities.map((availabilityRef, i) => (
+            <Radio
+              key={`availability-${availabilityRef.uri}-${i}`}
+              value={availabilityRef.uri}
+            >
+              {capitalizeFirstLetter(getTranslateText(availabilityRef.label)?.toString())}
+            </Radio>
+          ))}
+      </Radio.Group>
     </Box>
   );
 };

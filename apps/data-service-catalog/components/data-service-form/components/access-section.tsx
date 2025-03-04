@@ -1,7 +1,7 @@
 import { DataService, ReferenceDataCode } from '@catalog-frontend/types';
 import { FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { accessRights, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Box, Combobox, Fieldset } from '@digdir/designsystemet-react';
+import { Box, Radio } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 import { CostsTable } from './costs-table';
 
@@ -15,57 +15,50 @@ export const AccessSection = ({ openLicenses, currencies }: Props) => {
 
   return (
     <Box>
-      <Fieldset
+      <Radio.Group
+        value={values?.license ?? ''}
         legend={
           <TitleWithHelpTextAndTag helpText={localization.dataServiceForm.helptext.license}>
             {localization.dataServiceForm.fieldLabel.license}
           </TitleWithHelpTextAndTag>
         }
+        onChange={(selectedValues) => setFieldValue('license', selectedValues.toString())}
+        size='sm'
       >
-        <Combobox
-          value={[values?.license ?? '']}
-          portal={false}
-          onValueChange={(selectedValues) => setFieldValue('license', selectedValues.toString())}
-          size='sm'
-        >
-          <Combobox.Option value=''>{`${localization.dataServiceForm.noLicense}`}</Combobox.Option>
-          {openLicenses &&
-            openLicenses.map((licenseRef, i) => (
-              <Combobox.Option
-                key={`license-${licenseRef.uri}-${i}`}
-                value={licenseRef.uri}
-              >
-                {getTranslateText(licenseRef.label)}
-              </Combobox.Option>
-            ))}
-        </Combobox>
-      </Fieldset>
+        <Radio value=''>{`${localization.dataServiceForm.noLicense}`}</Radio>
+        {openLicenses &&
+          openLicenses.map((licenseRef, i) => (
+            <Radio
+              key={`license-${licenseRef.uri}-${i}`}
+              value={licenseRef.uri}
+            >
+              {getTranslateText(licenseRef.label)}
+            </Radio>
+          ))}
+      </Radio.Group>
 
       <FieldsetDivider />
 
-      <Fieldset
+      <Radio.Group
+        size='sm'
         legend={
           <TitleWithHelpTextAndTag helpText={localization.dataServiceForm.helptext.accessRights}>
             {localization.dataServiceForm.fieldLabel.accessRights}
           </TitleWithHelpTextAndTag>
         }
+        value={values.accessRights ?? ''}
+        onChange={(values) => setFieldValue('accessRights', values.toString())}
       >
-        <Combobox
-          size='sm'
-          value={[values.accessRights ?? '']}
-          onValueChange={(values) => setFieldValue('accessRights', values.toString())}
-        >
-          <Combobox.Option value=''>{`${localization.accessRight.none}`}</Combobox.Option>
-          {accessRights.map((option) => (
-            <Combobox.Option
-              key={option.uri}
-              value={option.uri}
-            >
-              {getTranslateText(option.label)}
-            </Combobox.Option>
-          ))}
-        </Combobox>
-      </Fieldset>
+        <Radio value=''>{`${localization.accessRight.none}`}</Radio>
+        {accessRights.map((option) => (
+          <Radio
+            key={option.uri}
+            value={option.uri}
+          >
+            {getTranslateText(option.label)}
+          </Radio>
+        ))}
+      </Radio.Group>
 
       <FieldsetDivider />
 
