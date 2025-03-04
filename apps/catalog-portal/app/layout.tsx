@@ -18,6 +18,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             adminGuiBaseUrl={process.env.ADMIN_GUI_BASE_URI}
             fdkBaseUrl={process.env.FDK_BASE_URI}
             catalogTitle={localization.catalogOverview}
+            displayFooter={false}
           >
             {children}
           </Layout>
