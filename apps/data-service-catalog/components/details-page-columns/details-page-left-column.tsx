@@ -27,21 +27,13 @@ export const LeftColumn = ({ dataService, referenceData, language, referenceData
         </InfoCard.Item>
       )}
 
-      {!isEmpty(dataService?.keywords) && (
-        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.keywords}>
-          <li className={styles.list}>
-            {(getTranslateText(dataService?.keywords, language) as string[])?.map((item, index) => {
-              return item ? (
-                <Tag
-                  size='sm'
-                  color='info'
-                  key={`keyword-tag-${index}`}
-                >
-                  {item}
-                </Tag>
-              ) : null;
-            })}
-          </li>
+      {!isEmpty(dataService?.formats) && (
+        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.format}>
+          <FormatList
+            formatURIs={dataService.formats}
+            referenceDataEnv={referenceDataEnv}
+            language={language}
+          />
         </InfoCard.Item>
       )}
 
@@ -79,39 +71,30 @@ export const LeftColumn = ({ dataService, referenceData, language, referenceData
         </InfoCard.Item>
       )}
 
-      {!isEmpty(dataService?.accessRights) && (
-        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.accessRights}>
-          <ReferenceDataTag
-            referenceDataURI={dataService.accessRights}
-            referenceDataCodes={accessRights}
-            language={language}
-          />
-        </InfoCard.Item>
-      )}
-
       {!isEmpty(dataService?.costs) && (
         <InfoCard.Item title={localization.dataServiceForm.fieldLabel.costs}>
-          <CostList costs={dataService.costs} />
-        </InfoCard.Item>
-      )}
-
-      {!isEmpty(dataService?.availability) && (
-        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.availability}>
-          <ReferenceDataTag
-            referenceDataURI={dataService.availability}
-            referenceDataCodes={referenceData.plannedAvailabilities}
+          <CostList
+            costs={dataService.costs}
             language={language}
           />
         </InfoCard.Item>
       )}
 
-      {!isEmpty(dataService?.formats) && (
-        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.format}>
-          <FormatList
-            formatURIs={dataService.formats}
-            referenceDataEnv={referenceDataEnv}
-            language={language}
-          />
+      {!isEmpty(dataService?.keywords) && (
+        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.keywords}>
+          <li className={styles.list}>
+            {(getTranslateText(dataService?.keywords, language) as string[])?.map((item, index) => {
+              return item ? (
+                <Tag
+                  size='sm'
+                  color='info'
+                  key={`keyword-tag-${index}`}
+                >
+                  {item}
+                </Tag>
+              ) : null;
+            })}
+          </li>
         </InfoCard.Item>
       )}
 
