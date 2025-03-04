@@ -7,11 +7,6 @@ export interface ServiceCatalogItem {
   publicServiceCount?: number;
 }
 
-export interface ServiceCatalogs {
-  serviceCatalogs: { catalogId: string; serviceCount: number }[];
-  publicServiceCatalogs: { catalogId: string; publicServiceCount: number }[];
-}
-
 export interface DatasetCatalog {
   id: string;
   uri: string;

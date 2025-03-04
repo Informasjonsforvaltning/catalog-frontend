@@ -76,11 +76,17 @@ export const isReadOnlyUser = (token: Token, orgNr: string): boolean =>
   );
 
 export const validateOidcUserSession = async (token: Token): Promise<boolean> => {
-  const response = await fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/userinfo?scope=openid`, {
-    headers: { Authorization: `Bearer ${token}` },
-    method: 'GET',
-  });
-  return response.ok;
+  try {
+    const response = await fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/userinfo?scope=openid`, {
+      headers: { Authorization: `Bearer ${token}` },
+      method: 'GET',
+    });
+
+    return response.ok;
+  } catch(e) {
+    console.log('validateOidcUserSession failed', e);
+  }
+  return false;
 };
 
 export const hasNonSystemAccessForOrg = (token: Token, orgId: string): boolean => {
