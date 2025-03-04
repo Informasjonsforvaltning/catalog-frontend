@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 const Home = async () => {
   // NOTICE: Call cookies() to opt into dynamic rendering
   cookies();
-  redirect(`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`);
+  redirect('/catalogs');
 };
 
 export default Home;
