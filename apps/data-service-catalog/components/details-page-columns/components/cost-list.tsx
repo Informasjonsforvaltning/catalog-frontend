@@ -1,8 +1,7 @@
 import { DataServiceCost } from '@catalog-frontend/types';
-import { Card, Divider, Link, List, Paragraph } from '@digdir/designsystemet-react';
+import { Card, Link, List, Paragraph } from '@digdir/designsystemet-react';
 import React from 'react';
 import { getTranslateText } from '@catalog-frontend/utils';
-import styles from '../../data-service-form/data-service-form.module.css';
 
 type Props = {
   costs: DataServiceCost[] | undefined;
@@ -18,7 +17,7 @@ export const CostList = ({ costs, language }: Props) => {
           color='neutral'
         >
           <Card.Content>
-            <List.Root>
+            <List.Root size={'sm'}>
               <List.Unordered
                 style={{
                   listStyle: 'none',

@@ -1,17 +1,20 @@
 import { InfoCard } from '@catalog-frontend/ui';
 import styles from './details-columns.module.css';
-import { DataService } from '@catalog-frontend/types';
-import { formatISO, localization } from '@catalog-frontend/utils';
+import { DataService, DataServiceReferenceData } from '@catalog-frontend/types';
+import { accessRights, formatISO, localization } from '@catalog-frontend/utils';
 import { isEmpty } from 'lodash';
 import { EnvelopeClosedIcon, LinkIcon, PhoneIcon } from '@navikt/aksel-icons';
 import PublishSwitch from '../publish-switch';
+import { ReferenceDataTag } from './components/reference-data-tag';
 
 type Props = {
   dataService: DataService;
+  referenceData: DataServiceReferenceData;
+  language: string;
   hasWritePermission: boolean;
 };
 
-export const RightColumn = ({ dataService, hasWritePermission }: Props) => {
+export const RightColumn = ({ dataService, hasWritePermission, referenceData, language }: Props) => {
   return (
     <InfoCard>
       <InfoCard.Item
@@ -55,6 +58,32 @@ export const RightColumn = ({ dataService, hasWritePermission }: Props) => {
           headingColor='light'
         >
           {new Date(dataService.modified).toLocaleDateString('no-NO')}
+        </InfoCard.Item>
+      )}
+
+      {!isEmpty(dataService?.accessRights) && (
+        <InfoCard.Item
+          title={localization.dataServiceForm.fieldLabel.accessRights}
+          headingColor='light'
+        >
+          <ReferenceDataTag
+            referenceDataURI={dataService.accessRights}
+            referenceDataCodes={accessRights}
+            language={language}
+          />
+        </InfoCard.Item>
+      )}
+
+      {!isEmpty(dataService?.availability) && (
+        <InfoCard.Item
+          title={localization.dataServiceForm.fieldLabel.availability}
+          headingColor='light'
+        >
+          <ReferenceDataTag
+            referenceDataURI={dataService.availability}
+            referenceDataCodes={referenceData.plannedAvailabilities}
+            language={language}
+          />
         </InfoCard.Item>
       )}
 

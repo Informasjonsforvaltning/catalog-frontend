@@ -78,7 +78,7 @@ export const CostsTable = ({ currencies }: Props) => {
           color='neutral'
         >
           <Card.Content className={styles.costContent}>
-            <List.Root>
+            <List.Root size={'sm'}>
               <List.Unordered
                 style={{
                   listStyle: 'none',

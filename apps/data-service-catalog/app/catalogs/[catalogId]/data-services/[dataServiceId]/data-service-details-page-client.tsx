@@ -88,6 +88,8 @@ const DataServiceDetailsPageClient = ({
       <DetailsPageLayout.Right>
         <RightColumn
           dataService={dataService}
+          referenceData={referenceData}
+          language={language}
           hasWritePermission={hasWritePermission}
         />
       </DetailsPageLayout.Right>
