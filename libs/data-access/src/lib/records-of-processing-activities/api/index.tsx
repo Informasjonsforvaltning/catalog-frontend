@@ -1,4 +1,4 @@
-const path = `${process.env.RECORDS_OF_PROCESSING_ACTIVITIES_GUI_BASE_URI}`;
+const path = `${process.env.RECORDS_OF_PROCESSING_ACTIVITIES_API_BASE_URI}`;
 
 export const getAllProcessingActivities = async (accessToken: string) => {
   const resource = `${path}/api/organizations`;
