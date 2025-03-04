@@ -105,7 +105,7 @@ const CatalogsPage = async ({ params: { catalogId } }: { params: { catalogId: st
               <NavigationCard
                 title={localization.catalogType.dataService}
                 body={`${dataServiceCount > 0 ? dataServiceCount : localization.none} ${localization.descriptionType.dataService}`}
-                href={`${process.env.DATA_SERVICE_CATALOG_FRONTEND}/${currentOrganization.organizationId}`}
+                href={`${process.env.DATASERVICE_CATALOG_BASE_URI}/${currentOrganization.organizationId}`}
               />
             </div>
 
