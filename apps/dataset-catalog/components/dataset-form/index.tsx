@@ -90,8 +90,9 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
             key={1}
             size='sm'
             severity='danger'
+            className={styles.notification}
           >
-            {localization.alert.formError}
+            {localization.validation.formError}
           </Alert>,
         ]),
     ...(hasUnsavedChanges
@@ -100,8 +101,9 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
             key={1}
             size='sm'
             severity='warning'
+            className={styles.notification}
           >
-            {localization.alert.formUnsavedChanges}
+            {localization.validation.unsavedChanges}
           </Alert>,
         ]
       : []),

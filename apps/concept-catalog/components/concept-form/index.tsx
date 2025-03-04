@@ -50,8 +50,7 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
           severity='danger'
           style={{ background: 'none', border: 'none', padding: 0 }}
         >
-          Skjemaet inneholder feil eller manglende informasjon. Vennligst kontroller feltene markert med rød tekst og
-          prøv igjen.
+          {localization.validation.formError}
         </Alert>,
       ]),
   ...(hasUnsavedChanges
@@ -62,7 +61,7 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
           severity='warning'
           style={{ background: 'none', border: 'none', padding: 0 }}
         >
-          Du har ulagrede endringer
+          {localization.validation.unsavedChanges}
         </Alert>,
       ]
     : []),
