@@ -9,7 +9,7 @@ import { CatalogLocalStorage, formatISO, getTranslateText, localization } from '
 import { CodeListsResult, Concept, FieldsResult, ReferenceDataCode, UsersResult } from '@catalog-frontend/types';
 import {
   Button,
-  ConceptStorageData,
+  StorageData,
   FormLayout,
   FormikAutoSaver,
   FormikAutoSaverRef,
@@ -170,7 +170,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
     router.push(concept.id ? `/catalogs/${catalogId}/concepts/${concept.id}` : `/catalogs/${catalogId}/concepts`);
   };
 
-  const restoreConfirmMessage = ({ values, lastChanged }: ConceptStorageData) => {
+  const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
     const name = getTranslateText(values?.anbefaltTerm?.navn) || localization.conceptForm.alert.termNotDefined;
     const lastChangedFormatted = formatISO(lastChanged, {
       year: 'numeric',
@@ -219,7 +219,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
         const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
         const hasError = (fields: (keyof Concept)[]) => fields.some((field) => Object.keys(errors).includes(field));
 
-        const handleRestoreConcept = (data: ConceptStorageData) => {
+        const handleRestoreConcept = (data: StorageData) => {
           if (data?.values?.id !== concept.id) {
             if (!data?.values?.id) {
               return router.push(`/catalogs/${catalogId}/concepts/new?restore=1`);
@@ -235,7 +235,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
               <Form>
                 <FormikAutoSaver
                   ref={autoSaveRef}
-                  storage={new CatalogLocalStorage<ConceptStorageData>({ key: 'conceptForm' })}
+                  storage={new CatalogLocalStorage<StorageData>({ key: 'conceptForm' })}
                   restoreOnRender={restoreOnRender}
                   onRestore={handleRestoreConcept}
                   confirmMessage={restoreConfirmMessage}

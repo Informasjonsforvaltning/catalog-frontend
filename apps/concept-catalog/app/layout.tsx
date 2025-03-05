@@ -1,5 +1,5 @@
-import { AuthSessionModal, ConceptStorageData, NextAuthProvider, ReactQueryClientProvider } from '@catalog-frontend/ui';
-import { CatalogLocalStorage, localization } from '@catalog-frontend/utils';
+import { AuthSessionModal, NextAuthProvider, ReactQueryClientProvider } from '@catalog-frontend/ui';
+import { localization } from '@catalog-frontend/utils';
 import { Metadata } from 'next';
 import CatalogLayout from '../components/catalog-layout';
 

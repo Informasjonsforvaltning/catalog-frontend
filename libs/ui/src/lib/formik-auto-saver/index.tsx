@@ -6,16 +6,16 @@ import { Button, Modal } from '@digdir/designsystemet-react';
 import { isEqual } from 'lodash';
 import { CatalogStorage, localization } from '@catalog-frontend/utils';
 
-export type ConceptStorageData = {
+export type StorageData = {
   values: any;
   lastChanged: string;
 };
 
 export type FormikAutoSaverProps = {
-  storage: CatalogStorage<ConceptStorageData>;
+  storage: CatalogStorage<StorageData>;
   restoreOnRender?: boolean;
-  onRestore: (data: ConceptStorageData) => void;
-  confirmMessage: (data : ConceptStorageData) => ReactNode;  
+  onRestore: (data: StorageData) => void;
+  confirmMessage: (data : StorageData) => ReactNode;  
 };
 
 export type FormikAutoSaverRef = {
@@ -64,7 +64,7 @@ export const FormikAutoSaver = forwardRef<FormikAutoSaverRef, FormikAutoSaverPro
   // Save form data to local storage on change
   useEffect(() => {
     if (!isEqual(initialValues, values)) {
-      storage.set({ values, lastChanged: Date.now().toString() });
+      storage.set({ values, lastChanged: new Date().toISOString() });
     }
   }, [values]);
 
