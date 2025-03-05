@@ -194,7 +194,7 @@ export const ChangeRequestsPageClient = ({ catalogId, data }) => {
                             {localization.concept.created}: {convertTimestampToDateAndTime(timeForProposal)}
                           </p>
                           <p>
-                            {localization.concept.createdBy}:{' '}
+                            {localization.concept.createdBy}:
                             {proposedBy.name
                               .split(' ')
                               .map((namePart) => capitalizeFirstLetter(namePart))

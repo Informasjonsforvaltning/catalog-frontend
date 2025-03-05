@@ -1,19 +1,22 @@
 'use client';
-import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Alert, Button, Spinner, Switch } from '@digdir/designsystemet-react';
+import { formatISO, getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
+import { Alert, Button, Paragraph, Spinner, Switch } from '@digdir/designsystemet-react';
 import { Dataset, DatasetSeries, DatasetToBeCreated, ReferenceData, PublicationStatus } from '@catalog-frontend/types';
 import {
+  FormikAutoSaver,
+  FormikAutoSaverRef,
   FormLayout,
   HelpMarkdown,
   NotificationCarousel,
   StickyFooterBar,
+  StorageData,
   useWarnIfUnsavedChanges,
 } from '@catalog-frontend/ui';
-import { Formik, Form } from 'formik';
-import { useParams } from 'next/navigation';
+import { Formik, Form, FormikProps } from 'formik';
+import { useParams, useSearchParams } from 'next/navigation';
 import { createDataset, updateDataset } from '../../app/actions/actions';
 import { datasetTemplate } from './utils/dataset-initial-values';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { confirmedDatasetSchema, draftDatasetSchema } from './utils/validation-schema';
 import { AboutSection } from './components/about-section';
 import ThemeSection from './components/theme-section';
@@ -35,6 +38,30 @@ type Props = {
   datasetSeries: DatasetSeries[];
 };
 
+const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
+  const lastChangedFormatted = formatISO(lastChanged, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+  return (
+    <>
+      <Paragraph size='sm'>{localization.datasetForm.alert.youHaveUnsavedChanges}</Paragraph>
+      <Paragraph size='sm'>
+        <span className={styles.bold}>{getTranslateText(values?.title)}</span> ({lastChangedFormatted})
+      </Paragraph>
+      <Paragraph
+        size='sm'
+        className={styles.topMargin2}
+      >
+        {localization.conceptForm.alert.wantToRestoreChanges}
+      </Paragraph>
+    </>
+  );
+};
+
 export const DatasetForm = ({ initialValues, referenceData, searchEnv, referenceDataEnv, datasetSeries }: Props) => {
   const { catalogId, datasetId } = useParams();
   const [isDirty, setIsDirty] = useState(false);
@@ -43,6 +70,11 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
   const { losThemes, dataThemes, openLicenses } = referenceData;
   const router = useRouter();
   const [formStatus, setFormStatus] = useState(initialValues?.registrationStatus);
+
+  const searchParams = useSearchParams();
+  const formikRef = useRef<FormikProps<Dataset>>(null);
+  const autoSaveRef = useRef<FormikAutoSaverRef>(null);
+  const restoreOnRender = Boolean(searchParams.get('restore'));
 
   useWarnIfUnsavedChanges({ unsavedChanges: isDirty });
 
@@ -73,6 +105,9 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
   };
 
   const handleCancel = () => {
+    // Discard autostored data
+    autoSaveRef.current?.discard();
+
     setIsCanceled(true);
     router.push(datasetId ? `/catalogs/${catalogId}/datasets/${datasetId}` : `/catalogs/${catalogId}/datasets`);
   };
@@ -110,6 +145,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
   return (
     <>
       <Formik
+        innerRef={formikRef}
         initialValues={datasetTemplate(initialValues as Dataset)}
         validationSchema={formStatus !== PublicationStatus.DRAFT ? confirmedDatasetSchema : draftDatasetSchema}
         validateOnChange={isSubmitted}
@@ -119,12 +155,22 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
           datasetId === null ? handleCreate(trimmedValues as Dataset) : await handleUpdate(trimmedValues as Dataset);
           setSubmitting(false);
           setIsSubmitted(true);
+          autoSaveRef.current?.discard();
         }}
       >
-        {({ setFieldValue, values, dirty, isValid, isSubmitting, isValidating, submitForm, errors }) => {
+        {({ setFieldValue, values, dirty, isValid, isSubmitting, isValidating, submitForm, errors, setValues }) => {
           setTimeout(() => setIsDirty(dirty), 0);
           const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
           const hasError = (fields: (keyof Dataset)[]) => fields.some((field) => Object.keys(errors).includes(field));
+          const handleRestoreDataset = (data: StorageData) => {
+            if (data?.values?.id !== datasetId) {
+              if (!data?.values?.id) {
+                return router.push(`/catalogs/${catalogId}/datasets/new?restore=1`);
+              }
+              return router.push(`/catalogs/${catalogId}/datasets/${data.values.id}/edit?restore=1`);
+            }
+            setValues(data.values);
+          };
 
           return (
             <>
@@ -136,13 +182,22 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                     window.alert(localization.datasetForm.alert.formError);
                   } else {
                     submitForm();
+                    autoSaveRef.current?.discard();
                   }
                 }}
               >
+                <FormikAutoSaver
+                  ref={autoSaveRef}
+                  storageKey='datasetForm'
+                  restoreOnRender={restoreOnRender}
+                  onRestore={handleRestoreDataset}
+                  confirmMessage={restoreConfirmMessage}
+                />
                 <FormLayout>
                   <FormLayout.Section
                     id='about-section'
                     title={localization.datasetForm.heading.about}
+                    subtitle={localization.datasetForm.subtitle.about}
                     required
                     error={hasError(['title'])}
                   >
@@ -152,7 +207,9 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                   <FormLayout.Section
                     id='tema-section'
                     title={localization.datasetForm.heading.losTheme}
+                    subtitle={localization.datasetForm.subtitle.losTheme}
                     required
+                    error={hasError(['euDataTheme'])}
                   >
                     <ThemeSection
                       losThemes={losThemes}
@@ -163,6 +220,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                   <FormLayout.Section
                     id='distribution-section'
                     title={localization.datasetForm.heading.distributions}
+                    subtitle={localization.datasetForm.subtitle.distributions}
                   >
                     <DistributionSection
                       referenceDataEnv={referenceDataEnv}
@@ -174,6 +232,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                   <FormLayout.Section
                     id='details-section'
                     title={localization.datasetForm.heading.details}
+                    subtitle={localization.datasetForm.subtitle.details}
                     error={hasError(['landingPage'])}
                   >
                     <DetailsSection
@@ -185,6 +244,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                   <FormLayout.Section
                     id='relation-section'
                     title={localization.datasetForm.heading.relations}
+                    subtitle={localization.datasetForm.subtitle.relations}
                   >
                     <RelationsSection
                       searchEnv={searchEnv}
@@ -195,7 +255,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                   <FormLayout.Section
                     id='concept-section'
                     title={localization.datasetForm.heading.concept}
-                    subtitle=''
+                    subtitle={localization.datasetForm.subtitle.concept}
                   >
                     <ConceptSection searchEnv={searchEnv} />
                   </FormLayout.Section>
@@ -203,7 +263,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                   <FormLayout.Section
                     id='information-model-section'
                     title={localization.datasetForm.heading.informationModel}
-                    subtitle=''
+                    subtitle={localization.datasetForm.subtitle.informationModel}
                   >
                     <InformationModelSection searchEnv={searchEnv} />
                   </FormLayout.Section>
@@ -211,6 +271,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                   <FormLayout.Section
                     id='contact-point-section'
                     title={localization.datasetForm.heading.contactPoint}
+                    subtitle={localization.datasetForm.subtitle.contactPoint}
                     required
                     error={hasError(['contactPoint'])}
                   >
