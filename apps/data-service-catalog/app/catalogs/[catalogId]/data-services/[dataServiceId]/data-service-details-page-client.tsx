@@ -15,6 +15,7 @@ interface dataServiceDetailsPageProps {
   catalogId: string;
   dataServiceId: string;
   hasWritePermission: boolean;
+  isValid: boolean;
   referenceData: DataServiceReferenceData;
   referenceDataEnv: string;
   searchEnv: string;
@@ -25,6 +26,7 @@ const DataServiceDetailsPageClient = ({
   catalogId,
   dataServiceId,
   hasWritePermission,
+  isValid,
   referenceData,
   referenceDataEnv,
   searchEnv,
@@ -87,10 +89,12 @@ const DataServiceDetailsPageClient = ({
       </DetailsPageLayout.Left>
       <DetailsPageLayout.Right>
         <RightColumn
+          catalogId={catalogId}
           dataService={dataService}
           referenceData={referenceData}
           language={language}
           hasWritePermission={hasWritePermission}
+          isValid={isValid}
         />
       </DetailsPageLayout.Right>
     </DetailsPageLayout>

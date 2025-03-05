@@ -15,6 +15,7 @@ import {
 } from '@catalog-frontend/data-access';
 import { redirect, RedirectType } from 'next/navigation';
 import DataServiceDetailsPageClient from './data-service-details-page-client';
+import { dataServiceValidationSchema } from '../../../../../components/data-service-form/utils/validation-schema';
 
 export default async function EditDataServicePage({ params }: Params) {
   const { catalogId, dataServiceId } = params;
@@ -27,6 +28,8 @@ export default async function EditDataServicePage({ params }: Params) {
   }
 
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
+  const isValid = await dataServiceValidationSchema().isValid(dataService);
+
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
 
@@ -71,6 +74,7 @@ export default async function EditDataServicePage({ params }: Params) {
           catalogId={catalogId}
           dataServiceId={dataServiceId}
           hasWritePermission={hasWritePermission}
+          isValid={isValid}
           referenceData={referenceData}
           referenceDataEnv={referenceDataEnv}
           searchEnv={searchEnv}

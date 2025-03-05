@@ -49,6 +49,12 @@ export interface InfoCardItemProps extends React.HTMLAttributes<HTMLDivElement> 
 
   helpText?: string;
 
+  /**
+   * Helptext severity
+   **/
+
+  helpTextSeverity?: 'info' | 'warning' | 'danger';
+
   /** Heading size **/
 
   headingSize?: Size;
@@ -58,7 +64,7 @@ export type InfoCardItemType = React.ForwardRefExoticComponent<InfoCardItemProps
 
 const InfoCardItem: InfoCardItemType = forwardRef(
   (
-    { title, headingColor = 'neutral', children, className, helpText, headingSize = '2xs', headingLevel = 3, ...rest },
+    { title, headingColor = 'neutral', children, className, helpText, helpTextSeverity = 'info', headingSize = '2xs', headingLevel = 3, ...rest },
     ref,
   ) => {
     return (
@@ -81,8 +87,9 @@ const InfoCardItem: InfoCardItemType = forwardRef(
 
             {helpText && (
               <HelpMarkdown
-                size='sm'
+                aria-label={`${localization.helpText} ${title}`}
                 title={`${localization.helpText} ${title}`}
+                severity={helpTextSeverity}
               >
                 {helpText}
               </HelpMarkdown>

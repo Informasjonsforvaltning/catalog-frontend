@@ -8,13 +8,15 @@ import PublishSwitch from '../publish-switch';
 import { ReferenceDataTag } from './components/reference-data-tag';
 
 type Props = {
+  catalogId: string;
   dataService: DataService;
   referenceData: DataServiceReferenceData;
   language: string;
   hasWritePermission: boolean;
+  isValid: boolean;
 };
 
-export const RightColumn = ({ dataService, hasWritePermission, referenceData, language }: Props) => {
+export const RightColumn = ({ catalogId, dataService, hasWritePermission, referenceData, language, isValid }: Props) => {
   return (
     <InfoCard>
       <InfoCard.Item
@@ -28,12 +30,15 @@ export const RightColumn = ({ dataService, hasWritePermission, referenceData, la
       <InfoCard.Item
         key={`info-data-${localization.publicationState.state}`}
         title={localization.publicationState.state}
+        helpText={isValid ? undefined : `Publisering er ikke mulig fordi ett eller flere felt inneholder ugyldige eller manglende verdier. Klikk på 
+            [Rediger API-et](/catalogs/${catalogId}/data-services/${dataService?.id}/edit) for å åpne skjemaet og se hvilke feil som må rettes for å publisere.`}
+        helpTextSeverity={'warning'}
         headingColor='light'
       >
         <PublishSwitch
           catalogId={dataService.catalogId}
           dataService={dataService}
-          disabled={!hasWritePermission}
+          disabled={!hasWritePermission || !isValid}
         />
         <div className={styles.greyFont}>
           {dataService.published
