@@ -24,6 +24,7 @@ const OrganizationCombobox = (props: OrganizationComboboxProps) => {
       <Combobox
         size='sm'
         label={'Virksomhet'}
+        placeholder='Velg en virksomhet'
         onValueChange={(value) => {
           const match = organizations.find((org) => org.organizationId === value[0]);
           if (match) {
