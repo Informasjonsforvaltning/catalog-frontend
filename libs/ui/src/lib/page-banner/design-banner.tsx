@@ -26,7 +26,7 @@ const DesignBanner = async ({ catalogId, title }: BannerProps) => {
       subtitle={getTranslateText(organization.prefLabel).toString()}
       fontColor={design?.fontColor}
       backgroundColor={design?.backgroundColor}
-      logo={design?.hasLogo ? logoResponse : undefined}
+      logo={design?.hasLogo && logoResponse ? logoResponse : undefined}
       logoDescription={design?.logoDescription}
     />
   );
