@@ -14,6 +14,7 @@ import {
   getAllServiceCatalogs,
   getAllServiceMessages,
   getOrganizations,
+  oldGetAllDataServiceCatalogs,
   StrapiGraphql,
 } from '@catalog-frontend/data-access';
 import {
@@ -240,9 +241,9 @@ const getDataServiceCountByOrg = async (orgId: string | null | undefined, sessio
   if (!orgId || !session) {
     return 0;
   }
-  const response = await getAllDataServiceCatalogs(`${session?.accessToken}`);
+  const response = await oldGetAllDataServiceCatalogs(`${session?.accessToken}`);
   if (response.status !== 200) {
-    console.error('getAllDataServiceCatalogs failed with response code ' + response.status);
+    console.error('oldGetAllDataServiceCatalogs failed with response code ' + response.status);
     return 0;
   }
   try {
