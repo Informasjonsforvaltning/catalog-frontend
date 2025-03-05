@@ -1,0 +1,9 @@
+.container {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--fds-spacing-2);
+}
+
+.combobox {
+    min-width: 500px;
+}
