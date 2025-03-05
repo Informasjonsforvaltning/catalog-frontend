@@ -3,6 +3,7 @@ import {
   getTranslateText,
   getValidSession,
   hasNonSystemAccessForOrg,
+  hasSystemAdminPermission,
   localization,
   redirectToSignIn,
 } from '@catalog-frontend/utils';
@@ -25,7 +26,7 @@ import {
   RecordOfProcessingActivities,
   ServiceCatalogItem,
 } from '@catalog-frontend/types';
-import OrganizationCombo from './organization-combobox';
+import OrganizationCombo from './components/organization-combobox';
 import { redirect } from 'next/navigation';
 import { Session } from 'next-auth';
 import { Breadcrumbs, NavigationCard, ServiceMessages } from '@catalog-frontend/ui';
@@ -39,16 +40,20 @@ const CatalogsPage = async ({ params: { catalogId } }: { params: { catalogId: st
     redirectToSignIn({ callbackUrl: `/catalogs` });
   }
 
-  const resourceRoles = getResourceRoles(`${session?.accessToken}`);
-  const organiztionIdsWithAdminRole = resourceRoles
-    .filter((role) => role.resource === 'organization')
-    .map((role) => role.resourceId);
-
   let organizations: Organization[] = [];
-  if (organiztionIdsWithAdminRole.length > 0) {
-    organizations = await getOrganizations(organiztionIdsWithAdminRole).then((res) => res.json());
+  if(hasSystemAdminPermission(`${session?.accessToken}`)) {
+    organizations = await getOrganizations().then((res) => res.json());
+  } else {
+    const resourceRoles = getResourceRoles(`${session?.accessToken}`);
+    const organiztionIdsWithAdminRole = resourceRoles
+      .filter((role) => role.resource === 'organization')
+      .map((role) => role.resourceId);
+    
+    if (organiztionIdsWithAdminRole.length > 0) {
+      organizations = await getOrganizations(organiztionIdsWithAdminRole).then((res) => res.json());
+    }
   }
-
+  
   if(organizations.length === 1 && !catalogId) {
     return redirect(`/catalogs/${organizations[0].organizationId}`);
   }
