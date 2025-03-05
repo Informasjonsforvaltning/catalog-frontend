@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:22-alpine
 WORKDIR /app
 COPY yarn.lock dist/apps/catalog-portal ./
 ARG NODE_ENV
