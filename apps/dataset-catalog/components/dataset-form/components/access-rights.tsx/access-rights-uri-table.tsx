@@ -5,11 +5,15 @@ import {
   EditButton,
   FieldsetDivider,
   FormikLanguageFieldset,
-  HelpMarkdown,
   TitleWithHelpTextAndTag,
-  FormHeading,
 } from '@catalog-frontend/ui';
-import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
+import {
+  accessRightNonPublic,
+  accessRightRestricted,
+  getTranslateText,
+  localization,
+  trimObjectWhitespace,
+} from '@catalog-frontend/utils';
 import { Button, Fieldset, Modal, Radio, Table, Textfield } from '@digdir/designsystemet-react';
 import { FastField, Formik, useFormikContext } from 'formik';
 import styles from '../../dataset-form.module.css';
@@ -75,7 +79,16 @@ export const AccessRightsUriTable = () => {
       <Fieldset
         size='sm'
         legend={
-          <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.legalBasis}>
+          <TitleWithHelpTextAndTag
+            helpText={localization.datasetForm.helptext.legalBasis}
+            tagColor='info'
+            tagTitle={
+              values.accessRights?.uri === accessRightNonPublic.uri ||
+              values.accessRights?.uri === accessRightRestricted.uri
+                ? localization.tag.recommended
+                : undefined
+            }
+          >
             {localization.datasetForm.fieldLabel.legalBasis}
           </TitleWithHelpTextAndTag>
         }

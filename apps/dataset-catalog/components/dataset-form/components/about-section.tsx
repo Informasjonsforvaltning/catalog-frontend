@@ -3,7 +3,7 @@ import { localization } from '@catalog-frontend/utils';
 import { Textfield } from '@digdir/designsystemet-react';
 import { FastField } from 'formik';
 import { FieldsetDivider } from '@catalog-frontend/ui';
-import { AccessRightFields } from './access-rights.tsx/dataset-form-access-rights-section';
+import { AccessRightFields } from './access-rights.tsx/access-rights-section';
 
 export const AboutSection = () => {
   return (
