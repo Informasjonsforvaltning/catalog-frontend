@@ -11,7 +11,7 @@ import {
   TextareaWithPrefix,
 } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Card, Combobox, Fieldset, Modal, Radio, Textfield } from '@digdir/designsystemet-react';
+import { Button, Card, Combobox, Fieldset, Modal, Textfield } from '@digdir/designsystemet-react';
 import {
   useSearchFileTypeByUri,
   useSearchFileTypes,
@@ -21,7 +21,7 @@ import {
 import { useSearchDataServiceByUri, useSearchDataServiceSuggestions } from '../../../../hooks/useSearchService';
 import { FastField, FieldArray, Formik } from 'formik';
 import { ReactNode, useRef, useState } from 'react';
-import styles from './distributions.module.css';
+import styles from './distributions.module.scss';
 import { distributionTemplate } from '../../utils/dataset-initial-values';
 import { distributionSectionSchema } from '../../utils/validation-schema';
 
@@ -33,7 +33,7 @@ type Props = {
   onSuccess: (values: Distribution, type: string) => void;
   initialValues: Partial<Distribution> | undefined;
   type: 'new' | 'edit';
-  initialDistributionType?: 'distribution' | 'sample';
+  distributionType: 'distribution' | 'sample';
 };
 
 export const DistributionModal = ({
@@ -44,11 +44,11 @@ export const DistributionModal = ({
   trigger,
   initialValues,
   type,
-  initialDistributionType = 'distribution',
+  distributionType,
 }: Props) => {
-  const [distributionType, setDistributionType] = useState<string>(initialDistributionType);
-  const distributionTypes = ['distribution', 'sample'];
   const [selectedAccesServices, setSelectedAccessServices] = useState(initialValues?.accessServiceUris);
+  const [selectedFileTypes, setSelectedFileTypes] = useState(initialValues?.format);
+  const [selectedMediaTypes, setSelectedMediaTypes] = useState(initialValues?.mediaType);
 
   const template = distributionTemplate(initialValues);
   const [submitted, setSubmitted] = useState(false);
@@ -63,19 +63,19 @@ export const DistributionModal = ({
     referenceDataEnv,
   );
 
-  const { data: selectedMediaTypes, isLoading: loadingSelectedMediaTypes } = useSearchMediaTypeByUri(
-    initialValues?.mediaType ?? [],
+  const { data: previouslySelectedMediaTypes, isLoading: loadingSelectedMediaTypes } = useSearchMediaTypeByUri(
+    selectedMediaTypes ?? [],
     referenceDataEnv,
   );
 
   const { data: fileTypes, isLoading: searchingFileTypes } = useSearchFileTypes(searchQueryFileTypes, referenceDataEnv);
 
-  const { data: selectedFileTypes, isLoading: loadingSelectedFileTypes } = useSearchFileTypeByUri(
-    initialValues?.format ?? [],
+  const { data: previouslySelectedFileTypes, isLoading: loadingSelectedFileTypes } = useSearchFileTypeByUri(
+    selectedFileTypes ?? [],
     referenceDataEnv,
   );
 
-  const { data: selectedDataServices, isLoading: isLoadingSelectedDataServices } = useSearchDataServiceByUri(
+  const { data: previouslySelectedAccessServices, isLoading: isLoadingAccessServices } = useSearchDataServiceByUri(
     searchEnv,
     selectedAccesServices ?? [],
   );
@@ -85,11 +85,11 @@ export const DistributionModal = ({
   const comboboxOptions = [
     ...new Map(
       [
-        ...(selectedDataServices ?? []),
+        ...(previouslySelectedAccessServices ?? []),
         ...(dataServices ?? []),
         ...(initialValues?.accessServiceUris ?? []).map((uri) => {
           const foundItem =
-            selectedDataServices?.find((item) => item.uri === uri) ||
+            previouslySelectedAccessServices?.find((item) => item.uri === uri) ||
             dataServices?.find((item: DataService) => item.uri === uri);
 
           return {
@@ -129,38 +129,13 @@ export const DistributionModal = ({
                   <>
                     <Modal.Header closeButton={false}>
                       {type === 'new'
-                        ? localization.datasetForm.button.addDistribution
-                        : `${localization.edit} ${localization.datasetForm.fieldLabel.distribution.toLowerCase()}`}
+                        ? distributionType === 'distribution'
+                          ? localization.datasetForm.button.addDistribution
+                          : localization.datasetForm.button.addSample
+                        : `${localization.edit} ${distributionType === 'distribution' ? localization.datasetForm.fieldLabel.distribution.toLowerCase() : localization.datasetForm.fieldLabel.sample.toLowerCase()}`}
                     </Modal.Header>
 
                     <Modal.Content className={styles.modalContent}>
-                      {type === 'new' && (
-                        <>
-                          <Radio.Group
-                            size='sm'
-                            legend={
-                              <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.distributionType}>
-                                {localization.type}
-                              </TitleWithHelpTextAndTag>
-                            }
-                            onChange={(val) => {
-                              setDistributionType(val);
-                            }}
-                            value={distributionType}
-                          >
-                            {distributionTypes.map((type) => (
-                              <Radio
-                                key={type}
-                                value={type}
-                              >
-                                {localization.datasetForm.fieldLabel[type]}
-                              </Radio>
-                            ))}
-                          </Radio.Group>
-                          <FieldsetDivider />
-                        </>
-                      )}
-
                       {distributionType === 'distribution' && (
                         <>
                           <FormikLanguageFieldset
@@ -205,7 +180,7 @@ export const DistributionModal = ({
                         error={errors?.downloadURL?.[0]}
                       />
 
-                      {!isLoadingSelectedDataServices && distributionType === 'distribution' && (
+                      {!isLoadingAccessServices && distributionType === 'distribution' && (
                         <Fieldset
                           size='sm'
                           legend={
@@ -255,9 +230,12 @@ export const DistributionModal = ({
                       >
                         <FormikReferenceDataCombobox
                           onChange={(event) => setSearchQueryFileTypes(event.target.value)}
-                          onValueChange={(selectedValues) => setFieldValue('format', selectedValues)}
-                          value={values?.format || []}
-                          selectedValuesSearchHits={selectedFileTypes ?? []}
+                          onValueChange={(selectedValues) => {
+                            setFieldValue('format', selectedValues);
+                            setSelectedFileTypes(selectedValues);
+                          }}
+                          value={[...(values.format || []), ...(initialValues?.format || [])]}
+                          selectedValuesSearchHits={previouslySelectedFileTypes ?? []}
                           querySearchHits={fileTypes ?? []}
                           formikValues={initialValues?.format ?? []}
                           loading={loadingSelectedFileTypes || searchingFileTypes}
@@ -274,13 +252,17 @@ export const DistributionModal = ({
                       >
                         <FormikReferenceDataCombobox
                           onChange={(event) => setSearchQueryMediaTypes(event.target.value)}
-                          onValueChange={(selectedValues) => setFieldValue('mediaType', selectedValues)}
-                          value={values?.mediaType || []}
-                          selectedValuesSearchHits={selectedMediaTypes ?? []}
+                          onValueChange={(selectedValues) => {
+                            setFieldValue('mediaType', selectedValues);
+                            setSelectedMediaTypes(selectedValues);
+                          }}
+                          value={[...(values.mediaType || []), ...(initialValues?.mediaType || [])]}
+                          selectedValuesSearchHits={previouslySelectedMediaTypes ?? []}
                           querySearchHits={mediaTypes ?? []}
                           formikValues={initialValues?.mediaType ?? []}
                           loading={loadingSelectedMediaTypes || searchingMediaTypes}
                           portal={false}
+                          showCodeAsDescription={true}
                         />
                       </Fieldset>
 
