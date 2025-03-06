@@ -19,8 +19,9 @@ export const datasetFormNb = {
       'Velg ett eller flere hovedtema som beskriver innholdet i datasettet. Listen er fra EUs kontrollerte vokabular.',
     losTheme:
       'Velg ett eller flere LOS-temaer som beskriver datasettet. LOS-tema (Livsområdestruktur) er en norsk utvidelse av EUs kontrollerte vokabular for temaer. Dette gjør det mulig å tilpasse kategoriseringen til nasjonale behov.',
-    distributionType:
-      'En distribusjon beskriver hvordan man får tilgang til datasettet. Eksempeldata er en distribusjon som representerer et utdrag eller en delmengde av datasettet.',
+    distribution:
+      'En distribusjon beskriver hvordan man får tilgang til datasettet. Datasett som har en distribusjon der det er lagt til en åpen lisens vil bli markert som "Åpne data"',
+    sample: 'Eksempeldata er en distribusjon som representerer et utdrag eller en delmengde av datasettet.',
     accessURL:
       'En nettadresse som gir tilgang til datasettet. Lenken kan peke til en ressurs som gir informasjon om hvordan datasettet kan brukes, for eksempel et API, en portal, eller en annen visning av datasettet.',
     downloadURL: 'Direktelenke (URL) til en nedlastbar fil av datasettet.',
@@ -28,7 +29,7 @@ export const datasetFormNb = {
     mediaType: 'Distribusjonens medietype. Medietype velges fra listen _IANA Media Types_.',
     accessService: 'Datatjenester som gir tilgang til distribusjon av datasettet.',
     license:
-      'Lisensen som distribusjonen er gjort tilgjengelig under. Velges fra EUs kontrollerte vokabular _License_.',
+      'Lisensen som distribusjonen er gjort tilgjengelig under. Velges fra EUs kontrollerte vokabular _License_. Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".',
     distributionLink: 'Refererer til en side eller et dokument som beskriver distribusjonen.',
     distributionConformsTo: 'En standard eller et etablert skjema som distribusjonen følger.',
     language: 'Språkene innholdet i datasettet er skrevet på.',
@@ -79,6 +80,16 @@ export const datasetFormNb = {
     concept: 'Begrep og emneord',
     informationModel: 'Informasjonsmodell',
     contactPoint: 'Kontaktpunkt',
+  },
+  subtitle: {
+    about: '',
+    losTheme: '',
+    distributions: '',
+    details: '',
+    relations: '',
+    concept: '',
+    informationModel: '',
+    contactPoint: '',
   },
   fieldLabel: {
     losTheme: 'LOS-tema(er)',
@@ -153,6 +164,8 @@ export const datasetFormNb = {
     addInformationModel: 'Legg til informasjonsmodell',
     addStandard: 'Legg til standard',
     addDistribution: 'Legg til distribusjon',
+    addSample: 'Legg til eksempeldata',
+    updateSamole: 'Oppdater eksempeldata',
     updateDistribution: 'Oppdater distribusjon',
     update: 'Oppdater',
     addDataset: 'Legg til datasett',

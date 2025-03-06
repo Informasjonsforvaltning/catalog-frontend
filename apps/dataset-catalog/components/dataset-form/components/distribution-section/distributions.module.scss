@@ -75,3 +75,13 @@
   gap: 0.5rem;
   align-items: center;
 }
+
+.fieldSet {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+
+  &:not(first-child) {
+    padding-top: 1rem 0;
+  }
+}

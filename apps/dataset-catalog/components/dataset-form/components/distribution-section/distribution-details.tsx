@@ -1,9 +1,9 @@
 'use client';
 
 import { Distribution, ReferenceDataCode } from '@catalog-frontend/types';
-import { getTranslateText, localization, validUUID } from '@catalog-frontend/utils';
+import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Paragraph, Tag, Table, TableBody, Heading } from '@digdir/designsystemet-react';
-import styles from './distributions.module.css';
+import styles from './distributions.module.scss';
 import { useSearchDataServiceByUri } from '../../../../hooks/useSearchService';
 import { useSearchMediaTypeByUri } from '../../../../hooks/useReferenceDataSearch';
 import { isEmpty } from 'lodash';
@@ -20,12 +20,6 @@ interface Props {
 export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv, openLicenses, language }: Props) => {
   const { data: selectedDataServices } = useSearchDataServiceByUri(searchEnv, distribution?.accessServiceUris ?? []);
   const { data: selectedMediaTypes } = useSearchMediaTypeByUri(distribution?.mediaType ?? [], referenceDataEnv);
-
-  type ResourceType = 'datasets' | 'information-models' | 'data-services' | 'concepts';
-
-  const getDataNorgeUri = (id: string | undefined, resourceType: ResourceType) => {
-    return validUUID(id) ? `${referenceDataEnv}/${resourceType}/${id}` : '/not-found';
-  };
 
   return (
     <div>
