@@ -127,6 +127,7 @@ export const nb = {
   },
 
   userRole: {
+    sysAdminRole: 'Systemadministrator',
     adminRole: 'Virksomhetsadministrator',
     writerRole: 'Skrivebruker',
     readerRole: 'Lesebruker',
