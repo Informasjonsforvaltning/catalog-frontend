@@ -16,7 +16,7 @@ export const AccessSection = ({ openLicenses, currencies }: Props) => {
   return (
     <Box>
       <Radio.Group
-        value={values?.license ?? ''}
+        value={values?.license ?? 'none'}
         legend={
           <TitleWithHelpTextAndTag helpText={localization.dataServiceForm.helptext.license}>
             {localization.dataServiceForm.fieldLabel.license}
@@ -25,7 +25,7 @@ export const AccessSection = ({ openLicenses, currencies }: Props) => {
         onChange={(selectedValues) => setFieldValue('license', selectedValues.toString())}
         size='sm'
       >
-        <Radio value=''>{`${localization.dataServiceForm.noLicense}`}</Radio>
+        <Radio value='none'>{`${localization.dataServiceForm.noLicense}`}</Radio>
         {openLicenses &&
           openLicenses.map((licenseRef, i) => (
             <Radio
@@ -46,10 +46,10 @@ export const AccessSection = ({ openLicenses, currencies }: Props) => {
             {localization.dataServiceForm.fieldLabel.accessRights}
           </TitleWithHelpTextAndTag>
         }
-        value={values.accessRights ?? ''}
+        value={values.accessRights ?? 'none'}
         onChange={(values) => setFieldValue('accessRights', values.toString())}
       >
-        <Radio value=''>{`${localization.accessRight.none}`}</Radio>
+        <Radio value='none'>{`${localization.accessRight.none}`}</Radio>
         {accessRights.map((option) => (
           <Radio
             key={option.uri}

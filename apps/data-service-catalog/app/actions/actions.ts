@@ -28,7 +28,11 @@ export async function getDataServices(catalogId: string) {
 }
 
 export async function createDataService(catalogId: string, values: DataServiceToBeCreated) {
-  const newDataService = removeEmptyValues(values);
+  const newDataService = removeEmptyValues({
+    ...values,
+    accessRights: { uri: values?.accessRights === 'none' ? undefined : values?.accessRights },
+    license: { uri: values?.license === 'none' ? undefined : values?.license },
+  });
   const session = await getValidSession();
   if(!session) {
     return redirectToSignIn();
@@ -76,7 +80,11 @@ export async function deleteDataService(catalogId: string, dataServiceId: string
 }
 
 export async function updateDataService(catalogId: string, initialDataService: DataService, values: DataService) {
-  const updatedDataService = removeEmptyValues({ ...values });
+  const updatedDataService = removeEmptyValues({
+    ...values,
+    accessRights: { uri: values?.accessRights === 'none' ? undefined : values?.accessRights },
+    license: { uri: values?.license === 'none' ? undefined : values?.license },
+  });
 
   const diff = compare(initialDataService, updatedDataService);
 
