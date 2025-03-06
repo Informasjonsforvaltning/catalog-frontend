@@ -78,7 +78,7 @@ spec:
             - name: RECORDS_OF_PROCESSING_ACTIVITIES_API_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl-prod
                   key: RECORDS_OF_PROCESSING_ACTIVITIES_API_BASE_URI      
             - name: SERVICE_CATALOG_GUI_BASE_URI
               valueFrom:
