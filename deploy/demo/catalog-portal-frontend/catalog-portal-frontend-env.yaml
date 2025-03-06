@@ -92,7 +92,7 @@ spec:
                   key: CONCEPT_CATALOG_BASE_URI
             - name: DATASERVICE_CATALOG_BASE_URI
               valueFrom:
-                secretKeyRef: 
+                secretKeyRef:
                   name: commonurl-demo
                   key: DATASERVICE_CATALOG_BASE_URI
             - name: DATA_SERVICE_CATALOG_BASE_URI
