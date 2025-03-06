@@ -1,7 +1,7 @@
 'use client';
 
 import { FC } from 'react';
-import { getResourceRoles, hasOrganizationAdminPermission, hasOrganizationReadPermission, hasOrganizationWritePermission, localization } from '@catalog-frontend/utils';
+import { getResourceRoles, hasOrganizationAdminPermission, hasOrganizationReadPermission, hasOrganizationWritePermission, hasSystemAdminPermission, localization } from '@catalog-frontend/utils';
 import FDKLogo from './images/fdk-publishing-logo-negative.svg';
 import FDKLogoDemo from './images/fdk-publishing-logo-negative-demo.svg';
 import { useSession } from 'next-auth/react';
@@ -86,7 +86,9 @@ const Header: FC<HeaderProps> = ({
   const resourceRoles = getResourceRoles(accessToken);
 
   const userRole = (() => {
-    if(hasOrganizationAdminPermission(accessToken, `${catalogId}`)) {
+    if(hasSystemAdminPermission(accessToken)) {
+      return localization.userRole.sysAdminRole;
+    } else if(hasOrganizationAdminPermission(accessToken, `${catalogId}`)) {
       return localization.userRole.adminRole;
     }
     if(hasOrganizationWritePermission(accessToken, `${catalogId}`)) {
