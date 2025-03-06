@@ -123,6 +123,9 @@
 
 .menuButton {
   color: currentColor;
+  &:hover {
+    color: var(--fds-semantic-text-neutral-default);
+  }
 }
 
 .externalLink {
