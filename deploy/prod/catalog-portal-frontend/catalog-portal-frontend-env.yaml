@@ -98,12 +98,12 @@ spec:
             - name: DATA_SERVICE_CATALOG_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-demo
+                  name: commonurl-prod
                   key: DATA_SERVICE_CATALOG_BASE_URI
             - name: DATA_SERVICE_CATALOG_FRONTEND
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-demo
+                  name: commonurl-prod
                   key: DATA_SERVICE_CATALOG_FRONTEND
             - name: DATASET_CATALOG_BASE_URI
               valueFrom:
