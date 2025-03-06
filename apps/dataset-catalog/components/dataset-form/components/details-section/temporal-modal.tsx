@@ -1,13 +1,14 @@
 import { DateRange } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, EditButton, FormHeading } from '@catalog-frontend/ui';
-import { localization, trimObjectWhitespace } from '@catalog-frontend/utils';
+import { formatDateToDDMMYYYY, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button, Modal, Table, Textfield } from '@digdir/designsystemet-react';
 import { FastField, Formik, useFormikContext } from 'formik';
 import styles from '../../dataset-form.module.css';
 import { ReactNode, useRef, useState } from 'react';
 import _ from 'lodash';
-import { uriWithLabelSchema } from '../../utils/validation-schema';
+import { dateSchema } from '../../utils/validation-schema';
 import cn from 'classnames';
+import { MinusIcon } from '@navikt/aksel-icons';
 
 interface Props {
   values: DateRange[] | undefined;
@@ -46,8 +47,8 @@ export const TemporalModal = ({ values, label }: Props) => {
           <Table.Body>
             {values?.map((item, index) => (
               <Table.Row key={`temporal-tableRow-${index}`}>
-                <Table.Cell>{item?.startDate}</Table.Cell>
-                <Table.Cell>{item?.endDate}</Table.Cell>
+                <Table.Cell>{formatDateToDDMMYYYY(item?.startDate)}</Table.Cell>
+                <Table.Cell>{formatDateToDDMMYYYY(item?.endDate)}</Table.Cell>
                 <Table.Cell>
                   <span className={styles.set}>
                     <FieldModal
@@ -96,7 +97,7 @@ const FieldModal = ({ template, type, onSuccess }: ModalProps) => {
             initialValues={template}
             validateOnChange={submitted}
             validateOnBlur={submitted}
-            validationSchema={uriWithLabelSchema}
+            validationSchema={dateSchema}
             onSubmit={(formValues, { setSubmitting }) => {
               const trimmedValues = trimObjectWhitespace(formValues);
               onSuccess(trimmedValues);
@@ -105,51 +106,61 @@ const FieldModal = ({ template, type, onSuccess }: ModalProps) => {
               modalRef.current?.close();
             }}
           >
-            {({ isSubmitting, submitForm, values, dirty }) => (
-              <>
-                <Modal.Header closeButton={false}>
-                  {type === 'edit' ? `${localization.edit} ` : `${localization.add} `}
-                </Modal.Header>
+            {({ isSubmitting, submitForm, values, dirty, errors }) => {
+              return (
+                <>
+                  <Modal.Header closeButton={false}>
+                    {type === 'edit' ? `${localization.edit} ` : `${localization.add} `}
+                  </Modal.Header>
 
-                <Modal.Content className={cn(styles.modalContent, styles.fieldContainer)}>
-                  <FastField
-                    as={Textfield}
-                    size='sm'
-                    label={localization.from}
-                    type='date'
-                    name={`startDate`}
-                  />
+                  <Modal.Content className={cn(styles.modalContent, styles.calendar)}>
+                    <FastField
+                      as={Textfield}
+                      size='sm'
+                      label={localization.from}
+                      type='date'
+                      name={`startDate`}
+                      error={errors.startDate}
+                    />
 
-                  <FastField
-                    as={Textfield}
-                    size='sm'
-                    label={localization.to}
-                    type='date'
-                    name={`endDate`}
-                  />
-                </Modal.Content>
+                    <MinusIcon
+                      title='minus-icon'
+                      fontSize='1rem'
+                    />
 
-                <Modal.Footer>
-                  <Button
-                    type='button'
-                    disabled={isSubmitting || !dirty || hasNoFieldValues(values)}
-                    onClick={() => submitForm()}
-                    size='sm'
-                  >
-                    {type === 'new' ? localization.add : localization.datasetForm.button.update}
-                  </Button>
-                  <Button
-                    variant='secondary'
-                    type='button'
-                    onClick={() => modalRef.current?.close()}
-                    disabled={isSubmitting}
-                    size='sm'
-                  >
-                    {localization.button.cancel}
-                  </Button>
-                </Modal.Footer>
-              </>
-            )}
+                    <FastField
+                      as={Textfield}
+                      size='sm'
+                      label={localization.to}
+                      type='date'
+                      name={`endDate`}
+                      error={errors.endDate}
+                      min={values.startDate}
+                    />
+                  </Modal.Content>
+
+                  <Modal.Footer>
+                    <Button
+                      type='button'
+                      disabled={isSubmitting || !dirty || hasNoFieldValues(values)}
+                      onClick={() => submitForm()}
+                      size='sm'
+                    >
+                      {type === 'new' ? localization.add : localization.datasetForm.button.update}
+                    </Button>
+                    <Button
+                      variant='secondary'
+                      type='button'
+                      onClick={() => modalRef.current?.close()}
+                      disabled={isSubmitting}
+                      size='sm'
+                    >
+                      {localization.button.cancel}
+                    </Button>
+                  </Modal.Footer>
+                </>
+              );
+            }}
           </Formik>
         </Modal.Dialog>
       </Modal.Root>

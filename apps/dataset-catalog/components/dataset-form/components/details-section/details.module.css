@@ -1,3 +1,7 @@
 .padding {
   padding-bottom: 0.5rem;
 }
+
+.calendar {
+  width: fit-content;
+}

@@ -185,6 +185,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         hasDeleteButton
       >
         <FastField
+          className={styles.calendar}
           as={Textfield}
           name='modified'
           type='date'

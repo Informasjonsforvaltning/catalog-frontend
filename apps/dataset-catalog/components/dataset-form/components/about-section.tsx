@@ -42,6 +42,7 @@ export const AboutSection = () => {
       <FieldsetDivider />
 
       <FastField
+        style={{ width: 'fit-content' }}
         as={Textfield}
         size='sm'
         type='date'

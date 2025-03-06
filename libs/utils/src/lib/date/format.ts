@@ -49,19 +49,26 @@ export const isDateBeforeToday = (date: Date | null) =>
 export const isDateAfterToday = (date: Date | null) => date && date.getTime() > Date.now() && !isDateSameDayAsNow(date);
 
 export const parseDateTime = (value: any) => {
-  if(!value) {
+  if (!value) {
     return null;
   }
-  
+
   let dateTime = DateTime.fromJSDate(value);
-  if(dateTime.isValid) {
+  if (dateTime.isValid) {
     return dateTime;
-  } 
-  
+  }
+
   dateTime = DateTime.fromFormat(value, 'yyyy-MM-dd');
-  if(dateTime.isValid) {
+  if (dateTime.isValid) {
     return dateTime;
   }
 
   return null;
+};
+
+export const formatDateToDDMMYYYY = (isoDate: string | undefined) => {
+  if (!isoDate) return null;
+
+  const date = DateTime.fromISO(isoDate);
+  return date.isValid ? date.toFormat('dd/MM/yyyy') : null;
 };

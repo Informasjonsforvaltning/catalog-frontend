@@ -9,8 +9,8 @@ export const AccessRightFields = () => {
   const { values, setFieldValue } = useFormikContext<Dataset>();
 
   return (
-    <Box>
-      <div>
+    <>
+      <Box>
         <Radio.Group
           size='sm'
           legend={
@@ -35,9 +35,9 @@ export const AccessRightFields = () => {
             </Radio>
           ))}
         </Radio.Group>
-      </div>
+      </Box>
       <FieldsetDivider />
       <AccessRightsUriTable />
-    </Box>
+    </>
   );
 };
