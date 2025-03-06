@@ -280,3 +280,6 @@ export const getUnpublishedRelatedConcepts = async (
 
 export const getAllConceptCatalogs = (accessToken: string) =>
   conceptCatalogApiCall('GET', `/begrepssamlinger`, null, accessToken);
+
+export const getConceptCountByCatalogId = (catalogId: string, accessToken: string) =>
+  conceptCatalogApiCall('GET', `/begreper/${catalogId}/count`, null, accessToken);

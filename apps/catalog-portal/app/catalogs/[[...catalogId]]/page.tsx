@@ -7,14 +7,8 @@ import {
   localization,
   redirectToSignIn,
 } from '@catalog-frontend/utils';
-import {
-  getAllServiceMessages,
-  getOrganizations,
-  StrapiGraphql,
-} from '@catalog-frontend/data-access';
-import {
-  Organization,
-} from '@catalog-frontend/types';
+import { getAllServiceMessages, getOrganizations, StrapiGraphql } from '@catalog-frontend/data-access';
+import { Organization } from '@catalog-frontend/types';
 import OrganizationCombo from './components/organization-combobox';
 import { redirect } from 'next/navigation';
 import { Breadcrumbs, ServiceMessages } from '@catalog-frontend/ui';
@@ -59,7 +53,12 @@ const CatalogsPage = async ({ params: { catalogId } }: { params: { catalogId: st
       />
       <ServiceMessages serviceMessages={serviceMessages} />
 
-      {(organizations.length > 1 || !currentOrganization) && <OrganizationCombo organizations={organizations} />}
+      {(organizations.length > 1 || !currentOrganization) && (
+        <OrganizationCombo
+          organizations={organizations}
+          currentOrganization={currentOrganization}
+        />
+      )}
 
       {currentOrganization && (
         <div key={`org-section-${currentOrganization.organizationId}`}>
