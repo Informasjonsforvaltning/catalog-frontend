@@ -54,3 +54,12 @@
   border: none;
   padding: 0;
 }
+
+.calendar {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  & > svg {
+    padding-top: 2.5rem;
+  }
+}

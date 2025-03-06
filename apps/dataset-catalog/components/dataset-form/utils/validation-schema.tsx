@@ -1,4 +1,4 @@
-import { httpsRegex, localization, telephoneNumberRegex } from '@catalog-frontend/utils';
+import { httpsRegex, localization, parseDateTime, telephoneNumberRegex } from '@catalog-frontend/utils';
 import * as Yup from 'yup';
 
 const contactPointDraftValidationSchema = Yup.array().of(
@@ -189,4 +189,51 @@ export const referenceSchema = Yup.object().shape({
   source: Yup.object().shape({
     uri: Yup.string().required(localization.datasetForm.validation.relation),
   }),
+});
+
+export const dateSchema = Yup.object().shape({
+  startDate: Yup.mixed()
+    .nullable()
+    .test({
+      test(value) {
+        if (!value) {
+          return true;
+        }
+
+        const fomDateTime = parseDateTime(value);
+        if (fomDateTime?.isValid) {
+          return true;
+        }
+
+        return this.createError({
+          message: localization.conceptForm.validation.date,
+          path: this.path,
+        });
+      },
+    }),
+  endDate: Yup.mixed()
+    .nullable()
+    .test({
+      test(value) {
+        if (!value) {
+          return true;
+        }
+
+        const tomDateTime = parseDateTime(value);
+        if (tomDateTime?.isValid) {
+          if (this.parent.startDate === null) {
+            return true;
+          }
+          const fomDateTime = parseDateTime(this.parent.startDate);
+          if (fomDateTime && tomDateTime.toJSDate() >= fomDateTime?.toJSDate()) {
+            return true;
+          }
+        }
+
+        return this.createError({
+          message: localization.conceptForm.validation.date,
+          path: this.path,
+        });
+      },
+    }),
 });
