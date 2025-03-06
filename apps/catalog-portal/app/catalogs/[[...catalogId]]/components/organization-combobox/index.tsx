@@ -10,13 +10,14 @@ import { useState } from 'react';
 
 type OrganizationComboboxProps = {
   organizations: Organization[];
+  currentOrganization?: Organization;
 };
 
 const OrganizationCombobox = (props: OrganizationComboboxProps) => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  
-  const { organizations } = props;
+
+  const { organizations, currentOrganization } = props;
 
   const sortedOrganization = organizations.sort((a, b) =>
     sortAscending(getTranslateText(a.prefLabel).toString(), getTranslateText(b.prefLabel).toString()),
@@ -37,18 +38,18 @@ const OrganizationCombobox = (props: OrganizationComboboxProps) => {
           }
         }}
       >
-        {sortedOrganization.map((org) => (
-          <Combobox.Option
-            key={org.organizationId}
-            value={org.organizationId}
-          >
-            {getTranslateText(org.prefLabel)}
-          </Combobox.Option>
-        ))}
+        {sortedOrganization
+          .filter((org) => org.organizationId !== currentOrganization?.organizationId)
+          .map((org) => (
+            <Combobox.Option
+              key={org.organizationId}
+              value={org.organizationId}
+            >
+              {getTranslateText(org.prefLabel)}
+            </Combobox.Option>
+          ))}
       </Combobox>
-      {loading && (
-        <Spinner title={'Laster virksomhet'} />
-      )}      
+      {loading && <Spinner title={'Laster virksomhet'} />}
     </div>
   );
 };

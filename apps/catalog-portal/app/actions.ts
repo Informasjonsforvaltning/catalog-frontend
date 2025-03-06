@@ -1,6 +1,6 @@
 'use server';
 
-import { getAllConceptCatalogs, getAllDatasetCatalogs, getAllProcessingActivities, getAllServiceCatalogs, oldGetAllDataServiceCatalogs, StrapiGraphql } from "@catalog-frontend/data-access";
+import { getAllDatasetCatalogs, getAllProcessingActivities, getAllServiceCatalogs, getConceptCountByCatalogId, oldGetAllDataServiceCatalogs } from "@catalog-frontend/data-access";
 import { ServiceCatalogItem, RecordOfProcessingActivities, DatasetCatalog, DataServiceCatalog, ConceptCatalog } from "@catalog-frontend/types";
 import { getValidSession, redirectToSignIn } from "@catalog-frontend/utils";
 import { Session } from "next-auth";
@@ -149,14 +149,12 @@ const getServiceCountByOrg = async (
     if (!orgId || !session) {
       return 0;
     }
-    const response = await getAllConceptCatalogs(`${session?.accessToken}`);
+    const response = await getConceptCountByCatalogId(orgId, `${session?.accessToken}`);
     if (response.status !== 200) {
-      console.error('getAllConceptCatalogs failed with response code ' + response.status);
+      console.error('getConceptCountByCatalogId failed with response code ' + response.status);
       return 0;
     }
-    const result = (await response.json()) as ConceptCatalog[];
-    const catalog = result.find((catalog) => catalog.id === orgId);
-    return catalog?.antallBegrep ?? 0;
+    return (await response.json()) as number;    
   };
   
  
