@@ -286,27 +286,29 @@ export const conceptSchema = ({ baseUri, required }) =>
     versjonsnr: Yup.object()
       .test({
         async test(value) {
-          if (this.parent.id) {
-            const revisions = (
-              await getRevisions({ baseUri, catalogId: this.parent.ansvarligVirksomhet.id, conceptId: this.parent.id })
-            )
-              .filter((rev) => rev.id !== this.parent.id)
-              .sort((a, b) => -compareVersion(a.versjonsnr, b.versjonsnr));
-            if (compareVersion(revisions[0]?.versjonsnr, value as any) >= 0) {
+          if(required) {
+            if (this.parent.id) {
+              const revisions = (
+                await getRevisions({ baseUri, catalogId: this.parent.ansvarligVirksomhet.id, conceptId: this.parent.id })
+              )
+                .filter((rev) => rev.id !== this.parent.id)
+                .sort((a, b) => -compareVersion(a.versjonsnr, b.versjonsnr));
+              if (compareVersion(revisions[0]?.versjonsnr, value as any) >= 0) {
+                return this.createError({
+                  message: localization.formatString(localization.conceptForm.validation.version, {
+                    min: versionToString(revisions[0]?.versjonsnr),
+                  }) as string,
+                });
+              }
+            }
+
+            if (compareVersion({ major: 0, minor: 1, patch: 0 }, value as any) > 0) {
               return this.createError({
                 message: localization.formatString(localization.conceptForm.validation.version, {
-                  min: versionToString(revisions[0]?.versjonsnr),
+                  min: '0.1.0',
                 }) as string,
               });
             }
-          }
-
-          if (compareVersion({ major: 0, minor: 1, patch: 0 }, value as any) > 0) {
-            return this.createError({
-              message: localization.formatString(localization.conceptForm.validation.version, {
-                min: '0.1.0',
-              }) as string,
-            });
           }
 
           return true;
