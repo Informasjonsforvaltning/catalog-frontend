@@ -43,6 +43,7 @@ export function FormikReferenceDataCombobox({
     <Combobox
       placeholder={`${localization.search.search}...`}
       multiple
+      hideClearButton
       filter={() => true} // disable filter
       size='sm'
       virtual

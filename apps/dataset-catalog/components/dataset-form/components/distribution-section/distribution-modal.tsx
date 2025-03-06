@@ -191,6 +191,7 @@ export const DistributionModal = ({
                         >
                           <Combobox
                             multiple
+                            hideClearButton
                             portal={false}
                             onChange={(event) => setSearchDataServicesQuery(event.target.value)}
                             value={[...(values.accessServiceUris || []), ...(initialValues?.accessServiceUris || [])]}

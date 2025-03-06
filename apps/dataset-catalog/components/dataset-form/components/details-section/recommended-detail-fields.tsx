@@ -127,6 +127,7 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
         <Combobox
           placeholder={`${localization.search.search}...`}
           multiple
+          hideClearButton
           filter={() => true} // disable filter
           size='sm'
           onChange={handleSearchChange}

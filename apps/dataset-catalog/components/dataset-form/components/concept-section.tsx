@@ -61,6 +61,7 @@ export const ConceptSection = ({ searchEnv }: Props) => {
           placeholder={localization.datasetForm.helptext.searchConcept}
           filter={() => true} // Deactivate filter, handled by backend
           virtual
+          hideClearButton
         >
           <Combobox.Empty>{`${localization.search.noHits}... `}</Combobox.Empty>
           {comboboxOptions.map((suggestion) => (
