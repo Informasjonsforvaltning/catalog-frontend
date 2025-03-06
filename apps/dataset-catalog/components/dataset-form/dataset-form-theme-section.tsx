@@ -52,6 +52,7 @@ export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
           <Field
             as={Combobox}
             name='losThemeList'
+            hideClearButton
             value={values.losThemeList}
             label={
               <TitleWithHelpTextAndTag
@@ -89,6 +90,7 @@ export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
           <Field
             as={Combobox}
             multiple
+            hideClearButton
             label={
               <TitleWithHelpTextAndTag tagTitle={localization.tag.required}>
                 {localization.datasetForm.fieldLabel.euTheme}

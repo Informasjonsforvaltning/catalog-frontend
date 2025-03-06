@@ -21,6 +21,7 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
         id='euDataTheme-combobox'
         as={Combobox}
         multiple
+        hideClearButton
         label={
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.required}
@@ -53,6 +54,7 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
         as={Combobox}
         value={values.losTheme}
         multiple
+        hideClearButton
         label={
           <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.losTheme}>
             {localization.datasetForm.fieldLabel.losTheme}
