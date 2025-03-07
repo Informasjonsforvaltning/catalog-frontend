@@ -153,7 +153,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
 
                   <FormLayout.Section
                     id='tema-section'
-                    title={localization.datasetForm.heading.losTheme}
+                    title={localization.datasetForm.heading.theme}
                     required
                   >
                     <ThemeSection

@@ -42,80 +42,67 @@ export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
   };
 
   return (
-    <FormContainer>
-      <FormContainer.Header
-        title={localization.datasetForm.heading.losTheme}
-        subtitle={localization.datasetForm.helptext.theme}
-      />
-      <>
-        <div className={styles.combobox}>
-          <Field
-            as={Combobox}
-            name='losThemeList'
-            hideClearButton
-            value={values.losThemeList}
-            label={
-              <TitleWithHelpTextAndTag
-                tagTitle={localization.tag.recommended}
-                tagColor='info'
-              >
-                {localization.datasetForm.fieldLabel.losTheme}
-              </TitleWithHelpTextAndTag>
-            }
-            multiple
-            virtual
-            filter={containsFilter}
-            placeholder={`${localization.search.search}...`}
-            onValueChange={(values: string[]) => setFieldValue('losThemeList', values)}
-          >
-            <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-            {losThemes?.map((theme) => (
+    <>
+      <div className={styles.combobox}>
+        <Field
+          as={Combobox}
+          hideClearButton
+          value={values.losTheme}
+          label={
+            <TitleWithHelpTextAndTag
+              tagTitle={localization.tag.recommended}
+              tagColor='info'
+            >
+              {localization.datasetForm.fieldLabel.losTheme}
+            </TitleWithHelpTextAndTag>
+          }
+          multiple
+          virtual
+          filter={containsFilter}
+          placeholder={`${localization.search.search}...`}
+          onValueChange={(values: string[]) => setFieldValue('losTheme', values)}
+        >
+          <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
+          {losThemes?.map((theme) => (
+            <Combobox.Option
+              key={theme.uri}
+              value={theme.uri}
+              description={getParentNames(theme.losPaths)}
+            >
+              {getTranslateText(theme.name)}
+            </Combobox.Option>
+          ))}
+        </Field>
+      </div>
+
+      <div className={styles.combobox}>
+        <Field
+          as={Combobox}
+          multiple
+          hideClearButton
+          label={
+            <TitleWithHelpTextAndTag tagTitle={localization.tag.required}>
+              {localization.datasetForm.fieldLabel.euTheme}
+            </TitleWithHelpTextAndTag>
+          }
+          filter={containsFilter}
+          placeholder={`${localization.search.search}...`}
+          value={values.euDataTheme}
+          onValueChange={(values: string[]) => setFieldValue('euDataTheme', values)}
+        >
+          <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
+          {dataThemes &&
+            dataThemes.map((eutheme) => (
               <Combobox.Option
-                key={theme.uri}
-                value={theme.uri}
-                description={getParentNames(theme.losPaths)}
+                key={eutheme.uri}
+                value={eutheme.uri}
               >
-                {getTranslateText(theme.name)}
+                {getTranslateText(eutheme.label)}
               </Combobox.Option>
             ))}
-          </Field>
-        </div>
-      </>
-      <FormContainer.Header
-        title={localization.datasetForm.heading.euTheme}
-        subtitle={localization.datasetForm.helptext.theme}
-      />
-      <>
-        <div className={styles.combobox}>
-          <Field
-            as={Combobox}
-            multiple
-            hideClearButton
-            label={
-              <TitleWithHelpTextAndTag tagTitle={localization.tag.required}>
-                {localization.datasetForm.fieldLabel.euTheme}
-              </TitleWithHelpTextAndTag>
-            }
-            filter={containsFilter}
-            placeholder={`${localization.search.search}...`}
-            error={errors.euThemeList}
-            value={values.euThemeList}
-            onValueChange={(values: string[]) => setFieldValue('euThemeList', values)}
-          >
-            <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-            {dataThemes &&
-              dataThemes.map((eutheme) => (
-                <Combobox.Option
-                  key={eutheme.uri}
-                  value={eutheme.uri}
-                >
-                  {getTranslateText(eutheme.label)}
-                </Combobox.Option>
-              ))}
-          </Field>
-        </div>
-      </>
-    </FormContainer>
+        </Field>
+      </div>
+    </>
   );
 };
 
