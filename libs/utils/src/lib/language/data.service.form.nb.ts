@@ -8,8 +8,9 @@ export const dataServiceFormNb = {
       - **Allmenn tilgang**: Tilgjengelig for alle.
       - **Betinget tilgang**: Tilgang krever oppfyllelse av bestemte betingelser.
       - **Ikke-allmenn tilgang**: Begrenset til en spesifikk gruppe eller formål.`,
-    contactPoint:
-      'Et kontaktpunkt er informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om datasettet. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.',
+    contactName: 'Brukes til å oppgi navnet til kontaktpunktet.',
+    contactFields:
+      'Informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om datasettet. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.',
     format: 'Søk på og velg blant registrerte filtyper.',
     landingPage: 'Referanse til nettside som gir tilgang til API-et og/eller tilleggsinformasjon',
     pages: 'Referanser til sider og/eller dokumenter som beskriver API-et',
@@ -56,6 +57,7 @@ export const dataServiceFormNb = {
     costValue: 'Beløp',
     dataServiceID: 'API-ID',
     modified: 'Sist oppdatert',
+    contactName: 'Navn',
     contactFields: 'Kontaktinformasjon',
   },
   validation: {

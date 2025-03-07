@@ -55,6 +55,24 @@ export const dataServiceValidationSchema = () =>
       ),
     contactPoint: Yup.object()
       .shape({
+        name: Yup.object()
+          .shape({
+            nb: Yup.string()
+              .label(`${localization.dataServiceForm.fieldLabel.contactName} (${localization.language.nb})`)
+              .notRequired(),
+            nn: Yup.string()
+              .label(`${localization.dataServiceForm.fieldLabel.contactName} (${localization.language.nn})`)
+              .notRequired(),
+            en: Yup.string()
+              .label(`${localization.dataServiceForm.fieldLabel.contactName} (${localization.language.en})`)
+              .notRequired(),
+          })
+          .test('contact-name-test', localization.validation.oneLanguageRequired, (name) => {
+            if (!name) {
+              return false;
+            }
+            return !!(name.nb || name.nn || name.en);
+          }),
         email: Yup.string().email(localization.validation.invalidEmail).notRequired(),
         phone: Yup.string().matches(telephoneNumberRegex, localization.validation.invalidPhone).notRequired(),
         url: Yup.string()

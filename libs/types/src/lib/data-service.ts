@@ -28,6 +28,7 @@ export interface DataServiceToBeCreated {
 }
 
 type DataServiceContactPoint = {
+  name?: LocalizedStrings;
   email?: string;
   phone?: string;
   url?: string;
