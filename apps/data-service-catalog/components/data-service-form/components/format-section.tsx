@@ -42,6 +42,7 @@ export const FormatSection = ({ referenceDataEnv }: Props) => {
           querySearchHits={fileTypes ?? []}
           formikValues={values?.formats ?? []}
           loading={loadingSelectedFileTypes || searchingFileTypes}
+          hideClearButton
           portal={false}
         />
       </Fieldset>
