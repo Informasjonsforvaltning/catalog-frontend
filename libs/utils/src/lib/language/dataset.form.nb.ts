@@ -18,7 +18,7 @@ export const datasetFormNb = {
     euDataTheme:
       'Velg ett eller flere hovedtema som beskriver innholdet i datasettet. Listen er fra EUs kontrollerte vokabular.',
     losTheme:
-      'Velg ett eller flere LOS-temaer som beskriver datasettet. LOS-tema (Livsområdestruktur) er en norsk utvidelse av EUs kontrollerte vokabular for temaer. Dette gjør det mulig å tilpasse kategoriseringen til nasjonale behov.',
+      'Velg ett eller flere LOS-temaer som beskriver datasettet. LOS-tema (Livsområdestruktur) er en norsk utvidelse av EUs kontrollerte vokabular for temaer. Dette gjør det mulig å tilpasse kategoriseringen til nasjonale behov. [Les mer om LOS her](https://psi.norge.no/los/struktur.html).',
     distribution:
       'En distribusjon beskriver hvordan man får tilgang til datasettet. Datasett som har en distribusjon der det er lagt til en åpen lisens vil bli markert som "Åpne data"',
     sample: 'Eksempeldata er en distribusjon som representerer et utdrag eller en delmengde av datasettet.',
@@ -73,7 +73,7 @@ export const datasetFormNb = {
   },
   heading: {
     about: 'Om datasettet',
-    losTheme: 'Tema',
+    theme: 'Hovedtema',
     distributions: 'Distribusjon',
     details: 'Detaljer',
     relations: 'Relasjoner',
@@ -93,7 +93,7 @@ export const datasetFormNb = {
   },
   fieldLabel: {
     losTheme: 'LOS-tema(er)',
-    euDataTheme: 'Hovedtema(er)',
+    euDataTheme: 'Datatema(er)',
     concept: 'Begreper',
     mediaType: 'Mediatyper',
     format: 'Format',
