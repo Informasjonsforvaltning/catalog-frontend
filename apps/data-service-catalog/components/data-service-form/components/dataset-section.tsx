@@ -68,6 +68,7 @@ export const DatasetSection = ({ searchEnv }: Props) => {
             onChange={(input: any) => debouncedSearch(input.target.value)}
             loading={searching}
             multiple
+            hideClearButton
             value={values.servesDataset}
             placeholder={`${localization.search.search}...`}
             filter={() => true} // Deactivate filter, handled by backend

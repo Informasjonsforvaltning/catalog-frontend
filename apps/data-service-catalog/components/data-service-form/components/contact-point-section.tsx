@@ -1,10 +1,11 @@
 'use client';
 import { DataService } from '@catalog-frontend/types';
-import { FormikOptionalFieldsFieldset, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { FormikLanguageFieldset, FormikOptionalFieldsFieldset, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { useFormikContext } from 'formik';
 import { get as lodashGet } from 'lodash';
-import { Box, ErrorMessage } from '@digdir/designsystemet-react';
+import { Box, ErrorMessage, Textfield } from '@digdir/designsystemet-react';
+import styles from '../data-service-form.module.css';
 
 export const ContactPointSection = () => {
   const { errors } = useFormikContext<DataService>();
@@ -38,10 +39,25 @@ export const ContactPointSection = () => {
 
   return (
     <Box>
+      <div className={styles.padding}>
+        <FormikLanguageFieldset
+          name={'contactPoint.name'}
+          as={Textfield}
+          legend={
+            <TitleWithHelpTextAndTag
+              tagTitle={localization.tag.required}
+              helpText={localization.dataServiceForm.helptext.contactName}
+            >
+              {localization.dataServiceForm.fieldLabel.contactName}
+            </TitleWithHelpTextAndTag>
+          }
+        />
+      </div>
+
       <FormikOptionalFieldsFieldset
         legend={
           <TitleWithHelpTextAndTag
-            helpText={localization.dataServiceForm.helptext.contactPoint}
+            helpText={localization.dataServiceForm.helptext.contactFields}
             tagTitle={localization.tag.required}
           >
             {localization.dataServiceForm.fieldLabel.contactFields}

@@ -1,7 +1,7 @@
 import { InfoCard } from '@catalog-frontend/ui';
 import styles from './details-columns.module.css';
 import { DataService, DataServiceReferenceData } from '@catalog-frontend/types';
-import { accessRights, formatISO, localization } from '@catalog-frontend/utils';
+import { accessRights, formatISO, getTranslateText, localization } from '@catalog-frontend/utils';
 import { isEmpty } from 'lodash';
 import { EnvelopeClosedIcon, LinkIcon, PhoneIcon } from '@navikt/aksel-icons';
 import PublishSwitch from '../publish-switch';
@@ -16,7 +16,14 @@ type Props = {
   isValid: boolean;
 };
 
-export const RightColumn = ({ catalogId, dataService, hasWritePermission, referenceData, language, isValid }: Props) => {
+export const RightColumn = ({
+  catalogId,
+  dataService,
+  hasWritePermission,
+  referenceData,
+  language,
+  isValid,
+}: Props) => {
   return (
     <InfoCard>
       <InfoCard.Item
@@ -30,8 +37,12 @@ export const RightColumn = ({ catalogId, dataService, hasWritePermission, refere
       <InfoCard.Item
         key={`info-data-${localization.publicationState.state}`}
         title={localization.publicationState.state}
-        helpText={isValid ? undefined : `Publisering er ikke mulig fordi ett eller flere felt inneholder ugyldige eller manglende verdier. Klikk på 
-            [Rediger API-et](/catalogs/${catalogId}/data-services/${dataService?.id}/edit) for å åpne skjemaet og se hvilke feil som må rettes for å publisere.`}
+        helpText={
+          isValid
+            ? undefined
+            : `Publisering er ikke mulig fordi ett eller flere felt inneholder ugyldige eller manglende verdier. Klikk på 
+            [Rediger API-et](/catalogs/${catalogId}/data-services/${dataService?.id}/edit) for å åpne skjemaet og se hvilke feil som må rettes for å publisere.`
+        }
         helpTextSeverity={'warning'}
         headingColor='light'
       >
@@ -98,6 +109,9 @@ export const RightColumn = ({ catalogId, dataService, hasWritePermission, refere
           headingColor='light'
         >
           <div className={styles.contactPoints}>
+            {!isEmpty(dataService.contactPoint?.name) && (
+              <span>{getTranslateText(dataService.contactPoint?.name, language)}</span>
+            )}
             {dataService.contactPoint.email && (
               <span>
                 <div>
