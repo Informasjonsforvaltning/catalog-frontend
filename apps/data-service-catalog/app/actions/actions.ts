@@ -16,7 +16,7 @@ import { compare } from 'fast-json-patch';
 
 export async function getDataServices(catalogId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
 
@@ -30,11 +30,11 @@ export async function getDataServices(catalogId: string) {
 export async function createDataService(catalogId: string, values: DataServiceToBeCreated) {
   const newDataService = removeEmptyValues({
     ...values,
-    accessRights: { uri: values?.accessRights === 'none' ? undefined : values?.accessRights },
-    license: { uri: values?.license === 'none' ? undefined : values?.license },
+    accessRights: values?.accessRights === 'none' ? undefined : values?.accessRights,
+    license: values?.license === 'none' ? undefined : values?.license,
   });
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   let success = false;
@@ -59,7 +59,7 @@ export async function createDataService(catalogId: string, values: DataServiceTo
 
 export async function deleteDataService(catalogId: string, dataServiceId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   let success = false;
@@ -82,8 +82,8 @@ export async function deleteDataService(catalogId: string, dataServiceId: string
 export async function updateDataService(catalogId: string, initialDataService: DataService, values: DataService) {
   const updatedDataService = removeEmptyValues({
     ...values,
-    accessRights: { uri: values?.accessRights === 'none' ? undefined : values?.accessRights },
-    license: { uri: values?.license === 'none' ? undefined : values?.license },
+    accessRights: values?.accessRights === 'none' ? undefined : values?.accessRights,
+    license: values?.license === 'none' ? undefined : values?.license,
   });
 
   const diff = compare(initialDataService, updatedDataService);
@@ -94,7 +94,7 @@ export async function updateDataService(catalogId: string, initialDataService: D
 
   let success = false;
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
 
