@@ -32,6 +32,8 @@ export async function createDataService(catalogId: string, values: DataServiceTo
     ...values,
     accessRights: values?.accessRights === 'none' ? undefined : values?.accessRights,
     license: values?.license === 'none' ? undefined : values?.license,
+    status: values?.status === 'none' ? undefined : values?.status,
+    availability: values?.availability === 'none' ? undefined : values?.availability,
   });
   const session = await getValidSession();
   if (!session) {
@@ -84,6 +86,8 @@ export async function updateDataService(catalogId: string, initialDataService: D
     ...values,
     accessRights: values?.accessRights === 'none' ? undefined : values?.accessRights,
     license: values?.license === 'none' ? undefined : values?.license,
+    status: values?.status === 'none' ? undefined : values?.status,
+    availability: values?.availability === 'none' ? undefined : values?.availability,
   });
 
   const diff = compare(initialDataService, updatedDataService);

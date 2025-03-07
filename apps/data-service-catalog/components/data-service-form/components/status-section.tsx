@@ -15,7 +15,7 @@ export const StatusSection = ({ statuses, availabilities }: Props) => {
   return (
     <Box>
       <Radio.Group
-        value={values?.status ?? ''}
+        value={values?.status ?? 'none'}
         legend={
           <TitleWithHelpTextAndTag helpText={localization.dataServiceForm.helptext.status}>
             {localization.dataServiceForm.fieldLabel.status}
@@ -24,7 +24,7 @@ export const StatusSection = ({ statuses, availabilities }: Props) => {
         onChange={(selectedValues) => setFieldValue('status', selectedValues.toString())}
         size='sm'
       >
-        <Radio value=''>{`${localization.dataServiceForm.noStatus}`}</Radio>
+        <Radio value='none'>{`${localization.dataServiceForm.noStatus}`}</Radio>
         {statuses &&
           statuses.map((statusRef, i) => (
             <Radio
@@ -39,7 +39,7 @@ export const StatusSection = ({ statuses, availabilities }: Props) => {
       <FieldsetDivider />
 
       <Radio.Group
-        value={values?.availability ?? ''}
+        value={values?.availability ?? 'none'}
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.dataServiceForm.helptext.availability}
@@ -52,7 +52,7 @@ export const StatusSection = ({ statuses, availabilities }: Props) => {
         onChange={(selectedValues) => setFieldValue('availability', selectedValues.toString())}
         size='sm'
       >
-        <Radio value=''>{`${localization.dataServiceForm.noAvailability}`}</Radio>
+        <Radio value='none'>{`${localization.dataServiceForm.noAvailability}`}</Radio>
         {availabilities &&
           availabilities.map((availabilityRef, i) => (
             <Radio
