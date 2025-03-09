@@ -6212,12 +6212,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-is@npm:18.3.1":
-  version: 18.3.1
-  resolution: "@types/react-is@npm:18.3.1"
+"@types/react-is@npm:19.0.0":
+  version: 19.0.0
+  resolution: "@types/react-is@npm:19.0.0"
   dependencies:
-    "@types/react": "npm:^18"
-  checksum: 10/ccb79d6e196a5232cde8ccb255ec97e062801a3dafeff3816130fb5ad6b9a87f7c0806ab35bc00890a229773228ef217d0390839b68c705d3add2f798b5fcf82
+    "@types/react": "npm:*"
+  checksum: 10/c56e39e88558a71bc0b1deaa84cce9d5c84d6522057b73690d099b0763898203ec29a91563431e83b5086c49ac64a239fe993c50a4f008d6fbfc551587db5895
   languageName: node
   linkType: hard
 
@@ -6231,7 +6231,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:18.3.18, @types/react@npm:^18":
+"@types/react@npm:18.3.18":
   version: 18.3.18
   resolution: "@types/react@npm:18.3.18"
   dependencies:
@@ -8423,7 +8423,7 @@ __metadata:
     "@types/node": "npm:22.13.5"
     "@types/react": "npm:18.3.18"
     "@types/react-dom": "npm:18.3.5"
-    "@types/react-is": "npm:18.3.1"
+    "@types/react-is": "npm:19.0.0"
     "@typescript-eslint/eslint-plugin": "npm:^7.18.0"
     "@typescript-eslint/parser": "npm:7.18.0"
     babel-jest: "npm:^29.7.0"
@@ -8471,7 +8471,7 @@ __metadata:
     react-arborist: "npm:^3.4.3"
     react-checkbox-tree: "npm:^1.8.0"
     react-dom: "npm:18.3.1"
-    react-is: "npm:18.3.1"
+    react-is: "npm:19.0.0"
     react-localization: "npm:^1.0.19"
     react-markdown: "npm:^9.0.1"
     react-papaparse: "npm:^4.4.0"
@@ -18581,10 +18581,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:18.3.1, react-is@npm:^18.0.0":
-  version: 18.3.1
-  resolution: "react-is@npm:18.3.1"
-  checksum: 10/d5f60c87d285af24b1e1e7eaeb123ec256c3c8bdea7061ab3932e3e14685708221bf234ec50b21e10dd07f008f1b966a2730a0ce4ff67905b3872ff2042aec22
+"react-is@npm:19.0.0":
+  version: 19.0.0
+  resolution: "react-is@npm:19.0.0"
+  checksum: 10/6cd3695c462ec3f0d4db98583f0c1b9a439248d60214f6c42c2b0e2951a1066339d0eefa74707f03484042e043fca87750282a35b652492c035f5f3da0d6498a
   languageName: node
   linkType: hard
 
@@ -18599,6 +18599,13 @@ __metadata:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 10/73b36281e58eeb27c9cc6031301b6ae19ecdc9f18ae2d518bdb39b0ac564e65c5779405d623f1df9abf378a13858b79442480244bd579968afc1faf9a2ce5e05
+  languageName: node
+  linkType: hard
+
+"react-is@npm:^18.0.0":
+  version: 18.3.1
+  resolution: "react-is@npm:18.3.1"
+  checksum: 10/d5f60c87d285af24b1e1e7eaeb123ec256c3c8bdea7061ab3932e3e14685708221bf234ec50b21e10dd07f008f1b966a2730a0ce4ff67905b3872ff2042aec22
   languageName: node
   linkType: hard
 
