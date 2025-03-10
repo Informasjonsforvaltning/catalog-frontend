@@ -60,11 +60,6 @@ spec:
                 secretKeyRef:
                   name: commonurl-demo
                   key: ORGANIZATION_CATALOG_BASE_URI
-            - name: CONCEPT_CATALOG_GUI_BASE_URI
-              valueFrom:
-                secretKeyRef:
-                  name: commonurl-demo
-                  key: CONCEPT_CATALOGUE_GUI_BASE_URI
             - name: FDK_SEARCH_SERVICE_BASE_URI
               valueFrom:
                 secretKeyRef:
