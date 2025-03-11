@@ -1,4 +1,4 @@
-import { NextAuthProvider, ReactQueryClientProvider } from '@catalog-frontend/ui';
+import { NextAuthProvider, ReactQueryClientProvider, TermsOfUseModal } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Metadata } from 'next';
 import { CatalogLayout } from '../components/catalog-layout';
@@ -14,6 +14,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body>
         <NextAuthProvider>
           <ReactQueryClientProvider>
+            <TermsOfUseModal />
             <CatalogLayout
               catalogAdminUrl={process.env.CATALOG_ADMIN_BASE_URI}
               catalogAdminServiceUrl={process.env.CATALOG_ADMIN_SERVICE_BASE_URI}

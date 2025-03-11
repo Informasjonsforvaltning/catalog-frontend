@@ -1,4 +1,4 @@
-import { Layout, NextAuthProvider } from '@catalog-frontend/ui';
+import { Layout, NextAuthProvider, TermsOfUseModal } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Metadata } from 'next';
 
@@ -12,6 +12,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang={localization.getLanguage()}>
       <body>
         <NextAuthProvider>
+          <TermsOfUseModal />
           <Layout
             catalogAdminUrl={process.env.CATALOG_ADMIN_BASE_URI}
             fdkRegistrationBaseUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}

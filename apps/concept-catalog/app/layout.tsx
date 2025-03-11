@@ -1,4 +1,4 @@
-import { AuthSessionModal, NextAuthProvider, ReactQueryClientProvider } from '@catalog-frontend/ui';
+import { AuthSessionModal, NextAuthProvider, ReactQueryClientProvider, TermsOfUseModal } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Metadata } from 'next';
 import CatalogLayout from '../components/catalog-layout';
@@ -13,7 +13,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang={localization.getLanguage()}>
       <body>
         <NextAuthProvider>
-          <AuthSessionModal storageKey='conceptForm' />  
+          <AuthSessionModal storageKey='conceptForm' />
+          <TermsOfUseModal />
           <ReactQueryClientProvider>
             <CatalogLayout
               catalogAdminUrl={process.env.CATALOG_ADMIN_BASE_URI}
@@ -23,7 +24,6 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
               fdkCommunityBaseUrl={process.env.FDK_COMMUNITY_BASE_URI}
               fdkBaseUrl={process.env.FDK_BASE_URI}
             >
-              
               {children}
             </CatalogLayout>
           </ReactQueryClientProvider>
