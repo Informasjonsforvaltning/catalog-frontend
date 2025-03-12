@@ -3,15 +3,10 @@
 import { memo } from 'react';
 import { Accordion } from '@digdir/designsystemet-react';
 import { ReferenceDataCode } from '@catalog-frontend/types';
-import {
-  capitalizeFirstLetter,
-  getTranslateText,
-  localization as loc,
-} from '@catalog-frontend/utils';
+import { capitalizeFirstLetter, getTranslateText, localization as loc } from '@catalog-frontend/utils';
 import styles from './search-filter.module.css';
-import { CheckboxGroupFilter } from './checkbox-group-filter';
-import { AccordionItem, AccordionItemProps } from '../accordion-item';
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
+import { AccordionItem, AccordionItemProps, CheckboxGroupFilter } from '@catalog-frontend/ui';
 
 export type PublishedFilterType = 'published' | 'unpublished';
 
@@ -48,17 +43,17 @@ const SearchFilter = ({ distributionStatuses }: Props) => {
   const accordionItemContents: AccordionItemProps[] = [
     ...(statusItems?.length > 0
       ? [
-        {
-          header: loc.status,
-          content: (
-            <CheckboxGroupFilter<string>
-              items={statusItems}
-              onChange={handleOnStatusChange}
-              value={filterStatus ?? []}
-            />
-          ),
-        },
-      ]
+          {
+            header: loc.status,
+            content: (
+              <CheckboxGroupFilter<string>
+                items={statusItems}
+                onChange={handleOnStatusChange}
+                value={filterStatus ?? []}
+              />
+            ),
+          },
+        ]
       : []),
     {
       header: loc.publicationState.state,
