@@ -117,7 +117,6 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
 
   const onSearchSubmit = (search: string) => {
     setSearchTerm(search);
-    //setPage(0);
   };
 
   const FilterChips = () => (

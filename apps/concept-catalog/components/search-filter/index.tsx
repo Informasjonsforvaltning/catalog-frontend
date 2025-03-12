@@ -2,7 +2,7 @@
 
 import { memo } from 'react';
 import { Accordion } from '@digdir/designsystemet-react';
-import { Select } from '@catalog-frontend/ui';
+import { AccordionItem, AccordionItemProps, CheckboxGroupFilter, Select } from '@catalog-frontend/ui';
 import { AssignedUser, CodeList, InternalField, ReferenceDataCode } from '@catalog-frontend/types';
 import {
   capitalizeFirstLetter,
@@ -11,8 +11,6 @@ import {
   localization as loc,
 } from '@catalog-frontend/utils';
 import styles from './search-filter.module.css';
-import { CheckboxGroupFilter } from './checkbox-group-filter';
-import { AccordionItem, AccordionItemProps } from '../accordion-item';
 import { useGetUsers } from '../../hooks/users';
 import { CheckboxTreeFilter } from './checkbox-tree-filter';
 import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'nuqs';
