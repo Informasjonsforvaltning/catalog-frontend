@@ -60,7 +60,7 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields }: Option
           {visibleFields.map((field) => (
             <Fieldset
               key={field.valuePath}
-              legend={field.legend}
+              legend={field?.legend ?? field?.label}
             >
               <Box
                 key={field.valuePath}
