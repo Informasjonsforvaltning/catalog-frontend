@@ -50,3 +50,5 @@ export * from './lib/sticky-footer-bar';
 export * from './lib/title-with-help-text-and-tag';
 export * from './lib/formik-reference-data-combobox';
 export * from './lib/form-heading';
+export * from './lib/accordion-item';
+export * from './lib/checkbox-group-filter';

@@ -178,7 +178,5 @@ export const datasetFormNb = {
     DRAFT: 'Utkast',
     PUBLISH: 'Publisert',
     APPROVE: 'Godkjent',
-    SERIES: 'Datasettserie',
-    DATASET: 'Datasett',
   },
 };
