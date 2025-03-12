@@ -1,26 +1,22 @@
+import { PublicationStatus } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
 import { Tag } from '@digdir/designsystemet-react';
 
 enum StatusColors {
-  DRAFT = 'second',
-  PUBLISH = 'success',
-  APPROVE = 'info',
+  'DRAFT' = 'second',
+  'APPROVE' = 'success',
 }
 
-export const StatusTag = ({
-  datasetStatus,
-  ...props
-}: {
-  datasetStatus: keyof typeof StatusColors;
-  [key: string]: any;
-}) => {
+export const StatusTag = ({ datasetStatus, ...props }: { datasetStatus: PublicationStatus }) => {
+  const status: keyof typeof StatusColors =
+    datasetStatus === PublicationStatus.PUBLISH ? PublicationStatus.APPROVE : datasetStatus;
   return (
     <Tag
       size='sm'
-      color={StatusColors[datasetStatus]}
+      color={StatusColors[status]}
       {...props}
     >
-      {localization.datasetCatalog.status?.[datasetStatus]}
+      {localization.datasetCatalog.status?.[status]}
     </Tag>
   );
 };
