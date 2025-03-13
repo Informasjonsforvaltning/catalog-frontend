@@ -13,6 +13,7 @@ type Props = {
   hasDeleteButton?: boolean;
   onDeleteValue?: any;
   addValue?: any;
+  setFocus?: (fieldName: string) => void;
 } & PropsWithChildren;
 
 export const ToggleFieldButton = ({
@@ -22,6 +23,7 @@ export const ToggleFieldButton = ({
   onDeleteValue = undefined,
   addValue = '',
   fieldValues,
+  setFocus,
 }: Props) => {
   const { setFieldValue } = useFormikContext<Dataset>();
 
@@ -59,6 +61,7 @@ export const ToggleFieldButton = ({
         <AddButton
           onClick={() => {
             setFieldValue(fieldName, addValue);
+            setFocus && setFocus(fieldName);
           }}
         >{`${localization.add} ${localization.datasetForm.fieldLabel[fieldName.split('.')[0]].toLowerCase()}`}</AddButton>
       )}
