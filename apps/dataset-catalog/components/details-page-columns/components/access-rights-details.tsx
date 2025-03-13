@@ -66,7 +66,10 @@ export const AccessRightsDetails = ({ dataset }: Props) => {
           {dataset?.accessRights.uri !== accessRightPublic.uri && allLegalBases.length > 0 && (
             <Card>
               <h4>{localization.datasetForm.fieldLabel.legalBasis}</h4>
-              <Table size='sm'>
+              <Table
+                size='sm'
+                className={styles.table}
+              >
                 <Table.Head>
                   <Table.Row>
                     <Table.HeaderCell>{localization.title}</Table.HeaderCell>

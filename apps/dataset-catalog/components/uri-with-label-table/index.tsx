@@ -11,7 +11,10 @@ export const UriWithLabelTable = ({ values = [], language }: Props) => {
   if (values.length === 0) return null;
 
   return (
-    <Table size='sm'>
+    <Table
+      size='sm'
+      style={{ tableLayout: 'fixed' }}
+    >
       <Table.Head>
         <Table.Row>
           <Table.HeaderCell>{localization.title}</Table.HeaderCell>

@@ -266,7 +266,10 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         <InfoCard.Item title={localization.relations}>
           <div className={styles.infoCardItems}>
             {dataset?.references && _.compact(dataset?.references).length > 0 && (
-              <Table size='sm'>
+              <Table
+                size='sm'
+                className={styles.table}
+              >
                 <Table.Head>
                   <Table.Row>
                     <Table.HeaderCell>{localization.datasetForm.fieldLabel.relationType}</Table.HeaderCell>

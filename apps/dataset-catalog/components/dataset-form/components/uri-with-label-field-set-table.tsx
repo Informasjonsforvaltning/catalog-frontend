@@ -42,7 +42,7 @@ export const UriWithLabelFieldsetTable = ({ fieldName, values, label }: Props) =
       {values && values?.length > 0 && !hasNoFieldValues(values[0]) && (
         <Table
           size='sm'
-          className={styles.fullWidth}
+          className={styles.table}
         >
           <Table.Head>
             <Table.Row>

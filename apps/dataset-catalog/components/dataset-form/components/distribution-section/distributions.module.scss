@@ -85,3 +85,13 @@
     padding-top: 1rem 0;
   }
 }
+
+.table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.table th,
+.table td {
+  word-wrap: break-word;
+}

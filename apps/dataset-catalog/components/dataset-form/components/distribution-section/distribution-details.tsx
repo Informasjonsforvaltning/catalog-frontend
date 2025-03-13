@@ -115,7 +115,10 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
                 size='2xs'
               >{`${localization.datasetForm.fieldLabel.standard}:`}</Heading>
 
-              <Table size='sm'>
+              <Table
+                size='sm'
+                className={styles.table}
+              >
                 <Table.Head>
                   <Table.Row>
                     <Table.HeaderCell>{localization.title}</Table.HeaderCell>
