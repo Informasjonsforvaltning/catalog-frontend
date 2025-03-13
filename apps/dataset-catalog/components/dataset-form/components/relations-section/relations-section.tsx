@@ -1,7 +1,7 @@
 import { Dataset, DatasetSeries } from '@catalog-frontend/types';
 import { FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Combobox } from '@digdir/designsystemet-react';
+import { Box, Combobox } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 import { UriWithLabelFieldsetTable } from '../uri-with-label-field-set-table';
 import { ReferenceTable } from './references-table';
@@ -16,7 +16,7 @@ export const RelationsSection = ({ searchEnv, datasetSeries }: Props) => {
   const { setFieldValue, values } = useFormikContext<Dataset>();
 
   return (
-    <>
+    <Box>
       <ReferenceTable searchEnv={searchEnv} />
       <FieldsetDivider />
       <div className={styles.fieldContainer}>
@@ -57,6 +57,6 @@ export const RelationsSection = ({ searchEnv, datasetSeries }: Props) => {
           fieldName={'relations'}
         />
       </div>
-    </>
+    </Box>
   );
 };
