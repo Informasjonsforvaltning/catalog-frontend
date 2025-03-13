@@ -1,17 +1,24 @@
 'use client';
 
-import { AddButton, FormikLanguageFieldset, TitleWithHelpTextAndTag, TextareaWithPrefix } from '@catalog-frontend/ui';
+import {
+  AddButton,
+  FormikLanguageFieldset,
+  TitleWithHelpTextAndTag,
+  TextareaWithPrefix,
+  FastFieldWithRef,
+} from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
 import { Combobox, Fieldset, Textfield } from '@digdir/designsystemet-react';
-import { FastField, FieldArray, useFormikContext } from 'formik';
+import { FieldArray, useFormikContext } from 'formik';
 import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
 import styles from './details.module.css';
 import { QualifiedAttributionsSection } from '../qualified-attributions-section';
 import FieldsetWithDelete from '../../../fieldset-with-delete';
 import { ToggleFieldButton } from '../toggle-field-button';
 import { UriWithLabelFieldsetTable } from '../uri-with-label-field-set-table';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import _ from 'lodash';
+import React from 'react';
 
 type Props = {
   datasetTypes: ReferenceDataCode[];
@@ -21,6 +28,19 @@ type Props = {
 
 export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequencies }: Props) => {
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
+  const [focus, setFocus] = useState<string | null>();
+  const inputRefs = useRef<Record<string, HTMLInputElement | HTMLTextAreaElement | null>>({});
+
+  useEffect(() => {
+    if (focus && inputRefs.current[focus]) {
+      inputRefs.current[focus]?.focus();
+      setFocus(null);
+    }
+  }, [focus]);
+
+  const setInputRef = (fieldName: string, element: HTMLInputElement | HTMLTextAreaElement | null) => {
+    inputRefs.current[fieldName] = element;
+  };
 
   const datasetTypeOptions = useMemo(
     () =>
@@ -74,8 +94,11 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
                   className={styles.padding}
                 >
                   <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
-                    <FastField
+                    <FastFieldWithRef
                       name={`landingPage[${index}]`}
+                      ref={(el: HTMLInputElement | HTMLTextAreaElement | null) =>
+                        setInputRef(`landingPage[${index}]`, el)
+                      }
                       label={
                         index === 0 ? (
                           <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.landingPage}>
@@ -93,7 +116,12 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
                 </div>
               ))}
 
-              <AddButton onClick={() => arrayHelpers.push('')}>
+              <AddButton
+                onClick={() => {
+                  arrayHelpers.push('');
+                  setFocus(values.landingPage ? `landingPage[${values.landingPage.length}]` : `landingPage[0]`);
+                }}
+              >
                 {`${localization.datasetForm.fieldLabel.landingPage}`}
               </AddButton>
             </>
@@ -105,6 +133,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         fieldName={'type'}
         hasDeleteButton
         fieldValues={values?.type}
+        setFocus={setFocus}
       >
         <Fieldset
           size='sm'
@@ -114,8 +143,9 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
             </TitleWithHelpTextAndTag>
           }
         >
-          <FastField
+          <FastFieldWithRef
             as={Combobox}
+            ref={(el: HTMLInputElement | HTMLTextAreaElement | null) => setInputRef('type', el)}
             size='sm'
             value={[values.type]}
             virtual
@@ -124,7 +154,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
           >
             <Combobox.Option value={''}>{`${localization.choose}...`}</Combobox.Option>
             {datasetTypeOptions}
-          </FastField>
+          </FastFieldWithRef>
         </Fieldset>
       </ToggleFieldButton>
 
@@ -132,6 +162,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         fieldName='provenance.uri'
         hasDeleteButton
         fieldValues={values?.provenance?.uri}
+        setFocus={setFocus}
       >
         <Fieldset
           size='sm'
@@ -141,7 +172,9 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
             </TitleWithHelpTextAndTag>
           }
         >
-          <Combobox
+          <FastFieldWithRef
+            as={Combobox}
+            ref={(el: HTMLInputElement | HTMLTextAreaElement | null) => setInputRef('provenance.uri', el)}
             value={values?.provenance?.uri ? [values?.provenance?.uri] : []}
             placeholder={`${localization.search.search}...`}
             onValueChange={(value: string[]) => setFieldValue('provenance.uri', value.toString())}
@@ -149,7 +182,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
           >
             <Combobox.Empty>{`${localization.choose}...`}</Combobox.Empty>
             {provenanceOptions}
-          </Combobox>
+          </FastFieldWithRef>
         </Fieldset>
       </ToggleFieldButton>
 
@@ -157,6 +190,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         fieldName='accrualPeriodicity.uri'
         fieldValues={values?.accrualPeriodicity?.uri}
         hasDeleteButton
+        setFocus={setFocus}
       >
         <Fieldset
           size='sm'
@@ -166,8 +200,10 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
             </TitleWithHelpTextAndTag>
           }
         >
-          <Combobox
+          <FastFieldWithRef
             size='sm'
+            as={Combobox}
+            ref={(el: HTMLInputElement | HTMLTextAreaElement | null) => setInputRef('accrualPeriodicity.uri', el)}
             value={[values?.accrualPeriodicity?.uri ?? '']}
             virtual
             placeholder={`${localization.search.search}...`}
@@ -175,7 +211,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
           >
             <Combobox.Option value=''>{`${localization.choose}...`}</Combobox.Option>
             {frequencyOptions}
-          </Combobox>
+          </FastFieldWithRef>
         </Fieldset>
       </ToggleFieldButton>
 
@@ -183,10 +219,12 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         fieldName='modified'
         fieldValues={values?.modified}
         hasDeleteButton
+        setFocus={setFocus}
       >
-        <FastField
+        <FastFieldWithRef
           className={styles.calendar}
           as={Textfield}
+          ref={(el: HTMLInputElement | HTMLTextAreaElement | null) => setInputRef('modified', el)}
           name='modified'
           type='date'
           label={
@@ -201,7 +239,6 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       <ToggleFieldButton
         fieldName='hasCurrentnessAnnotation.hasBody'
         fieldValues={values?.hasCurrentnessAnnotation?.hasBody}
-        addValue={{ nb: '' }}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
@@ -230,7 +267,6 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       <ToggleFieldButton
         fieldName='hasRelevanceAnnotation.hasBody'
         fieldValues={values?.hasRelevanceAnnotation?.hasBody}
-        addValue={{ nb: '' }}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
@@ -246,7 +282,6 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       <ToggleFieldButton
         fieldName='hasCompletenessAnnotation.hasBody'
         fieldValues={values?.hasCompletenessAnnotation?.hasBody}
-        addValue={{ nb: '' }}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
@@ -262,7 +297,6 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       <ToggleFieldButton
         fieldName='hasAccuracyAnnotation.hasBody'
         fieldValues={values?.hasAccuracyAnnotation?.hasBody}
-        addValue={{ nb: '' }}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
@@ -278,7 +312,6 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       <ToggleFieldButton
         fieldName='hasAvailabilityAnnotation.hasBody'
         fieldValues={values?.hasAvailabilityAnnotation?.hasBody}
-        addValue={{ nb: '' }}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
@@ -296,6 +329,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         fieldValues={values?.qualifiedAttributions}
         hasDeleteButton
         addValue={[]}
+        setFocus={setFocus}
       >
         <QualifiedAttributionsSection />
       </ToggleFieldButton>
