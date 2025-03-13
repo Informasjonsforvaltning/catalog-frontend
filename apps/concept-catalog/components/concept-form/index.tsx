@@ -38,6 +38,8 @@ type Props = {
   codeListsResult: CodeListsResult;
   fieldsResult: FieldsResult;
   usersResult: UsersResult;
+  readOnly?: boolean;
+  markDirty?: boolean;
 };
 
 const getNotifications = ({ isValid, hasUnsavedChanges }) => [
@@ -67,7 +69,16 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
     : []),
 ];
 
-const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }: Props) => {
+const ConceptForm = ({
+  catalogId,
+  concept,
+  conceptStatuses,
+  codeListsResult,
+  fieldsResult,
+  usersResult,
+  readOnly,
+  markDirty,
+}: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<Concept>>(null);
@@ -208,6 +219,10 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
       validateOnChange={validateOnChange}
       validateOnBlur={validateOnChange}
       onSubmit={async (values, { setSubmitting }) => {
+        if(readOnly) {
+          return;
+        }
+
         concept.id === null ? await handleCreate(values as Concept) : await handleUpdate(values as Concept);
         setSubmitting(false);
         // Discard stored data
@@ -258,7 +273,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     required
                     error={hasError(['anbefaltTerm', 'tillattTerm', 'frarådetTerm'])}
                   >
-                    <TermSection />
+                    <TermSection markDirty={markDirty} />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='definition'
@@ -267,7 +282,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     required
                     error={hasError(['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'])}
                   >
-                    <DefinitionSection />
+                    <DefinitionSection markDirty={markDirty} />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='remark'
@@ -275,7 +290,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     subtitle={localization.conceptForm.section.remarkSubtitle}
                     error={hasError(['merknad'])}
                   >
-                    <RemarkSection />
+                    <RemarkSection markDirty={markDirty} />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='subject'
@@ -283,7 +298,10 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     subtitle={localization.conceptForm.section.subjectSubtitle}
                     error={hasError(['fagområdeKoder'])}
                   >
-                    <SubjectSection codes={subjectCodeList?.codes} />
+                    <SubjectSection
+                      codes={subjectCodeList?.codes}
+                      markDirty={markDirty}
+                    />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='example'
@@ -291,7 +309,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     subtitle={localization.conceptForm.section.exampleSubtitle}
                     error={hasError(['eksempel'])}
                   >
-                    <ExampleSection />
+                    <ExampleSection markDirty={markDirty} readOnly={readOnly} />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='valueRange'
@@ -299,7 +317,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     subtitle={localization.conceptForm.section.valueRangeSubtitle}
                     error={hasError(['omfang'])}
                   >
-                    <ValueRangeSection />
+                    <ValueRangeSection markDirty={markDirty} readOnly={readOnly} />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='relation'
@@ -314,7 +332,11 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                       'internSeOgså',
                     ])}
                   >
-                    <RelationSection catalogId={catalogId} />
+                    <RelationSection
+                      catalogId={catalogId}
+                      markDirty={markDirty}
+                      readOnly={readOnly}
+                    />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='internal'
@@ -326,6 +348,8 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                       codeLists={codeListsResult.codeLists}
                       internalFields={fieldsResult.internal}
                       userList={usersResult.users}
+                      markDirty={markDirty}
+                      readOnly={readOnly}
                     />
                   </FormLayout.Section>
                   <FormLayout.Section
@@ -334,7 +358,11 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     subtitle={localization.conceptForm.section.conceptStatusSubtitle}
                     error={hasError(['statusURI'])}
                   >
-                    <StatusSection conceptStatuses={conceptStatuses} />
+                    <StatusSection
+                      conceptStatuses={conceptStatuses}
+                      markDirty={markDirty}
+                      readOnly={readOnly}
+                    />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='version'
@@ -342,7 +370,7 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     subtitle={localization.conceptForm.section.versionSubtitle}
                     error={hasError(['versjonsnr'])}
                   >
-                    <VersionSection />
+                    <VersionSection markDirty={markDirty} readOnly={readOnly} />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='period'
@@ -350,55 +378,57 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
                     subtitle={localization.conceptForm.section.periodSubtitle}
                     error={hasError(['gyldigFom', 'gyldigTom'])}
                   >
-                    <PeriodSection />
+                    <PeriodSection markDirty={markDirty} readOnly={readOnly} />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='contact'
                     title={localization.conceptForm.section.contactTitle}
                     subtitle={localization.conceptForm.section.contactSubtitle}
-                    required
+                    required                    
                     error={hasError(['kontaktpunkt'])}
                   >
-                    <ContactSection />
+                    <ContactSection markDirty={markDirty} readOnly={readOnly} />
                   </FormLayout.Section>
                 </FormLayout>
               </Form>
             </div>
-            <div className={styles.stickyFooterBar}>
-              <div className={classNames('container', styles.stickyFooterContent)}>
-                <div>
-                  <div className={styles.actionButtons}>
-                    <Button
-                      size='sm'
-                      type='button'
-                      disabled={isSubmitting || isValidating || isCanceled || !dirty}
-                      onClick={() => {
-                        setValidateOnChange(true);
-                        submitForm();
-                      }}
-                    >
-                      {isSubmitting ? (
-                        <Spinner
-                          title='Lagrer'
-                          size='sm'
-                        />
-                      ) : (
-                        'Lagre'
-                      )}
-                    </Button>
-                    <Button
-                      size='sm'
-                      disabled={isSubmitting || isValidating || isCanceled}
-                      onClick={handleCancel}
-                      variant='secondary'
-                    >
-                      Avbryt
-                    </Button>
+            
+              <div className={styles.stickyFooterBar}>
+                <div className={classNames('container', styles.stickyFooterContent)}>
+                  <div>
+                    <div className={styles.actionButtons}>
+                      <Button
+                        size='sm'
+                        type='button'
+                        disabled={readOnly || isSubmitting || isValidating || isCanceled || !dirty}
+                        onClick={() => {
+                          setValidateOnChange(true);
+                          submitForm();
+                        }}
+                      >
+                        {isSubmitting ? (
+                          <Spinner
+                            title='Lagrer'
+                            size='sm'
+                          />
+                        ) : (
+                          'Lagre'
+                        )}
+                      </Button>
+                      <Button
+                        size='sm'
+                        disabled={readOnly || isSubmitting || isValidating || isCanceled}
+                        onClick={handleCancel}
+                        variant='secondary'
+                      >
+                        Avbryt
+                      </Button>
+                    </div>
                   </div>
+                  {notifications.length > 0 && <NotificationCarousel notifications={notifications} />}
                 </div>
-                {notifications.length > 0 && <NotificationCarousel notifications={notifications} />}
               </div>
-            </div>
+            
           </>
         );
       }}
