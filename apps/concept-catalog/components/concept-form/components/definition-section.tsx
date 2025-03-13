@@ -6,7 +6,6 @@ import {
   ErrorMessage,
   Fieldset,
   Heading,
-  Link,
   Paragraph,
   Popover,
   Tag,
@@ -17,7 +16,8 @@ import { PencilWritingIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icon
 import { useState } from 'react';
 import { DefinitionModal } from './definition-modal';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { HelpMarkdown, TitleWithTag } from '@catalog-frontend/ui';
+import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { get, isEqual } from 'lodash';
 
 function getFirstErrorByRootKeys(obj: FormikErrors<Concept>, rootKeys: string[]): string | null {
   for (const rootKey of rootKeys) {
@@ -51,12 +51,21 @@ function getFirstErrorByRootKeys(obj: FormikErrors<Concept>, rootKeys: string[])
   return null;
 }
 
-export const DefinitionSection = () => {
-  const { errors, values, setFieldValue } = useFormikContext<Concept>();
+type DefinitionSectionProps = {
+  markDirty?: boolean;
+};
+
+export const DefinitionSection = ({ markDirty }: DefinitionSectionProps) => {
+  const { initialValues, errors, values, setFieldValue } = useFormikContext<Concept>();
   const [open, setOpen] = useState<Record<number, boolean>>({});
 
   const definitions = ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'];
   const allowedLanguages = Object.freeze<ISOLanguage[]>(['nb', 'nn', 'en']);
+
+  const fieldIsChanged = (name: string) => {
+    const dirty = !isEqual(get(initialValues, name), get(values, name));
+    return markDirty && dirty;
+  };
 
   const prepareInitialValues = (def: Definisjon): Definisjon => {
     return {
@@ -83,21 +92,11 @@ export const DefinitionSection = () => {
       <Box className={styles.fieldSet}>
         <Fieldset
           legend={
-            <TitleWithTag
-              title={
-                <>
-                  Definisjon
-                  <HelpMarkdown
-                    aria-label={'Hjelpetekst definisjon'}
-                    type='button'
-                    placement='right-end'
-                  >
-                    {localization.conceptForm.helpText.definition}
-                  </HelpMarkdown>
-                </>
-              }
+            <TitleWithHelpTextAndTag
+              helpText={localization.conceptForm.helpText.definition}
               tagTitle={localization.tag.required}
-            />
+              changed={definitions.some((def) => fieldIsChanged(def))}
+            >Definisjon</TitleWithHelpTextAndTag>
           }
         />
 

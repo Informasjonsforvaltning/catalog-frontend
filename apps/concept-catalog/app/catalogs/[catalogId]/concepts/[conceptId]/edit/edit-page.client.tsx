@@ -12,6 +12,8 @@ export const EditPage = ({ catalogId, concept, conceptStatuses, codeListsResult,
         codeListsResult={codeListsResult}
         fieldsResult={fieldsResult}
         usersResult={usersResult}
+        markDirty
+        readOnly
       />
     </>
   );

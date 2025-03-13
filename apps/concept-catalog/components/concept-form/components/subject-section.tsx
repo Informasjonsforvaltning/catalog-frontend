@@ -6,13 +6,14 @@ import { localization } from '@catalog-frontend/utils';
 import styles from '../concept-form.module.scss';
 import { getParentPath } from '../../../utils/codeList';
 import { ReactNode } from 'react';
-import { isEmpty } from 'lodash';
+import { get, isEmpty, isEqual } from 'lodash';
 
 type SubjectSectionProps = {
   codes: Code[] | undefined;
+  markDirty?: boolean;
 };
-export const SubjectSection = ({ codes }: SubjectSectionProps) => {
-  const { errors, values, setFieldValue } = useFormikContext<Concept>();
+export const SubjectSection = ({ codes, markDirty }: SubjectSectionProps) => {
+  const { initialValues, errors, values, setFieldValue } = useFormikContext<Concept>();
 
   const selected = values.fagområdeKoder?.filter((v) => codes?.find((code) => code.id === v));
   const codeListActivated = codes !== undefined;
@@ -94,6 +95,7 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
                   }
                 : {})}
               helpText={localization.conceptForm.helpText.subjectFree}
+              changed={markDirty && !isEqual(get(initialValues, 'fagområde'), get(values, 'fagområde'))}
             >
               {localization.conceptForm.fieldLabel.subjectFree}
             </TitleWithHelpTextAndTag>
@@ -111,6 +113,7 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
                   }
                 : {})}
               helpText={localization.conceptForm.helpText.subjectCodeList}
+              changed={markDirty && !isEqual(get(initialValues, 'fagområdeKoder'), get(values, 'fagområdeKoder'))}
             >
               {localization.conceptForm.fieldLabel.subjectCodeList}
             </TitleWithHelpTextAndTag>

@@ -5,8 +5,17 @@ import {
   TitleWithHelpTextAndTag,
 } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
+import { get, isEqual } from 'lodash';
+import { useFormikContext } from 'formik';
+import { Concept } from '@catalog-frontend/types';
 
-export const RemarkSection = () => {
+type RemarkSectionProps = {
+  markDirty?: boolean;
+}
+
+export const RemarkSection = ({ markDirty }: RemarkSectionProps) => {
+  const { initialValues, values } = useFormikContext<Concept>();
+
   return (
     <Box>
       <FormikLanguageFieldset
@@ -16,6 +25,7 @@ export const RemarkSection = () => {
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
             tagColor='info'
+            changed={markDirty && !isEqual(get(initialValues, 'merknad'), get(values, 'merknad'))}
           >
             {localization.conceptForm.fieldLabel.remark}
           </TitleWithHelpTextAndTag>

@@ -1,18 +1,40 @@
 import { useFormikContext } from 'formik';
 import { PencilWritingIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Box, Button, Skeleton, Table } from '@digdir/designsystemet-react';
+import { Box, Button, Fieldset, Skeleton, Table } from '@digdir/designsystemet-react';
 import { Concept, RelatedConcept, UnionRelation, RelationTypeEnum } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useSearchConcepts as useSearchInternalConcepts, useDataNorgeSearchConcepts } from '../../../hooks/search';
 import { RelationModal } from './relation-modal';
 import styles from '../concept-form.module.scss';
+import { get, isEqual } from 'lodash';
+import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
+
+type RelationSection = {
+  catalogId: string;
+  markDirty?: boolean;
+  readOnly?: boolean;
+};
 
 type UnionRelationWithIndex = {
   index: number;
 } & UnionRelation;
 
-export const RelationSection = ({ catalogId }) => {
-  const { values, setFieldValue } = useFormikContext<Concept>();
+export const RelationSection = ({ catalogId, markDirty, readOnly }: RelationSection) => {
+  const { initialValues, values, setFieldValue } = useFormikContext<Concept>();
+
+  const fieldIsChanged = (name: string) => {
+    const dirty = !isEqual(get(initialValues, name), get(values, name));
+    return markDirty && dirty;
+  };
+
+  const isDirty = [
+    'begrepsRelasjon',
+    'seOgså',
+    'erstattesAv',
+    'internBegrepsRelasjon',
+    'internSeOgså',
+    'internErstattesAv',
+  ].some((rel) => fieldIsChanged(rel));
 
   const relations: UnionRelationWithIndex[] = [
     ...(values['begrepsRelasjon']?.map((rel, index) => ({ ...rel, index })) ?? []),
@@ -20,23 +42,25 @@ export const RelationSection = ({ catalogId }) => {
       ? values['seOgså'].map((concept, index) => ({
           relasjon: RelationTypeEnum.SE_OGSÅ,
           relatertBegrep: concept,
-          index
+          index,
         }))
       : []),
     ...(values['erstattesAv']
       ? values['erstattesAv'].map((concept, index) => ({
           relasjon: RelationTypeEnum.ERSTATTES_AV,
           relatertBegrep: concept,
-          index
+          index,
         }))
       : []),
-    ...(values['internBegrepsRelasjon'] ? values.internBegrepsRelasjon.map((rel,index) => ({ ...rel, internal: true, index })) : []),
+    ...(values['internBegrepsRelasjon']
+      ? values.internBegrepsRelasjon.map((rel, index) => ({ ...rel, internal: true, index }))
+      : []),
     ...(values['internSeOgså']
       ? values['internSeOgså'].map((concept, index) => ({
           relasjon: RelationTypeEnum.SE_OGSÅ,
           relatertBegrep: concept,
           internal: true,
-          index
+          index,
         }))
       : []),
     ...(values['internErstattesAv']
@@ -44,7 +68,7 @@ export const RelationSection = ({ catalogId }) => {
           relasjon: RelationTypeEnum.ERSTATTES_AV,
           relatertBegrep: concept,
           internal: true,
-          index
+          index,
         }))
       : []),
   ];
@@ -88,20 +112,24 @@ export const RelationSection = ({ catalogId }) => {
   const resolveRelatedConcept = (relation: UnionRelation): RelatedConcept | undefined => {
     if (relation.internal) {
       const match = internalConcepts?.hits.find((hit) => hit.originaltBegrep === relation.relatertBegrep);
-      return match ? {
-        id: relation.relatertBegrep,
-        title: match.anbefaltTerm?.navn,         
-      } as RelatedConcept : undefined;  
+      return match
+        ? ({
+            id: relation.relatertBegrep,
+            title: match.anbefaltTerm?.navn,
+          } as RelatedConcept)
+        : undefined;
     } else {
       const match = externalConcepts?.hits.find((hit) => hit.uri === relation.relatertBegrep);
-      return match ? {
-        href: relation.relatertBegrep,
-        title: match.title,
-      } as RelatedConcept : {
-        href: relation.relatertBegrep,
-        custom: true,
-        title: { nb: relation.relatertBegrep }
-      } as RelatedConcept;  
+      return match
+        ? ({
+            href: relation.relatertBegrep,
+            title: match.title,
+          } as RelatedConcept)
+        : ({
+            href: relation.relatertBegrep,
+            custom: true,
+            title: { nb: relation.relatertBegrep },
+          } as RelatedConcept);
     }
   };
 
@@ -128,7 +156,7 @@ export const RelationSection = ({ catalogId }) => {
         relasjonsType: rel.relasjonsType,
         beskrivelse: rel.beskrivelse,
         inndelingskriterium: rel.inndelingskriterium,
-        relatertBegrep: rel.relatertBegrep
+        relatertBegrep: rel.relatertBegrep,
       };
       if (rel.relasjon === RelationTypeEnum.SE_OGSÅ || rel.relasjon === RelationTypeEnum.ERSTATTES_AV) {
         relationValue = rel.relatertBegrep;
@@ -142,7 +170,7 @@ export const RelationSection = ({ catalogId }) => {
             setFieldValue(name, [...values[name], relationValue]);
           }
 
-          if(prev && name !== prevName) {
+          if (prev && name !== prevName) {
             handleRemoveRelation(prev);
           }
         } else {
@@ -176,61 +204,74 @@ export const RelationSection = ({ catalogId }) => {
   return (
     <Box>
       <Box className={styles.fieldSet}>
-        <Table size='sm' className={styles.table}>
-          <Table.Head>
-            <Table.Row>
-              <Table.HeaderCell>Relasjon</Table.HeaderCell>
-              <Table.HeaderCell>Relatert begrep</Table.HeaderCell>
-              <Table.HeaderCell><span className='hide-text'>Akjsoner</span></Table.HeaderCell>
-            </Table.Row>
-          </Table.Head>
-          <Table.Body>
-            {relations?.map((relation, index) => (
-              <Table.Row key={index}>
-                <Table.Cell>
-                  {localization.conceptForm.fieldLabel.relationTypes[relation.relasjon as string]}
-                </Table.Cell>
-                <Table.Cell>{getTranslateText(resolveRelatedConcept(relation)?.title)}</Table.Cell>
-                <Table.Cell>
-                  <div className={styles.tableRowActions}>
-                    <RelationModal
-                      header={'Rediger relasjon'}
-                      catalogId={catalogId}
-                      initialRelation={relation}
-                      initialRelatedConcept={resolveRelatedConcept(relation)}
-                      trigger={
-                        <Button
-                          variant='tertiary'
-                          color='first'
-                          size='sm'
-                        >
-                          <PencilWritingIcon
-                            aria-hidden
-                            fontSize='1rem'
-                          />
-                          Rediger
-                        </Button>
-                      }
-                      onSucces={(values) => handleChangeRelation(values, relation)}
-                    />
-                    <Button
-                      variant='tertiary'
-                      color='danger'
-                      size='sm'
-                      onClick={() => handleRemoveRelation(relation)}
-                    >
-                      <TrashIcon
-                        aria-hidden
-                        fontSize='1rem'
-                      />
-                      Slett
-                    </Button>
-                  </div>
-                </Table.Cell>
+        <Fieldset
+          legend={<TitleWithHelpTextAndTag changed={isDirty}>Tabell over relasjoner</TitleWithHelpTextAndTag>}
+          readOnly={readOnly}
+          size='sm'
+        >
+          <Table
+            size='sm'
+            className={styles.table}
+          >
+            <Table.Head>
+              <Table.Row>
+                <Table.HeaderCell>Relasjon</Table.HeaderCell>
+                <Table.HeaderCell>Relatert begrep</Table.HeaderCell>
+                <Table.HeaderCell>
+                  <span className='hide-text'>Akjsoner</span>
+                </Table.HeaderCell>
               </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
+            </Table.Head>
+            <Table.Body>
+              {relations?.map((relation, index) => (
+                <Table.Row key={index}>
+                  <Table.Cell>
+                    {localization.conceptForm.fieldLabel.relationTypes[relation.relasjon as string]}
+                  </Table.Cell>
+                  <Table.Cell>{getTranslateText(resolveRelatedConcept(relation)?.title)}</Table.Cell>
+                  <Table.Cell>
+                    <div className={styles.tableRowActions}>
+                      <RelationModal
+                        header={'Rediger relasjon'}
+                        catalogId={catalogId}
+                        initialRelation={relation}
+                        initialRelatedConcept={resolveRelatedConcept(relation)}
+                        trigger={
+                          <Button
+                            variant='tertiary'
+                            color='first'
+                            size='sm'
+                            disabled={readOnly}
+                          >
+                            <PencilWritingIcon
+                              aria-hidden
+                              fontSize='1rem'
+                            />
+                            Rediger
+                          </Button>
+                        }
+                        onSucces={(values) => handleChangeRelation(values, relation)}
+                      />
+                      <Button
+                        variant='tertiary'
+                        color='danger'
+                        size='sm'
+                        disabled={readOnly}
+                        onClick={() => handleRemoveRelation(relation)}
+                      >
+                        <TrashIcon
+                          aria-hidden
+                          fontSize='1rem'
+                        />
+                        Slett
+                      </Button>
+                    </div>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+        </Fieldset>
       </Box>
       <Box className={styles.buttonRow}>
         <RelationModal
@@ -241,6 +282,7 @@ export const RelationSection = ({ catalogId }) => {
               variant='tertiary'
               color='first'
               size='sm'
+              disabled={readOnly}
             >
               <PlusCircleIcon
                 aria-hidden
