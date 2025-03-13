@@ -21,6 +21,7 @@ type LanuguageFieldsetProps = {
   as?: typeof Textfield | typeof TextareaWithPrefix;
   multiple?: boolean;
   readOnly?: boolean;
+  allowDeleteWhenReadOnly?: boolean;
   showError?: boolean;
 };
 
@@ -33,6 +34,7 @@ export const FormikLanguageFieldset = ({
   as: renderAs = Textfield,
   multiple = false,
   readOnly = false,
+  allowDeleteWhenReadOnly = false,
   showError = true,
 }: LanuguageFieldsetProps) => {
   const { errors, getFieldMeta, setFieldValue } = useFormikContext<Record<string, LocalizedStrings>>();
@@ -113,6 +115,7 @@ export const FormikLanguageFieldset = ({
               showDeleteButton
               onDeleteButtonClicked={() => handleRemoveLanguage(lang)}
               readOnly={readOnly}
+              allowDeleteWhenReadOnly={allowDeleteWhenReadOnly}
               error={hasError(lang)}
             />
           ) : (
@@ -138,9 +141,9 @@ export const FormikLanguageFieldset = ({
                           >
                             {localization.language[lang]}
                           </Paragraph>
-                          {!readOnly && !requiredLanguages?.includes(lang) && (
+                          {!requiredLanguages?.includes(lang) && (
                             <Box>
-                              <DeleteButton onClick={() => handleRemoveLanguage(lang)} />
+                              <DeleteButton onClick={() => handleRemoveLanguage(lang)} disabled={readOnly} />
                             </Box>
                           )}
                         </>
@@ -150,25 +153,26 @@ export const FormikLanguageFieldset = ({
                       prefix: localization.language[lang],
                     })}
               />
-              {!readOnly && !requiredLanguages?.includes(lang) && renderAs !== TextareaWithPrefix && (
-                <DeleteButton onClick={() => handleRemoveLanguage(lang)} />
+              {!requiredLanguages?.includes(lang) && renderAs !== TextareaWithPrefix && (
+                <DeleteButton onClick={() => handleRemoveLanguage(lang)} disabled={readOnly} />
               )}
             </Box>
           )}
         </div>
       ))}
-      {!readOnly && (
+      
         <div className={styles.languageButtons}>
           {visibleLanguageButtons.map((lang) => (
             <AddButton
               key={lang}
               onClick={() => handleAddLanguage(lang)}
+              disabled={readOnly}
             >
               {localization.language[lang] ?? '?'}
             </AddButton>
           ))}
         </div>
-      )}
+      
 
       {showError && getError() && (
         <ErrorMessage

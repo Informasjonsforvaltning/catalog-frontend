@@ -12,6 +12,7 @@ type FormikMultivalueTextfieldProps = {
   name: string;
   showDeleteButton?: boolean;
   readOnly?: boolean;
+  allowDeleteWhenReadOnly?: boolean;
   error?: ReactNode;
   onDeleteButtonClicked?: () => void;
 } & TextfieldProps;
@@ -81,6 +82,7 @@ export const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMult
               className={styles.buttons}
               variant='tertiary'
               onClick={() => onDeleteButtonClicked()}
+              disabled={readOnly && !allowDeleteWhenReadOnly}
             />
           )}
         </Box>

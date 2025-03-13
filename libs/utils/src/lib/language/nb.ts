@@ -77,6 +77,7 @@ export const nb = {
   helpText: 'Hjelpetekst',
   publisher: 'Utgiver',
   helpWithCompleting: 'Hjelp til utfylling',
+  changed: 'Endret',
 
   catalogType: {
     admin: 'Administrasjonsgrensesnitt',
