@@ -94,7 +94,10 @@ export const AccessRightsUriTable = () => {
         }
       >
         {allLegalBases && allLegalBases?.length > 0 && !hasNoFieldValues(allLegalBases[0]?.uriWithLabel) && (
-          <Table size='sm'>
+          <Table
+            size='sm'
+            className={styles.table}
+          >
             <Table.Head>
               <Table.Row>
                 <Table.HeaderCell>{localization.title}</Table.HeaderCell>

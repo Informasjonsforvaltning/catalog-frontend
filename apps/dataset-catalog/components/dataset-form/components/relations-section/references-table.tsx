@@ -43,7 +43,10 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
         {localization.datasetForm.fieldLabel.references}
       </TitleWithHelpTextAndTag>
       {values?.references && _.compact(values?.references).length > 0 && (
-        <Table size='sm'>
+        <Table
+          size='sm'
+          className={styles.table}
+        >
           <Table.Head>
             <Table.Row>
               <Table.HeaderCell>{localization.datasetForm.fieldLabel.relationType}</Table.HeaderCell>

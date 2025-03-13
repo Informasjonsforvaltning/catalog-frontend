@@ -10,7 +10,10 @@ export const TemporalDetails = ({ temporal }: Props) => {
   return (
     <>
       {temporal && (
-        <Table size='sm'>
+        <Table
+          size='sm'
+          style={{ tableLayout: 'fixed' }}
+        >
           <Table.Head>
             <Table.Row>
               <Table.HeaderCell>{localization.from}</Table.HeaderCell>

@@ -20,8 +20,14 @@
   padding-top: 0.5rem;
 }
 
-.fullWidth {
+.table {
   width: 100%;
+  table-layout: fixed;
+}
+
+.table th,
+.table td {
+  word-wrap: break-word;
 }
 
 .comboboxOption {
