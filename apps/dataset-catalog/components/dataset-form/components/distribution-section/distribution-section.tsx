@@ -62,8 +62,8 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
   };
 
   return (
-    <div>
-      <Box className={styles.fieldSet}>
+    <Box>
+      <div className={styles.fieldSet}>
         <Heading
           size='xs'
           level={3}
@@ -196,10 +196,9 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
             accessServiceUris: [],
           }}
         />
-      </Box>
-
+      </div>
       <FieldsetDivider />
-      <Box className={styles.fieldSet}>
+      <div className={styles.fieldSet}>
         <Heading
           level={3}
           size='xs'
@@ -325,7 +324,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
             }}
           />
         </div>
-      </Box>
-    </div>
+      </div>
+    </Box>
   );
 };

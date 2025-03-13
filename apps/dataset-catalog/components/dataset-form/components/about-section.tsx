@@ -1,13 +1,13 @@
 import { FormikLanguageFieldset, TitleWithHelpTextAndTag, TextareaWithPrefix } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Textfield } from '@digdir/designsystemet-react';
+import { Box, Textfield } from '@digdir/designsystemet-react';
 import { FastField } from 'formik';
 import { FieldsetDivider } from '@catalog-frontend/ui';
 import { AccessRightFields } from './access-rights.tsx/access-rights-section';
 
 export const AboutSection = () => {
   return (
-    <>
+    <Box>
       <FormikLanguageFieldset
         name={'title'}
         as={Textfield}
@@ -57,6 +57,6 @@ export const AboutSection = () => {
           </TitleWithHelpTextAndTag>
         }
       />
-    </>
+    </Box>
   );
 };

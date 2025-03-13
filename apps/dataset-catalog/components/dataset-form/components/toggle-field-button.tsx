@@ -6,6 +6,7 @@ import { PropsWithChildren, useMemo } from 'react';
 import FieldsetWithDelete from '../../fieldset-with-delete';
 import styles from '../dataset-form.module.css';
 import _ from 'lodash';
+import { Box } from '@digdir/designsystemet-react';
 
 type Props = {
   fieldName: string;
@@ -42,7 +43,7 @@ export const ToggleFieldButton = ({
   };
 
   return (
-    <div>
+    <Box>
       {shouldShowField ? (
         hasDeleteButton ? (
           <div className={styles.hiddenField}>
@@ -65,6 +66,6 @@ export const ToggleFieldButton = ({
           }}
         >{`${localization.add} ${localization.datasetForm.fieldLabel[fieldName.split('.')[0]].toLowerCase()}`}</AddButton>
       )}
-    </div>
+    </Box>
   );
 };
