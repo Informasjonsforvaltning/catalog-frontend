@@ -2,14 +2,7 @@
 
 import ConceptForm from '../../../../../../components/concept-form';
 
-export const EditPage = ({
-  catalogId,
-  concept,
-  conceptStatuses,
-  codeListsResult,
-  fieldsResult,
-  usersResult,  
-}) => {
+export const EditPage = ({ catalogId, concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }) => {
   return (
     <>
       <ConceptForm

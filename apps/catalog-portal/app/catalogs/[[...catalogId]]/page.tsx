@@ -73,9 +73,7 @@ const CatalogsPage = async ({ params: { catalogId } }: { params: { catalogId: st
           >
             {getTranslateText(currentOrganization.prefLabel)}
           </Heading>
-          {hasNonSystemAccess && (
-            <TermsOfUseAlert catalogId={currentOrganization.organizationId} />            
-          )}          
+          {hasNonSystemAccess && <TermsOfUseAlert catalogId={currentOrganization.organizationId} />}
           <div className={styles.cards}>
             <div key={`datasetCatalog-${currentOrganization.organizationId}`}>
               <CatalogCard

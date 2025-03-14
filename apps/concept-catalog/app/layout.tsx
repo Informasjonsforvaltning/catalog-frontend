@@ -7,19 +7,13 @@ export const metadata: Metadata = {
   description: localization.catalogType.concept,
 };
 
-const RootLayout = ({
-  children
-}: {
-  children: React.ReactNode;
-}) => {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang={localization.getLanguage()}>
       <body>
         <NextAuthProvider>
           <AuthSessionModal storageKey='conceptForm' />
-          <ReactQueryClientProvider>            
-              {children}
-          </ReactQueryClientProvider>
+          <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
         </NextAuthProvider>
       </body>
     </html>

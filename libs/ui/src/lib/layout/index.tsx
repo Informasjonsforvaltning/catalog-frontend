@@ -35,7 +35,7 @@ export const Layout = ({
   fdkBaseUrl,
   termsOfUseUrl,
   catalogTitle,
-  displayFooter = true
+  displayFooter = true,
 }: LayoutProps) => {
   return (
     <div className={cn(style.layout, className)}>
@@ -58,10 +58,10 @@ export const Layout = ({
       </main>
       {displayFooter && (
         <Footer
-        fontColor={fontColor}
-        backgroundColor={backgroundColor}
-      />
-      )}      
+          fontColor={fontColor}
+          backgroundColor={backgroundColor}
+        />
+      )}
     </div>
   );
 };
