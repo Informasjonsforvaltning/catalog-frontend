@@ -83,7 +83,7 @@ export const validateOidcUserSession = async (token: Token): Promise<boolean> =>
     });
 
     return response.ok;
-  } catch(e) {
+  } catch (e) {
     console.log('validateOidcUserSession failed', e);
   }
   return false;
@@ -95,4 +95,30 @@ export const hasNonSystemAccessForOrg = (token: Token, orgId: string): boolean =
     hasOrganizationWritePermission(token, orgId) ||
     hasOrganizationReadPermission(token, orgId)
   );
+};
+
+export const hasAcceptedTermsForOrg = (token: Token, orgId: string): boolean => {
+  if (hasSystemAdminPermission(token)) {
+    return true; // not relevant for sysAdmin
+  }
+
+  if (!token) {
+    return false;
+  }
+  const tokenDecoded = jwtDecode(token);
+  if (!tokenDecoded) {
+    return false;
+  }
+
+  const fdkTerms: string = (tokenDecoded as any).fdk_terms;
+  const orgTerms: string = (tokenDecoded as any).org_terms;
+  if (!fdkTerms || !orgTerms) {
+    return false;
+  }
+
+  return orgTerms.includes(`${orgId}:${fdkTerms}`);
+};
+
+export const hasAccessToMoreThanOneOrg = (token: Token): boolean => {
+  return new Set(getResourceRoles(token).map(({ resourceId }) => resourceId)).size > 1;
 };

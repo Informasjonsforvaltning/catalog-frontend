@@ -19,6 +19,7 @@ interface LayoutProps {
   fdkRegistrationBaseUrl?: string;
   adminGuiBaseUrl?: string;
   fdkBaseUrl?: string;
+  termsOfUseUrl?: string;
   catalogTitle?: string;
   displayFooter?: boolean;
 }
@@ -32,8 +33,9 @@ export const Layout = ({
   fdkRegistrationBaseUrl,
   adminGuiBaseUrl,
   fdkBaseUrl,
+  termsOfUseUrl,
   catalogTitle,
-  displayFooter = true
+  displayFooter = true,
 }: LayoutProps) => {
   return (
     <div className={cn(style.layout, className)}>
@@ -44,6 +46,7 @@ export const Layout = ({
         fdkRegistrationBaseUrl={fdkRegistrationBaseUrl}
         adminGuiBaseUrl={adminGuiBaseUrl}
         fdkBaseUrl={fdkBaseUrl}
+        termsOfUseUrl={termsOfUseUrl}
       />
       <main className={style.main}>
         <ErrorBoundary
@@ -55,10 +58,10 @@ export const Layout = ({
       </main>
       {displayFooter && (
         <Footer
-        fontColor={fontColor}
-        backgroundColor={backgroundColor}
-      />
-      )}      
+          fontColor={fontColor}
+          backgroundColor={backgroundColor}
+        />
+      )}
     </div>
   );
 };

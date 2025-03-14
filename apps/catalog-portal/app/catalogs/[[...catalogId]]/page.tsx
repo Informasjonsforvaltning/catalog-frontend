@@ -1,7 +1,10 @@
+'use server';
+
 import {
   getResourceRoles,
   getTranslateText,
   getValidSession,
+  hasAcceptedTermsForOrg,
   hasNonSystemAccessForOrg,
   hasSystemAdminPermission,
   localization,
@@ -11,8 +14,8 @@ import { getAllServiceMessages, getOrganizations, StrapiGraphql } from '@catalog
 import { Organization } from '@catalog-frontend/types';
 import OrganizationCombo from './components/organization-combobox';
 import { redirect } from 'next/navigation';
-import { Breadcrumbs, ServiceMessages } from '@catalog-frontend/ui';
-import { Heading } from '@digdir/designsystemet-react';
+import { Breadcrumbs, ServiceMessages, TermsOfUseAlert } from '@catalog-frontend/ui';
+import { Alert, Heading } from '@digdir/designsystemet-react';
 import Link from 'next/link';
 import styles from './catalogs.module.css';
 import { CatalogCard } from './components/catalog-card';
@@ -43,6 +46,7 @@ const CatalogsPage = async ({ params: { catalogId } }: { params: { catalogId: st
 
   const currentOrganization = organizations.find((org) => org.organizationId === catalogId?.[0]);
   const hasNonSystemAccess = catalogId ? hasNonSystemAccessForOrg(`${session?.accessToken}`, catalogId?.[0]) : false;
+  const acceptedTerms = hasAcceptedTermsForOrg(`${session?.accessToken}`, catalogId?.[0]);
   const serviceMessages = await getServiceMessages();
 
   return (
@@ -69,14 +73,7 @@ const CatalogsPage = async ({ params: { catalogId } }: { params: { catalogId: st
           >
             {getTranslateText(currentOrganization.prefLabel)}
           </Heading>
-          {hasNonSystemAccess && (
-            <Link
-              className={styles.link}
-              href={`${process.env.FDK_REGISTRATION_BASE_URI}/terms-and-conditions/${currentOrganization.organizationId}`}
-            >
-              {localization.footer.termsOfUse}
-            </Link>
-          )}
+          {hasNonSystemAccess && <TermsOfUseAlert catalogId={currentOrganization.organizationId} />}
           <div className={styles.cards}>
             <div key={`datasetCatalog-${currentOrganization.organizationId}`}>
               <CatalogCard

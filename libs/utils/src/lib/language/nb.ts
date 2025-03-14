@@ -121,9 +121,12 @@ export const nb = {
     loggingIn: 'Logger inn...',
     loggingOut: 'Logger ut...',
     sessionExpiredTitle: 'Sesjonen har utløpt',
-    sessionExpired: 'Din sesjon har utløpt på grunn av inaktivitet. For å fortsette arbeidet, vennligst logg inn på nytt. Hvis du ikke ønsker å logge inn nå, kan du avbryte og forbli på siden som utlogget.',
-    sessionExpiredWithStorage: 'Din sesjon har utløpt på grunn av inaktivitet. Endringene dine er lagret lokalt. For å fortsette arbeidet, vennligst logg inn på nytt. Hvis du ikke ønsker å logge inn nå, kan du avbryte og forbli på siden som utlogget.',
-    redirectedToLogin: 'Når du velger å forbli på siden, blir du sendt videre til innloggingssiden når du klikker på en lenke eller oppdaterer siden.',    
+    sessionExpired:
+      'Din sesjon har utløpt på grunn av inaktivitet. For å fortsette arbeidet, vennligst logg inn på nytt. Hvis du ikke ønsker å logge inn nå, kan du avbryte og forbli på siden som utlogget.',
+    sessionExpiredWithStorage:
+      'Din sesjon har utløpt på grunn av inaktivitet. Endringene dine er lagret lokalt. For å fortsette arbeidet, vennligst logg inn på nytt. Hvis du ikke ønsker å logge inn nå, kan du avbryte og forbli på siden som utlogget.',
+    redirectedToLogin:
+      'Når du velger å forbli på siden, blir du sendt videre til innloggingssiden når du klikker på en lenke eller oppdaterer siden.',
   },
 
   userRole: {
@@ -527,5 +530,12 @@ export const nb = {
 
   accessRight: {
     none: 'Ingen tilgangsrettighet valgt',
-  }
+  },
+
+  termsOfUse: {
+    notAcceptedTitle: 'Bruksvilkår ikke akseptert',
+    notAcceptedContent: `Bruksvilkår må aksepteres for å kunne ta i bruk katalogtjenestene. Hvis vilkårene nylig har blitt akseptert må du logge ut og inn igjen for at det skal tre i kraft. `,
+    gotoTermsOfUse: 'Gå til bruksvilkår',
+    cancel: 'Avbryt',
+  },
 };

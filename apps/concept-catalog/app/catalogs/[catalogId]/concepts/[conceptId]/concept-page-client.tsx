@@ -4,8 +4,6 @@ import { FC, useEffect, useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import NextLink from 'next/link';
 import {
-  Breadcrumbs,
-  BreadcrumbType,
   ConceptStatusTagProps,
   InfoCard,
   Spinner,
@@ -15,7 +13,6 @@ import {
   Tag,
   LinkButton,
   HelpMarkdown,
-  DesignBanner,
 } from '@catalog-frontend/ui';
 import {
   localization,

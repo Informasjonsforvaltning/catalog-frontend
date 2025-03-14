@@ -1,19 +1,8 @@
 'use client';
 
-import { Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
 import ConceptForm from '../../../../../../components/concept-form';
 
-export const EditPage = ({
-  breadcrumbList,
-  catalogId,
-  concept,
-  conceptStatuses,
-  codeListsResult,
-  fieldsResult,
-  usersResult,
-  catalogPortalBaseUri,
-}) => {
+export const EditPage = ({ catalogId, concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }) => {
   return (
     <>
       <ConceptForm

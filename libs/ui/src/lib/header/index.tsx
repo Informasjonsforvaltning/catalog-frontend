@@ -1,7 +1,14 @@
 'use client';
 
 import { FC } from 'react';
-import { getResourceRoles, hasOrganizationAdminPermission, hasOrganizationReadPermission, hasOrganizationWritePermission, hasSystemAdminPermission, localization } from '@catalog-frontend/utils';
+import {
+  getResourceRoles,
+  hasOrganizationAdminPermission,
+  hasOrganizationReadPermission,
+  hasOrganizationWritePermission,
+  hasSystemAdminPermission,
+  localization,
+} from '@catalog-frontend/utils';
 import FDKLogo from './images/fdk-publishing-logo-negative.svg';
 import FDKLogoDemo from './images/fdk-publishing-logo-negative-demo.svg';
 import { useSession } from 'next-auth/react';
@@ -17,6 +24,7 @@ export interface HeaderProps {
   catalogAdminUrl?: string;
   fdkBaseUrl?: string;
   fdkRegistrationBaseUrl?: string;
+  termsOfUseUrl?: string;
   useDemoLogo?: boolean;
   fontColor?: string;
   backgroundColor?: string;
@@ -28,6 +36,7 @@ const Header: FC<HeaderProps> = ({
   catalogAdminUrl,
   fdkBaseUrl,
   fdkRegistrationBaseUrl,
+  termsOfUseUrl,
   useDemoLogo,
   fontColor,
   backgroundColor,
@@ -53,7 +62,7 @@ const Header: FC<HeaderProps> = ({
     [
       {
         name: localization.footer.termsOfUse,
-        url: 'https://data.norge.no/publishing/terms-of-use',
+        url: termsOfUseUrl ?? 'https://data.norge.no/publishing/terms-of-use',
         external: true,
       },
       {
@@ -86,15 +95,15 @@ const Header: FC<HeaderProps> = ({
   const resourceRoles = getResourceRoles(accessToken);
 
   const userRole = (() => {
-    if(hasSystemAdminPermission(accessToken)) {
+    if (hasSystemAdminPermission(accessToken)) {
       return localization.userRole.sysAdminRole;
-    } else if(hasOrganizationAdminPermission(accessToken, `${catalogId}`)) {
+    } else if (hasOrganizationAdminPermission(accessToken, `${catalogId}`)) {
       return localization.userRole.adminRole;
     }
-    if(hasOrganizationWritePermission(accessToken, `${catalogId}`)) {
+    if (hasOrganizationWritePermission(accessToken, `${catalogId}`)) {
       return localization.userRole.writerRole;
     }
-    if(hasOrganizationReadPermission(accessToken, `${catalogId}`)) {
+    if (hasOrganizationReadPermission(accessToken, `${catalogId}`)) {
       return localization.userRole.readerRole;
     }
 
@@ -140,7 +149,10 @@ const Header: FC<HeaderProps> = ({
                 >
                   <div>
                     <span>
-                      <PersonIcon fontSize='1.3rem' role='presentation' />
+                      <PersonIcon
+                        fontSize='1.3rem'
+                        role='presentation'
+                      />
                       {userDisplayName}
                     </span>
                     {userRole && <span>{userRole}</span>}
