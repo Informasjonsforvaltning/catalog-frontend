@@ -171,6 +171,7 @@ export const nb = {
     },
 
     sortOptions: {
+      NEWEST_FIRST: 'Nyest først',
       LAST_UPDATED_FIRST: 'Sist endret først',
       LAST_UPDATED_LAST: 'Eldst først',
       RECOMMENDED_TERM_AÅ: 'Anbefalt term A-Å',
@@ -197,6 +198,7 @@ export const nb = {
     harvestDataset: 'Høst spesifikasjon fra katalog',
     importConcept: 'Importer',
     importLogo: 'Importer logo',
+    importDataService: 'Importer OpenAPI',
     removeFilter: 'Fjern filter',
     removeFromCodeList: 'Fjern fra kodeliste',
     restore: 'Gjenopprett',
@@ -537,5 +539,23 @@ export const nb = {
     notAcceptedContent: `Bruksvilkår må aksepteres for å kunne ta i bruk katalogtjenestene. Hvis vilkårene nylig har blitt akseptert må du logge ut og inn igjen for at det skal tre i kraft. `,
     gotoTermsOfUse: 'Gå til bruksvilkår',
     cancel: 'Avbryt',
+  },
+
+  importResult: {
+    completed: 'Vellykket',
+    failed: 'Feilet',
+    warnings: 'Advarsler',
+    errors: 'Feil',
+    goToImported: 'Gå til importert ressurs',
+    tableHeading: {
+      title: 'Import',
+      timestamp: 'Tidspunkt',
+      status: 'Status',
+    },
+    tooltip: {
+      ok: 'Antall uten feil.',
+      warning: 'Antall med bare små feil.',
+      error: 'Antall med alvorlige feil.',
+    },
   },
 };

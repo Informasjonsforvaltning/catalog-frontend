@@ -1,0 +1,36 @@
+.select {
+  width: fit-content;
+}
+
+.chips {
+  margin-top: 20px;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.searchHit {
+  cursor: pointer;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.set {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.successIcon {
+  color: var(--fds-semantic-text-success-default);
+}
+
+.errorIcon {
+  color: var(--fds-semantic-text-danger-default);
+}
+
+.warningIcon {
+  color: var(--fds-semantic-text-warning-icon_warning);
+}

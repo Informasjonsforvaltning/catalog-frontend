@@ -1,0 +1,31 @@
+.recordHeader {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.issuesContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.buttonRow {
+  display: flex;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+
+.issuesHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.errorIcon {
+  color: var(--fds-semantic-text-danger-default);
+}
+
+.warningIcon {
+  color: var(--fds-semantic-text-warning-icon_warning);
+}
