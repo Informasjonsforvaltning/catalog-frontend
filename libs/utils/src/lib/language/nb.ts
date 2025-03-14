@@ -197,6 +197,7 @@ export const nb = {
     harvestDataset: 'Høst spesifikasjon fra katalog',
     importConcept: 'Importer',
     importLogo: 'Importer logo',
+    importDataService: 'Importer OpenAPI',
     removeFilter: 'Fjern filter',
     removeFromCodeList: 'Fjern fra kodeliste',
     restore: 'Gjenopprett',
