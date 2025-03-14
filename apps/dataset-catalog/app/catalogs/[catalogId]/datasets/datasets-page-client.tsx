@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState, useEffect, useMemo } from 'react';
 import { Dataset, FilterType, PublicationStatus } from '@catalog-frontend/types';
 import styles from './datasets-page.module.css';
@@ -18,7 +17,7 @@ import StatusTag from '../../../../components/status-tag/index';
 import { MagnifyingGlassIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import SearchFilter from '../../../../components/search-filter';
 import { isEmpty } from 'lodash';
-import { useQueryState, parseAsArrayOf, parseAsString } from 'nuqs';
+import { useQueryState, parseAsArrayOf, parseAsString, parseAsInteger } from 'nuqs';
 
 interface Props {
   datasets: Dataset[];
@@ -28,6 +27,7 @@ interface Props {
 
 type SortTypes = 'titleAsc' | 'titleDesc' | 'lastChanged';
 const sortTypes: SortTypes[] = ['titleAsc', 'titleDesc', 'lastChanged'];
+const itemPerPage = 5;
 
 const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) => {
   const [searchTerm, setSearchTerm] = useQueryState('search');
@@ -37,7 +37,7 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
     parseAsArrayOf(parseAsString),
   );
   const [sortValue, setSortValue] = useQueryState('sort');
-
+  const [page, setPage] = useQueryState('page', parseAsInteger);
   const [filteredDatasets, setFilteredDatasets] = useState<Dataset[]>(datasets);
   const [searchValue, setSearchValue] = useState(searchTerm ?? '');
 
@@ -69,7 +69,7 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
   useEffect(() => {
     const filterAndSortDatasets = () => {
       let filtered = datasets;
-
+      setPage(0);
       if (!isEmpty(filterStatus)) {
         filtered = filtered.filter((dataset) => {
           if (filterStatus?.includes(PublicationStatus.APPROVE)) {
@@ -84,7 +84,6 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
           return false;
         });
       }
-
       if (!isEmpty(filterPublicationState)) {
         filtered = filtered.filter((dataset) => {
           const status = filterPublicationState?.toString();
@@ -94,7 +93,6 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
           );
         });
       }
-
       if (searchValue) {
         const lowercasedQuery = searchValue.toLowerCase();
         filtered = filtered.filter(
@@ -103,15 +101,12 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
             getTranslateText(dataset?.description).toString().toLowerCase().includes(lowercasedQuery),
         );
       }
-
       const sort: SortTypes | '' = sortTypes.includes(sortValue as SortTypes) ? (sortValue as SortTypes) : '';
       if (sort) {
         filtered = [...filtered].sort(getSortFunction(sort));
       }
-
       setFilteredDatasets(filtered);
     };
-
     filterAndSortDatasets();
   }, [datasets, filterPublicationState, filterStatus, searchTerm, sortValue]);
 
@@ -128,7 +123,9 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
         {filterStatus?.map((filter, index) => (
           <Chip.Removable
             key={`status-${index}`}
-            onClick={() => removeFilter(filter, 'status')}
+            onClick={() => {
+              removeFilter(filter, 'status');
+            }}
           >
             {getTranslateText(localization.datasetForm.filter[filter])}
           </Chip.Removable>
@@ -136,7 +133,9 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
         {filterPublicationState?.map((filter, index) => (
           <Chip.Removable
             key={`published-${index}`}
-            onClick={() => removeFilter(filter, 'published')}
+            onClick={() => {
+              removeFilter(filter, 'published');
+            }}
           >
             {filter === PublicationStatus.PUBLISH
               ? localization.publicationState.published
@@ -147,6 +146,14 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
     </div>
   );
 
+  const totalPages = Math.ceil(filteredDatasets.length / itemPerPage);
+
+  const paginatedDatasets = useMemo(() => {
+    const startIndex = page ? page * itemPerPage : 0;
+    const endIndex = startIndex + itemPerPage;
+    return filteredDatasets.slice(startIndex, endIndex);
+  }, [filteredDatasets, page]);
+
   return (
     <div className={styles.container}>
       <SearchHitsPageLayout>
@@ -155,7 +162,9 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
             label={localization.search.sort}
             size='sm'
             className={styles.select}
-            onChange={(val) => setSortValue(val.target.value)}
+            onChange={(val) => {
+              setSortValue(val.target.value);
+            }}
           >
             <option value=''>{`${localization.choose}...`}</option>
             <option value='lastChanged'>{localization.search.sortOptions.LAST_UPDATED_FIRST}</option>
@@ -163,7 +172,6 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
             <option value='titleDesc'>{localization.search.sortOptions.TITLE_ÅA}</option>
           </NativeSelect>
         </SearchHitsPageLayout.SearchRow>
-
         {hasWritePermission && (
           <SearchHitsPageLayout.ButtonRow>
             <LinkButton
@@ -182,7 +190,6 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
             </LinkButton>
           </SearchHitsPageLayout.ButtonRow>
         )}
-
         <SearchHitsPageLayout.LeftColumn>
           <div className={styles.leftColumn}>
             <Search
@@ -206,17 +213,15 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
                 onSearchSubmit('');
               }}
             />
-
             <FilterChips />
             <SearchFilter />
           </div>
         </SearchHitsPageLayout.LeftColumn>
-
         <SearchHitsPageLayout.MainColumn>
           <SearchHitContainer
             searchHits={
-              filteredDatasets.length > 0
-                ? filteredDatasets.map((dataset: Dataset) => (
+              paginatedDatasets.length > 0
+                ? paginatedDatasets.map((dataset: Dataset) => (
                     <div
                       key={dataset.id}
                       className={styles.searchHit}
@@ -244,7 +249,15 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
                   ))
                 : null
             }
-            noSearchHits={!filteredDatasets || filteredDatasets.length === 0}
+            noSearchHits={!paginatedDatasets || paginatedDatasets.length === 0}
+            paginationInfo={{
+              currentPage: page ?? 0,
+              totalPages: totalPages,
+            }}
+            onPageChange={(newPage) => {
+              setPage(newPage - 1);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
           />
         </SearchHitsPageLayout.MainColumn>
       </SearchHitsPageLayout>

@@ -6,8 +6,13 @@ import { ReactNode } from 'react';
 type Props = {
   onPageChange?(selectedItem: number): void;
   searchHits: ReactNode | undefined;
-  paginationInfo?: any;
+  paginationInfo?: PaginationInfo;
   noSearchHits: boolean;
+};
+
+type PaginationInfo = {
+  totalPages: number;
+  currentPage: number;
 };
 
 const SearchHitContainer = ({ onPageChange, searchHits, paginationInfo, noSearchHits }: Props) => {
