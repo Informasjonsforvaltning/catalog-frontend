@@ -17,6 +17,7 @@ export interface HeaderProps {
   catalogAdminUrl?: string;
   fdkBaseUrl?: string;
   fdkRegistrationBaseUrl?: string;
+  termsOfUseUrl?: string;
   useDemoLogo?: boolean;
   fontColor?: string;
   backgroundColor?: string;
@@ -28,6 +29,7 @@ const Header: FC<HeaderProps> = ({
   catalogAdminUrl,
   fdkBaseUrl,
   fdkRegistrationBaseUrl,
+  termsOfUseUrl,
   useDemoLogo,
   fontColor,
   backgroundColor,
@@ -53,7 +55,7 @@ const Header: FC<HeaderProps> = ({
     [
       {
         name: localization.footer.termsOfUse,
-        url: 'https://data.norge.no/publishing/terms-of-use',
+        url: termsOfUseUrl ?? 'https://data.norge.no/publishing/terms-of-use',
         external: true,
       },
       {

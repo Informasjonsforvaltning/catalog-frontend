@@ -38,6 +38,7 @@ export const CatalogLayout = ({
       fdkRegistrationBaseUrl={fdkRegistrationBaseUrl}
       adminGuiBaseUrl={adminGuiBaseUrl}
       fdkBaseUrl={fdkBaseUrl}
+      termsOfUseUrl={`${fdkRegistrationBaseUrl}/terms-and-conditions/${catalogId}`}
       catalogTitle={localization.catalogType.concept}
       displayFooter={false}
     >

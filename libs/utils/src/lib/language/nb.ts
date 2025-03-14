@@ -533,9 +533,9 @@ export const nb = {
   },
 
   termsOfUse: {
-    modalHeader: 'Bruksvilkår ikke akseptert',
-    modalContent: 'Bruksvilkår må aksepteres for å kunne ta i bruk katalogtjenestene. Hvis vilkårene nylig har blitt akseptert må du logge ut og inn igjen for at det skal tre i kraft.',
-    modalGoToButton: 'Gå til bruksvilkår',
-    modalCloseButton: 'Velg annen virksomhet',
+    notAcceptedTitle: 'Bruksvilkår ikke akseptert',
+    notAcceptedContent: `Bruksvilkår må aksepteres for å kunne ta i bruk katalogtjenestene. Hvis vilkårene nylig har blitt akseptert må du logge ut og inn igjen for at det skal tre i kraft. `,
+    gotoTermsOfUse: 'Gå til bruksvilkår',
+    cancel: 'Avbrytt',    
   },
 };

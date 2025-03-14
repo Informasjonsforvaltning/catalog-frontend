@@ -23,9 +23,9 @@ import {
 } from '@catalog-frontend/types';
 import ConceptPageClient from './concept-page-client';
 import { RedirectType, redirect } from 'next/navigation';
+import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
 import { withReadProtectedPage } from '../../../../../utils/auth';
 import { conceptSchema } from '../../../../../components/concept-form/validation-schema';
-import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
 
 const ConceptPage = withReadProtectedPage(
   ({ catalogId, conceptId }) => `/catalogs/${catalogId}/concepts/${conceptId}`,

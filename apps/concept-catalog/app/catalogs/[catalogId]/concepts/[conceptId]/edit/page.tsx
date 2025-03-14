@@ -61,13 +61,11 @@ export default withWriteProtectedPage(
         />
         <EditPage
           catalogId={catalogId}
-          breadcrumbList={breadcrumbList}
           concept={concept}
           conceptStatuses={conceptStatuses}
           codeListsResult={codeListsResult}
           fieldsResult={fieldsResult}
           usersResult={usersResult}
-          catalogPortalBaseUri={process.env.CATALOG_PORTAL_BASE_URI}
         />
       </>
     );

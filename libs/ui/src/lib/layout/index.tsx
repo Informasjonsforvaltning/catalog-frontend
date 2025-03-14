@@ -19,6 +19,7 @@ interface LayoutProps {
   fdkRegistrationBaseUrl?: string;
   adminGuiBaseUrl?: string;
   fdkBaseUrl?: string;
+  termsOfUseUrl?: string;
   catalogTitle?: string;
   displayFooter?: boolean;
 }
@@ -32,6 +33,7 @@ export const Layout = ({
   fdkRegistrationBaseUrl,
   adminGuiBaseUrl,
   fdkBaseUrl,
+  termsOfUseUrl,
   catalogTitle,
   displayFooter = true
 }: LayoutProps) => {
@@ -44,6 +46,7 @@ export const Layout = ({
         fdkRegistrationBaseUrl={fdkRegistrationBaseUrl}
         adminGuiBaseUrl={adminGuiBaseUrl}
         fdkBaseUrl={fdkBaseUrl}
+        termsOfUseUrl={termsOfUseUrl}
       />
       <main className={style.main}>
         <ErrorBoundary
