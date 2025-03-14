@@ -171,6 +171,7 @@ export const nb = {
     },
 
     sortOptions: {
+      NEWEST_FIRST: 'Nyest først',
       LAST_UPDATED_FIRST: 'Sist endret først',
       LAST_UPDATED_LAST: 'Eldst først',
       RECOMMENDED_TERM_AÅ: 'Anbefalt term A-Å',
@@ -197,6 +198,7 @@ export const nb = {
     harvestDataset: 'Høst spesifikasjon fra katalog',
     importConcept: 'Importer',
     importLogo: 'Importer logo',
+    importDataService: 'Importer OpenAPI',
     removeFilter: 'Fjern filter',
     removeFromCodeList: 'Fjern fra kodeliste',
     restore: 'Gjenopprett',
@@ -522,6 +524,12 @@ export const nb = {
     button: {
       newDataService: 'Legg til API-beskrivelse',
     },
+    importModal: {
+      title: 'API import',
+      openapiDescription:
+        'API-beskrivelser kan importeres ved å laste inn en OpenAPI-spesifikasjonsfil i JSON eller YAML-format, når importeringsforsøket er gjennomført vil du automatisk bli tatt til en side som detaljerer resultatet av importeringen.',
+      resultDescription: 'Bruk Resultater-knappen for å se alle tidligere gjennomførte importeringsforsøk.',
+    },
   },
 
   icon: {
@@ -537,5 +545,26 @@ export const nb = {
     notAcceptedContent: `Bruksvilkår må aksepteres for å kunne ta i bruk katalogtjenestene. Hvis vilkårene nylig har blitt akseptert må du logge ut og inn igjen for at det skal tre i kraft. `,
     gotoTermsOfUse: 'Gå til bruksvilkår',
     cancel: 'Avbryt',
+  },
+
+  importResult: {
+    completed: 'Vellykket',
+    failed: 'Feilet',
+    warnings: 'Advarsler',
+    errors: 'Feil',
+    goToImported: 'Gå til importert ressurs',
+    confirmDelete: 'Er du sikker på at du vil slette importeringsrapporten?',
+    deleteCanResultInDuplicates: `
+Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.`,
+    tableHeading: {
+      title: 'Import',
+      timestamp: 'Tidspunkt',
+      status: 'Status',
+    },
+    tooltip: {
+      ok: 'Antall uten feil.',
+      warning: 'Antall med bare små feil.',
+      error: 'Antall med alvorlige feil.',
+    },
   },
 };

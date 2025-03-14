@@ -8,7 +8,7 @@ import { getDataServices } from '../../../actions/actions';
 
 export default async function DataServicesSearchHits({ params }) {
   const { catalogId } = params;
-  const session = await getValidSession({ callbackUrl: `/catalogs/${catalogId}/data-services` });
+  const session = await getValidSession();
 
   const dataServices: DataService[] = await getDataServices(catalogId);
   const hasWritePermission = await hasOrganizationWritePermission(session.accessToken, catalogId);

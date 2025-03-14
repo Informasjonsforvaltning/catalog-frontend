@@ -19,8 +19,9 @@ import {
 } from '@catalog-frontend/utils';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 import StatusTag from '../../../../components/status-tag';
+import ImportModal from '../../../../components/import-modal';
 
 type SortTypes = 'titleAsc' | 'titleDesc' | 'lastChanged';
 type FilterType = 'published' | 'status';
@@ -61,11 +62,11 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
     const filteredDataServices = () => {
       let filtered = dataServices;
 
-      if (!_.isEmpty(filterStatus)) {
+      if (!isEmpty(filterStatus)) {
         filtered = filtered.filter((dataService) => dataService.status && filterStatus?.includes(dataService.status));
       }
 
-      if (!_.isEmpty(filterPublicationState)) {
+      if (!isEmpty(filterPublicationState)) {
         filtered = filtered.filter((dataService) =>
           filterPublicationState?.includes(dataService?.published ? 'published' : 'unpublished'),
         );
@@ -167,6 +168,7 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
         </SearchHitsPageLayout.SearchRow>
         {hasWritePermission && (
           <SearchHitsPageLayout.ButtonRow>
+            <ImportModal catalogId={catalogId} />
             <LinkButton href={`/catalogs/${catalogId}/data-services/new`}>
               <PlusCircleIcon />
               {localization.dataServiceCatalog.button.newDataService}
