@@ -52,6 +52,24 @@ export const postDataService = async (dataService: Partial<DataService>, catalog
   return await fetch(resource, options);
 };
 
+export const importDataService = async (
+  fileContent: string,
+  contentType: string,
+  catalogId: string,
+  accessToken: string,
+) => {
+  const resource = `https://data-service-catalog.api.staging.fellesdatakatalog.digdir.no/internal/catalogs/${catalogId}/import`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': contentType,
+    },
+    method: 'POST',
+    body: fileContent,
+  };
+  return await fetch(resource, options);
+};
+
 export const getAllDataServiceCatalogs = async (accessToken: string) => {
   const resource = `${path}/internal/catalogs/count`;
   const options = {
@@ -113,6 +131,18 @@ export const unpublishDataService = async (catalogId: string, dataServiceId: str
       'Content-Type': 'application/json',
     },
     method: 'POST',
+  };
+  return await fetch(resource, options);
+};
+
+export const getDataServiceImportResults = async (catalogId: string, accessToken: string) => {
+  const resource = `${path}/internal/catalogs/${catalogId}/import/results`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    next: { tags: ['import-results'] },
   };
   return await fetch(resource, options);
 };

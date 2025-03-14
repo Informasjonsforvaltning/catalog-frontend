@@ -1,0 +1,39 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 323px;
+  height: 198px;
+  left: 323px;
+  top: 803px;
+  background: #ffffff;
+  border: 1px dashed #d5d7d9;
+  border-radius: 8px;
+  justify-content: flex-end;
+  padding-bottom: 21px;
+}
+
+.input {
+  display: none;
+}
+
+.filename {
+  max-width: 170px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-size: 18px;
+  color: #2d3741;
+  gap: 7px;
+  margin-bottom: 25px;
+}
+
+.file {
+  width: fit-content;
+}
+
+.uploadIcon {
+  font-size: 50px;
+  color: #eeeff0;
+  margin-bottom: 30px;
+}
