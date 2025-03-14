@@ -536,6 +536,6 @@ export const nb = {
     notAcceptedTitle: 'Bruksvilkår ikke akseptert',
     notAcceptedContent: `Bruksvilkår må aksepteres for å kunne ta i bruk katalogtjenestene. Hvis vilkårene nylig har blitt akseptert må du logge ut og inn igjen for at det skal tre i kraft. `,
     gotoTermsOfUse: 'Gå til bruksvilkår',
-    cancel: 'Avbrytt',    
+    cancel: 'Avbryt',
   },
 };
