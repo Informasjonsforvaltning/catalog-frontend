@@ -22,7 +22,7 @@ import { redirect } from 'next/navigation';
 
 export async function getDatasets(catalogId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   const response = await getAll(catalogId, `${session?.accessToken}`);
@@ -35,7 +35,7 @@ export async function getDatasets(catalogId: string) {
 
 export async function getDatasetById(catalogId: string, datasetId: string): Promise<Dataset> {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   const response = await getById(catalogId, datasetId, `${session?.accessToken}`);
@@ -60,7 +60,7 @@ export async function createDataset(values: DatasetToBeCreated, catalogId: strin
   const datasetNoEmptyValues = removeEmptyValues(newDataset);
 
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   let success = false;
@@ -88,7 +88,7 @@ export async function createDataset(values: DatasetToBeCreated, catalogId: strin
 
 export async function deleteDataset(catalogId: string, datasetId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   let success = false;
@@ -126,7 +126,7 @@ export async function updateDataset(catalogId: string, initialDataset: Dataset, 
 
   let success = false;
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
 
@@ -156,7 +156,7 @@ export async function publishDataset(catalogId: string, initialDataset: Dataset,
   }
 
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
 
@@ -169,4 +169,6 @@ export async function publishDataset(catalogId: string, initialDataset: Dataset,
     console.error(`${localization.alert.fail} ${error}`);
     throw new Error(`Noe gikk galt, prøv igjen...`);
   }
+
+  revalidateTag('dataset');
 }

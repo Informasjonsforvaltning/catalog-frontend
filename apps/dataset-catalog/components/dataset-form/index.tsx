@@ -155,6 +155,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                     id='tema-section'
                     title={localization.datasetForm.heading.theme}
                     required
+                    error={hasError(['euDataTheme'])}
                   >
                     <ThemeSection
                       losThemes={losThemes}

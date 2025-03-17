@@ -68,8 +68,10 @@ export const datasetFormNb = {
       'Emneord eller tagger beskriver sentralt innhold i datasettet, spesielt når begrepsdefinisjoner mangler eller når det brukes ord som folk ofte søker etter, men som ikke formelt er knyttet til datasettet.',
     concept:
       'Søk etter begrep som er publisert i Data.norge.no og velg fra nedtrekkslisten. Her legger du inn de begrepene som brukes i datasettet. Begrepene brukes til å si noe om hva informasjonen i datasettet betyr. Ved å henvise til gjennomarbeidede definisjoner som virksomheten selv er ansvarlig for å vedlikeholde, sikrer vi at det er tydelig hvordan et begrep brukt i datasettet skal forstås og at denne forståelsen til en hver tid er riktig og oppdatert.',
+    publishWarning:
+      'Datasettbeskrivelsen må ha status "Godkjent" for å kunne publiseres til Data.norge.no. Statusen kan endres i ',
     publish:
-      'Publiser datasettbeskrivelsen til Data.Norge.no. Den må være godkjent for å kunne publiseres. En beskrivelse kan ikke slettes så lenge den er publisert.',
+      'Publiser datasettbeskrivelsen til Data.norge.no. En beskrivelse kan ikke slettes så lenge den er publisert.',
   },
   heading: {
     about: 'Om datasettet',

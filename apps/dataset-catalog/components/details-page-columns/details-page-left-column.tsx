@@ -202,14 +202,14 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
               data={referenceData.frequencies}
             />
 
-            {hasValues(dataset?.hasAccuracyAnnotation?.hasBody) && (
+            {hasValues(dataset?.hasCurrentnessAnnotation?.hasBody) && (
               <div>
                 <Heading
                   level={3}
                   size='2xs'
                 >{`${localization.datasetForm.fieldLabel.hasCurrentnessAnnotation}`}</Heading>
                 <Paragraph size='sm'>
-                  {getTranslateText(dataset?.hasCurrentnessAnnotation?.hasBody, language)}{' '}
+                  {getTranslateText(dataset?.hasCurrentnessAnnotation?.hasBody, language)}
                 </Paragraph>
               </div>
             )}
@@ -274,33 +274,33 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
                   <Table.Row>
                     <Table.HeaderCell>{localization.datasetForm.fieldLabel.relationType}</Table.HeaderCell>
                     <Table.HeaderCell>{localization.datasetForm.fieldLabel.dataset}</Table.HeaderCell>
+                    <Table.HeaderCell>{localization.publisher}</Table.HeaderCell>
                   </Table.Row>
                 </Table.Head>
                 <Table.Body>
                   {dataset?.references &&
                     hasValues(dataset.references) &&
-                    dataset?.references.map((ref, index) => (
-                      <Table.Row key={`references-${index}`}>
-                        <Table.Cell>
-                          {getTranslateText(
-                            relations.find((rel) => rel.code === ref?.referenceType?.code)?.label,
-                            language,
-                          ) ?? ref?.referenceType?.code}
-                        </Table.Cell>
-                        <Table.Cell>
-                          {
-                            <Link
-                              href={`${referenceDataEnv}/datasets/${references?.find((item) => item?.uri === ref?.source?.uri)?.id}`}
-                            >
-                              {getTranslateText(
-                                references?.find((item) => item?.uri === ref?.source?.uri)?.title,
-                                language,
-                              ) ?? ref?.source?.uri}
-                            </Link>
-                          }
-                        </Table.Cell>
-                      </Table.Row>
-                    ))}
+                    dataset?.references.map((ref, index) => {
+                      const match = references?.find((item) => item?.uri === ref?.source?.uri);
+                      return (
+                        <Table.Row key={`references-${index}`}>
+                          <Table.Cell>
+                            {getTranslateText(
+                              relations.find((rel) => rel.code === ref?.referenceType?.code)?.label,
+                              language,
+                            ) ?? ref?.referenceType?.code}
+                          </Table.Cell>
+                          <Table.Cell>
+                            {
+                              <Link href={`${referenceDataEnv}/datasets/${match?.id}`}>
+                                {getTranslateText(match?.title, language) ?? ref?.source?.uri}
+                              </Link>
+                            }
+                          </Table.Cell>
+                          <Table.Cell>{getTranslateText(match?.organization?.prefLabel, language)}</Table.Cell>
+                        </Table.Row>
+                      );
+                    })}
                 </Table.Body>
               </Table>
             )}
@@ -352,25 +352,35 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       )}
       {hasValues(dataset.concepts) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.concept}>
-          <ul className={styles.list}>
-            {dataset?.concepts &&
-              dataset?.concepts.map((item, index) => {
-                const match = concepts?.find((concept) => concept?.uri === item?.uri);
-                const linkText = match
-                  ? capitalizeFirstLetter(getTranslateText(match.title, language).toString())
-                  : item?.uri;
-
-                return (
-                  <li
-                    key={`concept-${item?.uri}`}
-                    className={styles.listItem}
-                  >
-                    <Link href={getDataNorgeUri(match?.id, 'concepts')}>{linkText}</Link>
-                    {dataset?.concepts && index < dataset?.concepts.length - 1 && <span>, </span>}
-                  </li>
-                );
-              })}
-          </ul>
+          <Table
+            size='sm'
+            className={styles.table}
+          >
+            <Table.Head>
+              <Table.Row>
+                <Table.HeaderCell>{localization.datasetForm.fieldLabel.concept}</Table.HeaderCell>
+                <Table.HeaderCell>{localization.publisher}</Table.HeaderCell>
+              </Table.Row>
+            </Table.Head>
+            <Table.Body>
+              {dataset?.concepts &&
+                dataset?.concepts.map((concept, index) => {
+                  const match = concepts?.find((item) => item?.uri === concept?.uri);
+                  return (
+                    <Table.Row key={`references-${index}`}>
+                      <Table.Cell>
+                        {
+                          <Link href={`${referenceDataEnv}/concepts/${match?.id}`}>
+                            {capitalizeFirstLetter(getTranslateText(match?.title, language).toString()) ?? concept?.uri}
+                          </Link>
+                        }
+                      </Table.Cell>
+                      <Table.Cell>{getTranslateText(match?.organization?.prefLabel, language)}</Table.Cell>
+                    </Table.Row>
+                  );
+                })}
+            </Table.Body>
+          </Table>
         </InfoCard.Item>
       )}
       {dataset?.keyword && !_.isEmpty(dataset?.keyword[0]) && (

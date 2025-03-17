@@ -1,5 +1,5 @@
 import { InfoCard } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
+import { capitalizeFirstLetter, formatISO, localization } from '@catalog-frontend/utils';
 import { EnvelopeClosedIcon, PhoneIcon, LinkIcon } from '@navikt/aksel-icons';
 import _ from 'lodash';
 import PublishSwitch from '../publish-switch';
@@ -27,8 +27,13 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
       <InfoCard.Item
         key={`info-data-${localization.publicationState.state}`}
         title={localization.publicationState.state}
-        helpText={localization.datasetForm.helptext.publish}
+        helpText={
+          dataset.registrationStatus === PublicationStatus.DRAFT
+            ? `${localization.datasetForm.helptext.publishWarning} [skjemaet.](/catalogs/${dataset?.catalogId}/dataset/${dataset?.id}/edit)`
+            : localization.datasetForm.helptext.publish
+        }
         headingColor='light'
+        helpTextSeverity={dataset.registrationStatus === PublicationStatus.DRAFT ? 'warning' : 'info'}
       >
         <PublishSwitch
           catalogId={dataset.catalogId}
@@ -44,7 +49,14 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
           title={localization.datasetForm.fieldLabel.issued}
           headingColor='light'
         >
-          {new Date(dataset.issued).toLocaleDateString('no-NO')}
+          {capitalizeFirstLetter(
+            formatISO(dataset.issued, {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            }),
+          )}
         </InfoCard.Item>
       )}
 
@@ -98,7 +110,14 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
           title={localization.datasetForm.helptext.modified.slice(0, -1)}
           headingColor='light'
         >
-          {new Date(dataset.modified).toLocaleDateString('no-NO')}
+          {capitalizeFirstLetter(
+            formatISO(dataset.modified, {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            }),
+          )}
         </InfoCard.Item>
       )}
     </InfoCard>
