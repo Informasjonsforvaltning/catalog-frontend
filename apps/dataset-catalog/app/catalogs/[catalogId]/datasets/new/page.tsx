@@ -4,7 +4,6 @@ import { datasetToBeCreatedTemplate } from '../../../../../components/dataset-fo
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getValidSession, localization } from '@catalog-frontend/utils';
 import {
-  getAllDatasetSeries,
   getDatasetTypes,
   getDataThemes,
   getFrequencies,
@@ -19,9 +18,6 @@ export default async function NewDatasetPage({ params }: Params) {
   const { catalogId } = params;
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
-  const session = await getValidSession();
-  const accessToken = session?.accessToken;
-  const datasetSeries = await getAllDatasetSeries(catalogId, accessToken).then((res) => res.json());
 
   const [
     losThemesResponse,
@@ -78,7 +74,6 @@ export default async function NewDatasetPage({ params }: Params) {
         referenceData={referenceData}
         searchEnv={searchEnv}
         referenceDataEnv={referenceDataEnv}
-        datasetSeries={datasetSeries._embedded.datasets}
       ></DatasetForm>
     </>
   );
