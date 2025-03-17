@@ -7,7 +7,7 @@ import {
   trimObjectWhitespace,
 } from '@catalog-frontend/utils';
 import { Alert, Button, Paragraph, Spinner, Switch } from '@digdir/designsystemet-react';
-import { Dataset, DatasetSeries, DatasetToBeCreated, ReferenceData, PublicationStatus } from '@catalog-frontend/types';
+import { Dataset, DatasetToBeCreated, ReferenceData, PublicationStatus } from '@catalog-frontend/types';
 import {
   FormikAutoSaver,
   FormikAutoSaverRef,
@@ -41,7 +41,6 @@ type Props = {
   searchEnv: string; // Environment variable to search service
   referenceDataEnv: string; // Environment variable to reference data
   referenceData: ReferenceData;
-  datasetSeries: DatasetSeries[];
 };
 
 const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
@@ -68,7 +67,7 @@ const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
   );
 };
 
-export const DatasetForm = ({ initialValues, referenceData, searchEnv, referenceDataEnv, datasetSeries }: Props) => {
+export const DatasetForm = ({ initialValues, referenceData, searchEnv, referenceDataEnv }: Props) => {
   const { catalogId, datasetId } = useParams();
   const [isDirty, setIsDirty] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -254,10 +253,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                     title={localization.datasetForm.heading.relations}
                     subtitle={localization.datasetForm.subtitle.relations}
                   >
-                    <RelationsSection
-                      searchEnv={searchEnv}
-                      datasetSeries={datasetSeries}
-                    />
+                    <RelationsSection searchEnv={searchEnv} />
                   </FormLayout.Section>
 
                   <FormLayout.Section

@@ -42,7 +42,6 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     sample: dataset?.sample,
     references: dataset?.references,
     relations: dataset?.relations,
-    inSeries: dataset.inSeries ?? '',
     distribution: dataset?.distribution ?? [],
     contactPoint: dataset.contactPoint ?? [],
   };
@@ -86,7 +85,6 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     sample: undefined,
     references: undefined,
     relations: undefined,
-    inSeries: '',
     distribution: undefined,
     contactPoint: [
       {

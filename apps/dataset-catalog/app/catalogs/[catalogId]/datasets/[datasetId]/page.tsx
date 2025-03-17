@@ -6,6 +6,7 @@ import {
   getValidSession,
   hasOrganizationWritePermission,
   localization,
+  redirectToSignIn,
 } from '@catalog-frontend/utils';
 import {
   getAllDatasetSeries,
@@ -26,9 +27,11 @@ export default async function EditDatasetPage({ params }: Params) {
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
 
-  const session = await getValidSession({
-    callbackUrl: `/catalogs/${catalogId}/services/${datasetId}`,
-  });
+  const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn();
+  }
+
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
 
   const breadcrumbList = [

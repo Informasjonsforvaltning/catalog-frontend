@@ -181,13 +181,6 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
               <PlusCircleIcon fontSize='1.2rem' />
               {localization.datasetForm.button.addDataset}
             </LinkButton>
-            <LinkButton
-              variant='secondary'
-              href={`/catalogs/${catalogId}/datasets/series/new`}
-            >
-              <PlusCircleIcon fontSize='1.2rem' />
-              {localization.datasetForm.button.addDatasetSeries}
-            </LinkButton>
           </SearchHitsPageLayout.ButtonRow>
         )}
         <SearchHitsPageLayout.LeftColumn>
