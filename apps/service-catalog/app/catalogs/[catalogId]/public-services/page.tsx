@@ -12,7 +12,8 @@ import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
 import PublicServicePageClient from './public-service-page-client';
 
-export default async function PublicServiceSearchHitsPage({ params }: Params) {
+export default async function PublicServiceSearchHitsPage(props: Params) {
+  const params = await props.params;
   const { catalogId } = params;
   const session = await getValidSession();
   if(!session) {

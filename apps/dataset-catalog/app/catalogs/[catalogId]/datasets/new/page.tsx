@@ -13,7 +13,8 @@ import {
   getProvenanceStatements,
 } from '@catalog-frontend/data-access';
 
-export default async function NewDatasetPage({ params }: Params) {
+export default async function NewDatasetPage(props: Params) {
+  const params = await props.params;
   const initialValues = datasetToBeCreatedTemplate();
   const { catalogId } = params;
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';

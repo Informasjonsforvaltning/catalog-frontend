@@ -1,8 +1,8 @@
-import { cookies } from 'next/headers';
+import { cookies, type UnsafeUnwrappedCookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
 const Home = () => {
-  cookies();
+  void (cookies() as unknown as UnsafeUnwrappedCookies);
   redirect(`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`);
 };
 

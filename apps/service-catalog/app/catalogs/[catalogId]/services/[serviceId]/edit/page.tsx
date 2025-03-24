@@ -8,7 +8,8 @@ import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import styles from './service-edit-page.module.css';
 import { Heading } from '@digdir/designsystemet-react';
 
-export default async function EditServicePage({ params }: Params) {
+export default async function EditServicePage(props: Params) {
+  const params = await props.params;
   const { catalogId, serviceId } = params;
   const service: Service = await getServiceById(catalogId, serviceId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());

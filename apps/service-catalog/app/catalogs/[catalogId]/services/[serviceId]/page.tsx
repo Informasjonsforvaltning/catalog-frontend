@@ -12,7 +12,8 @@ import { getServiceById } from '../../../../actions/services/actions';
 import { RedirectType, redirect } from 'next/navigation';
 import ServiceDetailsPageClient from './service-details-page-client';
 
-export default async function ServiceDetailsPage({ params }: Params) {
+export default async function ServiceDetailsPage(props: Params) {
+  const params = await props.params;
   const { catalogId, serviceId } = params;
   const session = await getValidSession({
     callbackUrl: `/catalogs/${catalogId}/services/${serviceId}`,

@@ -7,7 +7,8 @@ import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access'
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import styles from './public-service-new-page.module.css';
 
-export default async function NewPublicServicePage({ params }: Params) {
+export default async function NewPublicServicePage(props: Params) {
+  const params = await props.params;
   const { catalogId } = params;
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const statusesResponse = await getAdmsStatuses().then((res) => res.json());

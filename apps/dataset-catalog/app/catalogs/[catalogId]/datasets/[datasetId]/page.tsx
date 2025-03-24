@@ -20,7 +20,8 @@ import {
 } from '@catalog-frontend/data-access';
 import DatasetDetailsPageClient from './dataset-details-page-client';
 
-export default async function EditDatasetPage({ params }: Params) {
+export default async function EditDatasetPage(props: Params) {
+  const params = await props.params;
   const { catalogId, datasetId } = params;
   const dataset = await getDatasetById(catalogId, datasetId);
 

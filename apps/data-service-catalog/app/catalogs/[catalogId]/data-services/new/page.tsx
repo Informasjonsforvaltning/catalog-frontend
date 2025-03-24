@@ -11,7 +11,8 @@ import DataServiceForm from '../../../../../components/data-service-form';
 import { dataServiceToBeCreatedTemplate } from '../../../../../components/data-service-form/utils/data-service-initial-values';
 import { localization } from '@catalog-frontend/utils';
 
-export default async function NewDataServicePage({ params }: Params) {
+export default async function NewDataServicePage(props: Params) {
+  const params = await props.params;
   const { catalogId } = params;
   const initialValues = dataServiceToBeCreatedTemplate();
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';

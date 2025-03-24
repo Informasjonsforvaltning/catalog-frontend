@@ -3,12 +3,13 @@ import { withValidSessionForApi } from '@catalog-frontend/utils';
 import { NextRequest } from 'next/server';
 
 interface Props {
-  params: {
+  params: Promise<{
     slug: string[];
-  };
+  }>;
 }
 
-export const GET = async (req, { params }: Props) => {
+export const GET = async (req, props: Props) => {
+  const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId] = slug;
@@ -25,7 +26,8 @@ export const GET = async (req, { params }: Props) => {
   });
 };
 
-export const POST = async (req, { params }: Props) => {
+export const POST = async (req, props: Props) => {
+  const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId] = slug;
@@ -42,7 +44,8 @@ export const POST = async (req, { params }: Props) => {
   });
 };
 
-export const PATCH = async (req, { params }: Props) => {
+export const PATCH = async (req, props: Props) => {
+  const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId, codeListId] = slug;
@@ -60,7 +63,8 @@ export const PATCH = async (req, { params }: Props) => {
   });
 };
 
-export const DELETE = async (req: NextRequest, { params }: Props) => {
+export const DELETE = async (req: NextRequest, props: Props) => {
+  const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId, codeListId] = slug;

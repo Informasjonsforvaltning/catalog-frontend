@@ -11,7 +11,8 @@ import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getDatasets } from '../../../actions/actions';
 import DatasetsPageClient from './datasets-page-client';
 
-export default async function DatasetSearchHitsPage({ params }: Params) {
+export default async function DatasetSearchHitsPage(props: Params) {
+  const params = await props.params;
   const { catalogId } = params;
 
   const session = await getValidSession();

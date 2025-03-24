@@ -17,7 +17,8 @@ import { redirect, RedirectType } from 'next/navigation';
 import DataServiceDetailsPageClient from './data-service-details-page-client';
 import { dataServiceValidationSchema } from '../../../../../components/data-service-form/utils/validation-schema';
 
-export default async function EditDataServicePage({ params }: Params) {
+export default async function EditDataServicePage(props: Params) {
+  const params = await props.params;
   const { catalogId, dataServiceId } = params;
   const session = await getValidSession({ callbackUrl: `/catalogs/${catalogId}/data-services/${dataServiceId}/edit` });
   const dataService = await getDataServiceById(catalogId, dataServiceId, `${session?.accessToken}`).then((response) => {

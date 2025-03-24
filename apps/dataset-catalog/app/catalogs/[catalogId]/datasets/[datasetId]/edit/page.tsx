@@ -13,7 +13,8 @@ import {
   getOpenLicenses,
   getProvenanceStatements,
 } from '@catalog-frontend/data-access';
-export default async function EditDatasetPage({ params }: Params) {
+export default async function EditDatasetPage(props: Params) {
+  const params = await props.params;
   const { catalogId, datasetId } = params;
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
