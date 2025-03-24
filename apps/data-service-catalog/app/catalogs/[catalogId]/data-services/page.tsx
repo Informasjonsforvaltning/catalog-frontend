@@ -6,7 +6,8 @@ import { getDistributionStatuses } from '@catalog-frontend/data-access';
 import DataServicePageClient from './data-services-page-client';
 import { getDataServices } from '../../../actions/actions';
 
-export default async function DataServicesSearchHits({ params }) {
+export default async function DataServicesSearchHits(props) {
+  const params = await props.params;
   const { catalogId } = params;
   const session = await getValidSession({ callbackUrl: `/catalogs/${catalogId}/data-services` });
 

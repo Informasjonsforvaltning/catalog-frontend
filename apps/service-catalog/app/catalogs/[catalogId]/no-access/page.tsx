@@ -3,7 +3,8 @@ import { localization } from '@catalog-frontend/utils';
 import { Heading } from '@digdir/designsystemet-react';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 
-const NoAccess = async ({ params }: Params) => {
+const NoAccess = async (props: Params) => {
+  const params = await props.params;
   const { catalogId } = params;
 
   const breadcrumbList = catalogId
