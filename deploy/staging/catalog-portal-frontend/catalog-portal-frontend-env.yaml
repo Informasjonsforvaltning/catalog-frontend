@@ -79,7 +79,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: commonurl-staging
-                  key: RECORDS_OF_PROCESSING_ACTIVITIES_API_BASE_URI 
+                  key: RECORDS_OF_PROCESSING_ACTIVITIES_API_BASE_URI
             - name: SERVICE_CATALOG_GUI_BASE_URI
               valueFrom:
                 secretKeyRef:
@@ -104,7 +104,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: commonurl-staging
-                  key: DATA_SERVICE_CATALOG_FRONTEND            
+                  key: DATA_SERVICE_CATALOG_FRONTEND
             - name: DATASET_CATALOG_BASE_URI
               valueFrom:
                 secretKeyRef:
@@ -125,3 +125,8 @@ spec:
                 secretKeyRef:
                   name: commonurl-staging
                   key: FDK_CMS_BASE_URI
+            - name: RECORDS_ALLOW_LIST
+              valueFrom:
+                secretKeyRef:
+                  name: behandlingsoversikt
+                  key: ALLOW_LIST
