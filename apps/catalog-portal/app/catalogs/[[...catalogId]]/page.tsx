@@ -4,10 +4,8 @@ import {
   getResourceRoles,
   getTranslateText,
   getValidSession,
-  hasAcceptedTermsForOrg,
   hasNonSystemAccessForOrg,
   hasSystemAdminPermission,
-  localization,
   redirectToSignIn,
 } from '@catalog-frontend/utils';
 import { getAllServiceMessages, getOrganizations, StrapiGraphql } from '@catalog-frontend/data-access';
@@ -15,8 +13,7 @@ import { Organization } from '@catalog-frontend/types';
 import OrganizationCombo from './components/organization-combobox';
 import { redirect } from 'next/navigation';
 import { Breadcrumbs, ServiceMessages, TermsOfUseAlert } from '@catalog-frontend/ui';
-import { Alert, Heading } from '@digdir/designsystemet-react';
-import Link from 'next/link';
+import { Heading } from '@digdir/designsystemet-react';
 import styles from './catalogs.module.css';
 import { CatalogCard } from './components/catalog-card';
 
@@ -44,9 +41,12 @@ const CatalogsPage = async ({ params: { catalogId } }: { params: { catalogId: st
     return redirect(`/catalogs/${organizations[0].organizationId}`);
   }
 
+  const showRecordsOfProcessing = (organizationId: string) => {
+    return process.env.RECORDS_ALLOW_LIST?.includes(organizationId) ?? false;
+  };
+
   const currentOrganization = organizations.find((org) => org.organizationId === catalogId?.[0]);
   const hasNonSystemAccess = catalogId ? hasNonSystemAccessForOrg(`${session?.accessToken}`, catalogId?.[0]) : false;
-  const acceptedTerms = hasAcceptedTermsForOrg(`${session?.accessToken}`, catalogId?.[0]);
   const serviceMessages = await getServiceMessages();
 
   return (
@@ -115,13 +115,15 @@ const CatalogsPage = async ({ params: { catalogId } }: { params: { catalogId: st
               />
             </div>
 
-            <div key={`recordOfProcessingActivities-${currentOrganization.organizationId}`}>
-              <CatalogCard
-                variant='records-of-processing'
-                organizationId={currentOrganization.organizationId}
-                href={`${process.env.RECORDS_OF_PROCESSING_ACTIVITIES_GUI_BASE_URI}/${currentOrganization.organizationId}`}
-              />
-            </div>
+            {showRecordsOfProcessing(currentOrganization.organizationId) && (
+              <div key={`recordOfProcessingActivities-${currentOrganization.organizationId}`}>
+                <CatalogCard
+                  variant='records-of-processing'
+                  organizationId={currentOrganization.organizationId}
+                  href={`${process.env.RECORDS_OF_PROCESSING_ACTIVITIES_GUI_BASE_URI}/${currentOrganization.organizationId}`}
+                />
+              </div>
+            )}
           </div>
         </div>
       )}
