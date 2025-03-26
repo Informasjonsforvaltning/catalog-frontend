@@ -10,7 +10,7 @@ import {
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
-import { Chip, Heading, Tabs } from '@digdir/designsystemet-react';
+import { Heading, Tabs } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import Link from 'next/link';
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
@@ -20,7 +20,6 @@ import styles from './change-requests-page.module.css';
 import { getTranslatedStatus } from '../../../../utils/change-request';
 import { useRouter } from 'next/navigation';
 import { ChangeRequest } from '@catalog-frontend/types';
-import { isEmpty } from 'lodash';
 
 export const ChangeRequestsPageClient = ({ catalogId, data }) => {
   const itemTypeOptions = [
@@ -122,14 +121,6 @@ export const ChangeRequestsPageClient = ({ catalogId, data }) => {
     default:
       break;
   }
-
-  const removeFilter = (filterName: string, filterType: 'status' | 'type') => {
-    if (filterType === 'type') {
-      setFilterItemType(null);
-    } else if (filterType === 'status') {
-      setFilterStatus(filterStatus?.filter((name) => name !== filterName) ?? []);
-    }
-  };
 
   return (
     <div className='container'>
