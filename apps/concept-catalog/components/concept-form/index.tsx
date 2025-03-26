@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { Formik, Form, FormikProps } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -14,8 +14,8 @@ import {
   FormikAutoSaver,
   FormikAutoSaverRef,
   NotificationCarousel,
+  HelpMarkdown,
 } from '@catalog-frontend/ui';
-import { createConcept, updateConcept } from '../../app/actions/concept/actions';
 import { conceptSchema } from './validation-schema';
 import { TermSection } from './components/term-section';
 import { DefinitionSection } from './components/definition-section';
@@ -30,16 +30,23 @@ import { PeriodSection } from './components/period-section';
 import { InternalSection } from './components/internal-section';
 import { ContactSection } from './components/contact-section';
 import styles from './concept-form.module.scss';
+import { isEqual } from 'lodash';
 
 type Props = {
+  afterSubmit?: () => void;
+  autoSave?: boolean;
   catalogId: string;
-  concept: Concept;
+  concept?: Concept;
   conceptStatuses: ReferenceDataCode[];
   codeListsResult: CodeListsResult;
+  customFooterBar?: ReactNode;
   fieldsResult: FieldsResult;
-  usersResult: UsersResult;
-  readOnly?: boolean;
+  initialConcept: Concept;
   markDirty?: boolean;
+  onCancel?: () => void;
+  onSubmit?: (values: Concept) => Promise<void>;
+  readOnly?: boolean;
+  usersResult: UsersResult;
 };
 
 const getNotifications = ({ isValid, hasUnsavedChanges }) => [
@@ -70,14 +77,20 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
 ];
 
 const ConceptForm = ({
+  afterSubmit,
+  autoSave = true,
   catalogId,
   concept,
   conceptStatuses,
   codeListsResult,
+  customFooterBar,
   fieldsResult,
-  usersResult,
-  readOnly,
+  initialConcept,
   markDirty,
+  onCancel,
+  onSubmit,
+  readOnly,
+  usersResult,
 }: Props) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -156,28 +169,14 @@ const ConceptForm = ({
     (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
   );
 
-  const handleCreate = async (values: Concept) => {
-    await createConcept(values, catalogId.toString());
-  };
-
-  const handleUpdate = async (values: Concept) => {
-    if ('id' in concept) {
-      try {
-        await updateConcept(catalogId.toString(), concept, values);
-      } catch (error) {
-        window.alert(`${localization.alert.updateFailed} ${error}`);
-      }
-    } else {
-      await handleCreate(values);
-    }
-  };
-
   const handleCancel = () => {
     // Discard stored data
     autoSaveRef.current?.discard();
-
     setIsCanceled(true);
-    router.push(concept.id ? `/catalogs/${catalogId}/concepts/${concept.id}` : `/catalogs/${catalogId}/concepts`);
+
+    if (onCancel) {
+      onCancel();
+    }
   };
 
   const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
@@ -214,19 +213,26 @@ const ConceptForm = ({
   return (
     <Formik
       innerRef={formikRef}
-      initialValues={mapPropsToValues(concept)}
+      initialValues={mapPropsToValues(initialConcept)}
       validationSchema={conceptSchema({ required: !ignoreRequired, baseUri: '' })}
       validateOnChange={validateOnChange}
       validateOnBlur={validateOnChange}
       onSubmit={async (values, { setSubmitting }) => {
-        if(readOnly) {
+        if (readOnly) {
           return;
         }
 
-        concept.id === null ? await handleCreate(values as Concept) : await handleUpdate(values as Concept);
+        if (onSubmit) {
+          await onSubmit(values);
+        }
+
         setSubmitting(false);
         // Discard stored data
         autoSaveRef.current?.discard();
+
+        if (afterSubmit) {
+          afterSubmit();
+        }
       }}
     >
       {({ errors, dirty, isValid, isSubmitting, isValidating, submitForm, setValues }) => {
@@ -234,7 +240,7 @@ const ConceptForm = ({
         const hasError = (fields: (keyof Concept)[]) => fields.some((field) => Object.keys(errors).includes(field));
 
         const handleRestoreConcept = (data: StorageData) => {
-          if (data?.values?.id !== concept.id) {
+          if (data?.values?.id !== initialConcept.id) {
             if (!data?.values?.id) {
               return router.push(`/catalogs/${catalogId}/concepts/new?restore=1`);
             }
@@ -243,29 +249,25 @@ const ConceptForm = ({
           setValues(data.values);
         };
 
+        if (concept && !isEqual(initialConcept, concept) && !dirty) {
+          setValues(concept);
+        }
+
         return (
           <>
             <div className='container'>
               <Form>
-                <FormikAutoSaver
-                  ref={autoSaveRef}
-                  storage={new CatalogLocalStorage<StorageData>({ key: 'conceptForm' })}
-                  restoreOnRender={restoreOnRender}
-                  onRestore={handleRestoreConcept}
-                  confirmMessage={restoreConfirmMessage}
-                />
+                {autoSave && (
+                  <FormikAutoSaver
+                    ref={autoSaveRef}
+                    storage={new CatalogLocalStorage<StorageData>({ key: 'conceptForm' })}
+                    restoreOnRender={restoreOnRender}
+                    onRestore={handleRestoreConcept}
+                    confirmMessage={restoreConfirmMessage}
+                  />
+                )}
+
                 <FormLayout>
-                  <FormLayout.Options>
-                    <Paragraph>{localization.conceptForm.alert.ignoreRequired}</Paragraph>
-                    <Checkbox
-                      size='sm'
-                      value='ignoreRequired'
-                      checked={ignoreRequired}
-                      onChange={(e) => setIgnoreRequired(e.target.checked)}
-                    >
-                      {localization.conceptForm.fieldLabel.ignoreRequired}
-                    </Checkbox>
-                  </FormLayout.Options>
                   <FormLayout.Section
                     id='term'
                     title={localization.conceptForm.section.termTitle}
@@ -273,7 +275,10 @@ const ConceptForm = ({
                     required
                     error={hasError(['anbefaltTerm', 'tillattTerm', 'frarådetTerm'])}
                   >
-                    <TermSection markDirty={markDirty} />
+                    <TermSection
+                      markDirty={markDirty}
+                      readOnly={readOnly}
+                    />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='definition'
@@ -282,7 +287,10 @@ const ConceptForm = ({
                     required
                     error={hasError(['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'])}
                   >
-                    <DefinitionSection markDirty={markDirty} />
+                    <DefinitionSection
+                      markDirty={markDirty}
+                      readOnly={readOnly}
+                    />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='remark'
@@ -290,7 +298,10 @@ const ConceptForm = ({
                     subtitle={localization.conceptForm.section.remarkSubtitle}
                     error={hasError(['merknad'])}
                   >
-                    <RemarkSection markDirty={markDirty} />
+                    <RemarkSection
+                      markDirty={markDirty}
+                      readOnly={readOnly}
+                    />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='subject'
@@ -301,6 +312,7 @@ const ConceptForm = ({
                     <SubjectSection
                       codes={subjectCodeList?.codes}
                       markDirty={markDirty}
+                      readOnly={readOnly}
                     />
                   </FormLayout.Section>
                   <FormLayout.Section
@@ -309,7 +321,10 @@ const ConceptForm = ({
                     subtitle={localization.conceptForm.section.exampleSubtitle}
                     error={hasError(['eksempel'])}
                   >
-                    <ExampleSection markDirty={markDirty} readOnly={readOnly} />
+                    <ExampleSection
+                      markDirty={markDirty}
+                      readOnly={readOnly}
+                    />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='valueRange'
@@ -317,7 +332,10 @@ const ConceptForm = ({
                     subtitle={localization.conceptForm.section.valueRangeSubtitle}
                     error={hasError(['omfang'])}
                   >
-                    <ValueRangeSection markDirty={markDirty} readOnly={readOnly} />
+                    <ValueRangeSection
+                      markDirty={markDirty}
+                      readOnly={readOnly}
+                    />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='relation'
@@ -370,7 +388,10 @@ const ConceptForm = ({
                     subtitle={localization.conceptForm.section.versionSubtitle}
                     error={hasError(['versjonsnr'])}
                   >
-                    <VersionSection markDirty={markDirty} readOnly={readOnly} />
+                    <VersionSection
+                      markDirty={markDirty}
+                      readOnly={readOnly}
+                    />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='period'
@@ -378,57 +399,81 @@ const ConceptForm = ({
                     subtitle={localization.conceptForm.section.periodSubtitle}
                     error={hasError(['gyldigFom', 'gyldigTom'])}
                   >
-                    <PeriodSection markDirty={markDirty} readOnly={readOnly} />
+                    <PeriodSection
+                      markDirty={markDirty}
+                      readOnly={readOnly}
+                    />
                   </FormLayout.Section>
                   <FormLayout.Section
                     id='contact'
                     title={localization.conceptForm.section.contactTitle}
                     subtitle={localization.conceptForm.section.contactSubtitle}
-                    required                    
+                    required
                     error={hasError(['kontaktpunkt'])}
                   >
-                    <ContactSection markDirty={markDirty} readOnly={readOnly} />
+                    <ContactSection
+                      markDirty={markDirty}
+                      readOnly={readOnly}
+                    />
                   </FormLayout.Section>
                 </FormLayout>
               </Form>
             </div>
-            
-              <div className={styles.stickyFooterBar}>
-                <div className={classNames('container', styles.stickyFooterContent)}>
-                  <div>
-                    <div className={styles.actionButtons}>
-                      <Button
-                        size='sm'
-                        type='button'
-                        disabled={readOnly || isSubmitting || isValidating || isCanceled || !dirty}
-                        onClick={() => {
-                          setValidateOnChange(true);
-                          submitForm();
-                        }}
-                      >
-                        {isSubmitting ? (
-                          <Spinner
-                            title='Lagrer'
+
+            <div className={styles.stickyFooterBar}>
+              <div className={classNames('container', styles.stickyFooterContent)}>
+                {customFooterBar ? (
+                  <>{customFooterBar}</>
+                ) : (
+                  <>
+                    <div>
+                      <div className={classNames(styles.flex, styles.gap4)}>
+                        <Button
+                          size='sm'
+                          type='button'
+                          disabled={readOnly || isSubmitting || isValidating || isCanceled || !dirty}
+                          onClick={() => {
+                            setValidateOnChange(true);
+                            submitForm();
+                          }}
+                        >
+                          {isSubmitting ? (
+                            <Spinner
+                              title='Lagrer'
+                              size='sm'
+                            />
+                          ) : (
+                            'Lagre'
+                          )}
+                        </Button>
+                        <Button
+                          size='sm'
+                          disabled={readOnly || isSubmitting || isValidating || isCanceled}
+                          onClick={handleCancel}
+                          variant='secondary'
+                        >
+                          Avbryt
+                        </Button>
+                        <div className={classNames(styles.flex, styles.gap2, styles.noWrap)}>
+                          <Checkbox
                             size='sm'
-                          />
-                        ) : (
-                          'Lagre'
-                        )}
-                      </Button>
-                      <Button
-                        size='sm'
-                        disabled={readOnly || isSubmitting || isValidating || isCanceled}
-                        onClick={handleCancel}
-                        variant='secondary'
-                      >
-                        Avbryt
-                      </Button>
+                            value='ignoreRequired'
+                            checked={ignoreRequired}
+                            onChange={(e) => setIgnoreRequired(e.target.checked)}
+                          >
+                            {localization.conceptForm.fieldLabel.ignoreRequired}
+                          </Checkbox>
+                          <HelpMarkdown aria-label={`Help ${localization.conceptForm.fieldLabel.ignoreRequired}`}>
+                            {localization.conceptForm.alert.ignoreRequired}
+                          </HelpMarkdown>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  {notifications.length > 0 && <NotificationCarousel notifications={notifications} />}
-                </div>
+                    {notifications.length > 0 && <NotificationCarousel notifications={notifications} />}
+                  </>
+                )}
               </div>
-            
+            </div>
           </>
         );
       }}

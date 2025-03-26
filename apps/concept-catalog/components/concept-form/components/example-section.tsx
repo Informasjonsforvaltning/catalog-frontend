@@ -1,7 +1,7 @@
 import { Box } from '@digdir/designsystemet-react';
 import { FormikLanguageFieldset, TextareaWithPrefix, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { get, isEqual } from 'lodash';
+import { get, isEmpty, isEqual } from 'lodash';
 import { useFormikContext } from 'formik';
 import { Concept } from '@catalog-frontend/types';
 
@@ -12,6 +12,16 @@ type ExampleSectionProps = {
 
 export const ExampleSection = ({ markDirty = false, readOnly = false }: ExampleSectionProps) => {
   const { initialValues, values } = useFormikContext<Concept>();
+
+  const fieldIsChanged = () => {
+    const a = get(initialValues, 'eksempel');
+    const b = get(values, 'eksempel');
+    if (isEmpty(a) && isEmpty(b)) {
+      return false;
+    }
+    return markDirty && !isEqual(a, b);
+  };
+
   return (
     <Box>
       <FormikLanguageFieldset
@@ -19,9 +29,7 @@ export const ExampleSection = ({ markDirty = false, readOnly = false }: ExampleS
         as={TextareaWithPrefix}
         readOnly={readOnly}
         legend={
-          <TitleWithHelpTextAndTag
-            changed={markDirty && !isEqual(get(initialValues, 'eksempel'), get(values, 'eksempel'))}
-          >
+          <TitleWithHelpTextAndTag changed={fieldIsChanged()}>
             {localization.conceptForm.fieldLabel.example}
           </TitleWithHelpTextAndTag>
         }

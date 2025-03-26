@@ -2,7 +2,7 @@
 
 import React, { Children, PropsWithChildren, ReactNode, useRef, useState } from 'react';
 import styles from './form-layout.module.scss';
-import { Alert, Heading, Link, Paragraph, Tag } from '@digdir/designsystemet-react';
+import { Heading, Link, Paragraph, Tag } from '@digdir/designsystemet-react';
 import { useIntersectionObserver } from '../intersection-observer';
 import classNames from 'classnames';
 import { localization } from '@catalog-frontend/utils';
@@ -23,8 +23,6 @@ type SectionProps = {
   required?: boolean;
   error?: boolean;
 } & PropsWithChildren;
-
-type OptionsProps = PropsWithChildren;
 
 const SideMenu = ({ heading, children }: SideMenuProps) => {
   return (
@@ -66,8 +64,7 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
   const sectionRefs = useRef(sectionArray.map(() => React.createRef<HTMLDivElement>()));
 
   const [observerEnabled, setObserverEnabled] = useState(true);
-  const options = childrenArray.filter((child) => React.isValidElement(child) && child.type === Options)[0];
-
+  
   useIntersectionObserver({
     activeSection,
     setActiveSection,
@@ -133,7 +130,6 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
           </SideMenu>
         </div>
         <div className={styles.content}>
-          {options && <div>{options}</div>}
           {sectionArray.map((section, index) => {
             const { id } = section.props as SectionProps;
             const ref = sectionRefs.current[index];
@@ -168,9 +164,6 @@ const Section = ({ id, title, subtitle, children }: SectionProps) => (
   </div>
 );
 
-const Options = ({ children }: OptionsProps) => <Alert>{children}</Alert>;
-
 FormLayout.Section = Section;
-FormLayout.Options = Options;
 
 export default FormLayout;

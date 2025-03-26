@@ -1,14 +1,25 @@
-import { getOrganization, getChangeRequest, getConceptRevisions } from '@catalog-frontend/data-access';
-import { Organization, Concept, ChangeRequest } from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs, DesignBanner, DetailHeading } from '@catalog-frontend/ui';
-import { validUUID, localization, formatISO, conceptIsHigherVersion } from '@catalog-frontend/utils';
+import {
+  getOrganization,
+  getChangeRequest,
+  getConceptRevisions,
+  getConceptStatuses,
+  getAllCodeLists,
+  getFields,
+  getUsers,
+} from '@catalog-frontend/data-access';
+import {
+  Organization,
+  Concept,
+  ChangeRequest,
+  CodeListsResult,
+  FieldsResult,
+  UsersResult,
+} from '@catalog-frontend/types';
+import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
+import { validUUID, localization, conceptIsHigherVersion, prepareStatusList } from '@catalog-frontend/utils';
 import jsonpatch from 'fast-json-patch';
-import sharedStyle from '../change-requests-page.module.css';
-import { Alert, Heading, Link, Paragraph } from '@digdir/designsystemet-react';
-import NextLink from 'next/link';
-import ChangeRequestForm from '../../../../../components/change-request-form/change-request-form';
-import { ButtonRow } from '../../../../../components/buttons/button-row';
 import { withReadProtectedPage } from '../../../../../utils/auth';
+import { AcceptConceptFormClient } from './accept-concept-form-client';
 
 const ChangeRequestDetailsPage = withReadProtectedPage(
   ({ catalogId, changeRequestId }) => `/catalogs/${catalogId}/change-requests/${changeRequestId}`,
@@ -67,36 +78,22 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
       },
     ] as BreadcrumbType[];
 
-    const subtitle = `${localization.concept.created}: ${
-      changeRequest?.timeForProposal &&
-      formatISO(changeRequest?.timeForProposal, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      })
-    } - ${localization.concept.createdBy}: ${changeRequest.proposedBy?.name}`;
+    
 
-    const headingTitle = originalConcept?.id ? (
-      <h1>
-        <NextLink
-          href={`/catalogs/${catalogId}/change-requests/${originalConcept.id}`}
-          passHref
-          legacyBehavior
-        >
-          <Link>{changeRequest.title}</Link>
-        </NextLink>
-      </h1>
-    ) : (
-      <h1>{changeRequest.title}</h1>
+    const conceptStatuses = await getConceptStatuses()
+      .then((response) => response.json())
+      .then((body) => body?.conceptStatuses ?? [])
+      .then((statuses) => prepareStatusList(statuses));
+
+    const codeListsResult: CodeListsResult = await getAllCodeLists(catalogId, `${session?.accessToken}`).then(
+      (response) => response.json(),
     );
-
-    const clientProps = {
-      changeRequestAsConcept,
-      originalConcept,
-      readOnly: true,
-    };
+    const fieldsResult: FieldsResult = await getFields(catalogId, `${session?.accessToken}`).then((response) =>
+      response.json(),
+    );
+    const usersResult: UsersResult = await getUsers(catalogId, `${session?.accessToken}`).then((response) =>
+      response.json(),
+    );
 
     return (
       <>
@@ -105,39 +102,19 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
           catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
         />
         <DesignBanner
-          title={localization.catalogType.concept}
+          title={localization.changeRequest.changeRequest}
           catalogId={catalogId}
         />
-        <div className={'formContainer'}>
-          <div className={sharedStyle.topRow}>
-            <Alert severity='info'>
-              <Heading
-                level={2}
-                size='xsmall'
-                spacing
-              >
-                {originalConcept
-                  ? localization.changeRequest.alert.editAlertInfo.heading
-                  : localization.changeRequest.alert.newAlertInfo.heading}
-              </Heading>
-              <Paragraph>{localization.changeRequest.alert.editAlertInfo.paragraph}</Paragraph>
-            </Alert>
-          </div>
-          <div className={sharedStyle.topRow}>
-            <DetailHeading
-              headingTitle={headingTitle}
-              subtitle={subtitle}
-            />
-            {changeRequest.id && changeRequest.status == 'OPEN' && (
-              <ButtonRow
-                catalogId={catalogId}
-                changeRequestId={changeRequest.id}
-                hasWritePermission={hasWritePermission}
-              />
-            )}
-          </div>
-          <ChangeRequestForm {...clientProps} />
-        </div>
+        <AcceptConceptFormClient
+          organization={organization}
+          originalConcept={originalConcept}
+          changeRequest={changeRequest}
+          changeRequestAsConcept={changeRequestAsConcept}
+          conceptStatuses={conceptStatuses}
+          codeListsResult={codeListsResult}
+          fieldsResult={fieldsResult}
+          usersResult={usersResult}
+        />
       </>
     );
   },

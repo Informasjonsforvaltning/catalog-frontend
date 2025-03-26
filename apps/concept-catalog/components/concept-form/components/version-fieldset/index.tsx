@@ -2,7 +2,7 @@ import { FastField, useFormikContext } from 'formik';
 import { ErrorMessage, Fieldset, Textfield } from '@digdir/designsystemet-react';
 import styles from './version-fieldset.module.scss';
 import { Concept } from '@catalog-frontend/types';
-import _, { get, isEqual } from 'lodash';
+import _, { get, isEmpty, isEqual } from 'lodash';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 
@@ -15,6 +15,15 @@ export type VersionFieldsetProps = {
 export const VersionFieldset = ({ name, markDirty, readOnly }) => {
   const { errors, initialValues, values } = useFormikContext<Concept>();
 
+  const fieldIsChanged = () => {
+      const a = get(initialValues, name);
+      const b = get(values, name);
+      if (isEmpty(a) && isEmpty(b)) {
+        return false;
+      }
+      return markDirty && !isEqual(a, b);
+    };
+    
   return (
     <>
       <Fieldset
@@ -22,7 +31,7 @@ export const VersionFieldset = ({ name, markDirty, readOnly }) => {
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.versionNumber}
-            changed={markDirty && !isEqual(get(initialValues, name), get(values, name))}
+            changed={fieldIsChanged()}
           >
             {localization.conceptForm.fieldLabel.versionNumber}
           </TitleWithHelpTextAndTag>

@@ -5,7 +5,7 @@ import { Concept } from '@catalog-frontend/types';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import styles from '../concept-form.module.scss';
-import { get, isEqual, isNil } from 'lodash';
+import { get, isEmpty, isEqual, isNil } from 'lodash';
 
 type ContactSectionProps = {
   markDirty?: boolean;
@@ -17,8 +17,12 @@ export const ContactSection = ({ markDirty = false, readOnly = false }: ContactS
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
 
   const fieldIsChanged = (name: string) => {
-    const dirty = !isEqual(get(initialValues, name), get(values, name));
-    return markDirty && dirty;
+    const a = get(initialValues, name);
+    const b = get(values, name);
+    if (isEmpty(a) && isEmpty(b)) {
+      return false;
+    }
+    return markDirty && !isEqual(a, b);
   };
 
   const contactOptions = [

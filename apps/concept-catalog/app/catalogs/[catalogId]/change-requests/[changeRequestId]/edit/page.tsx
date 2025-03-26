@@ -1,13 +1,25 @@
-import { getChangeRequest, getConceptRevisions, getOrganization } from '@catalog-frontend/data-access';
-import { ChangeRequest, Concept, Organization } from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs, DesignBanner, DetailHeading } from '@catalog-frontend/ui';
-import { formatISO, conceptIsHigherVersion, localization, validUUID } from '@catalog-frontend/utils';
-import { Alert, Heading, Link, Paragraph } from '@digdir/designsystemet-react';
+import {
+  getAllCodeLists,
+  getChangeRequest,
+  getConceptRevisions,
+  getConceptStatuses,
+  getFields,
+  getOrganization,
+  getUsers,
+} from '@catalog-frontend/data-access';
+import {
+  ChangeRequest,
+  CodeListsResult,
+  Concept,
+  FieldsResult,
+  Organization,
+  UsersResult,
+} from '@catalog-frontend/types';
+import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
+import { conceptIsHigherVersion, localization, validUUID, prepareStatusList } from '@catalog-frontend/utils';
 import jsonpatch from 'fast-json-patch';
-import NextLink from 'next/link';
 import { withReadProtectedPage } from '../../../../../../utils/auth';
-import styles from '../../change-requests-page.module.css';
-import ChangeRequestEditPageClient from './change-request-edit-page-client';
+import { EditConceptFormClient } from './edit-concept-form-client';
 
 const ChangeRequestEditPage = withReadProtectedPage(
   ({ catalogId, changeRequestId }) => `/catalogs/${catalogId}/change-requests/${changeRequestId}/edit`,
@@ -70,37 +82,20 @@ const ChangeRequestEditPage = withReadProtectedPage(
       },
     ] as BreadcrumbType[];
 
-    const subtitle = `${localization.concept.created}: ${
-      changeRequest?.timeForProposal &&
-      formatISO(changeRequest?.timeForProposal, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      })
-    } - ${localization.concept.createdBy}: ${changeRequest.proposedBy?.name}`;
+    const conceptStatuses = await getConceptStatuses()
+      .then((response) => response.json())
+      .then((body) => body?.conceptStatuses ?? [])
+      .then((statuses) => prepareStatusList(statuses));
 
-    const headingTitle = originalConcept?.id ? (
-      <h1>
-        <NextLink
-          href={`/catalogs/${catalogId}/change-requests/${originalConcept.id}`}
-          passHref
-          legacyBehavior
-        >
-          <Link>{changeRequest.title}</Link>
-        </NextLink>
-      </h1>
-    ) : (
-      <h1>{changeRequest.title}</h1>
+    const codeListsResult: CodeListsResult = await getAllCodeLists(catalogId, `${session?.accessToken}`).then(
+      (response) => response.json(),
     );
-
-    const clientProps = {
-      organization,
-      changeRequest,
-      changeRequestAsConcept,
-      originalConcept,
-    };
+    const fieldsResult: FieldsResult = await getFields(catalogId, `${session?.accessToken}`).then((response) =>
+      response.json(),
+    );
+    const usersResult: UsersResult = await getUsers(catalogId, `${session?.accessToken}`).then((response) =>
+      response.json(),
+    );
 
     return (
       <>
@@ -109,32 +104,19 @@ const ChangeRequestEditPage = withReadProtectedPage(
           catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
         />
         <DesignBanner
-          title={localization.catalogType.concept}
+          title={localization.changeRequest.changeRequest}
           catalogId={catalogId}
         />
-        <div className={'formContainer'}>
-          <div className={styles.topRow}>
-            <Alert severity='info'>
-              <Heading
-                level={2}
-                size='xsmall'
-                spacing
-              >
-                {originalConcept
-                  ? localization.changeRequest.alert.editAlertInfo.heading
-                  : localization.changeRequest.alert.newAlertInfo.heading}
-              </Heading>
-              <Paragraph>{localization.changeRequest.alert.editAlertInfo.paragraph}</Paragraph>
-            </Alert>
-          </div>
-          <div className={styles.topRow}>
-            <DetailHeading
-              headingTitle={headingTitle}
-              subtitle={subtitle}
-            />
-          </div>
-          <ChangeRequestEditPageClient {...clientProps} />
-        </div>
+        <EditConceptFormClient
+          organization={organization}
+          originalConcept={originalConcept}
+          changeRequest={changeRequest}
+          changeRequestAsConcept={changeRequestAsConcept}
+          conceptStatuses={conceptStatuses}
+          codeListsResult={codeListsResult}
+          fieldsResult={fieldsResult}
+          usersResult={usersResult}
+        />
       </>
     );
   },
