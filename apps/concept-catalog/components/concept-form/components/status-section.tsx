@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react';
 import { useFormikContext } from 'formik';
 import { Box, Radio } from '@digdir/designsystemet-react';
-import { Concept } from '@catalog-frontend/types';
+import { Concept, ReferenceDataCode } from '@catalog-frontend/types';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
 import { get, isEqual } from 'lodash';
 
 type StatusSectionProps = {
-  conceptStatuses: { label: string; uri: string }[];
+  conceptStatuses: ReferenceDataCode[];
   markDirty?: boolean;
   readOnly?: boolean;
 };

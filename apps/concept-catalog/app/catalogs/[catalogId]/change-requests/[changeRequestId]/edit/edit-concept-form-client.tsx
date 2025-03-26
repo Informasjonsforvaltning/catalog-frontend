@@ -4,34 +4,24 @@ import {
   Concept,
   ChangeRequestUpdateBody,
   JsonPatchOperation,
-  Organization,
-  ChangeRequest,
 } from '@catalog-frontend/types';
 import { pruneEmptyProperties, updateDefinitionsIfEgendefinert } from '@catalog-frontend/utils';
 import jsonpatch from 'fast-json-patch';
-import { useUpdateChangeRequest } from '../../../../../../hooks/change-requests';
 import { useRouter } from 'next/navigation';
+import { useUpdateChangeRequest } from '../../../../../../hooks/change-requests';
+import ConceptForm from '../../../../../../components/concept-form';
 
-import ChangeRequestForm from '../../../../../../components/change-request-form/change-request-form';
-import { FC, useState } from 'react';
-import { FormikHelpers } from 'formik';
-
-interface Props {
-  organization: Organization;
-  changeRequest: ChangeRequest;
-  changeRequestAsConcept: Concept;
-  originalConcept?: Concept;
-}
-
-const ChangeRequestEditPageClient: FC<Props> = ({
+export const EditConceptFormClient = ({
   organization,
   changeRequest,
   changeRequestAsConcept,
   originalConcept,
+  conceptStatuses,
+  codeListsResult,
+  fieldsResult,
+  usersResult,
 }) => {
   const router = useRouter();
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const emptyConcept: Concept = originalConcept || {
     id: null,
@@ -44,8 +34,7 @@ const ChangeRequestEditPageClient: FC<Props> = ({
     changeRequestId: changeRequest.id,
   });
 
-  const submitHandler = ({ values, formikHelpers }: { values: Concept; formikHelpers: FormikHelpers<Concept> }) => {
-    setIsSubmitting(true);
+  const handleSubmit = async (values: Concept) => {
     const changeRequestTitle =
       (originalConcept &&
         (originalConcept.anbefaltTerm?.navn?.nb ||
@@ -62,29 +51,31 @@ const ChangeRequestEditPageClient: FC<Props> = ({
         pruneEmptyProperties(originalConcept || emptyConcept),
         pruneEmptyProperties(updateDefinitionsIfEgendefinert(values)),
       ) as JsonPatchOperation[],
-      title: changeRequestTitle,
+      title: `${changeRequestTitle}`,
     };
 
-    changeRequestMutateHook.mutate(changeRequestFromConcept, {
-      onSuccess: () => {
-        router.refresh();
-        formikHelpers.resetForm({ values });
-      },
-      onSettled: () => {
-        setIsSubmitting(false);
-      },
-    });
+    await changeRequestMutateHook.mutateAsync(changeRequestFromConcept);
   };
 
-  const clientProps = {
-    changeRequestAsConcept,
-    originalConcept,
-    readOnly: false,
-    isSubmitting,
-    submitHandler,
+  const handleAfterSubmit = () => {
+    router.push(`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}`);
   };
 
-  return <ChangeRequestForm {...clientProps} />;
+  const handleCancel = () => {
+    router.push(`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}`);
+  };
+
+  return (
+    <ConceptForm
+      afterSubmit={handleAfterSubmit}
+      catalogId={organization.organizationId}
+      initialConcept={changeRequestAsConcept}
+      conceptStatuses={conceptStatuses}
+      codeListsResult={codeListsResult}
+      fieldsResult={fieldsResult}
+      usersResult={usersResult}
+      onSubmit={handleSubmit}
+      onCancel={handleCancel}
+    />
+  );
 };
-
-export default ChangeRequestEditPageClient;

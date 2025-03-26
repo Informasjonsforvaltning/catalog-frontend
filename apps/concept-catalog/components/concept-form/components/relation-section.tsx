@@ -6,7 +6,7 @@ import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useSearchConcepts as useSearchInternalConcepts, useDataNorgeSearchConcepts } from '../../../hooks/search';
 import { RelationModal } from './relation-modal';
 import styles from '../concept-form.module.scss';
-import { get, isEqual } from 'lodash';
+import { get, isEmpty, isEqual } from 'lodash';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 
 type RelationSection = {
@@ -23,8 +23,12 @@ export const RelationSection = ({ catalogId, markDirty, readOnly }: RelationSect
   const { initialValues, values, setFieldValue } = useFormikContext<Concept>();
 
   const fieldIsChanged = (name: string) => {
-    const dirty = !isEqual(get(initialValues, name), get(values, name));
-    return markDirty && dirty;
+    const a = get(initialValues, name);
+    const b = get(values, name);
+    if (isEmpty(a) && isEmpty(b)) {
+      return false;
+    }
+    return markDirty && !isEqual(a, b);
   };
 
   const isDirty = [
