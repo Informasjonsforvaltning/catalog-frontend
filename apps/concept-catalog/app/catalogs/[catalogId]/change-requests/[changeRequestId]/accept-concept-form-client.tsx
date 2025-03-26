@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Button } from '@digdir/designsystemet-react';
 import { formatISO, localization } from '@catalog-frontend/utils';
 import { ChangeRequestStatusTagProps, LinkButton, Tag } from '@catalog-frontend/ui';
@@ -20,8 +19,6 @@ export const AcceptConceptFormClient = ({
   fieldsResult,
   usersResult,
 }) => {
-  const router = useRouter();
-
   const AcceptChangeRequestButton = () => {
     const [isHandlingAction, setIsHandlingAction] = useState(false);
     const handleAccept = () => {
