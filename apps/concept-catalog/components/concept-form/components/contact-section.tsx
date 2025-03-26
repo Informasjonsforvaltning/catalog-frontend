@@ -5,11 +5,25 @@ import { Concept } from '@catalog-frontend/types';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import styles from '../concept-form.module.scss';
-import { isNil } from 'lodash';
+import { get, isEmpty, isEqual, isNil } from 'lodash';
 
-export const ContactSection = () => {
-  const { errors, values, setFieldValue } = useFormikContext<Concept>();
+type ContactSectionProps = {
+  markDirty?: boolean;
+  readOnly?: boolean;
+};
+
+export const ContactSection = ({ markDirty = false, readOnly = false }: ContactSectionProps) => {
+  const { errors, initialValues, values, setFieldValue } = useFormikContext<Concept>();
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
+
+  const fieldIsChanged = (name: string) => {
+    const a = get(initialValues, name);
+    const b = get(values, name);
+    if (isEmpty(a) && isEmpty(b)) {
+      return false;
+    }
+    return markDirty && !isEqual(a, b);
+  };
 
   const contactOptions = [
     {
@@ -24,10 +38,10 @@ export const ContactSection = () => {
 
   const handleContactChange = (value: string[]) => {
     contactOptions.forEach((option) => {
-      if(!value.includes(option.value)) {
-        setFieldValue(`kontaktpunkt.${option.value}`, null);  
-      } else if(isNil(values.kontaktpunkt?.[option.value])) {
-        setFieldValue(`kontaktpunkt.${option.value}`, '');  
+      if (!value.includes(option.value)) {
+        setFieldValue(`kontaktpunkt.${option.value}`, null);
+      } else if (isNil(values.kontaktpunkt?.[option.value])) {
+        setFieldValue(`kontaktpunkt.${option.value}`, '');
       }
     });
   };
@@ -37,7 +51,7 @@ export const ContactSection = () => {
       ...(!isNil(values.kontaktpunkt?.harEpost) ? ['harEpost'] : []),
       ...(!isNil(values.kontaktpunkt?.harTelefon) ? ['harTelefon'] : []),
     ]);
-  }, [values.kontaktpunkt])
+  }, [values.kontaktpunkt]);
 
   return (
     <Box className={styles.contactSection}>
@@ -48,11 +62,15 @@ export const ContactSection = () => {
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.contactInfo}
             tagTitle={localization.tag.required}
+            changed={['kontaktpunkt.harEpost', 'kontaktpunkt.harTelefon', 'kontaktpunkt.harSkjema'].some((field) =>
+              fieldIsChanged(field),
+            )}
           >
             {localization.conceptForm.fieldLabel.contactInfo}
           </TitleWithHelpTextAndTag>
         }
         onChange={handleContactChange}
+        readOnly={readOnly}
       >
         {contactOptions.map((option) => (
           <Checkbox
@@ -70,6 +88,7 @@ export const ContactSection = () => {
           size='sm'
           label={<TitleWithHelpTextAndTag>{localization.conceptForm.fieldLabel.emailAddress}</TitleWithHelpTextAndTag>}
           error={errors?.kontaktpunkt?.['harEpost']}
+          readOnly={readOnly}
         />
       )}
       {selectedFields.includes('harTelefon') && (
@@ -79,6 +98,7 @@ export const ContactSection = () => {
           size='sm'
           label={<TitleWithHelpTextAndTag>{localization.conceptForm.fieldLabel.phoneNumber}</TitleWithHelpTextAndTag>}
           error={errors?.kontaktpunkt?.['harTelefon']}
+          readOnly={readOnly}
         />
       )}
       {selectedFields.includes('harSkjema') && (
@@ -88,6 +108,7 @@ export const ContactSection = () => {
           size='sm'
           label={<TitleWithHelpTextAndTag>{localization.conceptForm.fieldLabel.contactForm}</TitleWithHelpTextAndTag>}
           error={errors?.kontaktpunkt?.['harSkjema']}
+          readOnly={readOnly}
         />
       )}
       {typeof errors?.kontaktpunkt === 'string' ? (

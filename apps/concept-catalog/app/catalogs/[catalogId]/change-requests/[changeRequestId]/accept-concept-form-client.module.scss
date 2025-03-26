@@ -1,0 +1,18 @@
+.footerBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.footerButtons {
+    display: flex;
+    gap: var(--fds-spacing-4);
+    align-items: center;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+    gap: var(--fds-spacing-4);
+}

@@ -77,6 +77,9 @@ export const nb = {
   helpText: 'Hjelpetekst',
   publisher: 'Utgiver',
   helpWithCompleting: 'Hjelp til utfylling',
+  changed: 'Endret',
+  created: 'Opprettet',
+  by: 'av',
 
   catalogType: {
     admin: 'Administrasjonsgrensesnitt',
@@ -256,7 +259,6 @@ export const nb = {
     unsavedChanges: 'Du har ulagrede endringer. Er du sikker på at du vil forlate siden?',
     updateFailed: 'Oppdatering mislyktes. Prøv igjen senere.',
     deleteFailed: 'Kunne ikke slette. Prøv igjen senere.',
-    formError: 'Skjemaet har feil eller mangler. Sjekk feltene markert i rødt og prøv igjen.',
     formUnsavedChanges: 'Skjemaet har ulagrede endringer.',
   },
   catalogAdmin: {
@@ -332,8 +334,6 @@ export const nb = {
     concept: 'Begrep',
     confirmDelete: 'Er du sikker du ønsker å slette begrepet?',
     contactInformation: 'Kontaktinformasjon for eksterne',
-    created: 'Opprettet',
-    createdBy: 'Opprettet av',
     definition: 'Definisjon',
     divisionCriterion: 'Inndelingskriterium',
     example: 'Eksempel',
@@ -401,7 +401,6 @@ export const nb = {
     seeChangeRequests: 'Se alle endringsforslag',
     sourceLink: 'Lenke til kilde',
     sourceTitle: 'Tittel på kilde',
-
     alert: {
       changeRequestDescription: {
         heading: 'Hva er endringsforslag?',
@@ -473,8 +472,7 @@ export const nb = {
     oneLanguageRequired: 'Må fylles ut for minst ett språk.',
     deleteFieldIfEmpty: 'Slett feltet hvis det ikke skal ha innhold.',
     minOneField: 'Minst ett felt skal fylles ut.',
-    formError:
-      'Skjemaet inneholder feil eller manglende informasjon. Vennligst kontroller feltene markert med rød tekst og prøv igjen.',
+    formError: 'Skjemaet inneholder feil. Sjekk feltene i rødt.',
     unsavedChanges: 'Du har ulagrede endringer',
   },
 

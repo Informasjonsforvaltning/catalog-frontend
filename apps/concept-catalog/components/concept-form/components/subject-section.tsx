@@ -6,16 +6,27 @@ import { localization } from '@catalog-frontend/utils';
 import styles from '../concept-form.module.scss';
 import { getParentPath } from '../../../utils/codeList';
 import { ReactNode } from 'react';
-import { isEmpty } from 'lodash';
+import { get, isEmpty, isEqual } from 'lodash';
 
 type SubjectSectionProps = {
   codes: Code[] | undefined;
+  markDirty?: boolean;
+  readOnly?: boolean;
 };
-export const SubjectSection = ({ codes }: SubjectSectionProps) => {
-  const { errors, values, setFieldValue } = useFormikContext<Concept>();
+export const SubjectSection = ({ codes, markDirty, readOnly }: SubjectSectionProps) => {
+  const { initialValues, errors, values, setFieldValue } = useFormikContext<Concept>();
 
   const selected = values.fagområdeKoder?.filter((v) => codes?.find((code) => code.id === v));
   const codeListActivated = codes !== undefined;
+
+  const fieldIsChanged = (name: string) => {
+    const a = get(initialValues, name);
+    const b = get(values, name);
+    if (isEmpty(a) && isEmpty(b)) {
+      return false;
+    }
+    return markDirty && !isEqual(a, b);
+  };
 
   const ConflictAlert = () => {
     if (!codeListActivated && !isEmpty(values.fagområdeKoder)) {
@@ -36,6 +47,7 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
             <Button
               size='sm'
               variant='secondary'
+              disabled={readOnly}
               onClick={() => setFieldValue('fagområdeKoder', [])}
             >
               Slett koder
@@ -63,6 +75,7 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
             <Button
               size='sm'
               variant='secondary'
+              disabled={readOnly}
               onClick={() => setFieldValue('fagområde', null)}
             >
               Slett fritekst verdier
@@ -83,7 +96,7 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
           key='fagområde'
           name='fagområde'
           multiple
-          readOnly={codeListActivated}
+          readOnly={codeListActivated || readOnly}
           showError={!codeListActivated}
           legend={
             <TitleWithHelpTextAndTag
@@ -94,6 +107,7 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
                   }
                 : {})}
               helpText={localization.conceptForm.helpText.subjectFree}
+              changed={fieldIsChanged('fagområde')}
             >
               {localization.conceptForm.fieldLabel.subjectFree}
             </TitleWithHelpTextAndTag>
@@ -111,6 +125,7 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
                   }
                 : {})}
               helpText={localization.conceptForm.helpText.subjectCodeList}
+              changed={fieldIsChanged('fagområdeKoder')}
             >
               {localization.conceptForm.fieldLabel.subjectCodeList}
             </TitleWithHelpTextAndTag>
@@ -123,7 +138,7 @@ export const SubjectSection = ({ codes }: SubjectSectionProps) => {
           multiple
           size='sm'
           hideClearButton
-          readOnly={!codeListActivated}
+          readOnly={!codeListActivated || readOnly}
           label={codeListLabel}
           value={selected ?? []}
           onValueChange={(value) => setFieldValue('fagområdeKoder', value)}

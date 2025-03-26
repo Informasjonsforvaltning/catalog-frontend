@@ -320,7 +320,7 @@ export const ConceptPageClient = ({
           ],
         ]
       : []),
-    ...(concept?.opprettetAv ? [[localization.concept.createdBy, concept.opprettetAv]] : []),
+    ...(concept?.opprettetAv ? [[`${localization.created} ${localization.by}`, concept.opprettetAv]] : []),
     ...(concept?.kontaktpunkt?.harEpost || concept?.kontaktpunkt?.harTelefon
       ? [
           [

@@ -1,6 +1,18 @@
-.actionButtons {
+.flex {
   display: flex;
-  gap: 1rem;
+  align-items: center;
+}
+
+.gap2 {
+  gap: var(--fds-spacing-2);
+}
+
+.gap4 {
+  gap: var(--fds-spacing-4);
+}
+
+.noWrap {
+  flex-wrap: nowrap;
 }
 
 .buttonRow {
