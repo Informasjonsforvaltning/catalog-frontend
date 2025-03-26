@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeRequestStatusTagProps, LinkButton, Tag } from '@catalog-frontend/ui';
+import { ChangeRequestStatusTagProps, LinkButton, SearchHitsPageLayout, Tag } from '@catalog-frontend/ui';
 import {
   capitalizeFirstLetter,
   convertTimestampToDateAndTime,
@@ -10,13 +10,14 @@ import {
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
-import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Heading } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import Link from 'next/link';
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
 import ChangeRequestFilter from '../../../../components/change-request-filter';
 import ChangeRequestSort from '../../../../components/change-request-sort';
 import styles from './change-requests-page.module.css';
+import { getTranslatedStatus } from '../../../../utils/change-request';
 
 export const ChangeRequestsPageClient = ({ catalogId, data }) => {
   const itemTypeOptions = [
@@ -113,116 +114,89 @@ export const ChangeRequestsPageClient = ({ catalogId, data }) => {
       break;
   }
 
-  const getTranslatedStatus = (status: string) =>
-    Object.entries(localization.changeRequest.status as Record<string, string>)
-      .find(([key]) => key === status.toLowerCase())?.[1]
-      .toString();
-
   return (
-    <>
-      <div className='container'>
-        <div className={styles.newConceptSuggestionButton}>
-          <LinkButton href={`/catalogs/${catalogId}/change-requests/new`}>
-            {localization.suggestionForNewConcept}
-          </LinkButton>
-        </div>
-        <div className={styles.filterAndListContainer}>
-          <div className={styles.alertContainer}>
-            <Alert severity='info'>
-              <Heading
-                level={2}
-                size='xsmall'
-                spacing
-              >
-                {localization.changeRequest.alert.changeRequestDescription.heading}
-              </Heading>
-              <Paragraph>{localization.changeRequest.alert.changeRequestDescription.paragraph}</Paragraph>
-            </Alert>
-          </div>
-          <span className={styles.headingAndSortContainer}>
-            <Heading
-              level={2}
-              size='medium'
-              className={styles.listHeading}
-            >
-              {filterItemType === 'changeRequest'
-                ? localization.changeRequest.changeRequest
-                : localization.suggestionForNewConcept}
-            </Heading>
-            <ChangeRequestSort
-              options={sortOptions}
-              selected={sort}
-              onChange={onSortChange}
-            />
-          </span>
-          <ChangeRequestFilter
-            itemType={itemType}
-            status={status}
-          />
-          {listItems && listItems.length !== 0 ? (
-            <div className={styles.listWrapper}>
-              <ul className={styles.list}>
-                {listItems.map(({ id, title, catalogId, timeForProposal, proposedBy, status }) => (
-                  <li
-                    key={id}
-                    itemID={id}
-                    title={catalogId}
-                    className={styles.listItem}
-                  >
-                    <div className={styles.listContent}>
-                      <div>
-                        <Heading
-                          level={3}
-                          size={'xsmall'}
+    <SearchHitsPageLayout>
+      <SearchHitsPageLayout.ButtonRow>
+        <LinkButton href={`/catalogs/${catalogId}/change-requests/new`}>
+          {localization.suggestionForNewConcept}
+        </LinkButton>
+      </SearchHitsPageLayout.ButtonRow>
+
+      <SearchHitsPageLayout.SearchRow>
+        <ChangeRequestSort
+          options={sortOptions}
+          selected={sort}
+          onChange={onSortChange}
+        />
+      </SearchHitsPageLayout.SearchRow>
+      <SearchHitsPageLayout.LeftColumn>
+        <ChangeRequestFilter
+          itemType={itemType}
+          status={status}
+        />
+      </SearchHitsPageLayout.LeftColumn>
+      <SearchHitsPageLayout.MainColumn>
+        {listItems && listItems.length !== 0 ? (
+          <div className={styles.listWrapper}>
+            <ul className={styles.list}>
+              {listItems.map(({ id, title, catalogId, timeForProposal, proposedBy, status }) => (
+                <li
+                  key={id}
+                  itemID={id}
+                  title={catalogId}
+                  className={styles.listItem}
+                >
+                  <div className={styles.listContent}>
+                    <div>
+                      <Heading
+                        level={3}
+                        size={'xsmall'}
+                      >
+                        <Link
+                          prefetch={false}
+                          href={
+                            validOrganizationNumber(catalogId) &&
+                            validUUID(id) &&
+                            listItems.find(({ id: changeRequestId }) => changeRequestId === id)
+                              ? `/catalogs/${catalogId}/change-requests/${id}`
+                              : '#'
+                          }
+                          className={title ? styles.heading : cn(styles.heading, styles.noName)}
                         >
-                          <Link
-                            prefetch={false}
-                            href={
-                              validOrganizationNumber(catalogId) &&
-                              validUUID(id) &&
-                              listItems.find(({ id: changeRequestId }) => changeRequestId === id)
-                                ? `/catalogs/${catalogId}/change-requests/${id}`
-                                : '#'
-                            }
-                            className={title ? styles.heading : cn(styles.heading, styles.noName)}
-                          >
-                            {title || `(${localization.changeRequest.noName})`}
-                          </Link>
-                        </Heading>
-                        <div className={styles.text}>
-                          <p>
-                            {localization.concept.created}: {convertTimestampToDateAndTime(timeForProposal)}
-                          </p>
-                          <p>
-                            {localization.concept.createdBy}:
-                            {proposedBy.name
-                              .split(' ')
-                              .map((namePart) => capitalizeFirstLetter(namePart))
-                              .join(' ')}
-                          </p>
-                        </div>
+                          {title || `(${localization.changeRequest.noName})`}
+                        </Link>
+                      </Heading>
+                      <div className={styles.text}>
+                        <p>
+                          {localization.created}: {convertTimestampToDateAndTime(timeForProposal)}{' '}
+                          {localization.by}{' '}
+                          {proposedBy.name
+                            .split(' ')
+                            .map((namePart) => capitalizeFirstLetter(namePart))
+                            .join(' ')}
+                        </p>
                       </div>
-                      {status && (
-                        <div className={styles.status}>
-                          <Tag.ChangeRequestStatus
-                            statusKey={status}
-                            statusLabel={getTranslatedStatus(status) as ChangeRequestStatusTagProps['statusLabel']}
-                          />
-                        </div>
-                      )}
                     </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : (
-            <div className={styles.noHits}>
-              <p>{localization.changeRequest.noHits}</p>
-            </div>
-          )}
-        </div>
-      </div>
-    </>
+                    {status && (
+                      <div className={styles.status}>
+                        <Tag.ChangeRequestStatus
+                          statusKey={status}
+                          statusLabel={getTranslatedStatus(status) as ChangeRequestStatusTagProps['statusLabel']}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div className={styles.noHits}>
+            <p>{localization.changeRequest.noHits}</p>
+          </div>
+        )}
+      </SearchHitsPageLayout.MainColumn>
+    </SearchHitsPageLayout>
   );
 };
 

@@ -3,24 +3,30 @@ import { FieldsetDivider, FormikLanguageFieldset, TitleWithHelpTextAndTag } from
 import { localization } from '@catalog-frontend/utils';
 import { useFormikContext } from 'formik';
 import { Concept } from '@catalog-frontend/types';
-import { get, isEqual } from 'lodash';
+import { get, isEmpty, isEqual } from 'lodash';
 
 type TermSectionProps = {
   markDirty?: boolean;
-}
+  readOnly?: boolean;
+};
 
-export const TermSection = ({ markDirty }: TermSectionProps) => {
+export const TermSection = ({ markDirty, readOnly }: TermSectionProps) => {
   const { initialValues, values } = useFormikContext<Concept>();
 
   const fieldIsChanged = (name: string) => {
-    const dirty = !isEqual(get(initialValues, name), get(values, name));
-    return markDirty && dirty;
+    const a = get(initialValues, name);
+    const b = get(values, name);
+    if (isEmpty(a) && isEmpty(b)) {
+      return false;
+    }
+    return markDirty && !isEqual(a, b);
   };
-  
+
   return (
     <Box>
       <FormikLanguageFieldset
         name='anbefaltTerm.navn'
+        readOnly={readOnly}
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.prefLabel}
@@ -35,6 +41,7 @@ export const TermSection = ({ markDirty }: TermSectionProps) => {
       <FieldsetDivider />
       <FormikLanguageFieldset
         name='tillattTerm'
+        readOnly={readOnly}
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.altLabel}
@@ -50,8 +57,12 @@ export const TermSection = ({ markDirty }: TermSectionProps) => {
       <FieldsetDivider />
       <FormikLanguageFieldset
         name='frarådetTerm'
+        readOnly={readOnly}
         legend={
-          <TitleWithHelpTextAndTag helpText={localization.conceptForm.helpText.hiddenLabel} changed={fieldIsChanged('frarådetTerm')}>
+          <TitleWithHelpTextAndTag
+            helpText={localization.conceptForm.helpText.hiddenLabel}
+            changed={fieldIsChanged('frarådetTerm')}
+          >
             {localization.conceptForm.fieldLabel.hiddenLabel}
           </TitleWithHelpTextAndTag>
         }

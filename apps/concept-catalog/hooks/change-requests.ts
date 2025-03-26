@@ -1,7 +1,6 @@
 import { ChangeRequestUpdateBody } from '@catalog-frontend/types';
 import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 
 export const useGetChangeRequests = (catalogId: string) => {
   return useQuery({
@@ -26,8 +25,6 @@ export const useGetChangeRequests = (catalogId: string) => {
 };
 
 export const useCreateChangeRequest = ({ catalogId }) => {
-  const router = useRouter();
-
   return useMutation({
     mutationFn: async (changeRequest: ChangeRequestUpdateBody) => {
       if (!validOrganizationNumber(catalogId)) {
@@ -49,16 +46,9 @@ export const useCreateChangeRequest = ({ catalogId }) => {
       if (response.status !== 201) {
         return Promise.reject('Error when creating change request');
       }
-
-      return response;
-    },
-    onSuccess: (data) => {
-      data.json().then((changeRequestId) => {
-        if (validOrganizationNumber(catalogId) && validUUID(changeRequestId)) {
-          router.push(`/catalogs/${catalogId}/change-requests/${changeRequestId}/edit`);
-        }
-      });
-    },
+      
+      return await response.json();
+    }
   });
 };
 

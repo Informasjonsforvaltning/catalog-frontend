@@ -10,7 +10,6 @@ import { getValidSession, localization, redirectToSignIn, removeEmptyValues } fr
 import { compare } from 'fast-json-patch';
 import _ from 'lodash';
 import { revalidateTag } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 const metaDataFieldsToOmit = [
   'endringslogelement',
@@ -101,9 +100,10 @@ export async function createConcept(values: Concept, catalogId: string) {
     if (success) {
       revalidateTag('concept');
       revalidateTag('concepts');
-      redirect(`/catalogs/${catalogId}/concepts/${conceptId}`);
     }
   }
+
+  return conceptId;
 }
 
 export async function deleteConcept(catalogId: string, conceptId: string) {
@@ -124,7 +124,6 @@ export async function deleteConcept(catalogId: string, conceptId: string) {
   } finally {
     if (success) {
       revalidateTag('concepts');
-      redirect(`/catalogs/${catalogId}/concepts`);
     }
   }
 }
@@ -188,6 +187,7 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
   if (success) {
     revalidateTag('concept');
     revalidateTag('concepts');
-    redirect(`/catalogs/${catalogId}/concepts/${conceptId}`);
   }
+
+  return conceptId;
 }

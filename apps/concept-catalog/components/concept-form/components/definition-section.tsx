@@ -17,7 +17,7 @@ import { useState } from 'react';
 import { DefinitionModal } from './definition-modal';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { get, isEqual } from 'lodash';
+import { get, isEmpty, isEqual } from 'lodash';
 
 function getFirstErrorByRootKeys(obj: FormikErrors<Concept>, rootKeys: string[]): string | null {
   for (const rootKey of rootKeys) {
@@ -53,9 +53,10 @@ function getFirstErrorByRootKeys(obj: FormikErrors<Concept>, rootKeys: string[])
 
 type DefinitionSectionProps = {
   markDirty?: boolean;
+  readOnly?: boolean;
 };
 
-export const DefinitionSection = ({ markDirty }: DefinitionSectionProps) => {
+export const DefinitionSection = ({ markDirty, readOnly }: DefinitionSectionProps) => {
   const { initialValues, errors, values, setFieldValue } = useFormikContext<Concept>();
   const [open, setOpen] = useState<Record<number, boolean>>({});
 
@@ -63,8 +64,12 @@ export const DefinitionSection = ({ markDirty }: DefinitionSectionProps) => {
   const allowedLanguages = Object.freeze<ISOLanguage[]>(['nb', 'nn', 'en']);
 
   const fieldIsChanged = (name: string) => {
-    const dirty = !isEqual(get(initialValues, name), get(values, name));
-    return markDirty && dirty;
+    const a = get(initialValues, name);
+    const b = get(values, name);
+    if (isEmpty(a) && isEmpty(b)) {
+      return false;
+    }
+    return markDirty && !isEqual(a, b);
   };
 
   const prepareInitialValues = (def: Definisjon): Definisjon => {
@@ -91,12 +96,15 @@ export const DefinitionSection = ({ markDirty }: DefinitionSectionProps) => {
     <Box>
       <Box className={styles.fieldSet}>
         <Fieldset
+          readOnly={readOnly}
           legend={
             <TitleWithHelpTextAndTag
               helpText={localization.conceptForm.helpText.definition}
               tagTitle={localization.tag.required}
               changed={definitions.some((def) => fieldIsChanged(def))}
-            >Definisjon</TitleWithHelpTextAndTag>
+            >
+              Definisjon
+            </TitleWithHelpTextAndTag>
           }
         />
 
@@ -166,6 +174,7 @@ export const DefinitionSection = ({ markDirty }: DefinitionSectionProps) => {
                           <Button
                             variant='tertiary'
                             size='sm'
+                            disabled={readOnly}
                           >
                             <PencilWritingIcon
                               title='Rediger'
@@ -181,6 +190,7 @@ export const DefinitionSection = ({ markDirty }: DefinitionSectionProps) => {
                         variant='tertiary'
                         size='sm'
                         color='danger'
+                        disabled={readOnly}
                         onClick={() => setFieldValue(name, null)}
                       >
                         <TrashIcon
@@ -225,6 +235,7 @@ export const DefinitionSection = ({ markDirty }: DefinitionSectionProps) => {
                   variant='tertiary'
                   color='first'
                   size='sm'
+                  disabled={readOnly}
                 >
                   <PlusCircleIcon
                     aria-hidden

@@ -8,7 +8,7 @@ import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-
 import { FormikMultivalueTextfield, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import styles from '../../concept-form.module.scss';
 import { getParentPath } from '../../../../utils/codeList';
-import { get, isEqual } from 'lodash';
+import { get, isEmpty, isEqual } from 'lodash';
 
 export type InternalSectionProps = {
   internalFields: InternalField[];
@@ -28,8 +28,12 @@ export const InternalSection = ({
   const { errors, initialValues, values, setFieldValue } = useFormikContext<Concept>();
 
   const fieldIsChanged = (name: string) => {
-    const dirty = !isEqual(get(initialValues, name), get(values, name));
-    return markDirty && dirty;
+    const a = get(initialValues, name);
+    const b = get(values, name);
+    if (isEmpty(a) && isEmpty(b)) {
+      return false;
+    }
+    return markDirty && !isEqual(a, b);
   };
 
   const renderInternalField = ({
