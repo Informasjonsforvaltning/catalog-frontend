@@ -42,7 +42,8 @@ const CatalogsPage = async ({ params: { catalogId } }: { params: { catalogId: st
   }
 
   const showRecordsOfProcessing = (organizationId: string) => {
-    return process.env.RECORDS_ALLOW_LIST?.includes(organizationId) ?? false;
+    const recordsAllowedOrgs = process.env.RECORDS_ALLOW_LIST?.split(',') ?? [];
+    return recordsAllowedOrgs.includes(organizationId);
   };
 
   const currentOrganization = organizations.find((org) => org.organizationId === catalogId?.[0]);
