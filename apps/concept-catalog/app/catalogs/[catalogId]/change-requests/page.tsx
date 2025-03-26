@@ -34,7 +34,7 @@ const ChangeRequestsPage = withReadProtectedPage(
           catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
         />
         <DesignBanner
-          title={localization.catalogType.concept}
+          title={localization.changeRequest.changeRequest}
           catalogId={catalogId}
         />
         <ChangeRequestsPageClient
