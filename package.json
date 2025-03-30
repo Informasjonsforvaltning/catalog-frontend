@@ -132,7 +132,7 @@
     "kill-port": "^2.0.1",
     "lint-staged": "^15.2.10",
     "npm": "^11.1.0",
-    "nx": "^19.8.14",
+    "nx": "^20.6.4",
     "playwright-core": "^1.48.0",
     "playwright-ctrf-json-reporter": "^0.0.18",
     "prettier": "3.5.2",
