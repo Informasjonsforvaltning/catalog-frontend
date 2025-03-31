@@ -1,72 +1,116 @@
 'use client';
 
-import { FC, ChangeEvent, useState, KeyboardEvent } from 'react';
-import MagnifyingGlassSVG from './MagnifyingGlass.svg';
-import styles from './search-field.module.css';
+import { FC, ReactNode, useEffect, useRef, useState } from 'react';
+import { Button, Combobox, NativeSelect, Spinner, Textfield } from '@digdir/designsystemet-react';
+import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
+import styles from './search-field.module.scss';
+import classNames from 'classnames';
 
-type IconPoseType = 'left' | 'right' | undefined;
+type SearchOption = {
+  value: string;
+  label: string;
+  default?: boolean;
+};
 
-interface SearchFieldProps {
-  ariaLabel: string;
+type SearchFieldProps = {
+  label?: ReactNode;
   placeholder?: string;
-  label?: string;
-  error?: boolean;
-  nrOfLines?: number;
-  startIcon?: JSX.Element;
-  endIcon?: JSX.Element;
-  iconPos?: IconPoseType;
   value?: string;
-  onSearchSubmit?: (inputValue: string) => void | undefined;
-}
+  loading?: boolean;
+  options?: SearchOption[];
+  onSearch?: (query: string, option?: string) => void | undefined;
+  className?: string;
+};
 
 const SearchField: FC<SearchFieldProps> = ({
-  ariaLabel,
-  startIcon,
-  endIcon = <MagnifyingGlassSVG />,
+  className,
+  label,
   placeholder = '',
-  error = false,
   value = '',
-  onSearchSubmit,
+  loading = false,
+  options,
+  onSearch,
 }) => {
-  const [inputValue, setInputValue] = useState(value);
-  const conditionalPlaceholder = error ? 'Invalid input' : placeholder;
+  const [query, setQuery] = useState(value);
+  const [optionValue, setOptionValue] = useState(options?.find((option) => option.default === true)?.value);
+  const searchActionsRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const onInput = (changeEvent: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(changeEvent.target.value);
-
-    if (onSearchSubmit && changeEvent.target.value === '') {
-      onSearchSubmit('');
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (onSearch) {
+      onSearch(query, optionValue);
     }
   };
 
-  const onSubmit = (event: KeyboardEvent<HTMLInputElement> | 'clicked') => {
-    if (onSearchSubmit) {
-      if (event === 'clicked' || event?.key === 'Enter') {
-        onSearchSubmit(inputValue);
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    if (e.key === 'Enter') {
+      if (onSearch) {
+        onSearch(query, optionValue);
       }
     }
   };
 
+  useEffect(() => {
+    if (inputRef?.current && searchActionsRef?.current) {
+      const actionsWidth = searchActionsRef.current.offsetWidth;
+      inputRef.current.style.paddingRight = `${actionsWidth + 20}px`;
+    }
+  }, []);
+
   return (
-    <div className={styles.searchField}>
-      {startIcon && <span className={styles.leftSvg}>{startIcon}</span>}
-      <input
-        className={styles.input}
-        aria-label={ariaLabel}
-        placeholder={conditionalPlaceholder}
-        type='search'
-        value={inputValue}
-        onInput={onInput}
-        onKeyUp={onSubmit}
-      />
-      {endIcon && (
-        <figure
-          className={styles.svgWrapper}
-          onClick={(e) => onSubmit('clicked')}
-        >
-          {endIcon}
-        </figure>
-      )}
+    <div className={classNames([styles.search, ...className ? [className] : []] )}>
+      <div className={styles.searchBox}>
+        <Textfield
+          ref={inputRef}
+          autoComplete='off'
+          className={styles.inputTextfield}
+          placeholder={placeholder}
+          size='large'
+          value={query}
+          type='search'
+          label={label}
+          onChange={(e) => setQuery(e.target.value)}          
+          onKeyUp={handleKeyUp}
+        />
+        <div ref={searchActionsRef} className={styles.searchActions}>
+          {options && (
+            <NativeSelect
+              size='sm'
+              value={optionValue}
+              className={styles.searchOptions}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setOptionValue(e.target.value)}
+            >
+              {options.map(({ value, label }) => (
+                <option value={value} key={value}>{label}</option>
+              ))}
+            </NativeSelect>
+          )}
+          <Button
+            className={styles.searchButton}
+            type='submit'
+            size='sm'
+            onClick={handleClick}
+          >
+            {loading ? (
+              <Spinner
+                title={'loading'}
+                size='xsmall'
+                variant='inverted'
+              />
+            ) : (
+              <>
+                <MagnifyingGlassIcon
+                  className={styles.searchIcon}
+                  aria-hidden
+                />
+                <span>{'Søk'}</span>
+              </>
+            )}
+          </Button>
+        </div>
+      </div>
     </div>
   );
 };

@@ -5,13 +5,19 @@ import {
   UploadButton,
   SearchHitContainer,
   Spinner,
-  SearchHitsPageLayout,
+  SearchHitsLayout,
   Select,
   LinkButton,
+  SearchField,
 } from '@catalog-frontend/ui';
-import { getTranslateText, capitalizeFirstLetter, localization as loc } from '@catalog-frontend/utils';
-import { Chip, Search } from '@digdir/designsystemet-react';
-import { PlusCircleIcon, FileImportIcon, MagnifyingGlassIcon } from '@navikt/aksel-icons';
+import {
+  getTranslateText,
+  capitalizeFirstLetter,
+  localization as loc,
+  lowerCaseFirstLetter,
+} from '@catalog-frontend/utils';
+import { Chip, Tabs } from '@digdir/designsystemet-react';
+import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 
 import { useState, useEffect } from 'react';
 import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'nuqs';
@@ -24,9 +30,11 @@ import {
 } from '../../../../hooks/search';
 import SearchFilter from '../../../../components/search-filter';
 import { useImportConcepts } from '../../../../hooks/import';
-import styles from './search-page.module.css';
+import styles from './search-page.module.scss';
 import ConceptSearchHits from '../../../../components/concept-search-hits';
-import _ from 'lodash';
+import _, { isEmpty } from 'lodash';
+import classNames from 'classnames';
+import { useRouter } from 'next/navigation';
 
 export type FilterType = 'published' | 'status' | 'assignedUser' | 'subject' | 'internalFields' | 'label';
 
@@ -49,6 +57,8 @@ export const SearchPageClient = ({
   usersResult,
   conceptStatuses,
 }: Props) => {
+  const router = useRouter();
+
   const [selectedFieldOption, setSelectedFieldOption] = useState('alleFelter' as SearchableField | 'alleFelter');
   const [selectedSortOption, setSelectedSortOption] = useState(SortOption.RELEVANCE);
   const [page, setPage] = useQueryState('page', parseAsInteger);
@@ -65,8 +75,6 @@ export const SearchPageClient = ({
   );
   const [filterLabel, setFilterLabel] = useQueryState('filter.label', parseAsArrayOf(parseAsString));
   const [filterSubject, setFilterSubject] = useQueryState('filter.subject', parseAsArrayOf(parseAsString));
-
-  const [searchValue, setSearchValue] = useState(searchTerm ?? '');
 
   const sortMappings: Record<SortOption, QuerySort | undefined> = {
     [SortOption.RELEVANCE]: undefined,
@@ -145,20 +153,12 @@ export const SearchPageClient = ({
   });
 
   const importConcepts = useImportConcepts(catalogId);
-  const fieldOptions = getSelectOptions(loc.search.fields).map((opt) => (
-    <option
-      key={`fieldOption-${opt.value}`}
-      value={opt.value}
-    >
-      {opt.label}
-    </option>
-  ));
   const sortOptions = getSelectOptions(loc.search.sortOptions).map((opt) => (
     <option
       key={`sortOption-${opt.value}`}
       value={opt.value}
     >
-      {opt.label}
+      {`${selectedSortOption === opt.value ? 'Sorter på ' + lowerCaseFirstLetter(opt.label) : opt.label}`}
     </option>
   ));
 
@@ -206,16 +206,6 @@ export const SearchPageClient = ({
     setPage(0);
   };
 
-  const onSearchSubmit = (search) => {
-    setSearchTerm(search);
-    setPage(0);
-  };
-
-  const onFieldSelect = (field: SearchableField) => {
-    setSelectedFieldOption(field);
-    setPage(0);
-  };
-
   const onSortSelect = async (optionValue: SortOption) => {
     setSelectedSortOption(optionValue);
   };
@@ -237,185 +227,196 @@ export const SearchPageClient = ({
     refetch().catch((error) => console.error('refetch() failed: ', error));
   }, [selectedSortOption, refetch]);
 
-  const FilterChips = () => (
-    <div className={styles.chips}>
-      <Chip.Group
-        size='small'
-        className={styles.wrap}
-      >
-        {filterSubject?.map((filter, index) => (
-          <Chip.Removable
-            key={`subject-${index}`}
-            onClick={() => removeFilter(filter, 'subject')}
-          >
-            {getTranslateText(subjectCodeList.codes.find((c) => c.id === filter)?.name)}
-          </Chip.Removable>
-        ))}
-        {filterLabel?.map((filter, index) => (
-          <Chip.Removable
-            key={`label-${index}`}
-            onClick={() => removeFilter(filter, 'label')}
-          >
-            {filter}
-          </Chip.Removable>
-        ))}
-        {filterStatus?.map((filter, index) => (
-          <Chip.Removable
-            key={`status-${index}`}
-            onClick={() => removeFilter(filter, 'status')}
-          >
-            {capitalizeFirstLetter(getTranslateText(conceptStatuses?.find((s) => s.uri === filter)?.label) as string)}
-          </Chip.Removable>
-        ))}
-        {filterAssignedUser && (
-          <Chip.Removable
-            key={`${filterAssignedUser}`}
-            onClick={() => removeFilter(getUsername(filterAssignedUser), 'assignedUser')}
-          >
-            {getUsername(filterAssignedUser)}
-          </Chip.Removable>
-        )}
-        {filterPublicationState?.map((filter, index) => (
-          <Chip.Removable
-            key={`published-${index}`}
-            onClick={() => removeFilter(filter, 'published')}
-          >
-            {filter === 'published' ? loc.publicationState.published : loc.publicationState.unpublished}
-          </Chip.Removable>
-        ))}
-        {filterInternalFields &&
-          Object.entries(filterInternalFields).map(([key, values]: [string, string[]], index) => {
-            return values.map((value, innerIndex) => (
-              <Chip.Removable
-                key={`internalFields-${index}-${innerIndex}`}
-                onClick={() => {
-                  removeFilter({ key: key, value: value }, 'internalFields');
-                }}
-              >
-                {`${getTranslateText(getInternalFields(key).label)}: ${value === 'true' ? loc.yes : loc.no}`}
-              </Chip.Removable>
-            ));
-          })}
-      </Chip.Group>
-    </div>
-  );
+  const FilterChips = () => {
+    if (
+      isEmpty(filterSubject) &&
+      isEmpty(filterLabel) &&
+      isEmpty(filterStatus) &&
+      isEmpty(filterAssignedUser) &&
+      isEmpty(filterPublicationState) &&
+      isEmpty(filterInternalFields)
+    ) {
+      return undefined;
+    }
+
+    return (
+      <div className={styles.chips}>
+        <Chip.Group
+          size='small'
+          className={styles.wrap}
+        >
+          {filterSubject?.map((filter, index) => (
+            <Chip.Removable
+              key={`subject-${index}`}
+              onClick={() => removeFilter(filter, 'subject')}
+            >
+              {getTranslateText(subjectCodeList.codes.find((c) => c.id === filter)?.name)}
+            </Chip.Removable>
+          ))}
+          {filterLabel?.map((filter, index) => (
+            <Chip.Removable
+              key={`label-${index}`}
+              onClick={() => removeFilter(filter, 'label')}
+            >
+              {filter}
+            </Chip.Removable>
+          ))}
+          {filterStatus?.map((filter, index) => (
+            <Chip.Removable
+              key={`status-${index}`}
+              onClick={() => removeFilter(filter, 'status')}
+            >
+              {capitalizeFirstLetter(getTranslateText(conceptStatuses?.find((s) => s.uri === filter)?.label) as string)}
+            </Chip.Removable>
+          ))}
+          {filterAssignedUser && (
+            <Chip.Removable
+              key={`${filterAssignedUser}`}
+              onClick={() => removeFilter(getUsername(filterAssignedUser), 'assignedUser')}
+            >
+              {getUsername(filterAssignedUser)}
+            </Chip.Removable>
+          )}
+          {filterPublicationState?.map((filter, index) => (
+            <Chip.Removable
+              key={`published-${index}`}
+              onClick={() => removeFilter(filter, 'published')}
+            >
+              {filter === 'published' ? loc.publicationState.published : loc.publicationState.unpublished}
+            </Chip.Removable>
+          ))}
+          {filterInternalFields &&
+            Object.entries(filterInternalFields).map(([key, values]: [string, string[]], index) => {
+              return values.map((value, innerIndex) => (
+                <Chip.Removable
+                  key={`internalFields-${index}-${innerIndex}`}
+                  onClick={() => {
+                    removeFilter({ key: key, value: value }, 'internalFields');
+                  }}
+                >
+                  {`${getTranslateText(getInternalFields(key).label)}: ${value === 'true' ? loc.yes : loc.no}`}
+                </Chip.Removable>
+              ));
+            })}
+        </Chip.Group>
+      </div>
+    );
+  };
 
   return (
-    <>
-      <SearchHitsPageLayout>
-        <SearchHitsPageLayout.ButtonRow>
-          <>
-            <LinkButton
-              href={`/catalogs/${catalogId}/change-requests`}
-              variant='secondary'
-            >
-              {loc.changeRequest.changeRequest}
-            </LinkButton>
-            {hasWritePermission && (
-              <LinkButton href={`/catalogs/${catalogId}/concepts/new`}>
-                <>
-                  <PlusCircleIcon fontSize='1.5rem' />
-                  <span>{loc.button.createConcept}</span>
-                </>
-              </LinkButton>
-            )}
-            {hasAdminPermission && (
-              <UploadButton
-                variant='secondary'
-                allowedMimeTypes={[
-                  'text/csv',
-                  'text/x-csv',
-                  'text/plain',
-                  'application/csv',
-                  'application/x-csv',
-                  'application/vnd.ms-excel',
-                  'application/json',
-                ]}
-                onUpload={onImportUpload}
-              >
-                <FileImportIcon fontSize='1.5rem' />
-                <span>{loc.button.importConcept}</span>
-              </UploadButton>
-            )}
-          </>
-        </SearchHitsPageLayout.ButtonRow>
-        <SearchHitsPageLayout.SearchRow>
-          <div className={styles.searchOptions}>
-            <Select
-              label={loc.search.searchField}
-              size='sm'
-              onChange={(event) => onFieldSelect(event.target.value as SearchableField)}
-            >
-              {fieldOptions}
-            </Select>
-            <Select
-              label={loc.search.sort}
-              size='sm'
-              onChange={(event) => onSortSelect(event?.target.value as SortOption)}
-              value={selectedSortOption}
-            >
-              {sortOptions}
-            </Select>
-          </div>
-        </SearchHitsPageLayout.SearchRow>
-        <SearchHitsPageLayout.LeftColumn>
-          <div>
-            <Search
-              label={loc.search.search}
-              size='sm'
-              placeholder={loc.search.search}
-              clearButtonLabel={loc.search.clear}
-              searchButtonLabel={
-                <MagnifyingGlassIcon
-                  fontSize={'1em'}
-                  title={loc.search.search}
+    <div className='container'>
+      <Tabs
+        className={styles.tabs}
+        defaultValue={'tab1'}
+        size='medium'
+      >
+        <Tabs.List className={styles.tabsList}>
+          <Tabs.Tab value={'tab1'}>{'Begreper'}</Tabs.Tab>
+          <Tabs.Tab
+            value={'tab2'}
+            onClick={() => router.push(`/catalogs/${catalogId}/change-requests`)}
+          >
+            {'Endringsforslag'}
+          </Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Content
+          value={'tab1'}
+          className={styles.tabsContent}
+        >
+          <SearchHitsLayout>
+            <SearchHitsLayout.SearchRow>
+              <div className={styles.searchRow}>
+                <div className={styles.searchFieldWrapper}>
+                  <SearchField
+                    className={styles.searchField}
+                    placeholder={loc.search.search}
+                    value={searchTerm ?? ''}
+                    options={getSelectOptions(loc.search.fields).map(({ label, value }) => ({
+                      label,
+                      value,
+                      default: value === 'alleFelter',
+                    }))}
+                    onSearch={(value, option) => {
+                      setSelectedFieldOption(option as SearchableField);
+                      setSearchTerm(value);
+                      setPage(0);
+                    }}
+                  />
+                  <Select
+                    size='sm'
+                    onChange={(event) => onSortSelect(event?.target.value as SortOption)}
+                    value={selectedSortOption}
+                  >
+                    {sortOptions}
+                  </Select>
+                </div>
+                <div className={styles.buttons}>
+                  {hasAdminPermission && (
+                    <UploadButton
+                      size='sm'
+                      variant='secondary'
+                      allowedMimeTypes={[
+                        'text/csv',
+                        'text/x-csv',
+                        'text/plain',
+                        'application/csv',
+                        'application/x-csv',
+                        'application/vnd.ms-excel',
+                        'application/json',
+                      ]}
+                      onUpload={onImportUpload}
+                    >
+                      <FileImportIcon fontSize='1.5rem' />
+                      <span>{loc.button.importConcept}</span>
+                    </UploadButton>
+                  )}
+                  {hasWritePermission && (
+                    <LinkButton
+                      href={`/catalogs/${catalogId}/concepts/new`}
+                      size='sm'
+                    >
+                      <>
+                        <PlusCircleIcon fontSize='1.5rem' />
+                        <span>{loc.button.createConcept}</span>
+                      </>
+                    </LinkButton>
+                  )}
+                </div>
+              </div>
+              <FilterChips />
+            </SearchHitsLayout.SearchRow>
+            <SearchHitsLayout.LeftColumn>
+              <SearchFilter
+                catalogId={catalogId}
+                internalFields={fieldsResult?.internal}
+                subjectCodeList={subjectCodeList}
+                conceptStatuses={conceptStatuses}
+              />
+            </SearchHitsLayout.LeftColumn>
+            <SearchHitsLayout.MainColumn>
+              {status === 'pending' || importConcepts.status === 'pending' ? (
+                <Spinner />
+              ) : (
+                <SearchHitContainer
+                  onPageChange={onPageChange}
+                  noSearchHits={!data?.hits?.length}
+                  paginationInfo={data?.page}
+                  searchHits={
+                    <ConceptSearchHits
+                      catalogId={catalogId}
+                      data={data}
+                      conceptStatuses={conceptStatuses}
+                      subjectCodeList={subjectCodeList}
+                      assignableUsers={usersResult?.users ?? []}
+                      onLabelClick={onLabelClick}
+                    />
+                  }
                 />
-              }
-              variant='primary'
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.code === 'Enter') {
-                  onSearchSubmit(searchValue);
-                }
-              }}
-              onSearchClick={onSearchSubmit}
-              onClear={(value) => {
-                setSearchValue('');
-                onSearchSubmit('');
-              }}
-            />
-            <FilterChips />
-          </div>
-          <SearchFilter
-            catalogId={catalogId}
-            internalFields={fieldsResult?.internal}
-            subjectCodeList={subjectCodeList}
-            conceptStatuses={conceptStatuses}
-          />
-        </SearchHitsPageLayout.LeftColumn>
-        <SearchHitsPageLayout.MainColumn>
-          {status === 'pending' || importConcepts.status === 'pending' ? (
-            <Spinner />
-          ) : (
-            <SearchHitContainer
-              onPageChange={onPageChange}
-              noSearchHits={!data?.hits?.length}
-              paginationInfo={data?.page}
-              searchHits={
-                <ConceptSearchHits
-                  catalogId={catalogId}
-                  data={data}
-                  conceptStatuses={conceptStatuses}
-                  subjectCodeList={subjectCodeList}
-                  assignableUsers={usersResult?.users ?? []}
-                  onLabelClick={onLabelClick}
-                />
-              }
-            />
-          )}
-        </SearchHitsPageLayout.MainColumn>
-      </SearchHitsPageLayout>
-    </>
+              )}
+            </SearchHitsLayout.MainColumn>
+          </SearchHitsLayout>
+        </Tabs.Content>
+      </Tabs>
+    </div>
   );
 };
