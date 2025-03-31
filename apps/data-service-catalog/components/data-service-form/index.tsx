@@ -88,6 +88,7 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
                 <FormLayout.Section
                   id='about-section'
                   title={localization.dataServiceForm.heading.about}
+                  subtitle={localization.dataServiceForm.subtitle.about}
                   required
                   error={hasError(['title'])}
                 >
@@ -97,6 +98,7 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
                 <FormLayout.Section
                   id='endpoint-section'
                   title={localization.dataServiceForm.heading.endpoint}
+                  subtitle={localization.dataServiceForm.subtitle.endpoint}
                   required
                   error={hasError(['endpointUrl', 'endpointDescriptions'])}
                 >
@@ -106,6 +108,7 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
                 <FormLayout.Section
                   id='documentation-section'
                   title={localization.dataServiceForm.heading.documentation}
+                  subtitle={localization.dataServiceForm.subtitle.documentation}
                   error={hasError(['landingPage', 'pages'])}
                 >
                   <DocumentationSection />
@@ -114,6 +117,7 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
                 <FormLayout.Section
                   id='access-section'
                   title={localization.dataServiceForm.heading.access}
+                  subtitle={localization.dataServiceForm.subtitle.access}
                 >
                   <AccessSection
                     openLicenses={referenceData.openLicenses}
@@ -124,6 +128,7 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
                 <FormLayout.Section
                   id='status-section'
                   title={localization.dataServiceForm.heading.status}
+                  subtitle={localization.dataServiceForm.subtitle.status}
                 >
                   <StatusSection
                     statuses={referenceData.distributionStatuses}
@@ -134,6 +139,7 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
                 <FormLayout.Section
                   id='format-section'
                   title={localization.dataServiceForm.heading.format}
+                  subtitle={localization.dataServiceForm.subtitle.format}
                 >
                   <FormatSection referenceDataEnv={referenceDataEnv} />
                 </FormLayout.Section>
@@ -141,6 +147,7 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
                 <FormLayout.Section
                   id='dataset-section'
                   title={localization.dataServiceForm.heading.dataset}
+                  subtitle={localization.dataServiceForm.subtitle.dataset}
                 >
                   <DatasetSection searchEnv={searchEnv} />
                 </FormLayout.Section>
@@ -148,6 +155,7 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
                 <FormLayout.Section
                   id='contact-point-section'
                   title={localization.dataServiceForm.heading.contactPoint}
+                  subtitle={localization.dataServiceForm.subtitle.contactPoint}
                   required
                   error={hasError(['contactPoint'])}
                 >
