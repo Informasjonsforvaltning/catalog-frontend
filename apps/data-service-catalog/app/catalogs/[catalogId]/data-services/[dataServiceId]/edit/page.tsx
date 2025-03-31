@@ -10,11 +10,7 @@ import { getDataServiceById } from '@catalog-frontend/data-access';
 import DataServiceForm from '../../../../../../components/data-service-form';
 import { redirect, RedirectType } from 'next/navigation';
 
-export default async function EditDataServicePage({
-  params,
-}: {
-  params: Promise<{ catalogId: string; dataServiceId: string }>;
-}) {
+export default async function EditDataServicePage({ params }: Params) {
   const { catalogId, dataServiceId } = await params;
   const session = await getValidSession();
   if (!session) {
