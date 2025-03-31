@@ -14,12 +14,10 @@ import { getDataServices } from '../../../actions/actions';
 export default async function DataServicesSearchHits(props: Params) {
   const params = await props.params;
   const { catalogId } = params;
-
   const session = await getValidSession();
-  if (!session) {
-    return redirectToSignIn();
+  if(!session) {
+    return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/data-services` });
   }
-
   const dataServices: DataService[] = await getDataServices(catalogId);
   const hasWritePermission = await hasOrganizationWritePermission(session.accessToken, catalogId);
 

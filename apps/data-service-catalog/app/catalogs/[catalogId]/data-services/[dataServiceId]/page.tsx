@@ -17,16 +17,11 @@ import { redirect, RedirectType } from 'next/navigation';
 import DataServiceDetailsPageClient from './data-service-details-page-client';
 import { dataServiceValidationSchema } from '../../../../../components/data-service-form/utils/validation-schema';
 
-export default async function EditDataServicePage({
-  params,
-}: {
-  params: Promise<{ catalogId: string; dataServiceId: string }>;
-}) {
+export default async function EditDataServicePage({ params }: Params) {
   const { catalogId, dataServiceId } = await params;
-
   const session = await getValidSession();
-  if (!session) {
-    return redirectToSignIn();
+  if(!session) {
+    return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/data-services/${dataServiceId}/edit` });
   }
   const dataService = await getDataServiceById(catalogId, dataServiceId, `${session?.accessToken}`).then((response) => {
     if (response.ok) return response.json();
