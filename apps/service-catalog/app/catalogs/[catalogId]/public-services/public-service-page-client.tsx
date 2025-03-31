@@ -136,7 +136,7 @@ const PublicServicePageClient = ({ services, hasWritePermission, catalogId, stat
               </div>
             ))
           }
-          noSearchHits={!Boolean(filteredServices?.length)}
+          noSearchHits={!(filteredServices?.length)}
         />
       </SearchHitsLayout.MainColumn>
     </SearchHitsLayout>
