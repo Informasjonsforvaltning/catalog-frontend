@@ -17,7 +17,7 @@ export default async function PublicServiceDetailsPage({ params }: Params) {
   const { catalogId, serviceId } = params;
 
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn({
       callbackUrl: `/catalogs/${catalogId}/public-services/${serviceId}`,
     });
@@ -44,7 +44,10 @@ export default async function PublicServiceDetailsPage({ params }: Params) {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} />
+      <Breadcrumbs
+        breadcrumbList={breadcrumbList}
+        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+      />
       <PageBanner
         title={localization.catalogType.publicService}
         subtitle={getTranslateText(organization?.prefLabel).toString()}

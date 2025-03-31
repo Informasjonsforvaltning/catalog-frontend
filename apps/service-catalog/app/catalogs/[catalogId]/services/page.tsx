@@ -15,10 +15,9 @@ import ServicePageClient from './service-page-client';
 export default async function ServiceSearchHitsPage({ params }: Params) {
   const { catalogId } = params;
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/services` });
   }
-  
   const services: Service[] = await getServices(catalogId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const hasWritePermission = await hasOrganizationWritePermission(session.accessToken, catalogId);
@@ -35,7 +34,10 @@ export default async function ServiceSearchHitsPage({ params }: Params) {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} />
+      <Breadcrumbs
+        breadcrumbList={breadcrumbList}
+        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+      />
       <PageBanner
         title={localization.catalogType.service}
         subtitle={getTranslateText(organization.prefLabel).toString()}

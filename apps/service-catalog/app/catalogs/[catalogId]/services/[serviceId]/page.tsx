@@ -16,12 +16,11 @@ import ServiceDetailsPageClient from './service-details-page-client';
 export default async function ServiceDetailsPage({ params }: Params) {
   const { catalogId, serviceId } = params;
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn({
       callbackUrl: `/catalogs/${catalogId}/services/${serviceId}`,
     });
   }
-
   const service: Service | null = await getServiceById(catalogId, serviceId);
   if (!service) {
     redirect(`/notfound`, RedirectType.replace);
@@ -44,7 +43,10 @@ export default async function ServiceDetailsPage({ params }: Params) {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} />
+      <Breadcrumbs
+        breadcrumbList={breadcrumbList}
+        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+      />
       <PageBanner
         title={localization.catalogType.service}
         subtitle={getTranslateText(organization?.prefLabel).toString()}
