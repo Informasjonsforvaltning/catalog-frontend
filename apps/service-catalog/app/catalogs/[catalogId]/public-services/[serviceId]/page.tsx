@@ -6,6 +6,7 @@ import {
   getValidSession,
   hasOrganizationWritePermission,
   localization,
+  redirectToSignIn,
 } from '@catalog-frontend/utils';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getPublicServiceById } from '../../../../actions/public-services/actions';
@@ -15,9 +16,12 @@ import PublicServiceDetailsPageClient from './public-service-details-page-client
 export default async function PublicServiceDetailsPage({ params }: Params) {
   const { catalogId, serviceId } = params;
 
-  const session = await getValidSession({
-    callbackUrl: `/catalogs/${catalogId}/public-services/${serviceId}`,
-  });
+  const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn({
+      callbackUrl: `/catalogs/${catalogId}/public-services/${serviceId}`,
+    });
+  }
   const service: Service | null = await getPublicServiceById(catalogId, serviceId);
   if (!service) {
     redirect(`/notfound`, RedirectType.replace);

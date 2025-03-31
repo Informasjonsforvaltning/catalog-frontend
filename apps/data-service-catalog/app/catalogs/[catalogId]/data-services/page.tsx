@@ -1,6 +1,6 @@
 import { DataService } from '@catalog-frontend/types';
 import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
-import { getValidSession, hasOrganizationWritePermission, localization } from '@catalog-frontend/utils';
+import { getValidSession, hasOrganizationWritePermission, localization, redirectToSignIn } from '@catalog-frontend/utils';
 
 import { getDistributionStatuses } from '@catalog-frontend/data-access';
 import DataServicePageClient from './data-services-page-client';
@@ -8,8 +8,10 @@ import { getDataServices } from '../../../actions/actions';
 
 export default async function DataServicesSearchHits({ params }) {
   const { catalogId } = params;
-  const session = await getValidSession({ callbackUrl: `/catalogs/${catalogId}/data-services` });
-
+  const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/data-services` });
+  }
   const dataServices: DataService[] = await getDataServices(catalogId);
   const hasWritePermission = await hasOrganizationWritePermission(session.accessToken, catalogId);
 

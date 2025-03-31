@@ -7,14 +7,17 @@ import {
 } from '@catalog-frontend/data-access';
 
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import { getTranslateText, getValidSession, localization } from '@catalog-frontend/utils';
+import { getTranslateText, getValidSession, localization, redirectToSignIn } from '@catalog-frontend/utils';
 import { getDataServiceById } from '@catalog-frontend/data-access';
 import DataServiceForm from '../../../../../../components/data-service-form';
 import { redirect, RedirectType } from 'next/navigation';
 
 export default async function EditDataServicePage({ params }: Params) {
   const { catalogId, dataServiceId } = params;
-  const session = await getValidSession({ callbackUrl: `/catalogs/${catalogId}/data-services/${dataServiceId}/edit` });
+  const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/data-services/${dataServiceId}/edit` });
+  }
   const dataService = await getDataServiceById(catalogId, dataServiceId, `${session?.accessToken}`).then((response) => {
     if (response.ok) return response.json();
   });
