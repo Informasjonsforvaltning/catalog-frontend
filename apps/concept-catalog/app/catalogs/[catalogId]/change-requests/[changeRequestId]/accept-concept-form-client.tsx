@@ -8,10 +8,7 @@ import { ChangeRequestStatusTagProps, LinkButton, Tag } from '@catalog-frontend/
 import styles from './accept-concept-form-client.module.scss';
 import ConceptForm from '../../../../../components/concept-form';
 import { getTranslatedStatus } from '../../../../../utils/change-request';
-import {
-  acceptChangeRequestAction,
-  rejectChangeRequestAction,
-} from '../../../../actions/change-requests/actions';
+import { acceptChangeRequestAction, rejectChangeRequestAction } from '../../../../actions/change-requests/actions';
 
 export const AcceptConceptFormClient = ({
   organization,
@@ -94,6 +91,18 @@ export const AcceptConceptFormClient = ({
     );
   };
 
+  const CancelButton = () => {
+    return (
+      <LinkButton
+        size='sm'
+        href={`/catalogs/${organization.organizationId}/change-requests`}
+        variant='secondary'
+      >
+        Tilbake
+      </LinkButton>
+    );
+  };
+
   const FooterBar = () => {
     const info = `${localization.created}: ${
       changeRequest?.timeForProposal &&
@@ -109,12 +118,14 @@ export const AcceptConceptFormClient = ({
     return (
       <div className={styles.footerBar}>
         <div className={styles.footerButtons}>
-          {changeRequest.status === 'OPEN' && (
+          {changeRequest.status === 'OPEN' ? (
             <>
               <AcceptChangeRequestButton />
               <RejectChangeRequestButton />
               <EditChangeRequestButton />
             </>
+          ) : (
+            <CancelButton />
           )}
         </div>
         <div className={styles.info}>

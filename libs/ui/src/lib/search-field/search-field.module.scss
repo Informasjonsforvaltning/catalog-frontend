@@ -1,0 +1,49 @@
+.search {
+  max-width: 640px;
+}
+
+.searchBox {
+  position: relative;
+}
+
+.searchActions {
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0.5rem;
+  display: flex;
+  gap: var(--fds-spacing-2);
+}
+
+.searchButton {
+  font-size: medium;
+
+  title + circle {
+      display: none;
+  }
+
+  @media (max-width: 650px) {
+      right: 0.44444rem;
+      bottom: 0.44444rem;
+  }
+}
+
+.searchIcon {
+  transform: scale(1.25);
+  margin-right: 0.25rem;
+}
+
+.inputTextfield {
+  position: relative;
+  gap: 1rem;
+
+  input {
+      font-size: 1.25rem;      
+  }
+
+  > label + div + div {
+      position: absolute;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+  }
+}

@@ -1,14 +1,14 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { Search } from '@digdir/designsystemet-react';
 import Filter from '../../../../components/filter';
 import { Service, ReferenceDataCode, FilterType } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import {
   LinkButton,
+  SearchField,
   SearchHit,
   SearchHitContainer,
-  SearchHitsPageLayout,
+  SearchHitsLayout,
   ServiceStatusTagProps,
   Tag,
 } from '@catalog-frontend/ui';
@@ -69,35 +69,32 @@ const ServicePageClient = ({ services, hasWritePermission, catalogId, statuses }
   const findServiceStatus = (service: Service) => statuses.find((s) => s.uri === service?.status);
 
   return (
-    <SearchHitsPageLayout>
-      <SearchHitsPageLayout.SearchRow>
-        <div>
-          <Search
-            error=''
-            label={localization.search.search}
+    <SearchHitsLayout>
+      <SearchHitsLayout.SearchRow>
+        <div className={styles.search}>
+          <SearchField
+            className={styles.searchField}
             placeholder={localization.search.searchForService}
-            size='small'
-            variant='primary'
-            onSearchClick={(value) => setSearchQuery(value)}
-            className={styles.search}
+            onSearch={(value) => setSearchQuery(value)}
+
           />
+          {hasWritePermission && (
+            <LinkButton href={`/catalogs/${catalogId}/services/new`}>
+              <PlusCircleIcon />
+              {localization.serviceCatalog.form.new}
+            </LinkButton>
+          )}
+        </div>
+        {(statusFilters.length > 0 || publicationFilters.length > 0) ? (
           <FilterChips
             statusFilters={statusFilters}
             publicationFilters={publicationFilters}
             handleRemoveFilter={(filter: string, filterType: FilterType) => removeFilter(filter, filterType)}
             statuses={statuses}
           />
-        </div>
-        {hasWritePermission && (
-          <div>
-            <LinkButton href={`/catalogs/${catalogId}/services/new`}>
-              <PlusCircleIcon />
-              {localization.serviceCatalog.form.new}
-            </LinkButton>
-          </div>
-        )}
-      </SearchHitsPageLayout.SearchRow>
-      <SearchHitsPageLayout.LeftColumn>
+        ) : undefined}
+      </SearchHitsLayout.SearchRow>
+      <SearchHitsLayout.LeftColumn>
         {
           <div>
             <Filter
@@ -109,8 +106,8 @@ const ServicePageClient = ({ services, hasWritePermission, catalogId, statuses }
             />
           </div>
         }
-      </SearchHitsPageLayout.LeftColumn>
-      <SearchHitsPageLayout.MainColumn>
+      </SearchHitsLayout.LeftColumn>
+      <SearchHitsLayout.MainColumn>
         {
           <SearchHitContainer
             searchHits={
@@ -141,11 +138,11 @@ const ServicePageClient = ({ services, hasWritePermission, catalogId, statuses }
                 </div>
               ))
             }
-            noSearchHits={filteredServices?.length < 1 ? true : false}
+            noSearchHits={!Boolean(filteredServices?.length)}
           />
         }
-      </SearchHitsPageLayout.MainColumn>
-    </SearchHitsPageLayout>
+      </SearchHitsLayout.MainColumn>
+    </SearchHitsLayout>
   );
 };
 

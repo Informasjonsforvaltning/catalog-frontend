@@ -2,8 +2,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Dataset, FilterType, PublicationStatus } from '@catalog-frontend/types';
 import styles from './datasets-page.module.css';
-import { LinkButton, SearchHit, SearchHitContainer, SearchHitsPageLayout } from '@catalog-frontend/ui';
-import { Chip, NativeSelect, Search } from '@digdir/designsystemet-react';
+import { LinkButton, SearchField, SearchHit, SearchHitContainer, SearchHitsLayout } from '@catalog-frontend/ui';
+import { Chip, NativeSelect } from '@digdir/designsystemet-react';
 import {
   dateStringToDate,
   formatDate,
@@ -14,7 +14,7 @@ import {
   sortDescending,
 } from '@catalog-frontend/utils';
 import StatusTag from '../../../../components/status-tag/index';
-import { MagnifyingGlassIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 import SearchFilter from '../../../../components/search-filter';
 import { isEmpty } from 'lodash';
 import { useQueryState, parseAsArrayOf, parseAsString, parseAsInteger } from 'nuqs';
@@ -30,7 +30,7 @@ const sortTypes: SortTypes[] = ['titleAsc', 'titleDesc', 'lastChanged'];
 const itemPerPage = 5;
 
 const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) => {
-  const [searchTerm, setSearchTerm] = useQueryState('search');
+  const [searchTerm, setSearchTerm] = useQueryState('search', { defaultValue: '' });
   const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString));
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
     'filter.pubState',
@@ -39,7 +39,6 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
   const [sortValue, setSortValue] = useQueryState('sort');
   const [page, setPage] = useQueryState('page', parseAsInteger);
   const [filteredDatasets, setFilteredDatasets] = useState<Dataset[]>(datasets);
-  const [searchValue, setSearchValue] = useState(searchTerm ?? '');
 
   const getSortFunction = useMemo(() => {
     return (sortKey: SortTypes) => {
@@ -93,8 +92,8 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
           );
         });
       }
-      if (searchValue) {
-        const lowercasedQuery = searchValue.toLowerCase();
+      if (searchTerm) {
+        const lowercasedQuery = searchTerm.toLowerCase();
         filtered = filtered.filter(
           (dataset) =>
             getTranslateText(dataset?.title).toString().toLowerCase().includes(lowercasedQuery) ||
@@ -109,10 +108,6 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
     };
     filterAndSortDatasets();
   }, [datasets, filterPublicationState, filterStatus, searchTerm, sortValue]);
-
-  const onSearchSubmit = (search: string) => {
-    setSearchTerm(search);
-  };
 
   const FilterChips = () => (
     <div className={styles.chips}>
@@ -156,61 +151,59 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
 
   return (
     <div className={styles.container}>
-      <SearchHitsPageLayout>
-        <SearchHitsPageLayout.SearchRow>
-          <NativeSelect
-            label={localization.search.sort}
-            size='sm'
-            className={styles.select}
-            onChange={(val) => {
-              setSortValue(val.target.value);
-            }}
-          >
-            <option value=''>{`${localization.choose}...`}</option>
-            <option value='lastChanged'>{localization.search.sortOptions.LAST_UPDATED_FIRST}</option>
-            <option value='titleAsc'>{localization.search.sortOptions.TITLE_AÅ}</option>
-            <option value='titleDesc'>{localization.search.sortOptions.TITLE_ÅA}</option>
-          </NativeSelect>
-        </SearchHitsPageLayout.SearchRow>
-        {hasWritePermission && (
-          <SearchHitsPageLayout.ButtonRow>
-            <LinkButton
-              variant='primary'
-              href={`/catalogs/${catalogId}/datasets/new`}
-            >
-              <PlusCircleIcon fontSize='1.2rem' />
-              {localization.datasetForm.button.addDataset}
-            </LinkButton>
-          </SearchHitsPageLayout.ButtonRow>
-        )}
-        <SearchHitsPageLayout.LeftColumn>
+      <SearchHitsLayout>
+        <SearchHitsLayout.SearchRow>
+          <div className={styles.searchRow}>
+            <div className={styles.searchFieldWrapper}>
+              <SearchField
+                className={styles.searchField}
+                placeholder={`${localization.search.search}...`}
+                onSearch={(value) => {
+                  setSearchTerm(value);
+                }}
+              />
+              <NativeSelect
+                size='sm'
+                className={styles.select}
+                onChange={(e) => setSortValue(e.target.value)}
+              >
+                <option value=''>{`${localization.choose} ${localization.search.sort.toLowerCase()}...`}</option>
+                <option value='lastChanged'>{localization.search.sortOptions.LAST_UPDATED_FIRST}</option>
+                <option value='titleAsc'>{localization.search.sortOptions.TITLE_AÅ}</option>
+                <option value='titleDesc'>{localization.search.sortOptions.TITLE_ÅA}</option>
+              </NativeSelect>
+            </div>
+            <div className={styles.buttons}>
+              {hasWritePermission && (
+                <>
+                  <LinkButton
+                    variant='secondary'
+                    href={`/catalogs/${catalogId}/datasets/series/new`}
+                  >
+                    <PlusCircleIcon fontSize='1.2rem' />
+                    {localization.datasetForm.button.addDatasetSeries}
+                  </LinkButton>
+                  <LinkButton
+                    variant='primary'
+                    href={`/catalogs/${catalogId}/datasets/new`}
+                  >
+                    <PlusCircleIcon fontSize='1.2rem' />
+                    {localization.datasetForm.button.addDataset}
+                  </LinkButton>
+                </>
+              )}
+            </div>
+          </div>
+          <FilterChips />
+        </SearchHitsLayout.SearchRow>
+
+        <SearchHitsLayout.LeftColumn>
           <div className={styles.leftColumn}>
-            <Search
-              label={localization.search.search}
-              size='sm'
-              placeholder={localization.search.search}
-              clearButtonLabel={localization.search.clear}
-              searchButtonLabel={
-                <MagnifyingGlassIcon
-                  fontSize='1em'
-                  title={localization.search.search}
-                />
-              }
-              variant='primary'
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              onKeyDown={(e) => e.code === 'Enter' && onSearchSubmit(searchValue)}
-              onSearchClick={onSearchSubmit}
-              onClear={() => {
-                setSearchValue('');
-                onSearchSubmit('');
-              }}
-            />
-            <FilterChips />
             <SearchFilter />
           </div>
-        </SearchHitsPageLayout.LeftColumn>
-        <SearchHitsPageLayout.MainColumn>
+        </SearchHitsLayout.LeftColumn>
+
+        <SearchHitsLayout.MainColumn>
           <SearchHitContainer
             searchHits={
               paginatedDatasets.length > 0
@@ -252,8 +245,8 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           />
-        </SearchHitsPageLayout.MainColumn>
-      </SearchHitsPageLayout>
+        </SearchHitsLayout.MainColumn>
+      </SearchHitsLayout>
     </div>
   );
 };

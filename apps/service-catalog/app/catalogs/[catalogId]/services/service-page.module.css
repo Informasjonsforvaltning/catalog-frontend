@@ -1,7 +1,14 @@
 .searchHit {
-  padding-bottom: 1rem;
+  padding-bottom: var(--fds-spacing-4);
 }
 
 .search {
-  max-width: 24rem;
+  display: flex;
+  gap: var(--fds-spacing-4);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.searchField {
+  flex-grow: 1;
 }
