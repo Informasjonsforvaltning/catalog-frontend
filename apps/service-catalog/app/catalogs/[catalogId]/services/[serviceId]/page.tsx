@@ -23,10 +23,9 @@ export default async function ServiceDetailsPage({
   if (!session) {
     return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/services/${serviceId}` });
   }
-
   const service: Service | null = await getServiceById(catalogId, serviceId);
   if (!service) {
-    redirect(`/notfound`, RedirectType.replace);
+    return redirect(`/notfound`, RedirectType.replace);
   }
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);

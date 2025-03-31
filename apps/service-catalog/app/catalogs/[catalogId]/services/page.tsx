@@ -18,7 +18,7 @@ export default async function ServiceSearchHitsPage({ params }: { params: Promis
   if (!session) {
     return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/services` });
   }
-
+  
   const services: Service[] = await getServices(catalogId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const hasWritePermission = await hasOrganizationWritePermission(session.accessToken, catalogId);
