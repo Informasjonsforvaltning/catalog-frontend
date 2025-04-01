@@ -59,10 +59,12 @@ export const EditConceptFormClient = ({
 
   const handleAfterSubmit = () => {
     router.push(`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}`);
+    router.refresh();
   };
 
   const handleCancel = () => {
     router.push(`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}`);
+    router.refresh();
   };
 
   return (

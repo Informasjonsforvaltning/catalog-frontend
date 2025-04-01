@@ -1,8 +1,6 @@
 import { TermsOfUseModal } from '@catalog-frontend/ui';
 import { CatalogLayout } from '../../../components/catalog-layout';
 
-export const fetchCache = 'force-no-store';
-
 const Layout = ({ children, params: { catalogId } }: { children: React.ReactNode; params: { catalogId: string } }) => {
   return (
     <CatalogLayout
