@@ -43,7 +43,7 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
       .catch((error) => {
         throw error;
       });
-
+  
     const originalConcept =
       changeRequest.conceptId && validUUID(changeRequest.conceptId)
         ? await getConceptRevisions(`${changeRequest.conceptId}`, `${session.accessToken}`).then((response) => {
