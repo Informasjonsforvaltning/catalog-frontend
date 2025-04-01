@@ -18,6 +18,8 @@ export const AcceptConceptFormClient = ({
   codeListsResult,
   fieldsResult,
   usersResult,
+  allowEdit,
+  allowApprove
 }) => {
   const AcceptChangeRequestButton = () => {
     const [isHandlingAction, setIsHandlingAction] = useState(false);
@@ -91,9 +93,10 @@ export const AcceptConceptFormClient = ({
   const CancelButton = () => {
     return (
       <LinkButton
-        size='sm'
         href={`/catalogs/${organization.organizationId}/change-requests`}
         variant='secondary'
+        color='second'
+        size='sm'
       >
         Tilbake
       </LinkButton>
@@ -117,9 +120,21 @@ export const AcceptConceptFormClient = ({
         <div className={styles.footerButtons}>
           {changeRequest.status === 'OPEN' ? (
             <>
-              <AcceptChangeRequestButton />
-              <RejectChangeRequestButton />
-              <EditChangeRequestButton />
+              {allowApprove && (
+                <>
+                  <AcceptChangeRequestButton />
+                  <RejectChangeRequestButton />
+                </>
+              )}
+              {allowEdit && (              
+                <EditChangeRequestButton />
+              )}
+              {!(allowApprove || allowEdit) && (
+                <>
+                <CancelButton />
+                Skrivetilgang kreves for å godta eller avvise.
+                </>
+              )}
             </>
           ) : (
             <CancelButton />
