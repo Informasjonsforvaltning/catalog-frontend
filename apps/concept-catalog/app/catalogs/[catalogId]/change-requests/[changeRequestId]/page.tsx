@@ -95,6 +95,9 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
       response.json(),
     );
 
+    const allowApprove = hasWritePermission;
+    const allowEdit = hasWritePermission || (changeRequest.proposedBy && session.user.id === changeRequest.proposedBy.id);
+
     return (
       <>
         <Breadcrumbs
@@ -114,6 +117,8 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
           codeListsResult={codeListsResult}
           fieldsResult={fieldsResult}
           usersResult={usersResult}
+          allowApprove={allowApprove}
+          allowEdit={allowEdit}
         />
       </>
     );

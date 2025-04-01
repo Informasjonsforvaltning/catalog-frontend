@@ -22,6 +22,8 @@ export const AcceptConceptFormClient = ({
   codeListsResult,
   fieldsResult,
   usersResult,
+  allowEdit,
+  allowApprove
 }) => {
   const router = useRouter();
 
@@ -94,6 +96,19 @@ export const AcceptConceptFormClient = ({
     );
   };
 
+  const CancelButton = () => {
+    return (
+      <LinkButton
+        href={`/catalogs/${organization.organizationId}/change-requests`}
+        variant='secondary'
+        color='second'
+        size='sm'
+      >
+        Tilbake
+      </LinkButton>
+    );
+  };
+
   const FooterBar = () => {
     const info = `${localization.created}: ${
       changeRequest?.timeForProposal &&
@@ -111,9 +126,21 @@ export const AcceptConceptFormClient = ({
         <div className={styles.footerButtons}>
           {changeRequest.status === 'OPEN' && (
             <>
-              <AcceptChangeRequestButton />
-              <RejectChangeRequestButton />
-              <EditChangeRequestButton />
+              {allowApprove && (
+                <>
+                  <AcceptChangeRequestButton />
+                  <RejectChangeRequestButton />
+                </>
+              )}
+              {allowEdit && (              
+                <EditChangeRequestButton />
+              )}
+              {!(allowApprove || allowEdit) && (
+                <>
+                <CancelButton />
+                Skrivetilgang kreves for å godta eller avvise.
+                </>
+              )}
             </>
           )}
         </div>
