@@ -205,6 +205,7 @@ export const nb = {
     restore: 'Gjenopprett',
     save: 'Lagre',
     send: 'Send inn',
+    success: 'OK',
     addUrl: 'Legg til lenke',
   },
 
@@ -333,7 +334,8 @@ export const nb = {
     basedOnSource: 'Basert på kilde',
     concept: 'Begrep',
     concepts: 'Begreper',
-    confirmDelete: 'Er du sikker du ønsker å slette begrepet?',
+    confirmDelete: 'Du er i ferd med å slette begrepet "{0}". All historikk og endringsforslag knyttet til begrepet vil bli permanent slettet, og slettingen kan ikke angres. Er du sikker på at du vil fortsette?',
+    confirmEditWithChangeRequest: 'Det finnes et åpent endringsforslag for dette begrepet. Er du sikker på at du vil redigere begrepet?',
     contactInformation: 'Kontaktinformasjon for eksterne',
     definition: 'Definisjon',
     divisionCriterion: 'Inndelingskriterium',
