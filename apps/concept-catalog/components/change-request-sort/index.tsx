@@ -15,6 +15,7 @@ const ChangeRequestSort = ({ options, selected, onChange }: Props) => {
       label={localization.sorting}
       onChange={onChange}
       value={selected}
+      size='sm'
     >
       {options.map((option: Option) => (
         <option

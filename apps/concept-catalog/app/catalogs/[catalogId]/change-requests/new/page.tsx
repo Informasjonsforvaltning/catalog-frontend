@@ -1,12 +1,25 @@
-import { getConceptRevisions, getOrganization, searchChangeRequest } from '@catalog-frontend/data-access';
-import { Organization, Concept, ChangeRequest } from '@catalog-frontend/types';
-import { conceptIsHigherVersion, localization } from '@catalog-frontend/utils';
+import {
+  getAllCodeLists,
+  getConceptRevisions,
+  getConceptStatuses,
+  getFields,
+  getOrganization,
+  getUsers,
+  searchChangeRequest,
+} from '@catalog-frontend/data-access';
+import {
+  Organization,
+  Concept,
+  ChangeRequest,
+  CodeListsResult,
+  FieldsResult,
+  UsersResult,
+} from '@catalog-frontend/types';
+import { conceptIsHigherVersion, localization, prepareStatusList } from '@catalog-frontend/utils';
 import jsonpatch from 'fast-json-patch';
 import { RedirectType, redirect } from 'next/navigation';
-import ChangeRequestOrNewClient from './change-request-or-new-client';
 import { BreadcrumbType, Breadcrumbs, DesignBanner, DetailHeading } from '@catalog-frontend/ui';
-import style from '../change-requests-page.module.css';
-import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
+import { NewConceptFormClient } from './new-concept-form-client';
 import { withReadProtectedPage } from '../../../../../utils/auth';
 
 const ChangeRequestOrNew = withReadProtectedPage(
@@ -81,11 +94,20 @@ const ChangeRequestOrNew = withReadProtectedPage(
       },
     ] as BreadcrumbType[];
 
-    const clientProps = {
-      organization,
-      changeRequestAsConcept,
-      originalConcept,
-    };
+    const conceptStatuses = await getConceptStatuses()
+      .then((response) => response.json())
+      .then((body) => body?.conceptStatuses ?? [])
+      .then((statuses) => prepareStatusList(statuses));
+
+    const codeListsResult: CodeListsResult = await getAllCodeLists(catalogId, `${session?.accessToken}`).then(
+      (response) => response.json(),
+    );
+    const fieldsResult: FieldsResult = await getFields(catalogId, `${session?.accessToken}`).then((response) =>
+      response.json(),
+    );
+    const usersResult: UsersResult = await getUsers(catalogId, `${session?.accessToken}`).then((response) =>
+      response.json(),
+    );
 
     return (
       <>
@@ -94,35 +116,18 @@ const ChangeRequestOrNew = withReadProtectedPage(
           catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
         />
         <DesignBanner
-          title={localization.catalogType.concept}
+          title={localization.changeRequest.changeRequest}
           catalogId={catalogId}
         />
-        <div className='formContainer'>
-          <div className={style.topRow}>
-            <Alert severity='info'>
-              <Heading
-                level={2}
-                size='xsmall'
-                spacing
-              >
-                {originalConcept
-                  ? localization.changeRequest.alert.editAlertInfo.heading
-                  : localization.changeRequest.alert.newAlertInfo.heading}
-              </Heading>
-              <Paragraph>{localization.changeRequest.alert.newAlertInfo.paragraph}</Paragraph>
-            </Alert>
-          </div>
-          <div className={style.topRow}>
-            <DetailHeading
-              headingTitle={
-                <h1>
-                  {conceptIdSearch ? localization.changeRequest.newChangeRequest : localization.suggestionForNewConcept}
-                </h1>
-              }
-            />
-          </div>
-          <ChangeRequestOrNewClient {...clientProps} />
-        </div>
+        <NewConceptFormClient
+          organization={organization}
+          originalConcept={originalConcept}
+          changeRequestAsConcept={changeRequestAsConcept}
+          conceptStatuses={conceptStatuses}
+          codeListsResult={codeListsResult}
+          fieldsResult={fieldsResult}
+          usersResult={usersResult}
+        />
       </>
     );
   },

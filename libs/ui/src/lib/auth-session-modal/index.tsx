@@ -5,13 +5,13 @@ import { Button, Modal, Paragraph } from '@digdir/designsystemet-react';
 import { CatalogLocalStorage, localization } from '@catalog-frontend/utils';
 import { useRouter, usePathname } from 'next/navigation';
 
-type LoginCheckerProps = {
+type AuthSessionModalProps = {
   validatePath?: string;
   signInPath?: string;
   storageKey?: string;
 };
 
-export const AuthSessionModal = ({ validatePath = '/api/auth/validate', signInPath = '/auth/signin', storageKey }: LoginCheckerProps) => {
+export const AuthSessionModal = ({ validatePath = '/api/auth/validate', signInPath = '/auth/signin', storageKey }: AuthSessionModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const pathName = usePathname();
   const router = useRouter();

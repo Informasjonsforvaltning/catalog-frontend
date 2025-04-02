@@ -3,3 +3,7 @@
   gap: 0.5rem;
   align-items: center;
 }
+
+.changed {
+  color: #767676;
+}

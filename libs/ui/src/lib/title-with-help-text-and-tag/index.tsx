@@ -1,7 +1,7 @@
 import { Tag } from '@digdir/designsystemet-react';
+import { localization } from '@catalog-frontend/utils';
 import styles from './label.module.css';
 import { HelpMarkdown } from '../help-markdown';
-import { localization } from '@catalog-frontend/utils';
 
 type Props = {
   children: string;
@@ -9,6 +9,7 @@ type Props = {
   tagColor?: TagColor;
   tagSize?: TagSize;
   helpText?: string;
+  changed?: boolean;
 }
 
 type TagColor = 'first' | 'second' | 'success' | 'danger' | 'third' | 'neutral' | 'info' | 'warning';
@@ -20,7 +21,8 @@ export function TitleWithHelpTextAndTag({
   tagTitle,
   tagColor = 'warning',
   tagSize = 'sm',
-  helpText
+  helpText,
+  changed = false
 }: Props) {
   return (
     <div className={styles.container} >
@@ -33,7 +35,8 @@ export function TitleWithHelpTextAndTag({
         >
           {tagTitle}
         </Tag>
-      )}      
+      )}
+      {changed && <span className={styles.changed}>{`(${localization.changed})`.toLowerCase()}</span>}   
     </div>
   );
 }
