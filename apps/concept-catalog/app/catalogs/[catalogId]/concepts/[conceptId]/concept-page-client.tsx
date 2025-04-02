@@ -13,6 +13,7 @@ import {
   Tag,
   LinkButton,
   HelpMarkdown,
+  ConfirmModal,
 } from '@catalog-frontend/ui';
 import {
   localization,
@@ -22,6 +23,7 @@ import {
   validUUID,
   ensureStringArray,
   versionToString,
+  getTranslateText,
 } from '@catalog-frontend/utils';
 import {
   Concept,
@@ -149,6 +151,7 @@ export const ConceptPageClient = ({
   isValid,
 }: ConceptPageClientProps) => {
   const [language, setLanguage] = useState('nb');
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [isPublished, setIsPublished] = useState(concept?.erPublisert);
   const [publishedDate, setPublishedDate] = useState(concept?.publiseringsTidspunkt);
   const router = useRouter();
@@ -369,12 +372,9 @@ export const ConceptPageClient = ({
   };
 
   const handleDeleteConcept = () => {
-    if (window.confirm(localization.concept.confirmDelete)) {
-      const revision = revisions?.find((revision) => !revision.erPublisert);
-      if (revision) {
-        deleteConcept.mutate(revision.id as string);
-        router.replace(`/catalogs/${catalogId}/concepts`);
-      }
+    const revision = revisions?.find((revision) => !revision.erPublisert);
+    if (revision) {
+      deleteConcept.mutate(revision.id as string);
     }
   };
 
@@ -829,6 +829,15 @@ export const ConceptPageClient = ({
 
   return (
     <>
+      <ConfirmModal
+        title={'Slett begrep'}
+        content={localization.formatString(
+          localization.concept.confirmDelete,
+          `${getTranslateText(concept.anbefaltTerm?.navn)}`,
+        )}
+        onSuccess={() => handleDeleteConcept()}
+        show={showConfirmDelete}
+      />
       <DetailsPageLayout
         loading={deleteConcept.status === 'pending'}
         handleLanguageChange={handleLanguageChange}
@@ -857,7 +866,7 @@ export const ConceptPageClient = ({
                   <Button
                     color={'danger'}
                     variant='secondary'
-                    onClick={handleDeleteConcept}
+                    onClick={() => setShowConfirmDelete(true)}
                   >
                     {localization.button.delete}
                   </Button>

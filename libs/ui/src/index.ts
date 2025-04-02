@@ -3,6 +3,7 @@ export * from './lib/breadcrumbs';
 export * from './lib/button';
 export * from './lib/center-container';
 export * from './lib/checkbox-group';
+export * from './lib/confirm-modal';
 export * from './lib/custom-error';
 export * from './lib/detail-heading';
 export * from './lib/details-page-layout';
