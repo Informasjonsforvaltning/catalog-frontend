@@ -1,4 +1,4 @@
-import { getAllCodeLists, getConcept, getConceptStatuses, getFields, getUsers } from '@catalog-frontend/data-access';
+import { getAllCodeLists, getConcept, getConceptStatuses, getFields, getUsers, searchChangeRequest } from '@catalog-frontend/data-access';
 import { redirect, RedirectType } from 'next/navigation';
 import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
 import { getTranslateText, localization, prepareStatusList } from '@catalog-frontend/utils';
@@ -16,6 +16,16 @@ export default withWriteProtectedPage(
       return redirect(`/notfound`, RedirectType.replace);
     }
 
+    const changeRequests = await searchChangeRequest(catalogId, `${conceptId}`, `${session?.accessToken}`, 'OPEN').then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        console.error(`Failed to fetch change requests, status: ${response.status}`);
+        throw new Error('Failed to fetch change requests');
+      }
+    });
+
+    console.log('change requests', changeRequests);
     const conceptStatuses = await getConceptStatuses()
       .then((response) => response.json())
       .then((body) => body?.conceptStatuses ?? [])
@@ -66,6 +76,7 @@ export default withWriteProtectedPage(
           codeListsResult={codeListsResult}
           fieldsResult={fieldsResult}
           usersResult={usersResult}
+          hasChangeRequests={changeRequests?.length}
         />
       </>
     );

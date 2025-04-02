@@ -5,11 +5,21 @@ import { Concept } from '@catalog-frontend/types';
 import ConceptForm from '../../../../../../components/concept-form';
 import { createConcept, updateConcept } from '../../../../../actions/concept/actions';
 import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { ConfirmModal } from '@catalog-frontend/ui';
 
-export const EditPage = ({ catalogId, concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }) => {
+export const EditPage = ({
+  catalogId,
+  concept,
+  conceptStatuses,
+  codeListsResult,
+  fieldsResult,
+  usersResult,
+  hasChangeRequests,
+}) => {
   const router = useRouter();
   const conceptIdRef = useRef<string | undefined>(undefined); // Ref to store the concept id
+  const [autoSave, setAutoSave] = useState(hasChangeRequests ? false : true);
 
   const handleUpdate = async (values: Concept) => {
     if ('id' in concept) {
@@ -31,23 +41,41 @@ export const EditPage = ({ catalogId, concept, conceptStatuses, codeListsResult,
     } else {
       router.push(`/catalogs/${catalogId}/concepts`);
     }
+    router.refresh();
   };
 
   const handleCancel = () => {
     router.push(concept.id ? `/catalogs/${catalogId}/concepts/${concept.id}` : `/catalogs/${catalogId}/concepts`);
+    router.refresh();
+  };
+
+  const handleSuccess = () => {
+    setAutoSave(true);
   };
 
   return (
-    <ConceptForm
-      afterSubmit={handleAfterSubmit}
-      catalogId={catalogId}
-      initialConcept={concept}
-      conceptStatuses={conceptStatuses}
-      codeListsResult={codeListsResult}
-      fieldsResult={fieldsResult}
-      usersResult={usersResult}
-      onSubmit={handleUpdate}
-      onCancel={handleCancel}
-    />
+    <>
+      {hasChangeRequests && (
+        <ConfirmModal
+          title={localization.changeRequest.changeRequest}
+          content={localization.concept.confirmEditWithChangeRequest}
+          onSuccess={handleSuccess}
+          onCancel={handleCancel}
+        />
+      )}
+
+      <ConceptForm
+        autoSave={autoSave}
+        afterSubmit={handleAfterSubmit}
+        catalogId={catalogId}
+        initialConcept={concept}
+        conceptStatuses={conceptStatuses}
+        codeListsResult={codeListsResult}
+        fieldsResult={fieldsResult}
+        usersResult={usersResult}
+        onSubmit={handleUpdate}
+        onCancel={handleCancel}
+      />
+    </>
   );
 };

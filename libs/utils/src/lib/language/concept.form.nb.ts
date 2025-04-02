@@ -230,7 +230,6 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     period: 'Gyldighetsperiode'
   },
   alert: {
-    confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
     formError: 'Du har feil i skjemaet. Rett opp i disse før du kan lagre.',
     warning: 'Advarsel',
     codeListToText: 'Virksomheten har byttet fra kodeliste til fritekst. Tidligere kodeliste verdier må slettes for å kunne lagre begrepet.',
@@ -239,6 +238,7 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     youHaveUnsavedChanges: 'Det finnes endringer som ikke har blitt lagret på begrepet:',
     wantToRestoreChanges: 'Vil du gjenopprette?',
     termNotDefined: 'Term ikke oppgitt'
+
   },
   validation: {
     minLength: 'Verdien må være minst {0} karakterer lang.',
