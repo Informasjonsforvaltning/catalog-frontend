@@ -1,22 +1,14 @@
 import { TermsOfUseModal } from '@catalog-frontend/ui';
 import { CatalogLayout } from '../../../components/catalog-layout';
 
-const PageLayout = async (
-  props: {
-    children: React.ReactNode;
-    params: Promise<{ catalogId: string }>;
-  }
-) => {
-  const params = await props.params;
-
-  const {
-    catalogId
-  } = params;
-
-  const {
-    children
-  } = props;
-
+export default async function PageLayout({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ catalogId: string }>;
+}) {
+  const { catalogId } = await params;
   return (
     <CatalogLayout
       catalogAdminUrl={process.env.CATALOG_ADMIN_BASE_URI}
@@ -29,6 +21,4 @@ const PageLayout = async (
       {children}
     </CatalogLayout>
   );
-};
-
-export default PageLayout;
+}

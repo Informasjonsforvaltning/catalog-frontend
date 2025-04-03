@@ -1,5 +1,5 @@
 {
-  "presets": ["@nrwl/next/babel"],
+  "presets": ["@nx/next/babel"],
   "plugins": [
     [
       "styled-components",
