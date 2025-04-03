@@ -1,6 +1,7 @@
 import { NextAuthProvider, ReactQueryClientProvider } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Metadata } from 'next';
+import { NuqsAdapter } from 'nuqs/adapters/react';
 
 export const metadata: Metadata = {
   title: localization.catalogType.dataset,
@@ -12,7 +13,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang={localization.getLanguage()}>
       <body>
         <NextAuthProvider>
-          <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+          <NuqsAdapter>
+            <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+          </NuqsAdapter>
         </NextAuthProvider>
       </body>
     </html>

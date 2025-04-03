@@ -1,5 +1,5 @@
 import { Dataset, DataTheme, LosTheme, Option } from '@catalog-frontend/types';
-import { FormContainer, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 
 import { Combobox } from '@digdir/designsystemet-react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const ThemeSection = ({ losThemes, dataThemes }: Props) => {
-  const { setFieldValue, values, errors } = useFormikContext<Dataset>();
+  const { setFieldValue, values } = useFormikContext<Dataset>();
 
   const getNameFromLosPath = (path: string): string | string[] => {
     const obj = losThemes?.find((obj) => obj.losPaths.includes(path));
