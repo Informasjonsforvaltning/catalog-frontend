@@ -1,6 +1,7 @@
 import { AuthSessionModal, NextAuthProvider, ReactQueryClientProvider } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Metadata } from 'next';
+import { NuqsAdapter } from 'nuqs/adapters/react';
 
 export const metadata: Metadata = {
   title: localization.catalogType.concept,
@@ -13,7 +14,9 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body>
         <NextAuthProvider>
           <AuthSessionModal storageKey='conceptForm' />
-          <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+          <NuqsAdapter>
+            <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+          </NuqsAdapter>
         </NextAuthProvider>
       </body>
     </html>
