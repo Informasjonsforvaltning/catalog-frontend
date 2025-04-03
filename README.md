@@ -24,19 +24,19 @@ Run `yarn nx connect-to-nx-cloud` to enable [remote caching](https://nx.app) and
 
 ## Add nextjs app
 
-Run `yarn nx g @nrwl/next:app my-new-app` to add new app to this monorepo.
+Run `yarn nx g @nx/next:app my-new-app` to add new app to this monorepo.
 
 ## Add library
 
-Run `yarn nx g @nrwl/next:lib my-new-lib` to add new library to this monorepo.
+Run `yarn nx g @nx/next:lib my-new-lib` to add new library to this monorepo.
 
 ## Add new pages
 
-Run `yarn nx g @nrwl/next:page my-new-page --project=concept-catalog` to add new page to concept-catalog app this monorepo.
+Run `yarn nx g @nx/next:page my-new-page --project=concept-catalog` to add new page to concept-catalog app this monorepo.
 
 ## Add new components
 
-Run `yarn nx g @nrwl/next:component my-new-component --project=ui` to add a new component to **ui** library in **libs** folder
+Run `yarn nx g @nx/next:component my-new-component --project=ui` to add a new component to **ui** library in **libs** folder
 
 ## Testing
 
