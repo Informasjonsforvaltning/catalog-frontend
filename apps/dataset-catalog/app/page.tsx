@@ -1,8 +1,9 @@
-import { cookies, type UnsafeUnwrappedCookies } from 'next/headers';
+import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
-const Home = () => {
-  void (cookies() as unknown as UnsafeUnwrappedCookies);
+const Home = async () => {
+  // NOTICE: Call cookies() to opt into dynamic rendering
+  await cookies();
   redirect(`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`);
 };
 

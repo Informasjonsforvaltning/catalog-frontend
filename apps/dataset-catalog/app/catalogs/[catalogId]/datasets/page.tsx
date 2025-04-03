@@ -1,4 +1,4 @@
-import { Dataset } from '@catalog-frontend/types';
+import { Dataset, Params } from '@catalog-frontend/types';
 import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
 import {
   getValidSession,
@@ -6,14 +6,11 @@ import {
   localization,
   redirectToSignIn,
 } from '@catalog-frontend/utils';
-
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getDatasets } from '../../../actions/actions';
 import DatasetsPageClient from './datasets-page-client';
 
-export default async function DatasetSearchHitsPage(props: Params) {
-  const params = await props.params;
-  const { catalogId } = params;
+export default async function DatasetSearchHitsPage({ params }: { params: Promise<{ catalogId: string }> }) {
+  const { catalogId } = await params;
 
   const session = await getValidSession();
   if (!session) {

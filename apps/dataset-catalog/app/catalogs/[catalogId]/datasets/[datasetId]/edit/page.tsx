@@ -2,7 +2,6 @@ import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui'
 import { getDatasetById } from '../../../../../actions/actions';
 import { DatasetForm } from '../../../../../../components/dataset-form';
 
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import {
   getDatasetTypes,
@@ -13,9 +12,13 @@ import {
   getOpenLicenses,
   getProvenanceStatements,
 } from '@catalog-frontend/data-access';
-export default async function EditDatasetPage(props: Params) {
-  const params = await props.params;
-  const { catalogId, datasetId } = params;
+
+export default async function EditDatasetPage({
+  params,
+}: {
+  params: Promise<{ catalogId: string; datasetId: string }>;
+}) {
+  const { catalogId, datasetId } = await params;
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
   const dataset = await getDatasetById(catalogId, datasetId);

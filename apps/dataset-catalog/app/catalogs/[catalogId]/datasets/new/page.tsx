@@ -1,8 +1,7 @@
 import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
 import { DatasetForm } from '../../../../../components/dataset-form';
 import { datasetToBeCreatedTemplate } from '../../../../../components/dataset-form/utils/dataset-initial-values';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
-import { getValidSession, localization } from '@catalog-frontend/utils';
+import { localization } from '@catalog-frontend/utils';
 import {
   getDatasetTypes,
   getDataThemes,
@@ -13,10 +12,9 @@ import {
   getProvenanceStatements,
 } from '@catalog-frontend/data-access';
 
-export default async function NewDatasetPage(props: Params) {
-  const params = await props.params;
+export default async function NewDatasetPage({ params }: { params: Promise<{ catalogId: string }> }) {
+  const { catalogId } = await params;
   const initialValues = datasetToBeCreatedTemplate();
-  const { catalogId } = params;
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
 
