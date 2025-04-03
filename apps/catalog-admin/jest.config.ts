@@ -13,4 +13,5 @@ export default {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/apps/catalog-admin',
+  setupFilesAfterEnv: ['../../libs/utils/src/lib/tests/setupMocks.js'],
 };
