@@ -10,3 +10,10 @@ export type DatasetParams = {
     datasetId: string;
   };
 };
+
+export type DataServiceParams = {
+  params: {
+    catalogId: string;
+    dataServiceId: string;
+  };
+};
