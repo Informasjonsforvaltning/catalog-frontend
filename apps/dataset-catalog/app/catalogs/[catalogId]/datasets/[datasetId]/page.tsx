@@ -32,7 +32,7 @@ export default async function EditDatasetPage({
 
   const session = await getValidSession();
   if (!session) {
-    return redirectToSignIn();
+    return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/datasets/${datasetId}` });
   }
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
 

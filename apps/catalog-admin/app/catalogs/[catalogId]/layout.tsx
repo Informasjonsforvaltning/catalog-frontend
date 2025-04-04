@@ -8,22 +8,13 @@ export const metadata: Metadata = {
   description: localization.catalogType.admin,
 };
 
-const PageLayout = async (
-  props: {
-    children: React.ReactNode;
-    params: Promise<{ catalogId: string }>;
-  }
-) => {
-  const params = await props.params;
-
-  const {
-    catalogId
-  } = params;
-
-  const {
-    children
-  } = props;
-
+const PageLayout = ({
+  children,
+  params: { catalogId },
+}: {
+  children: React.ReactNode;
+  params: { catalogId: string };
+}) => {
   return (
     <Layout
       catalogAdminUrl={process.env.CATALOG_ADMIN_BASE_URI}

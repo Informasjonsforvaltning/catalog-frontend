@@ -18,7 +18,7 @@ export default async function EditDataServicePage({
   const { catalogId, dataServiceId } = await params;
   const session = await getValidSession();
   if (!session) {
-    return redirectToSignIn();
+    return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/data-services/${dataServiceId}/edit` });
   }
   const dataService = await getDataServiceById(catalogId, dataServiceId, `${session?.accessToken}`).then((response) => {
     if (response.ok) return response.json();
