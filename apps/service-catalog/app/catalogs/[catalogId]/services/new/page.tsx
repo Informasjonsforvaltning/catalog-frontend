@@ -1,8 +1,7 @@
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { BasicServiceForm } from '../../../../../components/basic-service-form';
 import { Heading } from '@digdir/designsystemet-react';
 import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
-import { Organization, ReferenceDataCode } from '@catalog-frontend/types';
+import { Organization, Params, ReferenceDataCode } from '@catalog-frontend/types';
 import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import styles from './service-new-page.module.css';
@@ -27,7 +26,10 @@ export default async function NewServicePage(props: Params) {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} />
+      <Breadcrumbs
+        breadcrumbList={breadcrumbList}
+        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+      />
       <PageBanner
         title={localization.catalogType.service}
         subtitle={getTranslateText(organization?.prefLabel).toString()}

@@ -6,19 +6,26 @@ import {
   getValidSession,
   hasOrganizationWritePermission,
   localization,
+  redirectToSignIn,
 } from '@catalog-frontend/utils';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getPublicServiceById } from '../../../../actions/public-services/actions';
 import { RedirectType, redirect } from 'next/navigation';
 import PublicServiceDetailsPageClient from './public-service-details-page-client';
 
-export default async function PublicServiceDetailsPage(props: Params) {
-  const params = await props.params;
-  const { catalogId, serviceId } = params;
+export default async function PublicServiceDetailsPage({
+  params,
+}: {
+  params: Promise<{ catalogId: string; serviceId: string }>;
+}) {
+  const { catalogId, serviceId } = await params;
 
-  const session = await getValidSession({
-    callbackUrl: `/catalogs/${catalogId}/public-services/${serviceId}`,
-  });
+  const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn({
+      callbackUrl: `/catalogs/${catalogId}/public-services/${serviceId}`,
+    });
+  }
+
   const service: Service | null = await getPublicServiceById(catalogId, serviceId);
   if (!service) {
     redirect(`/notfound`, RedirectType.replace);
@@ -41,7 +48,10 @@ export default async function PublicServiceDetailsPage(props: Params) {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} />
+      <Breadcrumbs
+        breadcrumbList={breadcrumbList}
+        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+      />
       <PageBanner
         title={localization.catalogType.publicService}
         subtitle={getTranslateText(organization?.prefLabel).toString()}

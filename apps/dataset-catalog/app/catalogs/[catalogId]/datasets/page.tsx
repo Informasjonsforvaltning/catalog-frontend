@@ -1,4 +1,4 @@
-import { Dataset, Params } from '@catalog-frontend/types';
+import { Dataset } from '@catalog-frontend/types';
 import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
 import {
   getValidSession,
@@ -14,7 +14,7 @@ export default async function DatasetSearchHitsPage({ params }: { params: Promis
 
   const session = await getValidSession();
   if (!session) {
-    return redirectToSignIn();
+    return redirectToSignIn({ callbackUrl: `catalogs/${catalogId}/datasets` });
   }
 
   const datasets: Dataset[] = await getDatasets(catalogId);

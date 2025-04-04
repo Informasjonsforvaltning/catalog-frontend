@@ -20,4 +20,3 @@ export * from './lib/dataset';
 export * from './lib/enums';
 export * from './lib/catalogs';
 export * from './lib/enhet';
-export * from './lib/params';
