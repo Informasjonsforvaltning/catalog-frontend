@@ -6,14 +6,11 @@ import {
   getPlannedAvailabilities,
 } from '@catalog-frontend/data-access';
 
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import DataServiceForm from '../../../../../components/data-service-form';
 import { dataServiceToBeCreatedTemplate } from '../../../../../components/data-service-form/utils/data-service-initial-values';
 import { localization } from '@catalog-frontend/utils';
-
-export default async function NewDataServicePage(props: Params) {
-  const params = await props.params;
-  const { catalogId } = params;
+export default async function NewDataServicePage({ params }: { params: Promise<{ catalogId: string }> }) {
+  const { catalogId } = await params;
   const initialValues = dataServiceToBeCreatedTemplate();
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
