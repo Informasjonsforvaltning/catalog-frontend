@@ -20,6 +20,7 @@ import { validUUID, localization, conceptIsHigherVersion, prepareStatusList } fr
 import jsonpatch from 'fast-json-patch';
 import { withReadProtectedPage } from '../../../../../utils/auth';
 import { AcceptConceptFormClient } from './accept-concept-form-client';
+import { redirect, RedirectType } from 'next/navigation';
 
 const ChangeRequestDetailsPage = withReadProtectedPage(
   ({ catalogId, changeRequestId }) => `/catalogs/${catalogId}/change-requests/${changeRequestId}`,
@@ -38,6 +39,9 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
       `${session.accessToken}`,
     )
       .then((response) => {
+        if(response.status === 404) {
+          return redirect(`/notfound`, RedirectType.replace);            
+        }
         return response.json();
       })
       .catch((error) => {
@@ -53,7 +57,9 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
                   return conceptIsHigherVersion(prev, current) ? prev : current;
                 });
               });
-            } else throw new Error('Error when searching for original concept');
+            } else {
+              return redirect(`/notfound`, RedirectType.replace);
+            }
           })
         : undefined;
 
@@ -77,8 +83,6 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
         text: changeRequest.title,
       },
     ] as BreadcrumbType[];
-
-    
 
     const conceptStatuses = await getConceptStatuses()
       .then((response) => response.json())
