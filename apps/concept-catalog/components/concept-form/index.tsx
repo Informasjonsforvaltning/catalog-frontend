@@ -41,7 +41,7 @@ type Props = {
   codeListsResult: CodeListsResult;
   customFooterBar?: ReactNode;
   fieldsResult: FieldsResult;
-  initialConcept: Concept;
+  initialConcept: Concept;  
   markDirty?: boolean;
   onCancel?: () => void;
   onSubmit?: (values: Concept) => Promise<void>;
@@ -101,7 +101,7 @@ const ConceptForm = ({
   const validateOnRender = Boolean(searchParams.get('validate'));
   const [validateOnChange, setValidateOnChange] = useState(validateOnRender);
   const [isCanceled, setIsCanceled] = useState(false);
-  const [ignoreRequired, setIgnoreRequired] = useState(false);
+  const [ignoreRequired, setIgnoreRequired] = useState(true);
 
   const mapPropsToValues = ({
     id,
