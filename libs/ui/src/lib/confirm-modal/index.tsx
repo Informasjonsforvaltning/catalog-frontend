@@ -3,6 +3,7 @@
 import { ReactNode, useEffect, useRef } from 'react';
 import { Button, Modal } from '@digdir/designsystemet-react';
 import { localization } from '@catalog-frontend/utils';
+import style from './confirm-modal.module.scss';
 
 type ConfirmModalProps = {
   title: string;
@@ -50,7 +51,7 @@ export const ConfirmModal = ({
   return (
     <Modal ref={modalRef}>
       <Modal.Header closeButton={false}>{title}</Modal.Header>
-      <Modal.Content>{content}</Modal.Content>
+      <Modal.Content className={style.content}>{content}</Modal.Content>
       <Modal.Footer>
         <Button
           size='sm'

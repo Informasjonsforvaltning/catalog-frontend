@@ -48,6 +48,7 @@ import { useDeleteConcept, usePublishConcept } from '../../../../../hooks/concep
 import RelatedConcepts from '../../../../../components/related-concepts';
 import Definition from '../../../../../components/definition';
 import { CodeListCodeLinks } from '../../../../../components/codelist-code-links';
+import Markdown from 'react-markdown';
 
 type MapType = {
   [id: string]: string;
@@ -830,11 +831,16 @@ export const ConceptPageClient = ({
   return (
     <>
       <ConfirmModal
-        title={'Slett begrep'}
-        content={localization.formatString(
-          localization.concept.confirmDelete,
-          `${getTranslateText(concept.anbefaltTerm?.navn)}`,
-        )}
+        title={localization.concept.deleteConcept}
+        content={
+          <Markdown>
+            {`${localization.formatString(
+              localization.concept.confirmDelete,
+              `${getTranslateText(concept.anbefaltTerm?.navn)}`,
+            )}`}
+          </Markdown>
+        }
+        successButtonText={localization.button.delete}
         onSuccess={() => handleDeleteConcept()}
         show={showConfirmDelete}
       />
