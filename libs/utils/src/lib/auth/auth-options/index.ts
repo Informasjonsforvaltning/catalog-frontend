@@ -52,7 +52,7 @@ export const authOptions: AuthOptions = {
       idToken: true,
       profile(profile) {
         return {
-          id: profile.sub,
+          id: profile.user_name,
           name: profile.name,
           email: profile.email ?? null,
         };
