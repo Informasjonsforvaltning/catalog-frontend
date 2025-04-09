@@ -32,3 +32,5 @@ export const ServiceStatusTag = forwardRef<HTMLSpanElement, ServiceStatusTagProp
     );
   },
 );
+
+ServiceStatusTag.displayName = 'ServiceStatusTag';

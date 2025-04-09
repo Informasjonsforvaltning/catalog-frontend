@@ -64,7 +64,17 @@ export type InfoCardItemType = React.ForwardRefExoticComponent<InfoCardItemProps
 
 const InfoCardItem: InfoCardItemType = forwardRef(
   (
-    { title, headingColor = 'neutral', children, className, helpText, helpTextSeverity = 'info', headingSize = '2xs', headingLevel = 3, ...rest },
+    {
+      title,
+      headingColor = 'neutral',
+      children,
+      className,
+      helpText,
+      helpTextSeverity = 'info',
+      headingSize = '2xs',
+      headingLevel = 3,
+      ...rest
+    },
     ref,
   ) => {
     return (
@@ -103,3 +113,4 @@ const InfoCardItem: InfoCardItemType = forwardRef(
 );
 
 export default InfoCardItem;
+InfoCardItem.displayName = 'InfoCardItem';

@@ -1,9 +1,5 @@
-import { CodeList, Concept, Definisjon } from '@catalog-frontend/types';
+import { Concept, Definisjon } from '@catalog-frontend/types';
 import { conceptIdFromUriRegex } from '../regex/regex';
-import { ensureStringArray } from '../text/text';
-import { getTranslateText } from '../language/translateText';
-import { convertCodeListToTreeNodes, getPath } from '../code-list';
-import { Link } from '@digdir/designsystemet-react';
 
 export const removeSourceIfEgendefinert = (def?: Definisjon): Definisjon | undefined => {
   if (!def) {

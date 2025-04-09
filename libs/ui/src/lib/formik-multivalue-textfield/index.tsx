@@ -17,7 +17,7 @@ type FormikMultivalueTextfieldProps = {
   onDeleteButtonClicked?: () => void;
 } & TextfieldProps;
 
-export const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueTextfieldProps>(
+const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueTextfieldProps>(
   ({ className, name, showDeleteButton, readOnly, label, error, onDeleteButtonClicked, ...props }, ref) => {
     const { values, setFieldValue } = useFormikContext<Record<string, string[]>>();
     const [inputValue, setInputValue] = useState<string>('');
@@ -91,7 +91,10 @@ export const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMult
             <div>{label}</div>
           </Label>
         )}
-        <Chip.Group size='sm' className={styles.chipGroup}>
+        <Chip.Group
+          size='sm'
+          className={styles.chipGroup}
+        >
           {_.get(values, name)?.map((v, i) => (
             <ChipComponent
               key={`chip-${i}`}
@@ -107,3 +110,6 @@ export const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMult
     );
   },
 );
+
+FormikMultivalueTextfield.displayName = 'FormikMultivalueTextfield';
+export { FormikMultivalueTextfield };

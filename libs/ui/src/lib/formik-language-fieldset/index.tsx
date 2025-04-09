@@ -81,7 +81,7 @@ export const FormikLanguageFieldset = ({
 
   const getError = () => {
     if (langErrors.length > 0) {
-      return langErrors.map((error) => <div>{getTranslateText(error)}</div>);
+      return langErrors.map((error, index) => <div key={`error-${index}`}>{getTranslateText(error)}</div>);
     }
 
     if (_.get(errors, name)) {
