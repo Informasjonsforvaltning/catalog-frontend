@@ -49,8 +49,8 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
         updatedService = handleProducesIds(values);
       }
       service
-        ? await updateService(catalogId, service, updatedService as Service)
-        : await createService(catalogId, updatedService as ServiceToBeCreated);
+        ? await handleUpdateService(updatedService as Service)
+        : await handleCreateService(updatedService as ServiceToBeCreated);
     } catch (error) {
       window.alert(error);
     }
@@ -62,8 +62,44 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
       updatedService = handleProducesIds(values);
     }
     service
-      ? updatePublicService(catalogId, service, updatedService as Service)
-      : createPublicService(catalogId, updatedService as ServiceToBeCreated);
+      ? handleUpdatePublicService(updatedService as Service)
+      : handleCreatePublicService(updatedService as ServiceToBeCreated);
+  };
+
+  const handleUpdateService = async (values: Service | ServiceToBeCreated) => {
+    let updatedService = values;
+    if (updatedService.produces) {
+      updatedService = handleProducesIds(values);
+    }
+
+    if (catalogId) {
+      try {
+        service && (await updateService(catalogId, service, updatedService as Service));
+        router.push(`/catalogs/${catalogId}/services/${service?.id}`);
+      } catch (error) {
+        window.alert(`${localization.alert.updateFailed} ${error}`);
+      }
+    } else {
+      createService(catalogId, updatedService as ServiceToBeCreated);
+    }
+  };
+
+  const handleUpdatePublicService = async (values: Service | ServiceToBeCreated) => {
+    let updatedService = values;
+    if (updatedService.produces) {
+      updatedService = handleProducesIds(values);
+    }
+
+    if (catalogId) {
+      try {
+        service && (await updatePublicService(catalogId, service, updatedService as Service));
+        router.push(`/catalogs/${catalogId}/public-services/${service?.id}`);
+      } catch (error) {
+        window.alert(`${localization.alert.updateFailed} ${error}`);
+      }
+    } else {
+      createPublicService(catalogId, updatedService as ServiceToBeCreated);
+    }
   };
 
   const handleDeleteService = async () => {
@@ -71,6 +107,7 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
       if (window.confirm(localization.serviceCatalog.form.confirmDelete)) {
         try {
           await deleteService(catalogId, service.id);
+          router.replace(`/catalogs/${catalogId}/services`);
         } catch (error) {
           window.alert(error);
         }
@@ -78,11 +115,46 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
     }
   };
 
-  const handleDeletePublicService = () => {
+  const handleDeletePublicService = async () => {
     if (service) {
       if (window.confirm(localization.serviceCatalog.form.confirmDelete)) {
-        deletePublicService(catalogId, service.id);
+        try {
+          await deletePublicService(catalogId, service.id);
+          router.replace(`/catalogs/${catalogId}/public-services`);
+        } catch (error) {
+          window.alert(error);
+        }
       }
+    }
+  };
+
+  const handleCreatePublicService = async (values: ServiceToBeCreated) => {
+    if (!catalogId) return;
+    try {
+      const serviceId = await createPublicService(catalogId.toString(), values);
+
+      if (serviceId) {
+        router.push(`/catalogs/${catalogId}/public-services/${serviceId}`);
+      } else {
+        window.alert(`${localization.alert.fail}`);
+      }
+    } catch (error) {
+      window.alert(`${localization.alert.fail} ${error}`);
+    }
+  };
+
+  const handleCreateService = async (values: ServiceToBeCreated) => {
+    if (!catalogId) return;
+    try {
+      const serviceId = await createService(catalogId, values);
+
+      if (serviceId) {
+        router.push(`/catalogs/${catalogId}/services/${serviceId}`);
+      } else {
+        window.alert(`${localization.alert.fail}`);
+      }
+    } catch (error) {
+      window.alert(`${localization.alert.fail} ${error}`);
     }
   };
 
