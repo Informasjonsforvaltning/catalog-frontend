@@ -13,11 +13,10 @@ import { Service, ServiceToBeCreated } from '@catalog-frontend/types';
 import { removeEmptyValues, localization, getValidSession, redirectToSignIn } from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
 import { revalidateTag } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 export async function getPublicServices(catalogId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   const response = await getAll(catalogId, `${session?.accessToken}`);
@@ -30,7 +29,7 @@ export async function getPublicServices(catalogId: string) {
 
 export async function getPublicServiceById(catalogId: string, serviceId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   const response = await getById(catalogId, serviceId, `${session?.accessToken}`);
@@ -46,7 +45,7 @@ export async function getPublicServiceById(catalogId: string, serviceId: string)
 export async function createPublicService(catalogId: string, values: ServiceToBeCreated) {
   const newPublicService = removeEmptyValues(values);
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   let success = false;
@@ -58,20 +57,20 @@ export async function createPublicService(catalogId: string, values: ServiceToBe
     }
     serviceId = response?.headers?.get('location')?.split('/').pop();
     success = true;
+    return serviceId;
   } catch (error) {
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
       revalidateTag('public-service');
       revalidateTag('public-services');
-      redirect(`/catalogs/${catalogId}/public-services/${serviceId}`);
     }
   }
 }
 
 export async function deletePublicService(catalogId: string, serviceId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   let success = false;
@@ -86,7 +85,6 @@ export async function deletePublicService(catalogId: string, serviceId: string) 
   } finally {
     if (success) {
       revalidateTag('public-services');
-      redirect(`/catalogs/${catalogId}/public-services`);
     }
   }
 }
@@ -113,7 +111,7 @@ export async function updatePublicService(catalogId: string, oldPublicService: S
   let success = false;
 
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   try {
@@ -128,14 +126,13 @@ export async function updatePublicService(catalogId: string, oldPublicService: S
     if (success) {
       revalidateTag('public-service');
       revalidateTag('public-services');
-      redirect(`/catalogs/${catalogId}/public-services/${oldPublicService.id}`);
     }
   }
 }
 
 export async function publishPublicService(catalogId: string, serviceId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   let success = false;
@@ -157,7 +154,7 @@ export async function publishPublicService(catalogId: string, serviceId: string)
 
 export async function unpublishPublicService(catalogId: string, serviceId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   let success = false;
