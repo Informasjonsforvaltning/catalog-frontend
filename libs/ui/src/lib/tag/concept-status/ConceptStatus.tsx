@@ -34,3 +34,5 @@ export const ConceptStatusTag = forwardRef<HTMLSpanElement, ConceptStatusTagProp
     );
   },
 );
+
+ConceptStatusTag.displayName = 'ConceptStatusTag';

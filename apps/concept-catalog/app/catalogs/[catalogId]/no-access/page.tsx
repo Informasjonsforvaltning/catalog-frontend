@@ -2,9 +2,8 @@ import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner } from '@catal
 import { localization } from '@catalog-frontend/utils';
 import { Heading } from '@digdir/designsystemet-react';
 
-const NoAccess = async props => {
-  const params = await props.params;
-  const { catalogId } = params;
+const NoAccess = async ({ params }: { params: Promise<{ catalogId: string }> }) => {
+  const { catalogId } = await params;
 
   const breadcrumbList = catalogId
     ? ([

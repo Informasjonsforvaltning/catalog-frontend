@@ -2,6 +2,7 @@ import { render } from '@testing-library/react';
 import React from 'react';
 import InfoCard from './info-card';
 
+/* eslint-disable react/display-name */
 jest.mock('react-markdown', () => (props) => <div {...props} />);
 
 describe('CardList', () => {

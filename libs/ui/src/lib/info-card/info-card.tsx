@@ -33,3 +33,4 @@ export const InfoCard = forwardRef<HTMLDivElement, InfoCardProps>(({ size = 'lar
 InfoCard.Item = InfoCardItem;
 
 export default InfoCard;
+InfoCard.displayName = 'InfoCard';
