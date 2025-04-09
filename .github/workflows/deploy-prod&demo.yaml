@@ -56,6 +56,7 @@ jobs:
       app_name: ${{ matrix.appname }}-frontend
       monorepo_app: true
       environment: prod
+      gh_environment: prod
       build_env: true
       build_env_name: BINARY
       build_env_value: ${{ matrix.appname }}-frontend
@@ -76,6 +77,7 @@ jobs:
     with:
       app_name: ${{ matrix.appname }}-frontend
       environment: prod
+      gh_environment: prod
       monorepo_app: true
       cluster: digdir-fdk-prod
     secrets:
@@ -94,6 +96,7 @@ jobs:
     with:
       app_name: ${{ matrix.appname }}-frontend
       environment: demo
+      gh_environment: demo
       monorepo_app: true
       cluster: digdir-fdk-dev
     secrets:
