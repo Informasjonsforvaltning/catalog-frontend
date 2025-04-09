@@ -31,7 +31,6 @@ export const ColorPicker = ({ catalogId, type }: ColorPicker) => {
     } else {
       setInputColor(fontColor);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -40,7 +39,6 @@ export const ColorPicker = ({ catalogId, type }: ColorPicker) => {
     } else if (type === 'font') {
       adminDispatch({ type: 'SET_FONT_COLOR', payload: { fontColor: inputColor } });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inputColor]);
 
   useEffect(() => {
@@ -53,7 +51,6 @@ export const ColorPicker = ({ catalogId, type }: ColorPicker) => {
       setInputColor(dbDesign?.fontColor);
       setIsValidInput(colorRegex.test(dbDesign?.fontColor));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dbDesign]);
 
   return (

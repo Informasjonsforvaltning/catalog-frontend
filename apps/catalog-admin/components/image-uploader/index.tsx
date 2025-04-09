@@ -8,7 +8,7 @@ import { UploadButton } from '@catalog-frontend/ui';
 
 const allowedFileTypes = ['image/x-png', 'image/svg+xml'];
 
-export function ImageUploader({ catalogId }) {
+export function ImageUploader(catalogId: string) {
   const [image, setImage] = useState<string | null | undefined>();
   const [fileName, setFileName] = useState<string | null | undefined>(null);
   const adminDispatch = useAdminDispatch();

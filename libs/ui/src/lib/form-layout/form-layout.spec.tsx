@@ -6,7 +6,11 @@ import '../../../__mocks__/intersection-observer';
 
 describe('FormLayout', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<FormLayout children={<p>form</p>} />);
+    const { baseElement } = render(
+      <FormLayout>
+        <p>form</p>
+      </FormLayout>,
+    );
     expect(baseElement).toBeTruthy();
   });
 });
