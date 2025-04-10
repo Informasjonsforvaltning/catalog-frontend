@@ -93,14 +93,6 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
                 {dataset?.contactPoint[0].hasURL}
               </span>
             )}
-            {dataset?.contactPoint[0].organizationUnit && (
-              <span>
-                <div>
-                  <LinkIcon />
-                </div>
-                <div>{dataset?.contactPoint[0].organizationUnit}</div>
-              </span>
-            )}
           </div>
         </InfoCard.Item>
       )}

@@ -144,7 +144,6 @@ export const nb = {
 
   contactPoint: {
     contactInformation: 'Kontaktinformasjon',
-    organizationUnit: 'Kontaktpunkt',
     form: 'Kontaktskjema',
   },
 
