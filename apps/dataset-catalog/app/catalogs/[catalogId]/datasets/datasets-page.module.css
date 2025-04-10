@@ -39,3 +39,7 @@
 .greyFont {
   color: #6c737a;
 }
+
+.chips {
+  margin: var(--fds-spacing-6) 0;
+}
