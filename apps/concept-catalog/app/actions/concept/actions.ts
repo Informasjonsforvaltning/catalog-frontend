@@ -3,14 +3,13 @@
 import {
   deleteConcept as deleteConceptApi,
   createConcept as createConceptApi,
-  patchConcept as patchConceptApi
+  patchConcept as patchConceptApi,
 } from '@catalog-frontend/data-access';
 import { Concept } from '@catalog-frontend/types';
 import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
 import _ from 'lodash';
 import { revalidateTag } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 const metaDataFieldsToOmit = [
   'endringslogelement',
@@ -21,7 +20,7 @@ const metaDataFieldsToOmit = [
   'gjeldendeRevisjon',
   'originaltBegrep',
   'id',
-  'revisjonAv'
+  'revisjonAv',
 ];
 
 const clearValues = (object: any, path: string) => {
@@ -32,21 +31,21 @@ const clearValues = (object: any, path: string) => {
     if (currentField.endsWith('[]')) {
       const value = _.get(object, currentField.replace('[]', ''));
       if (_.isArray(value)) {
-        _.forEach(value, item => {
+        _.forEach(value, (item) => {
           clearValues(item, fields.join('.'));
         });
       }
-    } else if(currentField === '*') {
-      if(fields.length > 0) {
-        Object.keys(object).forEach(key => clearValues(_.get(object, key), fields.join('.')));
+    } else if (currentField === '*') {
+      if (fields.length > 0) {
+        Object.keys(object).forEach((key) => clearValues(_.get(object, key), fields.join('.')));
       } else {
-        Object.keys(object).forEach(key => {
+        Object.keys(object).forEach((key) => {
           const value = _.get(object, key);
           if (value !== undefined && _.isEmpty(value)) {
             _.set(object, key, null);
           }
         });
-      }      
+      }
     } else if (fields.length > 0) {
       clearValues(object[currentField], fields.join('.'));
     } else {
@@ -60,29 +59,21 @@ const clearValues = (object: any, path: string) => {
 
 const preProcessValues = (
   orgId: string,
-  {
-    ansvarligVirksomhet,
-    merknad,
-    eksempel,
-    fagområde,
-    omfang,
-    kontaktpunkt,
-    ...conceptValues
-  }: Concept
+  { ansvarligVirksomhet, merknad, eksempel, fagområde, omfang, kontaktpunkt, ...conceptValues }: Concept,
 ) => ({
   ...conceptValues,
   merknad,
   eksempel,
   omfang: removeEmptyValues(omfang),
   kontaktpunkt: removeEmptyValues(kontaktpunkt),
-  ansvarligVirksomhet: ansvarligVirksomhet || { id: orgId }
+  ansvarligVirksomhet: ansvarligVirksomhet || { id: orgId },
 });
 
 export async function createConcept(values: Concept, catalogId: string) {
   const processedValues = preProcessValues(catalogId, values);
 
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   let success = false;
@@ -94,6 +85,7 @@ export async function createConcept(values: Concept, catalogId: string) {
     }
     conceptId = response?.headers?.get('location')?.split('/').pop();
     success = true;
+    return conceptId;
   } catch (error) {
     console.error(error);
     throw new Error(localization.alert.fail);
@@ -101,14 +93,13 @@ export async function createConcept(values: Concept, catalogId: string) {
     if (success) {
       revalidateTag('concept');
       revalidateTag('concepts');
-      redirect(`/catalogs/${catalogId}/concepts/${conceptId}`);
     }
   }
 }
 
 export async function deleteConcept(catalogId: string, conceptId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   let success = false;
@@ -124,13 +115,12 @@ export async function deleteConcept(catalogId: string, conceptId: string) {
   } finally {
     if (success) {
       revalidateTag('concepts');
-      redirect(`/catalogs/${catalogId}/concepts`);
     }
   }
 }
 
 export async function updateConcept(catalogId: string, initialConcept: Concept, values: Concept) {
-  if(!initialConcept.id) {
+  if (!initialConcept.id) {
     throw new Error('Concept id cannot be null');
   }
 
@@ -145,8 +135,8 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
     'kontaktpunkt.harEpost',
     'kontaktpunkt.harTelefon',
     'interneFelt.*.value',
-    'omfang.*'
-  ].forEach(field => {
+    'omfang.*',
+  ].forEach((field) => {
     clearValues(values, field);
   });
 
@@ -154,10 +144,10 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
     _(initialConcept).omit(metaDataFieldsToOmit).omitBy(_.isNull).value(),
     _({
       ...initialConcept,
-      ...values
+      ...values,
     })
       .omit(metaDataFieldsToOmit)
-      .value()
+      .value(),
   );
 
   if (diff.length === 0) {
@@ -166,7 +156,7 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
 
   let success = false;
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
 
@@ -177,9 +167,9 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
     }
 
     success = true;
-    if(response.status === 201) {
+    if (response.status === 201) {
       conceptId = response?.headers?.get('location')?.split('/').pop();
-    }    
+    }
   } catch (error) {
     console.error(`${localization.alert.fail} ${error}`);
     throw new Error(`Noe gikk galt, prøv igjen...`);
@@ -188,6 +178,5 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
   if (success) {
     revalidateTag('concept');
     revalidateTag('concepts');
-    redirect(`/catalogs/${catalogId}/concepts/${conceptId}`);
   }
 }

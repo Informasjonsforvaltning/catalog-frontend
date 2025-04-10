@@ -1,6 +1,5 @@
 import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
 import { getDatasetById } from '../../../../actions/actions';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import {
   getTranslateText,
   getValidSession,
@@ -20,8 +19,12 @@ import {
 } from '@catalog-frontend/data-access';
 import DatasetDetailsPageClient from './dataset-details-page-client';
 
-export default async function EditDatasetPage({ params }: Params) {
-  const { catalogId, datasetId } = params;
+export default async function EditDatasetPage({
+  params,
+}: {
+  params: Promise<{ catalogId: string; datasetId: string }>;
+}) {
+  const { catalogId, datasetId } = await params;
   const dataset = await getDatasetById(catalogId, datasetId);
 
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
@@ -29,9 +32,8 @@ export default async function EditDatasetPage({ params }: Params) {
 
   const session = await getValidSession();
   if (!session) {
-    return redirectToSignIn();
+    return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/datasets/${datasetId}` });
   }
-
   const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
 
   const breadcrumbList = [
@@ -41,7 +43,7 @@ export default async function EditDatasetPage({ params }: Params) {
     },
     {
       href: `/catalogs/${catalogId}/datasets/${datasetId}`,
-      text: getTranslateText(dataset.title),
+      text: dataset && getTranslateText(dataset?.title),
     },
   ] as BreadcrumbType[];
 
@@ -87,16 +89,18 @@ export default async function EditDatasetPage({ params }: Params) {
         title={localization.catalogType.dataset}
       />
       <div className='container'>
-        <DatasetDetailsPageClient
-          dataset={dataset}
-          catalogId={catalogId}
-          datasetId={datasetId}
-          hasWritePermission={hasWritePermission}
-          searchEnv={searchEnv}
-          referenceDataEnv={referenceDataEnv}
-          referenceData={referenceData}
-          datasetSeries={datasetSeries._embedded.datasets}
-        ></DatasetDetailsPageClient>
+        {dataset && (
+          <DatasetDetailsPageClient
+            dataset={dataset}
+            catalogId={catalogId}
+            datasetId={datasetId}
+            hasWritePermission={hasWritePermission}
+            searchEnv={searchEnv}
+            referenceDataEnv={referenceDataEnv}
+            referenceData={referenceData}
+            datasetSeries={datasetSeries._embedded.datasets}
+          ></DatasetDetailsPageClient>
+        )}
       </div>
     </>
   );

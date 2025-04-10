@@ -373,6 +373,7 @@ export const ConceptPageClient = ({
       const revision = revisions?.find((revision) => !revision.erPublisert);
       if (revision) {
         deleteConcept.mutate(revision.id as string);
+        router.replace(`/catalogs/${catalogId}/concepts`);
       }
     }
   };

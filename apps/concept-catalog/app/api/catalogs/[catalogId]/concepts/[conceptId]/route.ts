@@ -2,7 +2,8 @@ import { deleteConcept } from '@catalog-frontend/data-access';
 import { withValidSessionForApi } from '@catalog-frontend/utils';
 import { NextRequest } from 'next/server';
 
-export const DELETE = async (req: NextRequest, { params }) => {
+export const DELETE = async (req: NextRequest, props) => {
+  const params = await props.params;
   return withValidSessionForApi(async (session) => {
     const { conceptId } = params;
     try {

@@ -36,13 +36,24 @@ const DataServiceForm = ({ initialValues, submitType, searchEnv, referenceData, 
   useWarnIfUnsavedChanges({ unsavedChanges: isDirty });
 
   const handleCreate = async (values: DataService) => {
-    await createDataService(catalogId.toString(), values);
+    if (!catalogId) return;
+    try {
+      const newDataServiceId = await createDataService(catalogId.toString(), values);
+      if (newDataServiceId) {
+        router.push(`/catalogs/${catalogId}/data-services/${newDataServiceId}`);
+      } else {
+        window.alert(`${localization.alert.fail}`);
+      }
+    } catch (error) {
+      window.alert(`${localization.alert.fail} ${error}`);
+    }
   };
 
   const handleUpdate = async (values: DataService) => {
     try {
-      if ('id' in initialValues) {
-        await updateDataService(catalogId.toString(), initialValues, values);
+      if (catalogId && 'id' in initialValues) {
+        await updateDataService(catalogId?.toString(), initialValues, values);
+        router.push(`/catalogs/${catalogId}/data-services/${dataServiceId}`);
       } else {
         window.alert(`${localization.alert.updateFailed}`);
       }

@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 
 const Home = async () => {
   // NOTICE: Call cookies() to opt into dynamic rendering
-  cookies();
+  await cookies();
   redirect('/catalogs');
 };
 
