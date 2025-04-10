@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'ui',
   preset: '../../jest.preset.js',
@@ -10,4 +9,5 @@ export default {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/libs/ui',
+  setupFilesAfterEnv: ['../../libs/utils/src/lib/tests/setupMocks.js'],
 };

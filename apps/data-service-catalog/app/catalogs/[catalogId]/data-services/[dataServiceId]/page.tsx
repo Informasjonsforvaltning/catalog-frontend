@@ -1,10 +1,10 @@
 import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import {
   getTranslateText,
   getValidSession,
   hasOrganizationWritePermission,
   localization,
+  redirectToSignIn,
 } from '@catalog-frontend/utils';
 import {
   getCurrencies,
@@ -17,9 +17,17 @@ import { redirect, RedirectType } from 'next/navigation';
 import DataServiceDetailsPageClient from './data-service-details-page-client';
 import { dataServiceValidationSchema } from '../../../../../components/data-service-form/utils/validation-schema';
 
-export default async function EditDataServicePage({ params }: Params) {
-  const { catalogId, dataServiceId } = params;
-  const session = await getValidSession({ callbackUrl: `/catalogs/${catalogId}/data-services/${dataServiceId}/edit` });
+export default async function EditDataServicePage({
+  params,
+}: {
+  params: Promise<{ catalogId: string; dataServiceId: string }>;
+}) {
+  const { catalogId, dataServiceId } = await params;
+
+  const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn();
+  }
   const dataService = await getDataServiceById(catalogId, dataServiceId, `${session?.accessToken}`).then((response) => {
     if (response.ok) return response.json();
   });

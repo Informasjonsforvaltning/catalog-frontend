@@ -23,3 +23,5 @@ export const FastFieldWithRef = forwardRef<HTMLInputElement | HTMLTextAreaElemen
     </FastField>
   ),
 );
+
+FastFieldWithRef.displayName = 'FastFieldWithRef';

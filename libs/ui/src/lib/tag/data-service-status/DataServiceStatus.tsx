@@ -32,3 +32,5 @@ export const DataServiceStatusTag = forwardRef<HTMLSpanElement, DataServiceStatu
     );
   },
 );
+
+DataServiceStatusTag.displayName = 'DataServiceStatusTag';

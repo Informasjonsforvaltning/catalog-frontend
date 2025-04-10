@@ -11,10 +11,15 @@ describe('SearchHit', () => {
         content={'Search hit content'}
         statusTag={'Search hit status tag'}
         titleHref={'Search hit title href'}
-        conceptSubject={'Search hit concept subject'}
         labels={'Search hit labels'}
       />,
     );
+    expect(baseElement).toBeTruthy();
+    expect(baseElement).toMatchSnapshot();
+  });
+
+  it('should render SearchHit with empty title successfully', () => {
+    const { baseElement } = render(<SearchHit title={''} />);
     expect(baseElement).toBeTruthy();
     expect(baseElement).toMatchSnapshot();
   });

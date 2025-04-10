@@ -2,7 +2,8 @@ import { createInternalField, deleteInternalField, getFields, patchInternalField
 import { withValidSessionForApi } from '@catalog-frontend/utils';
 import { NextRequest } from 'next/server';
 
-export const GET = async (req: NextRequest, { params }: { params: { slug: string[] } }) => {
+export const GET = async (req: NextRequest, props: { params: Promise<{ slug: string[] }> }) => {
+  const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId] = slug;
@@ -19,7 +20,8 @@ export const GET = async (req: NextRequest, { params }: { params: { slug: string
   });
 };
 
-export const POST = async (req: NextRequest, { params }: { params: { slug: string[] } }) => {
+export const POST = async (req: NextRequest, props: { params: Promise<{ slug: string[] }> }) => {
+  const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId] = slug;
@@ -36,7 +38,8 @@ export const POST = async (req: NextRequest, { params }: { params: { slug: strin
   });
 };
 
-export const PATCH = async (req: NextRequest, { params }: { params: { slug: string[] } }) => {
+export const PATCH = async (req: NextRequest, props: { params: Promise<{ slug: string[] }> }) => {
+  const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId, fieldId] = slug;
@@ -54,7 +57,8 @@ export const PATCH = async (req: NextRequest, { params }: { params: { slug: stri
   });
 };
 
-export const DELETE = async (req: NextRequest, { params }: { params: { slug: string[] } }) => {
+export const DELETE = async (req: NextRequest, props: { params: Promise<{ slug: string[] }> }) => {
+  const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId, fieldId] = slug;

@@ -60,3 +60,8 @@ reports
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+
+
+.nx/cache
+.nx/workspace-data
