@@ -88,5 +88,4 @@ type DatasetContactPoint = {
   email?: string;
   hasTelephone?: string;
   hasURL?: string;
-  organizationUnit?: string;
 };

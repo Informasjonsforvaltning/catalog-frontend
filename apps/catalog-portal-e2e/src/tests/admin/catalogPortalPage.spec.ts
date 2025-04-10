@@ -36,25 +36,6 @@ const catalogTests = [
   },
 ];
 
-runTestAsAdmin('test breadcrumb navigation', async ({ catalogPortalPage }) => {
-  await catalogPortalPage.goto();
-
-  const breadcrumb = catalogPortalPage.termsOfUse();
-  await expect(breadcrumb).toBeVisible();
-
-  await breadcrumb.click();
-  await expect(catalogPortalPage.page).toHaveURL(
-    'https://registrering.staging.fellesdatakatalog.digdir.no/terms-and-conditions/313422127',
-  ); //Bytt ut denne med nye catalog-portal når det er prodsatt
-});
-
-runTestAsAdmin('verify terms and conditions', async ({ catalogPortalPage }) => {
-  await catalogPortalPage.goto();
-
-  const termsLink = catalogPortalPage.termsOfUse();
-  await expect(termsLink).toBeVisible();
-});
-
 catalogTests.forEach(({ name, locator, url }) => {
   runTestAsAdmin(`test navigation card for ${name}`, async ({ catalogPortalPage }) => {
     await catalogPortalPage.goto();

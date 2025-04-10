@@ -9,10 +9,6 @@ export const ContactPointSection = () => {
       label: localization.telephone,
     },
     { valuePath: 'contactPoint[0].hasURL', label: localization.contactPoint.form },
-    {
-      valuePath: 'contactPoint[0].organizationUnit',
-      label: localization.contactPoint.organizationUnit,
-    },
   ];
 
   return (
