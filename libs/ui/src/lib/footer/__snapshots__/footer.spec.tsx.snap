@@ -34,7 +34,7 @@ exports[`Footer should render successfully 1`] = `
           >
             Personvernerklæring
             <svg
-              aria-labelledby="title-r0"
+              aria-labelledby="title-«r0»"
               fill="none"
               focusable="false"
               height="1em"
@@ -44,7 +44,7 @@ exports[`Footer should render successfully 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <title
-                id="title-r0"
+                id="title-«r0»"
               >
                 ExternalLinkIcon
               </title>
@@ -63,7 +63,7 @@ exports[`Footer should render successfully 1`] = `
           >
             Informasjonskapsler
             <svg
-              aria-labelledby="title-r1"
+              aria-labelledby="title-«r1»"
               fill="none"
               focusable="false"
               height="1em"
@@ -73,7 +73,7 @@ exports[`Footer should render successfully 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <title
-                id="title-r1"
+                id="title-«r1»"
               >
                 ExternalLinkIcon
               </title>
@@ -92,7 +92,7 @@ exports[`Footer should render successfully 1`] = `
           >
             Tilgjengelighetserklæring
             <svg
-              aria-labelledby="title-r2"
+              aria-labelledby="title-«r2»"
               fill="none"
               focusable="false"
               height="1em"
@@ -102,7 +102,7 @@ exports[`Footer should render successfully 1`] = `
               xmlns="http://www.w3.org/2000/svg"
             >
               <title
-                id="title-r2"
+                id="title-«r2»"
               >
                 ExternalLinkIcon
               </title>
