@@ -110,7 +110,7 @@ jobs:
       build_env_name: BINARY
       build_env_value: ${{ matrix.appname }}-frontend
       cache_path: ./dist
-      cache_key: cache-dist-${{ github.sha }}
+      cache_key: cache-dist-${{ github.sha }}-${{ matrix.appname }}
       dockerfile: apps/${{ matrix.appname }}/Dockerfile
     secrets:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
