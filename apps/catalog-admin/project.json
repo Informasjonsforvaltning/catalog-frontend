@@ -5,7 +5,7 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/next:build",
+      "executor": "@nx/next:build",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
@@ -19,7 +19,7 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/next:server",
+      "executor": "@nx/next:server",
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "catalog-admin:build",
@@ -37,13 +37,13 @@
       }
     },
     "export": {
-      "executor": "@nrwl/next:export",
+      "executor": "@nx/next:export",
       "options": {
         "buildTarget": "catalog-admin:build:production"
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "apps/catalog-admin/jest.config.ts",

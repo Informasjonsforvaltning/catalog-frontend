@@ -5,15 +5,19 @@ import {
   getValidSession,
   hasOrganizationWritePermission,
   localization,
+  redirectToSignIn,
 } from '@catalog-frontend/utils';
 import { getServices } from '../../../actions/services/actions';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
 import ServicePageClient from './service-page-client';
 
-export default async function ServiceSearchHitsPage({ params }: Params) {
-  const { catalogId } = params;
-  const session = await getValidSession({ callbackUrl: `/catalogs/${catalogId}/services` });
+export default async function ServiceSearchHitsPage({ params }: { params: Promise<{ catalogId: string }> }) {
+  const { catalogId } = await params;
+
+  const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/services` });
+  }
 
   const services: Service[] = await getServices(catalogId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
@@ -31,7 +35,10 @@ export default async function ServiceSearchHitsPage({ params }: Params) {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} />
+      <Breadcrumbs
+        breadcrumbList={breadcrumbList}
+        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+      />
       <PageBanner
         title={localization.catalogType.service}
         subtitle={getTranslateText(organization.prefLabel).toString()}

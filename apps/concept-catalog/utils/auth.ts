@@ -23,8 +23,8 @@ type Render = (
 
 const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', render: Render) => {
   return async ({ params, searchParams }) => {
-    const { catalogId, conceptId, changeRequestId } = params;
-    const { concept: conceptIdSearch } = searchParams;
+    const { catalogId, conceptId, changeRequestId } = await params;
+    const { concept: conceptIdSearch } = await searchParams;
 
     if (!validOrganizationNumber(catalogId)) {
       redirect(`/notfound`, RedirectType.replace);
@@ -37,7 +37,7 @@ const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', re
     });
 
     const session = await getValidSession();
-    if(!session) {
+    if (!session) {
       return redirectToSignIn({
         callbackUrl: pagePath({ catalogId, conceptId, conceptIdSearch, changeRequestId }),
       });

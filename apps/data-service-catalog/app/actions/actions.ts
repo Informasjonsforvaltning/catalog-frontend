@@ -11,7 +11,6 @@ import {
 import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
 import { DataService, DataServiceToBeCreated } from '@catalog-frontend/types';
 import { revalidateTag } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { compare } from 'fast-json-patch';
 
 export async function getDataServices(catalogId: string) {
@@ -48,13 +47,13 @@ export async function createDataService(catalogId: string, values: DataServiceTo
     }
     dataServiceId = response?.headers?.get('location')?.split('/').pop();
     success = true;
+    return dataServiceId;
   } catch (error) {
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
       revalidateTag('data-service');
       revalidateTag('data-services');
-      redirect(`/catalogs/${catalogId}/data-services/${dataServiceId}`);
     }
   }
 }
@@ -76,7 +75,6 @@ export async function deleteDataService(catalogId: string, dataServiceId: string
   } finally {
     if (success) {
       revalidateTag('data-services');
-      redirect(`/catalogs/${catalogId}/data-services`);
     }
   }
 }
@@ -116,7 +114,6 @@ export async function updateDataService(catalogId: string, initialDataService: D
   if (success) {
     revalidateTag('data-service');
     revalidateTag('data-services');
-    redirect(`/catalogs/${catalogId}/data-services/${initialDataService.id}`);
   }
 }
 

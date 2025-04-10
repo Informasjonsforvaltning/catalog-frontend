@@ -8,7 +8,6 @@ import {
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { RedirectType, redirect } from 'next/navigation';
 
 type PageParams = {
@@ -21,8 +20,8 @@ type Render = (
 ) => Promise<any>;
 
 const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', render: Render) => {
-  return async ({ params }: Params) => {
-    const { catalogId, datasetId } = params;
+  return async ({ params }: any) => {
+    const { catalogId, datasetId } = await params;
 
     if (!validOrganizationNumber(catalogId)) {
       redirect(`/notfound`, RedirectType.replace);

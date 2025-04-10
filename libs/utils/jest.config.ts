@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'utils',
   preset: '../../jest.preset.js',
@@ -7,4 +6,5 @@ export default {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/libs/utils',
+  setupFilesAfterEnv: ['../../libs/utils/src/lib/tests/setupMocks.js'],
 };

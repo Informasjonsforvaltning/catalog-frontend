@@ -37,3 +37,31 @@ exports[`SearchHit should render SearchHit successfully 1`] = `
   </div>
 </body>
 `;
+
+exports[`SearchHit should render SearchHit with empty title successfully 1`] = `
+<body>
+  <div>
+    <div
+      class="container"
+    >
+      <div
+        class="rowSpaceBetween"
+      >
+        <div
+          class="titleRow"
+        >
+          <a
+            href=""
+          >
+            <h2
+              class="title"
+            >
+              Uten navn
+            </h2>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;

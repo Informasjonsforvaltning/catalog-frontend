@@ -146,13 +146,15 @@ const ConceptForm = ({ catalogId, concept, conceptStatuses, codeListsResult, fie
   );
 
   const handleCreate = async (values: Concept) => {
-    await createConcept(values, catalogId.toString());
+    const conceptId = await createConcept(values, catalogId.toString());
+    router.push(`/catalogs/${catalogId}/concepts/${conceptId}`);
   };
 
   const handleUpdate = async (values: Concept) => {
     if ('id' in concept) {
       try {
         await updateConcept(catalogId.toString(), concept, values);
+        router.push(`/catalogs/${catalogId}/concepts/${concept.id}`);
       } catch (error) {
         window.alert(`${localization.alert.updateFailed} ${error}`);
       }

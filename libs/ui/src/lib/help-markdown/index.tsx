@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 import Markdown, { Components } from 'react-markdown';
@@ -27,13 +27,13 @@ const markdownComponents: Partial<Components> = {
     return (
       <Link
         href={href}
-        {...(targetBlank ? { target: '_blank' } : {})}     
-        {...props}       
+        {...(targetBlank ? { target: '_blank' } : {})}
+        {...props}
       >
         {children}
       </Link>
     );
-  }
+  },
 };
 
 export const HelpMarkdown = forwardRef<HTMLButtonElement, HelpTextProps>(function HelpMarkdown(
@@ -58,8 +58,9 @@ export const HelpMarkdown = forwardRef<HTMLButtonElement, HelpTextProps>(functio
           <Markdown
             className={styles.markdownContent}
             components={markdownComponents}
-            children={children}
-          />
+          >
+            {children}
+          </Markdown>
         ) : (
           children
         )}
