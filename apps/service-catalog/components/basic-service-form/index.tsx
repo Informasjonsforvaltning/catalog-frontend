@@ -107,7 +107,6 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
       if (window.confirm(localization.serviceCatalog.form.confirmDelete)) {
         try {
           await deleteService(catalogId, service.id);
-          router.replace(`/catalogs/${catalogId}/services`);
         } catch (error) {
           window.alert(error);
         }
@@ -120,7 +119,6 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
       if (window.confirm(localization.serviceCatalog.form.confirmDelete)) {
         try {
           await deletePublicService(catalogId, service.id);
-          router.replace(`/catalogs/${catalogId}/public-services`);
         } catch (error) {
           window.alert(error);
         }
