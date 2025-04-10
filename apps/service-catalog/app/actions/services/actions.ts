@@ -13,6 +13,7 @@ import { Service, ServiceToBeCreated } from '@catalog-frontend/types';
 import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
 import { revalidateTag } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 export async function getServices(catalogId: string) {
   const session = await getValidSession();
@@ -85,6 +86,7 @@ export async function deleteService(catalogId: string, serviceId: string) {
   } finally {
     if (success) {
       revalidateTag('services');
+      redirect(`/catalogs/${catalogId}/services`);
     }
   }
 }
