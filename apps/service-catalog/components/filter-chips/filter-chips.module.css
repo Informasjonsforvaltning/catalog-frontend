@@ -1,6 +1,5 @@
 .chips {
-  margin-top: 20px;
-  margin-bottom: 40px;
+  margin-top: var(--fds-spacing-4);
 }
 
 .wrap {

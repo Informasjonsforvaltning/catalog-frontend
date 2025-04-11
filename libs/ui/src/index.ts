@@ -36,7 +36,7 @@ export * from './lib/react-query-client-provider';
 export * from './lib/search-field';
 export * from './lib/search-hit';
 export * from './lib/search-hit-container';
-export * from './lib/search-hits-page-layout';
+export * from './lib/search-hits-layout';
 export * from './lib/select';
 export * from './lib/service-messages';
 export * from './lib/spinner';

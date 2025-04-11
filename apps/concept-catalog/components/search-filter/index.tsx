@@ -188,7 +188,7 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
   ];
 
   const accordionItems = accordionItemContents.map((item) => (
-    <AccordionItem
+    <AccordionItem initiallyOpen
       key={`accordion-item-${item.header}`}
       {...item}
     />

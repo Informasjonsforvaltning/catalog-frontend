@@ -12,7 +12,7 @@ import {
   DetailsPageLayout,
   Tag,
   LinkButton,
-  HelpMarkdown,
+  HelpMarkdown,  
 } from '@catalog-frontend/ui';
 import {
   localization,
@@ -320,7 +320,7 @@ export const ConceptPageClient = ({
           ],
         ]
       : []),
-    ...(concept?.opprettetAv ? [[localization.concept.createdBy, concept.opprettetAv]] : []),
+    ...(concept?.opprettetAv ? [[`${localization.created} ${localization.by}`, concept.opprettetAv]] : []),
     ...(concept?.kontaktpunkt?.harEpost || concept?.kontaktpunkt?.harTelefon
       ? [
           [

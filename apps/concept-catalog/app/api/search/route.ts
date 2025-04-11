@@ -8,11 +8,12 @@ export const POST = async (req: NextRequest) => {
       const { catalogId, query: searchQuery } = await req.json();
       const response = await searchConceptsForCatalog(catalogId, searchQuery, `${session?.accessToken}`);
       if (response.status !== 200) {
-        throw new Error();
+        throw new Error(await response.text());
       }
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), { status: response.status });
     } catch (error) {
+      console.error(error);
       return new Response('Failed to search concepts', { status: 500 });
     }
   });

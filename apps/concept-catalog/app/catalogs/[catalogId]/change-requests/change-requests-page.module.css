@@ -56,14 +56,10 @@
   justify-content: center;
 }
 
-.topRow {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  margin-top: 5rem;
-  margin-bottom: 2rem;
+.searchRow {
+  display: flex;  
   gap: 1em;
-  flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
 }
 
@@ -99,4 +95,17 @@
 .alertContainer {
   grid-column-start: 2;
   margin-bottom: 3rem;
+}
+
+.tabsList {
+  margin: var(--fds-spacing-8) 0 var(--fds-spacing-4) 0;
+}
+
+.tabsContent {
+  padding: 0;
+
+  & > div {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }

@@ -5,6 +5,7 @@ import {
   getTranslateText,
   hasOrganizationWritePermission,
   localization,
+  redirectToSignIn,
 } from '@catalog-frontend/utils';
 import { getPublicServices } from '../../../actions/public-services/actions';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
@@ -13,10 +14,12 @@ import PublicServicePageClient from './public-service-page-client';
 
 export default async function PublicServiceSearchHitsPage({ params }: Params) {
   const { catalogId } = params;
-
-  const session = await getValidSession({
-    callbackUrl: `/catalogs/${catalogId}/public-services`,
-  });
+  const session = await getValidSession();
+  if(!session) {
+    return redirectToSignIn({
+      callbackUrl: `/catalogs/${catalogId}/public-services`,
+    });
+  }
 
   const services: Service[] = await getPublicServices(catalogId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());

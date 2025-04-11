@@ -4,27 +4,14 @@
   flex-direction: column;
   width: 100%;
   margin: 0 auto;
-  padding: 1.6rem 0;
+  padding: var(--fds-spacing-6) 0;
   overflow-wrap: break-word;
-}
-
-.secondRowContainer {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 1rem;
-  margin-bottom: 3rem;
-}
-
-.buttonsContainer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
 }
 
 .searchRowContainer {
   display: flex;
-  justify-content: flex-end;
-  margin-bottom: 1rem;
+  flex-direction: column;  
+  margin-bottom: var(--fds-spacing-6);
 }
 
 .gridContainer {
@@ -40,10 +27,6 @@
     flex-direction: column;
     align-items: center;
     gap: 1rem;
-  }
-
-  .buttonsContainer {
-    justify-content: center;
   }
 
   .gridContainer {

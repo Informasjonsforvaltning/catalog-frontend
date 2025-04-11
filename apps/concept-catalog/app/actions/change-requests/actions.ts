@@ -9,7 +9,6 @@ import {
 } from '@catalog-frontend/utils';
 import { acceptChangeRequest, rejectChangeRequest } from '@catalog-frontend/data-access';
 import { revalidateTag } from 'next/cache';
-import { headers } from 'next/headers';
 
 export async function acceptChangeRequestAction(catalogId: string, changeRequestId: string) {
   const session = await getValidSession();

@@ -1,17 +1,17 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { SearchHitsPageLayout } from '../search-hits-page-layout';
+import { SearchHitsLayout } from '../search-hits-layout';
 
 describe('SearchHitsPageLayout', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
-      <SearchHitsPageLayout>
+      <SearchHitsLayout>
         {
-          <SearchHitsPageLayout.MainColumn>
+          <SearchHitsLayout.MainColumn>
             <p>Test</p>
-          </SearchHitsPageLayout.MainColumn>
+          </SearchHitsLayout.MainColumn>
         }
-      </SearchHitsPageLayout>,
+      </SearchHitsLayout>,
     );
     expect(baseElement).toBeTruthy();
   });

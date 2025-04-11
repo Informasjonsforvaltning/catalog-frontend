@@ -13,6 +13,7 @@ export const isValidSessionAndToken = async (session: any) =>
 
 export const withValidSessionForApi = async (next: (session: any) => Promise<Response>) => {
   const session: any = await getServerSession(authOptions);
+  
   const valid = await isValidSessionAndToken(session);
   if (!valid) {
     return new Response('Unauthorized', { status: 401 });

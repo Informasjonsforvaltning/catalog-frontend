@@ -12,9 +12,9 @@ interface Props {
 const ChangeRequestSort = ({ options, selected, onChange }: Props) => {
   return (
     <NativeSelect
-      label={localization.sorting}
       onChange={onChange}
       value={selected}
+      size='sm'
     >
       {options.map((option: Option) => (
         <option

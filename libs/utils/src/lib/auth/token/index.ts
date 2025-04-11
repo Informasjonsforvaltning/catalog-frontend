@@ -83,9 +83,13 @@ export const validateOidcUserSession = async (token: Token): Promise<boolean> =>
     });
 
     return response.ok;
-  } catch (e) {
-    console.log('validateOidcUserSession failed', e);
-  }
+  } catch (error) {
+    if ((error as { name: string }).name === 'ConnectTimeoutError') {
+      return true;
+    } else {
+      console.log('validateOidcUserSession failed', error);
+    }    
+  } 
   return false;
 };
 

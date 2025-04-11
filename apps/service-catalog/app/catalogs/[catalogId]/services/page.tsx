@@ -5,6 +5,7 @@ import {
   getValidSession,
   hasOrganizationWritePermission,
   localization,
+  redirectToSignIn,
 } from '@catalog-frontend/utils';
 import { getServices } from '../../../actions/services/actions';
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
@@ -13,7 +14,10 @@ import ServicePageClient from './service-page-client';
 
 export default async function ServiceSearchHitsPage({ params }: Params) {
   const { catalogId } = params;
-  const session = await getValidSession({ callbackUrl: `/catalogs/${catalogId}/services` });
+  const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/services` });
+  }
 
   const services: Service[] = await getServices(catalogId);
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());

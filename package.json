@@ -19,6 +19,9 @@
     "affected:test": "nx affected -t test",
     "affected:lint": "nx affected -t lint",
     "affected": "nx affected",
+    "affected:matrix": "nx show projects --affected --type=app | tr '\n' ',' | jq -cR 'split(\",\")[:-1]'",
+    "all:matrix":  "nx show projects --type=app | tr '\n' ',' | jq -cR 'split(\",\")[:-1]'",
+    "matrix": "[ -z \"$(yarn run affected:matrix)\" ] && yarn run all:matrix || yarn run affected:matrix",
     "format": "nx format:write",
     "format:write": "nx format:write",
     "format:check": "nx format:check",
@@ -26,7 +29,6 @@
     "workspace-generator": "nx workspace-generator",
     "dep-graph": "nx dep-graph",
     "help": "nx help",
-    "matrix": "nx show projects --affected --type=app| tr '\n' ',' | jq -cR 'split(\",\")[:-1]'",
     "prepare": "husky install",
     "postinstall": "husky install",
     "graphql:codegen": "graphql-codegen --config codegen.yml"
