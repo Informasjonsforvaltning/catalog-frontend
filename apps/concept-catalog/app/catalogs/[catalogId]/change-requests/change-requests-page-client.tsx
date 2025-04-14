@@ -1,6 +1,6 @@
 'use client';
 
-import { ChangeRequestStatusTagProps, LinkButton, SearchHitsLayout, Tag } from '@catalog-frontend/ui';
+import { ChangeRequestStatusTagProps, LinkButton, SearchField, SearchHitsLayout, Tag } from '@catalog-frontend/ui';
 import {
   capitalizeFirstLetter,
   convertTimestampToDateAndTime,
@@ -10,7 +10,7 @@ import {
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
-import { Heading, Tabs } from '@digdir/designsystemet-react';
+import { Chip, Heading, Tabs } from '@digdir/designsystemet-react';
 import cn from 'classnames';
 import Link from 'next/link';
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
@@ -19,6 +19,8 @@ import ChangeRequestSort from '../../../../components/change-request-sort';
 import styles from './change-requests-page.module.css';
 import { getTranslatedStatus } from '../../../../utils/change-request';
 import { useRouter } from 'next/navigation';
+import { ChangeRequest } from '@catalog-frontend/types';
+import { isEmpty } from 'lodash';
 
 export const ChangeRequestsPageClient = ({ catalogId, data }) => {
   const itemTypeOptions = [
@@ -54,13 +56,12 @@ export const ChangeRequestsPageClient = ({ catalogId, data }) => {
 
   const router = useRouter();
 
+  const [searchTerm, setSearchTerm] = useQueryState('search', { defaultValue: '' });
   const [filterItemType, setFilterItemType] = useQueryState(
     'filter.itemType',
     parseAsString.withDefault(itemTypeOptions[0].value),
   );
-
   const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString).withDefault([]));
-
   const [sort, setSort] = useQueryState('sort', parseAsString.withDefault('TIME_FOR_PROPOSAL_DESC'));
 
   const onItemTypeChange = (value: string) => {
@@ -87,7 +88,7 @@ export const ChangeRequestsPageClient = ({ catalogId, data }) => {
     onChange: onStatusChange,
   };
 
-  let listItems;
+  let listItems: ChangeRequest[];
   if (filterItemType === 'changeRequest') {
     listItems = data.filter((item) => item.conceptId !== null);
   } else if (filterItemType === 'suggestionForNewConcept') {
@@ -96,16 +97,21 @@ export const ChangeRequestsPageClient = ({ catalogId, data }) => {
     listItems = data;
   }
 
+  if (searchTerm) {
+    const lowercasedQuery = searchTerm.toLowerCase();
+    listItems = listItems.filter((item) => item?.title.toLowerCase().includes(lowercasedQuery));
+  }
+
   if (filterStatus && filterStatus.length > 0) {
     listItems = listItems.filter((item) => filterStatus.includes(item.status.toLowerCase()));
   }
 
   switch (sort) {
     case 'TIME_FOR_PROPOSAL_ASC':
-      listItems = listItems.sort((a, b) => sortAscending(a.timeForProposal, b.timeForProposal));
+      listItems = listItems.sort((a, b) => sortAscending(a.timeForProposal ?? '', b.timeForProposal ?? ''));
       break;
     case 'TIME_FOR_PROPOSAL_DESC':
-      listItems = listItems.sort((a, b) => sortDescending(a.timeForProposal, b.timeForProposal));
+      listItems = listItems.sort((a, b) => sortDescending(a.timeForProposal ?? '', b.timeForProposal ?? ''));
       break;
     case 'TITLE_ASC':
       listItems = listItems.sort((a, b) => sortAscending(a.title.toLowerCase(), b.title.toLowerCase()));
@@ -116,6 +122,14 @@ export const ChangeRequestsPageClient = ({ catalogId, data }) => {
     default:
       break;
   }
+
+  const removeFilter = (filterName: string, filterType: 'status' | 'type') => {
+    if (filterType === 'type') {
+      setFilterItemType(null);
+    } else if (filterType === 'status') {
+      setFilterStatus(filterStatus?.filter((name) => name !== filterName) ?? []);
+    }
+  };
 
   return (
     <div className='container'>
@@ -140,11 +154,21 @@ export const ChangeRequestsPageClient = ({ catalogId, data }) => {
           <SearchHitsLayout>
             <SearchHitsLayout.SearchRow>
               <div className={styles.searchRow}>
-                <ChangeRequestSort
-                  options={sortOptions}
-                  selected={sort}
-                  onChange={onSortChange}
-                />
+                <div className={styles.searchFieldWrapper}>
+                  <SearchField
+                    className={styles.searchField}
+                    placeholder={`${localization.search.search}...`}
+                    value={searchTerm}
+                    onSearch={(value) => {
+                      setSearchTerm(value);
+                    }}
+                  />
+                  <ChangeRequestSort
+                    options={sortOptions}
+                    selected={sort}
+                    onChange={onSortChange}
+                  />
+                </div>
                 <LinkButton href={`/catalogs/${catalogId}/change-requests/new`}>
                   {localization.suggestionForNewConcept}
                 </LinkButton>
@@ -163,7 +187,7 @@ export const ChangeRequestsPageClient = ({ catalogId, data }) => {
                     {listItems.map(({ id, title, catalogId, timeForProposal, proposedBy, status }) => (
                       <li
                         key={id}
-                        itemID={id}
+                        itemID={id ?? ''}
                         title={catalogId}
                         className={styles.listItem}
                       >
@@ -189,9 +213,9 @@ export const ChangeRequestsPageClient = ({ catalogId, data }) => {
                             </Heading>
                             <div className={styles.text}>
                               <p>
-                                {localization.created}: {convertTimestampToDateAndTime(timeForProposal)}{' '}
+                                {localization.created}: {convertTimestampToDateAndTime(timeForProposal ?? '')}{' '}
                                 {localization.by}{' '}
-                                {proposedBy.name
+                                {(proposedBy?.name ?? '')
                                   .split(' ')
                                   .map((namePart) => capitalizeFirstLetter(namePart))
                                   .join(' ')}

@@ -21,6 +21,7 @@
 .searchField {
   flex-grow: 1;
 }
+
 .leftColumn {
   display: flex;
   flex-direction: column;

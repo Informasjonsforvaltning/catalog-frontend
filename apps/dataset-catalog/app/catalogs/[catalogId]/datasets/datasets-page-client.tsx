@@ -109,37 +109,43 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
     filterAndSortDatasets();
   }, [datasets, filterPublicationState, filterStatus, searchTerm, sortValue]);
 
-  const FilterChips = () => (
-    <div className={styles.chips}>
-      <Chip.Group
-        size='small'
-        className={styles.wrap}
-      >
-        {filterStatus?.map((filter, index) => (
-          <Chip.Removable
-            key={`status-${index}`}
-            onClick={() => {
-              removeFilter(filter, 'status');
-            }}
-          >
-            {getTranslateText(localization.datasetForm.filter[filter])}
-          </Chip.Removable>
-        ))}
-        {filterPublicationState?.map((filter, index) => (
-          <Chip.Removable
-            key={`published-${index}`}
-            onClick={() => {
-              removeFilter(filter, 'published');
-            }}
-          >
-            {filter === PublicationStatus.PUBLISH
-              ? localization.publicationState.published
-              : localization.publicationState.unpublished}
-          </Chip.Removable>
-        ))}
-      </Chip.Group>
-    </div>
-  );
+  const FilterChips = () => {
+    if (isEmpty(filterStatus) && isEmpty(filterPublicationState)) {
+      return undefined;
+    }
+
+    return (
+      <div className={styles.chips}>
+        <Chip.Group
+          size='small'
+          className={styles.wrap}
+        >
+          {filterStatus?.map((filter, index) => (
+            <Chip.Removable
+              key={`status-${index}`}
+              onClick={() => {
+                removeFilter(filter, 'status');
+              }}
+            >
+              {getTranslateText(localization.datasetForm.filter[filter])}
+            </Chip.Removable>
+          ))}
+          {filterPublicationState?.map((filter, index) => (
+            <Chip.Removable
+              key={`published-${index}`}
+              onClick={() => {
+                removeFilter(filter, 'published');
+              }}
+            >
+              {filter === PublicationStatus.PUBLISH
+                ? localization.publicationState.published
+                : localization.publicationState.unpublished}
+            </Chip.Removable>
+          ))}
+        </Chip.Group>
+      </div>
+    );
+  };
 
   const totalPages = Math.ceil(filteredDatasets.length / itemPerPage);
 
@@ -158,6 +164,7 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
               <SearchField
                 className={styles.searchField}
                 placeholder={`${localization.search.search}...`}
+                value={searchTerm}
                 onSearch={(value) => {
                   setSearchTerm(value);
                 }}

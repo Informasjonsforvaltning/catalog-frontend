@@ -62,7 +62,7 @@ export const SearchPageClient = ({
   const [selectedFieldOption, setSelectedFieldOption] = useState('alleFelter' as SearchableField | 'alleFelter');
   const [selectedSortOption, setSelectedSortOption] = useState(SortOption.RELEVANCE);
   const [page, setPage] = useQueryState('page', parseAsInteger);
-  const [searchTerm, setSearchTerm] = useQueryState('search');
+  const [searchTerm, setSearchTerm] = useQueryState('search', { defaultValue: '' });
   const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString));
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
     'filter.pubState',
@@ -158,7 +158,7 @@ export const SearchPageClient = ({
       key={`sortOption-${opt.value}`}
       value={opt.value}
     >
-      {`${selectedSortOption === opt.value ? 'Sorter på ' + lowerCaseFirstLetter(opt.label) : opt.label}`}
+      {opt.label}
     </option>
   ));
 
@@ -330,7 +330,7 @@ export const SearchPageClient = ({
                   <SearchField
                     className={styles.searchField}
                     placeholder={loc.search.search}
-                    value={searchTerm ?? ''}
+                    value={searchTerm}
                     options={getSelectOptions(loc.search.fields).map(({ label, value }) => ({
                       label,
                       value,
