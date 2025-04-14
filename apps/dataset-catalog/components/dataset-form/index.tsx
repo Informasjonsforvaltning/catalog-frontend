@@ -69,6 +69,7 @@ const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
 
 export const DatasetForm = ({ initialValues, referenceData, searchEnv, referenceDataEnv }: Props) => {
   const { catalogId, datasetId } = useParams();
+
   const [isDirty, setIsDirty] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
@@ -83,14 +84,26 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
 
   useWarnIfUnsavedChanges({ unsavedChanges: isDirty });
 
-  const handleCreate = (values: DatasetToBeCreated) => {
-    createDataset(values, catalogId.toString());
+  const handleCreate = async (values: DatasetToBeCreated) => {
+    if (!catalogId) return;
+    try {
+      const datasetId = await createDataset(values, catalogId.toString());
+
+      if (datasetId) {
+        router.push(`/catalogs/${catalogId}/datasets/${datasetId}`);
+      } else {
+        window.alert(`${localization.alert.fail}`);
+      }
+    } catch (error) {
+      window.alert(`${localization.alert.fail} ${error}`);
+    }
   };
 
   const handleUpdate = async (values: Dataset) => {
-    if ('id' in initialValues) {
+    if (catalogId && 'id' in initialValues) {
       try {
         await updateDataset(catalogId.toString(), initialValues, values);
+        router.push(`/catalogs/${catalogId}/datasets/${initialValues.id}`);
       } catch (error) {
         window.alert(`${localization.alert.updateFailed} ${error}`);
       }

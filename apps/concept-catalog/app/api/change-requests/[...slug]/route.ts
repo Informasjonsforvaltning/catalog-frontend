@@ -2,7 +2,8 @@ import { createChangeRequest, getChangeRequests, updateChangeRequest } from '@ca
 import { withValidSessionForApi } from '@catalog-frontend/utils';
 import { NextRequest } from 'next/server';
 
-export const GET = async (req: NextRequest, { params }: { params: { slug: string } }) => {
+export const GET = async (req: NextRequest, props: { params: Promise<{ slug: string }> }) => {
+  const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId] = slug;
@@ -20,7 +21,8 @@ export const GET = async (req: NextRequest, { params }: { params: { slug: string
   });
 };
 
-export const POST = async (req: NextRequest, { params }: { params: { slug: string } }) => {
+export const POST = async (req: NextRequest, props: { params: Promise<{ slug: string }> }) => {
+  const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId] = slug;
@@ -43,7 +45,8 @@ export const POST = async (req: NextRequest, { params }: { params: { slug: strin
   });
 };
 
-export const PUT = async (req: NextRequest, { params }: { params: { slug: string } }) => {
+export const PUT = async (req: NextRequest, props: { params: Promise<{ slug: string }> }) => {
+  const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId, changeRequestId] = slug;

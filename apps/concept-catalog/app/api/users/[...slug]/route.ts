@@ -2,7 +2,8 @@ import { getUsers } from '@catalog-frontend/data-access';
 import { withValidSessionForApi } from '@catalog-frontend/utils';
 import { NextRequest } from 'next/server';
 
-export const GET = async (request: NextRequest, { params }: { params: { slug: string[] } }) => {
+export const GET = async (request: NextRequest, props: { params: Promise<{ slug: string[] }> }) => {
+  const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId] = slug;

@@ -17,7 +17,13 @@ import { Heading } from '@digdir/designsystemet-react';
 import styles from './catalogs.module.css';
 import { CatalogCard } from './components/catalog-card';
 
-const CatalogsPage = async ({ params: { catalogId } }: { params: { catalogId: string[] } }) => {
+const CatalogsPage = async (props: { params: Promise<{ catalogId: string[] }> }) => {
+  const params = await props.params;
+
+  const {
+    catalogId
+  } = params;
+
   const session = await getValidSession();
   if (!session) {
     redirectToSignIn({ callbackUrl: `/catalogs` });

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, useEffect } from 'react';
+import React, { FC, JSX, useEffect } from 'react';
 import CheckboxTree, { OnCheckNode } from 'react-checkbox-tree';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 
@@ -46,10 +46,10 @@ const generateOptionElements = (nodes?: TreeNode[]): JSX.Element[] => {
       key={'no-user-selected'}
       value={undefined}
     />,
-    ...(options.map((opt) => (
+    ...(options.map((opt, index) => (
       <option
         value={opt.value}
-        key={`searchOption-${opt.value}`}
+        key={`searchOption-${opt.value}-${index}`}
       >
         {opt.label}
       </option>

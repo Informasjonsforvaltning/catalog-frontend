@@ -1,13 +1,13 @@
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { BasicServiceForm } from '../../../../../components/basic-service-form';
 import { Heading } from '@digdir/designsystemet-react';
 import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
-import { Organization, ReferenceDataCode } from '@catalog-frontend/types';
+import { Organization, Params, ReferenceDataCode } from '@catalog-frontend/types';
 import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import styles from './service-new-page.module.css';
 
-export default async function NewServicePage({ params }: Params) {
+export default async function NewServicePage(props: Params) {
+  const params = await props.params;
   const { catalogId } = params;
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
   const statusesResponse = await getAdmsStatuses().then((res) => res.json());
@@ -26,7 +26,10 @@ export default async function NewServicePage({ params }: Params) {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`} />
+      <Breadcrumbs
+        breadcrumbList={breadcrumbList}
+        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+      />
       <PageBanner
         title={localization.catalogType.service}
         subtitle={getTranslateText(organization?.prefLabel).toString()}

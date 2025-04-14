@@ -21,8 +21,6 @@ export default class CatalogPortalPage {
   serviceCatalog = () => this.page.getByRole('link', { name: /^Tjenestekatalog Tjenester/ });
   recordsOfProcessingActivities = () => this.page.getByRole('link', { name: /^Behandlingsoversikt/ });
 
-  termsOfUse = () => this.page.getByRole('main').getByRole('link', { name: 'Bruksvilkår' });
-
   public async goto(url: string = this.url) {
     await this.page.goto(url);
   }

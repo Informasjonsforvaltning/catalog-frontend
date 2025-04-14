@@ -9,6 +9,7 @@ import { RightColumn } from '../../../../../components/details-page-columns/deta
 import { LeftColumn } from '../../../../../components/details-page-columns/details-page-left-column';
 import { deleteDataset } from '../../../../actions/actions';
 import StatusTag from '../../../../../components/status-tag/index';
+import { useRouter } from 'next/navigation';
 
 interface datasetDetailsPageProps {
   dataset: Dataset;
@@ -32,6 +33,7 @@ const DatasetDetailsPageClient = ({
   datasetSeries,
 }: datasetDetailsPageProps) => {
   const [language, setLanguage] = useState('nb');
+  const router = useRouter();
 
   const handleLanguageChange = (value: string) => {
     setLanguage(value);
@@ -42,6 +44,7 @@ const DatasetDetailsPageClient = ({
       if (window.confirm(localization.serviceCatalog.form.confirmDelete)) {
         try {
           await deleteDataset(catalogId, dataset.id);
+          router.replace(`/catalogs/${catalogId}/datasets`);
         } catch (error) {
           window.alert(error);
         }

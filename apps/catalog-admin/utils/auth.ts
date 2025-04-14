@@ -1,4 +1,9 @@
-import { getValidSession, hasOrganizationAdminPermission, redirectToSignIn, validOrganizationNumber } from '@catalog-frontend/utils';
+import {
+  getValidSession,
+  hasOrganizationAdminPermission,
+  redirectToSignIn,
+  validOrganizationNumber,
+} from '@catalog-frontend/utils';
 import { RedirectType, redirect } from 'next/navigation';
 
 type PagePathProps = ({ catalogId }) => string;
@@ -6,13 +11,13 @@ type RenderProps = ({ catalogId, session }) => Promise<any>;
 
 export const withProtectedPage = (pagePath: PagePathProps, render: RenderProps) => {
   return async ({ params }) => {
-    const { catalogId } = params;
+    const { catalogId } = await params;
     if (!validOrganizationNumber(catalogId)) {
       redirect(`/notfound`, RedirectType.replace);
     }
 
     const session = await getValidSession();
-    if(!session) {
+    if (!session) {
       return redirectToSignIn({
         callbackUrl: pagePath(catalogId),
       });

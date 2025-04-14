@@ -21,7 +21,7 @@ type Render = (
 
 const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', render: Render) => {
   return async ({ params }) => {
-    const { catalogId, dataServiceId } = params;
+    const { catalogId, dataServiceId } = await params;
 
     if (!validOrganizationNumber(catalogId)) {
       redirect(`/not-found`, RedirectType.replace);

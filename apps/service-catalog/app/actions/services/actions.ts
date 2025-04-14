@@ -17,7 +17,7 @@ import { redirect } from 'next/navigation';
 
 export async function getServices(catalogId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
 
@@ -31,7 +31,7 @@ export async function getServices(catalogId: string) {
 
 export async function getServiceById(catalogId: string, serviceId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   const response = await getById(catalogId, serviceId, `${session?.accessToken}`);
@@ -47,7 +47,7 @@ export async function getServiceById(catalogId: string, serviceId: string) {
 export async function createService(catalogId: string, values: ServiceToBeCreated) {
   const newService = removeEmptyValues(values);
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   let success = false;
@@ -65,14 +65,13 @@ export async function createService(catalogId: string, values: ServiceToBeCreate
     if (success) {
       revalidateTag('service');
       revalidateTag('services');
-      redirect(`/catalogs/${catalogId}/services/${serviceId}`);
     }
   }
 }
 
 export async function deleteService(catalogId: string, serviceId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   let success = false;
@@ -113,7 +112,7 @@ export async function updateService(catalogId: string, oldService: Service, valu
 
   let success = false;
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
 
@@ -129,14 +128,13 @@ export async function updateService(catalogId: string, oldService: Service, valu
     if (success) {
       revalidateTag('service');
       revalidateTag('services');
-      redirect(`/catalogs/${catalogId}/services/${oldService.id}`);
     }
   }
 }
 
 export async function publishService(catalogId: string, serviceId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   let success = false;
@@ -158,7 +156,7 @@ export async function publishService(catalogId: string, serviceId: string) {
 
 export async function unpublishService(catalogId: string, serviceId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   let success = false;

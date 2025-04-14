@@ -18,7 +18,6 @@ import {
 } from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
 import { revalidateTag } from 'next/cache';
-import { redirect } from 'next/navigation';
 
 export async function getDatasets(catalogId: string) {
   const session = await getValidSession();
@@ -64,7 +63,6 @@ export async function createDataset(values: DatasetToBeCreated, catalogId: strin
     return redirectToSignIn();
   }
   let success = false;
-  let datasetId = undefined;
   try {
     const response = await postDataset(datasetNoEmptyValues, catalogId, `${session?.accessToken}`);
     if (response.status !== 201) {
@@ -72,16 +70,15 @@ export async function createDataset(values: DatasetToBeCreated, catalogId: strin
     }
 
     const data = await response.json();
-    datasetId = data.id;
 
     success = true;
+    return data.id;
   } catch (error) {
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
       revalidateTag('dataset');
       revalidateTag('datasets');
-      redirect(`/catalogs/${catalogId}/datasets/${datasetId}`);
     }
   }
 }
@@ -103,7 +100,6 @@ export async function deleteDataset(catalogId: string, datasetId: string) {
   } finally {
     if (success) {
       revalidateTag('datasets');
-      redirect(`/catalogs/${catalogId}/datasets`);
     }
   }
 }
@@ -144,7 +140,6 @@ export async function updateDataset(catalogId: string, initialDataset: Dataset, 
   if (success) {
     revalidateTag('dataset');
     revalidateTag('datasets');
-    redirect(`/catalogs/${catalogId}/datasets/${initialDataset.id}`);
   }
 }
 

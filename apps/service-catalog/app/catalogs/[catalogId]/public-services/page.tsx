@@ -8,14 +8,14 @@ import {
   redirectToSignIn,
 } from '@catalog-frontend/utils';
 import { getPublicServices } from '../../../actions/public-services/actions';
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher';
 import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
 import PublicServicePageClient from './public-service-page-client';
 
-export default async function PublicServiceSearchHitsPage({ params }: Params) {
-  const { catalogId } = params;
+export default async function PublicServiceSearchHitsPage({ params }: { params: Promise<{ catalogId: string }> }) {
+  const { catalogId } = await params;
+
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn({
       callbackUrl: `/catalogs/${catalogId}/public-services`,
     });
@@ -36,7 +36,10 @@ export default async function PublicServiceSearchHitsPage({ params }: Params) {
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}/>
+      <Breadcrumbs
+        breadcrumbList={breadcrumbList}
+        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+      />
       <PageBanner
         title={localization.catalogType.publicService}
         subtitle={getTranslateText(organization.prefLabel).toString()}

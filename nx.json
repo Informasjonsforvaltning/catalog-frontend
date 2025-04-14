@@ -44,23 +44,12 @@
     "sharedGlobals": ["{workspaceRoot}/babel.config.json"]
   },
   "generators": {
-    "@nrwl/react": {
+    "@nx/react": {
       "application": {
         "babel": true
       },
       "library": {
         "unitTestRunner": "jest"
-      }
-    },
-    "@nrwl/next": {
-      "application": {
-        "style": "styled-components",
-        "linter": "eslint"
-      }
-    },
-    "@nx/react": {
-      "application": {
-        "babel": true
       }
     },
     "@nx/next": {
