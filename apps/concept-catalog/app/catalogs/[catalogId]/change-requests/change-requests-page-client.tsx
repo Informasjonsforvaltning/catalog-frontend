@@ -135,20 +135,20 @@ export const ChangeRequestsPageClient = ({ catalogId, data }) => {
     <div className='container'>
       <Tabs
         className={styles.tabs}
-        defaultValue={'tab2'}
+        defaultValue={'changeRequestTab'}
         size='medium'
       >
         <Tabs.List className={styles.tabsList}>
           <Tabs.Tab
-            value={'tab1'}
+            value={'conceptTab'}
             onClick={() => router.push(`/catalogs/${catalogId}/concepts`)}
           >
-            {'Begreper'}
+            {localization.concept.concepts}
           </Tabs.Tab>
-          <Tabs.Tab value={'tab2'}>{'Endringsforslag'}</Tabs.Tab>
+          <Tabs.Tab value={'changeRequestTab'}>{localization.changeRequest.changeRequest}</Tabs.Tab>
         </Tabs.List>
         <Tabs.Content
-          value={'tab2'}
+          value={'changeRequestTab'}
           className={styles.tabsContent}
         >
           <SearchHitsLayout>
