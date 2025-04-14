@@ -12,7 +12,7 @@ import {
   DetailsPageLayout,
   Tag,
   LinkButton,
-  HelpMarkdown,  
+  HelpMarkdown,
 } from '@catalog-frontend/ui';
 import {
   localization,

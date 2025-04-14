@@ -5,6 +5,7 @@ import { Button, Combobox, NativeSelect, Spinner, Textfield } from '@digdir/desi
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import styles from './search-field.module.scss';
 import classNames from 'classnames';
+import { localization } from '@catalog-frontend/utils';
 
 type SearchOption = {
   value: string;
@@ -95,7 +96,7 @@ const SearchField: FC<SearchFieldProps> = ({
           >
             {loading ? (
               <Spinner
-                title={'loading'}
+                title={localization.loading}
                 size='xsmall'
                 variant='inverted'
               />
@@ -105,7 +106,7 @@ const SearchField: FC<SearchFieldProps> = ({
                   className={styles.searchIcon}
                   aria-hidden
                 />
-                <span>{'Søk'}</span>
+                <span>{localization.search.search}</span>
               </>
             )}
           </Button>

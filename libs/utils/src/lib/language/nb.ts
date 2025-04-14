@@ -332,6 +332,7 @@ export const nb = {
     associativeRelation: 'Assosiativ relasjon',
     basedOnSource: 'Basert på kilde',
     concept: 'Begrep',
+    concepts: 'Begreper',
     confirmDelete: 'Er du sikker du ønsker å slette begrepet?',
     contactInformation: 'Kontaktinformasjon for eksterne',
     definition: 'Definisjon',

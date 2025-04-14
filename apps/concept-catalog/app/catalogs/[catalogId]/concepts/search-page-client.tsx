@@ -15,6 +15,7 @@ import {
   capitalizeFirstLetter,
   localization as loc,
   lowerCaseFirstLetter,
+  localization,
 } from '@catalog-frontend/utils';
 import { Chip, Tabs } from '@digdir/designsystemet-react';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
@@ -307,20 +308,20 @@ export const SearchPageClient = ({
     <div className='container'>
       <Tabs
         className={styles.tabs}
-        defaultValue={'tab1'}
+        defaultValue={'conceptTab'}
         size='medium'
       >
         <Tabs.List className={styles.tabsList}>
-          <Tabs.Tab value={'tab1'}>{'Begreper'}</Tabs.Tab>
+          <Tabs.Tab value={'conceptTab'}>{localization.concept.concepts}</Tabs.Tab>
           <Tabs.Tab
-            value={'tab2'}
+            value={'changeRequestTab'}
             onClick={() => router.push(`/catalogs/${catalogId}/change-requests`)}
           >
-            {'Endringsforslag'}
+            {localization.changeRequest.changeRequest}
           </Tabs.Tab>
         </Tabs.List>
         <Tabs.Content
-          value={'tab1'}
+          value={'conceptTab'}
           className={styles.tabsContent}
         >
           <SearchHitsLayout>

@@ -50,7 +50,6 @@ const getNegatedFields = () => {
 };
 
 export const getFields = (field: SearchableField | 'alleFelter' | 'alleTermer'): FieldOptions => {
-  console.log('getFields', field)
   if (field === 'alleFelter') {
     return fields;
   }
