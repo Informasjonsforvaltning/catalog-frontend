@@ -50,7 +50,7 @@ const DetailsPageLayout = ({
           </Heading>
           <span>{headingTag}</span>
         </div>
-        <Ingress size='xs'>{headingSubtitle}</Ingress>
+        <div>{headingSubtitle}</div>
       </div>
       {loading && <Spinner />}
       {!loading && (
