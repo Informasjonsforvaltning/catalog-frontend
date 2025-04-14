@@ -169,24 +169,6 @@ const ConceptForm = ({
     (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
   );
 
-  const handleCreate = async (values: Concept) => {
-    const conceptId = await createConcept(values, catalogId.toString());
-    router.push(`/catalogs/${catalogId}/concepts/${conceptId}`);
-  };
-
-  const handleUpdate = async (values: Concept) => {
-    if ('id' in concept) {
-      try {
-        await updateConcept(catalogId.toString(), concept, values);
-        router.push(`/catalogs/${catalogId}/concepts/${concept.id}`);
-      } catch (error) {
-        window.alert(`${localization.alert.updateFailed} ${error}`);
-      }
-    } else {
-      await handleCreate(values);
-    }
-  };
-
   const handleCancel = () => {
     // Discard stored data
     autoSaveRef.current?.discard();

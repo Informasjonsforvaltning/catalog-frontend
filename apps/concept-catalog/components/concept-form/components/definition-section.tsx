@@ -13,7 +13,7 @@ import {
 import { FormikErrors, useFormikContext } from 'formik';
 import styles from '../concept-form.module.scss';
 import { PencilWritingIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { useState } from 'react';
+import { forwardRef, useState } from 'react';
 import { DefinitionModal } from './definition-modal';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
@@ -92,6 +92,18 @@ export const DefinitionSection = ({ markDirty, readOnly }: DefinitionSectionProp
     }
   };
 
+  const ForwardedTag = forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>((props, ref) => {
+    return (
+      <button
+        className={styles.forwardedTag}
+        {...props}
+        ref={ref}
+      />
+    );
+  });
+
+  ForwardedTag.displayName = 'ForwardedTag';
+
   return (
     <Box>
       <Box className={styles.fieldSet}>
@@ -136,17 +148,15 @@ export const DefinitionSection = ({ markDirty, readOnly }: DefinitionSectionProp
                           variant='default'
                         >
                           <Popover.Trigger asChild>
-                            <Tag
+                            <ForwardedTag
                               role='button'
-                              size='sm'
-                              color='second'
                               onMouseEnter={() =>
                                 def.kildebeskrivelse?.kilde?.length && setOpen({ ...open, [index]: true })
                               }
                               onMouseOut={() => setOpen({ ...open, [index]: false })}
                             >
                               {sourcesText(def.kildebeskrivelse?.kilde)}
-                            </Tag>
+                            </ForwardedTag>
                           </Popover.Trigger>
                           <Popover.Content>
                             <ul>

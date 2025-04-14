@@ -38,7 +38,7 @@
     display: flex;
     gap: 0.5rem;
   }
-  
+
   & > * {
     background-color: inherit;
   }
@@ -54,7 +54,7 @@
     display: flex;
     align-items: center;
     flex-direction: row;
-    
+
     &:first-child {
       gap: 0.5rem;
     }
@@ -96,8 +96,8 @@
 
 .stickyFooterBar {
   position: sticky;
-  bottom: 0px;  
-  background-color: #fff;  
+  bottom: 0px;
+  background-color: #fff;
   border-top: 1px solid rgb(230, 230, 230);
   box-shadow: #969ba0 0px 0px 10px -5px;
   z-index: 10;
@@ -130,7 +130,7 @@
 }
 
 .borderDanger {
-  border-color: var(--fds-semantic-border-danger-default)
+  border-color: var(--fds-semantic-border-danger-default);
 }
 
 .topMargin2 {
@@ -139,4 +139,13 @@
 
 .bold {
   font-weight: bold;
+}
+
+.forwardedTag {
+  background-color: var(--fds-semantic-surface-warning-default);
+  border: none;
+  min-height: var(--fds-sizing-7);
+  min-height: var(--fds-sizing-7);
+  font-size: 16px;
+  color: var(--fds-semantic-text-neutral-default);
 }
