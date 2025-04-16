@@ -25,7 +25,6 @@ export default withWriteProtectedPage(
       }
     });
 
-    console.log('change requests', changeRequests);
     const conceptStatuses = await getConceptStatuses()
       .then((response) => response.json())
       .then((body) => body?.conceptStatuses ?? [])

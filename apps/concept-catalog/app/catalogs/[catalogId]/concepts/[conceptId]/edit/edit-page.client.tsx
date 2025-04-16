@@ -3,10 +3,10 @@
 import { localization } from '@catalog-frontend/utils';
 import { Concept } from '@catalog-frontend/types';
 import ConceptForm from '../../../../../../components/concept-form';
-import { createConcept, updateConcept } from '../../../../../actions/concept/actions';
-import { useRouter } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
-import { ConfirmModal } from '@catalog-frontend/ui';
+import { updateConcept } from '../../../../../actions/concept/actions';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { ConfirmModal, Snackbar } from '@catalog-frontend/ui';
 
 export const EditPage = ({
   catalogId,
@@ -18,40 +18,38 @@ export const EditPage = ({
   hasChangeRequests,
 }) => {
   const router = useRouter();
-  const conceptIdRef = useRef<string | undefined>(undefined); // Ref to store the concept id
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [autoSave, setAutoSave] = useState(hasChangeRequests ? false : true);
+  const [showSnackbar, setShowSnackbar] = useState(false);
+
+  const created = searchParams.get('created');
 
   const handleUpdate = async (values: Concept) => {
-    if ('id' in concept) {
-      try {
-        const conceptId = await updateConcept(catalogId.toString(), concept, values);
-        conceptIdRef.current = conceptId; // Store the created concept in the ref
-      } catch (error) {
-        window.alert(`${localization.alert.updateFailed} ${error}`);
-      }
-    } else {
-      const conceptId = await createConcept(values, catalogId.toString());
-      conceptIdRef.current = conceptId; // Store the created concept in the ref
-    }
-  };
-
-  const handleAfterSubmit = () => {
-    if (conceptIdRef.current) {
-      router.push(`/catalogs/${catalogId}/concepts/${conceptIdRef.current}`);
-    } else {
-      router.push(`/catalogs/${catalogId}/concepts`);
-    }
-    router.refresh();
-  };
-
-  const handleCancel = () => {
-    router.push(concept.id ? `/catalogs/${catalogId}/concepts/${concept.id}` : `/catalogs/${catalogId}/concepts`);
-    router.refresh();
+    return await updateConcept(catalogId.toString(), concept, values);
   };
 
   const handleSuccess = () => {
     setAutoSave(true);
   };
+
+  const handleCancel = () => {
+    router.replace(`/catalogs/${catalogId}/concepts`);
+  };
+
+  useEffect(() => {
+    if (created === 'true') {
+      setShowSnackbar(true);
+
+      // Remove the param and update the URL shallowly
+      const newParams = new URLSearchParams(searchParams.toString());
+      newParams.delete('created');
+
+      const newUrl = newParams.toString().length > 0 ? `${pathname}?${newParams.toString()}` : pathname;
+
+      window.history.replaceState(null, '', newUrl);
+    }
+  }, [created, pathname]);
 
   return (
     <>
@@ -63,10 +61,8 @@ export const EditPage = ({
           onCancel={handleCancel}
         />
       )}
-
       <ConceptForm
         autoSave={autoSave}
-        afterSubmit={handleAfterSubmit}
         catalogId={catalogId}
         initialConcept={concept}
         conceptStatuses={conceptStatuses}
@@ -75,6 +71,7 @@ export const EditPage = ({
         usersResult={usersResult}
         onSubmit={handleUpdate}
         onCancel={handleCancel}
+        showSnackbarSuccessOnInit={showSnackbar}
       />
     </>
   );

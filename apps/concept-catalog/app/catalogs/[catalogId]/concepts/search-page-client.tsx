@@ -72,7 +72,7 @@ export const SearchPageClient = ({
   const [filterAssignedUser, setFilterAssignedUser] = useQueryState('filter.assignedUser');
   const [filterInternalFields, setFilterInternalFields] = useQueryState(
     'filter.internalFields',
-    parseAsJson<Record<string, string[]>>(),
+    parseAsJson<Record<string, string[]>>(() => ({})),
   );
   const [filterLabel, setFilterLabel] = useQueryState('filter.label', parseAsArrayOf(parseAsString));
   const [filterSubject, setFilterSubject] = useQueryState('filter.subject', parseAsArrayOf(parseAsString));

@@ -262,6 +262,12 @@ export const nb = {
     deleteFailed: 'Kunne ikke slette. Prøv igjen senere.',
     formUnsavedChanges: 'Skjemaet har ulagrede endringer.',
   },
+
+  snackbar: {
+    saveSuccessfull: 'Endringene ble lagret.',
+    saveFailed: 'Lagring feilet. Vennligst prøv igjen.'
+  },
+
   catalogAdmin: {
     addUser: 'Legg til nytt brukernavn',
     backgroundColor: 'Bakgrunnsfarge',
@@ -389,6 +395,8 @@ export const nb = {
 
   changeRequest: {
     accept: 'Godta',
+    acceptSuccessfull: 'Endringsforslaget er godtatt.',
+    acceptFailed: 'Kunne ikke godta endringsforslaget.',    
     changed: 'Endret',
     changeRequest: 'Endringsforslag',
     editSources: 'Rediger kilder',
@@ -401,7 +409,9 @@ export const nb = {
     noName: 'Uten navn',
     noValue: 'Ingen verdi',
     proposedChange: 'Forslag til ny {fieldType} på {lang}',
-    reject: 'Avslå',
+    reject: 'Avvis',
+    rejectSuccessfull: 'Endringsforslaget er avvist.',
+    rejectFailed: 'Kunne ikke avvise endringsforslaget.',
     seeChangeRequests: 'Se alle endringsforslag',
     sourceLink: 'Lenke til kilde',
     sourceTitle: 'Tittel på kilde',

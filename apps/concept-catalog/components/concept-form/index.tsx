@@ -1,9 +1,9 @@
 'use client';
 
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { Dispatch, ReactNode, SetStateAction, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { Formik, Form, FormikProps } from 'formik';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Alert, Checkbox, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { CatalogLocalStorage, formatISO, getTranslateText, localization } from '@catalog-frontend/utils';
 import { CodeListsResult, Concept, FieldsResult, ReferenceDataCode, UsersResult } from '@catalog-frontend/types';
@@ -15,6 +15,8 @@ import {
   FormikAutoSaverRef,
   NotificationCarousel,
   HelpMarkdown,
+  ConfirmModal,
+  Snackbar,
 } from '@catalog-frontend/ui';
 import { conceptSchema } from './validation-schema';
 import { TermSection } from './components/term-section';
@@ -41,11 +43,12 @@ type Props = {
   codeListsResult: CodeListsResult;
   customFooterBar?: ReactNode;
   fieldsResult: FieldsResult;
-  initialConcept: Concept;  
+  initialConcept: Concept;
   markDirty?: boolean;
   onCancel?: () => void;
-  onSubmit?: (values: Concept) => Promise<void>;
+  onSubmit?: (values: Concept) => Promise<Concept | undefined>;
   readOnly?: boolean;
+  showSnackbarSuccessOnInit?: boolean;
   usersResult: UsersResult;
 };
 
@@ -90,8 +93,10 @@ const ConceptForm = ({
   onCancel,
   onSubmit,
   readOnly,
+  showSnackbarSuccessOnInit,
   usersResult,
 }: Props) => {
+  const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<Concept>>(null);
@@ -102,6 +107,17 @@ const ConceptForm = ({
   const [validateOnChange, setValidateOnChange] = useState(validateOnRender);
   const [isCanceled, setIsCanceled] = useState(false);
   const [ignoreRequired, setIgnoreRequired] = useState(true);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'danger'>('success');
+
+  const showSnackbarMessage = ({ message, severity }) => {
+    setShowSnackbar(true);
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+  };
 
   const mapPropsToValues = ({
     id,
@@ -170,13 +186,25 @@ const ConceptForm = ({
   );
 
   const handleCancel = () => {
-    // Discard stored data
-    autoSaveRef.current?.discard();
-    setIsCanceled(true);
+    setShowCancelConfirm(true);
+  };
+
+  const handleConfirmCancel = () => {
+    setShowCancelConfirm(false);
 
     if (onCancel) {
-      onCancel();
+      try {
+        autoSaveRef.current?.discard();
+        setIsCanceled(true);
+        onCancel();
+      } catch {
+        // Nothing...
+      }
     }
+  };
+
+  const handleCloseConfirmCancel = () => {
+    setShowCancelConfirm(false);
   };
 
   const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
@@ -208,276 +236,319 @@ const ConceptForm = ({
     if (validateOnRender) {
       formikRef.current?.validateForm();
     }
-  }, []);
+  }, [validateOnRender]);
+
+  useEffect(() => {
+    if (showSnackbarSuccessOnInit) {
+      showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success' });
+    }
+  }, [showSnackbarSuccessOnInit]);
 
   return (
-    <Formik
-      innerRef={formikRef}
-      initialValues={mapPropsToValues(initialConcept)}
-      validationSchema={conceptSchema({ required: !ignoreRequired, baseUri: '' })}
-      validateOnChange={validateOnChange}
-      validateOnBlur={validateOnChange}
-      onSubmit={async (values, { setSubmitting }) => {
-        if (readOnly) {
-          return;
-        }
-
-        if (onSubmit) {
-          await onSubmit(values);
-        }
-
-        setSubmitting(false);
-        // Discard stored data
-        autoSaveRef.current?.discard();
-
-        if (afterSubmit) {
-          afterSubmit();
-        }
-      }}
-    >
-      {({ errors, dirty, isValid, isSubmitting, isValidating, submitForm, setValues }) => {
-        const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
-        const hasError = (fields: (keyof Concept)[]) => fields.some((field) => Object.keys(errors).includes(field));
-
-        const handleRestoreConcept = (data: StorageData) => {
-          if (data?.values?.id !== initialConcept.id) {
-            if (!data?.values?.id) {
-              return router.push(`/catalogs/${catalogId}/concepts/new?restore=1`);
-            }
-            return router.push(`/catalogs/${catalogId}/concepts/${data.values.id}/edit?restore=1`);
+    <>
+      {showCancelConfirm && (
+        <ConfirmModal
+          title={'Er du sikker?'}
+          content={'Du forlater skjemaet og blir videresendt til oversikten. Klikk på OK om du ønsker å fortsette.'}
+          onSuccess={handleConfirmCancel}
+          onCancel={handleCloseConfirmCancel}
+        />
+      )}
+      <Formik
+        innerRef={formikRef}
+        initialValues={mapPropsToValues(initialConcept)}
+        validationSchema={conceptSchema({ required: !ignoreRequired, baseUri: '' })}
+        validateOnChange={validateOnChange}
+        validateOnBlur={validateOnChange}
+        onSubmit={async (values, { setSubmitting, resetForm }) => {
+          if (readOnly) {
+            return;
           }
-          setValues(data.values);
-        };
 
-        if (concept && !isEqual(initialConcept, concept) && !dirty) {
-          setValues(concept);
-        }
+          if (onSubmit) {
+            try {
+              const newValues = await onSubmit(values);
 
-        return (
-          <>
-            <div className='container'>
-              <Form>
-                {autoSave && (
-                  <FormikAutoSaver
-                    ref={autoSaveRef}
-                    storage={new CatalogLocalStorage<StorageData>({ key: 'conceptForm' })}
-                    restoreOnRender={restoreOnRender}
-                    onRestore={handleRestoreConcept}
-                    confirmMessage={restoreConfirmMessage}
-                  />
-                )}
+              showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success' });
+              if (newValues) {
+                resetForm({ values: newValues });
+              } else {
+                resetForm();
+              }
 
-                <FormLayout>
-                  <FormLayout.Section
-                    id='term'
-                    title={localization.conceptForm.section.termTitle}
-                    subtitle={localization.conceptForm.section.termSubtitle}
-                    required
-                    error={hasError(['anbefaltTerm', 'tillattTerm', 'frarådetTerm'])}
-                  >
-                    <TermSection
-                      markDirty={markDirty}
-                      readOnly={readOnly}
-                    />
-                  </FormLayout.Section>
-                  <FormLayout.Section
-                    id='definition'
-                    title={localization.conceptForm.section.definitionTitle}
-                    subtitle={localization.conceptForm.section.definitionSubtitle}
-                    required
-                    error={hasError(['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'])}
-                  >
-                    <DefinitionSection
-                      markDirty={markDirty}
-                      readOnly={readOnly}
-                    />
-                  </FormLayout.Section>
-                  <FormLayout.Section
-                    id='remark'
-                    title={localization.conceptForm.section.remarkTitle}
-                    subtitle={localization.conceptForm.section.remarkSubtitle}
-                    error={hasError(['merknad'])}
-                  >
-                    <RemarkSection
-                      markDirty={markDirty}
-                      readOnly={readOnly}
-                    />
-                  </FormLayout.Section>
-                  <FormLayout.Section
-                    id='subject'
-                    title={localization.conceptForm.section.subjectTitle}
-                    subtitle={localization.conceptForm.section.subjectSubtitle}
-                    error={hasError(['fagområdeKoder'])}
-                  >
-                    <SubjectSection
-                      codes={subjectCodeList?.codes}
-                      markDirty={markDirty}
-                      readOnly={readOnly}
-                    />
-                  </FormLayout.Section>
-                  <FormLayout.Section
-                    id='example'
-                    title={localization.conceptForm.section.exampleTitle}
-                    subtitle={localization.conceptForm.section.exampleSubtitle}
-                    error={hasError(['eksempel'])}
-                  >
-                    <ExampleSection
-                      markDirty={markDirty}
-                      readOnly={readOnly}
-                    />
-                  </FormLayout.Section>
-                  <FormLayout.Section
-                    id='valueRange'
-                    title={localization.conceptForm.section.valueRangeTitle}
-                    subtitle={localization.conceptForm.section.valueRangeSubtitle}
-                    error={hasError(['omfang'])}
-                  >
-                    <ValueRangeSection
-                      markDirty={markDirty}
-                      readOnly={readOnly}
-                    />
-                  </FormLayout.Section>
-                  <FormLayout.Section
-                    id='relation'
-                    title={localization.conceptForm.section.relationTitle}
-                    subtitle={localization.conceptForm.section.relationSubtitle}
-                    error={hasError([
-                      'begrepsRelasjon',
-                      'erstattesAv',
-                      'seOgså',
-                      'internBegrepsRelasjon',
-                      'internErstattesAv',
-                      'internSeOgså',
-                    ])}
-                  >
-                    <RelationSection
-                      catalogId={catalogId}
-                      markDirty={markDirty}
-                      readOnly={readOnly}
-                    />
-                  </FormLayout.Section>
-                  <FormLayout.Section
-                    id='internal'
-                    title={localization.conceptForm.section.internalTitle}
-                    subtitle={localization.conceptForm.section.internalSubtitle}
-                    error={hasError(['interneFelt'])}
-                  >
-                    <InternalSection
-                      codeLists={codeListsResult.codeLists}
-                      internalFields={fieldsResult.internal}
-                      userList={usersResult.users}
-                      markDirty={markDirty}
-                      readOnly={readOnly}
-                    />
-                  </FormLayout.Section>
-                  <FormLayout.Section
-                    id='status'
-                    title={localization.conceptForm.section.conceptStatusTitle}
-                    subtitle={localization.conceptForm.section.conceptStatusSubtitle}
-                    error={hasError(['statusURI'])}
-                  >
-                    <StatusSection
-                      conceptStatuses={conceptStatuses}
-                      markDirty={markDirty}
-                      readOnly={readOnly}
-                    />
-                  </FormLayout.Section>
-                  <FormLayout.Section
-                    id='version'
-                    title={localization.conceptForm.section.versionTitle}
-                    subtitle={localization.conceptForm.section.versionSubtitle}
-                    error={hasError(['versjonsnr'])}
-                  >
-                    <VersionSection
-                      markDirty={markDirty}
-                      readOnly={readOnly}
-                    />
-                  </FormLayout.Section>
-                  <FormLayout.Section
-                    id='period'
-                    title={localization.conceptForm.section.periodTitle}
-                    subtitle={localization.conceptForm.section.periodSubtitle}
-                    error={hasError(['gyldigFom', 'gyldigTom'])}
-                  >
-                    <PeriodSection
-                      markDirty={markDirty}
-                      readOnly={readOnly}
-                    />
-                  </FormLayout.Section>
-                  <FormLayout.Section
-                    id='contact'
-                    title={localization.conceptForm.section.contactTitle}
-                    subtitle={localization.conceptForm.section.contactSubtitle}
-                    required
-                    error={hasError(['kontaktpunkt'])}
-                  >
-                    <ContactSection
-                      markDirty={markDirty}
-                      readOnly={readOnly}
-                    />
-                  </FormLayout.Section>
-                </FormLayout>
-              </Form>
-            </div>
+              // Discard stored data
+              autoSaveRef.current?.discard();
 
-            <div className={styles.stickyFooterBar}>
-              <div className={classNames('container', styles.stickyFooterContent)}>
-                {customFooterBar ? (
-                  <>{customFooterBar}</>
-                ) : (
-                  <>
-                    <div>
-                      <div className={classNames(styles.flex, styles.gap4)}>
-                        <Button
-                          size='sm'
-                          type='button'
-                          disabled={readOnly || isSubmitting || isValidating || isCanceled || !dirty}
-                          onClick={() => {
-                            setValidateOnChange(true);
-                            submitForm();
-                          }}
-                        >
-                          {isSubmitting ? (
-                            <Spinner
-                              title='Lagrer'
-                              size='sm'
-                            />
-                          ) : (
-                            'Lagre'
-                          )}
-                        </Button>
-                        <Button
-                          size='sm'
-                          disabled={readOnly || isSubmitting || isValidating || isCanceled}
-                          onClick={handleCancel}
-                          variant='secondary'
-                        >
-                          Avbryt
-                        </Button>
-                        <div className={classNames(styles.flex, styles.gap2, styles.noWrap)}>
-                          <Checkbox
+              setSubmitting(false);
+              if (afterSubmit) {
+                afterSubmit();
+              }
+            } catch {
+              setSubmitting(false);
+              showSnackbarMessage({ message: localization.snackbar.saveFailed, severity: 'danger' });
+            }
+          }
+        }}
+      >
+        {({ errors, dirty, isValid, isSubmitting, isValidating, submitForm, setValues }) => {
+          const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
+          const hasError = (fields: (keyof Concept)[]) => fields.some((field) => Object.keys(errors).includes(field));
+
+          const handleRestoreConcept = (data: StorageData) => {
+            const entityType = pathname.includes('change-requests') ? 'change-requests' : 'concepts';
+
+            if (data?.values?.id !== initialConcept.id) {
+              if (!data?.values?.id) {
+                return router.push(`/catalogs/${catalogId}/${entityType}/new?restore=1`);
+              }
+              return router.push(`/catalogs/${catalogId}/${entityType}/${data.values.id}/edit?restore=1`);
+            }
+
+            setValues(data.values);
+          };
+
+          if (concept && !isEqual(initialConcept, concept) && !dirty) {
+            setValues(concept);
+          }
+
+          return (
+            <>
+              <div className='container'>
+                <Form>
+                  {autoSave && (
+                    <FormikAutoSaver
+                      ref={autoSaveRef}
+                      storage={new CatalogLocalStorage<StorageData>({ key: 'conceptForm' })}
+                      restoreOnRender={restoreOnRender}
+                      onRestore={handleRestoreConcept}
+                      confirmMessage={restoreConfirmMessage}
+                    />
+                  )}
+
+                  <FormLayout>
+                    <FormLayout.Section
+                      id='term'
+                      title={localization.conceptForm.section.termTitle}
+                      subtitle={localization.conceptForm.section.termSubtitle}
+                      required
+                      error={hasError(['anbefaltTerm', 'tillattTerm', 'frarådetTerm'])}
+                    >
+                      <TermSection
+                        markDirty={markDirty}
+                        readOnly={readOnly}
+                      />
+                    </FormLayout.Section>
+                    <FormLayout.Section
+                      id='definition'
+                      title={localization.conceptForm.section.definitionTitle}
+                      subtitle={localization.conceptForm.section.definitionSubtitle}
+                      required
+                      error={hasError(['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'])}
+                    >
+                      <DefinitionSection
+                        markDirty={markDirty}
+                        readOnly={readOnly}
+                      />
+                    </FormLayout.Section>
+                    <FormLayout.Section
+                      id='remark'
+                      title={localization.conceptForm.section.remarkTitle}
+                      subtitle={localization.conceptForm.section.remarkSubtitle}
+                      error={hasError(['merknad'])}
+                    >
+                      <RemarkSection
+                        markDirty={markDirty}
+                        readOnly={readOnly}
+                      />
+                    </FormLayout.Section>
+                    <FormLayout.Section
+                      id='subject'
+                      title={localization.conceptForm.section.subjectTitle}
+                      subtitle={localization.conceptForm.section.subjectSubtitle}
+                      error={hasError(['fagområdeKoder'])}
+                    >
+                      <SubjectSection
+                        codes={subjectCodeList?.codes}
+                        markDirty={markDirty}
+                        readOnly={readOnly}
+                      />
+                    </FormLayout.Section>
+                    <FormLayout.Section
+                      id='example'
+                      title={localization.conceptForm.section.exampleTitle}
+                      subtitle={localization.conceptForm.section.exampleSubtitle}
+                      error={hasError(['eksempel'])}
+                    >
+                      <ExampleSection
+                        markDirty={markDirty}
+                        readOnly={readOnly}
+                      />
+                    </FormLayout.Section>
+                    <FormLayout.Section
+                      id='valueRange'
+                      title={localization.conceptForm.section.valueRangeTitle}
+                      subtitle={localization.conceptForm.section.valueRangeSubtitle}
+                      error={hasError(['omfang'])}
+                    >
+                      <ValueRangeSection
+                        markDirty={markDirty}
+                        readOnly={readOnly}
+                      />
+                    </FormLayout.Section>
+                    <FormLayout.Section
+                      id='relation'
+                      title={localization.conceptForm.section.relationTitle}
+                      subtitle={localization.conceptForm.section.relationSubtitle}
+                      error={hasError([
+                        'begrepsRelasjon',
+                        'erstattesAv',
+                        'seOgså',
+                        'internBegrepsRelasjon',
+                        'internErstattesAv',
+                        'internSeOgså',
+                      ])}
+                    >
+                      <RelationSection
+                        catalogId={catalogId}
+                        markDirty={markDirty}
+                        readOnly={readOnly}
+                      />
+                    </FormLayout.Section>
+                    <FormLayout.Section
+                      id='internal'
+                      title={localization.conceptForm.section.internalTitle}
+                      subtitle={localization.conceptForm.section.internalSubtitle}
+                      error={hasError(['interneFelt'])}
+                    >
+                      <InternalSection
+                        codeLists={codeListsResult.codeLists}
+                        internalFields={fieldsResult.internal}
+                        userList={usersResult.users}
+                        markDirty={markDirty}
+                        readOnly={readOnly}
+                      />
+                    </FormLayout.Section>
+                    <FormLayout.Section
+                      id='status'
+                      title={localization.conceptForm.section.conceptStatusTitle}
+                      subtitle={localization.conceptForm.section.conceptStatusSubtitle}
+                      error={hasError(['statusURI'])}
+                    >
+                      <StatusSection
+                        conceptStatuses={conceptStatuses}
+                        markDirty={markDirty}
+                        readOnly={readOnly}
+                      />
+                    </FormLayout.Section>
+                    <FormLayout.Section
+                      id='version'
+                      title={localization.conceptForm.section.versionTitle}
+                      subtitle={localization.conceptForm.section.versionSubtitle}
+                      error={hasError(['versjonsnr'])}
+                    >
+                      <VersionSection
+                        markDirty={markDirty}
+                        readOnly={readOnly}
+                      />
+                    </FormLayout.Section>
+                    <FormLayout.Section
+                      id='period'
+                      title={localization.conceptForm.section.periodTitle}
+                      subtitle={localization.conceptForm.section.periodSubtitle}
+                      error={hasError(['gyldigFom', 'gyldigTom'])}
+                    >
+                      <PeriodSection
+                        markDirty={markDirty}
+                        readOnly={readOnly}
+                      />
+                    </FormLayout.Section>
+                    <FormLayout.Section
+                      id='contact'
+                      title={localization.conceptForm.section.contactTitle}
+                      subtitle={localization.conceptForm.section.contactSubtitle}
+                      required
+                      error={hasError(['kontaktpunkt'])}
+                    >
+                      <ContactSection
+                        markDirty={markDirty}
+                        readOnly={readOnly}
+                      />
+                    </FormLayout.Section>
+                  </FormLayout>
+                </Form>
+              </div>
+
+              {showSnackbar && (
+                <Snackbar>
+                  <Snackbar.Item
+                    severity={snackbarSeverity}
+                    onClick={() => {
+                      setShowSnackbar(false);
+                    }}
+                  >
+                    {snackbarMessage}
+                  </Snackbar.Item>
+                </Snackbar>
+              )}
+              <div className={styles.stickyFooterBar}>
+                <div className={classNames('container', styles.stickyFooterContent)}>
+                  {customFooterBar ? (
+                    <>{customFooterBar}</>
+                  ) : (
+                    <>
+                      <div>
+                        <div className={classNames(styles.flex, styles.gap4)}>
+                          <Button
                             size='sm'
-                            value='ignoreRequired'
-                            checked={ignoreRequired}
-                            onChange={(e) => setIgnoreRequired(e.target.checked)}
+                            type='button'
+                            disabled={readOnly || isSubmitting || isValidating || isCanceled || !dirty}
+                            onClick={() => {
+                              setValidateOnChange(true);
+                              submitForm();
+                            }}
                           >
-                            {localization.conceptForm.fieldLabel.ignoreRequired}
-                          </Checkbox>
-                          <HelpMarkdown aria-label={`Help ${localization.conceptForm.fieldLabel.ignoreRequired}`}>
-                            {localization.conceptForm.alert.ignoreRequired}
-                          </HelpMarkdown>
+                            {isSubmitting ? (
+                              <Spinner
+                                title='Lagrer'
+                                size='sm'
+                              />
+                            ) : (
+                              'Lagre'
+                            )}
+                          </Button>
+                          <Button
+                            size='sm'
+                            disabled={readOnly || isSubmitting || isValidating || isCanceled}
+                            onClick={handleCancel}
+                            variant='secondary'
+                          >
+                            Avbryt
+                          </Button>
+                          <div className={classNames(styles.flex, styles.gap2, styles.noWrap)}>
+                            <Checkbox
+                              size='sm'
+                              value='ignoreRequired'
+                              checked={ignoreRequired}
+                              onChange={(e) => setIgnoreRequired(e.target.checked)}
+                            >
+                              {localization.conceptForm.fieldLabel.ignoreRequired}
+                            </Checkbox>
+                            <HelpMarkdown aria-label={`Help ${localization.conceptForm.fieldLabel.ignoreRequired}`}>
+                              {localization.conceptForm.alert.ignoreRequired}
+                            </HelpMarkdown>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    {notifications.length > 0 && <NotificationCarousel notifications={notifications} />}
-                  </>
-                )}
+                      {notifications.length > 0 && <NotificationCarousel notifications={notifications} />}
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-          </>
-        );
-      }}
-    </Formik>
+            </>
+          );
+        }}
+      </Formik>
+    </>
   );
 };
 

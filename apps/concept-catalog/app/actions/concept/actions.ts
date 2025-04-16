@@ -4,6 +4,7 @@ import {
   deleteConcept as deleteConceptApi,
   createConcept as createConceptApi,
   patchConcept as patchConceptApi,
+  getConcept,
 } from '@catalog-frontend/data-access';
 import { Concept } from '@catalog-frontend/types';
 import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
@@ -85,7 +86,6 @@ export async function createConcept(values: Concept, catalogId: string) {
     }
     conceptId = response?.headers?.get('location')?.split('/').pop();
     success = true;
-    return conceptId;
   } catch (error) {
     console.error(error);
     throw new Error(localization.alert.fail);
@@ -182,5 +182,6 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
     revalidateTag('concepts');
   }
 
-  return conceptId;
+  return await getConcept(`${conceptId}`, `${session?.accessToken}`)
+    .then((response) => response.ok ? response.json() : undefined);
 }

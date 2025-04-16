@@ -18,7 +18,7 @@ import {
 import { conceptIsHigherVersion, localization, prepareStatusList } from '@catalog-frontend/utils';
 import jsonpatch from 'fast-json-patch';
 import { RedirectType, redirect } from 'next/navigation';
-import { BreadcrumbType, Breadcrumbs, DesignBanner, DetailHeading } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
 import { NewConceptFormClient } from './new-concept-form-client';
 import { withReadProtectedPage } from '../../../../../utils/auth';
 
