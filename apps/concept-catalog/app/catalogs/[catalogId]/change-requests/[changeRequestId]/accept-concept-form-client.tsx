@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Button } from '@digdir/designsystemet-react';
 import { formatISO, localization } from '@catalog-frontend/utils';
-import { ChangeRequestStatusTagProps, LinkButton, Tag } from '@catalog-frontend/ui';
+import { ChangeRequestStatusTagProps, LinkButton, Snackbar, Tag } from '@catalog-frontend/ui';
 import styles from './accept-concept-form-client.module.scss';
 import ConceptForm from '../../../../../components/concept-form';
 import { getTranslatedStatus } from '../../../../../utils/change-request';
@@ -19,20 +19,32 @@ export const AcceptConceptFormClient = ({
   fieldsResult,
   usersResult,
   allowEdit,
-  allowApprove
+  allowApprove,
 }) => {
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'danger'>('success');
+
+  const showSnackbarMessage = ({ message, severity }) => {
+    setShowSnackbar(true);
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+  };
+
   const AcceptChangeRequestButton = () => {
     const [isHandlingAction, setIsHandlingAction] = useState(false);
-    const handleAccept = () => {
+    const handleAccept = async () => {
       if (!isHandlingAction) {
         setIsHandlingAction(true);
-        acceptChangeRequestAction(organization.organizationId, changeRequest.id)
-          .catch((err) => {
-            throw new Error(err);
-          })
-          .finally(() => {
-            setIsHandlingAction(false);
-          });
+
+        try {
+          await acceptChangeRequestAction(organization.organizationId, changeRequest.id);
+          showSnackbarMessage({ message: localization.changeRequest.acceptSuccessfull, severity: 'success' });
+        } catch {
+          showSnackbarMessage({ message: localization.changeRequest.acceptFailed, severity: 'danger' });
+        } finally {
+          setIsHandlingAction(false);
+        }
       }
     };
 
@@ -51,16 +63,18 @@ export const AcceptConceptFormClient = ({
 
   const RejectChangeRequestButton = () => {
     const [isHandlingAction, setIsHandlingAction] = useState(false);
-    const handleReject = () => {
+    const handleReject = async () => {
       if (!isHandlingAction) {
         setIsHandlingAction(true);
-        rejectChangeRequestAction(organization.organizationId, changeRequest.id)
-          .catch((err) => {
-            throw new Error(err);
-          })
-          .finally(() => {
-            setIsHandlingAction(false);
-          });
+
+        try {
+          await rejectChangeRequestAction(organization.organizationId, changeRequest.id);
+          showSnackbarMessage({ message: localization.changeRequest.rejectSuccessfull, severity: 'success' });
+        } catch {
+          showSnackbarMessage({ message: localization.changeRequest.rejectFailed, severity: 'danger' });
+        } finally {
+          setIsHandlingAction(false);
+        }
       }
     };
 
@@ -126,13 +140,11 @@ export const AcceptConceptFormClient = ({
                   <RejectChangeRequestButton />
                 </>
               )}
-              {allowEdit && (              
-                <EditChangeRequestButton />
-              )}
+              {allowEdit && <EditChangeRequestButton />}
               {!(allowApprove || allowEdit) && (
                 <>
-                <CancelButton />
-                Skrivetilgang kreves for å godta eller avvise.
+                  <CancelButton />
+                  Skrivetilgang kreves for å godta eller avvise.
                 </>
               )}
             </>
@@ -154,18 +166,32 @@ export const AcceptConceptFormClient = ({
   };
 
   return (
-    <ConceptForm
-      autoSave={false}
-      catalogId={organization.organizationId}
-      concept={changeRequestAsConcept}
-      conceptStatuses={conceptStatuses}
-      codeListsResult={codeListsResult}
-      customFooterBar={<FooterBar />}
-      fieldsResult={fieldsResult}
-      initialConcept={originalConcept ?? {}}
-      markDirty
-      readOnly
-      usersResult={usersResult}
-    />
+    <>
+      {showSnackbar && (
+        <Snackbar>
+          <Snackbar.Item
+            severity={snackbarSeverity}
+            onClick={() => {
+              setShowSnackbar(false);
+            }}
+          >
+            {snackbarMessage}
+          </Snackbar.Item>
+        </Snackbar>
+      )}
+      <ConceptForm
+        autoSave={false}
+        catalogId={organization.organizationId}
+        concept={changeRequestAsConcept}
+        conceptStatuses={conceptStatuses}
+        codeListsResult={codeListsResult}
+        customFooterBar={<FooterBar />}
+        fieldsResult={fieldsResult}
+        initialConcept={originalConcept ?? {}}
+        markDirty
+        readOnly
+        usersResult={usersResult}
+      />
+    </>
   );
 };

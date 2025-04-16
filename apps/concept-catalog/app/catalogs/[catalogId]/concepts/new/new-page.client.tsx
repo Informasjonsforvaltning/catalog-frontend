@@ -9,22 +9,23 @@ import ConceptForm from '../../../../../components/concept-form';
 export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }) => {
   const router = useRouter();
   const conceptIdRef = useRef<string | undefined>(undefined); // Ref to store the concept id
-
+  
   const handleCreate = async (values: Concept) => {
     const conceptId = await createConcept(values, catalogId.toString());
     conceptIdRef.current = conceptId;
+    return undefined;
   };
 
   const handleAfterSubmit = () => {
     if (conceptIdRef.current) {
-      router.push(`/catalogs/${catalogId}/concepts/${conceptIdRef.current}`);
+      router.replace(`/catalogs/${catalogId}/concepts/${conceptIdRef.current}/edit?created=true`);
     } else {
-      router.push(`/catalogs/${catalogId}/concepts`);
-    }
+      router.replace(`/catalogs/${catalogId}/concepts`);
+    }    
   };
-
+ 
   const handleCancel = () => {
-    router.push(`/catalogs/${catalogId}/concepts`);
+    router.replace(`/catalogs/${catalogId}/concepts`);
   };
 
   return (
