@@ -11,7 +11,7 @@ interface Props {
   language?: string;
 }
 
-const IsReplacedBy = ({ title, isReplacedBy, relatedConceptsMap, language }: Props) => (
+const IsReplacedBy = ({ isReplacedBy, relatedConceptsMap, language }: Props) => (
   <>
     {isReplacedBy.map((relasjon, index) => {
       const relatedConcept = relatedConceptsMap(relasjon.relatertBegrep ?? '');

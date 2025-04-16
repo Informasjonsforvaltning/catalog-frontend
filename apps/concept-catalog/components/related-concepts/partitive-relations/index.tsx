@@ -13,12 +13,12 @@ interface Props {
 const PartitiveRelations = ({ partitiveRelations, relatedConceptsMap, language }: Props) => {
   return (
     <>
-      {partitiveRelations.map(({ inndelingskriterium, relasjonsType, relatertBegrep }) => {
+      {partitiveRelations.map(({ inndelingskriterium, relasjonsType, relatertBegrep }, index) => {
         const relatedConcept = relatertBegrep && relatedConceptsMap(relatertBegrep);
-        if (!relatedConcept) return undefined;
+
         return (
           <KeyValueListItem
-            key={relatedConcept.id}
+            key={`${relatertBegrep}-${index}`}
             property={
               <div>
                 <div>
@@ -28,13 +28,20 @@ const PartitiveRelations = ({ partitiveRelations, relatedConceptsMap, language }
                   </span>
                   {getTranslateText(inndelingskriterium, language) && (
                     <span>{` (${localization.concept.divisionCriterion}: ${getTranslateText(
-                      inndelingskriterium, language
+                      inndelingskriterium,
+                      language,
                     )})`}</span>
                   )}
                 </div>
               </div>
             }
-            value={<Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title, language)}</Link>}
+            value={
+              relatedConcept ? (
+                <Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title, language)}</Link>
+              ) : (
+                relatertBegrep
+              )
+            }
           />
         );
       })}
