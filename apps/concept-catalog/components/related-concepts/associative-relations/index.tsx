@@ -12,26 +12,30 @@ interface Props {
 const AssociativeRelations = ({ associativeRelations, relatedConceptsMap, language }: Props) => {
   return (
     <>
-      {associativeRelations.map(({ beskrivelse, relatertBegrep = '' }) => {
+      {associativeRelations.map(({ beskrivelse, relatertBegrep = '' }, index) => {
         const relatedConcept = relatedConceptsMap(relatertBegrep);
-        if (relatedConcept) {
-          return (
-            <KeyValueListItem
-              key={relatedConcept.id}
-              property={
+        return (
+          <KeyValueListItem
+            key={`${relatertBegrep}-${index}`}
+            property={
+              <div>
                 <div>
-                  <div>
-                    <span>{localization.concept.associativeRelation}</span>
-                  </div>
-                  <div>
-                    <span>{getTranslateText(beskrivelse, language)}</span>
-                  </div>
+                  <span>{localization.concept.associativeRelation}</span>
                 </div>
-              }
-              value={<Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title, language)}</Link>}
-            />
-          );
-        }
+                <div>
+                  <span>{getTranslateText(beskrivelse, language)}</span>
+                </div>
+              </div>
+            }
+            value={
+              relatedConcept ? (
+                <Link href={relatedConcept?.href}>{getTranslateText(relatedConcept?.title, language)}</Link>
+              ) : (
+                relatertBegrep
+              )
+            }
+          />
+        );
       })}
     </>
   );

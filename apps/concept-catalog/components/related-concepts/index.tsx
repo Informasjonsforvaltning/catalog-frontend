@@ -17,16 +17,19 @@ interface Props {
   language?: string;
 }
 
-const RelatedConcepts = ({ conceptRelations, relatedConcepts, validToIncluding, validFromIncluding, title, language }: Props) => {
-  const associativeRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'assosiativ') ?? [];
-  const partitiveRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'partitiv') ?? [];
+const RelatedConcepts = ({
+  conceptRelations,
+  relatedConcepts,
+  validToIncluding,
+  validFromIncluding,
+  title,
+  language,
+}: Props) => {
+  const associativeRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'assosiativ') ?? []; //ja
+  const partitiveRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'partitiv') ?? []; //her //
   const genericRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'generisk') ?? [];
-  const seeAlso =
-    conceptRelations.filter((relasjon) => relasjon.relasjon === 'seOgså') ?? [];
-  const isReplacedBy =
-    conceptRelations.filter(
-      (relasjon) => relasjon.relasjon === 'erstattesAv',
-    ) ?? [];
+  const seeAlso = conceptRelations.filter((relasjon) => relasjon.relasjon === 'seOgså') ?? [];
+  const isReplacedBy = conceptRelations.filter((relasjon) => relasjon.relasjon === 'erstattesAv') ?? []; //her
 
   const relatedConceptsMap = (identifier: string | null) => {
     const result = relatedConcepts.find(
@@ -35,6 +38,12 @@ const RelatedConcepts = ({ conceptRelations, relatedConcepts, validToIncluding, 
     );
     return result;
   };
+
+  console.log('ass', associativeRelations);
+  console.log('part', partitiveRelations);
+  console.log('gen', genericRelations);
+  console.log('seeal', seeAlso);
+  console.log('isrep', isReplacedBy);
 
   return (
     <KeyValueList>
