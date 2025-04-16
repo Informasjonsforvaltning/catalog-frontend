@@ -10,7 +10,6 @@ const ChangeRequestsPage = withReadProtectedPage(
   async ({ catalogId, session }) => {
     const reponseData: ChangeRequest[] = await getChangeRequests(catalogId, `${session.accessToken}`)
       .then((response) => {
-        console.log(response.status)
         return response.json();
       })
       .catch((error) => {
