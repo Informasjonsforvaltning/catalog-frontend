@@ -2,6 +2,7 @@ export * from './lib/accordion-item';
 export * from './lib/auth-session-modal';
 export * from './lib/breadcrumbs';
 export * from './lib/button';
+export * from './lib/button-bar';
 export * from './lib/center-container';
 export * from './lib/checkbox-group';
 export * from './lib/checkbox-group-filter';

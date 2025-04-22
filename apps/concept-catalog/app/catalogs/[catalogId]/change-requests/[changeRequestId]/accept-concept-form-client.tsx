@@ -1,13 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from '@digdir/designsystemet-react';
 import { formatISO, localization } from '@catalog-frontend/utils';
-import { ChangeRequestStatusTagProps, LinkButton, Snackbar, Tag } from '@catalog-frontend/ui';
+import { ButtonBar, ChangeRequestStatusTagProps, LinkButton, Snackbar, Tag } from '@catalog-frontend/ui';
 import styles from './accept-concept-form-client.module.scss';
 import ConceptForm from '../../../../../components/concept-form';
 import { getTranslatedStatus } from '../../../../../utils/change-request';
 import { acceptChangeRequestAction, rejectChangeRequestAction } from '../../../../actions/change-requests/actions';
+import { usePathname, useSearchParams } from 'next/navigation';
+import classNames from 'classnames';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 export const AcceptConceptFormClient = ({
   organization,
@@ -21,6 +24,9 @@ export const AcceptConceptFormClient = ({
   allowEdit,
   allowApprove,
 }) => {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [saved, setSaved] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'danger'>('success');
@@ -47,6 +53,20 @@ export const AcceptConceptFormClient = ({
         }
       }
     };
+
+    useEffect(() => {
+      if (searchParams.get('saved') === 'true') {
+        setSaved(true);
+
+        // Remove the param and update the URL shallowly
+        const newParams = new URLSearchParams(searchParams.toString());
+        newParams.delete('saved');
+
+        const newUrl = newParams.toString().length > 0 ? `${pathname}?${newParams.toString()}` : pathname;
+
+        window.history.replaceState(null, '', newUrl);
+      }
+    }, [searchParams, pathname]);
 
     return (
       <Button
@@ -91,32 +111,6 @@ export const AcceptConceptFormClient = ({
     );
   };
 
-  const EditChangeRequestButton = () => {
-    return (
-      <LinkButton
-        href={`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}/edit`}
-        variant='secondary'
-        color='second'
-        size='sm'
-      >
-        {localization.button.edit}
-      </LinkButton>
-    );
-  };
-
-  const CancelButton = () => {
-    return (
-      <LinkButton
-        href={`/catalogs/${organization.organizationId}/change-requests`}
-        variant='secondary'
-        color='second'
-        size='sm'
-      >
-        Tilbake
-      </LinkButton>
-    );
-  };
-
   const FooterBar = () => {
     const info = `${localization.created}: ${
       changeRequest?.timeForProposal &&
@@ -132,7 +126,7 @@ export const AcceptConceptFormClient = ({
     return (
       <div className={styles.footerBar}>
         <div className={styles.footerButtons}>
-          {changeRequest.status === 'OPEN' ? (
+          {changeRequest.status === 'OPEN' && (
             <>
               {allowApprove && (
                 <>
@@ -140,16 +134,9 @@ export const AcceptConceptFormClient = ({
                   <RejectChangeRequestButton />
                 </>
               )}
-              {allowEdit && <EditChangeRequestButton />}
-              {!(allowApprove || allowEdit) && (
-                <>
-                  <CancelButton />
-                  Skrivetilgang kreves for å godta eller avvise.
-                </>
-              )}
+
+              {!(allowApprove || allowEdit) && <>Skrivetilgang kreves for å godta eller avvise.</>}
             </>
-          ) : (
-            <CancelButton />
           )}
         </div>
         <div className={styles.info}>
@@ -167,18 +154,31 @@ export const AcceptConceptFormClient = ({
 
   return (
     <>
-      {showSnackbar && (
-        <Snackbar>
-          <Snackbar.Item
-            severity={snackbarSeverity}
-            onClick={() => {
-              setShowSnackbar(false);
-            }}
+      <ButtonBar>
+        <ButtonBar.Left>
+          <LinkButton
+            href={`/catalogs/${organization.organizationId}/change-requests`}
+            variant='tertiary'
+            color='second'
+            size='sm'
           >
-            {snackbarMessage}
-          </Snackbar.Item>
-        </Snackbar>
-      )}
+            <ArrowLeftIcon />
+            Tilbake til oversikten
+          </LinkButton>
+        </ButtonBar.Left>
+        <ButtonBar.Right>
+          {allowEdit && (
+            <LinkButton
+              href={`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}/edit`}
+              variant='secondary'
+              color='second'
+              size='sm'
+            >
+              {localization.button.edit}
+            </LinkButton>
+          )}
+        </ButtonBar.Right>
+      </ButtonBar>
       <ConceptForm
         autoSave={false}
         catalogId={organization.organizationId}
@@ -191,7 +191,20 @@ export const AcceptConceptFormClient = ({
         markDirty
         readOnly
         usersResult={usersResult}
+        showSnackbarSuccessOnInit={saved}
       />
+      {showSnackbar && (
+        <Snackbar>
+          <Snackbar.Item
+            severity={snackbarSeverity}
+            onClick={() => {
+              setShowSnackbar(false);
+            }}
+          >
+            {snackbarMessage}
+          </Snackbar.Item>
+        </Snackbar>
+      )}
     </>
   );
 };

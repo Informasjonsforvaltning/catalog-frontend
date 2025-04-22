@@ -11,15 +11,16 @@ type SnackbarProps = {
 };
 
 type SnackbarItemProps = {
+  fadeIn?: boolean;
   children: ReactNode;
   severity?: 'success' | 'danger' | 'info' | 'warning';
   onClick?: MouseEventHandler<HTMLDivElement>;
 };
 
-const SnackbarItem = ({ children, severity = 'info', onClick }: SnackbarItemProps) => {
+const SnackbarItem = ({ children, fadeIn = true, severity = 'info', onClick }: SnackbarItemProps) => {
   return (
     <Alert
-      className={classNames(styles['snackbar-item'])}
+      className={classNames(styles.snackbaItem, ...(fadeIn ? [styles.fadeIn] : []))}
       size='sm'
       severity={severity}
       onClick={onClick}

@@ -112,11 +112,13 @@ const ConceptForm = ({
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'danger'>('success');
+  const [snackbarFadeIn, setSnackbarFadeIn] = useState(true);
 
-  const showSnackbarMessage = ({ message, severity }) => {
+  const showSnackbarMessage = ({ message, severity, fadeIn = true }) => {
     setShowSnackbar(true);
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
+    setSnackbarFadeIn(fadeIn);
   };
 
   const mapPropsToValues = ({
@@ -240,7 +242,7 @@ const ConceptForm = ({
 
   useEffect(() => {
     if (showSnackbarSuccessOnInit) {
-      showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success' });
+      showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success', fadeIn: false });
     }
   }, [showSnackbarSuccessOnInit]);
 
@@ -482,6 +484,7 @@ const ConceptForm = ({
                 <Snackbar>
                   <Snackbar.Item
                     severity={snackbarSeverity}
+                    fadeIn={snackbarFadeIn}
                     onClick={() => {
                       setShowSnackbar(false);
                     }}

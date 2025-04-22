@@ -68,7 +68,7 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
   useIntersectionObserver({
     activeSection,
     setActiveSection,
-    sectionRefs: sectionRefs.current,
+    sectionRefs: sectionRefs.current as React.RefObject<HTMLElement>[],
     observerEnabled,
     threshold: 0.8,
   });

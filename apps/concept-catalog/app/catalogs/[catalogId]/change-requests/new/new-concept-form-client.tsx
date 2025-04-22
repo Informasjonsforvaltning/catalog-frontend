@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 import ConceptForm from '../../../../../components/concept-form';
 import { createChangeRequestAction } from '../../../../actions/change-requests/actions';
 import { useRef } from 'react';
+import { ButtonBar, LinkButton } from '@catalog-frontend/ui';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 export const NewConceptFormClient = ({
   organization,
@@ -52,30 +54,45 @@ export const NewConceptFormClient = ({
   };
 
   const handleAfterSubmit = () => {
-    if(changeRequestIdRef.current){
-      router.push(`/catalogs/${organization.organizationId}/change-requests/${changeRequestIdRef.current}/edit?created=true`);
+    if (changeRequestIdRef.current) {
+      router.replace(
+        `/catalogs/${organization.organizationId}/change-requests/${changeRequestIdRef.current}/edit?created=true`,
+      );
     } else {
-      router.push(`/catalogs/${organization.organizationId}/change-requests`);
+      router.replace(`/catalogs/${organization.organizationId}/change-requests`);
     }
-    router.refresh();
   };
 
   const handleCancel = () => {
-    router.push(`/catalogs/${organization.organizationId}/change-requests`);
-    router.refresh();
+    router.replace(`/catalogs/${organization.organizationId}/change-requests`);
   };
 
   return (
-    <ConceptForm
-      afterSubmit={handleAfterSubmit}
-      catalogId={organization.organizationId}
-      initialConcept={changeRequestAsConcept}
-      conceptStatuses={conceptStatuses}
-      codeListsResult={codeListsResult}
-      fieldsResult={fieldsResult}
-      usersResult={usersResult}
-      onSubmit={handleSubmit}
-      onCancel={handleCancel}
-    />
+    <>
+      <ButtonBar>
+        <ButtonBar.Left>
+          <LinkButton
+            href={`/catalogs/${catalogId}/change-requests`}
+            variant='tertiary'
+            color='second'
+            size='sm'
+          >
+            <ArrowLeftIcon />
+            Tilbake til oversikten
+          </LinkButton>
+        </ButtonBar.Left>
+      </ButtonBar>
+      <ConceptForm
+        afterSubmit={handleAfterSubmit}
+        catalogId={organization.organizationId}
+        initialConcept={changeRequestAsConcept}
+        conceptStatuses={conceptStatuses}
+        codeListsResult={codeListsResult}
+        fieldsResult={fieldsResult}
+        usersResult={usersResult}
+        onSubmit={handleSubmit}
+        onCancel={handleCancel}
+      />
+    </>
   );
 };
