@@ -91,7 +91,6 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
         email: '',
         hasTelephone: '',
         hasURL: '',
-        organizationUnit: '',
       },
     ],
   };
