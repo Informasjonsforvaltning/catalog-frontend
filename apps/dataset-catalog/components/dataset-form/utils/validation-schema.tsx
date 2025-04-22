@@ -184,7 +184,7 @@ export const uriWithLabelSchema = Yup.object().shape({
 
 export const referenceSchema = Yup.object().shape({
   referenceType: Yup.object().shape({
-    code: Yup.string().required(localization.datasetForm.validation.relation),
+    uri: Yup.string().required(localization.datasetForm.validation.relation),
   }),
   source: Yup.object().shape({
     uri: Yup.string().required(localization.datasetForm.validation.relation),
