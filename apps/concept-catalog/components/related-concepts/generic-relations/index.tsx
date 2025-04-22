@@ -12,12 +12,12 @@ interface Props {
 
 const GenericRelations = ({ genericRelations, relatedConceptsMap, language }: Props) => (
   <>
-    {genericRelations.map(({ relatertBegrep, inndelingskriterium, relasjonsType }) => {
+    {genericRelations.map(({ relatertBegrep, inndelingskriterium, relasjonsType }, index) => {
       const relatedConcept = relatertBegrep && relatedConceptsMap(relatertBegrep);
-      if (!relatedConcept) return undefined;
+
       return (
         <KeyValueListItem
-          key={`generic-relation-${relatedConcept.id}`}
+          key={`generic-relation-${index}`}
           property={
             <div>
               <div>
@@ -30,13 +30,20 @@ const GenericRelations = ({ genericRelations, relatedConceptsMap, language }: Pr
                 </span>
                 {getTranslateText(inndelingskriterium, language) && (
                   <span>{` (${localization.concept.divisionCriterion}: ${getTranslateText(
-                    inndelingskriterium, language
+                    inndelingskriterium,
+                    language,
                   )})`}</span>
                 )}
               </div>
             </div>
           }
-          value={<Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title, language)}</Link>}
+          value={
+            relatedConcept ? (
+              <Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title, language)}</Link>
+            ) : (
+              relatertBegrep
+            )
+          }
         />
       );
     })}
