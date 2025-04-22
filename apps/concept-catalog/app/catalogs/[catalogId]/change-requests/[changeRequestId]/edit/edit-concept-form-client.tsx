@@ -3,11 +3,12 @@
 import { useEffect, useState } from 'react';
 import jsonpatch from 'fast-json-patch';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ConfirmModal, Snackbar } from '@catalog-frontend/ui';
+import { ButtonBar, ConfirmModal, LinkButton, Snackbar } from '@catalog-frontend/ui';
 import { Concept, ChangeRequestUpdateBody, JsonPatchOperation } from '@catalog-frontend/types';
 import { localization, pruneEmptyProperties, updateDefinitionsIfEgendefinert } from '@catalog-frontend/utils';
 import ConceptForm from '../../../../../../components/concept-form';
 import { updateChangeRequestAction } from '../../../../../actions/change-requests/actions';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 export const EditConceptFormClient = ({
   organization,
@@ -22,9 +23,7 @@ export const EditConceptFormClient = ({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  
-  const created = searchParams.get('created');
+  const [newChangeRequest, setNewChangeRequest] = useState(false);
 
   const emptyConcept: Concept = originalConcept || {
     id: null,
@@ -55,13 +54,19 @@ export const EditConceptFormClient = ({
     return await updateChangeRequestAction(organization.organizationId, changeRequest.id, changeRequestFromConcept);
   };
 
+  const handleAfterSubmit = () => {
+    if (!newChangeRequest) {
+      router.replace(`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}?saved=true`);
+    }
+  };
+
   const handleCancel = () => {
     router.replace(`/catalogs/${organization.organizationId}/change-requests`);
   };
 
   useEffect(() => {
-    if (created === 'true') {
-      setShowSnackbar(true);
+    if (searchParams.get('created') === 'true') {
+      setNewChangeRequest(true);
 
       // Remove the param and update the URL shallowly
       const newParams = new URLSearchParams(searchParams.toString());
@@ -71,19 +76,35 @@ export const EditConceptFormClient = ({
 
       window.history.replaceState(null, '', newUrl);
     }
-  }, [created, pathname]);
+  }, [searchParams, pathname]);
 
   return (
-    <ConceptForm
-      catalogId={organization.organizationId}
-      initialConcept={changeRequestAsConcept}
-      conceptStatuses={conceptStatuses}
-      codeListsResult={codeListsResult}
-      fieldsResult={fieldsResult}
-      usersResult={usersResult}
-      onSubmit={handleSubmit}
-      onCancel={handleCancel}
-      showSnackbarSuccessOnInit={showSnackbar}
-    />
+    <>
+      <ButtonBar>
+        <ButtonBar.Left>
+          <LinkButton
+            href={`/catalogs/${organization.organizationId}/change-requests`}
+            variant='tertiary'
+            color='second'
+            size='sm'
+          >
+            <ArrowLeftIcon />
+            Tilbake til oversikten
+          </LinkButton>
+        </ButtonBar.Left>
+      </ButtonBar>
+      <ConceptForm
+        afterSubmit={handleAfterSubmit}
+        catalogId={organization.organizationId}
+        initialConcept={changeRequestAsConcept}
+        conceptStatuses={conceptStatuses}
+        codeListsResult={codeListsResult}
+        fieldsResult={fieldsResult}
+        usersResult={usersResult}
+        onSubmit={handleSubmit}
+        onCancel={handleCancel}
+        showSnackbarSuccessOnInit={newChangeRequest}
+      />
+    </>
   );
 };

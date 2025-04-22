@@ -6,7 +6,8 @@ import ConceptForm from '../../../../../../components/concept-form';
 import { updateConcept } from '../../../../../actions/concept/actions';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { ConfirmModal, Snackbar } from '@catalog-frontend/ui';
+import { ButtonBar, ConfirmModal, LinkButton, Snackbar } from '@catalog-frontend/ui';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 export const EditPage = ({
   catalogId,
@@ -61,6 +62,19 @@ export const EditPage = ({
           onCancel={handleCancel}
         />
       )}
+      <ButtonBar>
+        <ButtonBar.Left>
+          <LinkButton
+            href={`/catalogs/${catalogId}/concepts`}
+            variant='tertiary'
+            color='second'
+            size='sm'
+          >
+            <ArrowLeftIcon />
+            Tilbake til oversikten
+          </LinkButton>
+        </ButtonBar.Left>
+      </ButtonBar>
       <ConceptForm
         autoSave={autoSave}
         catalogId={catalogId}
@@ -71,7 +85,7 @@ export const EditPage = ({
         usersResult={usersResult}
         onSubmit={handleUpdate}
         onCancel={handleCancel}
-        showSnackbarSuccessOnInit={showSnackbar}
+        showSnackbarSuccessOnInit={showSnackbar}        
       />
     </>
   );

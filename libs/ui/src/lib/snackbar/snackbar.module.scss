@@ -1,11 +1,26 @@
 .snackbar {
   position: fixed;
   bottom: 65px;
+  margin: var(--fds-spacing-2);
 }
 
-.snackbar-item {
-    position: relative;
-    margin: var(--fds-spacing-2);
-    min-width: 200px;
-    max-width: 400px;
+.snackbarItem {
+  position: relative;  
+  min-width: 200px;
+  max-width: 400px;
+}
+
+.fadeIn {
+  animation: fadeInFromBottom 0.5s ease-out;
+
+  @keyframes fadeInFromBottom {
+    from {
+      opacity: 0;
+      transform: translateY(50%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
+}
