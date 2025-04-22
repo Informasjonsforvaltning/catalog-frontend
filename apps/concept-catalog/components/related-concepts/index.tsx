@@ -39,12 +39,6 @@ const RelatedConcepts = ({
     return result;
   };
 
-  console.log('ass', associativeRelations);
-  console.log('part', partitiveRelations);
-  console.log('gen', genericRelations);
-  console.log('seeal', seeAlso);
-  console.log('isrep', isReplacedBy);
-
   return (
     <KeyValueList>
       {associativeRelations.length > 0 && (
