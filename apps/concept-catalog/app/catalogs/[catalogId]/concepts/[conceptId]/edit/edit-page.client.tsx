@@ -54,14 +54,14 @@ export const EditPage = ({
 
   return (
     <>
-      {hasChangeRequests && (
+      {hasChangeRequests ? (
         <ConfirmModal
           title={localization.changeRequest.changeRequest}
           content={localization.concept.confirmEditWithChangeRequest}
           onSuccess={handleSuccess}
           onCancel={handleCancel}
         />
-      )}
+      ) : undefined}
       <ButtonBar>
         <ButtonBar.Left>
           <LinkButton

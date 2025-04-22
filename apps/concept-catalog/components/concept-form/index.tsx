@@ -194,10 +194,11 @@ const ConceptForm = ({
   const handleConfirmCancel = () => {
     setShowCancelConfirm(false);
 
+    autoSaveRef.current?.discard();
+    setIsCanceled(true);
+
     if (onCancel) {
-      try {
-        autoSaveRef.current?.discard();
-        setIsCanceled(true);
+      try {        
         onCancel();
       } catch {
         // Nothing...
@@ -250,8 +251,8 @@ const ConceptForm = ({
     <>
       {showCancelConfirm && (
         <ConfirmModal
-          title={'Er du sikker?'}
-          content={'Du forlater skjemaet og blir videresendt til oversikten. Klikk på OK om du ønsker å fortsette.'}
+          title={'Er du sikker på at du vil forlate skjemaet?'}
+          content={'Eventuelle endringer vil ikke bli lagret, og du vil bli sendt tilbake til oversikten.'}
           onSuccess={handleConfirmCancel}
           onCancel={handleCloseConfirmCancel}
         />
