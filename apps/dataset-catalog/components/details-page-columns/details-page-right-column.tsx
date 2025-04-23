@@ -29,7 +29,7 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
         title={localization.publicationState.state}
         helpText={
           dataset.registrationStatus === PublicationStatus.DRAFT
-            ? `${localization.datasetForm.helptext.publishWarning} [skjemaet.](/catalogs/${dataset?.catalogId}/dataset/${dataset?.id}/edit)`
+            ? `${localization.datasetForm.helptext.publishWarning} [skjemaet.](/catalogs/${dataset?.catalogId}/datasets/${dataset?.id}/edit)`
             : localization.datasetForm.helptext.publish
         }
         headingColor='light'
