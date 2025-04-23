@@ -11,6 +11,7 @@ export const getOrganizations = async (organizationIds: string[] | null = null) 
     
   const options = {
     headers: {
+      'Accept': 'application/json',
       'Content-Type': 'application/json',
     },
     method: 'GET',
@@ -24,6 +25,7 @@ export const getOrganization = async (organizationId: string) => {
     const resource = `${process.env.ORGANIZATION_CATALOG_BASE_URI}/organizations/${organizationId}`;
     const options = {
       headers: {
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
       method: 'GET',
