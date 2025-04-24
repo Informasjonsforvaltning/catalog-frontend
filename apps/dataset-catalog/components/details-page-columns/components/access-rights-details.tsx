@@ -54,16 +54,15 @@ export const AccessRightsDetails = ({ dataset }: Props) => {
 
   return (
     <>
-      {dataset?.accessRights && (
+      {dataset?.accessRight && (
         <div className={styles.infoCardItems}>
           <Tag
             size='sm'
             color='info'
           >
-            {dataset.accessRights?.uri &&
-              accessRightsOptions.find((option) => option.value === dataset.accessRights?.uri)?.label}
+            {dataset.accessRight && accessRightsOptions.find((option) => option.value === dataset.accessRight)?.label}
           </Tag>
-          {dataset?.accessRights.uri !== accessRightPublic.uri && allLegalBases.length > 0 && (
+          {dataset?.accessRight !== accessRightPublic.uri && allLegalBases.length > 0 && (
             <Card>
               <h4>{localization.datasetForm.fieldLabel.legalBasis}</h4>
               <Table

@@ -83,8 +83,7 @@ export const AccessRightsUriTable = () => {
             helpText={localization.datasetForm.helptext.legalBasis}
             tagColor='info'
             tagTitle={
-              values.accessRights?.uri === accessRightNonPublic.uri ||
-              values.accessRights?.uri === accessRightRestricted.uri
+              values.accessRight === accessRightNonPublic.uri || values.accessRight === accessRightRestricted.uri
                 ? localization.tag.recommended
                 : undefined
             }

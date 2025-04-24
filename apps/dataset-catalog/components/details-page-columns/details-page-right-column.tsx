@@ -3,7 +3,7 @@ import { capitalizeFirstLetter, formatISO, localization } from '@catalog-fronten
 import { EnvelopeClosedIcon, PhoneIcon, LinkIcon } from '@navikt/aksel-icons';
 import _ from 'lodash';
 import PublishSwitch from '../publish-switch';
-import { Dataset, PublicationStatus } from '@catalog-frontend/types';
+import { Dataset } from '@catalog-frontend/types';
 import styles from './details-columns.module.css';
 
 type Props = {
@@ -12,8 +12,6 @@ type Props = {
 };
 
 export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
-  const published = dataset.registrationStatus === PublicationStatus.PUBLISH;
-
   return (
     <InfoCard>
       <InfoCard.Item
@@ -28,12 +26,12 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
         key={`info-data-${localization.publicationState.state}`}
         title={localization.publicationState.state}
         helpText={
-          dataset.registrationStatus === PublicationStatus.DRAFT
-            ? `${localization.datasetForm.helptext.publishWarning} [skjemaet.](/catalogs/${dataset?.catalogId}/dataset/${dataset?.id}/edit)`
-            : localization.datasetForm.helptext.publish
+          dataset.approved
+            ? localization.datasetForm.helptext.publish
+            : `${localization.datasetForm.helptext.publishWarning} [skjemaet.](/catalogs/${dataset?.catalogId}/dataset/${dataset?.id}/edit)`
         }
         headingColor='light'
-        helpTextSeverity={dataset.registrationStatus === PublicationStatus.DRAFT ? 'warning' : 'info'}
+        helpTextSeverity={dataset.approved ? 'info' : 'warning'}
       >
         <PublishSwitch
           catalogId={dataset.catalogId}
@@ -41,7 +39,7 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
           disabled={!hasWritePermission}
         />
 
-        {published ? localization.publicationState.publishedInFDK : localization.publicationState.unpublished}
+        {dataset.published ? localization.publicationState.publishedInFDK : localization.publicationState.unpublished}
       </InfoCard.Item>
 
       {dataset?.issued && (
@@ -60,45 +58,37 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
         </InfoCard.Item>
       )}
 
-      {dataset?.contactPoint && !_.isEmpty(dataset?.contactPoint[0]) && (
+      {dataset?.contactPoints && !_.isEmpty(dataset?.contactPoints[0]) && (
         <InfoCard.Item
           title={localization.concept.contactInformation}
           headingColor='light'
         >
           <div className={styles.contactPoints}>
-            {dataset?.contactPoint[0].email && (
+            {dataset?.contactPoints[0].email && (
               <span>
                 <div>
                   <EnvelopeClosedIcon />
                 </div>
 
-                {dataset?.contactPoint[0].email}
+                {dataset?.contactPoints[0].email}
               </span>
             )}
-            {dataset?.contactPoint[0].hasTelephone && (
+            {dataset?.contactPoints[0].phone && (
               <span>
                 <div>
                   <PhoneIcon />
                 </div>
-                {dataset?.contactPoint[0].hasTelephone}
+                {dataset?.contactPoints[0].phone}
               </span>
             )}
 
-            {dataset?.contactPoint[0].hasURL && (
+            {dataset?.contactPoints[0].url && (
               <span>
                 <div>
                   <LinkIcon />
                 </div>
 
-                {dataset?.contactPoint[0].hasURL}
-              </span>
-            )}
-            {dataset?.contactPoint[0].organizationUnit && (
-              <span>
-                <div>
-                  <LinkIcon />
-                </div>
-                <div>{dataset?.contactPoint[0].organizationUnit}</div>
+                {dataset?.contactPoints[0].url}
               </span>
             )}
           </div>

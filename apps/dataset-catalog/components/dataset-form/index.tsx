@@ -7,7 +7,7 @@ import {
   trimObjectWhitespace,
 } from '@catalog-frontend/utils';
 import { Alert, Button, Paragraph, Spinner, Switch } from '@digdir/designsystemet-react';
-import { Dataset, DatasetToBeCreated, ReferenceData, PublicationStatus } from '@catalog-frontend/types';
+import { Dataset, DatasetToBeCreated, ReferenceData } from '@catalog-frontend/types';
 import {
   FormikAutoSaver,
   FormikAutoSaverRef,
@@ -75,7 +75,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
   const [isCanceled, setIsCanceled] = useState(false);
   const { losThemes, dataThemes, openLicenses } = referenceData;
   const router = useRouter();
-  const [formStatus, setFormStatus] = useState(initialValues?.registrationStatus);
+  const [formStatus, setFormStatus] = useState(initialValues.approved);
 
   const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<Dataset>>(null);
@@ -114,12 +114,11 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
 
   const handleSwitchChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    setFieldValue: (fieldName: string, value: string) => void,
+    setFieldValue: (fieldName: string, value: boolean) => void,
   ) => {
     const isChecked = event.target.checked;
-    const status = isChecked ? PublicationStatus.APPROVE : PublicationStatus.DRAFT;
-    setFormStatus(status);
-    setFieldValue('registrationStatus', status);
+    setFormStatus(isChecked);
+    setFieldValue('approved', isChecked);
   };
 
   const handleCancel = () => {
@@ -167,7 +166,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
       <Formik
         innerRef={formikRef}
         initialValues={datasetTemplate(initialValues as Dataset)}
-        validationSchema={formStatus !== PublicationStatus.DRAFT ? confirmedDatasetSchema : draftDatasetSchema}
+        validationSchema={formStatus ? confirmedDatasetSchema : draftDatasetSchema}
         validateOnChange={isSubmitted}
         validateOnBlur={isSubmitted}
         onSubmit={async (values, { setSubmitting }) => {
@@ -290,7 +289,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                     title={localization.datasetForm.heading.contactPoint}
                     subtitle={localization.datasetForm.subtitle.contactPoint}
                     required
-                    error={hasError(['contactPoint'])}
+                    error={hasError(['contactPoints'])}
                   >
                     <ContactPointSection />
                   </FormLayout.Section>
@@ -330,7 +329,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                   <Switch
                     position='left'
                     size='sm'
-                    checked={values.registrationStatus !== PublicationStatus.DRAFT}
+                    checked={values.approved}
                     onChange={(event) => handleSwitchChange(event, setFieldValue)}
                   >
                     <div className={styles.footerContent}>

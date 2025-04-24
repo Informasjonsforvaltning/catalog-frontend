@@ -46,7 +46,7 @@ export const DistributionModal = ({
   type,
   distributionType,
 }: Props) => {
-  const [selectedAccesServices, setSelectedAccessServices] = useState(initialValues?.accessServiceUris);
+  const [selectedAccesServices, setSelectedAccessServices] = useState(initialValues?.accessServices);
   const [selectedFileTypes, setSelectedFileTypes] = useState(initialValues?.format);
   const [selectedMediaTypes, setSelectedMediaTypes] = useState(initialValues?.mediaType);
 
@@ -87,7 +87,7 @@ export const DistributionModal = ({
       [
         ...(previouslySelectedAccessServices ?? []),
         ...(dataServices ?? []),
-        ...(initialValues?.accessServiceUris ?? []).map((uri) => {
+        ...(initialValues?.accessServices ?? []).map((uri) => {
           const foundItem =
             previouslySelectedAccessServices?.find((item) => item.uri === uri) ||
             dataServices?.find((item: DataService) => item.uri === uri);
@@ -194,9 +194,9 @@ export const DistributionModal = ({
                             hideClearButton
                             portal={false}
                             onChange={(event) => setSearchDataServicesQuery(event.target.value)}
-                            value={[...(values.accessServiceUris || []), ...(initialValues?.accessServiceUris || [])]}
+                            value={[...(values.accessServices || []), ...(initialValues?.accessServices || [])]}
                             onValueChange={(selectedValues) => {
-                              setFieldValue('accessServiceUris', selectedValues);
+                              setFieldValue('accessServices', selectedValues);
                               setSelectedAccessServices(selectedValues);
                             }}
                             placeholder={`${localization.search.search}...`}
@@ -283,12 +283,9 @@ export const DistributionModal = ({
                             }
                           >
                             <Combobox
-                              // @ts-expect-error: uri exists on the object
-                              value={values?.license?.uri ? [values?.license.uri] : []}
+                              value={values?.license ? [values?.license] : []}
                               portal={false}
-                              onValueChange={(selectedValues) =>
-                                setFieldValue('license.uri', selectedValues.toString())
-                              }
+                              onValueChange={(selectedValues) => setFieldValue('license', selectedValues.toString())}
                               size='sm'
                               virtual
                             >
@@ -329,10 +326,9 @@ export const DistributionModal = ({
                           </TitleWithHelpTextAndTag>
                         }
                         as={Textfield}
-                        name='page[0].uri'
+                        name='page[0]'
                         size='sm'
-                        // @ts-expect-error: uri exists on the object
-                        error={errors?.page?.[0]?.uri}
+                        error={errors?.page}
                       />
 
                       {distributionType === 'distribution' && (

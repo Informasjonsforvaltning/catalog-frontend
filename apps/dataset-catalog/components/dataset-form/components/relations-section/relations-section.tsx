@@ -23,8 +23,8 @@ export const RelationsSection = ({ searchEnv }: Props) => {
           {localization.datasetForm.fieldLabel.relations}
         </TitleWithHelpTextAndTag>
         <UriWithLabelFieldsetTable
-          values={values.relations}
-          fieldName={'relations'}
+          values={values.relatedResources}
+          fieldName={'relatedResources'}
         />
       </div>
     </Box>
