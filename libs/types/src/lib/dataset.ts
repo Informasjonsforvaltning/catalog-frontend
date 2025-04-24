@@ -1,55 +1,53 @@
-import type { PublicationStatus } from './enums';
-import { LocalizedStrings } from './localization';
-import { ReferenceDataCode } from './reference-data';
+import { LocalizedStringLists, LocalizedStrings } from './localization';
 
 export interface Dataset extends DatasetToBeCreated {
   id: string;
   catalogId: string;
-  _lastModified: string;
+  lastModified: string;
+  published: boolean;
+  approved: boolean;
+  modifiedBy?: User;
 }
 
 export type DatasetToBeCreated = {
-  title: LocalizedStrings;
-  description: LocalizedStrings;
-  registrationStatus: PublicationStatus;
   specializedType?: 'SERIES' | undefined;
-  accessRights?: UriWithLabel;
-  legalBasisForProcessing?: UriWithLabel[];
-  legalBasisForAccess?: UriWithLabel[];
-  legalBasisForRestriction?: UriWithLabel[];
+  published?: boolean;
+  approved?: boolean;
+  concepts?: string[];
+  title?: LocalizedStrings;
+  description?: LocalizedStrings;
+  contactPoints?: DatasetContactPoint[];
+  keywords?: LocalizedStringLists;
+  issued?: string;
+  modified?: string;
+  language?: string[];
   landingPage?: string[];
   euDataTheme?: string[];
   losTheme?: string[];
-  type?: string;
-  keyword?: { [key: string]: string }[];
-  concepts?: [{ uri: string }];
-  provenance?: ReferenceDataCode;
-  accrualPeriodicity?: ReferenceDataCode;
-  modified?: string;
-  hasCurrentnessAnnotation?: { hasBody?: LocalizedStrings };
-  hasRelevanceAnnotation?: { hasBody?: LocalizedStrings };
-  hasCompletenessAnnotation?: { hasBody?: LocalizedStrings };
-  hasAvailabilityAnnotation?: { hasBody?: LocalizedStrings };
-  hasAccuracyAnnotation?: { hasBody?: LocalizedStrings };
-  conformsTo?: UriWithLabel[];
-  spatial?: ReferenceDataCode[];
+  distribution?: Distribution[];
+  sample?: Distribution[];
   temporal?: DateRange[];
-  issued?: string;
-  language?: ReferenceDataCode[];
-  informationModel?: UriWithLabel[];
+  spatial?: string[];
+  accessRight?: string;
+  legalBasisForRestriction?: UriWithLabel[];
+  legalBasisForProcessing?: UriWithLabel[];
+  legalBasisForAccess?: UriWithLabel[];
+  accuracy?: { hasBody?: LocalizedStrings };
+  completeness?: { hasBody?: LocalizedStrings };
+  currentness?: { hasBody?: LocalizedStrings };
+  availability?: { hasBody?: LocalizedStrings };
+  relevance?: { hasBody?: LocalizedStrings };
+  references?: Reference[];
+  relatedResources?: UriWithLabel[];
+  provenance?: string;
+  frequency?: string; // accrualPeriodicity
+  conformsTo?: UriWithLabel[];
+  informationModelsFromOtherSources?: UriWithLabel[];
   informationModelsFromFDK?: string[];
   qualifiedAttributions?: string[];
-  sample?: Partial<Distribution>[];
-  references?: Reference[];
-  relations?: UriWithLabel[];
+  type?: string;
   inSeries?: string;
-  distribution?: Distribution[];
-  contactPoint: DatasetContactPoint[];
-  // Arrays of URIs used as helper values for Formik. These properties are not part of the database object.
-  conceptList?: string[];
-  spatialList?: string[];
-  languageList?: string[];
-  keywordList?: { nb?: string[]; nn?: string[]; en?: string[] };
+  seriesDatasetOrder?: Record<string, number>;
 };
 
 export type UriWithLabel = {
@@ -63,8 +61,8 @@ export type DateRange = {
 };
 
 export type Reference = {
-  referenceType: { code: string };
-  source: { uri: string };
+  referenceType: string;
+  source: string;
 };
 
 export type DatasetSeries = {
@@ -77,16 +75,19 @@ export type Distribution = {
   description?: LocalizedStrings;
   downloadURL?: string[];
   accessURL?: string[];
+  license?: string;
+  conformsTo?: UriWithLabel[];
+  page?: string[];
   format?: string[];
   mediaType?: string[];
-  license?: { uri: string; code: string };
-  conformsTo?: UriWithLabel[];
-  page?: [{ uri: string }];
-  accessServiceUris?: string[];
+  accessServices?: string[];
 };
-type DatasetContactPoint = {
+
+export type DatasetContactPoint = {
   email?: string;
-  hasTelephone?: string;
-  hasURL?: string;
-  organizationUnit?: string;
+  phone?: string;
+  url?: string;
+  name?: LocalizedStrings;
 };
+
+type User = { id: string; name?: string; email?: string };

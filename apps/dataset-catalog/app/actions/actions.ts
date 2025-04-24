@@ -8,14 +8,7 @@ import {
   updateDataset as update,
 } from '@catalog-frontend/data-access';
 import { Dataset, DatasetToBeCreated } from '@catalog-frontend/types';
-import {
-  convertListToListOfObjects,
-  getValidSession,
-  localization,
-  redirectToSignIn,
-  removeEmptyValues,
-  transformToLocalizedStrings,
-} from '@catalog-frontend/utils';
+import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
 import { revalidateTag } from 'next/cache';
 
@@ -48,15 +41,7 @@ export async function getDatasetById(catalogId: string, datasetId: string): Prom
 }
 
 export async function createDataset(values: DatasetToBeCreated, catalogId: string) {
-  const newDataset = {
-    ...values,
-    keyword: values?.keywordList ? transformToLocalizedStrings(values?.keywordList) : undefined,
-    concepts: values?.conceptList ? convertListToListOfObjects(values.conceptList, 'uri') : undefined,
-    spatial: values?.spatialList ? convertListToListOfObjects(values.spatialList, 'uri') : undefined,
-    language: values.languageList ? convertListToListOfObjects(values.languageList, 'uri') : undefined,
-    accessRights: { uri: values?.accessRights?.uri === 'none' ? undefined : values?.accessRights?.uri },
-  };
-  const datasetNoEmptyValues = removeEmptyValues(newDataset);
+  const datasetNoEmptyValues = removeEmptyValues(values);
 
   const session = await getValidSession();
   if (!session) {
@@ -106,12 +91,7 @@ export async function deleteDataset(catalogId: string, datasetId: string) {
 
 export async function updateDataset(catalogId: string, initialDataset: Dataset, values: Dataset) {
   const updatedDataset = removeEmptyValues({
-    ...values,
-    keyword: values?.keywordList ? transformToLocalizedStrings(values?.keywordList) : undefined,
-    concepts: values?.conceptList ? convertListToListOfObjects(values.conceptList, 'uri') : undefined,
-    spatial: values?.spatialList ? convertListToListOfObjects(values.spatialList, 'uri') : undefined,
-    language: values.languageList ? convertListToListOfObjects(values.languageList, 'uri') : undefined,
-    accessRights: { uri: values?.accessRights?.uri === 'none' ? undefined : values?.accessRights?.uri },
+    values,
   });
 
   const diff = compare(initialDataset, updatedDataset);

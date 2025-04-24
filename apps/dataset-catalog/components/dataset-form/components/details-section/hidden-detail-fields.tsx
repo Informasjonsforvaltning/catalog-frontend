@@ -159,9 +159,9 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       </ToggleFieldButton>
 
       <ToggleFieldButton
-        fieldName='provenance.uri'
+        fieldName='provenance'
         hasDeleteButton
-        fieldValues={values?.provenance?.uri}
+        fieldValues={values?.provenance}
         setFocus={setFocus}
       >
         <Fieldset
@@ -174,10 +174,10 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         >
           <FastFieldWithRef
             as={Combobox}
-            ref={(el: HTMLInputElement | HTMLTextAreaElement | null) => setInputRef('provenance.uri', el)}
-            value={values?.provenance?.uri ? [values?.provenance?.uri] : []}
+            ref={(el: HTMLInputElement | HTMLTextAreaElement | null) => setInputRef('provenance', el)}
+            value={values?.provenance}
             placeholder={`${localization.search.search}...`}
-            onValueChange={(value: string[]) => setFieldValue('provenance.uri', value.toString())}
+            onValueChange={(value: string[]) => setFieldValue('provenance', value.toString())}
             size='sm'
           >
             <Combobox.Empty>{`${localization.choose}...`}</Combobox.Empty>
@@ -187,8 +187,8 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       </ToggleFieldButton>
 
       <ToggleFieldButton
-        fieldName='accrualPeriodicity.uri'
-        fieldValues={values?.accrualPeriodicity?.uri}
+        fieldName='frequency'
+        fieldValues={values?.frequency}
         hasDeleteButton
         setFocus={setFocus}
       >
@@ -203,11 +203,11 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
           <FastFieldWithRef
             size='sm'
             as={Combobox}
-            ref={(el: HTMLInputElement | HTMLTextAreaElement | null) => setInputRef('accrualPeriodicity.uri', el)}
-            value={[values?.accrualPeriodicity?.uri ?? '']}
+            ref={(el: HTMLInputElement | HTMLTextAreaElement | null) => setInputRef('frequency', el)}
+            value={[values?.frequency ?? '']}
             virtual
             placeholder={`${localization.search.search}...`}
-            onValueChange={(value: string[]) => setFieldValue('accrualPeriodicity.uri', value.toString())}
+            onValueChange={(value: string[]) => setFieldValue('frequency', value.toString())}
           >
             <Combobox.Option value=''>{`${localization.choose}...`}</Combobox.Option>
             {frequencyOptions}
@@ -237,12 +237,12 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       </ToggleFieldButton>
 
       <ToggleFieldButton
-        fieldName='hasCurrentnessAnnotation.hasBody'
-        fieldValues={values?.hasCurrentnessAnnotation?.hasBody}
+        fieldName='currentness.hasBody'
+        fieldValues={values?.currentness?.hasBody}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
-          name='hasCurrentnessAnnotation.hasBody'
+          name='currentness.hasBody'
           legend={
             <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.hasCurrentnessAnnotation}>
               {localization.datasetForm.fieldLabel.hasCurrentnessAnnotation}
@@ -265,12 +265,12 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       />
 
       <ToggleFieldButton
-        fieldName='hasRelevanceAnnotation.hasBody'
-        fieldValues={values?.hasRelevanceAnnotation?.hasBody}
+        fieldName='relevance.hasBody'
+        fieldValues={values?.relevance?.hasBody}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
-          name='hasRelevanceAnnotation.hasBody'
+          name='relevance.hasBody'
           legend={
             <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.hasRelevanceAnnotation}>
               {localization.datasetForm.fieldLabel.hasRelevanceAnnotation}
@@ -280,12 +280,12 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       </ToggleFieldButton>
 
       <ToggleFieldButton
-        fieldName='hasCompletenessAnnotation.hasBody'
-        fieldValues={values?.hasCompletenessAnnotation?.hasBody}
+        fieldName='completeness.hasBody'
+        fieldValues={values?.completeness?.hasBody}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
-          name='hasCompletenessAnnotation.hasBody'
+          name='completeness.hasBody'
           legend={
             <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.hasCompletenessAnnotation}>
               {localization.datasetForm.fieldLabel.hasCompletenessAnnotation}
@@ -295,12 +295,12 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       </ToggleFieldButton>
 
       <ToggleFieldButton
-        fieldName='hasAccuracyAnnotation.hasBody'
-        fieldValues={values?.hasAccuracyAnnotation?.hasBody}
+        fieldName='accuracy.hasBody'
+        fieldValues={values?.accuracy?.hasBody}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
-          name='hasAccuracyAnnotation.hasBody'
+          name='accuracy.hasBody'
           legend={
             <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.hasAccuracyAnnotation}>
               {localization.datasetForm.fieldLabel.hasAccuracyAnnotation}
@@ -310,12 +310,12 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       </ToggleFieldButton>
 
       <ToggleFieldButton
-        fieldName='hasAvailabilityAnnotation.hasBody'
-        fieldValues={values?.hasAvailabilityAnnotation?.hasBody}
+        fieldName='availability.hasBody'
+        fieldValues={values?.availability?.hasBody}
       >
         <FormikLanguageFieldset
           as={TextareaWithPrefix}
-          name='hasAvailabilityAnnotation.hasBody'
+          name='availability.hasBody'
           legend={
             <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.hasAvailabilityAnnotation}>
               {localization.datasetForm.fieldLabel.hasAvailabilityAnnotation}

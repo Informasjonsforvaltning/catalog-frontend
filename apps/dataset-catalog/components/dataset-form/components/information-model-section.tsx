@@ -102,8 +102,8 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
       )}
 
       <UriWithLabelFieldsetTable
-        values={values.informationModel}
-        fieldName={'informationModel'}
+        values={values.informationModelsFromOtherSources}
+        fieldName={'informationModelsFromOtherSources'}
         label={
           <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.informationModel}>
             {localization.datasetForm.fieldLabel.informationModel}

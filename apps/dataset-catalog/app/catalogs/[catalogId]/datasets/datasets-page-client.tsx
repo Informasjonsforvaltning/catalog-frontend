@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useMemo } from 'react';
-import { Dataset, FilterType, PublicationStatus } from '@catalog-frontend/types';
+import { Dataset, FilterType } from '@catalog-frontend/types';
 import styles from './datasets-page.module.css';
 import { LinkButton, SearchField, SearchHit, SearchHitContainer, SearchHitsLayout } from '@catalog-frontend/ui';
 import { Chip, NativeSelect } from '@digdir/designsystemet-react';
@@ -50,7 +50,7 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
           return (a: Dataset, b: Dataset) =>
             sortDescending(getTranslateText(a.title)?.toString() || '', getTranslateText(b.title)?.toString() || '');
         case 'lastChanged':
-          return (a: Dataset, b: Dataset) => sortDateStringsDescending(a._lastModified || '', b._lastModified || '');
+          return (a: Dataset, b: Dataset) => sortDateStringsDescending(a.lastModified || '', b.lastModified || '');
         default:
           return () => 0;
       }
@@ -69,29 +69,31 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
     const filterAndSortDatasets = () => {
       let filtered = datasets;
       setPage(0);
+
       if (!isEmpty(filterStatus)) {
         filtered = filtered.filter((dataset) => {
-          if (filterStatus?.includes(PublicationStatus.APPROVE)) {
-            return (
-              dataset.registrationStatus === PublicationStatus.APPROVE ||
-              dataset.registrationStatus === PublicationStatus.PUBLISH
-            );
+          if (filterStatus?.includes('APPROVED')) {
+            return dataset.approved;
           }
-          if (filterStatus?.includes(PublicationStatus.DRAFT)) {
-            return dataset.registrationStatus === PublicationStatus.DRAFT;
+          if (filterStatus?.includes('NOT_APPROVED')) {
+            return !dataset.approved;
           }
           return false;
         });
       }
+
       if (!isEmpty(filterPublicationState)) {
         filtered = filtered.filter((dataset) => {
-          const status = filterPublicationState?.toString();
-          return (
-            dataset.registrationStatus === status ||
-            (status === 'UNPUBLISH' && dataset.registrationStatus !== PublicationStatus.PUBLISH)
-          );
+          if (filterPublicationState?.includes('PUBLISHED')) {
+            return dataset.published;
+          }
+          if (filterPublicationState?.includes('UNPUBLISHED')) {
+            return !dataset.published;
+          }
+          return false;
         });
       }
+
       if (searchTerm) {
         const lowercasedQuery = searchTerm.toLowerCase();
         filtered = filtered.filter(
@@ -100,12 +102,15 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
             getTranslateText(dataset?.description).toString().toLowerCase().includes(lowercasedQuery),
         );
       }
+
       const sort: SortTypes | '' = sortTypes.includes(sortValue as SortTypes) ? (sortValue as SortTypes) : '';
       if (sort) {
         filtered = [...filtered].sort(getSortFunction(sort));
       }
+
       setFilteredDatasets(filtered);
     };
+
     filterAndSortDatasets();
   }, [datasets, filterPublicationState, filterStatus, searchTerm, sortValue]);
 
@@ -127,7 +132,9 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
                 removeFilter(filter, 'status');
               }}
             >
-              {getTranslateText(localization.datasetForm.filter[filter])}
+              {filter === 'APPROVED'
+                ? localization.datasetForm.filter.APPROVED
+                : localization.datasetForm.filter.NOT_APPROVED}
             </Chip.Removable>
           ))}
           {filterPublicationState?.map((filter, index) => (
@@ -137,7 +144,7 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
                 removeFilter(filter, 'published');
               }}
             >
-              {filter === PublicationStatus.PUBLISH
+              {filter === 'PUBLISHED'
                 ? localization.publicationState.published
                 : localization.publicationState.unpublished}
             </Chip.Removable>
@@ -216,15 +223,15 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
                         title={getTranslateText(dataset?.title)}
                         description={getTranslateText(dataset?.description)}
                         titleHref={`/catalogs/${catalogId}/datasets/${dataset?.id}`}
-                        statusTag={<StatusTag datasetStatus={dataset.registrationStatus} />}
+                        statusTag={<StatusTag approved={dataset.approved} />}
                         content={
                           <>
                             <div className={styles.set}>
                               <p>
-                                {localization.lastChanged} {formatDate(dateStringToDate(dataset._lastModified))}
+                                {localization.lastChanged} {formatDate(dateStringToDate(dataset.lastModified))}
                               </p>
                               <span>•</span>
-                              {dataset.registrationStatus === PublicationStatus.PUBLISH
+                              {dataset.published
                                 ? localization.publicationState.publishedInFDK
                                 : localization.publicationState.unpublished}
                             </div>

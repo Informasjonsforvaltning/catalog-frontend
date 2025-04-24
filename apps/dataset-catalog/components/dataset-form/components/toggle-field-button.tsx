@@ -64,7 +64,7 @@ export const ToggleFieldButton = ({
             setFieldValue(fieldName, addValue);
             setFocus && setFocus(fieldName);
           }}
-        >{`${localization.add} ${localization.datasetForm.fieldLabel[fieldName.split('.')[0]].toLowerCase()}`}</AddButton>
+        >{`${localization.add} ${localization.datasetForm.fieldLabel[fieldName.split('.')[0]]?.toLowerCase()}`}</AddButton>
       )}
     </Box>
   );

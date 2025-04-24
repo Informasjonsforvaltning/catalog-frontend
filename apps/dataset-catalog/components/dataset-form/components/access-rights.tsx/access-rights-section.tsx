@@ -22,8 +22,8 @@ export const AccessRightFields = () => {
               {localization.access}
             </TitleWithHelpTextAndTag>
           }
-          value={values?.accessRights?.uri || 'none'}
-          onChange={(values) => setFieldValue('accessRights.uri', values.toString())}
+          value={values?.accessRight || 'none'}
+          onChange={(values) => setFieldValue('accessRight', values.toString())}
         >
           <Radio value='none'>{`${localization.accessRight.none}`}</Radio>
           {accessRights.map((option, index) => (

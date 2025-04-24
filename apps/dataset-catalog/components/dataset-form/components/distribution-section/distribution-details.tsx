@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv, openLicenses, language }: Props) => {
-  const { data: selectedDataServices } = useSearchDataServiceByUri(searchEnv, distribution?.accessServiceUris ?? []);
+  const { data: selectedDataServices } = useSearchDataServiceByUri(searchEnv, distribution?.accessServices ?? []);
   const { data: selectedMediaTypes } = useSearchMediaTypeByUri(distribution?.mediaType ?? [], referenceDataEnv);
 
   return (
@@ -67,14 +67,14 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
             </div>
           )}
 
-          {distribution?.accessServiceUris && distribution.accessServiceUris.length > 0 && (
+          {distribution?.accessServices && distribution.accessServices.length > 0 && (
             <div className={styles.field}>
               <Heading
                 level={5}
                 size='2xs'
               >{`${localization.datasetForm.fieldLabel.accessService}:`}</Heading>
               <ul className={styles.list}>
-                {distribution.accessServiceUris.map((uri, i) => {
+                {distribution.accessServices.map((uri, i) => {
                   const match = selectedDataServices?.find((type) => type.uri === uri);
                   return (
                     <li key={`service-${uri}-${i}`}>
@@ -91,7 +91,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
             </div>
           )}
 
-          {distribution.license?.uri && (
+          {distribution.license && (
             <>
               <Heading
                 level={5}
@@ -100,7 +100,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
               <div className={styles.field}>
                 <Paragraph size='sm'>
                   {getTranslateText(
-                    openLicenses.find((license) => license.uri === distribution.license?.uri)?.label,
+                    openLicenses.find((license) => license.uri === distribution.license)?.label,
                     language,
                   )}
                 </Paragraph>
@@ -137,13 +137,13 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
             </div>
           )}
 
-          {distribution?.page && distribution.page?.[0]?.uri && (
+          {distribution?.page && distribution.page?.[0] && (
             <div className={styles.field}>
               <Heading
                 level={5}
                 size='2xs'
               >{`${localization.datasetForm.fieldLabel.distributionLink}:`}</Heading>
-              <Paragraph size='sm'>{distribution?.page?.[0].uri}</Paragraph>
+              <Paragraph size='sm'>{distribution?.page?.[0]}</Paragraph>
             </div>
           )}
         </div>

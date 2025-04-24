@@ -3,14 +3,14 @@ import { FormikOptionalFieldsFieldset, TitleWithHelpTextAndTag } from '@catalog-
 
 export const ContactPointSection = () => {
   const contactPointOptions = [
-    { valuePath: 'contactPoint[0].email', label: localization.email },
+    { valuePath: 'contactPoints[0].email', label: localization.email },
     {
-      valuePath: 'contactPoint[0].hasTelephone',
+      valuePath: 'contactPoints[0].phone',
       label: localization.telephone,
     },
-    { valuePath: 'contactPoint[0].hasURL', label: localization.contactPoint.form },
+    { valuePath: 'contactPoints[0].url', label: localization.contactPoint.form },
     {
-      valuePath: 'contactPoint[0].organizationUnit',
+      valuePath: 'contactPoints[0].organizationUnit',
       label: localization.contactPoint.organizationUnit,
     },
   ];

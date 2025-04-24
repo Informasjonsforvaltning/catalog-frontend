@@ -3,3 +3,9 @@ export interface LocalizedStrings {
 }
 
 export type ISOLanguage = 'nb' | 'nn' | 'no' | 'en';
+
+export type LocalizedStringLists = {
+  nb?: string[];
+  nn?: string[];
+  en?: string[];
+};
