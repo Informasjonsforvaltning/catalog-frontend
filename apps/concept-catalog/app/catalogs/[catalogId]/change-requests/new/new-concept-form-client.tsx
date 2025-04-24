@@ -1,13 +1,13 @@
 'use client';
 
 import { Concept, ChangeRequestUpdateBody, JsonPatchOperation } from '@catalog-frontend/types';
-import { pruneEmptyProperties, updateDefinitionsIfEgendefinert } from '@catalog-frontend/utils';
+import { localization, pruneEmptyProperties, updateDefinitionsIfEgendefinert } from '@catalog-frontend/utils';
 import jsonpatch from 'fast-json-patch';
 import { useRouter } from 'next/navigation';
 import ConceptForm from '../../../../../components/concept-form';
 import { createChangeRequestAction } from '../../../../actions/change-requests/actions';
-import { useRef } from 'react';
-import { ButtonBar, LinkButton } from '@catalog-frontend/ui';
+import { useRef, useState } from 'react';
+import { Button, ButtonBar, ConfirmModal, LinkButton } from '@catalog-frontend/ui';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 export const NewConceptFormClient = ({
@@ -21,6 +21,7 @@ export const NewConceptFormClient = ({
 }) => {
   const router = useRouter();
   const changeRequestIdRef = useRef<string | undefined>(undefined); // Ref to store the change-request id
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   const catalogId = organization.organizationId;
 
@@ -69,21 +70,29 @@ export const NewConceptFormClient = ({
 
   return (
     <>
+      {showCancelConfirm && (
+        <ConfirmModal
+          title={localization.confirm.cancelForm.title}
+          content={localization.confirm.cancelForm.message}
+          onSuccess={handleCancel}
+          onCancel={() => setShowCancelConfirm(false)}
+        />
+      )}
       <ButtonBar>
         <ButtonBar.Left>
-          <LinkButton
-            href={`/catalogs/${catalogId}/change-requests`}
+          <Button
             variant='tertiary'
             color='second'
             size='sm'
           >
             <ArrowLeftIcon />
-            Tilbake til oversikten
-          </LinkButton>
+            {localization.button.backToOverview}
+          </Button>
         </ButtonBar.Left>
       </ButtonBar>
       <ConceptForm
         afterSubmit={handleAfterSubmit}
+        autoSaveKey='changeRequestForm'
         catalogId={organization.organizationId}
         initialConcept={changeRequestAsConcept}
         conceptStatuses={conceptStatuses}

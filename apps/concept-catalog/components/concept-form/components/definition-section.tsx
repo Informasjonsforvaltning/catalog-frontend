@@ -232,32 +232,33 @@ export const DefinitionSection = ({ markDirty, readOnly }: DefinitionSectionProp
             );
           })}
       </Box>
-      <Box className={styles.buttonRow}>
-        {definitions
-          .filter((name) => !values[name])
-          .map((name) => (
-            <DefinitionModal
-              key={name}
-              header={localization.conceptForm.fieldLabel.definitionTargetGroup[name]}
-              definitionHelpText={localization.conceptForm.helpText.definitionText[name]}
-              trigger={
-                <Button
-                  variant='tertiary'
-                  color='first'
-                  size='sm'
-                  disabled={readOnly}
-                >
-                  <PlusCircleIcon
-                    aria-hidden
-                    fontSize='1rem'
-                  />
-                  {localization.conceptForm.fieldLabel.definitionTargetGroup[name]}
-                </Button>
-              }
-              onSucces={(def) => setFieldValue(name, def)}
-            />
-          ))}
-      </Box>
+      {!readOnly && (
+        <Box className={styles.buttonRow}>
+          {definitions
+            .filter((name) => !values[name])
+            .map((name) => (
+              <DefinitionModal
+                key={name}
+                header={localization.conceptForm.fieldLabel.definitionTargetGroup[name]}
+                definitionHelpText={localization.conceptForm.helpText.definitionText[name]}
+                trigger={
+                  <Button
+                    variant='tertiary'
+                    color='first'
+                    size='sm'
+                  >
+                    <PlusCircleIcon
+                      aria-hidden
+                      fontSize='1rem'
+                    />
+                    {localization.conceptForm.fieldLabel.definitionTargetGroup[name]}
+                  </Button>
+                }
+                onSucces={(def) => setFieldValue(name, def)}
+              />
+            ))}
+        </Box>
+      )}
 
       {Object.keys(errors).some((value) =>
         ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(value),

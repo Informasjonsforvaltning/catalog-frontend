@@ -7,12 +7,14 @@ import { isEqual } from 'lodash';
 import { CatalogStorage, localization } from '@catalog-frontend/utils';
 
 export type StorageData = {
+  id?: string;
   values: any;
   lastChanged: string;
 };
 
 export type FormikAutoSaverProps = {
-  storage: CatalogStorage<StorageData>;
+  id?: string;
+  storage: CatalogStorage<StorageData>;  
   restoreOnRender?: boolean;
   onRestore: (data: StorageData) => void;
   confirmMessage: (data: StorageData) => ReactNode;
@@ -23,7 +25,7 @@ export type FormikAutoSaverRef = {
 };
 
 export const FormikAutoSaver = forwardRef<FormikAutoSaverRef, FormikAutoSaverProps>(
-  ({ storage, onRestore, confirmMessage, restoreOnRender }: FormikAutoSaverProps, ref) => {
+  ({ id, storage, onRestore, confirmMessage, restoreOnRender }: FormikAutoSaverProps, ref) => {
     const [modalContent, setModalContent] = useState<ReactNode>(null);
     const { initialValues, values, setValues } = useFormikContext<any>();
     const modalRef = useRef<HTMLDialogElement>(null);
@@ -55,7 +57,9 @@ export const FormikAutoSaver = forwardRef<FormikAutoSaverRef, FormikAutoSaverPro
       if (data) {
         setModalContent(confirmMessage(data));
         if (restoreOnRender) {
-          setValues(data.values);
+          if (onRestore && data) {
+            onRestore(data);
+          }
         } else {
           modalRef.current?.showModal();
         }
@@ -65,7 +69,7 @@ export const FormikAutoSaver = forwardRef<FormikAutoSaverRef, FormikAutoSaverPro
     // Save form data to local storage on change
     useEffect(() => {
       if (!isEqual(initialValues, values)) {
-        storage.set({ values, lastChanged: new Date().toISOString() });
+        storage.set({ id, values, lastChanged: new Date().toISOString() });
       }
     }, [values]);
 

@@ -37,6 +37,8 @@ import { isEqual } from 'lodash';
 type Props = {
   afterSubmit?: () => void;
   autoSave?: boolean;
+  autoSaveKey?: string;
+  autoSaveId?: string;
   catalogId: string;
   concept?: Concept;
   conceptStatuses: ReferenceDataCode[];
@@ -82,6 +84,8 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
 const ConceptForm = ({
   afterSubmit,
   autoSave = true,
+  autoSaveKey = 'conceptForm',
+  autoSaveId,
   catalogId,
   concept,
   conceptStatuses,
@@ -221,7 +225,7 @@ const ConceptForm = ({
     });
     return (
       <>
-        <Paragraph size='sm'>{localization.conceptForm.alert.youHaveUnsavedChanges}</Paragraph>
+        <Paragraph size='sm'>{localization.alert.youHaveUnsavedChanges}</Paragraph>
         <Paragraph size='sm'>
           <span className={styles.bold}>{name}</span> ({lastChangedFormatted})
         </Paragraph>
@@ -229,7 +233,7 @@ const ConceptForm = ({
           size='sm'
           className={styles.topMargin2}
         >
-          {localization.conceptForm.alert.wantToRestoreChanges}
+          {localization.alert.wantToRestoreChanges}
         </Paragraph>
       </>
     );
@@ -251,8 +255,8 @@ const ConceptForm = ({
     <>
       {showCancelConfirm && (
         <ConfirmModal
-          title={'Er du sikker på at du vil forlate skjemaet?'}
-          content={'Eventuelle endringer vil ikke bli lagret, og du vil bli sendt tilbake til oversikten.'}
+          title={localization.confirm.cancelForm.title}
+          content={localization.confirm.cancelForm.message}
           onSuccess={handleConfirmCancel}
           onCancel={handleCloseConfirmCancel}
         />
@@ -300,14 +304,15 @@ const ConceptForm = ({
           const handleRestoreConcept = (data: StorageData) => {
             const entityType = pathname.includes('change-requests') ? 'change-requests' : 'concepts';
 
-            if (data?.values?.id !== initialConcept.id) {
-              if (!data?.values?.id) {
-                return router.push(`/catalogs/${catalogId}/${entityType}/new?restore=1`);
+            if (data?.id !== autoSaveId) {
+              if (!data?.id) {
+                return router.replace(`/catalogs/${catalogId}/${entityType}/new?restore=1`);
               }
-              return router.push(`/catalogs/${catalogId}/${entityType}/${data.values.id}/edit?restore=1`);
+              return router.replace(`/catalogs/${catalogId}/${entityType}/${data.id}/edit?restore=1`);
             }
 
             setValues(data.values);
+            showSnackbarMessage({ message: localization.snackbar.restoreSuccessfull, severity: 'success' });
           };
 
           if (concept && !isEqual(initialConcept, concept) && !dirty) {
@@ -321,7 +326,8 @@ const ConceptForm = ({
                   {autoSave && (
                     <FormikAutoSaver
                       ref={autoSaveRef}
-                      storage={new CatalogLocalStorage<StorageData>({ key: 'conceptForm' })}
+                      id={autoSaveId}
+                      storage={new CatalogLocalStorage<StorageData>({ key: autoSaveKey })}
                       restoreOnRender={restoreOnRender}
                       onRestore={handleRestoreConcept}
                       confirmMessage={restoreConfirmMessage}

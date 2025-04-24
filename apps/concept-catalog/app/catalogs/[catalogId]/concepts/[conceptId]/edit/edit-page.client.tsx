@@ -6,7 +6,7 @@ import ConceptForm from '../../../../../../components/concept-form';
 import { updateConcept } from '../../../../../actions/concept/actions';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { ButtonBar, ConfirmModal, LinkButton, Snackbar } from '@catalog-frontend/ui';
+import { Button, ButtonBar, ConfirmModal, LinkButton, Snackbar } from '@catalog-frontend/ui';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 export const EditPage = ({
@@ -23,8 +23,7 @@ export const EditPage = ({
   const searchParams = useSearchParams();
   const [autoSave, setAutoSave] = useState(hasChangeRequests ? false : true);
   const [showSnackbar, setShowSnackbar] = useState(false);
-
-  const created = searchParams.get('created');
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   const handleUpdate = async (values: Concept) => {
     return await updateConcept(catalogId.toString(), concept, values);
@@ -35,11 +34,11 @@ export const EditPage = ({
   };
 
   const handleCancel = () => {
-    router.replace(`/catalogs/${catalogId}/concepts`);
+    router.replace(`/catalogs/${catalogId}/concepts/${concept.id}`);
   };
 
   useEffect(() => {
-    if (created === 'true') {
+    if (searchParams.get('created') === 'true') {
       setShowSnackbar(true);
 
       // Remove the param and update the URL shallowly
@@ -50,10 +49,18 @@ export const EditPage = ({
 
       window.history.replaceState(null, '', newUrl);
     }
-  }, [created, pathname]);
+  }, [searchParams, pathname]);
 
   return (
     <>
+    {showCancelConfirm && (
+        <ConfirmModal
+          title={localization.confirm.cancelForm.title}
+          content={localization.confirm.cancelForm.message}
+          onSuccess={() => router.replace(`/catalogs/${catalogId}/concepts`)}
+          onCancel={() => setShowCancelConfirm(false)}
+        />
+      )}
       {hasChangeRequests ? (
         <ConfirmModal
           title={localization.changeRequest.changeRequest}
@@ -64,19 +71,20 @@ export const EditPage = ({
       ) : undefined}
       <ButtonBar>
         <ButtonBar.Left>
-          <LinkButton
-            href={`/catalogs/${catalogId}/concepts`}
+          <Button
             variant='tertiary'
             color='second'
             size='sm'
+            onClick={() => setShowCancelConfirm(true)}
           >
             <ArrowLeftIcon />
-            Tilbake til oversikten
-          </LinkButton>
+            {localization.button.backToOverview}
+          </Button>
         </ButtonBar.Left>
       </ButtonBar>
       <ConceptForm
         autoSave={autoSave}
+        autoSaveId={concept.id}
         catalogId={catalogId}
         initialConcept={concept}
         conceptStatuses={conceptStatuses}

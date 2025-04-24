@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react';
 import jsonpatch from 'fast-json-patch';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ButtonBar, ConfirmModal, LinkButton, Snackbar } from '@catalog-frontend/ui';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
+import { Button, ButtonBar, ConfirmModal, LinkButton } from '@catalog-frontend/ui';
 import { Concept, ChangeRequestUpdateBody, JsonPatchOperation } from '@catalog-frontend/types';
 import { localization, pruneEmptyProperties, updateDefinitionsIfEgendefinert } from '@catalog-frontend/utils';
 import ConceptForm from '../../../../../../components/concept-form';
 import { updateChangeRequestAction } from '../../../../../actions/change-requests/actions';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 export const EditConceptFormClient = ({
   organization,
@@ -24,6 +24,7 @@ export const EditConceptFormClient = ({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [newChangeRequest, setNewChangeRequest] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   const emptyConcept: Concept = originalConcept || {
     id: null,
@@ -61,7 +62,7 @@ export const EditConceptFormClient = ({
   };
 
   const handleCancel = () => {
-    router.replace(`/catalogs/${organization.organizationId}/change-requests`);
+    router.replace(`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}`);
   };
 
   useEffect(() => {
@@ -80,21 +81,31 @@ export const EditConceptFormClient = ({
 
   return (
     <>
+      {showCancelConfirm && (
+        <ConfirmModal
+          title={localization.confirm.cancelForm.title}
+          content={localization.confirm.cancelForm.message}
+          onSuccess={() => router.replace(`/catalogs/${organization.organizationId}/change-requests`)}
+          onCancel={() => setShowCancelConfirm(false)}
+        />
+      )}
       <ButtonBar>
         <ButtonBar.Left>
-          <LinkButton
-            href={`/catalogs/${organization.organizationId}/change-requests`}
+          <Button
             variant='tertiary'
             color='second'
             size='sm'
+            onClick={() => setShowCancelConfirm(true)}
           >
             <ArrowLeftIcon />
-            Tilbake til oversikten
-          </LinkButton>
+            {localization.button.backToOverview}
+          </Button>
         </ButtonBar.Left>
       </ButtonBar>
       <ConceptForm
         afterSubmit={handleAfterSubmit}
+        autoSaveKey='changeRequestForm'
+        autoSaveId={changeRequest.id}
         catalogId={organization.organizationId}
         initialConcept={changeRequestAsConcept}
         conceptStatuses={conceptStatuses}

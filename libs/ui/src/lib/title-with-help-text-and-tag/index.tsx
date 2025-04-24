@@ -36,7 +36,7 @@ export function TitleWithHelpTextAndTag({
           {tagTitle}
         </Tag>
       )}
-      {changed && <span className={styles.changed}>{`(${localization.changed})`.toLowerCase()}</span>}   
+      {changed && <Tag size='sm' color='warning'>{`${localization.changed}`}</Tag>}   
     </div>
   );
 }
