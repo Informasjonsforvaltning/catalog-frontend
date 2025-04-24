@@ -207,6 +207,7 @@ export const nb = {
     send: 'Send inn',
     success: 'OK',
     addUrl: 'Legg til lenke',
+    backToOverview: 'Tilbake til oversikten'
   },
 
   dropdown: {
@@ -261,11 +262,21 @@ export const nb = {
     updateFailed: 'Oppdatering mislyktes. Prøv igjen senere.',
     deleteFailed: 'Kunne ikke slette. Prøv igjen senere.',
     formUnsavedChanges: 'Skjemaet har ulagrede endringer.',
+    youHaveUnsavedChanges: 'Det finnes endringer som ikke har blitt lagret:',
+    wantToRestoreChanges: 'Vil du gjenopprette?',
   },
 
   snackbar: {
     saveSuccessfull: 'Endringene ble lagret.',
-    saveFailed: 'Lagring feilet. Vennligst prøv igjen.'
+    saveFailed: 'Lagring feilet. Vennligst prøv igjen.',
+    restoreSuccessfull: 'Endringene ble gjenopprettet.'
+  },
+
+  confirm: {
+    cancelForm: {
+      title: 'Er du sikker på at du vil forlate skjemaet?',
+      message: 'Eventuelle endringer vil ikke bli lagret.'      
+    }
   },
 
   catalogAdmin: {

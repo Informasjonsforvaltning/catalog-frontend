@@ -183,11 +183,11 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
           const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
           const hasError = (fields: (keyof Dataset)[]) => fields.some((field) => Object.keys(errors).includes(field));
           const handleRestoreDataset = (data: StorageData) => {
-            if (data?.values?.id !== datasetId) {
-              if (!data?.values?.id) {
+            if (data?.id !== datasetId) {
+              if (!data?.id) {
                 return router.push(`/catalogs/${catalogId}/datasets/new?restore=1`);
               }
-              return router.push(`/catalogs/${catalogId}/datasets/${data.values.id}/edit?restore=1`);
+              return router.push(`/catalogs/${catalogId}/datasets/${data.id}/edit?restore=1`);
             }
             setValues(data.values);
           };
@@ -207,6 +207,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                 }}
               >
                 <FormikAutoSaver
+                  id={`${datasetId}`}
                   ref={autoSaveRef}
                   storage={new CatalogLocalStorage<StorageData>({ key: 'datasetForm' })}
                   restoreOnRender={restoreOnRender}

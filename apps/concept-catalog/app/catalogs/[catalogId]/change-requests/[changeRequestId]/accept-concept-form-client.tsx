@@ -134,8 +134,17 @@ export const AcceptConceptFormClient = ({
                   <RejectChangeRequestButton />
                 </>
               )}
-
-              {!(allowApprove || allowEdit) && <>Skrivetilgang kreves for å godta eller avvise.</>}
+              {changeRequest.status === 'OPEN' && allowEdit && (
+                <LinkButton
+                  href={`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}/edit`}
+                  variant='secondary'
+                  color='second'
+                  size='sm'
+                >
+                  {localization.button.edit}
+                </LinkButton>
+              )}
+              {!allowApprove && <>Skrivetilgang kreves for å godta eller avvise.</>}
             </>
           )}
         </div>
@@ -163,21 +172,10 @@ export const AcceptConceptFormClient = ({
             size='sm'
           >
             <ArrowLeftIcon />
-            Tilbake til oversikten
+            {localization.button.backToOverview}
           </LinkButton>
         </ButtonBar.Left>
-        <ButtonBar.Right>
-          {allowEdit && (
-            <LinkButton
-              href={`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}/edit`}
-              variant='secondary'
-              color='second'
-              size='sm'
-            >
-              {localization.button.edit}
-            </LinkButton>
-          )}
-        </ButtonBar.Right>
+        <ButtonBar.Right></ButtonBar.Right>
       </ButtonBar>
       <ConceptForm
         autoSave={false}

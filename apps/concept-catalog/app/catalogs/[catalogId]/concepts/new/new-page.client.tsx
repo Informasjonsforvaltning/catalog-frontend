@@ -1,16 +1,18 @@
 'use client';
 
 import { Concept } from '@catalog-frontend/types';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createConcept } from '../../../../actions/concept/actions';
 import ConceptForm from '../../../../../components/concept-form';
-import { ButtonBar, LinkButton } from '@catalog-frontend/ui';
+import { Button, ButtonBar, ConfirmModal, LinkButton } from '@catalog-frontend/ui';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
+import { localization } from '@catalog-frontend/utils';
 
 export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }) => {
   const router = useRouter();
   const conceptIdRef = useRef<string | undefined>(undefined); // Ref to store the concept id
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   const handleCreate = async (values: Concept) => {
     const conceptId = await createConcept(values, catalogId.toString());
@@ -32,17 +34,25 @@ export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, 
 
   return (
     <>
+      {showCancelConfirm && (
+        <ConfirmModal
+          title={localization.confirm.cancelForm.title}
+          content={localization.confirm.cancelForm.message}
+          onSuccess={handleCancel}
+          onCancel={() => setShowCancelConfirm(false)}
+        />
+      )}
       <ButtonBar>
         <ButtonBar.Left>
-          <LinkButton
-            href={`/catalogs/${catalogId}/concepts`}
+          <Button
             variant='tertiary'
             color='second'
             size='sm'
+            onClick={() => setShowCancelConfirm(true)}
           >
             <ArrowLeftIcon />
-            Tilbake til oversikten
-          </LinkButton>
+            {localization.button.backToOverview}
+          </Button>
         </ButtonBar.Left>
       </ButtonBar>
       <ConceptForm

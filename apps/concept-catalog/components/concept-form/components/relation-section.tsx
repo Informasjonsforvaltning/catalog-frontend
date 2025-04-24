@@ -277,27 +277,28 @@ export const RelationSection = ({ catalogId, markDirty, readOnly }: RelationSect
           </Table>
         </Fieldset>
       </Box>
-      <Box className={styles.buttonRow}>
-        <RelationModal
-          header={'Ny relasjon'}
-          catalogId={catalogId}
-          trigger={
-            <Button
-              variant='tertiary'
-              color='first'
-              size='sm'
-              disabled={readOnly}
-            >
-              <PlusCircleIcon
-                aria-hidden
-                fontSize='1rem'
-              />
-              Legg til relasjon
-            </Button>
-          }
-          onSucces={(values) => handleChangeRelation(values)}
-        />
-      </Box>
+      {!readOnly && (
+        <Box className={styles.buttonRow}>
+          <RelationModal
+            header={'Ny relasjon'}
+            catalogId={catalogId}
+            trigger={
+              <Button
+                variant='tertiary'
+                color='first'
+                size='sm'
+              >
+                <PlusCircleIcon
+                  aria-hidden
+                  fontSize='1rem'
+                />
+                Legg til relasjon
+              </Button>
+            }
+            onSucces={(values) => handleChangeRelation(values)}
+          />
+        </Box>
+      )}
     </Box>
   );
 };
