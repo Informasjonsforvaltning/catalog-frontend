@@ -60,12 +60,12 @@ export const NewConceptFormClient = ({
         `/catalogs/${organization.organizationId}/change-requests/${changeRequestIdRef.current}/edit?created=true`,
       );
     } else {
-      router.replace(`/catalogs/${organization.organizationId}/change-requests?filter.itemType=suggestionForNewConcept`);
+      window.location.href = `/catalogs/${organization.organizationId}/change-requests?filter.itemType=suggestionForNewConcept`;
     }
   };
 
   const handleCancel = () => {
-    router.replace(`/catalogs/${organization.organizationId}/change-requests?filter.itemType=suggestionForNewConcept`);
+    window.location.href = `/catalogs/${organization.organizationId}/change-requests?filter.itemType=suggestionForNewConcept`;
   };
 
   return (
