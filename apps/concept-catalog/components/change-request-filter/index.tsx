@@ -20,7 +20,7 @@ const ChangeRequestsFilter = ({ itemType, status }: Props) => {
             <Radio.Group
               size='small'
               onChange={itemType.onChange}
-              defaultValue={itemType.options[0].value}
+              defaultValue={itemType.selected}
             >
               {itemType.options.map((option) => (
                 <Radio
