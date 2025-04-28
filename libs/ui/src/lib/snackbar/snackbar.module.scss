@@ -8,6 +8,26 @@
   position: relative;  
   min-width: 200px;
   max-width: 400px;
+  display: flex;
+  align-items: center;
+
+  & > span > div {
+    flex-grow: 1;
+  }
+
+  :global(.fds-alert__content) {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-grow: 1;
+    gap: var(--fds-spacing-4);
+  }
+
+  :global(.fds-btn) {
+    &:hover {
+      background: rgba(0,0,0,0.125);
+    }
+  }
 }
 
 .fadeIn {

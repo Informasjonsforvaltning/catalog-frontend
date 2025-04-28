@@ -413,6 +413,7 @@ export const nb = {
     editTitle: 'Rediger tittel',
     existingContent: 'Eksisterende innhold',
     existingValue: 'Eksisterende {fieldType} på {lang}',
+    needWriteAccess: 'Skrivetilgang kreves for å redigere, godta eller avvise andres endringsforslag.',
     newChangeRequest: 'Nytt endringsforslag',
     noChangeRequestsFound: 'Her var det ingen endringsforslag',
     noHits: 'Ingen treff!',
