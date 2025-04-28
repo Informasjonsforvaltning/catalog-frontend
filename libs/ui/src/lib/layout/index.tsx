@@ -3,6 +3,7 @@
 import { ReactNode } from 'react';
 import { Footer } from '../footer';
 import { Header } from '../header';
+import { AppBar } from '../app-bar';
 import cn from 'classnames';
 
 import './global.css';
@@ -39,7 +40,7 @@ export const Layout = ({
 }: LayoutProps) => {
   return (
     <div className={cn(style.layout, className)}>
-      <Header
+      {/*<Header
         fontColor={fontColor}
         backgroundColor={backgroundColor}
         catalogAdminUrl={catalogAdminUrl}
@@ -47,7 +48,8 @@ export const Layout = ({
         adminGuiBaseUrl={adminGuiBaseUrl}
         fdkBaseUrl={fdkBaseUrl}
         termsOfUseUrl={termsOfUseUrl}
-      />
+      />*/}
+      <AppBar />
       <main className={style.main}>
         {/* <ErrorBoundary
           fdkRegistrationBaseUrl={fdkRegistrationBaseUrl}
