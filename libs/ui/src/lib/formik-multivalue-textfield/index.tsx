@@ -87,7 +87,7 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
           )}
         </Box>
         {readOnly && label && (
-          <Label asChild>
+          <Label asChild size='sm'>
             <div>{label}</div>
           </Label>
         )}
