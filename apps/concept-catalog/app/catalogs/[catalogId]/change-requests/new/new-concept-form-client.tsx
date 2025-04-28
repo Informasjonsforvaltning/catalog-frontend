@@ -60,12 +60,12 @@ export const NewConceptFormClient = ({
         `/catalogs/${organization.organizationId}/change-requests/${changeRequestIdRef.current}/edit?created=true`,
       );
     } else {
-      router.replace(`/catalogs/${organization.organizationId}/change-requests`);
+      router.replace(`/catalogs/${organization.organizationId}/change-requests?filter.itemType=suggestionForNewConcept`);
     }
   };
 
   const handleCancel = () => {
-    router.replace(`/catalogs/${organization.organizationId}/change-requests`);
+    router.replace(`/catalogs/${organization.organizationId}/change-requests?filter.itemType=suggestionForNewConcept`);
   };
 
   return (
@@ -84,6 +84,7 @@ export const NewConceptFormClient = ({
             variant='tertiary'
             color='second'
             size='sm'
+            onClick={handleCancel}
           >
             <ArrowLeftIcon />
             {localization.button.backToOverview}
