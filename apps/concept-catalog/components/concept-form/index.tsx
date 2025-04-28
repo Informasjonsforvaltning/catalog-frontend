@@ -492,7 +492,7 @@ const ConceptForm = ({
                   <Snackbar.Item
                     severity={snackbarSeverity}
                     fadeIn={snackbarFadeIn}
-                    onClick={() => {
+                    onClose={() => {
                       setShowSnackbar(false);
                     }}
                   >
