@@ -3,7 +3,8 @@
 import React, { Children, MouseEventHandler, ReactNode } from 'react';
 import styles from './snackbar.module.scss';
 import classNames from 'classnames';
-import { Alert } from '@digdir/designsystemet-react';
+import { Alert, Button } from '@digdir/designsystemet-react';
+import { XMarkIcon } from '@navikt/aksel-icons';
 
 type SnackbarProps = {
   children: ReactNode;
@@ -14,19 +15,19 @@ type SnackbarItemProps = {
   fadeIn?: boolean;
   children: ReactNode;
   severity?: 'success' | 'danger' | 'info' | 'warning';
-  onClick?: MouseEventHandler<HTMLDivElement>;
+  onClose?: MouseEventHandler<HTMLButtonElement>;
 };
 
-const SnackbarItem = ({ children, fadeIn = true, severity = 'info', onClick }: SnackbarItemProps) => {
+const SnackbarItem = ({ children, fadeIn = true, severity = 'info', onClose }: SnackbarItemProps) => {
   return (
-    <Alert
-      className={classNames(styles.snackbaItem, ...(fadeIn ? [styles.fadeIn] : []))}
-      size='sm'
-      severity={severity}
-      onClick={onClick}
-    >
-      {children}
-    </Alert>
+    
+      <Alert className={classNames(styles.snackbarItem, ...(fadeIn ? [styles.fadeIn] : []))}     
+        size='sm'
+        severity={severity}
+      >
+        <div>{children}</div>
+        <Button  size='sm' variant='tertiary' onClick={onClose}><XMarkIcon fontSize='1.5rem' /></Button>        
+      </Alert>
   );
 };
 

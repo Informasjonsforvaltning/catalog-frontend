@@ -9,7 +9,6 @@ import ConceptForm from '../../../../../components/concept-form';
 import { getTranslatedStatus } from '../../../../../utils/change-request';
 import { acceptChangeRequestAction, rejectChangeRequestAction } from '../../../../actions/change-requests/actions';
 import { usePathname, useSearchParams } from 'next/navigation';
-import classNames from 'classnames';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 export const AcceptConceptFormClient = ({
@@ -53,20 +52,6 @@ export const AcceptConceptFormClient = ({
         }
       }
     };
-
-    useEffect(() => {
-      if (searchParams.get('saved') === 'true') {
-        setSaved(true);
-
-        // Remove the param and update the URL shallowly
-        const newParams = new URLSearchParams(searchParams.toString());
-        newParams.delete('saved');
-
-        const newUrl = newParams.toString().length > 0 ? `${pathname}?${newParams.toString()}` : pathname;
-
-        window.history.replaceState(null, '', newUrl);
-      }
-    }, [searchParams, pathname]);
 
     return (
       <Button
@@ -144,7 +129,7 @@ export const AcceptConceptFormClient = ({
                   {localization.button.edit}
                 </LinkButton>
               )}
-              {!allowApprove && <>Skrivetilgang kreves for å godta eller avvise.</>}
+              {!allowApprove && !allowEdit && <>{localization.changeRequest.needWriteAccess}</>}
             </>
           )}
         </div>
@@ -160,6 +145,20 @@ export const AcceptConceptFormClient = ({
       </div>
     );
   };
+
+  useEffect(() => {
+    if (searchParams.get('saved') === 'true') {
+      setSaved(true);
+
+      // Remove the param and update the URL shallowly
+      const newParams = new URLSearchParams(searchParams.toString());
+      newParams.delete('saved');
+
+      const newUrl = newParams.toString().length > 0 ? `${pathname}?${newParams.toString()}` : pathname;
+
+      window.history.replaceState(null, '', newUrl);
+    }
+  }, [searchParams, pathname]);
 
   return (
     <>
@@ -195,7 +194,7 @@ export const AcceptConceptFormClient = ({
         <Snackbar>
           <Snackbar.Item
             severity={snackbarSeverity}
-            onClick={() => {
+            onClose={() => {
               setShowSnackbar(false);
             }}
           >

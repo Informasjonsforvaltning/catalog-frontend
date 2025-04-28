@@ -285,14 +285,14 @@ const ConceptForm = ({
 
               // Discard stored data
               autoSaveRef.current?.discard();
-
-              setSubmitting(false);
+                            
               if (afterSubmit) {
                 afterSubmit();
-              }
-            } catch {
-              setSubmitting(false);
+              }              
+            } catch {              
               showSnackbarMessage({ message: localization.snackbar.saveFailed, severity: 'danger' });
+            } finally {
+              setSubmitting(false);
             }
           }
         }}
