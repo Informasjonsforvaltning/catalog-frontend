@@ -1,4 +1,11 @@
-import { Concept, UnionRelation, SearchConceptQuery, Search, RelatedConcept, RelationTypeEnum } from '@catalog-frontend/types';
+import {
+  Concept,
+  UnionRelation,
+  SearchConceptQuery,
+  Search,
+  RelatedConcept,
+  RelationTypeEnum,
+} from '@catalog-frontend/types';
 import { searchConceptsByUri } from '../../search/api';
 import { getUniqueConceptIdsFromUris, isObjectNullUndefinedEmpty } from '@catalog-frontend/utils';
 import { Operation } from 'fast-json-patch';
@@ -101,7 +108,9 @@ export const getPublishedConceptRelations = (concept: Concept): UnionRelation[] 
 
   if (concept.erstattesAv) {
     conceptRelations.push(
-      ...concept.erstattesAv.map((uri): UnionRelation => ({ relatertBegrep: uri, relasjon: RelationTypeEnum.ERSTATTES_AV })),
+      ...concept.erstattesAv.map(
+        (uri): UnionRelation => ({ relatertBegrep: uri, relasjon: RelationTypeEnum.ERSTATTES_AV }),
+      ),
     );
   }
 
@@ -222,10 +231,16 @@ export const getUnpublishedConceptRelations = (concept: Concept): UnionRelation[
   if (concept.internSeOgså) {
     if (Array.isArray(concept.internSeOgså)) {
       internalConceptRelations.push(
-        ...concept.internSeOgså.map((uri): UnionRelation => ({ relatertBegrep: uri, internal: true, relasjon: RelationTypeEnum.SE_OGSÅ })),
+        ...concept.internSeOgså.map(
+          (uri): UnionRelation => ({ relatertBegrep: uri, internal: true, relasjon: RelationTypeEnum.SE_OGSÅ }),
+        ),
       );
     } else {
-      internalConceptRelations.push({ relatertBegrep: concept.internSeOgså, internal: true, relasjon: RelationTypeEnum.SE_OGSÅ });
+      internalConceptRelations.push({
+        relatertBegrep: concept.internSeOgså,
+        internal: true,
+        relasjon: RelationTypeEnum.SE_OGSÅ,
+      });
     }
   }
 

@@ -39,8 +39,8 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
       `${session.accessToken}`,
     )
       .then((response) => {
-        if(response.status === 404) {
-          return redirect(`/notfound`, RedirectType.replace);            
+        if (response.status === 404) {
+          return redirect(`/notfound`, RedirectType.replace);
         }
         return response.json();
       })
@@ -100,7 +100,8 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
     );
 
     const allowApprove = hasWritePermission;
-    const allowEdit = hasWritePermission || (changeRequest.proposedBy && session.user.id === changeRequest.proposedBy.id);
+    const allowEdit =
+      hasWritePermission || (changeRequest.proposedBy && session.user.id === changeRequest.proposedBy.id);
 
     return (
       <>

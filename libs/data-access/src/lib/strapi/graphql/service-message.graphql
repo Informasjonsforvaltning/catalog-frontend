@@ -39,7 +39,7 @@ query GetServiceMessage($id: ID!) {
     localizations {
       title
       short_description
-      description          
+      description
     }
   }
 }

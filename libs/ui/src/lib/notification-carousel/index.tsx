@@ -10,7 +10,11 @@ export type NotificationCarouselProps = {
   interval?: number;
 };
 
-export const NotificationCarousel = ({ controlsPosition = 'right', notifications, interval = 10000 }: NotificationCarouselProps) => {
+export const NotificationCarousel = ({
+  controlsPosition = 'right',
+  notifications,
+  interval = 10000,
+}: NotificationCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -48,7 +52,7 @@ export const NotificationCarousel = ({ controlsPosition = 'right', notifications
   );
 
   useEffect(() => {
-    if(notifications.length > 1) {
+    if (notifications.length > 1) {
       const timer = setInterval(nextNotification, interval);
       return () => clearInterval(timer); // Cleanup on unmount
     }
@@ -56,9 +60,7 @@ export const NotificationCarousel = ({ controlsPosition = 'right', notifications
 
   return (
     <div className={styles.carouselContainer}>
-      {notifications.length > 1 && controlsPosition === 'left' && (
-        <Controls />
-      )}
+      {notifications.length > 1 && controlsPosition === 'left' && <Controls />}
       <div
         className={styles.carouselNotification}
         style={{
@@ -68,9 +70,7 @@ export const NotificationCarousel = ({ controlsPosition = 'right', notifications
       >
         {notifications[currentIndex]}
       </div>
-      {notifications.length > 1 && controlsPosition === 'right' && (
-        <Controls />
-      )}
+      {notifications.length > 1 && controlsPosition === 'right' && <Controls />}
     </div>
   );
 };

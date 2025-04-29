@@ -5,11 +5,9 @@ import { NextRequest } from 'next/server';
 export const POST = async (req: NextRequest, props) => {
   const params = await props.params;
 
-  const {
-    catalogId
-  } = params;
+  const { catalogId } = params;
 
-  return await withValidSessionForApi(async (session) => {    
+  return await withValidSessionForApi(async (session) => {
     try {
       const concepts = await req.json();
       const response = await importConcepts(concepts, session?.accessToken);

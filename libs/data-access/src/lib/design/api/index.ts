@@ -30,8 +30,8 @@ export const getBase64DesignLogo = async (catalogId: string, accessToken: string
   try {
     const response = await getDesignLogo(catalogId, accessToken);
     if (response.status !== 200) {
-      if(response.status !== 404) {
-        console.error("Failed to get design logo, status: ", response.status);
+      if (response.status !== 404) {
+        console.error('Failed to get design logo, status: ', response.status);
       }
       return null;
     }

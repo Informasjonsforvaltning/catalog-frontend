@@ -173,7 +173,7 @@ export const useImportConcepts = (catalogId: string) => {
 
       const content = await file.text();
       let parsedText: ConceptImport[] = [];
-      
+
       if (file.type === 'application/json') {
         parsedText = await attemptToParseJsonFile(content);
       } else if (file.type === 'text/csv') {
@@ -187,7 +187,7 @@ export const useImportConcepts = (catalogId: string) => {
           ({
             ...concept,
             ansvarligVirksomhet: { id: catalogId },
-          } as Concept),
+          }) as Concept,
       );
 
       if (
@@ -195,7 +195,10 @@ export const useImportConcepts = (catalogId: string) => {
           `Du er i ferd med å importere ${concepts.length} begreper. Dette vil opprette nye begreper i katalogen. Fortsette?`,
         )
       ) {
-        const response = await fetch(`/api/catalogs/${catalogId}/concepts/import`, { method: 'POST', body: JSON.stringify(concepts) });
+        const response = await fetch(`/api/catalogs/${catalogId}/concepts/import`, {
+          method: 'POST',
+          body: JSON.stringify(concepts),
+        });
 
         if (response.status === 401) {
           return Promise.reject('Unauthorized');

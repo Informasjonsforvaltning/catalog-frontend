@@ -108,7 +108,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
   relationSubtypeOptions.unshift({
     label: localization.conceptForm.fieldLabel.relationSubtypes['none'],
     value: '',
-  })  
+  });
 
   let internalRelatedConceptOptions: Option[] = [];
   let externalRelatedConceptOptions: Option[] = [];
@@ -309,9 +309,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
                 <TitleWithHelpTextAndTag
                   tagColor='warning'
                   tagTitle={localization.tag.required}
-                  helpText={
-                    localization.conceptForm.helpText.relationLevel[values.relasjon]
-                  }
+                  helpText={localization.conceptForm.helpText.relationLevel[values.relasjon]}
                 >
                   {localization.conceptForm.fieldLabel.relationLevel}
                 </TitleWithHelpTextAndTag>
@@ -340,9 +338,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
             name='inndelingskriterium'
             legend={
               <TitleWithHelpTextAndTag
-                helpText={
-                  localization.conceptForm.helpText.devisionCriterion[values.relasjon]
-                }
+                helpText={localization.conceptForm.helpText.devisionCriterion[values.relasjon]}
                 tagTitle={localization.tag.recommended}
                 tagColor='info'
               >

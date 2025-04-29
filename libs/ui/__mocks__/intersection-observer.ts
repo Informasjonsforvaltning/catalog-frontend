@@ -1,4 +1,4 @@
 const intersectionObserverMock = () => ({
-    observe: () => null
-})
+  observe: () => null,
+});
 window.IntersectionObserver = jest.fn().mockImplementation(intersectionObserverMock);

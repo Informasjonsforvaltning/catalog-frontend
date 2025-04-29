@@ -10,12 +10,12 @@ interface LocaleStrings extends LocalizedStringsMethods {
 }
 
 export const localization: LocaleStrings = new LocalizedStrings({
-  nb: { 
-    ...nb, 
-    conceptHelptexts: { ...conceptHelptextsNb }, 
-    conceptForm: { ...conceptFormNb },    
+  nb: {
+    ...nb,
+    conceptHelptexts: { ...conceptHelptextsNb },
+    conceptForm: { ...conceptFormNb },
     datasetForm: { ...datasetFormNb },
-    dataServiceForm: { ...dataServiceFormNb }, 
+    dataServiceForm: { ...dataServiceFormNb },
   },
 });
 

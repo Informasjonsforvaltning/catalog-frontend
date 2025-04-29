@@ -9,7 +9,7 @@ import type { StorageData } from '@catalog-frontend/types';
 
 export type FormikAutoSaverProps = {
   id?: string;
-  storage: DataStorage<StorageData>;  
+  storage: DataStorage<StorageData>;
   restoreOnRender?: boolean;
   onRestore: (data: StorageData) => void;
   confirmMessage: (data: StorageData) => ReactNode;

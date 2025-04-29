@@ -6,7 +6,7 @@ import styles from './style.module.css';
 export type SelectOption = {
   label: string;
   value: string;
-}
+};
 
 export const Select = (props: NativeSelectProps) => {
   return (

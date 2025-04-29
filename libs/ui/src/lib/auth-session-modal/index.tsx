@@ -11,25 +11,29 @@ type AuthSessionModalProps = {
   storageKey?: string;
 };
 
-export const AuthSessionModal = ({ validatePath = '/api/auth/validate', signInPath = '/auth/signin', storageKey }: AuthSessionModalProps) => {
+export const AuthSessionModal = ({
+  validatePath = '/api/auth/validate',
+  signInPath = '/auth/signin',
+  storageKey,
+}: AuthSessionModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const pathName = usePathname();
   const router = useRouter();
-  
+
   const storage = storageKey ? new LocalDataStorage<any>({ key: storageKey }) : undefined;
   const [hasStorageData, setHasStorageData] = useState(false);
-  
+
   const validateAuth = async () => {
     const res = await fetch(validatePath);
     return res.status === 200;
   };
 
   const handleLoginClick = () => {
-    if(pathName.includes(signInPath)) {
-      return window.location.href = signInPath;
+    if (pathName.includes(signInPath)) {
+      return (window.location.href = signInPath);
     } else {
       return router.push(`${signInPath}?callbackUrl=${window.location.href}`);
-    }    
+    }
   };
 
   const handleCancelClick = () => {
@@ -41,11 +45,11 @@ export const AuthSessionModal = ({ validatePath = '/api/auth/validate', signInPa
 
     const interval = setInterval(() => {
       validateAuth().then((valid) => {
-        if(!valid) {
+        if (!valid) {
           modalRef.current?.showModal();
           clearInterval(interval);
         }
-      })
+      });
     }, 5000); // 5 seconds
 
     return () => clearInterval(interval);

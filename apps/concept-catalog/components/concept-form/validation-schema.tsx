@@ -147,13 +147,12 @@ export const definitionSchema = (required) =>
 
 export const relationSchema = Yup.object().shape({
   relasjon: Yup.string().required().label(localization.conceptForm.fieldLabel.relation),
-  relasjonsType: Yup.string()
-    .when('relasjon', (relasjon) => {
-      if (`${relasjon}` === RelationTypeEnum.PARTITIV || `${relasjon}` === RelationTypeEnum.GENERISK) {
-        return Yup.string().required().label(localization.conceptForm.fieldLabel.relationLevel);
-      }
-      return Yup.string().nullable().notRequired().label(localization.conceptForm.fieldLabel.relationRole);
-    }),
+  relasjonsType: Yup.string().when('relasjon', (relasjon) => {
+    if (`${relasjon}` === RelationTypeEnum.PARTITIV || `${relasjon}` === RelationTypeEnum.GENERISK) {
+      return Yup.string().required().label(localization.conceptForm.fieldLabel.relationLevel);
+    }
+    return Yup.string().nullable().notRequired().label(localization.conceptForm.fieldLabel.relationRole);
+  }),
   relatertBegrep: Yup.string().required().label(localization.conceptForm.fieldLabel.relatedConcept),
 });
 
@@ -286,10 +285,14 @@ export const conceptSchema = ({ baseUri, required }) =>
     versjonsnr: Yup.object()
       .test({
         async test(value) {
-          if(required) {
+          if (required) {
             if (this.parent.id) {
               const revisions = (
-                await getRevisions({ baseUri, catalogId: this.parent.ansvarligVirksomhet.id, conceptId: this.parent.id })
+                await getRevisions({
+                  baseUri,
+                  catalogId: this.parent.ansvarligVirksomhet.id,
+                  conceptId: this.parent.id,
+                })
               )
                 .filter((rev) => rev.id !== this.parent.id)
                 .sort((a, b) => -compareVersion(a.versjonsnr, b.versjonsnr));

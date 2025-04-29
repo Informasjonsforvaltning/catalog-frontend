@@ -10,7 +10,7 @@ type Props = {
   tagSize?: TagSize;
   helpText?: string;
   changed?: boolean;
-}
+};
 
 type TagColor = 'first' | 'second' | 'success' | 'danger' | 'third' | 'neutral' | 'info' | 'warning';
 
@@ -22,11 +22,11 @@ export function TitleWithHelpTextAndTag({
   tagColor = 'warning',
   tagSize = 'sm',
   helpText,
-  changed = false
+  changed = false,
 }: Props) {
   return (
-    <div className={styles.container} >
-      {title}      
+    <div className={styles.container}>
+      {title}
       {helpText && <HelpMarkdown aria-label={`${localization.helpWithCompleting}`}>{helpText}</HelpMarkdown>}
       {tagTitle && (
         <Tag
@@ -36,7 +36,12 @@ export function TitleWithHelpTextAndTag({
           {tagTitle}
         </Tag>
       )}
-      {changed && <Tag size='sm' color='warning'>{`${localization.changed}`}</Tag>}   
+      {changed && (
+        <Tag
+          size='sm'
+          color='warning'
+        >{`${localization.changed}`}</Tag>
+      )}
     </div>
   );
 }

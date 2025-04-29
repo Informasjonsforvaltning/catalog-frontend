@@ -12,10 +12,7 @@ const KeycloakSignin = () => {
   const callbackUrl = searchParams.get('callbackUrl');
 
   useEffect(() => {
-    signIn(
-      'keycloak',
-      callbackUrl ? { callbackUrl } : { callbackUrl: pathName.includes('auth') ? '/' : undefined },
-    );
+    signIn('keycloak', callbackUrl ? { callbackUrl } : { callbackUrl: pathName.includes('auth') ? '/' : undefined });
   }, []);
 
   return <Spinner title={localization.auth.loggingIn} />;

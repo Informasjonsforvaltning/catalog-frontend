@@ -15,8 +15,7 @@ export const CodeListCodeLinks = ({ codeList, codes, catalogId, lang = 'nb' }: C
     return (
       <ul className={styles.list}>
         {codes.map((codeId, index) => {
-          const path = getPath(convertCodeListToTreeNodes(codeList?.codes), codeId)
-            ;
+          const path = getPath(convertCodeListToTreeNodes(codeList?.codes), codeId);
           return (
             <li key={`code-${index}`}>
               {index > 0 && ', '}
@@ -26,7 +25,6 @@ export const CodeListCodeLinks = ({ codeList, codes, catalogId, lang = 'nb' }: C
               >
                 {getTranslateText(codeList.codes?.find((c) => c.id === codeId)?.name, lang)}
               </Link>
-              
             </li>
           );
         })}
