@@ -1,19 +1,19 @@
 'use client';
 
-import { Concept, ChangeRequestUpdateBody, JsonPatchOperation } from '@catalog-frontend/types';
+import { useRef, useState } from 'react';
+import jsonpatch from 'fast-json-patch';
+import { useRouter } from 'next/navigation';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
+import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
+import type { Concept, ChangeRequestUpdateBody, JsonPatchOperation, StorageData } from '@catalog-frontend/types';
 import {
   LocalDataStorage,
   localization,
   pruneEmptyProperties,
   updateDefinitionsIfEgendefinert,
 } from '@catalog-frontend/utils';
-import jsonpatch from 'fast-json-patch';
-import { useRouter } from 'next/navigation';
 import ConceptForm from '../../../../../components/concept-form';
 import { createChangeRequestAction } from '../../../../actions/change-requests/actions';
-import { useRef, useState } from 'react';
-import { Button, ButtonBar, ConfirmModal, StorageData } from '@catalog-frontend/ui';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 export const NewConceptFormClient = ({
   organization,
@@ -97,7 +97,7 @@ export const NewConceptFormClient = ({
           size='sm'
           onClick={handleCancel}
         >
-          <ArrowLeftIcon />
+          <ArrowLeftIcon fontSize='1.25em' />
           {localization.button.backToOverview}
         </Button>
       </ButtonBar>

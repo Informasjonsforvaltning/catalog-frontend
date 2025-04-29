@@ -7,7 +7,7 @@ import {
   trimObjectWhitespace,
 } from '@catalog-frontend/utils';
 import { Alert, Button, Paragraph, Spinner, Switch } from '@digdir/designsystemet-react';
-import { Dataset, DatasetToBeCreated, ReferenceData, PublicationStatus } from '@catalog-frontend/types';
+import { Dataset, DatasetToBeCreated, ReferenceData, PublicationStatus, StorageData } from '@catalog-frontend/types';
 import {
   FormikAutoSaver,
   FormikAutoSaverRef,
@@ -15,7 +15,6 @@ import {
   HelpMarkdown,
   NotificationCarousel,
   StickyFooterBar,
-  StorageData,
   useWarnIfUnsavedChanges,
 } from '@catalog-frontend/ui';
 import { Formik, Form, FormikProps } from 'formik';

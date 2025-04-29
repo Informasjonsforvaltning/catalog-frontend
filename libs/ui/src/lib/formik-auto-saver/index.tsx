@@ -5,12 +5,7 @@ import { useFormikContext } from 'formik';
 import { Button, Modal } from '@digdir/designsystemet-react';
 import { isEqual } from 'lodash';
 import { DataStorage, localization } from '@catalog-frontend/utils';
-
-export type StorageData = {
-  id?: string;
-  values: any;
-  lastChanged: string;
-};
+import type { StorageData } from '@catalog-frontend/types';
 
 export type FormikAutoSaverProps = {
   id?: string;

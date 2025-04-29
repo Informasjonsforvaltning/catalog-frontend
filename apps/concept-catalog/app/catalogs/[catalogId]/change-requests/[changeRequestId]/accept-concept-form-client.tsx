@@ -177,7 +177,7 @@ export const AcceptConceptFormClient = ({
           size='sm'
           onClick={handleGotoOverview}
         >
-          <ArrowLeftIcon />
+          <ArrowLeftIcon fontSize='1.25em' />
           {localization.button.backToOverview}
         </Button>
       </ButtonBar>

@@ -6,10 +6,9 @@ import { Formik, Form, FormikProps } from 'formik';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Alert, Checkbox, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { DataStorage, formatISO, getTranslateText, localization } from '@catalog-frontend/utils';
-import { CodeListsResult, Concept, FieldsResult, ReferenceDataCode, UsersResult } from '@catalog-frontend/types';
+import type { CodeListsResult, Concept, FieldsResult, ReferenceDataCode, StorageData, UsersResult } from '@catalog-frontend/types';
 import {
   Button,
-  StorageData,
   FormLayout,
   FormikAutoSaver,
   FormikAutoSaverRef,

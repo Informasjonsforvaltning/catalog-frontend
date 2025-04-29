@@ -1,13 +1,13 @@
 'use client';
 
-import { Concept } from '@catalog-frontend/types';
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
+import type { Concept, StorageData } from '@catalog-frontend/types';
+import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
+import { LocalDataStorage, localization } from '@catalog-frontend/utils';
 import { createConcept } from '../../../../actions/concept/actions';
 import ConceptForm from '../../../../../components/concept-form';
-import { Button, ButtonBar, ConfirmModal, LinkButton, StorageData } from '@catalog-frontend/ui';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { LocalDataStorage, localization } from '@catalog-frontend/utils';
 
 export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }) => {
   const router = useRouter();
@@ -52,7 +52,7 @@ export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, 
           size='sm'
           onClick={() => setShowCancelConfirm(true)}
         >
-          <ArrowLeftIcon />
+          <ArrowLeftIcon fontSize='1.25em' />
           {localization.button.backToOverview}
         </Button>
       </ButtonBar>
