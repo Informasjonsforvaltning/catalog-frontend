@@ -21,6 +21,12 @@ git clone https://github.com/Informasjonsforvaltning/catalog-frontend.git --recu
 cd catalog-frontend
 ```
 
+Create .env.local from .env.local.example
+
+```bash
+cp .env.local.example .env.local
+```
+
 Install dependencies:
 
 ```bash
@@ -35,3 +41,8 @@ yarn start concept-catalog
 ```
 
 Go to http://localhost:4200
+
+> ⚠️ **Note:**
+Every catalog app requires a catalog id in the url path. When no catalog id is defined the user is redirected to
+the catalog portal app (https://catalog-portal.staging.fellesdatakatalog.digdir.no). Select your catalog and replace the domain
+with http://localhost:4200.
