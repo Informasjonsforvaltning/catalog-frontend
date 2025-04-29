@@ -45,13 +45,18 @@ const ChangeRequestEditPage = withReadProtectedPage(
         throw error;
       });
 
-      if (!changeRequest || changeRequest.catalogId !== catalogId) {
-            return redirect(`/notfound`, RedirectType.replace);
-          }
+    if (!changeRequest || changeRequest.catalogId !== catalogId) {
+      return redirect(`/notfound`, RedirectType.replace);
+    }
 
-     if(!(hasWritePermission || changeRequest.proposedBy && session.user.id === changeRequest.proposedBy.id)) {
-        return redirect(`/catalogs/${catalogId}/change-requests/${changeRequest.id}`, RedirectType.replace);
-     }
+    if (
+      !(
+        changeRequest.status === 'OPEN' &&
+        (hasWritePermission || (changeRequest.proposedBy && session.user.id === changeRequest.proposedBy.id))
+      )
+    ) {
+      return redirect(`/catalogs/${catalogId}/change-requests/${changeRequest.id}`, RedirectType.replace);
+    }
 
     const originalConcept =
       changeRequest.conceptId && validUUID(changeRequest.conceptId)

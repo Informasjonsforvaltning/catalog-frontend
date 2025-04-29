@@ -2,7 +2,6 @@
 
 import { useRef, useState } from 'react';
 import jsonpatch from 'fast-json-patch';
-import { useRouter } from 'next/navigation';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
 import type { Concept, ChangeRequestUpdateBody, JsonPatchOperation, StorageData } from '@catalog-frontend/types';
@@ -24,7 +23,6 @@ export const NewConceptFormClient = ({
   fieldsResult,
   usersResult,
 }) => {
-  const router = useRouter();
   const changeRequestIdRef = useRef<string | undefined>(undefined); // Ref to store the change-request id
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
@@ -76,7 +74,7 @@ export const NewConceptFormClient = ({
   const handleCancel = () => {
     dataStorage.delete();
     window.location.replace(
-      `/catalogs/${organization.organizationId}/change-requests?filter.itemType=suggestionForNewConcept`,
+      `/catalogs/${organization.organizationId}/change-requests${!originalConcept ? '?filter.itemType=suggestionForNewConcept' : ''}`,
     );
   };
 
