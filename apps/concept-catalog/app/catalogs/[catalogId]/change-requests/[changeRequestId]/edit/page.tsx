@@ -1,3 +1,4 @@
+import { redirect, RedirectType } from 'next/navigation';
 import {
   getAllCodeLists,
   getChangeRequest,
@@ -23,7 +24,7 @@ import { EditConceptFormClient } from './edit-concept-form-client';
 
 const ChangeRequestEditPage = withReadProtectedPage(
   ({ catalogId, changeRequestId }) => `/catalogs/${catalogId}/change-requests/${changeRequestId}/edit`,
-  async ({ catalogId, changeRequestId, session }) => {
+  async ({ catalogId, changeRequestId, session, hasWritePermission }) => {
     const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
 
     const baselineConcept: Concept = {
@@ -43,6 +44,14 @@ const ChangeRequestEditPage = withReadProtectedPage(
       .catch((error) => {
         throw error;
       });
+
+      if (!changeRequest || changeRequest.catalogId !== catalogId) {
+            return redirect(`/notfound`, RedirectType.replace);
+          }
+
+     if(!(hasWritePermission || changeRequest.proposedBy && session.user.id === changeRequest.proposedBy.id)) {
+        return redirect(`/catalogs/${catalogId}/change-requests/${changeRequest.id}`, RedirectType.replace);
+     }
 
     const originalConcept =
       changeRequest.conceptId && validUUID(changeRequest.conceptId)
