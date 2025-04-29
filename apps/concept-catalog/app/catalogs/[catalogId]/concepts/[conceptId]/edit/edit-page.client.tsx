@@ -42,7 +42,7 @@ export const EditPage = ({
   const handleGotoOverview = () => {
     dataStorage.delete();
     window.location.replace(`/catalogs/${catalogId}/concepts`);
-  }
+  };
 
   useEffect(() => {
     if (searchParams.get('created') === 'true') {
@@ -60,7 +60,7 @@ export const EditPage = ({
 
   return (
     <>
-    {showCancelConfirm && (
+      {showCancelConfirm && (
         <ConfirmModal
           title={localization.confirm.cancelForm.title}
           content={localization.confirm.cancelForm.message}
@@ -77,17 +77,15 @@ export const EditPage = ({
         />
       ) : undefined}
       <ButtonBar>
-        <ButtonBar.Left>
-          <Button
-            variant='tertiary'
-            color='second'
-            size='sm'
-            onClick={() => setShowCancelConfirm(true)}
-          >
-            <ArrowLeftIcon />
-            {localization.button.backToOverview}
-          </Button>
-        </ButtonBar.Left>
+        <Button
+          variant='tertiary'
+          color='second'
+          size='sm'
+          onClick={() => setShowCancelConfirm(true)}
+        >
+          <ArrowLeftIcon />
+          {localization.button.backToOverview}
+        </Button>
       </ButtonBar>
       <ConceptForm
         autoSave={autoSave}
@@ -101,7 +99,7 @@ export const EditPage = ({
         usersResult={usersResult}
         onSubmit={handleUpdate}
         onCancel={handleCancel}
-        showSnackbarSuccessOnInit={showSnackbar}        
+        showSnackbarSuccessOnInit={showSnackbar}
       />
     </>
   );

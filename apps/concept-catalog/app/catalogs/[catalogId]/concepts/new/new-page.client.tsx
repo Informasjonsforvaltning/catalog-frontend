@@ -15,7 +15,7 @@ export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, 
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   const dataStorage = new LocalDataStorage<StorageData>({ key: 'conceptForm' });
-  
+
   const handleCreate = async (values: Concept) => {
     const conceptId = await createConcept(values, catalogId.toString());
     conceptIdRef.current = conceptId;
@@ -46,17 +46,15 @@ export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, 
         />
       )}
       <ButtonBar>
-        <ButtonBar.Left>
-          <Button
-            variant='tertiary'
-            color='second'
-            size='sm'
-            onClick={() => setShowCancelConfirm(true)}
-          >
-            <ArrowLeftIcon />
-            {localization.button.backToOverview}
-          </Button>
-        </ButtonBar.Left>
+        <Button
+          variant='tertiary'
+          color='second'
+          size='sm'
+          onClick={() => setShowCancelConfirm(true)}
+        >
+          <ArrowLeftIcon />
+          {localization.button.backToOverview}
+        </Button>
       </ButtonBar>
       <ConceptForm
         afterSubmit={handleAfterSubmit}
