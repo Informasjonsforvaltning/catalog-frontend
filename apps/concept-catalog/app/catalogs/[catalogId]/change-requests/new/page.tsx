@@ -60,7 +60,7 @@ const ChangeRequestOrNew = withReadProtectedPage(
       }
 
       if (existingChangeRequest?.id && existingChangeRequest?.status === 'OPEN') {
-        redirect(`/catalogs/${catalogId}/change-requests/${existingChangeRequest.id}/edit`, RedirectType.replace);
+        redirect(`/catalogs/${catalogId}/change-requests/${existingChangeRequest.id}`, RedirectType.replace);
       }
     }
 

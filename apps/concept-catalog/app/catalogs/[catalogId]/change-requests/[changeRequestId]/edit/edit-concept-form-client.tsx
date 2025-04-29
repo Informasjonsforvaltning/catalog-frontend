@@ -77,7 +77,7 @@ export const EditConceptFormClient = ({
   const handleGotoOverview = () => {
     dataStorage.delete();
     window.location.replace(
-      `/catalogs/${organization.organizationId}/change-requests${!changeRequest.conceptId ? '?filter.itemType=suggestionForNewConcept' : ''}`,
+      `/catalogs/${organization.organizationId}/change-requests${!originalConcept ? '?filter.itemType=suggestionForNewConcept' : ''}`,
     );
   };
 

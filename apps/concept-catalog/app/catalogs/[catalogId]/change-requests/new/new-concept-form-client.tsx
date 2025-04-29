@@ -68,7 +68,7 @@ export const NewConceptFormClient = ({
       );
     } else {
       window.location.replace(
-        `/catalogs/${organization.organizationId}/change-requests?filter.itemType=suggestionForNewConcept`,
+        `/catalogs/${organization.organizationId}/change-requests${!originalConcept ? '?filter.itemType=suggestionForNewConcept' : ''}`,
       );
     }
   };
@@ -95,7 +95,7 @@ export const NewConceptFormClient = ({
           variant='tertiary'
           color='second'
           size='sm'
-          onClick={handleCancel}
+          onClick={() => setShowCancelConfirm(true)}
         >
           <ArrowLeftIcon fontSize='1.25em' />
           {localization.button.backToOverview}
