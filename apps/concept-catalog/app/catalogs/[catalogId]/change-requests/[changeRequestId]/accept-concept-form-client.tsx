@@ -42,7 +42,7 @@ export const AcceptConceptFormClient = ({
   const handleGotoOverview = () => {
     // Use window location to make sure query params are used on page render
     window.location.replace(
-      `/catalogs/${organization.organizationId}/change-requests${!changeRequest.conceptId ? '?filter.itemType=suggestionForNewConcept' : ''}`,
+      `/catalogs/${organization.organizationId}/change-requests${!originalConcept ? '?filter.itemType=suggestionForNewConcept' : ''}`,
     );
   };
 
