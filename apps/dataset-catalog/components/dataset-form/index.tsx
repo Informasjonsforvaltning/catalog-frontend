@@ -1,6 +1,6 @@
 'use client';
 import {
-  CatalogLocalStorage,
+  LocalDataStorage,
   formatISO,
   getTranslateText,
   localization,
@@ -209,7 +209,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                 <FormikAutoSaver
                   id={`${datasetId}`}
                   ref={autoSaveRef}
-                  storage={new CatalogLocalStorage<StorageData>({ key: 'datasetForm' })}
+                  storage={new LocalDataStorage<StorageData>({ key: 'datasetForm' })}
                   restoreOnRender={restoreOnRender}
                   onRestore={handleRestoreDataset}
                   confirmMessage={restoreConfirmMessage}

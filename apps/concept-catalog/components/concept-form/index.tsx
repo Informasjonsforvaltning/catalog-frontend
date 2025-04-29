@@ -1,11 +1,11 @@
 'use client';
 
-import { Dispatch, ReactNode, SetStateAction, useEffect, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { Formik, Form, FormikProps } from 'formik';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Alert, Checkbox, Paragraph, Spinner } from '@digdir/designsystemet-react';
-import { CatalogLocalStorage, formatISO, getTranslateText, localization } from '@catalog-frontend/utils';
+import { DataStorage, formatISO, getTranslateText, localization } from '@catalog-frontend/utils';
 import { CodeListsResult, Concept, FieldsResult, ReferenceDataCode, UsersResult } from '@catalog-frontend/types';
 import {
   Button,
@@ -36,9 +36,9 @@ import { isEqual } from 'lodash';
 
 type Props = {
   afterSubmit?: () => void;
-  autoSave?: boolean;
-  autoSaveKey?: string;
+  autoSave?: boolean;  
   autoSaveId?: string;
+  autoSaveStorage?: DataStorage<StorageData>;
   catalogId: string;
   concept?: Concept;
   conceptStatuses: ReferenceDataCode[];
@@ -84,8 +84,8 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
 const ConceptForm = ({
   afterSubmit,
   autoSave = true,
-  autoSaveKey = 'conceptForm',
   autoSaveId,
+  autoSaveStorage,
   catalogId,
   concept,
   conceptStatuses,
@@ -306,9 +306,9 @@ const ConceptForm = ({
 
             if (data?.id !== autoSaveId) {
               if (!data?.id) {
-                return router.replace(`/catalogs/${catalogId}/${entityType}/new?restore=1`);
+                return window.location.replace(`/catalogs/${catalogId}/${entityType}/new?restore=1`);
               }
-              return router.replace(`/catalogs/${catalogId}/${entityType}/${data.id}/edit?restore=1`);
+              return window.location.replace(`/catalogs/${catalogId}/${entityType}/${data.id}/edit?restore=1`);
             }
 
             setValues(data.values);
@@ -323,11 +323,11 @@ const ConceptForm = ({
             <>
               <div className='container'>
                 <Form>
-                  {autoSave && (
+                  {autoSave && autoSaveStorage && (
                     <FormikAutoSaver
                       ref={autoSaveRef}
                       id={autoSaveId}
-                      storage={new CatalogLocalStorage<StorageData>({ key: autoSaveKey })}
+                      storage={autoSaveStorage}
                       restoreOnRender={restoreOnRender}
                       onRestore={handleRestoreConcept}
                       confirmMessage={restoreConfirmMessage}

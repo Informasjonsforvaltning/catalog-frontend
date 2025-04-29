@@ -5,15 +5,17 @@ import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createConcept } from '../../../../actions/concept/actions';
 import ConceptForm from '../../../../../components/concept-form';
-import { Button, ButtonBar, ConfirmModal, LinkButton } from '@catalog-frontend/ui';
+import { Button, ButtonBar, ConfirmModal, LinkButton, StorageData } from '@catalog-frontend/ui';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { localization } from '@catalog-frontend/utils';
+import { LocalDataStorage, localization } from '@catalog-frontend/utils';
 
 export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }) => {
   const router = useRouter();
   const conceptIdRef = useRef<string | undefined>(undefined); // Ref to store the concept id
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
+  const dataStorage = new LocalDataStorage<StorageData>({ key: 'conceptForm' });
+  
   const handleCreate = async (values: Concept) => {
     const conceptId = await createConcept(values, catalogId.toString());
     conceptIdRef.current = conceptId;
@@ -22,14 +24,15 @@ export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, 
 
   const handleAfterSubmit = () => {
     if (conceptIdRef.current) {
-      router.replace(`/catalogs/${catalogId}/concepts/${conceptIdRef.current}/edit?created=true`);
+      window.location.replace(`/catalogs/${catalogId}/concepts/${conceptIdRef.current}/edit?created=true`);
     } else {
-      router.replace(`/catalogs/${catalogId}/concepts`);
+      window.location.replace(`/catalogs/${catalogId}/concepts`);
     }
   };
 
   const handleCancel = () => {
-    router.replace(`/catalogs/${catalogId}/concepts`);
+    dataStorage.delete();
+    window.location.replace(`/catalogs/${catalogId}/concepts`);
   };
 
   return (
@@ -57,6 +60,7 @@ export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, 
       </ButtonBar>
       <ConceptForm
         afterSubmit={handleAfterSubmit}
+        autoSaveStorage={dataStorage}
         catalogId={catalogId}
         initialConcept={concept}
         conceptStatuses={conceptStatuses}

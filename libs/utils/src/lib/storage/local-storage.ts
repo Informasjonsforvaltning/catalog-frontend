@@ -1,19 +1,19 @@
 
-export interface CatalogStorage<T> {    
+export interface DataStorage<T> {    
     get: () => T | null;
     set: (values: T) => void;
     delete: () => void;
 }
 
-export type CatalogLocalStorageConfig = {
+export type LocalDataStorageConfig = {
     key: string;
 }
 
-export class CatalogLocalStorage<T> implements CatalogStorage<T> {
+export class LocalDataStorage<T> implements DataStorage<T> {
 
     key: string;
 
-    constructor(config: CatalogLocalStorageConfig) {
+    constructor(config: LocalDataStorageConfig) {
         this.key = config.key;
     }
 

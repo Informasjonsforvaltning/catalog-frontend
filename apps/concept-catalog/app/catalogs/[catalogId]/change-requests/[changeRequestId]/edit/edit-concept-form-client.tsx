@@ -4,9 +4,14 @@ import { useEffect, useState } from 'react';
 import jsonpatch from 'fast-json-patch';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { Button, ButtonBar, ConfirmModal, LinkButton } from '@catalog-frontend/ui';
+import { Button, ButtonBar, ConfirmModal, LinkButton, StorageData } from '@catalog-frontend/ui';
 import { Concept, ChangeRequestUpdateBody, JsonPatchOperation } from '@catalog-frontend/types';
-import { localization, pruneEmptyProperties, updateDefinitionsIfEgendefinert } from '@catalog-frontend/utils';
+import {
+  LocalDataStorage,
+  localization,
+  pruneEmptyProperties,
+  updateDefinitionsIfEgendefinert,
+} from '@catalog-frontend/utils';
 import ConceptForm from '../../../../../../components/concept-form';
 import { updateChangeRequestAction } from '../../../../../actions/change-requests/actions';
 
@@ -25,6 +30,8 @@ export const EditConceptFormClient = ({
   const searchParams = useSearchParams();
   const [newChangeRequest, setNewChangeRequest] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+
+  const dataStorage = new LocalDataStorage<StorageData>({ key: 'changeRequestForm' });
 
   const emptyConcept: Concept = originalConcept || {
     id: null,
@@ -57,12 +64,21 @@ export const EditConceptFormClient = ({
 
   const handleAfterSubmit = () => {
     if (!newChangeRequest) {
-      router.replace(`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}?saved=true`);
+      window.location.replace(
+        `/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}?saved=true`,
+      );
     }
   };
 
   const handleCancel = () => {
-    router.replace(`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}`);
+    window.location.replace(`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}`);
+  };
+
+  const handleGotoOverview = () => {
+    dataStorage.delete();
+    window.location.replace(
+      `/catalogs/${organization.organizationId}/change-requests${!changeRequest.conceptId ? '?filter.itemType=suggestionForNewConcept' : ''}`,
+    );
   };
 
   useEffect(() => {
@@ -85,7 +101,7 @@ export const EditConceptFormClient = ({
         <ConfirmModal
           title={localization.confirm.cancelForm.title}
           content={localization.confirm.cancelForm.message}
-          onSuccess={() => router.replace(`/catalogs/${organization.organizationId}/change-requests`)}
+          onSuccess={handleGotoOverview}
           onCancel={() => setShowCancelConfirm(false)}
         />
       )}
@@ -104,8 +120,8 @@ export const EditConceptFormClient = ({
       </ButtonBar>
       <ConceptForm
         afterSubmit={handleAfterSubmit}
-        autoSaveKey='changeRequestForm'
         autoSaveId={changeRequest.id}
+        autoSaveStorage={dataStorage}
         catalogId={organization.organizationId}
         initialConcept={changeRequestAsConcept}
         conceptStatuses={conceptStatuses}

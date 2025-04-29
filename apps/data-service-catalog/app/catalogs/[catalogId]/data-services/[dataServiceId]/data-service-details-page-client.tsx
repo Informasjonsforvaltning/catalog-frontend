@@ -44,7 +44,7 @@ const DataServiceDetailsPageClient = ({
       if (window.confirm(localization.serviceCatalog.form.confirmDelete)) {
         try {
           await deleteDataService(catalogId, dataService?.id);
-          router.replace(`/catalogs/${catalogId}/data-services`);
+          window.location.replace(`/catalogs/${catalogId}/data-services`);
         } catch (error) {
           window.alert(error);
         }

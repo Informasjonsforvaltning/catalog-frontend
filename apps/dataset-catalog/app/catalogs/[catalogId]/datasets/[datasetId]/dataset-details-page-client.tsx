@@ -44,7 +44,7 @@ const DatasetDetailsPageClient = ({
       if (window.confirm(localization.serviceCatalog.form.confirmDelete)) {
         try {
           await deleteDataset(catalogId, dataset.id);
-          router.replace(`/catalogs/${catalogId}/datasets`);
+          window.location.replace(`/catalogs/${catalogId}/datasets`);
         } catch (error) {
           window.alert(error);
         }

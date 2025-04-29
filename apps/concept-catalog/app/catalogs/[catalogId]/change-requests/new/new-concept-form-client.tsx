@@ -1,13 +1,13 @@
 'use client';
 
 import { Concept, ChangeRequestUpdateBody, JsonPatchOperation } from '@catalog-frontend/types';
-import { localization, pruneEmptyProperties, updateDefinitionsIfEgendefinert } from '@catalog-frontend/utils';
+import { LocalDataStorage, localization, pruneEmptyProperties, updateDefinitionsIfEgendefinert } from '@catalog-frontend/utils';
 import jsonpatch from 'fast-json-patch';
 import { useRouter } from 'next/navigation';
 import ConceptForm from '../../../../../components/concept-form';
 import { createChangeRequestAction } from '../../../../actions/change-requests/actions';
 import { useRef, useState } from 'react';
-import { Button, ButtonBar, ConfirmModal, LinkButton } from '@catalog-frontend/ui';
+import { Button, ButtonBar, ConfirmModal, LinkButton, StorageData } from '@catalog-frontend/ui';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 export const NewConceptFormClient = ({
@@ -24,6 +24,8 @@ export const NewConceptFormClient = ({
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   const catalogId = organization.organizationId;
+
+  const dataStorage = new LocalDataStorage<StorageData>({ key: 'changeRequestForm' });
 
   const baselineConcept: Concept = {
     id: null,
@@ -56,16 +58,17 @@ export const NewConceptFormClient = ({
 
   const handleAfterSubmit = () => {
     if (changeRequestIdRef.current) {
-      router.replace(
+      window.location.replace(
         `/catalogs/${organization.organizationId}/change-requests/${changeRequestIdRef.current}/edit?created=true`,
       );
     } else {
-      window.location.href = `/catalogs/${organization.organizationId}/change-requests?filter.itemType=suggestionForNewConcept`;
+      window.location.replace(`/catalogs/${organization.organizationId}/change-requests?filter.itemType=suggestionForNewConcept`);
     }
   };
 
   const handleCancel = () => {
-    window.location.href = `/catalogs/${organization.organizationId}/change-requests?filter.itemType=suggestionForNewConcept`;
+    dataStorage.delete();
+    window.location.replace(`/catalogs/${organization.organizationId}/change-requests?filter.itemType=suggestionForNewConcept`);
   };
 
   return (
@@ -93,7 +96,7 @@ export const NewConceptFormClient = ({
       </ButtonBar>
       <ConceptForm
         afterSubmit={handleAfterSubmit}
-        autoSaveKey='changeRequestForm'
+        autoSaveStorage={dataStorage}
         catalogId={organization.organizationId}
         initialConcept={changeRequestAsConcept}
         conceptStatuses={conceptStatuses}
