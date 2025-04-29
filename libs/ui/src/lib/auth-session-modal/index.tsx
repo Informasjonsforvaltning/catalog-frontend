@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Button, Modal, Paragraph } from '@digdir/designsystemet-react';
-import { CatalogLocalStorage, localization } from '@catalog-frontend/utils';
+import { LocalDataStorage, localization } from '@catalog-frontend/utils';
 import { useRouter, usePathname } from 'next/navigation';
 
 type AuthSessionModalProps = {
@@ -16,7 +16,7 @@ export const AuthSessionModal = ({ validatePath = '/api/auth/validate', signInPa
   const pathName = usePathname();
   const router = useRouter();
   
-  const storage = storageKey ? new CatalogLocalStorage<any>({ key: storageKey }) : undefined;
+  const storage = storageKey ? new LocalDataStorage<any>({ key: storageKey }) : undefined;
   const [hasStorageData, setHasStorageData] = useState(false);
   
   const validateAuth = async () => {

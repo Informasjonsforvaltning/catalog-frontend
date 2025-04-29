@@ -4,7 +4,7 @@ import { forwardRef, ReactNode, useEffect, useImperativeHandle, useRef, useState
 import { useFormikContext } from 'formik';
 import { Button, Modal } from '@digdir/designsystemet-react';
 import { isEqual } from 'lodash';
-import { CatalogStorage, localization } from '@catalog-frontend/utils';
+import { DataStorage, localization } from '@catalog-frontend/utils';
 
 export type StorageData = {
   id?: string;
@@ -14,7 +14,7 @@ export type StorageData = {
 
 export type FormikAutoSaverProps = {
   id?: string;
-  storage: CatalogStorage<StorageData>;  
+  storage: DataStorage<StorageData>;  
   restoreOnRender?: boolean;
   onRestore: (data: StorageData) => void;
   confirmMessage: (data: StorageData) => ReactNode;

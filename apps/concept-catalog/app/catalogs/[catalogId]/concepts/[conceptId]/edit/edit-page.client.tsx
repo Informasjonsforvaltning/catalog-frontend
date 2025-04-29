@@ -1,12 +1,12 @@
 'use client';
 
-import { localization } from '@catalog-frontend/utils';
+import { LocalDataStorage, localization } from '@catalog-frontend/utils';
 import { Concept } from '@catalog-frontend/types';
 import ConceptForm from '../../../../../../components/concept-form';
 import { updateConcept } from '../../../../../actions/concept/actions';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { Button, ButtonBar, ConfirmModal, LinkButton, Snackbar } from '@catalog-frontend/ui';
+import { Button, ButtonBar, ConfirmModal, LinkButton, Snackbar, StorageData } from '@catalog-frontend/ui';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 export const EditPage = ({
@@ -25,6 +25,8 @@ export const EditPage = ({
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
+  const dataStorage = new LocalDataStorage<StorageData>({ key: 'conceptForm' });
+
   const handleUpdate = async (values: Concept) => {
     return await updateConcept(catalogId.toString(), concept, values);
   };
@@ -34,8 +36,13 @@ export const EditPage = ({
   };
 
   const handleCancel = () => {
-    router.replace(`/catalogs/${catalogId}/concepts/${concept.id}`);
+    window.location.replace(`/catalogs/${catalogId}/concepts/${concept.id}`);
   };
+
+  const handleGotoOverview = () => {
+    dataStorage.delete();
+    window.location.replace(`/catalogs/${catalogId}/concepts`);
+  }
 
   useEffect(() => {
     if (searchParams.get('created') === 'true') {
@@ -57,7 +64,7 @@ export const EditPage = ({
         <ConfirmModal
           title={localization.confirm.cancelForm.title}
           content={localization.confirm.cancelForm.message}
-          onSuccess={() => router.replace(`/catalogs/${catalogId}/concepts`)}
+          onSuccess={handleGotoOverview}
           onCancel={() => setShowCancelConfirm(false)}
         />
       )}
@@ -85,6 +92,7 @@ export const EditPage = ({
       <ConceptForm
         autoSave={autoSave}
         autoSaveId={concept.id}
+        autoSaveStorage={dataStorage}
         catalogId={catalogId}
         initialConcept={concept}
         conceptStatuses={conceptStatuses}

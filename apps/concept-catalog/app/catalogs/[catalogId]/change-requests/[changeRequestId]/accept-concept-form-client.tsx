@@ -165,7 +165,7 @@ export const AcceptConceptFormClient = ({
       <ButtonBar>
         <ButtonBar.Left>
           <LinkButton
-            href={`/catalogs/${organization.organizationId}/change-requests`}
+            href={`/catalogs/${organization.organizationId}/change-requests${!changeRequest.conceptId ? '?filter.itemType=suggestionForNewConcept' : ''}`}
             variant='tertiary'
             color='second'
             size='sm'
