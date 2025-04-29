@@ -7,7 +7,7 @@ const catalogTests = [
   {
     name: 'dataset catalog',
     locator: 'datasetCatalog',
-    url: `https://registrering.staging.fellesdatakatalog.digdir.no/catalogs/${orgId}/datasets`,
+    url: `https://datasettkatalog.staging.fellesdatakatalog.digdir.no/catalogs/${orgId}/datasets`,
   },
   {
     name: 'data service catalog',
