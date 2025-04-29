@@ -207,7 +207,7 @@ export const nb = {
     send: 'Send inn',
     success: 'OK',
     addUrl: 'Legg til lenke',
-    backToOverview: 'Tilbake til oversikten'
+    backToOverview: 'Tilbake til oversikten',
   },
 
   dropdown: {
@@ -269,14 +269,14 @@ export const nb = {
   snackbar: {
     saveSuccessfull: 'Endringene ble lagret.',
     saveFailed: 'Lagring feilet. Vennligst prøv igjen.',
-    restoreSuccessfull: 'Endringene ble gjenopprettet.'
+    restoreSuccessfull: 'Endringene ble gjenopprettet.',
   },
 
   confirm: {
     cancelForm: {
       title: 'Er du sikker på at du vil forlate skjemaet?',
-      message: 'Eventuelle endringer vil ikke bli lagret.'      
-    }
+      message: 'Eventuelle endringer vil ikke bli lagret.',
+    },
   },
 
   catalogAdmin: {
@@ -352,7 +352,8 @@ export const nb = {
     concept: 'Begrep',
     concepts: 'Begreper',
     confirmDelete: `Du er i ferd med å slette begrepet **{0}**. All historikk og endringsforslag knyttet til begrepet vil bli permanent slettet, og slettingen kan ikke angres. Er du sikker på at du vil fortsette?`,
-    confirmEditWithChangeRequest: 'Det finnes et åpent endringsforslag for dette begrepet. Er du sikker på at du vil redigere begrepet?',
+    confirmEditWithChangeRequest:
+      'Det finnes et åpent endringsforslag for dette begrepet. Er du sikker på at du vil redigere begrepet?',
     contactInformation: 'Kontaktinformasjon for eksterne',
     definition: 'Definisjon',
     deleteConcept: 'Slett begrep',
@@ -407,7 +408,7 @@ export const nb = {
   changeRequest: {
     accept: 'Godta',
     acceptSuccessfull: 'Endringsforslaget er godtatt.',
-    acceptFailed: 'Kunne ikke godta endringsforslaget.',    
+    acceptFailed: 'Kunne ikke godta endringsforslaget.',
     changed: 'Endret',
     changeRequest: 'Endringsforslag',
     editSources: 'Rediger kilder',

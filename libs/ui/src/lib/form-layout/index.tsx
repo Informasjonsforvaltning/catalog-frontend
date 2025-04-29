@@ -64,7 +64,7 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
   const sectionRefs = useRef(sectionArray.map(() => React.createRef<HTMLDivElement>()));
 
   const [observerEnabled, setObserverEnabled] = useState(true);
-  
+
   useIntersectionObserver({
     activeSection,
     setActiveSection,

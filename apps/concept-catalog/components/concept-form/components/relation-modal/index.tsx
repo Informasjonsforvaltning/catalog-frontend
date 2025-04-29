@@ -1,8 +1,7 @@
-
 import { ReactNode, useRef, useState } from 'react';
 import { Formik } from 'formik';
 import { Button, Modal } from '@digdir/designsystemet-react';
-import { RelatedConcept, UnionRelation, RelationTypeEnum,  } from '@catalog-frontend/types';
+import { RelatedConcept, UnionRelation, RelationTypeEnum } from '@catalog-frontend/types';
 import { relationSchema } from '../../validation-schema';
 import { RelationFieldset } from '../relation-fieldset';
 import styles from './relation-modal.module.scss';
@@ -12,16 +11,23 @@ export type RelationModalProps = {
   trigger: ReactNode;
   header: string;
   initialRelation?: UnionRelation;
-  initialRelatedConcept?: RelatedConcept
+  initialRelatedConcept?: RelatedConcept;
   onSuccess: (rel: UnionRelation) => void;
 };
 
 const defaultRelation: UnionRelation = { relasjon: undefined, internal: true };
 
-export const RelationModal = ({ catalogId, initialRelation, initialRelatedConcept, header, trigger, onSuccess }: RelationModalProps) => {
+export const RelationModal = ({
+  catalogId,
+  initialRelation,
+  initialRelatedConcept,
+  header,
+  trigger,
+  onSuccess,
+}: RelationModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [submitted, setSubmitted] = useState(false);
-  
+
   return (
     <Modal.Root>
       <Modal.Trigger asChild>{trigger}</Modal.Trigger>
@@ -29,13 +35,11 @@ export const RelationModal = ({ catalogId, initialRelation, initialRelatedConcep
         ref={modalRef}
         className={styles.dialog}
         style={{
-          overflow: 'visible'
+          overflow: 'visible',
         }}
       >
         <Formik
-          initialValues={
-            initialRelation || defaultRelation
-          }
+          initialValues={initialRelation || defaultRelation}
           validationSchema={relationSchema}
           validateOnChange={submitted}
           validateOnBlur={submitted}
@@ -51,7 +55,10 @@ export const RelationModal = ({ catalogId, initialRelation, initialRelatedConcep
               <>
                 <Modal.Header closeButton={false}>{header}</Modal.Header>
                 <Modal.Content className={styles.content}>
-                  <RelationFieldset catalogId={catalogId} initialRelatedConcept={initialRelatedConcept} />
+                  <RelationFieldset
+                    catalogId={catalogId}
+                    initialRelatedConcept={initialRelatedConcept}
+                  />
                 </Modal.Content>
                 <Modal.Footer>
                   <Button

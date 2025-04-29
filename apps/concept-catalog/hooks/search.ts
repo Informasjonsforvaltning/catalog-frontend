@@ -71,7 +71,16 @@ export const getSelectOptions = (object: any): SelectOption[] => {
   return options;
 };
 
-export const useSearchConcepts = ({ catalogId, searchTerm, page, size = 5, fields, sort, filters, enabled }: PageUpdate) => {
+export const useSearchConcepts = ({
+  catalogId,
+  searchTerm,
+  page,
+  size = 5,
+  fields,
+  sort,
+  filters,
+  enabled,
+}: PageUpdate) => {
   const body = {
     catalogId,
     query: {

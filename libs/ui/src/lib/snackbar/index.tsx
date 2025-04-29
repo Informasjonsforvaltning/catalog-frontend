@@ -20,14 +20,20 @@ type SnackbarItemProps = {
 
 const SnackbarItem = ({ children, fadeIn = true, severity = 'info', onClose }: SnackbarItemProps) => {
   return (
-    
-      <Alert className={classNames(styles.snackbarItem, ...(fadeIn ? [styles.fadeIn] : []))}     
+    <Alert
+      className={classNames(styles.snackbarItem, ...(fadeIn ? [styles.fadeIn] : []))}
+      size='sm'
+      severity={severity}
+    >
+      <div>{children}</div>
+      <Button
         size='sm'
-        severity={severity}
+        variant='tertiary'
+        onClick={onClose}
       >
-        <div>{children}</div>
-        <Button  size='sm' variant='tertiary' onClick={onClose}><XMarkIcon fontSize='1.5rem' /></Button>        
-      </Alert>
+        <XMarkIcon fontSize='1.5rem' />
+      </Button>
+    </Alert>
   );
 };
 

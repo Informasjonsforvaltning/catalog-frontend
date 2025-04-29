@@ -8,7 +8,10 @@ import { formatISO, localization } from '@catalog-frontend/utils';
 import { ButtonBar, ChangeRequestStatusTagProps, LinkButton, Snackbar, Tag } from '@catalog-frontend/ui';
 import ConceptForm from '@concept-catalog/components/concept-form';
 import { getTranslatedStatus } from '@concept-catalog/utils/change-request';
-import { acceptChangeRequestAction, rejectChangeRequestAction } from '@concept-catalog/app/actions/change-requests/actions';
+import {
+  acceptChangeRequestAction,
+  rejectChangeRequestAction,
+} from '@concept-catalog/app/actions/change-requests/actions';
 import styles from './accept-concept-form-client.module.scss';
 
 export const AcceptConceptFormClient = ({

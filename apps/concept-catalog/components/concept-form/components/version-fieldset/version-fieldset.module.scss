@@ -1,10 +1,10 @@
 .versionFieldset {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    margin-bottom: 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-bottom: 1rem;
 
-    & :global(.fds-textfield) {
-        width: 8rem;
-    }
+  & :global(.fds-textfield) {
+    width: 8rem;
+  }
 }

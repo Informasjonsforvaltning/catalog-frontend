@@ -19,9 +19,9 @@ Definisjonen kan utformes for ulike målgrupper, men meningsinnholdet må være 
 - __Uten målgruppe:__ Definisjonen er ikke tilpasset noen spesiell målgruppe. 
 - __Spesialister:__ Definisjonen er tilpasset personer med et visst kunnskapsnivå innen aktuelt fagområde.
 - __Allmenheten:__ Definisjonen er tilpasset for en bredere gruppe, og skal være lett å forstå for folk uten forkunnskaper innen aktuelt fagområde.`,
-    
+
     definitionText: {
-      definisjon:`
+      definisjon: `
 Definisjonen skal være en kort og presis forklaring av begrepet. Den skal være tydelig og lett å forstå, og skal i sin helhet skrives med små bokstaver, 
 med unntak for egennavn.
 
@@ -55,8 +55,8 @@ Inndelingskriterium beskriver hva relasjonsinndelingen bygger på, f.eks.: kjenn
 
 Eksempler:
 
-- _Funksjon blir brukt som inndelingskriterium for å dele helhetsbegrepet datamaskin i delbegreper som hovedkort, visningsenhet, strømforsyning, lagringsenhet og inndataenhet._`
-    }, 
+- _Funksjon blir brukt som inndelingskriterium for å dele helhetsbegrepet datamaskin i delbegreper som hovedkort, visningsenhet, strømforsyning, lagringsenhet og inndataenhet._`,
+    },
 
     contactInfo: `Det er mulig å legge til e-post og telefonnummer som kontaktinformasjon. Minst en av disse må fylles ut.`,
     labels: `
@@ -138,13 +138,15 @@ Versjonsnummeret følger formatet 'major.minor.patch', hvor:
 - __Patch__ økes ved feilrettinger og mindre justeringer.
 
 Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og tredje feilretting.`,
-    versionNote: 'Egenskapen brukes til å oppgi versjonsnoter til en versjon av et begrep. Egenskapen bør gjentas når teksten finnes på flere skriftspråk.'
+    versionNote:
+      'Egenskapen brukes til å oppgi versjonsnoter til en versjon av et begrep. Egenskapen bør gjentas når teksten finnes på flere skriftspråk.',
   },
   section: {
     termTitle: 'Term',
     termSubtitle: 'Termer er ord eller uttrykk som setter navn på begreper.',
     definitionTitle: 'Definisjon',
-    definitionSubtitle: 'Definisjoner er utsagn som tydelig beskriver meningsinnholdet i et begrep i et gitt fagområde.',
+    definitionSubtitle:
+      'Definisjoner er utsagn som tydelig beskriver meningsinnholdet i et begrep i et gitt fagområde.',
     remarkTitle: 'Merknad',
     remarkSubtitle: 'Tilleggsopplysninger som tydeliggjør betydningen og bruken av begrepet.',
     relationTitle: 'Relasjoner',
@@ -156,16 +158,19 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     valueRangeTitle: 'Verdiområde',
     valueRangeSubtitle: '',
     internalTitle: 'Interne opplysninger',
-    internalSubtitle: 'Opplysningene under er til intern bruk og vil ikke publiseres ut til Data.norge.no. Interne felt kan legges til og redigeres i administrasjonsgrensesnittet.',
+    internalSubtitle:
+      'Opplysningene under er til intern bruk og vil ikke publiseres ut til Data.norge.no. Interne felt kan legges til og redigeres i administrasjonsgrensesnittet.',
     contactTitle: 'Kontaktinformasjon',
-    contactSubtitle: 'Kontaktinformasjonen til den delen av virksomheten som har ansvar for begrepsbeskrivelsen. Det skal ikke oppgis personlig kontaktinformasjon.',
+    contactSubtitle:
+      'Kontaktinformasjonen til den delen av virksomheten som har ansvar for begrepsbeskrivelsen. Det skal ikke oppgis personlig kontaktinformasjon.',
     conceptStatusTitle: 'Begrepsstatus',
     conceptStatusSubtitle: 'Gjeldende status for begrepet.',
     periodTitle: 'Gyldighetsperiode',
     periodSubtitle: 'Datoene begrepet skal gjelde fra og med og/eller til og med.',
     versionTitle: 'Versjon',
-    versionSubtitle: 'En versjon representerer en spesifikk utgave eller oppdatering av et begrep, som reflekterer eventuelle endringer i definisjon, kontekst eller bruk over tid.'
-  },  
+    versionSubtitle:
+      'En versjon representerer en spesifikk utgave eller oppdatering av et begrep, som reflekterer eventuelle endringer i definisjon, kontekst eller bruk over tid.',
+  },
   fieldLabel: {
     abbreviationLabel: 'Forkortelse',
     assignedUser: 'Hvem skal begrepet tildeles?',
@@ -182,13 +187,13 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     definition: 'Definisjon',
     definitionTargetGroup: {
       definisjon: 'Uten målgruppe',
-      definisjonForAllmennheten: 'Allmennheten', 
-      definisjonForSpesialister: 'Spesialister'
+      definisjonForAllmennheten: 'Allmennheten',
+      definisjonForSpesialister: 'Spesialister',
     },
     definitionTargetGroupFull: {
       definisjon: 'Definisjon (uten målgruppe)',
-      definisjonForAllmennheten: 'Definisjon for allmennheten', 
-      definisjonForSpesialister: 'Definisjon for spesialister'
+      definisjonForAllmennheten: 'Definisjon for allmennheten',
+      definisjonForSpesialister: 'Definisjon for spesialister',
     },
     relationToSource: 'Forhold til kilde',
     sources: 'Kilder',
@@ -208,12 +213,12 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
       underordnet: 'Underordnet',
       erDelAv: 'Er del av',
       omfatter: 'Omfatter',
-      none: 'Ingen nivå valgt'
+      none: 'Ingen nivå valgt',
     },
     relatedConceptTypes: {
       internal: 'Virksomhetens eget begrep',
-      external :'Publisert begrep på data.norge.no',
-      custom: 'Begrep i en annen begrepskatalog'
+      external: 'Publisert begrep på data.norge.no',
+      custom: 'Begrep i en annen begrepskatalog',
     },
     relatedConcept: 'Relatert begrep',
     internalConcept: 'Internt begrep',
@@ -227,16 +232,18 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     labels: 'Merkelapp',
     valueRangeDescription: 'Beskrivelse',
     valueRangeLink: 'Lenke til referanse',
-    period: 'Gyldighetsperiode'
+    period: 'Gyldighetsperiode',
   },
   alert: {
     formError: 'Du har feil i skjemaet. Rett opp i disse før du kan lagre.',
     warning: 'Advarsel',
-    codeListToText: 'Virksomheten har byttet fra kodeliste til fritekst. Tidligere kodeliste verdier må slettes for å kunne lagre begrepet.',
-    textToCodeList: 'Virksomheten har byttet fra fritekst til kodeliste. Tidligere fritekst verdier må slettes for å kunne lagre begrepet.',
-    ignoreRequired: 'I utgangspunktet er det krav om at alle påkrevde felt må fylles ut for å få lagret. Når avhukingsboksen er aktiv, må bare Anbefalt term på bokmål være fylt ut.',    
-    termNotDefined: 'Term ikke oppgitt'
-
+    codeListToText:
+      'Virksomheten har byttet fra kodeliste til fritekst. Tidligere kodeliste verdier må slettes for å kunne lagre begrepet.',
+    textToCodeList:
+      'Virksomheten har byttet fra fritekst til kodeliste. Tidligere fritekst verdier må slettes for å kunne lagre begrepet.',
+    ignoreRequired:
+      'I utgangspunktet er det krav om at alle påkrevde felt må fylles ut for å få lagret. Når avhukingsboksen er aktiv, må bare Anbefalt term på bokmål være fylt ut.',
+    termNotDefined: 'Term ikke oppgitt',
   },
   validation: {
     minLength: 'Verdien må være minst {0} karakterer lang.',
@@ -246,7 +253,6 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     version: 'Versjon må være større en v{min}',
     languageRequired: '{label} ({language}) er påkrevd',
     date: 'Dato er ikke gyldig',
-    subjectConflict: 'Det er ikke tillatt å ha både fagområde som fritekst og kodeliste.'
+    subjectConflict: 'Det er ikke tillatt å ha både fagområde som fritekst og kodeliste.',
   },
-  
 };

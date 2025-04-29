@@ -1,14 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import {
-  Fieldset,
-  Textfield,
-  Button,
-  Radio,
-  Box,
-  ErrorMessage,
-} from '@digdir/designsystemet-react';
+import { Fieldset, Textfield, Button, Radio, Box, ErrorMessage } from '@digdir/designsystemet-react';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import styles from './source-description-fieldset.module.scss';
@@ -51,11 +44,9 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
       <Radio.Group
         size='sm'
         legend={
-          <TitleWithHelpTextAndTag
-            helpText={localization.conceptForm.helpText.relationToSource}
-          >
+          <TitleWithHelpTextAndTag helpText={localization.conceptForm.helpText.relationToSource}>
             {localization.conceptForm.fieldLabel.relationToSource}
-          </TitleWithHelpTextAndTag>  
+          </TitleWithHelpTextAndTag>
         }
         value={relationToSource}
         onChange={setRelationToSource}
@@ -80,7 +71,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
               tagTitle={localization.tag.required}
             >
               {localization.conceptForm.fieldLabel.sources}
-            </TitleWithHelpTextAndTag>  
+            </TitleWithHelpTextAndTag>
           }
         >
           <FieldArray

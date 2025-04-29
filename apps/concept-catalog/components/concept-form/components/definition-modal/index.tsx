@@ -23,7 +23,13 @@ export type DefinitionModalProps = {
 
 const defaultDefinition: Definisjon = { tekst: {}, kildebeskrivelse: { forholdTilKilde: 'egendefinert', kilde: [] } };
 
-export const DefinitionModal = ({ initialDefinition, header, definitionHelpText, trigger, onSucces }: DefinitionModalProps) => {
+export const DefinitionModal = ({
+  initialDefinition,
+  header,
+  definitionHelpText,
+  trigger,
+  onSucces,
+}: DefinitionModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [submitted, setSubmitted] = useState(false);
 
@@ -32,7 +38,7 @@ export const DefinitionModal = ({ initialDefinition, header, definitionHelpText,
       <Modal.Trigger asChild>{trigger}</Modal.Trigger>
       <Modal.Dialog
         ref={modalRef}
-        className={styles.dialog}        
+        className={styles.dialog}
         style={{
           overflow: 'visible',
         }}
@@ -50,7 +56,7 @@ export const DefinitionModal = ({ initialDefinition, header, definitionHelpText,
           }}
         >
           {({ errors, isValid, isSubmitting, submitForm }) => {
-             return (
+            return (
               <>
                 <Modal.Header closeButton={false}>{header}</Modal.Header>
                 <Modal.Content className={styles.content}>

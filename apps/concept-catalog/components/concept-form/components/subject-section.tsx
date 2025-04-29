@@ -118,17 +118,17 @@ export const SubjectSection = ({ codes, markDirty, readOnly }: SubjectSectionPro
 
     const codeListLabel = (
       <TitleWithHelpTextAndTag
-              {...(codeListActivated
-                ? {
-                    tagTitle: localization.tag.recommended,
-                    tagColor: 'info',
-                  }
-                : {})}
-              helpText={localization.conceptForm.helpText.subjectCodeList}
-              changed={fieldIsChanged('fagområdeKoder')}
-            >
-              {localization.conceptForm.fieldLabel.subjectCodeList}
-            </TitleWithHelpTextAndTag>
+        {...(codeListActivated
+          ? {
+              tagTitle: localization.tag.recommended,
+              tagColor: 'info',
+            }
+          : {})}
+        helpText={localization.conceptForm.helpText.subjectCodeList}
+        changed={fieldIsChanged('fagområdeKoder')}
+      >
+        {localization.conceptForm.fieldLabel.subjectCodeList}
+      </TitleWithHelpTextAndTag>
     );
 
     if (codeListActivated) {

@@ -88,8 +88,8 @@ export const validateOidcUserSession = async (token: Token): Promise<boolean> =>
       return true;
     } else {
       console.log('validateOidcUserSession failed', error);
-    }    
-  } 
+    }
+  }
   return false;
 };
 

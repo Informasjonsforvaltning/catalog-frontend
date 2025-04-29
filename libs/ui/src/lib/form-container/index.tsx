@@ -14,7 +14,7 @@ interface HeaderProps {
   id: string;
   title: string;
   subtitle?: string;
-  variant?: Variant;  
+  variant?: Variant;
 }
 
 const FormContainer: FC<PropsWithChildren<Props>> & {
@@ -35,7 +35,10 @@ const FormContainer: FC<PropsWithChildren<Props>> & {
 
 const Header: FC<HeaderProps> = ({ id, title, subtitle, variant = 'default' }) => {
   return (
-    <div id={id} className={cn(styles.header, styles[variant])}>
+    <div
+      id={id}
+      className={cn(styles.header, styles[variant])}
+    >
       <Heading className={styles.title}>{title}</Heading>
       <Paragraph className={styles.subtitle}>{subtitle}</Paragraph>
     </div>

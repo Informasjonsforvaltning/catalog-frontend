@@ -6,7 +6,7 @@ export const POST = async (req: NextRequest, props: { params: Promise<{ catalogI
   const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { catalogId } = params;
-    
+
     const drafConcept = {
       anbefaltTerm: {
         navn: { nb: '' },

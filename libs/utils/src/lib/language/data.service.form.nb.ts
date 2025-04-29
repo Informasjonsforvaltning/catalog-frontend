@@ -11,7 +11,8 @@ export const dataServiceFormNb = {
     contactName: 'Brukes til å oppgi navnet til kontaktpunktet.',
     contactFields:
       'Informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om datasettet. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.',
-    format: 'Brukes til å spesifisere strukturen som kan returneres av spørring mot endepunktsURL, verdien skal velges fra EUs kontrollerte vokabular _File type_.',
+    format:
+      'Brukes til å spesifisere strukturen som kan returneres av spørring mot endepunktsURL, verdien skal velges fra EUs kontrollerte vokabular _File type_.',
     landingPage: 'Referanse til nettside som gir tilgang til API-et og/eller tilleggsinformasjon',
     pages: 'Referanser til sider og/eller dokumenter som beskriver API-et',
     license: 'Lisensen som API-et er gjort tilgjengelig under. Velges fra EUs kontrollerte vokabular _License_.',
@@ -41,7 +42,8 @@ export const dataServiceFormNb = {
   subtitle: {
     about: 'Nøkkelinformasjon om APIet.',
     endpoint: 'Endepunktet til APIet og tilhørende beskrivelse.',
-    contactPoint: 'Kontaktinformasjonen til den delen av virksomheten som har ansvar for API-beskrivelsen. Det skal ikke oppgis personlig kontaktinformasjon.',
+    contactPoint:
+      'Kontaktinformasjonen til den delen av virksomheten som har ansvar for API-beskrivelsen. Det skal ikke oppgis personlig kontaktinformasjon.',
     format: 'Søk på og velg blant registrerte filtyper.',
     access: 'Bruksvilkår forklart med lisensalternativer tilgangsnivåer og kostnadsdetaljer.',
     dataset: 'Datasett som kan distribueres av datatjenesten.',

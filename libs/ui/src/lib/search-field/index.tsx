@@ -61,7 +61,7 @@ const SearchField: FC<SearchFieldProps> = ({
   }, []);
 
   return (
-    <div className={classNames([styles.search, ...className ? [className] : []] )}>
+    <div className={classNames([styles.search, ...(className ? [className] : [])])}>
       <div className={styles.searchBox}>
         <Textfield
           ref={inputRef}
@@ -72,10 +72,13 @@ const SearchField: FC<SearchFieldProps> = ({
           value={query}
           type='search'
           label={label}
-          onChange={(e) => setQuery(e.target.value)}          
+          onChange={(e) => setQuery(e.target.value)}
           onKeyUp={handleKeyUp}
         />
-        <div ref={searchActionsRef} className={styles.searchActions}>
+        <div
+          ref={searchActionsRef}
+          className={styles.searchActions}
+        >
           {options && (
             <NativeSelect
               size='sm'
@@ -84,7 +87,12 @@ const SearchField: FC<SearchFieldProps> = ({
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setOptionValue(e.target.value)}
             >
               {options.map(({ value, label }) => (
-                <option value={value} key={value}>{label}</option>
+                <option
+                  value={value}
+                  key={value}
+                >
+                  {label}
+                </option>
               ))}
             </NativeSelect>
           )}

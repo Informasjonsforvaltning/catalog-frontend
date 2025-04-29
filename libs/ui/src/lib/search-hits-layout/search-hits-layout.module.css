@@ -10,7 +10,7 @@
 
 .searchRowContainer {
   display: flex;
-  flex-direction: column;  
+  flex-direction: column;
   margin-bottom: var(--fds-spacing-6);
 }
 

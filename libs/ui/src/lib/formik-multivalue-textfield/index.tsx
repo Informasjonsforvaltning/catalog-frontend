@@ -14,11 +14,24 @@ type FormikMultivalueTextfieldProps = {
   readOnly?: boolean;
   allowDeleteWhenReadOnly?: boolean;
   error?: ReactNode;
-  onDeleteButtonClicked?: () => void;  
+  onDeleteButtonClicked?: () => void;
 } & TextfieldProps;
 
 const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueTextfieldProps>(
-  ({ allowDeleteWhenReadOnly, className, name, showDeleteButton, readOnly, label, error, onDeleteButtonClicked, ...props }, ref) => {
+  (
+    {
+      allowDeleteWhenReadOnly,
+      className,
+      name,
+      showDeleteButton,
+      readOnly,
+      label,
+      error,
+      onDeleteButtonClicked,
+      ...props
+    },
+    ref,
+  ) => {
     const { values, setFieldValue } = useFormikContext<Record<string, string[]>>();
     const [inputValue, setInputValue] = useState<string>('');
 
@@ -87,7 +100,10 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
           )}
         </Box>
         {readOnly && label && (
-          <Label asChild size='sm'>
+          <Label
+            asChild
+            size='sm'
+          >
             <div>{label}</div>
           </Label>
         )}
@@ -97,8 +113,8 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
         >
           {_.get(values, name)?.map((v, i) => (
             <ChipComponent
-              key={`chip-${i}`}            
-              onClick={readOnly ? undefined : () => handleRemoveTextValue(i)}              
+              key={`chip-${i}`}
+              onClick={readOnly ? undefined : () => handleRemoveTextValue(i)}
             >
               {v}
             </ChipComponent>

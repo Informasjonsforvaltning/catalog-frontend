@@ -182,6 +182,7 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
     revalidateTag('concepts');
   }
 
-  return await getConcept(`${conceptId}`, `${session?.accessToken}`)
-    .then((response) => response.ok ? response.json() : undefined);
+  return await getConcept(`${conceptId}`, `${session?.accessToken}`).then((response) =>
+    response.ok ? response.json() : undefined,
+  );
 }

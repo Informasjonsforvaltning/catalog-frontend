@@ -9,7 +9,11 @@ type VersionSectionProps = {
 export const VersionSection = ({ markDirty = false, readOnly = false }: VersionSectionProps) => {
   return (
     <Box>
-      <VersionFieldset name='versjonsnr' markDirty={markDirty} readOnly={readOnly} />
+      <VersionFieldset
+        name='versjonsnr'
+        markDirty={markDirty}
+        readOnly={readOnly}
+      />
       {/**
        * TODO Version note will be available as a modal dialog at a later stage.
        * 

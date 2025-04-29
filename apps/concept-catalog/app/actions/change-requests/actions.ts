@@ -8,24 +8,27 @@ import {
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
-import { acceptChangeRequest, createChangeRequest, getChangeRequest, getConceptRevisions, rejectChangeRequest, updateChangeRequest } from '@catalog-frontend/data-access';
+import {
+  acceptChangeRequest,
+  createChangeRequest,
+  getChangeRequest,
+  getConceptRevisions,
+  rejectChangeRequest,
+  updateChangeRequest,
+} from '@catalog-frontend/data-access';
 import { revalidateTag } from 'next/cache';
 import jsonpatch from 'fast-json-patch';
 import { ChangeRequest, ChangeRequestUpdateBody, Concept } from '@catalog-frontend/types';
 
 async function getChangeRequestAsConcept(catalogId: string, changeRequestId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   if (!validOrganizationNumber(catalogId)) throw new Error('Invalid catalogId');
   if (!validUUID(changeRequestId)) throw new Error('Invalid changeRequestId');
 
-  const changeRequest: ChangeRequest = await getChangeRequest(
-    catalogId,
-    `${changeRequestId}`,
-    `${session.accessToken}`,
-  )
+  const changeRequest: ChangeRequest = await getChangeRequest(catalogId, `${changeRequestId}`, `${session.accessToken}`)
     .then((response) => {
       return response.json();
     })
@@ -40,17 +43,17 @@ async function getChangeRequestAsConcept(catalogId: string, changeRequestId: str
   };
 
   const originalConcept =
-      changeRequest.conceptId && validUUID(changeRequest.conceptId)
-        ? await getConceptRevisions(`${changeRequest.conceptId}`, `${session.accessToken}`).then((response) => {
-            if (response.ok) {
-              return response.json().then((revisions: Concept[]) => {
-                return revisions.reduce(function (prev, current) {
-                  return conceptIsHigherVersion(prev, current) ? prev : current;
-                });
+    changeRequest.conceptId && validUUID(changeRequest.conceptId)
+      ? await getConceptRevisions(`${changeRequest.conceptId}`, `${session.accessToken}`).then((response) => {
+          if (response.ok) {
+            return response.json().then((revisions: Concept[]) => {
+              return revisions.reduce(function (prev, current) {
+                return conceptIsHigherVersion(prev, current) ? prev : current;
               });
-            } else throw new Error('Error when searching for original concept');
-          })
-        : undefined;
+            });
+          } else throw new Error('Error when searching for original concept');
+        })
+      : undefined;
 
   const changeRequestAsConcept: Concept = jsonpatch.applyPatch(
     jsonpatch.deepClone(originalConcept || baselineConcept),
@@ -63,11 +66,11 @@ async function getChangeRequestAsConcept(catalogId: string, changeRequestId: str
 
 export async function createChangeRequestAction(catalogId: string, body: ChangeRequestUpdateBody) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   if (!validOrganizationNumber(catalogId)) throw new Error('Invalid catalogId');
-  
+
   const response = await createChangeRequest(body, `${catalogId}`, `${session?.accessToken}`);
   if (response.status !== 201) {
     const errorMsg = `Error when creating change request. Response status: ${
@@ -77,27 +80,26 @@ export async function createChangeRequestAction(catalogId: string, body: ChangeR
     throw new Error(errorMsg);
   }
   const changeRequestId = response?.headers?.get('location')?.split('/').pop();
-  if(!changeRequestId) {
+  if (!changeRequestId) {
     console.error('Failed to fetch change request id');
     throw new Error('Failed to fetch change request id');
   }
   return changeRequestId;
 }
 
-export async function updateChangeRequestAction(catalogId: string, changeRequestId: string, body: ChangeRequestUpdateBody) {
+export async function updateChangeRequestAction(
+  catalogId: string,
+  changeRequestId: string,
+  body: ChangeRequestUpdateBody,
+) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   if (!validOrganizationNumber(catalogId)) throw new Error('Invalid catalogId');
   if (!validUUID(changeRequestId)) throw new Error('Invalid changeRequestId');
-  
-  const response = await updateChangeRequest(
-    body,
-    `${catalogId}`,
-    `${changeRequestId}`,
-    `${session?.accessToken}`,
-  );
+
+  const response = await updateChangeRequest(body, `${catalogId}`, `${changeRequestId}`, `${session?.accessToken}`);
 
   if (response.status !== 200) {
     const errorMsg = `Error when updating change request. Response status: ${
@@ -112,7 +114,7 @@ export async function updateChangeRequestAction(catalogId: string, changeRequest
 
 export async function acceptChangeRequestAction(catalogId: string, changeRequestId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   if (!validOrganizationNumber(catalogId)) throw new Error('Invalid catalogId');
@@ -132,7 +134,7 @@ export async function acceptChangeRequestAction(catalogId: string, changeRequest
 
 export async function rejectChangeRequestAction(catalogId: string, changeRequestId: string) {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn();
   }
   if (!validOrganizationNumber(catalogId)) throw new Error('Invalid catalogId');

@@ -6,7 +6,14 @@ import { Formik, Form, FormikProps } from 'formik';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Alert, Checkbox, Paragraph, Spinner } from '@digdir/designsystemet-react';
 import { DataStorage, formatISO, getTranslateText, localization } from '@catalog-frontend/utils';
-import type { CodeListsResult, Concept, FieldsResult, ReferenceDataCode, StorageData, UsersResult } from '@catalog-frontend/types';
+import type {
+  CodeListsResult,
+  Concept,
+  FieldsResult,
+  ReferenceDataCode,
+  StorageData,
+  UsersResult,
+} from '@catalog-frontend/types';
 import {
   Button,
   FormLayout,
@@ -35,7 +42,7 @@ import { isEqual } from 'lodash';
 
 type Props = {
   afterSubmit?: () => void;
-  autoSave?: boolean;  
+  autoSave?: boolean;
   autoSaveId?: string;
   autoSaveStorage?: DataStorage<StorageData>;
   catalogId: string;
@@ -201,7 +208,7 @@ const ConceptForm = ({
     setIsCanceled(true);
 
     if (onCancel) {
-      try {        
+      try {
         onCancel();
       } catch {
         // Nothing...
@@ -284,11 +291,11 @@ const ConceptForm = ({
 
               // Discard stored data
               autoSaveRef.current?.discard();
-                            
+
               if (afterSubmit) {
                 afterSubmit();
-              }              
-            } catch {              
+              }
+            } catch {
               showSnackbarMessage({ message: localization.snackbar.saveFailed, severity: 'danger' });
             } finally {
               setSubmitting(false);

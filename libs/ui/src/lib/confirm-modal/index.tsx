@@ -24,29 +24,29 @@ export const ConfirmModal = ({
   onSuccess,
   onCancel,
   hideCancel,
-  show = true
+  show = true,
 }: ConfirmModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
 
   const handleSuccess = () => {
     modalRef.current?.close();
-    if(onSuccess) {
+    if (onSuccess) {
       onSuccess();
-    }    
+    }
   };
 
   const handleCancel = () => {
     modalRef.current?.close();
-    if(onCancel) {
+    if (onCancel) {
       onCancel();
     }
   };
 
   useEffect(() => {
-    if(show) {
+    if (show) {
       modalRef.current?.showModal();
-    } 
-  }, [show])
+    }
+  }, [show]);
 
   return (
     <Modal ref={modalRef}>

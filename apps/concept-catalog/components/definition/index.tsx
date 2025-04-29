@@ -10,17 +10,16 @@ interface Props {
 }
 
 export const Definition = ({ definition, language }: Props) => {
-
   const RelationToSource = () => {
-    if(definition?.kildebeskrivelse?.forholdTilKilde === 'egendefinert') {
+    if (definition?.kildebeskrivelse?.forholdTilKilde === 'egendefinert') {
       return localization.concept.selfDefined;
-    } else if(definition?.kildebeskrivelse?.forholdTilKilde === 'basertPaaKilde') {
+    } else if (definition?.kildebeskrivelse?.forholdTilKilde === 'basertPaaKilde') {
       return `${localization.concept.basedOnSource}:`;
-    } else if(definition?.kildebeskrivelse?.forholdTilKilde === 'sitatFraKilde') {
+    } else if (definition?.kildebeskrivelse?.forholdTilKilde === 'sitatFraKilde') {
       return `${localization.concept.quoteFromSource}:`;
     }
     return null;
-  }
+  };
 
   return (
     <>
@@ -28,7 +27,9 @@ export const Definition = ({ definition, language }: Props) => {
       {(definition?.kildebeskrivelse?.forholdTilKilde === 'egendefinert' ||
         definition?.kildebeskrivelse?.kilde.length !== 0) && (
         <div className={cn(classes.source)}>
-          <div><RelationToSource /></div>
+          <div>
+            <RelationToSource />
+          </div>
           <div>
             {definition?.kildebeskrivelse?.kilde.length !== 0 && (
               <ul>

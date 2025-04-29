@@ -16,14 +16,14 @@ export const VersionFieldset = ({ name, markDirty, readOnly }) => {
   const { errors, initialValues, values } = useFormikContext<Concept>();
 
   const fieldIsChanged = () => {
-      const a = get(initialValues, name);
-      const b = get(values, name);
-      if (isEmpty(a) && isEmpty(b)) {
-        return false;
-      }
-      return markDirty && !isEqual(a, b);
-    };
-    
+    const a = get(initialValues, name);
+    const b = get(values, name);
+    if (isEmpty(a) && isEmpty(b)) {
+      return false;
+    }
+    return markDirty && !isEqual(a, b);
+  };
+
   return (
     <>
       <Fieldset

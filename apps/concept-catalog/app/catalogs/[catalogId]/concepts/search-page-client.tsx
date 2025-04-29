@@ -14,12 +14,7 @@ import {
   LinkButton,
   SearchField,
 } from '@catalog-frontend/ui';
-import {
-  getTranslateText,
-  capitalizeFirstLetter,
-  localization as loc,
-  localization,
-} from '@catalog-frontend/utils';
+import { getTranslateText, capitalizeFirstLetter, localization as loc, localization } from '@catalog-frontend/utils';
 import { Chip, Tabs } from '@digdir/designsystemet-react';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 import {
