@@ -36,6 +36,11 @@ export const AcceptConceptFormClient = ({
     setSnackbarSeverity(severity);
   };
 
+  const handleGotoOverview = () => {
+    // Use window location to make sure query params are used on page render
+    window.location.replace(`/catalogs/${organization.organizationId}/change-requests${!changeRequest.conceptId ? '?filter.itemType=suggestionForNewConcept' : ''}`);
+  };    
+
   const AcceptChangeRequestButton = () => {
     const [isHandlingAction, setIsHandlingAction] = useState(false);
     const handleAccept = async () => {
@@ -119,7 +124,7 @@ export const AcceptConceptFormClient = ({
                   <RejectChangeRequestButton />
                 </>
               )}
-              {changeRequest.status === 'OPEN' && allowEdit && (
+              {allowEdit && (
                 <LinkButton
                   href={`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}/edit`}
                   variant='secondary'
@@ -129,7 +134,8 @@ export const AcceptConceptFormClient = ({
                   {localization.button.edit}
                 </LinkButton>
               )}
-              {!allowApprove && !allowEdit && <>{localization.changeRequest.needWriteAccess}</>}
+              {!allowApprove && !allowEdit && <>{localization.changeRequest.needWriteAccessForOther}</>}
+              {!allowApprove && allowEdit && <>{localization.changeRequest.needWriteAccess}</>}
             </>
           )}
         </div>
@@ -164,15 +170,15 @@ export const AcceptConceptFormClient = ({
     <>
       <ButtonBar>
         <ButtonBar.Left>
-          <LinkButton
-            href={`/catalogs/${organization.organizationId}/change-requests${!changeRequest.conceptId ? '?filter.itemType=suggestionForNewConcept' : ''}`}
+          <Button
             variant='tertiary'
             color='second'
             size='sm'
+            onClick={handleGotoOverview}
           >
             <ArrowLeftIcon />
             {localization.button.backToOverview}
-          </LinkButton>
+          </Button>
         </ButtonBar.Left>
         <ButtonBar.Right></ButtonBar.Right>
       </ButtonBar>
