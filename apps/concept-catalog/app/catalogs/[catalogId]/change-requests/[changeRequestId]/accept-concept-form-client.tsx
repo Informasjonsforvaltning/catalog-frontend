@@ -38,8 +38,10 @@ export const AcceptConceptFormClient = ({
 
   const handleGotoOverview = () => {
     // Use window location to make sure query params are used on page render
-    window.location.replace(`/catalogs/${organization.organizationId}/change-requests${!changeRequest.conceptId ? '?filter.itemType=suggestionForNewConcept' : ''}`);
-  };    
+    window.location.replace(
+      `/catalogs/${organization.organizationId}/change-requests${!changeRequest.conceptId ? '?filter.itemType=suggestionForNewConcept' : ''}`,
+    );
+  };
 
   const AcceptChangeRequestButton = () => {
     const [isHandlingAction, setIsHandlingAction] = useState(false);
@@ -169,18 +171,15 @@ export const AcceptConceptFormClient = ({
   return (
     <>
       <ButtonBar>
-        <ButtonBar.Left>
-          <Button
-            variant='tertiary'
-            color='second'
-            size='sm'
-            onClick={handleGotoOverview}
-          >
-            <ArrowLeftIcon />
-            {localization.button.backToOverview}
-          </Button>
-        </ButtonBar.Left>
-        <ButtonBar.Right></ButtonBar.Right>
+        <Button
+          variant='tertiary'
+          color='second'
+          size='sm'
+          onClick={handleGotoOverview}
+        >
+          <ArrowLeftIcon />
+          {localization.button.backToOverview}
+        </Button>
       </ButtonBar>
       <ConceptForm
         autoSave={false}

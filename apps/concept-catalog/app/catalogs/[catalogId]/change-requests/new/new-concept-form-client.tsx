@@ -1,13 +1,18 @@
 'use client';
 
 import { Concept, ChangeRequestUpdateBody, JsonPatchOperation } from '@catalog-frontend/types';
-import { LocalDataStorage, localization, pruneEmptyProperties, updateDefinitionsIfEgendefinert } from '@catalog-frontend/utils';
+import {
+  LocalDataStorage,
+  localization,
+  pruneEmptyProperties,
+  updateDefinitionsIfEgendefinert,
+} from '@catalog-frontend/utils';
 import jsonpatch from 'fast-json-patch';
 import { useRouter } from 'next/navigation';
 import ConceptForm from '../../../../../components/concept-form';
 import { createChangeRequestAction } from '../../../../actions/change-requests/actions';
 import { useRef, useState } from 'react';
-import { Button, ButtonBar, ConfirmModal, LinkButton, StorageData } from '@catalog-frontend/ui';
+import { Button, ButtonBar, ConfirmModal, StorageData } from '@catalog-frontend/ui';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 export const NewConceptFormClient = ({
@@ -62,13 +67,17 @@ export const NewConceptFormClient = ({
         `/catalogs/${organization.organizationId}/change-requests/${changeRequestIdRef.current}/edit?created=true`,
       );
     } else {
-      window.location.replace(`/catalogs/${organization.organizationId}/change-requests?filter.itemType=suggestionForNewConcept`);
+      window.location.replace(
+        `/catalogs/${organization.organizationId}/change-requests?filter.itemType=suggestionForNewConcept`,
+      );
     }
   };
 
   const handleCancel = () => {
     dataStorage.delete();
-    window.location.replace(`/catalogs/${organization.organizationId}/change-requests?filter.itemType=suggestionForNewConcept`);
+    window.location.replace(
+      `/catalogs/${organization.organizationId}/change-requests?filter.itemType=suggestionForNewConcept`,
+    );
   };
 
   return (
@@ -82,17 +91,15 @@ export const NewConceptFormClient = ({
         />
       )}
       <ButtonBar>
-        <ButtonBar.Left>
-          <Button
-            variant='tertiary'
-            color='second'
-            size='sm'
-            onClick={handleCancel}
-          >
-            <ArrowLeftIcon />
-            {localization.button.backToOverview}
-          </Button>
-        </ButtonBar.Left>
+        <Button
+          variant='tertiary'
+          color='second'
+          size='sm'
+          onClick={handleCancel}
+        >
+          <ArrowLeftIcon />
+          {localization.button.backToOverview}
+        </Button>
       </ButtonBar>
       <ConceptForm
         afterSubmit={handleAfterSubmit}

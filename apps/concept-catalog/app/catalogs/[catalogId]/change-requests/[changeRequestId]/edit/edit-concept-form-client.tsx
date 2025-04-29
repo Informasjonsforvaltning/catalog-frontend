@@ -106,17 +106,15 @@ export const EditConceptFormClient = ({
         />
       )}
       <ButtonBar>
-        <ButtonBar.Left>
-          <Button
-            variant='tertiary'
-            color='second'
-            size='sm'
-            onClick={() => setShowCancelConfirm(true)}
-          >
-            <ArrowLeftIcon />
-            {localization.button.backToOverview}
-          </Button>
-        </ButtonBar.Left>
+        <Button
+          variant='tertiary'
+          color='second'
+          size='sm'
+          onClick={() => setShowCancelConfirm(true)}
+        >
+          <ArrowLeftIcon />
+          {localization.button.backToOverview}
+        </Button>
       </ButtonBar>
       <ConceptForm
         afterSubmit={handleAfterSubmit}
