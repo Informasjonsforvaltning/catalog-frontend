@@ -1,9 +1,9 @@
 import { ChangeRequest } from '@catalog-frontend/types';
 import { getChangeRequests } from '@catalog-frontend/data-access';
-import ChangeRequestsPageClient from './change-requests-page-client';
-import { withReadProtectedPage } from '../../../../utils/auth';
 import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
+import { withReadProtectedPage } from '@concept-catalog/utils/auth';
+import ChangeRequestsPageClient from './change-requests-page-client';
 
 const ChangeRequestsPage = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/change-requests`,

@@ -20,6 +20,12 @@
       "@catalog-frontend/ui": ["libs/ui/src/index.ts"],
       "@catalog-frontend/utils": ["libs/utils/src/index.ts"],
       "@catalog-frontend/utils/*": ["libs/utils/*"],
+      "@catalog-admin/*": ["apps/catalog-admin/*"],
+      "@catalog-portal/*": ["apps/catalog-portal/*"],
+      "@concept-catalog/*": ["apps/concept-catalog/*"],
+      "@data-service-catalog/*": ["apps/data-service-catalog/*"],
+      "@dataset-catalog/*": ["apps/dataset-catalog/*"],
+      "@service-catalog/*": ["apps/service-catalog/*"],
       "react": ["./node_modules/@types/react"]
     }
   },

@@ -2,9 +2,8 @@
 
 import { Accordion, Checkbox, Radio } from '@digdir/designsystemet-react';
 import { localization } from '@catalog-frontend/utils';
-import styles from './change-request-filter.module.css';
 import { ItemType, Status } from '@catalog-frontend/types';
-
+import styles from './change-request-filter.module.css';
 interface Props {
   itemType: ItemType;
   status: Status;

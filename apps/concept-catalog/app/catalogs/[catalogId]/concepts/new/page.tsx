@@ -2,7 +2,7 @@ import { getAllCodeLists, getConceptStatuses, getFields, getUsers } from '@catal
 import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
 import { localization, prepareStatusList } from '@catalog-frontend/utils';
 import { CodeListsResult, FieldsResult, UsersResult } from '@catalog-frontend/types';
-import { withWriteProtectedPage } from '../../../../../utils/auth';
+import { withWriteProtectedPage } from '@concept-catalog/utils/auth';
 
 import { NewPage } from './new-page.client';
 

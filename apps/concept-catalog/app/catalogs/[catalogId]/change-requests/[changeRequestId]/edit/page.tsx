@@ -18,7 +18,7 @@ import {
 import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
 import { conceptIsHigherVersion, localization, validUUID, prepareStatusList } from '@catalog-frontend/utils';
 import jsonpatch from 'fast-json-patch';
-import { withReadProtectedPage } from '../../../../../../utils/auth';
+import { withReadProtectedPage } from '@concept-catalog/utils/auth';
 import { EditConceptFormClient } from './edit-concept-form-client';
 
 const ChangeRequestEditPage = withReadProtectedPage(

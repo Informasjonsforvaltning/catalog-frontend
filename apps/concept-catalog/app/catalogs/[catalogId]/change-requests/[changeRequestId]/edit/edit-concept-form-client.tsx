@@ -12,8 +12,8 @@ import {
   pruneEmptyProperties,
   updateDefinitionsIfEgendefinert,
 } from '@catalog-frontend/utils';
-import ConceptForm from '../../../../../../components/concept-form';
-import { updateChangeRequestAction } from '../../../../../actions/change-requests/actions';
+import ConceptForm from '@concept-catalog/components/concept-form';
+import { updateChangeRequestAction } from '@concept-catalog/app/actions/change-requests/actions';
 
 export const EditConceptFormClient = ({
   organization,
