@@ -13,12 +13,12 @@ export type RelationModalProps = {
   header: string;
   initialRelation?: UnionRelation;
   initialRelatedConcept?: RelatedConcept
-  onSucces: (rel: UnionRelation) => void;
+  onSuccess: (rel: UnionRelation) => void;
 };
 
 const defaultRelation: UnionRelation = { relasjon: undefined, internal: true };
 
-export const RelationModal = ({ catalogId, initialRelation, initialRelatedConcept, header, trigger, onSucces }: RelationModalProps) => {
+export const RelationModal = ({ catalogId, initialRelation, initialRelatedConcept, header, trigger, onSuccess }: RelationModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [submitted, setSubmitted] = useState(false);
   
@@ -40,7 +40,7 @@ export const RelationModal = ({ catalogId, initialRelation, initialRelatedConcep
           validateOnChange={submitted}
           validateOnBlur={submitted}
           onSubmit={(values, { setSubmitting }) => {
-            onSucces(values);
+            onSuccess(values);
             setSubmitting(false);
             setSubmitted(true);
             modalRef.current?.close();

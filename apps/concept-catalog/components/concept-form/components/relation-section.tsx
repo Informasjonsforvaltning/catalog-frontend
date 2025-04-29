@@ -254,7 +254,7 @@ export const RelationSection = ({ catalogId, markDirty, readOnly }: RelationSect
                             Rediger
                           </Button>
                         }
-                        onSucces={(values) => handleChangeRelation(values, relation)}
+                        onSuccess={(values) => handleChangeRelation(values, relation)}
                       />
                       <Button
                         variant='tertiary'
@@ -295,7 +295,7 @@ export const RelationSection = ({ catalogId, markDirty, readOnly }: RelationSect
                 Legg til relasjon
               </Button>
             }
-            onSucces={(values) => handleChangeRelation(values)}
+            onSuccess={(values) => handleChangeRelation(values)}
           />
         </Box>
       )}
