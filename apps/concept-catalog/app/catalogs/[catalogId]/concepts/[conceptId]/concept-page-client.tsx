@@ -3,6 +3,11 @@
 import { FC, useEffect, useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import NextLink from 'next/link';
+import Markdown from 'react-markdown';
+import { isEmpty } from 'lodash';
+import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
+import cn from 'classnames';
+import { Accordion, Chip, Link, Switch, Tabs, Textarea } from '@digdir/designsystemet-react';
 import {
   ConceptStatusTagProps,
   InfoCard,
@@ -37,18 +42,13 @@ import {
   UnionRelation,
   RelatedConcept,
 } from '@catalog-frontend/types';
-import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
-import cn from 'classnames';
-import { Accordion, Chip, Link, Switch, Tabs, Textarea } from '@digdir/designsystemet-react';
-import _ from 'lodash';
+import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '@concept-catalog/hooks/comments';
+import { useGetHistory } from '@concept-catalog/hooks/history';
+import { useDeleteConcept, usePublishConcept } from '@concept-catalog/hooks/concepts';
+import RelatedConcepts from '@concept-catalog/components/related-concepts';
+import Definition from '@concept-catalog/components/definition';
+import { CodeListCodeLinks } from '@concept-catalog/components/codelist-code-links';
 import classes from './concept-page.module.scss';
-import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '../../../../../hooks/comments';
-import { useGetHistory } from '../../../../../hooks/history';
-import { useDeleteConcept, usePublishConcept } from '../../../../../hooks/concepts';
-import RelatedConcepts from '../../../../../components/related-concepts';
-import Definition from '../../../../../components/definition';
-import { CodeListCodeLinks } from '../../../../../components/codelist-code-links';
-import Markdown from 'react-markdown';
 
 type MapType = {
   [id: string]: string;
@@ -276,7 +276,7 @@ export const ConceptPageClient = ({
           ],
         ]
       : []),
-    ...(!_.isEmpty(concept?.merkelapp)
+    ...(!isEmpty(concept?.merkelapp)
       ? [
           [
             localization.concept.label,
@@ -667,7 +667,7 @@ export const ConceptPageClient = ({
   const MainColumn = () => (
     <div>
       <InfoCard>
-        {!_.isEmpty(translate(concept?.definisjon?.tekst ?? '', language)) && !_.isEmpty(concept?.definisjon) && (
+        {!isEmpty(translate(concept?.definisjon?.tekst ?? '', language)) && !isEmpty(concept?.definisjon) && (
           <InfoCard.Item title={`${localization.concept.definition}:`}>
             <Definition
               definition={concept?.definisjon}
@@ -675,8 +675,8 @@ export const ConceptPageClient = ({
             />
           </InfoCard.Item>
         )}
-        {!_.isEmpty(translate(concept?.definisjonForAllmennheten?.tekst ?? '', language)) &&
-          !_.isEmpty(concept?.definisjonForAllmennheten) && (
+        {!isEmpty(translate(concept?.definisjonForAllmennheten?.tekst ?? '', language)) &&
+          !isEmpty(concept?.definisjonForAllmennheten) && (
             <InfoCard.Item title={`${localization.concept.publicDefinition}:`}>
               <Definition
                 definition={concept?.definisjonForAllmennheten}
@@ -685,8 +685,8 @@ export const ConceptPageClient = ({
             </InfoCard.Item>
           )}
 
-        {!_.isEmpty(translate(concept?.definisjonForSpesialister?.tekst ?? '', language)) &&
-          !_.isEmpty(concept?.definisjonForSpesialister) && (
+        {!isEmpty(translate(concept?.definisjonForSpesialister?.tekst ?? '', language)) &&
+          !isEmpty(concept?.definisjonForSpesialister) && (
             <InfoCard.Item title={`${localization.concept.specialistDefinition}:`}>
               <Definition
                 definition={concept?.definisjonForSpesialister}
@@ -694,22 +694,22 @@ export const ConceptPageClient = ({
               />
             </InfoCard.Item>
           )}
-        {!_.isEmpty(translate(concept?.merknad, language)) && (
+        {!isEmpty(translate(concept?.merknad, language)) && (
           <InfoCard.Item title={`${localization.concept.remark}:`}>
             <span>{translate(concept?.merknad, language)}</span>
           </InfoCard.Item>
         )}
-        {!_.isEmpty(translate(concept?.eksempel, language)) && (
+        {!isEmpty(translate(concept?.eksempel, language)) && (
           <InfoCard.Item title={`${localization.concept.example}:`}>
             <span>{translate(concept?.eksempel, language)}</span>
           </InfoCard.Item>
         )}
-        {!_.isEmpty(translate(concept?.abbreviatedLabel, language)) && (
+        {!isEmpty(translate(concept?.abbreviatedLabel, language)) && (
           <InfoCard.Item title={`${localization.concept.abbreviation}:`}>
             <span>{translate(concept?.abbreviatedLabel, language)}</span>
           </InfoCard.Item>
         )}
-        {!_.isEmpty(translate(concept?.tillattTerm, language)) && (
+        {!isEmpty(translate(concept?.tillattTerm, language)) && (
           <InfoCard.Item title={`${localization.concept.altLabel}:`}>
             <ul>
               {ensureStringArray(translate(concept?.tillattTerm, language)).map((term, i) => (
@@ -718,7 +718,7 @@ export const ConceptPageClient = ({
             </ul>
           </InfoCard.Item>
         )}
-        {!_.isEmpty(translate(concept?.frarådetTerm, language)) && (
+        {!isEmpty(translate(concept?.frarådetTerm, language)) && (
           <InfoCard.Item title={`${localization.concept.hiddenLabel}:`}>
             <ul>
               {ensureStringArray(translate(concept?.frarådetTerm, language)).map((term, i) => (
@@ -727,7 +727,7 @@ export const ConceptPageClient = ({
             </ul>
           </InfoCard.Item>
         )}
-        {!_.isEmpty(relatedConcepts) && (
+        {!isEmpty(relatedConcepts) && (
           <InfoCard.Item
             title={`${localization.formatString(localization.concept.relatedConcepts, {
               conceptCount: conceptRelations.length,
@@ -743,7 +743,7 @@ export const ConceptPageClient = ({
             />
           </InfoCard.Item>
         )}
-        {!_.isEmpty(internalRelatedConcepts) && (
+        {!isEmpty(internalRelatedConcepts) && (
           <InfoCard.Item
             title={`${localization.formatString(localization.concept.unpublishedRelatedConcepts, {
               conceptCount: internalConceptRelations.length,
@@ -758,7 +758,7 @@ export const ConceptPageClient = ({
             />
           </InfoCard.Item>
         )}
-        {(!_.isEmpty(concept?.omfang?.uri) || !_.isEmpty(concept?.omfang?.tekst)) && (
+        {(!isEmpty(concept?.omfang?.uri) || !isEmpty(concept?.omfang?.tekst)) && (
           <InfoCard.Item title={`${localization.concept.valueDomain}:`}>
             {concept?.omfang?.uri ? (
               <Link

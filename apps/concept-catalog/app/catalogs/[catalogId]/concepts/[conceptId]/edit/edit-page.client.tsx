@@ -2,12 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { LocalDataStorage, localization } from '@catalog-frontend/utils';
 import type { Concept, StorageData } from '@catalog-frontend/types';
 import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import ConceptForm from '../../../../../../components/concept-form';
-import { updateConcept } from '../../../../../actions/concept/actions';
+import ConceptForm from '@concept-catalog/components/concept-form';
+import { updateConcept } from '@concept-catalog/app/actions/concept/actions';
 
 export const EditPage = ({
   catalogId,

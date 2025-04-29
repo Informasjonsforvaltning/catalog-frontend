@@ -1,3 +1,5 @@
+import jsonpatch from 'fast-json-patch';
+import { redirect, RedirectType } from 'next/navigation';
 import {
   getOrganization,
   getChangeRequest,
@@ -17,10 +19,8 @@ import {
 } from '@catalog-frontend/types';
 import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
 import { validUUID, localization, conceptIsHigherVersion, prepareStatusList } from '@catalog-frontend/utils';
-import jsonpatch from 'fast-json-patch';
-import { withReadProtectedPage } from '../../../../../utils/auth';
+import { withReadProtectedPage } from '@concept-catalog/utils/auth';
 import { AcceptConceptFormClient } from './accept-concept-form-client';
-import { redirect, RedirectType } from 'next/navigation';
 
 const ChangeRequestDetailsPage = withReadProtectedPage(
   ({ catalogId, changeRequestId }) => `/catalogs/${catalogId}/change-requests/${changeRequestId}`,

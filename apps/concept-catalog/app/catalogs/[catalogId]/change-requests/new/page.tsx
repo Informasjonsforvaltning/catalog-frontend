@@ -19,8 +19,8 @@ import { conceptIsHigherVersion, localization, prepareStatusList } from '@catalo
 import jsonpatch from 'fast-json-patch';
 import { RedirectType, redirect } from 'next/navigation';
 import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
+import { withReadProtectedPage } from '@concept-catalog/utils/auth';
 import { NewConceptFormClient } from './new-concept-form-client';
-import { withReadProtectedPage } from '../../../../../utils/auth';
 
 const ChangeRequestOrNew = withReadProtectedPage(
   ({ catalogId, conceptIdSearch }) =>

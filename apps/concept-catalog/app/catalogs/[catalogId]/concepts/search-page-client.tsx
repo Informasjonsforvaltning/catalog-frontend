@@ -1,5 +1,9 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'nuqs';
+import { isEmpty } from 'lodash';
+import { useRouter } from 'next/navigation';
 import { SearchableField, QuerySort } from '@catalog-frontend/types';
 import {
   UploadButton,
@@ -14,28 +18,20 @@ import {
   getTranslateText,
   capitalizeFirstLetter,
   localization as loc,
-  lowerCaseFirstLetter,
   localization,
 } from '@catalog-frontend/utils';
 import { Chip, Tabs } from '@digdir/designsystemet-react';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
-
-import { useState, useEffect } from 'react';
-import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'nuqs';
-
 import {
   SortOption,
   getSelectOptions,
   useSearchConcepts,
   getFields as getSearchFields,
-} from '../../../../hooks/search';
-import SearchFilter from '../../../../components/search-filter';
-import { useImportConcepts } from '../../../../hooks/import';
+} from '@concept-catalog/hooks/search';
+import SearchFilter from '@concept-catalog/components/search-filter';
+import { useImportConcepts } from '@concept-catalog/hooks/import';
+import ConceptSearchHits from '@concept-catalog/components/concept-search-hits';
 import styles from './search-page.module.scss';
-import ConceptSearchHits from '../../../../components/concept-search-hits';
-import _, { isEmpty } from 'lodash';
-import classNames from 'classnames';
-import { useRouter } from 'next/navigation';
 
 export type FilterType = 'published' | 'status' | 'assignedUser' | 'subject' | 'internalFields' | 'label';
 
@@ -143,7 +139,7 @@ export const SearchPageClient = ({
         internalFields: {
           value: Object.keys(filterInternalFields ?? {}).reduce((result, key) => {
             const value = filterInternalFields?.[key];
-            if (!_.isEmpty(value)) {
+            if (!isEmpty(value)) {
               result[key] = value;
             }
             return result;

@@ -1,5 +1,10 @@
 'use client';
 
+import cn from 'classnames';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
+import { Heading, Tabs } from '@digdir/designsystemet-react';
 import { ChangeRequestStatusTagProps, LinkButton, SearchField, SearchHitsLayout, Tag } from '@catalog-frontend/ui';
 import {
   capitalizeFirstLetter,
@@ -10,16 +15,11 @@ import {
   validOrganizationNumber,
   validUUID,
 } from '@catalog-frontend/utils';
-import { Heading, Tabs } from '@digdir/designsystemet-react';
-import cn from 'classnames';
-import Link from 'next/link';
-import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
-import ChangeRequestFilter from '../../../../components/change-request-filter';
-import ChangeRequestSort from '../../../../components/change-request-sort';
-import styles from './change-requests-page.module.css';
-import { getTranslatedStatus } from '../../../../utils/change-request';
-import { useRouter } from 'next/navigation';
+import ChangeRequestFilter from '@concept-catalog/components/change-request-filter';
+import ChangeRequestSort from '@concept-catalog/components/change-request-sort';
+import { getTranslatedStatus } from '@concept-catalog/utils/change-request';
 import { ChangeRequest } from '@catalog-frontend/types';
+import styles from './change-requests-page.module.css';
 
 export const ChangeRequestsPageClient = ({ catalogId, data }) => {
   const itemTypeOptions = [

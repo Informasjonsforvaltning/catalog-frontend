@@ -1,4 +1,4 @@
-import CatalogLayout from '../../components/catalog-layout';
+import CatalogLayout from '@concept-catalog/components/catalog-layout';
 
 const PageLayout = ({ children }: { children: React.ReactNode }) => {
   return (

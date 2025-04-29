@@ -21,11 +21,11 @@ import {
   UnionRelation,
   RelatedConcept,
 } from '@catalog-frontend/types';
-import ConceptPageClient from './concept-page-client';
 import { RedirectType, redirect } from 'next/navigation';
 import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
-import { withReadProtectedPage } from '../../../../../utils/auth';
-import { conceptSchema } from '../../../../../components/concept-form/validation-schema';
+import { withReadProtectedPage } from '@concept-catalog/utils/auth';
+import { conceptSchema } from '@concept-catalog/components/concept-form/validation-schema';
+import ConceptPageClient from './concept-page-client';
 
 const ConceptPage = withReadProtectedPage(
   ({ catalogId, conceptId }) => `/catalogs/${catalogId}/concepts/${conceptId}`,

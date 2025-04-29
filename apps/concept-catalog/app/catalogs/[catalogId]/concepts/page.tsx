@@ -1,9 +1,9 @@
 import { localization, prepareStatusList } from '@catalog-frontend/utils';
 import { CodeListsResult, FieldsResult, UsersResult } from '@catalog-frontend/types';
 import { getAllCodeLists, getConceptStatuses, getFields, getUsers } from '@catalog-frontend/data-access';
-import { SearchPageClient } from './search-page-client';
-import { withReadProtectedPage } from '../../../../utils/auth';
+import { withReadProtectedPage } from '@concept-catalog/utils/auth';
 import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
+import { SearchPageClient } from './search-page-client';
 
 const SearchPage = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}`,

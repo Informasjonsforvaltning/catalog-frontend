@@ -1,10 +1,10 @@
 'use client';
 
 import React, { ReactNode } from 'react';
+import { useParams } from 'next/navigation';
 import { Layout } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { useParams } from 'next/navigation';
-import { useGetCatalogDesign } from '../../hooks/catalog-admin';
+import { useGetCatalogDesign } from '@concept-catalog/hooks/catalog-admin';
 
 interface CatalogLayoutProps {
   children: ReactNode;
