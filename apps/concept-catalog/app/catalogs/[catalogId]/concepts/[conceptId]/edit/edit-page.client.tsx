@@ -1,13 +1,13 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { LocalDataStorage, localization } from '@catalog-frontend/utils';
-import { Concept } from '@catalog-frontend/types';
+import type { Concept, StorageData } from '@catalog-frontend/types';
+import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import ConceptForm from '../../../../../../components/concept-form';
 import { updateConcept } from '../../../../../actions/concept/actions';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { Button, ButtonBar, ConfirmModal, LinkButton, Snackbar, StorageData } from '@catalog-frontend/ui';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
 
 export const EditPage = ({
   catalogId,
@@ -83,7 +83,7 @@ export const EditPage = ({
           size='sm'
           onClick={() => setShowCancelConfirm(true)}
         >
-          <ArrowLeftIcon />
+          <ArrowLeftIcon fontSize='1.25em' />
           {localization.button.backToOverview}
         </Button>
       </ButtonBar>

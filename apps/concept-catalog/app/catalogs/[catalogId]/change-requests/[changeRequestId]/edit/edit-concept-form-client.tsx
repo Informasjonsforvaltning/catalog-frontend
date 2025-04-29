@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import jsonpatch from 'fast-json-patch';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { Button, ButtonBar, ConfirmModal, LinkButton, StorageData } from '@catalog-frontend/ui';
-import { Concept, ChangeRequestUpdateBody, JsonPatchOperation } from '@catalog-frontend/types';
+import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
+import type { Concept, ChangeRequestUpdateBody, JsonPatchOperation, StorageData } from '@catalog-frontend/types';
 import {
   LocalDataStorage,
   localization,
@@ -112,7 +112,7 @@ export const EditConceptFormClient = ({
           size='sm'
           onClick={() => setShowCancelConfirm(true)}
         >
-          <ArrowLeftIcon />
+          <ArrowLeftIcon fontSize='1.25em' />
           {localization.button.backToOverview}
         </Button>
       </ButtonBar>
