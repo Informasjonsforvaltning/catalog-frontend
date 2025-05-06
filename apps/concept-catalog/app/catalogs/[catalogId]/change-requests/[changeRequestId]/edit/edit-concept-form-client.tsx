@@ -1,19 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import jsonpatch from 'fast-json-patch';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
 import type { Concept, ChangeRequestUpdateBody, JsonPatchOperation, StorageData } from '@catalog-frontend/types';
-import {
-  LocalDataStorage,
-  localization,
-  pruneEmptyProperties,
-  updateDefinitionsIfEgendefinert,
-} from '@catalog-frontend/utils';
+import { LocalDataStorage, localization, updateDefinitionsIfEgendefinert } from '@catalog-frontend/utils';
 import ConceptForm from '@concept-catalog/components/concept-form';
 import { updateChangeRequestAction } from '@concept-catalog/app/actions/change-requests/actions';
+import { conceptJsonPatchOperations } from '@concept-catalog/utils/json-patch';
 
 export const EditConceptFormClient = ({
   organization,
@@ -52,9 +47,9 @@ export const EditConceptFormClient = ({
 
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
       conceptId: originalConcept?.originaltBegrep ?? null,
-      operations: jsonpatch.compare(
-        pruneEmptyProperties(originalConcept || emptyConcept),
-        pruneEmptyProperties(updateDefinitionsIfEgendefinert(values)),
+      operations: conceptJsonPatchOperations(
+        originalConcept || emptyConcept,
+        updateDefinitionsIfEgendefinert(values),
       ) as JsonPatchOperation[],
       title: `${changeRequestTitle}`,
     };
