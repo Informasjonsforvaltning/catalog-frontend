@@ -25,11 +25,11 @@ export const EditConceptFormClient = ({
   fieldsResult,
   usersResult,
 }) => {
-  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [newChangeRequest, setNewChangeRequest] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [showGotoConceptConfirm, setShowGotoConceptConfirm] = useState(false);
 
   const dataStorage = new LocalDataStorage<StorageData>({ key: 'changeRequestForm' });
 
@@ -81,6 +81,12 @@ export const EditConceptFormClient = ({
     );
   };
 
+  const handleGotoConcept = () => {
+    window.location.replace(
+      `/catalogs/${organization.organizationId}/concepts/${originalConcept?.id}`,
+    );
+  };
+
   useEffect(() => {
     if (searchParams.get('created') === 'true') {
       setNewChangeRequest(true);
@@ -99,10 +105,18 @@ export const EditConceptFormClient = ({
     <>
       {showCancelConfirm && (
         <ConfirmModal
-          title={localization.confirm.cancelForm.title}
-          content={localization.confirm.cancelForm.message}
+          title={localization.confirm.exitForm.title}
+          content={localization.confirm.exitForm.message}
           onSuccess={handleGotoOverview}
           onCancel={() => setShowCancelConfirm(false)}
+        />
+      )}
+      {showGotoConceptConfirm && (
+        <ConfirmModal
+          title={localization.confirm.exitForm.title}
+          content={localization.confirm.exitForm.message}
+          onSuccess={handleGotoConcept}
+          onCancel={() => setShowGotoConceptConfirm(false)}
         />
       )}
       <ButtonBar>
@@ -115,6 +129,17 @@ export const EditConceptFormClient = ({
           <ArrowLeftIcon fontSize='1.25em' />
           {localization.button.backToOverview}
         </Button>
+        <div style={{ flexGrow: 1 }}></div>
+        {originalConcept && (
+          <Button
+            variant='secondary'
+            color='second'
+            size='sm'
+            onClick={() => setShowGotoConceptConfirm(true)}
+          >
+            {localization.button.gotoConcept}
+          </Button>
+        )}
       </ButtonBar>
       <ConceptForm
         afterSubmit={handleAfterSubmit}

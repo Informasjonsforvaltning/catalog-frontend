@@ -261,8 +261,8 @@ const ConceptForm = ({
     <>
       {showCancelConfirm && (
         <ConfirmModal
-          title={localization.confirm.cancelForm.title}
-          content={localization.confirm.cancelForm.message}
+          title={localization.confirm.exitForm.title}
+          content={localization.confirm.exitForm.message}
           onSuccess={handleConfirmCancel}
           onCancel={handleCloseConfirmCancel}
         />

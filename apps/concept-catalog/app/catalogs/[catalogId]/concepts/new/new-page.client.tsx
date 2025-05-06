@@ -39,8 +39,8 @@ export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, 
     <>
       {showCancelConfirm && (
         <ConfirmModal
-          title={localization.confirm.cancelForm.title}
-          content={localization.confirm.cancelForm.message}
+          title={localization.confirm.exitForm.title}
+          content={localization.confirm.exitForm.message}
           onSuccess={handleCancel}
           onCancel={() => setShowCancelConfirm(false)}
         />

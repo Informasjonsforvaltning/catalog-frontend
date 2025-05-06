@@ -46,6 +46,12 @@ export const AcceptConceptFormClient = ({
     );
   };
 
+  const handleGotoConcept = () => {
+    window.location.replace(
+      `/catalogs/${organization.organizationId}/concepts/${originalConcept?.id}`,
+    );
+  };
+
   const AcceptChangeRequestButton = () => {
     const [isHandlingAction, setIsHandlingAction] = useState(false);
     const handleAccept = async () => {
@@ -183,6 +189,17 @@ export const AcceptConceptFormClient = ({
           <ArrowLeftIcon fontSize='1.25em' />
           {localization.button.backToOverview}
         </Button>
+        <div style={{ flexGrow: 1 }}></div>
+        {originalConcept && (
+          <Button
+            variant='secondary'
+            color='second'
+            size='sm'
+            onClick={handleGotoConcept}
+          >
+            {localization.button.gotoConcept}
+          </Button>
+        )}
       </ButtonBar>
       <ConceptForm
         autoSave={false}
