@@ -207,6 +207,7 @@ export const nb = {
     success: 'OK',
     addUrl: 'Legg til lenke',
     backToOverview: 'Tilbake til oversikten',
+    gotoConcept: 'Gå til begrepet'
   },
 
   dropdown: {
@@ -272,7 +273,7 @@ export const nb = {
   },
 
   confirm: {
-    cancelForm: {
+    exitForm: {
       title: 'Er du sikker på at du vil forlate skjemaet?',
       message: 'Eventuelle endringer vil ikke bli lagret.',
     },

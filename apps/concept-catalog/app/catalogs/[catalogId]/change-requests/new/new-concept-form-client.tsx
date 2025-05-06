@@ -25,6 +25,7 @@ export const NewConceptFormClient = ({
 }) => {
   const changeRequestIdRef = useRef<string | undefined>(undefined); // Ref to store the change-request id
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const [showGotoConceptConfirm, setShowGotoConceptConfirm] = useState(false);
 
   const catalogId = organization.organizationId;
 
@@ -78,14 +79,28 @@ export const NewConceptFormClient = ({
     );
   };
 
+  const handleGotoConcept = () => {
+    window.location.replace(
+      `/catalogs/${organization.organizationId}/concepts/${originalConcept?.id}`,
+    );
+  };
+
   return (
     <>
       {showCancelConfirm && (
         <ConfirmModal
-          title={localization.confirm.cancelForm.title}
-          content={localization.confirm.cancelForm.message}
+          title={localization.confirm.exitForm.title}
+          content={localization.confirm.exitForm.message}
           onSuccess={handleCancel}
           onCancel={() => setShowCancelConfirm(false)}
+        />
+      )}
+      {showGotoConceptConfirm && (
+        <ConfirmModal
+          title={localization.confirm.exitForm.title}
+          content={localization.confirm.exitForm.message}
+          onSuccess={handleGotoConcept}
+          onCancel={() => setShowGotoConceptConfirm(false)}
         />
       )}
       <ButtonBar>
@@ -98,6 +113,17 @@ export const NewConceptFormClient = ({
           <ArrowLeftIcon fontSize='1.25em' />
           {localization.button.backToOverview}
         </Button>
+        <div style={{ flexGrow: 1 }}></div>
+                {originalConcept && (
+                  <Button
+                    variant='secondary'
+                    color='second'
+                    size='sm'
+                    onClick={() => setShowGotoConceptConfirm(true)}
+                  >
+                    {localization.button.gotoConcept}
+                  </Button>
+                )}
       </ButtonBar>
       <ConceptForm
         afterSubmit={handleAfterSubmit}
