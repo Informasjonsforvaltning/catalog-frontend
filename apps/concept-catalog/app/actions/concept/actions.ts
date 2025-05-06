@@ -8,21 +8,9 @@ import {
 } from '@catalog-frontend/data-access';
 import { Concept } from '@catalog-frontend/types';
 import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
-import { compare } from 'fast-json-patch';
 import _ from 'lodash';
 import { revalidateTag } from 'next/cache';
-
-const metaDataFieldsToOmit = [
-  'endringslogelement',
-  'ansvarligVirksomhet',
-  'revisjonAvSistPublisert',
-  'erSistPublisert',
-  'sistPublisertId',
-  'gjeldendeRevisjon',
-  'originaltBegrep',
-  'id',
-  'revisjonAv',
-];
+import { conceptJsonPatchOperations } from '@concept-catalog/utils/json-patch';
 
 const clearValues = (object: any, path: string) => {
   const fields = path.split('.');
@@ -142,15 +130,7 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
     clearValues(values, field);
   });
 
-  const diff = compare(
-    _(initialConcept).omit(metaDataFieldsToOmit).omitBy(_.isNull).value(),
-    _({
-      ...initialConcept,
-      ...values,
-    })
-      .omit(metaDataFieldsToOmit)
-      .value(),
-  );
+  const diff = conceptJsonPatchOperations(initialConcept, values);
 
   if (diff.length === 0) {
     throw new Error(localization.alert.noChanges);
