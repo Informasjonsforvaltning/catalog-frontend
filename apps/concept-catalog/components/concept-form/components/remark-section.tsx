@@ -6,22 +6,11 @@ import { useFormikContext } from 'formik';
 import { Concept } from '@catalog-frontend/types';
 
 type RemarkSectionProps = {
-  markDirty?: boolean;
+  changed?: string[];
   readOnly?: boolean;
 };
 
-export const RemarkSection = ({ markDirty, readOnly }: RemarkSectionProps) => {
-  const { initialValues, values } = useFormikContext<Concept>();
-
-  const fieldIsChanged = () => {
-    const a = get(initialValues, 'merknad');
-    const b = get(values, 'merknad');
-    if (isEmpty(a) && isEmpty(b)) {
-      return false;
-    }
-    return markDirty && !isEqual(a, b);
-  };
-
+export const RemarkSection = ({ changed, readOnly }: RemarkSectionProps) => {
   return (
     <Box>
       <FormikLanguageFieldset
@@ -32,7 +21,7 @@ export const RemarkSection = ({ markDirty, readOnly }: RemarkSectionProps) => {
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
             tagColor='info'
-            changed={fieldIsChanged()}
+            changed={changed?.includes('merknad')}
           >
             {localization.conceptForm.fieldLabel.remark}
           </TitleWithHelpTextAndTag>

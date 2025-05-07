@@ -7,21 +7,12 @@ import styles from '../concept-form.module.scss';
 import { get, isEmpty, isEqual } from 'lodash';
 
 type ValueRangeSectionProps = {
-  markDirty?: boolean;
+  changed?: string[];
   readOnly?: boolean;
 };
 
-export const ValueRangeSection = ({ markDirty = false, readOnly = false }: ValueRangeSectionProps) => {
-  const { initialValues, values, errors } = useFormikContext<Concept>();
-
-  const fieldIsChanged = (name: string) => {
-    const a = get(initialValues, name);
-    const b = get(values, name);
-    if (isEmpty(a) && isEmpty(b)) {
-      return false;
-    }
-    return markDirty && !isEqual(a, b);
-  };
+export const ValueRangeSection = ({ changed, readOnly = false }: ValueRangeSectionProps) => {
+  const { errors } = useFormikContext<Concept>();
 
   return (
     <div>
@@ -33,7 +24,7 @@ export const ValueRangeSection = ({ markDirty = false, readOnly = false }: Value
           label={
             <TitleWithHelpTextAndTag
               helpText={localization.conceptForm.helpText.valueRange}
-              changed={fieldIsChanged('omfang.tekst')}
+              changed={changed?.includes('omfang.tekst')}
             >
               {localization.conceptForm.fieldLabel.valueRangeDescription}
             </TitleWithHelpTextAndTag>
@@ -46,7 +37,7 @@ export const ValueRangeSection = ({ markDirty = false, readOnly = false }: Value
           size='sm'
           name='omfang.uri'
           label={
-            <TitleWithHelpTextAndTag changed={fieldIsChanged('omfang.uri')}>
+            <TitleWithHelpTextAndTag changed={changed?.includes('omfang.uri')}>
               {localization.conceptForm.fieldLabel.valueRangeLink}
             </TitleWithHelpTextAndTag>
           }

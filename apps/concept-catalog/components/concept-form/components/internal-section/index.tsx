@@ -8,14 +8,13 @@ import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-
 import { FormikMultivalueTextfield, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import styles from '../../concept-form.module.scss';
 import { getParentPath } from '../../../../utils/codeList';
-import { get, isEmpty, isEqual } from 'lodash';
 
 export type InternalSectionProps = {
   internalFields: InternalField[];
   userList: AssignedUser[];
   codeLists: CodeList[];
   readOnly?: boolean;
-  markDirty?: boolean;
+  changed?: string[];
 };
 
 export const InternalSection = ({
@@ -23,18 +22,9 @@ export const InternalSection = ({
   userList,
   codeLists,
   readOnly = false,
-  markDirty = false,
+  changed,
 }: InternalSectionProps) => {
-  const { errors, initialValues, values, setFieldValue } = useFormikContext<Concept>();
-
-  const fieldIsChanged = (name: string) => {
-    const a = get(initialValues, name);
-    const b = get(values, name);
-    if (isEmpty(a) && isEmpty(b)) {
-      return false;
-    }
-    return markDirty && !isEqual(a, b);
-  };
+  const { errors, values, setFieldValue } = useFormikContext<Concept>();
 
   const renderInternalField = ({
     values,
@@ -55,7 +45,7 @@ export const InternalSection = ({
     const FieldLabel = () => (
       <TitleWithHelpTextAndTag
         helpText={getTranslateText(internalField.description) as string}
-        changed={fieldIsChanged(name)}
+        changed={changed?.includes(name)}
       >
         {capitalizeFirstLetter(getTranslateText(internalField.label) as string)}
       </TitleWithHelpTextAndTag>
@@ -163,7 +153,7 @@ export const InternalSection = ({
         label={
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.assignedUser}
-            changed={fieldIsChanged('assignedUser')}
+            changed={changed?.includes('assignedUser')}
           >
             {localization.conceptForm.fieldLabel.assignedUser}
           </TitleWithHelpTextAndTag>
@@ -193,7 +183,7 @@ export const InternalSection = ({
         label={
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.abbreviation}
-            changed={fieldIsChanged('abbreviatedLabel')}
+            changed={changed?.includes('abbreviatedLabel')}
           >
             {localization.conceptForm.fieldLabel.abbreviationLabel}
           </TitleWithHelpTextAndTag>
@@ -208,7 +198,7 @@ export const InternalSection = ({
         label={
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.labels}
-            changed={fieldIsChanged('merkelapp')}
+            changed={changed?.includes('merkelapp')}
           >
             {localization.conceptForm.fieldLabel.labels}
           </TitleWithHelpTextAndTag>

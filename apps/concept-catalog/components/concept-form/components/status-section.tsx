@@ -10,11 +10,11 @@ import { get, isEqual } from 'lodash';
 
 type StatusSectionProps = {
   conceptStatuses: ReferenceDataCode[];
-  markDirty?: boolean;
+  changed?: string[];
   readOnly?: boolean;
 };
 
-export const StatusSection = ({ conceptStatuses, markDirty = false, readOnly = false }: StatusSectionProps) => {
+export const StatusSection = ({ conceptStatuses, changed, readOnly = false }: StatusSectionProps) => {
   const { errors, initialValues, values, setFieldValue } = useFormikContext<Concept>();
   const [value, setValue] = useState<string>(values.statusURI ?? conceptStatuses[0].uri);
 
@@ -29,7 +29,7 @@ export const StatusSection = ({ conceptStatuses, markDirty = false, readOnly = f
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.status}
-            changed={markDirty && !isEqual(get(initialValues, 'statusURI'), get(values, 'statusURI'))}
+            changed={changed?.includes('statusURI')}
           >
             {localization.conceptForm.fieldLabel.status}
           </TitleWithHelpTextAndTag>

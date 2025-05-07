@@ -6,22 +6,11 @@ import { useFormikContext } from 'formik';
 import { Concept } from '@catalog-frontend/types';
 
 type ExampleSectionProps = {
-  markDirty?: boolean;
+  changed?: string[];
   readOnly?: boolean;
 };
 
-export const ExampleSection = ({ markDirty = false, readOnly = false }: ExampleSectionProps) => {
-  const { initialValues, values } = useFormikContext<Concept>();
-
-  const fieldIsChanged = () => {
-    const a = get(initialValues, 'eksempel');
-    const b = get(values, 'eksempel');
-    if (isEmpty(a) && isEmpty(b)) {
-      return false;
-    }
-    return markDirty && !isEqual(a, b);
-  };
-
+export const ExampleSection = ({ changed, readOnly = false }: ExampleSectionProps) => {
   return (
     <Box>
       <FormikLanguageFieldset
@@ -29,7 +18,7 @@ export const ExampleSection = ({ markDirty = false, readOnly = false }: ExampleS
         as={TextareaWithPrefix}
         readOnly={readOnly}
         legend={
-          <TitleWithHelpTextAndTag changed={fieldIsChanged()}>
+          <TitleWithHelpTextAndTag changed={changed?.includes('eksempel')}>
             {localization.conceptForm.fieldLabel.example}
           </TitleWithHelpTextAndTag>
         }
