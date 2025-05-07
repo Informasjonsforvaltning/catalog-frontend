@@ -15,12 +15,12 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@catalog-admin/*": ["apps/catalog-admin/*"],
       "@catalog-frontend/data-access": ["libs/data-access/src/index.ts"],
       "@catalog-frontend/types": ["libs/types/src/index.ts"],
       "@catalog-frontend/ui": ["libs/ui/src/index.ts"],
       "@catalog-frontend/utils": ["libs/utils/src/index.ts"],
       "@catalog-frontend/utils/*": ["libs/utils/*"],
-      "@catalog-admin/*": ["apps/catalog-admin/*"],
       "@catalog-portal/*": ["apps/catalog-portal/*"],
       "@concept-catalog/*": ["apps/concept-catalog/*"],
       "@data-service-catalog/*": ["apps/data-service-catalog/*"],

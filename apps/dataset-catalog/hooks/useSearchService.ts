@@ -29,6 +29,7 @@ export const useSearchConceptSuggestions = (searchEnv: string, searchQuery?: str
 export const useSearchInformationModelsByUri = (searchEnv: string, uriList: string[]) => {
   const searchOperation: Search.SearchOperation = {
     filters: { uri: { value: uriList } },
+    pagination: { page: 0, size: 100 },
   };
   return useQuery({
     queryKey: ['searchInformationModelsByUri', uriList],
@@ -61,6 +62,7 @@ export const useSearchDataServiceSuggestions = (searchEnv: string, searchQuery?:
 export const useSearchDataServiceByUri = (searchEnv: string, uriList: string[]) => {
   const searchOperation: Search.SearchOperation = {
     filters: { uri: { value: uriList } },
+    pagination: { page: 0, size: 100 },
   };
   return useQuery({
     queryKey: ['searchDataServicesByUri', uriList],
@@ -79,6 +81,7 @@ export const useSearchDataServiceByUri = (searchEnv: string, uriList: string[]) 
 export const useSearchConceptsByUri = (searchEnv: string, uriList: string[]) => {
   const searchOperation: Search.SearchOperation = {
     filters: { uri: { value: uriList } },
+    pagination: { page: 0, size: 100 },
   };
   return useQuery({
     queryKey: ['searchConceptSuggestions', 'uriList', uriList],
@@ -109,6 +112,7 @@ export const useSearchDatasetSuggestions = (searchEnv: string, searchQuery?: str
 export const useSearchDatasetsByUri = (searchEnv: string, uriList: string[]) => {
   const searchOperation: Search.SearchOperation = {
     filters: { uri: { value: uriList } },
+    pagination: { page: 0, size: 100 },
   };
   return useQuery({
     queryKey: ['searchDatasetByUri', 'uriList', uriList],
