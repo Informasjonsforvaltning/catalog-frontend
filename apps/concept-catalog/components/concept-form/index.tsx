@@ -107,7 +107,6 @@ const ConceptForm = ({
   usersResult,
 }: Props) => {
   const pathname = usePathname();
-  const router = useRouter();
   const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<Concept>>(null);
   const autoSaveRef = useRef<FormikAutoSaverRef>(null);
@@ -314,7 +313,7 @@ const ConceptForm = ({
               const a = get(initialValues, name);
               const b = get(values, name);
 
-              if((isEmpty(a) && isEmpty(b))) {
+              if (isEmpty(a) && isEmpty(b)) {
                 return false;
               }
 
@@ -327,11 +326,11 @@ const ConceptForm = ({
               'interneFelt.abbreviatedLabel',
               'interneFelt.merkelapp',
               ...fieldsResult.internal.map(({ id }) => `interneFelt[${id}].value`),
-              'kontaktpunkt.harEpost', 
-              'kontaktpunkt.harTelefon', 
+              'kontaktpunkt.harEpost',
+              'kontaktpunkt.harTelefon',
               'kontaktpunkt.harSkjema',
               'omfang.tekst',
-              'omfang.uri'
+              'omfang.uri',
             ].forEach((name) => {
               if (isDirty(name)) {
                 dirtyFields.push(name);
@@ -464,7 +463,7 @@ const ConceptForm = ({
                       id='valueRange'
                       title={localization.conceptForm.section.valueRangeTitle}
                       subtitle={localization.conceptForm.section.valueRangeSubtitle}
-                      changed={markDirty && dirtyFields.some((field) => ['omfang'].includes(field))}
+                      changed={markDirty && dirtyFields.some((field) => ['omfang.tekst', 'omfang.uri'].includes(field))}
                       error={hasError(['omfang'])}
                     >
                       <ValueRangeSection
@@ -508,7 +507,17 @@ const ConceptForm = ({
                       id='internal'
                       title={localization.conceptForm.section.internalTitle}
                       subtitle={localization.conceptForm.section.internalSubtitle}
-                      changed={markDirty && dirtyFields.some((field) => ['interneFelt'].includes(field))}
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) =>
+                          [
+                            'interneFelt.assignedUser',
+                            'interneFelt.abbreviatedLabel',
+                            'interneFelt.merkelapp',
+                            ...fieldsResult.internal.map(({ id }) => `interneFelt[${id}].value`),
+                          ].includes(field),
+                        )
+                      }
                       error={hasError(['interneFelt'])}
                     >
                       <InternalSection
@@ -561,7 +570,14 @@ const ConceptForm = ({
                       title={localization.conceptForm.section.contactTitle}
                       subtitle={localization.conceptForm.section.contactSubtitle}
                       required
-                      changed={markDirty && dirtyFields.some((field) => ['kontaktpunkt'].includes(field))}
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) =>
+                          ['kontaktpunkt.harEpost', 'kontaktpunkt.harTelefon', 'kontaktpunkt.harSkjema'].includes(
+                            field,
+                          ),
+                        )
+                      }
                       error={hasError(['kontaktpunkt'])}
                     >
                       <ContactSection
