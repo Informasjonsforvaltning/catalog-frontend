@@ -6,22 +6,11 @@ import { Concept } from '@catalog-frontend/types';
 import { get, isEmpty, isEqual } from 'lodash';
 
 type TermSectionProps = {
-  markDirty?: boolean;
+  changed?: string[];
   readOnly?: boolean;
 };
 
-export const TermSection = ({ markDirty, readOnly }: TermSectionProps) => {
-  const { initialValues, values } = useFormikContext<Concept>();
-
-  const fieldIsChanged = (name: string) => {
-    const a = get(initialValues, name);
-    const b = get(values, name);
-    if (isEmpty(a) && isEmpty(b)) {
-      return false;
-    }
-    return markDirty && !isEqual(a, b);
-  };
-
+export const TermSection = ({ changed, readOnly }: TermSectionProps) => {
   return (
     <Box>
       <FormikLanguageFieldset
@@ -31,7 +20,7 @@ export const TermSection = ({ markDirty, readOnly }: TermSectionProps) => {
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.prefLabel}
             tagTitle={localization.tag.required}
-            changed={fieldIsChanged('anbefaltTerm.navn')}
+            changed={changed?.includes('anbefaltTerm')}
           >
             {localization.conceptForm.fieldLabel.prefLabel}
           </TitleWithHelpTextAndTag>
@@ -47,7 +36,7 @@ export const TermSection = ({ markDirty, readOnly }: TermSectionProps) => {
             helpText={localization.conceptForm.helpText.altLabel}
             tagTitle={localization.tag.recommended}
             tagColor='info'
-            changed={fieldIsChanged('tillattTerm')}
+            changed={changed?.includes('tillattTerm')}
           >
             {localization.conceptForm.fieldLabel.altLabel}
           </TitleWithHelpTextAndTag>
@@ -61,7 +50,7 @@ export const TermSection = ({ markDirty, readOnly }: TermSectionProps) => {
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.hiddenLabel}
-            changed={fieldIsChanged('frarådetTerm')}
+            changed={changed?.includes('frarådetTerm')}
           >
             {localization.conceptForm.fieldLabel.hiddenLabel}
           </TitleWithHelpTextAndTag>

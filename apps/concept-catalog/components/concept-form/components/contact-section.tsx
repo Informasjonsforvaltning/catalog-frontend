@@ -8,23 +8,14 @@ import styles from '../concept-form.module.scss';
 import { get, isEmpty, isEqual, isNil } from 'lodash';
 
 type ContactSectionProps = {
-  markDirty?: boolean;
+  changed?: string[];
   readOnly?: boolean;
 };
 
-export const ContactSection = ({ markDirty = false, readOnly = false }: ContactSectionProps) => {
-  const { errors, initialValues, values, setFieldValue } = useFormikContext<Concept>();
+export const ContactSection = ({ changed, readOnly = false }: ContactSectionProps) => {
+  const { errors, values, setFieldValue } = useFormikContext<Concept>();
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
-
-  const fieldIsChanged = (name: string) => {
-    const a = get(initialValues, name);
-    const b = get(values, name);
-    if (isEmpty(a) && isEmpty(b)) {
-      return false;
-    }
-    return markDirty && !isEqual(a, b);
-  };
-
+ 
   const contactOptions = [
     {
       label: localization.conceptForm.fieldLabel.emailAddress,
@@ -63,7 +54,7 @@ export const ContactSection = ({ markDirty = false, readOnly = false }: ContactS
             helpText={localization.conceptForm.helpText.contactInfo}
             tagTitle={localization.tag.required}
             changed={['kontaktpunkt.harEpost', 'kontaktpunkt.harTelefon', 'kontaktpunkt.harSkjema'].some((field) =>
-              fieldIsChanged(field),
+              changed?.includes(field),
             )}
           >
             {localization.conceptForm.fieldLabel.contactInfo}

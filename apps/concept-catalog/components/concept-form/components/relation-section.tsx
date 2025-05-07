@@ -6,12 +6,11 @@ import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useSearchConcepts as useSearchInternalConcepts, useDataNorgeSearchConcepts } from '../../../hooks/search';
 import { RelationModal } from './relation-modal';
 import styles from '../concept-form.module.scss';
-import { get, isEmpty, isEqual } from 'lodash';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 
 type RelationSection = {
   catalogId: string;
-  markDirty?: boolean;
+  changed?: string[];
   readOnly?: boolean;
 };
 
@@ -19,17 +18,8 @@ type UnionRelationWithIndex = {
   index: number;
 } & UnionRelation;
 
-export const RelationSection = ({ catalogId, markDirty, readOnly }: RelationSection) => {
-  const { initialValues, values, setFieldValue } = useFormikContext<Concept>();
-
-  const fieldIsChanged = (name: string) => {
-    const a = get(initialValues, name);
-    const b = get(values, name);
-    if (isEmpty(a) && isEmpty(b)) {
-      return false;
-    }
-    return markDirty && !isEqual(a, b);
-  };
+export const RelationSection = ({ catalogId, changed, readOnly }: RelationSection) => {
+  const { values, setFieldValue } = useFormikContext<Concept>();
 
   const isDirty = [
     'begrepsRelasjon',
@@ -38,7 +28,7 @@ export const RelationSection = ({ catalogId, markDirty, readOnly }: RelationSect
     'internBegrepsRelasjon',
     'internSeOgså',
     'internErstattesAv',
-  ].some((rel) => fieldIsChanged(rel));
+  ].some((rel) => changed?.includes(rel));
 
   const relations: UnionRelationWithIndex[] = [
     ...(values['begrepsRelasjon']?.map((rel, index) => ({ ...rel, index })) ?? []),

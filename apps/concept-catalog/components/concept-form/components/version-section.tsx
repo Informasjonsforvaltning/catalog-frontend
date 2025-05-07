@@ -2,16 +2,16 @@ import { Box } from '@digdir/designsystemet-react';
 import { VersionFieldset } from './version-fieldset';
 
 type VersionSectionProps = {
-  markDirty?: boolean;
+  changed?: string[];
   readOnly?: boolean;
 };
 
-export const VersionSection = ({ markDirty = false, readOnly = false }: VersionSectionProps) => {
+export const VersionSection = ({ changed, readOnly = false }: VersionSectionProps) => {
   return (
     <Box>
       <VersionFieldset
         name='versjonsnr'
-        markDirty={markDirty}
+        changed={changed}
         readOnly={readOnly}
       />
       {/**

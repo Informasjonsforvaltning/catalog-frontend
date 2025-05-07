@@ -38,7 +38,7 @@ import { PeriodSection } from './components/period-section';
 import { InternalSection } from './components/internal-section';
 import { ContactSection } from './components/contact-section';
 import styles from './concept-form.module.scss';
-import { isEqual } from 'lodash';
+import { get, isEmpty, isEqual } from 'lodash';
 
 type Props = {
   afterSubmit?: () => void;
@@ -303,9 +303,43 @@ const ConceptForm = ({
           }
         }}
       >
-        {({ errors, dirty, isValid, isSubmitting, isValidating, submitForm, setValues }) => {
+        {({ errors, dirty, initialValues, isValid, isSubmitting, isValidating, values, submitForm, setValues }) => {
           const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
           const hasError = (fields: (keyof Concept)[]) => fields.some((field) => Object.keys(errors).includes(field));
+
+          const dirtyFields = ((): string[] => {
+            const dirtyFields: string[] = [];
+
+            const isDirty = (name) => {
+              const a = get(initialValues, name);
+              const b = get(values, name);
+
+              if((isEmpty(a) && isEmpty(b))) {
+                return false;
+              }
+
+              return !isEqual(a, b);
+            };
+
+            [
+              ...Object.keys(values),
+              'interneFelt.assignedUser',
+              'interneFelt.abbreviatedLabel',
+              'interneFelt.merkelapp',
+              ...fieldsResult.internal.map(({ id }) => `interneFelt[${id}].value`),
+              'kontaktpunkt.harEpost', 
+              'kontaktpunkt.harTelefon', 
+              'kontaktpunkt.harSkjema',
+              'omfang.tekst',
+              'omfang.uri'
+            ].forEach((name) => {
+              if (isDirty(name)) {
+                dirtyFields.push(name);
+              }
+            });
+
+            return dirtyFields;
+          })();
 
           const handleRestoreConcept = (data: StorageData) => {
             const entityType = pathname.includes('change-requests') ? 'change-requests' : 'concepts';
@@ -346,10 +380,20 @@ const ConceptForm = ({
                       title={localization.conceptForm.section.termTitle}
                       subtitle={localization.conceptForm.section.termSubtitle}
                       required
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) => ['anbefaltTerm', 'tillattTerm', 'frarådetTerm'].includes(field))
+                      }
                       error={hasError(['anbefaltTerm', 'tillattTerm', 'frarådetTerm'])}
                     >
                       <TermSection
-                        markDirty={markDirty}
+                        changed={
+                          markDirty
+                            ? dirtyFields.filter((field) =>
+                                ['anbefaltTerm', 'tillattTerm', 'frarådetTerm'].includes(field),
+                              )
+                            : []
+                        }
                         readOnly={readOnly}
                       />
                     </FormLayout.Section>
@@ -358,10 +402,24 @@ const ConceptForm = ({
                       title={localization.conceptForm.section.definitionTitle}
                       subtitle={localization.conceptForm.section.definitionSubtitle}
                       required
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) =>
+                          ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(field),
+                        )
+                      }
                       error={hasError(['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'])}
                     >
                       <DefinitionSection
-                        markDirty={markDirty}
+                        changed={
+                          markDirty
+                            ? dirtyFields.filter((field) =>
+                                ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(
+                                  field,
+                                ),
+                              )
+                            : []
+                        }
                         readOnly={readOnly}
                       />
                     </FormLayout.Section>
@@ -369,10 +427,11 @@ const ConceptForm = ({
                       id='remark'
                       title={localization.conceptForm.section.remarkTitle}
                       subtitle={localization.conceptForm.section.remarkSubtitle}
+                      changed={markDirty && dirtyFields.some((field) => ['merknad'].includes(field))}
                       error={hasError(['merknad'])}
                     >
                       <RemarkSection
-                        markDirty={markDirty}
+                        changed={markDirty ? dirtyFields : []}
                         readOnly={readOnly}
                       />
                     </FormLayout.Section>
@@ -380,11 +439,12 @@ const ConceptForm = ({
                       id='subject'
                       title={localization.conceptForm.section.subjectTitle}
                       subtitle={localization.conceptForm.section.subjectSubtitle}
+                      changed={markDirty && dirtyFields.some((field) => ['fagområdeKoder'].includes(field))}
                       error={hasError(['fagområdeKoder'])}
                     >
                       <SubjectSection
                         codes={subjectCodeList?.codes}
-                        markDirty={markDirty}
+                        changed={markDirty ? dirtyFields : []}
                         readOnly={readOnly}
                       />
                     </FormLayout.Section>
@@ -392,10 +452,11 @@ const ConceptForm = ({
                       id='example'
                       title={localization.conceptForm.section.exampleTitle}
                       subtitle={localization.conceptForm.section.exampleSubtitle}
+                      changed={markDirty && dirtyFields.some((field) => ['eksempel'].includes(field))}
                       error={hasError(['eksempel'])}
                     >
                       <ExampleSection
-                        markDirty={markDirty}
+                        changed={markDirty ? dirtyFields : []}
                         readOnly={readOnly}
                       />
                     </FormLayout.Section>
@@ -403,10 +464,11 @@ const ConceptForm = ({
                       id='valueRange'
                       title={localization.conceptForm.section.valueRangeTitle}
                       subtitle={localization.conceptForm.section.valueRangeSubtitle}
+                      changed={markDirty && dirtyFields.some((field) => ['omfang'].includes(field))}
                       error={hasError(['omfang'])}
                     >
                       <ValueRangeSection
-                        markDirty={markDirty}
+                        changed={markDirty ? dirtyFields : []}
                         readOnly={readOnly}
                       />
                     </FormLayout.Section>
@@ -414,6 +476,19 @@ const ConceptForm = ({
                       id='relation'
                       title={localization.conceptForm.section.relationTitle}
                       subtitle={localization.conceptForm.section.relationSubtitle}
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) =>
+                          [
+                            'begrepsRelasjon',
+                            'erstattesAv',
+                            'seOgså',
+                            'internBegrepsRelasjon',
+                            'internErstattesAv',
+                            'internSeOgså',
+                          ].includes(field),
+                        )
+                      }
                       error={hasError([
                         'begrepsRelasjon',
                         'erstattesAv',
@@ -425,7 +500,7 @@ const ConceptForm = ({
                     >
                       <RelationSection
                         catalogId={catalogId}
-                        markDirty={markDirty}
+                        changed={markDirty ? dirtyFields : []}
                         readOnly={readOnly}
                       />
                     </FormLayout.Section>
@@ -433,13 +508,14 @@ const ConceptForm = ({
                       id='internal'
                       title={localization.conceptForm.section.internalTitle}
                       subtitle={localization.conceptForm.section.internalSubtitle}
+                      changed={markDirty && dirtyFields.some((field) => ['interneFelt'].includes(field))}
                       error={hasError(['interneFelt'])}
                     >
                       <InternalSection
                         codeLists={codeListsResult.codeLists}
                         internalFields={fieldsResult.internal}
                         userList={usersResult.users}
-                        markDirty={markDirty}
+                        changed={markDirty ? dirtyFields : []}
                         readOnly={readOnly}
                       />
                     </FormLayout.Section>
@@ -447,11 +523,12 @@ const ConceptForm = ({
                       id='status'
                       title={localization.conceptForm.section.conceptStatusTitle}
                       subtitle={localization.conceptForm.section.conceptStatusSubtitle}
+                      changed={markDirty && dirtyFields.some((field) => ['statusURI'].includes(field))}
                       error={hasError(['statusURI'])}
                     >
                       <StatusSection
                         conceptStatuses={conceptStatuses}
-                        markDirty={markDirty}
+                        changed={markDirty ? dirtyFields : []}
                         readOnly={readOnly}
                       />
                     </FormLayout.Section>
@@ -459,10 +536,11 @@ const ConceptForm = ({
                       id='version'
                       title={localization.conceptForm.section.versionTitle}
                       subtitle={localization.conceptForm.section.versionSubtitle}
+                      changed={markDirty && dirtyFields.some((field) => ['versjonsnr'].includes(field))}
                       error={hasError(['versjonsnr'])}
                     >
                       <VersionSection
-                        markDirty={markDirty}
+                        changed={markDirty ? dirtyFields : []}
                         readOnly={readOnly}
                       />
                     </FormLayout.Section>
@@ -470,10 +548,11 @@ const ConceptForm = ({
                       id='period'
                       title={localization.conceptForm.section.periodTitle}
                       subtitle={localization.conceptForm.section.periodSubtitle}
+                      changed={markDirty && dirtyFields.some((field) => ['gyldigFom', 'gyldigTom'].includes(field))}
                       error={hasError(['gyldigFom', 'gyldigTom'])}
                     >
                       <PeriodSection
-                        markDirty={markDirty}
+                        changed={markDirty ? dirtyFields : []}
                         readOnly={readOnly}
                       />
                     </FormLayout.Section>
@@ -482,10 +561,11 @@ const ConceptForm = ({
                       title={localization.conceptForm.section.contactTitle}
                       subtitle={localization.conceptForm.section.contactSubtitle}
                       required
+                      changed={markDirty && dirtyFields.some((field) => ['kontaktpunkt'].includes(field))}
                       error={hasError(['kontaktpunkt'])}
                     >
                       <ContactSection
-                        markDirty={markDirty}
+                        changed={markDirty ? dirtyFields : []}
                         readOnly={readOnly}
                       />
                     </FormLayout.Section>

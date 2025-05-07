@@ -8,21 +8,12 @@ import { localization } from '@catalog-frontend/utils';
 import { get, isEmpty, isEqual } from 'lodash';
 
 type PeriodSectionProps = {
-  markDirty?: boolean;
+  changed?: string[];
   readOnly?: boolean;
 };
 
-export const PeriodSection = ({ markDirty, readOnly }: PeriodSectionProps) => {
-  const { initialValues, values, errors } = useFormikContext<Concept>();
-
-  const fieldIsChanged = (name: string) => {
-    const a = get(initialValues, name);
-    const b = get(values, name);
-    if (isEmpty(a) && isEmpty(b)) {
-      return false;
-    }
-    return markDirty && !isEqual(a, b);
-  };
+export const PeriodSection = ({ changed, readOnly }: PeriodSectionProps) => {
+  const { values, errors } = useFormikContext<Concept>();
 
   return (
     <Fieldset
@@ -30,7 +21,7 @@ export const PeriodSection = ({ markDirty, readOnly }: PeriodSectionProps) => {
       legend={
         <TitleWithHelpTextAndTag
           helpText={localization.conceptForm.helpText.period}
-          changed={['gyldigFom', 'gyldigTom'].some((field) => fieldIsChanged(field))}
+          changed={['gyldigFom', 'gyldigTom'].some((field) => changed?.includes(field))}
         >
           {localization.conceptForm.fieldLabel.period}
         </TitleWithHelpTextAndTag>

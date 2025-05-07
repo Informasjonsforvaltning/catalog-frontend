@@ -52,25 +52,16 @@ function getFirstErrorByRootKeys(obj: FormikErrors<Concept>, rootKeys: string[])
 }
 
 type DefinitionSectionProps = {
-  markDirty?: boolean;
+  changed?: string[];
   readOnly?: boolean;
 };
 
-export const DefinitionSection = ({ markDirty, readOnly }: DefinitionSectionProps) => {
-  const { initialValues, errors, values, setFieldValue } = useFormikContext<Concept>();
+export const DefinitionSection = ({ changed, readOnly }: DefinitionSectionProps) => {
+  const { errors, values, setFieldValue } = useFormikContext<Concept>();
   const [open, setOpen] = useState<Record<number, boolean>>({});
 
   const definitions = ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'];
   const allowedLanguages = Object.freeze<ISOLanguage[]>(['nb', 'nn', 'en']);
-
-  const fieldIsChanged = (name: string) => {
-    const a = get(initialValues, name);
-    const b = get(values, name);
-    if (isEmpty(a) && isEmpty(b)) {
-      return false;
-    }
-    return markDirty && !isEqual(a, b);
-  };
 
   const prepareInitialValues = (def: Definisjon): Definisjon => {
     return {
@@ -113,7 +104,7 @@ export const DefinitionSection = ({ markDirty, readOnly }: DefinitionSectionProp
             <TitleWithHelpTextAndTag
               helpText={localization.conceptForm.helpText.definition}
               tagTitle={localization.tag.required}
-              changed={definitions.some((def) => fieldIsChanged(def))}
+              changed={definitions.some((def) => changed?.includes(def))}
             >
               Definisjon
             </TitleWithHelpTextAndTag>

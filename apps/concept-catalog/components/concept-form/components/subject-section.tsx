@@ -10,23 +10,14 @@ import { get, isEmpty, isEqual } from 'lodash';
 
 type SubjectSectionProps = {
   codes: Code[] | undefined;
-  markDirty?: boolean;
+  changed?: string[];
   readOnly?: boolean;
 };
-export const SubjectSection = ({ codes, markDirty, readOnly }: SubjectSectionProps) => {
-  const { initialValues, errors, values, setFieldValue } = useFormikContext<Concept>();
+export const SubjectSection = ({ codes, changed, readOnly }: SubjectSectionProps) => {
+  const { errors, values, setFieldValue } = useFormikContext<Concept>();
 
   const selected = values.fagområdeKoder?.filter((v) => codes?.find((code) => code.id === v));
   const codeListActivated = codes !== undefined;
-
-  const fieldIsChanged = (name: string) => {
-    const a = get(initialValues, name);
-    const b = get(values, name);
-    if (isEmpty(a) && isEmpty(b)) {
-      return false;
-    }
-    return markDirty && !isEqual(a, b);
-  };
 
   const ConflictAlert = () => {
     if (!codeListActivated && !isEmpty(values.fagområdeKoder)) {
@@ -107,7 +98,7 @@ export const SubjectSection = ({ codes, markDirty, readOnly }: SubjectSectionPro
                   }
                 : {})}
               helpText={localization.conceptForm.helpText.subjectFree}
-              changed={fieldIsChanged('fagområde')}
+              changed={changed?.includes('fagområde')}
             >
               {localization.conceptForm.fieldLabel.subjectFree}
             </TitleWithHelpTextAndTag>
@@ -125,7 +116,7 @@ export const SubjectSection = ({ codes, markDirty, readOnly }: SubjectSectionPro
             }
           : {})}
         helpText={localization.conceptForm.helpText.subjectCodeList}
-        changed={fieldIsChanged('fagområdeKoder')}
+        changed={changed?.includes('fagområdeKoder')}
       >
         {localization.conceptForm.fieldLabel.subjectCodeList}
       </TitleWithHelpTextAndTag>

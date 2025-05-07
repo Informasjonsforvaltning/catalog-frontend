@@ -6,6 +6,7 @@ import { Heading, Link, Paragraph, Tag } from '@digdir/designsystemet-react';
 import { useIntersectionObserver } from '../intersection-observer';
 import classNames from 'classnames';
 import { localization } from '@catalog-frontend/utils';
+import { isEmpty } from 'lodash';
 
 type FormLayoutProps = {
   title?: ReactNode;
@@ -21,6 +22,7 @@ type SectionProps = {
   title: string;
   subtitle?: string;
   required?: boolean;
+  changed?: boolean;
   error?: boolean;
 } & PropsWithChildren;
 
@@ -92,7 +94,7 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
         <div className={styles.sideMenu}>
           <SideMenu heading='Innhold i skjema'>
             {sectionArray.map((child, index) => {
-              const { id, title, required, error } = child.props as SectionProps;
+              const { id, title, required, changed, error } = child.props as SectionProps;
               return (
                 <MenuItem
                   key={`menu-item-${id}`}
@@ -114,6 +116,15 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
                         </span>
                       )}
                     </span>
+                    {changed && (
+                      <Tag
+                        size='sm'
+                        color='warning'
+                        style={{ scale: 0.8, margin: '-0.25rem 0' }}
+                      >
+                        {localization.changed}
+                      </Tag>
+                    )}
                     {error && (
                       <Tag
                         size='sm'

@@ -2,27 +2,18 @@ import { FastField, useFormikContext } from 'formik';
 import { ErrorMessage, Fieldset, Textfield } from '@digdir/designsystemet-react';
 import styles from './version-fieldset.module.scss';
 import { Concept } from '@catalog-frontend/types';
-import _, { get, isEmpty, isEqual } from 'lodash';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
+import { get } from 'lodash';
 
 export type VersionFieldsetProps = {
   name: string;
-  markDirty?: boolean;
+  changed?: string[];
   readOnly?: boolean;
 };
 
-export const VersionFieldset = ({ name, markDirty, readOnly }) => {
-  const { errors, initialValues, values } = useFormikContext<Concept>();
-
-  const fieldIsChanged = () => {
-    const a = get(initialValues, name);
-    const b = get(values, name);
-    if (isEmpty(a) && isEmpty(b)) {
-      return false;
-    }
-    return markDirty && !isEqual(a, b);
-  };
+export const VersionFieldset = ({ name, changed, readOnly }) => {
+  const { errors } = useFormikContext<Concept>();
 
   return (
     <>
@@ -31,7 +22,7 @@ export const VersionFieldset = ({ name, markDirty, readOnly }) => {
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.versionNumber}
-            changed={fieldIsChanged()}
+            changed={changed?.includes(name)}
           >
             {localization.conceptForm.fieldLabel.versionNumber}
           </TitleWithHelpTextAndTag>
@@ -45,7 +36,7 @@ export const VersionFieldset = ({ name, markDirty, readOnly }) => {
             min='0'
             size='sm'
             name={`${name}.major`}
-            error={typeof _.get(errors, name) === 'string'}
+            error={typeof get(errors, name) === 'string'}
             readOnly={readOnly}
           />
           <FastField
@@ -55,7 +46,7 @@ export const VersionFieldset = ({ name, markDirty, readOnly }) => {
             min='0'
             size='sm'
             name={`${name}.minor`}
-            error={typeof _.get(errors, name) === 'string'}
+            error={typeof get(errors, name) === 'string'}
             readOnly={readOnly}
           />
           <FastField
@@ -65,13 +56,13 @@ export const VersionFieldset = ({ name, markDirty, readOnly }) => {
             min='0'
             size='sm'
             name={`${name}.patch`}
-            error={typeof _.get(errors, name) === 'string'}
+            error={typeof get(errors, name) === 'string'}
             readOnly={readOnly}
           />
         </div>
       </Fieldset>
-      {typeof _.get(errors, name) === 'string' ? (
-        <ErrorMessage size='sm'>{_.get(errors, name)}</ErrorMessage>
+      {typeof get(errors, name) === 'string' ? (
+        <ErrorMessage size='sm'>{get(errors, name)}</ErrorMessage>
       ) : undefined}
     </>
   );
