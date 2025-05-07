@@ -63,7 +63,7 @@ export const datasetFormNb = {
     contactPoint:
       'Et kontaktpunkt er informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om datasettet. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.',
     statusSwitch:
-      'Toggelen bestemmer om begrepsbeskrivelsen blir lagret med status “Godkjent” eller som et “Utkast”. For å endre status til “Godkjent” må alle obligatoriske felter være fylt ut. Husk å lagre skjemaet for å oppdatere status.',
+      'Toggelen bestemmer om begrepsbeskrivelsen blir lagret med status “Godkjent” eller som et “Utkast”. Husk å lagre skjemaet for å oppdatere status.',
     keyword:
       'Emneord eller tagger beskriver sentralt innhold i datasettet, spesielt når begrepsdefinisjoner mangler eller når det brukes ord som folk ofte søker etter, men som ikke formelt er knyttet til datasettet.',
     concept:
@@ -141,6 +141,7 @@ export const datasetFormNb = {
     sample: 'Eksempeldata',
     datasetID: 'Datasett-ID',
     registrationStatus: 'Registeringsstatus',
+    ignoreRequired: 'Ignorer påkrevde felt',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
@@ -148,6 +149,8 @@ export const datasetFormNb = {
     confirmUnpublish: 'Er du sikker på at du vil avpublisere datasettbeskrivelsen?',
     confirmPublish: 'Er du sikkert på at du vil publisere datasettbeskrivelsen?',
     youHaveUnsavedChanges: 'Det finnes endringer som ikke har blitt lagret på datasettbeskrivelsen:',
+    ignoreRequired:
+      'I utgangspunktet er det krav om at alle påkrevde felt må fylles ut for å få lagret. Når avhukingsboksen er aktiv, må bare tittel være fylt ut.',
   },
   validation: {
     title: 'Tittelen må være minst 3 karakterer lang.',

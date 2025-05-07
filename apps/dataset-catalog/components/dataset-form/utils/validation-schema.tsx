@@ -32,6 +32,29 @@ const contactPointConfirmValidationSchema = Yup.array()
   });
 
 export const draftDatasetSchema = Yup.object().shape({
+  title: Yup.object()
+    .shape({
+      nb: Yup.string()
+        .min(3, localization.datasetForm.validation.title)
+        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.nb})`)
+        .notRequired(),
+      nn: Yup.string()
+        .min(3, localization.datasetForm.validation.title)
+        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.nn})`)
+        .notRequired(),
+      en: Yup.string()
+        .min(3, localization.datasetForm.validation.title)
+        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.en})`)
+        .notRequired(),
+    })
+    .test('title-test', localization.validation.oneLanguageRequired, (title) => {
+      if (!title) {
+        return false;
+      }
+      return !!(title.nb || title.nn || title.en);
+    }
+  ),
+
   landingPage: Yup.array().of(
     Yup.string()
       .nullable()

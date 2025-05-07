@@ -6,7 +6,7 @@ import {
   localization,
   trimObjectWhitespace,
 } from '@catalog-frontend/utils';
-import { Alert, Button, Paragraph, Spinner, Switch } from '@digdir/designsystemet-react';
+import {Alert, Button, Checkbox, Paragraph, Spinner, Switch} from '@digdir/designsystemet-react';
 import { Dataset, DatasetToBeCreated, ReferenceData, PublicationStatus, StorageData } from '@catalog-frontend/types';
 import {
   FormikAutoSaver,
@@ -33,6 +33,7 @@ import { ContactPointSection } from './components/contact-point-section';
 import styles from './dataset-form.module.css';
 import { useRouter } from 'next/navigation';
 import { DetailsSection } from './components/details-section/details-section';
+import classNames from "classnames";
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
@@ -72,6 +73,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
   const [isDirty, setIsDirty] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
+  const [ignoreRequired, setIgnoreRequired] = useState(true);
   const { losThemes, dataThemes, openLicenses } = referenceData;
   const router = useRouter();
   const [formStatus, setFormStatus] = useState(initialValues?.registrationStatus);
@@ -166,7 +168,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
       <Formik
         innerRef={formikRef}
         initialValues={datasetTemplate(initialValues as Dataset)}
-        validationSchema={formStatus !== PublicationStatus.DRAFT ? confirmedDatasetSchema : draftDatasetSchema}
+        validationSchema={ignoreRequired ? draftDatasetSchema : confirmedDatasetSchema }
         validateOnChange={isSubmitted}
         validateOnBlur={isSubmitted}
         onSubmit={async (values, { setSubmitting }) => {
@@ -343,6 +345,20 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                       </HelpMarkdown>
                     </div>
                   </Switch>
+                  <div className={styles.verticalLine}></div>
+                  <div className={classNames(styles.flex, styles.gap2, styles.noWrap)}>
+                    <Checkbox
+                      size='sm'
+                      value='ignoreRequired'
+                      checked={ignoreRequired}
+                      onChange={(e) => setIgnoreRequired(e.target.checked)}
+                    >
+                      {localization.datasetForm.fieldLabel.ignoreRequired}
+                    </Checkbox>
+                    <HelpMarkdown aria-label={`Help ${localization.datasetForm.fieldLabel.ignoreRequired}`}>
+                      {localization.datasetForm.alert.ignoreRequired}
+                    </HelpMarkdown>
+                  </div>
                 </div>
                 {notifications.length > 0 && <NotificationCarousel notifications={notifications} />}
               </StickyFooterBar>
