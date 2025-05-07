@@ -96,7 +96,7 @@
     "@nx/js": "20.8.0",
     "@nx/next": "^20.8.0",
     "@nx/playwright": "20.8.0",
-    "@nx/react": "20.8.0",
+    "@nx/react": "20.8.1",
     "@nx/web": "20.8.0",
     "@nx/webpack": "20.8.0",
     "@nx/workspace": "20.8.0",
