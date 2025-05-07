@@ -367,6 +367,7 @@ export const nb = {
     isReplacedBy: 'Erstattes av',
     label: 'Merkelapp',
     dateLastUpdated: 'Dato sist oppdatert',
+    created: 'Opprettet',
     noName: 'Uten navn',
     hiddenLabel: 'Frarådet term',
     remark: 'Merknad',
