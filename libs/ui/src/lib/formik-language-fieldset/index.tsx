@@ -22,7 +22,6 @@ type LanuguageFieldsetProps = {
   as?: typeof Textfield | typeof TextareaWithPrefix;
   multiple?: boolean;
   readOnly?: boolean;
-  allowDeleteWhenReadOnly?: boolean;
   showError?: boolean;
 };
 
@@ -35,7 +34,6 @@ export const FormikLanguageFieldset = ({
   as: renderAs = Textfield,
   multiple = false,
   readOnly = false,
-  allowDeleteWhenReadOnly = false,
   showError = true,
 }: LanuguageFieldsetProps) => {
   const { errors, getFieldMeta, setFieldValue } = useFormikContext<Record<string, LocalizedStrings>>();
@@ -46,7 +44,7 @@ export const FormikLanguageFieldset = ({
         acc[lang] = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
         return acc;
       },
-      {} as Record<string, React.RefObject<HTMLInputElement | HTMLTextAreaElement>>,
+      {} as Record<string, React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>>,
     ),
   );
 
@@ -117,7 +115,6 @@ export const FormikLanguageFieldset = ({
               showDeleteButton
               onDeleteButtonClicked={() => handleRemoveLanguage(lang)}
               readOnly={readOnly}
-              allowDeleteWhenReadOnly={allowDeleteWhenReadOnly}
               error={hasError(lang)}
             />
           ) : (
