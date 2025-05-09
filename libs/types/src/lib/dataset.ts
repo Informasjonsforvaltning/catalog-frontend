@@ -63,7 +63,7 @@ export type DateRange = {
 };
 
 export type Reference = {
-  referenceType: { code: string };
+  referenceType: { uri: string };
   source: { uri: string };
 };
 
