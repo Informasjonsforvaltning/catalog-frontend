@@ -59,7 +59,6 @@ const DatasetDetailsPageClient = ({
       headingTitle={getTranslateText(dataset?.title ?? '', language)}
       headingTag={
         <StatusTag
-          size='md'
           datasetStatus={dataset.registrationStatus}
         />
       }

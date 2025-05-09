@@ -18,6 +18,7 @@ import { AccessRightsDetails } from './components/access-rights-details';
 import { TemporalDetails } from './components/temporal-details';
 import TagList from '../tag-list';
 import _ from 'lodash';
+import Markdown from "react-markdown";
 
 type Props = {
   dataset: Dataset;
@@ -64,7 +65,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
     <InfoCard>
       {hasValues(dataset?.description) && (
         <InfoCard.Item title={localization.description}>
-          <Paragraph size='sm'>{getTranslateText(dataset?.description, language)} </Paragraph>
+          <Markdown>{getTranslateText(dataset?.description, language) as string}</Markdown>
         </InfoCard.Item>
       )}
       {hasValues(dataset?.accessRights) && (
