@@ -48,20 +48,26 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
         throw error;
       });
 
-    const originalConcept =
-      changeRequest.conceptId && validUUID(changeRequest.conceptId)
-        ? await getConceptRevisions(`${changeRequest.conceptId}`, `${session.accessToken}`).then((response) => {
-            if (response.ok) {
-              return response.json().then((revisions: Concept[]) => {
-                return revisions.reduce(function (prev, current) {
-                  return conceptIsHigherVersion(prev, current) ? prev : current;
+    let originalConcept;
+
+    if (changeRequest.status !== 'OPEN' && changeRequest.conceptSnapshot) {
+      originalConcept = changeRequest.conceptSnapshot;
+    } else {
+      originalConcept =
+        changeRequest.conceptId && validUUID(changeRequest.conceptId)
+          ? await getConceptRevisions(`${changeRequest.conceptId}`, `${session.accessToken}`).then((response) => {
+              if (response.ok) {
+                return response.json().then((revisions: Concept[]) => {
+                  return revisions.reduce(function (prev, current) {
+                    return conceptIsHigherVersion(prev, current) ? prev : current;
+                  });
                 });
-              });
-            } else {
-              return redirect(`/notfound`, RedirectType.replace);
-            }
-          })
-        : undefined;
+              } else {
+                return redirect(`/notfound`, RedirectType.replace);
+              }
+            })
+          : null;
+    }
 
     const changeRequestAsConcept: Concept = jsonpatch.applyPatch(
       jsonpatch.deepClone(originalConcept || baselineConcept),

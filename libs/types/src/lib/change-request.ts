@@ -1,3 +1,4 @@
+import { Concept } from './concept';
 import { JsonPatchOperation } from './json-patch';
 import { UserName } from './user';
 
@@ -6,6 +7,7 @@ export type ChangeRequestStatus = 'OPEN' | 'REJECTED' | 'ACCEPTED';
 export interface ChangeRequest {
   id: string | null;
   conceptId?: string | null;
+  conceptSnapshot?: Concept | null;
   catalogId: string;
   status: ChangeRequestStatus;
   operations: JsonPatchOperation[];
