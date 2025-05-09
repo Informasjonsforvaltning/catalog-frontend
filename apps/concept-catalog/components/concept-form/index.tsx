@@ -321,7 +321,7 @@ const ConceptForm = ({
             };
 
             [
-              ...Object.keys(values),
+              ...Object.keys({ ...initialValues, ...values }),
               'interneFelt.assignedUser',
               'interneFelt.abbreviatedLabel',
               'interneFelt.merkelapp',
