@@ -11,7 +11,6 @@ export const AboutSection = () => {
       <FormikLanguageFieldset
         name={'title'}
         as={Textfield}
-        requiredLanguages={['nb']}
         legend={
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.required}

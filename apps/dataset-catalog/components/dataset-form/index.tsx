@@ -6,9 +6,10 @@ import {
   localization,
   trimObjectWhitespace,
 } from '@catalog-frontend/utils';
-import { Alert, Button, Paragraph, Spinner, Switch } from '@digdir/designsystemet-react';
+import {Alert, Button, Checkbox, Paragraph, Spinner, Switch} from '@digdir/designsystemet-react';
 import { Dataset, DatasetToBeCreated, ReferenceData, PublicationStatus, StorageData } from '@catalog-frontend/types';
 import {
+  ConfirmModal,
   FormikAutoSaver,
   FormikAutoSaverRef,
   FormLayout,
@@ -21,7 +22,7 @@ import { Formik, Form, FormikProps } from 'formik';
 import { useParams, useSearchParams } from 'next/navigation';
 import { createDataset, updateDataset } from '../../app/actions/actions';
 import { datasetTemplate } from './utils/dataset-initial-values';
-import { useRef, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 import { confirmedDatasetSchema, draftDatasetSchema } from './utils/validation-schema';
 import { AboutSection } from './components/about-section';
 import ThemeSection from './components/theme-section';
@@ -33,6 +34,7 @@ import { ContactPointSection } from './components/contact-point-section';
 import styles from './dataset-form.module.css';
 import { useRouter } from 'next/navigation';
 import { DetailsSection } from './components/details-section/details-section';
+import classNames from "classnames";
 
 type Props = {
   initialValues: DatasetToBeCreated | Dataset;
@@ -72,6 +74,8 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
   const [isDirty, setIsDirty] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
+  const [ignoreRequired, setIgnoreRequired] = useState(true);
+  const [showUnapproveModal, setShowUnapproveModal] = useState(false);
   const { losThemes, dataThemes, openLicenses } = referenceData;
   const router = useRouter();
   const [formStatus, setFormStatus] = useState(initialValues?.registrationStatus);
@@ -129,6 +133,21 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
     router.push(datasetId ? `/catalogs/${catalogId}/datasets/${datasetId}` : `/catalogs/${catalogId}/datasets`);
   };
 
+  const handleIgnoreRequiredChange = (newValue: boolean) => {
+    if (newValue && formStatus && formStatus !== PublicationStatus.DRAFT) {
+      setShowUnapproveModal(true);
+    } else {
+      setIgnoreRequired(newValue);
+    }
+  };
+
+  const handleUnapproveConfirm = (setFieldValue: (fieldName: string, value: string) => void) => {
+    setFormStatus(PublicationStatus.DRAFT);
+    setFieldValue('registrationStatus', PublicationStatus.DRAFT);
+    setIgnoreRequired(true);
+    setShowUnapproveModal(false);
+  }
+
   type Notifications = {
     isValid: boolean;
     hasUnsavedChanges: boolean;
@@ -161,12 +180,18 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
       : []),
   ];
 
+  useEffect(() => {
+    if (formStatus && formStatus !== PublicationStatus.DRAFT) {
+      setIgnoreRequired(false);
+    }
+  }, [setIgnoreRequired, formStatus]);
+
   return (
     <>
       <Formik
         innerRef={formikRef}
         initialValues={datasetTemplate(initialValues as Dataset)}
-        validationSchema={formStatus !== PublicationStatus.DRAFT ? confirmedDatasetSchema : draftDatasetSchema}
+        validationSchema={ignoreRequired ? draftDatasetSchema : confirmedDatasetSchema }
         validateOnChange={isSubmitted}
         validateOnBlur={isSubmitted}
         onSubmit={async (values, { setSubmitting }) => {
@@ -343,9 +368,31 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                       </HelpMarkdown>
                     </div>
                   </Switch>
+                  <div className={styles.verticalLine}></div>
+                  <div className={classNames(styles.flex, styles.gap2, styles.noWrap)}>
+                    <Checkbox
+                      size='sm'
+                      value='ignoreRequired'
+                      checked={ignoreRequired}
+                      onChange={(e) => handleIgnoreRequiredChange(e.target.checked)}
+                    >
+                      {localization.datasetForm.fieldLabel.ignoreRequired}
+                    </Checkbox>
+                    <HelpMarkdown aria-label={`Help ${localization.datasetForm.fieldLabel.ignoreRequired}`}>
+                      {localization.datasetForm.alert.ignoreRequired}
+                    </HelpMarkdown>
+                  </div>
                 </div>
                 {notifications.length > 0 && <NotificationCarousel notifications={notifications} />}
               </StickyFooterBar>
+              {showUnapproveModal && (
+                <ConfirmModal
+                  title={localization.datasetForm.unapproveModal.title}
+                  content={localization.datasetForm.unapproveModal.message}
+                  onSuccess={() => handleUnapproveConfirm(setFieldValue)}
+                  onCancel={() => setShowUnapproveModal(false)}
+                />
+              )}
             </>
           );
         }}
