@@ -9,6 +9,7 @@ import {
 import {Alert, Button, Checkbox, Paragraph, Spinner, Switch} from '@digdir/designsystemet-react';
 import { Dataset, DatasetToBeCreated, ReferenceData, PublicationStatus, StorageData } from '@catalog-frontend/types';
 import {
+  ConfirmModal,
   FormikAutoSaver,
   FormikAutoSaverRef,
   FormLayout,
@@ -21,7 +22,7 @@ import { Formik, Form, FormikProps } from 'formik';
 import { useParams, useSearchParams } from 'next/navigation';
 import { createDataset, updateDataset } from '../../app/actions/actions';
 import { datasetTemplate } from './utils/dataset-initial-values';
-import { useRef, useState } from 'react';
+import {useEffect, useRef, useState} from 'react';
 import { confirmedDatasetSchema, draftDatasetSchema } from './utils/validation-schema';
 import { AboutSection } from './components/about-section';
 import ThemeSection from './components/theme-section';
@@ -74,6 +75,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
   const [ignoreRequired, setIgnoreRequired] = useState(true);
+  const [showUnapproveModal, setShowUnapproveModal] = useState(false);
   const { losThemes, dataThemes, openLicenses } = referenceData;
   const router = useRouter();
   const [formStatus, setFormStatus] = useState(initialValues?.registrationStatus);
@@ -131,6 +133,21 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
     router.push(datasetId ? `/catalogs/${catalogId}/datasets/${datasetId}` : `/catalogs/${catalogId}/datasets`);
   };
 
+  const handleIgnoreRequiredChange = (newValue: boolean) => {
+    if (newValue && formStatus && formStatus !== PublicationStatus.DRAFT) {
+      setShowUnapproveModal(true);
+    } else {
+      setIgnoreRequired(newValue);
+    }
+  };
+
+  const handleUnapproveConfirm = (setFieldValue: (fieldName: string, value: string) => void) => {
+    setFormStatus(PublicationStatus.DRAFT);
+    setFieldValue('registrationStatus', PublicationStatus.DRAFT);
+    setIgnoreRequired(true);
+    setShowUnapproveModal(false);
+  }
+
   type Notifications = {
     isValid: boolean;
     hasUnsavedChanges: boolean;
@@ -162,6 +179,12 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
         ]
       : []),
   ];
+
+  useEffect(() => {
+    if (formStatus && formStatus !== PublicationStatus.DRAFT) {
+      setIgnoreRequired(false);
+    }
+  }, [setIgnoreRequired, formStatus]);
 
   return (
     <>
@@ -351,7 +374,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                       size='sm'
                       value='ignoreRequired'
                       checked={ignoreRequired}
-                      onChange={(e) => setIgnoreRequired(e.target.checked)}
+                      onChange={(e) => handleIgnoreRequiredChange(e.target.checked)}
                     >
                       {localization.datasetForm.fieldLabel.ignoreRequired}
                     </Checkbox>
@@ -362,6 +385,14 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                 </div>
                 {notifications.length > 0 && <NotificationCarousel notifications={notifications} />}
               </StickyFooterBar>
+              {showUnapproveModal && (
+                <ConfirmModal
+                  title={localization.datasetForm.unapproveModal.title}
+                  content={localization.datasetForm.unapproveModal.message}
+                  onSuccess={() => handleUnapproveConfirm(setFieldValue)}
+                  onCancel={() => setShowUnapproveModal(false)}
+                />
+              )}
             </>
           );
         }}

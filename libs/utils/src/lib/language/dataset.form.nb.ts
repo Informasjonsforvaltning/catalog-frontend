@@ -63,7 +63,7 @@ export const datasetFormNb = {
     contactPoint:
       'Et kontaktpunkt er informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om datasettet. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.',
     statusSwitch:
-      'Toggelen bestemmer om begrepsbeskrivelsen blir lagret med status “Godkjent” eller som et “Utkast”. Husk å lagre skjemaet for å oppdatere status.',
+      'Toggelen bestemmer om datasettbeskrivelsen blir lagret med status “Godkjent” eller som et “Utkast”. For å endre status til “Godkjent” må alle obligatoriske felter være fylt ut. Husk å lagre skjemaet for å oppdatere status.',
     keyword:
       'Emneord eller tagger beskriver sentralt innhold i datasettet, spesielt når begrepsdefinisjoner mangler eller når det brukes ord som folk ofte søker etter, men som ikke formelt er knyttet til datasettet.',
     concept:
@@ -185,4 +185,8 @@ export const datasetFormNb = {
     PUBLISH: 'Publisert',
     APPROVE: 'Godkjent',
   },
+  unapproveModal: {
+    title: 'Datasettet er godkjent',
+    message: 'Kan ikke ignorere påkrevde felt for godkjente datasett. Skal godkjenningen også fjernes?',
+  }
 };
