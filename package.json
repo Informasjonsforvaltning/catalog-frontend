@@ -98,7 +98,7 @@
     "@nx/playwright": "20.8.0",
     "@nx/react": "20.8.0",
     "@nx/web": "20.8.0",
-    "@nx/webpack": "20.8.0",
+    "@nx/webpack": "21.0.3",
     "@nx/workspace": "20.8.0",
     "@playwright/test": "^1.51.1",
     "@svgr/webpack": "^8.1.0",
