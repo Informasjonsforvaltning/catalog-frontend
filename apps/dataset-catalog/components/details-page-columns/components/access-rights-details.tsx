@@ -7,6 +7,7 @@ import _ from 'lodash';
 
 type Props = {
   dataset: Dataset;
+  language?: string;
 };
 
 const hasNoFieldValues = (values: UriWithLabel) => {
@@ -16,7 +17,7 @@ const hasNoFieldValues = (values: UriWithLabel) => {
   );
 };
 
-export const AccessRightsDetails = ({ dataset }: Props) => {
+export const AccessRightsDetails = ({ dataset, language }: Props) => {
   const allLegalBases = useMemo(
     () => [
       ...(dataset.legalBasisForRestriction ?? [])
@@ -47,7 +48,7 @@ export const AccessRightsDetails = ({ dataset }: Props) => {
   const accessRightsOptions = useMemo(
     () =>
       accessRights.map((accessRight) => {
-        return { value: accessRight.uri, label: getTranslateText(accessRight.label) };
+        return { value: accessRight.uri, label: getTranslateText(accessRight.label, language) };
       }),
     [],
   );
@@ -82,7 +83,7 @@ export const AccessRightsDetails = ({ dataset }: Props) => {
                     (item, i) =>
                       item?.uriWithLabel && (
                         <Table.Row key={`${item.type}-tableRow-${i}`}>
-                          <Table.Cell>{getTranslateText(item?.uriWithLabel.prefLabel)}</Table.Cell>
+                          <Table.Cell>{getTranslateText(item?.uriWithLabel.prefLabel, language)}</Table.Cell>
                           <Table.Cell>{item?.uriWithLabel.uri}</Table.Cell>
                           <Table.Cell>{localization.datasetForm.fieldLabel[item?.type]}</Table.Cell>
                         </Table.Row>
