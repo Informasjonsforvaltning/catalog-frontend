@@ -1,9 +1,10 @@
-import { localization, prepareStatusList } from '@catalog-frontend/utils';
+import { getServerConceptsPageSettings, localization, prepareStatusList } from '@catalog-frontend/utils';
 import { CodeListsResult, FieldsResult, UsersResult } from '@catalog-frontend/types';
 import { getAllCodeLists, getConceptStatuses, getFields, getUsers } from '@catalog-frontend/data-access';
 import { withReadProtectedPage } from '@concept-catalog/utils/auth';
 import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
 import { SearchPageClient } from './search-page-client';
+import { cookies } from 'next/headers';
 
 const SearchPage = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}`,
@@ -33,6 +34,8 @@ const SearchPage = withReadProtectedPage(
         ] as BreadcrumbType[])
       : [];
 
+    const pageSettings = getServerConceptsPageSettings(await cookies());
+
     return (
       <>
         <Breadcrumbs
@@ -51,6 +54,7 @@ const SearchPage = withReadProtectedPage(
           codeListsResult={codeListsResult}
           usersResult={usersResult}
           conceptStatuses={conceptStatuses}
+          pageSettings={pageSettings}
         />
       </>
     );

@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'nuqs';
 import { isEmpty } from 'lodash';
 import { useRouter } from 'next/navigation';
-import { SearchableField, QuerySort } from '@catalog-frontend/types';
+import { SearchableField, QuerySort, ConceptsPageSettings } from '@catalog-frontend/types';
 import {
   UploadButton,
   SearchHitContainer,
@@ -14,7 +14,7 @@ import {
   LinkButton,
   SearchField,
 } from '@catalog-frontend/ui';
-import { getTranslateText, capitalizeFirstLetter, localization as loc, localization } from '@catalog-frontend/utils';
+import { getTranslateText, capitalizeFirstLetter, localization as loc, localization, setClientConceptsPageSettings } from '@catalog-frontend/utils';
 import { Chip, Tabs } from '@digdir/designsystemet-react';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 import {
@@ -30,7 +30,7 @@ import styles from './search-page.module.scss';
 
 export type FilterType = 'published' | 'status' | 'assignedUser' | 'subject' | 'internalFields' | 'label';
 
-interface Props {
+type Props = {
   catalogId: string;
   hasWritePermission: boolean;
   hasAdminPermission: boolean;
@@ -38,7 +38,8 @@ interface Props {
   codeListsResult: any;
   usersResult: any;
   conceptStatuses: any;
-}
+  pageSettings?: ConceptsPageSettings;
+};
 
 export const SearchPageClient = ({
   catalogId,
@@ -48,25 +49,54 @@ export const SearchPageClient = ({
   codeListsResult,
   usersResult,
   conceptStatuses,
+  pageSettings
 }: Props) => {
   const router = useRouter();
 
-  const [selectedFieldOption, setSelectedFieldOption] = useState('alleFelter' as SearchableField | 'alleFelter');
-  const [selectedSortOption, setSelectedSortOption] = useState(SortOption.RELEVANCE);
-  const [page, setPage] = useQueryState('page', parseAsInteger);
-  const [searchTerm, setSearchTerm] = useQueryState('search', { defaultValue: '' });
-  const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString));
+  // Memoize default values for query states
+  const defaultSelectedFieldOption = useMemo(() => pageSettings?.searchField ?? 'alleFelter', []);
+  const defaultSelectedSortOption = useMemo(() => pageSettings?.sort ?? SortOption.RELEVANCE, []);
+  const defaultPage = useMemo(() => pageSettings?.page ?? 0, []);
+  const defaultSearchTerm = useMemo(() => pageSettings?.search ?? '', []);
+  const defaultFilterStatus = useMemo(() => pageSettings?.filter?.status ?? [], []);
+  const defaultFilterPublicationState = useMemo(() => pageSettings?.filter?.pubState ?? [], []);
+  const defaultFilterAssignedUser = useMemo(() => pageSettings?.filter?.assignedUser ?? '', []);
+  const defaultFilterInternalFields = useMemo(() => pageSettings?.filter?.internalFields ?? {}, []);
+  const defaultFilterLabel = useMemo(() => pageSettings?.filter?.label ?? [], []);
+  const defaultFilterSubject = useMemo(() => pageSettings?.filter?.subject ?? [], []);
+
+  // Query states
+  const [selectedFieldOption, setSelectedFieldOption] = useQueryState('conceptField', {
+    defaultValue: defaultSelectedFieldOption,
+  });
+  const [selectedSortOption, setSelectedSortOption] = useQueryState('conceptSort', {
+    defaultValue: defaultSelectedSortOption,
+  });
+  const [page, setPage] = useQueryState('conceptPage', parseAsInteger.withDefault(defaultPage));
+  const [searchTerm, setSearchTerm] = useQueryState('conceptSearch', { defaultValue: defaultSearchTerm });
+  const [filterStatus, setFilterStatus] = useQueryState(
+    'conceptFilter.status',
+    parseAsArrayOf(parseAsString).withDefault(defaultFilterStatus),
+  );
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
-    'filter.pubState',
-    parseAsArrayOf(parseAsString),
+    'conceptFilter.pubState',
+    parseAsArrayOf(parseAsString).withDefault(defaultFilterPublicationState),
   );
-  const [filterAssignedUser, setFilterAssignedUser] = useQueryState('filter.assignedUser');
+  const [filterAssignedUser, setFilterAssignedUser] = useQueryState('conceptFilter.assignedUser', {
+    defaultValue: defaultFilterAssignedUser,
+  });
   const [filterInternalFields, setFilterInternalFields] = useQueryState(
-    'filter.internalFields',
-    parseAsJson<Record<string, string[]>>(() => ({})),
+    'conceptFilter.internalFields',
+    parseAsJson<Record<string, string[]>>(() => ({})).withDefault(defaultFilterInternalFields),
   );
-  const [filterLabel, setFilterLabel] = useQueryState('filter.label', parseAsArrayOf(parseAsString));
-  const [filterSubject, setFilterSubject] = useQueryState('filter.subject', parseAsArrayOf(parseAsString));
+  const [filterLabel, setFilterLabel] = useQueryState(
+    'conceptFilter.label',
+    parseAsArrayOf(parseAsString).withDefault(defaultFilterLabel),
+  );
+  const [filterSubject, setFilterSubject] = useQueryState(
+    'conceptFilter.subject',
+    parseAsArrayOf(parseAsString).withDefault(defaultFilterSubject),
+  );
 
   const sortMappings: Record<SortOption, QuerySort | undefined> = {
     [SortOption.RELEVANCE]: undefined,
@@ -112,7 +142,7 @@ export const SearchPageClient = ({
     catalogId,
     searchTerm: searchTerm ?? '',
     page: page ?? 0,
-    fields: getSearchFields(selectedFieldOption),
+    fields: getSearchFields(selectedFieldOption as SearchableField | 'alleFelter'),
     sort: sortMappings[selectedSortOption],
     filters: {
       ...(filterStatus?.length && {
@@ -218,6 +248,35 @@ export const SearchPageClient = ({
   useEffect(() => {
     refetch().catch((error) => console.error('refetch() failed: ', error));
   }, [selectedSortOption, refetch]);
+
+  useEffect(() => {
+    const settings: ConceptsPageSettings = {
+      search: searchTerm,
+      searchField: selectedFieldOption,
+      sort: selectedSortOption,
+      page,
+      filter: {
+        assignedUser: filterAssignedUser,
+        internalFields: filterInternalFields,
+        label: filterLabel,
+        pubState: filterPublicationState,
+        status: filterStatus,
+        subject: filterSubject,
+      },
+    };
+    setClientConceptsPageSettings(settings);
+  }, [
+    selectedFieldOption,
+    selectedSortOption,
+    page,
+    searchTerm,
+    filterAssignedUser,
+    filterInternalFields,
+    filterLabel,
+    filterPublicationState,
+    filterStatus,
+    filterSubject,
+  ]);
 
   const FilterChips = () => {
     if (
@@ -328,6 +387,7 @@ export const SearchPageClient = ({
                       value,
                       default: value === 'alleFelter',
                     }))}
+                    optionValue={selectedFieldOption}
                     onSearch={(value, option) => {
                       setSelectedFieldOption(option as SearchableField);
                       setSearchTerm(value);
@@ -383,6 +443,7 @@ export const SearchPageClient = ({
                 internalFields={fieldsResult?.internal}
                 subjectCodeList={subjectCodeList}
                 conceptStatuses={conceptStatuses}
+                pageSettings={pageSettings}
               />
             </SearchHitsLayout.LeftColumn>
             <SearchHitsLayout.MainColumn>

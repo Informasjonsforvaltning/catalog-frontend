@@ -4,7 +4,8 @@ import { Accordion, Checkbox, Radio } from '@digdir/designsystemet-react';
 import { localization } from '@catalog-frontend/utils';
 import { ItemType, Status } from '@catalog-frontend/types';
 import styles from './change-request-filter.module.css';
-interface Props {
+
+type Props = {
   itemType: ItemType;
   status: Status;
 }
@@ -38,6 +39,7 @@ const ChangeRequestsFilter = ({ itemType, status }: Props) => {
             <Checkbox.Group
               onChange={status.onChange}
               size='small'
+              defaultValue={status.selected}
             >
               {status.options.map((statusItem) => (
                 <Checkbox

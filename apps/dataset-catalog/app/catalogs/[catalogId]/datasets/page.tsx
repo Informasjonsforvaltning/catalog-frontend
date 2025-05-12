@@ -1,6 +1,7 @@
 import { Dataset } from '@catalog-frontend/types';
 import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
 import {
+  getServerDatasetsPageSettings,
   getValidSession,
   hasOrganizationWritePermission,
   localization,
@@ -8,6 +9,7 @@ import {
 } from '@catalog-frontend/utils';
 import { getDatasets } from '../../../actions/actions';
 import DatasetsPageClient from './datasets-page-client';
+import { cookies } from 'next/headers';
 
 export default async function DatasetSearchHitsPage({ params }: { params: Promise<{ catalogId: string }> }) {
   const { catalogId } = await params;
@@ -27,6 +29,8 @@ export default async function DatasetSearchHitsPage({ params }: { params: Promis
     },
   ] as BreadcrumbType[];
 
+  const pageSettings = getServerDatasetsPageSettings(await cookies());
+  
   return (
     <>
       <Breadcrumbs
@@ -41,6 +45,7 @@ export default async function DatasetSearchHitsPage({ params }: { params: Promis
         datasets={datasets}
         hasWritePermission={hasWritePermission}
         catalogId={catalogId}
+        pageSettings={pageSettings}
       />
     </>
   );

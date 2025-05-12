@@ -93,7 +93,7 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
         }
         size='sm'
       >
-        {values.languageList && values.languageList.includes('NOR') && (
+        {values.languageList && values.languageList.some(lang => lang.includes('NOR')) && (
           <Checkbox
             key={langNOR.uri}
             value={langNOR.uri}
