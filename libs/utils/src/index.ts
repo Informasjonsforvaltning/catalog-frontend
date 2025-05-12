@@ -12,6 +12,7 @@ export * from './lib/reference-data';
 export * from './lib/regex/regex';
 export * from './lib/sort/sort';
 export * from './lib/storage/local-storage';
+export * from './lib/storage/cookies';
 export * from './lib/text/capitalize';
 export * from './lib/text/date';
 export * from './lib/text/number-parser';

@@ -19,6 +19,7 @@ type SearchFieldProps = {
   value?: string;
   loading?: boolean;
   options?: SearchOption[];
+  optionValue?: string;
   onSearch?: (query: string, option?: string) => void | undefined;
   className?: string;
 };
@@ -30,10 +31,11 @@ const SearchField: FC<SearchFieldProps> = ({
   value = '',
   loading = false,
   options,
+  optionValue: selectedOptionValue,
   onSearch,
 }) => {
   const [query, setQuery] = useState(value);
-  const [optionValue, setOptionValue] = useState(options?.find((option) => option.default === true)?.value);
+  const [optionValue, setOptionValue] = useState(selectedOptionValue ?? options?.find((option) => option.default === true)?.value);
   const searchActionsRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
