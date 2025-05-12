@@ -1,9 +1,9 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { Accordion } from '@digdir/designsystemet-react';
 import { AccordionItem, AccordionItemProps, CheckboxGroupFilter } from '@catalog-frontend/ui';
-import { PublicationStatus } from '@catalog-frontend/types';
+import { DatasetsPageSettings, PublicationStatus } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
 import styles from './search-filter.module.css';
 
@@ -16,13 +16,24 @@ export type InternalFieldFilterType = {
   value: string;
 };
 
-const SearchFilter = () => {
+type SearchFilterProps = {
+  pageSettings?: DatasetsPageSettings; 
+};
+
+const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
   const datasetStatuses = [PublicationStatus.APPROVE, PublicationStatus.DRAFT];
 
-  const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString));
+  // Memoize default values for query states
+  const defaultFilterStatus = useMemo(() => pageSettings?.filter?.status ?? [], []);
+  const defaultFilterPublicationState = useMemo(() => pageSettings?.filter?.pubState ?? [], []);
+
+  const [filterStatus, setFilterStatus] = useQueryState(
+    'datasetFilter.status',
+    parseAsArrayOf(parseAsString).withDefault(defaultFilterStatus),
+  );
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
-    'filter.pubState',
-    parseAsArrayOf(parseAsString),
+    'datasetFilter.pubState',
+    parseAsArrayOf(parseAsString).withDefault(defaultFilterPublicationState),
   );
 
   const statusItems =
@@ -48,6 +59,7 @@ const SearchFilter = () => {
     ...(statusItems?.length > 0
       ? [
           {
+            initiallyOpen: true,
             header: localization.status,
             content: (
               <CheckboxGroupFilter<string>
@@ -60,6 +72,7 @@ const SearchFilter = () => {
         ]
       : []),
     {
+      initiallyOpen: true,
       header: localization.publicationState.state,
       content: (
         <>
@@ -80,7 +93,7 @@ const SearchFilter = () => {
 
   const accordionItems = accordionItemContents.map((item) => (
     <AccordionItem
-      key={`accordion-item-${item.header}`}
+      key={`accordion-item-${item.header}`}            
       {...item}
     />
   ));

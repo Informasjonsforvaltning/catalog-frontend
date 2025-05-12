@@ -1,9 +1,10 @@
 import { ChangeRequest } from '@catalog-frontend/types';
 import { getChangeRequests } from '@catalog-frontend/data-access';
 import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
+import { getServerChangeRequestsPageSettings, localization } from '@catalog-frontend/utils';
 import { withReadProtectedPage } from '@concept-catalog/utils/auth';
 import ChangeRequestsPageClient from './change-requests-page-client';
+import { cookies } from 'next/headers';
 
 const ChangeRequestsPage = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/change-requests`,
@@ -27,6 +28,8 @@ const ChangeRequestsPage = withReadProtectedPage(
       },
     ] as BreadcrumbType[];
 
+    const pageSettings = getServerChangeRequestsPageSettings(await cookies());
+
     return (
       <>
         <Breadcrumbs
@@ -40,6 +43,7 @@ const ChangeRequestsPage = withReadProtectedPage(
         <ChangeRequestsPageClient
           catalogId={catalogId}
           data={reponseData}
+          pageSettings={pageSettings}
         />
       </>
     );

@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useMemo } from 'react';
-import { Dataset, FilterType, PublicationStatus } from '@catalog-frontend/types';
+import { Dataset, DatasetsPageSettings, FilterType, PublicationStatus } from '@catalog-frontend/types';
 import styles from './datasets-page.module.css';
 import {
   HelpMarkdown,
@@ -9,13 +9,15 @@ import {
   SearchHit,
   SearchHitContainer,
   SearchHitsLayout,
+  Select,
 } from '@catalog-frontend/ui';
-import { Chip, NativeSelect, Tag } from '@digdir/designsystemet-react';
+import { Chip, Tag } from '@digdir/designsystemet-react';
 import {
   dateStringToDate,
   formatDate,
   getTranslateText,
   localization,
+  setClientDatasetsPageSettings,
   sortAscending,
   sortDateStringsDescending,
   sortDescending,
@@ -30,23 +32,34 @@ interface Props {
   datasets: Dataset[];
   hasWritePermission: boolean;
   catalogId: string;
+  pageSettings?: DatasetsPageSettings;
 }
 
 type SortTypes = 'titleAsc' | 'titleDesc' | 'lastChanged';
 const sortTypes: SortTypes[] = ['titleAsc', 'titleDesc', 'lastChanged'];
 const itemPerPage = 5;
 
-const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) => {
-  const [searchTerm, setSearchTerm] = useQueryState('search', { defaultValue: '' });
-  const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString));
-  const [filterPublicationState, setFilterPublicationState] = useQueryState(
-    'filter.pubState',
-    parseAsArrayOf(parseAsString),
-  );
-  const [sortValue, setSortValue] = useQueryState('sort');
-  const [page, setPage] = useQueryState('page', parseAsInteger);
-  const [filteredDatasets, setFilteredDatasets] = useState<Dataset[]>(datasets);
+const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSettings }: Props) => {
+  // Memoize default values for query states
+  const defaultSearchTerm = useMemo(() => pageSettings?.search ?? '', []);
+  const defaultFilterStatus = useMemo(() => pageSettings?.filter?.status ?? [], []);
+  const defaultFilterPublicationState = useMemo(() => pageSettings?.filter?.pubState ?? [], []);
+  const defaultSortValue = useMemo(() => pageSettings?.sort ?? '', []);
+  const defaultPage = useMemo(() => pageSettings?.page ?? 0, []);
 
+  // Query states
+  const [searchTerm, setSearchTerm] = useQueryState('datasetSearch', { defaultValue: defaultSearchTerm });
+  const [filterStatus, setFilterStatus] = useQueryState(
+    'datasetFilter.status',
+    parseAsArrayOf(parseAsString).withDefault(defaultFilterStatus),
+  );
+  const [filterPublicationState, setFilterPublicationState] = useQueryState(
+    'datasetFilter.pubState',
+    parseAsArrayOf(parseAsString).withDefault(defaultFilterPublicationState),
+  );
+  const [sortValue, setSortValue] = useQueryState('datasetSort', { defaultValue: defaultSortValue });
+  const [page, setPage] = useQueryState('datasetPage', parseAsInteger.withDefault(defaultPage));
+  const [filteredDatasets, setFilteredDatasets] = useState<Dataset[]>(datasets);
   const getSortFunction = useMemo(() => {
     return (sortKey: SortTypes) => {
       switch (sortKey) {
@@ -67,15 +80,29 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
   const removeFilter = (filterName: string, filterType: FilterType) => {
     if (filterType === 'published') {
       setFilterPublicationState(filterPublicationState?.filter((name) => name !== filterName) ?? []);
+      setPage(0);
     } else if (filterType === 'status') {
       setFilterStatus(filterStatus?.filter((name) => name !== filterName) ?? []);
+      setPage(0);
     }
   };
 
   useEffect(() => {
+    const settings = {
+      search: searchTerm,
+      sort: sortValue,
+      page,
+      filter: {
+        pubState: filterPublicationState,
+        status: filterStatus,
+      },
+    };
+    setClientDatasetsPageSettings(settings);
+  }, [page, searchTerm, sortValue, filterPublicationState, filterStatus]);
+
+  useEffect(() => {
     const filterAndSortDatasets = () => {
       let filtered = datasets;
-      setPage(0);
       if (!isEmpty(filterStatus)) {
         filtered = filtered.filter((dataset) => {
           if (filterStatus?.includes(PublicationStatus.APPROVE)) {
@@ -190,18 +217,19 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
                 value={searchTerm}
                 onSearch={(value) => {
                   setSearchTerm(value);
+                  setPage(0);
                 }}
               />
-              <NativeSelect
+              <Select
                 size='sm'
-                className={styles.select}
                 onChange={(e) => setSortValue(e.target.value)}
+                value={sortValue}
               >
                 <option value=''>{`${localization.choose} ${localization.search.sort.toLowerCase()}...`}</option>
                 <option value='lastChanged'>{localization.search.sortOptions.LAST_UPDATED_FIRST}</option>
                 <option value='titleAsc'>{localization.search.sortOptions.TITLE_AÅ}</option>
                 <option value='titleDesc'>{localization.search.sortOptions.TITLE_ÅA}</option>
-              </NativeSelect>
+              </Select>
             </div>
             <div className={styles.buttons}>
               {hasWritePermission && (
@@ -222,7 +250,7 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
 
         <SearchHitsLayout.LeftColumn>
           <div className={styles.leftColumn}>
-            <SearchFilter />
+            <SearchFilter pageSettings={pageSettings} />
           </div>
         </SearchHitsLayout.LeftColumn>
 

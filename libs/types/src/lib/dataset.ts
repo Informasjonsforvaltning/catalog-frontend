@@ -89,3 +89,13 @@ type DatasetContactPoint = {
   hasTelephone?: string;
   hasURL?: string;
 };
+
+export type DatasetsPageSettings = {
+  search: string | null;
+  sort: string | null;
+  page: number | null;
+  filter: {
+    status: string[] | null;
+    pubState: string[] | null;
+  }
+};
