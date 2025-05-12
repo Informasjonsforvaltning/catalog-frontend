@@ -71,7 +71,6 @@ const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
 export const DatasetForm = ({ initialValues, referenceData, searchEnv, referenceDataEnv }: Props) => {
   const { catalogId, datasetId } = useParams();
 
-  const [isDirty, setIsDirty] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
   const [ignoreRequired, setIgnoreRequired] = useState(true);
@@ -84,8 +83,6 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
   const formikRef = useRef<FormikProps<Dataset>>(null);
   const autoSaveRef = useRef<FormikAutoSaverRef>(null);
   const restoreOnRender = Boolean(searchParams.get('restore'));
-
-  useWarnIfUnsavedChanges({ unsavedChanges: isDirty });
 
   const handleCreate = async (values: DatasetToBeCreated) => {
     if (!catalogId) return;
@@ -203,7 +200,6 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
         }}
       >
         {({ setFieldValue, values, dirty, isValid, isSubmitting, isValidating, submitForm, errors, setValues }) => {
-          setTimeout(() => setIsDirty(dirty), 0);
           const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
           const hasError = (fields: (keyof Dataset)[]) => fields.some((field) => Object.keys(errors).includes(field));
           const handleRestoreDataset = (data: StorageData) => {
