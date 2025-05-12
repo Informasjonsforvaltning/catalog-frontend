@@ -1,5 +1,5 @@
 import { DateRange } from '@catalog-frontend/types';
-import { localization } from '@catalog-frontend/utils';
+import { formatDate, localization } from '@catalog-frontend/utils';
 import { Table } from '@digdir/designsystemet-react';
 
 type Props = {
@@ -27,8 +27,8 @@ export const TemporalDetails = ({ temporal }: Props) => {
 
               return (
                 <Table.Row key={`tableRow-temporal-${index}`}>
-                  <Table.Cell>{startDate ? startDate.toLocaleDateString('no-NO') : ''}</Table.Cell>
-                  <Table.Cell>{endDate ? endDate.toLocaleDateString('no-NO') : ''}</Table.Cell>
+                  <Table.Cell>{startDate ? formatDate(startDate) : ''}</Table.Cell>
+                  <Table.Cell>{endDate ? formatDate(endDate) : ''}</Table.Cell>
                 </Table.Row>
               );
             })}

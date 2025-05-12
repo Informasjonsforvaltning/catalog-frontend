@@ -1,5 +1,12 @@
 import { InfoCard } from '@catalog-frontend/ui';
-import { localization, getTranslateText, capitalizeFirstLetter, validUUID } from '@catalog-frontend/utils';
+import {
+  localization,
+  getTranslateText,
+  capitalizeFirstLetter,
+  validUUID,
+  formatISO,
+  formatDateToDDMMYYYY,
+} from '@catalog-frontend/utils';
 import { Heading, Link, Paragraph, Table, Tag } from '@digdir/designsystemet-react';
 import { Dataset, DatasetSeries, ReferenceData, Search } from '@catalog-frontend/types';
 import styles from './details-columns.module.css';
@@ -18,7 +25,7 @@ import { AccessRightsDetails } from './components/access-rights-details';
 import { TemporalDetails } from './components/temporal-details';
 import TagList from '../tag-list';
 import _ from 'lodash';
-import Markdown from "react-markdown";
+import Markdown from 'react-markdown';
 
 type Props = {
   dataset: Dataset;
@@ -74,6 +81,15 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
           className={styles.access}
         >
           <AccessRightsDetails dataset={dataset} language={language} />
+        </InfoCard.Item>
+      )}
+
+      {dataset?.issued && (
+        <InfoCard.Item
+          title={localization.datasetForm.fieldLabel.issued}
+          headingColor='light'
+        >
+          {formatDateToDDMMYYYY(dataset.issued)}
         </InfoCard.Item>
       )}
 
@@ -192,6 +208,15 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
             values={dataset?.provenance?.uri}
             data={referenceData.provenanceStatements}
           />
+        </InfoCard.Item>
+      )}
+
+      {dataset?.modified && (
+        <InfoCard.Item
+          title={localization.datasetForm.helptext.modified.slice(0, -1)}
+          headingColor='light'
+        >
+          {formatDateToDDMMYYYY(dataset.modified)}
         </InfoCard.Item>
       )}
 
