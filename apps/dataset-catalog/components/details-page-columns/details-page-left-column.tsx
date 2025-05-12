@@ -73,7 +73,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
           title={localization.access}
           className={styles.access}
         >
-          <AccessRightsDetails dataset={dataset} />
+          <AccessRightsDetails dataset={dataset} language={language} />
         </InfoCard.Item>
       )}
 
@@ -422,7 +422,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
                           {getTranslateText(match?.title, language) || localization.noTitleAvailable}
                         </Link>
                       </Table.Cell>
-                      <Table.Cell>{getTranslateText(match?.organization?.prefLabel)}</Table.Cell>
+                      <Table.Cell>{getTranslateText(match?.organization?.prefLabel, language)}</Table.Cell>
                     </Table.Row>
                   ) : (
                     <Table.Row key={`missing-item-${index}`}>
