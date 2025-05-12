@@ -47,8 +47,9 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
   };
 };
 
-export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
+export const datasetToBeCreatedTemplate = (catalogId: string): DatasetToBeCreated => {
   return {
+    catalogId,
     title: {
       nb: '',
     },

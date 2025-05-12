@@ -3,12 +3,12 @@ import { LocalizedStrings } from './localization';
 import { ReferenceDataCode } from './reference-data';
 
 export interface Dataset extends DatasetToBeCreated {
-  id: string;
-  catalogId: string;
+  id: string;  
   _lastModified: string;
 }
 
 export type DatasetToBeCreated = {
+  catalogId: string;
   title: LocalizedStrings;
   description: LocalizedStrings;
   registrationStatus: PublicationStatus;
