@@ -57,4 +57,4 @@ export const accessRightRestricted: ReferenceDataCode = {
   },
 };
 
-export const accessRights: ReferenceDataCode[] = [accessRightPublic, accessRightNonPublic, accessRightRestricted];
+export const accessRights: ReferenceDataCode[] = [accessRightPublic, accessRightRestricted, accessRightNonPublic];
