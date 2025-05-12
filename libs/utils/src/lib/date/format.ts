@@ -70,5 +70,5 @@ export const formatDateToDDMMYYYY = (isoDate: string | undefined) => {
   if (!isoDate) return null;
 
   const date = DateTime.fromISO(isoDate);
-  return date.isValid ? date.toFormat('dd/MM/yyyy') : null;
+  return date.isValid ? date.toFormat('dd.MM.yyyy') : null;
 };

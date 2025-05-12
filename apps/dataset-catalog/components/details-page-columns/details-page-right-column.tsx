@@ -44,22 +44,6 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
         {published ? localization.publicationState.publishedInFDK : localization.publicationState.unpublished}
       </InfoCard.Item>
 
-      {dataset?.issued && (
-        <InfoCard.Item
-          title={localization.datasetForm.fieldLabel.issued}
-          headingColor='light'
-        >
-          {capitalizeFirstLetter(
-            formatISO(dataset.issued, {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            }),
-          )}
-        </InfoCard.Item>
-      )}
-
       {dataset?.contactPoint && !_.isEmpty(dataset?.contactPoint[0]) && (
         <InfoCard.Item
           title={localization.concept.contactInformation}
@@ -94,22 +78,6 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
               </span>
             )}
           </div>
-        </InfoCard.Item>
-      )}
-
-      {dataset?.modified && (
-        <InfoCard.Item
-          title={localization.datasetForm.helptext.modified.slice(0, -1)}
-          headingColor='light'
-        >
-          {capitalizeFirstLetter(
-            formatISO(dataset.modified, {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            }),
-          )}
         </InfoCard.Item>
       )}
     </InfoCard>
