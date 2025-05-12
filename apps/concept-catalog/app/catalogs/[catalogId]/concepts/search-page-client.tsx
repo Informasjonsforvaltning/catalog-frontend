@@ -14,7 +14,7 @@ import {
   LinkButton,
   SearchField,
 } from '@catalog-frontend/ui';
-import { getTranslateText, capitalizeFirstLetter, localization as loc, localization } from '@catalog-frontend/utils';
+import { getTranslateText, capitalizeFirstLetter, localization as loc, localization, LocalDataStorage } from '@catalog-frontend/utils';
 import { Chip, Tabs } from '@digdir/designsystemet-react';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 import {
@@ -30,7 +30,7 @@ import styles from './search-page.module.scss';
 
 export type FilterType = 'published' | 'status' | 'assignedUser' | 'subject' | 'internalFields' | 'label';
 
-interface Props {
+type Props = {
   catalogId: string;
   hasWritePermission: boolean;
   hasAdminPermission: boolean;
@@ -38,7 +38,13 @@ interface Props {
   codeListsResult: any;
   usersResult: any;
   conceptStatuses: any;
-}
+};
+
+type PageSettings = {
+  page: number;
+  search: string;
+  sort: string;
+};
 
 export const SearchPageClient = ({
   catalogId,
@@ -51,10 +57,13 @@ export const SearchPageClient = ({
 }: Props) => {
   const router = useRouter();
 
-  const [selectedFieldOption, setSelectedFieldOption] = useState('alleFelter' as SearchableField | 'alleFelter');
-  const [selectedSortOption, setSelectedSortOption] = useState(SortOption.RELEVANCE);
-  const [page, setPage] = useQueryState('page', parseAsInteger);
-  const [searchTerm, setSearchTerm] = useQueryState('search', { defaultValue: '' });
+  const pageSettingsStorage = new LocalDataStorage<PageSettings>({ key: 'conceptsPageSettings'});
+  const pageSettings = pageSettingsStorage.get();
+
+  const [selectedFieldOption, setSelectedFieldOption] = useQueryState('sort.field', {defaultValue: 'alleFelter' as SearchableField | 'alleFelter'});
+  const [selectedSortOption, setSelectedSortOption] = useQueryState('sort.by', {defaultValue: SortOption.RELEVANCE});
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(pageSettings?.page ?? 1));
+  const [searchTerm, setSearchTerm] = useQueryState('search', { defaultValue: pageSettings?.search ?? '' });
   const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString));
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
     'filter.pubState',
