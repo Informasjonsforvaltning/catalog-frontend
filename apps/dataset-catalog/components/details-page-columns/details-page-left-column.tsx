@@ -397,7 +397,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
                       <Table.Cell>
                         {
                           <Link href={`${referenceDataEnv}/concepts/${match?.id}`}>
-                            {capitalizeFirstLetter(getTranslateText(match?.title, language).toString()) ?? concept?.uri}
+                            {getTranslateText(match?.title, language).toString() ?? concept?.uri}
                           </Link>
                         }
                       </Table.Cell>
