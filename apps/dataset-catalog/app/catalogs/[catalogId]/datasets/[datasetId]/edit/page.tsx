@@ -1,7 +1,4 @@
 import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
-import { getDatasetById } from '../../../../../actions/actions';
-import { DatasetForm } from '../../../../../../components/dataset-form';
-
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import {
   getDatasetTypes,
@@ -12,6 +9,8 @@ import {
   getOpenLicenses,
   getProvenanceStatements,
 } from '@catalog-frontend/data-access';
+import { getDatasetById } from '@dataset-catalog/app/actions/actions';
+import { EditPage } from './edit-page-client';
 
 export default async function EditDatasetPage({
   params,
@@ -75,15 +74,8 @@ export default async function EditDatasetPage({
       <DesignBanner
         catalogId={catalogId}
         title={localization.catalogType.dataset}
-      />
-
-      <DatasetForm
-        initialValues={dataset}
-        submitType={'update'}
-        searchEnv={searchEnv}
-        referenceDataEnv={referenceDataEnv}
-        referenceData={referenceData}
-      ></DatasetForm>
-    </>
+      />      
+      <EditPage dataset={dataset} referenceData={referenceData} referenceDataEnv={referenceDataEnv} searchEnv={searchEnv} />
+      </>
   );
 }

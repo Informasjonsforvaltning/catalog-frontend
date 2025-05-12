@@ -1,6 +1,4 @@
 import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
-import { DatasetForm } from '../../../../../components/dataset-form';
-import { datasetToBeCreatedTemplate } from '../../../../../components/dataset-form/utils/dataset-initial-values';
 import { localization } from '@catalog-frontend/utils';
 import {
   getDatasetTypes,
@@ -11,10 +9,12 @@ import {
   getOpenLicenses,
   getProvenanceStatements,
 } from '@catalog-frontend/data-access';
+import { datasetToBeCreatedTemplate } from '@dataset-catalog/components/dataset-form/utils/dataset-initial-values';
+import { NewPage } from './new-page-client';
 
 export default async function NewDatasetPage({ params }: { params: Promise<{ catalogId: string }> }) {
   const { catalogId } = await params;
-  const initialValues = datasetToBeCreatedTemplate();
+  const dataset = datasetToBeCreatedTemplate(catalogId);
   const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
   const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
 
@@ -67,13 +67,12 @@ export default async function NewDatasetPage({ params }: { params: Promise<{ cat
         catalogId={catalogId}
         title={localization.catalogType.dataset}
       />
-      <DatasetForm
-        initialValues={initialValues}
-        submitType={'create'}
+      <NewPage
+        dataset={dataset}
         referenceData={referenceData}
-        searchEnv={searchEnv}
         referenceDataEnv={referenceDataEnv}
-      ></DatasetForm>
+        searchEnv={searchEnv}
+      />
     </>
   );
 }
