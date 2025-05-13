@@ -1,8 +1,9 @@
 'use client';
 
-import { DatasetToBeCreated } from '@catalog-frontend/types';
+import { DatasetToBeCreated, StorageData } from '@catalog-frontend/types';
 import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
+import { LocalDataStorage, localization } from '@catalog-frontend/utils';
+import { createDataset, getDatasetById } from '@dataset-catalog/app/actions/actions';
 import DatasetForm from '@dataset-catalog/components/dataset-form';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
@@ -15,12 +16,26 @@ type NewPageProps = {
 };
 
 export const NewPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }: NewPageProps) => {
-  const [showSnackbar, setShowSnackbar] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
-  function handleGotoOverview(): void {
+  const dataStorage = new LocalDataStorage<StorageData>({ key: 'datasetForm' });
+
+  const handleGotoOverview = () => {
+    dataStorage.delete();
     window.location.href = `/catalogs/${dataset.catalogId}/datasets`;
-  }
+  };
+
+  const handleCancel = () => {
+    dataStorage.delete();
+    window.location.replace(`/catalogs/${dataset.catalogId}/datasets`);
+  };
+
+  const handleCreate = async (values: DatasetToBeCreated) => {
+    if (!dataset.catalogId) return;
+
+    const datasetId = await createDataset(values, dataset.catalogId.toString());
+    return await getDatasetById(dataset.catalogId, datasetId);
+  };
 
   return (
     <>
@@ -49,6 +64,8 @@ export const NewPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }:
         searchEnv={searchEnv}
         referenceDataEnv={referenceDataEnv}
         referenceData={referenceData}
+        onSubmit={handleCreate}
+        onCancel={handleCancel}
       />
     </>
   );

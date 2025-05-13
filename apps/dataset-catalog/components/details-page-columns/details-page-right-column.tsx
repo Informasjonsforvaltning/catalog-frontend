@@ -27,12 +27,12 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
       <InfoCard.Item
         key={`info-data-${localization.publicationState.state}`}
         title={localization.publicationState.state}
+        headingColor='light'
         helpText={
           dataset.registrationStatus === PublicationStatus.DRAFT
             ? `${localization.datasetForm.helptext.publishWarning} [skjemaet.](/catalogs/${dataset?.catalogId}/datasets/${dataset?.id}/edit)`
             : localization.datasetForm.helptext.publish
-        }
-        headingColor='light'
+        }        
         helpTextSeverity={dataset.registrationStatus === PublicationStatus.DRAFT ? 'warning' : 'info'}
       >
         <PublishSwitch
