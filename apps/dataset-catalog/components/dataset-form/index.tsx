@@ -1,5 +1,6 @@
 'use client';
 import {
+  DataStorage,
   LocalDataStorage,
   formatISO,
   getTranslateText,
@@ -11,17 +12,14 @@ import { Dataset, DatasetToBeCreated, ReferenceData, PublicationStatus, StorageD
 import {
   ConfirmModal,
   FormikAutoSaver,
-  FormikAutoSaverRef,
   FormLayout,
   HelpMarkdown,
   NotificationCarousel,
   Snackbar,
   StickyFooterBar,
-  useWarnIfUnsavedChanges,
 } from '@catalog-frontend/ui';
 import { Formik, Form, FormikProps } from 'formik';
 import { useParams, useSearchParams } from 'next/navigation';
-import { createDataset, updateDataset } from '../../app/actions/actions';
 import { datasetTemplate } from './utils/dataset-initial-values';
 import { useEffect, useRef, useState } from 'react';
 import { confirmedDatasetSchema, draftDatasetSchema } from './utils/validation-schema';
@@ -33,13 +31,13 @@ import { RelationsSection } from './components/relations-section/relations-secti
 import { DistributionSection } from './components/distribution-section/distribution-section';
 import { ContactPointSection } from './components/contact-point-section';
 import styles from './dataset-form.module.css';
-import { useRouter } from 'next/navigation';
 import { DetailsSection } from './components/details-section/details-section';
 import classNames from 'classnames';
 
 type Props = {
   afterSubmit?: () => void;
   initialValues: DatasetToBeCreated | Dataset;
+  autoSaveStorage: DataStorage<StorageData>;
   submitType: 'create' | 'update';
   searchEnv: string; // Environment variable to search service
   referenceDataEnv: string; // Environment variable to reference data
@@ -75,6 +73,7 @@ const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
 
 export const DatasetForm = ({
   initialValues,
+  autoSaveStorage,
   referenceData,
   searchEnv,
   referenceDataEnv,
@@ -84,10 +83,8 @@ export const DatasetForm = ({
   onCancel,
 }: Props) => {
   const { catalogId, datasetId } = useParams();
-
   const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<Dataset>>(null);
-  const autoSaveRef = useRef<FormikAutoSaverRef>(null);
   const restoreOnRender = Boolean(searchParams.get('restore'));
   const [validateOnChange, setValidateOnChange] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
@@ -142,7 +139,7 @@ export const DatasetForm = ({
   const handleConfirmCancel = () => {
     setShowCancelConfirm(false);
 
-    autoSaveRef.current?.discard();
+    autoSaveStorage.delete();
     setIsCanceled(true);
 
     if (onCancel) {
@@ -231,7 +228,7 @@ export const DatasetForm = ({
               }
 
               // Discard stored data
-              autoSaveRef.current?.discard();
+              autoSaveStorage.delete();
 
               if (afterSubmit) {
                 afterSubmit();
@@ -262,8 +259,7 @@ export const DatasetForm = ({
               <Form className='container'>
                 <FormikAutoSaver
                   id={`${datasetId}`}
-                  ref={autoSaveRef}
-                  storage={new LocalDataStorage<StorageData>({ key: 'datasetForm' })}
+                  storage={autoSaveStorage}
                   restoreOnRender={restoreOnRender}
                   onRestore={handleRestoreDataset}
                   confirmMessage={restoreConfirmMessage}

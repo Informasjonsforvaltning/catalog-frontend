@@ -1,8 +1,8 @@
 'use client';
 
-import { Dataset } from '@catalog-frontend/types';
+import { Dataset, StorageData } from '@catalog-frontend/types';
 import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
+import { LocalDataStorage, localization } from '@catalog-frontend/utils';
 import { getDatasetById, updateDataset } from '@dataset-catalog/app/actions/actions';
 import DatasetForm from '@dataset-catalog/components/dataset-form';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
@@ -23,11 +23,15 @@ export const EditPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
+  const dataStorage = new LocalDataStorage<StorageData>({ key: 'datasetForm' });
+
   const handleGotoOverview = () => {
+    dataStorage.delete();
     window.location.href = `/catalogs/${dataset.catalogId}/datasets`;
   };
 
   const handleCancel = () => {
+    dataStorage.delete();
     window.location.replace(`/catalogs/${dataset.catalogId}/datasets/${dataset.id}`);
   };
 
@@ -72,6 +76,7 @@ export const EditPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }
         </Button>
       </ButtonBar>
       <DatasetForm
+        autoSaveStorage={dataStorage}
         initialValues={dataset}
         submitType={'update'}
         searchEnv={searchEnv}

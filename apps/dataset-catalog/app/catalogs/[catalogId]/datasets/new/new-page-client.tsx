@@ -70,6 +70,7 @@ export const NewPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }:
       </ButtonBar>
       <DatasetForm
         afterSubmit={handleAfterSubmit}
+        autoSaveStorage={dataStorage}
         initialValues={dataset}
         submitType={'create'}
         searchEnv={searchEnv}
