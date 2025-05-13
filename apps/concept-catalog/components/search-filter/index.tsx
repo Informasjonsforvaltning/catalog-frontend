@@ -3,12 +3,13 @@
 import { memo } from 'react';
 import { Accordion } from '@digdir/designsystemet-react';
 import { AccordionItem, AccordionItemProps, CheckboxGroupFilter, Select } from '@catalog-frontend/ui';
-import { AssignedUser, CodeList, InternalField, ReferenceDataCode } from '@catalog-frontend/types';
+import { AssignedUser, CodeList, ConceptPageSettings, InternalField, ReferenceDataCode } from '@catalog-frontend/types';
 import {
   capitalizeFirstLetter,
   convertCodeListToTreeNodes,
   getTranslateText,
   localization as loc,
+  LocalDataStorage,
 } from '@catalog-frontend/utils';
 import styles from './search-filter.module.css';
 import { useGetUsers } from '../../hooks/users';
@@ -28,18 +29,25 @@ interface Props {
 }
 
 const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatuses }: Props) => {
+  const pageSettingsStorage = new LocalDataStorage<ConceptPageSettings>({ key: 'conceptsPageSettings' });
+    const pageSettings = pageSettingsStorage.get();
+  
+  
   const [, setPage] = useQueryState('page', parseAsInteger);
-  const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString));
+  const [filterStatus, setFilterStatus] = useQueryState(
+    'filter.status',
+    parseAsArrayOf(parseAsString).withDefault(pageSettings?.filter?.status ?? []),
+  );
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
     'filter.pubState',
-    parseAsArrayOf(parseAsString),
+    parseAsArrayOf(parseAsString).withDefault(pageSettings?.filter?.pubState ?? []),
   );
-  const [filterAssignedUser, setFilterAssignedUser] = useQueryState('filter.assignedUser');
+  const [filterAssignedUser, setFilterAssignedUser] = useQueryState('filter.assignedUser', { defaultValue: pageSettings?.filter.assignedUser ?? '' });
   const [filterInternalFields, setFilterInternalFields] = useQueryState(
     'filter.internalFields',
-    parseAsJson<Record<string, string[]>>(),
+    parseAsJson<Record<string, string[]>>(() => ({})).withDefault(pageSettings?.filter.internalFields ?? {}),
   );
-  const [filterSubject, setFilterSubject] = useQueryState('filter.subject', parseAsArrayOf(parseAsString));
+  const [filterSubject, setFilterSubject] = useQueryState('filter.subject', parseAsArrayOf(parseAsString).withDefault(pageSettings?.filter.subject ?? []));
 
   const statusItems =
     conceptStatuses?.map((s) => ({

@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'nuqs';
 import { isEmpty } from 'lodash';
 import { useRouter } from 'next/navigation';
-import { SearchableField, QuerySort } from '@catalog-frontend/types';
+import { SearchableField, QuerySort, ConceptPageSettings } from '@catalog-frontend/types';
 import {
   UploadButton,
   SearchHitContainer,
@@ -14,7 +14,13 @@ import {
   LinkButton,
   SearchField,
 } from '@catalog-frontend/ui';
-import { getTranslateText, capitalizeFirstLetter, localization as loc, localization, LocalDataStorage } from '@catalog-frontend/utils';
+import {
+  getTranslateText,
+  capitalizeFirstLetter,
+  localization as loc,
+  localization,
+  LocalDataStorage,
+} from '@catalog-frontend/utils';
 import { Chip, Tabs } from '@digdir/designsystemet-react';
 import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
 import {
@@ -40,12 +46,6 @@ type Props = {
   conceptStatuses: any;
 };
 
-type PageSettings = {
-  page: number;
-  search: string;
-  sort: string;
-};
-
 export const SearchPageClient = ({
   catalogId,
   hasWritePermission,
@@ -57,25 +57,30 @@ export const SearchPageClient = ({
 }: Props) => {
   const router = useRouter();
 
-  const pageSettingsStorage = new LocalDataStorage<PageSettings>({ key: 'conceptsPageSettings'});
+  const pageSettingsStorage = new LocalDataStorage<ConceptPageSettings>({ key: 'conceptsPageSettings' });
   const pageSettings = pageSettingsStorage.get();
 
-  const [selectedFieldOption, setSelectedFieldOption] = useQueryState('sort.field', {defaultValue: 'alleFelter' as SearchableField | 'alleFelter'});
-  const [selectedSortOption, setSelectedSortOption] = useQueryState('sort.by', {defaultValue: SortOption.RELEVANCE});
+  const [selectedFieldOption, setSelectedFieldOption] = useQueryState('sort.field', {
+    defaultValue: pageSettings?.searchField ?? 'alleFelter',
+  });
+  const [selectedSortOption, setSelectedSortOption] = useQueryState('sort.by', { defaultValue: pageSettings?.sort ?? SortOption.RELEVANCE });
   const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(pageSettings?.page ?? 1));
   const [searchTerm, setSearchTerm] = useQueryState('search', { defaultValue: pageSettings?.search ?? '' });
-  const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString));
+  const [filterStatus, setFilterStatus] = useQueryState(
+    'filter.status',
+    parseAsArrayOf(parseAsString).withDefault(pageSettings?.filter?.status ?? []),
+  );
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
     'filter.pubState',
-    parseAsArrayOf(parseAsString),
+    parseAsArrayOf(parseAsString).withDefault(pageSettings?.filter?.pubState ?? []),
   );
-  const [filterAssignedUser, setFilterAssignedUser] = useQueryState('filter.assignedUser');
+  const [filterAssignedUser, setFilterAssignedUser] = useQueryState('filter.assignedUser', { defaultValue: pageSettings?.filter.assignedUser ?? '' });
   const [filterInternalFields, setFilterInternalFields] = useQueryState(
     'filter.internalFields',
-    parseAsJson<Record<string, string[]>>(() => ({})),
+    parseAsJson<Record<string, string[]>>(() => ({})).withDefault(pageSettings?.filter.internalFields ?? {}),
   );
-  const [filterLabel, setFilterLabel] = useQueryState('filter.label', parseAsArrayOf(parseAsString));
-  const [filterSubject, setFilterSubject] = useQueryState('filter.subject', parseAsArrayOf(parseAsString));
+  const [filterLabel, setFilterLabel] = useQueryState('filter.label', parseAsArrayOf(parseAsString).withDefault(pageSettings?.filter.label ?? []));
+  const [filterSubject, setFilterSubject] = useQueryState('filter.subject', parseAsArrayOf(parseAsString).withDefault(pageSettings?.filter.subject ?? []));
 
   const sortMappings: Record<SortOption, QuerySort | undefined> = {
     [SortOption.RELEVANCE]: undefined,
@@ -121,7 +126,7 @@ export const SearchPageClient = ({
     catalogId,
     searchTerm: searchTerm ?? '',
     page: page ?? 0,
-    fields: getSearchFields(selectedFieldOption),
+    fields: getSearchFields(selectedFieldOption as SearchableField | 'alleFelter'),
     sort: sortMappings[selectedSortOption],
     filters: {
       ...(filterStatus?.length && {
@@ -227,6 +232,34 @@ export const SearchPageClient = ({
   useEffect(() => {
     refetch().catch((error) => console.error('refetch() failed: ', error));
   }, [selectedSortOption, refetch]);
+
+  useEffect(() => {
+    pageSettingsStorage.set({
+      search: searchTerm,
+      searchField: selectedFieldOption,
+      sort: selectedSortOption,
+      page,
+      filter: {
+        assignedUser: filterAssignedUser,
+        internalFields: filterInternalFields,
+        label: filterLabel,
+        pubState: filterPublicationState,
+        status: filterStatus,
+        subject: filterSubject,
+      },
+    });
+  }, [
+    selectedFieldOption,
+    selectedSortOption,
+    page,
+    searchTerm,
+    filterAssignedUser,
+    filterInternalFields,
+    filterLabel,
+    filterPublicationState,
+    filterStatus,
+    filterSubject,
+  ]);
 
   const FilterChips = () => {
     if (
