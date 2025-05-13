@@ -10,7 +10,6 @@ import { createConcept } from '@concept-catalog/app/actions/concept/actions';
 import ConceptForm from '@concept-catalog/components/concept-form';
 
 export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, fieldsResult, usersResult }) => {
-  const router = useRouter();
   const conceptIdRef = useRef<string | undefined>(undefined); // Ref to store the concept id
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 

@@ -89,8 +89,7 @@ export const DatasetForm = ({
   const formikRef = useRef<FormikProps<Dataset>>(null);
   const autoSaveRef = useRef<FormikAutoSaverRef>(null);
   const restoreOnRender = Boolean(searchParams.get('restore'));
-  const validateOnRender = Boolean(searchParams.get('validate'));
-  const [validateOnChange, setValidateOnChange] = useState(validateOnRender);
+  const [validateOnChange, setValidateOnChange] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
   const [ignoreRequired, setIgnoreRequired] = useState(true);
   const [showUnapproveModal, setShowUnapproveModal] = useState(false);
@@ -190,12 +189,6 @@ export const DatasetForm = ({
         ]
       : []),
   ];
-
-  useEffect(() => {
-    if (validateOnRender) {
-      formikRef.current?.validateForm();
-    }
-  }, [validateOnRender]);
 
   useEffect(() => {
     if (formStatus && formStatus !== PublicationStatus.DRAFT) {

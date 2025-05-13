@@ -6,7 +6,7 @@ import { LocalDataStorage, localization } from '@catalog-frontend/utils';
 import { createDataset, getDatasetById } from '@dataset-catalog/app/actions/actions';
 import DatasetForm from '@dataset-catalog/components/dataset-form';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 type NewPageProps = {
   dataset: DatasetToBeCreated;
@@ -16,6 +16,7 @@ type NewPageProps = {
 };
 
 export const NewPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }: NewPageProps) => {
+  const datasetIdRef = useRef<string | undefined>(undefined); // Ref to store the dataset id
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   const dataStorage = new LocalDataStorage<StorageData>({ key: 'datasetForm' });
@@ -30,11 +31,20 @@ export const NewPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }:
     window.location.replace(`/catalogs/${dataset.catalogId}/datasets`);
   };
 
+  const handleAfterSubmit = () => {
+    if (datasetIdRef.current) {
+      window.location.replace(`/catalogs/${dataset.catalogId}/datasets/${datasetIdRef.current}/edit?created=true`);
+    } else {
+      window.location.replace(`/catalogs/${dataset.catalogId}/datasets`);
+    }
+  };
+
   const handleCreate = async (values: DatasetToBeCreated) => {
     if (!dataset.catalogId) return;
 
     const datasetId = await createDataset(values, dataset.catalogId.toString());
-    return await getDatasetById(dataset.catalogId, datasetId);
+    datasetIdRef.current = datasetId;
+    return undefined;
   };
 
   return (
@@ -59,6 +69,7 @@ export const NewPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }:
         </Button>
       </ButtonBar>
       <DatasetForm
+        afterSubmit={handleAfterSubmit}
         initialValues={dataset}
         submitType={'create'}
         searchEnv={searchEnv}
