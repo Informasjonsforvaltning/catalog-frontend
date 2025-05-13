@@ -3,9 +3,11 @@
 import { Dataset } from '@catalog-frontend/types';
 import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
+import { getDatasetById, updateDataset } from '@dataset-catalog/app/actions/actions';
 import DatasetForm from '@dataset-catalog/components/dataset-form';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { useState } from 'react';
+import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 type EditPageProps = {
   dataset: Dataset;
@@ -18,9 +20,35 @@ export const EditPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
-  function handleGotoOverview(): void {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const handleGotoOverview = () => {
     window.location.href = `/catalogs/${dataset.catalogId}/datasets`;
-  }
+  };
+
+  const handleCancel = () => {
+    window.location.replace(`/catalogs/${dataset.catalogId}/datasets/${dataset.id}`);
+  };
+
+  const handleUpdate = async (values: Dataset) => {
+    await updateDataset(dataset.catalogId.toString(), dataset, values);
+    return await getDatasetById(dataset.catalogId, dataset.id);
+  };
+
+  useEffect(() => {
+    if (searchParams.get('created') === 'true') {
+      setShowSnackbar(true);
+
+      // Remove the param and update the URL shallowly
+      const newParams = new URLSearchParams(searchParams.toString());
+      newParams.delete('created');
+
+      const newUrl = newParams.toString().length > 0 ? `${pathname}?${newParams.toString()}` : pathname;
+
+      window.history.replaceState(null, '', newUrl);
+    }
+  }, [searchParams, pathname]);
 
   return (
     <>
@@ -49,6 +77,9 @@ export const EditPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }
         searchEnv={searchEnv}
         referenceDataEnv={referenceDataEnv}
         referenceData={referenceData}
+        onSubmit={handleUpdate}
+        onCancel={handleCancel}
+        showSnackbarSuccessOnInit={showSnackbar}
       />
     </>
   );

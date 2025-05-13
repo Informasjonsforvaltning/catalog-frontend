@@ -55,12 +55,9 @@ export const HelpMarkdown = forwardRef<HTMLButtonElement, HelpTextProps>(functio
       />
       <Popover.Content>
         {typeof children === 'string' ? (
-          <Markdown
-            className={styles.markdownContent}
-            components={markdownComponents}
-          >
-            {children}
-          </Markdown>
+          <div className={styles.markdownContent}>
+            <Markdown components={markdownComponents}>{children}</Markdown>
+          </div>
         ) : (
           children
         )}

@@ -6,7 +6,7 @@ import {
   localization,
   trimObjectWhitespace,
 } from '@catalog-frontend/utils';
-import {Alert, Button, Checkbox, Paragraph, Spinner, Switch} from '@digdir/designsystemet-react';
+import { Alert, Button, Checkbox, Paragraph, Spinner, Switch } from '@digdir/designsystemet-react';
 import { Dataset, DatasetToBeCreated, ReferenceData, PublicationStatus, StorageData } from '@catalog-frontend/types';
 import {
   ConfirmModal,
@@ -15,6 +15,7 @@ import {
   FormLayout,
   HelpMarkdown,
   NotificationCarousel,
+  Snackbar,
   StickyFooterBar,
   useWarnIfUnsavedChanges,
 } from '@catalog-frontend/ui';
@@ -22,7 +23,7 @@ import { Formik, Form, FormikProps } from 'formik';
 import { useParams, useSearchParams } from 'next/navigation';
 import { createDataset, updateDataset } from '../../app/actions/actions';
 import { datasetTemplate } from './utils/dataset-initial-values';
-import {useEffect, useRef, useState} from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { confirmedDatasetSchema, draftDatasetSchema } from './utils/validation-schema';
 import { AboutSection } from './components/about-section';
 import ThemeSection from './components/theme-section';
@@ -34,14 +35,18 @@ import { ContactPointSection } from './components/contact-point-section';
 import styles from './dataset-form.module.css';
 import { useRouter } from 'next/navigation';
 import { DetailsSection } from './components/details-section/details-section';
-import classNames from "classnames";
+import classNames from 'classnames';
 
 type Props = {
+  afterSubmit?: () => void;
   initialValues: DatasetToBeCreated | Dataset;
   submitType: 'create' | 'update';
   searchEnv: string; // Environment variable to search service
   referenceDataEnv: string; // Environment variable to reference data
   referenceData: ReferenceData;
+  onCancel?: () => void;
+  onSubmit?: (values: Dataset) => Promise<Dataset | undefined>;
+  showSnackbarSuccessOnInit?: boolean;
 };
 
 const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
@@ -68,48 +73,42 @@ const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
   );
 };
 
-export const DatasetForm = ({ initialValues, referenceData, searchEnv, referenceDataEnv }: Props) => {
+export const DatasetForm = ({
+  initialValues,
+  referenceData,
+  searchEnv,
+  referenceDataEnv,
+  showSnackbarSuccessOnInit,
+  afterSubmit,
+  onSubmit,
+  onCancel,
+}: Props) => {
   const { catalogId, datasetId } = useParams();
-
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isCanceled, setIsCanceled] = useState(false);
-  const [ignoreRequired, setIgnoreRequired] = useState(true);
-  const [showUnapproveModal, setShowUnapproveModal] = useState(false);
-  const { losThemes, dataThemes, openLicenses } = referenceData;
-  const router = useRouter();
-  const [formStatus, setFormStatus] = useState(initialValues?.registrationStatus);
 
   const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<Dataset>>(null);
   const autoSaveRef = useRef<FormikAutoSaverRef>(null);
   const restoreOnRender = Boolean(searchParams.get('restore'));
+  const validateOnRender = Boolean(searchParams.get('validate'));
+  const [validateOnChange, setValidateOnChange] = useState(validateOnRender);
+  const [isCanceled, setIsCanceled] = useState(false);
+  const [ignoreRequired, setIgnoreRequired] = useState(true);
+  const [showUnapproveModal, setShowUnapproveModal] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+  const { losThemes, dataThemes, openLicenses } = referenceData;
+  
+  const [formStatus, setFormStatus] = useState(initialValues?.registrationStatus);
 
-  const handleCreate = async (values: DatasetToBeCreated) => {
-    if (!catalogId) return;
-    try {
-      const datasetId = await createDataset(values, catalogId.toString());
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'danger'>('success');
+  const [snackbarFadeIn, setSnackbarFadeIn] = useState(true);
 
-      if (datasetId) {
-        router.push(`/catalogs/${catalogId}/datasets/${datasetId}`);
-      } else {
-        window.alert(`${localization.alert.fail}`);
-      }
-    } catch (error) {
-      window.alert(`${localization.alert.fail} ${error}`);
-    }
-  };
-
-  const handleUpdate = async (values: Dataset) => {
-    if (catalogId && 'id' in initialValues) {
-      try {
-        await updateDataset(catalogId.toString(), initialValues, values);
-        router.push(`/catalogs/${catalogId}/datasets/${initialValues.id}`);
-      } catch (error) {
-        window.alert(`${localization.alert.updateFailed} ${error}`);
-      }
-    } else {
-      handleCreate(values);
-    }
+  const showSnackbarMessage = ({ message, severity, fadeIn = true }: any) => {
+    setShowSnackbar(true);
+    setSnackbarMessage(message);
+    setSnackbarSeverity(severity);
+    setSnackbarFadeIn(fadeIn);
   };
 
   const handleSwitchChange = (
@@ -120,14 +119,6 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
     const status = isChecked ? PublicationStatus.APPROVE : PublicationStatus.DRAFT;
     setFormStatus(status);
     setFieldValue('registrationStatus', status);
-  };
-
-  const handleCancel = () => {
-    // Discard autostored data
-    autoSaveRef.current?.discard();
-
-    setIsCanceled(true);
-    router.push(datasetId ? `/catalogs/${catalogId}/datasets/${datasetId}` : `/catalogs/${catalogId}/datasets`);
   };
 
   const handleIgnoreRequiredChange = (newValue: boolean) => {
@@ -143,7 +134,30 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
     setFieldValue('registrationStatus', PublicationStatus.DRAFT);
     setIgnoreRequired(true);
     setShowUnapproveModal(false);
-  }
+  };
+
+  const handleCancel = () => {
+    setShowCancelConfirm(true);
+  };
+  
+  const handleConfirmCancel = () => {
+    setShowCancelConfirm(false);
+
+    autoSaveRef.current?.discard();
+    setIsCanceled(true);
+
+    if (onCancel) {
+      try {
+        onCancel();
+      } catch {
+        // Nothing...
+      }
+    }
+  };
+
+  const handleCloseConfirmCancel = () => {
+    setShowCancelConfirm(false);
+  };
 
   type Notifications = {
     isValid: boolean;
@@ -178,25 +192,63 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
   ];
 
   useEffect(() => {
+    if (validateOnRender) {
+      formikRef.current?.validateForm();
+    }
+  }, [validateOnRender]);
+
+  useEffect(() => {
     if (formStatus && formStatus !== PublicationStatus.DRAFT) {
       setIgnoreRequired(false);
     }
   }, [setIgnoreRequired, formStatus]);
 
+  useEffect(() => {
+    if (showSnackbarSuccessOnInit) {
+      showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success', fadeIn: false });
+    }
+  }, [showSnackbarSuccessOnInit]);
+
   return (
     <>
+    {showCancelConfirm && (
+        <ConfirmModal
+          title={localization.confirm.exitForm.title}
+          content={localization.confirm.exitForm.message}
+          onSuccess={handleConfirmCancel}
+          onCancel={handleCloseConfirmCancel}
+        />
+      )}
       <Formik
         innerRef={formikRef}
         initialValues={datasetTemplate(initialValues as Dataset)}
-        validationSchema={ignoreRequired ? draftDatasetSchema : confirmedDatasetSchema }
-        validateOnChange={isSubmitted}
-        validateOnBlur={isSubmitted}
-        onSubmit={async (values, { setSubmitting }) => {
-          const trimmedValues = trimObjectWhitespace(values);
-          datasetId === null ? handleCreate(trimmedValues as Dataset) : await handleUpdate(trimmedValues as Dataset);
-          setSubmitting(false);
-          setIsSubmitted(true);
-          autoSaveRef.current?.discard();
+        validationSchema={ignoreRequired ? draftDatasetSchema : confirmedDatasetSchema}
+        validateOnChange={validateOnChange}
+        validateOnBlur={validateOnChange}
+        onSubmit={async (values, { setSubmitting, resetForm }) => {
+          if (onSubmit) {
+            try {
+              const newValues = await onSubmit(trimObjectWhitespace(values));
+
+              showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success' });
+              if (newValues) {
+                resetForm({ values: newValues });
+              } else {
+                resetForm();
+              }
+
+              // Discard stored data
+              autoSaveRef.current?.discard();
+
+              if (afterSubmit) {
+                afterSubmit();
+              }
+            } catch {
+              showSnackbarMessage({ message: localization.snackbar.saveFailed, severity: 'danger' });
+            } finally {
+              setSubmitting(false);
+            }
+          }
         }}
       >
         {({ setFieldValue, values, dirty, isValid, isSubmitting, isValidating, submitForm, errors, setValues }) => {
@@ -205,27 +257,16 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
           const handleRestoreDataset = (data: StorageData) => {
             if (data?.id !== datasetId) {
               if (!data?.id) {
-                return router.push(`/catalogs/${catalogId}/datasets/new?restore=1`);
+                return window.location.replace(`/catalogs/${catalogId}/datasets/new?restore=1`);
               }
-              return router.push(`/catalogs/${catalogId}/datasets/${data.id}/edit?restore=1`);
+              return window.location.replace(`/catalogs/${catalogId}/datasets/${data.id}/edit?restore=1`);
             }
             setValues(data.values);
           };
 
           return (
             <>
-              <Form
-                className='container'
-                onSubmit={(e) => {
-                  if (!isValid) {
-                    e.preventDefault();
-                    window.alert(localization.datasetForm.alert.formError);
-                  } else {
-                    submitForm();
-                    autoSaveRef.current?.discard();
-                  }
-                }}
-              >
+              <Form className='container'>
                 <FormikAutoSaver
                   id={`${datasetId}`}
                   ref={autoSaveRef}
@@ -317,14 +358,27 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                   </FormLayout.Section>
                 </FormLayout>
               </Form>
-
+              {showSnackbar && (
+                <Snackbar>
+                  <Snackbar.Item
+                    severity={snackbarSeverity}
+                    fadeIn={snackbarFadeIn}
+                    onClose={() => {
+                      setShowSnackbar(false);
+                    }}
+                  >
+                    {snackbarMessage}
+                  </Snackbar.Item>
+                </Snackbar>
+              )}
               <StickyFooterBar>
                 <div className={styles.footerContent}>
                   <Button
-                    type='submit'
+                    type='button'
                     size='sm'
                     disabled={isSubmitting || isValidating || isCanceled || !dirty}
                     onClick={() => {
+                      setValidateOnChange(true);
                       submitForm();
                     }}
                   >
@@ -343,7 +397,7 @@ export const DatasetForm = ({ initialValues, referenceData, searchEnv, reference
                     size='sm'
                     variant='secondary'
                     disabled={isSubmitting || isValidating || isCanceled}
-                    onClick={() => handleCancel()}
+                    onClick={handleCancel}
                   >
                     {localization.button.cancel}
                   </Button>
