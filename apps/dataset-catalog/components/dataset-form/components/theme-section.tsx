@@ -36,7 +36,6 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
         value={values.euDataTheme}
         onValueChange={(values: string[]) => setFieldValue('euDataTheme', values)}
         size='sm'
-        portal={false}
       >
         <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
         {euDataThemes &&
