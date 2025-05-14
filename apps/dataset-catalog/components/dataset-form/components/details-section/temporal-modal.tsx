@@ -5,7 +5,7 @@ import { Button, Modal, Table, Textfield } from '@digdir/designsystemet-react';
 import { FastField, Formik, useFormikContext } from 'formik';
 import styles from '../../dataset-form.module.css';
 import { ReactNode, useRef, useState } from 'react';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 import { dateSchema } from '../../utils/validation-schema';
 import cn from 'classnames';
 import { MinusIcon } from '@navikt/aksel-icons';
@@ -23,7 +23,7 @@ interface ModalProps {
 
 const hasNoFieldValues = (values: DateRange) => {
   if (!values) return true;
-  return _.isEmpty(values.startDate) && _.isEmpty(values.endDate);
+  return isEmpty(values.startDate) && isEmpty(values.endDate);
 };
 
 export const TemporalModal = ({ values, label }: Props) => {

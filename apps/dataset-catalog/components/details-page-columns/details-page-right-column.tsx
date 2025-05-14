@@ -1,7 +1,7 @@
 import { InfoCard } from '@catalog-frontend/ui';
-import { capitalizeFirstLetter, formatISO, localization } from '@catalog-frontend/utils';
+import { localization } from '@catalog-frontend/utils';
 import { EnvelopeClosedIcon, PhoneIcon, LinkIcon } from '@navikt/aksel-icons';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 import PublishSwitch from '../publish-switch';
 import { Dataset, PublicationStatus } from '@catalog-frontend/types';
 import styles from './details-columns.module.css';
@@ -44,7 +44,7 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
         {published ? localization.publicationState.publishedInFDK : localization.publicationState.unpublished}
       </InfoCard.Item>
 
-      {dataset?.contactPoint && !_.isEmpty(dataset?.contactPoint[0]) && (
+      {dataset?.contactPoint && !isEmpty(dataset?.contactPoint[0]) && (
         <InfoCard.Item
           title={localization.concept.contactInformation}
           headingColor='light'
