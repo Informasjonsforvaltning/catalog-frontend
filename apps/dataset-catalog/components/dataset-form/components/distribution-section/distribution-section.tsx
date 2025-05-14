@@ -43,10 +43,10 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
       distribution.downloadURL?.[0] ||
       distribution.mediaType?.[0] ||
       distribution.accessServiceUris?.[0] ||
-      distribution.license?.uri ||
+      distribution.license ||
       distribution.description?.nb ||
-      distribution.page?.[0]?.uri ||
-      distribution?.conformsTo?.[0]?.prefLabel?.nb
+      distribution.page?.[0] ||
+      distribution?.conformsTo?.[0]
     ) {
       return true;
     }
@@ -185,14 +185,14 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
           searchEnv={searchEnv}
           openLicenses={openLicenses}
           initialValues={{
-            title: { nb: '' },
-            description: { nb: '' },
-            downloadURL: [''],
-            accessURL: [''],
+            title: {},
+            description: {},
+            downloadURL: [],
+            accessURL: [],
             format: [],
             mediaType: [],
-            page: [{ uri: '' }],
-            conformsTo: [{ uri: '', prefLabel: { nb: '' } }],
+            page: [],
+            conformsTo: [],
             accessServiceUris: [],
           }}
         />
@@ -314,12 +314,12 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
             initialValues={{
               title: { nb: '' },
               description: { nb: '' },
-              downloadURL: [''],
-              accessURL: [''],
+              downloadURL: [],
+              accessURL: [],
               format: [],
               mediaType: [],
-              page: [{ uri: '' }],
-              conformsTo: [{ uri: '', prefLabel: { nb: '' } }],
+              page: [],
+              conformsTo: [],
               accessServiceUris: [],
             }}
           />

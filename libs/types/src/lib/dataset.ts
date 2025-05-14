@@ -3,7 +3,7 @@ import { LocalizedStrings } from './localization';
 import { ReferenceDataCode } from './reference-data';
 
 export interface Dataset extends DatasetToBeCreated {
-  id: string;  
+  id: string;
   _lastModified: string;
 }
 
@@ -81,7 +81,7 @@ export type Distribution = {
   mediaType?: string[];
   license?: { uri: string; code: string };
   conformsTo?: UriWithLabel[];
-  page?: [{ uri: string }];
+  page?: { uri: string }[];
   accessServiceUris?: string[];
 };
 type DatasetContactPoint = {
