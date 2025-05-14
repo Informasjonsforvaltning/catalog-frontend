@@ -80,7 +80,10 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
           title={localization.access}
           className={styles.access}
         >
-          <AccessRightsDetails dataset={dataset} language={language} />
+          <AccessRightsDetails
+            dataset={dataset}
+            language={language}
+          />
         </InfoCard.Item>
       )}
 
@@ -243,7 +246,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </InfoCard.Item>
       )}
 
-      {dataset?.conformsTo && dataset?.conformsTo[0]?.uri && (
+      {dataset?.conformsTo && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.conformsTo}>
           <UriWithLabelTable
             values={dataset?.conformsTo}
