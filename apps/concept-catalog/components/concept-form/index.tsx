@@ -595,10 +595,9 @@ const ConceptForm = ({
               </div>
 
               {showSnackbar && (
-                <Snackbar>
+                <Snackbar fadeIn={snackbarFadeIn}>
                   <Snackbar.Item
-                    severity={snackbarSeverity}
-                    fadeIn={snackbarFadeIn}
+                    severity={snackbarSeverity}                    
                     onClose={() => {
                       setShowSnackbar(false);
                     }}
