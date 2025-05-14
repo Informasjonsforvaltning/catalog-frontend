@@ -72,7 +72,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
               <Heading
                 level={5}
                 size='2xs'
-              >{`${localization.datasetForm.fieldLabel.accessService}:`}</Heading>
+              >{`${localization.datasetForm.fieldLabel.accessServiceUris}:`}</Heading>
               <ul className={styles.list}>
                 {distribution.accessServiceUris.map((uri, i) => {
                   const match = selectedDataServices?.find((type) => type.uri === uri);
@@ -143,13 +143,13 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
             </div>
           )}
 
-          {distribution?.page && distribution.page?.[0]?.uri && (
+          {distribution?.page && !isEmpty(distribution.page) && (
             <div className={styles.field}>
               <Heading
                 level={5}
                 size='2xs'
-              >{`${localization.datasetForm.fieldLabel.distributionLink}:`}</Heading>
-              <Paragraph size='sm'>{distribution?.page?.[0].uri}</Paragraph>
+              >{`${localization.datasetForm.fieldLabel.page}:`}</Heading>
+              <Paragraph size='sm'>{distribution?.page?.[0]?.uri}</Paragraph>
             </div>
           )}
         </div>
