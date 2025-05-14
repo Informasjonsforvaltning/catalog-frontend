@@ -7,7 +7,7 @@ import relations from '../../utils/relations.json';
 import { AddButton, DeleteButton, EditButton, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { useState, useRef } from 'react';
 import { referenceSchema } from '../../utils/validation-schema';
-import _ from 'lodash';
+import { compact, isEmpty } from 'lodash';
 import styles from '../../dataset-form.module.css';
 import cn from 'classnames';
 
@@ -25,7 +25,7 @@ type ModalProps = {
 
 const hasNoFieldValues = (values: Reference) => {
   if (!values) return true;
-  return _.isEmpty(values?.referenceType?.code) && _.isEmpty(values?.source?.uri);
+  return isEmpty(values?.referenceType?.code) && isEmpty(values?.source?.uri);
 };
 
 export const ReferenceTable = ({ searchEnv }: Props) => {
@@ -42,7 +42,7 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
       <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.references}>
         {localization.datasetForm.fieldLabel.references}
       </TitleWithHelpTextAndTag>
-      {values?.references && _.compact(values?.references).length > 0 && (
+      {values?.references && compact(values?.references).length > 0 && (
         <Table
           size='sm'
           className={styles.table}

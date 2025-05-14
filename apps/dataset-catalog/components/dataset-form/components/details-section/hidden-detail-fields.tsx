@@ -17,7 +17,7 @@ import FieldsetWithDelete from '../../../fieldset-with-delete';
 import { ToggleFieldButton } from '../toggle-field-button';
 import { UriWithLabelFieldsetTable } from '../uri-with-label-field-set-table';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 import React from 'react';
 
 type Props = {
@@ -255,7 +255,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         values={values.conformsTo}
         fieldName={'conformsTo'}
         label={
-          !_.isEmpty(values.conformsTo) && (
+          !isEmpty(values.conformsTo) && (
             <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.conformsTo}>
               {localization.datasetForm.fieldLabel.conformsTo}
             </TitleWithHelpTextAndTag>

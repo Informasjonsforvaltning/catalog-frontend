@@ -5,7 +5,7 @@ import { useFormikContext } from 'formik';
 import { PropsWithChildren, useMemo } from 'react';
 import FieldsetWithDelete from '../../fieldset-with-delete';
 import styles from '../dataset-form.module.css';
-import _ from 'lodash';
+import { isArray, isEmpty, isNil, isObject } from 'lodash';
 import { Box } from '@digdir/designsystemet-react';
 
 type Props = {
@@ -29,13 +29,13 @@ export const ToggleFieldButton = ({
   const { setFieldValue } = useFormikContext<Dataset>();
 
   const shouldShowField = useMemo(() => {
-    if (fieldName === 'qualifiedAttributions' && _.isArray(fieldValues) && fieldValues.length === 0) {
+    if (fieldName === 'qualifiedAttributions' && isArray(fieldValues) && fieldValues.length === 0) {
       return true;
     }
 
-    if (_.isArray(fieldValues)) return fieldValues.length > 0;
-    if (_.isObject(fieldValues)) return !_.isEmpty(fieldValues);
-    return !_.isNil(fieldValues);
+    if (isArray(fieldValues)) return fieldValues.length > 0;
+    if (isObject(fieldValues)) return !isEmpty(fieldValues);
+    return !isNil(fieldValues);
   }, [fieldValues, fieldName]);
 
   const handleDelete = () => {

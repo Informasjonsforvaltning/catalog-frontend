@@ -18,7 +18,7 @@ import { Button, Fieldset, Modal, Radio, Table, Textfield } from '@digdir/design
 import { FastField, Formik, useFormikContext } from 'formik';
 import styles from '../../dataset-form.module.css';
 import { useRef, useState } from 'react';
-import _ from 'lodash';
+import { identity, isEmpty, pickBy, trim } from 'lodash';
 import { uriWithLabelSchema } from '../../utils/validation-schema';
 
 type LegalBasis = {
@@ -35,7 +35,7 @@ type ModalProps = {
 
 const hasNoFieldValues = (values: UriWithLabel) => {
   if (!values) return true;
-  return _.isEmpty(_.trim(values.uri)) && _.isEmpty(_.pickBy(values.prefLabel, _.identity));
+  return isEmpty(trim(values.uri)) && isEmpty(pickBy(values.prefLabel, identity));
 };
 
 const accessRightTypes = ['legalBasisForRestriction', 'legalBasisForProcessing', 'legalBasisForAccess'];

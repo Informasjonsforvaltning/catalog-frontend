@@ -24,7 +24,7 @@ import { DistributionDetailsCard } from './components/distribution-details';
 import { AccessRightsDetails } from './components/access-rights-details';
 import { TemporalDetails } from './components/temporal-details';
 import TagList from '../tag-list';
-import _ from 'lodash';
+import { compact, isEmpty } from 'lodash';
 import Markdown from 'react-markdown';
 
 type Props = {
@@ -61,7 +61,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
   );
 
   const hasValues = (values: any | any[] | undefined | null): boolean => {
-    return values && !_.isEmpty(values);
+    return values && !isEmpty(values);
   };
 
   const getDataNorgeUri = (id: string | undefined, resourceType: Search.ResourceType) => {
@@ -182,7 +182,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </InfoCard.Item>
       )}
 
-      {dataset?.landingPage && !_.isEmpty(dataset?.landingPage[0]) && (
+      {dataset?.landingPage && !isEmpty(dataset?.landingPage[0]) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.landingPage}>
           <div className={styles.infoCardItems}>
             {dataset?.landingPage.map((item) => <Paragraph key={item}>{item}</Paragraph>)}
@@ -190,7 +190,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </InfoCard.Item>
       )}
 
-      {dataset?.temporal && !_.isEmpty(dataset?.temporal[0]) && (
+      {dataset?.temporal && !isEmpty(dataset?.temporal[0]) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.temporal}>
           <TemporalDetails temporal={dataset?.temporal} />
         </InfoCard.Item>
@@ -294,7 +294,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       {(hasValues(dataset.references) || hasValues(dataset.relations)) && (
         <InfoCard.Item title={localization.relations}>
           <div className={styles.infoCardItems}>
-            {dataset?.references && _.compact(dataset?.references).length > 0 && (
+            {dataset?.references && compact(dataset?.references).length > 0 && (
               <Table
                 size='sm'
                 className={styles.table}
@@ -412,7 +412,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
           </Table>
         </InfoCard.Item>
       )}
-      {dataset?.keyword && !_.isEmpty(dataset?.keyword[0]) && (
+      {dataset?.keyword && !isEmpty(dataset?.keyword[0]) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.keyword}>
           <li className={styles.list}>
             {dataset.keyword?.map((item, index) => {
@@ -464,7 +464,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </InfoCard.Item>
       )}
 
-      {dataset?.informationModel && !_.isEmpty(dataset?.informationModel[0]?.uri) && (
+      {dataset?.informationModel && !isEmpty(dataset?.informationModel[0]?.uri) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.informationModel}>
           <UriWithLabelTable
             values={dataset?.informationModel}

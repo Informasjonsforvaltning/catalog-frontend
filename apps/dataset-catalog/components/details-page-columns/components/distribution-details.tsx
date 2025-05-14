@@ -4,7 +4,7 @@ import { Card, Heading, Tag } from '@digdir/designsystemet-react';
 import { DistributionDetails } from '../../dataset-form/components/distribution-section/distribution-details';
 import styles from '../details-columns.module.css';
 import { useSearchFileTypeByUri } from '../../../hooks/useReferenceDataSearch';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 
 type Props = {
   distribution: Partial<Distribution>;
@@ -26,7 +26,7 @@ export const DistributionDetailsCard = ({
   return (
     <Card>
       <div className={styles.infoCardItems}>
-        {distribution?.title && !_.isEmpty(distribution?.title) && (
+        {distribution?.title && !isEmpty(distribution?.title) && (
           <div>
             <Heading
               level={4}
@@ -50,7 +50,7 @@ export const DistributionDetailsCard = ({
           </div>
         )}
 
-        {distribution?.format && !_.isEmpty(distribution.format) && (
+        {distribution?.format && !isEmpty(distribution.format) && (
           <div>
             <Heading
               level={4}
