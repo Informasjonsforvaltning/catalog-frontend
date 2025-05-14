@@ -2,12 +2,12 @@
 
 import { Distribution, ReferenceDataCode } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Paragraph, Tag, Table, TableBody, Heading } from '@digdir/designsystemet-react';
+import { Heading, Paragraph, Table, TableBody, Tag } from '@digdir/designsystemet-react';
 import styles from './distributions.module.scss';
 import { useSearchDataServiceByUri } from '../../../../hooks/useSearchService';
 import { useSearchMediaTypeByUri } from '../../../../hooks/useReferenceDataSearch';
 import { isEmpty } from 'lodash';
-import { FieldsetDivider } from '@catalog-frontend/ui';
+import { FieldsetDivider, Link } from '@catalog-frontend/ui';
 
 interface Props {
   searchEnv: string;
@@ -78,12 +78,17 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
                   const match = selectedDataServices?.find((type) => type.uri === uri);
                   return (
                     <li key={`service-${uri}-${i}`}>
-                      <Tag
-                        color='info'
-                        size='sm'
+                      <Link
+                        target='_blank'
+                        rel='noopener noreferrer'
                       >
-                        {match ? getTranslateText(match?.title) : uri}
-                      </Tag>
+                        <Tag
+                          color='info'
+                          size='sm'
+                        >
+                          {match ? getTranslateText(match?.title) : uri}
+                        </Tag>
+                      </Link>
                     </li>
                   );
                 })}
