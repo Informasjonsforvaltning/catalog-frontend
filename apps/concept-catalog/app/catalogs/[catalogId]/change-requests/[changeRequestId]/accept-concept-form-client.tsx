@@ -34,9 +34,10 @@ export const AcceptConceptFormClient = ({
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'danger'>('success');
 
   const showSnackbarMessage = ({ message, severity }) => {
-    setShowSnackbar(true);
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
+    setShowSnackbar(false);
+    setTimeout(() => setShowSnackbar(true), 10);
   };
 
   const handleGotoOverview = () => {

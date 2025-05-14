@@ -100,11 +100,16 @@ export const DatasetForm = ({
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'danger'>('success');
   const [snackbarFadeIn, setSnackbarFadeIn] = useState(true);
 
-  const showSnackbarMessage = ({ message, severity, fadeIn = true }: any) => {
-    setShowSnackbar(true);
+  const showSnackbarMessage = ({ message, severity, fadeIn = true }: any) => {    
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarFadeIn(fadeIn);
+    if(fadeIn) {
+      setShowSnackbar(false);
+      setTimeout(() => setShowSnackbar(true), 10);
+    } else {
+      setShowSnackbar(true)
+    }
   };
 
   const handleSwitchChange = (

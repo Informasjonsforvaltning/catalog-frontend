@@ -124,10 +124,15 @@ const ConceptForm = ({
   const [snackbarFadeIn, setSnackbarFadeIn] = useState(true);
 
   const showSnackbarMessage = ({ message, severity, fadeIn = true }) => {
-    setShowSnackbar(true);
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarFadeIn(fadeIn);
+    if(fadeIn) {
+      setShowSnackbar(false);
+      setTimeout(() => setShowSnackbar(true), 10);
+    } else {
+      setShowSnackbar(true)
+    }
   };
 
   const mapPropsToValues = ({
