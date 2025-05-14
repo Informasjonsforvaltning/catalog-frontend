@@ -32,6 +32,7 @@ export * from './lib/key-value-list-item';
 export * from './lib/keycloak-signin';
 export * from './lib/layout';
 export * from './lib/language-indicator';
+export * from './lib/link';
 export * from './lib/list';
 export * from './lib/navigation-card';
 export * from './lib/next-auth-provider';
