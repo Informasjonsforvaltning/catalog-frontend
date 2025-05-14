@@ -36,10 +36,15 @@ const hasNoFieldValues = (values: UriWithLabel) => {
 export const UriWithLabelFieldsetTable = ({ fieldName, values, label }: Props) => {
   const { setFieldValue } = useFormikContext();
 
+  function removeAtIndex(arr: UriWithLabel[], index: number) {
+    arr.splice(index, 1);
+    return arr;
+  }
+
   return (
     <div className={styles.fieldContainer}>
       {typeof label === 'string' ? <FormHeading>{label}</FormHeading> : label}
-      {values && values?.length > 0 && !hasNoFieldValues(values[0]) && (
+      {values && values?.length > 0 && (
         <Table
           size='sm'
           className={styles.table}
@@ -64,7 +69,7 @@ export const UriWithLabelFieldsetTable = ({ fieldName, values, label }: Props) =
                       type={'edit'}
                       onSuccess={(updatedItem: UriWithLabel) => setFieldValue(`${fieldName}[${index}]`, updatedItem)}
                     />
-                    <DeleteButton onClick={() => setFieldValue(`${fieldName}[${index}]`, undefined)} />
+                    <DeleteButton onClick={() => setFieldValue(fieldName, removeAtIndex(values, index))} />
                   </span>
                 </Table.Cell>
               </Table.Row>
@@ -79,9 +84,7 @@ export const UriWithLabelFieldsetTable = ({ fieldName, values, label }: Props) =
           type={'new'}
           onSuccess={(formValues) =>
             setFieldValue(
-              values && values?.length > 0 && !hasNoFieldValues(values[0])
-                ? `${fieldName}[${values?.length}]`
-                : `${fieldName}[0]`,
+              values && values?.length > 0 ? `${fieldName}[${values?.length}]` : `${fieldName}[0]`,
               formValues,
             )
           }

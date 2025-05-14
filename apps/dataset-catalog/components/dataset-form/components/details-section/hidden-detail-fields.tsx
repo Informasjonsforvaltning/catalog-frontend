@@ -255,8 +255,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
         values={values.conformsTo}
         fieldName={'conformsTo'}
         label={
-          !_.isEmpty(values.conformsTo) &&
-          _.some(values.conformsTo, (item) => !_.isUndefined(item)) && (
+          !_.isEmpty(values.conformsTo) && (
             <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.conformsTo}>
               {localization.datasetForm.fieldLabel.conformsTo}
             </TitleWithHelpTextAndTag>
