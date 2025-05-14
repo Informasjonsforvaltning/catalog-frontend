@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useFormikContext } from 'formik';
-import { Box, Button, Card, Heading, Link, Tag } from '@digdir/designsystemet-react';
+import { Box, Button, Card, Heading, Label, Link, Tag } from '@digdir/designsystemet-react';
 import { ChevronDownIcon, ChevronUpIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { Dataset, Distribution, ReferenceDataCode } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
@@ -64,9 +64,8 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
   return (
     <Box>
       <div className={styles.fieldSet}>
-        <Heading
-          size='xs'
-          level={3}
+        <Label
+          size='sm'
         >
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.distribution}
@@ -75,7 +74,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
           >
             {localization.datasetForm.fieldLabel.distributions}
           </TitleWithHelpTextAndTag>
-        </Heading>
+        </Label>
         {values?.distribution &&
           !distributionArrayIsEmpty(values?.distribution) &&
           values?.distribution?.map(
@@ -199,14 +198,13 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
       </div>
       <FieldsetDivider />
       <div className={styles.fieldSet}>
-        <Heading
-          level={3}
-          size='xs'
+        <Label
+          size='sm'
         >
           <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.sample}>
             {localization.datasetForm.fieldLabel.sample}
           </TitleWithHelpTextAndTag>
-        </Heading>
+        </Label>
 
         {values?.sample &&
           !distributionArrayIsEmpty(values?.sample) &&
