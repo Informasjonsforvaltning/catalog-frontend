@@ -9,6 +9,7 @@ import { ChangeRequestStatusTagProps, LinkButton, SearchField, SearchHitsLayout,
 import {
   capitalizeFirstLetter,
   convertTimestampToDateAndTime,
+  LocalDataStorage,
   localization,
   sortAscending,
   sortDescending,
@@ -18,10 +19,16 @@ import {
 import ChangeRequestFilter from '@concept-catalog/components/change-request-filter';
 import ChangeRequestSort from '@concept-catalog/components/change-request-sort';
 import { getTranslatedStatus } from '@concept-catalog/utils/change-request';
-import { ChangeRequest } from '@catalog-frontend/types';
+import { ChangeRequest, ChangeRequestSearchPageSettings } from '@catalog-frontend/types';
 import styles from './change-requests-page.module.css';
+import { useEffect } from 'react';
 
 export const ChangeRequestsPageClient = ({ catalogId, data }) => {
+  const pageSettingsStorage = new LocalDataStorage<ChangeRequestSearchPageSettings>({
+    key: 'change-request-search-page-settings',
+  });
+  const pageSettings = pageSettingsStorage.get();
+
   const itemTypeOptions = [
     {
       label: localization.changeRequest.changeRequest,
@@ -55,13 +62,13 @@ export const ChangeRequestsPageClient = ({ catalogId, data }) => {
 
   const router = useRouter();
 
-  const [searchTerm, setSearchTerm] = useQueryState('search', { defaultValue: '' });
+  const [searchTerm, setSearchTerm] = useQueryState('search', { defaultValue: pageSettings?.search ?? '' });
   const [filterItemType, setFilterItemType] = useQueryState(
     'filter.itemType',
-    parseAsString.withDefault(itemTypeOptions[0].value),
+    parseAsString.withDefault(pageSettings?.filter?.itemType ?? itemTypeOptions[0].value),
   );
-  const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString).withDefault([]));
-  const [sort, setSort] = useQueryState('sort', parseAsString.withDefault('TIME_FOR_PROPOSAL_DESC'));
+  const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString).withDefault(pageSettings?.filter?.status ?? []));
+  const [sort, setSort] = useQueryState('sort', parseAsString.withDefault(pageSettings?.sort ?? 'TIME_FOR_PROPOSAL_DESC'));
 
   const onItemTypeChange = (value: string) => {
     setFilterItemType(value);
@@ -121,6 +128,22 @@ export const ChangeRequestsPageClient = ({ catalogId, data }) => {
     default:
       break;
   }
+
+  useEffect(() => {
+      pageSettingsStorage.set({
+        search: searchTerm,
+        sort,
+        filter: {
+          status: filterStatus,
+          itemType: filterItemType,
+        },
+      });
+    }, [
+      searchTerm,
+      sort,
+      filterStatus,
+      filterItemType,
+    ]);
 
   return (
     <div className='container'>

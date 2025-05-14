@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useMemo } from 'react';
-import { Dataset, FilterType, PublicationStatus } from '@catalog-frontend/types';
+import { Dataset, DatasetSearchPageSettings, FilterType, PublicationStatus } from '@catalog-frontend/types';
 import styles from './datasets-page.module.css';
 import { LinkButton, SearchField, SearchHit, SearchHitContainer, SearchHitsLayout } from '@catalog-frontend/ui';
 import { Chip, NativeSelect } from '@digdir/designsystemet-react';
@@ -8,6 +8,7 @@ import {
   dateStringToDate,
   formatDate,
   getTranslateText,
+  LocalDataStorage,
   localization,
   sortAscending,
   sortDateStringsDescending,
@@ -30,14 +31,19 @@ const sortTypes: SortTypes[] = ['titleAsc', 'titleDesc', 'lastChanged'];
 const itemPerPage = 5;
 
 const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) => {
-  const [searchTerm, setSearchTerm] = useQueryState('search', { defaultValue: '' });
-  const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString));
+  const pageSettingsStorage = new LocalDataStorage<DatasetSearchPageSettings>({
+    key: 'dataset-search-page-settings',
+  });
+  const pageSettings = pageSettingsStorage.get();
+  
+  const [searchTerm, setSearchTerm] = useQueryState('search', { defaultValue: pageSettings?.search ?? '' });
+  const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString).withDefault(pageSettings?.filter.status ?? []));
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
     'filter.pubState',
-    parseAsArrayOf(parseAsString),
+    parseAsArrayOf(parseAsString).withDefault(pageSettings?.filter.pubState ?? []),
   );
-  const [sortValue, setSortValue] = useQueryState('sort');
-  const [page, setPage] = useQueryState('page', parseAsInteger);
+  const [sortValue, setSortValue] = useQueryState('sort', { defaultValue: pageSettings?.sort ?? ''});
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(pageSettings?.page ?? 0));
   const [filteredDatasets, setFilteredDatasets] = useState<Dataset[]>(datasets);
 
   const getSortFunction = useMemo(() => {
@@ -64,6 +70,24 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
       setFilterStatus(filterStatus?.filter((name) => name !== filterName) ?? []);
     }
   };
+
+  useEffect(() => {
+    pageSettingsStorage.set({
+      search: searchTerm,
+      sort: sortValue,
+      page,
+      filter: {
+        pubState: filterPublicationState,
+        status: filterStatus,
+      },
+    });
+  }, [
+    page,
+    searchTerm,
+    sortValue,
+    filterPublicationState,
+    filterStatus,
+  ]);
 
   useEffect(() => {
     const filterAndSortDatasets = () => {

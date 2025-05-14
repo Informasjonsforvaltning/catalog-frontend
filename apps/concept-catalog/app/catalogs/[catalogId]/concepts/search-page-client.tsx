@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'nuqs';
 import { isEmpty } from 'lodash';
 import { useRouter } from 'next/navigation';
-import { SearchableField, QuerySort, ConceptPageSettings } from '@catalog-frontend/types';
+import { SearchableField, QuerySort, ConceptSearchPageSettings } from '@catalog-frontend/types';
 import {
   UploadButton,
   SearchHitContainer,
@@ -57,14 +57,14 @@ export const SearchPageClient = ({
 }: Props) => {
   const router = useRouter();
 
-  const pageSettingsStorage = new LocalDataStorage<ConceptPageSettings>({ key: 'conceptsPageSettings' });
+  const pageSettingsStorage = new LocalDataStorage<ConceptSearchPageSettings>({ key: 'concept-search-page-settings' });
   const pageSettings = pageSettingsStorage.get();
 
   const [selectedFieldOption, setSelectedFieldOption] = useQueryState('sort.field', {
     defaultValue: pageSettings?.searchField ?? 'alleFelter',
   });
   const [selectedSortOption, setSelectedSortOption] = useQueryState('sort.by', { defaultValue: pageSettings?.sort ?? SortOption.RELEVANCE });
-  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(pageSettings?.page ?? 1));
+  const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(pageSettings?.page ?? 0));
   const [searchTerm, setSearchTerm] = useQueryState('search', { defaultValue: pageSettings?.search ?? '' });
   const [filterStatus, setFilterStatus] = useQueryState(
     'filter.status',

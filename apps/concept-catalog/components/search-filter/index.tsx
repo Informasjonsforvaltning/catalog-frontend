@@ -3,7 +3,7 @@
 import { memo } from 'react';
 import { Accordion } from '@digdir/designsystemet-react';
 import { AccordionItem, AccordionItemProps, CheckboxGroupFilter, Select } from '@catalog-frontend/ui';
-import { AssignedUser, CodeList, ConceptPageSettings, InternalField, ReferenceDataCode } from '@catalog-frontend/types';
+import { AssignedUser, CodeList, ConceptSearchPageSettings, InternalField, ReferenceDataCode } from '@catalog-frontend/types';
 import {
   capitalizeFirstLetter,
   convertCodeListToTreeNodes,
@@ -29,7 +29,7 @@ interface Props {
 }
 
 const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatuses }: Props) => {
-  const pageSettingsStorage = new LocalDataStorage<ConceptPageSettings>({ key: 'conceptsPageSettings' });
+  const pageSettingsStorage = new LocalDataStorage<ConceptSearchPageSettings>({ key: 'conceptsPageSettings' });
     const pageSettings = pageSettingsStorage.get();
   
   
