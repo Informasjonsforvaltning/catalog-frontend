@@ -25,7 +25,7 @@ type ModalProps = {
 
 const hasNoFieldValues = (values: Reference) => {
   if (!values) return true;
-  return _.isEmpty(values?.referenceType?.code) && _.isEmpty(values?.source?.uri);
+  return _.isEmpty(values?.referenceType?.uri) && _.isEmpty(values?.source?.uri);
 };
 
 export const ReferenceTable = ({ searchEnv }: Props) => {
@@ -59,12 +59,13 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
               values?.references.map((ref: Reference, index) => (
                 <Table.Row key={`references-${index}`}>
                   <Table.Cell>
-                    {getTranslateText(relations.find((rel) => rel.code === ref?.referenceType?.code)?.label) ??
-                      ref?.referenceType?.code}
+                    {getTranslateText(relations.find((rel) => rel.uri === ref?.referenceType?.uri)?.label) ??
+                      ref?.referenceType?.uri}
                   </Table.Cell>
                   <Table.Cell>
-                    {getTranslateText(selectedValues?.find((item) => item.uri === ref?.source?.uri)?.title) ??
-                      ref?.source?.uri}
+                    {selectedValues?.find((item) => item.uri === ref?.source?.uri)?.title
+                      ? getTranslateText(selectedValues?.find((item) => item.uri === ref?.source?.uri)?.title)
+                      : ref?.source?.uri}
                   </Table.Cell>
                   <Table.Cell>
                     <div className={styles.set}>
@@ -87,7 +88,7 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
       <div>
         <FieldModal
           searchEnv={searchEnv}
-          template={{ source: { uri: '' }, referenceType: { code: '' } }}
+          template={{ source: { uri: '' }, referenceType: { uri: '' } }}
           type={'new'}
           onSuccess={(formValues) =>
             setFieldValue(
@@ -167,19 +168,19 @@ const FieldModal = ({ template, type, onSuccess, searchEnv, selectedUri }: Modal
                 <Modal.Content className={cn(styles.modalContent, styles.fieldContainer)}>
                   <Combobox
                     label={localization.datasetForm.fieldLabel.relationType}
-                    onValueChange={(value) => setFieldValue(`referenceType.code`, value.toString())}
-                    value={values.referenceType?.code ? [values.referenceType?.code] : []}
+                    onValueChange={(value) => setFieldValue(`referenceType.uri`, value.toString())}
+                    value={values.referenceType?.uri ? [values.referenceType?.uri] : []}
                     placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
                     portal={false}
                     size='sm'
-                    error={errors?.referenceType?.code}
+                    error={errors?.referenceType?.uri}
                     virtual
                   >
                     <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
                     {relations.map((relation) => (
                       <Combobox.Option
-                        key={relation?.code}
-                        value={relation?.code}
+                        key={relation?.uri}
+                        value={relation?.uri}
                         description={`${relation?.uriAsPrefix} (${relation?.uri})`}
                       >
                         {getTranslateText(relation?.label)}

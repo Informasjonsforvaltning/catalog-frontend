@@ -311,15 +311,17 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
                       return (
                         <Table.Row key={`references-${index}`}>
                           <Table.Cell>
-                            {getTranslateText(
-                              relations.find((rel) => rel.code === ref?.referenceType?.code)?.label,
-                              language,
-                            ) ?? ref?.referenceType?.code}
+                            {relations.find((rel) => rel.code === ref?.referenceType?.uri)?.label
+                              ? getTranslateText(
+                                  relations.find((rel) => rel.code === ref?.referenceType?.uri)?.label,
+                                  language,
+                                )
+                              : ref?.referenceType?.uri}
                           </Table.Cell>
                           <Table.Cell>
                             {
                               <Link href={`${referenceDataEnv}/datasets/${match?.id}`}>
-                                {getTranslateText(match?.title, language) ?? ref?.source?.uri}
+                                {match?.title ? getTranslateText(match?.title, language) : ref?.source?.uri}
                               </Link>
                             }
                           </Table.Cell>
@@ -397,7 +399,9 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
                       <Table.Cell>
                         {
                           <Link href={`${referenceDataEnv}/concepts/${match?.id}`}>
-                            {capitalizeFirstLetter(getTranslateText(match?.title, language).toString()) ?? concept?.uri}
+                            {match?.title
+                              ? capitalizeFirstLetter(getTranslateText(match?.title, language).toString())
+                              : concept?.uri}
                           </Link>
                         }
                       </Table.Cell>
