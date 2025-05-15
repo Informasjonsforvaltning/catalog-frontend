@@ -79,6 +79,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
                   return (
                     <li key={`service-${uri}-${i}`}>
                       <Link
+                        href={uri}
                         target='_blank'
                         rel='noopener noreferrer'
                       >
