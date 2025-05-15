@@ -144,6 +144,7 @@ export const DistributionModal = ({
                             name='title'
                             legend={
                               <TitleWithHelpTextAndTag
+                                helpText={localization.datasetForm.helptext.title}
                                 tagTitle={localization.tag.recommended}
                                 tagColor='info'
                               >
@@ -344,6 +345,7 @@ export const DistributionModal = ({
                         as={TextareaWithPrefix}
                         legend={
                           <TitleWithHelpTextAndTag
+                            helpText={localization.datasetForm.helptext.distributionDescription}
                             tagColor='info'
                             tagTitle={localization.tag.recommended}
                           >

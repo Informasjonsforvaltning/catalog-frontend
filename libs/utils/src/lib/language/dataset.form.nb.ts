@@ -21,6 +21,7 @@ export const datasetFormNb = {
       'Velg ett eller flere LOS-temaer som beskriver datasettet. LOS-tema (Livsområdestruktur) er en norsk utvidelse av EUs kontrollerte vokabular for temaer. Dette gjør det mulig å tilpasse kategoriseringen til nasjonale behov. [Les mer om LOS her](https://psi.norge.no/los/struktur.html).',
     distribution:
       'En distribusjon beskriver hvordan man får tilgang til datasettet. Datasett som har en distribusjon der det er lagt til en åpen lisens vil bli markert som "Åpne data"',
+    distributionDescription: 'Kortfattet fritekstbeskrivelse av distribusjonen.',
     sample: 'Eksempeldata er en distribusjon som representerer et utdrag eller en delmengde av datasettet.',
     accessURL:
       'En nettadresse som gir tilgang til datasettet. Lenken kan peke til en ressurs som gir informasjon om hvordan datasettet kan brukes, for eksempel et API, en portal, eller en annen visning av datasettet.',
@@ -124,6 +125,7 @@ export const datasetFormNb = {
     lastUpdated: 'Sist oppdatert',
     landingPage: 'Lenke til mer informasjon om datasettet',
     type: 'Type',
+    title: 'Tittel',
     provenance: 'Opphav',
     accrualPeriodicity: 'Oppdateringsfrekvens',
     modified: 'Sist oppdatert',
