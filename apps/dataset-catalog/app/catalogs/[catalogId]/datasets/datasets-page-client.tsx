@@ -2,8 +2,15 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Dataset, FilterType, PublicationStatus } from '@catalog-frontend/types';
 import styles from './datasets-page.module.css';
-import { LinkButton, SearchField, SearchHit, SearchHitContainer, SearchHitsLayout } from '@catalog-frontend/ui';
-import { Chip, NativeSelect } from '@digdir/designsystemet-react';
+import {
+  HelpMarkdown,
+  LinkButton,
+  SearchField,
+  SearchHit,
+  SearchHitContainer,
+  SearchHitsLayout,
+} from '@catalog-frontend/ui';
+import { Chip, NativeSelect, Tag } from '@digdir/designsystemet-react';
 import {
   dateStringToDate,
   formatDate,
@@ -147,6 +154,22 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
     );
   };
 
+  const datasetTags = (dataset: Dataset) => {
+    return (
+      <div className={styles.set}>
+        {dataset.specializedType === 'SERIES' && (
+          <HelpMarkdown
+            aria-label={'series-not-implemented-warning'}
+            severity={'warning'}
+          >
+            Datasettserier har ikke blitt implementert enda
+          </HelpMarkdown>
+        )}
+        <StatusTag datasetStatus={dataset.registrationStatus} />
+      </div>
+    );
+  };
+
   const totalPages = Math.ceil(filteredDatasets.length / itemPerPage);
 
   const paginatedDatasets = useMemo(() => {
@@ -216,7 +239,8 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission }: Props) 
                         title={getTranslateText(dataset?.title)}
                         description={getTranslateText(dataset?.description)}
                         titleHref={`/catalogs/${catalogId}/datasets/${dataset?.id}`}
-                        statusTag={<StatusTag datasetStatus={dataset.registrationStatus} />}
+                        statusTag={datasetTags(dataset)}
+                        rightColumn={dataset.specializedType === 'SERIES' && <Tag>Serie</Tag>}
                         content={
                           <>
                             <div className={styles.set}>
