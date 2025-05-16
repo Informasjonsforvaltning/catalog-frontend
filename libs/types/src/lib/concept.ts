@@ -326,3 +326,29 @@ export interface GenericRelation {
 }
 
 export type RelationshipWithSource = 'egendefinert' | 'basertPaaKilde' | 'sitatFraKilde';
+
+export type ConceptsPageSettings = {
+  page: number | null;
+  search: string | null;
+  searchField: string | null;
+  sort: string | null;
+  filter: {
+    status: string[] | null;
+    pubState: string[] | null;
+    assignedUser: string | null;
+    internalFields: Record<string, string[]> | null;
+    label: string[] | null;
+    subject: string[] | null;
+  };
+};
+
+export type ChangeRequestsPageSettings = {
+  search: string | null;
+  sort: string | null;
+  filter: {
+    status: string[] | null;
+    itemType: string | null;
+  }
+};
+
+

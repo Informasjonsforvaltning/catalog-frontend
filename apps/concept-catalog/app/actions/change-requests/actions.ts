@@ -18,7 +18,7 @@ import {
 } from '@catalog-frontend/data-access';
 import { revalidateTag } from 'next/cache';
 import jsonpatch from 'fast-json-patch';
-import { ChangeRequest, ChangeRequestUpdateBody, Concept } from '@catalog-frontend/types';
+import { ChangeRequest, ChangeRequestsPageSettings, ChangeRequestUpdateBody, Concept } from '@catalog-frontend/types';
 
 async function getChangeRequestAsConcept(catalogId: string, changeRequestId: string) {
   const session = await getValidSession();
