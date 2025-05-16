@@ -3,7 +3,7 @@ import { accessRightPublic, accessRights, getTranslateText, localization } from 
 import { Card, Table, Tag } from '@digdir/designsystemet-react';
 import { useMemo } from 'react';
 import styles from '../details-columns.module.css';
-import _ from 'lodash';
+import { identity, isEmpty, pickBy, trim } from 'lodash';
 
 type Props = {
   dataset: Dataset;
@@ -12,9 +12,7 @@ type Props = {
 
 const hasNoFieldValues = (values: UriWithLabel) => {
   if (!values) return true;
-  return (
-    _.isEmpty(_.trim(values.uri)) && (_.isEmpty(values.prefLabel) || _.isEmpty(_.pickBy(values.prefLabel, _.identity)))
-  );
+  return isEmpty(trim(values.uri)) && (isEmpty(values.prefLabel) || isEmpty(pickBy(values.prefLabel, identity)));
 };
 
 export const AccessRightsDetails = ({ dataset, language }: Props) => {

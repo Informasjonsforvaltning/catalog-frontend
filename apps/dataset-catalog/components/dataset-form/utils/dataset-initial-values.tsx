@@ -1,6 +1,6 @@
 import { Dataset, DatasetToBeCreated, Distribution, PublicationStatus } from '@catalog-frontend/types';
 import { groupByKeys } from '@catalog-frontend/utils';
-import _ from 'lodash';
+import { isEmpty } from 'lodash';
 
 export const datasetTemplate = (dataset: Dataset): Dataset => {
   return {
@@ -8,7 +8,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     catalogId: dataset?.catalogId ?? '',
     _lastModified: dataset?._lastModified,
     title: dataset.title ?? '',
-    description: !_.isEmpty(dataset?.description) ? dataset.description : { nb: '' },
+    description: !isEmpty(dataset?.description) ? dataset.description : { nb: '' },
     accessRights: { uri: dataset?.accessRights?.uri ?? 'none' },
     legalBasisForAccess: dataset?.legalBasisForAccess ?? [],
     legalBasisForProcessing: dataset?.legalBasisForProcessing ?? [],
@@ -103,7 +103,7 @@ export const distributionTemplate = (dist: Distribution | undefined) => {
         ...dist,
         title: dist?.title ?? { nb: '' },
         downloadURL: dist?.downloadURL && dist?.downloadURL[0] ? dist?.downloadURL : [''],
-        conformsTo: !_.isEmpty(dist.conformsTo) ? dist.conformsTo : [{ uri: '', prefLabel: { nb: '' } }],
+        conformsTo: !isEmpty(dist.conformsTo) ? dist.conformsTo : [{ uri: '', prefLabel: { nb: '' } }],
       }
     : {
         title: { nb: '' },
