@@ -25,6 +25,10 @@ export const EditPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }
 
   const dataStorage = new LocalDataStorage<StorageData>({ key: 'datasetForm' });
 
+  if (dataset.specializedType === 'SERIES') {
+    window.location.replace(`/catalogs/${dataset.catalogId}/datasets/${dataset.id}`);
+  }
+
   const handleGotoOverview = () => {
     dataStorage.delete();
     window.location.href = `/catalogs/${dataset.catalogId}/datasets`;
