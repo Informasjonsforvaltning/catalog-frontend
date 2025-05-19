@@ -20,6 +20,7 @@ type LanuguageFieldsetProps = {
   name: string;
   requiredLanguages?: Omit<ISOLanguage, 'no'>[];
   as?: typeof Textfield | typeof TextareaWithPrefix;
+  ref?: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>;
   multiple?: boolean;
   readOnly?: boolean;
   showError?: boolean;
@@ -32,16 +33,27 @@ export const FormikLanguageFieldset = ({
   name,
   requiredLanguages,
   as: renderAs = Textfield,
+  ref,
   multiple = false,
   readOnly = false,
   showError = true,
 }: LanuguageFieldsetProps) => {
   const { errors, getFieldMeta, setFieldValue } = useFormikContext<Record<string, LocalizedStrings>>();
   const [focus, setFocus] = useState<string | null>();
+
+  const visibleLanguageFields = allowedLanguages.filter((lang) => {
+    const metadata = getFieldMeta(`${name}.${lang}`);
+    return requiredLanguages?.includes(lang) || metadata.value !== undefined;
+  });
+
   const languageRefs = useRef(
     allowedLanguages.reduce(
-      (acc, lang) => {
-        acc[lang] = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
+      (acc, lang, index) => {
+        if (ref && visibleLanguageFields.includes(lang) && !Object.values(acc).includes(ref)) {
+          acc[lang] = ref;
+        } else {
+          acc[lang] = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
+        }
         return acc;
       },
       {} as Record<string, React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>>,
@@ -57,11 +69,6 @@ export const FormikLanguageFieldset = ({
     setFieldValue(`${name}.${lang}`, undefined);
     setFocus(null);
   };
-
-  const visibleLanguageFields = allowedLanguages.filter((lang) => {
-    const metadata = getFieldMeta(`${name}.${lang}`);
-    return requiredLanguages?.includes(lang) || metadata.value !== undefined;
-  });
 
   const visibleLanguageButtons = allowedLanguages.filter((lang) => !visibleLanguageFields.includes(lang));
 
