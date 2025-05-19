@@ -38,6 +38,7 @@ export const nb = {
   to: 'Til',
   from: 'Fra',
   access: 'Tilgang',
+  accessService: 'Tilgangstjeneste',
   noAccess: 'Ingen tilgang',
   youHaveNoAccess: 'Det ser ikke ut til at du har tilgang til denne siden.',
   youHaveNoAccessToCatalogs: 'Det ser ikke ut til at du har tilgang til noen kataloger.',
