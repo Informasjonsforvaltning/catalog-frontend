@@ -82,7 +82,6 @@ export const DefinitionModal = ({
                     size='sm'
                     disabled={isSubmitting}
                     onClick={() => {
-                      console.log('submit form', isValid, errors);
                       submitForm();
                     }}
                   >

@@ -220,7 +220,7 @@ export const DatasetForm = ({
 
               showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success' });
               if (newValues) {
-                resetForm({ values: datasetTemplate(newValues)});
+                resetForm({ values: datasetTemplate(newValues) });
               } else {
                 resetForm();
               }
@@ -346,10 +346,9 @@ export const DatasetForm = ({
                 </FormLayout>
               </Form>
               {showSnackbar && (
-                <Snackbar>
+                <Snackbar fadeIn={snackbarFadeIn}>
                   <Snackbar.Item
                     severity={snackbarSeverity}
-                    fadeIn={snackbarFadeIn}
                     onClose={() => {
                       setShowSnackbar(false);
                     }}
