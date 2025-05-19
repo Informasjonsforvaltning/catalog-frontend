@@ -83,22 +83,9 @@ export const DistributionModal = ({
 
   const { data: dataServices } = useSearchDataServiceSuggestions(searchEnv, searchDataServicesQuery);
 
-  const comboboxOptions = [
+  const accessServiceOptions = [
     ...new Map(
-      [
-        ...(previouslySelectedAccessServices ?? []),
-        ...(dataServices ?? []),
-        ...(initialValues?.accessServiceUris ?? []).map((uri) => {
-          const foundItem =
-            previouslySelectedAccessServices?.find((item) => item.uri === uri) ||
-            dataServices?.find((item: DataService) => item.uri === uri);
-
-          return {
-            uri,
-            title: foundItem?.title ?? null,
-          };
-        }),
-      ].map((option) => [option.uri, option]),
+      [...(previouslySelectedAccessServices ?? []), ...(dataServices ?? [])].map((option) => [option.uri, option]),
     ).values(),
   ];
 
@@ -207,7 +194,7 @@ export const DistributionModal = ({
                               hideClearButton
                               portal={false}
                               onChange={(event) => setSearchDataServicesQuery(event.target.value)}
-                              value={[...(values.accessServiceUris || []), ...(initialValues?.accessServiceUris || [])]}
+                              value={values.accessServiceUris}
                               onValueChange={(selectedValues) => {
                                 setFieldValue('accessServiceUris', selectedValues);
                                 setSelectedAccessServices(selectedValues);
@@ -216,7 +203,7 @@ export const DistributionModal = ({
                               size='sm'
                               virtual
                             >
-                              {comboboxOptions.map((option, i) => (
+                              {accessServiceOptions.map((option, i) => (
                                 <Combobox.Option
                                   key={`distribution-${option.uri}-${i}`}
                                   value={option.uri ?? option.description}
