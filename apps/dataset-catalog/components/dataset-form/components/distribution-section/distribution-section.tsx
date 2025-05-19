@@ -40,13 +40,13 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
     }
 
     if (
-      distribution.downloadURL?.[0] ||
-      distribution.mediaType?.[0] ||
-      distribution.accessServiceUris?.[0] ||
+      !isEmpty(distribution.downloadURL) ||
+      !isEmpty(distribution.mediaType) ||
+      !isEmpty(distribution.accessServiceUris) ||
       distribution.license ||
-      distribution.description?.nb ||
-      distribution.page?.[0] ||
-      distribution?.conformsTo?.[0]
+      !isEmpty(distribution.description) ||
+      !isEmpty(distribution.page) ||
+      !isEmpty(distribution?.conformsTo)
     ) {
       return true;
     }
@@ -330,8 +330,8 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
             searchEnv={searchEnv}
             openLicenses={openLicenses}
             initialValues={{
-              title: { nb: '' },
-              description: { nb: '' },
+              title: {},
+              description: {},
               downloadURL: [],
               accessURL: [],
               format: [],
