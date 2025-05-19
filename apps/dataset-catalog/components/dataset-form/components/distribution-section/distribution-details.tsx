@@ -158,13 +158,13 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
             </div>
           )}
 
-          {distribution?.page && distribution.page?.[0]?.uri && (
+          {distribution?.page && !isEmpty(distribution.page) && (
             <div className={styles.field}>
               <Heading
                 level={5}
                 size='2xs'
-              >{`${localization.datasetForm.fieldLabel.distributionLink}:`}</Heading>
-              <Paragraph size='sm'>{distribution?.page?.[0].uri}</Paragraph>
+              >{`${localization.datasetForm.fieldLabel.page}:`}</Heading>
+              <Paragraph size='sm'>{distribution?.page?.[0]?.uri}</Paragraph>
             </div>
           )}
         </div>

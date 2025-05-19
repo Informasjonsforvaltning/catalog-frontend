@@ -101,20 +101,20 @@ export const distributionTemplate = (dist: Distribution | undefined) => {
   return dist
     ? {
         ...dist,
-        title: dist?.title ?? { nb: '' },
-        downloadURL: dist?.downloadURL && dist?.downloadURL[0] ? dist?.downloadURL : [''],
-        conformsTo: !isEmpty(dist.conformsTo) ? dist.conformsTo : [{ uri: '', prefLabel: { nb: '' } }],
+        title: dist?.title ?? {},
+        downloadURL: dist?.downloadURL && dist?.downloadURL[0] ? dist?.downloadURL : [],
+        conformsTo: !isEmpty(dist.conformsTo) ? dist.conformsTo : [],
       }
     : {
-        title: { nb: '' },
-        description: { nb: '' },
-        downloadURL: [''],
+        title: {},
+        description: {},
+        downloadURL: [],
         accessURL: [],
         format: [],
         mediaType: [],
-        licenseList: [],
-        conformsTo: [{ uri: '', prefLabel: { nb: '' } }],
-        pageList: [],
+        license: [],
+        conformsTo: [],
+        page: [],
         accessServiceUris: [],
       };
 };

@@ -10,6 +10,7 @@ import { LeftColumn } from '../../../../../components/details-page-columns/detai
 import { deleteDataset } from '../../../../actions/actions';
 import StatusTag from '../../../../../components/status-tag/index';
 import { useRouter } from 'next/navigation';
+import { Alert } from '@digdir/designsystemet-react';
 
 interface datasetDetailsPageProps {
   dataset: Dataset;
@@ -57,23 +58,25 @@ const DatasetDetailsPageClient = ({
       handleLanguageChange={handleLanguageChange}
       language={language}
       headingTitle={getTranslateText(dataset?.title ?? '', language)}
-      headingTag={
-        <StatusTag
-          datasetStatus={dataset.registrationStatus}
-        />
-      }
+      headingTag={<StatusTag datasetStatus={dataset.registrationStatus} />}
       loading={false}
     >
-      <DetailsPageLayout.Left>
-        <LeftColumn
-          dataset={dataset}
-          referenceDataEnv={referenceDataEnv}
-          searchEnv={searchEnv}
-          referenceData={referenceData}
-          datasetSeries={datasetSeries}
-          language={language}
-        />
-      </DetailsPageLayout.Left>
+      {dataset.specializedType === 'SERIES' ? (
+        <DetailsPageLayout.Left>
+          <Alert severity={'warning'}>Datasettserier har ikke blitt implementert enda.</Alert>
+        </DetailsPageLayout.Left>
+      ) : (
+        <DetailsPageLayout.Left>
+          <LeftColumn
+            dataset={dataset}
+            referenceDataEnv={referenceDataEnv}
+            searchEnv={searchEnv}
+            referenceData={referenceData}
+            datasetSeries={datasetSeries}
+            language={language}
+          />
+        </DetailsPageLayout.Left>
+      )}
       <DetailsPageLayout.Right>
         <RightColumn
           dataset={dataset}
@@ -83,9 +86,11 @@ const DatasetDetailsPageClient = ({
       <DetailsPageLayout.Buttons>
         {hasWritePermission && (
           <div className={styles.set}>
-            <LinkButton href={`/catalogs/${catalogId}/datasets/${datasetId}/edit`}>
-              {localization.button.edit}
-            </LinkButton>
+            {dataset.specializedType !== 'SERIES' && (
+              <LinkButton href={`/catalogs/${catalogId}/datasets/${datasetId}/edit`}>
+                {localization.button.edit}
+              </LinkButton>
+            )}
 
             <DeleteButton
               disabled={dataset.registrationStatus === PublicationStatus.PUBLISH}

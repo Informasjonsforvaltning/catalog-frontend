@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useFormikContext } from 'formik';
-import { Box, Button, Card, Heading, Link, Tag } from '@digdir/designsystemet-react';
+import { Box, Button, Card, Heading, Paragraph, Tag } from '@digdir/designsystemet-react';
 import { ChevronDownIcon, ChevronUpIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { Dataset, Distribution, ReferenceDataCode } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
@@ -43,10 +43,10 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
       distribution.downloadURL?.[0] ||
       distribution.mediaType?.[0] ||
       distribution.accessServiceUris?.[0] ||
-      distribution.license?.uri ||
+      distribution.license ||
       distribution.description?.nb ||
-      distribution.page?.[0]?.uri ||
-      distribution?.conformsTo?.[0]?.prefLabel?.nb
+      distribution.page?.[0] ||
+      distribution?.conformsTo?.[0]
     ) {
       return true;
     }
@@ -64,18 +64,13 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
   return (
     <Box>
       <div className={styles.fieldSet}>
-        <Heading
-          size='xs'
-          level={3}
+        <TitleWithHelpTextAndTag
+          helpText={localization.datasetForm.helptext.distribution}
+          tagColor='info'
+          tagTitle={localization.tag.recommended}
         >
-          <TitleWithHelpTextAndTag
-            helpText={localization.datasetForm.helptext.distribution}
-            tagColor='info'
-            tagTitle={localization.tag.recommended}
-          >
-            {localization.datasetForm.fieldLabel.distributions}
-          </TitleWithHelpTextAndTag>
-        </Heading>
+          {localization.datasetForm.fieldLabel.distributions}
+        </TitleWithHelpTextAndTag>
         {values?.distribution &&
           !distributionArrayIsEmpty(values?.distribution) &&
           values?.distribution?.map(
@@ -83,13 +78,16 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
               !isEmpty(item) && (
                 <Card key={`distribusjon-${index}`}>
                   <div className={styles.heading}>
-                    <Heading
-                      size='xs'
-                      spacing
-                      level={4}
-                    >
-                      {getTranslateText(item?.title) ?? ''}
-                    </Heading>
+                    <div className={styles.field}>
+                      <Heading
+                        size='2xs'
+                        spacing
+                        level={3}
+                      >
+                        {localization.datasetForm.fieldLabel.title}
+                      </Heading>
+                      <Paragraph size='sm'>{getTranslateText(item?.title) ?? ''}</Paragraph>
+                    </div>
                     <div className={styles.buttons}>
                       <DistributionModal
                         type='edit'
@@ -118,24 +116,38 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                     </div>
                   </div>
 
-                  {item?.accessURL && (
-                    <Heading
-                      size='2xs'
-                      level={4}
-                    >{`${localization.datasetForm.fieldLabel.accessURL}:`}</Heading>
-                  )}
-                  <Link href={item?.accessURL?.[0]}>{item?.accessURL?.[0]}</Link>
-
-                  <div className={styles.tags}>
-                    {item?.format?.map((uri) => (
-                      <Tag
-                        key={uri}
-                        color='third'
-                        size='sm'
+                  <div className={styles.field}>
+                    {item?.accessURL && (
+                      <Heading
+                        size='2xs'
+                        level={4}
                       >
-                        {(selectedFileTypes?.find((format) => format?.uri === uri) ?? {}).code ?? uri}
-                      </Tag>
-                    ))}
+                        {localization.datasetForm.fieldLabel.accessURL}
+                      </Heading>
+                    )}
+                    <Paragraph size='sm'>{item?.accessURL?.[0]}</Paragraph>
+                  </div>
+
+                  <div className={styles.field}>
+                    {!isEmpty(item?.format) && (
+                      <Heading
+                        size='2xs'
+                        level={4}
+                      >
+                        {localization.datasetForm.fieldLabel.format}
+                      </Heading>
+                    )}
+                    <div className={styles.tags}>
+                      {item?.format?.map((uri) => (
+                        <Tag
+                          key={uri}
+                          color='third'
+                          size='sm'
+                        >
+                          {(selectedFileTypes?.find((format) => format?.uri === uri) ?? {}).code ?? uri}
+                        </Tag>
+                      ))}
+                    </div>
                   </div>
 
                   {showSeeMoreButton(item) && (
@@ -185,29 +197,23 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
           searchEnv={searchEnv}
           openLicenses={openLicenses}
           initialValues={{
-            title: { nb: '' },
-            description: { nb: '' },
-            downloadURL: [''],
-            accessURL: [''],
+            title: {},
+            description: {},
+            downloadURL: [],
+            accessURL: [],
             format: [],
             mediaType: [],
-            page: [{ uri: '' }],
-            conformsTo: [{ uri: '', prefLabel: { nb: '' } }],
+            page: [],
+            conformsTo: [],
             accessServiceUris: [],
           }}
         />
       </div>
       <FieldsetDivider />
       <div className={styles.fieldSet}>
-        <Heading
-          level={3}
-          size='xs'
-        >
-          <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.sample}>
-            {localization.datasetForm.fieldLabel.sample}
-          </TitleWithHelpTextAndTag>
-        </Heading>
-
+        <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.sample}>
+          {localization.datasetForm.fieldLabel.sample}
+        </TitleWithHelpTextAndTag>
         {values?.sample &&
           !distributionArrayIsEmpty(values?.sample) &&
           values?.sample?.map(
@@ -215,14 +221,16 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
               !isEmpty(item) && (
                 <Card key={`sample-${index}`}>
                   <div className={styles.heading}>
-                    <div className={styles.exampleHeading}>
+                    <div className={styles.field}>
                       {item?.accessURL && (
                         <Heading
                           size='2xs'
                           level={4}
-                        >{`${localization.datasetForm.fieldLabel.accessURL}: `}</Heading>
+                        >
+                          {localization.datasetForm.fieldLabel.accessURL}
+                        </Heading>
                       )}
-                      <Link href={item?.accessURL?.[0]}>{item?.accessURL?.[0]}</Link>
+                      <Paragraph size='sm'>{item?.accessURL?.[0]}</Paragraph>
                     </div>
                     <div className={styles.buttons}>
                       <DistributionModal
@@ -251,16 +259,26 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                     </div>
                   </div>
 
-                  <div className={styles.tags}>
-                    {item?.format?.map((uri) => (
-                      <Tag
-                        key={uri}
-                        color='info'
-                        size='sm'
+                  <div className={styles.field}>
+                    {!isEmpty(item?.format) && (
+                      <Heading
+                        size='2xs'
+                        level={4}
                       >
-                        {(selectedFileTypes?.find((format) => format?.uri === uri) ?? {}).code ?? uri}
-                      </Tag>
-                    ))}
+                        {localization.datasetForm.fieldLabel.format}
+                      </Heading>
+                    )}
+                    <div className={styles.tags}>
+                      {item?.format?.map((uri) => (
+                        <Tag
+                          key={uri}
+                          color='info'
+                          size='sm'
+                        >
+                          {(selectedFileTypes?.find((format) => format?.uri === uri) ?? {}).code ?? uri}
+                        </Tag>
+                      ))}
+                    </div>
                   </div>
 
                   {showSeeMoreButton(item) && (
@@ -314,12 +332,12 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
             initialValues={{
               title: { nb: '' },
               description: { nb: '' },
-              downloadURL: [''],
-              accessURL: [''],
+              downloadURL: [],
+              accessURL: [],
               format: [],
               mediaType: [],
-              page: [{ uri: '' }],
-              conformsTo: [{ uri: '', prefLabel: { nb: '' } }],
+              page: [],
+              conformsTo: [],
               accessServiceUris: [],
             }}
           />
