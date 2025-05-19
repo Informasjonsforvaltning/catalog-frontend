@@ -1,20 +1,20 @@
 import { Dataset } from '@catalog-frontend/types';
-import { AddButton } from '@catalog-frontend/ui';
+import { AddButton, FieldsetDivider } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { useFormikContext } from 'formik';
-import { PropsWithChildren, useMemo } from 'react';
+import { PropsWithChildren } from 'react';
 import FieldsetWithDelete from '../../fieldset-with-delete';
 import styles from '../dataset-form.module.css';
-import { isArray, isEmpty, isNil, isObject } from 'lodash';
 import { Box } from '@digdir/designsystemet-react';
 
 type Props = {
   fieldName: string;
-  fieldValues: any;
   hasDeleteButton?: boolean;
   onDeleteValue?: any;
   addValue?: any;
   setFocus?: (fieldName: string) => void;
+  expanded?: boolean;
+  showDivider?: boolean;
 } & PropsWithChildren;
 
 export const ToggleFieldButton = ({
@@ -23,20 +23,11 @@ export const ToggleFieldButton = ({
   hasDeleteButton,
   onDeleteValue = undefined,
   addValue = '',
-  fieldValues,
   setFocus,
+  expanded,
+  showDivider,
 }: Props) => {
   const { setFieldValue } = useFormikContext<Dataset>();
-
-  const shouldShowField = useMemo(() => {
-    if (fieldName === 'qualifiedAttributions' && isArray(fieldValues) && fieldValues.length === 0) {
-      return true;
-    }
-
-    if (isArray(fieldValues)) return fieldValues.length > 0;
-    if (isObject(fieldValues)) return !isEmpty(fieldValues);
-    return !isNil(fieldValues);
-  }, [fieldValues, fieldName]);
 
   const handleDelete = () => {
     setFieldValue(fieldName, onDeleteValue);
@@ -44,20 +35,23 @@ export const ToggleFieldButton = ({
 
   return (
     <Box>
-      {shouldShowField ? (
-        hasDeleteButton ? (
-          <div className={styles.hiddenField}>
-            <FieldsetWithDelete
-              onDelete={() => {
-                handleDelete();
-              }}
-            >
-              {children}
-            </FieldsetWithDelete>
-          </div>
-        ) : (
-          <div className={styles.hiddenField}>{children}</div>
-        )
+      {expanded ? (
+        <>
+          {hasDeleteButton ? (
+            <div className={styles.hiddenField}>
+              <FieldsetWithDelete
+                onDelete={() => {
+                  handleDelete();
+                }}
+              >
+                {children}
+              </FieldsetWithDelete>
+            </div>
+          ) : (
+            <div className={styles.hiddenField}>{children}</div>
+          )}
+          {showDivider && <FieldsetDivider />}
+        </>
       ) : (
         <AddButton
           onClick={() => {

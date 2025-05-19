@@ -7,7 +7,7 @@ import { useFormikContext } from 'formik';
 import { debounce } from 'lodash';
 import { useCallback, useState } from 'react';
 
-export const QualifiedAttributionsSection = () => {
+export const QualifiedAttributionsSection = ({ ref }: { ref: React.RefObject<HTMLInputElement>}) => {
   const { setFieldValue, values } = useFormikContext<Dataset>();
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -64,6 +64,7 @@ export const QualifiedAttributionsSection = () => {
           placeholder={`${localization.search.search}...`}
           filter={() => true} // Deactivate filter, handled by backend
           virtual
+          ref={ref}
         >
           <Combobox.Empty>{`${localization.search.noHits}...`}</Combobox.Empty>
           {comboboxOptions.map((org) => (

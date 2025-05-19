@@ -18,6 +18,8 @@ import { uriWithLabelSchema } from '../utils/validation-schema';
 interface Props {
   values: UriWithLabel[] | undefined;
   fieldName: string;
+  expanded?: boolean;
+  showDivider?: boolean;
   label?: string | ReactNode;
   hideHeadWhenEmpty?: boolean;
 }
@@ -34,7 +36,7 @@ const hasNoFieldValues = (values: UriWithLabel) => {
   return isEmpty(trim(values.uri)) && isEmpty(pickBy(values.prefLabel, identity));
 };
 
-export const UriWithLabelFieldsetTable = ({ fieldName, values, label, hideHeadWhenEmpty = false }: Props) => {
+export const UriWithLabelFieldsetTable = ({ fieldName, values, label, hideHeadWhenEmpty = false, expanded, showDivider }: Props) => {
   const showHead = !hideHeadWhenEmpty || !isEmpty(values);
 
   return (
@@ -44,6 +46,7 @@ export const UriWithLabelFieldsetTable = ({ fieldName, values, label, hideHeadWh
         name={fieldName}
         render={(arrayHelpers) => (
           <>
+          {expanded && (
             <Table
               size='sm'
               className={styles.table}
@@ -76,7 +79,7 @@ export const UriWithLabelFieldsetTable = ({ fieldName, values, label, hideHeadWh
                   </Table.Row>
                 ))}
               </Table.Body>
-            </Table>
+            </Table>)}
             <div>
               <FieldModal
                 fieldName={fieldName}
@@ -88,6 +91,7 @@ export const UriWithLabelFieldsetTable = ({ fieldName, values, label, hideHeadWh
           </>
         )}
       />
+      {showDivider && <FieldsetDivider />}
     </div>
   );
 };
