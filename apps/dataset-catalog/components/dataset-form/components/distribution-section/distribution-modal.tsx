@@ -1,5 +1,6 @@
 'use client';
 
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { Distribution, ReferenceDataCode } from '@catalog-frontend/types';
 import {
   AddButton,
@@ -9,9 +10,10 @@ import {
   FormikReferenceDataCombobox,
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
+  FastFieldWithRef,
 } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Card, Combobox, Fieldset, Modal, Textfield } from '@digdir/designsystemet-react';
+import { Button, Card, Combobox, Fieldset, Modal, SkeletonRectangle, Textfield } from '@digdir/designsystemet-react';
 import {
   useSearchFileTypeByUri,
   useSearchFileTypes,
@@ -20,11 +22,12 @@ import {
 } from '../../../../hooks/useReferenceDataSearch';
 import { useSearchDataServiceByUri, useSearchDataServiceSuggestions } from '../../../../hooks/useSearchService';
 import { FastField, FieldArray, Formik } from 'formik';
-import { ReactNode, useRef, useState } from 'react';
 import styles from './distributions.module.scss';
 import { distributionTemplate } from '../../utils/dataset-initial-values';
 import { distributionSectionSchema } from '../../utils/validation-schema';
 import { ToggleFieldButton } from '@dataset-catalog/components/dataset-form/components/toggle-field-button';
+import { get, isArray, isEmpty, isNil, isObject } from 'lodash';
+import FieldsetWithDelete from '@dataset-catalog/components/fieldset-with-delete';
 
 type Props = {
   trigger: ReactNode;
@@ -59,6 +62,13 @@ export const DistributionModal = ({
   const [searchQueryFileTypes, setSearchQueryFileTypes] = useState<string>('');
   const [searchDataServicesQuery, setSearchDataServicesQuery] = useState<string>('');
 
+  const [focus, setFocus] = useState<string | null>();
+  const inputRefs = useRef<Record<string, HTMLInputElement | HTMLTextAreaElement | null>>({});
+
+  const setInputRef = (fieldName: string, element: HTMLInputElement | HTMLTextAreaElement | null) => {
+    inputRefs.current[fieldName] = element;
+  };
+
   const { data: mediaTypes, isLoading: searchingMediaTypes } = useSearchMediaTypes(
     searchQueryMediaTypes,
     referenceDataEnv,
@@ -89,6 +99,290 @@ export const DistributionModal = ({
     ).values(),
   ];
 
+  const FIELD_CONFIG = [
+    {
+      name: 'downloadURL',
+      getValue: (values: Distribution) => values?.downloadURL,
+      render: (props: any) => (
+        <FieldArray name='downloadURL'>
+          {(arrayHelpers) => (
+            <>
+              {(arrayHelpers.form.values.downloadURL || []).map((_: any, index: number, array: string[]) => (
+                <React.Fragment key={`downloadURL-${index}`}>
+                  <div className={styles['padding-bottom-4']}>
+                    <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
+                      <FastFieldWithRef
+                        name={`downloadURL[${index}]`}
+                        ref={(el: HTMLInputElement | HTMLTextAreaElement | null) =>
+                          props.setInputRef(`downloadURL[${index}]`, el)
+                        }
+                        label={
+                          index === 0 ? (
+                            <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.downloadURL}>
+                              {localization.datasetForm.fieldLabel.downloadURL}
+                            </TitleWithHelpTextAndTag>
+                          ) : (
+                            ''
+                          )
+                        }
+                        as={Textfield}
+                        size='sm'
+                        error={props.errors?.downloadURL?.[index]}
+                      />
+                    </FieldsetWithDelete>
+                  </div>
+                </React.Fragment>
+              ))}
+              <AddButton
+                onClick={() => {
+                  arrayHelpers.push('');
+                  props.setFocus(
+                    arrayHelpers.form.values.downloadURL
+                      ? `downloadURL[${arrayHelpers.form.values.downloadURL.length}]`
+                      : `downloadURL[0]`,
+                  );
+                }}
+              >
+                {`${localization.add} ${localization.datasetForm.fieldLabel.downloadURL.toLowerCase()}`}
+              </AddButton>
+              {props.showDivider && <FieldsetDivider />}
+            </>
+          )}
+        </FieldArray>
+      ),
+      hasDeleteButton: false,
+      hideToggleButton: true,
+    },
+    {
+      name: 'accessServiceUris',
+      shouldShow: ({ distributionType, isLoadingAccessServices }: any) =>
+        !isLoadingAccessServices && distributionType === 'distribution',
+      render: ({ setFieldValue, setSelectedAccessServices, setSearchDataServicesQuery, accessServiceOptions }: any) => (
+        <Fieldset
+          size='sm'
+          legend={
+            <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.accessServiceUris}>
+              {localization.datasetForm.fieldLabel.accessServiceUris}
+            </TitleWithHelpTextAndTag>
+          }
+        >
+          {selectedAccesServices?.every((v) =>
+            accessServiceOptions.find((option: { uri: string }) => option.uri === v),
+          ) ? (
+            <FieldsetWithDelete onDelete={() => setFieldValue('accessServiceUris', null)}>
+              <Combobox
+                multiple
+                hideClearButton
+                portal={false}
+                onChange={(event) => setSearchDataServicesQuery(event.target.value)}
+                value={selectedAccesServices}
+                onValueChange={(selectedValues) => {
+                  setFieldValue('accessServiceUris', selectedValues);
+                  setSelectedAccessServices(selectedValues);
+                }}
+                placeholder={`${localization.search.search}...`}
+                size='sm'
+                virtual
+                ref={(el: HTMLInputElement | null) => setInputRef(`accessServiceUris`, el)}
+              >
+                {accessServiceOptions.map(
+                  (option: { uri: any; description: any; title: any; organization: { prefLabel: any } }, i: any) => (
+                    <Combobox.Option
+                      key={`distribution-${option.uri}-${i}`}
+                      value={option.uri ?? option.description}
+                      displayValue={(getTranslateText(option.title) as string) ?? option.uri}
+                    >
+                      <div className={styles.comboboxOptionTwoColumns}>
+                        <div>
+                          {option.title ? getTranslateText(option.title) : getTranslateText(option.description)}
+                        </div>
+                        <div>{getTranslateText(option.organization?.prefLabel) ?? ''}</div>
+                      </div>
+                    </Combobox.Option>
+                  ),
+                )}
+              </Combobox>
+            </FieldsetWithDelete>
+          ) : (
+            <SkeletonRectangle />
+          )}
+        </Fieldset>
+      ),
+    },
+    {
+      name: 'mediaType',
+      render: ({
+        values,
+        setFieldValue,
+        setSelectedMediaTypes,
+        setSearchQueryMediaTypes,
+        initialValues,
+        previouslySelectedMediaTypes,
+        mediaTypes,
+        loadingSelectedMediaTypes,
+        searchingMediaTypes,
+      }: any) => (
+        <Fieldset
+          size='sm'
+          legend={
+            <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.mediaType}>
+              {localization.datasetForm.fieldLabel.mediaType}
+            </TitleWithHelpTextAndTag>
+          }
+        >
+          {selectedMediaTypes?.every((v) =>
+            previouslySelectedMediaTypes?.find((option: ReferenceDataCode | undefined) => option?.uri === v),
+          ) ? (
+            <FieldsetWithDelete onDelete={() => setFieldValue('mediaType', null)}>
+              <FormikReferenceDataCombobox
+                onChange={(event) => setSearchQueryMediaTypes(event.target.value)}
+                onValueChange={(selectedValues) => {
+                  setFieldValue('mediaType', selectedValues);
+                  setSelectedMediaTypes(selectedValues);
+                }}
+                value={selectedMediaTypes}
+                selectedValuesSearchHits={previouslySelectedMediaTypes ?? []}
+                querySearchHits={mediaTypes ?? []}
+                formikValues={initialValues?.mediaType ?? []}
+                loading={loadingSelectedMediaTypes || searchingMediaTypes}
+                portal={false}
+                showCodeAsDescription={true}
+                hideClearButton={false}
+                ref={(el: HTMLInputElement | null) => setInputRef(`mediaType`, el)}
+              />
+            </FieldsetWithDelete>
+          ) : (
+            <SkeletonRectangle />
+          )}
+        </Fieldset>
+      ),
+    },
+    {
+      name: 'page',
+      getValue: (values: Distribution) => values?.page,
+      render: (props: any) => (
+        <FieldArray name='page'>
+          {(arrayHelpers) => (
+            <>
+              {(arrayHelpers.form.values.page || []).map((_: any, index: number, array: string[]) => (
+                <React.Fragment key={`page-${index}`}>
+                  <div className={styles['padding-bottom-4']}>
+                    <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
+                      <FastFieldWithRef
+                        name={`page[${index}].uri`}
+                        ref={(el: HTMLInputElement | HTMLTextAreaElement | null) =>
+                          props.setInputRef(`page[${index}]`, el)
+                        }
+                        label={
+                          index === 0 ? (
+                            <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.page}>
+                              {localization.datasetForm.fieldLabel.page}
+                            </TitleWithHelpTextAndTag>
+                          ) : (
+                            ''
+                          )
+                        }
+                        as={Textfield}
+                        size='sm'
+                        error={props.errors?.page?.[index]}
+                      />
+                    </FieldsetWithDelete>
+                  </div>
+                </React.Fragment>
+              ))}
+              <AddButton
+                onClick={() => {
+                  arrayHelpers.push('');
+                  props.setFocus(
+                    arrayHelpers.form.values.page ? `page[${arrayHelpers.form.values.page.length}]` : `page[0]`,
+                  );
+                }}
+              >
+                {`${localization.add} ${localization.datasetForm.fieldLabel.page.toLowerCase()}`}
+              </AddButton>
+              {props.showDivider && <FieldsetDivider />}
+            </>
+          )}
+        </FieldArray>
+      ),
+      hasDeleteButton: false,
+      hideToggleButton: true,
+    },
+    {
+      name: 'conformsTo',
+      addValue: [{ prefLabel: { nb: '', nn: '' }, uri: '' }],
+      shouldShow: ({ distributionType }: any) => distributionType === 'distribution',
+      render: ({ errors }: any) => (
+        <Fieldset
+          size='sm'
+          legend={
+            <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.distributionConformsTo}>
+              {localization.datasetForm.fieldLabel.conformsTo}
+            </TitleWithHelpTextAndTag>
+          }
+        >
+          <FieldArray name='conformsTo'>
+            {({ push, remove, form }) => (
+              <>
+                {form.values.conformsTo?.map((_: any, i: number) => (
+                  <div
+                    className={styles.add}
+                    key={`conformsTo-${i}`}
+                  >
+                    <Card>
+                      <div>
+                        <FormikLanguageFieldset
+                          legend={
+                            <TitleWithHelpTextAndTag
+                              tagTitle={localization.tag.required}
+                              tagColor='warning'
+                            >
+                              {localization.title}
+                            </TitleWithHelpTextAndTag>
+                          }
+                          as={Textfield}
+                          name={`conformsTo[${i}].prefLabel`}
+                          ref={(el: HTMLInputElement | HTMLTextAreaElement | null) =>
+                            setInputRef(`conformsTo`, el)
+                          }
+                        />
+                      </div>
+                      <FastField
+                        size='sm'
+                        as={Textfield}
+                        label={localization.link}
+                        name={`conformsTo[${i}].uri`}
+                        error={errors?.conformsTo?.[i]?.uri}
+                      />
+                    </Card>
+                    <div>
+                      <DeleteButton onClick={() => remove(i)} />
+                    </div>
+                  </div>
+                ))}
+                <AddButton
+                  onClick={() => {
+                    push({ prefLabel: { nb: '', nn: '' }, uri: '' });
+                    setFocus(`conformsTo`);
+                  }}
+                >
+                  {localization.datasetForm.button.addStandard}
+                </AddButton>
+              </>
+            )}
+          </FieldArray>
+        </Fieldset>
+      ),
+    },
+  ];
+
+  useEffect(() => {
+    if (focus && inputRefs.current[focus]) {
+      inputRefs.current[focus]?.focus();
+      setFocus(null);
+    }
+  }, [focus]);
+
   return (
     <Modal.Root>
       <Modal.Trigger asChild>{trigger}</Modal.Trigger>
@@ -111,6 +405,68 @@ export const DistributionModal = ({
           }}
         >
           {({ errors, isSubmitting, submitForm, values, setFieldValue }) => {
+            if (isEmpty(values.accessURL)) {
+              setFieldValue('accessURL', ['']);
+            }
+
+            const isExpanded = (fieldConfig: any) => {
+              const fieldValues = get(values, fieldConfig.name);
+              if (isArray(fieldValues)) return fieldValues.length > 0;
+              if (isObject(fieldValues)) return !isEmpty(fieldValues);
+              return !isNil(fieldValues);
+            };
+
+            // Helper to render a field
+            const renderField = (fieldConfig: any, showDivider: boolean = false) => {
+              const props = {
+                accessServiceOptions,
+                distributionType,
+                expanded: isExpanded(fieldConfig),
+                fileTypes,
+                isLoadingAccessServices,
+                loadingSelectedFileTypes,
+                loadingSelectedMediaTypes,
+                mediaTypes,
+                previouslySelectedFileTypes,
+                previouslySelectedMediaTypes,
+                openLicenses,
+                ref: (el: HTMLInputElement | HTMLTextAreaElement | null) => setInputRef(fieldConfig.name, el),
+                searchingFileTypes,
+                searchingMediaTypes,
+                setFieldValue,
+                setFocus,
+                setInputRef,
+                setSearchDataServicesQuery,
+                setSearchQueryFileTypes,
+                setSearchQueryMediaTypes,
+                setSelectedAccessServices,
+                setSelectedFileTypes,
+                setSelectedMediaTypes,
+                showDivider,
+                values,
+              };
+
+              return fieldConfig.hideToggleButton ? (
+                <div key={fieldConfig.name}>{fieldConfig.render(props)}</div>
+              ) : (
+                <ToggleFieldButton
+                  key={fieldConfig.name}
+                  fieldName={fieldConfig.name}
+                  hasDeleteButton={fieldConfig.hasDeleteButton}
+                  addValue={fieldConfig.addValue}
+                  setFocus={setFocus}
+                  expanded={isExpanded(fieldConfig)}
+                  showDivider={showDivider && isExpanded(fieldConfig)}
+                >
+                  {fieldConfig.render(props)}
+                </ToggleFieldButton>
+              );
+            };
+
+            // Split fields into expanded and minimized
+            const expandedFields = FIELD_CONFIG.filter((f) => isExpanded(f));
+            const minimizedFields = FIELD_CONFIG.filter((f) => !isExpanded(f));
+
             return (
               <>
                 {initialValues && (
@@ -142,200 +498,6 @@ export const DistributionModal = ({
                           <FieldsetDivider />
                         </>
                       )}
-                      <FastField
-                        name='accessURL[0]'
-                        as={Textfield}
-                        size='sm'
-                        label={
-                          <TitleWithHelpTextAndTag
-                            tagTitle={localization.tag.required}
-                            helpText={localization.datasetForm.helptext.accessURL}
-                          >
-                            {localization.datasetForm.fieldLabel.accessURL}
-                          </TitleWithHelpTextAndTag>
-                        }
-                        error={errors?.accessURL?.[0]}
-                      />
-
-                      <ToggleFieldButton
-                        fieldName='downloadURL'
-                        hasDeleteButton
-                        fieldValues={values?.downloadURL}
-                      >
-                        <FastField
-                          name='downloadURL[0]'
-                          as={Textfield}
-                          size='sm'
-                          label={
-                            <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.downloadURL}>
-                              {localization.datasetForm.fieldLabel.downloadURL}
-                            </TitleWithHelpTextAndTag>
-                          }
-                          error={errors?.downloadURL?.[0]}
-                        />
-                      </ToggleFieldButton>
-
-                      {!isLoadingAccessServices && distributionType === 'distribution' && (
-                        <ToggleFieldButton
-                          fieldName='accessServiceUris'
-                          hasDeleteButton
-                          fieldValues={values?.accessServiceUris}
-                        >
-                          <Fieldset
-                            size='sm'
-                            legend={
-                              <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.accessServiceUris}>
-                                {localization.datasetForm.fieldLabel.accessServiceUris}
-                              </TitleWithHelpTextAndTag>
-                            }
-                          >
-                            <Combobox
-                              multiple
-                              hideClearButton
-                              portal={false}
-                              onChange={(event) => setSearchDataServicesQuery(event.target.value)}
-                              value={values.accessServiceUris}
-                              onValueChange={(selectedValues) => {
-                                setFieldValue('accessServiceUris', selectedValues);
-                                setSelectedAccessServices(selectedValues);
-                              }}
-                              placeholder={`${localization.search.search}...`}
-                              size='sm'
-                              virtual
-                            >
-                              {accessServiceOptions.map((option, i) => (
-                                <Combobox.Option
-                                  key={`distribution-${option.uri}-${i}`}
-                                  value={option.uri ?? option.description}
-                                  displayValue={(getTranslateText(option.title) as string) ?? option.uri}
-                                >
-                                  <div className={styles.comboboxOptionTwoColumns}>
-                                    <div>
-                                      {option.title
-                                        ? getTranslateText(option.title)
-                                        : getTranslateText(option.description)}
-                                    </div>
-                                    <div>{getTranslateText(option.organization?.prefLabel) ?? ''}</div>
-                                  </div>
-                                </Combobox.Option>
-                              ))}
-                            </Combobox>
-                          </Fieldset>
-                        </ToggleFieldButton>
-                      )}
-
-                      <FieldsetDivider />
-
-                      <ToggleFieldButton
-                        fieldName='format'
-                        hasDeleteButton
-                        fieldValues={values?.format}
-                      >
-                        <Fieldset
-                          size='sm'
-                          legend={
-                            <TitleWithHelpTextAndTag
-                              helpText={localization.datasetForm.helptext.fileType}
-                              tagTitle={localization.tag.recommended}
-                              tagColor='info'
-                            >
-                              {localization.datasetForm.fieldLabel.format}
-                            </TitleWithHelpTextAndTag>
-                          }
-                        >
-                          <FormikReferenceDataCombobox
-                            onChange={(event) => setSearchQueryFileTypes(event.target.value)}
-                            onValueChange={(selectedValues) => {
-                              setFieldValue('format', selectedValues);
-                              setSelectedFileTypes(selectedValues);
-                            }}
-                            value={[...(values.format || []), ...(initialValues?.format || [])]}
-                            selectedValuesSearchHits={previouslySelectedFileTypes ?? []}
-                            querySearchHits={fileTypes ?? []}
-                            formikValues={initialValues?.format ?? []}
-                            loading={loadingSelectedFileTypes || searchingFileTypes}
-                            portal={false}
-                          />
-                        </Fieldset>
-                      </ToggleFieldButton>
-
-                      <ToggleFieldButton
-                        fieldName='mediaType'
-                        hasDeleteButton
-                        fieldValues={values?.mediaType}
-                      >
-                        <Fieldset
-                          size='sm'
-                          legend={
-                            <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.mediaType}>
-                              {localization.datasetForm.fieldLabel.mediaType}
-                            </TitleWithHelpTextAndTag>
-                          }
-                        >
-                          <FormikReferenceDataCombobox
-                            onChange={(event) => setSearchQueryMediaTypes(event.target.value)}
-                            onValueChange={(selectedValues) => {
-                              setFieldValue('mediaType', selectedValues);
-                              setSelectedMediaTypes(selectedValues);
-                            }}
-                            value={[...(values.mediaType || []), ...(initialValues?.mediaType || [])]}
-                            selectedValuesSearchHits={previouslySelectedMediaTypes ?? []}
-                            querySearchHits={mediaTypes ?? []}
-                            formikValues={initialValues?.mediaType ?? []}
-                            loading={loadingSelectedMediaTypes || searchingMediaTypes}
-                            portal={false}
-                            showCodeAsDescription={true}
-                          />
-                        </Fieldset>
-                      </ToggleFieldButton>
-
-                      {distributionType === 'distribution' && (
-                        <>
-                          <FieldsetDivider />
-                          <ToggleFieldButton
-                            fieldName='license'
-                            hasDeleteButton
-                            fieldValues={values?.license}
-                          >
-                            <Fieldset
-                              size='sm'
-                              legend={
-                                <TitleWithHelpTextAndTag
-                                  tagTitle={localization.tag.recommended}
-                                  tagColor='info'
-                                  helpText={localization.datasetForm.helptext.license}
-                                >
-                                  {localization.datasetForm.fieldLabel.license}
-                                </TitleWithHelpTextAndTag>
-                              }
-                            >
-                              <Combobox
-                                // @ts-expect-error: uri exists on the object
-                                value={values?.license?.uri ? [values?.license.uri] : []}
-                                portal={false}
-                                onValueChange={(selectedValues) =>
-                                  setFieldValue('license.uri', selectedValues.toString())
-                                }
-                                size='sm'
-                                virtual
-                              >
-                                {openLicenses &&
-                                  openLicenses.map((license, i) => (
-                                    <Combobox.Option
-                                      key={`license-${license.uri}-${i}`}
-                                      value={license.uri}
-                                    >
-                                      {getTranslateText(license.label)}
-                                    </Combobox.Option>
-                                  ))}
-                              </Combobox>
-                            </Fieldset>
-                          </ToggleFieldButton>
-                        </>
-                      )}
-
-                      <FieldsetDivider />
-
                       <FormikLanguageFieldset
                         as={TextareaWithPrefix}
                         legend={
@@ -349,79 +511,172 @@ export const DistributionModal = ({
                         }
                         name='description'
                       />
-
-                      <ToggleFieldButton
-                        fieldName='page'
-                        hasDeleteButton
-                        fieldValues={values?.page}
+                      <FieldsetDivider />
+                      <FieldArray name='accessURL'>
+                        {(arrayHelpers) => (
+                          <>
+                            {(arrayHelpers.form.values.accessURL || []).map(
+                              (_: any, index: number, array: string[]) => {
+                                return (
+                                  <React.Fragment key={`accessURL-${index}`}>
+                                    <div>
+                                      {index > 0 ? (
+                                        <FieldsetWithDelete
+                                          onDelete={() => arrayHelpers.remove(index)}
+                                          style={{ marginTop: '1rem' }}
+                                        >
+                                          <FastFieldWithRef
+                                            name={`accessURL[${index}]`}
+                                            ref={(el: HTMLInputElement | HTMLTextAreaElement | null) =>
+                                              setInputRef(`accessURL[${index}]`, el)
+                                            }
+                                            label={
+                                              index === 0 ? (
+                                                <TitleWithHelpTextAndTag
+                                                  tagColor='warning'
+                                                  tagTitle={localization.tag.required}
+                                                  helpText={localization.datasetForm.helptext.accessURL}
+                                                >
+                                                  {localization.datasetForm.fieldLabel.accessURL}
+                                                </TitleWithHelpTextAndTag>
+                                              ) : (
+                                                ''
+                                              )
+                                            }
+                                            as={Textfield}
+                                            size='sm'
+                                            error={errors?.accessURL?.[index]}
+                                          />
+                                        </FieldsetWithDelete>
+                                      ) : (
+                                        <FastFieldWithRef
+                                          name={`accessURL[${index}]`}
+                                          ref={(el: HTMLInputElement | HTMLTextAreaElement | null) =>
+                                            setInputRef(`accessURL[${index}]`, el)
+                                          }
+                                          label={
+                                            index === 0 ? (
+                                              <TitleWithHelpTextAndTag
+                                                tagColor='warning'
+                                                tagTitle={localization.tag.required}
+                                                helpText={localization.datasetForm.helptext.accessURL}
+                                              >
+                                                {localization.datasetForm.fieldLabel.accessURL}
+                                              </TitleWithHelpTextAndTag>
+                                            ) : (
+                                              ''
+                                            )
+                                          }
+                                          as={Textfield}
+                                          size='sm'
+                                          error={errors?.accessURL?.[index]}
+                                        />
+                                      )}
+                                    </div>
+                                  </React.Fragment>
+                                );
+                              },
+                            )}
+                            <AddButton
+                              onClick={() => {
+                                arrayHelpers.push('');
+                                setFocus(
+                                  arrayHelpers.form.values.accessURL
+                                    ? `accessURL[${arrayHelpers.form.values.accessURL.length}]`
+                                    : `accessURL[0]`,
+                                );
+                              }}
+                            >
+                              {`${localization.datasetForm.fieldLabel.accessURL}`}
+                            </AddButton>
+                            <FieldsetDivider />
+                          </>
+                        )}
+                      </FieldArray>
+                      <Fieldset
+                        size='sm'
+                        legend={
+                          <TitleWithHelpTextAndTag
+                            helpText={localization.datasetForm.helptext.fileType}
+                            tagTitle={localization.tag.recommended}
+                            tagColor='info'
+                          >
+                            {localization.datasetForm.fieldLabel.format}
+                          </TitleWithHelpTextAndTag>
+                        }
                       >
-                        <FastField
-                          label={
-                            <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.page}>
-                              {localization.datasetForm.fieldLabel.page}
-                            </TitleWithHelpTextAndTag>
-                          }
-                          as={Textfield}
-                          name='page[0].uri'
-                          size='sm'
-                          // @ts-expect-error: uri exists on the object
-                          error={errors?.page?.[0]?.uri}
-                        />
-                      </ToggleFieldButton>
-
+                        {!selectedFileTypes ||
+                        selectedFileTypes?.every((v) =>
+                          previouslySelectedFileTypes?.find(
+                            (option: ReferenceDataCode | undefined) => option?.uri === v,
+                          ),
+                        ) ? (
+                          <FormikReferenceDataCombobox
+                            onChange={(event) => setSearchQueryFileTypes(event.target.value)}
+                            onValueChange={(selectedValues) => {
+                              setFieldValue('format', selectedValues);
+                              setSelectedFileTypes(selectedValues);
+                            }}
+                            value={selectedFileTypes}
+                            selectedValuesSearchHits={previouslySelectedFileTypes ?? []}
+                            querySearchHits={fileTypes ?? []}
+                            formikValues={initialValues?.format ?? []}
+                            loading={loadingSelectedFileTypes || searchingFileTypes}
+                            portal={false}
+                            hideClearButton={false}
+                          />
+                        ) : (
+                          <SkeletonRectangle />
+                        )}
+                      </Fieldset>
+                      <FieldsetDivider />
                       {distributionType === 'distribution' && (
                         <>
-                          <FieldsetDivider />
-
                           <Fieldset
                             size='sm'
                             legend={
                               <TitleWithHelpTextAndTag
-                                helpText={localization.datasetForm.helptext.distributionConformsTo}
+                                tagTitle={localization.tag.recommended}
+                                tagColor='info'
+                                helpText={localization.datasetForm.helptext.license}
                               >
-                                {localization.datasetForm.fieldLabel.conformsTo}
+                                {localization.datasetForm.fieldLabel.license}
                               </TitleWithHelpTextAndTag>
                             }
                           >
-                            <FieldArray name='conformsTo'>
-                              {({ push, remove }) => (
-                                <>
-                                  {values.conformsTo?.map((_, i) => (
-                                    <div
-                                      className={styles.add}
-                                      key={`conformsTo-${i}`}
-                                    >
-                                      <Card>
-                                        <div>
-                                          <FormikLanguageFieldset
-                                            legend={localization.title}
-                                            as={Textfield}
-                                            name={`conformsTo[${i}].prefLabel`}
-                                          />
-                                        </div>
-                                        <FastField
-                                          size='sm'
-                                          as={Textfield}
-                                          label={localization.link}
-                                          name={`conformsTo[${i}].uri`}
-                                          // @ts-expect-error: uri exists on the object
-                                          error={errors?.conformsTo?.[i]?.uri}
-                                        />
-                                      </Card>
-                                      <div>
-                                        <DeleteButton onClick={() => remove(i)} />
-                                      </div>
-                                    </div>
-                                  ))}
-                                  <AddButton onClick={() => push({ uri: '' })}>
-                                    {localization.datasetForm.button.addStandard}
-                                  </AddButton>
-                                </>
-                              )}
-                            </FieldArray>
+                            <Combobox
+                              value={values?.license?.uri ? [values?.license.uri] : ['']}
+                              portal={false}
+                              onValueChange={(selectedValues) =>
+                                setFieldValue('license.uri', selectedValues.toString())
+                              }
+                              size='sm'
+                              virtual
+                            >
+                              <Combobox.Option
+                                key={`license-none`}
+                                value={''}
+                              >
+                                {localization.none}
+                              </Combobox.Option>
+                              {openLicenses &&
+                                openLicenses.map((license: any, i: number) => (
+                                  <Combobox.Option
+                                    key={`license-${license.uri}-${i}`}
+                                    value={license.uri}
+                                  >
+                                    {getTranslateText(license.label)}
+                                  </Combobox.Option>
+                                ))}
+                            </Combobox>
                           </Fieldset>
+                          <FieldsetDivider />
                         </>
                       )}
+                      {expandedFields.map((f, index) =>
+                        renderField(f, !(minimizedFields.length === 0 && index === expandedFields.length - 1)),
+                      )}
+                      {minimizedFields.map((f) => renderField(f))}
                     </Modal.Content>
 
                     <Modal.Footer>

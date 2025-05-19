@@ -20,7 +20,7 @@ export const AboutSection = () => {
           </TitleWithHelpTextAndTag>
         }
       />
-
+      <FieldsetDivider />
       <FormikLanguageFieldset
         name='description'
         as={TextareaWithPrefix}
@@ -33,13 +33,9 @@ export const AboutSection = () => {
           </TitleWithHelpTextAndTag>
         }
       />
-
       <FieldsetDivider />
-
       <AccessRightFields />
-
       <FieldsetDivider />
-
       <FastField
         style={{ width: 'fit-content' }}
         as={Textfield}

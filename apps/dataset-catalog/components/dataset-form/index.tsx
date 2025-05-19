@@ -220,7 +220,7 @@ export const DatasetForm = ({
 
               showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success' });
               if (newValues) {
-                resetForm({ values: datasetTemplate(newValues)});
+                resetForm({ values: datasetTemplate(newValues) });
               } else {
                 resetForm();
               }
@@ -244,7 +244,7 @@ export const DatasetForm = ({
           const hasError = (fields: (keyof Dataset)[]) => fields.some((field) => Object.keys(errors).includes(field));
           const handleRestoreDataset = (data: StorageData) => {
             if (data?.id !== datasetId) {
-              if (!data?.id) {
+              if (!(data?.id)) {
                 return window.location.replace(`/catalogs/${catalogId}/datasets/new?restore=1`);
               }
               return window.location.replace(`/catalogs/${catalogId}/datasets/${data.id}/edit?restore=1`);
@@ -256,7 +256,7 @@ export const DatasetForm = ({
             <>
               <Form className='container'>
                 <FormikAutoSaver
-                  id={`${datasetId}`}
+                  id={datasetId?.toString()}
                   storage={autoSaveStorage}
                   restoreOnRender={restoreOnRender}
                   onRestore={handleRestoreDataset}
@@ -346,10 +346,9 @@ export const DatasetForm = ({
                 </FormLayout>
               </Form>
               {showSnackbar && (
-                <Snackbar>
+                <Snackbar fadeIn={snackbarFadeIn}>
                   <Snackbar.Item
                     severity={snackbarSeverity}
-                    fadeIn={snackbarFadeIn}
                     onClose={() => {
                       setShowSnackbar(false);
                     }}

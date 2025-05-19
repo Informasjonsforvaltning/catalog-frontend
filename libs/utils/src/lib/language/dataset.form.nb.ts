@@ -108,7 +108,7 @@ export const datasetFormNb = {
     choseRelation: 'Velg relasjon',
     conformsTo: 'Standard',
     standard: 'Standard',
-    page: 'Lenke til beskrivelse av distribusjonen',
+    page: 'Lenke til dokumentasjon',
     license: 'Lisens',
     accessServiceUris: 'Tilgangstjeneste',
     legalBasisForRestriction: 'Skjermingshjemmel',
