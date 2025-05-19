@@ -72,7 +72,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
               <Heading
                 level={5}
                 size='2xs'
-              >{`${localization.datasetForm.fieldLabel.accessService}:`}</Heading>
+              >{`${localization.datasetForm.fieldLabel.accessServiceUris}:`}</Heading>
               {
                 <Table
                   size='sm'
