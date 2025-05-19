@@ -19,6 +19,7 @@ interface Props {
   values: UriWithLabel[] | undefined;
   fieldName: string;
   label?: string | ReactNode;
+  hideHeadWhenEmpty?: boolean;
 }
 
 interface ModalProps {
@@ -33,7 +34,9 @@ const hasNoFieldValues = (values: UriWithLabel) => {
   return isEmpty(trim(values.uri)) && isEmpty(pickBy(values.prefLabel, identity));
 };
 
-export const UriWithLabelFieldsetTable = ({ fieldName, values, label }: Props) => {
+export const UriWithLabelFieldsetTable = ({ fieldName, values, label, hideHeadWhenEmpty = false }: Props) => {
+  const showHead = !hideHeadWhenEmpty || !isEmpty(values);
+
   return (
     <div className={styles.fieldContainer}>
       {typeof label === 'string' ? <FormHeading>{label}</FormHeading> : label}
@@ -45,13 +48,15 @@ export const UriWithLabelFieldsetTable = ({ fieldName, values, label }: Props) =
               size='sm'
               className={styles.table}
             >
-              <Table.Head>
-                <Table.Row>
-                  <Table.HeaderCell>{localization.title}</Table.HeaderCell>
-                  <Table.HeaderCell>{localization.link}</Table.HeaderCell>
-                  <Table.HeaderCell aria-label='Actions' />
-                </Table.Row>
-              </Table.Head>
+              {showHead && (
+                <Table.Head>
+                  <Table.Row>
+                    <Table.HeaderCell>{localization.title}</Table.HeaderCell>
+                    <Table.HeaderCell>{localization.link}</Table.HeaderCell>
+                    <Table.HeaderCell aria-label='Actions' />
+                  </Table.Row>
+                </Table.Head>
+              )}
               <Table.Body>
                 {values?.map((item, index) => (
                   <Table.Row key={`${fieldName}-tableRow-${index}`}>
@@ -75,7 +80,7 @@ export const UriWithLabelFieldsetTable = ({ fieldName, values, label }: Props) =
             <div>
               <FieldModal
                 fieldName={fieldName}
-                template={{ prefLabel: { nb: '' }, uri: '' }}
+                template={{ prefLabel: {}, uri: '' }}
                 type={'new'}
                 onSuccess={(formValues) => arrayHelpers.push(formValues)}
               />

@@ -8,7 +8,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     catalogId: dataset?.catalogId ?? '',
     _lastModified: dataset?._lastModified,
     title: dataset.title ?? '',
-    description: !isEmpty(dataset?.description) ? dataset.description : { nb: '' },
+    description: !isEmpty(dataset?.description) ? dataset.description : {},
     accessRights: { uri: dataset?.accessRights?.uri ?? 'none' },
     legalBasisForAccess: dataset?.legalBasisForAccess ?? [],
     legalBasisForProcessing: dataset?.legalBasisForProcessing ?? [],
@@ -21,7 +21,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     euDataTheme: dataset.euDataTheme ?? [],
     losTheme: dataset.losTheme ?? [],
     type: dataset?.type,
-    keywordList: dataset.keyword ? groupByKeys(dataset?.keyword) : { nb: [] },
+    keywordList: dataset.keyword ? groupByKeys(dataset?.keyword) : {},
     conceptList: dataset.concepts ? dataset.concepts.map((concept) => concept.uri) : [],
     provenance: dataset?.provenance?.uri ? { uri: dataset?.provenance?.uri } : undefined,
     accrualPeriodicity: dataset?.accrualPeriodicity?.uri ? { uri: dataset?.accrualPeriodicity?.uri } : undefined,
@@ -50,12 +50,8 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
 export const datasetToBeCreatedTemplate = (catalogId: string): DatasetToBeCreated => {
   return {
     catalogId,
-    title: {
-      nb: '',
-    },
-    description: {
-      nb: '',
-    },
+    title: {},
+    description: {},
     registrationStatus: PublicationStatus.DRAFT,
     landingPage: [],
     accessRights: { uri: 'none' },
@@ -65,7 +61,7 @@ export const datasetToBeCreatedTemplate = (catalogId: string): DatasetToBeCreate
     euDataTheme: [],
     losTheme: [],
     type: undefined,
-    keywordList: { nb: [] },
+    keywordList: {},
     conceptList: [],
     provenance: undefined,
     accrualPeriodicity: undefined,
@@ -87,13 +83,7 @@ export const datasetToBeCreatedTemplate = (catalogId: string): DatasetToBeCreate
     references: undefined,
     relations: undefined,
     distribution: undefined,
-    contactPoint: [
-      {
-        email: '',
-        hasTelephone: '',
-        hasURL: '',
-      },
-    ],
+    contactPoint: [{}],
   };
 };
 

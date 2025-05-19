@@ -136,7 +136,7 @@ export const AccessRightsUriTable = () => {
       </Fieldset>
       <div>
         <FieldModal
-          template={{ prefLabel: { nb: '' }, uri: '' }}
+          template={{ prefLabel: {}, uri: '' }}
           formType='new'
           onSuccess={(formValues: LegalBasis) => setFieldValue(getField(formValues), formValues.uriWithLabel)}
         />
