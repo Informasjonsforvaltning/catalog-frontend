@@ -144,7 +144,6 @@ export const datasetFormNb = {
     datasetID: 'Datasett-ID',
     registrationStatus: 'Registeringsstatus',
     ignoreRequired: 'Ignorer påkrevde felt',
-    publisher: 'Utgiver',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
