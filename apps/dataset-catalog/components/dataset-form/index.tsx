@@ -1,12 +1,5 @@
 'use client';
-import {
-  DataStorage,
-  LocalDataStorage,
-  formatISO,
-  getTranslateText,
-  localization,
-  trimObjectWhitespace,
-} from '@catalog-frontend/utils';
+import { DataStorage, formatISO, getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Alert, Button, Checkbox, Paragraph, Spinner, Switch } from '@digdir/designsystemet-react';
 import { Dataset, DatasetToBeCreated, ReferenceData, PublicationStatus, StorageData } from '@catalog-frontend/types';
 import {
@@ -92,7 +85,7 @@ export const DatasetForm = ({
   const [showUnapproveModal, setShowUnapproveModal] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const { losThemes, dataThemes, openLicenses } = referenceData;
-  
+
   const [formStatus, setFormStatus] = useState(initialValues?.registrationStatus);
 
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -100,15 +93,15 @@ export const DatasetForm = ({
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'danger'>('success');
   const [snackbarFadeIn, setSnackbarFadeIn] = useState(true);
 
-  const showSnackbarMessage = ({ message, severity, fadeIn = true }: any) => {    
+  const showSnackbarMessage = ({ message, severity, fadeIn = true }: any) => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarFadeIn(fadeIn);
-    if(fadeIn) {
+    if (fadeIn) {
       setShowSnackbar(false);
       setTimeout(() => setShowSnackbar(true), 10);
     } else {
-      setShowSnackbar(true)
+      setShowSnackbar(true);
     }
   };
 
@@ -140,7 +133,7 @@ export const DatasetForm = ({
   const handleCancel = () => {
     setShowCancelConfirm(true);
   };
-  
+
   const handleConfirmCancel = () => {
     setShowCancelConfirm(false);
 
@@ -206,7 +199,7 @@ export const DatasetForm = ({
 
   return (
     <>
-    {showCancelConfirm && (
+      {showCancelConfirm && (
         <ConfirmModal
           title={localization.confirm.exitForm.title}
           content={localization.confirm.exitForm.message}

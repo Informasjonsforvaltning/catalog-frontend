@@ -3,6 +3,7 @@ import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { Combobox } from '@digdir/designsystemet-react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { FastField, useFormikContext } from 'formik';
+import { get } from 'lodash';
 
 type Props = {
   losThemes: LosTheme[];
@@ -65,14 +66,16 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
         size='sm'
       >
         <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-        {losThemes?.map((theme) => (
-          <Combobox.Option
-            key={theme.uri}
-            value={theme.uri}
-          >
-            {getTranslateText(theme.name)}
-          </Combobox.Option>
-        ))}
+        {losThemes
+          ?.sort((a, b) => (get(a.name, 'nb')?.toString() ?? '').localeCompare(get(b.name, 'nb')?.toString() ?? ''))
+          ?.map((theme) => (
+            <Combobox.Option
+              key={theme.uri}
+              value={theme.uri}
+            >
+              {getTranslateText(theme.name)}
+            </Combobox.Option>
+          ))}
       </FastField>
     </>
   );
