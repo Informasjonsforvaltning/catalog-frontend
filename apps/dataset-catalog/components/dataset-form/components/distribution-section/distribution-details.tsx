@@ -80,7 +80,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
                 >
                   <Table.Head>
                     <Table.Row>
-                      <Table.HeaderCell>{localization.accessService}</Table.HeaderCell>
+                      <Table.HeaderCell>{localization.datasetForm.fieldLabel.accessServiceUris}</Table.HeaderCell>
                       <Table.HeaderCell>{localization.publisher}</Table.HeaderCell>
                     </Table.Row>
                   </Table.Head>
