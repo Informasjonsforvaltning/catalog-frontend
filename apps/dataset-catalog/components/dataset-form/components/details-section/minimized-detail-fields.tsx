@@ -289,6 +289,7 @@ const FIELD_CONFIG = [
         fieldName={'conformsTo'}
         expanded={props.expanded}
         hideHeadWhenEmpty={true}
+        showDivider={props.showDivider}
         label={
           !isEmpty(props.values.conformsTo) && (
             <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.conformsTo}>
@@ -396,7 +397,7 @@ export const MinimizedDetailFields = ({ datasetTypes, provenanceStatements, freq
         addValue={fieldConfig.addValue}
         setFocus={setFocus}
         expanded={isExpanded(fieldConfig)}
-        showDivider={isExpanded(fieldConfig)}
+        showDivider={showDivider && isExpanded(fieldConfig)}
       >
         {fieldConfig.render({
           values,
