@@ -87,7 +87,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
 
                   <TableBody>
                     {distribution.accessServiceUris.map((uri, i) => {
-                      const match = selectedDataServices?.find((type) => type.uri === uri);
+                      const match = selectedDataServices?.find((service) => service.uri === uri);
                       return (
                         <Table.Row key={`service-${uri}-${i}`}>
                           <Table.Cell>
