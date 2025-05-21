@@ -73,27 +73,42 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
                 level={5}
                 size='2xs'
               >{`${localization.datasetForm.fieldLabel.accessServiceUris}:`}</Heading>
-              <ul className={styles.list}>
-                {distribution.accessServiceUris.map((uri, i) => {
-                  const match = selectedDataServices?.find((type) => type.uri === uri);
-                  return (
-                    <li key={`service-${uri}-${i}`}>
-                      <Link
-                        href={uri}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                      >
-                        <Tag
-                          color='info'
-                          size='sm'
-                        >
-                          {match ? getTranslateText(match?.title) : uri}
-                        </Tag>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
+              {
+                <Table
+                  size='sm'
+                  className={styles.table}
+                >
+                  <Table.Head>
+                    <Table.Row>
+                      <Table.HeaderCell>{localization.datasetForm.fieldLabel.accessServiceUris}</Table.HeaderCell>
+                      <Table.HeaderCell>{localization.publisher}</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Head>
+
+                  <TableBody>
+                    {distribution.accessServiceUris.map((uri, i) => {
+                      const match = selectedDataServices?.find((service) => service.uri === uri);
+                      return (
+                        <Table.Row key={`service-${uri}-${i}`}>
+                          <Table.Cell>
+                            {
+                              <Link
+                                href={uri}
+                                target='_blank'
+                                rel='noopener noreferrer'
+                              >
+                                {match ? getTranslateText(match?.title) : uri}
+                              </Link>
+                            }
+                          </Table.Cell>
+
+                          <Table.Cell>{getTranslateText(match?.organization?.prefLabel, language)}</Table.Cell>
+                        </Table.Row>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              }
             </div>
           )}
 
