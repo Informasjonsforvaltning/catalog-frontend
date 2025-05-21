@@ -10,43 +10,47 @@ import {
 import { getDatasets } from '../../../actions/actions';
 import DatasetsPageClient from './datasets-page-client';
 import { cookies } from 'next/headers';
+import { withReadProtectedPage } from '@dataset-catalog/utils/auth';
 
-export default async function DatasetSearchHitsPage({ params }: { params: Promise<{ catalogId: string }> }) {
-  const { catalogId } = await params;
+const DatasetSearchHitsPage = withReadProtectedPage(
+  ({ catalogId }) => `/catalogs/${catalogId}/datasets`,
+  async ({ catalogId }) => {
+    const session = await getValidSession();
+    if (!session) {
+      return redirectToSignIn({ callbackUrl: `catalogs/${catalogId}/datasets` });
+    }
 
-  const session = await getValidSession();
-  if (!session) {
-    return redirectToSignIn({ callbackUrl: `catalogs/${catalogId}/datasets` });
-  }
+    const datasets: Dataset[] = await getDatasets(catalogId);
+    const hasWritePermission = hasOrganizationWritePermission(session.accessToken, catalogId);
 
-  const datasets: Dataset[] = await getDatasets(catalogId);
-  const hasWritePermission = hasOrganizationWritePermission(session.accessToken, catalogId);
+    const breadcrumbList = [
+      {
+        href: `/catalogs/${catalogId}/datasets`,
+        text: localization.catalogType.dataset,
+      },
+    ] as BreadcrumbType[];
 
-  const breadcrumbList = [
-    {
-      href: `/catalogs/${catalogId}/datasets`,
-      text: localization.catalogType.dataset,
-    },
-  ] as BreadcrumbType[];
+    const pageSettings = getServerDatasetsPageSettings(await cookies());
 
-  const pageSettings = getServerDatasetsPageSettings(await cookies());
-  
-  return (
-    <>
-      <Breadcrumbs
-        breadcrumbList={breadcrumbList}
-        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
-      />
-      <DesignBanner
-        catalogId={catalogId}
-        title={localization.catalogType.dataset}
-      />
-      <DatasetsPageClient
-        datasets={datasets}
-        hasWritePermission={hasWritePermission}
-        catalogId={catalogId}
-        pageSettings={pageSettings}
-      />
-    </>
-  );
-}
+    return (
+      <>
+        <Breadcrumbs
+          breadcrumbList={breadcrumbList}
+          catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+        />
+        <DesignBanner
+          catalogId={catalogId}
+          title={localization.catalogType.dataset}
+        />
+        <DatasetsPageClient
+          datasets={datasets}
+          hasWritePermission={hasWritePermission}
+          catalogId={catalogId}
+          pageSettings={pageSettings}
+        />
+      </>
+    );
+  },
+);
+
+export default DatasetSearchHitsPage;

@@ -1,4 +1,4 @@
-import { NextAuthProvider, ReactQueryClientProvider } from '@catalog-frontend/ui';
+import { AuthSessionModal, NextAuthProvider, ReactQueryClientProvider } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Metadata } from 'next';
 import { NuqsAdapter } from 'nuqs/adapters/react';
@@ -13,6 +13,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang={localization.getLanguage()}>
       <body>
         <NextAuthProvider>
+          <AuthSessionModal storageKey='datasetForm' />
           <NuqsAdapter>
             <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
           </NuqsAdapter>
