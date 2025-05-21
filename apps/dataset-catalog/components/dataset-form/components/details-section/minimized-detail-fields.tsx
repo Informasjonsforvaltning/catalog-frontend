@@ -392,7 +392,6 @@ export const MinimizedDetailFields = ({ datasetTypes, provenanceStatements, freq
       <ToggleFieldButton
         key={fieldConfig.name}
         fieldName={fieldConfig.name}
-        fieldValues={fieldConfig.getValue(values)}
         hasDeleteButton={fieldConfig.hasDeleteButton}
         addValue={fieldConfig.addValue}
         setFocus={setFocus}

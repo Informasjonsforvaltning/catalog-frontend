@@ -3,7 +3,7 @@ import { DeleteButton } from '@catalog-frontend/ui';
 import styles from './fieldset-with-delete.module.scss';
 
 type Props = {
-  onDelete: () => void;
+  onDelete: () => void;  
 } & PropsWithChildren;
 
 export const FieldsetWithDelete = ({ children, onDelete }: Props) => {
