@@ -244,7 +244,7 @@ export const DatasetForm = ({
           const hasError = (fields: (keyof Dataset)[]) => fields.some((field) => Object.keys(errors).includes(field));
           const handleRestoreDataset = (data: StorageData) => {
             if (data?.id !== datasetId) {
-              if (!data?.id) {
+              if (!(data?.id)) {
                 return window.location.replace(`/catalogs/${catalogId}/datasets/new?restore=1`);
               }
               return window.location.replace(`/catalogs/${catalogId}/datasets/${data.id}/edit?restore=1`);
@@ -256,7 +256,7 @@ export const DatasetForm = ({
             <>
               <Form className='container'>
                 <FormikAutoSaver
-                  id={`${datasetId}`}
+                  id={datasetId?.toString()}
                   storage={autoSaveStorage}
                   restoreOnRender={restoreOnRender}
                   onRestore={handleRestoreDataset}
