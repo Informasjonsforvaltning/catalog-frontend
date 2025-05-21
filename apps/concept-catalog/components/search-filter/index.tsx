@@ -1,9 +1,9 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useMemo } from 'react';
 import { Accordion } from '@digdir/designsystemet-react';
 import { AccordionItem, AccordionItemProps, CheckboxGroupFilter, Select } from '@catalog-frontend/ui';
-import { AssignedUser, CodeList, InternalField, ReferenceDataCode } from '@catalog-frontend/types';
+import { AssignedUser, CodeList, ConceptsPageSettings, InternalField, ReferenceDataCode } from '@catalog-frontend/types';
 import {
   capitalizeFirstLetter,
   convertCodeListToTreeNodes,
@@ -25,22 +25,39 @@ interface Props {
   subjectCodeList?: CodeList;
   conceptStatuses?: ReferenceDataCode[];
   catalogId: string;
+  pageSettings?: ConceptsPageSettings;
 }
 
-const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatuses }: Props) => {
-  const [, setPage] = useQueryState('page', parseAsInteger);
-  const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString));
-  const [filterPublicationState, setFilterPublicationState] = useQueryState(
-    'filter.pubState',
-    parseAsArrayOf(parseAsString),
-  );
-  const [filterAssignedUser, setFilterAssignedUser] = useQueryState('filter.assignedUser');
-  const [filterInternalFields, setFilterInternalFields] = useQueryState(
-    'filter.internalFields',
-    parseAsJson<Record<string, string[]>>(),
-  );
-  const [filterSubject, setFilterSubject] = useQueryState('filter.subject', parseAsArrayOf(parseAsString));
+const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatuses, pageSettings }: Props) => {
+  // Memoize default values for query states
+  const defaultFilterStatus = useMemo(() => pageSettings?.filter?.status ?? [], []);
+  const defaultFilterPublicationState = useMemo(() => pageSettings?.filter?.pubState ?? [], []);
+  const defaultFilterAssignedUser = useMemo(() => pageSettings?.filter?.assignedUser ?? '', []);
+  const defaultFilterInternalFields = useMemo(() => pageSettings?.filter?.internalFields ?? {}, []);
+  const defaultFilterSubject = useMemo(() => pageSettings?.filter?.subject ?? [], []);
 
+  // Query states
+  const [, setPage] = useQueryState('conceptPpage', parseAsInteger);
+  const [filterStatus, setFilterStatus] = useQueryState(
+    'conceptFilter.status',
+    parseAsArrayOf(parseAsString).withDefault(defaultFilterStatus),
+  );
+  const [filterPublicationState, setFilterPublicationState] = useQueryState(
+    'conceptFilter.pubState',
+    parseAsArrayOf(parseAsString).withDefault(defaultFilterPublicationState),
+  );
+  const [filterAssignedUser, setFilterAssignedUser] = useQueryState('conceptFilter.assignedUser', {
+    defaultValue: defaultFilterAssignedUser,
+  });
+  const [filterInternalFields, setFilterInternalFields] = useQueryState(
+    'conceptFilter.internalFields',
+    parseAsJson<Record<string, string[]>>(() => ({})).withDefault(defaultFilterInternalFields),
+  );
+  const [filterSubject, setFilterSubject] = useQueryState(
+    'conceptFilter.subject',
+    parseAsArrayOf(parseAsString).withDefault(defaultFilterSubject),
+  );
+  
   const statusItems =
     conceptStatuses?.map((s) => ({
       value: s.uri,

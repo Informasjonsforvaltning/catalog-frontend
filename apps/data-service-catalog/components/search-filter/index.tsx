@@ -15,9 +15,9 @@ interface Props {
 }
 
 const SearchFilter = ({ distributionStatuses }: Props) => {
-  const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString));
+  const [filterStatus, setFilterStatus] = useQueryState('dataServiceFilter.status', parseAsArrayOf(parseAsString));
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
-    'filter.pubState',
+    'dataServiceFilter.pubState',
     parseAsArrayOf(parseAsString),
   );
 

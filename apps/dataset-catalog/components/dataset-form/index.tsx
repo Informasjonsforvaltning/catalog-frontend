@@ -220,7 +220,7 @@ export const DatasetForm = ({
 
               showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success' });
               if (newValues) {
-                resetForm({ values: newValues });
+                resetForm({ values: datasetTemplate(newValues)});
               } else {
                 resetForm();
               }

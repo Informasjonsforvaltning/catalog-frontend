@@ -3,7 +3,7 @@
 import { DataService } from '@catalog-frontend/types';
 import styles from './data-services-page.module.css';
 
-import { LinkButton, SearchHit, SearchHitContainer, SearchHitsPageLayout } from '@catalog-frontend/ui';
+import { LinkButton, SearchHit, SearchHitContainer, SearchHitsLayout } from '@catalog-frontend/ui';
 import SearchFilter from '../../../../components/search-filter';
 import React, { useState, useEffect } from 'react';
 import { Chip, NativeSelect, Search } from '@digdir/designsystemet-react';
@@ -36,9 +36,9 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
   const [filteredDataServices, setFilteredDataServices] = useState<DataService[]>(dataServices);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [sortType, setSortType] = useState<SortTypes | ''>('');
-  const [filterStatus, setFilterStatus] = useQueryState('filter.status', parseAsArrayOf(parseAsString));
+  const [filterStatus, setFilterStatus] = useQueryState('dataServiceFilter.status', parseAsArrayOf(parseAsString));
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
-    'filter.pubState',
+    'dataServiceFilter.pubState',
     parseAsArrayOf(parseAsString),
   );
 
@@ -151,8 +151,8 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
 
   return (
     <div className={styles.container}>
-      <SearchHitsPageLayout>
-        <SearchHitsPageLayout.SearchRow>
+      <SearchHitsLayout>
+        <SearchHitsLayout.SearchRow>
           <NativeSelect
             label={localization.search.sort}
             size='sm'
@@ -164,16 +164,14 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
             <option value='titleAsc'>{localization.search.sortOptions.TITLE_AÅ}</option>
             <option value='titleDesc'>{localization.search.sortOptions.TITLE_ÅA}</option>
           </NativeSelect>
-        </SearchHitsPageLayout.SearchRow>
-        {hasWritePermission && (
-          <SearchHitsPageLayout.ButtonRow>
-            <LinkButton href={`/catalogs/${catalogId}/data-services/new`}>
+          {hasWritePermission && (
+          <LinkButton href={`/catalogs/${catalogId}/data-services/new`}>
               <PlusCircleIcon />
               {localization.dataServiceCatalog.button.newDataService}
             </LinkButton>
-          </SearchHitsPageLayout.ButtonRow>
-        )}
-        <SearchHitsPageLayout.LeftColumn>
+             )}
+        </SearchHitsLayout.SearchRow>
+        <SearchHitsLayout.LeftColumn>
           <Search
             variant='primary'
             placeholder={localization.search.search}
@@ -182,8 +180,8 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
           />
           <FilterChips />
           <SearchFilter distributionStatuses={distributionStatuses} />
-        </SearchHitsPageLayout.LeftColumn>
-        <SearchHitsPageLayout.MainColumn>
+        </SearchHitsLayout.LeftColumn>
+        <SearchHitsLayout.MainColumn>
           <SearchHitContainer
             searchHits={
               filteredDataServices.length > 0
@@ -223,8 +221,8 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
             }
             noSearchHits={!filteredDataServices || filteredDataServices.length === 0}
           />
-        </SearchHitsPageLayout.MainColumn>
-      </SearchHitsPageLayout>
+        </SearchHitsLayout.MainColumn>
+      </SearchHitsLayout>
     </div>
   );
 };

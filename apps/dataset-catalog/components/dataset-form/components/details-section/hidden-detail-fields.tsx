@@ -254,6 +254,7 @@ export const HiddenDetailFields = ({ datasetTypes, provenanceStatements, frequen
       <UriWithLabelFieldsetTable
         values={values.conformsTo}
         fieldName={'conformsTo'}
+        hideHeadWhenEmpty={true}
         label={
           !isEmpty(values.conformsTo) && (
             <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.conformsTo}>
