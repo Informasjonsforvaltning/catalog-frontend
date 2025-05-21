@@ -9,7 +9,6 @@ import { Box } from '@digdir/designsystemet-react';
 
 type Props = {
   fieldName: string;
-  fieldValues: any;
   hasDeleteButton?: boolean;
   onDeleteValue?: any;
   addValue?: any;
