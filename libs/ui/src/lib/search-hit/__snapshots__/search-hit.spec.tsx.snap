@@ -27,11 +27,13 @@ exports[`SearchHit should render SearchHit successfully 1`] = `
         </div>
       </div>
       Search hit content
-      <p
+      <div
         class="description"
       >
-        Search hit description
-      </p>
+        <emptymock>
+          Search hit description
+        </emptymock>
+      </div>
       Search hit labels
     </div>
   </div>
