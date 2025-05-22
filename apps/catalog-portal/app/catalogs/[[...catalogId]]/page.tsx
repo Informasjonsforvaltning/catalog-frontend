@@ -6,23 +6,23 @@ import {
   getValidSession,
   hasNonSystemAccessForOrg,
   hasSystemAdminPermission,
+  localization,
   redirectToSignIn,
 } from '@catalog-frontend/utils';
 import { getAllServiceMessages, getOrganizations, StrapiGraphql } from '@catalog-frontend/data-access';
 import { Organization } from '@catalog-frontend/types';
 import OrganizationCombo from './components/organization-combobox';
 import { redirect } from 'next/navigation';
-import { Breadcrumbs, ServiceMessages, TermsOfUseAlert } from '@catalog-frontend/ui';
-import { Heading } from '@digdir/designsystemet-react';
+import { ServiceMessages, TermsOfUseAlert } from '@catalog-frontend/ui';
+import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
 import styles from './catalogs.module.css';
 import { CatalogCard } from './components/catalog-card';
+import Markdown from 'react-markdown';
 
 const CatalogsPage = async (props: { params: Promise<{ catalogId: string[] }> }) => {
   const params = await props.params;
 
-  const {
-    catalogId
-  } = params;
+  const { catalogId } = params;
 
   const session = await getValidSession();
   if (!session) {
@@ -58,19 +58,34 @@ const CatalogsPage = async (props: { params: Promise<{ catalogId: string[] }> })
 
   return (
     <div className='container'>
-      <Breadcrumbs
-        data-testid='catalog-portal-breadcrumbs'
-        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
-      />
       <ServiceMessages serviceMessages={serviceMessages} />
-
-      {(organizations.length > 1 || !currentOrganization) && (
+      <Heading
+        level={1}
+        spacing
+      >
+        Katalogoversikt
+      </Heading>
+      {(organizations.length > 1 || (organizations.length > 0 && !currentOrganization)) && (
         <OrganizationCombo
           organizations={organizations}
           currentOrganization={currentOrganization}
         />
       )}
-
+      {organizations.length === 0 ? (
+        <Alert
+          severity='warning'
+          style={{ marginTop: '1rem' }}
+        >
+          <Heading
+            level={2}
+            size='xs'
+            spacing
+          >
+            {localization.alert.noOrganizationAvailable.heading}
+          </Heading>
+          <Markdown>{localization.alert.noOrganizationAvailable.text}</Markdown>
+        </Alert>
+      ) : null}
       {currentOrganization && (
         <div key={`org-section-${currentOrganization.organizationId}`}>
           <Heading
