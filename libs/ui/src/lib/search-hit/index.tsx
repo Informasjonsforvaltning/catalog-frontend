@@ -3,6 +3,7 @@ import styles from './search-hit.module.css';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 import { Url } from 'next/dist/shared/lib/router/router';
+import Markdown from 'react-markdown';
 
 interface Props {
   title: string[] | string;
@@ -27,7 +28,11 @@ const SearchHit = ({ title, description, content, statusTag, titleHref, rightCol
         {rightColumn}
       </div>
       {content}
-      {description && <p className={styles.description}>{description}</p>}
+      {description && (
+        <div className={styles.description}>
+          <Markdown>{description.toString()}</Markdown>
+        </div>
+      )}
       {labels}
     </div>
   );

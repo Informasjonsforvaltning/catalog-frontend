@@ -6,6 +6,7 @@ export default {
   },
   moduleNameMapper: {
     '\\.svg$': '<rootDir>/__mocks__/svg.ts',
+    'react-markdown': '<rootDir>/__mocks__/empty-mock.ts',
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/libs/ui',
