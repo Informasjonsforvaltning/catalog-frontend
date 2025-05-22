@@ -264,6 +264,13 @@ export const nb = {
     formUnsavedChanges: 'Skjemaet har ulagrede endringer.',
     youHaveUnsavedChanges: 'Det finnes endringer som ikke har blitt lagret:',
     wantToRestoreChanges: 'Vil du gjenopprette?',
+    noOrganizationAvailable: {
+      heading: 'Ingen virksomheter tilgjengelig',
+      text: 
+`Vi klarer ikke å finne noen virksomheter du har tilgang til. Dette kan bety at du mangler nødvendige 
+rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennligst prøv igjen senere, eller 
+[kontakt oss](https://data.norge.no/nb/contact) hvis problemet vedvarer.`
+    }
   },
 
   snackbar: {
