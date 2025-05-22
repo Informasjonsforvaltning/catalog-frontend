@@ -38,7 +38,7 @@ export const datasetFormNb = {
     temporal: 'Tidsrommet datasettet dekker dersom det kun har innhold fra visse perioder.',
     lastUpdated: 'Dato for når innholdet i datasettet sist er endret.',
     landingPage:
-      'Lenken kan referere til registerets hjemmeside, eller en samleside som beskriver innhold, struktur, tilgang, nedlasting, bruk og/eller søk.',
+      'Lenke til en nettside som gir tilgang til datasettet, dets distribusjoner og/eller tilleggsinformasjon.',
     type: 'Refererer til EU publication office sine datasett-typer.',
     provenance:
       'Brukes til å referere til beskrivelse av endring i eierskap og forvaltning av datasett (fra det ble skapt) som har betydning for autentisitet, integritet og fortolkning.',
@@ -123,7 +123,7 @@ export const datasetFormNb = {
     spatial: 'Dekningsområde',
     temporal: 'Tidsrom',
     lastUpdated: 'Sist oppdatert',
-    landingPage: 'Lenke til mer informasjon om datasettet',
+    landingPage: 'Landingsside',
     type: 'Type',
     title: 'Tittel',
     provenance: 'Opphav',
