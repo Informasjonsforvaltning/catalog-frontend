@@ -101,7 +101,7 @@ const CatalogsPage = async (props: { params: Promise<{ catalogId: string[] }> })
               <CatalogCard
                 variant='dataset'
                 organizationId={currentOrganization.organizationId}
-                href={`${process.env.FDK_REGISTRATION_BASE_URI}/catalogs/${currentOrganization.organizationId}/datasets`}
+                href={`${process.env.DATASET_CATALOG_FRONTEND}/catalogs/${currentOrganization.organizationId}/datasets`}
               />
             </div>
 
