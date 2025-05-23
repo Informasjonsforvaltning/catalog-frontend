@@ -1,6 +1,33 @@
 import { httpsRegex, localization, parseDateTime, telephoneNumberRegex } from '@catalog-frontend/utils';
 import * as Yup from 'yup';
 
+export const uriWithLabelSchema = Yup.object().shape({
+  prefLabel: Yup.object()
+    .shape({
+      nb: Yup.string()
+        .min(3, localization.datasetForm.validation.title)
+        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.nb})`)
+        .notRequired(),
+      nn: Yup.string()
+        .min(3, localization.datasetForm.validation.title)
+        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.nn})`)
+        .notRequired(),
+      en: Yup.string()
+        .min(3, localization.datasetForm.validation.title)
+        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.en})`)
+        .notRequired(),
+    })
+    .test('preflabel-test', localization.validation.oneLanguageRequired, (prefLabel) => {
+      if (!prefLabel) {
+        return false;
+      }
+      return !!(prefLabel.nb || prefLabel.nn || prefLabel.en);
+    }),
+  uri: Yup.string()
+    .matches(httpsRegex, localization.validation.invalidProtocol)
+    .url(localization.validation.invalidUrl),
+});
+
 const contactPointDraftValidationSchema = Yup.array().of(
   Yup.object().shape({
     email: Yup.string().email(localization.validation.invalidEmail).notRequired(),
@@ -52,8 +79,7 @@ export const draftDatasetSchema = Yup.object().shape({
         return false;
       }
       return !!(title.nb || title.nn || title.en);
-    }
-  ),
+    }),
 
   landingPage: Yup.array().of(
     Yup.string()
@@ -87,11 +113,7 @@ export const draftDatasetSchema = Yup.object().shape({
   ),
 
   conformsTo: Yup.array().of(
-    Yup.object().shape({
-      uri: Yup.string()
-        .matches(httpsRegex, localization.validation.invalidProtocol)
-        .url(localization.validation.invalidUrl),
-    }),
+    uriWithLabelSchema,
   ),
   informationModel: Yup.array().of(
     Yup.object().shape({
@@ -177,11 +199,7 @@ export const distributionSectionSchema = Yup.object().shape({
         .url(localization.validation.invalidUrl),
     ),
   conformsTo: Yup.array().of(
-    Yup.object().shape({
-      uri: Yup.string()
-        .matches(httpsRegex, localization.validation.invalidProtocol)
-        .url(localization.validation.invalidUrl),
-    }),
+    uriWithLabelSchema
   ),
   page: Yup.array().of(
     Yup.object().shape({
@@ -190,12 +208,6 @@ export const distributionSectionSchema = Yup.object().shape({
         .url(localization.validation.invalidUrl),
     }),
   ),
-});
-
-export const uriWithLabelSchema = Yup.object().shape({
-  uri: Yup.string()
-    .matches(httpsRegex, localization.validation.invalidProtocol)
-    .url(localization.validation.invalidUrl),
 });
 
 export const referenceSchema = Yup.object().shape({

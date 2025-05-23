@@ -1,9 +1,8 @@
 'use client';
 
-import { FieldsetDivider } from '@catalog-frontend/ui';
 import { ReferenceData } from '@catalog-frontend/types';
 import { RecommendedDetailFields } from './recommended-detail-fields';
-import { HiddenDetailFields } from './hidden-detail-fields';
+import { MinimizedDetailFields } from './minimized-detail-fields';
 import { Box } from '@digdir/designsystemet-react';
 
 type Props = {
@@ -19,8 +18,7 @@ export const DetailsSection = ({ referenceDataEnv, referenceData }: Props) => {
         referenceDataEnv={referenceDataEnv}
         languages={languages}
       />
-      <FieldsetDivider />
-      <HiddenDetailFields
+      <MinimizedDetailFields
         datasetTypes={datasetTypes}
         provenanceStatements={provenanceStatements}
         frequencies={frequencies}
