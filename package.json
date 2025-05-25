@@ -139,7 +139,7 @@
     "jest-svg-transformer": "^1.0.0",
     "kill-port": "^2.0.1",
     "lint-staged": "^15.5.0",
-    "npm": "^11.3.0",
+    "npm": "^11.4.1",
     "nx": "21.0.3",
     "playwright-core": "^1.51.1",
     "playwright-ctrf-json-reporter": "^0.0.20",
