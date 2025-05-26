@@ -144,7 +144,7 @@ export const DistributionModal = ({
                   );
                 }}
               >
-                {`${localization.datasetForm.fieldLabel.downloadURL}`}
+                {`${localization.add} ${localization.datasetForm.fieldLabel.downloadURL.toLowerCase()}`}
               </AddButton>
               {props.showDivider && <FieldsetDivider />}
             </>
@@ -210,49 +210,6 @@ export const DistributionModal = ({
       ),
     },
     {
-      name: 'format',
-      render: ({
-        values,
-        setFieldValue,
-        setSelectedFileTypes,
-        setSearchQueryFileTypes,
-        initialValues,
-        previouslySelectedFileTypes,
-        fileTypes,
-        loadingSelectedFileTypes,
-        searchingFileTypes,
-      }: any) => (
-        <Fieldset
-          size='sm'
-          legend={
-            <TitleWithHelpTextAndTag
-              helpText={localization.datasetForm.helptext.fileType}
-              tagTitle={localization.tag.recommended}
-              tagColor='info'
-            >
-              {localization.datasetForm.fieldLabel.format}
-            </TitleWithHelpTextAndTag>
-          }
-        >
-          <FieldsetWithDelete onDelete={() => setFieldValue('format', null)}>
-            <FormikReferenceDataCombobox
-              onChange={(event) => setSearchQueryFileTypes(event.target.value)}
-              onValueChange={(selectedValues) => {
-                setFieldValue('format', selectedValues);
-                setSelectedFileTypes(selectedValues);
-              }}
-              value={[...(values.format || []), ...(initialValues?.format || [])]}
-              selectedValuesSearchHits={previouslySelectedFileTypes ?? []}
-              querySearchHits={fileTypes ?? []}
-              formikValues={initialValues?.format ?? []}
-              loading={loadingSelectedFileTypes || searchingFileTypes}
-              portal={false}
-            />
-          </FieldsetWithDelete>
-        </Fieldset>
-      ),
-    },
-    {
       name: 'mediaType',
       render: ({
         values,
@@ -288,44 +245,6 @@ export const DistributionModal = ({
               portal={false}
               showCodeAsDescription={true}
             />
-          </FieldsetWithDelete>
-        </Fieldset>
-      ),
-    },
-    {
-      name: 'license',
-      shouldShow: ({ distributionType }: any) => distributionType === 'distribution',
-      render: ({ values, setFieldValue, openLicenses }: any) => (
-        <Fieldset
-          size='sm'
-          legend={
-            <TitleWithHelpTextAndTag
-              tagTitle={localization.tag.recommended}
-              tagColor='info'
-              helpText={localization.datasetForm.helptext.license}
-            >
-              {localization.datasetForm.fieldLabel.license}
-            </TitleWithHelpTextAndTag>
-          }
-        >
-          <FieldsetWithDelete onDelete={() => setFieldValue('license', null)}>
-            <Combobox
-              value={values?.license?.uri ? [values?.license.uri] : []}
-              portal={false}
-              onValueChange={(selectedValues) => setFieldValue('license.uri', selectedValues.toString())}
-              size='sm'
-              virtual
-            >
-              {openLicenses &&
-                openLicenses.map((license: any, i: number) => (
-                  <Combobox.Option
-                    key={`license-${license.uri}-${i}`}
-                    value={license.uri}
-                  >
-                    {getTranslateText(license.label)}
-                  </Combobox.Option>
-                ))}
-            </Combobox>
           </FieldsetWithDelete>
         </Fieldset>
       ),
@@ -371,7 +290,7 @@ export const DistributionModal = ({
                   );
                 }}
               >
-                {`${localization.datasetForm.fieldLabel.page}`}
+                {`${localization.add} ${localization.datasetForm.fieldLabel.page.toLowerCase()}`}
               </AddButton>
               {props.showDivider && <FieldsetDivider />}
             </>
@@ -619,7 +538,70 @@ export const DistributionModal = ({
                           </>
                         )}
                       </FieldArray>
-
+                      <Fieldset
+                        size='sm'
+                        legend={
+                          <TitleWithHelpTextAndTag
+                            helpText={localization.datasetForm.helptext.fileType}
+                            tagTitle={localization.tag.recommended}
+                            tagColor='info'
+                          >
+                            {localization.datasetForm.fieldLabel.format}
+                          </TitleWithHelpTextAndTag>
+                        }
+                      >
+                        <FieldsetWithDelete onDelete={() => setFieldValue('format', null)}>
+                          <FormikReferenceDataCombobox
+                            onChange={(event) => setSearchQueryFileTypes(event.target.value)}
+                            onValueChange={(selectedValues) => {
+                              setFieldValue('format', selectedValues);
+                              setSelectedFileTypes(selectedValues);
+                            }}
+                            value={[...(values.format || []), ...(initialValues?.format || [])]}
+                            selectedValuesSearchHits={previouslySelectedFileTypes ?? []}
+                            querySearchHits={fileTypes ?? []}
+                            formikValues={initialValues?.format ?? []}
+                            loading={loadingSelectedFileTypes || searchingFileTypes}
+                            portal={false}
+                          />
+                        </FieldsetWithDelete>
+                      </Fieldset>
+                      {distributionType === 'distribution' && (
+                        <Fieldset
+                          size='sm'
+                          legend={
+                            <TitleWithHelpTextAndTag
+                              tagTitle={localization.tag.recommended}
+                              tagColor='info'
+                              helpText={localization.datasetForm.helptext.license}
+                            >
+                              {localization.datasetForm.fieldLabel.license}
+                            </TitleWithHelpTextAndTag>
+                          }
+                        >
+                          <FieldsetWithDelete onDelete={() => setFieldValue('license', null)}>
+                            <Combobox
+                              value={values?.license?.uri ? [values?.license.uri] : []}
+                              portal={false}
+                              onValueChange={(selectedValues) =>
+                                setFieldValue('license.uri', selectedValues.toString())
+                              }
+                              size='sm'
+                              virtual
+                            >
+                              {openLicenses &&
+                                openLicenses.map((license: any, i: number) => (
+                                  <Combobox.Option
+                                    key={`license-${license.uri}-${i}`}
+                                    value={license.uri}
+                                  >
+                                    {getTranslateText(license.label)}
+                                  </Combobox.Option>
+                                ))}
+                            </Combobox>
+                          </FieldsetWithDelete>
+                        </Fieldset>
+                      )}
                       {expandedFields.map((f, index) =>
                         renderField(f, !(minimizedFields.length === 0 && index === expandedFields.length - 1)),
                       )}

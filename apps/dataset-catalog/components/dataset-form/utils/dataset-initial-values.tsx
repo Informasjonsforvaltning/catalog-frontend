@@ -88,7 +88,7 @@ export const datasetToBeCreatedTemplate = (catalogId: string): DatasetToBeCreate
 };
 
 export const distributionTemplate = (dist: Distribution | undefined) => {
-  return dist
+  return (dist
     ? {
         ...dist,
         title: dist?.title ?? {},
@@ -102,9 +102,9 @@ export const distributionTemplate = (dist: Distribution | undefined) => {
         accessURL: [],
         format: [],
         mediaType: [],
-        license: [],
+        license: {},
         conformsTo: [],
         page: [],
         accessServiceUris: [],
-      };
+      }) as Distribution;
 };
