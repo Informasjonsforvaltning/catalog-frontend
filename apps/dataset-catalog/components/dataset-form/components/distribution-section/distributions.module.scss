@@ -87,3 +87,9 @@
 .table td {
   word-wrap: break-word;
 }
+
+.comboboxOptionTwoColumns {
+  display: grid;
+  grid-template-columns: 49% 49%;
+  gap: 2%;
+}
