@@ -205,8 +205,12 @@ const FieldModal = ({ template, type, onSuccess, searchEnv, selectedUri }: Modal
                       <Combobox.Option
                         key={dataset.uri}
                         value={dataset.uri}
+                        displayValue={(getTranslateText(dataset.title) as string) ?? dataset.uri}
                       >
-                        {dataset?.title ? getTranslateText(dataset?.title) : dataset.uri}
+                        <div className={styles.comboboxOptionTwoColumns}>
+                          <div>{dataset?.title ? getTranslateText(dataset?.title) : dataset.uri}</div>
+                          <div>{getTranslateText(dataset.organization?.prefLabel) ?? ''}</div>
+                        </div>
                       </Combobox.Option>
                     ))}
                   </Combobox>

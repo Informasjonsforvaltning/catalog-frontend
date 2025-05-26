@@ -1,6 +1,6 @@
 'use client';
 
-import { DataService, Distribution, ReferenceDataCode } from '@catalog-frontend/types';
+import { Distribution, ReferenceDataCode } from '@catalog-frontend/types';
 import {
   AddButton,
   DeleteButton,
@@ -207,8 +207,16 @@ export const DistributionModal = ({
                                 <Combobox.Option
                                   key={`distribution-${option.uri}-${i}`}
                                   value={option.uri ?? option.description}
+                                  displayValue={(getTranslateText(option.title) as string) ?? option.uri}
                                 >
-                                  {option.title ? getTranslateText(option.title) : getTranslateText(option.description)}
+                                  <div className={styles.comboboxOptionTwoColumns}>
+                                    <div>
+                                      {option.title
+                                        ? getTranslateText(option.title)
+                                        : getTranslateText(option.description)}
+                                    </div>
+                                    <div>{getTranslateText(option.organization?.prefLabel) ?? ''}</div>
+                                  </div>
                                 </Combobox.Option>
                               ))}
                             </Combobox>
