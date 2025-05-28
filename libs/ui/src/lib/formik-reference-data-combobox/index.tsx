@@ -3,12 +3,14 @@ import { Combobox } from '@digdir/designsystemet-react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { ReferenceDataCode } from '@catalog-frontend/types';
 import { ComboboxProps } from '@digdir/designsystemet-react/dist/types/components/form/Combobox/Combobox';
+import { Ref } from 'react';
 
 interface Props extends ComboboxProps {
   selectedValuesSearchHits: ReferenceDataCode[];
   querySearchHits: ReferenceDataCode[];
   formikValues: string[];
   showCodeAsDescription?: boolean;
+  ref?: Ref<HTMLInputElement>
 }
 
 export function FormikReferenceDataCombobox({

@@ -41,7 +41,8 @@ export const EditPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }
 
   const handleUpdate = async (values: Dataset) => {
     await updateDataset(dataset.catalogId.toString(), dataset, values);
-    return await getDatasetById(dataset.catalogId, dataset.id);
+    const newValues = await getDatasetById(dataset.catalogId, dataset.id);
+    return newValues;
   };
 
   useEffect(() => {
