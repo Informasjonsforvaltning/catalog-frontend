@@ -322,9 +322,7 @@ export const DistributionModal = ({
           }
         >
           <FieldArray name='conformsTo'>
-            {({ push, remove, form }) => {
-              console.log(form.values.conformsTo);
-              return (
+            {({ push, remove, form }) => (
               <>
                 {form.values.conformsTo?.map((_: any, i: number) => (
                   <div
@@ -371,7 +369,7 @@ export const DistributionModal = ({
                   {localization.datasetForm.button.addStandard}
                 </AddButton>
               </>
-            )}}
+            )}
           </FieldArray>
         </Fieldset>
       ),
@@ -379,7 +377,6 @@ export const DistributionModal = ({
   ];
 
   useEffect(() => {
-    console.log('set focus', focus, inputRefs);
     if (focus && inputRefs.current[focus]) {
       inputRefs.current[focus]?.focus();
       setFocus(null);
