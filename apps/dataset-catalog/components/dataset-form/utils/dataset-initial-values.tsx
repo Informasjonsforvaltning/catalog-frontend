@@ -7,6 +7,8 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     id: dataset?.id ?? '',
     catalogId: dataset?.catalogId ?? '',
     _lastModified: dataset?._lastModified,
+    uri: dataset?.uri,
+    originalUri: dataset?.originalUri,
     title: dataset.title ?? '',
     description: !isEmpty(dataset?.description) ? dataset.description : {},
     accessRights: { uri: dataset?.accessRights?.uri ?? 'none' },

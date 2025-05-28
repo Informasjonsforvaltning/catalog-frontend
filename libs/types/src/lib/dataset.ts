@@ -5,6 +5,8 @@ import { ReferenceDataCode } from './reference-data';
 export interface Dataset extends DatasetToBeCreated {
   id: string;
   _lastModified: string;
+  uri?: string;
+  originalUri?: string;
 }
 
 export type DatasetToBeCreated = {
