@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode, useRef, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { Distribution, ReferenceDataCode } from '@catalog-frontend/types';
 import {
   AddButton,
@@ -157,13 +157,7 @@ export const DistributionModal = ({
       name: 'accessServiceUris',
       shouldShow: ({ distributionType, isLoadingAccessServices }: any) =>
         !isLoadingAccessServices && distributionType === 'distribution',
-      render: ({
-        values,
-        setFieldValue,
-        setSelectedAccessServices,
-        setSearchDataServicesQuery,
-        accessServiceOptions,
-      }: any) => (
+      render: ({ setFieldValue, setSelectedAccessServices, setSearchDataServicesQuery, accessServiceOptions }: any) => (
         <Fieldset
           size='sm'
           legend={
@@ -189,6 +183,7 @@ export const DistributionModal = ({
                 placeholder={`${localization.search.search}...`}
                 size='sm'
                 virtual
+                ref={(el: HTMLInputElement | null) => setInputRef(`accessServiceUris`, el)}
               >
                 {accessServiceOptions.map(
                   (option: { uri: any; description: any; title: any; organization: { prefLabel: any } }, i: any) => (
@@ -252,6 +247,8 @@ export const DistributionModal = ({
                 loading={loadingSelectedMediaTypes || searchingMediaTypes}
                 portal={false}
                 showCodeAsDescription={true}
+                hideClearButton={false}
+                ref={(el: HTMLInputElement | null) => setInputRef(`mediaType`, el)}
               />
             </FieldsetWithDelete>
           ) : (
@@ -274,7 +271,7 @@ export const DistributionModal = ({
                       <FastFieldWithRef
                         name={`page[${index}].uri`}
                         ref={(el: HTMLInputElement | HTMLTextAreaElement | null) =>
-                          props.setInputRef(`page[${index}].uri`, el)
+                          props.setInputRef(`page[${index}]`, el)
                         }
                         label={
                           index === 0 ? (
@@ -313,9 +310,9 @@ export const DistributionModal = ({
     },
     {
       name: 'conformsTo',
+      addValue: [{ prefLabel: { nb: '', nn: '' }, uri: '' }],
       shouldShow: ({ distributionType }: any) => distributionType === 'distribution',
-      addValue: [{}],
-      render: ({ values, errors }: any) => (
+      render: ({ errors }: any) => (
         <Fieldset
           size='sm'
           legend={
@@ -325,9 +322,11 @@ export const DistributionModal = ({
           }
         >
           <FieldArray name='conformsTo'>
-            {({ push, remove }) => (
+            {({ push, remove, form }) => {
+              console.log(form.values.conformsTo);
+              return (
               <>
-                {values.conformsTo?.map((_: any, i: number) => (
+                {form.values.conformsTo?.map((_: any, i: number) => (
                   <div
                     className={styles.add}
                     key={`conformsTo-${i}`}
@@ -345,6 +344,9 @@ export const DistributionModal = ({
                           }
                           as={Textfield}
                           name={`conformsTo[${i}].prefLabel`}
+                          ref={(el: HTMLInputElement | HTMLTextAreaElement | null) =>
+                            setInputRef(`conformsTo`, el)
+                          }
                         />
                       </div>
                       <FastField
@@ -360,14 +362,29 @@ export const DistributionModal = ({
                     </div>
                   </div>
                 ))}
-                <AddButton onClick={() => push({ uri: '' })}>{localization.datasetForm.button.addStandard}</AddButton>
+                <AddButton
+                  onClick={() => {
+                    push({ prefLabel: { nb: '', nn: '' }, uri: '' });
+                    setFocus(`conformsTo`);
+                  }}
+                >
+                  {localization.datasetForm.button.addStandard}
+                </AddButton>
               </>
-            )}
+            )}}
           </FieldArray>
         </Fieldset>
       ),
     },
   ];
+
+  useEffect(() => {
+    console.log('set focus', focus, inputRefs);
+    if (focus && inputRefs.current[focus]) {
+      inputRefs.current[focus]?.focus();
+      setFocus(null);
+    }
+  }, [focus]);
 
   return (
     <Modal.Root>
@@ -591,24 +608,26 @@ export const DistributionModal = ({
                           </TitleWithHelpTextAndTag>
                         }
                       >
-                        {!selectedFileTypes || selectedFileTypes?.every((v) =>
-                          previouslySelectedFileTypes?.find((option: ReferenceDataCode | undefined) => option?.uri === v),
+                        {!selectedFileTypes ||
+                        selectedFileTypes?.every((v) =>
+                          previouslySelectedFileTypes?.find(
+                            (option: ReferenceDataCode | undefined) => option?.uri === v,
+                          ),
                         ) ? (
-                          <FieldsetWithDelete onDelete={() => setFieldValue('format', null)}>
-                            <FormikReferenceDataCombobox
-                              onChange={(event) => setSearchQueryFileTypes(event.target.value)}
-                              onValueChange={(selectedValues) => {
-                                setFieldValue('format', selectedValues);
-                                setSelectedFileTypes(selectedValues);
-                              }}
-                              value={selectedFileTypes}
-                              selectedValuesSearchHits={previouslySelectedFileTypes ?? []}
-                              querySearchHits={fileTypes ?? []}
-                              formikValues={initialValues?.format ?? []}
-                              loading={loadingSelectedFileTypes || searchingFileTypes}
-                              portal={false}
-                            />
-                          </FieldsetWithDelete>
+                          <FormikReferenceDataCombobox
+                            onChange={(event) => setSearchQueryFileTypes(event.target.value)}
+                            onValueChange={(selectedValues) => {
+                              setFieldValue('format', selectedValues);
+                              setSelectedFileTypes(selectedValues);
+                            }}
+                            value={selectedFileTypes}
+                            selectedValuesSearchHits={previouslySelectedFileTypes ?? []}
+                            querySearchHits={fileTypes ?? []}
+                            formikValues={initialValues?.format ?? []}
+                            loading={loadingSelectedFileTypes || searchingFileTypes}
+                            portal={false}
+                            hideClearButton={false}
+                          />
                         ) : (
                           <SkeletonRectangle />
                         )}
@@ -628,27 +647,31 @@ export const DistributionModal = ({
                               </TitleWithHelpTextAndTag>
                             }
                           >
-                            <FieldsetWithDelete onDelete={() => setFieldValue('license', null)}>
-                              <Combobox
-                                value={values?.license?.uri ? [values?.license.uri] : []}
-                                portal={false}
-                                onValueChange={(selectedValues) =>
-                                  setFieldValue('license.uri', selectedValues.toString())
-                                }
-                                size='sm'
-                                virtual
+                            <Combobox
+                              value={values?.license?.uri ? [values?.license.uri] : ['']}
+                              portal={false}
+                              onValueChange={(selectedValues) =>
+                                setFieldValue('license.uri', selectedValues.toString())
+                              }
+                              size='sm'
+                              virtual
+                            >
+                              <Combobox.Option
+                                key={`license-none`}
+                                value={''}
                               >
-                                {openLicenses &&
-                                  openLicenses.map((license: any, i: number) => (
-                                    <Combobox.Option
-                                      key={`license-${license.uri}-${i}`}
-                                      value={license.uri}
-                                    >
-                                      {getTranslateText(license.label)}
-                                    </Combobox.Option>
-                                  ))}
-                              </Combobox>
-                            </FieldsetWithDelete>
+                                {localization.none}
+                              </Combobox.Option>
+                              {openLicenses &&
+                                openLicenses.map((license: any, i: number) => (
+                                  <Combobox.Option
+                                    key={`license-${license.uri}-${i}`}
+                                    value={license.uri}
+                                  >
+                                    {getTranslateText(license.label)}
+                                  </Combobox.Option>
+                                ))}
+                            </Combobox>
                           </Fieldset>
                           <FieldsetDivider />
                         </>

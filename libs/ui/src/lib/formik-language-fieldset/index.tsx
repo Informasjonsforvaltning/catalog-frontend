@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode, Ref, useEffect, useRef, useState } from 'react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Fieldset, Box, Paragraph, Textfield, ErrorMessage } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
@@ -9,18 +9,18 @@ import styles from './formik-language-fieldset.module.scss';
 import { ISOLanguage, LocalizedStrings } from '@catalog-frontend/types';
 import { TextareaWithPrefix } from '../textarea-with-prefix';
 import { AddButton, DeleteButton } from '../button';
-import _ from 'lodash';
 import React from 'react';
 import { FormikMultivalueTextfield } from '../formik-multivalue-textfield';
 import { FastFieldWithRef } from '../formik-fast-field-with-ref';
 import TitleWithHelpTextAndTag from '../title-with-help-text-and-tag';
+import { get } from 'lodash';
 
 type LanuguageFieldsetProps = {
   legend?: ReactNode;
   name: string;
   requiredLanguages?: Omit<ISOLanguage, 'no'>[];
   as?: typeof Textfield | typeof TextareaWithPrefix;
-  ref?: React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>;
+  ref?: Ref<HTMLInputElement | HTMLTextAreaElement | null>;
   multiple?: boolean;
   readOnly?: boolean;
   showError?: boolean;
@@ -56,7 +56,7 @@ export const FormikLanguageFieldset = ({
         }
         return acc;
       },
-      {} as Record<string, React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>>,
+      {} as Record<string, Ref<HTMLInputElement | HTMLTextAreaElement | null>>,
     ),
   );
 
@@ -73,13 +73,13 @@ export const FormikLanguageFieldset = ({
   const visibleLanguageButtons = allowedLanguages.filter((lang) => !visibleLanguageFields.includes(lang));
 
   const langErrors = allowedLanguages
-    .filter((lang) => _.get(errors, `${name}.${lang}`))
-    .map((lang) => _.get(errors, `${name}.${lang}`));
+    .filter((lang) => get(errors, `${name}.${lang}`))
+    .map((lang) => get(errors, `${name}.${lang}`));
 
   const hasError = (lang: string) => {
-    if (_.get(errors, `${name}.${lang}`)) {
+    if (get(errors, `${name}.${lang}`)) {
       return true;
-    } else if (langErrors.length === 0 && _.get(errors, name)) {
+    } else if (langErrors.length === 0 && get(errors, name)) {
       return true;
     }
     return false;
@@ -90,8 +90,8 @@ export const FormikLanguageFieldset = ({
       return langErrors.map((error, index) => <div key={`error-${index}`}>{getTranslateText(error)}</div>);
     }
 
-    if (_.get(errors, name)) {
-      return getTranslateText(_.get(errors, name));
+    if (get(errors, name)) {
+      return getTranslateText(get(errors, name));
     }
 
     return null;
@@ -99,7 +99,10 @@ export const FormikLanguageFieldset = ({
 
   useEffect(() => {
     if (focus) {
-      languageRefs.current[focus]?.current?.focus();
+      const ref = languageRefs.current[focus];
+      if (ref && 'current' in ref && ref.current) {
+        ref.current.focus();
+      }
     }
   }, [focus]);
 
