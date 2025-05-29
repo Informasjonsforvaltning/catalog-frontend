@@ -21,6 +21,7 @@ import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
 import StatusTag from '../../../../components/status-tag';
 import { isEmpty } from 'lodash';
+import ImportModal from '../../../../components/import-modal';
 
 type SortTypes = 'titleAsc' | 'titleDesc' | 'lastChanged';
 type FilterType = 'published' | 'status';
@@ -158,10 +159,13 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
             </div>
             <div className={styles.buttons}>
               {hasWritePermission && (
-                <LinkButton href={`/catalogs/${catalogId}/data-services/new`}>
-                  <PlusCircleIcon />
-                  {localization.dataServiceCatalog.button.newDataService}
-                </LinkButton>
+                <>
+                  <ImportModal catalogId={catalogId} />
+                  <LinkButton href={`/catalogs/${catalogId}/data-services/new`}>
+                    <PlusCircleIcon />
+                    {localization.dataServiceCatalog.button.newDataService}
+                  </LinkButton>
+                </>
               )}
             </div>
           </div>

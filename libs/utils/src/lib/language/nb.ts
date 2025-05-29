@@ -173,6 +173,7 @@ export const nb = {
     },
 
     sortOptions: {
+      NEWEST_FIRST: 'Nyest først',
       LAST_UPDATED_FIRST: 'Sist endret først',
       LAST_UPDATED_LAST: 'Eldst først',
       RECOMMENDED_TERM_AÅ: 'Anbefalt term A-Å',
@@ -199,6 +200,7 @@ export const nb = {
     harvestDataset: 'Høst spesifikasjon fra katalog',
     importConcept: 'Importer',
     importLogo: 'Importer logo',
+    importDataService: 'Importer OpenAPI',
     removeFilter: 'Fjern filter',
     removeFromCodeList: 'Fjern fra kodeliste',
     restore: 'Gjenopprett',
@@ -207,7 +209,7 @@ export const nb = {
     success: 'OK',
     addUrl: 'Legg til lenke',
     backToOverview: 'Tilbake til oversikten',
-    gotoConcept: 'Gå til begrepet'
+    gotoConcept: 'Gå til begrepet',
   },
 
   dropdown: {
@@ -266,11 +268,10 @@ export const nb = {
     wantToRestoreChanges: 'Vil du gjenopprette?',
     noOrganizationAvailable: {
       heading: 'Ingen virksomheter tilgjengelig',
-      text: 
-`Vi klarer ikke å finne noen virksomheter du har tilgang til. Dette kan bety at du mangler nødvendige 
+      text: `Vi klarer ikke å finne noen virksomheter du har tilgang til. Dette kan bety at du mangler nødvendige 
 rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennligst prøv igjen senere, eller 
-[kontakt oss](https://data.norge.no/nb/contact) hvis problemet vedvarer.`
-    }
+[kontakt oss](https://data.norge.no/nb/contact) hvis problemet vedvarer.`,
+    },
   },
 
   snackbar: {
@@ -556,6 +557,12 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
     button: {
       newDataService: 'Legg til API-beskrivelse',
     },
+    importModal: {
+      title: 'API import',
+      openapiDescription:
+        'API-beskrivelser kan importeres ved å laste inn en OpenAPI-spesifikasjonsfil i JSON eller YAML-format, når importeringsforsøket er gjennomført vil du automatisk bli tatt til en side som detaljerer resultatet av importeringen.',
+      resultDescription: 'Bruk Resultater-knappen for å se alle tidligere gjennomførte importeringsforsøk.',
+    },
   },
 
   icon: {
@@ -571,5 +578,26 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
     notAcceptedContent: `Bruksvilkår må aksepteres for å kunne ta i bruk katalogtjenestene. Hvis vilkårene nylig har blitt akseptert må du logge ut og inn igjen for at det skal tre i kraft. `,
     gotoTermsOfUse: 'Gå til bruksvilkår',
     cancel: 'Avbryt',
+  },
+
+  importResult: {
+    completed: 'Vellykket',
+    failed: 'Feilet',
+    warnings: 'Advarsler',
+    errors: 'Feil',
+    goToImported: 'Gå til importert ressurs',
+    confirmDelete: 'Er du sikker på at du vil slette importeringsrapporten?',
+    deleteCanResultInDuplicates: `
+Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.`,
+    tableHeading: {
+      title: 'Import',
+      timestamp: 'Tidspunkt',
+      status: 'Status',
+    },
+    tooltip: {
+      ok: 'Antall uten feil.',
+      warning: 'Antall med bare små feil.',
+      error: 'Antall med alvorlige feil.',
+    },
   },
 };
