@@ -13,6 +13,7 @@ import { RedirectType, redirect } from 'next/navigation';
 type PageParams = {
   catalogId: string;
   dataServiceId?: string | undefined | null;
+  resultId?: string | undefined | null;
 };
 type PagePath = (params: PageParams) => string;
 type Render = (
@@ -21,7 +22,7 @@ type Render = (
 
 const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', render: Render) => {
   return async ({ params }) => {
-    const { catalogId, dataServiceId } = await params;
+    const { catalogId, dataServiceId, resultId } = await params;
 
     if (!validOrganizationNumber(catalogId)) {
       redirect(`/not-found`, RedirectType.replace);
@@ -57,6 +58,7 @@ const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', re
     return await render({
       catalogId,
       dataServiceId,
+      resultId,
       session,
       hasWritePermission,
       hasAdminPermission,

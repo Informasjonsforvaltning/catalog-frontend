@@ -12,6 +12,7 @@ export * from './lib/enums';
 export * from './lib/error';
 export * from './lib/filters';
 export * from './lib/history';
+export * from './lib/import-result';
 export * from './lib/internal-field';
 export * from './lib/json-patch';
 export * from './lib/localization';

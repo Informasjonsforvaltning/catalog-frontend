@@ -1,3 +1,5 @@
+'use server';
+
 import { DataService } from '@catalog-frontend/types';
 import { Operation } from 'fast-json-patch';
 
@@ -50,6 +52,25 @@ export const postDataService = async (dataService: Partial<DataService>, catalog
     body: JSON.stringify(dataService),
   };
   return await fetch(resource, options);
+};
+
+export const importDataService = async (
+  fileContent: string,
+  contentType: string,
+  catalogId: string,
+  accessToken: string,
+) => {
+  const resource = `${path}/internal/catalogs/${catalogId}/import`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': contentType,
+    },
+    method: 'POST',
+    body: fileContent,
+  };
+
+  return await fetch(resource, options).then((res) => res.headers.get('location'));
 };
 
 export const getAllDataServiceCatalogs = async (accessToken: string) => {
@@ -113,6 +134,42 @@ export const unpublishDataService = async (catalogId: string, dataServiceId: str
       'Content-Type': 'application/json',
     },
     method: 'POST',
+  };
+  return await fetch(resource, options);
+};
+
+export const getDataServiceImportResults = async (catalogId: string, accessToken: string) => {
+  const resource = `${path}/internal/catalogs/${catalogId}/import/results`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    next: { tags: ['import-results'] },
+  };
+  return await fetch(resource, options);
+};
+
+export const getDataServiceImportResultById = async (catalogId: string, resultId: string, accessToken: string) => {
+  const resource = `${path}/internal/catalogs/${catalogId}/import/results/${resultId}`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    next: { tags: ['import-result'] },
+  };
+  return await fetch(resource, options);
+};
+
+export const deleteImportResult = async (catalogId: string, resultId: string, accessToken: string) => {
+  const resource = `${path}/internal/catalogs/${catalogId}/import/results/${resultId}`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'DELETE',
   };
   return await fetch(resource, options);
 };
