@@ -36,7 +36,7 @@ const ShutDownAlert = () => (
     size='small'
     className={styles.warning}
   >
-    Legges ned 31. mai 2025
+    Under avvikling
   </Alert>
 );
 
