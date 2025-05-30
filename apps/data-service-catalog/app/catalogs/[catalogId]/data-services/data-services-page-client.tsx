@@ -3,10 +3,10 @@
 import { DataService } from '@catalog-frontend/types';
 import styles from './data-services-page.module.css';
 
-import { LinkButton, SearchHit, SearchHitContainer, SearchHitsLayout } from '@catalog-frontend/ui';
+import { LinkButton, SearchField, SearchHit, SearchHitContainer, SearchHitsLayout, Select } from '@catalog-frontend/ui';
 import SearchFilter from '../../../../components/search-filter';
 import React, { useState, useEffect } from 'react';
-import { Chip, NativeSelect, Search } from '@digdir/designsystemet-react';
+import { Chip } from '@digdir/designsystemet-react';
 import {
   capitalizeFirstLetter,
   dateStringToDate,
@@ -19,8 +19,8 @@ import {
 } from '@catalog-frontend/utils';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
-import _ from 'lodash';
 import StatusTag from '../../../../components/status-tag';
+import { isEmpty } from 'lodash';
 
 type SortTypes = 'titleAsc' | 'titleDesc' | 'lastChanged';
 type FilterType = 'published' | 'status';
@@ -61,11 +61,11 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
     const filteredDataServices = () => {
       let filtered = dataServices;
 
-      if (!_.isEmpty(filterStatus)) {
+      if (!isEmpty(filterStatus)) {
         filtered = filtered.filter((dataService) => dataService.status && filterStatus?.includes(dataService.status));
       }
 
-      if (!_.isEmpty(filterPublicationState)) {
+      if (!isEmpty(filterPublicationState)) {
         filtered = filtered.filter((dataService) =>
           filterPublicationState?.includes(dataService?.published ? 'published' : 'unpublished'),
         );
@@ -89,22 +89,6 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
 
     filteredDataServices();
   }, [dataServices, filterStatus, filterPublicationState, searchQuery, sortType]);
-
-  const handleSearch = (value: string) => {
-    setSearchQuery(value);
-  };
-
-  const handleSearchKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
-      const value = (event.target as HTMLInputElement).value;
-      handleSearch(value);
-    }
-  };
-
-  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = event.target.value as SortTypes;
-    setSortType(value);
-  };
 
   const removeFilter = (filterName, filterType: FilterType) => {
     switch (filterType) {
@@ -153,32 +137,37 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
     <div className={styles.container}>
       <SearchHitsLayout>
         <SearchHitsLayout.SearchRow>
-          <NativeSelect
-            label={localization.search.sort}
-            size='sm'
-            className={styles.select}
-            onChange={handleSortChange}
-          >
-            <option value=''>{`${localization.choose}...`}</option>
-            <option value='lastChanged'>{localization.search.sortOptions.LAST_UPDATED_FIRST}</option>
-            <option value='titleAsc'>{localization.search.sortOptions.TITLE_AÅ}</option>
-            <option value='titleDesc'>{localization.search.sortOptions.TITLE_ÅA}</option>
-          </NativeSelect>
-          {hasWritePermission && (
-          <LinkButton href={`/catalogs/${catalogId}/data-services/new`}>
-              <PlusCircleIcon />
-              {localization.dataServiceCatalog.button.newDataService}
-            </LinkButton>
-             )}
+          <div className={styles.searchRow}>
+            <div className={styles.searchFieldWrapper}>
+              <SearchField
+                className={styles.searchField}
+                placeholder={localization.search.search}
+                value={searchQuery}
+                onSearch={(value) => setSearchQuery(value)}
+              />
+              <Select
+                size='sm'
+                onChange={(e) => setSortType(e.target.value as SortTypes)}
+                value={sortType}
+              >
+                <option value=''>{`${localization.choose}...`}</option>
+                <option value='lastChanged'>{localization.search.sortOptions.LAST_UPDATED_FIRST}</option>
+                <option value='titleAsc'>{localization.search.sortOptions.TITLE_AÅ}</option>
+                <option value='titleDesc'>{localization.search.sortOptions.TITLE_ÅA}</option>
+              </Select>
+            </div>
+            <div className={styles.buttons}>
+              {hasWritePermission && (
+                <LinkButton href={`/catalogs/${catalogId}/data-services/new`}>
+                  <PlusCircleIcon />
+                  {localization.dataServiceCatalog.button.newDataService}
+                </LinkButton>
+              )}
+            </div>
+          </div>
+          <FilterChips />
         </SearchHitsLayout.SearchRow>
         <SearchHitsLayout.LeftColumn>
-          <Search
-            variant='primary'
-            placeholder={localization.search.search}
-            onSearchClick={handleSearch}
-            onKeyDown={handleSearchKeyDown}
-          />
-          <FilterChips />
           <SearchFilter distributionStatuses={distributionStatuses} />
         </SearchHitsLayout.LeftColumn>
         <SearchHitsLayout.MainColumn>

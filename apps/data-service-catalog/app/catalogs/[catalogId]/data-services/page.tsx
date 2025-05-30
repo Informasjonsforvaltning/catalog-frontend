@@ -1,53 +1,50 @@
-import { DataService, Params } from '@catalog-frontend/types';
+import { DataService } from '@catalog-frontend/types';
 import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
-import {
-  getValidSession,
-  hasOrganizationWritePermission,
-  localization,
-  redirectToSignIn,
-} from '@catalog-frontend/utils';
+import { localization, redirectToSignIn } from '@catalog-frontend/utils';
 
 import { getDistributionStatuses } from '@catalog-frontend/data-access';
 import DataServicePageClient from './data-services-page-client';
 import { getDataServices } from '../../../actions/actions';
+import { withReadProtectedPage } from '@data-service-catalog/utils/auth';
 
-export default async function DataServicesSearchHits(props: Params) {
-  const params = await props.params;
-  const { catalogId } = params;
-  const session = await getValidSession();
-  if(!session) {
-    return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/data-services` });
-  }
-  const dataServices: DataService[] = await getDataServices(catalogId);
-  const hasWritePermission = await hasOrganizationWritePermission(session.accessToken, catalogId);
+const DataServicesSearchHits = withReadProtectedPage(
+  ({ catalogId }) => `/catalogs/${catalogId}/data-services`,
+  async ({ catalogId, session, hasWritePermission }) => {
+    if (!session) {
+      return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/data-services` });
+    }
+    const dataServices: DataService[] = await getDataServices(catalogId);
 
-  const distributionStatuses = await getDistributionStatuses()
-    .then((response) => response.json())
-    .then((body) => body?.distributionStatuses ?? []);
+    const distributionStatuses = await getDistributionStatuses()
+      .then((response) => response.json())
+      .then((body) => body?.distributionStatuses ?? []);
 
-  const breadcrumbList = [
-    {
-      href: `/catalogs/${catalogId}/data-services`,
-      text: localization.catalogType.dataService,
-    },
-  ] as BreadcrumbType[];
+    const breadcrumbList = [
+      {
+        href: `/catalogs/${catalogId}/data-services`,
+        text: localization.catalogType.dataService,
+      },
+    ] as BreadcrumbType[];
 
-  return (
-    <>
-      <Breadcrumbs
-        breadcrumbList={breadcrumbList}
-        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
-      />
-      <DesignBanner
-        title={localization.catalogType.dataService}
-        catalogId={catalogId}
-      />
-      <DataServicePageClient
-        dataServices={dataServices}
-        catalogId={catalogId}
-        hasWritePermission={hasWritePermission}
-        distributionStatuses={distributionStatuses}
-      />
-    </>
-  );
-}
+    return (
+      <>
+        <Breadcrumbs
+          breadcrumbList={breadcrumbList}
+          catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+        />
+        <DesignBanner
+          title={localization.catalogType.dataService}
+          catalogId={catalogId}
+        />
+        <DataServicePageClient
+          dataServices={dataServices}
+          catalogId={catalogId}
+          hasWritePermission={hasWritePermission}
+          distributionStatuses={distributionStatuses}
+        />
+      </>
+    );
+  },
+);
+
+export default DataServicesSearchHits;

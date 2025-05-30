@@ -9,7 +9,6 @@ import styles from './data-service-details-page.module.css';
 import StatusTag from '../../../../../components/status-tag';
 import { LeftColumn } from '../../../../../components/details-page-columns/details-page-left-column';
 import { RightColumn } from '../../../../../components/details-page-columns/details-page-right-column';
-import { useRouter } from 'next/navigation';
 
 interface dataServiceDetailsPageProps {
   dataService: DataService;
@@ -33,7 +32,6 @@ const DataServiceDetailsPageClient = ({
   searchEnv,
 }: dataServiceDetailsPageProps) => {
   const [language, setLanguage] = useState('nb');
-  const router = useRouter();
 
   const handleLanguageChange = (value: string) => {
     setLanguage(value);
