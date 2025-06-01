@@ -6604,12 +6604,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:22.15.7":
-  version: 22.15.7
-  resolution: "@types/node@npm:22.15.7"
+"@types/node@npm:22.15.29":
+  version: 22.15.29
+  resolution: "@types/node@npm:22.15.29"
   dependencies:
     undici-types: "npm:~6.21.0"
-  checksum: 10/73053d72e09c9b53ad5d2cf74da81e677c551bdb82d6255866130267c79d0f0f174b46afb0fcc1e3cafb81c38a93d9babb2d16340b31a44672e8d1418721f3fe
+  checksum: 10/3426790c5aa22df445213d7f37e57ea261cf3013030fe9b3025d87c302097799a9db3b848e2a9bdb07cab8ec6c7e9947ac770cf11e12e420148296b63d63e7db
   languageName: node
   linkType: hard
 
@@ -8661,7 +8661,7 @@ __metadata:
     "@types/js-cookie": "npm:^3.0.6"
     "@types/lodash": "npm:^4.17.16"
     "@types/luxon": "npm:^3.6.2"
-    "@types/node": "npm:22.15.7"
+    "@types/node": "npm:22.15.29"
     "@types/react": "npm:19.1.0"
     "@types/react-dom": "npm:19.1.2"
     "@types/react-is": "npm:19.0.0"
