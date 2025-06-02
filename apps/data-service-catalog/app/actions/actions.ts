@@ -173,7 +173,6 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
   } finally {
     if (success) {
       revalidateTag('import-results');
-      redirect(`/catalogs/${catalogId}/data-services/import-results`);
     }
   }
 }
