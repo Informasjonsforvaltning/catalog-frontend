@@ -1,26 +1,9 @@
-.select {
-  width: fit-content;
-}
-
-.chips {
-  margin-top: 20px;
-}
-
-.wrap {
-  flex-wrap: wrap;
-}
-
-.searchHit {
+.tableItem {
   cursor: pointer;
 }
 
 .bold {
   font-weight: bold;
-}
-
-.set {
-  display: flex;
-  gap: 0.5rem;
 }
 
 .successIcon {

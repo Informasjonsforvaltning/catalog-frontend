@@ -1,8 +1,9 @@
-import { BreadcrumbType, Breadcrumbs, DesignBanner, ImportResults } from '@catalog-frontend/ui';
+import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { ImportResult } from '@catalog-frontend/types';
 import { getDataServiceImportResults } from '@catalog-frontend/data-access';
 import { withWriteProtectedPage } from '@data-service-catalog/utils/auth';
+import ImportResultsPageClient from './import-results-page-client';
 
 const ImportResultsPage = withWriteProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/data-services/import-results`,
@@ -37,8 +38,8 @@ const ImportResultsPage = withWriteProtectedPage(
           title={localization.catalogType.dataService}
           catalogId={catalogId}
         />
-        <ImportResults
-          importHref={`/catalogs/${catalogId}/data-services/import-results`}
+        <ImportResultsPageClient
+          catalogId={catalogId}
           importResults={importResults}
         />
       </>

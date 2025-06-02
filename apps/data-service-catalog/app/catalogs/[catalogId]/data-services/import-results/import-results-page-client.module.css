@@ -1,3 +1,15 @@
+.select {
+  width: fit-content;
+}
+
+.chips {
+  margin-top: 20px;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
 .importFilter {
   display: flex;
   padding: 1px;
