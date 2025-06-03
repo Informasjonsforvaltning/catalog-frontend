@@ -36,13 +36,22 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
             </div>
           )}
 
-          {distribution?.downloadURL && distribution?.downloadURL[0] && (
+          {distribution?.downloadURL && (
             <div className={styles.field}>
               <Heading
                 level={5}
                 size='2xs'
               >{`${localization.datasetForm.fieldLabel.downloadURL}:`}</Heading>
-              <Paragraph size='sm'>{distribution?.downloadURL?.[0] ?? ''}</Paragraph>
+              {distribution.downloadURL.map((url: string, index: number) => {
+                return (
+                  <Paragraph
+                    size='sm'
+                    key={`downloadURL-${index}`}
+                  >
+                    {url}
+                  </Paragraph>
+                );
+              })}
             </div>
           )}
 
@@ -164,7 +173,16 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
                 level={5}
                 size='2xs'
               >{`${localization.datasetForm.fieldLabel.page}:`}</Heading>
-              <Paragraph size='sm'>{distribution?.page?.[0]?.uri}</Paragraph>
+              {distribution.page.map((page: { uri: string }, index: number) => {
+                return (
+                  <Paragraph
+                    key={`page-${index}`}
+                    size='sm'
+                  >
+                    {page.uri}
+                  </Paragraph>
+                );
+              })}
             </div>
           )}
         </div>

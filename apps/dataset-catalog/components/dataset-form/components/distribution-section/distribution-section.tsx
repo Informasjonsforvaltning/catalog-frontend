@@ -118,14 +118,25 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
 
                   <div className={styles.field}>
                     {item?.accessURL && (
-                      <Heading
-                        size='2xs'
-                        level={4}
-                      >
-                        {localization.datasetForm.fieldLabel.accessURL}
-                      </Heading>
+                      <>
+                        <Heading
+                          size='2xs'
+                          level={4}
+                        >
+                          {localization.datasetForm.fieldLabel.accessURL}
+                        </Heading>
+                        {item.accessURL.map((url: string, index: number) => {
+                          return (
+                            <Paragraph
+                              key={`accessURL-${index}`}
+                              size='sm'
+                            >
+                              {url}
+                            </Paragraph>
+                          );
+                        })}
+                      </>
                     )}
-                    <Paragraph size='sm'>{item?.accessURL?.[0]}</Paragraph>
                   </div>
 
                   <div className={styles.field}>
@@ -223,14 +234,25 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                   <div className={styles.heading}>
                     <div className={styles.field}>
                       {item?.accessURL && (
-                        <Heading
-                          size='2xs'
-                          level={4}
-                        >
-                          {localization.datasetForm.fieldLabel.accessURL}
-                        </Heading>
+                        <>
+                          <Heading
+                            size='2xs'
+                            level={4}
+                          >
+                            {localization.datasetForm.fieldLabel.accessURL}
+                          </Heading>
+                          {item.accessURL.map((url: string, index: number) => {
+                            return (
+                              <Paragraph
+                                key={`accessURL-${index}`}
+                                size='sm'
+                              >
+                                {url}
+                              </Paragraph>
+                            );
+                          })}
+                        </>
                       )}
-                      <Paragraph size='sm'>{item?.accessURL?.[0]}</Paragraph>
                     </div>
                     <div className={styles.buttons}>
                       <DistributionModal

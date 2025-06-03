@@ -46,7 +46,9 @@ export const DistributionDetailsCard = ({
             >
               {localization.datasetForm.fieldLabel.accessURL}
             </Heading>
-            <p>{distribution?.accessURL}</p>
+            {distribution.accessURL.map((url: string, index: number) => {
+              return <p key={`accessURL-${index}`}>{url}</p>;
+            })}
           </div>
         )}
 
