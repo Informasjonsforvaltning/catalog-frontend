@@ -2,21 +2,20 @@ import { getUsers } from '@catalog-frontend/data-access';
 import { withValidSessionForApi } from '@catalog-frontend/utils';
 import { NextRequest } from 'next/server';
 
-export const GET = async (request: NextRequest, props: { params: Promise<{ slug: string[] }> }) => {
+export const GET = async (request: NextRequest, props: { params: Promise<{ catalogId: string }> }) => {
   const params = await props.params;
   return await withValidSessionForApi(async (session) => {
-    const { slug } = params;
-    const [catalogId] = slug;
+    const { catalogId } = params;
 
     try {
       const response = await getUsers(catalogId, `${session?.accessToken}`);
       if (response.status !== 200) {
-        return new Response('Failed to get user list', { status: response.status });
+        return new Response(JSON.stringify({ message: 'Failed to get user list' }), { status: response.status });
       }
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), { status: response.status });
     } catch (error) {
-      return new Response('Failed to get user list', { status: 500 });
+      return new Response(JSON.stringify({ message: 'Failed to get user list' }), { status: 500 });
     }
   });
 };

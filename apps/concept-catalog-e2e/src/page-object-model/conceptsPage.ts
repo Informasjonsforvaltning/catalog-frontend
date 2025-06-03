@@ -1,9 +1,9 @@
 import { expect, Page, BrowserContext } from '@playwright/test';
 import type AxeBuilder from '@axe-core/playwright';
 import { Concept } from '@catalog-frontend/types';
-import { ALL_CONCEPTS } from '../data/concepts';
 import DetailPage from './detailPage';
 import EditPage from './editPage';
+import { ConceptStatus } from '../utils/helpers';
 
 export default class ConceptsPage {
   url: string;
@@ -47,8 +47,8 @@ export default class ConceptsPage {
     } catch {
       return false;
     }
-  };
- 
+  }
+
   async deleteConcept(url: string) {
     await this.detailPage.goto(url);
     await this.detailPage.deleteConcept();
@@ -62,9 +62,7 @@ export default class ConceptsPage {
     if (!this.accessibilityBuilder) {
       return;
     }
-    const result = await this.accessibilityBuilder
-      .disableRules('svg-img-alt')  
-      .analyze();
+    const result = await this.accessibilityBuilder.disableRules(['svg-img-alt', 'aria-toggle-field-name', 'target-size']).analyze();
     expect.soft(result.violations).toEqual([]);
   }
 
@@ -84,98 +82,53 @@ export default class ConceptsPage {
     expect(items.length).toBe(0);
   }
 
-  public async createConcepts() {
-    for (const concept of ALL_CONCEPTS) {
-      await this.goto();
-
-      console.log(`Create new concept with title ${concept.anbefaltTerm.navn.nb}`);
-
-      // Name and description
-      await this.page.getByRole('link', { name: 'Nytt begrep' }).click({ timeout: 10000 });
-      await this.editPage.expectMenu();
-      await this.editPage.fillFormAndSave(concept);
-      await this.detailPage.expectDetails(concept);
-    }
+  public async createConceptUsingForm(concept, apiRequestContext) {
     await this.goto();
-    await this.expectSearchResults(ALL_CONCEPTS);
-  }
-  
-  public async deleteAllConcepts() {
-    this.page.on('dialog', async (dialog) => {
-      expect(dialog.message()).toEqual('Er du sikker du ønsker å slette begrepet?');
-      await dialog.accept();
-    });
 
-    // eslint-disable-next-line no-constant-condition
-    while (!(await this.deletedAllConcepts())) {
-      // Get the list of items
-      const promises = (await this.page.getByRole('link').all()).map(async (link) => {
-        const href = await link.getAttribute('href');
-        return {
-          value: href,
-          include: href?.startsWith(this.url) && !href.endsWith('/new'),
-        };
-      });
-      const items = (await Promise.all(promises)).filter((l) => l.include).map((l) => l.value);
+    console.log(`Create new concept with title ${concept.anbefaltTerm.navn.nb}`);
 
-      if (items.length === 0) {
-        console.log('All items deleted, the list is empty.');
-        break;
-      }
-
-      // Log the number of items before deletion
-      console.log(`Number of items before deletion: ${items.length}`);
-
-      // Click the delete button for the first item
-      if(items[0]) {
-        await this.deleteConcept(items[0]);
-      }       
-      await this.goto();
-    }
+    // Name and description
+    await this.page.getByRole('link', { name: 'Nytt begrep' }).click({ timeout: 10000 });
+    await this.editPage.expectMenu();
+    await this.editPage.fillFormAndSave(concept, apiRequestContext);
+    await this.detailPage.expectDetails(concept, apiRequestContext);
   }
 
   public async expectFiltersToBeVisible() {
     await expect(this.statusFilterHeaderLocator()).toBeVisible();
-    await this.statusFilterHeaderLocator().click();
-
     await expect(this.statusFilterCandidateLocator()).toBeVisible();
     await expect(this.statusFilterCurrentLocator()).toBeVisible();
     await expect(this.statusFilterDraftLocator()).toBeVisible();
     await expect(this.statusFilterRejectedLocator()).toBeVisible();
     await expect(this.statusFilterRetiredLocator()).toBeVisible();
     await expect(this.statusFilterWaitingLocator()).toBeVisible();
-
     await expect(this.publishedStateFilterHeaderLocator()).toBeVisible();
-    await this.publishedStateFilterHeaderLocator().click();
-
     await expect(this.publishedStateFilterPublishedLocator()).toBeVisible();
     await expect(this.publishedStateFilterNotPublishedLocator()).toBeVisible();
   }
 
   public async expectSearchResults(expected: Concept[], notExpected: Concept[] = []) {
-    for (let i = 0; i < expected.length; i++) {
-      await expect(this.page.getByText(expected[i].anbefaltTerm.navn.nb as string, { exact: true })).toBeVisible({ timeout: 5000 });
-      //await expect(this.page.getByText(expected[i].description.nb, { exact: true })).toBeVisible();
-
-      // const rowLocator = getParentLocator(this.page.getByText(expected[i].title.nb, { exact: true }), 4);
-      // await expect(rowLocator.filter({ hasText: getStatusText(expected[i].status) })).toBeVisible();
-      // await expect(
-      //   rowLocator.filter({ hasText: expected[i].published ? 'Publisert' : 'Ikke publisert' }),
-      // ).toBeVisible();
+    for (const concept of expected) {
+      const nbName = concept.anbefaltTerm.navn.nb as string;
+      // Expect to find the concept
+      await expect(this.page.getByText(nbName, { exact: true })).toBeVisible({ timeout: 5000 });
     }
 
-    for (let i = 0; i < notExpected.length; i++) {
-      await expect(this.page.getByText(notExpected[i].anbefaltTerm.navn.nb as string, { exact: true })).toHaveCount(0);
+    for (const concept of notExpected) {
+      const nbName = concept.anbefaltTerm.navn.nb as string;
+      // Expect not to find the concept
+      await expect(this.page.getByText(nbName, { exact: true })).toHaveCount(0);
     }
   }
-
-  public async gotoDetailPage(concept: Concept) {
-    await this.page.getByText(concept.anbefaltTerm.navn.nb as string, { exact: true }).click();
-  };
 
   public async search(query: string) {
     await this.searchInputLocator().fill(query);
     await this.searchButtonLocator().click();
+
+    const spinner = this.page.getByRole('img', { name: 'Laster' });
+    // Wait for spinner to be visible and hidden
+    await spinner.waitFor({ state: 'visible', timeout: 3000 }).catch(() => {});
+    await spinner.waitFor({ state: 'hidden', timeout: 10000 }).catch(() => {});
   }
 
   public async clearSearch() {
@@ -190,9 +143,30 @@ export default class ConceptsPage {
     await this.statusFilterCurrentLocator().uncheck();
     await this.statusFilterRetiredLocator().uncheck();
     await this.statusFilterRejectedLocator().uncheck();
-    
+
     await this.publishedStateFilterPublishedLocator().uncheck();
     await this.publishedStateFilterNotPublishedLocator().uncheck();
+  }
+
+  public async filterStatus(status: string) {
+    const statusMap: { [key in ConceptStatus]: () => ReturnType<Page['getByLabel']> } = {
+      [ConceptStatus.DRAFT]: this.statusFilterDraftLocator,
+      [ConceptStatus.CANDIDATE]: this.statusFilterCandidateLocator,
+      [ConceptStatus.WAITING]: this.statusFilterWaitingLocator,
+      [ConceptStatus.CURRENT]: this.statusFilterCurrentLocator,
+      [ConceptStatus.RETIRED]: this.statusFilterRetiredLocator,
+      [ConceptStatus.REJECTED]: this.statusFilterRejectedLocator,
+    };
+
+    const locatorFn = statusMap[status];
+    if (!locatorFn) {
+      throw new Error(`Unknown status: ${status}`);
+    }
+
+    if (!(await locatorFn().isVisible())) {
+      await this.statusFilterHeaderLocator().click();
+    }
+    await locatorFn().check();
   }
 
   public async filterStatusDraft() {

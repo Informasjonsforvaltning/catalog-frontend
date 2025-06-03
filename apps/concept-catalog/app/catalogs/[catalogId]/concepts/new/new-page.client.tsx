@@ -16,7 +16,7 @@ export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, 
   const dataStorage = new LocalDataStorage<StorageData>({ key: 'conceptForm' });
 
   const handleCreate = async (values: Concept) => {
-    const conceptId = await createConcept(values, catalogId.toString());
+    const conceptId = await createConcept(values, catalogId.toString(), fieldsResult.internal);
     conceptIdRef.current = conceptId;
     return undefined;
   };

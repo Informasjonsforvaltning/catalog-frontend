@@ -10,6 +10,6 @@ export async function GET(req: NextRequest) {
     const jsonResponse = await response.json();
     return new Response(JSON.stringify(jsonResponse), { status: response.status });
   } catch (error) {
-    return new Response('Failed to get concept statuses', { status: 500 });
+    return new Response(JSON.stringify({ message: 'Failed to get concept statuses' }), { status: 500 });
   }
 }

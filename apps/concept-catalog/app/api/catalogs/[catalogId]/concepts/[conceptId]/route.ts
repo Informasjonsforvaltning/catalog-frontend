@@ -8,12 +8,13 @@ export const DELETE = async (req: NextRequest, props) => {
     const { conceptId } = params;
     try {
       const response = await deleteConcept(conceptId, session?.accessToken);
-      if (response.status !== 204) {
+      if (!response.ok) {
         throw new Error();
       }
       return new Response(response?.text?.toString(), { status: 200 });
     } catch (err) {
-      return new Response('Failed to delete concept', { status: 500 });
+      console.log('Error', err);
+      return new Response(JSON.stringify({ message: 'Failed to delete concept' }), { status: 500 });
     }
   });
 };

@@ -1,13 +1,15 @@
 import { test as init, runTestAsAdmin as initAsAdmin } from '../../fixtures/basePage';
-import ConceptsPage from '../../page-object-model/conceptsPage';
+import { adminAuthFile, deleteAllConcepts } from '../../utils/helpers';
 
-type TestProps = { conceptsPage: ConceptsPage };
+initAsAdmin('delete all existing concepts', async ({ playwright }) => {
+  console.log('[INIT] Creating API request context with admin storage state...');
+  // Create a request context with the admin storage state (includes next-auth cookie)
+  const apiRequestContext = await playwright.request.newContext({
+    storageState: adminAuthFile,
+  });
+  console.log('[INIT] API request context created:', !!apiRequestContext);
 
-initAsAdmin('delete all existing concepts and create new', async ({ conceptsPage }: TestProps) => {
-  // set timeout to 120 seconds
-  init.setTimeout(120 * 1000);
-
-  await init.step('Navigate to concepts page', () => conceptsPage.goto());
-  await init.step('Delete all concepts', () => conceptsPage.deleteAllConcepts());
-  await init.step('Create concepts', () => conceptsPage.createConcepts());
+  console.log('[INIT] Deleting all existing concepts...');
+  await deleteAllConcepts(apiRequestContext);
+  console.log('[INIT] All existing concepts deleted.');
 });
