@@ -1,0 +1,19 @@
+.tableItem {
+  cursor: pointer;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.successIcon {
+  color: var(--fds-semantic-text-success-default);
+}
+
+.errorIcon {
+  color: var(--fds-semantic-text-danger-default);
+}
+
+.warningIcon {
+  color: var(--fds-semantic-text-warning-icon_warning);
+}

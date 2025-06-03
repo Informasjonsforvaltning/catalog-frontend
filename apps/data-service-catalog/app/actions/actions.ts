@@ -2,6 +2,7 @@
 
 import {
   deleteDataService as removeDataService,
+  deleteImportResult as removeImportResult,
   getAllDataServices,
   postDataService,
   publishDataService as publish,
@@ -151,6 +152,27 @@ export async function unpublishDataService(catalogId: string, dataServiceId: str
     if (success) {
       revalidateTag('data-service');
       revalidateTag('data-services');
+    }
+  }
+}
+
+export async function deleteImportResult(catalogId: string, resultId: string) {
+  const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn();
+  }
+  let success = false;
+  try {
+    const response = await removeImportResult(catalogId, resultId, `${session?.accessToken}`);
+    if (response.status !== 204) {
+      throw new Error();
+    }
+    success = true;
+  } catch (error) {
+    throw new Error(localization.alert.deleteFail);
+  } finally {
+    if (success) {
+      revalidateTag('import-results');
     }
   }
 }

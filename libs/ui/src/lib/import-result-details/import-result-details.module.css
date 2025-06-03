@@ -1,0 +1,39 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding-top: 1rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.titleContainer {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.title {
+  font-weight: 500;
+  font-size: 40px;
+}
+
+.titleTags {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.tags {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
