@@ -396,6 +396,7 @@ export const SearchPageClient = ({
                   />
                   <Select
                     size='sm'
+                    aria-label='Velg sortering'
                     onChange={(event) => onSortSelect(event?.target.value as SortOption)}
                     value={selectedSortOption}
                   >

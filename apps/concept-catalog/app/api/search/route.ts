@@ -14,7 +14,7 @@ export const POST = async (req: NextRequest) => {
       return new Response(JSON.stringify(jsonResponse), { status: response.status });
     } catch (error) {
       console.error(error);
-      return new Response('Failed to search concepts', { status: 500 });
+      return new Response(JSON.stringify({ message: 'Failed to search concepts' }), { status: 500 });
     }
   });
 };

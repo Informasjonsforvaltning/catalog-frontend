@@ -1,19 +1,12 @@
-import { test as init, runTestAsAdmin as initAsAdmin } from '../../fixtures/basePage';
+import { runTestAsAdmin as initAsAdmin } from '../../fixtures/basePage';
+import { adminAuthFile, deleteAllPublicServices, deleteAllServices } from '../../utils/helpers';
 
-initAsAdmin('delete all existing services and create new', async ({ servicesPage }) => {
-  // set timeout to 120 seconds
-  init.setTimeout(120 * 1000);
+initAsAdmin('delete all existing services', async ({ playwright }) => {
+  // Create a request context with the admin storage state (includes next-auth cookie)
+  const apiRequestContext = await playwright.request.newContext({
+    storageState: adminAuthFile,
+  });
 
-  await init.step('Navigate to services page', () => servicesPage.goto());
-  await init.step('Delete all services', () => servicesPage.deleteAllServices());
-  await init.step('Create services', () => servicesPage.createServices());
-});
-
-initAsAdmin('delete all existing public services and create new', async ({ publicServicesPage }) => {
-  // set timeout to 120 seconds
-  init.setTimeout(120 * 1000);
-
-  await init.step('Navigate to public services page', () => publicServicesPage.goto());
-  await init.step('Delete all public services', () => publicServicesPage.deleteAllPublicServices());
-  await init.step('Create public services', () => publicServicesPage.createPublicServices());
+  await deleteAllServices(apiRequestContext);
+  await deleteAllPublicServices(apiRequestContext);
 });

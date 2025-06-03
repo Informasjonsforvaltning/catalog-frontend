@@ -9,14 +9,14 @@ import {
 import { redirect, RedirectType } from 'next/navigation';
 import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
 import { getTranslateText, localization, prepareStatusList } from '@catalog-frontend/utils';
-import { CodeListsResult, FieldsResult, UsersResult } from '@catalog-frontend/types';
+import { CodeListsResult, Concept, FieldsResult, UsersResult } from '@catalog-frontend/types';
 import { withWriteProtectedPage } from '@concept-catalog/utils/auth';
 import { EditPage } from './edit-page.client';
 
 export default withWriteProtectedPage(
   ({ catalogId, conceptId }) => `/catalogs//${catalogId}/concepts/${conceptId}/edit`,
   async ({ catalogId, conceptId, session }) => {
-    const concept = await getConcept(`${conceptId}`, `${session?.accessToken}`).then((response) => {
+    const concept: Concept = await getConcept(`${conceptId}`, `${session?.accessToken}`).then((response) => {
       if (response.ok) return response.json();
     });
     if (!concept || concept.ansvarligVirksomhet?.id !== catalogId) {

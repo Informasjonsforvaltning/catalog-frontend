@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { get } from 'lodash';
 import { localization } from './localization';
 
 export const getTranslateText = (textObj: any, language?: string): string | string[] => {
@@ -13,11 +13,11 @@ export const getTranslateText = (textObj: any, language?: string): string | stri
 
   return (
     textObj[selectedLanguage] ||
-    _.get(textObj, selectedLanguage) ||
-    _.get(textObj, 'nb') ||
-    _.get(textObj, 'no') ||
-    _.get(textObj, 'nn') ||
-    _.get(textObj, 'en') ||
+    get(textObj, selectedLanguage) ||
+    get(textObj, 'nb') ||
+    get(textObj, 'no') ||
+    get(textObj, 'nn') ||
+    get(textObj, 'en') ||
     ''
   );
 };

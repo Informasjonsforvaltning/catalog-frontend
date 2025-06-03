@@ -84,6 +84,7 @@ const SearchField: FC<SearchFieldProps> = ({
           {options && (
             <NativeSelect
               size='sm'
+              aria-label='Velg alternativ'
               value={optionValue}
               className={styles.searchOptions}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setOptionValue(e.target.value)}

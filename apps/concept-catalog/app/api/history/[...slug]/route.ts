@@ -19,10 +19,10 @@ export const GET = async (req: NextRequest, props: { params: Promise<{ slug: str
         const jsonResponse = await response.json();
         return new Response(JSON.stringify(jsonResponse), { status: response.status });
       } catch (error) {
-        return new Response('Failed to get history', { status: 500 });
+        return new Response(JSON.stringify({ message: 'Failed to get history' }), { status: 500 });
       }
     } else {
-      return new Response('Unauthorized', { status: 401 });
+      return new Response(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });
     }
   });
 };

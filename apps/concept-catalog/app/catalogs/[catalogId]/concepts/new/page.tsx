@@ -9,12 +9,6 @@ import { NewPage } from './new-page.client';
 export default withWriteProtectedPage(
   ({ catalogId }) => `/catalogs//${catalogId}/concepts/new`,
   async ({ catalogId, session }) => {
-    const concept = {
-      ansvarligVirksomhet: {
-        id: catalogId,
-      },
-    };
-
     const conceptStatuses = await getConceptStatuses()
       .then((response) => response.json())
       .then((body) => body?.conceptStatuses ?? [])
@@ -29,6 +23,12 @@ export default withWriteProtectedPage(
     const usersResult: UsersResult = await getUsers(catalogId, `${session?.accessToken}`).then((response) =>
       response.json(),
     );
+
+    const concept = {
+      ansvarligVirksomhet: {
+        id: catalogId,
+      }
+    };
 
     const breadcrumbList = catalogId
       ? ([

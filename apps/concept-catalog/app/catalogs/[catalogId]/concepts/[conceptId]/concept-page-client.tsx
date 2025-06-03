@@ -125,7 +125,7 @@ const InterneFelt = ({ concept, fields, codeLists, users, location, language }: 
               title={`${translate(field.label, language)}:`}
             >
               {(field.type === 'text_short' || field.type === 'text_long') && <span>{field.value}</span>}
-              {field.type === 'boolean' && <span>{field.value ? localization.yes : localization.no}</span>}
+              {field.type === 'boolean' && <span>{field.value === 'true' ? localization.yes : localization.no}</span>}
               {field.type === 'user_list' && <span>{getUserName(field.value ?? '')}</span>}
               {field.type === 'code_list' && <span>{getCodeName(field.codeListId ?? '', field.value ?? '')}</span>}
             </InfoCard.Item>
