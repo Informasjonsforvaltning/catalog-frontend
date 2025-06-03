@@ -154,5 +154,9 @@
     "webpack": "^5.99.9",
     "webpack-cli": "^6.0.1"
   },
+  "resolutions": {
+    "koa": "^2.16.1",
+    "esbuild": "^0.25.0"
+  },
   "packageManager": "yarn@4.5.0"
 }
