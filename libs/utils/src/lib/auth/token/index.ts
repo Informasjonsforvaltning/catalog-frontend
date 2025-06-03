@@ -77,20 +77,19 @@ export const isReadOnlyUser = (token: Token, orgNr: string): boolean =>
 
 export const validateOidcUserSession = async (token: Token): Promise<boolean> => {
   try {
-    const response = await fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/userinfo?scope=openid`, {
+    const response = await fetch(
+      `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/userinfo?scope=openid`,
+      {
       headers: { Authorization: `Bearer ${token}` },
       method: 'GET',
-    });
+      }
+    );
 
     return response.ok;
   } catch (error) {
-    if ((error as { name: string }).name === 'ConnectTimeoutError') {
-      return true;
-    } else {
-      console.log('validateOidcUserSession failed', error);
-    }
+    console.log('validateOidcUserSession failed, ignore and try again', error);
+    return true;
   }
-  return false;
 };
 
 export const hasNonSystemAccessForOrg = (token: Token, orgId: string): boolean => {
