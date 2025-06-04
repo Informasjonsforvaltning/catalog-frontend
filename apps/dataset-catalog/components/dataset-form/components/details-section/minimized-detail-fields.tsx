@@ -270,7 +270,7 @@ const FIELD_CONFIG = [
                 );
               }}
             >
-              {`${localization.datasetForm.fieldLabel.landingPage}`}
+              {`${localization.add} ${localization.datasetForm.fieldLabel.landingPage.toLowerCase()}`}
             </AddButton>
             {props.showDivider && <FieldsetDivider />}
           </>
