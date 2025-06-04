@@ -138,7 +138,7 @@ const FIELD_CONFIG = [
   {
     name: 'hasCurrentnessAnnotation.hasBody',
     getValue: (values: Dataset) => values?.hasCurrentnessAnnotation?.hasBody,
-    addValue: {nb: '', nn: ''},
+    addValue: { nb: '', nn: '' },
     render: (props: any) => (
       <FormikLanguageFieldset
         as={TextareaWithPrefix}
@@ -155,7 +155,7 @@ const FIELD_CONFIG = [
   {
     name: 'hasRelevanceAnnotation.hasBody',
     getValue: (values: Dataset) => values?.hasRelevanceAnnotation?.hasBody,
-    addValue: {nb: '', nn: ''},
+    addValue: { nb: '', nn: '' },
     render: (props: any) => (
       <FormikLanguageFieldset
         as={TextareaWithPrefix}
@@ -172,7 +172,7 @@ const FIELD_CONFIG = [
   {
     name: 'hasCompletenessAnnotation.hasBody',
     getValue: (values: Dataset) => values?.hasCompletenessAnnotation?.hasBody,
-    addValue: {nb: '', nn: ''},
+    addValue: { nb: '', nn: '' },
     render: (props: any) => (
       <FormikLanguageFieldset
         as={TextareaWithPrefix}
@@ -189,7 +189,7 @@ const FIELD_CONFIG = [
   {
     name: 'hasAccuracyAnnotation.hasBody',
     getValue: (values: Dataset) => values?.hasAccuracyAnnotation?.hasBody,
-    addValue: {nb: '', nn: ''},
+    addValue: { nb: '', nn: '' },
     render: (props: any) => (
       <FormikLanguageFieldset
         as={TextareaWithPrefix}
@@ -206,7 +206,7 @@ const FIELD_CONFIG = [
   {
     name: 'hasAvailabilityAnnotation.hasBody',
     getValue: (values: Dataset) => values?.hasAvailabilityAnnotation?.hasBody,
-    addValue: {nb: '', nn: ''},
+    addValue: { nb: '', nn: '' },
     render: (props: any) => (
       <FormikLanguageFieldset
         as={TextareaWithPrefix}
@@ -257,7 +257,7 @@ const FIELD_CONFIG = [
                       error={props.errors?.landingPage?.[index]}
                     />
                   </FieldsetWithDelete>
-                </div>                
+                </div>
               </React.Fragment>
             ))}
             <AddButton
@@ -322,7 +322,6 @@ export const MinimizedDetailFields = ({ datasetTypes, provenanceStatements, freq
 
   useEffect(() => {
     if (focus && inputRefs.current[focus]) {
-      
       inputRefs.current[focus]?.focus();
       setFocus(null);
     }
