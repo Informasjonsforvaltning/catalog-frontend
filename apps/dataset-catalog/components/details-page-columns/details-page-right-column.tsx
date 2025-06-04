@@ -5,6 +5,7 @@ import { isEmpty } from 'lodash';
 import PublishSwitch from '../publish-switch';
 import { Dataset, PublicationStatus } from '@catalog-frontend/types';
 import styles from './details-columns.module.css';
+import { Link } from '@digdir/designsystemet-react';
 
 type Props = {
   dataset: Dataset;
@@ -32,7 +33,7 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
           dataset.registrationStatus === PublicationStatus.DRAFT
             ? `${localization.datasetForm.helptext.publishWarning} [skjemaet.](/catalogs/${dataset?.catalogId}/datasets/${dataset?.id}/edit)`
             : localization.datasetForm.helptext.publish
-        }        
+        }
         helpTextSeverity={dataset.registrationStatus === PublicationStatus.DRAFT ? 'warning' : 'info'}
       >
         <PublishSwitch
@@ -74,7 +75,7 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
                   <LinkIcon />
                 </div>
 
-                {dataset?.contactPoint[0].hasURL}
+                <Link href={dataset?.contactPoint[0].hasURL}>{dataset?.contactPoint[0].hasURL}</Link>
               </span>
             )}
           </div>

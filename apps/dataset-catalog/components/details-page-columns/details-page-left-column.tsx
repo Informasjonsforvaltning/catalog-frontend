@@ -4,7 +4,6 @@ import {
   getTranslateText,
   capitalizeFirstLetter,
   validUUID,
-  formatISO,
   formatDateToDDMMYYYY,
 } from '@catalog-frontend/utils';
 import { Heading, Link, Paragraph, Table, Tag } from '@digdir/designsystemet-react';
@@ -184,9 +183,14 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
 
       {dataset?.landingPage && !isEmpty(dataset?.landingPage[0]) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.landingPage}>
-          <div className={styles.infoCardItems}>
-            {dataset?.landingPage.map((item) => <Paragraph key={item}>{item}</Paragraph>)}
-          </div>
+          {dataset?.landingPage.map((page: string, index: number) => (
+            <Paragraph
+              size={'sm'}
+              key={`landing-page-${index}`}
+            >
+              <Link href={page}>{page}</Link>
+            </Paragraph>
+          ))}
         </InfoCard.Item>
       )}
 
