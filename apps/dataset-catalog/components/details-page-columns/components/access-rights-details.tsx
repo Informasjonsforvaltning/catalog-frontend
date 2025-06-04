@@ -62,7 +62,7 @@ export const AccessRightsDetails = ({ dataset, language }: Props) => {
             {dataset.accessRights?.uri &&
               accessRightsOptions.find((option) => option.value === dataset.accessRights?.uri)?.label}
           </Tag>
-          {dataset?.accessRights.uri !== accessRightPublic.uri && allLegalBases.length > 0 && (
+          {allLegalBases.length > 0 && (
             <Card>
               <h4>{localization.datasetForm.fieldLabel.legalBasis}</h4>
               <Table
