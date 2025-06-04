@@ -99,18 +99,7 @@ export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv,
                       const match = selectedDataServices?.find((service) => service.uri === uri);
                       return (
                         <Table.Row key={`service-${uri}-${i}`}>
-                          <Table.Cell>
-                            {
-                              <Link
-                                href={uri}
-                                target='_blank'
-                                rel='noopener noreferrer'
-                              >
-                                {match ? getTranslateText(match?.title) : uri}
-                              </Link>
-                            }
-                          </Table.Cell>
-
+                          <Table.Cell>{match ? getTranslateText(match?.title) : uri}</Table.Cell>
                           <Table.Cell>{getTranslateText(match?.organization?.prefLabel, language)}</Table.Cell>
                         </Table.Row>
                       );

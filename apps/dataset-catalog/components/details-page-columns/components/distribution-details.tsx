@@ -1,5 +1,5 @@
-import { Distribution, ReferenceDataCode } from '@catalog-frontend/types';
-import { localization, getTranslateText } from '@catalog-frontend/utils';
+import { Distribution, ReferenceDataCode, Search } from '@catalog-frontend/types';
+import { localization, getTranslateText, validUUID } from '@catalog-frontend/utils';
 import { Card, Heading, Link, Paragraph, Table, TableBody, Tag } from '@digdir/designsystemet-react';
 import styles from '../details-columns.module.css';
 import { useSearchFileTypeByUri, useSearchMediaTypeByUri } from '../../../hooks/useReferenceDataSearch';
@@ -25,6 +25,10 @@ export const DistributionDetailsCard = ({
   const { data: formats } = useSearchFileTypeByUri(distribution.format, referenceDataEnv);
   const { data: selectedDataServices } = useSearchDataServiceByUri(searchEnv, distribution?.accessServiceUris ?? []);
   const { data: selectedMediaTypes } = useSearchMediaTypeByUri(distribution?.mediaType ?? [], referenceDataEnv);
+
+  const getDataNorgeUri = (id: string | undefined, resourceType: Search.ResourceType) => {
+    return validUUID(id) ? `${referenceDataEnv}/${resourceType}/${id}` : '/not-found';
+  };
 
   return (
     <Card>
@@ -165,15 +169,23 @@ export const DistributionDetailsCard = ({
                         return (
                           <Table.Row key={`service-${uri}-${i}`}>
                             <Table.Cell>
-                              {
+                              {match ? (
+                                <Link
+                                  href={getDataNorgeUri(match.id, 'data-services')}
+                                  target='_blank'
+                                  rel='noopener noreferrer'
+                                >
+                                  {getTranslateText(match.title)}
+                                </Link>
+                              ) : (
                                 <Link
                                   href={uri}
                                   target='_blank'
                                   rel='noopener noreferrer'
                                 >
-                                  {match ? getTranslateText(match?.title) : uri}
+                                  {uri}
                                 </Link>
-                              }
+                              )}
                             </Table.Cell>
 
                             <Table.Cell>{getTranslateText(match?.organization?.prefLabel, language)}</Table.Cell>
