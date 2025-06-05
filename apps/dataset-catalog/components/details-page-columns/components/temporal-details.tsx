@@ -27,8 +27,8 @@ export const TemporalDetails = ({ temporal }: Props) => {
 
               return (
                 <Table.Row key={`tableRow-temporal-${index}`}>
-                  <Table.Cell>{startDate ? formatDate(startDate) : ''}</Table.Cell>
-                  <Table.Cell>{endDate ? formatDate(endDate) : ''}</Table.Cell>
+                  <Table.Cell>{startDate ? formatDate(startDate) : '-'}</Table.Cell>
+                  <Table.Cell>{endDate ? formatDate(endDate) : '-'}</Table.Cell>
                 </Table.Row>
               );
             })}
