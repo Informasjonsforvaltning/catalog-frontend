@@ -44,7 +44,11 @@ export const AccessRightFields = () => {
         fieldName={'legalBasisForRestriction'}
         hideHeadWhenEmpty={true}
         label={
-          <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.legalBasisForRestriction}>
+          <TitleWithHelpTextAndTag
+            helpText={localization.datasetForm.helptext.legalBasisForRestriction}
+            tagTitle={localization.tag.recommended}
+            tagColor={'info'}
+          >
             {localization.datasetForm.fieldLabel.legalBasisForRestriction}
           </TitleWithHelpTextAndTag>
         }
@@ -57,7 +61,11 @@ export const AccessRightFields = () => {
         fieldName={'legalBasisForProcessing'}
         hideHeadWhenEmpty={true}
         label={
-          <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.legalBasisForProcessing}>
+          <TitleWithHelpTextAndTag
+            helpText={localization.datasetForm.helptext.legalBasisForProcessing}
+            tagTitle={localization.tag.recommended}
+            tagColor={'info'}
+          >
             {localization.datasetForm.fieldLabel.legalBasisForProcessing}
           </TitleWithHelpTextAndTag>
         }
@@ -70,7 +78,11 @@ export const AccessRightFields = () => {
         fieldName={'legalBasisForAccess'}
         hideHeadWhenEmpty={true}
         label={
-          <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.legalBasisForAccess}>
+          <TitleWithHelpTextAndTag
+            helpText={localization.datasetForm.helptext.legalBasisForAccess}
+            tagTitle={localization.tag.recommended}
+            tagColor={'info'}
+          >
             {localization.datasetForm.fieldLabel.legalBasisForAccess}
           </TitleWithHelpTextAndTag>
         }
