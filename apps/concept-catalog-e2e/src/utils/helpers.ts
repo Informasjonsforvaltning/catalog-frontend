@@ -43,13 +43,62 @@ export const clearCombobox = async (page, label) => {
   await page.getByLabel(label).press('Tab');
 };
 
-  export const relationToSourceText = (relationToSource) => {
-    if (relationToSource === 'egendefinert') {
-      return 'Egendefinert';
-    } else if (relationToSource === 'basertPaaKilde') {
-      return 'Basert på kilde';
-    } if (relationToSource === 'sitatFraKilde') {
-      return 'Sitat fra kilde';
-    }
-    return null;
+export const relationToSourceText = (relationToSource) => {
+  if (relationToSource === 'egendefinert') {
+    return 'Egendefinert';
+  } else if (relationToSource === 'basertPaaKilde') {
+    return 'Basert på kilde';
+  } if (relationToSource === 'sitatFraKilde') {
+    return 'Sitat fra kilde';
   }
+  return null;
+}
+
+export const deleteAllConcepts = async (apiRequestContext) => {
+  const response = await apiRequestContext.get(`/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts`);
+  if (!response.ok()) {
+    throw new Error(`API call failed with status ${response.status()}`);
+  }
+
+  const concepts = await response.json();
+  for (const concept of concepts) {
+    await apiRequestContext.delete(`/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/${concept.id}`);
+  }
+};
+
+export const deleteConcept = async (apiRequestContext, conceptId) => {
+  await apiRequestContext.delete(`/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/${conceptId}`);  
+};
+
+export const createConcept = async (apiRequestContext, concept) => {
+  const response = await apiRequestContext.post(`/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts`, {
+    data: concept
+  });
+
+  if (!response.ok()) {
+    console.error(`API call failed with status ${response.status()}`, await response.json());
+    throw new Error(`API call failed with status ${response.status()}`);
+  }
+
+  return await response.json();
+};
+
+export const publishConcept = async (apiRequestContext, conceptId) => {
+  const response = await apiRequestContext.post(`/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/${conceptId}/publish`);
+
+  if (!response.ok()) {
+    console.error(`API call failed with status ${response.status()}`, await response.json());
+    throw new Error(`API call failed with status ${response.status()}`);
+  }
+
+  return await response.json();
+};
+
+export enum ConceptStatus {
+  DRAFT = 'http://publications.europa.eu/resource/authority/concept-status/DRAFT',
+  CANDIDATE = 'http://publications.europa.eu/resource/authority/concept-status/CANDIDATE',
+  WAITING = 'http://publications.europa.eu/resource/authority/concept-status/WAITING',
+  CURRENT = 'http://publications.europa.eu/resource/authority/concept-status/CURRENT',
+  RETIRED = 'http://publications.europa.eu/resource/authority/concept-status/RETIRED',
+  REJECTED = 'internal codes - REJECTED'
+}

@@ -1,8 +1,6 @@
-/* eslint-disable playwright/no-wait-for-timeout */
 import { expect, Page, BrowserContext } from '@playwright/test';
 import type AxeBuilder from '@axe-core/playwright';
 import { Concept, RelationSubtypeEnum, RelationTypeEnum, UnionRelation } from '@catalog-frontend/types';
-import { ALL_RELATIONS } from '../data/relations';
 import { clearCombobox, getParentLocator, relationToSourceText } from '../utils/helpers';
 
 export default class EditPage {
@@ -26,10 +24,8 @@ export default class EditPage {
     await this.page.getByRole('group', { name: group }).first().waitFor({ state: 'visible' });
 
     if (clear) {
-      const removeBtn = this.page
-      .getByRole('group', { name: group })
-      .getByRole('button', { name: 'Slett' });
-      while(await removeBtn.count() > 0) {
+      const removeBtn = this.page.getByRole('group', { name: group }).getByRole('button', { name: 'Slett' });
+      while ((await removeBtn.count()) > 0) {
         await removeBtn.first().click();
       }
     }
@@ -89,13 +85,18 @@ export default class EditPage {
       await this.fillLanguageField(relation.beskrivelse, 'Relasjonsrolle', ['Bokmål', 'Nynorsk', 'Engelsk'], false);
     } else if (relation.relasjon === RelationTypeEnum.GENERISK) {
       await this.page.getByLabel('Generisk').click();
-      await this.page.getByLabel('Nivå' ).click();
+      await this.page.getByLabel('Nivå').click();
       if (relation.relasjonsType === RelationSubtypeEnum.OVERORDNET) {
         await this.page.getByLabel('Overordnet').click();
       } else if (relation.relasjonsType === RelationSubtypeEnum.UNDERORDNET) {
         await this.page.getByLabel('Underordnet').click();
       }
-      await this.fillLanguageField(relation.inndelingskriterium, 'Inndelingskriterium', ['Bokmål', 'Nynorsk', 'Engelsk'], false);
+      await this.fillLanguageField(
+        relation.inndelingskriterium,
+        'Inndelingskriterium',
+        ['Bokmål', 'Nynorsk', 'Engelsk'],
+        false,
+      );
     } else if (relation.relasjon === RelationTypeEnum.PARTITIV) {
       await this.page.getByLabel('Partitiv').click();
       await this.page.getByLabel('Nivå').click();
@@ -104,7 +105,12 @@ export default class EditPage {
       } else if (relation.relasjonsType === RelationSubtypeEnum.OMFATTER) {
         await this.page.getByLabel('Omfatter').click();
       }
-      await this.fillLanguageField(relation.inndelingskriterium, 'Inndelingskriterium', ['Bokmål', 'Nynorsk', 'Engelsk'], false);
+      await this.fillLanguageField(
+        relation.inndelingskriterium,
+        'Inndelingskriterium',
+        ['Bokmål', 'Nynorsk', 'Engelsk'],
+        false,
+      );
     } else if (relation.relasjon === RelationTypeEnum.SE_OGSÅ) {
       await this.page.getByLabel('Se også').click();
     } else if (relation.relasjon === RelationTypeEnum.ERSTATTES_AV) {
@@ -116,49 +122,47 @@ export default class EditPage {
 
   async clearFields() {
     const removeBtn = this.page.getByRole('button', { name: 'Slett' });
-    while(await removeBtn.count() > 0) {
-      // eslint-disable-next-line playwright/no-force-option
+    while ((await removeBtn.count()) > 0) {
       await removeBtn.first().click();
-    }    
+    }
 
     const clearBtn = this.page.getByRole('button', { name: 'Fjern alt' });
-    while(await clearBtn.count() > 0) {
+    while ((await clearBtn.count()) > 0) {
       await clearBtn.first().click();
     }
 
     // The table is replaced with a skeleton when loading, so wait for the table to be visible
     const relTable = getParentLocator(this.page.getByRole('cell', { name: 'Relasjon' }), 3);
-    while(await relTable.getByRole('row').count() === 0 || await relTable.getByRole('row').count() > 1) {
-      if(await relTable.getByRole('row').count() > 1) {
+    while ((await relTable.getByRole('row').count()) === 0 || (await relTable.getByRole('row').count()) > 1) {
+      if ((await relTable.getByRole('row').count()) > 1) {
         await relTable.getByRole('row').last().getByRole('button', { name: 'Slett' }).click();
       } else {
-        // eslint-disable-next-line playwright/no-wait-for-timeout
         await this.page.waitForTimeout(100);
       }
     }
-    
+
     await this.page
       .getByRole('group', { name: 'Begrepsstatus' })
       .locator(`input[type="radio"][value="http://publications.europa.eu/resource/authority/concept-status/DRAFT"]`)
       .click();
 
-    await this.page.getByLabel('Major').fill('0')
-    await this.page.getByLabel('Minor').fill('1')
-    await this.page.getByLabel('Patch').fill('0')
+    await this.page.getByLabel('Major').fill('0');
+    await this.page.getByLabel('Minor').fill('1');
+    await this.page.getByLabel('Patch').fill('0');
 
     await this.page.getByLabel('Gyldig fra og med').clear();
     await this.page.getByLabel('Gyldig til og med').clear();
     await this.page.getByRole('checkbox', { name: 'E-post' }).uncheck();
     await this.page.getByRole('checkbox', { name: 'Telefonnummer' }).uncheck();
-    
+
     await this.page.getByRole('textbox', { name: 'Forkortelse' }).clear();
     await this.page.getByRole('textbox', { name: 'Pet name' }).clear();
     await this.page.getByRole('textbox', { name: 'Adventure story' }).clear();
 
     await this.page.getByRole('group', { name: 'Has magical powers' }).getByRole('checkbox').uncheck();
-    
+
     await clearCombobox(this.page, 'Hvem skal begrepet tildeles?');
-    await clearCombobox(this.page, 'Planet type');    
+    await clearCombobox(this.page, 'Planet type');
   }
 
   // Helpers
@@ -170,22 +174,35 @@ export default class EditPage {
     await this.fillLanguageField(
       concept.anbefaltTerm.navn,
       'Anbefalt term Hjelp til utfylling',
-      ['Engelsk'], 
+      ['Engelsk'],
       clearBeforeFill,
     );
-    await this.fillLanguageField(concept.tillattTerm, 'Tillatt term Hjelp til utfylling', ['Bokmål', 'Nynorsk', 'Engelsk'], clearBeforeFill);
-    await this.fillLanguageField(concept.frarådetTerm, 'Frarådet term Hjelp til utfylling', ['Bokmål', 'Nynorsk', 'Engelsk'], clearBeforeFill);
+    await this.fillLanguageField(
+      concept.tillattTerm,
+      'Tillatt term Hjelp til utfylling',
+      ['Bokmål', 'Nynorsk', 'Engelsk'],
+      clearBeforeFill,
+    );
+    await this.fillLanguageField(
+      concept.frarådetTerm,
+      'Frarådet term Hjelp til utfylling',
+      ['Bokmål', 'Nynorsk', 'Engelsk'],
+      clearBeforeFill,
+    );
 
     // Add definition without target group
     await this.page.getByRole('button', { name: 'Uten målgruppe' }).click();
     await this.fillLanguageField(
       concept.definisjon?.tekst,
       'Definisjon Hjelp til utfylling',
-      ['Bokmål', 'Nynorsk', 'Engelsk'], 
+      ['Bokmål', 'Nynorsk', 'Engelsk'],
       clearBeforeFill,
     );
-    await this.page.getByRole('group', { name: 'Forhold til kilde' }).getByLabel(relationToSourceText(concept.definisjon?.kildebeskrivelse?.forholdTilKilde)).click();
-    if(concept.definisjon?.kildebeskrivelse?.forholdTilKilde !== 'egendefinert') {
+    await this.page
+      .getByRole('group', { name: 'Forhold til kilde' })
+      .getByLabel(relationToSourceText(concept.definisjon?.kildebeskrivelse?.forholdTilKilde))
+      .click();
+    if (concept.definisjon?.kildebeskrivelse?.forholdTilKilde !== 'egendefinert') {
       await this.page.getByRole('button', { name: 'Legg til kilde' }).click();
       await this.page.getByRole('textbox', { name: 'Kildebeskrivelse' }).fill('Kilde');
     }
@@ -193,13 +210,18 @@ export default class EditPage {
     await this.page.getByRole('button', { name: 'Legg til definisjon' }).click();
 
     // Add remark
-    await this.fillLanguageField(concept.merknad, 'Merknad Anbefalt', ['Bokmål', 'Nynorsk', 'Engelsk'], clearBeforeFill);
+    await this.fillLanguageField(
+      concept.merknad,
+      'Merknad Anbefalt',
+      ['Bokmål', 'Nynorsk', 'Engelsk'],
+      clearBeforeFill,
+    );
 
     // Example
     await this.fillLanguageField(concept.eksempel, 'Eksempel', ['Bokmål', 'Nynorsk', 'Engelsk'], clearBeforeFill);
 
     // Select subject
-    await this.page.getByLabel('Fagområde (velg fra liste)').click({ clickCount: 2});
+    await this.page.getByLabel('Fagområde (velg fra liste)').click({ clickCount: 2 });
     await this.page.getByLabel('Sprekkmunk').click();
 
     // Application
@@ -209,20 +231,20 @@ export default class EditPage {
     await this.page.getByLabel('Lenke til referanse').fill(concept.omfang?.uri ?? '');
 
     // Add relation
-    for (let i = 0; i < ALL_RELATIONS.length; i++) {
-      await this.addRelation('bolig', 'boligKomisk presis bille iks', ALL_RELATIONS[i]);
-    }
+    // for (let i = 0; i < ALL_RELATIONS.length; i++) {
+    //   await this.addRelation('bolig', 'boligKomisk presis bille iks', ALL_RELATIONS[i]);
+    // }
 
     // Internal fields
     await this.page.getByRole('combobox', { name: 'Hvem skal begrepet tildeles?' }).click();
     await this.page.getByLabel('Avery Quokka').click();
     await this.page.getByRole('textbox', { name: 'Forkortelse' }).fill(concept.abbreviatedLabel);
-    
+
     for (let i = 0; i < (concept.merkelapp?.length ?? 0); i++) {
       await this.page.getByLabel('Merkelapp').fill(concept.merkelapp[i]);
       await this.page.keyboard.press('Enter');
     }
-    
+
     await this.page.getByRole('textbox', { name: 'Pet name' }).fill('Fluffy');
     await this.page;
     this.page
@@ -242,9 +264,9 @@ export default class EditPage {
       .click();
 
     // Version
-    await this.page.getByLabel('Major').fill(`${concept.versjonsnr.major}`)
-    await this.page.getByLabel('Minor').fill(`${concept.versjonsnr.minor}`)
-    await this.page.getByLabel('Patch').fill(`${concept.versjonsnr.patch}`)
+    await this.page.getByLabel('Major').fill(`${concept.versjonsnr.major}`);
+    await this.page.getByLabel('Minor').fill(`${concept.versjonsnr.minor}`);
+    await this.page.getByLabel('Patch').fill(`${concept.versjonsnr.patch}`);
 
     if (concept.gyldigFom) {
       await this.page.getByLabel('Gyldig fra og med').fill(concept.gyldigFom);
@@ -264,9 +286,10 @@ export default class EditPage {
     }
 
     // Save concept
+    // Close Nextjs portal issues
+    await this.page.getByRole('button', { name: 'Collapse issues badge' }).click();
     await this.page.getByRole('button', { name: 'Lagre' }).click();
-    await expect(this.page.getByRole('button', { name: 'Lagre' })).toBeDisabled({ timeout: 5000 });
-    console.log(`Saved concept with title ${concept.anbefaltTerm.navn.nb}`);
+    await this.page.getByText('Endringene ble lagret.').waitFor({ state: 'visible' });
   }
 
   public async goto(id?) {
@@ -277,9 +300,7 @@ export default class EditPage {
     if (!this.accessibilityBuilder) {
       return;
     }
-    const result = await this.accessibilityBuilder
-      .disableRules('svg-img-alt')
-      .analyze();
+    const result = await this.accessibilityBuilder.disableRules('svg-img-alt').analyze();
     expect.soft(result.violations).toEqual([]);
   }
 

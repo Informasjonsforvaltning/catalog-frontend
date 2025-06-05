@@ -63,6 +63,7 @@ const DetailsPageLayout = ({
                   onChange={(event) => handleLanguageChange?.(event.target.value)}
                   value={language}
                   size='small'
+                  aria-label='Velg språk'
                 >
                   {languageOptions.map((item) => (
                     <option
