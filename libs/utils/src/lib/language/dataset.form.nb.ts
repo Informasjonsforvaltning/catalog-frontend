@@ -9,11 +9,12 @@ export const datasetFormNb = {
       - **Ikke-allmenn tilgang**: Begrenset til en spesifikk gruppe eller formål.`,
     legalBasis:
       'Relevante juridiske referanser for datasettet, som lover, forskrifter, eller andre rettslige rammer som begrenser eller gir grunnlag for behandling og bruk av datasettet. For eksempel kan dette være en lenke til en lovtekst.',
-    legalBasisType: `Velg hvilken type juridisk grunnlag som gjelder for datasettet:
-
-- **Skjermingshjemmel**: Referanse til lov eller forskrift som begrenser deling av datasettet (f.eks. offentlighetsloven, sikkerhetsloven).
-- **Behandlingsgrunnlag**: Lov, forskrift, samtykke eller nødvendighetsvurdering som grunnlag for behandling av personopplysninger.
-- **Utleveringshjemmel**: Henvisning til lov eller forskrift som gir offentlig virksomhet rett eller plikt til å utlevere opplysninger til private eller juridiske personer.`,
+    legalBasisForRestriction:
+      'Referanse til lov eller forskrift som begrenser deling av datasettet (f.eks. offentlighetsloven, sikkerhetsloven).',
+    legalBasisForProcessing:
+      'Lov, forskrift, samtykke eller nødvendighetsvurdering som grunnlag for behandling av personopplysninger.',
+    legalBasisForAccess:
+      'Henvisning til lov eller forskrift som gir offentlig virksomhet rett eller plikt til å utlevere opplysninger til private eller juridiske personer.',
     issued: 'Dato for når innholdet i datasettet ble eller blir tilgjengeliggjort.',
     euDataTheme:
       'Velg ett eller flere hovedtema som beskriver innholdet i datasettet. Listen er fra EUs kontrollerte vokabular.',

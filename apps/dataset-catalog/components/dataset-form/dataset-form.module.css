@@ -41,6 +41,7 @@
 .table th,
 .table td {
   word-wrap: break-word;
+  padding-bottom: 1rem;
 }
 
 .comboboxOption {
