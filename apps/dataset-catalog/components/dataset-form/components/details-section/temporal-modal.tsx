@@ -2,7 +2,7 @@ import { DateRange } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, EditButton, FormHeading } from '@catalog-frontend/ui';
 import { formatDateToDDMMYYYY, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button, Modal, Table, Textfield } from '@digdir/designsystemet-react';
-import { FastField, Formik, useFormikContext } from 'formik';
+import { FastField, FieldArray, Formik } from 'formik';
 import styles from '../../dataset-form.module.css';
 import { ReactNode, useRef, useState } from 'react';
 import { isEmpty } from 'lodash';
@@ -27,57 +27,55 @@ const hasNoFieldValues = (values: DateRange) => {
 };
 
 export const TemporalModal = ({ values, label }: Props) => {
-  const { setFieldValue } = useFormikContext();
-
   return (
     <div className={styles.fieldContainer}>
       {typeof label === 'string' ? <FormHeading>{label}</FormHeading> : label}
-      {values && values?.length > 0 && !hasNoFieldValues(values[0]) && (
-        <Table
-          size='sm'
-          className={styles.table}
-        >
-          <Table.Head>
-            <Table.Row>
-              <Table.HeaderCell>{localization.from}</Table.HeaderCell>
-              <Table.HeaderCell>{localization.to}</Table.HeaderCell>
-              <Table.HeaderCell aria-label='Actions' />
-            </Table.Row>
-          </Table.Head>
-          <Table.Body>
-            {values?.map((item, index) => (
-              <Table.Row key={`temporal-tableRow-${index}`}>
-                <Table.Cell>{formatDateToDDMMYYYY(item?.startDate)}</Table.Cell>
-                <Table.Cell>{formatDateToDDMMYYYY(item?.endDate)}</Table.Cell>
-                <Table.Cell>
-                  <span className={styles.set}>
-                    <FieldModal
-                      template={item}
-                      type={'edit'}
-                      onSuccess={(updatedItem: DateRange) => setFieldValue(`temporal[${index}]`, updatedItem)}
-                    />
-                    <DeleteButton onClick={() => setFieldValue(`temporal[${index}]`, undefined)} />
-                  </span>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
-      )}
-      <div>
-        <FieldModal
-          template={{ startDate: '', endDate: '' }}
-          type={'new'}
-          onSuccess={(formValues) =>
-            setFieldValue(
-              values && values?.length > 0 && !hasNoFieldValues(values[0])
-                ? `temporal[${values?.length}]`
-                : `temporal[0]`,
-              formValues,
-            )
-          }
-        />
-      </div>
+      <FieldArray
+        name={'temporal'}
+        render={(arrayHelpers) => (
+          <>
+            {values && values?.length > 0 && (
+              <Table
+                size='sm'
+                className={styles.table}
+              >
+                <Table.Head>
+                  <Table.Row>
+                    <Table.HeaderCell>{localization.from}</Table.HeaderCell>
+                    <Table.HeaderCell>{localization.to}</Table.HeaderCell>
+                    <Table.HeaderCell aria-label='Actions' />
+                  </Table.Row>
+                </Table.Head>
+                <Table.Body>
+                  {values?.map((item, index) => (
+                    <Table.Row key={`temporal-tableRow-${index}`}>
+                      <Table.Cell>{item?.startDate ? formatDateToDDMMYYYY(item.startDate) : '-'}</Table.Cell>
+                      <Table.Cell>{item?.endDate ? formatDateToDDMMYYYY(item.endDate) : '-'}</Table.Cell>
+                      <Table.Cell>
+                        <span className={styles.set}>
+                          <FieldModal
+                            template={item}
+                            type={'edit'}
+                            onSuccess={(updatedItem: DateRange) => arrayHelpers.replace(index, updatedItem)}
+                          />
+                          <DeleteButton onClick={() => arrayHelpers.remove(index)} />
+                        </span>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+            )}
+            <div>
+              <FieldModal
+                template={{ startDate: '', endDate: '' }}
+                type={'new'}
+                onSuccess={(formValues) => arrayHelpers.push(formValues)}
+              />
+            </div>
+          </>
+        )}
+      />
     </div>
   );
 };
