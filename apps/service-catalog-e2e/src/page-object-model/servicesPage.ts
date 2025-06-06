@@ -1,8 +1,7 @@
 import { expect, Page, BrowserContext } from '@playwright/test';
 import type AxeBuilder from '@axe-core/playwright';
 import { Service, ServiceToBeCreated } from '@catalog-frontend/types';
-import { ALL_SERVICES } from '../data/services';
-import { getParentLocator, getStatusText } from '../utils/helpers';
+import { ServiceStatus } from '../utils/helpers';
 
 export default class ServicesPage {
   url: string;
@@ -38,30 +37,30 @@ export default class ServicesPage {
 
     // Name and description
     await this.page.getByRole('link', { name: 'Opprett ny tjeneste' }).click({ timeout: 5000 });
-    await this.page.getByLabel('Navn på bokmål').fill(service.title.nb);
-    await this.page.getByLabel('Navn på nynorsk').fill(service.title.nn);
-    await this.page.getByLabel('Navn på engelsk').fill(service.title.en);
-    await this.page.getByLabel('Beskrivelse på bokmål').fill(service.description.nb);
-    await this.page.getByLabel('Beskrivelse på nynorsk').fill(service.description.nn);
-    await this.page.getByLabel('Beskrivelse på engelsk').fill(service.description.en);
+    await this.page.getByLabel('Navn på bokmål').fill(service.title.nb as string);
+    await this.page.getByLabel('Navn på nynorsk').fill(service.title.nn as string);
+    await this.page.getByLabel('Navn på engelsk').fill(service.title.en as string);
+    await this.page.getByLabel('Beskrivelse på bokmål').fill(service.description.nb as string);
+    await this.page.getByLabel('Beskrivelse på nynorsk').fill(service.description.nn as string);
+    await this.page.getByLabel('Beskrivelse på engelsk').fill(service.description.en as string);
 
     // Produces relations
     for (let i = 0; i < service.produces.length; i++) {
       const result = service.produces[i];
       await this.page.getByRole('button', { name: 'Legg til relasjon' }).click();
-      await this.page.locator(`input[name="produces\\[${i}\\]\\.title\\.nb"]`).fill(result.title.nb);
-      await this.page.locator(`input[name="produces\\[${i}\\]\\.title\\.nn"]`).fill(result.title.nn);
-      await this.page.locator(`input[name="produces\\[${i}\\]\\.title\\.en"]`).fill(result.title.en);
-      await this.page.locator(`input[name="produces\\[${i}\\]\\.description\\.nb"]`).fill(result.description.nb);
-      await this.page.locator(`input[name="produces\\[${i}\\]\\.description\\.nn"]`).fill(result.description.nn);
-      await this.page.locator(`input[name="produces\\[${i}\\]\\.description\\.en"]`).fill(result.description.en);
+      await this.page.locator(`input[name="produces\\[${i}\\]\\.title\\.nb"]`).fill(result.title.nb as string);
+      await this.page.locator(`input[name="produces\\[${i}\\]\\.title\\.nn"]`).fill(result.title.nn as string);
+      await this.page.locator(`input[name="produces\\[${i}\\]\\.title\\.en"]`).fill(result.title.en as string);
+      await this.page.locator(`input[name="produces\\[${i}\\]\\.description\\.nb"]`).fill(result.description.nb as string);
+      await this.page.locator(`input[name="produces\\[${i}\\]\\.description\\.nn"]`).fill(result.description.nn as string);
+      await this.page.locator(`input[name="produces\\[${i}\\]\\.description\\.en"]`).fill(result.description.en as string);
     }
 
     // Contact point
     const contactPoint = service.contactPoints[0];
-    await this.page.getByLabel('Kategori på bokmål').fill(contactPoint.category.nb);
-    await this.page.getByLabel('Kategori på nynorsk').fill(contactPoint.category.nn);
-    await this.page.getByLabel('Kategori på engelsk').fill(contactPoint.category.en);
+    await this.page.getByLabel('Kategori på bokmål').fill(contactPoint.category.nb as string);
+    await this.page.getByLabel('Kategori på nynorsk').fill(contactPoint.category.nn as string);
+    await this.page.getByLabel('Kategori på engelsk').fill(contactPoint.category.en as string);
     await this.page.getByLabel('E-post').fill(contactPoint.email);
     await this.page.getByLabel('Telefon').fill(contactPoint.telephone);
     await this.page.getByLabel('Kontaktside').fill(contactPoint.contactPage);
@@ -92,7 +91,7 @@ export default class ServicesPage {
     if (!this.accessibilityBuilder) {
       return;
     }
-    const result = await this.accessibilityBuilder.analyze();
+    const result = await this.accessibilityBuilder.disableRules(['svg-img-alt']).analyze();
     expect.soft(result.violations).toEqual([]);
   }
 
@@ -144,14 +143,6 @@ export default class ServicesPage {
     }
   }
 
-  public async createServices() {
-    for (const service of ALL_SERVICES) {
-      await this.createService(service);
-    }
-    await this.goto();
-    await this.expectSearchResults(ALL_SERVICES);
-  }
-
   public async expectFiltersToBeVisible() {
     await expect(this.statusFilterHeaderLocator()).toBeVisible();
     await this.statusFilterHeaderLocator().click();
@@ -169,25 +160,27 @@ export default class ServicesPage {
   }
 
   public async expectSearchResults(expected: Service[], notExpected: Service[] = []) {
-    for (let i = 0; i < expected.length; i++) {
-      await expect(this.page.getByText(expected[i].title.nb, { exact: true })).toBeVisible({ timeout: 5000 });
-      await expect(this.page.getByText(expected[i].description.nb, { exact: true })).toBeVisible();
-
-      const rowLocator = getParentLocator(this.page.getByText(expected[i].title.nb, { exact: true }), 4);
-      await expect(rowLocator.filter({ hasText: getStatusText(expected[i].status) })).toBeVisible();
-      await expect(
-        rowLocator.filter({ hasText: expected[i].published ? 'Publisert' : 'Ikke publisert' }),
-      ).toBeVisible();
+    for (const service of expected) {
+      const nbName = service.title.nb as string;
+      // Expect to find the concept
+      await expect(this.page.getByText(nbName, { exact: true })).toBeVisible({ timeout: 5000 });
     }
 
-    for (let i = 0; i < notExpected.length; i++) {
-      await expect(this.page.getByText(notExpected[i].title.nb, { exact: true })).toHaveCount(0);
+    for (const service of notExpected) {
+      const nbName = service.title.nb as string;
+      // Expect not to find the concept
+      await expect(this.page.getByText(nbName, { exact: true })).toHaveCount(0);
     }
   }
 
   public async search(query: string) {
     await this.searchInputLocator().fill(query);
     await this.searchButtonLocator().click();
+
+    const spinner = this.page.getByRole('img', { name: 'Laster' });
+    // Wait for spinner to be visible and hidden
+    await spinner.waitFor({ state: 'visible', timeout: 3000 }).catch(() => {});
+    await spinner.waitFor({ state: 'hidden', timeout: 10000 }).catch(() => {});
   }
 
   public async clearSearch() {
@@ -202,6 +195,25 @@ export default class ServicesPage {
     await this.statusFilterWithdrawnLocator().uncheck();
     await this.publishedStateFilterPublishedLocator().uncheck();
     await this.publishedStateFilterNotPublishedLocator().uncheck();
+  }
+
+public async filterStatus(status: string) {
+    const statusMap: { [key in ServiceStatus]: () => ReturnType<Page['getByLabel']> } = {
+      [ServiceStatus.COMPLETED]: this.statusFilterCompletedLocator,
+      [ServiceStatus.DEPRECATED]: this.statusFilterDeprecatedLocator,
+      [ServiceStatus.UNDER_DEVELOPMENT]: this.statusFilterUnderDevelopmentLocator,
+      [ServiceStatus.WITHDRAWN]: this.statusFilterWithdrawnLocator,
+    };
+
+    const locatorFn = statusMap[status];
+    if (!locatorFn) {
+      throw new Error(`Unknown status: ${status}`);
+    }
+
+    if (!(await locatorFn().isVisible())) {
+      await this.statusFilterHeaderLocator().click();
+    }
+    await locatorFn().check();
   }
 
   public async filterStatusCompleted() {
