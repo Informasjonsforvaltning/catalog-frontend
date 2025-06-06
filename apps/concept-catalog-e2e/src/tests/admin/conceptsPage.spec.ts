@@ -1,11 +1,6 @@
 import { Concept } from '@catalog-frontend/types';
 import { runTestAsAdmin } from '../../fixtures/basePage';
-import { adminAuthFile, createConcept, ConceptStatus } from '../../utils/helpers';
-
-// Helper to generate a unique, random string
-function uniqueString(prefix = 'concept') {
-  return `${prefix}_${Math.random().toString(36).substring(2, 10)}_${Date.now()}`;
-}
+import { adminAuthFile, createConcept, ConceptStatus, uniqueString } from '../../utils/helpers';
 
 runTestAsAdmin('test if the search page renders correctly', async ({ conceptsPage, playwright }) => {
   await conceptsPage.goto();
@@ -81,19 +76,13 @@ runTestAsAdmin('test status filter with random concepts', async ({ conceptsPage,
   await conceptsPage.goto();
 
   // Filter by status of the first concept
-  await conceptsPage.filterStatus(randomConcepts[0].statusURI);
-  await conceptsPage.search(randomConcepts[0].anbefaltTerm.navn.nb);
-  await conceptsPage.expectSearchResults([randomConcepts[0]], [randomConcepts[1], randomConcepts[2]]);
-
-  await conceptsPage.clearFilters();
-  await conceptsPage.filterStatus(randomConcepts[1].statusURI);
-  await conceptsPage.search(randomConcepts[1].anbefaltTerm.navn.nb);
-  await conceptsPage.expectSearchResults([randomConcepts[1]], [randomConcepts[0], randomConcepts[2]]);
-
-  await conceptsPage.clearFilters();
-  await conceptsPage.filterStatus(randomConcepts[2].statusURI);
-  await conceptsPage.search(randomConcepts[2].anbefaltTerm.navn.nb);
-  await conceptsPage.expectSearchResults([randomConcepts[2]], [randomConcepts[0], randomConcepts[1]]);
+  for (let i = 0; i < randomConcepts.length; i++) {
+    await conceptsPage.clearFilters();
+    await conceptsPage.filterStatus(randomConcepts[i].statusURI);
+    await conceptsPage.search(randomConcepts[i].anbefaltTerm.navn.nb);
+    const otherConcepts = randomConcepts.filter((_, idx) => idx !== i);
+    await conceptsPage.expectSearchResults([randomConcepts[i]], otherConcepts);
+  }
 
   await conceptsPage.clearFilters();
   for (const concept of randomConcepts) {

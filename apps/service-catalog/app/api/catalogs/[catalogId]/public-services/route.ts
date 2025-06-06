@@ -1,4 +1,4 @@
-import { createService, getAllServices } from '@catalog-frontend/data-access';
+import { createPublicService, getAllPublicServices } from '@catalog-frontend/data-access';
 import { Service } from '@catalog-frontend/types';
 import { withValidSessionForApi } from '@catalog-frontend/utils';
 import { NextRequest } from 'next/server';
@@ -9,7 +9,7 @@ export const GET = async (req: NextRequest, props: { params: Promise<{ catalogId
     const { catalogId } = params;
 
     try {
-      const response = await getAllServices(catalogId, session?.accessToken);
+      const response = await getAllPublicServices(catalogId, session?.accessToken);
       if (response.status !== 200) {
         throw new Error();
       }
@@ -30,7 +30,7 @@ export const POST = async (req: NextRequest, props: { params: Promise<{ catalogI
     
 
     try {
-      const response = await createService(service, catalogId, session?.accessToken);
+      const response = await createPublicService(service, catalogId, session?.accessToken);
       if (response.status !== 201) {
         console.log('Failed to create service with status ' + response.status, await response.json());
         throw new Error('Failed to create service with status ' + response.status);

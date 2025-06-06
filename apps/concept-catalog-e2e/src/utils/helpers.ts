@@ -1,9 +1,15 @@
 import AxeBuilder from '@axe-core/playwright';
 import { Locator, Page, expect } from '@playwright/test';
+import * as crypto from 'crypto';
 
 export const adminAuthFile = `${__dirname}/../../.playwright/auth/admin.json`;
 export const writeAuthFile = `${__dirname}/../../.playwright/auth/write.json`;
 export const readAuthFile = `${__dirname}/../../.playwright/auth/read.json`;
+
+// Helper to generate a unique, random string
+export function uniqueString(prefix = 'concept') {
+  return `${prefix}_${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 10)}_${Date.now()}`;
+}
 
 export const generateAccessibilityBuilder = async (page: Page) =>
   new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice']);

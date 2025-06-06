@@ -1,4 +1,4 @@
-import { deleteService } from '@catalog-frontend/data-access';
+import { deletePublicService } from '@catalog-frontend/data-access';
 import { withValidSessionForApi } from '@catalog-frontend/utils';
 import { NextRequest } from 'next/server';
 
@@ -7,7 +7,7 @@ export const DELETE = async (req: NextRequest, props: { params: any; }) => {
   return withValidSessionForApi(async (session) => {
     const { catalogId, serviceId } = params;
     try {
-      const response = await deleteService(catalogId, serviceId, session?.accessToken);
+      const response = await deletePublicService(catalogId, serviceId, session?.accessToken);
       if (response.status !== 204) {
         throw new Error();
       }

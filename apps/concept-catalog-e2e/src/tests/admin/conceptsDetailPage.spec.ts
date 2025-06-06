@@ -1,3 +1,4 @@
+import * as crypto from 'crypto';
 import { Concept, RelationSubtypeEnum, RelationTypeEnum } from '@catalog-frontend/types';
 import { runTestAsAdmin } from '../../fixtures/basePage';
 import { adminAuthFile, createConcept, publishConcept } from '../../utils/helpers';
@@ -11,9 +12,9 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
     id: null,
     anbefaltTerm: {
       navn: {
-        nb: `InternRel ${Math.random().toString(36).substring(2, 8)}`,
-        nn: `InternRel ${Math.random().toString(36).substring(2, 8)}`,
-        en: `InternalRel ${Math.random().toString(36).substring(2, 8)}`,
+        nb: `InternRel ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        nn: `InternRel ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        en: `InternalRel ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
       },
     },
     ansvarligVirksomhet: {
@@ -21,9 +22,9 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
     },
     definisjon: {
       tekst: {
-        nb: `Definisjon nb ${Math.random().toString(36).substring(2, 8)}`,
-        nn: `Definisjon nn ${Math.random().toString(36).substring(2, 8)}`,
-        en: `Definition en ${Math.random().toString(36).substring(2, 8)}`,
+        nb: `Definisjon nb ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        nn: `Definisjon nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        en: `Definition en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
       },
       kildebeskrivelse: {
         forholdTilKilde: 'egendefinert',
@@ -31,10 +32,10 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
       },
     },
     kontaktpunkt: {
-      harEpost: `user${Math.floor(Math.random() * 10000)}@example.com`,
-      harTelefon: `${Math.floor(100000000 + Math.random() * 900000000)}`,
+      harEpost: `user${Math.floor(crypto.randomInt(100000000, 1000000000) * 10000)}@example.com`,
+      harTelefon: `${Math.floor(100000000 + crypto.randomInt(100000000, 1000000000) * 900000000)}`,
     },
-    versjonsnr: { major: Math.floor(Math.random() * 10), minor: Math.floor(Math.random() * 10), patch: Math.floor(Math.random() * 10) },
+    versjonsnr: { major: Math.floor(crypto.randomInt(100000000, 1000000000) * 10), minor: Math.floor(crypto.randomInt(100000000, 1000000000) * 10), patch: Math.floor(crypto.randomInt(100000000, 1000000000) * 10) },
     merknad: {},
     merkelapp: [],
     eksempel: null,
@@ -54,16 +55,16 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
     assignedUser: null,
     begrepsRelasjon: [],
     interneFelt: null,
-    abbreviatedLabel: `LBL${Math.random().toString(36).substring(2, 6).toUpperCase()}`,
+    abbreviatedLabel: `LBL${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 6).toUpperCase()}`,
   };
 
   const relatedPublished: Concept = {
     id: null,
     anbefaltTerm: {
       navn: {
-        nb: `PublisertRel ${Math.random().toString(36).substring(2, 8)}`,
-        nn: `PublisertRel ${Math.random().toString(36).substring(2, 8)}`,
-        en: `PublishedRel ${Math.random().toString(36).substring(2, 8)}`,
+        nb: `PublisertRel ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        nn: `PublisertRel ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        en: `PublishedRel ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
       },
     },
     ansvarligVirksomhet: {
@@ -71,9 +72,9 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
     },
     definisjon: {
       tekst: {
-        nb: `Definisjon nb ${Math.random().toString(36).substring(2, 8)}`,
-        nn: `Definisjon nn ${Math.random().toString(36).substring(2, 8)}`,
-        en: `Definition en ${Math.random().toString(36).substring(2, 8)}`,
+        nb: `Definisjon nb ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        nn: `Definisjon nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        en: `Definition en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
       },
       kildebeskrivelse: {
         forholdTilKilde: 'egendefinert',
@@ -81,10 +82,10 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
       },
     },
     kontaktpunkt: {
-      harEpost: `user${Math.floor(Math.random() * 10000)}@example.com`,
-      harTelefon: `${Math.floor(100000000 + Math.random() * 900000000)}`,
+      harEpost: `user${Math.floor(crypto.randomInt(100000000, 1000000000) * 10000)}@example.com`,
+      harTelefon: `${Math.floor(100000000 + crypto.randomInt(100000000, 1000000000) * 900000000)}`,
     },
-    versjonsnr: { major: Math.floor(Math.random() * 10), minor: Math.floor(Math.random() * 10), patch: Math.floor(Math.random() * 10) },
+    versjonsnr: { major: Math.floor(crypto.randomInt(100000000, 1000000000) * 10), minor: Math.floor(crypto.randomInt(100000000, 1000000000) * 10), patch: Math.floor(crypto.randomInt(100000000, 1000000000) * 10) },
     merknad: {},
     merkelapp: [],
     eksempel: null,
@@ -104,7 +105,7 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
     assignedUser: null,
     begrepsRelasjon: [],
     interneFelt: null,
-    abbreviatedLabel: `LBL${Math.random().toString(36).substring(2, 6).toUpperCase()}`,
+    abbreviatedLabel: `LBL${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 6).toUpperCase()}`,
   };
 
   const relatedInternalId = await createConcept(apiRequestContext, relatedInternal);
@@ -115,9 +116,9 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
     id: null,
     anbefaltTerm: {
       navn: {
-        nb: `Begrep ${Math.random().toString(36).substring(2, 8)}`,
-        nn: `Omgrep ${Math.random().toString(36).substring(2, 8)}`,
-        en: `Concept ${Math.random().toString(36).substring(2, 8)}`,
+        nb: `Begrep ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        nn: `Omgrep ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        en: `Concept ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
       },
     },
     ansvarligVirksomhet: {
@@ -125,9 +126,9 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
     },
     definisjon: {
       tekst: {
-        nb: `Definisjon nb ${Math.random().toString(36).substring(2, 8)}`,
-        nn: `Definisjon nn ${Math.random().toString(36).substring(2, 8)}`,
-        en: `Definition en ${Math.random().toString(36).substring(2, 8)}`,
+        nb: `Definisjon nb ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        nn: `Definisjon nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        en: `Definition en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
       },
       kildebeskrivelse: {
         forholdTilKilde: 'egendefinert',
@@ -135,10 +136,10 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
       },
     },
     kontaktpunkt: {
-      harEpost: `user${Math.floor(Math.random() * 10000)}@example.com`,
-      harTelefon: `${Math.floor(100000000 + Math.random() * 900000000)}`,
+      harEpost: `user${Math.floor(crypto.randomInt(100000000, 1000000000) * 10000)}@example.com`,
+      harTelefon: `${Math.floor(100000000 + crypto.randomInt(100000000, 1000000000) * 900000000)}`,
     },
-    versjonsnr: { major: Math.floor(Math.random() * 10), minor: Math.floor(Math.random() * 10), patch: Math.floor(Math.random() * 10) },
+    versjonsnr: { major: Math.floor(crypto.randomInt(100000000, 1000000000) * 10), minor: Math.floor(crypto.randomInt(100000000, 1000000000) * 10), patch: Math.floor(crypto.randomInt(100000000, 1000000000) * 10) },
     merknad: {},
     merkelapp: [],
     eksempel: null,
@@ -154,9 +155,9 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
       relasjon: RelationTypeEnum.ASSOSIATIV,
       relasjonsType: RelationSubtypeEnum.OVERORDNET,
       beskrivelse: { 
-        nb: `Test beskrivelse nb ${Math.random().toString(36).substring(2, 8)}`,
-        nn: `Test beskrivelse nn ${Math.random().toString(36).substring(2, 8)}`,
-        en: `Test description en ${Math.random().toString(36).substring(2, 8)}`
+        nb: `Test beskrivelse nb ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        nn: `Test beskrivelse nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        en: `Test description en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`
       },
       relatertBegrep: relatedInternalId
     }],
@@ -169,19 +170,19 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
       relasjon: RelationTypeEnum.PARTITIV,
       relasjonsType: RelationSubtypeEnum.OMFATTER,
       beskrivelse: { 
-        nb: `Test beskrivelse nb ${Math.random().toString(36).substring(2, 8)}`,
-        nn: `Test beskrivelse nn ${Math.random().toString(36).substring(2, 8)}`,
-        en: `Test description en ${Math.random().toString(36).substring(2, 8)}`
+        nb: `Test beskrivelse nb ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        nn: `Test beskrivelse nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        en: `Test description en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`
       },
       inndelingskriterium: { 
-        nb: `Inndelingskriterium nb ${Math.random().toString(36).substring(2, 8)}`,
-        nn: `Inndelingskriterium nn ${Math.random().toString(36).substring(2, 8)}`,
-        en: `Division criterion en ${Math.random().toString(36).substring(2, 8)}`
+        nb: `Inndelingskriterium nb ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        nn: `Inndelingskriterium nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        en: `Division criterion en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`
       },
       relatertBegrep: `https://concept-catalog.staging.fellesdatakatalog.digdir.no/collections/${process.env.E2E_CATALOG_ID}/concepts/${relatedPublishedId}`
     }],
     interneFelt: null,
-    abbreviatedLabel: `LBL${Math.random().toString(36).substring(2, 6).toUpperCase()}`,
+    abbreviatedLabel: `LBL${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 6).toUpperCase()}`,
   };  
 
   const id = await createConcept(apiRequestContext, expected);

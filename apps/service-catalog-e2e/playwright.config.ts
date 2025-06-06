@@ -34,7 +34,7 @@ export default defineConfig({
     ],
   ],
   retries: 2,
-  workers: 4,
+  workers: 3,
   timeout: 60 * 1000,
   use: {
     baseURL,

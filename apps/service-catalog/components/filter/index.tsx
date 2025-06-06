@@ -27,7 +27,7 @@ export const Filter = ({
     <div>
       <Accordion border={true}>
         <Accordion.Item open>
-          <Accordion.Header level={3}>{localization.serviceCatalog.serviceStatus}</Accordion.Header>
+          <Accordion.Header level={2}>{localization.serviceCatalog.serviceStatus}</Accordion.Header>
           <Accordion.Content>
             <Checkbox.Group
               value={statusFilters}
@@ -47,7 +47,7 @@ export const Filter = ({
           </Accordion.Content>
         </Accordion.Item>
         <Accordion.Item open>
-          <Accordion.Header level={3}>{localization.publicationState.state}</Accordion.Header>
+          <Accordion.Header level={2}>{localization.publicationState.state}</Accordion.Header>
           <Accordion.Content>
             <Checkbox.Group
               value={publicationState}
