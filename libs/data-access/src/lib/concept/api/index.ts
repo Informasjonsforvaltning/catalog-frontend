@@ -255,6 +255,35 @@ export const getUnpublishedConceptRelations = (concept: Concept): UnionRelation[
   return internalConceptRelations;
 };
 
+export const getConceptImportResults = async (catalogId: string, accessToken: string) => {
+  console.log("Getting concept import results for catalog:", catalogId);
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}/results`;
+  console.log("URL", resource)
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    next: { tags: ['import-results'] },
+  };
+  return await fetch(resource, options);
+};
+
+export const getConceptImportResultById = async (catalogId: string, resultId: string, accessToken: string) => {
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}/results/${resultId}`;
+  console.log("Getting concept import results for catalog:", catalogId, resultId);
+
+  await console.log("Requested url:", resource);
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    next: { tags: ['import-result'] },
+  };
+  return await fetch(resource, options);
+};
+
 export const getUnpublishedRelatedConcepts = async (
   concept: Concept,
   accessToken: string | null | undefined,
@@ -298,3 +327,5 @@ export const getAllConceptCatalogs = (accessToken: string) =>
 
 export const getConceptCountByCatalogId = (catalogId: string, accessToken: string) =>
   conceptCatalogApiCall('GET', `/begreper/${catalogId}/count`, null, accessToken);
+
+export * from './import-rdf-concepts';
