@@ -112,9 +112,7 @@ export const draftDatasetSchema = Yup.object().shape({
     }),
   ),
 
-  conformsTo: Yup.array().of(
-    uriWithLabelSchema,
-  ),
+  conformsTo: Yup.array().of(uriWithLabelSchema),
   informationModel: Yup.array().of(
     Yup.object().shape({
       uri: Yup.string()
@@ -198,9 +196,7 @@ export const distributionSectionSchema = Yup.object().shape({
         .matches(httpsRegex, localization.validation.invalidProtocol)
         .url(localization.validation.invalidUrl),
     ),
-  conformsTo: Yup.array().of(
-    uriWithLabelSchema
-  ),
+  conformsTo: Yup.array().of(uriWithLabelSchema),
   page: Yup.array().of(
     Yup.object().shape({
       uri: Yup.string()
@@ -228,8 +224,8 @@ export const dateSchema = Yup.object().shape({
           return true;
         }
 
-        const fomDateTime = parseDateTime(value);
-        if (fomDateTime?.isValid) {
+        const startDateTime = parseDateTime(value);
+        if (startDateTime?.isValid) {
           return true;
         }
 
@@ -247,13 +243,13 @@ export const dateSchema = Yup.object().shape({
           return true;
         }
 
-        const tomDateTime = parseDateTime(value);
-        if (tomDateTime?.isValid) {
-          if (this.parent.startDate === null) {
+        const endDateTime = parseDateTime(value);
+        if (endDateTime?.isValid) {
+          const startDateTime = parseDateTime(this.parent.startDate);
+          if (!startDateTime?.isValid) {
             return true;
           }
-          const fomDateTime = parseDateTime(this.parent.startDate);
-          if (fomDateTime && tomDateTime.toJSDate() >= fomDateTime?.toJSDate()) {
+          if (endDateTime.toJSDate() >= startDateTime?.toJSDate()) {
             return true;
           }
         }
