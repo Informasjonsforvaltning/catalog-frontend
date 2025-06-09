@@ -105,13 +105,13 @@ export const DistributionDetailsCard = ({
               </div>
             )}
 
-            {distribution?.downloadURL && (
+            {!isEmpty(distribution?.downloadURL) && (
               <div className={styles.distributionField}>
                 <Heading
                   level={5}
                   size='2xs'
                 >{`${localization.datasetForm.fieldLabel.downloadURL}:`}</Heading>
-                {distribution.downloadURL.map((url: string, index: number) => {
+                {distribution.downloadURL?.map((url: string, index: number) => {
                   return (
                     <Paragraph
                       size={'sm'}
@@ -215,7 +215,7 @@ export const DistributionDetailsCard = ({
               </>
             )}
 
-            {distribution?.conformsTo && !isEmpty(distribution.conformsTo[0]?.uri) && (
+            {!isEmpty(distribution?.conformsTo) && (
               <div className={styles.distributionField}>
                 <Heading
                   level={5}
@@ -233,7 +233,7 @@ export const DistributionDetailsCard = ({
                     </Table.Row>
                   </Table.Head>
                   <TableBody>
-                    {distribution?.conformsTo.map((conform) => (
+                    {distribution.conformsTo?.map((conform) => (
                       <Table.Row key={`conformsTo-${conform.uri}`}>
                         <Table.Cell>{getTranslateText(conform.prefLabel, language)}</Table.Cell>
                         <Table.Cell>
