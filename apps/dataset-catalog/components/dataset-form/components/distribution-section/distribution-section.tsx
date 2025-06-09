@@ -79,14 +79,18 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                 <Card key={`distribusjon-${index}`}>
                   <div className={styles.heading}>
                     <div className={styles.field}>
-                      <Heading
-                        size='2xs'
-                        spacing
-                        level={3}
-                      >
-                        {localization.datasetForm.fieldLabel.title}
-                      </Heading>
-                      <Paragraph size='sm'>{getTranslateText(item?.title) ?? ''}</Paragraph>
+                      {!isEmpty(item?.title) && (
+                        <>
+                          <Heading
+                            size='2xs'
+                            spacing
+                            level={3}
+                          >
+                            {localization.datasetForm.fieldLabel.title}
+                          </Heading>
+                          <Paragraph size='sm'>{getTranslateText(item.title)}</Paragraph>
+                        </>
+                      )}
                     </div>
                     <div className={styles.buttons}>
                       <DistributionModal
