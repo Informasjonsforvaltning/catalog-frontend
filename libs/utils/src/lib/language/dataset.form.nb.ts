@@ -99,7 +99,7 @@ export const datasetFormNb = {
     losTheme: 'LOS-tema(er)',
     euDataTheme: 'Datatema(er)',
     concept: 'Begreper',
-    mediaType: 'Mediatyper',
+    mediaType: 'Medietyper',
     format: 'Format',
     accessURL: 'Tilgangslenke',
     downloadURL: 'Nedlastingslenke',

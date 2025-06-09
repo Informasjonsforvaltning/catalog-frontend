@@ -87,10 +87,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       )}
 
       {dataset?.issued && (
-        <InfoCard.Item
-          title={localization.datasetForm.fieldLabel.issued}
-          headingColor='light'
-        >
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.issued}>
           {formatDateToDDMMYYYY(dataset.issued)}
         </InfoCard.Item>
       )}
@@ -219,10 +216,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       )}
 
       {dataset?.modified && (
-        <InfoCard.Item
-          title={localization.datasetForm.helptext.modified.slice(0, -1)}
-          headingColor='light'
-        >
+        <InfoCard.Item title={localization.datasetForm.helptext.modified.slice(0, -1)}>
           {formatDateToDDMMYYYY(dataset.modified)}
         </InfoCard.Item>
       )}
@@ -468,7 +462,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </InfoCard.Item>
       )}
 
-      {dataset?.informationModel && !isEmpty(dataset?.informationModel[0]?.uri) && (
+      {!isEmpty(dataset?.informationModel) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.informationModel}>
           <UriWithLabelTable
             values={dataset?.informationModel}
