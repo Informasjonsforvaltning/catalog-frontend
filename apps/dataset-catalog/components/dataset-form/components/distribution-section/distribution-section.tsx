@@ -1,17 +1,21 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormikContext } from 'formik';
 import { Box, Button, Card, Heading, Paragraph, Tag } from '@digdir/designsystemet-react';
 import { ChevronDownIcon, ChevronUpIcon, PencilWritingIcon } from '@navikt/aksel-icons';
-import { Dataset, Distribution, ReferenceDataCode } from '@catalog-frontend/types';
+import { Dataset, Distribution, ReferenceDataCode, Search } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { useSearchFileTypeByUri } from '../../../../hooks/useReferenceDataSearch';
 import { DistributionModal } from './distribution-modal';
 import { DistributionDetails } from './distribution-details';
 import styles from './distributions.module.scss';
 import { isEmpty } from 'lodash';
+import {
+  ReferenceDataGraphql,
+  searchReferenceDataByUri,
+  searchResourcesWithFilter,
+} from '@catalog-frontend/data-access';
 
 type Props = {
   referenceDataEnv: string;
@@ -21,16 +25,84 @@ type Props = {
 
 export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses }: Props) => {
   const { values, setFieldValue } = useFormikContext<Dataset>();
+  const [selectedFileTypeUris, setSelectedFileTypeUris] = useState<string[]>();
+  const [selectedMediaTypeUris, setSelectedMediaTypeUris] = useState<string[]>();
+  const [selectedDataServiceUris, setSelectedDataServiceUris] = useState<string[]>();
+  const [selectedFileTypes, setSelectedFileTypes] = useState<ReferenceDataCode[]>();
+  const [selectedMediaTypes, setSelectedMediaTypes] = useState<ReferenceDataCode[]>();
+  const [selectedDataServices, setSelectedDataServices] = useState<Search.SearchObject[]>();
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [expandedIndexExampleData, setExpandedIndexExampleData] = useState<number | null>(null);
 
-  const getSelectedFileTypes = (): string[] => {
+  useEffect(() => {
+    const distributionAccessServices = values.distribution?.map((val) => val?.accessServiceUris)?.flat() ?? [];
+    const sampleAccessServices = values.sample?.map((val) => val?.accessServiceUris)?.flat() ?? [];
+    const allAccessServices = [...distributionAccessServices, ...sampleAccessServices]
+      .flat()
+      .filter((item) => item !== undefined);
+    const uniqueAccessServices = Array.from(new Set(allAccessServices));
+    if (uniqueAccessServices !== selectedDataServiceUris) {
+      setSelectedDataServiceUris(uniqueAccessServices);
+    }
+
     const distributionFormats = values.distribution?.map((val) => val?.format) || [];
     const sampleFormats = values.sample?.map((val) => val?.format) || [];
-    return [...distributionFormats, ...sampleFormats].flat().filter((item) => item !== undefined);
-  };
+    const allFormats = [...distributionFormats, ...sampleFormats].flat().filter((item) => item !== undefined);
+    const uniqueFormats = Array.from(new Set(allFormats));
+    if (uniqueFormats !== selectedFileTypeUris) {
+      setSelectedFileTypeUris(uniqueFormats);
+    }
 
-  const { data: selectedFileTypes } = useSearchFileTypeByUri(getSelectedFileTypes(), referenceDataEnv);
+    const distributionMediaTypes = values.distribution?.map((val) => val?.mediaType) || [];
+    const sampleMediaTypes = values.sample?.map((val) => val?.mediaType) || [];
+    const allMediaTypes = [...distributionMediaTypes, ...sampleMediaTypes].flat().filter((item) => item !== undefined);
+    const uniqueMediaTypes = Array.from(new Set(allMediaTypes));
+    if (uniqueMediaTypes !== selectedMediaTypeUris) {
+      setSelectedMediaTypeUris(uniqueMediaTypes);
+    }
+  }, [values]);
+
+  useEffect(() => {
+    const updateSelectedDataServices = async () => {
+      if (selectedDataServiceUris && !isEmpty(selectedDataServiceUris)) {
+        const searchOperation: Search.SearchOperation = {
+          filters: { uri: { value: selectedDataServiceUris } },
+          pagination: { page: 0, size: 100 },
+        };
+        const res = await searchResourcesWithFilter(searchEnv, 'dataservices', searchOperation);
+        const data = await res.json();
+        setSelectedDataServices(data.hits as Search.SearchObject[]);
+      }
+    };
+
+    updateSelectedDataServices();
+  }, [selectedDataServiceUris]);
+
+  useEffect(() => {
+    const updateSelectedMediaTypes = async () => {
+      if (selectedMediaTypeUris && !isEmpty(selectedMediaTypeUris)) {
+        const data: ReferenceDataCode[] = await searchReferenceDataByUri(selectedMediaTypeUris, referenceDataEnv, [
+          ReferenceDataGraphql.SearchAlternative.IanaMediaTypes,
+        ]);
+        setSelectedMediaTypes(data);
+      }
+    };
+
+    updateSelectedMediaTypes();
+  }, [selectedMediaTypeUris]);
+
+  useEffect(() => {
+    const updateSelectedFileTypes = async () => {
+      if (selectedFileTypeUris && !isEmpty(selectedFileTypeUris)) {
+        const data: ReferenceDataCode[] = await searchReferenceDataByUri(selectedFileTypeUris, referenceDataEnv, [
+          ReferenceDataGraphql.SearchAlternative.EuFileTypes,
+        ]);
+        setSelectedFileTypes(data);
+      }
+    };
+
+    updateSelectedFileTypes();
+  }, [selectedFileTypeUris]);
 
   const distributionArrayIsEmpty = (arr: Distribution[]) => Array.isArray(arr) && arr.every((item) => item == null);
 
@@ -192,9 +264,9 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
 
                   {expandedIndex === index && (
                     <DistributionDetails
+                      selectedDataServices={selectedDataServices ?? []}
+                      selectedMediaTypes={selectedMediaTypes ?? []}
                       distribution={item}
-                      searchEnv={searchEnv}
-                      referenceDataEnv={referenceDataEnv}
                       openLicenses={openLicenses}
                     />
                   )}
@@ -334,9 +406,9 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
 
                   {expandedIndexExampleData === index && (
                     <DistributionDetails
+                      selectedDataServices={selectedDataServices ?? []}
+                      selectedMediaTypes={selectedMediaTypes ?? []}
                       distribution={item}
-                      searchEnv={searchEnv}
-                      referenceDataEnv={referenceDataEnv}
                       openLicenses={openLicenses}
                     />
                   )}
