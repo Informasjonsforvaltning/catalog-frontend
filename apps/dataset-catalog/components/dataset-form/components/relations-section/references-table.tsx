@@ -1,15 +1,16 @@
-import { Dataset, Reference } from '@catalog-frontend/types';
+import { Dataset, Reference, Search } from '@catalog-frontend/types';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Box, Button, Combobox, Modal, Table } from '@digdir/designsystemet-react';
 import { useSearchDatasetsByUri, useSearchDatasetSuggestions } from '../../../../hooks/useSearchService';
 import { Formik, useFormikContext } from 'formik';
 import relations from '../../utils/relations.json';
 import { AddButton, DeleteButton, EditButton, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { referenceSchema } from '../../utils/validation-schema';
 import { compact, isEmpty } from 'lodash';
 import styles from '../../dataset-form.module.css';
 import cn from 'classnames';
+import { searchResourcesWithFilter } from '@catalog-frontend/data-access';
 
 type Props = {
   searchEnv: string;
@@ -106,31 +107,57 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
 
 const FieldModal = ({ template, type, onSuccess, searchEnv, selectedUri }: ModalProps) => {
   const [submitted, setSubmitted] = useState(false);
+
   const modalRef = useRef<HTMLDialogElement>(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  setInterval(() => {
+    setModalIsOpen(modalRef?.current?.open ?? false);
+  }, 300);
+
   const [searchQuery, setSearchQuery] = useState('');
 
   const { data: searchHits, isLoading: searching } = useSearchDatasetSuggestions(searchEnv, searchQuery);
-  const { data: selectedValues } = useSearchDatasetsByUri(searchEnv, [selectedUri ?? '']);
 
-  const comboboxOptions = [
-    ...new Map(
-      [
-        ...(searchHits ?? []),
-        ...(selectedValues ?? []),
-        selectedUri
-          ? {
-              uri: selectedUri,
-              title:
-                searchHits?.find((item: { uri: string }) => item.uri === selectedUri)?.title ??
-                selectedValues?.find((item) => item.uri === selectedUri)?.title ??
-                null,
-            }
-          : null,
-      ]
-        .filter(Boolean)
-        .map((option) => [option.uri, option]),
-    ).values(),
-  ];
+  const [selectedValues, setSelectedValues] = useState<Search.SearchObject[]>([]);
+  const [comboboxOptions, setComboboxOptions] = useState<any[]>([]);
+
+  useEffect(() => {
+    const updatePreviouslySelectedAccessServices = async () => {
+      if (selectedUri && !isEmpty(selectedUri)) {
+        const searchOperation: Search.SearchOperation = {
+          filters: { uri: { value: [selectedUri] } },
+          pagination: { page: 0, size: 100 },
+        };
+        const res = await searchResourcesWithFilter(searchEnv, 'datasets', searchOperation);
+        const data = await res.json();
+        setSelectedValues(data.hits as Search.SearchObject[]);
+      }
+    };
+
+    if (modalIsOpen) {
+      updatePreviouslySelectedAccessServices();
+    }
+  }, [modalIsOpen]);
+
+  useEffect(() => {
+    const titleFromSearch = searchHits?.find((item: { uri: string }) => item.uri === selectedUri)?.title;
+    const titleFromSelected = selectedValues?.find((item) => item.uri === selectedUri)?.title;
+    const uriOption = selectedUri
+      ? [
+          {
+            uri: selectedUri,
+            title: titleFromSearch ?? titleFromSelected ?? undefined,
+          },
+        ]
+      : [];
+    setComboboxOptions([
+      ...new Map(
+        [...(searchHits ?? []), ...(selectedValues ?? []), ...uriOption]
+          .filter(Boolean)
+          .map((option) => [option.uri, option]),
+      ).values(),
+    ]);
+  }, [selectedValues, searchHits]);
 
   return (
     <>
@@ -205,10 +232,10 @@ const FieldModal = ({ template, type, onSuccess, searchEnv, selectedUri }: Modal
                       <Combobox.Option
                         key={dataset.uri}
                         value={dataset.uri}
-                        displayValue={(getTranslateText(dataset.title) as string) ?? dataset.uri}
+                        displayValue={dataset.title ? getTranslateText(dataset.title) : dataset.uri}
                       >
                         <div className={styles.comboboxOptionTwoColumns}>
-                          <div>{dataset?.title ? getTranslateText(dataset?.title) : dataset.uri}</div>
+                          <div>{dataset.title ? getTranslateText(dataset.title) : dataset.uri}</div>
                           <div>{getTranslateText(dataset.organization?.prefLabel) ?? ''}</div>
                         </div>
                       </Combobox.Option>
