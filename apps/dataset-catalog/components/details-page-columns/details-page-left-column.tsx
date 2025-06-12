@@ -74,7 +74,10 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
           <Markdown>{getTranslateText(dataset?.description, language) as string}</Markdown>
         </InfoCard.Item>
       )}
-      {hasValues(dataset?.accessRights) && (
+      {(hasValues(dataset?.accessRights) ||
+        hasValues(dataset?.legalBasisForAccess) ||
+        hasValues(dataset?.legalBasisForRestriction) ||
+        hasValues(dataset?.legalBasisForProcessing)) && (
         <InfoCard.Item
           title={localization.access}
           className={styles.access}
