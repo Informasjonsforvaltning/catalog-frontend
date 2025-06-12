@@ -409,6 +409,11 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
     },
   },
 
+  dataset: {
+    deleteDataset: 'Slett datasettbeskrivelse',
+    confirmDelete: 'Du er i ferd med å slette datasettbeskrivelsen **{0}**. All data knyttet til datasettbeskrivelsen vil bli permanent slettet, og slettingen kan ikke angres. Er du sikker på at du vil fortsette?',
+  },
+
   validity: {
     expired: 'Utgått',
     willBeValid: 'blir gyldig',

@@ -194,7 +194,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </InfoCard.Item>
       )}
 
-      {dataset?.temporal && !isEmpty(dataset?.temporal[0]) && (
+      {dataset?.temporal && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.temporal}>
           <TemporalDetails temporal={dataset?.temporal} />
         </InfoCard.Item>
