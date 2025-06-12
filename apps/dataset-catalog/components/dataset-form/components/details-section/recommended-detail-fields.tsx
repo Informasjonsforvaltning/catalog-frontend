@@ -1,7 +1,7 @@
 'use client';
 import { FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Checkbox, Combobox } from '@digdir/designsystemet-react';
+import { Checkbox, Combobox, Fieldset } from '@digdir/designsystemet-react';
 import { useCallback, useState } from 'react';
 import {
   useSearchAdministrativeUnits,
@@ -116,37 +116,39 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
       <FieldsetDivider />
 
       <div className={styles.fieldContainer}>
-        <TitleWithHelpTextAndTag
-          tagColor='info'
-          tagTitle={localization.tag.recommended}
-          helpText={localization.datasetForm.helptext.spatial}
-        >
-          {localization.datasetForm.fieldLabel.spatial}
-        </TitleWithHelpTextAndTag>
-
-        <Combobox
-          placeholder={`${localization.search.search}...`}
-          multiple
-          hideClearButton
-          filter={() => true} // disable filter
+        <Fieldset
           size='sm'
-          onChange={handleSearchChange}
-          onValueChange={(selectedValues) => setFieldValue('spatialList', selectedValues)}
-          value={values.spatialList || []}
-          virtual
-          loading={isSearching}
-        >
-          <Combobox.Empty>{`${localization.search.noHits}... `}</Combobox.Empty>
-          {comboboxOptions.map((item) => (
-            <Combobox.Option
-              key={item.uri}
-              value={item.uri}
-              description={getDescription(item)}
-            >
-              {item.label ? getTranslateText(item.label) : item.uri}
-            </Combobox.Option>
-          ))}
-        </Combobox>
+          legend={<TitleWithHelpTextAndTag
+            tagColor='info'
+            tagTitle={localization.tag.recommended}
+            helpText={localization.datasetForm.helptext.spatial}
+          >
+            {localization.datasetForm.fieldLabel.spatial}
+          </TitleWithHelpTextAndTag>}>
+            <Combobox
+            placeholder={`${localization.search.search}...`}
+            multiple
+            hideClearButton
+            filter={() => true} // disable filter
+            size='sm'
+            onChange={handleSearchChange}
+            onValueChange={(selectedValues) => setFieldValue('spatialList', selectedValues)}
+            value={values.spatialList || []}
+            virtual
+            loading={isSearching}
+          >
+            <Combobox.Empty>{`${localization.search.noHits}... `}</Combobox.Empty>
+            {comboboxOptions.map((item) => (
+              <Combobox.Option
+                key={item.uri}
+                value={item.uri}
+                description={getDescription(item)}
+              >
+                {item.label ? getTranslateText(item.label) : item.uri}
+              </Combobox.Option>
+            ))}
+          </Combobox>
+        </Fieldset>        
       </div>
       <FieldsetDivider />
       <TemporalModal

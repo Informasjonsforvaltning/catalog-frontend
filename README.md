@@ -46,3 +46,22 @@ Go to http://localhost:4200
 Every catalog app requires a catalog id in the url path. When no catalog id is defined the user is redirected to
 the catalog portal app (https://catalog-portal.staging.fellesdatakatalog.digdir.no). Select your catalog and replace the domain
 with http://localhost:4200.
+
+### Running E2E tests
+We take dataset catalog as an example.
+
+Make sure you have these variables in you .env.local:
+
+```bash
+E2E_KEYCLOAK_ID_DATASET_CATALOG_FRONTEND=xxxxx
+E2E_KEYCLOAK_SECRET_DATASET_CATALOG_FRONTEND=xxxxx
+E2E_NEXTAUTH_SECRET=xxxxx
+```
+
+Run the e2e tests:
+
+```bash
+yarn nx e2e dataset-catalog-e2e
+```
+
+Use the options `--ui` and `--debug` during test development.

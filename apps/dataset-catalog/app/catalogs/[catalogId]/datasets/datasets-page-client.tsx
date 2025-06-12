@@ -126,6 +126,7 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
           );
         });
       }
+      
       if (searchTerm) {
         const lowercasedQuery = searchTerm.toLowerCase();
         filtered = filtered.filter(
@@ -258,10 +259,11 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
           <SearchHitContainer
             searchHits={
               paginatedDatasets.length > 0
-                ? paginatedDatasets.map((dataset: Dataset) => (
-                    <div
-                      key={dataset.id}
-                      className={styles.searchHit}
+                ? <ul className={styles.searchHits} role='list'> 
+                  {paginatedDatasets.map((dataset: Dataset) => (
+                    <li
+                      role='listitem'
+                      key={dataset.id}                      
                     >
                       <SearchHit
                         title={getTranslateText(dataset?.title)}
@@ -283,8 +285,9 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
                           </>
                         }
                       />
-                    </div>
-                  ))
+                    </li>
+                  ))}
+                </ul>
                 : null
             }
             noSearchHits={!paginatedDatasets || paginatedDatasets.length === 0}

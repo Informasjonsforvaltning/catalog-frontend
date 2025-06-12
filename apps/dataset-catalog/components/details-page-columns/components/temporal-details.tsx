@@ -10,7 +10,7 @@ type Props = {
 export const TemporalDetails = ({ temporal }: Props) => {
   return (
     <>
-      {temporal && (
+      {temporal && temporal.filter((item) => item?.startDate || item?.endDate).length > 0 ? (
         <Table
           size='sm'
           className={styles.table}
@@ -22,7 +22,7 @@ export const TemporalDetails = ({ temporal }: Props) => {
             </Table.Row>
           </Table.Head>
           <Table.Body>
-            {temporal.map((item, index) => {
+            {temporal.filter((item) => item?.startDate || item?.endDate).map((item, index) => {
               const startDate = item?.startDate ? new Date(item.startDate) : null;
               const endDate = item?.endDate ? new Date(item.endDate) : null;
 
@@ -35,7 +35,7 @@ export const TemporalDetails = ({ temporal }: Props) => {
             })}
           </Table.Body>
         </Table>
-      )}
+      ) : undefined}
     </>
   );
 };
