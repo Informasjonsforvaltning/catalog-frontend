@@ -168,6 +168,9 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                       <DistributionModal
                         type='edit'
                         initialValues={item}
+                        initialFileTypes={selectedFileTypes ?? []}
+                        initialMediaTypes={selectedMediaTypes ?? []}
+                        initialAccessServices={selectedDataServices ?? []}
                         referenceDataEnv={referenceDataEnv}
                         searchEnv={searchEnv}
                         openLicenses={openLicenses}
@@ -283,6 +286,9 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
           referenceDataEnv={referenceDataEnv}
           searchEnv={searchEnv}
           openLicenses={openLicenses}
+          initialFileTypes={[]}
+          initialMediaTypes={[]}
+          initialAccessServices={[]}
           initialValues={{
             title: {},
             description: {},
@@ -334,6 +340,9 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                       <DistributionModal
                         type='edit'
                         initialValues={item}
+                        initialFileTypes={selectedFileTypes ?? []}
+                        initialMediaTypes={selectedMediaTypes ?? []}
+                        initialAccessServices={selectedDataServices ?? []}
                         distributionType='sample'
                         referenceDataEnv={referenceDataEnv}
                         searchEnv={searchEnv}
@@ -427,6 +436,9 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
             referenceDataEnv={referenceDataEnv}
             searchEnv={searchEnv}
             openLicenses={openLicenses}
+            initialFileTypes={[]}
+            initialMediaTypes={[]}
+            initialAccessServices={[]}
             initialValues={{
               title: {},
               description: {},
