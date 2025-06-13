@@ -13,7 +13,7 @@ export const UriWithLabelTable = ({ values = [], language }: Props) => {
   return (
     <Table
       size='sm'
-      style={{ tableLayout: 'fixed' }}
+      style={{ tableLayout: 'fixed', width: '100%' }}
     >
       <Table.Head>
         <Table.Row>
