@@ -4,23 +4,25 @@ import { Distribution, ReferenceDataCode } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { Heading, Paragraph, Table, TableBody, Tag } from '@digdir/designsystemet-react';
 import styles from './distributions.module.scss';
-import { useSearchDataServiceByUri } from '../../../../hooks/useSearchService';
-import { useSearchMediaTypeByUri } from '../../../../hooks/useReferenceDataSearch';
 import { isEmpty } from 'lodash';
-import { FieldsetDivider, Link } from '@catalog-frontend/ui';
+import { FieldsetDivider } from '@catalog-frontend/ui';
+import { SearchObject } from '../../../../../../libs/types/src/lib/search';
 
 interface Props {
-  searchEnv: string;
-  referenceDataEnv: string;
+  selectedDataServices: SearchObject[];
+  selectedMediaTypes: ReferenceDataCode[];
   openLicenses: ReferenceDataCode[];
   distribution: Distribution;
   language?: string;
 }
 
-export const DistributionDetails = ({ distribution, searchEnv, referenceDataEnv, openLicenses, language }: Props) => {
-  const { data: selectedDataServices } = useSearchDataServiceByUri(searchEnv, distribution?.accessServiceUris ?? []);
-  const { data: selectedMediaTypes } = useSearchMediaTypeByUri(distribution?.mediaType ?? [], referenceDataEnv);
-
+export const DistributionDetails = ({
+  selectedDataServices,
+  selectedMediaTypes,
+  distribution,
+  openLicenses,
+  language,
+}: Props) => {
   return (
     <div>
       {distribution && (
