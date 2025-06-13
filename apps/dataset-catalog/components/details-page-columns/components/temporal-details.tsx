@@ -1,6 +1,7 @@
 import { DateRange } from '@catalog-frontend/types';
 import { formatDate, localization } from '@catalog-frontend/utils';
 import { Table } from '@digdir/designsystemet-react';
+import styles from '../details-columns.module.css';
 
 type Props = {
   temporal: DateRange[] | undefined;
@@ -12,7 +13,7 @@ export const TemporalDetails = ({ temporal }: Props) => {
       {temporal && (
         <Table
           size='sm'
-          style={{ tableLayout: 'fixed' }}
+          className={styles.table}
         >
           <Table.Head>
             <Table.Row>
