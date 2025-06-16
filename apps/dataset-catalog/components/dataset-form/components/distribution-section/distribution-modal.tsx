@@ -86,7 +86,10 @@ export const DistributionModal = ({
     const selectedMediaTypes = selectedMediaTypeUris
       ?.map((uri) => allMediaTypes.find((mediaType) => mediaType.uri === uri))
       .filter((mediaType) => mediaType !== undefined);
-    setSelectedAndSearchedMediaTypes([...(selectedMediaTypes ?? []), ...(mediaTypes ?? [])]);
+    const unique = Array.from(
+      new Map([...(selectedMediaTypes ?? []), ...(mediaTypes ?? [])].map((item) => [item.uri, item])).values(),
+    );
+    setSelectedAndSearchedMediaTypes(unique);
   }, [mediaTypes, selectedMediaTypeUris, initialMediaTypes]);
 
   useEffect(() => {
@@ -94,7 +97,10 @@ export const DistributionModal = ({
     const selectedFileTypes = selectedFileTypeUris
       ?.map((uri) => allFileTypes.find((fileType) => fileType.uri === uri))
       .filter((fileType) => fileType !== undefined);
-    setSelectedAndSearchedFileTypes([...(selectedFileTypes ?? []), ...(fileTypes ?? [])]);
+    const unique = Array.from(
+      new Map([...(selectedFileTypes ?? []), ...(fileTypes ?? [])].map((item) => [item.uri, item])).values(),
+    );
+    setSelectedAndSearchedFileTypes(unique);
   }, [fileTypes, selectedFileTypeUris, initialFileTypes]);
 
   useEffect(() => {
@@ -102,7 +108,10 @@ export const DistributionModal = ({
     const selectedAccessServices = selectedAccessServiceUris
       ?.map((uri) => allAccessServices.find((service) => service.uri === uri))
       .filter((service) => service !== undefined);
-    setSelectedAndSearchedAccessServices([...(selectedAccessServices ?? []), ...(dataServices ?? [])]);
+    const unique = Array.from(
+      new Map([...(selectedAccessServices ?? []), ...(dataServices ?? [])].map((item) => [item.uri, item])).values(),
+    );
+    setSelectedAndSearchedAccessServices(unique);
   }, [dataServices, selectedAccessServiceUris, initialAccessServices]);
 
   const FIELD_CONFIG = [
