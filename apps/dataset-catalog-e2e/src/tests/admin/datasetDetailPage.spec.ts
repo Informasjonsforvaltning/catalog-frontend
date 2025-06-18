@@ -1,9 +1,7 @@
 import { DatasetToBeCreated, PublicationStatus } from '@catalog-frontend/types';
 import { expect, runTestAsAdmin } from '../../fixtures/basePage';
-import DatasetsPage from '../../page-object-model/datasetsPage';
 import DatasetDetailPage from '../../page-object-model/datasetDetailPage';
 import { adminAuthFile, createDataset, uniqueString } from '../../utils/helpers';
-import { dateStringToDate, formatDate } from '@catalog-frontend/utils';
 
 const CATALOG_ID = '313422127';
 
@@ -42,6 +40,8 @@ runTestAsAdmin('should load dataset detail page with all elements', async ({ dat
   const dataset = getRandomDataset();
   const createdDataset = await createDataset(apiRequestContext, dataset);
 
+  const detailPage: DatasetDetailPage = datasetsPage.detailPage;
+
   // Navigate to the dataset detail page
   await datasetsPage.goto(CATALOG_ID);
    // Search for the dataset
@@ -53,39 +53,39 @@ runTestAsAdmin('should load dataset detail page with all elements', async ({ dat
   await datasetsPage.expectDatasetDetailPageUrl(CATALOG_ID, createdDataset.id);
 
   // Verify dataset details
-  await datasetsPage.detailPage.expectTitle(dataset.title.nb as string);
-  await datasetsPage.detailPage.expectDescription(dataset.description.nb as string);
-  await datasetsPage.detailPage.expectStatus('Utkast');
-  await datasetsPage.detailPage.expectPublicationStatus('Ikke publisert');
+  await detailPage.expectTitle(dataset.title.nb as string);
+  await detailPage.expectDescription(dataset.description.nb as string);
+  await detailPage.expectStatus('Utkast');
+  await detailPage.expectPublicationStatus('Ikke publisert');
 
   // Verify contact point information
-  await datasetsPage.detailPage.expectContactPoint(
+  await detailPage.expectContactPoint(
     dataset.contactPoint[0].email,
     dataset.contactPoint[0].hasTelephone,
     dataset.contactPoint[0].hasURL
   );
 
   // Verify dataset ID
-  await datasetsPage.detailPage.expectDatasetId(createdDataset.id);
+  await detailPage.expectDatasetId(createdDataset.id);
 
   // Verify language selector
-  await datasetsPage.detailPage.expectLanguageSelector();
+  await detailPage.expectLanguageSelector();
 
   // Verify action buttons
-  await datasetsPage.detailPage.expectEditButton();
-  await datasetsPage.detailPage.expectDeleteButton();
+  await detailPage.expectEditButton();
+  await detailPage.expectDeleteButton();
 
   // Verify publish switch
-  await datasetsPage.detailPage.expectPublishSwitch();
+  await detailPage.expectPublishSwitch();
 
   // Verify help button for publication status
-  await datasetsPage.detailPage.expectHelpButton('Publiseringstilstand');
+  await detailPage.expectHelpButton('Publiseringstilstand');
 
   // Verify section headings
-  await datasetsPage.detailPage.expectSectionHeading('Beskrivelse');
-  await datasetsPage.detailPage.expectSectionHeading('Datasett-ID');
-  await datasetsPage.detailPage.expectSectionHeading('Publiseringstilstand');
-  await datasetsPage.detailPage.expectSectionHeading('Kontaktinformasjon for eksterne');
+  await detailPage.expectSectionHeading('Beskrivelse');
+  await detailPage.expectSectionHeading('Datasett-ID');
+  await detailPage.expectSectionHeading('Publiseringstilstand');
+  await detailPage.expectSectionHeading('Kontaktinformasjon for eksterne');
 });
 
 runTestAsAdmin('should delete dataset from detail page', async ({ datasetsPage, context, playwright }: { datasetsPage, context, playwright }) => {
@@ -97,6 +97,8 @@ runTestAsAdmin('should delete dataset from detail page', async ({ datasetsPage, 
   const dataset = getRandomDataset();
   const createdDataset = await createDataset(apiRequestContext, dataset);
 
+  const detailPage: DatasetDetailPage = datasetsPage.detailPage;
+
   // Navigate to the dataset detail page
   await datasetsPage.goto(CATALOG_ID);
   // Search for the dataset
@@ -106,9 +108,9 @@ runTestAsAdmin('should delete dataset from detail page', async ({ datasetsPage, 
   await datasetsPage.expectDatasetDetailPageUrl(CATALOG_ID, createdDataset.id);
 
   // Delete the dataset
-  await datasetsPage.detailPage.clickDeleteButton();
-  await datasetsPage.detailPage.expectDeleteConfirmationDialog(dataset.title.nb as string);
-  await datasetsPage.detailPage.confirmDelete();
+  await detailPage.clickDeleteButton();
+  await detailPage.expectDeleteConfirmationDialog(dataset.title.nb as string);
+  await detailPage.confirmDelete();
 
   // Verify we're back on the datasets page
   await expect(datasetsPage.page).toHaveURL(`/catalogs/${CATALOG_ID}/datasets`);
