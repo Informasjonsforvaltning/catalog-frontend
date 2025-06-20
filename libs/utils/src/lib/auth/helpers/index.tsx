@@ -30,9 +30,10 @@ export const getValidSession = async () => {
 export const redirectToSignIn = (callback: SignInCallbackProps | undefined = undefined) => {
   if (callback) {
     const { callbackUrl, callbackParams } = callback;
-    const callbackUrlWithParams = `${callbackUrl}${callbackParams ? '?' + new URLSearchParams(callbackParams) : ''}`;
-    return redirect(`/auth/signin?callbackUrl=${callbackUrlWithParams}`);
-  } else {
-    return redirect('/auth/signin');
+    if(callbackUrl.startsWith('/')) {
+      const callbackUrlWithParams = `${callbackUrl}${callbackParams ? '?' + new URLSearchParams(callbackParams) : ''}`;
+      return redirect(`/auth/signin?callbackUrl=${callbackUrlWithParams}`);
+    }
   }
+  return redirect('/auth/signin');
 };
