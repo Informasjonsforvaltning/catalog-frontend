@@ -285,7 +285,6 @@ const FIELD_CONFIG = [
     getValue: (values: Dataset) => values?.conformsTo,
     render: (props: any) => (
       <UriWithLabelFieldsetTable
-        values={props.values.conformsTo}
         fieldName={'conformsTo'}
         errors={props.errors.conformsTo}
         hideHeadWhenEmpty={true}

@@ -40,7 +40,6 @@ export const AccessRightFields = () => {
       <FieldsetDivider />
 
       <UriWithLabelFieldsetTable
-        values={values.legalBasisForRestriction}
         fieldName={'legalBasisForRestriction'}
         errors={errors.legalBasisForRestriction}
         hideHeadWhenEmpty={true}
@@ -58,7 +57,6 @@ export const AccessRightFields = () => {
       <FieldsetDivider />
 
       <UriWithLabelFieldsetTable
-        values={values.legalBasisForProcessing}
         fieldName={'legalBasisForProcessing'}
         errors={errors.legalBasisForProcessing}
         hideHeadWhenEmpty={true}
@@ -76,7 +74,6 @@ export const AccessRightFields = () => {
       <FieldsetDivider />
 
       <UriWithLabelFieldsetTable
-        values={values.legalBasisForAccess}
         fieldName={'legalBasisForAccess'}
         errors={errors.legalBasisForAccess}
         hideHeadWhenEmpty={true}

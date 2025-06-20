@@ -1,17 +1,16 @@
-import { DateRange } from '@catalog-frontend/types';
+import { Dataset, DateRange } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, EditButton, FormHeading } from '@catalog-frontend/ui';
 import { formatDateToDDMMYYYY, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button, Modal, Table, Textfield } from '@digdir/designsystemet-react';
-import { FastField, FieldArray, Formik } from 'formik';
+import { FastField, FieldArray, Formik, useFormikContext } from 'formik';
 import styles from '../../dataset-form.module.css';
-import { ReactNode, useRef, useState } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { get, isEmpty } from 'lodash';
 import { dateSchema } from '../../utils/validation-schema';
 import cn from 'classnames';
 import { MinusIcon } from '@navikt/aksel-icons';
 
 interface Props {
-  values: DateRange[] | undefined;
   label?: string | ReactNode;
   errors?: any;
 }
@@ -19,6 +18,8 @@ interface Props {
 interface ModalProps {
   type: 'new' | 'edit';
   onSuccess: (values: DateRange) => void;
+  onCancel: () => void;
+  onChange: (values: DateRange) => void;
   template: DateRange;
 }
 
@@ -27,7 +28,10 @@ const hasNoFieldValues = (values: DateRange) => {
   return isEmpty(values.startDate) && isEmpty(values.endDate);
 };
 
-export const TemporalModal = ({ values, label, errors }: Props) => {
+export const TemporalModal = ({ label }: Props) => {
+  const { values, errors, setFieldValue } = useFormikContext<Dataset>();
+  const [snapshot, setSnapshot] = useState<DateRange[]>(values?.temporal ?? []);
+
   return (
     <div className={styles.fieldContainer}>
       {typeof label === 'string' ? <FormHeading>{label}</FormHeading> : label}
@@ -35,7 +39,7 @@ export const TemporalModal = ({ values, label, errors }: Props) => {
         name={'temporal'}
         render={(arrayHelpers) => (
           <div className={get(errors, `temporal`) ? styles.errorBorder : undefined}>
-            {values && values?.length > 0 && (
+            {values?.temporal && values?.temporal?.length > 0 && (
               <Table
                 size='sm'
                 className={styles.table}
@@ -48,7 +52,7 @@ export const TemporalModal = ({ values, label, errors }: Props) => {
                   </Table.Row>
                 </Table.Head>
                 <Table.Body>
-                  {values?.map((item, index) => (
+                  {values?.temporal?.map((item, index) => (
                     <Table.Row key={`temporal-tableRow-${index}`}>
                       <Table.Cell>{item?.startDate ? formatDateToDDMMYYYY(item.startDate) : '-'}</Table.Cell>
                       <Table.Cell>{item?.endDate ? formatDateToDDMMYYYY(item.endDate) : '-'}</Table.Cell>
@@ -57,9 +61,19 @@ export const TemporalModal = ({ values, label, errors }: Props) => {
                           <FieldModal
                             template={item}
                             type={'edit'}
-                            onSuccess={(updatedItem: DateRange) => arrayHelpers.replace(index, updatedItem)}
+                            onSuccess={(updatedItem: DateRange) => {
+                              arrayHelpers.replace(index, updatedItem);
+                              setSnapshot([...values.temporal ?? []]);
+                            }}
+                            onCancel={() => setFieldValue('temporal', snapshot)}
+                            onChange={(updatedItem: DateRange) => arrayHelpers.replace(index, updatedItem)}
                           />
-                          <DeleteButton onClick={() => arrayHelpers.remove(index)} />
+                          <DeleteButton onClick={() => {
+                            const newArray = [...values.temporal ?? []];
+                            newArray.splice(index, 1);
+                            setFieldValue('temporal', newArray);
+                            setSnapshot([...newArray]);
+                          }} />
                         </span>
                       </Table.Cell>
                     </Table.Row>
@@ -71,7 +85,15 @@ export const TemporalModal = ({ values, label, errors }: Props) => {
               <FieldModal
                 template={{ startDate: '', endDate: '' }}
                 type={'new'}
-                onSuccess={(formValues) => arrayHelpers.push(formValues)}
+                onSuccess={() => setSnapshot([...values.temporal ?? []])}
+                onCancel={() => setFieldValue('temporal', snapshot)}
+                onChange={(updatedItem: DateRange) => {
+                  if (snapshot.length === (values.temporal?.length ?? 0)) {
+                    arrayHelpers.push(updatedItem);
+                  } else {
+                    arrayHelpers.replace(snapshot.length, updatedItem);
+                  }
+                }}
               />
             </div>
           </div>
@@ -81,7 +103,7 @@ export const TemporalModal = ({ values, label, errors }: Props) => {
   );
 };
 
-const FieldModal = ({ template, type, onSuccess }: ModalProps) => {
+const FieldModal = ({ template, type, onSuccess, onCancel, onChange }: ModalProps) => {
   const [submitted, setSubmitted] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -106,6 +128,12 @@ const FieldModal = ({ template, type, onSuccess }: ModalProps) => {
             }}
           >
             {({ isSubmitting, submitForm, values, dirty, errors }) => {
+              useEffect(() => {
+                if (dirty) {
+                  onChange({ ...values });
+                }
+              }, [values, dirty]);
+
               return (
                 <>
                   <Modal.Header closeButton={false}>
@@ -150,7 +178,10 @@ const FieldModal = ({ template, type, onSuccess }: ModalProps) => {
                     <Button
                       variant='secondary'
                       type='button'
-                      onClick={() => modalRef.current?.close()}
+                      onClick={() => {
+                        onCancel();
+                        modalRef.current?.close();
+                      }}
                       disabled={isSubmitting}
                       size='sm'
                     >
