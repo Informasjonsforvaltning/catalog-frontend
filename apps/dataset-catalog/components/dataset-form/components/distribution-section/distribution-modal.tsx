@@ -30,6 +30,8 @@ type Props = {
   searchEnv: string;
   openLicenses?: ReferenceDataCode[];
   onSuccess: (values: Distribution, type: string) => void;
+  onCancel?: () => void;
+  onChange?: (values: Distribution) => void;
   initialValues: Partial<Distribution> | undefined;
   initialFileTypes: ReferenceDataCode[];
   initialMediaTypes: ReferenceDataCode[];
@@ -43,6 +45,8 @@ export const DistributionModal = ({
   searchEnv,
   openLicenses,
   onSuccess,
+  onCancel,
+  onChange,
   trigger,
   initialValues,
   initialFileTypes,
@@ -90,7 +94,7 @@ export const DistributionModal = ({
       new Map([...(selectedMediaTypes ?? []), ...(mediaTypes ?? [])].map((item) => [item.uri, item])).values(),
     );
     setSelectedAndSearchedMediaTypes(unique);
-  }, [mediaTypes, selectedMediaTypeUris, initialMediaTypes]);
+  }, [mediaTypes, selectedMediaTypeUris, initialMediaTypes, setSelectedAndSearchedMediaTypes]);
 
   useEffect(() => {
     const allFileTypes = [...selectedAndSearchedFileTypes, ...initialFileTypes];
@@ -101,7 +105,7 @@ export const DistributionModal = ({
       new Map([...(selectedFileTypes ?? []), ...(fileTypes ?? [])].map((item) => [item.uri, item])).values(),
     );
     setSelectedAndSearchedFileTypes(unique);
-  }, [fileTypes, selectedFileTypeUris, initialFileTypes]);
+  }, [fileTypes, selectedFileTypeUris, initialFileTypes, setSelectedAndSearchedFileTypes]);
 
   useEffect(() => {
     const allAccessServices = [...selectedAndSearchedAccessServices, ...initialAccessServices];
@@ -112,7 +116,22 @@ export const DistributionModal = ({
       new Map([...(selectedAccessServices ?? []), ...(dataServices ?? [])].map((item) => [item.uri, item])).values(),
     );
     setSelectedAndSearchedAccessServices(unique);
-  }, [dataServices, selectedAccessServiceUris, initialAccessServices]);
+  }, [dataServices, selectedAccessServiceUris, initialAccessServices, setSelectedAndSearchedAccessServices]);
+
+  const handleCancel = () => {
+    if (onCancel) {
+      onCancel();
+    }
+    modalRef.current?.close();
+  };
+
+  const handleSubmit = (values: Distribution, { setSubmitting }: any) => {
+    const trimmedValues = trimObjectWhitespace(values);
+    onSuccess(trimmedValues, distributionType);
+    setSubmitting(false);
+    setSubmitted(true);
+    modalRef.current?.close();
+  };
 
   const FIELD_CONFIG = [
     {
@@ -406,23 +425,20 @@ export const DistributionModal = ({
         className={styles.dialog}
       >
         <Formik
-          initialValues={template}
+          initialValues={{ accessURL: [''], ...template }}
           name='distribution'
           validateOnChange={submitted}
           validateOnBlur={submitted}
           validationSchema={distributionSectionSchema}
-          onSubmit={(values, { setSubmitting }) => {
-            const trimmedValues = trimObjectWhitespace(values);
-            onSuccess(trimmedValues, distributionType);
-            setSubmitting(false);
-            setSubmitted(true);
-            modalRef.current?.close();
-          }}
+          onSubmit={handleSubmit}
         >
-          {({ errors, isSubmitting, submitForm, values, setFieldValue }) => {
-            if (isEmpty(values.accessURL)) {
-              setFieldValue('accessURL', ['']);
-            }
+          {({ errors, isSubmitting, submitForm, values, dirty, setFieldValue }) => {
+            // Call onChange whenever values change for autosave
+            useEffect(() => {
+              if (dirty && onChange) {
+                onChange(values);
+              }
+            }, [values, dirty]);
 
             const isExpanded = (fieldConfig: any) => {
               const fieldValues = get(values, fieldConfig.name);
@@ -619,11 +635,11 @@ export const DistributionModal = ({
                         }
                       >
                         {!selectedFileTypeUris ||
-                        selectedFileTypeUris?.every((v) =>
-                          selectedAndSearchedFileTypes?.find(
-                            (option: ReferenceDataCode | undefined) => option?.uri === v,
-                          ),
-                        ) ? (
+                          selectedFileTypeUris?.every((v) =>
+                            selectedAndSearchedFileTypes?.find(
+                              (option: ReferenceDataCode | undefined) => option?.uri === v,
+                            ),
+                          ) ? (
                           <FormikReferenceDataCombobox
                             onChange={(event) => setSearchQueryFileTypes(event.target.value)}
                             onValueChange={(selectedValues) => {
@@ -661,9 +677,9 @@ export const DistributionModal = ({
                             <Combobox
                               value={values?.license?.uri ? [values?.license.uri] : ['']}
                               portal={false}
-                              onValueChange={(selectedValues) =>
-                                setFieldValue('license.uri', selectedValues.toString())
-                              }
+                              onValueChange={(selectedValues) => {
+                                setFieldValue('license.uri', selectedValues.toString());
+                              }}
                               size='sm'
                               virtual
                             >
@@ -705,7 +721,7 @@ export const DistributionModal = ({
                       <Button
                         variant='secondary'
                         type='button'
-                        onClick={() => modalRef.current?.close()}
+                        onClick={handleCancel}
                         disabled={isSubmitting}
                         size='sm'
                       >

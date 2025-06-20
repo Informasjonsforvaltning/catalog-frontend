@@ -2,7 +2,7 @@ import { Dataset, Reference, Search } from '@catalog-frontend/types';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Box, Button, Combobox, Fieldset, Modal, Table } from '@digdir/designsystemet-react';
 import { useSearchDatasetsByUri, useSearchDatasetSuggestions } from '../../../../hooks/useSearchService';
-import { FieldArray, Formik, useFormikContext } from 'formik';
+import { Formik, useFormikContext } from 'formik';
 import relations from '../../utils/relations.json';
 import { AddButton, DeleteButton, EditButton, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { useState, useRef, useEffect } from 'react';
@@ -19,6 +19,8 @@ type ModalProps = {
   searchEnv: string;
   type: 'new' | 'edit';
   onSuccess: (values: Reference) => void;
+  onCancel: () => void;
+  onChange: (values: Reference) => void;
   template: Reference;
   initialUri: string | undefined;
   initialDatasets: Search.SearchObject[];
@@ -30,7 +32,8 @@ const hasNoFieldValues = (values: Reference) => {
 };
 
 export const ReferenceTable = ({ searchEnv }: Props) => {
-  const { values, errors } = useFormikContext<Dataset>();
+  const { values, errors, setFieldValue } = useFormikContext<Dataset>();
+  const [snapshot, setSnapshot] = useState<Reference[]>(values?.references ?? []);
 
   const getUriList = () => {
     return values.references?.map((reference) => reference?.source?.uri).filter((uri) => uri) ?? [];
@@ -43,68 +46,89 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
       <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.references}>
         {localization.datasetForm.fieldLabel.references}
       </TitleWithHelpTextAndTag>
-      <FieldArray
-        name={'references'}
-        render={(arrayHelpers) => (
-          <div className={get(errors, `references`) ? styles.errorBorder : undefined}>
-            <Table
-              size='sm'
-              className={styles.table}
-            >
-              <Table.Head>
-                <Table.Row>
-                  <Table.HeaderCell>{localization.datasetForm.fieldLabel.relationType}</Table.HeaderCell>
-                  <Table.HeaderCell>{localization.datasetForm.fieldLabel.dataset}</Table.HeaderCell>
-                  <Table.HeaderCell aria-label='Actions' />
-                </Table.Row>
-              </Table.Head>
-              <Table.Body>
-                {values?.references?.map((ref: Reference, index) => (
-                  <Table.Row key={`references-${index}`}>
-                    <Table.Cell>
-                      {getTranslateText(relations.find((rel) => rel.code === ref?.referenceType?.code)?.label) ??
-                        ref?.referenceType?.code}
-                    </Table.Cell>
-                    <Table.Cell>
-                      {getTranslateText(selectedValues?.find((item) => item.uri === ref?.source?.uri)?.title) ??
-                        ref?.source?.uri}
-                    </Table.Cell>
-                    <Table.Cell>
-                      <div className={styles.set}>
-                        <FieldModal
-                          searchEnv={searchEnv}
-                          template={ref}
-                          type={'edit'}
-                          onSuccess={(updatedItem: Reference) => arrayHelpers.replace(index, updatedItem)}
-                          initialUri={ref?.source?.uri}
-                          initialDatasets={selectedValues ?? []}
-                        />
-                        <DeleteButton onClick={() => arrayHelpers.remove(index)} />
-                      </div>
-                    </Table.Cell>
-                  </Table.Row>
+      {values?.references && compact(values?.references).length > 0 && (
+        <div className={get(errors, `references`) ? styles.errorBorder : undefined}>
+        <Table
+          size='sm'
+          className={styles.table}
+        >
+          <Table.Head>
+            <Table.Row>
+              <Table.HeaderCell>{localization.datasetForm.fieldLabel.relationType}</Table.HeaderCell>
+              <Table.HeaderCell>{localization.datasetForm.fieldLabel.dataset}</Table.HeaderCell>
+              <Table.HeaderCell aria-label='Actions' />
+            </Table.Row>
+          </Table.Head>
+          <Table.Body>
+            {values?.references &&
+              values?.references.map((ref: Reference, index) => (
+                <Table.Row key={`references-${index}`}>
+                  <Table.Cell>
+                    {getTranslateText(relations.find((rel) => rel.code === ref?.referenceType?.code)?.label) ??
+                      ref?.referenceType?.code}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {getTranslateText(selectedValues?.find((item) => item.uri === ref?.source?.uri)?.title) ??
+                      ref?.source?.uri}
+                  </Table.Cell>
+                  <Table.Cell>
+                    <div className={styles.set}>
+                      <FieldModal
+                        searchEnv={searchEnv}
+                        template={ref}
+                        type={'edit'}
+                        onSuccess={(updatedItem: Reference) => {
+                          setFieldValue(`references[${index}]`, updatedItem);
+                          setSnapshot([...values.references ?? []]);
+                        }}
+                        onCancel={() => setFieldValue('references', snapshot)}
+                        onChange={(updatedItem: Reference) => setFieldValue(`references[${index}]`, updatedItem)}
+                        initialUri={ref?.source?.uri}
+                        initialDatasets={selectedValues ?? []}
+                      />
+                      <DeleteButton onClick={() => {
+                        const newArray = [...values.references ?? []];
+                        newArray.splice(index, 1);
+                        setFieldValue('references', newArray);
+                        setSnapshot([...newArray]);
+                      }} />
+                    </div>
+                  </Table.Cell>
+                </Table.Row>              
                 ))}
               </Table.Body>
             </Table>
 
-            <div>
-              <FieldModal
-                searchEnv={searchEnv}
-                template={{ source: { uri: '' }, referenceType: { code: '' } }}
-                type={'new'}
-                onSuccess={(formValues) => arrayHelpers.push(formValues)}
-                initialUri={undefined}
-                initialDatasets={[]}
-              />
-            </div>
           </div>
         )}
-      />
+      <div>
+        <FieldModal
+          searchEnv={searchEnv}
+          template={{ source: { uri: '' }, referenceType: { code: '' } }}
+          type={'new'}
+          onSuccess={() => setSnapshot([...values.references ?? []])}
+          onCancel={() => setFieldValue('references', snapshot)}
+          onChange={(updatedItem: Reference) => {
+            if (snapshot.length === (values.references?.length ?? 0)) {
+              setFieldValue(
+                values.references && values?.references.length > 0 && !hasNoFieldValues(values?.references?.[0])
+                  ? `references[${values?.references?.length}]`
+                  : `references[0]`,
+                updatedItem,
+              );
+            } else {
+              setFieldValue(`references[${snapshot.length}]`, updatedItem);
+            }
+          }}
+          initialUri={undefined}
+          initialDatasets={[]}
+        />
+      </div>
     </Box>
   );
 };
 
-const FieldModal = ({ template, type, onSuccess, searchEnv, initialUri, initialDatasets }: ModalProps) => {
+const FieldModal = ({ template, type, onSuccess, onCancel, onChange, searchEnv, initialUri, initialDatasets }: ModalProps) => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedUri, setSelectedUri] = useState(initialUri);
 
@@ -127,11 +151,11 @@ const FieldModal = ({ template, type, onSuccess, searchEnv, initialUri, initialD
     const titleFromSelected = selectedValue?.title;
     const uriOption = selectedUri
       ? [
-          {
-            uri: selectedUri,
-            title: titleFromSearch ?? titleFromSelected ?? undefined,
-          },
-        ]
+        {
+          uri: selectedUri,
+          title: titleFromSearch ?? titleFromSelected ?? undefined,
+        },
+      ]
       : [];
     const options = [
       ...new Map(
@@ -165,98 +189,103 @@ const FieldModal = ({ template, type, onSuccess, searchEnv, initialUri, initialD
               modalRef.current?.close();
             }}
           >
-            {({ errors, isSubmitting, submitForm, values, dirty, setFieldValue }) => (
-              <>
-                <Modal.Header closeButton={false}>
-                  {type === 'edit'
-                    ? `${localization.edit} ${localization.relation.toLowerCase()}`
-                    : `${localization.add} ${localization.relation.toLowerCase()}`}
-                </Modal.Header>
+            {({ errors, isSubmitting, submitForm, values, dirty, setFieldValue }) => {
+              useEffect(() => {
+                if (dirty) {
+                  onChange({ ...values });
+                }
+              }, [values, dirty]);
 
-                <Modal.Content className={cn(styles.modalContent, styles.fieldContainer)}>
-                  <Fieldset
-                    legend={localization.datasetForm.fieldLabel.relationType}
-                    size='sm'
-                  >
-                    <Combobox
-                      onValueChange={(value) => setFieldValue(`referenceType.code`, value.toString())}
-                      value={values.referenceType?.code ? [values.referenceType?.code] : []}
-                      placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
-                      portal={false}
-                      size='sm'
-                      error={errors?.referenceType?.code}
-                      virtual
-                    >
-                      <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-                      {relations.map((relation) => (
-                        <Combobox.Option
-                          key={relation?.code}
-                          value={relation?.code}
-                          description={`${relation?.uriAsPrefix} (${relation?.uri})`}
-                        >
-                          {getTranslateText(relation?.label)}
-                        </Combobox.Option>
-                      ))}
-                    </Combobox>
-                  </Fieldset>
+              return (
+                <>
+                  <Modal.Header closeButton={false}>
+                    {type === 'edit'
+                      ? `${localization.edit} ${localization.relation.toLowerCase()}`
+                      : `${localization.add} ${localization.relation.toLowerCase()}`}
+                  </Modal.Header>
 
-                  <Fieldset
-                    legend={localization.datasetForm.fieldLabel.dataset}
-                    size='sm'
-                  >
-                    <Combobox
-                      onChange={(input: any) => setSearchQuery(input.target.value)}
-                      onValueChange={(value) => {
-                        setSelectedUri(value.toString());
-                        setFieldValue(`source.uri`, value.toString());
-                      }}
-                      loading={searching}
-                      value={!isEmpty(values?.source?.uri) ? [values?.source?.uri] : []}
-                      placeholder={`${localization.search.search}...`}
-                      portal={false}
-                      size='sm'
-                      error={errors?.source?.uri}
-                    >
-                      <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-                      {comboboxOptions?.map((dataset) => {
-                        return (
+                  <Modal.Content className={cn(styles.modalContent, styles.fieldContainer)}>
+                    <Fieldset legend={localization.datasetForm.fieldLabel.relationType} size='sm'>
+                      <Combobox
+                        onValueChange={(value) => setFieldValue(`referenceType.code`, value.toString())}
+                        value={values.referenceType?.code ? [values.referenceType?.code] : []}
+                        placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
+                        portal={false}
+                        size='sm'
+                        error={errors?.referenceType?.code}
+                        virtual
+                      >
+                        <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
+                        {relations.map((relation) => (
                           <Combobox.Option
-                            key={dataset.uri}
-                            value={dataset.uri}
-                            displayValue={dataset.title ? getTranslateText(dataset.title) : dataset.uri}
+                            key={relation?.code}
+                            value={relation?.code}
+                            description={`${relation?.uriAsPrefix} (${relation?.uri})`}
                           >
-                            <div className={styles.comboboxOptionTwoColumns}>
-                              <div>{dataset.title ? getTranslateText(dataset.title) : dataset.uri}</div>
-                              <div>{getTranslateText(dataset.organization?.prefLabel) ?? ''}</div>
-                            </div>
+                            {getTranslateText(relation?.label)}
                           </Combobox.Option>
-                        );
-                      })}
-                    </Combobox>
-                  </Fieldset>
-                </Modal.Content>
+                        ))}
+                      </Combobox>
+                    </Fieldset>
 
-                <Modal.Footer>
-                  <Button
-                    type='button'
-                    disabled={isSubmitting || !dirty || hasNoFieldValues(values)}
-                    onClick={() => submitForm()}
-                    size='sm'
-                  >
-                    {type === 'new' ? localization.add : localization.datasetForm.button.update}
-                  </Button>
-                  <Button
-                    variant='secondary'
-                    type='button'
-                    onClick={() => modalRef.current?.close()}
-                    disabled={isSubmitting}
-                    size='sm'
-                  >
-                    {localization.button.cancel}
-                  </Button>
-                </Modal.Footer>
-              </>
-            )}
+                    <Fieldset legend={localization.datasetForm.fieldLabel.dataset} size='sm'>
+                      <Combobox
+                        onChange={(input: any) => setSearchQuery(input.target.value)}
+                        onValueChange={(value) => {
+                          setSelectedUri(value.toString());
+                          setFieldValue(`source.uri`, value.toString());
+                        }}
+                        loading={searching}
+                        value={!isEmpty(values?.source?.uri) ? [values?.source?.uri] : []}
+                        placeholder={`${localization.search.search}...`}
+                        portal={false}
+                        size='sm'
+                        error={errors?.source?.uri}
+                      >
+                        <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
+                        {comboboxOptions?.map((dataset) => {
+                          return (
+                            <Combobox.Option
+                              key={dataset.uri}
+                              value={dataset.uri}
+                              displayValue={dataset.title ? getTranslateText(dataset.title) : dataset.uri}
+                            >
+                              <div className={styles.comboboxOptionTwoColumns}>
+                                <div>{dataset.title ? getTranslateText(dataset.title) : dataset.uri}</div>
+                                <div>{getTranslateText(dataset.organization?.prefLabel) ?? ''}</div>
+                              </div>
+                            </Combobox.Option>
+                          );
+                        })}
+                      </Combobox>
+                    </Fieldset>
+                  </Modal.Content>
+
+                  <Modal.Footer>
+                    <Button
+                      type='button'
+                      disabled={isSubmitting || !dirty || hasNoFieldValues(values)}
+                      onClick={() => submitForm()}
+                      size='sm'
+                    >
+                      {type === 'new' ? localization.add : localization.datasetForm.button.update}
+                    </Button>
+                    <Button
+                      variant='secondary'
+                      type='button'
+                      onClick={() => {
+                        onCancel();
+                        modalRef.current?.close();
+                      }}
+                      disabled={isSubmitting}
+                      size='sm'
+                    >
+                      {localization.button.cancel}
+                    </Button>
+                  </Modal.Footer>
+                </>
+              );
+            }}
           </Formik>
         </Modal.Dialog>
       </Modal.Root>
