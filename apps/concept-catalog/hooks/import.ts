@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { validOrganizationNumber } from '@catalog-frontend/utils';
 import { useSession } from 'next-auth/react';
 import { importRdfConcepts } from '@catalog-frontend/data-access';
+import { useRouter } from 'next/navigation';
 
 type ConceptImport = Omit<Concept, 'id' | 'ansvarligVirksomhet'>;
 
@@ -166,6 +167,7 @@ const attemptToParseCsvFile = (text: string): Promise<ConceptImport[]> => {
 
 export const useImportRdfConcepts = (catalogId: string, contentType: string) => {
   const { data: session } = useSession();
+  const router = useRouter();
   const accessToken = session?.accessToken ?? '';
   return useMutation({
     mutationKey: ['import-Concepts-RDF'],
@@ -180,7 +182,8 @@ export const useImportRdfConcepts = (catalogId: string, contentType: string) => 
       const location = await importRdfConcepts(fileContent, contentType, catalogId, accessToken);
 
       if (location) {
-        console.log("Location", location)
+        const resultId = location.split('/').pop();
+        router.push(`/catalogs/${catalogId}/concepts/import-results/${resultId}`);
       }
 
     },

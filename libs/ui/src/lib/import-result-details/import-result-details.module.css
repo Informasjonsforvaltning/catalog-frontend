@@ -17,12 +17,13 @@
 .titleContainer {
   display: flex;
   gap: 0.5rem;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .title {
   font-weight: 500;
   font-size: 40px;
+  align-items: center;
 }
 
 .titleTags {

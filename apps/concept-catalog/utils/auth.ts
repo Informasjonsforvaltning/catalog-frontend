@@ -13,6 +13,7 @@ import { RedirectType, redirect } from 'next/navigation';
 type PageParams = {
   catalogId: string;
   conceptId?: string | undefined | null;
+  resultId?: string | undefined | null;
   changeRequestId?: string | undefined | null;
   conceptIdSearch?: string | undefined | null;
 };
@@ -23,7 +24,7 @@ type Render = (
 
 const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', render: Render) => {
   return async ({ params, searchParams }) => {
-    const { catalogId, conceptId, changeRequestId } = await params;
+    const { catalogId, conceptId, resultId, changeRequestId } = await params;
     const { concept: conceptIdSearch } = await searchParams;
 
     if (!validOrganizationNumber(catalogId)) {
@@ -60,6 +61,7 @@ const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', re
     return await render({
       catalogId,
       conceptId,
+      resultId,
       changeRequestId,
       conceptIdSearch,
       session,

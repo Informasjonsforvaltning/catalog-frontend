@@ -284,6 +284,18 @@ export const getConceptImportResultById = async (catalogId: string, resultId: st
   return await fetch(resource, options);
 };
 
+export const removeImportResultConcept = async (catalogId: string, resultId: string, accessToken: string) => {
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}/results/${resultId}`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'DELETE',
+  };
+  return await fetch(resource, options);
+};
+
 export const getUnpublishedRelatedConcepts = async (
   concept: Concept,
   accessToken: string | null | undefined,
