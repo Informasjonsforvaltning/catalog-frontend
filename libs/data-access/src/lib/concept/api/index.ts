@@ -256,9 +256,7 @@ export const getUnpublishedConceptRelations = (concept: Concept): UnionRelation[
 };
 
 export const getConceptImportResults = async (catalogId: string, accessToken: string) => {
-  console.log("Getting concept import results for catalog:", catalogId);
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}/results`;
-  console.log("URL", resource)
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -271,9 +269,7 @@ export const getConceptImportResults = async (catalogId: string, accessToken: st
 
 export const getConceptImportResultById = async (catalogId: string, resultId: string, accessToken: string) => {
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}/results/${resultId}`;
-  console.log("Getting concept import results for catalog:", catalogId, resultId);
 
-  await console.log("Requested url:", resource);
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
