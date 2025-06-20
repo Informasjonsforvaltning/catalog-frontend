@@ -3,6 +3,9 @@ import type { ParseResult } from 'papaparse';
 import { Concept } from '@catalog-frontend/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { validOrganizationNumber } from '@catalog-frontend/utils';
+import { useSession } from 'next-auth/react';
+import { importRdfConcepts } from '@catalog-frontend/data-access';
+import { useRouter } from 'next/navigation';
 
 type ConceptImport = Omit<Concept, 'id' | 'ansvarligVirksomhet'>;
 
@@ -159,6 +162,34 @@ const attemptToParseCsvFile = (text: string): Promise<ConceptImport[]> => {
     } catch (error: any) {
       reject(error);
     }
+  });
+};
+
+export const useImportRdfConcepts = (catalogId: string, contentType: string) => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const accessToken = session?.accessToken ?? '';
+  return useMutation({
+    mutationKey: ['import-Concepts-RDF'],
+    mutationFn: async (fileContent: string) => {
+      if (!validOrganizationNumber(catalogId)) {
+        console.log("Invalid organization number", catalogId);
+        return Promise.reject('Invalid organization number');
+      }
+
+      console.log("uploading")
+
+      const location = await importRdfConcepts(fileContent, contentType, catalogId, accessToken);
+
+      if (location) {
+        const resultId = location.split('/').pop();
+        router.push(`/catalogs/${catalogId}/concepts/import-results/${resultId}`);
+      }
+
+    },
+    onSuccess: () => {
+      console.log('Concept RDF concept successful!');
+    },
   });
 };
 
