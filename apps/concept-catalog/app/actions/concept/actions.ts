@@ -4,7 +4,8 @@ import {
   deleteConcept as deleteConceptApi,
   createConcept as createConceptApi,
   patchConcept as patchConceptApi,
-  getConcept, removeImportResultConcept as removeImportResult,
+  getConcept,
+  removeImportResultConcept as removeImportResult,
 } from '@catalog-frontend/data-access';
 import { Concept } from '@catalog-frontend/types';
 import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
