@@ -12,6 +12,9 @@ interface Props {
 export const ImportConceptRdf = ( { catalogId }: Props) => {
 
   const allowedFileTypesRDF = ['.ttl'];
+  const fileExtensions: string [] = allowedFileTypesRDF
+    .map(ext => ext.split('.').pop() || '')
+    .filter(ext => ext !== '');
   const uploadRdf = useImportRdfConcepts(catalogId, "text/turtle");
   const onFileUpload = async (event) => {
     const file = event.target.files?.[0];
@@ -20,12 +23,10 @@ export const ImportConceptRdf = ( { catalogId }: Props) => {
       reader.readAsText(file, 'UTF-8');
       reader.onload = function (evt) {
         if (evt.target && typeof evt.target.result === 'string') {
-          if (file.name.split('.').pop() === 'ttl') {
+          if (fileExtensions.includes(file.name.split('.').pop()?.toLowerCase())) {
             uploadRdf.mutate(evt.target.result);
           }
-        } else {
-          console.error('File content is not a string');
-        }
+        } else console.error('File content is not a string');
       };
     }
   }
