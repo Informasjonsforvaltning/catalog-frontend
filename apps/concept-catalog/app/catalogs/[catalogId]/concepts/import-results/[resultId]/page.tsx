@@ -14,7 +14,6 @@ const ImportResultDetailsPage = withWriteProtectedPage(
     const importResult = await getConceptImportResultById(catalogId, resultId, `${session?.accessToken}`).then(
       (response) => {
         if (response.ok) {
-          console.log('Importing result by id', response);
           return response.json();
         }
       },

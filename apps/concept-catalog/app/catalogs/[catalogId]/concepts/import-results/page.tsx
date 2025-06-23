@@ -10,7 +10,6 @@ const ImportResultsPage = withWriteProtectedPage(
   async ({ catalogId, session }) => {
     const importResults: ImportResult[] = await getConceptImportResults(catalogId, `${session.accessToken}`)
       .then((response) => {
-        console.log('Importing result by id', response);
         return response.json();
       })
       .catch((error) => {
