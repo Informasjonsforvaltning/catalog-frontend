@@ -186,8 +186,11 @@ export const useImportRdfConcepts = (catalogId: string, contentType: string) => 
 
     },
     onSuccess: () => {
-      console.log('Concept RDF concept successful!');
+      console.log('Concept RDF file has been uploaded successfully!');
     },
+    onError: (error: any) => {
+      console.error('Error uploading concept RDF file');
+    }
   });
 };
 
