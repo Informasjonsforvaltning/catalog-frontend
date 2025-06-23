@@ -33,11 +33,11 @@ export function ImportModal({ catalogId }: Props) {
         onInteractOutside={() => modalRef.current?.close()}
       >
         <Modal.Header>
-          <TitleWithHelpTextAndTag>{localization.dataServiceCatalog.importModal.title}</TitleWithHelpTextAndTag>
+          <TitleWithHelpTextAndTag>{localization.concept.importModal.title}</TitleWithHelpTextAndTag>
         </Modal.Header>
         <Modal.Content>
-          <div>{localization.dataServiceCatalog.importModal.openapiDescription}</div>
-          <div>{localization.dataServiceCatalog.importModal.resultDescription}</div>
+          <div>{localization.concept.importModal.openapiDescription}</div>
+          <div>{localization.concept.importModal.resultDescription}</div>
         </Modal.Content>
         <Modal.Footer>
           <div className={styles.buttons}>
