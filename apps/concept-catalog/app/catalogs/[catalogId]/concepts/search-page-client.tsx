@@ -6,7 +6,6 @@ import { isEmpty } from 'lodash';
 import { useRouter } from 'next/navigation';
 import { SearchableField, QuerySort, ConceptsPageSettings } from '@catalog-frontend/types';
 import {
-  UploadButton,
   SearchHitContainer,
   Spinner,
   SearchHitsLayout,
@@ -181,7 +180,7 @@ export const SearchPageClient = ({
   });
 
   const importConcepts = useImportConcepts(catalogId);
-  const sortOptions = getSelectOptions(loc.search.sortOptions).map((opt) => (
+  const sortOptions = getSelectOptions(localization.search.sortOptions).map((opt) => (
     <option
       key={`sortOption-${opt.value}`}
       value={opt.value}
@@ -339,7 +338,7 @@ export const SearchPageClient = ({
               key={`published-${index}`}
               onClick={() => removeFilter(filter, 'published')}
             >
-              {filter === 'published' ? loc.publicationState.published : loc.publicationState.unpublished}
+              {filter === 'published' ? localization.publicationState.published : localization.publicationState.unpublished}
             </Chip.Removable>
           ))}
           {filterInternalFields &&
@@ -351,7 +350,7 @@ export const SearchPageClient = ({
                     removeFilter({ key: key, value: value }, 'internalFields');
                   }}
                 >
-                  {`${getTranslateText(getInternalFields(key).label)}: ${value === 'true' ? loc.yes : loc.no}`}
+                  {`${getTranslateText(getInternalFields(key).label)}: ${value === 'true' ? localization.yes : localization.no}`}
                 </Chip.Removable>
               ));
             })}
@@ -386,9 +385,9 @@ export const SearchPageClient = ({
                 <div className={styles.searchFieldWrapper}>
                   <SearchField
                     className={styles.searchField}
-                    placeholder={loc.search.search}
+                    placeholder={localization.search.search}
                     value={searchTerm}
-                    options={getSelectOptions(loc.search.fields).map(({ label, value }) => ({
+                    options={getSelectOptions(localization.search.fields).map(({ label, value }) => ({
                       label,
                       value,
                       default: value === 'alleFelter',
@@ -418,7 +417,7 @@ export const SearchPageClient = ({
                       >
                         <>
                           <PlusCircleIcon fontSize='1.5rem' />
-                          <span>{loc.button.createConcept}</span>
+                          <span>{localization.button.createConcept}</span>
                         </>
                       </LinkButton>
                     </>
