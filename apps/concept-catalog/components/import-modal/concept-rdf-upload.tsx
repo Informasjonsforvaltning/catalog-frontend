@@ -11,7 +11,7 @@ interface Props {
 
 export const ImportConceptRdf = ( { catalogId }: Props) => {
 
-  const allowedFileTypesRDF = ['.ttl', '.n3', '.rdf', '.owl', '.xml', '.jsonld'];
+  const allowedFileTypesRDF = ['.ttl'];
   const uploadRdf = useImportRdfConcepts(catalogId, "text/turtle");
   const onFileUpload = async (event) => {
     const file = event.target.files?.[0];
