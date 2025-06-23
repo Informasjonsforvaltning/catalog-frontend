@@ -20,7 +20,7 @@ import {
   setClientConceptsPageSettings
 } from '@catalog-frontend/utils';
 import { Chip, Tabs } from '@digdir/designsystemet-react';
-import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 import {
   SortOption,
   getSelectOptions,
@@ -49,7 +49,6 @@ type Props = {
 export const SearchPageClient = ({
   catalogId,
   hasWritePermission,
-  hasAdminPermission,
   fieldsResult,
   codeListsResult,
   usersResult,
