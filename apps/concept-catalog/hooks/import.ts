@@ -177,8 +177,6 @@ export const useImportRdfConcepts = (catalogId: string, contentType: string) => 
         return Promise.reject('Invalid organization number');
       }
 
-      console.log("uploading")
-
       const location = await importRdfConcepts(fileContent, contentType, catalogId, accessToken);
 
       if (location) {
