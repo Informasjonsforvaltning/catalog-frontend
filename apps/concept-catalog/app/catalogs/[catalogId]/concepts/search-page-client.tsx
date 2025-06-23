@@ -17,7 +17,6 @@ import {
 import {
   getTranslateText,
   capitalizeFirstLetter,
-  localization as loc,
   localization,
   setClientConceptsPageSettings
 } from '@catalog-frontend/utils';
