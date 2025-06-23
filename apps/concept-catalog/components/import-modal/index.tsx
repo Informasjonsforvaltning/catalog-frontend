@@ -36,7 +36,7 @@ export function ImportModal({ catalogId }: Props) {
           <TitleWithHelpTextAndTag>{localization.concept.importModal.title}</TitleWithHelpTextAndTag>
         </Modal.Header>
         <Modal.Content>
-          <div>{localization.concept.importModal.openapiDescription}</div>
+          <div>{localization.concept.importModal.ConceptUploadDesctiption}</div>
           <div>{localization.concept.importModal.resultDescription}</div>
         </Modal.Content>
         <Modal.Footer>

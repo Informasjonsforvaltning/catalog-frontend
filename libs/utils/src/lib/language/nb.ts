@@ -408,6 +408,12 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
       RETIRED: 'danger',
       REJECTED: 'neutral',
     },
+    importModal: {
+      title: 'Begrep import',
+      ConceptUploadDesctiption:
+        'Begrep kan importeres ved å laste inn enten en fil i Turtle format eller CSV/JSON format ved bruk av relevant knapp. Når importeringsforsøket av Turtle fil er gjennomført vil du automatisk bli tatt til en side som detaljerer resultatet av importeringen.',
+      resultDescription: 'Bruk Resultater-knappen for å se alle tidligere gjennomførte importeringsforsøk av Turtle fil.',
+    },
   },
 
   validity: {
