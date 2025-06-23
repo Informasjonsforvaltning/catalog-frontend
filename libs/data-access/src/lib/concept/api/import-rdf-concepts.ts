@@ -6,9 +6,7 @@ export const importRdfConcepts = async (
   catalogId: string,
   accessToken: string
 ) => {
-  console.log("Base uri:", process.env.CONCEPT_CATALOG_BASE_URI);
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}`;
-  console.log("Resource:", resource);
 
   console.log("Uploading the concept rdf file catalog:", catalogId);
   const options = {
