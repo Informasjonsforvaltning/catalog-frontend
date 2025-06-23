@@ -23,6 +23,8 @@ export const ImportConceptRdf = ( { catalogId }: Props) => {
           if (file.name.split('.').pop() === 'ttl') {
             uploadRdf.mutate(evt.target.result);
           }
+        } else {
+          console.error('File content is not a string');
         }
       };
     }
