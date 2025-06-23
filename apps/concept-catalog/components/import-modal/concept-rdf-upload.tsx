@@ -19,10 +19,7 @@ export const ImportConceptRdf = ( { catalogId }: Props) => {
       const reader = new FileReader();
       reader.readAsText(file, 'UTF-8');
       reader.onload = function (evt) {
-        console.log("Checking if the content is a string");
         if (evt.target && typeof evt.target.result === 'string') {
-          console.log("The file is string, proceeding with upload");
-          console.log("File extension", file.name.split('.').pop());
           if (file.name.split('.').pop() === 'ttl') {
             uploadRdf.mutate(evt.target.result);
           }
