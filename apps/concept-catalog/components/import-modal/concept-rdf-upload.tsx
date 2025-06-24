@@ -18,7 +18,6 @@ export const ImportConceptRdf = ( { catalogId }: Props) => {
   extension2Type.set('.jsonld', 'application/ld+json');
   extension2Type.set('.json', 'application/rdf+json');
   const allowedExtensions = Array.from(extension2Type.keys());
-  const allowedMimeTypes = Array.from(extension2Type.values());
   const uploadRdf = useImportRdfConcepts(catalogId);
   const onFileUpload = async (event) => {
     const file: File = event.target.files?.[0];
