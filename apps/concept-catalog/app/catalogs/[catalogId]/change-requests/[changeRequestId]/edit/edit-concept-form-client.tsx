@@ -26,7 +26,7 @@ export const EditConceptFormClient = ({
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [showGotoConceptConfirm, setShowGotoConceptConfirm] = useState(false);
 
-  const dataStorage = new LocalDataStorage<StorageData>({ key: 'changeRequestForm' });
+  const dataStorage = new LocalDataStorage<StorageData>({ key: 'changeRequestForm', secondaryKeys: ['conceptFormRelation'] });
 
   const emptyConcept: Concept = originalConcept || {
     id: null,

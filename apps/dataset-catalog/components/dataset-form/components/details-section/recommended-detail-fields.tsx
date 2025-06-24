@@ -152,7 +152,6 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
       </div>
       <FieldsetDivider />
       <TemporalModal
-        values={values.temporal}
         label={
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
