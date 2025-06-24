@@ -1,4 +1,4 @@
-import { Concept, Definisjon, ISOLanguage, Kilde } from '@catalog-frontend/types';
+import { Concept, Definisjon, ISOLanguage, Kilde, StorageData } from '@catalog-frontend/types';
 import {
   Box,
   Button,
@@ -17,7 +17,7 @@ import { forwardRef, useState } from 'react';
 import { DefinitionModal } from './definition-modal';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { get, isEmpty, isEqual } from 'lodash';
+import { DataStorage } from '@catalog-frontend/utils';
 
 function getFirstErrorByRootKeys(obj: FormikErrors<Concept>, rootKeys: string[]): string | null {
   for (const rootKey of rootKeys) {
@@ -54,14 +54,42 @@ function getFirstErrorByRootKeys(obj: FormikErrors<Concept>, rootKeys: string[])
 type DefinitionSectionProps = {
   changed?: string[];
   readOnly?: boolean;
+  autoSaveId?: string;
+  autoSaveStorage: DataStorage<StorageData>;
 };
 
-export const DefinitionSection = ({ changed, readOnly }: DefinitionSectionProps) => {
+export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStorage }: DefinitionSectionProps) => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
   const [open, setOpen] = useState<Record<number, boolean>>({});
 
-  const definitions = ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'];
-  const allowedLanguages = Object.freeze<ISOLanguage[]>(['nb', 'nn', 'en']);
+  const definitions = ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'] as const;
+  const allowedLanguages: ISOLanguage[] = ['nb', 'nn', 'en'];
+
+  const handleChangeDefinitionInModal = (def: Definisjon, fieldName: string) => {
+    if (autoSaveStorage) {
+      autoSaveStorage.setSecondary('conceptFormDefinition', {
+        id: autoSaveId,
+        values: {
+          definition: def,
+          fieldName
+        },
+        lastChanged: new Date().toISOString(),
+      });
+    }
+  };
+
+  const handleCloseDefinitionModal = () => {
+    if (autoSaveStorage) {
+      autoSaveStorage.deleteSecondary('conceptFormDefinition');
+    }
+  };
+
+  const handleUpdateDefinition = (def: Definisjon | null, fieldName: string) => {
+    setFieldValue(fieldName, def);
+    if (autoSaveStorage) {
+      autoSaveStorage.deleteSecondary('conceptFormDefinition');
+    }
+  };
 
   const prepareInitialValues = (def: Definisjon): Definisjon => {
     return {
@@ -114,7 +142,7 @@ export const DefinitionSection = ({ changed, readOnly }: DefinitionSectionProps)
         {definitions
           .filter((name) => values[name])
           .map((name, index) => {
-            const def: Definisjon = values[name];
+            const def: Definisjon | undefined = values[name];
             return (
               def && (
                 <Card
@@ -168,7 +196,7 @@ export const DefinitionSection = ({ changed, readOnly }: DefinitionSectionProps)
                     </div>
                     <div>
                       <DefinitionModal
-                        initialDefinition={prepareInitialValues(def)}
+                        initialDefinition={def ? prepareInitialValues(def) : undefined}
                         header={localization.conceptForm.fieldLabel.definitionTargetGroupFull[name] as string}
                         definitionHelpText={localization.conceptForm.helpText.definitionText[name] as string}
                         trigger={
@@ -184,7 +212,9 @@ export const DefinitionSection = ({ changed, readOnly }: DefinitionSectionProps)
                             Rediger
                           </Button>
                         }
-                        onSucces={(updatedDef) => setFieldValue(name, updatedDef)}
+                        onSucces={(updatedDef) => handleUpdateDefinition(updatedDef, name)}
+                        onChange={(updatedDef) => handleChangeDefinitionInModal(updatedDef, name)}
+                        onClose={handleCloseDefinitionModal}
                       />
 
                       <Button
@@ -192,7 +222,7 @@ export const DefinitionSection = ({ changed, readOnly }: DefinitionSectionProps)
                         size='sm'
                         color='danger'
                         disabled={readOnly}
-                        onClick={() => setFieldValue(name, null)}
+                        onClick={() => handleUpdateDefinition(null, name)}
                       >
                         <TrashIcon
                           title='Slett'
@@ -245,7 +275,9 @@ export const DefinitionSection = ({ changed, readOnly }: DefinitionSectionProps)
                     {localization.conceptForm.fieldLabel.definitionTargetGroup[name]}
                   </Button>
                 }
-                onSucces={(def) => setFieldValue(name, def)}
+                onSucces={(def) => handleUpdateDefinition(def, name)}
+                onChange={(def) => handleChangeDefinitionInModal(def, name)}
+                onClose={handleCloseDefinitionModal}
               />
             ))}
         </Box>
@@ -254,10 +286,10 @@ export const DefinitionSection = ({ changed, readOnly }: DefinitionSectionProps)
       {Object.keys(errors).some((value) =>
         ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(value),
       ) && (
-        <ErrorMessage>
-          {getFirstErrorByRootKeys(errors, ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'])}
-        </ErrorMessage>
-      )}
+          <ErrorMessage>
+            {getFirstErrorByRootKeys(errors, ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'])}
+          </ErrorMessage>
+        )}
     </Box>
   );
 };
