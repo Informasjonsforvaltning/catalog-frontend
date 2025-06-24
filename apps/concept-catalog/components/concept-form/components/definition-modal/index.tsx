@@ -1,4 +1,4 @@
-import { ReactNode, useRef, useState } from 'react';
+import { ReactNode, useRef, useState, useEffect } from 'react';
 import { Formik } from 'formik';
 import { Button, Modal } from '@digdir/designsystemet-react';
 import {
@@ -19,6 +19,8 @@ export type DefinitionModalProps = {
   definitionHelpText?: string;
   initialDefinition?: Definisjon;
   onSucces: (def: Definisjon) => void;
+  onChange?: (def: Definisjon) => void;
+  onClose?: () => void;
 };
 
 const defaultDefinition: Definisjon = { tekst: {}, kildebeskrivelse: { forholdTilKilde: 'egendefinert', kilde: [] } };
@@ -29,6 +31,8 @@ export const DefinitionModal = ({
   definitionHelpText,
   trigger,
   onSucces,
+  onChange,
+  onClose,
 }: DefinitionModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -55,7 +59,13 @@ export const DefinitionModal = ({
             modalRef.current?.close();
           }}
         >
-          {({ errors, isValid, isSubmitting, submitForm }) => {
+          {({ errors, isValid, isSubmitting, submitForm, dirty, values }) => {
+            useEffect(() => {
+              if (dirty && onChange) {
+                onChange(values);
+              }
+            }, [dirty, values]);
+
             return (
               <>
                 <Modal.Header closeButton={false}>{header}</Modal.Header>
@@ -91,7 +101,10 @@ export const DefinitionModal = ({
                     variant='secondary'
                     type='button'
                     size='sm'
-                    onClick={() => modalRef.current?.close()}
+                    onClick={() => {
+                      onClose?.();
+                      modalRef.current?.close();
+                    }}
                     disabled={isSubmitting}
                   >
                     Avbryt

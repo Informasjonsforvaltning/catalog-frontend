@@ -1,26 +1,27 @@
+'use client';
+
 import { useFormikContext } from 'formik';
 import { PencilWritingIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
 import { Box, Button, Fieldset, Skeleton, Table } from '@digdir/designsystemet-react';
-import { Concept, RelatedConcept, UnionRelation, RelationTypeEnum } from '@catalog-frontend/types';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { Concept, RelatedConcept, UnionRelation, RelationTypeEnum, StorageData } from '@catalog-frontend/types';
+import { DataStorage, getTranslateText, localization } from '@catalog-frontend/utils';
 import { useSearchConcepts as useSearchInternalConcepts, useDataNorgeSearchConcepts } from '../../../hooks/search';
 import { RelationModal } from './relation-modal';
 import styles from '../concept-form.module.scss';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { updateUnionRelation, removeUnionRelation, UnionRelationWithIndex } from '../../../utils/relation-utils';
+
 
 type RelationSection = {
   catalogId: string;
   changed?: string[];
   readOnly?: boolean;
+  autoSaveId?: string;
+  autoSaveStorage: DataStorage<StorageData>;
 };
 
-type UnionRelationWithIndex = {
-  index: number;
-} & UnionRelation;
-
-export const RelationSection = ({ catalogId, changed, readOnly }: RelationSection) => {
+export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, autoSaveStorage }: RelationSection) => {
   const { values, setFieldValue } = useFormikContext<Concept>();
-
   const isDirty = [
     'begrepsRelasjon',
     'seOgså',
@@ -34,36 +35,36 @@ export const RelationSection = ({ catalogId, changed, readOnly }: RelationSectio
     ...(values['begrepsRelasjon']?.map((rel, index) => ({ ...rel, index })) ?? []),
     ...(values['seOgså']
       ? values['seOgså'].map((concept, index) => ({
-          relasjon: RelationTypeEnum.SE_OGSÅ,
-          relatertBegrep: concept,
-          index,
-        }))
+        relasjon: RelationTypeEnum.SE_OGSÅ,
+        relatertBegrep: concept,
+        index,
+      }))
       : []),
     ...(values['erstattesAv']
       ? values['erstattesAv'].map((concept, index) => ({
-          relasjon: RelationTypeEnum.ERSTATTES_AV,
-          relatertBegrep: concept,
-          index,
-        }))
+        relasjon: RelationTypeEnum.ERSTATTES_AV,
+        relatertBegrep: concept,
+        index,
+      }))
       : []),
     ...(values['internBegrepsRelasjon']
       ? values.internBegrepsRelasjon.map((rel, index) => ({ ...rel, internal: true, index }))
       : []),
     ...(values['internSeOgså']
       ? values['internSeOgså'].map((concept, index) => ({
-          relasjon: RelationTypeEnum.SE_OGSÅ,
-          relatertBegrep: concept,
-          internal: true,
-          index,
-        }))
+        relasjon: RelationTypeEnum.SE_OGSÅ,
+        relatertBegrep: concept,
+        internal: true,
+        index,
+      }))
       : []),
     ...(values['internErstattesAv']
       ? values['internErstattesAv'].map((concept, index) => ({
-          relasjon: RelationTypeEnum.ERSTATTES_AV,
-          relatertBegrep: concept,
-          internal: true,
-          index,
-        }))
+        relasjon: RelationTypeEnum.ERSTATTES_AV,
+        relatertBegrep: concept,
+        internal: true,
+        index,
+      }))
       : []),
   ];
 
@@ -108,84 +109,49 @@ export const RelationSection = ({ catalogId, changed, readOnly }: RelationSectio
       const match = internalConcepts?.hits.find((hit) => hit.originaltBegrep === relation.relatertBegrep);
       return match
         ? ({
-            id: relation.relatertBegrep,
-            title: match.anbefaltTerm?.navn,
-          } as RelatedConcept)
+          id: relation.relatertBegrep,
+          title: match.anbefaltTerm?.navn,
+        } as RelatedConcept)
         : undefined;
     } else {
       const match = externalConcepts?.hits.find((hit) => hit.uri === relation.relatertBegrep);
       return match
         ? ({
-            href: relation.relatertBegrep,
-            title: match.title,
-          } as RelatedConcept)
+          href: relation.relatertBegrep,
+          title: match.title,
+        } as RelatedConcept)
         : ({
-            href: relation.relatertBegrep,
-            custom: true,
-            title: { nb: relation.relatertBegrep },
-          } as RelatedConcept);
+          href: relation.relatertBegrep,
+          custom: true,
+          title: { nb: relation.relatertBegrep },
+        } as RelatedConcept);
     }
   };
 
-  const getFieldname = (rel: UnionRelation) => {
-    let name: string | undefined = undefined;
-    if (rel.relasjon === RelationTypeEnum.SE_OGSÅ) {
-      name = rel.internal ? 'internSeOgså' : 'seOgså';
-    } else if (rel.relasjon === RelationTypeEnum.ERSTATTES_AV) {
-      name = rel.internal ? 'internErstattesAv' : 'erstattesAv';
-    } else {
-      name = rel.internal ? 'internBegrepsRelasjon' : 'begrepsRelasjon';
-    }
-
-    return name;
+  const handleChangeRelationInModal = (rel: UnionRelation, prev?: UnionRelationWithIndex) => {
+    autoSaveStorage.setSecondary('conceptFormRelation', {
+      id: autoSaveId,
+      values: {
+        rel,
+        prev
+      },
+      lastChanged: new Date().toISOString(),
+    });    
   };
 
-  const handleChangeRelation = (rel: UnionRelation, prev?: UnionRelationWithIndex) => {
-    if (rel.relatertBegrep) {
-      const name: string | undefined = getFieldname(rel);
-      const prevName: string | undefined = prev ? getFieldname(prev) : undefined;
+  const handleCloseRelationModal = () => {
+    autoSaveStorage.deleteSecondary('conceptFormRelation');
+  };
 
-      let relationValue: any = {
-        relasjon: rel.relasjon,
-        relasjonsType: rel.relasjonsType,
-        beskrivelse: rel.beskrivelse,
-        inndelingskriterium: rel.inndelingskriterium,
-        relatertBegrep: rel.relatertBegrep,
-      };
-      if (rel.relasjon === RelationTypeEnum.SE_OGSÅ || rel.relasjon === RelationTypeEnum.ERSTATTES_AV) {
-        relationValue = rel.relatertBegrep;
-      }
-
-      if (name) {
-        if (prev?.index === undefined || name !== prevName) {
-          if (!values[name]) {
-            setFieldValue(name, [relationValue]);
-          } else {
-            setFieldValue(name, [...values[name], relationValue]);
-          }
-
-          if (prev && name !== prevName) {
-            handleRemoveRelation(prev);
-          }
-        } else {
-          const relations = [...values[name]];
-          relations[prev.index] = relationValue;
-          setFieldValue(name, relations);
-        }
-      }
-    }
+  const handleUpdateRelation = (rel: UnionRelation, prev?: UnionRelationWithIndex) => {
+    updateUnionRelation(rel, prev, values, setFieldValue);
+    autoSaveStorage.deleteSecondary('conceptFormRelation');
   };
 
   const handleRemoveRelation = (rel: UnionRelationWithIndex) => {
-    if (rel.index < 0) {
-      return;
-    }
-    const name: string | undefined = getFieldname(rel);
-    const relations = [...values[name]];
-    relations.splice(rel.index, 1);
-    setFieldValue(name, relations);
+    removeUnionRelation(rel, values, setFieldValue);
   };
-
+ 
   if (isLoadingInternalConcepts || isLoadingExternalConcepts) {
     return (
       <Skeleton.Rectangle
@@ -244,7 +210,9 @@ export const RelationSection = ({ catalogId, changed, readOnly }: RelationSectio
                             Rediger
                           </Button>
                         }
-                        onSuccess={(values) => handleChangeRelation(values, relation)}
+                        onSuccess={(values) => handleUpdateRelation(values, relation)}
+                        onChange={(values) => handleChangeRelationInModal(values, relation)}
+                        onClose={() => handleCloseRelationModal()}
                       />
                       <Button
                         variant='tertiary'
@@ -285,7 +253,9 @@ export const RelationSection = ({ catalogId, changed, readOnly }: RelationSectio
                 Legg til relasjon
               </Button>
             }
-            onSuccess={(values) => handleChangeRelation(values)}
+            onSuccess={(values) => handleUpdateRelation(values)}
+            onChange={(values) => handleChangeRelationInModal(values)}
+            onClose={() => handleCloseRelationModal()}
           />
         </Box>
       )}

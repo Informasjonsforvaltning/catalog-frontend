@@ -1,4 +1,6 @@
-import { ReactNode, useRef, useState } from 'react';
+'use client';
+
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Formik } from 'formik';
 import { Button, Modal } from '@digdir/designsystemet-react';
 import { RelatedConcept, UnionRelation, RelationTypeEnum } from '@catalog-frontend/types';
@@ -13,6 +15,8 @@ export type RelationModalProps = {
   initialRelation?: UnionRelation;
   initialRelatedConcept?: RelatedConcept;
   onSuccess: (rel: UnionRelation) => void;
+  onChange: (rel: UnionRelation) => void;
+  onClose: () => void;
 };
 
 const defaultRelation: UnionRelation = { relasjon: undefined, internal: true };
@@ -24,6 +28,8 @@ export const RelationModal = ({
   header,
   trigger,
   onSuccess,
+  onChange,
+  onClose,
 }: RelationModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -50,7 +56,13 @@ export const RelationModal = ({
             modalRef.current?.close();
           }}
         >
-          {({ isSubmitting, submitForm }) => {
+          {({ isSubmitting, dirty, submitForm, values }) => {
+            useEffect(() => {
+              if (dirty && onChange) {
+                onChange(values);
+              }
+            }, [dirty, values]);
+
             return (
               <>
                 <Modal.Header closeButton={false}>{header}</Modal.Header>
@@ -75,7 +87,10 @@ export const RelationModal = ({
                     variant='secondary'
                     type='button'
                     size='sm'
-                    onClick={() => modalRef.current?.close()}
+                    onClick={() => {
+                      onClose();
+                      modalRef.current?.close();
+                    }}
                     disabled={isSubmitting}
                   >
                     Avbryt
