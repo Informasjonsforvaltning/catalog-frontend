@@ -11,21 +11,29 @@ interface Props {
 
 export const ImportConceptRdf = ( { catalogId }: Props) => {
 
-  const allowedFileTypesRDF = ['.ttl'];
-  const fileExtensions: string [] = allowedFileTypesRDF
-    .map(ext => ext.split('.').pop() || '')
-    .filter(ext => ext !== '');
-  const uploadRdf = useImportRdfConcepts(catalogId, "text/turtle");
+  const extension2Type: Map<string, string> = new Map<string, string>();
+  extension2Type.set('.ttl', 'text/turtle');
+  extension2Type.set('.rdf', 'application/rdf+xml');
+  extension2Type.set('.xml', 'application/rdf+xml');
+  extension2Type.set('.jsonld', 'application/ld+json');
+  extension2Type.set('.json', 'application/rdf+json');
+  const allowedExtensions = Array.from(extension2Type.keys());
+  const allowedMimeTypes = Array.from(extension2Type.values());
+  const uploadRdf = useImportRdfConcepts(catalogId);
   const onFileUpload = async (event) => {
-    const file = event.target.files?.[0];
+    const file: File = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.readAsText(file, 'UTF-8');
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const contentType = extension2Type.get(`.${fileExtension}`);
+      if (!fileExtension || ! contentType) {
+        console.error('Uploaded file has no extension or unsupported extension:', fileExtension);
+        return;
+      }
       reader.onload = function (evt) {
         if (evt.target && typeof evt.target.result === 'string') {
-          if (fileExtensions.includes(file.name.split('.').pop()?.toLowerCase())) {
-            uploadRdf.mutate(evt.target.result);
-          }
+            uploadRdf.mutate({fileContent: evt.target.result, contentType: contentType });
         } else console.error('File content is not a string');
       };
     }
@@ -33,7 +41,7 @@ export const ImportConceptRdf = ( { catalogId }: Props) => {
 
   return (
     <UploadButton
-      allowedMimeTypes={allowedFileTypesRDF}
+      allowedMimeTypes={allowedExtensions}
       onUpload={(e) => onFileUpload(e)}
     >
       <FileImportIcon fontSize='1.5rem' />

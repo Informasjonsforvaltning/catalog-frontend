@@ -165,19 +165,19 @@ const attemptToParseCsvFile = (text: string): Promise<ConceptImport[]> => {
   });
 };
 
-export const useImportRdfConcepts = (catalogId: string, contentType: string) => {
+export const useImportRdfConcepts = (catalogId: string) => {
   const { data: session } = useSession();
   const router = useRouter();
   const accessToken = session?.accessToken ?? '';
   return useMutation({
     mutationKey: ['import-Concepts-RDF'],
-    mutationFn: async (fileContent: string) => {
+    mutationFn: async ({ ...mutationProps }: {fileContent: string, contentType: string}) => {
       if (!validOrganizationNumber(catalogId)) {
         console.log("Invalid organization number", catalogId);
         return Promise.reject('Invalid organization number');
       }
 
-      const location = await importRdfConcepts(fileContent, contentType, catalogId, accessToken);
+      const location = await importRdfConcepts(mutationProps.fileContent, mutationProps.contentType, catalogId, accessToken);
 
       if (location) {
         const resultId = location.split('/').pop();
