@@ -15,8 +15,6 @@ interface Props {
 const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const router = useRouter();
-
-
   const handleDeleteConfirmed = async () => {
     try {
       await deleteImportResult(catalogId, importResult.id);
