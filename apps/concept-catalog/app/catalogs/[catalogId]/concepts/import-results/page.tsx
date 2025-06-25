@@ -2,10 +2,10 @@ import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui'
 import { localization } from '@catalog-frontend/utils';
 import { ImportResult } from '@catalog-frontend/types';
 import { getConceptImportResults } from '@catalog-frontend/data-access';
-import { withWriteProtectedPage } from '@concept-catalog/utils/auth';
+import { withAdminProtectedPage } from '@concept-catalog/utils/auth';
 import ImportResultsPageClient from './import-results-page-client';
 
-const ImportResultsPage = withWriteProtectedPage(
+const ImportResultsPage = withAdminProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/concepts/import-results`,
   async ({ catalogId, session }) => {
     const importResults: ImportResult[] = await getConceptImportResults(catalogId, `${session.accessToken}`)

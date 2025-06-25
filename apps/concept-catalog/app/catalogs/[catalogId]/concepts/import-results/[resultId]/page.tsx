@@ -3,9 +3,9 @@ import { localization, validUUID } from '@catalog-frontend/utils';
 import { getConceptImportResultById } from '@catalog-frontend/data-access';
 import { redirect, RedirectType } from 'next/navigation';
 import ImportResultDetailsPageClient from './import-result-details-page-client';
-import { withWriteProtectedPage } from '@concept-catalog/utils/auth';
+import { withAdminProtectedPage } from '@concept-catalog/utils/auth';
 
-const ImportResultDetailsPage = withWriteProtectedPage(
+const ImportResultDetailsPage = withAdminProtectedPage(
   ({ catalogId, resultId }) => `/catalogs/${catalogId}/concepts/import-results/${resultId}`,
   async ({ catalogId, resultId, session }) => {
     if (!resultId || !validUUID(resultId)) {
