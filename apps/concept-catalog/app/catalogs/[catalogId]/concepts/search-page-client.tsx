@@ -49,6 +49,7 @@ type Props = {
 export const SearchPageClient = ({
   catalogId,
   hasWritePermission,
+  hasAdminPermission,
   fieldsResult,
   codeListsResult,
   usersResult,
@@ -407,20 +408,20 @@ export const SearchPageClient = ({
                   </Select>
                 </div>
                 <div className={styles.buttons}>
-                  {hasWritePermission && (
                     <>
-                      <ImportModal catalogId={catalogId}/>
-                      <LinkButton
-                        href={`/catalogs/${catalogId}/concepts/new`}
-                        size='sm'
-                      >
-                        <>
-                          <PlusCircleIcon fontSize='1.5rem' />
-                          <span>{localization.button.createConcept}</span>
-                        </>
-                      </LinkButton>
+                      {hasAdminPermission && <ImportModal catalogId={catalogId} />}
+                      {hasWritePermission && (
+                        <LinkButton
+                          href={`/catalogs/${catalogId}/concepts/new`}
+                          size='sm'
+                        >
+                          <>
+                            <PlusCircleIcon fontSize='1.5rem' />
+                            <span>{localization.button.createConcept}</span>
+                          </>
+                        </LinkButton>
+                      )}
                     </>
-                  )}
                 </div>
               </div>
               <FilterChips />
