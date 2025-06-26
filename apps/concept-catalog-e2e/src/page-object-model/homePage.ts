@@ -36,5 +36,5 @@ export default class HomePage {
     await this.page.waitForTimeout(5000);
     await this.page.waitForURL(/.*catalog-portal/);
     console.log('[HOME PAGE] Redirected to registration portal.');
-  }
+  }  
 }

@@ -4,12 +4,10 @@ import DatasetsPage from '../../page-object-model/datasetsPage';
 import { adminAuthFile, createDataset, uniqueString } from '../../utils/helpers';
 import { dateStringToDate, formatDate } from '@catalog-frontend/utils';
 
-const CATALOG_ID = '313422127';
-
 const getRandomDataset = () => {
   // Create a random dataset
   const dataset: DatasetToBeCreated = {
-    catalogId: CATALOG_ID,
+    catalogId: process.env.E2E_CATALOG_ID,
     title: {
       nb: uniqueString('test_dataset_nb'),
       nn: uniqueString('test_dataset_nn'),
@@ -41,32 +39,32 @@ runTestAsAdmin('should load datasets page', async ({ datasetsPage, playwright }:
   const dataset = getRandomDataset();
   await createDataset(apiRequestContext, dataset);
 
-  await datasetsPage.goto(CATALOG_ID);
+  await datasetsPage.goto(process.env.E2E_CATALOG_ID);
   await datasetsPage.expectHasDatasets();
 });
 
 runTestAsAdmin('should show create dataset button', async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
-  await datasetsPage.goto(CATALOG_ID);
+  await datasetsPage.goto(process.env.E2E_CATALOG_ID);
   await datasetsPage.expectCreateDatasetButtonVisible();
 });
 
 runTestAsAdmin('should have search input', async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
-  await datasetsPage.goto(CATALOG_ID);
+  await datasetsPage.goto(process.env.E2E_CATALOG_ID);
   await datasetsPage.expectSearchInputVisible();
 });
 
 runTestAsAdmin('should show all filters', async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
-  await datasetsPage.goto(CATALOG_ID);
+  await datasetsPage.goto(process.env.E2E_CATALOG_ID);
   await datasetsPage.expectAllFiltersVisible();
 });
 
 runTestAsAdmin('should show status filter', async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
-  await datasetsPage.goto(CATALOG_ID);
+  await datasetsPage.goto(process.env.E2E_CATALOG_ID);
   await datasetsPage.expectStatusFilterVisible();
 });
 
 runTestAsAdmin('should show published filter', async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
-  await datasetsPage.goto(CATALOG_ID);
+  await datasetsPage.goto(process.env.E2E_CATALOG_ID);
   await datasetsPage.expectPublishedFilterVisible();
 });
 
@@ -81,7 +79,7 @@ runTestAsAdmin('should be able to search datasets', async ({ datasetsPage, playw
     await createDataset(apiRequestContext, dataset);
   }  
 
-  await datasetsPage.goto(CATALOG_ID);
+  await datasetsPage.goto(process.env.E2E_CATALOG_ID);
   await datasetsPage.expectSearchInputVisible();
 
   // Search for the dataset
@@ -105,7 +103,7 @@ runTestAsAdmin('should show no results when searching for non-existent dataset',
   const dataset = getRandomDataset();
   await createDataset(apiRequestContext, dataset);
 
-  await datasetsPage.goto(CATALOG_ID);
+  await datasetsPage.goto(process.env.E2E_CATALOG_ID);
   await datasetsPage.expectSearchInputVisible();
   await datasetsPage.search('non-existent-dataset-123');
   await expect(datasetsPage.noResultsLocator()).toBeVisible();

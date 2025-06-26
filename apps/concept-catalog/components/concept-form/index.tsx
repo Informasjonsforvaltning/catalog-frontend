@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { Formik, Form, FormikProps } from 'formik';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { Alert, Checkbox, Paragraph, Spinner } from '@digdir/designsystemet-react';
-import { DataStorage, formatISO, getTranslateText, LocalDataStorage, localization } from '@catalog-frontend/utils';
+import { DataStorage, formatISO, getTranslateText, localization, safeValues, deepMergeWithUndefinedHandling } from '@catalog-frontend/utils';
 import type {
   CodeListsResult,
   Concept,
@@ -166,7 +166,7 @@ const ConceptForm = ({
     interneFelt = {},
     ...rest
   }: Concept) => {
-    return {
+    const values = {
       id,
       anbefaltTerm,
       definisjon,
@@ -196,6 +196,8 @@ const ConceptForm = ({
       interneFelt,
       ...rest,
     };
+
+    return safeValues(values);
   };
 
   const subjectCodeList = codeListsResult?.codeLists?.find(
@@ -356,7 +358,7 @@ const ConceptForm = ({
               return window.location.replace(`/catalogs/${catalogId}/${entityType}/${data.id}/edit?restore=1`);
             }
 
-            const restoreValues: Concept = { ...data.values };
+            const restoreValues: Concept = deepMergeWithUndefinedHandling({ ...initialValues }, data.values);
             setValues(restoreValues);
 
             // Handle relation data from secondary storage
@@ -376,7 +378,7 @@ const ConceptForm = ({
               // Delete definition data from secondary storage since it is merged with the main data
               autoSaveStorage?.deleteSecondary('conceptFormDefinition');
             }
-            
+
             showSnackbarMessage({ message: localization.snackbar.restoreSuccessfull, severity: 'success' });
           };
 

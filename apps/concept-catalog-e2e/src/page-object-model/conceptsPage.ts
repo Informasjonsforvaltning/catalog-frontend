@@ -224,4 +224,13 @@ export default class ConceptsPage {
     }
     await this.publishedStateFilterNotPublishedLocator().check();
   }
+
+  public async hideDevtools() {
+    if (await this.page.getByRole('button', { name: 'Open Next.js Dev Tools' }).isVisible()) {
+      await this.page.getByRole('button', { name: 'Open Next.js Dev Tools' }).click();
+      await this.page.getByText('Preferences').click();
+      await this.page.getByRole('button', { name: 'Hide' }).click();
+      await expect(this.page.getByRole('button', { name: 'Open Next.js Dev Tools' })).not.toBeVisible();
+    }
+  }
 }
