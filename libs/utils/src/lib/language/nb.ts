@@ -409,11 +409,13 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
       REJECTED: 'neutral',
     },
     importModal: {
-      title: 'Begrep import',
+      title: '**Import av begreper**',
       conceptUploadDescription:
-        'Begrep kan importeres ved å laste inn enten en fil i Turtle format eller CSV/JSON format ved bruk av relevant knapp. Når importeringsforsøket av Turtle fil er gjennomført vil du automatisk bli tatt til en side som detaljerer resultatet av importeringen.',
-      resultDescription: 'Bruk Resultater-knappen for å se alle tidligere gjennomførte importeringsforsøk av Turtle fil.',
-      csvImportHistoryNotSupported: 'Tidligere gjennomførte importeringsforsøk av CSV/JSON filer støttes ikke ennå.',
+        'Det er mulig å importere begrepsbeskrivelser ved å laste opp filer i enten Turtle-, CSV- eller JSON-format ved hjelp av de tilgjengelige knappene.',
+      resultDescription: `En side med detaljerte resultater av importprosessen vises automatisk ved fullført importforsøk av en Turtle-fil. Tidligere gjennomførte importforsøk for Turtle-filer kan vises ved å benytte **Resultater**-knappen.`,
+      csvImportHistoryNotSupported:
+        'Visning av detaljerte resultater og oversikt over tidligere importforsøk for CSV- og JSON-filer er foreløpig ikke tilgjengelig.',
+      maxFileSize: `**Merk:** Maksimal filstørrelse for opplastning er xx MB`,
     },
   },
 

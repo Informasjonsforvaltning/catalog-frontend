@@ -16,7 +16,19 @@
   text-align: justify;
 }
 
+.remark {
+  background-color: #faebcc;
+  color: #333;
+  font-size: 1rem;
+  margin-top: 1rem;
+  font-style: italic;
+}
+
 .modalContent {
   text-align: justify;
   overflow-wrap: break-word;
+}
+
+.content strong {
+  font-weight: 700;
 }

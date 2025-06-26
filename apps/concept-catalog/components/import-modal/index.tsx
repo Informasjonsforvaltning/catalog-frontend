@@ -1,11 +1,12 @@
 import React, { useRef } from 'react';
 import { localization as loc, localization } from '@catalog-frontend/utils';
-import { LinkButton, TitleWithHelpTextAndTag, UploadButton } from '@catalog-frontend/ui';
+import { LinkButton, UploadButton } from '@catalog-frontend/ui';
 import { useImportConcepts } from '../../hooks/import';
 import { Button, Modal } from '@digdir/designsystemet-react';
 import styles from './import-modal.module.scss';
 import { FileImportIcon } from '@navikt/aksel-icons';
 import { ImportConceptRdf } from './concept-rdf-upload';
+import Markdown from 'react-markdown';
 
 interface Props {
   catalogId: string;
@@ -32,43 +33,53 @@ export function ImportModal({ catalogId }: Props) {
         ref={modalRef}
         onInteractOutside={() => modalRef.current?.close()}
       >
-        <Modal.Header>
-          <TitleWithHelpTextAndTag>{localization.concept.importModal.title}</TitleWithHelpTextAndTag>
+        <Modal.Header className={styles.content}>
+          <Markdown>{localization.concept.importModal.title}</Markdown>
         </Modal.Header>
-        <Modal.Content>
-          <div className={styles.modalContent}>{localization.concept.importModal.conceptUploadDescription}</div>
-          <div className={styles.modalContent}>{localization.concept.importModal.resultDescription}</div>
-          <div className={styles.warning}>{localization.concept.importModal.csvImportHistoryNotSupported}</div>
+        <Modal.Content className={styles.content}>
+            <div className={styles.modalContent}>
+                <Markdown>{localization.concept.importModal.conceptUploadDescription}</Markdown>
+                <br/>
+                <Markdown>{localization.concept.importModal.resultDescription}</Markdown>
+                <br/>
+                <div className={styles.remark}>
+                    <Markdown>{localization.concept.importModal.maxFileSize}</Markdown>
+                </div>
+                <div className={styles.warning}>
+                    <Markdown>{localization.concept.importModal.csvImportHistoryNotSupported}</Markdown>
+                </div>
+          </div>
+
         </Modal.Content>
         <Modal.Footer>
           <div className={styles.buttons}>
             <>
-                <LinkButton
-                  href={`/catalogs/${catalogId}/concepts/import-results`}
-                  variant={'secondary'}
-                >
-                  Resultater
-                </LinkButton>
+              <LinkButton
+                href={`/catalogs/${catalogId}/concepts/import-results`}
+                variant={'secondary'}
+              >
+                Resultater
+              </LinkButton>
 
-                <UploadButton
-                  size='sm'
-                  allowedMimeTypes={[
-                    'text/csv',
-                    'text/x-csv',
-                    'text/plain',
-                    'application/csv',
-                    'application/x-csv',
-                    'application/vnd.ms-excel',
-                    'application/json',
-                  ]}
-                  onUpload={onImportUpload}
-                >
-                  <FileImportIcon fontSize='1.5rem' />
-                  <span>{loc.button.importConcept}</span>
-                </UploadButton>
+              <UploadButton
+                size='sm'
+                allowedMimeTypes={[
+                  'text/csv',
+                  'text/x-csv',
+                  'text/plain',
+                  'application/csv',
+                  'application/x-csv',
+                  'application/vnd.ms-excel',
+                  'application/json',
+                ]}
+                onUpload={onImportUpload}
+              >
+                <FileImportIcon fontSize='1.5rem' />
+                <span>{loc.button.importConcept}</span>
+              </UploadButton>
 
-                <ImportConceptRdf catalogId={catalogId} />
-              </>
+              <ImportConceptRdf catalogId={catalogId} />
+            </>
           </div>
         </Modal.Footer>
       </Modal.Dialog>
