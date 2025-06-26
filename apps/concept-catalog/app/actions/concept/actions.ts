@@ -5,6 +5,7 @@ import {
   createConcept as createConceptApi,
   patchConcept as patchConceptApi,
   getConcept,
+  removeImportResultConcept as removeImportResult,
 } from '@catalog-frontend/data-access';
 import { Concept, FieldsResult, InternalField } from '@catalog-frontend/types';
 import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
@@ -186,4 +187,26 @@ export async function updateConcept(initialConcept: Concept, values: Concept, in
   return await getConcept(`${conceptId}`, `${session?.accessToken}`).then((response) =>
     response.ok ? response.json() : undefined,
   );
+}
+
+export async function deleteImportResult(catalogId: string, resultId: string) {
+  const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn();
+  }
+  let success = false;
+  try {
+    const response = await removeImportResult(catalogId, resultId, `${session?.accessToken}`);
+    if (response.status !== 204) {
+      throw new Error();
+    }
+    success = true;
+    console.log("Deleted import result", catalogId, resultId);
+  } catch (error) {
+    throw new Error(localization.alert.deleteFail);
+  } finally {
+    if (success) {
+      revalidateTag('import-results');
+    }
+  }
 }

@@ -1,0 +1,24 @@
+.select {
+  width: fit-content;
+}
+
+.chips {
+  margin-top: 20px;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.importFilter {
+  display: flex;
+  padding: 1px;
+  border-radius: 4px;
+  height: fit-content;
+  box-sizing: border-box;
+}
+
+.accordion {
+  flex-grow: 1;
+  box-sizing: border-box;
+}
