@@ -264,7 +264,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
           )}
           {relatedConceptType === 'custom' && (
             <Textfield
-              value={relatedConcept[0]}
+              value={relatedConcept[0] ?? ''}
               onChange={handleCustomRelatedConceptChange}
               error={errors.relatertBegrep}
             />

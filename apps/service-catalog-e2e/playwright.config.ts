@@ -34,7 +34,7 @@ export default defineConfig({
     ],
   ],
   retries: 2,
-  workers: 3,
+  workers: undefined, // Use all available cores
   timeout: 60 * 1000,
   use: {
     baseURL,
