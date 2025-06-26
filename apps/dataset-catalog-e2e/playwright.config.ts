@@ -34,7 +34,7 @@ export default defineConfig({
     ],
   ],
   retries: 2,
-  workers: 3,
+  workers: undefined, // Use all available cores
   timeout: 180 * 1000,
   expect: {
     timeout: 10 * 1000

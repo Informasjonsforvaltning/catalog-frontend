@@ -640,8 +640,37 @@ export default class DatasetEditPage {
     phone: string;
     url: string;
   }) {
-    await this.page.getByLabel('E-post').fill(data.email);
-    await this.page.getByLabel('Telefon').fill(data.phone);
-    await this.page.getByLabel('Kontaktskjema').fill(data.url);
+    const dialog = this.page.getByRole('dialog');
+    await dialog.getByLabel('E-post').fill(data.email);
+    await dialog.getByLabel('Telefonnummer').fill(data.phone);
+    await dialog.getByLabel('URL').fill(data.url);
+    await dialog.getByRole('button', { name: 'Legg til' }).click();
+  }
+
+  // Auto-save testing helpers
+  async expectRestoreDialog() {
+    await expect(this.page.getByRole('dialog')).toBeVisible();
+    await expect(this.page.getByRole('heading', { name: 'Ulagrede endringer' })).toBeVisible();
+    await expect(this.page.getByRole('button', { name: 'Gjenopprett' })).toBeVisible();
+    await expect(this.page.getByRole('button', { name: 'Forkast' })).toBeVisible();
+  }
+
+  async clickRestoreButton() {
+    await this.page.getByRole('button', { name: 'Gjenopprett' }).click();
+    await expect(this.page.getByRole('dialog')).not.toBeVisible();
+  }
+
+  async clickDiscardButton() {
+    await this.page.getByRole('button', { name: 'Forkast' }).click();
+    await expect(this.page.getByRole('dialog')).not.toBeVisible();
+  }
+
+  async expectNoRestoreDialog() {
+    await expect(this.page.getByRole('dialog')).not.toBeVisible();
+  }
+
+  async waitForAutoSaveToComplete() {
+    // Wait a bit for auto-save to complete
+    await this.page.waitForTimeout(1000);
   }
 }

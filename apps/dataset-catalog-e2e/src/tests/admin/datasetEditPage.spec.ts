@@ -6,8 +6,6 @@ import EditPage from '../../page-object-model/datasetEditPage';
 import DatasetDetailPage from '../../page-object-model/datasetDetailPage';
 import DatasetEditPage from '../../page-object-model/datasetEditPage';
 
-const CATALOG_ID = '313422127';
-
 const createRandomDataset = async (playwright) => {
   // Create a request context with the admin storage state (includes next-auth cookie)
   const apiRequestContext = await playwright.request.newContext({
@@ -61,7 +59,7 @@ const createRandomDataset = async (playwright) => {
       },
     ],
     registrationStatus: PublicationStatus.DRAFT,
-    catalogId: CATALOG_ID,    
+    catalogId: process.env.E2E_CATALOG_ID,    
     contactPoint: [{
       email: 'test@example.com',
       hasTelephone: '+47 12 34 56 78',
@@ -108,12 +106,12 @@ runTestAsAdmin('should allow editing dataset about section', async ({ page, data
 
   // Navigate to dataset details and click edit
   const detailPage: DatasetDetailPage = datasetsPage.detailPage;
-  await detailPage.goto(CATALOG_ID, dataset.id);
+  await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
   await detailPage.clickEditButton();
 
   // Initialize edit page
   const editPage: EditPage = datasetsPage.editPage;
-  await editPage.expectEditPageUrl(CATALOG_ID, dataset.id);
+  await editPage.expectEditPageUrl(process.env.E2E_CATALOG_ID, dataset.id);
 
   // Verify initial title and description
   await editPage.expectTitleField('Bokmål', dataset.title.nb);
@@ -141,8 +139,8 @@ runTestAsAdmin('should allow editing dataset about section', async ({ page, data
   await editPage.clickSaveButton();
 
   // Verify we're back on the details page
-  await detailPage.goto(CATALOG_ID, dataset.id);
-  await expect(page).toHaveURL(`/catalogs/${CATALOG_ID}/datasets/${dataset.id}`);
+  await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+  await expect(page).toHaveURL(`/catalogs/${process.env.E2E_CATALOG_ID}/datasets/${dataset.id}`);
 
   // Verify the changes were saved
   await detailPage.expectTitle(newTitle.nb);
@@ -159,7 +157,7 @@ runTestAsAdmin('should edit dataset theme section', async ({ datasetsPage, playw
   const detailPage: DatasetDetailPage = datasetsPage.detailPage;
   const editPage: DatasetEditPage = datasetsPage.editPage;
 
-  await detailPage.goto(CATALOG_ID, dataset.id);
+  await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
   await detailPage.clickEditButton();
 
   // Select EU data theme
@@ -172,7 +170,7 @@ runTestAsAdmin('should edit dataset theme section', async ({ datasetsPage, playw
   await editPage.clickSaveButton();
 
   // Verify changes
-  await detailPage.goto(CATALOG_ID, dataset.id);
+  await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
   await detailPage.expectEuDataTheme('Energi');
   await detailPage.expectLosTheme('Energibruk');
 });
@@ -182,7 +180,7 @@ runTestAsAdmin('should edit dataset distribution section', async ({ datasetsPage
   const detailPage: DatasetDetailPage = datasetsPage.detailPage;
   const editPage: DatasetEditPage = datasetsPage.editPage;
 
-  await detailPage.goto(CATALOG_ID, dataset.id);
+  await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
   await detailPage.clickEditButton();
 
   const distributionTitle = {
@@ -209,7 +207,7 @@ runTestAsAdmin('should edit dataset distribution section', async ({ datasetsPage
   await editPage.clickSaveButton();
 
   // Verify changes
-  await detailPage.goto(CATALOG_ID, dataset.id);
+  await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
   await detailPage.expectDistributionTitle(distributionTitle.nb as string);
   await detailPage.expectDistributionDescription(distributionDescription.nb as string);
   await detailPage.expectDistributionAccessUrl('https://example.com/access-url');
@@ -222,7 +220,7 @@ runTestAsAdmin('should edit dataset details section', async ({ datasetsPage, pla
   const detailPage: DatasetDetailPage = datasetsPage.detailPage;
   const editPage: DatasetEditPage = datasetsPage.editPage;
 
-  await detailPage.goto(CATALOG_ID, dataset.id);
+  await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
   await detailPage.clickEditButton();
 
   // Fill in details
@@ -237,7 +235,7 @@ runTestAsAdmin('should edit dataset details section', async ({ datasetsPage, pla
   await editPage.clickSaveButton();
 
   // Verify changes
-  await detailPage.goto(CATALOG_ID, dataset.id);
+  await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
   await detailPage.expectLandingPage('https://example.com/landing-page');
   await detailPage.expectLanguages(['Norsk Bokmål', 'Norsk Nynorsk', 'Engelsk']);
   await detailPage.expectCoverageArea('Norge');
@@ -249,7 +247,7 @@ runTestAsAdmin('should edit dataset relations section', async ({ datasetsPage, p
   const detailPage: DatasetDetailPage = datasetsPage.detailPage;
   const editPage: DatasetEditPage = datasetsPage.editPage;
 
-  await detailPage.goto(CATALOG_ID, dataset.id);
+  await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
   await detailPage.clickEditButton();
 
   const referenceTitle = {
@@ -275,7 +273,7 @@ runTestAsAdmin('should edit dataset relations section', async ({ datasetsPage, p
   await editPage.clickSaveButton();
 
   // Verify changes
-  await detailPage.goto(CATALOG_ID, dataset.id);
+  await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
   await detailPage.expectRelatedResourceTitle(referenceTitle.nb as string);
   await detailPage.expectRelatedResourceUri('https://example.com/related-reference');  
   await detailPage.expectRelationTitle('Entur Timetable data');
@@ -287,7 +285,7 @@ runTestAsAdmin('should edit dataset concept section', async ({ datasetsPage, pla
   const detailPage: DatasetDetailPage = datasetsPage.detailPage;
   const editPage: DatasetEditPage = datasetsPage.editPage;
 
-  await detailPage.goto(CATALOG_ID, dataset.id);
+  await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
   await detailPage.clickEditButton();
 
   const keywords = {
@@ -305,7 +303,7 @@ runTestAsAdmin('should edit dataset concept section', async ({ datasetsPage, pla
   await editPage.clickSaveButton();
 
   // Verify changes
-  await detailPage.goto(CATALOG_ID, dataset.id);
+  await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
   await detailPage.expectConceptTitle("barnetillegg");
   await detailPage.expectConceptTitle("basispensjon");
   await detailPage.expectKeywords(keywords.nb);
@@ -316,7 +314,7 @@ runTestAsAdmin('should edit dataset information model section', async ({ dataset
   const detailPage: DatasetDetailPage = datasetsPage.detailPage;
   const editPage: DatasetEditPage = datasetsPage.editPage;
 
-  await detailPage.goto(CATALOG_ID, dataset.id);
+  await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
   await detailPage.clickEditButton();
 
   const modelTitle = {
@@ -339,7 +337,7 @@ runTestAsAdmin('should edit dataset information model section', async ({ dataset
   await editPage.clickSaveButton();
 
   // Verify changes
-  await detailPage.goto(CATALOG_ID, dataset.id);
+  await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
   await detailPage.expectInformationModelTitle("ssbs informasjonsmodell");
   await detailPage.expectInformationModelTitle(modelTitle.nb as string);
   await detailPage.expectInformationModelUri('https://example.com/information-model');
@@ -350,7 +348,7 @@ runTestAsAdmin('should edit dataset contact point section', async ({ datasetsPag
   const detailPage: DatasetDetailPage = datasetsPage.detailPage;
   const editPage: DatasetEditPage = datasetsPage.editPage;
 
-  await detailPage.goto(CATALOG_ID, dataset.id);
+  await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
   await detailPage.clickEditButton();
 
   const newEmail = `${uniqueString('new_email')}@example.com`;
@@ -366,7 +364,7 @@ runTestAsAdmin('should edit dataset contact point section', async ({ datasetsPag
   await editPage.clickSaveButton();
 
   // Verify changes
-  await detailPage.goto(CATALOG_ID, dataset.id);
+  await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
   await detailPage.expectContactPointEmail(newEmail);
   await detailPage.expectContactPointPhone('+358 12 34 56 78');
   await detailPage.expectContactPointUrl('https://example.com/new-contact');

@@ -3,12 +3,10 @@ import { expect, runTestAsAdmin } from '../../fixtures/basePage';
 import DatasetDetailPage from '../../page-object-model/datasetDetailPage';
 import { adminAuthFile, createDataset, uniqueString } from '../../utils/helpers';
 
-const CATALOG_ID = '313422127';
-
 const getRandomDataset = () => {
   // Create a random dataset
   const dataset: DatasetToBeCreated = {
-    catalogId: CATALOG_ID,
+    catalogId: process.env.E2E_CATALOG_ID,
     title: {
       nb: uniqueString('test_dataset_nb'),
       nn: uniqueString('test_dataset_nn'),
@@ -43,14 +41,14 @@ runTestAsAdmin('should load dataset detail page with all elements', async ({ dat
   const detailPage: DatasetDetailPage = datasetsPage.detailPage;
 
   // Navigate to the dataset detail page
-  await datasetsPage.goto(CATALOG_ID);
+  await datasetsPage.goto(process.env.E2E_CATALOG_ID);
    // Search for the dataset
   await datasetsPage.search(dataset.title.nb as string);
   await datasetsPage.verifyDatasetExists(dataset.title.nb as string);
   
   // Click on the dataset to go to detail page
   await datasetsPage.clickDatasetByTitle(dataset.title.nb as string);
-  await datasetsPage.expectDatasetDetailPageUrl(CATALOG_ID, createdDataset.id);
+  await datasetsPage.expectDatasetDetailPageUrl(process.env.E2E_CATALOG_ID, createdDataset.id);
 
   // Verify dataset details
   await detailPage.expectTitle(dataset.title.nb as string);
@@ -100,12 +98,12 @@ runTestAsAdmin('should delete dataset from detail page', async ({ datasetsPage, 
   const detailPage: DatasetDetailPage = datasetsPage.detailPage;
 
   // Navigate to the dataset detail page
-  await datasetsPage.goto(CATALOG_ID);
+  await datasetsPage.goto(process.env.E2E_CATALOG_ID);
   // Search for the dataset
   await datasetsPage.search(dataset.title.nb as string);
   await datasetsPage.verifyDatasetExists(dataset.title.nb as string);
   await datasetsPage.clickDatasetByTitle(dataset.title.nb as string);
-  await datasetsPage.expectDatasetDetailPageUrl(CATALOG_ID, createdDataset.id);
+  await datasetsPage.expectDatasetDetailPageUrl(process.env.E2E_CATALOG_ID, createdDataset.id);
 
   // Delete the dataset
   await detailPage.clickDeleteButton();
@@ -113,7 +111,7 @@ runTestAsAdmin('should delete dataset from detail page', async ({ datasetsPage, 
   await detailPage.confirmDelete();
 
   // Verify we're back on the datasets page
-  await expect(datasetsPage.page).toHaveURL(`/catalogs/${CATALOG_ID}/datasets`);
+  await expect(datasetsPage.page).toHaveURL(`/catalogs/${process.env.E2E_CATALOG_ID}/datasets`);
 
   // Verify the dataset no longer exists
   await datasetsPage.verifyDatasetDoesNotExist(dataset.title.nb as string);

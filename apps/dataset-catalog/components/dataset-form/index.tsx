@@ -1,5 +1,5 @@
 'use client';
-import { DataStorage, formatISO, getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
+import { DataStorage, formatISO, getTranslateText, localization, trimObjectWhitespace, deepMergeWithUndefinedHandling } from '@catalog-frontend/utils';
 import { Alert, Button, Checkbox, Paragraph, Spinner, Switch } from '@digdir/designsystemet-react';
 import { Dataset, DatasetToBeCreated, ReferenceData, PublicationStatus, StorageData } from '@catalog-frontend/types';
 import {
@@ -26,6 +26,7 @@ import { ContactPointSection } from './components/contact-point-section';
 import styles from './dataset-form.module.css';
 import { DetailsSection } from './components/details-section/details-section';
 import classNames from 'classnames';
+import { get, isEmpty, isEqual } from 'lodash';
 
 type Props = {
   afterSubmit?: () => void;
@@ -162,26 +163,26 @@ export const DatasetForm = ({
     ...(isValid
       ? []
       : [
-          <Alert
-            key={1}
-            size='sm'
-            severity='danger'
-            className={styles.notification}
-          >
-            {localization.validation.formError}
-          </Alert>,
-        ]),
+        <Alert
+          key={1}
+          size='sm'
+          severity='danger'
+          className={styles.notification}
+        >
+          {localization.validation.formError}
+        </Alert>,
+      ]),
     ...(hasUnsavedChanges
       ? [
-          <Alert
-            key={1}
-            size='sm'
-            severity='warning'
-            className={styles.notification}
-          >
-            {localization.validation.unsavedChanges}
-          </Alert>,
-        ]
+        <Alert
+          key={1}
+          size='sm'
+          severity='warning'
+          className={styles.notification}
+        >
+          {localization.validation.unsavedChanges}
+        </Alert>,
+      ]
       : []),
   ];
 
@@ -249,7 +250,8 @@ export const DatasetForm = ({
               }
               return window.location.replace(`/catalogs/${catalogId}/datasets/${data.id}/edit?restore=1`);
             }
-            setValues(data.values);
+            const restoreValues = deepMergeWithUndefinedHandling(initialValues, data.values);
+            setValues(restoreValues);
           };
 
           return (

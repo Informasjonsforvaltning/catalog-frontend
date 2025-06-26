@@ -1,6 +1,6 @@
 import { expect, Page, BrowserContext } from '@playwright/test';
 import type AxeBuilder from '@axe-core/playwright';
-import { Concept, RelationSubtypeEnum, RelationTypeEnum, UnionRelation } from '@catalog-frontend/types';
+import { Concept, Definisjon, RelationSubtypeEnum, RelationTypeEnum, UnionRelation } from '@catalog-frontend/types';
 import { clearCombobox, getFields, getParentLocator, relationToSourceText } from '../utils/helpers';
 
 export default class EditPage {
@@ -343,6 +343,10 @@ export default class EditPage {
     await this.page.goto(id ? `${this.url}/${id}/edit` : `${this.url}/new`);
   }
 
+  async expectEditPageUrl(conceptId: string) {
+    await this.page.waitForURL(`/catalogs/${process.env.E2E_CATALOG_ID}/concepts/${conceptId}/edit`);
+  }
+
   public async checkAccessibility() {
     if (!this.accessibilityBuilder) {
       return;
@@ -381,5 +385,96 @@ export default class EditPage {
     await expect(this.page.getByRole('list').getByText('Versjon')).toBeVisible();
     await expect(this.page.getByRole('list').getByText('Gyldighetsperiode')).toBeVisible();
     await expect(this.page.getByRole('list').getByText('Kontaktinformasjon *')).toBeVisible();
+  }
+
+  async fillContactPointForm(data: {
+    email: string;
+    phone: string;
+    url: string;
+  }) {
+    const dialog = this.page.getByRole('dialog');
+    await dialog.getByLabel('E-post').fill(data.email);
+    await dialog.getByLabel('Telefonnummer').fill(data.phone);
+    await dialog.getByLabel('URL').fill(data.url);
+    await dialog.getByRole('button', { name: 'Legg til' }).click();
+  }
+
+  // Auto-save testing helpers
+  async expectRestoreDialog() {
+    await expect(this.page.getByRole('dialog')).toBeVisible();
+    await expect(this.page.getByRole('heading', { name: 'Ulagrede endringer' })).toBeVisible();
+    await expect(this.page.getByRole('button', { name: 'Gjenopprett' })).toBeVisible();
+    await expect(this.page.getByRole('button', { name: 'Forkast' })).toBeVisible();
+  }
+
+  async expectRestoreDialogShowsTerm(term: string) {
+    const dialog = this.page.getByRole('dialog');
+    await expect(dialog.getByText(term)).toBeVisible();
+  }
+
+  async clickRestoreButton() {
+    await this.page.getByRole('button', { name: 'Gjenopprett' }).click();
+    await expect(this.page.getByRole('dialog')).not.toBeVisible();
+  }
+
+  async expectRestoreSuccessMessage() {
+    const snackbar = this.page.getByText('SuksessEndringene ble gjenopprettet.');
+    await expect(snackbar).toBeVisible();
+    await snackbar.getByRole('button').click();
+    await expect(snackbar).not.toBeVisible();
+  }
+
+  async clickDiscardButton() {
+    await this.page.getByRole('button', { name: 'Forkast' }).click();
+    await expect(this.page.getByRole('dialog')).not.toBeVisible();
+  }
+
+  async expectNoRestoreDialog() {
+    await expect(this.page.getByRole('dialog')).not.toBeVisible();
+  }
+
+  async waitForAutoSaveToComplete() {
+    // Wait a bit for auto-save to complete
+    await this.page.waitForTimeout(1000);
+  }
+
+  // Helper methods for concept form fields
+  async expectAnbefaltTermField(language: string, expectedValue: string) {
+    const termField = this.page.getByRole('group', { name: 'Anbefalt term Hjelp til utfylling Må fylles ut' }).getByLabel(language);
+    await expect(termField).toBeVisible();
+    await expect(termField).toHaveValue(expectedValue);
+  }
+
+  async fillAnbefaltTermField(value: any, open: string[], clear: boolean) {
+    await this.fillLanguageField(value, 'Anbefalt term Hjelp til utfylling Må fylles ut', open, clear);
+  }
+
+  async expectDefinitionCard(definition: Definisjon, targetGroup: 'uten målgruppe' | 'for allmennheten' | 'for spesialister') {
+    const type = targetGroup === 'uten målgruppe' ? '(uten målgruppe)' : targetGroup;
+    const sourceCount = definition.kildebeskrivelse?.kilde.length || 0;
+    const sourceText = sourceCount === 1 ? 'kilde' : 'kilder';
+    const card = await this.page.getByText(`Definisjon ${type}${sourceCount ? `${sourceCount} ${sourceText}Rediger` : 'Ingen kilder'}`);
+    await expect(card).toBeVisible();
+    const languages = Object.keys(definition.tekst).map(language => language === 'nb' ? 'Bokmål' : language === 'nn' ? 'Nynorsk' : 'Engelsk');
+    await expect(this.page.getByText(`${definition.tekst.nb}${languages.join('')}`)).toBeVisible();
+    return card;
+  }
+
+  async editDefinition(definition: Definisjon, targetGroup: 'uten målgruppe' | 'for allmennheten' | 'for spesialister') {
+    const card = await this.expectDefinitionCard(definition, targetGroup);
+    await card.getByRole('button', { name: 'Rediger' }).click();    
+  }
+
+  async fillDefinitionField(value: any, open: string[], clear: boolean) {
+    await this.fillLanguageField(value, 'Definisjon Hjelp til utfylling', open, clear);
+  }
+
+  async clickAddRelation() {
+    await this.page.getByRole('button', { name: 'Legg til relasjon' }).click();
+  }
+
+  async clickSaveButton() {
+    await this.page.getByRole('button', { name: 'Lagre' }).click();
+    await this.page.getByText('Endringene ble lagret.').waitFor({ state: 'visible' });
   }
 }

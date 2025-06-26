@@ -63,6 +63,11 @@ export const CheckboxTreeFilter: FC<Props> = ({ label, 'aria-label': ariaLabel, 
   const [collapsed, setCollapsed] = React.useState(true);
   const [searchOption, setSearchOption] = React.useState('');
 
+  // Generate a stable ID for the CheckboxTree to prevent hydration mismatches
+  const treeId = React.useMemo(() => {
+    return `checkbox-tree-${label?.replace(/\s+/g, '-').toLowerCase() || 'default'}`;
+  }, [label]);
+
   useEffect(() => {
     setChecked(filters);
     setExpanded(filters);
@@ -126,6 +131,7 @@ export const CheckboxTreeFilter: FC<Props> = ({ label, 'aria-label': ariaLabel, 
       </Select>
       <div className={classes.pt1}>
         <CheckboxTree
+          id={treeId}
           nodes={
             (collapsed ? nodes?.slice(0, 10) : nodes)?.map((node) => ({
               ...node,

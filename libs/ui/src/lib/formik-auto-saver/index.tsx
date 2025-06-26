@@ -5,6 +5,8 @@ import { useFormikContext } from 'formik';
 import { Button, Modal } from '@digdir/designsystemet-react';
 import { DataStorage, localization } from '@catalog-frontend/utils';
 import type { StorageData } from '@catalog-frontend/types';
+import { isEqual } from 'lodash';
+import { compare } from 'fast-json-patch';
 
 export type FormikAutoSaverProps = {
   id?: string;
@@ -16,55 +18,62 @@ export type FormikAutoSaverProps = {
 
 export const FormikAutoSaver = ({ id, storage, onRestore, confirmMessage, restoreOnRender }: FormikAutoSaverProps) => {
   const [modalContent, setModalContent] = useState<ReactNode>(null);
-  const [restored, setRestored] = useState(false);
-  const { values, dirty } = useFormikContext<any>();
+  const { values, initialValues } = useFormikContext<any>();
+  const [isInitialized, setIsInitialized] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
 
   const handleRestoreClick = () => {
     const data = storage.get();
     if (onRestore && data) {
       onRestore(data);
-      setRestored(true);
-    }
+    }    
     modalRef?.current?.close();
+    setIsInitialized(true);
   };
 
   const handleDiscardClick = () => {
     storage.delete();
     modalRef.current?.close();
+    setIsInitialized(true);
   };
 
   // Load saved data from local storage on mount
   useEffect(() => {
-    const unsubscribe = storage.subscribe((state) => {
-      if (state.isDirty && state.mainData === null) {
-        storage.set({ id, values, lastChanged: new Date().toISOString() }, true);
-      }
-    });
-
     const data = storage.get();
     if (data) {
       setModalContent(confirmMessage(data));
       if (restoreOnRender) {
         if (onRestore && data) {
           onRestore(data);
-          setRestored(true);
         }
+        setIsInitialized(true);
       } else {
         modalRef.current?.showModal();
       }
+    } else {
+      setIsInitialized(true);
     }
-    return () => unsubscribe();
   }, []);
 
   // Save form data to local storage on change
   useEffect(() => {
-    if (dirty) {
+    // Don't save until Formik is fully initialized
+    if (!isInitialized) {
+      return;
+    }
+
+    const unsubscribe = storage.subscribe((state) => {
+      if (state.isDirty && state.mainData === null) {
+        storage.set({ id, values, lastChanged: new Date().toISOString() }, true);
+      }
+    });
+    if (!isEqual(initialValues, values)) {
       storage.set({ id, values, lastChanged: new Date().toISOString() });
-    } else if(restored) {
+    } else {
       storage.delete();
     }
-  }, [values, restored]);
+    return () => unsubscribe();
+  }, [initialValues, values, isInitialized, id, storage]);
 
   return (
     <Modal ref={modalRef}>
