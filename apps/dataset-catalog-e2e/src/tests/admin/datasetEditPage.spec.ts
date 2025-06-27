@@ -78,7 +78,7 @@ const createRandomDataset = async (playwright) => {
             en: uniqueString('description_dist_en'),
         },
         accessURL: ['https://example.com/data'],
-        license: { uri: 'https://data.norge.no/nlod/no/2.0', code: 'NO_2.0' },
+        license: { uri: 'http://publications.europa.eu/resource/authority/licence/NLOD_2_0', code: 'NLOD20' },
       },
     ],
     landingPage: ['https://example.com/dataset'],    

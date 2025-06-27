@@ -136,7 +136,7 @@ export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, auto
         prev
       },
       lastChanged: new Date().toISOString(),
-    });    
+    });
   };
 
   const handleCloseRelationModal = () => {

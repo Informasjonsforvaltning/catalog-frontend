@@ -19,7 +19,10 @@ export const NewPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }:
   const datasetIdRef = useRef<string | undefined>(undefined); // Ref to store the dataset id
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
-  const dataStorage = new LocalDataStorage<StorageData>({ key: 'datasetForm' });
+  const dataStorage = new LocalDataStorage<StorageData>({
+    key: 'datasetForm',
+    secondaryKeys: ['datasetFormDistribution', 'datasetFormReference']
+  });
 
   const handleGotoOverview = () => {
     dataStorage.delete();

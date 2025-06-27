@@ -402,8 +402,6 @@ runTestAsAdmin('should discard auto-save data when changes are reverted to origi
   // Step 3: Revert changes back to original state
   await editPage.fillAnbefaltTermField(concept.anbefaltTerm.navn, [], false);
   // Press tab to trigger onBlur to make sure the autosave is triggered
-  await editPage.page.keyboard.press('Tab', { delay: 100 });
-  await editPage.page.keyboard.press('Tab', { delay: 100 });
   await editPage.waitForAutoSaveToComplete();
 
   // Step 4: Refresh again - should NOT show restore dialog since we reverted to original
