@@ -1,5 +1,5 @@
-import { Dataset, Reference, Search } from '@catalog-frontend/types';
-import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
+import { Dataset, Reference, Search, StorageData } from '@catalog-frontend/types';
+import { getTranslateText, localization, trimObjectWhitespace, DataStorage } from '@catalog-frontend/utils';
 import { Box, Button, Combobox, Fieldset, Modal, Table } from '@digdir/designsystemet-react';
 import { useSearchDatasetsByUri, useSearchDatasetSuggestions } from '../../../../hooks/useSearchService';
 import { Formik, useFormikContext } from 'formik';
@@ -13,6 +13,8 @@ import cn from 'classnames';
 
 type Props = {
   searchEnv: string;
+  autoSaveId?: string;
+  autoSaveStorage?: DataStorage<StorageData>;
 };
 
 type ModalProps = {
@@ -31,15 +33,44 @@ const hasNoFieldValues = (values: Reference) => {
   return isEmpty(values?.referenceType?.code) && isEmpty(values?.source?.uri);
 };
 
-export const ReferenceTable = ({ searchEnv }: Props) => {
+export const ReferenceTable = ({ searchEnv, autoSaveId, autoSaveStorage }: Props) => {
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
-  const [snapshot, setSnapshot] = useState<Reference[]>(values?.references ?? []);
 
   const getUriList = () => {
     return values.references?.map((reference) => reference?.source?.uri).filter((uri) => uri) ?? [];
   };
 
   const { data: selectedValues } = useSearchDatasetsByUri(searchEnv, getUriList());
+
+  const handleReferenceChange = (updatedRef: Reference, index: number) => {
+    // Save to secondary storage for auto-save
+    if (autoSaveStorage && autoSaveId) {
+      autoSaveStorage.setSecondary('datasetFormReference', {
+        id: autoSaveId,
+        values: {
+          reference: updatedRef,
+          index
+        },
+        lastChanged: new Date().toISOString(),
+      });
+    }
+  };
+
+  const handleReferenceCancel = () => {
+    // Clean up secondary storage on cancel
+    if (autoSaveStorage) {
+      autoSaveStorage.deleteSecondary('datasetFormReference');
+    }
+  };
+
+  const handleReferenceSuccess = (updatedRef: Reference, index: number) => {
+    setFieldValue(`references[${index}]`, updatedRef);
+
+    // Clean up secondary storage on success
+    if (autoSaveStorage) {
+      autoSaveStorage.deleteSecondary('datasetFormReference');
+    }
+  };
 
   return (
     <Box className={styles.fieldContainer}>
@@ -78,11 +109,10 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
                         template={ref}
                         type={'edit'}
                         onSuccess={(updatedItem: Reference) => {
-                          setFieldValue(`references[${index}]`, updatedItem);
-                          setSnapshot([...values.references ?? []]);
+                          handleReferenceSuccess(updatedItem, index);
                         }}
-                        onCancel={() => setFieldValue('references', snapshot)}
-                        onChange={(updatedItem: Reference) => setFieldValue(`references[${index}]`, updatedItem)}
+                        onCancel={handleReferenceCancel}
+                        onChange={(updatedItem: Reference) => handleReferenceChange(updatedItem, index)}
                         initialUri={ref?.source?.uri}
                         initialDatasets={selectedValues ?? []}
                       />
@@ -90,7 +120,6 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
                         const newArray = [...values.references ?? []];
                         newArray.splice(index, 1);
                         setFieldValue('references', newArray);
-                        setSnapshot([...newArray]);
                       }} />
                     </div>
                   </Table.Cell>
@@ -106,18 +135,26 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
           searchEnv={searchEnv}
           template={{ source: { uri: '' }, referenceType: { code: '' } }}
           type={'new'}
-          onSuccess={() => setSnapshot([...values.references ?? []])}
-          onCancel={() => setFieldValue('references', snapshot)}
+          onSuccess={(updatedItem: Reference) => {
+            const newIndex = values.references?.length ?? 0;
+            setFieldValue(`references[${newIndex}]`, updatedItem);
+            if (autoSaveStorage) {
+              autoSaveStorage.deleteSecondary('datasetFormReference');
+            }
+          }}
+          onCancel={handleReferenceCancel}
           onChange={(updatedItem: Reference) => {
-            if (snapshot.length === (values.references?.length ?? 0)) {
-              setFieldValue(
-                values.references && values?.references.length > 0 && !hasNoFieldValues(values?.references?.[0])
-                  ? `references[${values?.references?.length}]`
-                  : `references[0]`,
-                updatedItem,
-              );
-            } else {
-              setFieldValue(`references[${snapshot.length}]`, updatedItem);
+            const newIndex = values.references?.length ?? 0;
+            // Save to secondary storage for auto-save
+            if (autoSaveStorage && autoSaveId) {
+              autoSaveStorage.setSecondary('datasetFormReference', {
+                id: autoSaveId,
+                values: {
+                  reference: updatedItem,
+                  index: newIndex
+                },
+                lastChanged: new Date().toISOString(),
+              });
             }
           }}
           initialUri={undefined}

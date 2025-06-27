@@ -1,7 +1,7 @@
 'use client';
 import { DataStorage, formatISO, getTranslateText, localization, trimObjectWhitespace, deepMergeWithUndefinedHandling } from '@catalog-frontend/utils';
 import { Alert, Button, Checkbox, Paragraph, Spinner, Switch } from '@digdir/designsystemet-react';
-import { Dataset, DatasetToBeCreated, ReferenceData, PublicationStatus, StorageData } from '@catalog-frontend/types';
+import { Dataset, DatasetToBeCreated, ReferenceData, PublicationStatus, StorageData, Distribution, Reference } from '@catalog-frontend/types';
 import {
   ConfirmModal,
   FormikAutoSaver,
@@ -27,6 +27,7 @@ import styles from './dataset-form.module.css';
 import { DetailsSection } from './components/details-section/details-section';
 import classNames from 'classnames';
 import { get, isEmpty, isEqual } from 'lodash';
+import { compare } from 'fast-json-patch';
 
 type Props = {
   afterSubmit?: () => void;
@@ -250,8 +251,28 @@ export const DatasetForm = ({
               }
               return window.location.replace(`/catalogs/${catalogId}/datasets/${data.id}/edit?restore=1`);
             }
-            const restoreValues = deepMergeWithUndefinedHandling(initialValues, data.values);
+            const restoreValues = datasetTemplate(data.values);
             setValues(restoreValues);
+
+            // Handle distribution data from secondary storage
+            const restoreDistributionData = autoSaveStorage?.getSecondary('datasetFormDistribution');
+            if (restoreDistributionData && (restoreDistributionData?.id === datasetId)) {
+              const distributionValues: { distribution: Distribution; distributionType: 'distribution' | 'sample'; index: number } = restoreDistributionData.values;
+              setFieldValue(`${distributionValues.distributionType}[${distributionValues.index}]`, distributionValues.distribution);
+              // Delete distribution data from secondary storage since it is merged with the main data
+              autoSaveStorage?.deleteSecondary('datasetFormDistribution');
+            }
+
+            // Handle reference data from secondary storage
+            const restoreReferenceData = autoSaveStorage?.getSecondary('datasetFormReference');
+            if (restoreReferenceData && (restoreReferenceData?.id === datasetId)) {
+              const referenceValues: { reference: Reference; index: number } = restoreReferenceData.values;
+              setFieldValue(`references[${referenceValues.index}]`, referenceValues.reference);
+              // Delete reference data from secondary storage since it is merged with the main data
+              autoSaveStorage?.deleteSecondary('datasetFormReference');
+            }
+
+            showSnackbarMessage({ message: localization.snackbar.restoreSuccessfull, severity: 'success' });
           };
 
           return (
@@ -305,6 +326,8 @@ export const DatasetForm = ({
                       referenceDataEnv={referenceDataEnv}
                       searchEnv={searchEnv}
                       openLicenses={openLicenses}
+                      autoSaveId={datasetId?.toString()}
+                      autoSaveStorage={autoSaveStorage}
                     />
                   </FormLayout.Section>
 
@@ -326,7 +349,7 @@ export const DatasetForm = ({
                     subtitle={localization.datasetForm.subtitle.relations}
                     error={hasError(['references', 'relations'])}
                   >
-                    <RelationsSection searchEnv={searchEnv} />
+                    <RelationsSection searchEnv={searchEnv} autoSaveId={datasetId?.toString()} autoSaveStorage={autoSaveStorage} />
                   </FormLayout.Section>
 
                   <FormLayout.Section

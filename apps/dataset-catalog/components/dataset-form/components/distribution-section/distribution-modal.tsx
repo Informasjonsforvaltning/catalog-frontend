@@ -85,6 +85,10 @@ export const DistributionModal = ({
   const { data: fileTypes, isLoading: searchingFileTypes } = useSearchFileTypes(searchQueryFileTypes, referenceDataEnv);
   const { data: dataServices } = useSearchDataServiceSuggestions(searchEnv, searchDataServicesQuery);
 
+  if (initialValues?.accessURL?.length === 0) {
+    initialValues.accessURL = [''];
+  }
+
   useEffect(() => {
     const allMediaTypes = [...selectedAndSearchedMediaTypes, ...initialMediaTypes];
     const selectedMediaTypes = selectedMediaTypeUris
@@ -425,7 +429,7 @@ export const DistributionModal = ({
         className={styles.dialog}
       >
         <Formik
-          initialValues={{ accessURL: [''], ...template }}
+          initialValues={{ ...template }}
           name='distribution'
           validateOnChange={submitted}
           validateOnBlur={submitted}
@@ -438,7 +442,7 @@ export const DistributionModal = ({
               if (dirty && onChange) {
                 onChange(values);
               }
-            }, [values, dirty]);
+            }, [values, dirty, onChange]);
 
             const isExpanded = (fieldConfig: any) => {
               const fieldValues = get(values, fieldConfig.name);
