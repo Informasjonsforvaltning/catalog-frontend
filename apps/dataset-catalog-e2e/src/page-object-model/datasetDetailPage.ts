@@ -141,7 +141,7 @@ export default class DatasetDetailPage {
   }
 
   async expectDistributionLicense(license: string) {
-    await expect(this.page.getByText(license)).toBeVisible();
+    await expect(this.page.getByText(license).first()).toBeVisible();
   }
 
   async expectDistributionFormat(format: string) {

@@ -213,6 +213,7 @@ export class LocalDataStorage<T> implements DataStorage<T> {
 
   delete() {
     if (typeof localStorage !== 'undefined') {
+      console.log('[LOCAL STORAGE]: Deleting main and secondary keys');
       localStorage.removeItem(this.key);
       this.secondaryKeys.forEach((key) => {
         localStorage.removeItem(key);
@@ -231,6 +232,7 @@ export class LocalDataStorage<T> implements DataStorage<T> {
         return localStorage.getItem(key) === null;
       });
       if (allEmpty && this.loose) {
+        console.log('[LOCAL STORAGE]: All secondary keys are empty, main data is loose, deleting main key');
         this.delete();
       }
     }

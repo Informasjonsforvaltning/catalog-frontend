@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { useFormikContext } from 'formik';
 import { Box, Button, Card, ErrorMessage, Heading, Paragraph, Tag } from '@digdir/designsystemet-react';
 import { ChevronDownIcon, ChevronUpIcon, PencilWritingIcon } from '@navikt/aksel-icons';
-import { Dataset, Distribution, ReferenceDataCode, Search } from '@catalog-frontend/types';
+import { Dataset, Distribution, ReferenceDataCode, Search, StorageData } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { getTranslateText, localization, DataStorage } from '@catalog-frontend/utils';
 import { DistributionModal } from './distribution-modal';
 import { DistributionDetails } from './distribution-details';
 import styles from './distributions.module.scss';
@@ -21,14 +21,14 @@ type Props = {
   referenceDataEnv: string;
   searchEnv: string;
   openLicenses: ReferenceDataCode[];
+  autoSaveId?: string;
+  autoSaveStorage?: DataStorage<StorageData>;
 };
 
-export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses }: Props) => {
+export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses, autoSaveId, autoSaveStorage }: Props) => {
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
   const [expandedIndexDistribution, setExpandedIndexDistribution] = useState<number | null>(null);
   const [expandedIndexExampleData, setExpandedIndexExampleData] = useState<number | null>(null);
-  const [snapshotDistribution, setSnapshotDistribution] = useState<Distribution[]>(values?.distribution ?? []);
-  const [snapshotSample, setSnapshotSample] = useState<Distribution[]>(values?.sample ?? []);
 
   const [selectedFileTypeUris, setSelectedFileTypeUris] = useState<string[]>();
   const [selectedMediaTypeUris, setSelectedMediaTypeUris] = useState<string[]>();
@@ -36,6 +36,37 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
   const [selectedFileTypes, setSelectedFileTypes] = useState<ReferenceDataCode[]>();
   const [selectedMediaTypes, setSelectedMediaTypes] = useState<ReferenceDataCode[]>();
   const [selectedDataServices, setSelectedDataServices] = useState<Search.SearchObject[]>();
+
+  const handleDistributionChange = (updatedDist: Distribution, distributionType: 'distribution' | 'sample', index: number) => {
+    // Save to secondary storage for auto-save
+    if (autoSaveStorage && autoSaveId) {
+      autoSaveStorage.setSecondary('datasetFormDistribution', {
+        id: autoSaveId,
+        values: {
+          distribution: updatedDist,
+          distributionType,
+          index
+        },
+        lastChanged: new Date().toISOString(),
+      });
+    }
+  };
+
+  const handleDistributionCancel = (distributionType: 'distribution' | 'sample') => {
+    // Clean up secondary storage on cancel
+    if (autoSaveStorage) {
+      autoSaveStorage.deleteSecondary('datasetFormDistribution');
+    }
+  };
+
+  const handleDistributionSuccess = (updatedDist: Distribution, distributionType: 'distribution' | 'sample', index: number) => {
+    setFieldValue(`${distributionType}[${index}]`, updatedDist);
+
+    // Clean up secondary storage on success
+    if (autoSaveStorage) {
+      autoSaveStorage.deleteSecondary('datasetFormDistribution');
+    }
+  };
 
   useEffect(() => {
     const distributionAccessServices = values.distribution?.map((val) => val?.accessServiceUris)?.flat() ?? [];
@@ -170,7 +201,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                     <div className={styles.buttons}>
                       <DistributionModal
                         type='edit'
-                        initialValues={{...item}}
+                        initialValues={{ ...item }}
                         initialFileTypes={selectedFileTypes ?? []}
                         initialMediaTypes={selectedMediaTypes ?? []}
                         initialAccessServices={selectedDataServices ?? []}
@@ -179,11 +210,10 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                         openLicenses={openLicenses}
                         distributionType='distribution'
                         onSuccess={(updatedDist) => {
-                          setFieldValue(`distribution[${index}]`, updatedDist);
-                          setSnapshotDistribution([...values.distribution ?? []]);
+                          handleDistributionChange(updatedDist, 'distribution', index);
                         }}
-                        onCancel={() => setFieldValue('distribution', snapshotDistribution)}
-                        onChange={(updatedDist) => setFieldValue(`distribution[${index}]`, updatedDist)}
+                        onCancel={() => handleDistributionCancel('distribution')}
+                        onChange={(updatedDist) => handleDistributionChange(updatedDist, 'distribution', index)}
                         trigger={
                           <Button
                             variant='tertiary'
@@ -201,7 +231,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                         const newArray = [...values.distribution ?? []];
                         newArray.splice(index, 1);
                         setFieldValue('distribution', newArray);
-                        setSnapshotDistribution([...newArray]);
+                        handleDistributionCancel('distribution');
                       }} />
                     </div>
                   </div>
@@ -297,16 +327,11 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
             distributionType='distribution'
             trigger={<AddButton>{localization.datasetForm.button.addDistribution}</AddButton>}
             onSuccess={(formValues: Distribution, distributionType) => {
-              setFieldValue(getField(distributionType), formValues);
-              setSnapshotDistribution([...values.distribution ?? []]);
+              handleDistributionSuccess(formValues, 'distribution', values.distribution?.length ?? 0);
             }}
-            onCancel={() => setFieldValue('distribution', snapshotDistribution)}
+            onCancel={() => handleDistributionCancel('distribution')}
             onChange={(formValues: Distribution) => {
-              if (snapshotDistribution.length === (values.distribution?.length ?? 0)) {
-                setFieldValue(getField('distribution'), formValues);
-              } else {
-                setFieldValue(`distribution[${snapshotDistribution.length}]`, formValues);
-              }
+              handleDistributionChange(formValues, 'distribution', values.distribution?.length ?? 0);
             }}
             referenceDataEnv={referenceDataEnv}
             searchEnv={searchEnv}
@@ -365,19 +390,19 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                     <div className={styles.buttons}>
                       <DistributionModal
                         type='edit'
-                        initialValues={{...item}}
+                        initialValues={{ ...item }}
                         initialFileTypes={selectedFileTypes ?? []}
                         initialMediaTypes={selectedMediaTypes ?? []}
                         initialAccessServices={selectedDataServices ?? []}
                         distributionType='sample'
                         referenceDataEnv={referenceDataEnv}
                         searchEnv={searchEnv}
+                        openLicenses={openLicenses}
                         onSuccess={(updatedDist: Distribution) => {
-                          setFieldValue(`sample[${index}]`, updatedDist);
-                          setSnapshotSample([...values.sample ?? []]);
+                          handleDistributionSuccess(updatedDist, 'sample', index);
                         }}
-                        onCancel={() => setFieldValue('sample', snapshotSample)}
-                        onChange={(updatedDist: Distribution) => setFieldValue(`sample[${index}]`, updatedDist)}
+                        onCancel={() => handleDistributionCancel('sample')}
+                        onChange={(updatedDist: Distribution) => handleDistributionChange(updatedDist, 'sample', index)}
                         trigger={
                           <Button
                             variant='tertiary'
@@ -395,7 +420,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                         const newArray = [...values.sample ?? []];
                         newArray.splice(index, 1);
                         setFieldValue('sample', newArray);
-                        setSnapshotSample([...newArray]);
+                        handleDistributionCancel('sample');
                       }} />
                     </div>
                   </div>
@@ -467,17 +492,12 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
             type='new'
             distributionType='sample'
             trigger={<AddButton>{localization.datasetForm.button.addSample}</AddButton>}
-            onSuccess={(formValues: Distribution, distributionType) => {
-              setFieldValue(getField(distributionType), formValues);
-              setSnapshotSample([...values.sample ?? []]);
+            onSuccess={(formValues: Distribution) => {
+              handleDistributionSuccess(formValues, 'sample', values.sample?.length ?? 0);
             }}
-            onCancel={() => setFieldValue('sample', snapshotSample)}
+            onCancel={() => handleDistributionCancel('sample')}
             onChange={(formValues: Distribution) => {
-              if (snapshotSample.length === (values.sample?.length ?? 0)) {
-                setFieldValue(getField('sample'), formValues);
-              } else {
-                setFieldValue(`sample[${snapshotSample.length}]`, formValues);
-              }
+              handleDistributionChange(formValues, 'sample', values.sample?.length ?? 0);
             }}
             referenceDataEnv={referenceDataEnv}
             searchEnv={searchEnv}

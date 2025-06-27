@@ -1,11 +1,18 @@
 import { expect, Page, BrowserContext, Locator } from '@playwright/test';
 import type AxeBuilder from '@axe-core/playwright';
-import { Concept, LocalizedStrings, RelationSubtypeEnum, RelationTypeEnum, UnionRelation, UriWithLabel } from '@catalog-frontend/types';
+import {
+  Concept,
+  LocalizedStrings,
+  RelationSubtypeEnum,
+  RelationTypeEnum,
+  UnionRelation,
+  UriWithLabel,
+} from '@catalog-frontend/types';
 import { clearCombobox, getParentLocator, relationToSourceText } from '../utils/helpers';
 
 export default class DatasetEditPage {
   url: string;
-  protected page: Page;
+  public page: Page;
   protected context: BrowserContext;
   protected accessibilityBuilder: AxeBuilder;
 
@@ -26,7 +33,9 @@ export default class DatasetEditPage {
 
     if (clear) {
       console.log(`[fillLanguageField] Clearing existing values for group: ${group}`);
-      const removeBtn = (parent ?? this.page).getByRole('group', { name: group }).getByRole('button', { name: 'Slett' });
+      const removeBtn = (parent ?? this.page)
+        .getByRole('group', { name: group })
+        .getByRole('button', { name: 'Slett' });
       while ((await removeBtn.count()) > 0) {
         await removeBtn.first().click();
       }
@@ -166,22 +175,20 @@ export default class DatasetEditPage {
 
     await this.page.getByRole('textbox', { name: 'Forkortelse' }).clear();
     await clearCombobox(this.page, 'Hvem skal begrepet tildeles?');
-    
+
     for (const field of fields.internal) {
       if (field.type === 'text_long' || field.type === 'text_short') {
         console.log(`[EDIT PAGE] Clearing internal field (text): ${field.label.nb}`);
-        await this.page
-          .getByRole('textbox', { name: field.label.nb as string })
-          .clear();
+        await this.page.getByRole('textbox', { name: field.label.nb as string }).clear();
       } else if (field.type === 'boolean') {
         console.log(`[EDIT PAGE] Clearing internal field (boolean): ${field.label.nb}`);
         const checkbox = this.page.getByRole('group', { name: field.label.nb as string }).getByRole('checkbox');
-        if(await checkbox.isChecked()) {
+        if (await checkbox.isChecked()) {
           checkbox.uncheck();
-        }         
+        }
       } else if (field.type === 'code_list') {
         await clearCombobox(this.page, field.label.nb as string);
-      } 
+      }
     }
   }
 
@@ -362,7 +369,9 @@ export default class DatasetEditPage {
 
   // Title field
   async expectTitleField(language: string, expectedValue: string) {
-    const titleField = this.page.getByRole('group', { name: 'Tittel Hjelp til utfylling Må fylles ut' }).getByLabel(language);
+    const titleField = this.page
+      .getByRole('group', { name: 'Tittel Hjelp til utfylling Må fylles ut' })
+      .getByLabel(language);
     await expect(titleField).toBeVisible();
     await expect(titleField).toHaveValue(expectedValue);
   }
@@ -373,7 +382,9 @@ export default class DatasetEditPage {
 
   // Description field
   async expectDescriptionField(language: string, expectedValue: string) {
-    const descriptionField = this.page.getByRole('group', { name: 'Beskrivelse Hjelp til utfylling Må fylles ut' }).getByLabel(language);
+    const descriptionField = this.page
+      .getByRole('group', { name: 'Beskrivelse Hjelp til utfylling Må fylles ut' })
+      .getByLabel(language);
     await expect(descriptionField).toBeVisible();
     await expect(descriptionField).toHaveValue(expectedValue);
   }
@@ -384,12 +395,12 @@ export default class DatasetEditPage {
 
   // Access rights
   async selectAccessRights(option: 'none' | 'public' | 'restricted' | 'non-public') {
-    const accessRightsGroup = this.page.getByRole("group", { name: "Tilgang Hjelp til utfylling Anbefalt" });
+    const accessRightsGroup = this.page.getByRole('group', { name: 'Tilgang Hjelp til utfylling Anbefalt' });
     const options = {
-      'none': 'Ingen tilgangsrettighet valgt',
-      'public': 'Allmenn tilgang',
-      'restricted': 'Betinget tilgang',
-      'non-public': 'Ikke-allmenn tilgang'
+      none: 'Ingen tilgangsrettighet valgt',
+      public: 'Allmenn tilgang',
+      restricted: 'Betinget tilgang',
+      'non-public': 'Ikke-allmenn tilgang',
     };
     const radio = accessRightsGroup.getByLabel(options[option], { exact: true });
     await expect(radio).toBeVisible();
@@ -491,6 +502,7 @@ export default class DatasetEditPage {
     const dialog = this.page.getByRole('dialog');
     await this.fillLanguageField(data.title, 'Tittel', ['Bokmål', 'Nynorsk', 'Engelsk'], false, dialog);
     await this.fillLanguageField(data.description, 'Beskrivelse', ['Bokmål', 'Nynorsk', 'Engelsk'], false, dialog);
+
     await dialog.getByLabel('Lenke').fill(data.accessUrl);
     await dialog.getByRole('group', { name: 'Lisens' }).getByRole('combobox').click();
     await dialog.getByRole('option', { name: data.license, exact: true }).click();
@@ -537,7 +549,6 @@ export default class DatasetEditPage {
   }
 
   async selectDatasetType(type: string) {
-
     const typeField = this.page.getByRole('group', { name: 'Type' }).getByRole('combobox');
     await typeField.click();
     await this.page.getByRole('option', { name: type }).click();
@@ -564,10 +575,7 @@ export default class DatasetEditPage {
     await this.page.getByRole('button', { name: 'Legg til relaterte ressurser' }).click();
   }
 
-  async fillRelationForm(data: {
-    relationType: string;
-    dataset: string;
-  }) {
+  async fillRelationForm(data: { relationType: string; dataset: string }) {
     const dialog = this.page.getByRole('dialog');
     await dialog.getByRole('group', { name: 'Relasjonstype' }).getByRole('combobox').click();
     await dialog.getByRole('option', { name: data.relationType }).click();
@@ -578,10 +586,7 @@ export default class DatasetEditPage {
     await dialog.getByRole('button', { name: 'Legg til' }).click();
   }
 
-  async fillRelatedResourceForm(data: {
-    prefLabel: LocalizedStrings;
-    uri: string;
-  }) {
+  async fillRelatedResourceForm(data: { prefLabel: LocalizedStrings; uri: string }) {
     const dialog = this.page.getByRole('dialog');
     await this.fillLanguageField(data.prefLabel, 'Tittel', ['Bokmål', 'Nynorsk', 'Engelsk'], false, dialog);
     await dialog.getByLabel('Lenke').fill(data.uri);
@@ -591,20 +596,31 @@ export default class DatasetEditPage {
   // Concept section
   async selectConcept(concept: string) {
     await this.page.getByRole('group', { name: 'Begreper Hjelp til utfylling Anbefalt' }).getByRole('combobox').click();
-    await this.page.getByRole('group', { name: 'Begreper Hjelp til utfylling Anbefalt' }).getByPlaceholder('Søk').fill(concept);
+    await this.page
+      .getByRole('group', { name: 'Begreper Hjelp til utfylling Anbefalt' })
+      .getByPlaceholder('Søk')
+      .fill(concept);
     await this.page.getByRole('option', { name: concept }).click();
     await this.page.waitForTimeout(100);
     await this.page.keyboard.press('Escape');
   }
 
   async fillKeywords(keywords: LocalizedStrings) {
-    await this.fillLanguageField(keywords, 'Emneord Hjelp til utfylling Anbefalt', ['Bokmål', 'Nynorsk', 'Engelsk'], false);
+    await this.fillLanguageField(
+      keywords,
+      'Emneord Hjelp til utfylling Anbefalt',
+      ['Bokmål', 'Nynorsk', 'Engelsk'],
+      false,
+    );
   }
 
   // Information Model section
   async selectInformationModel(model: string) {
     await this.page.getByRole('group', { name: 'Informasjonsmodell fra Data.norge.no' }).getByRole('combobox').click();
-    await this.page.getByRole('group', { name: 'Informasjonsmodell fra Data.norge.no' }).getByPlaceholder('Søk').fill(model);
+    await this.page
+      .getByRole('group', { name: 'Informasjonsmodell fra Data.norge.no' })
+      .getByPlaceholder('Søk')
+      .fill(model);
     await this.page.getByRole('option', { name: model }).click();
     await this.page.waitForTimeout(100);
     await this.page.keyboard.press('Escape');
@@ -614,16 +630,11 @@ export default class DatasetEditPage {
     await this.page.getByRole('button', { name: 'Legg til informasjonsmodell fra andre kilder' }).click();
   }
 
-  async addInformationModelSource(data: {
-    prefLabel: LocalizedStrings;
-    uri: string;
-    open: string[];
-    clear: boolean;
-  }) {
+  async addInformationModelSource(data: { prefLabel: LocalizedStrings; uri: string; open: string[]; clear: boolean }) {
     // Wait for dialog to be visible
     const dialog = this.page.getByRole('dialog');
     await dialog.waitFor({ state: 'visible' });
-    
+
     // Try the original locator with more specific waiting
     await this.fillLanguageField(data.prefLabel, 'Tittel', data.open, data.clear, dialog);
     await dialog.getByLabel('Lenke').fill(data.uri);
@@ -635,16 +646,10 @@ export default class DatasetEditPage {
     await this.page.getByRole('button', { name: 'Legg til kontaktpunkt' }).click();
   }
 
-  async fillContactPointForm(data: {
-    email: string;
-    phone: string;
-    url: string;
-  }) {
-    const dialog = this.page.getByRole('dialog');
-    await dialog.getByLabel('E-post').fill(data.email);
-    await dialog.getByLabel('Telefonnummer').fill(data.phone);
-    await dialog.getByLabel('URL').fill(data.url);
-    await dialog.getByRole('button', { name: 'Legg til' }).click();
+  async fillContactPointForm(data: { email: string; phone: string; url: string }) {
+    await this.page.getByLabel('E-post').fill(data.email);
+    await this.page.getByLabel('Telefon').fill(data.phone);
+    await this.page.getByLabel('Kontaktskjema').fill(data.url);
   }
 
   // Auto-save testing helpers
