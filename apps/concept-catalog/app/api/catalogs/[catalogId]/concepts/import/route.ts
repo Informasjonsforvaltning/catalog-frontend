@@ -11,10 +11,14 @@ export const POST = async (req: NextRequest, props) => {
     try {
       const concepts = await req.json();
       const response = await importConcepts(concepts, session?.accessToken);
+      const location = response?.headers?.get("location")
+      const resultId = location?.split('/').pop();
 
       if (response.status > 399) {
         const error = await response.json();
         return new Response(error?.message ?? 'Failed to import concept', { status: response.status });
+      } else if (location && resultId) {
+        return new Response('', { status: 302, headers: { Location: `/catalogs/${catalogId}/concepts/import-results/${resultId}` } });
       } else {
         return new Response('', { status: response.status });
       }

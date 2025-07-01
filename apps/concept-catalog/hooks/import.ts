@@ -196,6 +196,7 @@ export const useImportRdfConcepts = (catalogId: string) => {
 
 export const useImportConcepts = (catalogId: string) => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   return useMutation({
     mutationKey: ['importConcepts'],
     mutationFn: async (file: File) => {
@@ -239,6 +240,10 @@ export const useImportConcepts = (catalogId: string) => {
         if (response.status > 399) {
           const errorMessage = await response.text();
           return Promise.reject(errorMessage);
+        }
+
+        if(response.url) {
+          await router.push(response.url);
         }
 
         return Promise.resolve();

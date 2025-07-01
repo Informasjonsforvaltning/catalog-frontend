@@ -44,7 +44,7 @@ export const patchConcept = (conceptId: string, patchOperations: Operation[], ac
   conceptCatalogApiCall('PATCH', `/begreper/${conceptId}`, patchOperations, accessToken);
 
 export const importConcepts = (concepts: Omit<Concept, 'id'>[], accessToken: string) =>
-  conceptCatalogApiCall('POST', `/begreper/import`, concepts, accessToken);
+  conceptCatalogApiCall('POST', `/begreper/importCsv`, concepts, accessToken);
 
 export const deleteConcept = (conceptId: string, accessToken: string) =>
   conceptCatalogApiCall('DELETE', `/begreper/${conceptId}`, null, accessToken);
