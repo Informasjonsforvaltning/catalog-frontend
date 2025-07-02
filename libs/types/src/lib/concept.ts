@@ -140,6 +140,7 @@ export type RelatedConcept = {
 };
 
 export interface Concept {
+  uri: string | undefined;
   abbreviatedLabel?: string | null;
   anbefaltTerm?: AnbefaltTerm;
   ansvarligVirksomhet: { id: string };

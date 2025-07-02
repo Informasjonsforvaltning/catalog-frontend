@@ -90,8 +90,12 @@ const mapKilde = (
 const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Concept, 'id' | 'ansvarligVirksomhet'> => {
   const csvMap = createCsvMap(columnHeaders, data);
   const version = mapToSingleValue(csvMap, 'versjon') || '0.1.0';
+  const uri = mapToSingleValue(csvMap, 'uri')
+  if(!uri)
+    console.error("Forventet kolonnenavn 'uri' i CSV-filen")
 
   return {
+    uri: uri,
     originaltBegrep: mapToSingleValue(csvMap, 'originalt_begrep') ?? '',
     versjonsnr: {
       major: parseInt(version.split('.')?.[0] ?? '0', 10),
