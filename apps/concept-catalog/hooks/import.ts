@@ -90,7 +90,7 @@ const mapKilde = (
 const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Concept, 'ansvarligVirksomhet'> => {
   const csvMap = createCsvMap(columnHeaders, data);
   const version = mapToSingleValue(csvMap, 'versjon') || '0.1.0';
-  const uri = mapToSingleValue(csvMap, 'uri')
+  const uri = mapToSingleValue(csvMap, 'id')
   if(!uri)
     console.error("Forventet kolonnenavn 'uri' i CSV-filen")
 
