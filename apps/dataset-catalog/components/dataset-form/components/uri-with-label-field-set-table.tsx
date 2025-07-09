@@ -18,6 +18,7 @@ import { uriWithLabelSchema } from '../utils/validation-schema';
 interface Props {
   values: UriWithLabel[] | undefined;
   fieldName: string;
+  errors: string | undefined;
   showDivider?: boolean;
   label?: string | ReactNode;
   hideHeadWhenEmpty?: boolean;
@@ -39,6 +40,7 @@ export const UriWithLabelFieldsetTable = ({
   fieldName,
   values,
   label,
+  errors,
   hideHeadWhenEmpty = false,
   showDivider,
 }: Props) => {
@@ -50,7 +52,7 @@ export const UriWithLabelFieldsetTable = ({
       <FieldArray
         name={fieldName}
         render={(arrayHelpers) => (
-          <>
+          <div className={errors ? styles.errorBorder : undefined}>
             <Table
               size='sm'
               className={styles.table}
@@ -92,7 +94,7 @@ export const UriWithLabelFieldsetTable = ({
                 onSuccess={(formValues) => arrayHelpers.push(formValues)}
               />
             </div>
-          </>
+          </div>
         )}
       />
       {showDivider && <FieldsetDivider />}

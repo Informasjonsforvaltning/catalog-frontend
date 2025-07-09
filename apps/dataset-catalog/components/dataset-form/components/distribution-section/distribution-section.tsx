@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useFormikContext } from 'formik';
-import { Box, Button, Card, Heading, Paragraph, Tag } from '@digdir/designsystemet-react';
+import { Box, Button, Card, ErrorMessage, Heading, Paragraph, Tag } from '@digdir/designsystemet-react';
 import { ChevronDownIcon, ChevronUpIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { Dataset, Distribution, ReferenceDataCode, Search } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
@@ -10,7 +10,7 @@ import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { DistributionModal } from './distribution-modal';
 import { DistributionDetails } from './distribution-details';
 import styles from './distributions.module.scss';
-import { isEmpty } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import {
   ReferenceDataGraphql,
   searchReferenceDataByUri,
@@ -24,7 +24,7 @@ type Props = {
 };
 
 export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses }: Props) => {
-  const { values, setFieldValue } = useFormikContext<Dataset>();
+  const { values, errors, setFieldValue } = useFormikContext<Dataset>();
   const [selectedFileTypeUris, setSelectedFileTypeUris] = useState<string[]>();
   const [selectedMediaTypeUris, setSelectedMediaTypeUris] = useState<string[]>();
   const [selectedDataServiceUris, setSelectedDataServiceUris] = useState<string[]>();
@@ -273,6 +273,9 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                       openLicenses={openLicenses}
                     />
                   )}
+                  {get(errors, 'distribution[' + index + ']') && (
+                    <ErrorMessage size={'sm'}>{localization.validation.multipleInvalidValues}</ErrorMessage>
+                  )}
                 </Card>
               ),
           )}
@@ -420,6 +423,9 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                       distribution={item}
                       openLicenses={openLicenses}
                     />
+                  )}
+                  {get(errors, 'sample[' + index + ']') && (
+                    <ErrorMessage size={'sm'}>Inneholder en eller flere ugyldige verdier</ErrorMessage>
                   )}
                 </Card>
               ),

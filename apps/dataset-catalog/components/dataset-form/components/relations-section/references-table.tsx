@@ -7,7 +7,7 @@ import relations from '../../utils/relations.json';
 import { AddButton, DeleteButton, EditButton, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { useState, useRef, useEffect } from 'react';
 import { referenceSchema } from '../../utils/validation-schema';
-import { compact, isEmpty } from 'lodash';
+import { compact, get, isEmpty } from 'lodash';
 import styles from '../../dataset-form.module.css';
 import cn from 'classnames';
 
@@ -30,7 +30,7 @@ const hasNoFieldValues = (values: Reference) => {
 };
 
 export const ReferenceTable = ({ searchEnv }: Props) => {
-  const { values, setFieldValue } = useFormikContext<Dataset>();
+  const { values, errors, setFieldValue } = useFormikContext<Dataset>();
 
   const getUriList = () => {
     return values.references?.map((reference) => reference?.source?.uri).filter((uri) => uri) ?? [];
@@ -44,46 +44,48 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
         {localization.datasetForm.fieldLabel.references}
       </TitleWithHelpTextAndTag>
       {values?.references && compact(values?.references).length > 0 && (
-        <Table
-          size='sm'
-          className={styles.table}
-        >
-          <Table.Head>
-            <Table.Row>
-              <Table.HeaderCell>{localization.datasetForm.fieldLabel.relationType}</Table.HeaderCell>
-              <Table.HeaderCell>{localization.datasetForm.fieldLabel.dataset}</Table.HeaderCell>
-              <Table.HeaderCell aria-label='Actions' />
-            </Table.Row>
-          </Table.Head>
-          <Table.Body>
-            {values?.references &&
-              values?.references.map((ref: Reference, index) => (
-                <Table.Row key={`references-${index}`}>
-                  <Table.Cell>
-                    {getTranslateText(relations.find((rel) => rel.code === ref?.referenceType?.code)?.label) ??
-                      ref?.referenceType?.code}
-                  </Table.Cell>
-                  <Table.Cell>
-                    {getTranslateText(selectedValues?.find((item) => item.uri === ref?.source?.uri)?.title) ??
-                      ref?.source?.uri}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div className={styles.set}>
-                      <FieldModal
-                        searchEnv={searchEnv}
-                        template={ref}
-                        type={'edit'}
-                        onSuccess={(updatedItem: Reference) => setFieldValue(`references[${index}]`, updatedItem)}
-                        initialUri={ref?.source?.uri}
-                        initialDatasets={selectedValues ?? []}
-                      />
-                      <DeleteButton onClick={() => setFieldValue(`references[${index}]`, undefined)} />
-                    </div>
-                  </Table.Cell>
-                </Table.Row>
-              ))}
-          </Table.Body>
-        </Table>
+        <div className={get(errors, `references`) ? styles.errorBorder : undefined}>
+          <Table
+            size='sm'
+            className={styles.table}
+          >
+            <Table.Head>
+              <Table.Row>
+                <Table.HeaderCell>{localization.datasetForm.fieldLabel.relationType}</Table.HeaderCell>
+                <Table.HeaderCell>{localization.datasetForm.fieldLabel.dataset}</Table.HeaderCell>
+                <Table.HeaderCell aria-label='Actions' />
+              </Table.Row>
+            </Table.Head>
+            <Table.Body>
+              {values?.references &&
+                values?.references.map((ref: Reference, index) => (
+                  <Table.Row key={`references-${index}`}>
+                    <Table.Cell>
+                      {getTranslateText(relations.find((rel) => rel.code === ref?.referenceType?.code)?.label) ??
+                        ref?.referenceType?.code}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {getTranslateText(selectedValues?.find((item) => item.uri === ref?.source?.uri)?.title) ??
+                        ref?.source?.uri}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <div className={styles.set}>
+                        <FieldModal
+                          searchEnv={searchEnv}
+                          template={ref}
+                          type={'edit'}
+                          onSuccess={(updatedItem: Reference) => setFieldValue(`references[${index}]`, updatedItem)}
+                          initialUri={ref?.source?.uri}
+                          initialDatasets={selectedValues ?? []}
+                        />
+                        <DeleteButton onClick={() => setFieldValue(`references[${index}]`, undefined)} />
+                      </div>
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+            </Table.Body>
+          </Table>
+        </div>
       )}
 
       <div>
@@ -177,7 +179,10 @@ const FieldModal = ({ template, type, onSuccess, searchEnv, initialUri, initialD
                 </Modal.Header>
 
                 <Modal.Content className={cn(styles.modalContent, styles.fieldContainer)}>
-                  <Fieldset legend={localization.datasetForm.fieldLabel.relationType} size='sm'>
+                  <Fieldset
+                    legend={localization.datasetForm.fieldLabel.relationType}
+                    size='sm'
+                  >
                     <Combobox
                       onValueChange={(value) => setFieldValue(`referenceType.code`, value.toString())}
                       value={values.referenceType?.code ? [values.referenceType?.code] : []}
@@ -200,7 +205,10 @@ const FieldModal = ({ template, type, onSuccess, searchEnv, initialUri, initialD
                     </Combobox>
                   </Fieldset>
 
-                  <Fieldset legend={localization.datasetForm.fieldLabel.dataset} size='sm'>
+                  <Fieldset
+                    legend={localization.datasetForm.fieldLabel.dataset}
+                    size='sm'
+                  >
                     <Combobox
                       onChange={(input: any) => setSearchQuery(input.target.value)}
                       onValueChange={(value) => {

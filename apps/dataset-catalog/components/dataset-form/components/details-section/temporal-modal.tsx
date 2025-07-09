@@ -5,7 +5,7 @@ import { Button, Modal, Table, Textfield } from '@digdir/designsystemet-react';
 import { FastField, FieldArray, Formik } from 'formik';
 import styles from '../../dataset-form.module.css';
 import { ReactNode, useRef, useState } from 'react';
-import { isEmpty } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import { dateSchema } from '../../utils/validation-schema';
 import cn from 'classnames';
 import { MinusIcon } from '@navikt/aksel-icons';
@@ -13,6 +13,7 @@ import { MinusIcon } from '@navikt/aksel-icons';
 interface Props {
   values: DateRange[] | undefined;
   label?: string | ReactNode;
+  errors?: any;
 }
 
 interface ModalProps {
@@ -26,14 +27,14 @@ const hasNoFieldValues = (values: DateRange) => {
   return isEmpty(values.startDate) && isEmpty(values.endDate);
 };
 
-export const TemporalModal = ({ values, label }: Props) => {
+export const TemporalModal = ({ values, label, errors }: Props) => {
   return (
     <div className={styles.fieldContainer}>
       {typeof label === 'string' ? <FormHeading>{label}</FormHeading> : label}
       <FieldArray
         name={'temporal'}
         render={(arrayHelpers) => (
-          <>
+          <div className={get(errors, `temporal`) ? styles.errorBorder : undefined}>
             {values && values?.length > 0 && (
               <Table
                 size='sm'
@@ -73,7 +74,7 @@ export const TemporalModal = ({ values, label }: Props) => {
                 onSuccess={(formValues) => arrayHelpers.push(formValues)}
               />
             </div>
-          </>
+          </div>
         )}
       />
     </div>

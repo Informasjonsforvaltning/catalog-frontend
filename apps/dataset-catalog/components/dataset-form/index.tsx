@@ -244,7 +244,7 @@ export const DatasetForm = ({
           const hasError = (fields: (keyof Dataset)[]) => fields.some((field) => Object.keys(errors).includes(field));
           const handleRestoreDataset = (data: StorageData) => {
             if (data?.id !== datasetId) {
-              if (!(data?.id)) {
+              if (!data?.id) {
                 return window.location.replace(`/catalogs/${catalogId}/datasets/new?restore=1`);
               }
               return window.location.replace(`/catalogs/${catalogId}/datasets/${data.id}/edit?restore=1`);
@@ -268,7 +268,14 @@ export const DatasetForm = ({
                     title={localization.datasetForm.heading.about}
                     subtitle={localization.datasetForm.subtitle.about}
                     required
-                    error={hasError(['title'])}
+                    error={hasError([
+                      'title',
+                      'description',
+                      'issued',
+                      'legalBasisForRestriction',
+                      'legalBasisForProcessing',
+                      'legalBasisForAccess',
+                    ])}
                   >
                     <AboutSection />
                   </FormLayout.Section>
@@ -278,7 +285,7 @@ export const DatasetForm = ({
                     title={localization.datasetForm.heading.theme}
                     subtitle={localization.datasetForm.subtitle.theme}
                     required
-                    error={hasError(['euDataTheme'])}
+                    error={hasError(['euDataTheme', 'losTheme'])}
                   >
                     <ThemeSection
                       losThemes={losThemes}
@@ -290,6 +297,7 @@ export const DatasetForm = ({
                     id='distribution-section'
                     title={localization.datasetForm.heading.distributions}
                     subtitle={localization.datasetForm.subtitle.distributions}
+                    error={hasError(['distribution', 'sample'])}
                   >
                     <DistributionSection
                       referenceDataEnv={referenceDataEnv}
@@ -302,7 +310,7 @@ export const DatasetForm = ({
                     id='details-section'
                     title={localization.datasetForm.heading.details}
                     subtitle={localization.datasetForm.subtitle.details}
-                    error={hasError(['landingPage'])}
+                    error={hasError(['landingPage', 'conformsTo'])}
                   >
                     <DetailsSection
                       referenceDataEnv={referenceDataEnv}
@@ -314,6 +322,7 @@ export const DatasetForm = ({
                     id='relation-section'
                     title={localization.datasetForm.heading.relations}
                     subtitle={localization.datasetForm.subtitle.relations}
+                    error={hasError(['references', 'relations'])}
                   >
                     <RelationsSection searchEnv={searchEnv} />
                   </FormLayout.Section>
@@ -322,6 +331,7 @@ export const DatasetForm = ({
                     id='concept-section'
                     title={localization.datasetForm.heading.concept}
                     subtitle={localization.datasetForm.subtitle.concept}
+                    error={hasError(['conceptList', 'keywordList'])}
                   >
                     <ConceptSection searchEnv={searchEnv} />
                   </FormLayout.Section>
@@ -330,6 +340,7 @@ export const DatasetForm = ({
                     id='information-model-section'
                     title={localization.datasetForm.heading.informationModel}
                     subtitle={localization.datasetForm.subtitle.informationModel}
+                    error={hasError(['informationModelsFromFDK', 'informationModel'])}
                   >
                     <InformationModelSection searchEnv={searchEnv} />
                   </FormLayout.Section>

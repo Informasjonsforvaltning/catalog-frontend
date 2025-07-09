@@ -89,3 +89,8 @@
     padding-top: 2.5rem;
   }
 }
+
+.errorBorder {
+  border: 2px solid var(--fds-semantic-border-danger-default);
+  border-radius: var(--fds-border_radius-medium);
+}

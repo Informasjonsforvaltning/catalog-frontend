@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const RelationsSection = ({ searchEnv }: Props) => {
-  const { values } = useFormikContext<Dataset>();
+  const { values, errors } = useFormikContext<Dataset>();
 
   return (
     <Box>
@@ -25,6 +25,7 @@ export const RelationsSection = ({ searchEnv }: Props) => {
         <UriWithLabelFieldsetTable
           values={values.relations}
           fieldName={'relations'}
+          errors={errors.relations}
         />
       </div>
     </Box>

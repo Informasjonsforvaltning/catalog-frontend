@@ -1,6 +1,6 @@
 'use client';
 
-import { Fieldset, Box, Card } from '@digdir/designsystemet-react';
+import { Fieldset, Box, Card, ErrorMessage } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 
 import styles from './formik-optional-fields-fieldset.module.scss';
@@ -13,9 +13,10 @@ import { FastFieldWithRef } from '../formik-fast-field-with-ref';
 type OptionalFieldsFieldsetProps = {
   legend?: ReactNode;
   availableFields: { valuePath: string; label: string; legend?: ReactNode }[];
+  errorPath?: string;
 };
 
-export const FormikOptionalFieldsFieldset = ({ legend, availableFields }: OptionalFieldsFieldsetProps) => {
+export const FormikOptionalFieldsFieldset = ({ legend, availableFields, errorPath }: OptionalFieldsFieldsetProps) => {
   const { errors, getFieldMeta, setFieldValue } = useFormikContext<Record<string, LocalizedStrings>>();
   const [focus, setFocus] = useState<string | null>();
   const fieldRefs = availableFields.reduce(
@@ -23,7 +24,7 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields }: Option
       map[field.valuePath] = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
       return map;
     },
-    {} as Record<string, React.RefObject<HTMLInputElement | HTMLTextAreaElement>>,
+    {} as Record<string, React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>>,
   );
 
   const handleAddField = (fieldName: string) => {
@@ -39,6 +40,8 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields }: Option
     const metadata = getFieldMeta(field.valuePath);
     return metadata.value !== undefined;
   });
+
+  const mainError = errorPath ? get(errors, errorPath) : undefined;
 
   const visibleFieldButtons = availableFields.filter((field) => !visibleFields.includes(field));
 
@@ -86,6 +89,7 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields }: Option
               </AddButton>
             ))}
           </div>
+          {typeof mainError === 'string' && <ErrorMessage size={'sm'}>{mainError}</ErrorMessage>}
         </Card.Content>
       </Card>
     </Fieldset>
