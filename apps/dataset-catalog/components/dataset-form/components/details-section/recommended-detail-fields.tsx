@@ -20,7 +20,7 @@ interface Props {
 
 export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const { values, setFieldValue } = useFormikContext<Dataset>();
+  const { values, errors, setFieldValue } = useFormikContext<Dataset>();
   const langNOR = languages.filter((lang) => lang.code === 'NOR')[0];
 
   const { data: searchHits, isLoading: isSearching } = useSearchAdministrativeUnits(searchTerm, referenceDataEnv);
@@ -93,7 +93,7 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
         }
         size='sm'
       >
-        {values.languageList && values.languageList.some(lang => lang.includes('NOR')) && (
+        {values.languageList && values.languageList.some((lang) => lang.includes('NOR')) && (
           <Checkbox
             key={langNOR.uri}
             value={langNOR.uri}
@@ -118,14 +118,17 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
       <div className={styles.fieldContainer}>
         <Fieldset
           size='sm'
-          legend={<TitleWithHelpTextAndTag
-            tagColor='info'
-            tagTitle={localization.tag.recommended}
-            helpText={localization.datasetForm.helptext.spatial}
-          >
-            {localization.datasetForm.fieldLabel.spatial}
-          </TitleWithHelpTextAndTag>}>
-            <Combobox
+          legend={
+            <TitleWithHelpTextAndTag
+              tagColor='info'
+              tagTitle={localization.tag.recommended}
+              helpText={localization.datasetForm.helptext.spatial}
+            >
+              {localization.datasetForm.fieldLabel.spatial}
+            </TitleWithHelpTextAndTag>
+          }
+        >
+          <Combobox
             placeholder={`${localization.search.search}...`}
             multiple
             hideClearButton
@@ -148,11 +151,12 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
               </Combobox.Option>
             ))}
           </Combobox>
-        </Fieldset>        
+        </Fieldset>
       </div>
       <FieldsetDivider />
       <TemporalModal
         values={values.temporal}
+        errors={errors}
         label={
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}

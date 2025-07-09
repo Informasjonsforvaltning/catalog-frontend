@@ -287,7 +287,7 @@ const FIELD_CONFIG = [
       <UriWithLabelFieldsetTable
         values={props.values.conformsTo}
         fieldName={'conformsTo'}
-        expanded={props.expanded}
+        errors={props.errors.conformsTo}
         hideHeadWhenEmpty={true}
         showDivider={props.showDivider}
         label={
@@ -377,6 +377,7 @@ export const MinimizedDetailFields = ({ datasetTypes, provenanceStatements, freq
       <div key={fieldConfig.name}>
         {fieldConfig.render({
           values,
+          errors,
           setFieldValue,
           setInputRef,
           setFocus,
@@ -399,6 +400,7 @@ export const MinimizedDetailFields = ({ datasetTypes, provenanceStatements, freq
       >
         {fieldConfig.render({
           values,
+          errors,
           setFieldValue,
           ref: (el: HTMLInputElement | HTMLTextAreaElement | null) => setInputRef(fieldConfig.name, el),
           datasetTypeOptions,

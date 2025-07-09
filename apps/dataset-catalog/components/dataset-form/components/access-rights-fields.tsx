@@ -6,7 +6,7 @@ import { useFormikContext } from 'formik';
 import { UriWithLabelFieldsetTable } from './uri-with-label-field-set-table';
 
 export const AccessRightFields = () => {
-  const { values, setFieldValue } = useFormikContext<Dataset>();
+  const { values, errors, setFieldValue } = useFormikContext<Dataset>();
 
   return (
     <>
@@ -42,6 +42,7 @@ export const AccessRightFields = () => {
       <UriWithLabelFieldsetTable
         values={values.legalBasisForRestriction}
         fieldName={'legalBasisForRestriction'}
+        errors={errors.legalBasisForRestriction}
         hideHeadWhenEmpty={true}
         label={
           <TitleWithHelpTextAndTag
@@ -59,6 +60,7 @@ export const AccessRightFields = () => {
       <UriWithLabelFieldsetTable
         values={values.legalBasisForProcessing}
         fieldName={'legalBasisForProcessing'}
+        errors={errors.legalBasisForProcessing}
         hideHeadWhenEmpty={true}
         label={
           <TitleWithHelpTextAndTag
@@ -76,6 +78,7 @@ export const AccessRightFields = () => {
       <UriWithLabelFieldsetTable
         values={values.legalBasisForAccess}
         fieldName={'legalBasisForAccess'}
+        errors={errors.legalBasisForAccess}
         hideHeadWhenEmpty={true}
         label={
           <TitleWithHelpTextAndTag

@@ -411,7 +411,8 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
 
   dataset: {
     deleteDataset: 'Slett datasettbeskrivelse',
-    confirmDelete: 'Du er i ferd med å slette datasettbeskrivelsen **{0}**. All data knyttet til datasettbeskrivelsen vil bli permanent slettet, og slettingen kan ikke angres. Er du sikker på at du vil fortsette?',
+    confirmDelete:
+      'Du er i ferd med å slette datasettbeskrivelsen **{0}**. All data knyttet til datasettbeskrivelsen vil bli permanent slettet, og slettingen kan ikke angres. Er du sikker på at du vil fortsette?',
   },
 
   validity: {
@@ -508,6 +509,7 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
     invalidUrl: `Ugyldig lenke. Vennligst sørg for at lenken har en gyldig adresse, og ender med et toppdomene (f.eks. ‘.no’).`,
     invalidProtocol: `Ugyldig lenke. Vennligst sørg for at lenken starter med ‘https://’.`,
     invalidPhone: 'Ugyldig telefonnummer.',
+    multipleInvalidValues: 'Inneholder en eller flere ugyldige verdier',
     nameRequired: 'Må ha navn',
     accessURLRequired: 'Tilgangslenke må fylles ut.',
     endpointURLRequired: 'Endepunkt må fylles ut.',

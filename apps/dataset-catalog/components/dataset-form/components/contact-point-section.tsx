@@ -23,6 +23,7 @@ export const ContactPointSection = () => {
           </TitleWithHelpTextAndTag>
         }
         availableFields={contactPointOptions}
+        errorPath={'contactPoint'}
       />
     </>
   );
