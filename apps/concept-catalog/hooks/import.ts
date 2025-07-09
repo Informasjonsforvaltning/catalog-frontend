@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import { importRdfConcepts } from '@catalog-frontend/data-access';
 import { useRouter } from 'next/navigation';
 
-type ConceptImport = Omit<Concept, 'id' | 'ansvarligVirksomhet'>;
+type ConceptImport = Omit<Concept, 'ansvarligVirksomhet'>;
 
 const mapToSingleValue = (csvMap: Record<string, string[]>, key: string) => {
   const value = csvMap[key];
@@ -87,7 +87,7 @@ const mapKilde = (
     : undefined;
 };
 
-const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Concept, 'id' | 'ansvarligVirksomhet'> => {
+const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Concept, 'ansvarligVirksomhet'> => {
   const csvMap = createCsvMap(columnHeaders, data);
   const version = mapToSingleValue(csvMap, 'versjon') || '0.1.0';
   const uri = mapToSingleValue(csvMap, 'uri')
@@ -95,7 +95,7 @@ const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Conc
     console.error("Forventet kolonnenavn 'uri' i CSV-filen")
 
   return {
-    uri: uri,
+    id: uri?? null,
     originaltBegrep: mapToSingleValue(csvMap, 'originalt_begrep') ?? '',
     versjonsnr: {
       major: parseInt(version.split('.')?.[0] ?? '0', 10),
