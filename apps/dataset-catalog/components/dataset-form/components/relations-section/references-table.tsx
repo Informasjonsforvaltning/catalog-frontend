@@ -2,7 +2,7 @@ import { Dataset, Reference, Search } from '@catalog-frontend/types';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Box, Button, Combobox, Fieldset, Modal, Table } from '@digdir/designsystemet-react';
 import { useSearchDatasetsByUri, useSearchDatasetSuggestions } from '../../../../hooks/useSearchService';
-import { Formik, useFormikContext } from 'formik';
+import { FieldArray, Formik, useFormikContext } from 'formik';
 import relations from '../../utils/relations.json';
 import { AddButton, DeleteButton, EditButton, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { useState, useRef, useEffect } from 'react';
@@ -30,7 +30,7 @@ const hasNoFieldValues = (values: Reference) => {
 };
 
 export const ReferenceTable = ({ searchEnv }: Props) => {
-  const { values, errors, setFieldValue } = useFormikContext<Dataset>();
+  const { values, errors } = useFormikContext<Dataset>();
 
   const getUriList = () => {
     return values.references?.map((reference) => reference?.source?.uri).filter((uri) => uri) ?? [];
@@ -43,22 +43,23 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
       <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.references}>
         {localization.datasetForm.fieldLabel.references}
       </TitleWithHelpTextAndTag>
-      {values?.references && compact(values?.references).length > 0 && (
-        <div className={get(errors, `references`) ? styles.errorBorder : undefined}>
-          <Table
-            size='sm'
-            className={styles.table}
-          >
-            <Table.Head>
-              <Table.Row>
-                <Table.HeaderCell>{localization.datasetForm.fieldLabel.relationType}</Table.HeaderCell>
-                <Table.HeaderCell>{localization.datasetForm.fieldLabel.dataset}</Table.HeaderCell>
-                <Table.HeaderCell aria-label='Actions' />
-              </Table.Row>
-            </Table.Head>
-            <Table.Body>
-              {values?.references &&
-                values?.references.map((ref: Reference, index) => (
+      <FieldArray
+        name={'references'}
+        render={(arrayHelpers) => (
+          <div className={get(errors, `references`) ? styles.errorBorder : undefined}>
+            <Table
+              size='sm'
+              className={styles.table}
+            >
+              <Table.Head>
+                <Table.Row>
+                  <Table.HeaderCell>{localization.datasetForm.fieldLabel.relationType}</Table.HeaderCell>
+                  <Table.HeaderCell>{localization.datasetForm.fieldLabel.dataset}</Table.HeaderCell>
+                  <Table.HeaderCell aria-label='Actions' />
+                </Table.Row>
+              </Table.Head>
+              <Table.Body>
+                {values?.references?.map((ref: Reference, index) => (
                   <Table.Row key={`references-${index}`}>
                     <Table.Cell>
                       {getTranslateText(relations.find((rel) => rel.code === ref?.referenceType?.code)?.label) ??
@@ -74,37 +75,31 @@ export const ReferenceTable = ({ searchEnv }: Props) => {
                           searchEnv={searchEnv}
                           template={ref}
                           type={'edit'}
-                          onSuccess={(updatedItem: Reference) => setFieldValue(`references[${index}]`, updatedItem)}
+                          onSuccess={(updatedItem: Reference) => arrayHelpers.replace(index, updatedItem)}
                           initialUri={ref?.source?.uri}
                           initialDatasets={selectedValues ?? []}
                         />
-                        <DeleteButton onClick={() => setFieldValue(`references[${index}]`, undefined)} />
+                        <DeleteButton onClick={() => arrayHelpers.remove(index)} />
                       </div>
                     </Table.Cell>
                   </Table.Row>
                 ))}
-            </Table.Body>
-          </Table>
-        </div>
-      )}
+              </Table.Body>
+            </Table>
 
-      <div>
-        <FieldModal
-          searchEnv={searchEnv}
-          template={{ source: { uri: '' }, referenceType: { code: '' } }}
-          type={'new'}
-          onSuccess={(formValues) =>
-            setFieldValue(
-              values.references && values?.references.length > 0 && !hasNoFieldValues(values?.references?.[0])
-                ? `references[${values?.references?.length}]`
-                : `references[0]`,
-              formValues,
-            )
-          }
-          initialUri={undefined}
-          initialDatasets={[]}
-        />
-      </div>
+            <div>
+              <FieldModal
+                searchEnv={searchEnv}
+                template={{ source: { uri: '' }, referenceType: { code: '' } }}
+                type={'new'}
+                onSuccess={(formValues) => arrayHelpers.push(formValues)}
+                initialUri={undefined}
+                initialDatasets={[]}
+              />
+            </div>
+          </div>
+        )}
+      />
     </Box>
   );
 };
