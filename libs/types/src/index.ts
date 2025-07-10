@@ -21,4 +21,5 @@ export * from './lib/reference-data';
 export * from './lib/service';
 export * from './lib/storage-data';
 export * from './lib/user';
+export * from './lib/terms';
 export * as Search from './lib/search';

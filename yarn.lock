@@ -8904,6 +8904,7 @@ __metadata:
     formik: "npm:^2.4.6"
     globals: "npm:^16.2.0"
     graphql: "npm:^16.11.0"
+    html-react-parser: "npm:^5.2.5"
     http-proxy: "npm:^1.18.1"
     husky: "npm:^9.1.7"
     immer: "npm:^10.1.1"
@@ -10515,7 +10516,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"domhandler@npm:^5.0.2, domhandler@npm:^5.0.3":
+"domhandler@npm:5.0.3, domhandler@npm:^5.0.2, domhandler@npm:^5.0.3":
   version: 5.0.3
   resolution: "domhandler@npm:5.0.3"
   dependencies:
@@ -10524,7 +10525,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"domutils@npm:^3.0.1":
+"domutils@npm:^3.0.1, domutils@npm:^3.2.1":
   version: 3.2.2
   resolution: "domutils@npm:3.2.2"
   dependencies:
@@ -12752,6 +12753,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"html-dom-parser@npm:5.1.1":
+  version: 5.1.1
+  resolution: "html-dom-parser@npm:5.1.1"
+  dependencies:
+    domhandler: "npm:5.0.3"
+    htmlparser2: "npm:10.0.0"
+  checksum: 10/85bbaa8699d40d54fd64f5472088199178a6c3dd6a907358ac476d9c511cb8ab10bff1469a785411e8b831a73ac08348392e56076eab6d100a3ec19dccc722ad
+  languageName: node
+  linkType: hard
+
 "html-encoding-sniffer@npm:^3.0.0":
   version: 3.0.0
   resolution: "html-encoding-sniffer@npm:3.0.0"
@@ -12768,10 +12779,40 @@ __metadata:
   languageName: node
   linkType: hard
 
+"html-react-parser@npm:^5.2.5":
+  version: 5.2.5
+  resolution: "html-react-parser@npm:5.2.5"
+  dependencies:
+    domhandler: "npm:5.0.3"
+    html-dom-parser: "npm:5.1.1"
+    react-property: "npm:2.0.2"
+    style-to-js: "npm:1.1.16"
+  peerDependencies:
+    "@types/react": 0.14 || 15 || 16 || 17 || 18 || 19
+    react: 0.14 || 15 || 16 || 17 || 18 || 19
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10/22852dc4826d3be9506e238e37a05c23b432675aac33f22bd5741caa195a32e99de99d2b99037fda532f198afbcdeacfc0b27627d6e529143a98c8f191e99c52
+  languageName: node
+  linkType: hard
+
 "html-url-attributes@npm:^3.0.0":
   version: 3.0.1
   resolution: "html-url-attributes@npm:3.0.1"
   checksum: 10/494074c2f730c5c0e517aa1b10111fb36732534a2d2b70427582c4a615472b47da472cf3a17562cc653826d378d20960f2783e0400f4f7cf0c3c2d91c6188d13
+  languageName: node
+  linkType: hard
+
+"htmlparser2@npm:10.0.0":
+  version: 10.0.0
+  resolution: "htmlparser2@npm:10.0.0"
+  dependencies:
+    domelementtype: "npm:^2.3.0"
+    domhandler: "npm:^5.0.3"
+    domutils: "npm:^3.2.1"
+    entities: "npm:^6.0.0"
+  checksum: 10/768870f0e020dca19dc45df206cb6ac466c5dba6566c8fca4ca880347eed409f9977028d08644ac516bca8628ac9c7ded5a3847dc3ee1c043f049abf9e817154
   languageName: node
   linkType: hard
 
@@ -19039,6 +19080,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-property@npm:2.0.2":
+  version: 2.0.2
+  resolution: "react-property@npm:2.0.2"
+  checksum: 10/3a4bc1951b2b7992cb8a2d3f12016dd0920d1c06eb58b456204a6ae1210401d62baece098d3200ed8a0513dde247a5d96ffdb24f354e32ce5a9b26fbd8552668
+  languageName: node
+  linkType: hard
+
 "react-window@npm:^1.8.11":
   version: 1.8.11
   resolution: "react-window@npm:1.8.11"
@@ -20934,7 +20982,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"style-to-js@npm:^1.0.0":
+"style-to-js@npm:1.1.16, style-to-js@npm:^1.0.0":
   version: 1.1.16
   resolution: "style-to-js@npm:1.1.16"
   dependencies:

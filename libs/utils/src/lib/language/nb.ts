@@ -581,10 +581,18 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
   },
 
   termsOfUse: {
+    pageTitle: 'Vilkår og betingelser',
+    heading: 'Bruksvilkår for registrering i Felles datakatalog',
     notAcceptedTitle: 'Bruksvilkår ikke akseptert',
     notAcceptedContent: `Bruksvilkår må aksepteres for å kunne ta i bruk katalogtjenestene. Hvis vilkårene nylig har blitt akseptert må du logge ut og inn igjen for at det skal tre i kraft. `,
     gotoTermsOfUse: 'Gå til bruksvilkår',
     cancel: 'Avbryt',
+    adminPermissionNeeded:
+      'Du må ha rollen _Virksomhetsadministrator_ for å kunne akseptere bruksvilkår på vegne av virksomheten.',
+    acceptCheckbox: 'Som bemyndiget person aksepterer jeg bruksvilkår for Felles datakatalog på vegne av virksomheten.',
+    acceptButton: 'Aksepter bruksvilkår',
+    acceptedByAndWhen:
+      '{0} aksepterte bruksvilkår på vegne av din virksomhet {1}. Dersom din virksomhet ikke ønsker oppføring i Felles datakatalog må du ta kontakt med forvalter av katalogen på [fellesdatakatalog@digdir.no](mailto:fellesdatakatalog@digdir.no).',
   },
 
   importResult: {
