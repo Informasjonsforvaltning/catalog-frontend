@@ -13,10 +13,6 @@ export const ImportConceptRdf = ( { catalogId }: Props) => {
 
   const extension2Type: Map<string, string> = new Map<string, string>();
   extension2Type.set('.ttl', 'text/turtle');
-  extension2Type.set('.rdf', 'application/rdf+xml');
-  extension2Type.set('.xml', 'application/rdf+xml');
-  extension2Type.set('.jsonld', 'application/ld+json');
-  extension2Type.set('.json', 'application/rdf+json');
   const allowedExtensions = Array.from(extension2Type.keys());
   const uploadRdf = useImportRdfConcepts(catalogId);
   const onFileUpload = async (event) => {
