@@ -32,7 +32,7 @@ const TermsOfUseAlert = async ({ catalogId }: TermsOfUseAlertProps) => {
     >
       {localization.termsOfUse.notAcceptedContent}
       <div className={styles.buttonRow}>
-        <Link href={`${process.env.FDK_REGISTRATION_BASE_URI}/terms-and-conditions/${catalogId}`}>
+        <Link href={`${process.env.CATALOG_PORTAL_BASE_URI}/terms-and-conditions/${catalogId}`}>
           {localization.termsOfUse.gotoTermsOfUse}
         </Link>
       </div>

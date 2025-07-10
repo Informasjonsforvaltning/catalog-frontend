@@ -1,0 +1,29 @@
+.terms {
+  margin-bottom: 6px;
+
+  h2 {
+    margin-top: 40px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  p {
+    margin-top: 20px;
+
+    color: black;
+  }
+
+  :hover {
+    text-decoration: none;
+  }
+}
+
+.agreement {
+  margin-bottom: 6px;
+}
+
+.alert {
+  em {
+    font-style: italic;
+  }
+}

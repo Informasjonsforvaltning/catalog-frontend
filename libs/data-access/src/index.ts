@@ -20,3 +20,4 @@ export * from './lib/records-of-processing-activities/api';
 export * as StrapiGraphql from './lib/strapi/generated/graphql';
 export * from './lib/strapi/service-messages';
 export * from './lib/enhetsregisteret';
+export * from './lib/terms-and-conditions/api';
