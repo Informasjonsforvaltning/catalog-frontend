@@ -15,7 +15,6 @@ import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryState } from 'nu
 import {
   getTranslateText,
   localization,
-  localization as loc,
   sortDateStringsAscending,
   sortDateStringsDescending,
 } from '@catalog-frontend/utils';
@@ -44,7 +43,7 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
     ...(importStatuses?.length > 0
       ? [
           {
-            header: loc.status,
+            header: localization.status,
             content: (
               <CheckboxGroupFilter<string>
                 items={importStatuses}
