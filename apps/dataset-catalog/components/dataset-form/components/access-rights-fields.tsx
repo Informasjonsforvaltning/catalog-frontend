@@ -26,7 +26,7 @@ export const AccessRightFields = () => {
           onChange={(values) => setFieldValue('accessRights.uri', values.toString())}
         >
           <Radio value='none'>{`${localization.accessRight.none}`}</Radio>
-          {accessRights.map((option, index) => (
+          {accessRights?.map((option, index) => (
             <Radio
               key={`${option.uri}-${index}`}
               value={option.uri}

@@ -333,7 +333,7 @@ export const MinimizedDetailFields = ({ datasetTypes, provenanceStatements, freq
 
   const datasetTypeOptions = useMemo(
     () =>
-      datasetTypes.map((type) => (
+      datasetTypes?.map((type) => (
         <Combobox.Option
           value={type.uri}
           key={type.uri}
@@ -347,7 +347,7 @@ export const MinimizedDetailFields = ({ datasetTypes, provenanceStatements, freq
 
   const provenanceOptions = useMemo(
     () =>
-      provenanceStatements.map((item) => (
+      provenanceStatements?.map((item) => (
         <Combobox.Option
           value={item.uri}
           key={item.uri}
@@ -360,7 +360,7 @@ export const MinimizedDetailFields = ({ datasetTypes, provenanceStatements, freq
 
   const frequencyOptions = useMemo(
     () =>
-      frequencies.map((item) => (
+      frequencies?.map((item) => (
         <Combobox.Option
           value={item.uri}
           key={item.uri}
