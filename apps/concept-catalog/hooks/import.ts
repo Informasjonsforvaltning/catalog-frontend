@@ -3,8 +3,11 @@ import type { ParseResult } from 'papaparse';
 import { Concept } from '@catalog-frontend/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { validOrganizationNumber } from '@catalog-frontend/utils';
+import { useSession } from 'next-auth/react';
+import { importRdfConcepts } from '@catalog-frontend/data-access';
+import { useRouter } from 'next/navigation';
 
-type ConceptImport = Omit<Concept, 'id' | 'ansvarligVirksomhet'>;
+type ConceptImport = Omit<Concept, 'ansvarligVirksomhet'>;
 
 const mapToSingleValue = (csvMap: Record<string, string[]>, key: string) => {
   const value = csvMap[key];
@@ -84,11 +87,15 @@ const mapKilde = (
     : undefined;
 };
 
-const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Concept, 'id' | 'ansvarligVirksomhet'> => {
+const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Concept, 'ansvarligVirksomhet'> => {
   const csvMap = createCsvMap(columnHeaders, data);
   const version = mapToSingleValue(csvMap, 'versjon') || '0.1.0';
+  const uri = mapToSingleValue(csvMap, 'id')
+  if(!uri)
+    console.error("Forventet kolonnenavn 'uri' i CSV-filen")
 
   return {
+    id: uri?? null,
     originaltBegrep: mapToSingleValue(csvMap, 'originalt_begrep') ?? '',
     versjonsnr: {
       major: parseInt(version.split('.')?.[0] ?? '0', 10),
@@ -162,8 +169,38 @@ const attemptToParseCsvFile = (text: string): Promise<ConceptImport[]> => {
   });
 };
 
+export const useImportRdfConcepts = (catalogId: string) => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const accessToken = session?.accessToken ?? '';
+  return useMutation({
+    mutationKey: ['import-Concepts-RDF'],
+    mutationFn: async ({ ...mutationProps }: {fileContent: string, contentType: string}) => {
+      if (!validOrganizationNumber(catalogId)) {
+        console.log("Invalid organization number", catalogId);
+        return Promise.reject('Invalid organization number');
+      }
+
+      const location = await importRdfConcepts(mutationProps.fileContent, mutationProps.contentType, catalogId, accessToken);
+
+      if (location) {
+        const resultId = location.split('/').pop();
+        router.push(`/catalogs/${catalogId}/concepts/import-results/${resultId}`);
+      }
+
+    },
+    onSuccess: () => {
+      console.log('Concept RDF file has been uploaded successfully!');
+    },
+    onError: (error: any) => {
+      console.error('Error uploading concept RDF file');
+    }
+  });
+};
+
 export const useImportConcepts = (catalogId: string) => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   return useMutation({
     mutationKey: ['importConcepts'],
     mutationFn: async (file: File) => {
@@ -207,6 +244,10 @@ export const useImportConcepts = (catalogId: string) => {
         if (response.status > 399) {
           const errorMessage = await response.text();
           return Promise.reject(errorMessage);
+        }
+
+        if(response.url) {
+          await router.push(response.url);
         }
 
         return Promise.resolve();
