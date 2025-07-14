@@ -281,7 +281,7 @@ export const DistributionModal = ({
         <FieldArray name='page'>
           {(arrayHelpers) => (
             <>
-              {(arrayHelpers.form.values.page || []).map((_: any, index: number, array: string[]) => (
+              {(arrayHelpers.form.values.page || []).map((_: any, index: number) => (
                 <React.Fragment key={`page-${index}`}>
                   <div className={styles['padding-bottom-4']}>
                     <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
@@ -301,7 +301,7 @@ export const DistributionModal = ({
                         }
                         as={Textfield}
                         size='sm'
-                        error={props.errors?.page?.[index]}
+                        error={props.errors?.page?.[index]?.uri}
                       />
                     </FieldsetWithDelete>
                   </div>
@@ -456,6 +456,7 @@ export const DistributionModal = ({
                 setSelectedMediaTypeUris,
                 showDivider,
                 values,
+                errors,
               };
 
               return fieldConfig.hideToggleButton ? (
