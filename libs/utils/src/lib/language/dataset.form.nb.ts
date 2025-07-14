@@ -164,7 +164,7 @@ export const datasetFormNb = {
     euDataTheme: 'Minst ett EU-tema må være valgt.',
     searchString: 'Ingen treff. Søkestrengen må inneholde minst to bokstaver.',
     accessURL: 'Tilgangslenke er påkrevd.',
-    contactPoint: 'Minst et kontaktpunkt må fylles ut.',
+    contactPoint: 'Minst en verdi må fylles ut for kontaktpunktet.',
     accessURLrequired: 'Tilgangslenke må fylles ut.',
     relation: 'Begge verdiene må fylles ut for å legge til en relasjon.',
   },
