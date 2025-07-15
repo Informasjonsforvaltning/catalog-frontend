@@ -67,6 +67,13 @@ export const authOptions: AuthOptions = {
       },
     }),
   ],
+  pages: {
+    signIn: '/auth/signin',
+    signOut: '/auth/signout',
+    error: '/auth/signin',
+    verifyRequest: '/auth/signin',
+    newUser: '/auth/signin',
+  },
   callbacks: {
     async session({ session, token }: any) {
       session.user = {
