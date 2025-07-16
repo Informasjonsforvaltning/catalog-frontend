@@ -9,7 +9,7 @@ import { withReadProtectedPage } from '@data-service-catalog/utils/auth';
 
 const DataServicesSearchHits = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/data-services`,
-  async ({ catalogId, session, hasWritePermission }) => {
+  async ({ catalogId, session, hasWritePermission, hasAdminPermission }) => {
     if (!session) {
       return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/data-services` });
     }
@@ -40,6 +40,7 @@ const DataServicesSearchHits = withReadProtectedPage(
           dataServices={dataServices}
           catalogId={catalogId}
           hasWritePermission={hasWritePermission}
+          hasAdminPermission={hasAdminPermission}
           distributionStatuses={distributionStatuses}
         />
       </>
