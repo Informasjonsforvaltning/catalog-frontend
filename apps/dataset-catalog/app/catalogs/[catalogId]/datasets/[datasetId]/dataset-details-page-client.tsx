@@ -87,6 +87,7 @@ const DatasetDetailsPageClient = ({
           <RightColumn
             dataset={dataset}
             hasWritePermission={hasWritePermission}
+            language={language}
           />
         </DetailsPageLayout.Right>
         <DetailsPageLayout.Buttons>
@@ -106,17 +107,12 @@ const DatasetDetailsPageClient = ({
             </div>
           )}
         </DetailsPageLayout.Buttons>
-
-
       </DetailsPageLayout>
       <ConfirmModal
         title={localization.dataset.deleteDataset}
         content={
           <Markdown>
-            {`${localization.formatString(
-              localization.dataset.confirmDelete,
-              `${getTranslateText(dataset.title)}`,
-            )}`}
+            {`${localization.formatString(localization.dataset.confirmDelete, `${getTranslateText(dataset.title)}`)}`}
           </Markdown>
         }
         successButtonText={localization.button.delete}

@@ -62,8 +62,9 @@ export const datasetFormNb = {
     relations: 'Beslektet ressurs, uten nærmere angivelse av type relasjon.',
     informationModelsFromFDK: 'Informasjonsmodell fra Data.norge.no',
     informationModel: 'Informasjonsmodell fra andre kilder',
-    contactPoint:
-      'Et kontaktpunkt er informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om datasettet. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.',
+    contactName: 'Brukes til å oppgi navnet til kontaktpunktet.',
+    contactFields:
+      'Informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om datasettet. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.',
     statusSwitch:
       'Toggelen bestemmer om datasettbeskrivelsen blir lagret med status “Godkjent” eller som et “Utkast”. For å endre status til “Godkjent” må alle obligatoriske felter være fylt ut. Husk å lagre skjemaet for å oppdatere status.',
     keyword:
@@ -145,6 +146,8 @@ export const datasetFormNb = {
     datasetID: 'Datasett-ID',
     registrationStatus: 'Registeringsstatus',
     ignoreRequired: 'Ignorer påkrevde felt',
+    contactName: 'Navn',
+    contactFields: 'Kontaktinformasjon',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
