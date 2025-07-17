@@ -42,6 +42,24 @@ const contactPointDraftValidationSchema = Yup.array().of(
 const contactPointConfirmValidationSchema = Yup.array()
   .of(
     Yup.object().shape({
+      name: Yup.object()
+        .shape({
+          nb: Yup.string()
+            .label(`${localization.datasetForm.fieldLabel.contactName} (${localization.language.nb})`)
+            .notRequired(),
+          nn: Yup.string()
+            .label(`${localization.datasetForm.fieldLabel.contactName} (${localization.language.nn})`)
+            .notRequired(),
+          en: Yup.string()
+            .label(`${localization.datasetForm.fieldLabel.contactName} (${localization.language.en})`)
+            .notRequired(),
+        })
+        .test('contact-name-test', localization.validation.oneLanguageRequired, (name) => {
+          if (!name) {
+            return false;
+          }
+          return !!(name.nb || name.nn || name.en);
+        }),
       email: Yup.string().email(localization.validation.invalidEmail).notRequired(),
       hasTelephone: Yup.string().matches(telephoneNumberRegex, localization.validation.invalidPhone).notRequired(),
       hasURL: Yup.string()
@@ -50,7 +68,7 @@ const contactPointConfirmValidationSchema = Yup.array()
         .notRequired(),
     }),
   )
-  .test('has-at-least-one-field', localization.datasetForm.validation.contactPoint, (contactPoints) => {
+  .test('contact-has-at-least-one-value-field', localization.datasetForm.validation.contactPoint, (contactPoints) => {
     if (!contactPoints || contactPoints.length === 0) {
       return false;
     }

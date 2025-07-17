@@ -1,5 +1,5 @@
 import { InfoCard } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
+import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { EnvelopeClosedIcon, PhoneIcon, LinkIcon } from '@navikt/aksel-icons';
 import { isEmpty } from 'lodash';
 import PublishSwitch from '../publish-switch';
@@ -10,9 +10,10 @@ import { Link } from '@digdir/designsystemet-react';
 type Props = {
   dataset: Dataset;
   hasWritePermission: boolean;
+  language: string;
 };
 
-export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
+export const RightColumn = ({ dataset, hasWritePermission, language }: Props) => {
   const published = dataset.registrationStatus === PublicationStatus.PUBLISH;
 
   return (
@@ -47,25 +48,28 @@ export const RightColumn = ({ dataset, hasWritePermission }: Props) => {
 
       {dataset?.contactPoint && !isEmpty(dataset?.contactPoint[0]) && (
         <InfoCard.Item
-          title={localization.concept.contactInformation}
+          title={localization.datasetForm.heading.contactPoint}
           headingColor='light'
         >
           <div className={styles.contactPoints}>
+            {!isEmpty(dataset?.contactPoint[0]?.name) && (
+              <span>{getTranslateText(dataset?.contactPoint[0]?.name, language)}</span>
+            )}
             {dataset?.contactPoint[0].email && (
               <span>
                 <div>
                   <EnvelopeClosedIcon />
                 </div>
 
-                {dataset?.contactPoint[0].email}
+                {dataset?.contactPoint[0]?.email}
               </span>
             )}
-            {dataset?.contactPoint[0].hasTelephone && (
+            {dataset?.contactPoint[0]?.hasTelephone && (
               <span>
                 <div>
                   <PhoneIcon />
                 </div>
-                {dataset?.contactPoint[0].hasTelephone}
+                {dataset?.contactPoint[0]?.hasTelephone}
               </span>
             )}
 

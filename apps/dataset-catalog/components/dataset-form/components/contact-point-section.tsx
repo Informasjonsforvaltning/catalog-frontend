@@ -1,5 +1,6 @@
 import { localization } from '@catalog-frontend/utils';
-import { FormikOptionalFieldsFieldset, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { FormikLanguageFieldset, FormikOptionalFieldsFieldset, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
+import { Textfield } from '@digdir/designsystemet-react';
 
 export const ContactPointSection = () => {
   const contactPointOptions = [
@@ -13,13 +14,28 @@ export const ContactPointSection = () => {
 
   return (
     <>
+      <div>
+        <FormikLanguageFieldset
+          name={'contactPoint[0].name'}
+          as={Textfield}
+          legend={
+            <TitleWithHelpTextAndTag
+              tagTitle={localization.tag.required}
+              helpText={localization.datasetForm.helptext.contactName}
+            >
+              {localization.datasetForm.fieldLabel.contactName}
+            </TitleWithHelpTextAndTag>
+          }
+        />
+      </div>
+
       <FormikOptionalFieldsFieldset
         legend={
           <TitleWithHelpTextAndTag
-            helpText={localization.dataServiceForm.helptext.contactFields}
+            helpText={localization.datasetForm.helptext.contactFields}
             tagTitle={localization.tag.required}
           >
-            {localization.dataServiceForm.fieldLabel.contactFields}
+            {localization.datasetForm.fieldLabel.contactFields}
           </TitleWithHelpTextAndTag>
         }
         availableFields={contactPointOptions}
