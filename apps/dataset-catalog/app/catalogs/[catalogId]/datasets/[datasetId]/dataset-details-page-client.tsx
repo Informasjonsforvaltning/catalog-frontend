@@ -1,6 +1,6 @@
 'use client';
 
-import { Dataset, DatasetSeries, PublicationStatus, ReferenceData } from '@catalog-frontend/types';
+import { Dataset, DatasetSeries, ReferenceData } from '@catalog-frontend/types';
 import { DeleteButton, DetailsPageLayout, LinkButton } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useState } from 'react';
@@ -49,7 +49,7 @@ const DatasetDetailsPageClient = ({
   const handleConfirmDelete = async () => {
     try {
       await deleteDataset(catalogId, dataset.id);
-      router.replace(`/catalogs/${catalogId}/datasets`);
+      router.push(`/catalogs/${catalogId}/datasets`);
     } catch (error) {
       console.error('Error deleting dataset:', error);
       // Show error message to user
@@ -63,7 +63,7 @@ const DatasetDetailsPageClient = ({
         handleLanguageChange={handleLanguageChange}
         language={language}
         headingTitle={getTranslateText(dataset?.title ?? '', language)}
-        headingTag={<StatusTag datasetStatus={dataset.registrationStatus} />}
+        headingTag={<StatusTag approved={dataset.approved || dataset.published} />}
         loading={false}
       >
         {dataset.specializedType === 'SERIES' ? (
@@ -99,7 +99,7 @@ const DatasetDetailsPageClient = ({
               )}
 
               <DeleteButton
-                disabled={dataset.registrationStatus === PublicationStatus.PUBLISH}
+                disabled={dataset.published}
                 variant='secondary'
                 onClick={handleDeleteDataset}
               />

@@ -24,7 +24,7 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
   const langNOR = languages.filter((lang) => lang.code === 'NOR')[0];
 
   const { data: searchHits, isLoading: isSearching } = useSearchAdministrativeUnits(searchTerm, referenceDataEnv);
-  const { data: selectedValues } = useSearchAdministrativeUnitsByUri(values?.spatialList, referenceDataEnv);
+  const { data: selectedValues } = useSearchAdministrativeUnitsByUri(values?.spatial, referenceDataEnv);
 
   const debouncedSetSearchTerm = debounce((term: string) => {
     setSearchTerm(term);
@@ -64,7 +64,7 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
       [
         ...(selectedValues ?? []),
         ...(searchHits ?? []),
-        ...(values.spatialList ?? []).map((uri) => {
+        ...(values.spatial ?? []).map((uri) => {
           const foundItem =
             selectedValues?.find((item) => item.uri === uri) || searchHits?.find((item) => item.uri === uri);
           return {
@@ -80,8 +80,8 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
   return (
     <>
       <Checkbox.Group
-        onChange={(values) => setFieldValue('languageList', values)}
-        value={values.languageList}
+        onChange={(values) => setFieldValue('language', values)}
+        value={values.language ?? []}
         legend={
           <TitleWithHelpTextAndTag
             tagColor='info'
@@ -93,7 +93,7 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
         }
         size='sm'
       >
-        {values.languageList && values.languageList.some((lang) => lang.includes('NOR')) && (
+        {values.language && values.language.some((lang) => lang.includes('NOR')) && (
           <Checkbox
             key={langNOR.uri}
             value={langNOR.uri}
@@ -135,8 +135,8 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
             filter={() => true} // disable filter
             size='sm'
             onChange={handleSearchChange}
-            onValueChange={(selectedValues) => setFieldValue('spatialList', selectedValues)}
-            value={values.spatialList || []}
+            onValueChange={(selectedValues) => setFieldValue('spatial', selectedValues)}
+            value={values.spatial || []}
             virtual
             loading={isSearching}
           >

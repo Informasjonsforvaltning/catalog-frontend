@@ -1,21 +1,21 @@
-import { Dataset, DatasetToBeCreated, Distribution, PublicationStatus } from '@catalog-frontend/types';
-import { groupByKeys } from '@catalog-frontend/utils';
+import { Dataset, DatasetToBeCreated, Distribution } from '@catalog-frontend/types';
 import { isEmpty } from 'lodash';
 
 export const datasetTemplate = (dataset: Dataset): Dataset => {
   return {
     id: dataset?.id ?? '',
     catalogId: dataset?.catalogId ?? '',
-    _lastModified: dataset?._lastModified,
+    approved: dataset?.approved ?? false,
+    published: dataset?.published ?? false,
+    lastModified: dataset?.lastModified,
     uri: dataset?.uri,
     originalUri: dataset?.originalUri,
     title: dataset.title ?? '',
     description: !isEmpty(dataset?.description) ? dataset.description : {},
-    accessRights: { uri: dataset?.accessRights?.uri ?? undefined },
+    accessRight: dataset?.accessRight,
     legalBasisForAccess: dataset?.legalBasisForAccess ?? [],
     legalBasisForProcessing: dataset?.legalBasisForProcessing ?? [],
     legalBasisForRestriction: dataset?.legalBasisForRestriction ?? [],
-    registrationStatus: dataset.registrationStatus,
     landingPage:
       dataset.landingPage && dataset?.landingPage?.length > 0 && dataset.landingPage.every((page) => page !== undefined)
         ? dataset.landingPage
@@ -23,81 +23,68 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     euDataTheme: dataset.euDataTheme ?? [],
     losTheme: dataset.losTheme ?? [],
     type: dataset?.type,
-    keywordList: dataset.keywordList ? dataset.keywordList : dataset.keyword ? groupByKeys(dataset?.keyword) : {},
-    conceptList: dataset.conceptList
-      ? dataset.conceptList
-      : dataset.concepts
-        ? dataset.concepts.map((concept) => concept.uri)
-        : [],
-    provenance: dataset?.provenance?.uri ? { uri: dataset?.provenance?.uri } : undefined,
-    accrualPeriodicity: dataset?.accrualPeriodicity?.uri ? { uri: dataset?.accrualPeriodicity?.uri } : undefined,
+    keywords: dataset.keywords,
+    concepts: dataset.concepts,
+    provenance: dataset?.provenance,
+    frequency: dataset?.frequency,
     modified: dataset?.modified,
-    hasCurrentnessAnnotation: { hasBody: dataset.hasCurrentnessAnnotation?.hasBody },
+    currentness: { hasBody: dataset.currentness?.hasBody },
     conformsTo: dataset?.conformsTo,
-    hasRelevanceAnnotation: { hasBody: dataset?.hasRelevanceAnnotation?.hasBody },
-    hasCompletenessAnnotation: { hasBody: dataset.hasCompletenessAnnotation?.hasBody },
-    hasAccuracyAnnotation: { hasBody: dataset?.hasAccuracyAnnotation?.hasBody },
-    hasAvailabilityAnnotation: { hasBody: dataset.hasAvailabilityAnnotation?.hasBody },
-    spatialList: dataset.spatialList
-      ? dataset.spatialList
-      : dataset.spatial
-        ? dataset.spatial.map((spatial) => spatial.uri)
-        : [],
+    relevance: { hasBody: dataset?.relevance?.hasBody },
+    completeness: { hasBody: dataset.completeness?.hasBody },
+    accuracy: { hasBody: dataset?.accuracy?.hasBody },
+    availability: { hasBody: dataset.availability?.hasBody },
+    spatial: dataset.spatial,
     temporal: dataset.temporal ?? [],
     issued: dataset.issued ?? '',
-    languageList: dataset.languageList
-      ? dataset.languageList
-      : dataset.language
-        ? dataset.language.map((lang) => lang.uri)
-        : [],
+    language: dataset.language,
     informationModelsFromFDK: dataset.informationModelsFromFDK ?? [],
-    informationModel: dataset?.informationModel,
+    informationModelsFromOtherSources: dataset?.informationModelsFromOtherSources,
     qualifiedAttributions: dataset?.qualifiedAttributions,
     sample: dataset?.sample,
     references: dataset?.references,
-    relations: dataset?.relations,
+    relatedResources: dataset?.relatedResources,
     distribution: dataset?.distribution ?? [],
-    contactPoint: dataset.contactPoint ?? [],
+    contactPoints: dataset.contactPoints ?? [],
   };
 };
 
-export const datasetToBeCreatedTemplate = (catalogId: string): DatasetToBeCreated => {
+export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
   return {
-    catalogId,
     title: {},
     description: {},
-    registrationStatus: PublicationStatus.DRAFT,
+    approved: false,
     landingPage: [],
-    accessRights: { uri: undefined },
+    accessRight: undefined,
     legalBasisForAccess: [],
     legalBasisForProcessing: [],
     legalBasisForRestriction: [],
     euDataTheme: [],
     losTheme: [],
     type: undefined,
-    keywordList: {},
-    conceptList: [],
+    keywords: {},
+    concepts: [],
     provenance: undefined,
-    accrualPeriodicity: undefined,
+    frequency: undefined,
     modified: undefined,
-    hasCurrentnessAnnotation: undefined,
+    currentness: undefined,
     conformsTo: undefined,
-    hasRelevanceAnnotation: undefined,
-    hasCompletenessAnnotation: undefined,
-    hasAccuracyAnnotation: undefined,
-    hasAvailabilityAnnotation: undefined,
-    spatialList: [],
+    relevance: undefined,
+    completeness: undefined,
+    accuracy: undefined,
+    availability: undefined,
+    spatial: [],
     temporal: [],
     issued: '',
-    languageList: [],
+    language: [],
     informationModelsFromFDK: [],
-    informationModel: undefined,
+    informationModelsFromOtherSources: undefined,
     qualifiedAttributions: undefined,
     sample: undefined,
     references: undefined,
-    relations: undefined,
+    relatedResources: undefined,
     distribution: undefined,
-    contactPoint: [],
+    contactPoints: [],
   };
 };
 
@@ -120,7 +107,7 @@ export const distributionTemplate = (dist: Distribution | undefined) => {
           license: {},
           conformsTo: [],
           page: [],
-          accessServiceUris: [],
+          accessServices: [],
         }
   ) as Distribution;
 };
