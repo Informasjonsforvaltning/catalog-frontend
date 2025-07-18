@@ -13,7 +13,7 @@ type Props = {
 
 export const PublishSwitch = ({ catalogId, dataset, disabled }: Props) => {
   const handlePublishDataset = async () => {
-    if (dataset.registrationStatus !== PublicationStatus.PUBLISH) {
+    if (!dataset.published) {
       if (window.confirm(localization.datasetForm.alert.confirmPublish)) {
         const publishedDataset = {
           ...dataset,
@@ -27,7 +27,7 @@ export const PublishSwitch = ({ catalogId, dataset, disabled }: Props) => {
       }
     }
 
-    if (dataset.registrationStatus === PublicationStatus.PUBLISH) {
+    if (dataset.published) {
       if (window.confirm(localization.datasetForm.alert.confirmUnpublish)) {
         const approvedDataset = {
           ...dataset,
@@ -49,8 +49,8 @@ export const PublishSwitch = ({ catalogId, dataset, disabled }: Props) => {
         size='small'
         position='right'
         onChange={() => handlePublishDataset()}
-        checked={dataset?.registrationStatus === PublicationStatus.PUBLISH}
-        disabled={disabled || dataset.registrationStatus === PublicationStatus.DRAFT}
+        checked={dataset.published}
+        disabled={disabled || !(dataset.approved || dataset.published)}
       >
         {localization.publicationState.published}
       </Switch>

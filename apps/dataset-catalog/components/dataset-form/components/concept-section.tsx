@@ -17,7 +17,7 @@ export const ConceptSection = ({ searchEnv }: Props) => {
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   const { data: searchHits, isLoading: searching } = useSearchConceptSuggestions(searchEnv, searchQuery);
-  const { data: selectedConcepts } = useSearchConceptsByUri(searchEnv, values.conceptList ?? []);
+  const { data: selectedConcepts } = useSearchConceptsByUri(searchEnv, values.concepts ?? []);
 
   const comboboxOptions = [
     // Safely handle the default values
@@ -25,7 +25,7 @@ export const ConceptSection = ({ searchEnv }: Props) => {
       [
         ...(selectedConcepts ?? []),
         ...(searchHits ?? []),
-        ...(values.conceptList ?? []).map((uri) => {
+        ...(values.concepts ?? []).map((uri) => {
           const foundItem =
             selectedConcepts?.find((item) => item.uri === uri) ||
             searchHits?.find((item: { uri: string }) => item.uri === uri);
@@ -56,11 +56,11 @@ export const ConceptSection = ({ searchEnv }: Props) => {
       >
         <Combobox
           size='sm'
-          onValueChange={(selectedValues: string[]) => setFieldValue('conceptList', selectedValues)}
+          onValueChange={(selectedValues: string[]) => setFieldValue('concepts', selectedValues)}
           onChange={(input: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(input.target.value)}
           loading={searching}
           multiple
-          value={values.conceptList}
+          value={values.concepts}
           placeholder={localization.search.search}
           filter={() => true} // Deactivate filter, handled by backend
           virtual
@@ -71,16 +71,10 @@ export const ConceptSection = ({ searchEnv }: Props) => {
             <Combobox.Option
               value={suggestion.uri}
               key={suggestion.uri}
-              displayValue={
-                suggestion.title ? (getTranslateText(suggestion.title) as string) : suggestion.uri
-              }
+              displayValue={suggestion.title ? (getTranslateText(suggestion.title) as string) : suggestion.uri}
             >
               <div className={styles.comboboxOption}>
-                <div>
-                  {suggestion.title
-                    ? (getTranslateText(suggestion.title) as string)
-                    : suggestion.uri}
-                </div>
+                <div>{suggestion.title ? (getTranslateText(suggestion.title) as string) : suggestion.uri}</div>
                 <div>{capitalizeFirstLetter(getTranslateText(suggestion.description) as string)}</div>
                 <div>{getTranslateText(suggestion.organization?.prefLabel)}</div>
               </div>
@@ -91,7 +85,7 @@ export const ConceptSection = ({ searchEnv }: Props) => {
 
       <FormikLanguageFieldset
         multiple
-        name={'keywordList'}
+        name={'keywords'}
         legend={
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}

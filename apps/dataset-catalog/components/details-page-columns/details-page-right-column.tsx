@@ -14,8 +14,6 @@ type Props = {
 };
 
 export const RightColumn = ({ dataset, hasWritePermission, language }: Props) => {
-  const published = dataset.registrationStatus === PublicationStatus.PUBLISH;
-
   return (
     <InfoCard>
       <InfoCard.Item
@@ -31,11 +29,11 @@ export const RightColumn = ({ dataset, hasWritePermission, language }: Props) =>
         title={localization.publicationState.state}
         headingColor='light'
         helpText={
-          dataset.registrationStatus === PublicationStatus.DRAFT
+          !(dataset.approved || dataset.published)
             ? `${localization.datasetForm.helptext.publishWarning} [skjemaet.](/catalogs/${dataset?.catalogId}/datasets/${dataset?.id}/edit)`
             : localization.datasetForm.helptext.publish
         }
-        helpTextSeverity={dataset.registrationStatus === PublicationStatus.DRAFT ? 'warning' : 'info'}
+        helpTextSeverity={!(dataset.approved || dataset.published) ? 'warning' : 'info'}
       >
         <PublishSwitch
           catalogId={dataset.catalogId}
@@ -43,43 +41,43 @@ export const RightColumn = ({ dataset, hasWritePermission, language }: Props) =>
           disabled={!hasWritePermission}
         />
 
-        {published ? localization.publicationState.publishedInFDK : localization.publicationState.unpublished}
+        {dataset.published ? localization.publicationState.publishedInFDK : localization.publicationState.unpublished}
       </InfoCard.Item>
 
-      {dataset?.contactPoint && !isEmpty(dataset?.contactPoint[0]) && (
+      {dataset?.contactPoints && !isEmpty(dataset?.contactPoints[0]) && (
         <InfoCard.Item
           title={localization.datasetForm.heading.contactPoint}
           headingColor='light'
         >
           <div className={styles.contactPoints}>
-            {!isEmpty(dataset?.contactPoint[0]?.name) && (
-              <span>{getTranslateText(dataset?.contactPoint[0]?.name, language)}</span>
+            {!isEmpty(dataset?.contactPoints[0]?.name) && (
+              <span>{getTranslateText(dataset?.contactPoints[0]?.name, language)}</span>
             )}
-            {dataset?.contactPoint[0].email && (
+            {dataset?.contactPoints[0].email && (
               <span>
                 <div>
                   <EnvelopeClosedIcon />
                 </div>
 
-                {dataset?.contactPoint[0]?.email}
+                {dataset?.contactPoints[0]?.email}
               </span>
             )}
-            {dataset?.contactPoint[0]?.hasTelephone && (
+            {dataset?.contactPoints[0]?.phone && (
               <span>
                 <div>
                   <PhoneIcon />
                 </div>
-                {dataset?.contactPoint[0]?.hasTelephone}
+                {dataset?.contactPoints[0]?.phone}
               </span>
             )}
 
-            {dataset?.contactPoint[0].hasURL && (
+            {dataset?.contactPoints[0].url && (
               <span>
                 <div>
                   <LinkIcon />
                 </div>
 
-                <Link href={dataset?.contactPoint[0].hasURL}>{dataset?.contactPoint[0].hasURL}</Link>
+                <Link href={dataset?.contactPoints[0].url}>{dataset?.contactPoints[0].url}</Link>
               </span>
             )}
           </div>

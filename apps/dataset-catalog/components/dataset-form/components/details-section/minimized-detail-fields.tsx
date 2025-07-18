@@ -57,8 +57,8 @@ const FIELD_CONFIG = [
     hasDeleteButton: true,
   },
   {
-    name: 'provenance.uri',
-    getValue: (values: Dataset) => values?.provenance?.uri,
+    name: 'provenance',
+    getValue: (values: Dataset) => values?.provenance,
     render: (props: any) => (
       <Fieldset
         size='sm'
@@ -71,9 +71,9 @@ const FIELD_CONFIG = [
         <FastFieldWithRef
           as={Combobox}
           ref={props.ref}
-          value={props.values?.provenance?.uri ? [props.values?.provenance?.uri] : []}
+          value={props.values?.provenance ? [props.values?.provenance] : []}
           placeholder={`${localization.search.search}...`}
-          onValueChange={(value: string[]) => props.setFieldValue('provenance.uri', value.toString())}
+          onValueChange={(value: string[]) => props.setFieldValue('provenance', value.toString())}
           size='sm'
         >
           <Combobox.Empty>{`${localization.choose}...`}</Combobox.Empty>
@@ -84,14 +84,14 @@ const FIELD_CONFIG = [
     hasDeleteButton: true,
   },
   {
-    name: 'accrualPeriodicity.uri',
-    getValue: (values: Dataset) => values?.accrualPeriodicity?.uri,
+    name: 'frequency',
+    getValue: (values: Dataset) => values?.frequency,
     render: (props: any) => (
       <Fieldset
         size='sm'
         legend={
-          <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.accrualPeriodicity}>
-            {localization.datasetForm.fieldLabel.accrualPeriodicity}
+          <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.frequency}>
+            {localization.datasetForm.fieldLabel.frequency}
           </TitleWithHelpTextAndTag>
         }
       >
@@ -99,10 +99,10 @@ const FIELD_CONFIG = [
           size='sm'
           as={Combobox}
           ref={props.ref}
-          value={[props.values?.accrualPeriodicity?.uri ?? '']}
+          value={[props.values?.frequency ?? '']}
           virtual
           placeholder={`${localization.search.search}...`}
-          onValueChange={(value: string[]) => props.setFieldValue('accrualPeriodicity.uri', value.toString())}
+          onValueChange={(value: string[]) => props.setFieldValue('frequency', value.toString())}
         >
           <Combobox.Option value=''>{`${localization.choose}...`}</Combobox.Option>
           {props.frequencyOptions}
@@ -136,13 +136,13 @@ const FIELD_CONFIG = [
     hasDeleteButton: true,
   },
   {
-    name: 'hasCurrentnessAnnotation.hasBody',
-    getValue: (values: Dataset) => values?.hasCurrentnessAnnotation?.hasBody,
+    name: 'currentness.hasBody',
+    getValue: (values: Dataset) => values?.currentness?.hasBody,
     addValue: { nb: '', nn: '' },
     render: (props: any) => (
       <FormikLanguageFieldset
         as={TextareaWithPrefix}
-        name='hasCurrentnessAnnotation.hasBody'
+        name='currentness.hasBody'
         ref={props.ref}
         legend={
           <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.hasCurrentnessAnnotation}>
@@ -153,13 +153,13 @@ const FIELD_CONFIG = [
     ),
   },
   {
-    name: 'hasRelevanceAnnotation.hasBody',
-    getValue: (values: Dataset) => values?.hasRelevanceAnnotation?.hasBody,
+    name: 'relevance.hasBody',
+    getValue: (values: Dataset) => values?.relevance?.hasBody,
     addValue: { nb: '', nn: '' },
     render: (props: any) => (
       <FormikLanguageFieldset
         as={TextareaWithPrefix}
-        name='hasRelevanceAnnotation.hasBody'
+        name='relevance.hasBody'
         ref={props.ref}
         legend={
           <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.hasRelevanceAnnotation}>
@@ -170,13 +170,13 @@ const FIELD_CONFIG = [
     ),
   },
   {
-    name: 'hasCompletenessAnnotation.hasBody',
-    getValue: (values: Dataset) => values?.hasCompletenessAnnotation?.hasBody,
+    name: 'completeness.hasBody',
+    getValue: (values: Dataset) => values?.completeness?.hasBody,
     addValue: { nb: '', nn: '' },
     render: (props: any) => (
       <FormikLanguageFieldset
         as={TextareaWithPrefix}
-        name='hasCompletenessAnnotation.hasBody'
+        name='completeness.hasBody'
         ref={props.ref}
         legend={
           <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.hasCompletenessAnnotation}>
@@ -187,13 +187,13 @@ const FIELD_CONFIG = [
     ),
   },
   {
-    name: 'hasAccuracyAnnotation.hasBody',
-    getValue: (values: Dataset) => values?.hasAccuracyAnnotation?.hasBody,
+    name: 'accuracy.hasBody',
+    getValue: (values: Dataset) => values?.accuracy?.hasBody,
     addValue: { nb: '', nn: '' },
     render: (props: any) => (
       <FormikLanguageFieldset
         as={TextareaWithPrefix}
-        name='hasAccuracyAnnotation.hasBody'
+        name='accuracy.hasBody'
         ref={props.ref}
         legend={
           <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.hasAccuracyAnnotation}>
@@ -204,13 +204,13 @@ const FIELD_CONFIG = [
     ),
   },
   {
-    name: 'hasAvailabilityAnnotation.hasBody',
-    getValue: (values: Dataset) => values?.hasAvailabilityAnnotation?.hasBody,
+    name: 'availability.hasBody',
+    getValue: (values: Dataset) => values?.availability?.hasBody,
     addValue: { nb: '', nn: '' },
     render: (props: any) => (
       <FormikLanguageFieldset
         as={TextareaWithPrefix}
-        name='hasAvailabilityAnnotation.hasBody'
+        name='availability.hasBody'
         ref={props.ref}
         legend={
           <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.hasAvailabilityAnnotation}>
