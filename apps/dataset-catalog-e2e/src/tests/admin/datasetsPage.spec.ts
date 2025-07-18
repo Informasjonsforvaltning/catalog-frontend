@@ -1,4 +1,4 @@
-import { DatasetToBeCreated, PublicationStatus } from '@catalog-frontend/types';
+import { DatasetToBeCreated } from '@catalog-frontend/types';
 import { expect, runTestAsAdmin } from '../../fixtures/basePage';
 import DatasetsPage from '../../page-object-model/datasetsPage';
 import { adminAuthFile, createDataset, uniqueString } from '../../utils/helpers';
@@ -7,7 +7,6 @@ import { dateStringToDate, formatDate } from '@catalog-frontend/utils';
 const getRandomDataset = () => {
   // Create a random dataset
   const dataset: DatasetToBeCreated = {
-    catalogId: process.env.E2E_CATALOG_ID,
     title: {
       nb: uniqueString('test_dataset_nb'),
       nn: uniqueString('test_dataset_nn'),
@@ -18,12 +17,12 @@ const getRandomDataset = () => {
       nn: uniqueString('test_dataset_description_nn'),
       en: uniqueString('test_dataset_description_en'),
     },
-    registrationStatus: PublicationStatus.DRAFT,
-    contactPoint: [
+    approved: false,
+    contactPoints: [
       {
         email: 'test@test.com',
-        hasTelephone: '1234567890',
-        hasURL: 'https://test.com',
+        phone: '1234567890',
+        url: 'https://test.com',
       },
     ],
   };

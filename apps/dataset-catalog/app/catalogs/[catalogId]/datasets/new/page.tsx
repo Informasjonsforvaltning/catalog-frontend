@@ -16,7 +16,7 @@ import { withWriteProtectedPage } from '@dataset-catalog/utils/auth';
 const NewDatasetPage = withWriteProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/datasets/new`,
   async ({ catalogId }) => {
-    const dataset = datasetToBeCreatedTemplate(catalogId);
+    const dataset = datasetToBeCreatedTemplate();
     const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
     const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
 
@@ -70,6 +70,7 @@ const NewDatasetPage = withWriteProtectedPage(
           title={localization.catalogType.dataset}
         />
         <NewPage
+          catalogId={catalogId}
           dataset={dataset}
           referenceData={referenceData}
           referenceDataEnv={referenceDataEnv}

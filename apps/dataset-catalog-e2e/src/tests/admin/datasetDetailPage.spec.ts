@@ -1,4 +1,4 @@
-import { DatasetToBeCreated, PublicationStatus } from '@catalog-frontend/types';
+import { DatasetToBeCreated } from '@catalog-frontend/types';
 import { expect, runTestAsAdmin } from '../../fixtures/basePage';
 import DatasetDetailPage from '../../page-object-model/datasetDetailPage';
 import { adminAuthFile, createDataset, uniqueString } from '../../utils/helpers';
@@ -6,7 +6,6 @@ import { adminAuthFile, createDataset, uniqueString } from '../../utils/helpers'
 const getRandomDataset = () => {
   // Create a random dataset
   const dataset: DatasetToBeCreated = {
-    catalogId: process.env.E2E_CATALOG_ID,
     title: {
       nb: uniqueString('test_dataset_nb'),
       nn: uniqueString('test_dataset_nn'),
@@ -17,12 +16,12 @@ const getRandomDataset = () => {
       nn: uniqueString('test_dataset_description_nn'),
       en: uniqueString('test_dataset_description_en'),
     },
-    registrationStatus: PublicationStatus.DRAFT,
-    contactPoint: [
+    approved: false,
+    contactPoints: [
       {
         email: 'test@test.com',
-        hasTelephone: '1234567890',
-        hasURL: 'https://test.com',
+        phone: '1234567890',
+        url: 'https://test.com',
       },
     ],
   };
@@ -36,7 +35,7 @@ runTestAsAdmin('should load dataset detail page with all elements', async ({ dat
   });
 
   const dataset = getRandomDataset();
-  const createdDataset = await createDataset(apiRequestContext, dataset);
+  const datasetId = await createDataset(apiRequestContext, dataset);
 
   const detailPage: DatasetDetailPage = datasetsPage.detailPage;
 
@@ -48,7 +47,7 @@ runTestAsAdmin('should load dataset detail page with all elements', async ({ dat
   
   // Click on the dataset to go to detail page
   await datasetsPage.clickDatasetByTitle(dataset.title.nb as string);
-  await datasetsPage.expectDatasetDetailPageUrl(process.env.E2E_CATALOG_ID, createdDataset.id);
+  await datasetsPage.expectDatasetDetailPageUrl(process.env.E2E_CATALOG_ID, datasetId);
 
   // Verify dataset details
   await detailPage.expectTitle(dataset.title.nb as string);
@@ -58,13 +57,13 @@ runTestAsAdmin('should load dataset detail page with all elements', async ({ dat
 
   // Verify contact point information
   await detailPage.expectContactPoint(
-    dataset.contactPoint[0].email,
-    dataset.contactPoint[0].hasTelephone,
-    dataset.contactPoint[0].hasURL
+    dataset.contactPoints[0].email,
+    dataset.contactPoints[0].phone,
+    dataset.contactPoints[0].url
   );
 
   // Verify dataset ID
-  await detailPage.expectDatasetId(createdDataset.id);
+  await detailPage.expectDatasetId(datasetId);
 
   // Verify language selector
   await detailPage.expectLanguageSelector();
@@ -93,7 +92,7 @@ runTestAsAdmin('should delete dataset from detail page', async ({ datasetsPage, 
   });
 
   const dataset = getRandomDataset();
-  const createdDataset = await createDataset(apiRequestContext, dataset);
+  const datasetId = await createDataset(apiRequestContext, dataset);
 
   const detailPage: DatasetDetailPage = datasetsPage.detailPage;
 
@@ -103,7 +102,7 @@ runTestAsAdmin('should delete dataset from detail page', async ({ datasetsPage, 
   await datasetsPage.search(dataset.title.nb as string);
   await datasetsPage.verifyDatasetExists(dataset.title.nb as string);
   await datasetsPage.clickDatasetByTitle(dataset.title.nb as string);
-  await datasetsPage.expectDatasetDetailPageUrl(process.env.E2E_CATALOG_ID, createdDataset.id);
+  await datasetsPage.expectDatasetDetailPageUrl(process.env.E2E_CATALOG_ID, datasetId);
 
   // Delete the dataset
   await detailPage.clickDeleteButton();

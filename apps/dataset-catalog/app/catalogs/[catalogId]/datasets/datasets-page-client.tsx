@@ -70,7 +70,7 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
           return (a: Dataset, b: Dataset) =>
             sortDescending(getTranslateText(a.title)?.toString() || '', getTranslateText(b.title)?.toString() || '');
         case 'lastChanged':
-          return (a: Dataset, b: Dataset) => sortDateStringsDescending(a._lastModified || '', b._lastModified || '');
+          return (a: Dataset, b: Dataset) => sortDateStringsDescending(a.lastModified || '', b.lastModified || '');
         default:
           return () => 0;
       }
@@ -106,27 +106,26 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
       if (!isEmpty(filterStatus)) {
         filtered = filtered.filter((dataset) => {
           if (filterStatus?.includes(PublicationStatus.APPROVE)) {
-            return (
-              dataset.registrationStatus === PublicationStatus.APPROVE ||
-              dataset.registrationStatus === PublicationStatus.PUBLISH
-            );
+            return dataset.approved || dataset.published;
           }
           if (filterStatus?.includes(PublicationStatus.DRAFT)) {
-            return dataset.registrationStatus === PublicationStatus.DRAFT;
+            return !dataset.approved && !dataset.published;
           }
           return false;
         });
       }
       if (!isEmpty(filterPublicationState)) {
         filtered = filtered.filter((dataset) => {
-          const status = filterPublicationState?.toString();
-          return (
-            dataset.registrationStatus === status ||
-            (status === 'UNPUBLISH' && dataset.registrationStatus !== PublicationStatus.PUBLISH)
-          );
+          if (filterPublicationState?.includes('PUBLISH')) {
+            return dataset.published;
+          }
+          if (filterPublicationState?.includes('UNPUBLISH')) {
+            return !dataset.published;
+          }
+          return false;
         });
       }
-      
+
       if (searchTerm) {
         const lowercasedQuery = searchTerm.toLowerCase();
         filtered = filtered.filter(
@@ -193,7 +192,7 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
             Datasettserier har ikke blitt implementert enda
           </HelpMarkdown>
         )}
-        <StatusTag datasetStatus={dataset.registrationStatus} />
+        <StatusTag approved={dataset.approved || dataset.published} />
       </div>
     );
   };
@@ -258,12 +257,15 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
         <SearchHitsLayout.MainColumn>
           <SearchHitContainer
             searchHits={
-              paginatedDatasets.length > 0
-                ? <ul className={styles.searchHits} role='list'> 
+              paginatedDatasets.length > 0 ? (
+                <ul
+                  className={styles.searchHits}
+                  role='list'
+                >
                   {paginatedDatasets.map((dataset: Dataset) => (
                     <li
                       role='listitem'
-                      key={dataset.id}                      
+                      key={dataset.id}
                     >
                       <SearchHit
                         title={getTranslateText(dataset?.title)}
@@ -275,10 +277,10 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
                           <>
                             <div className={styles.set}>
                               <p>
-                                {localization.lastChanged} {formatDate(dateStringToDate(dataset._lastModified))}
+                                {localization.lastChanged} {formatDate(dateStringToDate(dataset.lastModified))}
                               </p>
                               <span>•</span>
-                              {dataset.registrationStatus === PublicationStatus.PUBLISH
+                              {dataset.published
                                 ? localization.publicationState.publishedInFDK
                                 : localization.publicationState.unpublished}
                             </div>
@@ -288,7 +290,7 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
                     </li>
                   ))}
                 </ul>
-                : null
+              ) : null
             }
             noSearchHits={!paginatedDatasets || paginatedDatasets.length === 0}
             paginationInfo={{

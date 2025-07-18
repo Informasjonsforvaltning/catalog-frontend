@@ -30,14 +30,14 @@ type ModalProps = {
 
 const hasNoFieldValues = (values: Reference) => {
   if (!values) return true;
-  return isEmpty(values?.referenceType?.code) && isEmpty(values?.source?.uri);
+  return isEmpty(values?.referenceType) && isEmpty(values?.source);
 };
 
 export const ReferenceTable = ({ searchEnv, autoSaveId, autoSaveStorage }: Props) => {
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
 
   const getUriList = () => {
-    return values.references?.map((reference) => reference?.source?.uri).filter((uri) => uri) ?? [];
+    return values.references?.map((reference) => reference?.source).filter((uri) => uri !== undefined) ?? [];
   };
 
   const { data: selectedValues } = useSearchDatasetsByUri(searchEnv, getUriList());
@@ -49,7 +49,7 @@ export const ReferenceTable = ({ searchEnv, autoSaveId, autoSaveStorage }: Props
         id: autoSaveId,
         values: {
           reference: updatedRef,
-          index
+          index,
         },
         lastChanged: new Date().toISOString(),
       });
@@ -79,61 +79,61 @@ export const ReferenceTable = ({ searchEnv, autoSaveId, autoSaveStorage }: Props
       </TitleWithHelpTextAndTag>
       {values?.references && compact(values?.references).length > 0 && (
         <div className={get(errors, `references`) ? styles.errorBorder : undefined}>
-        <Table
-          size='sm'
-          className={styles.table}
-        >
-          <Table.Head>
-            <Table.Row>
-              <Table.HeaderCell>{localization.datasetForm.fieldLabel.relationType}</Table.HeaderCell>
-              <Table.HeaderCell>{localization.datasetForm.fieldLabel.dataset}</Table.HeaderCell>
-              <Table.HeaderCell aria-label='Actions' />
-            </Table.Row>
-          </Table.Head>
-          <Table.Body>
-            {values?.references &&
-              values?.references.map((ref: Reference, index) => (
-                <Table.Row key={`references-${index}`}>
-                  <Table.Cell>
-                    {getTranslateText(relations.find((rel) => rel.code === ref?.referenceType?.code)?.label) ??
-                      ref?.referenceType?.code}
-                  </Table.Cell>
-                  <Table.Cell>
-                    {getTranslateText(selectedValues?.find((item) => item.uri === ref?.source?.uri)?.title) ??
-                      ref?.source?.uri}
-                  </Table.Cell>
-                  <Table.Cell>
-                    <div className={styles.set}>
-                      <FieldModal
-                        searchEnv={searchEnv}
-                        template={ref}
-                        type={'edit'}
-                        onSuccess={(updatedItem: Reference) => {
-                          handleReferenceSuccess(updatedItem, index);
-                        }}
-                        onCancel={handleReferenceCancel}
-                        onChange={(updatedItem: Reference) => handleReferenceChange(updatedItem, index)}
-                        initialUri={ref?.source?.uri}
-                        initialDatasets={selectedValues ?? []}
-                      />
-                      <DeleteButton onClick={() => {
-                        const newArray = [...values.references ?? []];
-                        newArray.splice(index, 1);
-                        setFieldValue('references', newArray);
-                      }} />
-                    </div>
-                  </Table.Cell>
-                </Table.Row>              
+          <Table
+            size='sm'
+            className={styles.table}
+          >
+            <Table.Head>
+              <Table.Row>
+                <Table.HeaderCell>{localization.datasetForm.fieldLabel.relationType}</Table.HeaderCell>
+                <Table.HeaderCell>{localization.datasetForm.fieldLabel.dataset}</Table.HeaderCell>
+                <Table.HeaderCell aria-label='Actions' />
+              </Table.Row>
+            </Table.Head>
+            <Table.Body>
+              {values?.references &&
+                values?.references.map((ref: Reference, index) => (
+                  <Table.Row key={`references-${index}`}>
+                    <Table.Cell>
+                      {getTranslateText(relations.find((rel) => rel.code === ref?.referenceType)?.label) ??
+                        ref?.referenceType}
+                    </Table.Cell>
+                    <Table.Cell>
+                      {getTranslateText(selectedValues?.find((item) => item.uri === ref?.source)?.title) ?? ref?.source}
+                    </Table.Cell>
+                    <Table.Cell>
+                      <div className={styles.set}>
+                        <FieldModal
+                          searchEnv={searchEnv}
+                          template={ref}
+                          type={'edit'}
+                          onSuccess={(updatedItem: Reference) => {
+                            handleReferenceSuccess(updatedItem, index);
+                          }}
+                          onCancel={handleReferenceCancel}
+                          onChange={(updatedItem: Reference) => handleReferenceChange(updatedItem, index)}
+                          initialUri={ref?.source}
+                          initialDatasets={selectedValues ?? []}
+                        />
+                        <DeleteButton
+                          onClick={() => {
+                            const newArray = [...(values.references ?? [])];
+                            newArray.splice(index, 1);
+                            setFieldValue('references', newArray);
+                          }}
+                        />
+                      </div>
+                    </Table.Cell>
+                  </Table.Row>
                 ))}
-              </Table.Body>
-            </Table>
-
-          </div>
-        )}
+            </Table.Body>
+          </Table>
+        </div>
+      )}
       <div>
         <FieldModal
           searchEnv={searchEnv}
-          template={{ source: { uri: '' }, referenceType: { code: '' } }}
+          template={{ source: '', referenceType: '' }}
           type={'new'}
           onSuccess={(updatedItem: Reference) => {
             const newIndex = values.references?.length ?? 0;
@@ -151,7 +151,7 @@ export const ReferenceTable = ({ searchEnv, autoSaveId, autoSaveStorage }: Props
                 id: autoSaveId,
                 values: {
                   reference: updatedItem,
-                  index: newIndex
+                  index: newIndex,
                 },
                 lastChanged: new Date().toISOString(),
               });
@@ -165,7 +165,16 @@ export const ReferenceTable = ({ searchEnv, autoSaveId, autoSaveStorage }: Props
   );
 };
 
-const FieldModal = ({ template, type, onSuccess, onCancel, onChange, searchEnv, initialUri, initialDatasets }: ModalProps) => {
+const FieldModal = ({
+  template,
+  type,
+  onSuccess,
+  onCancel,
+  onChange,
+  searchEnv,
+  initialUri,
+  initialDatasets,
+}: ModalProps) => {
   const [submitted, setSubmitted] = useState(false);
   const [selectedUri, setSelectedUri] = useState(initialUri);
 
@@ -188,11 +197,11 @@ const FieldModal = ({ template, type, onSuccess, onCancel, onChange, searchEnv, 
     const titleFromSelected = selectedValue?.title;
     const uriOption = selectedUri
       ? [
-        {
-          uri: selectedUri,
-          title: titleFromSearch ?? titleFromSelected ?? undefined,
-        },
-      ]
+          {
+            uri: selectedUri,
+            title: titleFromSearch ?? titleFromSelected ?? undefined,
+          },
+        ]
       : [];
     const options = [
       ...new Map(
@@ -242,14 +251,17 @@ const FieldModal = ({ template, type, onSuccess, onCancel, onChange, searchEnv, 
                   </Modal.Header>
 
                   <Modal.Content className={cn(styles.modalContent, styles.fieldContainer)}>
-                    <Fieldset legend={localization.datasetForm.fieldLabel.relationType} size='sm'>
+                    <Fieldset
+                      legend={localization.datasetForm.fieldLabel.relationType}
+                      size='sm'
+                    >
                       <Combobox
-                        onValueChange={(value) => setFieldValue(`referenceType.code`, value.toString())}
-                        value={values.referenceType?.code ? [values.referenceType?.code] : []}
+                        onValueChange={(value) => setFieldValue(`referenceType`, value.toString())}
+                        value={values.referenceType ? [values.referenceType] : []}
                         placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
                         portal={false}
                         size='sm'
-                        error={errors?.referenceType?.code}
+                        error={errors?.referenceType}
                         virtual
                       >
                         <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
@@ -265,19 +277,22 @@ const FieldModal = ({ template, type, onSuccess, onCancel, onChange, searchEnv, 
                       </Combobox>
                     </Fieldset>
 
-                    <Fieldset legend={localization.datasetForm.fieldLabel.dataset} size='sm'>
+                    <Fieldset
+                      legend={localization.datasetForm.fieldLabel.dataset}
+                      size='sm'
+                    >
                       <Combobox
                         onChange={(input: any) => setSearchQuery(input.target.value)}
                         onValueChange={(value) => {
                           setSelectedUri(value.toString());
-                          setFieldValue(`source.uri`, value.toString());
+                          setFieldValue(`source`, value.toString());
                         }}
                         loading={searching}
-                        value={!isEmpty(values?.source?.uri) ? [values?.source?.uri] : []}
+                        value={values?.source && !isEmpty(values.source) ? [values.source] : []}
                         placeholder={`${localization.search.search}...`}
                         portal={false}
                         size='sm'
-                        error={errors?.source?.uri}
+                        error={errors?.source}
                       >
                         <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
                         {comboboxOptions?.map((dataset) => {
