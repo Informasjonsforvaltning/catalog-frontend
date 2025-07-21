@@ -26,7 +26,7 @@ export const EditPage = ({
 
   const dataStorage = new LocalDataStorage<StorageData>({ 
     key: 'conceptForm', 
-    secondaryKeys: ['conceptFormDefinition', 'conceptFormRelation'] 
+    secondaryKeys: ['conceptFormDefinition', 'conceptFormRelation']
   });
 
   const handleUpdate = async (values: Concept) => {
