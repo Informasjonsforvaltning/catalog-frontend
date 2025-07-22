@@ -83,7 +83,7 @@ runTestAsAdmin('should load dataset detail page with all elements', async ({ dat
   await detailPage.expectSectionHeading('Beskrivelse');
   await detailPage.expectSectionHeading('Datasett-ID');
   await detailPage.expectSectionHeading('Publiseringstilstand');
-  await detailPage.expectSectionHeading('Kontaktinformasjon for eksterne');
+  await detailPage.expectSectionHeading('Kontaktpunkt');
 });
 
 runTestAsAdmin('should delete dataset from detail page', async ({ datasetsPage, context, playwright }: { datasetsPage, context, playwright }) => {
