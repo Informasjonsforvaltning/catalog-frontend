@@ -56,7 +56,7 @@ const kilde = (required) =>
             test(value) {
               const isRequired = !this.parent.tekst;
 
-              if (isRequired && !isValidUrl(value)) {
+              if ((isRequired || value) && !isValidUrl(value)) {
                 return this.createError({
                   message: localization.conceptForm.validation.invalidUrl,
                 });
