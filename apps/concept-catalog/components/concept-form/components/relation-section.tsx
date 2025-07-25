@@ -194,6 +194,7 @@ export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, auto
                       <RelationModal
                         header={'Rediger relasjon'}
                         catalogId={catalogId}
+                        conceptId={values.originaltBegrep || ''}
                         initialRelation={relation}
                         initialRelatedConcept={resolveRelatedConcept(relation)}
                         trigger={
@@ -240,6 +241,7 @@ export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, auto
           <RelationModal
             header={'Ny relasjon'}
             catalogId={catalogId}
+            conceptId={values.originaltBegrep || ''}
             trigger={
               <Button
                 variant='tertiary'
