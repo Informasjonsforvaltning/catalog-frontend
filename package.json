@@ -96,7 +96,7 @@
     "@nx/eslint-plugin": "21.3.7",
     "@nx/jest": "21.3.7",
     "@nx/js": "21.3.7",
-    "@nx/next": "^21.0.3",
+    "@nx/next": "^21.3.7",
     "@nx/playwright": "21.3.7",
     "@nx/react": "21.3.7",
     "@nx/web": "21.3.7",
@@ -157,7 +157,9 @@
   },
   "resolutions": {
     "koa": "^2.16.1",
-    "esbuild": "^0.25.0"
+    "esbuild": "^0.25.8",
+    "form-data": "^4.0.4",
+    "on-headers": "^1.1.0"
   },
   "packageManager": "yarn@4.5.0"
 }
