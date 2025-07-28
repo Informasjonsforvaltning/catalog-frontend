@@ -192,9 +192,8 @@ export const ConceptPageClient = ({
             aria-label='Info publisering'
             severity='info'
           >
-            {`Viktig! Når et begrep er publisert, kan det verken slettes eller avpubliseres, men kun endres.${
-              isPublished ? '' : ' Sørg derfor for at alle opplysninger er korrekte før publisering.'
-            }`}
+            {`Viktig! Når et begrep er publisert, kan det verken slettes eller avpubliseres, men kun endres.${isPublished ? '' : ' Sørg derfor for at alle opplysninger er korrekte før publisering.'
+              }`}
           </HelpMarkdown>
         ) : (
           <HelpMarkdown
@@ -222,17 +221,16 @@ export const ConceptPageClient = ({
         </div>
         <div className={classes.greyFont}>
           {isPublished
-            ? `${localization.publicationState.publishedInFDK}${
-                publishedDate
-                  ? ' ' +
-                    formatISO(publishedDate, {
-                      weekday: 'long',
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })
-                  : ''
-              }`
+            ? `${localization.publicationState.publishedInFDK}${publishedDate
+              ? ' ' +
+              formatISO(publishedDate, {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })
+              : ''
+            }`
             : ''}
         </div>
       </>,
@@ -240,119 +238,119 @@ export const ConceptPageClient = ({
     [localization.concept.version, versionToString(concept?.versjonsnr)],
     ...(concept?.gyldigFom || concept?.gyldigTom
       ? [
-          [
-            localization.concept.validPeriod,
-            <>
-              {concept?.gyldigFom && (
-                <div>
-                  <span className={classes.greyFont}>{localization.fromAndIncluding}: </span>
-                  {`${formatISO(concept?.gyldigFom, {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}`}
-                </div>
-              )}
-              {concept?.gyldigTom && (
-                <div>
-                  <span className={classes.greyFont}>{localization.toAndIncluding}: </span>
-                  {`${formatISO(concept?.gyldigTom, {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}`}
-                </div>
-              )}
-            </>,
-          ],
-        ]
+        [
+          localization.concept.validPeriod,
+          <>
+            {concept?.gyldigFom && (
+              <div>
+                <span className={classes.greyFont}>{localization.fromAndIncluding}: </span>
+                {`${formatISO(concept?.gyldigFom, {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}`}
+              </div>
+            )}
+            {concept?.gyldigTom && (
+              <div>
+                <span className={classes.greyFont}>{localization.toAndIncluding}: </span>
+                {`${formatISO(concept?.gyldigTom, {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}`}
+              </div>
+            )}
+          </>,
+        ],
+      ]
       : []),
 
     ...(concept?.assignedUser
       ? [
-          [
-            localization.assigned,
-            usersResult?.users?.find((user) => user.id === concept.assignedUser)?.name ?? localization.unknown,
-          ],
-        ]
+        [
+          localization.assigned,
+          usersResult?.users?.find((user) => user.id === concept.assignedUser)?.name ?? localization.unknown,
+        ],
+      ]
       : []),
     ...(!isEmpty(concept?.merkelapp)
       ? [
-          [
-            localization.concept.label,
-            <ul
-              key='label-list'
-              className={classes.labels}
-            >
-              {concept?.merkelapp?.map((label) => (
-                <li key={`label-${label}`}>
-                  <Chip.Toggle
-                    key={`label-${label}`}
-                    onClick={() => handleLabelClick(label)}
-                  >
-                    {label}
-                  </Chip.Toggle>
-                </li>
-              ))}
-            </ul>,
-          ],
-        ]
+        [
+          localization.concept.label,
+          <ul
+            key='label-list'
+            className={classes.labels}
+          >
+            {concept?.merkelapp?.map((label) => (
+              <li key={`label-${label}`}>
+                <Chip.Toggle
+                  key={`label-${label}`}
+                  onClick={() => handleLabelClick(label)}
+                >
+                  {label}
+                </Chip.Toggle>
+              </li>
+            ))}
+          </ul>,
+        ],
+      ]
       : []),
     ...(concept?.endringslogelement?.endringstidspunkt
       ? [
-          [
-            localization.concept.dateLastUpdated,
-            formatISO(concept?.endringslogelement?.endringstidspunkt, {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            }) ?? '',
-          ],
-        ]
+        [
+          localization.concept.dateLastUpdated,
+          formatISO(concept?.endringslogelement?.endringstidspunkt, {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          }) ?? '',
+        ],
+      ]
       : []),
     ...(concept?.opprettet
       ? [
-          [
-            localization.concept.created,
-            formatISO(concept?.opprettet, {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            }) ?? '',
-          ],
-        ]
+        [
+          localization.concept.created,
+          formatISO(concept?.opprettet, {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          }) ?? '',
+        ],
+      ]
       : []),
     ...(concept?.opprettetAv ? [[`${localization.created} ${localization.by}`, concept.opprettetAv]] : []),
     ...(concept?.kontaktpunkt?.harEpost || concept?.kontaktpunkt?.harTelefon
       ? [
-          [
-            localization.concept.contactInformation,
-            <>
-              {concept?.kontaktpunkt?.harEpost && (
-                <div
-                  key='contactEmail'
-                  className={classes.contact}
-                >
-                  <EnvelopeClosedIcon />
-                  &nbsp;
-                  {concept?.kontaktpunkt?.harEpost}
-                </div>
-              )}
-              {concept?.kontaktpunkt?.harTelefon && (
-                <div
-                  key='contactTl'
-                  className={classes.contact}
-                >
-                  <PhoneIcon />
-                  &nbsp;
-                  {concept?.kontaktpunkt?.harTelefon}
-                </div>
-              )}
-            </>,
-          ],
-        ]
+        [
+          localization.concept.contactInformation,
+          <>
+            {concept?.kontaktpunkt?.harEpost && (
+              <div
+                key='contactEmail'
+                className={classes.contact}
+              >
+                <EnvelopeClosedIcon />
+                &nbsp;
+                {concept?.kontaktpunkt?.harEpost}
+              </div>
+            )}
+            {concept?.kontaktpunkt?.harTelefon && (
+              <div
+                key='contactTl'
+                className={classes.contact}
+              >
+                <PhoneIcon />
+                &nbsp;
+                {concept?.kontaktpunkt?.harTelefon}
+              </div>
+            )}
+          </>,
+        ],
+      ]
       : []),
   ];
 
@@ -664,169 +662,174 @@ export const ConceptPageClient = ({
     );
   };
 
-  const MainColumn = () => (
-    <div>
-      <InfoCard>
-        {!isEmpty(translate(concept?.definisjon?.tekst ?? '', language)) && !isEmpty(concept?.definisjon) && (
-          <InfoCard.Item title={`${localization.concept.definition}:`}>
-            <Definition
-              definition={concept?.definisjon}
-              language={language}
-            />
-          </InfoCard.Item>
-        )}
-        {!isEmpty(translate(concept?.definisjonForAllmennheten?.tekst ?? '', language)) &&
-          !isEmpty(concept?.definisjonForAllmennheten) && (
-            <InfoCard.Item title={`${localization.concept.publicDefinition}:`}>
+  const MainColumn = () => {
+    return (
+      <div>
+        <InfoCard>
+          {!isEmpty(translate(concept?.definisjon?.tekst ?? '', language)) && !isEmpty(concept?.definisjon) && (
+            <InfoCard.Item title={`${localization.concept.definition}:`}>
               <Definition
-                definition={concept?.definisjonForAllmennheten}
+                definition={concept?.definisjon}
                 language={language}
               />
             </InfoCard.Item>
           )}
-
-        {!isEmpty(translate(concept?.definisjonForSpesialister?.tekst ?? '', language)) &&
-          !isEmpty(concept?.definisjonForSpesialister) && (
-            <InfoCard.Item title={`${localization.concept.specialistDefinition}:`}>
-              <Definition
-                definition={concept?.definisjonForSpesialister}
-                language={language}
-              />
-            </InfoCard.Item>
-          )}
-        {!isEmpty(translate(concept?.merknad, language)) && (
-          <InfoCard.Item title={`${localization.concept.remark}:`}>
-            <span>{translate(concept?.merknad, language)}</span>
-          </InfoCard.Item>
-        )}
-        {!isEmpty(translate(concept?.eksempel, language)) && (
-          <InfoCard.Item title={`${localization.concept.example}:`}>
-            <span>{translate(concept?.eksempel, language)}</span>
-          </InfoCard.Item>
-        )}
-        {!isEmpty(translate(concept?.abbreviatedLabel, language)) && (
-          <InfoCard.Item title={`${localization.concept.abbreviation}:`}>
-            <span>{translate(concept?.abbreviatedLabel, language)}</span>
-          </InfoCard.Item>
-        )}
-        {!isEmpty(translate(concept?.tillattTerm, language)) && (
-          <InfoCard.Item title={`${localization.concept.altLabel}:`}>
-            <ul>
-              {ensureStringArray(translate(concept?.tillattTerm, language)).map((term, i) => (
-                <li key={`altLabel-${i}`}>{term}</li>
-              ))}
-            </ul>
-          </InfoCard.Item>
-        )}
-        {!isEmpty(translate(concept?.frarådetTerm, language)) && (
-          <InfoCard.Item title={`${localization.concept.hiddenLabel}:`}>
-            <ul>
-              {ensureStringArray(translate(concept?.frarådetTerm, language)).map((term, i) => (
-                <li key={`hiddenLabel-${i}`}>{term}</li>
-              ))}
-            </ul>
-          </InfoCard.Item>
-        )}
-        {!isEmpty(relatedConcepts) && (
-          <InfoCard.Item
-            title={`${localization.formatString(localization.concept.relatedConcepts, {
-              conceptCount: conceptRelations.length,
-            })}`}
-          >
-            <RelatedConcepts
-              title={getTitle(translate(concept?.anbefaltTerm?.navn, language))}
-              conceptRelations={conceptRelations}
-              relatedConcepts={relatedConcepts}
-              validFromIncluding={concept?.gyldigFom}
-              validToIncluding={concept?.gyldigTom}
-              language={language}
-            />
-          </InfoCard.Item>
-        )}
-        {!isEmpty(internalRelatedConcepts) && (
-          <InfoCard.Item
-            title={`${localization.formatString(localization.concept.unpublishedRelatedConcepts, {
-              conceptCount: internalConceptRelations.length,
-            })}`}
-          >
-            <RelatedConcepts
-              title={getTitle(translate(concept?.anbefaltTerm?.navn, language))}
-              conceptRelations={internalConceptRelations}
-              relatedConcepts={internalRelatedConcepts}
-              validFromIncluding={concept?.gyldigFom}
-              validToIncluding={concept?.gyldigTom}
-            />
-          </InfoCard.Item>
-        )}
-        {(!isEmpty(concept?.omfang?.uri) || !isEmpty(concept?.omfang?.tekst)) && (
-          <InfoCard.Item title={`${localization.concept.valueDomain}:`}>
-            {concept?.omfang?.uri ? (
-              <Link
-                href={concept?.omfang?.uri}
-                target='_blank'
-              >
-                {concept?.omfang?.tekst || concept?.omfang?.uri}
-              </Link>
-            ) : (
-              <span>{concept?.omfang?.tekst}</span>
+          {!isEmpty(translate(concept?.definisjonForAllmennheten?.tekst ?? '', language)) &&
+            !isEmpty(concept?.definisjonForAllmennheten) && (
+              <InfoCard.Item title={`${localization.concept.publicDefinition}:`}>
+                <Definition
+                  definition={concept?.definisjonForAllmennheten}
+                  language={language}
+                />
+              </InfoCard.Item>
             )}
+
+          {!isEmpty(translate(concept?.definisjonForSpesialister?.tekst ?? '', language)) &&
+            !isEmpty(concept?.definisjonForSpesialister) && (
+              <InfoCard.Item title={`${localization.concept.specialistDefinition}:`}>
+                <Definition
+                  definition={concept?.definisjonForSpesialister}
+                  language={language}
+                />
+              </InfoCard.Item>
+            )}
+          {!isEmpty(translate(concept?.merknad, language)) && (
+            <InfoCard.Item title={`${localization.concept.remark}:`}>
+              <span>{translate(concept?.merknad, language)}</span>
+            </InfoCard.Item>
+          )}
+          {!isEmpty(translate(concept?.eksempel, language)) && (
+            <InfoCard.Item title={`${localization.concept.example}:`}>
+              <span>{translate(concept?.eksempel, language)}</span>
+            </InfoCard.Item>
+          )}
+          {!isEmpty(translate(concept?.abbreviatedLabel, language)) && (
+            <InfoCard.Item title={`${localization.concept.abbreviation}:`}>
+              <span>{translate(concept?.abbreviatedLabel, language)}</span>
+            </InfoCard.Item>
+          )}
+          {!isEmpty(translate(concept?.tillattTerm, language)) && (
+            <InfoCard.Item title={`${localization.concept.altLabel}:`}>
+              <ul>
+                {ensureStringArray(translate(concept?.tillattTerm, language)).map((term, i) => (
+                  <li key={`altLabel-${i}`}>{term}</li>
+                ))}
+              </ul>
+            </InfoCard.Item>
+          )}
+          {!isEmpty(translate(concept?.frarådetTerm, language)) && (
+            <InfoCard.Item title={`${localization.concept.hiddenLabel}:`}>
+              <ul>
+                {ensureStringArray(translate(concept?.frarådetTerm, language)).map((term, i) => (
+                  <li key={`hiddenLabel-${i}`}>{term}</li>
+                ))}
+              </ul>
+            </InfoCard.Item>
+          )}
+          {!isEmpty(relatedConcepts) && (
+            <InfoCard.Item
+              title={`${localization.formatString(localization.concept.relatedConcepts, {
+                conceptCount: conceptRelations.length,
+              })}`}
+            >
+              <RelatedConcepts
+                title={getTitle(translate(concept?.anbefaltTerm?.navn, language))}
+                conceptRelations={conceptRelations}
+                relatedConcepts={relatedConcepts}
+                validFromIncluding={concept?.gyldigFom}
+                validToIncluding={concept?.gyldigTom}
+                language={language}
+              />
+            </InfoCard.Item>
+          )}
+          {!isEmpty(internalRelatedConcepts) && (
+            <InfoCard.Item
+              title={`${localization.formatString(localization.concept.unpublishedRelatedConcepts, {
+                conceptCount: internalConceptRelations.length,
+              })}`}
+            >
+              <RelatedConcepts
+                title={getTitle(translate(concept?.anbefaltTerm?.navn, language))}
+                conceptRelations={internalConceptRelations}
+                relatedConcepts={internalRelatedConcepts}
+                validFromIncluding={concept?.gyldigFom}
+                validToIncluding={concept?.gyldigTom}
+                language={language}
+              />
+            </InfoCard.Item>
+          )}
+          {(!isEmpty(concept?.omfang?.uri) || !isEmpty(concept?.omfang?.tekst)) && (
+            <InfoCard.Item title={`${localization.concept.valueDomain}:`}>
+              {concept?.omfang?.uri ? (
+                <Link
+                  href={concept?.omfang?.uri}
+                  target='_blank'
+                >
+                  {concept?.omfang?.tekst || concept?.omfang?.uri}
+                </Link>
+              ) : (
+                <span>{concept?.omfang?.tekst}</span>
+              )}
+            </InfoCard.Item>
+          )}
+          <InterneFelt
+            fields={fieldsResult.internal}
+            codeLists={codeListsResult.codeLists}
+            users={usersResult.users}
+            concept={concept}
+            location='main_column'
+            language={language}
+          />
+        </InfoCard>
+
+        <div className={classes.tabs}>
+          <Tabs
+            defaultValue={localization.comment.comments}
+            size='small'
+          >
+            <Tabs.List>
+              <Tabs.Tab value={localization.comment.comments}>{localization.comment.comments}</Tabs.Tab>
+              <Tabs.Tab value={localization.changeHistory}>{localization.changeHistory}</Tabs.Tab>
+              <Tabs.Tab value={localization.concept.versions}>{localization.concept.versions}</Tabs.Tab>
+            </Tabs.List>
+            <Tabs.Content value={localization.comment.comments}>
+              <CommentsTab />
+            </Tabs.Content>
+            <Tabs.Content value={localization.changeHistory}>
+              <HistoryTab />
+            </Tabs.Content>
+            <Tabs.Content value={localization.concept.versions}>
+              <RevisionsTab />
+            </Tabs.Content>
+          </Tabs>
+        </div>
+      </div>
+    );
+  };
+
+  const RightColumn = () => {
+    return (
+      <InfoCard size='small'>
+        {infoDataColumnRight.map(([label, value]) => (
+          <InfoCard.Item
+            key={`info-data-${label}`}
+            title={label}
+            headingColor='light'
+          >
+            <span>{value}</span>
           </InfoCard.Item>
-        )}
+        ))}
         <InterneFelt
           fields={fieldsResult.internal}
           codeLists={codeListsResult.codeLists}
           users={usersResult.users}
           concept={concept}
-          location='main_column'
+          location='right_column'
           language={language}
         />
       </InfoCard>
-
-      <div className={classes.tabs}>
-        <Tabs
-          defaultValue={localization.comment.comments}
-          size='small'
-        >
-          <Tabs.List>
-            <Tabs.Tab value={localization.comment.comments}>{localization.comment.comments}</Tabs.Tab>
-            <Tabs.Tab value={localization.changeHistory}>{localization.changeHistory}</Tabs.Tab>
-            <Tabs.Tab value={localization.concept.versions}>{localization.concept.versions}</Tabs.Tab>
-          </Tabs.List>
-          <Tabs.Content value={localization.comment.comments}>
-            <CommentsTab />
-          </Tabs.Content>
-          <Tabs.Content value={localization.changeHistory}>
-            <HistoryTab />
-          </Tabs.Content>
-          <Tabs.Content value={localization.concept.versions}>
-            <RevisionsTab />
-          </Tabs.Content>
-        </Tabs>
-      </div>
-    </div>
-  );
-
-  const RightColumn = () => (
-    <InfoCard size='small'>
-      {infoDataColumnRight.map(([label, value]) => (
-        <InfoCard.Item
-          key={`info-data-${label}`}
-          title={label}
-          headingColor='light'
-        >
-          <span>{value}</span>
-        </InfoCard.Item>
-      ))}
-      <InterneFelt
-        fields={fieldsResult.internal}
-        codeLists={codeListsResult.codeLists}
-        users={usersResult.users}
-        concept={concept}
-        location='right_column'
-        language={language}
-      />
-    </InfoCard>
-  );
+    );
+  };
 
   return (
     <>
