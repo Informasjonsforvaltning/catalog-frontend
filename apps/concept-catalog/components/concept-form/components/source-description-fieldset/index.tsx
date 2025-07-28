@@ -79,6 +79,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
             render={(arrayHelpers) => (
               <>
                 <table className={styles.sourceTable}>
+                  <tbody>
                   {values[name]?.kilde?.map((_, index) => (
                     <tr key={index}>
                       <td>
@@ -117,6 +118,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
                       </td>
                     </tr>
                   ))}
+                  </tbody>
                 </table>
 
                 <div className={styles.languageButtons}>
@@ -126,7 +128,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
                     size='sm'
                     type='button'
                     onClick={() => {
-                      arrayHelpers.push({ text: undefined, uri: undefined });
+                      arrayHelpers.push({ text: '', uri: '' });
                     }}
                   >
                     <PlusCircleIcon fontSize='1rem' />

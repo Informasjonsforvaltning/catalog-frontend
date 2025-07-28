@@ -121,8 +121,6 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
   let internalRelatedConceptOptions: Option[] = [];
   let externalRelatedConceptOptions: Option[] = [];
   if (relatedConceptType === 'internal' && searchTriggered) {
-    console.log('conceptId', conceptId);
-    console.log('internalConcepts', internalConcepts);
     internalRelatedConceptOptions =
       internalConcepts?.hits.filter((rel) => rel.originaltBegrep !== conceptId).map((concept) => ({
         label: getTranslateText(concept.anbefaltTerm?.navn) as string,

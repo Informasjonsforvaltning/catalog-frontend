@@ -460,9 +460,11 @@ export default class DatasetEditPage {
   }
 
   // Save button
-  async clickSaveButton() {
+  async clickSaveButton(success: boolean = true) {
     await this.page.getByRole('button', { name: 'Lagre' }).click();
-    await this.page.getByText('Endringene ble lagret.').waitFor({ state: 'visible' });
+    if (success) {
+      await this.page.getByText('Endringene ble lagret.').waitFor({ state: 'visible' });
+    } 
   }
 
   // Cancel button
