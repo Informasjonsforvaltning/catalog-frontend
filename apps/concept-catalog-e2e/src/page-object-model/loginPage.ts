@@ -39,7 +39,7 @@ export default class LoginPage {
     console.log('[LOGIN PAGE] Clicking "Logg inn via ID-porten"...');
     await this.page.getByRole('link', { name: 'Logg inn via ID-porten' }).click({ timeout: 5000 });
     console.log('[LOGIN PAGE] Clicking "TestID på nivå høyt"...');
-    await this.page.getByRole('link', { name: 'TestID på nivå høyt Lag din egen testbruker " / "' }).click();
+    await this.page.getByRole('link', { name: 'TestID på nivå høyt Lag din egen testbruker' }).click();
     console.log('[LOGIN PAGE] Filling synthetic personidentifikator...');
     await this.page.getByLabel('Personidentifikator (syntetisk)').fill(`${process.env.E2E_AUTH_ADMIN_ID}`);
     console.log('[LOGIN PAGE] Clicking "Autentiser"...');
@@ -70,7 +70,7 @@ export default class LoginPage {
     console.log('[LOGIN PAGE] Clicking "Logg inn via ID-porten"...');
     await this.page.getByRole('link', { name: 'Logg inn via ID-porten' }).click({ timeout: 5000 });
     console.log('[LOGIN PAGE] Clicking "TestID på nivå høyt"...');
-    await this.page.getByRole('link', { name: 'TestID på nivå høyt Lag din egen testbruker " / "' }).click();
+    await this.page.getByRole('link', { name: 'TestID på nivå høyt Lag din egen testbruker' }).click();
     console.log('[LOGIN PAGE] Filling synthetic personidentifikator...');
     await this.page.getByLabel('Personidentifikator (syntetisk)').fill(`${process.env.E2E_AUTH_WRITE_ID}`);
     console.log('[LOGIN PAGE] Clicking "Autentiser"...');
@@ -101,7 +101,7 @@ export default class LoginPage {
     console.log('[LOGIN PAGE] Clicking "Logg inn via ID-porten"...');
     await this.page.getByRole('link', { name: 'Logg inn via ID-porten' }).click({ timeout: 5000 });
     console.log('[LOGIN PAGE] Clicking "TestID på nivå høyt"...');
-    await this.page.getByRole('link', { name: 'TestID på nivå høyt Lag din egen testbruker " / "' }).click();
+    await this.page.getByRole('link', { name: 'TestID på nivå høyt Lag din egen testbruker' }).click();
     console.log('[LOGIN PAGE] Filling synthetic personidentifikator...');
     await this.page.getByLabel('Personidentifikator (syntetisk)').fill(`${process.env.E2E_AUTH_READ_ID}`);
     console.log('[LOGIN PAGE] Clicking "Autentiser"...');
