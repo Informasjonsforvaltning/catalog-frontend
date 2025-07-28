@@ -473,8 +473,10 @@ export default class EditPage {
     await this.page.getByRole('button', { name: 'Legg til relasjon' }).click();
   }
 
-  async clickSaveButton() {
+  async clickSaveButton(success: boolean = true) {
     await this.page.getByRole('button', { name: 'Lagre' }).click();
-    await this.page.getByText('Endringene ble lagret.').waitFor({ state: 'visible' });
+    if (success) {
+      await this.page.getByText('Endringene ble lagret.').waitFor({ state: 'visible' });
+    } 
   }
 }

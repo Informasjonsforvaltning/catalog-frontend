@@ -1,5 +1,6 @@
 import * as crypto from 'crypto';
 import { Concept } from '@catalog-frontend/types';
+import { expect } from '@playwright/test';
 import { runTestAsAdmin } from '../../fixtures/basePage';
 import { adminAuthFile, createConcept, getFields, getUsers, uniqueString } from '../../utils/helpers';
 
@@ -211,4 +212,281 @@ runTestAsAdmin('test if updating an existing concept saves correctly', async ({ 
   await conceptsPage.detailPage.expectDetails(updatedConcept, apiRequestContext);
 
   console.log('[TEST] Test completed: test if updating an existing concept saves correctly');
+});
+
+runTestAsAdmin(
+  'test that it should not be possible to make a relation to itself',
+  async ({ conceptsPage, playwright }) => {
+    console.log('[TEST] Starting test: test that it should not be possible to make a relation to itself');
+
+    const apiRequestContext = await playwright.request.newContext({
+      storageState: adminAuthFile,
+    });
+    console.log('[TEST] Created API request context with admin storage state');
+
+    const concept: Concept = {
+      id: null,
+      anbefaltTerm: {
+        navn: {
+          nb: `Self relation test concept ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+          nn: `Self relation test concept ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+          en: `Self relation test concept ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        },
+      },
+      ansvarligVirksomhet: {
+        id: null,
+      },
+      definisjon: {
+        tekst: {
+          nb: 'This is a test concept for self-relation nb',
+          nn: 'This is a test concept for self-relation nn',
+          en: 'This is a test concept for self-relation en',
+        },
+        kildebeskrivelse: {
+          forholdTilKilde: 'basertPaaKilde',
+          kilde: [
+            {
+              tekst: 'Kilde concept for self-relation',
+              uri: 'https://kilde.concept.self-relation.no',
+            },
+          ],
+        },
+      },
+      kontaktpunkt: {
+        harEpost: 'test-self-relation@example.com',
+        harTelefon: '123456789',
+      },
+      versjonsnr: { major: 1, minor: 0, patch: 0 },
+      merknad: {
+        nb: 'Merknad test concept for self-relation nb',
+        nn: 'Merknad test concept for self-relation nn',
+        en: 'Merknad test concept for self-relation en',
+      },
+      merkelapp: ['merkelapp-self-relation'],
+      eksempel: {
+        nb: 'Eksempel test concept for self-relation nb',
+        nn: 'Eksempel test concept for self-relation nn',
+        en: 'Eksempel test concept for self-relation en',
+      },
+      fagområde: null,
+      fagområdeKoder: null,
+      omfang: {
+        tekst: 'Omfang concept for self-relation',
+        uri: 'https://omfang.concept.self-relation.no',
+      },
+      tillattTerm: {
+        nb: ['tillat-term-self-relation nb'],
+        nn: ['tillat-term-self-relation nn'],
+        en: ['tillat-term-self-relation en'],
+      },
+      frarådetTerm: {
+        nb: ['frarådet-term-self-relation nb'],
+        nn: ['frarådet-term-self-relation nn'],
+        en: ['frarådet-term-self-relation en'],
+      },
+      gyldigFom: '2199-01-01',
+      gyldigTom: null,
+      seOgså: [],
+      internBegrepsRelasjon: [],
+      internSeOgså: [],
+      internErstattesAv: [],
+      erstattesAv: [],
+      statusURI: 'http://publications.europa.eu/resource/authority/concept-status/CURRENT',
+      assignedUser: null,
+      begrepsRelasjon: [],
+      interneFelt: null,
+      abbreviatedLabel: 'TCSELF',
+    };
+
+    console.log('[TEST] Creating test concept...');
+    const id = await createConcept(apiRequestContext, concept);
+    console.log(`[TEST] Concept created with id: ${id}`);
+
+    const detailUrl = `/catalogs/${process.env.E2E_CATALOG_ID}/concepts/${id}`;
+    console.log(`[TEST] Navigating to detail page: ${detailUrl}`);
+    await conceptsPage.detailPage.goto(detailUrl);
+
+    console.log('[TEST] Clicking edit concept...');
+    await conceptsPage.detailPage.editConcept();
+
+    console.log('[TEST] Adding a relation...');
+    await conceptsPage.editPage.clickAddRelation();
+
+    console.log('[TEST] Selecting internal relation type...');
+    await conceptsPage.page.getByText('Virksomhetens eget begrep').click();
+
+    console.log('[TEST] Opening the search combobox...');
+    await conceptsPage.page.getByRole('group', { name: 'Relatert begrep' }).getByRole('combobox').click();
+    await conceptsPage.page.waitForTimeout(100);
+
+    console.log('[TEST] Searching for the concept itself...');
+    await conceptsPage.page
+      .getByRole('group', { name: 'Relatert begrep' })
+      .getByLabel('Søk begrep')
+      .fill(concept.anbefaltTerm.navn.nb);
+    await conceptsPage.page.waitForTimeout(100);
+
+    console.log('[TEST] Verifying that the concept itself is not available in search results...');
+    // The concept should not appear in the search results due to the filter
+    const searchResults = conceptsPage.page.getByRole('listbox');
+    await expect(searchResults).toBeVisible();
+
+    // Check that the current concept's name is not in the search results
+    // We need to get the actual concept name that was generated
+    const conceptName = concept.anbefaltTerm.navn.nb;
+    const currentConceptOption = conceptsPage.page.getByRole('option', { name: conceptName });
+    await expect(currentConceptOption).not.toBeVisible();
+
+    console.log('[TEST] Test completed: test that it should not be possible to make a relation to itself');
+  },
+);
+
+runTestAsAdmin('test that URL fields only accept HTTPS URLs', async ({ conceptsPage, playwright }) => {
+  console.log('[TEST] Starting test: test that URL fields only accept HTTPS URLs');
+
+  const apiRequestContext = await playwright.request.newContext({
+    storageState: adminAuthFile,
+  });
+  console.log('[TEST] Created API request context with admin storage state');
+
+  const concept: Concept = {
+    id: null,
+    anbefaltTerm: {
+      navn: {
+        nb: `URL validation test concept ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        nn: `URL validation test concept ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        en: `URL validation test concept ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+      },
+    },
+    ansvarligVirksomhet: {
+      id: null,
+    },
+    definisjon: {
+      tekst: {
+        nb: 'This is a test concept for URL validation nb',
+        nn: 'This is a test concept for URL validation nn',
+        en: 'This is a test concept for URL validation en',
+      },
+      kildebeskrivelse: {
+        forholdTilKilde: 'basertPaaKilde',
+        kilde: [
+          {
+            tekst: 'Kilde for URL validation test',
+            uri: 'https://kilde.url-validation.no',
+          },
+        ],
+      },
+    },
+    kontaktpunkt: {
+      harEpost: 'test-url-validation@example.com',
+      harTelefon: '123456789',
+    },
+    versjonsnr: { major: 1, minor: 0, patch: 0 },
+    merknad: {
+      nb: 'Merknad test concept for URL validation nb',
+      nn: 'Merknad test concept for URL validation nn',
+      en: 'Merknad test concept for URL validation en',
+    },
+    merkelapp: ['merkelapp-url-validation'],
+    eksempel: {
+      nb: 'Eksempel test concept for URL validation nb',
+      nn: 'Eksempel test concept for URL validation nn',
+      en: 'Eksempel test concept for URL validation en',
+    },
+    fagområde: null,
+    fagområdeKoder: null,
+    omfang: {
+      tekst: 'Omfang for URL validation test',
+      uri: 'https://omfang.url-validation.no',
+    },
+    tillattTerm: {
+      nb: ['tillat-term-url-validation nb'],
+      nn: ['tillat-term-url-validation nn'],
+      en: ['tillat-term-url-validation en'],
+    },
+    frarådetTerm: {
+      nb: ['frarådet-term-url-validation nb'],
+      nn: ['frarådet-term-url-validation nn'],
+      en: ['frarådet-term-url-validation en'],
+    },
+    gyldigFom: '2199-01-01',
+    gyldigTom: null,
+    seOgså: [],
+    internBegrepsRelasjon: [],
+    internSeOgså: [],
+    internErstattesAv: [],
+    erstattesAv: [],
+    statusURI: 'http://publications.europa.eu/resource/authority/concept-status/CURRENT',
+    assignedUser: null,
+    begrepsRelasjon: [],
+    interneFelt: null,
+    abbreviatedLabel: 'TCURL',
+  };
+
+  console.log('[TEST] Creating test concept...');
+  const id = await createConcept(apiRequestContext, concept);
+  console.log(`[TEST] Concept created with id: ${id}`);
+
+  const detailUrl = `/catalogs/${process.env.E2E_CATALOG_ID}/concepts/${id}`;
+  console.log(`[TEST] Navigating to detail page: ${detailUrl}`);
+  await conceptsPage.detailPage.goto(detailUrl);
+
+  console.log('[TEST] Clicking edit concept...');
+  await conceptsPage.detailPage.editConcept();
+  
+  // Definition source URI - HTTP should be rejected immediately in modal
+  console.log('[TEST] Testing definition source URI with HTTP URL in modal...');
+  await conceptsPage.page.getByRole('button', { name: 'Allmennheten' }).click();
+
+  // Wait for the definition modal to appear
+  await conceptsPage.page.waitForTimeout(500);
+
+  await conceptsPage.editPage.fillLanguageField(
+    {'nb': 'Min definisjon nb'},
+    'Definisjon Hjelp til utfylling',
+    ['Bokmål'],
+    false,
+  );
+  // Add a source
+  await conceptsPage.page.getByRole('group', { name: 'Forhold til kilde' }).getByLabel('Basert på kilde').click();
+  await conceptsPage.page.getByRole('button', { name: 'Legg til kilde' }).click();
+
+  await conceptsPage.page.getByRole('textbox', { name: 'https://kilde.no' }).fill('http://invalid-source.com');
+  await conceptsPage.page.getByRole('button', { name: 'Legg til definisjon' }).click();
+
+  // Check for validation error in the source URI field - should appear immediately
+  const uriError = conceptsPage.page.getByText(
+    "Ugyldig lenke. Vennligst sørg for at lenken starter med",
+  );
+  await expect(uriError).toBeVisible();
+  
+  await conceptsPage.page.getByRole('textbox', { name: 'https://kilde.no' }).fill('https://valid-https-source.com');
+  await conceptsPage.page.getByRole('button', { name: 'Legg til definisjon' }).click();
+
+  await expect(uriError).not.toBeVisible();
+  await expect(conceptsPage.page.getByRole('dialog')).not.toBeVisible();
+
+  // Value range link (omfang.uri) - HTTP should be rejected on form submission
+  console.log('[TEST] Testing value range link with HTTP URL...');
+  await conceptsPage.page.getByLabel('Lenke til referanse').fill('http://invalid-url.com');
+
+  // Try to save the form - this should trigger validation for main form fields
+  console.log('[TEST] Attempting to save form with invalid HTTP URL...');
+  await conceptsPage.editPage.clickSaveButton(false);
+
+  // Check for validation error - it should appear after save attempt
+  await expect(uriError).toBeVisible();
+
+  // Clear the invalid value range URL and enter a valid one
+  await conceptsPage.page.getByLabel('Lenke til referanse').fill('https://valid-url.com');
+  await conceptsPage.page.getByLabel('Lenke til referanse').blur();
+
+  // The error should disappear immediately for modal fields    
+  await expect(uriError).not.toBeVisible();
+
+  // Try to save again - should work now with valid HTTPS URLs
+  console.log('[TEST] Attempting to save form with valid HTTPS URLs...');
+  await conceptsPage.editPage.clickSaveButton();
+
+  console.log('[TEST] Test completed: test that URL fields only accept HTTPS URLs');
 });
