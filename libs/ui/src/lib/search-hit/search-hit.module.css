@@ -20,6 +20,10 @@
   margin-bottom: 18px;
 }
 
+.titleLink {
+  text-decoration: none;
+}
+
 .description {
   font-style: normal;
   font-size: 20px;
