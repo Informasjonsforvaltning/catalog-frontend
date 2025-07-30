@@ -1,5 +1,5 @@
 import { InfoCard } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { formatISO, getTranslateText, localization } from '@catalog-frontend/utils';
 import { EnvelopeClosedIcon, PhoneIcon, LinkIcon } from '@navikt/aksel-icons';
 import { isEmpty } from 'lodash';
 import PublishSwitch from '../publish-switch';
@@ -45,6 +45,21 @@ export const RightColumn = ({ dataset, hasWritePermission, language }: Props) =>
 
         {published ? localization.publicationState.publishedInFDK : localization.publicationState.unpublished}
       </InfoCard.Item>
+
+      {dataset?._lastModified && (
+        <InfoCard.Item
+          key={`info-data-${localization.lastUpdated}`}
+          title={localization.lastUpdated}
+          headingColor='light'
+        >
+          {formatISO(dataset?._lastModified, {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })}
+        </InfoCard.Item>
+      )}
 
       {dataset?.contactPoint && !isEmpty(dataset?.contactPoint[0]) && (
         <InfoCard.Item
