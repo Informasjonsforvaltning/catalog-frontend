@@ -80,6 +80,8 @@ export const nb = {
   changed: 'Endret',
   created: 'Opprettet',
   by: 'av',
+  lastUpdated: 'Sist oppdatert',
+  
 
   catalogType: {
     admin: 'Administrasjonsgrensesnitt',

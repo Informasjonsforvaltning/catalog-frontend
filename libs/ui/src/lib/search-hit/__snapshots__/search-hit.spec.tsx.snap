@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`SearchHit should render SearchHit successfully 1`] = `
 <body>
@@ -13,6 +13,7 @@ exports[`SearchHit should render SearchHit successfully 1`] = `
           class="titleRow"
         >
           <a
+            class="titleLink"
             href="Search hit title href"
           >
             <h2
@@ -53,6 +54,7 @@ exports[`SearchHit should render SearchHit with empty title successfully 1`] = `
           class="titleRow"
         >
           <a
+            class="titleLink"
             href=""
           >
             <h2
