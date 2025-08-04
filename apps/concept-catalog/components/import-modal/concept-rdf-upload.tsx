@@ -6,10 +6,11 @@ import { useImportRdfConcepts } from '@concept-catalog/hooks/import';
 
 
 interface Props {
-  catalogId: string;
+  catalogId: string,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const ImportConceptRdf = ( { catalogId }: Props) => {
+export const ImportConceptRdf = ( { catalogId, setIsLoading }: Props) => {
 
   const extension2Type: Map<string, string> = new Map<string, string>();
   extension2Type.set('.ttl', 'text/turtle');
@@ -28,8 +29,12 @@ export const ImportConceptRdf = ( { catalogId }: Props) => {
       }
       reader.onload = function (evt) {
         if (evt.target && typeof evt.target.result === 'string') {
+            setIsLoading(true);
             uploadRdf.mutate({fileContent: evt.target.result, contentType: contentType });
-        } else console.error('File content is not a string');
+        } else {
+          console.error('File content is not a string');
+          setIsLoading(false);
+        }
       };
     }
   }
