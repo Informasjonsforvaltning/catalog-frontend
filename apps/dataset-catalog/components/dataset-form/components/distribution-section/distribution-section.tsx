@@ -210,7 +210,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses,
                         openLicenses={openLicenses}
                         distributionType='distribution'
                         onSuccess={(updatedDist) => {
-                          handleDistributionChange(updatedDist, 'distribution', index);
+                          handleDistributionSuccess(updatedDist, 'distribution', index);
                         }}
                         onCancel={() => handleDistributionCancel('distribution')}
                         onChange={(updatedDist) => handleDistributionChange(updatedDist, 'distribution', index)}
