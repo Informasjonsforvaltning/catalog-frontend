@@ -29,7 +29,7 @@ type Props = {
   referenceDataEnv: string;
   searchEnv: string;
   openLicenses?: ReferenceDataCode[];
-  onSuccess: (values: Distribution, type: string) => void;
+  onSuccess: (values: Distribution) => void;
   onCancel?: () => void;
   onChange?: (values: Distribution) => void;
   initialValues: Partial<Distribution> | undefined;
@@ -55,9 +55,9 @@ export const DistributionModal = ({
   type,
   distributionType,
 }: Props) => {
-  const [selectedFileTypeUris, setSelectedFileTypeUris] = useState(initialValues?.format);
-  const [selectedMediaTypeUris, setSelectedMediaTypeUris] = useState(initialValues?.mediaType);
-  const [selectedAccessServiceUris, setSelectedAccessServiceUris] = useState(initialValues?.accessServiceUris);
+  const [selectedFileTypeUris, setSelectedFileTypeUris] = useState(initialValues?.format ?? []);
+  const [selectedMediaTypeUris, setSelectedMediaTypeUris] = useState(initialValues?.mediaType ?? []);
+  const [selectedAccessServiceUris, setSelectedAccessServiceUris] = useState(initialValues?.accessServiceUris ?? []);
   const [selectedAndSearchedFileTypes, setSelectedAndSearchedFileTypes] = useState<ReferenceDataCode[]>([]);
   const [selectedAndSearchedMediaTypes, setSelectedAndSearchedMediaTypes] = useState<ReferenceDataCode[]>([]);
   const [selectedAndSearchedAccessServices, setSelectedAndSearchedAccessServices] = useState<Search.SearchObject[]>([]);
@@ -131,7 +131,7 @@ export const DistributionModal = ({
 
   const handleSubmit = (values: Distribution, { setSubmitting }: any) => {
     const trimmedValues = trimObjectWhitespace(values);
-    onSuccess(trimmedValues, distributionType);
+    onSuccess(trimmedValues);
     setSubmitting(false);
     setSubmitted(true);
     modalRef.current?.close();
@@ -639,11 +639,11 @@ export const DistributionModal = ({
                         }
                       >
                         {!selectedFileTypeUris ||
-                          selectedFileTypeUris?.every((v) =>
-                            selectedAndSearchedFileTypes?.find(
-                              (option: ReferenceDataCode | undefined) => option?.uri === v,
-                            ),
-                          ) ? (
+                        selectedFileTypeUris?.every((v) =>
+                          selectedAndSearchedFileTypes?.find(
+                            (option: ReferenceDataCode | undefined) => option?.uri === v,
+                          ),
+                        ) ? (
                           <FormikReferenceDataCombobox
                             onChange={(event) => setSearchQueryFileTypes(event.target.value)}
                             onValueChange={(selectedValues) => {

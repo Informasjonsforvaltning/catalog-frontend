@@ -25,7 +25,13 @@ type Props = {
   autoSaveStorage?: DataStorage<StorageData>;
 };
 
-export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses, autoSaveId, autoSaveStorage }: Props) => {
+export const DistributionSection = ({
+  referenceDataEnv,
+  searchEnv,
+  openLicenses,
+  autoSaveId,
+  autoSaveStorage,
+}: Props) => {
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
   const [expandedIndexDistribution, setExpandedIndexDistribution] = useState<number | null>(null);
   const [expandedIndexExampleData, setExpandedIndexExampleData] = useState<number | null>(null);
@@ -33,11 +39,15 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses,
   const [selectedFileTypeUris, setSelectedFileTypeUris] = useState<string[]>();
   const [selectedMediaTypeUris, setSelectedMediaTypeUris] = useState<string[]>();
   const [selectedDataServiceUris, setSelectedDataServiceUris] = useState<string[]>();
-  const [selectedFileTypes, setSelectedFileTypes] = useState<ReferenceDataCode[]>();
-  const [selectedMediaTypes, setSelectedMediaTypes] = useState<ReferenceDataCode[]>();
-  const [selectedDataServices, setSelectedDataServices] = useState<Search.SearchObject[]>();
+  const [selectedFileTypes, setSelectedFileTypes] = useState<ReferenceDataCode[]>([]);
+  const [selectedMediaTypes, setSelectedMediaTypes] = useState<ReferenceDataCode[]>([]);
+  const [selectedDataServices, setSelectedDataServices] = useState<Search.SearchObject[]>([]);
 
-  const handleDistributionChange = (updatedDist: Distribution, distributionType: 'distribution' | 'sample', index: number) => {
+  const handleDistributionChange = (
+    updatedDist: Distribution,
+    distributionType: 'distribution' | 'sample',
+    index: number,
+  ) => {
     // Save to secondary storage for auto-save
     if (autoSaveStorage && autoSaveId) {
       autoSaveStorage.setSecondary('datasetFormDistribution', {
@@ -45,7 +55,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses,
         values: {
           distribution: updatedDist,
           distributionType,
-          index
+          index,
         },
         lastChanged: new Date().toISOString(),
       });
@@ -59,7 +69,11 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses,
     }
   };
 
-  const handleDistributionSuccess = (updatedDist: Distribution, distributionType: 'distribution' | 'sample', index: number) => {
+  const handleDistributionSuccess = (
+    updatedDist: Distribution,
+    distributionType: 'distribution' | 'sample',
+    index: number,
+  ) => {
     setFieldValue(`${distributionType}[${index}]`, updatedDist);
 
     // Clean up secondary storage on success
@@ -75,7 +89,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses,
       .flat()
       .filter((item) => item !== undefined);
     const uniqueAccessServices = Array.from(new Set(allAccessServices));
-    if (uniqueAccessServices !== selectedDataServiceUris) {
+    if (uniqueAccessServices && uniqueAccessServices !== selectedDataServiceUris) {
       setSelectedDataServiceUris(uniqueAccessServices);
     }
 
@@ -83,7 +97,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses,
     const sampleFormats = values.sample?.map((val) => val?.format) || [];
     const allFormats = [...distributionFormats, ...sampleFormats].flat().filter((item) => item !== undefined);
     const uniqueFormats = Array.from(new Set(allFormats));
-    if (uniqueFormats !== selectedFileTypeUris) {
+    if (uniqueFormats && uniqueFormats !== selectedFileTypeUris) {
       setSelectedFileTypeUris(uniqueFormats);
     }
 
@@ -91,7 +105,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses,
     const sampleMediaTypes = values.sample?.map((val) => val?.mediaType) || [];
     const allMediaTypes = [...distributionMediaTypes, ...sampleMediaTypes].flat().filter((item) => item !== undefined);
     const uniqueMediaTypes = Array.from(new Set(allMediaTypes));
-    if (uniqueMediaTypes !== selectedMediaTypeUris) {
+    if (uniqueMediaTypes && uniqueMediaTypes !== selectedMediaTypeUris) {
       setSelectedMediaTypeUris(uniqueMediaTypes);
     }
   }, [values]);
@@ -227,12 +241,14 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses,
                           </Button>
                         }
                       />
-                      <DeleteButton onClick={() => {
-                        const newArray = [...values.distribution ?? []];
-                        newArray.splice(index, 1);
-                        setFieldValue('distribution', newArray);
-                        handleDistributionCancel('distribution');
-                      }} />
+                      <DeleteButton
+                        onClick={() => {
+                          const newArray = [...(values.distribution ?? [])];
+                          newArray.splice(index, 1);
+                          setFieldValue('distribution', newArray);
+                          handleDistributionCancel('distribution');
+                        }}
+                      />
                     </div>
                   </div>
 
@@ -326,7 +342,7 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses,
             type='new'
             distributionType='distribution'
             trigger={<AddButton>{localization.datasetForm.button.addDistribution}</AddButton>}
-            onSuccess={(formValues: Distribution, distributionType) => {
+            onSuccess={(formValues: Distribution) => {
               handleDistributionSuccess(formValues, 'distribution', values.distribution?.length ?? 0);
             }}
             onCancel={() => handleDistributionCancel('distribution')}
@@ -416,12 +432,14 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses,
                           </Button>
                         }
                       />
-                      <DeleteButton onClick={() => {
-                        const newArray = [...values.sample ?? []];
-                        newArray.splice(index, 1);
-                        setFieldValue('sample', newArray);
-                        handleDistributionCancel('sample');
-                      }} />
+                      <DeleteButton
+                        onClick={() => {
+                          const newArray = [...(values.sample ?? [])];
+                          newArray.splice(index, 1);
+                          setFieldValue('sample', newArray);
+                          handleDistributionCancel('sample');
+                        }}
+                      />
                     </div>
                   </div>
 
