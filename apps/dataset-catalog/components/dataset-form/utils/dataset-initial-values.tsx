@@ -24,7 +24,11 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     losTheme: dataset.losTheme ?? [],
     type: dataset?.type,
     keywordList: dataset.keywordList ? dataset.keywordList : dataset.keyword ? groupByKeys(dataset?.keyword) : {},
-    conceptList: dataset.conceptList ? dataset.conceptList : dataset.concepts ? dataset.concepts.map((concept) => concept.uri) : [],
+    conceptList: dataset.conceptList
+      ? dataset.conceptList
+      : dataset.concepts
+        ? dataset.concepts.map((concept) => concept.uri)
+        : [],
     provenance: dataset?.provenance?.uri ? { uri: dataset?.provenance?.uri } : undefined,
     accrualPeriodicity: dataset?.accrualPeriodicity?.uri ? { uri: dataset?.accrualPeriodicity?.uri } : undefined,
     modified: dataset?.modified,
@@ -34,10 +38,18 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     hasCompletenessAnnotation: { hasBody: dataset.hasCompletenessAnnotation?.hasBody },
     hasAccuracyAnnotation: { hasBody: dataset?.hasAccuracyAnnotation?.hasBody },
     hasAvailabilityAnnotation: { hasBody: dataset.hasAvailabilityAnnotation?.hasBody },
-    spatialList: dataset.spatial ? dataset.spatial.map((spatial) => spatial.uri) : [],
+    spatialList: dataset.spatialList
+      ? dataset.spatialList
+      : dataset.spatial
+        ? dataset.spatial.map((spatial) => spatial.uri)
+        : [],
     temporal: dataset.temporal ?? [],
     issued: dataset.issued ?? '',
-    languageList: dataset.language ? dataset.language.map((lang) => lang.uri) : [],
+    languageList: dataset.languageList
+      ? dataset.languageList
+      : dataset.language
+        ? dataset.language.map((lang) => lang.uri)
+        : [],
     informationModelsFromFDK: dataset.informationModelsFromFDK ?? [],
     informationModel: dataset?.informationModel,
     qualifiedAttributions: dataset?.qualifiedAttributions,
@@ -90,23 +102,25 @@ export const datasetToBeCreatedTemplate = (catalogId: string): DatasetToBeCreate
 };
 
 export const distributionTemplate = (dist: Distribution | undefined) => {
-  return (dist
-    ? {
-        ...dist,
-        title: dist?.title ?? {},
-        downloadURL: dist?.downloadURL && dist?.downloadURL[0] ? dist?.downloadURL : [],
-        conformsTo: !isEmpty(dist.conformsTo) ? dist.conformsTo : [],
-      }
-    : {
-        title: {},
-        description: {},
-        downloadURL: [],
-        accessURL: [],
-        format: [],
-        mediaType: [],
-        license: {},
-        conformsTo: [],
-        page: [],
-        accessServiceUris: [],
-      }) as Distribution;
+  return (
+    dist
+      ? {
+          ...dist,
+          title: dist?.title ?? {},
+          downloadURL: dist?.downloadURL && dist?.downloadURL[0] ? dist?.downloadURL : [],
+          conformsTo: !isEmpty(dist.conformsTo) ? dist.conformsTo : [],
+        }
+      : {
+          title: {},
+          description: {},
+          downloadURL: [],
+          accessURL: [],
+          format: [],
+          mediaType: [],
+          license: {},
+          conformsTo: [],
+          page: [],
+          accessServiceUris: [],
+        }
+  ) as Distribution;
 };
