@@ -111,35 +111,41 @@ const DataServicesPageClient = ({
     }
   };
 
-  const FilterChips = () => (
-    <div className={styles.chips}>
-      <Chip.Group
-        size='small'
-        className={styles.wrap}
-      >
-        {filterStatus?.map((filter, index) => (
-          <Chip.Removable
-            key={`status-${index}`}
-            onClick={() => removeFilter(filter, 'status')}
-          >
-            {capitalizeFirstLetter(
-              getTranslateText(distributionStatuses?.find((s) => s.uri === filter)?.label) as string,
-            )}
-          </Chip.Removable>
-        ))}
-        {filterPublicationState?.map((filter, index) => (
-          <Chip.Removable
-            key={`published-${index}`}
-            onClick={() => removeFilter(filter, 'published')}
-          >
-            {filter === 'published'
-              ? localization.publicationState.published
-              : localization.publicationState.unpublished}
-          </Chip.Removable>
-        ))}
-      </Chip.Group>
-    </div>
-  );
+  const FilterChips = () => {
+    if (isEmpty(filterStatus) && isEmpty(filterPublicationState)) {
+      return null;
+    }
+
+    return (
+      <div className={styles.chips}>
+        <Chip.Group
+          size='small'
+          className={styles.wrap}
+        >
+          {filterStatus?.map((filter, index) => (
+            <Chip.Removable
+              key={`status-${index}`}
+              onClick={() => removeFilter(filter, 'status')}
+            >
+              {capitalizeFirstLetter(
+                getTranslateText(distributionStatuses?.find((s) => s.uri === filter)?.label) as string,
+              )}
+            </Chip.Removable>
+          ))}
+          {filterPublicationState?.map((filter, index) => (
+            <Chip.Removable
+              key={`published-${index}`}
+              onClick={() => removeFilter(filter, 'published')}
+            >
+              {filter === 'published'
+                ? localization.publicationState.published
+                : localization.publicationState.unpublished}
+            </Chip.Removable>
+          ))}
+        </Chip.Group>
+      </div>
+    );
+  };
 
   return (
     <div className={styles.container}>
@@ -165,7 +171,9 @@ const DataServicesPageClient = ({
               </Select>
             </div>
             <div className={styles.buttons}>
-              {hasAdminPermission && <ImportModal catalogId={catalogId} />}
+              {hasAdminPermission && (
+                <ImportModal catalogId={catalogId} />
+              )}
               {hasWritePermission && (
                 <LinkButton href={`/catalogs/${catalogId}/data-services/new`}>
                   <PlusCircleIcon />
@@ -184,37 +192,37 @@ const DataServicesPageClient = ({
             searchHits={
               filteredDataServices.length > 0
                 ? filteredDataServices.map((dataService: DataService) => (
-                    <div
-                      key={dataService.id}
-                      className={styles.searchHit}
-                    >
-                      <SearchHit
-                        title={getTranslateText(dataService?.title)}
-                        description={getTranslateText(dataService?.description)}
-                        titleHref={`/catalogs/${catalogId}/data-services/${dataService?.id}`}
-                        statusTag={
-                          <StatusTag
-                            dataServiceStatus={dataService?.status}
-                            distributionStatuses={distributionStatuses}
-                            language={'nb'}
-                          />
-                        }
-                        content={
-                          <>
-                            <div className={styles.set}>
-                              <p>
-                                {localization.lastChanged} {formatDate(dateStringToDate(dataService.modified ?? ''))}
-                              </p>
-                              <span>•</span>
-                              {dataService.published
-                                ? localization.publicationState.publishedInFDK
-                                : localization.publicationState.unpublished}
-                            </div>
-                          </>
-                        }
-                      />
-                    </div>
-                  ))
+                  <div
+                    key={dataService.id}
+                    className={styles.searchHit}
+                  >
+                    <SearchHit
+                      title={getTranslateText(dataService?.title)}
+                      description={getTranslateText(dataService?.description)}
+                      titleHref={`/catalogs/${catalogId}/data-services/${dataService?.id}`}
+                      statusTag={
+                        <StatusTag
+                          dataServiceStatus={dataService?.status}
+                          distributionStatuses={distributionStatuses}
+                          language={'nb'}
+                        />
+                      }
+                      content={
+                        <>
+                          <div className={styles.set}>
+                            <p>
+                              {localization.lastChanged} {formatDate(dateStringToDate(dataService.modified ?? ''))}
+                            </p>
+                            <span>•</span>
+                            {dataService.published
+                              ? localization.publicationState.publishedInFDK
+                              : localization.publicationState.unpublished}
+                          </div>
+                        </>
+                      }
+                    />
+                  </div>
+                ))
                 : null
             }
             noSearchHits={!filteredDataServices || filteredDataServices.length === 0}
