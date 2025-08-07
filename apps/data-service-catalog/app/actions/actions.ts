@@ -107,14 +107,17 @@ export async function updateDataService(catalogId: string, initialDataService: D
       throw new Error(`${response.status} ${response.statusText}`);
     }
     success = true;
+
+    const updatedDataService = await response.json();
+    return updatedDataService;
   } catch (error) {
     console.error(`${localization.alert.fail} ${error}`);
     throw new Error(`Noe gikk galt, prøv igjen...`);
-  }
-
-  if (success) {
-    revalidateTag('data-service');
-    revalidateTag('data-services');
+  } finally {
+    if (success) {
+      revalidateTag('data-service');
+      revalidateTag('data-services');
+    }
   }
 }
 
