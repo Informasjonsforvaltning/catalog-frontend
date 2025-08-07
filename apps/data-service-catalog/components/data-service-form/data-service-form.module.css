@@ -72,3 +72,37 @@
   flex-direction: column;
   gap: 1rem;
 }
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.gap2 {
+  gap: var(--fds-spacing-2);
+}
+
+.gap4 {
+  gap: var(--fds-spacing-4);
+}
+
+.noWrap {
+  flex-wrap: nowrap;
+}
+
+.stickyFooterBar {
+  position: sticky;
+  bottom: 0px;
+  background-color: #fff;
+  border-top: 1px solid rgb(230, 230, 230);
+  box-shadow: #969ba0 0px 0px 10px -5px;
+  z-index: 10;
+}
+
+.stickyFooterContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+}

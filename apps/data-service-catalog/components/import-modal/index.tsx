@@ -4,6 +4,7 @@ import { LinkButton, TitleWithHelpTextAndTag, UploadButton } from '@catalog-fron
 import { useImport } from '../../hooks/import';
 import { Button, Modal, Spinner } from '@digdir/designsystemet-react';
 import styles from './import-modal.module.scss';
+import { FileImportIcon } from '@navikt/aksel-icons';
 
 const allowedFileTypes = ['.json', '.yaml', '.yml'];
 
@@ -38,7 +39,7 @@ export function ImportModal({ catalogId }: Props) {
   return (
     <Modal.Root>
       <Modal.Trigger asChild>
-        <Button variant={'secondary'}>Import</Button>
+        <Button variant={'secondary'} size='small'><FileImportIcon fontSize='1.5rem' />Import</Button>
       </Modal.Trigger>
       <Modal.Dialog
         ref={modalRef}

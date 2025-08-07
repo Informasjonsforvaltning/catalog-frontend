@@ -71,12 +71,16 @@ export const dataServiceFormNb = {
     modified: 'Sist oppdatert',
     contactName: 'Navn',
     contactFields: 'Kontaktinformasjon',
+    ignoreRequired: 'Ignorer påkrevde felt',
   },
   validation: {
     costValueRequiredWhenMissingDoc: 'Beløp er påkrevd når ingen dokumentasjon er oppgitt.',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette API-beskrivelsen?',
+    ignoreRequired:
+      'I utgangspunktet er det krav om at alle påkrevde felt må fylles ut for å få lagret. Når avhukingsboksen er aktiv, må bare Tittel på bokmål være fylt ut.',
+    titleNotDefined: 'Tittel ikke definert',
   },
   button: {
     update: 'Oppdater',

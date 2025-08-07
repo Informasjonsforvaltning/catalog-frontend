@@ -61,6 +61,7 @@ export const DatasetSection = ({ searchEnv }: Props) => {
               {localization.dataServiceForm.fieldLabel.servesDataset}
             </TitleWithHelpTextAndTag>
           }
+          size='sm'
         >
           <Combobox
             size='sm'

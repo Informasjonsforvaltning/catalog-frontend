@@ -33,6 +33,7 @@ export const FormatSection = ({ referenceDataEnv }: Props) => {
             {localization.dataServiceForm.fieldLabel.format}
           </TitleWithHelpTextAndTag>
         }
+        size='sm'
       >
         <FormikReferenceDataCombobox
           onChange={(event) => setSearchQueryFileTypes(event.target.value)}
