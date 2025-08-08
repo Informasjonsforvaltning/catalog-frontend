@@ -198,7 +198,7 @@ export const useImportRdfConcepts = (catalogId: string) => {
   });
 };
 
-export const useImportConcepts = (catalogId: string, setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
+export const useImportConcepts = (catalogId: string, setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   return useMutation({
@@ -207,7 +207,8 @@ export const useImportConcepts = (catalogId: string, setIsLoading: React.Dispatc
       if (!validOrganizationNumber(catalogId)) {
         return Promise.reject('Invalid catalog id');
       }
-      setIsLoading(true)
+      if(setIsLoading)
+        setIsLoading(true)
 
       const content = await file.text();
       let parsedText: ConceptImport[] = [];
@@ -218,7 +219,8 @@ export const useImportConcepts = (catalogId: string, setIsLoading: React.Dispatc
         parsedText = await attemptToParseCsvFile(content);
       } else {
         Promise.reject('Invalid file type');
-        setIsLoading(false)
+        if(setIsLoading)
+          setIsLoading(false)
       }
 
       const concepts = parsedText?.map(
