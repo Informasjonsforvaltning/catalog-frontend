@@ -169,7 +169,7 @@ const attemptToParseCsvFile = (text: string): Promise<ConceptImport[]> => {
   });
 };
 
-export const useImportRdfConcepts = (catalogId: string) => {
+export const useImportRdfConcepts = (catalogId: string, abortSignal: AbortSignal) => {
   const { data: session } = useSession();
   const router = useRouter();
   const accessToken = session?.accessToken ?? '';
@@ -181,7 +181,8 @@ export const useImportRdfConcepts = (catalogId: string) => {
         return Promise.reject('Invalid organization number');
       }
 
-      const location = await importRdfConcepts(mutationProps.fileContent, mutationProps.contentType, catalogId, accessToken);
+      const location = await importRdfConcepts(mutationProps.fileContent, mutationProps.contentType,
+        catalogId, accessToken, abortSignal);
 
       if (location) {
         const resultId = location.split('/').pop();
@@ -198,7 +199,10 @@ export const useImportRdfConcepts = (catalogId: string) => {
   });
 };
 
-export const useImportConcepts = (catalogId: string, setIsLoading: React.Dispatch<React.SetStateAction<boolean>>) => {
+export const useImportConcepts = (
+  catalogId: string,
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  abortController: AbortController) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   return useMutation({
@@ -237,6 +241,7 @@ export const useImportConcepts = (catalogId: string, setIsLoading: React.Dispatc
         const response = await fetch(`/api/catalogs/${catalogId}/concepts/import`, {
           method: 'POST',
           body: JSON.stringify(concepts),
+          signal: abortController.signal
         });
 
         if (response.status === 401) {

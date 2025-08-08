@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { localization as loc, localization } from '@catalog-frontend/utils';
+import { localization } from '@catalog-frontend/utils';
 import { LinkButton, UploadButton } from '@catalog-frontend/ui';
 import { useImportConcepts } from '../../hooks/import';
 import { Button, Modal, Spinner } from '@digdir/designsystemet-react';
@@ -15,12 +15,18 @@ interface Props {
 export function ImportModal({ catalogId }: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const modalRef = useRef<HTMLDialogElement>(null);
+  const abortController = new AbortController();
 
-  const importConcepts = useImportConcepts(catalogId, setIsLoading);
+  const importConcepts = useImportConcepts(catalogId, setIsLoading, abortController);
 
   const onImportUpload = (event) => {
     importConcepts.mutate(event.target.files[0], { onError: (error) => alert('Import failed: ' + error) });
   };
+
+  const cancelImport = () => {
+    abortController.abort()
+    setIsLoading(false);
+  }
 
   return (
     <Modal.Root>
@@ -39,6 +45,14 @@ export function ImportModal({ catalogId }: Props) {
         </Modal.Header>
         <Modal.Content className={styles.content}>
           <div className={styles.modalContent}>
+            {isLoading && (
+              <div className={styles.spinnerOverlay}>
+                <Spinner
+                  title={localization.loading}
+                  size='large'
+                />
+              </div>
+            )}
             <Markdown>{localization.concept.importModal.conceptUploadDescription}</Markdown>
             <br />
             <Markdown>{localization.concept.importModal.resultDescription}</Markdown>
@@ -53,12 +67,18 @@ export function ImportModal({ catalogId }: Props) {
         </Modal.Content>
         <Modal.Footer>
           <div className={styles.buttons}>
-            {isLoading ? (
-              <Spinner
-                title={localization.loading}
-                size='large'
-              />
-            ) : (
+          {isLoading && (
+            <>
+              <Button
+                variant={'secondary'}
+                onClick={cancelImport}
+              >
+                {localization.termsOfUse.cancel}
+              </Button>
+            </>
+          )}
+
+          {!isLoading && (
               <>
                 <LinkButton
                   href={`/catalogs/${catalogId}/concepts/import-results`}
@@ -81,12 +101,13 @@ export function ImportModal({ catalogId }: Props) {
                   onUpload={onImportUpload}
                 >
                   <FileImportIcon fontSize='1.5rem' />
-                  <span>{loc.button.importConcept}</span>
+                  <span>{localization.button.importConcept}</span>
                 </UploadButton>
 
                 <ImportConceptRdf
                   catalogId={catalogId}
                   setIsLoading={setIsLoading}
+                  abortSignal={abortController.signal}
                 />
               </>
             )}
