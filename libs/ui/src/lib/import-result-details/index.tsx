@@ -40,7 +40,7 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler }: Pr
                 ? localization.importResult.completed
                 : localization.importResult.failed}
             </Tag>
-            <div>{formattedCreateDate}</div>
+            <div className={styles.titleTags}>{formattedCreateDate}</div>
           </div>
         </div>
         <Button
