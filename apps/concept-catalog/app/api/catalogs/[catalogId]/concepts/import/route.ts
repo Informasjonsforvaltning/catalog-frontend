@@ -10,7 +10,7 @@ export const POST = async (req: NextRequest, props) => {
   return await withValidSessionForApi(async (session) => {
     try {
       const concepts = await req.json();
-      const response = await importConcepts(concepts, catalogId, session?.accessToken);
+      const response = await importConcepts(concepts, session?.accessToken);
       const location = response?.headers?.get("location")
       const resultId = location?.split('/').pop();
 

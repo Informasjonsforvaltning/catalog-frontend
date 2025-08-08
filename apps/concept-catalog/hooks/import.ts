@@ -7,7 +7,7 @@ import { useSession } from 'next-auth/react';
 import { importRdfConcepts } from '@catalog-frontend/data-access';
 import { useRouter } from 'next/navigation';
 
-type ConceptImport = Omit<Concept, 'ansvarligVirksomhet'>;
+type ConceptImport = Omit<Concept, 'id' | 'ansvarligVirksomhet'>;
 
 const mapToSingleValue = (csvMap: Record<string, string[]>, key: string) => {
   const value = csvMap[key];
@@ -87,15 +87,11 @@ const mapKilde = (
     : undefined;
 };
 
-const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Concept, 'ansvarligVirksomhet'> => {
+const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Concept, 'id' | 'ansvarligVirksomhet'> => {
   const csvMap = createCsvMap(columnHeaders, data);
   const version = mapToSingleValue(csvMap, 'versjon') || '0.1.0';
-  const uri = mapToSingleValue(csvMap, 'id')
-  if(!uri)
-    console.error("Forventet kolonnenavn 'uri' i CSV-filen")
 
   return {
-    id: uri?? null,
     originaltBegrep: mapToSingleValue(csvMap, 'originalt_begrep') ?? '',
     versjonsnr: {
       major: parseInt(version.split('.')?.[0] ?? '0', 10),
@@ -223,6 +219,8 @@ export const useImportConcepts = (catalogId: string, setIsLoading?: React.Dispat
           setIsLoading(false)
       }
 
+      parsedText.forEach((line) => {console.log("Parsed line: ", line)});
+
       const concepts = parsedText?.map(
         (concept) =>
           ({
@@ -248,10 +246,6 @@ export const useImportConcepts = (catalogId: string, setIsLoading?: React.Dispat
         if (response.status > 399) {
           const errorMessage = await response.text();
           return Promise.reject(errorMessage);
-        }
-
-        if(response.url) {
-          await router.push(response.url);
         }
 
         return Promise.resolve();
