@@ -4,8 +4,7 @@ export const importRdfConcepts = async (
   fileContent: string,
   contentType: string,
   catalogId: string,
-  accessToken: string,
-  abortSignal: AbortSignal
+  accessToken: string
 ) => {
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}`;
 
@@ -17,7 +16,6 @@ export const importRdfConcepts = async (
     },
     method: 'POST',
     body: fileContent,
-    signal: abortSignal,
   };
 
 

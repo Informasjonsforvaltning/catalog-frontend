@@ -8,15 +8,14 @@ import { useImportRdfConcepts } from '@concept-catalog/hooks/import';
 interface Props {
   catalogId: string,
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  abortSignal: AbortSignal;
 }
 
-export const ImportConceptRdf = ( { catalogId, setIsLoading, abortSignal }: Props) => {
+export const ImportConceptRdf = ( { catalogId, setIsLoading }: Props) => {
 
   const extension2Type: Map<string, string> = new Map<string, string>();
   extension2Type.set('.ttl', 'text/turtle');
   const allowedExtensions = Array.from(extension2Type.keys());
-  const uploadRdf = useImportRdfConcepts(catalogId, abortSignal);
+  const uploadRdf = useImportRdfConcepts(catalogId);
   const onFileUpload = async (event) => {
     const file: File = event.target.files?.[0];
     if (file) {
