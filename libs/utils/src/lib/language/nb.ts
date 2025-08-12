@@ -198,7 +198,7 @@ export const nb = {
     edit: 'Rediger',
     expandAll: 'Vis alle felter',
     harvestDataset: 'Høst spesifikasjon fra katalog',
-    importConcept: 'Importer CSV/JSON',
+    importConceptCSV: 'Importer CSV/JSON',
     importConceptRDF: 'Importer RDF',
     importLogo: 'Importer logo',
     importDataService: 'Importer OpenAPI',
