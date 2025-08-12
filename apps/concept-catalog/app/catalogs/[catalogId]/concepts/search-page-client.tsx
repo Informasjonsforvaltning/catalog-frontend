@@ -409,39 +409,36 @@ export const SearchPageClient = ({
                   </Select>
                 </div>
                 <div className={styles.buttons}>
-                    <>
-                      {false && hasAdminPermission && <ImportModal catalogId={catalogId} />}
-                      {hasAdminPermission && (
-                        <UploadButton
-                          size='sm'
-                          variant='secondary'
-                          allowedMimeTypes={[
-                            'text/csv',
-                            'text/x-csv',
-                            'text/plain',
-                            'application/csv',
-                            'application/x-csv',
-                            'application/vnd.ms-excel',
-                            'application/json',
-                          ]}
-                          onUpload={onImportUpload}
-                        >
-                          <FileImportIcon fontSize='1.5rem' />
-                          <span>{localization.button.importConcept}</span>
-                        </UploadButton>
-                      )}
-                      {hasWritePermission && (
-                        <LinkButton
-                          href={`/catalogs/${catalogId}/concepts/new`}
-                          size='sm'
-                        >
-                          <>
-                            <PlusCircleIcon fontSize='1.5rem' />
-                            <span>{localization.button.createConcept}</span>
-                          </>
-                        </LinkButton>
-                      )}
-                    </>
+                  {hasAdminPermission && (
+                    <UploadButton
+                      size='sm'
+                      variant='secondary'
+                      allowedMimeTypes={[
+                        'text/csv',
+                        'text/x-csv',
+                        'text/plain',
+                        'application/csv',
+                        'application/x-csv',
+                        'application/vnd.ms-excel',
+                        'application/json',
+                      ]}
+                      onUpload={onImportUpload}
+                    >
+                      <FileImportIcon fontSize='1.5rem' />
+                      <span>{localization.button.importConceptCSV}</span>
+                    </UploadButton>
+                  )}
+                  {hasWritePermission && (
+                    <LinkButton
+                      href={`/catalogs/${catalogId}/concepts/new`}
+                      size='sm'
+                    >
+                      <>
+                        <PlusCircleIcon fontSize='1.5rem' />
+                        <span>{localization.button.createConcept}</span>
+                      </>
+                    </LinkButton>
+                  )}
                 </div>
               </div>
               <FilterChips />
