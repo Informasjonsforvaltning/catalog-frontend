@@ -246,8 +246,9 @@ export const useImportConcepts = (catalogId: string) => {
           return Promise.reject(errorMessage);
         }
 
-        if(response.url) {
-          await router.push(response.url);
+        let resultId  = await response.json();
+        if(resultId) {
+            router.push(`/catalogs/${catalogId}/concepts/import-results/${resultId}`);
         }
 
         return Promise.resolve();
