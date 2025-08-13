@@ -6,17 +6,22 @@ import { isEmpty } from 'lodash';
 import { useRouter } from 'next/navigation';
 import { SearchableField, QuerySort, ConceptsPageSettings } from '@catalog-frontend/types';
 import {
-  UploadButton,
   SearchHitContainer,
   Spinner,
   SearchHitsLayout,
   Select,
   LinkButton,
   SearchField,
+  UploadButton,
 } from '@catalog-frontend/ui';
-import { getTranslateText, capitalizeFirstLetter, localization as loc, localization, setClientConceptsPageSettings } from '@catalog-frontend/utils';
+import {
+  getTranslateText,
+  capitalizeFirstLetter,
+  localization,
+  setClientConceptsPageSettings
+} from '@catalog-frontend/utils';
 import { Chip, Tabs } from '@digdir/designsystemet-react';
-import { PlusCircleIcon, FileImportIcon } from '@navikt/aksel-icons';
+import { FileImportIcon, PlusCircleIcon } from '@navikt/aksel-icons';
 import {
   SortOption,
   getSelectOptions,
@@ -27,6 +32,7 @@ import SearchFilter from '@concept-catalog/components/search-filter';
 import { useImportConcepts } from '@concept-catalog/hooks/import';
 import ConceptSearchHits from '@concept-catalog/components/concept-search-hits';
 import styles from './search-page.module.scss';
+import ImportModal from '@concept-catalog/components/import-modal';
 
 export type FilterType = 'published' | 'status' | 'assignedUser' | 'subject' | 'internalFields' | 'label';
 
@@ -175,7 +181,7 @@ export const SearchPageClient = ({
   });
 
   const importConcepts = useImportConcepts(catalogId);
-  const sortOptions = getSelectOptions(loc.search.sortOptions).map((opt) => (
+  const sortOptions = getSelectOptions(localization.search.sortOptions).map((opt) => (
     <option
       key={`sortOption-${opt.value}`}
       value={opt.value}
@@ -333,7 +339,7 @@ export const SearchPageClient = ({
               key={`published-${index}`}
               onClick={() => removeFilter(filter, 'published')}
             >
-              {filter === 'published' ? loc.publicationState.published : loc.publicationState.unpublished}
+              {filter === 'published' ? localization.publicationState.published : localization.publicationState.unpublished}
             </Chip.Removable>
           ))}
           {filterInternalFields &&
@@ -345,7 +351,7 @@ export const SearchPageClient = ({
                     removeFilter({ key: key, value: value }, 'internalFields');
                   }}
                 >
-                  {`${getTranslateText(getInternalFields(key).label)}: ${value === 'true' ? loc.yes : loc.no}`}
+                  {`${getTranslateText(getInternalFields(key).label)}: ${value === 'true' ? localization.yes : localization.no}`}
                 </Chip.Removable>
               ));
             })}
@@ -380,9 +386,9 @@ export const SearchPageClient = ({
                 <div className={styles.searchFieldWrapper}>
                   <SearchField
                     className={styles.searchField}
-                    placeholder={loc.search.search}
+                    placeholder={localization.search.search}
                     value={searchTerm}
-                    options={getSelectOptions(loc.search.fields).map(({ label, value }) => ({
+                    options={getSelectOptions(localization.search.fields).map(({ label, value }) => ({
                       label,
                       value,
                       default: value === 'alleFelter',
@@ -420,7 +426,7 @@ export const SearchPageClient = ({
                       onUpload={onImportUpload}
                     >
                       <FileImportIcon fontSize='1.5rem' />
-                      <span>{loc.button.importConcept}</span>
+                      <span>{localization.button.importConceptCSV}</span>
                     </UploadButton>
                   )}
                   {hasWritePermission && (
@@ -430,7 +436,7 @@ export const SearchPageClient = ({
                     >
                       <>
                         <PlusCircleIcon fontSize='1.5rem' />
-                        <span>{loc.button.createConcept}</span>
+                        <span>{localization.button.createConcept}</span>
                       </>
                     </LinkButton>
                   )}

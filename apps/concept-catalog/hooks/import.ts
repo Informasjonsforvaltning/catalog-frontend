@@ -3,6 +3,9 @@ import type { ParseResult } from 'papaparse';
 import { Concept } from '@catalog-frontend/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { validOrganizationNumber } from '@catalog-frontend/utils';
+import { useSession } from 'next-auth/react';
+import { importRdfConcepts } from '@catalog-frontend/data-access';
+import { useRouter } from 'next/navigation';
 
 type ConceptImport = Omit<Concept, 'id' | 'ansvarligVirksomhet'>;
 
@@ -162,14 +165,46 @@ const attemptToParseCsvFile = (text: string): Promise<ConceptImport[]> => {
   });
 };
 
-export const useImportConcepts = (catalogId: string) => {
+export const useImportRdfConcepts = (catalogId: string) => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const accessToken = session?.accessToken ?? '';
+  return useMutation({
+    mutationKey: ['import-Concepts-RDF'],
+    mutationFn: async ({ ...mutationProps }: {fileContent: string, contentType: string}) => {
+      if (!validOrganizationNumber(catalogId)) {
+        console.log("Invalid organization number", catalogId);
+        return Promise.reject('Invalid organization number');
+      }
+
+      const location = await importRdfConcepts(mutationProps.fileContent, mutationProps.contentType, catalogId, accessToken);
+
+      if (location) {
+        const resultId = location.split('/').pop();
+        router.push(`/catalogs/${catalogId}/concepts/import-results/${resultId}`);
+      }
+
+    },
+    onSuccess: () => {
+      console.log('Concept RDF file has been uploaded successfully!');
+    },
+    onError: (error: any) => {
+      console.error('Error uploading concept RDF file');
+    }
+  });
+};
+
+export const useImportConcepts = (catalogId: string, setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>) => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   return useMutation({
     mutationKey: ['importConcepts'],
     mutationFn: async (file: File) => {
       if (!validOrganizationNumber(catalogId)) {
         return Promise.reject('Invalid catalog id');
       }
+      if(setIsLoading)
+        setIsLoading(true)
 
       const content = await file.text();
       let parsedText: ConceptImport[] = [];
@@ -180,7 +215,11 @@ export const useImportConcepts = (catalogId: string) => {
         parsedText = await attemptToParseCsvFile(content);
       } else {
         Promise.reject('Invalid file type');
+        if(setIsLoading)
+          setIsLoading(false)
       }
+
+      parsedText.forEach((line) => {console.log("Parsed line: ", line)});
 
       const concepts = parsedText?.map(
         (concept) =>
