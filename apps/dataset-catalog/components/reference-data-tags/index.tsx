@@ -33,5 +33,5 @@ export const ReferenceDataTags = ({ values, data }: Props) => {
     return <>{renderTag(values)}</>;
   }
 
-  return <ul className={styles.list}>{values.map((item) => item?.uri && renderTag(item.uri))}</ul>;
+  return <ul className={styles.list}>{values?.map((item) => item?.uri && renderTag(item.uri))}</ul>;
 };

@@ -3,22 +3,23 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { Formik, Form, FormikProps } from 'formik';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { Alert, Checkbox, Paragraph, Spinner } from '@digdir/designsystemet-react';
-import { DataStorage, formatISO, getTranslateText, localization } from '@catalog-frontend/utils';
+import { DataStorage, formatISO, getTranslateText, localization, safeValues, deepMergeWithUndefinedHandling } from '@catalog-frontend/utils';
 import type {
   CodeListsResult,
   Concept,
+  Definisjon,
   FieldsResult,
   ReferenceDataCode,
   StorageData,
+  UnionRelation,
   UsersResult,
 } from '@catalog-frontend/types';
 import {
   Button,
   FormLayout,
   FormikAutoSaver,
-  FormikAutoSaverRef,
   NotificationCarousel,
   HelpMarkdown,
   ConfirmModal,
@@ -39,12 +40,13 @@ import { InternalSection } from './components/internal-section';
 import { ContactSection } from './components/contact-section';
 import styles from './concept-form.module.scss';
 import { get, isEmpty, isEqual } from 'lodash';
+import { UnionRelationWithIndex, updateUnionRelation } from '@concept-catalog/utils/relation-utils';
 
 type Props = {
   afterSubmit?: () => void;
   autoSave?: boolean;
   autoSaveId?: string;
-  autoSaveStorage?: DataStorage<StorageData>;
+  autoSaveStorage: DataStorage<StorageData>;
   catalogId: string;
   concept?: Concept;
   conceptStatuses: ReferenceDataCode[];
@@ -64,26 +66,26 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
   ...(isValid
     ? []
     : [
-        <Alert
-          key={1}
-          size='sm'
-          severity='danger'
-          style={{ background: 'none', border: 'none', padding: 0 }}
-        >
-          {localization.validation.formError}
-        </Alert>,
-      ]),
+      <Alert
+        key={1}
+        size='sm'
+        severity='danger'
+        style={{ background: 'none', border: 'none', padding: 0 }}
+      >
+        {localization.validation.formError}
+      </Alert>,
+    ]),
   ...(hasUnsavedChanges
     ? [
-        <Alert
-          key={1}
-          size='sm'
-          severity='warning'
-          style={{ background: 'none', border: 'none', padding: 0 }}
-        >
-          {localization.validation.unsavedChanges}
-        </Alert>,
-      ]
+      <Alert
+        key={1}
+        size='sm'
+        severity='warning'
+        style={{ background: 'none', border: 'none', padding: 0 }}
+      >
+        {localization.validation.unsavedChanges}
+      </Alert>,
+    ]
     : []),
 ];
 
@@ -109,7 +111,6 @@ const ConceptForm = ({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<Concept>>(null);
-  const autoSaveRef = useRef<FormikAutoSaverRef>(null);
 
   const restoreOnRender = Boolean(searchParams.get('restore'));
   const validateOnRender = Boolean(searchParams.get('validate'));
@@ -127,7 +128,7 @@ const ConceptForm = ({
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarFadeIn(fadeIn);
-    if(fadeIn) {
+    if (fadeIn) {
       setShowSnackbar(false);
       setTimeout(() => setShowSnackbar(true), 10);
     } else {
@@ -165,7 +166,7 @@ const ConceptForm = ({
     interneFelt = {},
     ...rest
   }: Concept) => {
-    return {
+    const values = {
       id,
       anbefaltTerm,
       definisjon,
@@ -195,6 +196,8 @@ const ConceptForm = ({
       interneFelt,
       ...rest,
     };
+
+    return safeValues(values);
   };
 
   const subjectCodeList = codeListsResult?.codeLists?.find(
@@ -208,7 +211,7 @@ const ConceptForm = ({
   const handleConfirmCancel = () => {
     setShowCancelConfirm(false);
 
-    autoSaveRef.current?.discard();
+    autoSaveStorage?.delete();
     setIsCanceled(true);
 
     if (onCancel) {
@@ -294,7 +297,7 @@ const ConceptForm = ({
               }
 
               // Discard stored data
-              autoSaveRef.current?.discard();
+              autoSaveStorage?.delete();
 
               if (afterSubmit) {
                 afterSubmit();
@@ -307,7 +310,7 @@ const ConceptForm = ({
           }
         }}
       >
-        {({ errors, dirty, initialValues, isValid, isSubmitting, isValidating, values, submitForm, setValues }) => {
+        {({ errors, dirty, initialValues, isValid, isSubmitting, isValidating, values, submitForm, setValues, setFieldValue }) => {
           const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
           const hasError = (fields: (keyof Concept)[]) => fields.some((field) => Object.keys(errors).includes(field));
 
@@ -355,7 +358,27 @@ const ConceptForm = ({
               return window.location.replace(`/catalogs/${catalogId}/${entityType}/${data.id}/edit?restore=1`);
             }
 
-            setValues(data.values);
+            const restoreValues: Concept = deepMergeWithUndefinedHandling({ ...initialValues }, data.values);
+            setValues(restoreValues);
+
+            // Handle relation data from secondary storage
+            const restoreRelationData = autoSaveStorage?.getSecondary('conceptFormRelation');
+            if (restoreRelationData && (restoreRelationData?.id === autoSaveId)) {
+              const relationValues: { rel: UnionRelation; prev: UnionRelationWithIndex } = restoreRelationData.values;
+              updateUnionRelation(relationValues.rel, relationValues.prev, restoreValues, setFieldValue);
+              // Delete relation data from secondary storage since it is merged with the main data
+              autoSaveStorage?.deleteSecondary('conceptFormRelation');
+            }
+
+            // Handle definition data from secondary storage
+            const restoreDefinitionData = autoSaveStorage?.getSecondary('conceptFormDefinition');
+            if (restoreDefinitionData && (restoreDefinitionData?.id === autoSaveId)) {
+              const definitionValues: { definition: Definisjon; fieldName: string } = restoreDefinitionData.values;
+              setFieldValue(definitionValues.fieldName, definitionValues.definition);
+              // Delete definition data from secondary storage since it is merged with the main data
+              autoSaveStorage?.deleteSecondary('conceptFormDefinition');
+            }
+
             showSnackbarMessage({ message: localization.snackbar.restoreSuccessfull, severity: 'success' });
           };
 
@@ -369,7 +392,6 @@ const ConceptForm = ({
                 <Form>
                   {autoSave && autoSaveStorage && (
                     <FormikAutoSaver
-                      ref={autoSaveRef}
                       id={autoSaveId}
                       storage={autoSaveStorage}
                       restoreOnRender={restoreOnRender}
@@ -394,8 +416,8 @@ const ConceptForm = ({
                         changed={
                           markDirty
                             ? dirtyFields.filter((field) =>
-                                ['anbefaltTerm', 'tillattTerm', 'frarådetTerm'].includes(field),
-                              )
+                              ['anbefaltTerm', 'tillattTerm', 'frarådetTerm'].includes(field),
+                            )
                             : []
                         }
                         readOnly={readOnly}
@@ -415,13 +437,15 @@ const ConceptForm = ({
                       error={hasError(['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'])}
                     >
                       <DefinitionSection
+                        autoSaveId={autoSaveId}
+                        autoSaveStorage={autoSaveStorage}
                         changed={
                           markDirty
                             ? dirtyFields.filter((field) =>
-                                ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(
-                                  field,
-                                ),
-                              )
+                              ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(
+                                field,
+                              ),
+                            )
                             : []
                         }
                         readOnly={readOnly}
@@ -503,6 +527,8 @@ const ConceptForm = ({
                       ])}
                     >
                       <RelationSection
+                        autoSaveId={autoSaveId}
+                        autoSaveStorage={autoSaveStorage}
                         catalogId={catalogId}
                         changed={markDirty ? dirtyFields : []}
                         readOnly={readOnly}
@@ -595,10 +621,9 @@ const ConceptForm = ({
               </div>
 
               {showSnackbar && (
-                <Snackbar>
+                <Snackbar fadeIn={snackbarFadeIn}>
                   <Snackbar.Item
                     severity={snackbarSeverity}
-                    fadeIn={snackbarFadeIn}
                     onClose={() => {
                       setShowSnackbar(false);
                     }}

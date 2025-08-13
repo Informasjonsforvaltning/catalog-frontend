@@ -30,10 +30,17 @@ interface Props {
   dataServices: DataService[];
   catalogId: string;
   hasWritePermission: boolean;
+  hasAdminPermission: boolean;
   distributionStatuses: any;
 }
 
-const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, distributionStatuses }: Props) => {
+const DataServicesPageClient = ({
+  dataServices,
+  catalogId,
+  hasWritePermission,
+  hasAdminPermission,
+  distributionStatuses,
+}: Props) => {
   const [filteredDataServices, setFilteredDataServices] = useState<DataService[]>(dataServices);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [sortType, setSortType] = useState<SortTypes | ''>('');
@@ -158,14 +165,12 @@ const DataServicesPageClient = ({ dataServices, catalogId, hasWritePermission, d
               </Select>
             </div>
             <div className={styles.buttons}>
+              {hasAdminPermission && <ImportModal catalogId={catalogId} />}
               {hasWritePermission && (
-                <>
-                  <ImportModal catalogId={catalogId} />
-                  <LinkButton href={`/catalogs/${catalogId}/data-services/new`}>
-                    <PlusCircleIcon />
-                    {localization.dataServiceCatalog.button.newDataService}
-                  </LinkButton>
-                </>
+                <LinkButton href={`/catalogs/${catalogId}/data-services/new`}>
+                  <PlusCircleIcon />
+                  {localization.dataServiceCatalog.button.newDataService}
+                </LinkButton>
               )}
             </div>
           </div>

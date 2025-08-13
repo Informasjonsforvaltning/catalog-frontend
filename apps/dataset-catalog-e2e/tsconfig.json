@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "module": "commonjs",
+    "types": ["node", "playwright"],
+    "esModuleInterop": true
+  },
+  "include": ["src/**/*.ts"]
+} 

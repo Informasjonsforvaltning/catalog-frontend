@@ -1,6 +1,6 @@
 import { Dataset, UriWithLabel } from '@catalog-frontend/types';
 import { accessRightPublic, accessRights, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Card, Table, Tag } from '@digdir/designsystemet-react';
+import { Card, Link, Table, Tag } from '@digdir/designsystemet-react';
 import { useMemo } from 'react';
 import styles from '../details-columns.module.css';
 import { identity, isEmpty, pickBy, trim } from 'lodash';
@@ -53,16 +53,17 @@ export const AccessRightsDetails = ({ dataset, language }: Props) => {
 
   return (
     <>
-      {dataset?.accessRights && (
+      {(dataset?.accessRights || allLegalBases.length > 0) && (
         <div className={styles.infoCardItems}>
-          <Tag
-            size='sm'
-            color='info'
-          >
-            {dataset.accessRights?.uri &&
-              accessRightsOptions.find((option) => option.value === dataset.accessRights?.uri)?.label}
-          </Tag>
-          {dataset?.accessRights.uri !== accessRightPublic.uri && allLegalBases.length > 0 && (
+          {!isEmpty(dataset.accessRights?.uri) && (
+            <Tag
+              size='sm'
+              color='info'
+            >
+              {accessRightsOptions.find((option) => option.value === dataset.accessRights?.uri)?.label}
+            </Tag>
+          )}
+          {allLegalBases.length > 0 && (
             <Card>
               <h4>{localization.datasetForm.fieldLabel.legalBasis}</h4>
               <Table
@@ -82,7 +83,9 @@ export const AccessRightsDetails = ({ dataset, language }: Props) => {
                       item?.uriWithLabel && (
                         <Table.Row key={`${item.type}-tableRow-${i}`}>
                           <Table.Cell>{getTranslateText(item?.uriWithLabel.prefLabel, language)}</Table.Cell>
-                          <Table.Cell>{item?.uriWithLabel.uri}</Table.Cell>
+                          <Table.Cell>
+                            <Link href={item?.uriWithLabel.uri}>{item?.uriWithLabel.uri}</Link>
+                          </Table.Cell>
                           <Table.Cell>{localization.datasetForm.fieldLabel[item?.type]}</Table.Cell>
                         </Table.Row>
                       ),

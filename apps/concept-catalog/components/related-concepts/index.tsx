@@ -8,14 +8,14 @@ import SeeAlso from './see-also';
 import IsReplacedBy from './is-replaced-by';
 import { conceptIdFromUriRegex } from '@catalog-frontend/utils';
 
-interface Props {
+type RelatedConceptsProps = {
   conceptRelations: UnionRelation[];
   relatedConcepts: RelatedConcept[];
   validFromIncluding: string | null | undefined;
   validToIncluding: string | null | undefined;
   title: LocalizedStrings;
-  language?: string;
-}
+  language: string;
+};
 
 const RelatedConcepts = ({
   conceptRelations,
@@ -24,7 +24,7 @@ const RelatedConcepts = ({
   validFromIncluding,
   title,
   language,
-}: Props) => {
+}: RelatedConceptsProps) => {
   const associativeRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'assosiativ') ?? []; //ja
   const partitiveRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'partitiv') ?? []; //her //
   const genericRelations = conceptRelations.filter((relasjon) => relasjon.relasjon === 'generisk') ?? [];

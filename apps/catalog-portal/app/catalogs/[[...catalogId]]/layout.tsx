@@ -1,21 +1,12 @@
 import { Layout } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 
-const PageLayout = async (
-  props: {
-    children: React.ReactNode;
-    params: Promise<{ catalogId: string }>;
-  }
-) => {
+const PageLayout = async (props: { children: React.ReactNode; params: Promise<{ catalogId: string }> }) => {
   const params = await props.params;
 
-  const {
-    catalogId
-  } = params;
+  const { catalogId } = params;
 
-  const {
-    children
-  } = props;
+  const { children } = props;
 
   return (
     <Layout
@@ -23,7 +14,7 @@ const PageLayout = async (
       fdkRegistrationBaseUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       adminGuiBaseUrl={process.env.ADMIN_GUI_BASE_URI}
       fdkBaseUrl={process.env.FDK_BASE_URI}
-      termsOfUseUrl={`${process.env.FDK_REGISTRATION_BASE_URI}/terms-and-conditions/${catalogId}`}
+      termsOfUseUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/terms-and-conditions/${catalogId}`}
       catalogTitle={localization.catalogOverview}
       displayFooter={false}
     >

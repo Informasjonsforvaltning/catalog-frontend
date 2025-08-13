@@ -6,38 +6,46 @@ const isAfterNow = (date: number) => {
 };
 
 const refreshToken = async (token: any) => {
-  // If the access token has expired, try to refresh it
-  try {
-    // https://accounts.google.com/.well-known/openid-configuration
-    // We need the `token_endpoint`.
-    const response = await fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`, {
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        client_id: `${process.env.KEYCLOAK_ID}`,
-        client_secret: `${process.env.KEYCLOAK_SECRET}`,
-        grant_type: 'refresh_token',
-        refresh_token: `${token.refresh_token}`,
-      }),
-      method: 'POST',
-    });
+  const maxRetries = 3;
+  let attempt = 0;
+  let lastError;
 
-    const tokens = await response.json();
+  while (attempt < maxRetries) {
+    try {
+      const response = await fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`, {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          client_id: `${process.env.KEYCLOAK_ID}`,
+          client_secret: `${process.env.KEYCLOAK_SECRET}`,
+          grant_type: 'refresh_token',
+          refresh_token: `${token.refresh_token}`,
+        }),
+        method: 'POST',
+      });
 
-    if (!response.ok) throw tokens;
+      const tokens = await response.json();
 
-    return {
-      ...token, // Keep the previous token properties
-      access_token: tokens.access_token,
-      expires_at: Math.floor(Date.now() / 1000 + Number(tokens.expires_in)),
-      // Fall back to old refresh token, but note that
-      // many providers may only allow using a refresh token once.
-      refresh_token: tokens.refresh_token ?? token.refresh_token,
-    };
-  } catch (error) {
-    // The error property will be used client-side to handle the refresh token error
-    console.error('Failed to refresh access token:', error);
-    return { ...token, error: 'RefreshAccessTokenError' as const };
+      if (!response.ok) throw tokens;
+
+      return {
+        ...token,
+        access_token: tokens.access_token,
+        expires_at: Math.floor(Date.now() / 1000 + Number(tokens.expires_in)),
+        refresh_token: tokens.refresh_token ?? token.refresh_token,
+      };
+    } catch (error) {
+      lastError = error;
+      console.error(`Failed to refresh access token (attempt ${attempt + 1}):`, error);
+      attempt++;
+      if (attempt < maxRetries) {
+        // Optional: add a short delay before retrying
+        await new Promise((resolve) => setTimeout(resolve, 500));
+      }
+    }
   }
+
+  // The error property will be used client-side to handle the refresh token error
+  return { ...token, error: 'RefreshAccessTokenError' as const, refreshError: lastError };
 };
 
 export const authOptions: AuthOptions = {
@@ -59,6 +67,13 @@ export const authOptions: AuthOptions = {
       },
     }),
   ],
+  pages: {
+    signIn: '/auth/signin',
+    signOut: '/auth/signout',
+    error: '/auth/signin',
+    verifyRequest: '/auth/signin',
+    newUser: '/auth/signin',
+  },
   callbacks: {
     async session({ session, token }: any) {
       session.user = {

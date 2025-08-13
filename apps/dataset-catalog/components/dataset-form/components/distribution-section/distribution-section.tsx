@@ -1,36 +1,156 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormikContext } from 'formik';
-import { Box, Button, Card, Heading, Paragraph, Tag } from '@digdir/designsystemet-react';
+import { Box, Button, Card, ErrorMessage, Heading, Paragraph, Tag } from '@digdir/designsystemet-react';
 import { ChevronDownIcon, ChevronUpIcon, PencilWritingIcon } from '@navikt/aksel-icons';
-import { Dataset, Distribution, ReferenceDataCode } from '@catalog-frontend/types';
+import { Dataset, Distribution, ReferenceDataCode, Search, StorageData } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { useSearchFileTypeByUri } from '../../../../hooks/useReferenceDataSearch';
+import { getTranslateText, localization, DataStorage } from '@catalog-frontend/utils';
 import { DistributionModal } from './distribution-modal';
 import { DistributionDetails } from './distribution-details';
 import styles from './distributions.module.scss';
-import { isEmpty } from 'lodash';
+import { get, isEmpty } from 'lodash';
+import {
+  ReferenceDataGraphql,
+  searchReferenceDataByUri,
+  searchResourcesWithFilter,
+} from '@catalog-frontend/data-access';
 
 type Props = {
   referenceDataEnv: string;
   searchEnv: string;
   openLicenses: ReferenceDataCode[];
+  autoSaveId?: string;
+  autoSaveStorage?: DataStorage<StorageData>;
 };
 
-export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses }: Props) => {
-  const { values, setFieldValue } = useFormikContext<Dataset>();
-  const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+export const DistributionSection = ({
+  referenceDataEnv,
+  searchEnv,
+  openLicenses,
+  autoSaveId,
+  autoSaveStorage,
+}: Props) => {
+  const { values, errors, setFieldValue } = useFormikContext<Dataset>();
+  const [expandedIndexDistribution, setExpandedIndexDistribution] = useState<number | null>(null);
   const [expandedIndexExampleData, setExpandedIndexExampleData] = useState<number | null>(null);
 
-  const getSelectedFileTypes = (): string[] => {
-    const distributionFormats = values.distribution?.map((val) => val?.format) || [];
-    const sampleFormats = values.sample?.map((val) => val?.format) || [];
-    return [...distributionFormats, ...sampleFormats].flat().filter((item) => item !== undefined);
+  const [selectedFileTypeUris, setSelectedFileTypeUris] = useState<string[]>();
+  const [selectedMediaTypeUris, setSelectedMediaTypeUris] = useState<string[]>();
+  const [selectedDataServiceUris, setSelectedDataServiceUris] = useState<string[]>();
+  const [selectedFileTypes, setSelectedFileTypes] = useState<ReferenceDataCode[]>([]);
+  const [selectedMediaTypes, setSelectedMediaTypes] = useState<ReferenceDataCode[]>([]);
+  const [selectedDataServices, setSelectedDataServices] = useState<Search.SearchObject[]>([]);
+
+  const handleDistributionChange = (
+    updatedDist: Distribution,
+    distributionType: 'distribution' | 'sample',
+    index: number,
+  ) => {
+    // Save to secondary storage for auto-save
+    if (autoSaveStorage && autoSaveId) {
+      autoSaveStorage.setSecondary('datasetFormDistribution', {
+        id: autoSaveId,
+        values: {
+          distribution: updatedDist,
+          distributionType,
+          index,
+        },
+        lastChanged: new Date().toISOString(),
+      });
+    }
   };
 
-  const { data: selectedFileTypes } = useSearchFileTypeByUri(getSelectedFileTypes(), referenceDataEnv);
+  const handleDistributionCancel = (distributionType: 'distribution' | 'sample') => {
+    // Clean up secondary storage on cancel
+    if (autoSaveStorage) {
+      autoSaveStorage.deleteSecondary('datasetFormDistribution');
+    }
+  };
+
+  const handleDistributionSuccess = (
+    updatedDist: Distribution,
+    distributionType: 'distribution' | 'sample',
+    index: number,
+  ) => {
+    setFieldValue(`${distributionType}[${index}]`, updatedDist);
+
+    // Clean up secondary storage on success
+    if (autoSaveStorage) {
+      autoSaveStorage.deleteSecondary('datasetFormDistribution');
+    }
+  };
+
+  useEffect(() => {
+    const distributionAccessServices = values.distribution?.map((val) => val?.accessServiceUris)?.flat() ?? [];
+    const sampleAccessServices = values.sample?.map((val) => val?.accessServiceUris)?.flat() ?? [];
+    const allAccessServices = [...distributionAccessServices, ...sampleAccessServices]
+      .flat()
+      .filter((item) => item !== undefined);
+    const uniqueAccessServices = Array.from(new Set(allAccessServices));
+    if (uniqueAccessServices && uniqueAccessServices !== selectedDataServiceUris) {
+      setSelectedDataServiceUris(uniqueAccessServices);
+    }
+
+    const distributionFormats = values.distribution?.map((val) => val?.format) || [];
+    const sampleFormats = values.sample?.map((val) => val?.format) || [];
+    const allFormats = [...distributionFormats, ...sampleFormats].flat().filter((item) => item !== undefined);
+    const uniqueFormats = Array.from(new Set(allFormats));
+    if (uniqueFormats && uniqueFormats !== selectedFileTypeUris) {
+      setSelectedFileTypeUris(uniqueFormats);
+    }
+
+    const distributionMediaTypes = values.distribution?.map((val) => val?.mediaType) || [];
+    const sampleMediaTypes = values.sample?.map((val) => val?.mediaType) || [];
+    const allMediaTypes = [...distributionMediaTypes, ...sampleMediaTypes].flat().filter((item) => item !== undefined);
+    const uniqueMediaTypes = Array.from(new Set(allMediaTypes));
+    if (uniqueMediaTypes && uniqueMediaTypes !== selectedMediaTypeUris) {
+      setSelectedMediaTypeUris(uniqueMediaTypes);
+    }
+  }, [values]);
+
+  useEffect(() => {
+    const updateSelectedDataServices = async () => {
+      if (selectedDataServiceUris && !isEmpty(selectedDataServiceUris)) {
+        const searchOperation: Search.SearchOperation = {
+          filters: { uri: { value: selectedDataServiceUris } },
+          pagination: { page: 0, size: 100 },
+        };
+        const res = await searchResourcesWithFilter(searchEnv, 'dataservices', searchOperation);
+        const data = await res.json();
+        setSelectedDataServices(data.hits as Search.SearchObject[]);
+      }
+    };
+
+    updateSelectedDataServices();
+  }, [selectedDataServiceUris]);
+
+  useEffect(() => {
+    const updateSelectedMediaTypes = async () => {
+      if (selectedMediaTypeUris && !isEmpty(selectedMediaTypeUris)) {
+        const data: ReferenceDataCode[] = await searchReferenceDataByUri(selectedMediaTypeUris, referenceDataEnv, [
+          ReferenceDataGraphql.SearchAlternative.IanaMediaTypes,
+        ]);
+        setSelectedMediaTypes(data);
+      }
+    };
+
+    updateSelectedMediaTypes();
+  }, [selectedMediaTypeUris]);
+
+  useEffect(() => {
+    const updateSelectedFileTypes = async () => {
+      if (selectedFileTypeUris && !isEmpty(selectedFileTypeUris)) {
+        const data: ReferenceDataCode[] = await searchReferenceDataByUri(selectedFileTypeUris, referenceDataEnv, [
+          ReferenceDataGraphql.SearchAlternative.EuFileTypes,
+        ]);
+        setSelectedFileTypes(data);
+      }
+    };
+
+    updateSelectedFileTypes();
+  }, [selectedFileTypeUris]);
 
   const distributionArrayIsEmpty = (arr: Distribution[]) => Array.isArray(arr) && arr.every((item) => item == null);
 
@@ -79,26 +199,35 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                 <Card key={`distribusjon-${index}`}>
                   <div className={styles.heading}>
                     <div className={styles.field}>
-                      <Heading
-                        size='2xs'
-                        spacing
-                        level={3}
-                      >
-                        {localization.datasetForm.fieldLabel.title}
-                      </Heading>
-                      <Paragraph size='sm'>{getTranslateText(item?.title) ?? ''}</Paragraph>
+                      {!isEmpty(item?.title) && (
+                        <>
+                          <Heading
+                            size='2xs'
+                            spacing
+                            level={3}
+                          >
+                            {localization.datasetForm.fieldLabel.title}
+                          </Heading>
+                          <Paragraph size='sm'>{getTranslateText(item.title)}</Paragraph>
+                        </>
+                      )}
                     </div>
                     <div className={styles.buttons}>
                       <DistributionModal
                         type='edit'
-                        initialValues={item}
+                        initialValues={{ ...item }}
+                        initialFileTypes={selectedFileTypes ?? []}
+                        initialMediaTypes={selectedMediaTypes ?? []}
+                        initialAccessServices={selectedDataServices ?? []}
                         referenceDataEnv={referenceDataEnv}
                         searchEnv={searchEnv}
                         openLicenses={openLicenses}
                         distributionType='distribution'
                         onSuccess={(updatedDist) => {
-                          setFieldValue(`distribution[${index}]`, updatedDist);
+                          handleDistributionSuccess(updatedDist, 'distribution', index);
                         }}
+                        onCancel={() => handleDistributionCancel('distribution')}
+                        onChange={(updatedDist) => handleDistributionChange(updatedDist, 'distribution', index)}
                         trigger={
                           <Button
                             variant='tertiary'
@@ -112,7 +241,14 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                           </Button>
                         }
                       />
-                      <DeleteButton onClick={() => setFieldValue(`distribution[${index}]`, undefined)} />
+                      <DeleteButton
+                        onClick={() => {
+                          const newArray = [...(values.distribution ?? [])];
+                          newArray.splice(index, 1);
+                          setFieldValue('distribution', newArray);
+                          handleDistributionCancel('distribution');
+                        }}
+                      />
                     </div>
                   </div>
 
@@ -166,12 +302,12 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                       <Button
                         variant='tertiary'
                         onClick={() => {
-                          setExpandedIndex(expandedIndex === index ? null : index);
+                          setExpandedIndexDistribution(expandedIndexDistribution === index ? null : index);
                         }}
                         className={styles.button}
                         size='sm'
                       >
-                        {expandedIndex === index ? (
+                        {expandedIndexDistribution === index ? (
                           <>
                             <ChevronUpIcon fontSize='1.3rem' />
                             {localization.seeLess}
@@ -186,39 +322,52 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                     </div>
                   )}
 
-                  {expandedIndex === index && (
+                  {expandedIndexDistribution === index && (
                     <DistributionDetails
+                      selectedDataServices={selectedDataServices ?? []}
+                      selectedMediaTypes={selectedMediaTypes ?? []}
                       distribution={item}
-                      searchEnv={searchEnv}
-                      referenceDataEnv={referenceDataEnv}
                       openLicenses={openLicenses}
                     />
+                  )}
+                  {get(errors, 'distribution[' + index + ']') && (
+                    <ErrorMessage size={'sm'}>{localization.validation.multipleInvalidValues}</ErrorMessage>
                   )}
                 </Card>
               ),
           )}
-        <DistributionModal
-          type='new'
-          distributionType='distribution'
-          trigger={<AddButton>{localization.datasetForm.button.addDistribution}</AddButton>}
-          onSuccess={(formValues: Distribution, distributionType) => {
-            setFieldValue(getField(distributionType), formValues);
-          }}
-          referenceDataEnv={referenceDataEnv}
-          searchEnv={searchEnv}
-          openLicenses={openLicenses}
-          initialValues={{
-            title: {},
-            description: {},
-            downloadURL: [],
-            accessURL: [],
-            format: [],
-            mediaType: [],
-            page: [],
-            conformsTo: [],
-            accessServiceUris: [],
-          }}
-        />
+
+        <div className={styles.add}>
+          <DistributionModal
+            type='new'
+            distributionType='distribution'
+            trigger={<AddButton>{localization.datasetForm.button.addDistribution}</AddButton>}
+            onSuccess={(formValues: Distribution) => {
+              handleDistributionSuccess(formValues, 'distribution', values.distribution?.length ?? 0);
+            }}
+            onCancel={() => handleDistributionCancel('distribution')}
+            onChange={(formValues: Distribution) => {
+              handleDistributionChange(formValues, 'distribution', values.distribution?.length ?? 0);
+            }}
+            referenceDataEnv={referenceDataEnv}
+            searchEnv={searchEnv}
+            openLicenses={openLicenses}
+            initialFileTypes={[]}
+            initialMediaTypes={[]}
+            initialAccessServices={[]}
+            initialValues={{
+              title: {},
+              description: {},
+              downloadURL: [],
+              accessURL: [],
+              format: [],
+              mediaType: [],
+              page: [],
+              conformsTo: [],
+              accessServiceUris: [],
+            }}
+          />
+        </div>
       </div>
       <FieldsetDivider />
       <div className={styles.fieldSet}>
@@ -257,13 +406,19 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                     <div className={styles.buttons}>
                       <DistributionModal
                         type='edit'
-                        initialValues={item}
+                        initialValues={{ ...item }}
+                        initialFileTypes={selectedFileTypes ?? []}
+                        initialMediaTypes={selectedMediaTypes ?? []}
+                        initialAccessServices={selectedDataServices ?? []}
                         distributionType='sample'
                         referenceDataEnv={referenceDataEnv}
                         searchEnv={searchEnv}
+                        openLicenses={openLicenses}
                         onSuccess={(updatedDist: Distribution) => {
-                          setFieldValue(`sample[${index}]`, updatedDist);
+                          handleDistributionSuccess(updatedDist, 'sample', index);
                         }}
+                        onCancel={() => handleDistributionCancel('sample')}
+                        onChange={(updatedDist: Distribution) => handleDistributionChange(updatedDist, 'sample', index)}
                         trigger={
                           <Button
                             variant='tertiary'
@@ -277,7 +432,14 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
                           </Button>
                         }
                       />
-                      <DeleteButton onClick={() => setFieldValue(`sample[${index}]`, undefined)} />
+                      <DeleteButton
+                        onClick={() => {
+                          const newArray = [...(values.sample ?? [])];
+                          newArray.splice(index, 1);
+                          setFieldValue('sample', newArray);
+                          handleDistributionCancel('sample');
+                        }}
+                      />
                     </div>
                   </div>
 
@@ -330,11 +492,14 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
 
                   {expandedIndexExampleData === index && (
                     <DistributionDetails
+                      selectedDataServices={selectedDataServices ?? []}
+                      selectedMediaTypes={selectedMediaTypes ?? []}
                       distribution={item}
-                      searchEnv={searchEnv}
-                      referenceDataEnv={referenceDataEnv}
                       openLicenses={openLicenses}
                     />
+                  )}
+                  {get(errors, 'sample[' + index + ']') && (
+                    <ErrorMessage size={'sm'}>Inneholder en eller flere ugyldige verdier</ErrorMessage>
                   )}
                 </Card>
               ),
@@ -345,12 +510,19 @@ export const DistributionSection = ({ referenceDataEnv, searchEnv, openLicenses 
             type='new'
             distributionType='sample'
             trigger={<AddButton>{localization.datasetForm.button.addSample}</AddButton>}
-            onSuccess={(formValues: Distribution, distributionType) => {
-              setFieldValue(getField(distributionType), formValues);
+            onSuccess={(formValues: Distribution) => {
+              handleDistributionSuccess(formValues, 'sample', values.sample?.length ?? 0);
+            }}
+            onCancel={() => handleDistributionCancel('sample')}
+            onChange={(formValues: Distribution) => {
+              handleDistributionChange(formValues, 'sample', values.sample?.length ?? 0);
             }}
             referenceDataEnv={referenceDataEnv}
             searchEnv={searchEnv}
             openLicenses={openLicenses}
+            initialFileTypes={[]}
+            initialMediaTypes={[]}
+            initialAccessServices={[]}
             initialValues={{
               title: {},
               description: {},

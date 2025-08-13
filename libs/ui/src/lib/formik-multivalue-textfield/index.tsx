@@ -71,7 +71,8 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
                 onChange={(e) => handleOnChangeInputValue(e.target.value)}
                 onKeyDown={(e) => {
                   if (e.code === 'Enter') {
-                    handleAddTextValue();
+                    e.preventDefault();
+                    handleAddTextValue();                    
                   }
                 }}
                 onBlur={() => handleAddTextValue()}

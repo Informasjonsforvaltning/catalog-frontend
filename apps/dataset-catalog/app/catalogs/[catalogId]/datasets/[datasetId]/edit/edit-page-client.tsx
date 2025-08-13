@@ -23,7 +23,10 @@ export const EditPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const dataStorage = new LocalDataStorage<StorageData>({ key: 'datasetForm' });
+  const dataStorage = new LocalDataStorage<StorageData>({
+    key: 'datasetForm',
+    secondaryKeys: ['datasetFormDistribution', 'datasetFormReference']
+  });
 
   if (dataset.specializedType === 'SERIES') {
     window.location.replace(`/catalogs/${dataset.catalogId}/datasets/${dataset.id}`);

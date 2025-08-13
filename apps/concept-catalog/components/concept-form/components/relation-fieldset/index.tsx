@@ -5,7 +5,7 @@ import { useFormikContext } from 'formik';
 import { Box, Combobox, Fieldset, Radio, Textfield } from '@digdir/designsystemet-react';
 import { FieldsetDivider, FormikLanguageFieldset, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { RelatedConcept, UnionRelation, RelationSubtypeEnum, RelationTypeEnum } from '@catalog-frontend/types';
+import { RelatedConcept, UnionRelation, RelationSubtypeEnum, RelationTypeEnum, Concept } from '@catalog-frontend/types';
 import { useSearchConcepts as useSearchInternalConcepts, useDataNorgeSearchConcepts } from '../../../../hooks/search';
 import styles from './relation-fieldset.module.scss';
 
@@ -33,6 +33,7 @@ const relationSubtypes = Object.keys(RelationSubtypeEnum)
 type RelationFieldsetProps = {
   catalogId: string;
   initialRelatedConcept?: RelatedConcept;
+  conceptId: string;
 };
 
 const getRelatedConceptStateValue = (relatedConcept?: RelatedConcept): string[] => {
@@ -55,7 +56,7 @@ const getRelatedConceptTypeStateValue = (relatedConcept?: RelatedConcept): Relat
   return 'internal';
 };
 
-export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationFieldsetProps) => {
+export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }: RelationFieldsetProps) => {
   const { errors, values, setFieldValue } = useFormikContext<UnionRelation>();
   const [relatedConcept, setRelatedConcept] = useState<string[]>(getRelatedConceptStateValue(initialRelatedConcept));
   const [relatedConceptType, setRelatedConceptType] = useState<RelatedConceptType>(
@@ -87,10 +88,17 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
     enabled: Boolean(search),
   });
 
-  const relationTypeOptions = relationTypes.map((item) => ({
-    label: localization.conceptForm.fieldLabel.relationTypes[item],
-    value: item,
-  }));
+  const relationTypeOptions = relationTypes
+    .map((item) => ({
+      label: localization.conceptForm.fieldLabel.relationTypes[item],
+      value: item,
+    }))
+    .filter((item) => {
+      if (values.relasjon === RelationTypeEnum.ASSOSIATIV) {
+        return item.value !== RelationTypeEnum.ASSOSIATIV;
+      }
+      return true;
+    });
 
   const relationSubtypeOptions = relationSubtypes
     .filter((subtype) => {
@@ -114,7 +122,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
   let externalRelatedConceptOptions: Option[] = [];
   if (relatedConceptType === 'internal' && searchTriggered) {
     internalRelatedConceptOptions =
-      internalConcepts?.hits.map((concept) => ({
+      internalConcepts?.hits.filter((rel) => rel.originaltBegrep !== conceptId).map((concept) => ({
         label: getTranslateText(concept.anbefaltTerm?.navn) as string,
         value: concept.originaltBegrep as string,
       })) ?? [];
@@ -129,7 +137,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
 
   if (relatedConceptType === 'external' && searchTriggered) {
     externalRelatedConceptOptions =
-      externalConcepts?.hits.map((concept) => ({
+      externalConcepts?.hits.filter((rel) => !rel.uri?.includes(conceptId)).map((concept) => ({
         label: getTranslateText(concept.title) as string,
         description: getTranslateText(concept.organization?.prefLabel) as string,
         value: concept.uri as string,
@@ -264,7 +272,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept }: RelationF
           )}
           {relatedConceptType === 'custom' && (
             <Textfield
-              value={relatedConcept[0]}
+              value={relatedConcept[0] ?? ''}
               onChange={handleCustomRelatedConceptChange}
               error={errors.relatertBegrep}
             />

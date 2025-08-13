@@ -4,7 +4,6 @@ import {
   getTranslateText,
   capitalizeFirstLetter,
   validUUID,
-  formatISO,
   formatDateToDDMMYYYY,
 } from '@catalog-frontend/utils';
 import { Heading, Link, Paragraph, Table, Tag } from '@digdir/designsystemet-react';
@@ -75,7 +74,10 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
           <Markdown>{getTranslateText(dataset?.description, language) as string}</Markdown>
         </InfoCard.Item>
       )}
-      {hasValues(dataset?.accessRights) && (
+      {(hasValues(dataset?.accessRights) ||
+        hasValues(dataset?.legalBasisForAccess) ||
+        hasValues(dataset?.legalBasisForRestriction) ||
+        hasValues(dataset?.legalBasisForProcessing)) && (
         <InfoCard.Item
           title={localization.access}
           className={styles.access}
@@ -88,10 +90,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       )}
 
       {dataset?.issued && (
-        <InfoCard.Item
-          title={localization.datasetForm.fieldLabel.issued}
-          headingColor='light'
-        >
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.issued}>
           {formatDateToDDMMYYYY(dataset.issued)}
         </InfoCard.Item>
       )}
@@ -184,13 +183,18 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
 
       {dataset?.landingPage && !isEmpty(dataset?.landingPage[0]) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.landingPage}>
-          <div className={styles.infoCardItems}>
-            {dataset?.landingPage.map((item) => <Paragraph key={item}>{item}</Paragraph>)}
-          </div>
+          {dataset?.landingPage.map((page: string, index: number) => (
+            <Paragraph
+              size={'sm'}
+              key={`landing-page-${index}`}
+            >
+              <Link href={page}>{page}</Link>
+            </Paragraph>
+          ))}
         </InfoCard.Item>
       )}
 
-      {dataset?.temporal && !isEmpty(dataset?.temporal[0]) && (
+      {dataset?.temporal && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.temporal}>
           <TemporalDetails temporal={dataset?.temporal} />
         </InfoCard.Item>
@@ -215,10 +219,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       )}
 
       {dataset?.modified && (
-        <InfoCard.Item
-          title={localization.datasetForm.helptext.modified.slice(0, -1)}
-          headingColor='light'
-        >
+        <InfoCard.Item title={localization.datasetForm.helptext.modified.slice(0, -1)}>
           {formatDateToDDMMYYYY(dataset.modified)}
         </InfoCard.Item>
       )}
@@ -464,7 +465,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </InfoCard.Item>
       )}
 
-      {dataset?.informationModel && !isEmpty(dataset?.informationModel[0]?.uri) && (
+      {!isEmpty(dataset?.informationModel) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.informationModel}>
           <UriWithLabelTable
             values={dataset?.informationModel}

@@ -56,7 +56,7 @@ const kilde = (required) =>
             test(value) {
               const isRequired = !this.parent.tekst;
 
-              if (isRequired && !isValidUrl(value)) {
+              if ((isRequired || value) && !isValidUrl(value)) {
                 return this.createError({
                   message: localization.conceptForm.validation.invalidUrl,
                 });
@@ -210,8 +210,16 @@ export const conceptSchema = ({ baseUri, required }) =>
         tekst: Yup.string().nullable().label(localization.conceptForm.fieldLabel.valueRangeDescription),
         uri: Yup.string()
           .nullable()
-          .url(localization.conceptForm.validation.url)
-          .label(localization.conceptForm.fieldLabel.valueRangeLink),
+          .test({
+            test(value) {
+              if (value && !isValidUrl(value)) {
+                return this.createError({
+                  message: localization.conceptForm.validation.invalidUrl,
+                });
+              }
+              return true;
+            },
+          }),
       }),
     kontaktpunkt: Yup.object()
       .test('contact-test', 'Minst en av kontaktfeltene må fylles ut.', (value: any) => {

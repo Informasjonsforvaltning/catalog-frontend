@@ -24,10 +24,13 @@ export const EditPage = ({
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
-  const dataStorage = new LocalDataStorage<StorageData>({ key: 'conceptForm' });
+  const dataStorage = new LocalDataStorage<StorageData>({ 
+    key: 'conceptForm', 
+    secondaryKeys: ['conceptFormDefinition', 'conceptFormRelation']
+  });
 
   const handleUpdate = async (values: Concept) => {
-    return await updateConcept(catalogId.toString(), concept, values);
+    return await updateConcept(concept, values, fieldsResult.internal);
   };
 
   const handleSuccess = () => {

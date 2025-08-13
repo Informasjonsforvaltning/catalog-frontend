@@ -13,10 +13,13 @@ export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, 
   const conceptIdRef = useRef<string | undefined>(undefined); // Ref to store the concept id
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
-  const dataStorage = new LocalDataStorage<StorageData>({ key: 'conceptForm' });
+  const dataStorage = new LocalDataStorage<StorageData>({ 
+    key: 'conceptForm', 
+    secondaryKeys: ['conceptFormDefinition', 'conceptFormRelation']
+  });
 
   const handleCreate = async (values: Concept) => {
-    const conceptId = await createConcept(values, catalogId.toString());
+    const conceptId = await createConcept(values, catalogId.toString(), fieldsResult.internal);
     conceptIdRef.current = conceptId;
     return undefined;
   };

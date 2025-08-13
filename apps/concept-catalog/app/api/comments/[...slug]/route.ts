@@ -17,10 +17,10 @@ export const GET = async (req: NextRequest, props: { params: Promise<{ slug: str
         const jsonResponse = await response.json();
         return new Response(JSON.stringify(jsonResponse), { status: response.status });
       } catch (error) {
-        return new Response('Failed to get comments', { status: 500 });
+        return new Response(JSON.stringify({ message: 'Failed to get comments' }), { status: 500 });
       }
     } else {
-      return new Response('Unauthorized', { status: 401 });
+      return new Response(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });
     }
   });
 };
@@ -37,12 +37,12 @@ export const POST = async (req: NextRequest, props: { params: Promise<{ slug: st
         if (response.status !== 201) {
           throw new Error();
         }
-        return new Response('Created comment', { status: response.status });
+        return new Response(JSON.stringify({ ok: true }), { status: response.status });
       } catch (error) {
-        return new Response('Failed to create comment', { status: 500 });
+        return new Response(JSON.stringify({ message: 'Failed to create comment' }), { status: 500 });
       }
     } else {
-      return new Response('Unauthorized', { status: 401 });
+      return new Response(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });
     }
   });
 };
@@ -62,10 +62,10 @@ export const PUT = async (req: NextRequest, props: { params: Promise<{ slug: str
         const jsonResponse = await response.json();
         return new Response(JSON.stringify(jsonResponse), { status: response.status });
       } catch (error) {
-        return new Response('Failed to update comment', { status: 500 });
+        return new Response(JSON.stringify({ message: 'Failed to update comment' }), { status: 500 });
       }
     } else {
-      return new Response('Unauthorized', { status: 401 });
+      return new Response(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });
     }
   });
 };
@@ -81,12 +81,12 @@ export const DELETE = async (req: NextRequest, props: { params: Promise<{ slug: 
         if (response.status !== 204) {
           throw new Error();
         }
-        return new Response('Comment deleted', { status: 200 });
+        return new Response(JSON.stringify({ ok: true }), { status: 200 });
       } catch (error) {
-        return new Response('Failed to delete comment', { status: 500 });
+        return new Response(JSON.stringify({ message: 'Failed to delete comment' }), { status: 500 });
       }
     } else {
-      return new Response('Unauthorized', { status: 401 });
+      return new Response(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });
     }
   });
 };

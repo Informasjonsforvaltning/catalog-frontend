@@ -1,6 +1,6 @@
 'use client';
 import { Dataset } from '@catalog-frontend/types';
-import { Combobox } from '@digdir/designsystemet-react';
+import { Combobox, Fieldset } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 import { useState } from 'react';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
@@ -42,15 +42,18 @@ export const ConceptSection = ({ searchEnv }: Props) => {
 
   return (
     <>
-      <>
-        <TitleWithHelpTextAndTag
-          tagTitle={localization.tag.recommended}
-          tagColor='info'
-          helpText={localization.datasetForm.helptext.concept}
-        >
-          {localization.datasetForm.fieldLabel.concept}
-        </TitleWithHelpTextAndTag>
-
+      <Fieldset
+        size='sm'
+        legend={
+          <TitleWithHelpTextAndTag
+            tagTitle={localization.tag.recommended}
+            tagColor='info'
+            helpText={localization.datasetForm.helptext.concept}
+          >
+            {localization.datasetForm.fieldLabel.concept}
+          </TitleWithHelpTextAndTag>
+        }
+      >
         <Combobox
           size='sm'
           onValueChange={(selectedValues: string[]) => setFieldValue('conceptList', selectedValues)}
@@ -58,7 +61,7 @@ export const ConceptSection = ({ searchEnv }: Props) => {
           loading={searching}
           multiple
           value={values.conceptList}
-          placeholder={localization.datasetForm.helptext.searchConcept}
+          placeholder={localization.search.search}
           filter={() => true} // Deactivate filter, handled by backend
           virtual
           hideClearButton
@@ -84,7 +87,7 @@ export const ConceptSection = ({ searchEnv }: Props) => {
             </Combobox.Option>
           ))}
         </Combobox>
-      </>
+      </Fieldset>
 
       <FormikLanguageFieldset
         multiple

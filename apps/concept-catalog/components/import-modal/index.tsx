@@ -82,7 +82,7 @@ export function ImportModal({ catalogId }: Props) {
                   onUpload={onImportUpload}
                 >
                   <FileImportIcon fontSize='1.5rem' />
-                  <span>{localization.button.importConcept}</span>
+                  <span>{localization.button.importConceptCSV}</span>
                 </UploadButton>
 
                 <ImportConceptRdf

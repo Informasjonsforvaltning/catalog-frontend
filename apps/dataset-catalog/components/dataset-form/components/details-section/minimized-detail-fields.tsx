@@ -138,7 +138,7 @@ const FIELD_CONFIG = [
   {
     name: 'hasCurrentnessAnnotation.hasBody',
     getValue: (values: Dataset) => values?.hasCurrentnessAnnotation?.hasBody,
-    addValue: {nb: '', nn: ''},
+    addValue: { nb: '', nn: '' },
     render: (props: any) => (
       <FormikLanguageFieldset
         as={TextareaWithPrefix}
@@ -155,7 +155,7 @@ const FIELD_CONFIG = [
   {
     name: 'hasRelevanceAnnotation.hasBody',
     getValue: (values: Dataset) => values?.hasRelevanceAnnotation?.hasBody,
-    addValue: {nb: '', nn: ''},
+    addValue: { nb: '', nn: '' },
     render: (props: any) => (
       <FormikLanguageFieldset
         as={TextareaWithPrefix}
@@ -172,7 +172,7 @@ const FIELD_CONFIG = [
   {
     name: 'hasCompletenessAnnotation.hasBody',
     getValue: (values: Dataset) => values?.hasCompletenessAnnotation?.hasBody,
-    addValue: {nb: '', nn: ''},
+    addValue: { nb: '', nn: '' },
     render: (props: any) => (
       <FormikLanguageFieldset
         as={TextareaWithPrefix}
@@ -189,7 +189,7 @@ const FIELD_CONFIG = [
   {
     name: 'hasAccuracyAnnotation.hasBody',
     getValue: (values: Dataset) => values?.hasAccuracyAnnotation?.hasBody,
-    addValue: {nb: '', nn: ''},
+    addValue: { nb: '', nn: '' },
     render: (props: any) => (
       <FormikLanguageFieldset
         as={TextareaWithPrefix}
@@ -206,7 +206,7 @@ const FIELD_CONFIG = [
   {
     name: 'hasAvailabilityAnnotation.hasBody',
     getValue: (values: Dataset) => values?.hasAvailabilityAnnotation?.hasBody,
-    addValue: {nb: '', nn: ''},
+    addValue: { nb: '', nn: '' },
     render: (props: any) => (
       <FormikLanguageFieldset
         as={TextareaWithPrefix}
@@ -257,7 +257,7 @@ const FIELD_CONFIG = [
                       error={props.errors?.landingPage?.[index]}
                     />
                   </FieldsetWithDelete>
-                </div>                
+                </div>
               </React.Fragment>
             ))}
             <AddButton
@@ -270,7 +270,7 @@ const FIELD_CONFIG = [
                 );
               }}
             >
-              {`${localization.datasetForm.fieldLabel.landingPage}`}
+              {`${localization.add} ${localization.datasetForm.fieldLabel.landingPage.toLowerCase()}`}
             </AddButton>
             {props.showDivider && <FieldsetDivider />}
           </>
@@ -285,9 +285,8 @@ const FIELD_CONFIG = [
     getValue: (values: Dataset) => values?.conformsTo,
     render: (props: any) => (
       <UriWithLabelFieldsetTable
-        values={props.values.conformsTo}
         fieldName={'conformsTo'}
-        expanded={props.expanded}
+        errors={props.errors.conformsTo}
         hideHeadWhenEmpty={true}
         showDivider={props.showDivider}
         label={
@@ -322,7 +321,6 @@ export const MinimizedDetailFields = ({ datasetTypes, provenanceStatements, freq
 
   useEffect(() => {
     if (focus && inputRefs.current[focus]) {
-      
       inputRefs.current[focus]?.focus();
       setFocus(null);
     }
@@ -334,7 +332,7 @@ export const MinimizedDetailFields = ({ datasetTypes, provenanceStatements, freq
 
   const datasetTypeOptions = useMemo(
     () =>
-      datasetTypes.map((type) => (
+      datasetTypes?.map((type) => (
         <Combobox.Option
           value={type.uri}
           key={type.uri}
@@ -348,7 +346,7 @@ export const MinimizedDetailFields = ({ datasetTypes, provenanceStatements, freq
 
   const provenanceOptions = useMemo(
     () =>
-      provenanceStatements.map((item) => (
+      provenanceStatements?.map((item) => (
         <Combobox.Option
           value={item.uri}
           key={item.uri}
@@ -361,7 +359,7 @@ export const MinimizedDetailFields = ({ datasetTypes, provenanceStatements, freq
 
   const frequencyOptions = useMemo(
     () =>
-      frequencies.map((item) => (
+      frequencies?.map((item) => (
         <Combobox.Option
           value={item.uri}
           key={item.uri}
@@ -378,6 +376,7 @@ export const MinimizedDetailFields = ({ datasetTypes, provenanceStatements, freq
       <div key={fieldConfig.name}>
         {fieldConfig.render({
           values,
+          errors,
           setFieldValue,
           setInputRef,
           setFocus,
@@ -400,6 +399,7 @@ export const MinimizedDetailFields = ({ datasetTypes, provenanceStatements, freq
       >
         {fieldConfig.render({
           values,
+          errors,
           setFieldValue,
           ref: (el: HTMLInputElement | HTMLTextAreaElement | null) => setInputRef(fieldConfig.name, el),
           datasetTypeOptions,

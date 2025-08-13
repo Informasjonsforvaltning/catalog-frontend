@@ -7,7 +7,7 @@ import {
   getConcept,
   removeImportResultConcept as removeImportResult,
 } from '@catalog-frontend/data-access';
-import { Concept } from '@catalog-frontend/types';
+import { Concept, FieldsResult, InternalField } from '@catalog-frontend/types';
 import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
 import _ from 'lodash';
 import { revalidateTag } from 'next/cache';
@@ -59,8 +59,18 @@ const preProcessValues = (
   ansvarligVirksomhet: ansvarligVirksomhet || { id: orgId },
 });
 
-export async function createConcept(values: Concept, catalogId: string) {
+export async function createConcept(values: Concept, catalogId: string, internalFields: InternalField[]) {
   const processedValues = preProcessValues(catalogId, values);
+  internalFields.forEach((field) => {
+    if (
+      field.type === 'boolean' &&
+      (values.interneFelt?.[field.id]?.value === undefined)
+    ) {
+      // Ensure interneFelt is defined before assignment
+      values.interneFelt = values.interneFelt || {};
+      values.interneFelt[field.id] = { value: 'false' };
+    }
+  });
 
   const session = await getValidSession();
   if (!session) {
@@ -110,7 +120,7 @@ export async function deleteConcept(catalogId: string, conceptId: string) {
   }
 }
 
-export async function updateConcept(catalogId: string, initialConcept: Concept, values: Concept) {
+export async function updateConcept(initialConcept: Concept, values: Concept, internalFields: InternalField[]) {
   if (!initialConcept.id) {
     throw new Error('Concept id cannot be null');
   }
@@ -129,6 +139,17 @@ export async function updateConcept(catalogId: string, initialConcept: Concept, 
     'omfang.*',
   ].forEach((field) => {
     clearValues(values, field);
+  });
+
+  internalFields.forEach((field) => {
+    if (
+      field.type === 'boolean' &&
+      (values.interneFelt?.[field.id]?.value === undefined)
+    ) {
+      // Ensure interneFelt is defined before assignment
+      values.interneFelt = values.interneFelt || {};
+      values.interneFelt[field.id] = { value: 'false' };
+    }
   });
 
   const diff = conceptJsonPatchOperations(initialConcept, values);

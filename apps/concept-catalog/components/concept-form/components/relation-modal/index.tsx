@@ -1,29 +1,37 @@
-import { ReactNode, useRef, useState } from 'react';
+'use client';
+
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Formik } from 'formik';
 import { Button, Modal } from '@digdir/designsystemet-react';
-import { RelatedConcept, UnionRelation, RelationTypeEnum } from '@catalog-frontend/types';
+import { RelatedConcept, UnionRelation, RelationTypeEnum, Concept } from '@catalog-frontend/types';
 import { relationSchema } from '../../validation-schema';
 import { RelationFieldset } from '../relation-fieldset';
 import styles from './relation-modal.module.scss';
 
 export type RelationModalProps = {
   catalogId: string;
+  conceptId: string;
   trigger: ReactNode;
   header: string;
   initialRelation?: UnionRelation;
   initialRelatedConcept?: RelatedConcept;
   onSuccess: (rel: UnionRelation) => void;
+  onChange: (rel: UnionRelation) => void;
+  onClose: () => void;
 };
 
 const defaultRelation: UnionRelation = { relasjon: undefined, internal: true };
 
 export const RelationModal = ({
   catalogId,
+  conceptId,
   initialRelation,
   initialRelatedConcept,
   header,
   trigger,
   onSuccess,
+  onChange,
+  onClose,
 }: RelationModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -50,13 +58,20 @@ export const RelationModal = ({
             modalRef.current?.close();
           }}
         >
-          {({ isSubmitting, submitForm }) => {
+          {({ isSubmitting, dirty, submitForm, values }) => {
+            useEffect(() => {
+              if (dirty && onChange) {
+                onChange(values);
+              }
+            }, [dirty, values]);
+
             return (
               <>
                 <Modal.Header closeButton={false}>{header}</Modal.Header>
                 <Modal.Content className={styles.content}>
                   <RelationFieldset
                     catalogId={catalogId}
+                    conceptId={conceptId}
                     initialRelatedConcept={initialRelatedConcept}
                   />
                 </Modal.Content>
@@ -75,7 +90,10 @@ export const RelationModal = ({
                     variant='secondary'
                     type='button'
                     size='sm'
-                    onClick={() => modalRef.current?.close()}
+                    onClick={() => {
+                      onClose();
+                      modalRef.current?.close();
+                    }}
                     disabled={isSubmitting}
                   >
                     Avbryt

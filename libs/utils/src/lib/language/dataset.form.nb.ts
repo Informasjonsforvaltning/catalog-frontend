@@ -9,11 +9,12 @@ export const datasetFormNb = {
       - **Ikke-allmenn tilgang**: Begrenset til en spesifikk gruppe eller formål.`,
     legalBasis:
       'Relevante juridiske referanser for datasettet, som lover, forskrifter, eller andre rettslige rammer som begrenser eller gir grunnlag for behandling og bruk av datasettet. For eksempel kan dette være en lenke til en lovtekst.',
-    legalBasisType: `Velg hvilken type juridisk grunnlag som gjelder for datasettet:
-
-- **Skjermingshjemmel**: Referanse til lov eller forskrift som begrenser deling av datasettet (f.eks. offentlighetsloven, sikkerhetsloven).
-- **Behandlingsgrunnlag**: Lov, forskrift, samtykke eller nødvendighetsvurdering som grunnlag for behandling av personopplysninger.
-- **Utleveringshjemmel**: Henvisning til lov eller forskrift som gir offentlig virksomhet rett eller plikt til å utlevere opplysninger til private eller juridiske personer.`,
+    legalBasisForRestriction:
+      'Referanse til lov eller forskrift som begrenser deling av datasettet (f.eks. offentlighetsloven, sikkerhetsloven).',
+    legalBasisForProcessing:
+      'Lov, forskrift, samtykke eller nødvendighetsvurdering som grunnlag for behandling av personopplysninger.',
+    legalBasisForAccess:
+      'Henvisning til lov eller forskrift som gir offentlig virksomhet rett eller plikt til å utlevere opplysninger til private eller juridiske personer.',
     issued: 'Dato for når innholdet i datasettet ble eller blir tilgjengeliggjort.',
     euDataTheme:
       'Velg ett eller flere hovedtema som beskriver innholdet i datasettet. Listen er fra EUs kontrollerte vokabular.',
@@ -61,8 +62,9 @@ export const datasetFormNb = {
     relations: 'Beslektet ressurs, uten nærmere angivelse av type relasjon.',
     informationModelsFromFDK: 'Informasjonsmodell fra Data.norge.no',
     informationModel: 'Informasjonsmodell fra andre kilder',
-    contactPoint:
-      'Et kontaktpunkt er informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om datasettet. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.',
+    contactName: 'Brukes til å oppgi navnet til kontaktpunktet.',
+    contactFields:
+      'Informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om datasettet. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.',
     statusSwitch:
       'Toggelen bestemmer om datasettbeskrivelsen blir lagret med status “Godkjent” eller som et “Utkast”. For å endre status til “Godkjent” må alle obligatoriske felter være fylt ut. Husk å lagre skjemaet for å oppdatere status.',
     keyword:
@@ -98,7 +100,7 @@ export const datasetFormNb = {
     losTheme: 'LOS-tema(er)',
     euDataTheme: 'Datatema(er)',
     concept: 'Begreper',
-    mediaType: 'Mediatyper',
+    mediaType: 'Medietyper',
     format: 'Format',
     accessURL: 'Tilgangslenke',
     downloadURL: 'Nedlastingslenke',
@@ -144,6 +146,8 @@ export const datasetFormNb = {
     datasetID: 'Datasett-ID',
     registrationStatus: 'Registeringsstatus',
     ignoreRequired: 'Ignorer påkrevde felt',
+    contactName: 'Navn',
+    contactFields: 'Kontaktinformasjon',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
@@ -163,7 +167,7 @@ export const datasetFormNb = {
     euDataTheme: 'Minst ett EU-tema må være valgt.',
     searchString: 'Ingen treff. Søkestrengen må inneholde minst to bokstaver.',
     accessURL: 'Tilgangslenke er påkrevd.',
-    contactPoint: 'Minst et kontaktpunkt må fylles ut.',
+    contactPoint: 'Minst en verdi må fylles ut for kontaktpunktet.',
     accessURLrequired: 'Tilgangslenke må fylles ut.',
     relation: 'Begge verdiene må fylles ut for å legge til en relasjon.',
   },

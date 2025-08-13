@@ -14,7 +14,7 @@ export const POST = async (request: NextRequest, props: { params: Promise<{ conc
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), { status: response?.status });
     } catch (err) {
-      return new Response('Failed to publish concept', { status: 500 });
+      return new Response(JSON.stringify({ message: 'Failed to publish concept' }), { status: 500 });
     }
   });
 };

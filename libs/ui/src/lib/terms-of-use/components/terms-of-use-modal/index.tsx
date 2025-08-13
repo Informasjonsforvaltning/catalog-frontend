@@ -20,7 +20,7 @@ const TermsOfUseModal = async ({ catalogId }: TermsOfUseModalProps) => {
 
   return (
     <TermsOfUseModalClient
-      termsOfUseUrl={`${process.env.FDK_REGISTRATION_BASE_URI}/terms-and-conditions/${catalogId}`}
+      termsOfUseUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/terms-and-conditions/${catalogId}`}
       closeUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
     />
   );

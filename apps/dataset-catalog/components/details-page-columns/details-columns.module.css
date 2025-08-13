@@ -26,3 +26,22 @@
   gap: 0.5rem;
   flex-wrap: wrap;
 }
+
+.distributionField {
+  padding-bottom: 1.5rem;
+}
+
+.distributionTable {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.distributionTable th,
+.distributionTable td {
+  word-wrap: break-word;
+}
+
+.table {
+  width: 100%;
+  table-layout: fixed;
+}

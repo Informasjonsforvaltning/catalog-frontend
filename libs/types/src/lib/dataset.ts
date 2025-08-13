@@ -87,6 +87,7 @@ export type Distribution = {
   accessServiceUris?: string[];
 };
 type DatasetContactPoint = {
+  name?: LocalizedStrings;
   email?: string;
   hasTelephone?: string;
   hasURL?: string;
@@ -99,5 +100,5 @@ export type DatasetsPageSettings = {
   filter: {
     status: string[] | null;
     pubState: string[] | null;
-  }
+  };
 };

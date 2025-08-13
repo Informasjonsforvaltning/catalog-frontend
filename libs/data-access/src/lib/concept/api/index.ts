@@ -31,6 +31,9 @@ export const conceptCatalogApiCall = async (
 export const searchConceptsForCatalog = (catalogId: string, query: SearchConceptQuery, accessToken: string) =>
   conceptCatalogApiCall('POST', `/begreper/search?orgNummer=${catalogId}`, query, accessToken);
 
+export const getConceptsForCatalog = (catalogId: string, accessToken: string) =>
+  conceptCatalogApiCall('GET', `/begreper?orgNummer=${catalogId}`, null, accessToken);
+
 export const getConcept = (conceptId: string, accessToken: string) =>
   conceptCatalogApiCall('GET', `/begreper/${conceptId}`, null, accessToken);
 

@@ -20,7 +20,7 @@ type Render = (
   props: { session: any; hasWritePermission: boolean; hasAdminPermission: boolean } & PageParams,
 ) => Promise<any>;
 
-const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', render: Render) => {
+const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write' | 'admin', render: Render) => {
   return async ({ params }) => {
     const { catalogId, dataServiceId, resultId } = await params;
 
@@ -49,11 +49,14 @@ const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', re
     }
 
     const hasWritePermission = session?.accessToken && hasOrganizationWritePermission(session.accessToken, catalogId);
-    if (!hasWritePermission && permissions === 'write') {
+    if (!hasWritePermission && (permissions === 'write' || permissions === 'admin')) {
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
 
     const hasAdminPermission = session?.accessToken && hasOrganizationAdminPermission(session.accessToken, catalogId);
+    if (!hasAdminPermission && permissions === 'admin') {
+      redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
+    }
 
     return await render({
       catalogId,
@@ -70,3 +73,5 @@ export const withReadProtectedPage = (pagePath: PagePath, render: Render) =>
   withProtectedPage(pagePath, 'read', render);
 export const withWriteProtectedPage = (pagePath: PagePath, render: Render) =>
   withProtectedPage(pagePath, 'write', render);
+export const withAdminProtectedPage = (pagePath: PagePath, render: Render) =>
+  withProtectedPage(pagePath, 'admin', render);

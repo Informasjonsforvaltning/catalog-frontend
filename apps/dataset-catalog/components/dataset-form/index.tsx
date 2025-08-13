@@ -1,7 +1,7 @@
 'use client';
-import { DataStorage, formatISO, getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
+import { DataStorage, formatISO, getTranslateText, localization, trimObjectWhitespace, deepMergeWithUndefinedHandling } from '@catalog-frontend/utils';
 import { Alert, Button, Checkbox, Paragraph, Spinner, Switch } from '@digdir/designsystemet-react';
-import { Dataset, DatasetToBeCreated, ReferenceData, PublicationStatus, StorageData } from '@catalog-frontend/types';
+import { Dataset, DatasetToBeCreated, ReferenceData, PublicationStatus, StorageData, Distribution, Reference } from '@catalog-frontend/types';
 import {
   ConfirmModal,
   FormikAutoSaver,
@@ -26,6 +26,8 @@ import { ContactPointSection } from './components/contact-point-section';
 import styles from './dataset-form.module.css';
 import { DetailsSection } from './components/details-section/details-section';
 import classNames from 'classnames';
+import { get, isEmpty, isEqual } from 'lodash';
+import { compare } from 'fast-json-patch';
 
 type Props = {
   afterSubmit?: () => void;
@@ -162,26 +164,26 @@ export const DatasetForm = ({
     ...(isValid
       ? []
       : [
-          <Alert
-            key={1}
-            size='sm'
-            severity='danger'
-            className={styles.notification}
-          >
-            {localization.validation.formError}
-          </Alert>,
-        ]),
+        <Alert
+          key={1}
+          size='sm'
+          severity='danger'
+          className={styles.notification}
+        >
+          {localization.validation.formError}
+        </Alert>,
+      ]),
     ...(hasUnsavedChanges
       ? [
-          <Alert
-            key={1}
-            size='sm'
-            severity='warning'
-            className={styles.notification}
-          >
-            {localization.validation.unsavedChanges}
-          </Alert>,
-        ]
+        <Alert
+          key={1}
+          size='sm'
+          severity='warning'
+          className={styles.notification}
+        >
+          {localization.validation.unsavedChanges}
+        </Alert>,
+      ]
       : []),
   ];
 
@@ -244,12 +246,33 @@ export const DatasetForm = ({
           const hasError = (fields: (keyof Dataset)[]) => fields.some((field) => Object.keys(errors).includes(field));
           const handleRestoreDataset = (data: StorageData) => {
             if (data?.id !== datasetId) {
-              if (!(data?.id)) {
+              if (!data?.id) {
                 return window.location.replace(`/catalogs/${catalogId}/datasets/new?restore=1`);
               }
               return window.location.replace(`/catalogs/${catalogId}/datasets/${data.id}/edit?restore=1`);
             }
-            setValues(data.values);
+            const restoreValues = datasetTemplate(data.values);
+            setValues(restoreValues);
+
+            // Handle distribution data from secondary storage
+            const restoreDistributionData = autoSaveStorage?.getSecondary('datasetFormDistribution');
+            if (restoreDistributionData && (restoreDistributionData?.id === datasetId)) {
+              const distributionValues: { distribution: Distribution; distributionType: 'distribution' | 'sample'; index: number } = restoreDistributionData.values;
+              setFieldValue(`${distributionValues.distributionType}[${distributionValues.index}]`, distributionValues.distribution);
+              // Delete distribution data from secondary storage since it is merged with the main data
+              autoSaveStorage?.deleteSecondary('datasetFormDistribution');
+            }
+
+            // Handle reference data from secondary storage
+            const restoreReferenceData = autoSaveStorage?.getSecondary('datasetFormReference');
+            if (restoreReferenceData && (restoreReferenceData?.id === datasetId)) {
+              const referenceValues: { reference: Reference; index: number } = restoreReferenceData.values;
+              setFieldValue(`references[${referenceValues.index}]`, referenceValues.reference);
+              // Delete reference data from secondary storage since it is merged with the main data
+              autoSaveStorage?.deleteSecondary('datasetFormReference');
+            }
+
+            showSnackbarMessage({ message: localization.snackbar.restoreSuccessfull, severity: 'success' });
           };
 
           return (
@@ -268,7 +291,14 @@ export const DatasetForm = ({
                     title={localization.datasetForm.heading.about}
                     subtitle={localization.datasetForm.subtitle.about}
                     required
-                    error={hasError(['title'])}
+                    error={hasError([
+                      'title',
+                      'description',
+                      'issued',
+                      'legalBasisForRestriction',
+                      'legalBasisForProcessing',
+                      'legalBasisForAccess',
+                    ])}
                   >
                     <AboutSection />
                   </FormLayout.Section>
@@ -278,7 +308,7 @@ export const DatasetForm = ({
                     title={localization.datasetForm.heading.theme}
                     subtitle={localization.datasetForm.subtitle.theme}
                     required
-                    error={hasError(['euDataTheme'])}
+                    error={hasError(['euDataTheme', 'losTheme'])}
                   >
                     <ThemeSection
                       losThemes={losThemes}
@@ -290,11 +320,14 @@ export const DatasetForm = ({
                     id='distribution-section'
                     title={localization.datasetForm.heading.distributions}
                     subtitle={localization.datasetForm.subtitle.distributions}
+                    error={hasError(['distribution', 'sample'])}
                   >
                     <DistributionSection
                       referenceDataEnv={referenceDataEnv}
                       searchEnv={searchEnv}
                       openLicenses={openLicenses}
+                      autoSaveId={datasetId?.toString()}
+                      autoSaveStorage={autoSaveStorage}
                     />
                   </FormLayout.Section>
 
@@ -302,7 +335,7 @@ export const DatasetForm = ({
                     id='details-section'
                     title={localization.datasetForm.heading.details}
                     subtitle={localization.datasetForm.subtitle.details}
-                    error={hasError(['landingPage'])}
+                    error={hasError(['landingPage', 'conformsTo'])}
                   >
                     <DetailsSection
                       referenceDataEnv={referenceDataEnv}
@@ -314,14 +347,16 @@ export const DatasetForm = ({
                     id='relation-section'
                     title={localization.datasetForm.heading.relations}
                     subtitle={localization.datasetForm.subtitle.relations}
+                    error={hasError(['references', 'relations'])}
                   >
-                    <RelationsSection searchEnv={searchEnv} />
+                    <RelationsSection searchEnv={searchEnv} autoSaveId={datasetId?.toString()} autoSaveStorage={autoSaveStorage} />
                   </FormLayout.Section>
 
                   <FormLayout.Section
                     id='concept-section'
                     title={localization.datasetForm.heading.concept}
                     subtitle={localization.datasetForm.subtitle.concept}
+                    error={hasError(['conceptList', 'keywordList'])}
                   >
                     <ConceptSection searchEnv={searchEnv} />
                   </FormLayout.Section>
@@ -330,6 +365,7 @@ export const DatasetForm = ({
                     id='information-model-section'
                     title={localization.datasetForm.heading.informationModel}
                     subtitle={localization.datasetForm.subtitle.informationModel}
+                    error={hasError(['informationModelsFromFDK', 'informationModel'])}
                   >
                     <InformationModelSection searchEnv={searchEnv} />
                   </FormLayout.Section>

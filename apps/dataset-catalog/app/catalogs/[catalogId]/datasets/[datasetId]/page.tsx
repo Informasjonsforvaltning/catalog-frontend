@@ -22,7 +22,7 @@ import DatasetDetailsPageClient from './dataset-details-page-client';
 import { withReadProtectedPage } from '@dataset-catalog/utils/auth';
 import { redirect, RedirectType } from 'next/navigation';
 
-const EditDatasetPage = withReadProtectedPage(
+const DatasetDetailPage = withReadProtectedPage(
   ({ catalogId, datasetId }) => `/catalogs/${catalogId}/datasets/${datasetId}`,
   async ({ catalogId, datasetId }) => {
     if (!datasetId || !validUUID(datasetId)) {
@@ -110,4 +110,4 @@ const EditDatasetPage = withReadProtectedPage(
   },
 );
 
-export default EditDatasetPage;
+export default DatasetDetailPage;

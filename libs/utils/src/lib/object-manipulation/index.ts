@@ -48,6 +48,27 @@ export const trimObjectWhitespace = (obj: any): any => {
   return typeof obj === 'string' ? obj.trim() : obj; // Trim root-level strings if necessary
 };
 
+/**
+ * Recursively replaces null values with undefined in an object or array
+ * This is useful for Formik forms that don't handle null values well
+ */
+export const safeValues = (obj: any): any => {
+  if (obj === null) {
+    return undefined;
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(safeValues);
+  }
+  if (typeof obj === 'object' && obj !== null) {
+    const result: any = {};
+    for (const [key, value] of Object.entries(obj)) {
+      result[key] = safeValues(value);
+    }
+    return result;
+  }
+  return obj;
+};
+
 export const convertListToListOfObjects = (valueList: string[], key: string) => {
   return valueList.map((value) => ({ [key]: value }));
 };
@@ -87,3 +108,43 @@ export function transformToLocalizedStrings(inputDict: {
 
   return outputList;
 }
+
+/**
+ * Deep merge utility that handles undefined values properly
+ * This is useful for merging form data where undefined values should not override existing values
+ * @param target - The base object to merge into
+ * @param source - The object to merge from
+ * @returns A new object with the merged values
+ */
+export const deepMergeWithUndefinedHandling = (target: any, source: any): any => {
+  if (source === undefined) {
+    return target;
+  }
+
+  if (typeof source !== 'object' || source === null) {
+    return source;
+  }
+
+  if (typeof target !== 'object' || target === null) {
+    return source;
+  }
+
+  const result = { ...target };
+
+  for (const key in source) {
+    if (source.hasOwnProperty(key)) {
+      if (source[key] === undefined) {
+        // Skip undefined values from source
+        continue;
+      }
+
+      if (typeof source[key] === 'object' && source[key] !== null && !Array.isArray(source[key])) {
+        result[key] = deepMergeWithUndefinedHandling(result[key], source[key]);
+      } else {
+        result[key] = source[key];
+      }
+    }
+  }
+
+  return result;
+};

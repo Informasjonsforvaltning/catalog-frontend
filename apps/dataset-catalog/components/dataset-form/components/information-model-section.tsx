@@ -18,7 +18,7 @@ interface Props {
 }
 
 export const InformationModelSection = ({ searchEnv }: Props) => {
-  const { setFieldValue, values } = useFormikContext<Dataset>();
+  const { setFieldValue, errors, values } = useFormikContext<Dataset>();
   const [searchTerm, setSearchTerm] = useState<string>('');
 
   const { data: informationModelSuggestions, isLoading: searching } = useSearchInformationModelsSuggestions(
@@ -102,8 +102,8 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
       )}
 
       <UriWithLabelFieldsetTable
-        values={values.informationModel}
         fieldName={'informationModel'}
+        errors={errors.informationModel}
         label={
           <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.informationModel}>
             {localization.datasetForm.fieldLabel.informationModel}

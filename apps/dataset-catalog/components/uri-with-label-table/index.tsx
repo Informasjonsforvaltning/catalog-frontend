@@ -1,6 +1,6 @@
 import { UriWithLabel } from '@catalog-frontend/types';
 import { localization, getTranslateText } from '@catalog-frontend/utils';
-import { Table } from '@digdir/designsystemet-react';
+import { Link, Table } from '@digdir/designsystemet-react';
 
 type Props = {
   values?: UriWithLabel[];
@@ -13,7 +13,7 @@ export const UriWithLabelTable = ({ values = [], language }: Props) => {
   return (
     <Table
       size='sm'
-      style={{ tableLayout: 'fixed' }}
+      style={{ tableLayout: 'fixed', width: '100%' }}
     >
       <Table.Head>
         <Table.Row>
@@ -25,7 +25,7 @@ export const UriWithLabelTable = ({ values = [], language }: Props) => {
         {values.map((item, index) => (
           <Table.Row key={`uri-with-label-table-${item?.uri}-${index}`}>
             <Table.Cell>{getTranslateText(item?.prefLabel, language)}</Table.Cell>
-            <Table.Cell>{item?.uri}</Table.Cell>
+            <Table.Cell>{item?.uri && <Link href={item.uri}>{item.uri}</Link>}</Table.Cell>
           </Table.Row>
         ))}
       </Table.Body>

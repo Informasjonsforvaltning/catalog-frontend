@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ReactNode, useEffect, useRef, useState } from 'react';
-import { Distribution, ReferenceDataCode } from '@catalog-frontend/types';
+import { Distribution, ReferenceDataCode, Search } from '@catalog-frontend/types';
 import {
   AddButton,
   DeleteButton,
@@ -14,13 +14,8 @@ import {
 } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button, Card, Combobox, Fieldset, Modal, SkeletonRectangle, Textfield } from '@digdir/designsystemet-react';
-import {
-  useSearchFileTypeByUri,
-  useSearchFileTypes,
-  useSearchMediaTypeByUri,
-  useSearchMediaTypes,
-} from '../../../../hooks/useReferenceDataSearch';
-import { useSearchDataServiceByUri, useSearchDataServiceSuggestions } from '../../../../hooks/useSearchService';
+import { useSearchFileTypes, useSearchMediaTypes } from '../../../../hooks/useReferenceDataSearch';
+import { useSearchDataServiceSuggestions } from '../../../../hooks/useSearchService';
 import { FastField, FieldArray, Formik } from 'formik';
 import styles from './distributions.module.scss';
 import { distributionTemplate } from '../../utils/dataset-initial-values';
@@ -34,8 +29,13 @@ type Props = {
   referenceDataEnv: string;
   searchEnv: string;
   openLicenses?: ReferenceDataCode[];
-  onSuccess: (values: Distribution, type: string) => void;
+  onSuccess: (values: Distribution) => void;
+  onCancel?: () => void;
+  onChange?: (values: Distribution) => void;
   initialValues: Partial<Distribution> | undefined;
+  initialFileTypes: ReferenceDataCode[];
+  initialMediaTypes: ReferenceDataCode[];
+  initialAccessServices: Search.SearchObject[];
   type: 'new' | 'edit';
   distributionType: 'distribution' | 'sample';
 };
@@ -45,17 +45,26 @@ export const DistributionModal = ({
   searchEnv,
   openLicenses,
   onSuccess,
+  onCancel,
+  onChange,
   trigger,
   initialValues,
+  initialFileTypes,
+  initialMediaTypes,
+  initialAccessServices,
   type,
   distributionType,
 }: Props) => {
-  const [selectedAccesServices, setSelectedAccessServices] = useState(initialValues?.accessServiceUris);
-  const [selectedFileTypes, setSelectedFileTypes] = useState(initialValues?.format);
-  const [selectedMediaTypes, setSelectedMediaTypes] = useState(initialValues?.mediaType);
+  const [selectedFileTypeUris, setSelectedFileTypeUris] = useState(initialValues?.format ?? []);
+  const [selectedMediaTypeUris, setSelectedMediaTypeUris] = useState(initialValues?.mediaType ?? []);
+  const [selectedAccessServiceUris, setSelectedAccessServiceUris] = useState(initialValues?.accessServiceUris ?? []);
+  const [selectedAndSearchedFileTypes, setSelectedAndSearchedFileTypes] = useState<ReferenceDataCode[]>([]);
+  const [selectedAndSearchedMediaTypes, setSelectedAndSearchedMediaTypes] = useState<ReferenceDataCode[]>([]);
+  const [selectedAndSearchedAccessServices, setSelectedAndSearchedAccessServices] = useState<Search.SearchObject[]>([]);
 
   const template = distributionTemplate(initialValues);
   const [submitted, setSubmitted] = useState(false);
+
   const modalRef = useRef<HTMLDialogElement>(null);
 
   const [searchQueryMediaTypes, setSearchQueryMediaTypes] = useState<string>('');
@@ -73,31 +82,60 @@ export const DistributionModal = ({
     searchQueryMediaTypes,
     referenceDataEnv,
   );
-
-  const { data: previouslySelectedMediaTypes, isLoading: loadingSelectedMediaTypes } = useSearchMediaTypeByUri(
-    selectedMediaTypes ?? [],
-    referenceDataEnv,
-  );
-
   const { data: fileTypes, isLoading: searchingFileTypes } = useSearchFileTypes(searchQueryFileTypes, referenceDataEnv);
-
-  const { data: previouslySelectedFileTypes, isLoading: loadingSelectedFileTypes } = useSearchFileTypeByUri(
-    selectedFileTypes ?? [],
-    referenceDataEnv,
-  );
-
-  const { data: previouslySelectedAccessServices, isLoading: isLoadingAccessServices } = useSearchDataServiceByUri(
-    searchEnv,
-    selectedAccesServices ?? [],
-  );
-
   const { data: dataServices } = useSearchDataServiceSuggestions(searchEnv, searchDataServicesQuery);
 
-  const accessServiceOptions = [
-    ...new Map(
-      [...(previouslySelectedAccessServices ?? []), ...(dataServices ?? [])].map((option) => [option.uri, option]),
-    ).values(),
-  ];
+  if (initialValues?.accessURL?.length === 0) {
+    initialValues.accessURL = [''];
+  }
+
+  useEffect(() => {
+    const allMediaTypes = [...selectedAndSearchedMediaTypes, ...initialMediaTypes];
+    const selectedMediaTypes = selectedMediaTypeUris
+      ?.map((uri) => allMediaTypes.find((mediaType) => mediaType.uri === uri))
+      .filter((mediaType) => mediaType !== undefined);
+    const unique = Array.from(
+      new Map([...(selectedMediaTypes ?? []), ...(mediaTypes ?? [])].map((item) => [item.uri, item])).values(),
+    );
+    setSelectedAndSearchedMediaTypes(unique);
+  }, [mediaTypes, selectedMediaTypeUris, initialMediaTypes, setSelectedAndSearchedMediaTypes]);
+
+  useEffect(() => {
+    const allFileTypes = [...selectedAndSearchedFileTypes, ...initialFileTypes];
+    const selectedFileTypes = selectedFileTypeUris
+      ?.map((uri) => allFileTypes.find((fileType) => fileType.uri === uri))
+      .filter((fileType) => fileType !== undefined);
+    const unique = Array.from(
+      new Map([...(selectedFileTypes ?? []), ...(fileTypes ?? [])].map((item) => [item.uri, item])).values(),
+    );
+    setSelectedAndSearchedFileTypes(unique);
+  }, [fileTypes, selectedFileTypeUris, initialFileTypes, setSelectedAndSearchedFileTypes]);
+
+  useEffect(() => {
+    const allAccessServices = [...selectedAndSearchedAccessServices, ...initialAccessServices];
+    const selectedAccessServices = selectedAccessServiceUris
+      ?.map((uri) => allAccessServices.find((service) => service.uri === uri))
+      .filter((service) => service !== undefined);
+    const unique = Array.from(
+      new Map([...(selectedAccessServices ?? []), ...(dataServices ?? [])].map((item) => [item.uri, item])).values(),
+    );
+    setSelectedAndSearchedAccessServices(unique);
+  }, [dataServices, selectedAccessServiceUris, initialAccessServices, setSelectedAndSearchedAccessServices]);
+
+  const handleCancel = () => {
+    if (onCancel) {
+      onCancel();
+    }
+    modalRef.current?.close();
+  };
+
+  const handleSubmit = (values: Distribution, { setSubmitting }: any) => {
+    const trimmedValues = trimObjectWhitespace(values);
+    onSuccess(trimmedValues);
+    setSubmitting(false);
+    setSubmitted(true);
+    modalRef.current?.close();
+  };
 
   const FIELD_CONFIG = [
     {
@@ -155,9 +193,13 @@ export const DistributionModal = ({
     },
     {
       name: 'accessServiceUris',
-      shouldShow: ({ distributionType, isLoadingAccessServices }: any) =>
-        !isLoadingAccessServices && distributionType === 'distribution',
-      render: ({ setFieldValue, setSelectedAccessServices, setSearchDataServicesQuery, accessServiceOptions }: any) => (
+      shouldShow: ({ distributionType }: any) => distributionType === 'distribution',
+      render: ({
+        setFieldValue,
+        setSelectedAccessServiceUris,
+        setSearchDataServicesQuery,
+        selectedAndSearchedAccessServices,
+      }: any) => (
         <Fieldset
           size='sm'
           legend={
@@ -166,8 +208,8 @@ export const DistributionModal = ({
             </TitleWithHelpTextAndTag>
           }
         >
-          {selectedAccesServices?.every((v) =>
-            accessServiceOptions.find((option: { uri: string }) => option.uri === v),
+          {selectedAccessServiceUris?.every((v) =>
+            selectedAndSearchedAccessServices.find((option: { uri: string }) => option.uri === v),
           ) ? (
             <FieldsetWithDelete onDelete={() => setFieldValue('accessServiceUris', null)}>
               <Combobox
@@ -175,17 +217,17 @@ export const DistributionModal = ({
                 hideClearButton
                 portal={false}
                 onChange={(event) => setSearchDataServicesQuery(event.target.value)}
-                value={selectedAccesServices}
+                value={selectedAccessServiceUris}
                 onValueChange={(selectedValues) => {
                   setFieldValue('accessServiceUris', selectedValues);
-                  setSelectedAccessServices(selectedValues);
+                  setSelectedAccessServiceUris(selectedValues);
                 }}
                 placeholder={`${localization.search.search}...`}
                 size='sm'
                 virtual
                 ref={(el: HTMLInputElement | null) => setInputRef(`accessServiceUris`, el)}
               >
-                {accessServiceOptions.map(
+                {selectedAndSearchedAccessServices.map(
                   (option: { uri: any; description: any; title: any; organization: { prefLabel: any } }, i: any) => (
                     <Combobox.Option
                       key={`distribution-${option.uri}-${i}`}
@@ -212,14 +254,12 @@ export const DistributionModal = ({
     {
       name: 'mediaType',
       render: ({
-        values,
         setFieldValue,
-        setSelectedMediaTypes,
+        setSelectedMediaTypeUris,
         setSearchQueryMediaTypes,
         initialValues,
-        previouslySelectedMediaTypes,
+        selectedAndSearchedMediaTypes,
         mediaTypes,
-        loadingSelectedMediaTypes,
         searchingMediaTypes,
       }: any) => (
         <Fieldset
@@ -230,21 +270,21 @@ export const DistributionModal = ({
             </TitleWithHelpTextAndTag>
           }
         >
-          {selectedMediaTypes?.every((v) =>
-            previouslySelectedMediaTypes?.find((option: ReferenceDataCode | undefined) => option?.uri === v),
+          {selectedMediaTypeUris?.every((v) =>
+            selectedAndSearchedMediaTypes?.find((option: ReferenceDataCode | undefined) => option?.uri === v),
           ) ? (
             <FieldsetWithDelete onDelete={() => setFieldValue('mediaType', null)}>
               <FormikReferenceDataCombobox
                 onChange={(event) => setSearchQueryMediaTypes(event.target.value)}
                 onValueChange={(selectedValues) => {
                   setFieldValue('mediaType', selectedValues);
-                  setSelectedMediaTypes(selectedValues);
+                  setSelectedMediaTypeUris(selectedValues);
                 }}
-                value={selectedMediaTypes}
-                selectedValuesSearchHits={previouslySelectedMediaTypes ?? []}
+                value={selectedMediaTypeUris}
+                selectedValuesSearchHits={selectedAndSearchedMediaTypes ?? []}
                 querySearchHits={mediaTypes ?? []}
                 formikValues={initialValues?.mediaType ?? []}
-                loading={loadingSelectedMediaTypes || searchingMediaTypes}
+                loading={searchingMediaTypes}
                 portal={false}
                 showCodeAsDescription={true}
                 hideClearButton={false}
@@ -264,7 +304,7 @@ export const DistributionModal = ({
         <FieldArray name='page'>
           {(arrayHelpers) => (
             <>
-              {(arrayHelpers.form.values.page || []).map((_: any, index: number, array: string[]) => (
+              {(arrayHelpers.form.values.page || []).map((_: any, index: number) => (
                 <React.Fragment key={`page-${index}`}>
                   <div className={styles['padding-bottom-4']}>
                     <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
@@ -284,7 +324,7 @@ export const DistributionModal = ({
                         }
                         as={Textfield}
                         size='sm'
-                        error={props.errors?.page?.[index]}
+                        error={props.errors?.page?.[index]?.uri}
                       />
                     </FieldsetWithDelete>
                   </div>
@@ -342,9 +382,7 @@ export const DistributionModal = ({
                           }
                           as={Textfield}
                           name={`conformsTo[${i}].prefLabel`}
-                          ref={(el: HTMLInputElement | HTMLTextAreaElement | null) =>
-                            setInputRef(`conformsTo`, el)
-                          }
+                          ref={(el: HTMLInputElement | HTMLTextAreaElement | null) => setInputRef(`conformsTo`, el)}
                         />
                       </div>
                       <FastField
@@ -391,23 +429,20 @@ export const DistributionModal = ({
         className={styles.dialog}
       >
         <Formik
-          initialValues={template}
+          initialValues={{ ...template }}
           name='distribution'
           validateOnChange={submitted}
           validateOnBlur={submitted}
           validationSchema={distributionSectionSchema}
-          onSubmit={(values, { setSubmitting }) => {
-            const trimmedValues = trimObjectWhitespace(values);
-            onSuccess(trimmedValues, distributionType);
-            setSubmitting(false);
-            setSubmitted(true);
-            modalRef.current?.close();
-          }}
+          onSubmit={handleSubmit}
         >
-          {({ errors, isSubmitting, submitForm, values, setFieldValue }) => {
-            if (isEmpty(values.accessURL)) {
-              setFieldValue('accessURL', ['']);
-            }
+          {({ errors, isSubmitting, submitForm, values, dirty, setFieldValue }) => {
+            // Call onChange whenever values change for autosave
+            useEffect(() => {
+              if (dirty && onChange) {
+                onChange(values);
+              }
+            }, [values, dirty, onChange]);
 
             const isExpanded = (fieldConfig: any) => {
               const fieldValues = get(values, fieldConfig.name);
@@ -419,16 +454,13 @@ export const DistributionModal = ({
             // Helper to render a field
             const renderField = (fieldConfig: any, showDivider: boolean = false) => {
               const props = {
-                accessServiceOptions,
+                selectedAndSearchedAccessServices,
                 distributionType,
                 expanded: isExpanded(fieldConfig),
                 fileTypes,
-                isLoadingAccessServices,
-                loadingSelectedFileTypes,
-                loadingSelectedMediaTypes,
                 mediaTypes,
-                previouslySelectedFileTypes,
-                previouslySelectedMediaTypes,
+                selectedAndSearchedFileTypes,
+                selectedAndSearchedMediaTypes,
                 openLicenses,
                 ref: (el: HTMLInputElement | HTMLTextAreaElement | null) => setInputRef(fieldConfig.name, el),
                 searchingFileTypes,
@@ -439,11 +471,12 @@ export const DistributionModal = ({
                 setSearchDataServicesQuery,
                 setSearchQueryFileTypes,
                 setSearchQueryMediaTypes,
-                setSelectedAccessServices,
-                setSelectedFileTypes,
-                setSelectedMediaTypes,
+                setSelectedAccessServiceUris,
+                setSelectedFileTypeUris,
+                setSelectedMediaTypeUris,
                 showDivider,
                 values,
+                errors,
               };
 
               return fieldConfig.hideToggleButton ? (
@@ -605,9 +638,9 @@ export const DistributionModal = ({
                           </TitleWithHelpTextAndTag>
                         }
                       >
-                        {!selectedFileTypes ||
-                        selectedFileTypes?.every((v) =>
-                          previouslySelectedFileTypes?.find(
+                        {!selectedFileTypeUris ||
+                        selectedFileTypeUris?.every((v) =>
+                          selectedAndSearchedFileTypes?.find(
                             (option: ReferenceDataCode | undefined) => option?.uri === v,
                           ),
                         ) ? (
@@ -615,15 +648,16 @@ export const DistributionModal = ({
                             onChange={(event) => setSearchQueryFileTypes(event.target.value)}
                             onValueChange={(selectedValues) => {
                               setFieldValue('format', selectedValues);
-                              setSelectedFileTypes(selectedValues);
+                              setSelectedFileTypeUris(selectedValues);
                             }}
-                            value={selectedFileTypes}
-                            selectedValuesSearchHits={previouslySelectedFileTypes ?? []}
+                            value={selectedFileTypeUris}
+                            selectedValuesSearchHits={selectedAndSearchedFileTypes ?? []}
                             querySearchHits={fileTypes ?? []}
                             formikValues={initialValues?.format ?? []}
-                            loading={loadingSelectedFileTypes || searchingFileTypes}
+                            loading={searchingFileTypes}
                             portal={false}
                             hideClearButton={false}
+                            ref={(el: HTMLInputElement | null) => setInputRef(`format`, el)}
                           />
                         ) : (
                           <SkeletonRectangle />
@@ -647,9 +681,9 @@ export const DistributionModal = ({
                             <Combobox
                               value={values?.license?.uri ? [values?.license.uri] : ['']}
                               portal={false}
-                              onValueChange={(selectedValues) =>
-                                setFieldValue('license.uri', selectedValues.toString())
-                              }
+                              onValueChange={(selectedValues) => {
+                                setFieldValue('license.uri', selectedValues.toString());
+                              }}
                               size='sm'
                               virtual
                             >
@@ -691,7 +725,7 @@ export const DistributionModal = ({
                       <Button
                         variant='secondary'
                         type='button'
-                        onClick={() => modalRef.current?.close()}
+                        onClick={handleCancel}
                         disabled={isSubmitting}
                         size='sm'
                       >
