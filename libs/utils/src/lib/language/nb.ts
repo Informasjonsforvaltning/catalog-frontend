@@ -198,7 +198,7 @@ export const nb = {
     edit: 'Rediger',
     expandAll: 'Vis alle felter',
     harvestDataset: 'Høst spesifikasjon fra katalog',
-    importConcept: 'Importer CSV/JSON',
+    importConceptCSV: 'Importer CSV/JSON',
     importConceptRDF: 'Importer RDF',
     importLogo: 'Importer logo',
     importDataService: 'Importer OpenAPI',
@@ -417,6 +417,12 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
         'Visning av detaljerte resultater og oversikt over tidligere importforsøk for CSV- og JSON-filer er foreløpig ikke tilgjengelig.',
       maxFileSize: `**Merk:** Maksimal filstørrelse for opplastning er xx MB`,
     },
+  },
+
+  dataset: {
+    deleteDataset: 'Slett datasettbeskrivelse',
+    confirmDelete:
+      'Du er i ferd med å slette datasettbeskrivelsen **{0}**. All data knyttet til datasettbeskrivelsen vil bli permanent slettet, og slettingen kan ikke angres. Er du sikker på at du vil fortsette?',
   },
 
   validity: {

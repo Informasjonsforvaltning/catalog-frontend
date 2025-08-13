@@ -20,7 +20,7 @@ export const POST = async (req: NextRequest, props) => {
       } else if (location && resultId) {
         return new Response(JSON.stringify(resultId), { status: 200 });
       } else {
-        return new Response('', { status: response.status });
+        return new Response(JSON.stringify({ ok: true }), { status: response.status });
       }
     } catch (error) {
       console.error('Failed to import concept', error);
