@@ -1,25 +1,52 @@
 import React, { useRef, useState } from 'react';
 import { localization } from '@catalog-frontend/utils';
 import { LinkButton, UploadButton } from '@catalog-frontend/ui';
-import { useImportConcepts } from '../../hooks/import';
+import { useImportConcepts, useSendConcepts } from '../../hooks/import';
 import { Button, Modal, Spinner } from '@digdir/designsystemet-react';
 import styles from './import-modal.module.scss';
-import { FileImportIcon } from '@navikt/aksel-icons';
+import { FileImportIcon, TasklistSendIcon } from '@navikt/aksel-icons';
 import { ImportConceptRdf } from './concept-rdf-upload';
 import Markdown from 'react-markdown';
+import { Concept } from '@catalog-frontend/types';
 
-interface Props {
+interface ImportProps {
   catalogId: string;
 }
 
-export function ImportModal({ catalogId }: Props) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+export function ImportModal({ catalogId }: ImportProps) {
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [isUploaded, setIsUploaded] = useState<boolean>(false);
+  const [isSending, setIsSending] = useState<boolean>(false);
+  const [uploadedConcepts, setUploadedConcepts] = useState<Array<Concept>>(new Array<Concept>());
   const modalRef = useRef<HTMLDialogElement>(null);
 
-  const importConcepts = useImportConcepts(catalogId, setIsLoading);
+  const importConcepts = useImportConcepts(catalogId, setIsUploading, setIsUploaded);
+  const sendConcepts = useSendConcepts(catalogId)//, setIsSending);
 
   const onImportUpload = (event) => {
-    importConcepts.mutate(event.target.files[0], { onError: (error) => alert('Import failed: ' + error) });
+    importConcepts.mutate(event.target.files[0], {
+      onSuccess: (concepts) => {
+        setUploadedConcepts(concepts)
+        setIsUploading(false);
+      },
+      onError: (error) => alert('Import failed: ' + error) });
+  };
+
+  const send = async () => {
+    if(uploadedConcepts.length === 0) {
+      alert("Ingen bereper var funnet i opplastet fil.");
+      return
+    }
+    setIsSending(true)
+    sendConcepts.mutate(uploadedConcepts)
+  }
+
+  const cancel = () => {
+    setIsUploading(false);
+    setIsUploaded(false);
+    setIsSending(false);
+    setUploadedConcepts(new Array<Concept>());
+    modalRef.current?.close();
   };
 
   return (
@@ -39,6 +66,14 @@ export function ImportModal({ catalogId }: Props) {
         </Modal.Header>
         <Modal.Content className={styles.content}>
           <div className={styles.modalContent}>
+            {(isUploading || isSending) && (
+              <div className={styles.spinnerOverlay}>
+                <Spinner
+                  title={localization.loading}
+                  size='large'
+                />
+              </div>
+            )}
             <Markdown>{localization.concept.importModal.conceptUploadDescription}</Markdown>
             <br />
             <Markdown>{localization.concept.importModal.resultDescription}</Markdown>
@@ -50,16 +85,10 @@ export function ImportModal({ catalogId }: Props) {
               <Markdown>{localization.concept.importModal.csvImportHistoryNotSupported}</Markdown>
             </div>
           </div>
-
         </Modal.Content>
-        <Modal.Footer>
-          <div className={styles.buttons}>
-            {isLoading ? (
-              <Spinner
-                title={localization.loading}
-                size='large'
-              />
-            ) : (
+        {!(isUploading || isSending || isUploaded) && (
+          <Modal.Footer>
+            <div className={styles.buttons}>
               <>
                 <LinkButton
                   href={`/catalogs/${catalogId}/concepts/import-results`}
@@ -87,12 +116,31 @@ export function ImportModal({ catalogId }: Props) {
 
                 <ImportConceptRdf
                   catalogId={catalogId}
-                  setIsLoading={setIsLoading}
+                  setIsLoading={setIsUploading}
                 />
               </>
-            )}
-          </div>
-        </Modal.Footer>
+            </div>
+          </Modal.Footer>
+        )}
+        {isUploaded && !isSending && (
+          <Modal.Footer>
+            <div className={styles.buttons}>
+              <Button
+                variant={'secondary'}
+                onClick={cancel}
+              >
+                Avbryt
+              </Button>
+              <Button
+                onClick={send}
+                variant={'primary'}
+              >
+                <TasklistSendIcon />
+                Send
+              </Button>
+            </div>
+          </Modal.Footer>
+        )}
       </Modal.Dialog>
     </Modal.Root>
   );

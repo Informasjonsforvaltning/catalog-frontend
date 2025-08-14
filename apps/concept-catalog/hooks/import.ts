@@ -198,46 +198,15 @@ export const useImportRdfConcepts = (catalogId: string) => {
   });
 };
 
-export const useImportConcepts = (catalogId: string, setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>) => {
-  const queryClient = useQueryClient();
+export const useSendConcepts = (catalogId: string,
+                                setIsSending?: React.Dispatch<React.SetStateAction<boolean>>) => {
   const router = useRouter();
   return useMutation({
-    mutationKey: ['importConcepts'],
-    mutationFn: async (file: File) => {
-      if (!validOrganizationNumber(catalogId)) {
-        return Promise.reject('Invalid catalog id');
-      }
-      if(setIsLoading)
-        setIsLoading(true)
+    mutationKey: ['sendConcepts'],
+    mutationFn: async (concepts: Concept []) => {
+      if(setIsSending)
+        setIsSending(true)
 
-      const content = await file.text();
-      let parsedText: ConceptImport[] = [];
-
-      if (file.type === 'application/json') {
-        parsedText = await attemptToParseJsonFile(content);
-      } else if (file.type === 'text/csv') {
-        parsedText = await attemptToParseCsvFile(content);
-      } else {
-        Promise.reject('Invalid file type');
-        if(setIsLoading)
-          setIsLoading(false)
-      }
-
-      parsedText.forEach((line) => {console.log("Parsed line: ", line)});
-
-      const concepts = parsedText?.map(
-        (concept) =>
-          ({
-            ...concept,
-            ansvarligVirksomhet: { id: catalogId },
-          }) as Concept,
-      );
-
-      if (
-        window.confirm(
-          `Du er i ferd med å importere ${concepts.length} begreper. Dette vil opprette nye begreper i katalogen. Fortsette?`,
-        )
-      ) {
         const response = await fetch(`/api/catalogs/${catalogId}/concepts/import`, {
           method: 'POST',
           body: JSON.stringify(concepts),
@@ -258,6 +227,60 @@ export const useImportConcepts = (catalogId: string, setIsLoading?: React.Dispat
         }
 
         return Promise.resolve();
+
+      return Promise.reject('Canceled');
+    },
+    onSuccess: () => {
+      // Invalidate and refetch
+      router.refresh();
+    },
+  })
+
+}
+
+export const useImportConcepts = (catalogId: string,
+                                  setIsUploading?: React.Dispatch<React.SetStateAction<boolean>>,
+                                  setIsUploaded?: React.Dispatch<React.SetStateAction<boolean>>) => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: ['importConcepts'],
+    mutationFn: async (file: File) => {
+      if (!validOrganizationNumber(catalogId)) {
+        return Promise.reject('Invalid catalog id');
+      }
+      if(setIsUploading)
+        setIsUploading(true)
+
+      const content = await file.text();
+      let parsedText: ConceptImport[] = [];
+
+      if (file.type === 'application/json') {
+        parsedText = await attemptToParseJsonFile(content);
+      } else if (file.type === 'text/csv') {
+        parsedText = await attemptToParseCsvFile(content);
+      } else {
+        Promise.reject('Invalid file type');
+        if(setIsUploading)
+          setIsUploading(false)
+      }
+
+      parsedText.forEach((line) => {console.log("Parsed line: ", line)});
+
+      const concepts = parsedText?.map(
+        (concept) =>
+          ({
+            ...concept,
+            ansvarligVirksomhet: { id: catalogId },
+          }) as Concept,
+      );
+
+      if (
+        window.confirm(
+          `Du er i ferd med å importere ${concepts.length} begreper. Dette vil opprette nye begreper i katalogen. Fortsette?`,
+        )
+      ) {
+        if(setIsUploaded) setIsUploaded(true)
+        return concepts;
       }
 
       return Promise.reject('Canceled');
