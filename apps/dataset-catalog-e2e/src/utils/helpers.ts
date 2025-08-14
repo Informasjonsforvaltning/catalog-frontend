@@ -104,7 +104,7 @@ export const createDataset = async (apiRequestContext, dataset) => {
   }
 
   const createdDataset = await response.json();
-  console.log('[CREATE DATASET] Dataset created successfully with ID:', createdDataset.id);
+  console.log('[CREATE DATASET] Dataset created successfully with ID:', createdDataset);
   
   return createdDataset;
 };

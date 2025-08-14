@@ -78,12 +78,12 @@ export const DistributionDetails = ({
             </div>
           )}
 
-          {distribution?.accessServiceUris && distribution.accessServiceUris.length > 0 && (
+          {distribution?.accessServices && distribution.accessServices.length > 0 && (
             <div className={styles.field}>
               <Heading
                 level={5}
                 size='2xs'
-              >{`${localization.datasetForm.fieldLabel.accessServiceUris}:`}</Heading>
+              >{`${localization.datasetForm.fieldLabel.accessServices}:`}</Heading>
               {
                 <Table
                   size='sm'
@@ -91,13 +91,13 @@ export const DistributionDetails = ({
                 >
                   <Table.Head>
                     <Table.Row>
-                      <Table.HeaderCell>{localization.datasetForm.fieldLabel.accessServiceUris}</Table.HeaderCell>
+                      <Table.HeaderCell>{localization.datasetForm.fieldLabel.accessServices}</Table.HeaderCell>
                       <Table.HeaderCell>{localization.publisher}</Table.HeaderCell>
                     </Table.Row>
                   </Table.Head>
 
                   <TableBody>
-                    {distribution.accessServiceUris.map((uri, i) => {
+                    {distribution.accessServices.map((uri, i) => {
                       const match = selectedDataServices?.find((service) => service.uri === uri);
                       return (
                         <Table.Row key={`service-${uri}-${i}`}>
@@ -112,7 +112,7 @@ export const DistributionDetails = ({
             </div>
           )}
 
-          {distribution.license?.uri && (
+          {distribution.license && (
             <>
               <Heading
                 level={5}
@@ -121,7 +121,7 @@ export const DistributionDetails = ({
               <div className={styles.field}>
                 <Paragraph size='sm'>
                   {getTranslateText(
-                    openLicenses.find((license) => license.uri === distribution.license?.uri)?.label,
+                    openLicenses.find((license) => license.uri === distribution.license)?.label,
                     language,
                   )}
                 </Paragraph>
@@ -164,13 +164,13 @@ export const DistributionDetails = ({
                 level={5}
                 size='2xs'
               >{`${localization.datasetForm.fieldLabel.page}:`}</Heading>
-              {distribution.page.map((page: { uri: string }, index: number) => {
+              {distribution.page.map((page: string, index: number) => {
                 return (
                   <Paragraph
                     key={`page-${index}`}
                     size='sm'
                   >
-                    {page.uri}
+                    {page}
                   </Paragraph>
                 );
               })}

@@ -4,7 +4,7 @@ import { Operation } from 'fast-json-patch';
 const path = `${process.env.DATASET_CATALOG_BASE_URI}`;
 
 export const getAllDatasets = async (catalogId: string, accessToken: string) => {
-  const resource = `${path}/catalogs/${catalogId}/datasets`;
+  const resource = `${path}/internal/catalogs/${catalogId}/datasets`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -16,7 +16,7 @@ export const getAllDatasets = async (catalogId: string, accessToken: string) => 
 };
 
 export const getById = async (catalogId: string, datasetId: string, accessToken: string) => {
-  const resource = `${path}/catalogs/${catalogId}/datasets/${datasetId}`;
+  const resource = `${path}/internal/catalogs/${catalogId}/datasets/${datasetId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -28,7 +28,7 @@ export const getById = async (catalogId: string, datasetId: string, accessToken:
 };
 
 export const postDataset = async (Dataset: Partial<Dataset>, catalogId: string, accessToken: string) => {
-  const resource = `${path}/catalogs/${catalogId}/datasets`;
+  const resource = `${path}/internal/catalogs/${catalogId}/datasets`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -41,7 +41,7 @@ export const postDataset = async (Dataset: Partial<Dataset>, catalogId: string, 
 };
 
 export const deleteDataset = async (catalogId: string, datasetId: string, accessToken: string) => {
-  const resource = `${path}/catalogs/${catalogId}/datasets/${datasetId}`;
+  const resource = `${path}/internal/catalogs/${catalogId}/datasets/${datasetId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -58,7 +58,7 @@ export const updateDataset = async (
   patchOperations: Operation[],
   accessToken: string,
 ) => {
-  const resource = `${path}/catalogs/${catalogId}/datasets/${datasetId}`;
+  const resource = `${path}/internal/catalogs/${catalogId}/datasets/${datasetId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -71,7 +71,7 @@ export const updateDataset = async (
 };
 
 export const publishDataset = async (catalogId: string, datasetId: string, accessToken: string) => {
-  const resource = `${path}/catalogs/${catalogId}/datasets/${datasetId}/publish`;
+  const resource = `${path}/internal/catalogs/${catalogId}/datasets/${datasetId}/publish`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -83,7 +83,7 @@ export const publishDataset = async (catalogId: string, datasetId: string, acces
 };
 
 export const unpublishDataset = async (catalogId: string, datasetId: string, accessToken: string) => {
-  const resource = `${path}/catalogs/${catalogId}/datasets/${datasetId}/unpublish`;
+  const resource = `${path}/internal/catalogs/${catalogId}/datasets/${datasetId}/unpublish`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -95,7 +95,7 @@ export const unpublishDataset = async (catalogId: string, datasetId: string, acc
 };
 
 export const getAllDatasetCatalogs = async (accessToken: string) => {
-  const resource = `${path}/catalogs`;
+  const resource = `${path}/internal/catalogs`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,

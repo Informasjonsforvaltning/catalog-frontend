@@ -1,4 +1,4 @@
-import { DatasetToBeCreated, PublicationStatus } from '@catalog-frontend/types';
+import { DatasetToBeCreated } from '@catalog-frontend/types';
 import { expect, runTestAsAdmin } from '../../fixtures/basePage';
 import { adminAuthFile, createDataset, uniqueString } from '../../utils/helpers';
 import { accessRightPublic } from '@catalog-frontend/utils';
@@ -24,10 +24,7 @@ const createRandomDataset = async (playwright) => {
         nn: uniqueString('description_nn'),
         en: uniqueString('description_en'),
     },
-    accessRights: {
-        uri: accessRightPublic.uri,
-        prefLabel: accessRightPublic.label,
-    },
+    accessRight: accessRightPublic.uri,
     legalBasisForRestriction: [
       {
         uri: 'https://lovdata.no/dokument/NL/lov/2018-06-15-25',
@@ -58,12 +55,11 @@ const createRandomDataset = async (playwright) => {
         },
       },
     ],
-    registrationStatus: PublicationStatus.DRAFT,
-    catalogId: process.env.E2E_CATALOG_ID,    
-    contactPoint: [{
+    approved: false,
+    contactPoints: [{
       email: 'test@example.com',
-      hasTelephone: '+47 12 34 56 78',
-      hasURL: 'https://example.com/contact',
+      phone: '+47 12 34 56 78',
+      url: 'https://example.com/contact',
     }],
     distribution: [
       {
@@ -78,17 +74,17 @@ const createRandomDataset = async (playwright) => {
             en: uniqueString('description_dist_en'),
         },
         accessURL: ['https://example.com/data'],
-        license: { uri: 'http://publications.europa.eu/resource/authority/licence/NLOD_2_0', code: 'NLOD20' },
+        license: 'http://publications.europa.eu/resource/authority/licence/NLOD_2_0',
       },
     ],
     landingPage: ['https://example.com/dataset'],    
     references: [],
-    spatialList: [],
+    spatial: [],
     temporal: [],
   };
 
-  const createdDataset = await createDataset(apiRequestContext, dataset);
-  return createdDataset;
+  const datasetId =  await createDataset(apiRequestContext, dataset);
+  return {id: datasetId, ...dataset}
 };
 
 runTestAsAdmin('should allow editing dataset about section', async ({ page, datasetsPage, playwright }) => {
@@ -114,8 +110,8 @@ runTestAsAdmin('should allow editing dataset about section', async ({ page, data
   await editPage.expectEditPageUrl(process.env.E2E_CATALOG_ID, dataset.id);
 
   // Verify initial title and description
-  await editPage.expectTitleField('Bokmål', dataset.title.nb);
-  await editPage.expectDescriptionField('Bokmål', dataset.description.nb);
+  await editPage.expectTitleField('Bokmål', dataset.title.nb as string);
+  await editPage.expectDescriptionField('Bokmål', dataset.description.nb as string);
 
   // Change title and description
   await editPage.fillTitleField(newTitle, [], false);
