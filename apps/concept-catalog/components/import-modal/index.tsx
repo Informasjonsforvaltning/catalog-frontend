@@ -99,7 +99,7 @@ export function ImportModal({ catalogId }: ImportProps) {
     const onFileUpload = (event) => {
       setCancelled(false)
       setIsUploading(true)
-      //await new Promise(resolve => setTimeout(resolve, 5000));// TODO remove
+      //await new Promise(resolve => setTimeout(resolve, 5000));
       const file: File = event.target.files?.[0];
       if (file) {
         const reader = new FileReader();
@@ -113,7 +113,7 @@ export function ImportModal({ catalogId }: ImportProps) {
           return;
         }
         reader.onload = function (evt) {
-          //await new Promise(resolve => setTimeout(resolve, 100000));// TODO remove
+          //await new Promise(resolve => setTimeout(resolve, 100000));
           if (uploadSession !== sessionId.current || cancelled) {
             console.log('Session ID', sessionId);
             console.log('Upload session', uploadSession);
