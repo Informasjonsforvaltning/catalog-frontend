@@ -169,7 +169,7 @@ const attemptToParseCsvFile = (text: string): Promise<ConceptImport[]> => {
   });
 };
 
-export const useImportRdfConcepts = (catalogId: string) => {
+export const useImportRdf = (catalogId: string) => {
   const { data: session } = useSession();
   const router = useRouter();
   const accessToken = session?.accessToken ?? '';
@@ -177,11 +177,34 @@ export const useImportRdfConcepts = (catalogId: string) => {
     mutationKey: ['import-Concepts-RDF'],
     mutationFn: async ({ ...mutationProps }: {fileContent: string, contentType: string}) => {
       if (!validOrganizationNumber(catalogId)) {
-        console.log("Invalid organization number", catalogId);
+        console.log('Invalid organization number', catalogId);
         return Promise.reject('Invalid organization number');
       }
+      //return {...mutationProps }
+    },
+    onSuccess: () => {
+      console.log('Concept RDF file has been uploaded successfully!');
+    },
+    onError: (error: any) => {
+      console.error('Error uploading concept RDF file');
+    },
+  });
+};
 
-      const location = await importRdfConcepts(mutationProps.fileContent, mutationProps.contentType, catalogId, accessToken);
+export const useSendRdf = (catalogId: string) => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const accessToken = session?.accessToken ?? '';
+  return useMutation({
+    mutationKey: ['sendConceptsRDF'],
+    mutationFn: async ({ ...mutationProps }: {fileContent: string, contentType: string}) => {
+
+      const location = await importRdfConcepts(
+        mutationProps.fileContent,
+        mutationProps.contentType,
+        catalogId,
+        accessToken,
+      );
 
       if (location) {
         const resultId = location.split('/').pop();
@@ -190,19 +213,20 @@ export const useImportRdfConcepts = (catalogId: string) => {
 
     },
     onSuccess: () => {
-      console.log('Concept RDF file has been uploaded successfully!');
+      console.log('Concept RDF file has been send successfully!');
     },
     onError: (error: any) => {
-      console.error('Error uploading concept RDF file');
-    }
-  });
-};
+      console.error('Error sending concept RDF file');
+    },
+
+  })
+}
 
 export const useSendConcepts = (catalogId: string,
                                 setIsSending?: React.Dispatch<React.SetStateAction<boolean>>) => {
   const router = useRouter();
   return useMutation({
-    mutationKey: ['sendConcepts'],
+    mutationKey: ['sendConceptsCSV'],
     mutationFn: async (concepts: Concept []) => {
       if(setIsSending)
         setIsSending(true)

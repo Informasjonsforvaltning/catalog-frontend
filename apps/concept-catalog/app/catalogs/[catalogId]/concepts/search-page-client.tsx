@@ -31,7 +31,7 @@ import SearchFilter from '@concept-catalog/components/search-filter';
 import { useImportConcepts } from '@concept-catalog/hooks/import';
 import ConceptSearchHits from '@concept-catalog/components/concept-search-hits';
 import styles from './search-page.module.scss';
-import ImportModal from '@concept-catalog/components/import-modal';
+import { ImportModal } from '@concept-catalog/components/import-modal';
 
 export type FilterType = 'published' | 'status' | 'assignedUser' | 'subject' | 'internalFields' | 'label';
 
