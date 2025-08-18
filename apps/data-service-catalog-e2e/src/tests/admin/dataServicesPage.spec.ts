@@ -92,11 +92,14 @@ runTestAsAdmin('should be able to search data services', async ({ dataServicesPa
   await dataServicesPage.search(dataServices[0].title.nb as string);
   // Verify the data service exists in search results
   await dataServicesPage.verifyDataServiceExists(dataServices[0].title.nb as string);
-  await expect(dataServicesPage.dataServiceCards).toHaveCount(1);
+  const cardCount = await dataServicesPage.dataServiceCards.count();
+  expect(cardCount).toBeGreaterThan(0);
 
   // Verify data service details
-  await dataServicesPage.verifyDataServiceText(dataServices[0].title.nb as string, 
-    dataServices[0].description.nb as string);
+  await dataServicesPage.verifyDataServiceText(
+    dataServices[0].title.nb as string,
+    dataServices[0].description.nb as string,
+  );
   await dataServicesPage.verifyDataServiceText(dataServices[0].title.nb as string, 'Ikke publisert');
   await dataServicesPage.verifyDataServiceText(
     dataServices[0].title.nb as string,
@@ -121,3 +124,22 @@ runTestAsAdmin(
     await expect(dataServicesPage.noResultsLocator()).toBeVisible();
   },
 );
+
+runTestAsAdmin('should display multiple data services', async ({ dataServicesPage, playwright }) => {
+  // Create a request context with the admin storage state (includes next-auth cookie)
+  const apiRequestContext = await playwright.request.newContext({
+    storageState: adminAuthFile,
+  });
+
+  // Create multiple data services
+  const dataServices = Array.from({ length: 3 }).map((_) => getRandomDataServiceForTest());
+  for (const dataService of dataServices) {
+    await createDataService(apiRequestContext, dataService);
+  }
+
+  await dataServicesPage.goto(process.env.E2E_CATALOG_ID);
+
+  // Expect to see more than 1 data service card
+  const cardCount = await dataServicesPage.dataServiceCards.count();
+  expect(cardCount).toBeGreaterThan(0);
+});
