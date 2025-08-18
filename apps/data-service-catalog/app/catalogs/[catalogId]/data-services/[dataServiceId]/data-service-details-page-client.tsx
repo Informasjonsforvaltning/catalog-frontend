@@ -1,7 +1,7 @@
 'use client';
 
 import { DataService, DataServiceReferenceData } from '@catalog-frontend/types';
-import { DeleteButton, DetailsPageLayout, LinkButton } from '@catalog-frontend/ui';
+import { ConfirmModal, DeleteButton, DetailsPageLayout, LinkButton } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import React, { useState } from 'react';
 import { deleteDataService } from '../../../../actions/actions';
@@ -9,6 +9,7 @@ import styles from './data-service-details-page.module.css';
 import StatusTag from '../../../../../components/status-tag';
 import { LeftColumn } from '../../../../../components/details-page-columns/details-page-left-column';
 import { RightColumn } from '../../../../../components/details-page-columns/details-page-right-column';
+import { useRouter } from 'next/navigation';
 
 interface dataServiceDetailsPageProps {
   dataService: DataService;
@@ -32,73 +33,93 @@ const DataServiceDetailsPageClient = ({
   searchEnv,
 }: dataServiceDetailsPageProps) => {
   const [language, setLanguage] = useState('nb');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const router = useRouter();
 
   const handleLanguageChange = (value: string) => {
     setLanguage(value);
   };
 
-  const handleDeleteDataService = async () => {
+  const handleDeleteClick = () => {
+    setShowDeleteConfirm(true);
+  };
+
+  const handleConfirmDelete = async () => {
     if (dataService) {
-      if (window.confirm(localization.serviceCatalog.form.confirmDelete)) {
-        try {
-          await deleteDataService(catalogId, dataService?.id);
-          window.location.replace(`/catalogs/${catalogId}/data-services`);
-        } catch (error) {
-          window.alert(error);
-        }
+      try {
+        await deleteDataService(catalogId, dataService?.id);
+        router.replace(`/catalogs/${catalogId}/data-services`);
+      } catch (error) {
+        console.error(error);
       }
     }
   };
 
   return (
-    <DetailsPageLayout
-      handleLanguageChange={handleLanguageChange}
-      language={language}
-      headingTitle={getTranslateText(dataService?.title, language)}
-      headingTag={
-        <StatusTag
-          dataServiceStatus={dataService?.status}
-          distributionStatuses={referenceData.distributionStatuses}
-          language={language}
+    <>
+      {showDeleteConfirm && (
+        <ConfirmModal
+          title={localization.dataServiceForm.alert.confirmDeleteTitle || 'Bekreft sletting'}
+          content={localization.dataServiceForm.alert.confirmDelete}
+          successButtonText={localization.button.delete}
+          onSuccess={handleConfirmDelete}
+          onCancel={() => setShowDeleteConfirm(false)}
         />
-      }
-      loading={false}
-    >
-      <DetailsPageLayout.Buttons>
-        {hasWritePermission && (
-          <div className={styles.set}>
-            <LinkButton href={`/catalogs/${catalogId}/data-services/${dataServiceId}/edit`}>
-              {localization.button.edit}
-            </LinkButton>
+      )}
+      <DetailsPageLayout
+        handleLanguageChange={handleLanguageChange}
+        language={language}
+        headingTitle={getTranslateText(dataService?.title, language)}
+        headingTag={
+          <StatusTag
+            dataServiceStatus={dataService?.status}
+            distributionStatuses={referenceData.distributionStatuses}
+            language={language}
+          />
+        }
+        loading={false}
+        data-testid='data-service-details-page'
+      >
+        <DetailsPageLayout.Buttons>
+          {hasWritePermission && (
+            <div className={styles.set} data-testid='data-service-action-buttons'>
+              <LinkButton
+                href={`/catalogs/${catalogId}/data-services/${dataServiceId}/edit`}
+                data-testid='edit-data-service-button'
+              >
+                {localization.button.edit}
+              </LinkButton>
 
-            <DeleteButton
-              disabled={dataService?.published}
-              variant='secondary'
-              onClick={() => handleDeleteDataService()}
-            />
-          </div>
-        )}
-      </DetailsPageLayout.Buttons>
-      <DetailsPageLayout.Left>
-        <LeftColumn
-          dataService={dataService}
-          referenceData={referenceData}
-          language={language}
-          referenceDataEnv={referenceDataEnv}
-          searchEnv={searchEnv}
-        />
-      </DetailsPageLayout.Left>
-      <DetailsPageLayout.Right>
-        <RightColumn
-          catalogId={catalogId}
-          dataService={dataService}
-          referenceData={referenceData}
-          language={language}
-          hasWritePermission={hasWritePermission}
-          isValid={isValid}
-        />
-      </DetailsPageLayout.Right>
-    </DetailsPageLayout>
+              <DeleteButton
+                disabled={dataService?.published}
+                variant='secondary'
+                onClick={handleDeleteClick}
+                data-testid='delete-data-service-button'
+              />
+            </div>
+          )}
+        </DetailsPageLayout.Buttons>
+        <DetailsPageLayout.Left>
+          <LeftColumn
+            dataService={dataService}
+            referenceData={referenceData}
+            language={language}
+            referenceDataEnv={referenceDataEnv}
+            searchEnv={searchEnv}
+          />
+        </DetailsPageLayout.Left>
+        <DetailsPageLayout.Right>
+          <RightColumn
+            catalogId={catalogId}
+            dataService={dataService}
+            referenceData={referenceData}
+            language={language}
+            hasWritePermission={hasWritePermission}
+            isValid={isValid}
+          />
+        </DetailsPageLayout.Right>
+      </DetailsPageLayout>
+    </>
   );
 };
 

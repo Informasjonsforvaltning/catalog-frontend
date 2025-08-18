@@ -20,15 +20,21 @@ type Props = {
 
 export const LeftColumn = ({ dataService, referenceData, language, referenceDataEnv, searchEnv }: Props) => {
   return (
-    <InfoCard>
+    <InfoCard data-testid='data-service-left-column'>
       {!isEmpty(dataService?.description) && (
-        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.description}>
+        <InfoCard.Item
+          title={localization.dataServiceForm.fieldLabel.description}
+          data-testid='data-service-description'
+        >
           <Paragraph size='sm'>{getTranslateText(dataService?.description, language)}</Paragraph>
         </InfoCard.Item>
       )}
 
       {!isEmpty(dataService?.formats) && (
-        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.format}>
+        <InfoCard.Item
+          title={localization.dataServiceForm.fieldLabel.format}
+          data-testid='data-service-formats'
+        >
           <FormatList
             formatURIs={dataService.formats}
             referenceDataEnv={referenceDataEnv}
@@ -38,31 +44,46 @@ export const LeftColumn = ({ dataService, referenceData, language, referenceData
       )}
 
       {!isEmpty(dataService?.endpointUrl) && (
-        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.endpoint}>
+        <InfoCard.Item
+          title={localization.dataServiceForm.fieldLabel.endpoint}
+          data-testid='data-service-endpoint-url'
+        >
           {dataService?.endpointUrl}
         </InfoCard.Item>
       )}
 
       {!isEmpty(dataService?.endpointDescriptions) && (
-        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.endpointDescriptions}>
+        <InfoCard.Item
+          title={localization.dataServiceForm.fieldLabel.endpointDescriptions}
+          data-testid='data-service-endpoint-descriptions'
+        >
           <DetailsUrlList urls={dataService.endpointDescriptions} />
         </InfoCard.Item>
       )}
 
       {!isEmpty(dataService?.landingPage) && (
-        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.landingPage}>
+        <InfoCard.Item
+          title={localization.dataServiceForm.fieldLabel.landingPage}
+          data-testid='data-service-landing-page'
+        >
           {dataService?.landingPage}
         </InfoCard.Item>
       )}
 
       {!isEmpty(dataService?.pages) && (
-        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.pages}>
+        <InfoCard.Item
+          title={localization.dataServiceForm.fieldLabel.pages}
+          data-testid='data-service-pages'
+        >
           <DetailsUrlList urls={dataService.pages} />
         </InfoCard.Item>
       )}
 
       {!isEmpty(dataService?.license) && (
-        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.license}>
+        <InfoCard.Item
+          title={localization.dataServiceForm.fieldLabel.license}
+          data-testid='data-service-license'
+        >
           <ReferenceDataTag
             referenceDataURI={dataService.license}
             referenceDataCodes={referenceData.openLicenses}
@@ -72,7 +93,10 @@ export const LeftColumn = ({ dataService, referenceData, language, referenceData
       )}
 
       {!isEmpty(dataService?.costs) && (
-        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.costs}>
+        <InfoCard.Item
+          title={localization.dataServiceForm.fieldLabel.costs}
+          data-testid='data-service-costs'
+        >
           <CostList
             costs={dataService.costs}
             language={language}
@@ -81,7 +105,10 @@ export const LeftColumn = ({ dataService, referenceData, language, referenceData
       )}
 
       {!isEmpty(dataService?.keywords) && (
-        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.keywords}>
+        <InfoCard.Item
+          title={localization.dataServiceForm.fieldLabel.keywords}
+          data-testid='data-service-keywords'
+        >
           <li className={styles.list}>
             {(getTranslateText(dataService?.keywords, language) as string[])?.map((item, index) => {
               return item ? (
@@ -89,6 +116,7 @@ export const LeftColumn = ({ dataService, referenceData, language, referenceData
                   size='sm'
                   color='info'
                   key={`keyword-tag-${index}`}
+                  data-testid={`keyword-tag-${index}`}
                 >
                   {item}
                 </Tag>
@@ -99,7 +127,10 @@ export const LeftColumn = ({ dataService, referenceData, language, referenceData
       )}
 
       {!isEmpty(dataService?.servesDataset) && (
-        <InfoCard.Item title={localization.dataServiceForm.fieldLabel.servesDataset}>
+        <InfoCard.Item
+          title={localization.dataServiceForm.fieldLabel.servesDataset}
+          data-testid='data-service-serves-dataset'
+        >
           <DatasetList
             datasetURIs={dataService.servesDataset}
             searchEnv={searchEnv}

@@ -28,6 +28,7 @@ export async function getDataServices(catalogId: string) {
 }
 
 export async function createDataService(catalogId: string, values: DataServiceToBeCreated) {
+  console.log(`[createDataService] Starting creation for catalog ${catalogId}`);
   const newDataService = removeEmptyValues({
     ...values,
     accessRights: values?.accessRights === 'none' ? undefined : values?.accessRights,
@@ -44,15 +45,28 @@ export async function createDataService(catalogId: string, values: DataServiceTo
   try {
     const response = await postDataService(newDataService, catalogId, `${session?.accessToken}`);
     if (response.status !== 201) {
-      throw new Error();
+      throw new Error(`Failed to create data service: ${response.status} ${response.statusText}`);
     }
-    dataServiceId = response?.headers?.get('location')?.split('/').pop();
+
+    const locationHeader = response?.headers?.get('location');
+    if (!locationHeader) {
+      throw new Error('No location header returned from server');
+    }
+
+    dataServiceId = locationHeader?.split('/').pop();
+    if (!dataServiceId) {
+      throw new Error('Could not extract data service ID from location header');
+    }
+
+    console.log(`[createDataService] Successfully created data service with ID: ${dataServiceId}`);
     success = true;
     return dataServiceId;
   } catch (error) {
+    console.error('Error creating data service:', error);
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
+      console.log(`[createDataService] Revalidating cache tags for data service ${dataServiceId}`);
       revalidateTag('data-service');
       revalidateTag('data-services');
     }

@@ -190,40 +190,42 @@ const DataServicesPageClient = ({
         <SearchHitsLayout.MainColumn>
           <SearchHitContainer
             searchHits={
-              filteredDataServices.length > 0
-                ? filteredDataServices.map((dataService: DataService) => (
-                  <div
-                    key={dataService.id}
-                    className={styles.searchHit}
-                  >
-                    <SearchHit
-                      title={getTranslateText(dataService?.title)}
-                      description={getTranslateText(dataService?.description)}
-                      titleHref={`/catalogs/${catalogId}/data-services/${dataService?.id}`}
-                      statusTag={
-                        <StatusTag
-                          dataServiceStatus={dataService?.status}
-                          distributionStatuses={distributionStatuses}
-                          language={'nb'}
-                        />
-                      }
-                      content={
-                        <>
-                          <div className={styles.set}>
-                            <p>
-                              {localization.lastChanged} {formatDate(dateStringToDate(dataService.modified ?? ''))}
-                            </p>
-                            <span>•</span>
-                            {dataService.published
-                              ? localization.publicationState.publishedInFDK
-                              : localization.publicationState.unpublished}
-                          </div>
-                        </>
-                      }
-                    />
-                  </div>
-                ))
-                : null
+              filteredDataServices.length > 0 ? (
+                <ul className={styles.searchHits} role='list'>
+                  {filteredDataServices.map((dataService: DataService) => (
+                    <li
+                      role='listitem'
+                      key={dataService.id}
+                    >
+                      <SearchHit
+                        title={getTranslateText(dataService?.title)}
+                        description={getTranslateText(dataService?.description)}
+                        titleHref={`/catalogs/${catalogId}/data-services/${dataService?.id}`}
+                        statusTag={
+                          <StatusTag
+                            dataServiceStatus={dataService?.status}
+                            distributionStatuses={distributionStatuses}
+                            language={'nb'}
+                          />
+                        }
+                        content={
+                          <>
+                            <div className={styles.set}>
+                              <p>
+                                {localization.lastChanged} {formatDate(dateStringToDate(dataService.modified ?? ''))}
+                              </p>
+                              <span>•</span>
+                              {dataService.published
+                                ? localization.publicationState.publishedInFDK
+                                : localization.publicationState.unpublished}
+                            </div>
+                          </>
+                        }
+                      />
+                    </li>
+                  ))}
+                </ul>
+              ) : null
             }
             noSearchHits={!filteredDataServices || filteredDataServices.length === 0}
           />

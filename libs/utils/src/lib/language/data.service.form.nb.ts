@@ -53,7 +53,7 @@ export const dataServiceFormNb = {
   fieldLabel: {
     description: 'Beskrivelse av API-et',
     title: 'Tittel',
-    endpoint: 'EndepunktURL',
+    endpoint: 'EndepunktsURL',
     endpointDescriptions: 'Endepunktsbeskrivelse',
     accessRights: 'Tilgangsrettigheter',
     format: 'Format',
@@ -78,6 +78,8 @@ export const dataServiceFormNb = {
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette API-beskrivelsen?',
+    confirmPublish: 'Er du sikker på at du vil publisere API-beskrivelsen?',
+    confirmUnpublish: 'Er du sikker på at du vil avpublisere API-beskrivelsen?',
     ignoreRequired:
       'I utgangspunktet er det krav om at alle påkrevde felt må fylles ut for å få lagret. Når avhukingsboksen er aktiv, må bare Tittel på bokmål være fylt ut.',
     titleNotDefined: 'Tittel ikke definert',

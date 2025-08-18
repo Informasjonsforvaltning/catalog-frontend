@@ -1,0 +1,10 @@
+{
+  "name": "data-service-catalog-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/data-service-catalog-e2e/src",
+  "projectType": "application",
+  "tags": [],
+  "implicitDependencies": ["data-service-catalog"],
+  "// targets": "to see all targets run: nx show project data-service-catalog-e2e --web",
+  "targets": {}
+}
