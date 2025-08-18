@@ -2,6 +2,7 @@
 
 import { DataService } from '@catalog-frontend/types';
 import { Operation } from 'fast-json-patch';
+import { validateOrganizationNumber } from '@catalog-frontend/utils';
 
 const oldPath = `${process.env.DATASERVICE_CATALOG_BASE_URI}`;
 const path = `${process.env.DATA_SERVICE_CATALOG_BASE_URI}`;
@@ -18,6 +19,8 @@ export const oldGetAllDataServiceCatalogs = async (accessToken: string) => {
 };
 
 export const getAllDataServices = async (catalogId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'getAllDataServices');
+
   const resource = `${path}/internal/catalogs/${catalogId}/data-services`;
   const options = {
     headers: {
@@ -30,6 +33,8 @@ export const getAllDataServices = async (catalogId: string, accessToken: string)
 };
 
 export const getDataServiceById = async (catalogId: string, dataServiceId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'getDataServiceById');
+
   const resource = `${path}/internal/catalogs/${catalogId}/data-services/${dataServiceId}`;
   const options = {
     headers: {
@@ -42,6 +47,8 @@ export const getDataServiceById = async (catalogId: string, dataServiceId: strin
 };
 
 export const postDataService = async (dataService: Partial<DataService>, catalogId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'postDataService');
+
   const resource = `${path}/internal/catalogs/${catalogId}/data-services`;
   const options = {
     headers: {
@@ -60,6 +67,8 @@ export const importDataService = async (
   catalogId: string,
   accessToken: string,
 ) => {
+  validateOrganizationNumber(catalogId, 'importDataService');
+
   const resource = `${path}/internal/catalogs/${catalogId}/import`;
   const options = {
     headers: {
@@ -85,6 +94,8 @@ export const getAllDataServiceCatalogs = async (accessToken: string) => {
 };
 
 export const deleteDataService = async (catalogId: string, dataServiceId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'deleteDataService');
+
   const resource = `${path}/internal/catalogs/${catalogId}/data-services/${dataServiceId}`;
   const options = {
     headers: {
@@ -102,6 +113,8 @@ export const updateDataService = async (
   patchOperations: Operation[],
   accessToken: string,
 ) => {
+  validateOrganizationNumber(catalogId, 'updateDataService');
+
   const resource = `${path}/internal/catalogs/${catalogId}/data-services/${dataServiceId}`;
   const options = {
     headers: {
@@ -115,6 +128,8 @@ export const updateDataService = async (
 };
 
 export const publishDataService = async (catalogId: string, dataServiceId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'publishDataService');
+
   const resource = `${path}/internal/catalogs/${catalogId}/data-services/${dataServiceId}/publish`;
   const options = {
     headers: {
@@ -127,6 +142,8 @@ export const publishDataService = async (catalogId: string, dataServiceId: strin
 };
 
 export const unpublishDataService = async (catalogId: string, dataServiceId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'unpublishDataService');
+
   const resource = `${path}/internal/catalogs/${catalogId}/data-services/${dataServiceId}/unpublish`;
   const options = {
     headers: {
@@ -139,6 +156,8 @@ export const unpublishDataService = async (catalogId: string, dataServiceId: str
 };
 
 export const getDataServiceImportResults = async (catalogId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'getDataServiceImportResults');
+
   const resource = `${path}/internal/catalogs/${catalogId}/import/results`;
   const options = {
     headers: {
@@ -151,6 +170,8 @@ export const getDataServiceImportResults = async (catalogId: string, accessToken
 };
 
 export const getDataServiceImportResultById = async (catalogId: string, resultId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'getDataServiceImportResultById');
+
   const resource = `${path}/internal/catalogs/${catalogId}/import/results/${resultId}`;
   const options = {
     headers: {
@@ -163,6 +184,8 @@ export const getDataServiceImportResultById = async (catalogId: string, resultId
 };
 
 export const deleteImportResult = async (catalogId: string, resultId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'deleteImportResult');
+
   const resource = `${path}/internal/catalogs/${catalogId}/import/results/${resultId}`;
   const options = {
     headers: {

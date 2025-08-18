@@ -20,5 +20,7 @@ export * from './lib/text/text';
 export * from './lib/validation/change-requests-id';
 export * from './lib/validation/image-upload';
 export * from './lib/validation/organization-number';
+export * from './lib/validation/search';
+export * from './lib/validation/uri';
 export * from './lib/validation/uuid';
 export * from './lib/version';

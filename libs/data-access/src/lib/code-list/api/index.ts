@@ -1,9 +1,12 @@
 import { CodeList } from '@catalog-frontend/types';
 import { Operation } from 'fast-json-patch';
+import { validateOrganizationNumber, validateUUID } from '@catalog-frontend/utils';
 
 const path = `${process.env.CATALOG_ADMIN_SERVICE_BASE_URI}`;
 
 export const getAllCodeLists = async (catalogId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'getAllCodeLists');
+
   const resource = `${path}/${catalogId}/concepts/code-lists`;
   const options = {
     headers: {
@@ -16,6 +19,8 @@ export const getAllCodeLists = async (catalogId: string, accessToken: string) =>
 };
 
 export const createCodeList = async (codeList: Partial<CodeList>, accessToken: string, catalogId: string) => {
+  validateOrganizationNumber(catalogId, 'createCodeList');
+
   const resource = `${path}/${catalogId}/concepts/code-lists`;
   const options = {
     headers: {
@@ -29,6 +34,9 @@ export const createCodeList = async (codeList: Partial<CodeList>, accessToken: s
 };
 
 export const patchCodeList = async (catalogId: string, codeListId: string, accessToken: string, diff: Operation[]) => {
+  validateOrganizationNumber(catalogId, 'patchCodeList');
+  validateUUID(codeListId, 'patchCodeList');
+
   if (diff.length > 0) {
     const resource = `${path}/${catalogId}/concepts/code-lists/${codeListId}`;
     const options = {
@@ -44,6 +52,9 @@ export const patchCodeList = async (catalogId: string, codeListId: string, acces
 };
 
 export const deleteCodeList = async (catalogId: string, codeListId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'deleteCodeList');
+  validateUUID(codeListId, 'deleteCodeList');
+
   const resource = `${path}/${catalogId}/concepts/code-lists/${codeListId}`;
   const options = {
     headers: {

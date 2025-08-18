@@ -1,9 +1,12 @@
 import { InternalField } from '@catalog-frontend/types';
 import { Operation } from 'fast-json-patch';
+import { validateOrganizationNumber, validateUUID } from '@catalog-frontend/utils';
 
 const path = `${process.env.CATALOG_ADMIN_SERVICE_BASE_URI}`;
 
 export const getFields = async (catalogId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'getFields');
+
   const resource = `${path}/${catalogId}/concepts/fields`;
   const options = {
     headers: {
@@ -16,6 +19,8 @@ export const getFields = async (catalogId: string, accessToken: string) => {
 };
 
 export const createInternalField = async (field: Partial<InternalField>, accessToken: string, catalogId: string) => {
+  validateOrganizationNumber(catalogId, 'createInternalField');
+
   const resource = `${path}/${catalogId}/concepts/fields/internal`;
   const options = {
     headers: {
@@ -34,6 +39,9 @@ export const patchInternalField = async (
   accessToken: string,
   diff: Operation[],
 ) => {
+  validateOrganizationNumber(catalogId, 'patchInternalField');
+  validateUUID(fieldId, 'patchInternalField');
+
   if (diff.length > 0) {
     const resource = `${path}/${catalogId}/concepts/fields/internal/${fieldId}`;
     const options = {
@@ -49,6 +57,9 @@ export const patchInternalField = async (
 };
 
 export const deleteInternalField = async (catalogId: string, fieldId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'deleteInternalField');
+  validateUUID(fieldId, 'deleteInternalField');
+
   const resource = `${path}/${catalogId}/concepts/fields/internal/${fieldId}`;
   const options = {
     headers: {
@@ -61,6 +72,8 @@ export const deleteInternalField = async (catalogId: string, fieldId: string, ac
 };
 
 export const patchEditableFields = async (catalogId: string, accessToken: string, diff: Operation[]) => {
+  validateOrganizationNumber(catalogId, 'patchEditableFields');
+
   if (diff.length > 0) {
     const resource = `${path}/${catalogId}/concepts/fields/editable`;
     const options = {

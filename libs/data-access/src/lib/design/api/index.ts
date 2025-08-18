@@ -1,4 +1,5 @@
 import { Operation } from 'fast-json-patch';
+import { validateOrganizationNumber } from '@catalog-frontend/utils';
 
 const path = `${process.env.CATALOG_ADMIN_SERVICE_BASE_URI}`;
 
@@ -13,13 +14,19 @@ const apiGetCall = async (resource: string, accessToken: string) => {
   return await fetch(resource, options);
 };
 
-export const getDesign = async (catalogId: string, accessToken: string, envVariable?: string) =>
-  apiGetCall(`${envVariable ?? path}/${catalogId}/design`, accessToken);
+export const getDesign = async (catalogId: string, accessToken: string, envVariable?: string) => {
+  validateOrganizationNumber(catalogId, 'getDesign');
+  return apiGetCall(`${envVariable ?? path}/${catalogId}/design`, accessToken);
+};
 
-export const getDesignLogo = async (catalogId: string, accessToken: string) =>
-  apiGetCall(`${path}/${catalogId}/design/logo`, accessToken);
+export const getDesignLogo = async (catalogId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'getDesignLogo');
+  return apiGetCall(`${path}/${catalogId}/design/logo`, accessToken);
+};
 
 export const getBase64DesignLogo = async (catalogId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'getBase64DesignLogo');
+
   const arrayBufferToBase64 = (buffer: ArrayBuffer, mimeType: string) => {
     let binary = '';
     const bytes = new Uint8Array(buffer);
@@ -51,6 +58,8 @@ export const getBase64DesignLogo = async (catalogId: string, accessToken: string
 };
 
 export const patchDesign = async (catalogId: string, accessToken: string, diff: Operation[]) => {
+  validateOrganizationNumber(catalogId, 'patchDesign');
+
   if (diff) {
     const resource = `${path}/${catalogId}/design`;
     const options = {
@@ -66,6 +75,8 @@ export const patchDesign = async (catalogId: string, accessToken: string, diff: 
 };
 
 export const postDesignLogo = async (catalogId: string, accessToken: string, logo: any) => {
+  validateOrganizationNumber(catalogId, 'postDesignLogo');
+
   const resource = `${path}/${catalogId}/design/logo`;
 
   const formData = new FormData();
@@ -83,6 +94,8 @@ export const postDesignLogo = async (catalogId: string, accessToken: string, log
 };
 
 export const deleteDesignLogo = async (catalogId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'deleteDesignLogo');
+
   const resource = `${path}/${catalogId}/design/logo`;
   const options = {
     headers: {
@@ -95,6 +108,8 @@ export const deleteDesignLogo = async (catalogId: string, accessToken: string) =
 };
 
 export const deleteLogo = async (catalogId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'deleteLogo');
+
   const resource = `${path}/${catalogId}/design/logo`;
   const options = {
     headers: {

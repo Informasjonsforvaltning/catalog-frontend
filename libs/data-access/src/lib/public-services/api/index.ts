@@ -1,9 +1,12 @@
 import { Service } from '@catalog-frontend/types';
 import { Operation } from 'fast-json-patch';
+import { validateOrganizationNumber, validateUUID } from '@catalog-frontend/utils';
 
 const path = `${process.env.SERVICE_CATALOG_BASE_URI}`;
 
 export const getAllPublicServices = async (catalogId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'getAllPublicServices');
+
   const resource = `${path}/internal/catalogs/${catalogId}/public-services`;
   const options = {
     headers: {
@@ -16,6 +19,9 @@ export const getAllPublicServices = async (catalogId: string, accessToken: strin
 };
 
 export const getPublicServiceById = async (catalogId: string, serviceId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'getPublicServiceById');
+  validateUUID(serviceId, 'getPublicServiceById');
+
   const resource = `${path}/internal/catalogs/${catalogId}/public-services/${serviceId}`;
   const options = {
     headers: {
@@ -28,6 +34,8 @@ export const getPublicServiceById = async (catalogId: string, serviceId: string,
 };
 
 export const createPublicService = async (publicService: Partial<Service>, catalogId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'createPublicService');
+
   const resource = `${path}/internal/catalogs/${catalogId}/public-services`;
   const options = {
     headers: {
@@ -41,6 +49,9 @@ export const createPublicService = async (publicService: Partial<Service>, catal
 };
 
 export const deletePublicService = async (catalogId: string, serviceId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'deletePublicService');
+  validateUUID(serviceId, 'deletePublicService');
+
   const resource = `${path}/internal/catalogs/${catalogId}/public-services/${serviceId}`;
   const options = {
     headers: {
@@ -58,6 +69,9 @@ export const updatePublicService = async (
   patchOperations: Operation[],
   accessToken: string,
 ) => {
+  validateOrganizationNumber(catalogId, 'updatePublicService');
+  validateUUID(serviceId, 'updatePublicService');
+
   const resource = `${path}/internal/catalogs/${catalogId}/public-services/${serviceId}`;
   const options = {
     headers: {
@@ -71,6 +85,9 @@ export const updatePublicService = async (
 };
 
 export const publishPublicService = async (catalogId: string, serviceId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'publishPublicService');
+  validateUUID(serviceId, 'publishPublicService');
+
   const resource = `${path}/internal/catalogs/${catalogId}/public-services/${serviceId}/publish`;
   const options = {
     headers: {
@@ -83,6 +100,9 @@ export const publishPublicService = async (catalogId: string, serviceId: string,
 };
 
 export const unpublishPublicService = async (catalogId: string, serviceId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'unpublishPublicService');
+  validateUUID(serviceId, 'unpublishPublicService');
+
   const resource = `${path}/internal/catalogs/${catalogId}/public-services/${serviceId}/unpublish`;
   const options = {
     headers: {
