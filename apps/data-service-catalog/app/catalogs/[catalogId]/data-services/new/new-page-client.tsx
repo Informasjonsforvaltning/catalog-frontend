@@ -43,8 +43,12 @@ export const NewDataServicePageClient = ({
         return undefined;
     };
 
-    const handleAfterSubmit = () => {
+    const handleAfterSubmit = async () => {
         if (dataServiceIdRef.current) {
+            // Add a small delay to allow for data propagation and revalidation
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            // Navigate to the edit page with created=true parameter
             router.replace(`/catalogs/${catalogId}/data-services/${dataServiceIdRef.current}/edit?created=true`);
         } else {
             router.replace(`/catalogs/${catalogId}/data-services`);

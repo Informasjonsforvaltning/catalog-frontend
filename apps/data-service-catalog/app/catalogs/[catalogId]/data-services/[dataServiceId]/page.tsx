@@ -17,6 +17,7 @@ import { redirect, RedirectType } from 'next/navigation';
 import DataServiceDetailsPageClient from './data-service-details-page-client';
 import { dataServiceValidationSchema } from '../../../../../components/data-service-form/utils/validation-schema';
 import { withReadProtectedPage } from '@data-service-catalog/utils/auth';
+import { fetchDataServiceWithRetry } from '@data-service-catalog/utils/data-service';
 
 const EditDataServicePage = withReadProtectedPage(
   ({ catalogId, dataServiceId }) => `/catalogs/${catalogId}/data-services/${dataServiceId}`,
@@ -27,11 +28,10 @@ const EditDataServicePage = withReadProtectedPage(
     if (!session) {
       return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/data-services/${dataServiceId}` });
     }
-    const dataService = await getDataServiceById(catalogId, dataServiceId, `${session?.accessToken}`).then(
-      (response) => {
-        if (response.ok) return response.json();
-      },
-    );
+
+    // Fetch data service with retry mechanism
+    const dataService = await fetchDataServiceWithRetry(catalogId, dataServiceId, `${session?.accessToken}`);
+
     if (!dataService || dataService.catalogId !== catalogId) {
       redirect(`/not-found`, RedirectType.replace);
     }

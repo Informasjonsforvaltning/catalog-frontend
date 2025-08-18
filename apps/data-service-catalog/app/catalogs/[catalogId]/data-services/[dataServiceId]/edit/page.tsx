@@ -10,6 +10,7 @@ import { getDataServiceById } from '@catalog-frontend/data-access';
 import { redirect, RedirectType } from 'next/navigation';
 import { withWriteProtectedPage } from '@data-service-catalog/utils/auth';
 import { EditPage } from './edit-page-client';
+import { fetchDataServiceWithRetry } from '@data-service-catalog/utils/data-service';
 
 const EditDataServicePage = withWriteProtectedPage(
   ({ catalogId, dataServiceId }) => `/catalogs/${catalogId}/data-services/${dataServiceId}/edit`,
@@ -20,11 +21,10 @@ const EditDataServicePage = withWriteProtectedPage(
     if (!session) {
       return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/data-services/${dataServiceId}/edit` });
     }
-    const dataService = await getDataServiceById(catalogId, dataServiceId, `${session?.accessToken}`).then(
-      (response) => {
-        if (response.ok) return response.json();
-      },
-    );
+
+    // Fetch data service with retry mechanism
+    const dataService = await fetchDataServiceWithRetry(catalogId, dataServiceId, `${session?.accessToken}`);
+
     if (!dataService || dataService.catalogId !== catalogId) {
       redirect(`/not-found`, RedirectType.replace);
     }

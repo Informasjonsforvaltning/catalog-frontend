@@ -192,13 +192,13 @@ const DataServiceForm = ({
               }
               return window.location.replace(`/catalogs/${catalogId}/data-services/${data.id}/edit?restore=1`);
             }
-        
+
             const restoreValues: DataService = deepMergeWithUndefinedHandling({ ...initialValues }, data.values);
             setValues(restoreValues);
-        
+
             showSnackbarMessage({ message: localization.snackbar.restoreSuccessfull, severity: 'success' });
           };
-          
+
           const dirtyFields = ((): string[] => {
             const dirtyFields: string[] = [];
 
@@ -368,6 +368,7 @@ const DataServiceForm = ({
                           setValidateOnChange(true);
                           submitForm();
                         }}
+                        data-testid='save-data-service-button'
                       >
                         {isSubmitting ? (
                           <Spinner
@@ -383,6 +384,7 @@ const DataServiceForm = ({
                         disabled={readOnly || isSubmitting || isValidating || isCanceled}
                         onClick={handleCancel}
                         variant='secondary'
+                        data-testid='cancel-data-service-button'
                       >
                         Avbryt
                       </Button>
