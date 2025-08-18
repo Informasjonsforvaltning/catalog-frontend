@@ -1,14 +1,18 @@
 'use server';
 
+import { validateOrganizationNumber } from '@catalog-frontend/utils';
+
 export const importRdfConcepts = async (
   fileContent: string,
   contentType: string,
   catalogId: string,
-  accessToken: string
+  accessToken: string,
 ) => {
+  validateOrganizationNumber(catalogId, 'importRdfConcepts');
+
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}`;
 
-  console.log("Uploading the concept rdf file catalog:", catalogId);
+  console.log('Uploading the concept rdf file catalog:', catalogId);
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -18,6 +22,5 @@ export const importRdfConcepts = async (
     body: fileContent,
   };
 
-
   return await fetch(resource, options).then((res) => res.headers.get('location'));
-}
+};

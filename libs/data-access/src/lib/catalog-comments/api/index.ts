@@ -1,4 +1,9 @@
+import { validateOrganizationNumber, validateUUID } from '@catalog-frontend/utils';
+
 export const getComments = async (orgNumber: string, topicId: string, accessToken: string) => {
+  validateOrganizationNumber(orgNumber, 'getComments');
+  validateUUID(topicId, 'getComments');
+
   const resource = `${process.env.CATALOG_COMMENTS_SERVICE_BASE_URI}/${orgNumber}/${topicId}/comment`;
   const options = {
     headers: {
@@ -12,6 +17,9 @@ export const getComments = async (orgNumber: string, topicId: string, accessToke
 };
 
 export const createComment = async (orgNumber: string, topicId: string, comment: string, accessToken: string) => {
+  validateOrganizationNumber(orgNumber, 'createComment');
+  validateUUID(topicId, 'createComment');
+
   const resource = `${process.env.CATALOG_COMMENTS_SERVICE_BASE_URI}/${orgNumber}/${topicId}/comment`;
   const options = {
     headers: {
@@ -35,6 +43,10 @@ export const updateComment = async (
   comment: string,
   accessToken: string,
 ) => {
+  validateOrganizationNumber(orgNumber, 'updateComment');
+  validateUUID(topicId, 'updateComment');
+  validateUUID(commentId, 'updateComment');
+
   const resource = `${process.env.CATALOG_COMMENTS_SERVICE_BASE_URI}/${orgNumber}/${topicId}/comment/${commentId}`;
   const options = {
     headers: {
@@ -52,6 +64,10 @@ export const updateComment = async (
 };
 
 export const deleteComment = async (orgNumber: string, topicId: string, commentId: string, accessToken: string) => {
+  validateOrganizationNumber(orgNumber, 'deleteComment');
+  validateUUID(topicId, 'deleteComment');
+  validateUUID(commentId, 'deleteComment');
+
   const resource = `${process.env.CATALOG_COMMENTS_SERVICE_BASE_URI}/${orgNumber}/${topicId}/comment/${commentId}`;
   const options = {
     headers: {

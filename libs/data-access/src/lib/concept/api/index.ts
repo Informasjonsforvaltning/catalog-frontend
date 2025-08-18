@@ -7,7 +7,14 @@ import {
   RelationTypeEnum,
 } from '@catalog-frontend/types';
 import { searchConceptsByUri } from '../../search/api';
-import { getUniqueConceptIdsFromUris, isObjectNullUndefinedEmpty } from '@catalog-frontend/utils';
+import {
+  getUniqueConceptIdsFromUris,
+  isObjectNullUndefinedEmpty,
+  validOrganizationNumber,
+  validUUID,
+  validateOrganizationNumber,
+  validateUUID,
+} from '@catalog-frontend/utils';
 import { Operation } from 'fast-json-patch';
 
 type SearchObject = Search.SearchObject;
@@ -28,11 +35,15 @@ export const conceptCatalogApiCall = async (
     ...(body ? { body: JSON.stringify(body) } : {}),
   });
 
-export const searchConceptsForCatalog = (catalogId: string, query: SearchConceptQuery, accessToken: string) =>
-  conceptCatalogApiCall('POST', `/begreper/search?orgNummer=${catalogId}`, query, accessToken);
+export const searchConceptsForCatalog = (catalogId: string, query: SearchConceptQuery, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'searchConceptsForCatalog');
+  return conceptCatalogApiCall('POST', `/begreper/search?orgNummer=${catalogId}`, query, accessToken);
+};
 
-export const getConceptsForCatalog = (catalogId: string, accessToken: string) =>
-  conceptCatalogApiCall('GET', `/begreper?orgNummer=${catalogId}`, null, accessToken);
+export const getConceptsForCatalog = (catalogId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'getConceptsForCatalog');
+  return conceptCatalogApiCall('GET', `/begreper?orgNummer=${catalogId}`, null, accessToken);
+};
 
 export const getConcept = (conceptId: string, accessToken: string) =>
   conceptCatalogApiCall('GET', `/begreper/${conceptId}`, null, accessToken);
@@ -61,8 +72,9 @@ export const searchInternalConcepts = (
   catalogId: string,
   body: string[],
   accessToken: string | null | undefined,
-): Promise<Response> =>
-  conceptCatalogApiCall(
+): Promise<Response> => {
+  validateOrganizationNumber(catalogId, 'searchInternalConcepts');
+  return conceptCatalogApiCall(
     'POST',
     `/begreper/search?orgNummer=${catalogId}`,
     {
@@ -75,6 +87,7 @@ export const searchInternalConcepts = (
     },
     accessToken ?? '',
   );
+};
 
 const hasRelatedConcepts = (concept: Concept): boolean => {
   if (!isObjectNullUndefinedEmpty(concept.begrepsRelasjon)) return true;
@@ -259,6 +272,8 @@ export const getUnpublishedConceptRelations = (concept: Concept): UnionRelation[
 };
 
 export const getConceptImportResults = async (catalogId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'getConceptImportResults');
+
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}/results`;
   const options = {
     headers: {
@@ -271,6 +286,9 @@ export const getConceptImportResults = async (catalogId: string, accessToken: st
 };
 
 export const getConceptImportResultById = async (catalogId: string, resultId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'getConceptImportResultById');
+  validateUUID(resultId, 'getConceptImportResultById');
+
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}/results/${resultId}`;
 
   const options = {
@@ -284,6 +302,8 @@ export const getConceptImportResultById = async (catalogId: string, resultId: st
 };
 
 export const removeImportResultConcept = async (catalogId: string, resultId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'removeImportResultConcept');
+
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}/results/${resultId}`;
   const options = {
     headers: {
@@ -336,7 +356,9 @@ export const getUnpublishedRelatedConcepts = async (
 export const getAllConceptCatalogs = (accessToken: string) =>
   conceptCatalogApiCall('GET', `/begrepssamlinger`, null, accessToken);
 
-export const getConceptCountByCatalogId = (catalogId: string, accessToken: string) =>
-  conceptCatalogApiCall('GET', `/begreper/${catalogId}/count`, null, accessToken);
+export const getConceptCountByCatalogId = (catalogId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'getConceptCountByCatalogId');
+  return conceptCatalogApiCall('GET', `/begreper/${catalogId}/count`, null, accessToken);
+};
 
 export * from './import-rdf-concepts';
