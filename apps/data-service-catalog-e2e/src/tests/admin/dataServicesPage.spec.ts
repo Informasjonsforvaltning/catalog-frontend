@@ -88,6 +88,9 @@ runTestAsAdmin('should be able to search data services', async ({ dataServicesPa
   await dataServicesPage.goto(process.env.E2E_CATALOG_ID);
   await dataServicesPage.expectSearchInputVisible();
 
+  // Clear any existing filters before searching
+  await dataServicesPage.clearFilters();
+
   // Search for the data service
   await dataServicesPage.search(dataServices[0].title.nb as string);
   // Verify the data service exists in search results
@@ -120,6 +123,10 @@ runTestAsAdmin(
 
     await dataServicesPage.goto(process.env.E2E_CATALOG_ID);
     await dataServicesPage.expectSearchInputVisible();
+
+    // Clear any existing filters before searching
+    await dataServicesPage.clearFilters();
+
     await dataServicesPage.search('non-existent-dataservice-123');
     await expect(dataServicesPage.noResultsLocator()).toBeVisible();
   },
@@ -138,6 +145,13 @@ runTestAsAdmin('should display multiple data services', async ({ dataServicesPag
   }
 
   await dataServicesPage.goto(process.env.E2E_CATALOG_ID);
+  await dataServicesPage.expectSearchInputVisible();
+
+  // Clear any existing filters before searching
+  await dataServicesPage.clearFilters();
+
+  // Search all data services
+  await dataServicesPage.search('');
 
   // Expect to see more than 1 data service card
   const cardCount = await dataServicesPage.dataServiceCards.count();

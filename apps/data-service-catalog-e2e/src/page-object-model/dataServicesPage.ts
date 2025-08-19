@@ -60,6 +60,22 @@ export default class DataServicesPage {
     await spinner.waitFor({ state: 'hidden', timeout: 10000 }).catch(() => {});
   }
 
+  async clearFilters() {
+    // Find and click all filter pills to remove them
+    const filterChips = this.page.locator('[role="button"]').filter({ hasText: /Fjern filter/ });
+    const chipCount = await filterChips.count();
+
+    for (let i = 0; i < chipCount; i++) {
+      // Click the first pill each time since the list will update after each removal
+      const firstChip = filterChips.first();
+      if (await firstChip.isVisible()) {
+        await firstChip.click();
+        // Wait a moment for the pill to be removed
+        await this.page.waitForTimeout(500);
+      }
+    }
+  }
+
   async clickCreateDataService() {
     await this.createDataServiceButton.click();
   }
