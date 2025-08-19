@@ -30,7 +30,10 @@ export default class DataServicesPage {
     this.accessibilityBuilder = accessibilityBuilder;
     this.searchInput = page.getByRole('searchbox', { name: 'Søk' });
     this.searchButton = page.getByRole('button', { name: 'Søk' });
-    this.dataServiceCards = page.locator('ul[role="list"]:not(nav ul) li[role="listitem"]');
+    // More specific locator for data service cards
+    this.dataServiceCards = page.locator(
+      'ul[role="list"]:not(nav ul) li[role="listitem"]:has(a[href*="/data-services/"])',
+    );
     this.createDataServiceButton = page.getByRole('link', { name: 'Legg til API-beskrivelse' });
     this.statusFilterHeader = page.getByRole('button', { name: 'Status' });
     this.statusFilterFerdigstilt = page.getByLabel('Ferdigstilt');
@@ -46,33 +49,84 @@ export default class DataServicesPage {
 
   // Navigation
   async goto(catalogId: string) {
+    console.log(`[DataServicesPage] Navigating to data services page for catalog: ${catalogId}`);
     await this.page.goto(`/catalogs/${catalogId}/data-services`);
+
+    // Wait for the page to be ready
+    await this.page.waitForLoadState('networkidle');
+    console.log('[DataServicesPage] Page loaded');
   }
 
   // Actions
   async search(query: string) {
+    console.log(`[DataServicesPage] Searching for: "${query}"`);
+
+    // Clear the search input first
+    await this.searchInput.clear();
     await this.searchInput.fill(query);
     await this.searchButton.click();
 
+    // Wait for search to complete
     const spinner = this.page.getByRole('img', { name: 'Laster' });
-    // Wait for spinner to be visible and hidden
-    await spinner.waitFor({ state: 'visible', timeout: 3000 }).catch(() => {});
-    await spinner.waitFor({ state: 'hidden', timeout: 10000 }).catch(() => {});
+    try {
+      // Wait for spinner to be visible and hidden
+      await spinner.waitFor({ state: 'visible', timeout: 3000 });
+      await spinner.waitFor({ state: 'hidden', timeout: 10000 });
+    } catch (error) {
+      console.log('[DataServicesPage] Spinner not found or already hidden, continuing...');
+    }
+
+    // Wait for the page to stabilize
+    await this.page.waitForTimeout(1000);
+
+    // Log the current state
+    const cardCount = await this.dataServiceCards.count();
+    console.log(`[DataServicesPage] Found ${cardCount} data service cards after search`);
   }
 
   async clearFilters() {
+    console.log('[DataServicesPage] Clearing filters...');
+
     // Find and click all filter pills to remove them
     const filterChips = this.page.locator('[role="button"]').filter({ hasText: /Fjern filter/ });
     const chipCount = await filterChips.count();
+
+    console.log(`[DataServicesPage] Found ${chipCount} filter chips to remove`);
 
     for (let i = 0; i < chipCount; i++) {
       // Click the first pill each time since the list will update after each removal
       const firstChip = filterChips.first();
       if (await firstChip.isVisible()) {
+        console.log(`[DataServicesPage] Removing filter chip ${i + 1}/${chipCount}`);
         await firstChip.click();
         // Wait a moment for the pill to be removed
         await this.page.waitForTimeout(500);
       }
+    }
+
+    // Wait for filters to be cleared and page to update
+    await this.page.waitForTimeout(1000);
+    console.log('[DataServicesPage] Filters cleared');
+  }
+
+  async waitForDataServicesToLoad(timeout = 10000) {
+    console.log('[DataServicesPage] Waiting for data services to load...');
+
+    try {
+      // Wait for either data service cards to appear or no results message
+      await Promise.race([
+        this.dataServiceCards.first().waitFor({ state: 'visible', timeout }),
+        this.noResultsLocator().waitFor({ state: 'visible', timeout }),
+      ]);
+
+      const cardCount = await this.dataServiceCards.count();
+      console.log(`[DataServicesPage] Data services loaded. Found ${cardCount} cards.`);
+      return cardCount;
+    } catch (error) {
+      console.log('[DataServicesPage] Timeout waiting for data services to load');
+      const cardCount = await this.dataServiceCards.count();
+      console.log(`[DataServicesPage] Current card count: ${cardCount}`);
+      return cardCount;
     }
   }
 
