@@ -156,6 +156,7 @@ const DataServicesPageClient = ({
           {filterStatus?.map((filter, index) => (
             <Chip.Removable
               key={`status-${index}`}
+              aria-label={`Fjern filter for status ${filter}`}
               onClick={() => {
                 removeFilter(filter, 'status');
               }}
@@ -168,6 +169,7 @@ const DataServicesPageClient = ({
           {filterPublicationState?.map((filter, index) => (
             <Chip.Removable
               key={`published-${index}`}
+              aria-label={`Fjern filter for publisering ${filter}`}
               onClick={() => {
                 removeFilter(filter, 'published');
               }}
