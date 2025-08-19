@@ -258,6 +258,7 @@ export const nb = {
     deleteInternalField: 'Er du sikker på at du ønsker å slette feltet?',
     deleteUser: 'Er du sikker på at du vil slette brukernavnet?',
     fail: 'Oppdatering feilet.',
+    maxFileSizeExceeded: 'Filstørrelsen er mer enn maksimumsgrensen på 5.8 MB. Importering avbrytes.',
     noChanges: 'Ingen endringer funnet.',
     notValidFile: 'Innholdet i filen er ikke gyldig.',
     success: 'Oppdatering vellykket!',

@@ -51,14 +51,25 @@ export function ImportModal({ catalogId }: ImportProps) {
   const uploadRdf = useImportRdf(catalogId);
   const sendRdf = useSendRdf(catalogId)
 
+  const maxSize = 5.8 * 1024 * 1024; // 5.8 MB
+
   const onCsvUpload = (event) => {
-    uploadConcepts.mutate(event.target.files[0], {
-      onSuccess: (concepts) => {
-        setUploadedConcepts(concepts)
-        setIsUploading(false);
-        setUploadType(UploadType.CSV);
-      },
-      onError: (error) => alert('Import failed: ' + error) });
+    const file: File = event.target.files?.[0];
+    if (file) {
+      if(file.size > maxSize) {
+        alert(localization.alert.maxFileSizeExceeded);
+        cancel();
+        return;
+      }
+      uploadConcepts.mutate(event.target.files[0], {
+        onSuccess: (concepts) => {
+          setUploadedConcepts(concepts);
+          setIsUploading(false);
+          setUploadType(UploadType.CSV);
+        },
+        onError: (error) => alert('Import failed: ' + error),
+      });
+    }
   };
 
   const send = async () => {
@@ -102,6 +113,11 @@ export function ImportModal({ catalogId }: ImportProps) {
       //await new Promise(resolve => setTimeout(resolve, 5000));
       const file: File = event.target.files?.[0];
       if (file) {
+        if (file.size > maxSize) {
+          alert(localization.alert.maxFileSizeExceeded);
+          cancel();
+          return;
+        }
         const reader = new FileReader();
         readerRdfRef.current = reader;
         reader.readAsText(file, 'UTF-8');
@@ -241,7 +257,7 @@ export function ImportModal({ catalogId }: ImportProps) {
               </Button>
               <Button
                 onClick={send}
-                disabled={isUploading}
+                disabled={isUploading || isSending}
                 variant={'primary'}
               >
                 <TasklistSendIcon />
