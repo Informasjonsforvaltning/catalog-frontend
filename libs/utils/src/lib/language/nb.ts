@@ -416,7 +416,7 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
       resultDescription: `En side med detaljerte resultater av importprosessen vises automatisk ved fullført importforsøk av en Turtle-fil. Tidligere gjennomførte importforsøk for Turtle-filer kan vises ved å benytte **Resultater**-knappen.`,
       csvImportHistoryNotSupported:
         'Visning av detaljerte resultater og oversikt over tidligere importforsøk for CSV- og JSON-filer er foreløpig ikke tilgjengelig.',
-      maxFileSize: `**Merk:** Maksimal filstørrelse for opplastning er xx MB`,
+      maxFileSize: `**Merk:** Maksimal filstørrelse for opplastning er 5.8 MB`,
     },
   },
 
