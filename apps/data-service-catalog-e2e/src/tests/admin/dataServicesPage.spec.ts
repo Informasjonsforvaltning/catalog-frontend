@@ -93,10 +93,13 @@ runTestAsAdmin('should be able to search data services', async ({ dataServicesPa
 
   // Search for the data service
   await dataServicesPage.search(dataServices[0].title.nb as string);
+
+  // Wait for search results to load
+  const cardCount = await dataServicesPage.waitForDataServicesToLoad();
+  expect(cardCount).toBeGreaterThan(0);
+
   // Verify the data service exists in search results
   await dataServicesPage.verifyDataServiceExists(dataServices[0].title.nb as string);
-  const cardCount = await dataServicesPage.dataServiceCards.count();
-  expect(cardCount).toBeGreaterThan(0);
 
   // Verify data service details
   await dataServicesPage.verifyDataServiceText(
@@ -128,6 +131,9 @@ runTestAsAdmin(
     await dataServicesPage.clearFilters();
 
     await dataServicesPage.search('non-existent-dataservice-123');
+
+    // Wait for search results and check for no results message
+    await dataServicesPage.waitForDataServicesToLoad();
     await expect(dataServicesPage.noResultsLocator()).toBeVisible();
   },
 );
@@ -140,20 +146,47 @@ runTestAsAdmin('should display multiple data services', async ({ dataServicesPag
 
   // Create multiple data services
   const dataServices = Array.from({ length: 3 }).map((_) => getRandomDataServiceForTest());
+  console.log(`[Test] Creating ${dataServices.length} data services...`);
+
   for (const dataService of dataServices) {
+    console.log(`[Test] Creating data service with title: ${dataService.title.nb}`);
     await createDataService(apiRequestContext, dataService);
   }
 
+  console.log('[Test] Navigating to data services page...');
   await dataServicesPage.goto(process.env.E2E_CATALOG_ID);
   await dataServicesPage.expectSearchInputVisible();
+
+  // Wait for page to load completely
+  await dataServicesPage.page.waitForTimeout(2000);
 
   // Clear any existing filters before searching
   await dataServicesPage.clearFilters();
 
   // Search all data services
+  console.log('[Test] Searching for all data services...');
   await dataServicesPage.search('');
 
-  // Expect to see more than 1 data service card
-  const cardCount = await dataServicesPage.dataServiceCards.count();
+  // Wait for data services to load
+  const cardCount = await dataServicesPage.waitForDataServicesToLoad();
+  console.log(`[Test] Found ${cardCount} data service cards`);
+
+  // If no cards found, let's check what's on the page
+  if (cardCount === 0) {
+    console.log('[Test] No cards found, checking page content...');
+    const pageContent = await dataServicesPage.page.content();
+    console.log('[Test] Page content length:', pageContent.length);
+
+    // Check if there are any error messages
+    const errorMessages = await dataServicesPage.page.locator('[role="alert"], .error, .alert').allTextContents();
+    if (errorMessages.length > 0) {
+      console.log('[Test] Error messages found:', errorMessages);
+    }
+
+    // Check if the no results message is shown
+    const noResultsVisible = await dataServicesPage.noResultsLocator().isVisible();
+    console.log('[Test] No results message visible:', noResultsVisible);
+  }
+
   expect(cardCount).toBeGreaterThan(0);
 });
