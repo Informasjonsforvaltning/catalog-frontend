@@ -12,7 +12,6 @@ import {
   Select,
   LinkButton,
   SearchField,
-  UploadButton,
 } from '@catalog-frontend/ui';
 import {
   getTranslateText,
@@ -21,7 +20,7 @@ import {
   setClientConceptsPageSettings
 } from '@catalog-frontend/utils';
 import { Chip, Tabs } from '@digdir/designsystemet-react';
-import { FileImportIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+import { PlusCircleIcon } from '@navikt/aksel-icons';
 import {
   SortOption,
   getSelectOptions,
@@ -32,7 +31,7 @@ import SearchFilter from '@concept-catalog/components/search-filter';
 import { useImportConcepts } from '@concept-catalog/hooks/import';
 import ConceptSearchHits from '@concept-catalog/components/concept-search-hits';
 import styles from './search-page.module.scss';
-import ImportModal from '@concept-catalog/components/import-modal';
+import { ImportModal } from '@concept-catalog/components/import-modal';
 
 export type FilterType = 'published' | 'status' | 'assignedUser' | 'subject' | 'internalFields' | 'label';
 
@@ -402,7 +401,6 @@ export const SearchPageClient = ({
                   />
                   <Select
                     size='sm'
-                    aria-label='Velg sortering'
                     onChange={(event) => onSortSelect(event?.target.value as SortOption)}
                     value={selectedSortOption}
                   >
@@ -410,36 +408,20 @@ export const SearchPageClient = ({
                   </Select>
                 </div>
                 <div className={styles.buttons}>
-                  {hasAdminPermission && (
-                    <UploadButton
-                      size='sm'
-                      variant='secondary'
-                      allowedMimeTypes={[
-                        'text/csv',
-                        'text/x-csv',
-                        'text/plain',
-                        'application/csv',
-                        'application/x-csv',
-                        'application/vnd.ms-excel',
-                        'application/json',
-                      ]}
-                      onUpload={onImportUpload}
-                    >
-                      <FileImportIcon fontSize='1.5rem' />
-                      <span>{localization.button.importConceptCSV}</span>
-                    </UploadButton>
-                  )}
-                  {hasWritePermission && (
-                    <LinkButton
-                      href={`/catalogs/${catalogId}/concepts/new`}
-                      size='sm'
-                    >
-                      <>
-                        <PlusCircleIcon fontSize='1.5rem' />
-                        <span>{localization.button.createConcept}</span>
-                      </>
-                    </LinkButton>
-                  )}
+                    <>
+                      {hasAdminPermission && <ImportModal catalogId={catalogId} />}
+                      {hasWritePermission && (
+                        <LinkButton
+                          href={`/catalogs/${catalogId}/concepts/new`}
+                          size='sm'
+                        >
+                          <>
+                            <PlusCircleIcon fontSize='1.5rem' />
+                            <span>{localization.button.createConcept}</span>
+                          </>
+                        </LinkButton>
+                      )}
+                    </>
                 </div>
               </div>
               <FilterChips />

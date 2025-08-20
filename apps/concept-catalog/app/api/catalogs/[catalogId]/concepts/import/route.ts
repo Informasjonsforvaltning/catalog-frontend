@@ -10,7 +10,7 @@ export const POST = async (req: NextRequest, props) => {
   return await withValidSessionForApi(async (session) => {
     try {
       const concepts = await req.json();
-      const response = await importConcepts(concepts, session?.accessToken);
+      const response = await importConcepts(concepts, catalogId, session?.accessToken);
       const location = response?.headers?.get("location")
       const resultId = location?.split('/').pop();
 
@@ -24,7 +24,7 @@ export const POST = async (req: NextRequest, props) => {
       }
     } catch (error) {
       console.error('Failed to import concept', error);
-      return new Response(JSON.stringify({ message: 'Failed to import concept' }), { status: 500 });
+      return new Response('Failed to import concept', { status: 500 });
     }
   });
 };
