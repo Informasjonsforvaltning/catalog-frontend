@@ -14,6 +14,7 @@ import {
   validUUID,
   validateOrganizationNumber,
   validateUUID,
+  validateAndEncodeUrlSafe,
 } from '@catalog-frontend/utils';
 import { Operation } from 'fast-json-patch';
 
@@ -37,34 +38,51 @@ export const conceptCatalogApiCall = async (
 
 export const searchConceptsForCatalog = (catalogId: string, query: SearchConceptQuery, accessToken: string) => {
   validateOrganizationNumber(catalogId, 'searchConceptsForCatalog');
-  return conceptCatalogApiCall('POST', `/begreper/search?orgNummer=${catalogId}`, query, accessToken);
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'searchConceptsForCatalog');
+  return conceptCatalogApiCall('POST', `/begreper/search?orgNummer=${encodedCatalogId}`, query, accessToken);
 };
 
 export const getConceptsForCatalog = (catalogId: string, accessToken: string) => {
   validateOrganizationNumber(catalogId, 'getConceptsForCatalog');
-  return conceptCatalogApiCall('GET', `/begreper?orgNummer=${catalogId}`, null, accessToken);
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getConceptsForCatalog');
+  return conceptCatalogApiCall('GET', `/begreper?orgNummer=${encodedCatalogId}`, null, accessToken);
 };
 
-export const getConcept = (conceptId: string, accessToken: string) =>
-  conceptCatalogApiCall('GET', `/begreper/${conceptId}`, null, accessToken);
+export const getConcept = (conceptId: string, accessToken: string) => {
+  validateUUID(conceptId, 'getConcept');
+  const encodedConceptId = validateAndEncodeUrlSafe(conceptId, 'concept ID', 'getConcept');
+  return conceptCatalogApiCall('GET', `/begreper/${encodedConceptId}`, null, accessToken);
+};
 
-export const getConceptRevisions = (conceptId: string, accessToken: string) =>
-  conceptCatalogApiCall('GET', `/begreper/${conceptId}/revisions`, null, accessToken);
+export const getConceptRevisions = (conceptId: string, accessToken: string) => {
+  validateUUID(conceptId, 'getConceptRevisions');
+  const encodedConceptId = validateAndEncodeUrlSafe(conceptId, 'concept ID', 'getConceptRevisions');
+  return conceptCatalogApiCall('GET', `/begreper/${encodedConceptId}/revisions`, null, accessToken);
+};
 
 export const createConcept = (concept: Partial<Concept>, accessToken: string) =>
   conceptCatalogApiCall('POST', `/begreper`, concept, accessToken);
 
-export const patchConcept = (conceptId: string, patchOperations: Operation[], accessToken: string) =>
-  conceptCatalogApiCall('PATCH', `/begreper/${conceptId}`, patchOperations, accessToken);
+export const patchConcept = (conceptId: string, patchOperations: Operation[], accessToken: string) => {
+  validateUUID(conceptId, 'patchConcept');
+  const encodedConceptId = validateAndEncodeUrlSafe(conceptId, 'concept ID', 'patchConcept');
+  return conceptCatalogApiCall('PATCH', `/begreper/${encodedConceptId}`, patchOperations, accessToken);
+};
 
 export const importConcepts = (concepts: Omit<Concept, 'id'>[], accessToken: string) =>
   conceptCatalogApiCall('POST', `/begreper/import`, concepts, accessToken);
 
-export const deleteConcept = (conceptId: string, accessToken: string) =>
-  conceptCatalogApiCall('DELETE', `/begreper/${conceptId}`, null, accessToken);
+export const deleteConcept = (conceptId: string, accessToken: string) => {
+  validateUUID(conceptId, 'deleteConcept');
+  const encodedConceptId = validateAndEncodeUrlSafe(conceptId, 'concept ID', 'deleteConcept');
+  return conceptCatalogApiCall('DELETE', `/begreper/${encodedConceptId}`, null, accessToken);
+};
 
-export const publishConcept = (conceptId: string, accessToken: string) =>
-  conceptCatalogApiCall('POST', `/begreper/${conceptId}/publish`, null, accessToken);
+export const publishConcept = (conceptId: string, accessToken: string) => {
+  validateUUID(conceptId, 'publishConcept');
+  const encodedConceptId = validateAndEncodeUrlSafe(conceptId, 'concept ID', 'publishConcept');
+  return conceptCatalogApiCall('POST', `/begreper/${encodedConceptId}/publish`, null, accessToken);
+};
 
 export const extractHits = (searchResponse: any) => searchResponse?.hits ?? [];
 
@@ -74,9 +92,10 @@ export const searchInternalConcepts = (
   accessToken: string | null | undefined,
 ): Promise<Response> => {
   validateOrganizationNumber(catalogId, 'searchInternalConcepts');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'searchInternalConcepts');
   return conceptCatalogApiCall(
     'POST',
-    `/begreper/search?orgNummer=${catalogId}`,
+    `/begreper/search?orgNummer=${encodedCatalogId}`,
     {
       filters: {
         originalId: { value: body },
@@ -273,8 +292,9 @@ export const getUnpublishedConceptRelations = (concept: Concept): UnionRelation[
 
 export const getConceptImportResults = async (catalogId: string, accessToken: string) => {
   validateOrganizationNumber(catalogId, 'getConceptImportResults');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getConceptImportResults');
 
-  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}/results`;
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/results`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -288,8 +308,10 @@ export const getConceptImportResults = async (catalogId: string, accessToken: st
 export const getConceptImportResultById = async (catalogId: string, resultId: string, accessToken: string) => {
   validateOrganizationNumber(catalogId, 'getConceptImportResultById');
   validateUUID(resultId, 'getConceptImportResultById');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getConceptImportResultById');
+  const encodedResultId = validateAndEncodeUrlSafe(resultId, 'result ID', 'getConceptImportResultById');
 
-  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}/results/${resultId}`;
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/results/${encodedResultId}`;
 
   const options = {
     headers: {
@@ -303,8 +325,10 @@ export const getConceptImportResultById = async (catalogId: string, resultId: st
 
 export const removeImportResultConcept = async (catalogId: string, resultId: string, accessToken: string) => {
   validateOrganizationNumber(catalogId, 'removeImportResultConcept');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'removeImportResultConcept');
+  const encodedResultId = validateAndEncodeUrlSafe(resultId, 'result ID', 'removeImportResultConcept');
 
-  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}/results/${resultId}`;
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/results/${encodedResultId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -358,7 +382,8 @@ export const getAllConceptCatalogs = (accessToken: string) =>
 
 export const getConceptCountByCatalogId = (catalogId: string, accessToken: string) => {
   validateOrganizationNumber(catalogId, 'getConceptCountByCatalogId');
-  return conceptCatalogApiCall('GET', `/begreper/${catalogId}/count`, null, accessToken);
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getConceptCountByCatalogId');
+  return conceptCatalogApiCall('GET', `/begreper/${encodedCatalogId}/count`, null, accessToken);
 };
 
 export * from './import-rdf-concepts';
