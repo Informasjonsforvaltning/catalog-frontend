@@ -1,12 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { localization as loc, localization } from '@catalog-frontend/utils';
-import { LinkButton, UploadButton } from '@catalog-frontend/ui';
+import { LinkButton, UploadButton, MarkdownComponent } from '@catalog-frontend/ui';
 import { useImportConcepts } from '../../hooks/import';
 import { Button, Modal, Spinner } from '@digdir/designsystemet-react';
 import styles from './import-modal.module.scss';
 import { FileImportIcon } from '@navikt/aksel-icons';
 import { ImportConceptRdf } from './concept-rdf-upload';
-import Markdown from 'react-markdown';
 
 interface Props {
   catalogId: string;
@@ -35,19 +34,19 @@ export function ImportModal({ catalogId }: Props) {
         onInteractOutside={() => modalRef.current?.close()}
       >
         <Modal.Header className={styles.content}>
-          <Markdown>{localization.concept.importModal.title}</Markdown>
+          <MarkdownComponent>{localization.concept.importModal.title}</MarkdownComponent>
         </Modal.Header>
         <Modal.Content className={styles.content}>
           <div className={styles.modalContent}>
-            <Markdown>{localization.concept.importModal.conceptUploadDescription}</Markdown>
+            <MarkdownComponent>{localization.concept.importModal.conceptUploadDescription}</MarkdownComponent>
             <br />
-            <Markdown>{localization.concept.importModal.resultDescription}</Markdown>
+            <MarkdownComponent>{localization.concept.importModal.resultDescription}</MarkdownComponent>
             <br />
             <div className={styles.remark}>
-              <Markdown>{localization.concept.importModal.maxFileSize}</Markdown>
+              <MarkdownComponent>{localization.concept.importModal.maxFileSize}</MarkdownComponent>
             </div>
             <div className={styles.warning}>
-              <Markdown>{localization.concept.importModal.csvImportHistoryNotSupported}</Markdown>
+              <MarkdownComponent>{localization.concept.importModal.csvImportHistoryNotSupported}</MarkdownComponent>
             </div>
           </div>
         </Modal.Content>

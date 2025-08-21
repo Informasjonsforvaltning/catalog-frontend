@@ -11,8 +11,7 @@ import { deleteDataset } from '../../../../actions/actions';
 import StatusTag from '../../../../../components/status-tag/index';
 import { useRouter } from 'next/navigation';
 import { Alert } from '@digdir/designsystemet-react';
-import { ConfirmModal } from '@catalog-frontend/ui';
-import Markdown from 'react-markdown';
+import { ConfirmModal, MarkdownComponent } from '@catalog-frontend/ui';
 
 interface datasetDetailsPageProps {
   dataset: Dataset;
@@ -111,9 +110,9 @@ const DatasetDetailsPageClient = ({
       <ConfirmModal
         title={localization.dataset.deleteDataset}
         content={
-          <Markdown>
+          <MarkdownComponent>
             {`${localization.formatString(localization.dataset.confirmDelete, `${getTranslateText(dataset.title)}`)}`}
-          </Markdown>
+          </MarkdownComponent>
         }
         successButtonText={localization.button.delete}
         onSuccess={handleConfirmDelete}
