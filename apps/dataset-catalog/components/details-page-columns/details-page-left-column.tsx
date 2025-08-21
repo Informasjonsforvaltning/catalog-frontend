@@ -24,7 +24,7 @@ import { AccessRightsDetails } from './components/access-rights-details';
 import { TemporalDetails } from './components/temporal-details';
 import TagList from '../tag-list';
 import { compact, isEmpty } from 'lodash';
-import Markdown from 'react-markdown';
+import { MarkdownComponent } from '@catalog-frontend/ui';
 
 type Props = {
   dataset: Dataset;
@@ -71,23 +71,23 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
     <InfoCard>
       {hasValues(dataset?.description) && (
         <InfoCard.Item title={localization.description}>
-          <Markdown>{getTranslateText(dataset?.description, language) as string}</Markdown>
+          <MarkdownComponent>{getTranslateText(dataset?.description, language) as string}</MarkdownComponent>
         </InfoCard.Item>
       )}
       {(hasValues(dataset?.accessRights) ||
         hasValues(dataset?.legalBasisForAccess) ||
         hasValues(dataset?.legalBasisForRestriction) ||
         hasValues(dataset?.legalBasisForProcessing)) && (
-        <InfoCard.Item
-          title={localization.access}
-          className={styles.access}
-        >
-          <AccessRightsDetails
-            dataset={dataset}
-            language={language}
-          />
-        </InfoCard.Item>
-      )}
+          <InfoCard.Item
+            title={localization.access}
+            className={styles.access}
+          >
+            <AccessRightsDetails
+              dataset={dataset}
+              language={language}
+            />
+          </InfoCard.Item>
+        )}
 
       {dataset?.issued && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.issued}>

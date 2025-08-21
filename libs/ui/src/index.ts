@@ -36,6 +36,7 @@ export * from './lib/layout';
 export * from './lib/language-indicator';
 export * from './lib/link';
 export * from './lib/list';
+export * from './lib/markdown';
 export * from './lib/navigation-card';
 export * from './lib/next-auth-provider';
 export * from './lib/notification-carousel';

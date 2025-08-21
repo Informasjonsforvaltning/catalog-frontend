@@ -5,10 +5,9 @@ import { localization } from '@catalog-frontend/utils';
 import { Terms, TermsAcceptation } from '@catalog-frontend/types';
 import parse from 'html-react-parser';
 import styles from './terms-and-conditions-page.module.css';
-import { Button, Link } from '@catalog-frontend/ui';
+import { Button, Link, MarkdownComponent } from '@catalog-frontend/ui';
 import { useState } from 'react';
 import { acceptTermsAndConditions } from '@catalog-portal/app/actions';
-import Markdown from 'react-markdown';
 
 interface Props {
   hasAdminPermission: boolean;
@@ -47,7 +46,7 @@ const TermsAndConditionsPageClient = ({ catalogId, hasAdminPermission, userName,
           severity='success'
           size='small'
         >
-          <Markdown>
+          <MarkdownComponent>
             {
               localization.formatString(
                 localization.termsOfUse.acceptedByAndWhen,
@@ -55,7 +54,7 @@ const TermsAndConditionsPageClient = ({ catalogId, hasAdminPermission, userName,
                 new Date(acceptation.acceptDate).toLocaleDateString(),
               ) as string
             }
-          </Markdown>
+          </MarkdownComponent>
         </Alert>
       )}
       {!latestIsAccepted && !hasAdminPermission && (
@@ -64,7 +63,7 @@ const TermsAndConditionsPageClient = ({ catalogId, hasAdminPermission, userName,
           size='small'
           className={styles.alert}
         >
-          <Markdown>{localization.termsOfUse.adminPermissionNeeded}</Markdown>
+          <MarkdownComponent>{localization.termsOfUse.adminPermissionNeeded}</MarkdownComponent>
         </Alert>
       )}
       <div className={styles.terms}>{parse(latestTerms.text)}</div>
