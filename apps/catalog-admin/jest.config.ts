@@ -6,6 +6,7 @@ export default {
     '\\.(css|less)$': '<rootDir>/__mocks__/emptyMock.js',
     '@digdir/designsystemet-(theme|css)$': '<rootDir>/__mocks__/emptyMock.js',
     'react-markdown': '<rootDir>/__mocks__/emptyMock.js',
+    'remark-gfm': '<rootDir>/__mocks__/emptyMock.js',
   },
   transform: {
     '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nx/react/plugins/jest',
