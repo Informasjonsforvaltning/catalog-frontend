@@ -46,6 +46,10 @@ runTestAsAdmin('should load data services page', async ({ dataServicesPage, play
   await createDataService(apiRequestContext, dataService);
 
   await dataServicesPage.goto(process.env.E2E_CATALOG_ID);
+  // Clear any existing filters before searching
+  await dataServicesPage.clearFilters();
+  console.log('[Test] Searching for all data services...');
+  await dataServicesPage.search('');
   await dataServicesPage.expectHasDataServices();
 });
 
