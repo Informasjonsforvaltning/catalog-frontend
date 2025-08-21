@@ -164,7 +164,6 @@ export default class DataServicesPage {
   // Assertions
   async expectHasDataServices() {
     const cards = await this.dataServiceCards.count();
-    // Subtract 1 for the header row
     expect(cards).toBeGreaterThan(0);
   }
 
