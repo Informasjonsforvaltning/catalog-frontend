@@ -73,8 +73,9 @@ export const importDataService = async (
   accessToken: string,
 ) => {
   validateOrganizationNumber(catalogId, 'importDataService');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'importDataService');
 
-  const resource = `${path}/internal/catalogs/${catalogId}/import`;
+  const resource = `${path}/internal/catalogs/${encodedCatalogId}/import`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,

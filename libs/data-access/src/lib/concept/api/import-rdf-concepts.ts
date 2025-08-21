@@ -1,6 +1,6 @@
 'use server';
 
-import { validateOrganizationNumber } from '@catalog-frontend/utils';
+import { validateOrganizationNumber, validateAndEncodeUrlSafe } from '@catalog-frontend/utils';
 
 export const importRdfConcepts = async (
   fileContent: string,
@@ -9,8 +9,9 @@ export const importRdfConcepts = async (
   accessToken: string,
 ) => {
   validateOrganizationNumber(catalogId, 'importRdfConcepts');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'importRdfConcepts');
 
-  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}`;
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}`;
 
   console.log('Uploading the concept rdf file catalog:', catalogId);
   const options = {
