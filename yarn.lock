@@ -9513,7 +9513,7 @@ __metadata:
     "@graphql-codegen/typescript-react-apollo": "npm:^4.3.3"
     "@navikt/aksel-icons": "npm:^7.25.1"
     "@nx/cypress": "npm:21.3.7"
-    "@nx/devkit": "npm:21.3.7"
+    "@nx/devkit": "npm:21.4.0"
     "@nx/eslint": "npm:21.3.7"
     "@nx/eslint-plugin": "npm:21.3.7"
     "@nx/jest": "npm:21.3.7"
