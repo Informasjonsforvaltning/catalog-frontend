@@ -14,14 +14,7 @@ export async function createRandomDataset(context: BrowserContext) {
       nn: uniqueString('description_nn'),
       en: uniqueString('description_en'),
     },
-    accessRights: {
-      uri: 'http://publications.europa.eu/resource/authority/access-right/PUBLIC',
-      label: {
-        nb: 'Allmenn tilgang',
-        nn: 'Allmenn tilgang',
-        en: 'Public access',
-      },
-    },
+    accessRight: 'http://publications.europa.eu/resource/authority/access-right/PUBLIC',
     legalBasisForRestriction: [],
     legalBasisForProcessing: [],
     legalBasisForAccess: [],
@@ -33,10 +26,10 @@ export async function createRandomDataset(context: BrowserContext) {
     type: '',
     provenance: '',
     frequency: '',
-    reference: [],
-    concept: [],
-    informationModel: [],
-    contactPoint: [],
+    references: [],
+    concepts: [],
+    informationModelsFromOtherSources: [],
+    contactPoints: [],
   };
 
   // Create the dataset using the API
@@ -49,4 +42,4 @@ export async function createRandomDataset(context: BrowserContext) {
   }
 
   return dataset;
-} 
+}

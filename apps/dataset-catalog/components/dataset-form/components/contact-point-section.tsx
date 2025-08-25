@@ -4,19 +4,19 @@ import { Textfield } from '@digdir/designsystemet-react';
 
 export const ContactPointSection = () => {
   const contactPointOptions = [
-    { valuePath: 'contactPoint[0].email', label: localization.email },
+    { valuePath: 'contactPoints[0].email', label: localization.email },
     {
-      valuePath: 'contactPoint[0].hasTelephone',
+      valuePath: 'contactPoints[0].phone',
       label: localization.telephone,
     },
-    { valuePath: 'contactPoint[0].hasURL', label: localization.contactPoint.form },
+    { valuePath: 'contactPoints[0].url', label: localization.contactPoint.form },
   ];
 
   return (
     <>
       <div>
         <FormikLanguageFieldset
-          name={'contactPoint[0].name'}
+          name={'contactPoints[0].name'}
           as={Textfield}
           legend={
             <TitleWithHelpTextAndTag
@@ -39,7 +39,7 @@ export const ContactPointSection = () => {
           </TitleWithHelpTextAndTag>
         }
         availableFields={contactPointOptions}
-        errorPath={'contactPoint'}
+        errorPath={'contactPoints'}
       />
     </>
   );

@@ -101,7 +101,7 @@ const DatasetDetailPage = withReadProtectedPage(
               searchEnv={searchEnv}
               referenceDataEnv={referenceDataEnv}
               referenceData={referenceData}
-              datasetSeries={datasetSeries._embedded.datasets}
+              datasetSeries={datasetSeries}
             ></DatasetDetailsPageClient>
           )}
         </div>

@@ -7,7 +7,7 @@ import {
   formatDateToDDMMYYYY,
 } from '@catalog-frontend/utils';
 import { Heading, Link, Paragraph, Table, Tag } from '@digdir/designsystemet-react';
-import { Dataset, DatasetSeries, ReferenceData, Search } from '@catalog-frontend/types';
+import { Dataset, DatasetSeries, ISOLanguage, ReferenceData, Search } from '@catalog-frontend/types';
 import styles from './details-columns.module.css';
 import { useSearchAdministrativeUnitsByUri } from '../../hooks/useReferenceDataSearch';
 import { useSearchEnheterByOrgNmbs } from '../../hooks/useEnhetsregister';
@@ -23,7 +23,7 @@ import { DistributionDetailsCard } from './components/distribution-details';
 import { AccessRightsDetails } from './components/access-rights-details';
 import { TemporalDetails } from './components/temporal-details';
 import TagList from '../tag-list';
-import { compact, isEmpty } from 'lodash';
+import { compact, get, isEmpty } from 'lodash';
 import { MarkdownComponent } from '@catalog-frontend/ui';
 
 type Props = {
@@ -36,23 +36,19 @@ type Props = {
 };
 
 export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData, datasetSeries, language }: Props) => {
-  const getAllSpatialUris = dataset?.spatial?.reduce((acc, item) => {
-    return acc.concat(item?.uri ?? []);
-  }, [] as string[]);
-
-  const { data: spatial } = useSearchAdministrativeUnitsByUri(getAllSpatialUris, referenceDataEnv);
+  const keywordLanguages: ISOLanguage[] = ['nb', 'nn', 'en'];
+  const { data: spatial } = useSearchAdministrativeUnitsByUri(dataset?.spatial, referenceDataEnv);
   const { data: qualifiedAttributions } = useSearchEnheterByOrgNmbs(dataset?.qualifiedAttributions);
 
   const allReferenceUris =
     dataset.references?.reduce((acc, ref) => {
-      if (ref?.source?.uri) acc.push(ref.source.uri);
+      if (ref?.source) acc.push(ref.source);
       return acc;
     }, [] as string[]) ?? [];
 
   const { data: references } = useSearchDatasetsByUri(searchEnv, allReferenceUris);
 
-  const allConceptUris = dataset.concepts?.map((item) => item.uri) ?? [];
-  const { data: concepts } = useSearchConceptsByUri(searchEnv, allConceptUris);
+  const { data: concepts } = useSearchConceptsByUri(searchEnv, dataset?.concepts ?? []);
 
   const { data: informationModels } = useSearchInformationModelsByUri(
     searchEnv,
@@ -74,20 +70,20 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
           <MarkdownComponent>{getTranslateText(dataset?.description, language) as string}</MarkdownComponent>
         </InfoCard.Item>
       )}
-      {(hasValues(dataset?.accessRights) ||
+      {(hasValues(dataset?.accessRight) ||
         hasValues(dataset?.legalBasisForAccess) ||
         hasValues(dataset?.legalBasisForRestriction) ||
         hasValues(dataset?.legalBasisForProcessing)) && (
-          <InfoCard.Item
-            title={localization.access}
-            className={styles.access}
-          >
-            <AccessRightsDetails
-              dataset={dataset}
-              language={language}
-            />
-          </InfoCard.Item>
-        )}
+        <InfoCard.Item
+          title={localization.access}
+          className={styles.access}
+        >
+          <AccessRightsDetails
+            dataset={dataset}
+            language={language}
+          />
+        </InfoCard.Item>
+      )}
 
       {dataset?.issued && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.issued}>
@@ -164,7 +160,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
           {dataset?.language &&
             dataset.language
               .map((lang) => {
-                const matchedLang = referenceData?.languages?.find((item) => item?.uri === lang?.uri);
+                const matchedLang = referenceData?.languages?.find((item) => item?.uri === lang);
                 return matchedLang ? getTranslateText(matchedLang.label, language) : null;
               })
               .filter(Boolean)
@@ -212,7 +208,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       {hasValues(dataset?.provenance) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.provenance}>
           <ReferenceDataTags
-            values={dataset?.provenance?.uri}
+            values={dataset?.provenance}
             data={referenceData.provenanceStatements}
           />
         </InfoCard.Item>
@@ -224,23 +220,21 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </InfoCard.Item>
       )}
 
-      {(hasValues(dataset?.accrualPeriodicity) || hasValues(dataset?.hasCurrentnessAnnotation?.hasBody)) && (
-        <InfoCard.Item title={localization.datasetForm.fieldLabel.accrualPeriodicity}>
+      {(hasValues(dataset?.frequency) || hasValues(dataset?.currentness?.hasBody)) && (
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.frequency}>
           <div className={styles.infoCardItems}>
             <ReferenceDataTags
-              values={dataset.accrualPeriodicity?.uri}
+              values={dataset.frequency}
               data={referenceData.frequencies}
             />
 
-            {hasValues(dataset?.hasCurrentnessAnnotation?.hasBody) && (
+            {hasValues(dataset?.currentness?.hasBody) && (
               <div>
                 <Heading
                   level={3}
                   size='2xs'
-                >{`${localization.datasetForm.fieldLabel.hasCurrentnessAnnotation}`}</Heading>
-                <Paragraph size='sm'>
-                  {getTranslateText(dataset?.hasCurrentnessAnnotation?.hasBody, language)}
-                </Paragraph>
+                >{`${localization.datasetForm.fieldLabel.currentness}`}</Heading>
+                <Paragraph size='sm'>{getTranslateText(dataset?.currentness?.hasBody, language)}</Paragraph>
               </div>
             )}
           </div>
@@ -256,27 +250,27 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </InfoCard.Item>
       )}
 
-      {hasValues(dataset?.hasRelevanceAnnotation?.hasBody) && (
-        <InfoCard.Item title={localization.datasetForm.fieldLabel.hasRelevanceAnnotation}>
-          <Paragraph size='sm'>{getTranslateText(dataset?.hasRelevanceAnnotation?.hasBody, language)} </Paragraph>
+      {hasValues(dataset?.relevance?.hasBody) && (
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.relevance}>
+          <Paragraph size='sm'>{getTranslateText(dataset?.relevance?.hasBody, language)} </Paragraph>
         </InfoCard.Item>
       )}
 
-      {hasValues(dataset?.hasCompletenessAnnotation?.hasBody) && (
-        <InfoCard.Item title={localization.datasetForm.fieldLabel.hasCompletenessAnnotation}>
-          <Paragraph size='sm'>{getTranslateText(dataset?.hasCompletenessAnnotation?.hasBody, language)} </Paragraph>
+      {hasValues(dataset?.completeness?.hasBody) && (
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.completeness}>
+          <Paragraph size='sm'>{getTranslateText(dataset?.completeness?.hasBody, language)} </Paragraph>
         </InfoCard.Item>
       )}
 
-      {hasValues(dataset?.hasAccuracyAnnotation?.hasBody) && (
-        <InfoCard.Item title={localization.datasetForm.fieldLabel.hasAccuracyAnnotation}>
-          <Paragraph size='sm'>{getTranslateText(dataset?.hasAccuracyAnnotation?.hasBody, language)} </Paragraph>
+      {hasValues(dataset?.accuracy?.hasBody) && (
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.accuracy}>
+          <Paragraph size='sm'>{getTranslateText(dataset?.accuracy?.hasBody, language)} </Paragraph>
         </InfoCard.Item>
       )}
 
-      {hasValues(dataset?.hasAvailabilityAnnotation?.hasBody) && (
-        <InfoCard.Item title={localization.datasetForm.fieldLabel.hasAvailabilityAnnotation}>
-          <Paragraph size='sm'>{getTranslateText(dataset?.hasAvailabilityAnnotation?.hasBody, language)} </Paragraph>
+      {hasValues(dataset?.availability?.hasBody) && (
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.availability}>
+          <Paragraph size='sm'>{getTranslateText(dataset?.availability?.hasBody, language)} </Paragraph>
         </InfoCard.Item>
       )}
       {hasValues(dataset?.qualifiedAttributions) && (
@@ -292,7 +286,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
           />
         </InfoCard.Item>
       )}
-      {(hasValues(dataset.references) || hasValues(dataset.relations)) && (
+      {(hasValues(dataset.references) || hasValues(dataset.relatedResources)) && (
         <InfoCard.Item title={localization.relations}>
           <div className={styles.infoCardItems}>
             {dataset?.references && compact(dataset?.references).length > 0 && (
@@ -311,19 +305,19 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
                   {dataset?.references &&
                     hasValues(dataset.references) &&
                     dataset?.references.map((ref, index) => {
-                      const match = references?.find((item) => item?.uri === ref?.source?.uri);
+                      const match = references?.find((item) => item?.uri === ref?.source);
                       return (
                         <Table.Row key={`references-${index}`}>
                           <Table.Cell>
                             {getTranslateText(
-                              relations.find((rel) => rel.code === ref?.referenceType?.code)?.label,
+                              relations.find((rel) => rel.code === ref?.referenceType)?.label,
                               language,
-                            ) ?? ref?.referenceType?.code}
+                            ) ?? ref?.referenceType}
                           </Table.Cell>
                           <Table.Cell>
                             {
                               <Link href={`${referenceDataEnv}/datasets/${match?.id}`}>
-                                {getTranslateText(match?.title, language) ?? ref?.source?.uri}
+                                {getTranslateText(match?.title, language) ?? ref?.source}
                               </Link>
                             }
                           </Table.Cell>
@@ -361,9 +355,9 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
               </div>
             )}
 
-            {dataset?.relations &&
-              hasValues(dataset.relations[0]?.uri) &&
-              hasValues(dataset.relations[0].prefLabel) && (
+            {dataset?.relatedResources &&
+              hasValues(dataset.relatedResources[0]?.uri) &&
+              hasValues(dataset.relatedResources[0].prefLabel) && (
                 <div>
                   <Heading
                     level={3}
@@ -372,7 +366,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
                     {localization.datasetForm.fieldLabel.relations}
                   </Heading>
                   <UriWithLabelTable
-                    values={dataset?.relations}
+                    values={dataset?.relatedResources}
                     language={language}
                   />
                 </div>
@@ -381,27 +375,27 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </InfoCard.Item>
       )}
       {hasValues(dataset.concepts) && (
-        <InfoCard.Item title={localization.datasetForm.fieldLabel.concept}>
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.concepts}>
           <Table
             size='sm'
             className={styles.table}
           >
             <Table.Head>
               <Table.Row>
-                <Table.HeaderCell>{localization.datasetForm.fieldLabel.concept}</Table.HeaderCell>
+                <Table.HeaderCell>{localization.datasetForm.fieldLabel.concepts}</Table.HeaderCell>
                 <Table.HeaderCell>{localization.publisher}</Table.HeaderCell>
               </Table.Row>
             </Table.Head>
             <Table.Body>
               {dataset?.concepts &&
                 dataset?.concepts.map((concept, index) => {
-                  const match = concepts?.find((item) => item?.uri === concept?.uri);
+                  const match = concepts?.find((item) => item?.uri === concept);
                   return (
                     <Table.Row key={`references-${index}`}>
                       <Table.Cell>
                         {
                           <Link href={`${referenceDataEnv}/concepts/${match?.id}`}>
-                            {getTranslateText(match?.title, language).toString() ?? concept?.uri}
+                            {getTranslateText(match?.title, language).toString() ?? concept}
                           </Link>
                         }
                       </Table.Cell>
@@ -413,19 +407,24 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
           </Table>
         </InfoCard.Item>
       )}
-      {dataset?.keyword && !isEmpty(dataset?.keyword[0]) && (
-        <InfoCard.Item title={localization.datasetForm.fieldLabel.keyword}>
+      {dataset?.keywords && (
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.keywords}>
           <li className={styles.list}>
-            {dataset.keyword?.map((item, index) => {
-              return item[language] ? (
-                <Tag
-                  size='sm'
-                  color='info'
-                  key={`keyword-tag-${index}`}
-                >
-                  {item[language]}
-                </Tag>
-              ) : null;
+            {keywordLanguages.map((lang) => {
+              const langValues = get(dataset.keywords, lang);
+              return langValues && typeof langValues !== 'string'
+                ? langValues.map((item, index) =>
+                    item ? (
+                      <Tag
+                        size='sm'
+                        color='info'
+                        key={`keyword-tag-${index}`}
+                      >
+                        {item}
+                      </Tag>
+                    ) : null,
+                  )
+                : null;
             })}
           </li>
         </InfoCard.Item>
@@ -465,10 +464,10 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         </InfoCard.Item>
       )}
 
-      {!isEmpty(dataset?.informationModel) && (
-        <InfoCard.Item title={localization.datasetForm.fieldLabel.informationModel}>
+      {!isEmpty(dataset?.informationModelsFromOtherSources) && (
+        <InfoCard.Item title={localization.datasetForm.fieldLabel.informationModelsFromOtherSources}>
           <UriWithLabelTable
-            values={dataset?.informationModel}
+            values={dataset?.informationModelsFromOtherSources}
             language={language}
           />
         </InfoCard.Item>

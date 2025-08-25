@@ -27,7 +27,8 @@ export const CatalogLayout = ({
   fdkBaseUrl,
 }: CatalogLayoutProps) => {
   const { catalogId } = useParams();
-  const { data: design } = useGetCatalogDesign(catalogId?.toString(), catalogAdminServiceUrl);
+  const { data: design } =
+    typeof catalogId === 'string' ? useGetCatalogDesign(catalogId?.toString(), catalogAdminServiceUrl) : {};
 
   return (
     <Layout

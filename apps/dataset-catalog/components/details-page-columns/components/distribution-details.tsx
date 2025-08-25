@@ -23,7 +23,7 @@ export const DistributionDetailsCard = ({
   language,
 }: Props) => {
   const { data: formats } = useSearchFileTypeByUri(distribution.format, referenceDataEnv);
-  const { data: selectedDataServices } = useSearchDataServiceByUri(searchEnv, distribution?.accessServiceUris ?? []);
+  const { data: selectedDataServices } = useSearchDataServiceByUri(searchEnv, distribution?.accessServices ?? []);
   const { data: selectedMediaTypes } = useSearchMediaTypeByUri(distribution?.mediaType ?? [], referenceDataEnv);
 
   const getDataNorgeUri = (id: string | undefined, resourceType: Search.ResourceType) => {
@@ -145,12 +145,12 @@ export const DistributionDetailsCard = ({
               </div>
             )}
 
-            {distribution?.accessServiceUris && distribution.accessServiceUris.length > 0 && (
+            {distribution?.accessServices && distribution.accessServices.length > 0 && (
               <div className={styles.distributionField}>
                 <Heading
                   level={5}
                   size='2xs'
-                >{`${localization.datasetForm.fieldLabel.accessServiceUris}:`}</Heading>
+                >{`${localization.datasetForm.fieldLabel.accessServices}:`}</Heading>
                 {
                   <Table
                     size='sm'
@@ -158,13 +158,13 @@ export const DistributionDetailsCard = ({
                   >
                     <Table.Head>
                       <Table.Row>
-                        <Table.HeaderCell>{localization.datasetForm.fieldLabel.accessServiceUris}</Table.HeaderCell>
+                        <Table.HeaderCell>{localization.datasetForm.fieldLabel.accessServices}</Table.HeaderCell>
                         <Table.HeaderCell>{localization.publisher}</Table.HeaderCell>
                       </Table.Row>
                     </Table.Head>
 
                     <TableBody>
-                      {distribution.accessServiceUris.map((uri, i) => {
+                      {distribution.accessServices.map((uri, i) => {
                         const match = selectedDataServices?.find((service) => service.uri === uri);
                         return (
                           <Table.Row key={`service-${uri}-${i}`}>
@@ -198,7 +198,7 @@ export const DistributionDetailsCard = ({
               </div>
             )}
 
-            {distribution.license?.uri && (
+            {distribution.license && (
               <>
                 <Heading
                   level={5}
@@ -207,7 +207,7 @@ export const DistributionDetailsCard = ({
                 <div className={styles.distributionField}>
                   <Paragraph size='sm'>
                     {getTranslateText(
-                      openLicenses.find((license) => license.uri === distribution.license?.uri)?.label,
+                      openLicenses.find((license) => license.uri === distribution.license)?.label,
                       language,
                     )}
                   </Paragraph>
@@ -252,13 +252,13 @@ export const DistributionDetailsCard = ({
                   level={5}
                   size='2xs'
                 >{`${localization.datasetForm.fieldLabel.page}:`}</Heading>
-                {distribution.page.map((page: { uri: string }, index: number) => {
+                {distribution.page.map((page, index: number) => {
                   return (
                     <Paragraph
                       size={'sm'}
                       key={`page-${index}`}
                     >
-                      <Link href={page.uri}>{page.uri}</Link>
+                      <Link href={page}>{page}</Link>
                     </Paragraph>
                   );
                 })}

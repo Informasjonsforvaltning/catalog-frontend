@@ -4,7 +4,7 @@ import { Tag } from '@digdir/designsystemet-react';
 import styles from './referenceDataTags.module.css';
 
 type Props = {
-  values: UriWithLabel[] | string | undefined;
+  values: string[] | string | undefined;
   data: ReferenceDataCode[] | undefined;
 };
 
@@ -33,5 +33,5 @@ export const ReferenceDataTags = ({ values, data }: Props) => {
     return <>{renderTag(values)}</>;
   }
 
-  return <ul className={styles.list}>{values?.map((item) => item?.uri && renderTag(item.uri))}</ul>;
+  return <ul className={styles.list}>{values?.map((item) => item && renderTag(item))}</ul>;
 };
