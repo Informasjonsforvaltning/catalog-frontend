@@ -46,9 +46,6 @@ export const createConcept = (concept: Partial<Concept>, accessToken: string) =>
 export const patchConcept = (conceptId: string, patchOperations: Operation[], accessToken: string) =>
   conceptCatalogApiCall('PATCH', `/begreper/${conceptId}`, patchOperations, accessToken);
 
-export const importConcepts = (concepts: Omit<Concept, 'id'>[], catalogId: string, accessToken: string) =>
-  conceptCatalogApiCall('POST', `/import/${catalogId}`, concepts, accessToken);
-
 export const deleteConcept = (conceptId: string, accessToken: string) =>
   conceptCatalogApiCall('DELETE', `/begreper/${conceptId}`, null, accessToken);
 
@@ -283,6 +280,31 @@ export const getConceptImportResultById = async (catalogId: string, resultId: st
   return await fetch(resource, options);
 };
 
+export const confirmConceptImport = async (catalogId: string, resultId: string, accessToken: string) => {
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}/${resultId}/confirm`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    method: 'PUT',
+  };
+
+  return await fetch(resource, options);
+}
+
+export const cancelConceptImport = async (catalogId: string, resultId: string, accessToken: string) => {
+    const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}/${resultId}/cancel`;
+    const options = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+        },
+        method: 'PUT',
+    };
+
+    return await fetch(resource, options);
+}
+
 export const removeImportResultConcept = async (catalogId: string, resultId: string, accessToken: string) => {
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}/results/${resultId}`;
   const options = {
@@ -340,3 +362,4 @@ export const getConceptCountByCatalogId = (catalogId: string, accessToken: strin
   conceptCatalogApiCall('GET', `/begreper/${catalogId}/count`, null, accessToken);
 
 export * from './import-rdf-concepts';
+export * from './import-csv-json';

@@ -4,7 +4,7 @@ import { Concept } from '@catalog-frontend/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { validOrganizationNumber } from '@catalog-frontend/utils';
 import { useSession } from 'next-auth/react';
-import { importRdfConcepts } from '@catalog-frontend/data-access';
+import { importRdfConcepts, importConceptsCSV, createImportJob } from '@catalog-frontend/data-access';
 import { useRouter } from 'next/navigation';
 
 type ConceptImport = Omit<Concept, 'ansvarligVirksomhet'>;
@@ -197,23 +197,29 @@ export const useSendRdf = (catalogId: string) => {
   const accessToken = session?.accessToken ?? '';
   return useMutation({
     mutationKey: ['sendConceptsRDF'],
-    mutationFn: async ({ ...mutationProps }: {fileContent: string, contentType: string}) => {
-
-      const location = await importRdfConcepts(
-        mutationProps.fileContent,
-        mutationProps.contentType,
-        catalogId,
-        accessToken,
-      );
-
+    mutationFn: async ({ ...mutationProps }: { fileContent: string; contentType: string }) => {
+      const location = await createImportJob(catalogId, accessToken);
       if (location) {
+
         const resultId = location.split('/').pop();
+        console.log('Created import result ID at ', location);
+        if (!resultId) {
+
+          console.error('No result ID found in the location URL');
+          return Promise.reject('No result ID found');
+
+        }
+
+        importRdfConcepts(mutationProps.fileContent, mutationProps.contentType, catalogId, resultId, accessToken)
+          .catch(error => console.error("Failed to import RDF concepts in the background", error));
+
         router.push(`/catalogs/${catalogId}/concepts/import-results/${resultId}`);
+
       }
 
     },
     onSuccess: () => {
-      console.log('Concept RDF file has been send successfully!');
+      console.log('Concept RDF file has been sent successfully!');
     },
     onError: (error: any) => {
       console.error('Error sending concept RDF file');
@@ -225,40 +231,33 @@ export const useSendRdf = (catalogId: string) => {
 export const useSendConcepts = (catalogId: string,
                                 setIsSending?: React.Dispatch<React.SetStateAction<boolean>>) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const accessToken = session?.accessToken ?? '';
   return useMutation({
     mutationKey: ['sendConceptsCSV'],
-    mutationFn: async (concepts: Concept []) => {
-      if(setIsSending)
-        setIsSending(true)
+    mutationFn: async (concepts: Concept[]) => {
+      if (setIsSending) setIsSending(true);
 
-        const response = await fetch(`/api/catalogs/${catalogId}/concepts/import`, {
-          method: 'POST',
-          body: JSON.stringify(concepts),
-        });
-
-        if (response.status === 401) {
-          return Promise.reject('Unauthorized');
+      const location = await createImportJob(catalogId, accessToken);
+      if (location) {
+        const resultId = location.split('/').pop();
+        console.log('Created import result ID at ', location);
+        if (!resultId) {
+          console.error('No result ID found in the location URL');
+          return Promise.reject('No result ID found');
         }
 
-        if (response.status > 399) {
-          const errorMessage = await response.text();
-          return Promise.reject(errorMessage);
-        }
+        importConceptsCSV(catalogId, resultId, concepts, accessToken)
+          .catch(error => console.error("Failed to import CSV/JSON concepts in the background", error));
 
-        let resultId  = await response.json();
-        if(resultId) {
-            router.push(`/catalogs/${catalogId}/concepts/import-results/${resultId}`);
-        }
-
-        return Promise.resolve();
-
-      return Promise.reject('Canceled');
+        router.push(`/catalogs/${catalogId}/concepts/import-results/${resultId}`);
+      }
     },
     onSuccess: () => {
-      // Invalidate and refetch
-      router.refresh();
+      console.log('Concepts have been sent successfully!');
     },
-  })
+  });
 
 }
 

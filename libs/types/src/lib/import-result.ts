@@ -4,7 +4,7 @@ export interface ImportResult {
   id: string;
   created: string;
   catalogId: string;
-  status: 'FAILED' | 'COMPLETED';
+  status: 'FAILED' | 'COMPLETED' | 'IN_PROGRESS' | 'CANCELLED' | 'PENDING_CONFIRMATION';
   extractionRecords?: ExtractionRecord[];
 }
 

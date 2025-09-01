@@ -609,6 +609,9 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
   importResult: {
     completed: 'Vellykket',
     failed: 'Feilet',
+    inProgress: 'Pågår',
+    cancelled: 'Avvist',
+    pendingConfirmation: 'Venter på bekreftelse',
     warnings: 'Advarsler',
     errors: 'Feil',
     goToImported: 'Gå til importert ressurs',

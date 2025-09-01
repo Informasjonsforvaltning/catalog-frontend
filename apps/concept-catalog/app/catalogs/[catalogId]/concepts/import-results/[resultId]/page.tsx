@@ -4,6 +4,7 @@ import { getConceptImportResultById } from '@catalog-frontend/data-access';
 import { redirect, RedirectType } from 'next/navigation';
 import ImportResultDetailsPageClient from './import-result-details-page-client';
 import { withAdminProtectedPage } from '@concept-catalog/utils/auth';
+import { useQuery } from '@tanstack/react-query';
 
 const ImportResultDetailsPage = withAdminProtectedPage(
   ({ catalogId, resultId }) => `/catalogs/${catalogId}/concepts/import-results/${resultId}`,
@@ -11,6 +12,20 @@ const ImportResultDetailsPage = withAdminProtectedPage(
     if (!resultId || !validUUID(resultId)) {
       return redirect(`/notfound`, RedirectType.replace);
     }
+
+    /*const { data } = useQuery({
+      queryKey: ['importResult', catalogId, resultId],
+      queryFn: async () =>
+        await getConceptImportResultById(catalogId, resultId, `${session?.accessToken}`).then(
+          (response) => {
+            if (response.ok) {
+              return response.json();
+            }
+          },
+        ),
+      refetchInterval: 5000, // Poll every 5 seconds
+    });*/
+
     const importResult = await getConceptImportResultById(catalogId, resultId, `${session?.accessToken}`).then(
       (response) => {
         if (response.ok) {

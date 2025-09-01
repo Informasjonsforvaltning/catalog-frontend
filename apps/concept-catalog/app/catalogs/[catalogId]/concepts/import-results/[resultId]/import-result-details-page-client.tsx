@@ -2,7 +2,7 @@
 
 import { ImportResult } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
-import { deleteImportResult } from '../../../../../actions/concept/actions';
+import { confirmImport, cancelImport, deleteImportResult } from '../../../../../actions/concept/actions';
 import { ConfirmModal, ImportResultDetails } from '@catalog-frontend/ui';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -28,6 +28,14 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
     setShowDeleteConfirm(true);
   };
 
+    const handleConfirmClick = async () => {
+      await confirmImport(catalogId, importResult.id);
+    };
+
+    const handleCancelClick = async () => {
+        await cancelImport(catalogId, importResult.id);
+    };
+
   return (
     <>
       {showDeleteConfirm && (
@@ -42,6 +50,8 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
         targetBaseHref={`catalogs/${catalogId}/concepts`}
         importResult={importResult}
         deleteHandler={handleDeleteClick}
+        confirmHandler={handleConfirmClick}
+        cancelHandler={handleCancelClick}
       />
     </>
   );
