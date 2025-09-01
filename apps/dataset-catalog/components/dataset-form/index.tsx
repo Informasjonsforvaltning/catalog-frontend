@@ -127,12 +127,21 @@ export const DatasetForm = ({
     setFieldValue: (fieldName: string, value: boolean) => void,
   ) => {
     const isChecked = event.target.checked;
-    setFormApprovedStatus(isChecked);
-    setFieldValue('approved', isChecked);
+    if (!isChecked && 'published' in initialValues && initialValues?.published === true) {
+      showSnackbarMessage({ message: localization.datasetForm.alert.unpublishBeforeUnapprove, severity: 'danger' });
+    } else {
+      setFormApprovedStatus(isChecked);
+      setFieldValue('approved', isChecked);
+    }
   };
 
   const handleIgnoreRequiredChange = (newValue: boolean) => {
-    if (newValue && formApprovedStatus === true) {
+    if (newValue && 'published' in initialValues && initialValues?.published === true) {
+      showSnackbarMessage({
+        message: localization.datasetForm.alert.unpublishBeforeIgnoreRequired,
+        severity: 'danger',
+      });
+    } else if (newValue && formApprovedStatus === true) {
       setShowUnapproveModal(true);
     } else {
       setIgnoreRequired(newValue);
