@@ -17,7 +17,7 @@ type RelationSection = {
   changed?: string[];
   readOnly?: boolean;
   autoSaveId?: string;
-  autoSaveStorage: DataStorage<StorageData>;
+  autoSaveStorage?: DataStorage<StorageData>;
 };
 
 export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, autoSaveStorage }: RelationSection) => {
@@ -129,7 +129,7 @@ export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, auto
   };
 
   const handleChangeRelationInModal = (rel: UnionRelation, prev?: UnionRelationWithIndex) => {
-    autoSaveStorage.setSecondary('conceptFormRelation', {
+    autoSaveStorage?.setSecondary('relation', {
       id: autoSaveId,
       values: {
         rel,
@@ -140,12 +140,12 @@ export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, auto
   };
 
   const handleCloseRelationModal = () => {
-    autoSaveStorage.deleteSecondary('conceptFormRelation');
+    autoSaveStorage?.deleteSecondary('relation');
   };
 
   const handleUpdateRelation = (rel: UnionRelation, prev?: UnionRelationWithIndex) => {
     updateUnionRelation(rel, prev, values, setFieldValue);
-    autoSaveStorage.deleteSecondary('conceptFormRelation');
+    autoSaveStorage?.deleteSecondary('relation');
   };
 
   const handleRemoveRelation = (rel: UnionRelationWithIndex) => {

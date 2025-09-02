@@ -45,7 +45,7 @@ export const ReferenceTable = ({ searchEnv, autoSaveId, autoSaveStorage }: Props
   const handleReferenceChange = (updatedRef: Reference, index: number) => {
     // Save to secondary storage for auto-save
     if (autoSaveStorage && autoSaveId) {
-      autoSaveStorage.setSecondary('datasetFormReference', {
+      autoSaveStorage.setSecondary('reference', {
         id: autoSaveId,
         values: {
           reference: updatedRef,
@@ -59,7 +59,7 @@ export const ReferenceTable = ({ searchEnv, autoSaveId, autoSaveStorage }: Props
   const handleReferenceCancel = () => {
     // Clean up secondary storage on cancel
     if (autoSaveStorage) {
-      autoSaveStorage.deleteSecondary('datasetFormReference');
+      autoSaveStorage.deleteSecondary('reference');
     }
   };
 
@@ -68,7 +68,7 @@ export const ReferenceTable = ({ searchEnv, autoSaveId, autoSaveStorage }: Props
 
     // Clean up secondary storage on success
     if (autoSaveStorage) {
-      autoSaveStorage.deleteSecondary('datasetFormReference');
+      autoSaveStorage.deleteSecondary('reference');
     }
   };
 
@@ -139,7 +139,7 @@ export const ReferenceTable = ({ searchEnv, autoSaveId, autoSaveStorage }: Props
             const newIndex = values.references?.length ?? 0;
             setFieldValue(`references[${newIndex}]`, updatedItem);
             if (autoSaveStorage) {
-              autoSaveStorage.deleteSecondary('datasetFormReference');
+              autoSaveStorage.deleteSecondary('reference');
             }
           }}
           onCancel={handleReferenceCancel}
@@ -147,7 +147,7 @@ export const ReferenceTable = ({ searchEnv, autoSaveId, autoSaveStorage }: Props
             const newIndex = values.references?.length ?? 0;
             // Save to secondary storage for auto-save
             if (autoSaveStorage && autoSaveId) {
-              autoSaveStorage.setSecondary('datasetFormReference', {
+              autoSaveStorage.setSecondary('reference', {
                 id: autoSaveId,
                 values: {
                   reference: updatedItem,

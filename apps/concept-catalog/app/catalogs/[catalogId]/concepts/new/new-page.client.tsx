@@ -15,7 +15,10 @@ export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, 
 
   const dataStorage = new LocalDataStorage<StorageData>({ 
     key: 'conceptForm', 
-    secondaryKeys: ['conceptFormDefinition', 'conceptFormRelation']
+    secondaryKeys: {
+      definition: 'conceptFormDefinition',
+      relation: 'conceptFormRelation'
+    }
   });
 
   const handleCreate = async (values: Concept) => {
@@ -35,6 +38,14 @@ export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, 
   const handleCancel = () => {
     dataStorage.delete();
     window.location.replace(`/catalogs/${catalogId}/concepts`);
+  };
+
+  const handleRestore = (data: StorageData): boolean => {
+    if (data?.id) {
+      window.location.replace(`/catalogs/${catalogId}/concepts/${data.id}/edit?restore=1`);
+      return false;
+    } 
+    return true;
   };
 
   return (
@@ -69,6 +80,7 @@ export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, 
         usersResult={usersResult}
         onSubmit={handleCreate}
         onCancel={handleCancel}
+        onRestore={handleRestore}
       />
     </>
   );
