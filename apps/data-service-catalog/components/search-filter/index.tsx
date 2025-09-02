@@ -77,6 +77,7 @@ const SearchFilter = ({ distributionStatuses }: Props) => {
   const accordionItems = accordionItemContents.map((item) => (
     <AccordionItem
       key={`accordion-item-${item.header}`}
+      initiallyOpen={true}
       {...item}
     />
   ));

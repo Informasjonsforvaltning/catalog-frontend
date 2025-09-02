@@ -6,10 +6,10 @@ import {
   getPlannedAvailabilities,
 } from '@catalog-frontend/data-access';
 
-import DataServiceForm from '../../../../../components/data-service-form';
 import { dataServiceToBeCreatedTemplate } from '../../../../../components/data-service-form/utils/data-service-initial-values';
 import { localization } from '@catalog-frontend/utils';
 import { withWriteProtectedPage } from '@data-service-catalog/utils/auth';
+import { NewDataServicePageClient } from './new-page-client';
 
 const NewDataServicePage = withWriteProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/data-services/new`,
@@ -53,12 +53,12 @@ const NewDataServicePage = withWriteProtectedPage(
           title={localization.catalogType.dataService}
           catalogId={catalogId}
         />
-        <DataServiceForm
+        <NewDataServicePageClient
+          catalogId={catalogId}
           initialValues={initialValues}
           searchEnv={searchEnv}
           referenceData={referenceData}
           referenceDataEnv={referenceDataEnv}
-          submitType={'create'}
         />
       </>
     );

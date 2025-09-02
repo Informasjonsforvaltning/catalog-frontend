@@ -1,9 +1,13 @@
 import { ChangeRequestStatus } from '@catalog-frontend/types';
+import { validateOrganizationNumber, validateUUID, validateAndEncodeUrlSafe } from '@catalog-frontend/utils';
 
 const path = `${process.env.CONCEPT_CATALOG_BASE_URI}`;
 
 export const getChangeRequests = async (catalogId: string, accessToken: string) => {
-  const resource = `${path}/${catalogId}/endringsforslag`;
+  validateOrganizationNumber(catalogId, 'getChangeRequests');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getChangeRequests');
+
+  const resource = `${path}/${encodedCatalogId}/endringsforslag`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -21,7 +25,14 @@ export const searchChangeRequest = async (
   accessToken: string,
   status?: ChangeRequestStatus,
 ) => {
-  const resource = `${path}/${catalogId}/endringsforslag?concept=${conceptId}` + (status ? `&status=${status}` : '');
+  validateOrganizationNumber(catalogId, 'searchChangeRequest');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'searchChangeRequest');
+
+  const encodedConceptId = encodeURIComponent(conceptId);
+  const encodedStatus = status ? encodeURIComponent(status) : '';
+  const resource =
+    `${path}/${encodedCatalogId}/endringsforslag?concept=${encodedConceptId}` +
+    (status ? `&status=${encodedStatus}` : '');
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -34,7 +45,12 @@ export const searchChangeRequest = async (
 };
 
 export const getChangeRequest = async (catalogId: string, changeRequestId: string, accessToken: string) => {
-  const resource = `${path}/${catalogId}/endringsforslag/${changeRequestId}`;
+  validateOrganizationNumber(catalogId, 'getChangeRequest');
+  validateUUID(changeRequestId, 'getChangeRequest');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getChangeRequest');
+  const encodedChangeRequestId = validateAndEncodeUrlSafe(changeRequestId, 'change request ID', 'getChangeRequest');
+
+  const resource = `${path}/${encodedCatalogId}/endringsforslag/${encodedChangeRequestId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -47,7 +63,10 @@ export const getChangeRequest = async (catalogId: string, changeRequestId: strin
 };
 
 export const createChangeRequest = async (body: any, catalogId: string, accessToken: string) => {
-  const resource = `${path}/${catalogId}/endringsforslag`;
+  validateOrganizationNumber(catalogId, 'createChangeRequest');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'createChangeRequest');
+
+  const resource = `${path}/${encodedCatalogId}/endringsforslag`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -65,7 +84,12 @@ export const updateChangeRequest = async (
   changeRequestId: string,
   accessToken: string,
 ) => {
-  const resource = `${path}/${catalogId}/endringsforslag/${changeRequestId}`;
+  validateOrganizationNumber(catalogId, 'updateChangeRequest');
+  validateUUID(changeRequestId, 'updateChangeRequest');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'updateChangeRequest');
+  const encodedChangeRequestId = validateAndEncodeUrlSafe(changeRequestId, 'change request ID', 'updateChangeRequest');
+
+  const resource = `${path}/${encodedCatalogId}/endringsforslag/${encodedChangeRequestId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -78,7 +102,12 @@ export const updateChangeRequest = async (
 };
 
 export const acceptChangeRequest = async (catalogId: string, changeRequestId: string, accessToken: string) => {
-  const resource = `${path}/${catalogId}/endringsforslag/${changeRequestId}/accept`;
+  validateOrganizationNumber(catalogId, 'acceptChangeRequest');
+  validateUUID(changeRequestId, 'acceptChangeRequest');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'acceptChangeRequest');
+  const encodedChangeRequestId = validateAndEncodeUrlSafe(changeRequestId, 'change request ID', 'acceptChangeRequest');
+
+  const resource = `${path}/${encodedCatalogId}/endringsforslag/${encodedChangeRequestId}/accept`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -91,7 +120,12 @@ export const acceptChangeRequest = async (catalogId: string, changeRequestId: st
 };
 
 export const rejectChangeRequest = async (catalogId: string, changeRequestId: string, accessToken: string) => {
-  const resource = `${path}/${catalogId}/endringsforslag/${changeRequestId}/reject`;
+  validateOrganizationNumber(catalogId, 'rejectChangeRequest');
+  validateUUID(changeRequestId, 'rejectChangeRequest');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'rejectChangeRequest');
+  const encodedChangeRequestId = validateAndEncodeUrlSafe(changeRequestId, 'change request ID', 'rejectChangeRequest');
+
+  const resource = `${path}/${encodedCatalogId}/endringsforslag/${encodedChangeRequestId}/reject`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,

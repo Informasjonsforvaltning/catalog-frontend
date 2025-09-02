@@ -83,8 +83,8 @@ export const DistributionSection = ({
   };
 
   useEffect(() => {
-    const distributionAccessServices = values.distribution?.map((val) => val?.accessServiceUris)?.flat() ?? [];
-    const sampleAccessServices = values.sample?.map((val) => val?.accessServiceUris)?.flat() ?? [];
+    const distributionAccessServices = values.distribution?.map((val) => val?.accessServices)?.flat() ?? [];
+    const sampleAccessServices = values.sample?.map((val) => val?.accessServices)?.flat() ?? [];
     const allAccessServices = [...distributionAccessServices, ...sampleAccessServices]
       .flat()
       .filter((item) => item !== undefined);
@@ -162,7 +162,7 @@ export const DistributionSection = ({
     if (
       !isEmpty(distribution.downloadURL) ||
       !isEmpty(distribution.mediaType) ||
-      !isEmpty(distribution.accessServiceUris) ||
+      !isEmpty(distribution.accessServices) ||
       distribution.license ||
       !isEmpty(distribution.description) ||
       !isEmpty(distribution.page) ||
@@ -364,7 +364,7 @@ export const DistributionSection = ({
               mediaType: [],
               page: [],
               conformsTo: [],
-              accessServiceUris: [],
+              accessServices: [],
             }}
           />
         </div>
@@ -532,7 +532,7 @@ export const DistributionSection = ({
               mediaType: [],
               page: [],
               conformsTo: [],
-              accessServiceUris: [],
+              accessServices: [],
             }}
           />
         </div>

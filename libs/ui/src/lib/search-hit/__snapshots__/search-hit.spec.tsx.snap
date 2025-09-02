@@ -31,7 +31,9 @@ exports[`SearchHit should render SearchHit successfully 1`] = `
       <div
         class="description"
       >
-        <emptymock>
+        <emptymock
+          remarkplugins="EmptyMock"
+        >
           Search hit description
         </emptymock>
       </div>

@@ -31,8 +31,8 @@ export const uriWithLabelSchema = Yup.object().shape({
 const contactPointDraftValidationSchema = Yup.array().of(
   Yup.object().shape({
     email: Yup.string().email(localization.validation.invalidEmail).notRequired(),
-    hasTelephone: Yup.string().matches(telephoneNumberRegex, localization.validation.invalidPhone).notRequired(),
-    hasURL: Yup.string()
+    phone: Yup.string().matches(telephoneNumberRegex, localization.validation.invalidPhone).notRequired(),
+    url: Yup.string()
       .matches(httpsRegex, localization.validation.invalidProtocol)
       .url(localization.validation.invalidUrl)
       .notRequired(),
@@ -61,8 +61,8 @@ const contactPointConfirmValidationSchema = Yup.array()
           return !!(name.nb || name.nn || name.en);
         }),
       email: Yup.string().email(localization.validation.invalidEmail).notRequired(),
-      hasTelephone: Yup.string().matches(telephoneNumberRegex, localization.validation.invalidPhone).notRequired(),
-      hasURL: Yup.string()
+      phone: Yup.string().matches(telephoneNumberRegex, localization.validation.invalidPhone).notRequired(),
+      url: Yup.string()
         .matches(httpsRegex, localization.validation.invalidProtocol)
         .url(localization.validation.invalidUrl)
         .notRequired(),
@@ -73,18 +73,18 @@ const contactPointConfirmValidationSchema = Yup.array()
       return false;
     }
     const firstContactPoint = contactPoints[0];
-    return !!(firstContactPoint.email || firstContactPoint.hasTelephone || firstContactPoint.hasURL);
+    return !!(firstContactPoint.email || firstContactPoint.phone || firstContactPoint.url);
   });
 
 export const distributionSectionSchema = Yup.object().shape({
   accessURL: Yup.array()
     .of(
       Yup.string()
-        .required(localization.datasetForm.validation.accessURLrequired)
+        .required(localization.datasetForm.validation.accessUrlRequired)
         .matches(httpsRegex, localization.validation.invalidProtocol)
         .url(localization.validation.invalidUrl),
     )
-    .min(1, localization.datasetForm.validation.accessURLrequired),
+    .min(1, localization.datasetForm.validation.accessUrlRequired),
   downloadURL: Yup.array()
     .nullable()
     .of(
@@ -95,21 +95,13 @@ export const distributionSectionSchema = Yup.object().shape({
     ),
   conformsTo: Yup.array().of(uriWithLabelSchema),
   page: Yup.array().of(
-    Yup.object().shape({
-      uri: Yup.string()
-        .matches(httpsRegex, localization.validation.invalidProtocol)
-        .url(localization.validation.invalidUrl),
-    }),
+    Yup.string().matches(httpsRegex, localization.validation.invalidProtocol).url(localization.validation.invalidUrl),
   ),
 });
 
 export const referenceSchema = Yup.object().shape({
-  referenceType: Yup.object().shape({
-    code: Yup.string().required(localization.datasetForm.validation.relation),
-  }),
-  source: Yup.object().shape({
-    uri: Yup.string().required(localization.datasetForm.validation.relation),
-  }),
+  referenceType: Yup.string().required(localization.datasetForm.validation.relation),
+  source: Yup.string().required(localization.datasetForm.validation.relation),
 });
 
 export const dateSchema = Yup.object().shape({
@@ -181,7 +173,7 @@ export const draftDatasetSchema = Yup.object().shape({
       }
       return !!(title.nb || title.nn || title.en);
     }),
-  contactPoint: contactPointDraftValidationSchema,
+  contactPoints: contactPointDraftValidationSchema,
 });
 
 export const confirmedDatasetSchema = draftDatasetSchema.shape({
@@ -245,8 +237,8 @@ export const confirmedDatasetSchema = draftDatasetSchema.shape({
   legalBasisForProcessing: Yup.array().of(uriWithLabelSchema),
   legalBasisForAccess: Yup.array().of(uriWithLabelSchema),
   conformsTo: Yup.array().of(uriWithLabelSchema),
-  informationModel: Yup.array().of(uriWithLabelSchema),
+  informationModelsFromOtherSources: Yup.array().of(uriWithLabelSchema),
   references: Yup.array().of(referenceSchema),
   relations: Yup.array().of(uriWithLabelSchema),
-  contactPoint: contactPointConfirmValidationSchema,
+  contactPoints: contactPointConfirmValidationSchema,
 });

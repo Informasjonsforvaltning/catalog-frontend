@@ -13,11 +13,10 @@ import { getAllServiceMessages, getOrganizations, StrapiGraphql } from '@catalog
 import { Organization } from '@catalog-frontend/types';
 import OrganizationCombo from './components/organization-combobox';
 import { redirect } from 'next/navigation';
-import { ServiceMessages, TermsOfUseAlert } from '@catalog-frontend/ui';
+import { ServiceMessages, TermsOfUseAlert, MarkdownComponent } from '@catalog-frontend/ui';
 import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
 import styles from './catalogs.module.css';
 import { CatalogCard } from './components/catalog-card';
-import Markdown from 'react-markdown';
 
 const CatalogsPage = async (props: { params: Promise<{ catalogId: string[] }> }) => {
   const params = await props.params;
@@ -83,7 +82,7 @@ const CatalogsPage = async (props: { params: Promise<{ catalogId: string[] }> })
           >
             {localization.alert.noOrganizationAvailable.heading}
           </Heading>
-          <Markdown>{localization.alert.noOrganizationAvailable.text}</Markdown>
+          <MarkdownComponent>{localization.alert.noOrganizationAvailable.text}</MarkdownComponent>
         </Alert>
       ) : null}
       {currentOrganization && (

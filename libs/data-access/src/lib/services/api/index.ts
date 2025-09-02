@@ -1,10 +1,14 @@
 import { Service } from '@catalog-frontend/types';
 import { Operation } from 'fast-json-patch';
+import { validateOrganizationNumber, validateUUID, validateAndEncodeUrlSafe } from '@catalog-frontend/utils';
 
 const path = `${process.env.SERVICE_CATALOG_BASE_URI}`;
 
 export const getAllServices = async (catalogId: string, accessToken: string) => {
-  const resource = `${path}/internal/catalogs/${catalogId}/services`;
+  validateOrganizationNumber(catalogId, 'getAllServices');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getAllServices');
+
+  const resource = `${path}/internal/catalogs/${encodedCatalogId}/services`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -16,7 +20,12 @@ export const getAllServices = async (catalogId: string, accessToken: string) => 
 };
 
 export const getServiceById = async (catalogId: string, serviceId: string, accessToken: string) => {
-  const resource = `${path}/internal/catalogs/${catalogId}/services/${serviceId}`;
+  validateOrganizationNumber(catalogId, 'getServiceById');
+  validateUUID(serviceId, 'getServiceById');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getServiceById');
+  const encodedServiceId = validateAndEncodeUrlSafe(serviceId, 'service ID', 'getServiceById');
+
+  const resource = `${path}/internal/catalogs/${encodedCatalogId}/services/${encodedServiceId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -28,7 +37,10 @@ export const getServiceById = async (catalogId: string, serviceId: string, acces
 };
 
 export const createService = async (Service: Partial<Service>, catalogId: string, accessToken: string) => {
-  const resource = `${path}/internal/catalogs/${catalogId}/services`;
+  validateOrganizationNumber(catalogId, 'createService');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'createService');
+
+  const resource = `${path}/internal/catalogs/${encodedCatalogId}/services`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -41,7 +53,12 @@ export const createService = async (Service: Partial<Service>, catalogId: string
 };
 
 export const deleteService = async (catalogId: string, serviceId: string, accessToken: string) => {
-  const resource = `${path}/internal/catalogs/${catalogId}/services/${serviceId}`;
+  validateOrganizationNumber(catalogId, 'deleteService');
+  validateUUID(serviceId, 'deleteService');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'deleteService');
+  const encodedServiceId = validateAndEncodeUrlSafe(serviceId, 'service ID', 'deleteService');
+
+  const resource = `${path}/internal/catalogs/${encodedCatalogId}/services/${encodedServiceId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -58,7 +75,12 @@ export const updateService = async (
   patchOperations: Operation[],
   accessToken: string,
 ) => {
-  const resource = `${path}/internal/catalogs/${catalogId}/services/${serviceId}`;
+  validateOrganizationNumber(catalogId, 'updateService');
+  validateUUID(serviceId, 'updateService');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'updateService');
+  const encodedServiceId = validateAndEncodeUrlSafe(serviceId, 'service ID', 'updateService');
+
+  const resource = `${path}/internal/catalogs/${encodedCatalogId}/services/${encodedServiceId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -71,7 +93,12 @@ export const updateService = async (
 };
 
 export const publishService = async (catalogId: string, serviceId: string, accessToken: string) => {
-  const resource = `${path}/internal/catalogs/${catalogId}/services/${serviceId}/publish`;
+  validateOrganizationNumber(catalogId, 'publishService');
+  validateUUID(serviceId, 'publishService');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'publishService');
+  const encodedServiceId = validateAndEncodeUrlSafe(serviceId, 'service ID', 'publishService');
+
+  const resource = `${path}/internal/catalogs/${encodedCatalogId}/services/${encodedServiceId}/publish`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -83,7 +110,12 @@ export const publishService = async (catalogId: string, serviceId: string, acces
 };
 
 export const unpublishService = async (catalogId: string, serviceId: string, accessToken: string) => {
-  const resource = `${path}/internal/catalogs/${catalogId}/services/${serviceId}/unpublish`;
+  validateOrganizationNumber(catalogId, 'unpublishService');
+  validateUUID(serviceId, 'unpublishService');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'unpublishService');
+  const encodedServiceId = validateAndEncodeUrlSafe(serviceId, 'service ID', 'unpublishService');
+
+  const resource = `${path}/internal/catalogs/${encodedCatalogId}/services/${encodedServiceId}/unpublish`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,

@@ -1,10 +1,14 @@
 import { InternalField } from '@catalog-frontend/types';
 import { Operation } from 'fast-json-patch';
+import { validateOrganizationNumber, validateUUID, validateAndEncodeUrlSafe } from '@catalog-frontend/utils';
 
 const path = `${process.env.CATALOG_ADMIN_SERVICE_BASE_URI}`;
 
 export const getFields = async (catalogId: string, accessToken: string) => {
-  const resource = `${path}/${catalogId}/concepts/fields`;
+  validateOrganizationNumber(catalogId, 'getFields');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getFields');
+
+  const resource = `${path}/${encodedCatalogId}/concepts/fields`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -16,7 +20,10 @@ export const getFields = async (catalogId: string, accessToken: string) => {
 };
 
 export const createInternalField = async (field: Partial<InternalField>, accessToken: string, catalogId: string) => {
-  const resource = `${path}/${catalogId}/concepts/fields/internal`;
+  validateOrganizationNumber(catalogId, 'createInternalField');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'createInternalField');
+
+  const resource = `${path}/${encodedCatalogId}/concepts/fields/internal`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -34,8 +41,13 @@ export const patchInternalField = async (
   accessToken: string,
   diff: Operation[],
 ) => {
+  validateOrganizationNumber(catalogId, 'patchInternalField');
+  validateUUID(fieldId, 'patchInternalField');
+
   if (diff.length > 0) {
-    const resource = `${path}/${catalogId}/concepts/fields/internal/${fieldId}`;
+    const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'patchInternalField');
+    const encodedFieldId = validateAndEncodeUrlSafe(fieldId, 'field ID', 'patchInternalField');
+    const resource = `${path}/${encodedCatalogId}/concepts/fields/internal/${encodedFieldId}`;
     const options = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -49,7 +61,12 @@ export const patchInternalField = async (
 };
 
 export const deleteInternalField = async (catalogId: string, fieldId: string, accessToken: string) => {
-  const resource = `${path}/${catalogId}/concepts/fields/internal/${fieldId}`;
+  validateOrganizationNumber(catalogId, 'deleteInternalField');
+  validateUUID(fieldId, 'deleteInternalField');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'deleteInternalField');
+  const encodedFieldId = validateAndEncodeUrlSafe(fieldId, 'field ID', 'deleteInternalField');
+
+  const resource = `${path}/${encodedCatalogId}/concepts/fields/internal/${encodedFieldId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -61,8 +78,11 @@ export const deleteInternalField = async (catalogId: string, fieldId: string, ac
 };
 
 export const patchEditableFields = async (catalogId: string, accessToken: string, diff: Operation[]) => {
+  validateOrganizationNumber(catalogId, 'patchEditableFields');
+
   if (diff.length > 0) {
-    const resource = `${path}/${catalogId}/concepts/fields/editable`;
+    const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'patchEditableFields');
+    const resource = `${path}/${encodedCatalogId}/concepts/fields/editable`;
     const options = {
       headers: {
         Authorization: `Bearer ${accessToken}`,

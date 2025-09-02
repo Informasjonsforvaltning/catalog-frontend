@@ -40,3 +40,13 @@ export type DataServiceCost = {
   documentation?: string[];
   currency?: string;
 };
+
+export type DataServicesPageSettings = {
+  search: string | null;
+  sort: string | null;
+  page: number | null;
+  filter: {
+    status: string[] | null;
+    pubState: string[] | null;
+  };
+};

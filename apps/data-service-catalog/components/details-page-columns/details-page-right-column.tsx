@@ -25,11 +25,12 @@ export const RightColumn = ({
   isValid,
 }: Props) => {
   return (
-    <InfoCard>
+    <InfoCard data-testid='data-service-right-column'>
       <InfoCard.Item
         key={`info-data-${localization.id}`}
         title={localization.dataServiceForm.fieldLabel.dataServiceID}
         headingColor='light'
+        data-testid='data-service-id'
       >
         {dataService?.id}
       </InfoCard.Item>
@@ -45,25 +46,25 @@ export const RightColumn = ({
         }
         helpTextSeverity={'warning'}
         headingColor='light'
+        data-testid='data-service-publication-state'
       >
         <PublishSwitch
           catalogId={dataService.catalogId}
           dataService={dataService}
           disabled={!hasWritePermission || !isValid}
         />
-        <div className={styles.greyFont}>
+        <div className={styles.greyFont} data-testid='data-service-publication-date'>
           {dataService.published
-            ? `${localization.publicationState.publishedInFDK}${
-                dataService.publishedDate
-                  ? ' ' +
-                    formatISO(dataService.publishedDate, {
-                      weekday: 'long',
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })
-                  : ''
-              }`
+            ? `${localization.publicationState.publishedInFDK}${dataService.publishedDate
+              ? ' ' +
+              formatISO(dataService.publishedDate, {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })
+              : ''
+            }`
             : ''}
         </div>
       </InfoCard.Item>
@@ -72,6 +73,7 @@ export const RightColumn = ({
         <InfoCard.Item
           title={localization.dataServiceForm.fieldLabel.modified}
           headingColor='light'
+          data-testid='data-service-modified-date'
         >
           {new Date(dataService.modified).toLocaleDateString('no-NO')}
         </InfoCard.Item>
@@ -81,6 +83,7 @@ export const RightColumn = ({
         <InfoCard.Item
           title={localization.dataServiceForm.fieldLabel.accessRights}
           headingColor='light'
+          data-testid='data-service-access-rights'
         >
           <ReferenceDataTag
             referenceDataURI={dataService.accessRights}
@@ -94,6 +97,7 @@ export const RightColumn = ({
         <InfoCard.Item
           title={localization.dataServiceForm.fieldLabel.availability}
           headingColor='light'
+          data-testid='data-service-availability'
         >
           <ReferenceDataTag
             referenceDataURI={dataService.availability}
@@ -107,13 +111,16 @@ export const RightColumn = ({
         <InfoCard.Item
           title={localization.dataServiceForm.heading.contactPoint}
           headingColor='light'
+          data-testid='data-service-contact-point'
         >
           <div className={styles.contactPoints}>
             {!isEmpty(dataService.contactPoint?.name) && (
-              <span>{getTranslateText(dataService.contactPoint?.name, language)}</span>
+              <span data-testid='data-service-contact-name'>
+                {getTranslateText(dataService.contactPoint?.name, language)}
+              </span>
             )}
             {dataService.contactPoint.email && (
-              <span>
+              <span data-testid='data-service-contact-email'>
                 <div>
                   <EnvelopeClosedIcon />
                 </div>
@@ -122,7 +129,7 @@ export const RightColumn = ({
               </span>
             )}
             {dataService.contactPoint?.phone && (
-              <span>
+              <span data-testid='data-service-contact-phone'>
                 <div>
                   <PhoneIcon />
                 </div>
@@ -130,7 +137,7 @@ export const RightColumn = ({
               </span>
             )}
             {dataService.contactPoint.url && (
-              <span>
+              <span data-testid='data-service-contact-url'>
                 <div>
                   <LinkIcon />
                 </div>

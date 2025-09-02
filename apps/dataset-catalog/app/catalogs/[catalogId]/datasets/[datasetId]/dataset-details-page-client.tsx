@@ -1,6 +1,6 @@
 'use client';
 
-import { Dataset, DatasetSeries, PublicationStatus, ReferenceData } from '@catalog-frontend/types';
+import { Dataset, DatasetSeries, ReferenceData } from '@catalog-frontend/types';
 import { DeleteButton, DetailsPageLayout, LinkButton } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useState } from 'react';
@@ -11,8 +11,7 @@ import { deleteDataset } from '../../../../actions/actions';
 import StatusTag from '../../../../../components/status-tag/index';
 import { useRouter } from 'next/navigation';
 import { Alert } from '@digdir/designsystemet-react';
-import { ConfirmModal } from '@catalog-frontend/ui';
-import Markdown from 'react-markdown';
+import { ConfirmModal, MarkdownComponent } from '@catalog-frontend/ui';
 
 interface datasetDetailsPageProps {
   dataset: Dataset;
@@ -50,7 +49,7 @@ const DatasetDetailsPageClient = ({
   const handleConfirmDelete = async () => {
     try {
       await deleteDataset(catalogId, dataset.id);
-      router.replace(`/catalogs/${catalogId}/datasets`);
+      router.push(`/catalogs/${catalogId}/datasets`);
     } catch (error) {
       console.error('Error deleting dataset:', error);
       // Show error message to user
@@ -64,7 +63,7 @@ const DatasetDetailsPageClient = ({
         handleLanguageChange={handleLanguageChange}
         language={language}
         headingTitle={getTranslateText(dataset?.title ?? '', language)}
-        headingTag={<StatusTag datasetStatus={dataset.registrationStatus} />}
+        headingTag={<StatusTag approved={dataset.approved || dataset.published} />}
         loading={false}
       >
         {dataset.specializedType === 'SERIES' ? (
@@ -100,7 +99,7 @@ const DatasetDetailsPageClient = ({
               )}
 
               <DeleteButton
-                disabled={dataset.registrationStatus === PublicationStatus.PUBLISH}
+                disabled={dataset.published}
                 variant='secondary'
                 onClick={handleDeleteDataset}
               />
@@ -111,9 +110,9 @@ const DatasetDetailsPageClient = ({
       <ConfirmModal
         title={localization.dataset.deleteDataset}
         content={
-          <Markdown>
+          <MarkdownComponent>
             {`${localization.formatString(localization.dataset.confirmDelete, `${getTranslateText(dataset.title)}`)}`}
-          </Markdown>
+          </MarkdownComponent>
         }
         successButtonText={localization.button.delete}
         onSuccess={handleConfirmDelete}

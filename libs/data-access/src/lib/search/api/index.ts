@@ -1,4 +1,10 @@
 import { Search } from '@catalog-frontend/types';
+import {
+  validateURIs,
+  validateSearchQuery,
+  validateResourceType,
+  validateEnvironmentURL,
+} from '@catalog-frontend/utils';
 
 type SearchOperation = Search.SearchOperation;
 
@@ -13,6 +19,8 @@ const searchApi = ({ path, searchOperation }: { path: string; searchOperation?: 
 };
 
 export const searchConceptsByUri = (uri: string[]) => {
+  validateURIs(uri, 'searchConceptsByUri');
+
   const searchOperation: SearchOperation = {
     filters: {
       uri: { value: uri },
@@ -39,7 +47,11 @@ export const searchConcepts = (searchOperation: SearchOperation) => {
 };
 
 export const searchConceptSuggestions = (env: string, query: string) => {
-  const path = `suggestions/concepts?q=${query}`;
+  validateEnvironmentURL(env, 'searchConceptSuggestions');
+  validateSearchQuery(query, 'searchConceptSuggestions');
+
+  const encodedQuery = encodeURIComponent(query);
+  const path = `suggestions/concepts?q=${encodedQuery}`;
   return fetch(`${env}/${path}`, {
     headers: {
       'Content-Type': 'application/json',
@@ -53,7 +65,19 @@ export const searchSuggestions = async (
   query?: string,
   resourceType?: string,
 ): Promise<Response> => {
-  const path = `suggestions/${resourceType}?q=${query}`;
+  validateEnvironmentURL(searchEnv, 'searchSuggestions');
+
+  if (query) {
+    validateSearchQuery(query, 'searchSuggestions');
+  }
+
+  if (resourceType) {
+    validateResourceType(resourceType, 'searchSuggestions');
+  }
+
+  const encodedResourceType = resourceType ? encodeURIComponent(resourceType) : '';
+  const encodedQuery = query ? encodeURIComponent(query) : '';
+  const path = `suggestions/${encodedResourceType}?q=${encodedQuery}`;
   return fetch(`${searchEnv}/${path}`, {
     headers: {
       'Content-Type': 'application/json',
@@ -67,7 +91,14 @@ export const searchResourcesWithFilter = async (
   resourceType?: string,
   body?: SearchOperation,
 ): Promise<Response> => {
-  const path = `search/${resourceType}`;
+  validateEnvironmentURL(searchEnv, 'searchResourcesWithFilter');
+
+  if (resourceType) {
+    validateResourceType(resourceType, 'searchResourcesWithFilter');
+  }
+
+  const encodedResourceType = resourceType ? encodeURIComponent(resourceType) : '';
+  const path = `search/${encodedResourceType}`;
   return fetch(`${searchEnv}/${path}`, {
     headers: {
       'Content-Type': 'application/json',

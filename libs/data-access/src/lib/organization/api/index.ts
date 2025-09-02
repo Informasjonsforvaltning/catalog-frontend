@@ -1,10 +1,19 @@
+import { validateOrganizationNumber, validateAndEncodeUrlSafe } from '@catalog-frontend/utils';
+
 export const getOrganizations = async (organizationIds: string[] | null = null) => {
   let resource;
 
   if (organizationIds === null) {
     resource = `${process.env.ORGANIZATION_CATALOG_BASE_URI}/organizations`;
   } else if (organizationIds.length > 0) {
-    resource = `${process.env.ORGANIZATION_CATALOG_BASE_URI}/organizations?organizationId=${organizationIds}`;
+    // Validate all organization IDs
+    organizationIds.forEach((id, index) => {
+      validateOrganizationNumber(id, `getOrganizations[${index}]`);
+    });
+    const encodedOrgIds = organizationIds.map((id) =>
+      validateAndEncodeUrlSafe(id, 'organization ID', 'getOrganizations'),
+    );
+    resource = `${process.env.ORGANIZATION_CATALOG_BASE_URI}/organizations?organizationId=${encodedOrgIds.join(',')}`;
   } else {
     return Promise.reject('Organization ids cannot be empty');
   }
@@ -21,18 +30,17 @@ export const getOrganizations = async (organizationIds: string[] | null = null) 
 };
 
 export const getOrganization = async (organizationId: string) => {
-  if (RegExp(/^\d{9}$/).exec(organizationId)) {
-    const resource = `${process.env.ORGANIZATION_CATALOG_BASE_URI}/organizations/${organizationId}`;
-    const options = {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      method: 'GET',
-      cache: 'no-cache' as RequestCache,
-    };
-    return await fetch(resource, options);
-  }
+  validateOrganizationNumber(organizationId, 'getOrganization');
+  const encodedOrganizationId = validateAndEncodeUrlSafe(organizationId, 'organization ID', 'getOrganization');
 
-  return Promise.reject('Invalid organization id');
+  const resource = `${process.env.ORGANIZATION_CATALOG_BASE_URI}/organizations/${encodedOrganizationId}`;
+  const options = {
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    method: 'GET',
+    cache: 'no-cache' as RequestCache,
+  };
+  return await fetch(resource, options);
 };

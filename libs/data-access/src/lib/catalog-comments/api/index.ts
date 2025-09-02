@@ -1,5 +1,12 @@
+import { validateOrganizationNumber, validateUUID, validateAndEncodeUrlSafe } from '@catalog-frontend/utils';
+
 export const getComments = async (orgNumber: string, topicId: string, accessToken: string) => {
-  const resource = `${process.env.CATALOG_COMMENTS_SERVICE_BASE_URI}/${orgNumber}/${topicId}/comment`;
+  validateOrganizationNumber(orgNumber, 'getComments');
+  validateUUID(topicId, 'getComments');
+  const encodedOrgNumber = validateAndEncodeUrlSafe(orgNumber, 'organization number', 'getComments');
+  const encodedTopicId = validateAndEncodeUrlSafe(topicId, 'topic ID', 'getComments');
+
+  const resource = `${process.env.CATALOG_COMMENTS_SERVICE_BASE_URI}/${encodedOrgNumber}/${encodedTopicId}/comment`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -12,7 +19,12 @@ export const getComments = async (orgNumber: string, topicId: string, accessToke
 };
 
 export const createComment = async (orgNumber: string, topicId: string, comment: string, accessToken: string) => {
-  const resource = `${process.env.CATALOG_COMMENTS_SERVICE_BASE_URI}/${orgNumber}/${topicId}/comment`;
+  validateOrganizationNumber(orgNumber, 'createComment');
+  validateUUID(topicId, 'createComment');
+  const encodedOrgNumber = validateAndEncodeUrlSafe(orgNumber, 'organization number', 'createComment');
+  const encodedTopicId = validateAndEncodeUrlSafe(topicId, 'topic ID', 'createComment');
+
+  const resource = `${process.env.CATALOG_COMMENTS_SERVICE_BASE_URI}/${encodedOrgNumber}/${encodedTopicId}/comment`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -35,7 +47,14 @@ export const updateComment = async (
   comment: string,
   accessToken: string,
 ) => {
-  const resource = `${process.env.CATALOG_COMMENTS_SERVICE_BASE_URI}/${orgNumber}/${topicId}/comment/${commentId}`;
+  validateOrganizationNumber(orgNumber, 'updateComment');
+  validateUUID(topicId, 'updateComment');
+  validateUUID(commentId, 'updateComment');
+  const encodedOrgNumber = validateAndEncodeUrlSafe(orgNumber, 'organization number', 'updateComment');
+  const encodedTopicId = validateAndEncodeUrlSafe(topicId, 'topic ID', 'updateComment');
+  const encodedCommentId = validateAndEncodeUrlSafe(commentId, 'comment ID', 'updateComment');
+
+  const resource = `${process.env.CATALOG_COMMENTS_SERVICE_BASE_URI}/${encodedOrgNumber}/${encodedTopicId}/comment/${encodedCommentId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -52,7 +71,14 @@ export const updateComment = async (
 };
 
 export const deleteComment = async (orgNumber: string, topicId: string, commentId: string, accessToken: string) => {
-  const resource = `${process.env.CATALOG_COMMENTS_SERVICE_BASE_URI}/${orgNumber}/${topicId}/comment/${commentId}`;
+  validateOrganizationNumber(orgNumber, 'deleteComment');
+  validateUUID(topicId, 'deleteComment');
+  validateUUID(commentId, 'deleteComment');
+  const encodedOrgNumber = validateAndEncodeUrlSafe(orgNumber, 'organization number', 'deleteComment');
+  const encodedTopicId = validateAndEncodeUrlSafe(topicId, 'topic ID', 'deleteComment');
+  const encodedCommentId = validateAndEncodeUrlSafe(commentId, 'comment ID', 'deleteComment');
+
+  const resource = `${process.env.CATALOG_COMMENTS_SERVICE_BASE_URI}/${encodedOrgNumber}/${encodedTopicId}/comment/${encodedCommentId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,

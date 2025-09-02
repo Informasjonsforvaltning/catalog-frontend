@@ -3,7 +3,6 @@
 import { FC, useEffect, useId, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import NextLink from 'next/link';
-import Markdown from 'react-markdown';
 import { isEmpty } from 'lodash';
 import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
 import cn from 'classnames';
@@ -19,6 +18,7 @@ import {
   LinkButton,
   HelpMarkdown,
   ConfirmModal,
+  MarkdownComponent,
 } from '@catalog-frontend/ui';
 import {
   localization,
@@ -836,12 +836,12 @@ export const ConceptPageClient = ({
       <ConfirmModal
         title={localization.concept.deleteConcept}
         content={
-          <Markdown>
+          <MarkdownComponent>
             {`${localization.formatString(
               localization.concept.confirmDelete,
               `${getTranslateText(concept.anbefaltTerm?.navn)}`,
             )}`}
-          </Markdown>
+          </MarkdownComponent>
         }
         successButtonText={localization.button.delete}
         onSuccess={() => handleDeleteConcept()}

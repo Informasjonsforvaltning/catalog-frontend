@@ -18,15 +18,19 @@ export const RelationsSection = ({ searchEnv, autoSaveId, autoSaveStorage }: Pro
 
   return (
     <Box>
-      <ReferenceTable searchEnv={searchEnv} autoSaveId={autoSaveId} autoSaveStorage={autoSaveStorage} />
+      <ReferenceTable
+        searchEnv={searchEnv}
+        autoSaveId={autoSaveId}
+        autoSaveStorage={autoSaveStorage}
+      />
       <FieldsetDivider />
       <div className={styles.fieldContainer}>
-        <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.relations}>
-          {localization.datasetForm.fieldLabel.relations}
+        <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.relatedResources}>
+          {localization.datasetForm.fieldLabel.relatedResources}
         </TitleWithHelpTextAndTag>
         <UriWithLabelFieldsetTable
-          fieldName={'relations'}
-          errors={errors.relations}
+          fieldName={'relatedResources'}
+          errors={errors.relatedResources}
         />
       </div>
     </Box>

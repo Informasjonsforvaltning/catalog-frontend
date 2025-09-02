@@ -1,10 +1,14 @@
 import { AssignedUser } from '@catalog-frontend/types';
 import { Operation } from 'fast-json-patch';
+import { validateOrganizationNumber, validateUUID, validateAndEncodeUrlSafe } from '@catalog-frontend/utils';
 
 const path = `${process.env.CATALOG_ADMIN_SERVICE_BASE_URI}`;
 
 export const getUsers = async (catalogId: string, accessToken: string) => {
-  const resource = `${path}/${catalogId}/general/users`;
+  validateOrganizationNumber(catalogId, 'getUsers');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getUsers');
+
+  const resource = `${path}/${encodedCatalogId}/general/users`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -16,7 +20,10 @@ export const getUsers = async (catalogId: string, accessToken: string) => {
 };
 
 export const createUser = async (user: Partial<AssignedUser>, accessToken: string, catalogId: string) => {
-  const resource = `${path}/${catalogId}/general/users`;
+  validateOrganizationNumber(catalogId, 'createUser');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'createUser');
+
+  const resource = `${path}/${encodedCatalogId}/general/users`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -29,8 +36,13 @@ export const createUser = async (user: Partial<AssignedUser>, accessToken: strin
 };
 
 export const patchUser = async (catalogId: string, userId: string, accessToken: string, diff: Operation[]) => {
+  validateOrganizationNumber(catalogId, 'patchUser');
+  validateUUID(userId, 'patchUser');
+
   if (diff.length > 0) {
-    const resource = `${path}/${catalogId}/general/users/${userId}`;
+    const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'patchUser');
+    const encodedUserId = validateAndEncodeUrlSafe(userId, 'user ID', 'patchUser');
+    const resource = `${path}/${encodedCatalogId}/general/users/${encodedUserId}`;
     const options = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -44,7 +56,12 @@ export const patchUser = async (catalogId: string, userId: string, accessToken: 
 };
 
 export const deleteUser = async (catalogId: string, userId: string, accessToken: string) => {
-  const resource = `${path}/${catalogId}/general/users/${userId}`;
+  validateOrganizationNumber(catalogId, 'deleteUser');
+  validateUUID(userId, 'deleteUser');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'deleteUser');
+  const encodedUserId = validateAndEncodeUrlSafe(userId, 'user ID', 'deleteUser');
+
+  const resource = `${path}/${encodedCatalogId}/general/users/${encodedUserId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,

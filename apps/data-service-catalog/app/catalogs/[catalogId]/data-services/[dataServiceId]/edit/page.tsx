@@ -7,9 +7,10 @@ import {
 } from '@catalog-frontend/data-access';
 import { getTranslateText, localization, redirectToSignIn, validUUID } from '@catalog-frontend/utils';
 import { getDataServiceById } from '@catalog-frontend/data-access';
-import DataServiceForm from '../../../../../../components/data-service-form';
 import { redirect, RedirectType } from 'next/navigation';
 import { withWriteProtectedPage } from '@data-service-catalog/utils/auth';
+import { EditPage } from './edit-page-client';
+import { fetchDataServiceWithRetry } from '@data-service-catalog/utils/data-service';
 
 const EditDataServicePage = withWriteProtectedPage(
   ({ catalogId, dataServiceId }) => `/catalogs/${catalogId}/data-services/${dataServiceId}/edit`,
@@ -20,11 +21,10 @@ const EditDataServicePage = withWriteProtectedPage(
     if (!session) {
       return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/data-services/${dataServiceId}/edit` });
     }
-    const dataService = await getDataServiceById(catalogId, dataServiceId, `${session?.accessToken}`).then(
-      (response) => {
-        if (response.ok) return response.json();
-      },
-    );
+
+    // Fetch data service with retry mechanism
+    const dataService = await fetchDataServiceWithRetry(catalogId, dataServiceId, `${session?.accessToken}`);
+
     if (!dataService || dataService.catalogId !== catalogId) {
       redirect(`/not-found`, RedirectType.replace);
     }
@@ -70,12 +70,12 @@ const EditDataServicePage = withWriteProtectedPage(
           title={localization.catalogType.dataService}
           catalogId={catalogId}
         />
-        <DataServiceForm
-          initialValues={dataService}
+        <EditPage
+          catalogId={catalogId}
+          dataService={dataService}
           searchEnv={searchEnv}
           referenceData={referenceData}
           referenceDataEnv={referenceDataEnv}
-          submitType={'update'}
         />
       </>
     );

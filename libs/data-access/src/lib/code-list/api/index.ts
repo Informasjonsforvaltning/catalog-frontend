@@ -1,10 +1,14 @@
 import { CodeList } from '@catalog-frontend/types';
 import { Operation } from 'fast-json-patch';
+import { validateOrganizationNumber, validateUUID, validateAndEncodeUrlSafe } from '@catalog-frontend/utils';
 
 const path = `${process.env.CATALOG_ADMIN_SERVICE_BASE_URI}`;
 
 export const getAllCodeLists = async (catalogId: string, accessToken: string) => {
-  const resource = `${path}/${catalogId}/concepts/code-lists`;
+  validateOrganizationNumber(catalogId, 'getAllCodeLists');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getAllCodeLists');
+
+  const resource = `${path}/${encodedCatalogId}/concepts/code-lists`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -16,7 +20,10 @@ export const getAllCodeLists = async (catalogId: string, accessToken: string) =>
 };
 
 export const createCodeList = async (codeList: Partial<CodeList>, accessToken: string, catalogId: string) => {
-  const resource = `${path}/${catalogId}/concepts/code-lists`;
+  validateOrganizationNumber(catalogId, 'createCodeList');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'createCodeList');
+
+  const resource = `${path}/${encodedCatalogId}/concepts/code-lists`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -29,8 +36,13 @@ export const createCodeList = async (codeList: Partial<CodeList>, accessToken: s
 };
 
 export const patchCodeList = async (catalogId: string, codeListId: string, accessToken: string, diff: Operation[]) => {
+  validateOrganizationNumber(catalogId, 'patchCodeList');
+  validateUUID(codeListId, 'patchCodeList');
+
   if (diff.length > 0) {
-    const resource = `${path}/${catalogId}/concepts/code-lists/${codeListId}`;
+    const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'patchCodeList');
+    const encodedCodeListId = validateAndEncodeUrlSafe(codeListId, 'code list ID', 'patchCodeList');
+    const resource = `${path}/${encodedCatalogId}/concepts/code-lists/${encodedCodeListId}`;
     const options = {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -44,7 +56,12 @@ export const patchCodeList = async (catalogId: string, codeListId: string, acces
 };
 
 export const deleteCodeList = async (catalogId: string, codeListId: string, accessToken: string) => {
-  const resource = `${path}/${catalogId}/concepts/code-lists/${codeListId}`;
+  validateOrganizationNumber(catalogId, 'deleteCodeList');
+  validateUUID(codeListId, 'deleteCodeList');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'deleteCodeList');
+  const encodedCodeListId = validateAndEncodeUrlSafe(codeListId, 'code list ID', 'deleteCodeList');
+
+  const resource = `${path}/${encodedCatalogId}/concepts/code-lists/${encodedCodeListId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
