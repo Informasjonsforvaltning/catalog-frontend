@@ -55,7 +55,7 @@ type DefinitionSectionProps = {
   changed?: string[];
   readOnly?: boolean;
   autoSaveId?: string;
-  autoSaveStorage: DataStorage<StorageData>;
+  autoSaveStorage?: DataStorage<StorageData>;
 };
 
 export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStorage }: DefinitionSectionProps) => {
@@ -67,7 +67,7 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
 
   const handleChangeDefinitionInModal = (def: Definisjon, fieldName: string) => {
     if (autoSaveStorage) {
-      autoSaveStorage.setSecondary('conceptFormDefinition', {
+      autoSaveStorage?.setSecondary('definition', {
         id: autoSaveId,
         values: {
           definition: def,
@@ -80,14 +80,14 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
 
   const handleCloseDefinitionModal = () => {
     if (autoSaveStorage) {
-      autoSaveStorage.deleteSecondary('conceptFormDefinition');
+      autoSaveStorage.deleteSecondary('definition');
     }
   };
 
   const handleUpdateDefinition = (def: Definisjon | null, fieldName: string) => {
     setFieldValue(fieldName, def);
     if (autoSaveStorage) {
-      autoSaveStorage.deleteSecondary('conceptFormDefinition');
+      autoSaveStorage.deleteSecondary('definition');
     }
   };
 

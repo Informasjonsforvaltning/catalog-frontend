@@ -26,7 +26,10 @@ export const EditPage = ({
 
   const dataStorage = new LocalDataStorage<StorageData>({ 
     key: 'conceptForm', 
-    secondaryKeys: ['conceptFormDefinition', 'conceptFormRelation']
+    secondaryKeys: {
+      definition: 'conceptFormDefinition',
+      relation: 'conceptFormRelation'
+    }
   });
 
   const handleUpdate = async (values: Concept) => {
@@ -59,6 +62,18 @@ export const EditPage = ({
       window.history.replaceState(null, '', newUrl);
     }
   }, [searchParams, pathname]);
+
+  function handleRestore(data: StorageData): boolean {
+    if (data?.id !== concept.id) {
+      if (!data?.id) {
+        window.location.replace(`/catalogs/${catalogId}/concepts/new?restore=1`);
+        return false;
+      }
+      window.location.replace(`/catalogs/${catalogId}/concepts/${data.id}/edit?restore=1`);
+      return false;
+    } 
+    return true;
+  }
 
   return (
     <>
@@ -101,6 +116,7 @@ export const EditPage = ({
         usersResult={usersResult}
         onSubmit={handleUpdate}
         onCancel={handleCancel}
+        onRestore={handleRestore}
         showSnackbarSuccessOnInit={showSnackbar}
       />
     </>

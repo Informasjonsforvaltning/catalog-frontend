@@ -50,7 +50,7 @@ export const DistributionSection = ({
   ) => {
     // Save to secondary storage for auto-save
     if (autoSaveStorage && autoSaveId) {
-      autoSaveStorage.setSecondary('datasetFormDistribution', {
+      autoSaveStorage.setSecondary('distribution', {
         id: autoSaveId,
         values: {
           distribution: updatedDist,
@@ -65,7 +65,7 @@ export const DistributionSection = ({
   const handleDistributionCancel = (distributionType: 'distribution' | 'sample') => {
     // Clean up secondary storage on cancel
     if (autoSaveStorage) {
-      autoSaveStorage.deleteSecondary('datasetFormDistribution');
+      autoSaveStorage.deleteSecondary('distribution');
     }
   };
 
@@ -78,7 +78,7 @@ export const DistributionSection = ({
 
     // Clean up secondary storage on success
     if (autoSaveStorage) {
-      autoSaveStorage.deleteSecondary('datasetFormDistribution');
+      autoSaveStorage.deleteSecondary('distribution');
     }
   };
 

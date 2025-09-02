@@ -29,7 +29,16 @@ export const NewConceptFormClient = ({
 
   const catalogId = organization.organizationId;
 
-  const dataStorage = new LocalDataStorage<StorageData>({ key: 'changeRequestForm' });
+  const dataStorage = new LocalDataStorage<StorageData>({ 
+    key: 'changeRequestForm', 
+    secondaryKeys: {
+      definition: 'changeRequestFormDefinition',
+      relation: 'changeRequestFormRelation'
+    },
+    metadata: {
+      newChangeRequestConceptId: originalConcept?.originaltBegrep,
+    }
+  });
 
   const baselineConcept: Concept = {
     id: null,
@@ -46,10 +55,19 @@ export const NewConceptFormClient = ({
       values.anbefaltTerm?.navn.nn ||
       values.anbefaltTerm?.navn.en;
 
+    const clonedConcept = jsonpatch.deepClone(originalConcept || baselineConcept);
+    // Remove specified fields from the concept object
+    delete clonedConcept.id;
+    delete clonedConcept.ansvarligVirksomhet;
+    delete clonedConcept.originaltBegrep;
+    delete clonedConcept.endringslogelement;
+    delete clonedConcept.publiseringsTidspunkt;
+    delete clonedConcept.erPublisert;
+
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
       conceptId: originalConcept?.originaltBegrep ?? null,
       operations: jsonpatch.compare(
-        pruneEmptyProperties(originalConcept || baselineConcept),
+        pruneEmptyProperties(clonedConcept),
         pruneEmptyProperties(updateDefinitionsIfEgendefinert(values)),
       ) as JsonPatchOperation[],
       title: anbefaltTerm ? `${anbefaltTerm}` : '',
@@ -85,6 +103,17 @@ export const NewConceptFormClient = ({
     );
   };
 
+  function handleRestore(data: StorageData): boolean {
+    if (data?.id) {
+      window.location.replace(`/catalogs/${catalogId}/change-requests/${data.id}/edit?restore=1`);
+      return false;
+    } else if (data?.metadata?.newChangeRequestConceptId !== originalConcept?.originaltBegrep) {
+      window.location.replace(`/catalogs/${catalogId}/change-requests/new?concept=${data.metadata.newChangeRequestConceptId}&restore=1`);
+      return false;
+    }
+    return true;
+  }
+
   return (
     <>
       {showCancelConfirm && (
@@ -114,16 +143,16 @@ export const NewConceptFormClient = ({
           {localization.button.backToOverview}
         </Button>
         <div style={{ flexGrow: 1 }}></div>
-                {originalConcept && (
-                  <Button
-                    variant='secondary'
-                    color='second'
-                    size='sm'
-                    onClick={() => setShowGotoConceptConfirm(true)}
-                  >
-                    {localization.button.gotoConcept}
-                  </Button>
-                )}
+        {originalConcept && (
+          <Button
+            variant='secondary'
+            color='second'
+            size='sm'
+            onClick={() => setShowGotoConceptConfirm(true)}
+          >
+            {localization.button.gotoConcept}
+          </Button>
+        )}
       </ButtonBar>
       <ConceptForm
         afterSubmit={handleAfterSubmit}
@@ -136,6 +165,7 @@ export const NewConceptFormClient = ({
         usersResult={usersResult}
         onSubmit={handleSubmit}
         onCancel={handleCancel}
+        onRestore={handleRestore}
       />
     </>
   );

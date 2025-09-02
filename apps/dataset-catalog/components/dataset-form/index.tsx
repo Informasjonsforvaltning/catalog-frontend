@@ -12,7 +12,6 @@ import {
   Dataset,
   DatasetToBeCreated,
   ReferenceData,
-  PublicationStatus,
   StorageData,
   Distribution,
   Reference,
@@ -41,8 +40,6 @@ import { ContactPointSection } from './components/contact-point-section';
 import styles from './dataset-form.module.css';
 import { DetailsSection } from './components/details-section/details-section';
 import classNames from 'classnames';
-import { get, isEmpty, isEqual } from 'lodash';
-import { compare } from 'fast-json-patch';
 
 type Props = {
   afterSubmit?: () => void;
@@ -270,15 +267,17 @@ export const DatasetForm = ({
           const handleRestoreDataset = (data: StorageData) => {
             if (data?.id !== datasetId) {
               if (!data?.id) {
-                return window.location.replace(`/catalogs/${catalogId}/datasets/new?restore=1`);
+                window.location.replace(`/catalogs/${catalogId}/datasets/new?restore=1`);
+                return false;
               }
-              return window.location.replace(`/catalogs/${catalogId}/datasets/${data.id}/edit?restore=1`);
+              window.location.replace(`/catalogs/${catalogId}/datasets/${data.id}/edit?restore=1`);
+              return false;
             }
             const restoreValues = datasetTemplate(data.values);
             setValues(restoreValues);
 
             // Handle distribution data from secondary storage
-            const restoreDistributionData = autoSaveStorage?.getSecondary('datasetFormDistribution');
+            const restoreDistributionData = autoSaveStorage?.getSecondary('distribution');
             if (restoreDistributionData && restoreDistributionData?.id === datasetId) {
               const distributionValues: {
                 distribution: Distribution;
@@ -290,19 +289,20 @@ export const DatasetForm = ({
                 distributionValues.distribution,
               );
               // Delete distribution data from secondary storage since it is merged with the main data
-              autoSaveStorage?.deleteSecondary('datasetFormDistribution');
+              autoSaveStorage?.deleteSecondary('distribution');
             }
 
             // Handle reference data from secondary storage
-            const restoreReferenceData = autoSaveStorage?.getSecondary('datasetFormReference');
+            const restoreReferenceData = autoSaveStorage?.getSecondary('reference');
             if (restoreReferenceData && restoreReferenceData?.id === datasetId) {
               const referenceValues: { reference: Reference; index: number } = restoreReferenceData.values;
               setFieldValue(`references[${referenceValues.index}]`, referenceValues.reference);
               // Delete reference data from secondary storage since it is merged with the main data
-              autoSaveStorage?.deleteSecondary('datasetFormReference');
+              autoSaveStorage?.deleteSecondary('reference');
             }
 
             showSnackbarMessage({ message: localization.snackbar.restoreSuccessfull, severity: 'success' });
+            return true;
           };
 
           return (
