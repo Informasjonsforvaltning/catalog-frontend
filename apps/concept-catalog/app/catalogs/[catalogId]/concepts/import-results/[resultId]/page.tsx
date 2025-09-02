@@ -4,7 +4,6 @@ import { getConceptImportResultById } from '@catalog-frontend/data-access';
 import { redirect, RedirectType } from 'next/navigation';
 import ImportResultDetailsPageClient from './import-result-details-page-client';
 import { withAdminProtectedPage } from '@concept-catalog/utils/auth';
-import { useQuery } from '@tanstack/react-query';
 
 const ImportResultDetailsPage = withAdminProtectedPage(
   ({ catalogId, resultId }) => `/catalogs/${catalogId}/concepts/import-results/${resultId}`,
