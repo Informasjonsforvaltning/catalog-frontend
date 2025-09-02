@@ -12,20 +12,6 @@ const ImportResultDetailsPage = withAdminProtectedPage(
     if (!resultId || !validUUID(resultId)) {
       return redirect(`/notfound`, RedirectType.replace);
     }
-
-    /*const { data } = useQuery({
-      queryKey: ['importResult', catalogId, resultId],
-      queryFn: async () =>
-        await getConceptImportResultById(catalogId, resultId, `${session?.accessToken}`).then(
-          (response) => {
-            if (response.ok) {
-              return response.json();
-            }
-          },
-        ),
-      refetchInterval: 5000, // Poll every 5 seconds
-    });*/
-
     const importResult = await getConceptImportResultById(catalogId, resultId, `${session?.accessToken}`).then(
       (response) => {
         if (response.ok) {
