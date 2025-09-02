@@ -131,11 +131,9 @@ const getDatasetCountByOrg = async (orgId: string | null | undefined, session: S
     return 0;
   }
   try {
-    const result = await response.json();
-    if (result._embedded?.catalogs) {
-      const catalog = (result._embedded.catalogs as DatasetCatalog[]).find((catalog) => catalog.id === orgId);
-      return catalog?.datasetCount ?? 0;
-    }
+    const result = (await response.json()) as DatasetCatalog[];
+    const catalog = result.find((catalog) => catalog.id === orgId);
+    return catalog?.datasetCount ?? 0;
   } catch (e) {
     console.log('Failed to fetch json from dataset response', e);
   }

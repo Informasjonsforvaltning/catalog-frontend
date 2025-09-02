@@ -1,21 +1,20 @@
-import type { PublicationStatus } from './enums';
 import { LocalizedStrings } from './localization';
-import { ReferenceDataCode } from './reference-data';
 
 export interface Dataset extends DatasetToBeCreated {
   id: string;
-  _lastModified: string;
+  catalogId: string;
+  published: boolean;
+  lastModified: string;
   uri?: string;
   originalUri?: string;
 }
 
 export type DatasetToBeCreated = {
-  catalogId: string;
   title: LocalizedStrings;
   description: LocalizedStrings;
-  registrationStatus: PublicationStatus;
+  approved: boolean;
   specializedType?: 'SERIES' | undefined;
-  accessRights?: UriWithLabel;
+  accessRight?: string;
   legalBasisForProcessing?: UriWithLabel[];
   legalBasisForAccess?: UriWithLabel[];
   legalBasisForRestriction?: UriWithLabel[];
@@ -23,35 +22,30 @@ export type DatasetToBeCreated = {
   euDataTheme?: string[];
   losTheme?: string[];
   type?: string;
-  keyword?: { [key: string]: string }[];
-  concepts?: [{ uri: string }];
-  provenance?: ReferenceDataCode;
-  accrualPeriodicity?: ReferenceDataCode;
+  keywords?: LocalizedStrings;
+  concepts?: string[];
+  provenance?: string;
+  frequency?: string;
   modified?: string;
-  hasCurrentnessAnnotation?: { hasBody?: LocalizedStrings };
-  hasRelevanceAnnotation?: { hasBody?: LocalizedStrings };
-  hasCompletenessAnnotation?: { hasBody?: LocalizedStrings };
-  hasAvailabilityAnnotation?: { hasBody?: LocalizedStrings };
-  hasAccuracyAnnotation?: { hasBody?: LocalizedStrings };
+  currentness?: { hasBody?: LocalizedStrings };
+  relevance?: { hasBody?: LocalizedStrings };
+  completeness?: { hasBody?: LocalizedStrings };
+  availability?: { hasBody?: LocalizedStrings };
+  accuracy?: { hasBody?: LocalizedStrings };
   conformsTo?: UriWithLabel[];
-  spatial?: ReferenceDataCode[];
+  spatial?: string[];
   temporal?: DateRange[];
   issued?: string;
-  language?: ReferenceDataCode[];
-  informationModel?: UriWithLabel[];
+  language?: string[];
+  informationModelsFromOtherSources?: UriWithLabel[];
   informationModelsFromFDK?: string[];
   qualifiedAttributions?: string[];
   sample?: Partial<Distribution>[];
   references?: Reference[];
-  relations?: UriWithLabel[];
+  relatedResources?: UriWithLabel[];
   inSeries?: string;
   distribution?: Distribution[];
-  contactPoint: DatasetContactPoint[];
-  // Arrays of URIs used as helper values for Formik. These properties are not part of the database object.
-  conceptList?: string[];
-  spatialList?: string[];
-  languageList?: string[];
-  keywordList?: { nb?: string[]; nn?: string[]; en?: string[] };
+  contactPoints: DatasetContactPoint[];
 };
 
 export type UriWithLabel = {
@@ -65,8 +59,8 @@ export type DateRange = {
 };
 
 export type Reference = {
-  referenceType: { code: string };
-  source: { uri: string };
+  referenceType?: string;
+  source?: string;
 };
 
 export type DatasetSeries = {
@@ -81,16 +75,16 @@ export type Distribution = {
   accessURL?: string[];
   format?: string[];
   mediaType?: string[];
-  license?: { uri: string; code: string };
+  license?: string;
   conformsTo?: UriWithLabel[];
-  page?: { uri: string }[];
-  accessServiceUris?: string[];
+  page?: string[];
+  accessServices?: string[];
 };
 type DatasetContactPoint = {
   name?: LocalizedStrings;
   email?: string;
-  hasTelephone?: string;
-  hasURL?: string;
+  phone?: string;
+  url?: string;
 };
 
 export type DatasetsPageSettings = {

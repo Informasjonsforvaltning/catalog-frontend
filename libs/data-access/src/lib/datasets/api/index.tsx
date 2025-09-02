@@ -8,7 +8,7 @@ export const getAllDatasets = async (catalogId: string, accessToken: string) => 
   validateOrganizationNumber(catalogId, 'getAllDatasets');
   const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getAllDatasets');
 
-  const resource = `${path}/catalogs/${encodedCatalogId}/datasets`;
+  const resource = `${path}/internal/catalogs/${encodedCatalogId}/datasets`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -25,7 +25,7 @@ export const getById = async (catalogId: string, datasetId: string, accessToken:
   const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getById');
   const encodedDatasetId = validateAndEncodeUrlSafe(datasetId, 'dataset ID', 'getById');
 
-  const resource = `${path}/catalogs/${encodedCatalogId}/datasets/${encodedDatasetId}`;
+  const resource = `${path}/internal/catalogs/${encodedCatalogId}/datasets/${encodedDatasetId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -40,7 +40,7 @@ export const postDataset = async (Dataset: Partial<Dataset>, catalogId: string, 
   validateOrganizationNumber(catalogId, 'postDataset');
   const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'postDataset');
 
-  const resource = `${path}/catalogs/${encodedCatalogId}/datasets`;
+  const resource = `${path}/internal/catalogs/${encodedCatalogId}/datasets`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -58,7 +58,7 @@ export const deleteDataset = async (catalogId: string, datasetId: string, access
   const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'deleteDataset');
   const encodedDatasetId = validateAndEncodeUrlSafe(datasetId, 'dataset ID', 'deleteDataset');
 
-  const resource = `${path}/catalogs/${encodedCatalogId}/datasets/${encodedDatasetId}`;
+  const resource = `${path}/internal/catalogs/${encodedCatalogId}/datasets/${encodedDatasetId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -80,7 +80,7 @@ export const updateDataset = async (
   const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'updateDataset');
   const encodedDatasetId = validateAndEncodeUrlSafe(datasetId, 'dataset ID', 'updateDataset');
 
-  const resource = `${path}/catalogs/${encodedCatalogId}/datasets/${encodedDatasetId}`;
+  const resource = `${path}/internal/catalogs/${encodedCatalogId}/datasets/${encodedDatasetId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -98,7 +98,7 @@ export const publishDataset = async (catalogId: string, datasetId: string, acces
   const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'publishDataset');
   const encodedDatasetId = validateAndEncodeUrlSafe(datasetId, 'dataset ID', 'publishDataset');
 
-  const resource = `${path}/catalogs/${encodedCatalogId}/datasets/${encodedDatasetId}/publish`;
+  const resource = `${path}/internal/catalogs/${encodedCatalogId}/datasets/${encodedDatasetId}/publish`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -115,7 +115,7 @@ export const unpublishDataset = async (catalogId: string, datasetId: string, acc
   const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'unpublishDataset');
   const encodedDatasetId = validateAndEncodeUrlSafe(datasetId, 'dataset ID', 'unpublishDataset');
 
-  const resource = `${path}/catalogs/${encodedCatalogId}/datasets/${encodedDatasetId}/unpublish`;
+  const resource = `${path}/internal/catalogs/${encodedCatalogId}/datasets/${encodedDatasetId}/unpublish`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -127,7 +127,7 @@ export const unpublishDataset = async (catalogId: string, datasetId: string, acc
 };
 
 export const getAllDatasetCatalogs = async (accessToken: string) => {
-  const resource = `${path}/catalogs`;
+  const resource = `${path}/internal/catalogs`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,

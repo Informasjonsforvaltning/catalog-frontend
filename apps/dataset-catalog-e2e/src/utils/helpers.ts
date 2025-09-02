@@ -41,10 +41,10 @@ export const clearCombobox = async (page, label) => {
   // Workaround to clear and close a combobox.
   const currentValue = await page.getByRole('combobox', { name: label }).inputValue();
   await page.getByRole('combobox', { name: label }).click();
- 
+
   for (let i = 0; i < currentValue.length; i++) {
     await page.getByLabel(label).press('Backspace');
-  }  
+  }
   await expect(page.getByLabel(label)).toHaveValue('');
   await page.getByLabel(label).press('Tab');
 };
@@ -54,15 +54,16 @@ export const relationToSourceText = (relationToSource) => {
     return 'Egendefinert';
   } else if (relationToSource === 'basertPaaKilde') {
     return 'Basert på kilde';
-  } if (relationToSource === 'sitatFraKilde') {
+  }
+  if (relationToSource === 'sitatFraKilde') {
     return 'Sitat fra kilde';
   }
   return null;
-}
+};
 
 export const deleteAllDatasets = async (apiRequestContext) => {
   console.log('[DELETE ALL DATASETS] Starting deletion of all datasets...');
-  
+
   try {
     const response = await apiRequestContext.get(`/api/catalogs/${process.env.E2E_CATALOG_ID}/datasets`);
     if (!response.ok()) {
@@ -95,7 +96,7 @@ export const deleteDataset = async (apiRequestContext, datasetId) => {
 export const createDataset = async (apiRequestContext, dataset) => {
   console.log('[CREATE DATASET] Creating dataset:', dataset.title);
   const response = await apiRequestContext.post(`/api/catalogs/${process.env.E2E_CATALOG_ID}/datasets`, {
-    data: dataset
+    data: dataset,
   });
 
   if (!response.ok()) {
@@ -104,8 +105,8 @@ export const createDataset = async (apiRequestContext, dataset) => {
   }
 
   const createdDataset = await response.json();
-  console.log('[CREATE DATASET] Dataset created successfully with ID:', createdDataset.id);
-  
+  console.log('[CREATE DATASET] Dataset created successfully with ID:', createdDataset);
+
   return createdDataset;
 };
 
@@ -118,14 +119,16 @@ export const getPublishedDataset = async (apiRequestContext) => {
   }
 
   const datasets = await response.json();
-  const publishedDataset = datasets.filter(d => d.erPublisert).pop();
+  const publishedDataset = datasets.filter((d) => d.erPublisert).pop();
   console.log('[GET PUBLISHED DATASET] Found published dataset:', publishedDataset?.id);
   return publishedDataset;
 };
 
 export const publishDataset = async (apiRequestContext, datasetId) => {
   console.log('[PUBLISH DATASET] Publishing dataset:', datasetId);
-  const response = await apiRequestContext.post(`/api/catalogs/${process.env.E2E_CATALOG_ID}/datasets/${datasetId}/publish`);
+  const response = await apiRequestContext.post(
+    `/api/catalogs/${process.env.E2E_CATALOG_ID}/datasets/${datasetId}/publish`,
+  );
 
   if (!response.ok()) {
     console.error(`[PUBLISH DATASET] API call failed with status ${response.status()}`, await response.json());
@@ -145,4 +148,3 @@ export const getUsers = async (apiRequestContext) => {
   const result = await response.json();
   return result;
 };
-

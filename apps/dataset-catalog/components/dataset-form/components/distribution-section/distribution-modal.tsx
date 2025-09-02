@@ -57,7 +57,7 @@ export const DistributionModal = ({
 }: Props) => {
   const [selectedFileTypeUris, setSelectedFileTypeUris] = useState(initialValues?.format ?? []);
   const [selectedMediaTypeUris, setSelectedMediaTypeUris] = useState(initialValues?.mediaType ?? []);
-  const [selectedAccessServiceUris, setSelectedAccessServiceUris] = useState(initialValues?.accessServiceUris ?? []);
+  const [selectedAccessServiceUris, setSelectedAccessServiceUris] = useState(initialValues?.accessServices ?? []);
   const [selectedAndSearchedFileTypes, setSelectedAndSearchedFileTypes] = useState<ReferenceDataCode[]>([]);
   const [selectedAndSearchedMediaTypes, setSelectedAndSearchedMediaTypes] = useState<ReferenceDataCode[]>([]);
   const [selectedAndSearchedAccessServices, setSelectedAndSearchedAccessServices] = useState<Search.SearchObject[]>([]);
@@ -192,7 +192,7 @@ export const DistributionModal = ({
       hideToggleButton: true,
     },
     {
-      name: 'accessServiceUris',
+      name: 'accessServices',
       shouldShow: ({ distributionType }: any) => distributionType === 'distribution',
       render: ({
         setFieldValue,
@@ -203,15 +203,15 @@ export const DistributionModal = ({
         <Fieldset
           size='sm'
           legend={
-            <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.accessServiceUris}>
-              {localization.datasetForm.fieldLabel.accessServiceUris}
+            <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.accessServices}>
+              {localization.datasetForm.fieldLabel.accessServices}
             </TitleWithHelpTextAndTag>
           }
         >
           {selectedAccessServiceUris?.every((v) =>
             selectedAndSearchedAccessServices.find((option: { uri: string }) => option.uri === v),
           ) ? (
-            <FieldsetWithDelete onDelete={() => setFieldValue('accessServiceUris', null)}>
+            <FieldsetWithDelete onDelete={() => setFieldValue('accessServices', null)}>
               <Combobox
                 multiple
                 hideClearButton
@@ -219,13 +219,13 @@ export const DistributionModal = ({
                 onChange={(event) => setSearchDataServicesQuery(event.target.value)}
                 value={selectedAccessServiceUris}
                 onValueChange={(selectedValues) => {
-                  setFieldValue('accessServiceUris', selectedValues);
+                  setFieldValue('accessServices', selectedValues);
                   setSelectedAccessServiceUris(selectedValues);
                 }}
                 placeholder={`${localization.search.search}...`}
                 size='sm'
                 virtual
-                ref={(el: HTMLInputElement | null) => setInputRef(`accessServiceUris`, el)}
+                ref={(el: HTMLInputElement | null) => setInputRef(`accessServices`, el)}
               >
                 {selectedAndSearchedAccessServices.map(
                   (option: { uri: any; description: any; title: any; organization: { prefLabel: any } }, i: any) => (
@@ -309,7 +309,7 @@ export const DistributionModal = ({
                   <div className={styles['padding-bottom-4']}>
                     <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
                       <FastFieldWithRef
-                        name={`page[${index}].uri`}
+                        name={`page[${index}]`}
                         ref={(el: HTMLInputElement | HTMLTextAreaElement | null) =>
                           props.setInputRef(`page[${index}]`, el)
                         }
@@ -324,7 +324,7 @@ export const DistributionModal = ({
                         }
                         as={Textfield}
                         size='sm'
-                        error={props.errors?.page?.[index]?.uri}
+                        error={props.errors?.page?.[index]}
                       />
                     </FieldsetWithDelete>
                   </div>
@@ -679,10 +679,10 @@ export const DistributionModal = ({
                             }
                           >
                             <Combobox
-                              value={values?.license?.uri ? [values?.license.uri] : ['']}
+                              value={values?.license ? [values?.license] : ['']}
                               portal={false}
                               onValueChange={(selectedValues) => {
-                                setFieldValue('license.uri', selectedValues.toString());
+                                setFieldValue('license', selectedValues.toString());
                               }}
                               size='sm'
                               virtual

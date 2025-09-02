@@ -1,7 +1,22 @@
 'use client';
-import { DataStorage, formatISO, getTranslateText, localization, trimObjectWhitespace, deepMergeWithUndefinedHandling } from '@catalog-frontend/utils';
+import {
+  DataStorage,
+  formatISO,
+  getTranslateText,
+  localization,
+  trimObjectWhitespace,
+  deepMergeWithUndefinedHandling,
+} from '@catalog-frontend/utils';
 import { Alert, Button, Checkbox, Paragraph, Spinner, Switch } from '@digdir/designsystemet-react';
-import { Dataset, DatasetToBeCreated, ReferenceData, PublicationStatus, StorageData, Distribution, Reference } from '@catalog-frontend/types';
+import {
+  Dataset,
+  DatasetToBeCreated,
+  ReferenceData,
+  PublicationStatus,
+  StorageData,
+  Distribution,
+  Reference,
+} from '@catalog-frontend/types';
 import {
   ConfirmModal,
   FormikAutoSaver,
@@ -88,7 +103,7 @@ export const DatasetForm = ({
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const { losThemes, dataThemes, openLicenses } = referenceData;
 
-  const [formStatus, setFormStatus] = useState(initialValues?.registrationStatus);
+  const [formApprovedStatus, setFormApprovedStatus] = useState(initialValues?.approved);
 
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
@@ -109,25 +124,33 @@ export const DatasetForm = ({
 
   const handleSwitchChange = (
     event: React.ChangeEvent<HTMLInputElement>,
-    setFieldValue: (fieldName: string, value: string) => void,
+    setFieldValue: (fieldName: string, value: boolean) => void,
   ) => {
     const isChecked = event.target.checked;
-    const status = isChecked ? PublicationStatus.APPROVE : PublicationStatus.DRAFT;
-    setFormStatus(status);
-    setFieldValue('registrationStatus', status);
+    if (!isChecked && 'published' in initialValues && initialValues?.published === true) {
+      showSnackbarMessage({ message: localization.datasetForm.alert.unpublishBeforeUnapprove, severity: 'danger' });
+    } else {
+      setFormApprovedStatus(isChecked);
+      setFieldValue('approved', isChecked);
+    }
   };
 
   const handleIgnoreRequiredChange = (newValue: boolean) => {
-    if (newValue && formStatus && formStatus !== PublicationStatus.DRAFT) {
+    if (newValue && 'published' in initialValues && initialValues?.published === true) {
+      showSnackbarMessage({
+        message: localization.datasetForm.alert.unpublishBeforeIgnoreRequired,
+        severity: 'danger',
+      });
+    } else if (newValue && formApprovedStatus === true) {
       setShowUnapproveModal(true);
     } else {
       setIgnoreRequired(newValue);
     }
   };
 
-  const handleUnapproveConfirm = (setFieldValue: (fieldName: string, value: string) => void) => {
-    setFormStatus(PublicationStatus.DRAFT);
-    setFieldValue('registrationStatus', PublicationStatus.DRAFT);
+  const handleUnapproveConfirm = (setFieldValue: (fieldName: string, value: boolean) => void) => {
+    setFormApprovedStatus(false);
+    setFieldValue('approved', false);
     setIgnoreRequired(true);
     setShowUnapproveModal(false);
   };
@@ -164,34 +187,34 @@ export const DatasetForm = ({
     ...(isValid
       ? []
       : [
-        <Alert
-          key={1}
-          size='sm'
-          severity='danger'
-          className={styles.notification}
-        >
-          {localization.validation.formError}
-        </Alert>,
-      ]),
+          <Alert
+            key={1}
+            size='sm'
+            severity='danger'
+            className={styles.notification}
+          >
+            {localization.validation.formError}
+          </Alert>,
+        ]),
     ...(hasUnsavedChanges
       ? [
-        <Alert
-          key={1}
-          size='sm'
-          severity='warning'
-          className={styles.notification}
-        >
-          {localization.validation.unsavedChanges}
-        </Alert>,
-      ]
+          <Alert
+            key={1}
+            size='sm'
+            severity='warning'
+            className={styles.notification}
+          >
+            {localization.validation.unsavedChanges}
+          </Alert>,
+        ]
       : []),
   ];
 
   useEffect(() => {
-    if (formStatus && formStatus !== PublicationStatus.DRAFT) {
+    if (formApprovedStatus === true) {
       setIgnoreRequired(false);
     }
-  }, [setIgnoreRequired, formStatus]);
+  }, [setIgnoreRequired, formApprovedStatus]);
 
   useEffect(() => {
     if (showSnackbarSuccessOnInit) {
@@ -256,16 +279,23 @@ export const DatasetForm = ({
 
             // Handle distribution data from secondary storage
             const restoreDistributionData = autoSaveStorage?.getSecondary('datasetFormDistribution');
-            if (restoreDistributionData && (restoreDistributionData?.id === datasetId)) {
-              const distributionValues: { distribution: Distribution; distributionType: 'distribution' | 'sample'; index: number } = restoreDistributionData.values;
-              setFieldValue(`${distributionValues.distributionType}[${distributionValues.index}]`, distributionValues.distribution);
+            if (restoreDistributionData && restoreDistributionData?.id === datasetId) {
+              const distributionValues: {
+                distribution: Distribution;
+                distributionType: 'distribution' | 'sample';
+                index: number;
+              } = restoreDistributionData.values;
+              setFieldValue(
+                `${distributionValues.distributionType}[${distributionValues.index}]`,
+                distributionValues.distribution,
+              );
               // Delete distribution data from secondary storage since it is merged with the main data
               autoSaveStorage?.deleteSecondary('datasetFormDistribution');
             }
 
             // Handle reference data from secondary storage
             const restoreReferenceData = autoSaveStorage?.getSecondary('datasetFormReference');
-            if (restoreReferenceData && (restoreReferenceData?.id === datasetId)) {
+            if (restoreReferenceData && restoreReferenceData?.id === datasetId) {
               const referenceValues: { reference: Reference; index: number } = restoreReferenceData.values;
               setFieldValue(`references[${referenceValues.index}]`, referenceValues.reference);
               // Delete reference data from secondary storage since it is merged with the main data
@@ -347,25 +377,29 @@ export const DatasetForm = ({
                     id='relation-section'
                     title={localization.datasetForm.heading.relations}
                     subtitle={localization.datasetForm.subtitle.relations}
-                    error={hasError(['references', 'relations'])}
+                    error={hasError(['references', 'relatedResources'])}
                   >
-                    <RelationsSection searchEnv={searchEnv} autoSaveId={datasetId?.toString()} autoSaveStorage={autoSaveStorage} />
+                    <RelationsSection
+                      searchEnv={searchEnv}
+                      autoSaveId={datasetId?.toString()}
+                      autoSaveStorage={autoSaveStorage}
+                    />
                   </FormLayout.Section>
 
                   <FormLayout.Section
                     id='concept-section'
                     title={localization.datasetForm.heading.concept}
                     subtitle={localization.datasetForm.subtitle.concept}
-                    error={hasError(['conceptList', 'keywordList'])}
+                    error={hasError(['concepts', 'keywords'])}
                   >
                     <ConceptSection searchEnv={searchEnv} />
                   </FormLayout.Section>
 
                   <FormLayout.Section
                     id='information-model-section'
-                    title={localization.datasetForm.heading.informationModel}
-                    subtitle={localization.datasetForm.subtitle.informationModel}
-                    error={hasError(['informationModelsFromFDK', 'informationModel'])}
+                    title={localization.datasetForm.heading.informationModels}
+                    subtitle={localization.datasetForm.subtitle.informationModels}
+                    error={hasError(['informationModelsFromFDK', 'informationModelsFromOtherSources'])}
                   >
                     <InformationModelSection searchEnv={searchEnv} />
                   </FormLayout.Section>
@@ -375,7 +409,7 @@ export const DatasetForm = ({
                     title={localization.datasetForm.heading.contactPoint}
                     subtitle={localization.datasetForm.subtitle.contactPoint}
                     required
-                    error={hasError(['contactPoint'])}
+                    error={hasError(['contactPoints'])}
                   >
                     <ContactPointSection />
                   </FormLayout.Section>
@@ -427,7 +461,7 @@ export const DatasetForm = ({
                   <Switch
                     position='left'
                     size='sm'
-                    checked={values.registrationStatus !== PublicationStatus.DRAFT}
+                    checked={values.approved}
                     onChange={(event) => handleSwitchChange(event, setFieldValue)}
                   >
                     <div className={styles.footerContent}>

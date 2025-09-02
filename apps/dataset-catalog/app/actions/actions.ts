@@ -8,14 +8,7 @@ import {
   updateDataset as update,
 } from '@catalog-frontend/data-access';
 import { Dataset, DatasetToBeCreated } from '@catalog-frontend/types';
-import {
-  convertListToListOfObjects,
-  getValidSession,
-  localization,
-  redirectToSignIn,
-  removeEmptyValues,
-  transformToLocalizedStrings,
-} from '@catalog-frontend/utils';
+import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
 import { compare } from 'fast-json-patch';
 import { revalidateTag } from 'next/cache';
 
@@ -28,8 +21,7 @@ export async function getDatasets(catalogId: string) {
   if (response.status !== 200) {
     throw new Error('getDatasets failed with response code ' + response.status);
   }
-  const jsonResponse = await response.json();
-  return jsonResponse._embedded.datasets;
+  return await response.json();
 }
 
 export async function getDatasetById(catalogId: string, datasetId: string): Promise<Dataset> {
@@ -43,38 +35,29 @@ export async function getDatasetById(catalogId: string, datasetId: string): Prom
     throw new Error('getDatasetById failed with response code ' + response.status);
   }
 
-  const jsonResponse = await response.json();
-  return jsonResponse;
+  return await response.json();
 }
 
 export async function createDataset(values: DatasetToBeCreated, catalogId: string) {
-  const newDataset = {
-    ...values,
-    keyword: values?.keywordList ? transformToLocalizedStrings(values?.keywordList) : undefined,
-    concepts: values?.conceptList ? convertListToListOfObjects(values.conceptList, 'uri') : undefined,
-    spatial: values?.spatialList ? convertListToListOfObjects(values.spatialList, 'uri') : undefined,
-    language: values.languageList ? convertListToListOfObjects(values.languageList, 'uri') : undefined,
-    accessRights: { uri: values?.accessRights?.uri === 'none' ? undefined : values?.accessRights?.uri },
-  };
-  const datasetNoEmptyValues = removeEmptyValues(newDataset);
+  const datasetNoEmptyValues = removeEmptyValues(values);
 
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
   let success = false;
+  let datasetId: undefined | string = undefined;
   try {
     const response = await postDataset(datasetNoEmptyValues, catalogId, `${session?.accessToken}`);
     if (response.status !== 201) {
       throw new Error();
     }
 
-    const data = await response.json();
-
+    datasetId = response?.headers?.get('location')?.split('/').pop();
     success = true;
-    return data.id;
+    return datasetId;
   } catch (error) {
-    throw new Error(localization.alert.fail);
+    throw new Error(`${localization.alert.fail} ${error}`);
   } finally {
     if (success) {
       revalidateTag('dataset');
@@ -96,7 +79,7 @@ export async function deleteDataset(catalogId: string, datasetId: string) {
     }
     success = true;
   } catch (error) {
-    throw new Error(localization.alert.deleteFail);
+    throw new Error(`${localization.alert.deleteFail} ${error}`);
   } finally {
     if (success) {
       revalidateTag('datasets');
@@ -105,14 +88,7 @@ export async function deleteDataset(catalogId: string, datasetId: string) {
 }
 
 export async function updateDataset(catalogId: string, initialDataset: Dataset, values: Dataset) {
-  const updatedDataset = removeEmptyValues({
-    ...values,
-    keyword: values?.keywordList ? transformToLocalizedStrings(values?.keywordList) : undefined,
-    concepts: values?.conceptList ? convertListToListOfObjects(values.conceptList, 'uri') : undefined,
-    spatial: values?.spatialList ? convertListToListOfObjects(values.spatialList, 'uri') : undefined,
-    language: values.languageList ? convertListToListOfObjects(values.languageList, 'uri') : undefined,
-    accessRights: { uri: values?.accessRights?.uri === 'none' ? undefined : values?.accessRights?.uri },
-  });
+  const updatedDataset = removeEmptyValues(values);
 
   const diff = compare(initialDataset, updatedDataset);
 
