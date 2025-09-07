@@ -40,7 +40,7 @@
   "dependencies": {
     "@apollo/client": "^3.13.8",
     "@digdir/designsystemet-css": "0.10.0",
-    "@digdir/designsystemet-react": "0.63.1",
+    "@digdir/designsystemet-react": "1.4.0",
     "@digdir/designsystemet-theme": "^0.15.3",
     "@fellesdatakatalog/icons": "^0.8.5",
     "@fortawesome/fontawesome-svg-core": "7.0.0",
