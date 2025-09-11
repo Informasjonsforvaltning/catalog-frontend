@@ -125,7 +125,6 @@ export function ImportModal({ catalogId }: ImportProps) {
         const contentType = extension2Type.get(`.${fileExtension}`);
         if (!fileExtension || ! contentType) {
           console.error('Uploaded file has no extension or unsupported extension:', fileExtension);
-          //cancel()
           return;
         }
         reader.onload = function (evt) {
