@@ -173,7 +173,7 @@ export function ImportModal({ catalogId }: ImportProps) {
       </Modal.Trigger>
       <Modal.Dialog
         ref={modalRef}
-        //onInteractOutside={() => modalRef.current?.close()}
+        onInteractOutside={() => modalRef.current?.close()}
         onClose={() =>
           {
             cancel();
