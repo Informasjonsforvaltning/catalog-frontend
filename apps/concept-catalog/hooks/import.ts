@@ -180,7 +180,6 @@ export const useImportRdf = (catalogId: string) => {
         console.log('Invalid organization number', catalogId);
         return Promise.reject('Invalid organization number');
       }
-      //return {...mutationProps }
     },
     onSuccess: () => {
       console.log('Concept RDF file has been uploaded successfully!');
