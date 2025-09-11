@@ -45,6 +45,16 @@ spec:
                 secretKeyRef:
                   name: commonurl
                   key: CATALOG_ADMIN_BASE_URI
+            - name: CATALOG_COMMENTS_SERVICE_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl
+                  key: CATALOG_COMMENTS_SERVICE_BASE_URI
+            - name: CATALOG_HISTORY_SERVICE_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl
+                  key: CATALOG_HISTORY_SERVICE_BASE_URI
             - name: ADMIN_GUI_BASE_URI
               valueFrom:
                 secretKeyRef:

@@ -60,11 +60,6 @@ spec:
                 secretKeyRef:
                   name: commonurl
                   key: SERVICE_CATALOG_BASE_URI
-            - name: SERVICE_CATALOG_BASE_URI
-              valueFrom:
-                secretKeyRef:
-                  name: commonurl
-                  key: SERVICE_CATALOG_BASE_URI
             - name: RECORDS_OF_PROCESSING_ACTIVITIES_GUI_BASE_URI
               valueFrom:
                 secretKeyRef:
