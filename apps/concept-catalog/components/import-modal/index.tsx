@@ -128,7 +128,6 @@ export function ImportModal({ catalogId }: ImportProps) {
           return;
         }
         reader.onload = function (evt) {
-          //await new Promise(resolve => setTimeout(resolve, 100000));
           if (uploadSession !== sessionId.current || cancelled) {
             console.log('Session ID', sessionId);
             console.log('Upload session', uploadSession);
