@@ -43,7 +43,9 @@ export default defineConfig({
     baseURL,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on', // Captures a trace for each test
-    screenshot: 'on', // Takes screenshots on test failures    
+    screenshot: 'on', // Takes screenshots on test failures
+    video: 'on',
+    headless: false,
   },
   /* Run your local dev server before starting the tests */
   webServer: {
@@ -68,12 +70,28 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
       dependencies: ['admin-init'],
       testMatch: '**/admin/*.spec.ts',
+      grepInvert: /@solo/
     },
     {
       name: 'admin-firefox',
       use: { ...devices['Desktop Firefox'] },
       dependencies: ['admin-init'],
       testMatch: '**/admin/*.spec.ts',
+      grepInvert: /@solo/
+    },
+    {
+      name: 'admin-chromium-solo',
+      use: { ...devices['Desktop Chrome'] },
+      dependencies: ['admin-init'],
+      testMatch: '**/admin/*.spec.ts',
+      grep: /@solo/
+    },
+    {
+      name: 'admin-firefox-solo',
+      use: { ...devices['Desktop Firefox'] },
+      dependencies: ['admin-init', 'admin-chromium-solo'],
+      testMatch: '**/admin/*.spec.ts',
+      grep: /@solo/,
     },
     // Uncomment for mobile browsers support
     /* {
