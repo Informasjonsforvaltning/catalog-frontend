@@ -24,7 +24,10 @@ export const NewPage = ({ catalogId, dataset, searchEnv, referenceDataEnv, refer
 
   const dataStorage = new LocalDataStorage<StorageData>({
     key: 'datasetForm',
-    secondaryKeys: ['datasetFormDistribution', 'datasetFormReference'],
+    secondaryKeys: {
+      distribution: 'datasetFormDistribution',
+      reference: 'datasetFormReference'
+    }
   });
 
   const handleGotoOverview = () => {

@@ -54,11 +54,13 @@
  * ```
  */
 
+type DataWithMetadata<T> = T & { metadata?: any };
+
 export interface DataStorage<T> {
-  get: () => T | null;
+  get: () => DataWithMetadata<T> | null;
   getSecondary: (key: string) => T | null;
-  set: (values: T, loose?: boolean) => void;
-  setSecondary: (key: string, values: T) => void;
+  set: (values: DataWithMetadata<T>, loose?: boolean) => void;
+  setSecondary: (key: string, values: DataWithMetadata<T>) => void;
   deleteSecondary: (key: string) => void;
   delete: () => void;
   // State management methods
@@ -67,8 +69,8 @@ export interface DataStorage<T> {
 }
 
 export interface StorageState<T> {
-  mainData: T | null;
-  secondaryData: Record<string, T | null>;
+  mainData: DataWithMetadata<T> | null;
+  secondaryData: Record<string, DataWithMetadata<T> | null>;
   lastChanged: Date | null;
   isDirty: boolean;
   // Additional state properties
@@ -78,32 +80,36 @@ export interface StorageState<T> {
 
 export type LocalDataStorageConfig<T = any> = {
   key: string;
-  secondaryKeys?: string[];
+  // <key, internal key>
+  secondaryKeys?: Record<string, string>;
   onChange?: (state: StorageState<T>) => void;
   // Additional configuration options
   enableHistory?: boolean;
   maxHistorySize?: number;
-  validateData?: (data: T) => boolean;
+  metadata?: any;
+  validateData?: (data: DataWithMetadata<T>) => boolean;
 };
 
 export class LocalDataStorage<T> implements DataStorage<T> {
   key: string;
-  secondaryKeys: string[];
+  secondaryKeys: Record<string, string>;
   private loose: boolean;
   private subscribers: Set<(state: StorageState<T>) => void> = new Set();
   private currentState: StorageState<T>;
   private onChange?: (state: StorageState<T>) => void;
   private enableHistory: boolean;
   private maxHistorySize: number;
-  private validateData?: (data: T) => boolean;
+  private metadata?: any;
+  private validateData?: (data: DataWithMetadata<T>) => boolean;
   private stateHistory: StorageState<T>[] = [];
 
   constructor(config: LocalDataStorageConfig<T>) {
     this.key = config.key;
-    this.secondaryKeys = config.secondaryKeys || [];
+    this.secondaryKeys = config.secondaryKeys || {};
     this.onChange = config.onChange;
     this.enableHistory = config.enableHistory || false;
     this.maxHistorySize = config.maxHistorySize || 10;
+    this.metadata = config.metadata;
     this.validateData = config.validateData;
     this.loose = false;
 
@@ -118,10 +124,10 @@ export class LocalDataStorage<T> implements DataStorage<T> {
 
   private buildState(): StorageState<T> {
     const mainData = this.getFromStorage(this.key);
-    const secondaryData: Record<string, T | null> = {};
+    const secondaryData: Record<string, DataWithMetadata<T> | null> = {};
     
-    this.secondaryKeys.forEach(key => {
-      secondaryData[key] = this.getFromStorage(key);
+    Object.keys(this.secondaryKeys).forEach(key => {
+      secondaryData[this.secondaryKeys[key]] = this.getFromStorage(this.secondaryKeys[key]);
     });
 
     return {
@@ -133,13 +139,13 @@ export class LocalDataStorage<T> implements DataStorage<T> {
     };
   }
 
-  private getFromStorage(key: string): T | null {
+  private getFromStorage(key: string): DataWithMetadata<T> | null {
     if (typeof localStorage === 'undefined') {
       return null;
     }
     const savedData = localStorage.getItem(key);
     if (savedData) {
-      return JSON.parse(savedData) as T;
+      return JSON.parse(savedData) as DataWithMetadata<T>;
     }
     return null;
   }
@@ -168,7 +174,7 @@ export class LocalDataStorage<T> implements DataStorage<T> {
     }
   }
 
-  private validateAndSet(data: T): boolean {
+  private validateAndSet(data: DataWithMetadata<T>): boolean {
     if (this.validateData && !this.validateData(data)) {
       console.warn('Data validation failed for storage:', this.key);
       return false;
@@ -176,19 +182,20 @@ export class LocalDataStorage<T> implements DataStorage<T> {
     return true;
   }
 
-  get(): T | null {
+  get(): DataWithMetadata<T> | null {
     return this.currentState.mainData;
   }
 
-  getSecondary(key: string): T | null {
-    if (!this.secondaryKeys.includes(key)) {
+  getSecondary(key: string): DataWithMetadata<T> | null {
+    if (!Object.keys(this.secondaryKeys).includes(key)) {
       throw new Error(`Key ${key} is not a secondary key`);
     }
-    return this.currentState.secondaryData[key];
+    return this.currentState.secondaryData[this.secondaryKeys[key]];
   }
 
-  set(data: T, loose?: boolean) {
+  set(data: DataWithMetadata<T>, loose?: boolean) {
     this.loose = loose || false;
+    data.metadata = this.metadata;
     if (!this.validateAndSet(data)) {
       return;
     }
@@ -198,15 +205,16 @@ export class LocalDataStorage<T> implements DataStorage<T> {
     this.notifySubscribers();
   }
 
-  setSecondary(key: string, data: T) {
-    if (!this.secondaryKeys.includes(key)) {
+  setSecondary(key: string, data: DataWithMetadata<T>) {
+    if (!Object.keys(this.secondaryKeys).includes(key)) {
       throw new Error(`Key ${key} is not a secondary key`);
     }
+    data.metadata = this.metadata;
     if (!this.validateAndSet(data)) {
       return;
     }
     if (typeof localStorage !== 'undefined') {
-      localStorage.setItem(key, JSON.stringify(data));
+      localStorage.setItem(this.secondaryKeys[key], JSON.stringify(data));
     }
     this.notifySubscribers();
   }
@@ -215,21 +223,21 @@ export class LocalDataStorage<T> implements DataStorage<T> {
     if (typeof localStorage !== 'undefined') {
       console.log('[LOCAL STORAGE]: Deleting main and secondary keys');
       localStorage.removeItem(this.key);
-      this.secondaryKeys.forEach((key) => {
-        localStorage.removeItem(key);
+      Object.keys(this.secondaryKeys).forEach((key) => {
+        localStorage.removeItem(this.secondaryKeys[key]);
       });
     }
     this.notifySubscribers();
   }
 
   deleteSecondary(key: string) {
-    if (!this.secondaryKeys.includes(key)) {
+    if (!Object.keys(this.secondaryKeys).includes(key)) {
       throw new Error(`Key ${key} is not a secondary key`);
     }
     if (typeof localStorage !== 'undefined') {
-      localStorage.removeItem(key);
-      const allEmpty = this.secondaryKeys.every((key) => {
-        return localStorage.getItem(key) === null;
+      localStorage.removeItem(this.secondaryKeys[key]);
+      const allEmpty = Object.keys(this.secondaryKeys).every((key) => {
+        return localStorage.getItem(this.secondaryKeys[key]) === null;
       });
       if (allEmpty && this.loose) {
         console.log('[LOCAL STORAGE]: All secondary keys are empty, main data is loose, deleting main key');

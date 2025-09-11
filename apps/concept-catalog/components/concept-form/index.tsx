@@ -46,7 +46,7 @@ type Props = {
   afterSubmit?: () => void;
   autoSave?: boolean;
   autoSaveId?: string;
-  autoSaveStorage: DataStorage<StorageData>;
+  autoSaveStorage?: DataStorage<StorageData>;
   catalogId: string;
   concept?: Concept;
   conceptStatuses: ReferenceDataCode[];
@@ -57,6 +57,7 @@ type Props = {
   markDirty?: boolean;
   onCancel?: () => void;
   onSubmit?: (values: Concept) => Promise<Concept | undefined>;
+  onRestore?: (data: StorageData) => boolean;
   readOnly?: boolean;
   showSnackbarSuccessOnInit?: boolean;
   usersResult: UsersResult;
@@ -104,11 +105,11 @@ const ConceptForm = ({
   markDirty,
   onCancel,
   onSubmit,
+  onRestore,
   readOnly,
   showSnackbarSuccessOnInit,
   usersResult,
 }: Props) => {
-  const pathname = usePathname();
   const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<Concept>>(null);
 
@@ -348,38 +349,34 @@ const ConceptForm = ({
             return dirtyFields;
           })();
 
-          const handleRestoreConcept = (data: StorageData) => {
-            const entityType = pathname.includes('change-requests') ? 'change-requests' : 'concepts';
-
-            if (data?.id !== autoSaveId) {
-              if (!data?.id) {
-                return window.location.replace(`/catalogs/${catalogId}/${entityType}/new?restore=1`);
-              }
-              return window.location.replace(`/catalogs/${catalogId}/${entityType}/${data.id}/edit?restore=1`);
+          const handleRestoreConcept = (data: StorageData) => {            
+            if (onRestore && !onRestore(data)) {
+              return false;
             }
-
+         
             const restoreValues: Concept = deepMergeWithUndefinedHandling({ ...initialValues }, data.values);
             setValues(restoreValues);
 
             // Handle relation data from secondary storage
-            const restoreRelationData = autoSaveStorage?.getSecondary('conceptFormRelation');
+            const restoreRelationData = autoSaveStorage?.getSecondary('relation');
             if (restoreRelationData && (restoreRelationData?.id === autoSaveId)) {
               const relationValues: { rel: UnionRelation; prev: UnionRelationWithIndex } = restoreRelationData.values;
               updateUnionRelation(relationValues.rel, relationValues.prev, restoreValues, setFieldValue);
               // Delete relation data from secondary storage since it is merged with the main data
-              autoSaveStorage?.deleteSecondary('conceptFormRelation');
+              autoSaveStorage?.deleteSecondary('relation');
             }
 
             // Handle definition data from secondary storage
-            const restoreDefinitionData = autoSaveStorage?.getSecondary('conceptFormDefinition');
+            const restoreDefinitionData = autoSaveStorage?.getSecondary('definition');
             if (restoreDefinitionData && (restoreDefinitionData?.id === autoSaveId)) {
               const definitionValues: { definition: Definisjon; fieldName: string } = restoreDefinitionData.values;
               setFieldValue(definitionValues.fieldName, definitionValues.definition);
               // Delete definition data from secondary storage since it is merged with the main data
-              autoSaveStorage?.deleteSecondary('conceptFormDefinition');
+              autoSaveStorage?.deleteSecondary('definition');
             }
 
             showSnackbarMessage({ message: localization.snackbar.restoreSuccessfull, severity: 'success' });
+            return true;
           };
 
           if (concept && !isEqual(initialConcept, concept) && !dirty) {

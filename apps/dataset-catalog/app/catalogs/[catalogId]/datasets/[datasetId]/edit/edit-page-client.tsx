@@ -25,7 +25,10 @@ export const EditPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }
 
   const dataStorage = new LocalDataStorage<StorageData>({
     key: 'datasetForm',
-    secondaryKeys: ['datasetFormDistribution', 'datasetFormReference']
+    secondaryKeys: {
+      distribution: 'datasetFormDistribution',
+      reference: 'datasetFormReference'
+    }
   });
 
   if (dataset.specializedType === 'SERIES') {

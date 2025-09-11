@@ -64,18 +64,17 @@ const ChangeRequestOrNew = withReadProtectedPage(
       }
     }
 
-    const newChangeRequest: ChangeRequest = {
-      id: null,
-      conceptId: conceptIdSearch,
-      operations: [],
-      title: '',
-      catalogId: catalogId,
-      status: 'OPEN',
-    };
+    const clonedConcept = jsonpatch.deepClone(originalConcept || baselineConcept);
+    delete clonedConcept.id;
+    delete clonedConcept.ansvarligVirksomhet;
+    delete clonedConcept.originaltBegrep;
+    delete clonedConcept.endringslogelement;
+    delete clonedConcept.publiseringsTidspunkt;
+    delete clonedConcept.erPublisert;
 
     const changeRequestAsConcept = jsonpatch.applyPatch(
-      jsonpatch.deepClone(originalConcept || baselineConcept),
-      jsonpatch.deepClone(newChangeRequest.operations),
+      clonedConcept,
+      [],
       false,
     ).newDocument;
 
