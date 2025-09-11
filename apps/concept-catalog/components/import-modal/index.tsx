@@ -153,7 +153,6 @@ export function ImportModal({ catalogId }: ImportProps) {
         allowedMimeTypes={allowedExtensions}
         onUpload={(e) => {
           sessionId.current = Date.now();
-          //setUploadSession(sessionId.current)
           uploadSession = sessionId.current;
           onFileUpload(e)
         }}
