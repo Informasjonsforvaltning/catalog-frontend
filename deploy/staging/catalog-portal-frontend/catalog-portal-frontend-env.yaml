@@ -23,7 +23,7 @@ spec:
             - name: KEYCLOAK_ISSUER
               valueFrom:
                 secretKeyRef:
-                  name: sso-staging
+                  name: sso
                   key: SSO_OIDC_ISSUER
             - name: KEYCLOAK_SECRET
               valueFrom:
@@ -33,102 +33,102 @@ spec:
             - name: CATALOG_ADMIN_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: CATALOG_ADMIN_BASE_URI
             - name: ORGANIZATION_CATALOG_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: ORGANIZATION_CATALOG_BASE_URI
             - name: ADMIN_GUI_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: ADMIN_GUI_BASE_URI
             - name: FDK_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: FDK_BASE_URI
             - name: CATALOG_PORTAL_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: CATALOG_PORTAL_BASE_URI
             - name: SERVICE_CATALOG_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: SERVICE_CATALOG_BASE_URI
             - name: SERVICE_CATALOG_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: SERVICE_CATALOG_BASE_URI
             - name: RECORDS_OF_PROCESSING_ACTIVITIES_GUI_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: RECORDS_OF_PROCESSING_ACTIVITIES_GUI_BASE_URI
             - name: RECORDS_OF_PROCESSING_ACTIVITIES_API_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: RECORDS_OF_PROCESSING_ACTIVITIES_API_BASE_URI
             - name: SERVICE_CATALOG_GUI_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: SERVICE_CATALOG_GUI_BASE_URI
             - name: CONCEPT_CATALOG_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: CONCEPT_CATALOG_BASE_URI
             - name: DATASERVICE_CATALOG_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: DATASERVICE_CATALOG_BASE_URI
             - name: DATA_SERVICE_CATALOG_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: DATA_SERVICE_CATALOG_BASE_URI
             - name: DATA_SERVICE_CATALOG_FRONTEND
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: DATA_SERVICE_CATALOG_FRONTEND
             - name: DATASET_CATALOG_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: DATASET_CATALOG_BASE_URI
             - name: CONCEPT_CATALOG_FRONTEND
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: CONCEPT_CATALOG_FRONTEND
             - name: DATASET_CATALOG_FRONTEND
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: DATASET_CATALOG_FRONTEND
             - name: FDK_COMMUNITY_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: FDK_COMMUNITY_BASE_URI
             - name: FDK_CMS_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: FDK_CMS_BASE_URI
             - name: TERMS_AND_CONDITIONS_BASE_URI
               valueFrom:
                 secretKeyRef:
-                  name: commonurl-staging
+                  name: commonurl
                   key: FDK_TERMS_AND_CONDITIONS_BASE_URI
             - name: RECORDS_ALLOW_LIST
               valueFrom:
