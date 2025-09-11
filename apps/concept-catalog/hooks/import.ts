@@ -95,7 +95,7 @@ const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Conc
     console.error("Forventet kolonnenavn 'uri' i CSV-filen")
 
   return {
-    id: uri?? null,
+    id: uri ?? null,
     originaltBegrep: mapToSingleValue(csvMap, 'originalt_begrep') ?? '',
     versjonsnr: {
       major: parseInt(version.split('.')?.[0] ?? '0', 10),
