@@ -7,7 +7,6 @@ import styles from './import-modal.module.scss';
 import { FileImportIcon, TasklistSendIcon } from '@navikt/aksel-icons';
 import Markdown from 'react-markdown';
 import { Concept } from '@catalog-frontend/types';
-import { delay } from 'lodash';
 
 interface ImportProps {
   catalogId: string;
@@ -177,38 +176,65 @@ export function ImportModal({ catalogId }: ImportProps) {
       <Modal.Dialog
         ref={modalRef}
         //onInteractOutside={() => modalRef.current?.close()}
-        onClose={() =>
-          {
-            cancel();
-            modalRef.current = null;
+        onClose={() => {
+          cancel();
+          modalRef.current = null;
         }}
       >
-        <Modal.Header className={styles.content}>
-          <Markdown>{localization.concept.importModal.title}</Markdown>
-        </Modal.Header>
-        <Modal.Content className={styles.content}>
-          <div className={styles.modalContent}>
-            {(isUploading || isSending) && (
-              <div className={styles.spinnerOverlay}>
-                <Spinner
-                  title={localization.loading}
-                  size='large'
-                />
-              </div>
-            )}
-            <Markdown>{localization.concept.importModal.conceptUploadDescription}</Markdown>
-            <br />
-            <Markdown>{localization.concept.importModal.resultDescription}</Markdown>
-            <br />
-            <div className={styles.remark}>
-              <Markdown>{localization.concept.importModal.maxFileSize}</Markdown>
-            </div>
-            <div className={styles.warning}>
-              <Markdown>{localization.concept.importModal.csvImportHistoryNotSupported}</Markdown>
-            </div>
-          </div>
-        </Modal.Content>
         {(!isUploading && !isSending && !isUploaded) && (
+          <>
+            <Modal.Header className={styles.content}>
+              <Markdown>{localization.concept.importModal.title}</Markdown>
+            </Modal.Header>
+            <Modal.Content className={styles.content}>
+              <div className={styles.modalContent}>
+                {(isUploading || isSending) && (
+                  <div className={styles.spinnerOverlay}>
+                    <Spinner
+                      title={localization.loading}
+                      size='large'
+                    />
+                  </div>
+                )}
+                <Markdown>{localization.concept.importModal.conceptUploadDescription}</Markdown>
+                <br />
+                <Markdown>{localization.concept.importModal.resultDescription}</Markdown>
+                <br />
+                <div className={styles.remark}>
+                  <Markdown>{localization.concept.importModal.maxFileSize}</Markdown>
+                </div>
+              </div>
+            </Modal.Content>
+          </>
+        )}
+
+        {(isUploading || isUploaded || isSending) && (
+          <>
+            <Modal.Header className={styles.content}>
+              <Markdown>{localization.concept.importModal.titleConfirmSending}</Markdown>
+            </Modal.Header>
+            <Modal.Content className={styles.content}>
+              <div className={styles.modalContent}>
+                {(isUploading || isSending) && (
+                  <div className={styles.spinnerOverlay}>
+                    <Spinner
+                      title={localization.loading}
+                      size='large'
+                    />
+                  </div>
+                )}
+                <Markdown>{localization.concept.importModal.textSendingConfirmation}</Markdown>
+                <br />
+                <Markdown>{localization.concept.importModal.aboutImportStatusPage}</Markdown>
+                <br />
+                <Markdown>{localization.concept.importModal.importConfirmation}</Markdown>
+
+              </div>
+            </Modal.Content>
+          </>
+        )}
+
+        {!isUploading && !isSending && !isUploaded && (
           <Modal.Footer>
             <div className={styles.buttons}>
               <>
