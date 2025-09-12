@@ -249,19 +249,19 @@ export function ImportModal({ catalogId }: ImportProps) {
           <Modal.Footer>
             <div className={styles.buttons}>
               <Button
-                variant={'secondary'}
-                onClick={cancel}
-                disabled={isSending}
-              >
-                Avbryt
-              </Button>
-              <Button
                 onClick={send}
                 disabled={isUploading || isSending}
                 variant={'primary'}
               >
                 <TasklistSendIcon />
-                Send
+                Fortsett
+              </Button>
+              <Button
+                variant={'secondary'}
+                onClick={cancel}
+                disabled={isSending}
+              >
+                Avbryt
               </Button>
             </div>
           </Modal.Footer>
