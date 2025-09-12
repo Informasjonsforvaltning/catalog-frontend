@@ -54,13 +54,13 @@ export const runTestAsAdmin = (name: string, fn: (any) => void) => {
   runTest(name, fn);
 };
 
-export const runTestsAdminSoloSerial = (tests: {name: string, fn: (any)  => void} []) => {
+export const runSerialTestsAdmin = (name: string, tests: {name: string, fn: (any)  => void} []) => {
   test.use({ storageState: adminAuthFile });
-  test.describe.serial(PREFIX_TEXT + 'Admin @solo serial tests', () => {
+  test.describe.serial(PREFIX_TEXT + ' serial tests ' + name, () => {
 
     for (const { name, fn } of tests){
       test.use({ storageState: adminAuthFile });
-      runTest(`${PREFIX_TEXT} @solo ${name}`, fn);
+      runTest(`${PREFIX_TEXT} ${name}`, fn);
     }
 
   });

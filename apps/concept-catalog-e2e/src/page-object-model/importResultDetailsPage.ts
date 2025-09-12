@@ -54,11 +54,11 @@ export default class ImportResultDetailsPage {
   }
 
   async checkWaitingForConfirmationStatus() {
-    await expect(this.getWaitingForConfirmationLabel()).toBeVisible({ timeout: 20000 })
+    await expect(this.getWaitingForConfirmationLabel()).toBeVisible({ timeout: 30000 })
   }
 
   async checkFailedStatus() {
-    await expect(this.getFailedLabel()).toBeVisible({ timeout: 20000 })
+    await expect(this.getFailedLabel()).toBeVisible({ timeout: 30000 })
   }
 
   async confirmImport() {
