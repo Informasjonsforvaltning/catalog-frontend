@@ -80,8 +80,6 @@ export const nb = {
   changed: 'Endret',
   created: 'Opprettet',
   by: 'av',
-  lastUpdated: 'Sist oppdatert',
-  
 
   catalogType: {
     admin: 'Administrasjonsgrensesnitt',
@@ -260,6 +258,7 @@ export const nb = {
     deleteInternalField: 'Er du sikker på at du ønsker å slette feltet?',
     deleteUser: 'Er du sikker på at du vil slette brukernavnet?',
     fail: 'Oppdatering feilet.',
+    maxFileSizeExceeded: 'Filstørrelsen er mer enn maksimumsgrensen på 5.8 MB. Importering avbrytes.',
     noChanges: 'Ingen endringer funnet.',
     notValidFile: 'Innholdet i filen er ikke gyldig.',
     success: 'Oppdatering vellykket!',
@@ -417,7 +416,7 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
       resultDescription: `En side med detaljerte resultater av importprosessen vises automatisk ved fullført importforsøk av en Turtle-fil. Tidligere gjennomførte importforsøk for Turtle-filer kan vises ved å benytte **Resultater**-knappen.`,
       csvImportHistoryNotSupported:
         'Visning av detaljerte resultater og oversikt over tidligere importforsøk for CSV- og JSON-filer er foreløpig ikke tilgjengelig.',
-      maxFileSize: `**Merk:** Maksimal filstørrelse for opplastning er xx MB`,
+      maxFileSize: `**Merk:** Maksimal filstørrelse for opplastning er 5.8 MB`,
     },
   },
 
@@ -610,6 +609,9 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
   importResult: {
     completed: 'Vellykket',
     failed: 'Feilet',
+    inProgress: 'Pågår',
+    cancelled: 'Avvist',
+    pendingConfirmation: 'Venter på bekreftelse',
     warnings: 'Advarsler',
     errors: 'Feil',
     goToImported: 'Gå til importert ressurs',

@@ -4,10 +4,10 @@ import { Concept } from '@catalog-frontend/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { validOrganizationNumber } from '@catalog-frontend/utils';
 import { useSession } from 'next-auth/react';
-import { importRdfConcepts } from '@catalog-frontend/data-access';
+import { importRdfConcepts, importConceptsCSV, createImportJob } from '@catalog-frontend/data-access';
 import { useRouter } from 'next/navigation';
 
-type ConceptImport = Omit<Concept, 'id' | 'ansvarligVirksomhet'>;
+type ConceptImport = Omit<Concept, 'ansvarligVirksomhet'>;
 
 const mapToSingleValue = (csvMap: Record<string, string[]>, key: string) => {
   const value = csvMap[key];
@@ -87,11 +87,15 @@ const mapKilde = (
     : undefined;
 };
 
-const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Concept, 'id' | 'ansvarligVirksomhet'> => {
+const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Concept, 'ansvarligVirksomhet'> => {
   const csvMap = createCsvMap(columnHeaders, data);
   const version = mapToSingleValue(csvMap, 'versjon') || '0.1.0';
+  const uri = mapToSingleValue(csvMap, 'id')
+  if(!uri)
+    console.error("Forventet kolonnenavn 'uri' i CSV-filen")
 
   return {
+    id: uri?? null,
     originaltBegrep: mapToSingleValue(csvMap, 'originalt_begrep') ?? '',
     versjonsnr: {
       major: parseInt(version.split('.')?.[0] ?? '0', 10),
@@ -165,7 +169,7 @@ const attemptToParseCsvFile = (text: string): Promise<ConceptImport[]> => {
   });
 };
 
-export const useImportRdfConcepts = (catalogId: string) => {
+export const useImportRdf = (catalogId: string) => {
   const { data: session } = useSession();
   const router = useRouter();
   const accessToken = session?.accessToken ?? '';
@@ -173,38 +177,102 @@ export const useImportRdfConcepts = (catalogId: string) => {
     mutationKey: ['import-Concepts-RDF'],
     mutationFn: async ({ ...mutationProps }: {fileContent: string, contentType: string}) => {
       if (!validOrganizationNumber(catalogId)) {
-        console.log("Invalid organization number", catalogId);
+        console.log('Invalid organization number', catalogId);
         return Promise.reject('Invalid organization number');
       }
-
-      const location = await importRdfConcepts(mutationProps.fileContent, mutationProps.contentType, catalogId, accessToken);
-
-      if (location) {
-        const resultId = location.split('/').pop();
-        router.push(`/catalogs/${catalogId}/concepts/import-results/${resultId}`);
-      }
-
+      //return {...mutationProps }
     },
     onSuccess: () => {
       console.log('Concept RDF file has been uploaded successfully!');
     },
     onError: (error: any) => {
       console.error('Error uploading concept RDF file');
-    }
+    },
   });
 };
 
-export const useImportConcepts = (catalogId: string, setIsLoading?: React.Dispatch<React.SetStateAction<boolean>>) => {
-  const queryClient = useQueryClient();
+export const useSendRdf = (catalogId: string) => {
+  const { data: session } = useSession();
   const router = useRouter();
+  const accessToken = session?.accessToken ?? '';
+  return useMutation({
+    mutationKey: ['sendConceptsRDF'],
+    mutationFn: async ({ ...mutationProps }: { fileContent: string; contentType: string }) => {
+      const location = await createImportJob(catalogId, accessToken);
+      if (location) {
+
+        const resultId = location.split('/').pop();
+        console.log('Created import result ID at ', location);
+        if (!resultId) {
+
+          console.error('No result ID found in the location URL');
+          return Promise.reject('No result ID found');
+
+        }
+
+        importRdfConcepts(mutationProps.fileContent, mutationProps.contentType, catalogId, resultId, accessToken)
+          .catch(error => console.error("Failed to import RDF concepts in the background", error));
+
+        router.push(`/catalogs/${catalogId}/concepts/import-results/${resultId}`);
+
+      }
+
+    },
+    onSuccess: () => {
+      console.log('Concept RDF file has been sent successfully!');
+    },
+    onError: (error: any) => {
+      console.error('Error sending concept RDF file');
+    },
+
+  })
+}
+
+export const useSendConcepts = (catalogId: string,
+                                setIsSending?: React.Dispatch<React.SetStateAction<boolean>>) => {
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
+  const accessToken = session?.accessToken ?? '';
+  return useMutation({
+    mutationKey: ['sendConceptsCSV'],
+    mutationFn: async (concepts: Concept[]) => {
+      if (setIsSending) setIsSending(true);
+
+      const location = await createImportJob(catalogId, accessToken);
+      if (location) {
+        const resultId = location.split('/').pop();
+        console.log('Created import result ID at ', location);
+        if (!resultId) {
+          console.error('No result ID found in the location URL');
+          return Promise.reject('No result ID found');
+        }
+
+        importConceptsCSV(catalogId, resultId, concepts, accessToken)
+          .catch(error => console.error("Failed to import CSV/JSON concepts in the background", error));
+
+        router.push(`/catalogs/${catalogId}/concepts/import-results/${resultId}`);
+      }
+    },
+    onSuccess: () => {
+      console.log('Concepts have been sent successfully!');
+    },
+  });
+
+}
+
+export const useImportConcepts = (catalogId: string,
+                                  setIsUploading?: React.Dispatch<React.SetStateAction<boolean>>,
+                                  setIsUploaded?: React.Dispatch<React.SetStateAction<boolean>>) => {
+  const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ['importConcepts'],
     mutationFn: async (file: File) => {
       if (!validOrganizationNumber(catalogId)) {
         return Promise.reject('Invalid catalog id');
       }
-      if(setIsLoading)
-        setIsLoading(true)
+      if(setIsUploading)
+        setIsUploading(true)
 
       const content = await file.text();
       let parsedText: ConceptImport[] = [];
@@ -215,8 +283,8 @@ export const useImportConcepts = (catalogId: string, setIsLoading?: React.Dispat
         parsedText = await attemptToParseCsvFile(content);
       } else {
         Promise.reject('Invalid file type');
-        if(setIsLoading)
-          setIsLoading(false)
+        if(setIsUploading)
+          setIsUploading(false)
       }
 
       parsedText.forEach((line) => {console.log("Parsed line: ", line)});
@@ -234,21 +302,8 @@ export const useImportConcepts = (catalogId: string, setIsLoading?: React.Dispat
           `Du er i ferd med å importere ${concepts.length} begreper. Dette vil opprette nye begreper i katalogen. Fortsette?`,
         )
       ) {
-        const response = await fetch(`/api/catalogs/${catalogId}/concepts/import`, {
-          method: 'POST',
-          body: JSON.stringify(concepts),
-        });
-
-        if (response.status === 401) {
-          return Promise.reject('Unauthorized');
-        }
-
-        if (response.status > 399) {
-          const errorMessage = await response.text();
-          return Promise.reject(errorMessage);
-        }
-
-        return Promise.resolve();
+        if(setIsUploaded) setIsUploaded(true)
+        return concepts;
       }
 
       return Promise.reject('Canceled');

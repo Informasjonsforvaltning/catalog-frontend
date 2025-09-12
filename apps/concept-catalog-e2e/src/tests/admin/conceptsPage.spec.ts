@@ -1,6 +1,6 @@
-import { Concept } from '@catalog-frontend/types';
-import { runTestAsAdmin } from '../../fixtures/basePage';
+import { runTestAsAdmin, runSerialTestsAdmin } from '../../fixtures/basePage';
 import { adminAuthFile, createConcept, ConceptStatus, uniqueString } from '../../utils/helpers';
+import { expect } from '@playwright/test';
 
 runTestAsAdmin('test if the search page renders correctly', async ({ conceptsPage, playwright }) => {
   console.log('[TEST] Navigating to concepts page...');
@@ -75,9 +75,10 @@ runTestAsAdmin('test status filter with random concepts', async ({ conceptsPage,
         nb: uniqueString('def_nb'),
         nn: uniqueString('def_nn'),
         en: uniqueString('def_en'),
-      }
+      },
     },
-    statusURI: ConceptStatus[Object.keys(ConceptStatus)[i % Object.keys(ConceptStatus).length] as keyof typeof ConceptStatus],
+    statusURI:
+      ConceptStatus[Object.keys(ConceptStatus)[i % Object.keys(ConceptStatus).length] as keyof typeof ConceptStatus],
   }));
 
   console.log('[TEST] Creating random concepts via API...');
@@ -107,7 +108,112 @@ runTestAsAdmin('test status filter with random concepts', async ({ conceptsPage,
     console.log(`[TEST] Searching for concept: ${concept.anbefaltTerm.navn.nb}`);
     await conceptsPage.search(concept.anbefaltTerm.navn.nb);
     console.log(`[TEST] Expecting only this concept in results: ${concept.anbefaltTerm.navn.nb}`);
-    await conceptsPage.expectSearchResults([concept], randomConcepts.filter(c => c !== concept));
+    await conceptsPage.expectSearchResults(
+      [concept],
+      randomConcepts.filter((c) => c !== concept),
+    );
   }
   console.log('[TEST] Finished test: status filter with random concepts');
 });
+
+runTestAsAdmin('Test if a modal opens when click Import', async ({ conceptsPage, playwright }) => {
+  console.log('[TEST] Creating API request context for Admin user...');
+  await playwright.request.newContext({
+    storageState: adminAuthFile,
+  });
+
+  await conceptsPage.goto();
+
+  // Click the Import button
+  console.log('[TEST] Clicking Importer Button...');
+  await conceptsPage.page.getByRole('button', { name: 'Importer' }).click();
+
+  // A modal should open
+  console.log('[TEST] Expecting an open modal...');
+  await expect(conceptsPage.page.getByRole('dialog')).toBeVisible({ timeout: 5000 });
+
+  const dialog = conceptsPage.page.getByRole('dialog', {
+    has: conceptsPage.page.getByRole('button', { name: 'Resultater' }),
+  });
+
+  console.log('[TEST] Checking that there are 3 buttons in the modal...');
+  await expect(dialog.getByRole('link', { name: 'Resultater' })).toBeVisible({ timeout: 5000 });
+
+  await expect(dialog.getByRole('button', { name: 'Importer RDF' })).toBeVisible({ timeout: 5000 });
+
+  await expect(dialog.getByRole('button', { name: 'Importer CSV/JSON' })).toBeVisible({ timeout: 5000 });
+});
+
+runSerialTestsAdmin('Test @solo importing RDF', [
+  {
+    name: 'Test cancelling import turtle file after uploading and sending',
+    fn: async ({ conceptsPage, playwright }) => {
+      const apiRequestContext = await playwright.request.newContext({
+        storageState: adminAuthFile,
+      });
+
+      const importResultDetailsPage = conceptsPage.importResultDetailsPage;
+
+      await importResultDetailsPage.deleteAllImportResults(apiRequestContext);
+
+      const importId: string = await conceptsPage.importTurtleFile('begreper.ttl');
+
+      expect(importId != null);
+
+      await importResultDetailsPage.goto(importId, { timeout: 5000 });
+
+      await importResultDetailsPage.checkWaitingForConfirmationStatus();
+
+      await importResultDetailsPage.cancelImport();
+
+      await importResultDetailsPage.checkCancelledStatus();
+    },
+  },
+  {
+    name: 'Test if a modal can import Turtle file and confirm saving concepts ',
+    fn: async ({ conceptsPage, playwright }) => {
+      const apiRequestContext = await playwright.request.newContext({
+        storageState: adminAuthFile,
+      });
+
+      const importResultDetailsPage = conceptsPage.importResultDetailsPage;
+
+      //await importResultDetailsPage.deleteAllImportResults(apiRequestContext);
+
+      const importId: string = await conceptsPage.importTurtleFile('begreper.ttl');
+
+      expect(importId != null);
+
+      await importResultDetailsPage.goto(importId, { timeout: 5000 });
+
+      await importResultDetailsPage.checkVisibleButtons();
+
+      await importResultDetailsPage.checkWaitingForConfirmationStatus();
+
+      await importResultDetailsPage.checkDisabledDeleteButton();
+
+      await importResultDetailsPage.confirmImport();
+
+      await importResultDetailsPage.checkSuccessfulStatus();
+
+    },
+  },
+  {
+    name: 'Test failing of import Turtle file after previously importing and confirm saving concepts',
+    fn: async ({ conceptsPage, playwright }) => {
+      const apiRequestContext = await playwright.request.newContext({
+        storageState: adminAuthFile,
+      });
+
+      const importResultDetailsPage = conceptsPage.importResultDetailsPage;
+
+      const importIdFailure: string = await conceptsPage.importTurtleFile('begreper.ttl');
+
+      await importResultDetailsPage.goto(importIdFailure, { timeout: 5000 });
+
+      await importResultDetailsPage.checkFailedStatus();
+
+      //await importResultDetailsPage.deleteAllImportResults(apiRequestContext);
+    },
+  },
+]);
