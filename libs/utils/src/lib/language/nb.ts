@@ -258,7 +258,7 @@ export const nb = {
     deleteInternalField: 'Er du sikker på at du ønsker å slette feltet?',
     deleteUser: 'Er du sikker på at du vil slette brukernavnet?',
     fail: 'Oppdatering feilet.',
-    maxFileSizeExceeded: 'Filstørrelsen er mer enn maksimumsgrensen på 5.8 MB. Importering avbrytes.',
+    maxFileSizeExceeded: 'Filstørrelsen er mer enn maksimumsgrensen på {0} MB. Importering avbrytes.',
     noChanges: 'Ingen endringer funnet.',
     notValidFile: 'Innholdet i filen er ikke gyldig.',
     success: 'Oppdatering vellykket!',
@@ -415,10 +415,11 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
       conceptUploadDescription:
         'Det er mulig å importere begrepsbeskrivelser ved å laste opp filer i enten Turtle-, CSV- eller JSON-format ved hjelp av de tilgjengelige knappene.',
       textSendingConfirmation: 'Begreper er klare til å bli importert.',
-      aboutImportStatusPage: 'Importstatus vil vises på en egen side, der det også kan velges om begrepene skal opprettes i begrepskatalogen.',
+      aboutImportStatusPage:
+        'Importstatus vil vises på en egen side, der det også kan velges om begrepene skal opprettes i begrepskatalogen.',
       importConfirmation: 'Vil du fortsette importen eller avbryte?',
       resultDescription: `En side med detaljerte resultater av importprosessen vises automatisk ved fullført importforsøk av en Turtle-fil. Tidligere gjennomførte importforsøk for Turtle-filer kan vises ved å benytte **Resultater**-knappen.`,
-      maxFileSize: `**Merk:** Maksimal filstørrelse for opplastning er 5.8 MB`,
+      maxFileSize: `**Merk:** Maksimal filstørrelse for opplastning er {0} MB`,
     },
   },
 

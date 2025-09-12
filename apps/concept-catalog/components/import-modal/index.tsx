@@ -50,13 +50,13 @@ export function ImportModal({ catalogId }: ImportProps) {
   const uploadRdf = useImportRdf(catalogId);
   const sendRdf = useSendRdf(catalogId)
 
-  const maxSize = 5.8 * 1024 * 1024; // 5.8 MB
+  const maxSize = 10 ; // 5.8 MB
 
   const onCsvUpload = (event) => {
     const file: File = event.target.files?.[0];
     if (file) {
-      if(file.size > maxSize) {
-        alert(localization.alert.maxFileSizeExceeded);
+      if(file.size > maxSize * 1024 * 1024) {
+        alert(localization.formatString(localization.alert.maxFileSizeExceeded, maxSize));
         cancel();
         return;
       }
@@ -72,10 +72,6 @@ export function ImportModal({ catalogId }: ImportProps) {
   };
 
   const send = async () => {
-    /*if(uploadedConcepts.length === 0 || !uploadedRdfConcepts.fileContent) {
-      alert("Ingen begreper var funnet i opplastet fil.");
-      return
-    }*/
 
     setIsSending(true)
 
@@ -112,8 +108,8 @@ export function ImportModal({ catalogId }: ImportProps) {
       //await new Promise(resolve => setTimeout(resolve, 5000));
       const file: File = event.target.files?.[0];
       if (file) {
-        if (file.size > maxSize) {
-          alert(localization.alert.maxFileSizeExceeded);
+        if (file.size > maxSize * 1024 * 1024) {
+          alert(localization.formatString(localization.alert.maxFileSizeExceeded, maxSize));
           cancel();
           return;
         }
@@ -201,7 +197,7 @@ export function ImportModal({ catalogId }: ImportProps) {
                 <Markdown>{localization.concept.importModal.resultDescription}</Markdown>
                 <br />
                 <div className={styles.remark}>
-                  <Markdown>{localization.concept.importModal.maxFileSize}</Markdown>
+                  <Markdown>{localization.formatString(localization.concept.importModal.maxFileSize, maxSize).toString()}</Markdown>
                 </div>
               </div>
             </Modal.Content>
