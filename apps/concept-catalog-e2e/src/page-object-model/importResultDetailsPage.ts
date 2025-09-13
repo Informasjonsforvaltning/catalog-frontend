@@ -21,13 +21,13 @@ export default class ImportResultDetailsPage {
   public getButtonByName = (name: string) => this.page.getByRole('button', { name: name });
   public getElementByText = (text: string) => this.page.getByText(text);
 
-  public getCancelImportButton = () => this.getButtonByName('Avvis');
+  public getCancelImportButton = () => this.getButtonByName('Avvis import');
   public getDeleteImportButton = () => this.getButtonByName('Slett');
-  public getConfirmButton = () => this.getButtonByName('Bekreft å lagre');
+  public getConfirmButton = () => this.getButtonByName('Legg til i katalog');
 
-  public getSuccessfulLabel = () => this.getElementByText('Vellykket');
+  public getSuccessfulLabel = () => this.getElementByText('Lagt til i katalog');
   public getCancelledLabel = () => this.getElementByText('Avvist');
-  public getWaitingForConfirmationLabel = () => this.getElementByText('Venter på bekreftelse');
+  public getWaitingForConfirmationLabel = () => this.getElementByText('Til gjennomgang');
   public getFailedLabel = () => this.getElementByText('Feilet');
 
 
@@ -72,10 +72,4 @@ export default class ImportResultDetailsPage {
   async deleteAllImportResults(apiRequestContext) {
     await deleteAllImportResults(apiRequestContext)
   }
-
-
-
-
-
-
 }

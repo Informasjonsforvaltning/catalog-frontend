@@ -279,9 +279,9 @@ export default class ConceptsPage {
     });
 
     await expect(dialog.getByRole('button', { name: 'Importer RDF' })).toBeHidden({ timeout: 5000 });
-    await expect(dialog.getByRole('button', { name: 'Send' })).toBeVisible({ timeout: 5000 });
+    await expect(dialog.getByRole('button', { name: 'Fortsett' })).toBeVisible({ timeout: 5000 });
 
-    const sendButton = dialog.getByRole('button', { name: 'Send' });
+    const sendButton = dialog.getByRole('button', { name: 'Fortsett' });
     expect(sendButton).not.toBeDisabled({ timeout: 10000 });
 
     await Promise.all([
