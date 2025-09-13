@@ -45,12 +45,12 @@ export function ImportModal({ catalogId }: ImportProps) {
 
 
   const uploadConcepts = useImportConcepts(catalogId, setIsUploading, setIsUploaded);
-  const sendConcepts = useSendConcepts(catalogId)//, setIsSending);
+  const sendConcepts = useSendConcepts(catalogId)
 
   const uploadRdf = useImportRdf(catalogId);
   const sendRdf = useSendRdf(catalogId)
 
-  const maxSize = 10 ; // 5.8 MB
+  const maxSize = 10 ; // 10 MB
 
   const onCsvUpload = (event) => {
     const file: File = event.target.files?.[0];
@@ -60,6 +60,15 @@ export function ImportModal({ catalogId }: ImportProps) {
         cancel();
         return;
       }
+
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      console.log("file extension ", fileExtension);
+      if(fileExtension != 'csv' && fileExtension != 'json') {
+        alert(localization.formatString(localization.concept.importModal.alert.unsupportedFileUpload, 'CSV/JSON'));
+        cancel();
+        return;
+      }
+
       uploadConcepts.mutate(event.target.files[0], {
         onSuccess: (concepts) => {
           setUploadedConcepts(concepts);
@@ -118,11 +127,13 @@ export function ImportModal({ catalogId }: ImportProps) {
         reader.readAsText(file, 'UTF-8');
         const fileExtension = file.name.split('.').pop()?.toLowerCase();
         const contentType = extension2Type.get(`.${fileExtension}`);
-        if (!fileExtension || ! contentType) {
+        if (!fileExtension || !contentType || fileExtension != 'ttl') {
           console.error('Uploaded file has no extension or unsupported extension:', fileExtension);
-          //cancel()
+          alert(localization.formatString(localization.concept.importModal.alert.unsupportedFileUpload, 'RDF/Turtle'));
+          cancel();
           return;
         }
+
         reader.onload = function (evt) {
           //await new Promise(resolve => setTimeout(resolve, 100000));
           if (uploadSession !== sessionId.current || cancelled) {

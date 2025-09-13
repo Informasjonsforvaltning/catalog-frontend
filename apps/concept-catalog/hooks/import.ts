@@ -261,9 +261,11 @@ export const useSendConcepts = (catalogId: string,
 
 }
 
-export const useImportConcepts = (catalogId: string,
-                                  setIsUploading?: React.Dispatch<React.SetStateAction<boolean>>,
-                                  setIsUploaded?: React.Dispatch<React.SetStateAction<boolean>>) => {
+export const useImportConcepts = (
+  catalogId: string,
+  setIsUploading?: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsUploaded?: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ['importConcepts'],
@@ -271,8 +273,7 @@ export const useImportConcepts = (catalogId: string,
       if (!validOrganizationNumber(catalogId)) {
         return Promise.reject('Invalid catalog id');
       }
-      if(setIsUploading)
-        setIsUploading(true)
+      if (setIsUploading) setIsUploading(true);
 
       const content = await file.text();
       let parsedText: ConceptImport[] = [];
@@ -283,11 +284,12 @@ export const useImportConcepts = (catalogId: string,
         parsedText = await attemptToParseCsvFile(content);
       } else {
         Promise.reject('Invalid file type');
-        if(setIsUploading)
-          setIsUploading(false)
+        if (setIsUploading) setIsUploading(false);
       }
 
-      parsedText.forEach((line) => {console.log("Parsed line: ", line)});
+      parsedText.forEach((line) => {
+        console.log('Parsed line: ', line);
+      });
 
       const concepts = parsedText?.map(
         (concept) =>
@@ -297,14 +299,8 @@ export const useImportConcepts = (catalogId: string,
           }) as Concept,
       );
 
-      if (
-        window.confirm(
-          `Du er i ferd med å importere ${concepts.length} begreper. Dette vil opprette nye begreper i katalogen. Fortsette?`,
-        )
-      ) {
-        if(setIsUploaded) setIsUploaded(true)
-        return concepts;
-      }
+      if (setIsUploaded) setIsUploaded(true);
+      return concepts;
 
       return Promise.reject('Canceled');
     },

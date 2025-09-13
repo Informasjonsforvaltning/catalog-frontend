@@ -420,6 +420,10 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
       importConfirmation: 'Vil du fortsette importen eller avbryte?',
       resultDescription: `En side med detaljerte resultater av importprosessen vises automatisk ved fullført importforsøk av en Turtle-fil. Tidligere gjennomførte importforsøk for Turtle-filer kan vises ved å benytte **Resultater**-knappen.`,
       maxFileSize: `**Merk:** Maksimal filstørrelse for opplastning er {0} MB`,
+      alert: {
+        unsupportedFileUpload:
+          'Den valgte filen kan ikke importeres fordi filformatet ikke støttes. Støttet filformate er {0}.',
+      },
     },
   },
 
