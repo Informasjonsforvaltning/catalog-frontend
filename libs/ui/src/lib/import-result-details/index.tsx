@@ -8,6 +8,7 @@ import { ImportRecordAccordionItem } from './components/import-record-accordion-
 import { TrashIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import { ImportResultStatusColors, StatusKey } from '../tag/import-result-status/ImportResultStatus';
+import { HelpMarkdown } from '@catalog-frontend/ui';
 
 interface Props {
   targetBaseHref: string;
@@ -25,6 +26,14 @@ const importStatuses = [
   { value: 'PENDING_CONFIRMATION', label: localization.importResult.pendingConfirmation },
 ];
 
+const importStatusHelpTexts = [
+  { value: 'COMPLETED', label: localization.importResult.helpText.completed },
+  { value: 'FAILED', label: localization.importResult.helpText.failed },
+  { value: 'IN_PROGRESS', label: localization.importResult.helpText.inProgress },
+  { value: 'CANCELLED', label: localization.importResult.helpText.cancelled },
+  { value: 'PENDING_CONFIRMATION', label: localization.importResult.helpText.pendingConfirmation },
+]
+
 const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, confirmHandler, cancelHandler }: Props) => {
   const formattedCreateDate = capitalizeFirstLetter(
     formatISO(importResult.created, {
@@ -36,6 +45,12 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
       minute: '2-digit',
     }),
   );
+
+  const getImportStatusDisplay = (status: string) => importStatuses
+    .find((st) => status === st.value)?.label ?? status
+
+  const getImportStatusHelpTexts = (status: string) => importStatusHelpTexts
+    .find((st) => status === st.value)?.label ?? status
 
   console.log("Import result", importResult)
 
@@ -52,7 +67,12 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
               size={'sm'}
               color={getColorFromStatusKey(importResult.status as StatusKey)}
             >
-              {importStatuses.find((st) => importResult.status === st.value)?.label ?? importResult.status}
+              <div className={styles.titleTags}>
+                {getImportStatusDisplay(importResult.status)}
+                <HelpMarkdown aria-label={`Help ${getImportStatusHelpTexts(importResult.status)}`}>
+                  {getImportStatusHelpTexts(importResult.status)}
+                </HelpMarkdown>
+              </div>
             </Tag>
             <div className={styles.titleTags}>{formattedCreateDate}</div>
           </div>
@@ -62,8 +82,14 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
             variant='tertiary'
             size='sm'
             color='danger'
-            disabled={!importResult.status || !(importResult.status === 'COMPLETED' ||
-              importResult.status === 'CANCELLED' || importResult.status === 'FAILED')}
+            disabled={
+              !importResult.status ||
+              !(
+                importResult.status === 'COMPLETED' ||
+                importResult.status === 'CANCELLED' ||
+                importResult.status === 'FAILED'
+              )
+            }
             onClick={() => deleteHandler(importResult.id)}
           >
             <TrashIcon
@@ -77,14 +103,15 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
             variant='secondary'
             size='small'
             color='first'
-            disabled={ !importResult.status ||
+            disabled={
+              !importResult.status ||
               importResult.status === 'CANCELLED' ||
               importResult.status === 'FAILED' ||
               importResult.status === 'COMPLETED'
             }
             onClick={() => cancelHandler(importResult.id)}
           >
-            Avvis
+            Avvis import
           </Button>
 
           <Button
@@ -95,10 +122,10 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
             onClick={() => confirmHandler(importResult.id)}
           >
             <CheckmarkIcon
-              title='Bekreft å lagre'
+              title='Legg til i katalog'
               fontSize='1.5rem'
             />
-            Bekreft å lagre
+            Legg til i katalog
           </Button>
         </div>
       </div>

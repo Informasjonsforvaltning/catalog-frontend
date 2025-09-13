@@ -614,17 +614,23 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
   },
 
   importResult: {
-    completed: 'Vellykket',
+    completed: 'Lagt til i katalog',
     failed: 'Feilet',
     inProgress: 'Pågår',
     cancelled: 'Avvist',
-    pendingConfirmation: 'Venter på bekreftelse',
+    pendingConfirmation: 'Til gjennomgang',
     warnings: 'Advarsler',
     errors: 'Feil',
     goToImported: 'Gå til importert ressurs',
     confirmDelete: 'Er du sikker på at du vil slette importeringsrapporten?',
-    deleteCanResultInDuplicates: `
-Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.`,
+    deleteCanResultInDuplicates: `Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.`,
+    helpText: {
+       completed: 'Importen er godkjent, og begrepene er tilgjengelige i katalogen.',
+       failed: 'Importen kunne ikke fullføres på grunn av feil i minst ett av de begrepene i den opplastede filen.',
+       inProgress: 'Importen er under behandling. Importen kan bare avvises.',
+       cancelled: 'Importen er forkastet og begrepene er ikke lagt til i katalogen.',
+       pendingConfirmation: 'Begrepene er importert, men er ennå ikke synlige i katalogen. Importen kan enten avvises eller legges til i katalogen.',
+    },
     tableHeading: {
       title: 'Import',
       timestamp: 'Tidspunkt',
