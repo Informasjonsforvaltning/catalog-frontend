@@ -5077,6 +5077,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nx/devkit@npm:21.5.2":
+  version: 21.5.2
+  resolution: "@nx/devkit@npm:21.5.2"
+  dependencies:
+    ejs: "npm:^3.1.7"
+    enquirer: "npm:~2.3.6"
+    ignore: "npm:^5.0.4"
+    minimatch: "npm:9.0.3"
+    semver: "npm:^7.5.3"
+    tmp: "npm:~0.2.1"
+    tslib: "npm:^2.3.0"
+    yargs-parser: "npm:21.1.1"
+  peerDependencies:
+    nx: ">= 20 <= 22"
+  checksum: 10/0df7141b9e4341f8f1ade0e74876e282db0aded3eb2605c95a8240e4b23fc63c9dba9214f374de15dec19f8bb879a7a6a7fc0322ab4160b042306d252022b257
+  languageName: node
+  linkType: hard
+
 "@nx/eslint-plugin@npm:21.3.7":
   version: 21.3.7
   resolution: "@nx/eslint-plugin@npm:21.3.7"
@@ -9513,7 +9531,7 @@ __metadata:
     "@graphql-codegen/typescript-react-apollo": "npm:^4.3.3"
     "@navikt/aksel-icons": "npm:^7.25.1"
     "@nx/cypress": "npm:21.3.7"
-    "@nx/devkit": "npm:21.3.7"
+    "@nx/devkit": "npm:21.5.2"
     "@nx/eslint": "npm:21.3.7"
     "@nx/eslint-plugin": "npm:21.3.7"
     "@nx/jest": "npm:21.3.7"

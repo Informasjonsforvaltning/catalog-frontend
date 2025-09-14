@@ -92,7 +92,7 @@
     "@graphql-codegen/cli": "^5.0.6",
     "@graphql-codegen/typescript-react-apollo": "^4.3.3",
     "@nx/cypress": "21.3.7",
-    "@nx/devkit": "21.3.7",
+    "@nx/devkit": "21.5.2",
     "@nx/eslint": "21.3.7",
     "@nx/eslint-plugin": "21.3.7",
     "@nx/jest": "21.3.7",
