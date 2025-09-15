@@ -9,16 +9,6 @@ export enum ImportResultStatusColors {
   CANCELLED = 'first',
 }
 
-/**
- * First light red
- * second orange
- * third light blue
- * warning yellow
- * info grey
- * */
-
-//"neutral" | "success" | "warning" | "danger" | "info" | "first" | "second" | "third"
-
 export type StatusKey = keyof typeof ImportResultStatusColors;
 
 export type ImportResultStatusTagProps = {
