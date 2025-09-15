@@ -624,6 +624,7 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
     goToImported: 'Gå til importert ressurs',
     confirmDelete: 'Er du sikker på at du vil slette importeringsrapporten?',
     deleteCanResultInDuplicates: `Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.`,
+    cancelledImport: `Importen er avbrutt før den ble fullført.`,
     helpText: {
        completed: 'Importen er godkjent, og begrepene er tilgjengelige i katalogen.',
        failed: 'Importen kunne ikke fullføres på grunn av feil i minst ett av de begrepene i den opplastede filen.',

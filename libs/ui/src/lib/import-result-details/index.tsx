@@ -2,20 +2,20 @@
 
 import { ImportResult } from '@catalog-frontend/types';
 import styles from './import-result-details.module.css';
-import { Accordion, Button, Tag } from '@digdir/designsystemet-react';
+import { Accordion, Button, Heading, Tag } from '@digdir/designsystemet-react';
 import { capitalizeFirstLetter, formatISO, localization } from '@catalog-frontend/utils';
 import { ImportRecordAccordionItem } from './components/import-record-accordion-item';
 import { TrashIcon, CheckmarkIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import { ImportResultStatusColors, StatusKey } from '../tag/import-result-status/ImportResultStatus';
-import { HelpMarkdown } from '@catalog-frontend/ui';
+import { CenterContainer, HelpMarkdown } from '@catalog-frontend/ui';
 
 interface Props {
   targetBaseHref: string;
   importResult: ImportResult;
   deleteHandler: (resultId: string) => void;
-  confirmHandler: (resultId: string) => void;
-  cancelHandler: (resultId: string) => void;
+  confirmHandler?: (resultId: string) => void;
+  cancelHandler?: (resultId: string) => void;
   showCancellationButton?: boolean;
   showConfirmationButton?: boolean;
 }
@@ -102,7 +102,7 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
             Slett
           </Button>
 
-          {showCancellationButton &&
+          {showCancellationButton && (
             <Button
               variant='secondary'
               size='small'
@@ -113,38 +113,53 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
                 importResult.status === 'FAILED' ||
                 importResult.status === 'COMPLETED'
               }
-              onClick={() => cancelHandler(importResult.id)}
+              onClick={() => cancelHandler && cancelHandler(importResult.id)}
             >
               Avvis import
             </Button>
-          }
+          )}
 
-          {showConfirmationButton && <Button
-            variant='secondary'
-            size='small'
-            color='first'
-            disabled={!importResult.status || importResult.status !== 'PENDING_CONFIRMATION'}
-            onClick={() => confirmHandler(importResult.id)}
-          >
-            <CheckmarkIcon
-              title='Legg til i katalog'
-              fontSize='1.5rem'
-            />
-            Legg til i katalog
-          </Button>
-          }
+          {showConfirmationButton && (
+            <Button
+              variant='secondary'
+              size='small'
+              color='first'
+              disabled={!importResult.status || importResult.status !== 'PENDING_CONFIRMATION'}
+              onClick={() => confirmHandler && confirmHandler(importResult.id)}
+            >
+              <CheckmarkIcon
+                title='Legg til i katalog'
+                fontSize='1.5rem'
+              />
+              Legg til i katalog
+            </Button>
+          )}
         </div>
       </div>
-      <Accordion border={true}>
-        {importResult?.extractionRecords?.map((record) => (
-          <ImportRecordAccordionItem
-            key={`result-${record.internalId}`}
-            targetBaseHref={targetBaseHref}
-            record={record}
-            enableOpening={importResult?.status !== 'PENDING_CONFIRMATION' && importResult?.status !== 'CANCELLED'}
-          />
-        ))}
-      </Accordion>
+      {(!importResult.extractionRecords || importResult.extractionRecords?.length === 0) &&
+        importResult.status === 'CANCELLED' && (
+          <CenterContainer>
+            <Heading
+              level={2}
+              size='lg'
+            >
+              {localization.importResult.cancelledImport}
+            </Heading>
+          </CenterContainer>
+        )}
+      {importResult?.extractionRecords && importResult?.extractionRecords.length > 0 && (
+        <Accordion border={true}>
+          {importResult?.extractionRecords?.map((record) => (
+            <ImportRecordAccordionItem
+              key={`result-${record.internalId}`}
+              targetBaseHref={targetBaseHref}
+              record={record}
+              enableOpening={importResult?.status !== 'PENDING_CONFIRMATION' && importResult?.status !== 'CANCELLED'}
+              isCompleted={importResult.status === 'COMPLETED'}
+            />
+          ))}
+        </Accordion>
+      )}
     </div>
   );
 };
