@@ -188,15 +188,18 @@ const DataServiceForm = ({
           const handleRestoreDataService = (data: StorageData) => {
             if (data?.id !== autoSaveId) {
               if (!data?.id) {
-                return window.location.replace(`/catalogs/${catalogId}/data-services/new?restore=1`);
+                window.location.replace(`/catalogs/${catalogId}/data-services/new?restore=1`);
+                return false;
               }
-              return window.location.replace(`/catalogs/${catalogId}/data-services/${data.id}/edit?restore=1`);
+              window.location.replace(`/catalogs/${catalogId}/data-services/${data.id}/edit?restore=1`);
+              return false;
             }
 
             const restoreValues: DataService = deepMergeWithUndefinedHandling({ ...initialValues }, data.values);
             setValues(restoreValues);
 
             showSnackbarMessage({ message: localization.snackbar.restoreSuccessfull, severity: 'success' });
+            return true;
           };
 
           const dirtyFields = ((): string[] => {

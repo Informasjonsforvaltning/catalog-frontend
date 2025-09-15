@@ -6,13 +6,12 @@ import { Button, Modal } from '@digdir/designsystemet-react';
 import { DataStorage, localization } from '@catalog-frontend/utils';
 import type { StorageData } from '@catalog-frontend/types';
 import { isEqual } from 'lodash';
-import { compare } from 'fast-json-patch';
 
 export type FormikAutoSaverProps = {
   id?: string;
   storage: DataStorage<StorageData>;
   restoreOnRender?: boolean;
-  onRestore: (data: StorageData) => void;
+  onRestore: (data: StorageData) => boolean;
   confirmMessage: (data: StorageData) => ReactNode;
 };
 
@@ -24,11 +23,11 @@ export const FormikAutoSaver = ({ id, storage, onRestore, confirmMessage, restor
 
   const handleRestoreClick = () => {
     const data = storage.get();
-    if (onRestore && data) {
-      onRestore(data);
-    }    
-    modalRef?.current?.close();
-    setIsInitialized(true);
+    const proceed = data ? onRestore(data) : true;    
+    if (proceed) {
+      modalRef?.current?.close();
+      setIsInitialized(true);
+    }
   };
 
   const handleDiscardClick = () => {
@@ -40,14 +39,15 @@ export const FormikAutoSaver = ({ id, storage, onRestore, confirmMessage, restor
   // Load saved data from local storage on mount
   useEffect(() => {
     const data = storage.get();
-    if (data) {
-      setModalContent(confirmMessage(data));
+    if (data) {      
       if (restoreOnRender) {
-        if (onRestore && data) {
-          onRestore(data);
+        if (data) {
+          if(onRestore(data)) {            
+            setIsInitialized(true);
+          }
         }
-        setIsInitialized(true);
       } else {
+        setModalContent(confirmMessage(data));
         modalRef.current?.showModal();
       }
     } else {
@@ -60,7 +60,7 @@ export const FormikAutoSaver = ({ id, storage, onRestore, confirmMessage, restor
     // Don't save until Formik is fully initialized
     if (!isInitialized) {
       return;
-    }
+    } 
 
     const unsubscribe = storage.subscribe((state) => {
       if (state.isDirty && state.mainData === null) {

@@ -26,7 +26,13 @@ export const EditConceptFormClient = ({
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [showGotoConceptConfirm, setShowGotoConceptConfirm] = useState(false);
 
-  const dataStorage = new LocalDataStorage<StorageData>({ key: 'changeRequestForm', secondaryKeys: ['conceptFormRelation'] });
+  const dataStorage = new LocalDataStorage<StorageData>({ 
+    key: 'changeRequestForm', 
+    secondaryKeys: {
+      definition: 'changeRequestFormDefinition',
+      relation: 'changeRequestFormRelation'
+    }
+  });
 
   const emptyConcept: Concept = originalConcept || {
     id: null,
@@ -80,6 +86,22 @@ export const EditConceptFormClient = ({
     window.location.replace(
       `/catalogs/${organization.organizationId}/concepts/${originalConcept?.id}`,
     );
+  };
+
+  const handleRestore = (data: StorageData): boolean => {
+    if (data?.id !== changeRequest.id) {
+      if (!data?.id) {
+        if(data?.metadata?.newChangeRequestConceptId) {
+          window.location.replace(`/catalogs/${organization.organizationId}/change-requests/new?concept=${data.metadata.newChangeRequestConceptId}&restore=1`);
+        } else {
+          window.location.replace(`/catalogs/${organization.organizationId}/change-requests/new?restore=1`);
+        }
+      } else {
+        window.location.replace(`/catalogs/${organization.organizationId}/change-requests/${data.id}/edit?restore=1`);        
+      }
+      return false;
+    } 
+    return true;
   };
 
   useEffect(() => {
@@ -148,6 +170,7 @@ export const EditConceptFormClient = ({
         usersResult={usersResult}
         onSubmit={handleSubmit}
         onCancel={handleCancel}
+        onRestore={handleRestore}
         showSnackbarSuccessOnInit={newChangeRequest}
       />
     </>
