@@ -52,6 +52,8 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
         deleteHandler={handleDeleteClick}
         confirmHandler={handleConfirmClick}
         cancelHandler={handleCancelClick}
+        showCancellationButton={true}
+        showConfirmationButton={true}
       />
     </>
   );

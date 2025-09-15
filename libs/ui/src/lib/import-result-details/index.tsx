@@ -16,6 +16,8 @@ interface Props {
   deleteHandler: (resultId: string) => void;
   confirmHandler: (resultId: string) => void;
   cancelHandler: (resultId: string) => void;
+  showCancellationButton?: boolean;
+  showConfirmationButton?: boolean;
 }
 
 const importStatuses = [
@@ -34,7 +36,8 @@ const importStatusHelpTexts = [
   { value: 'PENDING_CONFIRMATION', label: localization.importResult.helpText.pendingConfirmation },
 ]
 
-const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, confirmHandler, cancelHandler }: Props) => {
+const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, confirmHandler,
+                               cancelHandler, showCancellationButton, showConfirmationButton }: Props) => {
   const formattedCreateDate = capitalizeFirstLetter(
     formatISO(importResult.created, {
       weekday: 'long',
@@ -99,22 +102,24 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
             Slett
           </Button>
 
-          <Button
-            variant='secondary'
-            size='small'
-            color='first'
-            disabled={
-              !importResult.status ||
-              importResult.status === 'CANCELLED' ||
-              importResult.status === 'FAILED' ||
-              importResult.status === 'COMPLETED'
-            }
-            onClick={() => cancelHandler(importResult.id)}
-          >
-            Avvis import
-          </Button>
+          {showCancellationButton &&
+            <Button
+              variant='secondary'
+              size='small'
+              color='first'
+              disabled={
+                !importResult.status ||
+                importResult.status === 'CANCELLED' ||
+                importResult.status === 'FAILED' ||
+                importResult.status === 'COMPLETED'
+              }
+              onClick={() => cancelHandler(importResult.id)}
+            >
+              Avvis import
+            </Button>
+          }
 
-          <Button
+          {showConfirmationButton && <Button
             variant='secondary'
             size='small'
             color='first'
@@ -127,6 +132,7 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
             />
             Legg til i katalog
           </Button>
+          }
         </div>
       </div>
       <Accordion border={true}>

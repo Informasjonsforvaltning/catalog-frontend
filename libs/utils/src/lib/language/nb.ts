@@ -635,6 +635,14 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
       title: 'Import',
       timestamp: 'Tidspunkt',
       status: 'Status',
+      statusHelpTextConceptImport: `
+Status viser hvor langt importen har kommet i prosessen:
+
+- __Til gjennomgang:__ Begrepene er importert, men er ennå ikke synlige i katalogen. Importen kan enten avvises eller legges til i katalogen.
+- __Lagt til i katalog:__ Importen er godkjent, og begrepene er tilgjengelige i katalogen.
+- __Avvist:__ Importen er forkastet og begrepene er ikke lagt til i katalogen.
+- __Feilet:__ Importen er ikke fullført fordi minst ett av begrepene i filen inneholder feil.
+      `,
     },
     tooltip: {
       ok: 'Antall uten feil.',
