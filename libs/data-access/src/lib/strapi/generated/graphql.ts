@@ -1,5 +1,6 @@
-import { gql } from '@apollo/client';
-import * as Apollo from '@apollo/client';
+import type { GraphQLClient } from 'graphql-request';
+import type { RequestInit } from 'graphql-request/dist/types.dom';
+import { useQuery, useInfiniteQuery, type UseQueryOptions, type UseInfiniteQueryOptions } from '@tanstack/react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -7,7 +8,20 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
-const defaultOptions = {} as const;
+
+function fetcher<TData, TVariables extends { [key: string]: any }>(
+  client: GraphQLClient,
+  query: string,
+  variables?: TVariables,
+  requestHeaders?: RequestInit['headers'],
+) {
+  return async (): Promise<TData> =>
+    client.request({
+      document: query,
+      variables,
+      requestHeaders,
+    });
+}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string };
@@ -15,11 +29,11 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
-  DateTime: { input: any; output: any };
-  FancyArticleContentDynamicZoneInput: { input: any; output: any };
-  I18NLocaleCode: { input: any; output: any };
-  JSON: { input: any; output: any };
-  TransportArticleContentDynamicZoneInput: { input: any; output: any };
+  DateTime: { input: string; output: string };
+  FancyArticleContentDynamicZoneInput: { input: Record<string, any>; output: Record<string, any> };
+  I18NLocaleCode: { input: string; output: string };
+  JSON: { input: Record<string, any>; output: Record<string, any> };
+  TransportArticleContentDynamicZoneInput: { input: Record<string, any>; output: Record<string, any> };
 };
 
 export type Article = {
@@ -310,24 +324,9 @@ export type I18NLocale = {
   code?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   documentId: Scalars['ID']['output'];
-  locale?: Maybe<Scalars['String']['output']>;
-  localizations: Array<Maybe<I18NLocale>>;
-  localizations_connection?: Maybe<I18NLocaleRelationResponseCollection>;
   name?: Maybe<Scalars['String']['output']>;
   publishedAt?: Maybe<Scalars['DateTime']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
-};
-
-export type I18NLocaleLocalizationsArgs = {
-  filters?: InputMaybe<I18NLocaleFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-};
-
-export type I18NLocaleLocalizations_ConnectionArgs = {
-  filters?: InputMaybe<I18NLocaleFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type I18NLocaleEntityResponseCollection = {
@@ -341,18 +340,11 @@ export type I18NLocaleFiltersInput = {
   code?: InputMaybe<StringFilterInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
   documentId?: InputMaybe<IdFilterInput>;
-  locale?: InputMaybe<StringFilterInput>;
-  localizations?: InputMaybe<I18NLocaleFiltersInput>;
   name?: InputMaybe<StringFilterInput>;
   not?: InputMaybe<I18NLocaleFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<I18NLocaleFiltersInput>>>;
   publishedAt?: InputMaybe<DateTimeFilterInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
-};
-
-export type I18NLocaleRelationResponseCollection = {
-  __typename?: 'I18NLocaleRelationResponseCollection';
-  nodes: Array<I18NLocale>;
 };
 
 export type IdFilterInput = {
@@ -904,26 +896,12 @@ export type ReviewWorkflowsWorkflow = {
   contentTypes: Scalars['JSON']['output'];
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   documentId: Scalars['ID']['output'];
-  locale?: Maybe<Scalars['String']['output']>;
-  localizations: Array<Maybe<ReviewWorkflowsWorkflow>>;
-  localizations_connection?: Maybe<ReviewWorkflowsWorkflowRelationResponseCollection>;
   name: Scalars['String']['output'];
   publishedAt?: Maybe<Scalars['DateTime']['output']>;
+  stageRequiredToPublish?: Maybe<ReviewWorkflowsWorkflowStage>;
   stages: Array<Maybe<ReviewWorkflowsWorkflowStage>>;
   stages_connection?: Maybe<ReviewWorkflowsWorkflowStageRelationResponseCollection>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
-};
-
-export type ReviewWorkflowsWorkflowLocalizationsArgs = {
-  filters?: InputMaybe<ReviewWorkflowsWorkflowFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-};
-
-export type ReviewWorkflowsWorkflowLocalizations_ConnectionArgs = {
-  filters?: InputMaybe<ReviewWorkflowsWorkflowFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type ReviewWorkflowsWorkflowStagesArgs = {
@@ -949,27 +927,21 @@ export type ReviewWorkflowsWorkflowFiltersInput = {
   contentTypes?: InputMaybe<JsonFilterInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
   documentId?: InputMaybe<IdFilterInput>;
-  locale?: InputMaybe<StringFilterInput>;
-  localizations?: InputMaybe<ReviewWorkflowsWorkflowFiltersInput>;
   name?: InputMaybe<StringFilterInput>;
   not?: InputMaybe<ReviewWorkflowsWorkflowFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<ReviewWorkflowsWorkflowFiltersInput>>>;
   publishedAt?: InputMaybe<DateTimeFilterInput>;
+  stageRequiredToPublish?: InputMaybe<ReviewWorkflowsWorkflowStageFiltersInput>;
   stages?: InputMaybe<ReviewWorkflowsWorkflowStageFiltersInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
 };
 
 export type ReviewWorkflowsWorkflowInput = {
   contentTypes?: InputMaybe<Scalars['JSON']['input']>;
-  locale?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   publishedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  stageRequiredToPublish?: InputMaybe<Scalars['ID']['input']>;
   stages?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
-};
-
-export type ReviewWorkflowsWorkflowRelationResponseCollection = {
-  __typename?: 'ReviewWorkflowsWorkflowRelationResponseCollection';
-  nodes: Array<ReviewWorkflowsWorkflow>;
 };
 
 export type ReviewWorkflowsWorkflowStage = {
@@ -977,25 +949,10 @@ export type ReviewWorkflowsWorkflowStage = {
   color?: Maybe<Scalars['String']['output']>;
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   documentId: Scalars['ID']['output'];
-  locale?: Maybe<Scalars['String']['output']>;
-  localizations: Array<Maybe<ReviewWorkflowsWorkflowStage>>;
-  localizations_connection?: Maybe<ReviewWorkflowsWorkflowStageRelationResponseCollection>;
   name?: Maybe<Scalars['String']['output']>;
   publishedAt?: Maybe<Scalars['DateTime']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
   workflow?: Maybe<ReviewWorkflowsWorkflow>;
-};
-
-export type ReviewWorkflowsWorkflowStageLocalizationsArgs = {
-  filters?: InputMaybe<ReviewWorkflowsWorkflowStageFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-};
-
-export type ReviewWorkflowsWorkflowStageLocalizations_ConnectionArgs = {
-  filters?: InputMaybe<ReviewWorkflowsWorkflowStageFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type ReviewWorkflowsWorkflowStageEntityResponseCollection = {
@@ -1009,8 +966,6 @@ export type ReviewWorkflowsWorkflowStageFiltersInput = {
   color?: InputMaybe<StringFilterInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
   documentId?: InputMaybe<IdFilterInput>;
-  locale?: InputMaybe<StringFilterInput>;
-  localizations?: InputMaybe<ReviewWorkflowsWorkflowStageFiltersInput>;
   name?: InputMaybe<StringFilterInput>;
   not?: InputMaybe<ReviewWorkflowsWorkflowStageFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<ReviewWorkflowsWorkflowStageFiltersInput>>>;
@@ -1021,7 +976,6 @@ export type ReviewWorkflowsWorkflowStageFiltersInput = {
 
 export type ReviewWorkflowsWorkflowStageInput = {
   color?: InputMaybe<Scalars['String']['input']>;
-  locale?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   publishedAt?: InputMaybe<Scalars['DateTime']['input']>;
   workflow?: InputMaybe<Scalars['ID']['input']>;
@@ -1146,6 +1100,7 @@ export type TransportArticle = {
   localizations: Array<Maybe<TransportArticle>>;
   localizations_connection?: Maybe<TransportArticleRelationResponseCollection>;
   publishedAt?: Maybe<Scalars['DateTime']['output']>;
+  slug?: Maybe<Scalars['String']['output']>;
   subtitle?: Maybe<Scalars['String']['output']>;
   title?: Maybe<Scalars['String']['output']>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
@@ -1185,6 +1140,7 @@ export type TransportArticleFiltersInput = {
   not?: InputMaybe<TransportArticleFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<TransportArticleFiltersInput>>>;
   publishedAt?: InputMaybe<DateTimeFilterInput>;
+  slug?: InputMaybe<StringFilterInput>;
   subtitle?: InputMaybe<StringFilterInput>;
   title?: InputMaybe<StringFilterInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
@@ -1193,6 +1149,7 @@ export type TransportArticleFiltersInput = {
 export type TransportArticleInput = {
   Content?: InputMaybe<Array<Scalars['TransportArticleContentDynamicZoneInput']['input']>>;
   publishedAt?: InputMaybe<Scalars['DateTime']['input']>;
+  slug?: InputMaybe<Scalars['String']['input']>;
   subtitle?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
 };
@@ -1212,9 +1169,6 @@ export type UploadFile = {
   formats?: Maybe<Scalars['JSON']['output']>;
   hash: Scalars['String']['output'];
   height?: Maybe<Scalars['Int']['output']>;
-  locale?: Maybe<Scalars['String']['output']>;
-  localizations: Array<Maybe<UploadFile>>;
-  localizations_connection?: Maybe<UploadFileRelationResponseCollection>;
   mime: Scalars['String']['output'];
   name: Scalars['String']['output'];
   previewUrl?: Maybe<Scalars['String']['output']>;
@@ -1226,18 +1180,6 @@ export type UploadFile = {
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
   url: Scalars['String']['output'];
   width?: Maybe<Scalars['Int']['output']>;
-};
-
-export type UploadFileLocalizationsArgs = {
-  filters?: InputMaybe<UploadFileFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-};
-
-export type UploadFileLocalizations_ConnectionArgs = {
-  filters?: InputMaybe<UploadFileFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type UploadFileEntityResponseCollection = {
@@ -1253,12 +1195,9 @@ export type UploadFileFiltersInput = {
   createdAt?: InputMaybe<DateTimeFilterInput>;
   documentId?: InputMaybe<IdFilterInput>;
   ext?: InputMaybe<StringFilterInput>;
-  folderPath?: InputMaybe<StringFilterInput>;
   formats?: InputMaybe<JsonFilterInput>;
   hash?: InputMaybe<StringFilterInput>;
   height?: InputMaybe<IntFilterInput>;
-  locale?: InputMaybe<StringFilterInput>;
-  localizations?: InputMaybe<UploadFileFiltersInput>;
   mime?: InputMaybe<StringFilterInput>;
   name?: InputMaybe<StringFilterInput>;
   not?: InputMaybe<UploadFileFiltersInput>;
@@ -1271,11 +1210,6 @@ export type UploadFileFiltersInput = {
   updatedAt?: InputMaybe<DateTimeFilterInput>;
   url?: InputMaybe<StringFilterInput>;
   width?: InputMaybe<IntFilterInput>;
-};
-
-export type UploadFileRelationResponseCollection = {
-  __typename?: 'UploadFileRelationResponseCollection';
-  nodes: Array<UploadFile>;
 };
 
 export type UsersPermissionsCreateRolePayload = {
@@ -1304,6 +1238,7 @@ export type UsersPermissionsMe = {
   __typename?: 'UsersPermissionsMe';
   blocked?: Maybe<Scalars['Boolean']['output']>;
   confirmed?: Maybe<Scalars['Boolean']['output']>;
+  documentId: Scalars['ID']['output'];
   email?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   role?: Maybe<UsersPermissionsMeRole>;
@@ -1328,24 +1263,9 @@ export type UsersPermissionsPermission = {
   action: Scalars['String']['output'];
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   documentId: Scalars['ID']['output'];
-  locale?: Maybe<Scalars['String']['output']>;
-  localizations: Array<Maybe<UsersPermissionsPermission>>;
-  localizations_connection?: Maybe<UsersPermissionsPermissionRelationResponseCollection>;
   publishedAt?: Maybe<Scalars['DateTime']['output']>;
   role?: Maybe<UsersPermissionsRole>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
-};
-
-export type UsersPermissionsPermissionLocalizationsArgs = {
-  filters?: InputMaybe<UsersPermissionsPermissionFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-};
-
-export type UsersPermissionsPermissionLocalizations_ConnectionArgs = {
-  filters?: InputMaybe<UsersPermissionsPermissionFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type UsersPermissionsPermissionFiltersInput = {
@@ -1353,8 +1273,6 @@ export type UsersPermissionsPermissionFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<UsersPermissionsPermissionFiltersInput>>>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
   documentId?: InputMaybe<IdFilterInput>;
-  locale?: InputMaybe<StringFilterInput>;
-  localizations?: InputMaybe<UsersPermissionsPermissionFiltersInput>;
   not?: InputMaybe<UsersPermissionsPermissionFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<UsersPermissionsPermissionFiltersInput>>>;
   publishedAt?: InputMaybe<DateTimeFilterInput>;
@@ -1378,9 +1296,6 @@ export type UsersPermissionsRole = {
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   description?: Maybe<Scalars['String']['output']>;
   documentId: Scalars['ID']['output'];
-  locale?: Maybe<Scalars['String']['output']>;
-  localizations: Array<Maybe<UsersPermissionsRole>>;
-  localizations_connection?: Maybe<UsersPermissionsRoleRelationResponseCollection>;
   name: Scalars['String']['output'];
   permissions: Array<Maybe<UsersPermissionsPermission>>;
   permissions_connection?: Maybe<UsersPermissionsPermissionRelationResponseCollection>;
@@ -1389,18 +1304,6 @@ export type UsersPermissionsRole = {
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
   users: Array<Maybe<UsersPermissionsUser>>;
   users_connection?: Maybe<UsersPermissionsUserRelationResponseCollection>;
-};
-
-export type UsersPermissionsRoleLocalizationsArgs = {
-  filters?: InputMaybe<UsersPermissionsRoleFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-};
-
-export type UsersPermissionsRoleLocalizations_ConnectionArgs = {
-  filters?: InputMaybe<UsersPermissionsRoleFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type UsersPermissionsRolePermissionsArgs = {
@@ -1438,8 +1341,6 @@ export type UsersPermissionsRoleFiltersInput = {
   createdAt?: InputMaybe<DateTimeFilterInput>;
   description?: InputMaybe<StringFilterInput>;
   documentId?: InputMaybe<IdFilterInput>;
-  locale?: InputMaybe<StringFilterInput>;
-  localizations?: InputMaybe<UsersPermissionsRoleFiltersInput>;
   name?: InputMaybe<StringFilterInput>;
   not?: InputMaybe<UsersPermissionsRoleFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<UsersPermissionsRoleFiltersInput>>>;
@@ -1452,17 +1353,11 @@ export type UsersPermissionsRoleFiltersInput = {
 
 export type UsersPermissionsRoleInput = {
   description?: InputMaybe<Scalars['String']['input']>;
-  locale?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   permissions?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
   publishedAt?: InputMaybe<Scalars['DateTime']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
   users?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
-};
-
-export type UsersPermissionsRoleRelationResponseCollection = {
-  __typename?: 'UsersPermissionsRoleRelationResponseCollection';
-  nodes: Array<UsersPermissionsRole>;
 };
 
 export type UsersPermissionsUpdateRolePayload = {
@@ -1477,26 +1372,11 @@ export type UsersPermissionsUser = {
   createdAt?: Maybe<Scalars['DateTime']['output']>;
   documentId: Scalars['ID']['output'];
   email: Scalars['String']['output'];
-  locale?: Maybe<Scalars['String']['output']>;
-  localizations: Array<Maybe<UsersPermissionsUser>>;
-  localizations_connection?: Maybe<UsersPermissionsUserRelationResponseCollection>;
   provider?: Maybe<Scalars['String']['output']>;
   publishedAt?: Maybe<Scalars['DateTime']['output']>;
   role?: Maybe<UsersPermissionsRole>;
   updatedAt?: Maybe<Scalars['DateTime']['output']>;
   username: Scalars['String']['output'];
-};
-
-export type UsersPermissionsUserLocalizationsArgs = {
-  filters?: InputMaybe<UsersPermissionsUserFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-};
-
-export type UsersPermissionsUserLocalizations_ConnectionArgs = {
-  filters?: InputMaybe<UsersPermissionsUserFiltersInput>;
-  pagination?: InputMaybe<PaginationArg>;
-  sort?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
 };
 
 export type UsersPermissionsUserEntityResponse = {
@@ -1513,19 +1393,14 @@ export type UsersPermissionsUserEntityResponseCollection = {
 export type UsersPermissionsUserFiltersInput = {
   and?: InputMaybe<Array<InputMaybe<UsersPermissionsUserFiltersInput>>>;
   blocked?: InputMaybe<BooleanFilterInput>;
-  confirmationToken?: InputMaybe<StringFilterInput>;
   confirmed?: InputMaybe<BooleanFilterInput>;
   createdAt?: InputMaybe<DateTimeFilterInput>;
   documentId?: InputMaybe<IdFilterInput>;
   email?: InputMaybe<StringFilterInput>;
-  locale?: InputMaybe<StringFilterInput>;
-  localizations?: InputMaybe<UsersPermissionsUserFiltersInput>;
   not?: InputMaybe<UsersPermissionsUserFiltersInput>;
   or?: InputMaybe<Array<InputMaybe<UsersPermissionsUserFiltersInput>>>;
-  password?: InputMaybe<StringFilterInput>;
   provider?: InputMaybe<StringFilterInput>;
   publishedAt?: InputMaybe<DateTimeFilterInput>;
-  resetPasswordToken?: InputMaybe<StringFilterInput>;
   role?: InputMaybe<UsersPermissionsRoleFiltersInput>;
   updatedAt?: InputMaybe<DateTimeFilterInput>;
   username?: InputMaybe<StringFilterInput>;
@@ -1533,14 +1408,11 @@ export type UsersPermissionsUserFiltersInput = {
 
 export type UsersPermissionsUserInput = {
   blocked?: InputMaybe<Scalars['Boolean']['input']>;
-  confirmationToken?: InputMaybe<Scalars['String']['input']>;
   confirmed?: InputMaybe<Scalars['Boolean']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
-  locale?: InputMaybe<Scalars['String']['input']>;
   password?: InputMaybe<Scalars['String']['input']>;
   provider?: InputMaybe<Scalars['String']['input']>;
   publishedAt?: InputMaybe<Scalars['DateTime']['input']>;
-  resetPasswordToken?: InputMaybe<Scalars['String']['input']>;
   role?: InputMaybe<Scalars['ID']['input']>;
   username?: InputMaybe<Scalars['String']['input']>;
 };
@@ -1562,8 +1434,8 @@ export type GetServiceMessagesQuery = {
     __typename?: 'ServiceMessage';
     documentId: string;
     title: string;
-    valid_from: any;
-    valid_to?: any | null;
+    valid_from: string;
+    valid_to?: string | null;
     message_type: Enum_Servicemessage_Message_Type;
     short_description: string;
     description?: string | null;
@@ -1589,8 +1461,8 @@ export type GetServiceMessageQuery = {
     __typename?: 'ServiceMessage';
     documentId: string;
     title: string;
-    valid_from: any;
-    valid_to?: any | null;
+    valid_from: string;
+    valid_to?: string | null;
     message_type: Enum_Servicemessage_Message_Type;
     short_description: string;
     description?: string | null;
@@ -1604,150 +1476,158 @@ export type GetServiceMessageQuery = {
   } | null;
 };
 
-export const GetServiceMessagesDocument = gql`
-  query GetServiceMessages($today: DateTime, $channelPubliseringPortal: Boolean, $env: String) {
-    serviceMessages(
-      filters: {
-        valid_from: { lte: $today }
-        valid_to: { gte: $today }
-        channel_publiseringportal: { eq: $channelPubliseringPortal }
-        environment: { eq: $env }
-      }
-      sort: "valid_from:desc"
-    ) {
-      documentId
+export const GetServiceMessagesDocument = `
+    query GetServiceMessages($today: DateTime, $channelPubliseringPortal: Boolean, $env: String) {
+  serviceMessages(
+    filters: {valid_from: {lte: $today}, valid_to: {gte: $today}, channel_publiseringportal: {eq: $channelPubliseringPortal}, environment: {eq: $env}}
+    sort: "valid_from:desc"
+  ) {
+    documentId
+    title
+    valid_from
+    valid_to
+    message_type
+    short_description
+    description
+    environment
+    channel_publiseringportal
+    locale
+    localizations {
       title
-      valid_from
-      valid_to
-      message_type
       short_description
       description
-      environment
-      channel_publiseringportal
-      locale
-      localizations {
-        title
-        short_description
-        description
-      }
     }
   }
-`;
+}
+    `;
 
-/**
- * __useGetServiceMessagesQuery__
- *
- * To run a query within a React component, call `useGetServiceMessagesQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetServiceMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetServiceMessagesQuery({
- *   variables: {
- *      today: // value for 'today'
- *      channelPubliseringPortal: // value for 'channelPubliseringPortal'
- *      env: // value for 'env'
- *   },
- * });
- */
-export function useGetServiceMessagesQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetServiceMessagesQuery, GetServiceMessagesQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetServiceMessagesQuery, GetServiceMessagesQueryVariables>(
-    GetServiceMessagesDocument,
+export const useGetServiceMessagesQuery = <TData = GetServiceMessagesQuery, TError = unknown>(
+  client: GraphQLClient,
+  variables?: GetServiceMessagesQueryVariables,
+  options?: UseQueryOptions<GetServiceMessagesQuery, TError, TData>,
+  headers?: RequestInit['headers'],
+) => {
+  return useQuery<GetServiceMessagesQuery, TError, TData>(
+    variables === undefined ? ['GetServiceMessages'] : ['GetServiceMessages', variables],
+    fetcher<GetServiceMessagesQuery, GetServiceMessagesQueryVariables>(
+      client,
+      GetServiceMessagesDocument,
+      variables,
+      headers,
+    ),
     options,
   );
-}
-export function useGetServiceMessagesLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetServiceMessagesQuery, GetServiceMessagesQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetServiceMessagesQuery, GetServiceMessagesQueryVariables>(
-    GetServiceMessagesDocument,
+};
+
+useGetServiceMessagesQuery.getKey = (variables?: GetServiceMessagesQueryVariables) =>
+  variables === undefined ? ['GetServiceMessages'] : ['GetServiceMessages', variables];
+
+export const useInfiniteGetServiceMessagesQuery = <TData = GetServiceMessagesQuery, TError = unknown>(
+  client: GraphQLClient,
+  variables?: GetServiceMessagesQueryVariables,
+  options?: UseInfiniteQueryOptions<GetServiceMessagesQuery, TError, TData>,
+  headers?: RequestInit['headers'],
+) => {
+  return useInfiniteQuery<GetServiceMessagesQuery, TError, TData>(
+    variables === undefined ? ['GetServiceMessages.infinite'] : ['GetServiceMessages.infinite', variables],
+    (metaData) =>
+      fetcher<GetServiceMessagesQuery, GetServiceMessagesQueryVariables>(
+        client,
+        GetServiceMessagesDocument,
+        { ...variables, ...(metaData.pageParam ?? {}) },
+        headers,
+      )(),
     options,
   );
-}
-export function useGetServiceMessagesSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<GetServiceMessagesQuery, GetServiceMessagesQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<GetServiceMessagesQuery, GetServiceMessagesQueryVariables>(
+};
+
+useInfiniteGetServiceMessagesQuery.getKey = (variables?: GetServiceMessagesQueryVariables) =>
+  variables === undefined ? ['GetServiceMessages.infinite'] : ['GetServiceMessages.infinite', variables];
+
+useGetServiceMessagesQuery.fetcher = (
+  client: GraphQLClient,
+  variables?: GetServiceMessagesQueryVariables,
+  headers?: RequestInit['headers'],
+) =>
+  fetcher<GetServiceMessagesQuery, GetServiceMessagesQueryVariables>(
+    client,
     GetServiceMessagesDocument,
-    options,
+    variables,
+    headers,
   );
-}
-export type GetServiceMessagesQueryHookResult = ReturnType<typeof useGetServiceMessagesQuery>;
-export type GetServiceMessagesLazyQueryHookResult = ReturnType<typeof useGetServiceMessagesLazyQuery>;
-export type GetServiceMessagesSuspenseQueryHookResult = ReturnType<typeof useGetServiceMessagesSuspenseQuery>;
-export type GetServiceMessagesQueryResult = Apollo.QueryResult<
-  GetServiceMessagesQuery,
-  GetServiceMessagesQueryVariables
->;
-export const GetServiceMessageDocument = gql`
-  query GetServiceMessage($id: ID!) {
-    serviceMessage(documentId: $id) {
-      documentId
+
+export const GetServiceMessageDocument = `
+    query GetServiceMessage($id: ID!) {
+  serviceMessage(documentId: $id) {
+    documentId
+    title
+    valid_from
+    valid_to
+    message_type
+    short_description
+    description
+    locale
+    localizations {
       title
-      valid_from
-      valid_to
-      message_type
       short_description
       description
-      locale
-      localizations {
-        title
-        short_description
-        description
-      }
     }
   }
-`;
+}
+    `;
 
-/**
- * __useGetServiceMessageQuery__
- *
- * To run a query within a React component, call `useGetServiceMessageQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetServiceMessageQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetServiceMessageQuery({
- *   variables: {
- *      id: // value for 'id'
- *   },
- * });
- */
-export function useGetServiceMessageQuery(
-  baseOptions: Apollo.QueryHookOptions<GetServiceMessageQuery, GetServiceMessageQueryVariables> &
-    ({ variables: GetServiceMessageQueryVariables; skip?: boolean } | { skip: boolean }),
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetServiceMessageQuery, GetServiceMessageQueryVariables>(GetServiceMessageDocument, options);
-}
-export function useGetServiceMessageLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<GetServiceMessageQuery, GetServiceMessageQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetServiceMessageQuery, GetServiceMessageQueryVariables>(
-    GetServiceMessageDocument,
+export const useGetServiceMessageQuery = <TData = GetServiceMessageQuery, TError = unknown>(
+  client: GraphQLClient,
+  variables: GetServiceMessageQueryVariables,
+  options?: UseQueryOptions<GetServiceMessageQuery, TError, TData>,
+  headers?: RequestInit['headers'],
+) => {
+  return useQuery<GetServiceMessageQuery, TError, TData>(
+    ['GetServiceMessage', variables],
+    fetcher<GetServiceMessageQuery, GetServiceMessageQueryVariables>(
+      client,
+      GetServiceMessageDocument,
+      variables,
+      headers,
+    ),
     options,
   );
-}
-export function useGetServiceMessageSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<GetServiceMessageQuery, GetServiceMessageQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<GetServiceMessageQuery, GetServiceMessageQueryVariables>(
-    GetServiceMessageDocument,
+};
+
+useGetServiceMessageQuery.getKey = (variables: GetServiceMessageQueryVariables) => ['GetServiceMessage', variables];
+
+export const useInfiniteGetServiceMessageQuery = <TData = GetServiceMessageQuery, TError = unknown>(
+  client: GraphQLClient,
+  variables: GetServiceMessageQueryVariables,
+  options?: UseInfiniteQueryOptions<GetServiceMessageQuery, TError, TData>,
+  headers?: RequestInit['headers'],
+) => {
+  return useInfiniteQuery<GetServiceMessageQuery, TError, TData>(
+    ['GetServiceMessage.infinite', variables],
+    (metaData) =>
+      fetcher<GetServiceMessageQuery, GetServiceMessageQueryVariables>(
+        client,
+        GetServiceMessageDocument,
+        { ...variables, ...(metaData.pageParam ?? {}) },
+        headers,
+      )(),
     options,
   );
-}
-export type GetServiceMessageQueryHookResult = ReturnType<typeof useGetServiceMessageQuery>;
-export type GetServiceMessageLazyQueryHookResult = ReturnType<typeof useGetServiceMessageLazyQuery>;
-export type GetServiceMessageSuspenseQueryHookResult = ReturnType<typeof useGetServiceMessageSuspenseQuery>;
-export type GetServiceMessageQueryResult = Apollo.QueryResult<GetServiceMessageQuery, GetServiceMessageQueryVariables>;
+};
+
+useInfiniteGetServiceMessageQuery.getKey = (variables: GetServiceMessageQueryVariables) => [
+  'GetServiceMessage.infinite',
+  variables,
+];
+
+useGetServiceMessageQuery.fetcher = (
+  client: GraphQLClient,
+  variables: GetServiceMessageQueryVariables,
+  headers?: RequestInit['headers'],
+) =>
+  fetcher<GetServiceMessageQuery, GetServiceMessageQueryVariables>(
+    client,
+    GetServiceMessageDocument,
+    variables,
+    headers,
+  );
