@@ -188,7 +188,7 @@ export function ImportModal({ catalogId }: ImportProps) {
           modalRef.current = null;
         }}
       >
-        {(!isUploading && !isSending && !isUploaded) && (
+        {!isUploading && !isSending && !isUploaded && (
           <>
             <Modal.Header className={styles.content}>
               <Markdown>{localization.concept.importModal.title}</Markdown>
@@ -203,12 +203,15 @@ export function ImportModal({ catalogId }: ImportProps) {
                     />
                   </div>
                 )}
-                <Markdown>{localization.concept.importModal.conceptUploadDescription}</Markdown>
-                <br />
-                <Markdown>{localization.concept.importModal.resultDescription}</Markdown>
-                <br />
+                <div className={styles.markdownContent}>
+                  <Markdown>{localization.concept.importModal.conceptUploadDescription}</Markdown>
+                </div>
                 <div className={styles.remark}>
-                  <Markdown>{localization.formatString(localization.concept.importModal.maxFileSize, maxSize).toString()}</Markdown>
+                  <div className={styles.markdownContent}>
+                    <Markdown>
+                      {localization.formatString(localization.concept.importModal.maxFileSize, maxSize).toString()}
+                    </Markdown>
+                  </div>
                 </div>
               </div>
             </Modal.Content>
@@ -218,7 +221,7 @@ export function ImportModal({ catalogId }: ImportProps) {
         {(isUploading || isUploaded || isSending) && (
           <>
             <Modal.Header className={styles.content}>
-              <Markdown>{localization.concept.importModal.titleConfirmSending}</Markdown>
+                <Markdown>{localization.concept.importModal.titleConfirmSending}</Markdown>
             </Modal.Header>
             <Modal.Content className={styles.content}>
               <div className={styles.modalContent}>
@@ -230,12 +233,9 @@ export function ImportModal({ catalogId }: ImportProps) {
                     />
                   </div>
                 )}
-                <Markdown>{localization.concept.importModal.textSendingConfirmation}</Markdown>
-                <br />
-                <Markdown>{localization.concept.importModal.aboutImportStatusPage}</Markdown>
-                <br />
-                <Markdown>{localization.concept.importModal.importConfirmation}</Markdown>
-
+                <div className={styles.markdownContent}>
+                  <Markdown>{localization.concept.importModal.textConfirmSending}</Markdown>
+                </div>
               </div>
             </Modal.Content>
           </>

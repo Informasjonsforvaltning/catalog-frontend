@@ -410,16 +410,19 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
       REJECTED: 'neutral',
     },
     importModal: {
-      title: '**Import av begreper**',
-      titleConfirmSending: '**Begreper klare til import**',
-      conceptUploadDescription:
-        'Det er mulig å importere begrepsbeskrivelser ved å laste opp filer i enten Turtle-, CSV- eller JSON-format ved hjelp av de tilgjengelige knappene.',
-      textSendingConfirmation: 'Begreper er klare til å bli importert.',
-      aboutImportStatusPage:
-        'Importstatus vil vises på en egen side, der det også kan velges om begrepene skal opprettes i begrepskatalogen.',
-      importConfirmation: 'Vil du fortsette importen eller avbryte?',
-      resultDescription: `En side med detaljerte resultater av importprosessen vises automatisk ved fullført importforsøk av en Turtle-fil. Tidligere gjennomførte importforsøk for Turtle-filer kan vises ved å benytte **Resultater**-knappen.`,
-      maxFileSize: `**Merk:** Maksimal filstørrelse for opplastning er {0} MB`,
+      title: `__Import av begreper__`,
+      titleConfirmSending: `__Begreper klare til import__`,
+      conceptUploadDescription: `
+Det er mulig å importere begrepsbeskrivelser ved å laste opp filer i enten Turtle-, CSV- eller JSON-format ved hjelp av de tilgjengelige knappene.
+        
+En side med detaljerte resultater av importprosessen vises automatisk ved fullført importforsøk av en Turtle-fil. Tidligere gjennomførte importforsøk for Turtle-filer kan vises ved å benytte __Resultater__-knappen.
+        `,
+      textConfirmSending: `
+ Importstatus vil vises på en egen side, der det også kan velges om begrepene skal opprettes i begrepskatalogen.
+ 
+ Vil du fortsette importen eller avbryte?
+ `,
+      maxFileSize: `___Merk:__ Maksimal filstørrelse for opplastning er {0} MB_`,
       alert: {
         unsupportedFileUpload:
           'Den valgte filen kan ikke importeres fordi filformatet ikke støttes. Støttet filformate er {0}.',
