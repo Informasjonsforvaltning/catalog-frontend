@@ -62,7 +62,6 @@ export default defineConfig([
     rules: {
       ...tseslint.configs.recommended[0].rules,
       '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/triple-slash-reference': 'off',
     },
   },
 
