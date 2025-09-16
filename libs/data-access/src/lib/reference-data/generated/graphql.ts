@@ -1,3 +1,6 @@
+import type { GraphQLClient } from 'graphql-request';
+import type { RequestInit } from 'graphql-request/dist/types.dom';
+import { useQuery, useInfiniteQuery, type UseQueryOptions, type UseInfiniteQueryOptions } from '@tanstack/react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -5,6 +8,20 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: 
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+
+function fetcher<TData, TVariables extends { [key: string]: any }>(
+  client: GraphQLClient,
+  query: string,
+  variables?: TVariables,
+  requestHeaders?: RequestInit['headers'],
+) {
+  return async (): Promise<TData> =>
+    client.request({
+      document: query,
+      variables,
+      requestHeaders,
+    });
+}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: { input: string; output: string };
@@ -64,6 +81,13 @@ export type ConceptSubject = {
   uri: Scalars['ID']['output'];
 };
 
+export type Currency = {
+  __typename?: 'Currency';
+  code?: Maybe<Scalars['String']['output']>;
+  label?: Maybe<LocalizedStrings>;
+  uri: Scalars['ID']['output'];
+};
+
 export type DataTheme = {
   __typename?: 'DataTheme';
   code?: Maybe<Scalars['String']['output']>;
@@ -84,6 +108,14 @@ export type DayOfWeek = {
   __typename?: 'DayOfWeek';
   code?: Maybe<Scalars['String']['output']>;
   label?: Maybe<LocalizedStrings>;
+  uri: Scalars['ID']['output'];
+};
+
+export type DistributionStatus = {
+  __typename?: 'DistributionStatus';
+  code?: Maybe<Scalars['String']['output']>;
+  label?: Maybe<LocalizedStrings>;
+  startUse?: Maybe<Scalars['String']['output']>;
   uri: Scalars['ID']['output'];
 };
 
@@ -221,6 +253,14 @@ export type OpenLicense = {
   uri: Scalars['ID']['output'];
 };
 
+export type PlannedAvailability = {
+  __typename?: 'PlannedAvailability';
+  code?: Maybe<Scalars['String']['output']>;
+  label?: Maybe<LocalizedStrings>;
+  startUse?: Maybe<Scalars['String']['output']>;
+  uri: Scalars['ID']['output'];
+};
+
 export type ProvenanceStatement = {
   __typename?: 'ProvenanceStatement';
   code?: Maybe<Scalars['String']['output']>;
@@ -248,11 +288,15 @@ export type Query = {
   conceptStatusByCode?: Maybe<ConceptStatus>;
   conceptStatuses: Array<ConceptStatus>;
   conceptSubjects: Array<ConceptSubject>;
+  currencies: Array<Currency>;
+  currencyByCode?: Maybe<Currency>;
   dataThemeByCode?: Maybe<DataTheme>;
   dataThemes: Array<DataTheme>;
   datasetTypeByCode?: Maybe<DatasetType>;
   datasetTypes: Array<DatasetType>;
   dayOfWeekByCode?: Maybe<DayOfWeek>;
+  distributionStatusByCode?: Maybe<DistributionStatus>;
+  distributionStatuses: Array<DistributionStatus>;
   distributionTypeByCode?: Maybe<DistributionType>;
   distributionTypes: Array<DistributionType>;
   euroVocByCode?: Maybe<EuroVoc>;
@@ -284,6 +328,8 @@ export type Query = {
   nasjoner: Array<Nasjon>;
   openLicenseByCode?: Maybe<OpenLicense>;
   openLicenses: Array<OpenLicense>;
+  plannedAvailabilities: Array<PlannedAvailability>;
+  plannedAvailabilityByCode?: Maybe<PlannedAvailability>;
   provenanceStatementByCode?: Maybe<ProvenanceStatement>;
   provenanceStatements: Array<ProvenanceStatement>;
   publisherTypeByCode?: Maybe<PublisherType>;
@@ -322,6 +368,10 @@ export type QueryConceptStatusByCodeArgs = {
   code: Scalars['String']['input'];
 };
 
+export type QueryCurrencyByCodeArgs = {
+  code: Scalars['String']['input'];
+};
+
 export type QueryDataThemeByCodeArgs = {
   code: Scalars['String']['input'];
 };
@@ -331,6 +381,10 @@ export type QueryDatasetTypeByCodeArgs = {
 };
 
 export type QueryDayOfWeekByCodeArgs = {
+  code: Scalars['String']['input'];
+};
+
+export type QueryDistributionStatusByCodeArgs = {
   code: Scalars['String']['input'];
 };
 
@@ -400,6 +454,10 @@ export type QueryNasjonByNasjonsnummerArgs = {
 };
 
 export type QueryOpenLicenseByCodeArgs = {
+  code: Scalars['String']['input'];
+};
+
+export type QueryPlannedAvailabilityByCodeArgs = {
   code: Scalars['String']['input'];
 };
 
@@ -511,3 +569,124 @@ export type FindByUrIsRequestQuery = {
     label?: { __typename?: 'LocalizedStrings'; nb?: string | null } | null;
   }>;
 };
+
+export const SearchDocument = `
+    query Search($req: SearchRequest!) {
+  search(req: $req) {
+    uri
+    code
+    label {
+      nb
+    }
+    type
+  }
+}
+    `;
+
+export const useSearchQuery = <TData = SearchQuery, TError = unknown>(
+  client: GraphQLClient,
+  variables: SearchQueryVariables,
+  options?: UseQueryOptions<SearchQuery, TError, TData>,
+  headers?: RequestInit['headers'],
+) => {
+  return useQuery<SearchQuery, TError, TData>(
+    ['Search', variables],
+    fetcher<SearchQuery, SearchQueryVariables>(client, SearchDocument, variables, headers),
+    options,
+  );
+};
+
+useSearchQuery.getKey = (variables: SearchQueryVariables) => ['Search', variables];
+
+export const useInfiniteSearchQuery = <TData = SearchQuery, TError = unknown>(
+  client: GraphQLClient,
+  variables: SearchQueryVariables,
+  options?: UseInfiniteQueryOptions<SearchQuery, TError, TData>,
+  headers?: RequestInit['headers'],
+) => {
+  return useInfiniteQuery<SearchQuery, TError, TData>(
+    ['Search.infinite', variables],
+    (metaData) =>
+      fetcher<SearchQuery, SearchQueryVariables>(
+        client,
+        SearchDocument,
+        { ...variables, ...(metaData.pageParam ?? {}) },
+        headers,
+      )(),
+    options,
+  );
+};
+
+useInfiniteSearchQuery.getKey = (variables: SearchQueryVariables) => ['Search.infinite', variables];
+
+useSearchQuery.fetcher = (client: GraphQLClient, variables: SearchQueryVariables, headers?: RequestInit['headers']) =>
+  fetcher<SearchQuery, SearchQueryVariables>(client, SearchDocument, variables, headers);
+
+export const FindByUrIsRequestDocument = `
+    query FindByURIsRequest($req: FindByURIsRequest!) {
+  findByURIs(req: $req) {
+    uri
+    code
+    label {
+      nb
+    }
+    type
+  }
+}
+    `;
+
+export const useFindByUrIsRequestQuery = <TData = FindByUrIsRequestQuery, TError = unknown>(
+  client: GraphQLClient,
+  variables: FindByUrIsRequestQueryVariables,
+  options?: UseQueryOptions<FindByUrIsRequestQuery, TError, TData>,
+  headers?: RequestInit['headers'],
+) => {
+  return useQuery<FindByUrIsRequestQuery, TError, TData>(
+    ['FindByURIsRequest', variables],
+    fetcher<FindByUrIsRequestQuery, FindByUrIsRequestQueryVariables>(
+      client,
+      FindByUrIsRequestDocument,
+      variables,
+      headers,
+    ),
+    options,
+  );
+};
+
+useFindByUrIsRequestQuery.getKey = (variables: FindByUrIsRequestQueryVariables) => ['FindByURIsRequest', variables];
+
+export const useInfiniteFindByUrIsRequestQuery = <TData = FindByUrIsRequestQuery, TError = unknown>(
+  client: GraphQLClient,
+  variables: FindByUrIsRequestQueryVariables,
+  options?: UseInfiniteQueryOptions<FindByUrIsRequestQuery, TError, TData>,
+  headers?: RequestInit['headers'],
+) => {
+  return useInfiniteQuery<FindByUrIsRequestQuery, TError, TData>(
+    ['FindByURIsRequest.infinite', variables],
+    (metaData) =>
+      fetcher<FindByUrIsRequestQuery, FindByUrIsRequestQueryVariables>(
+        client,
+        FindByUrIsRequestDocument,
+        { ...variables, ...(metaData.pageParam ?? {}) },
+        headers,
+      )(),
+    options,
+  );
+};
+
+useInfiniteFindByUrIsRequestQuery.getKey = (variables: FindByUrIsRequestQueryVariables) => [
+  'FindByURIsRequest.infinite',
+  variables,
+];
+
+useFindByUrIsRequestQuery.fetcher = (
+  client: GraphQLClient,
+  variables: FindByUrIsRequestQueryVariables,
+  headers?: RequestInit['headers'],
+) =>
+  fetcher<FindByUrIsRequestQuery, FindByUrIsRequestQueryVariables>(
+    client,
+    FindByUrIsRequestDocument,
+    variables,
+    headers,
+  );
