@@ -14,9 +14,9 @@ export const Definition = ({ definition, language }: Props) => {
     if (definition?.kildebeskrivelse?.forholdTilKilde === 'egendefinert') {
       return localization.concept.selfDefined;
     } else if (definition?.kildebeskrivelse?.forholdTilKilde === 'basertPaaKilde') {
-      return `${localization.concept.basedOnSource}`;
+      return `${localization.concept.basedOnSource}:`;
     } else if (definition?.kildebeskrivelse?.forholdTilKilde === 'sitatFraKilde') {
-      return `${localization.concept.quoteFromSource}`;
+      return `${localization.concept.quoteFromSource}:`;
     }
     return null;
   };
@@ -24,11 +24,12 @@ export const Definition = ({ definition, language }: Props) => {
   return (
     <>
       <div>{getTranslateText(definition?.tekst ?? '', language)}</div>
-      <div className={cn(classes.source)}>
-        <div>
-          <RelationToSource />
-        </div>
-        {definition?.kildebeskrivelse?.kilde.length !== 0 && (
+      {(definition?.kildebeskrivelse?.forholdTilKilde === 'egendefinert' ||
+        definition?.kildebeskrivelse?.kilde.length !== 0) && (
+        <div className={cn(classes.source)}>
+          <div>
+            <RelationToSource />
+          </div>
           <div>
             {definition?.kildebeskrivelse?.kilde.length !== 0 && (
               <ul>
@@ -44,8 +45,8 @@ export const Definition = ({ definition, language }: Props) => {
               </ul>
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </>
   );
 };
