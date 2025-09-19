@@ -290,7 +290,7 @@ export const getUnpublishedConceptRelations = (concept: Concept): UnionRelation[
   return internalConceptRelations;
 };
 
-export const getConceptImportResults = async (catalogId: string, accessToken: string) =>  {
+export const getConceptImportResults = async (catalogId: string, accessToken: string) => {
   validateOrganizationNumber(catalogId, 'getConceptImportResults');
   const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getConceptImportResults');
 
