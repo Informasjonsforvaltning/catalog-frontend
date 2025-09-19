@@ -22,7 +22,10 @@ import { useEffect, useMemo, useState } from 'react';
 import { isEmpty } from 'lodash';
 
 const importStatuses = [
+  { value: 'IN_PROGRESS', label: localization.importResult.inProgress },
+  { value: 'PENDING_CONFIRMATION', label: localization.importResult.pendingConfirmation },
   { value: 'COMPLETED', label: localization.importResult.completed },
+  { value: 'CANCELLED', label: localization.importResult.cancelled },
   { value: 'FAILED', label: localization.importResult.failed },
 ];
 
@@ -147,6 +150,7 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
               <ImportResultsTable
                 importHref={`/catalogs/${catalogId}/concepts/import-results`}
                 importResults={paginatedImportResults}
+                showStatusHelpText={true}
               />
             ) : null
           }

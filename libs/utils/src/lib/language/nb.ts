@@ -80,8 +80,6 @@ export const nb = {
   changed: 'Endret',
   created: 'Opprettet',
   by: 'av',
-  lastUpdated: 'Sist oppdatert',
-  
 
   catalogType: {
     admin: 'Administrasjonsgrensesnitt',
@@ -260,6 +258,7 @@ export const nb = {
     deleteInternalField: 'Er du sikker på at du ønsker å slette feltet?',
     deleteUser: 'Er du sikker på at du vil slette brukernavnet?',
     fail: 'Oppdatering feilet.',
+    maxFileSizeExceeded: 'Filstørrelsen er mer enn maksimumsgrensen på {0} MB. Importering avbrytes.',
     noChanges: 'Ingen endringer funnet.',
     notValidFile: 'Innholdet i filen er ikke gyldig.',
     success: 'Oppdatering vellykket!',
@@ -411,13 +410,23 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
       REJECTED: 'neutral',
     },
     importModal: {
-      title: '**Import av begreper**',
-      conceptUploadDescription:
-        'Det er mulig å importere begrepsbeskrivelser ved å laste opp filer i enten Turtle-, CSV- eller JSON-format ved hjelp av de tilgjengelige knappene.',
-      resultDescription: `En side med detaljerte resultater av importprosessen vises automatisk ved fullført importforsøk av en Turtle-fil. Tidligere gjennomførte importforsøk for Turtle-filer kan vises ved å benytte **Resultater**-knappen.`,
-      csvImportHistoryNotSupported:
-        'Visning av detaljerte resultater og oversikt over tidligere importforsøk for CSV- og JSON-filer er foreløpig ikke tilgjengelig.',
-      maxFileSize: `**Merk:** Maksimal filstørrelse for opplastning er xx MB`,
+      title: `__Import av begreper__`,
+      titleConfirmSending: `__Begreper klare til import__`,
+      conceptUploadDescription: `
+Det er mulig å importere begrepsbeskrivelser ved å laste opp filer i enten Turtle-, CSV- eller JSON-format ved hjelp av de tilgjengelige knappene.
+        
+En side med detaljerte resultater av importprosessen vises automatisk ved fullført importforsøk av en Turtle-fil. Tidligere gjennomførte importforsøk for Turtle-filer kan vises ved å benytte __Resultater__-knappen.
+        `,
+      textConfirmSending: `
+ Importstatus vil vises på en egen side, der det også kan velges om begrepene skal opprettes i begrepskatalogen.
+ 
+ Vil du fortsette importen eller avbryte?
+ `,
+      maxFileSize: `___Merk:__ Maksimal filstørrelse for opplastning er {0} MB_`,
+      alert: {
+        unsupportedFileUpload:
+          'Den valgte filen kan ikke importeres fordi filformatet ikke støttes. Støttet filformate er {0}.',
+      },
     },
   },
 
@@ -608,18 +617,36 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
   },
 
   importResult: {
-    completed: 'Vellykket',
+    completed: 'Lagt til i katalog',
     failed: 'Feilet',
+    inProgress: 'Pågår',
+    cancelled: 'Avvist',
+    pendingConfirmation: 'Til gjennomgang',
     warnings: 'Advarsler',
     errors: 'Feil',
     goToImported: 'Gå til importert ressurs',
     confirmDelete: 'Er du sikker på at du vil slette importeringsrapporten?',
-    deleteCanResultInDuplicates: `
-Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.`,
+    deleteCanResultInDuplicates: `Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.`,
+    cancelledImport: `Importen ble avvist før den ble fullført.`,
+    helpText: {
+       completed: 'Importen er godkjent, og begrepene er tilgjengelige i katalogen.',
+       failed: 'Importen kunne ikke fullføres på grunn av feil i minst ett av de begrepene i den opplastede filen.',
+       inProgress: 'Importen er under behandling. Importen kan bare avvises.',
+       cancelled: 'Importen er forkastet og begrepene er ikke lagt til i katalogen.',
+       pendingConfirmation: 'Begrepene er importert, men er ennå ikke synlige i katalogen. Importen kan enten avvises eller legges til i katalogen.',
+    },
     tableHeading: {
       title: 'Import',
       timestamp: 'Tidspunkt',
       status: 'Status',
+      statusHelpTextConceptImport: `
+Status viser hvor langt importen har kommet i prosessen:
+
+- __Til gjennomgang:__ Begrepene er importert, men er ennå ikke synlige i katalogen. Importen kan enten avvises eller legges til i katalogen.
+- __Lagt til i katalog:__ Importen er godkjent, og begrepene er tilgjengelige i katalogen.
+- __Avvist:__ Importen er forkastet og begrepene er ikke lagt til i katalogen.
+- __Feilet:__ Importen er ikke fullført fordi minst ett av begrepene i filen inneholder feil.
+      `,
     },
     tooltip: {
       ok: 'Antall uten feil.',

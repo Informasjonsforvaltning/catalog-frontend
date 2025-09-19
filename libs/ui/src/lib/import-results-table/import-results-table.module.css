@@ -17,3 +17,9 @@
 .warningIcon {
   color: var(--fds-semantic-text-warning-icon_warning);
 }
+
+.titleTags {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}

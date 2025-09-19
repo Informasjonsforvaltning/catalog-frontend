@@ -7,18 +7,23 @@ import { capitalizeFirstLetter, formatISO, localization } from '@catalog-fronten
 import { TagImportResultStatus } from '../tag';
 import { CheckmarkCircleIcon, ExclamationmarkTriangleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { useRouter } from 'next/navigation';
+import { HelpMarkdown } from '../help-markdown';
 
 const importStatuses = [
   { value: 'COMPLETED', label: localization.importResult.completed },
   { value: 'FAILED', label: localization.importResult.failed },
+  { value: 'IN_PROGRESS', label: localization.importResult.inProgress },
+  { value: 'CANCELLED', label: localization.importResult.cancelled },
+  { value: 'PENDING_CONFIRMATION', label: localization.importResult.pendingConfirmation },
 ];
 
 interface Props {
   importHref: string;
   importResults: ImportResult[];
+  showStatusHelpText?: boolean;
 }
 
-const ImportResultsTable = ({ importHref, importResults }: Props) => {
+const ImportResultsTable = ({ importHref, importResults, showStatusHelpText }: Props) => {
   const router = useRouter();
   const importResultHitTitle = (importResult: ImportResult) => {
     return <div className={styles.bold}>{`Import #${importResult.id.slice(0, 5).toUpperCase()}`}</div>;
@@ -49,7 +54,16 @@ const ImportResultsTable = ({ importHref, importResults }: Props) => {
       <Table.Head>
         <Table.Row>
           <Table.Cell>{localization.importResult.tableHeading.title}</Table.Cell>
-          <Table.Cell>{localization.importResult.tableHeading.status}</Table.Cell>
+          <Table.Cell>
+            <div className={styles.titleTags}>
+            {localization.importResult.tableHeading.status}
+            {showStatusHelpText && (
+              <HelpMarkdown aria-label={`Help Status`}>
+                {localization.importResult.tableHeading.statusHelpTextConceptImport}
+              </HelpMarkdown>
+            )}
+            </div>
+          </Table.Cell>
           <Table.Cell>{localization.importResult.tableHeading.timestamp}</Table.Cell>
           <Table.Cell>
             <Tooltip content={localization.importResult.tooltip.ok}>
