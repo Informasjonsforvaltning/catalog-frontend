@@ -69,6 +69,9 @@ export const patchConcept = (conceptId: string, patchOperations: Operation[], ac
   return conceptCatalogApiCall('PATCH', `/begreper/${encodedConceptId}`, patchOperations, accessToken);
 };
 
+export const importConcepts = (concepts: Omit<Concept, 'id'>[], accessToken: string) =>
+  conceptCatalogApiCall('POST', `/begreper/import`, concepts, accessToken);
+
 export const deleteConcept = (conceptId: string, accessToken: string) =>{
   validateUUID(conceptId, 'deleteConcept');
   const encodedConceptId = validateAndEncodeUrlSafe(conceptId, 'concept ID', 'deleteConcept');
