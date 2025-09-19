@@ -323,8 +323,47 @@ export const getConceptImportResultById = async (catalogId: string, resultId: st
   return await fetch(resource, options);
 };
 
+export const confirmConceptImport = async (catalogId: string, resultId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'confirmConceptImport');
+  validateUUID(resultId, 'confirmConceptImport');
+
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'confirmConceptImport');
+  const encodedResultId = validateAndEncodeUrlSafe(resultId, 'result ID', 'confirmConceptImport');
+
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}/confirm`;
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    method: 'PUT',
+  };
+
+  return await fetch(resource, options);
+}
+
+export const cancelConceptImport = async (catalogId: string, resultId: string, accessToken: string) => {
+  validateOrganizationNumber(catalogId, 'cancelConceptImport');
+  validateUUID(resultId, 'cancelConceptImport');
+
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'cancelConceptImport');
+  const encodedResultId = validateAndEncodeUrlSafe(resultId, 'result ID', 'cancelConceptImport');
+
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}/cancel`;
+    const options = {
+        headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+        },
+        method: 'PUT',
+    };
+
+    return await fetch(resource, options);
+}
+
 export const removeImportResultConcept = async (catalogId: string, resultId: string, accessToken: string) => {
   validateOrganizationNumber(catalogId, 'removeImportResultConcept');
+  validateUUID(resultId, 'removeImportResultConcept');
+
   const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'removeImportResultConcept');
   const encodedResultId = validateAndEncodeUrlSafe(resultId, 'result ID', 'removeImportResultConcept');
 
@@ -387,3 +426,4 @@ export const getConceptCountByCatalogId = (catalogId: string, accessToken: strin
 };
 
 export * from './import-rdf-concepts';
+export * from './import-csv-json';

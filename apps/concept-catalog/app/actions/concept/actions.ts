@@ -6,6 +6,8 @@ import {
   patchConcept as patchConceptApi,
   getConcept,
   removeImportResultConcept as removeImportResult,
+  confirmConceptImport,
+  cancelConceptImport
 } from '@catalog-frontend/data-access';
 import { Concept, FieldsResult, InternalField } from '@catalog-frontend/types';
 import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
@@ -206,6 +208,56 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
     throw new Error(localization.alert.deleteFail);
   } finally {
     if (success) {
+      revalidateTag('import-results');
+    }
+  }
+}
+
+export async function confirmImport(catalogId: string, resultId: string) {
+  const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn();
+  }
+  let success = false;
+  try {
+
+    const response = await confirmConceptImport(catalogId, resultId, `${session?.accessToken}`)
+
+    if (response.status !== 200 && response.status !== 201) {
+      throw new Error();
+    }
+    success = true;
+    console.log("Confirmed import result", catalogId, resultId);
+  } catch (error) {
+    throw new Error(localization.alert.fail);
+  } finally {
+    if (success) {
+      revalidateTag('import-result');
+      revalidateTag('import-results');
+    }
+  }
+}
+
+export async function cancelImport(catalogId: string, resultId: string) {
+  const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn();
+  }
+  let success = false;
+  try {
+
+    const response = await cancelConceptImport(catalogId, resultId, `${session?.accessToken}`)
+
+    if (response.status !== 200 && response.status !== 201) {
+      throw new Error();
+    }
+    success = true;
+    console.log("Importing result has been cancelled", catalogId, resultId);
+  } catch (error) {
+    throw new Error(localization.alert.fail);
+  } finally {
+    if (success) {
+      revalidateTag('import-result');
       revalidateTag('import-results');
     }
   }

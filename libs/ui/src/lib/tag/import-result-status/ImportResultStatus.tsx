@@ -4,6 +4,9 @@ import { forwardRef } from 'react';
 export enum ImportResultStatusColors {
   FAILED = 'danger',
   COMPLETED = 'success',
+  IN_PROGRESS = 'third',
+  PENDING_CONFIRMATION = 'warning',
+  CANCELLED = 'first',
 }
 
 export type StatusKey = keyof typeof ImportResultStatusColors;
