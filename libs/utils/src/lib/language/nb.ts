@@ -198,8 +198,8 @@ export const nb = {
     edit: 'Rediger',
     expandAll: 'Vis alle felter',
     harvestDataset: 'Høst spesifikasjon fra katalog',
-    importConceptCSV: 'Importer CSV/JSON',
-    importConceptRDF: 'Importer RDF',
+    importConceptCSV: 'Import av CSV/JSON',
+    importConceptRDF: 'Import av RDF',
     importLogo: 'Importer logo',
     importDataService: 'Importer OpenAPI',
     removeFilter: 'Fjern filter',
@@ -410,12 +410,13 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
       REJECTED: 'neutral',
     },
     importModal: {
-      title: `__Import av begreper__`,
+      title: `__Import av begrep__`,
+      titleHelpText: `
+For å importere en Turtle-fil, som er et RDF-format, brukes __Importer RDF__. CSV- og JSON-filer importeres ved hjelp av __Importer CSV/JSON__. Når importen er gjennomført, vises resultatene automatisk på en egen side. Tidligere importforsøk kan alltid åpnes igjen via __Resultater__.
+`,
       titleConfirmSending: `__Begreper klare til import__`,
       conceptUploadDescription: `
-Det er mulig å importere begrepsbeskrivelser ved å laste opp filer i enten Turtle-, CSV- eller JSON-format ved hjelp av de tilgjengelige knappene.
-        
-En side med detaljerte resultater av importprosessen vises automatisk ved fullført importforsøk av en Turtle-fil. Tidligere gjennomførte importforsøk for Turtle-filer kan vises ved å benytte __Resultater__-knappen.
+Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- eller JSON-format. Etter import vises en side med resultater.
         `,
       textConfirmSending: `
  Importstatus vil vises på en egen side, der det også kan velges om begrepene skal opprettes i begrepskatalogen.

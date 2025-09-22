@@ -7,6 +7,7 @@ import styles from './import-modal.module.scss';
 import { FileImportIcon, TasklistSendIcon } from '@navikt/aksel-icons';
 import Markdown from 'react-markdown';
 import { Concept } from '@catalog-frontend/types';
+import { HelpMarkdown } from '@catalog-frontend/ui';
 
 interface ImportProps {
   catalogId: string;
@@ -191,7 +192,14 @@ export function ImportModal({ catalogId }: ImportProps) {
         {!isUploading && !isSending && !isUploaded && (
           <>
             <Modal.Header className={styles.content}>
-              <Markdown>{localization.concept.importModal.title}</Markdown>
+              <div className={styles.titleTags}>
+                <Markdown>
+                  {localization.concept.importModal.title}
+                </Markdown>
+                <HelpMarkdown aria-label={`Help ${localization.concept.importModal.titleHelpText}`}>
+                  {localization.concept.importModal.titleHelpText}
+                </HelpMarkdown>
+              </div>
             </Modal.Header>
             <Modal.Content className={styles.content}>
               <div className={styles.modalContent}>
