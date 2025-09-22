@@ -8,16 +8,23 @@
 }
 
 .header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 8px;
 }
 
 .titleContainer {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+}
+
+.buttonContainer {
+    margin-left: auto;
+    display: flex;
+    gap: 8px;
 }
 
 .title {
@@ -28,7 +35,7 @@
 
 .titleTags {
   display: flex;
-  gap: 0.5rem;
+  gap: 8px;
   align-items: center;
 }
 

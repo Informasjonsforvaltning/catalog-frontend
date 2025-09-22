@@ -18,9 +18,10 @@ import { localization } from '@catalog-frontend/utils';
 interface Props {
   targetBaseHref: string;
   record: ExtractionRecord;
+  enableOpening: boolean;
 }
 
-const ImportRecordAccordionItem = ({ targetBaseHref, record }: Props) => {
+const ImportRecordAccordionItem = ({ targetBaseHref, record, enableOpening }: Props) => {
   const errors = record.extractResult?.issues?.filter((issue) => issue.type === 'ERROR') ?? [];
   const warnings = record.extractResult?.issues?.filter((issue) => issue.type === 'WARNING') ?? [];
 
@@ -56,7 +57,7 @@ const ImportRecordAccordionItem = ({ targetBaseHref, record }: Props) => {
     <AccordionItem>
       <AccordionHeader>{renderHeader(record)}</AccordionHeader>
       <AccordionContent>
-        {errors.length === 0 && (
+        {errors.length === 0 && enableOpening && (
           <div className={styles.buttonRow}>
             <LinkButton
               variant={'tertiary'}

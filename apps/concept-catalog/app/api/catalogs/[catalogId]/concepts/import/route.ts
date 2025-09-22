@@ -18,13 +18,13 @@ export const POST = async (req: NextRequest, props) => {
         const error = await response.json();
         return new Response(error?.message ?? 'Failed to import concept', { status: response.status });
       } else if (location && resultId) {
-        return new Response(JSON.stringify(resultId), { status: 200 });
+        return new Response('', { status: 302, headers: { Location: `/catalogs/${catalogId}/concepts/import-results/${resultId}` } });
       } else {
-        return new Response(JSON.stringify({ ok: true }), { status: response.status });
+        return new Response('', { status: response.status });
       }
     } catch (error) {
       console.error('Failed to import concept', error);
-      return new Response(JSON.stringify({ message: 'Failed to import concept' }), { status: 500 });
+      return new Response('Failed to import concept', { status: 500 });
     }
   });
 };
