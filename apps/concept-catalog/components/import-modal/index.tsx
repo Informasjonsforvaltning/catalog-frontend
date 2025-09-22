@@ -73,10 +73,10 @@ export function ImportModal({ catalogId }: ImportProps) {
   };
 
   const send = async () => {
-    /*if(uploadedConcepts.length === 0 || !uploadedRdfConcepts.fileContent) {
+    if(uploadedConcepts.length === 0 || !uploadedRdfConcepts.fileContent) {
       alert("Ingen begreper var funnet i opplastet fil.");
       return
-    }*/
+    }
 
     setIsSending(true)
 
