@@ -27,6 +27,9 @@ const importStatuses = [
   { value: 'COMPLETED', label: localization.importResult.completed },
   { value: 'CANCELLED', label: localization.importResult.cancelled },
   { value: 'FAILED', label: localization.importResult.failed },
+  { value: 'IN_PROGRESS', label: localization.importResult.inProgress },
+  { value: 'CANCELLED', label: localization.importResult.cancelled },
+  { value: 'PENDING_CONFIRMATION', label: localization.importResult.pendingConfirmation },
 ];
 
 interface Props {

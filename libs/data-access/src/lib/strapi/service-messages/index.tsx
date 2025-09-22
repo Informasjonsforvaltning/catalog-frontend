@@ -1,5 +1,4 @@
 import { GetServiceMessagesDocument } from '../generated/graphql';
-import { print } from 'graphql/language/printer';
 
 export const getAllServiceMessages = async () => {
   const resource = `${process.env.FDK_CMS_BASE_URI}/graphql`;
@@ -9,7 +8,7 @@ export const getAllServiceMessages = async () => {
     variables: {
       today: new Date().toISOString(),
     },
-    query: print(GetServiceMessagesDocument), // Convert the GraphQL document to a string
+    query: GetServiceMessagesDocument, // Use the document directly as a string
   });
 
   const options = {
