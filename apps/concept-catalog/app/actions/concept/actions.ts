@@ -7,7 +7,8 @@ import {
   getConcept,
   removeImportResultConcept as removeImportResult,
   confirmConceptImport,
-  cancelConceptImport
+  cancelConceptImport,
+  getConceptImportResultById,
 } from '@catalog-frontend/data-access';
 import { Concept, FieldsResult, InternalField } from '@catalog-frontend/types';
 import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
@@ -245,8 +246,11 @@ export async function cancelImport(catalogId: string, resultId: string) {
   }
   let success = false;
   try {
+    console.log("Sending Cancelling import", catalogId, resultId);
 
     const response = await cancelConceptImport(catalogId, resultId, `${session?.accessToken}`)
+
+    console.log("Cancelling import has been sent", catalogId, resultId);
 
     if (response.status !== 200 && response.status !== 201) {
       throw new Error();

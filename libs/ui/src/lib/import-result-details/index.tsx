@@ -55,8 +55,6 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
   const getImportStatusHelpTexts = (status: string) => importStatusHelpTexts
     .find((st) => status === st.value)?.label ?? status
 
-  console.log("Import result", importResult)
-
   const getColorFromStatusKey = (statusKey: StatusKey | undefined) =>
     statusKey ? ImportResultStatusColors[statusKey.toLocaleUpperCase() as StatusKey] : 'neutral';
 
@@ -75,6 +73,14 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
                 <HelpMarkdown aria-label={`Help ${getImportStatusHelpTexts(importResult.status)}`}>
                   {getImportStatusHelpTexts(importResult.status)}
                 </HelpMarkdown>
+
+                {
+                  /*importResult.extractedConcepts ! == undefined &&
+                  importResult.totalConcepts !== undefined &&
+                  importResult.totalConcepts > 0 && */ <div>
+                    {importResult.extractedConcepts}/{importResult.totalConcepts}
+                  </div>
+                }
               </div>
             </Tag>
             <div className={styles.titleTags}>{formattedCreateDate}</div>
@@ -113,7 +119,10 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
                 importResult.status === 'FAILED' ||
                 importResult.status === 'COMPLETED'
               }
-              onClick={() => cancelHandler && cancelHandler(importResult.id)}
+              onClick={async () => {
+                console.log("Cancel import", importResult.id);
+                cancelHandler && cancelHandler(importResult.id);
+              }}
             >
               Avvis import
             </Button>

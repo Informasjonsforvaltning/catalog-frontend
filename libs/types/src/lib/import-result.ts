@@ -6,6 +6,8 @@ export interface ImportResult {
   catalogId: string;
   status: 'FAILED' | 'COMPLETED' | 'IN_PROGRESS' | 'CANCELLED' | 'PENDING_CONFIRMATION';
   extractionRecords?: ExtractionRecord[];
+  totalConcepts: number;
+  extractedConcepts: number;
 }
 
 export interface ExtractionRecord {
