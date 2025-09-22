@@ -260,7 +260,7 @@ export const useSendConcepts = (catalogId: string,
 
 }
 
-export const useImportConceptsCsv = (catalogId: string,
+export const useImportConcepts = (catalogId: string,
                                   setIsUploading?: React.Dispatch<React.SetStateAction<boolean>>,
                                   setIsUploaded?: React.Dispatch<React.SetStateAction<boolean>>) => {
   const queryClient = useQueryClient();
@@ -301,7 +301,23 @@ export const useImportConceptsCsv = (catalogId: string,
           `Du er i ferd med å importere ${concepts.length} begreper. Dette vil opprette nye begreper i katalogen. Fortsette?`,
         )
       ) {
+
+        const response = await fetch(`/api/catalogs/${catalogId}/concepts/import`, {
+          method: 'POST',
+          body: JSON.stringify(concepts),
+        });
+
         if(setIsUploaded) setIsUploaded(true)
+
+        if (response.status === 401) {
+          return Promise.reject('Unauthorized');
+        }
+
+        if (response.status > 399) {
+          const errorMessage = await response.text();
+          return Promise.reject(errorMessage);
+        }
+
         return concepts;
       }
 
@@ -315,7 +331,7 @@ export const useImportConceptsCsv = (catalogId: string,
 
 }
 
-export const useImportConcepts = (
+export const useImportConceptsCSV = (
   catalogId: string,
   setIsUploading?: React.Dispatch<React.SetStateAction<boolean>>,
   setIsUploaded?: React.Dispatch<React.SetStateAction<boolean>>,

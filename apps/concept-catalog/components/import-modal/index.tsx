@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { localization } from '@catalog-frontend/utils';
 import { LinkButton, UploadButton } from '@catalog-frontend/ui';
-import { useImportConcepts, useSendConcepts, useImportRdf, useSendRdf } from '../../hooks/import';
+import { useImportConceptsCSV, useSendConcepts, useImportRdf, useSendRdf } from '../../hooks/import';
 import { Button, Modal, Spinner } from '@digdir/designsystemet-react';
 import styles from './import-modal.module.scss';
 import { FileImportIcon, TasklistSendIcon } from '@navikt/aksel-icons';
@@ -44,7 +44,7 @@ export function ImportModal({ catalogId }: ImportProps) {
   const readerRdfRef = useRef<FileReader | null>(null);
 
 
-  const uploadConcepts = useImportConcepts(catalogId, setIsUploading, setIsUploaded);
+  const uploadConcepts = useImportConceptsCSV(catalogId, setIsUploading, setIsUploaded);
   const sendConcepts = useSendConcepts(catalogId)
 
   const uploadRdf = useImportRdf(catalogId);
