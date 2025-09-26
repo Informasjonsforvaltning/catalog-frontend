@@ -260,8 +260,6 @@ export default class ConceptsPage {
       //has: this.page.getByRole('button', { name: 'Importer RDF' }),
     });
 
-    await expect(dialog.getByRole('button', { name: 'Importer RDF' })).toBeVisible({ timeout: 10000 });
-
     const importerRdfButton = dialog.getByRole('button', { name: 'Importer RDF' });
 
     await importerRdfButton.click({ timeout: 5000 });
