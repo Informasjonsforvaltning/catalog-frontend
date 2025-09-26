@@ -19,9 +19,10 @@ interface Props {
   targetBaseHref: string;
   record: ExtractionRecord;
   enableOpening: boolean;
+  isCompleted: boolean;
 }
 
-const ImportRecordAccordionItem = ({ targetBaseHref, record, enableOpening }: Props) => {
+const ImportRecordAccordionItem = ({ targetBaseHref, record, enableOpening, isCompleted }: Props) => {
   const errors = record.extractResult?.issues?.filter((issue) => issue.type === 'ERROR') ?? [];
   const warnings = record.extractResult?.issues?.filter((issue) => issue.type === 'WARNING') ?? [];
 
@@ -59,12 +60,12 @@ const ImportRecordAccordionItem = ({ targetBaseHref, record, enableOpening }: Pr
       <AccordionContent>
         {errors.length === 0 && enableOpening && (
           <div className={styles.buttonRow}>
-            <LinkButton
+            {isCompleted && <LinkButton
               variant={'tertiary'}
               href={`/${targetBaseHref}/${record.internalId}`}
             >
               {localization.importResult.goToImported}
-            </LinkButton>
+            </LinkButton>}
           </div>
         )}
         <div className={styles.issuesContainer}>
