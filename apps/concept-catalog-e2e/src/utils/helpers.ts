@@ -142,24 +142,6 @@ const getAccessToken = async (apiRequestContext) => {
   return accessToken;
 }
 
-export const getImportResults2 = async (apiRequestContext) => {
-
-  const response = await apiRequestContext.get(`/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/import-results`)
-
-  console.log("Response status for importing RDF results ", response.status)
-
-  return response.json();
-}
-
-async function deleteImportResult2(apiRequestContext, resultId: string) {
-  const response = await apiRequestContext.delete(`/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/import-results/${resultId}`)
-
-  console.log("Import result delete response status ", response.status, " for import result ", resultId)
-
-  console.log("Deleted import result ", resultId)
-
-}
-
 export const getImportResults = async (apiRequestContext) => {
   const accessToken = await getAccessToken(apiRequestContext)
   const response = await getConceptImportResults(process.env.E2E_CATALOG_ID, `${accessToken}`)
@@ -179,10 +161,10 @@ export const deleteImportResult = async (apiRequestContext, importResultId: stri
 }
 
 export const deleteAllImportResults = async (apiRequestContext) => {
-  const importResults: ImportResult[] = await getImportResults2(apiRequestContext);
+  const importResults: ImportResult[] = await getImportResults(apiRequestContext);
 
   for (const importResult of importResults) {
-    await deleteImportResult2(apiRequestContext, importResult?.id)
+    await deleteImportResult(apiRequestContext, importResult?.id)
   }
 
 };
