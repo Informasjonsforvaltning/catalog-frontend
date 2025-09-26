@@ -74,13 +74,20 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
                   {getImportStatusHelpTexts(importResult.status)}
                 </HelpMarkdown>
 
-                {
+                {cancelHandler && confirmHandler && (
                   /*importResult.extractedConcepts ! == undefined &&
                   importResult.totalConcepts !== undefined &&
-                  importResult.totalConcepts > 0 && */ <div>
+                  importResult.totalConcepts > 0 && */
+                  <div>
                     {importResult.extractedConcepts}/{importResult.totalConcepts}
+                    {/*
+                      <progress>
+                        value={importResult.extractedConcepts}
+                        max={importResult.totalConcepts}
+                      </progress>*/
+                    }
                   </div>
-                }
+                )}
               </div>
             </Tag>
             <div className={styles.titleTags}>{formattedCreateDate}</div>
@@ -120,7 +127,7 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
                 importResult.status === 'COMPLETED'
               }
               onClick={async () => {
-                console.log("Cancel import", importResult.id);
+                console.log('Cancel import', importResult.id);
                 cancelHandler && cancelHandler(importResult.id);
               }}
             >
