@@ -100,7 +100,7 @@ runTestAsAdmin('should show restore dialog after refresh when concept form has u
   // Navigate to concept details and click edit
   const detailPage: DetailPage = conceptsPage.detailPage;
   await detailPage.goto(`/catalogs/${process.env.E2E_CATALOG_ID}/concepts/${concept.id}`);
-  await detailPage.editConcept(); //TODO here
+  await detailPage.editConcept();
 
   // Initialize edit page
   const editPage: EditPage = conceptsPage.editPage;

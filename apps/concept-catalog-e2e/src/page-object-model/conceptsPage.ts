@@ -4,16 +4,11 @@ import { Concept } from '@catalog-frontend/types';
 import DetailPage from './detailPage';
 import EditPage from './editPage';
 import { ConceptStatus } from '../utils/helpers';
-import ImportResultsPage from './importResultsPage';
-import ImportResultDetailsPage from './importResultDetailsPage';
-import * as path from 'node:path';
 
 export default class ConceptsPage {
   url: string;
   page: Page;
   detailPage: DetailPage;
-  importResultsPage: ImportResultsPage;
-  importResultDetailsPage: ImportResultDetailsPage;
   editPage: EditPage;
   context: BrowserContext;
   accessibilityBuilder: AxeBuilder;
@@ -22,8 +17,6 @@ export default class ConceptsPage {
     this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/concepts`;
     this.page = page;
     this.detailPage = new DetailPage(page, context, accessibilityBuilder);
-    this.importResultsPage = new ImportResultsPage(page, context, accessibilityBuilder);
-    this.importResultDetailsPage = new ImportResultDetailsPage(page, context, accessibilityBuilder);
     this.editPage = new EditPage(page, context, accessibilityBuilder);
     this.context = context;
     this.accessibilityBuilder = accessibilityBuilder;
@@ -95,8 +88,8 @@ export default class ConceptsPage {
     console.log(`Create new concept with title ${concept.anbefaltTerm.navn.nb}`);
 
     // Name and description
-    await this.page.getByRole('link', { name: 'Nytt begrep' }).click({ timeout: 10000 }); // TODO
-    await this.editPage.expectMenu(); // TODO
+    await this.page.getByRole('link', { name: 'Nytt begrep' }).click({ timeout: 10000 });
+    await this.editPage.expectMenu();
     await this.editPage.fillFormAndSave(concept, apiRequestContext);
     await this.detailPage.expectDetails(concept, apiRequestContext);
   }
@@ -240,64 +233,4 @@ export default class ConceptsPage {
       await expect(this.page.getByRole('button', { name: 'Open Next.js Dev Tools' })).not.toBeVisible();
     }
   }
-
-  public async importTurtleFile(fileName: string) {
-    const filePath = path.resolve(__dirname, `../data/${fileName}`);
-
-    console.log("File path: ", filePath);
-
-    await this.goto();
-
-    // Click the Import butt
-    console.log('[TEST] Clicking Importer Button...');
-    await this.page.getByRole('button', { name: 'Importer' }).click();
-
-    // A modal should open
-    console.log('[TEST] Expecting an open modal...');
-    await expect(this.page.getByRole('dialog')).toBeVisible({ timeout: 5000 });
-
-    let dialog = this.page.getByRole('dialog', {
-      //has: this.page.getByRole('button', { name: 'Importer RDF' }),
-    });
-
-    const importerRdfButton = dialog.getByRole('button', { name: 'Importer RDF' });
-
-    await importerRdfButton.click({ timeout: 5000 });
-
-    console.log('[TEST] Clicking Importer RDF Button...');
-    const fileInput = await this.page
-      .locator('input[type="file"][accept*=".ttl"], input[type="file"][accept*="ttl"]')
-      .first();
-    await expect(fileInput).toBeAttached({ timeout: 5000 });
-
-    await fileInput.setInputFiles(filePath);
-
-    dialog = this.page.getByRole('dialog', {
-      //has: this.page.getByRole('button', { name: 'Send' }),
-    });
-
-    await expect(dialog.getByRole('button', { name: 'Importer RDF' })).toBeHidden({ timeout: 5000 });
-    await expect(dialog.getByRole('button', { name: 'Fortsett' })).toBeVisible({ timeout: 5000 });
-
-    const sendButton = dialog.getByRole('button', { name: 'Fortsett' });
-    expect(sendButton).not.toBeDisabled({ timeout: 10000 });
-
-    await Promise.all([
-      this.page.waitForURL('**/import-results/**', { timeout: 60_000 }),
-      sendButton.click({ timeout: 10000 }),
-    ]);
-
-    await expect(this.page).toHaveURL(/\/import-results\/.+/i);
-
-    const url = this.page.url();
-    console.log("Import result URL: ", url);
-
-    const importId = url.split('/').pop();
-    console.log("Import result ID: ", url);
-
-    expect(importId != null);
-
-    return importId
-  }
-
 }

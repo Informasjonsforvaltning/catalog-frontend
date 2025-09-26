@@ -1,8 +1,7 @@
 import AxeBuilder from '@axe-core/playwright';
-import { Concept, FieldsResult, ImportResult, UsersResult } from '@catalog-frontend/types';
+import { Concept, FieldsResult, UsersResult } from '@catalog-frontend/types';
 import { Locator, Page, expect } from '@playwright/test';
 import * as crypto from 'crypto';
-import { getConceptImportResults, removeImportResultConcept } from '@catalog-frontend/data-access';
 
 export const adminAuthFile = `${__dirname}/../../.playwright/auth/admin.json`;
 export const writeAuthFile = `${__dirname}/../../.playwright/auth/write.json`;
@@ -132,41 +131,6 @@ export const getFields = async (apiRequestContext) => {
 
   const result = await response.json() as FieldsResult;
   return result;
-};
-
-const getAccessToken = async (apiRequestContext) => {
-  const session = await apiRequestContext.get('/api/auth/session');
-  //const session = await page.request.get('/api/auth/session');
-  const accessToken = (await session.json())?.accessToken;
-
-  return accessToken;
-}
-
-export const getImportResults = async (apiRequestContext) => {
-  const accessToken = await getAccessToken(apiRequestContext)
-  const response = await getConceptImportResults(process.env.E2E_CATALOG_ID, `${accessToken}`)
-
-  console.log("Response status for importing RDF results ", response.status)
-
-  return response.json();
-}
-
-export const deleteImportResult = async (apiRequestContext, importResultId: string) => {
-  const accessToken = await getAccessToken(apiRequestContext)
-  const response = await removeImportResultConcept(process.env.E2E_CATALOG_ID, importResultId, `${accessToken}`)
-
-  console.log("Import result delete response status ", response.status, " for import result ", importResultId)
-
-  console.log("Deleted import result ", importResultId)
-}
-
-export const deleteAllImportResults = async (apiRequestContext) => {
-  const importResults: ImportResult[] = await getImportResults(apiRequestContext);
-
-  for (const importResult of importResults) {
-    await deleteImportResult(apiRequestContext, importResult?.id)
-  }
-
 };
 
 export enum ConceptStatus {
