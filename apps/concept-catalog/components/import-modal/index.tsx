@@ -63,7 +63,6 @@ export function ImportModal({ catalogId }: ImportProps) {
       }
 
       const fileExtension = file.name.split('.').pop()?.toLowerCase();
-      console.log("file extension ", fileExtension);
       if(fileExtension != 'csv' && fileExtension != 'json') {
         alert(localization.formatString(localization.concept.importModal.alert.unsupportedFileUpload, 'CSV/JSON'));
         cancel();
@@ -136,7 +135,6 @@ export function ImportModal({ catalogId }: ImportProps) {
         }
 
         reader.onload = function (evt) {
-          //await new Promise(resolve => setTimeout(resolve, 100000));
           if (uploadSession !== sessionId.current || cancelled) {
             console.log('Session ID', sessionId);
             console.log('Upload session', uploadSession);
@@ -162,7 +160,6 @@ export function ImportModal({ catalogId }: ImportProps) {
         allowedMimeTypes={allowedExtensions}
         onUpload={(e) => {
           sessionId.current = Date.now();
-          //setUploadSession(sessionId.current)
           uploadSession = sessionId.current;
           onFileUpload(e)
         }}
@@ -183,7 +180,6 @@ export function ImportModal({ catalogId }: ImportProps) {
       </Modal.Trigger>
       <Modal.Dialog
         ref={modalRef}
-        //onInteractOutside={() => modalRef.current?.close()}
         onClose={() => {
           cancel();
           modalRef.current = null;

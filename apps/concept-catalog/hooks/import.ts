@@ -357,10 +357,6 @@ export const useImportConceptsCSV = (
         if (setIsUploading) setIsUploading(false);
       }
 
-      parsedText.forEach((line) => {
-        console.log('Parsed line: ', line);
-      });
-
       const concepts = parsedText?.map(
         (concept) =>
           ({

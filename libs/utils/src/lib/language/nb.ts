@@ -634,7 +634,7 @@ Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- 
        failed: 'Importen kunne ikke fullføres på grunn av feil i minst ett av de begrepene i den opplastede filen.',
        inProgress: 'Importen er under behandling. Importen kan bare avvises.',
        cancelled: 'Importen er forkastet og begrepene er ikke lagt til i katalogen.',
-       pendingConfirmation: 'Begrepene er importert, men er ennå ikke synlige i katalogen. Importen kan enten avvises eller legges til i katalogen.',
+       pendingConfirmation: 'Begrepene er opplastet, men er ennå ikke importert til katalogen. Importen kan enten avvises eller legges til i katalogen.',
     },
     tableHeading: {
       title: 'Import',
