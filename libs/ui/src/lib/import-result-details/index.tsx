@@ -115,7 +115,8 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
               }
               onClick={() => cancelHandler && cancelHandler(importResult.id)}
             >
-              Avvis import
+
+              {localization.importResult.cancelImport}
             </Button>
           )}
 
@@ -131,7 +132,7 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
                 title='Legg til i katalog'
                 fontSize='1.5rem'
               />
-              Legg til i katalog
+              {localization.importResult.confirmImport}
             </Button>
           )}
         </div>
