@@ -8,14 +8,6 @@
   margin-bottom: 1rem;
 }
 
-.warning {
-  background-color: #faebcc;
-  padding: 1rem;
-  font-size: 1rem;
-  margin-top: 1rem;
-  text-align: justify;
-}
-
 .remark {
   background-color: #faebcc;
   color: #333;
@@ -44,4 +36,30 @@
 
 .content strong {
   font-weight: 700;
+}
+
+.markdownContent {
+  font: var(--fds-typography-paragraph-small);
+
+  p {
+    margin-bottom: var(--fds-spacing-2);
+  }
+
+  li {
+    margin-bottom: var(--fds-spacing-1);
+  }
+
+  strong {
+    font-weight: 700;
+  }
+
+  em {
+    font-style: italic;
+  }
+}
+
+.titleTags {
+  display: flex;
+  gap: 8px;
+  align-items: center;
 }

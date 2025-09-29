@@ -1,13 +1,13 @@
 import React, { useRef, useState } from 'react';
 import { localization } from '@catalog-frontend/utils';
 import { LinkButton, UploadButton } from '@catalog-frontend/ui';
-import { useImportConceptsCsv, useSendConcepts, useImportRdf, useSendRdf } from '../../hooks/import';
+import { useImportConceptsCSV, useSendConcepts, useImportRdf, useSendRdf } from '../../hooks/import';
 import { Button, Modal, Spinner } from '@digdir/designsystemet-react';
 import styles from './import-modal.module.scss';
 import { FileImportIcon, TasklistSendIcon } from '@navikt/aksel-icons';
 import Markdown from 'react-markdown';
 import { Concept } from '@catalog-frontend/types';
-import { delay } from 'lodash';
+import { HelpMarkdown } from '@catalog-frontend/ui';
 
 interface ImportProps {
   catalogId: string;
@@ -45,22 +45,30 @@ export function ImportModal({ catalogId }: ImportProps) {
   const readerRdfRef = useRef<FileReader | null>(null);
 
 
-  const uploadConcepts = useImportConceptsCsv(catalogId, setIsUploading, setIsUploaded);
-  const sendConcepts = useSendConcepts(catalogId)//, setIsSending);
+  const uploadConcepts = useImportConceptsCSV(catalogId, setIsUploading, setIsUploaded);
+  const sendConcepts = useSendConcepts(catalogId)
 
   const uploadRdf = useImportRdf(catalogId);
   const sendRdf = useSendRdf(catalogId)
 
-  const maxSize = 5.8 * 1024 * 1024; // 5.8 MB
+  const maxSize = 10 ; // 10 MB
 
   const onCsvUpload = (event) => {
     const file: File = event.target.files?.[0];
     if (file) {
-      if(file.size > maxSize) {
-        alert(localization.alert.maxFileSizeExceeded);
+      if(file.size > maxSize * 1024 * 1024) {
+        alert(localization.formatString(localization.alert.maxFileSizeExceeded, maxSize));
         cancel();
         return;
       }
+
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      if(fileExtension != 'csv' && fileExtension != 'json') {
+        alert(localization.formatString(localization.concept.importModal.alert.unsupportedFileUpload, 'CSV/JSON'));
+        cancel();
+        return;
+      }
+
       uploadConcepts.mutate(event.target.files[0], {
         onSuccess: (concepts) => {
           setUploadedConcepts(concepts);
@@ -73,10 +81,6 @@ export function ImportModal({ catalogId }: ImportProps) {
   };
 
   const send = async () => {
-    if(uploadedConcepts.length === 0 || !uploadedRdfConcepts.fileContent) {
-      alert("Ingen begreper var funnet i opplastet fil.");
-      return
-    }
 
     setIsSending(true)
 
@@ -113,8 +117,8 @@ export function ImportModal({ catalogId }: ImportProps) {
       //await new Promise(resolve => setTimeout(resolve, 5000));
       const file: File = event.target.files?.[0];
       if (file) {
-        if (file.size > maxSize) {
-          alert(localization.alert.maxFileSizeExceeded);
+        if (file.size > maxSize * 1024 * 1024) {
+          alert(localization.formatString(localization.alert.maxFileSizeExceeded, maxSize));
           cancel();
           return;
         }
@@ -123,10 +127,13 @@ export function ImportModal({ catalogId }: ImportProps) {
         reader.readAsText(file, 'UTF-8');
         const fileExtension = file.name.split('.').pop()?.toLowerCase();
         const contentType = extension2Type.get(`.${fileExtension}`);
-        if (!fileExtension || ! contentType) {
+        if (!fileExtension || !contentType || fileExtension != 'ttl') {
           console.error('Uploaded file has no extension or unsupported extension:', fileExtension);
+          alert(localization.formatString(localization.concept.importModal.alert.unsupportedFileUpload, 'RDF/Turtle'));
+          cancel();
           return;
         }
+
         reader.onload = function (evt) {
           if (uploadSession !== sessionId.current || cancelled) {
             console.log('Session ID', sessionId);
@@ -173,39 +180,72 @@ export function ImportModal({ catalogId }: ImportProps) {
       </Modal.Trigger>
       <Modal.Dialog
         ref={modalRef}
-        onInteractOutside={() => modalRef.current?.close()}
-        onClose={() =>
-          {
-            cancel();
-            modalRef.current = null;
+        onClose={() => {
+          cancel();
+          modalRef.current = null;
         }}
       >
-        <Modal.Header className={styles.content}>
-          <Markdown>{localization.concept.importModal.title}</Markdown>
-        </Modal.Header>
-        <Modal.Content className={styles.content}>
-          <div className={styles.modalContent}>
-            {(isUploading || isSending) && (
-              <div className={styles.spinnerOverlay}>
-                <Spinner
-                  title={localization.loading}
-                  size='large'
-                />
+        {!isUploading && !isSending && !isUploaded && (
+          <>
+            <Modal.Header className={styles.content}>
+              <div className={styles.titleTags}>
+                <Markdown>
+                  {localization.concept.importModal.title}
+                </Markdown>
+                <HelpMarkdown aria-label={`Help ${localization.concept.importModal.titleHelpText}`}>
+                  {localization.concept.importModal.titleHelpText}
+                </HelpMarkdown>
               </div>
-            )}
-            <Markdown>{localization.concept.importModal.conceptUploadDescription}</Markdown>
-            <br />
-            <Markdown>{localization.concept.importModal.resultDescription}</Markdown>
-            <br />
-            <div className={styles.remark}>
-              <Markdown>{localization.concept.importModal.maxFileSize}</Markdown>
-            </div>
-            <div className={styles.warning}>
-              <Markdown>{localization.concept.importModal.csvImportHistoryNotSupported}</Markdown>
-            </div>
-          </div>
-        </Modal.Content>
-        {(!isUploading && !isSending && !isUploaded) && (
+            </Modal.Header>
+            <Modal.Content className={styles.content}>
+              <div className={styles.modalContent}>
+                {(isUploading || isSending) && (
+                  <div className={styles.spinnerOverlay}>
+                    <Spinner
+                      title={localization.loading}
+                      size='large'
+                    />
+                  </div>
+                )}
+                <div className={styles.markdownContent}>
+                  <Markdown>{localization.concept.importModal.conceptUploadDescription}</Markdown>
+                </div>
+                <div className={styles.remark}>
+                  <div className={styles.markdownContent}>
+                    <Markdown>
+                      {localization.formatString(localization.concept.importModal.maxFileSize, maxSize).toString()}
+                    </Markdown>
+                  </div>
+                </div>
+              </div>
+            </Modal.Content>
+          </>
+        )}
+
+        {(isUploading || isUploaded || isSending) && (
+          <>
+            <Modal.Header className={styles.content}>
+                <Markdown>{localization.concept.importModal.titleConfirmSending}</Markdown>
+            </Modal.Header>
+            <Modal.Content className={styles.content}>
+              <div className={styles.modalContent}>
+                {(isUploading || isSending) && (
+                  <div className={styles.spinnerOverlay}>
+                    <Spinner
+                      title={localization.loading}
+                      size='large'
+                    />
+                  </div>
+                )}
+                <div className={styles.markdownContent}>
+                  <Markdown>{localization.concept.importModal.textConfirmSending}</Markdown>
+                </div>
+              </div>
+            </Modal.Content>
+          </>
+        )}
+
+        {!isUploading && !isSending && !isUploaded && (
           <Modal.Footer>
             <div className={styles.buttons}>
               <>
@@ -246,19 +286,19 @@ export function ImportModal({ catalogId }: ImportProps) {
           <Modal.Footer>
             <div className={styles.buttons}>
               <Button
-                variant={'secondary'}
-                onClick={cancel}
-                disabled={isSending}
-              >
-                Avbryt
-              </Button>
-              <Button
                 onClick={send}
                 disabled={isUploading || isSending}
                 variant={'primary'}
               >
                 <TasklistSendIcon />
-                Send
+                Fortsett
+              </Button>
+              <Button
+                variant={'secondary'}
+                onClick={cancel}
+                disabled={isSending}
+              >
+                Avbryt
               </Button>
             </div>
           </Modal.Footer>
