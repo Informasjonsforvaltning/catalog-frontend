@@ -40,7 +40,7 @@
   "dependencies": {
     "@digdir/designsystemet-css": "0.10.0",
     "@digdir/designsystemet-react": "0.63.1",
-    "@digdir/designsystemet-theme": "^0.15.3",
+    "@digdir/designsystemet-theme": "^1.5.1",
     "@fellesdatakatalog/icons": "^0.8.5",
     "@fortawesome/fontawesome-svg-core": "7.0.0",
     "@fortawesome/free-regular-svg-icons": "^7.0.0",
