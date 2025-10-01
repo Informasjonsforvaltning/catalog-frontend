@@ -8,9 +8,8 @@ import {
   removeImportResultConcept as removeImportResult,
   confirmConceptImport,
   cancelConceptImport,
-  getConceptImportResultById,
 } from '@catalog-frontend/data-access';
-import { Concept, FieldsResult, InternalField } from '@catalog-frontend/types';
+import { Concept, InternalField } from '@catalog-frontend/types';
 import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
 import _ from 'lodash';
 import { revalidateTag } from 'next/cache';
