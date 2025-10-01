@@ -34,10 +34,17 @@ const importStatusHelpTexts = [
   { value: 'IN_PROGRESS', label: localization.importResult.helpText.inProgress },
   { value: 'CANCELLED', label: localization.importResult.helpText.cancelled },
   { value: 'PENDING_CONFIRMATION', label: localization.importResult.helpText.pendingConfirmation },
-]
+];
 
-const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, confirmHandler,
-                               cancelHandler, showCancellationButton, showConfirmationButton }: Props) => {
+const ImportResultDetails = ({
+  targetBaseHref,
+  importResult,
+  deleteHandler,
+  confirmHandler,
+  cancelHandler,
+  showCancellationButton,
+  showConfirmationButton,
+}: Props) => {
   const formattedCreateDate = capitalizeFirstLetter(
     formatISO(importResult.created, {
       weekday: 'long',
@@ -49,11 +56,10 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
     }),
   );
 
-  const getImportStatusDisplay = (status: string) => importStatuses
-    .find((st) => status === st.value)?.label ?? status
+  const getImportStatusDisplay = (status: string) => importStatuses.find((st) => status === st.value)?.label ?? status;
 
-  const getImportStatusHelpTexts = (status: string) => importStatusHelpTexts
-    .find((st) => status === st.value)?.label ?? status
+  const getImportStatusHelpTexts = (status: string) =>
+    importStatusHelpTexts.find((st) => status === st.value)?.label ?? status;
 
   const getColorFromStatusKey = (statusKey: StatusKey | undefined) =>
     statusKey ? ImportResultStatusColors[statusKey.toLocaleUpperCase() as StatusKey] : 'neutral';
@@ -74,20 +80,21 @@ const ImportResultDetails = ({ targetBaseHref, importResult, deleteHandler, conf
                   {getImportStatusHelpTexts(importResult.status)}
                 </HelpMarkdown>
 
-                {cancelHandler && confirmHandler && (
-                  /*importResult.extractedConcepts ! == undefined &&
+                {cancelHandler &&
+                  confirmHandler &&
                   importResult.totalConcepts !== undefined &&
-                  importResult.totalConcepts > 0 && */
-                  <div>
-                    {importResult.extractedConcepts}/{importResult.totalConcepts}
-                    {/*
-                      <progress>
-                        value={importResult.extractedConcepts}
-                        max={importResult.totalConcepts}
-                      </progress>*/
-                    }
-                  </div>
-                )}
+                  importResult.totalConcepts > 0 && (
+                    <div className={styles.progress}>
+                      {importResult.extractedConcepts}/{importResult.totalConcepts}
+                      {importResult.status === 'IN_PROGRESS' && (
+                        <progress
+                          value={importResult.extractedConcepts}
+                          max={importResult.totalConcepts}
+                          style={{ width: 120, height: 16, accentColor: '#0d6efd' }}
+                        />
+                      )}
+                    </div>
+                  )}
               </div>
             </Tag>
             <div className={styles.titleTags}>{formattedCreateDate}</div>
