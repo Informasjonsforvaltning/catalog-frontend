@@ -13,7 +13,7 @@ export const DELETE = async (req: NextRequest,
       if (response.status !== 200) {
         throw new Error();
       }
-      //return new Response(JSON.stringify(importResults), { status: 200 });
+
       return new Response('Success', { status: 200 });
     } catch (err) {
       return new Response(JSON.stringify({ message: 'Failed to fetch concepts' }), { status: 500 });

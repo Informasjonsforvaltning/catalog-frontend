@@ -39,7 +39,6 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
 
     const handleConfirmClick = () => {
       confirmMutation.mutate()
-      //await confirmImport(catalogId, importResult.id);
     };
 
     const cancelMutation = useMutation({
@@ -51,7 +50,6 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
 
     const handleCancelClick = () => {
       console.log("Cancelling import", catalogId, importResult.id);
-      //await cancelImport(catalogId, importResult.id);
       cancelMutation.mutate();
     };
 
