@@ -209,7 +209,7 @@ export const useSendRdf = (catalogId: string) => {
 
         }
 
-        await importRdfConcepts(mutationProps.fileContent, mutationProps.contentType, catalogId, resultId, accessToken)
+        importRdfConcepts(mutationProps.fileContent, mutationProps.contentType, catalogId, resultId, accessToken)
           .catch(error => console.error("Failed to import RDF concepts in the background", error));
 
         console.log('Created import result ID at ', location);
