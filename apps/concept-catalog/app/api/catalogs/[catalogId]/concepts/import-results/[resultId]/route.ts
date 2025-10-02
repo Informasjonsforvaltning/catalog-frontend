@@ -29,14 +29,13 @@ export const GET = async (req: NextRequest,
 
     try {
       const response = await getConceptImportResultById(catalogId, resultId, session?.accessToken);
-      if (response.status !== 200) {
-        throw new Error();
-      }
+      console.log(response);
 
       const jsonResponse = await response.json();
       //return new Response(JSON.stringify(importResults), { status: 200 });
       return new Response(JSON.stringify(jsonResponse), { status: 200 });
     } catch (err) {
+      console.log(err)
       return new Response(JSON.stringify({ message: 'Failed to fetch concepts' }), { status: 500 });
     }
   });
