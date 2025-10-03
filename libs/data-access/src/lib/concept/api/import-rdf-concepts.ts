@@ -31,9 +31,10 @@ export const importRdfConcepts = async (
   const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'importRdfConcepts');
   const encodedResultId = validateAndEncodeUrlSafe(importId, 'result ID', 'importRdfConcepts');
 
+  console.log("Uploading the concept rdf file catalog:", encodedCatalogId);
+
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}`;
 
-  console.log("Uploading the concept rdf file catalog:", encodedCatalogId);
   console.log("Updating status of import result with id:", encodedResultId);
 
   const options = {
