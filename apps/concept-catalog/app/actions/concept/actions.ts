@@ -249,7 +249,7 @@ export async function cancelImport(catalogId: string, resultId: string) {
 
     const response = await cancelConceptImport(catalogId, resultId, `${session?.accessToken}`)
 
-    console.log("Cancelling import has been sent", catalogId, resultId);
+    console.log("Import cancellation has been sent", catalogId, resultId);
 
     if (response.status !== 200 && response.status !== 201) {
       throw new Error();
