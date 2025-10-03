@@ -245,7 +245,7 @@ export async function cancelImport(catalogId: string, resultId: string) {
   }
   let success = false;
   try {
-    console.log("Sending Cancelling import", catalogId, resultId);
+    console.log("Sending import cancellation", catalogId, resultId);
 
     const response = await cancelConceptImport(catalogId, resultId, `${session?.accessToken}`)
 
