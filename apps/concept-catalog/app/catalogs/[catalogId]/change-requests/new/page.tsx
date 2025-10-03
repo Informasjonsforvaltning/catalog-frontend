@@ -71,6 +71,7 @@ const ChangeRequestOrNew = withReadProtectedPage(
     delete clonedConcept.endringslogelement;
     delete clonedConcept.publiseringsTidspunkt;
     delete clonedConcept.erPublisert;
+    delete clonedConcept.isArchived;
 
     const changeRequestAsConcept = jsonpatch.applyPatch(
       clonedConcept,
