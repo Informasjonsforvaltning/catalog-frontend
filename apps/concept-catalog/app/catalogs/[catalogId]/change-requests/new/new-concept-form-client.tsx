@@ -63,6 +63,7 @@ export const NewConceptFormClient = ({
     delete clonedConcept.endringslogelement;
     delete clonedConcept.publiseringsTidspunkt;
     delete clonedConcept.erPublisert;
+    delete clonedConcept.isArchived;
 
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
       conceptId: originalConcept?.originaltBegrep ?? null,

@@ -363,7 +363,7 @@ export const ConceptPageClient = ({
   };
 
   const handleEditConcept = () => {
-    const revision = revisions?.find((revision) => !revision.erPublisert);
+    const revision = revisions?.find((revision) => !revision.isArchived);
     const id = revision ? revision.id : concept?.id;
     if (validOrganizationNumber(catalogId) && validUUID(id)) {
       router.push(`/catalogs/${catalogId}/concepts/${id}/edit`);
@@ -371,7 +371,7 @@ export const ConceptPageClient = ({
   };
 
   const handleDeleteConcept = () => {
-    const revision = revisions?.find((revision) => !revision.erPublisert);
+    const revision = revisions?.find((revision) => !revision.isArchived);
     if (revision) {
       deleteConcept.mutate(revision.id as string);
     }
@@ -871,7 +871,7 @@ export const ConceptPageClient = ({
             {hasWritePermission && (
               <>
                 <Button onClick={handleEditConcept}>{localization.button.edit}</Button>
-                {!concept?.erPublisert && (
+                {!concept?.isArchived && (
                   <Button
                     color={'danger'}
                     variant='secondary'

@@ -175,6 +175,7 @@ export interface Concept {
   tillattTerm?: Record<string, string[]>;
   versjonsnr?: Version | null;
   erPublisert?: boolean;
+  isArchived?: boolean;
   revisjonAv?: string;
 }
 
