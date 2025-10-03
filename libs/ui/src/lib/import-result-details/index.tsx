@@ -134,7 +134,6 @@ const ImportResultDetails = ({
                 importResult.status === 'COMPLETED'
               }
               onClick={async () => {
-                console.log('Cancel import', importResult.id);
                 cancelHandler && cancelHandler(importResult.id);
               }}
             >
