@@ -49,7 +49,6 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
     });
 
     const handleCancelClick = () => {
-      console.log("Cancelling import", catalogId, importResult.id);
       cancelMutation.mutate();
     };
 
