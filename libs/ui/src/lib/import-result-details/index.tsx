@@ -25,6 +25,7 @@ const importStatuses = [
   { value: 'FAILED', label: localization.importResult.failed },
   { value: 'IN_PROGRESS', label: localization.importResult.inProgress },
   { value: 'CANCELLED', label: localization.importResult.cancelled },
+  { value: 'SAVING', label: localization.importResult.savingInCatalog },
   { value: 'PENDING_CONFIRMATION', label: localization.importResult.pendingConfirmation },
 ];
 
@@ -33,6 +34,7 @@ const importStatusHelpTexts = [
   { value: 'FAILED', label: localization.importResult.helpText.failed },
   { value: 'IN_PROGRESS', label: localization.importResult.helpText.inProgress },
   { value: 'CANCELLED', label: localization.importResult.helpText.cancelled },
+  { value: 'SAVING', label: localization.importResult.helpText.savingInCatalog },
   { value: 'PENDING_CONFIRMATION', label: localization.importResult.helpText.pendingConfirmation },
 ];
 
@@ -85,13 +87,26 @@ const ImportResultDetails = ({
                   importResult.totalConcepts !== undefined &&
                   importResult.totalConcepts > 0 && (
                     <div className={styles.progress}>
-                      {importResult.extractedConcepts}/{importResult.totalConcepts}
                       {importResult.status === 'IN_PROGRESS' && (
-                        <progress
-                          value={importResult.extractedConcepts}
-                          max={importResult.totalConcepts}
-                          style={{ width: 120, height: 16, accentColor: '#0d6efd' }}
-                        />
+                        <>
+                          {importResult.extractedConcepts}/{importResult.totalConcepts}
+                          <progress
+                            value={importResult.extractedConcepts}
+                            max={importResult.totalConcepts}
+                            style={{ width: 120, height: 16, accentColor: '#0d6efd' }}
+                          />
+                        </>
+                      )}
+
+                      {importResult.status === 'SAVING' && (
+                        <>
+                          {importResult.savedConcepts}/{importResult.totalConcepts}
+                          <progress
+                            value={importResult.savedConcepts}
+                            max={importResult.totalConcepts}
+                            style={{ width: 120, height: 16, accentColor: '#0d6efd' }}
+                          />
+                        </>
                       )}
                     </div>
                   )}
@@ -131,13 +146,13 @@ const ImportResultDetails = ({
                 !importResult.status ||
                 importResult.status === 'CANCELLED' ||
                 importResult.status === 'FAILED' ||
+                importResult.status === 'SAVING' ||
                 importResult.status === 'COMPLETED'
               }
               onClick={async () => {
                 cancelHandler && cancelHandler(importResult.id);
               }}
             >
-
               {localization.importResult.cancelImport}
             </Button>
           )}

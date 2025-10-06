@@ -4,10 +4,11 @@ export interface ImportResult {
   id: string;
   created: string;
   catalogId: string;
-  status: 'FAILED' | 'COMPLETED' | 'IN_PROGRESS' | 'CANCELLED' | 'PENDING_CONFIRMATION';
+  status: 'FAILED' | 'COMPLETED' | 'IN_PROGRESS' | 'CANCELLED' | 'PENDING_CONFIRMATION' | 'SAVING';
   extractionRecords?: ExtractionRecord[];
   totalConcepts: number;
   extractedConcepts: number;
+  savedConcepts: number;
 }
 
 export interface ExtractionRecord {

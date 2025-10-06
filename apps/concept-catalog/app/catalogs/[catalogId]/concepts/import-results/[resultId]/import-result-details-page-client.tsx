@@ -52,7 +52,10 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
       cancelMutation.mutate();
     };
 
-    const shouldRefetch = (fetchedData)=> fetchedData.status === 'IN_PROGRESS';
+    const shouldRefetch = (fetchedData)=> fetchedData.status === 'IN_PROGRESS'
+      || fetchedData.status === 'SAVING';
+
+    const isPendingConfirmation = (fetchedData) => fetchedData.status === 'PENDING_CONFIRMATION';
 
     const { data } = useQuery({
       queryKey: ['refresh-import-result', catalogId, importResult?.id],
@@ -66,10 +69,9 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
       refetchInterval: (q) => {
         const status = q?.state?.data?.status;
         console.log("Status", status)
-
-        return shouldRefetch(q?.state?.data) ? 3000 : false;
+        return shouldRefetch(q?.state?.data) ? 3000 : isPendingConfirmation(q?.state?.data) ? 6000: false;
       },
-      refetchOnWindowFocus: false,
+      refetchOnWindowFocus: true,
       retry: 2,
     });
 
