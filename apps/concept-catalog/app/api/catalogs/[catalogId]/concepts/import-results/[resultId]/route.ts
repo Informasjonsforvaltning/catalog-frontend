@@ -29,10 +29,8 @@ export const GET = async (req: NextRequest,
 
     try {
       const response = await getConceptImportResultById(catalogId, resultId, session?.accessToken);
-      console.log(response);
 
       const jsonResponse = await response.json();
-      //return new Response(JSON.stringify(importResults), { status: 200 });
       return new Response(JSON.stringify(jsonResponse), { status: 200 });
     } catch (err) {
       console.log(err)
