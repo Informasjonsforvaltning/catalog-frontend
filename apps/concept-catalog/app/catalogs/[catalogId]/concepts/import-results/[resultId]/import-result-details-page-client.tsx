@@ -6,6 +6,7 @@ import { confirmImport, cancelImport, deleteImportResult } from '../../../../../
 import { ConfirmModal, ImportResultDetails } from '@catalog-frontend/ui';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface Props {
   catalogId: string;
@@ -23,18 +24,53 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
       window.alert(error);
     }
   };
+  const qc = useQueryClient();
 
   const handleDeleteClick = async () => {
     setShowDeleteConfirm(true);
   };
 
-    const handleConfirmClick = async () => {
-      await confirmImport(catalogId, importResult.id);
+  const confirmMutation = useMutation({
+    mutationFn: async () => await confirmImport(catalogId, importResult.id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['refresh-import-result', catalogId, importResult.id] });
+    },
+  });
+
+    const handleConfirmClick = () => {
+      confirmMutation.mutate()
     };
 
-    const handleCancelClick = async () => {
-        await cancelImport(catalogId, importResult.id);
+    const cancelMutation = useMutation({
+      mutationFn: async () => await cancelImport(catalogId, importResult.id),
+      onSuccess: () => {
+        qc.invalidateQueries({ queryKey: ['refresh-import-result', catalogId, importResult.id] });
+      },
+    });
+
+    const handleCancelClick = () => {
+      cancelMutation.mutate();
     };
+
+    const shouldRefetch = (fetchedData)=> fetchedData.status === 'IN_PROGRESS';
+
+    const { data } = useQuery({
+      queryKey: ['refresh-import-result', catalogId, importResult?.id],
+      queryFn: async () => {
+        const response = await fetch(`/api/catalogs/${catalogId}/concepts/import-results/${importResult?.id}`, {
+          method: 'GET',
+        });
+        return response.json();
+      },
+      initialData: importResult, // seed from server
+      refetchInterval: (q) => {
+        const status = q?.state?.data?.status;
+
+        return shouldRefetch(q?.state?.data) ? 3000 : false;
+      },
+      refetchOnWindowFocus: false,
+      retry: 2,
+    });
 
   return (
     <>
@@ -48,7 +84,7 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
       )}
       <ImportResultDetails
         targetBaseHref={`catalogs/${catalogId}/concepts`}
-        importResult={importResult}
+        importResult={data}
         deleteHandler={handleDeleteClick}
         confirmHandler={handleConfirmClick}
         cancelHandler={handleCancelClick}
