@@ -22,6 +22,7 @@ export default class DataServiceDetailPage {
   readonly contactEmail: Locator;
   readonly contactPhone: Locator;
   readonly contactUrl: Locator;
+  readonly versionInfo: Locator;
   readonly confirmModal: Locator;
   readonly confirmModalSuccessButton: Locator;
   readonly confirmModalCancelButton: Locator;
@@ -47,6 +48,7 @@ export default class DataServiceDetailPage {
     this.contactEmail = page.getByTestId('data-service-contact-email');
     this.contactPhone = page.getByTestId('data-service-contact-phone');
     this.contactUrl = page.getByTestId('data-service-contact-url');
+    this.versionInfo = page.getByTestId('data-service-version');
     this.confirmModal = page.locator('dialog[open]');
     this.confirmModalSuccessButton = page.locator('dialog[open] button').first();
     this.confirmModalCancelButton = page.locator('dialog[open] button').nth(1);
@@ -195,6 +197,10 @@ export default class DataServiceDetailPage {
 
   async expectContactUrlToBe(url: string) {
     await expect(this.contactUrl).toContainText(url);
+  }
+
+  async expectVersionInfoToBe(version: string) {
+    await expect(this.versionInfo).toContainText(version);
   }
 
   // Modal assertions

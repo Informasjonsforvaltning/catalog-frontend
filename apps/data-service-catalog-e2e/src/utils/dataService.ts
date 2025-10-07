@@ -30,6 +30,7 @@ export const getRandomDataService = () => {
       phone: '+4712345678',
       url: 'https://example.com/contact',
     },
+    versionInfo: '1.0.0',
   };
   return dataService;
 };
@@ -53,6 +54,7 @@ export const getMinimalDataService = () => {
       nn: ['minimal'],
       en: ['minimal'],
     },
+    versionInfo: '0.1.0',
   };
   return dataService;
 };

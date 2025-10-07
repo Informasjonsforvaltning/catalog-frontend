@@ -18,6 +18,7 @@ runTestAsAdmin('should display data service details', async ({ page, context, ac
   await dataServiceDetailPage.expectTitleToBe(dataService.title.nb as string);
   await dataServiceDetailPage.expectDescriptionToBe(dataService.description.nb as string);
   await dataServiceDetailPage.expectEndpointUrlToBe(dataService.endpointUrl || '');
+  await dataServiceDetailPage.expectVersionInfoToBe(dataService.versionInfo || '');
 
   // Verify buttons are visible
   await dataServiceDetailPage.expectEditButtonVisible();
