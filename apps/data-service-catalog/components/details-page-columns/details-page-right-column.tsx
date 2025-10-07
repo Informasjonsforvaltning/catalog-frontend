@@ -107,6 +107,16 @@ export const RightColumn = ({
         </InfoCard.Item>
       )}
 
+      {!isEmpty(dataService?.versionInfo) && (
+        <InfoCard.Item
+          title={localization.dataServiceForm.fieldLabel.version}
+          headingColor='light'
+          data-testid='data-service-version'
+        >
+          {dataService?.versionInfo}
+        </InfoCard.Item>
+      )}
+
       {!isEmpty(dataService?.contactPoint) && (
         <InfoCard.Item
           title={localization.dataServiceForm.heading.contactPoint}

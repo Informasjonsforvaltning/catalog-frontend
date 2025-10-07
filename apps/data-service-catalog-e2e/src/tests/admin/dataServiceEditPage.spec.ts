@@ -40,6 +40,7 @@ runTestAsAdmin('should edit existing data service', async ({ page, playwright, a
   await dataServiceEditPage.expectTitleToBe(originalDataService.title);
   await dataServiceEditPage.expectDescriptionToBe(originalDataService.description);
   await dataServiceEditPage.expectEndpointUrlToBe(originalDataService.endpointUrl);
+  await dataServiceEditPage.expectVersionInfoToBe(originalDataService.versionInfo || '');
 
   // Update the data service
   const updatedTitle = { nb: 'Updated Title', nn: 'Oppdatert Tittel', en: 'Updated Title' };
@@ -69,6 +70,7 @@ runTestAsAdmin('should show all form fields', async ({ page, playwright, accessi
   await expect(dataServiceEditPage.licenseGroup).toBeVisible();
   await expect(dataServiceEditPage.accessRightsGroup).toBeVisible();
   await expect(dataServiceEditPage.availabilityGroup).toBeVisible();
+  await expect(dataServiceEditPage.versionInfoInput).toBeVisible();
 
   // Verify buttons are visible
   await dataServiceEditPage.expectSaveButtonVisible();
@@ -120,4 +122,33 @@ runTestAsAdmin('should auto-save form data', async ({ page, playwright, accessib
 
   // Should show restore dialog
   await expect(page.getByText('Vil du gjenopprette?')).toBeVisible();
+});
+
+runTestAsAdmin('should handle versionInfo field', async ({ page, playwright, accessibilityBuilder }) => {
+  const apiRequestContext = await playwright.request.newContext({
+    storageState: adminAuthFile,
+  });
+
+  // Create a data service first
+  const originalDataService = getMinimalDataService();
+  const createdDataService = await createDataService(apiRequestContext, originalDataService);
+
+  const dataServiceEditPage = new DataServiceEditPage(page, playwright, accessibilityBuilder);
+  await dataServiceEditPage.goto(process.env.E2E_CATALOG_ID, createdDataService.id);
+
+  // Verify initial versionInfo value
+  await dataServiceEditPage.expectVersionInfoToBe(originalDataService.versionInfo || '');
+
+  // Update the versionInfo
+  const newVersion = '2.0.0';
+  await dataServiceEditPage.fillVersionInfo(newVersion);
+
+  // Save changes
+  await dataServiceEditPage.clickSave();
+
+  // Verify the versionInfo was saved
+  await dataServiceEditPage.expectVersionInfoToBe(newVersion);
+
+  // Clean up
+  await deleteDataService(apiRequestContext, createdDataService.id);
 });
