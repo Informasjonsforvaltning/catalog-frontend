@@ -25,6 +25,7 @@ export interface DataServiceToBeCreated {
   contactPoint?: DataServiceContactPoint;
   availability?: string;
   costs?: DataServiceCost[];
+  versionInfo?: string;
 }
 
 type DataServiceContactPoint = {
