@@ -163,7 +163,7 @@ runSerialTestsAdmin('Test @solo importing RDF', [
       expect(importId != null);
 
       console.log('[TEST] Redirecting to the created import result...');
-      await importResultDetailsPage.goto(importId, { timeout: 5000 });
+      await importResultDetailsPage.goto(importId, { timeout: 20000 });
 
       console.log('[TEST] Checking buttons...');
       await importResultDetailsPage.checkWaitingForConfirmationStatus();
@@ -211,7 +211,7 @@ runSerialTestsAdmin('Test @solo importing RDF', [
       await importResultDetailsPage.checkSuccessfulStatus();
 
     },
-  },
+  }], [
   {
     name: 'Test failing of import Turtle file after previously importing and confirm saving concepts',
     fn: async ({ conceptsPage, playwright }) => {

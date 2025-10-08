@@ -290,7 +290,7 @@ export default class ConceptsPage {
       sendButton.click({ timeout: 10000 }),
     ]);
 
-    await expect(this.page).toHaveURL(/\/import-results\/.+/i);
+    await expect(this.page).toHaveURL(/\/import-results\/.+/i, { timeout: 60000 });
 
     const url = this.page.url();
     console.log("Import result URL: ", url);

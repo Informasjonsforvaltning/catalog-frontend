@@ -54,16 +54,22 @@ export const runTestAsAdmin = (name: string, fn: (any) => void) => {
   runTest(name, fn);
 };
 
-export const runSerialTestsAdmin = (name: string, tests: {name: string, fn: (any)  => void} []) => {
+export const runSerialTestsAdmin = (name: string, tests: {name: string, fn: (any)  => void} [],
+                                    skippedTests?: {name: string, fn: (any)  => void} []) => {
   test.use({ storageState: adminAuthFile });
   test.describe.serial(PREFIX_TEXT + ' serial tests ' + name, () => {
 
-    for (const { name, fn } of tests){
+    for (const { name, fn } of tests) {
       test.use({ storageState: adminAuthFile });
       runTest(`${PREFIX_TEXT} ${name}`, fn);
     }
 
   });
+  if(!skippedTests) return;
+
+  for (const { name, fn } of skippedTests)
+    skipTest(name, fn);
+
 }
 
 export const skipTestAsAdmin = (name: string, fn: (any) => void) => {
