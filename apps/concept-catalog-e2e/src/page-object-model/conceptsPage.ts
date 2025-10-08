@@ -268,7 +268,7 @@ export default class ConceptsPage {
 
     console.log('[TEST] Clicking Importer RDF Button...');
     const fileInput = await this.page
-      .locator('input[type="file"][accept*=".ttl"], input[type="file"][accept*="ttl"]')
+      .locator('input[type="file"][accept*=".ttl"]')
       .first();
 
     await expect(fileInput).toBeAttached({ timeout: 5000 });
