@@ -619,6 +619,7 @@ Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- 
 
   importResult: {
     completed: 'Lagt til i katalog',
+    savingInCatalog: 'Legging til i katalog',
     failed: 'Feilet',
     inProgress: 'Pågår',
     cancelled: 'Avvist',
@@ -632,6 +633,7 @@ Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- 
     deleteCanResultInDuplicates: `Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.`,
     cancelledImport: `Importen ble avvist før den ble fullført.`,
     helpText: {
+       savingInCatalog: 'Importen er godkjent, og begrepene vil være tilgjengelige i katalogen seinere.',
        completed: 'Importen er godkjent, og begrepene er tilgjengelige i katalogen.',
        failed: 'Importen kunne ikke fullføres på grunn av feil i minst ett av begrepene i den opplastede filen.',
        inProgress: 'Importen er under behandling. Importen kan avvises.',
