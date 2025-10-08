@@ -198,8 +198,8 @@ export const nb = {
     edit: 'Rediger',
     expandAll: 'Vis alle felter',
     harvestDataset: 'Høst spesifikasjon fra katalog',
-    importConceptCSV: 'Importer CSV/JSON',
-    importConceptRDF: 'Importer RDF',
+    importConceptCSV: 'Import av CSV/JSON',
+    importConceptRDF: 'Import av RDF',
     importLogo: 'Importer logo',
     importDataService: 'Importer OpenAPI',
     removeFilter: 'Fjern filter',
@@ -258,7 +258,7 @@ export const nb = {
     deleteInternalField: 'Er du sikker på at du ønsker å slette feltet?',
     deleteUser: 'Er du sikker på at du vil slette brukernavnet?',
     fail: 'Oppdatering feilet.',
-    maxFileSizeExceeded: 'Filstørrelsen er mer enn maksimumsgrensen på 5.8 MB. Importering avbrytes.',
+    maxFileSizeExceeded: 'Filstørrelsen er mer enn maksimumsgrensen på {0} MB. Importering avbrytes.',
     noChanges: 'Ingen endringer funnet.',
     notValidFile: 'Innholdet i filen er ikke gyldig.',
     success: 'Oppdatering vellykket!',
@@ -410,13 +410,24 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
       REJECTED: 'neutral',
     },
     importModal: {
-      title: '**Import av begreper**',
-      conceptUploadDescription:
-        'Det er mulig å importere begrepsbeskrivelser ved å laste opp filer i enten Turtle-, CSV- eller JSON-format ved hjelp av de tilgjengelige knappene.',
-      resultDescription: `En side med detaljerte resultater av importprosessen vises automatisk ved fullført importforsøk av en Turtle-fil. Tidligere gjennomførte importforsøk for Turtle-filer kan vises ved å benytte **Resultater**-knappen.`,
-      csvImportHistoryNotSupported:
-        'Visning av detaljerte resultater og oversikt over tidligere importforsøk for CSV- og JSON-filer er foreløpig ikke tilgjengelig.',
-      maxFileSize: `**Merk:** Maksimal filstørrelse for opplastning er 5.8 MB`,
+      title: `__Import av begrep__`,
+      titleHelpText: `
+For å importere en Turtle-fil, som er et RDF-format, brukes __Importer RDF__. CSV- og JSON-filer importeres ved hjelp av __Importer CSV/JSON__. Når importen er gjennomført, vises resultatene automatisk på en egen side. Tidligere importforsøk kan alltid åpnes igjen via __Resultater__.
+`,
+      titleConfirmSending: `__Begreper klare til import__`,
+      conceptUploadDescription: `
+Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- eller JSON-format. Etter import vises en side med resultater.
+        `,
+      textConfirmSending: `
+ Importstatus vil vises på en egen side, der det også kan velges om begrepene skal opprettes i begrepskatalogen.
+ 
+ Vil du fortsette importen eller avbryte?
+ `,
+      maxFileSize: `___Merk:__ Maksimal filstørrelse for opplastning er {0} MB_`,
+      alert: {
+        unsupportedFileUpload:
+          'Den valgte filen kan ikke importeres fordi filformatet ikke støttes. Støttet filformate er {0}.',
+      },
     },
   },
 
@@ -607,21 +618,38 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
   },
 
   importResult: {
-    completed: 'Vellykket',
+    completed: 'Lagt til i katalog',
     failed: 'Feilet',
     inProgress: 'Pågår',
     cancelled: 'Avvist',
-    pendingConfirmation: 'Venter på bekreftelse',
+    pendingConfirmation: 'Til gjennomgang',
     warnings: 'Advarsler',
     errors: 'Feil',
     goToImported: 'Gå til importert ressurs',
     confirmDelete: 'Er du sikker på at du vil slette importeringsrapporten?',
-    deleteCanResultInDuplicates: `
-Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.`,
+    cancelImport: 'Avvis import',
+    confirmImport: 'Legg til i katalog',
+    deleteCanResultInDuplicates: `Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.`,
+    cancelledImport: `Importen ble avvist før den ble fullført.`,
+    helpText: {
+       completed: 'Importen er godkjent, og begrepene er tilgjengelige i katalogen.',
+       failed: 'Importen kunne ikke fullføres på grunn av feil i minst ett av begrepene i den opplastede filen.',
+       inProgress: 'Importen er under behandling. Importen kan avvises.',
+       cancelled: 'Importen er forkastet og begrepene er ikke lagt til i katalogen.',
+       pendingConfirmation: 'Begrepene er opplastet, men er ennå ikke importert til katalogen. Importen kan enten avvises eller legges til i katalogen.',
+    },
     tableHeading: {
       title: 'Import',
       timestamp: 'Tidspunkt',
       status: 'Status',
+      statusHelpTextConceptImport: `
+Status viser hvor langt importen har kommet i prosessen:
+
+- __Til gjennomgang:__ Begrepene er importert, men er ennå ikke synlige i katalogen. Importen kan enten avvises eller legges til i katalogen.
+- __Lagt til i katalog:__ Importen er godkjent, og begrepene er tilgjengelige i katalogen.
+- __Avvist:__ Importen er forkastet og begrepene er ikke lagt til i katalogen.
+- __Feilet:__ Importen er ikke fullført fordi minst ett av begrepene i filen inneholder feil.
+      `,
     },
     tooltip: {
       ok: 'Antall uten feil.',

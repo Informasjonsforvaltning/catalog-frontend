@@ -1,6 +1,7 @@
 export * from './lib/auth/auth-options';
 export * from './lib/auth/helpers';
 export * from './lib/auth/token';
+export * from './lib/auth/routes';
 export * from './lib/code-list';
 export * from './lib/concept';
 export * from './lib/date/format';

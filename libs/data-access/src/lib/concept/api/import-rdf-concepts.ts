@@ -1,7 +1,12 @@
 'use server';
 
+import { validateAndEncodeUrlSafe, validateOrganizationNumber, validateUUID } from '@catalog-frontend/utils';
+
 export const createImportJob = async (catalogId: string, accessToken: string) => {
-  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}/createImportId`;
+  validateOrganizationNumber(catalogId, 'createImportJob');
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'createImportJob');
+
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/createImportId`;
 
   const options = {
     headers: {
@@ -20,10 +25,17 @@ export const importRdfConcepts = async (
   importId: string,
   accessToken: string
 ) => {
-  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${catalogId}/${importId}`;
+  validateOrganizationNumber(catalogId, 'importRdfConcepts');
+  validateUUID(importId, 'importRdfConcepts');
 
-  console.log("Uploading the concept rdf file catalog:", catalogId);
-  console.log("Updating status of import result with id:", importId);
+  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'importRdfConcepts');
+  const encodedResultId = validateAndEncodeUrlSafe(importId, 'result ID', 'importRdfConcepts');
+
+  console.log("Uploading the concept rdf file catalog:", encodedCatalogId);
+
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}`;
+
+  console.log("Updating status of import result with id:", encodedResultId);
 
   const options = {
     headers: {

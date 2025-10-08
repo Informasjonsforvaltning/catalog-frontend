@@ -150,6 +150,7 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
               <ImportResultsTable
                 importHref={`/catalogs/${catalogId}/concepts/import-results`}
                 importResults={paginatedImportResults}
+                showStatusHelpText={true}
               />
             ) : null
           }

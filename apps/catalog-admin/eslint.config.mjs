@@ -36,6 +36,7 @@ export default defineConfig([
       ...pluginReact.configs.flat.recommended.rules,
 
       '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/triple-slash-reference': 'off',
       '@next/next/no-html-link-for-pages': ['error', 'apps/catalog-admin/pages'],
     },
   },
