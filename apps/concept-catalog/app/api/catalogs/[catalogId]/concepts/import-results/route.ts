@@ -9,9 +9,9 @@ export const GET = async (req: NextRequest, props: { params: Promise<{ catalogId
 
     try {
       const response = await getConceptImportResults(catalogId, session?.accessToken);
-      if (response.status !== 200) {
-        throw new Error();
-      }
+
+      console.log("Import results", response);
+
       const importResults = await response.json();
       return new Response(JSON.stringify(importResults), { status: 200 });
     } catch (err) {

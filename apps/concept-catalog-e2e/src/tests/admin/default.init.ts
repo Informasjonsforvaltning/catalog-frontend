@@ -21,11 +21,11 @@ initAsAdmin('Hide devtools', async ({ conceptsPage }) => {
   console.log('[INIT] Devtools hidden.');
 });
 
-initAsAdmin('delete all existing import results', async ({ playwright, conceptsPage }) => {
+/*initAsAdmin('delete all existing import results', async ({ playwright, conceptsPage }) => {
 
   const apiRequestContext = await playwright.request.newContext({
     storageState: adminAuthFile,
   });
 
   await deleteAllImportResults(apiRequestContext)
-});
+});*/
