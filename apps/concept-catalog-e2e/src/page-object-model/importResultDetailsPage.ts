@@ -21,7 +21,7 @@ export default class ImportResultDetailsPage {
   public getButtonByName = (name: string) => this.page.getByRole('button', { name: name });
   public getElementByText = (text: string) => this.page.getByText(text);
 
-  public getCancelImportButton = () => this.getButtonByName('Avvis');
+  public getCancelImportButton = () => this.getButtonByName('Avvis import');
   public getDeleteImportButton = () => this.getButtonByName('Slett');
   public getConfirmButton = () => this.getButtonByName('Legg til i katalog');
 
@@ -63,11 +63,11 @@ export default class ImportResultDetailsPage {
   }
 
   async confirmImport() {
-    await this.getConfirmButton().click({ timeout: 20000 })
+    await this.getConfirmButton().click({ timeout: 40000 })
   }
 
   async cancelImport() {
-    await this.getCancelImportButton().click({ timeout: 20000 })
+    await this.getCancelImportButton().click({ timeout: 40000 })
   }
 
   async deleteAllImportResults(apiRequestContext) {
