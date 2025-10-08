@@ -62,7 +62,7 @@ jobs:
           key: cache-nx-${{ hashFiles('yarn.lock') }}
 
       - run: yarn playwright install
-      - run: yarn nx e2e ${{ matrix.appname }} --verbose --configuration=ci
+      - run: yarn nx e2e ${{ matrix.appname }} --configuration=ci
         env:
           E2E_AUTH_ADMIN_ID: ${{ secrets.E2E_AUTH_ADMIN_ID }}
           E2E_AUTH_READ_ID: ${{ secrets.E2E_AUTH_READ_ID }}
