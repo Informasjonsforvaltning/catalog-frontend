@@ -23,11 +23,12 @@ export default class ImportResultDetailsPage {
 
   public getCancelImportButton = () => this.getButtonByName('Avvis');
   public getDeleteImportButton = () => this.getButtonByName('Slett');
-  public getConfirmButton = () => this.getButtonByName('Bekreft å lagre');
+  public getConfirmButton = () => this.getButtonByName('Legg til i katalog');
 
-  public getSuccessfulLabel = () => this.getElementByText('Vellykket');
+  public getOngoingLabel = () => this.getElementByText('Pågår');
+  public getSuccessfulLabel = () => this.getElementByText('Lagt til i katalog');
   public getCancelledLabel = () => this.getElementByText('Avvist');
-  public getWaitingForConfirmationLabel = () => this.getElementByText('Venter på bekreftelse');
+  public getWaitingForConfirmationLabel = () => this.getElementByText('Til gjennomgang');
   public getFailedLabel = () => this.getElementByText('Feilet');
 
 

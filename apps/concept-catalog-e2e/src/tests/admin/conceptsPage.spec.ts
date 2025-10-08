@@ -139,9 +139,9 @@ runTestAsAdmin('Test if a modal opens when click Import', async ({ conceptsPage,
   console.log('[TEST] Checking that there are 3 buttons in the modal...');
   await expect(dialog.getByRole('link', { name: 'Resultater' })).toBeVisible({ timeout: 5000 });
 
-  await expect(dialog.getByRole('button', { name: 'Importer RDF' })).toBeVisible({ timeout: 5000 });
+  await expect(dialog.getByRole('button', { name: 'Import av RDF' })).toBeVisible({ timeout: 5000 });
 
-  await expect(dialog.getByRole('button', { name: 'Importer CSV/JSON' })).toBeVisible({ timeout: 5000 });
+  await expect(dialog.getByRole('button', { name: 'Import av CSV/JSON' })).toBeVisible({ timeout: 5000 });
 });
 
 runSerialTestsAdmin('Test @solo importing RDF', [

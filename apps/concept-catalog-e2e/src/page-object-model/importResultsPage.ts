@@ -19,11 +19,11 @@ export default class ImportResultsPage {
 
   // Locators
   statusFilterHeaderLocator = () => this.page.getByRole('button', { name: 'Status' });
-  statusFilterSuccessfulLocator = () => this.getByLabelLocator('Vellykket');
+  statusFilterSuccessfulLocator = () => this.getByLabelLocator('Lagt til i katalog');
   statusFilterFailedLocator = () => this.getByLabelLocator('Feilet');
   statusFilterOngoingLocator = () => this.getByLabelLocator('Pågår');
   statusFilterCancelledLocator = () => this.getByLabelLocator('Avvist');
-  statusFilterPendingConfirmationLocator = () => this.getByLabelLocator('Venter på bekreftelse');
+  statusFilterPendingConfirmationLocator = () => this.getByLabelLocator('Til gjennomgang');
 
   async expectFiltersToBeInvisible() {
     await expect(this.statusFilterSuccessfulLocator()).not.toBeVisible();
