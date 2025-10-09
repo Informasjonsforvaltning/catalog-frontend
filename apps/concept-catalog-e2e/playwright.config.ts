@@ -67,28 +67,28 @@ export default defineConfig({
       name: 'admin-chromium',
       use: { ...devices['Desktop Chrome'] },
       dependencies: ['admin-init'],
-      testMatch: '**/admin/conceptsPage.spec.ts',
+      testMatch: '**/admin/*.spec.ts',
       grepInvert: /@solo/
     },
     {
       name: 'admin-firefox',
       use: { ...devices['Desktop Firefox'] },
       dependencies: ['admin-init'],
-      testMatch: '**/admin/conceptsPage.spec.ts',
+      testMatch: '**/admin/*.spec.ts',
       grepInvert: /@solo/
     },
     {
       name: 'admin-chromium-solo',
       use: { ...devices['Desktop Chrome'] },
       dependencies: ['admin-init'],
-      testMatch: '**/admin/conceptsPage.spec.ts',
+      testMatch: '**/admin/*.spec.ts',
       grep: /@solo/
     },
     {
       name: 'admin-firefox-solo',
       use: { ...devices['Desktop Firefox'] },
       dependencies: ['admin-init', 'admin-chromium-solo'],
-      testMatch: '**/admin/conceptsPage.spec.ts',
+      testMatch: '**/admin/*.spec.ts',
       grep: /@solo/,
     },
     // Uncomment for mobile browsers support
