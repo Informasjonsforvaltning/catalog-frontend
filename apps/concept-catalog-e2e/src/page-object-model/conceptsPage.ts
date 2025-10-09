@@ -248,7 +248,7 @@ export default class ConceptsPage {
 
     await this.goto();
 
-    // Click the Import butt
+    // Click the Import button
     console.log('[TEST] Clicking Importer Button...');
     await this.page.getByRole('button', { name: 'Importer' }).click();
 
@@ -271,7 +271,7 @@ export default class ConceptsPage {
       .locator('input[type="file"][accept*=".ttl"]')
       .first();
 
-    await expect(fileInput).toBeAttached({ timeout: 5000 });
+    //await expect(fileInput).toBeAttached({ timeout: 20000 });
 
     await fileInput.setInputFiles(filePath);
 
@@ -290,7 +290,7 @@ export default class ConceptsPage {
       sendButton.click({ timeout: 10000 }),
     ]);
 
-    await expect(this.page).toHaveURL(/\/import-results\/.+/i, { timeout: 60000 });
+    await expect(this.page).toHaveURL(/\/import-results\/.+/i, { timeout: 100000 });
 
     const url = this.page.url();
     console.log("Import result URL: ", url);

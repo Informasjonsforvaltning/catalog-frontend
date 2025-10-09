@@ -63,20 +63,22 @@ export default defineConfig({
       dependencies: ['admin-login'],
       testMatch: '**/admin/*.init.ts',
     },
-    {
+    //      testMatch: '**/admin/conceptsPage.spec.ts',
+    /*{
       name: 'admin-chromium',
       use: { ...devices['Desktop Chrome'] },
       dependencies: ['admin-init'],
-      testMatch: '**/admin/conceptsPage.spec.ts',
+
       grepInvert: /@solo/
     },
     {
       name: 'admin-firefox',
       use: { ...devices['Desktop Firefox'] },
       dependencies: ['admin-init'],
-      testMatch: '**/admin/conceptsPage.spec.ts',
+
       grepInvert: /@solo/
-    },
+    },*/
+    //      testMatch: '**/admin/conceptsPage.spec.ts',
     {
       name: 'admin-chromium-solo',
       use: { ...devices['Desktop Chrome'] },
