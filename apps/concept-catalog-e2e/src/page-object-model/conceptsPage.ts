@@ -257,37 +257,33 @@ export default class ConceptsPage {
     await expect(this.page.getByRole('dialog')).toBeVisible({ timeout: 5000 });
 
     let dialog = this.page.getByRole('dialog', {
-      //has: this.page.getByRole('button', { name: 'Importer RDF' }),
     });
 
     await expect(dialog.getByRole('button', { name: 'Import av RDF' })).toBeVisible({ timeout: 10000 });
 
     const importerRdfButton = dialog.getByRole('button', { name: 'Import av RDF' });
 
-    await importerRdfButton.click({ timeout: 5000 });
 
     console.log('[TEST] Clicking Importer RDF Button...');
-    const fileInput = await this.page
-      .locator('input[type="file"][accept*=".ttl"]')
-      .first();
 
-    //await expect(fileInput).toBeAttached({ timeout: 20000 });
+    const [fileChooser] = await Promise.all([
+        this.page.waitForEvent('filechooser', { timeout: 20000 }),
+        await importerRdfButton.click({ timeout: 20000 }),
+    ]);
 
-    await fileInput.setInputFiles(filePath);
+    await fileChooser.setFiles(filePath)
 
-    dialog = this.page.getByRole('dialog', {
-      //has: this.page.getByRole('button', { name: 'Send' }),
-    });
+    dialog = this.page.getByRole('dialog', {});
 
     await expect(dialog.getByRole('button', { name: 'Import av RDF' })).toBeHidden({ timeout: 5000 });
     await expect(dialog.getByRole('button', { name: 'Fortsett' })).toBeVisible({ timeout: 5000 });
 
     const sendButton = dialog.getByRole('button', { name: 'Fortsett' });
-    expect(sendButton).not.toBeDisabled({ timeout: 10000 });
+    expect(sendButton).not.toBeDisabled({ timeout: 30000 });
 
     await Promise.all([
-      this.page.waitForURL('**/import-results/**', { timeout: 60_000 }),
-      sendButton.click({ timeout: 10000 }),
+        this.page.waitForURL('**/import-results/**', { timeout: 60_000 }),
+        sendButton.click({ timeout: 10000 }),
     ]);
 
     await expect(this.page).toHaveURL(/\/import-results\/.+/i, { timeout: 100000 });
