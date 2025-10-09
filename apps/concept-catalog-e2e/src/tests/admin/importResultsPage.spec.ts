@@ -10,15 +10,20 @@ runTestAsAdmin('test import results page renders correctly', async ({ importResu
   console.log('[TEST] Navigating to ImportResults page...');
   await importResultsPage.goto();
 
+  console.log('[TEST] Navigated to ImportResults page...');
+
   console.log('[TEST] Expecting URLs to be visible...');
   await importResultsPage.expectImportResultUrl();
+  console.log('[TEST] URLs to are visible...');
 
   console.log('[TEST] Expecting filters to be invisible by default...');
   await importResultsPage.expectFiltersToBeInvisible();
+  console.log('[TEST] Filters are invisible by default...');
 
   console.log('[TEST] Expecting filters to be visible after clicking on Status...');
   await importResultsPage.page.getByRole('button', { name: 'Status' }).click({timeout: 20000});
   await importResultsPage.expectFiltersToBeVisible();
+  console.log('[TEST] Filters are visible after clicking on Status...');
 
 });
 
