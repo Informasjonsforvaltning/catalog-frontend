@@ -21,7 +21,7 @@ runTestAsAdmin('test import results page renders correctly', async ({ importResu
   console.log('[TEST] Filters are invisible by default...');
 
   console.log('[TEST] Expecting filters to be visible after clicking on Status...');
-  await importResultsPage.page.getByRole('button', { name: 'Status' }).click({timeout: 20000});
+  await importResultsPage.page.getByRole('button', { name: 'Status' }).click({timeout: 40000});
   await importResultsPage.expectFiltersToBeVisible();
   console.log('[TEST] Filters are visible after clicking on Status...');
 

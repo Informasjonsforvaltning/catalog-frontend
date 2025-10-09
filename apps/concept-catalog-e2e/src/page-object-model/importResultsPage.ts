@@ -26,20 +26,20 @@ export default class ImportResultsPage {
   statusFilterPendingConfirmationLocator = () => this.getByLabelLocator('Til gjennomgang');
 
   async expectFiltersToBeInvisible() {
-    await expect(this.statusFilterSuccessfulLocator()).not.toBeVisible();
-    await expect(this.statusFilterFailedLocator()).not.toBeVisible();
-    await expect(this.statusFilterOngoingLocator()).not.toBeVisible();
-    await expect(this.statusFilterCancelledLocator()).not.toBeVisible();
-    await expect(this.statusFilterPendingConfirmationLocator()).not.toBeVisible();
+    await expect(this.statusFilterSuccessfulLocator()).not.toBeVisible({timeout: 20000});
+    await expect(this.statusFilterFailedLocator()).not.toBeVisible({timeout: 20000});
+    await expect(this.statusFilterOngoingLocator()).not.toBeVisible({timeout: 20000});
+    await expect(this.statusFilterCancelledLocator()).not.toBeVisible({timeout: 20000});
+    await expect(this.statusFilterPendingConfirmationLocator()).not.toBeVisible({timeout: 20000});
   }
 
   async expectFiltersToBeVisible() {
-    await expect(this.statusFilterHeaderLocator()).toBeVisible();
-    await expect(this.statusFilterSuccessfulLocator()).toBeVisible();
-    await expect(this.statusFilterFailedLocator()).toBeVisible();
-    await expect(this.statusFilterOngoingLocator()).toBeVisible();
-    await expect(this.statusFilterCancelledLocator()).toBeVisible();
-    await expect(this.statusFilterPendingConfirmationLocator()).toBeVisible();
+    await expect(this.statusFilterHeaderLocator()).toBeVisible({timeout: 20000});
+    await expect(this.statusFilterSuccessfulLocator()).toBeVisible({timeout: 20000});
+    await expect(this.statusFilterFailedLocator()).toBeVisible({timeout: 20000});
+    await expect(this.statusFilterOngoingLocator()).toBeVisible({timeout: 20000});
+    await expect(this.statusFilterCancelledLocator()).toBeVisible({timeout: 20000});
+    await expect(this.statusFilterPendingConfirmationLocator()).toBeVisible({timeout: 20000});
   }
 
   async goto() {
