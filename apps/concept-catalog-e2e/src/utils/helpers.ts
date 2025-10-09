@@ -170,21 +170,24 @@ export const getImportResults = async (apiRequestContext) => {
 }
 
 export const deleteImportResult = async (apiRequestContext, importResultId: string) => {
-  const accessToken = await getAccessToken(apiRequestContext)
-  const response = await removeImportResultConcept(process.env.E2E_CATALOG_ID, importResultId, `${accessToken}`)
+  const accessToken = await getAccessToken(apiRequestContext);
+  const response = await removeImportResultConcept(process.env.E2E_CATALOG_ID, importResultId, `${accessToken}`);
 
-  console.log("Import result delete response status ", response.status, " for import result ", importResultId)
+  console.log('Import result delete response status ', response.status, ' for import result ', importResultId);
 
-  console.log("Deleted import result ", importResultId)
-}
+  console.log('Deleted import result ', importResultId);
+};
 
 export const deleteAllImportResults = async (apiRequestContext) => {
-  const importResults: ImportResult[] = await getImportResults2(apiRequestContext);
+  try {
+    const importResults: ImportResult[] = await getImportResults2(apiRequestContext);
 
-  for (const importResult of importResults) {
-    await deleteImportResult2(apiRequestContext, importResult?.id)
+    for (const importResult of importResults) {
+      await deleteImportResult2(apiRequestContext, importResult?.id);
+    }
+  } catch (error) {
+    console.log('[TEST] No import results to remove: ', error);
   }
-
 };
 
 export enum ConceptStatus {
