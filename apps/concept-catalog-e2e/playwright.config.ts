@@ -33,8 +33,8 @@ export default defineConfig({
       },
     ],
   ],
-  retries: 2,
-  workers: 5,
+  retries: 3,
+  workers: 4,
   timeout: 180 * 1000,
   expect: {
     timeout: 10 * 1000
