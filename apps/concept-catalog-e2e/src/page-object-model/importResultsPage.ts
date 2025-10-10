@@ -20,25 +20,52 @@ export default class ImportResultsPage {
   // Locators
   statusFilterHeaderLocator = () => this.page.getByRole('button', { name: 'Status' });
   statusFilterSuccessfulLocator = () => this.getByLabelLocator('Lagt til i katalog');
+  statusFilterSavingLocator = () => this.getByLabelLocator('Legging til i katalog');
   statusFilterFailedLocator = () => this.getByLabelLocator('Feilet');
   statusFilterOngoingLocator = () => this.getByLabelLocator('Pågår');
   statusFilterCancelledLocator = () => this.getByLabelLocator('Avvist');
   statusFilterPendingConfirmationLocator = () => this.getByLabelLocator('Til gjennomgang');
 
   async expectFiltersToBeInvisible() {
+    console.log('[Test] Expecting \'Lagt til i katalog\' filter to be invisible...');
     await expect(this.statusFilterSuccessfulLocator()).not.toBeVisible({timeout: 20000});
+
+    console.log('[Test] Expecting \'Legging til i katalog\' filter to be invisible...');
+    await expect(this.statusFilterSavingLocator()).not.toBeVisible({timeout: 20000});
+
+    console.log('[Test] Expecting \'Feilet\' filter to be invisible...');
     await expect(this.statusFilterFailedLocator()).not.toBeVisible({timeout: 20000});
+
+    console.log('[Test] Expecting \'Pågår\' filter to be invisible...');
     await expect(this.statusFilterOngoingLocator()).not.toBeVisible({timeout: 20000});
+
+    console.log('[Test] Expecting \'Avvist\' filter to be invisible...');
     await expect(this.statusFilterCancelledLocator()).not.toBeVisible({timeout: 20000});
+
+    console.log('[Test] Expecting \'Til gjennomgang\' filter to be invisible...');
     await expect(this.statusFilterPendingConfirmationLocator()).not.toBeVisible({timeout: 20000});
   }
 
   async expectFiltersToBeVisible() {
+    console.log('[Test] Expecting \'Status\' filter to be visible...');
     await expect(this.statusFilterHeaderLocator()).toBeVisible({timeout: 20000});
+
+    console.log('[Test] Expecting \'Lagt til i katalog\' filter to be visible...');
     await expect(this.statusFilterSuccessfulLocator()).toBeVisible({timeout: 20000});
+
+    console.log('[Test] Expecting \'Legging til i katalog\' filter to be visible...');
+    await expect(this.statusFilterSavingLocator()).toBeVisible({timeout: 20000});
+
+    console.log('[Test] Expecting \'Feilet\' filter to be visible...');
     await expect(this.statusFilterFailedLocator()).toBeVisible({timeout: 20000});
+
+    console.log('[Test] Expecting \'Pågår\' filter to be visible...');
     await expect(this.statusFilterOngoingLocator()).toBeVisible({timeout: 20000});
+
+    console.log('[Test] Expecting \'Avvist\' filter to be visible...');
     await expect(this.statusFilterCancelledLocator()).toBeVisible({timeout: 20000});
+
+    console.log('[Test] Expecting \'Til gjennomgang\' filter to be visible...');
     await expect(this.statusFilterPendingConfirmationLocator()).toBeVisible({timeout: 20000});
   }
 
