@@ -20,7 +20,7 @@ export default class ImportResultsPage {
   // Locators
   statusFilterHeaderLocator = () => this.page.getByRole('button', { name: 'Status' });
   statusFilterSuccessfulLocator = () => this.getByLabelLocator('Lagt til i katalog');
-  statusFilterSavingLocator = () => this.getByLabelLocator('Legging til i katalog');
+  statusFilterSavingLocator = () => this.getByLabelLocator('Legges til i katalog');
   statusFilterFailedLocator = () => this.getByLabelLocator('Feilet');
   statusFilterOngoingLocator = () => this.getByLabelLocator('Pågår');
   statusFilterCancelledLocator = () => this.getByLabelLocator('Avvist');
