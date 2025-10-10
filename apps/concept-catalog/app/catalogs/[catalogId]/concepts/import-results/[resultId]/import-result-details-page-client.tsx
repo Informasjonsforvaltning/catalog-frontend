@@ -68,7 +68,6 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
       initialData: importResult, // seed from server
       refetchInterval: (q) => {
         const status = q?.state?.data?.status;
-        console.log("Status", status)
         return shouldRefetch(q?.state?.data) ? 3000 : isPendingConfirmation(q?.state?.data) ? 6000: false;
       },
       refetchOnWindowFocus: true,
