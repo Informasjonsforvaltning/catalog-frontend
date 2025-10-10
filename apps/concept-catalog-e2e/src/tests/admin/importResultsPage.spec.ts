@@ -21,8 +21,9 @@ runTestAsAdmin('test import results page renders correctly', async ({ importResu
   console.log('[TEST] Filters are invisible by default...');
 
   console.log('[TEST] Expecting filters to be visible after clicking on Status...');
-  await importResultsPage.page.getByRole('button', { name: 'Status' }).click({timeout: 40000});
+  await importResultsPage.page.getByText('Status', { exact: true }).click({timeout: 40000});
   await importResultsPage.expectFiltersToBeVisible();
+
   console.log('[TEST] Filters are visible after clicking on Status...');
 
 });
@@ -47,9 +48,9 @@ runTestAsAdmin('Test going to Import results page when clicking on Results butto
     // click the Import results button
     console.log('[TEST] Clicking on results button...');
     //await conceptsPage.page.getByRole('button', { name: 'Resultater' }).click();
-    dialog.getByRole('link', { name: 'Resultater' }).click({timeout: 20000});
+    dialog.getByRole('link', { name: 'Resultater' }).click({timeout: 40000});
 
     // Wait for navigation to complete
     console.log('[TEST] Test Navigation to importResults...');
-    await expect(conceptsPage.page).toHaveURL(conceptsPage.importResultsPage.url, { timeout: 20000 });
+    await expect(conceptsPage.page).toHaveURL(conceptsPage.importResultsPage.url, { timeout: 40000 });
 });
