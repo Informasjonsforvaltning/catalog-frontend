@@ -21,10 +21,15 @@ runTestAsAdmin('test import results page renders correctly', async ({ importResu
   console.log('[TEST] Filters are invisible by default...');
 
   console.log('[TEST] Expecting filters to be visible after clicking on Status...');
-  await importResultsPage.page.getByText('Status', { exact: true }).click({timeout: 40000});
-  await importResultsPage.expectFiltersToBeVisible();
+
+  const statusLabels = await importResultsPage.page.getByText(/^Status$/).all();
+  console.log("[TEST]: number of labels", statusLabels.length)
+  expect(statusLabels).toHaveLength(1);
+
+  statusLabels.forEach(label => label.click({timeout: 40000}))
 
   console.log('[TEST] Filters are visible after clicking on Status...');
+  await importResultsPage.expectFiltersToBeVisible();
 
 });
 
