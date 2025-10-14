@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import NextLink from 'next/link';
 import { isEmpty } from 'lodash';
 import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
-import cn from 'classnames';
 import { Accordion, Chip, Link, Switch, Tabs, Textarea } from '@digdir/designsystemet-react';
 import {
   ConceptStatusTagProps,
@@ -434,7 +433,7 @@ export const ConceptPageClient = ({
                   </NextLink>
                 </div>
                 {status && (
-                  <div className={cn(classes.status)}>
+                  <div className={classes.status}>
                     <Tag.ConceptStatus
                       statusKey={getStatusFromURL(revision?.statusURI)}
                       statusLabel={status}
