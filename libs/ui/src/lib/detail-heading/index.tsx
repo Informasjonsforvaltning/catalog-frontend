@@ -10,8 +10,8 @@ interface DetailHeadingProps extends HTMLAttributes<HTMLDivElement> {
 export const DetailHeading = ({ headingTitle, subtitle, className, ...rest }: DetailHeadingProps) => {
   return (
     <div className={cn(style.detailHeading, className)}>
-      <div className={cn(style.title)}>{headingTitle}</div>
-      <div className={cn(style.subtitle)}>{subtitle}</div>
+      <div className={style.title}>{headingTitle}</div>
+      <div className={style.subtitle}>{subtitle}</div>
     </div>
   );
 };
