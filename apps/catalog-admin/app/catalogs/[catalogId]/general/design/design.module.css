@@ -31,7 +31,7 @@
 .banner {
   height: 167px;
   color: white;
-  font-size: 48px;
+  font-size: 3rem;
 }
 
 .heading {
@@ -42,7 +42,7 @@
 
 .label {
   padding-bottom: 15px;
-  font-size: 18px;
+  font-size: 1.125rem;
   color: #2d3741;
   width: fit-content;
   display: flex;
@@ -52,14 +52,14 @@
 .subheading {
   margin-top: 75px;
   padding-bottom: 15px;
-  font-size: 18px;
+  font-size: 1.125rem;
   color: #2d3741;
   width: 960px;
 }
 
 .textField {
   color: #2d3741;
-  font-size: 18px;
+  font-size: 1.125rem;
   width: 323px;
 }
 

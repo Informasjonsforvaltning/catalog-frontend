@@ -76,7 +76,6 @@ const PublicServicePageClient = ({ services, hasWritePermission, catalogId, stat
             className={styles.searchField}
             placeholder={localization.search.searchForPublicService}
             onSearch={(value) => setSearchQuery(value)}
-
           />
           {hasWritePermission && (
             <LinkButton href={`/catalogs/${catalogId}/public-services/new`}>
@@ -85,7 +84,7 @@ const PublicServicePageClient = ({ services, hasWritePermission, catalogId, stat
             </LinkButton>
           )}
         </div>
-        {(statusFilters.length > 0 || publicationFilters.length > 0) ? (
+        {statusFilters.length > 0 || publicationFilters.length > 0 ? (
           <FilterChips
             statusFilters={statusFilters}
             publicationFilters={publicationFilters}
@@ -110,32 +109,28 @@ const PublicServicePageClient = ({ services, hasWritePermission, catalogId, stat
           searchHits={
             filteredServices &&
             filteredServices.map((service: Service) => (
-              <div
+              <SearchHit
                 key={service.id}
-                className={styles.searchHit}
-              >
-                <SearchHit
-                  title={getTranslateText(service?.title)}
-                  description={getTranslateText(service?.description)}
-                  titleHref={`/catalogs/${catalogId}/public-services/${service?.id}`}
-                  statusTag={
-                    service?.status && (
-                      <Tag.ServiceStatus
-                        statusKey={findServiceStatus(service)?.code as ServiceStatusTagProps['statusKey']}
-                        statusLabel={getTranslateText(findServiceStatus(service)?.label) as string}
-                      />
-                    )
-                  }
-                  content={
-                    service.published
-                      ? localization.publicationState.publishedInFDK
-                      : localization.publicationState.unpublished
-                  }
-                />
-              </div>
+                title={getTranslateText(service?.title)}
+                description={getTranslateText(service?.description)}
+                titleHref={`/catalogs/${catalogId}/public-services/${service?.id}`}
+                statusTag={
+                  service?.status && (
+                    <Tag.ServiceStatus
+                      statusKey={findServiceStatus(service)?.code as ServiceStatusTagProps['statusKey']}
+                      statusLabel={getTranslateText(findServiceStatus(service)?.label) as string}
+                    />
+                  )
+                }
+                content={
+                  service.published
+                    ? localization.publicationState.publishedInFDK
+                    : localization.publicationState.unpublished
+                }
+              />
             ))
           }
-          noSearchHits={!(filteredServices?.length)}
+          noSearchHits={!filteredServices?.length}
         />
       </SearchHitsLayout.MainColumn>
     </SearchHitsLayout>
