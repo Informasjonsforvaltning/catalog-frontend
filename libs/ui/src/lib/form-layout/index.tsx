@@ -6,7 +6,6 @@ import { Heading, Link, Paragraph, Tag } from '@digdir/designsystemet-react';
 import { useIntersectionObserver } from '../intersection-observer';
 import classNames from 'classnames';
 import { localization } from '@catalog-frontend/utils';
-import { isEmpty } from 'lodash';
 
 type FormLayoutProps = {
   title?: ReactNode;
