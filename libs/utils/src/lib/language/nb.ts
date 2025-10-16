@@ -63,6 +63,7 @@ export const nb = {
   title: 'Tittel',
   toAndIncluding: 'Til og med',
   unknown: 'Ukjent',
+  update: 'Oppdater',
   yes: 'Ja',
   allUsers: 'Alle brukere',
   type: 'Type',
@@ -277,9 +278,9 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
   },
 
   snackbar: {
-    saveSuccessfull: 'Endringene ble lagret.',
+    saveSuccessful: 'Endringene ble lagret.',
     saveFailed: 'Lagring feilet. Vennligst prøv igjen.',
-    restoreSuccessfull: 'Endringene ble gjenopprettet.',
+    restoreSuccessful: 'Endringene ble gjenopprettet.',
   },
 
   confirm: {
@@ -444,7 +445,7 @@ Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- 
 
   changeRequest: {
     accept: 'Godta',
-    acceptSuccessfull: 'Endringsforslaget er godtatt.',
+    acceptSuccessful: 'Endringsforslaget er godtatt.',
     acceptFailed: 'Kunne ikke godta endringsforslaget.',
     changed: 'Endret',
     changeRequest: 'Endringsforslag',
@@ -461,7 +462,7 @@ Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- 
     noValue: 'Ingen verdi',
     proposedChange: 'Forslag til ny {fieldType} på {lang}',
     reject: 'Avvis',
-    rejectSuccessfull: 'Endringsforslaget er avvist.',
+    rejectSuccessful: 'Endringsforslaget er avvist.',
     rejectFailed: 'Kunne ikke avvise endringsforslaget.',
     seeChangeRequests: 'Se alle endringsforslag',
     sourceLink: 'Lenke til kilde',
@@ -633,12 +634,12 @@ Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- 
     deleteCanResultInDuplicates: `Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.`,
     cancelledImport: `Importen ble avvist før den ble fullført.`,
     helpText: {
-       savingInCatalog: 'Importen er godkjent, og begrepene vil være tilgjengelige i katalogen senere.',
-       completed: 'Importen er godkjent, og begrepene er tilgjengelige i katalogen.',
-       failed: 'Importen kunne ikke fullføres på grunn av feil i minst ett av begrepene i den opplastede filen.',
-       inProgress: 'Importen er under behandling. Importen kan avvises.',
-       cancelled: 'Importen er forkastet og begrepene er ikke lagt til i katalogen.',
-       pendingConfirmation: 'Begrepene er opplastet, men er ennå ikke importert til katalogen. Importen kan enten avvises eller legges til i katalogen.',
+      savingInCatalog: 'Importen er godkjent, og begrepene vil være tilgjengelige i katalogen senere.',
+      completed: 'Importen er godkjent, og begrepene er tilgjengelige i katalogen.',
+      failed: 'Importen kunne ikke fullføres på grunn av feil i minst ett av begrepene i den opplastede filen.',
+      inProgress: 'Importen er under behandling. Importen kan avvises.',
+      cancelled: 'Importen er forkastet og begrepene er ikke lagt til i katalogen.',
+      pendingConfirmation: 'Begrepene er opplastet, men er ennå ikke importert til katalogen. Importen kan enten avvises eller legges til i katalogen.',
     },
     tableHeading: {
       title: 'Import',

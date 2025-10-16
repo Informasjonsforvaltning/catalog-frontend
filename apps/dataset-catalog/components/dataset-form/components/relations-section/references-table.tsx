@@ -320,7 +320,7 @@ const FieldModal = ({
                       onClick={() => submitForm()}
                       size='sm'
                     >
-                      {type === 'new' ? localization.add : localization.datasetForm.button.update}
+                      {type === 'new' ? localization.add : localization.update}
                     </Button>
                     <Button
                       variant='secondary'

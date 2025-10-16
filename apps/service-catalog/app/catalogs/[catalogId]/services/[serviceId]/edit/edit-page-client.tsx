@@ -1,0 +1,80 @@
+'use client';
+
+import { ReferenceDataCode, Service, StorageData } from '@catalog-frontend/types';
+import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
+import { LocalDataStorage, localization } from '@catalog-frontend/utils';
+import { ArrowLeftIcon } from '@navikt/aksel-icons';
+import { getServiceById, updateService } from '@service-catalog/app/actions/services/actions';
+import ServiceForm from '@service-catalog/components/service-form';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+
+type EditPageProps = {
+  type: 'public-services' | 'services';
+  service: Service;
+  statuses: ReferenceDataCode[];
+};
+
+export const EditPage = (props: EditPageProps) => {
+  const { type, service, statuses } = props;
+  const router = useRouter();
+  const { catalogId, serviceId } = useParams<{ catalogId: string; serviceId: string }>();
+
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
+
+  const dataStorage = new LocalDataStorage<StorageData>({
+    key: 'serviceForm',
+    secondaryKeys: {
+      distribution: 'serviceFormDistribution',
+      reference: 'serviceFormReference',
+    },
+  });
+
+  const handleGotoOverview = () => {
+    dataStorage.delete();
+    router.push(`/catalogs/${service.catalogId}/services`);
+  };
+
+  const handleCancel = () => {
+    dataStorage.delete();
+    router.push(`/catalogs/${service.catalogId}/services/${service.id}`);
+  };
+
+  const handleUpdate = async (values: Service) => {
+    await updateService(catalogId, service, values);
+    const newValues = await getServiceById(catalogId, serviceId);
+    return newValues;
+  };
+
+  return (
+    <>
+      {showCancelConfirm && (
+        <ConfirmModal
+          title={localization.confirm.exitForm.title}
+          content={localization.confirm.exitForm.message}
+          onSuccess={handleGotoOverview}
+          onCancel={() => setShowCancelConfirm(false)}
+        />
+      )}
+      <ButtonBar>
+        <Button
+          variant='tertiary'
+          color='second'
+          size='sm'
+          onClick={() => setShowCancelConfirm(true)}
+        >
+          <ArrowLeftIcon fontSize='1.25em' />
+          {localization.button.backToOverview}
+        </Button>
+      </ButtonBar>
+      <ServiceForm
+        autoSaveStorage={dataStorage}
+        onCancel={handleCancel}
+        onSubmit={handleUpdate}
+        initialValues={service}
+        statuses={statuses}
+        type={type}
+      />
+    </>
+  );
+};
