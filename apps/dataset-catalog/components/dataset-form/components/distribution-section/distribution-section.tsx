@@ -173,14 +173,6 @@ export const DistributionSection = ({
     return false;
   }
 
-  type DistributionKey = 'distribution' | 'sample';
-
-  const getField = (distributionType: string): string => {
-    const fieldValues = values[distributionType as DistributionKey] ?? [];
-    const hasValues = fieldValues.length > 0 && !isEmpty(fieldValues[0]?.accessURL?.[0]);
-    return `${distributionType}[${hasValues ? fieldValues.length : 0}]`;
-  };
-
   return (
     <Box>
       <div className={styles.fieldSet}>

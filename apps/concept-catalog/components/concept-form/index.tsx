@@ -3,9 +3,16 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { Formik, Form, FormikProps } from 'formik';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { Alert, Checkbox, Paragraph, Spinner } from '@digdir/designsystemet-react';
-import { DataStorage, formatISO, getTranslateText, localization, safeValues, deepMergeWithUndefinedHandling } from '@catalog-frontend/utils';
+import {
+  DataStorage,
+  formatISO,
+  getTranslateText,
+  localization,
+  safeValues,
+  deepMergeWithUndefinedHandling,
+} from '@catalog-frontend/utils';
 import type {
   CodeListsResult,
   Concept,
@@ -67,26 +74,26 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
   ...(isValid
     ? []
     : [
-      <Alert
-        key={1}
-        size='sm'
-        severity='danger'
-        style={{ background: 'none', border: 'none', padding: 0 }}
-      >
-        {localization.validation.formError}
-      </Alert>,
-    ]),
+        <Alert
+          key={1}
+          size='sm'
+          severity='danger'
+          style={{ background: 'none', border: 'none', padding: 0 }}
+        >
+          {localization.validation.formError}
+        </Alert>,
+      ]),
   ...(hasUnsavedChanges
     ? [
-      <Alert
-        key={1}
-        size='sm'
-        severity='warning'
-        style={{ background: 'none', border: 'none', padding: 0 }}
-      >
-        {localization.validation.unsavedChanges}
-      </Alert>,
-    ]
+        <Alert
+          key={1}
+          size='sm'
+          severity='warning'
+          style={{ background: 'none', border: 'none', padding: 0 }}
+        >
+          {localization.validation.unsavedChanges}
+        </Alert>,
+      ]
     : []),
 ];
 
@@ -133,7 +140,7 @@ const ConceptForm = ({
       setShowSnackbar(false);
       setTimeout(() => setShowSnackbar(true), 10);
     } else {
-      setShowSnackbar(true)
+      setShowSnackbar(true);
     }
   };
 
@@ -261,7 +268,7 @@ const ConceptForm = ({
 
   useEffect(() => {
     if (showSnackbarSuccessOnInit) {
-      showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success', fadeIn: false });
+      showSnackbarMessage({ message: localization.snackbar.saveSuccessful, severity: 'success', fadeIn: false });
     }
   }, [showSnackbarSuccessOnInit]);
 
@@ -290,7 +297,7 @@ const ConceptForm = ({
             try {
               const newValues = await onSubmit(values);
 
-              showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success' });
+              showSnackbarMessage({ message: localization.snackbar.saveSuccessful, severity: 'success' });
               if (newValues) {
                 resetForm({ values: newValues });
               } else {
@@ -311,7 +318,18 @@ const ConceptForm = ({
           }
         }}
       >
-        {({ errors, dirty, initialValues, isValid, isSubmitting, isValidating, values, submitForm, setValues, setFieldValue }) => {
+        {({
+          errors,
+          dirty,
+          initialValues,
+          isValid,
+          isSubmitting,
+          isValidating,
+          values,
+          submitForm,
+          setValues,
+          setFieldValue,
+        }) => {
           const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
           const hasError = (fields: (keyof Concept)[]) => fields.some((field) => Object.keys(errors).includes(field));
 
@@ -349,17 +367,17 @@ const ConceptForm = ({
             return dirtyFields;
           })();
 
-          const handleRestoreConcept = (data: StorageData) => {            
+          const handleRestoreConcept = (data: StorageData) => {
             if (onRestore && !onRestore(data)) {
               return false;
             }
-         
+
             const restoreValues: Concept = deepMergeWithUndefinedHandling({ ...initialValues }, data.values);
             setValues(restoreValues);
 
             // Handle relation data from secondary storage
             const restoreRelationData = autoSaveStorage?.getSecondary('relation');
-            if (restoreRelationData && (restoreRelationData?.id === autoSaveId)) {
+            if (restoreRelationData && restoreRelationData?.id === autoSaveId) {
               const relationValues: { rel: UnionRelation; prev: UnionRelationWithIndex } = restoreRelationData.values;
               updateUnionRelation(relationValues.rel, relationValues.prev, restoreValues, setFieldValue);
               // Delete relation data from secondary storage since it is merged with the main data
@@ -368,14 +386,14 @@ const ConceptForm = ({
 
             // Handle definition data from secondary storage
             const restoreDefinitionData = autoSaveStorage?.getSecondary('definition');
-            if (restoreDefinitionData && (restoreDefinitionData?.id === autoSaveId)) {
+            if (restoreDefinitionData && restoreDefinitionData?.id === autoSaveId) {
               const definitionValues: { definition: Definisjon; fieldName: string } = restoreDefinitionData.values;
               setFieldValue(definitionValues.fieldName, definitionValues.definition);
               // Delete definition data from secondary storage since it is merged with the main data
               autoSaveStorage?.deleteSecondary('definition');
             }
 
-            showSnackbarMessage({ message: localization.snackbar.restoreSuccessfull, severity: 'success' });
+            showSnackbarMessage({ message: localization.snackbar.restoreSuccessful, severity: 'success' });
             return true;
           };
 
@@ -413,8 +431,8 @@ const ConceptForm = ({
                         changed={
                           markDirty
                             ? dirtyFields.filter((field) =>
-                              ['anbefaltTerm', 'tillattTerm', 'frarådetTerm'].includes(field),
-                            )
+                                ['anbefaltTerm', 'tillattTerm', 'frarådetTerm'].includes(field),
+                              )
                             : []
                         }
                         readOnly={readOnly}
@@ -439,10 +457,10 @@ const ConceptForm = ({
                         changed={
                           markDirty
                             ? dirtyFields.filter((field) =>
-                              ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(
-                                field,
-                              ),
-                            )
+                                ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(
+                                  field,
+                                ),
+                              )
                             : []
                         }
                         readOnly={readOnly}

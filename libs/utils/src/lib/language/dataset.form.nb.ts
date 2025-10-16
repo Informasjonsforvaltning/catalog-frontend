@@ -178,7 +178,6 @@ export const datasetFormNb = {
     addSample: 'Legg til eksempeldata',
     updateSamole: 'Oppdater eksempeldata',
     updateDistribution: 'Oppdater distribusjon',
-    update: 'Oppdater',
     addDataset: 'Legg til datasett',
     addDatasetSeries: 'Legg til datasettserie',
   },
