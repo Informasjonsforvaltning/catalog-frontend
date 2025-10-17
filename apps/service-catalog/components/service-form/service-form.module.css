@@ -57,3 +57,12 @@
 .noWrap {
   flex-wrap: nowrap;
 }
+
+.errorBorder {
+  border: 2px solid var(--fds-semantic-border-danger-default);
+  border-radius: var(--fds-border_radius-medium);
+}
+
+.errorMessage {
+  padding: 1rem;
+}
