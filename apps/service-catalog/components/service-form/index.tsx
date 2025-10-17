@@ -18,20 +18,13 @@ import {
   TitleWithHelpTextAndTag,
 } from '@catalog-frontend/ui';
 import { localization, getTranslateText, trimObjectWhitespace, DataStorage, formatISO } from '@catalog-frontend/utils';
-import {
-  Distribution,
-  Reference,
-  ReferenceDataCode,
-  Service,
-  ServiceToBeCreated,
-  StorageData,
-} from '@catalog-frontend/types';
+import { ReferenceDataCode, Service, ServiceToBeCreated, StorageData } from '@catalog-frontend/types';
 import cn from 'classnames';
 import styles from './service-form.module.css';
 import { useParams, useSearchParams } from 'next/navigation';
 import { FastField, Field, Form, Formik, FormikProps } from 'formik';
 import { serviceTemplate } from '../basic-service-form/service-template';
-import { validationSchema } from '../basic-service-form/validation-schema';
+import { confirmedServiceSchema, draftServiceSchema } from '../basic-service-form/validation-schema';
 import { useEffect, useRef, useState } from 'react';
 import { ProducesField } from './components/produces-field';
 import { ContactPointSection } from './components/contact-point-section';
@@ -187,7 +180,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
       <Formik
         innerRef={formikRef}
         initialValues={serviceTemplate(initialValues)}
-        validationSchema={ignoreRequired ? validationSchema : validationSchema} // todo: draft vs confirmed
+        validationSchema={ignoreRequired ? draftServiceSchema : confirmedServiceSchema}
         validateOnChange={validateOnChange}
         validateOnBlur={validateOnChange}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -216,11 +209,10 @@ export const ServiceForm = (props: ServiceFormProps) => {
           }
         }}
       >
-        {({ setFieldValue, dirty, isValid, isSubmitting, isValidating, submitForm, errors, setValues }) => {
+        {({ dirty, isValid, isSubmitting, isValidating, submitForm, errors, setValues }) => {
           const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
           const hasError = (fields: (keyof Service)[]) => fields.some((field) => Object.keys(errors).includes(field));
           const handleRestoreDataset = (data: StorageData) => {
-            // todo: use router.replace?
             if (data?.id !== serviceId) {
               if (!data?.id) {
                 window.location.replace(`/catalogs/${catalogId}/services/new?restore=1`);
@@ -231,31 +223,6 @@ export const ServiceForm = (props: ServiceFormProps) => {
             }
             const restoreValues = serviceTemplate(data.values);
             setValues(restoreValues);
-
-            // Handle distribution data from secondary storage
-            const restoreDistributionData = autoSaveStorage?.getSecondary('distribution');
-            if (restoreDistributionData && restoreDistributionData?.id === serviceId) {
-              const distributionValues: {
-                distribution: Distribution;
-                distributionType: 'distribution' | 'sample';
-                index: number;
-              } = restoreDistributionData.values;
-              setFieldValue(
-                `${distributionValues.distributionType}[${distributionValues.index}]`,
-                distributionValues.distribution,
-              );
-              // Delete distribution data from secondary storage since it is merged with the main data
-              autoSaveStorage?.deleteSecondary('distribution');
-            }
-
-            // Handle reference data from secondary storage
-            const restoreReferenceData = autoSaveStorage?.getSecondary('reference');
-            if (restoreReferenceData && restoreReferenceData?.id === serviceId) {
-              const referenceValues: { reference: Reference; index: number } = restoreReferenceData.values;
-              setFieldValue(`references[${referenceValues.index}]`, referenceValues.reference);
-              // Delete reference data from secondary storage since it is merged with the main data
-              autoSaveStorage?.deleteSecondary('reference');
-            }
 
             showSnackbarMessage({ message: localization.snackbar.restoreSuccessful, severity: 'success' });
             return true;
@@ -276,12 +243,13 @@ export const ServiceForm = (props: ServiceFormProps) => {
                     title={localization.serviceForm.section.about.title}
                     subtitle={localization.serviceForm.section.about.subtitle}
                     required
-                    error={hasError(['title', 'description', 'produces'])}
+                    error={hasError(['title', 'description'])}
                   >
                     <Box>
                       <FormikLanguageFieldset
                         name='title'
                         as={Textfield}
+                        requiredLanguages={['nb']}
                         legend={
                           <TitleWithHelpTextAndTag
                             helpText={localization.serviceForm.helptext.title}
@@ -305,8 +273,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                         }
                       />
                       <FieldsetDivider />
-                      <ProducesField errors={errors.produces} />
-                      <FieldsetDivider />
+
                       <FastField
                         as={Textfield}
                         name='homepage'
@@ -345,6 +312,16 @@ export const ServiceForm = (props: ServiceFormProps) => {
                         ))}
                       </Field>
                     </Box>
+                  </FormLayout.Section>
+
+                  <FormLayout.Section
+                    id='produces-section'
+                    title={localization.serviceForm.section.produces.title}
+                    subtitle={localization.serviceForm.section.produces.subtitle}
+                    required
+                    error={hasError(['produces'])}
+                  >
+                    <ProducesField error={errors.produces} />
                   </FormLayout.Section>
 
                   <FormLayout.Section
@@ -413,8 +390,8 @@ export const ServiceForm = (props: ServiceFormProps) => {
                     >
                       {localization.serviceForm.fieldLabel.ignoreRequired}
                     </Checkbox>
-                    <HelpMarkdown aria-label={localization.serviceForm.fieldLabel.ignoreRequired}>
-                      {localization.serviceForm.fieldLabel.ignoreRequired}
+                    <HelpMarkdown aria-label={localization.serviceForm.helptext.ignoreRequired}>
+                      {localization.serviceForm.helptext.ignoreRequired}
                     </HelpMarkdown>
                   </div>
                 </div>

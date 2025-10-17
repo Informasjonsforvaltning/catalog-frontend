@@ -6,7 +6,7 @@ import { LocalDataStorage, localization } from '@catalog-frontend/utils';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { getServiceById, updateService } from '@service-catalog/app/actions/services/actions';
 import ServiceForm from '@service-catalog/components/service-form';
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 type EditPageProps = {
@@ -19,15 +19,10 @@ export const EditPage = (props: EditPageProps) => {
   const { type, service, statuses } = props;
   const router = useRouter();
   const { catalogId, serviceId } = useParams<{ catalogId: string; serviceId: string }>();
-
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   const dataStorage = new LocalDataStorage<StorageData>({
     key: 'serviceForm',
-    secondaryKeys: {
-      distribution: 'serviceFormDistribution',
-      reference: 'serviceFormReference',
-    },
   });
 
   const handleGotoOverview = () => {

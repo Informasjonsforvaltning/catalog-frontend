@@ -145,6 +145,7 @@ export const datasetFormNb = {
     ignoreRequired: 'Ignorer påkrevde felt',
     contactName: 'Navn',
     contactFields: 'Kontaktinformasjon',
+    description: 'Beskrivelse',
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',

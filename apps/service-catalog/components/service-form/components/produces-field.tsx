@@ -9,7 +9,7 @@ import {
 } from '@catalog-frontend/ui';
 import cn from 'classnames';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Card, Heading, Modal, Paragraph, Table, Textfield } from '@digdir/designsystemet-react';
+import { Button, Card, ErrorMessage, Heading, Modal, Paragraph, Textfield } from '@digdir/designsystemet-react';
 import { FieldArray, Formik, useFormikContext } from 'formik';
 import styles from '../service-form.module.css';
 import { useEffect, useRef, useState } from 'react';
@@ -17,7 +17,7 @@ import { trim, isEmpty, pickBy, identity } from 'lodash';
 import { producesSchema } from '@service-catalog/components/basic-service-form/validation-schema';
 
 interface Props {
-  errors: string | undefined;
+  error: string | undefined;
 }
 
 interface ModalProps {
@@ -33,7 +33,8 @@ const hasNoFieldValues = (values: Output) => {
   return isEmpty(trim(values.identifier)) && isEmpty(pickBy(values.title, identity));
 };
 
-export const ProducesField = ({ errors }: Props) => {
+export const ProducesField = (props: Props) => {
+  const { error } = props;
   const { values, setFieldValue } = useFormikContext<Service>();
   const fieldValues = values.produces;
   const [snapshot, setSnapshot] = useState<Output[]>(fieldValues ?? []);
@@ -50,7 +51,7 @@ export const ProducesField = ({ errors }: Props) => {
       <FieldArray
         name='produces'
         render={(arrayHelpers) => (
-          <div className={cn(styles.fieldSet, errors ? styles.errorBorder : undefined)}>
+          <div className={cn(styles.fieldSet, error && styles.errorBorder)}>
             {fieldValues?.map((item, index) => (
               <Card key={`${index}-${item.identifier}`}>
                 <div className={styles.heading}>
@@ -122,6 +123,15 @@ export const ProducesField = ({ errors }: Props) => {
                 }}
               />
             </div>
+
+            {error && (
+              <ErrorMessage
+                className={styles.errorMessage}
+                size='sm'
+              >
+                {error}
+              </ErrorMessage>
+            )}
           </div>
         )}
       />

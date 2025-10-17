@@ -3,9 +3,9 @@ export const serviceFormNb = {
     unpublishBeforeIgnoreRequired: 'Du må avpublisere tjenesten før du kan ignorere påkrevde felt.',
   },
   fieldLabel: {
-    category: 'Kategori',
+    category: 'Navn',
     contactPage: 'Kontaktside',
-    contactPoint: 'Kontaktpunkt',
+    contactPoint: 'Kontaktinformasjon',
     description: 'Beskrivelse',
     email: 'E-post',
     homepage: 'Hjemmeside',
@@ -16,13 +16,17 @@ export const serviceFormNb = {
     title: 'Tittel',
   },
   helptext: {
-    category: 'woop',
-    contactPoint: 'Legg til et kontaktpunkt for tjenesten.',
-    description: 'woop',
-    homepage: 'Legg til en eller flere nettadresser for tjenestens hjemmeside.',
-    produces: 'Legg til en eller flere tjenester som denne tjenesten produserer.',
+    category: 'Brukes til å oppgi navnet til kontaktpunktet.',
+    contactPoint:
+      'Informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om tjenesten. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.',
+    description: 'Beskrivelsen skal være kortfattet og formålet med tjenesten bør fremgå.',
+    homepage: 'Lenke til en nettside som gir tilgang til tjenesten og/eller tilleggsinformasjon.',
+    ignoreRequired:
+      'I utgangspunktet er det krav om at alle påkrevde felt må fylles ut for å få lagret. Når avhukingsboksen er aktiv, må bare tittel være fylt ut.',
+    produces:
+      'Egenskapen brukes til å referere til en eller flere instanser av tjenesteresultat som beskriver resultat av tjenesten.',
     status: 'Velg tjenestens nåværende status.',
-    title: 'woop',
+    title: 'Navnet skal være kortfattet, kunne stå alene og gi mening.',
   },
   section: {
     about: {
@@ -30,8 +34,12 @@ export const serviceFormNb = {
       title: 'Om tjenesten',
     },
     contactPoint: {
-      subtitle: 'Informasjon om tjenestens kontaktpunkt.',
+      subtitle: 'Kontaktpunkt som kan brukes vedr. spørsmål og kommentarer om tjenesten.',
       title: 'Kontaktpunkt',
+    },
+    produces: {
+      subtitle: 'Referanser til tjenesteresultater som beskriver tjenestens resultat.',
+      title: 'Produserer',
     },
   },
 };
