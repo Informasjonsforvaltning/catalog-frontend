@@ -14,13 +14,18 @@ import { FieldArray, Formik, useFormikContext } from 'formik';
 import styles from '../service-form.module.css';
 import { useEffect, useRef, useState } from 'react';
 import { trim, isEmpty, pickBy, identity } from 'lodash';
-import { producesSchema } from '@service-catalog/components/basic-service-form/validation-schema';
+import {
+  confirmedProducesSchema,
+  draftProducesSchema,
+} from '@service-catalog/components/basic-service-form/validation-schema';
 
 interface Props {
   error: string | undefined;
+  ignoreRequired: boolean;
 }
 
 interface ModalProps {
+  ignoreRequired: boolean;
   onCancel: () => void;
   onChange: (values: Output) => void;
   onSuccess: (values: Output) => void;
@@ -34,17 +39,15 @@ const hasNoFieldValues = (values: Output) => {
 };
 
 export const ProducesField = (props: Props) => {
-  const { error } = props;
+  const { error, ignoreRequired } = props;
   const { values, setFieldValue } = useFormikContext<Service>();
-  const fieldValues = values.produces;
-  const [snapshot, setSnapshot] = useState<Output[]>(fieldValues ?? []);
+  const [snapshot, setSnapshot] = useState<Output[]>(values.produces ?? []);
 
   return (
     <div className={styles.fieldSet}>
       <TitleWithHelpTextAndTag
         helpText={localization.serviceForm.helptext.produces}
-        tagTitle={localization.tag.recommended}
-        tagColor='info'
+        tagTitle={localization.tag.required}
       >
         {localization.serviceForm.fieldLabel.produces}
       </TitleWithHelpTextAndTag>
@@ -52,7 +55,7 @@ export const ProducesField = (props: Props) => {
         name='produces'
         render={(arrayHelpers) => (
           <div className={cn(styles.fieldSet, error && styles.errorBorder)}>
-            {fieldValues?.map((item, index) => (
+            {values.produces?.map((item, index) => (
               <Card key={`${index}-${item.identifier}`}>
                 <div className={styles.heading}>
                   <div className={styles.field}>
@@ -72,18 +75,19 @@ export const ProducesField = (props: Props) => {
 
                   <div className={styles.buttons}>
                     <FieldModal
+                      ignoreRequired={ignoreRequired}
                       template={item}
                       type='edit'
                       onSuccess={(updatedItem: Output) => {
                         arrayHelpers.replace(index, updatedItem);
-                        setSnapshot([...(fieldValues ?? [])]);
+                        setSnapshot([...(values.produces ?? [])]);
                       }}
                       onCancel={() => setFieldValue('produces', snapshot)}
                       onChange={(updatedItem: Output) => arrayHelpers.replace(index, updatedItem)}
                     />
                     <DeleteButton
                       onClick={() => {
-                        const newArray = [...(fieldValues ?? [])];
+                        const newArray = [...(values.produces ?? [])];
                         newArray.splice(index, 1);
                         setFieldValue('produces', newArray);
                         setSnapshot([...newArray]);
@@ -110,12 +114,13 @@ export const ProducesField = (props: Props) => {
 
             <div>
               <FieldModal
+                ignoreRequired={ignoreRequired}
                 template={{ title: {}, description: {}, identifier: '' }}
                 type='new'
-                onSuccess={() => setSnapshot([...(fieldValues ?? [])])}
+                onSuccess={() => setSnapshot([...(values.produces ?? [])])}
                 onCancel={() => setFieldValue('produces', snapshot)}
                 onChange={(updatedItem: Output) => {
-                  if (snapshot.length === (fieldValues?.length ?? 0)) {
+                  if (snapshot.length === (values.produces?.length ?? 0)) {
                     arrayHelpers.push(updatedItem);
                   } else {
                     arrayHelpers.replace(snapshot.length, updatedItem);
@@ -139,7 +144,8 @@ export const ProducesField = (props: Props) => {
   );
 };
 
-const FieldModal = ({ template, type, onSuccess, onCancel, onChange }: ModalProps) => {
+const FieldModal = (props: ModalProps) => {
+  const { template, type, onSuccess, onCancel, onChange, ignoreRequired } = props;
   const [submitted, setSubmitted] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -158,7 +164,7 @@ const FieldModal = ({ template, type, onSuccess, onCancel, onChange }: ModalProp
             initialValues={template}
             validateOnChange={submitted}
             validateOnBlur={submitted}
-            validationSchema={producesSchema}
+            validationSchema={ignoreRequired ? draftProducesSchema : confirmedProducesSchema}
             onSubmit={(formValues, { setSubmitting }) => {
               const trimmedValues = trimObjectWhitespace(formValues);
               onSuccess(trimmedValues);

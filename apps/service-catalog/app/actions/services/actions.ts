@@ -59,6 +59,7 @@ export async function createService(catalogId: string, values: ServiceToBeCreate
     }
     serviceId = response?.headers?.get('location')?.split('/').pop();
     success = true;
+    return serviceId;
   } catch (error) {
     throw new Error(localization.alert.fail);
   } finally {

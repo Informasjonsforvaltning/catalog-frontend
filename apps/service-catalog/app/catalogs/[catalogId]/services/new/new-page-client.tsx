@@ -4,21 +4,22 @@ import { ReferenceDataCode, Service, StorageData } from '@catalog-frontend/types
 import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
 import { LocalDataStorage, localization } from '@catalog-frontend/utils';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { getServiceById, updateService } from '@service-catalog/app/actions/services/actions';
-import ServiceForm from '@service-catalog/components/service-form';
-import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import ServiceForm from '@service-catalog/components/service-form';
+import { createService, getServiceById } from '@service-catalog/app/actions/services/actions';
+import { serviceTemplate } from '@service-catalog/components/basic-service-form/service-template';
 
-type EditPageProps = {
-  service: Service;
+type NewPageProps = {
   statuses: ReferenceDataCode[];
   type: 'public-services' | 'services';
 };
 
-export const EditPage = (props: EditPageProps) => {
-  const { type, service, statuses } = props;
+export const NewPage = (props: NewPageProps) => {
+  const { statuses, type } = props;
   const router = useRouter();
-  const { catalogId, serviceId } = useParams<{ catalogId: string; serviceId: string }>();
+  const { catalogId } = useParams<{ catalogId: string }>();
+
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   const dataStorage = new LocalDataStorage<StorageData>({
@@ -27,18 +28,22 @@ export const EditPage = (props: EditPageProps) => {
 
   const handleGotoOverview = () => {
     dataStorage.delete();
-    router.push(`/catalogs/${service.catalogId}/services`);
+    router.push(`/catalogs/${catalogId}/services`);
   };
 
   const handleCancel = () => {
     dataStorage.delete();
-    router.push(`/catalogs/${service.catalogId}/services/${service.id}`);
+    router.push(`/catalogs/${catalogId}/services`);
   };
 
-  const handleUpdate = async (values: Service) => {
-    await updateService(catalogId, service, values);
-    const newValues = await getServiceById(catalogId, serviceId);
-    return newValues;
+  const handleCreate = async (values: Service) => {
+    const maybeServiceId = await createService(catalogId, values);
+    if (!maybeServiceId) {
+      throw new Error('Service creation failed, no service ID returned');
+    } else {
+      router.replace(`/catalogs/${catalogId}/services/${maybeServiceId}/edit`);
+      return getServiceById(catalogId, maybeServiceId);
+    }
   };
 
   return (
@@ -65,8 +70,8 @@ export const EditPage = (props: EditPageProps) => {
       <ServiceForm
         autoSaveStorage={dataStorage}
         onCancel={handleCancel}
-        onSubmit={handleUpdate}
-        initialValues={service}
+        onSubmit={handleCreate}
+        initialValues={serviceTemplate(undefined)}
         statuses={statuses}
         type={type}
       />
