@@ -12,11 +12,10 @@ import { useState } from 'react';
 type EditPageProps = {
   service: Service;
   statuses: ReferenceDataCode[];
-  type: 'public-services' | 'services';
 };
 
 export const EditPage = (props: EditPageProps) => {
-  const { type, service, statuses } = props;
+  const { service, statuses } = props;
   const router = useRouter();
   const { catalogId, serviceId } = useParams<{ catalogId: string; serviceId: string }>();
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
@@ -68,7 +67,7 @@ export const EditPage = (props: EditPageProps) => {
         onSubmit={handleUpdate}
         initialValues={service}
         statuses={statuses}
-        type={type}
+        type='services'
       />
     </>
   );

@@ -14,10 +14,7 @@ import { FieldArray, Formik, useFormikContext } from 'formik';
 import styles from '../service-form.module.css';
 import { useEffect, useRef, useState } from 'react';
 import { trim, isEmpty, pickBy, identity } from 'lodash';
-import {
-  confirmedProducesSchema,
-  draftProducesSchema,
-} from '@service-catalog/components/basic-service-form/validation-schema';
+import { confirmedProducesSchema, draftProducesSchema } from '../validation-schema';
 
 interface Props {
   error: string | undefined;

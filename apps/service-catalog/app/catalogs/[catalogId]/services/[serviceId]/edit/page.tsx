@@ -42,7 +42,6 @@ export default async function EditServicePage({
       />
       <EditPage
         service={service}
-        type='services'
         statuses={statusesResponse.statuses}
       />
     </>

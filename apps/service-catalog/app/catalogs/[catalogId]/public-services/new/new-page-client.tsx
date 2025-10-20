@@ -7,8 +7,8 @@ import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import ServiceForm from '@service-catalog/components/service-form';
-import { createService, getServiceById } from '@service-catalog/app/actions/services/actions';
 import { serviceTemplate } from '@service-catalog/components/service-form/service-template';
+import { createPublicService, getPublicServiceById } from '@service-catalog/app/actions/public-services/actions';
 
 type NewPageProps = {
   statuses: ReferenceDataCode[];
@@ -27,21 +27,21 @@ export const NewPage = (props: NewPageProps) => {
 
   const handleGotoOverview = () => {
     dataStorage.delete();
-    router.push(`/catalogs/${catalogId}/services`);
+    router.push(`/catalogs/${catalogId}/public-services`);
   };
 
   const handleCancel = () => {
     dataStorage.delete();
-    router.push(`/catalogs/${catalogId}/services`);
+    router.push(`/catalogs/${catalogId}/public-services`);
   };
 
   const handleCreate = async (values: Service) => {
-    const maybeServiceId = await createService(catalogId, values);
+    const maybeServiceId = await createPublicService(catalogId, values);
     if (!maybeServiceId) {
       throw new Error('Service creation failed, no service ID returned');
     } else {
-      router.replace(`/catalogs/${catalogId}/services/${maybeServiceId}/edit`);
-      return getServiceById(catalogId, maybeServiceId);
+      router.replace(`/catalogs/${catalogId}/public-services/${maybeServiceId}/edit`);
+      return getPublicServiceById(catalogId, maybeServiceId);
     }
   };
 
@@ -72,7 +72,7 @@ export const NewPage = (props: NewPageProps) => {
         onSubmit={handleCreate}
         initialValues={serviceTemplate(undefined)}
         statuses={statuses}
-        type='services'
+        type='public-services'
       />
     </>
   );
