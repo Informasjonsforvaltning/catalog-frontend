@@ -32,7 +32,7 @@ import { ContactPointSection } from './components/contact-point-section';
 interface ServiceFormProps {
   afterSubmit?: () => void;
   autoSaveStorage: DataStorage<StorageData>;
-  initialValues: Service;
+  initialValues: ServiceToBeCreated;
   onCancel?: () => void;
   onSubmit?: (values: Service) => Promise<Service | undefined>;
   showSnackbarSuccessOnInit?: boolean;
@@ -179,13 +179,19 @@ export const ServiceForm = (props: ServiceFormProps) => {
       )}
       <Formik
         innerRef={formikRef}
-        initialValues={serviceTemplate(initialValues)}
+        initialValues={initialValues}
         validationSchema={ignoreRequired ? draftServiceSchema : confirmedServiceSchema}
         validateOnChange={validateOnChange}
         validateOnBlur={validateOnChange}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
           if (onSubmit) {
             try {
+              // set produces identifiers
+              values.produces?.map((produce, index) => ({
+                ...produce,
+                identifier: index,
+              }));
+
               const newValues = await onSubmit(trimObjectWhitespace(values));
 
               showSnackbarMessage({ message: localization.snackbar.saveSuccessful, severity: 'success' });
@@ -249,7 +255,6 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       <FormikLanguageFieldset
                         name='title'
                         as={Textfield}
-                        requiredLanguages={['nb']}
                         legend={
                           <TitleWithHelpTextAndTag
                             helpText={localization.serviceForm.helptext.title}
@@ -321,7 +326,10 @@ export const ServiceForm = (props: ServiceFormProps) => {
                     required
                     error={hasError(['produces'])}
                   >
-                    <ProducesField error={errors.produces} />
+                    <ProducesField
+                      error={errors.produces}
+                      ignoreRequired={ignoreRequired}
+                    />
                   </FormLayout.Section>
 
                   <FormLayout.Section
