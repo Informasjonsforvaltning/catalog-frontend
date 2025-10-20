@@ -30,10 +30,7 @@ export default async function NewServicePage(props: { params: Promise<{ catalogI
         title={localization.catalogType.service}
         subtitle={getTranslateText(organization?.prefLabel).toString()}
       />
-      <NewPage
-        type='services'
-        statuses={statusesResponse.statuses}
-      />
+      <NewPage statuses={statusesResponse.statuses} />
     </>
   );
 }

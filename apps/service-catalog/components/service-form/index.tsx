@@ -23,11 +23,11 @@ import cn from 'classnames';
 import styles from './service-form.module.css';
 import { useParams, useSearchParams } from 'next/navigation';
 import { FastField, Field, Form, Formik, FormikProps } from 'formik';
-import { serviceTemplate } from '../basic-service-form/service-template';
-import { confirmedServiceSchema, draftServiceSchema } from '../basic-service-form/validation-schema';
+import { serviceTemplate } from './service-template';
 import { useEffect, useRef, useState } from 'react';
 import { ProducesField } from './components/produces-field';
 import { ContactPointSection } from './components/contact-point-section';
+import { confirmedServiceSchema, draftServiceSchema } from './validation-schema';
 
 interface ServiceFormProps {
   afterSubmit?: () => void;
@@ -69,7 +69,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
     props;
   const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<ServiceToBeCreated>>(null);
-  const { catalogId, serviceId } = useParams<{ catalogId: string; serviceId: string }>();
+  const { catalogId, serviceId } = useParams<{ catalogId: string; serviceId?: string }>();
   const restoreOnRender = Boolean(searchParams.get('restore'));
 
   const [isCanceled, setIsCanceled] = useState(false);
