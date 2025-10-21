@@ -17,7 +17,7 @@ import { trim, isEmpty, pickBy, identity } from 'lodash';
 import { confirmedProducesSchema, draftProducesSchema } from '../validation-schema';
 
 interface Props {
-  error: string | undefined;
+  error: string | string[] | undefined;
   validationSchema: typeof confirmedProducesSchema | typeof draftProducesSchema;
 }
 
@@ -131,7 +131,7 @@ export const ProducesField = (props: Props) => {
                 className={styles.errorMessage}
                 size='sm'
               >
-                {error}
+                {error.toString()}
               </ErrorMessage>
             )}
           </div>

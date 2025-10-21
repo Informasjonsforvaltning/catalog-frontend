@@ -89,12 +89,12 @@ export const draftServiceSchema = Yup.object().shape({
     nn: Yup.string(),
     en: Yup.string(),
   }),
-  produces: Yup.array().of(draftProducesSchema),
   homepage: Yup.string()
     .matches(httpsRegex, localization.validation.invalidProtocol)
     .url(localization.validation.invalidUrl)
     .notRequired(),
   status: Yup.string(),
+  produces: Yup.array().of(draftProducesSchema),
   contactPoints: Yup.array().of(
     Yup.object().shape({
       category: Yup.object().shape({
@@ -132,11 +132,15 @@ export const confirmedServiceSchema = Yup.object().shape({
     .test('description-test', localization.validation.oneLanguageRequired, (description) => {
       return Boolean(description.nb || description.nn || description.en);
     }),
-  produces: Yup.array().of(confirmedProducesSchema).min(1, localization.validation.minOneField),
   homepage: Yup.string()
+    .required(localization.serviceForm.validation.homepageRequired)
     .matches(httpsRegex, localization.validation.invalidProtocol)
     .url(localization.validation.invalidUrl),
-  status: Yup.string(),
+  status: Yup.string().required(localization.validation.invalidValue),
+  produces: Yup.array()
+    .of(confirmedProducesSchema)
+    .min(1, localization.validation.minOneField)
+    .required(localization.validation.minOneField),
   contactPoints: Yup.array()
     .of(
       Yup.object().shape({

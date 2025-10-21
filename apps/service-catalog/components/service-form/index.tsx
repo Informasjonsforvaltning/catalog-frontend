@@ -226,10 +226,10 @@ export const ServiceForm = (props: ServiceFormProps) => {
           const handleRestoreDataset = (data: StorageData) => {
             if (data?.id !== serviceId) {
               if (!data?.id) {
-                window.location.replace(`/catalogs/${catalogId}/services/new?restore=1`);
+                window.location.replace(`/catalogs/${catalogId}/${type}/new?restore=1`);
                 return false;
               }
-              window.location.replace(`/catalogs/${catalogId}/services/${data.id}/edit?restore=1`);
+              window.location.replace(`/catalogs/${catalogId}/${type}/edit?restore=1`);
               return false;
             }
             const restoreValues = serviceTemplate(data.values);
@@ -254,7 +254,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                     title={localization.serviceForm.section.about.title}
                     subtitle={localization.serviceForm.section.about.subtitle}
                     required
-                    error={hasError(['title', 'description'])}
+                    error={hasError(['title', 'description', 'homepage', 'status'])}
                   >
                     <Box>
                       <FormikLanguageFieldset
@@ -300,6 +300,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       />
                       <FieldsetDivider />
                       <Field
+                        error={errors?.status}
                         as={Select}
                         label={
                           <TitleWithHelpTextAndTag
@@ -311,7 +312,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                         }
                         name='status'
                       >
-                        <option value={undefined}>Ingen status</option>
+                        <option value=''>Ingen status</option>
                         {statuses.map((status) => (
                           <option
                             key={status.code}

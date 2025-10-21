@@ -46,6 +46,7 @@ export const serviceFormNb = {
     contactPoints: 'Minst en verdi må fylles ut for kontaktpunktet.',
     description: 'Beskrivelsen må være minst 5 karakterer lang.',
     title: 'Tittelen må være minst 3 karakterer lang.',
+    homepageRequired: 'Hjemmeside er påkrevd.',
     produces: 'For hvert tjenesteresultat må både tittel og beskrivelse være fylt ut.',
   },
 };
