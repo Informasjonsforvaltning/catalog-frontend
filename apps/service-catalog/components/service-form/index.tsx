@@ -27,7 +27,12 @@ import { serviceTemplate } from './service-template';
 import { useEffect, useRef, useState } from 'react';
 import { ProducesField } from './components/produces-field';
 import { ContactPointSection } from './components/contact-point-section';
-import { confirmedServiceSchema, draftServiceSchema } from './validation-schema';
+import {
+  confirmedProducesSchema,
+  confirmedServiceSchema,
+  draftProducesSchema,
+  draftServiceSchema,
+} from './validation-schema';
 
 interface ServiceFormProps {
   afterSubmit?: () => void;
@@ -328,7 +333,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                   >
                     <ProducesField
                       error={errors.produces}
-                      ignoreRequired={ignoreRequired}
+                      validationSchema={ignoreRequired ? draftProducesSchema : confirmedProducesSchema}
                     />
                   </FormLayout.Section>
 
