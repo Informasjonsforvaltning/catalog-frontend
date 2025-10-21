@@ -6,6 +6,7 @@ import { LocalDataStorage, localization } from '@catalog-frontend/utils';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { getServiceById, updateService } from '@service-catalog/app/actions/services/actions';
 import ServiceForm from '@service-catalog/components/service-form';
+import { serviceTemplate } from '@service-catalog/components/service-form/service-template';
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -64,7 +65,7 @@ export const EditPage = (props: EditPageProps) => {
         autoSaveStorage={dataStorage}
         onCancel={handleCancel}
         onSubmit={handleUpdate}
-        initialValues={service}
+        initialValues={serviceTemplate(service)}
         statuses={statuses}
         type='services'
       />

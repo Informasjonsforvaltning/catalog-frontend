@@ -35,7 +35,7 @@ export default async function ServiceDetailsPage({
   const breadcrumbList = [
     {
       href: `/catalogs/${catalogId}/services`,
-      text: localization.catalogType.publicService,
+      text: localization.catalogType.service,
     },
     {
       href: `/catalogs/${catalogId}/services/${serviceId}`,
