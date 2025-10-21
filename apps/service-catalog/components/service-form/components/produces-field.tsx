@@ -18,11 +18,11 @@ import { confirmedProducesSchema, draftProducesSchema } from '../validation-sche
 
 interface Props {
   error: string | undefined;
-  ignoreRequired: boolean;
+  validationSchema: typeof confirmedProducesSchema | typeof draftProducesSchema;
 }
 
 interface ModalProps {
-  ignoreRequired: boolean;
+  validationSchema: typeof confirmedProducesSchema | typeof draftProducesSchema;
   onCancel: () => void;
   onChange: (values: Output) => void;
   onSuccess: (values: Output) => void;
@@ -36,7 +36,7 @@ const hasNoFieldValues = (values: Output) => {
 };
 
 export const ProducesField = (props: Props) => {
-  const { error, ignoreRequired } = props;
+  const { error, validationSchema } = props;
   const { values, setFieldValue } = useFormikContext<Service>();
   const [snapshot, setSnapshot] = useState<Output[]>(values.produces ?? []);
 
@@ -72,7 +72,7 @@ export const ProducesField = (props: Props) => {
 
                   <div className={styles.buttons}>
                     <FieldModal
-                      ignoreRequired={ignoreRequired}
+                      validationSchema={validationSchema}
                       template={item}
                       type='edit'
                       onSuccess={(updatedItem: Output) => {
@@ -111,7 +111,7 @@ export const ProducesField = (props: Props) => {
 
             <div>
               <FieldModal
-                ignoreRequired={ignoreRequired}
+                validationSchema={validationSchema}
                 template={{ title: {}, description: {}, identifier: '' }}
                 type='new'
                 onSuccess={() => setSnapshot([...(values.produces ?? [])])}
@@ -142,7 +142,7 @@ export const ProducesField = (props: Props) => {
 };
 
 const FieldModal = (props: ModalProps) => {
-  const { template, type, onSuccess, onCancel, onChange, ignoreRequired } = props;
+  const { template, type, onSuccess, onCancel, onChange, validationSchema } = props;
   const [submitted, setSubmitted] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -153,7 +153,9 @@ const FieldModal = (props: ModalProps) => {
           {type === 'edit' ? (
             <EditButton />
           ) : (
-            <AddButton>{`${localization.add} ${localization.serviceForm.fieldLabel.produces.toLowerCase()}`}</AddButton>
+            <AddButton>
+              {localization.add} {localization.serviceForm.fieldLabel.produces.toLowerCase()}
+            </AddButton>
           )}
         </Modal.Trigger>
         <Modal.Dialog ref={modalRef}>
@@ -161,7 +163,7 @@ const FieldModal = (props: ModalProps) => {
             initialValues={template}
             validateOnChange={submitted}
             validateOnBlur={submitted}
-            validationSchema={ignoreRequired ? draftProducesSchema : confirmedProducesSchema}
+            validationSchema={validationSchema}
             onSubmit={(formValues, { setSubmitting }) => {
               const trimmedValues = trimObjectWhitespace(formValues);
               onSuccess(trimmedValues);

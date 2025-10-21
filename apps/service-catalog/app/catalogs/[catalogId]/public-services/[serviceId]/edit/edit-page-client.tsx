@@ -36,8 +36,7 @@ export const EditPage = (props: EditPageProps) => {
 
   const handleUpdate = async (values: Service) => {
     await updatePublicService(catalogId, service, values);
-    const newValues = await getPublicServiceById(catalogId, serviceId);
-    return newValues;
+    return getPublicServiceById(catalogId, serviceId);
   };
 
   return (
