@@ -17,7 +17,7 @@ import { trim, isEmpty, pickBy, identity } from 'lodash';
 import { confirmedProducesSchema, draftProducesSchema } from '../validation-schema';
 
 interface Props {
-  errors?: string | Array<{ title?: string | LocalizedStrings; description?: string | LocalizedStrings }>;
+  errors?: string | Array<{ title: LocalizedStrings; description: LocalizedStrings }>;
   validationSchema: typeof confirmedProducesSchema | typeof draftProducesSchema;
 }
 

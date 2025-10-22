@@ -2,8 +2,8 @@ import { ContactPoint, Output, Service, ServiceToBeCreated } from '@catalog-fron
 
 export const producesTemplate = (produce: Output): Output => {
   return {
-    identifier: produce?.identifier ?? 0,
-    title: { nb: produce?.title?.nb, nn: produce?.title?.nn, en: produce?.title?.en },
+    identifier: produce.identifier ?? 0,
+    title: { nb: produce.title?.nb, nn: produce.title?.nn, en: produce.title?.en },
     description: {
       nb: produce.description?.nb,
       nn: produce.description?.nn,
@@ -32,9 +32,9 @@ export const emptyProduces: Output[] = [
 const contactPointTemplate = (contactPoint: ContactPoint): ContactPoint | null => {
   return {
     category: {
-      nb: contactPoint?.category?.nb,
-      nn: contactPoint?.category?.nn,
-      en: contactPoint?.category?.en,
+      nb: contactPoint.category?.nb,
+      nn: contactPoint.category?.nn,
+      en: contactPoint.category?.en,
     },
     email: contactPoint.email,
     telephone: contactPoint.telephone,
