@@ -33,6 +33,7 @@ import {
   draftProducesSchema,
   draftServiceSchema,
 } from './validation-schema';
+import { get, isEmpty, isEqual } from 'lodash';
 
 interface ServiceFormProps {
   afterSubmit?: () => void;
@@ -104,8 +105,6 @@ export const ServiceForm = (props: ServiceFormProps) => {
         message: localization.serviceForm.alert.unpublishBeforeIgnoreRequired,
         severity: 'danger',
       });
-      // } else if (newValue && formApprovedStatus === true) {
-      //   setShowUnapproveModal(true);
     } else {
       setIgnoreRequired(newValue);
     }
@@ -220,7 +219,17 @@ export const ServiceForm = (props: ServiceFormProps) => {
           }
         }}
       >
-        {({ dirty, isValid, isSubmitting, isValidating, submitForm, errors, setValues }) => {
+        {({
+          dirty,
+          initialValues: _initialValues,
+          isValid,
+          isSubmitting,
+          isValidating,
+          submitForm,
+          errors,
+          setValues,
+          values,
+        }) => {
           const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
           const hasError = (fields: (keyof Service)[]) => fields.some((field) => Object.keys(errors).includes(field));
           const handleRestoreDataset = (data: StorageData) => {
@@ -238,6 +247,38 @@ export const ServiceForm = (props: ServiceFormProps) => {
             showSnackbarMessage({ message: localization.snackbar.restoreSuccessful, severity: 'success' });
             return true;
           };
+
+          const dirtyFields = ((): string[] => {
+            const dirtyFields: string[] = [];
+
+            const isDirty = (name: string) => {
+              const a = get(_initialValues, name);
+              const b = get(values, name);
+
+              if (isEmpty(a) && isEmpty(b)) {
+                return false;
+              }
+
+              return !isEqual(a, b);
+            };
+
+            [
+              ...Object.keys({ ..._initialValues, ...values }),
+              'title',
+              'description',
+              'homepage',
+              'status',
+              'produces',
+              'contactPoints',
+            ].forEach((name) => {
+              if (isDirty(name)) {
+                dirtyFields.push(name);
+              }
+            });
+
+            return dirtyFields;
+          })();
+
           return (
             <>
               <Form className='container'>
@@ -254,12 +295,16 @@ export const ServiceForm = (props: ServiceFormProps) => {
                     title={localization.serviceForm.section.about.title}
                     subtitle={localization.serviceForm.section.about.subtitle}
                     required
+                    changed={dirtyFields.some((field) =>
+                      ['title', 'description', 'homepage', 'status'].includes(field),
+                    )}
                     error={hasError(['title', 'description', 'homepage', 'status'])}
                   >
                     <Box>
                       <FormikLanguageFieldset
                         name='title'
                         as={Textfield}
+                        requiredLanguages={['nb']}
                         legend={
                           <TitleWithHelpTextAndTag
                             helpText={localization.serviceForm.helptext.title}
@@ -331,9 +376,10 @@ export const ServiceForm = (props: ServiceFormProps) => {
                     subtitle={localization.serviceForm.section.produces.subtitle}
                     required
                     error={hasError(['produces'])}
+                    changed={dirtyFields.includes('produces')}
                   >
                     <ProducesField
-                      error={errors.produces}
+                      errors={errors.produces}
                       validationSchema={ignoreRequired ? draftProducesSchema : confirmedProducesSchema}
                     />
                   </FormLayout.Section>
@@ -343,7 +389,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                     title={localization.serviceForm.section.contactPoint.title}
                     subtitle={localization.serviceForm.section.contactPoint.subtitle}
                     required
-                    // changed={markDirty && dirtyFields.some((field) => ['contactPoint'].includes(field))}
+                    changed={dirtyFields.includes('contactPoints')}
                     error={hasError(['contactPoints'])}
                   >
                     <ContactPointSection />

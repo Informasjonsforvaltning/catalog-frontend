@@ -1,4 +1,4 @@
-import { Output, Service } from '@catalog-frontend/types';
+import { LocalizedStrings, Output, Service } from '@catalog-frontend/types';
 import {
   AddButton,
   DeleteButton,
@@ -17,7 +17,7 @@ import { trim, isEmpty, pickBy, identity } from 'lodash';
 import { confirmedProducesSchema, draftProducesSchema } from '../validation-schema';
 
 interface Props {
-  error: string | string[] | undefined;
+  errors?: string | Array<{ title?: string | LocalizedStrings; description?: string | LocalizedStrings }>;
   validationSchema: typeof confirmedProducesSchema | typeof draftProducesSchema;
 }
 
@@ -36,7 +36,7 @@ const hasNoFieldValues = (values: Output) => {
 };
 
 export const ProducesField = (props: Props) => {
-  const { error, validationSchema } = props;
+  const { errors, validationSchema } = props;
   const { values, setFieldValue } = useFormikContext<Service>();
   const [snapshot, setSnapshot] = useState<Output[]>(values.produces ?? []);
 
@@ -51,7 +51,7 @@ export const ProducesField = (props: Props) => {
       <FieldArray
         name='produces'
         render={(arrayHelpers) => (
-          <div className={cn(styles.fieldSet, error && styles.errorBorder)}>
+          <div className={cn(styles.fieldSet, errors && styles.errorBorder)}>
             {values.produces?.map((item, index) => (
               <Card key={`${index}-${item.identifier}`}>
                 <div className={styles.heading}>
@@ -66,6 +66,9 @@ export const ProducesField = (props: Props) => {
                           {localization.serviceForm.fieldLabel.title}
                         </Heading>
                         <Paragraph size='sm'>{getTranslateText(item.title)}</Paragraph>
+                        {Array.isArray(errors) && errors?.[index]?.title && (
+                          <ErrorMessage size='sm'>{getTranslateText(errors[index].title)}</ErrorMessage>
+                        )}
                       </>
                     )}
                   </div>
@@ -93,17 +96,16 @@ export const ProducesField = (props: Props) => {
                   </div>
                 </div>
                 <div className={styles.field}>
-                  {!isEmpty(item?.description) && (
-                    <>
-                      <Heading
-                        size='2xs'
-                        spacing
-                        level={3}
-                      >
-                        {localization.serviceForm.fieldLabel.description}
-                      </Heading>
-                      <Paragraph size='sm'>{getTranslateText(item.description)}</Paragraph>
-                    </>
+                  <Heading
+                    size='2xs'
+                    spacing
+                    level={3}
+                  >
+                    {localization.serviceForm.fieldLabel.description}
+                  </Heading>
+                  <Paragraph size='sm'>{getTranslateText(item.description)}</Paragraph>
+                  {Array.isArray(errors) && errors?.[index]?.description && (
+                    <ErrorMessage size='sm'>{getTranslateText(errors[index].description)}</ErrorMessage>
                   )}
                 </div>
               </Card>
@@ -126,12 +128,12 @@ export const ProducesField = (props: Props) => {
               />
             </div>
 
-            {error && (
+            {typeof errors === 'string' && (
               <ErrorMessage
                 className={styles.errorMessage}
                 size='sm'
               >
-                {error.toString()}
+                {errors}
               </ErrorMessage>
             )}
           </div>

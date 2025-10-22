@@ -226,7 +226,7 @@ const DataServiceForm = ({
           const dirtyFields = ((): string[] => {
             const dirtyFields: string[] = [];
 
-            const isDirty = (name) => {
+            const isDirty = (name: string) => {
               const a = get(formInitialValues, name);
               const b = get(values, name);
 

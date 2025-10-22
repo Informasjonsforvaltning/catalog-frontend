@@ -7,8 +7,8 @@ import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { getPublicServiceById, updatePublicService } from '@service-catalog/app/actions/public-services/actions';
 import ServiceForm from '@service-catalog/components/service-form';
 import { serviceTemplate } from '@service-catalog/components/service-form/service-template';
-import { useParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 type EditPageProps = {
   service: Service;
@@ -19,10 +19,14 @@ export const EditPage = (props: EditPageProps) => {
   const { service, statuses } = props;
   const router = useRouter();
   const { catalogId, serviceId } = useParams<{ catalogId: string; serviceId: string }>();
+  const [showSnackbar, setShowSnackbar] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
   const dataStorage = new LocalDataStorage<StorageData>({
-    key: 'serviceForm',
+    key: 'publicServiceForm',
   });
 
   const handleGotoOverview = () => {
@@ -39,6 +43,20 @@ export const EditPage = (props: EditPageProps) => {
     await updatePublicService(catalogId, service, values);
     return getPublicServiceById(catalogId, serviceId);
   };
+
+  useEffect(() => {
+    if (searchParams.get('created') === 'true') {
+      setShowSnackbar(true);
+
+      // Remove the param and update the URL shallowly
+      const newParams = new URLSearchParams(searchParams.toString());
+      newParams.delete('created');
+
+      const newUrl = newParams.toString().length > 0 ? `${pathname}?${newParams.toString()}` : pathname;
+
+      window.history.replaceState(null, '', newUrl);
+    }
+  }, [searchParams, pathname]);
 
   return (
     <>
@@ -67,6 +85,7 @@ export const EditPage = (props: EditPageProps) => {
         onSubmit={handleUpdate}
         initialValues={serviceTemplate(service)}
         statuses={statuses}
+        showSnackbarSuccessOnInit={showSnackbar}
         type='public-services'
       />
     </>
