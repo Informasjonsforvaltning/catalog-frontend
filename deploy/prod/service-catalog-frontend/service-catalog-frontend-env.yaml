@@ -28,7 +28,7 @@ spec:
             - name: KEYCLOAK_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: sso-client-credentials
+                  name: keycloak-client-credentials
                   key: SERVICE_CATALOG_FRONTEND
             - name: SERVICE_CATALOG_BASE_URI
               valueFrom:
