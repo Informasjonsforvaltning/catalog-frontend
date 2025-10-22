@@ -4,7 +4,7 @@ import { ReferenceDataCode, Service, StorageData } from '@catalog-frontend/types
 import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
 import { LocalDataStorage, localization } from '@catalog-frontend/utils';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import ServiceForm from '@service-catalog/components/service-form';
 import { createService, getServiceById } from '@service-catalog/app/actions/services/actions';
@@ -18,6 +18,7 @@ export const NewPage = (props: NewPageProps) => {
   const { statuses } = props;
   const router = useRouter();
   const { catalogId } = useParams<{ catalogId: string }>();
+  const serviceIdRef = useRef<string | undefined>(undefined); // Ref to store the service id
 
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
@@ -35,14 +36,17 @@ export const NewPage = (props: NewPageProps) => {
     router.push(`/catalogs/${catalogId}/services`);
   };
 
-  const handleCreate = async (values: Service) => {
-    const maybeServiceId = await createService(catalogId, values);
-    if (!maybeServiceId) {
-      throw new Error('Service creation failed, no service ID returned');
+  const handleAfterSubmit = () => {
+    if (serviceIdRef.current) {
+      router.replace(`/catalogs/${catalogId}/services/${serviceIdRef.current}/edit`);
     } else {
-      router.replace(`/catalogs/${catalogId}/services/${maybeServiceId}/edit`);
-      return getServiceById(catalogId, maybeServiceId);
+      router.replace(`/catalogs/${catalogId}/services`);
     }
+  };
+
+  const handleCreate = async (values: Service) => {
+    serviceIdRef.current = await createService(catalogId, values);
+    return undefined;
   };
 
   return (
@@ -67,6 +71,7 @@ export const NewPage = (props: NewPageProps) => {
         </Button>
       </ButtonBar>
       <ServiceForm
+        afterSubmit={handleAfterSubmit}
         autoSaveStorage={dataStorage}
         onCancel={handleCancel}
         onSubmit={handleCreate}

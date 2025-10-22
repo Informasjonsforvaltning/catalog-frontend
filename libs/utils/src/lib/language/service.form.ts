@@ -47,6 +47,5 @@ export const serviceFormNb = {
     description: 'Beskrivelsen må være minst 5 karakterer lang.',
     title: 'Tittelen må være minst 3 karakterer lang.',
     homepageRequired: 'Hjemmeside er påkrevd.',
-    produces: 'For hvert tjenesteresultat må både tittel og beskrivelse være fylt ut.',
   },
 };

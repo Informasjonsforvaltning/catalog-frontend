@@ -23,9 +23,9 @@ export const draftProducesSchema = Yup.object().shape({
   }),
 });
 
-export const confirmedProducesSchema = Yup.object()
-  .shape({
-    title: Yup.object().shape({
+export const confirmedProducesSchema = Yup.object().shape({
+  title: Yup.object()
+    .shape({
       nb: Yup.string()
         .min(3, localization.serviceForm.validation.title)
         .label(`${localization.serviceForm.fieldLabel.title} (${localization.language.nb})`)
@@ -38,8 +38,12 @@ export const confirmedProducesSchema = Yup.object()
         .min(3, localization.serviceForm.validation.title)
         .label(`${localization.serviceForm.fieldLabel.title} (${localization.language.en})`)
         .notRequired(),
+    })
+    .test('title-test', localization.validation.oneLanguageRequired, (title) => {
+      return Boolean(title.nb || title.nn || title.en);
     }),
-    description: Yup.object().shape({
+  description: Yup.object()
+    .shape({
       nb: Yup.string()
         .min(3, localization.serviceForm.validation.description)
         .label(`${localization.serviceForm.fieldLabel.description} (${localization.language.nb})`)
@@ -52,13 +56,11 @@ export const confirmedProducesSchema = Yup.object()
         .min(3, localization.serviceForm.validation.description)
         .label(`${localization.serviceForm.fieldLabel.description} (${localization.language.en})`)
         .notRequired(),
+    })
+    .test('description-test', localization.validation.oneLanguageRequired, (description) => {
+      return Boolean(description.nb || description.nn || description.en);
     }),
-  })
-  .test('produces-test', localization.serviceForm.validation.produces, ({ description, title }) => {
-    const hasTitle = Boolean(title.nb || title.nn || title.en);
-    const hasDescription = Boolean(description.nb || description.nn || description.en);
-    return hasTitle && hasDescription;
-  });
+});
 
 const titleSchema = Yup.object()
   .shape({
