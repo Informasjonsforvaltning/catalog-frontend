@@ -1,8 +1,4 @@
 import { defineConfig, globalIgnores } from 'eslint/config';
-import globals from 'globals';
-import pluginReact from 'eslint-plugin-react';
-import pluginNx from '@nx/eslint-plugin';
-import tseslint from 'typescript-eslint';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createCommonTsConfig } from '../../tools/eslint/shared-eslint-config.mjs';
