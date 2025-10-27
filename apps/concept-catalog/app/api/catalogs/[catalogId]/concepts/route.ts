@@ -15,7 +15,7 @@ export const GET = async (req: NextRequest, props: { params: Promise<{ catalogId
       }
       const concepts = await response.json();
       return new Response(JSON.stringify(concepts), { status: 200 });
-    } catch (err) {
+    } catch {
       return new Response(JSON.stringify({ message: 'Failed to fetch concepts' }), { status: 500 });
     }
   });
@@ -28,7 +28,7 @@ export const POST = async (req: NextRequest, props: { params: Promise<{ catalogI
 
     const concept: Concept = await req.json();
     concept.ansvarligVirksomhet = {
-      id: catalogId
+      id: catalogId,
     };
 
     try {

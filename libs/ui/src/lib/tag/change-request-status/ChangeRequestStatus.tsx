@@ -18,7 +18,7 @@ const getColorFromStatusKey = (statusKey: StatusKey | undefined) =>
   statusKey ? ChangeRequestStatusColors[statusKey.toLocaleUpperCase() as StatusKey] : 'neutral';
 
 export const ChangeRequestStatusTag = forwardRef<HTMLSpanElement, ChangeRequestStatusTagProps>(
-  ({ children, statusKey, statusLabel, size = 'medium', ...rest }: ChangeRequestStatusTagProps, ref) => {
+  ({ statusKey, statusLabel, size = 'medium', ...rest }: ChangeRequestStatusTagProps, ref) => {
     return (
       <DSTag
         ref={ref}

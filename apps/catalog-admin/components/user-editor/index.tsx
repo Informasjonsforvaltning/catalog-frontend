@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import { Button, Textfield } from '@digdir/designsystemet-react';
 import { compare } from 'fast-json-patch';
 import { emailRegex, localization, textRegex } from '@catalog-frontend/utils';
@@ -30,7 +30,7 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
 
   const handleDeleteUser = (user: AssignedUser) => {
     if (window.confirm(`${localization.alert.deleteUser} ${user?.name}`)) {
-      deleteUser.mutate(user?.id);
+      deleteUser.mutate(user?.id as any);
     }
   };
 
@@ -54,7 +54,7 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
 
     if (diff) {
       updateUser
-        .mutateAsync({ beforeUpdateUser: dbUser, updatedUser: updatedUser })
+        .mutateAsync({ beforeUpdateUser: dbUser, updatedUser: updatedUser as any })
         .then(() => {
           alert(localization.alert.success);
         })
@@ -71,7 +71,7 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
     const userToUpdate =
       updatedUserListIndex !== -1
         ? updatedUserList[updatedUserListIndex]
-        : dbUsers?.find((user) => user?.id === userId);
+        : dbUsers?.find((user: any) => user?.id === userId);
     const updatedUserListsCopy = [...updatedUserList];
 
     if (userToUpdate) {
@@ -107,38 +107,40 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
       <div className='editorSpacing'>
         <Textfield
           error={
-            textRegex.test((findUserById(user?.id) || user)?.name || newUser.name)
+            textRegex.test((findUserById(user?.id as any) || user)?.name || (newUser.name as any))
               ? null
               : localization.validation.invalidValue
           }
           label='Navn'
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
             type === 'create'
               ? setNewUser({ name: event.target.value, email: newUser.email, telephoneNumber: newUser.telephoneNumber })
-              : updateUserState(user?.id, event.target.value);
+              : updateUserState(user?.id as any, event.target.value);
           }}
-          value={(findUserById(user?.id) || user)?.name}
+          value={(findUserById(user?.id as any) || user)?.name}
         />
       </div>
       <div className='editorSpacing'>
         <Textfield
           error={
-            emailRegex.test((findUserById(user?.id) || user)?.email || newUser.email)
+            emailRegex.test((findUserById(user?.id as any) || user)?.email || (newUser.email as any))
               ? null
               : localization.validation.invalidValue
           }
           label='E-post'
           inputMode='email'
-          value={(findUserById(user?.id) || user)?.email}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          value={(findUserById(user?.id as any) || user)?.email}
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
             type === 'create'
               ? setNewUser({ name: newUser.name, email: event.target.value, telephoneNumber: newUser.telephoneNumber })
-              : updateUserState(user?.id, undefined, event.target.value, undefined);
+              : updateUserState(user?.id as any, undefined, event.target.value, undefined);
           }}
         />
       </div>
       <div className='editorButtons'>
-        <Button onClick={() => (type === 'create' ? handleCreateUser() : handleUpdateUser(user?.id))}>Lagre</Button>
+        <Button onClick={() => (type === 'create' ? handleCreateUser() : handleUpdateUser(user?.id as any))}>
+          Lagre
+        </Button>
         {type === 'create' ? (
           <Button
             color='danger'
@@ -149,7 +151,7 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
         ) : (
           <Button
             color='danger'
-            onClick={() => handleDeleteUser(user)}
+            onClick={() => handleDeleteUser(user as any)}
           >
             {localization.button.delete}
           </Button>

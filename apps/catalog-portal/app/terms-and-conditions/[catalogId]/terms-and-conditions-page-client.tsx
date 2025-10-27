@@ -5,7 +5,7 @@ import { localization } from '@catalog-frontend/utils';
 import { Terms, TermsAcceptation } from '@catalog-frontend/types';
 import parse from 'html-react-parser';
 import styles from './terms-and-conditions-page.module.css';
-import { Button, Link, MarkdownComponent } from '@catalog-frontend/ui';
+import { Button, MarkdownComponent } from '@catalog-frontend/ui';
 import { useState } from 'react';
 import { acceptTermsAndConditions } from '@catalog-portal/app/actions';
 

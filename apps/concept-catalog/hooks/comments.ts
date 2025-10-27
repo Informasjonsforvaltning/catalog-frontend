@@ -1,7 +1,7 @@
 import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-export const useGetComments = ({ orgNumber, topicId }) => {
+export const useGetComments = ({ orgNumber, topicId }: any) => {
   return useQuery({
     queryKey: ['getComments', orgNumber, topicId],
     queryFn: async () => {
@@ -26,7 +26,7 @@ export const useGetComments = ({ orgNumber, topicId }) => {
   });
 };
 
-export const useCreateComment = ({ orgNumber, topicId }) => {
+export const useCreateComment = ({ orgNumber, topicId }: any) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -64,7 +64,7 @@ export const useCreateComment = ({ orgNumber, topicId }) => {
   });
 };
 
-export const useUpdateComment = ({ orgNumber, topicId }) => {
+export const useUpdateComment = ({ orgNumber, topicId }: any) => {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -106,7 +106,7 @@ export const useUpdateComment = ({ orgNumber, topicId }) => {
   });
 };
 
-export const useDeleteComment = ({ orgNumber, topicId }) => {
+export const useDeleteComment = ({ orgNumber, topicId }: any) => {
   const queryClient = useQueryClient();
 
   return useMutation({

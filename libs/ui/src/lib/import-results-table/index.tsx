@@ -56,12 +56,12 @@ const ImportResultsTable = ({ importHref, importResults, showStatusHelpText }: P
           <Table.Cell>{localization.importResult.tableHeading.title}</Table.Cell>
           <Table.Cell>
             <div className={styles.titleTags}>
-            {localization.importResult.tableHeading.status}
-            {showStatusHelpText && (
-              <HelpMarkdown aria-label={`Help Status`}>
-                {localization.importResult.tableHeading.statusHelpTextConceptImport}
-              </HelpMarkdown>
-            )}
+              {localization.importResult.tableHeading.status}
+              {showStatusHelpText && (
+                <HelpMarkdown aria-label={`Help Status`}>
+                  {localization.importResult.tableHeading.statusHelpTextConceptImport}
+                </HelpMarkdown>
+              )}
             </div>
           </Table.Cell>
           <Table.Cell>{localization.importResult.tableHeading.timestamp}</Table.Cell>

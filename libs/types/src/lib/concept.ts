@@ -349,7 +349,5 @@ export type ChangeRequestsPageSettings = {
   filter: {
     status: string[] | null;
     itemType: string | null;
-  }
+  };
 };
-
-

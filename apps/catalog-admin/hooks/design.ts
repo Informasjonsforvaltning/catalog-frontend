@@ -3,7 +3,7 @@ import { colorRegex, textRegexWithNumbers, validOrganizationNumber } from '@cata
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { compare } from 'fast-json-patch';
 
-export const useGetDesign = (catalogId) =>
+export const useGetDesign = (catalogId: any) =>
   useQuery<Design>({
     queryKey: ['getDesign', catalogId],
     queryFn: async () => {

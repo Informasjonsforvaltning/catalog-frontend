@@ -6,7 +6,7 @@ import { nb } from 'yup-locales';
 
 Yup.setLocale(nb);
 
-const getRevisions = async ({ baseUri, catalogId, conceptId }) => {
+const getRevisions = async ({ baseUri, catalogId, conceptId }: any) => {
   const response = await fetch(`${baseUri}/api/catalogs/${catalogId}/concepts/${conceptId}/revisions`);
   if (response.status !== 200) {
     return [];
@@ -14,11 +14,11 @@ const getRevisions = async ({ baseUri, catalogId, conceptId }) => {
   return await response.json();
 };
 
-const isValidUrl = (value) => {
+const isValidUrl = (value: any) => {
   try {
     const url = new URL(value);
     return url.protocol === 'https:';
-  } catch (e) {
+  } catch {
     return false;
   }
 };
@@ -32,7 +32,7 @@ const tekstMedSpraakKodeArray = (label: string) =>
       en: Yup.array().of(Yup.string()).nullable().label(`${label} (${localization.language.en})`),
     });
 
-const kilde = (required) =>
+const kilde = (required: any) =>
   Yup.array()
     .of(
       Yup.object().shape({
@@ -80,7 +80,7 @@ const kilde = (required) =>
     })
     .nullable();
 
-export const definitionSchema = (required) =>
+export const definitionSchema = (required: any) =>
   Yup.object()
     .shape({
       tekst: Yup.object().shape({
@@ -160,7 +160,7 @@ const prefLabelNynorsk = Yup.string().label(
   `${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.nn})`,
 );
 
-export const conceptSchema = ({ baseUri, required }) =>
+export const conceptSchema = ({ baseUri, required }: any) =>
   Yup.object().shape({
     anbefaltTerm: Yup.object().shape({
       navn: Yup.object().shape({
@@ -302,8 +302,8 @@ export const conceptSchema = ({ baseUri, required }) =>
                   conceptId: this.parent.id,
                 })
               )
-                .filter((rev) => rev.id !== this.parent.id)
-                .sort((a, b) => -compareVersion(a.versjonsnr, b.versjonsnr));
+                .filter((rev: any) => rev.id !== this.parent.id)
+                .sort((a: any, b: any) => -compareVersion(a.versjonsnr, b.versjonsnr));
               if (compareVersion(revisions[0]?.versjonsnr, value as any) >= 0) {
                 return this.createError({
                   message: localization.formatString(localization.conceptForm.validation.version, {

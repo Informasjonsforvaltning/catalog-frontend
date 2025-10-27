@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Children, MouseEventHandler, ReactNode, useEffect } from 'react';
+import { Children, isValidElement, MouseEventHandler, ReactElement, ReactNode } from 'react';
 import styles from './snackbar.module.scss';
 import classNames from 'classnames';
 import { Alert, Button } from '@digdir/designsystemet-react';
@@ -39,12 +39,8 @@ const SnackbarItem = ({ children, severity = 'info', onClose }: SnackbarItemProp
 
 const Snackbar = ({ children, fadeIn = true }: SnackbarProps) => {
   const items = Children.toArray(children)
-    .filter((child) => React.isValidElement(child) && child.type === SnackbarItem)
-    .map((child) => child as React.ReactElement);
-
-  useEffect(() => {
-
-  }, [])  
+    .filter((child) => isValidElement(child) && child.type === SnackbarItem)
+    .map((child) => child as ReactElement);
 
   return <div className={classNames(styles.snackbar, ...(fadeIn ? [styles.fadeIn] : []))}>{items}</div>;
 };

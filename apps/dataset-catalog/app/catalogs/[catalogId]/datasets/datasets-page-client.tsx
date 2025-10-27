@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Dataset, DatasetsPageSettings, FilterType, PublicationStatus } from '@catalog-frontend/types';
 import styles from './datasets-page.module.css';
 import {

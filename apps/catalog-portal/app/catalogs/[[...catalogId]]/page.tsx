@@ -14,7 +14,7 @@ import { Organization } from '@catalog-frontend/types';
 import OrganizationCombo from './components/organization-combobox';
 import { redirect } from 'next/navigation';
 import { ServiceMessages, TermsOfUseAlert, MarkdownComponent } from '@catalog-frontend/ui';
-import { Alert, Heading, Paragraph } from '@digdir/designsystemet-react';
+import { Alert, Heading } from '@digdir/designsystemet-react';
 import styles from './catalogs.module.css';
 import { CatalogCard } from './components/catalog-card';
 

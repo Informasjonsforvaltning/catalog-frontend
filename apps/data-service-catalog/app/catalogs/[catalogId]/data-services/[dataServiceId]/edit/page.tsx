@@ -6,7 +6,6 @@ import {
   getPlannedAvailabilities,
 } from '@catalog-frontend/data-access';
 import { getTranslateText, localization, redirectToSignIn, validUUID } from '@catalog-frontend/utils';
-import { getDataServiceById } from '@catalog-frontend/data-access';
 import { redirect, RedirectType } from 'next/navigation';
 import { withWriteProtectedPage } from '@data-service-catalog/utils/auth';
 import { EditPage } from './edit-page-client';

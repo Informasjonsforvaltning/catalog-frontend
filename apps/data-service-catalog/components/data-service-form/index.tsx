@@ -1,11 +1,17 @@
 'use client';
-import { ReactNode, useEffect, useRef, useState } from 'react';
-import { localization, trimObjectWhitespace, deepMergeWithUndefinedHandling, formatISO, getTranslateText } from '@catalog-frontend/utils';
+import { useEffect, useRef, useState } from 'react';
+import {
+  localization,
+  trimObjectWhitespace,
+  deepMergeWithUndefinedHandling,
+  formatISO,
+  getTranslateText,
+} from '@catalog-frontend/utils';
 import { DataService, DataServiceReferenceData, DataServiceToBeCreated, StorageData } from '@catalog-frontend/types';
-import { FormLayout, StickyFooterBar, useWarnIfUnsavedChanges, FormikAutoSaver, Snackbar, NotificationCarousel, HelpMarkdown } from '@catalog-frontend/ui';
+import { FormLayout, FormikAutoSaver, Snackbar, NotificationCarousel } from '@catalog-frontend/ui';
 import { Formik, Form } from 'formik';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { Button, Checkbox, Spinner, Alert, Paragraph } from '@digdir/designsystemet-react';
+import { Button, Spinner, Alert, Paragraph } from '@digdir/designsystemet-react';
 import styles from './data-service-form.module.css';
 import { AboutSection } from './components/about-section';
 import { EndpointSection } from './components/endpoint-section';
@@ -36,30 +42,30 @@ type Props = {
   markDirty?: boolean;
 };
 
-const getNotifications = ({ isValid, hasUnsavedChanges }) => [
+const getNotifications = ({ isValid, hasUnsavedChanges }: any) => [
   ...(isValid
     ? []
     : [
-      <Alert
-        key={1}
-        size='sm'
-        severity='danger'
-        style={{ background: 'none', border: 'none', padding: 0 }}
-      >
-        {localization.validation.formError}
-      </Alert>,
-    ]),
+        <Alert
+          key={1}
+          size='sm'
+          severity='danger'
+          style={{ background: 'none', border: 'none', padding: 0 }}
+        >
+          {localization.validation.formError}
+        </Alert>,
+      ]),
   ...(hasUnsavedChanges
     ? [
-      <Alert
-        key={1}
-        size='sm'
-        severity='warning'
-        style={{ background: 'none', border: 'none', padding: 0 }}
-      >
-        {localization.validation.unsavedChanges}
-      </Alert>,
-    ]
+        <Alert
+          key={1}
+          size='sm'
+          severity='warning'
+          style={{ background: 'none', border: 'none', padding: 0 }}
+        >
+          {localization.validation.unsavedChanges}
+        </Alert>,
+      ]
     : []),
 ];
 
@@ -81,7 +87,6 @@ const DataServiceForm = ({
   const searchParams = useSearchParams();
   const restoreOnRender = Boolean(searchParams.get('restore'));
   const { catalogId, dataServiceId } = useParams();
-  const [isDirty, setIsDirty] = useState(false);
   const [validateOnChange, setValidateOnChange] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -93,7 +98,7 @@ const DataServiceForm = ({
 
   //useWarnIfUnsavedChanges({ unsavedChanges: isDirty });
 
-  const showSnackbarMessage = ({ message, severity, fadeIn = true }) => {
+  const showSnackbarMessage = ({ message, severity, fadeIn = true }: any) => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarFadeIn(fadeIn);
@@ -106,7 +111,9 @@ const DataServiceForm = ({
       onCancel();
     } else {
       router.push(
-        dataServiceId ? `/catalogs/${catalogId}/data-services/${dataServiceId}` : `/catalogs/${catalogId}/data-services`,
+        dataServiceId
+          ? `/catalogs/${catalogId}/data-services/${dataServiceId}`
+          : `/catalogs/${catalogId}/data-services`,
       );
     }
   };
@@ -172,7 +179,7 @@ const DataServiceForm = ({
               if (afterSubmit) {
                 afterSubmit();
               }
-            } catch (error) {
+            } catch {
               showSnackbarMessage({ message: localization.snackbar.saveFailed, severity: 'danger' });
             } finally {
               setSubmitting(false);
@@ -180,10 +187,22 @@ const DataServiceForm = ({
           }
         }}
       >
-        {({ errors, dirty, isSubmitting, isValidating, submitForm, setValues, setFieldValue, values, initialValues: formInitialValues }) => {
-          setTimeout(() => setIsDirty(dirty), 0);
-          const notifications = getNotifications({ isValid: Object.keys(errors).length === 0, hasUnsavedChanges: false });
-          const hasError = (fields: (keyof DataService)[]) => fields.some((field) => Object.keys(errors).includes(field));
+        {({
+          errors,
+          dirty,
+          isSubmitting,
+          isValidating,
+          submitForm,
+          setValues,
+          values,
+          initialValues: formInitialValues,
+        }) => {
+          const notifications = getNotifications({
+            isValid: Object.keys(errors).length === 0,
+            hasUnsavedChanges: false,
+          });
+          const hasError = (fields: (keyof DataService)[]) =>
+            fields.some((field) => Object.keys(errors).includes(field));
 
           const handleRestoreDataService = (data: StorageData) => {
             if (data?.id !== autoSaveId) {
@@ -205,7 +224,7 @@ const DataServiceForm = ({
           const dirtyFields = ((): string[] => {
             const dirtyFields: string[] = [];
 
-            const isDirty = (name) => {
+            const isDirty = (name: any) => {
               const a = get(formInitialValues, name);
               const b = get(values, name);
 
@@ -270,7 +289,10 @@ const DataServiceForm = ({
                       title={localization.dataServiceForm.heading.endpoint}
                       subtitle={localization.dataServiceForm.subtitle.endpoint}
                       required
-                      changed={markDirty && dirtyFields.some((field) => ['endpointUrl', 'endpointDescriptions'].includes(field))}
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) => ['endpointUrl', 'endpointDescriptions'].includes(field))
+                      }
                       error={hasError(['endpointUrl', 'endpointDescriptions'])}
                     >
                       <EndpointSection />

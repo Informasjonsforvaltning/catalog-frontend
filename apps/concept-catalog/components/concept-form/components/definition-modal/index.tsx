@@ -59,7 +59,7 @@ export const DefinitionModal = ({
             modalRef.current?.close();
           }}
         >
-          {({ errors, isValid, isSubmitting, submitForm, dirty, values }) => {
+          {({ isSubmitting, submitForm, dirty, values }) => {
             useEffect(() => {
               if (dirty && onChange) {
                 onChange(values);

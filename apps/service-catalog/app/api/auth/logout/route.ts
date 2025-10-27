@@ -34,7 +34,7 @@ const handler = async (req: NextRequest) => {
     });
     const fullUrl = `${endSessionURL}?${endSessionParams.toString()}`;
     return NextResponse.redirect(fullUrl);
-  } catch (error) {
+  } catch {
     return NextResponse.redirect(baseUrl);
   }
 };

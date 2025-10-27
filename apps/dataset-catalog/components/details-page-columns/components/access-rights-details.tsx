@@ -1,5 +1,5 @@
 import { Dataset, UriWithLabel } from '@catalog-frontend/types';
-import { accessRightPublic, accessRights, getTranslateText, localization } from '@catalog-frontend/utils';
+import { accessRights, getTranslateText, localization } from '@catalog-frontend/utils';
 import { Card, Link, Table, Tag } from '@digdir/designsystemet-react';
 import { useMemo } from 'react';
 import styles from '../details-columns.module.css';

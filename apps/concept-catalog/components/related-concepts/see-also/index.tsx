@@ -1,4 +1,3 @@
-import React from 'react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { KeyValueListItem } from '@catalog-frontend/ui';
 import { UnionRelation, RelatedConcept } from '@catalog-frontend/types';

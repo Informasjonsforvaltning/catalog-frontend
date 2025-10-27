@@ -2,7 +2,10 @@ import { publishPublicService } from '@catalog-frontend/data-access';
 import { withValidSessionForApi } from '@catalog-frontend/utils';
 import { NextRequest } from 'next/server';
 
-export const POST = async (request: NextRequest, props: { params: Promise<{ catalogId: string; serviceId: string }> }) => {
+export const POST = async (
+  request: NextRequest,
+  props: { params: Promise<{ catalogId: string; serviceId: string }> },
+) => {
   const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { catalogId, serviceId } = params;
@@ -13,7 +16,7 @@ export const POST = async (request: NextRequest, props: { params: Promise<{ cata
       }
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), { status: response?.status });
-    } catch (err) {
+    } catch {
       return new Response('Failed to publish service', { status: 500 });
     }
   });

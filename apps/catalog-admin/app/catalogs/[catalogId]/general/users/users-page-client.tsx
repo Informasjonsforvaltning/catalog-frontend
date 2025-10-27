@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Accordion, Heading } from '@digdir/designsystemet-react';
 import { Button, SearchField } from '@catalog-frontend/ui';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
@@ -44,9 +44,9 @@ export const UsersPageClient = ({ catalogId }: UsersPageClientProps) => {
       <PageLayout>
         <div className={styles.row}>
           <SearchField
-            ariaLabel={localization.search.searchForUsername}
+            label={localization.search.searchForUsername}
             placeholder={localization.search.searchForUsername}
-            onSearchSubmit={(search) => setSearch(search)}
+            onSearch={(search) => setSearch(search)}
           />
           <div className='editorButtons'>
             <Button

@@ -25,7 +25,7 @@ export const AcceptConceptFormClient = ({
   usersResult,
   allowEdit,
   allowApprove,
-}) => {
+}: any) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [saved, setSaved] = useState(false);
@@ -33,7 +33,7 @@ export const AcceptConceptFormClient = ({
   const [snackbarMessage, setSnackbarMessage] = useState('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'danger'>('success');
 
-  const showSnackbarMessage = ({ message, severity }) => {
+  const showSnackbarMessage = ({ message, severity }: any) => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setShowSnackbar(false);
@@ -48,9 +48,7 @@ export const AcceptConceptFormClient = ({
   };
 
   const handleGotoConcept = () => {
-    window.location.replace(
-      `/catalogs/${organization.organizationId}/concepts/${originalConcept?.id}`,
-    );
+    window.location.replace(`/catalogs/${organization.organizationId}/concepts/${originalConcept?.id}`);
   };
 
   const AcceptChangeRequestButton = () => {

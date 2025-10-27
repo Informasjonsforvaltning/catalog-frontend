@@ -44,7 +44,7 @@ export const fields = {
 const getNegatedFields = () => {
   const negatedFields = { ...fields };
   for (const field in negatedFields) {
-    negatedFields[field] = false;
+    (negatedFields as any)[field] = false;
   }
   return negatedFields;
 };

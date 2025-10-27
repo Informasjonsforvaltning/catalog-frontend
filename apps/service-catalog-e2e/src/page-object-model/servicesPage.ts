@@ -51,9 +51,15 @@ export default class ServicesPage {
       await this.page.locator(`input[name="produces\\[${i}\\]\\.title\\.nb"]`).fill(result.title.nb as string);
       await this.page.locator(`input[name="produces\\[${i}\\]\\.title\\.nn"]`).fill(result.title.nn as string);
       await this.page.locator(`input[name="produces\\[${i}\\]\\.title\\.en"]`).fill(result.title.en as string);
-      await this.page.locator(`input[name="produces\\[${i}\\]\\.description\\.nb"]`).fill(result.description.nb as string);
-      await this.page.locator(`input[name="produces\\[${i}\\]\\.description\\.nn"]`).fill(result.description.nn as string);
-      await this.page.locator(`input[name="produces\\[${i}\\]\\.description\\.en"]`).fill(result.description.en as string);
+      await this.page
+        .locator(`input[name="produces\\[${i}\\]\\.description\\.nb"]`)
+        .fill(result.description.nb as string);
+      await this.page
+        .locator(`input[name="produces\\[${i}\\]\\.description\\.nn"]`)
+        .fill(result.description.nn as string);
+      await this.page
+        .locator(`input[name="produces\\[${i}\\]\\.description\\.en"]`)
+        .fill(result.description.en as string);
     }
 
     // Contact point
@@ -117,7 +123,6 @@ export default class ServicesPage {
       await dialog.accept();
     });
 
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       // Get the list of items
       const promises = (await this.page.getByRole('link').all()).map(async (link) => {
@@ -197,7 +202,7 @@ export default class ServicesPage {
     await this.publishedStateFilterNotPublishedLocator().uncheck();
   }
 
-public async filterStatus(status: string) {
+  public async filterStatus(status: string) {
     const statusMap: { [key in ServiceStatus]: () => ReturnType<Page['getByLabel']> } = {
       [ServiceStatus.COMPLETED]: this.statusFilterCompletedLocator,
       [ServiceStatus.DEPRECATED]: this.statusFilterDeprecatedLocator,

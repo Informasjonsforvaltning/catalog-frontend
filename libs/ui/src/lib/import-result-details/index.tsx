@@ -4,11 +4,10 @@ import { ImportResult } from '@catalog-frontend/types';
 import styles from './import-result-details.module.css';
 import { Accordion, Button, Heading, Tag } from '@digdir/designsystemet-react';
 import { capitalizeFirstLetter, formatISO, localization } from '@catalog-frontend/utils';
-import { ImportRecordAccordionItem } from './components/import-record-accordion-item';
 import { TrashIcon, CheckmarkIcon } from '@navikt/aksel-icons';
-import React from 'react';
 import { ImportResultStatusColors, StatusKey } from '../tag/import-result-status/ImportResultStatus';
 import { CenterContainer, HelpMarkdown } from '@catalog-frontend/ui';
+import { ImportRecordAccordionItem } from './components/import-record-accordion-item';
 
 interface Props {
   targetBaseHref: string;

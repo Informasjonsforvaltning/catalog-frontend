@@ -1,7 +1,7 @@
 import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useQuery } from '@tanstack/react-query';
 
-export const useGetHistory = ({ catalogId, resourceId, page = 1 }) => {
+export const useGetHistory = ({ catalogId, resourceId, page = 1 }: any) => {
   return useQuery({
     queryKey: ['getHistory', resourceId, page],
     queryFn: async () => {

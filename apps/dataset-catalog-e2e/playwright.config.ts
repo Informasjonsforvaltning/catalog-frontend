@@ -1,7 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 import { nxE2EPreset } from '@nx/playwright/preset';
 import { workspaceRoot } from '@nx/devkit';
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 import * as path from 'path';
 import * as dotenv from 'dotenv';
 
@@ -37,13 +36,13 @@ export default defineConfig({
   workers: 3,
   timeout: 180 * 1000,
   expect: {
-    timeout: 10 * 1000
+    timeout: 10 * 1000,
   },
   use: {
     baseURL,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on', // Captures a trace for each test
-    screenshot: 'on', // Takes screenshots on test failures    
+    screenshot: 'on', // Takes screenshots on test failures
   },
   /* Run your local dev server before starting the tests */
   webServer: {
@@ -95,4 +94,4 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], channel: 'chrome' },
     } */
   ],
-}); 
+});

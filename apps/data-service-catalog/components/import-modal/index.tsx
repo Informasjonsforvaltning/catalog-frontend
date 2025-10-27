@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { localization } from '@catalog-frontend/utils';
 import { LinkButton, TitleWithHelpTextAndTag, UploadButton } from '@catalog-frontend/ui';
 import { useImport } from '../../hooks/import';
@@ -18,7 +18,7 @@ export function ImportModal({ catalogId }: Props) {
   const uploadYaml = useImport(catalogId, 'application/yaml');
   const uploadJson = useImport(catalogId, 'application/json');
 
-  const onFileChange = async (event) => {
+  const onFileChange = async (event: any) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -39,7 +39,13 @@ export function ImportModal({ catalogId }: Props) {
   return (
     <Modal.Root>
       <Modal.Trigger asChild>
-        <Button variant={'secondary'} size='small'><FileImportIcon fontSize='1.5rem' />Import</Button>
+        <Button
+          variant={'secondary'}
+          size='small'
+        >
+          <FileImportIcon fontSize='1.5rem' />
+          Import
+        </Button>
       </Modal.Trigger>
       <Modal.Dialog
         ref={modalRef}

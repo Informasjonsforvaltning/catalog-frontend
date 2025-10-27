@@ -3,7 +3,9 @@ import pluginReact from 'eslint-plugin-react';
 import pluginNx from '@nx/eslint-plugin';
 import tseslint from 'typescript-eslint';
 
-export function createCommonTsConfig(tsconfigRootDir) {
+export function createCommonTsConfig(tsconfigRootDir, allow) {
+  const allowList = ['tools', ...(allow || [])];
+
   return {
     files: ['**/*.{js,cjs,mjs,ts,tsx,jsx}'],
     settings: {
@@ -32,9 +34,22 @@ export function createCommonTsConfig(tsconfigRootDir) {
     rules: {
       ...tseslint.configs.recommended[0].rules,
       ...pluginReact.configs.flat.recommended.rules,
-      '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/triple-slash-reference': 'off',
-      '@next/next/no-html-link-for-pages': ['error', ['apps/dataset-catalog/pages', 'apps/catalog-admin/pages']],
+      'react/react-in-jsx-scope': 'off', // not needed with Next.js
+      'react/prop-types': 'off', // we use TypeScript for type checking
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@nx/enforce-module-boundaries': [
+        'error',
+        {
+          enforceBuildableLibDependency: true,
+          allow: allowList,
+          depConstraints: [
+            {
+              sourceTag: '*',
+              onlyDependOnLibsWithTags: ['*'],
+            },
+          ],
+        },
+      ],
     },
   };
 }

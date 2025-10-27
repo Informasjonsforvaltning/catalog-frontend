@@ -1,6 +1,5 @@
 import { authOptions, isValidSessionAndToken, getUsername, getResourceRoles } from '@catalog-frontend/utils';
 import { getServerSession } from 'next-auth';
-import { NextRequest } from 'next/server';
 import { jwtDecode } from 'jwt-decode';
 
 /**
@@ -8,7 +7,7 @@ import { jwtDecode } from 'jwt-decode';
  * Access token is only included in development mode for security
  */
 export const createTokenRoute = () => {
-  const handler = async (req: NextRequest) => {
+  const handler = async () => {
     const session = await getServerSession(authOptions);
     const isValid = await isValidSessionAndToken(session);
 
@@ -62,7 +61,7 @@ export const createTokenRoute = () => {
         };
         debugInfo.username = getUsername(session.accessToken);
         debugInfo.resourceRoles = getResourceRoles(session.accessToken);
-      } catch (error) {
+      } catch {
         debugInfo.tokenDecodeError = 'Failed to decode token';
       }
     }

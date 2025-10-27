@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import cn from 'classnames';
 import styles from './internal-field.module.css';
 import { Button, Select } from '@catalog-frontend/ui';
@@ -49,7 +49,7 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
     description: { nb: '' },
   };
 
-  const [updatedFieldsList, setUpdatedFieldsList] = React.useState<InternalField[]>([]);
+  const [updatedFieldsList, setUpdatedFieldsList] = useState<InternalField[]>([]);
   const [newField, setNewField] = useState<InternalFieldTemplate>(newFieldTemplate);
 
   const handleCreateInternalField = () => {
@@ -93,7 +93,7 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
     }
   };
 
-  const handleDeleteInternalField = (fieldId) => {
+  const handleDeleteInternalField = (fieldId: any) => {
     if (window.confirm(localization.codeList.confirmDelete)) {
       deleteInternalField.mutate(fieldId);
     }
@@ -129,7 +129,9 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
   ) => {
     const updatedFieldIndex = updatedFieldsList.findIndex((field) => field.id === fieldId);
     const fieldToUpdate: InternalField =
-      updatedFieldIndex !== -1 ? updatedFieldsList[updatedFieldIndex] : dbFields.find((field) => field.id === fieldId);
+      updatedFieldIndex !== -1
+        ? updatedFieldsList[updatedFieldIndex]
+        : dbFields.find((field: any) => field.id === fieldId);
     const updatedFieldsListCopy = [...updatedFieldsList];
     const enableFilterBoolean = enableFilter && enableFilter?.length > 0 && enableFilter[0] === 'enableFilter';
 
@@ -173,7 +175,7 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
               ? null
               : localization.validation.invalidValue
           }
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
             field
               ? updateFieldsListState(field.id, event.target.value, undefined, undefined)
               : setNewField((prevField) => ({

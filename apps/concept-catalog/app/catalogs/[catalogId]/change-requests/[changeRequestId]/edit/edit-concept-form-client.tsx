@@ -19,19 +19,19 @@ export const EditConceptFormClient = ({
   codeListsResult,
   fieldsResult,
   usersResult,
-}) => {
+}: any) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [newChangeRequest, setNewChangeRequest] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [showGotoConceptConfirm, setShowGotoConceptConfirm] = useState(false);
 
-  const dataStorage = new LocalDataStorage<StorageData>({ 
-    key: 'changeRequestForm', 
+  const dataStorage = new LocalDataStorage<StorageData>({
+    key: 'changeRequestForm',
     secondaryKeys: {
       definition: 'changeRequestFormDefinition',
-      relation: 'changeRequestFormRelation'
-    }
+      relation: 'changeRequestFormRelation',
+    },
   });
 
   const emptyConcept: Concept = originalConcept || {
@@ -83,24 +83,24 @@ export const EditConceptFormClient = ({
   };
 
   const handleGotoConcept = () => {
-    window.location.replace(
-      `/catalogs/${organization.organizationId}/concepts/${originalConcept?.id}`,
-    );
+    window.location.replace(`/catalogs/${organization.organizationId}/concepts/${originalConcept?.id}`);
   };
 
   const handleRestore = (data: StorageData): boolean => {
     if (data?.id !== changeRequest.id) {
       if (!data?.id) {
-        if(data?.metadata?.newChangeRequestConceptId) {
-          window.location.replace(`/catalogs/${organization.organizationId}/change-requests/new?concept=${data.metadata.newChangeRequestConceptId}&restore=1`);
+        if (data?.metadata?.newChangeRequestConceptId) {
+          window.location.replace(
+            `/catalogs/${organization.organizationId}/change-requests/new?concept=${data.metadata.newChangeRequestConceptId}&restore=1`,
+          );
         } else {
           window.location.replace(`/catalogs/${organization.organizationId}/change-requests/new?restore=1`);
         }
       } else {
-        window.location.replace(`/catalogs/${organization.organizationId}/change-requests/${data.id}/edit?restore=1`);        
+        window.location.replace(`/catalogs/${organization.organizationId}/change-requests/${data.id}/edit?restore=1`);
       }
       return false;
-    } 
+    }
     return true;
   };
 

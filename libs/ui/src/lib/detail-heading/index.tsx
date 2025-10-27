@@ -7,7 +7,7 @@ interface DetailHeadingProps extends HTMLAttributes<HTMLDivElement> {
   subtitle?: ReactNode;
 }
 
-export const DetailHeading = ({ headingTitle, subtitle, className, ...rest }: DetailHeadingProps) => {
+export const DetailHeading = ({ headingTitle, subtitle, className }: DetailHeadingProps) => {
   return (
     <div className={cn(style.detailHeading, className)}>
       <div className={cn(style.title)}>{headingTitle}</div>

@@ -464,7 +464,7 @@ export default class DatasetEditPage {
     await this.page.getByRole('button', { name: 'Lagre' }).click();
     if (success) {
       await this.page.getByText('Endringene ble lagret.').waitFor({ state: 'visible' });
-    } 
+    }
   }
 
   // Cancel button

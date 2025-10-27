@@ -2,7 +2,7 @@ import { deletePublicService } from '@catalog-frontend/data-access';
 import { withValidSessionForApi } from '@catalog-frontend/utils';
 import { NextRequest } from 'next/server';
 
-export const DELETE = async (req: NextRequest, props: { params: any; }) => {
+export const DELETE = async (req: NextRequest, props: { params: any }) => {
   const params = await props.params;
   return withValidSessionForApi(async (session) => {
     const { catalogId, serviceId } = params;
@@ -12,7 +12,7 @@ export const DELETE = async (req: NextRequest, props: { params: any; }) => {
         throw new Error();
       }
       return new Response(response?.text?.toString(), { status: 200 });
-    } catch (err) {
+    } catch {
       return new Response('Failed to delete service', { status: 500 });
     }
   });

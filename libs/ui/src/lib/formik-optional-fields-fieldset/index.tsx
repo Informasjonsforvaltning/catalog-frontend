@@ -7,7 +7,7 @@ import styles from './formik-optional-fields-fieldset.module.scss';
 import { LocalizedStrings } from '@catalog-frontend/types';
 import { AddButton, DeleteButton } from '../button';
 import { get } from 'lodash';
-import React, { ReactNode, useEffect, useState } from 'react';
+import { createRef, ReactNode, RefObject, useEffect, useState } from 'react';
 import { FastFieldWithRef } from '../formik-fast-field-with-ref';
 
 type OptionalFieldsFieldsetProps = {
@@ -21,10 +21,10 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields, errorPat
   const [focus, setFocus] = useState<string | null>();
   const fieldRefs = availableFields.reduce(
     (map, field) => {
-      map[field.valuePath] = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
+      map[field.valuePath] = createRef<HTMLInputElement | HTMLTextAreaElement>();
       return map;
     },
-    {} as Record<string, React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>>,
+    {} as Record<string, RefObject<HTMLInputElement | HTMLTextAreaElement | null>>,
   );
 
   const handleAddField = (fieldName: string) => {

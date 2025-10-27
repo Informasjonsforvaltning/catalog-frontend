@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import React, { forwardRef } from 'react';
+import { forwardRef, ForwardRefExoticComponent, HTMLAttributes, ReactNode, RefAttributes } from 'react';
 import classes from './info-card.module.css';
 import { HelpMarkdown } from '../help-markdown';
 import { Heading } from '@digdir/designsystemet-react';
@@ -25,7 +25,7 @@ type Size =
 
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
-export interface InfoCardItemProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface InfoCardItemProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Heading
    */
@@ -41,7 +41,7 @@ export interface InfoCardItemProps extends React.HTMLAttributes<HTMLDivElement> 
   /**
    * Content in Item
    */
-  children: React.ReactNode;
+  children: ReactNode;
 
   /**
    * Helptext
@@ -60,7 +60,7 @@ export interface InfoCardItemProps extends React.HTMLAttributes<HTMLDivElement> 
   headingSize?: Size;
 }
 
-export type InfoCardItemType = React.ForwardRefExoticComponent<InfoCardItemProps & React.RefAttributes<HTMLDivElement>>;
+export type InfoCardItemType = ForwardRefExoticComponent<InfoCardItemProps & RefAttributes<HTMLDivElement>>;
 
 const InfoCardItem: InfoCardItemType = forwardRef(
   (

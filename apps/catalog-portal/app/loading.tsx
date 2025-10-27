@@ -1,4 +1,3 @@
-import React from 'react';
 import { Spinner } from '@digdir/designsystemet-react';
 import styles from './loading.module.css';
 import { localization } from '@catalog-frontend/utils';

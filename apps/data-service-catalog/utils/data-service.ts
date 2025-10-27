@@ -18,10 +18,10 @@ export async function fetchDataServiceWithRetry(
 ): Promise<any> {
   let retryCount = 0;
   const startTime = Date.now();
-  
+
   // Check if we're in a test environment (E2E tests)
   const isTestEnvironment = process.env.NODE_ENV === 'test' || process.env.NX_TASK_TARGET_PROJECT?.includes('e2e');
-  
+
   // Adjust retry behavior for test environment
   if (isTestEnvironment) {
     maxRetries = Math.min(maxRetries, 2); // Fewer retries in tests

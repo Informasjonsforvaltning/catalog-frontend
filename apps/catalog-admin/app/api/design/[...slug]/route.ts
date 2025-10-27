@@ -14,7 +14,7 @@ export const GET = async (req: NextRequest, props: { params: Promise<{ slug: str
         }
         const jsonResponse = await response.json();
         return new Response(JSON.stringify(jsonResponse), { status: response.status });
-      } catch (error) {
+      } catch {
         return new Response('Failed to get design logo', { status: 500 });
       }
     } else if (slug?.length === 3 && slug[1] === 'design' && slug[2] === 'logo') {
@@ -34,7 +34,7 @@ export const GET = async (req: NextRequest, props: { params: Promise<{ slug: str
         };
         const arrayBufferResponse = await response.arrayBuffer();
         return new Response(arrayBufferResponse, { status: response.status, headers });
-      } catch (error) {
+      } catch {
         return new Response('Failed to get design logo', { status: 500 });
       }
     } else {
@@ -57,7 +57,7 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ slug: s
       }
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), { status: response.status });
-    } catch (error) {
+    } catch {
       return new Response('Failed to update design', { status: 500 });
     }
   });

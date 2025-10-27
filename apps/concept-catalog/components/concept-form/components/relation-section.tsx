@@ -11,7 +11,6 @@ import styles from '../concept-form.module.scss';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { updateUnionRelation, removeUnionRelation, UnionRelationWithIndex } from '../../../utils/relation-utils';
 
-
 type RelationSection = {
   catalogId: string;
   changed?: string[];
@@ -35,36 +34,36 @@ export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, auto
     ...(values['begrepsRelasjon']?.map((rel, index) => ({ ...rel, index })) ?? []),
     ...(values['seOgså']
       ? values['seOgså'].map((concept, index) => ({
-        relasjon: RelationTypeEnum.SE_OGSÅ,
-        relatertBegrep: concept,
-        index,
-      }))
+          relasjon: RelationTypeEnum.SE_OGSÅ,
+          relatertBegrep: concept,
+          index,
+        }))
       : []),
     ...(values['erstattesAv']
       ? values['erstattesAv'].map((concept, index) => ({
-        relasjon: RelationTypeEnum.ERSTATTES_AV,
-        relatertBegrep: concept,
-        index,
-      }))
+          relasjon: RelationTypeEnum.ERSTATTES_AV,
+          relatertBegrep: concept,
+          index,
+        }))
       : []),
     ...(values['internBegrepsRelasjon']
       ? values.internBegrepsRelasjon.map((rel, index) => ({ ...rel, internal: true, index }))
       : []),
     ...(values['internSeOgså']
       ? values['internSeOgså'].map((concept, index) => ({
-        relasjon: RelationTypeEnum.SE_OGSÅ,
-        relatertBegrep: concept,
-        internal: true,
-        index,
-      }))
+          relasjon: RelationTypeEnum.SE_OGSÅ,
+          relatertBegrep: concept,
+          internal: true,
+          index,
+        }))
       : []),
     ...(values['internErstattesAv']
       ? values['internErstattesAv'].map((concept, index) => ({
-        relasjon: RelationTypeEnum.ERSTATTES_AV,
-        relatertBegrep: concept,
-        internal: true,
-        index,
-      }))
+          relasjon: RelationTypeEnum.ERSTATTES_AV,
+          relatertBegrep: concept,
+          internal: true,
+          index,
+        }))
       : []),
   ];
 
@@ -109,22 +108,22 @@ export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, auto
       const match = internalConcepts?.hits.find((hit) => hit.originaltBegrep === relation.relatertBegrep);
       return match
         ? ({
-          id: relation.relatertBegrep,
-          title: match.anbefaltTerm?.navn,
-        } as RelatedConcept)
+            id: relation.relatertBegrep,
+            title: match.anbefaltTerm?.navn,
+          } as RelatedConcept)
         : undefined;
     } else {
       const match = externalConcepts?.hits.find((hit) => hit.uri === relation.relatertBegrep);
       return match
         ? ({
-          href: relation.relatertBegrep,
-          title: match.title,
-        } as RelatedConcept)
+            href: relation.relatertBegrep,
+            title: match.title,
+          } as RelatedConcept)
         : ({
-          href: relation.relatertBegrep,
-          custom: true,
-          title: { nb: relation.relatertBegrep },
-        } as RelatedConcept);
+            href: relation.relatertBegrep,
+            custom: true,
+            title: { nb: relation.relatertBegrep },
+          } as RelatedConcept);
     }
   };
 
@@ -133,7 +132,7 @@ export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, auto
       id: autoSaveId,
       values: {
         rel,
-        prev
+        prev,
       },
       lastChanged: new Date().toISOString(),
     });
@@ -151,7 +150,7 @@ export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, auto
   const handleRemoveRelation = (rel: UnionRelationWithIndex) => {
     removeUnionRelation(rel, values, setFieldValue);
   };
- 
+
   if (isLoadingInternalConcepts || isLoadingExternalConcepts) {
     return (
       <Skeleton.Rectangle

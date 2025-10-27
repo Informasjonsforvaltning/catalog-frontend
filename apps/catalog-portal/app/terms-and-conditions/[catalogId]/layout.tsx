@@ -1,7 +1,8 @@
 import { Layout } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
+import { ReactNode } from 'react';
 
-const PageLayout = async (props: { children: React.ReactNode; params: Promise<{ catalogId: string }> }) => {
+const PageLayout = async (props: { children: ReactNode; params: Promise<{ catalogId: string }> }) => {
   const params = await props.params;
 
   const { catalogId } = params;

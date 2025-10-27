@@ -1,7 +1,6 @@
 import { render } from '@testing-library/react';
 
-import React from 'react';
-import FormikReferenceDataCombobox from './index';
+import { FormikReferenceDataCombobox } from './index';
 
 describe('FormikReferenceDataCombobox', () => {
   it('should render successfully', () => {

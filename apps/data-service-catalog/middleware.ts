@@ -65,7 +65,7 @@ export default withAuth(
       signOut: '/auth/signout',
     },
     callbacks: {
-      authorized: ({ req, token }) => {
+      authorized: ({ token }) => {
         if (!token || token.error === 'RefreshAccessTokenError') {
           return false;
         }

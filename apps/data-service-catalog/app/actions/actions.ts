@@ -85,7 +85,7 @@ export async function deleteDataService(catalogId: string, dataServiceId: string
       throw new Error();
     }
     success = true;
-  } catch (error) {
+  } catch {
     throw new Error(localization.alert.deleteFail);
   } finally {
     if (success) {
@@ -144,7 +144,7 @@ export async function publishDataService(catalogId: string, dataServiceId: strin
       throw new Error();
     }
     success = true;
-  } catch (error) {
+  } catch {
     throw new Error(localization.alert.deleteFail);
   } finally {
     if (success) {
@@ -163,7 +163,7 @@ export async function unpublishDataService(catalogId: string, dataServiceId: str
       throw new Error();
     }
     success = true;
-  } catch (error) {
+  } catch {
     throw new Error(localization.alert.deleteFail);
   } finally {
     if (success) {
@@ -185,7 +185,7 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
       throw new Error();
     }
     success = true;
-  } catch (error) {
+  } catch {
     throw new Error(localization.alert.deleteFail);
   } finally {
     if (success) {

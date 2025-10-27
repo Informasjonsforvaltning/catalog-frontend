@@ -13,7 +13,7 @@ export const GET = async (request: NextRequest, props: { params: Promise<{ conce
       }
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), { status: response?.status });
-    } catch (err) {
+    } catch {
       return new Response(JSON.stringify({ message: 'Failed to fetch revisions for concept' }), { status: 500 });
     }
   });

@@ -1,7 +1,6 @@
 import { getConceptStatuses } from '@catalog-frontend/data-access';
-import { NextRequest } from 'next/server';
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const response = await getConceptStatuses();
     if (response.status !== 200) {
@@ -9,7 +8,7 @@ export async function GET(req: NextRequest) {
     }
     const jsonResponse = await response.json();
     return new Response(JSON.stringify(jsonResponse), { status: response.status });
-  } catch (error) {
+  } catch {
     return new Response(JSON.stringify({ message: 'Failed to get concept statuses' }), { status: 500 });
   }
 }

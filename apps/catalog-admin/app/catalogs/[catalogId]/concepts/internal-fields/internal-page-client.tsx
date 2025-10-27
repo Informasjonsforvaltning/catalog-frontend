@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import styles from './internal-fields.module.css';
 import { Accordion, Heading } from '@digdir/designsystemet-react';
 import { PlusCircleIcon } from '@navikt/aksel-icons';

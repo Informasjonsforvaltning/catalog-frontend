@@ -1,12 +1,5 @@
 'use client';
-import {
-  DataStorage,
-  formatISO,
-  getTranslateText,
-  localization,
-  trimObjectWhitespace,
-  deepMergeWithUndefinedHandling,
-} from '@catalog-frontend/utils';
+import { DataStorage, formatISO, getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Alert, Button, Checkbox, Paragraph, Spinner, Switch } from '@digdir/designsystemet-react';
 import {
   Dataset,
@@ -28,7 +21,7 @@ import {
 import { Formik, Form, FormikProps } from 'formik';
 import { useParams, useSearchParams } from 'next/navigation';
 import { datasetTemplate } from './utils/dataset-initial-values';
-import { useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { confirmedDatasetSchema, draftDatasetSchema } from './utils/validation-schema';
 import { AboutSection } from './components/about-section';
 import ThemeSection from './components/theme-section';
@@ -120,7 +113,7 @@ export const DatasetForm = ({
   };
 
   const handleSwitchChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: ChangeEvent<HTMLInputElement>,
     setFieldValue: (fieldName: string, value: boolean) => void,
   ) => {
     const isChecked = event.target.checked;

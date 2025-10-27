@@ -59,7 +59,7 @@ export async function createPublicService(catalogId: string, values: ServiceToBe
     serviceId = response?.headers?.get('location')?.split('/').pop();
     success = true;
     return serviceId;
-  } catch (error) {
+  } catch {
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
@@ -81,7 +81,7 @@ export async function deletePublicService(catalogId: string, serviceId: string) 
       throw new Error();
     }
     success = true;
-  } catch (error) {
+  } catch {
     throw new Error(localization.alert.deleteFail);
   } finally {
     if (success) {
@@ -122,7 +122,7 @@ export async function updatePublicService(catalogId: string, oldPublicService: S
       throw new Error();
     }
     success = true;
-  } catch (error) {
+  } catch {
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
@@ -144,7 +144,7 @@ export async function publishPublicService(catalogId: string, serviceId: string)
       throw new Error();
     }
     success = true;
-  } catch (error) {
+  } catch {
     throw new Error(localization.alert.publishFail);
   } finally {
     if (success) {
@@ -166,7 +166,7 @@ export async function unpublishPublicService(catalogId: string, serviceId: strin
       throw new Error();
     }
     success = true;
-  } catch (error) {
+  } catch {
     throw new Error(localization.alert.unpublishFail);
   } finally {
     if (success) {

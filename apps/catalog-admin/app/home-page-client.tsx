@@ -2,14 +2,14 @@
 
 import { Breadcrumbs, NavigationCard } from '@catalog-frontend/ui';
 
-const HomePageClient = ({ organizations, catalogPortalUrl }) => {
+const HomePageClient = ({ organizations, catalogPortalUrl }: any) => {
   return (
     <>
       <Breadcrumbs catalogPortalUrl={catalogPortalUrl} />
       <div>
         <div className='card'>
           {organizations.length === 0 && <div>Du har ikke tilgang</div>}
-          {organizations.map((organization) => (
+          {organizations.map((organization: any) => (
             <NavigationCard
               key={organization.organizationId}
               title={organization.name}

@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+
 import { CodeList, Concept, ReferenceDataCode } from '@catalog-frontend/types';
 import {
   getTranslateText as translate,
@@ -14,6 +14,7 @@ import Link from 'next/link';
 import styles from './concept-search-hits.module.css';
 import { Chip } from '@digdir/designsystemet-react';
 import ConceptSubject from '../concept-subject';
+import { FC } from 'react';
 
 interface Props {
   catalogId: string;
@@ -24,7 +25,7 @@ interface Props {
   onLabelClick?: (label: string) => void;
 }
 
-const ConceptSearchHits: React.FC<Props> = ({
+const ConceptSearchHits: FC<Props> = ({
   data,
   conceptStatuses,
   catalogId,
@@ -32,9 +33,9 @@ const ConceptSearchHits: React.FC<Props> = ({
   assignableUsers,
   onLabelClick,
 }: Props) => {
-  const findConceptStatus = (statusURI) => conceptStatuses?.find((s) => s.uri === statusURI);
+  const findConceptStatus = (statusURI: any) => conceptStatuses?.find((s) => s.uri === statusURI);
 
-  const ConceptLabels: React.FC<{ searchHit: Concept }> = ({ searchHit }) => (
+  const ConceptLabels: FC<{ searchHit: Concept }> = ({ searchHit }) => (
     <div className={styles.rowSpaceBetween}>
       <Chip.Group
         size='small'
@@ -53,7 +54,7 @@ const ConceptSearchHits: React.FC<Props> = ({
     </div>
   );
 
-  const ConceptPublishingInfo: React.FC<{ searchHit: Concept }> = ({ searchHit }) => (
+  const ConceptPublishingInfo: FC<{ searchHit: Concept }> = ({ searchHit }) => (
     <>
       <div className={styles.metaData}>
         <p>{localization.searchHit.lastEdited}&nbsp;</p>

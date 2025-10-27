@@ -17,19 +17,7 @@ type FormikMultivalueTextfieldProps = {
 } & TextfieldProps;
 
 const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueTextfieldProps>(
-  (
-    {
-      className,
-      name,
-      showDeleteButton,
-      readOnly,
-      label,
-      error,
-      onDeleteButtonClicked,
-      ...props
-    },
-    ref,
-  ) => {
+  ({ className, name, showDeleteButton, readOnly, label, error, onDeleteButtonClicked, ...props }, ref) => {
     const { values, setFieldValue } = useFormikContext<Record<string, string[]>>();
     const [inputValue, setInputValue] = useState<string>('');
 
@@ -72,7 +60,7 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
                 onKeyDown={(e) => {
                   if (e.code === 'Enter') {
                     e.preventDefault();
-                    handleAddTextValue();                    
+                    handleAddTextValue();
                   }
                 }}
                 onBlur={() => handleAddTextValue()}

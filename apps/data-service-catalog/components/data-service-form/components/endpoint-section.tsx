@@ -5,12 +5,12 @@ import { Box, Fieldset, Textfield } from '@digdir/designsystemet-react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
 import FieldsetWithDelete from '../../fieldset-with-delete';
 import styles from '../data-service-form.module.css';
-import React, { useEffect, useState } from 'react';
+import { createRef, useEffect, useState } from 'react';
 
 export const EndpointSection = () => {
   const errors = useFormikContext<DataService>()?.errors;
   const [focus, setFocus] = useState<boolean | null>();
-  const fieldRef = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
+  const fieldRef = createRef<HTMLInputElement | HTMLTextAreaElement>();
 
   useEffect(() => {
     if (focus) {
@@ -54,7 +54,7 @@ export const EndpointSection = () => {
           {(arrayHelpers) => (
             <>
               {arrayHelpers.form.values.endpointDescriptions &&
-                arrayHelpers.form.values.endpointDescriptions.map((_, index: number) => (
+                arrayHelpers.form.values.endpointDescriptions.map((_: any, index: number) => (
                   <div
                     key={`endpointDescriptions-${index}`}
                     className={styles.padding}

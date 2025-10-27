@@ -21,7 +21,7 @@ const getColorFromStatusKey = (statusKey: StatusKey | undefined) =>
   statusKey ? ConceptStatusColors[statusKey.toLocaleUpperCase() as StatusKey] : 'neutral';
 
 export const ConceptStatusTag = forwardRef<HTMLSpanElement, ConceptStatusTagProps>(
-  ({ children, statusKey, statusLabel, size = 'medium', ...rest }: ConceptStatusTagProps, ref) => {
+  ({ statusKey, statusLabel, size = 'medium', ...rest }: ConceptStatusTagProps, ref) => {
     return (
       <DSTag
         ref={ref}

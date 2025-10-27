@@ -15,7 +15,7 @@ export const GET = async (req: NextRequest, props: { params: Promise<{ catalogId
       }
       const services = await response.json();
       return new Response(JSON.stringify(services), { status: 200 });
-    } catch (err) {
+    } catch {
       return new Response('Failed to fetch services', { status: 500 });
     }
   });
@@ -27,7 +27,6 @@ export const POST = async (req: NextRequest, props: { params: Promise<{ catalogI
     const { catalogId } = params;
 
     const service: Service = await req.json();
-    
 
     try {
       const response = await createPublicService(service, catalogId, session?.accessToken);

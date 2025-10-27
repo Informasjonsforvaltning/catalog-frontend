@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren, ReactElement } from 'react';
+import { Children, FC, isValidElement, PropsWithChildren } from 'react';
 import styles from './form-container.module.css';
 import cn from 'classnames';
 import { Heading, Paragraph } from '@digdir/designsystemet-react';
@@ -11,7 +11,7 @@ interface Props extends PropsWithChildren {
 }
 
 interface HeaderProps {
-  id: string;
+  id?: string;
   title: string;
   subtitle?: string;
   variant?: Variant;
@@ -22,8 +22,8 @@ const FormContainer: FC<PropsWithChildren<Props>> & {
 } = ({ variant = 'default', className, children }) => {
   return (
     <div className={cn(styles.container, styles[variant], className)}>
-      {React.Children.map(children, (child) =>
-        React.isValidElement(child) && child.type === Header ? (
+      {Children.map(children, (child) =>
+        isValidElement(child) && child.type === Header ? (
           <div className={styles.headerWrapper}>{child}</div>
         ) : (
           <div className={styles.content}>{child}</div>

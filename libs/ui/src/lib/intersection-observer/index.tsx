@@ -23,12 +23,12 @@
  * });
  * ```
  */
-import { useEffect } from 'react';
+import { Dispatch, RefObject, SetStateAction, useEffect } from 'react';
 
 export type useIntersectionObserverProps = {
   activeSection: string;
-  setActiveSection: React.Dispatch<React.SetStateAction<string>>;
-  sectionRefs: React.RefObject<HTMLElement>[];
+  setActiveSection: Dispatch<SetStateAction<string>>;
+  sectionRefs: RefObject<HTMLElement>[];
   threshold?: number;
   observerEnabled?: boolean;
 };

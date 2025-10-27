@@ -24,7 +24,7 @@ export const test = base.extend<{
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
     const datasetsPage = new DatasetsPage(page, context, accessibilityBuilder);
     await use(datasetsPage);
-  }
+  },
 });
 
 export const runTest = (name: string, fn: (any) => void) => {

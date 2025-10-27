@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import { createElement, PropsWithChildren } from 'react';
 import styles from './form-heading.module.css';
 
 type Props = {
@@ -6,7 +6,7 @@ type Props = {
 } & PropsWithChildren;
 
 const FormHeading = ({ children, headingLevel = 3 }: Props) => {
-  return React.createElement(`h${headingLevel}`, { className: styles.formHeading }, children);
+  return createElement(`h${headingLevel}`, { className: styles.formHeading }, children);
 };
 
 export { FormHeading };

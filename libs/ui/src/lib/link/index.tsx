@@ -1,7 +1,7 @@
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import styles from './link.module.css';
 
-import React, { FC, ComponentPropsWithoutRef, PropsWithChildren, ReactNode, ComponentType } from 'react';
+import { FC, ComponentPropsWithoutRef, PropsWithChildren, ReactNode, ComponentType, JSX } from 'react';
 
 export interface Props extends ComponentPropsWithoutRef<'a'> {
   /**
@@ -40,5 +40,3 @@ export const Link: FC<PropsWithChildren<Props>> = ({ external, icon, children, a
     </As>
   );
 };
-
-export default Link;

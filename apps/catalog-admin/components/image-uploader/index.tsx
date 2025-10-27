@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { TrashIcon, UploadIcon } from '@navikt/aksel-icons';
 import { localization, validateImageFile } from '@catalog-frontend/utils';
 import { useDeleteLogo, useGetLogo, useUpdateLogo } from '../../hooks/design';
@@ -8,7 +8,11 @@ import { UploadButton } from '@catalog-frontend/ui';
 
 const allowedFileTypes = ['image/x-png', 'image/svg+xml'];
 
-export function ImageUploader(catalogId: string) {
+interface Props {
+  catalogId: string;
+}
+
+export function ImageUploader({ catalogId }: Props) {
   const [image, setImage] = useState<string | null | undefined>();
   const [fileName, setFileName] = useState<string | null | undefined>(null);
   const adminDispatch = useAdminDispatch();
@@ -19,7 +23,7 @@ export function ImageUploader(catalogId: string) {
   const updateLogo = useUpdateLogo(catalogId);
   const deleteLogo = useDeleteLogo(catalogId);
 
-  const onImageChange = async (event) => {
+  const onImageChange = async (event: any) => {
     const file = event.target.files?.[0];
     if (file && (await validateImageFile(file))) {
       setImage(URL.createObjectURL(file));
@@ -66,14 +70,10 @@ export function ImageUploader(catalogId: string) {
       )}
       <UploadButton
         allowedMimeTypes={allowedFileTypes}
-        onUpload={(e) => {
-          onImageChange(e);
-        }}
+        onUpload={onImageChange}
       >
         {localization.button.importLogo}
       </UploadButton>
     </div>
   );
 }
-
-export default ImageUploader;

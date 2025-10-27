@@ -1,25 +1,26 @@
 import { render } from '@testing-library/react';
-import CodesEditor from '.';
+import { CodesEditor } from '.';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { CodeList } from '@catalog-frontend/types';
 
 jest.mock('next/router', () => ({
   useRouter: jest.fn().mockReturnValue({ query: {} }),
 }));
 
-const codeList = {
+const codeList: CodeList = {
   id: 'fc4d43e1-ea1e-430b-9116-762cffad69aa',
   name: 'Kodeliste 1',
   catalogId: '910244132',
   description: 'Ny beskrivelse 1',
   codes: [
     {
-      id: 13,
+      id: '13',
       name: {
         nb: 'Forelder lv 1',
         nn: '',
         en: '',
       },
-      parentID: 17,
+      parentID: '17',
     },
   ],
 };

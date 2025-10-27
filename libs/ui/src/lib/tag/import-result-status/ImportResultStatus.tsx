@@ -21,7 +21,7 @@ const getColorFromStatusKey = (statusKey: StatusKey | undefined) =>
   statusKey ? ImportResultStatusColors[statusKey.toLocaleUpperCase() as StatusKey] : 'neutral';
 
 export const ImportResultStatusTag = forwardRef<HTMLSpanElement, ImportResultStatusTagProps>(
-  ({ children, statusKey, statusLabel, size = 'sm', ...rest }: ImportResultStatusTagProps, ref) => {
+  ({ statusKey, statusLabel, size = 'sm', ...rest }: ImportResultStatusTagProps, ref) => {
     return (
       <DSTag
         ref={ref}

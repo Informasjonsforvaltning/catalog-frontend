@@ -1,12 +1,21 @@
 'use client';
 
-import React, { Children, PropsWithChildren, ReactNode, useRef, useState } from 'react';
+import {
+  Children,
+  createRef,
+  isValidElement,
+  PropsWithChildren,
+  ReactElement,
+  ReactNode,
+  RefObject,
+  useRef,
+  useState,
+} from 'react';
 import styles from './form-layout.module.scss';
 import { Heading, Link, Paragraph, Tag } from '@digdir/designsystemet-react';
 import { useIntersectionObserver } from '../intersection-observer';
 import classNames from 'classnames';
 import { localization } from '@catalog-frontend/utils';
-import { isEmpty } from 'lodash';
 
 type FormLayoutProps = {
   title?: ReactNode;
@@ -36,9 +45,8 @@ const SideMenu = ({ heading, children }: SideMenuProps) => {
         {heading}
       </Heading>
       <ol>
-        {React.Children.map(children, (child) => {
-          if (React.isValidElement(child) && child.type === MenuItem) {
-            // eslint-disable-next-line react/jsx-no-useless-fragment
+        {Children.map(children, (child) => {
+          if (isValidElement(child) && child.type === MenuItem) {
             return <>{child}</>;
           }
         })}
@@ -59,18 +67,18 @@ const MenuItem = ({
 export const FormLayout = ({ children }: FormLayoutProps) => {
   const childrenArray = Children.toArray(children);
   const sectionArray = childrenArray
-    .filter((child) => React.isValidElement(child) && child.type === Section)
-    .map((child) => child as React.ReactElement);
+    .filter((child) => isValidElement(child) && child.type === Section)
+    .map((child) => child as ReactElement);
 
   const [activeSection, setActiveSection] = useState('');
-  const sectionRefs = useRef(sectionArray.map(() => React.createRef<HTMLDivElement>()));
+  const sectionRefs = useRef(sectionArray.map(() => createRef<HTMLDivElement>()));
 
   const [observerEnabled, setObserverEnabled] = useState(true);
 
   useIntersectionObserver({
     activeSection,
     setActiveSection,
-    sectionRefs: sectionRefs.current as React.RefObject<HTMLElement>[],
+    sectionRefs: sectionRefs.current as RefObject<HTMLElement>[],
     observerEnabled,
     threshold: 0.8,
   });
@@ -160,7 +168,7 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
   );
 };
 
-const Section = ({ id, title, subtitle, children }: SectionProps) => (
+const Section = ({ title, subtitle, children }: SectionProps) => (
   <div className={styles.section}>
     <div className={styles.sectionHeading}>
       <Heading
@@ -176,5 +184,3 @@ const Section = ({ id, title, subtitle, children }: SectionProps) => (
 );
 
 FormLayout.Section = Section;
-
-export default FormLayout;

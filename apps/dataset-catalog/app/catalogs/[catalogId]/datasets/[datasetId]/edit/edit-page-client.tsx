@@ -27,8 +27,8 @@ export const EditPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }
     key: 'datasetForm',
     secondaryKeys: {
       distribution: 'datasetFormDistribution',
-      reference: 'datasetFormReference'
-    }
+      reference: 'datasetFormReference',
+    },
   });
 
   if (dataset.specializedType === 'SERIES') {

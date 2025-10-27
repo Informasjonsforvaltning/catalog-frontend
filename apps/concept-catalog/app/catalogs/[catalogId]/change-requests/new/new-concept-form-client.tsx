@@ -22,22 +22,22 @@ export const NewConceptFormClient = ({
   codeListsResult,
   fieldsResult,
   usersResult,
-}) => {
+}: any) => {
   const changeRequestIdRef = useRef<string | undefined>(undefined); // Ref to store the change-request id
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [showGotoConceptConfirm, setShowGotoConceptConfirm] = useState(false);
 
   const catalogId = organization.organizationId;
 
-  const dataStorage = new LocalDataStorage<StorageData>({ 
-    key: 'changeRequestForm', 
+  const dataStorage = new LocalDataStorage<StorageData>({
+    key: 'changeRequestForm',
     secondaryKeys: {
       definition: 'changeRequestFormDefinition',
-      relation: 'changeRequestFormRelation'
+      relation: 'changeRequestFormRelation',
     },
     metadata: {
       newChangeRequestConceptId: originalConcept?.originaltBegrep,
-    }
+    },
   });
 
   const baselineConcept: Concept = {
@@ -99,9 +99,7 @@ export const NewConceptFormClient = ({
   };
 
   const handleGotoConcept = () => {
-    window.location.replace(
-      `/catalogs/${organization.organizationId}/concepts/${originalConcept?.id}`,
-    );
+    window.location.replace(`/catalogs/${organization.organizationId}/concepts/${originalConcept?.id}`);
   };
 
   function handleRestore(data: StorageData): boolean {
@@ -109,7 +107,9 @@ export const NewConceptFormClient = ({
       window.location.replace(`/catalogs/${catalogId}/change-requests/${data.id}/edit?restore=1`);
       return false;
     } else if (data?.metadata?.newChangeRequestConceptId !== originalConcept?.originaltBegrep) {
-      window.location.replace(`/catalogs/${catalogId}/change-requests/new?concept=${data.metadata.newChangeRequestConceptId}&restore=1`);
+      window.location.replace(
+        `/catalogs/${catalogId}/change-requests/new?concept=${data.metadata.newChangeRequestConceptId}&restore=1`,
+      );
       return false;
     }
     return true;

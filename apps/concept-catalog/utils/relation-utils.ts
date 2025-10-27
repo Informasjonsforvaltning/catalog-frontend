@@ -15,10 +15,10 @@ export const getFieldname = (rel: UnionRelation): string | undefined => {
 };
 
 export const updateUnionRelation = (
-  rel: UnionRelation, 
-  prev: UnionRelationWithIndex | undefined, 
-  values: Concept, 
-  setFieldValue: (field: string, value: any) => void
+  rel: UnionRelation,
+  prev: UnionRelationWithIndex | undefined,
+  values: Concept,
+  setFieldValue: (field: string, value: any) => void,
 ): void => {
   const name: string | undefined = getFieldname(rel);
   const prevName: string | undefined = prev ? getFieldname(prev) : undefined;
@@ -36,17 +36,17 @@ export const updateUnionRelation = (
 
   if (name) {
     if (prev?.index === undefined || name !== prevName) {
-      if (!values[name]) {
+      if (!(values as any)[name]) {
         setFieldValue(name, [relationValue]);
       } else {
-        setFieldValue(name, [...values[name], relationValue]);
+        setFieldValue(name, [...(values as any)[name], relationValue]);
       }
 
       if (prev && name !== prevName) {
         removeUnionRelation(prev, values, setFieldValue);
       }
     } else {
-      const relations = [...values[name]];
+      const relations = [...(values as any)[name]];
       relations[prev.index] = relationValue;
       setFieldValue(name, relations);
     }
@@ -54,17 +54,17 @@ export const updateUnionRelation = (
 };
 
 export const removeUnionRelation = (
-  rel: UnionRelationWithIndex, 
-  values: Concept, 
-  setFieldValue: (field: string, value: any) => void
+  rel: UnionRelationWithIndex,
+  values: Concept,
+  setFieldValue: (field: string, value: any) => void,
 ): void => {
   if (rel.index < 0) {
     return;
   }
   const name: string | undefined = getFieldname(rel);
   if (name) {
-    const relations = [...values[name]];
+    const relations = [...(values as any)[name]];
     relations.splice(rel.index, 1);
     setFieldValue(name, relations);
   }
-}; 
+};

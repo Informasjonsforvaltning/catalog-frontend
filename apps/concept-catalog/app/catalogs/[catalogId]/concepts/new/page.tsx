@@ -27,7 +27,7 @@ export default withWriteProtectedPage(
     const concept = {
       ansvarligVirksomhet: {
         id: catalogId,
-      }
+      },
     };
 
     const breadcrumbList = catalogId

@@ -24,7 +24,7 @@ export async function POST(
       console.error('[PUBLISH DATA SERVICE] API call failed with status:', response.status);
       return NextResponse.json({ error: 'Failed to publish data service' }, { status: response.status });
     }
-    
+
     return NextResponse.json({}, { status: 200 });
   } catch (error) {
     console.error('[PUBLISH DATA SERVICE] Error:', error);

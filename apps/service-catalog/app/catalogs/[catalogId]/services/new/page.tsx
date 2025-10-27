@@ -1,12 +1,12 @@
 import { BasicServiceForm } from '../../../../../components/basic-service-form';
 import { Heading } from '@digdir/designsystemet-react';
 import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
-import { Organization, Params, ReferenceDataCode } from '@catalog-frontend/types';
+import { Organization, ReferenceDataCode } from '@catalog-frontend/types';
 import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import styles from './service-new-page.module.css';
 
-export default async function NewServicePage(props: Params) {
+export default async function NewServicePage(props: { params: Promise<{ catalogId: string }> }) {
   const params = await props.params;
   const { catalogId } = params;
   const organization: Organization = await getOrganization(catalogId).then((res) => res.json());

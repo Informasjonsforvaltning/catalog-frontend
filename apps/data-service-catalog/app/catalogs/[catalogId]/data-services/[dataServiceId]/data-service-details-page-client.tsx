@@ -3,7 +3,7 @@
 import { DataService, DataServiceReferenceData } from '@catalog-frontend/types';
 import { ConfirmModal, DeleteButton, DetailsPageLayout, LinkButton } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { deleteDataService } from '../../../../actions/actions';
 import styles from './data-service-details-page.module.css';
 import StatusTag from '../../../../../components/status-tag';
@@ -82,7 +82,10 @@ const DataServiceDetailsPageClient = ({
       >
         <DetailsPageLayout.Buttons>
           {hasWritePermission && (
-            <div className={styles.set} data-testid='data-service-action-buttons'>
+            <div
+              className={styles.set}
+              data-testid='data-service-action-buttons'
+            >
               <LinkButton
                 href={`/catalogs/${catalogId}/data-services/${dataServiceId}/edit`}
                 data-testid='edit-data-service-button'

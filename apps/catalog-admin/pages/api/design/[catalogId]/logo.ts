@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.setHeader('Cache-Control', response.headers.get('Cache-Control') ?? '');
       }
       res.end(Buffer.from(await response.arrayBuffer()));
-    } catch (error) {
+    } catch {
       res.status(500).send('Failed to get design logo');
     }
     return;

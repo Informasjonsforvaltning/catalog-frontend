@@ -73,11 +73,7 @@ const ChangeRequestOrNew = withReadProtectedPage(
     delete clonedConcept.erPublisert;
     delete clonedConcept.isArchived;
 
-    const changeRequestAsConcept = jsonpatch.applyPatch(
-      clonedConcept,
-      [],
-      false,
-    ).newDocument;
+    const changeRequestAsConcept = jsonpatch.applyPatch(clonedConcept, [], false).newDocument;
 
     const breadcrumbList = [
       {

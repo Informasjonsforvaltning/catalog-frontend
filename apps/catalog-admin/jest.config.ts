@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'catalog-admin',
   preset: '../../jest.preset.js',
