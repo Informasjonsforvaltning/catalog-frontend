@@ -20,7 +20,7 @@ interface Props {
 
 export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) => {
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const { values, errors, setFieldValue } = useFormikContext<Dataset>();
+  const { values, setFieldValue } = useFormikContext<Dataset>();
   const langNOR = languages.filter((lang) => lang.code === 'NOR')[0];
 
   const { data: searchHits, isLoading: isSearching } = useSearchAdministrativeUnits(searchTerm, referenceDataEnv);

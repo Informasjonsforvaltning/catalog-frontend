@@ -26,8 +26,8 @@ export const NewPage = ({ catalogId, dataset, searchEnv, referenceDataEnv, refer
     key: 'datasetForm',
     secondaryKeys: {
       distribution: 'datasetFormDistribution',
-      reference: 'datasetFormReference'
-    }
+      reference: 'datasetFormReference',
+    },
   });
 
   const handleGotoOverview = () => {

@@ -1,6 +1,5 @@
 import { DataServiceCost } from '@catalog-frontend/types';
 import { Card, Link, List, Paragraph } from '@digdir/designsystemet-react';
-import React from 'react';
 import { getTranslateText } from '@catalog-frontend/utils';
 
 type Props = {

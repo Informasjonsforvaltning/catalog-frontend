@@ -6,7 +6,7 @@ import styles from './details-page.module.css';
 import cn from 'classnames';
 import { Spinner } from '../spinner';
 import { Select } from '../select';
-import { Heading, Ingress } from '@digdir/designsystemet-react';
+import { Heading } from '@digdir/designsystemet-react';
 
 interface DetailsPageLayoutProps extends HTMLAttributes<HTMLDivElement> {
   headingTitle: string | string[];

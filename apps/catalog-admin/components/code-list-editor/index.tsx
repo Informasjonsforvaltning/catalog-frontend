@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { Button } from '@catalog-frontend/ui';
 import { Textfield } from '@digdir/designsystemet-react';
 import { CodeList, EditorType } from '@catalog-frontend/types';
@@ -8,9 +8,9 @@ import { localization } from '@catalog-frontend/utils';
 import { useAdminDispatch, useAdminState } from '../../context/admin';
 import { useCreateCodeList, useDeleteCodeList, useGetAllCodeLists, useUpdateCodeList } from '../../hooks/code-lists';
 import { compare } from 'fast-json-patch';
-import CodesEditor from '../codes-editor';
+import { CodesEditor } from '../codes-editor';
 
-export interface Props {
+interface Props {
   codeList?: CodeList;
   codeListsInUse?: string[];
   type?: EditorType;
@@ -85,7 +85,7 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
         adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
       }
     } else {
-      const codeListToUpdate = dbCodeLists.find((codeList) => codeList.id === codeListId);
+      const codeListToUpdate = dbCodeLists.find((codeList: any) => codeList.id === codeListId);
 
       if (codeListToUpdate) {
         const updatedCodeList = {
@@ -148,7 +148,7 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
       <div className='editorSpacing'>
         <Textfield
           label={localization.name}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
             type === 'create'
               ? setNewCodeList((prevCodeList) => ({
                   ...prevCodeList,
@@ -162,7 +162,7 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
       <div className='editorSpacing'>
         <Textfield
           label={localization.description}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
             type === 'create'
               ? setNewCodeList((prevCodeList) => ({ ...prevCodeList, description: event.target.value }))
               : handleCodeListUpdate(codeList?.id, undefined, event.target.value);
@@ -204,5 +204,3 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
     </div>
   );
 };
-
-export default CodeListEditor;

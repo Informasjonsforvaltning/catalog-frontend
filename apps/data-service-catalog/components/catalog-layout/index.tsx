@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Layout } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { useParams } from 'next/navigation';
@@ -27,7 +27,7 @@ export const CatalogLayout = ({
   fdkBaseUrl,
 }: CatalogLayoutProps) => {
   const { catalogId } = useParams();
-  const { data: design } = useGetCatalogDesign(catalogId?.toString(), catalogAdminServiceUrl);
+  const { data: design } = useGetCatalogDesign(catalogId?.toString() as any, catalogAdminServiceUrl);
 
   return (
     <Layout

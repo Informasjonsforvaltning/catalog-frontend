@@ -50,7 +50,6 @@ export default class PublicServicesPage {
       await dialog.accept();
     });
 
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       // Get the list of items
       const promises = (await this.page.getByRole('link').all()).map(async (link) => {
@@ -74,7 +73,6 @@ export default class PublicServicesPage {
       await this.deleteItem(items[0]);
 
       // Wait for the list to update after deletion
-      // eslint-disable-next-line playwright/no-wait-for-timeout
       await this.page.waitForTimeout(500);
       await this.goto();
     }

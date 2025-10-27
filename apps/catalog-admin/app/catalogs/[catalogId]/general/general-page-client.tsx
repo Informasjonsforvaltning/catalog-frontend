@@ -1,7 +1,6 @@
 'use client';
 
 import { NavigationCard } from '@catalog-frontend/ui';
-import React from 'react';
 import { localization } from '@catalog-frontend/utils';
 import { PaletteIcon, PersonIcon } from '@navikt/aksel-icons';
 import styles from './general-page.module.css';

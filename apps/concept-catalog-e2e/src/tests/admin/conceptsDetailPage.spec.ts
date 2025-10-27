@@ -1,7 +1,14 @@
 import * as crypto from 'crypto';
 import { Concept, RelationSubtypeEnum, RelationTypeEnum } from '@catalog-frontend/types';
 import { runTestAsAdmin } from '../../fixtures/basePage';
-import { adminAuthFile, createConcept, getFields, getPublishedConcept, getUsers, uniqueString } from '../../utils/helpers';
+import {
+  adminAuthFile,
+  createConcept,
+  getFields,
+  getPublishedConcept,
+  getUsers,
+  uniqueString,
+} from '../../utils/helpers';
 
 runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPage, playwright }) => {
   console.log('[TEST] Starting test: test if the detail page renders correctly');
@@ -67,59 +74,59 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
 
   console.log('[TEST] Fetching published concept...');
   let publishedConcept = await getPublishedConcept(apiRequestContext);
-  if(!publishedConcept) {
+  if (!publishedConcept) {
     publishedConcept = {
+      id: null,
+      anbefaltTerm: {
+        navn: {
+          nb: `PublisertRel ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+          nn: `PublisertRel ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+          en: `PublishedRel ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        },
+      },
+      ansvarligVirksomhet: {
         id: null,
-        anbefaltTerm: {
-          navn: {
-            nb: `PublisertRel ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
-            nn: `PublisertRel ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
-            en: `PublishedRel ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
-          },
+      },
+      definisjon: {
+        tekst: {
+          nb: `Definisjon nb ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+          nn: `Definisjon nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+          en: `Definition en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
         },
-        ansvarligVirksomhet: {
-          id: null,
+        kildebeskrivelse: {
+          forholdTilKilde: 'egendefinert',
+          kilde: [],
         },
-        definisjon: {
-          tekst: {
-            nb: `Definisjon nb ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
-            nn: `Definisjon nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
-            en: `Definition en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
-          },
-          kildebeskrivelse: {
-            forholdTilKilde: 'egendefinert',
-            kilde: [],
-          },
-        },
-        kontaktpunkt: {
-          harEpost: `user${Math.floor(crypto.randomInt(100000000, 1000000000) * 10000)}@example.com`,
-          harTelefon: `${Math.floor(100000000 + crypto.randomInt(100000000, 1000000000) * 900000000)}`,
-        },
-        versjonsnr: { major: crypto.randomInt(1, 100), minor: crypto.randomInt(1, 100), patch: crypto.randomInt(1, 100) },
-        merknad: {},
-        merkelapp: [],
-        eksempel: null,
-        fagområde: null,
-        fagområdeKoder: null,
-        omfang: null,
-        tillattTerm: null,
-        frarådetTerm: null,
-        gyldigFom: null,
-        gyldigTom: null,
-        seOgså: [],
-        internBegrepsRelasjon: [],
-        internSeOgså: [],
-        internErstattesAv: [],
-        erstattesAv: [],
-        statusURI: 'http://publications.europa.eu/resource/authority/concept-status/CURRENT',
-        assignedUser: null,
-        begrepsRelasjon: [],
-        interneFelt: null,
-        abbreviatedLabel: `LBL${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 6).toUpperCase()}`,
-      };
-      const id = await createConcept(apiRequestContext, publishedConcept);
-      publishedConcept.id = id;
-      console.log(`[TEST] Created published concept with id: ${id}`);
+      },
+      kontaktpunkt: {
+        harEpost: `user${Math.floor(crypto.randomInt(100000000, 1000000000) * 10000)}@example.com`,
+        harTelefon: `${Math.floor(100000000 + crypto.randomInt(100000000, 1000000000) * 900000000)}`,
+      },
+      versjonsnr: { major: crypto.randomInt(1, 100), minor: crypto.randomInt(1, 100), patch: crypto.randomInt(1, 100) },
+      merknad: {},
+      merkelapp: [],
+      eksempel: null,
+      fagområde: null,
+      fagområdeKoder: null,
+      omfang: null,
+      tillattTerm: null,
+      frarådetTerm: null,
+      gyldigFom: null,
+      gyldigTom: null,
+      seOgså: [],
+      internBegrepsRelasjon: [],
+      internSeOgså: [],
+      internErstattesAv: [],
+      erstattesAv: [],
+      statusURI: 'http://publications.europa.eu/resource/authority/concept-status/CURRENT',
+      assignedUser: null,
+      begrepsRelasjon: [],
+      interneFelt: null,
+      abbreviatedLabel: `LBL${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 6).toUpperCase()}`,
+    };
+    const id = await createConcept(apiRequestContext, publishedConcept);
+    publishedConcept.id = id;
+    console.log(`[TEST] Created published concept with id: ${id}`);
   }
   const relatedPublishedId = [publishedConcept.id];
 
@@ -128,15 +135,11 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
   console.log('[TEST] Fields fetched:', fields);
 
   console.log('[TEST] Fetching users...');
-  const  { users } = await getUsers(apiRequestContext);
+  const { users } = await getUsers(apiRequestContext);
   console.log('[TEST] Users fetched:', users);
 
   const randomUser =
-      users.length > 1
-        ? users[crypto.randomInt(0, users.length-1)]
-        : users.length === 1
-        ? users[0]
-        : undefined;
+    users.length > 1 ? users[crypto.randomInt(0, users.length - 1)] : users.length === 1 ? users[0] : undefined;
 
   console.log('[TEST] Selected random user:', randomUser);
 
@@ -178,51 +181,62 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
     frarådetTerm: null,
     gyldigFom: null,
     gyldigTom: null,
-    seOgså: [`https://concept-catalog.staging.fellesdatakatalog.digdir.no/collections/${process.env.E2E_CATALOG_ID}/concepts/${relatedPublishedId}`],
-    internBegrepsRelasjon: [{
-      relasjon: RelationTypeEnum.ASSOSIATIV,
-      relasjonsType: RelationSubtypeEnum.OVERORDNET,
-      beskrivelse: { 
-        nb: `Test beskrivelse nb ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
-        nn: `Test beskrivelse nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
-        en: `Test description en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`
+    seOgså: [
+      `https://concept-catalog.staging.fellesdatakatalog.digdir.no/collections/${process.env.E2E_CATALOG_ID}/concepts/${relatedPublishedId}`,
+    ],
+    internBegrepsRelasjon: [
+      {
+        relasjon: RelationTypeEnum.ASSOSIATIV,
+        relasjonsType: RelationSubtypeEnum.OVERORDNET,
+        beskrivelse: {
+          nb: `Test beskrivelse nb ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+          nn: `Test beskrivelse nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+          en: `Test description en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        },
+        relatertBegrep: relatedInternalId,
       },
-      relatertBegrep: relatedInternalId
-    }],
+    ],
     internSeOgså: [relatedInternalId],
     internErstattesAv: [relatedInternalId],
-    erstattesAv: [`https://concept-catalog.staging.fellesdatakatalog.digdir.no/collections/${process.env.E2E_CATALOG_ID}/concepts/${relatedPublishedId}`],
+    erstattesAv: [
+      `https://concept-catalog.staging.fellesdatakatalog.digdir.no/collections/${process.env.E2E_CATALOG_ID}/concepts/${relatedPublishedId}`,
+    ],
     statusURI: 'http://publications.europa.eu/resource/authority/concept-status/DRAFT',
     assignedUser: randomUser.id,
-    begrepsRelasjon: [{
-      relasjon: RelationTypeEnum.PARTITIV,
-      relasjonsType: RelationSubtypeEnum.OMFATTER,
-      beskrivelse: { 
-        nb: `Test beskrivelse nb ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
-        nn: `Test beskrivelse nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
-        en: `Test description en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`
+    begrepsRelasjon: [
+      {
+        relasjon: RelationTypeEnum.PARTITIV,
+        relasjonsType: RelationSubtypeEnum.OMFATTER,
+        beskrivelse: {
+          nb: `Test beskrivelse nb ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+          nn: `Test beskrivelse nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+          en: `Test description en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        },
+        inndelingskriterium: {
+          nb: `Inndelingskriterium nb ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+          nn: `Inndelingskriterium nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+          en: `Division criterion en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        },
+        relatertBegrep: `https://concept-catalog.staging.fellesdatakatalog.digdir.no/collections/${process.env.E2E_CATALOG_ID}/concepts/${relatedPublishedId}`,
       },
-      inndelingskriterium: { 
-        nb: `Inndelingskriterium nb ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
-        nn: `Inndelingskriterium nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
-        en: `Division criterion en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`
+    ],
+    interneFelt: fields.internal.reduce(
+      (acc, field) => {
+        if (field.type === 'text_short' || field.type === 'text_long') {
+          acc[field.id] = { value: uniqueString('Internal_') };
+        } else if (field.type === 'boolean') {
+          acc[field.id] = { value: crypto.randomInt(1, 10) > 5 ? 'true' : 'false' };
+        } else if (field.type === 'code_list') {
+          //TODO
+        } else if (field.type === 'user_list') {
+          acc[field.id] = { value: randomUser.id };
+        }
+        return acc;
       },
-      relatertBegrep: `https://concept-catalog.staging.fellesdatakatalog.digdir.no/collections/${process.env.E2E_CATALOG_ID}/concepts/${relatedPublishedId}`
-    }],
-    interneFelt: fields.internal.reduce((acc, field) => {
-      if(field.type === 'text_short' || field.type === 'text_long') {
-        acc[field.id] = { value: uniqueString('Internal_') };
-      } else if(field.type === 'boolean') {
-        acc[field.id] = { value: crypto.randomInt(1,10) > 5 ? 'true' : 'false' };
-      } else if(field.type === 'code_list') {
-        //TODO
-      } else if(field.type === 'user_list') {
-        acc[field.id] = { value: randomUser.id };
-      }      
-      return acc;
-    }, {} as Record<string, { value: string }>),
+      {} as Record<string, { value: string }>,
+    ),
     abbreviatedLabel: `LBL${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 6).toUpperCase()}`,
-  };  
+  };
 
   console.log('[TEST] Creating expected concept...');
   const id = await createConcept(apiRequestContext, expected);

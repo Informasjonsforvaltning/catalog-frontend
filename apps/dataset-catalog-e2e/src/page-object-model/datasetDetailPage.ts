@@ -61,7 +61,11 @@ export default class DatasetDetailPage {
   async expectDeleteConfirmationDialog(datasetTitle: string) {
     await expect(this.page.getByRole('dialog')).toBeVisible();
     await expect(this.page.getByRole('heading', { name: 'Slett datasett' })).toBeVisible();
-    await expect(this.page.getByText(`Du er i ferd med å slette datasettbeskrivelsen ${datasetTitle}. All data knyttet til datasettbeskrivelsen vil bli permanent slettet, og slettingen kan ikke angres. Er du sikker på at du vil fortsette?`)).toBeVisible();
+    await expect(
+      this.page.getByText(
+        `Du er i ferd med å slette datasettbeskrivelsen ${datasetTitle}. All data knyttet til datasettbeskrivelsen vil bli permanent slettet, og slettingen kan ikke angres. Er du sikker på at du vil fortsette?`,
+      ),
+    ).toBeVisible();
   }
 
   async confirmDelete() {
@@ -112,7 +116,7 @@ export default class DatasetDetailPage {
     const [year, month, day] = date.split('-');
     const formattedDate = `${day}.${month}.${year}`;
     await expect(this.page.getByText(formattedDate)).toBeVisible();
-  } 
+  }
 
   // Theme section
   async expectEuDataTheme(theme: string) {
@@ -156,7 +160,7 @@ export default class DatasetDetailPage {
   }
 
   async expectLanguages(languages: string[]) {
-    await expect(this.page.getByText(languages.join(', '))).toBeVisible();    
+    await expect(this.page.getByText(languages.join(', '))).toBeVisible();
   }
 
   async expectCoverageArea(area: string) {
@@ -233,4 +237,4 @@ export default class DatasetDetailPage {
   async expectContactPointUrl(url: string) {
     await expect(this.page.getByRole('link', { name: url })).toBeVisible();
   }
-} 
+}

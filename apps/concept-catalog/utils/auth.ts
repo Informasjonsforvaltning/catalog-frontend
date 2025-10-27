@@ -23,7 +23,7 @@ type Render = (
 ) => Promise<any>;
 
 const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write' | 'admin', render: Render) => {
-  return async ({ params, searchParams }) => {
+  return async ({ params, searchParams }: any) => {
     const { catalogId, conceptId, resultId, changeRequestId } = await params;
     const { concept: conceptIdSearch } = await searchParams;
 
@@ -57,7 +57,7 @@ const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write' | '
     }
 
     const hasAdminPermission = session?.accessToken && hasOrganizationAdminPermission(session.accessToken, catalogId);
-    if(!hasAdminPermission && permissions === 'admin') {
+    if (!hasAdminPermission && permissions === 'admin') {
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
 

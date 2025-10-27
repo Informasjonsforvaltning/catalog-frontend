@@ -5,7 +5,7 @@ import { useFormikContext } from 'formik';
 import { Box, Combobox, Fieldset, Radio, Textfield } from '@digdir/designsystemet-react';
 import { FieldsetDivider, FormikLanguageFieldset, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { RelatedConcept, UnionRelation, RelationSubtypeEnum, RelationTypeEnum, Concept } from '@catalog-frontend/types';
+import { RelatedConcept, UnionRelation, RelationSubtypeEnum, RelationTypeEnum } from '@catalog-frontend/types';
 import { useSearchConcepts as useSearchInternalConcepts, useDataNorgeSearchConcepts } from '../../../../hooks/search';
 import styles from './relation-fieldset.module.scss';
 
@@ -19,16 +19,12 @@ type Option = {
 
 const relatedConceptTypes: RelatedConceptType[] = ['internal', 'external', 'custom'];
 const relationTypes = Object.keys(RelationTypeEnum)
-  .filter((item) => {
-    return isNaN(Number(item));
-  })
-  .map((key) => RelationTypeEnum[key]);
+  .filter((item) => isNaN(Number(item)))
+  .map((key) => RelationTypeEnum[key as keyof typeof RelationTypeEnum]);
 
 const relationSubtypes = Object.keys(RelationSubtypeEnum)
-  .filter((item) => {
-    return isNaN(Number(item));
-  })
-  .map((key) => RelationSubtypeEnum[key]);
+  .filter((item) => isNaN(Number(item)))
+  .map((key) => RelationSubtypeEnum[key as keyof typeof RelationSubtypeEnum]);
 
 type RelationFieldsetProps = {
   catalogId: string;
@@ -115,17 +111,19 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
     }));
   relationSubtypeOptions.unshift({
     label: localization.conceptForm.fieldLabel.relationSubtypes['none'],
-    value: '',
+    value: '' as any,
   });
 
   let internalRelatedConceptOptions: Option[] = [];
   let externalRelatedConceptOptions: Option[] = [];
   if (relatedConceptType === 'internal' && searchTriggered) {
     internalRelatedConceptOptions =
-      internalConcepts?.hits.filter((rel) => rel.originaltBegrep !== conceptId).map((concept) => ({
-        label: getTranslateText(concept.anbefaltTerm?.navn) as string,
-        value: concept.originaltBegrep as string,
-      })) ?? [];
+      internalConcepts?.hits
+        .filter((rel) => rel.originaltBegrep !== conceptId)
+        .map((concept) => ({
+          label: getTranslateText(concept.anbefaltTerm?.navn) as string,
+          value: concept.originaltBegrep as string,
+        })) ?? [];
   } else if (relatedConceptType === 'internal' && !searchTriggered && initialRelatedConcept) {
     internalRelatedConceptOptions = [
       {
@@ -137,11 +135,13 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
 
   if (relatedConceptType === 'external' && searchTriggered) {
     externalRelatedConceptOptions =
-      externalConcepts?.hits.filter((rel) => !rel.uri?.includes(conceptId)).map((concept) => ({
-        label: getTranslateText(concept.title) as string,
-        description: getTranslateText(concept.organization?.prefLabel) as string,
-        value: concept.uri as string,
-      })) ?? [];
+      externalConcepts?.hits
+        .filter((rel) => !rel.uri?.includes(conceptId))
+        .map((concept) => ({
+          label: getTranslateText(concept.title) as string,
+          description: getTranslateText(concept.organization?.prefLabel) as string,
+          value: concept.uri as string,
+        })) ?? [];
   } else if (relatedConceptType === 'external' && !searchTriggered && initialRelatedConcept) {
     externalRelatedConceptOptions = [
       {
@@ -151,7 +151,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
     ];
   }
 
-  const handleRelatedConceptTypeChange = (value) => {
+  const handleRelatedConceptTypeChange = (value: any) => {
     setFieldValue('internal', value === 'internal');
 
     setRelatedConceptType(value as RelatedConceptType);
@@ -178,7 +178,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
     setRelatedConcept(value);
   };
 
-  const handleCustomRelatedConceptChange = (e) => {
+  const handleCustomRelatedConceptChange = (e: any) => {
     setRelatedConcept([e.target.value]);
   };
 
@@ -283,13 +283,15 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
 
       <Combobox
         label={
-          <TitleWithHelpTextAndTag
-            helpText={localization.conceptForm.helpText.relation}
-            tagColor='warning'
-            tagTitle={localization.tag.required}
-          >
-            {localization.conceptForm.fieldLabel.relation}
-          </TitleWithHelpTextAndTag>
+          (
+            <TitleWithHelpTextAndTag
+              helpText={localization.conceptForm.helpText.relation}
+              tagColor='warning'
+              tagTitle={localization.tag.required}
+            >
+              {localization.conceptForm.fieldLabel.relation}
+            </TitleWithHelpTextAndTag>
+          ) as any
         }
         size='sm'
         portal={false}
@@ -314,13 +316,15 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
           <Box className={styles.flex}>
             <Combobox
               label={
-                <TitleWithHelpTextAndTag
-                  tagColor='warning'
-                  tagTitle={localization.tag.required}
-                  helpText={localization.conceptForm.helpText.relationLevel[values.relasjon]}
-                >
-                  {localization.conceptForm.fieldLabel.relationLevel}
-                </TitleWithHelpTextAndTag>
+                (
+                  <TitleWithHelpTextAndTag
+                    tagColor='warning'
+                    tagTitle={localization.tag.required}
+                    helpText={localization.conceptForm.helpText.relationLevel[values.relasjon]}
+                  >
+                    {localization.conceptForm.fieldLabel.relationLevel}
+                  </TitleWithHelpTextAndTag>
+                ) as any
               }
               size='sm'
               portal={false}

@@ -5,9 +5,9 @@ import { Box, Combobox, Fieldset } from '@digdir/designsystemet-react';
 import { useSearchEnheter, useSearchEnheterByOrgNmbs } from '../../../hooks/useEnhetsregister';
 import { useFormikContext } from 'formik';
 import { debounce } from 'lodash';
-import { useCallback, useState } from 'react';
+import { RefObject, useCallback, useState } from 'react';
 
-export const QualifiedAttributionsSection = ({ ref }: { ref: React.RefObject<HTMLInputElement>}) => {
+export const QualifiedAttributionsSection = ({ ref }: { ref: RefObject<HTMLInputElement> }) => {
   const { setFieldValue, values } = useFormikContext<Dataset>();
 
   const [searchTerm, setSearchTerm] = useState('');

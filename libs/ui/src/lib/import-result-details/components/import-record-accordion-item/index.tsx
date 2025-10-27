@@ -60,12 +60,14 @@ const ImportRecordAccordionItem = ({ targetBaseHref, record, enableOpening, isCo
       <AccordionContent>
         {errors.length === 0 && enableOpening && (
           <div className={styles.buttonRow}>
-            {isCompleted && <LinkButton
-              variant={'tertiary'}
-              href={`/${targetBaseHref}/${record.internalId}`}
-            >
-              {localization.importResult.goToImported}
-            </LinkButton>}
+            {isCompleted && (
+              <LinkButton
+                variant={'tertiary'}
+                href={`/${targetBaseHref}/${record.internalId}`}
+              >
+                {localization.importResult.goToImported}
+              </LinkButton>
+            )}
           </div>
         )}
         <div className={styles.issuesContainer}>

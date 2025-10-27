@@ -30,7 +30,7 @@ const getRandomDataset = () => {
 
 runTestAsAdmin(
   'should load dataset detail page with all elements',
-  async ({ datasetsPage, context, playwright }: { datasetsPage; context; playwright }) => {
+  async ({ datasetsPage, playwright }: { datasetsPage; context; playwright }) => {
     // Create a request context with the admin storage state (includes next-auth cookie)
     const apiRequestContext = await playwright.request.newContext({
       storageState: adminAuthFile,
@@ -90,7 +90,7 @@ runTestAsAdmin(
 
 runTestAsAdmin(
   'should delete dataset from detail page',
-  async ({ datasetsPage, context, playwright }: { datasetsPage; context; playwright }) => {
+  async ({ datasetsPage, playwright }: { datasetsPage; context; playwright }) => {
     // Create a request context with the admin storage state (includes next-auth cookie)
     const apiRequestContext = await playwright.request.newContext({
       storageState: adminAuthFile,

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useRef, useState } from 'react';
 import { localization } from '@catalog-frontend/utils';
 import { LinkButton, UploadButton } from '@catalog-frontend/ui';
 import { useImportConceptsCSV, useSendConcepts, useImportRdf, useSendRdf } from '../../hooks/import';
@@ -14,19 +14,19 @@ interface ImportProps {
 }
 
 interface ImportRdfProps {
-  catalogId: string,
-  setIsUploading: React.Dispatch<React.SetStateAction<boolean>>,
-  setIsUploaded: React.Dispatch<React.SetStateAction<boolean>>;
+  catalogId: string;
+  setIsUploading: Dispatch<SetStateAction<boolean>>;
+  setIsUploaded: Dispatch<SetStateAction<boolean>>;
 }
 
 enum UploadType {
   CSV = 'CSV',
-  RDF = 'RDF'
+  RDF = 'RDF',
 }
 
 export interface UploadRdfProps {
-  fileContent: string,
-  contentType: string
+  fileContent: string;
+  contentType: string;
 }
 
 export function ImportModal({ catalogId }: ImportProps) {
@@ -34,7 +34,7 @@ export function ImportModal({ catalogId }: ImportProps) {
   const [isUploaded, setIsUploaded] = useState<boolean>(false);
   const [isSending, setIsSending] = useState<boolean>(false);
   const [cancelled, setCancelled] = useState<boolean>(false);
-  let uploadSession ;
+  let uploadSession: any;
   const sessionId = useRef<number>(0);
 
   const [uploadType, setUploadType] = useState<UploadType>(UploadType.CSV);
@@ -44,26 +44,25 @@ export function ImportModal({ catalogId }: ImportProps) {
   const modalRef = useRef<HTMLDialogElement>(null);
   const readerRdfRef = useRef<FileReader | null>(null);
 
-
   const uploadConcepts = useImportConceptsCSV(catalogId, setIsUploading, setIsUploaded);
-  const sendConcepts = useSendConcepts(catalogId)
+  const sendConcepts = useSendConcepts(catalogId);
 
   const uploadRdf = useImportRdf(catalogId);
-  const sendRdf = useSendRdf(catalogId)
+  const sendRdf = useSendRdf(catalogId);
 
-  const maxSize = 10 ; // 10 MB
+  const maxSize = 10; // 10 MB
 
-  const onCsvUpload = (event) => {
+  const onCsvUpload = (event: any) => {
     const file: File = event.target.files?.[0];
     if (file) {
-      if(file.size > maxSize * 1024 * 1024) {
+      if (file.size > maxSize * 1024 * 1024) {
         alert(localization.formatString(localization.alert.maxFileSizeExceeded, maxSize));
         cancel();
         return;
       }
 
       const fileExtension = file.name.split('.').pop()?.toLowerCase();
-      if(fileExtension != 'csv' && fileExtension != 'json') {
+      if (fileExtension != 'csv' && fileExtension != 'json') {
         alert(localization.formatString(localization.concept.importModal.alert.unsupportedFileUpload, 'CSV/JSON'));
         cancel();
         return;
@@ -81,25 +80,23 @@ export function ImportModal({ catalogId }: ImportProps) {
   };
 
   const send = async () => {
-
-    setIsSending(true)
+    setIsSending(true);
 
     if (uploadType === UploadType.CSV) sendConcepts.mutate(uploadedConcepts);
     else if (uploadType === UploadType.RDF) {
-      console.log("Uploaded concepts: ", uploadedRdfConcepts)
+      console.log('Uploaded concepts: ', uploadedRdfConcepts);
       sendRdf.mutate(uploadedRdfConcepts);
     }
-
-  }
+  };
 
   const cancel = () => {
-    console.log("Reader aborting: ", readerRdfRef?.current);
-    readerRdfRef?.current?.abort()
+    console.log('Reader aborting: ', readerRdfRef?.current);
+    readerRdfRef?.current?.abort();
     readerRdfRef.current = null;
     setIsUploading(false);
     setIsUploaded(false);
     setIsSending(false);
-    setCancelled(false)
+    setCancelled(false);
     setUploadedConcepts(new Array<Concept>());
     setUploadedRdfConcepts({} as UploadRdfProps);
     modalRef.current?.close();
@@ -107,13 +104,13 @@ export function ImportModal({ catalogId }: ImportProps) {
     uploadSession = null;
   };
 
-  const ImportConceptRdf = ( { catalogId, setIsUploading, setIsUploaded }: ImportRdfProps) => {
+  const ImportConceptRdf = ({ setIsUploading, setIsUploaded }: ImportRdfProps) => {
     const extension2Type: Map<string, string> = new Map<string, string>();
     extension2Type.set('.ttl', 'text/turtle');
     const allowedExtensions = Array.from(extension2Type.keys());
-    const onFileUpload = (event) => {
-      setCancelled(false)
-      setIsUploading(true)
+    const onFileUpload = (event: any) => {
+      setCancelled(false);
+      setIsUploading(true);
       //await new Promise(resolve => setTimeout(resolve, 5000));
       const file: File = event.target.files?.[0];
       if (file) {
@@ -153,7 +150,7 @@ export function ImportModal({ catalogId }: ImportProps) {
           }
         };
       }
-    }
+    };
 
     return (
       <UploadButton
@@ -161,7 +158,7 @@ export function ImportModal({ catalogId }: ImportProps) {
         onUpload={(e) => {
           sessionId.current = Date.now();
           uploadSession = sessionId.current;
-          onFileUpload(e)
+          onFileUpload(e);
         }}
       >
         <FileImportIcon fontSize='1.5rem' />
@@ -189,9 +186,7 @@ export function ImportModal({ catalogId }: ImportProps) {
           <>
             <Modal.Header className={styles.content}>
               <div className={styles.titleTags}>
-                <Markdown>
-                  {localization.concept.importModal.title}
-                </Markdown>
+                <Markdown>{localization.concept.importModal.title}</Markdown>
                 <HelpMarkdown aria-label={`Help ${localization.concept.importModal.titleHelpText}`}>
                   {localization.concept.importModal.titleHelpText}
                 </HelpMarkdown>
@@ -225,7 +220,7 @@ export function ImportModal({ catalogId }: ImportProps) {
         {(isUploading || isUploaded || isSending) && (
           <>
             <Modal.Header className={styles.content}>
-                <Markdown>{localization.concept.importModal.titleConfirmSending}</Markdown>
+              <Markdown>{localization.concept.importModal.titleConfirmSending}</Markdown>
             </Modal.Header>
             <Modal.Content className={styles.content}>
               <div className={styles.modalContent}>

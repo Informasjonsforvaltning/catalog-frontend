@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import Link from '../link';
+import { Link } from '../link';
 
 import styles from './footer.module.css';
 import { localization } from '@catalog-frontend/utils';
@@ -59,5 +59,3 @@ export const Footer: FC<FooterProps> = ({ fontColor, backgroundColor }) => (
     </div>
   </footer>
 );
-
-export default Footer;

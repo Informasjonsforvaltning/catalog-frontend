@@ -1,7 +1,6 @@
 import { render } from '@testing-library/react';
-import React from 'react';
 
-import FormLayout from './index';
+import { FormLayout } from './index';
 import '../../../__mocks__/intersection-observer';
 
 describe('FormLayout', () => {

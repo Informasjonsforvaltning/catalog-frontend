@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren, Children, isValidElement } from 'react';
+import { FC, PropsWithChildren, Children, isValidElement } from 'react';
 
 import classes from './key-value-list.module.css';
 

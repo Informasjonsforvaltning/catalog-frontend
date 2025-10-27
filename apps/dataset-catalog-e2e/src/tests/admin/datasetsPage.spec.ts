@@ -78,7 +78,7 @@ runTestAsAdmin(
       storageState: adminAuthFile,
     });
 
-    const datasets = Array.from({ length: 3 }).map((_) => getRandomDataset());
+    const datasets = Array.from({ length: 3 }).map(() => getRandomDataset());
     for (const dataset of datasets) {
       await createDataset(apiRequestContext, dataset);
     }

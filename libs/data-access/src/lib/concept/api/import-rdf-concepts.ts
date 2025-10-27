@@ -16,14 +16,14 @@ export const createImportJob = async (catalogId: string, accessToken: string) =>
   };
 
   return await fetch(resource, options).then((res) => res.headers.get('location'));
-}
+};
 
 export const importRdfConcepts = async (
   fileContent: string,
   contentType: string,
   catalogId: string,
   importId: string,
-  accessToken: string
+  accessToken: string,
 ) => {
   validateOrganizationNumber(catalogId, 'importRdfConcepts');
   validateUUID(importId, 'importRdfConcepts');
@@ -31,11 +31,11 @@ export const importRdfConcepts = async (
   const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'importRdfConcepts');
   const encodedResultId = validateAndEncodeUrlSafe(importId, 'result ID', 'importRdfConcepts');
 
-  console.log("Uploading the concept rdf file catalog:", encodedCatalogId);
+  console.log('Uploading the concept rdf file catalog:', encodedCatalogId);
 
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}`;
 
-  console.log("Updating status of import result with id:", encodedResultId);
+  console.log('Updating status of import result with id:', encodedResultId);
 
   const options = {
     headers: {
@@ -47,4 +47,4 @@ export const importRdfConcepts = async (
   };
 
   return await fetch(resource, options).then((res) => res.headers.get('location'));
-}
+};

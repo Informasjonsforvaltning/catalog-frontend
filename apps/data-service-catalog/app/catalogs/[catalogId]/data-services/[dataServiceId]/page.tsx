@@ -8,7 +8,6 @@ import {
 } from '@catalog-frontend/utils';
 import {
   getCurrencies,
-  getDataServiceById,
   getDistributionStatuses,
   getOpenLicenses,
   getPlannedAvailabilities,

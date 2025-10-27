@@ -14,7 +14,7 @@ export const GET = async (request: NextRequest, props: { params: Promise<{ catal
       }
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), { status: response.status });
-    } catch (error) {
+    } catch {
       return new Response(JSON.stringify({ message: 'Failed to get user list' }), { status: 500 });
     }
   });

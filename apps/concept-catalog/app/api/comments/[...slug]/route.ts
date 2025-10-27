@@ -16,7 +16,7 @@ export const GET = async (req: NextRequest, props: { params: Promise<{ slug: str
         }
         const jsonResponse = await response.json();
         return new Response(JSON.stringify(jsonResponse), { status: response.status });
-      } catch (error) {
+      } catch {
         return new Response(JSON.stringify({ message: 'Failed to get comments' }), { status: 500 });
       }
     } else {
@@ -38,7 +38,7 @@ export const POST = async (req: NextRequest, props: { params: Promise<{ slug: st
           throw new Error();
         }
         return new Response(JSON.stringify({ ok: true }), { status: response.status });
-      } catch (error) {
+      } catch {
         return new Response(JSON.stringify({ message: 'Failed to create comment' }), { status: 500 });
       }
     } else {
@@ -61,7 +61,7 @@ export const PUT = async (req: NextRequest, props: { params: Promise<{ slug: str
         }
         const jsonResponse = await response.json();
         return new Response(JSON.stringify(jsonResponse), { status: response.status });
-      } catch (error) {
+      } catch {
         return new Response(JSON.stringify({ message: 'Failed to update comment' }), { status: 500 });
       }
     } else {
@@ -82,7 +82,7 @@ export const DELETE = async (req: NextRequest, props: { params: Promise<{ slug: 
           throw new Error();
         }
         return new Response(JSON.stringify({ ok: true }), { status: 200 });
-      } catch (error) {
+      } catch {
         return new Response(JSON.stringify({ message: 'Failed to delete comment' }), { status: 500 });
       }
     } else {

@@ -9,7 +9,6 @@ export const importConceptsCSV = async (
   concepts: Concept[],
   accessToken: string,
 ) => {
-
   validateOrganizationNumber(catalogId, 'importConceptsCSV');
   validateUUID(importId, 'importConceptsCSV');
 

@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import ImageUploader from '.';
+import { ImageUploader } from '.';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 jest.mock('next/router', () => ({
@@ -11,7 +11,7 @@ describe('ImageUploader', () => {
     const queryClient = new QueryClient();
     const { baseElement } = render(
       <QueryClientProvider client={queryClient}>
-        <ImageUploader />
+        <ImageUploader catalogId='test-catalog-id' />
       </QueryClientProvider>,
     );
     expect(baseElement).toBeTruthy();

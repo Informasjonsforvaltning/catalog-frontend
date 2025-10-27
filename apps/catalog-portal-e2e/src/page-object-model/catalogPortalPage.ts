@@ -1,4 +1,4 @@
-import { expect, Page, BrowserContext, Locator } from '@playwright/test';
+import { expect, Page, BrowserContext } from '@playwright/test';
 import type AxeBuilder from '@axe-core/playwright';
 
 export default class CatalogPortalPage {

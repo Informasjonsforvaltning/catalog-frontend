@@ -1,6 +1,5 @@
 import { render } from '@testing-library/react';
 import { ServiceMessages } from './index';
-import React from 'react';
 
 describe('ServiceMessages', () => {
   it('should render successfully', () => {

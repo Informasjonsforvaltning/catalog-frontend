@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'catalog-portal',
   preset: '../../jest.preset.js',

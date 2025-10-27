@@ -7,7 +7,7 @@ export const validSearchQuery = (query: string): boolean => {
   if (!query || typeof query !== 'string') {
     return false;
   }
-  
+
   // Basic validation: query should not be empty and should have reasonable length
   return query.trim().length > 0 && query.length <= 1000;
 };
@@ -20,7 +20,9 @@ export const validSearchQuery = (query: string): boolean => {
  */
 export const validateSearchQuery = (query: string, functionName: string): void => {
   if (!validSearchQuery(query)) {
-    throw new Error(`Invalid search query '${query}' in ${functionName}. Query must be a non-empty string with maximum length of 1000 characters.`);
+    throw new Error(
+      `Invalid search query '${query}' in ${functionName}. Query must be a non-empty string with maximum length of 1000 characters.`,
+    );
   }
 };
 
@@ -33,7 +35,7 @@ export const validResourceType = (resourceType: string): boolean => {
   if (!resourceType || typeof resourceType !== 'string') {
     return false;
   }
-  
+
   // Basic validation: resource type should be alphanumeric with possible hyphens/underscores
   return /^[a-zA-Z0-9_-]+$/.test(resourceType) && resourceType.length <= 50;
 };
@@ -46,7 +48,9 @@ export const validResourceType = (resourceType: string): boolean => {
  */
 export const validateResourceType = (resourceType: string, functionName: string): void => {
   if (!validResourceType(resourceType)) {
-    throw new Error(`Invalid resource type '${resourceType}' in ${functionName}. Resource type must be alphanumeric with hyphens/underscores and maximum length of 50 characters.`);
+    throw new Error(
+      `Invalid resource type '${resourceType}' in ${functionName}. Resource type must be alphanumeric with hyphens/underscores and maximum length of 50 characters.`,
+    );
   }
 };
 
@@ -59,7 +63,7 @@ export const validEnvironmentURL = (env: string): boolean => {
   if (!env || typeof env !== 'string') {
     return false;
   }
-  
+
   try {
     new URL(env);
     return true;

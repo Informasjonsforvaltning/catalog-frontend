@@ -1,4 +1,3 @@
-import React from 'react';
 import { UnionRelation, RelatedConcept, LocalizedStrings } from '@catalog-frontend/types';
 import { KeyValueList } from '@catalog-frontend/ui';
 import AssociativeRelations from './associative-relations';

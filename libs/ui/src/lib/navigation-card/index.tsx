@@ -3,11 +3,12 @@
 import Link from 'next/link';
 import styles from './navigation-card.module.css';
 import { Heading, Card as CardBase, Paragraph, Card } from '@digdir/designsystemet-react';
+import { ReactElement } from 'react';
 interface Card {
   title?: string;
-  body?: React.ReactElement | string;
+  body?: ReactElement | string;
   href?: string;
-  icon?: React.ReactElement;
+  icon?: ReactElement;
   subtitle?: string;
 }
 

@@ -1,6 +1,5 @@
 'use client';
 
-import React from 'react';
 import { FastField, FormikErrors, useFormikContext } from 'formik';
 import { Box, Checkbox, Combobox, Textarea, Textfield } from '@digdir/designsystemet-react';
 import { AssignedUser, CodeList, Concept, InternalField } from '@catalog-frontend/types';
@@ -96,7 +95,7 @@ export const InternalSection = ({
     if (internalField.type === 'user_list') {
       return (
         <Combobox
-          label={<FieldLabel />}
+          label={(<FieldLabel />) as any}
           size='sm'
           placeholder={'select user'}
           value={fieldValue && userList?.find((u) => u.id === fieldValue) ? [fieldValue] : []}
@@ -121,7 +120,7 @@ export const InternalSection = ({
 
       return (
         <Combobox
-          label={<FieldLabel />}
+          label={(<FieldLabel />) as any}
           size='sm'
           value={fieldValue && codes?.find((code) => code.id === fieldValue) ? [fieldValue] : []}
           onValueChange={(value) => setFieldValue(name, value[0])}
@@ -151,12 +150,14 @@ export const InternalSection = ({
     <Box className={styles.internalSection}>
       <Combobox
         label={
-          <TitleWithHelpTextAndTag
-            helpText={localization.conceptForm.helpText.assignedUser}
-            changed={changed?.includes('assignedUser')}
-          >
-            {localization.conceptForm.fieldLabel.assignedUser}
-          </TitleWithHelpTextAndTag>
+          (
+            <TitleWithHelpTextAndTag
+              helpText={localization.conceptForm.helpText.assignedUser}
+              changed={changed?.includes('assignedUser')}
+            >
+              {localization.conceptForm.fieldLabel.assignedUser}
+            </TitleWithHelpTextAndTag>
+          ) as any
         }
         size='sm'
         value={

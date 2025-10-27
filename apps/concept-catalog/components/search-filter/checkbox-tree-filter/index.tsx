@@ -1,6 +1,6 @@
 'use client';
 
-import React, { FC, JSX, useEffect } from 'react';
+import { FC, JSX, useEffect, useMemo, useState } from 'react';
 import CheckboxTree, { OnCheckNode } from 'react-checkbox-tree';
 import 'react-checkbox-tree/lib/react-checkbox-tree.css';
 
@@ -46,7 +46,7 @@ const generateOptionElements = (nodes?: TreeNode[]): JSX.Element[] => {
       key={'no-user-selected'}
       value={undefined}
     />,
-    ...(options.map((opt, index) => (
+    ...(options.map((opt: any, index: any) => (
       <option
         value={opt.value}
         key={`searchOption-${opt.value}-${index}`}
@@ -58,13 +58,13 @@ const generateOptionElements = (nodes?: TreeNode[]): JSX.Element[] => {
 };
 
 export const CheckboxTreeFilter: FC<Props> = ({ label, 'aria-label': ariaLabel, nodes, onCheck, filters }) => {
-  const [checked, setChecked] = React.useState<string[]>([]);
-  const [expanded, setExpanded] = React.useState<string[]>([]);
-  const [collapsed, setCollapsed] = React.useState(true);
-  const [searchOption, setSearchOption] = React.useState('');
+  const [checked, setChecked] = useState<string[]>([]);
+  const [expanded, setExpanded] = useState<string[]>([]);
+  const [collapsed, setCollapsed] = useState(true);
+  const [searchOption, setSearchOption] = useState('');
 
   // Generate a stable ID for the CheckboxTree to prevent hydration mismatches
-  const treeId = React.useMemo(() => {
+  const treeId = useMemo(() => {
     return `checkbox-tree-${label?.replace(/\s+/g, '-').toLowerCase() || 'default'}`;
   }, [label]);
 
@@ -73,7 +73,7 @@ export const CheckboxTreeFilter: FC<Props> = ({ label, 'aria-label': ariaLabel, 
     setExpanded(filters);
   }, [filters]);
 
-  const handleChecked = ({ value }) => {
+  const handleChecked = ({ value }: any) => {
     setSearchOption('');
 
     const path = getPath(nodes, value).map((item) => item.value);
@@ -114,7 +114,7 @@ export const CheckboxTreeFilter: FC<Props> = ({ label, 'aria-label': ariaLabel, 
     }
   };
 
-  const handleOnCheck = (_values, node: OnCheckNode) => {
+  const handleOnCheck = (_values: any, node: OnCheckNode) => {
     handleChecked(node);
   };
 

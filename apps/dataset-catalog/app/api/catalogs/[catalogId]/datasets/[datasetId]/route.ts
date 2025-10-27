@@ -5,7 +5,7 @@ import { deleteDataset } from '@catalog-frontend/data-access';
 
 export async function DELETE(
   request: NextRequest,
-  context: { params: Promise<{ catalogId: string; datasetId: string }> }
+  context: { params: Promise<{ catalogId: string; datasetId: string }> },
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -14,29 +14,20 @@ export async function DELETE(
     }
 
     const { catalogId, datasetId } = await context.params;
-    
+
     if (!catalogId || !datasetId) {
-      return NextResponse.json(
-        { error: 'Catalog ID and Dataset ID are required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Catalog ID and Dataset ID are required' }, { status: 400 });
     }
 
     const response = await deleteDataset(catalogId, datasetId, `${session.accessToken}`);
     if (!response.ok) {
       console.error('[DELETE DATASET] API call failed with status:', response.status);
-      return NextResponse.json(
-        { error: 'Failed to delete dataset' },
-        { status: response.status }
-      );
+      return NextResponse.json({ error: 'Failed to delete dataset' }, { status: response.status });
     }
 
     return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error('[DELETE DATASET] Error:', error);
-    return NextResponse.json(
-      { error: 'Failed to delete dataset' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to delete dataset' }, { status: 500 });
   }
-} 
+}

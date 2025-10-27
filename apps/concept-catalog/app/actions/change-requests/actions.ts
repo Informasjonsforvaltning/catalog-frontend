@@ -18,7 +18,7 @@ import {
 } from '@catalog-frontend/data-access';
 import { revalidateTag } from 'next/cache';
 import jsonpatch from 'fast-json-patch';
-import { ChangeRequest, ChangeRequestsPageSettings, ChangeRequestUpdateBody, Concept } from '@catalog-frontend/types';
+import { ChangeRequest, ChangeRequestUpdateBody, Concept } from '@catalog-frontend/types';
 
 async function getChangeRequestAsConcept(catalogId: string, changeRequestId: string) {
   const session = await getValidSession();
@@ -125,7 +125,7 @@ export async function acceptChangeRequestAction(catalogId: string, changeRequest
   try {
     await acceptChangeRequest(catalogId, changeRequestId, `${session?.accessToken}`);
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error as any);
   } finally {
     revalidateTag('concept-change-requests');
     revalidateTag('concept-change-request');
@@ -145,7 +145,7 @@ export async function rejectChangeRequestAction(catalogId: string, changeRequest
   try {
     await rejectChangeRequest(catalogId, changeRequestId, `${session?.accessToken}`);
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error as any);
   } finally {
     revalidateTag('concept-change-requests');
     revalidateTag('concept-change-request');

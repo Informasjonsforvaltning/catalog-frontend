@@ -2,13 +2,14 @@ import { Layout } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { Metadata } from 'next';
 import '../global.css';
+import { ReactNode } from 'react';
 
 export const metadata: Metadata = {
   title: localization.catalogType.admin,
   description: localization.catalogType.admin,
 };
 
-const PageLayout = ({ children }: { children: React.ReactNode }) => {
+const PageLayout = ({ children }: { children: ReactNode }) => {
   return (
     <Layout
       catalogAdminUrl={process.env.CATALOG_ADMIN_BASE_URI}

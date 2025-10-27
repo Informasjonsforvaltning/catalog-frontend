@@ -1,5 +1,4 @@
 import { Option } from '@catalog-frontend/types';
-import { localization } from '@catalog-frontend/utils';
 import { NativeSelect } from '@digdir/designsystemet-react';
 import { ChangeEvent } from 'react';
 

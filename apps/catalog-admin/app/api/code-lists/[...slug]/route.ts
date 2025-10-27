@@ -8,7 +8,7 @@ interface Props {
   }>;
 }
 
-export const GET = async (req, props: Props) => {
+export const GET = async (req: any, props: Props) => {
   const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
@@ -20,13 +20,13 @@ export const GET = async (req, props: Props) => {
       }
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), { status: response.status });
-    } catch (error) {
+    } catch {
       return new Response('Failed to get code lists', { status: 500 });
     }
   });
 };
 
-export const POST = async (req, props: Props) => {
+export const POST = async (req: any, props: Props) => {
   const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
@@ -38,13 +38,13 @@ export const POST = async (req, props: Props) => {
         throw new Error();
       }
       return new Response('Created code list', { status: response.status });
-    } catch (error) {
+    } catch {
       return new Response('Failed to create code list', { status: 500 });
     }
   });
 };
 
-export const PATCH = async (req, props: Props) => {
+export const PATCH = async (req: any, props: Props) => {
   const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
@@ -57,7 +57,7 @@ export const PATCH = async (req, props: Props) => {
       }
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), { status: response.status });
-    } catch (error) {
+    } catch {
       return new Response('Failed to update code list', { status: 500 });
     }
   });
@@ -74,7 +74,7 @@ export const DELETE = async (req: NextRequest, props: Props) => {
         throw new Error();
       }
       return new Response('Code list deleted', { status: 200 });
-    } catch (error) {
+    } catch {
       return new Response('Failed to delete code list', { status: 500 });
     }
   });

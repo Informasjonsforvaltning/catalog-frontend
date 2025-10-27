@@ -3,7 +3,7 @@ import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { compare } from 'fast-json-patch';
 
-export const useGetAllCodeLists = ({ catalogId }) => {
+export const useGetAllCodeLists = ({ catalogId }: any) => {
   return useQuery({
     queryKey: ['getAllCodeLists', catalogId],
 

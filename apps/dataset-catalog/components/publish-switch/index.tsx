@@ -3,7 +3,7 @@ import { localization } from '@catalog-frontend/utils';
 import { Switch } from '@digdir/designsystemet-react';
 import styles from './publish-switch.module.css';
 import { publishDataset } from '../../app/actions/actions';
-import { Dataset, PublicationStatus } from '@catalog-frontend/types';
+import { Dataset } from '@catalog-frontend/types';
 
 type Props = {
   catalogId: string;

@@ -637,12 +637,13 @@ ___Merk:___
     deleteCanResultInDuplicates: `Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.`,
     cancelledImport: `Importen ble avvist før den ble fullført.`,
     helpText: {
-       savingInCatalog: 'Importen er godkjent, og begrepene vil være tilgjengelige i katalogen senere.',
-       completed: 'Importen er godkjent, og begrepene er tilgjengelige i katalogen.',
-       failed: 'Importen kunne ikke fullføres på grunn av feil i minst ett av begrepene i den opplastede filen.',
-       inProgress: 'Importen er under behandling. Importen kan avvises.',
-       cancelled: 'Importen er forkastet og begrepene er ikke lagt til i katalogen.',
-       pendingConfirmation: 'Begrepene er opplastet, men er ennå ikke importert til katalogen. Importen kan enten avvises eller legges til i katalogen.',
+      savingInCatalog: 'Importen er godkjent, og begrepene vil være tilgjengelige i katalogen senere.',
+      completed: 'Importen er godkjent, og begrepene er tilgjengelige i katalogen.',
+      failed: 'Importen kunne ikke fullføres på grunn av feil i minst ett av begrepene i den opplastede filen.',
+      inProgress: 'Importen er under behandling. Importen kan avvises.',
+      cancelled: 'Importen er forkastet og begrepene er ikke lagt til i katalogen.',
+      pendingConfirmation:
+        'Begrepene er opplastet, men er ennå ikke importert til katalogen. Importen kan enten avvises eller legges til i katalogen.',
     },
     tableHeading: {
       title: 'Import',

@@ -3,7 +3,7 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Formik } from 'formik';
 import { Button, Modal } from '@digdir/designsystemet-react';
-import { RelatedConcept, UnionRelation, RelationTypeEnum, Concept } from '@catalog-frontend/types';
+import { RelatedConcept, UnionRelation } from '@catalog-frontend/types';
 import { relationSchema } from '../../validation-schema';
 import { RelationFieldset } from '../relation-fieldset';
 import styles from './relation-modal.module.scss';

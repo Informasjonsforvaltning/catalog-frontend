@@ -5,7 +5,7 @@ import styles from './data-services-page.module.css';
 
 import { LinkButton, SearchField, SearchHit, SearchHitContainer, SearchHitsLayout, Select } from '@catalog-frontend/ui';
 import SearchFilter from '../../../../components/search-filter';
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Chip } from '@digdir/designsystemet-react';
 import {
   capitalizeFirstLetter,
@@ -162,7 +162,7 @@ const DataServicesPageClient = ({
               }}
             >
               {capitalizeFirstLetter(
-                getTranslateText(distributionStatuses?.find((s) => s.uri === filter)?.label) as string,
+                getTranslateText(distributionStatuses?.find((s: any) => s.uri === filter)?.label) as string,
               )}
             </Chip.Removable>
           ))}
@@ -219,9 +219,7 @@ const DataServicesPageClient = ({
               </Select>
             </div>
             <div className={styles.buttons}>
-              {hasAdminPermission && (
-                <ImportModal catalogId={catalogId} />
-              )}
+              {hasAdminPermission && <ImportModal catalogId={catalogId} />}
               {hasWritePermission && (
                 <LinkButton href={`/catalogs/${catalogId}/data-services/new`}>
                   <PlusCircleIcon />
@@ -239,7 +237,10 @@ const DataServicesPageClient = ({
           <SearchHitContainer
             searchHits={
               paginatedDataServices.length > 0 ? (
-                <ul className={styles.searchHits} role='list'>
+                <ul
+                  className={styles.searchHits}
+                  role='list'
+                >
                   {paginatedDataServices.map((dataService: DataService) => (
                     <li
                       role='listitem'

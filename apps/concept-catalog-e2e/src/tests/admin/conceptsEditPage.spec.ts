@@ -433,7 +433,7 @@ runTestAsAdmin('test that URL fields only accept HTTPS URLs', async ({ conceptsP
 
   console.log('[TEST] Clicking edit concept...');
   await conceptsPage.detailPage.editConcept();
-  
+
   // Definition source URI - HTTP should be rejected immediately in modal
   console.log('[TEST] Testing definition source URI with HTTP URL in modal...');
   await conceptsPage.page.getByRole('button', { name: 'Allmennheten' }).click();
@@ -442,7 +442,7 @@ runTestAsAdmin('test that URL fields only accept HTTPS URLs', async ({ conceptsP
   await conceptsPage.page.waitForTimeout(500);
 
   await conceptsPage.editPage.fillLanguageField(
-    {'nb': 'Min definisjon nb'},
+    { nb: 'Min definisjon nb' },
     'Definisjon Hjelp til utfylling',
     ['Bokmål'],
     false,
@@ -455,11 +455,9 @@ runTestAsAdmin('test that URL fields only accept HTTPS URLs', async ({ conceptsP
   await conceptsPage.page.getByRole('button', { name: 'Legg til definisjon' }).click();
 
   // Check for validation error in the source URI field - should appear immediately
-  const uriError = conceptsPage.page.getByText(
-    "Ugyldig lenke. Vennligst sørg for at lenken starter med",
-  );
+  const uriError = conceptsPage.page.getByText('Ugyldig lenke. Vennligst sørg for at lenken starter med');
   await expect(uriError).toBeVisible();
-  
+
   await conceptsPage.page.getByRole('textbox', { name: 'https://kilde.no' }).fill('https://valid-https-source.com');
   await conceptsPage.page.getByRole('button', { name: 'Legg til definisjon' }).click();
 
@@ -481,7 +479,7 @@ runTestAsAdmin('test that URL fields only accept HTTPS URLs', async ({ conceptsP
   await conceptsPage.page.getByLabel('Lenke til referanse').fill('https://valid-url.com');
   await conceptsPage.page.getByLabel('Lenke til referanse').blur();
 
-  // The error should disappear immediately for modal fields    
+  // The error should disappear immediately for modal fields
   await expect(uriError).not.toBeVisible();
 
   // Try to save again - should work now with valid HTTPS URLs

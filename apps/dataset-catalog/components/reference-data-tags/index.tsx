@@ -1,4 +1,4 @@
-import { UriWithLabel, ReferenceDataCode } from '@catalog-frontend/types';
+import { ReferenceDataCode } from '@catalog-frontend/types';
 import { capitalizeFirstLetter, getTranslateText } from '@catalog-frontend/utils';
 import { Tag } from '@digdir/designsystemet-react';
 import styles from './referenceDataTags.module.css';

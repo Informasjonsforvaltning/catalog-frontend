@@ -19,7 +19,6 @@ import { ToggleFieldButton } from '../toggle-field-button';
 import { UriWithLabelFieldsetTable } from '../uri-with-label-field-set-table';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { isArray, isEmpty, isNil, isObject } from 'lodash';
-import React from 'react';
 
 type Props = {
   datasetTypes: ReferenceDataCode[];
@@ -234,31 +233,32 @@ const FIELD_CONFIG = [
       <FieldArray name='landingPage'>
         {(arrayHelpers) => (
           <>
-            {(arrayHelpers.form.values.landingPage || []).map((_: any, index: number, array: string[]) => (
-              <React.Fragment key={`landingPage-${index}`}>
-                <div className={styles.padding}>
-                  <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
-                    <FastFieldWithRef
-                      name={`landingPage[${index}]`}
-                      ref={(el: HTMLInputElement | HTMLTextAreaElement | null) =>
-                        props.setInputRef(`landingPage[${index}]`, el)
-                      }
-                      label={
-                        index === 0 ? (
-                          <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.landingPage}>
-                            {localization.datasetForm.fieldLabel.landingPage}
-                          </TitleWithHelpTextAndTag>
-                        ) : (
-                          ''
-                        )
-                      }
-                      as={Textfield}
-                      size='sm'
-                      error={props.errors?.landingPage?.[index]}
-                    />
-                  </FieldsetWithDelete>
-                </div>
-              </React.Fragment>
+            {(arrayHelpers.form.values.landingPage || []).map((_: any, index: number) => (
+              <div
+                className={styles.padding}
+                key={`landingPage-${index}`}
+              >
+                <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
+                  <FastFieldWithRef
+                    name={`landingPage[${index}]`}
+                    ref={(el: HTMLInputElement | HTMLTextAreaElement | null) =>
+                      props.setInputRef(`landingPage[${index}]`, el)
+                    }
+                    label={
+                      index === 0 ? (
+                        <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.landingPage}>
+                          {localization.datasetForm.fieldLabel.landingPage}
+                        </TitleWithHelpTextAndTag>
+                      ) : (
+                        ''
+                      )
+                    }
+                    as={Textfield}
+                    size='sm'
+                    error={props.errors?.landingPage?.[index]}
+                  />
+                </FieldsetWithDelete>
+              </div>
             ))}
             <AddButton
               onClick={() => {

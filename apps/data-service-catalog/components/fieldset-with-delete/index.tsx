@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import { Children, PropsWithChildren } from 'react';
 import { DeleteButton } from '@catalog-frontend/ui';
 import styles from './fieldset-with-delete.module.scss';
 
@@ -7,7 +7,7 @@ type Props = {
 } & PropsWithChildren;
 
 export const FieldsetWithDelete = ({ children, onDelete }: Props) => {
-  const childArray = React.Children.toArray(children).filter(Boolean);
+  const childArray = Children.toArray(children).filter(Boolean);
 
   return (
     <div className={styles.content}>

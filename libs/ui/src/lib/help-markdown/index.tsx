@@ -22,7 +22,7 @@ export type HelpTextProps = {
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'color'>;
 
 const markdownComponents: Partial<Components> = {
-  a: ({ node, href, children, ...props }) => {
+  a: ({ href, children, ...props }) => {
     const targetBlank = href?.startsWith('http://') || href?.startsWith('https://');
     return (
       <Link

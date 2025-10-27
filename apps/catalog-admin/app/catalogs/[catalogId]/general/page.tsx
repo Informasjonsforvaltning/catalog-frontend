@@ -1,4 +1,3 @@
-import React from 'react';
 import { withProtectedPage } from '../../../../utils/auth';
 import GeneralPageClient from './general-page-client';
 import { getTranslateText, localization } from '@catalog-frontend/utils';

@@ -23,7 +23,7 @@ export const FormikAutoSaver = ({ id, storage, onRestore, confirmMessage, restor
 
   const handleRestoreClick = () => {
     const data = storage.get();
-    const proceed = data ? onRestore(data) : true;    
+    const proceed = data ? onRestore(data) : true;
     if (proceed) {
       modalRef?.current?.close();
       setIsInitialized(true);
@@ -39,10 +39,10 @@ export const FormikAutoSaver = ({ id, storage, onRestore, confirmMessage, restor
   // Load saved data from local storage on mount
   useEffect(() => {
     const data = storage.get();
-    if (data) {      
+    if (data) {
       if (restoreOnRender) {
         if (data) {
-          if(onRestore(data)) {            
+          if (onRestore(data)) {
             setIsInitialized(true);
           }
         }
@@ -60,7 +60,7 @@ export const FormikAutoSaver = ({ id, storage, onRestore, confirmMessage, restor
     // Don't save until Formik is fully initialized
     if (!isInitialized) {
       return;
-    } 
+    }
 
     const unsubscribe = storage.subscribe((state) => {
       if (state.isDirty && state.mainData === null) {

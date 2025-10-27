@@ -18,7 +18,7 @@ import {
   getTranslateText,
   capitalizeFirstLetter,
   localization,
-  setClientConceptsPageSettings
+  setClientConceptsPageSettings,
 } from '@catalog-frontend/utils';
 import { Chip, Tabs } from '@digdir/designsystemet-react';
 import { FileImportIcon, PlusCircleIcon } from '@navikt/aksel-icons';
@@ -32,7 +32,6 @@ import SearchFilter from '@concept-catalog/components/search-filter';
 import { useImportConcepts } from '@concept-catalog/hooks/import';
 import ConceptSearchHits from '@concept-catalog/components/concept-search-hits';
 import styles from './search-page.module.scss';
-import { ImportModal } from '@concept-catalog/components/import-modal';
 
 export type FilterType = 'published' | 'status' | 'assignedUser' | 'subject' | 'internalFields' | 'label';
 
@@ -55,7 +54,7 @@ export const SearchPageClient = ({
   codeListsResult,
   usersResult,
   conceptStatuses,
-  pageSettings
+  pageSettings,
 }: Props) => {
   const router = useRouter();
 
@@ -113,18 +112,18 @@ export const SearchPageClient = ({
   };
 
   const subjectCodeList = codeListsResult?.codeLists?.find(
-    (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
+    (codeList: any) => codeList.id === fieldsResult?.editable?.domainCodeListId,
   );
 
-  const getInternalFields = (fieldId) => fieldsResult?.internal?.find((field) => field.id === fieldId);
+  const getInternalFields = (fieldId: any) => fieldsResult?.internal?.find((field: any) => field.id === fieldId);
 
   const getSubjectChildren = (subjectId: string) => {
     const children: number[] = [];
 
     subjectCodeList?.codes
-      ?.filter((code) => code.parentID === subjectId)
-      .map((code) => code.id)
-      .forEach((childId) => {
+      ?.filter((code: any) => code.parentID === subjectId)
+      .map((code: any) => code.id)
+      .forEach((childId: any) => {
         children.push(childId);
         children.push(...getSubjectChildren(childId));
       });
@@ -132,7 +131,7 @@ export const SearchPageClient = ({
     return children;
   };
 
-  const getSubjectFilterWithChildren = (subjects) => {
+  const getSubjectFilterWithChildren = (subjects: any) => {
     // Fetch lowest level code and add its children to the filter
     // Subjects will always be a path like: Code 1 -> Code 1.1 -> Code 1.1.1
     // The lowest level code will always be the last code in the path, Code 1.1.1 in this example.
@@ -149,7 +148,7 @@ export const SearchPageClient = ({
     searchTerm: searchTerm ?? '',
     page: page ?? 0,
     fields: getSearchFields(selectedFieldOption as SearchableField | 'alleFelter'),
-    sort: sortMappings[selectedSortOption],
+    sort: sortMappings[selectedSortOption as SortOption],
     filters: {
       ...(filterStatus?.length && {
         status: { value: filterStatus },
@@ -168,13 +167,16 @@ export const SearchPageClient = ({
       }),
       ...(Object.keys(filterInternalFields ?? {}).length > 0 && {
         internalFields: {
-          value: Object.keys(filterInternalFields ?? {}).reduce((result, key) => {
-            const value = filterInternalFields?.[key];
-            if (!isEmpty(value)) {
-              result[key] = value;
-            }
-            return result;
-          }, {}),
+          value: Object.keys(filterInternalFields ?? {}).reduce(
+            (result, key) => {
+              const value = filterInternalFields?.[key];
+              if (!isEmpty(value)) {
+                result[key] = value;
+              }
+              return result;
+            },
+            {} as Record<string, string[]>,
+          ),
         },
       }),
     },
@@ -191,7 +193,7 @@ export const SearchPageClient = ({
   ));
 
   const getUsername = (userId: string) => {
-    const user = usersResult?.users?.find((u) => u.id === userId);
+    const user = usersResult?.users?.find((u: any) => u.id === userId);
     return user?.name ?? '';
   };
 
@@ -203,7 +205,7 @@ export const SearchPageClient = ({
     });
   };
 
-  const removeFilter = (filterName, filterType: FilterType) => {
+  const removeFilter = (filterName: any, filterType: FilterType) => {
     switch (filterType) {
       case 'published':
         setFilterPublicationState(filterPublicationState?.filter((name) => name !== filterName) ?? []);
@@ -238,7 +240,7 @@ export const SearchPageClient = ({
     setSelectedSortOption(optionValue);
   };
 
-  const onImportUpload = (event) => {
+  const onImportUpload = (event: any) => {
     importConcepts.mutate(event.target.files[0], { onError: (error) => alert('Import failed: ' + error) });
   };
 
@@ -307,7 +309,7 @@ export const SearchPageClient = ({
               key={`subject-${index}`}
               onClick={() => removeFilter(filter, 'subject')}
             >
-              {getTranslateText(subjectCodeList.codes.find((c) => c.id === filter)?.name)}
+              {getTranslateText(subjectCodeList.codes.find((c: any) => c.id === filter)?.name)}
             </Chip.Removable>
           ))}
           {filterLabel?.map((filter, index) => (
@@ -323,7 +325,9 @@ export const SearchPageClient = ({
               key={`status-${index}`}
               onClick={() => removeFilter(filter, 'status')}
             >
-              {capitalizeFirstLetter(getTranslateText(conceptStatuses?.find((s) => s.uri === filter)?.label) as string)}
+              {capitalizeFirstLetter(
+                getTranslateText(conceptStatuses?.find((s: any) => s.uri === filter)?.label) as string,
+              )}
             </Chip.Removable>
           ))}
           {filterAssignedUser && (
@@ -339,7 +343,9 @@ export const SearchPageClient = ({
               key={`published-${index}`}
               onClick={() => removeFilter(filter, 'published')}
             >
-              {filter === 'published' ? localization.publicationState.published : localization.publicationState.unpublished}
+              {filter === 'published'
+                ? localization.publicationState.published
+                : localization.publicationState.unpublished}
             </Chip.Removable>
           ))}
           {filterInternalFields &&
@@ -409,39 +415,39 @@ export const SearchPageClient = ({
                   </Select>
                 </div>
                 <div className={styles.buttons}>
-                    <>
-                      {/*hasAdminPermission && <ImportModal catalogId={catalogId} />*/}
-                      {hasAdminPermission && (
-                        <UploadButton
-                          size='sm'
-                          variant='secondary'
-                          allowedMimeTypes={[
-                            'text/csv',
-                            'text/x-csv',
-                            'text/plain',
-                            'application/csv',
-                            'application/x-csv',
-                            'application/vnd.ms-excel',
-                            'application/json',
-                          ]}
-                          onUpload={onImportUpload}
-                        >
-                          <FileImportIcon fontSize='1.5rem' />
-                          <span>{localization.button.importConceptCSV}</span>
-                        </UploadButton>
-                      )}
-                      {hasWritePermission && (
-                        <LinkButton
-                          href={`/catalogs/${catalogId}/concepts/new`}
-                          size='sm'
-                        >
-                          <>
-                            <PlusCircleIcon fontSize='1.5rem' />
-                            <span>{localization.button.createConcept}</span>
-                          </>
-                        </LinkButton>
-                      )}
-                    </>
+                  <>
+                    {/*hasAdminPermission && <ImportModal catalogId={catalogId} />*/}
+                    {hasAdminPermission && (
+                      <UploadButton
+                        size='sm'
+                        variant='secondary'
+                        allowedMimeTypes={[
+                          'text/csv',
+                          'text/x-csv',
+                          'text/plain',
+                          'application/csv',
+                          'application/x-csv',
+                          'application/vnd.ms-excel',
+                          'application/json',
+                        ]}
+                        onUpload={onImportUpload}
+                      >
+                        <FileImportIcon fontSize='1.5rem' />
+                        <span>{localization.button.importConceptCSV}</span>
+                      </UploadButton>
+                    )}
+                    {hasWritePermission && (
+                      <LinkButton
+                        href={`/catalogs/${catalogId}/concepts/new`}
+                        size='sm'
+                      >
+                        <>
+                          <PlusCircleIcon fontSize='1.5rem' />
+                          <span>{localization.button.createConcept}</span>
+                        </>
+                      </LinkButton>
+                    )}
+                  </>
                 </div>
               </div>
               <FilterChips />

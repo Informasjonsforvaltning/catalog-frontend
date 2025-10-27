@@ -98,7 +98,8 @@ runTestAsAdmin('test search', async ({ servicesPage, playwright }) => {
         },
       ],
       homepage,
-      status: ServiceStatus[Object.keys(ServiceStatus)[i % Object.keys(ServiceStatus).length] as keyof typeof ServiceStatus],
+      status:
+        ServiceStatus[Object.keys(ServiceStatus)[i % Object.keys(ServiceStatus).length] as keyof typeof ServiceStatus],
     };
   });
 
@@ -204,7 +205,8 @@ runTestAsAdmin('test status filter', async ({ servicesPage, playwright }) => {
         },
       ],
       homepage,
-      status: ServiceStatus[Object.keys(ServiceStatus)[i % Object.keys(ServiceStatus).length] as keyof typeof ServiceStatus],
+      status:
+        ServiceStatus[Object.keys(ServiceStatus)[i % Object.keys(ServiceStatus).length] as keyof typeof ServiceStatus],
     };
   });
 
@@ -212,7 +214,7 @@ runTestAsAdmin('test status filter', async ({ servicesPage, playwright }) => {
   for (const service of randomServices) {
     await createService(apiRequestContext, service);
   }
-  
+
   await servicesPage.goto();
   // Filter by status of the first concept
   for (let i = 0; i < randomServices.length; i++) {
@@ -226,7 +228,10 @@ runTestAsAdmin('test status filter', async ({ servicesPage, playwright }) => {
   await servicesPage.clearFilters();
   for (const service of randomServices) {
     await servicesPage.search(service.title.nb);
-    await servicesPage.expectSearchResults([service], randomServices.filter(s => s !== service));
+    await servicesPage.expectSearchResults(
+      [service],
+      randomServices.filter((s) => s !== service),
+    );
   }
 });
 
@@ -234,7 +239,7 @@ runTestAsAdmin('test published state filter', async ({ servicesPage, playwright 
   const apiRequestContext = await playwright.request.newContext({
     storageState: adminAuthFile,
   });
-  
+
   const randomServices: Partial<Service>[] = Array.from({ length: 3 }).map((_, i) => {
     const titleNb = uniqueString(`Test_service_${i + 1}_nb`);
     const titleNn = uniqueString(`Test_service_${i + 1}_nn`);
@@ -319,7 +324,8 @@ runTestAsAdmin('test published state filter', async ({ servicesPage, playwright 
         },
       ],
       homepage,
-      status: ServiceStatus[Object.keys(ServiceStatus)[i % Object.keys(ServiceStatus).length] as keyof typeof ServiceStatus],
+      status:
+        ServiceStatus[Object.keys(ServiceStatus)[i % Object.keys(ServiceStatus).length] as keyof typeof ServiceStatus],
     };
   });
 
@@ -330,7 +336,7 @@ runTestAsAdmin('test published state filter', async ({ servicesPage, playwright 
   }
 
   await publishService(apiRequestContext, randomServices[0].id);
-  
+
   await servicesPage.goto();
   await servicesPage.filterPublished();
   await servicesPage.search(randomServices[0].title.nb);
@@ -339,12 +345,18 @@ runTestAsAdmin('test published state filter', async ({ servicesPage, playwright 
   await servicesPage.clearFilters();
   for (const service of randomServices) {
     await servicesPage.search(service.title.nb);
-    await servicesPage.expectSearchResults([service], randomServices.filter(s => s !== service));
+    await servicesPage.expectSearchResults(
+      [service],
+      randomServices.filter((s) => s !== service),
+    );
   }
 
   await servicesPage.filterNotPublished();
   for (const service of [randomServices[1], randomServices[2]]) {
     await servicesPage.search(service.title.nb);
-    await servicesPage.expectSearchResults([service], randomServices.filter(s => s !== service));
+    await servicesPage.expectSearchResults(
+      [service],
+      randomServices.filter((s) => s !== service),
+    );
   }
 });

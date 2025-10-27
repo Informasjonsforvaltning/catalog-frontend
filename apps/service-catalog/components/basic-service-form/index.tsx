@@ -170,7 +170,7 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
         {({ errors, values }) => (
           <Form>
             <div className={styles.formCard}>
-              <FormContainer variant='third'>
+              <FormContainer>
                 <FormContainer.Header
                   title={localization.name}
                   subtitle={localization.serviceCatalog.form.titleSubtitle}

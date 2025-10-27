@@ -20,7 +20,7 @@ export const GET = async (req: NextRequest, props: Props) => {
       }
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), { status: response.status });
-    } catch (error) {
+    } catch {
       return new Response('Failed to get user list', { status: 500 });
     }
   });
@@ -38,7 +38,7 @@ export const POST = async (req: NextRequest, props: Props) => {
         throw new Error();
       }
       return new Response('Created user', { status: response.status });
-    } catch (error) {
+    } catch {
       return new Response('Failed to create user', { status: 500 });
     }
   });
@@ -58,7 +58,7 @@ export const PATCH = async (req: NextRequest, props: Props) => {
       }
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), { status: response.status });
-    } catch (error) {
+    } catch {
       return new Response('Failed to update user', { status: 500 });
     }
   });
@@ -75,7 +75,7 @@ export const DELETE = async (req: NextRequest, props: Props) => {
         throw new Error();
       }
       return new Response('User deleted', { status: 200 });
-    } catch (error) {
+    } catch {
       return new Response('Failed to delete user', { status: 500 });
     }
   });

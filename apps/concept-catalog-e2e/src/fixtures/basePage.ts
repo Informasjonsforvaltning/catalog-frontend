@@ -24,7 +24,7 @@ export const test = base.extend<{
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
     const conceptsPage = new ConceptsPage(page, context, accessibilityBuilder);
     await use(conceptsPage);
-  }
+  },
 });
 
 export const runTest = (name: string, fn: (any) => void) => {

@@ -51,7 +51,7 @@ const clearValues = (object: any, path: string) => {
 
 const preProcessValues = (
   orgId: string,
-  { ansvarligVirksomhet, merknad, eksempel, fagområde, omfang, kontaktpunkt, ...conceptValues }: Concept,
+  { ansvarligVirksomhet, merknad, eksempel, omfang, kontaktpunkt, ...conceptValues }: Concept,
 ) => ({
   ...conceptValues,
   merknad,
@@ -64,10 +64,7 @@ const preProcessValues = (
 export async function createConcept(values: Concept, catalogId: string, internalFields: InternalField[]) {
   const processedValues = preProcessValues(catalogId, values);
   internalFields.forEach((field) => {
-    if (
-      field.type === 'boolean' &&
-      (values.interneFelt?.[field.id]?.value === undefined)
-    ) {
+    if (field.type === 'boolean' && values.interneFelt?.[field.id]?.value === undefined) {
       // Ensure interneFelt is defined before assignment
       values.interneFelt = values.interneFelt || {};
       values.interneFelt[field.id] = { value: 'false' };
@@ -144,10 +141,7 @@ export async function updateConcept(initialConcept: Concept, values: Concept, in
   });
 
   internalFields.forEach((field) => {
-    if (
-      field.type === 'boolean' &&
-      (values.interneFelt?.[field.id]?.value === undefined)
-    ) {
+    if (field.type === 'boolean' && values.interneFelt?.[field.id]?.value === undefined) {
       // Ensure interneFelt is defined before assignment
       values.interneFelt = values.interneFelt || {};
       values.interneFelt[field.id] = { value: 'false' };
@@ -203,8 +197,8 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
       throw new Error();
     }
     success = true;
-    console.log("Deleted import result", catalogId, resultId);
-  } catch (error) {
+    console.log('Deleted import result', catalogId, resultId);
+  } catch {
     throw new Error(localization.alert.deleteFail);
   } finally {
     if (success) {
@@ -220,15 +214,14 @@ export async function confirmImport(catalogId: string, resultId: string) {
   }
   let success = false;
   try {
-
-    const response = await confirmConceptImport(catalogId, resultId, `${session?.accessToken}`)
+    const response = await confirmConceptImport(catalogId, resultId, `${session?.accessToken}`);
 
     if (response.status !== 200 && response.status !== 201) {
       throw new Error();
     }
     success = true;
-    console.log("Confirmed import result", catalogId, resultId);
-  } catch (error) {
+    console.log('Confirmed import result', catalogId, resultId);
+  } catch {
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
@@ -245,18 +238,18 @@ export async function cancelImport(catalogId: string, resultId: string) {
   }
   let success = false;
   try {
-    console.log("Sending import cancellation", catalogId, resultId);
+    console.log('Sending import cancellation', catalogId, resultId);
 
-    const response = await cancelConceptImport(catalogId, resultId, `${session?.accessToken}`)
+    const response = await cancelConceptImport(catalogId, resultId, `${session?.accessToken}`);
 
-    console.log("Import cancellation has been sent", catalogId, resultId);
+    console.log('Import cancellation has been sent', catalogId, resultId);
 
     if (response.status !== 200 && response.status !== 201) {
       throw new Error();
     }
     success = true;
-    console.log("Importing result has been cancelled", catalogId, resultId);
-  } catch (error) {
+    console.log('Importing result has been cancelled', catalogId, resultId);
+  } catch {
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {

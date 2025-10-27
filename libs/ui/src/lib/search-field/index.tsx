@@ -1,7 +1,7 @@
 'use client';
 
-import { FC, ReactNode, useEffect, useRef, useState } from 'react';
-import { Button, Combobox, NativeSelect, Spinner, Textfield } from '@digdir/designsystemet-react';
+import { ChangeEvent, FC, MouseEvent, KeyboardEvent, ReactNode, useEffect, useRef, useState } from 'react';
+import { Button, NativeSelect, Spinner, Textfield } from '@digdir/designsystemet-react';
 import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
 import styles from './search-field.module.scss';
 import classNames from 'classnames';
@@ -35,18 +35,20 @@ const SearchField: FC<SearchFieldProps> = ({
   onSearch,
 }) => {
   const [query, setQuery] = useState(value);
-  const [optionValue, setOptionValue] = useState(selectedOptionValue ?? options?.find((option) => option.default === true)?.value);
+  const [optionValue, setOptionValue] = useState(
+    selectedOptionValue ?? options?.find((option) => option.default === true)?.value,
+  );
   const searchActionsRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (onSearch) {
       onSearch(query, optionValue);
     }
   };
 
-  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.key === 'Enter') {
       if (onSearch) {
@@ -87,7 +89,7 @@ const SearchField: FC<SearchFieldProps> = ({
               aria-label='Velg alternativ'
               value={optionValue}
               className={styles.searchOptions}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setOptionValue(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => setOptionValue(e.target.value)}
             >
               {options.map(({ value, label }) => (
                 <option

@@ -1,4 +1,9 @@
-import { ChangeRequestsPageSettings, ConceptsPageSettings, DatasetsPageSettings, DataServicesPageSettings } from '@catalog-frontend/types';
+import {
+  ChangeRequestsPageSettings,
+  ConceptsPageSettings,
+  DatasetsPageSettings,
+  DataServicesPageSettings,
+} from '@catalog-frontend/types';
 import Cookies from 'js-cookie';
 
 const cookieNameConceptsPageSettings = 'concepts-page-settings';
@@ -8,7 +13,6 @@ const cookieNameDataServicesPageSettings = 'data-services-page-settings';
 
 export const getServerPageSettings = <T>(name: string, cookieStore: any): T | undefined => {
   const cookieValue = cookieStore.get(name)?.value;
-  let pageSettings = undefined;
   if (cookieValue) {
     try {
       return JSON.parse(cookieValue) as T;

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { LocalDataStorage, localization } from '@catalog-frontend/utils';
 import type { Concept, StorageData } from '@catalog-frontend/types';
@@ -17,19 +17,19 @@ export const EditPage = ({
   fieldsResult,
   usersResult,
   hasChangeRequests,
-}) => {
+}: any) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [autoSave, setAutoSave] = useState(hasChangeRequests ? false : true);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
-  const dataStorage = new LocalDataStorage<StorageData>({ 
-    key: 'conceptForm', 
+  const dataStorage = new LocalDataStorage<StorageData>({
+    key: 'conceptForm',
     secondaryKeys: {
       definition: 'conceptFormDefinition',
-      relation: 'conceptFormRelation'
-    }
+      relation: 'conceptFormRelation',
+    },
   });
 
   const handleUpdate = async (values: Concept) => {
@@ -71,7 +71,7 @@ export const EditPage = ({
       }
       window.location.replace(`/catalogs/${catalogId}/concepts/${data.id}/edit?restore=1`);
       return false;
-    } 
+    }
     return true;
   }
 

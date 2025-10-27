@@ -6,10 +6,10 @@ import { Heading, Paragraph, Table, TableBody, Tag } from '@digdir/designsysteme
 import styles from './distributions.module.scss';
 import { isEmpty } from 'lodash';
 import { FieldsetDivider } from '@catalog-frontend/ui';
-import { SearchObject } from '../../../../../../libs/types/src/lib/search';
+import { Search } from '@catalog-frontend/types';
 
 interface Props {
-  selectedDataServices: SearchObject[];
+  selectedDataServices: Search.SearchObject[];
   selectedMediaTypes: ReferenceDataCode[];
   openLicenses: ReferenceDataCode[];
   distribution: Distribution;

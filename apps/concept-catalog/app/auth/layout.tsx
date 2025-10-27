@@ -1,6 +1,7 @@
 import CatalogLayout from '@concept-catalog/components/catalog-layout';
+import { ReactNode } from 'react';
 
-const PageLayout = ({ children }: { children: React.ReactNode }) => {
+const PageLayout = ({ children }: { children: ReactNode }) => {
   return (
     <CatalogLayout
       catalogAdminUrl={process.env.CATALOG_ADMIN_BASE_URI}

@@ -18,7 +18,7 @@ export const GET = async (req: NextRequest, props: { params: Promise<{ slug: str
         }
         const jsonResponse = await response.json();
         return new Response(JSON.stringify(jsonResponse), { status: response.status });
-      } catch (error) {
+      } catch {
         return new Response(JSON.stringify({ message: 'Failed to get history' }), { status: 500 });
       }
     } else {

@@ -1,7 +1,7 @@
-import { test as init, runTestAsAdmin as initAsAdmin } from '../../fixtures/basePage';
+import { runTestAsAdmin as initAsAdmin } from '../../fixtures/basePage';
 import { adminAuthFile, deleteAllConcepts } from '../../utils/helpers';
 
-initAsAdmin('delete all existing concepts', async ({ playwright, conceptsPage }) => {
+initAsAdmin('delete all existing concepts', async ({ playwright }) => {
   console.log('[INIT] Creating API request context with admin storage state...');
   // Create a request context with the admin storage state (includes next-auth cookie)
   const apiRequestContext = await playwright.request.newContext({

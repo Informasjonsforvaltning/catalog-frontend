@@ -1,7 +1,8 @@
 import { TermsOfUseModal } from '@catalog-frontend/ui';
 import { CatalogLayout } from '@concept-catalog/components/catalog-layout';
+import { ReactNode } from 'react';
 
-const Layout = async (props: { children: React.ReactNode; params: Promise<{ catalogId: string }> }) => {
+const Layout = async (props: { children: ReactNode; params: Promise<{ catalogId: string }> }) => {
   const params = await props.params;
 
   const { catalogId } = params;

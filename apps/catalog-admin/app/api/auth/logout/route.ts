@@ -1,6 +1,7 @@
 import { authOptions } from '@catalog-frontend/utils';
-import { getServerSession } from 'next-auth';
 import { getToken } from 'next-auth/jwt';
+import { getServerSession } from 'next-auth/next';
+
 import { NextRequest, NextResponse } from 'next/server';
 
 const handler = async (req: NextRequest) => {
@@ -34,7 +35,7 @@ const handler = async (req: NextRequest) => {
     });
     const fullUrl = `${endSessionURL}?${endSessionParams.toString()}`;
     return NextResponse.redirect(fullUrl);
-  } catch (error) {
+  } catch {
     return NextResponse.redirect(baseUrl);
   }
 };

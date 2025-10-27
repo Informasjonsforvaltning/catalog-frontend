@@ -1,4 +1,4 @@
-import { createContext, type ReactNode } from 'react';
+import { createContext } from 'react';
 
 import { useGetDesign } from '../../hooks/design';
 import { useParams } from 'next/navigation';

@@ -63,17 +63,19 @@ export const TemporalModal = ({ label }: Props) => {
                             type={'edit'}
                             onSuccess={(updatedItem: DateRange) => {
                               arrayHelpers.replace(index, updatedItem);
-                              setSnapshot([...values.temporal ?? []]);
+                              setSnapshot([...(values.temporal ?? [])]);
                             }}
                             onCancel={() => setFieldValue('temporal', snapshot)}
                             onChange={(updatedItem: DateRange) => arrayHelpers.replace(index, updatedItem)}
                           />
-                          <DeleteButton onClick={() => {
-                            const newArray = [...values.temporal ?? []];
-                            newArray.splice(index, 1);
-                            setFieldValue('temporal', newArray);
-                            setSnapshot([...newArray]);
-                          }} />
+                          <DeleteButton
+                            onClick={() => {
+                              const newArray = [...(values.temporal ?? [])];
+                              newArray.splice(index, 1);
+                              setFieldValue('temporal', newArray);
+                              setSnapshot([...newArray]);
+                            }}
+                          />
                         </span>
                       </Table.Cell>
                     </Table.Row>
@@ -85,7 +87,7 @@ export const TemporalModal = ({ label }: Props) => {
               <FieldModal
                 template={{ startDate: '', endDate: '' }}
                 type={'new'}
-                onSuccess={() => setSnapshot([...values.temporal ?? []])}
+                onSuccess={() => setSnapshot([...(values.temporal ?? [])])}
                 onCancel={() => setFieldValue('temporal', snapshot)}
                 onChange={(updatedItem: DateRange) => {
                   if (snapshot.length === (values.temporal?.length ?? 0)) {

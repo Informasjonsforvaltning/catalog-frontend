@@ -1,7 +1,8 @@
 import { Layout } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
+import { ReactNode } from 'react';
 
-const PageLayout = ({ children }: { children: React.ReactNode }) => {
+const PageLayout = ({ children }: { children: ReactNode }) => {
   return (
     <Layout
       catalogAdminUrl={process.env.CATALOG_ADMIN_BASE_URI}

@@ -6,11 +6,11 @@ import {
 } from '@catalog-frontend/utils';
 import { RedirectType, redirect } from 'next/navigation';
 
-type PagePathProps = ({ catalogId }) => string;
-type RenderProps = ({ catalogId, session }) => Promise<any>;
+type PagePathProps = ({ catalogId }: any) => string;
+type RenderProps = ({ catalogId, session }: any) => Promise<any>;
 
 export const withProtectedPage = (pagePath: PagePathProps, render: RenderProps) => {
-  return async ({ params }) => {
+  return async ({ params }: any) => {
     const { catalogId } = await params;
     if (!validOrganizationNumber(catalogId)) {
       redirect(`/notfound`, RedirectType.replace);

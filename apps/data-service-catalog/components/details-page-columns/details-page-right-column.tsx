@@ -53,18 +53,22 @@ export const RightColumn = ({
           dataService={dataService}
           disabled={!hasWritePermission || !isValid}
         />
-        <div className={styles.greyFont} data-testid='data-service-publication-date'>
+        <div
+          className={styles.greyFont}
+          data-testid='data-service-publication-date'
+        >
           {dataService.published
-            ? `${localization.publicationState.publishedInFDK}${dataService.publishedDate
-              ? ' ' +
-              formatISO(dataService.publishedDate, {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })
-              : ''
-            }`
+            ? `${localization.publicationState.publishedInFDK}${
+                dataService.publishedDate
+                  ? ' ' +
+                    formatISO(dataService.publishedDate, {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })
+                  : ''
+              }`
             : ''}
         </div>
       </InfoCard.Item>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, ReactNode } from 'react';
+import { useState, useEffect, ReactNode } from 'react';
 import styles from './notification-carousel.module.scss';
 import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
 

@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import CodeListEditor from '.';
+import { CodeListEditor } from '.';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 jest.mock('next/router', () => ({

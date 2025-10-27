@@ -18,9 +18,12 @@ const conceptMetaDataFieldsToOmit = [
 export const conceptJsonPatchOperations = (original: Concept, updated: Concept): Operation[] => {
   return compare(
     omit(original, conceptMetaDataFieldsToOmit),
-    omit(({
-      ...original,
-      ...updated,
-    }), conceptMetaDataFieldsToOmit),
+    omit(
+      {
+        ...original,
+        ...updated,
+      },
+      conceptMetaDataFieldsToOmit,
+    ),
   );
 };

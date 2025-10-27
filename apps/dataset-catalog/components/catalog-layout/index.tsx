@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 import { Layout } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { useParams } from 'next/navigation';

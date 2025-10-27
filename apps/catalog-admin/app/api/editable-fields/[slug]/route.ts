@@ -16,7 +16,7 @@ export const PATCH = async (req: NextRequest, props: { params: Promise<{ slug: s
       }
       const jsonResponse = await response.json();
       return new Response(JSON.stringify(jsonResponse), { status: response.status });
-    } catch (error) {
+    } catch {
       return new Response('Failed to update editable field', { status: 500 });
     }
   });

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import styles from './code-lists.module.css';
 import { Accordion, Heading } from '@digdir/designsystemet-react';
 import { Button, SearchField, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
@@ -9,7 +9,7 @@ import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
 import { Code, CodeList } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
 import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
-import CodeListEditor from '../../../../../components/code-list-editor';
+import { CodeListEditor } from '../../../../../components/code-list-editor';
 import { PageLayout } from '../../../../../components/page-layout';
 import { compare } from 'fast-json-patch';
 
@@ -82,9 +82,9 @@ const CodeListsPageClient = ({ catalogId, codeListsInUse }: CodeListsPageClientP
       <PageLayout>
         <div className={styles.row}>
           <SearchField
-            ariaLabel='Søkefelt kodeliste'
+            label='Søkefelt kodeliste'
             placeholder='Søk etter kodeliste...'
-            onSearchSubmit={(search) => setSearch(search)}
+            onSearch={(search) => setSearch(search)}
           />
 
           <Button onClick={handleCreateCodeList}>

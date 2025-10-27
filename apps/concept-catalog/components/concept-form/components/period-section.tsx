@@ -5,7 +5,6 @@ import styles from '../concept-form.module.scss';
 import { Concept } from '@catalog-frontend/types';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { get, isEmpty, isEqual } from 'lodash';
 
 type PeriodSectionProps = {
   changed?: string[];

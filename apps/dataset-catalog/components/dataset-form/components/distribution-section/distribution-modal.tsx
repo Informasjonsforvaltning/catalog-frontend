@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode, useEffect, useRef, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useRef, useState } from 'react';
 import { Distribution, ReferenceDataCode, Search } from '@catalog-frontend/types';
 import {
   AddButton,
@@ -145,8 +145,8 @@ export const DistributionModal = ({
         <FieldArray name='downloadURL'>
           {(arrayHelpers) => (
             <>
-              {(arrayHelpers.form.values.downloadURL || []).map((_: any, index: number, array: string[]) => (
-                <React.Fragment key={`downloadURL-${index}`}>
+              {(arrayHelpers.form.values.downloadURL || []).map((_: any, index: number) => (
+                <Fragment key={`downloadURL-${index}`}>
                   <div className={styles['padding-bottom-4']}>
                     <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
                       <FastFieldWithRef
@@ -169,7 +169,7 @@ export const DistributionModal = ({
                       />
                     </FieldsetWithDelete>
                   </div>
-                </React.Fragment>
+                </Fragment>
               ))}
               <AddButton
                 onClick={() => {
@@ -305,7 +305,7 @@ export const DistributionModal = ({
           {(arrayHelpers) => (
             <>
               {(arrayHelpers.form.values.page || []).map((_: any, index: number) => (
-                <React.Fragment key={`page-${index}`}>
+                <Fragment key={`page-${index}`}>
                   <div className={styles['padding-bottom-4']}>
                     <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
                       <FastFieldWithRef
@@ -328,7 +328,7 @@ export const DistributionModal = ({
                       />
                     </FieldsetWithDelete>
                   </div>
-                </React.Fragment>
+                </Fragment>
               ))}
               <AddButton
                 onClick={() => {
@@ -548,40 +548,15 @@ export const DistributionModal = ({
                       <FieldArray name='accessURL'>
                         {(arrayHelpers) => (
                           <>
-                            {(arrayHelpers.form.values.accessURL || []).map(
-                              (_: any, index: number, array: string[]) => {
-                                return (
-                                  <React.Fragment key={`accessURL-${index}`}>
-                                    <div>
-                                      {index > 0 ? (
-                                        <FieldsetWithDelete
-                                          onDelete={() => arrayHelpers.remove(index)}
-                                          style={{ marginTop: '1rem' }}
-                                        >
-                                          <FastFieldWithRef
-                                            name={`accessURL[${index}]`}
-                                            ref={(el: HTMLInputElement | HTMLTextAreaElement | null) =>
-                                              setInputRef(`accessURL[${index}]`, el)
-                                            }
-                                            label={
-                                              index === 0 ? (
-                                                <TitleWithHelpTextAndTag
-                                                  tagColor='warning'
-                                                  tagTitle={localization.tag.required}
-                                                  helpText={localization.datasetForm.helptext.accessURL}
-                                                >
-                                                  {localization.datasetForm.fieldLabel.accessURL}
-                                                </TitleWithHelpTextAndTag>
-                                              ) : (
-                                                ''
-                                              )
-                                            }
-                                            as={Textfield}
-                                            size='sm'
-                                            error={errors?.accessURL?.[index]}
-                                          />
-                                        </FieldsetWithDelete>
-                                      ) : (
+                            {(arrayHelpers.form.values.accessURL || []).map((_: any, index: number) => {
+                              return (
+                                <Fragment key={`accessURL-${index}`}>
+                                  <div>
+                                    {index > 0 ? (
+                                      <FieldsetWithDelete
+                                        onDelete={() => arrayHelpers.remove(index)}
+                                        style={{ marginTop: '1rem' }}
+                                      >
                                         <FastFieldWithRef
                                           name={`accessURL[${index}]`}
                                           ref={(el: HTMLInputElement | HTMLTextAreaElement | null) =>
@@ -604,12 +579,35 @@ export const DistributionModal = ({
                                           size='sm'
                                           error={errors?.accessURL?.[index]}
                                         />
-                                      )}
-                                    </div>
-                                  </React.Fragment>
-                                );
-                              },
-                            )}
+                                      </FieldsetWithDelete>
+                                    ) : (
+                                      <FastFieldWithRef
+                                        name={`accessURL[${index}]`}
+                                        ref={(el: HTMLInputElement | HTMLTextAreaElement | null) =>
+                                          setInputRef(`accessURL[${index}]`, el)
+                                        }
+                                        label={
+                                          index === 0 ? (
+                                            <TitleWithHelpTextAndTag
+                                              tagColor='warning'
+                                              tagTitle={localization.tag.required}
+                                              helpText={localization.datasetForm.helptext.accessURL}
+                                            >
+                                              {localization.datasetForm.fieldLabel.accessURL}
+                                            </TitleWithHelpTextAndTag>
+                                          ) : (
+                                            ''
+                                          )
+                                        }
+                                        as={Textfield}
+                                        size='sm'
+                                        error={errors?.accessURL?.[index]}
+                                      />
+                                    )}
+                                  </div>
+                                </Fragment>
+                              );
+                            })}
                             <AddButton
                               onClick={() => {
                                 arrayHelpers.push('');

@@ -42,10 +42,10 @@ export const clearCombobox = async (page, label) => {
   // Workaround to clear and close a combobox.
   const currentValue = await page.getByRole('combobox', { name: label }).inputValue();
   await page.getByRole('combobox', { name: label }).click();
- 
+
   for (let i = 0; i < currentValue.length; i++) {
     await page.getByLabel(label).press('Backspace');
-  }  
+  }
   await expect(page.getByLabel(label)).toHaveValue('');
   await page.getByLabel(label).press('Tab');
 };
@@ -55,11 +55,12 @@ export const relationToSourceText = (relationToSource) => {
     return 'Egendefinert';
   } else if (relationToSource === 'basertPaaKilde') {
     return 'Basert på kilde';
-  } if (relationToSource === 'sitatFraKilde') {
+  }
+  if (relationToSource === 'sitatFraKilde') {
     return 'Sitat fra kilde';
   }
   return null;
-}
+};
 
 export const deleteAllConcepts = async (apiRequestContext) => {
   const response = await apiRequestContext.get(`/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts`);
@@ -69,19 +70,19 @@ export const deleteAllConcepts = async (apiRequestContext) => {
 
   const concepts: Concept[] = await response.json();
   for (const concept of concepts) {
-    if(!concept.erPublisert) {
+    if (!concept.erPublisert) {
       await apiRequestContext.delete(`/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/${concept.id}`);
-    }    
+    }
   }
 };
 
 export const deleteConcept = async (apiRequestContext, conceptId) => {
-  await apiRequestContext.delete(`/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/${conceptId}`);  
+  await apiRequestContext.delete(`/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/${conceptId}`);
 };
 
 export const createConcept = async (apiRequestContext, concept) => {
   const response = await apiRequestContext.post(`/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts`, {
-    data: concept
+    data: concept,
   });
 
   if (!response.ok()) {
@@ -99,11 +100,13 @@ export const getPublishedConcept = async (apiRequestContext) => {
   }
 
   const concepts: Concept[] = await response.json();
-  return concepts.filter(c => c.erPublisert).pop();
-}; 
+  return concepts.filter((c) => c.erPublisert).pop();
+};
 
 export const publishConcept = async (apiRequestContext, conceptId) => {
-  const response = await apiRequestContext.post(`/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/${conceptId}/publish`);
+  const response = await apiRequestContext.post(
+    `/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/${conceptId}/publish`,
+  );
 
   if (!response.ok()) {
     console.error(`API call failed with status ${response.status()}`, await response.json());
@@ -119,7 +122,7 @@ export const getUsers = async (apiRequestContext) => {
     throw new Error(`API call failed with status ${response.status()}`);
   }
 
-  const result = await response.json() as UsersResult;
+  const result = (await response.json()) as UsersResult;
   return result;
 };
 
@@ -129,7 +132,7 @@ export const getFields = async (apiRequestContext) => {
     throw new Error(`API call failed with status ${response.status()}`);
   }
 
-  const result = await response.json() as FieldsResult;
+  const result = (await response.json()) as FieldsResult;
   return result;
 };
 
@@ -139,5 +142,5 @@ export enum ConceptStatus {
   WAITING = 'http://publications.europa.eu/resource/authority/concept-status/WAITING',
   CURRENT = 'http://publications.europa.eu/resource/authority/concept-status/CURRENT',
   RETIRED = 'http://publications.europa.eu/resource/authority/concept-status/RETIRED',
-  REJECTED = 'internal codes - REJECTED'
+  REJECTED = 'internal codes - REJECTED',
 }

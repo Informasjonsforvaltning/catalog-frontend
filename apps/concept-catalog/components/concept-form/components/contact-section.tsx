@@ -5,7 +5,7 @@ import { Concept } from '@catalog-frontend/types';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import styles from '../concept-form.module.scss';
-import { get, isEmpty, isEqual, isNil } from 'lodash';
+import { isNil } from 'lodash';
 
 type ContactSectionProps = {
   changed?: string[];
@@ -15,7 +15,7 @@ type ContactSectionProps = {
 export const ContactSection = ({ changed, readOnly = false }: ContactSectionProps) => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
- 
+
   const contactOptions = [
     {
       label: localization.conceptForm.fieldLabel.emailAddress,
@@ -31,7 +31,7 @@ export const ContactSection = ({ changed, readOnly = false }: ContactSectionProp
     contactOptions.forEach((option) => {
       if (!value.includes(option.value)) {
         setFieldValue(`kontaktpunkt.${option.value}`, null);
-      } else if (isNil(values.kontaktpunkt?.[option.value])) {
+      } else if (isNil((values.kontaktpunkt as any)?.[option.value])) {
         setFieldValue(`kontaktpunkt.${option.value}`, '');
       }
     });
@@ -78,7 +78,7 @@ export const ContactSection = ({ changed, readOnly = false }: ContactSectionProp
           name='kontaktpunkt.harEpost'
           size='sm'
           label={<TitleWithHelpTextAndTag>{localization.conceptForm.fieldLabel.emailAddress}</TitleWithHelpTextAndTag>}
-          error={errors?.kontaktpunkt?.['harEpost']}
+          error={(errors?.kontaktpunkt as any)?.['harEpost']}
           readOnly={readOnly}
         />
       )}
@@ -88,7 +88,7 @@ export const ContactSection = ({ changed, readOnly = false }: ContactSectionProp
           name='kontaktpunkt.harTelefon'
           size='sm'
           label={<TitleWithHelpTextAndTag>{localization.conceptForm.fieldLabel.phoneNumber}</TitleWithHelpTextAndTag>}
-          error={errors?.kontaktpunkt?.['harTelefon']}
+          error={(errors?.kontaktpunkt as any)?.['harTelefon']}
           readOnly={readOnly}
         />
       )}
@@ -98,7 +98,7 @@ export const ContactSection = ({ changed, readOnly = false }: ContactSectionProp
           name='kontaktpunkt.harSkjema'
           size='sm'
           label={<TitleWithHelpTextAndTag>{localization.conceptForm.fieldLabel.contactForm}</TitleWithHelpTextAndTag>}
-          error={errors?.kontaktpunkt?.['harSkjema']}
+          error={(errors?.kontaktpunkt as any)?.['harSkjema']}
           readOnly={readOnly}
         />
       )}
