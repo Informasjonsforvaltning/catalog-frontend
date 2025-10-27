@@ -4,6 +4,7 @@ import { forwardRef } from 'react';
 export enum ImportResultStatusColors {
   FAILED = 'danger',
   COMPLETED = 'success',
+  PARTIALLY_COMPLETED = 'third',
   IN_PROGRESS = 'third',
   PENDING_CONFIRMATION = 'warning',
   SAVING = 'third',

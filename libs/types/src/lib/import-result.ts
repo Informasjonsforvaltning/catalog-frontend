@@ -1,14 +1,22 @@
 import { JsonPatchOperation } from './json-patch';
+import { Concept } from './concept';
 
 export interface ImportResult {
   id: string;
   created: string;
   catalogId: string;
-  status: 'FAILED' | 'COMPLETED' | 'IN_PROGRESS' | 'CANCELLED' | 'PENDING_CONFIRMATION' | 'SAVING';
+  status: 'FAILED' | 'COMPLETED' | 'PARTIALLY_COMPLETED' | 'IN_PROGRESS' | 'CANCELLED' | 'PENDING_CONFIRMATION' | 'SAVING';
   extractionRecords?: ExtractionRecord[];
+  conceptExtractions: ConceptExtraction[];
   totalConcepts: number;
   extractedConcepts: number;
   savedConcepts: number;
+}
+
+export interface ConceptExtraction {
+  extractionRecord: ExtractionRecord;
+  concept: Concept;
+  conceptExtractionStatus: 'PENDING_CONFIRMATION' | 'SAVING' | 'COMPLETED' | 'FAILED';
 }
 
 export interface ExtractionRecord {

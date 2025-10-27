@@ -323,19 +323,20 @@ export const getConceptImportResultById = async (catalogId: string, resultId: st
   return await fetch(resource, options);
 };
 
-export const confirmConceptImport = async (catalogId: string, resultId: string, accessToken: string) => {
+export const confirmImportedConcept = async (catalogId: string, resultId: string, externalId: string, accessToken: string) => {
   validateOrganizationNumber(catalogId, 'confirmConceptImport');
   validateUUID(resultId, 'confirmConceptImport');
 
   const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'confirmConceptImport');
   const encodedResultId = validateAndEncodeUrlSafe(resultId, 'result ID', 'confirmConceptImport');
 
-  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}/confirm`;
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}/confirmConceptImport`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
     method: 'PUT',
+    body: externalId,
   };
 
   return await fetch(resource, options);

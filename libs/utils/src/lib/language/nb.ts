@@ -618,12 +618,13 @@ Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- 
   },
 
   importResult: {
-    completed: 'Lagt til i katalog',
+    completed: 'Fullført',
+    partiallyCompleted: 'Delvis fullført',
     savingInCatalog: 'Legges til i katalogen',
     failed: 'Feilet',
     inProgress: 'Pågår',
     cancelled: 'Avvist',
-    pendingConfirmation: 'Til gjennomgang',
+    pendingConfirmation: 'Klar til katalog',
     warnings: 'Advarsler',
     errors: 'Feil',
     goToImported: 'Gå til importert ressurs',
@@ -632,9 +633,16 @@ Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- 
     confirmImport: 'Legg til i katalog',
     deleteCanResultInDuplicates: `Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.`,
     cancelledImport: `Importen ble avvist før den ble fullført.`,
+    conceptId: "Begreps-ID ",
+    recordStatus: {
+      addToCatalog: 'Klar til i katalog',
+      addedToCatalog: 'Lagt til i katalog',
+      failedToAddToCatalog: 'Feilet a legge til i katalog',
+    },
     helpText: {
        savingInCatalog: 'Importen er godkjent, og begrepene vil være tilgjengelige i katalogen senere.',
-       completed: 'Importen er godkjent, og begrepene er tilgjengelige i katalogen.',
+       completed: 'Importen er godkjent, og alle begrepene er tilgjengelige i katalogen.',
+       partiallyCompleted: 'Importen er godkjent, og minst ett begrep er tilgjengelig i katalogen',
        failed: 'Importen kunne ikke fullføres på grunn av feil i minst ett av begrepene i den opplastede filen.',
        inProgress: 'Importen er under behandling. Importen kan avvises.',
        cancelled: 'Importen er forkastet og begrepene er ikke lagt til i katalogen.',

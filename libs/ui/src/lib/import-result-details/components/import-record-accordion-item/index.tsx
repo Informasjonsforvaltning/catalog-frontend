@@ -29,7 +29,7 @@ const ImportRecordAccordionItem = ({ targetBaseHref, record, enableOpening, isCo
   const renderHeader = (record: ExtractionRecord) => {
     return (
       <div className={styles.recordHeader}>
-        <div>{record.externalId}</div>
+        <div style={{ maxWidth: '90%' }}>{record.externalId}</div>
         {errors.length > 0 && (
           <Tag
             size={'sm'}

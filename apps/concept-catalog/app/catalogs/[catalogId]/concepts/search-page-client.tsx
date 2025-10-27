@@ -410,8 +410,8 @@ export const SearchPageClient = ({
                 </div>
                 <div className={styles.buttons}>
                     <>
-                      {/*hasAdminPermission && <ImportModal catalogId={catalogId} />*/}
-                      {hasAdminPermission && (
+                      {hasAdminPermission && <ImportModal catalogId={catalogId} />}
+                      {/*hasAdminPermission && (
                         <UploadButton
                           size='sm'
                           variant='secondary'
@@ -429,7 +429,7 @@ export const SearchPageClient = ({
                           <FileImportIcon fontSize='1.5rem' />
                           <span>{localization.button.importConceptCSV}</span>
                         </UploadButton>
-                      )}
+                      )*/}
                       {hasWritePermission && (
                         <LinkButton
                           href={`/catalogs/${catalogId}/concepts/new`}

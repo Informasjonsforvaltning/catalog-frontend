@@ -1,27 +1,29 @@
 'use client';
 
-import { ImportResult } from '@catalog-frontend/types';
+import { ConceptExtraction, ImportResult } from '@catalog-frontend/types';
 import styles from './import-result-details.module.css';
-import { Accordion, Button, Heading, Tag } from '@digdir/designsystemet-react';
+import { Accordion, Heading, Spinner, Table, Tag } from '@digdir/designsystemet-react';
 import { capitalizeFirstLetter, formatISO, localization } from '@catalog-frontend/utils';
 import { ImportRecordAccordionItem } from './components/import-record-accordion-item';
-import { TrashIcon, CheckmarkIcon } from '@navikt/aksel-icons';
+import { TrashIcon, FloppydiskIcon, ArrowCirclepathIcon } from '@navikt/aksel-icons';
 import React from 'react';
 import { ImportResultStatusColors, StatusKey } from '../tag/import-result-status/ImportResultStatus';
-import { CenterContainer, HelpMarkdown } from '@catalog-frontend/ui';
+import { Button, CenterContainer, HelpMarkdown } from '@catalog-frontend/ui';
+import { useMutation } from '@tanstack/react-query';
 
 interface Props {
   targetBaseHref: string;
   importResult: ImportResult;
   deleteHandler: (resultId: string) => void;
-  confirmHandler?: (resultId: string) => void;
+  saveConceptMutation?: ReturnType<typeof useMutation>;
   cancelHandler?: (resultId: string) => void;
+  cancelMutation?: ReturnType<typeof useMutation>;
   showCancellationButton?: boolean;
-  showConfirmationButton?: boolean;
 }
 
 const importStatuses = [
   { value: 'COMPLETED', label: localization.importResult.completed },
+  { value: 'PARTIALLY_COMPLETED', label: localization.importResult.partiallyCompleted },
   { value: 'FAILED', label: localization.importResult.failed },
   { value: 'IN_PROGRESS', label: localization.importResult.inProgress },
   { value: 'CANCELLED', label: localization.importResult.cancelled },
@@ -31,6 +33,7 @@ const importStatuses = [
 
 const importStatusHelpTexts = [
   { value: 'COMPLETED', label: localization.importResult.helpText.completed },
+  { value: 'PARTIALLY_COMPLETED', label: localization.importResult.helpText.partiallyCompleted },
   { value: 'FAILED', label: localization.importResult.helpText.failed },
   { value: 'IN_PROGRESS', label: localization.importResult.helpText.inProgress },
   { value: 'CANCELLED', label: localization.importResult.helpText.cancelled },
@@ -42,10 +45,9 @@ const ImportResultDetails = ({
   targetBaseHref,
   importResult,
   deleteHandler,
-  confirmHandler,
+  saveConceptMutation,
   cancelHandler,
   showCancellationButton,
-  showConfirmationButton,
 }: Props) => {
   const formattedCreateDate = capitalizeFirstLetter(
     formatISO(importResult.created, {
@@ -66,6 +68,51 @@ const ImportResultDetails = ({
   const getColorFromStatusKey = (statusKey: StatusKey | undefined) =>
     statusKey ? ImportResultStatusColors[statusKey.toLocaleUpperCase() as StatusKey] : 'neutral';
 
+  function saveExtractedConcept(externalId: string) {
+    console.log("Saving concept with externalId:", externalId);
+    saveConceptMutation?.mutate(externalId) //TODO: Handle errors
+  }
+
+  const getButtonText = (conceptExtraction: ConceptExtraction)=> {
+    if(conceptExtraction.conceptExtractionStatus === 'PENDING_CONFIRMATION') {
+      return `Legg til i katalog`;
+    } else if(conceptExtraction.conceptExtractionStatus === 'FAILED') {
+      return `Prøv igjen`;
+    }
+  }
+
+  const getButtonColor = (conceptExtraction: ConceptExtraction) => {
+    if(conceptExtraction.conceptExtractionStatus === 'PENDING_CONFIRMATION') {
+      return 'first';
+    } else if(conceptExtraction.conceptExtractionStatus === 'FAILED') {
+      return 'danger';
+    }
+  }
+
+  const getButton = (conceptExtraction: ConceptExtraction)=> {
+      return (
+        <Button
+          variant='primary'
+          size='sm'
+          color={getButtonColor(conceptExtraction)}
+          onClick={() => saveExtractedConcept(conceptExtraction?.extractionRecord?.externalId)}
+          >
+          <>
+            {getButtonIcon(conceptExtraction)}
+            {getButtonText(conceptExtraction)}
+          </>
+        </Button>
+      )
+  }
+
+  const getButtonIcon = (conceptExtraction: ConceptExtraction) => {
+    if(conceptExtraction.conceptExtractionStatus === 'PENDING_CONFIRMATION') {
+      return <FloppydiskIcon fontSize='1.5rem'/>;
+    } else if(conceptExtraction.conceptExtractionStatus === 'FAILED') {
+      return <ArrowCirclepathIcon fontSize='1.5rem'/>;
+    }
+  }
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.header}>
@@ -83,7 +130,6 @@ const ImportResultDetails = ({
                 </HelpMarkdown>
 
                 {cancelHandler &&
-                  confirmHandler &&
                   importResult.totalConcepts !== undefined &&
                   importResult.totalConcepts > 0 && (
                     <div className={styles.progress}>
@@ -121,9 +167,10 @@ const ImportResultDetails = ({
             size='sm'
             color='danger'
             disabled={
-              !importResult.status ||
+              saveConceptMutation?.isPending || !importResult.status ||
               !(
                 importResult.status === 'COMPLETED' ||
+                importResult.status === 'PARTIALLY_COMPLETED' ||
                 importResult.status === 'CANCELLED' ||
                 importResult.status === 'FAILED'
               )
@@ -143,33 +190,18 @@ const ImportResultDetails = ({
               size='small'
               color='first'
               disabled={
-                !importResult.status ||
-                importResult.status === 'CANCELLED' ||
-                importResult.status === 'FAILED' ||
-                importResult.status === 'SAVING' ||
-                importResult.status === 'COMPLETED'
+                saveConceptMutation?.isPending ||
+                importResult?.status === 'CANCELLED' ||
+                importResult?.status === 'FAILED' ||
+                importResult?.status === 'SAVING' ||
+                importResult?.status === 'COMPLETED' ||
+                importResult?.status === 'PARTIALLY_COMPLETED'
               }
               onClick={async () => {
                 cancelHandler && cancelHandler(importResult.id);
               }}
             >
               {localization.importResult.cancelImport}
-            </Button>
-          )}
-
-          {showConfirmationButton && (
-            <Button
-              variant='secondary'
-              size='small'
-              color='first'
-              disabled={!importResult.status || importResult.status !== 'PENDING_CONFIRMATION'}
-              onClick={() => confirmHandler && confirmHandler(importResult.id)}
-            >
-              <CheckmarkIcon
-                title='Legg til i katalog'
-                fontSize='1.5rem'
-              />
-              {localization.importResult.confirmImport}
             </Button>
           )}
         </div>
@@ -186,17 +218,62 @@ const ImportResultDetails = ({
           </CenterContainer>
         )}
       {importResult?.extractionRecords && importResult?.extractionRecords.length > 0 && (
-        <Accordion border={true}>
-          {importResult?.extractionRecords?.map((record) => (
-            <ImportRecordAccordionItem
-              key={`result-${record.internalId}`}
-              targetBaseHref={targetBaseHref}
-              record={record}
-              enableOpening={importResult?.status !== 'PENDING_CONFIRMATION' && importResult?.status !== 'CANCELLED'}
-              isCompleted={importResult.status === 'COMPLETED'}
-            />
-          ))}
-        </Accordion>
+        <div className={styles.tableContainer}>
+          { saveConceptMutation?.isPending &&
+            <div className={styles.spinnerOverlay}>
+              <Spinner
+                title={localization.loading}
+                size='large'
+              />
+            </div>
+          }
+          <Table
+            className={styles.tableFullWidth}
+            zebra={true}
+            border={true}
+          >
+            <Table.Head>
+              <Table.Cell style={{ width: '70%' }}>{localization.importResult.conceptId}</Table.Cell>
+              <Table.Cell style={{ width: '10%' }}>Status</Table.Cell>
+              <Table.Cell style={{ width: '20%' }}/>
+            </Table.Head>
+            <Table.Body>
+              {importResult?.conceptExtractions?.map((conceptExtraction) => (
+                <Table.Row key={conceptExtraction?.extractionRecord?.internalId}>
+                  <Table.Cell style={{ width: '70%' }} >
+                    <Accordion>
+                      <ImportRecordAccordionItem
+                        key={`result-${conceptExtraction?.extractionRecord?.internalId}`}
+                        targetBaseHref={targetBaseHref}
+                        record={conceptExtraction?.extractionRecord}
+                        enableOpening={
+                          importResult?.status !== 'PENDING_CONFIRMATION' && importResult?.status !== 'CANCELLED'
+                        }
+                        isCompleted={importResult.status === 'COMPLETED'}
+                      />
+                    </Accordion>
+                  </Table.Cell>
+
+                  <Table.Cell style={{ width: '10%' }} >
+                    <Tag
+                      size={'sm'}
+                      color={getColorFromStatusKey(conceptExtraction.conceptExtractionStatus as StatusKey)}
+                    >
+                      <div className={styles.titleTags}>
+                        {getImportStatusDisplay(conceptExtraction.conceptExtractionStatus)}
+                      </div>
+                    </Tag>
+                  </Table.Cell>
+                  <Table.Cell style={{ width: '20%' }}>
+                    {(conceptExtraction.conceptExtractionStatus === 'PENDING_CONFIRMATION' ||
+                      conceptExtraction.conceptExtractionStatus === 'FAILED') &&
+                      getButton(conceptExtraction)}
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+        </div>
       )}
     </div>
   );

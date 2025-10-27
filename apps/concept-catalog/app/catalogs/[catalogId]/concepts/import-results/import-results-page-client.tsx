@@ -23,6 +23,7 @@ import { isEmpty } from 'lodash';
 
 const importStatuses = [
   { value: 'COMPLETED', label: localization.importResult.completed },
+  { value: 'PARTIALLY_COMPLETED', label: localization.importResult.partiallyCompleted },
   { value: 'FAILED', label: localization.importResult.failed },
   { value: 'IN_PROGRESS', label: localization.importResult.inProgress },
   { value: 'CANCELLED', label: localization.importResult.cancelled },

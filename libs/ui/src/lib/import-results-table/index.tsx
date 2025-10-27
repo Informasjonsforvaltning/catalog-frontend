@@ -11,10 +11,12 @@ import { HelpMarkdown } from '../help-markdown';
 
 const importStatuses = [
   { value: 'COMPLETED', label: localization.importResult.completed },
+  { value: 'PARTIALLY_COMPLETED', label: localization.importResult.partiallyCompleted },
   { value: 'FAILED', label: localization.importResult.failed },
   { value: 'IN_PROGRESS', label: localization.importResult.inProgress },
   { value: 'CANCELLED', label: localization.importResult.cancelled },
   { value: 'PENDING_CONFIRMATION', label: localization.importResult.pendingConfirmation },
+  { value: 'SAVING', label: localization.importResult.savingInCatalog },
 ];
 
 interface Props {

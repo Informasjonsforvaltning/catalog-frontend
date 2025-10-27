@@ -2,7 +2,11 @@
 
 import { ImportResult } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
-import { confirmImport, cancelImport, deleteImportResult } from '../../../../../actions/concept/actions';
+import {
+  cancelImport,
+  deleteImportResult,
+  saveImportedConcept,
+} from '../../../../../actions/concept/actions';
 import { ConfirmModal, ImportResultDetails } from '@catalog-frontend/ui';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -30,16 +34,12 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
     setShowDeleteConfirm(true);
   };
 
-  const confirmMutation = useMutation({
-    mutationFn: async () => await confirmImport(catalogId, importResult.id),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['refresh-import-result', catalogId, importResult.id] });
+  const saveConceptMutation = useMutation({
+    mutationFn: async (externalId: string) => {
+      await saveImportedConcept(catalogId, importResult.id, externalId);
+      refetch()
     },
   });
-
-    const handleConfirmClick = () => {
-      confirmMutation.mutate()
-    };
 
     const cancelMutation = useMutation({
       mutationFn: async () => await cancelImport(catalogId, importResult.id),
@@ -52,12 +52,9 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
       cancelMutation.mutate();
     };
 
-    const shouldRefetch = (fetchedData)=> fetchedData.status === 'IN_PROGRESS'
-      || fetchedData.status === 'SAVING';
+    const shouldRefetch = (fetchedData)=> fetchedData.status === 'IN_PROGRESS';
 
-    const isPendingConfirmation = (fetchedData) => fetchedData.status === 'PENDING_CONFIRMATION';
-
-    const { data } = useQuery({
+    const { data, refetch } = useQuery({
       queryKey: ['refresh-import-result', catalogId, importResult?.id],
       queryFn: async () => {
         const response = await fetch(`/api/catalogs/${catalogId}/concepts/import-results/${importResult?.id}`, {
@@ -66,10 +63,7 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
         return response.json();
       },
       initialData: importResult, // seed from server
-      refetchInterval: (q) => {
-        const status = q?.state?.data?.status;
-        return shouldRefetch(q?.state?.data) ? 3000 : isPendingConfirmation(q?.state?.data) ? 6000: false;
-      },
+      refetchInterval: (q) => shouldRefetch(q?.state?.data) ? 3000 : false,
       refetchOnWindowFocus: true,
       retry: 2,
     });
@@ -88,10 +82,9 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
         targetBaseHref={`catalogs/${catalogId}/concepts`}
         importResult={data}
         deleteHandler={handleDeleteClick}
-        confirmHandler={handleConfirmClick}
         cancelHandler={handleCancelClick}
+        saveConceptMutation={saveConceptMutation}
         showCancellationButton={true}
-        showConfirmationButton={true}
       />
     </>
   );
