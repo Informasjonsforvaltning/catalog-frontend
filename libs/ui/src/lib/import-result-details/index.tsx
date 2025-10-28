@@ -66,6 +66,15 @@ const ImportResultDetails = ({
   const getColorFromStatusKey = (statusKey: StatusKey | undefined) =>
     statusKey ? ImportResultStatusColors[statusKey.toLocaleUpperCase() as StatusKey] : 'neutral';
 
+  const getMessage = () => {
+    if (importResult.status === 'FAILED' && importResult.failureMessage)
+      return importResult.failureMessage;
+    else if (importResult.status === 'CANCELLED')
+      return localization.importResult.cancelledImport;
+
+    return "";
+  }
+
   return (
     <div className={styles.pageContainer}>
       <div className={styles.header}>
@@ -175,13 +184,13 @@ const ImportResultDetails = ({
         </div>
       </div>
       {(!importResult.extractionRecords || importResult.extractionRecords?.length === 0) &&
-        importResult.status === 'CANCELLED' && (
+        (
           <CenterContainer>
             <Heading
               level={2}
               size='lg'
             >
-              {localization.importResult.cancelledImport}
+              {getMessage()}
             </Heading>
           </CenterContainer>
         )}
