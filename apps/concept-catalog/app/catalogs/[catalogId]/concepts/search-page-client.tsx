@@ -429,7 +429,7 @@ export const SearchPageClient = ({
                           <FileImportIcon fontSize='1.5rem' />
                           <span>{localization.button.importConceptCSV}</span>
                         </UploadButton>
-                      )*/}
+                      )}
                       {hasWritePermission && (
                         <LinkButton
                           href={`/catalogs/${catalogId}/concepts/new`}
