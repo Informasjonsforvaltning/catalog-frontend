@@ -37,8 +37,10 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
   const saveConceptMutation = useMutation({
     mutationFn: async (externalId: string) => {
       await saveImportedConcept(catalogId, importResult.id, externalId);
-      refetch()
     },
+    onSuccess: async () => {
+      await refetch()
+    }
   });
 
     const cancelMutation = useMutation({
