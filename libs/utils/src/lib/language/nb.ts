@@ -423,7 +423,11 @@ Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- 
  
  Vil du fortsette importen eller avbryte?
  `,
-      maxFileSize: `___Merk:__ Maksimal filstørrelse for opplastning er {0} MB_`,
+      maxFileSize: `
+___Merk:___
+* _Maksimal filstørrelse for opplastning er {0} MB_   
+* _CSV/JSON-format tillater opplastning av inntil 500 begreper per fil_
+      `,
       alert: {
         unsupportedFileUpload:
           'Den valgte filen kan ikke importeres fordi filformatet ikke støttes. Støttet filformate er {0}.',

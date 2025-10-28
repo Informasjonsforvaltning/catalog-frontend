@@ -11,6 +11,7 @@ export interface ImportResult {
   totalConcepts: number;
   extractedConcepts: number;
   savedConcepts: number;
+  failureMessage: string;
 }
 
 export interface ConceptExtraction {
