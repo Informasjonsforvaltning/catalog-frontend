@@ -6,7 +6,6 @@ import tseslint from 'typescript-eslint';
 export function createCommonTsConfig(tsconfigRootDir) {
   return {
     files: ['**/*.{js,cjs,mjs,ts,tsx,jsx}'],
-    ignores: ['.next/**/*', 'node_modules/**/*'],
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {

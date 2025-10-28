@@ -56,7 +56,7 @@ export default class PublicServicesPage {
         const href = await link.getAttribute('href');
         return {
           value: href,
-          include: href.includes(this.url) && !href.endsWith('/new'),
+          include: href?.includes(this.url) && !href.endsWith('/new'),
         };
       });
       const items = (await Promise.all(promises)).filter((l) => l.include).map((l) => l.value);
@@ -70,7 +70,7 @@ export default class PublicServicesPage {
       console.log(`Number of items before deletion: ${items.length}`);
 
       // Click the delete button for the first item
-      await this.deleteItem(items[0]);
+      await this.deleteItem(items[0] as string);
 
       // Wait for the list to update after deletion
       await this.page.waitForTimeout(500);

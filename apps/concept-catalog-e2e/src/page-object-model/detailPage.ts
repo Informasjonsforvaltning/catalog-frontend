@@ -17,14 +17,14 @@ export default class DetailPage {
     this.page = page;
     this.editPage = new EditPage(page, context, accessibilityBuilder);
     this.context = context;
-    this.accessibilityBuilder = accessibilityBuilder;
+    this.accessibilityBuilder = accessibilityBuilder as any;
   }
 
   // Locators
   pageTitleLocator = () => this.page.getByRole('heading', { name: '' });
   pageDescriptionLocator = () => this.page.getByText('');
 
-  public async goto(url) {
+  public async goto(url: string) {
     await this.page.goto(url);
   }
 
@@ -56,13 +56,13 @@ export default class DetailPage {
 
   public async checkIfNoConceptsExist() {
     const items = (await this.page.getByRole('link').all()).filter(async (link) => {
-      (await link.getAttribute('href')).startsWith(this.url);
+      (await link.getAttribute('href'))?.startsWith(this.url);
     });
 
     expect(items.length).toBe(0);
   }
 
-  getStatusText(uri) {
+  getStatusText(uri: string) {
     if (uri.includes('DRAFT')) {
       return 'utkast';
     } else if (uri.includes('CURRENT')) {
@@ -73,7 +73,7 @@ export default class DetailPage {
     return 'ukjent';
   }
 
-  getStatusColor(uri) {
+  getStatusColor(uri: string) {
     if (uri.includes('DRAFT')) {
       return 'rgb(250, 238, 194)';
     } else if (uri.includes('CURRENT')) {
@@ -85,23 +85,23 @@ export default class DetailPage {
   }
 
   getDefinitionSourceText(def: Definisjon) {
-    const text = relationToSourceText(def.kildebeskrivelse.forholdTilKilde);
-    return def.kildebeskrivelse.forholdTilKilde === 'egendefinert' ? text : `${text}:`;
+    const text = relationToSourceText(def.kildebeskrivelse?.forholdTilKilde);
+    return def.kildebeskrivelse?.forholdTilKilde === 'egendefinert' ? text : `${text}:`;
   }
 
   getVersionText(concept: Concept) {
-    return `${concept.versjonsnr.major}.${concept.versjonsnr.minor}.${concept.versjonsnr.patch}`;
+    return `${concept.versjonsnr?.major}.${concept.versjonsnr?.minor}.${concept.versjonsnr?.patch}`;
   }
 
   async expectHeading(concept: Concept) {
-    console.log('[DETAIL PAGE] Checking heading for concept:', concept.anbefaltTerm.navn.nb);
-    await expect(this.page.getByRole('heading', { name: concept.anbefaltTerm.navn.nb as string })).toBeVisible();
+    console.log('[DETAIL PAGE] Checking heading for concept:', concept.anbefaltTerm?.navn.nb);
+    await expect(this.page.getByRole('heading', { name: concept.anbefaltTerm?.navn.nb as string })).toBeVisible();
 
-    const statusTag = this.page.getByText(this.getStatusText(concept.statusURI), { exact: true });
+    const statusTag = this.page.getByText(this.getStatusText(concept.statusURI as any), { exact: true });
     await expect(statusTag).toBeVisible();
 
     const backgroundColor = await statusTag.evaluate((el) => window.getComputedStyle(el).backgroundColor);
-    expect(backgroundColor).toBe(this.getStatusColor(concept.statusURI));
+    expect(backgroundColor).toBe(this.getStatusColor(concept.statusURI as any));
     console.log('[DETAIL PAGE] Heading and status checked.');
   }
 
@@ -128,7 +128,7 @@ export default class DetailPage {
         .locator('div')
         .filter({
           hasText: new RegExp(
-            `Definisjon:${concept.definisjon.tekst.nb as string}${this.getDefinitionSourceText(concept.definisjon)}`,
+            `Definisjon:${concept.definisjon?.tekst.nb as string}${this.getDefinitionSourceText(concept.definisjon as any)}`,
           ),
         })
         .first(),
@@ -156,10 +156,10 @@ export default class DetailPage {
       this.page
         .locator('div')
         .filter({
-          hasText: new RegExp(`^Merknad:${concept.merknad.nb}$`),
+          hasText: new RegExp(`^Merknad:${concept.merknad?.nb}$`),
         })
         .first(),
-    ).toBeVisible({ visible: Boolean(concept.merknad.nb) });
+    ).toBeVisible({ visible: Boolean(concept.merknad?.nb) });
 
     await expect(this.page.getByText(`Forkortelse:${concept.abbreviatedLabel}`)).toBeVisible({
       visible: Boolean(concept.abbreviatedLabel),
@@ -219,20 +219,22 @@ export default class DetailPage {
       const rel = allRelations[i];
       if (rel.relasjon === RelationTypeEnum.ASSOSIATIV) {
         await expect(
-          this.page.getByText(`Assosiativ relasjon${rel.beskrivelse.nb}${rel.internal ? 'InternRel' : 'PublisertRel'}`),
+          this.page.getByText(
+            `Assosiativ relasjon${rel.beskrivelse?.nb}${rel.internal ? 'InternRel' : 'PublisertRel'}`,
+          ),
         ).toBeVisible();
       } else if (rel.relasjon === RelationTypeEnum.GENERISK) {
         const subtype = rel.relasjonsType === RelationSubtypeEnum.OVERORDNET ? 'Overordnet' : 'Underordnet';
         await expect(
           this.page.getByText(
-            `Generisk relasjon${subtype} (Inndelingskriterium: ${rel.inndelingskriterium.nb})${rel.internal ? 'InternRel' : 'PublisertRel'}`,
+            `Generisk relasjon${subtype} (Inndelingskriterium: ${rel.inndelingskriterium?.nb})${rel.internal ? 'InternRel' : 'PublisertRel'}`,
           ),
         ).toBeVisible();
       } else if (rel.relasjon === RelationTypeEnum.PARTITIV) {
         const subtype = rel.relasjonsType === RelationSubtypeEnum.OMFATTER ? 'Omfatter' : 'Er del av';
         await expect(
           this.page.getByText(
-            `Partitiv relasjon${subtype} (Inndelingskriterium: ${rel.inndelingskriterium.nb})${rel.internal ? 'InternRel' : 'PublisertRel'}`,
+            `Partitiv relasjon${subtype} (Inndelingskriterium: ${rel.inndelingskriterium?.nb})${rel.internal ? 'InternRel' : 'PublisertRel'}`,
           ),
         ).toBeVisible();
       } else if (rel.relasjon === RelationTypeEnum.SE_OGSÅ) {
@@ -246,16 +248,16 @@ export default class DetailPage {
     const fields = await getFields(apiRequestContext);
     for (const field of fields.internal) {
       if (field.type === 'text_short' || field.type === 'text_long') {
-        await expect(this.page.getByText(`${field.label.nb}:${concept.interneFelt[field.id].value}`)).toBeVisible();
+        await expect(this.page.getByText(`${field.label?.nb}:${concept.interneFelt?.[field.id]?.value}`)).toBeVisible();
       } else if (field.type === 'boolean') {
         await expect(
-          this.page.getByText(`${field.label.nb}:${concept.interneFelt[field.id].value === 'true' ? 'Ja' : 'Nei'}`),
+          this.page.getByText(`${field.label?.nb}:${concept.interneFelt?.[field.id]?.value === 'true' ? 'Ja' : 'Nei'}`),
         ).toBeVisible();
       } else if (field.type === 'code_list') {
         //TODO support code lists
       } else if (field.type === 'user_list') {
-        const user = users.find((u) => u.id === concept.interneFelt[field.id].value);
-        await expect(this.page.getByText(`${field.label.nb}:${user.name}`)).toBeVisible();
+        const user = users.find((u) => u.id === concept.interneFelt?.[field.id]?.value);
+        await expect(this.page.getByText(`${field.label?.nb}:${user?.name}`)).toBeVisible();
       }
     }
     console.log('[DETAIL PAGE] Left column content checked.');
@@ -293,7 +295,7 @@ export default class DetailPage {
     console.log('[DETAIL PAGE] History tab checked.');
   }
 
-  async expectVersionTab({ anbefaltTerm: { navn }, versjonsnr, statusURI }: Concept) {
+  async expectVersionTab({ anbefaltTerm: { navn }, versjonsnr, statusURI }: any) {
     console.log('[DETAIL PAGE] Checking version tab...');
     const tab = this.page.getByRole('tab', { name: 'Versjoner' });
     await expect(tab).toBeVisible();
@@ -330,7 +332,7 @@ export default class DetailPage {
     });
     await expect(
       this.page.getByText(
-        formatISO(new Date(concept.gyldigFom).toISOString(), {
+        formatISO(new Date(concept.gyldigFom as any).toISOString(), {
           year: 'numeric',
           month: 'long',
           day: 'numeric',
@@ -343,7 +345,7 @@ export default class DetailPage {
     });
     await expect(
       this.page.getByText(
-        formatISO(new Date(concept.gyldigTom).toISOString(), {
+        formatISO(new Date(concept.gyldigTom as any).toISOString(), {
           year: 'numeric',
           month: 'long',
           day: 'numeric',
@@ -353,7 +355,7 @@ export default class DetailPage {
 
     const { users } = await getUsers(apiRequestContext);
     await expect(this.page.getByRole('heading', { name: 'Tildelt' })).toBeVisible();
-    await expect(this.page.getByText(users.find((u) => u.id === concept.assignedUser).name)).toBeVisible();
+    await expect(this.page.getByText(users.find((u) => u.id === concept.assignedUser)?.name as any)).toBeVisible();
 
     await expect(this.page.getByRole('heading', { name: 'Dato sist oppdatert' })).toBeVisible();
     await expect(
@@ -388,10 +390,10 @@ export default class DetailPage {
 
     if (concept.kontaktpunkt?.harEpost || concept.kontaktpunkt?.harTelefon) {
       await expect(this.page.getByRole('heading', { name: 'Kontaktinformasjon for eksterne' })).toBeVisible();
-      await expect(this.page.getByText(concept.kontaktpunkt.harEpost)).toBeVisible({
+      await expect(this.page.getByText(concept.kontaktpunkt?.harEpost as any)).toBeVisible({
         visible: Boolean(concept.kontaktpunkt.harEpost),
       });
-      await expect(this.page.getByText(concept.kontaktpunkt.harTelefon)).toBeVisible({
+      await expect(this.page.getByText(concept.kontaktpunkt?.harTelefon as any)).toBeVisible({
         visible: Boolean(concept.kontaktpunkt.harTelefon),
       });
     }
@@ -399,7 +401,7 @@ export default class DetailPage {
   }
 
   public async expectDetails(concept: Concept, apiRequestContext: APIRequestContext) {
-    console.log('[DETAIL PAGE] Checking all details for concept:', concept.anbefaltTerm.navn.nb);
+    console.log('[DETAIL PAGE] Checking all details for concept:', concept.anbefaltTerm?.navn.nb as any);
     await this.expectHeading(concept);
     await this.expectActionButtons();
     await this.expectLanguageCombobox();
@@ -408,6 +410,6 @@ export default class DetailPage {
     await this.expectCommentsTab();
     await this.expectHistoryTab();
     await this.expectVersionTab(concept);
-    console.log('[DETAIL PAGE] All details checked for concept:', concept.anbefaltTerm.navn.nb);
+    console.log('[DETAIL PAGE] All details checked for concept:', concept.anbefaltTerm?.navn.nb as any);
   }
 }

@@ -10,28 +10,28 @@ export const test = base.extend<{
   homePage: any;
   conceptsPage: any;
 }>({
-  loginPage: async ({ page, context }, use) => {
+  loginPage: async ({ page, context }: { page: any; context: any }, use: any) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
     const loginPage = new LoginPage(page, context, accessibilityBuilder);
     await use(loginPage);
   },
-  homePage: async ({ page, context }, use) => {
+  homePage: async ({ page, context }: { page: any; context: any }, use: any) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
     const homePage = new HomePage(page, context, accessibilityBuilder);
     await use(homePage);
   },
-  conceptsPage: async ({ page, context }, use) => {
+  conceptsPage: async ({ page, context }: { page: any; context: any }, use: any) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
     const conceptsPage = new ConceptsPage(page, context, accessibilityBuilder);
     await use(conceptsPage);
   },
 });
 
-export const runTest = (name: string, fn: (any) => void) => {
+export const runTest = (name: string, fn: (args: any) => void) => {
   test(PREFIX_TEXT + name, fn);
 };
 
-export const runTestAsAdmin = (name: string, fn: (any) => void) => {
+export const runTestAsAdmin = (name: string, fn: (args: any) => void) => {
   test.use({ storageState: adminAuthFile });
   runTest(name, fn);
 };

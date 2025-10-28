@@ -92,7 +92,9 @@ const mapCsvTextToConcept = (columnHeaders: string[], data: string[]): Omit<Conc
   const csvMap = createCsvMap(columnHeaders, data);
   const version = mapToSingleValue(csvMap, 'versjon') || '0.1.0';
   const uri = mapToSingleValue(csvMap, 'id');
-  if (!uri) console.error("Forventet kolonnenavn 'uri' i CSV-filen");
+  if (!uri) {
+    console.error("Forventet kolonnenavn 'uri' i CSV-filen");
+  }
 
   return {
     id: uri ?? null,
@@ -172,7 +174,7 @@ const attemptToParseCsvFile = (text: string): Promise<ConceptImport[]> => {
 export const useImportRdf = (catalogId: string) => {
   return useMutation({
     mutationKey: ['import-Concepts-RDF'],
-    mutationFn: async ({}: { fileContent: string; contentType: string }) => {
+    mutationFn: async () => {
       if (!validOrganizationNumber(catalogId)) {
         console.log('Invalid organization number', catalogId);
         return Promise.reject('Invalid organization number');
@@ -264,7 +266,9 @@ export const useImportConcepts = (
       if (!validOrganizationNumber(catalogId)) {
         return Promise.reject('Invalid catalog id');
       }
-      if (setIsUploading) setIsUploading(true);
+      if (setIsUploading) {
+        setIsUploading(true);
+      }
 
       const content = await file.text();
       let parsedText: ConceptImport[] = [];
@@ -275,7 +279,9 @@ export const useImportConcepts = (
         parsedText = await attemptToParseCsvFile(content);
       } else {
         Promise.reject('Invalid file type');
-        if (setIsUploading) setIsUploading(false);
+        if (setIsUploading) {
+          setIsUploading(false);
+        }
       }
 
       parsedText.forEach((line) => {
@@ -335,7 +341,9 @@ export const useImportConceptsCSV = (
       if (!validOrganizationNumber(catalogId)) {
         return Promise.reject('Invalid catalog id');
       }
-      if (setIsUploading) setIsUploading(true);
+      if (setIsUploading) {
+        setIsUploading(true);
+      }
 
       const content = await file.text();
       let parsedText: ConceptImport[] = [];
@@ -346,7 +354,9 @@ export const useImportConceptsCSV = (
         parsedText = await attemptToParseCsvFile(content);
       } else {
         Promise.reject('Invalid file type');
-        if (setIsUploading) setIsUploading(false);
+        if (setIsUploading) {
+          setIsUploading(false);
+        }
       }
 
       const concepts = parsedText?.map(
