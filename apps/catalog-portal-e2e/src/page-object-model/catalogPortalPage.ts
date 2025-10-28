@@ -34,7 +34,7 @@ export default class CatalogPortalPage {
   }
 
   async verifyAndClickCatalogLink(locatorFunction: keyof CatalogPortalPage, expectedUrl: RegExp) {
-    const locator = this[locatorFunction]();
+    const locator = (this[locatorFunction] as any)();
     await expect(locator).toBeVisible();
     await expect(locator).toHaveAttribute('href', expectedUrl);
   }

@@ -6,9 +6,9 @@ import {
   hasOrganizationWritePermission,
   hasSystemAdminPermission,
   validateOidcUserSession,
-  validUUID,
-  validOrganizationNumber,
-} from '@catalog-frontend/utils';
+} from '@catalog-frontend/utils/src/lib/auth/token';
+import { validUUID } from '@catalog-frontend/utils/src/lib/validation/uuid';
+import { validOrganizationNumber } from '@catalog-frontend/utils/src/lib/validation/organization-number';
 
 export const config = {
   matcher: '/catalogs/:path*',
