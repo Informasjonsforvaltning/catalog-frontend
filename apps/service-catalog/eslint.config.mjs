@@ -5,4 +5,4 @@ import { createCommonTsConfig } from '../../tools/eslint/shared-eslint-config.mj
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-export default defineConfig([globalIgnores(['.next/**/*', 'node_modules/**/*']), createCommonTsConfig(__dirname)]);
+export default defineConfig([createCommonTsConfig(__dirname)]);
