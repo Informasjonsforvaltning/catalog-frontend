@@ -642,7 +642,7 @@ Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- 
     helpText: {
        savingInCatalog: 'Importen er godkjent, og begrepene vil være tilgjengelige i katalogen senere.',
        completed: 'Importen er godkjent, og alle begrepene er tilgjengelige i katalogen.',
-       partiallyCompleted: 'Importen er godkjent, og minst ett begrep er tilgjengelig i katalogen',
+       partiallyCompleted: 'Importen er godkjent, og minst ett begrep er tilgjengelig i katalogen.',
        failed: 'Importen kunne ikke fullføres på grunn av feil i minst ett av begrepene i den opplastede filen.',
        inProgress: 'Importen er under behandling. Importen kan avvises.',
        cancelled: 'Importen er forkastet og begrepene er ikke lagt til i katalogen.',
@@ -655,8 +655,10 @@ Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- 
       statusHelpTextConceptImport: `
 Status viser hvor langt importen har kommet i prosessen:
 
-- __Til gjennomgang:__ Begrepene er importert, men er ennå ikke synlige i katalogen. Importen kan enten avvises eller legges til i katalogen.
-- __Lagt til i katalog:__ Importen er godkjent, og begrepene er tilgjengelige i katalogen.
+- __Pågår:__ Importen er under behandling. Importen kan avvises..
+- __Klar til katalog:__ Begrepene er importert, men er ennå ikke synlige i katalogen. Importen kan enten avvises eller legges til i katalogen.
+- __Delvis Fullført:__ Importen er godkjent, og minst ett begrep er tilgjengelig i katalogen.
+- __Fullført:__ Importen er godkjent, og begrepene er tilgjengelige i katalogen.
 - __Avvist:__ Importen er forkastet og begrepene er ikke lagt til i katalogen.
 - __Feilet:__ Importen er ikke fullført fordi minst ett av begrepene i filen inneholder feil.
       `,
