@@ -8,6 +8,7 @@ import { FileImportIcon, TasklistSendIcon } from '@navikt/aksel-icons';
 import Markdown from 'react-markdown';
 import { Concept } from '@catalog-frontend/types';
 import { HelpMarkdown } from '@catalog-frontend/ui';
+import { router } from 'next/client';
 
 interface ImportProps {
   catalogId: string;
@@ -34,6 +35,7 @@ export function ImportModal({ catalogId }: ImportProps) {
   const [isUploaded, setIsUploaded] = useState<boolean>(false);
   const [isSending, setIsSending] = useState<boolean>(false);
   const [cancelled, setCancelled] = useState<boolean>(false);
+  const [isGoingtoImportResults, setIsGoingtoImportResults] = useState<boolean>(false);
   let uploadSession ;
   const sessionId = useRef<number>(0);
 
@@ -97,6 +99,7 @@ export function ImportModal({ catalogId }: ImportProps) {
     readerRdfRef?.current?.abort()
     readerRdfRef.current = null;
     setIsUploading(false);
+    setIsGoingtoImportResults(false);
     setIsUploaded(false);
     setIsSending(false);
     setCancelled(false)
@@ -157,6 +160,7 @@ export function ImportModal({ catalogId }: ImportProps) {
 
     return (
       <UploadButton
+        disabled={isUploading || isGoingtoImportResults}
         allowedMimeTypes={allowedExtensions}
         onUpload={(e) => {
           sessionId.current = Date.now();
@@ -169,6 +173,11 @@ export function ImportModal({ catalogId }: ImportProps) {
       </UploadButton>
     );
   };
+
+  const goToImporResults = () => {
+    setIsGoingtoImportResults(true)
+    router.push(`/catalogs/${catalogId}/concepts/import-results`);
+  }
 
   return (
     <Modal.Root>
@@ -199,7 +208,7 @@ export function ImportModal({ catalogId }: ImportProps) {
             </Modal.Header>
             <Modal.Content className={styles.content}>
               <div className={styles.modalContent}>
-                {(isUploading || isSending) && (
+                {(isGoingtoImportResults || isUploading || isSending) && (
                   <div className={styles.spinnerOverlay}>
                     <Spinner
                       title={localization.loading}
@@ -252,11 +261,14 @@ export function ImportModal({ catalogId }: ImportProps) {
                 <LinkButton
                   href={`/catalogs/${catalogId}/concepts/import-results`}
                   variant={'secondary'}
+                  disabled={isGoingtoImportResults || isUploading}
+                  onClick={goToImporResults}
                 >
                   Resultater
                 </LinkButton>
 
                 <UploadButton
+                  disabled={isGoingtoImportResults || isUploading}
                   size='sm'
                   allowedMimeTypes={[
                     'text/csv',
