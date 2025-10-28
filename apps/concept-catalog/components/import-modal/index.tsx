@@ -95,13 +95,7 @@ export function ImportModal({ catalogId }: ImportProps) {
     if (uploadType === UploadType.CSV) sendConcepts.mutate(uploadedConcepts);
     else if (uploadType === UploadType.RDF) {
       console.log("Uploaded concepts: ", uploadedRdfConcepts)
-      sendRdf.mutate(uploadedRdfConcepts, {
-        //onSuccess: () => setIsSending(false),
-        onError: (error) => {
-          alert("Importing av RDF feilet: " + error);
-          setIsSending(false);
-        },
-      });
+      sendRdf.mutate(uploadedRdfConcepts);
     }
 
   }
@@ -220,11 +214,7 @@ export function ImportModal({ catalogId }: ImportProps) {
             </Modal.Header>
             <Modal.Content className={styles.content}>
               <div className={styles.modalContent}>
-                {(
-                  uploadRdf.isPending || uploadConcepts.isPending ||
-                  sendRdf.isPending || sendConcepts.isPending ||
-                  resultsPageMutation.isPending
-                ) && (
+                {(isGoingtoImportResults || isUploading || isSending) && (
                   <div className={styles.spinnerOverlay}>
                     <Spinner
                       title={localization.loading}
@@ -254,7 +244,7 @@ export function ImportModal({ catalogId }: ImportProps) {
             </Modal.Header>
             <Modal.Content className={styles.content}>
               <div className={styles.modalContent}>
-                {(uploadRdf.isPending || uploadConcepts.isPending || sendRdf.isPending || sendConcepts.isPending) && (
+                {(isUploading || isSending) && (
                   <div className={styles.spinnerOverlay}>
                     <Spinner
                       title={localization.loading}
@@ -283,7 +273,7 @@ export function ImportModal({ catalogId }: ImportProps) {
                 </Button>
 
                 <UploadButton
-                  disabled={resultsPageMutation.isPending || uploadConcepts.isPending || uploadRdf.isPending}
+                  disabled={isGoingtoImportResults || isUploading}
                   size='sm'
                   allowedMimeTypes={[
                     'text/csv',
@@ -314,8 +304,7 @@ export function ImportModal({ catalogId }: ImportProps) {
             <div className={styles.buttons}>
               <Button
                 onClick={send}
-                disabled={uploadConcepts.isPending || uploadRdf.isPending
-                  || sendConcepts.isPending || sendRdf.isPending}
+                disabled={isUploading || isSending}
                 variant={'primary'}
               >
                 <TasklistSendIcon />
@@ -324,7 +313,7 @@ export function ImportModal({ catalogId }: ImportProps) {
               <Button
                 variant={'secondary'}
                 onClick={cancel}
-                disabled={sendConcepts.isPending || sendRdf.isPending}
+                disabled={isSending}
               >
                 Avbryt
               </Button>
