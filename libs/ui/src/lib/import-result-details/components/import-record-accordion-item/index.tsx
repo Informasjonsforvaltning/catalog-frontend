@@ -12,19 +12,19 @@ import {
 } from '@digdir/designsystemet-react';
 import { ExclamationmarkTriangleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
 import { LinkButton } from '../../../button';
-import { ExtractionRecord } from '@catalog-frontend/types';
+import { ConceptExtraction, ExtractionRecord } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
 
 interface Props {
   targetBaseHref: string;
-  record: ExtractionRecord;
+  conceptExtraction: ConceptExtraction;
   enableOpening: boolean;
   isCompleted: boolean;
 }
 
-const ImportRecordAccordionItem = ({ targetBaseHref, record, enableOpening, isCompleted }: Props) => {
-  const errors = record.extractResult?.issues?.filter((issue) => issue.type === 'ERROR') ?? [];
-  const warnings = record.extractResult?.issues?.filter((issue) => issue.type === 'WARNING') ?? [];
+const ImportRecordAccordionItem = ({ targetBaseHref, conceptExtraction, enableOpening, isCompleted }: Props) => {
+  const errors = conceptExtraction.extractionRecord.extractResult?.issues?.filter((issue) => issue.type === 'ERROR') ?? [];
+  const warnings = conceptExtraction.extractionRecord.extractResult?.issues?.filter((issue) => issue.type === 'WARNING') ?? [];
 
   const renderHeader = (record: ExtractionRecord) => {
     return (
@@ -56,13 +56,13 @@ const ImportRecordAccordionItem = ({ targetBaseHref, record, enableOpening, isCo
 
   return (
     <AccordionItem>
-      <AccordionHeader>{renderHeader(record)}</AccordionHeader>
+      <AccordionHeader>{renderHeader(conceptExtraction.extractionRecord)}</AccordionHeader>
       <AccordionContent>
         {errors.length === 0 && enableOpening && (
           <div className={styles.buttonRow}>
-            {isCompleted && <LinkButton
+            {isCompleted || conceptExtraction.conceptExtractionStatus === 'COMPLETED' && <LinkButton
               variant={'tertiary'}
-              href={`/${targetBaseHref}/${record.internalId}`}
+              href={`/${targetBaseHref}/${conceptExtraction.extractionRecord.internalId}`}
             >
               {localization.importResult.goToImported}
             </LinkButton>}

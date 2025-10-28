@@ -254,7 +254,7 @@ const ImportResultDetails = ({
                       <ImportRecordAccordionItem
                         key={`result-${conceptExtraction?.extractionRecord?.internalId}`}
                         targetBaseHref={targetBaseHref}
-                        record={conceptExtraction?.extractionRecord}
+                        conceptExtraction={conceptExtraction}
                         enableOpening={
                           importResult?.status !== 'PENDING_CONFIRMATION' && importResult?.status !== 'CANCELLED'
                         }
