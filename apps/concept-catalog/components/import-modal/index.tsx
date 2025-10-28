@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { localization } from '@catalog-frontend/utils';
-import { LinkButton, UploadButton } from '@catalog-frontend/ui';
+import { UploadButton } from '@catalog-frontend/ui';
 import { useImportConceptsCSV, useSendConcepts, useImportRdf, useSendRdf } from '../../hooks/import';
 import { Button, Modal, Spinner } from '@digdir/designsystemet-react';
 import styles from './import-modal.module.scss';
@@ -8,7 +8,8 @@ import { FileImportIcon, TasklistSendIcon } from '@navikt/aksel-icons';
 import Markdown from 'react-markdown';
 import { Concept } from '@catalog-frontend/types';
 import { HelpMarkdown } from '@catalog-frontend/ui';
-import { router } from 'next/client';
+import { useMutation } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
 interface ImportProps {
   catalogId: string;
@@ -31,6 +32,7 @@ export interface UploadRdfProps {
 }
 
 export function ImportModal({ catalogId }: ImportProps) {
+  const router = useRouter();
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isUploaded, setIsUploaded] = useState<boolean>(false);
   const [isSending, setIsSending] = useState<boolean>(false);
@@ -51,7 +53,11 @@ export function ImportModal({ catalogId }: ImportProps) {
   const sendConcepts = useSendConcepts(catalogId)
 
   const uploadRdf = useImportRdf(catalogId);
-  const sendRdf = useSendRdf(catalogId)
+  const sendRdf = useSendRdf(catalogId);
+  const resultsPageMutation = useMutation({
+    mutationFn: async () => await router.push(`/catalogs/${catalogId}/concepts/import-results`),
+    onError: (error) => console.error('Failed to go to import results page', error)
+  });
 
   const maxSize = 10 ; // 10 MB
 
@@ -160,7 +166,7 @@ export function ImportModal({ catalogId }: ImportProps) {
 
     return (
       <UploadButton
-        disabled={isUploading || isGoingtoImportResults}
+        disabled={isGoingtoImportResults || isUploading}
         allowedMimeTypes={allowedExtensions}
         onUpload={(e) => {
           sessionId.current = Date.now();
@@ -176,7 +182,7 @@ export function ImportModal({ catalogId }: ImportProps) {
 
   const goToImporResults = () => {
     setIsGoingtoImportResults(true)
-    router.push(`/catalogs/${catalogId}/concepts/import-results`);
+    resultsPageMutation.mutate()
   }
 
   return (
@@ -258,14 +264,13 @@ export function ImportModal({ catalogId }: ImportProps) {
           <Modal.Footer>
             <div className={styles.buttons}>
               <>
-                <LinkButton
-                  href={`/catalogs/${catalogId}/concepts/import-results`}
+                <Button
                   variant={'secondary'}
                   disabled={isGoingtoImportResults || isUploading}
                   onClick={goToImporResults}
                 >
                   Resultater
-                </LinkButton>
+                </Button>
 
                 <UploadButton
                   disabled={isGoingtoImportResults || isUploading}
