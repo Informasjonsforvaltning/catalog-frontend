@@ -22,6 +22,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
         : [],
     euDataTheme: dataset.euDataTheme ?? [],
     losTheme: dataset.losTheme ?? [],
+    mobilityTheme: dataset.mobilityTheme ?? [],
     type: dataset?.type,
     keywords: dataset.keywords,
     concepts: dataset.concepts,
@@ -61,6 +62,7 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     legalBasisForRestriction: [],
     euDataTheme: [],
     losTheme: [],
+    mobilityTheme: [],
     type: undefined,
     keywords: {},
     concepts: [],
@@ -108,6 +110,8 @@ export const distributionTemplate = (dist: Distribution | undefined) => {
           conformsTo: [],
           page: [],
           accessServices: [],
+          mobilityRights: {},
+          mobilityDataStandard: {}
         }
   ) as Distribution;
 };

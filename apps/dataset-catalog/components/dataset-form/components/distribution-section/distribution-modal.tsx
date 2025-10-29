@@ -38,6 +38,9 @@ type Props = {
   initialAccessServices: Search.SearchObject[];
   type: 'new' | 'edit';
   distributionType: 'distribution' | 'sample';
+  isMobility?: boolean;
+  mobilityDataStandards?: ReferenceDataCode[];
+  mobilityRights?: ReferenceDataCode[];
 };
 
 export const DistributionModal = ({
@@ -54,6 +57,9 @@ export const DistributionModal = ({
   initialAccessServices,
   type,
   distributionType,
+  isMobility: isMobility,
+  mobilityDataStandards,
+  mobilityRights
 }: Props) => {
   const [selectedFileTypeUris, setSelectedFileTypeUris] = useState(initialValues?.format ?? []);
   const [selectedMediaTypeUris, setSelectedMediaTypeUris] = useState(initialValues?.mediaType ?? []);
@@ -61,10 +67,8 @@ export const DistributionModal = ({
   const [selectedAndSearchedFileTypes, setSelectedAndSearchedFileTypes] = useState<ReferenceDataCode[]>([]);
   const [selectedAndSearchedMediaTypes, setSelectedAndSearchedMediaTypes] = useState<ReferenceDataCode[]>([]);
   const [selectedAndSearchedAccessServices, setSelectedAndSearchedAccessServices] = useState<Search.SearchObject[]>([]);
-
   const template = distributionTemplate(initialValues);
   const [submitted, setSubmitted] = useState(false);
-
   const modalRef = useRef<HTMLDialogElement>(null);
 
   const [searchQueryMediaTypes, setSearchQueryMediaTypes] = useState<string>('');
@@ -462,6 +466,8 @@ export const DistributionModal = ({
                 selectedAndSearchedFileTypes,
                 selectedAndSearchedMediaTypes,
                 openLicenses,
+                mobilityDataStandards,
+                mobilityRights,
                 ref: (el: HTMLInputElement | HTMLTextAreaElement | null) => setInputRef(fieldConfig.name, el),
                 searchingFileTypes,
                 searchingMediaTypes,
@@ -626,13 +632,97 @@ export const DistributionModal = ({
                           </>
                         )}
                       </FieldArray>
+                      {(isMobility && ("mobilityDataStandard" in values)) ? (
+                        <>
+                          <Fieldset
+                            size='sm'
+                            legend={
+                              <TitleWithHelpTextAndTag
+                                tagTitle={localization.tag.required}
+                                helpText={localization.datasetForm.helptext.mobilityDataStandard}
+                              >
+                                {localization.datasetForm.fieldLabel.mobilityDataStandard}
+                              </TitleWithHelpTextAndTag>
+                            }
+                          >
+                            <Combobox
+                              value={values?.mobilityDataStandard? [values.mobilityDataStandard] : ['']}
+                              portal={false}
+                              onValueChange={(selectedValues) => {
+                                setFieldValue('mobilityDataStandard', selectedValues.toString());
+                              }}
+                              size='sm'
+                              virtual
+                            >
+                              <Combobox.Option
+                                key={`mobilityDataStandard`}
+                                value={''}
+                              >
+                                {localization.none}
+                              </Combobox.Option>
+                              {mobilityDataStandards &&
+                                mobilityDataStandards.map((mobilityDataStandard: any, i: number) => (
+                                  <Combobox.Option
+                                    key={`mobilityDataStandard-${mobilityDataStandard.uri}-${i}`}
+                                    value={mobilityDataStandard.uri}
+                                  >
+                                    {getTranslateText(mobilityDataStandard.label)}
+                                  </Combobox.Option>
+                                ))}
+                            </Combobox>
+                          </Fieldset>
+                          <FieldsetDivider />
+                        </>) : undefined 
+                      }
+                      {(isMobility && ("mobilityRights" in values)) ? (
+                        <>
+                          <Fieldset
+                            size='sm'
+                            legend={
+                              <TitleWithHelpTextAndTag
+                                helpText={localization.datasetForm.helptext.distributionRights}
+                                tagTitle={localization.tag.required}
+                              >
+                                {localization.datasetForm.fieldLabel.distributionRights}
+                              </TitleWithHelpTextAndTag>
+                        }
+                          >
+                            <Combobox
+                              value={values?.mobilityRights? [values.mobilityRights] : ['']}
+                              portal={false}
+                              onValueChange={(selectedValues) => {
+                                setFieldValue('mobilityRights', selectedValues.toString());
+                              }}
+                              size='sm'
+                              virtual
+                            >
+                              <Combobox.Option
+                                key={`mobilityRight`}
+                                value={''}
+                              >
+                                {localization.none}
+                              </Combobox.Option>
+                              {mobilityRights &&
+                                mobilityRights.map((mobilityRight: any, i: number) => (
+                                  <Combobox.Option
+                                    key={`mobilityRights-${mobilityRight.uri}-${i}`}
+                                    value={mobilityRight.uri}
+                                  >
+                                    {getTranslateText(mobilityRight.label)}
+                                  </Combobox.Option>
+                                ))}
+                            </Combobox>
+                          </Fieldset>
+                          <FieldsetDivider />
+                        </>) : undefined 
+                      }
                       <Fieldset
                         size='sm'
                         legend={
                           <TitleWithHelpTextAndTag
                             helpText={localization.datasetForm.helptext.fileType}
-                            tagTitle={localization.tag.recommended}
-                            tagColor='info'
+                            tagTitle={isMobility? localization.tag.required :(localization.tag.recommended)}
+                            tagColor={isMobility? undefined :'info'}
                           >
                             {localization.datasetForm.fieldLabel.format}
                           </TitleWithHelpTextAndTag>

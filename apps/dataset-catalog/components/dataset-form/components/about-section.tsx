@@ -4,8 +4,18 @@ import { Box, Textfield } from '@digdir/designsystemet-react';
 import { FastField } from 'formik';
 import { FieldsetDivider } from '@catalog-frontend/ui';
 import { AccessRightFields } from './access-rights-fields';
+import { SpacialCombobox } from './spatial-combobox';
+import { TemporalModal } from './details-section/temporal-modal';
 
-export const AboutSection = () => {
+interface Props {
+  referenceDataEnv: string;
+  isMobility?: boolean;
+}
+
+export const AboutSection = ({
+  referenceDataEnv,
+  isMobility: isMobility
+}: Props) => {
   return (
     <Box>
       <FormikLanguageFieldset
@@ -34,7 +44,25 @@ export const AboutSection = () => {
         }
       />
       <FieldsetDivider />
-      <AccessRightFields />
+      { isMobility && <>
+          <SpacialCombobox 
+            referenceDataEnv={referenceDataEnv}
+            isMobility={isMobility}
+          />
+          <TemporalModal
+            label={
+              <TitleWithHelpTextAndTag
+                tagTitle={localization.tag.required}
+                helpText={localization.datasetForm.helptext.temporal}
+              >
+                {localization.datasetForm.fieldLabel.temporal}
+              </TitleWithHelpTextAndTag>
+            }
+          />
+          <FieldsetDivider />
+        </> 
+      }
+      <AccessRightFields isMobility= {isMobility}/>
       <FieldsetDivider />
       <FastField
         style={{ width: 'fit-content' }}

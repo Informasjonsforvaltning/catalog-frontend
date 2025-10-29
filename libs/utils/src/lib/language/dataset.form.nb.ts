@@ -72,6 +72,9 @@ export const datasetFormNb = {
       'Datasettbeskrivelsen må ha status "Godkjent" for å kunne publiseres til Data.norge.no. Statusen kan endres i ',
     publish:
       'Publiser datasettbeskrivelsen til Data.norge.no. En beskrivelse kan ikke slettes så lenge den er publisert.',
+    mobilityTheme: 'Velg ett eller flere transporttema som beskriver innholdet i datasettet. Listen er fra EUs liste over transporttema.',
+    distributionRights: 'Betingelser for tilgang og bruk av distribusjonen.',
+    mobilityDataStandard: 'Standard for distribusjonen av datasettet. Velges fra EUs kontrollerte vokabular for Mobility Data Standard.'
   },
   heading: {
     about: 'Om datasettet',
@@ -82,6 +85,7 @@ export const datasetFormNb = {
     concept: 'Begrep og emneord',
     informationModels: 'Informasjonsmodeller',
     contactPoint: 'Kontaktpunkt',
+    transportTheme: 'Transporttema'
   },
   subtitle: {
     about: 'Nøkkelinformasjon om datasettet.',
@@ -145,6 +149,9 @@ export const datasetFormNb = {
     ignoreRequired: 'Ignorer påkrevde felt',
     contactName: 'Navn',
     contactFields: 'Kontaktinformasjon',
+    mobilityTheme: 'Transporttema',
+    distributionRights: 'Rettigheter',
+    mobilityDataStandard: 'Mobility-standard'
   },
   alert: {
     confirmDelete: 'Er du sikker på at du vil slette datasettbeskrivelsen?',
@@ -169,6 +176,7 @@ export const datasetFormNb = {
     contactPoints: 'Minst en verdi må fylles ut for kontaktpunktet.',
     accessUrlRequired: 'Tilgangslenke må fylles ut.',
     relation: 'Begge verdiene må fylles ut for å legge til en relasjon.',
+    mobilityTheme: 'Minst ett transporttema må være valgt.'
   },
   button: {
     addDate: 'Legg til tidsperiode',
@@ -181,6 +189,7 @@ export const datasetFormNb = {
     update: 'Oppdater',
     addDataset: 'Legg til datasett',
     addDatasetSeries: 'Legg til datasettserie',
+    addTransportDataset: 'Legg til transport-datasett'
   },
   errors: {
     qualifiedAttributions: 'Kunne ikke hente enheter.',

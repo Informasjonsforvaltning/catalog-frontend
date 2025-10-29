@@ -1,8 +1,15 @@
 import { localization } from '@catalog-frontend/utils';
 import { FormikLanguageFieldset, FormikOptionalFieldsFieldset, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { Textfield } from '@digdir/designsystemet-react';
+import { FastField } from 'formik';
 
-export const ContactPointSection = () => {
+type Props = {
+  isMobility?: boolean;
+}
+
+export const ContactPointSection = ({
+  isMobility: isMobility
+}: Props) => {
   const contactPointOptions = [
     { valuePath: 'contactPoints[0].email', label: localization.email },
     {
@@ -14,20 +21,37 @@ export const ContactPointSection = () => {
 
   return (
     <>
-      <div>
-        <FormikLanguageFieldset
-          name={'contactPoints[0].name'}
-          as={Textfield}
-          legend={
-            <TitleWithHelpTextAndTag
-              tagTitle={localization.tag.required}
-              helpText={localization.datasetForm.helptext.contactName}
-            >
-              {localization.datasetForm.fieldLabel.contactName}
-            </TitleWithHelpTextAndTag>
-          }
-        />
-      </div>
+      {!isMobility &&
+        <div>
+          <FormikLanguageFieldset
+            name={'contactPoints[0].name'}
+            as={Textfield}
+            legend={
+              <TitleWithHelpTextAndTag
+                tagTitle={localization.tag.required}
+                helpText={localization.datasetForm.helptext.contactName}
+              >
+                {localization.datasetForm.fieldLabel.contactName}
+              </TitleWithHelpTextAndTag>
+            }
+          />
+        </div>
+      }
+      {isMobility &&
+        <div>
+           <FastField
+            name={'contactPoints[0].name'}
+            as={Textfield}
+            label={<TitleWithHelpTextAndTag
+                tagTitle={localization.tag.required}
+                helpText={localization.datasetForm.helptext.contactName}
+              >
+                {localization.datasetForm.fieldLabel.contactName}
+              </TitleWithHelpTextAndTag>}
+            size='sm'
+          />
+        </div>
+      }
 
       <FormikOptionalFieldsFieldset
         legend={
