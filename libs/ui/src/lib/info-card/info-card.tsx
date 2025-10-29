@@ -7,8 +7,7 @@ interface InfoCardComponent extends ForwardRefExoticComponent<InfoCardProps & Re
   Item: InfoCardItemType;
 }
 
-export const infoCardSize = ['large', 'small'] as const;
-type InfoCardSize = (typeof infoCardSize)[number];
+type InfoCardSize = 'large' | 'small';
 
 export interface InfoCardProps extends HTMLAttributes<HTMLDivElement> {
   /**

@@ -5,8 +5,7 @@ import { HelpMarkdown } from '../help-markdown';
 import { Heading } from '@digdir/designsystemet-react';
 import { localization } from '@catalog-frontend/utils';
 
-export const headingColor = ['neutral', 'light'] as const;
-type HeadingColor = (typeof headingColor)[number];
+type HeadingColor = 'neutral' | 'light';
 type Size =
   | '2xs'
   | 'xs'
