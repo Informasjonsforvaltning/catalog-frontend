@@ -1,10 +1,6 @@
-import { NextConfig } from 'next';
+import type { NextConfig } from 'next';
+import { withNx } from '@nx/next/plugins/with-nx';
 
-const { withNx } = require('@nx/next/plugins/with-nx');
-
-/**
- * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
- **/
 const nextConfig: NextConfig = {
   nx: {
     // Set this to true if you would like to to use SVGR
@@ -43,9 +39,7 @@ const nextConfig: NextConfig = {
 
     return config;
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+
   async redirects() {
     return [
       {
@@ -62,4 +56,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-module.exports = withNx(nextConfig);
+export default withNx(nextConfig);
