@@ -6,7 +6,7 @@ import { localization } from '@catalog-frontend/utils';
 import EmailIcon from './images/email.svg';
 import Illustration from './images/illustration.svg';
 
-export interface FooterProps {
+interface FooterProps {
   /**
    * font color
    * @type {string}

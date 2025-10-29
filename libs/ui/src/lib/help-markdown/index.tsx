@@ -7,7 +7,7 @@ import { Link, Popover } from '@digdir/designsystemet-react';
 import type { Placement } from '@floating-ui/react';
 import styles from './help-markdown.module.scss';
 
-export type HelpTextProps = {
+type HelpTextProps = {
   /**
    * Required descriptive label for screen readers.
    **/

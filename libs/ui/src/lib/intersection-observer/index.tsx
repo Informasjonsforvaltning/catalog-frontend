@@ -25,7 +25,7 @@
  */
 import { Dispatch, RefObject, SetStateAction, useEffect } from 'react';
 
-export type useIntersectionObserverProps = {
+type useIntersectionObserverProps = {
   activeSection: string;
   setActiveSection: Dispatch<SetStateAction<string>>;
   sectionRefs: RefObject<HTMLElement>[];

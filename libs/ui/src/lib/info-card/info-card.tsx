@@ -9,7 +9,7 @@ interface InfoCardComponent extends ForwardRefExoticComponent<InfoCardProps & Re
 
 type InfoCardSize = 'large' | 'small';
 
-export interface InfoCardProps extends HTMLAttributes<HTMLDivElement> {
+interface InfoCardProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Instances of InfoCard.Item
    */

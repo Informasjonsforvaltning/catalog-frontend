@@ -18,7 +18,7 @@ import { Button, Divider, DropdownMenu } from '@digdir/designsystemet-react';
 import classNames from 'classnames';
 import { useParams } from 'next/navigation';
 
-export interface HeaderProps {
+interface HeaderProps {
   homeUrl?: string;
   adminGuiBaseUrl?: string;
   catalogAdminUrl?: string;

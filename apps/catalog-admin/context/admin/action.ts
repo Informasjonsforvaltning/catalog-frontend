@@ -2,7 +2,7 @@ import { Code, CodeList } from '@catalog-frontend/types';
 import { AdminState } from './state';
 
 // add new action types here as needed: E.g. 'POPULATE' | 'UPDATE'
-export type ACTION_TYPE =
+type ACTION_TYPE =
   | 'POPULATE'
   | 'SET_BACKGROUND_COLOR'
   | 'SET_FONT_COLOR'
@@ -14,7 +14,7 @@ export type ACTION_TYPE =
   | 'SET_UPDATED_CODES';
 
 // add new payload types here as needed
-export type ACTION_PAYLOAD =
+type ACTION_PAYLOAD =
   | AdminState
   | ({ backgroundColor: string } & { fontColor: string } & { logo: string | null | undefined } & {
       updatedCodeLists: CodeList[];

@@ -3,7 +3,7 @@ import styles from './link.module.css';
 
 import { FC, ComponentPropsWithoutRef, PropsWithChildren, ReactNode, ComponentType, JSX } from 'react';
 
-export interface Props extends ComponentPropsWithoutRef<'a'> {
+interface Props extends ComponentPropsWithoutRef<'a'> {
   /**
    * An alternative to href
    */
