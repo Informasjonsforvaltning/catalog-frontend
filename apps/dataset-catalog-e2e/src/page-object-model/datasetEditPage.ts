@@ -20,14 +20,14 @@ export default class DatasetEditPage {
     this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/concepts`;
     this.page = page;
     this.context = context;
-    this.accessibilityBuilder = accessibilityBuilder;
+    this.accessibilityBuilder = accessibilityBuilder as any;
   }
 
   // Locators
   pageTitleLocator = () => this.page.getByRole('heading', { name: '' });
   pageDescriptionLocator = () => this.page.getByText('');
 
-  async fillLanguageField(field, group, open, clear, parent?: Locator) {
+  async fillLanguageField(field: any, group: any, open: any, clear: any, parent?: Locator) {
     console.log(`[fillLanguageField] group: ${group}, open: ${JSON.stringify(open)}, clear: ${clear}`);
     await (parent ?? this.page).getByRole('group', { name: group }).first().waitFor({ state: 'visible' });
 
@@ -82,7 +82,7 @@ export default class DatasetEditPage {
     }
   }
 
-  async addRelation(search, item, relation: UnionRelation) {
+  async addRelation(search: any, item: any, relation: UnionRelation) {
     await this.page.getByRole('button', { name: 'Legg til relasjon' }).click();
     if (relation.internal) {
       await this.page.getByText('Virksomhetens eget begrep').click();
@@ -138,7 +138,7 @@ export default class DatasetEditPage {
     await this.page.getByRole('dialog').getByRole('button', { name: 'Legg til relasjon' }).waitFor({ state: 'hidden' });
   }
 
-  async clearFields(fields) {
+  async clearFields(fields: any) {
     const removeBtn = this.page.getByRole('button', { name: 'Slett' });
     while ((await removeBtn.count()) > 0) {
       await removeBtn.first().click();
@@ -193,10 +193,10 @@ export default class DatasetEditPage {
   }
 
   // Helpers
-  async fillFormAndSave(concept: Concept, apiRequestContext, clearBeforeFill = false) {
+  async fillFormAndSave(concept: Concept, apiRequestContext: any, clearBeforeFill = false) {
     console.log('[EDIT PAGE] Filling anbefaltTerm...');
     await this.fillLanguageField(
-      concept.anbefaltTerm.navn,
+      concept.anbefaltTerm?.navn,
       'Anbefalt term Hjelp til utfylling',
       ['Engelsk'],
       clearBeforeFill,
@@ -228,7 +228,7 @@ export default class DatasetEditPage {
     console.log('[EDIT PAGE] Selecting forholdTilKilde:', concept.definisjon?.kildebeskrivelse?.forholdTilKilde);
     await this.page
       .getByRole('group', { name: 'Forhold til kilde' })
-      .getByLabel(relationToSourceText(concept.definisjon?.kildebeskrivelse?.forholdTilKilde))
+      .getByLabel(relationToSourceText(concept.definisjon?.kildebeskrivelse?.forholdTilKilde) as any)
       .click();
     if (concept.definisjon?.kildebeskrivelse?.forholdTilKilde !== 'egendefinert') {
       console.log('[EDIT PAGE] Adding kildebeskrivelse...');
@@ -268,10 +268,10 @@ export default class DatasetEditPage {
     await this.page.getByLabel('Avery Quokka').click();
 
     console.log('[EDIT PAGE] Filling abbreviatedLabel...');
-    await this.page.getByRole('textbox', { name: 'Forkortelse' }).fill(concept.abbreviatedLabel);
+    await this.page.getByRole('textbox', { name: 'Forkortelse' }).fill(concept.abbreviatedLabel as any);
     for (let i = 0; i < (concept.merkelapp?.length ?? 0); i++) {
-      console.log(`[EDIT PAGE] Adding merkelapp: ${concept.merkelapp[i]}`);
-      await this.page.getByLabel('Merkelapp').fill(concept.merkelapp[i]);
+      console.log(`[EDIT PAGE] Adding merkelapp: ${(concept.merkelapp as any)[i]}`);
+      await this.page.getByLabel('Merkelapp').fill((concept.merkelapp as any)[i]);
       await this.page.keyboard.press('Enter');
     }
 
@@ -284,9 +284,9 @@ export default class DatasetEditPage {
 
     // Version
     console.log('[EDIT PAGE] Filling version:', concept.versjonsnr);
-    await this.page.getByLabel('Major').fill(`${concept.versjonsnr.major}`);
-    await this.page.getByLabel('Minor').fill(`${concept.versjonsnr.minor}`);
-    await this.page.getByLabel('Patch').fill(`${concept.versjonsnr.patch}`);
+    await this.page.getByLabel('Major').fill(`${concept.versjonsnr?.major}`);
+    await this.page.getByLabel('Minor').fill(`${concept.versjonsnr?.minor}`);
+    await this.page.getByLabel('Patch').fill(`${concept.versjonsnr?.patch}`);
 
     if (concept.gyldigFom) {
       console.log('[EDIT PAGE] Filling gyldigFom:', concept.gyldigFom);
@@ -319,7 +319,7 @@ export default class DatasetEditPage {
     console.log('[EDIT PAGE] Form filled and saved successfully.');
   }
 
-  public async goto(id?) {
+  public async goto(id?: any) {
     await this.page.goto(id ? `${this.url}/${id}/edit` : `${this.url}/new`);
   }
 
@@ -341,7 +341,7 @@ export default class DatasetEditPage {
 
   public async checkIfNoConceptsExist() {
     const items = (await this.page.getByRole('link').all()).filter(async (link) => {
-      (await link.getAttribute('href')).startsWith(this.url);
+      ((await link.getAttribute('href')) as any).startsWith(this.url);
     });
 
     expect(items.length).toBe(0);
@@ -426,7 +426,7 @@ export default class DatasetEditPage {
   async fillUrlWithLabelModal(name: string, value: UriWithLabel, open: string[], clear: boolean) {
     const dialog = this.page.getByRole('dialog');
     await this.fillLanguageField(value.prefLabel, 'Tittel', open, clear, dialog);
-    await dialog.getByLabel('Lenke').fill(value.uri);
+    await dialog.getByLabel('Lenke').fill(value.uri as any);
     await dialog.getByRole('button', { name: 'Legg til' }).click();
   }
 
@@ -536,10 +536,10 @@ export default class DatasetEditPage {
     const dialog = this.page.getByRole('dialog');
     const fromDateField = dialog.getByLabel('Fra');
     await expect(fromDateField).toBeVisible();
-    await fromDateField.fill(from);
+    await fromDateField.fill(from as any);
     const toDateField = dialog.getByLabel('Til');
     await expect(toDateField).toBeVisible();
-    await toDateField.fill(to);
+    await toDateField.fill(to as any);
     await dialog.getByRole('button', { name: 'Legg til' }).click();
   }
 

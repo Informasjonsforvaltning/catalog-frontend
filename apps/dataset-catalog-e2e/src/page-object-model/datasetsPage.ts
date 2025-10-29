@@ -25,7 +25,7 @@ export default class DatasetsPage {
     this.detailPage = new DatasetDetailPage(page, context);
     this.editPage = new EditPage(page, context);
     this.context = context;
-    this.accessibilityBuilder = accessibilityBuilder;
+    this.accessibilityBuilder = accessibilityBuilder as any;
     this.searchInput = page.getByRole('searchbox', { name: 'Søk' });
     this.searchButton = page.getByRole('button', { name: 'Søk' });
     this.datasetCards = page.locator('ul[role="list"]:not(nav ul) li[role="listitem"]');

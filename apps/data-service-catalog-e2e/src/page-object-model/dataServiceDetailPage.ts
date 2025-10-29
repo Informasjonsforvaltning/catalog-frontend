@@ -29,7 +29,7 @@ export default class DataServiceDetailPage {
   constructor(page: Page, context: BrowserContext, accessibilityBuilder?: AxeBuilder) {
     this.page = page;
     this.context = context;
-    this.accessibilityBuilder = accessibilityBuilder;
+    this.accessibilityBuilder = accessibilityBuilder as any;
     this.editButton = page.getByTestId('edit-data-service-button');
     this.deleteButton = page.getByTestId('delete-data-service-button');
     this.publishSwitch = page.getByTestId('data-service-publish-switch');

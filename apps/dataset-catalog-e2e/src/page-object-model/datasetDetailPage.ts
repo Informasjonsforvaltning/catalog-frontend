@@ -9,7 +9,7 @@ export default class DatasetDetailPage {
   constructor(page: Page, context: BrowserContext, accessibilityBuilder?: AxeBuilder) {
     this.page = page;
     this.context = context;
-    this.accessibilityBuilder = accessibilityBuilder;
+    this.accessibilityBuilder = accessibilityBuilder as any;
   }
 
   async goto(catalogId: string, datasetId: string) {

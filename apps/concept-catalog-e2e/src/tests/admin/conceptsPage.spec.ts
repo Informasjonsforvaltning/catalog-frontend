@@ -40,7 +40,7 @@ runTestAsAdmin('test search with random concepts', async ({ conceptsPage, playwr
   console.log('[TEST] Creating random concepts via API...');
   for (const concept of randomConcepts) {
     console.log(`[TEST] Creating concept: ${concept.anbefaltTerm.navn.nb}`);
-    await createConcept(apiRequestContext, concept);
+    await createConcept(apiRequestContext, concept as any);
   }
 
   console.log('[TEST] Navigating to concepts page...');
@@ -87,7 +87,7 @@ runTestAsAdmin('test status filter with random concepts', async ({ conceptsPage,
   console.log('[TEST] Creating random concepts via API...');
   for (const concept of randomConcepts) {
     console.log(`[TEST] Creating concept: ${concept.anbefaltTerm.navn.nb} with status ${concept.statusURI}`);
-    await createConcept(apiRequestContext, concept);
+    await createConcept(apiRequestContext, concept as any);
   }
 
   console.log('[TEST] Navigating to concepts page...');

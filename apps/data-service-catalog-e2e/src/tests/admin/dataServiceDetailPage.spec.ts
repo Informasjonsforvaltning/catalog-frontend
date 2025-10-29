@@ -3,7 +3,7 @@ import DataServiceDetailPage from '../../page-object-model/dataServiceDetailPage
 import { adminAuthFile, createDataService, deleteDataService, publishDataService } from '../../utils/helpers';
 import { getRandomDataService } from '../../utils/dataService';
 
-runTestAsAdmin('should display data service details', async ({ page, context, accessibilityBuilder, playwright }) => {
+runTestAsAdmin('should display data service details', async ({ page, accessibilityBuilder, playwright }) => {
   const apiRequestContext = await playwright.request.newContext({
     storageState: adminAuthFile,
   });
@@ -12,7 +12,7 @@ runTestAsAdmin('should display data service details', async ({ page, context, ac
   const createdDataService = await createDataService(apiRequestContext, dataService);
 
   const dataServiceDetailPage = new DataServiceDetailPage(page, playwright, accessibilityBuilder);
-  await dataServiceDetailPage.goto(process.env.E2E_CATALOG_ID, createdDataService.id);
+  await dataServiceDetailPage.goto(process.env.E2E_CATALOG_ID as any, createdDataService.id);
 
   // Verify data service details are displayed
   await dataServiceDetailPage.expectTitleToBe(dataService.title.nb as string);
@@ -37,7 +37,7 @@ runTestAsAdmin('should publish data service with confirmation', async ({ page, p
   const createdDataService = await createDataService(apiRequestContext, dataService);
 
   const dataServiceDetailPage = new DataServiceDetailPage(page, playwright, accessibilityBuilder);
-  await dataServiceDetailPage.goto(process.env.E2E_CATALOG_ID, createdDataService.id);
+  await dataServiceDetailPage.goto(process.env.E2E_CATALOG_ID as any, createdDataService.id);
 
   // Click publish switch to trigger confirmation modal
   await dataServiceDetailPage.publishSwitch.click();
@@ -73,7 +73,7 @@ runTestAsAdmin(
     await publishDataService(apiRequestContext, createdDataService.id);
 
     const dataServiceDetailPage = new DataServiceDetailPage(page, playwright, accessibilityBuilder);
-    await dataServiceDetailPage.goto(process.env.E2E_CATALOG_ID, createdDataService.id);
+    await dataServiceDetailPage.goto(process.env.E2E_CATALOG_ID as any, createdDataService.id);
 
     // Click unpublish switch to trigger confirmation modal
     await dataServiceDetailPage.publishSwitch.click();
@@ -105,7 +105,7 @@ runTestAsAdmin('should cancel publish confirmation modal', async ({ page, playwr
   const createdDataService = await createDataService(apiRequestContext, dataService);
 
   const dataServiceDetailPage = new DataServiceDetailPage(page, playwright, accessibilityBuilder);
-  await dataServiceDetailPage.goto(process.env.E2E_CATALOG_ID, createdDataService.id);
+  await dataServiceDetailPage.goto(process.env.E2E_CATALOG_ID as any, createdDataService.id);
 
   // Click publish switch to trigger confirmation modal
   await dataServiceDetailPage.publishSwitch.click();
@@ -139,13 +139,13 @@ runTestAsAdmin('should navigate to edit page', async ({ page, playwright, access
   const createdDataService = await createDataService(apiRequestContext, dataService);
 
   const dataServiceDetailPage = new DataServiceDetailPage(page, playwright, accessibilityBuilder);
-  await dataServiceDetailPage.goto(process.env.E2E_CATALOG_ID, createdDataService.id);
+  await dataServiceDetailPage.goto(process.env.E2E_CATALOG_ID as any, createdDataService.id);
 
   // Click edit button
   await dataServiceDetailPage.clickEdit();
 
   // Verify navigation to edit page
-  await dataServiceDetailPage.expectDataServiceDetailPageUrl(process.env.E2E_CATALOG_ID, createdDataService.id);
+  await dataServiceDetailPage.expectDataServiceDetailPageUrl(process.env.E2E_CATALOG_ID as any, createdDataService.id);
 
   // Clean up
   await deleteDataService(apiRequestContext, createdDataService.id);
@@ -160,7 +160,7 @@ runTestAsAdmin('should delete data service with confirmation', async ({ page, pl
   const createdDataService = await createDataService(apiRequestContext, dataService);
 
   const dataServiceDetailPage = new DataServiceDetailPage(page, playwright, accessibilityBuilder);
-  await dataServiceDetailPage.goto(process.env.E2E_CATALOG_ID, createdDataService.id);
+  await dataServiceDetailPage.goto(process.env.E2E_CATALOG_ID as any, createdDataService.id);
 
   // Click delete button to trigger confirmation modal
   await dataServiceDetailPage.deleteButton.click();
@@ -189,7 +189,7 @@ runTestAsAdmin('should cancel delete confirmation modal', async ({ page, playwri
   const createdDataService = await createDataService(apiRequestContext, dataService);
 
   const dataServiceDetailPage = new DataServiceDetailPage(page, playwright, accessibilityBuilder);
-  await dataServiceDetailPage.goto(process.env.E2E_CATALOG_ID, createdDataService.id);
+  await dataServiceDetailPage.goto(process.env.E2E_CATALOG_ID as any, createdDataService.id);
 
   // Click delete button to trigger confirmation modal
   await dataServiceDetailPage.deleteButton.click();
@@ -204,7 +204,7 @@ runTestAsAdmin('should cancel delete confirmation modal', async ({ page, playwri
   await dataServiceDetailPage.expectConfirmModalNotVisible();
 
   // Verify we're still on the detail page
-  await dataServiceDetailPage.expectDataServiceDetailPageUrl(process.env.E2E_CATALOG_ID, createdDataService.id);
+  await dataServiceDetailPage.expectDataServiceDetailPageUrl(process.env.E2E_CATALOG_ID as any, createdDataService.id);
 
   // Clean up
   await deleteDataService(apiRequestContext, createdDataService.id);
@@ -219,10 +219,10 @@ runTestAsAdmin('should show correct URL structure', async ({ page, playwright, a
   const createdDataService = await createDataService(apiRequestContext, dataService);
 
   const dataServiceDetailPage = new DataServiceDetailPage(page, playwright, accessibilityBuilder);
-  await dataServiceDetailPage.goto(process.env.E2E_CATALOG_ID, createdDataService.id);
+  await dataServiceDetailPage.goto(process.env.E2E_CATALOG_ID as any, createdDataService.id);
 
   // Verify correct URL structure
-  await dataServiceDetailPage.expectDataServiceDetailPageUrl(process.env.E2E_CATALOG_ID, createdDataService.id);
+  await dataServiceDetailPage.expectDataServiceDetailPageUrl(process.env.E2E_CATALOG_ID as any, createdDataService.id);
 
   // Clean up
   await deleteDataService(apiRequestContext, createdDataService.id);

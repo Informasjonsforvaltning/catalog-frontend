@@ -28,7 +28,7 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
       },
     },
     ansvarligVirksomhet: {
-      id: null,
+      id: '',
     },
     definisjon: {
       tekst: {
@@ -48,12 +48,12 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
     versjonsnr: { major: crypto.randomInt(1, 100), minor: crypto.randomInt(1, 100), patch: crypto.randomInt(1, 100) },
     merknad: {},
     merkelapp: [],
-    eksempel: null,
-    fagområde: null,
-    fagområdeKoder: null,
-    omfang: null,
-    tillattTerm: null,
-    frarådetTerm: null,
+    eksempel: undefined,
+    fagområde: undefined,
+    fagområdeKoder: undefined,
+    omfang: undefined,
+    tillattTerm: undefined,
+    frarådetTerm: undefined,
     gyldigFom: null,
     gyldigTom: null,
     seOgså: [],
@@ -62,9 +62,9 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
     internErstattesAv: [],
     erstattesAv: [],
     statusURI: 'http://publications.europa.eu/resource/authority/concept-status/DRAFT',
-    assignedUser: null,
+    assignedUser: undefined,
     begrepsRelasjon: [],
-    interneFelt: null,
+    interneFelt: undefined,
     abbreviatedLabel: `LBL${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 6).toUpperCase()}`,
   };
 
@@ -85,7 +85,7 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
         },
       },
       ansvarligVirksomhet: {
-        id: null,
+        id: '',
       },
       definisjon: {
         tekst: {
@@ -105,12 +105,12 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
       versjonsnr: { major: crypto.randomInt(1, 100), minor: crypto.randomInt(1, 100), patch: crypto.randomInt(1, 100) },
       merknad: {},
       merkelapp: [],
-      eksempel: null,
-      fagområde: null,
-      fagområdeKoder: null,
+      eksempel: undefined,
+      fagområde: undefined,
+      fagområdeKoder: undefined,
       omfang: null,
-      tillattTerm: null,
-      frarådetTerm: null,
+      tillattTerm: undefined,
+      frarådetTerm: undefined,
       gyldigFom: null,
       gyldigTom: null,
       seOgså: [],
@@ -119,13 +119,13 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
       internErstattesAv: [],
       erstattesAv: [],
       statusURI: 'http://publications.europa.eu/resource/authority/concept-status/CURRENT',
-      assignedUser: null,
+      assignedUser: undefined,
       begrepsRelasjon: [],
-      interneFelt: null,
+      interneFelt: undefined,
       abbreviatedLabel: `LBL${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 6).toUpperCase()}`,
     };
     const id = await createConcept(apiRequestContext, publishedConcept);
-    publishedConcept.id = id;
+    (publishedConcept as any).id = id;
     console.log(`[TEST] Created published concept with id: ${id}`);
   }
   const relatedPublishedId = [publishedConcept.id];
@@ -153,7 +153,7 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
       },
     },
     ansvarligVirksomhet: {
-      id: null,
+      id: '',
     },
     definisjon: {
       tekst: {
@@ -173,12 +173,12 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
     versjonsnr: { major: crypto.randomInt(1, 100), minor: crypto.randomInt(1, 100), patch: crypto.randomInt(1, 100) },
     merknad: {},
     merkelapp: [],
-    eksempel: null,
-    fagområde: null,
-    fagområdeKoder: null,
+    eksempel: undefined,
+    fagområde: undefined,
+    fagområdeKoder: undefined,
     omfang: null,
-    tillattTerm: null,
-    frarådetTerm: null,
+    tillattTerm: undefined,
+    frarådetTerm: undefined,
     gyldigFom: null,
     gyldigTom: null,
     seOgså: [
@@ -202,7 +202,7 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
       `https://concept-catalog.staging.fellesdatakatalog.digdir.no/collections/${process.env.E2E_CATALOG_ID}/concepts/${relatedPublishedId}`,
     ],
     statusURI: 'http://publications.europa.eu/resource/authority/concept-status/DRAFT',
-    assignedUser: randomUser.id,
+    assignedUser: randomUser?.id,
     begrepsRelasjon: [
       {
         relasjon: RelationTypeEnum.PARTITIV,
@@ -229,7 +229,7 @@ runTestAsAdmin('test if the detail page renders correctly', async ({ conceptsPag
         } else if (field.type === 'code_list') {
           //TODO
         } else if (field.type === 'user_list') {
-          acc[field.id] = { value: randomUser.id };
+          acc[field.id] = { value: randomUser?.id ?? '' };
         }
         return acc;
       },

@@ -1,7 +1,6 @@
 import { DataServiceToBeCreated } from '@catalog-frontend/types';
 import { expect, runTestAsAdmin } from '../../fixtures/basePage';
 import { adminAuthFile, createDataService, uniqueString, dateStringToDate, formatDate } from '../../utils/helpers';
-import { getRandomDataService } from '../../utils/dataService';
 
 const getRandomDataServiceForTest = () => {
   // Create a random data service

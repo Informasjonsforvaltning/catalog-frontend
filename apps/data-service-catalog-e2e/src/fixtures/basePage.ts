@@ -11,29 +11,29 @@ export const test = base.extend<{
   dataServicesPage: any;
   accessibilityBuilder: any;
 }>({
-  accessibilityBuilder: async ({ page }, use) => {
+  accessibilityBuilder: async ({ page }: any, use: any) => {
     const builder = await generateAccessibilityBuilder(page);
     await use(builder);
   },
-  loginPage: async ({ page, context, accessibilityBuilder }, use) => {
+  loginPage: async ({ page, context, accessibilityBuilder }: any, use: any) => {
     const loginPage = new LoginPage(page, context, accessibilityBuilder);
     await use(loginPage);
   },
-  homePage: async ({ page, context, accessibilityBuilder }, use) => {
+  homePage: async ({ page, context, accessibilityBuilder }: any, use: any) => {
     const homePage = new HomePage(page, context, accessibilityBuilder);
     await use(homePage);
   },
-  dataServicesPage: async ({ page, context, accessibilityBuilder }, use) => {
+  dataServicesPage: async ({ page, context, accessibilityBuilder }: any, use: any) => {
     const dataServicesPage = new DataServicesPage(page, context, accessibilityBuilder);
     await use(dataServicesPage);
   },
 });
 
-export const runTest = (name: string, fn: (any) => void) => {
+export const runTest = (name: string, fn: (any: any) => void) => {
   test(PREFIX_TEXT + name, fn);
 };
 
-export const runTestAsAdmin = (name: string, fn: (any) => void) => {
+export const runTestAsAdmin = (name: string, fn: (any: any) => void) => {
   test.use({ storageState: adminAuthFile });
   runTest(name, fn);
 };

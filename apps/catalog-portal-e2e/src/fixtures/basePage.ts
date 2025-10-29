@@ -8,23 +8,23 @@ export const test = base.extend<{
   loginPage: any;
   catalogPortalPage: any;
 }>({
-  loginPage: async ({ page, context }, use) => {
+  loginPage: async ({ page, context }: any, use: any) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
     const loginPage = new LoginPage(page, context, accessibilityBuilder);
     await use(loginPage);
   },
-  catalogPortalPage: async ({ page, context }, use) => {
+  catalogPortalPage: async ({ page, context }: any, use: any) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
     const catalogPortalPage = new CatalogPortalPage(page, context, accessibilityBuilder);
     await use(catalogPortalPage);
   },
 });
 
-export const runTest = (name: string, fn: (any) => void) => {
+export const runTest = (name: string, fn: (any: any) => void) => {
   test(PREFIX_TEXT + name, fn);
 };
 
-export const runTestAsAdmin = (name: string, fn: (any) => void) => {
+export const runTestAsAdmin = (name: string, fn: (any: any) => void) => {
   test.use({ storageState: adminAuthFile });
   runTest(name, fn);
 };

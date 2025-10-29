@@ -4,15 +4,11 @@ import { adminAuthFile, createDataService, deleteDataService } from '../../utils
 import { getRandomDataService, getMinimalDataService } from '../../utils/dataService';
 
 runTestAsAdmin('should create new data service', async ({ page, playwright, accessibilityBuilder }) => {
-  const apiRequestContext = await playwright.request.newContext({
-    storageState: adminAuthFile,
-  });
-
   const dataService = getRandomDataService();
   const dataServiceEditPage = new DataServiceEditPage(page, playwright, accessibilityBuilder);
 
-  await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID);
-  await dataServiceEditPage.expectNewDataServicePageUrl(process.env.E2E_CATALOG_ID);
+  await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID as any);
+  await dataServiceEditPage.expectNewDataServicePageUrl(process.env.E2E_CATALOG_ID as any);
 
   // Fill the form
   await dataServiceEditPage.fillDataServiceForm(dataService);
@@ -34,7 +30,7 @@ runTestAsAdmin('should edit existing data service', async ({ page, playwright, a
   const createdDataService = await createDataService(apiRequestContext, originalDataService);
 
   const dataServiceEditPage = new DataServiceEditPage(page, playwright, accessibilityBuilder);
-  await dataServiceEditPage.goto(process.env.E2E_CATALOG_ID, createdDataService.id);
+  await dataServiceEditPage.goto(process.env.E2E_CATALOG_ID as any, createdDataService.id);
 
   // Verify initial values
   await dataServiceEditPage.expectTitleToBe(originalDataService.title);
@@ -57,7 +53,7 @@ runTestAsAdmin('should edit existing data service', async ({ page, playwright, a
 
 runTestAsAdmin('should show all form fields', async ({ page, playwright, accessibilityBuilder }) => {
   const dataServiceEditPage = new DataServiceEditPage(page, playwright, accessibilityBuilder);
-  await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID);
+  await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID as any);
 
   // Verify all form fields are visible
   await expect(dataServiceEditPage.titleGroup).toBeVisible();
@@ -77,7 +73,7 @@ runTestAsAdmin('should show all form fields', async ({ page, playwright, accessi
 
 runTestAsAdmin('should validate required fields', async ({ page, playwright, accessibilityBuilder }) => {
   const dataServiceEditPage = new DataServiceEditPage(page, playwright, accessibilityBuilder);
-  await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID);
+  await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID as any);
 
   await dataServiceEditPage.fillDescription({ nb: 'Test Description' }, ['Bokmål']);
   // Try to save without filling required fields
@@ -91,7 +87,7 @@ runTestAsAdmin('should validate required fields', async ({ page, playwright, acc
 
 runTestAsAdmin('should handle form cancellation', async ({ page, playwright, accessibilityBuilder }) => {
   const dataServiceEditPage = new DataServiceEditPage(page, playwright, accessibilityBuilder);
-  await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID);
+  await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID as any);
 
   // Fill some data
   await dataServiceEditPage.fillTitle({ nb: 'Test Title' }, ['Bokmål']);
@@ -105,7 +101,7 @@ runTestAsAdmin('should handle form cancellation', async ({ page, playwright, acc
 
 runTestAsAdmin('should auto-save form data', async ({ page, playwright, accessibilityBuilder }) => {
   const dataServiceEditPage = new DataServiceEditPage(page, playwright, accessibilityBuilder);
-  await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID);
+  await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID as any);
 
   // Fill some data
   await dataServiceEditPage.fillTitle({ nb: 'Auto Save Test' }, ['Bokmål'], false);
@@ -116,7 +112,7 @@ runTestAsAdmin('should auto-save form data', async ({ page, playwright, accessib
 
   // Navigate away and back
   await page.goto('/');
-  await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID);
+  await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID as any);
 
   // Should show restore dialog
   await expect(page.getByText('Vil du gjenopprette?')).toBeVisible();

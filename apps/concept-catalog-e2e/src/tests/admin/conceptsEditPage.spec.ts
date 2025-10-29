@@ -22,7 +22,7 @@ runTestAsAdmin('test if updating an existing concept saves correctly', async ({ 
       },
     },
     ansvarligVirksomhet: {
-      id: null,
+      id: '',
     },
     definisjon: {
       tekst: {
@@ -57,8 +57,8 @@ runTestAsAdmin('test if updating an existing concept saves correctly', async ({ 
       nn: 'Eksempel test concept 2 nn',
       en: 'Eksempel test concept 2 en',
     },
-    fagområde: null,
-    fagområdeKoder: null,
+    fagområde: undefined,
+    fagområdeKoder: undefined,
     omfang: {
       tekst: 'Omfang concept 2',
       uri: 'https://omfang.concept2.no',
@@ -81,9 +81,9 @@ runTestAsAdmin('test if updating an existing concept saves correctly', async ({ 
     internErstattesAv: [],
     erstattesAv: [],
     statusURI: 'http://publications.europa.eu/resource/authority/concept-status/CURRENT',
-    assignedUser: null,
+    assignedUser: undefined,
     begrepsRelasjon: [],
-    interneFelt: null,
+    interneFelt: undefined,
     abbreviatedLabel: 'TC2',
   };
 
@@ -178,7 +178,7 @@ runTestAsAdmin('test if updating an existing concept saves correctly', async ({ 
           } else if (field.type === 'code_list') {
             //TODO
           } else if (field.type === 'user_list') {
-            acc[field.id] = { value: randomUser?.id };
+            acc[field.id] = { value: randomUser?.id ?? '' };
           }
           return acc;
         },
@@ -234,7 +234,7 @@ runTestAsAdmin(
         },
       },
       ansvarligVirksomhet: {
-        id: null,
+        id: '',
       },
       definisjon: {
         tekst: {
@@ -268,8 +268,8 @@ runTestAsAdmin(
         nn: 'Eksempel test concept for self-relation nn',
         en: 'Eksempel test concept for self-relation en',
       },
-      fagområde: null,
-      fagområdeKoder: null,
+      fagområde: undefined,
+      fagområdeKoder: undefined,
       omfang: {
         tekst: 'Omfang concept for self-relation',
         uri: 'https://omfang.concept.self-relation.no',
@@ -292,9 +292,9 @@ runTestAsAdmin(
       internErstattesAv: [],
       erstattesAv: [],
       statusURI: 'http://publications.europa.eu/resource/authority/concept-status/CURRENT',
-      assignedUser: null,
+      assignedUser: undefined,
       begrepsRelasjon: [],
-      interneFelt: null,
+      interneFelt: undefined,
       abbreviatedLabel: 'TCSELF',
     };
 
@@ -323,7 +323,7 @@ runTestAsAdmin(
     await conceptsPage.page
       .getByRole('group', { name: 'Relatert begrep' })
       .getByLabel('Søk begrep')
-      .fill(concept.anbefaltTerm.navn.nb);
+      .fill(concept.anbefaltTerm?.navn.nb);
     await conceptsPage.page.waitForTimeout(100);
 
     console.log('[TEST] Verifying that the concept itself is not available in search results...');
@@ -333,7 +333,7 @@ runTestAsAdmin(
 
     // Check that the current concept's name is not in the search results
     // We need to get the actual concept name that was generated
-    const conceptName = concept.anbefaltTerm.navn.nb;
+    const conceptName = concept.anbefaltTerm?.navn.nb;
     const currentConceptOption = conceptsPage.page.getByRole('option', { name: conceptName });
     await expect(currentConceptOption).not.toBeVisible();
 
@@ -359,7 +359,7 @@ runTestAsAdmin('test that URL fields only accept HTTPS URLs', async ({ conceptsP
       },
     },
     ansvarligVirksomhet: {
-      id: null,
+      id: '',
     },
     definisjon: {
       tekst: {
@@ -393,8 +393,8 @@ runTestAsAdmin('test that URL fields only accept HTTPS URLs', async ({ conceptsP
       nn: 'Eksempel test concept for URL validation nn',
       en: 'Eksempel test concept for URL validation en',
     },
-    fagområde: null,
-    fagområdeKoder: null,
+    fagområde: undefined,
+    fagområdeKoder: undefined,
     omfang: {
       tekst: 'Omfang for URL validation test',
       uri: 'https://omfang.url-validation.no',
@@ -417,9 +417,9 @@ runTestAsAdmin('test that URL fields only accept HTTPS URLs', async ({ conceptsP
     internErstattesAv: [],
     erstattesAv: [],
     statusURI: 'http://publications.europa.eu/resource/authority/concept-status/CURRENT',
-    assignedUser: null,
+    assignedUser: undefined,
     begrepsRelasjon: [],
-    interneFelt: null,
+    interneFelt: undefined,
     abbreviatedLabel: 'TCURL',
   };
 

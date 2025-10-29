@@ -1,7 +1,5 @@
 import { expect, Page, BrowserContext, Locator } from '@playwright/test';
 import type AxeBuilder from '@axe-core/playwright';
-import { clearCombobox } from '../utils/helpers';
-
 export default class DataServiceEditPage {
   protected page: Page;
   protected context: BrowserContext;
@@ -16,7 +14,7 @@ export default class DataServiceEditPage {
   readonly descriptionNbInput: Locator;
   readonly descriptionNnInput: Locator;
   readonly descriptionEnInput: Locator;
-  readonly endpointUrlGroup: Locator;
+  readonly endpointUrlGroup: any;
   readonly endpointUrlInput: Locator;
   readonly endpointDescriptionGroup: Locator;
   readonly endpointDescriptionNbInput: Locator;
@@ -52,7 +50,7 @@ export default class DataServiceEditPage {
   constructor(page: Page, context: BrowserContext, accessibilityBuilder?: AxeBuilder) {
     this.page = page;
     this.context = context;
-    this.accessibilityBuilder = accessibilityBuilder;
+    this.accessibilityBuilder = accessibilityBuilder as any;
 
     // Form fields
     this.titleGroup = page.getByRole('group', { name: 'Tittel Hjelp til utfylling Må fylles ut' });

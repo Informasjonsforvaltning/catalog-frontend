@@ -37,7 +37,7 @@ export const getParentLocator = (locator: Locator, n = 1) => {
   return parent;
 };
 
-export const clearCombobox = async (page, label) => {
+export const clearCombobox = async (page: any, label: any) => {
   // Workaround to clear and close a combobox.
   const currentValue = await page.getByRole('combobox', { name: label }).inputValue();
   await page.getByRole('combobox', { name: label }).click();
@@ -49,7 +49,7 @@ export const clearCombobox = async (page, label) => {
   await page.getByLabel(label).press('Tab');
 };
 
-export const relationToSourceText = (relationToSource) => {
+export const relationToSourceText = (relationToSource: any) => {
   if (relationToSource === 'egendefinert') {
     return 'Egendefinert';
   } else if (relationToSource === 'basertPaaKilde') {
@@ -61,7 +61,7 @@ export const relationToSourceText = (relationToSource) => {
   return null;
 };
 
-export const deleteAllDatasets = async (apiRequestContext) => {
+export const deleteAllDatasets = async (apiRequestContext: any) => {
   console.log('[DELETE ALL DATASETS] Starting deletion of all datasets...');
 
   try {
@@ -87,13 +87,13 @@ export const deleteAllDatasets = async (apiRequestContext) => {
   }
 };
 
-export const deleteDataset = async (apiRequestContext, datasetId) => {
+export const deleteDataset = async (apiRequestContext: any, datasetId: any) => {
   console.log('[DELETE DATASET] Deleting dataset:', datasetId);
   await apiRequestContext.delete(`/api/catalogs/${process.env.E2E_CATALOG_ID}/datasets/${datasetId}`);
   console.log('[DELETE DATASET] Dataset deleted successfully');
 };
 
-export const createDataset = async (apiRequestContext, dataset) => {
+export const createDataset = async (apiRequestContext: any, dataset: any) => {
   console.log('[CREATE DATASET] Creating dataset:', dataset.title);
   const response = await apiRequestContext.post(`/api/catalogs/${process.env.E2E_CATALOG_ID}/datasets`, {
     data: dataset,
@@ -110,7 +110,7 @@ export const createDataset = async (apiRequestContext, dataset) => {
   return createdDataset;
 };
 
-export const getPublishedDataset = async (apiRequestContext) => {
+export const getPublishedDataset = async (apiRequestContext: any) => {
   console.log('[GET PUBLISHED DATASET] Fetching published datasets');
   const response = await apiRequestContext.get(`/api/catalogs/${process.env.E2E_CATALOG_ID}/datasets`);
   if (!response.ok()) {
@@ -119,12 +119,12 @@ export const getPublishedDataset = async (apiRequestContext) => {
   }
 
   const datasets = await response.json();
-  const publishedDataset = datasets.filter((d) => d.erPublisert).pop();
+  const publishedDataset = datasets.filter((d: any) => d.erPublisert).pop();
   console.log('[GET PUBLISHED DATASET] Found published dataset:', publishedDataset?.id);
   return publishedDataset;
 };
 
-export const publishDataset = async (apiRequestContext, datasetId) => {
+export const publishDataset = async (apiRequestContext: any, datasetId: any) => {
   console.log('[PUBLISH DATASET] Publishing dataset:', datasetId);
   const response = await apiRequestContext.post(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/datasets/${datasetId}/publish`,
@@ -139,7 +139,7 @@ export const publishDataset = async (apiRequestContext, datasetId) => {
   return await response.json();
 };
 
-export const getUsers = async (apiRequestContext) => {
+export const getUsers = async (apiRequestContext: any) => {
   const response = await apiRequestContext.get(`/api/catalogs/${process.env.E2E_CATALOG_ID}/users`);
   if (!response.ok()) {
     throw new Error(`API call failed with status ${response.status()}`);

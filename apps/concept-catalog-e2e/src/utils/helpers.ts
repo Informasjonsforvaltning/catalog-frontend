@@ -38,7 +38,7 @@ export const getParentLocator = (locator: Locator, n = 1) => {
   return parent;
 };
 
-export const clearCombobox = async (page, label) => {
+export const clearCombobox = async (page: any, label: any) => {
   // Workaround to clear and close a combobox.
   const currentValue = await page.getByRole('combobox', { name: label }).inputValue();
   await page.getByRole('combobox', { name: label }).click();
@@ -50,7 +50,7 @@ export const clearCombobox = async (page, label) => {
   await page.getByLabel(label).press('Tab');
 };
 
-export const relationToSourceText = (relationToSource) => {
+export const relationToSourceText = (relationToSource: any) => {
   if (relationToSource === 'egendefinert') {
     return 'Egendefinert';
   } else if (relationToSource === 'basertPaaKilde') {
@@ -62,7 +62,7 @@ export const relationToSourceText = (relationToSource) => {
   return null;
 };
 
-export const deleteAllConcepts = async (apiRequestContext) => {
+export const deleteAllConcepts = async (apiRequestContext: any) => {
   const response = await apiRequestContext.get(`/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts`);
   if (!response.ok()) {
     throw new Error(`API call failed with status ${response.status()}`);
@@ -76,11 +76,11 @@ export const deleteAllConcepts = async (apiRequestContext) => {
   }
 };
 
-export const deleteConcept = async (apiRequestContext, conceptId) => {
+export const deleteConcept = async (apiRequestContext: any, conceptId: string) => {
   await apiRequestContext.delete(`/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/${conceptId}`);
 };
 
-export const createConcept = async (apiRequestContext, concept) => {
+export const createConcept = async (apiRequestContext: any, concept: Concept) => {
   const response = await apiRequestContext.post(`/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts`, {
     data: concept,
   });
@@ -93,7 +93,7 @@ export const createConcept = async (apiRequestContext, concept) => {
   return await response.json();
 };
 
-export const getPublishedConcept = async (apiRequestContext) => {
+export const getPublishedConcept = async (apiRequestContext: any) => {
   const response = await apiRequestContext.get(`/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts`);
   if (!response.ok()) {
     throw new Error(`API call failed with status ${response.status()}`);
@@ -103,7 +103,7 @@ export const getPublishedConcept = async (apiRequestContext) => {
   return concepts.filter((c) => c.erPublisert).pop();
 };
 
-export const publishConcept = async (apiRequestContext, conceptId) => {
+export const publishConcept = async (apiRequestContext: any, conceptId: string) => {
   const response = await apiRequestContext.post(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/${conceptId}/publish`,
   );
@@ -116,7 +116,7 @@ export const publishConcept = async (apiRequestContext, conceptId) => {
   return await response.json();
 };
 
-export const getUsers = async (apiRequestContext) => {
+export const getUsers = async (apiRequestContext: any) => {
   const response = await apiRequestContext.get(`/api/catalogs/${process.env.E2E_CATALOG_ID}/users`);
   if (!response.ok()) {
     throw new Error(`API call failed with status ${response.status()}`);
@@ -126,7 +126,7 @@ export const getUsers = async (apiRequestContext) => {
   return result;
 };
 
-export const getFields = async (apiRequestContext) => {
+export const getFields = async (apiRequestContext: any) => {
   const response = await apiRequestContext.get(`/api/catalogs/${process.env.E2E_CATALOG_ID}/fields`);
   if (!response.ok()) {
     throw new Error(`API call failed with status ${response.status()}`);

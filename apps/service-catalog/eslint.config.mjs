@@ -1,4 +1,4 @@
-import { defineConfig, globalIgnores } from 'eslint/config';
+import { defineConfig } from 'eslint/config';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createCommonTsConfig } from '../../tools/eslint/shared-eslint-config.mjs';

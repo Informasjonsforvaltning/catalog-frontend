@@ -66,13 +66,14 @@ const ImportResultDetails = ({
     statusKey ? ImportResultStatusColors[statusKey.toLocaleUpperCase() as StatusKey] : 'neutral';
 
   const getMessage = () => {
-    if (importResult.status === 'FAILED' && importResult.failureMessage)
+    if (importResult.status === 'FAILED' && importResult.failureMessage) {
       return importResult.failureMessage;
-    else if (importResult.status === 'CANCELLED')
+    } else if (importResult.status === 'CANCELLED') {
       return localization.importResult.cancelledImport;
+    }
 
-    return "";
-  }
+    return '';
+  };
 
   return (
     <div className={styles.pageContainer}>
@@ -182,17 +183,16 @@ const ImportResultDetails = ({
           )}
         </div>
       </div>
-      {(!importResult.extractionRecords || importResult.extractionRecords?.length === 0) &&
-        (
-          <CenterContainer>
-            <Heading
-              level={2}
-              size='lg'
-            >
-              {getMessage()}
-            </Heading>
-          </CenterContainer>
-        )}
+      {(!importResult.extractionRecords || importResult.extractionRecords?.length === 0) && (
+        <CenterContainer>
+          <Heading
+            level={2}
+            size='lg'
+          >
+            {getMessage()}
+          </Heading>
+        </CenterContainer>
+      )}
       {importResult?.extractionRecords && importResult?.extractionRecords.length > 0 && (
         <Accordion border={true}>
           {importResult?.extractionRecords?.map((record) => (
