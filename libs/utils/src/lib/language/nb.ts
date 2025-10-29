@@ -412,7 +412,7 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
     importModal: {
       title: `__Import av begrep__`,
       titleHelpText: `
-For å importere en Turtle-fil, som er et RDF-format, brukes __Importer RDF__. CSV- og JSON-filer importeres ved hjelp av __Importer CSV/JSON__. Når importen er gjennomført, vises resultatene automatisk på en egen side. Tidligere importforsøk kan alltid åpnes igjen via __Resultater__.
+Ved import brukes __Import av RDF__ for Turtle-filer og __Import av CSV/JSON__ for CSV- og JSON-filer. Importen omfatter opplasting og analyse av filen, men begrep legges ikke automatisk til i katalogen. Etter at filen er behandlet, åpnes en resultatside. Hvis filen er uten feil, kan begrepene legges til etter behov. Tidligere importer kan åpnes igjen via __Resultater__.
 `,
       titleConfirmSending: `__Begreper klare til import__`,
       conceptUploadDescription: `
@@ -424,11 +424,8 @@ Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- 
  Vil du fortsette importen eller avbryte?
  `,
       maxFileSize: `
-___Merk:___
-* _Maksimal filstørrelse for opplastning er {0} MB_   
-* _CSV/JSON-format tillater opplastning av inntil 500 begreper per fil_
-* _Turtle format tillater opplastning av inntil 3000 begreper per fil_
-      `,
+___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan inneholde opptil 500 begrep, og Turtle (RDF)-filer kan inneholde opptil 3000 begrep per fil._
+`,
       alert: {
         unsupportedFileUpload:
           'Den valgte filen kan ikke importeres fordi filformatet ikke støttes. Støttet filformate er {0}.',
