@@ -42,6 +42,7 @@
     "@digdir/designsystemet-react": "0.63.1",
     "@digdir/designsystemet-theme": "^0.15.3",
     "@fellesdatakatalog/icons": "^0.8.5",
+    "@fortawesome/fontawesome-svg-core": "7.0.0",
     "@fortawesome/free-regular-svg-icons": "^7.0.0",
     "@fortawesome/react-fontawesome": "^3.0.2",
     "@navikt/aksel-icons": "^7.30.1",

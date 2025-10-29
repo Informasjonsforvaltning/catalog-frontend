@@ -2778,6 +2778,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fortawesome/fontawesome-svg-core@npm:7.0.0":
+  version: 7.0.0
+  resolution: "@fortawesome/fontawesome-svg-core@npm:7.0.0"
+  dependencies:
+    "@fortawesome/fontawesome-common-types": "npm:7.0.0"
+  checksum: 10/cc5b3403ddcafdc9a54f4c7b21f2ccddd413d8361253723c70bb3e390e80ec486b3ebb89b32c7697bb87254591eaedf7f2439a8c3b2bc176c18d787baf8a511c
+  languageName: node
+  linkType: hard
+
 "@fortawesome/free-regular-svg-icons@npm:^7.0.0":
   version: 7.0.0
   resolution: "@fortawesome/free-regular-svg-icons@npm:7.0.0"
@@ -9346,6 +9355,7 @@ __metadata:
     "@eslint/eslintrc": "npm:^3.3.1"
     "@eslint/js": "npm:^9.35.0"
     "@fellesdatakatalog/icons": "npm:^0.8.5"
+    "@fortawesome/fontawesome-svg-core": "npm:7.0.0"
     "@fortawesome/free-regular-svg-icons": "npm:^7.0.0"
     "@fortawesome/react-fontawesome": "npm:^3.0.2"
     "@graphql-codegen/cli": "npm:^6.0.0"
