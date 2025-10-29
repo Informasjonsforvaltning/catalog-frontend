@@ -162,8 +162,8 @@ export const confirmedServiceSchema = Yup.object().shape({
             return Boolean(name.nb || name.nn || name.en);
           }),
         email: Yup.string().email(localization.validation.invalidEmail).notRequired(),
-        phone: Yup.string().matches(telephoneNumberRegex, localization.validation.invalidPhone).notRequired(),
-        url: Yup.string()
+        telephone: Yup.string().matches(telephoneNumberRegex, localization.validation.invalidPhone).notRequired(),
+        contactPage: Yup.string()
           .matches(httpsRegex, localization.validation.invalidProtocol)
           .url(localization.validation.invalidUrl)
           .notRequired(),
@@ -177,7 +177,7 @@ export const confirmedServiceSchema = Yup.object().shape({
           return false;
         }
         const firstContactPoint = contactPoints[0];
-        return Boolean(firstContactPoint.email || firstContactPoint.phone || firstContactPoint.url);
+        return Boolean(firstContactPoint.email || firstContactPoint.telephone || firstContactPoint.contactPage);
       },
     ),
 });
