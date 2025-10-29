@@ -6,10 +6,10 @@ export const ContactPointSection = () => {
   const contactPointOptions = [
     { valuePath: 'contactPoints[0].email', label: localization.email },
     {
-      valuePath: 'contactPoints[0].phone',
+      valuePath: 'contactPoints[0].telephone',
       label: localization.telephone,
     },
-    { valuePath: 'contactPoints[0].url', label: localization.contactPoint.form },
+    { valuePath: 'contactPoints[0].contactPage', label: localization.contactPoint.form },
   ];
 
   return (

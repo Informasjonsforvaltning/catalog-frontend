@@ -7,7 +7,7 @@ import { ArrowLeftIcon } from '@navikt/aksel-icons';
 import { useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import ServiceForm from '@service-catalog/components/service-form';
-import { createService, getServiceById } from '@service-catalog/app/actions/services/actions';
+import { createService } from '@service-catalog/app/actions/services/actions';
 import { serviceTemplate } from '@service-catalog/components/service-form/service-template';
 
 type NewPageProps = {
