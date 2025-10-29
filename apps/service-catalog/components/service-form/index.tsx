@@ -201,8 +201,6 @@ export const ServiceForm = (props: ServiceFormProps) => {
               showSnackbarMessage({ message: localization.snackbar.saveSuccessful, severity: 'success' });
               if (newValues) {
                 resetForm({ values: serviceTemplate(newValues) });
-              } else {
-                resetForm();
               }
 
               // Discard stored data
