@@ -419,7 +419,7 @@ Ved import brukes __Import av RDF__ for Turtle-filer og __Import av CSV/JSON__ f
 Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- eller JSON-format. Etter import vises en side med resultater.
         `,
       textConfirmSending: `
- Importstatus vil vises på en egen side, der det også kan velges om begrepene skal opprettes i begrepskatalogen.
+ Importstatus vil vises på en egen side, der det også kan velges om begrepene skal legges til i begrepskatalogen.
  
  Vil du fortsette importen eller avbryte?
  `,
