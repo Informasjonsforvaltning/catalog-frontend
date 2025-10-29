@@ -238,7 +238,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                 window.location.replace(`/catalogs/${catalogId}/${type}/new?restore=1`);
                 return false;
               }
-              window.location.replace(`/catalogs/${catalogId}/${type}/edit?restore=1`);
+              window.location.replace(`/catalogs/${catalogId}/${type}/${data.id}/edit?restore=1`);
               return false;
             }
             const restoreValues = serviceTemplate(data.values);

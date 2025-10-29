@@ -8,7 +8,7 @@ import { useRef, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import ServiceForm from '@service-catalog/components/service-form';
 import { serviceTemplate } from '@service-catalog/components/service-form/service-template';
-import { createPublicService, getPublicServiceById } from '@service-catalog/app/actions/public-services/actions';
+import { createPublicService } from '@service-catalog/app/actions/public-services/actions';
 
 type NewPageProps = {
   statuses: ReferenceDataCode[];
