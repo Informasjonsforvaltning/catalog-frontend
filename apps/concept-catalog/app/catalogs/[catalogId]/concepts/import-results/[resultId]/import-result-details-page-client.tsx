@@ -20,6 +20,7 @@ interface Props {
 const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
   const router = useRouter();
   const deleteImportMutation = useMutation({
     mutationFn: async ({ catalogId, importResultId }: { catalogId: string; importResultId: string }) => {
@@ -49,14 +50,18 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
   });
 
     const cancelMutation = useMutation({
-      mutationFn: async () => await cancelImport(catalogId, importResult.id),
+      mutationFn: async () => {
+        await cancelImport(catalogId, importResult.id);
+        await setIsCancelling(false)
+      },
       onSuccess: () => {
         qc.invalidateQueries({ queryKey: ['refresh-import-result', catalogId, importResult.id] });
       },
     });
 
-    const handleCancelClick = () => {
-      cancelMutation.mutate();
+    const handleCancelClick = async () => {
+      await setIsCancelling(true);
+      await cancelMutation.mutate();
     };
 
     const shouldRefetch = (fetchedData)=> fetchedData.status === 'IN_PROGRESS';
@@ -93,7 +98,9 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
         importResult={data}
         deleteHandler={handleDeleteClick}
         cancelHandler={handleCancelClick}
+        cancelMutation={cancelMutation}
         saveConceptMutation={saveConceptMutation}
+        isCancelling={isCancelling}
         isDeleting={isDeleting}
         showCancellationButton={true}
       />

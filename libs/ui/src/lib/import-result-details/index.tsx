@@ -21,6 +21,7 @@ interface Props {
   cancelMutation?: ReturnType<typeof useMutation>;
   showCancellationButton?: boolean;
   isDeleting: boolean;
+  isCancelling: boolean;
 }
 
 const importStatuses = [
@@ -50,8 +51,10 @@ const ImportResultDetails = ({
   saveConceptMutation,
   deleteImportMutation,
   cancelHandler,
-  isDeleting,
+  cancelMutation,
   showCancellationButton,
+  isDeleting,
+  isCancelling,
 }: Props) => {
   const formattedCreateDate = capitalizeFirstLetter(
     formatISO(importResult.created, {
@@ -108,7 +111,7 @@ const ImportResultDetails = ({
           variant='primary'
           size='sm'
           color={getButtonColor(conceptExtraction)}
-          disabled={isDeleting || saveConceptMutation?.isPending || deleteImportMutation?.isPending}
+          disabled={isDeleting || isCancelling || saveConceptMutation?.isPending || deleteImportMutation?.isPending}
           onClick={() => saveExtractedConcept(conceptExtraction?.extractionRecord?.externalId)}
           >
           <>
@@ -132,7 +135,7 @@ const ImportResultDetails = ({
       <div className={styles.header}>
         <div className={styles.titleContainer}>
           {
-            (isDeleting || deleteImportMutation?.isPending) && (
+            (isCancelling || isDeleting || cancelMutation?.isPending || deleteImportMutation?.isPending) && (
             <div className={styles.spinnerOverlay}>
             <Spinner
               title={localization.loading}
