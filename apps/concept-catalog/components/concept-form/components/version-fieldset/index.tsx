@@ -61,9 +61,7 @@ export const VersionFieldset = ({ name, changed, readOnly }) => {
           />
         </div>
       </Fieldset>
-      {typeof get(errors, name) === 'string' ? (
-        <ErrorMessage size='sm'>{get(errors, name)}</ErrorMessage>
-      ) : undefined}
+      {typeof get(errors, name) === 'string' ? <ErrorMessage size='sm'>{get(errors, name)}</ErrorMessage> : undefined}
     </>
   );
 };

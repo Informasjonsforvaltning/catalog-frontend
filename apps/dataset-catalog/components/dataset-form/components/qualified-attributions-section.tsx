@@ -7,7 +7,7 @@ import { useFormikContext } from 'formik';
 import { debounce } from 'lodash';
 import { useCallback, useState } from 'react';
 
-export const QualifiedAttributionsSection = ({ ref }: { ref: React.RefObject<HTMLInputElement>}) => {
+export const QualifiedAttributionsSection = ({ ref }: { ref: React.RefObject<HTMLInputElement> }) => {
   const { setFieldValue, values } = useFormikContext<Dataset>();
 
   const [searchTerm, setSearchTerm] = useState('');

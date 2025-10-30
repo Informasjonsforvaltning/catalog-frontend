@@ -7,6 +7,7 @@ This directory contains end-to-end tests for the concept catalog application.
 The `autoSave.spec.ts` file contains comprehensive tests for the auto-save functionality in the concept catalog. These tests verify that:
 
 ### Main Form Auto-Save
+
 - **Restore Dialog Appearance**: Tests that the restore dialog appears after a page refresh when there are unsaved changes
 - **Data Restoration**: Verifies that form data is correctly restored when clicking the "Gjenopprett" (Restore) button
 - **Data Discard**: Ensures that data is properly discarded when clicking the "Forkast" (Discard) button
@@ -15,6 +16,7 @@ The `autoSave.spec.ts` file contains comprehensive tests for the auto-save funct
 - **Clear After Save**: Verifies that auto-save data is cleared after successful form submission
 
 ### Concept-Specific Auto-Save
+
 - **Anbefalt Term**: Tests auto-save functionality for the recommended term field
 - **Definition**: Tests auto-save functionality for concept definitions
 - **Tillatt Term**: Tests auto-save functionality for allowed terms
@@ -24,6 +26,7 @@ The `autoSave.spec.ts` file contains comprehensive tests for the auto-save funct
 ## Test Structure
 
 Each test follows this pattern:
+
 1. **Setup**: Create a test concept and navigate to the edit page
 2. **Action**: Make changes to form fields or modal dialogs
 3. **Trigger**: Refresh the page to trigger auto-save restore dialog
@@ -67,11 +70,13 @@ Tests use randomly generated data to avoid conflicts and ensure test isolation. 
 ## Auto-Save Implementation
 
 The auto-save functionality is implemented using:
+
 - **FormikAutoSaver**: A React component that automatically saves form data to localStorage
 - **LocalDataStorage**: A utility class for managing localStorage data with secondary storage support
 - **Restore Dialog**: A modal dialog that appears when unsaved changes are detected
 
 The auto-save system:
+
 1. Monitors form changes using Formik's `dirty` state
 2. Saves form data to localStorage when changes are detected
 3. Supports secondary storage for complex data like relations and definitions
@@ -82,7 +87,8 @@ The auto-save system:
 ## Concept-Specific Features
 
 The concept catalog auto-save system includes additional features:
+
 - **Secondary Storage**: Handles complex data structures like relations and definitions
 - **Multi-language Support**: Auto-saves data in Norwegian (Bokmål, Nynorsk) and English
 - **Relation Management**: Auto-saves relation data including internal and external concepts
-- **Definition Sources**: Auto-saves definition source information and relationships 
+- **Definition Sources**: Auto-saves definition source information and relationships

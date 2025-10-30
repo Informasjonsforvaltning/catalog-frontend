@@ -5,7 +5,7 @@ import HomePageClient from './home-page-client';
 
 const Home = async () => {
   const session = await getValidSession();
-  if(!session) {
+  if (!session) {
     return redirectToSignIn({ callbackUrl: `/` });
   }
 
@@ -19,7 +19,12 @@ const Home = async () => {
     organizations = await getOrganizations(organiztionIdsWithAdminRole).then((res) => res.json());
   }
 
-  return <HomePageClient organizations={organizations} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}`}/>;
+  return (
+    <HomePageClient
+      organizations={organizations}
+      catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}`}
+    />
+  );
 };
 
 export default Home;

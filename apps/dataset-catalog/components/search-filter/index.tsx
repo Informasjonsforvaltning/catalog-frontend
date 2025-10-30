@@ -17,7 +17,7 @@ export type InternalFieldFilterType = {
 };
 
 type SearchFilterProps = {
-  pageSettings?: DatasetsPageSettings; 
+  pageSettings?: DatasetsPageSettings;
 };
 
 const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
@@ -93,7 +93,7 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
 
   const accordionItems = accordionItemContents.map((item) => (
     <AccordionItem
-      key={`accordion-item-${item.header}`}            
+      key={`accordion-item-${item.header}`}
       {...item}
     />
   ));

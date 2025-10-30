@@ -4,14 +4,12 @@ import { localization } from '@catalog-frontend/utils';
 import React from 'react';
 import { useImportRdf } from '@concept-catalog/hooks/import';
 
-
 interface Props {
-  catalogId: string,
+  catalogId: string;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const ImportConceptRdf = ( { catalogId, setIsLoading }: Props) => {
-
+export const ImportConceptRdf = ({ catalogId, setIsLoading }: Props) => {
   const extension2Type: Map<string, string> = new Map<string, string>();
   extension2Type.set('.ttl', 'text/turtle');
   const allowedExtensions = Array.from(extension2Type.keys());
@@ -23,21 +21,21 @@ export const ImportConceptRdf = ( { catalogId, setIsLoading }: Props) => {
       reader.readAsText(file, 'UTF-8');
       const fileExtension = file.name.split('.').pop()?.toLowerCase();
       const contentType = extension2Type.get(`.${fileExtension}`);
-      if (!fileExtension || ! contentType) {
+      if (!fileExtension || !contentType) {
         console.error('Uploaded file has no extension or unsupported extension:', fileExtension);
         return;
       }
       reader.onload = function (evt) {
         if (evt.target && typeof evt.target.result === 'string') {
-            setIsLoading(true);
-            uploadRdf.mutate({fileContent: evt.target.result, contentType: contentType });
+          setIsLoading(true);
+          uploadRdf.mutate({ fileContent: evt.target.result, contentType: contentType });
         } else {
           console.error('File content is not a string');
           setIsLoading(false);
         }
       };
     }
-  }
+  };
 
   return (
     <UploadButton

@@ -76,7 +76,6 @@ const ServicePageClient = ({ services, hasWritePermission, catalogId, statuses }
             className={styles.searchField}
             placeholder={localization.search.searchForService}
             onSearch={(value) => setSearchQuery(value)}
-
           />
           {hasWritePermission && (
             <LinkButton href={`/catalogs/${catalogId}/services/new`}>
@@ -85,7 +84,7 @@ const ServicePageClient = ({ services, hasWritePermission, catalogId, statuses }
             </LinkButton>
           )}
         </div>
-        {(statusFilters.length > 0 || publicationFilters.length > 0) ? (
+        {statusFilters.length > 0 || publicationFilters.length > 0 ? (
           <FilterChips
             statusFilters={statusFilters}
             publicationFilters={publicationFilters}
@@ -138,7 +137,7 @@ const ServicePageClient = ({ services, hasWritePermission, catalogId, statuses }
                 </div>
               ))
             }
-            noSearchHits={!(filteredServices?.length)}
+            noSearchHits={!filteredServices?.length}
           />
         }
       </SearchHitsLayout.MainColumn>

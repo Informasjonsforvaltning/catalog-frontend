@@ -8,7 +8,7 @@ import styles from './change-request-filter.module.css';
 type Props = {
   itemType: ItemType;
   status: Status;
-}
+};
 
 const ChangeRequestsFilter = ({ itemType, status }: Props) => {
   return (

@@ -339,7 +339,7 @@ export const confirmConceptImport = async (catalogId: string, resultId: string, 
   };
 
   return await fetch(resource, options);
-}
+};
 
 export const cancelConceptImport = async (catalogId: string, resultId: string, accessToken: string) => {
   validateOrganizationNumber(catalogId, 'cancelConceptImport');
@@ -349,16 +349,16 @@ export const cancelConceptImport = async (catalogId: string, resultId: string, a
   const encodedResultId = validateAndEncodeUrlSafe(resultId, 'result ID', 'cancelConceptImport');
 
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}/cancel`;
-    const options = {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-        },
-        method: 'PUT',
-    };
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'PUT',
+  };
 
-    return await fetch(resource, options);
-}
+  return await fetch(resource, options);
+};
 
 export const removeImportResultConcept = async (catalogId: string, resultId: string, accessToken: string) => {
   validateOrganizationNumber(catalogId, 'removeImportResultConcept');

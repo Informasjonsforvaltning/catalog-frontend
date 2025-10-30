@@ -154,8 +154,10 @@ export const datasetFormNb = {
     youHaveUnsavedChanges: 'Det finnes endringer som ikke har blitt lagret på datasettbeskrivelsen:',
     ignoreRequired:
       'I utgangspunktet er det krav om at alle påkrevde felt må fylles ut for å få lagret. Når avhukingsboksen er aktiv, må bare tittel være fylt ut.',
-    unpublishBeforeUnapprove: 'Datasettet må være avpublisert før status kan endres fra ‘Godkjent’. Avpublisering gjøres fra detaljsiden.',
-    unpublishBeforeIgnoreRequired: 'Datasettet må være avpublisert for å kunne aktivere ‘Ignorer påkrevde felt’. Avpublisering gjøres fra detaljsiden.',
+    unpublishBeforeUnapprove:
+      'Datasettet må være avpublisert før status kan endres fra ‘Godkjent’. Avpublisering gjøres fra detaljsiden.',
+    unpublishBeforeIgnoreRequired:
+      'Datasettet må være avpublisert for å kunne aktivere ‘Ignorer påkrevde felt’. Avpublisering gjøres fra detaljsiden.',
   },
   validation: {
     title: 'Tittelen må være minst 3 karakterer lang.',

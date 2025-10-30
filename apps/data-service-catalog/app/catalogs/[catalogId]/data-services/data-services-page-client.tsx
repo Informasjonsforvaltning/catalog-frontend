@@ -219,9 +219,7 @@ const DataServicesPageClient = ({
               </Select>
             </div>
             <div className={styles.buttons}>
-              {hasAdminPermission && (
-                <ImportModal catalogId={catalogId} />
-              )}
+              {hasAdminPermission && <ImportModal catalogId={catalogId} />}
               {hasWritePermission && (
                 <LinkButton href={`/catalogs/${catalogId}/data-services/new`}>
                   <PlusCircleIcon />
@@ -239,7 +237,10 @@ const DataServicesPageClient = ({
           <SearchHitContainer
             searchHits={
               paginatedDataServices.length > 0 ? (
-                <ul className={styles.searchHits} role='list'>
+                <ul
+                  className={styles.searchHits}
+                  role='list'
+                >
                   {paginatedDataServices.map((dataService: DataService) => (
                     <li
                       role='listitem'

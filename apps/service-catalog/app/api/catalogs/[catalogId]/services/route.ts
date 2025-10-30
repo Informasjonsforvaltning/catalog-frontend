@@ -27,7 +27,6 @@ export const POST = async (req: NextRequest, props: { params: Promise<{ catalogI
     const { catalogId } = params;
 
     const service: Service = await req.json();
-    
 
     try {
       const response = await createService(service, catalogId, session?.accessToken);

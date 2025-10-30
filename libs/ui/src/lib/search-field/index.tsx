@@ -35,7 +35,9 @@ const SearchField: FC<SearchFieldProps> = ({
   onSearch,
 }) => {
   const [query, setQuery] = useState(value);
-  const [optionValue, setOptionValue] = useState(selectedOptionValue ?? options?.find((option) => option.default === true)?.value);
+  const [optionValue, setOptionValue] = useState(
+    selectedOptionValue ?? options?.find((option) => option.default === true)?.value,
+  );
   const searchActionsRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 

@@ -24,7 +24,7 @@ export const DatasetList = ({ datasetURIs, searchEnv, language }: Props) => {
         {datasetURIs?.map((uri, index) => {
           return uri ? (
             <List.Item key={`dataset-${index}`}>
-                <Link href={uri}>{getTranslateText(matchDataset(uri)?.title, language) || uri}</Link>
+              <Link href={uri}>{getTranslateText(matchDataset(uri)?.title, language) || uri}</Link>
             </List.Item>
           ) : null;
         })}

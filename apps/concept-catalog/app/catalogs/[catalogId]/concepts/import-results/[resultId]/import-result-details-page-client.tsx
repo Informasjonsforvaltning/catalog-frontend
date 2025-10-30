@@ -37,42 +37,41 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
     },
   });
 
-    const handleConfirmClick = () => {
-      confirmMutation.mutate()
-    };
+  const handleConfirmClick = () => {
+    confirmMutation.mutate();
+  };
 
-    const cancelMutation = useMutation({
-      mutationFn: async () => await cancelImport(catalogId, importResult.id),
-      onSuccess: () => {
-        qc.invalidateQueries({ queryKey: ['refresh-import-result', catalogId, importResult.id] });
-      },
-    });
+  const cancelMutation = useMutation({
+    mutationFn: async () => await cancelImport(catalogId, importResult.id),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ['refresh-import-result', catalogId, importResult.id] });
+    },
+  });
 
-    const handleCancelClick = () => {
-      cancelMutation.mutate();
-    };
+  const handleCancelClick = () => {
+    cancelMutation.mutate();
+  };
 
-    const shouldRefetch = (fetchedData)=> fetchedData.status === 'IN_PROGRESS'
-      || fetchedData.status === 'SAVING';
+  const shouldRefetch = (fetchedData) => fetchedData.status === 'IN_PROGRESS' || fetchedData.status === 'SAVING';
 
-    const isPendingConfirmation = (fetchedData) => fetchedData.status === 'PENDING_CONFIRMATION';
+  const isPendingConfirmation = (fetchedData) => fetchedData.status === 'PENDING_CONFIRMATION';
 
-    const { data } = useQuery({
-      queryKey: ['refresh-import-result', catalogId, importResult?.id],
-      queryFn: async () => {
-        const response = await fetch(`/api/catalogs/${catalogId}/concepts/import-results/${importResult?.id}`, {
-          method: 'GET',
-        });
-        return response.json();
-      },
-      initialData: importResult, // seed from server
-      refetchInterval: (q) => {
-        const status = q?.state?.data?.status;
-        return shouldRefetch(q?.state?.data) ? 3000 : isPendingConfirmation(q?.state?.data) ? 6000: false;
-      },
-      refetchOnWindowFocus: true,
-      retry: 2,
-    });
+  const { data } = useQuery({
+    queryKey: ['refresh-import-result', catalogId, importResult?.id],
+    queryFn: async () => {
+      const response = await fetch(`/api/catalogs/${catalogId}/concepts/import-results/${importResult?.id}`, {
+        method: 'GET',
+      });
+      return response.json();
+    },
+    initialData: importResult, // seed from server
+    refetchInterval: (q) => {
+      const status = q?.state?.data?.status;
+      return shouldRefetch(q?.state?.data) ? 3000 : isPendingConfirmation(q?.state?.data) ? 6000 : false;
+    },
+    refetchOnWindowFocus: true,
+    retry: 2,
+  });
 
   return (
     <>

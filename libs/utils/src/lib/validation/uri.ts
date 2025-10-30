@@ -7,7 +7,7 @@ export const validURI = (uri: string): boolean => {
   if (!uri || typeof uri !== 'string') {
     return false;
   }
-  
+
   try {
     new URL(uri);
     return true;

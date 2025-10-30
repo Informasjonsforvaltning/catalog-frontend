@@ -10,7 +10,7 @@ interface Props extends ComboboxProps {
   querySearchHits: ReferenceDataCode[];
   formikValues: string[];
   showCodeAsDescription?: boolean;
-  ref?: Ref<HTMLInputElement>
+  ref?: Ref<HTMLInputElement>;
 }
 
 export function FormikReferenceDataCombobox({

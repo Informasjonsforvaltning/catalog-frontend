@@ -15,7 +15,7 @@ type ContactSectionProps = {
 export const ContactSection = ({ changed, readOnly = false }: ContactSectionProps) => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
   const [selectedFields, setSelectedFields] = useState<string[]>([]);
- 
+
   const contactOptions = [
     {
       label: localization.conceptForm.fieldLabel.emailAddress,

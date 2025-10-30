@@ -192,8 +192,9 @@ export const ConceptPageClient = ({
             aria-label='Info publisering'
             severity='info'
           >
-            {`Viktig! Når et begrep er publisert, kan det verken slettes eller avpubliseres, men kun endres.${isPublished ? '' : ' Sørg derfor for at alle opplysninger er korrekte før publisering.'
-              }`}
+            {`Viktig! Når et begrep er publisert, kan det verken slettes eller avpubliseres, men kun endres.${
+              isPublished ? '' : ' Sørg derfor for at alle opplysninger er korrekte før publisering.'
+            }`}
           </HelpMarkdown>
         ) : (
           <HelpMarkdown
@@ -221,16 +222,17 @@ export const ConceptPageClient = ({
         </div>
         <div className={classes.greyFont}>
           {isPublished
-            ? `${localization.publicationState.publishedInFDK}${publishedDate
-              ? ' ' +
-              formatISO(publishedDate, {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })
-              : ''
-            }`
+            ? `${localization.publicationState.publishedInFDK}${
+                publishedDate
+                  ? ' ' +
+                    formatISO(publishedDate, {
+                      weekday: 'long',
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })
+                  : ''
+              }`
             : ''}
         </div>
       </>,
@@ -238,119 +240,119 @@ export const ConceptPageClient = ({
     [localization.concept.version, versionToString(concept?.versjonsnr)],
     ...(concept?.gyldigFom || concept?.gyldigTom
       ? [
-        [
-          localization.concept.validPeriod,
-          <>
-            {concept?.gyldigFom && (
-              <div>
-                <span className={classes.greyFont}>{localization.fromAndIncluding}: </span>
-                {`${formatISO(concept?.gyldigFom, {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}`}
-              </div>
-            )}
-            {concept?.gyldigTom && (
-              <div>
-                <span className={classes.greyFont}>{localization.toAndIncluding}: </span>
-                {`${formatISO(concept?.gyldigTom, {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}`}
-              </div>
-            )}
-          </>,
-        ],
-      ]
+          [
+            localization.concept.validPeriod,
+            <>
+              {concept?.gyldigFom && (
+                <div>
+                  <span className={classes.greyFont}>{localization.fromAndIncluding}: </span>
+                  {`${formatISO(concept?.gyldigFom, {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}`}
+                </div>
+              )}
+              {concept?.gyldigTom && (
+                <div>
+                  <span className={classes.greyFont}>{localization.toAndIncluding}: </span>
+                  {`${formatISO(concept?.gyldigTom, {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}`}
+                </div>
+              )}
+            </>,
+          ],
+        ]
       : []),
 
     ...(concept?.assignedUser
       ? [
-        [
-          localization.assigned,
-          usersResult?.users?.find((user) => user.id === concept.assignedUser)?.name ?? localization.unknown,
-        ],
-      ]
+          [
+            localization.assigned,
+            usersResult?.users?.find((user) => user.id === concept.assignedUser)?.name ?? localization.unknown,
+          ],
+        ]
       : []),
     ...(!isEmpty(concept?.merkelapp)
       ? [
-        [
-          localization.concept.label,
-          <ul
-            key='label-list'
-            className={classes.labels}
-          >
-            {concept?.merkelapp?.map((label) => (
-              <li key={`label-${label}`}>
-                <Chip.Toggle
-                  key={`label-${label}`}
-                  onClick={() => handleLabelClick(label)}
-                >
-                  {label}
-                </Chip.Toggle>
-              </li>
-            ))}
-          </ul>,
-        ],
-      ]
+          [
+            localization.concept.label,
+            <ul
+              key='label-list'
+              className={classes.labels}
+            >
+              {concept?.merkelapp?.map((label) => (
+                <li key={`label-${label}`}>
+                  <Chip.Toggle
+                    key={`label-${label}`}
+                    onClick={() => handleLabelClick(label)}
+                  >
+                    {label}
+                  </Chip.Toggle>
+                </li>
+              ))}
+            </ul>,
+          ],
+        ]
       : []),
     ...(concept?.endringslogelement?.endringstidspunkt
       ? [
-        [
-          localization.concept.dateLastUpdated,
-          formatISO(concept?.endringslogelement?.endringstidspunkt, {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          }) ?? '',
-        ],
-      ]
+          [
+            localization.concept.dateLastUpdated,
+            formatISO(concept?.endringslogelement?.endringstidspunkt, {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            }) ?? '',
+          ],
+        ]
       : []),
     ...(concept?.opprettet
       ? [
-        [
-          localization.concept.created,
-          formatISO(concept?.opprettet, {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-          }) ?? '',
-        ],
-      ]
+          [
+            localization.concept.created,
+            formatISO(concept?.opprettet, {
+              weekday: 'long',
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            }) ?? '',
+          ],
+        ]
       : []),
     ...(concept?.opprettetAv ? [[`${localization.created} ${localization.by}`, concept.opprettetAv]] : []),
     ...(concept?.kontaktpunkt?.harEpost || concept?.kontaktpunkt?.harTelefon
       ? [
-        [
-          localization.concept.contactInformation,
-          <>
-            {concept?.kontaktpunkt?.harEpost && (
-              <div
-                key='contactEmail'
-                className={classes.contact}
-              >
-                <EnvelopeClosedIcon />
-                &nbsp;
-                {concept?.kontaktpunkt?.harEpost}
-              </div>
-            )}
-            {concept?.kontaktpunkt?.harTelefon && (
-              <div
-                key='contactTl'
-                className={classes.contact}
-              >
-                <PhoneIcon />
-                &nbsp;
-                {concept?.kontaktpunkt?.harTelefon}
-              </div>
-            )}
-          </>,
-        ],
-      ]
+          [
+            localization.concept.contactInformation,
+            <>
+              {concept?.kontaktpunkt?.harEpost && (
+                <div
+                  key='contactEmail'
+                  className={classes.contact}
+                >
+                  <EnvelopeClosedIcon />
+                  &nbsp;
+                  {concept?.kontaktpunkt?.harEpost}
+                </div>
+              )}
+              {concept?.kontaktpunkt?.harTelefon && (
+                <div
+                  key='contactTl'
+                  className={classes.contact}
+                >
+                  <PhoneIcon />
+                  &nbsp;
+                  {concept?.kontaktpunkt?.harTelefon}
+                </div>
+              )}
+            </>,
+          ],
+        ]
       : []),
   ];
 

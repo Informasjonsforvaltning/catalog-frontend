@@ -13,12 +13,12 @@ export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, 
   const conceptIdRef = useRef<string | undefined>(undefined); // Ref to store the concept id
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
-  const dataStorage = new LocalDataStorage<StorageData>({ 
-    key: 'conceptForm', 
+  const dataStorage = new LocalDataStorage<StorageData>({
+    key: 'conceptForm',
     secondaryKeys: {
       definition: 'conceptFormDefinition',
-      relation: 'conceptFormRelation'
-    }
+      relation: 'conceptFormRelation',
+    },
   });
 
   const handleCreate = async (values: Concept) => {
@@ -44,7 +44,7 @@ export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, 
     if (data?.id) {
       window.location.replace(`/catalogs/${catalogId}/concepts/${data.id}/edit?restore=1`);
       return false;
-    } 
+    }
     return true;
   };
 

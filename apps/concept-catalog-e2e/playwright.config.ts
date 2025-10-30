@@ -37,13 +37,13 @@ export default defineConfig({
   workers: 3,
   timeout: 180 * 1000,
   expect: {
-    timeout: 10 * 1000
+    timeout: 10 * 1000,
   },
   use: {
     baseURL,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on', // Captures a trace for each test
-    screenshot: 'on', // Takes screenshots on test failures    
+    screenshot: 'on', // Takes screenshots on test failures
   },
   /* Run your local dev server before starting the tests */
   webServer: {

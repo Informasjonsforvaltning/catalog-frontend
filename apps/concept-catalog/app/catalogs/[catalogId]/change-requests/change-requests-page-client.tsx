@@ -27,9 +27,9 @@ type Props = {
   catalogId: string;
   data: ChangeRequest[];
   pageSettings?: ChangeRequestsPageSettings;
-}
+};
 
-export const ChangeRequestsPageClient = ({ catalogId, data, pageSettings}: Props) => {
+export const ChangeRequestsPageClient = ({ catalogId, data, pageSettings }: Props) => {
   const itemTypeOptions = [
     {
       label: localization.changeRequest.changeRequest,
@@ -62,7 +62,7 @@ export const ChangeRequestsPageClient = ({ catalogId, data, pageSettings}: Props
   }));
 
   const router = useRouter();
- 
+
   // Memoize default values for query states
   const defaultSelectedSortOption = useMemo(() => pageSettings?.sort ?? 'TIME_FOR_PROPOSAL_DESC', []);
   const defaultSearchTerm = useMemo(() => pageSettings?.search ?? '', []);

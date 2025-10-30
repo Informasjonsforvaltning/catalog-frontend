@@ -62,7 +62,9 @@ export default class ConceptsPage {
     if (!this.accessibilityBuilder) {
       return;
     }
-    const result = await this.accessibilityBuilder.disableRules(['svg-img-alt', 'aria-toggle-field-name', 'target-size']).analyze();
+    const result = await this.accessibilityBuilder
+      .disableRules(['svg-img-alt', 'aria-toggle-field-name', 'target-size'])
+      .analyze();
     expect.soft(result.violations).toEqual([]);
   }
 

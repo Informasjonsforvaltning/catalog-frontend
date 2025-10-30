@@ -86,7 +86,10 @@ const DesignPageClient = ({ catalogId, organization, catalogPortalUrl }: DesignP
 
   return (
     <>
-      <Breadcrumbs breadcrumbList={breadcrumbList} catalogPortalUrl={catalogPortalUrl} />
+      <Breadcrumbs
+        breadcrumbList={breadcrumbList}
+        catalogPortalUrl={catalogPortalUrl}
+      />
 
       <PageLayout>
         <div className={styles.heading}>

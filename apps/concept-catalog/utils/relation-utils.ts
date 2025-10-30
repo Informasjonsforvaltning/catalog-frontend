@@ -15,10 +15,10 @@ export const getFieldname = (rel: UnionRelation): string | undefined => {
 };
 
 export const updateUnionRelation = (
-  rel: UnionRelation, 
-  prev: UnionRelationWithIndex | undefined, 
-  values: Concept, 
-  setFieldValue: (field: string, value: any) => void
+  rel: UnionRelation,
+  prev: UnionRelationWithIndex | undefined,
+  values: Concept,
+  setFieldValue: (field: string, value: any) => void,
 ): void => {
   const name: string | undefined = getFieldname(rel);
   const prevName: string | undefined = prev ? getFieldname(prev) : undefined;
@@ -54,9 +54,9 @@ export const updateUnionRelation = (
 };
 
 export const removeUnionRelation = (
-  rel: UnionRelationWithIndex, 
-  values: Concept, 
-  setFieldValue: (field: string, value: any) => void
+  rel: UnionRelationWithIndex,
+  values: Concept,
+  setFieldValue: (field: string, value: any) => void,
 ): void => {
   if (rel.index < 0) {
     return;
@@ -67,4 +67,4 @@ export const removeUnionRelation = (
     relations.splice(rel.index, 1);
     setFieldValue(name, relations);
   }
-}; 
+};

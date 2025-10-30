@@ -28,7 +28,7 @@ export const POST = async (req: NextRequest, props: { params: Promise<{ catalogI
 
     const concept: Concept = await req.json();
     concept.ansvarligVirksomhet = {
-      id: catalogId
+      id: catalogId,
     };
 
     try {

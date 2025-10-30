@@ -20,7 +20,10 @@ const SearchHit = ({ title, description, content, statusTag, titleHref, rightCol
     <div className={styles.container}>
       <div className={styles.rowSpaceBetween}>
         <div className={styles.titleRow}>
-          <Link href={titleHref ?? ''} className={styles.titleLink}>
+          <Link
+            href={titleHref ?? ''}
+            className={styles.titleLink}
+          >
             <h2 className={styles.title}>{translate(title) ? translate(title) : localization.concept.noName}</h2>
           </Link>
           {statusTag && <div>{statusTag}</div>}

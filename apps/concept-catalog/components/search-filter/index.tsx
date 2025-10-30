@@ -3,7 +3,13 @@
 import { memo, useMemo } from 'react';
 import { Accordion } from '@digdir/designsystemet-react';
 import { AccordionItem, AccordionItemProps, CheckboxGroupFilter, Select } from '@catalog-frontend/ui';
-import { AssignedUser, CodeList, ConceptsPageSettings, InternalField, ReferenceDataCode } from '@catalog-frontend/types';
+import {
+  AssignedUser,
+  CodeList,
+  ConceptsPageSettings,
+  InternalField,
+  ReferenceDataCode,
+} from '@catalog-frontend/types';
 import {
   capitalizeFirstLetter,
   convertCodeListToTreeNodes,
@@ -57,7 +63,7 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
     'conceptFilter.subject',
     parseAsArrayOf(parseAsString).withDefault(defaultFilterSubject),
   );
-  
+
   const statusItems =
     conceptStatuses?.map((s) => ({
       value: s.uri,

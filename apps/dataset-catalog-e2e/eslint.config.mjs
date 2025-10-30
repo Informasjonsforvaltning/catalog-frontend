@@ -8,4 +8,4 @@ export default [
       // Add or override rules specific to e2e tests here
     },
   },
-]; 
+];

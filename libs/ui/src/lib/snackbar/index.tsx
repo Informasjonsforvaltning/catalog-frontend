@@ -42,9 +42,7 @@ const Snackbar = ({ children, fadeIn = true }: SnackbarProps) => {
     .filter((child) => React.isValidElement(child) && child.type === SnackbarItem)
     .map((child) => child as React.ReactElement);
 
-  useEffect(() => {
-
-  }, [])  
+  useEffect(() => {}, []);
 
   return <div className={classNames(styles.snackbar, ...(fadeIn ? [styles.fadeIn] : []))}>{items}</div>;
 };

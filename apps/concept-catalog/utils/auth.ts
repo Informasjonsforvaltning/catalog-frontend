@@ -57,7 +57,7 @@ const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write' | '
     }
 
     const hasAdminPermission = session?.accessToken && hasOrganizationAdminPermission(session.accessToken, catalogId);
-    if(!hasAdminPermission && permissions === 'admin') {
+    if (!hasAdminPermission && permissions === 'admin') {
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
 

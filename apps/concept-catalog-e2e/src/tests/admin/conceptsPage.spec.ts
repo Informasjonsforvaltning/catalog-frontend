@@ -32,9 +32,10 @@ runTestAsAdmin('test search with random concepts', async ({ conceptsPage, playwr
         nb: uniqueString('def_nb'),
         nn: uniqueString('def_nn'),
         en: uniqueString('def_en'),
-      }
+      },
     },
-    statusURI: ConceptStatus[Object.keys(ConceptStatus)[i % Object.keys(ConceptStatus).length] as keyof typeof ConceptStatus],
+    statusURI:
+      ConceptStatus[Object.keys(ConceptStatus)[i % Object.keys(ConceptStatus).length] as keyof typeof ConceptStatus],
   }));
 
   console.log('[TEST] Creating random concepts via API...');
@@ -50,7 +51,10 @@ runTestAsAdmin('test search with random concepts', async ({ conceptsPage, playwr
     console.log(`[TEST] Searching for concept: ${concept.anbefaltTerm.navn.nb}`);
     await conceptsPage.search(concept.anbefaltTerm.navn.nb);
     console.log(`[TEST] Expecting only this concept in results: ${concept.anbefaltTerm.navn.nb}`);
-    await conceptsPage.expectSearchResults([concept], randomConcepts.filter(c => c !== concept));
+    await conceptsPage.expectSearchResults(
+      [concept],
+      randomConcepts.filter((c) => c !== concept),
+    );
   }
   console.log('[TEST] Finished test: search with random concepts');
 });
@@ -75,9 +79,10 @@ runTestAsAdmin('test status filter with random concepts', async ({ conceptsPage,
         nb: uniqueString('def_nb'),
         nn: uniqueString('def_nn'),
         en: uniqueString('def_en'),
-      }
+      },
     },
-    statusURI: ConceptStatus[Object.keys(ConceptStatus)[i % Object.keys(ConceptStatus).length] as keyof typeof ConceptStatus],
+    statusURI:
+      ConceptStatus[Object.keys(ConceptStatus)[i % Object.keys(ConceptStatus).length] as keyof typeof ConceptStatus],
   }));
 
   console.log('[TEST] Creating random concepts via API...');
@@ -107,7 +112,10 @@ runTestAsAdmin('test status filter with random concepts', async ({ conceptsPage,
     console.log(`[TEST] Searching for concept: ${concept.anbefaltTerm.navn.nb}`);
     await conceptsPage.search(concept.anbefaltTerm.navn.nb);
     console.log(`[TEST] Expecting only this concept in results: ${concept.anbefaltTerm.navn.nb}`);
-    await conceptsPage.expectSearchResults([concept], randomConcepts.filter(c => c !== concept));
+    await conceptsPage.expectSearchResults(
+      [concept],
+      randomConcepts.filter((c) => c !== concept),
+    );
   }
   console.log('[TEST] Finished test: status filter with random concepts');
 });

@@ -166,29 +166,27 @@ export default class EditPage {
 
     await this.page.getByRole('textbox', { name: 'Forkortelse' }).clear();
     await clearCombobox(this.page, 'Hvem skal begrepet tildeles?');
-    
+
     for (const field of fields.internal) {
       if (field.type === 'text_long' || field.type === 'text_short') {
         console.log(`[EDIT PAGE] Clearing internal field (text): ${field.label.nb}`);
-        await this.page
-          .getByRole('textbox', { name: field.label.nb as string })
-          .clear();
+        await this.page.getByRole('textbox', { name: field.label.nb as string }).clear();
       } else if (field.type === 'boolean') {
         console.log(`[EDIT PAGE] Clearing internal field (boolean): ${field.label.nb}`);
         const checkbox = this.page.getByRole('group', { name: field.label.nb as string }).getByRole('checkbox');
-        if(await checkbox.isChecked()) {
+        if (await checkbox.isChecked()) {
           checkbox.uncheck();
-        }         
+        }
       } else if (field.type === 'code_list') {
         await clearCombobox(this.page, field.label.nb as string);
-      } 
+      }
     }
   }
 
   // Helpers
   async fillFormAndSave(concept: Concept, apiRequestContext, clearBeforeFill = false) {
     const fields = await getFields(apiRequestContext);
-    
+
     console.log('[EDIT PAGE] fillFormAndSave called with clearBeforeFill:', clearBeforeFill);
     if (clearBeforeFill) {
       console.log('[EDIT PAGE] Clearing all fields before filling...');
@@ -265,20 +263,24 @@ export default class EditPage {
     await this.page.getByLabel('Lenke til referanse').fill(concept.omfang?.uri ?? '');
 
     // Internal fields
-    console.log('[EDIT PAGE] Filling interneFelt...');    
+    console.log('[EDIT PAGE] Filling interneFelt...');
     for (const field of fields.internal) {
       if (concept.interneFelt[field.id]) {
         if (field.type === 'text_long' || field.type === 'text_short') {
-          console.log(`[EDIT PAGE] Filling internal field (text): ${field.label.nb} = ${concept.interneFelt[field.id].value}`);
+          console.log(
+            `[EDIT PAGE] Filling internal field (text): ${field.label.nb} = ${concept.interneFelt[field.id].value}`,
+          );
           await this.page
             .getByRole('textbox', { name: field.label.nb as string })
             .fill(concept.interneFelt[field.id].value);
         } else if (field.type === 'boolean') {
-          console.log(`[EDIT PAGE] Setting internal field (boolean): ${field.label.nb} = ${concept.interneFelt[field.id].value}`);
+          console.log(
+            `[EDIT PAGE] Setting internal field (boolean): ${field.label.nb} = ${concept.interneFelt[field.id].value}`,
+          );
           const checkbox = this.page.getByRole('group', { name: field.label.nb as string }).getByRole('checkbox');
-          if(concept.interneFelt[field.id].value === 'true' && !(await checkbox.isChecked())) {
+          if (concept.interneFelt[field.id].value === 'true' && !(await checkbox.isChecked())) {
             await checkbox.check();
-          }        
+          }
         }
       }
     }
@@ -387,11 +389,7 @@ export default class EditPage {
     await expect(this.page.getByRole('list').getByText('Kontaktinformasjon *')).toBeVisible();
   }
 
-  async fillContactPointForm(data: {
-    email: string;
-    phone: string;
-    url: string;
-  }) {
+  async fillContactPointForm(data: { email: string; phone: string; url: string }) {
     const dialog = this.page.getByRole('dialog');
     await dialog.getByLabel('E-post').fill(data.email);
     await dialog.getByLabel('Telefonnummer').fill(data.phone);
@@ -440,7 +438,9 @@ export default class EditPage {
 
   // Helper methods for concept form fields
   async expectAnbefaltTermField(language: string, expectedValue: string) {
-    const termField = this.page.getByRole('group', { name: 'Anbefalt term Hjelp til utfylling Må fylles ut' }).getByLabel(language);
+    const termField = this.page
+      .getByRole('group', { name: 'Anbefalt term Hjelp til utfylling Må fylles ut' })
+      .getByLabel(language);
     await expect(termField).toBeVisible();
     await expect(termField).toHaveValue(expectedValue);
   }
@@ -449,20 +449,30 @@ export default class EditPage {
     await this.fillLanguageField(value, 'Anbefalt term Hjelp til utfylling Må fylles ut', open, clear);
   }
 
-  async expectDefinitionCard(definition: Definisjon, targetGroup: 'uten målgruppe' | 'for allmennheten' | 'for spesialister') {
+  async expectDefinitionCard(
+    definition: Definisjon,
+    targetGroup: 'uten målgruppe' | 'for allmennheten' | 'for spesialister',
+  ) {
     const type = targetGroup === 'uten målgruppe' ? '(uten målgruppe)' : targetGroup;
     const sourceCount = definition.kildebeskrivelse?.kilde.length || 0;
     const sourceText = sourceCount === 1 ? 'kilde' : 'kilder';
-    const card = await this.page.getByText(`Definisjon ${type}${sourceCount ? `${sourceCount} ${sourceText}Rediger` : 'Ingen kilder'}`);
+    const card = await this.page.getByText(
+      `Definisjon ${type}${sourceCount ? `${sourceCount} ${sourceText}Rediger` : 'Ingen kilder'}`,
+    );
     await expect(card).toBeVisible();
-    const languages = Object.keys(definition.tekst).map(language => language === 'nb' ? 'Bokmål' : language === 'nn' ? 'Nynorsk' : 'Engelsk');
+    const languages = Object.keys(definition.tekst).map((language) =>
+      language === 'nb' ? 'Bokmål' : language === 'nn' ? 'Nynorsk' : 'Engelsk',
+    );
     await expect(this.page.getByText(`${definition.tekst.nb}${languages.join('')}`)).toBeVisible();
     return card;
   }
 
-  async editDefinition(definition: Definisjon, targetGroup: 'uten målgruppe' | 'for allmennheten' | 'for spesialister') {
+  async editDefinition(
+    definition: Definisjon,
+    targetGroup: 'uten målgruppe' | 'for allmennheten' | 'for spesialister',
+  ) {
     const card = await this.expectDefinitionCard(definition, targetGroup);
-    await card.getByRole('button', { name: 'Rediger' }).click();    
+    await card.getByRole('button', { name: 'Rediger' }).click();
   }
 
   async fillDefinitionField(value: any, open: string[], clear: boolean) {
@@ -477,6 +487,6 @@ export default class EditPage {
     await this.page.getByRole('button', { name: 'Lagre' }).click();
     if (success) {
       await this.page.getByText('Endringene ble lagret.').waitFor({ state: 'visible' });
-    } 
+    }
   }
 }

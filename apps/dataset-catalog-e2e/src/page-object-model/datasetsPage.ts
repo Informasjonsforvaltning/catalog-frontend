@@ -30,10 +30,10 @@ export default class DatasetsPage {
     this.searchButton = page.getByRole('button', { name: 'Søk' });
     this.datasetCards = page.locator('ul[role="list"]:not(nav ul) li[role="listitem"]');
     this.createDatasetButton = page.getByRole('link', { name: 'Legg til datasett' });
-    this.statusFilterHeader = page.getByRole('button', { name: 'Status' })
+    this.statusFilterHeader = page.getByRole('button', { name: 'Status' });
     this.statusFilterDraft = page.getByLabel('Utkast');
     this.statusFilterApproved = page.getByLabel('Godkjent');
-    this.publishedFilterHeader =  page.getByRole('button', { name: 'Publiseringstilstand' })
+    this.publishedFilterHeader = page.getByRole('button', { name: 'Publiseringstilstand' });
     this.publishedFilterPublished = page.getByLabel('Publisert', { exact: true });
     this.publishedFilterNotPublished = page.getByLabel('Ikke publisert');
   }
@@ -49,7 +49,7 @@ export default class DatasetsPage {
   async search(query: string) {
     await this.searchInput.fill(query);
     await this.searchButton.click();
-    
+
     const spinner = this.page.getByRole('img', { name: 'Laster' });
     // Wait for spinner to be visible and hidden
     await spinner.waitFor({ state: 'visible', timeout: 3000 }).catch(() => {});

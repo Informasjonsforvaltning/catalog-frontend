@@ -48,9 +48,7 @@ export const AcceptConceptFormClient = ({
   };
 
   const handleGotoConcept = () => {
-    window.location.replace(
-      `/catalogs/${organization.organizationId}/concepts/${originalConcept?.id}`,
-    );
+    window.location.replace(`/catalogs/${organization.organizationId}/concepts/${originalConcept?.id}`);
   };
 
   const AcceptChangeRequestButton = () => {

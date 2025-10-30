@@ -71,7 +71,7 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
         id: autoSaveId,
         values: {
           definition: def,
-          fieldName
+          fieldName,
         },
         lastChanged: new Date().toISOString(),
       });
@@ -286,10 +286,10 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
       {Object.keys(errors).some((value) =>
         ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(value),
       ) && (
-          <ErrorMessage>
-            {getFirstErrorByRootKeys(errors, ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'])}
-          </ErrorMessage>
-        )}
+        <ErrorMessage>
+          {getFirstErrorByRootKeys(errors, ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'])}
+        </ErrorMessage>
+      )}
     </Box>
   );
 };

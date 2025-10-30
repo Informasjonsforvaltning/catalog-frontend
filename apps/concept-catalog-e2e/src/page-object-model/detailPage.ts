@@ -142,7 +142,7 @@ export default class DetailPage {
         })
         .first(),
     ).toBeVisible({ visible: Boolean(concept.tillattTerm?.nb) });
- 
+
     await expect(
       this.page
         .locator('div')
@@ -244,15 +244,17 @@ export default class DetailPage {
 
     const { users } = await getUsers(apiRequestContext);
     const fields = await getFields(apiRequestContext);
-    for(const field of fields.internal) {      
-      if(field.type === 'text_short' || field.type === 'text_long') {
-         await expect(this.page.getByText(`${field.label.nb}:${concept.interneFelt[field.id].value}`)).toBeVisible();
-      } else if(field.type === 'boolean') {
-        await expect(this.page.getByText(`${field.label.nb}:${concept.interneFelt[field.id].value === 'true' ? 'Ja' : 'Nei'}`)).toBeVisible();
-      } else if(field.type === 'code_list') {
+    for (const field of fields.internal) {
+      if (field.type === 'text_short' || field.type === 'text_long') {
+        await expect(this.page.getByText(`${field.label.nb}:${concept.interneFelt[field.id].value}`)).toBeVisible();
+      } else if (field.type === 'boolean') {
+        await expect(
+          this.page.getByText(`${field.label.nb}:${concept.interneFelt[field.id].value === 'true' ? 'Ja' : 'Nei'}`),
+        ).toBeVisible();
+      } else if (field.type === 'code_list') {
         //TODO support code lists
-      } else if(field.type === 'user_list') {
-        const user = users.find(u => u.id === concept.interneFelt[field.id].value);
+      } else if (field.type === 'user_list') {
+        const user = users.find((u) => u.id === concept.interneFelt[field.id].value);
         await expect(this.page.getByText(`${field.label.nb}:${user.name}`)).toBeVisible();
       }
     }
@@ -349,9 +351,9 @@ export default class DetailPage {
       ),
     ).toBeVisible({ visible: Boolean(concept.gyldigTom) });
 
-    const { users } = await getUsers(apiRequestContext);    
+    const { users } = await getUsers(apiRequestContext);
     await expect(this.page.getByRole('heading', { name: 'Tildelt' })).toBeVisible();
-    await expect(this.page.getByText(users.find(u => u.id === concept.assignedUser).name)).toBeVisible();
+    await expect(this.page.getByText(users.find((u) => u.id === concept.assignedUser).name)).toBeVisible();
 
     await expect(this.page.getByRole('heading', { name: 'Dato sist oppdatert' })).toBeVisible();
     await expect(

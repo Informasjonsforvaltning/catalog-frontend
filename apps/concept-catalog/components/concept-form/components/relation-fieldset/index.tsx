@@ -122,10 +122,12 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
   let externalRelatedConceptOptions: Option[] = [];
   if (relatedConceptType === 'internal' && searchTriggered) {
     internalRelatedConceptOptions =
-      internalConcepts?.hits.filter((rel) => rel.originaltBegrep !== conceptId).map((concept) => ({
-        label: getTranslateText(concept.anbefaltTerm?.navn) as string,
-        value: concept.originaltBegrep as string,
-      })) ?? [];
+      internalConcepts?.hits
+        .filter((rel) => rel.originaltBegrep !== conceptId)
+        .map((concept) => ({
+          label: getTranslateText(concept.anbefaltTerm?.navn) as string,
+          value: concept.originaltBegrep as string,
+        })) ?? [];
   } else if (relatedConceptType === 'internal' && !searchTriggered && initialRelatedConcept) {
     internalRelatedConceptOptions = [
       {
@@ -137,11 +139,13 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
 
   if (relatedConceptType === 'external' && searchTriggered) {
     externalRelatedConceptOptions =
-      externalConcepts?.hits.filter((rel) => !rel.uri?.includes(conceptId)).map((concept) => ({
-        label: getTranslateText(concept.title) as string,
-        description: getTranslateText(concept.organization?.prefLabel) as string,
-        value: concept.uri as string,
-      })) ?? [];
+      externalConcepts?.hits
+        .filter((rel) => !rel.uri?.includes(conceptId))
+        .map((concept) => ({
+          label: getTranslateText(concept.title) as string,
+          description: getTranslateText(concept.organization?.prefLabel) as string,
+          value: concept.uri as string,
+        })) ?? [];
   } else if (relatedConceptType === 'external' && !searchTriggered && initialRelatedConcept) {
     externalRelatedConceptOptions = [
       {

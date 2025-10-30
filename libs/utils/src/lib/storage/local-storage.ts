@@ -1,15 +1,15 @@
 /**
  * Enhanced LocalDataStorage with State Management
- * 
+ *
  * This module provides a comprehensive local storage solution with:
  * - State tracking and change notifications
  * - Secondary storage management
  * - State history and undo functionality
  * - Data validation
  * - Debug utilities
- * 
+ *
  * Example usage:
- * 
+ *
  * ```typescript
  * // Basic usage with state management
  * const storage = new LocalDataStorage<StorageData>({
@@ -20,34 +20,34 @@
  *   maxHistorySize: 5,
  *   validateData: (data) => data && typeof data === 'object'
  * });
- * 
+ *
  * // Subscribe to state changes
  * const unsubscribe = storage.subscribe((state) => {
  *   console.log('New state:', state);
  *   console.log('Has changes:', state.hasChanges);
  *   console.log('Is dirty:', state.isDirty);
  * });
- * 
+ *
  * // Set main data
  * storage.set({ id: '1', values: { name: 'Test' }, lastChanged: new Date().toISOString() });
- * 
+ *
  * // Set secondary data
  * storage.setSecondary('relationData', { id: '2', values: { relations: [] }, lastChanged: new Date().toISOString() });
- * 
+ *
  * // Get current state
  * const state = storage.getState();
  * console.log('Current state:', state);
- * 
+ *
  * // Access state history
  * const history = storage.getHistory();
  * console.log('State history:', history);
- * 
+ *
  * // Revert to previous state
  * const reverted = storage.revertToPreviousState();
- * 
+ *
  * // Debug current state
  * storage.debugState();
- * 
+ *
  * // Clean up
  * unsubscribe();
  * storage.delete();
@@ -115,7 +115,7 @@ export class LocalDataStorage<T> implements DataStorage<T> {
 
     // Initialize state
     this.currentState = this.buildState();
-    
+
     // Subscribe to onChange callback if provided
     if (this.onChange) {
       this.subscribe(this.onChange);
@@ -125,8 +125,8 @@ export class LocalDataStorage<T> implements DataStorage<T> {
   private buildState(): StorageState<T> {
     const mainData = this.getFromStorage(this.key);
     const secondaryData: Record<string, DataWithMetadata<T> | null> = {};
-    
-    Object.keys(this.secondaryKeys).forEach(key => {
+
+    Object.keys(this.secondaryKeys).forEach((key) => {
       secondaryData[this.secondaryKeys[key]] = this.getFromStorage(this.secondaryKeys[key]);
     });
 
@@ -134,7 +134,7 @@ export class LocalDataStorage<T> implements DataStorage<T> {
       mainData,
       secondaryData,
       lastChanged: new Date(),
-      isDirty: mainData !== null || Object.values(secondaryData).some(data => data !== null),
+      isDirty: mainData !== null || Object.values(secondaryData).some((data) => data !== null),
       version: 1, // Assuming a default version
     };
   }
@@ -152,13 +152,13 @@ export class LocalDataStorage<T> implements DataStorage<T> {
 
   private notifySubscribers() {
     this.currentState = this.buildState();
-    
+
     // Add to history if enabled
     if (this.enableHistory) {
       this.addToHistory(this.currentState);
     }
-    
-    this.subscribers.forEach(callback => {
+
+    this.subscribers.forEach((callback) => {
       try {
         callback(this.currentState);
       } catch (error) {
@@ -265,9 +265,7 @@ export class LocalDataStorage<T> implements DataStorage<T> {
   }
 
   getPreviousState(): StorageState<T> | null {
-    return this.stateHistory.length > 1 
-      ? this.stateHistory[this.stateHistory.length - 2] 
-      : null;
+    return this.stateHistory.length > 1 ? this.stateHistory[this.stateHistory.length - 2] : null;
   }
 
   revertToPreviousState(): boolean {
@@ -308,7 +306,7 @@ export class LocalDataStorage<T> implements DataStorage<T> {
       key: this.key,
       state: this.currentState,
       historyLength: this.stateHistory.length,
-      subscribersCount: this.subscribers.size
+      subscribersCount: this.subscribers.size,
     });
   }
 

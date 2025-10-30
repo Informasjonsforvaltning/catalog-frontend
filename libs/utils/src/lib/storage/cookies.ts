@@ -1,4 +1,9 @@
-import { ChangeRequestsPageSettings, ConceptsPageSettings, DatasetsPageSettings, DataServicesPageSettings } from '@catalog-frontend/types';
+import {
+  ChangeRequestsPageSettings,
+  ConceptsPageSettings,
+  DatasetsPageSettings,
+  DataServicesPageSettings,
+} from '@catalog-frontend/types';
 import Cookies from 'js-cookie';
 
 const cookieNameConceptsPageSettings = 'concepts-page-settings';

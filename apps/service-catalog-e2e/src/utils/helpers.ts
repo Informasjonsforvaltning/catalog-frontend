@@ -62,16 +62,16 @@ export const deleteAllPublicServices = async (apiRequestContext) => {
 };
 
 export const deleteService = async (apiRequestContext, serviceId) => {
-  await apiRequestContext.delete(`/api/catalogs/${process.env.E2E_CATALOG_ID}/services/${serviceId}`);  
+  await apiRequestContext.delete(`/api/catalogs/${process.env.E2E_CATALOG_ID}/services/${serviceId}`);
 };
 
 export const deletePublicService = async (apiRequestContext, serviceId) => {
-  await apiRequestContext.delete(`/api/catalogs/${process.env.E2E_CATALOG_ID}/public-services/${serviceId}`);  
+  await apiRequestContext.delete(`/api/catalogs/${process.env.E2E_CATALOG_ID}/public-services/${serviceId}`);
 };
 
 export const createService = async (apiRequestContext, service) => {
   const response = await apiRequestContext.post(`/api/catalogs/${process.env.E2E_CATALOG_ID}/services`, {
-    data: service
+    data: service,
   });
 
   if (!response.ok()) {
@@ -84,7 +84,7 @@ export const createService = async (apiRequestContext, service) => {
 
 export const createPublicService = async (apiRequestContext, service) => {
   const response = await apiRequestContext.post(`/api/catalogs/${process.env.E2E_CATALOG_ID}/public-services`, {
-    data: service
+    data: service,
   });
 
   if (!response.ok()) {
@@ -96,7 +96,9 @@ export const createPublicService = async (apiRequestContext, service) => {
 };
 
 export const publishService = async (apiRequestContext, serviceId) => {
-  const response = await apiRequestContext.post(`/api/catalogs/${process.env.E2E_CATALOG_ID}/services/${serviceId}/publish`);
+  const response = await apiRequestContext.post(
+    `/api/catalogs/${process.env.E2E_CATALOG_ID}/services/${serviceId}/publish`,
+  );
 
   if (!response.ok()) {
     console.error(`API call failed with status ${response.status()}`, await response.json());
@@ -107,7 +109,9 @@ export const publishService = async (apiRequestContext, serviceId) => {
 };
 
 export const publishPublicService = async (apiRequestContext, serviceId) => {
-  const response = await apiRequestContext.post(`/api/catalogs/${process.env.E2E_CATALOG_ID}public-services/${serviceId}/publish`);
+  const response = await apiRequestContext.post(
+    `/api/catalogs/${process.env.E2E_CATALOG_ID}public-services/${serviceId}/publish`,
+  );
 
   if (!response.ok()) {
     console.error(`API call failed with status ${response.status()}`, await response.json());

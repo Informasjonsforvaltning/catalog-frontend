@@ -115,4 +115,4 @@ export default class LoginPage {
     await this.page.context().storageState({ path: readAuthFile });
     console.log('[LOGIN PAGE] Login as read user complete.');
   }
-} 
+}

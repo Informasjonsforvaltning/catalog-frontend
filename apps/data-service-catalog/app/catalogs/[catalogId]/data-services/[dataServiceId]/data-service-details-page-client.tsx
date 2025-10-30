@@ -82,7 +82,10 @@ const DataServiceDetailsPageClient = ({
       >
         <DetailsPageLayout.Buttons>
           {hasWritePermission && (
-            <div className={styles.set} data-testid='data-service-action-buttons'>
+            <div
+              className={styles.set}
+              data-testid='data-service-action-buttons'
+            >
               <LinkButton
                 href={`/catalogs/${catalogId}/data-services/${dataServiceId}/edit`}
                 data-testid='edit-data-service-button'

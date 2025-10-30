@@ -83,17 +83,19 @@ export const UriWithLabelFieldsetTable = ({
                           type={'edit'}
                           onSuccess={(updatedItem: UriWithLabel) => {
                             arrayHelpers.replace(index, updatedItem);
-                            setSnapshot([...fieldValues ?? []]);
+                            setSnapshot([...(fieldValues ?? [])]);
                           }}
                           onCancel={() => setFieldValue(fieldName, snapshot)}
                           onChange={(updatedItem: UriWithLabel) => arrayHelpers.replace(index, updatedItem)}
                         />
-                        <DeleteButton onClick={() => {
-                          const newArray = [...fieldValues ?? []];
-                          newArray.splice(index, 1);
-                          setFieldValue(fieldName, newArray);
-                          setSnapshot([...newArray]);
-                        }} />
+                        <DeleteButton
+                          onClick={() => {
+                            const newArray = [...(fieldValues ?? [])];
+                            newArray.splice(index, 1);
+                            setFieldValue(fieldName, newArray);
+                            setSnapshot([...newArray]);
+                          }}
+                        />
                       </span>
                     </Table.Cell>
                   </Table.Row>
@@ -105,7 +107,7 @@ export const UriWithLabelFieldsetTable = ({
                 fieldName={fieldName}
                 template={{ prefLabel: {}, uri: '' }}
                 type={'new'}
-                onSuccess={() => setSnapshot([...fieldValues ?? []])}
+                onSuccess={() => setSnapshot([...(fieldValues ?? [])])}
                 onCancel={() => setFieldValue(fieldName, snapshot)}
                 onChange={(updatedItem: UriWithLabel) => {
                   if (snapshot.length === (fieldValues?.length ?? 0)) {
