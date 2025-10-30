@@ -131,6 +131,16 @@ const ImportResultDetails = ({
     <div className={styles.pageContainer}>
       <div className={styles.header}>
         <div className={styles.titleContainer}>
+          {
+            (isDeleting || deleteImportMutation?.isPending) && (
+            <div className={styles.spinnerOverlay}>
+            <Spinner
+              title={localization.loading}
+              size='large'
+            />
+          </div>
+            )
+          }
           <div className={styles.title}>{'Import #' + importResult.id.slice(0, 5).toUpperCase()}</div>
           <div className={styles.titleTags}>
             <Tag
@@ -233,7 +243,7 @@ const ImportResultDetails = ({
         )}
       {importResult?.extractionRecords && importResult?.extractionRecords.length > 0 && (
         <div className={styles.tableContainer}>
-          { deleteImportMutation?.isPending || saveConceptMutation?.isPending &&
+          { isDeleting || deleteImportMutation?.isPending || saveConceptMutation?.isPending &&
             <div className={styles.spinnerOverlay}>
               <Spinner
                 title={localization.loading}
