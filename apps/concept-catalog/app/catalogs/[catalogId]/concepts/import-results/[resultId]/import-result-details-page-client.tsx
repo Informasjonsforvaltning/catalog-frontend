@@ -19,15 +19,20 @@ interface Props {
 
 const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
-  const handleDeleteConfirmed = async () => {
-    try {
-      await deleteImportResult(catalogId, importResult.id);
-      router.push(`/catalogs/${catalogId}/concepts/import-results`);
-    } catch (error) {
+  const deleteImportMutation = useMutation({
+    mutationFn: async ({ catalogId, importResultId }: { catalogId: string; importResultId: string }) => {
+      await deleteImportResult(catalogId, importResultId)
+      await router.push(`/catalogs/${catalogId}/concepts/import-results`)
+      await setShowDeleteConfirm(false);
+    },
+    onError: (error) => {
+      setIsDeleting(false)
       window.alert(error);
-    }
-  };
+    },
+  });
+
   const qc = useQueryClient();
 
   const handleDeleteClick = async () => {
@@ -76,7 +81,10 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
         <ConfirmModal
           title={localization.importResult.confirmDelete}
           content={importResult.status === 'COMPLETED' ? localization.importResult.deleteCanResultInDuplicates : ''}
-          onSuccess={handleDeleteConfirmed}
+          onSuccess={async () => {
+            await setIsDeleting(true)
+            await deleteImportMutation.mutate({ catalogId: catalogId, importResultId: importResult.id });
+          }}
           onCancel={() => setShowDeleteConfirm(false)}
         />
       )}
@@ -86,6 +94,7 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
         deleteHandler={handleDeleteClick}
         cancelHandler={handleCancelClick}
         saveConceptMutation={saveConceptMutation}
+        isDeleting={isDeleting}
         showCancellationButton={true}
       />
     </>
