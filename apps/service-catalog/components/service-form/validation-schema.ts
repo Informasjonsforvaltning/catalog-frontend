@@ -135,10 +135,10 @@ export const confirmedServiceSchema = Yup.object().shape({
       return Boolean(description.nb || description.nn || description.en);
     }),
   homepage: Yup.string()
-    .required(localization.serviceForm.validation.homepageRequired)
     .matches(httpsRegex, localization.validation.invalidProtocol)
-    .url(localization.validation.invalidUrl),
-  status: Yup.string().required(localization.validation.invalidValue),
+    .url(localization.validation.invalidUrl)
+    .notRequired(),
+  status: Yup.string(),
   produces: Yup.array()
     .of(confirmedProducesSchema)
     .min(1, localization.validation.minOneField)
@@ -146,21 +146,17 @@ export const confirmedServiceSchema = Yup.object().shape({
   contactPoints: Yup.array()
     .of(
       Yup.object().shape({
-        category: Yup.object()
-          .shape({
-            nb: Yup.string()
-              .label(`${localization.serviceForm.fieldLabel.category} (${localization.language.nb})`)
-              .notRequired(),
-            nn: Yup.string()
-              .label(`${localization.serviceForm.fieldLabel.category} (${localization.language.nn})`)
-              .notRequired(),
-            en: Yup.string()
-              .label(`${localization.serviceForm.fieldLabel.category} (${localization.language.en})`)
-              .notRequired(),
-          })
-          .test('contact-name-test', localization.validation.oneLanguageRequired, (name) => {
-            return Boolean(name.nb || name.nn || name.en);
-          }),
+        category: Yup.object().shape({
+          nb: Yup.string()
+            .label(`${localization.serviceForm.fieldLabel.category} (${localization.language.nb})`)
+            .notRequired(),
+          nn: Yup.string()
+            .label(`${localization.serviceForm.fieldLabel.category} (${localization.language.nn})`)
+            .notRequired(),
+          en: Yup.string()
+            .label(`${localization.serviceForm.fieldLabel.category} (${localization.language.en})`)
+            .notRequired(),
+        }),
         email: Yup.string().email(localization.validation.invalidEmail).notRequired(),
         telephone: Yup.string().matches(telephoneNumberRegex, localization.validation.invalidPhone).notRequired(),
         contactPage: Yup.string()
@@ -176,8 +172,15 @@ export const confirmedServiceSchema = Yup.object().shape({
         if (!contactPoints || contactPoints.length === 0) {
           return false;
         }
-        const firstContactPoint = contactPoints[0];
-        return Boolean(firstContactPoint.email || firstContactPoint.telephone || firstContactPoint.contactPage);
+        const contactPoint = contactPoints[0];
+        return Boolean(
+          contactPoint.category.nb ||
+            contactPoint.category.nn ||
+            contactPoint.category.en ||
+            contactPoint.email ||
+            contactPoint.telephone ||
+            contactPoint.contactPage,
+        );
       },
     ),
 });
