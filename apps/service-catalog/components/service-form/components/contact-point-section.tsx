@@ -20,8 +20,9 @@ export const ContactPointSection = () => {
           as={Textfield}
           legend={
             <TitleWithHelpTextAndTag
-              tagTitle={localization.tag.required}
               helpText={localization.serviceForm.helptext.category}
+              tagColor='info'
+              tagTitle={localization.tag.recommended}
             >
               {localization.serviceForm.fieldLabel.category}
             </TitleWithHelpTextAndTag>
@@ -33,7 +34,8 @@ export const ContactPointSection = () => {
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.serviceForm.helptext.contactPoint}
-            tagTitle={localization.tag.required}
+            tagColor='info'
+            tagTitle={localization.tag.recommended}
           >
             {localization.serviceForm.fieldLabel.contactPoint}
           </TitleWithHelpTextAndTag>

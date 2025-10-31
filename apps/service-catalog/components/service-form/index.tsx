@@ -302,7 +302,6 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       <FormikLanguageFieldset
                         name='title'
                         as={Textfield}
-                        requiredLanguages={['nb']}
                         legend={
                           <TitleWithHelpTextAndTag
                             helpText={localization.serviceForm.helptext.title}
@@ -333,7 +332,8 @@ export const ServiceForm = (props: ServiceFormProps) => {
                         label={
                           <TitleWithHelpTextAndTag
                             helpText={localization.serviceForm.helptext.homepage}
-                            tagTitle={localization.tag.required}
+                            tagColor='info'
+                            tagTitle={localization.tag.recommended}
                           >
                             {localization.serviceForm.fieldLabel.homepage}
                           </TitleWithHelpTextAndTag>
@@ -348,7 +348,8 @@ export const ServiceForm = (props: ServiceFormProps) => {
                         label={
                           <TitleWithHelpTextAndTag
                             helpText={localization.serviceForm.helptext.status}
-                            tagTitle={localization.tag.required}
+                            tagColor='info'
+                            tagTitle={localization.tag.recommended}
                           >
                             {localization.serviceForm.fieldLabel.status}
                           </TitleWithHelpTextAndTag>
