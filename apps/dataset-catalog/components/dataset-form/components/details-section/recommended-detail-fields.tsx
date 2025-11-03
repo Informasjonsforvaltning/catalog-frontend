@@ -69,22 +69,20 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages, isMobilit
       {
         !isMobility && <>
           <SpacialCombobox referenceDataEnv={referenceDataEnv}/>
-          <TemporalModal
-            label={
-              <TitleWithHelpTextAndTag
-                tagTitle={localization.tag.recommended}
-                tagColor='info'
-                helpText={localization.datasetForm.helptext.temporal}
-              >
-                {localization.datasetForm.fieldLabel.temporal}
-              </TitleWithHelpTextAndTag>
-            }
-          />
-          <FieldsetDivider />
         </>
       }
-      
-      
+      <TemporalModal
+        label={
+          <TitleWithHelpTextAndTag
+            tagTitle={localization.tag.recommended}
+            tagColor='info'
+            helpText={localization.datasetForm.helptext.temporal}
+          >
+            {localization.datasetForm.fieldLabel.temporal}
+          </TitleWithHelpTextAndTag>
+        }
+      />
+      <FieldsetDivider />
     </>
   );
 };
