@@ -422,11 +422,8 @@ export const ServiceForm = (props: ServiceFormProps) => {
                         },
                         { valuePath: 'contactPoints[0].contactPage', label: localization.contactPoint.form },
                       ]}
+                      errorPath='contactPoints'
                     />
-
-                    {typeof get(errors, 'contactPoints') === 'string' && (
-                      <ErrorMessage size='sm'>{get(errors, 'contactPoints')}</ErrorMessage>
-                    )}
                   </FormLayout.Section>
                 </FormLayout>
               </Form>
