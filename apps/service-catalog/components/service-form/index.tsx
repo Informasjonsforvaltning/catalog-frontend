@@ -1,12 +1,13 @@
 'use client';
 
-import { Alert, Box, Checkbox, Paragraph, Spinner, Textfield } from '@digdir/designsystemet-react';
+import { Alert, Box, Checkbox, ErrorMessage, Paragraph, Spinner, Textfield } from '@digdir/designsystemet-react';
 import {
   Button,
   ConfirmModal,
   FieldsetDivider,
   FormikAutoSaver,
   FormikLanguageFieldset,
+  FormikOptionalFieldsFieldset,
   FormLayout,
   HelpMarkdown,
   NotificationCarousel,
@@ -26,7 +27,6 @@ import { FastField, Field, Form, Formik, FormikProps } from 'formik';
 import { serviceTemplate } from './service-template';
 import { useEffect, useRef, useState } from 'react';
 import { ProducesField } from './components/produces-field';
-import { ContactPointSection } from './components/contact-point-section';
 import {
   confirmedProducesSchema,
   confirmedServiceSchema,
@@ -391,7 +391,35 @@ export const ServiceForm = (props: ServiceFormProps) => {
                     changed={dirtyFields.includes('contactPoints')}
                     error={hasError(['contactPoints'])}
                   >
-                    <ContactPointSection />
+                    <FormikLanguageFieldset
+                      name='contactPoints[0].category'
+                      as={Textfield}
+                      legend={
+                        <TitleWithHelpTextAndTag helpText={localization.serviceForm.helptext.category}>
+                          {localization.serviceForm.fieldLabel.category}
+                        </TitleWithHelpTextAndTag>
+                      }
+                    />
+
+                    <FormikOptionalFieldsFieldset
+                      legend={
+                        <TitleWithHelpTextAndTag helpText={localization.serviceForm.helptext.contactPoint}>
+                          {localization.serviceForm.fieldLabel.contactPoint}
+                        </TitleWithHelpTextAndTag>
+                      }
+                      availableFields={[
+                        { valuePath: 'contactPoints[0].email', label: localization.email },
+                        {
+                          valuePath: 'contactPoints[0].telephone',
+                          label: localization.telephone,
+                        },
+                        { valuePath: 'contactPoints[0].contactPage', label: localization.contactPoint.form },
+                      ]}
+                    />
+
+                    {typeof get(errors, 'contactPoints') === 'string' && (
+                      <ErrorMessage size='sm'>{get(errors, 'contactPoints')}</ErrorMessage>
+                    )}
                   </FormLayout.Section>
                 </FormLayout>
               </Form>

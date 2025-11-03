@@ -34,7 +34,8 @@ export const serviceFormNb = {
       title: 'Om tjenesten',
     },
     contactPoint: {
-      subtitle: 'Kontaktpunkt som kan brukes vedr. spørsmål og kommentarer om tjenesten.',
+      subtitle:
+        'Kontaktpunkt som kan brukes vedr. spørsmål og kommentarer om tjenesten. Minst én av verdiene må fylles ut.',
       title: 'Kontaktpunkt',
     },
     produces: {
