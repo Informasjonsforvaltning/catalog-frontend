@@ -109,9 +109,7 @@ export const mobilityDistributionSectionSchema = Yup.object().shape({
     )
     .min(1, localization.datasetForm.validation.accessUrlRequired),
   mobilityDataStandard: Yup.string().required(localization.datasetForm.validation.mobilityDataStandard),
-  mobilityRights: Yup.array()
-    .min(1, localization.datasetForm.validation.mobilityRights)
-    .required(localization.datasetForm.validation.mobilityRights),
+  mobilityRights: Yup.string().required(localization.datasetForm.validation.mobilityRights),
   format: Yup.array()
     .min(1, localization.datasetForm.validation.format)
     .required(localization.datasetForm.validation.format),
@@ -319,9 +317,7 @@ export const confirmedMobilityDatasetSchema = draftDatasetSchema.shape({
   spatial: Yup.array()
     .min(1, localization.datasetForm.validation.spatial)
     .required(localization.datasetForm.validation.spatial),
-  frequency: Yup.array().of(uriWithLabelSchema)
-    .min(1, localization.datasetForm.validation.frequency)
-    .required(localization.datasetForm.validation.frequency),
+  frequency: Yup.string().required(localization.datasetForm.validation.frequency),
   euDataTheme: Yup.array()
     .min(1, localization.datasetForm.validation.euDataTheme)
     .required(localization.datasetForm.validation.euDataTheme),
@@ -329,6 +325,7 @@ export const confirmedMobilityDatasetSchema = draftDatasetSchema.shape({
     .min(1, localization.datasetForm.validation.mobilityTheme)
     .required(localization.datasetForm.validation.mobilityTheme),
   distribution: Yup.array().of(distributionSectionSchema)
+    .min(1, localization.datasetForm.validation.distribution)
     .required(localization.datasetForm.validation.distribution),
   landingPage: Yup.array()
     .nullable()

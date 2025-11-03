@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useFormikContext } from 'formik';
-import { Box, Button, Card, ErrorMessage, Heading, Paragraph, Tag } from '@digdir/designsystemet-react';
+import { Box, Button, Card, ErrorMessage, Fieldset, Heading, Paragraph, Tag } from '@digdir/designsystemet-react';
 import { ChevronDownIcon, ChevronUpIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { Dataset, Distribution, ReferenceDataCode, Search, StorageData } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
@@ -188,14 +188,19 @@ export const DistributionSection = ({
 
   return (
     <Box>
-      <div className={styles.fieldSet}>
-        <TitleWithHelpTextAndTag
-          helpText={localization.datasetForm.helptext.distribution}
-          tagColor={isMobility? undefined: 'info'} 
-          tagTitle={isMobility? localization.tag.required : localization.tag.recommended}
-        >
-          {localization.datasetForm.fieldLabel.distributions}
-        </TitleWithHelpTextAndTag>
+      <Fieldset
+        size='sm'
+        legend={
+          <TitleWithHelpTextAndTag
+            helpText={localization.datasetForm.helptext.distribution}
+            tagTitle={isMobility? localization.tag.required : localization.tag.recommended}
+            tagColor={isMobility? undefined: 'info'} 
+          >
+            {localization.datasetForm.fieldLabel.distributions}
+          </TitleWithHelpTextAndTag>
+        }
+        error={errors.distribution}
+      >
         {values?.distribution &&
           !distributionArrayIsEmpty(values?.distribution) &&
           values?.distribution?.map(
@@ -381,7 +386,7 @@ export const DistributionSection = ({
             isMobility={isMobility}
           />
         </div>
-      </div>
+      </Fieldset>
       {
         !(isMobility) &&
         <div>
