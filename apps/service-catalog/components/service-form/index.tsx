@@ -395,7 +395,10 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       name='contactPoints[0].category'
                       as={Textfield}
                       legend={
-                        <TitleWithHelpTextAndTag helpText={localization.serviceForm.helptext.category}>
+                        <TitleWithHelpTextAndTag
+                          helpText={localization.serviceForm.helptext.category}
+                          tagTitle={localization.tag.required}
+                        >
                           {localization.serviceForm.fieldLabel.category}
                         </TitleWithHelpTextAndTag>
                       }
@@ -403,7 +406,11 @@ export const ServiceForm = (props: ServiceFormProps) => {
 
                     <FormikOptionalFieldsFieldset
                       legend={
-                        <TitleWithHelpTextAndTag helpText={localization.serviceForm.helptext.contactPoint}>
+                        <TitleWithHelpTextAndTag
+                          helpText={localization.serviceForm.helptext.contactPoint}
+                          tagColor='info'
+                          tagTitle={localization.tag.minOneField}
+                        >
                           {localization.serviceForm.fieldLabel.contactPoint}
                         </TitleWithHelpTextAndTag>
                       }

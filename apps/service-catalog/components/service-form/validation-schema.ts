@@ -146,17 +146,21 @@ export const confirmedServiceSchema = Yup.object().shape({
   contactPoints: Yup.array()
     .of(
       Yup.object().shape({
-        category: Yup.object().shape({
-          nb: Yup.string()
-            .label(`${localization.serviceForm.fieldLabel.category} (${localization.language.nb})`)
-            .notRequired(),
-          nn: Yup.string()
-            .label(`${localization.serviceForm.fieldLabel.category} (${localization.language.nn})`)
-            .notRequired(),
-          en: Yup.string()
-            .label(`${localization.serviceForm.fieldLabel.category} (${localization.language.en})`)
-            .notRequired(),
-        }),
+        category: Yup.object()
+          .shape({
+            nb: Yup.string()
+              .label(`${localization.serviceForm.fieldLabel.category} (${localization.language.nb})`)
+              .notRequired(),
+            nn: Yup.string()
+              .label(`${localization.serviceForm.fieldLabel.category} (${localization.language.nn})`)
+              .notRequired(),
+            en: Yup.string()
+              .label(`${localization.serviceForm.fieldLabel.category} (${localization.language.en})`)
+              .notRequired(),
+          })
+          .test('contact-name-test', localization.validation.oneLanguageRequired, (name) => {
+            return Boolean(name.nb || name.nn || name.en);
+          }),
         email: Yup.string().email(localization.validation.invalidEmail).notRequired(),
         telephone: Yup.string().matches(telephoneNumberRegex, localization.validation.invalidPhone).notRequired(),
         contactPage: Yup.string()
@@ -173,14 +177,7 @@ export const confirmedServiceSchema = Yup.object().shape({
           return false;
         }
         const contactPoint = contactPoints[0];
-        return Boolean(
-          contactPoint.category.nb ||
-            contactPoint.category.nn ||
-            contactPoint.category.en ||
-            contactPoint.email ||
-            contactPoint.telephone ||
-            contactPoint.contactPage,
-        );
+        return Boolean(contactPoint.email || contactPoint.telephone || contactPoint.contactPage);
       },
     ),
 });
