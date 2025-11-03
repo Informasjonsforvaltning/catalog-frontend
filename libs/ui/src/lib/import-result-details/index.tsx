@@ -6,7 +6,7 @@ import { Accordion, Heading, Spinner, Table, Tag } from '@digdir/designsystemet-
 import { capitalizeFirstLetter, formatISO, localization } from '@catalog-frontend/utils';
 import { ImportRecordAccordionItem } from './components/import-record-accordion-item';
 import { TrashIcon, FloppydiskIcon, ArrowCirclepathIcon } from '@navikt/aksel-icons';
-import React from 'react';
+import React, {useEffect} from 'react';
 import { ImportResultStatusColors, StatusKey } from '../tag/import-result-status/ImportResultStatus';
 import { Button, CenterContainer, HelpMarkdown } from '@catalog-frontend/ui';
 import { useMutation } from '@tanstack/react-query';
@@ -67,6 +67,7 @@ const ImportResultDetails = ({
     }),
   );
 
+  const [savingExternalId, setSavingExternalId] = React.useState<string | null>(null);
   const getImportStatusDisplay = (status: string) => importStatuses.find((st) => status === st.value)?.label ?? status;
 
   const getImportStatusHelpTexts = (status: string) =>
@@ -76,17 +77,28 @@ const ImportResultDetails = ({
     statusKey ? ImportResultStatusColors[statusKey.toLocaleUpperCase() as StatusKey] : 'neutral';
 
   const getMessage = () => {
-    if (importResult.status === 'FAILED' && importResult.failureMessage)
-      return importResult.failureMessage;
-    else if (importResult.status === 'CANCELLED')
-      return localization.importResult.cancelledImport;
+    if (importResult.status === 'FAILED' && importResult.failureMessage) return importResult.failureMessage;
+    else if (importResult.status === 'CANCELLED') return localization.importResult.cancelledImport;
 
-    return "";
-  }
+    return '';
+  };
 
-  function saveExtractedConcept(externalId: string) {
-    console.log("Saving concept with externalId:", externalId);
-    saveConceptMutation?.mutate(externalId)
+  useEffect(() => {
+    if (savingExternalId !== null) {
+        console.log("External Id, triggering save:", savingExternalId);
+      saveExtractedConcept(savingExternalId);
+    }
+  }, [savingExternalId]);
+
+  async function saveExtractedConcept(externalId: string) {
+    await saveConceptMutation?.mutate(externalId, {
+        onSuccess: async () => {
+            await setSavingExternalId(null)
+        },
+        onError: async () => {
+            await setSavingExternalId(null)
+        }
+    })
   }
 
   const getButtonText = (conceptExtraction: ConceptExtraction)=> {
@@ -98,29 +110,54 @@ const ImportResultDetails = ({
   }
 
   const getButtonColor = (conceptExtraction: ConceptExtraction) => {
-    if(conceptExtraction.conceptExtractionStatus === 'PENDING_CONFIRMATION') {
+    if (conceptExtraction.conceptExtractionStatus === 'PENDING_CONFIRMATION') {
       return 'first';
-    } else if(conceptExtraction.conceptExtractionStatus === 'FAILED') {
+    } else if (conceptExtraction.conceptExtractionStatus === 'FAILED') {
       return 'danger';
     }
-  }
+  };
 
-  const getButton = (conceptExtraction: ConceptExtraction)=> {
+    const checkIfSavingExternalIdMatches = (
+      conceptExtraction: ConceptExtraction,
+      savingExternalId: string | null,
+    ): boolean => {
+      if (savingExternalId !== null) {
+        console.log('External ID: ', savingExternalId);
+        console.log('Concept Extraction: ', conceptExtraction?.extractionRecord?.externalId);
+      }
+
       return (
-        <Button
-          variant='primary'
-          size='sm'
-          color={getButtonColor(conceptExtraction)}
-          disabled={isDeleting || isCancelling || saveConceptMutation?.isPending || deleteImportMutation?.isPending}
-          onClick={() => saveExtractedConcept(conceptExtraction?.extractionRecord?.externalId)}
-          >
-          <>
-            {getButtonIcon(conceptExtraction)}
-            {getButtonText(conceptExtraction)}
-          </>
-        </Button>
-      )
-  }
+        savingExternalId != null &&
+        conceptExtraction?.extractionRecord?.externalId != null &&
+        String(savingExternalId) == String(conceptExtraction?.extractionRecord?.externalId)
+      );
+    };
+
+    const getButton = (conceptExtraction: ConceptExtraction) => {
+    return (
+      <Button
+        variant='primary'
+        size='sm'
+        color={getButtonColor(conceptExtraction)}
+        disabled={isDeleting || isCancelling || saveConceptMutation?.isPending || deleteImportMutation?.isPending}
+        onClick={() => {
+          setSavingExternalId(conceptExtraction?.extractionRecord?.externalId)
+        }}
+      >
+        <>
+          {getButtonIcon(conceptExtraction)}
+          {getButtonText(conceptExtraction)}
+          {saveConceptMutation?.isPending && checkIfSavingExternalIdMatches(conceptExtraction, savingExternalId)
+              && (
+              <Spinner
+                title={localization.loading}
+                size='small'
+              />
+            )}
+        </>
+      </Button>
+    );
+  };
 
   const getButtonIcon = (conceptExtraction: ConceptExtraction) => {
     if(conceptExtraction.conceptExtractionStatus === 'PENDING_CONFIRMATION') {
@@ -194,7 +231,7 @@ const ImportResultDetails = ({
             size='sm'
             color='danger'
             disabled={
-              isDeleting || !importResult.status ||
+              isDeleting || saveConceptMutation?.isPending || !importResult.status ||
               !(
                 importResult.status === 'COMPLETED' ||
                 importResult.status === 'PARTIALLY_COMPLETED' ||
@@ -246,14 +283,6 @@ const ImportResultDetails = ({
         )}
       {importResult?.extractionRecords && importResult?.extractionRecords.length > 0 && (
         <div className={styles.tableContainer}>
-          { isDeleting || deleteImportMutation?.isPending || saveConceptMutation?.isPending &&
-            <div className={styles.spinnerOverlay}>
-              <Spinner
-                title={localization.loading}
-                size='large'
-              />
-            </div>
-          }
           <Table
             className={styles.tableFullWidth}
             zebra={true}
@@ -292,7 +321,8 @@ const ImportResultDetails = ({
                     </Tag>
                   </Table.Cell>
                   <Table.Cell style={{ width: '20%' }}>
-                    {(conceptExtraction.conceptExtractionStatus === 'PENDING_CONFIRMATION' ||
+                    {(importResult.status === 'PENDING_CONFIRMATION' || importResult.status === 'PARTIALLY_COMPLETED') &&
+                      (conceptExtraction.conceptExtractionStatus === 'PENDING_CONFIRMATION' ||
                       conceptExtraction.conceptExtractionStatus === 'FAILED') &&
                       getButton(conceptExtraction)}
                   </Table.Cell>
