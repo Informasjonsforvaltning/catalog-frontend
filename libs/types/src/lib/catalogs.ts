@@ -35,8 +35,3 @@ export interface ServiceCatalog {
   catalogId: string;
   serviceCount: number;
 }
-
-export interface RecordOfProcessingActivities {
-  organizationId: string;
-  recordCount: number;
-}

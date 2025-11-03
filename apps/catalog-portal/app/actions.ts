@@ -55,15 +55,6 @@ export const getServiceCount = async (catalogId: string) => {
   return catalogId ? await getServiceCountByOrg(catalogId, session) : { serviceCount: 0, publicServiceCount: 0 };
 };
 
-export const getRecordsOfProcessingActivityCount = async (catalogId: string) => {
-  const session: Session = await getValidSession();
-  if (!session) {
-    redirectToSignIn({ callbackUrl: `/catalogs` });
-  }
-
-  return catalogId ? await getRecordsOfProcessingActivityCountByOrg(catalogId, session) : 0;
-};
-
 const getServiceCountByOrg = async (
   orgId: string | null | undefined,
   session: Session,
@@ -102,23 +93,6 @@ const getServiceCountByOrg = async (
     serviceCount,
     publicServiceCount,
   };
-};
-
-const getRecordsOfProcessingActivityCountByOrg = async (
-  orgId: string | null | undefined,
-  session: Session,
-): Promise<number> => {
-  if (!orgId || !session) {
-    return 0;
-  }
-  const response = await getAllProcessingActivities(`${session?.accessToken}`);
-  if (response.status !== 200) {
-    console.error('getAllProcessingActivitiesCatalogs failed with response code ' + response.status);
-    return 0;
-  }
-  const result = (await response.json()) as RecordOfProcessingActivities[];
-  const activities = result?.find((record) => record.organizationId === orgId);
-  return activities?.recordCount ?? 0;
 };
 
 const getDatasetCountByOrg = async (orgId: string | null | undefined, session: Session): Promise<number> => {
