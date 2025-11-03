@@ -46,11 +46,6 @@ const CatalogsPage = async (props: { params: Promise<{ catalogId: string[] }> })
     return redirect(`/catalogs/${organizations[0].organizationId}`);
   }
 
-  const showRecordsOfProcessing = (organizationId: string) => {
-    const recordsAllowedOrgs = process.env.RECORDS_ALLOW_LIST?.split(',') ?? [];
-    return recordsAllowedOrgs.includes(organizationId);
-  };
-
   const currentOrganization = organizations.find((org) => org.organizationId === catalogId?.[0]);
   const hasNonSystemAccess = catalogId ? hasNonSystemAccessForOrg(`${session?.accessToken}`, catalogId?.[0]) : false;
   const serviceMessages = await getServiceMessages();
@@ -135,16 +130,6 @@ const CatalogsPage = async (props: { params: Promise<{ catalogId: string[] }> })
                 href={`${process.env.SERVICE_CATALOG_GUI_BASE_URI}/catalogs/${currentOrganization.organizationId}/services`}
               />
             </div>
-
-            {showRecordsOfProcessing(currentOrganization.organizationId) && (
-              <div key={`recordOfProcessingActivities-${currentOrganization.organizationId}`}>
-                <CatalogCard
-                  variant='records-of-processing'
-                  organizationId={currentOrganization.organizationId}
-                  href={`${process.env.RECORDS_OF_PROCESSING_ACTIVITIES_GUI_BASE_URI}/${currentOrganization.organizationId}`}
-                />
-              </div>
-            )}
           </div>
         </div>
       )}
