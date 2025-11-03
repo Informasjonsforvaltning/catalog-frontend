@@ -68,6 +68,7 @@ export const ThemeSection = ({ losThemes, euDataThemes, mobilityThemes: mobility
         filter={containsFilter}
         placeholder={`${localization.search.search}...`}
         onValueChange={(values: string[]) => setFieldValue('mobilityTheme', values)}
+        error={errors.mobilityTheme}
         size='sm'
       >
         <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>

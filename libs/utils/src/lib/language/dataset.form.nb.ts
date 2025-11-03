@@ -174,9 +174,16 @@ export const datasetFormNb = {
     searchString: 'Ingen treff. Søkestrengen må inneholde minst to bokstaver.',
     accessURL: 'Tilgangslenke er påkrevd.',
     contactPoints: 'Minst en verdi må fylles ut for kontaktpunktet.',
+    contacPointName: 'Navn på kontaktpunkt er obligatorisk',
     accessUrlRequired: 'Tilgangslenke må fylles ut.',
     relation: 'Begge verdiene må fylles ut for å legge til en relasjon.',
-    mobilityTheme: 'Minst ett transporttema må være valgt.'
+    mobilityTheme: 'Minst ett transporttema må være valgt.',
+    mobilityDataStandard: 'Minst en datastandard må være valgt.',
+    mobilityRights: 'Rettigheter må velges.',
+    format: 'Minst ett filformat må velges.',
+    distribution: 'Distribusjon er påkrevd.',
+    spatial: 'Dekningsområde må velges.',
+    frequency: 'Oppdateringsfrekvens må velges.'
   },
   button: {
     addDate: 'Legg til tidsperiode',

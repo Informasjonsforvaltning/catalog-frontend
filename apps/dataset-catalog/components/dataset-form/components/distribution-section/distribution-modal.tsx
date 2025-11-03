@@ -19,7 +19,7 @@ import { useSearchDataServiceSuggestions } from '../../../../hooks/useSearchServ
 import { FastField, FieldArray, Formik } from 'formik';
 import styles from './distributions.module.scss';
 import { distributionTemplate } from '../../utils/dataset-initial-values';
-import { distributionSectionSchema } from '../../utils/validation-schema';
+import { distributionSectionSchema, mobilityDistributionSectionSchema } from '../../utils/validation-schema';
 import { ToggleFieldButton } from '@dataset-catalog/components/dataset-form/components/toggle-field-button';
 import { get, isArray, isEmpty, isNil, isObject } from 'lodash';
 import FieldsetWithDelete from '@dataset-catalog/components/fieldset-with-delete';
@@ -437,7 +437,12 @@ export const DistributionModal = ({
           name='distribution'
           validateOnChange={submitted}
           validateOnBlur={submitted}
-          validationSchema={distributionSectionSchema}
+          validationSchema={
+            isMobility? (
+              mobilityDistributionSectionSchema
+            ):(
+              distributionSectionSchema
+          )}
           onSubmit={handleSubmit}
         >
           {({ errors, isSubmitting, submitForm, values, dirty, setFieldValue }) => {
@@ -653,6 +658,7 @@ export const DistributionModal = ({
                               }}
                               size='sm'
                               virtual
+                              error={errors.mobilityDataStandard}
                             >
                               <Combobox.Option
                                 key={`mobilityDataStandard`}
@@ -685,34 +691,35 @@ export const DistributionModal = ({
                               >
                                 {localization.datasetForm.fieldLabel.distributionRights}
                               </TitleWithHelpTextAndTag>
-                        }
-                          >
-                            <Combobox
-                              value={values?.mobilityRights? [values.mobilityRights] : ['']}
-                              portal={false}
-                              onValueChange={(selectedValues) => {
-                                setFieldValue('mobilityRights', selectedValues.toString());
-                              }}
-                              size='sm'
-                              virtual
+                            }
                             >
-                              <Combobox.Option
-                                key={`mobilityRight`}
-                                value={''}
+                              <Combobox
+                                value={values?.mobilityRights? [values.mobilityRights] : ['']}
+                                portal={false}
+                                onValueChange={(selectedValues) => {
+                                  setFieldValue('mobilityRights', selectedValues.toString());
+                                }}
+                                size='sm'
+                                virtual
+                                error={errors.mobilityRights}
                               >
-                                {localization.none}
-                              </Combobox.Option>
-                              {mobilityRights &&
-                                mobilityRights.map((mobilityRight: any, i: number) => (
-                                  <Combobox.Option
-                                    key={`mobilityRights-${mobilityRight.uri}-${i}`}
-                                    value={mobilityRight.uri}
-                                  >
-                                    {getTranslateText(mobilityRight.label)}
-                                  </Combobox.Option>
-                                ))}
-                            </Combobox>
-                          </Fieldset>
+                                <Combobox.Option
+                                  key={`mobilityRight`}
+                                  value={''}
+                                >
+                                  {localization.none}
+                                </Combobox.Option>
+                                {mobilityRights &&
+                                  mobilityRights.map((mobilityRight: any, i: number) => (
+                                    <Combobox.Option
+                                      key={`mobilityRights-${mobilityRight.uri}-${i}`}
+                                      value={mobilityRight.uri}
+                                    >
+                                      {getTranslateText(mobilityRight.label)}
+                                    </Combobox.Option>
+                                  ))}
+                              </Combobox>
+                            </Fieldset>
                           <FieldsetDivider />
                         </>) : undefined 
                       }
@@ -748,6 +755,7 @@ export const DistributionModal = ({
                             portal={false}
                             hideClearButton={false}
                             ref={(el: HTMLInputElement | null) => setInputRef(`format`, el)}
+                            error={errors.format}
                           />
                         ) : (
                           <SkeletonRectangle />

@@ -65,45 +65,45 @@ export const SpacialCombobox = ({
   );
 
   return (
-    <Fieldset
-      size='sm'
-      legend={
-        <TitleWithHelpTextAndTag
-          tagTitle={isMobility? (localization.tag.required): (localization.tag.recommended)}
-          tagColor={isMobility? undefined : 'info'}
-          helpText={localization.datasetForm.helptext.spatial}
-        >
-          {localization.datasetForm.fieldLabel.spatial}
-        </TitleWithHelpTextAndTag>
-      }
-      error={errors.spatial}
-
-    >
-      <Combobox
-        placeholder={`${localization.search.search}...`}
-        multiple
-        hideClearButton
-        filter={() => true} // disable filter
+    <>
+      <Fieldset
         size='sm'
-        onChange={handleSearchChange}
-        onValueChange={(selectedValues) => setFieldValue('spatial', selectedValues)}
-        value={values.spatial || []}
-        virtual
-        loading={isSearching}
+        legend={
+          <TitleWithHelpTextAndTag
+            tagTitle={isMobility? (localization.tag.required): (localization.tag.recommended)}
+            tagColor={isMobility? undefined : 'info'}
+            helpText={localization.datasetForm.helptext.spatial}
+          >
+            {localization.datasetForm.fieldLabel.spatial}
+          </TitleWithHelpTextAndTag>
+        }
       >
-        <Combobox.Empty>{`${localization.search.noHits}... `}</Combobox.Empty>
-          {comboboxOptions.map((item) => (
-            <Combobox.Option
-              key={item.uri}
-              value={item.uri}
-              description={getDescription(item)}
-            >
-              {item.label ? getTranslateText(item.label) : item.uri}
-            </Combobox.Option>
-          ))}
-      </Combobox>
+        <Combobox
+          placeholder={`${localization.search.search}...`}
+          multiple
+          hideClearButton
+          filter={() => true} // disable filter
+          size='sm'
+          onChange={handleSearchChange}
+          onValueChange={(selectedValues) => setFieldValue('spatial', selectedValues)}
+          value={values.spatial || []}
+          virtual
+          loading={isSearching}
+          error={errors.spatial}
+        >
+          <Combobox.Empty>{`${localization.search.noHits}... `}</Combobox.Empty>
+            {comboboxOptions.map((item) => (
+              <Combobox.Option
+                key={item.uri}
+                value={item.uri}
+                description={getDescription(item)}
+              >
+                {item.label ? getTranslateText(item.label) : item.uri}
+              </Combobox.Option>
+            ))}
+        </Combobox>
+      </Fieldset>
       <FieldsetDivider />
-
-    </Fieldset>
+    </>
   )
 }
