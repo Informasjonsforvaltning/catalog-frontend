@@ -99,16 +99,21 @@ const ImportResultsTable = ({ importHref, importResults, showStatusHelpText }: P
             </Table.Cell>
             <Table.Cell>{formatDate(result.created)}</Table.Cell>
             <Table.Cell>
-              {result?.extractionRecords?.filter((record) => record.extractResult?.issues.length === 0).length ?? 0}
+              {result?.conceptExtractions
+                ?.map(conceptExtraction => conceptExtraction.extractionRecord)
+                ?.filter((record) => record.extractResult?.issues.length === 0).length ?? 0}
             </Table.Cell>
             <Table.Cell>
-              {result?.extractionRecords
-                ?.filter((record) => !record.extractResult?.issues.some((issue) => issue.type === 'ERROR'))
-                ?.filter((record) => record.extractResult?.issues.some((issue) => issue.type === 'WARNING')).length ??
+              {result?.conceptExtractions
+                  ?.map(conceptExtraction => conceptExtraction.extractionRecord)
+                  ?.filter((record) => !record.extractResult?.issues.some((issue) => issue.type === 'ERROR'))
+                  ?.filter((record) => record.extractResult?.issues.some((issue) => issue.type === 'WARNING')).length ??
                 0}
             </Table.Cell>
             <Table.Cell>
-              {result?.extractionRecords?.filter((record) =>
+              {result?.conceptExtractions
+                ?.map(conceptExtraction => conceptExtraction.extractionRecord)
+                ?.filter((record) =>
                 record.extractResult?.issues.some((issue) => issue.type === 'ERROR'),
               ).length ?? 0}
             </Table.Cell>

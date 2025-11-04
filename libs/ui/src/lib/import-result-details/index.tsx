@@ -270,7 +270,7 @@ const ImportResultDetails = ({
           )}
         </div>
       </div>
-      {(!importResult.extractionRecords || importResult.extractionRecords?.length === 0) &&
+      {(!importResult.conceptExtractions || importResult.conceptExtractions?.length === 0) &&
         (
           <CenterContainer>
             <Heading
@@ -281,7 +281,7 @@ const ImportResultDetails = ({
             </Heading>
           </CenterContainer>
         )}
-      {importResult?.extractionRecords && importResult?.extractionRecords.length > 0 && (
+      {importResult?.conceptExtractions && importResult?.conceptExtractions.length > 0 && (
         <div className={styles.tableContainer}>
           <Table
             className={styles.tableFullWidth}
