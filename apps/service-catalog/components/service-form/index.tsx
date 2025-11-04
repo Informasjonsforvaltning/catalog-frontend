@@ -408,8 +408,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       legend={
                         <TitleWithHelpTextAndTag
                           helpText={localization.serviceForm.helptext.contactPoint}
-                          tagColor='info'
-                          tagTitle={localization.tag.minOneField}
+                          tagTitle={localization.tag.required}
                         >
                           {localization.serviceForm.fieldLabel.contactPoint}
                         </TitleWithHelpTextAndTag>
