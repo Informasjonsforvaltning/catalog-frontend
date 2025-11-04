@@ -63,6 +63,7 @@ export const nb = {
   title: 'Tittel',
   toAndIncluding: 'Til og med',
   unknown: 'Ukjent',
+  update: 'Oppdater',
   yes: 'Ja',
   allUsers: 'Alle brukere',
   type: 'Type',
@@ -245,6 +246,7 @@ export const nb = {
     publish: 'Publisert',
     required: 'Må fylles ut',
     recommended: 'Anbefalt',
+    minOneField: 'Minst ett felt må fylles ut',
   },
 
   searchHit: {
@@ -277,9 +279,9 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
   },
 
   snackbar: {
-    saveSuccessfull: 'Endringene ble lagret.',
+    saveSuccessful: 'Endringene ble lagret.',
     saveFailed: 'Lagring feilet. Vennligst prøv igjen.',
-    restoreSuccessfull: 'Endringene ble gjenopprettet.',
+    restoreSuccessful: 'Endringene ble gjenopprettet.',
   },
 
   confirm: {
@@ -446,7 +448,7 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
 
   changeRequest: {
     accept: 'Godta',
-    acceptSuccessfull: 'Endringsforslaget er godtatt.',
+    acceptSuccessful: 'Endringsforslaget er godtatt.',
     acceptFailed: 'Kunne ikke godta endringsforslaget.',
     changed: 'Endret',
     changeRequest: 'Endringsforslag',
@@ -463,7 +465,7 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
     noValue: 'Ingen verdi',
     proposedChange: 'Forslag til ny {fieldType} på {lang}',
     reject: 'Avvis',
-    rejectSuccessfull: 'Endringsforslaget er avvist.',
+    rejectSuccessful: 'Endringsforslaget er avvist.',
     rejectFailed: 'Kunne ikke avvise endringsforslaget.',
     seeChangeRequests: 'Se alle endringsforslag',
     sourceLink: 'Lenke til kilde',

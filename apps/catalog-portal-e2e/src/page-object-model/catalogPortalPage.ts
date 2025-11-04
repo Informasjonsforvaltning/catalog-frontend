@@ -19,7 +19,6 @@ export default class CatalogPortalPage {
   conceptCatalog = () => this.page.getByRole('link', { name: /^Begrepskatalog/ });
   publicServiceCatalog = () => this.page.getByRole('link', { name: /^Tjenestekatalog Offentlige/ });
   serviceCatalog = () => this.page.getByRole('link', { name: /^Tjenestekatalog Tjenester/ });
-  recordsOfProcessingActivities = () => this.page.getByRole('link', { name: /^Behandlingsoversikt/ });
 
   public async goto(url: string = this.url) {
     await this.page.goto(url);

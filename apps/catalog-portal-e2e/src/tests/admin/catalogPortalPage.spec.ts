@@ -29,11 +29,6 @@ const catalogTests = [
     locator: 'publicServiceCatalog',
     url: `https://service-catalog.staging.fellesdatakatalog.digdir.no/catalogs/${orgId}/public-services`,
   },
-  {
-    name: 'records of processing activities',
-    locator: 'recordsOfProcessingActivities',
-    url: `https://registrering-protokoll.staging.fellesdatakatalog.digdir.no/${orgId}`,
-  },
 ];
 
 catalogTests.forEach(({ name, locator, url }) => {

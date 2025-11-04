@@ -1,12 +1,5 @@
 'use client';
-import {
-  DataStorage,
-  formatISO,
-  getTranslateText,
-  localization,
-  trimObjectWhitespace,
-  deepMergeWithUndefinedHandling,
-} from '@catalog-frontend/utils';
+import { DataStorage, formatISO, getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Alert, Button, Checkbox, Paragraph, Spinner, Switch } from '@digdir/designsystemet-react';
 import {
   Dataset,
@@ -72,7 +65,7 @@ const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
         size='sm'
         className={styles.topMargin2}
       >
-        {localization.conceptForm.alert.wantToRestoreChanges}
+        {localization.alert.wantToRestoreChanges}
       </Paragraph>
     </>
   );
@@ -215,7 +208,7 @@ export const DatasetForm = ({
 
   useEffect(() => {
     if (showSnackbarSuccessOnInit) {
-      showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success', fadeIn: false });
+      showSnackbarMessage({ message: localization.snackbar.saveSuccessful, severity: 'success', fadeIn: false });
     }
   }, [showSnackbarSuccessOnInit]);
 
@@ -240,7 +233,7 @@ export const DatasetForm = ({
             try {
               const newValues = await onSubmit(trimObjectWhitespace(values));
 
-              showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success' });
+              showSnackbarMessage({ message: localization.snackbar.saveSuccessful, severity: 'success' });
               if (newValues) {
                 resetForm({ values: datasetTemplate(newValues) });
               } else {
@@ -301,7 +294,7 @@ export const DatasetForm = ({
               autoSaveStorage?.deleteSecondary('reference');
             }
 
-            showSnackbarMessage({ message: localization.snackbar.restoreSuccessfull, severity: 'success' });
+            showSnackbarMessage({ message: localization.snackbar.restoreSuccessful, severity: 'success' });
             return true;
           };
 

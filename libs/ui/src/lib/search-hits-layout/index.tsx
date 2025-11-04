@@ -2,7 +2,6 @@
 
 import { HTMLAttributes, ReactNode, Children, isValidElement } from 'react';
 import styles from './search-hits-layout.module.css';
-import cn from 'classnames';
 
 interface SearchHitsPageLayoutProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
@@ -20,7 +19,7 @@ const SearchHitsLayout = ({ children }: SearchHitsPageLayoutProps) => {
     <div className='container'>
       <div className={styles.pageContainer}>
         {searchRowChild && <div className={styles.searchRowContainer}>{searchRowChild}</div>}
-        <div className={cn(styles.gridContainer)}>
+        <div className={styles.gridContainer}>
           {leftChild}
           {mainChild}
         </div>

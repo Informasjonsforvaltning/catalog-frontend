@@ -62,7 +62,7 @@
     "lodash": "^4.17.21",
     "luxon": "3.7.1",
     "next": "15.5.3",
-    "next-auth": "^4.24.11",
+    "next-auth": "^4.24.12",
     "nuqs": "^2.6.0",
     "postcss": "^8.5.6",
     "postcss-flexbugs-fixes": "^5.0.2",

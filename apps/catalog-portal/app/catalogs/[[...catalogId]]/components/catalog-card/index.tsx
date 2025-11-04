@@ -5,16 +5,14 @@ import {
   getConceptCount,
   getDataServiceCount,
   getDatasetCount,
-  getRecordsOfProcessingActivityCount,
   getServiceCount,
 } from '../../../../actions';
 import { localization } from '@catalog-frontend/utils';
 import { JSXElementConstructor, ReactElement, useEffect, useState } from 'react';
-import { Alert } from '@digdir/designsystemet-react';
 import styles from '../../catalogs.module.css';
 
 type CatalogCardProps = {
-  variant: 'dataset' | 'data-service' | 'concept' | 'service' | 'public-service' | 'records-of-processing';
+  variant: 'dataset' | 'data-service' | 'concept' | 'service' | 'public-service';
   organizationId: string;
   href: string;
 };
@@ -30,26 +28,9 @@ const CardSpinner = () => {
   );
 };
 
-const ShutDownAlert = () => (
-  <Alert
-    severity='warning'
-    size='small'
-    className={styles.warning}
-  >
-    Legges ned 31. mai 2025
-  </Alert>
-);
-
 export const CatalogCard = ({ variant, organizationId, href }: CatalogCardProps) => {
   const [body, setBody] = useState<ReactElement<any, string | JSXElementConstructor<any>>>(
-    variant === 'records-of-processing' ? (
-      <>
-        <CardSpinner />
-        <ShutDownAlert />
-      </>
-    ) : (
-      <CardSpinner />
-    ),
+    <CardSpinner />
   );
   let title, subtitle;
 
@@ -65,8 +46,6 @@ export const CatalogCard = ({ variant, organizationId, href }: CatalogCardProps)
   } else if (variant === 'public-service') {
     title = localization.catalogType.service;
     subtitle = localization.resourceType.publicServices;
-  } else if (variant === 'records-of-processing') {
-    title = localization.catalogType.recordsOfProcessingActivities;
   }
 
   useEffect(() => {
@@ -93,16 +72,6 @@ export const CatalogCard = ({ variant, organizationId, href }: CatalogCardProps)
             : (await getServiceCount(organizationId)).publicServiceCount;
         setBody(
           <>{`${serviceCount > 0 ? serviceCount : localization.none} ${localization.descriptionType.service}`}</>,
-        );
-      } else if (variant === 'records-of-processing') {
-        const processingActivitiesCount = await getRecordsOfProcessingActivityCount(organizationId);
-        setBody(
-          <>
-            <span className={styles.behandlingsoversikt}>
-              {`${processingActivitiesCount > 0 ? processingActivitiesCount : localization.none} ${localization.descriptionType.recordsOfProcessingActivities}`}
-            </span>
-            <ShutDownAlert />
-          </>,
         );
       }
     }

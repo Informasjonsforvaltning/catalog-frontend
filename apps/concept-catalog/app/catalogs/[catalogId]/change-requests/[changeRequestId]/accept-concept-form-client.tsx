@@ -48,9 +48,7 @@ export const AcceptConceptFormClient = ({
   };
 
   const handleGotoConcept = () => {
-    window.location.replace(
-      `/catalogs/${organization.organizationId}/concepts/${originalConcept?.id}`,
-    );
+    window.location.replace(`/catalogs/${organization.organizationId}/concepts/${originalConcept?.id}`);
   };
 
   const AcceptChangeRequestButton = () => {
@@ -61,7 +59,7 @@ export const AcceptConceptFormClient = ({
 
         try {
           await acceptChangeRequestAction(organization.organizationId, changeRequest.id);
-          showSnackbarMessage({ message: localization.changeRequest.acceptSuccessfull, severity: 'success' });
+          showSnackbarMessage({ message: localization.changeRequest.acceptSuccessful, severity: 'success' });
         } catch {
           showSnackbarMessage({ message: localization.changeRequest.acceptFailed, severity: 'danger' });
         } finally {
@@ -91,7 +89,7 @@ export const AcceptConceptFormClient = ({
 
         try {
           await rejectChangeRequestAction(organization.organizationId, changeRequest.id);
-          showSnackbarMessage({ message: localization.changeRequest.rejectSuccessfull, severity: 'success' });
+          showSnackbarMessage({ message: localization.changeRequest.rejectSuccessful, severity: 'success' });
         } catch {
           showSnackbarMessage({ message: localization.changeRequest.rejectFailed, severity: 'danger' });
         } finally {
