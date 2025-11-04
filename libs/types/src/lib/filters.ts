@@ -1,1 +1,1 @@
-export type FilterType = 'status' | 'published';
+export type FilterType = "status" | "published";

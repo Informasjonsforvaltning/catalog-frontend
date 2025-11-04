@@ -1,14 +1,21 @@
-import { Fields } from '@catalog-frontend/types';
-import { withProtectedPage } from '../../../../../utils/auth';
-import { getFields } from '@catalog-frontend/data-access';
-import CodeListsPageClient from './code-list-page-client';
-import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
+import { Fields } from "@catalog-frontend/types";
+import { withProtectedPage } from "../../../../../utils/auth";
+import { getFields } from "@catalog-frontend/data-access";
+import CodeListsPageClient from "./code-list-page-client";
+import {
+  Breadcrumbs,
+  BreadcrumbType,
+  DesignBanner,
+} from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
 
 export default withProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/concepts/code-lists`,
   async ({ catalogId, session }) => {
-    const { internal, editable }: Fields = await getFields(catalogId, session.accessToken).then((res) => res.json());
+    const { internal, editable }: Fields = await getFields(
+      catalogId,
+      session.accessToken,
+    ).then((res) => res.json());
 
     const codeListsInUse: string[] = [];
 

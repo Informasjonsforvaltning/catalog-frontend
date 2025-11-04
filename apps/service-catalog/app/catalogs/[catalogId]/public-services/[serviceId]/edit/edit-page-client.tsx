@@ -1,14 +1,26 @@
-'use client';
+"use client";
 
-import { ReferenceDataCode, Service, StorageData } from '@catalog-frontend/types';
-import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
-import { LocalDataStorage, localization } from '@catalog-frontend/utils';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { getPublicServiceById, updatePublicService } from '@service-catalog/app/actions/public-services/actions';
-import ServiceForm from '@service-catalog/components/service-form';
-import { serviceTemplate } from '@service-catalog/components/service-form/service-template';
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import {
+  ReferenceDataCode,
+  Service,
+  StorageData,
+} from "@catalog-frontend/types";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
+import { LocalDataStorage, localization } from "@catalog-frontend/utils";
+import { ArrowLeftIcon } from "@navikt/aksel-icons";
+import {
+  getPublicServiceById,
+  updatePublicService,
+} from "@service-catalog/app/actions/public-services/actions";
+import ServiceForm from "@service-catalog/components/service-form";
+import { serviceTemplate } from "@service-catalog/components/service-form/service-template";
+import {
+  useParams,
+  usePathname,
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
+import { useEffect, useState } from "react";
 
 type EditPageProps = {
   service: Service;
@@ -18,7 +30,10 @@ type EditPageProps = {
 export const EditPage = (props: EditPageProps) => {
   const { service, statuses } = props;
   const router = useRouter();
-  const { catalogId, serviceId } = useParams<{ catalogId: string; serviceId: string }>();
+  const { catalogId, serviceId } = useParams<{
+    catalogId: string;
+    serviceId: string;
+  }>();
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
@@ -26,7 +41,7 @@ export const EditPage = (props: EditPageProps) => {
   const searchParams = useSearchParams();
 
   const dataStorage = new LocalDataStorage<StorageData>({
-    key: 'publicServiceForm',
+    key: "publicServiceForm",
   });
 
   const handleGotoOverview = () => {
@@ -45,16 +60,19 @@ export const EditPage = (props: EditPageProps) => {
   };
 
   useEffect(() => {
-    if (searchParams.get('created') === 'true') {
+    if (searchParams.get("created") === "true") {
       setShowSnackbar(true);
 
       // Remove the param and update the URL shallowly
       const newParams = new URLSearchParams(searchParams.toString());
-      newParams.delete('created');
+      newParams.delete("created");
 
-      const newUrl = newParams.toString().length > 0 ? `${pathname}?${newParams.toString()}` : pathname;
+      const newUrl =
+        newParams.toString().length > 0
+          ? `${pathname}?${newParams.toString()}`
+          : pathname;
 
-      window.history.replaceState(null, '', newUrl);
+      window.history.replaceState(null, "", newUrl);
     }
   }, [searchParams, pathname]);
 
@@ -70,12 +88,12 @@ export const EditPage = (props: EditPageProps) => {
       )}
       <ButtonBar>
         <Button
-          variant='tertiary'
-          color='second'
-          size='sm'
+          variant="tertiary"
+          color="second"
+          size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >
-          <ArrowLeftIcon fontSize='1.25em' />
+          <ArrowLeftIcon fontSize="1.25em" />
           {localization.button.backToOverview}
         </Button>
       </ButtonBar>
@@ -86,7 +104,7 @@ export const EditPage = (props: EditPageProps) => {
         initialValues={serviceTemplate(service)}
         statuses={statuses}
         showSnackbarSuccessOnInit={showSnackbar}
-        type='public-services'
+        type="public-services"
       />
     </>
   );

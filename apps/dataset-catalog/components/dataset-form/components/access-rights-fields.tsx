@@ -1,9 +1,13 @@
-import { Dataset } from '@catalog-frontend/types';
-import { FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { accessRights, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Box, Radio } from '@digdir/designsystemet-react';
-import { useFormikContext } from 'formik';
-import { UriWithLabelFieldsetTable } from './uri-with-label-field-set-table';
+import { Dataset } from "@catalog-frontend/types";
+import { FieldsetDivider, TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import {
+  accessRights,
+  getTranslateText,
+  localization,
+} from "@catalog-frontend/utils";
+import { Box, Radio } from "@digdir/designsystemet-react";
+import { useFormikContext } from "formik";
+import { UriWithLabelFieldsetTable } from "./uri-with-label-field-set-table";
 
 export const AccessRightFields = () => {
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
@@ -12,25 +16,22 @@ export const AccessRightFields = () => {
     <>
       <Box>
         <Radio.Group
-          size='sm'
+          size="sm"
           legend={
             <TitleWithHelpTextAndTag
               helpText={localization.datasetForm.helptext.accessRights}
-              tagColor='info'
+              tagColor="info"
               tagTitle={localization.tag.recommended}
             >
               {localization.access}
             </TitleWithHelpTextAndTag>
           }
-          value={values?.accessRight || 'none'}
-          onChange={(values) => setFieldValue('accessRight', values.toString())}
+          value={values?.accessRight || "none"}
+          onChange={(values) => setFieldValue("accessRight", values.toString())}
         >
-          <Radio value='none'>{`${localization.accessRight.none}`}</Radio>
+          <Radio value="none">{`${localization.accessRight.none}`}</Radio>
           {accessRights?.map((option, index) => (
-            <Radio
-              key={`${option.uri}-${index}`}
-              value={option.uri}
-            >
+            <Radio key={`${option.uri}-${index}`} value={option.uri}>
               {getTranslateText(option.label)}
             </Radio>
           ))}
@@ -40,14 +41,16 @@ export const AccessRightFields = () => {
       <FieldsetDivider />
 
       <UriWithLabelFieldsetTable
-        fieldName={'legalBasisForRestriction'}
+        fieldName={"legalBasisForRestriction"}
         errors={errors.legalBasisForRestriction}
         hideHeadWhenEmpty={true}
         label={
           <TitleWithHelpTextAndTag
-            helpText={localization.datasetForm.helptext.legalBasisForRestriction}
+            helpText={
+              localization.datasetForm.helptext.legalBasisForRestriction
+            }
             tagTitle={localization.tag.recommended}
-            tagColor={'info'}
+            tagColor={"info"}
           >
             {localization.datasetForm.fieldLabel.legalBasisForRestriction}
           </TitleWithHelpTextAndTag>
@@ -57,14 +60,14 @@ export const AccessRightFields = () => {
       <FieldsetDivider />
 
       <UriWithLabelFieldsetTable
-        fieldName={'legalBasisForProcessing'}
+        fieldName={"legalBasisForProcessing"}
         errors={errors.legalBasisForProcessing}
         hideHeadWhenEmpty={true}
         label={
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.legalBasisForProcessing}
             tagTitle={localization.tag.recommended}
-            tagColor={'info'}
+            tagColor={"info"}
           >
             {localization.datasetForm.fieldLabel.legalBasisForProcessing}
           </TitleWithHelpTextAndTag>
@@ -74,14 +77,14 @@ export const AccessRightFields = () => {
       <FieldsetDivider />
 
       <UriWithLabelFieldsetTable
-        fieldName={'legalBasisForAccess'}
+        fieldName={"legalBasisForAccess"}
         errors={errors.legalBasisForAccess}
         hideHeadWhenEmpty={true}
         label={
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.legalBasisForAccess}
             tagTitle={localization.tag.recommended}
-            tagColor={'info'}
+            tagColor={"info"}
           >
             {localization.datasetForm.fieldLabel.legalBasisForAccess}
           </TitleWithHelpTextAndTag>

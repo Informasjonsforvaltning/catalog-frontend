@@ -1,9 +1,12 @@
-import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
-import { Organization, Service } from '@catalog-frontend/types';
-import { Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { getServiceById } from '../../../../../actions/services/actions';
-import { EditPage } from './edit-page-client';
+import {
+  getAdmsStatuses,
+  getOrganization,
+} from "@catalog-frontend/data-access";
+import { Organization, Service } from "@catalog-frontend/types";
+import { Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import { getServiceById } from "../../../../../actions/services/actions";
+import { EditPage } from "./edit-page-client";
 
 export default async function EditServicePage({
   params,
@@ -12,7 +15,9 @@ export default async function EditServicePage({
 }) {
   const { catalogId, serviceId } = await params;
   const service: Service = await getServiceById(catalogId, serviceId);
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+  const organization: Organization = await getOrganization(catalogId).then(
+    (res) => res.json(),
+  );
   const statusesResponse = await getAdmsStatuses().then((res) => res.json());
 
   const breadcrumbList = [
@@ -40,10 +45,7 @@ export default async function EditServicePage({
         title={localization.catalogType.service}
         subtitle={getTranslateText(organization?.prefLabel).toString()}
       />
-      <EditPage
-        service={service}
-        statuses={statusesResponse.statuses}
-      />
+      <EditPage service={service} statuses={statusesResponse.statuses} />
     </>
   );
 }

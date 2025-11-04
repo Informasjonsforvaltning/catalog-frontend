@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { NativeSelect, NativeSelectProps } from '@digdir/designsystemet-react';
-import styles from './style.module.css';
+import { NativeSelect, NativeSelectProps } from "@digdir/designsystemet-react";
+import styles from "./style.module.css";
 
 export type SelectOption = {
   label: string;

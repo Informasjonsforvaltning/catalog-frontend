@@ -1,10 +1,13 @@
-'use client';
-import { useState } from 'react';
-import { localization } from '@catalog-frontend/utils';
-import { Switch } from '@digdir/designsystemet-react';
-import { ConfirmModal } from '@catalog-frontend/ui';
-import { publishDataService, unpublishDataService } from '../../app/actions/actions';
-import { DataService } from '@catalog-frontend/types';
+"use client";
+import { useState } from "react";
+import { localization } from "@catalog-frontend/utils";
+import { Switch } from "@digdir/designsystemet-react";
+import { ConfirmModal } from "@catalog-frontend/ui";
+import {
+  publishDataService,
+  unpublishDataService,
+} from "../../app/actions/actions";
+import { DataService } from "@catalog-frontend/types";
 
 type Props = {
   catalogId: string;
@@ -47,21 +50,26 @@ export const PublishSwitch = ({ catalogId, dataService, disabled }: Props) => {
   return (
     <>
       <Switch
-        size='small'
-        position='right'
+        size="small"
+        position="right"
         onChange={() => handlePublishDataService()}
         checked={dataService.published}
         disabled={disabled}
-        data-testid='data-service-publish-switch'
+        data-testid="data-service-publish-switch"
       >
-        {dataService.published ? localization.publicationState.published : localization.publicationState.unpublished}
+        {dataService.published
+          ? localization.publicationState.published
+          : localization.publicationState.unpublished}
       </Switch>
 
       {showPublishConfirm && (
         <ConfirmModal
-          title={localization.dataServiceForm.alert.confirmPublishTitle || 'Bekreft publisering'}
+          title={
+            localization.dataServiceForm.alert.confirmPublishTitle ||
+            "Bekreft publisering"
+          }
           content={localization.dataServiceForm.alert.confirmPublish}
-          successButtonText={localization.button.publish || 'Publiser'}
+          successButtonText={localization.button.publish || "Publiser"}
           onSuccess={handleConfirmPublish}
           onCancel={() => setShowPublishConfirm(false)}
         />
@@ -69,9 +77,12 @@ export const PublishSwitch = ({ catalogId, dataService, disabled }: Props) => {
 
       {showUnpublishConfirm && (
         <ConfirmModal
-          title={localization.dataServiceForm.alert.confirmUnpublishTitle || 'Bekreft avpublisering'}
+          title={
+            localization.dataServiceForm.alert.confirmUnpublishTitle ||
+            "Bekreft avpublisering"
+          }
           content={localization.dataServiceForm.alert.confirmUnpublish}
-          successButtonText={localization.button.unpublish || 'Avpubliser'}
+          successButtonText={localization.button.unpublish || "Avpubliser"}
           onSuccess={handleConfirmUnpublish}
           onCancel={() => setShowUnpublishConfirm(false)}
         />

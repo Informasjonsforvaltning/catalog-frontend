@@ -1,4 +1,4 @@
-import { AssignedUser } from './user';
+import { AssignedUser } from "./user";
 
 export interface Comment {
   id: string;

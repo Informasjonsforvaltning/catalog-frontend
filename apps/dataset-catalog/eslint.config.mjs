@@ -1,29 +1,29 @@
-import { defineConfig, globalIgnores } from 'eslint/config';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { createCommonTsConfig } from '../../tools/eslint/shared-eslint-config.mjs';
+import { defineConfig, globalIgnores } from "eslint/config";
+import path from "path";
+import { fileURLToPath } from "url";
+import { createCommonTsConfig } from "../../tools/eslint/shared-eslint-config.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig([
-  globalIgnores(['.next/**/*', 'node_modules/**/*']),
+  globalIgnores([".next/**/*", "node_modules/**/*"]),
   createCommonTsConfig(__dirname),
 
   {
-    ignores: ['.next', '.next/**/*', '**/.next/**/*', 'node_modules/**/*'],
+    ignores: [".next", ".next/**/*", "**/.next/**/*", "node_modules/**/*"],
   },
   {
-    files: ['*.ts', '*.tsx', '*.js', '*.jsx'],
+    files: ["*.ts", "*.tsx", "*.js", "*.jsx"],
     rules: {
-      '@nx/enforce-module-boundaries': [
-        'error',
+      "@nx/enforce-module-boundaries": [
+        "error",
         {
           enforceBuildableLibDependency: true,
           allow: [],
           depConstraints: [
             {
-              sourceTag: '*',
-              onlyDependOnLibsWithTags: ['*'],
+              sourceTag: "*",
+              onlyDependOnLibsWithTags: ["*"],
             },
           ],
         },
@@ -34,8 +34,8 @@ export default defineConfig([
   // Ekstra override for å skru av next-regel globalt i andre apps
   {
     rules: {
-      '@next/next/no-html-link-for-pages': 'off',
-      'react/react-in-jsx-scope': 'off',
+      "@next/next/no-html-link-for-pages": "off",
+      "react/react-in-jsx-scope": "off",
     },
   },
 ]);

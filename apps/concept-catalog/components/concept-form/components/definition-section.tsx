@@ -1,4 +1,10 @@
-import { Concept, Definisjon, ISOLanguage, Kilde, StorageData } from '@catalog-frontend/types';
+import {
+  Concept,
+  Definisjon,
+  ISOLanguage,
+  Kilde,
+  StorageData,
+} from "@catalog-frontend/types";
 import {
   Box,
   Button,
@@ -9,23 +15,30 @@ import {
   Paragraph,
   Popover,
   Tag,
-} from '@digdir/designsystemet-react';
-import { FormikErrors, useFormikContext } from 'formik';
-import styles from '../concept-form.module.scss';
-import { PencilWritingIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { forwardRef, useState } from 'react';
-import { DefinitionModal } from './definition-modal';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { DataStorage } from '@catalog-frontend/utils';
+} from "@digdir/designsystemet-react";
+import { FormikErrors, useFormikContext } from "formik";
+import styles from "../concept-form.module.scss";
+import {
+  PencilWritingIcon,
+  PlusCircleIcon,
+  TrashIcon,
+} from "@navikt/aksel-icons";
+import { forwardRef, useState } from "react";
+import { DefinitionModal } from "./definition-modal";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import { DataStorage } from "@catalog-frontend/utils";
 
-function getFirstErrorByRootKeys(obj: FormikErrors<Concept>, rootKeys: string[]): string | null {
+function getFirstErrorByRootKeys(
+  obj: FormikErrors<Concept>,
+  rootKeys: string[],
+): string | null {
   for (const rootKey of rootKeys) {
     if (Object.prototype.hasOwnProperty.call(obj, rootKey)) {
       const value = obj[rootKey];
-      if (typeof value === 'string') {
+      if (typeof value === "string") {
         return value;
-      } else if (typeof value === 'object') {
+      } else if (typeof value === "object") {
         // Recursively search within the nested object
         for (const nestedKey in value) {
           const nestedValue = getFirstErrorByRootKeys(value, [nestedKey]);
@@ -40,7 +53,7 @@ function getFirstErrorByRootKeys(obj: FormikErrors<Concept>, rootKeys: string[])
   // If none of the root keys are directly found, check nested objects
   for (const key in obj) {
     const value = obj[key];
-    if (typeof value === 'object') {
+    if (typeof value === "object") {
       const nestedValue = getFirstErrorByRootKeys(value, rootKeys);
       if (nestedValue) {
         return nestedValue;
@@ -58,20 +71,32 @@ type DefinitionSectionProps = {
   autoSaveStorage?: DataStorage<StorageData>;
 };
 
-export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStorage }: DefinitionSectionProps) => {
+export const DefinitionSection = ({
+  changed,
+  readOnly,
+  autoSaveId,
+  autoSaveStorage,
+}: DefinitionSectionProps) => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
   const [open, setOpen] = useState<Record<number, boolean>>({});
 
-  const definitions = ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'] as const;
-  const allowedLanguages: ISOLanguage[] = ['nb', 'nn', 'en'];
+  const definitions = [
+    "definisjon",
+    "definisjonForAllmennheten",
+    "definisjonForSpesialister",
+  ] as const;
+  const allowedLanguages: ISOLanguage[] = ["nb", "nn", "en"];
 
-  const handleChangeDefinitionInModal = (def: Definisjon, fieldName: string) => {
+  const handleChangeDefinitionInModal = (
+    def: Definisjon,
+    fieldName: string,
+  ) => {
     if (autoSaveStorage) {
-      autoSaveStorage?.setSecondary('definition', {
+      autoSaveStorage?.setSecondary("definition", {
         id: autoSaveId,
         values: {
           definition: def,
-          fieldName
+          fieldName,
         },
         lastChanged: new Date().toISOString(),
       });
@@ -80,14 +105,17 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
 
   const handleCloseDefinitionModal = () => {
     if (autoSaveStorage) {
-      autoSaveStorage.deleteSecondary('definition');
+      autoSaveStorage.deleteSecondary("definition");
     }
   };
 
-  const handleUpdateDefinition = (def: Definisjon | null, fieldName: string) => {
+  const handleUpdateDefinition = (
+    def: Definisjon | null,
+    fieldName: string,
+  ) => {
     setFieldValue(fieldName, def);
     if (autoSaveStorage) {
-      autoSaveStorage.deleteSecondary('definition');
+      autoSaveStorage.deleteSecondary("definition");
     }
   };
 
@@ -95,7 +123,8 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
     return {
       ...def,
       kildebeskrivelse: {
-        forholdTilKilde: def.kildebeskrivelse?.forholdTilKilde ?? 'egendefinert',
+        forholdTilKilde:
+          def.kildebeskrivelse?.forholdTilKilde ?? "egendefinert",
         kilde: def.kildebeskrivelse?.kilde ?? [],
       },
     };
@@ -111,17 +140,14 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
     }
   };
 
-  const ForwardedTag = forwardRef<HTMLButtonElement, React.ButtonHTMLAttributes<HTMLButtonElement>>((props, ref) => {
-    return (
-      <button
-        className={styles.forwardedTag}
-        {...props}
-        ref={ref}
-      />
-    );
+  const ForwardedTag = forwardRef<
+    HTMLButtonElement,
+    React.ButtonHTMLAttributes<HTMLButtonElement>
+  >((props, ref) => {
+    return <button className={styles.forwardedTag} {...props} ref={ref} />;
   });
 
-  ForwardedTag.displayName = 'ForwardedTag';
+  ForwardedTag.displayName = "ForwardedTag";
 
   return (
     <Box>
@@ -147,87 +173,105 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
               def && (
                 <Card
                   key={name}
-                  color='neutral'
-                  className={Object.keys(errors).includes(name) ? styles.borderDanger : ''}
+                  color="neutral"
+                  className={
+                    Object.keys(errors).includes(name)
+                      ? styles.borderDanger
+                      : ""
+                  }
                 >
                   <Card.Header className={styles.definitionHeader}>
                     <div>
-                      <Heading
-                        level={3}
-                        size='xxsmall'
-                      >
-                        {localization.conceptForm.fieldLabel.definitionTargetGroupFull[name]}
+                      <Heading level={3} size="xxsmall">
+                        {
+                          localization.conceptForm.fieldLabel
+                            .definitionTargetGroupFull[name]
+                        }
                       </Heading>
                       {def.kildebeskrivelse?.kilde?.length ? (
                         <Popover
                           open={open[index]}
                           onClose={() => setOpen({ ...open, [index]: false })}
-                          placement='top'
-                          size='md'
-                          variant='default'
+                          placement="top"
+                          size="md"
+                          variant="default"
                         >
                           <Popover.Trigger asChild>
                             <ForwardedTag
-                              role='button'
+                              role="button"
                               onMouseEnter={() =>
-                                def.kildebeskrivelse?.kilde?.length && setOpen({ ...open, [index]: true })
+                                def.kildebeskrivelse?.kilde?.length &&
+                                setOpen({ ...open, [index]: true })
                               }
-                              onMouseOut={() => setOpen({ ...open, [index]: false })}
+                              onMouseOut={() =>
+                                setOpen({ ...open, [index]: false })
+                              }
                             >
                               {sourcesText(def.kildebeskrivelse?.kilde)}
                             </ForwardedTag>
                           </Popover.Trigger>
                           <Popover.Content>
                             <ul>
-                              {def.kildebeskrivelse?.kilde?.map((source, index) => (
-                                <li key={index}>{source.tekst || source.uri}</li>
-                              ))}
+                              {def.kildebeskrivelse?.kilde?.map(
+                                (source, index) => (
+                                  <li key={index}>
+                                    {source.tekst || source.uri}
+                                  </li>
+                                ),
+                              )}
                             </ul>
                           </Popover.Content>
                         </Popover>
                       ) : (
-                        <Tag
-                          size='sm'
-                          color='second'
-                        >
+                        <Tag size="sm" color="second">
                           {sourcesText(def.kildebeskrivelse?.kilde)}
                         </Tag>
                       )}
                     </div>
                     <div>
                       <DefinitionModal
-                        initialDefinition={def ? prepareInitialValues(def) : undefined}
-                        header={localization.conceptForm.fieldLabel.definitionTargetGroupFull[name] as string}
-                        definitionHelpText={localization.conceptForm.helpText.definitionText[name] as string}
+                        initialDefinition={
+                          def ? prepareInitialValues(def) : undefined
+                        }
+                        header={
+                          localization.conceptForm.fieldLabel
+                            .definitionTargetGroupFull[name] as string
+                        }
+                        definitionHelpText={
+                          localization.conceptForm.helpText.definitionText[
+                            name
+                          ] as string
+                        }
                         trigger={
                           <Button
-                            variant='tertiary'
-                            size='sm'
+                            variant="tertiary"
+                            size="sm"
                             disabled={readOnly}
                           >
                             <PencilWritingIcon
-                              title='Rediger'
-                              fontSize='1.5rem'
+                              title="Rediger"
+                              fontSize="1.5rem"
                             />
                             Rediger
                           </Button>
                         }
-                        onSucces={(updatedDef) => handleUpdateDefinition(updatedDef, name)}
-                        onChange={(updatedDef) => handleChangeDefinitionInModal(updatedDef, name)}
+                        onSucces={(updatedDef) =>
+                          handleUpdateDefinition(updatedDef, name)
+                        }
+                        onChange={(updatedDef) =>
+                          handleChangeDefinitionInModal(updatedDef, name)
+                        }
                         onClose={handleCloseDefinitionModal}
                       />
 
                       <Button
-                        variant='tertiary'
-                        size='sm'
-                        color='danger'
+                        variant="tertiary"
+                        size="sm"
+                        color="danger"
                         disabled={readOnly}
                         onClick={() => handleUpdateDefinition(null, name)}
                       >
-                        <TrashIcon
-                          title='Slett'
-                          fontSize='1.5rem'
-                        />
+                        <TrashIcon title="Slett" fontSize="1.5rem" />
                         Slett
                       </Button>
                     </div>
@@ -238,11 +282,7 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
                       {allowedLanguages
                         .filter((lang) => def.tekst[lang])
                         .map((lang) => (
-                          <Tag
-                            key={lang}
-                            size='sm'
-                            color='third'
-                          >
+                          <Tag key={lang} size="sm" color="third">
                             {localization.language[lang]}
                           </Tag>
                         ))}
@@ -260,19 +300,22 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
             .map((name) => (
               <DefinitionModal
                 key={name}
-                header={localization.conceptForm.fieldLabel.definitionTargetGroup[name]}
-                definitionHelpText={localization.conceptForm.helpText.definitionText[name]}
+                header={
+                  localization.conceptForm.fieldLabel.definitionTargetGroup[
+                    name
+                  ]
+                }
+                definitionHelpText={
+                  localization.conceptForm.helpText.definitionText[name]
+                }
                 trigger={
-                  <Button
-                    variant='tertiary'
-                    color='first'
-                    size='sm'
-                  >
-                    <PlusCircleIcon
-                      aria-hidden
-                      fontSize='1rem'
-                    />
-                    {localization.conceptForm.fieldLabel.definitionTargetGroup[name]}
+                  <Button variant="tertiary" color="first" size="sm">
+                    <PlusCircleIcon aria-hidden fontSize="1rem" />
+                    {
+                      localization.conceptForm.fieldLabel.definitionTargetGroup[
+                        name
+                      ]
+                    }
                   </Button>
                 }
                 onSucces={(def) => handleUpdateDefinition(def, name)}
@@ -284,12 +327,20 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
       )}
 
       {Object.keys(errors).some((value) =>
-        ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(value),
+        [
+          "definisjon",
+          "definisjonForAllmennheten",
+          "definisjonForSpesialister",
+        ].includes(value),
       ) && (
-          <ErrorMessage>
-            {getFirstErrorByRootKeys(errors, ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'])}
-          </ErrorMessage>
-        )}
+        <ErrorMessage>
+          {getFirstErrorByRootKeys(errors, [
+            "definisjon",
+            "definisjonForAllmennheten",
+            "definisjonForSpesialister",
+          ])}
+        </ErrorMessage>
+      )}
     </Box>
   );
 };

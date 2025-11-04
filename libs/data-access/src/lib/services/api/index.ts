@@ -1,70 +1,113 @@
-import { Service } from '@catalog-frontend/types';
-import { Operation } from 'fast-json-patch';
-import { validateOrganizationNumber, validateUUID, validateAndEncodeUrlSafe } from '@catalog-frontend/utils';
+import { Service } from "@catalog-frontend/types";
+import { Operation } from "fast-json-patch";
+import {
+  validateOrganizationNumber,
+  validateUUID,
+  validateAndEncodeUrlSafe,
+} from "@catalog-frontend/utils";
 
 const path = `${process.env.SERVICE_CATALOG_BASE_URI}`;
 
-export const getAllServices = async (catalogId: string, accessToken: string) => {
-  validateOrganizationNumber(catalogId, 'getAllServices');
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getAllServices');
+export const getAllServices = async (
+  catalogId: string,
+  accessToken: string,
+) => {
+  validateOrganizationNumber(catalogId, "getAllServices");
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "getAllServices",
+  );
 
   const resource = `${path}/internal/catalogs/${encodedCatalogId}/services`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    next: { tags: ['services'] },
+    next: { tags: ["services"] },
   };
   return await fetch(resource, options);
 };
 
-export const getServiceById = async (catalogId: string, serviceId: string, accessToken: string) => {
-  validateOrganizationNumber(catalogId, 'getServiceById');
-  validateUUID(serviceId, 'getServiceById');
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getServiceById');
-  const encodedServiceId = validateAndEncodeUrlSafe(serviceId, 'service ID', 'getServiceById');
+export const getServiceById = async (
+  catalogId: string,
+  serviceId: string,
+  accessToken: string,
+) => {
+  validateOrganizationNumber(catalogId, "getServiceById");
+  validateUUID(serviceId, "getServiceById");
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "getServiceById",
+  );
+  const encodedServiceId = validateAndEncodeUrlSafe(
+    serviceId,
+    "service ID",
+    "getServiceById",
+  );
 
   const resource = `${path}/internal/catalogs/${encodedCatalogId}/services/${encodedServiceId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    next: { tags: ['service'] },
+    next: { tags: ["service"] },
   };
   return await fetch(resource, options);
 };
 
-export const createService = async (Service: Partial<Service>, catalogId: string, accessToken: string) => {
-  validateOrganizationNumber(catalogId, 'createService');
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'createService');
+export const createService = async (
+  Service: Partial<Service>,
+  catalogId: string,
+  accessToken: string,
+) => {
+  validateOrganizationNumber(catalogId, "createService");
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "createService",
+  );
 
   const resource = `${path}/internal/catalogs/${encodedCatalogId}/services`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(Service),
   };
   return await fetch(resource, options);
 };
 
-export const deleteService = async (catalogId: string, serviceId: string, accessToken: string) => {
-  validateOrganizationNumber(catalogId, 'deleteService');
-  validateUUID(serviceId, 'deleteService');
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'deleteService');
-  const encodedServiceId = validateAndEncodeUrlSafe(serviceId, 'service ID', 'deleteService');
+export const deleteService = async (
+  catalogId: string,
+  serviceId: string,
+  accessToken: string,
+) => {
+  validateOrganizationNumber(catalogId, "deleteService");
+  validateUUID(serviceId, "deleteService");
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "deleteService",
+  );
+  const encodedServiceId = validateAndEncodeUrlSafe(
+    serviceId,
+    "service ID",
+    "deleteService",
+  );
 
   const resource = `${path}/internal/catalogs/${encodedCatalogId}/services/${encodedServiceId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'DELETE',
+    method: "DELETE",
   };
   return await fetch(resource, options);
 };
@@ -75,53 +118,85 @@ export const updateService = async (
   patchOperations: Operation[],
   accessToken: string,
 ) => {
-  validateOrganizationNumber(catalogId, 'updateService');
-  validateUUID(serviceId, 'updateService');
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'updateService');
-  const encodedServiceId = validateAndEncodeUrlSafe(serviceId, 'service ID', 'updateService');
+  validateOrganizationNumber(catalogId, "updateService");
+  validateUUID(serviceId, "updateService");
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "updateService",
+  );
+  const encodedServiceId = validateAndEncodeUrlSafe(
+    serviceId,
+    "service ID",
+    "updateService",
+  );
 
   const resource = `${path}/internal/catalogs/${encodedCatalogId}/services/${encodedServiceId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'PATCH',
+    method: "PATCH",
     body: JSON.stringify(patchOperations),
   };
   return await fetch(resource, options);
 };
 
-export const publishService = async (catalogId: string, serviceId: string, accessToken: string) => {
-  validateOrganizationNumber(catalogId, 'publishService');
-  validateUUID(serviceId, 'publishService');
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'publishService');
-  const encodedServiceId = validateAndEncodeUrlSafe(serviceId, 'service ID', 'publishService');
+export const publishService = async (
+  catalogId: string,
+  serviceId: string,
+  accessToken: string,
+) => {
+  validateOrganizationNumber(catalogId, "publishService");
+  validateUUID(serviceId, "publishService");
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "publishService",
+  );
+  const encodedServiceId = validateAndEncodeUrlSafe(
+    serviceId,
+    "service ID",
+    "publishService",
+  );
 
   const resource = `${path}/internal/catalogs/${encodedCatalogId}/services/${encodedServiceId}/publish`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'POST',
+    method: "POST",
   };
   return await fetch(resource, options);
 };
 
-export const unpublishService = async (catalogId: string, serviceId: string, accessToken: string) => {
-  validateOrganizationNumber(catalogId, 'unpublishService');
-  validateUUID(serviceId, 'unpublishService');
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'unpublishService');
-  const encodedServiceId = validateAndEncodeUrlSafe(serviceId, 'service ID', 'unpublishService');
+export const unpublishService = async (
+  catalogId: string,
+  serviceId: string,
+  accessToken: string,
+) => {
+  validateOrganizationNumber(catalogId, "unpublishService");
+  validateUUID(serviceId, "unpublishService");
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "unpublishService",
+  );
+  const encodedServiceId = validateAndEncodeUrlSafe(
+    serviceId,
+    "service ID",
+    "unpublishService",
+  );
 
   const resource = `${path}/internal/catalogs/${encodedCatalogId}/services/${encodedServiceId}/unpublish`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'POST',
+    method: "POST",
   };
   return await fetch(resource, options);
 };
@@ -131,7 +206,7 @@ export const getAllServiceCatalogs = async (accessToken: string) => {
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   };
 

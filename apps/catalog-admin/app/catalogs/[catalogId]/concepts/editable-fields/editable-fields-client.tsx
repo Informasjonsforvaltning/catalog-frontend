@@ -1,16 +1,19 @@
-'use client';
+"use client";
 
-import styles from './editable-fields.module.css';
-import { Heading } from '@digdir/designsystemet-react';
-import { Button, Select, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { CodeList } from '@catalog-frontend/types';
+import styles from "./editable-fields.module.css";
+import { Heading } from "@digdir/designsystemet-react";
+import { Button, Select, useWarnIfUnsavedChanges } from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { CodeList } from "@catalog-frontend/types";
 
-import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
-import { useGetInternalFields, useUpdateEditableFields } from '../../../../../hooks/internal-fields';
-import { useState } from 'react';
-import { compare } from 'fast-json-patch';
-import { PageLayout } from '../../../../../components/page-layout';
+import { useGetAllCodeLists } from "../../../../../hooks/code-lists";
+import {
+  useGetInternalFields,
+  useUpdateEditableFields,
+} from "../../../../../hooks/internal-fields";
+import { useState } from "react";
+import { compare } from "fast-json-patch";
+import { PageLayout } from "../../../../../components/page-layout";
 
 export interface EditableFieldsClientProps {
   catalogId: string;
@@ -23,12 +26,18 @@ export function EditableFieldsClient({ catalogId }: EditableFieldsClientProps) {
   const dbEditableFields = getInternalFields?.editable;
   const [updatedCodeListId, setUpdatedCodeListId] = useState<string>();
   const updateCodeListId = useUpdateEditableFields(catalogId);
-  const unsavedChanges = !!(updatedCodeListId && updatedCodeListId !== dbEditableFields?.domainCodeListId);
+  const unsavedChanges = !!(
+    updatedCodeListId &&
+    updatedCodeListId !== dbEditableFields?.domainCodeListId
+  );
 
   useWarnIfUnsavedChanges({ unsavedChanges: unsavedChanges });
 
   const handleUpdateDbCodeListId = () => {
-    const newField = { catalogId: catalogId, domainCodeListId: updatedCodeListId ?? '' };
+    const newField = {
+      catalogId: catalogId,
+      domainCodeListId: updatedCodeListId ?? "",
+    };
     const diff = compare(dbEditableFields, newField);
 
     if (updatedCodeListId === undefined) {
@@ -51,17 +60,11 @@ export function EditableFieldsClient({ catalogId }: EditableFieldsClientProps) {
   };
 
   const codeListsOptions = [
-    <option
-      key={'no-codelist'}
-      value={undefined}
-    >
+    <option key={"no-codelist"} value={undefined}>
       {localization.catalogAdmin.noListChosen}
     </option>,
     ...(dbCodeLists?.map((codeList: CodeList) => (
-      <option
-        key={codeList.id}
-        value={codeList.id}
-      >
+      <option key={codeList.id} value={codeList.id}>
         {codeList.name}
       </option>
     )) || []),
@@ -71,10 +74,7 @@ export function EditableFieldsClient({ catalogId }: EditableFieldsClientProps) {
     <>
       <PageLayout>
         <div className={styles.heading}>
-          <Heading
-            level={2}
-            size='xsmall'
-          >
+          <Heading level={2} size="xsmall">
             {localization.catalogAdmin.editableFields}
           </Heading>
         </div>
@@ -82,12 +82,14 @@ export function EditableFieldsClient({ catalogId }: EditableFieldsClientProps) {
         <div className={styles.page}>
           <div className={styles.pageContent}>
             <div>
-              <div className='accordionField'>
+              <div className="accordionField">
                 <p>Fagområde:</p>
 
                 <Select
                   label={localization.catalogAdmin.chooseCodeList}
-                  value={updatedCodeListId || dbEditableFields?.domainCodeListId}
+                  value={
+                    updatedCodeListId || dbEditableFields?.domainCodeListId
+                  }
                   onChange={(event) => {
                     setUpdatedCodeListId(event.target.value);
                   }}
@@ -96,11 +98,11 @@ export function EditableFieldsClient({ catalogId }: EditableFieldsClientProps) {
                 </Select>
               </div>
 
-              <div className='accordionField'>
+              <div className="accordionField">
                 <div className={styles.accordionButtons}>
                   <Button
                     fullWidth={true}
-                    size='small'
+                    size="small"
                     onClick={() => handleUpdateDbCodeListId()}
                   >
                     {localization.button.save}

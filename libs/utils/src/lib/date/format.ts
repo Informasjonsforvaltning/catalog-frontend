@@ -1,14 +1,14 @@
-import { DateTime } from 'luxon';
+import { DateTime } from "luxon";
 
 export const formatISO = (
   isoDate: string,
   options: Intl.DateTimeFormatOptions = {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   },
 ) => {
   if (!isoDate) {
@@ -16,7 +16,7 @@ export const formatISO = (
   }
 
   const d = new Date(isoDate);
-  return d.toLocaleString('no-NO', options);
+  return d.toLocaleString("no-NO", options);
 };
 
 export const dateStringToDate = (dateString: string) => {
@@ -29,14 +29,14 @@ export const dateStringToDate = (dateString: string) => {
 export const formatDate = (date: Date | null) =>
   date
     ? date
-        .toLocaleDateString('nb-NO', {
-          year: 'numeric',
-          month: '2-digit',
-          day: '2-digit',
+        .toLocaleDateString("nb-NO", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
         })
-        .split('/')
-        .join('.')
-    : '';
+        .split("/")
+        .join(".")
+    : "";
 
 const isDateSameDayAsNow = (date: Date) =>
   date.getFullYear() === new Date().getFullYear() &&
@@ -46,7 +46,8 @@ const isDateSameDayAsNow = (date: Date) =>
 export const isDateBeforeToday = (date: Date | null) =>
   date && date.getTime() < Date.now() && !isDateSameDayAsNow(date);
 
-export const isDateAfterToday = (date: Date | null) => date && date.getTime() > Date.now() && !isDateSameDayAsNow(date);
+export const isDateAfterToday = (date: Date | null) =>
+  date && date.getTime() > Date.now() && !isDateSameDayAsNow(date);
 
 export const parseDateTime = (value: any) => {
   if (!value) {
@@ -58,7 +59,7 @@ export const parseDateTime = (value: any) => {
     return dateTime;
   }
 
-  dateTime = DateTime.fromFormat(value, 'yyyy-MM-dd');
+  dateTime = DateTime.fromFormat(value, "yyyy-MM-dd");
   if (dateTime.isValid) {
     return dateTime;
   }
@@ -70,5 +71,5 @@ export const formatDateToDDMMYYYY = (isoDate: string | undefined) => {
   if (!isoDate) return null;
 
   const date = DateTime.fromISO(isoDate);
-  return date.isValid ? date.toFormat('dd.MM.yyyy') : null;
+  return date.isValid ? date.toFormat("dd.MM.yyyy") : null;
 };

@@ -3,15 +3,15 @@ import {
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
-} from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { Box, Textfield } from '@digdir/designsystemet-react';
+} from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { Box, Textfield } from "@digdir/designsystemet-react";
 
 export const AboutSection = () => {
   return (
     <Box>
       <FormikLanguageFieldset
-        name={'title'}
+        name={"title"}
         as={Textfield}
         legend={
           <TitleWithHelpTextAndTag
@@ -26,10 +26,12 @@ export const AboutSection = () => {
       <FieldsetDivider />
 
       <FormikLanguageFieldset
-        name='description'
+        name="description"
         as={TextareaWithPrefix}
         legend={
-          <TitleWithHelpTextAndTag helpText={localization.dataServiceForm.helptext.description}>
+          <TitleWithHelpTextAndTag
+            helpText={localization.dataServiceForm.helptext.description}
+          >
             {localization.dataServiceForm.fieldLabel.description}
           </TitleWithHelpTextAndTag>
         }
@@ -38,12 +40,12 @@ export const AboutSection = () => {
       <FieldsetDivider />
 
       <FormikLanguageFieldset
-        name='keywords'
+        name="keywords"
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.dataServiceForm.helptext.keywords}
             tagTitle={localization.tag.recommended}
-            tagColor='info'
+            tagColor="info"
           >
             {localization.dataServiceForm.fieldLabel.keywords}
           </TitleWithHelpTextAndTag>

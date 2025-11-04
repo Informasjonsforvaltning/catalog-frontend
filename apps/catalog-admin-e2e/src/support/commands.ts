@@ -18,8 +18,8 @@ declare namespace Cypress {
 //
 // -- This is a parent command --
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-Cypress.Commands.add('login', (email, password) => {
-  console.log('Custom command example');
+Cypress.Commands.add("login", (email, password) => {
+  console.log("Custom command example");
 });
 //
 // -- This is a child command --

@@ -1,16 +1,23 @@
-import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
-import { Organization, ReferenceDataCode, Service } from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
+import {
+  getAdmsStatuses,
+  getOrganization,
+} from "@catalog-frontend/data-access";
+import {
+  Organization,
+  ReferenceDataCode,
+  Service,
+} from "@catalog-frontend/types";
+import { BreadcrumbType, Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
 import {
   getTranslateText,
   getValidSession,
   hasOrganizationWritePermission,
   localization,
   redirectToSignIn,
-} from '@catalog-frontend/utils';
-import { getServiceById } from '../../../../actions/services/actions';
-import { RedirectType, redirect } from 'next/navigation';
-import ServiceDetailsPageClient from './service-details-page-client';
+} from "@catalog-frontend/utils";
+import { getServiceById } from "../../../../actions/services/actions";
+import { RedirectType, redirect } from "next/navigation";
+import ServiceDetailsPageClient from "./service-details-page-client";
 
 export default async function ServiceDetailsPage({
   params,
@@ -21,14 +28,19 @@ export default async function ServiceDetailsPage({
 
   const session = await getValidSession();
   if (!session) {
-    return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/services/${serviceId}` });
+    return redirectToSignIn({
+      callbackUrl: `/catalogs/${catalogId}/services/${serviceId}`,
+    });
   }
   const service: Service | null = await getServiceById(catalogId, serviceId);
   if (!service) {
     return redirect(`/notfound`, RedirectType.replace);
   }
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
-  const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
+  const organization: Organization = await getOrganization(catalogId).then(
+    (res) => res.json(),
+  );
+  const hasWritePermission =
+    session && hasOrganizationWritePermission(session?.accessToken, catalogId);
   const statusesResponse = await getAdmsStatuses().then((res) => res.json());
   const statuses: ReferenceDataCode[] = statusesResponse.statuses;
 

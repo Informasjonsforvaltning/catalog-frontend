@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { FC } from 'react';
-import style from './source-section.module.css';
-import { localization } from '@catalog-frontend/utils';
-import { Definisjon } from '@catalog-frontend/types';
-import { FieldArray } from 'formik';
-import { SourceForDefinitionField } from './source-for-definition';
-import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { RelationToSource } from './relation-to-source';
-import { Button } from '@catalog-frontend/ui';
+import { FC } from "react";
+import style from "./source-section.module.css";
+import { localization } from "@catalog-frontend/utils";
+import { Definisjon } from "@catalog-frontend/types";
+import { FieldArray } from "formik";
+import { SourceForDefinitionField } from "./source-for-definition";
+import { PlusCircleIcon } from "@navikt/aksel-icons";
+import { RelationToSource } from "./relation-to-source";
+import { Button } from "@catalog-frontend/ui";
 
 interface Props {
   fieldName: string;
@@ -16,7 +16,11 @@ interface Props {
   readOnly: boolean;
 }
 
-export const SourceSection: FC<Props> = ({ fieldName, definisjon, readOnly }) => {
+export const SourceSection: FC<Props> = ({
+  fieldName,
+  definisjon,
+  readOnly,
+}) => {
   const forholdTilKilde = definisjon?.kildebeskrivelse?.forholdTilKilde;
 
   return (
@@ -25,7 +29,7 @@ export const SourceSection: FC<Props> = ({ fieldName, definisjon, readOnly }) =>
         readOnly={readOnly}
         fieldName={`${fieldName}.forholdTilKilde`}
       />
-      {forholdTilKilde && forholdTilKilde !== 'egendefinert' && (
+      {forholdTilKilde && forholdTilKilde !== "egendefinert" && (
         <FieldArray name={`${fieldName}.kilde`}>
           {(arrayHelpers) => (
             <>
@@ -43,15 +47,18 @@ export const SourceSection: FC<Props> = ({ fieldName, definisjon, readOnly }) =>
               <div>
                 {!readOnly && (
                   <Button
-                    color='second'
-                    variant='tertiary'
-                    onClick={() => arrayHelpers.push({ uri: '', tekst: '' })}
+                    color="second"
+                    variant="tertiary"
+                    onClick={() => arrayHelpers.push({ uri: "", tekst: "" })}
                   >
                     <>
                       <PlusCircleIcon />
-                      {localization.formatString(localization.button.addWithFormat, {
-                        text: localization.concept.source.toLowerCase(),
-                      })}
+                      {localization.formatString(
+                        localization.button.addWithFormat,
+                        {
+                          text: localization.concept.source.toLowerCase(),
+                        },
+                      )}
                     </>
                   </Button>
                 )}

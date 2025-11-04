@@ -1,12 +1,16 @@
-import { expect, Page, BrowserContext } from '@playwright/test';
-import type AxeBuilder from '@axe-core/playwright';
+import { expect, Page, BrowserContext } from "@playwright/test";
+import type AxeBuilder from "@axe-core/playwright";
 
 export default class DatasetDetailPage {
   protected page: Page;
   protected context: BrowserContext;
   protected accessibilityBuilder: AxeBuilder;
 
-  constructor(page: Page, context: BrowserContext, accessibilityBuilder?: AxeBuilder) {
+  constructor(
+    page: Page,
+    context: BrowserContext,
+    accessibilityBuilder?: AxeBuilder,
+  ) {
     this.page = page;
     this.context = context;
     this.accessibilityBuilder = accessibilityBuilder;
@@ -17,7 +21,7 @@ export default class DatasetDetailPage {
   }
 
   async expectTitle(title: string) {
-    await expect(this.page.getByRole('heading', { name: title })).toBeVisible();
+    await expect(this.page.getByRole("heading", { name: title })).toBeVisible();
   }
 
   async expectDescription(description: string) {
@@ -35,7 +39,7 @@ export default class DatasetDetailPage {
   async expectContactPoint(email: string, phone: string, url: string) {
     await expect(this.page.getByText(email)).toBeVisible();
     await expect(this.page.getByText(phone)).toBeVisible();
-    await expect(this.page.getByRole('link', { name: url })).toBeVisible();
+    await expect(this.page.getByRole("link", { name: url })).toBeVisible();
   }
 
   async expectDatasetId(id: string) {
@@ -43,49 +47,67 @@ export default class DatasetDetailPage {
   }
 
   async expectLanguageSelector() {
-    await expect(this.page.getByRole('combobox', { name: 'Velg språk' })).toBeVisible();
+    await expect(
+      this.page.getByRole("combobox", { name: "Velg språk" }),
+    ).toBeVisible();
   }
 
   async expectEditButton() {
-    await expect(this.page.getByRole('link', { name: 'Rediger' })).toBeVisible();
+    await expect(
+      this.page.getByRole("link", { name: "Rediger" }),
+    ).toBeVisible();
   }
 
   async expectDeleteButton() {
-    await expect(this.page.getByRole('button', { name: 'Søppelikon Slett' })).toBeVisible();
+    await expect(
+      this.page.getByRole("button", { name: "Søppelikon Slett" }),
+    ).toBeVisible();
   }
 
   async clickDeleteButton() {
-    await this.page.getByRole('button', { name: 'Søppelikon Slett' }).click();
+    await this.page.getByRole("button", { name: "Søppelikon Slett" }).click();
   }
 
   async expectDeleteConfirmationDialog(datasetTitle: string) {
-    await expect(this.page.getByRole('dialog')).toBeVisible();
-    await expect(this.page.getByRole('heading', { name: 'Slett datasett' })).toBeVisible();
-    await expect(this.page.getByText(`Du er i ferd med å slette datasettbeskrivelsen ${datasetTitle}. All data knyttet til datasettbeskrivelsen vil bli permanent slettet, og slettingen kan ikke angres. Er du sikker på at du vil fortsette?`)).toBeVisible();
+    await expect(this.page.getByRole("dialog")).toBeVisible();
+    await expect(
+      this.page.getByRole("heading", { name: "Slett datasett" }),
+    ).toBeVisible();
+    await expect(
+      this.page.getByText(
+        `Du er i ferd med å slette datasettbeskrivelsen ${datasetTitle}. All data knyttet til datasettbeskrivelsen vil bli permanent slettet, og slettingen kan ikke angres. Er du sikker på at du vil fortsette?`,
+      ),
+    ).toBeVisible();
   }
 
   async confirmDelete() {
-    await this.page.getByRole('button', { name: 'Slett', exact: true }).click();
+    await this.page.getByRole("button", { name: "Slett", exact: true }).click();
   }
 
   async cancelDelete() {
-    await this.page.getByRole('button', { name: 'Avbryt' }).click();
+    await this.page.getByRole("button", { name: "Avbryt" }).click();
   }
 
   async expectPublishSwitch() {
-    await expect(this.page.getByRole('checkbox', { name: 'Publisert' })).toBeVisible();
+    await expect(
+      this.page.getByRole("checkbox", { name: "Publisert" }),
+    ).toBeVisible();
   }
 
   async expectHelpButton(label: string) {
-    await expect(this.page.getByRole('button', { name: `Hjelpetekst ${label}` })).toBeVisible();
+    await expect(
+      this.page.getByRole("button", { name: `Hjelpetekst ${label}` }),
+    ).toBeVisible();
   }
 
   async expectSectionHeading(heading: string) {
-    await expect(this.page.getByRole('heading', { name: heading })).toBeVisible();
+    await expect(
+      this.page.getByRole("heading", { name: heading }),
+    ).toBeVisible();
   }
 
   async clickEditButton() {
-    await this.page.getByRole('link', { name: 'Rediger' }).click();
+    await this.page.getByRole("link", { name: "Rediger" }).click();
   }
 
   // New methods for verifying dataset details
@@ -106,23 +128,23 @@ export default class DatasetDetailPage {
   }
 
   async expectPublicationDate(date: string) {
-    const label = this.page.getByRole('heading', { name: 'Utgivelsesdato' });
+    const label = this.page.getByRole("heading", { name: "Utgivelsesdato" });
     await expect(label).toBeVisible();
     // Convert YYYY-MM-DD to DD.MM.YYYY
-    const [year, month, day] = date.split('-');
+    const [year, month, day] = date.split("-");
     const formattedDate = `${day}.${month}.${year}`;
     await expect(this.page.getByText(formattedDate)).toBeVisible();
-  } 
+  }
 
   // Theme section
   async expectEuDataTheme(theme: string) {
-    const label = this.page.getByRole('heading', { name: 'Datatema(er)' });
+    const label = this.page.getByRole("heading", { name: "Datatema(er)" });
     await expect(label).toBeVisible();
     await expect(this.page.getByText(theme, { exact: true })).toBeVisible();
   }
 
   async expectLosTheme(theme: string) {
-    const label = this.page.getByRole('heading', { name: 'LOS-tema(er)' });
+    const label = this.page.getByRole("heading", { name: "LOS-tema(er)" });
     await expect(label).toBeVisible();
     await expect(this.page.getByText(theme, { exact: true })).toBeVisible();
   }
@@ -137,7 +159,7 @@ export default class DatasetDetailPage {
   }
 
   async expectDistributionAccessUrl(url: string) {
-    await expect(this.page.getByRole('link', { name: url })).toBeVisible();
+    await expect(this.page.getByRole("link", { name: url })).toBeVisible();
   }
 
   async expectDistributionLicense(license: string) {
@@ -145,18 +167,18 @@ export default class DatasetDetailPage {
   }
 
   async expectDistributionFormat(format: string) {
-    const label = this.page.getByRole('heading', { name: 'Format' });
+    const label = this.page.getByRole("heading", { name: "Format" });
     await expect(label).toBeVisible();
     await expect(this.page.getByText(format, { exact: true })).toBeVisible();
   }
 
   // Details section
   async expectLandingPage(url: string) {
-    await expect(this.page.getByRole('link', { name: url })).toBeVisible();
+    await expect(this.page.getByRole("link", { name: url })).toBeVisible();
   }
 
   async expectLanguages(languages: string[]) {
-    await expect(this.page.getByText(languages.join(', '))).toBeVisible();    
+    await expect(this.page.getByText(languages.join(", "))).toBeVisible();
   }
 
   async expectCoverageArea(area: string) {
@@ -186,7 +208,7 @@ export default class DatasetDetailPage {
   }
 
   async expectRelatedResourceUri(uri: string) {
-    await expect(this.page.getByRole('link', { name: uri })).toBeVisible();
+    await expect(this.page.getByRole("link", { name: uri })).toBeVisible();
   }
 
   async expectRelationTitle(title: string) {
@@ -203,7 +225,7 @@ export default class DatasetDetailPage {
   }
 
   async expectConceptUri(uri: string) {
-    await expect(this.page.getByRole('link', { name: uri })).toBeVisible();
+    await expect(this.page.getByRole("link", { name: uri })).toBeVisible();
   }
 
   async expectKeywords(keywords: string[]) {
@@ -218,7 +240,7 @@ export default class DatasetDetailPage {
   }
 
   async expectInformationModelUri(uri: string) {
-    await expect(this.page.getByRole('link', { name: uri })).toBeVisible();
+    await expect(this.page.getByRole("link", { name: uri })).toBeVisible();
   }
 
   // Contact Point section
@@ -231,6 +253,6 @@ export default class DatasetDetailPage {
   }
 
   async expectContactPointUrl(url: string) {
-    await expect(this.page.getByRole('link', { name: url })).toBeVisible();
+    await expect(this.page.getByRole("link", { name: url })).toBeVisible();
   }
-} 
+}

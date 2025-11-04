@@ -1,11 +1,11 @@
-import { Dataset } from '@catalog-frontend/types';
-import { AddButton, FieldsetDivider } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { useFormikContext } from 'formik';
-import { PropsWithChildren } from 'react';
-import FieldsetWithDelete from '../../fieldset-with-delete';
-import styles from '../dataset-form.module.css';
-import { Box } from '@digdir/designsystemet-react';
+import { Dataset } from "@catalog-frontend/types";
+import { AddButton, FieldsetDivider } from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { useFormikContext } from "formik";
+import { PropsWithChildren } from "react";
+import FieldsetWithDelete from "../../fieldset-with-delete";
+import styles from "../dataset-form.module.css";
+import { Box } from "@digdir/designsystemet-react";
 
 type Props = {
   fieldName: string;
@@ -22,7 +22,7 @@ export const ToggleFieldButton = ({
   fieldName,
   hasDeleteButton,
   onDeleteValue = undefined,
-  addValue = '',
+  addValue = "",
   setFocus,
   expanded,
   showDivider,
@@ -58,7 +58,7 @@ export const ToggleFieldButton = ({
             setFieldValue(fieldName, addValue);
             setFocus && setFocus(fieldName);
           }}
-        >{`${localization.add} ${localization.datasetForm.fieldLabel[fieldName.split('.')[0]]?.toLowerCase()}`}</AddButton>
+        >{`${localization.add} ${localization.datasetForm.fieldLabel[fieldName.split(".")[0]]?.toLowerCase()}`}</AddButton>
       )}
     </Box>
   );

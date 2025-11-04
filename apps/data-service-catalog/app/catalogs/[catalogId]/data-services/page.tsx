@@ -1,18 +1,28 @@
-import { DataService } from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
-import { localization, redirectToSignIn, getServerDataServicesPageSettings } from '@catalog-frontend/utils';
+import { DataService } from "@catalog-frontend/types";
+import {
+  BreadcrumbType,
+  Breadcrumbs,
+  DesignBanner,
+} from "@catalog-frontend/ui";
+import {
+  localization,
+  redirectToSignIn,
+  getServerDataServicesPageSettings,
+} from "@catalog-frontend/utils";
 
-import { getDistributionStatuses } from '@catalog-frontend/data-access';
-import DataServicePageClient from './data-services-page-client';
-import { getDataServices } from '../../../actions/actions';
-import { withReadProtectedPage } from '@data-service-catalog/utils/auth';
-import { cookies } from 'next/headers';
+import { getDistributionStatuses } from "@catalog-frontend/data-access";
+import DataServicePageClient from "./data-services-page-client";
+import { getDataServices } from "../../../actions/actions";
+import { withReadProtectedPage } from "@data-service-catalog/utils/auth";
+import { cookies } from "next/headers";
 
 const DataServicesSearchHits = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/data-services`,
   async ({ catalogId, session, hasWritePermission, hasAdminPermission }) => {
     if (!session) {
-      return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/data-services` });
+      return redirectToSignIn({
+        callbackUrl: `/catalogs/${catalogId}/data-services`,
+      });
     }
     const dataServices: DataService[] = await getDataServices(catalogId);
 
