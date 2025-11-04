@@ -1,11 +1,17 @@
 'use client';
-import { ReactNode, useEffect, useRef, useState } from 'react';
-import { localization, trimObjectWhitespace, deepMergeWithUndefinedHandling, formatISO, getTranslateText } from '@catalog-frontend/utils';
+import { useEffect, useRef, useState } from 'react';
+import {
+  localization,
+  trimObjectWhitespace,
+  deepMergeWithUndefinedHandling,
+  formatISO,
+  getTranslateText,
+} from '@catalog-frontend/utils';
 import { DataService, DataServiceReferenceData, DataServiceToBeCreated, StorageData } from '@catalog-frontend/types';
-import { FormLayout, StickyFooterBar, useWarnIfUnsavedChanges, FormikAutoSaver, Snackbar, NotificationCarousel, HelpMarkdown } from '@catalog-frontend/ui';
+import { FormLayout, FormikAutoSaver, Snackbar, NotificationCarousel } from '@catalog-frontend/ui';
 import { Formik, Form } from 'formik';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { Button, Checkbox, Spinner, Alert, Paragraph } from '@digdir/designsystemet-react';
+import { Button, Spinner, Alert, Paragraph } from '@digdir/designsystemet-react';
 import styles from './data-service-form.module.css';
 import { AboutSection } from './components/about-section';
 import { EndpointSection } from './components/endpoint-section';
@@ -40,26 +46,26 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
   ...(isValid
     ? []
     : [
-      <Alert
-        key={1}
-        size='sm'
-        severity='danger'
-        style={{ background: 'none', border: 'none', padding: 0 }}
-      >
-        {localization.validation.formError}
-      </Alert>,
-    ]),
+        <Alert
+          key={1}
+          size='sm'
+          severity='danger'
+          style={{ background: 'none', border: 'none', padding: 0 }}
+        >
+          {localization.validation.formError}
+        </Alert>,
+      ]),
   ...(hasUnsavedChanges
     ? [
-      <Alert
-        key={1}
-        size='sm'
-        severity='warning'
-        style={{ background: 'none', border: 'none', padding: 0 }}
-      >
-        {localization.validation.unsavedChanges}
-      </Alert>,
-    ]
+        <Alert
+          key={1}
+          size='sm'
+          severity='warning'
+          style={{ background: 'none', border: 'none', padding: 0 }}
+        >
+          {localization.validation.unsavedChanges}
+        </Alert>,
+      ]
     : []),
 ];
 
@@ -106,7 +112,9 @@ const DataServiceForm = ({
       onCancel();
     } else {
       router.push(
-        dataServiceId ? `/catalogs/${catalogId}/data-services/${dataServiceId}` : `/catalogs/${catalogId}/data-services`,
+        dataServiceId
+          ? `/catalogs/${catalogId}/data-services/${dataServiceId}`
+          : `/catalogs/${catalogId}/data-services`,
       );
     }
   };
@@ -138,7 +146,7 @@ const DataServiceForm = ({
 
   useEffect(() => {
     if (showSnackbarSuccessOnInit) {
-      showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success', fadeIn: false });
+      showSnackbarMessage({ message: localization.snackbar.saveSuccessful, severity: 'success', fadeIn: false });
     }
   }, [showSnackbarSuccessOnInit]);
 
@@ -159,7 +167,7 @@ const DataServiceForm = ({
             try {
               const newValues = await onSubmit(trimObjectWhitespace(values) as DataService);
 
-              showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success' });
+              showSnackbarMessage({ message: localization.snackbar.saveSuccessful, severity: 'success' });
               if (newValues) {
                 resetForm({ values: newValues });
               } else {
@@ -180,10 +188,23 @@ const DataServiceForm = ({
           }
         }}
       >
-        {({ errors, dirty, isSubmitting, isValidating, submitForm, setValues, setFieldValue, values, initialValues: formInitialValues }) => {
+        {({
+          errors,
+          dirty,
+          isSubmitting,
+          isValidating,
+          submitForm,
+          setValues,
+          values,
+          initialValues: formInitialValues,
+        }) => {
           setTimeout(() => setIsDirty(dirty), 0);
-          const notifications = getNotifications({ isValid: Object.keys(errors).length === 0, hasUnsavedChanges: false });
-          const hasError = (fields: (keyof DataService)[]) => fields.some((field) => Object.keys(errors).includes(field));
+          const notifications = getNotifications({
+            isValid: Object.keys(errors).length === 0,
+            hasUnsavedChanges: false,
+          });
+          const hasError = (fields: (keyof DataService)[]) =>
+            fields.some((field) => Object.keys(errors).includes(field));
 
           const handleRestoreDataService = (data: StorageData) => {
             if (data?.id !== autoSaveId) {
@@ -198,14 +219,14 @@ const DataServiceForm = ({
             const restoreValues: DataService = deepMergeWithUndefinedHandling({ ...initialValues }, data.values);
             setValues(restoreValues);
 
-            showSnackbarMessage({ message: localization.snackbar.restoreSuccessfull, severity: 'success' });
+            showSnackbarMessage({ message: localization.snackbar.restoreSuccessful, severity: 'success' });
             return true;
           };
 
           const dirtyFields = ((): string[] => {
             const dirtyFields: string[] = [];
 
-            const isDirty = (name) => {
+            const isDirty = (name: string) => {
               const a = get(formInitialValues, name);
               const b = get(values, name);
 
@@ -270,7 +291,10 @@ const DataServiceForm = ({
                       title={localization.dataServiceForm.heading.endpoint}
                       subtitle={localization.dataServiceForm.subtitle.endpoint}
                       required
-                      changed={markDirty && dirtyFields.some((field) => ['endpointUrl', 'endpointDescriptions'].includes(field))}
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) => ['endpointUrl', 'endpointDescriptions'].includes(field))
+                      }
                       error={hasError(['endpointUrl', 'endpointDescriptions'])}
                     >
                       <EndpointSection />

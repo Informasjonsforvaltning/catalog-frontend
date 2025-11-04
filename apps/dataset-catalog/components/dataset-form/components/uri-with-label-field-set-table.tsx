@@ -83,17 +83,19 @@ export const UriWithLabelFieldsetTable = ({
                           type={'edit'}
                           onSuccess={(updatedItem: UriWithLabel) => {
                             arrayHelpers.replace(index, updatedItem);
-                            setSnapshot([...fieldValues ?? []]);
+                            setSnapshot([...(fieldValues ?? [])]);
                           }}
                           onCancel={() => setFieldValue(fieldName, snapshot)}
                           onChange={(updatedItem: UriWithLabel) => arrayHelpers.replace(index, updatedItem)}
                         />
-                        <DeleteButton onClick={() => {
-                          const newArray = [...fieldValues ?? []];
-                          newArray.splice(index, 1);
-                          setFieldValue(fieldName, newArray);
-                          setSnapshot([...newArray]);
-                        }} />
+                        <DeleteButton
+                          onClick={() => {
+                            const newArray = [...(fieldValues ?? [])];
+                            newArray.splice(index, 1);
+                            setFieldValue(fieldName, newArray);
+                            setSnapshot([...newArray]);
+                          }}
+                        />
                       </span>
                     </Table.Cell>
                   </Table.Row>
@@ -105,7 +107,7 @@ export const UriWithLabelFieldsetTable = ({
                 fieldName={fieldName}
                 template={{ prefLabel: {}, uri: '' }}
                 type={'new'}
-                onSuccess={() => setSnapshot([...fieldValues ?? []])}
+                onSuccess={() => setSnapshot([...(fieldValues ?? [])])}
                 onCancel={() => setFieldValue(fieldName, snapshot)}
                 onChange={(updatedItem: UriWithLabel) => {
                   if (snapshot.length === (fieldValues?.length ?? 0)) {
@@ -135,7 +137,12 @@ const FieldModal = ({ fieldName, template, type, onSuccess, onCancel, onChange }
           {type === 'edit' ? (
             <EditButton />
           ) : (
-            <AddButton>{`${localization.add} ${localization.datasetForm.fieldLabel?.[fieldName]?.toLowerCase()}`}</AddButton>
+            <AddButton>
+              {localization.add}{' '}
+              {localization.datasetForm.fieldLabel?.[
+                fieldName as keyof typeof localization.datasetForm.fieldLabel
+              ]?.toLowerCase()}
+            </AddButton>
           )}
         </Modal.Trigger>
         <Modal.Dialog ref={modalRef}>
@@ -162,9 +169,14 @@ const FieldModal = ({ fieldName, template, type, onSuccess, onCancel, onChange }
               return (
                 <>
                   <Modal.Header closeButton={false}>
-                    {type === 'edit'
-                      ? `${localization.edit} ${getTranslateText(localization.datasetForm.fieldLabel[fieldName])?.toString().toLowerCase()}`
-                      : `${localization.add} ${getTranslateText(localization.datasetForm.fieldLabel[fieldName])?.toString().toLowerCase()}`}
+                    {type === 'edit' ? localization.edit : localization.add}{' '}
+                    {getTranslateText(
+                      localization.datasetForm.fieldLabel?.[
+                        fieldName as keyof typeof localization.datasetForm.fieldLabel
+                      ],
+                    )
+                      ?.toString()
+                      .toLowerCase()}
                   </Modal.Header>
 
                   <Modal.Content className={styles.modalContent}>
@@ -190,7 +202,7 @@ const FieldModal = ({ fieldName, template, type, onSuccess, onCancel, onChange }
                       onClick={() => submitForm()}
                       size='sm'
                     >
-                      {type === 'new' ? localization.add : localization.datasetForm.button.update}
+                      {type === 'new' ? localization.add : localization.update}
                     </Button>
                     <Button
                       variant='secondary'

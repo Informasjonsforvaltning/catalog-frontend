@@ -1,6 +1,5 @@
 import { Definisjon } from '@catalog-frontend/types';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import cn from 'classnames';
 import classes from './definition.module.css';
 import { Link } from '@digdir/designsystemet-react';
 
@@ -26,7 +25,7 @@ export const Definition = ({ definition, language }: Props) => {
       <div>{getTranslateText(definition?.tekst ?? '', language)}</div>
       {(definition?.kildebeskrivelse?.forholdTilKilde === 'egendefinert' ||
         definition?.kildebeskrivelse?.kilde.length !== 0) && (
-        <div className={cn(classes.source)}>
+        <div className={classes.source}>
           <div>
             <RelationToSource />
           </div>
