@@ -110,7 +110,8 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
         <ConfirmModal
           title={localization.importResult.confirmDelete}
           content={
-            importResult.status === "COMPLETED"
+            data?.status === "COMPLETED" ||
+            data?.status === "PARTIALLY_COMPLETED"
               ? localization.importResult.deleteCanResultInDuplicates
               : ""
           }
