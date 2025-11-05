@@ -29,6 +29,7 @@ const importStatuses = [
   { value: 'PARTIALLY_COMPLETED', label: localization.importResult.partiallyCompleted },
   { value: 'FAILED', label: localization.importResult.failed },
   { value: 'IN_PROGRESS', label: localization.importResult.inProgress },
+  { value: 'CANCELLING', label: localization.importResult.cancelling },
   { value: 'CANCELLED', label: localization.importResult.cancelled },
   { value: 'SAVING', label: localization.importResult.savingInCatalog },
   { value: 'PENDING_CONFIRMATION', label: localization.importResult.pendingConfirmation },
@@ -39,6 +40,7 @@ const importStatusHelpTexts = [
   { value: 'PARTIALLY_COMPLETED', label: localization.importResult.helpText.partiallyCompleted },
   { value: 'FAILED', label: localization.importResult.helpText.failed },
   { value: 'IN_PROGRESS', label: localization.importResult.helpText.inProgress },
+  { value: 'CANCELLING', label: localization.importResult.helpText.cancelling },
   { value: 'CANCELLED', label: localization.importResult.helpText.cancelled },
   { value: 'SAVING', label: localization.importResult.helpText.savingInCatalog },
   { value: 'PENDING_CONFIRMATION', label: localization.importResult.helpText.pendingConfirmation },
@@ -139,7 +141,8 @@ const ImportResultDetails = ({
         variant='primary'
         size='sm'
         color={getButtonColor(conceptExtraction)}
-        disabled={isDeleting || isCancelling || saveConceptMutation?.isPending || deleteImportMutation?.isPending}
+        disabled={isDeleting || isCancelling || importResult.status === 'CANCELLING' ||
+          saveConceptMutation?.isPending || deleteImportMutation?.isPending}
         onClick={() => {
           setSavingExternalId(conceptExtraction?.extractionRecord?.externalId)
         }}
@@ -172,7 +175,8 @@ const ImportResultDetails = ({
       <div className={styles.header}>
         <div className={styles.titleContainer}>
           {
-            (isCancelling || isDeleting || cancelMutation?.isPending || deleteImportMutation?.isPending) && (
+            (isCancelling || importResult.status === 'CANCELLING' || isDeleting
+              || cancelMutation?.isPending || deleteImportMutation?.isPending) && (
             <div className={styles.spinnerOverlay}>
             <Spinner
               title={localization.loading}

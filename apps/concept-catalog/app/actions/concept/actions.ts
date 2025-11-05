@@ -114,7 +114,7 @@ export async function deleteConcept(catalogId: string, conceptId: string) {
     success = true;
   } catch (error) {
     console.error(error);
-    throw new Error(localization.alert.deleteFail);
+    throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
       revalidateTag('concepts');
@@ -205,7 +205,7 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
     success = true;
     console.log("Deleted import result", catalogId, resultId);
   } catch (error) {
-    throw new Error(localization.alert.deleteFail);
+    throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
       revalidateTag('import-results');

@@ -5,7 +5,8 @@ export interface ImportResult {
   id: string;
   created: string;
   catalogId: string;
-  status: 'FAILED' | 'COMPLETED' | 'PARTIALLY_COMPLETED' | 'IN_PROGRESS' | 'CANCELLED' | 'PENDING_CONFIRMATION' | 'SAVING';
+  status: 'FAILED' | 'COMPLETED' | 'PARTIALLY_COMPLETED' | 'IN_PROGRESS' | 'CANCELLED' |
+    'CANCELLING' | 'PENDING_CONFIRMATION' | 'SAVING';
   extractionRecords?: ExtractionRecord[];
   conceptExtractions: ConceptExtraction[];
   totalConcepts: number;

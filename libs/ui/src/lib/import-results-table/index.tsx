@@ -14,6 +14,7 @@ const importStatuses = [
   { value: 'PARTIALLY_COMPLETED', label: localization.importResult.partiallyCompleted },
   { value: 'FAILED', label: localization.importResult.failed },
   { value: 'IN_PROGRESS', label: localization.importResult.inProgress },
+  { value: 'CANCELLING', label: localization.importResult.cancelling },
   { value: 'CANCELLED', label: localization.importResult.cancelled },
   { value: 'PENDING_CONFIRMATION', label: localization.importResult.pendingConfirmation },
 ];

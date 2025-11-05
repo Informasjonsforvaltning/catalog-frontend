@@ -8,6 +8,7 @@ export enum ImportResultStatusColors {
   IN_PROGRESS = 'third',
   PENDING_CONFIRMATION = 'warning',
   SAVING = 'third',
+  CANCELLING = 'first',
   CANCELLED = 'first',
 }
 
