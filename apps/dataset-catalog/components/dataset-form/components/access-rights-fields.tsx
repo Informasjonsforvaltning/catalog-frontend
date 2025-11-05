@@ -13,10 +13,7 @@ interface Props {
   isMobility?: boolean;
 }
 
-
-export const AccessRightFields = ({
-  isMobility: isMobility
-}: Props) => {
+export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
 
   return (
@@ -45,19 +42,20 @@ export const AccessRightFields = ({
         </Radio.Group>
       </Box>
 
-      
-      {
-        !isMobility && <div>
+      {!isMobility && (
+        <div>
           <FieldsetDivider />
           <UriWithLabelFieldsetTable
-            fieldName={'legalBasisForRestriction'}
+            fieldName={"legalBasisForRestriction"}
             errors={errors.legalBasisForRestriction}
             hideHeadWhenEmpty={true}
             label={
               <TitleWithHelpTextAndTag
-                helpText={localization.datasetForm.helptext.legalBasisForRestriction}
+                helpText={
+                  localization.datasetForm.helptext.legalBasisForRestriction
+                }
                 tagTitle={localization.tag.recommended}
-                tagColor={'info'}
+                tagColor={"info"}
               >
                 {localization.datasetForm.fieldLabel.legalBasisForRestriction}
               </TitleWithHelpTextAndTag>
@@ -67,14 +65,16 @@ export const AccessRightFields = ({
           <FieldsetDivider />
 
           <UriWithLabelFieldsetTable
-            fieldName={'legalBasisForProcessing'}
+            fieldName={"legalBasisForProcessing"}
             errors={errors.legalBasisForProcessing}
             hideHeadWhenEmpty={true}
             label={
               <TitleWithHelpTextAndTag
-                helpText={localization.datasetForm.helptext.legalBasisForProcessing}
+                helpText={
+                  localization.datasetForm.helptext.legalBasisForProcessing
+                }
                 tagTitle={localization.tag.recommended}
-                tagColor={'info'}
+                tagColor={"info"}
               >
                 {localization.datasetForm.fieldLabel.legalBasisForProcessing}
               </TitleWithHelpTextAndTag>
@@ -84,22 +84,21 @@ export const AccessRightFields = ({
           <FieldsetDivider />
 
           <UriWithLabelFieldsetTable
-            fieldName={'legalBasisForAccess'}
+            fieldName={"legalBasisForAccess"}
             errors={errors.legalBasisForAccess}
             hideHeadWhenEmpty={true}
             label={
               <TitleWithHelpTextAndTag
                 helpText={localization.datasetForm.helptext.legalBasisForAccess}
                 tagTitle={localization.tag.recommended}
-                tagColor={'info'}
+                tagColor={"info"}
               >
                 {localization.datasetForm.fieldLabel.legalBasisForAccess}
               </TitleWithHelpTextAndTag>
             }
           />
         </div>
-      }
-      
+      )}
     </>
   );
 };

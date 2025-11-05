@@ -11,8 +11,13 @@ type Props = {
   isMobility?: boolean;
 };
 
-export const DetailsSection = ({ referenceDataEnv, referenceData, isMobility }: Props) => {
-  const { datasetTypes, provenanceStatements, languages, frequencies } = referenceData;
+export const DetailsSection = ({
+  referenceDataEnv,
+  referenceData,
+  isMobility,
+}: Props) => {
+  const { datasetTypes, provenanceStatements, languages, frequencies } =
+    referenceData;
   return (
     <Box>
       <RecommendedDetailFields

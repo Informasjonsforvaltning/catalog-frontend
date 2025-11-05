@@ -101,13 +101,21 @@ const contactPointConfirmValidationSchema = Yup.array()
         .notRequired(),
     }),
   )
-  .test('contact-has-at-least-one-value-field', localization.datasetForm.validation.contactPoint, (contactPoints) => {
-    if (!contactPoints || contactPoints.length === 0) {
-      return false;
-    }
-    const firstContactPoint = contactPoints[0];
-    return !!(firstContactPoint.email || firstContactPoint.phone || firstContactPoint.url);
-});
+  .test(
+    "contact-has-at-least-one-value-field",
+    localization.datasetForm.validation.contactPoint,
+    (contactPoints) => {
+      if (!contactPoints || contactPoints.length === 0) {
+        return false;
+      }
+      const firstContactPoint = contactPoints[0];
+      return !!(
+        firstContactPoint.email ||
+        firstContactPoint.phone ||
+        firstContactPoint.url
+      );
+    },
+  );
 
 export const distributionSectionSchema = Yup.object().shape({
   accessURL: Yup.array()
@@ -143,8 +151,12 @@ export const mobilityDistributionSectionSchema = Yup.object().shape({
         .url(localization.validation.invalidUrl),
     )
     .min(1, localization.datasetForm.validation.accessUrlRequired),
-  mobilityDataStandard: Yup.string().required(localization.datasetForm.validation.mobilityDataStandard),
-  mobilityRights: Yup.string().required(localization.datasetForm.validation.mobilityRights),
+  mobilityDataStandard: Yup.string().required(
+    localization.datasetForm.validation.mobilityDataStandard,
+  ),
+  mobilityRights: Yup.string().required(
+    localization.datasetForm.validation.mobilityRights,
+  ),
   format: Yup.array()
     .min(1, localization.datasetForm.validation.format)
     .required(localization.datasetForm.validation.format),
@@ -158,7 +170,9 @@ export const mobilityDistributionSectionSchema = Yup.object().shape({
     ),
   conformsTo: Yup.array().of(uriWithLabelSchema),
   page: Yup.array().of(
-    Yup.string().matches(httpsRegex, localization.validation.invalidProtocol).url(localization.validation.invalidUrl),
+    Yup.string()
+      .matches(httpsRegex, localization.validation.invalidProtocol)
+      .url(localization.validation.invalidUrl),
   ),
 });
 
@@ -343,55 +357,78 @@ export const confirmedMobilityDatasetSchema = draftDatasetSchema.shape({
     .shape({
       nb: Yup.string()
         .min(3, localization.datasetForm.validation.title)
-        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.nb})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.title} (${localization.language.nb})`,
+        )
         .notRequired(),
       nn: Yup.string()
         .min(3, localization.datasetForm.validation.title)
-        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.nn})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.title} (${localization.language.nn})`,
+        )
         .notRequired(),
       en: Yup.string()
         .min(3, localization.datasetForm.validation.title)
-        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.en})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.title} (${localization.language.en})`,
+        )
         .notRequired(),
     })
-    .test('title-test', localization.validation.oneLanguageRequired, (title) => {
-      if (!title) {
-        return false;
-      }
-      return !!(title.nb || title.nn || title.en);
-    }),
+    .test(
+      "title-test",
+      localization.validation.oneLanguageRequired,
+      (title) => {
+        if (!title) {
+          return false;
+        }
+        return !!(title.nb || title.nn || title.en);
+      },
+    ),
   description: Yup.object()
     .shape({
       nb: Yup.string()
-        .label(`${localization.datasetForm.fieldLabel.description} (${localization.language.nb})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.description} (${localization.language.nb})`,
+        )
         .min(5, localization.datasetForm.validation.description)
         .notRequired(),
       nn: Yup.string()
-        .label(`${localization.datasetForm.fieldLabel.description} (${localization.language.nn})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.description} (${localization.language.nn})`,
+        )
         .min(5, localization.datasetForm.validation.description)
         .notRequired(),
       en: Yup.string()
-        .label(`${localization.datasetForm.fieldLabel.description} (${localization.language.en})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.description} (${localization.language.en})`,
+        )
         .min(5, localization.datasetForm.validation.description)
         .notRequired(),
     })
-    .test('description-test', localization.validation.oneLanguageRequired, (description) => {
-      if (!description) {
-        return false;
-      }
-      return !!(description.nb || description.nn || description.en);
-    }),
+    .test(
+      "description-test",
+      localization.validation.oneLanguageRequired,
+      (description) => {
+        if (!description) {
+          return false;
+        }
+        return !!(description.nb || description.nn || description.en);
+      },
+    ),
   spatial: Yup.array()
     .min(1, localization.datasetForm.validation.spatial)
     .required(localization.datasetForm.validation.spatial),
-  frequency: Yup.string().required(localization.datasetForm.validation.frequency),
+  frequency: Yup.string().required(
+    localization.datasetForm.validation.frequency,
+  ),
   euDataTheme: Yup.array()
     .min(1, localization.datasetForm.validation.euDataTheme)
     .required(localization.datasetForm.validation.euDataTheme),
   mobilityTheme: Yup.array()
     .min(1, localization.datasetForm.validation.mobilityTheme)
     .required(localization.datasetForm.validation.mobilityTheme),
-  distribution: Yup.array().of(distributionSectionSchema)
+  distribution: Yup.array()
+    .of(distributionSectionSchema)
     .min(1, localization.datasetForm.validation.distribution)
     .required(localization.datasetForm.validation.distribution),
   landingPage: Yup.array()

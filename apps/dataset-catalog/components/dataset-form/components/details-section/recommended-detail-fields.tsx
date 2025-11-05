@@ -1,12 +1,12 @@
-'use client';
-import { FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Checkbox } from '@digdir/designsystemet-react';
-import { useFormikContext } from 'formik';
-import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
-import { sortBy } from 'lodash';
-import { TemporalModal } from './temporal-modal';
-import { SpacialCombobox } from '../spatial-combobox';
+"use client";
+import { FieldsetDivider, TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import { Checkbox } from "@digdir/designsystemet-react";
+import { useFormikContext } from "formik";
+import { Dataset, ReferenceDataCode } from "@catalog-frontend/types";
+import { sortBy } from "lodash";
+import { TemporalModal } from "./temporal-modal";
+import { SpacialCombobox } from "../spatial-combobox";
 
 interface Props {
   referenceDataEnv: string;
@@ -14,9 +14,13 @@ interface Props {
   isMobility?: boolean;
 }
 
-export const RecommendedDetailFields = ({ referenceDataEnv, languages, isMobility }: Props) => {
+export const RecommendedDetailFields = ({
+  referenceDataEnv,
+  languages,
+  isMobility,
+}: Props) => {
   const { values, setFieldValue } = useFormikContext<Dataset>();
-  const langNOR = languages.filter((lang) => lang.code === 'NOR')[0];
+  const langNOR = languages.filter((lang) => lang.code === "NOR")[0];
 
   const customLanguageOrder = [
     "http://publications.europa.eu/resource/authority/language/NOB",
@@ -61,11 +65,11 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages, isMobilit
       </Checkbox.Group>
 
       <FieldsetDivider />
-      {
-        !isMobility && <>
-          <SpacialCombobox referenceDataEnv={referenceDataEnv}/>
+      {!isMobility && (
+        <>
+          <SpacialCombobox referenceDataEnv={referenceDataEnv} />
         </>
-      }
+      )}
       <TemporalModal
         label={
           <TitleWithHelpTextAndTag

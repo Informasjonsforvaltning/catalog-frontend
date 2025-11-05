@@ -22,7 +22,7 @@ export const ContactPointSection = () => {
   return (
     <>
       <FormikLanguageFieldset
-        name={'contactPoints[0].name'}
+        name={"contactPoints[0].name"}
         as={Textfield}
         legend={
           <TitleWithHelpTextAndTag

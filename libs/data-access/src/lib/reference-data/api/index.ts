@@ -66,9 +66,9 @@ export const getMobilityThemes = async () => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/mobility/themes`;
   const options = {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'GET',
+    method: "GET",
   };
   return await fetch(resource, options);
 };
@@ -77,23 +77,23 @@ export const getMobilityDataStandards = async () => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/mobility/data-standards`;
   const options = {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'GET',
+    method: "GET",
   };
   return await fetch(resource, options);
-}
+};
 
 export const getMobilityRights = async () => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/mobility/conditions-for-access-and-usage`; 
+  const resource = `${process.env.FDK_BASE_URI}/reference-data/mobility/conditions-for-access-and-usage`;
   const options = {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'GET',
+    method: "GET",
   };
   return await fetch(resource, options);
-}
+};
 
 export const getFrequencies = async () => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/frequencies`;

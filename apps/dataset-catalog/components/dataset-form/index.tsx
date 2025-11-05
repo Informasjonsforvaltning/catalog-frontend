@@ -30,22 +30,26 @@ import {
   NotificationCarousel,
   Snackbar,
   StickyFooterBar,
-} from '@catalog-frontend/ui';
-import { Formik, Form, FormikProps } from 'formik';
-import { useParams, useSearchParams } from 'next/navigation';
-import { datasetTemplate } from './utils/dataset-initial-values';
-import { useEffect, useRef, useState } from 'react';
-import { confirmedDatasetSchema, confirmedMobilityDatasetSchema, draftDatasetSchema } from './utils/validation-schema';
-import { AboutSection } from './components/about-section';
-import ThemeSection from './components/theme-section';
-import { ConceptSection } from './components/concept-section';
-import { InformationModelSection } from './components/information-model-section';
-import { RelationsSection } from './components/relations-section/relations-section';
-import { DistributionSection } from './components/distribution-section/distribution-section';
-import { ContactPointSection } from './components/contact-point-section';
-import styles from './dataset-form.module.css';
-import { DetailsSection } from './components/details-section/details-section';
-import classNames from 'classnames';
+} from "@catalog-frontend/ui";
+import { Formik, Form, FormikProps } from "formik";
+import { useParams, useSearchParams } from "next/navigation";
+import { datasetTemplate } from "./utils/dataset-initial-values";
+import { useEffect, useRef, useState } from "react";
+import {
+  confirmedDatasetSchema,
+  confirmedMobilityDatasetSchema,
+  draftDatasetSchema,
+} from "./utils/validation-schema";
+import { AboutSection } from "./components/about-section";
+import ThemeSection from "./components/theme-section";
+import { ConceptSection } from "./components/concept-section";
+import { InformationModelSection } from "./components/information-model-section";
+import { RelationsSection } from "./components/relations-section/relations-section";
+import { DistributionSection } from "./components/distribution-section/distribution-section";
+import { ContactPointSection } from "./components/contact-point-section";
+import styles from "./dataset-form.module.css";
+import { DetailsSection } from "./components/details-section/details-section";
+import classNames from "classnames";
 
 type Props = {
   afterSubmit?: () => void;
@@ -95,7 +99,7 @@ export const DatasetForm = ({
   afterSubmit,
   onSubmit,
   onCancel,
-  isMobility
+  isMobility,
 }: Props) => {
   const { catalogId, datasetId } = useParams();
   const searchParams = useSearchParams();
@@ -106,7 +110,15 @@ export const DatasetForm = ({
   const [ignoreRequired, setIgnoreRequired] = useState(true);
   const [showUnapproveModal, setShowUnapproveModal] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
-  const { losThemes, dataThemes, mobilityThemes, openLicenses, mobilityDataStandards, mobilityRights, frequencies } = referenceData;
+  const {
+    losThemes,
+    dataThemes,
+    mobilityThemes,
+    openLicenses,
+    mobilityDataStandards,
+    mobilityRights,
+    frequencies,
+  } = referenceData;
 
   const [formApprovedStatus, setFormApprovedStatus] = useState(
     initialValues?.approved,
@@ -261,7 +273,13 @@ export const DatasetForm = ({
       <Formik
         innerRef={formikRef}
         initialValues={datasetTemplate(initialValues as Dataset)}
-        validationSchema={ignoreRequired ? draftDatasetSchema : (isMobility? confirmedMobilityDatasetSchema : confirmedDatasetSchema)}
+        validationSchema={
+          ignoreRequired
+            ? draftDatasetSchema
+            : isMobility
+              ? confirmedMobilityDatasetSchema
+              : confirmedDatasetSchema
+        }
         validateOnChange={validateOnChange}
         validateOnBlur={validateOnChange}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -390,18 +408,18 @@ export const DatasetForm = ({
                     subtitle={localization.datasetForm.subtitle.about}
                     required
                     error={hasError([
-                      'title',
-                      'description',
-                      'issued',
-                      'legalBasisForRestriction',
-                      'legalBasisForProcessing',
-                      'legalBasisForAccess',
-                      'temporal',
-                      'spatial'
+                      "title",
+                      "description",
+                      "issued",
+                      "legalBasisForRestriction",
+                      "legalBasisForProcessing",
+                      "legalBasisForAccess",
+                      "temporal",
+                      "spatial",
                     ])}
                   >
-                    <AboutSection 
-                      referenceDataEnv={referenceDataEnv} 
+                    <AboutSection
+                      referenceDataEnv={referenceDataEnv}
                       isMobility={isMobility}
                       frequencies={frequencies}
                     />
@@ -412,12 +430,16 @@ export const DatasetForm = ({
                     title={localization.datasetForm.heading.theme}
                     subtitle={localization.datasetForm.subtitle.theme}
                     required
-                    error={hasError(['euDataTheme', 'losTheme', 'mobilityTheme'])}
+                    error={hasError([
+                      "euDataTheme",
+                      "losTheme",
+                      "mobilityTheme",
+                    ])}
                   >
                     <ThemeSection
                       losThemes={losThemes}
                       euDataThemes={dataThemes}
-                      mobilityThemes={isMobility? mobilityThemes : undefined}
+                      mobilityThemes={isMobility ? mobilityThemes : undefined}
                       isMobility={isMobility}
                     />
                   </FormLayout.Section>
@@ -496,7 +518,7 @@ export const DatasetForm = ({
                     required
                     error={hasError(["contactPoints"])}
                   >
-                    <ContactPointSection/>
+                    <ContactPointSection />
                   </FormLayout.Section>
                 </FormLayout>
               </Form>

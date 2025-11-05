@@ -1,13 +1,25 @@
-import { FormikLanguageFieldset, TitleWithHelpTextAndTag, TextareaWithPrefix, FastFieldWithRef } from '@catalog-frontend/ui';
-import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Box, Textfield, Fieldset, Combobox } from '@digdir/designsystemet-react';
-import { FastField, useFormikContext } from 'formik';
-import { FieldsetDivider } from '@catalog-frontend/ui';
-import { AccessRightFields } from './access-rights-fields';
-import { SpacialCombobox } from './spatial-combobox';
-import { TemporalModal } from './details-section/temporal-modal';
-import { Dataset, ReferenceData, ReferenceDataCode } from '@catalog-frontend/types';
-import { useMemo } from 'react';
+import {
+  FormikLanguageFieldset,
+  TitleWithHelpTextAndTag,
+  TextareaWithPrefix,
+  FastFieldWithRef,
+} from "@catalog-frontend/ui";
+import {
+  capitalizeFirstLetter,
+  getTranslateText,
+  localization,
+} from "@catalog-frontend/utils";
+import {
+  Box,
+  Textfield,
+  Fieldset,
+  Combobox,
+} from "@digdir/designsystemet-react";
+import { FastField, useFormikContext } from "formik";
+import { FieldsetDivider } from "@catalog-frontend/ui";
+import { AccessRightFields } from "./access-rights-fields";
+import { SpacialCombobox } from "./spatial-combobox";
+import { Dataset, ReferenceDataCode } from "@catalog-frontend/types";
 
 interface Props {
   referenceDataEnv: string;
@@ -18,7 +30,7 @@ interface Props {
 export const AboutSection = ({
   referenceDataEnv,
   isMobility,
-  frequencies
+  frequencies,
 }: Props) => {
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
 
@@ -50,35 +62,34 @@ export const AboutSection = ({
         }
       />
       <FieldsetDivider />
-      { isMobility && <>
-        <SpacialCombobox 
-          referenceDataEnv={referenceDataEnv}
-          isMobility={isMobility}
-        />
-        <Fieldset
-          size='sm'
-          legend={
-            <TitleWithHelpTextAndTag
-              helpText={localization.datasetForm.helptext.frequency}
-              tagTitle={localization.tag.required}
-            >
-              {localization.datasetForm.fieldLabel.frequency}
-            </TitleWithHelpTextAndTag>
-          }>
+      {isMobility && (
+        <>
+          <SpacialCombobox
+            referenceDataEnv={referenceDataEnv}
+            isMobility={isMobility}
+          />
+          <Fieldset
+            size="sm"
+            legend={
+              <TitleWithHelpTextAndTag
+                helpText={localization.datasetForm.helptext.frequency}
+                tagTitle={localization.tag.required}
+              >
+                {localization.datasetForm.fieldLabel.frequency}
+              </TitleWithHelpTextAndTag>
+            }
+          >
             <Combobox
-              value={values?.frequency? [values.frequency] : ['']}
+              value={values?.frequency ? [values.frequency] : [""]}
               portal={false}
               onValueChange={(selectedValues) => {
-                setFieldValue('frequency', selectedValues.toString());
+                setFieldValue("frequency", selectedValues.toString());
               }}
-              size='sm'
+              size="sm"
               virtual
               error={errors.frequency}
             >
-              <Combobox.Option
-                key={`frequency`}
-                value={''}
-              >
+              <Combobox.Option key={`frequency`} value={""}>
                 {localization.none}
               </Combobox.Option>
               {frequencies &&
@@ -87,14 +98,17 @@ export const AboutSection = ({
                     key={`frequency-${frequency.uri}-${i}`}
                     value={frequency.uri}
                   >
-                    {capitalizeFirstLetter(getTranslateText(frequency.label).toString())}
+                    {capitalizeFirstLetter(
+                      getTranslateText(frequency.label).toString(),
+                    )}
                   </Combobox.Option>
                 ))}
             </Combobox>
           </Fieldset>
-        <FieldsetDivider />
-      </>}
-      <AccessRightFields isMobility= {isMobility}/>
+          <FieldsetDivider />
+        </>
+      )}
+      <AccessRightFields isMobility={isMobility} />
       <FieldsetDivider />
       <FastField
         style={{ width: "fit-content" }}

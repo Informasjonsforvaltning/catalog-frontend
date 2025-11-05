@@ -1,5 +1,9 @@
-import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
+import {
+  Breadcrumbs,
+  BreadcrumbType,
+  DesignBanner,
+} from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
 import {
   getDatasetTypes,
   getMobilityThemes,
@@ -11,18 +15,18 @@ import {
   getLosThemes,
   getMobilityDataStandards,
   getMobilityRights,
-  getDistributionStatuses
-} from '@catalog-frontend/data-access';
-import { datasetToBeCreatedTemplate } from '@dataset-catalog/components/dataset-form/utils/dataset-initial-values';
-import { NewPage } from './new-page-client';
-import { withWriteProtectedPage } from '@dataset-catalog/utils/auth';
+  getDistributionStatuses,
+} from "@catalog-frontend/data-access";
+import { datasetToBeCreatedTemplate } from "@dataset-catalog/components/dataset-form/utils/dataset-initial-values";
+import { NewPage } from "./new-page-client";
+import { withWriteProtectedPage } from "@dataset-catalog/utils/auth";
 
 const NewTransportDatasetPage = withWriteProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/datasets/new`,
   async ({ catalogId }) => {
     const dataset = datasetToBeCreatedTemplate();
-    const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
-    const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
+    const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
+    const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
 
     const [
       losThemesResponse,
@@ -35,7 +39,7 @@ const NewTransportDatasetPage = withWriteProtectedPage(
       licenseResponse,
       mobilityDataStandardResponse,
       mobilityRightsResponse,
-      distributionStatusResponse
+      distributionStatusResponse,
     ] = await Promise.all([
       getLosThemes().then((res) => res.json()),
       getDataThemes().then((res) => res.json()),
@@ -52,7 +56,7 @@ const NewTransportDatasetPage = withWriteProtectedPage(
     const referenceData = {
       losThemes: losThemesResponse.losNodes,
       dataThemes: dataThemesResponse.dataThemes,
-      mobilityThemes: mobilityThemesResponse.mobilityThemes, 
+      mobilityThemes: mobilityThemesResponse.mobilityThemes,
       datasetTypes: datasetTypesResponse.datasetTypes,
       provenanceStatements: provenanceStatementsResponse.provenanceStatements,
       frequencies: frequenciesResponse.frequencies,
@@ -60,7 +64,7 @@ const NewTransportDatasetPage = withWriteProtectedPage(
       openLicenses: licenseResponse.openLicenses,
       mobilityDataStandards: mobilityDataStandardResponse.mobilityDataStandards,
       mobilityRights: mobilityRightsResponse.mobilityConditions,
-      distributionStatuses: distributionStatusResponse.distributionStatuses
+      distributionStatuses: distributionStatusResponse.distributionStatuses,
     };
 
     const breadcrumbList = [
@@ -90,8 +94,7 @@ const NewTransportDatasetPage = withWriteProtectedPage(
           referenceData={referenceData}
           referenceDataEnv={referenceDataEnv}
           searchEnv={searchEnv}
-        /> 
-        
+        />
       </>
     );
   },

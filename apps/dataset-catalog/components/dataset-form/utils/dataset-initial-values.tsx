@@ -119,7 +119,7 @@ export const distributionTemplate = (dist: Distribution | undefined) => {
           page: [],
           accessServices: [],
           mobilityRights: {},
-          mobilityDataStandard: {}
+          mobilityDataStandard: {},
         }
   ) as Distribution;
 };

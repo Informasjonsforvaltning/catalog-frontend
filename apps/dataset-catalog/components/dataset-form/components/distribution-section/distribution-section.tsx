@@ -1,16 +1,44 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { useFormikContext } from 'formik';
-import { Box, Button, Card, ErrorMessage, Fieldset, Heading, Paragraph, Tag } from '@digdir/designsystemet-react';
-import { ChevronDownIcon, ChevronUpIcon, PencilWritingIcon } from '@navikt/aksel-icons';
-import { Dataset, Distribution, ReferenceDataCode, Search, StorageData } from '@catalog-frontend/types';
-import { AddButton, DeleteButton, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { getTranslateText, localization, DataStorage } from '@catalog-frontend/utils';
-import { DistributionModal } from './distribution-modal';
-import { DistributionDetails } from './distribution-details';
-import styles from './distributions.module.scss';
-import { get, isEmpty } from 'lodash';
+import { useEffect, useState } from "react";
+import { useFormikContext } from "formik";
+import {
+  Box,
+  Button,
+  Card,
+  ErrorMessage,
+  Fieldset,
+  Heading,
+  Paragraph,
+  Tag,
+} from "@digdir/designsystemet-react";
+import {
+  ChevronDownIcon,
+  ChevronUpIcon,
+  PencilWritingIcon,
+} from "@navikt/aksel-icons";
+import {
+  Dataset,
+  Distribution,
+  ReferenceDataCode,
+  Search,
+  StorageData,
+} from "@catalog-frontend/types";
+import {
+  AddButton,
+  DeleteButton,
+  FieldsetDivider,
+  TitleWithHelpTextAndTag,
+} from "@catalog-frontend/ui";
+import {
+  getTranslateText,
+  localization,
+  DataStorage,
+} from "@catalog-frontend/utils";
+import { DistributionModal } from "./distribution-modal";
+import { DistributionDetails } from "./distribution-details";
+import styles from "./distributions.module.scss";
+import { get, isEmpty } from "lodash";
 import {
   ReferenceDataGraphql,
   searchReferenceDataByUri,
@@ -36,18 +64,30 @@ export const DistributionSection = ({
   autoSaveStorage,
   isMobility: isMobility,
   mobilityDataStandards,
-  mobilityRights
+  mobilityRights,
 }: Props) => {
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
-  const [expandedIndexDistribution, setExpandedIndexDistribution] = useState<number | null>(null); 
-  const [expandedIndexExampleData, setExpandedIndexExampleData] = useState<number | null>(null); 
+  const [expandedIndexDistribution, setExpandedIndexDistribution] = useState<
+    number | null
+  >(null);
+  const [expandedIndexExampleData, setExpandedIndexExampleData] = useState<
+    number | null
+  >(null);
   const [selectedFileTypeUris, setSelectedFileTypeUris] = useState<string[]>();
-  const [selectedMediaTypeUris, setSelectedMediaTypeUris] = useState<string[]>();
-  const [selectedDataServiceUris, setSelectedDataServiceUris] = useState<string[]>();
-  const [selectedFileTypes, setSelectedFileTypes] = useState<ReferenceDataCode[]>([]);
-  const [selectedMediaTypes, setSelectedMediaTypes] = useState<ReferenceDataCode[]>([]);
-  const [selectedDataServices, setSelectedDataServices] = useState<Search.SearchObject[]>([]);
-  
+  const [selectedMediaTypeUris, setSelectedMediaTypeUris] =
+    useState<string[]>();
+  const [selectedDataServiceUris, setSelectedDataServiceUris] =
+    useState<string[]>();
+  const [selectedFileTypes, setSelectedFileTypes] = useState<
+    ReferenceDataCode[]
+  >([]);
+  const [selectedMediaTypes, setSelectedMediaTypes] = useState<
+    ReferenceDataCode[]
+  >([]);
+  const [selectedDataServices, setSelectedDataServices] = useState<
+    Search.SearchObject[]
+  >([]);
+
   const handleDistributionChange = (
     updatedDist: Distribution,
     distributionType: "distribution" | "sample",
@@ -208,12 +248,16 @@ export const DistributionSection = ({
   return (
     <Box>
       <Fieldset
-        size='sm'
+        size="sm"
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.datasetForm.helptext.distribution}
-            tagTitle={isMobility? localization.tag.required : localization.tag.recommended}
-            tagColor={isMobility? undefined: 'info'} 
+            tagTitle={
+              isMobility
+                ? localization.tag.required
+                : localization.tag.recommended
+            }
+            tagColor={isMobility ? undefined : "info"}
           >
             {localization.datasetForm.fieldLabel.distributions}
           </TitleWithHelpTextAndTag>
@@ -251,7 +295,7 @@ export const DistributionSection = ({
                         openLicenses={openLicenses}
                         mobilityDataStandards={mobilityDataStandards}
                         mobilityRights={mobilityRights}
-                        distributionType='distribution'
+                        distributionType="distribution"
                         onSuccess={(updatedDist) => {
                           handleDistributionSuccess(
                             updatedDist,
@@ -259,8 +303,16 @@ export const DistributionSection = ({
                             index,
                           );
                         }}
-                        onCancel={() => handleDistributionCancel('distribution')}
-                        onChange={(updatedDist) => handleDistributionChange(updatedDist, 'distribution', index)}
+                        onCancel={() =>
+                          handleDistributionCancel("distribution")
+                        }
+                        onChange={(updatedDist) =>
+                          handleDistributionChange(
+                            updatedDist,
+                            "distribution",
+                            index,
+                          )
+                        }
                         isMobility={isMobility}
                         trigger={
                           <Button variant="tertiary" size="sm">
@@ -405,19 +457,20 @@ export const DistributionSection = ({
               page: [],
               conformsTo: [],
               accessServices: [],
-              mobilityRights: '',
-              mobilityDataStandard: ''
+              mobilityRights: "",
+              mobilityDataStandard: "",
             }}
             isMobility={isMobility}
           />
         </div>
       </Fieldset>
-      {
-        !(isMobility) &&
+      {!isMobility && (
         <div>
           <FieldsetDivider />
           <div className={styles.fieldSet}>
-            <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.sample}>
+            <TitleWithHelpTextAndTag
+              helpText={localization.datasetForm.helptext.sample}
+            >
               {localization.datasetForm.fieldLabel.sample}
             </TitleWithHelpTextAndTag>
             {values?.sample &&
@@ -430,51 +483,57 @@ export const DistributionSection = ({
                         <div className={styles.field}>
                           {item?.accessURL && (
                             <>
-                              <Heading
-                                size='2xs'
-                                level={4}
-                              >
+                              <Heading size="2xs" level={4}>
                                 {localization.datasetForm.fieldLabel.accessURL}
                               </Heading>
-                              {item.accessURL.map((url: string, index: number) => {
-                                return (
-                                  <Paragraph
-                                    key={`accessURL-${index}`}
-                                    size='sm'
-                                  >
-                                    {url}
-                                  </Paragraph>
-                                );
-                              })}
+                              {item.accessURL.map(
+                                (url: string, index: number) => {
+                                  return (
+                                    <Paragraph
+                                      key={`accessURL-${index}`}
+                                      size="sm"
+                                    >
+                                      {url}
+                                    </Paragraph>
+                                  );
+                                },
+                              )}
                             </>
                           )}
                         </div>
                         <div className={styles.buttons}>
                           <DistributionModal
-                            type='edit'
+                            type="edit"
                             initialValues={{ ...item }}
                             initialFileTypes={selectedFileTypes ?? []}
                             initialMediaTypes={selectedMediaTypes ?? []}
                             initialAccessServices={selectedDataServices ?? []}
-                            distributionType='sample'
+                            distributionType="sample"
                             referenceDataEnv={referenceDataEnv}
                             searchEnv={searchEnv}
                             openLicenses={openLicenses}
-                            mobilityDataStandards={mobilityDataStandards} 
+                            mobilityDataStandards={mobilityDataStandards}
                             mobilityRights={mobilityRights}
                             onSuccess={(updatedDist: Distribution) => {
-                              handleDistributionSuccess(updatedDist, 'sample', index);
+                              handleDistributionSuccess(
+                                updatedDist,
+                                "sample",
+                                index,
+                              );
                             }}
-                            onCancel={() => handleDistributionCancel('sample')}
-                            onChange={(updatedDist: Distribution) => handleDistributionChange(updatedDist, 'sample', index)}
+                            onCancel={() => handleDistributionCancel("sample")}
+                            onChange={(updatedDist: Distribution) =>
+                              handleDistributionChange(
+                                updatedDist,
+                                "sample",
+                                index,
+                              )
+                            }
                             trigger={
-                              <Button
-                                variant='tertiary'
-                                size='sm'
-                              >
+                              <Button variant="tertiary" size="sm">
                                 <PencilWritingIcon
-                                  title='Rediger'
-                                  fontSize='1.5rem'
+                                  title="Rediger"
+                                  fontSize="1.5rem"
                                 />
                                 {localization.button.edit}
                               </Button>
@@ -485,8 +544,8 @@ export const DistributionSection = ({
                             onClick={() => {
                               const newArray = [...(values.sample ?? [])];
                               newArray.splice(index, 1);
-                              setFieldValue('sample', newArray);
-                              handleDistributionCancel('sample');
+                              setFieldValue("sample", newArray);
+                              handleDistributionCancel("sample");
                             }}
                           />
                         </div>
@@ -494,21 +553,18 @@ export const DistributionSection = ({
 
                       <div className={styles.field}>
                         {!isEmpty(item?.format) && (
-                          <Heading
-                            size='2xs'
-                            level={4}
-                          >
+                          <Heading size="2xs" level={4}>
                             {localization.datasetForm.fieldLabel.format}
                           </Heading>
                         )}
                         <div className={styles.tags}>
                           {item?.format?.map((uri) => (
-                            <Tag
-                              key={uri}
-                              color='info'
-                              size='sm'
-                            >
-                              {(selectedFileTypes?.find((format) => format?.uri === uri) ?? {}).code ?? uri}
+                            <Tag key={uri} color="info" size="sm">
+                              {(
+                                selectedFileTypes?.find(
+                                  (format) => format?.uri === uri,
+                                ) ?? {}
+                              ).code ?? uri}
                             </Tag>
                           ))}
                         </div>
@@ -517,21 +573,25 @@ export const DistributionSection = ({
                       {showSeeMoreButton(item) && (
                         <div>
                           <Button
-                            variant='tertiary'
+                            variant="tertiary"
                             onClick={() => {
-                              setExpandedIndexExampleData(expandedIndexExampleData === index ? null : index);
+                              setExpandedIndexExampleData(
+                                expandedIndexExampleData === index
+                                  ? null
+                                  : index,
+                              );
                             }}
                             className={styles.button}
-                            size='sm'
+                            size="sm"
                           >
                             {expandedIndexExampleData === index ? (
                               <>
-                                <ChevronUpIcon fontSize='1.3rem' />
+                                <ChevronUpIcon fontSize="1.3rem" />
                                 {localization.seeLess}
                               </>
                             ) : (
                               <>
-                                <ChevronDownIcon fontSize='1.3rem' />
+                                <ChevronDownIcon fontSize="1.3rem" />
                                 {localization.seeMore}
                               </>
                             )}
@@ -547,8 +607,10 @@ export const DistributionSection = ({
                           openLicenses={openLicenses}
                         />
                       )}
-                      {get(errors, 'sample[' + index + ']') && (
-                        <ErrorMessage size={'sm'}>Inneholder en eller flere ugyldige verdier</ErrorMessage>
+                      {get(errors, "sample[" + index + "]") && (
+                        <ErrorMessage size={"sm"}>
+                          Inneholder en eller flere ugyldige verdier
+                        </ErrorMessage>
                       )}
                     </Card>
                   ),
@@ -556,15 +618,27 @@ export const DistributionSection = ({
 
             <div className={styles.add}>
               <DistributionModal
-                type='new'
-                distributionType='sample'
-                trigger={<AddButton>{localization.datasetForm.button.addSample}</AddButton>}
+                type="new"
+                distributionType="sample"
+                trigger={
+                  <AddButton>
+                    {localization.datasetForm.button.addSample}
+                  </AddButton>
+                }
                 onSuccess={(formValues: Distribution) => {
-                  handleDistributionSuccess(formValues, 'sample', values.sample?.length ?? 0);
+                  handleDistributionSuccess(
+                    formValues,
+                    "sample",
+                    values.sample?.length ?? 0,
+                  );
                 }}
-                onCancel={() => handleDistributionCancel('sample')}
+                onCancel={() => handleDistributionCancel("sample")}
                 onChange={(formValues: Distribution) => {
-                  handleDistributionChange(formValues, 'sample', values.sample?.length ?? 0);
+                  handleDistributionChange(
+                    formValues,
+                    "sample",
+                    values.sample?.length ?? 0,
+                  );
                 }}
                 referenceDataEnv={referenceDataEnv}
                 searchEnv={searchEnv}
@@ -590,7 +664,7 @@ export const DistributionSection = ({
             </div>
           </div>
         </div>
-      }
+      )}
     </Box>
   );
 };
