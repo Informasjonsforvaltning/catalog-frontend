@@ -41,6 +41,7 @@ export default class DataServiceEditPage {
   readonly licenseGroup: Locator;
   readonly accessRightsGroup: Locator;
   readonly availabilityGroup: Locator;
+  readonly versionInfoInput: Locator;
 
   // Buttons
   readonly saveButton: Locator;
@@ -89,6 +90,7 @@ export default class DataServiceEditPage {
     this.licenseGroup = page.getByRole('group', { name: 'Lisens' });
     this.accessRightsGroup = page.getByRole('group', { name: 'Tilgangsrettigheter' });
     this.availabilityGroup = page.getByRole('group', { name: 'Tilgjengelighet' });
+    this.versionInfoInput = page.getByRole('textbox', { name: 'Versjon Hjelp til utfylling Anbefalt' });
 
     // Buttons
     this.saveButton = page.getByTestId('save-data-service-button');
@@ -242,6 +244,10 @@ export default class DataServiceEditPage {
     await this.availabilityGroup.getByRole('combobox').selectOption(availability);
   }
 
+  async fillVersionInfo(version: string) {
+    await this.versionInfoInput.fill(version);
+  }
+
   // Button actions
   async clickSave() {
     await this.saveButton.click();
@@ -279,6 +285,7 @@ export default class DataServiceEditPage {
     license?: string;
     accessRights?: string;
     availability?: string;
+    versionInfo?: string;
   }) {
     if (dataService.title) await this.fillTitle(dataService.title);
     if (dataService.description) await this.fillDescription(dataService.description);
@@ -289,6 +296,7 @@ export default class DataServiceEditPage {
     if (dataService.license) await this.selectLicense(dataService.license);
     if (dataService.accessRights) await this.selectAccessRights(dataService.accessRights);
     if (dataService.availability) await this.selectAvailability(dataService.availability);
+    if (dataService.versionInfo) await this.fillVersionInfo(dataService.versionInfo);
   }
 
   // Assertions
@@ -306,6 +314,10 @@ export default class DataServiceEditPage {
 
   async expectEndpointUrlToBe(url: string) {
     await expect(this.endpointUrlInput).toHaveValue(url);
+  }
+
+  async expectVersionInfoToBe(version: string) {
+    await expect(this.versionInfoInput).toHaveValue(version);
   }
 
   async expectSaveButtonVisible() {

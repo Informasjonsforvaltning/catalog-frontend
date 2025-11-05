@@ -25,6 +25,7 @@ import { dataServiceValidationSchema } from './utils/validation-schema';
 import { DataStorage } from '@catalog-frontend/utils';
 import { get, isEmpty, isEqual } from 'lodash';
 import classNames from 'classnames';
+import { VersionSection } from './components/version-section';
 
 type Props = {
   initialValues: DataService | DataServiceToBeCreated;
@@ -354,6 +355,16 @@ const DataServiceForm = ({
                         statuses={referenceData.distributionStatuses}
                         availabilities={referenceData.plannedAvailabilities}
                       />
+                    </FormLayout.Section>
+
+                    <FormLayout.Section
+                      id='data-service-version-section'
+                      title={localization.dataServiceForm.heading.version}
+                      subtitle={localization.dataServiceForm.subtitle.version}
+                      changed={markDirty && dirtyFields.some((field) => ['versionInfo'].includes(field))}
+                      error={hasError(['versionInfo'])}
+                    >
+                      <VersionSection />
                     </FormLayout.Section>
 
                     <FormLayout.Section

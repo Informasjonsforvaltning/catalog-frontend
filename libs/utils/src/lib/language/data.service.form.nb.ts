@@ -28,6 +28,7 @@ export const dataServiceFormNb = {
       'Brukes til å referere til en side eller et dokument som beskriver prismodell/beregningsgrunnlag. I tillegg til å dokumentere beregningsgrunnlaget, kan denne egenskapen brukes i tilfeller der det ikke bare er ett beløp, men en komplisert prismodell avhengig av f.eks. mengde data, hyppighet av oppslag/nedlasting osv. Selv om hverken beløp eller dokumentasjon er obligatorisk, SKAL minst én av dem brukes.',
     costValue:
       'Brukes til å oppgi gebyrbeløpet. Selv om hverken beløp eller dokumentasjon er obligatorisk, SKAL minst én av dem brukes. Valutaverdien velges fra EUs kontrollerte vokabular _Valuta_.',
+    version: 'Brukes til å oppgi versjoninformasjon for API-et. Beste praksis for versjonering er beskrevet i [W3C Data on the Web Best Practices: Data Versioning](https://www.w3.org/TR/dwbp/#VersioningInfo)',
   },
   heading: {
     about: 'Om API-et',
@@ -38,6 +39,7 @@ export const dataServiceFormNb = {
     dataset: 'Tilgjengeliggjør datasett',
     documentation: 'Dokumentasjon',
     status: 'Status',
+    version: 'Versjon',
   },
   subtitle: {
     about: 'Nøkkelinformasjon om APIet.',
@@ -49,6 +51,7 @@ export const dataServiceFormNb = {
     dataset: 'Datasett som kan distribueres av datatjenesten.',
     documentation: 'Landingsside og annen viktig dokumentasjon for API-et.',
     status: 'Statusinformasjon for tjenestens modenhet og tilgjengelighet.',
+    version: 'Versjoninformasjon for API-et.',
   },
   fieldLabel: {
     description: 'Beskrivelse av API-et',
@@ -72,6 +75,7 @@ export const dataServiceFormNb = {
     contactName: 'Navn',
     contactFields: 'Kontaktinformasjon',
     ignoreRequired: 'Ignorer påkrevde felt',
+    version: 'Versjon',
   },
   validation: {
     costValueRequiredWhenMissingDoc: 'Beløp er påkrevd når ingen dokumentasjon er oppgitt.',

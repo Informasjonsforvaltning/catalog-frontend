@@ -24,6 +24,7 @@ const EditDataServicePage = withWriteProtectedPage(
     // Fetch data service with retry mechanism
     const dataService = await fetchDataServiceWithRetry(catalogId, dataServiceId, `${session?.accessToken}`);
 
+
     if (!dataService || dataService.catalogId !== catalogId) {
       redirect(`/not-found`, RedirectType.replace);
     }
