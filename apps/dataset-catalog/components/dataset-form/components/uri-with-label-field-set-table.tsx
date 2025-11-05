@@ -1,4 +1,4 @@
-import { Dataset, UriWithLabel } from '@catalog-frontend/types';
+import { Dataset, UriWithLabel } from "@catalog-frontend/types";
 import {
   AddButton,
   DeleteButton,
@@ -6,14 +6,18 @@ import {
   FieldsetDivider,
   FormikLanguageFieldset,
   FormHeading,
-} from '@catalog-frontend/ui';
-import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Modal, Table, Textfield } from '@digdir/designsystemet-react';
-import { FastField, FieldArray, Formik, useFormikContext } from 'formik';
-import styles from '../dataset-form.module.css';
-import { ReactNode, useEffect, useRef, useState } from 'react';
-import { trim, isEmpty, pickBy, identity } from 'lodash';
-import { uriWithLabelSchema } from '../utils/validation-schema';
+} from "@catalog-frontend/ui";
+import {
+  getTranslateText,
+  localization,
+  trimObjectWhitespace,
+} from "@catalog-frontend/utils";
+import { Button, Modal, Table, Textfield } from "@digdir/designsystemet-react";
+import { FastField, FieldArray, Formik, useFormikContext } from "formik";
+import styles from "../dataset-form.module.css";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { trim, isEmpty, pickBy, identity } from "lodash";
+import { uriWithLabelSchema } from "../utils/validation-schema";
 
 interface Props {
   fieldName: string;
@@ -25,7 +29,7 @@ interface Props {
 
 interface ModalProps {
   fieldName: string;
-  type: 'new' | 'edit';
+  type: "new" | "edit";
   onSuccess: (values: UriWithLabel) => void;
   onCancel: () => void;
   onChange: (values: UriWithLabel) => void;
@@ -34,7 +38,9 @@ interface ModalProps {
 
 const hasNoFieldValues = (values: UriWithLabel) => {
   if (!values) return true;
-  return isEmpty(trim(values.uri)) && isEmpty(pickBy(values.prefLabel, identity));
+  return (
+    isEmpty(trim(values.uri)) && isEmpty(pickBy(values.prefLabel, identity))
+  );
 };
 
 export const UriWithLabelFieldsetTable = ({
@@ -45,28 +51,27 @@ export const UriWithLabelFieldsetTable = ({
   showDivider,
 }: Props) => {
   const { values, setFieldValue } = useFormikContext<Dataset>();
-  const fieldValues = values[fieldName as keyof Dataset] as UriWithLabel[] | undefined;
+  const fieldValues = values[fieldName as keyof Dataset] as
+    | UriWithLabel[]
+    | undefined;
   const [snapshot, setSnapshot] = useState<UriWithLabel[]>(fieldValues ?? []);
 
   const showHead = !hideHeadWhenEmpty || !isEmpty(fieldValues);
 
   return (
     <div className={styles.fieldContainer}>
-      {typeof label === 'string' ? <FormHeading>{label}</FormHeading> : label}
+      {typeof label === "string" ? <FormHeading>{label}</FormHeading> : label}
       <FieldArray
         name={fieldName}
         render={(arrayHelpers) => (
           <div className={errors ? styles.errorBorder : undefined}>
-            <Table
-              size='sm'
-              className={styles.table}
-            >
+            <Table size="sm" className={styles.table}>
               {showHead && (
                 <Table.Head>
                   <Table.Row>
                     <Table.HeaderCell>{localization.title}</Table.HeaderCell>
                     <Table.HeaderCell>{localization.link}</Table.HeaderCell>
-                    <Table.HeaderCell aria-label='Actions' />
+                    <Table.HeaderCell aria-label="Actions" />
                   </Table.Row>
                 </Table.Head>
               )}
@@ -80,13 +85,15 @@ export const UriWithLabelFieldsetTable = ({
                         <FieldModal
                           fieldName={fieldName}
                           template={item}
-                          type={'edit'}
+                          type={"edit"}
                           onSuccess={(updatedItem: UriWithLabel) => {
                             arrayHelpers.replace(index, updatedItem);
                             setSnapshot([...(fieldValues ?? [])]);
                           }}
                           onCancel={() => setFieldValue(fieldName, snapshot)}
-                          onChange={(updatedItem: UriWithLabel) => arrayHelpers.replace(index, updatedItem)}
+                          onChange={(updatedItem: UriWithLabel) =>
+                            arrayHelpers.replace(index, updatedItem)
+                          }
                         />
                         <DeleteButton
                           onClick={() => {
@@ -105,8 +112,8 @@ export const UriWithLabelFieldsetTable = ({
             <div>
               <FieldModal
                 fieldName={fieldName}
-                template={{ prefLabel: {}, uri: '' }}
-                type={'new'}
+                template={{ prefLabel: {}, uri: "" }}
+                type={"new"}
                 onSuccess={() => setSnapshot([...(fieldValues ?? [])])}
                 onCancel={() => setFieldValue(fieldName, snapshot)}
                 onChange={(updatedItem: UriWithLabel) => {
@@ -126,7 +133,14 @@ export const UriWithLabelFieldsetTable = ({
   );
 };
 
-const FieldModal = ({ fieldName, template, type, onSuccess, onCancel, onChange }: ModalProps) => {
+const FieldModal = ({
+  fieldName,
+  template,
+  type,
+  onSuccess,
+  onCancel,
+  onChange,
+}: ModalProps) => {
   const [submitted, setSubmitted] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -134,11 +148,11 @@ const FieldModal = ({ fieldName, template, type, onSuccess, onCancel, onChange }
     <>
       <Modal.Root>
         <Modal.Trigger asChild>
-          {type === 'edit' ? (
+          {type === "edit" ? (
             <EditButton />
           ) : (
             <AddButton>
-              {localization.add}{' '}
+              {localization.add}{" "}
               {localization.datasetForm.fieldLabel?.[
                 fieldName as keyof typeof localization.datasetForm.fieldLabel
               ]?.toLowerCase()}
@@ -169,7 +183,7 @@ const FieldModal = ({ fieldName, template, type, onSuccess, onCancel, onChange }
               return (
                 <>
                   <Modal.Header closeButton={false}>
-                    {type === 'edit' ? localization.edit : localization.add}{' '}
+                    {type === "edit" ? localization.edit : localization.add}{" "}
                     {getTranslateText(
                       localization.datasetForm.fieldLabel?.[
                         fieldName as keyof typeof localization.datasetForm.fieldLabel
@@ -182,37 +196,39 @@ const FieldModal = ({ fieldName, template, type, onSuccess, onCancel, onChange }
                   <Modal.Content className={styles.modalContent}>
                     <FormikLanguageFieldset
                       as={Textfield}
-                      name='prefLabel'
+                      name="prefLabel"
                       legend={localization.title}
                     />
                     <FieldsetDivider />
                     <FastField
-                      name='uri'
+                      name="uri"
                       as={Textfield}
                       label={localization.link}
                       error={errors?.uri}
-                      size='sm'
+                      size="sm"
                     />
                   </Modal.Content>
 
                   <Modal.Footer>
                     <Button
-                      type='button'
-                      disabled={isSubmitting || !dirty || hasNoFieldValues(values)}
+                      type="button"
+                      disabled={
+                        isSubmitting || !dirty || hasNoFieldValues(values)
+                      }
                       onClick={() => submitForm()}
-                      size='sm'
+                      size="sm"
                     >
-                      {type === 'new' ? localization.add : localization.update}
+                      {type === "new" ? localization.add : localization.update}
                     </Button>
                     <Button
-                      variant='secondary'
-                      type='button'
+                      variant="secondary"
+                      type="button"
                       onClick={() => {
                         onCancel();
                         modalRef.current?.close();
                       }}
                       disabled={isSubmitting}
-                      size='sm'
+                      size="sm"
                     >
                       {localization.button.cancel}
                     </Button>

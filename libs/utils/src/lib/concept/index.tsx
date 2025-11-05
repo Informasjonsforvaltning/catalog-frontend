@@ -1,7 +1,9 @@
-import { Concept, Definisjon } from '@catalog-frontend/types';
-import { conceptIdFromUriRegex } from '../regex/regex';
+import { Concept, Definisjon } from "@catalog-frontend/types";
+import { conceptIdFromUriRegex } from "../regex/regex";
 
-export const removeSourceIfEgendefinert = (def?: Definisjon): Definisjon | undefined => {
+export const removeSourceIfEgendefinert = (
+  def?: Definisjon,
+): Definisjon | undefined => {
   if (!def) {
     return undefined;
   }
@@ -9,7 +11,10 @@ export const removeSourceIfEgendefinert = (def?: Definisjon): Definisjon | undef
     ...def,
     kildebeskrivelse: def.kildebeskrivelse && {
       forholdTilKilde: def.kildebeskrivelse.forholdTilKilde,
-      kilde: def.kildebeskrivelse.forholdTilKilde === 'egendefinert' ? [] : def.kildebeskrivelse.kilde,
+      kilde:
+        def.kildebeskrivelse.forholdTilKilde === "egendefinert"
+          ? []
+          : def.kildebeskrivelse.kilde,
     },
   };
 };
@@ -18,8 +23,12 @@ export const updateDefinitionsIfEgendefinert = (cr: Concept): Concept => {
   return {
     ...cr,
     definisjon: removeSourceIfEgendefinert(cr.definisjon),
-    definisjonForAllmennheten: removeSourceIfEgendefinert(cr.definisjonForAllmennheten),
-    definisjonForSpesialister: removeSourceIfEgendefinert(cr.definisjonForSpesialister),
+    definisjonForAllmennheten: removeSourceIfEgendefinert(
+      cr.definisjonForAllmennheten,
+    ),
+    definisjonForSpesialister: removeSourceIfEgendefinert(
+      cr.definisjonForSpesialister,
+    ),
   };
 };
 
@@ -28,37 +37,54 @@ export const pruneEmptyProperties = (obj: any, reduceAsArray = false): any => {
     return null;
   }
   const filteredKeys = Object.keys(obj).filter(
-    (key) => obj[key] != null && obj[key] !== '' && (Array.isArray(obj[key]) ? obj[key].length !== 0 : true),
+    (key) =>
+      obj[key] != null &&
+      obj[key] !== "" &&
+      (Array.isArray(obj[key]) ? obj[key].length !== 0 : true),
   );
 
   return reduceAsArray
     ? filteredKeys.reduce((acc, key) => {
-        if (typeof obj[key] === 'object') {
+        if (typeof obj[key] === "object") {
           const prunedObject = pruneEmptyProperties(obj[key]);
-          return Object.keys(prunedObject).length === 0 ? acc : [...acc, prunedObject];
+          return Object.keys(prunedObject).length === 0
+            ? acc
+            : [...acc, prunedObject];
         }
         return [...acc, obj[key]];
       }, [] as any[])
     : filteredKeys.reduce((acc, key) => {
-        if (typeof obj[key] === 'object') {
+        if (typeof obj[key] === "object") {
           const isArray = Array.isArray(obj[key]);
           const prunedObject = pruneEmptyProperties(obj[key], isArray);
-          return Object.keys(prunedObject).length === 0 ? acc : { ...acc, [key]: prunedObject };
+          return Object.keys(prunedObject).length === 0
+            ? acc
+            : { ...acc, [key]: prunedObject };
         }
         return { ...acc, [key]: obj[key] };
       }, {});
 };
 
-export const getConceptIdFromRdfUri = (baseUri: string | undefined, uri: string | undefined): string | undefined => {
-  return baseUri && uri?.startsWith(baseUri) ? uri?.split('/').pop() : undefined;
+export const getConceptIdFromRdfUri = (
+  baseUri: string | undefined,
+  uri: string | undefined,
+): string | undefined => {
+  return baseUri && uri?.startsWith(baseUri)
+    ? uri?.split("/").pop()
+    : undefined;
 };
 
 export const getUniqueConceptIdsFromUris = (uris: string[]): string[] => {
-  const ids = uris.map((uri) => uri?.match(conceptIdFromUriRegex)?.[1]).filter((id): id is string => !!id);
+  const ids = uris
+    .map((uri) => uri?.match(conceptIdFromUriRegex)?.[1])
+    .filter((id): id is string => !!id);
   return [...new Set(ids)];
 };
 
-export const conceptIsHigherVersion = (concept: Concept, other: Concept): boolean => {
+export const conceptIsHigherVersion = (
+  concept: Concept,
+  other: Concept,
+): boolean => {
   const major = concept.versjonsnr?.major ?? 0;
   const otherMajor = other.versjonsnr?.major ?? 0;
 

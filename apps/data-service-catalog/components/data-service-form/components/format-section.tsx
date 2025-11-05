@@ -1,10 +1,16 @@
-import { DataService } from '@catalog-frontend/types';
-import { FormikReferenceDataCombobox, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { Box, Fieldset } from '@digdir/designsystemet-react';
-import { useFormikContext } from 'formik';
-import { useState } from 'react';
-import { useSearchFileTypeByUri, useSearchFileTypes } from '../../../hooks/useReferenceDataSearch';
+import { DataService } from "@catalog-frontend/types";
+import {
+  FormikReferenceDataCombobox,
+  TitleWithHelpTextAndTag,
+} from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { Box, Fieldset } from "@digdir/designsystemet-react";
+import { useFormikContext } from "formik";
+import { useState } from "react";
+import {
+  useSearchFileTypeByUri,
+  useSearchFileTypes,
+} from "../../../hooks/useReferenceDataSearch";
 
 type Props = {
   referenceDataEnv: string;
@@ -12,14 +18,15 @@ type Props = {
 
 export const FormatSection = ({ referenceDataEnv }: Props) => {
   const { setFieldValue, values } = useFormikContext<DataService>();
-  const [searchQueryFileTypes, setSearchQueryFileTypes] = useState<string>('');
+  const [searchQueryFileTypes, setSearchQueryFileTypes] = useState<string>("");
 
-  const { data: fileTypes, isLoading: searchingFileTypes } = useSearchFileTypes(searchQueryFileTypes, referenceDataEnv);
-
-  const { data: selectedFileTypes, isLoading: loadingSelectedFileTypes } = useSearchFileTypeByUri(
-    values?.formats ?? [],
+  const { data: fileTypes, isLoading: searchingFileTypes } = useSearchFileTypes(
+    searchQueryFileTypes,
     referenceDataEnv,
   );
+
+  const { data: selectedFileTypes, isLoading: loadingSelectedFileTypes } =
+    useSearchFileTypeByUri(values?.formats ?? [], referenceDataEnv);
 
   return (
     <Box>
@@ -28,16 +35,18 @@ export const FormatSection = ({ referenceDataEnv }: Props) => {
           <TitleWithHelpTextAndTag
             helpText={localization.dataServiceForm.helptext.format}
             tagTitle={localization.tag.recommended}
-            tagColor='info'
+            tagColor="info"
           >
             {localization.dataServiceForm.fieldLabel.format}
           </TitleWithHelpTextAndTag>
         }
-        size='sm'
+        size="sm"
       >
         <FormikReferenceDataCombobox
           onChange={(event) => setSearchQueryFileTypes(event.target.value)}
-          onValueChange={(selectedValues) => setFieldValue('formats', selectedValues)}
+          onValueChange={(selectedValues) =>
+            setFieldValue("formats", selectedValues)
+          }
           value={values?.formats || []}
           selectedValuesSearchHits={selectedFileTypes ?? []}
           querySearchHits={fileTypes ?? []}

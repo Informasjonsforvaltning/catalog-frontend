@@ -1,6 +1,9 @@
-import { Version } from '@catalog-frontend/types';
+import { Version } from "@catalog-frontend/types";
 
-export const compareVersion = (v1: Version | null | undefined, v2: Version | null | undefined) => {
+export const compareVersion = (
+  v1: Version | null | undefined,
+  v2: Version | null | undefined,
+) => {
   if (v1 == null && v2 == null) return 0;
   if (v1 == null) return -1;
   if (v2 == null) return 1;
@@ -17,14 +20,14 @@ export const compareVersion = (v1: Version | null | undefined, v2: Version | nul
   for (let i = 0, j = 0; i < v1String.length || j < v2String.length; ) {
     // storing numeric part of
     // version 1 in vnum1
-    while (i < v1String.length && v1String[i] !== '.' && v1String[i] !== '-') {
+    while (i < v1String.length && v1String[i] !== "." && v1String[i] !== "-") {
       vnum1 = vnum1 * 10 + +v1String[i];
       i++;
     }
 
     // storing numeric part of
     // version 2 in vnum2
-    while (j < v2String.length && v2String[j] !== '.' && v2String[j] !== '-') {
+    while (j < v2String.length && v2String[j] !== "." && v2String[j] !== "-") {
       vnum2 = vnum2 * 10 + +v2String[j];
       j++;
     }
@@ -42,4 +45,5 @@ export const compareVersion = (v1: Version | null | undefined, v2: Version | nul
   return 0;
 };
 
-export const versionToString = (version?: Version | null) => `${version?.major}.${version?.minor}.${version?.patch}`;
+export const versionToString = (version?: Version | null) =>
+  `${version?.major}.${version?.minor}.${version?.patch}`;

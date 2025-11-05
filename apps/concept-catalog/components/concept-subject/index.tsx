@@ -1,8 +1,8 @@
-import { CodeList, Concept } from '@catalog-frontend/types';
-import cn from 'classnames';
-import styles from './concept-subject.module.css';
-import { CodeListCodeLinks } from '../codelist-code-links';
-import { ensureStringArray, getTranslateText } from '@catalog-frontend/utils';
+import { CodeList, Concept } from "@catalog-frontend/types";
+import cn from "classnames";
+import styles from "./concept-subject.module.css";
+import { CodeListCodeLinks } from "../codelist-code-links";
+import { ensureStringArray, getTranslateText } from "@catalog-frontend/utils";
 
 interface Props {
   concept: Concept;
@@ -10,7 +10,11 @@ interface Props {
   className?: string;
 }
 
-export const ConceptSubject = ({ concept, subjectCodeList, className }: Props) => {
+export const ConceptSubject = ({
+  concept,
+  subjectCodeList,
+  className,
+}: Props) => {
   return (
     <div className={cn(styles.subject, className)}>
       {subjectCodeList && concept.fagområdeKoder ? (
@@ -20,7 +24,7 @@ export const ConceptSubject = ({ concept, subjectCodeList, className }: Props) =
           catalogId={concept.ansvarligVirksomhet.id}
         />
       ) : (
-        ensureStringArray(getTranslateText(concept.fagområde)).join(', ')
+        ensureStringArray(getTranslateText(concept.fagområde)).join(", ")
       )}
     </div>
   );

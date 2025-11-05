@@ -1,14 +1,19 @@
-'use client';
+"use client";
 
-import { Fieldset, Box, Card, ErrorMessage } from '@digdir/designsystemet-react';
-import { useFormikContext } from 'formik';
+import {
+  Fieldset,
+  Box,
+  Card,
+  ErrorMessage,
+} from "@digdir/designsystemet-react";
+import { useFormikContext } from "formik";
 
-import styles from './formik-optional-fields-fieldset.module.scss';
-import { LocalizedStrings } from '@catalog-frontend/types';
-import { AddButton, DeleteButton } from '../button';
-import { get } from 'lodash';
-import React, { ReactNode, useEffect, useState } from 'react';
-import { FastFieldWithRef } from '../formik-fast-field-with-ref';
+import styles from "./formik-optional-fields-fieldset.module.scss";
+import { LocalizedStrings } from "@catalog-frontend/types";
+import { AddButton, DeleteButton } from "../button";
+import { get } from "lodash";
+import React, { ReactNode, useEffect, useState } from "react";
+import { FastFieldWithRef } from "../formik-fast-field-with-ref";
 
 type OptionalFieldsFieldsetProps = {
   legend?: ReactNode;
@@ -16,19 +21,29 @@ type OptionalFieldsFieldsetProps = {
   errorPath?: string;
 };
 
-export const FormikOptionalFieldsFieldset = ({ legend, availableFields, errorPath }: OptionalFieldsFieldsetProps) => {
-  const { errors, getFieldMeta, setFieldValue } = useFormikContext<Record<string, LocalizedStrings>>();
+export const FormikOptionalFieldsFieldset = ({
+  legend,
+  availableFields,
+  errorPath,
+}: OptionalFieldsFieldsetProps) => {
+  const { errors, getFieldMeta, setFieldValue } =
+    useFormikContext<Record<string, LocalizedStrings>>();
   const [focus, setFocus] = useState<string | null>();
   const fieldRefs = availableFields.reduce(
     (map, field) => {
-      map[field.valuePath] = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
+      map[field.valuePath] = React.createRef<
+        HTMLInputElement | HTMLTextAreaElement
+      >();
       return map;
     },
-    {} as Record<string, React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>>,
+    {} as Record<
+      string,
+      React.RefObject<HTMLInputElement | HTMLTextAreaElement | null>
+    >,
   );
 
   const handleAddField = (fieldName: string) => {
-    setFieldValue(fieldName, '');
+    setFieldValue(fieldName, "");
     setFocus(fieldName);
   };
 
@@ -43,7 +58,9 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields, errorPat
 
   const mainError = errorPath ? get(errors, errorPath) : undefined;
 
-  const visibleFieldButtons = availableFields.filter((field) => !visibleFields.includes(field));
+  const visibleFieldButtons = availableFields.filter(
+    (field) => !visibleFields.includes(field),
+  );
 
   useEffect(() => {
     if (focus) {
@@ -53,11 +70,7 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields, errorPat
   }, [focus, fieldRefs]);
 
   return (
-    <Fieldset
-      className={styles.fieldset}
-      legend={legend}
-      size='sm'
-    >
+    <Fieldset className={styles.fieldset} legend={legend} size="sm">
       <Card>
         <Card.Content>
           {visibleFields.map((field) => (
@@ -65,17 +78,16 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields, errorPat
               key={field.valuePath}
               legend={field?.legend ?? field?.label}
             >
-              <Box
-                key={field.valuePath}
-                className={styles.field}
-              >
+              <Box key={field.valuePath} className={styles.field}>
                 <FastFieldWithRef
                   ref={fieldRefs[field.valuePath]}
                   name={field.valuePath}
                   aria-label={field.label}
                   error={get(errors, field.valuePath)}
                 />
-                <DeleteButton onClick={() => handleRemoveField(field.valuePath)} />
+                <DeleteButton
+                  onClick={() => handleRemoveField(field.valuePath)}
+                />
               </Box>
             </Fieldset>
           ))}
@@ -89,7 +101,9 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields, errorPat
               </AddButton>
             ))}
           </div>
-          {typeof mainError === 'string' && <ErrorMessage size={'sm'}>{mainError}</ErrorMessage>}
+          {typeof mainError === "string" && (
+            <ErrorMessage size={"sm"}>{mainError}</ErrorMessage>
+          )}
         </Card.Content>
       </Card>
     </Fieldset>

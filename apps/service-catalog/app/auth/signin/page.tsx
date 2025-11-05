@@ -5,9 +5,9 @@ import {
   KeycloakSignin,
   PageBanner,
   Spinner,
-} from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { Suspense } from 'react';
+} from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { Suspense } from "react";
 
 export const SignIn = () => {
   const breadcrumbList = [

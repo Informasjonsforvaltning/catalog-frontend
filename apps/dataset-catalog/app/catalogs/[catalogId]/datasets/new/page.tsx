@@ -1,5 +1,9 @@
-import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
+import {
+  Breadcrumbs,
+  BreadcrumbType,
+  DesignBanner,
+} from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
 import {
   getDatasetTypes,
   getDataThemes,
@@ -8,17 +12,17 @@ import {
   getLosThemes,
   getOpenLicenses,
   getProvenanceStatements,
-} from '@catalog-frontend/data-access';
-import { datasetToBeCreatedTemplate } from '@dataset-catalog/components/dataset-form/utils/dataset-initial-values';
-import { NewPage } from './new-page-client';
-import { withWriteProtectedPage } from '@dataset-catalog/utils/auth';
+} from "@catalog-frontend/data-access";
+import { datasetToBeCreatedTemplate } from "@dataset-catalog/components/dataset-form/utils/dataset-initial-values";
+import { NewPage } from "./new-page-client";
+import { withWriteProtectedPage } from "@dataset-catalog/utils/auth";
 
 const NewDatasetPage = withWriteProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/datasets/new`,
   async ({ catalogId }) => {
     const dataset = datasetToBeCreatedTemplate();
-    const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
-    const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
+    const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
+    const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
 
     const [
       losThemesResponse,

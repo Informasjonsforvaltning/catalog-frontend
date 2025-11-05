@@ -1,1 +1,1 @@
-export default 'EmptyMock';
+export default "EmptyMock";

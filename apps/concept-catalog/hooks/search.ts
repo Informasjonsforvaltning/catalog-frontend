@@ -1,11 +1,17 @@
-'use client';
+"use client";
 
-import { QueryFilters, QuerySort, SearchableField, SearchConceptResponse, Search } from '@catalog-frontend/types';
-import { SelectOption } from '@catalog-frontend/ui';
-import { useQuery } from '@tanstack/react-query';
+import {
+  QueryFilters,
+  QuerySort,
+  SearchableField,
+  SearchConceptResponse,
+  Search,
+} from "@catalog-frontend/types";
+import { SelectOption } from "@catalog-frontend/ui";
+import { useQuery } from "@tanstack/react-query";
 
-export type SortFields = 'SIST_ENDRET' | 'ANBEFALT_TERM';
-export type SortDirection = 'ASC' | 'DESC';
+export type SortFields = "SIST_ENDRET" | "ANBEFALT_TERM";
+export type SortDirection = "ASC" | "DESC";
 
 export interface FieldOptions {
   anbefaltTerm: boolean;
@@ -16,11 +22,11 @@ export interface FieldOptions {
 }
 
 export enum SortOption {
-  RELEVANCE = 'RELEVANCE',
-  LAST_UPDATED_FIRST = 'LAST_UPDATED_FIRST',
-  LAST_UPDATED_LAST = 'LAST_UPDATED_LAST',
-  RECOMMENDED_TERM_AÅ = 'RECOMMENDED_TERM_AÅ',
-  RECOMMENDED_TERM_ÅA = 'RECOMMENDED_TERM_ÅA',
+  RELEVANCE = "RELEVANCE",
+  LAST_UPDATED_FIRST = "LAST_UPDATED_FIRST",
+  LAST_UPDATED_LAST = "LAST_UPDATED_LAST",
+  RECOMMENDED_TERM_AÅ = "RECOMMENDED_TERM_AÅ",
+  RECOMMENDED_TERM_ÅA = "RECOMMENDED_TERM_ÅA",
 }
 export interface PageUpdate {
   catalogId: string;
@@ -49,12 +55,19 @@ const getNegatedFields = () => {
   return negatedFields;
 };
 
-export const getFields = (field: SearchableField | 'alleFelter' | 'alleTermer'): FieldOptions => {
-  if (field === 'alleFelter') {
+export const getFields = (
+  field: SearchableField | "alleFelter" | "alleTermer",
+): FieldOptions => {
+  if (field === "alleFelter") {
     return fields;
   }
-  if (field === 'alleTermer') {
-    return { ...getNegatedFields(), anbefaltTerm: true, frarådetTerm: true, tillattTerm: true };
+  if (field === "alleTermer") {
+    return {
+      ...getNegatedFields(),
+      anbefaltTerm: true,
+      frarådetTerm: true,
+      tillattTerm: true,
+    };
   }
   return { ...getNegatedFields(), [field]: true };
 };
@@ -96,15 +109,15 @@ export const useSearchConcepts = ({
   };
 
   return useQuery<SearchConceptResponse>({
-    queryKey: ['searchConcepts', body],
+    queryKey: ["searchConcepts", body],
     queryFn: async () => {
-      const response = await fetch('/api/search', {
-        method: 'POST',
+      const response = await fetch("/api/search", {
+        method: "POST",
         body: JSON.stringify(body),
       });
 
       if (response.status === 401) {
-        return Promise.reject('Unauthorized');
+        return Promise.reject("Unauthorized");
       }
 
       return response.json();
@@ -121,14 +134,14 @@ export const useDataNorgeSearchConcepts = ({
   enabled?: boolean;
 }) => {
   return useQuery<Search.SearchResult>({
-    queryKey: ['searchExternalConcept', searchOperation],
+    queryKey: ["searchExternalConcept", searchOperation],
     queryFn: async () => {
-      const resource = '/api/data-norge/search';
+      const resource = "/api/data-norge/search";
       const options = {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify(searchOperation),
       };
 

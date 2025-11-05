@@ -1,6 +1,6 @@
-import { test, expect } from '../../fixtures/basePage';
+import { test, expect } from "../../fixtures/basePage";
 
-test('should login as admin', async ({ loginPage }) => {
+test("should login as admin", async ({ loginPage }) => {
   await loginPage.goto();
   await loginPage.loginAsAdmin();
 

@@ -1,15 +1,15 @@
 name: Deploy to staging
-permissions: 
-    contents: read
-    packages: write
+permissions:
+  contents: read
+  packages: write
 on:
   pull_request:
     types: [ready_for_review, opened, reopened, synchronize]
     branches:
       - main
     paths-ignore:
-      - 'README.md'
-      - 'LICENSE'
+      - "README.md"
+      - "LICENSE"
 
 jobs:
   test:
@@ -49,19 +49,19 @@ jobs:
     if: ${{ needs.test.outputs.changed != '[]' }}
     runs-on: ubuntu-latest
     strategy:
-        matrix: ${{fromJSON(needs.test.outputs.matrix)}}
+      matrix: ${{fromJSON(needs.test.outputs.matrix)}}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-            # We need to fetch all branches and commits so that Nx affected has a base to compare against.
-            fetch-depth: 0
-            submodules: true
+          # We need to fetch all branches and commits so that Nx affected has a base to compare against.
+          fetch-depth: 0
+          submodules: true
 
       - name: Update submodules to latest main
         run: |
-            git submodule foreach --recursive git fetch origin
-            git submodule foreach --recursive git checkout origin/main
+          git submodule foreach --recursive git fetch origin
+          git submodule foreach --recursive git checkout origin/main
 
       - name: Set SHAs
         uses: nrwl/nx-set-shas@v4
@@ -72,27 +72,27 @@ jobs:
       - name: Use Node.js 22.14.0
         uses: actions/setup-node@v4
         with:
-            node-version: 22.14.0
-            cache: 'yarn'
+          node-version: 22.14.0
+          cache: "yarn"
 
       - name: Yarn install
         run: |
-            yarn set version stable
-            yarn install --no-immutable
+          yarn set version stable
+          yarn install --no-immutable
 
       - name: Caching Nx
         uses: actions/cache@v4
         with:
-            path: node_modules/.cache
-            key: cache-nx-${{ hashFiles('yarn.lock') }}
+          path: node_modules/.cache
+          key: cache-nx-${{ hashFiles('yarn.lock') }}
 
       - run: yarn nx build ${{ matrix.appname }} --configuration=ci
 
       - name: Caching Dist Folder
         uses: actions/cache@v4
         with:
-            path: ./dist
-            key: cache-dist-${{ github.sha }}-${{ matrix.appname }}
+          path: ./dist
+          key: cache-dist-${{ github.sha }}-${{ matrix.appname }}
 
   build:
     name: Build image for ${{ matrix.appname }}

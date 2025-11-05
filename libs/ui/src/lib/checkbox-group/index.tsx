@@ -1,3 +1,3 @@
-'use client';
+"use client";
 
-export { Checkbox } from '@digdir/designsystemet-react';
+export { Checkbox } from "@digdir/designsystemet-react";

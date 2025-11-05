@@ -1,6 +1,6 @@
-import { searchConcepts } from '@catalog-frontend/data-access';
-import { withValidSessionForApi } from '@catalog-frontend/utils';
-import { NextRequest } from 'next/server';
+import { searchConcepts } from "@catalog-frontend/data-access";
+import { withValidSessionForApi } from "@catalog-frontend/utils";
+import { NextRequest } from "next/server";
 
 export const POST = async (req: NextRequest) => {
   return await withValidSessionForApi(async (session) => {
@@ -11,10 +11,15 @@ export const POST = async (req: NextRequest) => {
         throw new Error();
       }
       const jsonResponse = await response.json();
-      return new Response(JSON.stringify(jsonResponse), { status: response.status });
+      return new Response(JSON.stringify(jsonResponse), {
+        status: response.status,
+      });
     } catch (error) {
       console.error(error);
-      return new Response(JSON.stringify({ message: 'Failed to search concepts on data.norge' }), { status: 500 });
+      return new Response(
+        JSON.stringify({ message: "Failed to search concepts on data.norge" }),
+        { status: 500 },
+      );
     }
   });
 };

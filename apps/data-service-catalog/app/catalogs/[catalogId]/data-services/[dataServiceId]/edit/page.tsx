@@ -1,36 +1,57 @@
-import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
+import {
+  Breadcrumbs,
+  BreadcrumbType,
+  DesignBanner,
+} from "@catalog-frontend/ui";
 import {
   getCurrencies,
   getDistributionStatuses,
   getOpenLicenses,
   getPlannedAvailabilities,
-} from '@catalog-frontend/data-access';
-import { getTranslateText, localization, redirectToSignIn, validUUID } from '@catalog-frontend/utils';
-import { redirect, RedirectType } from 'next/navigation';
-import { withWriteProtectedPage } from '@data-service-catalog/utils/auth';
-import { EditPage } from './edit-page-client';
-import { fetchDataServiceWithRetry } from '@data-service-catalog/utils/data-service';
+} from "@catalog-frontend/data-access";
+import {
+  getTranslateText,
+  localization,
+  redirectToSignIn,
+  validUUID,
+} from "@catalog-frontend/utils";
+import { redirect, RedirectType } from "next/navigation";
+import { withWriteProtectedPage } from "@data-service-catalog/utils/auth";
+import { EditPage } from "./edit-page-client";
+import { fetchDataServiceWithRetry } from "@data-service-catalog/utils/data-service";
 
 const EditDataServicePage = withWriteProtectedPage(
-  ({ catalogId, dataServiceId }) => `/catalogs/${catalogId}/data-services/${dataServiceId}/edit`,
+  ({ catalogId, dataServiceId }) =>
+    `/catalogs/${catalogId}/data-services/${dataServiceId}/edit`,
   async ({ catalogId, dataServiceId, session }) => {
     if (!dataServiceId || !validUUID(dataServiceId)) {
       return redirect(`/notfound`, RedirectType.replace);
     }
     if (!session) {
-      return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/data-services/${dataServiceId}/edit` });
+      return redirectToSignIn({
+        callbackUrl: `/catalogs/${catalogId}/data-services/${dataServiceId}/edit`,
+      });
     }
 
     // Fetch data service with retry mechanism
-    const dataService = await fetchDataServiceWithRetry(catalogId, dataServiceId, `${session?.accessToken}`);
+    const dataService = await fetchDataServiceWithRetry(
+      catalogId,
+      dataServiceId,
+      `${session?.accessToken}`,
+    );
 
     if (!dataService || dataService.catalogId !== catalogId) {
       redirect(`/not-found`, RedirectType.replace);
     }
-    const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
-    const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
+    const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
+    const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
 
-    const [licenseResponse, statusResponse, availabilitiesResponse, currenciesResponse] = await Promise.all([
+    const [
+      licenseResponse,
+      statusResponse,
+      availabilitiesResponse,
+      currenciesResponse,
+    ] = await Promise.all([
       getOpenLicenses().then((res) => res.json()),
       getDistributionStatuses().then((res) => res.json()),
       getPlannedAvailabilities().then((res) => res.json()),

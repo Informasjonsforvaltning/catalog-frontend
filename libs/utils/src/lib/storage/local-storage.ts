@@ -1,15 +1,15 @@
 /**
  * Enhanced LocalDataStorage with State Management
- * 
+ *
  * This module provides a comprehensive local storage solution with:
  * - State tracking and change notifications
  * - Secondary storage management
  * - State history and undo functionality
  * - Data validation
  * - Debug utilities
- * 
+ *
  * Example usage:
- * 
+ *
  * ```typescript
  * // Basic usage with state management
  * const storage = new LocalDataStorage<StorageData>({
@@ -20,34 +20,34 @@
  *   maxHistorySize: 5,
  *   validateData: (data) => data && typeof data === 'object'
  * });
- * 
+ *
  * // Subscribe to state changes
  * const unsubscribe = storage.subscribe((state) => {
  *   console.log('New state:', state);
  *   console.log('Has changes:', state.hasChanges);
  *   console.log('Is dirty:', state.isDirty);
  * });
- * 
+ *
  * // Set main data
  * storage.set({ id: '1', values: { name: 'Test' }, lastChanged: new Date().toISOString() });
- * 
+ *
  * // Set secondary data
  * storage.setSecondary('relationData', { id: '2', values: { relations: [] }, lastChanged: new Date().toISOString() });
- * 
+ *
  * // Get current state
  * const state = storage.getState();
  * console.log('Current state:', state);
- * 
+ *
  * // Access state history
  * const history = storage.getHistory();
  * console.log('State history:', history);
- * 
+ *
  * // Revert to previous state
  * const reverted = storage.revertToPreviousState();
- * 
+ *
  * // Debug current state
  * storage.debugState();
- * 
+ *
  * // Clean up
  * unsubscribe();
  * storage.delete();
@@ -115,7 +115,7 @@ export class LocalDataStorage<T> implements DataStorage<T> {
 
     // Initialize state
     this.currentState = this.buildState();
-    
+
     // Subscribe to onChange callback if provided
     if (this.onChange) {
       this.subscribe(this.onChange);
@@ -125,22 +125,26 @@ export class LocalDataStorage<T> implements DataStorage<T> {
   private buildState(): StorageState<T> {
     const mainData = this.getFromStorage(this.key);
     const secondaryData: Record<string, DataWithMetadata<T> | null> = {};
-    
-    Object.keys(this.secondaryKeys).forEach(key => {
-      secondaryData[this.secondaryKeys[key]] = this.getFromStorage(this.secondaryKeys[key]);
+
+    Object.keys(this.secondaryKeys).forEach((key) => {
+      secondaryData[this.secondaryKeys[key]] = this.getFromStorage(
+        this.secondaryKeys[key],
+      );
     });
 
     return {
       mainData,
       secondaryData,
       lastChanged: new Date(),
-      isDirty: mainData !== null || Object.values(secondaryData).some(data => data !== null),
+      isDirty:
+        mainData !== null ||
+        Object.values(secondaryData).some((data) => data !== null),
       version: 1, // Assuming a default version
     };
   }
 
   private getFromStorage(key: string): DataWithMetadata<T> | null {
-    if (typeof localStorage === 'undefined') {
+    if (typeof localStorage === "undefined") {
       return null;
     }
     const savedData = localStorage.getItem(key);
@@ -152,17 +156,17 @@ export class LocalDataStorage<T> implements DataStorage<T> {
 
   private notifySubscribers() {
     this.currentState = this.buildState();
-    
+
     // Add to history if enabled
     if (this.enableHistory) {
       this.addToHistory(this.currentState);
     }
-    
-    this.subscribers.forEach(callback => {
+
+    this.subscribers.forEach((callback) => {
       try {
         callback(this.currentState);
       } catch (error) {
-        console.error('Error in storage subscriber callback:', error);
+        console.error("Error in storage subscriber callback:", error);
       }
     });
   }
@@ -176,7 +180,7 @@ export class LocalDataStorage<T> implements DataStorage<T> {
 
   private validateAndSet(data: DataWithMetadata<T>): boolean {
     if (this.validateData && !this.validateData(data)) {
-      console.warn('Data validation failed for storage:', this.key);
+      console.warn("Data validation failed for storage:", this.key);
       return false;
     }
     return true;
@@ -199,7 +203,7 @@ export class LocalDataStorage<T> implements DataStorage<T> {
     if (!this.validateAndSet(data)) {
       return;
     }
-    if (typeof localStorage !== 'undefined') {
+    if (typeof localStorage !== "undefined") {
       localStorage.setItem(this.key, JSON.stringify(data));
     }
     this.notifySubscribers();
@@ -213,15 +217,15 @@ export class LocalDataStorage<T> implements DataStorage<T> {
     if (!this.validateAndSet(data)) {
       return;
     }
-    if (typeof localStorage !== 'undefined') {
+    if (typeof localStorage !== "undefined") {
       localStorage.setItem(this.secondaryKeys[key], JSON.stringify(data));
     }
     this.notifySubscribers();
   }
 
   delete() {
-    if (typeof localStorage !== 'undefined') {
-      console.log('[LOCAL STORAGE]: Deleting main and secondary keys');
+    if (typeof localStorage !== "undefined") {
+      console.log("[LOCAL STORAGE]: Deleting main and secondary keys");
       localStorage.removeItem(this.key);
       Object.keys(this.secondaryKeys).forEach((key) => {
         localStorage.removeItem(this.secondaryKeys[key]);
@@ -234,13 +238,15 @@ export class LocalDataStorage<T> implements DataStorage<T> {
     if (!Object.keys(this.secondaryKeys).includes(key)) {
       throw new Error(`Key ${key} is not a secondary key`);
     }
-    if (typeof localStorage !== 'undefined') {
+    if (typeof localStorage !== "undefined") {
       localStorage.removeItem(this.secondaryKeys[key]);
       const allEmpty = Object.keys(this.secondaryKeys).every((key) => {
         return localStorage.getItem(this.secondaryKeys[key]) === null;
       });
       if (allEmpty && this.loose) {
-        console.log('[LOCAL STORAGE]: All secondary keys are empty, main data is loose, deleting main key');
+        console.log(
+          "[LOCAL STORAGE]: All secondary keys are empty, main data is loose, deleting main key",
+        );
         this.delete();
       }
     }
@@ -265,8 +271,8 @@ export class LocalDataStorage<T> implements DataStorage<T> {
   }
 
   getPreviousState(): StorageState<T> | null {
-    return this.stateHistory.length > 1 
-      ? this.stateHistory[this.stateHistory.length - 2] 
+    return this.stateHistory.length > 1
+      ? this.stateHistory[this.stateHistory.length - 2]
       : null;
   }
 
@@ -304,11 +310,11 @@ export class LocalDataStorage<T> implements DataStorage<T> {
 
   // Debug methods
   debugState(): void {
-    console.log('Storage State:', {
+    console.log("Storage State:", {
       key: this.key,
       state: this.currentState,
       historyLength: this.stateHistory.length,
-      subscribersCount: this.subscribers.size
+      subscribersCount: this.subscribers.size,
     });
   }
 

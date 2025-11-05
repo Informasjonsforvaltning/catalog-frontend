@@ -1,7 +1,7 @@
-import { localization } from '@catalog-frontend/utils';
-import styles from './search-hit-container.module.css';
-import { Pagination } from '../pagination';
-import { ReactNode } from 'react';
+import { localization } from "@catalog-frontend/utils";
+import styles from "./search-hit-container.module.css";
+import { Pagination } from "../pagination";
+import { ReactNode } from "react";
 
 type Props = {
   onPageChange?(selectedItem: number): void;
@@ -15,7 +15,12 @@ type PaginationInfo = {
   currentPage: number;
 };
 
-const SearchHitContainer = ({ onPageChange, searchHits, paginationInfo, noSearchHits }: Props) => {
+const SearchHitContainer = ({
+  onPageChange,
+  searchHits,
+  paginationInfo,
+  noSearchHits,
+}: Props) => {
   return (
     <div className={styles.searchHitsContainer}>
       {(noSearchHits || noSearchHits === undefined) && (

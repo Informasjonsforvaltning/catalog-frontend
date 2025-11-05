@@ -5,9 +5,9 @@ import {
   KeycloakSignin,
   PageBanner,
   Spinner,
-} from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { Suspense } from 'react';
+} from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { Suspense } from "react";
 
 export const SignIn = () => {
   const breadcrumbList = [
@@ -20,7 +20,8 @@ export const SignIn = () => {
   return (
     <>
       <Breadcrumbs
-        breadcrumbList={breadcrumbList} catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
+        breadcrumbList={breadcrumbList}
+        catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
       <PageBanner
         title={localization.catalogType.concept}

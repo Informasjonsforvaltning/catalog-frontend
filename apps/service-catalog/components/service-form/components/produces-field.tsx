@@ -1,4 +1,4 @@
-import { LocalizedStrings, Output, Service } from '@catalog-frontend/types';
+import { LocalizedStrings, Output, Service } from "@catalog-frontend/types";
 import {
   AddButton,
   DeleteButton,
@@ -6,18 +6,35 @@ import {
   FieldsetDivider,
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
-} from '@catalog-frontend/ui';
-import cn from 'classnames';
-import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Card, ErrorMessage, Heading, Modal, Paragraph, Textfield } from '@digdir/designsystemet-react';
-import { FieldArray, Formik, useFormikContext } from 'formik';
-import styles from '../service-form.module.css';
-import { useEffect, useRef, useState } from 'react';
-import { trim, isEmpty, pickBy, identity } from 'lodash';
-import { confirmedProducesSchema, draftProducesSchema } from '../validation-schema';
+} from "@catalog-frontend/ui";
+import cn from "classnames";
+import {
+  getTranslateText,
+  localization,
+  trimObjectWhitespace,
+} from "@catalog-frontend/utils";
+import {
+  Button,
+  Card,
+  ErrorMessage,
+  Heading,
+  Modal,
+  Paragraph,
+  Textfield,
+} from "@digdir/designsystemet-react";
+import { FieldArray, Formik, useFormikContext } from "formik";
+import styles from "../service-form.module.css";
+import { useEffect, useRef, useState } from "react";
+import { trim, isEmpty, pickBy, identity } from "lodash";
+import {
+  confirmedProducesSchema,
+  draftProducesSchema,
+} from "../validation-schema";
 
 interface Props {
-  errors?: string | Array<{ title: LocalizedStrings; description: LocalizedStrings }>;
+  errors?:
+    | string
+    | Array<{ title: LocalizedStrings; description: LocalizedStrings }>;
   validationSchema: typeof confirmedProducesSchema | typeof draftProducesSchema;
 }
 
@@ -27,12 +44,14 @@ interface ModalProps {
   onChange: (values: Output) => void;
   onSuccess: (values: Output) => void;
   template: Output;
-  type: 'new' | 'edit';
+  type: "new" | "edit";
 }
 
 const hasNoFieldValues = (values: Output) => {
   if (!values) return true;
-  return isEmpty(trim(values.identifier)) && isEmpty(pickBy(values.title, identity));
+  return (
+    isEmpty(trim(values.identifier)) && isEmpty(pickBy(values.title, identity))
+  );
 };
 
 export const ProducesField = (props: Props) => {
@@ -49,7 +68,7 @@ export const ProducesField = (props: Props) => {
         {localization.serviceForm.fieldLabel.produces}
       </TitleWithHelpTextAndTag>
       <FieldArray
-        name='produces'
+        name="produces"
         render={(arrayHelpers) => (
           <div className={cn(styles.fieldSet, errors && styles.errorBorder)}>
             {values.produces?.map((item, index) => (
@@ -58,16 +77,16 @@ export const ProducesField = (props: Props) => {
                   <div className={styles.field}>
                     {!isEmpty(item?.title) && (
                       <>
-                        <Heading
-                          size='2xs'
-                          spacing
-                          level={3}
-                        >
+                        <Heading size="2xs" spacing level={3}>
                           {localization.serviceForm.fieldLabel.title}
                         </Heading>
-                        <Paragraph size='sm'>{getTranslateText(item.title)}</Paragraph>
+                        <Paragraph size="sm">
+                          {getTranslateText(item.title)}
+                        </Paragraph>
                         {Array.isArray(errors) && errors?.[index]?.title && (
-                          <ErrorMessage size='sm'>{getTranslateText(errors[index].title)}</ErrorMessage>
+                          <ErrorMessage size="sm">
+                            {getTranslateText(errors[index].title)}
+                          </ErrorMessage>
                         )}
                       </>
                     )}
@@ -77,35 +96,37 @@ export const ProducesField = (props: Props) => {
                     <FieldModal
                       validationSchema={validationSchema}
                       template={item}
-                      type='edit'
+                      type="edit"
                       onSuccess={(updatedItem: Output) => {
                         arrayHelpers.replace(index, updatedItem);
                         setSnapshot([...(values.produces ?? [])]);
                       }}
-                      onCancel={() => setFieldValue('produces', snapshot)}
-                      onChange={(updatedItem: Output) => arrayHelpers.replace(index, updatedItem)}
+                      onCancel={() => setFieldValue("produces", snapshot)}
+                      onChange={(updatedItem: Output) =>
+                        arrayHelpers.replace(index, updatedItem)
+                      }
                     />
                     <DeleteButton
                       onClick={() => {
                         const newArray = [...(values.produces ?? [])];
                         newArray.splice(index, 1);
-                        setFieldValue('produces', newArray);
+                        setFieldValue("produces", newArray);
                         setSnapshot([...newArray]);
                       }}
                     />
                   </div>
                 </div>
                 <div className={styles.field}>
-                  <Heading
-                    size='2xs'
-                    spacing
-                    level={3}
-                  >
+                  <Heading size="2xs" spacing level={3}>
                     {localization.serviceForm.fieldLabel.description}
                   </Heading>
-                  <Paragraph size='sm'>{getTranslateText(item.description)}</Paragraph>
+                  <Paragraph size="sm">
+                    {getTranslateText(item.description)}
+                  </Paragraph>
                   {Array.isArray(errors) && errors?.[index]?.description && (
-                    <ErrorMessage size='sm'>{getTranslateText(errors[index].description)}</ErrorMessage>
+                    <ErrorMessage size="sm">
+                      {getTranslateText(errors[index].description)}
+                    </ErrorMessage>
                   )}
                 </div>
               </Card>
@@ -114,10 +135,10 @@ export const ProducesField = (props: Props) => {
             <div>
               <FieldModal
                 validationSchema={validationSchema}
-                template={{ title: {}, description: {}, identifier: '' }}
-                type='new'
+                template={{ title: {}, description: {}, identifier: "" }}
+                type="new"
                 onSuccess={() => setSnapshot([...(values.produces ?? [])])}
-                onCancel={() => setFieldValue('produces', snapshot)}
+                onCancel={() => setFieldValue("produces", snapshot)}
                 onChange={(updatedItem: Output) => {
                   if (snapshot.length === (values.produces?.length ?? 0)) {
                     arrayHelpers.push(updatedItem);
@@ -128,11 +149,8 @@ export const ProducesField = (props: Props) => {
               />
             </div>
 
-            {typeof errors === 'string' && (
-              <ErrorMessage
-                className={styles.errorMessage}
-                size='sm'
-              >
+            {typeof errors === "string" && (
+              <ErrorMessage className={styles.errorMessage} size="sm">
                 {errors}
               </ErrorMessage>
             )}
@@ -144,7 +162,8 @@ export const ProducesField = (props: Props) => {
 };
 
 const FieldModal = (props: ModalProps) => {
-  const { template, type, onSuccess, onCancel, onChange, validationSchema } = props;
+  const { template, type, onSuccess, onCancel, onChange, validationSchema } =
+    props;
   const [submitted, setSubmitted] = useState(false);
   const modalRef = useRef<HTMLDialogElement>(null);
 
@@ -152,11 +171,12 @@ const FieldModal = (props: ModalProps) => {
     <>
       <Modal.Root>
         <Modal.Trigger asChild>
-          {type === 'edit' ? (
+          {type === "edit" ? (
             <EditButton />
           ) : (
             <AddButton>
-              {localization.add} {localization.serviceForm.fieldLabel.produces.toLowerCase()}
+              {localization.add}{" "}
+              {localization.serviceForm.fieldLabel.produces.toLowerCase()}
             </AddButton>
           )}
         </Modal.Trigger>
@@ -184,43 +204,45 @@ const FieldModal = (props: ModalProps) => {
               return (
                 <>
                   <Modal.Header closeButton={false}>
-                    {type === 'edit' ? localization.edit : localization.add}{' '}
+                    {type === "edit" ? localization.edit : localization.add}{" "}
                     {localization.serviceForm.fieldLabel.produces.toLowerCase()}
                   </Modal.Header>
 
                   <Modal.Content className={styles.modalContent}>
                     <FormikLanguageFieldset
                       as={Textfield}
-                      name='title'
+                      name="title"
                       legend={localization.serviceForm.fieldLabel.title}
                     />
 
                     <FieldsetDivider />
                     <FormikLanguageFieldset
                       as={Textfield}
-                      name='description'
+                      name="description"
                       legend={localization.serviceForm.fieldLabel.description}
                     />
                   </Modal.Content>
 
                   <Modal.Footer>
                     <Button
-                      type='button'
-                      disabled={isSubmitting || !dirty || hasNoFieldValues(values)}
+                      type="button"
+                      disabled={
+                        isSubmitting || !dirty || hasNoFieldValues(values)
+                      }
                       onClick={() => submitForm()}
-                      size='sm'
+                      size="sm"
                     >
-                      {type === 'new' ? localization.add : localization.update}
+                      {type === "new" ? localization.add : localization.update}
                     </Button>
                     <Button
-                      variant='secondary'
-                      type='button'
+                      variant="secondary"
+                      type="button"
                       onClick={() => {
                         onCancel();
                         modalRef.current?.close();
                       }}
                       disabled={isSubmitting}
-                      size='sm'
+                      size="sm"
                     >
                       {localization.button.cancel}
                     </Button>

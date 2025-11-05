@@ -1,5 +1,5 @@
-import { runTestAsAdmin as initAsAdmin } from '../../fixtures/basePage';
+import { runTestAsAdmin as initAsAdmin } from "../../fixtures/basePage";
 
-initAsAdmin('init tests', async () => {
+initAsAdmin("init tests", async () => {
   // Nothing to do...
 });

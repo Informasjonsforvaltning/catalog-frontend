@@ -1,9 +1,18 @@
-import { ContactPoint, Output, Service, ServiceToBeCreated } from '@catalog-frontend/types';
+import {
+  ContactPoint,
+  Output,
+  Service,
+  ServiceToBeCreated,
+} from "@catalog-frontend/types";
 
 export const producesTemplate = (produce: Output): Output => {
   return {
     identifier: produce.identifier ?? 0,
-    title: { nb: produce.title?.nb, nn: produce.title?.nn, en: produce.title?.en },
+    title: {
+      nb: produce.title?.nb,
+      nn: produce.title?.nn,
+      en: produce.title?.en,
+    },
     description: {
       nb: produce.description?.nb,
       nn: produce.description?.nn,
@@ -23,13 +32,15 @@ const emptyContactpoint: ContactPoint[] = [
 
 export const emptyProduces: Output[] = [
   {
-    identifier: '0',
+    identifier: "0",
     title: { nb: undefined, nn: undefined, en: undefined },
     description: { nb: undefined, nn: undefined, en: undefined },
   },
 ];
 
-const contactPointTemplate = (contactPoint: ContactPoint): ContactPoint | null => {
+const contactPointTemplate = (
+  contactPoint: ContactPoint,
+): ContactPoint | null => {
   return {
     category: {
       nb: contactPoint.category?.nb,
@@ -42,11 +53,18 @@ const contactPointTemplate = (contactPoint: ContactPoint): ContactPoint | null =
   };
 };
 
-export const serviceTemplate = (service: Service | undefined): ServiceToBeCreated => {
+export const serviceTemplate = (
+  service: Service | undefined,
+): ServiceToBeCreated => {
   const produces =
-    service?.produces && service.produces.map((produce) => producesTemplate(produce)).filter((cp) => cp !== null);
+    service?.produces &&
+    service.produces
+      .map((produce) => producesTemplate(produce))
+      .filter((cp) => cp !== null);
   const contactPoints = service?.contactPoints
-    ? service.contactPoints.map((cp) => contactPointTemplate(cp)).filter((cp) => cp !== null)
+    ? service.contactPoints
+        .map((cp) => contactPointTemplate(cp))
+        .filter((cp) => cp !== null)
     : emptyContactpoint;
 
   return {

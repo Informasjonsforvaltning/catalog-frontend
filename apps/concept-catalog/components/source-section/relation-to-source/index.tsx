@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { FC, ReactNode } from 'react';
-import { Select } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { Field } from 'formik';
-import styles from './relation-to-source.module.css';
-import { RelationshipWithSource } from '@catalog-frontend/types';
+import { FC, ReactNode } from "react";
+import { Select } from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { Field } from "formik";
+import styles from "./relation-to-source.module.css";
+import { RelationshipWithSource } from "@catalog-frontend/types";
 
 export interface RelationshipWithSourceOptions {
   displayValue: ReactNode | string;
@@ -13,9 +13,12 @@ export interface RelationshipWithSourceOptions {
 }
 
 export const relationToSourceOptions: RelationshipWithSourceOptions[] = [
-  { displayValue: localization.concept.selfDefined, value: 'egendefinert' },
-  { displayValue: localization.concept.basedOnSource, value: 'basertPaaKilde' },
-  { displayValue: localization.concept.quoteFromSource, value: 'sitatFraKilde' },
+  { displayValue: localization.concept.selfDefined, value: "egendefinert" },
+  { displayValue: localization.concept.basedOnSource, value: "basertPaaKilde" },
+  {
+    displayValue: localization.concept.quoteFromSource,
+    value: "sitatFraKilde",
+  },
 ];
 
 interface Props {
@@ -31,14 +34,11 @@ export const RelationToSource: FC<Props> = ({ fieldName, readOnly }) => {
           name={fieldName}
           as={Select}
           label={localization.concept.relationToSource}
-          size='small'
+          size="small"
           readOnly={readOnly}
         >
           {relationToSourceOptions.map(({ displayValue, value }) => (
-            <option
-              key={value}
-              value={value}
-            >
+            <option key={value} value={value}>
               {displayValue}
             </option>
           ))}

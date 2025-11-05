@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { getTranslateText, sortAscending } from '@catalog-frontend/utils';
+import { getTranslateText, sortAscending } from "@catalog-frontend/utils";
 
-import { Organization } from '@catalog-frontend/types';
-import { Combobox, Spinner } from '@digdir/designsystemet-react';
-import { useRouter } from 'next/navigation';
-import styles from './organization-combobox.module.css';
-import { useState } from 'react';
+import { Organization } from "@catalog-frontend/types";
+import { Combobox, Spinner } from "@digdir/designsystemet-react";
+import { useRouter } from "next/navigation";
+import styles from "./organization-combobox.module.css";
+import { useState } from "react";
 
 type OrganizationComboboxProps = {
   organizations: Organization[];
@@ -20,18 +20,23 @@ const OrganizationCombobox = (props: OrganizationComboboxProps) => {
   const { organizations, currentOrganization } = props;
 
   const sortedOrganization = organizations.sort((a, b) =>
-    sortAscending(getTranslateText(a.prefLabel).toString(), getTranslateText(b.prefLabel).toString()),
+    sortAscending(
+      getTranslateText(a.prefLabel).toString(),
+      getTranslateText(b.prefLabel).toString(),
+    ),
   );
 
   return (
     <div className={styles.container}>
       <Combobox
         className={styles.combobox}
-        size='sm'
-        label={'Virksomhet'}
-        placeholder='Velg en virksomhet'
+        size="sm"
+        label={"Virksomhet"}
+        placeholder="Velg en virksomhet"
         onValueChange={(value) => {
-          const match = organizations.find((org) => org.organizationId === value[0]);
+          const match = organizations.find(
+            (org) => org.organizationId === value[0],
+          );
           if (match) {
             setLoading(true);
             router.push(`/catalogs/${value[0]}`);
@@ -39,7 +44,9 @@ const OrganizationCombobox = (props: OrganizationComboboxProps) => {
         }}
       >
         {sortedOrganization
-          .filter((org) => org.organizationId !== currentOrganization?.organizationId)
+          .filter(
+            (org) => org.organizationId !== currentOrganization?.organizationId,
+          )
           .map((org) => (
             <Combobox.Option
               key={org.organizationId}
@@ -49,7 +56,7 @@ const OrganizationCombobox = (props: OrganizationComboboxProps) => {
             </Combobox.Option>
           ))}
       </Combobox>
-      {loading && <Spinner title={'Laster virksomhet'} />}
+      {loading && <Spinner title={"Laster virksomhet"} />}
     </div>
   );
 };

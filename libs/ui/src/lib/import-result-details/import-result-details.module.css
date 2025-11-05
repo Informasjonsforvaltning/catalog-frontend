@@ -9,17 +9,17 @@
 }
 
 .header {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 8px;
 }
 
 .titleContainer {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
 }
 
 .tableContainer {
@@ -46,9 +46,9 @@
 }
 
 .buttonContainer {
-    margin-left: auto;
-    display: flex;
-    gap: 8px;
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
 }
 
 .title {
