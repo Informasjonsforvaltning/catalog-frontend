@@ -1,17 +1,21 @@
-'use client';
-import { Dataset } from '@catalog-frontend/types';
-import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Combobox, Fieldset } from '@digdir/designsystemet-react';
+"use client";
+import { Dataset } from "@catalog-frontend/types";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import {
+  capitalizeFirstLetter,
+  getTranslateText,
+  localization,
+} from "@catalog-frontend/utils";
+import { Combobox, Fieldset } from "@digdir/designsystemet-react";
 import {
   useSearchInformationModelsByUri,
   useSearchInformationModelsSuggestions,
-} from '../../../hooks/useSearchService';
-import { useFormikContext } from 'formik';
-import { debounce } from 'lodash';
-import { useCallback, useState } from 'react';
-import styles from '../dataset-form.module.css';
-import { UriWithLabelFieldsetTable } from './uri-with-label-field-set-table';
+} from "../../../hooks/useSearchService";
+import { useFormikContext } from "formik";
+import { debounce } from "lodash";
+import { useCallback, useState } from "react";
+import styles from "../dataset-form.module.css";
+import { UriWithLabelFieldsetTable } from "./uri-with-label-field-set-table";
 
 interface Props {
   searchEnv: string;
@@ -19,16 +23,15 @@ interface Props {
 
 export const InformationModelSection = ({ searchEnv }: Props) => {
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const { data: informationModelSuggestions, isLoading: searching } = useSearchInformationModelsSuggestions(
-    searchEnv,
-    searchTerm,
-  );
-  const { data: selectedInformationModels, isLoading } = useSearchInformationModelsByUri(
-    searchEnv,
-    values.informationModelsFromFDK || [],
-  );
+  const { data: informationModelSuggestions, isLoading: searching } =
+    useSearchInformationModelsSuggestions(searchEnv, searchTerm);
+  const { data: selectedInformationModels, isLoading } =
+    useSearchInformationModelsByUri(
+      searchEnv,
+      values.informationModelsFromFDK || [],
+    );
 
   const comboboxOptions = [
     // Combine selectedInformationModels and informationModelSuggestions, and adding uri's for values not found in selectedInformationModels
@@ -63,16 +66,22 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
     <>
       {!isLoading && (
         <Fieldset
-          size='sm'
+          size="sm"
           legend={
-            <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.informationModelsFromFDK}>
+            <TitleWithHelpTextAndTag
+              helpText={
+                localization.datasetForm.helptext.informationModelsFromFDK
+              }
+            >
               {localization.datasetForm.fieldLabel.informationModelsFromFDK}
             </TitleWithHelpTextAndTag>
           }
         >
           <Combobox
-            size='sm'
-            onValueChange={(selectedValues: string[]) => setFieldValue('informationModelsFromFDK', selectedValues)}
+            size="sm"
+            onValueChange={(selectedValues: string[]) =>
+              setFieldValue("informationModelsFromFDK", selectedValues)
+            }
             onChange={(input: any) => debouncedSearch(input.target.value)}
             loading={searching}
             multiple
@@ -88,12 +97,27 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
                 <Combobox.Option
                   value={suggestion.uri}
                   key={suggestion.uri}
-                  displayValue={capitalizeFirstLetter(getTranslateText(suggestion.title) as string) ?? suggestion.uri}
+                  displayValue={
+                    capitalizeFirstLetter(
+                      getTranslateText(suggestion.title) as string,
+                    ) ?? suggestion.uri
+                  }
                 >
                   <div className={styles.comboboxOption}>
-                    <div>{capitalizeFirstLetter(getTranslateText(suggestion.title) as string) ?? suggestion.uri}</div>
-                    <div>{capitalizeFirstLetter(getTranslateText(suggestion.description) as string) ?? ''}</div>
-                    <div>{getTranslateText(suggestion.organization?.prefLabel) ?? ''}</div>
+                    <div>
+                      {capitalizeFirstLetter(
+                        getTranslateText(suggestion.title) as string,
+                      ) ?? suggestion.uri}
+                    </div>
+                    <div>
+                      {capitalizeFirstLetter(
+                        getTranslateText(suggestion.description) as string,
+                      ) ?? ""}
+                    </div>
+                    <div>
+                      {getTranslateText(suggestion.organization?.prefLabel) ??
+                        ""}
+                    </div>
                   </div>
                 </Combobox.Option>
               ))}
@@ -102,11 +126,19 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
       )}
 
       <UriWithLabelFieldsetTable
-        fieldName={'informationModelsFromOtherSources'}
+        fieldName={"informationModelsFromOtherSources"}
         errors={errors.informationModelsFromOtherSources}
         label={
-          <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.informationModelsFromOtherSources}>
-            {localization.datasetForm.fieldLabel.informationModelsFromOtherSources}
+          <TitleWithHelpTextAndTag
+            helpText={
+              localization.datasetForm.helptext
+                .informationModelsFromOtherSources
+            }
+          >
+            {
+              localization.datasetForm.fieldLabel
+                .informationModelsFromOtherSources
+            }
           </TitleWithHelpTextAndTag>
         }
       />

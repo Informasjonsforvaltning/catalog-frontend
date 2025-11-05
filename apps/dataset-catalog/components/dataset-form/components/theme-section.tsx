@@ -22,7 +22,7 @@ export const ThemeSection = ({ losThemes, euDataThemes, mobilityThemes: mobility
   return (
     <>
       <FastField
-        id='euDataTheme-combobox'
+        id="euDataTheme-combobox"
         as={Combobox}
         multiple
         hideClearButton
@@ -38,16 +38,15 @@ export const ThemeSection = ({ losThemes, euDataThemes, mobilityThemes: mobility
         placeholder={`${localization.search.search}...`}
         error={errors.euDataTheme}
         value={values.euDataTheme}
-        onValueChange={(values: string[]) => setFieldValue('euDataTheme', values)}
-        size='sm'
+        onValueChange={(values: string[]) =>
+          setFieldValue("euDataTheme", values)
+        }
+        size="sm"
       >
         <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
         {euDataThemes &&
           euDataThemes.map((theme) => (
-            <Combobox.Option
-              key={theme.uri}
-              value={theme.uri}
-            >
+            <Combobox.Option key={theme.uri} value={theme.uri}>
               {getTranslateText(theme.label)}
             </Combobox.Option>
           ))}
@@ -84,29 +83,32 @@ export const ThemeSection = ({ losThemes, euDataThemes, mobilityThemes: mobility
           ))}
       </FastField>) :  undefined }
       <FastField
-        id='losTheme-combobox'
+        id="losTheme-combobox"
         as={Combobox}
         value={values.losTheme}
         multiple
         hideClearButton
         label={
-          <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.losTheme}>
+          <TitleWithHelpTextAndTag
+            helpText={localization.datasetForm.helptext.losTheme}
+          >
             {localization.datasetForm.fieldLabel.losTheme}
           </TitleWithHelpTextAndTag>
         }
         filter={containsFilter}
         placeholder={`${localization.search.search}...`}
-        onValueChange={(values: string[]) => setFieldValue('losTheme', values)}
-        size='sm'
+        onValueChange={(values: string[]) => setFieldValue("losTheme", values)}
+        size="sm"
       >
         <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
         {losThemes
-          ?.sort((a, b) => (get(a.name, 'nb')?.toString() ?? '').localeCompare(get(b.name, 'nb')?.toString() ?? ''))
+          ?.sort((a, b) =>
+            (get(a.name, "nb")?.toString() ?? "").localeCompare(
+              get(b.name, "nb")?.toString() ?? "",
+            ),
+          )
           ?.map((theme) => (
-            <Combobox.Option
-              key={theme.uri}
-              value={theme.uri}
-            >
+            <Combobox.Option key={theme.uri} value={theme.uri}>
               {getTranslateText(theme.name)}
             </Combobox.Option>
           ))}

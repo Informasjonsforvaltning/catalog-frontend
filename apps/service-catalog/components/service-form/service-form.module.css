@@ -1,0 +1,68 @@
+.fieldSet {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.field {
+  padding-bottom: 1.5rem;
+}
+
+.modalContent {
+  margin: var(--fds-spacing-8);
+  padding: var(--fds-spacing-4);
+  border: 1px solid var(--fds-semantic-border-neutral-subtle);
+  border-radius: var(--fds-border_radius-medium);
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.field {
+  padding-bottom: 1.5rem;
+}
+
+.buttons {
+  display: flex;
+}
+
+.footerContent {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.verticalLine {
+  width: 1px;
+  height: 2rem;
+  background-color: #ccc;
+  margin: 0 0.5rem;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.gap2 {
+  gap: var(--fds-spacing-2);
+}
+
+.noWrap {
+  flex-wrap: nowrap;
+}
+
+.errorBorder {
+  border: 2px solid var(--fds-semantic-border-danger-default);
+  border-radius: var(--fds-border_radius-medium);
+}
+
+.errorMessage {
+  padding: 0.5rem 1rem;
+}

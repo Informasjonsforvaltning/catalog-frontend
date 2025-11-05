@@ -6,14 +6,18 @@
  * @returns The URL-encoded string
  * @throws Error if the string contains dangerous URL characters
  */
-export const validateAndEncodeUrlSafe = (value: string, fieldName: string, functionName: string): string => {
+export const validateAndEncodeUrlSafe = (
+  value: string,
+  fieldName: string,
+  functionName: string,
+): string => {
   // Check for URL manipulation characters that could be used for SSRF
-  const dangerousChars = ['/', '\\', '?', '#', '&', '=', '+', '%'];
+  const dangerousChars = ["/", "\\", "?", "#", "&", "=", "+", "%"];
   const foundChars = dangerousChars.filter((char) => value.includes(char));
 
   if (foundChars.length > 0) {
     throw new Error(
-      `Invalid ${fieldName} '${value}' in ${functionName}. Contains dangerous URL characters: ${foundChars.join(', ')}`,
+      `Invalid ${fieldName} '${value}' in ${functionName}. Contains dangerous URL characters: ${foundChars.join(", ")}`,
     );
   }
 

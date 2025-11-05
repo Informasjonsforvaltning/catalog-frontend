@@ -1,4 +1,4 @@
-import { LocalizedStrings } from './localization';
+import { LocalizedStrings } from "./localization";
 
 export interface Dataset extends DatasetToBeCreated {
   id: string;
@@ -13,7 +13,7 @@ export type DatasetToBeCreated = {
   title: LocalizedStrings;
   description: LocalizedStrings;
   approved: boolean;
-  specializedType?: 'SERIES' | undefined;
+  specializedType?: "SERIES" | undefined;
   accessRight?: string;
   legalBasisForProcessing?: UriWithLabel[];
   legalBasisForAccess?: UriWithLabel[];

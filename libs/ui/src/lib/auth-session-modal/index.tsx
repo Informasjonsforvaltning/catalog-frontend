@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { Button, Modal, Paragraph } from '@digdir/designsystemet-react';
-import { LocalDataStorage, localization } from '@catalog-frontend/utils';
-import { useRouter, usePathname } from 'next/navigation';
+import { useEffect, useRef, useState } from "react";
+import { Button, Modal, Paragraph } from "@digdir/designsystemet-react";
+import { LocalDataStorage, localization } from "@catalog-frontend/utils";
+import { useRouter, usePathname } from "next/navigation";
 
 type AuthSessionModalProps = {
   validatePath?: string;
@@ -12,15 +12,17 @@ type AuthSessionModalProps = {
 };
 
 export const AuthSessionModal = ({
-  validatePath = '/api/auth/validate',
-  signInPath = '/auth/signin',
+  validatePath = "/api/auth/validate",
+  signInPath = "/auth/signin",
   storageKey,
 }: AuthSessionModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
   const pathName = usePathname();
   const router = useRouter();
 
-  const storage = storageKey ? new LocalDataStorage<any>({ key: storageKey }) : undefined;
+  const storage = storageKey
+    ? new LocalDataStorage<any>({ key: storageKey })
+    : undefined;
   const [hasStorageData, setHasStorageData] = useState(false);
 
   const validateAuth = async () => {
@@ -57,24 +59,21 @@ export const AuthSessionModal = ({
 
   return (
     <Modal ref={modalRef}>
-      <Modal.Header closeButton={false}>{localization.auth.sessionExpiredTitle}</Modal.Header>
+      <Modal.Header closeButton={false}>
+        {localization.auth.sessionExpiredTitle}
+      </Modal.Header>
       <Modal.Content>
-        <Paragraph size='sm'>
-          {hasStorageData ? localization.auth.sessionExpiredWithStorage : localization.auth.sessionExpired}
+        <Paragraph size="sm">
+          {hasStorageData
+            ? localization.auth.sessionExpiredWithStorage
+            : localization.auth.sessionExpired}
         </Paragraph>
       </Modal.Content>
       <Modal.Footer>
-        <Button
-          size='sm'
-          onClick={handleLoginClick}
-        >
+        <Button size="sm" onClick={handleLoginClick}>
           {localization.auth.login}
         </Button>
-        <Button
-          size='sm'
-          variant='secondary'
-          onClick={handleCancelClick}
-        >
+        <Button size="sm" variant="secondary" onClick={handleCancelClick}>
           {localization.button.cancel}
         </Button>
       </Modal.Footer>

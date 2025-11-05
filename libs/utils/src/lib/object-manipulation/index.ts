@@ -1,21 +1,21 @@
-import _ from 'lodash';
+import _ from "lodash";
 
 export const removeEmptyValues = (obj: any): any => {
   if (Array.isArray(obj)) {
     return obj.map((value) =>
-      typeof value === 'object' && value !== null
+      typeof value === "object" && value !== null
         ? removeEmptyValues(value) // Recursively process nested objects in arrays
-        : value !== ''
+        : value !== ""
           ? value
           : undefined,
     );
   }
 
-  if (typeof obj === 'object' && obj !== null) {
+  if (typeof obj === "object" && obj !== null) {
     return _.mapValues(
-      _.omitBy(obj, (value) => value === ''), // Omit key-value pairs where the value is an empty string
+      _.omitBy(obj, (value) => value === ""), // Omit key-value pairs where the value is an empty string
       (value) =>
-        typeof value === 'object' && value !== null
+        typeof value === "object" && value !== null
           ? removeEmptyValues(value) // Recursively process nested objects in objects
           : value,
     );
@@ -27,25 +27,25 @@ export const removeEmptyValues = (obj: any): any => {
 export const trimObjectWhitespace = (obj: any): any => {
   if (Array.isArray(obj)) {
     return obj.map((value) =>
-      typeof value === 'object' && value !== null
+      typeof value === "object" && value !== null
         ? trimObjectWhitespace(value) // Recursively process nested objects in arrays
-        : typeof value === 'string'
+        : typeof value === "string"
           ? value.trim() // Trim strings in arrays
           : value,
     );
   }
 
-  if (typeof obj === 'object' && obj !== null) {
+  if (typeof obj === "object" && obj !== null) {
     return _.mapValues(obj, (value) =>
-      typeof value === 'object' && value !== null
+      typeof value === "object" && value !== null
         ? trimObjectWhitespace(value) // Recursively process nested objects in objects
-        : typeof value === 'string'
+        : typeof value === "string"
           ? value.trim() // Trim strings in objects
           : value,
     );
   }
 
-  return typeof obj === 'string' ? obj.trim() : obj; // Trim root-level strings if necessary
+  return typeof obj === "string" ? obj.trim() : obj; // Trim root-level strings if necessary
 };
 
 /**
@@ -59,7 +59,7 @@ export const safeValues = (obj: any): any => {
   if (Array.isArray(obj)) {
     return obj.map(safeValues);
   }
-  if (typeof obj === 'object' && obj !== null) {
+  if (typeof obj === "object" && obj !== null) {
     const result: any = {};
     for (const [key, value] of Object.entries(obj)) {
       result[key] = safeValues(value);
@@ -69,11 +69,16 @@ export const safeValues = (obj: any): any => {
   return obj;
 };
 
-export const convertListToListOfObjects = (valueList: string[], key: string) => {
+export const convertListToListOfObjects = (
+  valueList: string[],
+  key: string,
+) => {
   return valueList.map((value) => ({ [key]: value }));
 };
 
-export function groupByKeys(inputList: { [key: string]: string }[]): { [key: string]: string[] } {
+export function groupByKeys(inputList: { [key: string]: string }[]): {
+  [key: string]: string[];
+} {
   // Transform from localizedStrings to list on the form {nb: [], nn: [], en: []}
   const outputDict: { [key: string]: string[] } = {};
 
@@ -96,7 +101,7 @@ export function transformToLocalizedStrings(inputDict: {
   en?: string[];
 }): { nn?: string; nb?: string; en?: string }[] {
   const outputList: { nn?: string; nb?: string; en?: string }[] = [];
-  const allowedKeys: (keyof typeof inputDict)[] = ['nn', 'nb', 'en'];
+  const allowedKeys: (keyof typeof inputDict)[] = ["nn", "nb", "en"];
 
   allowedKeys.forEach((key) => {
     if (inputDict[key]) {
@@ -116,16 +121,19 @@ export function transformToLocalizedStrings(inputDict: {
  * @param source - The object to merge from
  * @returns A new object with the merged values
  */
-export const deepMergeWithUndefinedHandling = (target: any, source: any): any => {
+export const deepMergeWithUndefinedHandling = (
+  target: any,
+  source: any,
+): any => {
   if (source === undefined) {
     return target;
   }
 
-  if (typeof source !== 'object' || source === null) {
+  if (typeof source !== "object" || source === null) {
     return source;
   }
 
-  if (typeof target !== 'object' || target === null) {
+  if (typeof target !== "object" || target === null) {
     return source;
   }
 
@@ -138,7 +146,11 @@ export const deepMergeWithUndefinedHandling = (target: any, source: any): any =>
         continue;
       }
 
-      if (typeof source[key] === 'object' && source[key] !== null && !Array.isArray(source[key])) {
+      if (
+        typeof source[key] === "object" &&
+        source[key] !== null &&
+        !Array.isArray(source[key])
+      ) {
         result[key] = deepMergeWithUndefinedHandling(result[key], source[key]);
       } else {
         result[key] = source[key];

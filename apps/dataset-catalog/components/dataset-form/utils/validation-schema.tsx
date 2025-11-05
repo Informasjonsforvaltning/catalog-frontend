@@ -1,28 +1,43 @@
-import { httpsRegex, localization, parseDateTime, telephoneNumberRegex } from '@catalog-frontend/utils';
-import * as Yup from 'yup';
+import {
+  httpsRegex,
+  localization,
+  parseDateTime,
+  telephoneNumberRegex,
+} from "@catalog-frontend/utils";
+import * as Yup from "yup";
 
 export const uriWithLabelSchema = Yup.object().shape({
   prefLabel: Yup.object()
     .shape({
       nb: Yup.string()
         .min(3, localization.datasetForm.validation.title)
-        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.nb})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.title} (${localization.language.nb})`,
+        )
         .notRequired(),
       nn: Yup.string()
         .min(3, localization.datasetForm.validation.title)
-        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.nn})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.title} (${localization.language.nn})`,
+        )
         .notRequired(),
       en: Yup.string()
         .min(3, localization.datasetForm.validation.title)
-        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.en})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.title} (${localization.language.en})`,
+        )
         .notRequired(),
     })
-    .test('preflabel-test', localization.validation.oneLanguageRequired, (prefLabel) => {
-      if (!prefLabel) {
-        return false;
-      }
-      return !!(prefLabel.nb || prefLabel.nn || prefLabel.en);
-    }),
+    .test(
+      "preflabel-test",
+      localization.validation.oneLanguageRequired,
+      (prefLabel) => {
+        if (!prefLabel) {
+          return false;
+        }
+        return !!(prefLabel.nb || prefLabel.nn || prefLabel.en);
+      },
+    ),
   uri: Yup.string()
     .matches(httpsRegex, localization.validation.invalidProtocol)
     .url(localization.validation.invalidUrl),
@@ -30,8 +45,12 @@ export const uriWithLabelSchema = Yup.object().shape({
 
 const contactPointDraftValidationSchema = Yup.array().of(
   Yup.object().shape({
-    email: Yup.string().email(localization.validation.invalidEmail).notRequired(),
-    phone: Yup.string().matches(telephoneNumberRegex, localization.validation.invalidPhone).notRequired(),
+    email: Yup.string()
+      .email(localization.validation.invalidEmail)
+      .notRequired(),
+    phone: Yup.string()
+      .matches(telephoneNumberRegex, localization.validation.invalidPhone)
+      .notRequired(),
     url: Yup.string()
       .matches(httpsRegex, localization.validation.invalidProtocol)
       .url(localization.validation.invalidUrl)
@@ -45,23 +64,37 @@ const contactPointConfirmValidationSchema = Yup.array()
       name: Yup.object()
         .shape({
           nb: Yup.string()
-            .label(`${localization.datasetForm.fieldLabel.contactName} (${localization.language.nb})`)
+            .label(
+              `${localization.datasetForm.fieldLabel.contactName} (${localization.language.nb})`,
+            )
             .notRequired(),
           nn: Yup.string()
-            .label(`${localization.datasetForm.fieldLabel.contactName} (${localization.language.nn})`)
+            .label(
+              `${localization.datasetForm.fieldLabel.contactName} (${localization.language.nn})`,
+            )
             .notRequired(),
           en: Yup.string()
-            .label(`${localization.datasetForm.fieldLabel.contactName} (${localization.language.en})`)
+            .label(
+              `${localization.datasetForm.fieldLabel.contactName} (${localization.language.en})`,
+            )
             .notRequired(),
         })
-        .test('contact-name-test', localization.validation.oneLanguageRequired, (name) => {
-          if (!name) {
-            return false;
-          }
-          return !!(name.nb || name.nn || name.en);
-        }),
-      email: Yup.string().email(localization.validation.invalidEmail).notRequired(),
-      phone: Yup.string().matches(telephoneNumberRegex, localization.validation.invalidPhone).notRequired(),
+        .test(
+          "contact-name-test",
+          localization.validation.oneLanguageRequired,
+          (name) => {
+            if (!name) {
+              return false;
+            }
+            return !!(name.nb || name.nn || name.en);
+          },
+        ),
+      email: Yup.string()
+        .email(localization.validation.invalidEmail)
+        .notRequired(),
+      phone: Yup.string()
+        .matches(telephoneNumberRegex, localization.validation.invalidPhone)
+        .notRequired(),
       url: Yup.string()
         .matches(httpsRegex, localization.validation.invalidProtocol)
         .url(localization.validation.invalidUrl)
@@ -95,7 +128,9 @@ export const distributionSectionSchema = Yup.object().shape({
     ),
   conformsTo: Yup.array().of(uriWithLabelSchema),
   page: Yup.array().of(
-    Yup.string().matches(httpsRegex, localization.validation.invalidProtocol).url(localization.validation.invalidUrl),
+    Yup.string()
+      .matches(httpsRegex, localization.validation.invalidProtocol)
+      .url(localization.validation.invalidUrl),
   ),
 });
 
@@ -128,7 +163,9 @@ export const mobilityDistributionSectionSchema = Yup.object().shape({
 });
 
 export const referenceSchema = Yup.object().shape({
-  referenceType: Yup.string().required(localization.datasetForm.validation.relation),
+  referenceType: Yup.string().required(
+    localization.datasetForm.validation.relation,
+  ),
   source: Yup.string().required(localization.datasetForm.validation.relation),
 });
 
@@ -184,23 +221,33 @@ export const draftDatasetSchema = Yup.object().shape({
     .shape({
       nb: Yup.string()
         .min(3, localization.datasetForm.validation.title)
-        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.nb})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.title} (${localization.language.nb})`,
+        )
         .notRequired(),
       nn: Yup.string()
         .min(3, localization.datasetForm.validation.title)
-        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.nn})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.title} (${localization.language.nn})`,
+        )
         .notRequired(),
       en: Yup.string()
         .min(3, localization.datasetForm.validation.title)
-        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.en})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.title} (${localization.language.en})`,
+        )
         .notRequired(),
     })
-    .test('title-test', localization.validation.oneLanguageRequired, (title) => {
-      if (!title) {
-        return false;
-      }
-      return !!(title.nb || title.nn || title.en);
-    }),
+    .test(
+      "title-test",
+      localization.validation.oneLanguageRequired,
+      (title) => {
+        if (!title) {
+          return false;
+        }
+        return !!(title.nb || title.nn || title.en);
+      },
+    ),
   contactPoints: contactPointDraftValidationSchema,
 });
 
@@ -209,44 +256,64 @@ export const confirmedDatasetSchema = draftDatasetSchema.shape({
     .shape({
       nb: Yup.string()
         .min(3, localization.datasetForm.validation.title)
-        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.nb})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.title} (${localization.language.nb})`,
+        )
         .notRequired(),
       nn: Yup.string()
         .min(3, localization.datasetForm.validation.title)
-        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.nn})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.title} (${localization.language.nn})`,
+        )
         .notRequired(),
       en: Yup.string()
         .min(3, localization.datasetForm.validation.title)
-        .label(`${localization.datasetForm.fieldLabel.title} (${localization.language.en})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.title} (${localization.language.en})`,
+        )
         .notRequired(),
     })
-    .test('title-test', localization.validation.oneLanguageRequired, (title) => {
-      if (!title) {
-        return false;
-      }
-      return !!(title.nb || title.nn || title.en);
-    }),
+    .test(
+      "title-test",
+      localization.validation.oneLanguageRequired,
+      (title) => {
+        if (!title) {
+          return false;
+        }
+        return !!(title.nb || title.nn || title.en);
+      },
+    ),
   description: Yup.object()
     .shape({
       nb: Yup.string()
-        .label(`${localization.datasetForm.fieldLabel.description} (${localization.language.nb})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.description} (${localization.language.nb})`,
+        )
         .min(5, localization.datasetForm.validation.description)
         .notRequired(),
       nn: Yup.string()
-        .label(`${localization.datasetForm.fieldLabel.description} (${localization.language.nn})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.description} (${localization.language.nn})`,
+        )
         .min(5, localization.datasetForm.validation.description)
         .notRequired(),
       en: Yup.string()
-        .label(`${localization.datasetForm.fieldLabel.description} (${localization.language.en})`)
+        .label(
+          `${localization.datasetForm.fieldLabel.description} (${localization.language.en})`,
+        )
         .min(5, localization.datasetForm.validation.description)
         .notRequired(),
     })
-    .test('description-test', localization.validation.oneLanguageRequired, (description) => {
-      if (!description) {
-        return false;
-      }
-      return !!(description.nb || description.nn || description.en);
-    }),
+    .test(
+      "description-test",
+      localization.validation.oneLanguageRequired,
+      (description) => {
+        if (!description) {
+          return false;
+        }
+        return !!(description.nb || description.nn || description.en);
+      },
+    ),
   temporal: Yup.array().of(dateSchema),
   euDataTheme: Yup.array()
     .min(1, localization.datasetForm.validation.euDataTheme)

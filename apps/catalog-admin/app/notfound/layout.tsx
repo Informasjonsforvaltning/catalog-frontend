@@ -1,7 +1,7 @@
-import { Layout } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { Metadata } from 'next';
-import '../global.css';
+import { Layout } from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { Metadata } from "next";
+import "../global.css";
 
 export const metadata: Metadata = {
   title: localization.catalogType.admin,

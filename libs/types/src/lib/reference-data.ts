@@ -1,5 +1,5 @@
-import { UriWithLabel } from './dataset';
-import { LocalizedStrings } from './localization';
+import { UriWithLabel } from "./dataset";
+import { LocalizedStrings } from "./localization";
 
 export interface ReferenceDataCode {
   uri: string;

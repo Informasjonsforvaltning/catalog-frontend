@@ -1,12 +1,16 @@
-import { Tag as DSTag, type TagProps as DSTagProps } from '@digdir/designsystemet-react';
-import { forwardRef } from 'react';
+import {
+  Tag as DSTag,
+  type TagProps as DSTagProps,
+} from "@digdir/designsystemet-react";
+import { forwardRef } from "react";
 
 export enum ImportResultStatusColors {
-  FAILED = 'danger',
-  COMPLETED = 'success',
-  IN_PROGRESS = 'third',
-  PENDING_CONFIRMATION = 'warning',
-  CANCELLED = 'first',
+  FAILED = "danger",
+  COMPLETED = "success",
+  IN_PROGRESS = "third",
+  PENDING_CONFIRMATION = "warning",
+  SAVING = "third",
+  CANCELLED = "first",
 }
 
 export type StatusKey = keyof typeof ImportResultStatusColors;
@@ -17,10 +21,24 @@ export type ImportResultStatusTagProps = {
 } & DSTagProps;
 
 const getColorFromStatusKey = (statusKey: StatusKey | undefined) =>
-  statusKey ? ImportResultStatusColors[statusKey.toLocaleUpperCase() as StatusKey] : 'neutral';
+  statusKey
+    ? ImportResultStatusColors[statusKey.toLocaleUpperCase() as StatusKey]
+    : "neutral";
 
-export const ImportResultStatusTag = forwardRef<HTMLSpanElement, ImportResultStatusTagProps>(
-  ({ children, statusKey, statusLabel, size = 'sm', ...rest }: ImportResultStatusTagProps, ref) => {
+export const ImportResultStatusTag = forwardRef<
+  HTMLSpanElement,
+  ImportResultStatusTagProps
+>(
+  (
+    {
+      children,
+      statusKey,
+      statusLabel,
+      size = "sm",
+      ...rest
+    }: ImportResultStatusTagProps,
+    ref,
+  ) => {
     return (
       <DSTag
         ref={ref}
@@ -34,4 +52,4 @@ export const ImportResultStatusTag = forwardRef<HTMLSpanElement, ImportResultSta
   },
 );
 
-ImportResultStatusTag.displayName = 'ImportResultStatusTag';
+ImportResultStatusTag.displayName = "ImportResultStatusTag";

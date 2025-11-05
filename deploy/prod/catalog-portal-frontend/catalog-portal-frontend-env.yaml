@@ -125,8 +125,3 @@ spec:
                 secretKeyRef:
                   name: commonurl
                   key: FDK_TERMS_AND_CONDITIONS_BASE_URI
-            - name: RECORDS_ALLOW_LIST
-              valueFrom:
-                secretKeyRef:
-                  name: behandlingsoversikt
-                  key: ALLOW_LIST

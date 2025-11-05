@@ -1,47 +1,61 @@
-'use client';
-import { DataService } from '@catalog-frontend/types';
-import { FormikLanguageFieldset, FormikOptionalFieldsFieldset, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { useFormikContext } from 'formik';
-import { get as lodashGet } from 'lodash';
-import { Box, ErrorMessage, Textfield } from '@digdir/designsystemet-react';
-import styles from '../data-service-form.module.css';
+"use client";
+import { DataService } from "@catalog-frontend/types";
+import {
+  FormikLanguageFieldset,
+  FormikOptionalFieldsFieldset,
+  TitleWithHelpTextAndTag,
+} from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { useFormikContext } from "formik";
+import { get as lodashGet } from "lodash";
+import { Box, ErrorMessage, Textfield } from "@digdir/designsystemet-react";
+import styles from "../data-service-form.module.css";
 
 export const ContactPointSection = () => {
   const { errors } = useFormikContext<DataService>();
 
   const contactPointOptions = [
     {
-      valuePath: 'contactPoint.email',
+      valuePath: "contactPoint.email",
       label: localization.email,
-      legend: <TitleWithHelpTextAndTag>{localization.email}</TitleWithHelpTextAndTag>,
+      legend: (
+        <TitleWithHelpTextAndTag>{localization.email}</TitleWithHelpTextAndTag>
+      ),
     },
     {
-      valuePath: 'contactPoint.phone',
+      valuePath: "contactPoint.phone",
       label: localization.telephone,
-      legend: <TitleWithHelpTextAndTag>{localization.telephone}</TitleWithHelpTextAndTag>,
+      legend: (
+        <TitleWithHelpTextAndTag>
+          {localization.telephone}
+        </TitleWithHelpTextAndTag>
+      ),
     },
     {
-      valuePath: 'contactPoint.url',
+      valuePath: "contactPoint.url",
       label: localization.contactPoint.form,
-      legend: <TitleWithHelpTextAndTag>{localization.contactPoint.form}</TitleWithHelpTextAndTag>,
+      legend: (
+        <TitleWithHelpTextAndTag>
+          {localization.contactPoint.form}
+        </TitleWithHelpTextAndTag>
+      ),
     },
   ];
 
   const getErrors = () => {
-    return lodashGet(errors, 'contactPoint');
+    return lodashGet(errors, "contactPoint");
   };
 
   const hasMainLevelError = () => {
     const contactErrors: any = getErrors();
-    return typeof contactErrors === 'string' || contactErrors instanceof String;
+    return typeof contactErrors === "string" || contactErrors instanceof String;
   };
 
   return (
     <Box>
       <div className={styles.padding}>
         <FormikLanguageFieldset
-          name={'contactPoint.name'}
+          name={"contactPoint.name"}
           as={Textfield}
           legend={
             <TitleWithHelpTextAndTag
@@ -66,10 +80,7 @@ export const ContactPointSection = () => {
         availableFields={contactPointOptions}
       />
       {hasMainLevelError() && (
-        <ErrorMessage
-          size='sm'
-          error
-        >
+        <ErrorMessage size="sm" error>
           {getErrors()}
         </ErrorMessage>
       )}

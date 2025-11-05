@@ -1,15 +1,22 @@
-'use client';
+"use client";
 
-import { memo, useMemo } from 'react';
-import { Accordion } from '@digdir/designsystemet-react';
-import { AccordionItem, AccordionItemProps, CheckboxGroupFilter } from '@catalog-frontend/ui';
-import { DatasetsPageSettings, PublicationStatus } from '@catalog-frontend/types';
-import { localization } from '@catalog-frontend/utils';
-import styles from './search-filter.module.css';
+import { memo, useMemo } from "react";
+import { Accordion } from "@digdir/designsystemet-react";
+import {
+  AccordionItem,
+  AccordionItemProps,
+  CheckboxGroupFilter,
+} from "@catalog-frontend/ui";
+import {
+  DatasetsPageSettings,
+  PublicationStatus,
+} from "@catalog-frontend/types";
+import { localization } from "@catalog-frontend/utils";
+import styles from "./search-filter.module.css";
 
-import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
+import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
 
-export type PublishedFilterType = PublicationStatus.PUBLISH | 'unpublish';
+export type PublishedFilterType = PublicationStatus.PUBLISH | "unpublish";
 
 export type InternalFieldFilterType = {
   id: string;
@@ -17,22 +24,28 @@ export type InternalFieldFilterType = {
 };
 
 type SearchFilterProps = {
-  pageSettings?: DatasetsPageSettings; 
+  pageSettings?: DatasetsPageSettings;
 };
 
 const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
   const datasetStatuses = [PublicationStatus.APPROVE, PublicationStatus.DRAFT];
 
   // Memoize default values for query states
-  const defaultFilterStatus = useMemo(() => pageSettings?.filter?.status ?? [], []);
-  const defaultFilterPublicationState = useMemo(() => pageSettings?.filter?.pubState ?? [], []);
+  const defaultFilterStatus = useMemo(
+    () => pageSettings?.filter?.status ?? [],
+    [],
+  );
+  const defaultFilterPublicationState = useMemo(
+    () => pageSettings?.filter?.pubState ?? [],
+    [],
+  );
 
   const [filterStatus, setFilterStatus] = useQueryState(
-    'datasetFilter.status',
+    "datasetFilter.status",
     parseAsArrayOf(parseAsString).withDefault(defaultFilterStatus),
   );
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
-    'datasetFilter.pubState',
+    "datasetFilter.pubState",
     parseAsArrayOf(parseAsString).withDefault(defaultFilterPublicationState),
   );
 
@@ -43,8 +56,11 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
     })) ?? [];
 
   const publicationStateItems = [
-    { value: PublicationStatus.PUBLISH, label: localization.publicationState.published },
-    { value: 'UNPUBLISH', label: localization.publicationState.unpublished },
+    {
+      value: PublicationStatus.PUBLISH,
+      label: localization.publicationState.published,
+    },
+    { value: "UNPUBLISH", label: localization.publicationState.unpublished },
   ];
 
   const handleStatusOnChange = (names: string[]) => {
@@ -92,18 +108,12 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
   ];
 
   const accordionItems = accordionItemContents.map((item) => (
-    <AccordionItem
-      key={`accordion-item-${item.header}`}            
-      {...item}
-    />
+    <AccordionItem key={`accordion-item-${item.header}`} {...item} />
   ));
 
   return (
     <div className={styles.searchFilter}>
-      <Accordion
-        border={true}
-        className={styles.accordion}
-      >
+      <Accordion border={true} className={styles.accordion}>
         {accordionItems}
       </Accordion>
     </div>

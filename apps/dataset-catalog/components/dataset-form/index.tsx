@@ -1,13 +1,19 @@
-'use client';
+"use client";
 import {
   DataStorage,
   formatISO,
   getTranslateText,
   localization,
   trimObjectWhitespace,
-  deepMergeWithUndefinedHandling,
-} from '@catalog-frontend/utils';
-import { Alert, Button, Checkbox, Paragraph, Spinner, Switch } from '@digdir/designsystemet-react';
+} from "@catalog-frontend/utils";
+import {
+  Alert,
+  Button,
+  Checkbox,
+  Paragraph,
+  Spinner,
+  Switch,
+} from "@digdir/designsystemet-react";
 import {
   Dataset,
   DatasetToBeCreated,
@@ -15,7 +21,7 @@ import {
   StorageData,
   Distribution,
   Reference,
-} from '@catalog-frontend/types';
+} from "@catalog-frontend/types";
 import {
   ConfirmModal,
   FormikAutoSaver,
@@ -45,7 +51,7 @@ type Props = {
   afterSubmit?: () => void;
   initialValues: DatasetToBeCreated | Dataset;
   autoSaveStorage: DataStorage<StorageData>;
-  submitType: 'create' | 'update';
+  submitType: "create" | "update";
   searchEnv: string; // Environment variable to search service
   referenceDataEnv: string; // Environment variable to reference data
   referenceData: ReferenceData;
@@ -57,23 +63,23 @@ type Props = {
 
 const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
   const lastChangedFormatted = formatISO(lastChanged, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
   return (
     <>
-      <Paragraph size='sm'>{localization.datasetForm.alert.youHaveUnsavedChanges}</Paragraph>
-      <Paragraph size='sm'>
-        <span className={styles.bold}>{getTranslateText(values?.title)}</span> ({lastChangedFormatted})
+      <Paragraph size="sm">
+        {localization.datasetForm.alert.youHaveUnsavedChanges}
       </Paragraph>
-      <Paragraph
-        size='sm'
-        className={styles.topMargin2}
-      >
-        {localization.conceptForm.alert.wantToRestoreChanges}
+      <Paragraph size="sm">
+        <span className={styles.bold}>{getTranslateText(values?.title)}</span> (
+        {lastChangedFormatted})
+      </Paragraph>
+      <Paragraph size="sm" className={styles.topMargin2}>
+        {localization.alert.wantToRestoreChanges}
       </Paragraph>
     </>
   );
@@ -94,7 +100,7 @@ export const DatasetForm = ({
   const { catalogId, datasetId } = useParams();
   const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<Dataset>>(null);
-  const restoreOnRender = Boolean(searchParams.get('restore'));
+  const restoreOnRender = Boolean(searchParams.get("restore"));
   const [validateOnChange, setValidateOnChange] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
   const [ignoreRequired, setIgnoreRequired] = useState(true);
@@ -102,11 +108,15 @@ export const DatasetForm = ({
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const { losThemes, dataThemes, mobilityThemes, openLicenses, mobilityDataStandards, mobilityRights, frequencies } = referenceData;
 
-  const [formApprovedStatus, setFormApprovedStatus] = useState(initialValues?.approved);
+  const [formApprovedStatus, setFormApprovedStatus] = useState(
+    initialValues?.approved,
+  );
 
   const [showSnackbar, setShowSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'danger'>('success');
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "danger"
+  >("success");
   const [snackbarFadeIn, setSnackbarFadeIn] = useState(true);
 
   const showSnackbarMessage = ({ message, severity, fadeIn = true }: any) => {
@@ -126,19 +136,30 @@ export const DatasetForm = ({
     setFieldValue: (fieldName: string, value: boolean) => void,
   ) => {
     const isChecked = event.target.checked;
-    if (!isChecked && 'published' in initialValues && initialValues?.published === true) {
-      showSnackbarMessage({ message: localization.datasetForm.alert.unpublishBeforeUnapprove, severity: 'danger' });
+    if (
+      !isChecked &&
+      "published" in initialValues &&
+      initialValues?.published === true
+    ) {
+      showSnackbarMessage({
+        message: localization.datasetForm.alert.unpublishBeforeUnapprove,
+        severity: "danger",
+      });
     } else {
       setFormApprovedStatus(isChecked);
-      setFieldValue('approved', isChecked);
+      setFieldValue("approved", isChecked);
     }
   };
 
   const handleIgnoreRequiredChange = (newValue: boolean) => {
-    if (newValue && 'published' in initialValues && initialValues?.published === true) {
+    if (
+      newValue &&
+      "published" in initialValues &&
+      initialValues?.published === true
+    ) {
       showSnackbarMessage({
         message: localization.datasetForm.alert.unpublishBeforeIgnoreRequired,
-        severity: 'danger',
+        severity: "danger",
       });
     } else if (newValue && formApprovedStatus === true) {
       setShowUnapproveModal(true);
@@ -147,9 +168,11 @@ export const DatasetForm = ({
     }
   };
 
-  const handleUnapproveConfirm = (setFieldValue: (fieldName: string, value: boolean) => void) => {
+  const handleUnapproveConfirm = (
+    setFieldValue: (fieldName: string, value: boolean) => void,
+  ) => {
     setFormApprovedStatus(false);
-    setFieldValue('approved', false);
+    setFieldValue("approved", false);
     setIgnoreRequired(true);
     setShowUnapproveModal(false);
   };
@@ -188,8 +211,8 @@ export const DatasetForm = ({
       : [
           <Alert
             key={1}
-            size='sm'
-            severity='danger'
+            size="sm"
+            severity="danger"
             className={styles.notification}
           >
             {localization.validation.formError}
@@ -199,8 +222,8 @@ export const DatasetForm = ({
       ? [
           <Alert
             key={1}
-            size='sm'
-            severity='warning'
+            size="sm"
+            severity="warning"
             className={styles.notification}
           >
             {localization.validation.unsavedChanges}
@@ -217,7 +240,11 @@ export const DatasetForm = ({
 
   useEffect(() => {
     if (showSnackbarSuccessOnInit) {
-      showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success', fadeIn: false });
+      showSnackbarMessage({
+        message: localization.snackbar.saveSuccessful,
+        severity: "success",
+        fadeIn: false,
+      });
     }
   }, [showSnackbarSuccessOnInit]);
 
@@ -242,7 +269,10 @@ export const DatasetForm = ({
             try {
               const newValues = await onSubmit(trimObjectWhitespace(values));
 
-              showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success' });
+              showSnackbarMessage({
+                message: localization.snackbar.saveSuccessful,
+                severity: "success",
+              });
               if (newValues) {
                 resetForm({ values: datasetTemplate(newValues) });
               } else {
@@ -256,34 +286,59 @@ export const DatasetForm = ({
                 afterSubmit();
               }
             } catch {
-              showSnackbarMessage({ message: localization.snackbar.saveFailed, severity: 'danger' });
+              showSnackbarMessage({
+                message: localization.snackbar.saveFailed,
+                severity: "danger",
+              });
             } finally {
               setSubmitting(false);
             }
           }
         }}
       >
-        {({ setFieldValue, values, dirty, isValid, isSubmitting, isValidating, submitForm, errors, setValues }) => {
-          const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
-          const hasError = (fields: (keyof Dataset)[]) => fields.some((field) => Object.keys(errors).includes(field));
+        {({
+          setFieldValue,
+          values,
+          dirty,
+          isValid,
+          isSubmitting,
+          isValidating,
+          submitForm,
+          errors,
+          setValues,
+        }) => {
+          const notifications = getNotifications({
+            isValid,
+            hasUnsavedChanges: false,
+          });
+          const hasError = (fields: (keyof Dataset)[]) =>
+            fields.some((field) => Object.keys(errors).includes(field));
           const handleRestoreDataset = (data: StorageData) => {
             if (data?.id !== datasetId) {
               if (!data?.id) {
-                window.location.replace(`/catalogs/${catalogId}/datasets/new?restore=1`);
+                window.location.replace(
+                  `/catalogs/${catalogId}/datasets/new?restore=1`,
+                );
                 return false;
               }
-              window.location.replace(`/catalogs/${catalogId}/datasets/${data.id}/edit?restore=1`);
+              window.location.replace(
+                `/catalogs/${catalogId}/datasets/${data.id}/edit?restore=1`,
+              );
               return false;
             }
             const restoreValues = datasetTemplate(data.values);
             setValues(restoreValues);
 
             // Handle distribution data from secondary storage
-            const restoreDistributionData = autoSaveStorage?.getSecondary('distribution');
-            if (restoreDistributionData && restoreDistributionData?.id === datasetId) {
+            const restoreDistributionData =
+              autoSaveStorage?.getSecondary("distribution");
+            if (
+              restoreDistributionData &&
+              restoreDistributionData?.id === datasetId
+            ) {
               const distributionValues: {
                 distribution: Distribution;
-                distributionType: 'distribution' | 'sample';
+                distributionType: "distribution" | "sample";
                 index: number;
               } = restoreDistributionData.values;
               setFieldValue(
@@ -291,25 +346,36 @@ export const DatasetForm = ({
                 distributionValues.distribution,
               );
               // Delete distribution data from secondary storage since it is merged with the main data
-              autoSaveStorage?.deleteSecondary('distribution');
+              autoSaveStorage?.deleteSecondary("distribution");
             }
 
             // Handle reference data from secondary storage
-            const restoreReferenceData = autoSaveStorage?.getSecondary('reference');
-            if (restoreReferenceData && restoreReferenceData?.id === datasetId) {
-              const referenceValues: { reference: Reference; index: number } = restoreReferenceData.values;
-              setFieldValue(`references[${referenceValues.index}]`, referenceValues.reference);
+            const restoreReferenceData =
+              autoSaveStorage?.getSecondary("reference");
+            if (
+              restoreReferenceData &&
+              restoreReferenceData?.id === datasetId
+            ) {
+              const referenceValues: { reference: Reference; index: number } =
+                restoreReferenceData.values;
+              setFieldValue(
+                `references[${referenceValues.index}]`,
+                referenceValues.reference,
+              );
               // Delete reference data from secondary storage since it is merged with the main data
-              autoSaveStorage?.deleteSecondary('reference');
+              autoSaveStorage?.deleteSecondary("reference");
             }
 
-            showSnackbarMessage({ message: localization.snackbar.restoreSuccessfull, severity: 'success' });
+            showSnackbarMessage({
+              message: localization.snackbar.restoreSuccessful,
+              severity: "success",
+            });
             return true;
           };
 
           return (
             <>
-              <Form className='container'>
+              <Form className="container">
                 <FormikAutoSaver
                   id={datasetId?.toString()}
                   storage={autoSaveStorage}
@@ -319,7 +385,7 @@ export const DatasetForm = ({
                 />
                 <FormLayout>
                   <FormLayout.Section
-                    id='about-section'
+                    id="about-section"
                     title={localization.datasetForm.heading.about}
                     subtitle={localization.datasetForm.subtitle.about}
                     required
@@ -342,7 +408,7 @@ export const DatasetForm = ({
                   </FormLayout.Section>
 
                   <FormLayout.Section
-                    id='tema-section'
+                    id="tema-section"
                     title={localization.datasetForm.heading.theme}
                     subtitle={localization.datasetForm.subtitle.theme}
                     required
@@ -357,10 +423,10 @@ export const DatasetForm = ({
                   </FormLayout.Section>
 
                   <FormLayout.Section
-                    id='distribution-section'
+                    id="distribution-section"
                     title={localization.datasetForm.heading.distributions}
                     subtitle={localization.datasetForm.subtitle.distributions}
-                    error={hasError(['distribution', 'sample'])}
+                    error={hasError(["distribution", "sample"])}
                   >
                     <DistributionSection
                       referenceDataEnv={referenceDataEnv}
@@ -375,10 +441,10 @@ export const DatasetForm = ({
                   </FormLayout.Section>
 
                   <FormLayout.Section
-                    id='details-section'
+                    id="details-section"
                     title={localization.datasetForm.heading.details}
                     subtitle={localization.datasetForm.subtitle.details}
-                    error={hasError(['landingPage', 'conformsTo'])}
+                    error={hasError(["landingPage", "conformsTo"])}
                   >
                     <DetailsSection
                       referenceDataEnv={referenceDataEnv}
@@ -388,10 +454,10 @@ export const DatasetForm = ({
                   </FormLayout.Section>
 
                   <FormLayout.Section
-                    id='relation-section'
+                    id="relation-section"
                     title={localization.datasetForm.heading.relations}
                     subtitle={localization.datasetForm.subtitle.relations}
-                    error={hasError(['references', 'relatedResources'])}
+                    error={hasError(["references", "relatedResources"])}
                   >
                     <RelationsSection
                       searchEnv={searchEnv}
@@ -401,31 +467,36 @@ export const DatasetForm = ({
                   </FormLayout.Section>
 
                   <FormLayout.Section
-                    id='concept-section'
+                    id="concept-section"
                     title={localization.datasetForm.heading.concept}
                     subtitle={localization.datasetForm.subtitle.concept}
-                    error={hasError(['concepts', 'keywords'])}
+                    error={hasError(["concepts", "keywords"])}
                   >
                     <ConceptSection searchEnv={searchEnv} />
                   </FormLayout.Section>
 
                   <FormLayout.Section
-                    id='information-model-section'
+                    id="information-model-section"
                     title={localization.datasetForm.heading.informationModels}
-                    subtitle={localization.datasetForm.subtitle.informationModels}
-                    error={hasError(['informationModelsFromFDK', 'informationModelsFromOtherSources'])}
+                    subtitle={
+                      localization.datasetForm.subtitle.informationModels
+                    }
+                    error={hasError([
+                      "informationModelsFromFDK",
+                      "informationModelsFromOtherSources",
+                    ])}
                   >
                     <InformationModelSection searchEnv={searchEnv} />
                   </FormLayout.Section>
 
                   <FormLayout.Section
-                    id='contact-point-section'
+                    id="contact-point-section"
                     title={localization.datasetForm.heading.contactPoint}
                     subtitle={localization.datasetForm.subtitle.contactPoint}
                     required
-                    error={hasError(['contactPoints'])}
+                    error={hasError(["contactPoints"])}
                   >
-                    <ContactPointSection isMobility={isMobility}/>
+                    <ContactPointSection/>
                   </FormLayout.Section>
                 </FormLayout>
               </Form>
@@ -444,28 +515,27 @@ export const DatasetForm = ({
               <StickyFooterBar>
                 <div className={styles.footerContent}>
                   <Button
-                    type='button'
-                    size='sm'
-                    disabled={isSubmitting || isValidating || isCanceled || !dirty}
+                    type="button"
+                    size="sm"
+                    disabled={
+                      isSubmitting || isValidating || isCanceled || !dirty
+                    }
                     onClick={() => {
                       setValidateOnChange(true);
                       submitForm();
                     }}
                   >
                     {isSubmitting ? (
-                      <Spinner
-                        title='Lagrer'
-                        size='sm'
-                      />
+                      <Spinner title="Lagrer" size="sm" />
                     ) : (
                       localization.save
                     )}
                   </Button>
 
                   <Button
-                    type='button'
-                    size='sm'
-                    variant='secondary'
+                    type="button"
+                    size="sm"
+                    variant="secondary"
                     disabled={isSubmitting || isValidating || isCanceled}
                     onClick={handleCancel}
                   >
@@ -473,37 +543,53 @@ export const DatasetForm = ({
                   </Button>
                   <div className={styles.verticalLine}></div>
                   <Switch
-                    position='left'
-                    size='sm'
+                    position="left"
+                    size="sm"
                     checked={values.approved}
-                    onChange={(event) => handleSwitchChange(event, setFieldValue)}
+                    onChange={(event) =>
+                      handleSwitchChange(event, setFieldValue)
+                    }
                   >
                     <div className={styles.footerContent}>
                       {localization.tag.approve}
                       <HelpMarkdown
-                        title={localization.datasetForm.fieldLabel.registrationStatus}
-                        aria-label={'statusSwitch'}
+                        title={
+                          localization.datasetForm.fieldLabel.registrationStatus
+                        }
+                        aria-label={"statusSwitch"}
                       >
                         {localization.datasetForm.helptext.statusSwitch}
                       </HelpMarkdown>
                     </div>
                   </Switch>
                   <div className={styles.verticalLine}></div>
-                  <div className={classNames(styles.flex, styles.gap2, styles.noWrap)}>
+                  <div
+                    className={classNames(
+                      styles.flex,
+                      styles.gap2,
+                      styles.noWrap,
+                    )}
+                  >
                     <Checkbox
-                      size='sm'
-                      value='ignoreRequired'
+                      size="sm"
+                      value="ignoreRequired"
                       checked={ignoreRequired}
-                      onChange={(e) => handleIgnoreRequiredChange(e.target.checked)}
+                      onChange={(e) =>
+                        handleIgnoreRequiredChange(e.target.checked)
+                      }
                     >
                       {localization.datasetForm.fieldLabel.ignoreRequired}
                     </Checkbox>
-                    <HelpMarkdown aria-label={`Help ${localization.datasetForm.fieldLabel.ignoreRequired}`}>
+                    <HelpMarkdown
+                      aria-label={`Help ${localization.datasetForm.fieldLabel.ignoreRequired}`}
+                    >
                       {localization.datasetForm.alert.ignoreRequired}
                     </HelpMarkdown>
                   </div>
                 </div>
-                {notifications.length > 0 && <NotificationCarousel notifications={notifications} />}
+                {notifications.length > 0 && (
+                  <NotificationCarousel notifications={notifications} />
+                )}
               </StickyFooterBar>
               {showUnapproveModal && (
                 <ConfirmModal

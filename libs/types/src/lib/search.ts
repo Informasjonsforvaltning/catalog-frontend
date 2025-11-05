@@ -1,5 +1,5 @@
-import { LocalizedStrings } from './localization';
-import { ReferenceDataCode } from './reference-data';
+import { LocalizedStrings } from "./localization";
+import { ReferenceDataCode } from "./reference-data";
 
 export type SearchFilter<T> = {
   value: T;
@@ -33,10 +33,10 @@ export type SearchOperation = {
     size: number;
   };
   sort?: {
-    field: 'FIRST_HARVESTED';
-    direction: 'ASC' | 'DESC';
+    field: "FIRST_HARVESTED";
+    direction: "ASC" | "DESC";
   };
-  profile?: 'TRANSPORT';
+  profile?: "TRANSPORT";
 };
 
 export type SearchResult = {
@@ -73,7 +73,7 @@ export type SearchObject = {
   spatial?: ReferenceDataCode[];
   title?: LocalizedStrings;
   relations?: Relation[];
-  specializedType?: 'DATASET_SERIES' | 'LIFE_EVENT' | 'BUSINESS_EVENT';
+  specializedType?: "DATASET_SERIES" | "LIFE_EVENT" | "BUSINESS_EVENT";
   isAuthoritative?: boolean;
   isRelatedToTransportportal?: boolean;
 };
@@ -84,32 +84,32 @@ export type Relation = {
 };
 
 export type RelationType =
-  | 'associativeRelation'
-  | 'closeMatch'
-  | 'exactMatch'
-  | 'generalizes'
-  | 'specializes'
-  | 'isReplacedBy'
-  | 'memberOf'
-  | 'replaces'
-  | 'seeAlso'
-  | 'conformsTo'
-  | 'servesDataset'
-  | 'inSeries'
-  | 'subject'
-  | 'hasPart'
-  | 'isPartOf'
-  | 'isGroupedBy'
-  | 'isClassifiedBy'
-  | 'isDescribedAt'
-  | 'relation'
-  | 'hasVersion'
-  | 'isVersionOf'
-  | 'references'
-  | 'isReferencedBy'
-  | 'requires'
-  | 'isRequiredBy'
-  | 'source';
+  | "associativeRelation"
+  | "closeMatch"
+  | "exactMatch"
+  | "generalizes"
+  | "specializes"
+  | "isReplacedBy"
+  | "memberOf"
+  | "replaces"
+  | "seeAlso"
+  | "conformsTo"
+  | "servesDataset"
+  | "inSeries"
+  | "subject"
+  | "hasPart"
+  | "isPartOf"
+  | "isGroupedBy"
+  | "isClassifiedBy"
+  | "isDescribedAt"
+  | "relation"
+  | "hasVersion"
+  | "isVersionOf"
+  | "references"
+  | "isReferencedBy"
+  | "requires"
+  | "isRequiredBy"
+  | "source";
 
 export type Organization = {
   id?: string;
@@ -153,5 +153,15 @@ export interface Suggestion {
   searchType: SearchType;
 }
 
-export type SearchType = 'CONCEPT' | 'DATASET' | 'DATA_SERVICE' | 'INFORMATION_MODEL' | 'SERVICE' | 'EVENT';
-export type ResourceType = 'concepts' | 'datasets' | 'data-services' | 'information-models';
+export type SearchType =
+  | "CONCEPT"
+  | "DATASET"
+  | "DATA_SERVICE"
+  | "INFORMATION_MODEL"
+  | "SERVICE"
+  | "EVENT";
+export type ResourceType =
+  | "concepts"
+  | "datasets"
+  | "data-services"
+  | "information-models";

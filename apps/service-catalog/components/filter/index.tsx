@@ -1,7 +1,7 @@
-'use client';
-import { ReferenceDataCode } from '@catalog-frontend/types';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Accordion, Checkbox } from '@digdir/designsystemet-react';
+"use client";
+import { ReferenceDataCode } from "@catalog-frontend/types";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import { Accordion, Checkbox } from "@digdir/designsystemet-react";
 
 type Props = {
   statuses: ReferenceDataCode[];
@@ -19,15 +19,17 @@ export const Filter = ({
   publicationState,
 }: Props) => {
   const publicationStates = [
-    { name: localization.publicationState.published, value: 'true' },
-    { name: localization.publicationState.unpublished, value: 'false' },
+    { name: localization.publicationState.published, value: "true" },
+    { name: localization.publicationState.unpublished, value: "false" },
   ];
 
   return (
     <div>
       <Accordion border={true}>
         <Accordion.Item open>
-          <Accordion.Header level={2}>{localization.serviceCatalog.serviceStatus}</Accordion.Header>
+          <Accordion.Header level={2}>
+            {localization.serviceCatalog.serviceStatus}
+          </Accordion.Header>
           <Accordion.Content>
             <Checkbox.Group
               value={statusFilters}
@@ -36,10 +38,7 @@ export const Filter = ({
               legend={localization.serviceCatalog.serviceStatus}
             >
               {statuses.map((status) => (
-                <Checkbox
-                  key={`filter-${status.code}`}
-                  value={status.uri}
-                >
+                <Checkbox key={`filter-${status.code}`} value={status.uri}>
                   {getTranslateText(status.label)}
                 </Checkbox>
               ))}
@@ -47,7 +46,9 @@ export const Filter = ({
           </Accordion.Content>
         </Accordion.Item>
         <Accordion.Item open>
-          <Accordion.Header level={2}>{localization.publicationState.state}</Accordion.Header>
+          <Accordion.Header level={2}>
+            {localization.publicationState.state}
+          </Accordion.Header>
           <Accordion.Content>
             <Checkbox.Group
               value={publicationState}
@@ -56,10 +57,7 @@ export const Filter = ({
               legend={localization.publicationState.state}
             >
               {publicationStates.map((state) => (
-                <Checkbox
-                  key={state.name}
-                  value={state.value}
-                >
+                <Checkbox key={state.name} value={state.value}>
                   {getTranslateText(state.name)}
                 </Checkbox>
               ))}

@@ -4,10 +4,10 @@
  * @returns true if the URI is valid, false otherwise
  */
 export const validURI = (uri: string): boolean => {
-  if (!uri || typeof uri !== 'string') {
+  if (!uri || typeof uri !== "string") {
     return false;
   }
-  
+
   try {
     new URL(uri);
     return true;
@@ -24,7 +24,9 @@ export const validURI = (uri: string): boolean => {
  */
 export const validateURI = (uri: string, functionName: string): void => {
   if (!validURI(uri)) {
-    throw new Error(`Invalid URI '${uri}' in ${functionName}. URI must be a valid URL format.`);
+    throw new Error(
+      `Invalid URI '${uri}' in ${functionName}. URI must be a valid URL format.`,
+    );
   }
 };
 
@@ -39,7 +41,9 @@ export const validateURIs = (uris: string[], functionName: string): void => {
     try {
       validateURI(uri, `${functionName}[${index}]`);
     } catch (error) {
-      throw new Error(`Invalid URI at index ${index}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      throw new Error(
+        `Invalid URI at index ${index}: ${error instanceof Error ? error.message : "Unknown error"}`,
+      );
     }
   });
 };

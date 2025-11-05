@@ -1,11 +1,15 @@
-import { InfoCard } from '@catalog-frontend/ui';
-import { formatISO, getTranslateText, localization } from '@catalog-frontend/utils';
-import { EnvelopeClosedIcon, PhoneIcon, LinkIcon } from '@navikt/aksel-icons';
-import { isEmpty } from 'lodash';
-import PublishSwitch from '../publish-switch';
-import { Dataset } from '@catalog-frontend/types';
-import styles from './details-columns.module.css';
-import { Link } from '@digdir/designsystemet-react';
+import { InfoCard } from "@catalog-frontend/ui";
+import {
+  formatISO,
+  getTranslateText,
+  localization,
+} from "@catalog-frontend/utils";
+import { EnvelopeClosedIcon, PhoneIcon, LinkIcon } from "@navikt/aksel-icons";
+import { isEmpty } from "lodash";
+import PublishSwitch from "../publish-switch";
+import { Dataset } from "@catalog-frontend/types";
+import styles from "./details-columns.module.css";
+import { Link } from "@digdir/designsystemet-react";
 
 type Props = {
   dataset: Dataset;
@@ -13,13 +17,17 @@ type Props = {
   language: string;
 };
 
-export const RightColumn = ({ dataset, hasWritePermission, language }: Props) => {
+export const RightColumn = ({
+  dataset,
+  hasWritePermission,
+  language,
+}: Props) => {
   return (
     <InfoCard>
       <InfoCard.Item
         key={`info-data-${localization.id}`}
         title={localization.datasetForm.fieldLabel.datasetID}
-        headingColor='light'
+        headingColor="light"
       >
         {dataset?.id}
       </InfoCard.Item>
@@ -27,13 +35,15 @@ export const RightColumn = ({ dataset, hasWritePermission, language }: Props) =>
       <InfoCard.Item
         key={`info-data-${localization.publicationState.state}`}
         title={localization.publicationState.state}
-        headingColor='light'
+        headingColor="light"
         helpText={
           !(dataset.approved || dataset.published)
             ? `${localization.datasetForm.helptext.publishWarning} [skjemaet.](/catalogs/${dataset?.catalogId}/datasets/${dataset?.id}/edit)`
             : localization.datasetForm.helptext.publish
         }
-        helpTextSeverity={!(dataset.approved || dataset.published) ? 'warning' : 'info'}
+        helpTextSeverity={
+          !(dataset.approved || dataset.published) ? "warning" : "info"
+        }
       >
         <PublishSwitch
           catalogId={dataset.catalogId}
@@ -41,20 +51,22 @@ export const RightColumn = ({ dataset, hasWritePermission, language }: Props) =>
           disabled={!hasWritePermission}
         />
 
-        {dataset.published ? localization.publicationState.publishedInFDK : localization.publicationState.unpublished}
+        {dataset.published
+          ? localization.publicationState.publishedInFDK
+          : localization.publicationState.unpublished}
       </InfoCard.Item>
 
       {dataset?.lastModified && (
         <InfoCard.Item
           key={`info-data-${localization.lastUpdated}`}
           title={localization.lastUpdated}
-          headingColor='light'
+          headingColor="light"
         >
           {formatISO(dataset?.lastModified, {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
           })}
         </InfoCard.Item>
       )}
@@ -62,11 +74,13 @@ export const RightColumn = ({ dataset, hasWritePermission, language }: Props) =>
       {dataset?.contactPoints && !isEmpty(dataset?.contactPoints[0]) && (
         <InfoCard.Item
           title={localization.datasetForm.heading.contactPoint}
-          headingColor='light'
+          headingColor="light"
         >
           <div className={styles.contactPoints}>
             {!isEmpty(dataset?.contactPoints[0]?.name) && (
-              <span>{getTranslateText(dataset?.contactPoints[0]?.name, language)}</span>
+              <span>
+                {getTranslateText(dataset?.contactPoints[0]?.name, language)}
+              </span>
             )}
             {dataset?.contactPoints[0].email && (
               <span>
@@ -92,7 +106,9 @@ export const RightColumn = ({ dataset, hasWritePermission, language }: Props) =>
                   <LinkIcon />
                 </div>
 
-                <Link href={dataset?.contactPoints[0].url}>{dataset?.contactPoints[0].url}</Link>
+                <Link href={dataset?.contactPoints[0].url}>
+                  {dataset?.contactPoints[0].url}
+                </Link>
               </span>
             )}
           </div>

@@ -19,10 +19,10 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages, isMobilit
   const langNOR = languages.filter((lang) => lang.code === 'NOR')[0];
 
   const customLanguageOrder = [
-    'http://publications.europa.eu/resource/authority/language/NOB',
-    'http://publications.europa.eu/resource/authority/language/NNO',
-    'http://publications.europa.eu/resource/authority/language/ENG',
-    'http://publications.europa.eu/resource/authority/language/SMI',
+    "http://publications.europa.eu/resource/authority/language/NOB",
+    "http://publications.europa.eu/resource/authority/language/NNO",
+    "http://publications.europa.eu/resource/authority/language/ENG",
+    "http://publications.europa.eu/resource/authority/language/SMI",
   ];
 
   const sortedLanguages = sortBy(languages, (item) => {
@@ -32,34 +32,29 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages, isMobilit
   return (
     <>
       <Checkbox.Group
-        onChange={(values) => setFieldValue('language', values)}
+        onChange={(values) => setFieldValue("language", values)}
         value={values.language ?? []}
         legend={
           <TitleWithHelpTextAndTag
-            tagColor='info'
+            tagColor="info"
             tagTitle={localization.tag.recommended}
             helpText={localization.datasetForm.helptext.language}
           >
             {localization.datasetForm.fieldLabel.language}
           </TitleWithHelpTextAndTag>
         }
-        size='sm'
+        size="sm"
       >
-        {values.language && values.language.some((lang) => lang.includes('NOR')) && (
-          <Checkbox
-            key={langNOR.uri}
-            value={langNOR.uri}
-          >
-            {getTranslateText(langNOR.label)}
-          </Checkbox>
-        )}
+        {values.language &&
+          values.language.some((lang) => lang.includes("NOR")) && (
+            <Checkbox key={langNOR.uri} value={langNOR.uri}>
+              {getTranslateText(langNOR.label)}
+            </Checkbox>
+          )}
         {sortedLanguages
-          .filter((lang) => lang.code !== 'NOR')
+          .filter((lang) => lang.code !== "NOR")
           .map((lang) => (
-            <Checkbox
-              key={lang.uri}
-              value={lang.uri}
-            >
+            <Checkbox key={lang.uri} value={lang.uri}>
               {getTranslateText(lang.label)}
             </Checkbox>
           ))}
@@ -75,7 +70,7 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages, isMobilit
         label={
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
-            tagColor='info'
+            tagColor="info"
             helpText={localization.datasetForm.helptext.temporal}
           >
             {localization.datasetForm.fieldLabel.temporal}

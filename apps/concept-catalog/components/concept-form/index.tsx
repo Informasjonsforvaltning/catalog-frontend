@@ -1,11 +1,23 @@
-'use client';
+"use client";
 
-import { ReactNode, useEffect, useRef, useState } from 'react';
-import classNames from 'classnames';
-import { Formik, Form, FormikProps } from 'formik';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { Alert, Checkbox, Paragraph, Spinner } from '@digdir/designsystemet-react';
-import { DataStorage, formatISO, getTranslateText, localization, safeValues, deepMergeWithUndefinedHandling } from '@catalog-frontend/utils';
+import { ReactNode, useEffect, useRef, useState } from "react";
+import classNames from "classnames";
+import { Formik, Form, FormikProps } from "formik";
+import { useSearchParams } from "next/navigation";
+import {
+  Alert,
+  Checkbox,
+  Paragraph,
+  Spinner,
+} from "@digdir/designsystemet-react";
+import {
+  DataStorage,
+  formatISO,
+  getTranslateText,
+  localization,
+  safeValues,
+  deepMergeWithUndefinedHandling,
+} from "@catalog-frontend/utils";
 import type {
   CodeListsResult,
   Concept,
@@ -15,7 +27,7 @@ import type {
   StorageData,
   UnionRelation,
   UsersResult,
-} from '@catalog-frontend/types';
+} from "@catalog-frontend/types";
 import {
   Button,
   FormLayout,
@@ -24,23 +36,26 @@ import {
   HelpMarkdown,
   ConfirmModal,
   Snackbar,
-} from '@catalog-frontend/ui';
-import { conceptSchema } from './validation-schema';
-import { TermSection } from './components/term-section';
-import { DefinitionSection } from './components/definition-section';
-import { RemarkSection } from './components/remark-section';
-import { SubjectSection } from './components/subject-section';
-import { ExampleSection } from './components/example-section';
-import { RelationSection } from './components/relation-section';
-import { ValueRangeSection } from './components/value-range-section';
-import { StatusSection } from './components/status-section';
-import { VersionSection } from './components/version-section';
-import { PeriodSection } from './components/period-section';
-import { InternalSection } from './components/internal-section';
-import { ContactSection } from './components/contact-section';
-import styles from './concept-form.module.scss';
-import { get, isEmpty, isEqual } from 'lodash';
-import { UnionRelationWithIndex, updateUnionRelation } from '@concept-catalog/utils/relation-utils';
+} from "@catalog-frontend/ui";
+import { conceptSchema } from "./validation-schema";
+import { TermSection } from "./components/term-section";
+import { DefinitionSection } from "./components/definition-section";
+import { RemarkSection } from "./components/remark-section";
+import { SubjectSection } from "./components/subject-section";
+import { ExampleSection } from "./components/example-section";
+import { RelationSection } from "./components/relation-section";
+import { ValueRangeSection } from "./components/value-range-section";
+import { StatusSection } from "./components/status-section";
+import { VersionSection } from "./components/version-section";
+import { PeriodSection } from "./components/period-section";
+import { InternalSection } from "./components/internal-section";
+import { ContactSection } from "./components/contact-section";
+import styles from "./concept-form.module.scss";
+import { get, isEmpty, isEqual } from "lodash";
+import {
+  UnionRelationWithIndex,
+  updateUnionRelation,
+} from "@concept-catalog/utils/relation-utils";
 
 type Props = {
   afterSubmit?: () => void;
@@ -67,26 +82,26 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
   ...(isValid
     ? []
     : [
-      <Alert
-        key={1}
-        size='sm'
-        severity='danger'
-        style={{ background: 'none', border: 'none', padding: 0 }}
-      >
-        {localization.validation.formError}
-      </Alert>,
-    ]),
+        <Alert
+          key={1}
+          size="sm"
+          severity="danger"
+          style={{ background: "none", border: "none", padding: 0 }}
+        >
+          {localization.validation.formError}
+        </Alert>,
+      ]),
   ...(hasUnsavedChanges
     ? [
-      <Alert
-        key={1}
-        size='sm'
-        severity='warning'
-        style={{ background: 'none', border: 'none', padding: 0 }}
-      >
-        {localization.validation.unsavedChanges}
-      </Alert>,
-    ]
+        <Alert
+          key={1}
+          size="sm"
+          severity="warning"
+          style={{ background: "none", border: "none", padding: 0 }}
+        >
+          {localization.validation.unsavedChanges}
+        </Alert>,
+      ]
     : []),
 ];
 
@@ -113,16 +128,18 @@ const ConceptForm = ({
   const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<Concept>>(null);
 
-  const restoreOnRender = Boolean(searchParams.get('restore'));
-  const validateOnRender = Boolean(searchParams.get('validate'));
+  const restoreOnRender = Boolean(searchParams.get("restore"));
+  const validateOnRender = Boolean(searchParams.get("validate"));
   const [validateOnChange, setValidateOnChange] = useState(validateOnRender);
   const [isCanceled, setIsCanceled] = useState(false);
   const [ignoreRequired, setIgnoreRequired] = useState(true);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   const [showSnackbar, setShowSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'danger'>('success');
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "danger"
+  >("success");
   const [snackbarFadeIn, setSnackbarFadeIn] = useState(true);
 
   const showSnackbarMessage = ({ message, severity, fadeIn = true }) => {
@@ -133,7 +150,7 @@ const ConceptForm = ({
       setShowSnackbar(false);
       setTimeout(() => setShowSnackbar(true), 10);
     } else {
-      setShowSnackbar(true)
+      setShowSnackbar(true);
     }
   };
 
@@ -150,7 +167,7 @@ const ConceptForm = ({
     eksempel = {},
     fagområde = {},
     fagområdeKoder = [],
-    statusURI = 'http://publications.europa.eu/resource/authority/concept-status/DRAFT',
+    statusURI = "http://publications.europa.eu/resource/authority/concept-status/DRAFT",
     omfang = undefined,
     kontaktpunkt = undefined,
     gyldigFom = undefined,
@@ -159,7 +176,7 @@ const ConceptForm = ({
     internSeOgså = [],
     erstattesAv = [],
     internErstattesAv = [],
-    assignedUser = '',
+    assignedUser = "",
     abbreviatedLabel = undefined,
     begrepsRelasjon = [],
     internBegrepsRelasjon = [],
@@ -229,24 +246,25 @@ const ConceptForm = ({
   };
 
   const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
-    const name = getTranslateText(values?.anbefaltTerm?.navn) || localization.conceptForm.alert.termNotDefined;
+    const name =
+      getTranslateText(values?.anbefaltTerm?.navn) ||
+      localization.conceptForm.alert.termNotDefined;
     const lastChangedFormatted = formatISO(lastChanged, {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
     return (
       <>
-        <Paragraph size='sm'>{localization.alert.youHaveUnsavedChanges}</Paragraph>
-        <Paragraph size='sm'>
+        <Paragraph size="sm">
+          {localization.alert.youHaveUnsavedChanges}
+        </Paragraph>
+        <Paragraph size="sm">
           <span className={styles.bold}>{name}</span> ({lastChangedFormatted})
         </Paragraph>
-        <Paragraph
-          size='sm'
-          className={styles.topMargin2}
-        >
+        <Paragraph size="sm" className={styles.topMargin2}>
           {localization.alert.wantToRestoreChanges}
         </Paragraph>
       </>
@@ -261,7 +279,11 @@ const ConceptForm = ({
 
   useEffect(() => {
     if (showSnackbarSuccessOnInit) {
-      showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success', fadeIn: false });
+      showSnackbarMessage({
+        message: localization.snackbar.saveSuccessful,
+        severity: "success",
+        fadeIn: false,
+      });
     }
   }, [showSnackbarSuccessOnInit]);
 
@@ -278,7 +300,10 @@ const ConceptForm = ({
       <Formik
         innerRef={formikRef}
         initialValues={mapPropsToValues(initialConcept)}
-        validationSchema={conceptSchema({ required: !ignoreRequired, baseUri: '' })}
+        validationSchema={conceptSchema({
+          required: !ignoreRequired,
+          baseUri: "",
+        })}
         validateOnChange={validateOnChange}
         validateOnBlur={validateOnChange}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -290,7 +315,10 @@ const ConceptForm = ({
             try {
               const newValues = await onSubmit(values);
 
-              showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success' });
+              showSnackbarMessage({
+                message: localization.snackbar.saveSuccessful,
+                severity: "success",
+              });
               if (newValues) {
                 resetForm({ values: newValues });
               } else {
@@ -304,16 +332,34 @@ const ConceptForm = ({
                 afterSubmit();
               }
             } catch {
-              showSnackbarMessage({ message: localization.snackbar.saveFailed, severity: 'danger' });
+              showSnackbarMessage({
+                message: localization.snackbar.saveFailed,
+                severity: "danger",
+              });
             } finally {
               setSubmitting(false);
             }
           }
         }}
       >
-        {({ errors, dirty, initialValues, isValid, isSubmitting, isValidating, values, submitForm, setValues, setFieldValue }) => {
-          const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
-          const hasError = (fields: (keyof Concept)[]) => fields.some((field) => Object.keys(errors).includes(field));
+        {({
+          errors,
+          dirty,
+          initialValues,
+          isValid,
+          isSubmitting,
+          isValidating,
+          values,
+          submitForm,
+          setValues,
+          setFieldValue,
+        }) => {
+          const notifications = getNotifications({
+            isValid,
+            hasUnsavedChanges: false,
+          });
+          const hasError = (fields: (keyof Concept)[]) =>
+            fields.some((field) => Object.keys(errors).includes(field));
 
           const dirtyFields = ((): string[] => {
             const dirtyFields: string[] = [];
@@ -331,15 +377,17 @@ const ConceptForm = ({
 
             [
               ...Object.keys({ ...initialValues, ...values }),
-              'interneFelt.assignedUser',
-              'interneFelt.abbreviatedLabel',
-              'interneFelt.merkelapp',
-              ...fieldsResult.internal.map(({ id }) => `interneFelt[${id}].value`),
-              'kontaktpunkt.harEpost',
-              'kontaktpunkt.harTelefon',
-              'kontaktpunkt.harSkjema',
-              'omfang.tekst',
-              'omfang.uri',
+              "interneFelt.assignedUser",
+              "interneFelt.abbreviatedLabel",
+              "interneFelt.merkelapp",
+              ...fieldsResult.internal.map(
+                ({ id }) => `interneFelt[${id}].value`,
+              ),
+              "kontaktpunkt.harEpost",
+              "kontaktpunkt.harTelefon",
+              "kontaktpunkt.harSkjema",
+              "omfang.tekst",
+              "omfang.uri",
             ].forEach((name) => {
               if (isDirty(name)) {
                 dirtyFields.push(name);
@@ -349,33 +397,58 @@ const ConceptForm = ({
             return dirtyFields;
           })();
 
-          const handleRestoreConcept = (data: StorageData) => {            
+          const handleRestoreConcept = (data: StorageData) => {
             if (onRestore && !onRestore(data)) {
               return false;
             }
-         
-            const restoreValues: Concept = deepMergeWithUndefinedHandling({ ...initialValues }, data.values);
+
+            const restoreValues: Concept = deepMergeWithUndefinedHandling(
+              { ...initialValues },
+              data.values,
+            );
             setValues(restoreValues);
 
             // Handle relation data from secondary storage
-            const restoreRelationData = autoSaveStorage?.getSecondary('relation');
-            if (restoreRelationData && (restoreRelationData?.id === autoSaveId)) {
-              const relationValues: { rel: UnionRelation; prev: UnionRelationWithIndex } = restoreRelationData.values;
-              updateUnionRelation(relationValues.rel, relationValues.prev, restoreValues, setFieldValue);
+            const restoreRelationData =
+              autoSaveStorage?.getSecondary("relation");
+            if (restoreRelationData && restoreRelationData?.id === autoSaveId) {
+              const relationValues: {
+                rel: UnionRelation;
+                prev: UnionRelationWithIndex;
+              } = restoreRelationData.values;
+              updateUnionRelation(
+                relationValues.rel,
+                relationValues.prev,
+                restoreValues,
+                setFieldValue,
+              );
               // Delete relation data from secondary storage since it is merged with the main data
-              autoSaveStorage?.deleteSecondary('relation');
+              autoSaveStorage?.deleteSecondary("relation");
             }
 
             // Handle definition data from secondary storage
-            const restoreDefinitionData = autoSaveStorage?.getSecondary('definition');
-            if (restoreDefinitionData && (restoreDefinitionData?.id === autoSaveId)) {
-              const definitionValues: { definition: Definisjon; fieldName: string } = restoreDefinitionData.values;
-              setFieldValue(definitionValues.fieldName, definitionValues.definition);
+            const restoreDefinitionData =
+              autoSaveStorage?.getSecondary("definition");
+            if (
+              restoreDefinitionData &&
+              restoreDefinitionData?.id === autoSaveId
+            ) {
+              const definitionValues: {
+                definition: Definisjon;
+                fieldName: string;
+              } = restoreDefinitionData.values;
+              setFieldValue(
+                definitionValues.fieldName,
+                definitionValues.definition,
+              );
               // Delete definition data from secondary storage since it is merged with the main data
-              autoSaveStorage?.deleteSecondary('definition');
+              autoSaveStorage?.deleteSecondary("definition");
             }
 
-            showSnackbarMessage({ message: localization.snackbar.restoreSuccessfull, severity: 'success' });
+            showSnackbarMessage({
+              message: localization.snackbar.restoreSuccessful,
+              severity: "success",
+            });
             return true;
           };
 
@@ -385,7 +458,7 @@ const ConceptForm = ({
 
           return (
             <>
-              <div className='container'>
+              <div className="container">
                 <Form>
                   {autoSave && autoSaveStorage && (
                     <FormikAutoSaver
@@ -399,39 +472,63 @@ const ConceptForm = ({
 
                   <FormLayout>
                     <FormLayout.Section
-                      id='term'
+                      id="term"
                       title={localization.conceptForm.section.termTitle}
                       subtitle={localization.conceptForm.section.termSubtitle}
                       required
                       changed={
                         markDirty &&
-                        dirtyFields.some((field) => ['anbefaltTerm', 'tillattTerm', 'frarådetTerm'].includes(field))
+                        dirtyFields.some((field) =>
+                          [
+                            "anbefaltTerm",
+                            "tillattTerm",
+                            "frarådetTerm",
+                          ].includes(field),
+                        )
                       }
-                      error={hasError(['anbefaltTerm', 'tillattTerm', 'frarådetTerm'])}
+                      error={hasError([
+                        "anbefaltTerm",
+                        "tillattTerm",
+                        "frarådetTerm",
+                      ])}
                     >
                       <TermSection
                         changed={
                           markDirty
                             ? dirtyFields.filter((field) =>
-                              ['anbefaltTerm', 'tillattTerm', 'frarådetTerm'].includes(field),
-                            )
+                                [
+                                  "anbefaltTerm",
+                                  "tillattTerm",
+                                  "frarådetTerm",
+                                ].includes(field),
+                              )
                             : []
                         }
                         readOnly={readOnly}
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
-                      id='definition'
+                      id="definition"
                       title={localization.conceptForm.section.definitionTitle}
-                      subtitle={localization.conceptForm.section.definitionSubtitle}
+                      subtitle={
+                        localization.conceptForm.section.definitionSubtitle
+                      }
                       required
                       changed={
                         markDirty &&
                         dirtyFields.some((field) =>
-                          ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(field),
+                          [
+                            "definisjon",
+                            "definisjonForAllmennheten",
+                            "definisjonForSpesialister",
+                          ].includes(field),
                         )
                       }
-                      error={hasError(['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'])}
+                      error={hasError([
+                        "definisjon",
+                        "definisjonForAllmennheten",
+                        "definisjonForSpesialister",
+                      ])}
                     >
                       <DefinitionSection
                         autoSaveId={autoSaveId}
@@ -439,21 +536,26 @@ const ConceptForm = ({
                         changed={
                           markDirty
                             ? dirtyFields.filter((field) =>
-                              ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(
-                                field,
-                              ),
-                            )
+                                [
+                                  "definisjon",
+                                  "definisjonForAllmennheten",
+                                  "definisjonForSpesialister",
+                                ].includes(field),
+                              )
                             : []
                         }
                         readOnly={readOnly}
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
-                      id='remark'
+                      id="remark"
                       title={localization.conceptForm.section.remarkTitle}
                       subtitle={localization.conceptForm.section.remarkSubtitle}
-                      changed={markDirty && dirtyFields.some((field) => ['merknad'].includes(field))}
-                      error={hasError(['merknad'])}
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) => ["merknad"].includes(field))
+                      }
+                      error={hasError(["merknad"])}
                     >
                       <RemarkSection
                         changed={markDirty ? dirtyFields : []}
@@ -461,11 +563,18 @@ const ConceptForm = ({
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
-                      id='subject'
+                      id="subject"
                       title={localization.conceptForm.section.subjectTitle}
-                      subtitle={localization.conceptForm.section.subjectSubtitle}
-                      changed={markDirty && dirtyFields.some((field) => ['fagområdeKoder'].includes(field))}
-                      error={hasError(['fagområdeKoder'])}
+                      subtitle={
+                        localization.conceptForm.section.subjectSubtitle
+                      }
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) =>
+                          ["fagområdeKoder"].includes(field),
+                        )
+                      }
+                      error={hasError(["fagområdeKoder"])}
                     >
                       <SubjectSection
                         codes={subjectCodeList?.codes}
@@ -474,11 +583,18 @@ const ConceptForm = ({
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
-                      id='example'
+                      id="example"
                       title={localization.conceptForm.section.exampleTitle}
-                      subtitle={localization.conceptForm.section.exampleSubtitle}
-                      changed={markDirty && dirtyFields.some((field) => ['eksempel'].includes(field))}
-                      error={hasError(['eksempel'])}
+                      subtitle={
+                        localization.conceptForm.section.exampleSubtitle
+                      }
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) =>
+                          ["eksempel"].includes(field),
+                        )
+                      }
+                      error={hasError(["eksempel"])}
                     >
                       <ExampleSection
                         changed={markDirty ? dirtyFields : []}
@@ -486,11 +602,18 @@ const ConceptForm = ({
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
-                      id='valueRange'
+                      id="valueRange"
                       title={localization.conceptForm.section.valueRangeTitle}
-                      subtitle={localization.conceptForm.section.valueRangeSubtitle}
-                      changed={markDirty && dirtyFields.some((field) => ['omfang.tekst', 'omfang.uri'].includes(field))}
-                      error={hasError(['omfang'])}
+                      subtitle={
+                        localization.conceptForm.section.valueRangeSubtitle
+                      }
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) =>
+                          ["omfang.tekst", "omfang.uri"].includes(field),
+                        )
+                      }
+                      error={hasError(["omfang"])}
                     >
                       <ValueRangeSection
                         changed={markDirty ? dirtyFields : []}
@@ -498,29 +621,31 @@ const ConceptForm = ({
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
-                      id='relation'
+                      id="relation"
                       title={localization.conceptForm.section.relationTitle}
-                      subtitle={localization.conceptForm.section.relationSubtitle}
+                      subtitle={
+                        localization.conceptForm.section.relationSubtitle
+                      }
                       changed={
                         markDirty &&
                         dirtyFields.some((field) =>
                           [
-                            'begrepsRelasjon',
-                            'erstattesAv',
-                            'seOgså',
-                            'internBegrepsRelasjon',
-                            'internErstattesAv',
-                            'internSeOgså',
+                            "begrepsRelasjon",
+                            "erstattesAv",
+                            "seOgså",
+                            "internBegrepsRelasjon",
+                            "internErstattesAv",
+                            "internSeOgså",
                           ].includes(field),
                         )
                       }
                       error={hasError([
-                        'begrepsRelasjon',
-                        'erstattesAv',
-                        'seOgså',
-                        'internBegrepsRelasjon',
-                        'internErstattesAv',
-                        'internSeOgså',
+                        "begrepsRelasjon",
+                        "erstattesAv",
+                        "seOgså",
+                        "internBegrepsRelasjon",
+                        "internErstattesAv",
+                        "internSeOgså",
                       ])}
                     >
                       <RelationSection
@@ -532,21 +657,25 @@ const ConceptForm = ({
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
-                      id='internal'
+                      id="internal"
                       title={localization.conceptForm.section.internalTitle}
-                      subtitle={localization.conceptForm.section.internalSubtitle}
+                      subtitle={
+                        localization.conceptForm.section.internalSubtitle
+                      }
                       changed={
                         markDirty &&
                         dirtyFields.some((field) =>
                           [
-                            'interneFelt.assignedUser',
-                            'interneFelt.abbreviatedLabel',
-                            'interneFelt.merkelapp',
-                            ...fieldsResult.internal.map(({ id }) => `interneFelt[${id}].value`),
+                            "interneFelt.assignedUser",
+                            "interneFelt.abbreviatedLabel",
+                            "interneFelt.merkelapp",
+                            ...fieldsResult.internal.map(
+                              ({ id }) => `interneFelt[${id}].value`,
+                            ),
                           ].includes(field),
                         )
                       }
-                      error={hasError(['interneFelt'])}
+                      error={hasError(["interneFelt"])}
                     >
                       <InternalSection
                         codeLists={codeListsResult.codeLists}
@@ -557,11 +686,20 @@ const ConceptForm = ({
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
-                      id='status'
-                      title={localization.conceptForm.section.conceptStatusTitle}
-                      subtitle={localization.conceptForm.section.conceptStatusSubtitle}
-                      changed={markDirty && dirtyFields.some((field) => ['statusURI'].includes(field))}
-                      error={hasError(['statusURI'])}
+                      id="status"
+                      title={
+                        localization.conceptForm.section.conceptStatusTitle
+                      }
+                      subtitle={
+                        localization.conceptForm.section.conceptStatusSubtitle
+                      }
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) =>
+                          ["statusURI"].includes(field),
+                        )
+                      }
+                      error={hasError(["statusURI"])}
                     >
                       <StatusSection
                         conceptStatuses={conceptStatuses}
@@ -570,11 +708,18 @@ const ConceptForm = ({
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
-                      id='version'
+                      id="version"
                       title={localization.conceptForm.section.versionTitle}
-                      subtitle={localization.conceptForm.section.versionSubtitle}
-                      changed={markDirty && dirtyFields.some((field) => ['versjonsnr'].includes(field))}
-                      error={hasError(['versjonsnr'])}
+                      subtitle={
+                        localization.conceptForm.section.versionSubtitle
+                      }
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) =>
+                          ["versjonsnr"].includes(field),
+                        )
+                      }
+                      error={hasError(["versjonsnr"])}
                     >
                       <VersionSection
                         changed={markDirty ? dirtyFields : []}
@@ -582,11 +727,16 @@ const ConceptForm = ({
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
-                      id='period'
+                      id="period"
                       title={localization.conceptForm.section.periodTitle}
                       subtitle={localization.conceptForm.section.periodSubtitle}
-                      changed={markDirty && dirtyFields.some((field) => ['gyldigFom', 'gyldigTom'].includes(field))}
-                      error={hasError(['gyldigFom', 'gyldigTom'])}
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) =>
+                          ["gyldigFom", "gyldigTom"].includes(field),
+                        )
+                      }
+                      error={hasError(["gyldigFom", "gyldigTom"])}
                     >
                       <PeriodSection
                         changed={markDirty ? dirtyFields : []}
@@ -594,19 +744,23 @@ const ConceptForm = ({
                       />
                     </FormLayout.Section>
                     <FormLayout.Section
-                      id='contact'
+                      id="contact"
                       title={localization.conceptForm.section.contactTitle}
-                      subtitle={localization.conceptForm.section.contactSubtitle}
+                      subtitle={
+                        localization.conceptForm.section.contactSubtitle
+                      }
                       required
                       changed={
                         markDirty &&
                         dirtyFields.some((field) =>
-                          ['kontaktpunkt.harEpost', 'kontaktpunkt.harTelefon', 'kontaktpunkt.harSkjema'].includes(
-                            field,
-                          ),
+                          [
+                            "kontaktpunkt.harEpost",
+                            "kontaktpunkt.harTelefon",
+                            "kontaktpunkt.harSkjema",
+                          ].includes(field),
                         )
                       }
-                      error={hasError(['kontaktpunkt'])}
+                      error={hasError(["kontaktpunkt"])}
                     >
                       <ContactSection
                         changed={markDirty ? dirtyFields : []}
@@ -630,7 +784,12 @@ const ConceptForm = ({
                 </Snackbar>
               )}
               <div className={styles.stickyFooterBar}>
-                <div className={classNames('container', styles.stickyFooterContent)}>
+                <div
+                  className={classNames(
+                    "container",
+                    styles.stickyFooterContent,
+                  )}
+                >
                   {customFooterBar ? (
                     <>{customFooterBar}</>
                   ) : (
@@ -638,47 +797,70 @@ const ConceptForm = ({
                       <div>
                         <div className={classNames(styles.flex, styles.gap4)}>
                           <Button
-                            size='sm'
-                            type='button'
-                            disabled={readOnly || isSubmitting || isValidating || isCanceled || !dirty}
+                            size="sm"
+                            type="button"
+                            disabled={
+                              readOnly ||
+                              isSubmitting ||
+                              isValidating ||
+                              isCanceled ||
+                              !dirty
+                            }
                             onClick={() => {
                               setValidateOnChange(true);
                               submitForm();
                             }}
                           >
                             {isSubmitting ? (
-                              <Spinner
-                                title='Lagrer'
-                                size='sm'
-                              />
+                              <Spinner title="Lagrer" size="sm" />
                             ) : (
-                              'Lagre'
+                              "Lagre"
                             )}
                           </Button>
                           <Button
-                            size='sm'
-                            disabled={readOnly || isSubmitting || isValidating || isCanceled}
+                            size="sm"
+                            disabled={
+                              readOnly ||
+                              isSubmitting ||
+                              isValidating ||
+                              isCanceled
+                            }
                             onClick={handleCancel}
-                            variant='secondary'
+                            variant="secondary"
                           >
                             Avbryt
                           </Button>
-                          <div className={classNames(styles.flex, styles.gap2, styles.noWrap)}>
+                          <div
+                            className={classNames(
+                              styles.flex,
+                              styles.gap2,
+                              styles.noWrap,
+                            )}
+                          >
                             <Checkbox
-                              size='sm'
-                              value='ignoreRequired'
+                              size="sm"
+                              value="ignoreRequired"
                               checked={ignoreRequired}
-                              onChange={(e) => setIgnoreRequired(e.target.checked)}
+                              onChange={(e) =>
+                                setIgnoreRequired(e.target.checked)
+                              }
                             >
-                              {localization.conceptForm.fieldLabel.ignoreRequired}
+                              {
+                                localization.conceptForm.fieldLabel
+                                  .ignoreRequired
+                              }
                             </Checkbox>
-                            <HelpMarkdown aria-label={`Help ${localization.conceptForm.fieldLabel.ignoreRequired}`}>
+                            <HelpMarkdown
+                              aria-label={`Help ${localization.conceptForm.fieldLabel.ignoreRequired}`}
+                            >
                               {localization.conceptForm.alert.ignoreRequired}
                             </HelpMarkdown>
                           </div>
                         </div>
                       </div>
-                      {notifications.length > 0 && <NotificationCarousel notifications={notifications} />}
+                      {notifications.length > 0 && (
+                        <NotificationCarousel notifications={notifications} />
+                      )}
                     </>
                   )}
                 </div>

@@ -25,7 +25,7 @@ export const AboutSection = ({
   return (
     <Box>
       <FormikLanguageFieldset
-        name={'title'}
+        name={"title"}
         as={Textfield}
         legend={
           <TitleWithHelpTextAndTag
@@ -38,7 +38,7 @@ export const AboutSection = ({
       />
       <FieldsetDivider />
       <FormikLanguageFieldset
-        name='description'
+        name="description"
         as={TextareaWithPrefix}
         legend={
           <TitleWithHelpTextAndTag
@@ -97,16 +97,16 @@ export const AboutSection = ({
       <AccessRightFields isMobility= {isMobility}/>
       <FieldsetDivider />
       <FastField
-        style={{ width: 'fit-content' }}
+        style={{ width: "fit-content" }}
         as={Textfield}
-        size='sm'
-        type='date'
-        name='issued'
+        size="sm"
+        type="date"
+        name="issued"
         label={
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
             helpText={localization.datasetForm.helptext.issued}
-            tagColor='info'
+            tagColor="info"
           >
             {localization.datasetForm.fieldLabel.issued}
           </TitleWithHelpTextAndTag>

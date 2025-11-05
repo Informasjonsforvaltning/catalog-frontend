@@ -1,6 +1,6 @@
-import { hashCode, localization } from '@catalog-frontend/utils';
-import styles from './breadcrumbs.module.css';
-import Link from 'next/link';
+import { hashCode, localization } from "@catalog-frontend/utils";
+import styles from "./breadcrumbs.module.css";
+import Link from "next/link";
 export type BreadcrumbType = {
   href: string;
   text: string;
@@ -12,9 +12,12 @@ export interface BreadcrumbsProps {
   catalogPortalUrl: string;
 }
 
-const Breadcrumbs = ({ breadcrumbList, catalogPortalUrl }: BreadcrumbsProps) => {
+const Breadcrumbs = ({
+  breadcrumbList,
+  catalogPortalUrl,
+}: BreadcrumbsProps) => {
   return (
-    <div className='container'>
+    <div className="container">
       <nav className={styles.breadcrumbs}>
         <span>
           <a
@@ -27,14 +30,11 @@ const Breadcrumbs = ({ breadcrumbList, catalogPortalUrl }: BreadcrumbsProps) => 
           {breadcrumbList?.map((breadcrumb, i) => {
             return (
               <span key={hashCode(breadcrumb.href)}>
-                <span className={styles.separator}>{'>'}</span>
+                <span className={styles.separator}>{">"}</span>
                 {i === breadcrumbList.length - 1 ? (
                   <span className={styles.deactiveLink}>{breadcrumb.text}</span>
                 ) : (
-                  <Link
-                    href={breadcrumb.href}
-                    className={styles.link}
-                  >
+                  <Link href={breadcrumb.href} className={styles.link}>
                     {breadcrumb.text}
                   </Link>
                 )}

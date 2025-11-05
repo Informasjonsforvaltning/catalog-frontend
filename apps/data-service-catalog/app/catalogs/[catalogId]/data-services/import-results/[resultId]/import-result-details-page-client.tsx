@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { ImportResult } from '@catalog-frontend/types';
-import { localization } from '@catalog-frontend/utils';
-import { deleteImportResult } from '../../../../../actions/actions';
-import { ConfirmModal, ImportResultDetails } from '@catalog-frontend/ui';
-import { useState } from 'react';
+import { ImportResult } from "@catalog-frontend/types";
+import { localization } from "@catalog-frontend/utils";
+import { deleteImportResult } from "../../../../../actions/actions";
+import { ConfirmModal, ImportResultDetails } from "@catalog-frontend/ui";
+import { useState } from "react";
 
 interface Props {
   catalogId: string;
@@ -17,7 +17,9 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
   const handleDeleteConfirmed = async () => {
     try {
       await deleteImportResult(catalogId, importResult.id);
-      window.location.replace(`/catalogs/${catalogId}/data-services/import-results`);
+      window.location.replace(
+        `/catalogs/${catalogId}/data-services/import-results`,
+      );
     } catch (error) {
       window.alert(error);
     }
@@ -32,7 +34,11 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
       {showDeleteConfirm && (
         <ConfirmModal
           title={localization.importResult.confirmDelete}
-          content={importResult.status === 'COMPLETED' ? localization.importResult.deleteCanResultInDuplicates : ''}
+          content={
+            importResult.status === "COMPLETED"
+              ? localization.importResult.deleteCanResultInDuplicates
+              : ""
+          }
           onSuccess={handleDeleteConfirmed}
           onCancel={() => setShowDeleteConfirm(false)}
         />
