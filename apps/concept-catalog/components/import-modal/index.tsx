@@ -115,10 +115,11 @@ export function ImportModal({ catalogId }: ImportProps) {
   const send = async () => {
     setIsSending(true);
 
-    if (uploadType === UploadType.CSV) sendConcepts.mutate(uploadedConcepts);
+    if (uploadType === UploadType.CSV)
+      await sendConcepts.mutateAsync(uploadedConcepts);
     else if (uploadType === UploadType.RDF) {
       console.log("Uploaded concepts: ", uploadedRdfConcepts);
-      sendRdf.mutate(uploadedRdfConcepts);
+      await sendRdf.mutateAsync(uploadedRdfConcepts);
     }
   };
 

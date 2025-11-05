@@ -233,7 +233,7 @@ export const useSendRdf = (catalogId: string) => {
       fileContent: string;
       contentType: string;
     }) => {
-      const location = await createImportJob(catalogId, accessToken);
+      const location = await createImportJob(catalogId);
       if (location) {
         const resultId = location.split("/").pop();
         console.log("Created import result ID at ", location);
@@ -247,7 +247,6 @@ export const useSendRdf = (catalogId: string) => {
           mutationProps.contentType,
           catalogId,
           resultId,
-          accessToken,
         ).catch((error) =>
           console.error(
             "Failed to import RDF concepts in the background",
@@ -276,15 +275,12 @@ export const useSendConcepts = (
   setIsSending?: React.Dispatch<React.SetStateAction<boolean>>,
 ) => {
   const router = useRouter();
-  const queryClient = useQueryClient();
-  const { data: session } = useSession();
-  const accessToken = session?.accessToken ?? "";
   return useMutation({
     mutationKey: ["sendConceptsCSV"],
     mutationFn: async (concepts: Concept[]) => {
       if (setIsSending) setIsSending(true);
 
-      const location = await createImportJob(catalogId, accessToken);
+      const location = await createImportJob(catalogId);
       if (location) {
         const resultId = location.split("/").pop();
         console.log("Created import result ID at ", location);
@@ -293,12 +289,11 @@ export const useSendConcepts = (
           return Promise.reject("No result ID found");
         }
 
-        importConceptsCSV(catalogId, resultId, concepts, accessToken).catch(
-          (error) =>
-            console.error(
-              "Failed to import CSV/JSON concepts in the background",
-              error,
-            ),
+        importConceptsCSV(catalogId, resultId, concepts).catch((error) =>
+          console.error(
+            "Failed to import CSV/JSON concepts in the background",
+            error,
+          ),
         );
 
         router.push(
