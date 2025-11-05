@@ -2,46 +2,65 @@ import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui'
 import { localization } from '@catalog-frontend/utils';
 import {
   getDatasetTypes,
-  getTransportThemes,
+  getMobilityThemes,
   getFrequencies,
   getLanguages,
   getOpenLicenses,
   getProvenanceStatements,
+  getDataThemes,
+  getLosThemes,
+  getMobilityDataStandards,
+  getMobilityRights,
+  getDistributionStatuses
 } from '@catalog-frontend/data-access';
-import { transportDatasetToBeCreatedTemplate } from '@dataset-catalog/components/dataset-form/utils/transport-dataset-initial-values';
+import { datasetToBeCreatedTemplate } from '@dataset-catalog/components/dataset-form/utils/dataset-initial-values';
 import { NewPage } from './new-page-client';
 import { withWriteProtectedPage } from '@dataset-catalog/utils/auth';
 
 const NewTransportDatasetPage = withWriteProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/datasets/new`,
   async ({ catalogId }) => {
-    const dataset = transportDatasetToBeCreatedTemplate();
+    const dataset = datasetToBeCreatedTemplate();
     const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
     const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
 
     const [
-      transportThemesResponse,
+      losThemesResponse,
+      dataThemesResponse,
+      mobilityThemesResponse,
       datasetTypesResponse,
       provenanceStatementsResponse,
       frequenciesResponse,
       languageResponse,
       licenseResponse,
+      mobilityDataStandardResponse,
+      mobilityRightsResponse,
+      distributionStatusResponse
     ] = await Promise.all([
-      getTransportThemes().then((res) => res.json()),
+      getLosThemes().then((res) => res.json()),
+      getDataThemes().then((res) => res.json()),
+      getMobilityThemes().then((res) => res.json()),
       getDatasetTypes().then((res) => res.json()),
       getProvenanceStatements().then((res) => res.json()),
       getFrequencies().then((res) => res.json()),
       getLanguages().then((res) => res.json()),
       getOpenLicenses().then((res) => res.json()),
+      getMobilityDataStandards().then((res) => res.json()),
+      getMobilityRights().then((res) => res.json()),
+      getDistributionStatuses().then((res) => res.json()),
     ]);
-
     const referenceData = {
-      transportThemes: transportThemesResponse.transportThemes,
+      losThemes: losThemesResponse.losNodes,
+      dataThemes: dataThemesResponse.dataThemes,
+      mobilityThemes: mobilityThemesResponse.mobilityThemes, 
       datasetTypes: datasetTypesResponse.datasetTypes,
       provenanceStatements: provenanceStatementsResponse.provenanceStatements,
       frequencies: frequenciesResponse.frequencies,
       languages: languageResponse.linguisticSystems,
       openLicenses: licenseResponse.openLicenses,
+      mobilityDataStandards: mobilityDataStandardResponse.mobilityDataStandards,
+      mobilityRights: mobilityRightsResponse.mobilityConditions,
+      distributionStatuses: distributionStatusResponse.distributionStatuses
     };
 
     const breadcrumbList = [
@@ -51,7 +70,7 @@ const NewTransportDatasetPage = withWriteProtectedPage(
       },
       {
         href: `/catalogs/${catalogId}/datasets/new-transport`,
-        text: localization.button.addDataset,
+        text: localization.button.addMobilityDataset,
       },
     ] as BreadcrumbType[];
 
