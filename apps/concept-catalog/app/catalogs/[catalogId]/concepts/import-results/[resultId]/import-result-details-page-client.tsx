@@ -56,7 +56,10 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
   });
 
   const cancelMutation = useMutation({
-    mutationFn: async () => await cancelImport(catalogId, importResult.id),
+    mutationFn: async () => {
+      console.log("Is cancelling", isCancelling)
+      await cancelImport(catalogId, importResult.id);
+    },
     onMutate: async () => {
       qc.setQueryData(
         ["refresh-import-result", catalogId, importResult?.id],
@@ -67,15 +70,22 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
       );
     },
     onSuccess: async () => {
-      await refetch();
-      qc.setQueryData(
-        ["refresh-import-result", catalogId, importResult?.id],
-        (old: ImportResult) => ({
-          ...old,
-          status: "CANCELLED",
-        }),
-      );
-      await setIsCancelling(false);
+      const refetched = await refetch();
+      console.log("Refetched Import status data", refetched.data.status);
+      if(isCancelling && refetched?.data.status !== "CANCELLING" && refetched?.data.status !== "CANCELLED") {
+        console.log("should send cancel request again")
+        await cancelMutation.mutateAsync();
+      }
+      else {
+        qc.setQueryData(
+          ["refresh-import-result", catalogId, importResult?.id],
+          (old: ImportResult) => ({
+            ...old,
+            status: "CANCELLED",
+          }),
+        );
+        await setIsCancelling(false);
+      }
     },
   });
 
@@ -98,7 +108,8 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
       return response.json();
     },
     initialData: importResult,
-    refetchInterval: (q) => (shouldRefetch(q?.state?.data) ? 3000 : false),
+    refetchInterval: (q) =>
+      shouldRefetch(q?.state?.data) ? 3000 : false,
     refetchOnWindowFocus: true,
     enabled: (q) => shouldRefetch(q?.state?.data),
     retry: 2,
