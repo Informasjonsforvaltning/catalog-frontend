@@ -1,12 +1,21 @@
-import { Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
-import { Organization } from '@catalog-frontend/types';
-import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { NewPage } from './new-page-client';
+import { Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
+import { Organization } from "@catalog-frontend/types";
+import {
+  getAdmsStatuses,
+  getOrganization,
+} from "@catalog-frontend/data-access";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import { NewPage } from "./new-page-client";
 
-export default async function NewPublicServicePage({ params }: { params: Promise<{ catalogId: string }> }) {
+export default async function NewPublicServicePage({
+  params,
+}: {
+  params: Promise<{ catalogId: string }>;
+}) {
   const { catalogId } = await params;
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+  const organization: Organization = await getOrganization(catalogId).then(
+    (res) => res.json(),
+  );
   const statusesResponse = await getAdmsStatuses().then((res) => res.json());
 
   const breadcrumbList = [

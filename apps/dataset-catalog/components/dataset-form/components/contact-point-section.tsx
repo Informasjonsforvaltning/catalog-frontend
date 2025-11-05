@@ -1,22 +1,29 @@
-import { localization } from '@catalog-frontend/utils';
-import { FormikLanguageFieldset, FormikOptionalFieldsFieldset, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { Textfield } from '@digdir/designsystemet-react';
+import { localization } from "@catalog-frontend/utils";
+import {
+  FormikLanguageFieldset,
+  FormikOptionalFieldsFieldset,
+  TitleWithHelpTextAndTag,
+} from "@catalog-frontend/ui";
+import { Textfield } from "@digdir/designsystemet-react";
 
 export const ContactPointSection = () => {
   const contactPointOptions = [
-    { valuePath: 'contactPoints[0].email', label: localization.email },
+    { valuePath: "contactPoints[0].email", label: localization.email },
     {
-      valuePath: 'contactPoints[0].phone',
+      valuePath: "contactPoints[0].phone",
       label: localization.telephone,
     },
-    { valuePath: 'contactPoints[0].url', label: localization.contactPoint.form },
+    {
+      valuePath: "contactPoints[0].url",
+      label: localization.contactPoint.form,
+    },
   ];
 
   return (
     <>
       <div>
         <FormikLanguageFieldset
-          name={'contactPoints[0].name'}
+          name={"contactPoints[0].name"}
           as={Textfield}
           legend={
             <TitleWithHelpTextAndTag
@@ -39,7 +46,7 @@ export const ContactPointSection = () => {
           </TitleWithHelpTextAndTag>
         }
         availableFields={contactPointOptions}
-        errorPath={'contactPoints'}
+        errorPath={"contactPoints"}
       />
     </>
   );

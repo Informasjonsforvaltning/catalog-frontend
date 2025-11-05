@@ -1,4 +1,4 @@
-import { createTokenRoute } from '@catalog-frontend/utils';
+import { createTokenRoute } from "@catalog-frontend/utils";
 
 const { handler } = createTokenRoute();
 

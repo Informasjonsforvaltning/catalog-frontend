@@ -1,5 +1,5 @@
-import { Tag } from '@digdir/designsystemet-react';
-import styles from './tagList.module.css';
+import { Tag } from "@digdir/designsystemet-react";
+import styles from "./tagList.module.css";
 
 type TagListProps = {
   values: string[] | undefined;
@@ -16,10 +16,7 @@ const TagList = ({ values, getTagText }: TagListProps) => {
         if (label) {
           return (
             <li key={index}>
-              <Tag
-                size='sm'
-                color='info'
-              >
+              <Tag size="sm" color="info">
                 {label}
               </Tag>
             </li>

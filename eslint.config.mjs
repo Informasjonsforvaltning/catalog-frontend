@@ -1,21 +1,21 @@
-import { defineConfig } from 'eslint/config';
-import js from '@eslint/js';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
-import pluginNx from '@nx/eslint-plugin';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { defineConfig } from "eslint/config";
+import js from "@eslint/js";
+import globals from "globals";
+import tseslint from "typescript-eslint";
+import pluginNx from "@nx/eslint-plugin";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig([
   {
-    ignores: ['**/*'],
+    ignores: ["**/*"],
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
+        ecmaVersion: "latest",
+        sourceType: "module",
         ecmaFeatures: { jsx: true },
       },
       globals: {
@@ -26,12 +26,12 @@ export default defineConfig([
   },
 
   {
-    files: ['*.ts', '*.tsx', '*.js', '*.jsx'],
+    files: ["*.ts", "*.tsx", "*.js", "*.jsx"],
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
-        ecmaVersion: 'latest',
-        sourceType: 'module',
+        ecmaVersion: "latest",
+        sourceType: "module",
         tsconfigRootDir: __dirname,
       },
       globals: {
@@ -40,18 +40,18 @@ export default defineConfig([
       },
     },
     plugins: {
-      '@nx': pluginNx,
+      "@nx": pluginNx,
     },
     rules: {
-      '@nx/enforce-module-boundaries': [
-        'error',
+      "@nx/enforce-module-boundaries": [
+        "error",
         {
           enforceBuildableLibDependency: true,
           allow: [],
           depConstraints: [
             {
-              sourceTag: '*',
-              onlyDependOnLibsWithTags: ['*'],
+              sourceTag: "*",
+              onlyDependOnLibsWithTags: ["*"],
             },
           ],
         },
@@ -60,25 +60,25 @@ export default defineConfig([
   },
 
   {
-    files: ['*.ts', '*.tsx'],
+    files: ["*.ts", "*.tsx"],
     plugins: {
-      '@typescript-eslint': tseslint.plugin,
+      "@typescript-eslint": tseslint.plugin,
     },
     rules: {
       ...tseslint.configs.recommended[0].rules,
-      '@typescript-eslint/no-explicit-any': 'off',
+      "@typescript-eslint/no-explicit-any": "off",
     },
   },
 
   {
-    files: ['*.js', '*.jsx'],
+    files: ["*.js", "*.jsx"],
     rules: {
       ...js.configs.recommended.rules,
     },
   },
 
   {
-    files: ['*.spec.ts', '*.spec.tsx', '*.spec.js', '*.spec.jsx'],
+    files: ["*.spec.ts", "*.spec.tsx", "*.spec.js", "*.spec.jsx"],
     languageOptions: {
       globals: {
         ...globals.jest,
@@ -88,9 +88,9 @@ export default defineConfig([
   },
 
   {
-    files: ['middleware.ts'],
+    files: ["middleware.ts"],
     rules: {
-      '@nx/enforce-module-boundaries': 'off',
+      "@nx/enforce-module-boundaries": "off",
     },
   },
 ]);

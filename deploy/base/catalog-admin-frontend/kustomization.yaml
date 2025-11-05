@@ -7,4 +7,4 @@ resources:
 images:
   - name: catalog-admin-frontend
     newName: ghcr.io/informasjonsforvaltning/catalog-frontend/catalog-admin-frontend
-    newTag: $(GIT_COMMIT_SHA)  
+    newTag: $(GIT_COMMIT_SHA)

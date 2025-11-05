@@ -1,10 +1,16 @@
-import { JsonPatchOperation } from './json-patch';
+import { JsonPatchOperation } from "./json-patch";
 
 export interface ImportResult {
   id: string;
   created: string;
   catalogId: string;
-  status: 'FAILED' | 'COMPLETED' | 'IN_PROGRESS' | 'CANCELLED' | 'PENDING_CONFIRMATION' | 'SAVING';
+  status:
+    | "FAILED"
+    | "COMPLETED"
+    | "IN_PROGRESS"
+    | "CANCELLED"
+    | "PENDING_CONFIRMATION"
+    | "SAVING";
   extractionRecords?: ExtractionRecord[];
   totalConcepts: number;
   extractedConcepts: number;
@@ -24,6 +30,6 @@ export interface ExtractResult {
 }
 
 export interface ExtractIssue {
-  type: 'WARNING' | 'ERROR';
+  type: "WARNING" | "ERROR";
   message: string;
 }

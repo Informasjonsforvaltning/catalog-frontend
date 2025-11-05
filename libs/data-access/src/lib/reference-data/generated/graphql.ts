@@ -1,19 +1,37 @@
-import type { GraphQLClient } from 'graphql-request';
-import type { RequestInit } from 'graphql-request/dist/types.dom';
-import { useQuery, useInfiniteQuery, type UseQueryOptions, type UseInfiniteQueryOptions } from '@tanstack/react-query';
+import type { GraphQLClient } from "graphql-request";
+import type { RequestInit } from "graphql-request/dist/types.dom";
+import {
+  useQuery,
+  useInfiniteQuery,
+  type UseQueryOptions,
+  type UseInfiniteQueryOptions,
+} from "@tanstack/react-query";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T,
+> = { [_ in K]?: never };
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
+    };
 
 function fetcher<TData, TVariables extends { [key: string]: any }>(
   client: GraphQLClient,
   query: string,
   variables?: TVariables,
-  requestHeaders?: RequestInit['headers'],
+  requestHeaders?: RequestInit["headers"],
 ) {
   return async (): Promise<TData> =>
     client.request({
@@ -32,251 +50,251 @@ export type Scalars = {
 };
 
 export type AdmsStatus = {
-  __typename?: 'ADMSStatus';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "ADMSStatus";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export type AccessRight = {
-  __typename?: 'AccessRight';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "AccessRight";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export type ApiSpecification = {
-  __typename?: 'ApiSpecification';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "ApiSpecification";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  source?: Maybe<Scalars['String']['output']>;
-  uri: Scalars['ID']['output'];
+  source?: Maybe<Scalars["String"]["output"]>;
+  uri: Scalars["ID"]["output"];
 };
 
 export type ApiStatus = {
-  __typename?: 'ApiStatus';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "ApiStatus";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export type AudienceType = {
-  __typename?: 'AudienceType';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "AudienceType";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export type ConceptStatus = {
-  __typename?: 'ConceptStatus';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "ConceptStatus";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export type ConceptSubject = {
-  __typename?: 'ConceptSubject';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "ConceptSubject";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export type Currency = {
-  __typename?: 'Currency';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "Currency";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export type DataTheme = {
-  __typename?: 'DataTheme';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "DataTheme";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  startUse?: Maybe<Scalars['String']['output']>;
-  uri: Scalars['ID']['output'];
+  startUse?: Maybe<Scalars["String"]["output"]>;
+  uri: Scalars["ID"]["output"];
 };
 
 export type DatasetType = {
-  __typename?: 'DatasetType';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "DatasetType";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  startUse?: Maybe<Scalars['String']['output']>;
-  uri: Scalars['ID']['output'];
+  startUse?: Maybe<Scalars["String"]["output"]>;
+  uri: Scalars["ID"]["output"];
 };
 
 export type DayOfWeek = {
-  __typename?: 'DayOfWeek';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "DayOfWeek";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export type DistributionStatus = {
-  __typename?: 'DistributionStatus';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "DistributionStatus";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  startUse?: Maybe<Scalars['String']['output']>;
-  uri: Scalars['ID']['output'];
+  startUse?: Maybe<Scalars["String"]["output"]>;
+  uri: Scalars["ID"]["output"];
 };
 
 export type DistributionType = {
-  __typename?: 'DistributionType';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "DistributionType";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  startUse?: Maybe<Scalars['String']['output']>;
-  uri: Scalars['ID']['output'];
+  startUse?: Maybe<Scalars["String"]["output"]>;
+  uri: Scalars["ID"]["output"];
 };
 
 export type EuroVoc = {
-  __typename?: 'EuroVoc';
-  children?: Maybe<Array<Scalars['String']['output']>>;
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "EuroVoc";
+  children?: Maybe<Array<Scalars["String"]["output"]>>;
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  parents?: Maybe<Array<Scalars['String']['output']>>;
-  uri: Scalars['ID']['output'];
+  parents?: Maybe<Array<Scalars["String"]["output"]>>;
+  uri: Scalars["ID"]["output"];
 };
 
 export type EvidenceType = {
-  __typename?: 'EvidenceType';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "EvidenceType";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export type FileType = {
-  __typename?: 'FileType';
-  code?: Maybe<Scalars['String']['output']>;
-  mediaType?: Maybe<Scalars['String']['output']>;
-  uri: Scalars['ID']['output'];
+  __typename?: "FileType";
+  code?: Maybe<Scalars["String"]["output"]>;
+  mediaType?: Maybe<Scalars["String"]["output"]>;
+  uri: Scalars["ID"]["output"];
 };
 
 export type FindByUrIsRequest = {
   types: Array<SearchAlternative>;
-  uris: Array<Scalars['String']['input']>;
+  uris: Array<Scalars["String"]["input"]>;
 };
 
 export type Frequency = {
-  __typename?: 'Frequency';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "Frequency";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export type Fylke = {
-  __typename?: 'Fylke';
-  fylkesnavn?: Maybe<Scalars['String']['output']>;
-  fylkesnummer?: Maybe<Scalars['String']['output']>;
-  uri: Scalars['ID']['output'];
+  __typename?: "Fylke";
+  fylkesnavn?: Maybe<Scalars["String"]["output"]>;
+  fylkesnummer?: Maybe<Scalars["String"]["output"]>;
+  uri: Scalars["ID"]["output"];
 };
 
 export type FylkeOrganisasjon = {
-  __typename?: 'FylkeOrganisasjon';
-  fylkesnavn?: Maybe<Scalars['String']['output']>;
-  fylkesnummer?: Maybe<Scalars['String']['output']>;
-  organisasjonsnavn?: Maybe<Scalars['String']['output']>;
-  organisasjonsnummer?: Maybe<Scalars['String']['output']>;
-  uri: Scalars['ID']['output'];
+  __typename?: "FylkeOrganisasjon";
+  fylkesnavn?: Maybe<Scalars["String"]["output"]>;
+  fylkesnummer?: Maybe<Scalars["String"]["output"]>;
+  organisasjonsnavn?: Maybe<Scalars["String"]["output"]>;
+  organisasjonsnummer?: Maybe<Scalars["String"]["output"]>;
+  uri: Scalars["ID"]["output"];
 };
 
 export type Kommune = {
-  __typename?: 'Kommune';
-  kommunenavn?: Maybe<Scalars['String']['output']>;
-  kommunenavnNorsk?: Maybe<Scalars['String']['output']>;
-  kommunenummer?: Maybe<Scalars['String']['output']>;
-  uri: Scalars['ID']['output'];
+  __typename?: "Kommune";
+  kommunenavn?: Maybe<Scalars["String"]["output"]>;
+  kommunenavnNorsk?: Maybe<Scalars["String"]["output"]>;
+  kommunenummer?: Maybe<Scalars["String"]["output"]>;
+  uri: Scalars["ID"]["output"];
 };
 
 export type KommuneOrganisasjon = {
-  __typename?: 'KommuneOrganisasjon';
-  kommunenavn?: Maybe<Scalars['String']['output']>;
-  kommunenummer?: Maybe<Scalars['String']['output']>;
-  organisasjonsnavn?: Maybe<Scalars['String']['output']>;
-  organisasjonsnummer?: Maybe<Scalars['String']['output']>;
-  uri: Scalars['ID']['output'];
+  __typename?: "KommuneOrganisasjon";
+  kommunenavn?: Maybe<Scalars["String"]["output"]>;
+  kommunenummer?: Maybe<Scalars["String"]["output"]>;
+  organisasjonsnavn?: Maybe<Scalars["String"]["output"]>;
+  organisasjonsnummer?: Maybe<Scalars["String"]["output"]>;
+  uri: Scalars["ID"]["output"];
 };
 
 export type LinguisticSystem = {
-  __typename?: 'LinguisticSystem';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "LinguisticSystem";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export type LocalizedStrings = {
-  __typename?: 'LocalizedStrings';
-  en?: Maybe<Scalars['String']['output']>;
-  nb?: Maybe<Scalars['String']['output']>;
-  nn?: Maybe<Scalars['String']['output']>;
-  no?: Maybe<Scalars['String']['output']>;
+  __typename?: "LocalizedStrings";
+  en?: Maybe<Scalars["String"]["output"]>;
+  nb?: Maybe<Scalars["String"]["output"]>;
+  nn?: Maybe<Scalars["String"]["output"]>;
+  no?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type LosNode = {
-  __typename?: 'LosNode';
-  children?: Maybe<Array<Scalars['String']['output']>>;
+  __typename?: "LosNode";
+  children?: Maybe<Array<Scalars["String"]["output"]>>;
   definition?: Maybe<LocalizedStrings>;
-  isTheme: Scalars['Boolean']['output'];
-  losPaths?: Maybe<Array<Scalars['String']['output']>>;
+  isTheme: Scalars["Boolean"]["output"];
+  losPaths?: Maybe<Array<Scalars["String"]["output"]>>;
   name?: Maybe<LocalizedStrings>;
-  parents?: Maybe<Array<Scalars['String']['output']>>;
-  relatedTerms?: Maybe<Array<Scalars['String']['output']>>;
-  synonyms?: Maybe<Array<Scalars['String']['output']>>;
-  uri: Scalars['ID']['output'];
+  parents?: Maybe<Array<Scalars["String"]["output"]>>;
+  relatedTerms?: Maybe<Array<Scalars["String"]["output"]>>;
+  synonyms?: Maybe<Array<Scalars["String"]["output"]>>;
+  uri: Scalars["ID"]["output"];
 };
 
 export type MainActivity = {
-  __typename?: 'MainActivity';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "MainActivity";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export type MediaType = {
-  __typename?: 'MediaType';
-  name?: Maybe<Scalars['String']['output']>;
-  subType?: Maybe<Scalars['String']['output']>;
-  type?: Maybe<Scalars['String']['output']>;
-  uri: Scalars['ID']['output'];
+  __typename?: "MediaType";
+  name?: Maybe<Scalars["String"]["output"]>;
+  subType?: Maybe<Scalars["String"]["output"]>;
+  type?: Maybe<Scalars["String"]["output"]>;
+  uri: Scalars["ID"]["output"];
 };
 
 export type Nasjon = {
-  __typename?: 'Nasjon';
-  nasjonsnavn?: Maybe<Scalars['String']['output']>;
-  nasjonsnummer?: Maybe<Scalars['String']['output']>;
-  uri: Scalars['ID']['output'];
+  __typename?: "Nasjon";
+  nasjonsnavn?: Maybe<Scalars["String"]["output"]>;
+  nasjonsnummer?: Maybe<Scalars["String"]["output"]>;
+  uri: Scalars["ID"]["output"];
 };
 
 export type OpenLicense = {
-  __typename?: 'OpenLicense';
-  code?: Maybe<Scalars['String']['output']>;
-  isReplacedBy?: Maybe<Scalars['String']['output']>;
+  __typename?: "OpenLicense";
+  code?: Maybe<Scalars["String"]["output"]>;
+  isReplacedBy?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export type PlannedAvailability = {
-  __typename?: 'PlannedAvailability';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "PlannedAvailability";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  startUse?: Maybe<Scalars['String']['output']>;
-  uri: Scalars['ID']['output'];
+  startUse?: Maybe<Scalars["String"]["output"]>;
+  uri: Scalars["ID"]["output"];
 };
 
 export type ProvenanceStatement = {
-  __typename?: 'ProvenanceStatement';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "ProvenanceStatement";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export type PublisherType = {
-  __typename?: 'PublisherType';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "PublisherType";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export type Query = {
-  __typename?: 'Query';
+  __typename?: "Query";
   accessRightByCode?: Maybe<AccessRight>;
   accessRights: Array<AccessRight>;
   apiSpecificationByCode?: Maybe<ApiSpecification>;
@@ -349,59 +367,59 @@ export type Query = {
 };
 
 export type QueryAccessRightByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryApiSpecificationByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryApiStatusByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryAudienceTypeByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryConceptStatusByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryCurrencyByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryDataThemeByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryDatasetTypeByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryDayOfWeekByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryDistributionStatusByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryDistributionTypeByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryEuroVocByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryEvidenceTypeByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryFileTypeByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryFindByUrIsArgs = {
@@ -409,76 +427,76 @@ export type QueryFindByUrIsArgs = {
 };
 
 export type QueryFrequencyByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryFylkeByFylkesnummerArgs = {
-  fylkesnummer: Scalars['String']['input'];
+  fylkesnummer: Scalars["String"]["input"];
 };
 
 export type QueryFylkeOrganisasjonByFylkesnummerArgs = {
-  fylkesnummer: Scalars['String']['input'];
+  fylkesnummer: Scalars["String"]["input"];
 };
 
 export type QueryKommuneByKommunenummerArgs = {
-  kommunenummer: Scalars['String']['input'];
+  kommunenummer: Scalars["String"]["input"];
 };
 
 export type QueryKommuneOrganisasjonByKommunenummerArgs = {
-  kommunenummer: Scalars['String']['input'];
+  kommunenummer: Scalars["String"]["input"];
 };
 
 export type QueryLinguisticSystemByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryLosThemesAndWordsArgs = {
-  uris?: InputMaybe<Array<Scalars['String']['input']>>;
+  uris?: InputMaybe<Array<Scalars["String"]["input"]>>;
 };
 
 export type QueryMainActivityByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryMediaTypeByTypeAndSubTypeArgs = {
-  subType: Scalars['String']['input'];
-  type: Scalars['String']['input'];
+  subType: Scalars["String"]["input"];
+  type: Scalars["String"]["input"];
 };
 
 export type QueryMediaTypesByTypeArgs = {
-  type: Scalars['String']['input'];
+  type: Scalars["String"]["input"];
 };
 
 export type QueryNasjonByNasjonsnummerArgs = {
-  nasjonsnummer: Scalars['String']['input'];
+  nasjonsnummer: Scalars["String"]["input"];
 };
 
 export type QueryOpenLicenseByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryPlannedAvailabilityByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryProvenanceStatementByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryPublisherTypeByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryReferenceTypeByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryRelationshipWithSourceTypeByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryRoleTypeByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QuerySearchArgs = {
@@ -486,58 +504,58 @@ export type QuerySearchArgs = {
 };
 
 export type QueryServiceChannelTypeByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type QueryStatusByCodeArgs = {
-  code: Scalars['String']['input'];
+  code: Scalars["String"]["input"];
 };
 
 export type ReferenceType = {
-  __typename?: 'ReferenceType';
-  code?: Maybe<Scalars['ID']['output']>;
+  __typename?: "ReferenceType";
+  code?: Maybe<Scalars["ID"]["output"]>;
   inverseLabel?: Maybe<LocalizedStrings>;
   label?: Maybe<LocalizedStrings>;
 };
 
 export type RelationshipWithSourceType = {
-  __typename?: 'RelationshipWithSourceType';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "RelationshipWithSourceType";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export type RoleType = {
-  __typename?: 'RoleType';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "RoleType";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export enum SearchAlternative {
-  AdministrativeEnheter = 'ADMINISTRATIVE_ENHETER',
-  EuFileTypes = 'EU_FILE_TYPES',
-  IanaMediaTypes = 'IANA_MEDIA_TYPES',
+  AdministrativeEnheter = "ADMINISTRATIVE_ENHETER",
+  EuFileTypes = "EU_FILE_TYPES",
+  IanaMediaTypes = "IANA_MEDIA_TYPES",
 }
 
 export type SearchHit = {
-  __typename?: 'SearchHit';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "SearchHit";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  type?: Maybe<Scalars['String']['output']>;
-  uri: Scalars['ID']['output'];
+  type?: Maybe<Scalars["String"]["output"]>;
+  uri: Scalars["ID"]["output"];
 };
 
 export type SearchRequest = {
-  query: Scalars['String']['input'];
+  query: Scalars["String"]["input"];
   types: Array<SearchAlternative>;
 };
 
 export type ServiceChannelType = {
-  __typename?: 'ServiceChannelType';
-  code?: Maybe<Scalars['String']['output']>;
+  __typename?: "ServiceChannelType";
+  code?: Maybe<Scalars["String"]["output"]>;
   label?: Maybe<LocalizedStrings>;
-  uri: Scalars['ID']['output'];
+  uri: Scalars["ID"]["output"];
 };
 
 export type SearchQueryVariables = Exact<{
@@ -545,13 +563,13 @@ export type SearchQueryVariables = Exact<{
 }>;
 
 export type SearchQuery = {
-  __typename?: 'Query';
+  __typename?: "Query";
   search: Array<{
-    __typename?: 'SearchHit';
+    __typename?: "SearchHit";
     uri: string;
     code?: string | null;
     type?: string | null;
-    label?: { __typename?: 'LocalizedStrings'; nb?: string | null } | null;
+    label?: { __typename?: "LocalizedStrings"; nb?: string | null } | null;
   }>;
 };
 
@@ -560,13 +578,13 @@ export type FindByUrIsRequestQueryVariables = Exact<{
 }>;
 
 export type FindByUrIsRequestQuery = {
-  __typename?: 'Query';
+  __typename?: "Query";
   findByURIs: Array<{
-    __typename?: 'SearchHit';
+    __typename?: "SearchHit";
     uri: string;
     code?: string | null;
     type?: string | null;
-    label?: { __typename?: 'LocalizedStrings'; nb?: string | null } | null;
+    label?: { __typename?: "LocalizedStrings"; nb?: string | null } | null;
   }>;
 };
 
@@ -587,25 +605,33 @@ export const useSearchQuery = <TData = SearchQuery, TError = unknown>(
   client: GraphQLClient,
   variables: SearchQueryVariables,
   options?: UseQueryOptions<SearchQuery, TError, TData>,
-  headers?: RequestInit['headers'],
+  headers?: RequestInit["headers"],
 ) => {
   return useQuery<SearchQuery, TError, TData>(
-    ['Search', variables],
-    fetcher<SearchQuery, SearchQueryVariables>(client, SearchDocument, variables, headers),
+    ["Search", variables],
+    fetcher<SearchQuery, SearchQueryVariables>(
+      client,
+      SearchDocument,
+      variables,
+      headers,
+    ),
     options,
   );
 };
 
-useSearchQuery.getKey = (variables: SearchQueryVariables) => ['Search', variables];
+useSearchQuery.getKey = (variables: SearchQueryVariables) => [
+  "Search",
+  variables,
+];
 
 export const useInfiniteSearchQuery = <TData = SearchQuery, TError = unknown>(
   client: GraphQLClient,
   variables: SearchQueryVariables,
   options?: UseInfiniteQueryOptions<SearchQuery, TError, TData>,
-  headers?: RequestInit['headers'],
+  headers?: RequestInit["headers"],
 ) => {
   return useInfiniteQuery<SearchQuery, TError, TData>(
-    ['Search.infinite', variables],
+    ["Search.infinite", variables],
     (metaData) =>
       fetcher<SearchQuery, SearchQueryVariables>(
         client,
@@ -617,10 +643,22 @@ export const useInfiniteSearchQuery = <TData = SearchQuery, TError = unknown>(
   );
 };
 
-useInfiniteSearchQuery.getKey = (variables: SearchQueryVariables) => ['Search.infinite', variables];
+useInfiniteSearchQuery.getKey = (variables: SearchQueryVariables) => [
+  "Search.infinite",
+  variables,
+];
 
-useSearchQuery.fetcher = (client: GraphQLClient, variables: SearchQueryVariables, headers?: RequestInit['headers']) =>
-  fetcher<SearchQuery, SearchQueryVariables>(client, SearchDocument, variables, headers);
+useSearchQuery.fetcher = (
+  client: GraphQLClient,
+  variables: SearchQueryVariables,
+  headers?: RequestInit["headers"],
+) =>
+  fetcher<SearchQuery, SearchQueryVariables>(
+    client,
+    SearchDocument,
+    variables,
+    headers,
+  );
 
 export const FindByUrIsRequestDocument = `
     query FindByURIsRequest($req: FindByURIsRequest!) {
@@ -635,14 +673,17 @@ export const FindByUrIsRequestDocument = `
 }
     `;
 
-export const useFindByUrIsRequestQuery = <TData = FindByUrIsRequestQuery, TError = unknown>(
+export const useFindByUrIsRequestQuery = <
+  TData = FindByUrIsRequestQuery,
+  TError = unknown,
+>(
   client: GraphQLClient,
   variables: FindByUrIsRequestQueryVariables,
   options?: UseQueryOptions<FindByUrIsRequestQuery, TError, TData>,
-  headers?: RequestInit['headers'],
+  headers?: RequestInit["headers"],
 ) => {
   return useQuery<FindByUrIsRequestQuery, TError, TData>(
-    ['FindByURIsRequest', variables],
+    ["FindByURIsRequest", variables],
     fetcher<FindByUrIsRequestQuery, FindByUrIsRequestQueryVariables>(
       client,
       FindByUrIsRequestDocument,
@@ -653,16 +694,21 @@ export const useFindByUrIsRequestQuery = <TData = FindByUrIsRequestQuery, TError
   );
 };
 
-useFindByUrIsRequestQuery.getKey = (variables: FindByUrIsRequestQueryVariables) => ['FindByURIsRequest', variables];
+useFindByUrIsRequestQuery.getKey = (
+  variables: FindByUrIsRequestQueryVariables,
+) => ["FindByURIsRequest", variables];
 
-export const useInfiniteFindByUrIsRequestQuery = <TData = FindByUrIsRequestQuery, TError = unknown>(
+export const useInfiniteFindByUrIsRequestQuery = <
+  TData = FindByUrIsRequestQuery,
+  TError = unknown,
+>(
   client: GraphQLClient,
   variables: FindByUrIsRequestQueryVariables,
   options?: UseInfiniteQueryOptions<FindByUrIsRequestQuery, TError, TData>,
-  headers?: RequestInit['headers'],
+  headers?: RequestInit["headers"],
 ) => {
   return useInfiniteQuery<FindByUrIsRequestQuery, TError, TData>(
-    ['FindByURIsRequest.infinite', variables],
+    ["FindByURIsRequest.infinite", variables],
     (metaData) =>
       fetcher<FindByUrIsRequestQuery, FindByUrIsRequestQueryVariables>(
         client,
@@ -674,15 +720,14 @@ export const useInfiniteFindByUrIsRequestQuery = <TData = FindByUrIsRequestQuery
   );
 };
 
-useInfiniteFindByUrIsRequestQuery.getKey = (variables: FindByUrIsRequestQueryVariables) => [
-  'FindByURIsRequest.infinite',
-  variables,
-];
+useInfiniteFindByUrIsRequestQuery.getKey = (
+  variables: FindByUrIsRequestQueryVariables,
+) => ["FindByURIsRequest.infinite", variables];
 
 useFindByUrIsRequestQuery.fetcher = (
   client: GraphQLClient,
   variables: FindByUrIsRequestQueryVariables,
-  headers?: RequestInit['headers'],
+  headers?: RequestInit["headers"],
 ) =>
   fetcher<FindByUrIsRequestQuery, FindByUrIsRequestQueryVariables>(
     client,

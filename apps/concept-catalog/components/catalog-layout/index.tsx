@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React, { ReactNode } from 'react';
-import { useParams } from 'next/navigation';
-import { Layout } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { useGetCatalogDesign } from '@concept-catalog/hooks/catalog-admin';
+import React, { ReactNode } from "react";
+import { useParams } from "next/navigation";
+import { Layout } from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { useGetCatalogDesign } from "@concept-catalog/hooks/catalog-admin";
 
 interface CatalogLayoutProps {
   children: ReactNode;
@@ -27,7 +27,10 @@ export const CatalogLayout = ({
   catalogAdminServiceUrl,
 }: CatalogLayoutProps) => {
   const { catalogId } = useParams();
-  const { data: design } = useGetCatalogDesign(catalogId?.toString(), catalogAdminServiceUrl);
+  const { data: design } = useGetCatalogDesign(
+    catalogId?.toString(),
+    catalogAdminServiceUrl,
+  );
 
   return (
     <Layout

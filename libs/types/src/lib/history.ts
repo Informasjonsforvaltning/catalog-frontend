@@ -1,5 +1,5 @@
-import { JsonPatchOperation } from './json-patch';
-import { AssignedUser } from './user';
+import { JsonPatchOperation } from "./json-patch";
+import { AssignedUser } from "./user";
 
 export interface UpdateList {
   updates: Update[];

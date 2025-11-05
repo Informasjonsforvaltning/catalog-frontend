@@ -1,6 +1,10 @@
-import { onlyNumbersRegex, validateOrganizationNumber } from '@catalog-frontend/utils';
+import {
+  onlyNumbersRegex,
+  validateOrganizationNumber,
+} from "@catalog-frontend/utils";
 
-const enhetsregisteretPath = 'https://data.brreg.no/enhetsregisteret/api/enheter';
+const enhetsregisteretPath =
+  "https://data.brreg.no/enhetsregisteret/api/enheter";
 
 export const getEnheterByOrgNmbs = async (orgNmbs?: string[]) => {
   if (orgNmbs && orgNmbs.length > 0) {
@@ -10,15 +14,17 @@ export const getEnheterByOrgNmbs = async (orgNmbs?: string[]) => {
     });
   }
 
-  const orgNmbsAsString = orgNmbs?.join(',');
-  const encodedOrgNmbs = orgNmbsAsString ? encodeURIComponent(orgNmbsAsString) : '';
+  const orgNmbsAsString = orgNmbs?.join(",");
+  const encodedOrgNmbs = orgNmbsAsString
+    ? encodeURIComponent(orgNmbsAsString)
+    : "";
   const resource = `${enhetsregisteretPath}?organisasjonsnummer=${encodedOrgNmbs}`;
   const options = {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'GET',
-    cache: 'default' as RequestCache,
+    method: "GET",
+    cache: "default" as RequestCache,
   };
   return await fetch(resource, options);
 };
@@ -26,7 +32,7 @@ export const getEnheterByOrgNmbs = async (orgNmbs?: string[]) => {
 export const searchEnheter = async (query: string) => {
   // If query is a 9-digit number, validate it as an organization number
   if (onlyNumbersRegex.test(query) && query.length === 9) {
-    validateOrganizationNumber(query, 'searchEnheter');
+    validateOrganizationNumber(query, "searchEnheter");
   }
 
   const encodedQuery = encodeURIComponent(query);
@@ -37,10 +43,10 @@ export const searchEnheter = async (query: string) => {
 
   const options = {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'GET',
-    cache: 'default' as RequestCache,
+    method: "GET",
+    cache: "default" as RequestCache,
   };
   return await fetch(resource, options);
 };

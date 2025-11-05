@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, ReactNode } from 'react';
-import styles from './notification-carousel.module.scss';
-import { ChevronDownIcon, ChevronUpIcon } from '@navikt/aksel-icons';
+import React, { useState, useEffect, ReactNode } from "react";
+import styles from "./notification-carousel.module.scss";
+import { ChevronDownIcon, ChevronUpIcon } from "@navikt/aksel-icons";
 
 export type NotificationCarouselProps = {
-  controlsPosition?: 'left' | 'right';
+  controlsPosition?: "left" | "right";
   notifications: ReactNode[];
   interval?: number;
 };
 
 export const NotificationCarousel = ({
-  controlsPosition = 'right',
+  controlsPosition = "right",
   notifications,
   interval = 10000,
 }: NotificationCarouselProps) => {
@@ -29,24 +29,20 @@ export const NotificationCarousel = ({
   const prevNotification = () => {
     setIsAnimating(true);
     setTimeout(() => {
-      setCurrentIndex((prevIndex) => (prevIndex === 0 ? notifications.length - 1 : prevIndex - 1));
+      setCurrentIndex((prevIndex) =>
+        prevIndex === 0 ? notifications.length - 1 : prevIndex - 1,
+      );
       setIsAnimating(false);
     }, 300);
   };
 
   const Controls = () => (
     <div className={styles.carouselControls}>
-      <button
-        className={styles.carouselButton}
-        onClick={prevNotification}
-      >
-        <ChevronUpIcon fontSize='1.5rem' />
+      <button className={styles.carouselButton} onClick={prevNotification}>
+        <ChevronUpIcon fontSize="1.5rem" />
       </button>
-      <button
-        className={styles.carouselButton}
-        onClick={nextNotification}
-      >
-        <ChevronDownIcon fontSize='1.5rem' />
+      <button className={styles.carouselButton} onClick={nextNotification}>
+        <ChevronDownIcon fontSize="1.5rem" />
       </button>
     </div>
   );
@@ -60,17 +56,17 @@ export const NotificationCarousel = ({
 
   return (
     <div className={styles.carouselContainer}>
-      {notifications.length > 1 && controlsPosition === 'left' && <Controls />}
+      {notifications.length > 1 && controlsPosition === "left" && <Controls />}
       <div
         className={styles.carouselNotification}
         style={{
-          transform: isAnimating ? 'translateY(100%)' : 'translateY(0)',
+          transform: isAnimating ? "translateY(100%)" : "translateY(0)",
           opacity: isAnimating ? 0 : 1,
         }}
       >
         {notifications[currentIndex]}
       </div>
-      {notifications.length > 1 && controlsPosition === 'right' && <Controls />}
+      {notifications.length > 1 && controlsPosition === "right" && <Controls />}
     </div>
   );
 };

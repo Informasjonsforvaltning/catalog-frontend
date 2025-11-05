@@ -1,7 +1,7 @@
-import { NextRequest } from 'next/server';
+import { NextRequest } from "next/server";
 
 const handler = async (req: NextRequest) => {
-  return new Response('Pong', { status: 200 });
+  return new Response("Pong", { status: 200 });
 };
 
 export { handler as GET };

@@ -1,27 +1,36 @@
-import { Dataset } from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
+import { Dataset } from "@catalog-frontend/types";
+import {
+  BreadcrumbType,
+  Breadcrumbs,
+  DesignBanner,
+} from "@catalog-frontend/ui";
 import {
   getServerDatasetsPageSettings,
   getValidSession,
   hasOrganizationWritePermission,
   localization,
   redirectToSignIn,
-} from '@catalog-frontend/utils';
-import { getDatasets } from '../../../actions/actions';
-import DatasetsPageClient from './datasets-page-client';
-import { cookies } from 'next/headers';
-import { withReadProtectedPage } from '@dataset-catalog/utils/auth';
+} from "@catalog-frontend/utils";
+import { getDatasets } from "../../../actions/actions";
+import DatasetsPageClient from "./datasets-page-client";
+import { cookies } from "next/headers";
+import { withReadProtectedPage } from "@dataset-catalog/utils/auth";
 
 const DatasetSearchHitsPage = withReadProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/datasets`,
   async ({ catalogId }) => {
     const session = await getValidSession();
     if (!session) {
-      return redirectToSignIn({ callbackUrl: `catalogs/${catalogId}/datasets` });
+      return redirectToSignIn({
+        callbackUrl: `catalogs/${catalogId}/datasets`,
+      });
     }
 
     const datasets: Dataset[] = await getDatasets(catalogId);
-    const hasWritePermission = hasOrganizationWritePermission(session.accessToken, catalogId);
+    const hasWritePermission = hasOrganizationWritePermission(
+      session.accessToken,
+      catalogId,
+    );
 
     const breadcrumbList = [
       {

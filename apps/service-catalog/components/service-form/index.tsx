@@ -1,6 +1,14 @@
-'use client';
+"use client";
 
-import { Alert, Box, Checkbox, ErrorMessage, Paragraph, Spinner, Textfield } from '@digdir/designsystemet-react';
+import {
+  Alert,
+  Box,
+  Checkbox,
+  ErrorMessage,
+  Paragraph,
+  Spinner,
+  Textfield,
+} from "@digdir/designsystemet-react";
 import {
   Button,
   ConfirmModal,
@@ -17,23 +25,34 @@ import {
   StickyFooterBar,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
-} from '@catalog-frontend/ui';
-import { localization, getTranslateText, trimObjectWhitespace, DataStorage, formatISO } from '@catalog-frontend/utils';
-import { ReferenceDataCode, Service, ServiceToBeCreated, StorageData } from '@catalog-frontend/types';
-import cn from 'classnames';
-import styles from './service-form.module.css';
-import { useParams, useSearchParams } from 'next/navigation';
-import { FastField, Field, Form, Formik, FormikProps } from 'formik';
-import { serviceTemplate } from './service-template';
-import { useEffect, useRef, useState } from 'react';
-import { ProducesField } from './components/produces-field';
+} from "@catalog-frontend/ui";
+import {
+  localization,
+  getTranslateText,
+  trimObjectWhitespace,
+  DataStorage,
+  formatISO,
+} from "@catalog-frontend/utils";
+import {
+  ReferenceDataCode,
+  Service,
+  ServiceToBeCreated,
+  StorageData,
+} from "@catalog-frontend/types";
+import cn from "classnames";
+import styles from "./service-form.module.css";
+import { useParams, useSearchParams } from "next/navigation";
+import { FastField, Field, Form, Formik, FormikProps } from "formik";
+import { serviceTemplate } from "./service-template";
+import { useEffect, useRef, useState } from "react";
+import { ProducesField } from "./components/produces-field";
 import {
   confirmedProducesSchema,
   confirmedServiceSchema,
   draftProducesSchema,
   draftServiceSchema,
-} from './validation-schema';
-import { get, isEmpty, isEqual } from 'lodash';
+} from "./validation-schema";
+import { get, isEmpty, isEqual } from "lodash";
 
 interface ServiceFormProps {
   afterSubmit?: () => void;
@@ -43,27 +62,27 @@ interface ServiceFormProps {
   onSubmit?: (values: Service) => Promise<Service | undefined>;
   showSnackbarSuccessOnInit?: boolean;
   statuses: ReferenceDataCode[];
-  type: 'public-services' | 'services';
+  type: "public-services" | "services";
 }
 
 const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
   const lastChangedFormatted = formatISO(lastChanged, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
   });
   return (
     <>
-      <Paragraph size='sm'>{localization.alert.youHaveUnsavedChanges}</Paragraph>
-      <Paragraph size='sm'>
-        <span className={styles.bold}>{getTranslateText(values?.title)}</span> ({lastChangedFormatted})
+      <Paragraph size="sm">
+        {localization.alert.youHaveUnsavedChanges}
       </Paragraph>
-      <Paragraph
-        size='sm'
-        className={styles.topMargin2}
-      >
+      <Paragraph size="sm">
+        <span className={styles.bold}>{getTranslateText(values?.title)}</span> (
+        {lastChangedFormatted})
+      </Paragraph>
+      <Paragraph size="sm" className={styles.topMargin2}>
         {localization.alert.wantToRestoreChanges}
       </Paragraph>
     </>
@@ -71,20 +90,32 @@ const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
 };
 
 export const ServiceForm = (props: ServiceFormProps) => {
-  const { afterSubmit, autoSaveStorage, initialValues, onCancel, onSubmit, showSnackbarSuccessOnInit, statuses, type } =
-    props;
+  const {
+    afterSubmit,
+    autoSaveStorage,
+    initialValues,
+    onCancel,
+    onSubmit,
+    showSnackbarSuccessOnInit,
+    statuses,
+    type,
+  } = props;
   const searchParams = useSearchParams();
   const formikRef = useRef<FormikProps<ServiceToBeCreated>>(null);
-  const { catalogId, serviceId } = useParams<{ catalogId: string; serviceId?: string }>();
-  const restoreOnRender = Boolean(searchParams.get('restore'));
+  const { catalogId, serviceId } = useParams<{
+    catalogId: string;
+    serviceId?: string;
+  }>();
+  const restoreOnRender = Boolean(searchParams.get("restore"));
 
   const [isCanceled, setIsCanceled] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [ignoreRequired, setIgnoreRequired] = useState(true);
   const [validateOnChange, setValidateOnChange] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<SnackbarSeverity>('success');
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<SnackbarSeverity>("success");
   const [snackbarFadeIn, setSnackbarFadeIn] = useState(true);
 
   const showSnackbarMessage = ({ message, severity, fadeIn = true }: any) => {
@@ -100,10 +131,14 @@ export const ServiceForm = (props: ServiceFormProps) => {
   };
 
   const handleIgnoreRequiredChange = (newValue: boolean) => {
-    if (newValue && 'published' in initialValues && initialValues?.published === true) {
+    if (
+      newValue &&
+      "published" in initialValues &&
+      initialValues?.published === true
+    ) {
       showSnackbarMessage({
         message: localization.serviceForm.alert.unpublishBeforeIgnoreRequired,
-        severity: 'danger',
+        severity: "danger",
       });
     } else {
       setIgnoreRequired(newValue);
@@ -144,8 +179,8 @@ export const ServiceForm = (props: ServiceFormProps) => {
       : [
           <Alert
             key={1}
-            size='sm'
-            severity='danger'
+            size="sm"
+            severity="danger"
             className={styles.notification}
           >
             {localization.validation.formError}
@@ -155,8 +190,8 @@ export const ServiceForm = (props: ServiceFormProps) => {
       ? [
           <Alert
             key={1}
-            size='sm'
-            severity='warning'
+            size="sm"
+            severity="warning"
             className={styles.notification}
           >
             {localization.validation.unsavedChanges}
@@ -167,7 +202,11 @@ export const ServiceForm = (props: ServiceFormProps) => {
 
   useEffect(() => {
     if (showSnackbarSuccessOnInit) {
-      showSnackbarMessage({ message: localization.snackbar.saveSuccessful, severity: 'success', fadeIn: false });
+      showSnackbarMessage({
+        message: localization.snackbar.saveSuccessful,
+        severity: "success",
+        fadeIn: false,
+      });
     }
   }, [showSnackbarSuccessOnInit]);
 
@@ -184,7 +223,9 @@ export const ServiceForm = (props: ServiceFormProps) => {
       <Formik
         innerRef={formikRef}
         initialValues={initialValues}
-        validationSchema={ignoreRequired ? draftServiceSchema : confirmedServiceSchema}
+        validationSchema={
+          ignoreRequired ? draftServiceSchema : confirmedServiceSchema
+        }
         validateOnChange={validateOnChange}
         validateOnBlur={validateOnChange}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
@@ -198,7 +239,10 @@ export const ServiceForm = (props: ServiceFormProps) => {
 
               const newValues = await onSubmit(trimObjectWhitespace(values));
 
-              showSnackbarMessage({ message: localization.snackbar.saveSuccessful, severity: 'success' });
+              showSnackbarMessage({
+                message: localization.snackbar.saveSuccessful,
+                severity: "success",
+              });
               if (newValues) {
                 resetForm({ values: serviceTemplate(newValues) });
               }
@@ -210,7 +254,10 @@ export const ServiceForm = (props: ServiceFormProps) => {
                 afterSubmit();
               }
             } catch {
-              showSnackbarMessage({ message: localization.snackbar.saveFailed, severity: 'danger' });
+              showSnackbarMessage({
+                message: localization.snackbar.saveFailed,
+                severity: "danger",
+              });
             } finally {
               setSubmitting(false);
             }
@@ -228,21 +275,32 @@ export const ServiceForm = (props: ServiceFormProps) => {
           setValues,
           values,
         }) => {
-          const notifications = getNotifications({ isValid, hasUnsavedChanges: false });
-          const hasError = (fields: (keyof Service)[]) => fields.some((field) => Object.keys(errors).includes(field));
+          const notifications = getNotifications({
+            isValid,
+            hasUnsavedChanges: false,
+          });
+          const hasError = (fields: (keyof Service)[]) =>
+            fields.some((field) => Object.keys(errors).includes(field));
           const handleRestoreDataset = (data: StorageData) => {
             if (data?.id !== serviceId) {
               if (!data?.id) {
-                window.location.replace(`/catalogs/${catalogId}/${type}/new?restore=1`);
+                window.location.replace(
+                  `/catalogs/${catalogId}/${type}/new?restore=1`,
+                );
                 return false;
               }
-              window.location.replace(`/catalogs/${catalogId}/${type}/${data.id}/edit?restore=1`);
+              window.location.replace(
+                `/catalogs/${catalogId}/${type}/${data.id}/edit?restore=1`,
+              );
               return false;
             }
             const restoreValues = serviceTemplate(data.values);
             setValues(restoreValues);
 
-            showSnackbarMessage({ message: localization.snackbar.restoreSuccessful, severity: 'success' });
+            showSnackbarMessage({
+              message: localization.snackbar.restoreSuccessful,
+              severity: "success",
+            });
             return true;
           };
 
@@ -262,12 +320,12 @@ export const ServiceForm = (props: ServiceFormProps) => {
 
             [
               ...Object.keys({ ..._initialValues, ...values }),
-              'title',
-              'description',
-              'homepage',
-              'status',
-              'produces',
-              'contactPoints',
+              "title",
+              "description",
+              "homepage",
+              "status",
+              "produces",
+              "contactPoints",
             ].forEach((name) => {
               if (isDirty(name)) {
                 dirtyFields.push(name);
@@ -279,7 +337,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
 
           return (
             <>
-              <Form className='container'>
+              <Form className="container">
                 <FormikAutoSaver
                   id={serviceId}
                   storage={autoSaveStorage}
@@ -289,18 +347,25 @@ export const ServiceForm = (props: ServiceFormProps) => {
                 />
                 <FormLayout>
                   <FormLayout.Section
-                    id='about-section'
+                    id="about-section"
                     title={localization.serviceForm.section.about.title}
                     subtitle={localization.serviceForm.section.about.subtitle}
                     required
                     changed={dirtyFields.some((field) =>
-                      ['title', 'description', 'homepage', 'status'].includes(field),
+                      ["title", "description", "homepage", "status"].includes(
+                        field,
+                      ),
                     )}
-                    error={hasError(['title', 'description', 'homepage', 'status'])}
+                    error={hasError([
+                      "title",
+                      "description",
+                      "homepage",
+                      "status",
+                    ])}
                   >
                     <Box>
                       <FormikLanguageFieldset
-                        name='title'
+                        name="title"
                         as={Textfield}
                         legend={
                           <TitleWithHelpTextAndTag
@@ -314,10 +379,12 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       <FieldsetDivider />
                       <FormikLanguageFieldset
                         as={TextareaWithPrefix}
-                        name='description'
+                        name="description"
                         legend={
                           <TitleWithHelpTextAndTag
-                            helpText={localization.serviceForm.helptext.description}
+                            helpText={
+                              localization.serviceForm.helptext.description
+                            }
                             tagTitle={localization.tag.required}
                           >
                             {localization.serviceForm.fieldLabel.description}
@@ -328,18 +395,20 @@ export const ServiceForm = (props: ServiceFormProps) => {
 
                       <FastField
                         as={Textfield}
-                        name='homepage'
+                        name="homepage"
                         label={
                           <TitleWithHelpTextAndTag
-                            helpText={localization.serviceForm.helptext.homepage}
-                            tagColor='info'
+                            helpText={
+                              localization.serviceForm.helptext.homepage
+                            }
+                            tagColor="info"
                             tagTitle={localization.tag.recommended}
                           >
                             {localization.serviceForm.fieldLabel.homepage}
                           </TitleWithHelpTextAndTag>
                         }
                         error={errors?.homepage}
-                        size='sm'
+                        size="sm"
                       />
                       <FieldsetDivider />
                       <Field
@@ -348,20 +417,17 @@ export const ServiceForm = (props: ServiceFormProps) => {
                         label={
                           <TitleWithHelpTextAndTag
                             helpText={localization.serviceForm.helptext.status}
-                            tagColor='info'
+                            tagColor="info"
                             tagTitle={localization.tag.recommended}
                           >
                             {localization.serviceForm.fieldLabel.status}
                           </TitleWithHelpTextAndTag>
                         }
-                        name='status'
+                        name="status"
                       >
-                        <option value=''>Ingen status</option>
+                        <option value="">Ingen status</option>
                         {statuses.map((status) => (
-                          <option
-                            key={status.code}
-                            value={status.uri}
-                          >
+                          <option key={status.code} value={status.uri}>
                             {getTranslateText(status.label)}
                           </option>
                         ))}
@@ -370,29 +436,37 @@ export const ServiceForm = (props: ServiceFormProps) => {
                   </FormLayout.Section>
 
                   <FormLayout.Section
-                    id='produces-section'
+                    id="produces-section"
                     title={localization.serviceForm.section.produces.title}
-                    subtitle={localization.serviceForm.section.produces.subtitle}
+                    subtitle={
+                      localization.serviceForm.section.produces.subtitle
+                    }
                     required
-                    error={hasError(['produces'])}
-                    changed={dirtyFields.includes('produces')}
+                    error={hasError(["produces"])}
+                    changed={dirtyFields.includes("produces")}
                   >
                     <ProducesField
                       errors={errors.produces}
-                      validationSchema={ignoreRequired ? draftProducesSchema : confirmedProducesSchema}
+                      validationSchema={
+                        ignoreRequired
+                          ? draftProducesSchema
+                          : confirmedProducesSchema
+                      }
                     />
                   </FormLayout.Section>
 
                   <FormLayout.Section
-                    id='contact-point-section'
+                    id="contact-point-section"
                     title={localization.serviceForm.section.contactPoint.title}
-                    subtitle={localization.serviceForm.section.contactPoint.subtitle}
+                    subtitle={
+                      localization.serviceForm.section.contactPoint.subtitle
+                    }
                     required
-                    changed={dirtyFields.includes('contactPoints')}
-                    error={hasError(['contactPoints'])}
+                    changed={dirtyFields.includes("contactPoints")}
+                    error={hasError(["contactPoints"])}
                   >
                     <FormikLanguageFieldset
-                      name='contactPoints[0].category'
+                      name="contactPoints[0].category"
                       as={Textfield}
                       legend={
                         <TitleWithHelpTextAndTag
@@ -407,21 +481,29 @@ export const ServiceForm = (props: ServiceFormProps) => {
                     <FormikOptionalFieldsFieldset
                       legend={
                         <TitleWithHelpTextAndTag
-                          helpText={localization.serviceForm.helptext.contactPoint}
+                          helpText={
+                            localization.serviceForm.helptext.contactPoint
+                          }
                           tagTitle={localization.tag.required}
                         >
                           {localization.serviceForm.fieldLabel.contactPoint}
                         </TitleWithHelpTextAndTag>
                       }
                       availableFields={[
-                        { valuePath: 'contactPoints[0].email', label: localization.email },
                         {
-                          valuePath: 'contactPoints[0].telephone',
+                          valuePath: "contactPoints[0].email",
+                          label: localization.email,
+                        },
+                        {
+                          valuePath: "contactPoints[0].telephone",
                           label: localization.telephone,
                         },
-                        { valuePath: 'contactPoints[0].contactPage', label: localization.contactPoint.form },
+                        {
+                          valuePath: "contactPoints[0].contactPage",
+                          label: localization.contactPoint.form,
+                        },
                       ]}
-                      errorPath='contactPoints'
+                      errorPath="contactPoints"
                     />
                   </FormLayout.Section>
                 </FormLayout>
@@ -443,28 +525,27 @@ export const ServiceForm = (props: ServiceFormProps) => {
               <StickyFooterBar>
                 <div className={styles.footerContent}>
                   <Button
-                    type='button'
-                    size='sm'
-                    disabled={isSubmitting || isValidating || isCanceled || !dirty}
+                    type="button"
+                    size="sm"
+                    disabled={
+                      isSubmitting || isValidating || isCanceled || !dirty
+                    }
                     onClick={() => {
                       setValidateOnChange(true);
                       submitForm();
                     }}
                   >
                     {isSubmitting ? (
-                      <Spinner
-                        title='Lagrer'
-                        size='sm'
-                      />
+                      <Spinner title="Lagrer" size="sm" />
                     ) : (
                       localization.save
                     )}
                   </Button>
 
                   <Button
-                    type='button'
-                    size='sm'
-                    variant='secondary'
+                    type="button"
+                    size="sm"
+                    variant="secondary"
                     disabled={isSubmitting || isValidating || isCanceled}
                     onClick={handleCancel}
                   >
@@ -473,19 +554,27 @@ export const ServiceForm = (props: ServiceFormProps) => {
                   <div className={styles.verticalLine}></div>
                   <div className={cn(styles.flex, styles.gap2, styles.noWrap)}>
                     <Checkbox
-                      size='sm'
-                      value='ignoreRequired'
+                      size="sm"
+                      value="ignoreRequired"
                       checked={ignoreRequired}
-                      onChange={(e) => handleIgnoreRequiredChange(e.target.checked)}
+                      onChange={(e) =>
+                        handleIgnoreRequiredChange(e.target.checked)
+                      }
                     >
                       {localization.serviceForm.fieldLabel.ignoreRequired}
                     </Checkbox>
-                    <HelpMarkdown aria-label={localization.serviceForm.helptext.ignoreRequired}>
+                    <HelpMarkdown
+                      aria-label={
+                        localization.serviceForm.helptext.ignoreRequired
+                      }
+                    >
                       {localization.serviceForm.helptext.ignoreRequired}
                     </HelpMarkdown>
                   </div>
                 </div>
-                {notifications.length > 0 && <NotificationCarousel notifications={notifications} />}
+                {notifications.length > 0 && (
+                  <NotificationCarousel notifications={notifications} />
+                )}
               </StickyFooterBar>
             </>
           );

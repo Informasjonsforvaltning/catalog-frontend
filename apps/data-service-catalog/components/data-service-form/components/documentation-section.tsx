@@ -1,11 +1,16 @@
-import { DataService } from '@catalog-frontend/types';
-import { AddButton, FastFieldWithRef, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { Box, Fieldset, Textfield } from '@digdir/designsystemet-react';
-import { FastField, FieldArray, useFormikContext } from 'formik';
-import FieldsetWithDelete from '../../fieldset-with-delete';
-import styles from '../data-service-form.module.css';
-import React, { useEffect, useState } from 'react';
+import { DataService } from "@catalog-frontend/types";
+import {
+  AddButton,
+  FastFieldWithRef,
+  FieldsetDivider,
+  TitleWithHelpTextAndTag,
+} from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { Box, Fieldset, Textfield } from "@digdir/designsystemet-react";
+import { FastField, FieldArray, useFormikContext } from "formik";
+import FieldsetWithDelete from "../../fieldset-with-delete";
+import styles from "../data-service-form.module.css";
+import React, { useEffect, useState } from "react";
 
 export const DocumentationSection = () => {
   const errors = useFormikContext<DataService>()?.errors;
@@ -22,11 +27,13 @@ export const DocumentationSection = () => {
   return (
     <Box>
       <FastField
-        name='landingPage'
+        name="landingPage"
         as={Textfield}
-        size='sm'
+        size="sm"
         label={
-          <TitleWithHelpTextAndTag helpText={localization.dataServiceForm.helptext.landingPage}>
+          <TitleWithHelpTextAndTag
+            helpText={localization.dataServiceForm.helptext.landingPage}
+          >
             {localization.dataServiceForm.fieldLabel.landingPage}
           </TitleWithHelpTextAndTag>
         }
@@ -36,27 +43,28 @@ export const DocumentationSection = () => {
       <FieldsetDivider />
 
       <Fieldset
-        size='sm'
+        size="sm"
         legend={
-          <TitleWithHelpTextAndTag helpText={localization.dataServiceForm.helptext.pages}>
+          <TitleWithHelpTextAndTag
+            helpText={localization.dataServiceForm.helptext.pages}
+          >
             {localization.dataServiceForm.fieldLabel.pages}
           </TitleWithHelpTextAndTag>
         }
       >
-        <FieldArray name='pages'>
+        <FieldArray name="pages">
           {(arrayHelpers) => (
             <>
               {arrayHelpers.form.values.pages &&
                 arrayHelpers.form.values.pages.map((_, index: number) => (
-                  <div
-                    key={`pages-${index}`}
-                    className={styles.padding}
-                  >
-                    <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
+                  <div key={`pages-${index}`} className={styles.padding}>
+                    <FieldsetWithDelete
+                      onDelete={() => arrayHelpers.remove(index)}
+                    >
                       <FastFieldWithRef
                         name={`pages[${index}]`}
                         as={Textfield}
-                        size='sm'
+                        size="sm"
                         ref={fieldRef}
                         error={errors?.pages?.[index]}
                       />
@@ -67,7 +75,7 @@ export const DocumentationSection = () => {
               <AddButton
                 onClick={() => {
                   setFocus(true);
-                  arrayHelpers.push('');
+                  arrayHelpers.push("");
                 }}
               >
                 {`${localization.dataServiceForm.fieldLabel.pages}`}

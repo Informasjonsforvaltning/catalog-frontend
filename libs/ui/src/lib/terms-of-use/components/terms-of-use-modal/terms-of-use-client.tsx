@@ -1,15 +1,18 @@
-'use client';
+"use client";
 
-import { useEffect, useRef } from 'react';
-import { Button, Modal, Paragraph } from '@digdir/designsystemet-react';
-import { localization } from '@catalog-frontend/utils';
+import { useEffect, useRef } from "react";
+import { Button, Modal, Paragraph } from "@digdir/designsystemet-react";
+import { localization } from "@catalog-frontend/utils";
 
 type TermsModalProps = {
   termsOfUseUrl: string;
   closeUrl: string;
 };
 
-export const TermsOfUseModalClient = ({ termsOfUseUrl, closeUrl }: TermsModalProps) => {
+export const TermsOfUseModalClient = ({
+  termsOfUseUrl,
+  closeUrl,
+}: TermsModalProps) => {
   const modalRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -19,37 +22,23 @@ export const TermsOfUseModalClient = ({ termsOfUseUrl, closeUrl }: TermsModalPro
   }, []);
 
   return (
-    <Modal
-      ref={modalRef}
-      onBeforeClose={() => false}
-    >
-      <Modal.Header closeButton={false}>{localization.termsOfUse.notAcceptedTitle}</Modal.Header>
+    <Modal ref={modalRef} onBeforeClose={() => false}>
+      <Modal.Header closeButton={false}>
+        {localization.termsOfUse.notAcceptedTitle}
+      </Modal.Header>
       <Modal.Content>
-        <Paragraph size='sm'>{localization.termsOfUse.notAcceptedContent}</Paragraph>
+        <Paragraph size="sm">
+          {localization.termsOfUse.notAcceptedContent}
+        </Paragraph>
       </Modal.Content>
       <Modal.Footer>
-        <Button
-          size='sm'
-          asChild
-        >
-          <a
-            target='_blank'
-            rel='noreferrer'
-            href={termsOfUseUrl}
-          >
+        <Button size="sm" asChild>
+          <a target="_blank" rel="noreferrer" href={termsOfUseUrl}>
             {localization.termsOfUse.gotoTermsOfUse}
           </a>
         </Button>
-        <Button
-          size='sm'
-          variant='secondary'
-          asChild
-        >
-          <a
-            target='_blank'
-            rel='noreferrer'
-            href={closeUrl}
-          >
+        <Button size="sm" variant="secondary" asChild>
+          <a target="_blank" rel="noreferrer" href={closeUrl}>
             {localization.termsOfUse.cancel}
           </a>
         </Button>

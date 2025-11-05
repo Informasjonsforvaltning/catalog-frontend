@@ -1,1 +1,1 @@
-export { createTokenRoute } from './token-route';
+export { createTokenRoute } from "./token-route";

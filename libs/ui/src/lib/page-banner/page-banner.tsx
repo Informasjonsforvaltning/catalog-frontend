@@ -1,7 +1,7 @@
-import cn from 'classnames';
-import EllipseSVG from './svg/ellipse-1.svg';
-import RectangleSVG from './svg/rectangle-1.svg';
-import style from './page-banner.module.css';
+import cn from "classnames";
+import EllipseSVG from "./svg/ellipse-1.svg";
+import RectangleSVG from "./svg/rectangle-1.svg";
+import style from "./page-banner.module.css";
 
 interface PageBannerProps {
   title: string;
@@ -12,7 +12,14 @@ interface PageBannerProps {
   backgroundColor?: string;
 }
 
-const PageBanner = ({ title, subtitle, fontColor, backgroundColor, logo, logoDescription }: PageBannerProps) => {
+const PageBanner = ({
+  title,
+  subtitle,
+  fontColor,
+  backgroundColor,
+  logo,
+  logoDescription,
+}: PageBannerProps) => {
   return (
     <div
       className={style.banner}
@@ -27,7 +34,7 @@ const PageBanner = ({ title, subtitle, fontColor, backgroundColor, logo, logoDes
         </div>
       )}
 
-      <div className={cn('container', style.contentContainer)}>
+      <div className={cn("container", style.contentContainer)}>
         {logo && (
           <div className={style.contentContainer}>
             <img

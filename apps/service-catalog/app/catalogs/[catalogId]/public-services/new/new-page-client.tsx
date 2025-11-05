@@ -1,14 +1,18 @@
-'use client';
+"use client";
 
-import { ReferenceDataCode, Service, StorageData } from '@catalog-frontend/types';
-import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
-import { LocalDataStorage, localization } from '@catalog-frontend/utils';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { useRef, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
-import ServiceForm from '@service-catalog/components/service-form';
-import { serviceTemplate } from '@service-catalog/components/service-form/service-template';
-import { createPublicService } from '@service-catalog/app/actions/public-services/actions';
+import {
+  ReferenceDataCode,
+  Service,
+  StorageData,
+} from "@catalog-frontend/types";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
+import { LocalDataStorage, localization } from "@catalog-frontend/utils";
+import { ArrowLeftIcon } from "@navikt/aksel-icons";
+import { useRef, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
+import ServiceForm from "@service-catalog/components/service-form";
+import { serviceTemplate } from "@service-catalog/components/service-form/service-template";
+import { createPublicService } from "@service-catalog/app/actions/public-services/actions";
 
 type NewPageProps = {
   statuses: ReferenceDataCode[];
@@ -23,7 +27,7 @@ export const NewPage = (props: NewPageProps) => {
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   const dataStorage = new LocalDataStorage<StorageData>({
-    key: 'serviceForm',
+    key: "serviceForm",
   });
 
   const handleGotoOverview = () => {
@@ -38,7 +42,9 @@ export const NewPage = (props: NewPageProps) => {
 
   const handleAfterSubmit = () => {
     if (serviceIdRef.current) {
-      router.replace(`/catalogs/${catalogId}/public-services/${serviceIdRef.current}/edit`);
+      router.replace(
+        `/catalogs/${catalogId}/public-services/${serviceIdRef.current}/edit`,
+      );
     } else {
       router.replace(`/catalogs/${catalogId}/public-services`);
     }
@@ -61,12 +67,12 @@ export const NewPage = (props: NewPageProps) => {
       )}
       <ButtonBar>
         <Button
-          variant='tertiary'
-          color='second'
-          size='sm'
+          variant="tertiary"
+          color="second"
+          size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >
-          <ArrowLeftIcon fontSize='1.25em' />
+          <ArrowLeftIcon fontSize="1.25em" />
           {localization.button.backToOverview}
         </Button>
       </ButtonBar>
@@ -77,7 +83,7 @@ export const NewPage = (props: NewPageProps) => {
         onSubmit={handleCreate}
         initialValues={serviceTemplate(undefined)}
         statuses={statuses}
-        type='public-services'
+        type="public-services"
       />
     </>
   );

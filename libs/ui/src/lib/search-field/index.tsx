@@ -1,11 +1,17 @@
-'use client';
+"use client";
 
-import { FC, ReactNode, useEffect, useRef, useState } from 'react';
-import { Button, Combobox, NativeSelect, Spinner, Textfield } from '@digdir/designsystemet-react';
-import { MagnifyingGlassIcon } from '@navikt/aksel-icons';
-import styles from './search-field.module.scss';
-import classNames from 'classnames';
-import { localization } from '@catalog-frontend/utils';
+import { FC, ReactNode, useEffect, useRef, useState } from "react";
+import {
+  Button,
+  Combobox,
+  NativeSelect,
+  Spinner,
+  Textfield,
+} from "@digdir/designsystemet-react";
+import { MagnifyingGlassIcon } from "@navikt/aksel-icons";
+import styles from "./search-field.module.scss";
+import classNames from "classnames";
+import { localization } from "@catalog-frontend/utils";
 
 type SearchOption = {
   value: string;
@@ -27,15 +33,18 @@ type SearchFieldProps = {
 const SearchField: FC<SearchFieldProps> = ({
   className,
   label,
-  placeholder = '',
-  value = '',
+  placeholder = "",
+  value = "",
   loading = false,
   options,
   optionValue: selectedOptionValue,
   onSearch,
 }) => {
   const [query, setQuery] = useState(value);
-  const [optionValue, setOptionValue] = useState(selectedOptionValue ?? options?.find((option) => option.default === true)?.value);
+  const [optionValue, setOptionValue] = useState(
+    selectedOptionValue ??
+      options?.find((option) => option.default === true)?.value,
+  );
   const searchActionsRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -48,7 +57,7 @@ const SearchField: FC<SearchFieldProps> = ({
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       if (onSearch) {
         onSearch(query, optionValue);
       }
@@ -63,37 +72,35 @@ const SearchField: FC<SearchFieldProps> = ({
   }, []);
 
   return (
-    <div className={classNames([styles.search, ...(className ? [className] : [])])}>
+    <div
+      className={classNames([styles.search, ...(className ? [className] : [])])}
+    >
       <div className={styles.searchBox}>
         <Textfield
           ref={inputRef}
-          autoComplete='off'
+          autoComplete="off"
           className={styles.inputTextfield}
           placeholder={placeholder}
-          size='large'
+          size="large"
           value={query}
-          type='search'
+          type="search"
           label={label}
           onChange={(e) => setQuery(e.target.value)}
           onKeyUp={handleKeyUp}
         />
-        <div
-          ref={searchActionsRef}
-          className={styles.searchActions}
-        >
+        <div ref={searchActionsRef} className={styles.searchActions}>
           {options && (
             <NativeSelect
-              size='sm'
-              aria-label='Velg alternativ'
+              size="sm"
+              aria-label="Velg alternativ"
               value={optionValue}
               className={styles.searchOptions}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setOptionValue(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                setOptionValue(e.target.value)
+              }
             >
               {options.map(({ value, label }) => (
-                <option
-                  value={value}
-                  key={value}
-                >
+                <option value={value} key={value}>
                   {label}
                 </option>
               ))}
@@ -101,15 +108,15 @@ const SearchField: FC<SearchFieldProps> = ({
           )}
           <Button
             className={styles.searchButton}
-            type='submit'
-            size='sm'
+            type="submit"
+            size="sm"
             onClick={handleClick}
           >
             {loading ? (
               <Spinner
                 title={localization.loading}
-                size='xsmall'
-                variant='inverted'
+                size="xsmall"
+                variant="inverted"
               />
             ) : (
               <>
