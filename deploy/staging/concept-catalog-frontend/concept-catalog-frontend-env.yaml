@@ -24,7 +24,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: keycloak
-                  key: KEYCLOAK_OICD_ISSUER
+                  key: KEYCLOAK_OIDC_ISSUER
             - name: KEYCLOAK_SECRET
               valueFrom:
                 secretKeyRef:
