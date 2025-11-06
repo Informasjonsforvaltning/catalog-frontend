@@ -127,20 +127,24 @@ export class LocalDataStorage<T> implements DataStorage<T> {
     const secondaryData: Record<string, DataWithMetadata<T> | null> = {};
 
     Object.keys(this.secondaryKeys).forEach((key) => {
-      secondaryData[this.secondaryKeys[key]] = this.getFromStorage(this.secondaryKeys[key]);
+      secondaryData[this.secondaryKeys[key]] = this.getFromStorage(
+        this.secondaryKeys[key],
+      );
     });
 
     return {
       mainData,
       secondaryData,
       lastChanged: new Date(),
-      isDirty: mainData !== null || Object.values(secondaryData).some((data) => data !== null),
+      isDirty:
+        mainData !== null ||
+        Object.values(secondaryData).some((data) => data !== null),
       version: 1, // Assuming a default version
     };
   }
 
   private getFromStorage(key: string): DataWithMetadata<T> | null {
-    if (typeof localStorage === 'undefined') {
+    if (typeof localStorage === "undefined") {
       return null;
     }
     const savedData = localStorage.getItem(key);
@@ -162,7 +166,7 @@ export class LocalDataStorage<T> implements DataStorage<T> {
       try {
         callback(this.currentState);
       } catch (error) {
-        console.error('Error in storage subscriber callback:', error);
+        console.error("Error in storage subscriber callback:", error);
       }
     });
   }
@@ -176,7 +180,7 @@ export class LocalDataStorage<T> implements DataStorage<T> {
 
   private validateAndSet(data: DataWithMetadata<T>): boolean {
     if (this.validateData && !this.validateData(data)) {
-      console.warn('Data validation failed for storage:', this.key);
+      console.warn("Data validation failed for storage:", this.key);
       return false;
     }
     return true;
@@ -199,7 +203,7 @@ export class LocalDataStorage<T> implements DataStorage<T> {
     if (!this.validateAndSet(data)) {
       return;
     }
-    if (typeof localStorage !== 'undefined') {
+    if (typeof localStorage !== "undefined") {
       localStorage.setItem(this.key, JSON.stringify(data));
     }
     this.notifySubscribers();
@@ -213,15 +217,15 @@ export class LocalDataStorage<T> implements DataStorage<T> {
     if (!this.validateAndSet(data)) {
       return;
     }
-    if (typeof localStorage !== 'undefined') {
+    if (typeof localStorage !== "undefined") {
       localStorage.setItem(this.secondaryKeys[key], JSON.stringify(data));
     }
     this.notifySubscribers();
   }
 
   delete() {
-    if (typeof localStorage !== 'undefined') {
-      console.log('[LOCAL STORAGE]: Deleting main and secondary keys');
+    if (typeof localStorage !== "undefined") {
+      console.log("[LOCAL STORAGE]: Deleting main and secondary keys");
       localStorage.removeItem(this.key);
       Object.keys(this.secondaryKeys).forEach((key) => {
         localStorage.removeItem(this.secondaryKeys[key]);
@@ -234,13 +238,15 @@ export class LocalDataStorage<T> implements DataStorage<T> {
     if (!Object.keys(this.secondaryKeys).includes(key)) {
       throw new Error(`Key ${key} is not a secondary key`);
     }
-    if (typeof localStorage !== 'undefined') {
+    if (typeof localStorage !== "undefined") {
       localStorage.removeItem(this.secondaryKeys[key]);
       const allEmpty = Object.keys(this.secondaryKeys).every((key) => {
         return localStorage.getItem(this.secondaryKeys[key]) === null;
       });
       if (allEmpty && this.loose) {
-        console.log('[LOCAL STORAGE]: All secondary keys are empty, main data is loose, deleting main key');
+        console.log(
+          "[LOCAL STORAGE]: All secondary keys are empty, main data is loose, deleting main key",
+        );
         this.delete();
       }
     }
@@ -265,7 +271,9 @@ export class LocalDataStorage<T> implements DataStorage<T> {
   }
 
   getPreviousState(): StorageState<T> | null {
-    return this.stateHistory.length > 1 ? this.stateHistory[this.stateHistory.length - 2] : null;
+    return this.stateHistory.length > 1
+      ? this.stateHistory[this.stateHistory.length - 2]
+      : null;
   }
 
   revertToPreviousState(): boolean {
@@ -302,7 +310,7 @@ export class LocalDataStorage<T> implements DataStorage<T> {
 
   // Debug methods
   debugState(): void {
-    console.log('Storage State:', {
+    console.log("Storage State:", {
       key: this.key,
       state: this.currentState,
       historyLength: this.stateHistory.length,

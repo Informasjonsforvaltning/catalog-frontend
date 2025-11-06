@@ -1,7 +1,7 @@
-import { UnionRelation, RelatedConcept } from '@catalog-frontend/types';
-import { KeyValueListItem } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Link } from '@digdir/designsystemet-react';
+import { UnionRelation, RelatedConcept } from "@catalog-frontend/types";
+import { KeyValueListItem } from "@catalog-frontend/ui";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import { Link } from "@digdir/designsystemet-react";
 
 interface Props {
   partitiveRelations: UnionRelation[];
@@ -9,41 +9,52 @@ interface Props {
   language?: string;
 }
 
-const PartitiveRelations = ({ partitiveRelations, relatedConceptsMap, language }: Props) => {
+const PartitiveRelations = ({
+  partitiveRelations,
+  relatedConceptsMap,
+  language,
+}: Props) => {
   return (
     <>
-      {partitiveRelations.map(({ inndelingskriterium, relasjonsType, relatertBegrep }, index) => {
-        const relatedConcept = relatertBegrep && relatedConceptsMap(relatertBegrep);
+      {partitiveRelations.map(
+        ({ inndelingskriterium, relasjonsType, relatertBegrep }, index) => {
+          const relatedConcept =
+            relatertBegrep && relatedConceptsMap(relatertBegrep);
 
-        return (
-          <KeyValueListItem
-            key={`${relatertBegrep}-${index}`}
-            property={
-              <div>
+          return (
+            <KeyValueListItem
+              key={`${relatertBegrep}-${index}`}
+              property={
                 <div>
-                  <p>{localization.concept.partitiveRelation}</p>
-                  <span>
-                    {relasjonsType === 'erDelAv' ? localization.concept.isPartOf : localization.concept.hasPart}
-                  </span>
-                  {getTranslateText(inndelingskriterium, language) && (
-                    <span>{` (${localization.concept.divisionCriterion}: ${getTranslateText(
-                      inndelingskriterium,
-                      language,
-                    )})`}</span>
-                  )}
+                  <div>
+                    <p>{localization.concept.partitiveRelation}</p>
+                    <span>
+                      {relasjonsType === "erDelAv"
+                        ? localization.concept.isPartOf
+                        : localization.concept.hasPart}
+                    </span>
+                    {getTranslateText(inndelingskriterium, language) && (
+                      <span>{` (${localization.concept.divisionCriterion}: ${getTranslateText(
+                        inndelingskriterium,
+                        language,
+                      )})`}</span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            }
-            value={
-              relatedConcept ? (
-                <Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title, language)}</Link>
-              ) : (
-                relatertBegrep
-              )
-            }
-          />
-        );
-      })}
+              }
+              value={
+                relatedConcept ? (
+                  <Link href={relatedConcept.href}>
+                    {getTranslateText(relatedConcept.title, language)}
+                  </Link>
+                ) : (
+                  relatertBegrep
+                )
+              }
+            />
+          );
+        },
+      )}
     </>
   );
 };

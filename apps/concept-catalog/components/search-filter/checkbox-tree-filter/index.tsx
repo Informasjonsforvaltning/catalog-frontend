@@ -1,16 +1,19 @@
-'use client';
+"use client";
 
-import { FC, JSX, useEffect, useMemo, useState } from 'react';
-import CheckboxTree, { OnCheckNode } from 'react-checkbox-tree';
-import 'react-checkbox-tree/lib/react-checkbox-tree.css';
+import { FC, JSX, useEffect, useMemo, useState } from "react";
+import CheckboxTree, { OnCheckNode } from "react-checkbox-tree";
+import "react-checkbox-tree/lib/react-checkbox-tree.css";
 
-import classes from './checkbox-tree.module.css';
-import { Select } from '@catalog-frontend/ui';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheckSquare, faSquare } from '@fortawesome/free-regular-svg-icons';
-import { getPath, localization } from '@catalog-frontend/utils';
-import { Button, Label } from '@digdir/designsystemet-react';
-import { ChevronDownDoubleIcon, ChevronUpDoubleIcon } from '@navikt/aksel-icons';
+import classes from "./checkbox-tree.module.css";
+import { Select } from "@catalog-frontend/ui";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckSquare, faSquare } from "@fortawesome/free-regular-svg-icons";
+import { getPath, localization } from "@catalog-frontend/utils";
+import { Button, Label } from "@digdir/designsystemet-react";
+import {
+  ChevronDownDoubleIcon,
+  ChevronUpDoubleIcon,
+} from "@navikt/aksel-icons";
 
 export interface TreeNode {
   value: string;
@@ -20,7 +23,7 @@ export interface TreeNode {
 
 interface Props {
   label?: string;
-  'aria-label'?: string;
+  "aria-label"?: string;
   nodes?: TreeNode[];
   onCheck?: (value: string[]) => void;
   filters: string[];
@@ -35,37 +38,39 @@ const getSearchOptions = (nodes?: TreeNode[]) => {
     });
   }
 
-  return options.sort((a: { label: string }, b: { label: any }) => a.label.localeCompare(b.label));
+  return options.sort((a: { label: string }, b: { label: any }) =>
+    a.label.localeCompare(b.label),
+  );
 };
 
 const generateOptionElements = (nodes?: TreeNode[]): JSX.Element[] => {
   const options = getSearchOptions(nodes);
 
   return [
-    <option
-      key={'no-user-selected'}
-      value={undefined}
-    />,
+    <option key={"no-user-selected"} value={undefined} />,
     ...(options.map((opt: any, index: any) => (
-      <option
-        value={opt.value}
-        key={`searchOption-${opt.value}-${index}`}
-      >
+      <option value={opt.value} key={`searchOption-${opt.value}-${index}`}>
         {opt.label}
       </option>
     )) || []),
   ];
 };
 
-export const CheckboxTreeFilter: FC<Props> = ({ label, 'aria-label': ariaLabel, nodes, onCheck, filters }) => {
+export const CheckboxTreeFilter: FC<Props> = ({
+  label,
+  "aria-label": ariaLabel,
+  nodes,
+  onCheck,
+  filters,
+}) => {
   const [checked, setChecked] = useState<string[]>([]);
   const [expanded, setExpanded] = useState<string[]>([]);
   const [collapsed, setCollapsed] = useState(true);
-  const [searchOption, setSearchOption] = useState('');
+  const [searchOption, setSearchOption] = useState("");
 
   // Generate a stable ID for the CheckboxTree to prevent hydration mismatches
   const treeId = useMemo(() => {
-    return `checkbox-tree-${label?.replace(/\s+/g, '-').toLowerCase() || 'default'}`;
+    return `checkbox-tree-${label?.replace(/\s+/g, "-").toLowerCase() || "default"}`;
   }, [label]);
 
   useEffect(() => {
@@ -74,7 +79,7 @@ export const CheckboxTreeFilter: FC<Props> = ({ label, 'aria-label': ariaLabel, 
   }, [filters]);
 
   const handleChecked = ({ value }: any) => {
-    setSearchOption('');
+    setSearchOption("");
 
     const path = getPath(nodes, value).map((item) => item.value);
     if (checked.includes(value)) {
@@ -124,7 +129,7 @@ export const CheckboxTreeFilter: FC<Props> = ({ label, 'aria-label': ariaLabel, 
         label={label}
         aria-label={ariaLabel}
         value={searchOption}
-        size='sm'
+        size="sm"
         onChange={(event) => handleSearchOnChange(event.target.value)}
       >
         {generateOptionElements(nodes)}
@@ -137,11 +142,7 @@ export const CheckboxTreeFilter: FC<Props> = ({ label, 'aria-label': ariaLabel, 
               ...node,
               className: classes.checkbox,
               label: (
-                <Label
-                  asChild
-                  size='small'
-                  weight='regular'
-                >
+                <Label asChild size="small" weight="regular">
                   <span>{node.label}</span>
                 </Label>
               ),
@@ -179,8 +180,8 @@ export const CheckboxTreeFilter: FC<Props> = ({ label, 'aria-label': ariaLabel, 
       </div>
       {nodes && nodes.length > 10 && (
         <Button
-          variant='tertiary'
-          size='sm'
+          variant="tertiary"
+          size="sm"
           onClick={() => setCollapsed(!collapsed)}
         >
           {collapsed ? <ChevronDownDoubleIcon /> : <ChevronUpDoubleIcon />}

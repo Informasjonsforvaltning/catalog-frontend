@@ -1,13 +1,18 @@
-import { Dispatch, SetStateAction, useRef, useState } from 'react';
-import { localization } from '@catalog-frontend/utils';
-import { LinkButton, UploadButton } from '@catalog-frontend/ui';
-import { useImportConceptsCSV, useSendConcepts, useImportRdf, useSendRdf } from '../../hooks/import';
-import { Button, Modal, Spinner } from '@digdir/designsystemet-react';
-import styles from './import-modal.module.scss';
-import { FileImportIcon, TasklistSendIcon } from '@navikt/aksel-icons';
-import Markdown from 'react-markdown';
-import { Concept } from '@catalog-frontend/types';
-import { HelpMarkdown } from '@catalog-frontend/ui';
+import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { localization } from "@catalog-frontend/utils";
+import { LinkButton, UploadButton } from "@catalog-frontend/ui";
+import {
+  useImportConceptsCSV,
+  useSendConcepts,
+  useImportRdf,
+  useSendRdf,
+} from "../../hooks/import";
+import { Button, Modal, Spinner } from "@digdir/designsystemet-react";
+import styles from "./import-modal.module.scss";
+import { FileImportIcon, TasklistSendIcon } from "@navikt/aksel-icons";
+import Markdown from "react-markdown";
+import { Concept } from "@catalog-frontend/types";
+import { HelpMarkdown } from "@catalog-frontend/ui";
 
 interface ImportProps {
   catalogId: string;
@@ -20,8 +25,8 @@ interface ImportRdfProps {
 }
 
 enum UploadType {
-  CSV = 'CSV',
-  RDF = 'RDF',
+  CSV = "CSV",
+  RDF = "RDF",
 }
 
 export interface UploadRdfProps {
@@ -38,13 +43,20 @@ export function ImportModal({ catalogId }: ImportProps) {
   const sessionId = useRef<number>(0);
 
   const [uploadType, setUploadType] = useState<UploadType>(UploadType.CSV);
-  const [uploadedConcepts, setUploadedConcepts] = useState<Array<Concept>>(new Array<Concept>());
-  const [uploadedRdfConcepts, setUploadedRdfConcepts] = useState<UploadRdfProps>({} as UploadRdfProps);
+  const [uploadedConcepts, setUploadedConcepts] = useState<Array<Concept>>(
+    new Array<Concept>(),
+  );
+  const [uploadedRdfConcepts, setUploadedRdfConcepts] =
+    useState<UploadRdfProps>({} as UploadRdfProps);
 
   const modalRef = useRef<HTMLDialogElement>(null);
   const readerRdfRef = useRef<FileReader | null>(null);
 
-  const uploadConcepts = useImportConceptsCSV(catalogId, setIsUploading, setIsUploaded);
+  const uploadConcepts = useImportConceptsCSV(
+    catalogId,
+    setIsUploading,
+    setIsUploaded,
+  );
   const sendConcepts = useSendConcepts(catalogId);
 
   const uploadRdf = useImportRdf(catalogId);
@@ -56,14 +68,24 @@ export function ImportModal({ catalogId }: ImportProps) {
     const file: File = event.target.files?.[0];
     if (file) {
       if (file.size > maxSize * 1024 * 1024) {
-        alert(localization.formatString(localization.alert.maxFileSizeExceeded, maxSize));
+        alert(
+          localization.formatString(
+            localization.alert.maxFileSizeExceeded,
+            maxSize,
+          ),
+        );
         cancel();
         return;
       }
 
-      const fileExtension = file.name.split('.').pop()?.toLowerCase();
-      if (fileExtension != 'csv' && fileExtension != 'json') {
-        alert(localization.formatString(localization.concept.importModal.alert.unsupportedFileUpload, 'CSV/JSON'));
+      const fileExtension = file.name.split(".").pop()?.toLowerCase();
+      if (fileExtension != "csv" && fileExtension != "json") {
+        alert(
+          localization.formatString(
+            localization.concept.importModal.alert.unsupportedFileUpload,
+            "CSV/JSON",
+          ),
+        );
         cancel();
         return;
       }
@@ -74,7 +96,7 @@ export function ImportModal({ catalogId }: ImportProps) {
           setIsUploading(false);
           setUploadType(UploadType.CSV);
         },
-        onError: (error) => alert('Import failed: ' + error),
+        onError: (error) => alert("Import failed: " + error),
       });
     }
   };
@@ -84,13 +106,13 @@ export function ImportModal({ catalogId }: ImportProps) {
 
     if (uploadType === UploadType.CSV) sendConcepts.mutate(uploadedConcepts);
     else if (uploadType === UploadType.RDF) {
-      console.log('Uploaded concepts: ', uploadedRdfConcepts);
+      console.log("Uploaded concepts: ", uploadedRdfConcepts);
       sendRdf.mutate(uploadedRdfConcepts);
     }
   };
 
   const cancel = () => {
-    console.log('Reader aborting: ', readerRdfRef?.current);
+    console.log("Reader aborting: ", readerRdfRef?.current);
     readerRdfRef?.current?.abort();
     readerRdfRef.current = null;
     setIsUploading(false);
@@ -104,9 +126,12 @@ export function ImportModal({ catalogId }: ImportProps) {
     uploadSession = null;
   };
 
-  const ImportConceptRdf = ({ setIsUploading, setIsUploaded }: ImportRdfProps) => {
+  const ImportConceptRdf = ({
+    setIsUploading,
+    setIsUploaded,
+  }: ImportRdfProps) => {
     const extension2Type: Map<string, string> = new Map<string, string>();
-    extension2Type.set('.ttl', 'text/turtle');
+    extension2Type.set(".ttl", "text/turtle");
     const allowedExtensions = Array.from(extension2Type.keys());
     const onFileUpload = (event: any) => {
       setCancelled(false);
@@ -115,37 +140,58 @@ export function ImportModal({ catalogId }: ImportProps) {
       const file: File = event.target.files?.[0];
       if (file) {
         if (file.size > maxSize * 1024 * 1024) {
-          alert(localization.formatString(localization.alert.maxFileSizeExceeded, maxSize));
+          alert(
+            localization.formatString(
+              localization.alert.maxFileSizeExceeded,
+              maxSize,
+            ),
+          );
           cancel();
           return;
         }
         const reader = new FileReader();
         readerRdfRef.current = reader;
-        reader.readAsText(file, 'UTF-8');
-        const fileExtension = file.name.split('.').pop()?.toLowerCase();
+        reader.readAsText(file, "UTF-8");
+        const fileExtension = file.name.split(".").pop()?.toLowerCase();
         const contentType = extension2Type.get(`.${fileExtension}`);
-        if (!fileExtension || !contentType || fileExtension != 'ttl') {
-          console.error('Uploaded file has no extension or unsupported extension:', fileExtension);
-          alert(localization.formatString(localization.concept.importModal.alert.unsupportedFileUpload, 'RDF/Turtle'));
+        if (!fileExtension || !contentType || fileExtension != "ttl") {
+          console.error(
+            "Uploaded file has no extension or unsupported extension:",
+            fileExtension,
+          );
+          alert(
+            localization.formatString(
+              localization.concept.importModal.alert.unsupportedFileUpload,
+              "RDF/Turtle",
+            ),
+          );
           cancel();
           return;
         }
 
         reader.onload = function (evt) {
           if (uploadSession !== sessionId.current || cancelled) {
-            console.log('Session ID', sessionId);
-            console.log('Upload session', uploadSession);
-            console.log('Will not upload, sessionId does not match or upload was cancelled');
+            console.log("Session ID", sessionId);
+            console.log("Upload session", uploadSession);
+            console.log(
+              "Will not upload, sessionId does not match or upload was cancelled",
+            );
             return;
           }
-          if (evt.target && typeof evt.target.result === 'string') {
-            uploadRdf.mutate({ fileContent: evt.target.result, contentType: contentType });
+          if (evt.target && typeof evt.target.result === "string") {
+            uploadRdf.mutate({
+              fileContent: evt.target.result,
+              contentType: contentType,
+            });
             setUploadType(UploadType.RDF);
-            setUploadedRdfConcepts({ fileContent: evt.target.result, contentType: contentType } as UploadRdfProps);
+            setUploadedRdfConcepts({
+              fileContent: evt.target.result,
+              contentType: contentType,
+            } as UploadRdfProps);
             setIsUploaded(true);
             setIsUploading(false);
           } else {
-            console.error('File content is not a string');
+            console.error("File content is not a string");
             setIsUploading(false);
           }
         };
@@ -161,7 +207,7 @@ export function ImportModal({ catalogId }: ImportProps) {
           onFileUpload(e);
         }}
       >
-        <FileImportIcon fontSize='1.5rem' />
+        <FileImportIcon fontSize="1.5rem" />
         <span>{localization.button.importConceptRDF}</span>
       </UploadButton>
     );
@@ -170,7 +216,7 @@ export function ImportModal({ catalogId }: ImportProps) {
   return (
     <Modal.Root>
       <Modal.Trigger asChild>
-        <Button variant={'secondary'}>
+        <Button variant={"secondary"}>
           <FileImportIcon />
           Importer
         </Button>
@@ -187,7 +233,9 @@ export function ImportModal({ catalogId }: ImportProps) {
             <Modal.Header className={styles.content}>
               <div className={styles.titleTags}>
                 <Markdown>{localization.concept.importModal.title}</Markdown>
-                <HelpMarkdown aria-label={`Help ${localization.concept.importModal.titleHelpText}`}>
+                <HelpMarkdown
+                  aria-label={`Help ${localization.concept.importModal.titleHelpText}`}
+                >
                   {localization.concept.importModal.titleHelpText}
                 </HelpMarkdown>
               </div>
@@ -196,19 +244,23 @@ export function ImportModal({ catalogId }: ImportProps) {
               <div className={styles.modalContent}>
                 {(isUploading || isSending) && (
                   <div className={styles.spinnerOverlay}>
-                    <Spinner
-                      title={localization.loading}
-                      size='large'
-                    />
+                    <Spinner title={localization.loading} size="large" />
                   </div>
                 )}
                 <div className={styles.markdownContent}>
-                  <Markdown>{localization.concept.importModal.conceptUploadDescription}</Markdown>
+                  <Markdown>
+                    {localization.concept.importModal.conceptUploadDescription}
+                  </Markdown>
                 </div>
                 <div className={styles.remark}>
                   <div className={styles.markdownContent}>
                     <Markdown>
-                      {localization.formatString(localization.concept.importModal.maxFileSize, maxSize).toString()}
+                      {localization
+                        .formatString(
+                          localization.concept.importModal.maxFileSize,
+                          maxSize,
+                        )
+                        .toString()}
                     </Markdown>
                   </div>
                 </div>
@@ -220,20 +272,21 @@ export function ImportModal({ catalogId }: ImportProps) {
         {(isUploading || isUploaded || isSending) && (
           <>
             <Modal.Header className={styles.content}>
-              <Markdown>{localization.concept.importModal.titleConfirmSending}</Markdown>
+              <Markdown>
+                {localization.concept.importModal.titleConfirmSending}
+              </Markdown>
             </Modal.Header>
             <Modal.Content className={styles.content}>
               <div className={styles.modalContent}>
                 {(isUploading || isSending) && (
                   <div className={styles.spinnerOverlay}>
-                    <Spinner
-                      title={localization.loading}
-                      size='large'
-                    />
+                    <Spinner title={localization.loading} size="large" />
                   </div>
                 )}
                 <div className={styles.markdownContent}>
-                  <Markdown>{localization.concept.importModal.textConfirmSending}</Markdown>
+                  <Markdown>
+                    {localization.concept.importModal.textConfirmSending}
+                  </Markdown>
                 </div>
               </div>
             </Modal.Content>
@@ -246,25 +299,25 @@ export function ImportModal({ catalogId }: ImportProps) {
               <>
                 <LinkButton
                   href={`/catalogs/${catalogId}/concepts/import-results`}
-                  variant={'secondary'}
+                  variant={"secondary"}
                 >
                   Resultater
                 </LinkButton>
 
                 <UploadButton
-                  size='sm'
+                  size="sm"
                   allowedMimeTypes={[
-                    'text/csv',
-                    'text/x-csv',
-                    'text/plain',
-                    'application/csv',
-                    'application/x-csv',
-                    'application/vnd.ms-excel',
-                    'application/json',
+                    "text/csv",
+                    "text/x-csv",
+                    "text/plain",
+                    "application/csv",
+                    "application/x-csv",
+                    "application/vnd.ms-excel",
+                    "application/json",
                   ]}
                   onUpload={onCsvUpload}
                 >
-                  <FileImportIcon fontSize='1.5rem' />
+                  <FileImportIcon fontSize="1.5rem" />
                   <span>{localization.button.importConceptCSV}</span>
                 </UploadButton>
 
@@ -283,13 +336,13 @@ export function ImportModal({ catalogId }: ImportProps) {
               <Button
                 onClick={send}
                 disabled={isUploading || isSending}
-                variant={'primary'}
+                variant={"primary"}
               >
                 <TasklistSendIcon />
                 Fortsett
               </Button>
               <Button
-                variant={'secondary'}
+                variant={"secondary"}
                 onClick={cancel}
                 disabled={isSending}
               >

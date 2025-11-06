@@ -1,9 +1,9 @@
-'use client';
-import { localization } from '@catalog-frontend/utils';
-import { Switch } from '@digdir/designsystemet-react';
-import styles from './publish-switch.module.css';
-import { publishDataset } from '../../app/actions/actions';
-import { Dataset } from '@catalog-frontend/types';
+"use client";
+import { localization } from "@catalog-frontend/utils";
+import { Switch } from "@digdir/designsystemet-react";
+import styles from "./publish-switch.module.css";
+import { publishDataset } from "../../app/actions/actions";
+import { Dataset } from "@catalog-frontend/types";
 
 type Props = {
   catalogId: string;
@@ -47,8 +47,8 @@ export const PublishSwitch = ({ catalogId, dataset, disabled }: Props) => {
     <>
       <Switch
         className={styles.center}
-        size='small'
-        position='right'
+        size="small"
+        position="right"
         onChange={() => handlePublishDataset()}
         checked={dataset.published}
         disabled={disabled || !(dataset.approved || dataset.published)}

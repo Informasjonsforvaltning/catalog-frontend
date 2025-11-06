@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { ReactNode } from 'react';
-import { Footer } from '../footer';
-import { Header } from '../header';
-import cn from 'classnames';
+import { ReactNode } from "react";
+import { Footer } from "../footer";
+import { Header } from "../header";
+import cn from "classnames";
 
-import './global.css';
+import "./global.css";
 
-import style from './layout.module.css';
-import ErrorBoundary from '../error-boundry';
+import style from "./layout.module.css";
+import ErrorBoundary from "../error-boundry";
 
 interface LayoutProps {
   children: ReactNode;
@@ -57,10 +57,7 @@ export const Layout = ({
         </ErrorBoundary>
       </main>
       {displayFooter && (
-        <Footer
-          fontColor={fontColor}
-          backgroundColor={backgroundColor}
-        />
+        <Footer fontColor={fontColor} backgroundColor={backgroundColor} />
       )}
     </div>
   );

@@ -1,17 +1,17 @@
-import { ReactNode, useRef, useState, useEffect } from 'react';
-import { Formik } from 'formik';
-import { Button, Modal } from '@digdir/designsystemet-react';
+import { ReactNode, useRef, useState, useEffect } from "react";
+import { Formik } from "formik";
+import { Button, Modal } from "@digdir/designsystemet-react";
 import {
   FieldsetDivider,
   FormikLanguageFieldset,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
-} from '@catalog-frontend/ui';
-import { Definisjon } from '@catalog-frontend/types';
-import { localization } from '@catalog-frontend/utils';
-import { SourceDescriptionFieldset } from '../source-description-fieldset';
-import { definitionSchema } from '../../validation-schema';
-import styles from './definition-modal.module.scss';
+} from "@catalog-frontend/ui";
+import { Definisjon } from "@catalog-frontend/types";
+import { localization } from "@catalog-frontend/utils";
+import { SourceDescriptionFieldset } from "../source-description-fieldset";
+import { definitionSchema } from "../../validation-schema";
+import styles from "./definition-modal.module.scss";
 
 export type DefinitionModalProps = {
   trigger: ReactNode;
@@ -23,7 +23,10 @@ export type DefinitionModalProps = {
   onClose?: () => void;
 };
 
-const defaultDefinition: Definisjon = { tekst: {}, kildebeskrivelse: { forholdTilKilde: 'egendefinert', kilde: [] } };
+const defaultDefinition: Definisjon = {
+  tekst: {},
+  kildebeskrivelse: { forholdTilKilde: "egendefinert", kilde: [] },
+};
 
 export const DefinitionModal = ({
   initialDefinition,
@@ -44,7 +47,7 @@ export const DefinitionModal = ({
         ref={modalRef}
         className={styles.dialog}
         style={{
-          overflow: 'visible',
+          overflow: "visible",
         }}
       >
         <Formik
@@ -71,36 +74,36 @@ export const DefinitionModal = ({
                 <Modal.Header closeButton={false}>{header}</Modal.Header>
                 <Modal.Content className={styles.content}>
                   <FormikLanguageFieldset
-                    name='tekst'
+                    name="tekst"
                     as={TextareaWithPrefix}
                     legend={
                       <TitleWithHelpTextAndTag
                         helpText={definitionHelpText}
                         tagTitle={localization.tag.required}
-                        tagColor='warning'
+                        tagColor="warning"
                       >
                         {localization.conceptForm.fieldLabel.definition}
                       </TitleWithHelpTextAndTag>
                     }
                   />
                   <FieldsetDivider />
-                  <SourceDescriptionFieldset name={'kildebeskrivelse'} />
+                  <SourceDescriptionFieldset name={"kildebeskrivelse"} />
                 </Modal.Content>
                 <Modal.Footer>
                   <Button
-                    type='button'
-                    size='sm'
+                    type="button"
+                    size="sm"
                     disabled={isSubmitting}
                     onClick={() => {
                       submitForm();
                     }}
                   >
-                    {initialDefinition ? 'Oppdater' : 'Legg til'} definisjon
+                    {initialDefinition ? "Oppdater" : "Legg til"} definisjon
                   </Button>
                   <Button
-                    variant='secondary'
-                    type='button'
-                    size='sm'
+                    variant="secondary"
+                    type="button"
+                    size="sm"
                     onClick={() => {
                       onClose?.();
                       modalRef.current?.close();

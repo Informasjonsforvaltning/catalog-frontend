@@ -1,6 +1,6 @@
-import { Layout } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { ReactNode } from 'react';
+import { Layout } from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { ReactNode } from "react";
 
 const PageLayout = ({ children }: { children: ReactNode }) => {
   return (

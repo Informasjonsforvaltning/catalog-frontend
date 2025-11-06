@@ -1,5 +1,5 @@
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 const Home = async (props: any) => {
   const params = await props.params;

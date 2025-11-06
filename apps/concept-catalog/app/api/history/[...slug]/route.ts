@@ -1,28 +1,44 @@
-import { getHistory } from '@catalog-frontend/data-access';
-import { withValidSessionForApi } from '@catalog-frontend/utils';
-import { NextRequest } from 'next/server';
+import { getHistory } from "@catalog-frontend/data-access";
+import { withValidSessionForApi } from "@catalog-frontend/utils";
+import { NextRequest } from "next/server";
 
-export const GET = async (req: NextRequest, props: { params: Promise<{ slug: string }> }) => {
+export const GET = async (
+  req: NextRequest,
+  props: { params: Promise<{ slug: string }> },
+) => {
   const params = await props.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     if (slug?.length == 2) {
       const [catalogId, resourceId] = slug;
-      const page = req.nextUrl.searchParams.get('page') ?? 1;
-      const size = req.nextUrl.searchParams.get('size') ?? 10;
+      const page = req.nextUrl.searchParams.get("page") ?? 1;
+      const size = req.nextUrl.searchParams.get("size") ?? 10;
 
       try {
-        const response = await getHistory(catalogId, resourceId, `${session?.accessToken}`, +page, +size);
+        const response = await getHistory(
+          catalogId,
+          resourceId,
+          `${session?.accessToken}`,
+          +page,
+          +size,
+        );
         if (response.status !== 200) {
           throw new Error();
         }
         const jsonResponse = await response.json();
-        return new Response(JSON.stringify(jsonResponse), { status: response.status });
+        return new Response(JSON.stringify(jsonResponse), {
+          status: response.status,
+        });
       } catch {
-        return new Response(JSON.stringify({ message: 'Failed to get history' }), { status: 500 });
+        return new Response(
+          JSON.stringify({ message: "Failed to get history" }),
+          { status: 500 },
+        );
       }
     } else {
-      return new Response(JSON.stringify({ message: 'Unauthorized' }), { status: 401 });
+      return new Response(JSON.stringify({ message: "Unauthorized" }), {
+        status: 401,
+      });
     }
   });
 };

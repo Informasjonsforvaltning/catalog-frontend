@@ -1,13 +1,13 @@
-import { withAuth } from 'next-auth/middleware';
+import { withAuth } from "next-auth/middleware";
 
 export default withAuth({
   pages: {
-    signIn: '/auth/signin',
-    signOut: '/auth/signout',
+    signIn: "/auth/signin",
+    signOut: "/auth/signout",
   },
   callbacks: {
     authorized: ({ token }) => {
-      if (!token || token.error === 'RefreshAccessTokenError') {
+      if (!token || token.error === "RefreshAccessTokenError") {
         return false;
       }
       return true;
@@ -16,5 +16,5 @@ export default withAuth({
 });
 
 export const config = {
-  matcher: ['/((?!auth/signin|api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ["/((?!auth/signin|api|_next/static|_next/image|favicon.ico).*)"],
 };

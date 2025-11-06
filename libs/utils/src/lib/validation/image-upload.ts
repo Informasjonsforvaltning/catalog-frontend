@@ -1,4 +1,4 @@
-import { localization } from '../language/localization';
+import { localization } from "../language/localization";
 
 export const validateImageFile = (file: File | null): Promise<boolean> => {
   return new Promise((resolve) => {

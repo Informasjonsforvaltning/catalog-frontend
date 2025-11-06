@@ -1,4 +1,4 @@
-import { getDataServiceById } from '@catalog-frontend/data-access';
+import { getDataServiceById } from "@catalog-frontend/data-access";
 
 /**
  * Fetches a data service with retry mechanism to handle race conditions
@@ -20,7 +20,9 @@ export async function fetchDataServiceWithRetry(
   const startTime = Date.now();
 
   // Check if we're in a test environment (E2E tests)
-  const isTestEnvironment = process.env.NODE_ENV === 'test' || process.env.NX_TASK_TARGET_PROJECT?.includes('e2e');
+  const isTestEnvironment =
+    process.env.NODE_ENV === "test" ||
+    process.env.NX_TASK_TARGET_PROJECT?.includes("e2e");
 
   // Adjust retry behavior for test environment
   if (isTestEnvironment) {
@@ -31,23 +33,33 @@ export async function fetchDataServiceWithRetry(
   while (retryCount < maxRetries) {
     // Check if we've exceeded the timeout
     if (Date.now() - startTime > timeout) {
-      console.warn(`[fetchDataServiceWithRetry] Timeout exceeded after ${timeout}ms`);
+      console.warn(
+        `[fetchDataServiceWithRetry] Timeout exceeded after ${timeout}ms`,
+      );
       break;
     }
 
-    const response = await getDataServiceById(catalogId, dataServiceId, accessToken);
+    const response = await getDataServiceById(
+      catalogId,
+      dataServiceId,
+      accessToken,
+    );
 
     if (response.ok) {
       const dataService = await response.json();
       if (retryCount > 0) {
-        console.log(`[fetchDataServiceWithRetry] Successfully fetched data service after ${retryCount + 1} attempts`);
+        console.log(
+          `[fetchDataServiceWithRetry] Successfully fetched data service after ${retryCount + 1} attempts`,
+        );
       }
       return dataService;
     }
 
     // If it's a 404 and we haven't exhausted retries, wait and retry
     if (response.status === 404 && retryCount < maxRetries - 1) {
-      const delay = isTestEnvironment ? 500 * (retryCount + 1) : 1000 * (retryCount + 1); // Shorter delays in tests
+      const delay = isTestEnvironment
+        ? 500 * (retryCount + 1)
+        : 1000 * (retryCount + 1); // Shorter delays in tests
       console.log(
         `[fetchDataServiceWithRetry] Data service not found, retrying in ${delay}ms (attempt ${retryCount + 1}/${maxRetries})`,
       );

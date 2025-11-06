@@ -1,15 +1,15 @@
-import { authOptions } from '@catalog-frontend/utils';
-import { getToken } from 'next-auth/jwt';
-import { getServerSession } from 'next-auth/next';
+import { authOptions } from "@catalog-frontend/utils";
+import { getToken } from "next-auth/jwt";
+import { getServerSession } from "next-auth/next";
 
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
 const handler = async (req: NextRequest) => {
   // Get JWT
   const token = await getToken({ req });
 
   // Get the site base url
-  const baseUrl = process.env.NEXTAUTH_URL ?? '';
+  const baseUrl = process.env.NEXTAUTH_URL ?? "";
 
   try {
     // We need to grab the session to get at the id token

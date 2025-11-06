@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Children,
@@ -10,12 +10,12 @@ import {
   RefObject,
   useRef,
   useState,
-} from 'react';
-import styles from './form-layout.module.scss';
-import { Heading, Link, Paragraph, Tag } from '@digdir/designsystemet-react';
-import { useIntersectionObserver } from '../intersection-observer';
-import classNames from 'classnames';
-import { localization } from '@catalog-frontend/utils';
+} from "react";
+import styles from "./form-layout.module.scss";
+import { Heading, Link, Paragraph, Tag } from "@digdir/designsystemet-react";
+import { useIntersectionObserver } from "../intersection-observer";
+import classNames from "classnames";
+import { localization } from "@catalog-frontend/utils";
 
 type FormLayoutProps = {
   title?: ReactNode;
@@ -38,10 +38,7 @@ type SectionProps = {
 const SideMenu = ({ heading, children }: SideMenuProps) => {
   return (
     <div>
-      <Heading
-        size='sm'
-        className={styles.sideMenuHeading}
-      >
+      <Heading size="sm" className={styles.sideMenuHeading}>
         {heading}
       </Heading>
       <ol>
@@ -61,7 +58,16 @@ const MenuItem = ({
   required = false,
   children,
 }: PropsWithChildren & { active: boolean; required?: boolean }) => {
-  return <li className={classNames(active ? styles.active : {}, required ? styles.required : {})}>{children}</li>;
+  return (
+    <li
+      className={classNames(
+        active ? styles.active : {},
+        required ? styles.required : {},
+      )}
+    >
+      {children}
+    </li>
+  );
 };
 
 export const FormLayout = ({ children }: FormLayoutProps) => {
@@ -70,8 +76,10 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
     .filter((child) => isValidElement(child) && child.type === Section)
     .map((child) => child as ReactElement);
 
-  const [activeSection, setActiveSection] = useState('');
-  const sectionRefs = useRef(sectionArray.map(() => createRef<HTMLDivElement>()));
+  const [activeSection, setActiveSection] = useState("");
+  const sectionRefs = useRef(
+    sectionArray.map(() => createRef<HTMLDivElement>()),
+  );
 
   const [observerEnabled, setObserverEnabled] = useState(true);
 
@@ -88,7 +96,7 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
     setObserverEnabled(false); // Disable observer temporarily
 
     // Scroll to the clicked section smoothly
-    sectionRefs.current[index].current?.scrollIntoView({ behavior: 'smooth' });
+    sectionRefs.current[index].current?.scrollIntoView({ behavior: "smooth" });
 
     // Re-enable observer after a delay to avoid conflict
     setTimeout(() => {
@@ -100,9 +108,10 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
     <div className={styles.layout}>
       <div className={styles.grid}>
         <div className={styles.sideMenu}>
-          <SideMenu heading='Innhold i skjema'>
+          <SideMenu heading="Innhold i skjema">
             {sectionArray.map((child, index) => {
-              const { id, title, required, changed, error } = child.props as SectionProps;
+              const { id, title, required, changed, error } =
+                child.props as SectionProps;
               return (
                 <MenuItem
                   key={`menu-item-${id}`}
@@ -114,11 +123,13 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
                     className={styles.sideMenuItem}
                   >
                     <span>
-                      {title}{' '}
+                      {title}{" "}
                       {required && (
                         <span
                           className={styles.required}
-                          aria-label={localization.conceptForm.validation.required}
+                          aria-label={
+                            localization.conceptForm.validation.required
+                          }
                         >
                           *
                         </span>
@@ -126,18 +137,18 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
                     </span>
                     {changed && (
                       <Tag
-                        size='sm'
-                        color='warning'
-                        style={{ scale: 0.8, margin: '-0.25rem 0' }}
+                        size="sm"
+                        color="warning"
+                        style={{ scale: 0.8, margin: "-0.25rem 0" }}
                       >
                         {localization.changed}
                       </Tag>
                     )}
                     {error && (
                       <Tag
-                        size='sm'
-                        color='danger'
-                        style={{ scale: 0.8, margin: '-0.25rem 0' }}
+                        size="sm"
+                        color="danger"
+                        style={{ scale: 0.8, margin: "-0.25rem 0" }}
                       >
                         {localization.error}
                       </Tag>
@@ -153,11 +164,7 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
             const { id } = section.props as SectionProps;
             const ref = sectionRefs.current[index];
             return (
-              <div
-                id={id}
-                key={id}
-                ref={ref}
-              >
+              <div id={id} key={id} ref={ref}>
                 {section}
               </div>
             );
@@ -171,13 +178,12 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
 const Section = ({ title, subtitle, children }: SectionProps) => (
   <div className={styles.section}>
     <div className={styles.sectionHeading}>
-      <Heading
-        className={styles.sectionHeadingTitle}
-        level={2}
-      >
+      <Heading className={styles.sectionHeadingTitle} level={2}>
         {title}
       </Heading>
-      <Paragraph className={styles.sectionHeadingSubtitle}>{subtitle}</Paragraph>
+      <Paragraph className={styles.sectionHeadingSubtitle}>
+        {subtitle}
+      </Paragraph>
     </div>
     <div className={styles.sectionContent}>{children}</div>
   </div>

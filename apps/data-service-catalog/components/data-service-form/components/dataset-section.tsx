@@ -1,13 +1,20 @@
-'use client';
-import { DataService } from '@catalog-frontend/types';
-import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Box, Combobox, Fieldset } from '@digdir/designsystemet-react';
-import { useFormikContext } from 'formik';
-import { debounce } from 'lodash';
-import { useCallback, useState } from 'react';
-import styles from '../data-service-form.module.css';
-import { useSearchDatasetsByUri, useSearchDatasetSuggestions } from '../../../hooks/useSearchService';
-import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
+"use client";
+import { DataService } from "@catalog-frontend/types";
+import {
+  capitalizeFirstLetter,
+  getTranslateText,
+  localization,
+} from "@catalog-frontend/utils";
+import { Box, Combobox, Fieldset } from "@digdir/designsystemet-react";
+import { useFormikContext } from "formik";
+import { debounce } from "lodash";
+import { useCallback, useState } from "react";
+import styles from "../data-service-form.module.css";
+import {
+  useSearchDatasetsByUri,
+  useSearchDatasetSuggestions,
+} from "../../../hooks/useSearchService";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 
 interface Props {
   searchEnv: string;
@@ -15,10 +22,14 @@ interface Props {
 
 export const DatasetSection = ({ searchEnv }: Props) => {
   const { setFieldValue, values } = useFormikContext<DataService>();
-  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
-  const { data: datasetSuggestions, isLoading: searching } = useSearchDatasetSuggestions(searchEnv, searchTerm);
-  const { data: selectedDatasets, isLoading } = useSearchDatasetsByUri(searchEnv, values.servesDataset || []);
+  const { data: datasetSuggestions, isLoading: searching } =
+    useSearchDatasetSuggestions(searchEnv, searchTerm);
+  const { data: selectedDatasets, isLoading } = useSearchDatasetsByUri(
+    searchEnv,
+    values.servesDataset || [],
+  );
 
   const comboboxOptions = [
     // Combine selectedDatasets and datasetSuggestions, and adding uri's for values not found in selectedDatasets
@@ -57,16 +68,18 @@ export const DatasetSection = ({ searchEnv }: Props) => {
             <TitleWithHelpTextAndTag
               helpText={localization.dataServiceForm.helptext.servesDataset}
               tagTitle={localization.tag.recommended}
-              tagColor='info'
+              tagColor="info"
             >
               {localization.dataServiceForm.fieldLabel.servesDataset}
             </TitleWithHelpTextAndTag>
           }
-          size='sm'
+          size="sm"
         >
           <Combobox
-            size='sm'
-            onValueChange={(selectedValues: string[]) => setFieldValue('servesDataset', selectedValues)}
+            size="sm"
+            onValueChange={(selectedValues: string[]) =>
+              setFieldValue("servesDataset", selectedValues)
+            }
             onChange={(input: any) => debouncedSearch(input.target.value)}
             loading={searching}
             multiple
@@ -83,14 +96,27 @@ export const DatasetSection = ({ searchEnv }: Props) => {
                   key={suggestion.uri}
                   displayValue={
                     suggestion.title
-                      ? capitalizeFirstLetter(getTranslateText(suggestion.title) as string)
+                      ? capitalizeFirstLetter(
+                          getTranslateText(suggestion.title) as string,
+                        )
                       : suggestion.uri
                   }
                 >
                   <div className={styles.comboboxOption}>
-                    <div>{capitalizeFirstLetter(getTranslateText(suggestion.title) as string) ?? suggestion.uri}</div>
-                    <div>{capitalizeFirstLetter(getTranslateText(suggestion.description) as string) ?? ''}</div>
-                    <div>{getTranslateText(suggestion.organization?.prefLabel) ?? ''}</div>
+                    <div>
+                      {capitalizeFirstLetter(
+                        getTranslateText(suggestion.title) as string,
+                      ) ?? suggestion.uri}
+                    </div>
+                    <div>
+                      {capitalizeFirstLetter(
+                        getTranslateText(suggestion.description) as string,
+                      ) ?? ""}
+                    </div>
+                    <div>
+                      {getTranslateText(suggestion.organization?.prefLabel) ??
+                        ""}
+                    </div>
                   </div>
                 </Combobox.Option>
               ))}

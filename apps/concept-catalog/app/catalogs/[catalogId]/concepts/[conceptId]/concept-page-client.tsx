@@ -1,12 +1,18 @@
-'use client';
+"use client";
 
-import { FC, useEffect, useId, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import NextLink from 'next/link';
-import { isEmpty } from 'lodash';
-import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from '@navikt/aksel-icons';
-import cn from 'classnames';
-import { Accordion, Chip, Link, Switch, Tabs, Textarea } from '@digdir/designsystemet-react';
+import { FC, useEffect, useId, useState } from "react";
+import { useRouter } from "next/navigation";
+import NextLink from "next/link";
+import { isEmpty } from "lodash";
+import { ChatIcon, EnvelopeClosedIcon, PhoneIcon } from "@navikt/aksel-icons";
+import {
+  Accordion,
+  Chip,
+  Link,
+  Switch,
+  Tabs,
+  Textarea,
+} from "@digdir/designsystemet-react";
 import {
   ConceptStatusTagProps,
   InfoCard,
@@ -19,7 +25,7 @@ import {
   HelpMarkdown,
   ConfirmModal,
   MarkdownComponent,
-} from '@catalog-frontend/ui';
+} from "@catalog-frontend/ui";
 import {
   localization,
   getTranslateText as translate,
@@ -29,7 +35,7 @@ import {
   ensureStringArray,
   versionToString,
   getTranslateText,
-} from '@catalog-frontend/utils';
+} from "@catalog-frontend/utils";
 import {
   Concept,
   Comment,
@@ -41,14 +47,22 @@ import {
   ReferenceDataCode,
   UnionRelation,
   RelatedConcept,
-} from '@catalog-frontend/types';
-import { useCreateComment, useDeleteComment, useGetComments, useUpdateComment } from '@concept-catalog/hooks/comments';
-import { useGetHistory } from '@concept-catalog/hooks/history';
-import { useDeleteConcept, usePublishConcept } from '@concept-catalog/hooks/concepts';
-import RelatedConcepts from '@concept-catalog/components/related-concepts';
-import Definition from '@concept-catalog/components/definition';
-import { CodeListCodeLinks } from '@concept-catalog/components/codelist-code-links';
-import classes from './concept-page.module.scss';
+} from "@catalog-frontend/types";
+import {
+  useCreateComment,
+  useDeleteComment,
+  useGetComments,
+  useUpdateComment,
+} from "@concept-catalog/hooks/comments";
+import { useGetHistory } from "@concept-catalog/hooks/history";
+import {
+  useDeleteConcept,
+  usePublishConcept,
+} from "@concept-catalog/hooks/concepts";
+import RelatedConcepts from "@concept-catalog/components/related-concepts";
+import Definition from "@concept-catalog/components/definition";
+import { CodeListCodeLinks } from "@concept-catalog/components/codelist-code-links";
+import classes from "./concept-page.module.scss";
 
 type MapType = {
   [id: string]: string;
@@ -59,7 +73,7 @@ type InterneFeltProps = {
   fields: InternalField[];
   codeLists: CodeList[];
   users: AssignedUser[];
-  location: 'main_column' | 'right_column';
+  location: "main_column" | "right_column";
   language: string;
 };
 
@@ -90,10 +104,20 @@ type ConceptPageClientProps = {
   isValid: boolean;
 };
 
-const InterneFelt = ({ concept, fields, codeLists, users, location, language }: InterneFeltProps) => {
+const InterneFelt = ({
+  concept,
+  fields,
+  codeLists,
+  users,
+  location,
+  language,
+}: InterneFeltProps) => {
   const getCodeName = (codeListId: string, codeId: string) => {
     const codeList = codeLists.find((codeList) => codeList.id === codeListId);
-    return translate(codeList?.codes?.find((code) => `${code.id}` === codeId)?.name, language);
+    return translate(
+      codeList?.codes?.find((code) => `${code.id}` === codeId)?.name,
+      language,
+    );
   };
 
   const getUserName = (userId: string) => {
@@ -113,7 +137,11 @@ const InterneFelt = ({ concept, fields, codeLists, users, location, language }: 
       };
     })
     .filter((field) => field?.value !== null && field?.location === location)
-    .sort((a, b) => `${translate(a?.label, language)}`.localeCompare(`${translate(b?.label, language)}`));
+    .sort((a, b) =>
+      `${translate(a?.label, language)}`.localeCompare(
+        `${translate(b?.label, language)}`,
+      ),
+    );
 
   return (
     <>
@@ -124,10 +152,22 @@ const InterneFelt = ({ concept, fields, codeLists, users, location, language }: 
               key={`internalField-${field.id}`}
               title={`${translate(field.label, language)}:`}
             >
-              {(field.type === 'text_short' || field.type === 'text_long') && <span>{field.value}</span>}
-              {field.type === 'boolean' && <span>{field.value === 'true' ? localization.yes : localization.no}</span>}
-              {field.type === 'user_list' && <span>{getUserName(field.value ?? '')}</span>}
-              {field.type === 'code_list' && <span>{getCodeName(field.codeListId ?? '', field.value ?? '')}</span>}
+              {(field.type === "text_short" || field.type === "text_long") && (
+                <span>{field.value}</span>
+              )}
+              {field.type === "boolean" && (
+                <span>
+                  {field.value === "true" ? localization.yes : localization.no}
+                </span>
+              )}
+              {field.type === "user_list" && (
+                <span>{getUserName(field.value ?? "")}</span>
+              )}
+              {field.type === "code_list" && (
+                <span>
+                  {getCodeName(field.codeListId ?? "", field.value ?? "")}
+                </span>
+              )}
             </InfoCard.Item>
           ),
       )}
@@ -151,18 +191,22 @@ export const ConceptPageClient = ({
   internalRelatedConcepts,
   isValid,
 }: ConceptPageClientProps) => {
-  const [language, setLanguage] = useState('nb');
+  const [language, setLanguage] = useState("nb");
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [isPublished, setIsPublished] = useState(concept?.erPublisert);
-  const [publishedDate, setPublishedDate] = useState(concept?.publiseringsTidspunkt);
+  const [publishedDate, setPublishedDate] = useState(
+    concept?.publiseringsTidspunkt,
+  );
   const router = useRouter();
-  const catalogId = organization.organizationId ?? '';
+  const catalogId = organization.organizationId ?? "";
 
   const publishConcept = usePublishConcept(catalogId);
   const deleteConcept = useDeleteConcept(catalogId);
 
   const handleLabelClick = (label: any) => {
-    const queryParams = new URLSearchParams({ 'filter.label': label }).toString();
+    const queryParams = new URLSearchParams({
+      "filter.label": label,
+    }).toString();
     router.push(`/catalogs/${catalogId}/concepts?${queryParams}`);
   };
 
@@ -182,25 +226,18 @@ export const ConceptPageClient = ({
   const infoDataColumnRight = [
     [localization.conceptId, concept?.originaltBegrep],
     [
-      <div
-        key='publicationState'
-        className={classes.publicationStateHeader}
-      >
+      <div key="publicationState" className={classes.publicationStateHeader}>
         {localization.publicationState.state}
         {isValid || isPublished ? (
-          <HelpMarkdown
-            aria-label='Info publisering'
-            severity='info'
-          >
+          <HelpMarkdown aria-label="Info publisering" severity="info">
             {`Viktig! Når et begrep er publisert, kan det verken slettes eller avpubliseres, men kun endres.${
-              isPublished ? '' : ' Sørg derfor for at alle opplysninger er korrekte før publisering.'
+              isPublished
+                ? ""
+                : " Sørg derfor for at alle opplysninger er korrekte før publisering."
             }`}
           </HelpMarkdown>
         ) : (
-          <HelpMarkdown
-            aria-label='Valideringsfeil'
-            severity='warning'
-          >
+          <HelpMarkdown aria-label="Valideringsfeil" severity="warning">
             {`Publisering er ikke mulig fordi ett eller flere felt inneholder ugyldige eller manglende verdier. Klikk på 
             [Rediger begrepet](/catalogs/${catalogId}/concepts/${concept?.id}/edit?validate=1) for å åpne skjemaet og se 
             hvilke feil som må rettes for å publisere.`}
@@ -210,30 +247,32 @@ export const ConceptPageClient = ({
       <>
         <div>
           <Switch
-            value='published'
-            size='small'
-            position='right'
+            value="published"
+            size="small"
+            position="right"
             readOnly={isPublished || !hasWritePermission || !isValid}
             checked={isPublished}
             onChange={handleOnChangePublished}
           >
-            {isPublished ? localization.publicationState.published : localization.publicationState.unpublished}
+            {isPublished
+              ? localization.publicationState.published
+              : localization.publicationState.unpublished}
           </Switch>
         </div>
         <div className={classes.greyFont}>
           {isPublished
             ? `${localization.publicationState.publishedInFDK}${
                 publishedDate
-                  ? ' ' +
+                  ? " " +
                     formatISO(publishedDate, {
-                      weekday: 'long',
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
                     })
-                  : ''
+                  : ""
               }`
-            : ''}
+            : ""}
         </div>
       </>,
     ],
@@ -245,21 +284,25 @@ export const ConceptPageClient = ({
             <>
               {concept?.gyldigFom && (
                 <div>
-                  <span className={classes.greyFont}>{localization.fromAndIncluding}: </span>
+                  <span className={classes.greyFont}>
+                    {localization.fromAndIncluding}:{" "}
+                  </span>
                   {`${formatISO(concept?.gyldigFom, {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
                   })}`}
                 </div>
               )}
               {concept?.gyldigTom && (
                 <div>
-                  <span className={classes.greyFont}>{localization.toAndIncluding}: </span>
+                  <span className={classes.greyFont}>
+                    {localization.toAndIncluding}:{" "}
+                  </span>
                   {`${formatISO(concept?.gyldigTom, {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
                   })}`}
                 </div>
               )}
@@ -272,7 +315,8 @@ export const ConceptPageClient = ({
       ? [
           [
             localization.assigned,
-            usersResult?.users?.find((user) => user.id === concept.assignedUser)?.name ?? localization.unknown,
+            usersResult?.users?.find((user) => user.id === concept.assignedUser)
+              ?.name ?? localization.unknown,
           ],
         ]
       : []),
@@ -280,10 +324,7 @@ export const ConceptPageClient = ({
       ? [
           [
             localization.concept.label,
-            <ul
-              key='label-list'
-              className={classes.labels}
-            >
+            <ul key="label-list" className={classes.labels}>
               {concept?.merkelapp?.map((label) => (
                 <li key={`label-${label}`}>
                   <Chip.Toggle
@@ -303,11 +344,11 @@ export const ConceptPageClient = ({
           [
             localization.concept.dateLastUpdated,
             formatISO(concept?.endringslogelement?.endringstidspunkt, {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            }) ?? '',
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            }) ?? "",
           ],
         ]
       : []),
@@ -316,35 +357,28 @@ export const ConceptPageClient = ({
           [
             localization.concept.created,
             formatISO(concept?.opprettet, {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            }) ?? '',
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            }) ?? "",
           ],
         ]
       : []),
-    ...(concept?.opprettetAv ? [[`${localization.created} ${localization.by}`, concept.opprettetAv]] : []),
     ...(concept?.kontaktpunkt?.harEpost || concept?.kontaktpunkt?.harTelefon
       ? [
           [
             localization.concept.contactInformation,
             <>
               {concept?.kontaktpunkt?.harEpost && (
-                <div
-                  key='contactEmail'
-                  className={classes.contact}
-                >
+                <div key="contactEmail" className={classes.contact}>
                   <EnvelopeClosedIcon />
                   &nbsp;
                   {concept?.kontaktpunkt?.harEpost}
                 </div>
               )}
               {concept?.kontaktpunkt?.harTelefon && (
-                <div
-                  key='contactTl'
-                  className={classes.contact}
-                >
+                <div key="contactTl" className={classes.contact}>
                   <PhoneIcon />
                   &nbsp;
                   {concept?.kontaktpunkt?.harTelefon}
@@ -357,7 +391,9 @@ export const ConceptPageClient = ({
   ];
 
   const findStatusLabel = (statusURI: any) => {
-    return translate(conceptStatuses?.find((s) => s.uri === statusURI)?.label) as string;
+    return translate(
+      conceptStatuses?.find((s) => s.uri === statusURI)?.label,
+    ) as string;
   };
 
   const handleLanguageChange = (lang: any) => {
@@ -379,7 +415,8 @@ export const ConceptPageClient = ({
     }
   };
 
-  const getTitle = (text: string | string[]) => (text ? text : localization.concept.noName);
+  const getTitle = (text: string | string[]) =>
+    text ? text : localization.concept.noName;
   const getDetailSubtitle = (lang: any) => {
     const subjectCodeList = codeListsResult?.codeLists?.find(
       (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
@@ -396,14 +433,16 @@ export const ConceptPageClient = ({
       );
     }
 
-    return ensureStringArray(translate(concept.fagområde, lang)).join(', ');
+    return ensureStringArray(translate(concept.fagområde, lang)).join(", ");
   };
 
   const getStatusFromURL = (statusURI?: string | null) => {
-    if (statusURI && typeof statusURI === 'string') {
-      const urlParts = statusURI.split('/');
+    if (statusURI && typeof statusURI === "string") {
+      const urlParts = statusURI.split("/");
       if (urlParts.length > 0) {
-        return urlParts[urlParts.length - 1] as ConceptStatusTagProps['statusKey'];
+        return urlParts[
+          urlParts.length - 1
+        ] as ConceptStatusTagProps["statusKey"];
       }
     }
     return undefined;
@@ -418,7 +457,7 @@ export const ConceptPageClient = ({
             <InfoCard.Item
               key={`revision-${revision.id}`}
               title={`${localization.versionId} ${revision.id}`}
-              headingColor='light'
+              headingColor="light"
             >
               <div className={classes.revision}>
                 <div>v{versionToString(revision?.versjonsnr)}</div>
@@ -426,17 +465,20 @@ export const ConceptPageClient = ({
                   <NextLink
                     prefetch={false}
                     href={
-                      validOrganizationNumber(catalogId) && validUUID(revision.id)
+                      validOrganizationNumber(catalogId) &&
+                      validUUID(revision.id)
                         ? `/catalogs/${catalogId}/concepts/${revision.id}`
-                        : '#'
+                        : "#"
                     }
                     className={classes.versionTitle}
                   >
-                    {getTitle(translate(revision?.anbefaltTerm?.navn, language))}
+                    {getTitle(
+                      translate(revision?.anbefaltTerm?.navn, language),
+                    )}
                   </NextLink>
                 </div>
                 {status && (
-                  <div className={cn(classes.status)}>
+                  <div className={classes.status}>
                     <Tag.ConceptStatus
                       statusKey={getStatusFromURL(revision?.statusURI)}
                       statusLabel={status}
@@ -459,13 +501,15 @@ export const ConceptPageClient = ({
   }, [concept]);
 
   const CommentsTab: FC = () => {
-    const [newCommentText, setNewCommentText] = useState('');
+    const [newCommentText, setNewCommentText] = useState("");
     const [updateCommentText, setUpdateCommentText] = useState<MapType>({});
 
-    const { status: getCommentsStatus, data: getCommentsData } = useGetComments({
-      orgNumber: catalogId,
-      topicId: concept?.id,
-    });
+    const { status: getCommentsStatus, data: getCommentsData } = useGetComments(
+      {
+        orgNumber: catalogId,
+        topicId: concept?.id,
+      },
+    );
 
     const createComment = useCreateComment({
       orgNumber: catalogId,
@@ -485,7 +529,7 @@ export const ConceptPageClient = ({
     const handleCreateComment = () => {
       createComment.mutate(newCommentText, {
         onSuccess: () => {
-          setNewCommentText('');
+          setNewCommentText("");
         },
       });
     };
@@ -524,14 +568,17 @@ export const ConceptPageClient = ({
     };
 
     const handleUpdateCommentChange = (commentId: any, event: any) => {
-      setUpdateCommentText({ ...updateCommentText, ...{ [commentId]: event.target.value } });
+      setUpdateCommentText({
+        ...updateCommentText,
+        ...{ [commentId]: event.target.value },
+      });
     };
 
     const newCommentButtonId = useId();
     const isCommentInEditMode = (id: any) => id in updateCommentText;
 
-    return getCommentsStatus == 'pending' ? (
-      <Spinner size='medium' />
+    return getCommentsStatus == "pending" ? (
+      <Spinner size="medium" />
     ) : (
       <>
         <div className={classes.bottomSpacingSmall}>
@@ -576,7 +623,7 @@ export const ConceptPageClient = ({
                     />
                   ) : (
                     <div>
-                      {comment?.comment.split('\n').map((ln, i) => (
+                      {comment?.comment.split("\n").map((ln, i) => (
                         <span key={`comment-${comment?.id}-${i}`}>
                           {ln}
                           <br />
@@ -587,7 +634,7 @@ export const ConceptPageClient = ({
                   {comment.user?.id === username && (
                     <div className={classes.commentActions}>
                       <Button
-                        variant='secondary'
+                        variant="secondary"
                         onClick={() => handleUpdateComment(comment)}
                       >
                         {isCommentInEditMode(comment.id)
@@ -595,7 +642,7 @@ export const ConceptPageClient = ({
                           : localization.comment.editComment}
                       </Button>
                       <Button
-                        variant='secondary'
+                        variant="secondary"
                         onClick={() => handleDeleteComment(comment.id)}
                       >
                         {localization.comment.deleteComment}
@@ -622,8 +669,8 @@ export const ConceptPageClient = ({
       setHistoryCurrentPage(page);
     };
 
-    return getHistoryStatus === 'pending' ? (
-      <Spinner size='medium' />
+    return getHistoryStatus === "pending" ? (
+      <Spinner size="medium" />
     ) : getHistoryData?.updates?.length === 0 ? (
       <span>{localization.history.noChanges}</span>
     ) : (
@@ -668,17 +715,25 @@ export const ConceptPageClient = ({
     return (
       <div>
         <InfoCard>
-          {!isEmpty(translate(concept?.definisjon?.tekst ?? '', language)) && !isEmpty(concept?.definisjon) && (
-            <InfoCard.Item title={`${localization.concept.definition}:`}>
-              <Definition
-                definition={concept?.definisjon}
-                language={language}
-              />
-            </InfoCard.Item>
-          )}
-          {!isEmpty(translate(concept?.definisjonForAllmennheten?.tekst ?? '', language)) &&
+          {!isEmpty(translate(concept?.definisjon?.tekst ?? "", language)) &&
+            !isEmpty(concept?.definisjon) && (
+              <InfoCard.Item title={`${localization.concept.definition}:`}>
+                <Definition
+                  definition={concept?.definisjon}
+                  language={language}
+                />
+              </InfoCard.Item>
+            )}
+          {!isEmpty(
+            translate(
+              concept?.definisjonForAllmennheten?.tekst ?? "",
+              language,
+            ),
+          ) &&
             !isEmpty(concept?.definisjonForAllmennheten) && (
-              <InfoCard.Item title={`${localization.concept.publicDefinition}:`}>
+              <InfoCard.Item
+                title={`${localization.concept.publicDefinition}:`}
+              >
                 <Definition
                   definition={concept?.definisjonForAllmennheten}
                   language={language}
@@ -686,9 +741,16 @@ export const ConceptPageClient = ({
               </InfoCard.Item>
             )}
 
-          {!isEmpty(translate(concept?.definisjonForSpesialister?.tekst ?? '', language)) &&
+          {!isEmpty(
+            translate(
+              concept?.definisjonForSpesialister?.tekst ?? "",
+              language,
+            ),
+          ) &&
             !isEmpty(concept?.definisjonForSpesialister) && (
-              <InfoCard.Item title={`${localization.concept.specialistDefinition}:`}>
+              <InfoCard.Item
+                title={`${localization.concept.specialistDefinition}:`}
+              >
                 <Definition
                   definition={concept?.definisjonForSpesialister}
                   language={language}
@@ -713,7 +775,9 @@ export const ConceptPageClient = ({
           {!isEmpty(translate(concept?.tillattTerm, language)) && (
             <InfoCard.Item title={`${localization.concept.altLabel}:`}>
               <ul>
-                {ensureStringArray(translate(concept?.tillattTerm, language)).map((term, i) => (
+                {ensureStringArray(
+                  translate(concept?.tillattTerm, language),
+                ).map((term, i) => (
                   <li key={`altLabel-${i}`}>{term}</li>
                 ))}
               </ul>
@@ -722,7 +786,9 @@ export const ConceptPageClient = ({
           {!isEmpty(translate(concept?.frarådetTerm, language)) && (
             <InfoCard.Item title={`${localization.concept.hiddenLabel}:`}>
               <ul>
-                {ensureStringArray(translate(concept?.frarådetTerm, language)).map((term, i) => (
+                {ensureStringArray(
+                  translate(concept?.frarådetTerm, language),
+                ).map((term, i) => (
                   <li key={`hiddenLabel-${i}`}>{term}</li>
                 ))}
               </ul>
@@ -730,12 +796,17 @@ export const ConceptPageClient = ({
           )}
           {!isEmpty(relatedConcepts) && (
             <InfoCard.Item
-              title={`${localization.formatString(localization.concept.relatedConcepts, {
-                conceptCount: conceptRelations.length,
-              })}`}
+              title={`${localization.formatString(
+                localization.concept.relatedConcepts,
+                {
+                  conceptCount: conceptRelations.length,
+                },
+              )}`}
             >
               <RelatedConcepts
-                title={getTitle(translate(concept?.anbefaltTerm?.navn, language))}
+                title={getTitle(
+                  translate(concept?.anbefaltTerm?.navn, language),
+                )}
                 conceptRelations={conceptRelations}
                 relatedConcepts={relatedConcepts}
                 validFromIncluding={concept?.gyldigFom}
@@ -746,12 +817,17 @@ export const ConceptPageClient = ({
           )}
           {!isEmpty(internalRelatedConcepts) && (
             <InfoCard.Item
-              title={`${localization.formatString(localization.concept.unpublishedRelatedConcepts, {
-                conceptCount: internalConceptRelations.length,
-              })}`}
+              title={`${localization.formatString(
+                localization.concept.unpublishedRelatedConcepts,
+                {
+                  conceptCount: internalConceptRelations.length,
+                },
+              )}`}
             >
               <RelatedConcepts
-                title={getTitle(translate(concept?.anbefaltTerm?.navn, language))}
+                title={getTitle(
+                  translate(concept?.anbefaltTerm?.navn, language),
+                )}
                 conceptRelations={internalConceptRelations}
                 relatedConcepts={internalRelatedConcepts}
                 validFromIncluding={concept?.gyldigFom}
@@ -760,13 +836,11 @@ export const ConceptPageClient = ({
               />
             </InfoCard.Item>
           )}
-          {(!isEmpty(concept?.omfang?.uri) || !isEmpty(concept?.omfang?.tekst)) && (
+          {(!isEmpty(concept?.omfang?.uri) ||
+            !isEmpty(concept?.omfang?.tekst)) && (
             <InfoCard.Item title={`${localization.concept.valueDomain}:`}>
               {concept?.omfang?.uri ? (
-                <Link
-                  href={concept?.omfang?.uri}
-                  target='_blank'
-                >
+                <Link href={concept?.omfang?.uri} target="_blank">
                   {concept?.omfang?.tekst || concept?.omfang?.uri}
                 </Link>
               ) : (
@@ -779,20 +853,23 @@ export const ConceptPageClient = ({
             codeLists={codeListsResult.codeLists}
             users={usersResult.users}
             concept={concept}
-            location='main_column'
+            location="main_column"
             language={language}
           />
         </InfoCard>
 
         <div className={classes.tabs}>
-          <Tabs
-            defaultValue={localization.comment.comments}
-            size='small'
-          >
+          <Tabs defaultValue={localization.comment.comments} size="small">
             <Tabs.List>
-              <Tabs.Tab value={localization.comment.comments}>{localization.comment.comments}</Tabs.Tab>
-              <Tabs.Tab value={localization.changeHistory}>{localization.changeHistory}</Tabs.Tab>
-              <Tabs.Tab value={localization.concept.versions}>{localization.concept.versions}</Tabs.Tab>
+              <Tabs.Tab value={localization.comment.comments}>
+                {localization.comment.comments}
+              </Tabs.Tab>
+              <Tabs.Tab value={localization.changeHistory}>
+                {localization.changeHistory}
+              </Tabs.Tab>
+              <Tabs.Tab value={localization.concept.versions}>
+                {localization.concept.versions}
+              </Tabs.Tab>
             </Tabs.List>
             <Tabs.Content value={localization.comment.comments}>
               <CommentsTab />
@@ -811,12 +888,12 @@ export const ConceptPageClient = ({
 
   const RightColumn = () => {
     return (
-      <InfoCard size='small'>
+      <InfoCard size="small">
         {infoDataColumnRight.map(([label, value]) => (
           <InfoCard.Item
             key={`info-data-${label}`}
             title={label}
-            headingColor='light'
+            headingColor="light"
           >
             <span>{value}</span>
           </InfoCard.Item>
@@ -826,7 +903,7 @@ export const ConceptPageClient = ({
           codeLists={codeListsResult.codeLists}
           users={usersResult.users}
           concept={concept}
-          location='right_column'
+          location="right_column"
           language={language}
         />
       </InfoCard>
@@ -850,10 +927,12 @@ export const ConceptPageClient = ({
         show={showConfirmDelete}
       />
       <DetailsPageLayout
-        loading={deleteConcept.status === 'pending'}
+        loading={deleteConcept.status === "pending"}
         handleLanguageChange={handleLanguageChange}
         language={language}
-        headingTitle={getTitle(translate(concept?.anbefaltTerm?.navn, language))}
+        headingTitle={getTitle(
+          translate(concept?.anbefaltTerm?.navn, language),
+        )}
         headingTag={
           <Tag.ConceptStatus
             statusKey={getStatusFromURL(concept?.statusURI)}
@@ -872,11 +951,13 @@ export const ConceptPageClient = ({
           <div className={classes.actionButtons}>
             {hasWritePermission && (
               <>
-                <Button onClick={handleEditConcept}>{localization.button.edit}</Button>
+                <Button onClick={handleEditConcept}>
+                  {localization.button.edit}
+                </Button>
                 {!concept?.isArchived && (
                   <Button
-                    color={'danger'}
-                    variant='secondary'
+                    color={"danger"}
+                    variant="secondary"
                     onClick={() => setShowConfirmDelete(true)}
                   >
                     {localization.button.delete}
@@ -886,7 +967,7 @@ export const ConceptPageClient = ({
             )}
             <LinkButton
               href={`/catalogs/${catalogId}/change-requests/new?concept=${concept?.id}`}
-              variant='secondary'
+              variant="secondary"
               fullWidth={false}
             >
               {localization.concept.suggestChanges}

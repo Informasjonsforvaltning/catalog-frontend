@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { localization } from '@catalog-frontend/utils';
-import { Component, ErrorInfo, ReactNode } from 'react';
-import { Breadcrumbs } from '../breadcrumbs';
-import { PageBanner } from '../page-banner';
-import { Heading } from '@digdir/designsystemet-react';
-import { CenterContainer } from '../center-container';
+import { localization } from "@catalog-frontend/utils";
+import { Component, ErrorInfo, ReactNode } from "react";
+import { Breadcrumbs } from "../breadcrumbs";
+import { PageBanner } from "../page-banner";
+import { Heading } from "@digdir/designsystemet-react";
+import { CenterContainer } from "../center-container";
 
 interface Props {
   children?: ReactNode;
@@ -37,28 +37,22 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Uncaught error:', error, errorInfo);
+    console.error("Uncaught error:", error, errorInfo);
   }
 
   public render() {
     if (this.state.hasError) {
-      const pageSubtitle = 'Feil';
+      const pageSubtitle = "Feil";
 
       return (
         <>
           <Breadcrumbs
             breadcrumbList={[]}
-            catalogPortalUrl={`${this.fdkRegistrationBaseUrl ?? '/catalogs'}`}
+            catalogPortalUrl={`${this.fdkRegistrationBaseUrl ?? "/catalogs"}`}
           />
-          <PageBanner
-            title={this.title ?? 'Feil'}
-            subtitle={pageSubtitle}
-          />
+          <PageBanner title={this.title ?? "Feil"} subtitle={pageSubtitle} />
           <CenterContainer>
-            <Heading
-              level={2}
-              size='small'
-            >
+            <Heading level={2} size="small">
               {localization.somethingWentWrong}
             </Heading>
           </CenterContainer>

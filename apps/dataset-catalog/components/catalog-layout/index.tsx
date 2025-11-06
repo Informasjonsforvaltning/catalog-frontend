@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { ReactNode } from 'react';
-import { Layout } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { useParams } from 'next/navigation';
-import { useGetCatalogDesign } from '../../hooks/catalog-admin';
+import { ReactNode } from "react";
+import { Layout } from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { useParams } from "next/navigation";
+import { useGetCatalogDesign } from "../../hooks/catalog-admin";
 
 interface CatalogLayoutProps {
   children: ReactNode;
@@ -28,7 +28,9 @@ export const CatalogLayout = ({
 }: CatalogLayoutProps) => {
   const { catalogId } = useParams();
   const { data: design } =
-    typeof catalogId === 'string' ? useGetCatalogDesign(catalogId?.toString(), catalogAdminServiceUrl) : {};
+    typeof catalogId === "string"
+      ? useGetCatalogDesign(catalogId?.toString(), catalogAdminServiceUrl)
+      : {};
 
   return (
     <Layout
@@ -36,7 +38,7 @@ export const CatalogLayout = ({
       backgroundColor={design?.backgroundColor}
       className={className}
       catalogAdminUrl={catalogAdminUrl}
-      fdkRegistrationBaseUrl={`${fdkRegistrationBaseUrl}/catalogs}`}
+      fdkRegistrationBaseUrl={`${fdkRegistrationBaseUrl}/catalogs`}
       termsOfUseUrl={`${fdkRegistrationBaseUrl}/terms-and-conditions/${catalogId}`}
       adminGuiBaseUrl={adminGuiBaseUrl}
       fdkBaseUrl={fdkBaseUrl}

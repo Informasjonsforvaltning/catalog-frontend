@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { Accordion, Checkbox, Radio } from '@digdir/designsystemet-react';
-import { localization } from '@catalog-frontend/utils';
-import { ItemType, Status } from '@catalog-frontend/types';
-import styles from './change-request-filter.module.css';
+import { Accordion, Checkbox, Radio } from "@digdir/designsystemet-react";
+import { localization } from "@catalog-frontend/utils";
+import { ItemType, Status } from "@catalog-frontend/types";
+import styles from "./change-request-filter.module.css";
 
 type Props = {
   itemType: ItemType;
@@ -18,16 +18,13 @@ const ChangeRequestsFilter = ({ itemType, status }: Props) => {
           <Accordion.Header level={3}>{localization.filter}</Accordion.Header>
           <Accordion.Content>
             <Radio.Group
-              legend=''
-              size='small'
+              legend=""
+              size="small"
               onChange={itemType.onChange}
               defaultValue={itemType.selected}
             >
               {itemType.options.map((option) => (
-                <Radio
-                  key={option.value}
-                  value={option.value}
-                >
+                <Radio key={option.value} value={option.value}>
                   {option.label}
                 </Radio>
               ))}
@@ -38,16 +35,13 @@ const ChangeRequestsFilter = ({ itemType, status }: Props) => {
           <Accordion.Header level={3}>{localization.status}</Accordion.Header>
           <Accordion.Content>
             <Checkbox.Group
-              legend=''
+              legend=""
               onChange={status.onChange}
-              size='small'
+              size="small"
               defaultValue={status.selected}
             >
               {status.options.map((statusItem) => (
-                <Checkbox
-                  key={statusItem.value}
-                  value={statusItem.value}
-                >
+                <Checkbox key={statusItem.value} value={statusItem.value}>
                   {statusItem.label}
                 </Checkbox>
               ))}

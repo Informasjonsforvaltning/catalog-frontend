@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * Custom hook to observe the intersection of multiple sections and set the active section.
@@ -23,7 +23,7 @@
  * });
  * ```
  */
-import { Dispatch, RefObject, SetStateAction, useEffect } from 'react';
+import { Dispatch, RefObject, SetStateAction, useEffect } from "react";
 
 type useIntersectionObserverProps = {
   activeSection: string;
@@ -71,5 +71,11 @@ export const useIntersectionObserver = ({
         if (ref.current) observer.unobserve(ref.current);
       });
     };
-  }, [sectionRefs, activeSection, setActiveSection, threshold, observerEnabled]);
+  }, [
+    sectionRefs,
+    activeSection,
+    setActiveSection,
+    threshold,
+    observerEnabled,
+  ]);
 };

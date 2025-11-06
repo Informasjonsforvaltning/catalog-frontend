@@ -1,5 +1,5 @@
-import jsonpatch from 'fast-json-patch';
-import { redirect, RedirectType } from 'next/navigation';
+import jsonpatch from "fast-json-patch";
+import { redirect, RedirectType } from "next/navigation";
 import {
   getOrganization,
   getChangeRequest,
@@ -8,7 +8,7 @@ import {
   getAllCodeLists,
   getFields,
   getUsers,
-} from '@catalog-frontend/data-access';
+} from "@catalog-frontend/data-access";
 import {
   Organization,
   Concept,
@@ -16,16 +16,28 @@ import {
   CodeListsResult,
   FieldsResult,
   UsersResult,
-} from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
-import { validUUID, localization, conceptIsHigherVersion, prepareStatusList } from '@catalog-frontend/utils';
-import { withReadProtectedPage } from '@concept-catalog/utils/auth';
-import { AcceptConceptFormClient } from './accept-concept-form-client';
+} from "@catalog-frontend/types";
+import {
+  BreadcrumbType,
+  Breadcrumbs,
+  DesignBanner,
+} from "@catalog-frontend/ui";
+import {
+  validUUID,
+  localization,
+  conceptIsHigherVersion,
+  prepareStatusList,
+} from "@catalog-frontend/utils";
+import { withReadProtectedPage } from "@concept-catalog/utils/auth";
+import { AcceptConceptFormClient } from "./accept-concept-form-client";
 
 const ChangeRequestDetailsPage = withReadProtectedPage(
-  ({ catalogId, changeRequestId }) => `/catalogs/${catalogId}/change-requests/${changeRequestId}`,
+  ({ catalogId, changeRequestId }) =>
+    `/catalogs/${catalogId}/change-requests/${changeRequestId}`,
   async ({ catalogId, changeRequestId, session, hasWritePermission }) => {
-    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+    const organization: Organization = await getOrganization(catalogId).then(
+      (res) => res.json(),
+    );
 
     const baselineConcept: Concept = {
       id: null,
@@ -50,16 +62,21 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
 
     let originalConcept;
 
-    if (changeRequest.status !== 'OPEN' && changeRequest.conceptSnapshot) {
+    if (changeRequest.status !== "OPEN" && changeRequest.conceptSnapshot) {
       originalConcept = changeRequest.conceptSnapshot;
     } else {
       originalConcept =
         changeRequest.conceptId && validUUID(changeRequest.conceptId)
-          ? await getConceptRevisions(`${changeRequest.conceptId}`, `${session.accessToken}`).then((response) => {
+          ? await getConceptRevisions(
+              `${changeRequest.conceptId}`,
+              `${session.accessToken}`,
+            ).then((response) => {
               if (response.ok) {
                 return response.json().then((revisions: Concept[]) => {
                   return revisions.reduce(function (prev, current) {
-                    return conceptIsHigherVersion(prev, current) ? prev : current;
+                    return conceptIsHigherVersion(prev, current)
+                      ? prev
+                      : current;
                   });
                 });
               } else {
@@ -95,19 +112,24 @@ const ChangeRequestDetailsPage = withReadProtectedPage(
       .then((body) => body?.conceptStatuses ?? [])
       .then((statuses) => prepareStatusList(statuses));
 
-    const codeListsResult: CodeListsResult = await getAllCodeLists(catalogId, `${session?.accessToken}`).then(
-      (response) => response.json(),
-    );
-    const fieldsResult: FieldsResult = await getFields(catalogId, `${session?.accessToken}`).then((response) =>
-      response.json(),
-    );
-    const usersResult: UsersResult = await getUsers(catalogId, `${session?.accessToken}`).then((response) =>
-      response.json(),
-    );
+    const codeListsResult: CodeListsResult = await getAllCodeLists(
+      catalogId,
+      `${session?.accessToken}`,
+    ).then((response) => response.json());
+    const fieldsResult: FieldsResult = await getFields(
+      catalogId,
+      `${session?.accessToken}`,
+    ).then((response) => response.json());
+    const usersResult: UsersResult = await getUsers(
+      catalogId,
+      `${session?.accessToken}`,
+    ).then((response) => response.json());
 
     const allowApprove = hasWritePermission;
     const allowEdit =
-      hasWritePermission || (changeRequest.proposedBy && session.user.id === changeRequest.proposedBy.id);
+      hasWritePermission ||
+      (changeRequest.proposedBy &&
+        session.user.id === changeRequest.proposedBy.id);
 
     return (
       <>

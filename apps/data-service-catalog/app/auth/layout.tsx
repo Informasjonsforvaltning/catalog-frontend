@@ -1,5 +1,5 @@
-import { ReactNode } from 'react';
-import { CatalogLayout } from '../../components/catalog-layout';
+import { ReactNode } from "react";
+import { CatalogLayout } from "../../components/catalog-layout";
 
 const PageLayout = ({ children }: { children: ReactNode }) => {
   return (

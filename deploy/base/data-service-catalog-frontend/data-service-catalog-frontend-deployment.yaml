@@ -17,7 +17,7 @@ spec:
       labels:
         app: data-service-catalog-frontend
       annotations:
-        prometheus.io/scrape: 'false'
+        prometheus.io/scrape: "false"
     spec:
       containers:
         - name: data-service-catalog-frontend

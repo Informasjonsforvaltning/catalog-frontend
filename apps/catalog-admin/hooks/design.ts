@@ -1,17 +1,21 @@
-import { Design } from '@catalog-frontend/types';
-import { colorRegex, textRegexWithNumbers, validOrganizationNumber } from '@catalog-frontend/utils';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { compare } from 'fast-json-patch';
+import { Design } from "@catalog-frontend/types";
+import {
+  colorRegex,
+  textRegexWithNumbers,
+  validOrganizationNumber,
+} from "@catalog-frontend/utils";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { compare } from "fast-json-patch";
 
 export const useGetDesign = (catalogId: any) =>
   useQuery<Design>({
-    queryKey: ['getDesign', catalogId],
+    queryKey: ["getDesign", catalogId],
     queryFn: async () => {
       if (!validOrganizationNumber(catalogId)) {
         return null;
       }
       const response = await fetch(`/api/design/${catalogId}/design`, {
-        method: 'GET',
+        method: "GET",
       });
 
       if (response.status === 401) {
@@ -25,42 +29,52 @@ export const useUpdateDesign = (catalogId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ oldDesign, newDesign }: { oldDesign: Design; newDesign: Design }) => {
+    mutationFn: async ({
+      oldDesign,
+      newDesign,
+    }: {
+      oldDesign: Design;
+      newDesign: Design;
+    }) => {
       const diff = compare(oldDesign, newDesign);
 
       if (!validOrganizationNumber(catalogId)) {
-        throw new Error('Invalid organization number');
+        throw new Error("Invalid organization number");
       }
 
-      if (!colorRegex.test(newDesign.fontColor ?? '')) {
-        throw new Error('Invalid font color format');
+      if (!colorRegex.test(newDesign.fontColor ?? "")) {
+        throw new Error("Invalid font color format");
       }
 
-      if (!colorRegex.test(newDesign.backgroundColor ?? '')) {
-        throw new Error('Invalid background color format');
+      if (!colorRegex.test(newDesign.backgroundColor ?? "")) {
+        throw new Error("Invalid background color format");
       }
 
-      if (!textRegexWithNumbers.test(newDesign.logoDescription ?? '')) {
-        throw new Error('Invalid logo description');
+      if (!textRegexWithNumbers.test(newDesign.logoDescription ?? "")) {
+        throw new Error("Invalid logo description");
       }
 
       if (diff) {
         const response = await fetch(`/api/design/${catalogId}`, {
-          method: 'PATCH',
+          method: "PATCH",
           body: JSON.stringify(diff),
-          cache: 'no-store',
+          cache: "no-store",
         });
 
         if (!response.ok) {
-          console.error('Failed to update design', response.status, response.statusText);
-          throw new Error('Failed to update design');
+          console.error(
+            "Failed to update design",
+            response.status,
+            response.statusText,
+          );
+          throw new Error("Failed to update design");
         }
         return response;
       }
     },
     onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ['getDesign', catalogId] });
+      queryClient.invalidateQueries({ queryKey: ["getDesign", catalogId] });
     },
   });
 };
@@ -69,14 +83,14 @@ type LogoResult = { body: string; headers: Headers } | null;
 
 export const useGetLogo = (catalogId: string) =>
   useQuery<LogoResult, Error>({
-    queryKey: ['getLogo', catalogId],
+    queryKey: ["getLogo", catalogId],
     queryFn: async (): Promise<LogoResult> => {
       if (!validOrganizationNumber(catalogId)) {
-        return Promise.reject('Invalid organization number');
+        return Promise.reject("Invalid organization number");
       }
 
       const response = await fetch(`/api/design/${catalogId}/logo`, {
-        method: 'GET',
+        method: "GET",
       });
 
       if (response.status === 404) {
@@ -98,13 +112,13 @@ export const useUpdateLogo = (catalogId: string) => {
   return useMutation({
     mutationFn: async (file: any) => {
       if (!validOrganizationNumber(catalogId)) {
-        return Promise.reject('Invalid organization number');
+        return Promise.reject("Invalid organization number");
       }
       const formData = new FormData();
-      formData.append('logo', file);
+      formData.append("logo", file);
 
       const res = await fetch(`/api/design/${catalogId}/logo`, {
-        method: 'POST',
+        method: "POST",
         body: formData,
       });
       return res;
@@ -112,7 +126,7 @@ export const useUpdateLogo = (catalogId: string) => {
 
     onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ['getLogo', catalogId] });
+      queryClient.invalidateQueries({ queryKey: ["getLogo", catalogId] });
     },
   });
 };
@@ -123,18 +137,18 @@ export const useDeleteLogo = (catalogId: string) => {
   return useMutation({
     mutationFn: async () => {
       if (!validOrganizationNumber(catalogId)) {
-        return Promise.reject('Invalid organization number');
+        return Promise.reject("Invalid organization number");
       }
 
       const response = await fetch(`/api/design/${catalogId}/logo`, {
-        method: 'DELETE',
-        cache: 'no-store',
+        method: "DELETE",
+        cache: "no-store",
       });
       return response;
     },
     onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ['getLogo', catalogId] });
+      queryClient.invalidateQueries({ queryKey: ["getLogo", catalogId] });
     },
   });
 };

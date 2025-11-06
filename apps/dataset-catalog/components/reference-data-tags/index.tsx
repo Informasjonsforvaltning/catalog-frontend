@@ -1,7 +1,10 @@
-import { ReferenceDataCode } from '@catalog-frontend/types';
-import { capitalizeFirstLetter, getTranslateText } from '@catalog-frontend/utils';
-import { Tag } from '@digdir/designsystemet-react';
-import styles from './referenceDataTags.module.css';
+import { ReferenceDataCode } from "@catalog-frontend/types";
+import {
+  capitalizeFirstLetter,
+  getTranslateText,
+} from "@catalog-frontend/utils";
+import { Tag } from "@digdir/designsystemet-react";
+import styles from "./referenceDataTags.module.css";
 
 type Props = {
   values: string[] | string | undefined;
@@ -17,21 +20,23 @@ export const ReferenceDataTags = ({ values, data }: Props) => {
 
   const renderTag = (uri: string) => {
     const label = dataMap.get(uri);
-    const displayText = capitalizeFirstLetter(getTranslateText(label)?.toString() || uri);
+    const displayText = capitalizeFirstLetter(
+      getTranslateText(label)?.toString() || uri,
+    );
     return (
-      <Tag
-        size='sm'
-        color='info'
-        key={uri}
-      >
+      <Tag size="sm" color="info" key={uri}>
         {displayText}
       </Tag>
     );
   };
 
-  if (typeof values === 'string') {
+  if (typeof values === "string") {
     return <>{renderTag(values)}</>;
   }
 
-  return <ul className={styles.list}>{values?.map((item) => item && renderTag(item))}</ul>;
+  return (
+    <ul className={styles.list}>
+      {values?.map((item) => item && renderTag(item))}
+    </ul>
+  );
 };

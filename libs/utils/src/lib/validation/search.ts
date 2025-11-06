@@ -4,7 +4,7 @@
  * @returns true if the query is valid, false otherwise
  */
 export const validSearchQuery = (query: string): boolean => {
-  if (!query || typeof query !== 'string') {
+  if (!query || typeof query !== "string") {
     return false;
   }
 
@@ -18,7 +18,10 @@ export const validSearchQuery = (query: string): boolean => {
  * @param functionName - Name of the function calling this validation (for error message)
  * @throws Error if search query is invalid
  */
-export const validateSearchQuery = (query: string, functionName: string): void => {
+export const validateSearchQuery = (
+  query: string,
+  functionName: string,
+): void => {
   if (!validSearchQuery(query)) {
     throw new Error(
       `Invalid search query '${query}' in ${functionName}. Query must be a non-empty string with maximum length of 1000 characters.`,
@@ -32,7 +35,7 @@ export const validateSearchQuery = (query: string, functionName: string): void =
  * @returns true if the resource type is valid, false otherwise
  */
 export const validResourceType = (resourceType: string): boolean => {
-  if (!resourceType || typeof resourceType !== 'string') {
+  if (!resourceType || typeof resourceType !== "string") {
     return false;
   }
 
@@ -46,7 +49,10 @@ export const validResourceType = (resourceType: string): boolean => {
  * @param functionName - Name of the function calling this validation (for error message)
  * @throws Error if resource type is invalid
  */
-export const validateResourceType = (resourceType: string, functionName: string): void => {
+export const validateResourceType = (
+  resourceType: string,
+  functionName: string,
+): void => {
   if (!validResourceType(resourceType)) {
     throw new Error(
       `Invalid resource type '${resourceType}' in ${functionName}. Resource type must be alphanumeric with hyphens/underscores and maximum length of 50 characters.`,
@@ -60,7 +66,7 @@ export const validateResourceType = (resourceType: string, functionName: string)
  * @returns true if the environment URL is valid, false otherwise
  */
 export const validEnvironmentURL = (env: string): boolean => {
-  if (!env || typeof env !== 'string') {
+  if (!env || typeof env !== "string") {
     return false;
   }
 
@@ -78,8 +84,13 @@ export const validEnvironmentURL = (env: string): boolean => {
  * @param functionName - Name of the function calling this validation (for error message)
  * @throws Error if environment URL is invalid
  */
-export const validateEnvironmentURL = (env: string, functionName: string): void => {
+export const validateEnvironmentURL = (
+  env: string,
+  functionName: string,
+): void => {
   if (!validEnvironmentURL(env)) {
-    throw new Error(`Invalid environment URL '${env}' in ${functionName}. Environment URL must be a valid URL format.`);
+    throw new Error(
+      `Invalid environment URL '${env}' in ${functionName}. Environment URL must be a valid URL format.`,
+    );
   }
 };

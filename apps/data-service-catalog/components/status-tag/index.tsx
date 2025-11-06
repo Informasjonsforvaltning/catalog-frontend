@@ -1,6 +1,6 @@
-import { DataServiceStatusTagProps, Tag } from '@catalog-frontend/ui';
-import { getTranslateText } from '@catalog-frontend/utils';
-import { ReferenceDataCode } from '@catalog-frontend/types';
+import { DataServiceStatusTagProps, Tag } from "@catalog-frontend/ui";
+import { getTranslateText } from "@catalog-frontend/utils";
+import { ReferenceDataCode } from "@catalog-frontend/types";
 
 export const StatusTag = ({
   dataServiceStatus,
@@ -11,11 +11,20 @@ export const StatusTag = ({
   distributionStatuses: ReferenceDataCode[];
   language: string;
 }) => {
-  const findDistributionStatus = (statusURI: any) => distributionStatuses?.find((s) => s.uri === statusURI);
+  const findDistributionStatus = (statusURI: any) =>
+    distributionStatuses?.find((s) => s.uri === statusURI);
   return dataServiceStatus ? (
     <Tag.DataServiceStatus
-      statusKey={findDistributionStatus(dataServiceStatus)?.code as DataServiceStatusTagProps['statusKey']}
-      statusLabel={getTranslateText(findDistributionStatus(dataServiceStatus)?.label, language) as string}
+      statusKey={
+        findDistributionStatus(dataServiceStatus)
+          ?.code as DataServiceStatusTagProps["statusKey"]
+      }
+      statusLabel={
+        getTranslateText(
+          findDistributionStatus(dataServiceStatus)?.label,
+          language,
+        ) as string
+      }
     />
   ) : (
     <></>

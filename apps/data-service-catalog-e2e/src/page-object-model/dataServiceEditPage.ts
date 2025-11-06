@@ -1,5 +1,5 @@
-import { expect, Page, BrowserContext, Locator } from '@playwright/test';
-import type AxeBuilder from '@axe-core/playwright';
+import { expect, Page, BrowserContext, Locator } from "@playwright/test";
+import type AxeBuilder from "@axe-core/playwright";
 export default class DataServiceEditPage {
   protected page: Page;
   protected context: BrowserContext;
@@ -47,58 +47,95 @@ export default class DataServiceEditPage {
   readonly publishButton: Locator;
   readonly unpublishButton: Locator;
 
-  constructor(page: Page, context: BrowserContext, accessibilityBuilder?: AxeBuilder) {
+  constructor(
+    page: Page,
+    context: BrowserContext,
+    accessibilityBuilder?: AxeBuilder,
+  ) {
     this.page = page;
     this.context = context;
     this.accessibilityBuilder = accessibilityBuilder as any;
 
     // Form fields
-    this.titleGroup = page.getByRole('group', { name: 'Tittel Hjelp til utfylling Må fylles ut' });
-    this.titleNbInput = this.titleGroup.getByLabel('Bokmål');
-    this.titleNnInput = this.titleGroup.getByLabel('Nynorsk');
-    this.titleEnInput = this.titleGroup.getByLabel('Engelsk');
-    this.descriptionGroup = page.getByRole('group', { name: 'Beskrivelse av API-et Hjelp til utfylling' });
-    this.descriptionNbInput = this.descriptionGroup.getByLabel('Bokmål');
-    this.descriptionNnInput = this.descriptionGroup.getByLabel('Nynorsk');
-    this.descriptionEnInput = this.descriptionGroup.getByLabel('Engelsk');
-    this.endpointUrlInput = page.getByRole('textbox', { name: 'EndepunktsURL Hjelp til utfylling Må fylles ut' });
-    this.endpointDescriptionGroup = page.getByRole('group', {
-      name: 'Endepunktbeskrivelse Hjelp til utfylling Anbefalt',
+    this.titleGroup = page.getByRole("group", {
+      name: "Tittel Hjelp til utfylling Må fylles ut",
     });
-    this.endpointDescriptionNbInput = this.endpointDescriptionGroup.getByLabel('Bokmål');
-    this.endpointDescriptionNnInput = this.endpointDescriptionGroup.getByLabel('Nynorsk');
-    this.endpointDescriptionEnInput = this.endpointDescriptionGroup.getByLabel('Engelsk');
-    this.keywordsGroup = page.getByRole('group', { name: 'Emneord Hjelp til utfylling Anbefalt' });
-    this.keywordsNbInput = this.keywordsGroup.getByLabel('Bokmål');
-    this.keywordsNnInput = this.keywordsGroup.getByLabel('Nynorsk');
-    this.keywordsEnInput = this.keywordsGroup.getByLabel('Engelsk');
-    this.contactNameGroup = page.getByRole('group', { name: 'Navn Hjelp til utfylling Må fylles ut' });
-    this.contactNameNbInput = this.contactNameGroup.getByLabel('Bokmål');
-    this.contactNameNnInput = this.contactNameGroup.getByLabel('Nynorsk');
-    this.contactNameEnInput = this.contactNameGroup.getByLabel('Engelsk');
-    this.contactInfoGroup = page.getByRole('group', { name: 'Kontaktinformasjon Hjelp til utfylling Må fylles ut' });
-    this.contactEmailButton = this.contactInfoGroup.getByRole('button', { name: 'E-post' });
-    this.contactPhoneButton = this.contactInfoGroup.getByRole('button', { name: 'Telefon' });
-    this.contactUrlButton = this.contactInfoGroup.getByRole('button', { name: 'Kontaktskjema' });
-    this.contactEmailInput = page.getByRole('group', { name: 'E-post' }).getByRole('textbox');
-    this.contactPhoneInput = page.getByRole('group', { name: 'Telefon' }).getByRole('textbox');
-    this.contactUrlInput = page.getByRole('group', { name: 'Kontaktskjema' }).getByRole('textbox');
-    this.statusGroup = page.getByRole('group', { name: 'Status' });
-    this.licenseGroup = page.getByRole('group', { name: 'Lisens' });
-    this.accessRightsGroup = page.getByRole('group', { name: 'Tilgangsrettigheter' });
-    this.availabilityGroup = page.getByRole('group', { name: 'Tilgjengelighet' });
+    this.titleNbInput = this.titleGroup.getByLabel("Bokmål");
+    this.titleNnInput = this.titleGroup.getByLabel("Nynorsk");
+    this.titleEnInput = this.titleGroup.getByLabel("Engelsk");
+    this.descriptionGroup = page.getByRole("group", {
+      name: "Beskrivelse av API-et Hjelp til utfylling",
+    });
+    this.descriptionNbInput = this.descriptionGroup.getByLabel("Bokmål");
+    this.descriptionNnInput = this.descriptionGroup.getByLabel("Nynorsk");
+    this.descriptionEnInput = this.descriptionGroup.getByLabel("Engelsk");
+    this.endpointUrlInput = page.getByRole("textbox", {
+      name: "EndepunktsURL Hjelp til utfylling Må fylles ut",
+    });
+    this.endpointDescriptionGroup = page.getByRole("group", {
+      name: "Endepunktbeskrivelse Hjelp til utfylling Anbefalt",
+    });
+    this.endpointDescriptionNbInput =
+      this.endpointDescriptionGroup.getByLabel("Bokmål");
+    this.endpointDescriptionNnInput =
+      this.endpointDescriptionGroup.getByLabel("Nynorsk");
+    this.endpointDescriptionEnInput =
+      this.endpointDescriptionGroup.getByLabel("Engelsk");
+    this.keywordsGroup = page.getByRole("group", {
+      name: "Emneord Hjelp til utfylling Anbefalt",
+    });
+    this.keywordsNbInput = this.keywordsGroup.getByLabel("Bokmål");
+    this.keywordsNnInput = this.keywordsGroup.getByLabel("Nynorsk");
+    this.keywordsEnInput = this.keywordsGroup.getByLabel("Engelsk");
+    this.contactNameGroup = page.getByRole("group", {
+      name: "Navn Hjelp til utfylling Må fylles ut",
+    });
+    this.contactNameNbInput = this.contactNameGroup.getByLabel("Bokmål");
+    this.contactNameNnInput = this.contactNameGroup.getByLabel("Nynorsk");
+    this.contactNameEnInput = this.contactNameGroup.getByLabel("Engelsk");
+    this.contactInfoGroup = page.getByRole("group", {
+      name: "Kontaktinformasjon Hjelp til utfylling Må fylles ut",
+    });
+    this.contactEmailButton = this.contactInfoGroup.getByRole("button", {
+      name: "E-post",
+    });
+    this.contactPhoneButton = this.contactInfoGroup.getByRole("button", {
+      name: "Telefon",
+    });
+    this.contactUrlButton = this.contactInfoGroup.getByRole("button", {
+      name: "Kontaktskjema",
+    });
+    this.contactEmailInput = page
+      .getByRole("group", { name: "E-post" })
+      .getByRole("textbox");
+    this.contactPhoneInput = page
+      .getByRole("group", { name: "Telefon" })
+      .getByRole("textbox");
+    this.contactUrlInput = page
+      .getByRole("group", { name: "Kontaktskjema" })
+      .getByRole("textbox");
+    this.statusGroup = page.getByRole("group", { name: "Status" });
+    this.licenseGroup = page.getByRole("group", { name: "Lisens" });
+    this.accessRightsGroup = page.getByRole("group", {
+      name: "Tilgangsrettigheter",
+    });
+    this.availabilityGroup = page.getByRole("group", {
+      name: "Tilgjengelighet",
+    });
 
     // Buttons
-    this.saveButton = page.getByTestId('save-data-service-button');
-    this.cancelButton = page.getByTestId('cancel-data-service-button');
-    this.deleteButton = page.getByRole('button', { name: 'Slett' });
-    this.publishButton = page.getByRole('button', { name: 'Publiser' });
-    this.unpublishButton = page.getByRole('button', { name: 'Avpubliser' });
+    this.saveButton = page.getByTestId("save-data-service-button");
+    this.cancelButton = page.getByTestId("cancel-data-service-button");
+    this.deleteButton = page.getByRole("button", { name: "Slett" });
+    this.publishButton = page.getByRole("button", { name: "Publiser" });
+    this.unpublishButton = page.getByRole("button", { name: "Avpubliser" });
   }
 
   // Navigation
   async goto(catalogId: string, dataServiceId: string) {
-    await this.page.goto(`/catalogs/${catalogId}/data-services/${dataServiceId}/edit`);
+    await this.page.goto(
+      `/catalogs/${catalogId}/data-services/${dataServiceId}/edit`,
+    );
   }
 
   async gotoNew(catalogId: string) {
@@ -106,15 +143,28 @@ export default class DataServiceEditPage {
   }
 
   // Language field helper
-  async fillLanguageField(field: any, group: string, open: string[], clear: boolean, parent?: Locator) {
-    console.log(`[fillLanguageField] group: ${group}, open: ${JSON.stringify(open)}, clear: ${clear}`);
-    await (parent ?? this.page).getByRole('group', { name: group }).first().waitFor({ state: 'visible' });
+  async fillLanguageField(
+    field: any,
+    group: string,
+    open: string[],
+    clear: boolean,
+    parent?: Locator,
+  ) {
+    console.log(
+      `[fillLanguageField] group: ${group}, open: ${JSON.stringify(open)}, clear: ${clear}`,
+    );
+    await (parent ?? this.page)
+      .getByRole("group", { name: group })
+      .first()
+      .waitFor({ state: "visible" });
 
     if (clear) {
-      console.log(`[fillLanguageField] Clearing existing values for group: ${group}`);
+      console.log(
+        `[fillLanguageField] Clearing existing values for group: ${group}`,
+      );
       const removeBtn = (parent ?? this.page)
-        .getByRole('group', { name: group })
-        .getByRole('button', { name: 'Slett' });
+        .getByRole("group", { name: group })
+        .getByRole("button", { name: "Slett" });
       while ((await removeBtn.count()) > 0) {
         await removeBtn.first().click();
       }
@@ -122,41 +172,74 @@ export default class DataServiceEditPage {
 
     if (open) {
       for (const lang of open) {
-        console.log(`[fillLanguageField] Opening language: ${lang} in group: ${group}`);
-        await (parent ?? this.page).getByRole('group', { name: group }).getByRole('button', { name: lang }).click();
+        console.log(
+          `[fillLanguageField] Opening language: ${lang} in group: ${group}`,
+        );
+        await (parent ?? this.page)
+          .getByRole("group", { name: group })
+          .getByRole("button", { name: lang })
+          .click();
       }
     }
 
-    if (Array.isArray(field?.nb) || Array.isArray(field?.nn) || Array.isArray(field?.en)) {
+    if (
+      Array.isArray(field?.nb) ||
+      Array.isArray(field?.nn) ||
+      Array.isArray(field?.en)
+    ) {
       for (let i = 0; i < (field?.nb?.length ?? 0); i++) {
-        console.log(`[fillLanguageField] Filling Bokmål [${i}]: ${field.nb[i]}`);
-        await (parent ?? this.page).getByRole('group', { name: group }).getByLabel('Bokmål').fill(field.nb[i]);
-        await this.page.keyboard.press('Enter');
+        console.log(
+          `[fillLanguageField] Filling Bokmål [${i}]: ${field.nb[i]}`,
+        );
+        await (parent ?? this.page)
+          .getByRole("group", { name: group })
+          .getByLabel("Bokmål")
+          .fill(field.nb[i]);
+        await this.page.keyboard.press("Enter");
       }
 
       for (let i = 0; i < (field?.nn?.length ?? 0); i++) {
-        console.log(`[fillLanguageField] Filling Nynorsk [${i}]: ${field.nn[i]}`);
-        await (parent ?? this.page).getByRole('group', { name: group }).getByLabel('Nynorsk').fill(field.nn[i]);
-        await this.page.keyboard.press('Enter');
+        console.log(
+          `[fillLanguageField] Filling Nynorsk [${i}]: ${field.nn[i]}`,
+        );
+        await (parent ?? this.page)
+          .getByRole("group", { name: group })
+          .getByLabel("Nynorsk")
+          .fill(field.nn[i]);
+        await this.page.keyboard.press("Enter");
       }
 
       for (let i = 0; i < (field?.en?.length ?? 0); i++) {
-        console.log(`[fillLanguageField] Filling Engelsk [${i}]: ${field.en[i]}`);
-        await (parent ?? this.page).getByRole('group', { name: group }).getByLabel('Engelsk').fill(field.en[i]);
-        await this.page.keyboard.press('Enter');
+        console.log(
+          `[fillLanguageField] Filling Engelsk [${i}]: ${field.en[i]}`,
+        );
+        await (parent ?? this.page)
+          .getByRole("group", { name: group })
+          .getByLabel("Engelsk")
+          .fill(field.en[i]);
+        await this.page.keyboard.press("Enter");
       }
     } else {
       if (field?.nb) {
         console.log(`[fillLanguageField] Filling Bokmål: ${field.nb}`);
-        await (parent ?? this.page).getByRole('group', { name: group }).getByLabel('Bokmål').fill(field.nb);
+        await (parent ?? this.page)
+          .getByRole("group", { name: group })
+          .getByLabel("Bokmål")
+          .fill(field.nb);
       }
       if (field?.nn) {
         console.log(`[fillLanguageField] Filling Nynorsk: ${field.nn}`);
-        await (parent ?? this.page).getByRole('group', { name: group }).getByLabel('Nynorsk').fill(field.nn);
+        await (parent ?? this.page)
+          .getByRole("group", { name: group })
+          .getByLabel("Nynorsk")
+          .fill(field.nn);
       }
       if (field?.en) {
         console.log(`[fillLanguageField] Filling Engelsk: ${field.en}`);
-        await (parent ?? this.page).getByRole('group', { name: group }).getByLabel('Engelsk').fill(field.en);
+        await (parent ?? this.page)
+          .getByRole("group", { name: group })
+          .getByLabel("Engelsk")
+          .fill(field.en);
       }
     }
   }
@@ -164,18 +247,28 @@ export default class DataServiceEditPage {
   // Form actions
   async fillTitle(
     title: { nb?: string; nn?: string; en?: string },
-    open: string[] = ['Bokmål', 'Nynorsk', 'Engelsk'],
+    open: string[] = ["Bokmål", "Nynorsk", "Engelsk"],
     clear: boolean = false,
   ) {
-    await this.fillLanguageField(title, 'Tittel Hjelp til utfylling Må fylles ut', open, clear);
+    await this.fillLanguageField(
+      title,
+      "Tittel Hjelp til utfylling Må fylles ut",
+      open,
+      clear,
+    );
   }
 
   async fillDescription(
     description: { nb?: string; nn?: string; en?: string },
-    open: string[] = ['Bokmål', 'Nynorsk', 'Engelsk'],
+    open: string[] = ["Bokmål", "Nynorsk", "Engelsk"],
     clear: boolean = false,
   ) {
-    await this.fillLanguageField(description, 'Beskrivelse av API-et Hjelp til utfylling', open, clear);
+    await this.fillLanguageField(
+      description,
+      "Beskrivelse av API-et Hjelp til utfylling",
+      open,
+      clear,
+    );
   }
 
   async fillEndpointUrl(url: string) {
@@ -184,10 +277,15 @@ export default class DataServiceEditPage {
 
   async fillKeywords(
     keywords: { nb?: string[]; nn?: string[]; en?: string[] },
-    open: string[] = ['Bokmål', 'Nynorsk', 'Engelsk'],
+    open: string[] = ["Bokmål", "Nynorsk", "Engelsk"],
     clear: boolean = false,
   ) {
-    await this.fillLanguageField(keywords, 'Emneord Hjelp til utfylling Anbefalt', open, clear);
+    await this.fillLanguageField(
+      keywords,
+      "Emneord Hjelp til utfylling Anbefalt",
+      open,
+      clear,
+    );
   }
 
   async fillContactPoint(contactPoint: {
@@ -199,8 +297,8 @@ export default class DataServiceEditPage {
     if (contactPoint.name) {
       await this.fillLanguageField(
         contactPoint.name,
-        'Navn Hjelp til utfylling Må fylles ut',
-        ['Bokmål', 'Nynorsk', 'Engelsk'],
+        "Navn Hjelp til utfylling Må fylles ut",
+        ["Bokmål", "Nynorsk", "Engelsk"],
         false,
       );
     }
@@ -225,19 +323,23 @@ export default class DataServiceEditPage {
   }
 
   async selectStatus(status: string) {
-    await this.statusGroup.getByRole('combobox').selectOption(status);
+    await this.statusGroup.getByRole("combobox").selectOption(status);
   }
 
   async selectLicense(license: string) {
-    await this.licenseGroup.getByRole('combobox').selectOption(license);
+    await this.licenseGroup.getByRole("combobox").selectOption(license);
   }
 
   async selectAccessRights(accessRights: string) {
-    await this.accessRightsGroup.getByRole('combobox').selectOption(accessRights);
+    await this.accessRightsGroup
+      .getByRole("combobox")
+      .selectOption(accessRights);
   }
 
   async selectAvailability(availability: string) {
-    await this.availabilityGroup.getByRole('combobox').selectOption(availability);
+    await this.availabilityGroup
+      .getByRole("combobox")
+      .selectOption(availability);
   }
 
   // Button actions
@@ -279,14 +381,19 @@ export default class DataServiceEditPage {
     availability?: string;
   }) {
     if (dataService.title) await this.fillTitle(dataService.title);
-    if (dataService.description) await this.fillDescription(dataService.description);
-    if (dataService.endpointUrl) await this.fillEndpointUrl(dataService.endpointUrl);
+    if (dataService.description)
+      await this.fillDescription(dataService.description);
+    if (dataService.endpointUrl)
+      await this.fillEndpointUrl(dataService.endpointUrl);
     if (dataService.keywords) await this.fillKeywords(dataService.keywords);
-    if (dataService.contactPoint) await this.fillContactPoint(dataService.contactPoint);
+    if (dataService.contactPoint)
+      await this.fillContactPoint(dataService.contactPoint);
     if (dataService.status) await this.selectStatus(dataService.status);
     if (dataService.license) await this.selectLicense(dataService.license);
-    if (dataService.accessRights) await this.selectAccessRights(dataService.accessRights);
-    if (dataService.availability) await this.selectAvailability(dataService.availability);
+    if (dataService.accessRights)
+      await this.selectAccessRights(dataService.accessRights);
+    if (dataService.availability)
+      await this.selectAvailability(dataService.availability);
   }
 
   // Assertions
@@ -296,10 +403,17 @@ export default class DataServiceEditPage {
     if (title.en) await expect(this.titleEnInput).toHaveValue(title.en);
   }
 
-  async expectDescriptionToBe(description: { nb?: string; nn?: string; en?: string }) {
-    if (description.nb) await expect(this.descriptionNbInput).toHaveValue(description.nb);
-    if (description.nn) await expect(this.descriptionNnInput).toHaveValue(description.nn);
-    if (description.en) await expect(this.descriptionEnInput).toHaveValue(description.en);
+  async expectDescriptionToBe(description: {
+    nb?: string;
+    nn?: string;
+    en?: string;
+  }) {
+    if (description.nb)
+      await expect(this.descriptionNbInput).toHaveValue(description.nb);
+    if (description.nn)
+      await expect(this.descriptionNnInput).toHaveValue(description.nn);
+    if (description.en)
+      await expect(this.descriptionEnInput).toHaveValue(description.en);
   }
 
   async expectEndpointUrlToBe(url: string) {
@@ -327,11 +441,15 @@ export default class DataServiceEditPage {
   }
 
   async expectDataServiceEditPageUrl(catalogId: string, dataServiceId: string) {
-    await expect(this.page).toHaveURL(`/catalogs/${catalogId}/data-services/${dataServiceId}/edit`);
+    await expect(this.page).toHaveURL(
+      `/catalogs/${catalogId}/data-services/${dataServiceId}/edit`,
+    );
   }
 
   async expectNewDataServicePageUrl(catalogId: string) {
-    await expect(this.page).toHaveURL(`/catalogs/${catalogId}/data-services/new`);
+    await expect(this.page).toHaveURL(
+      `/catalogs/${catalogId}/data-services/new`,
+    );
   }
 
   // Accessibility
@@ -340,7 +458,7 @@ export default class DataServiceEditPage {
       return;
     }
     const result = await this.accessibilityBuilder
-      .disableRules(['svg-img-alt', 'aria-toggle-field-name', 'target-size'])
+      .disableRules(["svg-img-alt", "aria-toggle-field-name", "target-size"])
       .analyze();
     expect.soft(result.violations).toEqual([]);
   }

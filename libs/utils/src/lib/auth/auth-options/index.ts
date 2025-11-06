@@ -1,5 +1,5 @@
-import { AuthOptions } from 'next-auth';
-import KeycloakProvider from 'next-auth/providers/keycloak';
+import { AuthOptions } from "next-auth";
+import KeycloakProvider from "next-auth/providers/keycloak";
 
 const isAfterNow = (date: number) => {
   return Date.now() < date * 1000;
@@ -12,16 +12,19 @@ const refreshToken = async (token: any) => {
 
   while (attempt < maxRetries) {
     try {
-      const response = await fetch(`${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`, {
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          client_id: `${process.env.KEYCLOAK_ID}`,
-          client_secret: `${process.env.KEYCLOAK_SECRET}`,
-          grant_type: 'refresh_token',
-          refresh_token: `${token.refresh_token}`,
-        }),
-        method: 'POST',
-      });
+      const response = await fetch(
+        `${process.env.KEYCLOAK_ISSUER}/protocol/openid-connect/token`,
+        {
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({
+            client_id: `${process.env.KEYCLOAK_ID}`,
+            client_secret: `${process.env.KEYCLOAK_SECRET}`,
+            grant_type: "refresh_token",
+            refresh_token: `${token.refresh_token}`,
+          }),
+          method: "POST",
+        },
+      );
 
       const tokens = await response.json();
 
@@ -35,7 +38,10 @@ const refreshToken = async (token: any) => {
       };
     } catch (error) {
       lastError = error;
-      console.error(`Failed to refresh access token (attempt ${attempt + 1}):`, error);
+      console.error(
+        `Failed to refresh access token (attempt ${attempt + 1}):`,
+        error,
+      );
       attempt++;
       if (attempt < maxRetries) {
         // Optional: add a short delay before retrying
@@ -45,17 +51,21 @@ const refreshToken = async (token: any) => {
   }
 
   // The error property will be used client-side to handle the refresh token error
-  return { ...token, error: 'RefreshAccessTokenError' as const, refreshError: lastError };
+  return {
+    ...token,
+    error: "RefreshAccessTokenError" as const,
+    refreshError: lastError,
+  };
 };
 
 export const authOptions: AuthOptions = {
   session: {
-    strategy: 'jwt',
+    strategy: "jwt",
   },
   providers: [
     KeycloakProvider({
-      clientId: process.env.KEYCLOAK_ID ?? '',
-      clientSecret: process.env.KEYCLOAK_SECRET ?? '',
+      clientId: process.env.KEYCLOAK_ID ?? "",
+      clientSecret: process.env.KEYCLOAK_SECRET ?? "",
       issuer: process.env.KEYCLOAK_ISSUER,
       idToken: true,
       profile(profile) {
@@ -68,11 +78,11 @@ export const authOptions: AuthOptions = {
     }),
   ],
   pages: {
-    signIn: '/auth/signin',
-    signOut: '/auth/signout',
-    error: '/auth/signin',
-    verifyRequest: '/auth/signin',
-    newUser: '/auth/signin',
+    signIn: "/auth/signin",
+    signOut: "/auth/signout",
+    error: "/auth/signin",
+    verifyRequest: "/auth/signin",
+    newUser: "/auth/signin",
   },
   callbacks: {
     async session({ session, token }: any) {
@@ -92,7 +102,7 @@ export const authOptions: AuthOptions = {
       return session;
     },
     async jwt({ token, user, account, trigger }) {
-      if (trigger === 'update') {
+      if (trigger === "update") {
         return refreshToken(token);
       }
 
@@ -101,7 +111,9 @@ export const authOptions: AuthOptions = {
         return {
           ...user,
           access_token: account.access_token,
-          expires_at: Math.floor(Date.now() / 1000 + Number(account.expires_in)),
+          expires_at: Math.floor(
+            Date.now() / 1000 + Number(account.expires_in),
+          ),
           refresh_token: account.refresh_token,
           id_token: account.id_token,
         };

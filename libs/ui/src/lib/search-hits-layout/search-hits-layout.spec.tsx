@@ -1,8 +1,8 @@
-import { render } from '@testing-library/react';
-import { SearchHitsLayout } from '../search-hits-layout';
+import { render } from "@testing-library/react";
+import { SearchHitsLayout } from "../search-hits-layout";
 
-describe('SearchHitsPageLayout', () => {
-  it('should render successfully', () => {
+describe("SearchHitsPageLayout", () => {
+  it("should render successfully", () => {
     const { baseElement } = render(
       <SearchHitsLayout>
         {

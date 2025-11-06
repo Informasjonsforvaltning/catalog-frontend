@@ -1,8 +1,8 @@
-import { Concept } from './concept';
-import { JsonPatchOperation } from './json-patch';
-import { UserName } from './user';
+import { Concept } from "./concept";
+import { JsonPatchOperation } from "./json-patch";
+import { UserName } from "./user";
 
-export type ChangeRequestStatus = 'OPEN' | 'REJECTED' | 'ACCEPTED';
+export type ChangeRequestStatus = "OPEN" | "REJECTED" | "ACCEPTED";
 
 export interface ChangeRequest {
   id: string | null;

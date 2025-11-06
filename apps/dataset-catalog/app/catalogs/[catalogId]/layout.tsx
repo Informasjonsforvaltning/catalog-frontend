@@ -1,6 +1,6 @@
-import { TermsOfUseModal } from '@catalog-frontend/ui';
-import { CatalogLayout } from '../../../components/catalog-layout';
-import { ReactNode } from 'react';
+import { TermsOfUseModal } from "@catalog-frontend/ui";
+import { CatalogLayout } from "../../../components/catalog-layout";
+import { ReactNode } from "react";
 
 export default async function PageLayout({
   children,

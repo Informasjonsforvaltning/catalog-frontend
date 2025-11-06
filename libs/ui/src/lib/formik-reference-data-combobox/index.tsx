@@ -1,9 +1,9 @@
-'use client';
-import { Combobox } from '@digdir/designsystemet-react';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { ReferenceDataCode } from '@catalog-frontend/types';
-import { ComboboxProps } from '@digdir/designsystemet-react/dist/types/components/form/Combobox/Combobox';
-import { Ref } from 'react';
+"use client";
+import { Combobox } from "@digdir/designsystemet-react";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import { ReferenceDataCode } from "@catalog-frontend/types";
+import { ComboboxProps } from "@digdir/designsystemet-react/dist/types/components/form/Combobox/Combobox";
+import { Ref } from "react";
 
 interface Props extends ComboboxProps {
   selectedValuesSearchHits: ReferenceDataCode[];
@@ -46,7 +46,7 @@ export function FormikReferenceDataCombobox({
       multiple
       hideClearButton
       filter={() => true} // disable filter
-      size='sm'
+      size="sm"
       virtual
       {...rest}
     >
@@ -55,7 +55,7 @@ export function FormikReferenceDataCombobox({
         <Combobox.Option
           key={item.uri}
           value={item.uri}
-          description={showCodeAsDescription ? item?.code : ''}
+          description={showCodeAsDescription ? item?.code : ""}
         >
           {item.label ? getTranslateText(item.label) : item.uri}
         </Combobox.Option>

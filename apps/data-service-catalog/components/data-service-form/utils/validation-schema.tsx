@@ -1,7 +1,11 @@
-import { httpsRegex, localization, telephoneNumberRegex } from '@catalog-frontend/utils';
-import * as Yup from 'yup';
-import { nb } from 'yup-locales';
-import { isEmpty, isNumber } from 'lodash';
+import {
+  httpsRegex,
+  localization,
+  telephoneNumberRegex,
+} from "@catalog-frontend/utils";
+import * as Yup from "yup";
+import { nb } from "yup-locales";
+import { isEmpty, isNumber } from "lodash";
 
 Yup.setLocale(nb);
 
@@ -10,21 +14,31 @@ export const dataServiceValidationSchema = () =>
     title: Yup.object()
       .shape({
         nb: Yup.string()
-          .label(`${localization.dataServiceForm.fieldLabel.title} (${localization.language.nb})`)
+          .label(
+            `${localization.dataServiceForm.fieldLabel.title} (${localization.language.nb})`,
+          )
           .notRequired(),
         nn: Yup.string()
-          .label(`${localization.dataServiceForm.fieldLabel.title} (${localization.language.nn})`)
+          .label(
+            `${localization.dataServiceForm.fieldLabel.title} (${localization.language.nn})`,
+          )
           .notRequired(),
         en: Yup.string()
-          .label(`${localization.dataServiceForm.fieldLabel.title} (${localization.language.en})`)
+          .label(
+            `${localization.dataServiceForm.fieldLabel.title} (${localization.language.en})`,
+          )
           .notRequired(),
       })
-      .test('title-test', localization.validation.oneLanguageRequired, (title) => {
-        if (!title) {
-          return false;
-        }
-        return !!(title.nb || title.nn || title.en);
-      }),
+      .test(
+        "title-test",
+        localization.validation.oneLanguageRequired,
+        (title) => {
+          if (!title) {
+            return false;
+          }
+          return !!(title.nb || title.nn || title.en);
+        },
+      ),
     endpointUrl: Yup.string()
       .label(localization.dataServiceForm.fieldLabel.endpoint)
       .required(localization.validation.endpointURLRequired)
@@ -58,34 +72,56 @@ export const dataServiceValidationSchema = () =>
         name: Yup.object()
           .shape({
             nb: Yup.string()
-              .label(`${localization.dataServiceForm.fieldLabel.contactName} (${localization.language.nb})`)
+              .label(
+                `${localization.dataServiceForm.fieldLabel.contactName} (${localization.language.nb})`,
+              )
               .notRequired(),
             nn: Yup.string()
-              .label(`${localization.dataServiceForm.fieldLabel.contactName} (${localization.language.nn})`)
+              .label(
+                `${localization.dataServiceForm.fieldLabel.contactName} (${localization.language.nn})`,
+              )
               .notRequired(),
             en: Yup.string()
-              .label(`${localization.dataServiceForm.fieldLabel.contactName} (${localization.language.en})`)
+              .label(
+                `${localization.dataServiceForm.fieldLabel.contactName} (${localization.language.en})`,
+              )
               .notRequired(),
           })
-          .test('contact-name-test', localization.validation.oneLanguageRequired, (name) => {
-            if (!name) {
-              return false;
-            }
-            return !!(name.nb || name.nn || name.en);
-          }),
-        email: Yup.string().email(localization.validation.invalidEmail).notRequired(),
-        phone: Yup.string().matches(telephoneNumberRegex, localization.validation.invalidPhone).notRequired(),
+          .test(
+            "contact-name-test",
+            localization.validation.oneLanguageRequired,
+            (name) => {
+              if (!name) {
+                return false;
+              }
+              return !!(name.nb || name.nn || name.en);
+            },
+          ),
+        email: Yup.string()
+          .email(localization.validation.invalidEmail)
+          .notRequired(),
+        phone: Yup.string()
+          .matches(telephoneNumberRegex, localization.validation.invalidPhone)
+          .notRequired(),
         url: Yup.string()
           .matches(httpsRegex, localization.validation.invalidProtocol)
           .url(localization.validation.invalidUrl)
           .notRequired(),
       })
-      .test('contact-has-at-least-one-field', localization.validation.minOneField, (contactPoint) => {
-        if (!contactPoint) {
-          return false;
-        }
-        return !!(contactPoint.email || contactPoint.phone || contactPoint.url);
-      }),
+      .test(
+        "contact-has-at-least-one-field",
+        localization.validation.minOneField,
+        (contactPoint) => {
+          if (!contactPoint) {
+            return false;
+          }
+          return !!(
+            contactPoint.email ||
+            contactPoint.phone ||
+            contactPoint.url
+          );
+        },
+      ),
   });
 
 export const costValidationSchema = () =>
@@ -93,12 +129,17 @@ export const costValidationSchema = () =>
     {
       value: Yup.number()
         .label(localization.dataServiceForm.fieldLabel.costValue)
-        .when('documentation', {
+        .when("documentation", {
           is: (documentation: any) => {
             return isEmpty(documentation);
           },
           then: (valueSchema) =>
-            valueSchema.required(localization.dataServiceForm.validation.costValueRequiredWhenMissingDoc).nonNullable(),
+            valueSchema
+              .required(
+                localization.dataServiceForm.validation
+                  .costValueRequiredWhenMissingDoc,
+              )
+              .nonNullable(),
           otherwise: (valueSchema) => valueSchema.notRequired().nullable(),
         }),
       documentation: Yup.array()
@@ -109,7 +150,7 @@ export const costValidationSchema = () =>
             .matches(httpsRegex, localization.validation.invalidProtocol)
             .url(localization.validation.invalidUrl),
         )
-        .when('value', {
+        .when("value", {
           is: (value: any) => {
             return !isNumber(value);
           },
@@ -117,5 +158,5 @@ export const costValidationSchema = () =>
           otherwise: (docSchema) => docSchema.notRequired().nullable(),
         }),
     },
-    [['value', 'documentation']],
+    [["value", "documentation"]],
   );

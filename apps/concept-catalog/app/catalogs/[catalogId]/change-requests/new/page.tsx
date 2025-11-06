@@ -6,7 +6,7 @@ import {
   getOrganization,
   getUsers,
   searchChangeRequest,
-} from '@catalog-frontend/data-access';
+} from "@catalog-frontend/data-access";
 import {
   Organization,
   Concept,
@@ -14,19 +14,29 @@ import {
   CodeListsResult,
   FieldsResult,
   UsersResult,
-} from '@catalog-frontend/types';
-import { conceptIsHigherVersion, localization, prepareStatusList } from '@catalog-frontend/utils';
-import jsonpatch from 'fast-json-patch';
-import { RedirectType, redirect } from 'next/navigation';
-import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
-import { withReadProtectedPage } from '@concept-catalog/utils/auth';
-import { NewConceptFormClient } from './new-concept-form-client';
+} from "@catalog-frontend/types";
+import {
+  conceptIsHigherVersion,
+  localization,
+  prepareStatusList,
+} from "@catalog-frontend/utils";
+import jsonpatch from "fast-json-patch";
+import { RedirectType, redirect } from "next/navigation";
+import {
+  BreadcrumbType,
+  Breadcrumbs,
+  DesignBanner,
+} from "@catalog-frontend/ui";
+import { withReadProtectedPage } from "@concept-catalog/utils/auth";
+import { NewConceptFormClient } from "./new-concept-form-client";
 
 const ChangeRequestOrNew = withReadProtectedPage(
   ({ catalogId, conceptIdSearch }) =>
-    `/catalogs/${catalogId}/change-requests/new${conceptIdSearch ? `?conceptId=${conceptIdSearch}` : ''}`,
+    `/catalogs/${catalogId}/change-requests/new${conceptIdSearch ? `?conceptId=${conceptIdSearch}` : ""}`,
   async ({ catalogId, conceptIdSearch, session }) => {
-    const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+    const organization: Organization = await getOrganization(catalogId).then(
+      (res) => res.json(),
+    );
     const baselineConcept: Concept = {
       id: null,
       ansvarligVirksomhet: { id: organization.organizationId },
@@ -36,7 +46,10 @@ const ChangeRequestOrNew = withReadProtectedPage(
     let originalConcept: Concept | undefined = undefined;
 
     if (conceptIdSearch) {
-      originalConcept = await getConceptRevisions(`${conceptIdSearch}`, `${session.accessToken}`).then((response) => {
+      originalConcept = await getConceptRevisions(
+        `${conceptIdSearch}`,
+        `${session.accessToken}`,
+      ).then((response) => {
         if (response.ok) {
           return response.json().then((revisions: Concept[]) => {
             return revisions.reduce(function (prev, current) {
@@ -45,7 +58,7 @@ const ChangeRequestOrNew = withReadProtectedPage(
           });
         } else if (response.status === 404) {
           return originalConcept;
-        } else throw new Error('Error when searching for original concept');
+        } else throw new Error("Error when searching for original concept");
       });
 
       let existingChangeRequest: ChangeRequest | undefined = undefined;
@@ -55,16 +68,24 @@ const ChangeRequestOrNew = withReadProtectedPage(
           catalogId,
           `${originalConcept?.originaltBegrep}`,
           session.accessToken,
-          'OPEN',
+          "OPEN",
         ).then((res) => res.json());
       }
 
-      if (existingChangeRequest?.id && existingChangeRequest?.status === 'OPEN') {
-        return redirect(`/catalogs/${catalogId}/change-requests/${existingChangeRequest.id}`, RedirectType.replace);
+      if (
+        existingChangeRequest?.id &&
+        existingChangeRequest?.status === "OPEN"
+      ) {
+        return redirect(
+          `/catalogs/${catalogId}/change-requests/${existingChangeRequest.id}`,
+          RedirectType.replace,
+        );
       }
     }
 
-    const clonedConcept = jsonpatch.deepClone(originalConcept || baselineConcept);
+    const clonedConcept = jsonpatch.deepClone(
+      originalConcept || baselineConcept,
+    );
     delete clonedConcept.id;
     delete clonedConcept.ansvarligVirksomhet;
     delete clonedConcept.originaltBegrep;
@@ -73,7 +94,11 @@ const ChangeRequestOrNew = withReadProtectedPage(
     delete clonedConcept.erPublisert;
     delete clonedConcept.isArchived;
 
-    const changeRequestAsConcept = jsonpatch.applyPatch(clonedConcept, [], false).newDocument;
+    const changeRequestAsConcept = jsonpatch.applyPatch(
+      clonedConcept,
+      [],
+      false,
+    ).newDocument;
 
     const breadcrumbList = [
       {
@@ -86,7 +111,9 @@ const ChangeRequestOrNew = withReadProtectedPage(
       },
       {
         href: `/catalogs/${catalogId}/change-requests/new`,
-        text: conceptIdSearch ? localization.changeRequest.newChangeRequest : localization.suggestionForNewConcept,
+        text: conceptIdSearch
+          ? localization.changeRequest.newChangeRequest
+          : localization.suggestionForNewConcept,
       },
     ] as BreadcrumbType[];
 
@@ -95,15 +122,18 @@ const ChangeRequestOrNew = withReadProtectedPage(
       .then((body) => body?.conceptStatuses ?? [])
       .then((statuses) => prepareStatusList(statuses));
 
-    const codeListsResult: CodeListsResult = await getAllCodeLists(catalogId, `${session?.accessToken}`).then(
-      (response) => response.json(),
-    );
-    const fieldsResult: FieldsResult = await getFields(catalogId, `${session?.accessToken}`).then((response) =>
-      response.json(),
-    );
-    const usersResult: UsersResult = await getUsers(catalogId, `${session?.accessToken}`).then((response) =>
-      response.json(),
-    );
+    const codeListsResult: CodeListsResult = await getAllCodeLists(
+      catalogId,
+      `${session?.accessToken}`,
+    ).then((response) => response.json());
+    const fieldsResult: FieldsResult = await getFields(
+      catalogId,
+      `${session?.accessToken}`,
+    ).then((response) => response.json());
+    const usersResult: UsersResult = await getUsers(
+      catalogId,
+      `${session?.accessToken}`,
+    ).then((response) => response.json());
 
     return (
       <>

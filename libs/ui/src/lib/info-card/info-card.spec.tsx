@@ -1,10 +1,10 @@
-import { render } from '@testing-library/react';
-import { InfoCard } from './info-card';
+import { render } from "@testing-library/react";
+import { InfoCard } from "./info-card";
 
 /* eslint-disable-next-line react/display-name */
-jest.mock('react-markdown', () => (props: any) => <div {...props} />);
+jest.mock("react-markdown", () => (props: any) => <div {...props} />);
 
-describe('CardList', () => {
+describe("CardList", () => {
   const cardList = (
     <InfoCard>
       <InfoCard.Item>Item #1</InfoCard.Item>
@@ -12,7 +12,7 @@ describe('CardList', () => {
     </InfoCard>
   );
 
-  it('should render successfully', () => {
+  it("should render successfully", () => {
     const { baseElement } = render(cardList);
     expect(baseElement).toBeTruthy();
   });

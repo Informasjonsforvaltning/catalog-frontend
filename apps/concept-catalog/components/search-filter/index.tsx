@@ -1,27 +1,38 @@
-'use client';
+"use client";
 
-import { memo, useMemo } from 'react';
-import { Accordion } from '@digdir/designsystemet-react';
-import { AccordionItem, AccordionItemProps, CheckboxGroupFilter, Select } from '@catalog-frontend/ui';
+import { memo, useMemo } from "react";
+import { Accordion } from "@digdir/designsystemet-react";
+import {
+  AccordionItem,
+  AccordionItemProps,
+  CheckboxGroupFilter,
+  Select,
+} from "@catalog-frontend/ui";
 import {
   AssignedUser,
   CodeList,
   ConceptsPageSettings,
   InternalField,
   ReferenceDataCode,
-} from '@catalog-frontend/types';
+} from "@catalog-frontend/types";
 import {
   capitalizeFirstLetter,
   convertCodeListToTreeNodes,
   getTranslateText,
   localization as loc,
-} from '@catalog-frontend/utils';
-import styles from './search-filter.module.css';
-import { useGetUsers } from '../../hooks/users';
-import { CheckboxTreeFilter } from './checkbox-tree-filter';
-import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'nuqs';
+} from "@catalog-frontend/utils";
+import styles from "./search-filter.module.css";
+import { useGetUsers } from "../../hooks/users";
+import { CheckboxTreeFilter } from "./checkbox-tree-filter";
+import {
+  parseAsArrayOf,
+  parseAsInteger,
+  parseAsJson,
+  parseAsString,
+  useQueryState,
+} from "nuqs";
 
-export type PublishedFilterType = 'published' | 'unpublished';
+export type PublishedFilterType = "published" | "unpublished";
 export type InternalFieldFilterType = {
   id: string;
   value: string;
@@ -34,33 +45,59 @@ interface Props {
   pageSettings?: ConceptsPageSettings;
 }
 
-const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatuses, pageSettings }: Props) => {
+const SearchFilter = ({
+  catalogId,
+  internalFields,
+  subjectCodeList,
+  conceptStatuses,
+  pageSettings,
+}: Props) => {
   // Memoize default values for query states
-  const defaultFilterStatus = useMemo(() => pageSettings?.filter?.status ?? [], []);
-  const defaultFilterPublicationState = useMemo(() => pageSettings?.filter?.pubState ?? [], []);
-  const defaultFilterAssignedUser = useMemo(() => pageSettings?.filter?.assignedUser ?? '', []);
-  const defaultFilterInternalFields = useMemo(() => pageSettings?.filter?.internalFields ?? {}, []);
-  const defaultFilterSubject = useMemo(() => pageSettings?.filter?.subject ?? [], []);
+  const defaultFilterStatus = useMemo(
+    () => pageSettings?.filter?.status ?? [],
+    [],
+  );
+  const defaultFilterPublicationState = useMemo(
+    () => pageSettings?.filter?.pubState ?? [],
+    [],
+  );
+  const defaultFilterAssignedUser = useMemo(
+    () => pageSettings?.filter?.assignedUser ?? "",
+    [],
+  );
+  const defaultFilterInternalFields = useMemo(
+    () => pageSettings?.filter?.internalFields ?? {},
+    [],
+  );
+  const defaultFilterSubject = useMemo(
+    () => pageSettings?.filter?.subject ?? [],
+    [],
+  );
 
   // Query states
-  const [, setPage] = useQueryState('conceptPpage', parseAsInteger);
+  const [, setPage] = useQueryState("conceptPpage", parseAsInteger);
   const [filterStatus, setFilterStatus] = useQueryState(
-    'conceptFilter.status',
+    "conceptFilter.status",
     parseAsArrayOf(parseAsString).withDefault(defaultFilterStatus),
   );
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
-    'conceptFilter.pubState',
+    "conceptFilter.pubState",
     parseAsArrayOf(parseAsString).withDefault(defaultFilterPublicationState),
   );
-  const [filterAssignedUser, setFilterAssignedUser] = useQueryState('conceptFilter.assignedUser', {
-    defaultValue: defaultFilterAssignedUser,
-  });
+  const [filterAssignedUser, setFilterAssignedUser] = useQueryState(
+    "conceptFilter.assignedUser",
+    {
+      defaultValue: defaultFilterAssignedUser,
+    },
+  );
   const [filterInternalFields, setFilterInternalFields] = useQueryState(
-    'conceptFilter.internalFields',
-    parseAsJson<Record<string, string[]>>(() => ({})).withDefault(defaultFilterInternalFields),
+    "conceptFilter.internalFields",
+    parseAsJson<Record<string, string[]>>(() => ({})).withDefault(
+      defaultFilterInternalFields,
+    ),
   );
   const [filterSubject, setFilterSubject] = useQueryState(
-    'conceptFilter.subject',
+    "conceptFilter.subject",
     parseAsArrayOf(parseAsString).withDefault(defaultFilterSubject),
   );
 
@@ -70,8 +107,14 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
       label: capitalizeFirstLetter(getTranslateText(s.label) as string),
     })) ?? [];
   const publicationStateItems = [
-    { value: 'published' as PublishedFilterType, label: loc.publicationState.published },
-    { value: 'unpublished' as PublishedFilterType, label: loc.publicationState.unpublished },
+    {
+      value: "published" as PublishedFilterType,
+      label: loc.publicationState.published,
+    },
+    {
+      value: "unpublished" as PublishedFilterType,
+      label: loc.publicationState.unpublished,
+    },
   ];
 
   const { data: getUsers } = useGetUsers(catalogId);
@@ -88,8 +131,10 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
   };
 
   const handleOnAssignedChange = (userId: string) => {
-    const assignedUser: AssignedUser | undefined = assignedUserItems.find((item) => item.id === userId);
-    setFilterAssignedUser(assignedUser?.id ?? '');
+    const assignedUser: AssignedUser | undefined = assignedUserItems.find(
+      (item) => item.id === userId,
+    );
+    setFilterAssignedUser(assignedUser?.id ?? "");
     setPage(0);
   };
 
@@ -115,7 +160,7 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
             header: loc.subjectArea,
             content: (
               <CheckboxTreeFilter
-                aria-label='Velg fagområde'
+                aria-label="Velg fagområde"
                 nodes={convertCodeListToTreeNodes(subjectCodeList?.codes)}
                 onCheck={handleSubjectOnCheck}
                 filters={filterSubject ?? []}
@@ -144,23 +189,17 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
             header: loc.assigned,
             content: (
               <Select
-                aria-label='Velg bruker'
+                aria-label="Velg bruker"
                 onChange={(event) => handleOnAssignedChange(event.target.value)}
-                size='sm'
-                value={filterAssignedUser ?? ''}
+                size="sm"
+                value={filterAssignedUser ?? ""}
               >
                 {[
-                  <option
-                    key={'no-user-selected'}
-                    value={undefined}
-                  >
+                  <option key={"no-user-selected"} value={undefined}>
                     {loc.allUsers}
                   </option>,
                   ...(assignedUserItems.map((item) => (
-                    <option
-                      key={item.id}
-                      value={item.id}
-                    >
+                    <option key={item.id} value={item.id}>
                       {item.name}
                     </option>
                   )) || []),
@@ -188,18 +227,18 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
       ),
     },
     ...(internalFields ?? [])
-      .filter((field) => field.enableFilter && field.type === 'boolean')
+      .filter((field) => field.enableFilter && field.type === "boolean")
       .map((field) => ({
         header: getTranslateText(field.label),
         content: (
           <CheckboxGroupFilter<string>
             items={[
               {
-                value: 'true',
+                value: "true",
                 label: loc.yes,
               },
               {
-                value: 'false',
+                value: "false",
                 label: loc.no,
               },
             ]}
@@ -220,10 +259,7 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
 
   return (
     <div className={styles.searchFilter}>
-      <Accordion
-        border={true}
-        className={styles.accordion}
-      >
+      <Accordion border={true} className={styles.accordion}>
         {accordionItems}
       </Accordion>
     </div>

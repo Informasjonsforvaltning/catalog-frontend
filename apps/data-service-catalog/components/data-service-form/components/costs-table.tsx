@@ -1,5 +1,15 @@
-import { DataService, DataServiceCost, ISOLanguage, ReferenceDataCode } from '@catalog-frontend/types';
-import { capitalizeFirstLetter, getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
+import {
+  DataService,
+  DataServiceCost,
+  ISOLanguage,
+  ReferenceDataCode,
+} from "@catalog-frontend/types";
+import {
+  capitalizeFirstLetter,
+  getTranslateText,
+  localization,
+  trimObjectWhitespace,
+} from "@catalog-frontend/utils";
 import {
   Box,
   Button,
@@ -13,8 +23,8 @@ import {
   Paragraph,
   Tag,
   Textfield,
-} from '@digdir/designsystemet-react';
-import { FieldArray, Formik, useFormikContext } from 'formik';
+} from "@digdir/designsystemet-react";
+import { FieldArray, Formik, useFormikContext } from "formik";
 import {
   AddButton,
   EditButton,
@@ -24,29 +34,30 @@ import {
   TextareaWithPrefix,
   DeleteButton,
   FastFieldWithRef,
-} from '@catalog-frontend/ui';
-import { useState, useRef, useEffect, createRef } from 'react';
-import { isEmpty, isNumber } from 'lodash';
-import styles from '../data-service-form.module.css';
-import FieldsetWithDelete from '../../fieldset-with-delete';
-import { TrashIcon } from '@navikt/aksel-icons';
-import { costValidationSchema } from '../utils/validation-schema';
+} from "@catalog-frontend/ui";
+import { useState, useRef, useEffect, createRef } from "react";
+import { isEmpty, isNumber } from "lodash";
+import styles from "../data-service-form.module.css";
+import FieldsetWithDelete from "../../fieldset-with-delete";
+import { TrashIcon } from "@navikt/aksel-icons";
+import { costValidationSchema } from "../utils/validation-schema";
 
-const DEFAULT_CURRENCY = 'http://publications.europa.eu/resource/authority/currency/NOK';
+const DEFAULT_CURRENCY =
+  "http://publications.europa.eu/resource/authority/currency/NOK";
 
 type Props = {
   currencies?: ReferenceDataCode[];
 };
 
 type ModalProps = {
-  type: 'new' | 'edit';
+  type: "new" | "edit";
   onSuccess: (values: DataServiceCost) => void;
   template: DataServiceCost;
   currencies?: ReferenceDataCode[];
 };
 
 const sortCurrencies = (currencies?: ReferenceDataCode[]) => {
-  const priority = ['JPY', 'ISK', 'SEK', 'DKK', 'GBP', 'USD', 'EUR', 'NOK'];
+  const priority = ["JPY", "ISK", "SEK", "DKK", "GBP", "USD", "EUR", "NOK"];
   return currencies?.sort((a, b) => {
     if (!a.code) return 1;
     if (!b.code) return -1;
@@ -65,38 +76,34 @@ const sortCurrencies = (currencies?: ReferenceDataCode[]) => {
 export const CostsTable = ({ currencies }: Props) => {
   const { values, setFieldValue } = useFormikContext<DataService>();
   const sortedCurrencies = sortCurrencies(currencies);
-  const allowedLanguages = Object.freeze<ISOLanguage[]>(['nb', 'nn', 'en']);
+  const allowedLanguages = Object.freeze<ISOLanguage[]>(["nb", "nn", "en"]);
 
   return (
     <div className={styles.fieldContainer}>
-      <TitleWithHelpTextAndTag helpText={localization.dataServiceForm.helptext.costs}>
+      <TitleWithHelpTextAndTag
+        helpText={localization.dataServiceForm.helptext.costs}
+      >
         {localization.dataServiceForm.fieldLabel.costs}
       </TitleWithHelpTextAndTag>
       {values?.costs?.map((item, i) => (
-        <Card
-          key={`costs-card-${i}`}
-          color='neutral'
-        >
+        <Card key={`costs-card-${i}`} color="neutral">
           <Card.Content className={styles.costContent}>
-            <List.Root size={'sm'}>
+            <List.Root size={"sm"}>
               <List.Unordered
                 style={{
-                  listStyle: 'none',
+                  listStyle: "none",
                   paddingLeft: 0,
                 }}
               >
                 {item.value && (
                   <List.Item>
-                    {item.value} {item.currency?.split('/')?.reverse()[0] ?? ''}
+                    {item.value} {item.currency?.split("/")?.reverse()[0] ?? ""}
                   </List.Item>
                 )}
 
                 {item.documentation?.map((doc, docIndex) => (
                   <List.Item key={`costs-${i}-doc-${docIndex}`}>
-                    <Link
-                      href={doc}
-                      target='_blank'
-                    >
+                    <Link href={doc} target="_blank">
                       {doc}
                     </Link>
                   </List.Item>
@@ -106,36 +113,35 @@ export const CostsTable = ({ currencies }: Props) => {
             <div>
               <FieldModal
                 template={item}
-                type={'edit'}
+                type={"edit"}
                 currencies={sortedCurrencies}
-                onSuccess={(updatedItem: DataServiceCost) => setFieldValue(`costs[${i}]`, updatedItem)}
+                onSuccess={(updatedItem: DataServiceCost) =>
+                  setFieldValue(`costs[${i}]`, updatedItem)
+                }
               />
 
               <Button
-                variant='tertiary'
-                size='sm'
-                color='danger'
+                variant="tertiary"
+                size="sm"
+                color="danger"
                 onClick={() => setFieldValue(`costs[${i}]`, undefined)}
               >
-                <TrashIcon
-                  title='Slett'
-                  fontSize='1.5rem'
-                />
+                <TrashIcon title="Slett" fontSize="1.5rem" />
                 {localization.button.delete}
               </Button>
             </div>
           </Card.Content>
           <Card.Footer className={styles.costFooter}>
-            <Paragraph size={'sm'}>{getTranslateText(item.description)}</Paragraph>
+            <Paragraph size={"sm"}>
+              {getTranslateText(item.description)}
+            </Paragraph>
             <Box>
               {allowedLanguages
-                .filter((lang) => Object.prototype.hasOwnProperty.call(item.description, lang))
+                .filter((lang) =>
+                  Object.prototype.hasOwnProperty.call(item.description, lang),
+                )
                 .map((lang) => (
-                  <Tag
-                    key={lang}
-                    size='sm'
-                    color='third'
-                  >
+                  <Tag key={lang} size="sm" color="third">
                     {localization.language[lang]}
                   </Tag>
                 ))}
@@ -147,11 +153,13 @@ export const CostsTable = ({ currencies }: Props) => {
       <div>
         <FieldModal
           template={{ description: {} }}
-          type={'new'}
+          type={"new"}
           currencies={sortedCurrencies}
           onSuccess={(formValues) =>
             setFieldValue(
-              values.costs && values?.costs.length > 0 ? `costs[${values?.costs?.length}]` : `costs[0]`,
+              values.costs && values?.costs.length > 0
+                ? `costs[${values?.costs?.length}]`
+                : `costs[0]`,
               formValues,
             )
           }
@@ -170,11 +178,11 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
   const docRef = createRef<HTMLInputElement | HTMLTextAreaElement>();
 
   useEffect(() => {
-    if (focus === 'value') {
+    if (focus === "value") {
       valueRef?.current?.focus();
       setFocus(null);
     }
-    if (focus === 'documentation') {
+    if (focus === "documentation") {
       docRef?.current?.focus();
       setFocus(null);
     }
@@ -197,7 +205,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
     <>
       <Modal.Root>
         <Modal.Trigger asChild>
-          {type === 'new' ? (
+          {type === "new" ? (
             <AddButton>{`${localization.add} ${localization.dataServiceForm.fieldLabel.costs.toLowerCase()}`}</AddButton>
           ) : (
             <EditButton />
@@ -210,13 +218,23 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
             validateOnBlur={validateOnChange}
             validationSchema={costValidationSchema}
             onSubmit={(formValues: DataServiceCost, { setSubmitting }) => {
-              const trimmedValues = trimObjectWhitespace(rmCurrencyIfNoValue(formValues));
+              const trimmedValues = trimObjectWhitespace(
+                rmCurrencyIfNoValue(formValues),
+              );
               onSuccess(trimmedValues);
               setSubmitting(false);
               modalRef.current?.close();
             }}
           >
-            {({ errors, isSubmitting, submitForm, values, dirty, setFieldValue, validateForm }) => {
+            {({
+              errors,
+              isSubmitting,
+              submitForm,
+              values,
+              dirty,
+              setFieldValue,
+              validateForm,
+            }) => {
               const showValueError = () => {
                 return validateOnChange && !isEmpty(errors?.value);
               };
@@ -224,7 +242,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
               return (
                 <>
                   <Modal.Header closeButton={false}>
-                    {type === 'edit'
+                    {type === "edit"
                       ? `${localization.edit} ${localization.dataServiceForm.fieldLabel.costs.toLowerCase()}`
                       : `${localization.add} ${localization.dataServiceForm.fieldLabel.costs.toLowerCase()}`}
                   </Modal.Header>
@@ -234,7 +252,9 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                       legend={
                         <TitleWithHelpTextAndTag
                           tagTitle={localization.tag.recommended}
-                          helpText={localization.dataServiceForm.helptext.costValue}
+                          helpText={
+                            localization.dataServiceForm.helptext.costValue
+                          }
                         >
                           {localization.dataServiceForm.fieldLabel.costValue}
                         </TitleWithHelpTextAndTag>
@@ -243,17 +263,22 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                       {showValueField || isNumber(values?.value) ? (
                         <div className={styles.valueCurrencyFieldset}>
                           <FastFieldWithRef
-                            name='value'
+                            name="value"
                             as={Textfield}
-                            size='sm'
+                            size="sm"
                             ref={valueRef}
-                            type={'number'}
+                            type={"number"}
                           />
                           <Combobox
                             value={[values?.currency ?? DEFAULT_CURRENCY]}
                             portal={false}
-                            onValueChange={(selectedValues) => setFieldValue('currency', selectedValues.toString())}
-                            size='sm'
+                            onValueChange={(selectedValues) =>
+                              setFieldValue(
+                                "currency",
+                                selectedValues.toString(),
+                              )
+                            }
+                            size="sm"
                             disabled={!isNumber(values?.value)}
                           >
                             {currencies &&
@@ -263,15 +288,20 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                                   value={currencyRef.uri}
                                 >
                                   {currencyRef.code} (
-                                  {capitalizeFirstLetter(getTranslateText(currencyRef.label)?.toString())})
+                                  {capitalizeFirstLetter(
+                                    getTranslateText(
+                                      currencyRef.label,
+                                    )?.toString(),
+                                  )}
+                                  )
                                 </Combobox.Option>
                               ))}
                           </Combobox>
                           <DeleteButton
                             className={styles.deleteButton}
                             onClick={() => {
-                              setFieldValue('value', undefined);
-                              setFieldValue('currency', undefined);
+                              setFieldValue("value", undefined);
+                              setFieldValue("currency", undefined);
                               setShowValueField(false);
                             }}
                           />
@@ -279,9 +309,9 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                       ) : (
                         <AddButton
                           onClick={() => {
-                            setFieldValue('value', '');
-                            setFieldValue('currency', DEFAULT_CURRENCY);
-                            setFocus('value');
+                            setFieldValue("value", "");
+                            setFieldValue("currency", DEFAULT_CURRENCY);
+                            setFocus("value");
                             setShowValueField(true);
                           }}
                         >
@@ -289,10 +319,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                         </AddButton>
                       )}
                       {showValueError() && (
-                        <ErrorMessage
-                          size='sm'
-                          error
-                        >
+                        <ErrorMessage size="sm" error>
                           {errors.value}
                         </ErrorMessage>
                       )}
@@ -301,41 +328,53 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                     <FieldsetDivider />
 
                     <Fieldset
-                      size='sm'
+                      size="sm"
                       legend={
                         <TitleWithHelpTextAndTag
                           tagTitle={localization.tag.recommended}
-                          helpText={localization.dataServiceForm.helptext.costDocumentation}
+                          helpText={
+                            localization.dataServiceForm.helptext
+                              .costDocumentation
+                          }
                         >
-                          {localization.dataServiceForm.fieldLabel.costDocumentation}
+                          {
+                            localization.dataServiceForm.fieldLabel
+                              .costDocumentation
+                          }
                         </TitleWithHelpTextAndTag>
                       }
                     >
-                      <FieldArray name='documentation'>
+                      <FieldArray name="documentation">
                         {(arrayHelpers) => (
                           <>
                             {arrayHelpers.form.values.documentation &&
-                              arrayHelpers.form.values.documentation.map((_: any, index: number) => (
-                                <div
-                                  key={`documentation-${index}`}
-                                  className={styles.padding}
-                                >
-                                  <FieldsetWithDelete onDelete={() => arrayHelpers.remove(index)}>
-                                    <FastFieldWithRef
-                                      name={`documentation[${index}]`}
-                                      as={Textfield}
-                                      size='sm'
-                                      ref={docRef}
-                                      error={errors?.documentation?.[index]}
-                                    />
-                                  </FieldsetWithDelete>
-                                </div>
-                              ))}
+                              arrayHelpers.form.values.documentation.map(
+                                (_: any, index: number) => (
+                                  <div
+                                    key={`documentation-${index}`}
+                                    className={styles.padding}
+                                  >
+                                    <FieldsetWithDelete
+                                      onDelete={() =>
+                                        arrayHelpers.remove(index)
+                                      }
+                                    >
+                                      <FastFieldWithRef
+                                        name={`documentation[${index}]`}
+                                        as={Textfield}
+                                        size="sm"
+                                        ref={docRef}
+                                        error={errors?.documentation?.[index]}
+                                      />
+                                    </FieldsetWithDelete>
+                                  </div>
+                                ),
+                              )}
 
                             <AddButton
                               onClick={() => {
-                                arrayHelpers.push('');
-                                setFocus('documentation');
+                                arrayHelpers.push("");
+                                setFocus("documentation");
                               }}
                             >
                               {`${localization.dataServiceForm.fieldLabel.costDocumentation}`}
@@ -348,12 +387,15 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                     <FieldsetDivider />
 
                     <FormikLanguageFieldset
-                      name={'description'}
+                      name={"description"}
                       as={TextareaWithPrefix}
                       legend={
                         <TitleWithHelpTextAndTag
                           tagTitle={localization.tag.recommended}
-                          helpText={localization.dataServiceForm.helptext.costDescription}
+                          helpText={
+                            localization.dataServiceForm.helptext
+                              .costDescription
+                          }
                         >
                           {localization.dataServiceForm.fieldLabel.description}
                         </TitleWithHelpTextAndTag>
@@ -363,7 +405,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
 
                   <Modal.Footer>
                     <Button
-                      type='button'
+                      type="button"
                       disabled={isSubmitting || !dirty}
                       onClick={() => {
                         validateForm().then((result) => {
@@ -375,19 +417,21 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                           }
                         });
                       }}
-                      size='sm'
+                      size="sm"
                     >
-                      {type === 'new' ? localization.add : localization.dataServiceForm.button.update}
+                      {type === "new"
+                        ? localization.add
+                        : localization.dataServiceForm.button.update}
                     </Button>
                     <Button
-                      variant='secondary'
-                      type='button'
+                      variant="secondary"
+                      type="button"
                       onClick={() => {
                         setValidateOnChange(false);
                         modalRef.current?.close();
                       }}
                       disabled={isSubmitting}
-                      size='sm'
+                      size="sm"
                     >
                       {localization.button.cancel}
                     </Button>

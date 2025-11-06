@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { createContext, useReducer, type ReactNode, useContext } from 'react';
+import { createContext, useReducer, type ReactNode, useContext } from "react";
 
-import { reducer } from './reducer';
-import { DefaultAdminState } from './state';
-import { type AdminState } from './state';
-import { ACTION } from './action';
+import { reducer } from "./reducer";
+import { DefaultAdminState } from "./state";
+import { type AdminState } from "./state";
+import { ACTION } from "./action";
 
 interface ContextProps {
   state: AdminState;
@@ -18,7 +18,7 @@ const context: ContextProps = {
 };
 
 const AdminContext = createContext(context);
-AdminContext.displayName = 'AdminContext';
+AdminContext.displayName = "AdminContext";
 
 interface StateProviderProps {
   children: ReactNode;
@@ -33,7 +33,11 @@ const AdminContextProvider = ({ children }: StateProviderProps) => {
     dispatch,
   };
 
-  return <AdminContext.Provider value={value as any}>{children}</AdminContext.Provider>;
+  return (
+    <AdminContext.Provider value={value as any}>
+      {children}
+    </AdminContext.Provider>
+  );
 };
 
 const useAdminState = () => {

@@ -1,14 +1,23 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
-import type { Concept, ChangeRequestUpdateBody, JsonPatchOperation, StorageData } from '@catalog-frontend/types';
-import { LocalDataStorage, localization, updateDefinitionsIfEgendefinert } from '@catalog-frontend/utils';
-import ConceptForm from '@concept-catalog/components/concept-form';
-import { updateChangeRequestAction } from '@concept-catalog/app/actions/change-requests/actions';
-import { conceptJsonPatchOperations } from '@concept-catalog/utils/json-patch';
+import { useEffect, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { ArrowLeftIcon } from "@navikt/aksel-icons";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
+import type {
+  Concept,
+  ChangeRequestUpdateBody,
+  JsonPatchOperation,
+  StorageData,
+} from "@catalog-frontend/types";
+import {
+  LocalDataStorage,
+  localization,
+  updateDefinitionsIfEgendefinert,
+} from "@catalog-frontend/utils";
+import ConceptForm from "@concept-catalog/components/concept-form";
+import { updateChangeRequestAction } from "@concept-catalog/app/actions/change-requests/actions";
+import { conceptJsonPatchOperations } from "@concept-catalog/utils/json-patch";
 
 export const EditConceptFormClient = ({
   organization,
@@ -27,10 +36,10 @@ export const EditConceptFormClient = ({
   const [showGotoConceptConfirm, setShowGotoConceptConfirm] = useState(false);
 
   const dataStorage = new LocalDataStorage<StorageData>({
-    key: 'changeRequestForm',
+    key: "changeRequestForm",
     secondaryKeys: {
-      definition: 'changeRequestFormDefinition',
-      relation: 'changeRequestFormRelation',
+      definition: "changeRequestFormDefinition",
+      relation: "changeRequestFormRelation",
     },
   });
 
@@ -49,7 +58,7 @@ export const EditConceptFormClient = ({
       values.anbefaltTerm?.navn?.nb ||
       values.anbefaltTerm?.navn?.nn ||
       values.anbefaltTerm?.navn?.en ||
-      '';
+      "";
 
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
       conceptId: originalConcept?.originaltBegrep ?? null,
@@ -60,7 +69,11 @@ export const EditConceptFormClient = ({
       title: `${changeRequestTitle}`,
     };
 
-    return await updateChangeRequestAction(organization.organizationId, changeRequest.id, changeRequestFromConcept);
+    return await updateChangeRequestAction(
+      organization.organizationId,
+      changeRequest.id,
+      changeRequestFromConcept,
+    );
   };
 
   const handleAfterSubmit = () => {
@@ -72,18 +85,22 @@ export const EditConceptFormClient = ({
   };
 
   const handleCancel = () => {
-    window.location.replace(`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}`);
+    window.location.replace(
+      `/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}`,
+    );
   };
 
   const handleGotoOverview = () => {
     dataStorage.delete();
     window.location.replace(
-      `/catalogs/${organization.organizationId}/change-requests${!originalConcept ? '?filter.itemType=suggestionForNewConcept' : ''}`,
+      `/catalogs/${organization.organizationId}/change-requests${!originalConcept ? "?filter.itemType=suggestionForNewConcept" : ""}`,
     );
   };
 
   const handleGotoConcept = () => {
-    window.location.replace(`/catalogs/${organization.organizationId}/concepts/${originalConcept?.id}`);
+    window.location.replace(
+      `/catalogs/${organization.organizationId}/concepts/${originalConcept?.id}`,
+    );
   };
 
   const handleRestore = (data: StorageData): boolean => {
@@ -94,10 +111,14 @@ export const EditConceptFormClient = ({
             `/catalogs/${organization.organizationId}/change-requests/new?concept=${data.metadata.newChangeRequestConceptId}&restore=1`,
           );
         } else {
-          window.location.replace(`/catalogs/${organization.organizationId}/change-requests/new?restore=1`);
+          window.location.replace(
+            `/catalogs/${organization.organizationId}/change-requests/new?restore=1`,
+          );
         }
       } else {
-        window.location.replace(`/catalogs/${organization.organizationId}/change-requests/${data.id}/edit?restore=1`);
+        window.location.replace(
+          `/catalogs/${organization.organizationId}/change-requests/${data.id}/edit?restore=1`,
+        );
       }
       return false;
     }
@@ -105,16 +126,19 @@ export const EditConceptFormClient = ({
   };
 
   useEffect(() => {
-    if (searchParams.get('created') === 'true') {
+    if (searchParams.get("created") === "true") {
       setNewChangeRequest(true);
 
       // Remove the param and update the URL shallowly
       const newParams = new URLSearchParams(searchParams.toString());
-      newParams.delete('created');
+      newParams.delete("created");
 
-      const newUrl = newParams.toString().length > 0 ? `${pathname}?${newParams.toString()}` : pathname;
+      const newUrl =
+        newParams.toString().length > 0
+          ? `${pathname}?${newParams.toString()}`
+          : pathname;
 
-      window.history.replaceState(null, '', newUrl);
+      window.history.replaceState(null, "", newUrl);
     }
   }, [searchParams, pathname]);
 
@@ -138,20 +162,20 @@ export const EditConceptFormClient = ({
       )}
       <ButtonBar>
         <Button
-          variant='tertiary'
-          color='second'
-          size='sm'
+          variant="tertiary"
+          color="second"
+          size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >
-          <ArrowLeftIcon fontSize='1.25em' />
+          <ArrowLeftIcon fontSize="1.25em" />
           {localization.button.backToOverview}
         </Button>
         <div style={{ flexGrow: 1 }}></div>
         {originalConcept && (
           <Button
-            variant='secondary'
-            color='second'
-            size='sm'
+            variant="secondary"
+            color="second"
+            size="sm"
             onClick={() => setShowGotoConceptConfirm(true)}
           >
             {localization.button.gotoConcept}

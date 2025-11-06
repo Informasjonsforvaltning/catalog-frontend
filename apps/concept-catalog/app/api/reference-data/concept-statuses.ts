@@ -1,4 +1,4 @@
-import { getConceptStatuses } from '@catalog-frontend/data-access';
+import { getConceptStatuses } from "@catalog-frontend/data-access";
 
 export async function GET() {
   try {
@@ -7,8 +7,13 @@ export async function GET() {
       throw new Error();
     }
     const jsonResponse = await response.json();
-    return new Response(JSON.stringify(jsonResponse), { status: response.status });
+    return new Response(JSON.stringify(jsonResponse), {
+      status: response.status,
+    });
   } catch {
-    return new Response(JSON.stringify({ message: 'Failed to get concept statuses' }), { status: 500 });
+    return new Response(
+      JSON.stringify({ message: "Failed to get concept statuses" }),
+      { status: 500 },
+    );
   }
 }

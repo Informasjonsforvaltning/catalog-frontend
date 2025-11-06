@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { ReactNode, useEffect, useRef, useState } from 'react';
-import { useFormikContext } from 'formik';
-import { Button, Modal } from '@digdir/designsystemet-react';
-import { DataStorage, localization } from '@catalog-frontend/utils';
-import type { StorageData } from '@catalog-frontend/types';
-import { isEqual } from 'lodash';
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { useFormikContext } from "formik";
+import { Button, Modal } from "@digdir/designsystemet-react";
+import { DataStorage, localization } from "@catalog-frontend/utils";
+import type { StorageData } from "@catalog-frontend/types";
+import { isEqual } from "lodash";
 
 export type FormikAutoSaverProps = {
   id?: string;
@@ -15,7 +15,13 @@ export type FormikAutoSaverProps = {
   confirmMessage: (data: StorageData) => ReactNode;
 };
 
-export const FormikAutoSaver = ({ id, storage, onRestore, confirmMessage, restoreOnRender }: FormikAutoSaverProps) => {
+export const FormikAutoSaver = ({
+  id,
+  storage,
+  onRestore,
+  confirmMessage,
+  restoreOnRender,
+}: FormikAutoSaverProps) => {
   const [modalContent, setModalContent] = useState<ReactNode>(null);
   const { values, initialValues } = useFormikContext<any>();
   const [isInitialized, setIsInitialized] = useState(false);
@@ -64,7 +70,10 @@ export const FormikAutoSaver = ({ id, storage, onRestore, confirmMessage, restor
 
     const unsubscribe = storage.subscribe((state) => {
       if (state.isDirty && state.mainData === null) {
-        storage.set({ id, values, lastChanged: new Date().toISOString() }, true);
+        storage.set(
+          { id, values, lastChanged: new Date().toISOString() },
+          true,
+        );
       }
     });
     if (!isEqual(initialValues, values)) {
@@ -80,16 +89,13 @@ export const FormikAutoSaver = ({ id, storage, onRestore, confirmMessage, restor
       <Modal.Header closeButton={false}>Ulagrede endringer</Modal.Header>
       <Modal.Content>{modalContent}</Modal.Content>
       <Modal.Footer>
-        <Button
-          size='sm'
-          onClick={handleRestoreClick}
-        >
+        <Button size="sm" onClick={handleRestoreClick}>
           {localization.button.restore}
         </Button>
         <Button
-          size='sm'
-          variant='secondary'
-          color='danger'
+          size="sm"
+          variant="secondary"
+          color="danger"
           onClick={handleDiscardClick}
         >
           {localization.button.discard}
@@ -99,5 +105,5 @@ export const FormikAutoSaver = ({ id, storage, onRestore, confirmMessage, restor
   );
 };
 
-FormikAutoSaver.displayName = 'FormikAutoSaver';
+FormikAutoSaver.displayName = "FormikAutoSaver";
 export default FormikAutoSaver;

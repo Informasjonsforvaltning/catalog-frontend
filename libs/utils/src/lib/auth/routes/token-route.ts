@@ -1,6 +1,11 @@
-import { authOptions, isValidSessionAndToken, getUsername, getResourceRoles } from '@catalog-frontend/utils';
-import { getServerSession } from 'next-auth';
-import { jwtDecode } from 'jwt-decode';
+import {
+  authOptions,
+  isValidSessionAndToken,
+  getUsername,
+  getResourceRoles,
+} from "@catalog-frontend/utils";
+import { getServerSession } from "next-auth";
+import { jwtDecode } from "jwt-decode";
 
 /**
  * Creates a token route handler that provides debug information and access token
@@ -15,15 +20,15 @@ export const createTokenRoute = () => {
     if (!isValid || !session?.accessToken) {
       return new Response(
         JSON.stringify({
-          error: 'Unauthorized',
-          message: 'No valid session or access token available',
+          error: "Unauthorized",
+          message: "No valid session or access token available",
           hasSession: !!session,
           hasAccessToken: !!session?.accessToken,
           isValid: false,
         }),
         {
           status: 401,
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         },
       );
     }
@@ -33,11 +38,15 @@ export const createTokenRoute = () => {
       hasSession: !!session,
       hasAccessToken: !!session?.accessToken,
       tokenLength: session?.accessToken?.length || 0,
-      tokenPrefix: session?.accessToken?.substring(0, 20) + '...' || 'N/A',
+      tokenPrefix: session?.accessToken?.substring(0, 20) + "..." || "N/A",
       expiresAt: session?.accessTokenExpiresAt,
-      isExpired: session?.accessTokenExpiresAt ? session.accessTokenExpiresAt < Date.now() / 1000 : true,
+      isExpired: session?.accessTokenExpiresAt
+        ? session.accessTokenExpiresAt < Date.now() / 1000
+        : true,
       currentTime: Math.floor(Date.now() / 1000),
-      timeUntilExpiry: session?.accessTokenExpiresAt ? session.accessTokenExpiresAt - Math.floor(Date.now() / 1000) : 0,
+      timeUntilExpiry: session?.accessTokenExpiresAt
+        ? session.accessTokenExpiresAt - Math.floor(Date.now() / 1000)
+        : 0,
       hasError: !!session?.error,
       error: session?.error || null,
       user: session?.user || null,
@@ -62,14 +71,14 @@ export const createTokenRoute = () => {
         debugInfo.username = getUsername(session.accessToken);
         debugInfo.resourceRoles = getResourceRoles(session.accessToken);
       } catch {
-        debugInfo.tokenDecodeError = 'Failed to decode token';
+        debugInfo.tokenDecodeError = "Failed to decode token";
       }
     }
 
     debugInfo.isValid = isValid;
 
     // Return debug info and access token only in development
-    const allowTokenAccess = process.env.NODE_ENV === 'development';
+    const allowTokenAccess = process.env.NODE_ENV === "development";
 
     const response = {
       ...debugInfo,
@@ -80,7 +89,7 @@ export const createTokenRoute = () => {
     return new Response(JSON.stringify(response, null, 2), {
       status: 200,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
   };

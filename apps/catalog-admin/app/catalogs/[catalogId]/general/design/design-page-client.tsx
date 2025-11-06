@@ -1,18 +1,31 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useAdminState } from '../../../../../context/admin';
-import { ColorPicker } from '../../../../../components/color-picker';
-import { ImageUploader } from '../../../../../components/image-uploader';
-import styles from './design.module.css';
-import { BreadcrumbType, Breadcrumbs, Button, PageBanner } from '@catalog-frontend/ui';
-import { Heading, Label, Textfield } from '@digdir/designsystemet-react';
-import { getTranslateText, localization, textRegexWithNumbers } from '@catalog-frontend/utils';
+import { useEffect, useState } from "react";
+import { useAdminState } from "../../../../../context/admin";
+import { ColorPicker } from "../../../../../components/color-picker";
+import { ImageUploader } from "../../../../../components/image-uploader";
+import styles from "./design.module.css";
+import {
+  BreadcrumbType,
+  Breadcrumbs,
+  Button,
+  PageBanner,
+} from "@catalog-frontend/ui";
+import { Heading, Label, Textfield } from "@digdir/designsystemet-react";
+import {
+  getTranslateText,
+  localization,
+  textRegexWithNumbers,
+} from "@catalog-frontend/utils";
 
-import { useGetDesign, useGetLogo, useUpdateDesign } from '../../../../../hooks/design';
-import { compare } from 'fast-json-patch';
-import { PageLayout } from '../../../../../components/page-layout';
-import { Organization } from '@catalog-frontend/types';
+import {
+  useGetDesign,
+  useGetLogo,
+  useUpdateDesign,
+} from "../../../../../hooks/design";
+import { compare } from "fast-json-patch";
+import { PageLayout } from "../../../../../components/page-layout";
+import { Organization } from "@catalog-frontend/types";
 
 export interface DesignPageClientProps {
   catalogId: string;
@@ -20,7 +33,11 @@ export interface DesignPageClientProps {
   catalogPortalUrl: string;
 }
 
-const DesignPageClient = ({ catalogId, organization, catalogPortalUrl }: DesignPageClientProps) => {
+const DesignPageClient = ({
+  catalogId,
+  organization,
+  catalogPortalUrl,
+}: DesignPageClientProps) => {
   const adminContext = useAdminState();
 
   const { backgroundColor, fontColor, logo } = adminContext;
@@ -30,7 +47,7 @@ const DesignPageClient = ({ catalogId, organization, catalogPortalUrl }: DesignP
   const { data: dbDesign } = useGetDesign(catalogId);
   const { data: dbLogo } = useGetLogo(catalogId);
 
-  const [imageLabel, setImageLabel] = useState('');
+  const [imageLabel, setImageLabel] = useState("");
   const updateDesign = useUpdateDesign(catalogId);
 
   const handleUpdateDbDesign = () => {
@@ -48,21 +65,28 @@ const DesignPageClient = ({ catalogId, organization, catalogPortalUrl }: DesignP
         .mutateAsync({ oldDesign: dbDesign ?? {}, newDesign: newDesign })
         .then(() => alert(localization.alert.success))
         .catch((e) => {
-          console.error('Updating design failed: ', e);
+          console.error("Updating design failed: ", e);
           alert(localization.alert.fail);
         });
     } else {
-      console.log('No changes detected.');
+      console.log("No changes detected.");
     }
   };
 
   useEffect(() => {
-    const hasValidLabel = dbDesign?.hasLogo ? textRegexWithNumbers.test(dbDesign?.logoDescription ?? '') : false;
-    setDisableTextField(!(logo || (dbDesign && dbDesign.hasLogo) || hasValidLabel));
+    const hasValidLabel = dbDesign?.hasLogo
+      ? textRegexWithNumbers.test(dbDesign?.logoDescription ?? "")
+      : false;
+    setDisableTextField(
+      !(logo || (dbDesign && dbDesign.hasLogo) || hasValidLabel),
+    );
   }, [logo, dbLogo, dbDesign]);
 
   useEffect(() => {
-    if (dbDesign?.logoDescription !== undefined && dbDesign?.logoDescription !== null) {
+    if (
+      dbDesign?.logoDescription !== undefined &&
+      dbDesign?.logoDescription !== null
+    ) {
       setImageLabel(dbDesign.logoDescription);
     }
   }, [dbDesign?.logoDescription]);
@@ -93,21 +117,29 @@ const DesignPageClient = ({ catalogId, organization, catalogPortalUrl }: DesignP
 
       <PageLayout>
         <div className={styles.heading}>
-          <Heading size='xlarge'>{localization.catalogAdmin.design}</Heading>
+          <Heading size="xlarge">{localization.catalogAdmin.design}</Heading>
         </div>
         <div className={styles.subheading}>
-          <Heading size='small'>{localization.catalogAdmin.preview}</Heading>
+          <Heading size="small">{localization.catalogAdmin.preview}</Heading>
         </div>
         <PageBanner
           title={localization.manageCatalog}
           subtitle={`${getTranslateText(organization?.prefLabel)}`}
-          logoDescription={(dbDesign?.hasLogo && dbDesign?.logoDescription) || ''}
-          backgroundColor={(backgroundColor ?? dbDesign?.backgroundColor) || '#FFFFFF'}
-          fontColor={fontColor ?? dbDesign?.fontColor ?? '#2D3741'}
-          logo={logo || (dbDesign?.hasLogo && `/api/design/${catalogId}/logo`) || ''}
+          logoDescription={
+            (dbDesign?.hasLogo && dbDesign?.logoDescription) || ""
+          }
+          backgroundColor={
+            (backgroundColor ?? dbDesign?.backgroundColor) || "#FFFFFF"
+          }
+          fontColor={fontColor ?? dbDesign?.fontColor ?? "#2D3741"}
+          logo={
+            logo || (dbDesign?.hasLogo && `/api/design/${catalogId}/logo`) || ""
+          }
         />
         <div className={styles.subheading}>
-          <Heading size='small'>{localization.catalogAdmin.customizeDesign}</Heading>
+          <Heading size="small">
+            {localization.catalogAdmin.customizeDesign}
+          </Heading>
         </div>
 
         <div className={styles.backgroundContainer}>
@@ -129,7 +161,9 @@ const DesignPageClient = ({ catalogId, organization, catalogPortalUrl }: DesignP
               value={imageLabel}
               onChange={(event) => {
                 setImageLabel(event.target.value);
-                setIsTextInputValid(textRegexWithNumbers.test(event.target.value));
+                setIsTextInputValid(
+                  textRegexWithNumbers.test(event.target.value),
+                );
               }}
               required={true}
               disabled={disableTextField}
@@ -146,23 +180,19 @@ const DesignPageClient = ({ catalogId, organization, catalogPortalUrl }: DesignP
               <div className={styles.label}>
                 <Label>{localization.catalogAdmin.backgroundColor}</Label>
               </div>
-              <ColorPicker
-                catalogId={catalogId}
-                type={'background'}
-              />
+              <ColorPicker catalogId={catalogId} type={"background"} />
             </div>
             <div>
               <div className={styles.label}>
                 <Label>{localization.catalogAdmin.fontColor}</Label>
               </div>
-              <ColorPicker
-                catalogId={catalogId}
-                type='font'
-              />
+              <ColorPicker catalogId={catalogId} type="font" />
             </div>
           </div>
           <div>
-            <Button onClick={() => handleUpdateDbDesign()}>{localization.save}</Button>
+            <Button onClick={() => handleUpdateDbDesign()}>
+              {localization.save}
+            </Button>
           </div>
         </div>
       </PageLayout>

@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { Alert, Checkbox, Heading } from '@digdir/designsystemet-react';
-import { localization } from '@catalog-frontend/utils';
-import { Terms, TermsAcceptation } from '@catalog-frontend/types';
-import parse from 'html-react-parser';
-import styles from './terms-and-conditions-page.module.css';
-import { Button, MarkdownComponent } from '@catalog-frontend/ui';
-import { useState } from 'react';
-import { acceptTermsAndConditions } from '@catalog-portal/app/actions';
+import { Alert, Checkbox, Heading } from "@digdir/designsystemet-react";
+import { localization } from "@catalog-frontend/utils";
+import { Terms, TermsAcceptation } from "@catalog-frontend/types";
+import parse from "html-react-parser";
+import styles from "./terms-and-conditions-page.module.css";
+import { Button, MarkdownComponent } from "@catalog-frontend/ui";
+import { useState } from "react";
+import { acceptTermsAndConditions } from "@catalog-portal/app/actions";
 
 interface Props {
   hasAdminPermission: boolean;
@@ -17,7 +17,13 @@ interface Props {
   acceptation: TermsAcceptation | undefined;
 }
 
-const TermsAndConditionsPageClient = ({ catalogId, hasAdminPermission, userName, latestTerms, acceptation }: Props) => {
+const TermsAndConditionsPageClient = ({
+  catalogId,
+  hasAdminPermission,
+  userName,
+  latestTerms,
+  acceptation,
+}: Props) => {
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const latestIsAccepted = latestTerms.version === acceptation?.acceptedVersion;
 
@@ -34,18 +40,12 @@ const TermsAndConditionsPageClient = ({ catalogId, hasAdminPermission, userName,
   };
 
   return (
-    <div className='container'>
-      <Heading
-        level={1}
-        spacing
-      >
+    <div className="container">
+      <Heading level={1} spacing>
         {localization.termsOfUse.heading}
       </Heading>
       {latestIsAccepted && (
-        <Alert
-          severity='success'
-          size='small'
-        >
+        <Alert severity="success" size="small">
           <MarkdownComponent>
             {
               localization.formatString(
@@ -58,19 +58,17 @@ const TermsAndConditionsPageClient = ({ catalogId, hasAdminPermission, userName,
         </Alert>
       )}
       {!latestIsAccepted && !hasAdminPermission && (
-        <Alert
-          severity='warning'
-          size='small'
-          className={styles.alert}
-        >
-          <MarkdownComponent>{localization.termsOfUse.adminPermissionNeeded}</MarkdownComponent>
+        <Alert severity="warning" size="small" className={styles.alert}>
+          <MarkdownComponent>
+            {localization.termsOfUse.adminPermissionNeeded}
+          </MarkdownComponent>
         </Alert>
       )}
       <div className={styles.terms}>{parse(latestTerms.text)}</div>
       {hasAdminPermission && (
         <div className={styles.agreement}>
           <Checkbox
-            value='terms-checkbox'
+            value="terms-checkbox"
             checked={isCheckboxChecked}
             disabled={latestIsAccepted}
             onChange={() => setIsCheckboxChecked(!isCheckboxChecked)}

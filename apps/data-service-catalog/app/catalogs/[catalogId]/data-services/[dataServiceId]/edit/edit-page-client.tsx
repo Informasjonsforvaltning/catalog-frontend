@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { LocalDataStorage, localization } from '@catalog-frontend/utils';
-import type { DataService, StorageData } from '@catalog-frontend/types';
-import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
-import DataServiceForm from '../../../../../../components/data-service-form';
-import { updateDataService } from '../../../../../../app/actions/actions';
+import { useEffect, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { ArrowLeftIcon } from "@navikt/aksel-icons";
+import { LocalDataStorage, localization } from "@catalog-frontend/utils";
+import type { DataService, StorageData } from "@catalog-frontend/types";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
+import DataServiceForm from "../../../../../../components/data-service-form";
+import { updateDataService } from "../../../../../../app/actions/actions";
 
 type EditPageProps = {
   catalogId: string;
@@ -17,14 +17,20 @@ type EditPageProps = {
   referenceDataEnv: string;
 };
 
-export const EditPage = ({ catalogId, dataService, searchEnv, referenceData, referenceDataEnv }: EditPageProps) => {
+export const EditPage = ({
+  catalogId,
+  dataService,
+  searchEnv,
+  referenceData,
+  referenceDataEnv,
+}: EditPageProps) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
   const dataStorage = new LocalDataStorage<StorageData>({
-    key: 'dataServiceForm',
+    key: "dataServiceForm",
   });
 
   const handleUpdate = async (values: DataService) => {
@@ -32,7 +38,9 @@ export const EditPage = ({ catalogId, dataService, searchEnv, referenceData, ref
   };
 
   const handleCancel = () => {
-    window.location.replace(`/catalogs/${catalogId}/data-services/${dataService.id}`);
+    window.location.replace(
+      `/catalogs/${catalogId}/data-services/${dataService.id}`,
+    );
   };
 
   const handleGotoOverview = () => {
@@ -41,16 +49,19 @@ export const EditPage = ({ catalogId, dataService, searchEnv, referenceData, ref
   };
 
   useEffect(() => {
-    if (searchParams.get('created') === 'true') {
+    if (searchParams.get("created") === "true") {
       setShowSnackbar(true);
 
       // Remove the param and update the URL shallowly
       const newParams = new URLSearchParams(searchParams.toString());
-      newParams.delete('created');
+      newParams.delete("created");
 
-      const newUrl = newParams.toString().length > 0 ? `${pathname}?${newParams.toString()}` : pathname;
+      const newUrl =
+        newParams.toString().length > 0
+          ? `${pathname}?${newParams.toString()}`
+          : pathname;
 
-      window.history.replaceState(null, '', newUrl);
+      window.history.replaceState(null, "", newUrl);
     }
   }, [searchParams, pathname]);
 
@@ -66,12 +77,12 @@ export const EditPage = ({ catalogId, dataService, searchEnv, referenceData, ref
       )}
       <ButtonBar>
         <Button
-          variant='tertiary'
-          color='second'
-          size='sm'
+          variant="tertiary"
+          color="second"
+          size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >
-          <ArrowLeftIcon fontSize='1.25em' />
+          <ArrowLeftIcon fontSize="1.25em" />
           {localization.button.backToOverview}
         </Button>
       </ButtonBar>

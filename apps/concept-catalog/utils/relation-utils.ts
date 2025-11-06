@@ -1,4 +1,8 @@
-import { Concept, UnionRelation, RelationTypeEnum } from '@catalog-frontend/types';
+import {
+  Concept,
+  UnionRelation,
+  RelationTypeEnum,
+} from "@catalog-frontend/types";
 
 export type UnionRelationWithIndex = {
   index: number;
@@ -6,11 +10,11 @@ export type UnionRelationWithIndex = {
 
 export const getFieldname = (rel: UnionRelation): string | undefined => {
   if (rel.relasjon === RelationTypeEnum.SE_OGSÅ) {
-    return rel.internal ? 'internSeOgså' : 'seOgså';
+    return rel.internal ? "internSeOgså" : "seOgså";
   } else if (rel.relasjon === RelationTypeEnum.ERSTATTES_AV) {
-    return rel.internal ? 'internErstattesAv' : 'erstattesAv';
+    return rel.internal ? "internErstattesAv" : "erstattesAv";
   } else {
-    return rel.internal ? 'internBegrepsRelasjon' : 'begrepsRelasjon';
+    return rel.internal ? "internBegrepsRelasjon" : "begrepsRelasjon";
   }
 };
 
@@ -30,7 +34,10 @@ export const updateUnionRelation = (
     inndelingskriterium: rel.inndelingskriterium,
     relatertBegrep: rel.relatertBegrep,
   };
-  if (rel.relasjon === RelationTypeEnum.SE_OGSÅ || rel.relasjon === RelationTypeEnum.ERSTATTES_AV) {
+  if (
+    rel.relasjon === RelationTypeEnum.SE_OGSÅ ||
+    rel.relasjon === RelationTypeEnum.ERSTATTES_AV
+  ) {
     relationValue = rel.relatertBegrep;
   }
 

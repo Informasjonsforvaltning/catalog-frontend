@@ -1,12 +1,22 @@
-'use client';
-import { Dataset } from '@catalog-frontend/types';
-import { Combobox, Fieldset } from '@digdir/designsystemet-react';
-import { useFormikContext } from 'formik';
-import { ChangeEvent, useState } from 'react';
-import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import styles from '../dataset-form.module.css';
-import { useSearchConceptsByUri, useSearchConceptSuggestions } from '../../../hooks/useSearchService';
-import { FormikLanguageFieldset, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
+"use client";
+import { Dataset } from "@catalog-frontend/types";
+import { Combobox, Fieldset } from "@digdir/designsystemet-react";
+import { useFormikContext } from "formik";
+import { ChangeEvent, useState } from "react";
+import {
+  capitalizeFirstLetter,
+  getTranslateText,
+  localization,
+} from "@catalog-frontend/utils";
+import styles from "../dataset-form.module.css";
+import {
+  useSearchConceptsByUri,
+  useSearchConceptSuggestions,
+} from "../../../hooks/useSearchService";
+import {
+  FormikLanguageFieldset,
+  TitleWithHelpTextAndTag,
+} from "@catalog-frontend/ui";
 
 interface Props {
   searchEnv: string; // Environment variable to search service
@@ -14,10 +24,14 @@ interface Props {
 
 export const ConceptSection = ({ searchEnv }: Props) => {
   const { setFieldValue, values } = useFormikContext<Dataset>();
-  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
-  const { data: searchHits, isLoading: searching } = useSearchConceptSuggestions(searchEnv, searchQuery);
-  const { data: selectedConcepts } = useSearchConceptsByUri(searchEnv, values.concepts ?? []);
+  const { data: searchHits, isLoading: searching } =
+    useSearchConceptSuggestions(searchEnv, searchQuery);
+  const { data: selectedConcepts } = useSearchConceptsByUri(
+    searchEnv,
+    values.concepts ?? [],
+  );
 
   const comboboxOptions = [
     // Safely handle the default values
@@ -43,11 +57,11 @@ export const ConceptSection = ({ searchEnv }: Props) => {
   return (
     <>
       <Fieldset
-        size='sm'
+        size="sm"
         legend={
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
-            tagColor='info'
+            tagColor="info"
             helpText={localization.datasetForm.helptext.concepts}
           >
             {localization.datasetForm.fieldLabel.concepts}
@@ -55,9 +69,13 @@ export const ConceptSection = ({ searchEnv }: Props) => {
         }
       >
         <Combobox
-          size='sm'
-          onValueChange={(selectedValues: string[]) => setFieldValue('concepts', selectedValues)}
-          onChange={(input: ChangeEvent<HTMLInputElement>) => setSearchQuery(input.target.value)}
+          size="sm"
+          onValueChange={(selectedValues: string[]) =>
+            setFieldValue("concepts", selectedValues)
+          }
+          onChange={(input: ChangeEvent<HTMLInputElement>) =>
+            setSearchQuery(input.target.value)
+          }
           loading={searching}
           multiple
           value={values.concepts}
@@ -71,12 +89,26 @@ export const ConceptSection = ({ searchEnv }: Props) => {
             <Combobox.Option
               value={suggestion.uri}
               key={suggestion.uri}
-              displayValue={suggestion.title ? (getTranslateText(suggestion.title) as string) : suggestion.uri}
+              displayValue={
+                suggestion.title
+                  ? (getTranslateText(suggestion.title) as string)
+                  : suggestion.uri
+              }
             >
               <div className={styles.comboboxOption}>
-                <div>{suggestion.title ? (getTranslateText(suggestion.title) as string) : suggestion.uri}</div>
-                <div>{capitalizeFirstLetter(getTranslateText(suggestion.description) as string)}</div>
-                <div>{getTranslateText(suggestion.organization?.prefLabel)}</div>
+                <div>
+                  {suggestion.title
+                    ? (getTranslateText(suggestion.title) as string)
+                    : suggestion.uri}
+                </div>
+                <div>
+                  {capitalizeFirstLetter(
+                    getTranslateText(suggestion.description) as string,
+                  )}
+                </div>
+                <div>
+                  {getTranslateText(suggestion.organization?.prefLabel)}
+                </div>
               </div>
             </Combobox.Option>
           ))}
@@ -85,11 +117,11 @@ export const ConceptSection = ({ searchEnv }: Props) => {
 
       <FormikLanguageFieldset
         multiple
-        name={'keywords'}
+        name={"keywords"}
         legend={
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
-            tagColor='info'
+            tagColor="info"
             helpText={localization.datasetForm.helptext.keywords}
           >
             {localization.datasetForm.fieldLabel.keywords}

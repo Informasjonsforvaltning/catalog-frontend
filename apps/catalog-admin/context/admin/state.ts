@@ -1,4 +1,4 @@
-import { Code, CodeList } from '@catalog-frontend/types';
+import { Code, CodeList } from "@catalog-frontend/types";
 
 export interface AdminState {
   backgroundColor?: string;
@@ -12,8 +12,8 @@ export interface AdminState {
 }
 
 export const DefaultAdminState = {
-  backgroundColor: '#FFFFFF',
-  fontColor: '#2D3741',
+  backgroundColor: "#FFFFFF",
+  fontColor: "#2D3741",
   logo: null,
   updatedCodeLists: [],
   showUserEditor: false,

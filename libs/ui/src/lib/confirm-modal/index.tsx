@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { ReactNode, useEffect, useRef } from 'react';
-import { Button, Modal } from '@digdir/designsystemet-react';
-import { localization } from '@catalog-frontend/utils';
-import style from './confirm-modal.module.scss';
+import { ReactNode, useEffect, useRef } from "react";
+import { Button, Modal } from "@digdir/designsystemet-react";
+import { localization } from "@catalog-frontend/utils";
+import style from "./confirm-modal.module.scss";
 
 type ConfirmModalProps = {
   title: string;
@@ -53,18 +53,11 @@ export const ConfirmModal = ({
       <Modal.Header closeButton={false}>{title}</Modal.Header>
       <Modal.Content className={style.content}>{content}</Modal.Content>
       <Modal.Footer>
-        <Button
-          size='sm'
-          onClick={handleSuccess}
-        >
+        <Button size="sm" onClick={handleSuccess}>
           {successButtonText ?? localization.button.success}
         </Button>
         {!hideCancel && (
-          <Button
-            size='sm'
-            variant='secondary'
-            onClick={handleCancel}
-          >
+          <Button size="sm" variant="secondary" onClick={handleCancel}>
             {cancelButtonText ?? localization.button.cancel}
           </Button>
         )}

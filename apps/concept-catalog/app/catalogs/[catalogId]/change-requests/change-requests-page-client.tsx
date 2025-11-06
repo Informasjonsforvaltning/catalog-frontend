@@ -1,11 +1,17 @@
-'use client';
+"use client";
 
-import cn from 'classnames';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
-import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
-import { Heading, Tabs } from '@digdir/designsystemet-react';
-import { ChangeRequestStatusTagProps, LinkButton, SearchField, SearchHitsLayout, Tag } from '@catalog-frontend/ui';
+import cn from "classnames";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
+import { Heading, Tabs } from "@digdir/designsystemet-react";
+import {
+  ChangeRequestStatusTagProps,
+  LinkButton,
+  SearchField,
+  SearchHitsLayout,
+  Tag,
+} from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
   convertTimestampToDateAndTime,
@@ -15,13 +21,16 @@ import {
   sortDescending,
   validOrganizationNumber,
   validUUID,
-} from '@catalog-frontend/utils';
-import ChangeRequestFilter from '@concept-catalog/components/change-request-filter';
-import ChangeRequestSort from '@concept-catalog/components/change-request-sort';
-import { getTranslatedStatus } from '@concept-catalog/utils/change-request';
-import { ChangeRequest, ChangeRequestsPageSettings } from '@catalog-frontend/types';
-import styles from './change-requests-page.module.css';
-import { useEffect, useMemo } from 'react';
+} from "@catalog-frontend/utils";
+import ChangeRequestFilter from "@concept-catalog/components/change-request-filter";
+import ChangeRequestSort from "@concept-catalog/components/change-request-sort";
+import { getTranslatedStatus } from "@concept-catalog/utils/change-request";
+import {
+  ChangeRequest,
+  ChangeRequestsPageSettings,
+} from "@catalog-frontend/types";
+import styles from "./change-requests-page.module.css";
+import { useEffect, useMemo } from "react";
 
 type Props = {
   catalogId: string;
@@ -29,34 +38,40 @@ type Props = {
   pageSettings?: ChangeRequestsPageSettings;
 };
 
-export const ChangeRequestsPageClient = ({ catalogId, data, pageSettings }: Props) => {
+export const ChangeRequestsPageClient = ({
+  catalogId,
+  data,
+  pageSettings,
+}: Props) => {
   const itemTypeOptions = [
     {
       label: localization.changeRequest.changeRequest,
-      value: 'changeRequest',
+      value: "changeRequest",
     },
     {
       label: localization.suggestionForNewConcept,
-      value: 'suggestionForNewConcept',
+      value: "suggestionForNewConcept",
     },
   ];
 
   const statusOptions = [
     {
       label: localization.changeRequest.status.open,
-      value: 'open',
+      value: "open",
     },
     {
       label: localization.changeRequest.status.accepted,
-      value: 'accepted',
+      value: "accepted",
     },
     {
       label: localization.changeRequest.status.rejected,
-      value: 'rejected',
+      value: "rejected",
     },
   ];
 
-  const sortOptions = Object.entries(localization.changeRequest.sortOptions ?? {}).map(([key, value]) => ({
+  const sortOptions = Object.entries(
+    localization.changeRequest.sortOptions ?? {},
+  ).map(([key, value]) => ({
     label: value as string,
     value: key,
   }));
@@ -64,21 +79,35 @@ export const ChangeRequestsPageClient = ({ catalogId, data, pageSettings }: Prop
   const router = useRouter();
 
   // Memoize default values for query states
-  const defaultSelectedSortOption = useMemo(() => pageSettings?.sort ?? 'TIME_FOR_PROPOSAL_DESC', []);
-  const defaultSearchTerm = useMemo(() => pageSettings?.search ?? '', []);
-  const defaultFilterStatus = useMemo(() => pageSettings?.filter?.status ?? [], []);
-  const defaultFilterItemType = useMemo(() => pageSettings?.filter?.itemType ?? itemTypeOptions[0].value, []);
+  const defaultSelectedSortOption = useMemo(
+    () => pageSettings?.sort ?? "TIME_FOR_PROPOSAL_DESC",
+    [],
+  );
+  const defaultSearchTerm = useMemo(() => pageSettings?.search ?? "", []);
+  const defaultFilterStatus = useMemo(
+    () => pageSettings?.filter?.status ?? [],
+    [],
+  );
+  const defaultFilterItemType = useMemo(
+    () => pageSettings?.filter?.itemType ?? itemTypeOptions[0].value,
+    [],
+  );
 
-  const [searchTerm, setSearchTerm] = useQueryState('changeRequestSearch', { defaultValue: defaultSearchTerm });
+  const [searchTerm, setSearchTerm] = useQueryState("changeRequestSearch", {
+    defaultValue: defaultSearchTerm,
+  });
   const [filterItemType, setFilterItemType] = useQueryState(
-    'changeRequestFilter.itemType',
+    "changeRequestFilter.itemType",
     parseAsString.withDefault(defaultFilterItemType),
   );
   const [filterStatus, setFilterStatus] = useQueryState(
-    'changeRequestFilter.status',
+    "changeRequestFilter.status",
     parseAsArrayOf(parseAsString).withDefault(defaultFilterStatus),
   );
-  const [sort, setSort] = useQueryState('changeRequestSort', parseAsString.withDefault(defaultSelectedSortOption));
+  const [sort, setSort] = useQueryState(
+    "changeRequestSort",
+    parseAsString.withDefault(defaultSelectedSortOption),
+  );
 
   const onItemTypeChange = (value: string) => {
     setFilterItemType(value);
@@ -105,9 +134,9 @@ export const ChangeRequestsPageClient = ({ catalogId, data, pageSettings }: Prop
   };
 
   let listItems: ChangeRequest[];
-  if (filterItemType === 'changeRequest') {
+  if (filterItemType === "changeRequest") {
     listItems = data.filter((item) => item.conceptId !== null);
-  } else if (filterItemType === 'suggestionForNewConcept') {
+  } else if (filterItemType === "suggestionForNewConcept") {
     listItems = data.filter((item) => item.conceptId === null);
   } else {
     listItems = data;
@@ -115,25 +144,37 @@ export const ChangeRequestsPageClient = ({ catalogId, data, pageSettings }: Prop
 
   if (searchTerm) {
     const lowercasedQuery = searchTerm.toLowerCase();
-    listItems = listItems.filter((item) => item?.title.toLowerCase().includes(lowercasedQuery));
+    listItems = listItems.filter((item) =>
+      item?.title.toLowerCase().includes(lowercasedQuery),
+    );
   }
 
   if (filterStatus && filterStatus.length > 0) {
-    listItems = listItems.filter((item) => filterStatus.includes(item.status.toLowerCase()));
+    listItems = listItems.filter((item) =>
+      filterStatus.includes(item.status.toLowerCase()),
+    );
   }
 
   switch (sort) {
-    case 'TIME_FOR_PROPOSAL_ASC':
-      listItems = listItems.sort((a, b) => sortAscending(a.timeForProposal ?? '', b.timeForProposal ?? ''));
+    case "TIME_FOR_PROPOSAL_ASC":
+      listItems = listItems.sort((a, b) =>
+        sortAscending(a.timeForProposal ?? "", b.timeForProposal ?? ""),
+      );
       break;
-    case 'TIME_FOR_PROPOSAL_DESC':
-      listItems = listItems.sort((a, b) => sortDescending(a.timeForProposal ?? '', b.timeForProposal ?? ''));
+    case "TIME_FOR_PROPOSAL_DESC":
+      listItems = listItems.sort((a, b) =>
+        sortDescending(a.timeForProposal ?? "", b.timeForProposal ?? ""),
+      );
       break;
-    case 'TITLE_ASC':
-      listItems = listItems.sort((a, b) => sortAscending(a.title.toLowerCase(), b.title.toLowerCase()));
+    case "TITLE_ASC":
+      listItems = listItems.sort((a, b) =>
+        sortAscending(a.title.toLowerCase(), b.title.toLowerCase()),
+      );
       break;
-    case 'TITLE_DESC':
-      listItems = listItems.sort((a, b) => sortDescending(a.title.toLowerCase(), b.title.toLowerCase()));
+    case "TITLE_DESC":
+      listItems = listItems.sort((a, b) =>
+        sortDescending(a.title.toLowerCase(), b.title.toLowerCase()),
+      );
       break;
     default:
       break;
@@ -152,25 +193,24 @@ export const ChangeRequestsPageClient = ({ catalogId, data, pageSettings }: Prop
   }, [searchTerm, sort, filterStatus, filterItemType]);
 
   return (
-    <div className='container'>
+    <div className="container">
       <Tabs
         className={styles.tabs}
-        defaultValue={'changeRequestTab'}
-        size='medium'
+        defaultValue={"changeRequestTab"}
+        size="medium"
       >
         <Tabs.List className={styles.tabsList}>
           <Tabs.Tab
-            value={'conceptTab'}
+            value={"conceptTab"}
             onClick={() => router.push(`/catalogs/${catalogId}/concepts`)}
           >
             {localization.concept.concepts}
           </Tabs.Tab>
-          <Tabs.Tab value={'changeRequestTab'}>{localization.changeRequest.changeRequest}</Tabs.Tab>
+          <Tabs.Tab value={"changeRequestTab"}>
+            {localization.changeRequest.changeRequest}
+          </Tabs.Tab>
         </Tabs.List>
-        <Tabs.Content
-          value={'changeRequestTab'}
-          className={styles.tabsContent}
-        >
+        <Tabs.Content value={"changeRequestTab"} className={styles.tabsContent}>
           <SearchHitsLayout>
             <SearchHitsLayout.SearchRow>
               <div className={styles.searchRow}>
@@ -195,64 +235,84 @@ export const ChangeRequestsPageClient = ({ catalogId, data, pageSettings }: Prop
               </div>
             </SearchHitsLayout.SearchRow>
             <SearchHitsLayout.LeftColumn>
-              <ChangeRequestFilter
-                itemType={itemType}
-                status={status}
-              />
+              <ChangeRequestFilter itemType={itemType} status={status} />
             </SearchHitsLayout.LeftColumn>
             <SearchHitsLayout.MainColumn>
               {listItems && listItems.length !== 0 ? (
                 <div className={styles.listWrapper}>
                   <ul className={styles.list}>
-                    {listItems.map(({ id, title, catalogId, timeForProposal, proposedBy, status }) => (
-                      <li
-                        key={id}
-                        itemID={id ?? ''}
-                        title={catalogId}
-                        className={styles.listItem}
-                      >
-                        <div className={styles.listContent}>
-                          <div>
-                            <Heading
-                              level={3}
-                              size={'xsmall'}
-                            >
-                              <Link
-                                prefetch={false}
-                                href={
-                                  validOrganizationNumber(catalogId) &&
-                                  validUUID(id) &&
-                                  listItems.find(({ id: changeRequestId }) => changeRequestId === id)
-                                    ? `/catalogs/${catalogId}/change-requests/${id}`
-                                    : '#'
-                                }
-                                className={title ? styles.heading : cn(styles.heading, styles.noName)}
-                              >
-                                {title || `(${localization.changeRequest.noName})`}
-                              </Link>
-                            </Heading>
-                            <div className={styles.text}>
-                              <p>
-                                {localization.created}: {convertTimestampToDateAndTime(timeForProposal ?? '')}{' '}
-                                {localization.by}{' '}
-                                {(proposedBy?.name ?? '')
-                                  .split(' ')
-                                  .map((namePart) => capitalizeFirstLetter(namePart))
-                                  .join(' ')}
-                              </p>
+                    {listItems.map(
+                      ({
+                        id,
+                        title,
+                        catalogId,
+                        timeForProposal,
+                        proposedBy,
+                        status,
+                      }) => (
+                        <li
+                          key={id}
+                          itemID={id ?? ""}
+                          title={catalogId}
+                          className={styles.listItem}
+                        >
+                          <div className={styles.listContent}>
+                            <div>
+                              <Heading level={3} size={"xsmall"}>
+                                <Link
+                                  prefetch={false}
+                                  href={
+                                    validOrganizationNumber(catalogId) &&
+                                    validUUID(id) &&
+                                    listItems.find(
+                                      ({ id: changeRequestId }) =>
+                                        changeRequestId === id,
+                                    )
+                                      ? `/catalogs/${catalogId}/change-requests/${id}`
+                                      : "#"
+                                  }
+                                  className={
+                                    title
+                                      ? styles.heading
+                                      : cn(styles.heading, styles.noName)
+                                  }
+                                >
+                                  {title ||
+                                    `(${localization.changeRequest.noName})`}
+                                </Link>
+                              </Heading>
+                              <div className={styles.text}>
+                                <p>
+                                  {localization.created}:{" "}
+                                  {convertTimestampToDateAndTime(
+                                    timeForProposal ?? "",
+                                  )}{" "}
+                                  {localization.by}{" "}
+                                  {(proposedBy?.name ?? "")
+                                    .split(" ")
+                                    .map((namePart) =>
+                                      capitalizeFirstLetter(namePart),
+                                    )
+                                    .join(" ")}
+                                </p>
+                              </div>
                             </div>
+                            {status && (
+                              <div className={styles.status}>
+                                <Tag.ChangeRequestStatus
+                                  statusKey={status}
+                                  statusLabel={
+                                    getTranslatedStatus(
+                                      status,
+                                    ) as ChangeRequestStatusTagProps["statusLabel"]
+                                  }
+                                />
+                              </div>
+                            )}
                           </div>
-                          {status && (
-                            <div className={styles.status}>
-                              <Tag.ChangeRequestStatus
-                                statusKey={status}
-                                statusLabel={getTranslatedStatus(status) as ChangeRequestStatusTagProps['statusLabel']}
-                              />
-                            </div>
-                          )}
-                        </div>
-                      </li>
-                    ))}
+                        </li>
+                      ),
+                    )}
                   </ul>
                 </div>
               ) : (

@@ -1,5 +1,5 @@
-import { authOptions, isValidSessionAndToken } from '@catalog-frontend/utils';
-import { getServerSession } from 'next-auth';
+import { authOptions, isValidSessionAndToken } from "@catalog-frontend/utils";
+import { getServerSession } from "next-auth";
 
 const handler = async () => {
   const session = await getServerSession(authOptions);

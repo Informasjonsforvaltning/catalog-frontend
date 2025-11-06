@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import { CodeList, Concept, ReferenceDataCode } from '@catalog-frontend/types';
+import { CodeList, Concept, ReferenceDataCode } from "@catalog-frontend/types";
 import {
   getTranslateText as translate,
   localization,
   formatISO,
   validOrganizationNumber,
   validUUID,
-} from '@catalog-frontend/utils';
-import cn from 'classnames';
-import { ConceptStatusTagProps, SearchHit, Tag } from '@catalog-frontend/ui';
-import Link from 'next/link';
-import styles from './concept-search-hits.module.css';
-import { Chip } from '@digdir/designsystemet-react';
-import ConceptSubject from '../concept-subject';
-import { FC } from 'react';
+} from "@catalog-frontend/utils";
+import cn from "classnames";
+import { ConceptStatusTagProps, SearchHit, Tag } from "@catalog-frontend/ui";
+import Link from "next/link";
+import styles from "./concept-search-hits.module.css";
+import { Chip } from "@digdir/designsystemet-react";
+import ConceptSubject from "../concept-subject";
+import { FC } from "react";
 
 interface Props {
   catalogId: string;
@@ -33,14 +33,12 @@ const ConceptSearchHits: FC<Props> = ({
   assignableUsers,
   onLabelClick,
 }: Props) => {
-  const findConceptStatus = (statusURI: any) => conceptStatuses?.find((s) => s.uri === statusURI);
+  const findConceptStatus = (statusURI: any) =>
+    conceptStatuses?.find((s) => s.uri === statusURI);
 
   const ConceptLabels: FC<{ searchHit: Concept }> = ({ searchHit }) => (
     <div className={styles.rowSpaceBetween}>
-      <Chip.Group
-        size='small'
-        className={styles.chipGroup}
-      >
+      <Chip.Group size="small" className={styles.chipGroup}>
         {searchHit.merkelapp &&
           searchHit.merkelapp.map((label) => (
             <Chip.Toggle
@@ -61,9 +59,9 @@ const ConceptSearchHits: FC<Props> = ({
         {searchHit?.endringslogelement && (
           <p>
             {formatISO(searchHit.endringslogelement.endringstidspunkt, {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
+              year: "numeric",
+              month: "long",
+              day: "numeric",
             })}
           </p>
         )}
@@ -80,9 +78,10 @@ const ConceptSearchHits: FC<Props> = ({
             <Link
               prefetch={false}
               href={
-                validOrganizationNumber(catalogId) && validUUID(searchHit.sistPublisertId)
+                validOrganizationNumber(catalogId) &&
+                validUUID(searchHit.sistPublisertId)
                   ? `/catalogs/${catalogId}/concepts/${searchHit.sistPublisertId}`
-                  : '#'
+                  : "#"
               }
             >
               {localization.searchHit.lastPublished}
@@ -93,7 +92,8 @@ const ConceptSearchHits: FC<Props> = ({
       <div className={styles.rowSpaceBetween}>
         {searchHit?.assignedUser && (
           <p className={styles.greyFont}>
-            {assignableUsers?.find((user) => user.id === searchHit.assignedUser)?.name ?? localization.unknown}
+            {assignableUsers?.find((user) => user.id === searchHit.assignedUser)
+              ?.name ?? localization.unknown}
           </p>
         )}
       </div>
@@ -104,27 +104,35 @@ const ConceptSearchHits: FC<Props> = ({
     <>
       {data?.hits &&
         data.hits.map((concept: Concept) => (
-          <div
-            className={styles.searchHitContainer}
-            key={concept.id}
-          >
+          <div className={styles.searchHitContainer} key={concept.id}>
             <SearchHit
-              title={concept?.anbefaltTerm?.navn ? translate(concept?.anbefaltTerm?.navn) : localization.concept.noName}
+              title={
+                concept?.anbefaltTerm?.navn
+                  ? translate(concept?.anbefaltTerm?.navn)
+                  : localization.concept.noName
+              }
               description={translate(concept?.definisjon?.tekst)}
               labels={<ConceptLabels searchHit={concept} />}
               content={<ConceptPublishingInfo searchHit={concept} />}
               statusTag={
                 concept?.statusURI && (
                   <Tag.ConceptStatus
-                    statusKey={findConceptStatus(concept.statusURI)?.code as ConceptStatusTagProps['statusKey']}
-                    statusLabel={translate(findConceptStatus(concept.statusURI)?.label) as string}
+                    statusKey={
+                      findConceptStatus(concept.statusURI)
+                        ?.code as ConceptStatusTagProps["statusKey"]
+                    }
+                    statusLabel={
+                      translate(
+                        findConceptStatus(concept.statusURI)?.label,
+                      ) as string
+                    }
                   />
                 )
               }
               titleHref={
                 validOrganizationNumber(catalogId) && validUUID(concept?.id)
                   ? `/catalogs/${catalogId}/concepts/${concept.id}`
-                  : '#'
+                  : "#"
               }
               rightColumn={
                 <ConceptSubject

@@ -1,23 +1,37 @@
-'use client';
+"use client";
 
-import { createRef, ReactNode, Ref, RefObject, useEffect, useRef, useState } from 'react';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Fieldset, Box, Paragraph, Textfield, ErrorMessage } from '@digdir/designsystemet-react';
-import { useFormikContext } from 'formik';
+import {
+  createRef,
+  ReactNode,
+  Ref,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import {
+  Fieldset,
+  Box,
+  Paragraph,
+  Textfield,
+  ErrorMessage,
+} from "@digdir/designsystemet-react";
+import { useFormikContext } from "formik";
 
-import styles from './formik-language-fieldset.module.scss';
-import { ISOLanguage, LocalizedStrings } from '@catalog-frontend/types';
-import { TextareaWithPrefix } from '../textarea-with-prefix';
-import { AddButton, DeleteButton } from '../button';
-import { FormikMultivalueTextfield } from '../formik-multivalue-textfield';
-import { FastFieldWithRef } from '../formik-fast-field-with-ref';
-import TitleWithHelpTextAndTag from '../title-with-help-text-and-tag';
-import { get } from 'lodash';
+import styles from "./formik-language-fieldset.module.scss";
+import { ISOLanguage, LocalizedStrings } from "@catalog-frontend/types";
+import { TextareaWithPrefix } from "../textarea-with-prefix";
+import { AddButton, DeleteButton } from "../button";
+import { FormikMultivalueTextfield } from "../formik-multivalue-textfield";
+import { FastFieldWithRef } from "../formik-fast-field-with-ref";
+import TitleWithHelpTextAndTag from "../title-with-help-text-and-tag";
+import { get } from "lodash";
 
 type LanuguageFieldsetProps = {
   legend?: ReactNode;
   name: string;
-  requiredLanguages?: Omit<ISOLanguage, 'no'>[];
+  requiredLanguages?: Omit<ISOLanguage, "no">[];
   as?: typeof Textfield | typeof TextareaWithPrefix;
   ref?: Ref<HTMLInputElement | HTMLTextAreaElement | null>;
   multiple?: boolean;
@@ -25,7 +39,7 @@ type LanuguageFieldsetProps = {
   showError?: boolean;
 };
 
-const allowedLanguages = Object.freeze<ISOLanguage[]>(['nb', 'nn', 'en']);
+const allowedLanguages = Object.freeze<ISOLanguage[]>(["nb", "nn", "en"]);
 
 export const FormikLanguageFieldset = ({
   legend,
@@ -37,7 +51,8 @@ export const FormikLanguageFieldset = ({
   readOnly = false,
   showError = true,
 }: LanuguageFieldsetProps) => {
-  const { errors, getFieldMeta, setFieldValue } = useFormikContext<Record<string, LocalizedStrings>>();
+  const { errors, getFieldMeta, setFieldValue } =
+    useFormikContext<Record<string, LocalizedStrings>>();
   const [focus, setFocus] = useState<string | null>();
 
   const visibleLanguageFields = allowedLanguages.filter((lang) => {
@@ -48,7 +63,11 @@ export const FormikLanguageFieldset = ({
   const languageRefs = useRef(
     allowedLanguages.reduce(
       (acc, lang) => {
-        if (ref && visibleLanguageFields.includes(lang) && !Object.values(acc).includes(ref)) {
+        if (
+          ref &&
+          visibleLanguageFields.includes(lang) &&
+          !Object.values(acc).includes(ref)
+        ) {
           acc[lang] = ref;
         } else {
           acc[lang] = createRef<HTMLInputElement | HTMLTextAreaElement>();
@@ -60,7 +79,7 @@ export const FormikLanguageFieldset = ({
   );
 
   const handleAddLanguage = (lang: string) => {
-    setFieldValue(`${name}.${lang}`, multiple ? [] : multiple ? [] : '');
+    setFieldValue(`${name}.${lang}`, multiple ? [] : multiple ? [] : "");
     setFocus(lang);
   };
 
@@ -69,7 +88,9 @@ export const FormikLanguageFieldset = ({
     setFocus(null);
   };
 
-  const visibleLanguageButtons = allowedLanguages.filter((lang) => !visibleLanguageFields.includes(lang));
+  const visibleLanguageButtons = allowedLanguages.filter(
+    (lang) => !visibleLanguageFields.includes(lang),
+  );
 
   const langErrors = allowedLanguages
     .filter((lang) => get(errors, `${name}.${lang}`))
@@ -86,7 +107,9 @@ export const FormikLanguageFieldset = ({
 
   const getError = () => {
     if (langErrors.length > 0) {
-      return langErrors.map((error, index) => <div key={`error-${index}`}>{getTranslateText(error)}</div>);
+      return langErrors.map((error, index) => (
+        <div key={`error-${index}`}>{getTranslateText(error)}</div>
+      ));
     }
 
     if (get(errors, name)) {
@@ -99,7 +122,7 @@ export const FormikLanguageFieldset = ({
   useEffect(() => {
     if (focus) {
       const ref = languageRefs.current[focus];
-      if (ref && 'current' in ref && ref.current) {
+      if (ref && "current" in ref && ref.current) {
         ref.current.focus();
       }
     }
@@ -110,14 +133,18 @@ export const FormikLanguageFieldset = ({
       className={styles.fieldset}
       legend={legend}
       readOnly={readOnly}
-      size='sm'
+      size="sm"
     >
       {visibleLanguageFields.map((lang) => (
         <div key={lang}>
           {multiple ? (
             <FormikMultivalueTextfield
               ref={languageRefs.current[lang] as RefObject<HTMLInputElement>}
-              label={<TitleWithHelpTextAndTag>{localization.language[lang]}</TitleWithHelpTextAndTag>}
+              label={
+                <TitleWithHelpTextAndTag>
+                  {localization.language[lang]}
+                </TitleWithHelpTextAndTag>
+              }
               name={`${name}.${lang}`}
               prefix={localization.language[lang]}
               aria-label={localization.language[lang]}
@@ -127,10 +154,7 @@ export const FormikLanguageFieldset = ({
               error={hasError(lang)}
             />
           ) : (
-            <Box
-              key={lang}
-              className={styles.languageField}
-            >
+            <Box key={lang} className={styles.languageField}>
               <FastFieldWithRef
                 as={renderAs}
                 ref={languageRefs.current[lang]}
@@ -143,15 +167,14 @@ export const FormikLanguageFieldset = ({
                       cols: 110,
                       prefix: (
                         <>
-                          <Paragraph
-                            size='sm'
-                            variant='short'
-                          >
+                          <Paragraph size="sm" variant="short">
                             {localization.language[lang]}
                           </Paragraph>
                           {!requiredLanguages?.includes(lang) && !readOnly && (
                             <Box>
-                              <DeleteButton onClick={() => handleRemoveLanguage(lang)} />
+                              <DeleteButton
+                                onClick={() => handleRemoveLanguage(lang)}
+                              />
                             </Box>
                           )}
                         </>
@@ -161,9 +184,11 @@ export const FormikLanguageFieldset = ({
                       prefix: localization.language[lang],
                     })}
               />
-              {!requiredLanguages?.includes(lang) && renderAs !== TextareaWithPrefix && !readOnly && (
-                <DeleteButton onClick={() => handleRemoveLanguage(lang)} />
-              )}
+              {!requiredLanguages?.includes(lang) &&
+                renderAs !== TextareaWithPrefix &&
+                !readOnly && (
+                  <DeleteButton onClick={() => handleRemoveLanguage(lang)} />
+                )}
             </Box>
           )}
         </div>
@@ -172,21 +197,15 @@ export const FormikLanguageFieldset = ({
       {!readOnly && (
         <div className={styles.languageButtons}>
           {visibleLanguageButtons.map((lang) => (
-            <AddButton
-              key={lang}
-              onClick={() => handleAddLanguage(lang)}
-            >
-              {localization.language[lang] ?? '?'}
+            <AddButton key={lang} onClick={() => handleAddLanguage(lang)}>
+              {localization.language[lang] ?? "?"}
             </AddButton>
           ))}
         </div>
       )}
 
       {showError && getError() && (
-        <ErrorMessage
-          size='sm'
-          error
-        >
+        <ErrorMessage size="sm" error>
           {getError()}
         </ErrorMessage>
       )}

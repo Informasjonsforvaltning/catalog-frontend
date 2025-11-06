@@ -1,10 +1,10 @@
-import { test as base } from '@playwright/test';
-import HomePage from '../page-object-model/homePage';
-import LoginPage from '../page-object-model/loginPage';
-import DataServicesPage from '../page-object-model/dataServicesPage';
-import { adminAuthFile, generateAccessibilityBuilder } from '../utils/helpers';
+import { test as base } from "@playwright/test";
+import HomePage from "../page-object-model/homePage";
+import LoginPage from "../page-object-model/loginPage";
+import DataServicesPage from "../page-object-model/dataServicesPage";
+import { adminAuthFile, generateAccessibilityBuilder } from "../utils/helpers";
 
-const PREFIX_TEXT = 'data-service-catalog: ';
+const PREFIX_TEXT = "data-service-catalog: ";
 export const test = base.extend<{
   loginPage: any;
   homePage: any;
@@ -23,8 +23,15 @@ export const test = base.extend<{
     const homePage = new HomePage(page, context, accessibilityBuilder);
     await use(homePage);
   },
-  dataServicesPage: async ({ page, context, accessibilityBuilder }: any, use: any) => {
-    const dataServicesPage = new DataServicesPage(page, context, accessibilityBuilder);
+  dataServicesPage: async (
+    { page, context, accessibilityBuilder }: any,
+    use: any,
+  ) => {
+    const dataServicesPage = new DataServicesPage(
+      page,
+      context,
+      accessibilityBuilder,
+    );
     await use(dataServicesPage);
   },
 });
@@ -38,4 +45,4 @@ export const runTestAsAdmin = (name: string, fn: (any: any) => void) => {
   runTest(name, fn);
 };
 
-export { expect } from '@playwright/test';
+export { expect } from "@playwright/test";

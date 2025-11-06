@@ -1,12 +1,16 @@
-'use client';
+"use client";
 
-import { ImportResult } from '@catalog-frontend/types';
-import { localization } from '@catalog-frontend/utils';
-import { confirmImport, cancelImport, deleteImportResult } from '../../../../../actions/concept/actions';
-import { ConfirmModal, ImportResultDetails } from '@catalog-frontend/ui';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ImportResult } from "@catalog-frontend/types";
+import { localization } from "@catalog-frontend/utils";
+import {
+  confirmImport,
+  cancelImport,
+  deleteImportResult,
+} from "../../../../../actions/concept/actions";
+import { ConfirmModal, ImportResultDetails } from "@catalog-frontend/ui";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   catalogId: string;
@@ -33,7 +37,9 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
   const confirmMutation = useMutation({
     mutationFn: async () => await confirmImport(catalogId, importResult.id),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['refresh-import-result', catalogId, importResult.id] });
+      qc.invalidateQueries({
+        queryKey: ["refresh-import-result", catalogId, importResult.id],
+      });
     },
   });
 
@@ -44,7 +50,9 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
   const cancelMutation = useMutation({
     mutationFn: async () => await cancelImport(catalogId, importResult.id),
     onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['refresh-import-result', catalogId, importResult.id] });
+      qc.invalidateQueries({
+        queryKey: ["refresh-import-result", catalogId, importResult.id],
+      });
     },
   });
 
@@ -52,21 +60,30 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
     cancelMutation.mutate();
   };
 
-  const shouldRefetch = (fetchedData: any) => fetchedData.status === 'IN_PROGRESS' || fetchedData.status === 'SAVING';
+  const shouldRefetch = (fetchedData: any) =>
+    fetchedData.status === "IN_PROGRESS" || fetchedData.status === "SAVING";
 
-  const isPendingConfirmation = (fetchedData: any) => fetchedData.status === 'PENDING_CONFIRMATION';
+  const isPendingConfirmation = (fetchedData: any) =>
+    fetchedData.status === "PENDING_CONFIRMATION";
 
   const { data } = useQuery({
-    queryKey: ['refresh-import-result', catalogId, importResult?.id],
+    queryKey: ["refresh-import-result", catalogId, importResult?.id],
     queryFn: async () => {
-      const response = await fetch(`/api/catalogs/${catalogId}/concepts/import-results/${importResult?.id}`, {
-        method: 'GET',
-      });
+      const response = await fetch(
+        `/api/catalogs/${catalogId}/concepts/import-results/${importResult?.id}`,
+        {
+          method: "GET",
+        },
+      );
       return response.json();
     },
     initialData: importResult, // seed from server
     refetchInterval: (q) => {
-      return shouldRefetch(q?.state?.data) ? 3000 : isPendingConfirmation(q?.state?.data) ? 6000 : false;
+      return shouldRefetch(q?.state?.data)
+        ? 3000
+        : isPendingConfirmation(q?.state?.data)
+          ? 6000
+          : false;
     },
     refetchOnWindowFocus: true,
     retry: 2,
@@ -77,7 +94,11 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
       {showDeleteConfirm && (
         <ConfirmModal
           title={localization.importResult.confirmDelete}
-          content={importResult.status === 'COMPLETED' ? localization.importResult.deleteCanResultInDuplicates : ''}
+          content={
+            importResult.status === "COMPLETED"
+              ? localization.importResult.deleteCanResultInDuplicates
+              : ""
+          }
           onSuccess={handleDeleteConfirmed}
           onCancel={() => setShowDeleteConfirm(false)}
         />

@@ -3,13 +3,16 @@ import {
   hasOrganizationAdminPermission,
   redirectToSignIn,
   validOrganizationNumber,
-} from '@catalog-frontend/utils';
-import { RedirectType, redirect } from 'next/navigation';
+} from "@catalog-frontend/utils";
+import { RedirectType, redirect } from "next/navigation";
 
 type PagePathProps = ({ catalogId }: any) => string;
 type RenderProps = ({ catalogId, session }: any) => Promise<any>;
 
-export const withProtectedPage = (pagePath: PagePathProps, render: RenderProps) => {
+export const withProtectedPage = (
+  pagePath: PagePathProps,
+  render: RenderProps,
+) => {
   return async ({ params }: any) => {
     const { catalogId } = await params;
     if (!validOrganizationNumber(catalogId)) {
@@ -23,7 +26,9 @@ export const withProtectedPage = (pagePath: PagePathProps, render: RenderProps) 
       });
     }
 
-    const hasAdminPermission = session?.accessToken && hasOrganizationAdminPermission(session.accessToken, catalogId);
+    const hasAdminPermission =
+      session?.accessToken &&
+      hasOrganizationAdminPermission(session.accessToken, catalogId);
     if (!hasAdminPermission) {
       return redirect(`/catalogs/${catalogId}/no-access`);
     }

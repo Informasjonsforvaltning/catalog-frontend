@@ -1,9 +1,9 @@
-import { test as base } from '@playwright/test';
-import CatalogPortalPage from '../page-object-model/catalogPortalPage';
-import LoginPage from '../page-object-model/loginPage';
-import { adminAuthFile, generateAccessibilityBuilder } from '../utils/helpers';
+import { test as base } from "@playwright/test";
+import CatalogPortalPage from "../page-object-model/catalogPortalPage";
+import LoginPage from "../page-object-model/loginPage";
+import { adminAuthFile, generateAccessibilityBuilder } from "../utils/helpers";
 
-const PREFIX_TEXT = 'catalog-portal: ';
+const PREFIX_TEXT = "catalog-portal: ";
 export const test = base.extend<{
   loginPage: any;
   catalogPortalPage: any;
@@ -15,7 +15,11 @@ export const test = base.extend<{
   },
   catalogPortalPage: async ({ page, context }: any, use: any) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
-    const catalogPortalPage = new CatalogPortalPage(page, context, accessibilityBuilder);
+    const catalogPortalPage = new CatalogPortalPage(
+      page,
+      context,
+      accessibilityBuilder,
+    );
     await use(catalogPortalPage);
   },
 });
@@ -29,4 +33,4 @@ export const runTestAsAdmin = (name: string, fn: (any: any) => void) => {
   runTest(name, fn);
 };
 
-export { expect } from '@playwright/test';
+export { expect } from "@playwright/test";

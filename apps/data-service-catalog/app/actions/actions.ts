@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 import {
   deleteDataService as removeDataService,
@@ -8,11 +8,16 @@ import {
   publishDataService as publish,
   unpublishDataService as unpublish,
   updateDataService as update,
-} from '@catalog-frontend/data-access';
-import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
-import { DataService, DataServiceToBeCreated } from '@catalog-frontend/types';
-import { revalidateTag } from 'next/cache';
-import { compare } from 'fast-json-patch';
+} from "@catalog-frontend/data-access";
+import {
+  getValidSession,
+  localization,
+  redirectToSignIn,
+  removeEmptyValues,
+} from "@catalog-frontend/utils";
+import { DataService, DataServiceToBeCreated } from "@catalog-frontend/types";
+import { revalidateTag } from "next/cache";
+import { compare } from "fast-json-patch";
 
 export async function getDataServices(catalogId: string) {
   const session = await getValidSession();
@@ -20,21 +25,31 @@ export async function getDataServices(catalogId: string) {
     return redirectToSignIn();
   }
 
-  const response = await getAllDataServices(catalogId, `${session?.accessToken}`);
+  const response = await getAllDataServices(
+    catalogId,
+    `${session?.accessToken}`,
+  );
   if (response.status !== 200) {
-    throw new Error('getDataServices failed with response code ' + response.status);
+    throw new Error(
+      "getDataServices failed with response code " + response.status,
+    );
   }
   return await response.json();
 }
 
-export async function createDataService(catalogId: string, values: DataServiceToBeCreated) {
+export async function createDataService(
+  catalogId: string,
+  values: DataServiceToBeCreated,
+) {
   console.log(`[createDataService] Starting creation for catalog ${catalogId}`);
   const newDataService = removeEmptyValues({
     ...values,
-    accessRights: values?.accessRights === 'none' ? undefined : values?.accessRights,
-    license: values?.license === 'none' ? undefined : values?.license,
-    status: values?.status === 'none' ? undefined : values?.status,
-    availability: values?.availability === 'none' ? undefined : values?.availability,
+    accessRights:
+      values?.accessRights === "none" ? undefined : values?.accessRights,
+    license: values?.license === "none" ? undefined : values?.license,
+    status: values?.status === "none" ? undefined : values?.status,
+    availability:
+      values?.availability === "none" ? undefined : values?.availability,
   });
   const session = await getValidSession();
   if (!session) {
@@ -43,44 +58,61 @@ export async function createDataService(catalogId: string, values: DataServiceTo
   let success = false;
   let dataServiceId: undefined | string = undefined;
   try {
-    const response = await postDataService(newDataService, catalogId, `${session?.accessToken}`);
+    const response = await postDataService(
+      newDataService,
+      catalogId,
+      `${session?.accessToken}`,
+    );
     if (response.status !== 201) {
-      throw new Error(`Failed to create data service: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to create data service: ${response.status} ${response.statusText}`,
+      );
     }
 
-    const locationHeader = response?.headers?.get('location');
+    const locationHeader = response?.headers?.get("location");
     if (!locationHeader) {
-      throw new Error('No location header returned from server');
+      throw new Error("No location header returned from server");
     }
 
-    dataServiceId = locationHeader?.split('/').pop();
+    dataServiceId = locationHeader?.split("/").pop();
     if (!dataServiceId) {
-      throw new Error('Could not extract data service ID from location header');
+      throw new Error("Could not extract data service ID from location header");
     }
 
-    console.log(`[createDataService] Successfully created data service with ID: ${dataServiceId}`);
+    console.log(
+      `[createDataService] Successfully created data service with ID: ${dataServiceId}`,
+    );
     success = true;
     return dataServiceId;
   } catch (error) {
-    console.error('Error creating data service:', error);
+    console.error("Error creating data service:", error);
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
-      console.log(`[createDataService] Revalidating cache tags for data service ${dataServiceId}`);
-      revalidateTag('data-service');
-      revalidateTag('data-services');
+      console.log(
+        `[createDataService] Revalidating cache tags for data service ${dataServiceId}`,
+      );
+      revalidateTag("data-service");
+      revalidateTag("data-services");
     }
   }
 }
 
-export async function deleteDataService(catalogId: string, dataServiceId: string) {
+export async function deleteDataService(
+  catalogId: string,
+  dataServiceId: string,
+) {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
   let success = false;
   try {
-    const response = await removeDataService(catalogId, dataServiceId, `${session?.accessToken}`);
+    const response = await removeDataService(
+      catalogId,
+      dataServiceId,
+      `${session?.accessToken}`,
+    );
     if (response.status !== 204) {
       throw new Error();
     }
@@ -89,18 +121,24 @@ export async function deleteDataService(catalogId: string, dataServiceId: string
     throw new Error(localization.alert.deleteFail);
   } finally {
     if (success) {
-      revalidateTag('data-services');
+      revalidateTag("data-services");
     }
   }
 }
 
-export async function updateDataService(catalogId: string, initialDataService: DataService, values: DataService) {
+export async function updateDataService(
+  catalogId: string,
+  initialDataService: DataService,
+  values: DataService,
+) {
   const updatedDataService = removeEmptyValues({
     ...values,
-    accessRights: values?.accessRights === 'none' ? undefined : values?.accessRights,
-    license: values?.license === 'none' ? undefined : values?.license,
-    status: values?.status === 'none' ? undefined : values?.status,
-    availability: values?.availability === 'none' ? undefined : values?.availability,
+    accessRights:
+      values?.accessRights === "none" ? undefined : values?.accessRights,
+    license: values?.license === "none" ? undefined : values?.license,
+    status: values?.status === "none" ? undefined : values?.status,
+    availability:
+      values?.availability === "none" ? undefined : values?.availability,
   });
 
   const diff = compare(initialDataService, updatedDataService);
@@ -116,7 +154,12 @@ export async function updateDataService(catalogId: string, initialDataService: D
   }
 
   try {
-    const response = await update(catalogId, initialDataService.id, diff, `${session?.accessToken}`);
+    const response = await update(
+      catalogId,
+      initialDataService.id,
+      diff,
+      `${session?.accessToken}`,
+    );
     if (response.status !== 200) {
       throw new Error(`${response.status} ${response.statusText}`);
     }
@@ -129,17 +172,24 @@ export async function updateDataService(catalogId: string, initialDataService: D
     throw new Error(`Noe gikk galt, prøv igjen...`);
   } finally {
     if (success) {
-      revalidateTag('data-service');
-      revalidateTag('data-services');
+      revalidateTag("data-service");
+      revalidateTag("data-services");
     }
   }
 }
 
-export async function publishDataService(catalogId: string, dataServiceId: string) {
+export async function publishDataService(
+  catalogId: string,
+  dataServiceId: string,
+) {
   const session = await getValidSession();
   let success = false;
   try {
-    const response = await publish(catalogId, dataServiceId, `${session?.accessToken}`);
+    const response = await publish(
+      catalogId,
+      dataServiceId,
+      `${session?.accessToken}`,
+    );
     if (response.status !== 200) {
       throw new Error();
     }
@@ -148,17 +198,24 @@ export async function publishDataService(catalogId: string, dataServiceId: strin
     throw new Error(localization.alert.deleteFail);
   } finally {
     if (success) {
-      revalidateTag('data-service');
-      revalidateTag('data-services');
+      revalidateTag("data-service");
+      revalidateTag("data-services");
     }
   }
 }
 
-export async function unpublishDataService(catalogId: string, dataServiceId: string) {
+export async function unpublishDataService(
+  catalogId: string,
+  dataServiceId: string,
+) {
   const session = await getValidSession();
   let success = false;
   try {
-    const response = await unpublish(catalogId, dataServiceId, `${session?.accessToken}`);
+    const response = await unpublish(
+      catalogId,
+      dataServiceId,
+      `${session?.accessToken}`,
+    );
     if (response.status !== 200) {
       throw new Error();
     }
@@ -167,8 +224,8 @@ export async function unpublishDataService(catalogId: string, dataServiceId: str
     throw new Error(localization.alert.deleteFail);
   } finally {
     if (success) {
-      revalidateTag('data-service');
-      revalidateTag('data-services');
+      revalidateTag("data-service");
+      revalidateTag("data-services");
     }
   }
 }
@@ -180,7 +237,11 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
   }
   let success = false;
   try {
-    const response = await removeImportResult(catalogId, resultId, `${session?.accessToken}`);
+    const response = await removeImportResult(
+      catalogId,
+      resultId,
+      `${session?.accessToken}`,
+    );
     if (response.status !== 204) {
       throw new Error();
     }
@@ -189,7 +250,7 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
     throw new Error(localization.alert.deleteFail);
   } finally {
     if (success) {
-      revalidateTag('import-results');
+      revalidateTag("import-results");
     }
   }
 }

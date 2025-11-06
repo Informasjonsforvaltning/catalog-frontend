@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
-import { LocalDataStorage, localization } from '@catalog-frontend/utils';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { useRef, useState } from 'react';
-import type { StorageData } from '@catalog-frontend/types';
-import DataServiceForm from '../../../../../components/data-service-form';
-import { createDataService } from '@data-service-catalog/app/actions/actions';
-import { useRouter } from 'next/navigation';
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
+import { LocalDataStorage, localization } from "@catalog-frontend/utils";
+import { ArrowLeftIcon } from "@navikt/aksel-icons";
+import { useRef, useState } from "react";
+import type { StorageData } from "@catalog-frontend/types";
+import DataServiceForm from "../../../../../components/data-service-form";
+import { createDataService } from "@data-service-catalog/app/actions/actions";
+import { useRouter } from "next/navigation";
 
 type NewDataServicePageClientProps = {
   catalogId: string;
@@ -29,7 +29,7 @@ export const NewDataServicePageClient = ({
   const dataServiceIdRef = useRef<string | undefined>(undefined); // Ref to store the data service id
 
   const dataStorage = new LocalDataStorage<StorageData>({
-    key: 'dataServiceForm',
+    key: "dataServiceForm",
   });
 
   const handleCancel = () => {
@@ -49,7 +49,9 @@ export const NewDataServicePageClient = ({
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       // Navigate to the edit page with created=true parameter
-      router.replace(`/catalogs/${catalogId}/data-services/${dataServiceIdRef.current}/edit?created=true`);
+      router.replace(
+        `/catalogs/${catalogId}/data-services/${dataServiceIdRef.current}/edit?created=true`,
+      );
     } else {
       router.replace(`/catalogs/${catalogId}/data-services`);
     }
@@ -67,12 +69,12 @@ export const NewDataServicePageClient = ({
       )}
       <ButtonBar>
         <Button
-          variant='tertiary'
-          color='second'
-          size='sm'
+          variant="tertiary"
+          color="second"
+          size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >
-          <ArrowLeftIcon fontSize='1.25em' />
+          <ArrowLeftIcon fontSize="1.25em" />
           {localization.button.backToOverview}
         </Button>
       </ButtonBar>

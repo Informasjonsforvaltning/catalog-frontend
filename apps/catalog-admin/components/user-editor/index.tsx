@@ -1,14 +1,19 @@
-'use client';
+"use client";
 
-import { ChangeEvent, useState } from 'react';
-import { Button, Textfield } from '@digdir/designsystemet-react';
-import { compare } from 'fast-json-patch';
-import { emailRegex, localization, textRegex } from '@catalog-frontend/utils';
-import { useCreateUser, useDeleteUser, useGetUsers, useUpdateUser } from '../../hooks/users';
-import { useAdminDispatch } from '../../context/admin';
-import { AssignedUser } from '@catalog-frontend/types';
+import { ChangeEvent, useState } from "react";
+import { Button, Textfield } from "@digdir/designsystemet-react";
+import { compare } from "fast-json-patch";
+import { emailRegex, localization, textRegex } from "@catalog-frontend/utils";
+import {
+  useCreateUser,
+  useDeleteUser,
+  useGetUsers,
+  useUpdateUser,
+} from "../../hooks/users";
+import { useAdminDispatch } from "../../context/admin";
+import { AssignedUser } from "@catalog-frontend/types";
 
-type EditorType = 'create' | 'update';
+type EditorType = "create" | "update";
 
 interface UserEditorProps {
   user?: AssignedUser;
@@ -26,7 +31,8 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
 
   const adminDispatch = useAdminDispatch();
 
-  const findUserById = (userId: string) => updatedUserList.find((user) => user?.id === userId);
+  const findUserById = (userId: string) =>
+    updatedUserList.find((user) => user?.id === userId);
 
   const handleDeleteUser = (user: AssignedUser) => {
     if (window.confirm(`${localization.alert.deleteUser} ${user?.name}`)) {
@@ -35,13 +41,16 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
   };
 
   const newUserTemplate: AssignedUser = {
-    name: '',
-    telephoneNumber: '',
-    email: '',
+    name: "",
+    telephoneNumber: "",
+    email: "",
   };
 
   const handleCancel = () => {
-    adminDispatch({ type: 'SET_SHOW_USER_EDITOR', payload: { showUserEditor: false } });
+    adminDispatch({
+      type: "SET_SHOW_USER_EDITOR",
+      payload: { showUserEditor: false },
+    });
   };
 
   const [updatedUserList, setUpdatedUserList] = useState<AssignedUser[]>([]);
@@ -49,12 +58,17 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
 
   const handleUpdateUser = (userId: string) => {
     const updatedUser = updatedUserList.find((user) => user?.id === userId);
-    const dbUser: AssignedUser = getUsers.users.find((user: AssignedUser) => user?.id === userId);
+    const dbUser: AssignedUser = getUsers.users.find(
+      (user: AssignedUser) => user?.id === userId,
+    );
     const diff = dbUser && updatedUser ? compare(dbUser, updatedUser) : null;
 
     if (diff) {
       updateUser
-        .mutateAsync({ beforeUpdateUser: dbUser, updatedUser: updatedUser as any })
+        .mutateAsync({
+          beforeUpdateUser: dbUser,
+          updatedUser: updatedUser as any,
+        })
         .then(() => {
           alert(localization.alert.success);
         })
@@ -66,8 +80,15 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
     }
   };
 
-  const updateUserState = (userId: string, newName?: string, newEmail?: string, newTelephoneNumber?: string) => {
-    const updatedUserListIndex = updatedUserList.findIndex((user) => user?.id === userId);
+  const updateUserState = (
+    userId: string,
+    newName?: string,
+    newEmail?: string,
+    newTelephoneNumber?: string,
+  ) => {
+    const updatedUserListIndex = updatedUserList.findIndex(
+      (user) => user?.id === userId,
+    );
     const userToUpdate =
       updatedUserListIndex !== -1
         ? updatedUserList[updatedUserListIndex]
@@ -103,56 +124,75 @@ export const UserEditor = ({ catalogId, user, type }: UserEditorProps) => {
   };
 
   return (
-    <div className='editorStructure'>
-      <div className='editorSpacing'>
+    <div className="editorStructure">
+      <div className="editorSpacing">
         <Textfield
           error={
-            textRegex.test((findUserById(user?.id as any) || user)?.name || (newUser.name as any))
+            textRegex.test(
+              (findUserById(user?.id as any) || user)?.name ||
+                (newUser.name as any),
+            )
               ? null
               : localization.validation.invalidValue
           }
-          label='Navn'
+          label="Navn"
           onChange={(event: ChangeEvent<HTMLInputElement>) => {
-            type === 'create'
-              ? setNewUser({ name: event.target.value, email: newUser.email, telephoneNumber: newUser.telephoneNumber })
+            type === "create"
+              ? setNewUser({
+                  name: event.target.value,
+                  email: newUser.email,
+                  telephoneNumber: newUser.telephoneNumber,
+                })
               : updateUserState(user?.id as any, event.target.value);
           }}
           value={(findUserById(user?.id as any) || user)?.name}
         />
       </div>
-      <div className='editorSpacing'>
+      <div className="editorSpacing">
         <Textfield
           error={
-            emailRegex.test((findUserById(user?.id as any) || user)?.email || (newUser.email as any))
+            emailRegex.test(
+              (findUserById(user?.id as any) || user)?.email ||
+                (newUser.email as any),
+            )
               ? null
               : localization.validation.invalidValue
           }
-          label='E-post'
-          inputMode='email'
+          label="E-post"
+          inputMode="email"
           value={(findUserById(user?.id as any) || user)?.email}
           onChange={(event: ChangeEvent<HTMLInputElement>) => {
-            type === 'create'
-              ? setNewUser({ name: newUser.name, email: event.target.value, telephoneNumber: newUser.telephoneNumber })
-              : updateUserState(user?.id as any, undefined, event.target.value, undefined);
+            type === "create"
+              ? setNewUser({
+                  name: newUser.name,
+                  email: event.target.value,
+                  telephoneNumber: newUser.telephoneNumber,
+                })
+              : updateUserState(
+                  user?.id as any,
+                  undefined,
+                  event.target.value,
+                  undefined,
+                );
           }}
         />
       </div>
-      <div className='editorButtons'>
-        <Button onClick={() => (type === 'create' ? handleCreateUser() : handleUpdateUser(user?.id as any))}>
+      <div className="editorButtons">
+        <Button
+          onClick={() =>
+            type === "create"
+              ? handleCreateUser()
+              : handleUpdateUser(user?.id as any)
+          }
+        >
           Lagre
         </Button>
-        {type === 'create' ? (
-          <Button
-            color='danger'
-            onClick={handleCancel}
-          >
+        {type === "create" ? (
+          <Button color="danger" onClick={handleCancel}>
             {localization.button.cancel}
           </Button>
         ) : (
-          <Button
-            color='danger'
-            onClick={() => handleDeleteUser(user as any)}
-          >
+          <Button color="danger" onClick={() => handleDeleteUser(user as any)}>
             {localization.button.delete}
           </Button>
         )}

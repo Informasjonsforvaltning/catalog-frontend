@@ -1,10 +1,10 @@
-import { GetServiceMessagesDocument } from '../generated/graphql';
+import { GetServiceMessagesDocument } from "../generated/graphql";
 
 export const getAllServiceMessages = async () => {
   const resource = `${process.env.FDK_CMS_BASE_URI}/graphql`;
 
   const body = JSON.stringify({
-    operationName: 'GetServiceMessages',
+    operationName: "GetServiceMessages",
     variables: {
       today: new Date().toISOString(),
     },
@@ -13,11 +13,11 @@ export const getAllServiceMessages = async () => {
 
   const options = {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body,
-    method: 'POST',
-    cache: 'default' as RequestCache,
+    method: "POST",
+    cache: "default" as RequestCache,
   };
 
   const res = await fetch(resource, options);

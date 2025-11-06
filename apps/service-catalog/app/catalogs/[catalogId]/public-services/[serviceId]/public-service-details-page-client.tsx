@@ -1,13 +1,19 @@
-'use client';
-import { ReferenceDataCode, Service } from '@catalog-frontend/types';
-import { DetailsPageLayout, InfoCard, LinkButton, ServiceStatusTagProps, Tag } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { DeleteServiceButton } from '../../../../../components/buttons';
-import PublishSwitch from '../../../../../components/publish-switch';
-import BasicServiceFormInfoCardItems from '../../../../../components/basic-form-info-card-items';
-import { useState } from 'react';
-import styles from './public-service-details-page.module.css';
-import _ from 'lodash';
+"use client";
+import { ReferenceDataCode, Service } from "@catalog-frontend/types";
+import {
+  DetailsPageLayout,
+  InfoCard,
+  LinkButton,
+  ServiceStatusTagProps,
+  Tag,
+} from "@catalog-frontend/ui";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import { DeleteServiceButton } from "../../../../../components/buttons";
+import PublishSwitch from "../../../../../components/publish-switch";
+import BasicServiceFormInfoCardItems from "../../../../../components/basic-form-info-card-items";
+import { useState } from "react";
+import styles from "./public-service-details-page.module.css";
+import _ from "lodash";
 
 interface PublicServiceDetailsPageProps {
   service: Service;
@@ -24,12 +30,13 @@ const PublicServiceDetailsPageClient = ({
   hasWritePermission,
   statuses,
 }: PublicServiceDetailsPageProps) => {
-  const [language, setLanguage] = useState('nb');
+  const [language, setLanguage] = useState("nb");
   const handleLanguageChange = (value: string) => {
     setLanguage(value);
   };
 
-  const findServiceStatus = () => statuses.find((s) => s.uri === service?.status);
+  const findServiceStatus = () =>
+    statuses.find((s) => s.uri === service?.status);
 
   const RightColumn = () => (
     <div>
@@ -37,7 +44,7 @@ const PublicServiceDetailsPageClient = ({
         <InfoCard.Item
           key={`info-data-${localization.id}`}
           title={localization.id}
-          headingColor='light'
+          headingColor="light"
         >
           <span>{service?.id}</span>
         </InfoCard.Item>
@@ -45,13 +52,13 @@ const PublicServiceDetailsPageClient = ({
         <InfoCard.Item
           key={`info-data-${localization.publicationState.state}`}
           title={localization.publicationState.state}
-          headingColor='light'
+          headingColor="light"
         >
           <PublishSwitch
             catalogId={catalogId}
             serviceId={serviceId}
             isPublished={!!service?.published}
-            type='public-services'
+            type="public-services"
             disabled={!hasWritePermission}
           />
 
@@ -69,10 +76,12 @@ const PublicServiceDetailsPageClient = ({
     <DetailsPageLayout
       handleLanguageChange={handleLanguageChange}
       language={language}
-      headingTitle={getTranslateText(service?.title ?? '', language)}
+      headingTitle={getTranslateText(service?.title ?? "", language)}
       headingTag={
         <Tag.ServiceStatus
-          statusKey={findServiceStatus()?.code as ServiceStatusTagProps['statusKey']}
+          statusKey={
+            findServiceStatus()?.code as ServiceStatusTagProps["statusKey"]
+          }
           statusLabel={getTranslateText(findServiceStatus()?.label) as string}
         />
       }
@@ -81,7 +90,9 @@ const PublicServiceDetailsPageClient = ({
       <DetailsPageLayout.Left>
         {
           <InfoCard>
-            {!_.isEmpty(getTranslateText(service?.description ?? '', language)) && (
+            {!_.isEmpty(
+              getTranslateText(service?.description ?? "", language),
+            ) && (
               <BasicServiceFormInfoCardItems
                 service={service}
                 language={language}
@@ -94,14 +105,16 @@ const PublicServiceDetailsPageClient = ({
       <DetailsPageLayout.Buttons>
         {hasWritePermission && (
           <div className={styles.actionButtons}>
-            <LinkButton href={`/catalogs/${catalogId}/public-services/${serviceId}/edit`}>
+            <LinkButton
+              href={`/catalogs/${catalogId}/public-services/${serviceId}/edit`}
+            >
               {localization.serviceCatalog.editPublicService}
             </LinkButton>
 
             <DeleteServiceButton
               catalogId={catalogId}
               serviceId={serviceId}
-              type='public-services'
+              type="public-services"
             />
           </div>
         )}

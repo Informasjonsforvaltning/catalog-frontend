@@ -1,17 +1,17 @@
-import { NextResponse } from 'next/server';
-import { NextRequestWithAuth, withAuth } from 'next-auth/middleware';
+import { NextResponse } from "next/server";
+import { NextRequestWithAuth, withAuth } from "next-auth/middleware";
 
 import {
   hasOrganizationReadPermission,
   hasOrganizationWritePermission,
   hasSystemAdminPermission,
   validateOidcUserSession,
-} from '@catalog-frontend/utils/src/lib/auth/token';
-import { validUUID } from '@catalog-frontend/utils/src/lib/validation/uuid';
-import { validOrganizationNumber } from '@catalog-frontend/utils/src/lib/validation/organization-number';
+} from "@catalog-frontend/utils/src/lib/auth/token";
+import { validUUID } from "@catalog-frontend/utils/src/lib/validation/uuid";
+import { validOrganizationNumber } from "@catalog-frontend/utils/src/lib/validation/organization-number";
 
 export const config = {
-  matcher: '/catalogs/:path*',
+  matcher: "/catalogs/:path*",
 };
 
 export default withAuth(
@@ -19,7 +19,7 @@ export default withAuth(
     const accessToken = req.nextauth.token?.access_token;
 
     const pathname = req.nextUrl.pathname;
-    const parts = pathname.split('/');
+    const parts = pathname.split("/");
     const catalogId = validOrganizationNumber(parts[2]) ? parts[2] : undefined;
     const serviceId = validUUID(parts[4]) ? parts[4] : undefined;
 
@@ -31,25 +31,37 @@ export default withAuth(
     ];
 
     if (catalogId && !validOrganizationNumber(catalogId)) {
-      return NextResponse.rewrite(new URL('/notfound', process.env.NEXTAUTH_URL));
+      return NextResponse.rewrite(
+        new URL("/notfound", process.env.NEXTAUTH_URL),
+      );
     }
 
     if (serviceId && !validUUID(serviceId)) {
-      return NextResponse.rewrite(new URL('/notfound', process.env.NEXTAUTH_URL));
+      return NextResponse.rewrite(
+        new URL("/notfound", process.env.NEXTAUTH_URL),
+      );
     }
 
     if ((await validateOidcUserSession(accessToken)) !== true) {
       return NextResponse.rewrite(
-        new URL(`/auth/signin?callbackUrl=${req.nextUrl.pathname}`, process.env.NEXTAUTH_URL),
+        new URL(
+          `/auth/signin?callbackUrl=${req.nextUrl.pathname}`,
+          process.env.NEXTAUTH_URL,
+        ),
       );
     }
 
     if (
       accessToken &&
       catalogId &&
-      !(hasOrganizationReadPermission(accessToken, catalogId) || hasSystemAdminPermission(accessToken))
+      !(
+        hasOrganizationReadPermission(accessToken, catalogId) ||
+        hasSystemAdminPermission(accessToken)
+      )
     ) {
-      return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access`, process.env.NEXTAUTH_URL));
+      return NextResponse.rewrite(
+        new URL(`/catalogs/${catalogId}/no-access`, process.env.NEXTAUTH_URL),
+      );
     }
 
     if (
@@ -58,17 +70,19 @@ export default withAuth(
       !hasOrganizationWritePermission(accessToken, catalogId) &&
       writePermissionsRoutes.includes(pathname)
     ) {
-      return NextResponse.rewrite(new URL(`/catalogs/${catalogId}/no-access`, process.env.NEXTAUTH_URL));
+      return NextResponse.rewrite(
+        new URL(`/catalogs/${catalogId}/no-access`, process.env.NEXTAUTH_URL),
+      );
     }
   },
   {
     pages: {
-      signIn: '/auth/signin',
-      signOut: '/auth/signout',
+      signIn: "/auth/signin",
+      signOut: "/auth/signout",
     },
     callbacks: {
       authorized: ({ token }) => {
-        if (!token || token.error === 'RefreshAccessTokenError') {
+        if (!token || token.error === "RefreshAccessTokenError") {
           return false;
         }
         return true;

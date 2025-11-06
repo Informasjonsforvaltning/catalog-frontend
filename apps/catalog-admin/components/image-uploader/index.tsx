@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react';
-import { TrashIcon, UploadIcon } from '@navikt/aksel-icons';
-import { localization, validateImageFile } from '@catalog-frontend/utils';
-import { useDeleteLogo, useGetLogo, useUpdateLogo } from '../../hooks/design';
-import { useAdminDispatch } from '../../context/admin';
-import styles from './image-uploader.module.css';
-import { UploadButton } from '@catalog-frontend/ui';
+import { useEffect, useState } from "react";
+import { TrashIcon, UploadIcon } from "@navikt/aksel-icons";
+import { localization, validateImageFile } from "@catalog-frontend/utils";
+import { useDeleteLogo, useGetLogo, useUpdateLogo } from "../../hooks/design";
+import { useAdminDispatch } from "../../context/admin";
+import styles from "./image-uploader.module.css";
+import { UploadButton } from "@catalog-frontend/ui";
 
-const allowedFileTypes = ['image/x-png', 'image/svg+xml'];
+const allowedFileTypes = ["image/x-png", "image/svg+xml"];
 
 interface Props {
   catalogId: string;
@@ -18,7 +18,9 @@ export function ImageUploader({ catalogId }: Props) {
   const adminDispatch = useAdminDispatch();
   const { data: getLogo } = useGetLogo(catalogId);
   const dbLogo = getLogo?.body;
-  const dbFileName = getLogo?.headers?.get('Content-Disposition')?.match(/filename="([^"]+)"/)?.[1];
+  const dbFileName = getLogo?.headers
+    ?.get("Content-Disposition")
+    ?.match(/filename="([^"]+)"/)?.[1];
 
   const updateLogo = useUpdateLogo(catalogId);
   const deleteLogo = useDeleteLogo(catalogId);
@@ -34,7 +36,7 @@ export function ImageUploader({ catalogId }: Props) {
   };
 
   useEffect(() => {
-    adminDispatch({ type: 'SET_LOGO', payload: { logo: image } });
+    adminDispatch({ type: "SET_LOGO", payload: { logo: image } });
   }, [image, adminDispatch]);
 
   useEffect(() => {
@@ -42,7 +44,7 @@ export function ImageUploader({ catalogId }: Props) {
   }, [dbFileName, dbLogo]);
 
   const handleDeleteLogo = () => {
-    if (window.confirm('Er du sikker på at du ønsker å slette logoen?')) {
+    if (window.confirm("Er du sikker på at du ønsker å slette logoen?")) {
       deleteLogo.mutate();
     }
   };
@@ -64,7 +66,7 @@ export function ImageUploader({ catalogId }: Props) {
           <TrashIcon
             title={localization.button.bin}
             onClick={resetImage}
-            fontSize={'25px'}
+            fontSize={"25px"}
           />
         </div>
       )}

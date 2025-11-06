@@ -1,14 +1,14 @@
 export enum EntityEnum {
-  CONCEPT = 'concept',
-  EVENT = 'event',
+  CONCEPT = "concept",
+  EVENT = "event",
 }
 
 export enum PublicationStatus {
-  DRAFT = 'DRAFT',
-  PUBLISH = 'PUBLISH',
-  APPROVE = 'APPROVE',
+  DRAFT = "DRAFT",
+  PUBLISH = "PUBLISH",
+  APPROVE = "APPROVE",
 }
 
 export enum SpecializedType {
-  SERIES = 'SERIES',
+  SERIES = "SERIES",
 }

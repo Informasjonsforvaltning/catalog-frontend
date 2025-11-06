@@ -1,45 +1,56 @@
-import { useFormikContext } from 'formik';
-import { Alert, Button, Combobox, Heading, Paragraph } from '@digdir/designsystemet-react';
-import { Code, Concept } from '@catalog-frontend/types';
-import { FormikLanguageFieldset, FormikMultivalueTextfield, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import styles from '../concept-form.module.scss';
-import { getParentPath } from '../../../utils/codeList';
-import { ReactNode } from 'react';
-import { isEmpty } from 'lodash';
+import { useFormikContext } from "formik";
+import {
+  Alert,
+  Button,
+  Combobox,
+  Heading,
+  Paragraph,
+} from "@digdir/designsystemet-react";
+import { Code, Concept } from "@catalog-frontend/types";
+import {
+  FormikLanguageFieldset,
+  FormikMultivalueTextfield,
+  TitleWithHelpTextAndTag,
+} from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import styles from "../concept-form.module.scss";
+import { getParentPath } from "../../../utils/codeList";
+import { ReactNode } from "react";
+import { isEmpty } from "lodash";
 
 type SubjectSectionProps = {
   codes: Code[] | undefined;
   changed?: string[];
   readOnly?: boolean;
 };
-export const SubjectSection = ({ codes, changed, readOnly }: SubjectSectionProps) => {
+export const SubjectSection = ({
+  codes,
+  changed,
+  readOnly,
+}: SubjectSectionProps) => {
   const { errors, values, setFieldValue } = useFormikContext<Concept>();
 
-  const selected = values.fagområdeKoder?.filter((v) => codes?.find((code) => code.id === v));
+  const selected = values.fagområdeKoder?.filter((v) =>
+    codes?.find((code) => code.id === v),
+  );
   const codeListActivated = codes !== undefined;
 
   const ConflictAlert = () => {
     if (!codeListActivated && !isEmpty(values.fagområdeKoder)) {
       return (
-        <Alert
-          size='sm'
-          severity='warning'
-        >
-          <Heading
-            level={3}
-            size='xxsmall'
-            spacing
-          >
+        <Alert size="sm" severity="warning">
+          <Heading level={3} size="xxsmall" spacing>
             {localization.conceptForm.alert.warning}
           </Heading>
-          <Paragraph size='sm'>{localization.conceptForm.alert.codeListToText}</Paragraph>
+          <Paragraph size="sm">
+            {localization.conceptForm.alert.codeListToText}
+          </Paragraph>
           <div className={styles.topMargin2}>
             <Button
-              size='sm'
-              variant='secondary'
+              size="sm"
+              variant="secondary"
               disabled={readOnly}
-              onClick={() => setFieldValue('fagområdeKoder', [])}
+              onClick={() => setFieldValue("fagområdeKoder", [])}
             >
               Slett koder
             </Button>
@@ -50,24 +61,19 @@ export const SubjectSection = ({ codes, changed, readOnly }: SubjectSectionProps
 
     if (codeListActivated && !isEmpty(values.fagområde)) {
       return (
-        <Alert
-          size='sm'
-          severity='warning'
-        >
-          <Heading
-            level={3}
-            size='xxsmall'
-            spacing
-          >
+        <Alert size="sm" severity="warning">
+          <Heading level={3} size="xxsmall" spacing>
             {localization.conceptForm.alert.warning}
           </Heading>
-          <Paragraph size='sm'>{localization.conceptForm.alert.textToCodeList}</Paragraph>
+          <Paragraph size="sm">
+            {localization.conceptForm.alert.textToCodeList}
+          </Paragraph>
           <div className={styles.topMargin2}>
             <Button
-              size='sm'
-              variant='secondary'
+              size="sm"
+              variant="secondary"
               disabled={readOnly}
-              onClick={() => setFieldValue('fagområde', null)}
+              onClick={() => setFieldValue("fagområde", null)}
             >
               Slett fritekst verdier
             </Button>
@@ -84,8 +90,8 @@ export const SubjectSection = ({ codes, changed, readOnly }: SubjectSectionProps
     if (!codeListActivated || !isEmpty(values.fagområde)) {
       fields.push(
         <FormikLanguageFieldset
-          key='fagområde'
-          name='fagområde'
+          key="fagområde"
+          name="fagområde"
           multiple
           readOnly={codeListActivated || readOnly}
           showError={!codeListActivated}
@@ -94,11 +100,11 @@ export const SubjectSection = ({ codes, changed, readOnly }: SubjectSectionProps
               {...(!codeListActivated
                 ? {
                     tagTitle: localization.tag.recommended,
-                    tagColor: 'info',
+                    tagColor: "info",
                   }
                 : {})}
               helpText={localization.conceptForm.helpText.subjectFree}
-              changed={changed?.includes('fagområde')}
+              changed={changed?.includes("fagområde")}
             >
               {localization.conceptForm.fieldLabel.subjectFree}
             </TitleWithHelpTextAndTag>
@@ -112,11 +118,11 @@ export const SubjectSection = ({ codes, changed, readOnly }: SubjectSectionProps
         {...(codeListActivated
           ? {
               tagTitle: localization.tag.recommended,
-              tagColor: 'info',
+              tagColor: "info",
             }
           : {})}
         helpText={localization.conceptForm.helpText.subjectCodeList}
-        changed={changed?.includes('fagområdeKoder')}
+        changed={changed?.includes("fagområdeKoder")}
       >
         {localization.conceptForm.fieldLabel.subjectCodeList}
       </TitleWithHelpTextAndTag>
@@ -125,14 +131,14 @@ export const SubjectSection = ({ codes, changed, readOnly }: SubjectSectionProps
     if (codeListActivated) {
       fields.push(
         <Combobox
-          key='fagområdeKoder'
+          key="fagområdeKoder"
           multiple
-          size='sm'
+          size="sm"
           hideClearButton
           readOnly={!codeListActivated || readOnly}
           label={codeListLabel as any}
           value={selected ?? []}
-          onValueChange={(value) => setFieldValue('fagområdeKoder', value)}
+          onValueChange={(value) => setFieldValue("fagområdeKoder", value)}
           error={errors.fagområdeKoder}
         >
           <Combobox.Empty>Fant ingen treff</Combobox.Empty>
@@ -142,7 +148,11 @@ export const SubjectSection = ({ codes, changed, readOnly }: SubjectSectionProps
               <Combobox.Option
                 key={code.id}
                 value={code.id}
-                description={parentPath.length > 0 ? `Overordnet: ${parentPath.join(' - ')}` : ''}
+                description={
+                  parentPath.length > 0
+                    ? `Overordnet: ${parentPath.join(" - ")}`
+                    : ""
+                }
               >
                 {code.name.nb}
               </Combobox.Option>
@@ -153,8 +163,8 @@ export const SubjectSection = ({ codes, changed, readOnly }: SubjectSectionProps
     } else if (!isEmpty(values.fagområdeKoder)) {
       fields.push(
         <FormikMultivalueTextfield
-          key='fagområdeKoder'
-          name='fagområdeKoder'
+          key="fagområdeKoder"
+          name="fagområdeKoder"
           label={codeListLabel}
           readOnly
         />,

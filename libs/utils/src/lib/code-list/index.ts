@@ -1,5 +1,5 @@
-import { Code, CodeList, TreeNode } from '@catalog-frontend/types';
-import { getTranslateText } from '../language/translateText';
+import { Code, CodeList, TreeNode } from "@catalog-frontend/types";
+import { getTranslateText } from "../language/translateText";
 
 const findParent = (id: string, nodes: TreeNode[]): TreeNode | null => {
   const parent = nodes.find((node) => node.value === `${id}`);
@@ -62,17 +62,28 @@ export const getPath = (nodes?: TreeNode[], value?: string) => {
   return [];
 };
 
-export const convertCodeListToTreeNodes = (codes: Code[] | undefined): TreeNode[] =>
+export const convertCodeListToTreeNodes = (
+  codes: Code[] | undefined,
+): TreeNode[] =>
   codes?.reduce((accumulator, currentValue, _currentIndex, codes) => {
     // Use the tree node if it already exists in the accumulator
-    const current = accumulator.find((node) => node.value === `${currentValue.id}`);
+    const current = accumulator.find(
+      (node) => node.value === `${currentValue.id}`,
+    );
     // Remove the node from the accumulator if it exists
-    accumulator = accumulator.filter((node) => node.value !== `${currentValue.id}`);
+    accumulator = accumulator.filter(
+      (node) => node.value !== `${currentValue.id}`,
+    );
 
-    if (currentValue.parentID !== null && currentValue.parentID !== 'noParent') {
+    if (
+      currentValue.parentID !== null &&
+      currentValue.parentID !== "noParent"
+    ) {
       let parent = findParent(currentValue.parentID, accumulator);
       if (!parent) {
-        const parentCode = codes.find((code) => code.id === currentValue.parentID);
+        const parentCode = codes.find(
+          (code) => code.id === currentValue.parentID,
+        );
         parent = parentCode
           ? ({
               value: `${parentCode.id}`,
@@ -104,11 +115,16 @@ export const convertCodeListToTreeNodes = (codes: Code[] | undefined): TreeNode[
     return accumulator;
   }, [] as TreeNode[]) ?? [];
 
-export const getAllChildrenCodes = (codeId: string, codeList: CodeList | undefined) => {
+export const getAllChildrenCodes = (
+  codeId: string,
+  codeList: CodeList | undefined,
+) => {
   const children: Code[] = [];
-  (codeList?.codes?.filter((code) => code.parentID === codeId) ?? []).forEach((code) => {
-    children.push(code);
-    children.push(...getAllChildrenCodes(code.id, codeList));
-  });
+  (codeList?.codes?.filter((code) => code.parentID === codeId) ?? []).forEach(
+    (code) => {
+      children.push(code);
+      children.push(...getAllChildrenCodes(code.id, codeList));
+    },
+  );
   return children;
 };

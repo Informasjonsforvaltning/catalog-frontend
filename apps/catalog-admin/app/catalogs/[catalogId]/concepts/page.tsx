@@ -1,7 +1,11 @@
-import { withProtectedPage } from '../../../../utils/auth';
-import ConceptsPageClient from './concepts-page-client';
-import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
+import { withProtectedPage } from "../../../../utils/auth";
+import ConceptsPageClient from "./concepts-page-client";
+import {
+  BreadcrumbType,
+  Breadcrumbs,
+  DesignBanner,
+} from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
 
 export default withProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/concepts`,

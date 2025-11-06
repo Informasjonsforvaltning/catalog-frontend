@@ -1,6 +1,6 @@
-import { publishService } from '@catalog-frontend/data-access';
-import { withValidSessionForApi } from '@catalog-frontend/utils';
-import { NextRequest } from 'next/server';
+import { publishService } from "@catalog-frontend/data-access";
+import { withValidSessionForApi } from "@catalog-frontend/utils";
+import { NextRequest } from "next/server";
 
 export const POST = async (
   request: NextRequest,
@@ -10,14 +10,20 @@ export const POST = async (
   return await withValidSessionForApi(async (session) => {
     const { catalogId, serviceId } = params;
     try {
-      const response = await publishService(catalogId, serviceId, session?.accessToken as string);
+      const response = await publishService(
+        catalogId,
+        serviceId,
+        session?.accessToken as string,
+      );
       if (response.status !== 200) {
         throw new Error();
       }
       const jsonResponse = await response.json();
-      return new Response(JSON.stringify(jsonResponse), { status: response?.status });
+      return new Response(JSON.stringify(jsonResponse), {
+        status: response?.status,
+      });
     } catch {
-      return new Response('Failed to publish service', { status: 500 });
+      return new Response("Failed to publish service", { status: 500 });
     }
   });
 };

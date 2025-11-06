@@ -1,10 +1,23 @@
-import { getAllCodeLists, getConceptStatuses, getFields, getUsers } from '@catalog-frontend/data-access';
-import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
-import { localization, prepareStatusList } from '@catalog-frontend/utils';
-import { CodeListsResult, FieldsResult, UsersResult } from '@catalog-frontend/types';
-import { withWriteProtectedPage } from '@concept-catalog/utils/auth';
+import {
+  getAllCodeLists,
+  getConceptStatuses,
+  getFields,
+  getUsers,
+} from "@catalog-frontend/data-access";
+import {
+  Breadcrumbs,
+  BreadcrumbType,
+  DesignBanner,
+} from "@catalog-frontend/ui";
+import { localization, prepareStatusList } from "@catalog-frontend/utils";
+import {
+  CodeListsResult,
+  FieldsResult,
+  UsersResult,
+} from "@catalog-frontend/types";
+import { withWriteProtectedPage } from "@concept-catalog/utils/auth";
 
-import { NewPage } from './new-page.client';
+import { NewPage } from "./new-page.client";
 
 export default withWriteProtectedPage(
   ({ catalogId }) => `/catalogs//${catalogId}/concepts/new`,
@@ -14,15 +27,18 @@ export default withWriteProtectedPage(
       .then((body) => body?.conceptStatuses ?? [])
       .then((statuses) => prepareStatusList(statuses));
 
-    const codeListsResult: CodeListsResult = await getAllCodeLists(catalogId, `${session?.accessToken}`).then(
-      (response) => response.json(),
-    );
-    const fieldsResult: FieldsResult = await getFields(catalogId, `${session?.accessToken}`).then((response) =>
-      response.json(),
-    );
-    const usersResult: UsersResult = await getUsers(catalogId, `${session?.accessToken}`).then((response) =>
-      response.json(),
-    );
+    const codeListsResult: CodeListsResult = await getAllCodeLists(
+      catalogId,
+      `${session?.accessToken}`,
+    ).then((response) => response.json());
+    const fieldsResult: FieldsResult = await getFields(
+      catalogId,
+      `${session?.accessToken}`,
+    ).then((response) => response.json());
+    const usersResult: UsersResult = await getUsers(
+      catalogId,
+      `${session?.accessToken}`,
+    ).then((response) => response.json());
 
     const concept = {
       ansvarligVirksomhet: {

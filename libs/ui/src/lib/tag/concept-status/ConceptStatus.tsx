@@ -1,13 +1,16 @@
-import { Tag as DSTag, type TagProps as DSTagProps } from '@digdir/designsystemet-react';
-import { forwardRef } from 'react';
+import {
+  Tag as DSTag,
+  type TagProps as DSTagProps,
+} from "@digdir/designsystemet-react";
+import { forwardRef } from "react";
 
 enum ConceptStatusColors {
-  DRAFT = 'second',
-  CANDIDATE = 'info',
-  WAITING = 'neutral',
-  CURRENT = 'success',
-  RETIRED = 'third',
-  REJECTED = 'danger',
+  DRAFT = "second",
+  CANDIDATE = "info",
+  WAITING = "neutral",
+  CURRENT = "success",
+  RETIRED = "third",
+  REJECTED = "danger",
 }
 
 export type StatusKey = keyof typeof ConceptStatusColors;
@@ -18,10 +21,18 @@ export type ConceptStatusTagProps = {
 } & DSTagProps;
 
 const getColorFromStatusKey = (statusKey: StatusKey | undefined) =>
-  statusKey ? ConceptStatusColors[statusKey.toLocaleUpperCase() as StatusKey] : 'neutral';
+  statusKey
+    ? ConceptStatusColors[statusKey.toLocaleUpperCase() as StatusKey]
+    : "neutral";
 
-export const ConceptStatusTag = forwardRef<HTMLSpanElement, ConceptStatusTagProps>(
-  ({ statusKey, statusLabel, size = 'medium', ...rest }: ConceptStatusTagProps, ref) => {
+export const ConceptStatusTag = forwardRef<
+  HTMLSpanElement,
+  ConceptStatusTagProps
+>(
+  (
+    { statusKey, statusLabel, size = "medium", ...rest }: ConceptStatusTagProps,
+    ref,
+  ) => {
     return (
       <DSTag
         ref={ref}
@@ -35,4 +46,4 @@ export const ConceptStatusTag = forwardRef<HTMLSpanElement, ConceptStatusTagProp
   },
 );
 
-ConceptStatusTag.displayName = 'ConceptStatusTag';
+ConceptStatusTag.displayName = "ConceptStatusTag";
