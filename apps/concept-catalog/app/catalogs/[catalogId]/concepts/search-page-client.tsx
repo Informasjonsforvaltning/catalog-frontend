@@ -42,7 +42,6 @@ import SearchFilter from "@concept-catalog/components/search-filter";
 import { useImportConcepts } from "@concept-catalog/hooks/import";
 import ConceptSearchHits from "@concept-catalog/components/concept-search-hits";
 import styles from "./search-page.module.scss";
-import { ImportModal } from "@concept-catalog/components/import-modal";
 
 export type FilterType =
   | "published"
@@ -321,7 +320,7 @@ export const SearchPageClient = ({
     setSelectedSortOption(optionValue);
   };
 
-  const onImportUpload = (event) => {
+  const onImportUpload = (event: any) => {
     importConcepts.mutate(event.target.files[0], {
       onError: (error) => alert("Import failed: " + error),
     });

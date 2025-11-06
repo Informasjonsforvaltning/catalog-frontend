@@ -44,8 +44,9 @@ runTestAsAdmin(
           nn: `Definisjon nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
           en: `Definition en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
         },
-        ansvarligVirksomhet: {
-          id: null,
+        kildebeskrivelse: {
+          forholdTilKilde: "egendefinert",
+          kilde: [],
         },
       },
       kontaktpunkt: {
@@ -187,8 +188,9 @@ runTestAsAdmin(
           nn: `Definisjon nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
           en: `Definition en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
         },
-        ansvarligVirksomhet: {
-          id: null,
+        kildebeskrivelse: {
+          forholdTilKilde: "egendefinert",
+          kilde: [],
         },
       },
       kontaktpunkt: {

@@ -104,7 +104,7 @@ export async function deleteDataset(catalogId: string, datasetId: string) {
     }
     success = true;
   } catch (error) {
-    throw new Error(`${localization.alert.deleteFail} ${error}`);
+    throw new Error(`${(localization.alert as any).deleteFail} ${error}`);
   } finally {
     if (success) {
       revalidateTag("datasets");

@@ -65,7 +65,7 @@ const DataServiceDetailsPageClient = ({
       {showDeleteConfirm && (
         <ConfirmModal
           title={
-            localization.dataServiceForm.alert.confirmDeleteTitle ||
+            (localization.dataServiceForm.alert as any).confirmDeleteTitle ||
             "Bekreft sletting"
           }
           content={localization.dataServiceForm.alert.confirmDelete}

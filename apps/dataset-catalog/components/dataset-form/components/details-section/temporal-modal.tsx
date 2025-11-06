@@ -81,6 +81,10 @@ export const TemporalModal = ({ label }: Props) => {
                               arrayHelpers.replace(index, updatedItem);
                               setSnapshot([...(values.temporal ?? [])]);
                             }}
+                            onCancel={() => setFieldValue("temporal", snapshot)}
+                            onChange={(updatedItem: DateRange) =>
+                              arrayHelpers.replace(index, updatedItem)
+                            }
                           />
                           <DeleteButton
                             onClick={() => {

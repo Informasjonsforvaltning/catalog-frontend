@@ -23,7 +23,7 @@ export const GET = async (
         return new Response(JSON.stringify(jsonResponse), {
           status: response.status,
         });
-      } catch (error) {
+      } catch {
         return new Response("Failed to get design logo", { status: 500 });
       }
     } else if (
@@ -57,7 +57,7 @@ export const GET = async (
           status: response.status,
           headers,
         });
-      } catch (error) {
+      } catch {
         return new Response("Failed to get design logo", { status: 500 });
       }
     } else {
@@ -89,7 +89,7 @@ export const PATCH = async (
       return new Response(JSON.stringify(jsonResponse), {
         status: response.status,
       });
-    } catch (error) {
+    } catch {
       return new Response("Failed to update design", { status: 500 });
     }
   });

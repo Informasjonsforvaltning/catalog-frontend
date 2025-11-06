@@ -3,14 +3,12 @@
 import {
   acceptTerms,
   getAllDatasetCatalogs,
-  getAllProcessingActivities,
   getAllServiceCatalogs,
   getConceptCountByCatalogId,
   oldGetAllDataServiceCatalogs,
 } from "@catalog-frontend/data-access";
 import {
   ServiceCatalogItem,
-  RecordOfProcessingActivities,
   DatasetCatalog,
   DataServiceCatalog,
   TermsAcceptation,

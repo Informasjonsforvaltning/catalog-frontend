@@ -1,13 +1,10 @@
-import { BasicServiceForm } from "../../../../../components/basic-service-form";
-import { Heading } from "@digdir/designsystemet-react";
-import { BreadcrumbType, Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
-import { Organization, ReferenceDataCode } from "@catalog-frontend/types";
+import { Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
+import { Organization } from "@catalog-frontend/types";
 import {
   getAdmsStatuses,
   getOrganization,
 } from "@catalog-frontend/data-access";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
-import styles from "./service-new-page.module.css";
 import { NewPage } from "./new-page-client";
 
 export default async function NewServicePage(props: {

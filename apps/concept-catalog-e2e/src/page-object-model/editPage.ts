@@ -253,9 +253,6 @@ export default class EditPage {
     await this.page.getByRole("textbox", { name: "Forkortelse" }).clear();
     await clearCombobox(this.page, "Hvem skal begrepet tildeles?");
 
-    await this.page.getByRole("textbox", { name: "Forkortelse" }).clear();
-    await clearCombobox(this.page, "Hvem skal begrepet tildeles?");
-
     for (const field of fields.internal) {
       if (field.type === "text_long" || field.type === "text_short") {
         console.log(

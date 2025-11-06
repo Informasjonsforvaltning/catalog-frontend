@@ -28,12 +28,9 @@ export function createCommonTsConfig(tsconfigRootDir) {
       "react/react-in-jsx-scope": "off",
       "react/prop-types": "off",
 
-      // prefer TS-aware unused-vars
+      // prefer TS unused-vars
       "no-unused-vars": "off",
-      "@typescript-eslint/no-unused-vars": [
-        "warn",
-        { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
-      ],
+      "@typescript-eslint/no-unused-vars": "warn",
     },
     plugins: {
       "@typescript-eslint": tseslint.plugin,

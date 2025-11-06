@@ -182,7 +182,7 @@ export function ImportModal({ catalogId }: ImportProps) {
             uploadRdf.mutate({
               fileContent: evt.target.result,
               contentType: contentType,
-            });
+            } as any);
             setUploadType(UploadType.RDF);
             setUploadedRdfConcepts({
               fileContent: evt.target.result,

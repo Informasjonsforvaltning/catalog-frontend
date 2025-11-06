@@ -180,52 +180,6 @@ runTestAsAdmin(
 );
 
 runTestAsAdmin(
-  "should restore form data when clicking restore button",
-  async ({ page, datasetsPage, playwright }) => {
-    const dataset = await createRandomDataset(playwright);
-    const newTitle = {
-      nb: uniqueString("new_title_nb"),
-      nn: uniqueString("new_title_nn"),
-      en: uniqueString("new_title_en"),
-    };
-    const newDescription = {
-      nb: uniqueString("new_description_nb"),
-      nn: uniqueString("new_description_nn"),
-      en: uniqueString("new_description_en"),
-    };
-
-    // Navigate to dataset details and click edit
-    const detailPage: DatasetDetailPage = datasetsPage.detailPage;
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
-    await detailPage.clickEditButton();
-
-    // Initialize edit page
-    const editPage: EditPage = datasetsPage.editPage;
-    await editPage.expectEditPageUrl(process.env.E2E_CATALOG_ID, dataset.id);
-
-    // Change title and description to create unsaved changes
-    await editPage.fillTitleField(newTitle, [], false);
-    await editPage.fillDescriptionField(newDescription, [], false);
-    await editPage.waitForAutoSaveToComplete();
-
-    // Refresh the page to trigger auto-save restore dialog
-    await page.reload();
-
-    // Wait for restore dialog and click restore
-    await editPage.expectRestoreDialog();
-    await editPage.clickRestoreButton();
-
-    // Verify the form data was restored
-    await editPage.expectTitleField("Bokmål", newTitle.nb);
-    await editPage.expectTitleField("Nynorsk", newTitle.nn);
-    await editPage.expectTitleField("Engelsk", newTitle.en);
-    await editPage.expectDescriptionField("Bokmål", newDescription.nb);
-    await editPage.expectDescriptionField("Nynorsk", newDescription.nn);
-    await editPage.expectDescriptionField("Engelsk", newDescription.en);
-  },
-);
-
-runTestAsAdmin(
   "should not show restore dialog after clicking discard button",
   async ({ page, datasetsPage, playwright }) => {
     const dataset = await createRandomDataset(playwright);

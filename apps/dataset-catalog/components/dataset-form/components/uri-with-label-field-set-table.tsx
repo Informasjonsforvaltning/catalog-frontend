@@ -103,14 +103,6 @@ export const UriWithLabelFieldsetTable = ({
                             setSnapshot([...newArray]);
                           }}
                         />
-                        <DeleteButton
-                          onClick={() => {
-                            const newArray = [...(fieldValues ?? [])];
-                            newArray.splice(index, 1);
-                            setFieldValue(fieldName, newArray);
-                            setSnapshot([...newArray]);
-                          }}
-                        />
                       </span>
                     </Table.Cell>
                   </Table.Row>

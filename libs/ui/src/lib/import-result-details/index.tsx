@@ -241,23 +241,6 @@ const ImportResultDetails = ({
             ))}
           </Accordion>
         )}
-      {importResult?.extractionRecords &&
-        importResult?.extractionRecords.length > 0 && (
-          <Accordion border={true}>
-            {importResult?.extractionRecords?.map((record) => (
-              <ImportRecordAccordionItem
-                key={`result-${record.internalId}`}
-                targetBaseHref={targetBaseHref}
-                record={record}
-                enableOpening={
-                  importResult?.status !== "PENDING_CONFIRMATION" &&
-                  importResult?.status !== "CANCELLED"
-                }
-                isCompleted={importResult.status === "COMPLETED"}
-              />
-            ))}
-          </Accordion>
-        )}
     </div>
   );
 };
