@@ -1,6 +1,6 @@
 "use client";
 
-import { ImportResult } from "@catalog-frontend/types";
+import { ImportResult, ImportResutStatus } from "@catalog-frontend/types";
 import { localization } from "@catalog-frontend/utils";
 import {
   cancelImport,
@@ -57,7 +57,7 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
 
   const cancelMutation = useMutation({
     mutationFn: async () => {
-      console.log("Is cancelling", isCancelling)
+      console.log("Is cancelling", isCancelling);
       await cancelImport(catalogId, importResult.id);
     },
     onMutate: async () => {
@@ -65,23 +65,26 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
         ["refresh-import-result", catalogId, importResult?.id],
         (old: ImportResult) => ({
           ...old,
-          status: "CANCELLING",
+          status: ImportResutStatus.CANCELLING,
         }),
       );
     },
     onSuccess: async () => {
       const refetched = await refetch();
       console.log("Refetched Import status data", refetched.data.status);
-      if(isCancelling && refetched?.data.status !== "CANCELLING" && refetched?.data.status !== "CANCELLED") {
-        console.log("should send cancel request again")
+      if (
+        isCancelling &&
+        refetched?.data.status !== "CANCELLING" &&
+        refetched?.data.status !== "CANCELLED"
+      ) {
+        console.log("should send cancel request again");
         await cancelMutation.mutateAsync();
-      }
-      else {
+      } else {
         qc.setQueryData(
           ["refresh-import-result", catalogId, importResult?.id],
           (old: ImportResult) => ({
             ...old,
-            status: "CANCELLED",
+            status: ImportResutStatus.CANCELLED,
           }),
         );
         await setIsCancelling(false);
@@ -108,8 +111,7 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
       return response.json();
     },
     initialData: importResult,
-    refetchInterval: (q) =>
-      shouldRefetch(q?.state?.data) ? 3000 : false,
+    refetchInterval: (q) => (shouldRefetch(q?.state?.data) ? 3000 : false),
     refetchOnWindowFocus: true,
     enabled: (q) => shouldRefetch(q?.state?.data),
     retry: 2,
@@ -121,8 +123,8 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
         <ConfirmModal
           title={localization.importResult.confirmDelete}
           content={
-            data?.status === "COMPLETED" ||
-            data?.status === "PARTIALLY_COMPLETED"
+            data?.status === ImportResutStatus.COMPLETED ||
+            data?.status === ImportResutStatus.PARTIALLY_COMPLETED
               ? localization.importResult.deleteCanResultInDuplicates
               : ""
           }

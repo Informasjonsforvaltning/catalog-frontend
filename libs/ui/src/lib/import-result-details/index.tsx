@@ -1,6 +1,11 @@
 "use client";
 
-import { ConceptExtraction, ImportResult } from "@catalog-frontend/types";
+import {
+  ConceptExtraction,
+  ConceptExtractionStatus,
+  ImportResult,
+  ImportResutStatus,
+} from "@catalog-frontend/types";
 import styles from "./import-result-details.module.css";
 import {
   Accordion,
@@ -16,9 +21,9 @@ import {
 } from "@catalog-frontend/utils";
 import { ImportRecordAccordionItem } from "./components/import-record-accordion-item";
 import {
-  TrashIcon,
-  FloppydiskIcon,
   ArrowCirclepathIcon,
+  FloppydiskIcon,
+  TrashIcon,
 } from "@navikt/aksel-icons";
 import React, { useEffect } from "react";
 import {
@@ -42,41 +47,72 @@ interface Props {
 }
 
 const importStatuses = [
-  { value: "COMPLETED", label: localization.importResult.completed },
   {
-    value: "PARTIALLY_COMPLETED",
+    value: ImportResutStatus.COMPLETED,
+    label: localization.importResult.completed,
+  },
+  {
+    value: ImportResutStatus.PARTIALLY_COMPLETED,
     label: localization.importResult.partiallyCompleted,
   },
-  { value: "FAILED", label: localization.importResult.failed },
-  { value: "IN_PROGRESS", label: localization.importResult.inProgress },
-  { value: "CANCELLING", label: localization.importResult.cancelling },
-  { value: "CANCELLED", label: localization.importResult.cancelled },
-  { value: "SAVING", label: localization.importResult.savingInCatalog },
+  { value: ImportResutStatus.FAILED, label: localization.importResult.failed },
   {
-    value: "PENDING_CONFIRMATION",
+    value: ImportResutStatus.IN_PROGRESS,
+    label: localization.importResult.inProgress,
+  },
+  {
+    value: ImportResutStatus.CANCELLING,
+    label: localization.importResult.cancelling,
+  },
+  {
+    value: ImportResutStatus.CANCELLED,
+    label: localization.importResult.cancelled,
+  },
+  {
+    value: ImportResutStatus.SAVING,
+    label: localization.importResult.savingInCatalog,
+  },
+  {
+    value: ImportResutStatus.PENDING_CONFIRMATION,
     label: localization.importResult.pendingConfirmation,
+  },
+  {
+    value: ConceptExtractionStatus.SAVING_FAILED,
+    label: localization.importResult.savingFailed,
   },
 ];
 
 const importStatusHelpTexts = [
-  { value: "COMPLETED", label: localization.importResult.helpText.completed },
   {
-    value: "PARTIALLY_COMPLETED",
+    value: ImportResutStatus.COMPLETED,
+    label: localization.importResult.helpText.completed,
+  },
+  {
+    value: ImportResutStatus.PARTIALLY_COMPLETED,
     label: localization.importResult.helpText.partiallyCompleted,
   },
-  { value: "FAILED", label: localization.importResult.helpText.failed },
   {
-    value: "IN_PROGRESS",
+    value: ImportResutStatus.FAILED,
+    label: localization.importResult.helpText.failed,
+  },
+  {
+    value: ImportResutStatus.IN_PROGRESS,
     label: localization.importResult.helpText.inProgress,
   },
-  { value: "CANCELLING", label: localization.importResult.helpText.cancelling },
-  { value: "CANCELLED", label: localization.importResult.helpText.cancelled },
   {
-    value: "SAVING",
+    value: ImportResutStatus.CANCELLING,
+    label: localization.importResult.helpText.cancelling,
+  },
+  {
+    value: ImportResutStatus.CANCELLED,
+    label: localization.importResult.helpText.cancelled,
+  },
+  {
+    value: ImportResutStatus.SAVING,
     label: localization.importResult.helpText.savingInCatalog,
   },
   {
-    value: "PENDING_CONFIRMATION",
+    value: ImportResutStatus.PENDING_CONFIRMATION,
     label: localization.importResult.helpText.pendingConfirmation,
   },
 ];
@@ -119,9 +155,12 @@ const ImportResultDetails = ({
       : "neutral";
 
   const getMessage = () => {
-    if (importResult.status === "FAILED" && importResult.failureMessage)
+    if (
+      importResult.status === ImportResutStatus.FAILED &&
+      importResult.failureMessage
+    )
       return importResult.failureMessage;
-    else if (importResult.status === "CANCELLED")
+    else if (importResult.status === ImportResutStatus.CANCELLED)
       return localization.importResult.cancelledImport;
 
     return "";
@@ -146,17 +185,29 @@ const ImportResultDetails = ({
   }
 
   const getButtonText = (conceptExtraction: ConceptExtraction) => {
-    if (conceptExtraction.conceptExtractionStatus === "PENDING_CONFIRMATION") {
+    if (
+      conceptExtraction.conceptExtractionStatus ===
+      ConceptExtractionStatus.PENDING_CONFIRMATION
+    ) {
       return `Legg til i katalog`;
-    } else if (conceptExtraction.conceptExtractionStatus === "FAILED") {
+    } else if (
+      conceptExtraction.conceptExtractionStatus ===
+      ConceptExtractionStatus.SAVING_FAILED
+    ) {
       return `Prøv igjen`;
     }
   };
 
   const getButtonColor = (conceptExtraction: ConceptExtraction) => {
-    if (conceptExtraction.conceptExtractionStatus === "PENDING_CONFIRMATION") {
+    if (
+      conceptExtraction.conceptExtractionStatus ===
+      ConceptExtractionStatus.PENDING_CONFIRMATION
+    ) {
       return "first";
-    } else if (conceptExtraction.conceptExtractionStatus === "FAILED") {
+    } else if (
+      conceptExtraction.conceptExtractionStatus ===
+      ConceptExtractionStatus.SAVING_FAILED
+    ) {
       return "danger";
     }
   };
@@ -190,7 +241,7 @@ const ImportResultDetails = ({
         disabled={
           isDeleting ||
           isCancelling ||
-          importResult.status === "CANCELLING" ||
+          importResult.status === ImportResutStatus.CANCELLING ||
           saveConceptMutation?.isPending ||
           deleteImportMutation?.isPending
         }
@@ -212,9 +263,15 @@ const ImportResultDetails = ({
   };
 
   const getButtonIcon = (conceptExtraction: ConceptExtraction) => {
-    if (conceptExtraction.conceptExtractionStatus === "PENDING_CONFIRMATION") {
+    if (
+      conceptExtraction.conceptExtractionStatus ===
+      ConceptExtractionStatus.PENDING_CONFIRMATION
+    ) {
       return <FloppydiskIcon fontSize="1.5rem" />;
-    } else if (conceptExtraction.conceptExtractionStatus === "FAILED") {
+    } else if (
+      conceptExtraction.conceptExtractionStatus ===
+      ConceptExtractionStatus.SAVING_FAILED
+    ) {
       return <ArrowCirclepathIcon fontSize="1.5rem" />;
     }
   };
@@ -252,7 +309,8 @@ const ImportResultDetails = ({
                   importResult.totalConcepts !== undefined &&
                   importResult.totalConcepts > 0 && (
                     <div className={styles.progress}>
-                      {importResult.status === "IN_PROGRESS" && (
+                      {importResult.status ===
+                        ImportResutStatus.IN_PROGRESS && (
                         <>
                           {importResult.extractedConcepts}/
                           {importResult.totalConcepts}
@@ -300,10 +358,10 @@ const ImportResultDetails = ({
               saveConceptMutation?.isPending ||
               !importResult.status ||
               !(
-                importResult.status === "COMPLETED" ||
-                importResult.status === "PARTIALLY_COMPLETED" ||
-                importResult.status === "CANCELLED" ||
-                importResult.status === "FAILED"
+                importResult.status === ImportResutStatus.COMPLETED ||
+                importResult.status === ImportResutStatus.PARTIALLY_COMPLETED ||
+                importResult.status === ImportResutStatus.CANCELLED ||
+                importResult.status === ImportResutStatus.FAILED
               )
             }
             onClick={() => deleteHandler(importResult.id)}
@@ -319,11 +377,11 @@ const ImportResultDetails = ({
               color="first"
               disabled={
                 saveConceptMutation?.isPending ||
-                importResult?.status === "CANCELLED" ||
-                importResult?.status === "FAILED" ||
-                importResult?.status === "SAVING" ||
-                importResult?.status === "COMPLETED" ||
-                importResult?.status === "PARTIALLY_COMPLETED"
+                importResult?.status === ImportResutStatus.CANCELLED ||
+                importResult?.status === ImportResutStatus.FAILED ||
+                importResult?.status === ImportResutStatus.SAVING ||
+                importResult?.status === ImportResutStatus.COMPLETED ||
+                importResult?.status === ImportResutStatus.PARTIALLY_COMPLETED
               }
               onClick={async () => {
                 cancelHandler && cancelHandler(importResult.id);
@@ -365,10 +423,13 @@ const ImportResultDetails = ({
                           targetBaseHref={targetBaseHref}
                           conceptExtraction={conceptExtraction}
                           enableOpening={
-                            importResult?.status !== "PENDING_CONFIRMATION" &&
-                            importResult?.status !== "CANCELLED"
+                            importResult?.status !==
+                              ImportResutStatus.PENDING_CONFIRMATION &&
+                            importResult?.status !== ImportResutStatus.CANCELLED
                           }
-                          isCompleted={importResult.status === "COMPLETED"}
+                          isCompleted={
+                            importResult.status === ImportResutStatus.COMPLETED
+                          }
                         />
                       </Accordion>
                     </Table.Cell>
@@ -388,12 +449,14 @@ const ImportResultDetails = ({
                       </Tag>
                     </Table.Cell>
                     <Table.Cell style={{ width: "20%" }}>
-                      {(importResult.status === "PENDING_CONFIRMATION" ||
-                        importResult.status === "PARTIALLY_COMPLETED") &&
+                      {(importResult.status ===
+                        ImportResutStatus.PENDING_CONFIRMATION ||
+                        importResult.status ===
+                          ImportResutStatus.PARTIALLY_COMPLETED) &&
                         (conceptExtraction.conceptExtractionStatus ===
-                          "PENDING_CONFIRMATION" ||
+                          ConceptExtractionStatus.PENDING_CONFIRMATION ||
                           conceptExtraction.conceptExtractionStatus ===
-                            "FAILED") &&
+                            ConceptExtractionStatus.SAVING_FAILED) &&
                         getButton(conceptExtraction)}
                     </Table.Cell>
                   </Table.Row>

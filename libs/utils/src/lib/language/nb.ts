@@ -655,6 +655,7 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
     cancelling: "Avvises",
     cancelled: "Avvist",
     pendingConfirmation: "Klar til katalog",
+    savingFailed: "Lagring feilet",
     warnings: "Advarsler",
     errors: "Feil",
     goToImported: "Gå til importert ressurs",
@@ -677,7 +678,7 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
       partiallyCompleted:
         "Importen er godkjent, og minst ett begrep er tilgjengelig i katalogen.",
       failed:
-        "Importen kunne ikke fullføres på grunn av feil i minst ett av begrepene i den opplastede filen.",
+        "Importen kunne ikke fullføres på grunn av feil i alle begrepene i den opplastede filen.",
       inProgress: "Importen er under behandling. Importen kan avvises.",
       cancelling: "Forkasting av importen pågår.",
       cancelled:
@@ -698,7 +699,7 @@ Status viser hvor langt importen har kommet i prosessen:
 - __Fullført:__ Importen er godkjent, og begrepene er tilgjengelige i katalogen.
 - __Avvises:__ Forkasting av importen pågår.
 - __Avvist:__ Importen er forkastet og begrepene er ikke lagt til i katalogen.
-- __Feilet:__ Importen er ikke fullført fordi minst ett av begrepene i filen inneholder feil.
+- __Feilet:__ Importen er ikke fullført fordi alle begrepene i filen inneholder feil.
       `,
     },
     tooltip: {

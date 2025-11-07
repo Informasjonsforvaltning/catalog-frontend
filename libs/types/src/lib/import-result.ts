@@ -1,19 +1,30 @@
 import { JsonPatchOperation } from "./json-patch";
 import { Concept } from "./concept";
 
+export enum ImportResutStatus {
+  FAILED = "FAILED",
+  COMPLETED = "COMPLETED",
+  PARTIALLY_COMPLETED = "PARTIALLY_COMPLETED",
+  IN_PROGRESS = "IN_PROGRESS",
+  CANCELLED = "CANCELLED",
+  CANCELLING = "CANCELLING",
+  PENDING_CONFIRMATION = "PENDING_CONFIRMATION",
+  SAVING = "SAVING",
+}
+
+export enum ConceptExtractionStatus {
+  PENDING_CONFIRMATION = "PENDING_CONFIRMATION",
+  SAVING = "SAVING",
+  COMPLETED = "COMPLETED",
+  FAILED = "FAILED",
+  SAVING_FAILED = "SAVING_FAILED",
+}
+
 export interface ImportResult {
   id: string;
   created: string;
   catalogId: string;
-  status:
-    | "FAILED"
-    | "COMPLETED"
-    | "PARTIALLY_COMPLETED"
-    | "IN_PROGRESS"
-    | "CANCELLED"
-    | "CANCELLING"
-    | "PENDING_CONFIRMATION"
-    | "SAVING";
+  status: ImportResutStatus;
   extractionRecords?: ExtractionRecord[];
   conceptExtractions: ConceptExtraction[];
   totalConcepts: number;
@@ -25,11 +36,7 @@ export interface ImportResult {
 export interface ConceptExtraction {
   extractionRecord: ExtractionRecord;
   concept: Concept;
-  conceptExtractionStatus:
-    | "PENDING_CONFIRMATION"
-    | "SAVING"
-    | "COMPLETED"
-    | "FAILED";
+  conceptExtractionStatus: ConceptExtractionStatus;
 }
 
 export interface ExtractionRecord {

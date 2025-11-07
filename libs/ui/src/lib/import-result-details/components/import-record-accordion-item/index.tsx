@@ -15,7 +15,11 @@ import {
   XMarkOctagonIcon,
 } from "@navikt/aksel-icons";
 import { LinkButton } from "../../../button";
-import { ConceptExtraction, ExtractionRecord } from "@catalog-frontend/types";
+import {
+  ConceptExtraction,
+  ConceptExtractionStatus,
+  ExtractionRecord,
+} from "@catalog-frontend/types";
 import { localization } from "@catalog-frontend/utils";
 
 interface Props {
@@ -73,15 +77,16 @@ const ImportRecordAccordionItem = ({
       <AccordionContent>
         {errors.length === 0 && enableOpening && (
           <div className={styles.buttonRow}>
-            {isCompleted ||
-              (conceptExtraction.conceptExtractionStatus === "COMPLETED" && (
-                <LinkButton
-                  variant={"tertiary"}
-                  href={`/${targetBaseHref}/${conceptExtraction.extractionRecord.internalId}`}
-                >
-                  {localization.importResult.goToImported}
-                </LinkButton>
-              ))}
+            {(isCompleted ||
+              conceptExtraction.conceptExtractionStatus ===
+                ConceptExtractionStatus.COMPLETED) && (
+              <LinkButton
+                variant={"tertiary"}
+                href={`/${targetBaseHref}/${conceptExtraction.extractionRecord.internalId}`}
+              >
+                {localization.importResult.goToImported}
+              </LinkButton>
+            )}
           </div>
         )}
         <div className={styles.issuesContainer}>
