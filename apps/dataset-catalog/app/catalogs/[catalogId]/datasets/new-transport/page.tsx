@@ -20,11 +20,13 @@ import {
 import { datasetToBeCreatedTemplate } from "@dataset-catalog/components/dataset-form/utils/dataset-initial-values";
 import { NewPage } from "./new-page-client";
 import { withWriteProtectedPage } from "@dataset-catalog/utils/auth";
+import { SchemaType } from "@catalog-frontend/types";
 
 const NewTransportDatasetPage = withWriteProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/datasets/new`,
   async ({ catalogId }) => {
     const dataset = datasetToBeCreatedTemplate();
+    dataset.schemaType = SchemaType.MOBILITYDCATAP;
     const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
     const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
 

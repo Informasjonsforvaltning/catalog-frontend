@@ -14,6 +14,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     lastModified: dataset?.lastModified,
     uri: dataset?.uri,
     originalUri: dataset?.originalUri,
+    schemaType: isEmpty(dataset?.schemaType)? undefined : dataset.schemaType,
     title: dataset.title ?? "",
     description: !isEmpty(dataset?.description) ? dataset.description : {},
     accessRight: dataset?.accessRight,
@@ -59,6 +60,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
 
 export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
   return {
+    schemaType: undefined,
     title: {},
     description: {},
     approved: false,

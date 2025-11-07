@@ -10,6 +10,7 @@ export interface Dataset extends DatasetToBeCreated {
 }
 
 export type DatasetToBeCreated = {
+  schemaType?: string;
   title: LocalizedStrings;
   description: LocalizedStrings;
   approved: boolean;
