@@ -168,6 +168,7 @@ export const datasetFormNb = {
     ignoreRequired: "Ignorer påkrevde felt",
     contactName: "Navn",
     contactFields: "Kontaktinformasjon",
+    description: "Beskrivelse",
     mobilityTheme: "Transporttema",
     distributionRights: "Rettigheter",
     mobilityDataStandard: "Mobility-standard",
@@ -206,7 +207,7 @@ export const datasetFormNb = {
     mobilityRights: "Rettigheter må velges.",
     format: "Minst ett filformat må velges.",
     distribution: "Distribusjon er påkrevd.",
-    spatial: "Dekningsområde må velges.",
+    spatial: "Minst ett dekningsområde må velges.",
     frequency: "Oppdateringsfrekvens må velges.",
   },
   button: {
