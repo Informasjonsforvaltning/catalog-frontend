@@ -86,10 +86,10 @@ export const datasetFormNb = {
     publish:
       "Publiser datasettbeskrivelsen til Data.norge.no. En beskrivelse kan ikke slettes så lenge den er publisert.",
     mobilityTheme:
-      "Velg ett eller flere transporttema som beskriver innholdet i datasettet. Listen er fra EUs liste over transporttema.",
+      "Velg ett eller flere transporttema som beskriver innholdet i datasettet. Listen er fra [EUs liste over transporttema](https://w3id.org/mobilitydcat-ap/mobility-theme).",
     distributionRights: "Betingelser for tilgang og bruk av distribusjonen.",
     mobilityDataStandard:
-      "Standard for distribusjonen av datasettet. Velges fra EUs kontrollerte vokabular for Mobility Data Standard.",
+      "Standard for distribusjonen av datasettet. Velges fra [EUs kontrollerte vokabular for Mobility Data Standard](https://w3id.org/mobilitydcat-ap/mobility-data-standard).",
   },
   heading: {
     about: "Om datasettet",
