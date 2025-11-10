@@ -218,7 +218,6 @@ export const DistributionModal = ({
       );
     }
     onSuccess(trimmedValues);
-    submitted = false;
     setSubmitting(false);
     setSubmitted(true);
     modalRef.current?.close();
