@@ -206,7 +206,17 @@ export const DistributionModal = ({
   };
 
   const handleSubmit = (values: Distribution, { setSubmitting }: any) => {
-    const trimmedValues = trimObjectWhitespace(values);
+    const trimmedValues: Distribution = trimObjectWhitespace(values);
+    if (trimmedValues.mediaType) {
+      trimmedValues.mediaType = trimmedValues.mediaType.filter(
+        (value: string) => !isEmpty(value),
+      );
+    }
+    if (trimmedValues.accessServices) {
+      trimmedValues.accessServices = trimmedValues.accessServices.filter(
+        (value: string) => !isEmpty(value),
+      );
+    }
     onSuccess(trimmedValues);
     setSubmitting(false);
     setSubmitted(true);
@@ -280,6 +290,7 @@ export const DistributionModal = ({
     },
     {
       name: "accessServices",
+      addValue: [""],
       shouldShow: ({ distributionType }: any) =>
         distributionType === "distribution",
       render: ({
@@ -366,6 +377,7 @@ export const DistributionModal = ({
     },
     {
       name: "mediaType",
+      addValue: [""],
       render: ({
         setFieldValue,
         setSelectedMediaTypeUris,
