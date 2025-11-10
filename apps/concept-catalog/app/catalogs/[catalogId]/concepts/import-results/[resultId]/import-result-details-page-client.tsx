@@ -1,6 +1,10 @@
 "use client";
 
-import { ImportResult, ImportResutStatus } from "@catalog-frontend/types";
+import {
+  ConceptExtractionStatus,
+  ImportResult,
+  ImportResutStatus,
+} from "@catalog-frontend/types";
 import { localization } from "@catalog-frontend/utils";
 import {
   cancelImport,
@@ -61,21 +65,14 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
       await cancelImport(catalogId, importResult.id);
     },
     onMutate: async () => {
-      qc.setQueryData(
-        ["refresh-import-result", catalogId, importResult?.id],
-        (old: ImportResult) => ({
-          ...old,
-          status: ImportResutStatus.CANCELLING,
-        }),
-      );
+      setIsCancelling(true);
     },
     onSuccess: async () => {
       const refetched = await refetch();
       console.log("Refetched Import status data", refetched.data.status);
       if (
         isCancelling &&
-        refetched?.data.status !== "CANCELLING" &&
-        refetched?.data.status !== "CANCELLED"
+        refetched?.data.status !== ImportResutStatus.CANCELLED
       ) {
         console.log("should send cancel request again");
         await cancelMutation.mutateAsync();
@@ -85,6 +82,10 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
           (old: ImportResult) => ({
             ...old,
             status: ImportResutStatus.CANCELLED,
+            conceptExtractions: old?.conceptExtractions.map((ce) => ({
+              ...ce,
+              conceptExtractionStatus: ConceptExtractionStatus.CANCELLED,
+            })),
           }),
         );
         await setIsCancelling(false);

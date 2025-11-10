@@ -14,6 +14,7 @@ export enum ImportResutStatus {
 
 export enum ConceptExtractionStatus {
   PENDING_CONFIRMATION = "PENDING_CONFIRMATION",
+  CANCELLED = "CANCELLED",
   SAVING = "SAVING",
   COMPLETED = "COMPLETED",
   FAILED = "FAILED",

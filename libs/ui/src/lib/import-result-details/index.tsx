@@ -61,10 +61,6 @@ const importStatuses = [
     label: localization.importResult.inProgress,
   },
   {
-    value: ImportResutStatus.CANCELLING,
-    label: localization.importResult.cancelling,
-  },
-  {
     value: ImportResutStatus.CANCELLED,
     label: localization.importResult.cancelled,
   },
@@ -167,10 +163,7 @@ const ImportResultDetails = ({
   };
 
   useEffect(() => {
-    if (savingExternalId !== null) {
-      console.log("External Id, triggering save:", savingExternalId);
-      saveExtractedConcept(savingExternalId);
-    }
+    if (savingExternalId !== null) saveExtractedConcept(savingExternalId);
   }, [savingExternalId]);
 
   async function saveExtractedConcept(externalId: string) {
@@ -216,14 +209,6 @@ const ImportResultDetails = ({
     conceptExtraction: ConceptExtraction,
     savingExternalId: string | null,
   ): boolean => {
-    if (savingExternalId !== null) {
-      console.log("External ID: ", savingExternalId);
-      console.log(
-        "Concept Extraction: ",
-        conceptExtraction?.extractionRecord?.externalId,
-      );
-    }
-
     return (
       savingExternalId != null &&
       conceptExtraction?.extractionRecord?.externalId != null &&

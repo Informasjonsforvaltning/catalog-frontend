@@ -652,7 +652,6 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
     savingInCatalog: "Legges til i katalogen",
     failed: "Feilet",
     inProgress: "Pågår",
-    cancelling: "Avvises",
     cancelled: "Avvist",
     pendingConfirmation: "Klar til katalog",
     savingFailed: "Lagring feilet",

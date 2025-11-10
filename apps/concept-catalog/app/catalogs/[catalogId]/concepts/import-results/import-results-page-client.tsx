@@ -44,10 +44,6 @@ const importStatuses = [
     label: localization.importResult.completed,
   },
   {
-    value: ImportResutStatus.CANCELLING,
-    label: localization.importResult.cancelling,
-  },
-  {
     value: ImportResutStatus.CANCELLED,
     label: localization.importResult.cancelled,
   },
