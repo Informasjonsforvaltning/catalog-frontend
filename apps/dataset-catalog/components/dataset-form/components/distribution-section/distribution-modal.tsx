@@ -883,7 +883,7 @@ export const DistributionModal = ({
                           <FieldsetDivider />
                         </>
                       ) : undefined}
-                      {isMobility && "mobilityRights" in values ? (
+                      {(isMobility && values.rights) ? (
                         <>
                           <Fieldset
                             size="sm"
@@ -904,22 +904,22 @@ export const DistributionModal = ({
                           >
                             <Combobox
                               value={
-                                values?.mobilityRights
-                                  ? [values.mobilityRights]
+                                values?.rights?.type
+                                  ? [values.rights.type]
                                   : [""]
                               }
                               portal={false}
                               onValueChange={(selectedValues) => {
                                 setFieldValue(
-                                  "mobilityRights",
+                                  "rights.type",
                                   selectedValues.toString(),
                                 );
                               }}
                               size="sm"
                               virtual
-                              error={errors.mobilityRights}
+                              error={errors?.rights?.type}
                             >
-                              <Combobox.Option key={`mobilityRight`} value={""}>
+                              <Combobox.Option key={`right.type`} value={""}>
                                 {localization.none}
                               </Combobox.Option>
                               {mobilityRights &&

@@ -103,7 +103,7 @@ const contactPointConfirmValidationSchema = Yup.array()
   )
   .test(
     "contact-has-at-least-one-value-field",
-    localization.datasetForm.validation.contactPoint,
+    localization.datasetForm.validation.contactPoints,
     (contactPoints) => {
       if (!contactPoints || contactPoints.length === 0) {
         return false;
@@ -142,6 +142,12 @@ export const distributionSectionSchema = Yup.object().shape({
   ),
 });
 
+export const rightsSchema = Yup.object().shape({
+  type: Yup.string().required(
+    localization.datasetForm.validation.mobilityRights,
+  ),
+})
+
 export const mobilityDistributionSectionSchema = Yup.object().shape({
   accessURL: Yup.array()
     .of(
@@ -154,9 +160,7 @@ export const mobilityDistributionSectionSchema = Yup.object().shape({
   mobilityDataStandard: Yup.string().required(
     localization.datasetForm.validation.mobilityDataStandard,
   ),
-  mobilityRights: Yup.string().required(
-    localization.datasetForm.validation.mobilityRights,
-  ),
+  rights: rightsSchema,
   format: Yup.array()
     .min(1, localization.datasetForm.validation.format)
     .required(localization.datasetForm.validation.format),

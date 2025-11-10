@@ -120,8 +120,8 @@ export const distributionTemplate = (dist: Distribution | undefined) => {
           conformsTo: [],
           page: [],
           accessServices: [],
-          mobilityRights: {},
           mobilityDataStandard: {},
+          rights: [],
         }
   ) as Distribution;
 };

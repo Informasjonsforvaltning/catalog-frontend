@@ -22,7 +22,7 @@ export type DatasetToBeCreated = {
   landingPage?: string[];
   euDataTheme?: string[];
   losTheme?: string[];
-  mobilityTheme: string[];
+  mobilityTheme?: string[];
   type?: string;
   keywords?: LocalizedStrings;
   concepts?: string[];
@@ -71,6 +71,10 @@ export type DatasetSeries = {
   id: string;
 };
 
+export type Rights = {
+  type?: string;
+}
+
 export type Distribution = {
   title?: LocalizedStrings;
   description?: LocalizedStrings;
@@ -82,8 +86,8 @@ export type Distribution = {
   conformsTo?: UriWithLabel[];
   page?: string[];
   accessServices?: string[];
-  mobilityRights?: string;
   mobilityDataStandard?: string;
+  rights?: Rights;
 };
 
 type DatasetContactPoint = {

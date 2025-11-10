@@ -457,7 +457,7 @@ export const DistributionSection = ({
               page: [],
               conformsTo: [],
               accessServices: [],
-              mobilityRights: "",
+              rights: {type: ""},
               mobilityDataStandard: "",
             }}
             isMobility={isMobility}
