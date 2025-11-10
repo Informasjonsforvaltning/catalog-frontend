@@ -93,7 +93,7 @@ export const DistributionModal = ({
   ] = useState<Search.SearchObject[]>([]);
 
   const template = distributionTemplate(initialValues);
-  let [submitted, setSubmitted] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const modalRef = useRef<HTMLDialogElement>(null);
 
