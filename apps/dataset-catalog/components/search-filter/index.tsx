@@ -1,7 +1,6 @@
 'use client';
 
 import { memo, useMemo } from 'react';
-import { Accordion } from '@digdir/designsystemet-react';
 import { AccordionItem, AccordionItemProps, CheckboxGroupFilter } from '@catalog-frontend/ui';
 import { DatasetsPageSettings, PublicationStatus } from '@catalog-frontend/types';
 import { localization } from '@catalog-frontend/utils';
@@ -100,12 +99,9 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
 
   return (
     <div className={styles.searchFilter}>
-      {/* <Accordion
-        border={true}
-        className={styles.accordion}
-      >
+      <>
         {accordionItems}
-      </Accordion> */}
+      </>
     </div>
   );
 };
