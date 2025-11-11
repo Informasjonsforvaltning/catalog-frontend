@@ -214,12 +214,12 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
 
   return (
     <div className={styles.searchFilter}>
-      <Accordion
+      {/* <Accordion
         border={true}
         className={styles.accordion}
       >
         {accordionItems}
-      </Accordion>
+      </Accordion> */}
     </div>
   );
 };

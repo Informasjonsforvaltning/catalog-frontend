@@ -49,12 +49,12 @@ export const Layout = ({
         termsOfUseUrl={termsOfUseUrl}
       />
       <main className={style.main}>
-        <ErrorBoundary
+        {/* <ErrorBoundary
           fdkRegistrationBaseUrl={fdkRegistrationBaseUrl}
           title={catalogTitle}
-        >
+        > */}
           {children}
-        </ErrorBoundary>
+        {/* </ErrorBoundary> */}
       </main>
       {displayFooter && (
         <Footer

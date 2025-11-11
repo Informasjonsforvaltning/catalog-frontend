@@ -41,11 +41,7 @@ export const HelpMarkdown = forwardRef<HTMLButtonElement, HelpTextProps>(functio
   ref,
 ) {
   return (
-    <Popover
-      size='sm'
-      placement={placement}
-      variant={severity}
-    >
+    <Popover.TriggerContext>
       <Popover.Trigger
         className={classNames(styles.helpMarkdown, styles[severity])}
         ref={ref}
@@ -53,7 +49,7 @@ export const HelpMarkdown = forwardRef<HTMLButtonElement, HelpTextProps>(functio
         data-color='warning'
         {...rest}
       />
-      <Popover.Content>
+      <Popover placement={placement}>
         {typeof children === 'string' ? (
           <div className={styles.markdownContent}>
             <Markdown components={markdownComponents}>{children}</Markdown>
@@ -61,7 +57,7 @@ export const HelpMarkdown = forwardRef<HTMLButtonElement, HelpTextProps>(functio
         ) : (
           children
         )}
-      </Popover.Content>
-    </Popover>
+      </Popover>
+    </Popover.TriggerContext>
   );
 });

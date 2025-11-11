@@ -14,7 +14,7 @@ import FDKLogoDemo from './images/fdk-publishing-logo-negative-demo.svg';
 import { useSession } from 'next-auth/react';
 import styles from './header.module.scss';
 import { ExternalLinkIcon, LeaveIcon, MenuHamburgerIcon, PersonIcon } from '@navikt/aksel-icons';
-import { Button, Divider, DropdownMenu } from '@digdir/designsystemet-react';
+import { Button, Divider, Dropdown } from '@digdir/designsystemet-react';
 import classNames from 'classnames';
 import { useParams } from 'next/navigation';
 
@@ -128,22 +128,17 @@ const Header: FC<HeaderProps> = ({
           {useDemoLogo ? <FDKLogoDemo /> : <FDKLogo />}
         </a>
         {userDisplayName && (
-          <DropdownMenu size='small'>
-            <DropdownMenu.Trigger asChild>
-              <Button
-                variant='tertiary'
-                className={styles.menuButton}
-              >
-                <MenuHamburgerIcon
-                  aria-hidden
-                  fontSize='1.5rem'
-                />
-                {localization.header.menu}
-              </Button>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content>
-              <DropdownMenu.Group key='menu-group-user'>
-                <DropdownMenu.Item
+          <Dropdown.TriggerContext>
+            <Dropdown.Trigger>
+              <MenuHamburgerIcon
+                aria-hidden
+                fontSize='1.5rem'
+              />
+              {localization.header.menu}
+            </Dropdown.Trigger>
+            <Dropdown>
+              <Dropdown.List key='menu-group-user'>
+                <Dropdown.Item
                   className={classNames(styles.dropDownItem, styles.userInfo)}
                   asChild
                 >
@@ -157,12 +152,12 @@ const Header: FC<HeaderProps> = ({
                     </span>
                     {userRole && <span>{userRole}</span>}
                   </div>
-                </DropdownMenu.Item>
+                </Dropdown.Item>
                 <Divider />
-              </DropdownMenu.Group>
+              </Dropdown.List>
               {resourceRoles.some((role) => role.role === 'admin') && (
-                <DropdownMenu.Group key='menu-group-admin'>
-                  <DropdownMenu.Item
+                <Dropdown.List key='menu-group-admin'>
+                  <Dropdown.Item
                     className={styles.dropDownItem}
                     asChild
                   >
@@ -172,14 +167,14 @@ const Header: FC<HeaderProps> = ({
                     >
                       {localization.manageCatalogs}
                     </a>
-                  </DropdownMenu.Item>
+                  </Dropdown.Item>
                   <Divider />
-                </DropdownMenu.Group>
+                </Dropdown.List>
               )}
               {urls.map((group, index) => (
-                <DropdownMenu.Group key={`menu-group-${index}`}>
+                <Dropdown.List key={`menu-group-${index}`}>
                   {group.map((urlObject, itemIndex) => (
-                    <DropdownMenu.Item
+                    <Dropdown.Item
                       key={`menu-item-${index}-${itemIndex}`}
                       className={styles.dropDownItem}
                       asChild
@@ -199,14 +194,14 @@ const Header: FC<HeaderProps> = ({
                           ''
                         )}
                       </a>
-                    </DropdownMenu.Item>
+                    </Dropdown.Item>
                   ))}
                   <Divider />
-                </DropdownMenu.Group>
+                </Dropdown.List>
               ))}
               {handleLogout && (
-                <DropdownMenu.Group key='menu-group-logout'>
-                  <DropdownMenu.Item asChild>
+                <Dropdown.List key='menu-group-logout'>
+                  <Dropdown.Item asChild>
                     <button
                       onClick={handleLogout}
                       className={styles.dropDownItem}
@@ -214,11 +209,11 @@ const Header: FC<HeaderProps> = ({
                       <LeaveIcon fontSize='1.3rem' />
                       <span>{localization.auth.logout}</span>
                     </button>
-                  </DropdownMenu.Item>
-                </DropdownMenu.Group>
+                  </Dropdown.Item>
+                </Dropdown.List>
               )}
-            </DropdownMenu.Content>
-          </DropdownMenu>
+            </Dropdown>
+          </Dropdown.TriggerContext>
         )}
       </div>
     </header>

@@ -2,7 +2,7 @@
 
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useFormikContext } from 'formik';
-import { Button, Modal } from '@digdir/designsystemet-react';
+import { Button, Dialog } from '@digdir/designsystemet-react';
 import { DataStorage, localization } from '@catalog-frontend/utils';
 import type { StorageData } from '@catalog-frontend/types';
 import { isEqual } from 'lodash';
@@ -76,10 +76,10 @@ export const FormikAutoSaver = ({ id, storage, onRestore, confirmMessage, restor
   }, [initialValues, values, isInitialized, id, storage]);
 
   return (
-    <Modal ref={modalRef}>
-      <Modal.Header closeButton={false}>Ulagrede endringer</Modal.Header>
-      <Modal.Content>{modalContent}</Modal.Content>
-      <Modal.Footer>
+    <Dialog ref={modalRef}>
+      <Dialog.Block>Ulagrede endringer</Dialog.Block>
+      <Dialog.Block>{modalContent}</Dialog.Block>
+      <Dialog.Block>
         <Button
           size='sm'
           onClick={handleRestoreClick}
@@ -94,8 +94,8 @@ export const FormikAutoSaver = ({ id, storage, onRestore, confirmMessage, restor
         >
           {localization.button.discard}
         </Button>
-      </Modal.Footer>
-    </Modal>
+      </Dialog.Block>
+    </Dialog>
   );
 };
 

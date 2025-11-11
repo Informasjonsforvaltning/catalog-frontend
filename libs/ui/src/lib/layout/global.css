@@ -3,8 +3,8 @@
 @layer reset, fds;
 
 @import url('./reset.css');
-@import url('@digdir/designsystemet-theme');
 @import url('@digdir/designsystemet-css');
+@import url('@digdir/designsystemet-theme');
 
 html * {
   font-display: swap;

@@ -17,7 +17,6 @@ export const RightColumn = ({ dataset, hasWritePermission, language }: Props) =>
   return (
     <InfoCard>
       <InfoCard.Item
-        key={`info-data-${localization.id}`}
         title={localization.datasetForm.fieldLabel.datasetID}
         headingColor='light'
       >
@@ -25,7 +24,6 @@ export const RightColumn = ({ dataset, hasWritePermission, language }: Props) =>
       </InfoCard.Item>
 
       <InfoCard.Item
-        key={`info-data-${localization.publicationState.state}`}
         title={localization.publicationState.state}
         headingColor='light'
         helpText={
@@ -46,7 +44,6 @@ export const RightColumn = ({ dataset, hasWritePermission, language }: Props) =>
 
       {dataset?.lastModified && (
         <InfoCard.Item
-          key={`info-data-${localization.lastUpdated}`}
           title={localization.lastUpdated}
           headingColor='light'
         >

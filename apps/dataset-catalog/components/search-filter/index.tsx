@@ -100,12 +100,12 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
 
   return (
     <div className={styles.searchFilter}>
-      <Accordion
+      {/* <Accordion
         border={true}
         className={styles.accordion}
       >
         {accordionItems}
-      </Accordion>
+      </Accordion> */}
     </div>
   );
 };
