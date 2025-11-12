@@ -1,20 +1,17 @@
 'use client';
 
-import { Select } from '@digdir/designsystemet-react';
-export { Select };
+import { Select as DSSelect, SelectProps as DSSelectProps } from '@digdir/designsystemet-react';
+import styles from './style.module.css';
 
-// import { NativeSelect, NativeSelectProps } from '@digdir/designsystemet-react';
-// import styles from './style.module.css';
+export type SelectOption = {
+  label: string;
+  value: string;
+};
 
-// export type SelectOption = {
-//   label: string;
-//   value: string;
-// };
-
-// export const Select = (props: NativeSelectProps) => {
-//   return (
-//     <div className={styles.select}>
-//       <NativeSelect {...props} />
-//     </div>
-//   );
-// };
+export const Select = (props: DSSelectProps) => {
+  return (
+    <div className={styles.select}>
+      <DSSelect {...props} />
+    </div>
+  );
+};

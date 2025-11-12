@@ -99,9 +99,7 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
 
   return (
     <div className={styles.searchFilter}>
-      <>
-        {accordionItems}
-      </>
+      {accordionItems}
     </div>
   );
 };

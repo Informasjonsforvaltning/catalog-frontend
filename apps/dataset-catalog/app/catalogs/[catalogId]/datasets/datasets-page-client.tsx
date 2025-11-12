@@ -221,7 +221,7 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
                 }}
               />
               <Select
-                size='sm'
+                data-size='sm'
                 onChange={(e) => setSortValue(e.target.value)}
                 value={sortValue}
               >
@@ -236,6 +236,7 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
                 <>
                   <LinkButton
                     variant='primary'
+                    data-size='sm'
                     href={`/catalogs/${catalogId}/datasets/new`}
                   >
                     <PlusCircleIcon fontSize='1.2rem' />
