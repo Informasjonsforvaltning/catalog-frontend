@@ -22,7 +22,7 @@ export const POST = async (
       return new Response(JSON.stringify(jsonResponse), {
         status: response?.status,
       });
-    } catch (err) {
+    } catch {
       return new Response("Failed to publish service", { status: 500 });
     }
   });

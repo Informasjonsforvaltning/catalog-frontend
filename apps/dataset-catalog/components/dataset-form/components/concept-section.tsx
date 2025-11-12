@@ -2,7 +2,7 @@
 import { Dataset } from "@catalog-frontend/types";
 import { Combobox, Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import {
   capitalizeFirstLetter,
   getTranslateText,
@@ -73,7 +73,7 @@ export const ConceptSection = ({ searchEnv }: Props) => {
           onValueChange={(selectedValues: string[]) =>
             setFieldValue("concepts", selectedValues)
           }
-          onChange={(input: React.ChangeEvent<HTMLInputElement>) =>
+          onChange={(input: ChangeEvent<HTMLInputElement>) =>
             setSearchQuery(input.target.value)
           }
           loading={searching}

@@ -36,7 +36,7 @@ runTestAsAdmin(
         },
       },
       ansvarligVirksomhet: {
-        id: null,
+        id: "",
       },
       definisjon: {
         tekst: {
@@ -60,12 +60,12 @@ runTestAsAdmin(
       },
       merknad: {},
       merkelapp: [],
-      eksempel: null,
-      fagområde: null,
-      fagområdeKoder: null,
-      omfang: null,
-      tillattTerm: null,
-      frarådetTerm: null,
+      eksempel: undefined,
+      fagområde: undefined,
+      fagområdeKoder: undefined,
+      omfang: undefined,
+      tillattTerm: undefined,
+      frarådetTerm: undefined,
       gyldigFom: null,
       gyldigTom: null,
       seOgså: [],
@@ -75,9 +75,9 @@ runTestAsAdmin(
       erstattesAv: [],
       statusURI:
         "http://publications.europa.eu/resource/authority/concept-status/DRAFT",
-      assignedUser: null,
+      assignedUser: undefined,
       begrepsRelasjon: [],
-      interneFelt: null,
+      interneFelt: undefined,
       abbreviatedLabel: `LBL${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 6).toUpperCase()}`,
     };
 
@@ -103,7 +103,7 @@ runTestAsAdmin(
           },
         },
         ansvarligVirksomhet: {
-          id: null,
+          id: "",
         },
         definisjon: {
           tekst: {
@@ -127,12 +127,12 @@ runTestAsAdmin(
         },
         merknad: {},
         merkelapp: [],
-        eksempel: null,
-        fagområde: null,
-        fagområdeKoder: null,
+        eksempel: undefined,
+        fagområde: undefined,
+        fagområdeKoder: undefined,
         omfang: null,
-        tillattTerm: null,
-        frarådetTerm: null,
+        tillattTerm: undefined,
+        frarådetTerm: undefined,
         gyldigFom: null,
         gyldigTom: null,
         seOgså: [],
@@ -142,13 +142,13 @@ runTestAsAdmin(
         erstattesAv: [],
         statusURI:
           "http://publications.europa.eu/resource/authority/concept-status/CURRENT",
-        assignedUser: null,
+        assignedUser: undefined,
         begrepsRelasjon: [],
-        interneFelt: null,
+        interneFelt: undefined,
         abbreviatedLabel: `LBL${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 6).toUpperCase()}`,
       };
       const id = await createConcept(apiRequestContext, publishedConcept);
-      publishedConcept.id = id;
+      (publishedConcept as any).id = id;
       console.log(`[TEST] Created published concept with id: ${id}`);
     }
     const relatedPublishedId = [publishedConcept.id];
@@ -180,7 +180,7 @@ runTestAsAdmin(
         },
       },
       ansvarligVirksomhet: {
-        id: null,
+        id: "",
       },
       definisjon: {
         tekst: {
@@ -204,12 +204,12 @@ runTestAsAdmin(
       },
       merknad: {},
       merkelapp: [],
-      eksempel: null,
-      fagområde: null,
-      fagområdeKoder: null,
+      eksempel: undefined,
+      fagområde: undefined,
+      fagområdeKoder: undefined,
       omfang: null,
-      tillattTerm: null,
-      frarådetTerm: null,
+      tillattTerm: undefined,
+      frarådetTerm: undefined,
       gyldigFom: null,
       gyldigTom: null,
       seOgså: [
@@ -234,7 +234,7 @@ runTestAsAdmin(
       ],
       statusURI:
         "http://publications.europa.eu/resource/authority/concept-status/DRAFT",
-      assignedUser: randomUser.id,
+      assignedUser: randomUser?.id,
       begrepsRelasjon: [
         {
           relasjon: RelationTypeEnum.PARTITIV,
@@ -263,7 +263,7 @@ runTestAsAdmin(
           } else if (field.type === "code_list") {
             //TODO
           } else if (field.type === "user_list") {
-            acc[field.id] = { value: randomUser.id };
+            acc[field.id] = { value: randomUser?.id ?? "" };
           }
           return acc;
         },

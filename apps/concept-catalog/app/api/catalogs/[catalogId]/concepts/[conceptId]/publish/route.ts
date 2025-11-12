@@ -21,7 +21,7 @@ export const POST = async (
       return new Response(JSON.stringify(jsonResponse), {
         status: response?.status,
       });
-    } catch (err) {
+    } catch {
       return new Response(
         JSON.stringify({ message: "Failed to publish concept" }),
         { status: 500 },

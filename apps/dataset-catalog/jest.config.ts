@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: "dataset-catalog",
   preset: "../../jest.preset.js",

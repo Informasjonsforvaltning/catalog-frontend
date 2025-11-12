@@ -20,7 +20,6 @@ import {
   UnionRelation,
   RelationSubtypeEnum,
   RelationTypeEnum,
-  Concept,
 } from "@catalog-frontend/types";
 import {
   useSearchConcepts as useSearchInternalConcepts,
@@ -42,16 +41,12 @@ const relatedConceptTypes: RelatedConceptType[] = [
   "custom",
 ];
 const relationTypes = Object.keys(RelationTypeEnum)
-  .filter((item) => {
-    return isNaN(Number(item));
-  })
-  .map((key) => RelationTypeEnum[key]);
+  .filter((item) => isNaN(Number(item)))
+  .map((key) => RelationTypeEnum[key as keyof typeof RelationTypeEnum]);
 
 const relationSubtypes = Object.keys(RelationSubtypeEnum)
-  .filter((item) => {
-    return isNaN(Number(item));
-  })
-  .map((key) => RelationSubtypeEnum[key]);
+  .filter((item) => isNaN(Number(item)))
+  .map((key) => RelationSubtypeEnum[key as keyof typeof RelationSubtypeEnum]);
 
 type RelationFieldsetProps = {
   catalogId: string;
@@ -155,7 +150,7 @@ export const RelationFieldset = ({
     }));
   relationSubtypeOptions.unshift({
     label: localization.conceptForm.fieldLabel.relationSubtypes["none"],
-    value: "",
+    value: "" as any,
   });
 
   let internalRelatedConceptOptions: Option[] = [];
@@ -205,7 +200,7 @@ export const RelationFieldset = ({
     ];
   }
 
-  const handleRelatedConceptTypeChange = (value) => {
+  const handleRelatedConceptTypeChange = (value: any) => {
     setFieldValue("internal", value === "internal");
 
     setRelatedConceptType(value as RelatedConceptType);
@@ -232,7 +227,7 @@ export const RelationFieldset = ({
     setRelatedConcept(value);
   };
 
-  const handleCustomRelatedConceptChange = (e) => {
+  const handleCustomRelatedConceptChange = (e: any) => {
     setRelatedConcept([e.target.value]);
   };
 
@@ -342,13 +337,15 @@ export const RelationFieldset = ({
 
       <Combobox
         label={
-          <TitleWithHelpTextAndTag
-            helpText={localization.conceptForm.helpText.relation}
-            tagColor="warning"
-            tagTitle={localization.tag.required}
-          >
-            {localization.conceptForm.fieldLabel.relation}
-          </TitleWithHelpTextAndTag>
+          (
+            <TitleWithHelpTextAndTag
+              helpText={localization.conceptForm.helpText.relation}
+              tagColor="warning"
+              tagTitle={localization.tag.required}
+            >
+              {localization.conceptForm.fieldLabel.relation}
+            </TitleWithHelpTextAndTag>
+          ) as any
         }
         size="sm"
         portal={false}
@@ -374,17 +371,19 @@ export const RelationFieldset = ({
           <Box className={styles.flex}>
             <Combobox
               label={
-                <TitleWithHelpTextAndTag
-                  tagColor="warning"
-                  tagTitle={localization.tag.required}
-                  helpText={
-                    localization.conceptForm.helpText.relationLevel[
-                      values.relasjon
-                    ]
-                  }
-                >
-                  {localization.conceptForm.fieldLabel.relationLevel}
-                </TitleWithHelpTextAndTag>
+                (
+                  <TitleWithHelpTextAndTag
+                    tagColor="warning"
+                    tagTitle={localization.tag.required}
+                    helpText={
+                      localization.conceptForm.helpText.relationLevel[
+                        values.relasjon
+                      ]
+                    }
+                  >
+                    {localization.conceptForm.fieldLabel.relationLevel}
+                  </TitleWithHelpTextAndTag>
+                ) as any
               }
               size="sm"
               portal={false}

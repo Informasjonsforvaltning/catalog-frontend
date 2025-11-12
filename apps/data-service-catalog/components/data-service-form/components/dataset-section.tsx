@@ -40,7 +40,7 @@ export const DatasetSection = ({ searchEnv }: Props) => {
         ...(values.servesDataset ?? []).map((uri) => {
           const foundItem =
             selectedDatasets?.find((item) => item.uri === uri) ||
-            datasetSuggestions?.find((item) => item.uri === uri);
+            datasetSuggestions?.find((item: any) => item.uri === uri);
 
           return {
             uri,

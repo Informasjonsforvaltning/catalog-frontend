@@ -21,7 +21,7 @@ export const GET = async (
       return new Response(JSON.stringify(jsonResponse), {
         status: response?.status,
       });
-    } catch (err) {
+    } catch {
       return new Response(
         JSON.stringify({ message: "Failed to fetch revisions for concept" }),
         { status: 500 },

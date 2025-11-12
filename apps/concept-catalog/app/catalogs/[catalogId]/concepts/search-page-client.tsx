@@ -42,7 +42,6 @@ import SearchFilter from "@concept-catalog/components/search-filter";
 import { useImportConcepts } from "@concept-catalog/hooks/import";
 import ConceptSearchHits from "@concept-catalog/components/concept-search-hits";
 import styles from "./search-page.module.scss";
-import { ImportModal } from "@concept-catalog/components/import-modal";
 
 export type FilterType =
   | "published"
@@ -178,19 +177,19 @@ export const SearchPageClient = ({
   };
 
   const subjectCodeList = codeListsResult?.codeLists?.find(
-    (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
+    (codeList: any) => codeList.id === fieldsResult?.editable?.domainCodeListId,
   );
 
-  const getInternalFields = (fieldId) =>
-    fieldsResult?.internal?.find((field) => field.id === fieldId);
+  const getInternalFields = (fieldId: any) =>
+    fieldsResult?.internal?.find((field: any) => field.id === fieldId);
 
   const getSubjectChildren = (subjectId: string) => {
     const children: number[] = [];
 
     subjectCodeList?.codes
-      ?.filter((code) => code.parentID === subjectId)
-      .map((code) => code.id)
-      .forEach((childId) => {
+      ?.filter((code: any) => code.parentID === subjectId)
+      .map((code: any) => code.id)
+      .forEach((childId: any) => {
         children.push(childId);
         children.push(...getSubjectChildren(childId));
       });
@@ -198,7 +197,7 @@ export const SearchPageClient = ({
     return children;
   };
 
-  const getSubjectFilterWithChildren = (subjects) => {
+  const getSubjectFilterWithChildren = (subjects: any) => {
     // Fetch lowest level code and add its children to the filter
     // Subjects will always be a path like: Code 1 -> Code 1.1 -> Code 1.1.1
     // The lowest level code will always be the last code in the path, Code 1.1.1 in this example.
@@ -220,7 +219,7 @@ export const SearchPageClient = ({
     fields: getSearchFields(
       selectedFieldOption as SearchableField | "alleFelter",
     ),
-    sort: sortMappings[selectedSortOption],
+    sort: sortMappings[selectedSortOption as SortOption],
     filters: {
       ...(filterStatus?.length && {
         status: { value: filterStatus },
@@ -247,7 +246,7 @@ export const SearchPageClient = ({
               }
               return result;
             },
-            {},
+            {} as Record<string, string[]>,
           ),
         },
       }),
@@ -264,7 +263,7 @@ export const SearchPageClient = ({
   );
 
   const getUsername = (userId: string) => {
-    const user = usersResult?.users?.find((u) => u.id === userId);
+    const user = usersResult?.users?.find((u: any) => u.id === userId);
     return user?.name ?? "";
   };
 
@@ -276,7 +275,7 @@ export const SearchPageClient = ({
     });
   };
 
-  const removeFilter = (filterName, filterType: FilterType) => {
+  const removeFilter = (filterName: any, filterType: FilterType) => {
     switch (filterType) {
       case "published":
         setFilterPublicationState(
@@ -321,7 +320,7 @@ export const SearchPageClient = ({
     setSelectedSortOption(optionValue);
   };
 
-  const onImportUpload = (event) => {
+  const onImportUpload = (event: any) => {
     importConcepts.mutate(event.target.files[0], {
       onError: (error) => alert("Import failed: " + error),
     });
@@ -390,7 +389,7 @@ export const SearchPageClient = ({
               onClick={() => removeFilter(filter, "subject")}
             >
               {getTranslateText(
-                subjectCodeList.codes.find((c) => c.id === filter)?.name,
+                subjectCodeList.codes.find((c: any) => c.id === filter)?.name,
               )}
             </Chip.Removable>
           ))}
@@ -409,7 +408,7 @@ export const SearchPageClient = ({
             >
               {capitalizeFirstLetter(
                 getTranslateText(
-                  conceptStatuses?.find((s) => s.uri === filter)?.label,
+                  conceptStatuses?.find((s: any) => s.uri === filter)?.label,
                 ) as string,
               )}
             </Chip.Removable>

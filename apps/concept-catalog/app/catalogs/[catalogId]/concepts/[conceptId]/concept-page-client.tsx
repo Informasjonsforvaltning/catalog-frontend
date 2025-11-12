@@ -203,14 +203,14 @@ export const ConceptPageClient = ({
   const publishConcept = usePublishConcept(catalogId);
   const deleteConcept = useDeleteConcept(catalogId);
 
-  const handleLabelClick = (label) => {
+  const handleLabelClick = (label: any) => {
     const queryParams = new URLSearchParams({
       "filter.label": label,
     }).toString();
     router.push(`/catalogs/${catalogId}/concepts?${queryParams}`);
   };
 
-  const handleOnChangePublished = (e) => {
+  const handleOnChangePublished = (e: any) => {
     if (e.target.checked) {
       if (window.confirm(localization.publicationState.confirmPublish)) {
         publishConcept.mutate(concept?.id as string, {
@@ -365,9 +365,6 @@ export const ConceptPageClient = ({
           ],
         ]
       : []),
-    ...(concept?.opprettetAv
-      ? [[`${localization.created} ${localization.by}`, concept.opprettetAv]]
-      : []),
     ...(concept?.kontaktpunkt?.harEpost || concept?.kontaktpunkt?.harTelefon
       ? [
           [
@@ -393,13 +390,13 @@ export const ConceptPageClient = ({
       : []),
   ];
 
-  const findStatusLabel = (statusURI) => {
+  const findStatusLabel = (statusURI: any) => {
     return translate(
       conceptStatuses?.find((s) => s.uri === statusURI)?.label,
     ) as string;
   };
 
-  const handleLanguageChange = (lang) => {
+  const handleLanguageChange = (lang: any) => {
     setLanguage(lang);
   };
 
@@ -420,7 +417,7 @@ export const ConceptPageClient = ({
 
   const getTitle = (text: string | string[]) =>
     text ? text : localization.concept.noName;
-  const getDetailSubtitle = (lang) => {
+  const getDetailSubtitle = (lang: any) => {
     const subjectCodeList = codeListsResult?.codeLists?.find(
       (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
     );
@@ -537,7 +534,7 @@ export const ConceptPageClient = ({
       });
     };
 
-    const handleUpdateComment = ({ id, comment }) => {
+    const handleUpdateComment = ({ id, comment }: any) => {
       if (updateCommentText[id]) {
         updateComment.mutate(
           { commentId: id, comment: updateCommentText[id] },
@@ -550,7 +547,7 @@ export const ConceptPageClient = ({
                   .reduce((obj, key) => {
                     obj[key] = updateCommentText[key];
                     return obj;
-                  }, {}),
+                  }, {} as MapType),
               );
             },
           },
@@ -560,17 +557,17 @@ export const ConceptPageClient = ({
       }
     };
 
-    const handleDeleteComment = (id, event) => {
+    const handleDeleteComment = (id: any) => {
       if (window.confirm(localization.comment.confirmDelete)) {
         deleteComment.mutate(id);
       }
     };
 
-    const handleNewCommentChange = (event) => {
+    const handleNewCommentChange = (event: any) => {
       setNewCommentText(event.target.value);
     };
 
-    const handleUpdateCommentChange = (commentId, event) => {
+    const handleUpdateCommentChange = (commentId: any, event: any) => {
       setUpdateCommentText({
         ...updateCommentText,
         ...{ [commentId]: event.target.value },
@@ -578,7 +575,7 @@ export const ConceptPageClient = ({
     };
 
     const newCommentButtonId = useId();
-    const isCommentInEditMode = (id) => id in updateCommentText;
+    const isCommentInEditMode = (id: any) => id in updateCommentText;
 
     return getCommentsStatus == "pending" ? (
       <Spinner size="medium" />
@@ -608,7 +605,7 @@ export const ConceptPageClient = ({
             Kommentarer ({getCommentsData?.length})
           </div>
           {getCommentsData?.length > 0 &&
-            getCommentsData.map((comment: Comment, i) => (
+            getCommentsData.map((comment: Comment) => (
               <InfoCard
                 key={`comment-${comment.id}`}
                 className={classes.comment}
@@ -646,7 +643,7 @@ export const ConceptPageClient = ({
                       </Button>
                       <Button
                         variant="secondary"
-                        onClick={(e) => handleDeleteComment(comment.id, e)}
+                        onClick={() => handleDeleteComment(comment.id)}
                       >
                         {localization.comment.deleteComment}
                       </Button>
@@ -668,7 +665,7 @@ export const ConceptPageClient = ({
       page: historyCurrentPage,
     });
 
-    const handleHistoryPageChange = (page) => {
+    const handleHistoryPageChange = (page: any) => {
       setHistoryCurrentPage(page);
     };
 
@@ -680,7 +677,7 @@ export const ConceptPageClient = ({
       <>
         <Accordion>
           {getHistoryData.updates?.length > 0 &&
-            getHistoryData.updates.map((update: Update, i) => (
+            getHistoryData.updates.map((update: Update) => (
               <Accordion.Item key={`history-${update.id}`}>
                 <Accordion.Header className={classes.historyHeader}>
                   <span>{update.person.name}</span>

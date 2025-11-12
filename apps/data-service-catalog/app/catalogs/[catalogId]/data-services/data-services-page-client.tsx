@@ -12,7 +12,7 @@ import {
   Select,
 } from "@catalog-frontend/ui";
 import SearchFilter from "../../../../components/search-filter";
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Chip } from "@digdir/designsystemet-react";
 import {
   capitalizeFirstLetter,
@@ -214,7 +214,8 @@ const DataServicesPageClient = ({
             >
               {capitalizeFirstLetter(
                 getTranslateText(
-                  distributionStatuses?.find((s) => s.uri === filter)?.label,
+                  distributionStatuses?.find((s: any) => s.uri === filter)
+                    ?.label,
                 ) as string,
               )}
             </Chip.Removable>

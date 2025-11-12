@@ -1,7 +1,6 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import type { Concept, StorageData } from "@catalog-frontend/types";
 import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
@@ -16,7 +15,7 @@ export const NewPage = ({
   codeListsResult,
   fieldsResult,
   usersResult,
-}) => {
+}: any) => {
   const conceptIdRef = useRef<string | undefined>(undefined); // Ref to store the concept id
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 

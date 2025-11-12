@@ -57,7 +57,7 @@ type Props = {
   markDirty?: boolean;
 };
 
-const getNotifications = ({ isValid, hasUnsavedChanges }) => [
+const getNotifications = ({ isValid, hasUnsavedChanges }: any) => [
   ...(isValid
     ? []
     : [
@@ -102,7 +102,6 @@ const DataServiceForm = ({
   const searchParams = useSearchParams();
   const restoreOnRender = Boolean(searchParams.get("restore"));
   const { catalogId, dataServiceId } = useParams();
-  const [isDirty, setIsDirty] = useState(false);
   const [validateOnChange, setValidateOnChange] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -116,7 +115,7 @@ const DataServiceForm = ({
 
   //useWarnIfUnsavedChanges({ unsavedChanges: isDirty });
 
-  const showSnackbarMessage = ({ message, severity, fadeIn = true }) => {
+  const showSnackbarMessage = ({ message, severity, fadeIn = true }: any) => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarFadeIn(fadeIn);
@@ -207,7 +206,7 @@ const DataServiceForm = ({
               if (afterSubmit) {
                 afterSubmit();
               }
-            } catch (error) {
+            } catch {
               showSnackbarMessage({
                 message: localization.snackbar.saveFailed,
                 severity: "danger",
@@ -228,7 +227,6 @@ const DataServiceForm = ({
           values,
           initialValues: formInitialValues,
         }) => {
-          setTimeout(() => setIsDirty(dirty), 0);
           const notifications = getNotifications({
             isValid: Object.keys(errors).length === 0,
             hasUnsavedChanges: false,
@@ -266,7 +264,7 @@ const DataServiceForm = ({
           const dirtyFields = ((): string[] => {
             const dirtyFields: string[] = [];
 
-            const isDirty = (name: string) => {
+            const isDirty = (name: any) => {
               const a = get(formInitialValues, name);
               const b = get(values, name);
 

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { localization } from "@catalog-frontend/utils";
 import {
   LinkButton,
@@ -22,7 +22,7 @@ export function ImportModal({ catalogId }: Props) {
   const uploadYaml = useImport(catalogId, "application/yaml");
   const uploadJson = useImport(catalogId, "application/json");
 
-  const onFileChange = async (event) => {
+  const onFileChange = async (event: any) => {
     const file = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();

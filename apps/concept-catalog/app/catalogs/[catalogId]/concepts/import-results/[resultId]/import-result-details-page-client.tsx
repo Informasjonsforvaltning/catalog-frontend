@@ -60,10 +60,10 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
     cancelMutation.mutate();
   };
 
-  const shouldRefetch = (fetchedData) =>
+  const shouldRefetch = (fetchedData: any) =>
     fetchedData.status === "IN_PROGRESS" || fetchedData.status === "SAVING";
 
-  const isPendingConfirmation = (fetchedData) =>
+  const isPendingConfirmation = (fetchedData: any) =>
     fetchedData.status === "PENDING_CONFIRMATION";
 
   const { data } = useQuery({
@@ -79,7 +79,6 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
     },
     initialData: importResult, // seed from server
     refetchInterval: (q) => {
-      const status = q?.state?.data?.status;
       return shouldRefetch(q?.state?.data)
         ? 3000
         : isPendingConfirmation(q?.state?.data)

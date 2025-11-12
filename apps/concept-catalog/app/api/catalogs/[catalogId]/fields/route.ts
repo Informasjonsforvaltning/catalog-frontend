@@ -1,4 +1,4 @@
-import { getFields, getUsers } from "@catalog-frontend/data-access";
+import { getFields } from "@catalog-frontend/data-access";
 import { withValidSessionForApi } from "@catalog-frontend/utils";
 import { NextRequest } from "next/server";
 
@@ -22,7 +22,7 @@ export const GET = async (
       return new Response(JSON.stringify(jsonResponse), {
         status: response.status,
       });
-    } catch (error) {
+    } catch {
       return new Response(JSON.stringify({ message: "Failed to get fields" }), {
         status: 500,
       });

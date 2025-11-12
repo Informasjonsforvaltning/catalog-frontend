@@ -1,4 +1,4 @@
-import { expect, Page, BrowserContext, Locator } from "@playwright/test";
+import { expect, Page, BrowserContext } from "@playwright/test";
 import type AxeBuilder from "@axe-core/playwright";
 
 export default class CatalogPortalPage {
@@ -45,7 +45,7 @@ export default class CatalogPortalPage {
     locatorFunction: keyof CatalogPortalPage,
     expectedUrl: RegExp,
   ) {
-    const locator = this[locatorFunction]();
+    const locator = (this[locatorFunction] as any)();
     await expect(locator).toBeVisible();
     await expect(locator).toHaveAttribute("href", expectedUrl);
   }

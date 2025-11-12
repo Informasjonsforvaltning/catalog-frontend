@@ -1,4 +1,3 @@
-import { Concept } from "@catalog-frontend/types";
 import { runTestAsAdmin } from "../../fixtures/basePage";
 import {
   adminAuthFile,
@@ -9,7 +8,7 @@ import {
 
 runTestAsAdmin(
   "test if the search page renders correctly",
-  async ({ conceptsPage, playwright }) => {
+  async ({ conceptsPage }) => {
     console.log("[TEST] Navigating to concepts page...");
     await conceptsPage.goto();
     console.log("[TEST] Checking accessibility...");
@@ -55,7 +54,7 @@ runTestAsAdmin(
     console.log("[TEST] Creating random concepts via API...");
     for (const concept of randomConcepts) {
       console.log(`[TEST] Creating concept: ${concept.anbefaltTerm.navn.nb}`);
-      await createConcept(apiRequestContext, concept);
+      await createConcept(apiRequestContext, concept as any);
     }
 
     console.log("[TEST] Navigating to concepts page...");
@@ -115,7 +114,7 @@ runTestAsAdmin(
       console.log(
         `[TEST] Creating concept: ${concept.anbefaltTerm.navn.nb} with status ${concept.statusURI}`,
       );
-      await createConcept(apiRequestContext, concept);
+      await createConcept(apiRequestContext, concept as any);
     }
 
     console.log("[TEST] Navigating to concepts page...");

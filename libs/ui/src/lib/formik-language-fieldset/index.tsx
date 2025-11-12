@@ -1,6 +1,14 @@
 "use client";
 
-import { ReactNode, Ref, useEffect, useRef, useState } from "react";
+import {
+  createRef,
+  ReactNode,
+  Ref,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import {
   Fieldset,
@@ -15,7 +23,6 @@ import styles from "./formik-language-fieldset.module.scss";
 import { ISOLanguage, LocalizedStrings } from "@catalog-frontend/types";
 import { TextareaWithPrefix } from "../textarea-with-prefix";
 import { AddButton, DeleteButton } from "../button";
-import React from "react";
 import { FormikMultivalueTextfield } from "../formik-multivalue-textfield";
 import { FastFieldWithRef } from "../formik-fast-field-with-ref";
 import TitleWithHelpTextAndTag from "../title-with-help-text-and-tag";
@@ -55,7 +62,7 @@ export const FormikLanguageFieldset = ({
 
   const languageRefs = useRef(
     allowedLanguages.reduce(
-      (acc, lang, index) => {
+      (acc, lang) => {
         if (
           ref &&
           visibleLanguageFields.includes(lang) &&
@@ -63,7 +70,7 @@ export const FormikLanguageFieldset = ({
         ) {
           acc[lang] = ref;
         } else {
-          acc[lang] = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
+          acc[lang] = createRef<HTMLInputElement | HTMLTextAreaElement>();
         }
         return acc;
       },
@@ -132,9 +139,7 @@ export const FormikLanguageFieldset = ({
         <div key={lang}>
           {multiple ? (
             <FormikMultivalueTextfield
-              ref={
-                languageRefs.current[lang] as React.RefObject<HTMLInputElement>
-              }
+              ref={languageRefs.current[lang] as RefObject<HTMLInputElement>}
               label={
                 <TitleWithHelpTextAndTag>
                   {localization.language[lang]}

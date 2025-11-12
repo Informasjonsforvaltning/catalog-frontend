@@ -20,7 +20,6 @@ import { revalidateTag } from "next/cache";
 import jsonpatch from "fast-json-patch";
 import {
   ChangeRequest,
-  ChangeRequestsPageSettings,
   ChangeRequestUpdateBody,
   Concept,
 } from "@catalog-frontend/types";
@@ -159,7 +158,7 @@ export async function acceptChangeRequestAction(
       `${session?.accessToken}`,
     );
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error as any);
   } finally {
     revalidateTag("concept-change-requests");
     revalidateTag("concept-change-request");
@@ -186,7 +185,7 @@ export async function rejectChangeRequestAction(
       `${session?.accessToken}`,
     );
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error as any);
   } finally {
     revalidateTag("concept-change-requests");
     revalidateTag("concept-change-request");

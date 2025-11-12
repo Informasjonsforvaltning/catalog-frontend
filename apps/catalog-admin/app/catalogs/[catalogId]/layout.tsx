@@ -2,6 +2,7 @@ import { Layout, TermsOfUseModal } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import { Metadata } from "next";
 import "../../global.css";
+import { ReactNode } from "react";
 
 export const metadata: Metadata = {
   title: localization.catalogType.admin,
@@ -12,7 +13,7 @@ const PageLayout = ({
   children,
   params: { catalogId },
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
   params: { catalogId: string };
 }) => {
   return (

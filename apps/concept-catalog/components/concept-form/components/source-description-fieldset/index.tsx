@@ -38,7 +38,8 @@ export const SourceDescriptionFieldset = <T,>({
 }: SourceDescriptionFieldsetProps) => {
   const { errors, values, setFieldValue } = useFormikContext<T>();
   const [relationToSource, setRelationToSource] = useState<string>(
-    values[name].forholdTilKilde ?? relationshipToSources[0].value,
+    ((values as any)[name]?.forholdTilKilde as string) ??
+      relationshipToSources[0].value,
   );
 
   useEffect(() => {
@@ -61,7 +62,7 @@ export const SourceDescriptionFieldset = <T,>({
         }
         value={relationToSource}
         onChange={setRelationToSource}
-        error={errors?.[name]?.forholdTilKilde}
+        error={(errors as any)?.[name]?.forholdTilKilde}
       >
         {relationshipToSources.map((rel) => (
           <Radio key={rel.value} value={rel.value}>
@@ -88,7 +89,7 @@ export const SourceDescriptionFieldset = <T,>({
               <>
                 <table className={styles.sourceTable}>
                   <tbody>
-                    {values[name]?.kilde?.map((_, index) => (
+                    {(values as any)[name]?.kilde?.map((_: any, index: any) => (
                       <tr key={index}>
                         <td>
                           <FastField
@@ -97,7 +98,9 @@ export const SourceDescriptionFieldset = <T,>({
                             name={`${name}.kilde.${index}.tekst`}
                             aria-label={""}
                             placeholder="Kildebeskrivelse"
-                            error={errors?.[name]?.kilde?.[index]?.tekst}
+                            error={
+                              (errors as any)?.[name]?.kilde?.[index]?.tekst
+                            }
                           />
                         </td>
                         <td>
@@ -107,7 +110,7 @@ export const SourceDescriptionFieldset = <T,>({
                             name={`${name}.kilde.${index}.uri`}
                             aria-label={""}
                             placeholder="https://kilde.no"
-                            error={errors?.[name]?.kilde?.[index]?.uri}
+                            error={(errors as any)?.[name]?.kilde?.[index]?.uri}
                           />
                         </td>
                         <td>

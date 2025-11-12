@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { NodeApi, NodeRendererProps, Tree } from "react-arborist";
 import {
   TabsAddIcon,
@@ -21,12 +21,12 @@ import {
 } from "@catalog-frontend/utils";
 import { useAdminDispatch, useAdminState } from "../../context/admin";
 import { compare } from "fast-json-patch";
-import { v4 as uuid } from "uuid";
+import crypto from "crypto";
 
 const INDENT_STEP = 15;
 const NO_PARENT = "noParent";
 
-export interface Props {
+interface Props {
   codeList?: CodeList;
   dirty?: (dirty: boolean) => void;
   type?: EditorType;
@@ -84,7 +84,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
 
   const createNewCode = () => {
     setSelectedCode({
-      id: uuid(),
+      id: crypto.randomUUID(),
       name: { nb: "Ny kode", nn: "", en: "" },
       parentID: null,
     });
@@ -216,7 +216,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
     const relatedCodes = codes?.filter((code) => code.parentID === codeId);
     const descendants = relatedCodes?.flatMap((relatedCode) =>
       findRelatedCodes(codes, relatedCode.id, depth + 1, maxDepth),
-    );
+    ) as any;
 
     return [...relatedCodes, ...descendants];
   }
@@ -302,7 +302,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
                 <Textfield
                   label={localization.catalogAdmin.codeName.nb}
                   value={selectedCode?.name?.nb}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
                     updateCodeName("nb", event.target.value);
                   }}
                 />
@@ -311,7 +311,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
                 <Textfield
                   label={localization.catalogAdmin.codeName.nn}
                   value={selectedCode?.name?.nn}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
                     updateCodeName("nn", event.target.value);
                   }}
                 />
@@ -320,7 +320,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
                 <Textfield
                   label={localization.catalogAdmin.codeName.en}
                   value={selectedCode?.name?.en}
-                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  onChange={(event: ChangeEvent<HTMLInputElement>) => {
                     updateCodeName("en", event.target.value);
                   }}
                 />
@@ -369,5 +369,3 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
     </>
   );
 };
-
-export default CodesEditor;

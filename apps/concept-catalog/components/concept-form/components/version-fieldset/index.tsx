@@ -16,7 +16,11 @@ export type VersionFieldsetProps = {
   readOnly?: boolean;
 };
 
-export const VersionFieldset = ({ name, changed, readOnly }) => {
+export const VersionFieldset = ({
+  name,
+  changed,
+  readOnly,
+}: VersionFieldsetProps) => {
   const { errors } = useFormikContext<Concept>();
 
   return (

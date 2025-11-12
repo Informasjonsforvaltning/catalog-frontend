@@ -24,7 +24,7 @@ import {
   sortDateStringsAscending,
   sortDateStringsDescending,
 } from "@catalog-frontend/utils";
-import { useEffect, useMemo, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { isEmpty } from "lodash";
 
 const importStatuses = [
@@ -84,7 +84,7 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
       sortDateStringsDescending(a.created, b.created);
   };
 
-  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSortChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setSortType(event.target.value);
   };
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { Textfield } from "@digdir/designsystemet-react";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { colorRegex, localization } from "@catalog-frontend/utils";
 import { Design } from "@catalog-frontend/types";
 import { useGetDesign } from "../../hooks/design";
@@ -19,7 +19,7 @@ interface ColorPicker {
 
 export const ColorPicker = ({ catalogId, type }: ColorPicker) => {
   const { data: getDesign } = useGetDesign(catalogId);
-  const dbDesign: Design = getDesign;
+  const dbDesign: Design = getDesign as any;
 
   const [inputColor, setInputColor] = useState("");
   const [isValidInput, setIsValidInput] = useState(true);
@@ -31,9 +31,9 @@ export const ColorPicker = ({ catalogId, type }: ColorPicker) => {
 
   useEffect(() => {
     if (type === "background") {
-      setInputColor(backgroundColor);
+      setInputColor(backgroundColor as any);
     } else {
-      setInputColor(fontColor);
+      setInputColor(fontColor as any);
     }
   }, []);
 
@@ -57,8 +57,8 @@ export const ColorPicker = ({ catalogId, type }: ColorPicker) => {
       dbDesign?.fontColor !== undefined &&
       type === "background"
     ) {
-      setInputColor(dbDesign?.backgroundColor);
-      setIsValidInput(colorRegex.test(dbDesign?.backgroundColor));
+      setInputColor(dbDesign?.backgroundColor as any);
+      setIsValidInput(colorRegex.test(dbDesign?.backgroundColor as any));
     }
 
     if (
@@ -79,7 +79,7 @@ export const ColorPicker = ({ catalogId, type }: ColorPicker) => {
           className={styles.textField}
           error={!isValidInput && localization.validation.invalidValue}
           value={inputColor}
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
             setInputColor(event.target.value);
             setIsValidInput(colorRegex.test(event.target.value));
           }}
@@ -88,5 +88,3 @@ export const ColorPicker = ({ catalogId, type }: ColorPicker) => {
     </AdminContextProvider>
   );
 };
-
-export default ColorPicker;

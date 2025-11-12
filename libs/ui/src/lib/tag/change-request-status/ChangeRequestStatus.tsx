@@ -28,7 +28,6 @@ export const ChangeRequestStatusTag = forwardRef<
 >(
   (
     {
-      children,
       statusKey,
       statusLabel,
       size = "medium",

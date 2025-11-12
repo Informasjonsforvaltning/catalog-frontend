@@ -31,7 +31,7 @@ const withProtectedPage = (
   permissions: "read" | "write" | "admin",
   render: Render,
 ) => {
-  return async ({ params, searchParams }) => {
+  return async ({ params, searchParams }: any) => {
     const { catalogId, conceptId, resultId, changeRequestId } = await params;
     const { concept: conceptIdSearch } = await searchParams;
 

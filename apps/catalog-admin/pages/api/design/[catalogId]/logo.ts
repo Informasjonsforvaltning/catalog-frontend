@@ -52,7 +52,7 @@ export default async function handler(
         );
       }
       res.end(Buffer.from(await response.arrayBuffer()));
-    } catch (error) {
+    } catch {
       res.status(500).send("Failed to get design logo");
     }
     return;

@@ -8,9 +8,10 @@ import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { NewPage } from "./new-page-client";
 
 export default async function NewServicePage(props: {
-  params: Promise<{ catalogId: string; serviceId: string }>;
+  params: Promise<{ catalogId: string }>;
 }) {
-  const { catalogId } = await props.params;
+  const params = await props.params;
+  const { catalogId } = params;
   const organization: Organization = await getOrganization(catalogId).then(
     (res) => res.json(),
   );

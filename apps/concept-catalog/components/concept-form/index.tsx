@@ -78,7 +78,7 @@ type Props = {
   usersResult: UsersResult;
 };
 
-const getNotifications = ({ isValid, hasUnsavedChanges }) => [
+const getNotifications = ({ isValid, hasUnsavedChanges }: any) => [
   ...(isValid
     ? []
     : [
@@ -142,7 +142,7 @@ const ConceptForm = ({
   >("success");
   const [snackbarFadeIn, setSnackbarFadeIn] = useState(true);
 
-  const showSnackbarMessage = ({ message, severity, fadeIn = true }) => {
+  const showSnackbarMessage = ({ message, severity, fadeIn = true }: any) => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarFadeIn(fadeIn);
@@ -364,7 +364,7 @@ const ConceptForm = ({
           const dirtyFields = ((): string[] => {
             const dirtyFields: string[] = [];
 
-            const isDirty = (name) => {
+            const isDirty = (name: any) => {
               const a = get(initialValues, name);
               const b = get(values, name);
 

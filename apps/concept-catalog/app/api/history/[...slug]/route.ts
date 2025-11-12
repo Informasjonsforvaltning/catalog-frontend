@@ -29,7 +29,7 @@ export const GET = async (
         return new Response(JSON.stringify(jsonResponse), {
           status: response.status,
         });
-      } catch (error) {
+      } catch {
         return new Response(
           JSON.stringify({ message: "Failed to get history" }),
           { status: 500 },

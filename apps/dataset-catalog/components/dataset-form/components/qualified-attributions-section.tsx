@@ -12,12 +12,12 @@ import {
 } from "../../../hooks/useEnhetsregister";
 import { useFormikContext } from "formik";
 import { debounce } from "lodash";
-import { useCallback, useState } from "react";
+import { RefObject, useCallback, useState } from "react";
 
 export const QualifiedAttributionsSection = ({
   ref,
 }: {
-  ref: React.RefObject<HTMLInputElement>;
+  ref: RefObject<HTMLInputElement>;
 }) => {
   const { setFieldValue, values } = useFormikContext<Dataset>();
 

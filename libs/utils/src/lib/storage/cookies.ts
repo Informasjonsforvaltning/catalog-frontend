@@ -16,7 +16,6 @@ export const getServerPageSettings = <T>(
   cookieStore: any,
 ): T | undefined => {
   const cookieValue = cookieStore.get(name)?.value;
-  let pageSettings = undefined;
   if (cookieValue) {
     try {
       return JSON.parse(cookieValue) as T;

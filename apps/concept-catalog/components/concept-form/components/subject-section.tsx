@@ -16,7 +16,7 @@ import { localization } from "@catalog-frontend/utils";
 import styles from "../concept-form.module.scss";
 import { getParentPath } from "../../../utils/codeList";
 import { ReactNode } from "react";
-import { get, isEmpty, isEqual } from "lodash";
+import { isEmpty } from "lodash";
 
 type SubjectSectionProps = {
   codes: Code[] | undefined;
@@ -136,7 +136,7 @@ export const SubjectSection = ({
           size="sm"
           hideClearButton
           readOnly={!codeListActivated || readOnly}
-          label={codeListLabel}
+          label={codeListLabel as any}
           value={selected ?? []}
           onValueChange={(value) => setFieldValue("fagområdeKoder", value)}
           error={errors.fagområdeKoder}

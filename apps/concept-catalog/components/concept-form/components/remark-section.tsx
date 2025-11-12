@@ -5,9 +5,6 @@ import {
   TitleWithHelpTextAndTag,
 } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
-import { get, isEmpty, isEqual } from "lodash";
-import { useFormikContext } from "formik";
-import { Concept } from "@catalog-frontend/types";
 
 type RemarkSectionProps = {
   changed?: string[];

@@ -1,9 +1,17 @@
 "use client";
 
-import { FC, ReactNode, useEffect, useRef, useState } from "react";
+import {
+  ChangeEvent,
+  FC,
+  MouseEvent,
+  KeyboardEvent,
+  ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Button,
-  Combobox,
   NativeSelect,
   Spinner,
   Textfield,
@@ -48,14 +56,14 @@ const SearchField: FC<SearchFieldProps> = ({
   const searchActionsRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (onSearch) {
       onSearch(query, optionValue);
     }
   };
 
-  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (e.key === "Enter") {
       if (onSearch) {
@@ -95,7 +103,7 @@ const SearchField: FC<SearchFieldProps> = ({
               aria-label="Velg alternativ"
               value={optionValue}
               className={styles.searchOptions}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                 setOptionValue(e.target.value)
               }
             >

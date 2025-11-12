@@ -2,7 +2,7 @@ import { importConcepts } from "@catalog-frontend/data-access";
 import { withValidSessionForApi } from "@catalog-frontend/utils";
 import { NextRequest } from "next/server";
 
-export const POST = async (req: NextRequest, props) => {
+export const POST = async (req: NextRequest, props: any) => {
   const params = await props.params;
 
   const { catalogId } = params;

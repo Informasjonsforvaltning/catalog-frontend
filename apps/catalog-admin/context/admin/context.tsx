@@ -13,7 +13,7 @@ interface ContextProps {
 }
 
 const context: ContextProps = {
-  state: DefaultAdminState,
+  state: DefaultAdminState as any,
   dispatch: () => undefined,
 };
 
@@ -26,7 +26,7 @@ interface StateProviderProps {
 }
 
 const AdminContextProvider = ({ children }: StateProviderProps) => {
-  const [state, dispatch] = useReducer(reducer, DefaultAdminState);
+  const [state, dispatch] = useReducer(reducer, DefaultAdminState as any);
 
   const value = {
     state,
@@ -34,7 +34,9 @@ const AdminContextProvider = ({ children }: StateProviderProps) => {
   };
 
   return (
-    <AdminContext.Provider value={value}>{children}</AdminContext.Provider>
+    <AdminContext.Provider value={value as any}>
+      {children}
+    </AdminContext.Provider>
   );
 };
 

@@ -24,7 +24,7 @@ export const GET = async (
       return new Response(JSON.stringify(jsonResponse), {
         status: response.status,
       });
-    } catch (error) {
+    } catch {
       return new Response("Failed to get internal fields", { status: 500 });
     }
   });
@@ -51,7 +51,7 @@ export const POST = async (
       return new Response("Created internal field", {
         status: response.status,
       });
-    } catch (error) {
+    } catch {
       return new Response("Failed to create internal field", { status: 500 });
     }
   });
@@ -80,7 +80,7 @@ export const PATCH = async (
       return new Response(JSON.stringify(jsonResponse), {
         status: response.status,
       });
-    } catch (error) {
+    } catch {
       return new Response("Failed to update internal field", { status: 500 });
     }
   });
@@ -104,7 +104,7 @@ export const DELETE = async (
         throw new Error();
       }
       return new Response("Internal field deleted", { status: 200 });
-    } catch (error) {
+    } catch {
       return new Response("Failed to delete internal field", { status: 500 });
     }
   });

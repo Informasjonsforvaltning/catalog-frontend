@@ -29,7 +29,6 @@ export const DataServiceStatusTag = forwardRef<
 >(
   (
     {
-      children,
       statusKey,
       statusLabel,
       size = "medium",

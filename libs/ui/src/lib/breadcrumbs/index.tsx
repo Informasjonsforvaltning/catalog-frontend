@@ -6,7 +6,6 @@ export type BreadcrumbType = {
   text: string;
 };
 
-/* eslint-disable-next-line */
 export interface BreadcrumbsProps {
   breadcrumbList?: BreadcrumbType[];
   catalogPortalUrl: string;

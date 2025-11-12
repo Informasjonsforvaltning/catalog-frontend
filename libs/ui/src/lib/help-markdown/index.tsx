@@ -7,7 +7,7 @@ import { Link, Popover } from "@digdir/designsystemet-react";
 import type { Placement } from "@floating-ui/react";
 import styles from "./help-markdown.module.scss";
 
-export type HelpTextProps = {
+type HelpTextProps = {
   /**
    * Required descriptive label for screen readers.
    **/
@@ -22,7 +22,7 @@ export type HelpTextProps = {
 } & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "color">;
 
 const markdownComponents: Partial<Components> = {
-  a: ({ node, href, children, ...props }) => {
+  a: ({ href, children, ...props }) => {
     const targetBlank =
       href?.startsWith("http://") || href?.startsWith("https://");
     return (

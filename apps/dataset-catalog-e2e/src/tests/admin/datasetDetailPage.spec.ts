@@ -36,12 +36,11 @@ runTestAsAdmin(
   "should load dataset detail page with all elements",
   async ({
     datasetsPage,
-    context,
     playwright,
   }: {
-    datasetsPage;
-    context;
-    playwright;
+    datasetsPage: any;
+    context: any;
+    playwright: any;
   }) => {
     // Create a request context with the admin storage state (includes next-auth cookie)
     const apiRequestContext = await playwright.request.newContext({
@@ -74,9 +73,9 @@ runTestAsAdmin(
 
     // Verify contact point information
     await detailPage.expectContactPoint(
-      dataset.contactPoints[0].email,
-      dataset.contactPoints[0].phone,
-      dataset.contactPoints[0].url,
+      dataset.contactPoints[0].email as any,
+      dataset.contactPoints[0].phone as any,
+      dataset.contactPoints[0].url as any,
     );
 
     // Verify dataset ID
@@ -107,12 +106,11 @@ runTestAsAdmin(
   "should delete dataset from detail page",
   async ({
     datasetsPage,
-    context,
     playwright,
   }: {
-    datasetsPage;
-    context;
-    playwright;
+    datasetsPage: any;
+    context: any;
+    playwright: any;
   }) => {
     // Create a request context with the admin storage state (includes next-auth cookie)
     const apiRequestContext = await playwright.request.newContext({

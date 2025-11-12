@@ -8,7 +8,7 @@ import {
   LinkButton,
 } from "@catalog-frontend/ui";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
-import React, { useState } from "react";
+import { useState } from "react";
 import { deleteDataService } from "../../../../actions/actions";
 import styles from "./data-service-details-page.module.css";
 import StatusTag from "../../../../../components/status-tag";
@@ -65,7 +65,7 @@ const DataServiceDetailsPageClient = ({
       {showDeleteConfirm && (
         <ConfirmModal
           title={
-            localization.dataServiceForm.alert.confirmDeleteTitle ||
+            (localization.dataServiceForm.alert as any).confirmDeleteTitle ||
             "Bekreft sletting"
           }
           content={localization.dataServiceForm.alert.confirmDelete}

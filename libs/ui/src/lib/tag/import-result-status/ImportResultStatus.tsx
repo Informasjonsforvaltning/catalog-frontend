@@ -31,7 +31,6 @@ export const ImportResultStatusTag = forwardRef<
 >(
   (
     {
-      children,
       statusKey,
       statusLabel,
       size = "sm",

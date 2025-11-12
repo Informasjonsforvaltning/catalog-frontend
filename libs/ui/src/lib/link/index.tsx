@@ -1,15 +1,16 @@
 import { ExternalLinkIcon } from "@navikt/aksel-icons";
 import styles from "./link.module.css";
 
-import React, {
+import {
   FC,
   ComponentPropsWithoutRef,
   PropsWithChildren,
   ReactNode,
   ComponentType,
+  JSX,
 } from "react";
 
-export interface Props extends ComponentPropsWithoutRef<"a"> {
+interface Props extends ComponentPropsWithoutRef<"a"> {
   /**
    * An alternative to href
    */
@@ -52,5 +53,3 @@ export const Link: FC<PropsWithChildren<Props>> = ({
     </As>
   );
 };
-
-export default Link;

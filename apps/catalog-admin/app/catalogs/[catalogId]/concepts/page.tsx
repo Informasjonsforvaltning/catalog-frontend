@@ -9,7 +9,7 @@ import { localization } from "@catalog-frontend/utils";
 
 export default withProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/concepts`,
-  async ({ catalogId, session }) => {
+  async ({ catalogId }) => {
     const breadcrumbList = catalogId
       ? ([
           {

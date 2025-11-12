@@ -23,7 +23,7 @@ export default class ConceptsPage {
     this.detailPage = new DetailPage(page, context, accessibilityBuilder);
     this.editPage = new EditPage(page, context, accessibilityBuilder);
     this.context = context;
-    this.accessibilityBuilder = accessibilityBuilder;
+    this.accessibilityBuilder = accessibilityBuilder as any;
   }
 
   // Locators
@@ -98,7 +98,7 @@ export default class ConceptsPage {
     expect(items.length).toBe(0);
   }
 
-  public async createConceptUsingForm(concept, apiRequestContext) {
+  public async createConceptUsingForm(concept: any, apiRequestContext: any) {
     await this.goto();
 
     console.log(
@@ -132,7 +132,7 @@ export default class ConceptsPage {
     notExpected: Concept[] = [],
   ) {
     for (const concept of expected) {
-      const nbName = concept.anbefaltTerm.navn.nb as string;
+      const nbName = concept.anbefaltTerm?.navn.nb as string;
       // Expect to find the concept
       await expect(this.page.getByText(nbName, { exact: true })).toBeVisible({
         timeout: 5000,
@@ -140,7 +140,7 @@ export default class ConceptsPage {
     }
 
     for (const concept of notExpected) {
-      const nbName = concept.anbefaltTerm.navn.nb as string;
+      const nbName = concept.anbefaltTerm?.navn.nb as string;
       // Expect not to find the concept
       await expect(this.page.getByText(nbName, { exact: true })).toHaveCount(0);
     }
@@ -185,7 +185,7 @@ export default class ConceptsPage {
       [ConceptStatus.REJECTED]: this.statusFilterRejectedLocator,
     };
 
-    const locatorFn = statusMap[status];
+    const locatorFn = statusMap[status as ConceptStatus];
     if (!locatorFn) {
       throw new Error(`Unknown status: ${status}`);
     }

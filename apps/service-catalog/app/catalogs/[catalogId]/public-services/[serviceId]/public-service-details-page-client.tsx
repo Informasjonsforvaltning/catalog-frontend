@@ -1,7 +1,6 @@
 "use client";
 import { ReferenceDataCode, Service } from "@catalog-frontend/types";
 import {
-  Button,
   DetailsPageLayout,
   InfoCard,
   LinkButton,

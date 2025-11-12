@@ -10,8 +10,6 @@ import { searchConceptsByUri } from "../../search/api";
 import {
   getUniqueConceptIdsFromUris,
   isObjectNullUndefinedEmpty,
-  validOrganizationNumber,
-  validUUID,
   validateOrganizationNumber,
   validateUUID,
   validateAndEncodeUrlSafe,

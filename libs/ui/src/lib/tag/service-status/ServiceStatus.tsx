@@ -28,13 +28,7 @@ export const ServiceStatusTag = forwardRef<
   ServiceStatusTagProps
 >(
   (
-    {
-      children,
-      statusKey,
-      statusLabel,
-      size = "medium",
-      ...rest
-    }: ServiceStatusTagProps,
+    { statusKey, statusLabel, size = "medium", ...rest }: ServiceStatusTagProps,
     ref,
   ) => {
     return (

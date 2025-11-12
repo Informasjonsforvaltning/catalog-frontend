@@ -25,7 +25,7 @@ export const PATCH = async (
       return new Response(JSON.stringify(jsonResponse), {
         status: response.status,
       });
-    } catch (error) {
+    } catch {
       return new Response("Failed to update editable field", { status: 500 });
     }
   });

@@ -3,7 +3,7 @@ import { withValidSessionForApi } from "@catalog-frontend/utils";
 import { NextRequest } from "next/server";
 
 export const POST = async (req: NextRequest) => {
-  return await withValidSessionForApi(async (session) => {
+  return await withValidSessionForApi(async () => {
     try {
       const searchOperation = await req.json();
       const response = await searchConcepts(searchOperation);

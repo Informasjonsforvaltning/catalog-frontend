@@ -57,7 +57,7 @@ const DatasetDetailsPageClient = ({
     } catch (error) {
       console.error("Error deleting dataset:", error);
       // Show error message to user
-      alert(localization.alert.deleteFail);
+      alert((localization.alert as any).deleteFail);
     }
   };
 

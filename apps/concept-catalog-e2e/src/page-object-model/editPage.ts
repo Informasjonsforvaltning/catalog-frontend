@@ -28,14 +28,14 @@ export default class EditPage {
     this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/concepts`;
     this.page = page;
     this.context = context;
-    this.accessibilityBuilder = accessibilityBuilder;
+    this.accessibilityBuilder = accessibilityBuilder as any;
   }
 
   // Locators
   pageTitleLocator = () => this.page.getByRole("heading", { name: "" });
   pageDescriptionLocator = () => this.page.getByText("");
 
-  async fillLanguageField(field, group, open, clear) {
+  async fillLanguageField(field: any, group: any, open: any, clear: any) {
     console.log(
       `[fillLanguageField] group: ${group}, open: ${JSON.stringify(open)}, clear: ${clear}`,
     );
@@ -130,7 +130,7 @@ export default class EditPage {
     }
   }
 
-  async addRelation(search, item, relation: UnionRelation) {
+  async addRelation(search: any, item: any, relation: UnionRelation) {
     await this.page.getByRole("button", { name: "Legg til relasjon" }).click();
     if (relation.internal) {
       await this.page.getByText("Virksomhetens eget begrep").click();
@@ -203,7 +203,7 @@ export default class EditPage {
       .waitFor({ state: "hidden" });
   }
 
-  async clearFields(fields) {
+  async clearFields(fields: any) {
     const removeBtn = this.page.getByRole("button", { name: "Slett" });
     while ((await removeBtn.count()) > 0) {
       await removeBtn.first().click();
@@ -280,7 +280,7 @@ export default class EditPage {
   // Helpers
   async fillFormAndSave(
     concept: Concept,
-    apiRequestContext,
+    apiRequestContext: any,
     clearBeforeFill = false,
   ) {
     const fields = await getFields(apiRequestContext);
@@ -296,7 +296,7 @@ export default class EditPage {
 
     console.log("[EDIT PAGE] Filling anbefaltTerm...");
     await this.fillLanguageField(
-      concept.anbefaltTerm.navn,
+      concept.anbefaltTerm?.navn,
       "Anbefalt term Hjelp til utfylling",
       ["Engelsk"],
       clearBeforeFill,
@@ -334,7 +334,7 @@ export default class EditPage {
       .getByLabel(
         relationToSourceText(
           concept.definisjon?.kildebeskrivelse?.forholdTilKilde,
-        ),
+        ) as any,
       )
       .click();
     if (
@@ -388,20 +388,20 @@ export default class EditPage {
     // Internal fields
     console.log("[EDIT PAGE] Filling interneFelt...");
     for (const field of fields.internal) {
-      if (concept.interneFelt[field.id]) {
+      if (concept.interneFelt?.[field.id]) {
         if (field.type === "text_long" || field.type === "text_short") {
           console.log(
-            `[EDIT PAGE] Filling internal field (text): ${field.label.nb} = ${concept.interneFelt[field.id].value}`,
+            `[EDIT PAGE] Filling internal field (text): ${field.label?.nb} = ${concept.interneFelt?.[field.id]?.value}`,
           );
           await this.page
-            .getByRole("textbox", { name: field.label.nb as string })
+            .getByRole("textbox", { name: field.label?.nb as string })
             .fill(concept.interneFelt[field.id].value);
         } else if (field.type === "boolean") {
           console.log(
-            `[EDIT PAGE] Setting internal field (boolean): ${field.label.nb} = ${concept.interneFelt[field.id].value}`,
+            `[EDIT PAGE] Setting internal field (boolean): ${field.label?.nb} = ${concept.interneFelt?.[field.id]?.value}`,
           );
           const checkbox = this.page
-            .getByRole("group", { name: field.label.nb as string })
+            .getByRole("group", { name: field.label?.nb as string })
             .getByRole("checkbox");
           if (
             concept.interneFelt[field.id].value === "true" &&
@@ -422,10 +422,12 @@ export default class EditPage {
     console.log("[EDIT PAGE] Filling abbreviatedLabel...");
     await this.page
       .getByRole("textbox", { name: "Forkortelse" })
-      .fill(concept.abbreviatedLabel);
+      .fill(concept.abbreviatedLabel as any);
     for (let i = 0; i < (concept.merkelapp?.length ?? 0); i++) {
-      console.log(`[EDIT PAGE] Adding merkelapp: ${concept.merkelapp[i]}`);
-      await this.page.getByLabel("Merkelapp").fill(concept.merkelapp[i]);
+      console.log(`[EDIT PAGE] Adding merkelapp: ${concept.merkelapp?.[i]}`);
+      await this.page
+        .getByLabel("Merkelapp")
+        .fill(concept.merkelapp?.[i] as any);
       await this.page.keyboard.press("Enter");
     }
 
@@ -438,9 +440,9 @@ export default class EditPage {
 
     // Version
     console.log("[EDIT PAGE] Filling version:", concept.versjonsnr);
-    await this.page.getByLabel("Major").fill(`${concept.versjonsnr.major}`);
-    await this.page.getByLabel("Minor").fill(`${concept.versjonsnr.minor}`);
-    await this.page.getByLabel("Patch").fill(`${concept.versjonsnr.patch}`);
+    await this.page.getByLabel("Major").fill(`${concept.versjonsnr?.major}`);
+    await this.page.getByLabel("Minor").fill(`${concept.versjonsnr?.minor}`);
+    await this.page.getByLabel("Patch").fill(`${concept.versjonsnr?.patch}`);
 
     if (concept.gyldigFom) {
       console.log("[EDIT PAGE] Filling gyldigFom:", concept.gyldigFom);
@@ -487,7 +489,7 @@ export default class EditPage {
     console.log("[EDIT PAGE] Form filled and saved successfully.");
   }
 
-  public async goto(id?) {
+  public async goto(id?: any) {
     await this.page.goto(id ? `${this.url}/${id}/edit` : `${this.url}/new`);
   }
 
@@ -518,7 +520,7 @@ export default class EditPage {
   public async checkIfNoConceptsExist() {
     const items = (await this.page.getByRole("link").all()).filter(
       async (link) => {
-        (await link.getAttribute("href")).startsWith(this.url);
+        (await link.getAttribute("href"))?.startsWith(this.url);
       },
     );
 

@@ -30,13 +30,7 @@ export const ConceptStatusTag = forwardRef<
   ConceptStatusTagProps
 >(
   (
-    {
-      children,
-      statusKey,
-      statusLabel,
-      size = "medium",
-      ...rest
-    }: ConceptStatusTagProps,
+    { statusKey, statusLabel, size = "medium", ...rest }: ConceptStatusTagProps,
     ref,
   ) => {
     return (

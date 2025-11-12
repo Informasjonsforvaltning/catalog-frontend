@@ -24,7 +24,7 @@ export const DELETE = async (
       }
 
       return new Response("Success", { status: 200 });
-    } catch (err) {
+    } catch {
       return new Response(
         JSON.stringify({ message: "Failed to fetch concepts" }),
         { status: 500 },

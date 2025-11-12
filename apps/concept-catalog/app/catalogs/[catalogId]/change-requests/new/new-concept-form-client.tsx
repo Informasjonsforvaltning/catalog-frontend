@@ -27,7 +27,7 @@ export const NewConceptFormClient = ({
   codeListsResult,
   fieldsResult,
   usersResult,
-}) => {
+}: any) => {
   const changeRequestIdRef = useRef<string | undefined>(undefined); // Ref to store the change-request id
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [showGotoConceptConfirm, setShowGotoConceptConfirm] = useState(false);

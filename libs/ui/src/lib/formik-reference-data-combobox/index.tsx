@@ -17,7 +17,6 @@ export function FormikReferenceDataCombobox({
   formikValues,
   selectedValuesSearchHits,
   querySearchHits,
-  virtual,
   showCodeAsDescription = false,
   ...rest
 }: Props) {
@@ -64,5 +63,3 @@ export function FormikReferenceDataCombobox({
     </Combobox>
   );
 }
-
-export default FormikReferenceDataCombobox;
