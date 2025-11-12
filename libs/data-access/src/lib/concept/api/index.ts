@@ -10,11 +10,11 @@ import { searchConceptsByUri } from "../../search/api";
 import {
   getUniqueConceptIdsFromUris,
   isObjectNullUndefinedEmpty,
-  validOrganizationNumber,
   validUUID,
   validateOrganizationNumber,
   validateUUID,
   validateAndEncodeUrlSafe,
+  validURI,
 } from "@catalog-frontend/utils";
 import { Operation } from "fast-json-patch";
 
@@ -485,11 +485,30 @@ export const confirmImportedConcept = async (
     "catalog ID",
     "confirmConceptImport",
   );
+
   const encodedResultId = validateAndEncodeUrlSafe(
     resultId,
     "result ID",
     "confirmConceptImport",
   );
+
+  let encodedExternalId: string;
+  if (validUUID(externalId)) {
+    validateUUID(externalId, "confirmConceptImport");
+    encodedExternalId = validateAndEncodeUrlSafe(
+      externalId,
+      "external ID",
+      "confirmConceptImport",
+    );
+    console.log("Encoded external ID as UUID", encodedExternalId);
+  } else if (validURI(externalId)) {
+    encodedExternalId = encodeURIComponent(externalId);
+    console.log("Encoded external ID as URI", encodedExternalId);
+  } else {
+    throw new Error(
+      `Invalid URI or UUID for as ID in confirmConceptImport: ${externalId}`,
+    );
+  }
 
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}/confirmConceptImport`;
   const options = {
@@ -497,7 +516,7 @@ export const confirmImportedConcept = async (
       Authorization: `Bearer ${accessToken}`,
     },
     method: "PUT",
-    body: externalId,
+    body: encodedExternalId,
   };
 
   return await fetch(resource, options);
