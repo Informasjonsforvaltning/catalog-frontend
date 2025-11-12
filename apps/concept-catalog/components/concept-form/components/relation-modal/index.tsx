@@ -78,7 +78,7 @@ export const RelationModal = ({
                 <Modal.Footer>
                   <Button
                     type='button'
-                    size='sm'
+                    data-size='sm'
                     disabled={isSubmitting}
                     onClick={() => {
                       submitForm();
@@ -89,7 +89,7 @@ export const RelationModal = ({
                   <Button
                     variant='secondary'
                     type='button'
-                    size='sm'
+                    data-size='sm'
                     onClick={() => {
                       onClose();
                       modalRef.current?.close();

@@ -22,12 +22,12 @@ const SnackbarItem = ({ children, severity = 'info', onClose }: SnackbarItemProp
   return (
     <Alert
       className={classNames(styles.snackbarItem)}
-      size='sm'
+      data-size='sm'
       severity={severity}
     >
       <div>{children}</div>
       <Button
-        size='sm'
+        data-size='sm'
         variant='tertiary'
         onClick={onClose}
       >

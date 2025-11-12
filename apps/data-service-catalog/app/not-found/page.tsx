@@ -23,7 +23,7 @@ const NotFound = async () => {
       <CenterContainer>
         <Heading
           level={2}
-          size='small'
+          data-size='sm'
         >
           {localization.notFoundPage}
         </Heading>

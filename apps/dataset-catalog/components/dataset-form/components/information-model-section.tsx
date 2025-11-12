@@ -63,7 +63,7 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
     <>
       {!isLoading && (
         <Fieldset
-          size='sm'
+          data-size='sm'
           legend={
             <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.informationModelsFromFDK}>
               {localization.datasetForm.fieldLabel.informationModelsFromFDK}
@@ -71,7 +71,7 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
           }
         >
           <Combobox
-            size='sm'
+            data-size='sm'
             onValueChange={(selectedValues: string[]) => setFieldValue('informationModelsFromFDK', selectedValues)}
             onChange={(input: any) => debouncedSearch(input.target.value)}
             loading={searching}

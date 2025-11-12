@@ -20,7 +20,7 @@ export const ReferenceDataTags = ({ values, data }: Props) => {
     const displayText = capitalizeFirstLetter(getTranslateText(label)?.toString() || uri);
     return (
       <Tag
-        size='sm'
+        data-size='sm'
         color='info'
         key={uri}
       >

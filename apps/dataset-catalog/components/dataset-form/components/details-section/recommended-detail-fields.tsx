@@ -91,7 +91,7 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
             {localization.datasetForm.fieldLabel.language}
           </TitleWithHelpTextAndTag>
         }
-        size='sm'
+        data-size='sm'
       >
         {values.language && values.language.some((lang) => lang.includes('NOR')) && (
           <Checkbox
@@ -117,7 +117,7 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
 
       <div className={styles.fieldContainer}>
         <Fieldset
-          size='sm'
+          data-size='sm'
           legend={
             <TitleWithHelpTextAndTag
               tagColor='info'
@@ -133,7 +133,7 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
             multiple
             hideClearButton
             filter={() => true} // disable filter
-            size='sm'
+            data-size='sm'
             onChange={handleSearchChange}
             onValueChange={(selectedValues) => setFieldValue('spatial', selectedValues)}
             value={values.spatial || []}

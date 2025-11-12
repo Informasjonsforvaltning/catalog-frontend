@@ -28,7 +28,7 @@ const NavigationCard = ({ title, body, href, icon, subtitle }: Card) => {
 
           <Heading
             className={styles.heading}
-            size='sm'
+            data-size='sm'
             level={2}
           >
             {title}
@@ -49,7 +49,7 @@ const NavigationCard = ({ title, body, href, icon, subtitle }: Card) => {
           <span className={styles.icon}>{icon}</span>
           <Heading
             className={styles.heading}
-            size='sm'
+            data-size='sm'
           >
             {title}
           </Heading>

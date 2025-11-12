@@ -61,10 +61,10 @@ export const DatasetSection = ({ searchEnv }: Props) => {
               {localization.dataServiceForm.fieldLabel.servesDataset}
             </TitleWithHelpTextAndTag>
           }
-          size='sm'
+          data-size='sm'
         >
           <Combobox
-            size='sm'
+            data-size='sm'
             onValueChange={(selectedValues: string[]) => setFieldValue('servesDataset', selectedValues)}
             onChange={(input: any) => debouncedSearch(input.target.value)}
             loading={searching}

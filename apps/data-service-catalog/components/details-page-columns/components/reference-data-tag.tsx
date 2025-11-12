@@ -13,7 +13,7 @@ export const ReferenceDataTag = ({ referenceDataURI, referenceDataCodes, languag
   const code = referenceDataCodes?.find((s) => s.uri === referenceDataURI);
   return (
     <Tag
-      size='sm'
+      data-size='sm'
       color='info'
     >
       {getTranslateText(code?.label, language) ?? referenceDataURI}

@@ -19,7 +19,7 @@ export const ValueRangeSection = ({ changed, readOnly = false }: ValueRangeSecti
       <div className={styles.fieldSet}>
         <FastField
           as={Textfield}
-          size='sm'
+          data-size='sm'
           name='omfang.tekst'
           label={
             <TitleWithHelpTextAndTag
@@ -34,7 +34,7 @@ export const ValueRangeSection = ({ changed, readOnly = false }: ValueRangeSecti
         />
         <FastField
           as={Textfield}
-          size='sm'
+          data-size='sm'
           name='omfang.uri'
           label={
             <TitleWithHelpTextAndTag changed={changed?.includes('omfang.uri')}>

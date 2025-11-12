@@ -39,7 +39,7 @@ export function ImportModal({ catalogId }: Props) {
   return (
     <Modal.Root>
       <Modal.Trigger asChild>
-        <Button variant={'secondary'} size='small'><FileImportIcon fontSize='1.5rem' />Import</Button>
+        <Button variant={'secondary'} data-size='sm'><FileImportIcon fontSize='1.5rem' />Import</Button>
       </Modal.Trigger>
       <Modal.Dialog
         ref={modalRef}

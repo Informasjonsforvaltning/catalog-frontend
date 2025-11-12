@@ -291,7 +291,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
           <div className={styles.infoCardItems}>
             {dataset?.references && compact(dataset?.references).length > 0 && (
               <Table
-                size='sm'
+                data-size='sm'
                 className={styles.table}
               >
                 <Table.Head>
@@ -342,7 +342,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
                   return matchedType ? (
                     <>
                       <Tag
-                        size='sm'
+                        data-size='sm'
                         color='info'
                       >
                         {capitalizeFirstLetter(getTranslateText(matchedType.title, language).toString())}
@@ -377,7 +377,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
       {hasValues(dataset.concepts) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.concepts}>
           <Table
-            size='sm'
+            data-size='sm'
             className={styles.table}
           >
             <Table.Head>
@@ -416,7 +416,7 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
                 ? langValues.map((item, index) =>
                     item ? (
                       <Tag
-                        size='sm'
+                        data-size='sm'
                         color='info'
                         key={`keyword-tag-${index}`}
                       >

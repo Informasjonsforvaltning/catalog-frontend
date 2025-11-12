@@ -187,7 +187,7 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
                         </Popover>
                       ) : (
                         <Tag
-                          size='sm'
+                          data-size='sm'
                           color='second'
                         >
                           {sourcesText(def.kildebeskrivelse?.kilde)}
@@ -202,7 +202,7 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
                         trigger={
                           <Button
                             variant='tertiary'
-                            size='sm'
+                            data-size='sm'
                             disabled={readOnly}
                           >
                             <PencilWritingIcon
@@ -219,7 +219,7 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
 
                       <Button
                         variant='tertiary'
-                        size='sm'
+                        data-size='sm'
                         color='danger'
                         disabled={readOnly}
                         onClick={() => handleUpdateDefinition(null, name)}
@@ -240,7 +240,7 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
                         .map((lang) => (
                           <Tag
                             key={lang}
-                            size='sm'
+                            data-size='sm'
                             color='third'
                           >
                             {localization.language[lang]}
@@ -266,7 +266,7 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
                   <Button
                     variant='tertiary'
                     color='first'
-                    size='sm'
+                    data-size='sm'
                   >
                     <PlusCircleIcon
                       aria-hidden

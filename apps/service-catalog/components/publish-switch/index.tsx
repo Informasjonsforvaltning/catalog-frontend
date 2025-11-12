@@ -63,7 +63,7 @@ export const PublishSwitch = ({ catalogId, serviceId, isPublished, type, disable
       <Switch
         className={styles.center}
         value='published'
-        size='small'
+        data-size='sm'
         position='right'
         checked={isPublished}
         onChange={() => (type === 'services' ? handlePublishService() : handlePublishPublicService())}

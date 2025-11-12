@@ -20,7 +20,7 @@ const NoAccess = () => {
       <CenterContainer>
         <Heading
           level={2}
-          size='small'
+          data-size='sm'
         >
           {localization.youHaveNoAccess}
         </Heading>

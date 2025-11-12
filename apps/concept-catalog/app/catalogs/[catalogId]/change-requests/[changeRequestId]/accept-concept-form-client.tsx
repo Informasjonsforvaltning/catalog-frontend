@@ -76,7 +76,7 @@ export const AcceptConceptFormClient = ({
         color='success'
         onClick={handleAccept}
         disabled={isHandlingAction}
-        size='sm'
+        data-size='sm'
       >
         {localization.changeRequest.accept}
       </Button>
@@ -106,7 +106,7 @@ export const AcceptConceptFormClient = ({
         color='danger'
         onClick={handleReject}
         disabled={isHandlingAction}
-        size='sm'
+        data-size='sm'
       >
         {localization.changeRequest.reject}
       </Button>
@@ -141,7 +141,7 @@ export const AcceptConceptFormClient = ({
                   href={`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}/edit`}
                   variant='secondary'
                   color='second'
-                  size='sm'
+                  data-size='sm'
                 >
                   {localization.button.edit}
                 </LinkButton>
@@ -184,7 +184,7 @@ export const AcceptConceptFormClient = ({
         <Button
           variant='tertiary'
           color='second'
-          size='sm'
+          data-size='sm'
           onClick={handleGotoOverview}
         >
           <ArrowLeftIcon fontSize='1.25em' />
@@ -195,7 +195,7 @@ export const AcceptConceptFormClient = ({
           <Button
             variant='secondary'
             color='second'
-            size='sm'
+            data-size='sm'
             onClick={handleGotoConcept}
           >
             {localization.button.gotoConcept}

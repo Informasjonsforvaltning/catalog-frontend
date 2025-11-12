@@ -79,7 +79,7 @@ export const DistributionDetailsCard = ({
                 const match = formats && formats.find((format: any) => format?.uri === item);
                 return (
                   <Tag
-                    size='sm'
+                    data-size='sm'
                     color='info'
                     key={`distributionformat-${index}`}
                   >
@@ -134,7 +134,7 @@ export const DistributionDetailsCard = ({
                   {distribution?.mediaType?.map((uri) => (
                     <li key={`mediatype-${uri}`}>
                       <Tag
-                        size='sm'
+                        data-size='sm'
                         color='info'
                       >
                         {(selectedMediaTypes?.find((type) => type.uri === uri) ?? {}).code ?? uri}
@@ -153,7 +153,7 @@ export const DistributionDetailsCard = ({
                 >{`${localization.datasetForm.fieldLabel.accessServices}:`}</Heading>
                 {
                   <Table
-                    size='sm'
+                    data-size='sm'
                     className={styles.distributionTable}
                   >
                     <Table.Head>
@@ -223,7 +223,7 @@ export const DistributionDetailsCard = ({
                 >{`${localization.datasetForm.fieldLabel.standard}:`}</Heading>
 
                 <Table
-                  size='sm'
+                  data-size='sm'
                   className={styles.distributionTable}
                 >
                   <Table.Head>

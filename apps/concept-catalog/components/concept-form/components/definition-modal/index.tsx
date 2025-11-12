@@ -89,7 +89,7 @@ export const DefinitionModal = ({
                 <Modal.Footer>
                   <Button
                     type='button'
-                    size='sm'
+                    data-size='sm'
                     disabled={isSubmitting}
                     onClick={() => {
                       submitForm();
@@ -100,7 +100,7 @@ export const DefinitionModal = ({
                   <Button
                     variant='secondary'
                     type='button'
-                    size='sm'
+                    data-size='sm'
                     onClick={() => {
                       onClose?.();
                       modalRef.current?.close();

@@ -69,7 +69,7 @@ const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
         <span className={styles.bold}>{getTranslateText(values?.title)}</span> ({lastChangedFormatted})
       </Paragraph>
       <Paragraph
-        size='sm'
+        data-size='sm'
         className={styles.topMargin2}
       >
         {localization.conceptForm.alert.wantToRestoreChanges}
@@ -186,7 +186,7 @@ export const DatasetForm = ({
       : [
           <Alert
             key={1}
-            size='sm'
+            data-size='sm'
             severity='danger'
             className={styles.notification}
           >
@@ -197,7 +197,7 @@ export const DatasetForm = ({
       ? [
           <Alert
             key={1}
-            size='sm'
+            data-size='sm'
             severity='warning'
             className={styles.notification}
           >
@@ -431,7 +431,7 @@ export const DatasetForm = ({
                 <div className={styles.footerContent}>
                   <Button
                     type='button'
-                    size='sm'
+                    data-size='sm'
                     disabled={isSubmitting || isValidating || isCanceled || !dirty}
                     onClick={() => {
                       setValidateOnChange(true);
@@ -441,7 +441,7 @@ export const DatasetForm = ({
                     {isSubmitting ? (
                       <Spinner
                         title='Lagrer'
-                        size='sm'
+                        data-size='sm'
                       />
                     ) : (
                       localization.save
@@ -450,7 +450,7 @@ export const DatasetForm = ({
 
                   <Button
                     type='button'
-                    size='sm'
+                    data-size='sm'
                     variant='secondary'
                     disabled={isSubmitting || isValidating || isCanceled}
                     onClick={handleCancel}
@@ -460,7 +460,7 @@ export const DatasetForm = ({
                   <div className={styles.verticalLine}></div>
                   <Switch
                     position='left'
-                    size='sm'
+                    data-size='sm'
                     checked={values.approved}
                     onChange={(event) => handleSwitchChange(event, setFieldValue)}
                   >
@@ -477,7 +477,7 @@ export const DatasetForm = ({
                   <div className={styles.verticalLine}></div>
                   <div className={classNames(styles.flex, styles.gap2, styles.noWrap)}>
                     <Checkbox
-                      size='sm'
+                      data-size='sm'
                       value='ignoreRequired'
                       checked={ignoreRequired}
                       onChange={(e) => handleIgnoreRequiredChange(e.target.checked)}

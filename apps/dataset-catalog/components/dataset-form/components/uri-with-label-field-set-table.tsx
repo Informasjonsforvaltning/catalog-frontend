@@ -58,7 +58,7 @@ export const UriWithLabelFieldsetTable = ({
         render={(arrayHelpers) => (
           <div className={errors ? styles.errorBorder : undefined}>
             <Table
-              size='sm'
+              data-size='sm'
               className={styles.table}
             >
               {showHead && (
@@ -179,7 +179,7 @@ const FieldModal = ({ fieldName, template, type, onSuccess, onCancel, onChange }
                       as={Textfield}
                       label={localization.link}
                       error={errors?.uri}
-                      size='sm'
+                      data-size='sm'
                     />
                   </Modal.Content>
 
@@ -188,7 +188,7 @@ const FieldModal = ({ fieldName, template, type, onSuccess, onCancel, onChange }
                       type='button'
                       disabled={isSubmitting || !dirty || hasNoFieldValues(values)}
                       onClick={() => submitForm()}
-                      size='sm'
+                      data-size='sm'
                     >
                       {type === 'new' ? localization.add : localization.datasetForm.button.update}
                     </Button>
@@ -200,7 +200,7 @@ const FieldModal = ({ fieldName, template, type, onSuccess, onCancel, onChange }
                         modalRef.current?.close();
                       }}
                       disabled={isSubmitting}
-                      size='sm'
+                      data-size='sm'
                     >
                       {localization.button.cancel}
                     </Button>

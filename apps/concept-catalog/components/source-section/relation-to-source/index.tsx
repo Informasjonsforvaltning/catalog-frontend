@@ -31,7 +31,7 @@ export const RelationToSource: FC<Props> = ({ fieldName, readOnly }) => {
           name={fieldName}
           as={Select}
           label={localization.concept.relationToSource}
-          size='small'
+          data-size='sm'
           readOnly={readOnly}
         >
           {relationToSourceOptions.map(({ displayValue, value }) => (

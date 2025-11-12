@@ -90,7 +90,7 @@ const CatalogsPage = async (props: { params: Promise<{ catalogId: string[] }> })
           <Heading
             data-testid='catalog-portal-heading'
             className={styles.heading}
-            size='lg'
+            data-size='lg'
           >
             {getTranslateText(currentOrganization.prefLabel)}
           </Heading>

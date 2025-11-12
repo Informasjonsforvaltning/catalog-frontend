@@ -100,7 +100,7 @@ export function EditableFieldsClient({ catalogId }: EditableFieldsClientProps) {
                 <div className={styles.accordionButtons}>
                   <Button
                     fullWidth={true}
-                    size='small'
+                    data-size='sm'
                     onClick={() => handleUpdateDbCodeListId()}
                   >
                     {localization.button.save}

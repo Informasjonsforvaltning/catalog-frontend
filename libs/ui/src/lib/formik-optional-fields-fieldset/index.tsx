@@ -56,7 +56,7 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields, errorPat
     <Fieldset
       className={styles.fieldset}
       legend={legend}
-      size='sm'
+      data-size='sm'
     >
       <Card>
         <Card.Content>
@@ -89,7 +89,7 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields, errorPat
               </AddButton>
             ))}
           </div>
-          {typeof mainError === 'string' && <ErrorMessage size={'sm'}>{mainError}</ErrorMessage>}
+          {typeof mainError === 'string' && <ErrorMessage data-size={'sm'}>{mainError}</ErrorMessage>}
         </Card.Content>
       </Card>
     </Fieldset>

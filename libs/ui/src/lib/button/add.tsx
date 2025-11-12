@@ -8,7 +8,7 @@ const AddButton = ({ children = localization.add, ...props }: ButtonProps) => (
     <Button
       variant='tertiary'
       className={styles.add}
-      size='sm'
+      data-size='sm'
       {...props}
     >
       <span className={styles.withIcon}>

@@ -231,7 +231,7 @@ export const DistributionSection = ({
                         trigger={
                           <Button
                             variant='tertiary'
-                            size='sm'
+                            data-size='sm'
                           >
                             <PencilWritingIcon
                               title='Rediger'
@@ -265,7 +265,7 @@ export const DistributionSection = ({
                           return (
                             <Paragraph
                               key={`accessURL-${index}`}
-                              size='sm'
+                              data-size='sm'
                             >
                               {url}
                             </Paragraph>
@@ -289,7 +289,7 @@ export const DistributionSection = ({
                         <Tag
                           key={uri}
                           color='third'
-                          size='sm'
+                          data-size='sm'
                         >
                           {(selectedFileTypes?.find((format) => format?.uri === uri) ?? {}).code ?? uri}
                         </Tag>
@@ -305,7 +305,7 @@ export const DistributionSection = ({
                           setExpandedIndexDistribution(expandedIndexDistribution === index ? null : index);
                         }}
                         className={styles.button}
-                        size='sm'
+                        data-size='sm'
                       >
                         {expandedIndexDistribution === index ? (
                           <>
@@ -331,7 +331,7 @@ export const DistributionSection = ({
                     />
                   )}
                   {get(errors, 'distribution[' + index + ']') && (
-                    <ErrorMessage size={'sm'}>{localization.validation.multipleInvalidValues}</ErrorMessage>
+                    <ErrorMessage data-size={'sm'}>{localization.validation.multipleInvalidValues}</ErrorMessage>
                   )}
                 </Card>
               ),
@@ -394,7 +394,7 @@ export const DistributionSection = ({
                             return (
                               <Paragraph
                                 key={`accessURL-${index}`}
-                                size='sm'
+                                data-size='sm'
                               >
                                 {url}
                               </Paragraph>
@@ -422,7 +422,7 @@ export const DistributionSection = ({
                         trigger={
                           <Button
                             variant='tertiary'
-                            size='sm'
+                            data-size='sm'
                           >
                             <PencilWritingIcon
                               title='Rediger'
@@ -457,7 +457,7 @@ export const DistributionSection = ({
                         <Tag
                           key={uri}
                           color='info'
-                          size='sm'
+                          data-size='sm'
                         >
                           {(selectedFileTypes?.find((format) => format?.uri === uri) ?? {}).code ?? uri}
                         </Tag>
@@ -473,7 +473,7 @@ export const DistributionSection = ({
                           setExpandedIndexExampleData(expandedIndexExampleData === index ? null : index);
                         }}
                         className={styles.button}
-                        size='sm'
+                        data-size='sm'
                       >
                         {expandedIndexExampleData === index ? (
                           <>
@@ -499,7 +499,7 @@ export const DistributionSection = ({
                     />
                   )}
                   {get(errors, 'sample[' + index + ']') && (
-                    <ErrorMessage size={'sm'}>Inneholder en eller flere ugyldige verdier</ErrorMessage>
+                    <ErrorMessage data-size={'sm'}>Inneholder en eller flere ugyldige verdier</ErrorMessage>
                   )}
                 </Card>
               ),

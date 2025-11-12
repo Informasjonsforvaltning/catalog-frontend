@@ -36,7 +36,7 @@ export default async function NewServicePage(props: Params) {
       />
       <div className='container'>
         <Heading
-          size='medium'
+          size='md'
           className={styles.heading}
         >
           {localization.serviceCatalog.infoAboutService}

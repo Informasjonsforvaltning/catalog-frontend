@@ -164,7 +164,7 @@ export const DistributionModal = ({
                           )
                         }
                         as={Textfield}
-                        size='sm'
+                        data-size='sm'
                         error={props.errors?.downloadURL?.[index]}
                       />
                     </FieldsetWithDelete>
@@ -201,7 +201,7 @@ export const DistributionModal = ({
         selectedAndSearchedAccessServices,
       }: any) => (
         <Fieldset
-          size='sm'
+          data-size='sm'
           legend={
             <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.accessServices}>
               {localization.datasetForm.fieldLabel.accessServices}
@@ -223,7 +223,7 @@ export const DistributionModal = ({
                   setSelectedAccessServiceUris(selectedValues);
                 }}
                 placeholder={`${localization.search.search}...`}
-                size='sm'
+                data-size='sm'
                 virtual
                 ref={(el: HTMLInputElement | null) => setInputRef(`accessServices`, el)}
               >
@@ -263,7 +263,7 @@ export const DistributionModal = ({
         searchingMediaTypes,
       }: any) => (
         <Fieldset
-          size='sm'
+          data-size='sm'
           legend={
             <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.mediaType}>
               {localization.datasetForm.fieldLabel.mediaType}
@@ -323,7 +323,7 @@ export const DistributionModal = ({
                           )
                         }
                         as={Textfield}
-                        size='sm'
+                        data-size='sm'
                         error={props.errors?.page?.[index]}
                       />
                     </FieldsetWithDelete>
@@ -354,7 +354,7 @@ export const DistributionModal = ({
       shouldShow: ({ distributionType }: any) => distributionType === 'distribution',
       render: ({ errors }: any) => (
         <Fieldset
-          size='sm'
+          data-size='sm'
           legend={
             <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.distributionConformsTo}>
               {localization.datasetForm.fieldLabel.conformsTo}
@@ -386,7 +386,7 @@ export const DistributionModal = ({
                         />
                       </div>
                       <FastField
-                        size='sm'
+                        data-size='sm'
                         as={Textfield}
                         label={localization.link}
                         name={`conformsTo[${i}].uri`}
@@ -577,7 +577,7 @@ export const DistributionModal = ({
                                               )
                                             }
                                             as={Textfield}
-                                            size='sm'
+                                            data-size='sm'
                                             error={errors?.accessURL?.[index]}
                                           />
                                         </FieldsetWithDelete>
@@ -601,7 +601,7 @@ export const DistributionModal = ({
                                             )
                                           }
                                           as={Textfield}
-                                          size='sm'
+                                          data-size='sm'
                                           error={errors?.accessURL?.[index]}
                                         />
                                       )}
@@ -627,7 +627,7 @@ export const DistributionModal = ({
                         )}
                       </FieldArray>
                       <Fieldset
-                        size='sm'
+                        data-size='sm'
                         legend={
                           <TitleWithHelpTextAndTag
                             helpText={localization.datasetForm.helptext.fileType}
@@ -667,7 +667,7 @@ export const DistributionModal = ({
                       {distributionType === 'distribution' && (
                         <>
                           <Fieldset
-                            size='sm'
+                            data-size='sm'
                             legend={
                               <TitleWithHelpTextAndTag
                                 tagTitle={localization.tag.recommended}
@@ -684,7 +684,7 @@ export const DistributionModal = ({
                               onValueChange={(selectedValues) => {
                                 setFieldValue('license', selectedValues.toString());
                               }}
-                              size='sm'
+                              data-size='sm'
                               virtual
                             >
                               <Combobox.Option
@@ -718,7 +718,7 @@ export const DistributionModal = ({
                         type='button'
                         disabled={isSubmitting}
                         onClick={() => submitForm()}
-                        size='sm'
+                        data-size='sm'
                       >
                         {type === 'new' ? localization.add : localization.datasetForm.button.updateDistribution}
                       </Button>
@@ -727,7 +727,7 @@ export const DistributionModal = ({
                         type='button'
                         onClick={handleCancel}
                         disabled={isSubmitting}
-                        size='sm'
+                        data-size='sm'
                       >
                         {localization.button.cancel}
                       </Button>

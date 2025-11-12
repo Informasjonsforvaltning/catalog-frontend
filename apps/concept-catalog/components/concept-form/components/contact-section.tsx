@@ -47,7 +47,7 @@ export const ContactSection = ({ changed, readOnly = false }: ContactSectionProp
   return (
     <Box className={styles.contactSection}>
       <CheckboxGroup
-        size='sm'
+        data-size='sm'
         value={selectedFields}
         legend={
           <TitleWithHelpTextAndTag
@@ -76,7 +76,7 @@ export const ContactSection = ({ changed, readOnly = false }: ContactSectionProp
         <FastField
           as={Textfield}
           name='kontaktpunkt.harEpost'
-          size='sm'
+          data-size='sm'
           label={<TitleWithHelpTextAndTag>{localization.conceptForm.fieldLabel.emailAddress}</TitleWithHelpTextAndTag>}
           error={errors?.kontaktpunkt?.['harEpost']}
           readOnly={readOnly}
@@ -86,7 +86,7 @@ export const ContactSection = ({ changed, readOnly = false }: ContactSectionProp
         <FastField
           as={Textfield}
           name='kontaktpunkt.harTelefon'
-          size='sm'
+          data-size='sm'
           label={<TitleWithHelpTextAndTag>{localization.conceptForm.fieldLabel.phoneNumber}</TitleWithHelpTextAndTag>}
           error={errors?.kontaktpunkt?.['harTelefon']}
           readOnly={readOnly}
@@ -96,14 +96,14 @@ export const ContactSection = ({ changed, readOnly = false }: ContactSectionProp
         <FastField
           as={Textfield}
           name='kontaktpunkt.harSkjema'
-          size='sm'
+          data-size='sm'
           label={<TitleWithHelpTextAndTag>{localization.conceptForm.fieldLabel.contactForm}</TitleWithHelpTextAndTag>}
           error={errors?.kontaktpunkt?.['harSkjema']}
           readOnly={readOnly}
         />
       )}
       {typeof errors?.kontaktpunkt === 'string' ? (
-        <ErrorMessage size='sm'>{errors?.kontaktpunkt}</ErrorMessage>
+        <ErrorMessage data-size='sm'>{errors?.kontaktpunkt}</ErrorMessage>
       ) : undefined}
     </Box>
   );

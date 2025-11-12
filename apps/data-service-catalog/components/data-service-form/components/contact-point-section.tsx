@@ -67,7 +67,7 @@ export const ContactPointSection = () => {
       />
       {hasMainLevelError() && (
         <ErrorMessage
-          size='sm'
+          data-size='sm'
           error
         >
           {getErrors()}

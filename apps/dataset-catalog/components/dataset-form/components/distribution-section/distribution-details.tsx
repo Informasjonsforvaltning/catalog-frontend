@@ -47,7 +47,7 @@ export const DistributionDetails = ({
               {distribution.downloadURL?.map((url: string, index: number) => {
                 return (
                   <Paragraph
-                    size='sm'
+                    data-size='sm'
                     key={`downloadURL-${index}`}
                   >
                     {url}
@@ -67,7 +67,7 @@ export const DistributionDetails = ({
                 {distribution?.mediaType?.map((uri) => (
                   <li key={`mediatype-${uri}`}>
                     <Tag
-                      size='sm'
+                      data-size='sm'
                       color='info'
                     >
                       {(selectedMediaTypes?.find((type) => type.uri === uri) ?? {}).code ?? uri}
@@ -86,7 +86,7 @@ export const DistributionDetails = ({
               >{`${localization.datasetForm.fieldLabel.accessServices}:`}</Heading>
               {
                 <Table
-                  size='sm'
+                  data-size='sm'
                   className={styles.table}
                 >
                   <Table.Head>
@@ -137,7 +137,7 @@ export const DistributionDetails = ({
               >{`${localization.datasetForm.fieldLabel.standard}:`}</Heading>
 
               <Table
-                size='sm'
+                data-size='sm'
                 className={styles.table}
               >
                 <Table.Head>
@@ -168,7 +168,7 @@ export const DistributionDetails = ({
                 return (
                   <Paragraph
                     key={`page-${index}`}
-                    size='sm'
+                    data-size='sm'
                   >
                     {page}
                   </Paragraph>

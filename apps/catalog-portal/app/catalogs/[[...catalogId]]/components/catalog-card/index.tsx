@@ -24,7 +24,7 @@ const CardSpinner = () => {
     <div className={styles.cardSpinner}>
       <Spinner
         title='Laster...'
-        size='small'
+        data-size='sm'
       />
     </div>
   );
@@ -33,7 +33,7 @@ const CardSpinner = () => {
 const ShutDownAlert = () => (
   <Alert
     severity='warning'
-    size='small'
+    data-size='sm'
     className={styles.warning}
   >
     Legges ned 31. mai 2025

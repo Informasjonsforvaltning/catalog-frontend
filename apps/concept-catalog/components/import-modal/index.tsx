@@ -257,7 +257,7 @@ export function ImportModal({ catalogId }: ImportProps) {
                 </LinkButton>
 
                 <UploadButton
-                  size='sm'
+                  data-size='sm'
                   allowedMimeTypes={[
                     'text/csv',
                     'text/x-csv',

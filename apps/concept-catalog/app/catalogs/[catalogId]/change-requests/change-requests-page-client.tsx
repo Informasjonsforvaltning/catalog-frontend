@@ -156,7 +156,7 @@ export const ChangeRequestsPageClient = ({ catalogId, data, pageSettings}: Props
       <Tabs
         className={styles.tabs}
         defaultValue={'changeRequestTab'}
-        size='medium'
+        size='md'
       >
         <Tabs.List className={styles.tabsList}>
           <Tabs.Tab

@@ -25,7 +25,7 @@ export const StatusSection = ({ conceptStatuses, changed, readOnly = false }: St
   return (
     <Box>
       <Radio.Group
-        size='sm'
+        data-size='sm'
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.status}

@@ -39,7 +39,7 @@ export const AboutSection = () => {
       <FastField
         style={{ width: 'fit-content' }}
         as={Textfield}
-        size='sm'
+        data-size='sm'
         type='date'
         name='issued'
         label={

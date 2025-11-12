@@ -118,7 +118,7 @@ const ImportResultDetails = ({
         <div className={styles.buttonContainer}>
           <Button
             variant='tertiary'
-            size='sm'
+            data-size='sm'
             color='danger'
             disabled={
               !importResult.status ||
@@ -140,7 +140,7 @@ const ImportResultDetails = ({
           {showCancellationButton && (
             <Button
               variant='secondary'
-              size='small'
+              data-size='sm'
               color='first'
               disabled={
                 !importResult.status ||
@@ -160,7 +160,7 @@ const ImportResultDetails = ({
           {showConfirmationButton && (
             <Button
               variant='secondary'
-              size='small'
+              data-size='sm'
               color='first'
               disabled={!importResult.status || importResult.status !== 'PENDING_CONFIRMATION'}
               onClick={() => confirmHandler && confirmHandler(importResult.id)}
@@ -179,7 +179,7 @@ const ImportResultDetails = ({
           <CenterContainer>
             <Heading
               level={2}
-              size='lg'
+              data-size='lg'
             >
               {localization.importResult.cancelledImport}
             </Heading>

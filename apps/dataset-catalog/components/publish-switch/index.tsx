@@ -47,7 +47,7 @@ export const PublishSwitch = ({ catalogId, dataset, disabled }: Props) => {
     <>
       <Switch
         className={styles.center}
-        size='small'
+        data-size='sm'
         position='right'
         onChange={() => handlePublishDataset()}
         checked={dataset.published}

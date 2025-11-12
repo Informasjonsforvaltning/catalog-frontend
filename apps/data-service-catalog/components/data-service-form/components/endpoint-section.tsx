@@ -24,7 +24,7 @@ export const EndpointSection = () => {
       <FastField
         name='endpointUrl'
         as={Textfield}
-        size='sm'
+        data-size='sm'
         label={
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.required}
@@ -39,7 +39,7 @@ export const EndpointSection = () => {
       <FieldsetDivider />
 
       <Fieldset
-        size='sm'
+        data-size='sm'
         legend={
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
@@ -64,7 +64,7 @@ export const EndpointSection = () => {
                         name={`endpointDescriptions[${index}]`}
                         as={Textfield}
                         ref={fieldRef}
-                        size='sm'
+                        data-size='sm'
                         error={errors?.endpointDescriptions?.[index]}
                       />
                     </FieldsetWithDelete>

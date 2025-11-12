@@ -7,7 +7,7 @@ const DeleteButton = ({ children = localization.button.delete, ...props }: Butto
   <Button
     variant='tertiary'
     color='danger'
-    size='sm'
+    data-size='sm'
     {...props}
   >
     <span className={styles.withIcon}>

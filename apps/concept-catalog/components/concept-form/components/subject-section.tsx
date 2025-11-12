@@ -23,7 +23,7 @@ export const SubjectSection = ({ codes, changed, readOnly }: SubjectSectionProps
     if (!codeListActivated && !isEmpty(values.fagområdeKoder)) {
       return (
         <Alert
-          size='sm'
+          data-size='sm'
           severity='warning'
         >
           <Heading
@@ -36,7 +36,7 @@ export const SubjectSection = ({ codes, changed, readOnly }: SubjectSectionProps
           <Paragraph size='sm'>{localization.conceptForm.alert.codeListToText}</Paragraph>
           <div className={styles.topMargin2}>
             <Button
-              size='sm'
+              data-size='sm'
               variant='secondary'
               disabled={readOnly}
               onClick={() => setFieldValue('fagområdeKoder', [])}
@@ -51,7 +51,7 @@ export const SubjectSection = ({ codes, changed, readOnly }: SubjectSectionProps
     if (codeListActivated && !isEmpty(values.fagområde)) {
       return (
         <Alert
-          size='sm'
+          data-size='sm'
           severity='warning'
         >
           <Heading
@@ -64,7 +64,7 @@ export const SubjectSection = ({ codes, changed, readOnly }: SubjectSectionProps
           <Paragraph size='sm'>{localization.conceptForm.alert.textToCodeList}</Paragraph>
           <div className={styles.topMargin2}>
             <Button
-              size='sm'
+              data-size='sm'
               variant='secondary'
               disabled={readOnly}
               onClick={() => setFieldValue('fagområde', null)}
@@ -127,7 +127,7 @@ export const SubjectSection = ({ codes, changed, readOnly }: SubjectSectionProps
         <Combobox
           key='fagområdeKoder'
           multiple
-          size='sm'
+          data-size='sm'
           hideClearButton
           readOnly={!codeListActivated || readOnly}
           label={codeListLabel}

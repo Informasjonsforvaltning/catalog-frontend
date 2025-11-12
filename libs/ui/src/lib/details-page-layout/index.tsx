@@ -44,7 +44,7 @@ const DetailsPageLayout = ({
         <div className={styles.headingTitle}>
           <Heading
             level={2}
-            size='lg'
+            data-size='lg'
           >
             {headingTitle}
           </Heading>
@@ -62,7 +62,7 @@ const DetailsPageLayout = ({
                 <Select
                   onChange={(event) => handleLanguageChange?.(event.target.value)}
                   value={language}
-                  size='small'
+                  data-size='sm'
                   aria-label='Velg språk'
                 >
                   {languageOptions.map((item) => (

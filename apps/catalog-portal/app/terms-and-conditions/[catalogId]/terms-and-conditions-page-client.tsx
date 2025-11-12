@@ -44,7 +44,7 @@ const TermsAndConditionsPageClient = ({ catalogId, hasAdminPermission, userName,
       {latestIsAccepted && (
         <Alert
           severity='success'
-          size='small'
+          data-size='sm'
         >
           <MarkdownComponent>
             {
@@ -60,7 +60,7 @@ const TermsAndConditionsPageClient = ({ catalogId, hasAdminPermission, userName,
       {!latestIsAccepted && !hasAdminPermission && (
         <Alert
           severity='warning'
-          size='small'
+          data-size='sm'
           className={styles.alert}
         >
           <MarkdownComponent>{localization.termsOfUse.adminPermissionNeeded}</MarkdownComponent>

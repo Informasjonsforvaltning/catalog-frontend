@@ -93,7 +93,7 @@ const DesignPageClient = ({ catalogId, organization, catalogPortalUrl }: DesignP
           <Heading size='xlarge'>{localization.catalogAdmin.design}</Heading>
         </div>
         <div className={styles.subheading}>
-          <Heading size='small'>{localization.catalogAdmin.preview}</Heading>
+          <Heading data-size='sm'>{localization.catalogAdmin.preview}</Heading>
         </div>
         <PageBanner
           title={localization.manageCatalog}
@@ -104,7 +104,7 @@ const DesignPageClient = ({ catalogId, organization, catalogPortalUrl }: DesignP
           logo={logo || (dbDesign?.hasLogo && `/api/design/${catalogId}/logo`) || ''}
         />
         <div className={styles.subheading}>
-          <Heading size='small'>{localization.catalogAdmin.customizeDesign}</Heading>
+          <Heading data-size='sm'>{localization.catalogAdmin.customizeDesign}</Heading>
         </div>
 
         <div className={styles.backgroundContainer}>

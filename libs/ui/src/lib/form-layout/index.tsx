@@ -30,7 +30,7 @@ const SideMenu = ({ heading, children }: SideMenuProps) => {
   return (
     <div>
       <Heading
-        size='sm'
+        data-size='sm'
         className={styles.sideMenuHeading}
       >
         {heading}
@@ -118,7 +118,7 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
                     </span>
                     {changed && (
                       <Tag
-                        size='sm'
+                        data-size='sm'
                         color='warning'
                         style={{ scale: 0.8, margin: '-0.25rem 0' }}
                       >
@@ -127,7 +127,7 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
                     )}
                     {error && (
                       <Tag
-                        size='sm'
+                        data-size='sm'
                         color='danger'
                         style={{ scale: 0.8, margin: '-0.25rem 0' }}
                       >

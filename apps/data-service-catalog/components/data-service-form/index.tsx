@@ -42,7 +42,7 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
     : [
       <Alert
         key={1}
-        size='sm'
+        data-size='sm'
         severity='danger'
         style={{ background: 'none', border: 'none', padding: 0 }}
       >
@@ -53,7 +53,7 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
     ? [
       <Alert
         key={1}
-        size='sm'
+        data-size='sm'
         severity='warning'
         style={{ background: 'none', border: 'none', padding: 0 }}
       >
@@ -127,7 +127,7 @@ const DataServiceForm = ({
           <span className={styles.bold}>{name}</span> ({lastChangedFormatted})
         </Paragraph>
         <Paragraph
-          size='sm'
+          data-size='sm'
           className={styles.topMargin2}
         >
           {localization.alert.wantToRestoreChanges}
@@ -364,7 +364,7 @@ const DataServiceForm = ({
                   <div>
                     <div className={classNames(styles.flex, styles.gap4)}>
                       <Button
-                        size='sm'
+                        data-size='sm'
                         type='button'
                         disabled={readOnly || isSubmitting || isValidating || isCanceled || !dirty}
                         onClick={() => {
@@ -376,14 +376,14 @@ const DataServiceForm = ({
                         {isSubmitting ? (
                           <Spinner
                             title='Lagrer'
-                            size='sm'
+                            data-size='sm'
                           />
                         ) : (
                           'Lagre'
                         )}
                       </Button>
                       <Button
-                        size='sm'
+                        data-size='sm'
                         disabled={readOnly || isSubmitting || isValidating || isCanceled}
                         onClick={handleCancel}
                         variant='secondary'

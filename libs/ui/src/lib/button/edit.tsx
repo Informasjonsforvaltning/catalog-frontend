@@ -6,7 +6,7 @@ import styles from './button.module.css';
 const EditButton = ({ children = localization.button.edit, ...props }: ButtonProps) => (
   <Button
     variant='tertiary'
-    size='sm'
+    data-size='sm'
     {...props}
   >
     <span className={styles.withIcon}>

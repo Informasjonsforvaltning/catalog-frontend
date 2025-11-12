@@ -113,7 +113,7 @@ export const CostsTable = ({ currencies }: Props) => {
 
               <Button
                 variant='tertiary'
-                size='sm'
+                data-size='sm'
                 color='danger'
                 onClick={() => setFieldValue(`costs[${i}]`, undefined)}
               >
@@ -133,7 +133,7 @@ export const CostsTable = ({ currencies }: Props) => {
                 .map((lang) => (
                   <Tag
                     key={lang}
-                    size='sm'
+                    data-size='sm'
                     color='third'
                   >
                     {localization.language[lang]}
@@ -245,7 +245,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                           <FastFieldWithRef
                             name='value'
                             as={Textfield}
-                            size='sm'
+                            data-size='sm'
                             ref={valueRef}
                             type={'number'}
                           />
@@ -253,7 +253,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                             value={[values?.currency ?? DEFAULT_CURRENCY]}
                             portal={false}
                             onValueChange={(selectedValues) => setFieldValue('currency', selectedValues.toString())}
-                            size='sm'
+                            data-size='sm'
                             disabled={!isNumber(values?.value)}
                           >
                             {currencies &&
@@ -290,7 +290,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                       )}
                       {showValueError() && (
                         <ErrorMessage
-                          size='sm'
+                          data-size='sm'
                           error
                         >
                           {errors.value}
@@ -301,7 +301,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                     <FieldsetDivider />
 
                     <Fieldset
-                      size='sm'
+                      data-size='sm'
                       legend={
                         <TitleWithHelpTextAndTag
                           tagTitle={localization.tag.recommended}
@@ -324,7 +324,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                                     <FastFieldWithRef
                                       name={`documentation[${index}]`}
                                       as={Textfield}
-                                      size='sm'
+                                      data-size='sm'
                                       ref={docRef}
                                       error={errors?.documentation?.[index]}
                                     />
@@ -375,7 +375,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                           }
                         });
                       }}
-                      size='sm'
+                      data-size='sm'
                     >
                       {type === 'new' ? localization.add : localization.dataServiceForm.button.update}
                     </Button>
@@ -387,7 +387,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                         modalRef.current?.close();
                       }}
                       disabled={isSubmitting}
-                      size='sm'
+                      data-size='sm'
                     >
                       {localization.button.cancel}
                     </Button>

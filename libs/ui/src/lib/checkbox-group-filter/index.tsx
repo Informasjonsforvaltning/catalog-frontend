@@ -19,7 +19,7 @@ export const CheckboxGroupFilter = <T,>({ items, onChange, value }: Props<T>) =>
     <Fieldset>
       {items.map(({ value, label }) => (
         <Checkbox
-          data-size='small'
+          data-size='sm'
           key={`checkbox-item-${value}`}
           label={label}
           {...getCheckboxProps(label)}

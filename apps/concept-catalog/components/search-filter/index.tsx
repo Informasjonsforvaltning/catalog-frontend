@@ -140,7 +140,7 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
               <Select
                 aria-label='Velg bruker'
                 onChange={(event) => handleOnAssignedChange(event.target.value)}
-                size='sm'
+                data-size='sm'
                 value={filterAssignedUser ?? ''}
               >
                 {[

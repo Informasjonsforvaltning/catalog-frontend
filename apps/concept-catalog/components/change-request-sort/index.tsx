@@ -14,7 +14,7 @@ const ChangeRequestSort = ({ options, selected, onChange }: Props) => {
     <NativeSelect
       onChange={onChange}
       value={selected}
-      size='sm'
+      data-size='sm'
     >
       {options.map((option: Option) => (
         <option

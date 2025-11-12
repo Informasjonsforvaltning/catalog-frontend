@@ -198,7 +198,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
     <Box className={styles.root}>
       <Box className={styles.flex}>
         <Fieldset
-          size='sm'
+          data-size='sm'
           legend={
             <TitleWithHelpTextAndTag
               helpText={localization.conceptForm.helpText.relatedConcept}
@@ -211,7 +211,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
         >
           <Radio.Group
             legend=''
-            size='sm'
+            data-size='sm'
             value={relatedConceptType}
             onChange={handleRelatedConceptTypeChange}
           >
@@ -226,7 +226,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
           </Radio.Group>
           {relatedConceptType === 'internal' && (
             <Combobox
-              size='sm'
+              data-size='sm'
               portal={false}
               value={internalRelatedConceptComboValue()}
               label='Søk begrep'
@@ -249,7 +249,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
           )}
           {relatedConceptType === 'external' && (
             <Combobox
-              size='sm'
+              data-size='sm'
               portal={false}
               value={externalRelatedConceptComboValue()}
               label='Søk begrep'
@@ -291,7 +291,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
             {localization.conceptForm.fieldLabel.relation}
           </TitleWithHelpTextAndTag>
         }
-        size='sm'
+        data-size='sm'
         portal={false}
         error={errors?.relasjon}
         value={
@@ -322,7 +322,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
                   {localization.conceptForm.fieldLabel.relationLevel}
                 </TitleWithHelpTextAndTag>
               }
-              size='sm'
+              data-size='sm'
               portal={false}
               value={
                 values.relasjonsType && relationSubtypeOptions.find((type) => type.value === values.relasjonsType)

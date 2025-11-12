@@ -29,7 +29,7 @@ export const TermsOfUseModalClient = ({ termsOfUseUrl, closeUrl }: TermsModalPro
       </Modal.Content>
       <Modal.Footer>
         <Button
-          size='sm'
+          data-size='sm'
           asChild
         >
           <a
@@ -41,7 +41,7 @@ export const TermsOfUseModalClient = ({ termsOfUseUrl, closeUrl }: TermsModalPro
           </a>
         </Button>
         <Button
-          size='sm'
+          data-size='sm'
           variant='secondary'
           asChild
         >

@@ -111,7 +111,7 @@ export const FormikLanguageFieldset = ({
       className={styles.fieldset}
       legend={legend}
       readOnly={readOnly}
-      size='sm'
+      data-size='sm'
     >
       {visibleLanguageFields.map((lang) => (
         <div key={lang}>
@@ -145,7 +145,7 @@ export const FormikLanguageFieldset = ({
                       prefix: (
                         <>
                           <Paragraph
-                            size='sm'
+                            data-size='sm'
                             variant='short'
                           >
                             {localization.language[lang]}
@@ -185,7 +185,7 @@ export const FormikLanguageFieldset = ({
 
       {showError && getError() && (
         <ErrorMessage
-          size='sm'
+          data-size='sm'
           error
         >
           {getError()}

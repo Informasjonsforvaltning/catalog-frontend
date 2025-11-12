@@ -69,7 +69,7 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
     : [
       <Alert
         key={1}
-        size='sm'
+        data-size='sm'
         severity='danger'
         style={{ background: 'none', border: 'none', padding: 0 }}
       >
@@ -80,7 +80,7 @@ const getNotifications = ({ isValid, hasUnsavedChanges }) => [
     ? [
       <Alert
         key={1}
-        size='sm'
+        data-size='sm'
         severity='warning'
         style={{ background: 'none', border: 'none', padding: 0 }}
       >
@@ -244,7 +244,7 @@ const ConceptForm = ({
           <span className={styles.bold}>{name}</span> ({lastChangedFormatted})
         </Paragraph>
         <Paragraph
-          size='sm'
+          data-size='sm'
           className={styles.topMargin2}
         >
           {localization.alert.wantToRestoreChanges}
@@ -638,7 +638,7 @@ const ConceptForm = ({
                       <div>
                         <div className={classNames(styles.flex, styles.gap4)}>
                           <Button
-                            size='sm'
+                            data-size='sm'
                             type='button'
                             disabled={readOnly || isSubmitting || isValidating || isCanceled || !dirty}
                             onClick={() => {
@@ -649,14 +649,14 @@ const ConceptForm = ({
                             {isSubmitting ? (
                               <Spinner
                                 title='Lagrer'
-                                size='sm'
+                                data-size='sm'
                               />
                             ) : (
                               'Lagre'
                             )}
                           </Button>
                           <Button
-                            size='sm'
+                            data-size='sm'
                             disabled={readOnly || isSubmitting || isValidating || isCanceled}
                             onClick={handleCancel}
                             variant='secondary'
@@ -665,7 +665,7 @@ const ConceptForm = ({
                           </Button>
                           <div className={classNames(styles.flex, styles.gap2, styles.noWrap)}>
                             <Checkbox
-                              size='sm'
+                              data-size='sm'
                               value='ignoreRequired'
                               checked={ignoreRequired}
                               onChange={(e) => setIgnoreRequired(e.target.checked)}

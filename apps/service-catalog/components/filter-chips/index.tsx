@@ -15,7 +15,7 @@ export const FilterChips = ({ handleRemoveFilter, statuses, statusFilters, publi
   return (
     <div className={styles.chips}>
       <Chip.Group
-        size='small'
+        data-size='sm'
         className={styles.wrap}
       >
         {statusFilters?.map((filter, index) => (

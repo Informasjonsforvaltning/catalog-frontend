@@ -140,7 +140,7 @@ export const EditConceptFormClient = ({
         <Button
           variant='tertiary'
           color='second'
-          size='sm'
+          data-size='sm'
           onClick={() => setShowCancelConfirm(true)}
         >
           <ArrowLeftIcon fontSize='1.25em' />
@@ -151,7 +151,7 @@ export const EditConceptFormClient = ({
           <Button
             variant='secondary'
             color='second'
-            size='sm'
+            data-size='sm'
             onClick={() => setShowGotoConceptConfirm(true)}
           >
             {localization.button.gotoConcept}

@@ -24,7 +24,7 @@ export const DocumentationSection = () => {
       <FastField
         name='landingPage'
         as={Textfield}
-        size='sm'
+        data-size='sm'
         label={
           <TitleWithHelpTextAndTag helpText={localization.dataServiceForm.helptext.landingPage}>
             {localization.dataServiceForm.fieldLabel.landingPage}
@@ -36,7 +36,7 @@ export const DocumentationSection = () => {
       <FieldsetDivider />
 
       <Fieldset
-        size='sm'
+        data-size='sm'
         legend={
           <TitleWithHelpTextAndTag helpText={localization.dataServiceForm.helptext.pages}>
             {localization.dataServiceForm.fieldLabel.pages}
@@ -56,7 +56,7 @@ export const DocumentationSection = () => {
                       <FastFieldWithRef
                         name={`pages[${index}]`}
                         as={Textfield}
-                        size='sm'
+                        data-size='sm'
                         ref={fieldRef}
                         error={errors?.pages?.[index]}
                       />

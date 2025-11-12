@@ -17,7 +17,7 @@ export const PeriodSection = ({ changed, readOnly }: PeriodSectionProps) => {
 
   return (
     <Fieldset
-      size='sm'
+      data-size='sm'
       legend={
         <TitleWithHelpTextAndTag
           helpText={localization.conceptForm.helpText.period}
@@ -32,7 +32,7 @@ export const PeriodSection = ({ changed, readOnly }: PeriodSectionProps) => {
           as={Textfield}
           type='date'
           name='gyldigFom'
-          size='sm'
+          data-size='sm'
           label='Gyldig fra og med'
           error={errors.gyldigFom}
           readOnly={readOnly}
@@ -45,7 +45,7 @@ export const PeriodSection = ({ changed, readOnly }: PeriodSectionProps) => {
           as={Textfield}
           type='date'
           name='gyldigTom'
-          size='sm'
+          data-size='sm'
           label='Gyldig til og med'
           error={errors.gyldigTom}
           min={values.gyldigFom}

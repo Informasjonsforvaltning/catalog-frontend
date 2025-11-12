@@ -167,10 +167,10 @@ export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, auto
         <Fieldset
           legend={<TitleWithHelpTextAndTag changed={isDirty}>Tabell over relasjoner</TitleWithHelpTextAndTag>}
           readOnly={readOnly}
-          size='sm'
+          data-size='sm'
         >
           <Table
-            size='sm'
+            data-size='sm'
             className={styles.table}
           >
             <Table.Head>
@@ -201,7 +201,7 @@ export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, auto
                           <Button
                             variant='tertiary'
                             color='first'
-                            size='sm'
+                            data-size='sm'
                             disabled={readOnly}
                           >
                             <PencilWritingIcon
@@ -218,7 +218,7 @@ export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, auto
                       <Button
                         variant='tertiary'
                         color='danger'
-                        size='sm'
+                        data-size='sm'
                         disabled={readOnly}
                         onClick={() => handleRemoveRelation(relation)}
                       >
@@ -246,7 +246,7 @@ export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, auto
               <Button
                 variant='tertiary'
                 color='first'
-                size='sm'
+                data-size='sm'
               >
                 <PlusCircleIcon
                   aria-hidden

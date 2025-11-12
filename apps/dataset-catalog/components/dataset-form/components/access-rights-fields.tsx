@@ -12,7 +12,7 @@ export const AccessRightFields = () => {
     <>
       <Box>
         <Radio.Group
-          size='sm'
+          data-size='sm'
           legend={
             <TitleWithHelpTextAndTag
               helpText={localization.datasetForm.helptext.accessRights}

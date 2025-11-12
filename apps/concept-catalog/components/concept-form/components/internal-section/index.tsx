@@ -55,7 +55,7 @@ export const InternalSection = ({
       return (
         <FastField
           name={name}
-          size='sm'
+          data-size='sm'
           label={<FieldLabel />}
           as={Textfield}
           readOnly={readOnly}
@@ -67,7 +67,7 @@ export const InternalSection = ({
       return (
         <FastField
           name={name}
-          size='sm'
+          data-size='sm'
           as={Textarea}
           label={<FieldLabel />}
           rows={3}
@@ -80,7 +80,7 @@ export const InternalSection = ({
       return (
         <Checkbox.Group
           legend={<FieldLabel />}
-          size='sm'
+          data-size='sm'
           readOnly={readOnly}
         >
           <Checkbox
@@ -97,7 +97,7 @@ export const InternalSection = ({
       return (
         <Combobox
           label={<FieldLabel />}
-          size='sm'
+          data-size='sm'
           placeholder={'select user'}
           value={fieldValue && userList?.find((u) => u.id === fieldValue) ? [fieldValue] : []}
           onValueChange={(value) => setFieldValue(name, value[0])}
@@ -122,7 +122,7 @@ export const InternalSection = ({
       return (
         <Combobox
           label={<FieldLabel />}
-          size='sm'
+          data-size='sm'
           value={fieldValue && codes?.find((code) => code.id === fieldValue) ? [fieldValue] : []}
           onValueChange={(value) => setFieldValue(name, value[0])}
           readOnly={readOnly}
@@ -158,7 +158,7 @@ export const InternalSection = ({
             {localization.conceptForm.fieldLabel.assignedUser}
           </TitleWithHelpTextAndTag>
         }
-        size='sm'
+        data-size='sm'
         value={
           values.assignedUser && userList?.find((user) => user.id === values.assignedUser) ? [values.assignedUser] : []
         }
@@ -188,7 +188,7 @@ export const InternalSection = ({
             {localization.conceptForm.fieldLabel.abbreviationLabel}
           </TitleWithHelpTextAndTag>
         }
-        size='sm'
+        data-size='sm'
         name='abbreviatedLabel'
         error={errors?.['abbreviatedLabel']}
         readOnly={readOnly}

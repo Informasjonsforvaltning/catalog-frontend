@@ -150,7 +150,7 @@ const DataServicesPageClient = ({
     return (
       <div className={styles.chips}>
         <Chip.Group
-          size='small'
+          data-size='sm'
           className={styles.wrap}
         >
           {filterStatus?.map((filter, index) => (
@@ -208,7 +208,7 @@ const DataServicesPageClient = ({
                 }}
               />
               <Select
-                size='sm'
+                data-size='sm'
                 onChange={(e) => setSortValue(e.target.value)}
                 value={sortValue}
               >

@@ -37,7 +37,7 @@ const ConceptSearchHits: React.FC<Props> = ({
   const ConceptLabels: React.FC<{ searchHit: Concept }> = ({ searchHit }) => (
     <div className={styles.rowSpaceBetween}>
       <Chip.Group
-        size='small'
+        data-size='sm'
         className={styles.chipGroup}
       >
         {searchHit.merkelapp &&

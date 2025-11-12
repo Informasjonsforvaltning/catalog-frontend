@@ -19,7 +19,7 @@ export const DeleteServiceButton = ({ catalogId, serviceId, type }: DeleteProps)
 
   return (
     <Button
-      size='small'
+      data-size='sm'
       color={'danger'}
       onClick={handleDelete}
     >

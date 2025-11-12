@@ -210,7 +210,7 @@ export const ConceptPageClient = ({
         <div>
           <Switch
             value='published'
-            size='small'
+            data-size='sm'
             position='right'
             readOnly={isPublished || !hasWritePermission || !isValid}
             checked={isPublished}
@@ -529,7 +529,7 @@ export const ConceptPageClient = ({
     const isCommentInEditMode = (id) => id in updateCommentText;
 
     return getCommentsStatus == 'pending' ? (
-      <Spinner size='medium' />
+      <Spinner size='md' />
     ) : (
       <>
         <div className={classes.bottomSpacingSmall}>
@@ -621,7 +621,7 @@ export const ConceptPageClient = ({
     };
 
     return getHistoryStatus === 'pending' ? (
-      <Spinner size='medium' />
+      <Spinner size='md' />
     ) : getHistoryData?.updates?.length === 0 ? (
       <span>{localization.history.noChanges}</span>
     ) : (
@@ -785,7 +785,7 @@ export const ConceptPageClient = ({
         <div className={classes.tabs}>
           <Tabs
             defaultValue={localization.comment.comments}
-            size='small'
+            data-size='sm'
           >
             <Tabs.List>
               <Tabs.Tab value={localization.comment.comments}>{localization.comment.comments}</Tabs.Tab>
@@ -809,7 +809,7 @@ export const ConceptPageClient = ({
 
   const RightColumn = () => {
     return (
-      <InfoCard size='small'>
+      <InfoCard size='sm'>
         {infoDataColumnRight.map(([label, value]) => (
           <InfoCard.Item
             key={`info-data-${label}`}

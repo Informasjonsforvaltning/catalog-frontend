@@ -42,7 +42,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
   return (
     <Box className={styles.sourceDescription}>
       <Radio.Group
-        size='sm'
+        data-size='sm'
         legend={
           <TitleWithHelpTextAndTag helpText={localization.conceptForm.helpText.relationToSource}>
             {localization.conceptForm.fieldLabel.relationToSource}
@@ -63,7 +63,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
       </Radio.Group>
       {relationToSource !== 'egendefinert' && (
         <Fieldset
-          size='sm'
+          data-size='sm'
           legend={
             <TitleWithHelpTextAndTag
               helpText={localization.conceptForm.helpText.sources}
@@ -85,7 +85,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
                       <td>
                         <FastField
                           as={Textfield}
-                          size='sm'
+                          data-size='sm'
                           name={`${name}.kilde.${index}.tekst`}
                           aria-label={''}
                           placeholder='Kildebeskrivelse'
@@ -95,7 +95,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
                       <td>
                         <FastField
                           as={Textfield}
-                          size='sm'
+                          data-size='sm'
                           name={`${name}.kilde.${index}.uri`}
                           aria-label={''}
                           placeholder='https://kilde.no'
@@ -105,7 +105,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
                       <td>
                         <Button
                           variant='tertiary'
-                          size='sm'
+                          data-size='sm'
                           color='danger'
                           onClick={() => arrayHelpers.remove(index)}
                         >
@@ -125,7 +125,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
                   <Button
                     variant='tertiary'
                     color='first'
-                    size='sm'
+                    data-size='sm'
                     type='button'
                     onClick={() => {
                       arrayHelpers.push({ text: '', uri: '' });
@@ -139,7 +139,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
             )}
           />
           {typeof _.get(errors, `${name}.kilde`) === 'string' && (
-            <ErrorMessage size='sm'>{`${_.get(errors, `${name}.kilde`)}`}</ErrorMessage>
+            <ErrorMessage data-size='sm'>{`${_.get(errors, `${name}.kilde`)}`}</ErrorMessage>
           )}
         </Fieldset>
       )}

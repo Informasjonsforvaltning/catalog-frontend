@@ -26,7 +26,7 @@ const NoAccess = async ({ params }: { params: Promise<{ catalogId: string }> }) 
       <CenterContainer>
         <Heading
           level={2}
-          size='small'
+          data-size='sm'
         >
           {localization.youHaveNoAccess}
         </Heading>

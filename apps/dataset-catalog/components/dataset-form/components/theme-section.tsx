@@ -36,7 +36,7 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
         error={errors.euDataTheme}
         value={values.euDataTheme}
         onValueChange={(values: string[]) => setFieldValue('euDataTheme', values)}
-        size='sm'
+        data-size='sm'
       >
         <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
         {euDataThemes &&
@@ -63,7 +63,7 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
         filter={containsFilter}
         placeholder={`${localization.search.search}...`}
         onValueChange={(values: string[]) => setFieldValue('losTheme', values)}
-        size='sm'
+        data-size='sm'
       >
         <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
         {losThemes

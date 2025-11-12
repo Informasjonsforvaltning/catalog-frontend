@@ -36,7 +36,7 @@ export default async function NewPublicServicePage({ params }: { params: Promise
       />
       <div className='container'>
         <Heading
-          size='medium'
+          size='md'
           className={styles.heading}
         >
           {localization.serviceCatalog.infoAboutService}

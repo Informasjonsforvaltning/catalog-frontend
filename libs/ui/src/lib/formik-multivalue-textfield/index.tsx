@@ -66,7 +66,7 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
             <>
               <Textfield
                 ref={ref}
-                size='sm'
+                data-size='sm'
                 value={inputValue}
                 onChange={(e) => handleOnChangeInputValue(e.target.value)}
                 onKeyDown={(e) => {
@@ -100,13 +100,13 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
         {readOnly && label && (
           <Label
             asChild
-            size='sm'
+            data-size='sm'
           >
             <div>{label}</div>
           </Label>
         )}
         <Chip.Group
-          size='sm'
+          data-size='sm'
           className={styles.chipGroup}
         >
           {_.get(values, name)?.map((v, i) => (

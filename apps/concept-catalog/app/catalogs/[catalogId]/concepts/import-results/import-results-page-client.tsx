@@ -83,7 +83,7 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
   const FilterChips = () => (
     <div className={styles.chips}>
       <Chip.Group
-        size='small'
+        data-size='sm'
         className={styles.wrap}
       >
         {filterStatus?.map((filter, index) => (
@@ -125,7 +125,7 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
     <SearchHitsLayout>
       <SearchHitsLayout.SearchRow>
         <NativeSelect
-          size='sm'
+          data-size='sm'
           className={styles.select}
           onChange={handleSortChange}
         >

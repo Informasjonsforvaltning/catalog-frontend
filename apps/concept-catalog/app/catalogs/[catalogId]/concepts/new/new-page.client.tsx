@@ -62,7 +62,7 @@ export const NewPage = ({ catalogId, concept, conceptStatuses, codeListsResult, 
         <Button
           variant='tertiary'
           color='second'
-          size='sm'
+          data-size='sm'
           onClick={() => setShowCancelConfirm(true)}
         >
           <ArrowLeftIcon fontSize='1.25em' />

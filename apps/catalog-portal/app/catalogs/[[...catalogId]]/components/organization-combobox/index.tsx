@@ -27,7 +27,7 @@ const OrganizationCombobox = (props: OrganizationComboboxProps) => {
     <div className={styles.container}>
       <Combobox
         className={styles.combobox}
-        size='sm'
+        data-size='sm'
         label={'Virksomhet'}
         placeholder='Velg en virksomhet'
         onValueChange={(value) => {

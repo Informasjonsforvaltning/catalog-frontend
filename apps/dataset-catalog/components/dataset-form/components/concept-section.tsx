@@ -43,7 +43,7 @@ export const ConceptSection = ({ searchEnv }: Props) => {
   return (
     <>
       <Fieldset
-        size='sm'
+        data-size='sm'
         legend={
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
@@ -55,7 +55,7 @@ export const ConceptSection = ({ searchEnv }: Props) => {
         }
       >
         <Combobox
-          size='sm'
+          data-size='sm'
           onValueChange={(selectedValues: string[]) => setFieldValue('concepts', selectedValues)}
           onChange={(input: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(input.target.value)}
           loading={searching}

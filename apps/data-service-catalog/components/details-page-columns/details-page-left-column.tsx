@@ -113,7 +113,7 @@ export const LeftColumn = ({ dataService, referenceData, language, referenceData
             {(getTranslateText(dataService?.keywords, language) as string[])?.map((item, index) => {
               return item ? (
                 <Tag
-                  size='sm'
+                  data-size='sm'
                   color='info'
                   key={`keyword-tag-${index}`}
                   data-testid={`keyword-tag-${index}`}

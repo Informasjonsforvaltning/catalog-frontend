@@ -17,7 +17,7 @@ const TagList = ({ values, getTagText }: TagListProps) => {
           return (
             <li key={index}>
               <Tag
-                size='sm'
+                data-size='sm'
                 color='info'
               >
                 {label}

@@ -20,7 +20,7 @@ const Pagination = ({ onChange, totalPages, currentPage, className }: Props) => 
     nextLabel='Neste'
     previousLabel='Forrige'
     itemLabel={(num) => `Side ${num}}`}
-    size='small'
+    data-size='sm'
     compact={false}
   />
 );

@@ -56,7 +56,7 @@ export const InternalFieldsPageClient = ({ catalogId }: InternalFieldsPageClient
               <Accordion.Item defaultOpen={showInternalFieldEditor}>
                 <Accordion.Header>
                   <Heading
-                    size='small'
+                    data-size='sm'
                     className={styles.label}
                     level={3}
                   ></Heading>

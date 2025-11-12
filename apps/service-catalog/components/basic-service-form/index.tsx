@@ -355,7 +355,7 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                   <Button
                     color='danger'
                     variant='secondary'
-                    size='small'
+                    data-size='sm'
                     onClick={() => (type === 'services' ? handleDeleteService() : handleDeletePublicService())}
                   >
                     <>
@@ -367,7 +367,7 @@ export const BasicServiceForm = ({ catalogId, service, type, statuses }: Service
                   <Button
                     color='danger'
                     variant='secondary'
-                    size='small'
+                    data-size='sm'
                     onClick={() => router.push(`/catalogs/${catalogId}/${type}`)}
                   >
                     {localization.button.cancel}

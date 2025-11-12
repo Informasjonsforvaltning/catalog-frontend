@@ -47,7 +47,7 @@ export const PublishSwitch = ({ catalogId, dataService, disabled }: Props) => {
   return (
     <>
       <Switch
-        size='small'
+        data-size='sm'
         position='right'
         onChange={() => handlePublishDataService()}
         checked={dataService.published}

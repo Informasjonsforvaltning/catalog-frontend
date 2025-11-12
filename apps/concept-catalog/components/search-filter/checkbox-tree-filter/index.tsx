@@ -124,7 +124,7 @@ export const CheckboxTreeFilter: FC<Props> = ({ label, 'aria-label': ariaLabel, 
         label={label}
         aria-label={ariaLabel}
         value={searchOption}
-        size='sm'
+        data-size='sm'
         onChange={(event) => handleSearchOnChange(event.target.value)}
       >
         {generateOptionElements(nodes)}
@@ -139,7 +139,7 @@ export const CheckboxTreeFilter: FC<Props> = ({ label, 'aria-label': ariaLabel, 
               label: (
                 <Label
                   asChild
-                  size='small'
+                  data-size='sm'
                   weight='regular'
                 >
                   <span>{node.label}</span>
@@ -180,7 +180,7 @@ export const CheckboxTreeFilter: FC<Props> = ({ label, 'aria-label': ariaLabel, 
       {nodes && nodes.length > 10 && (
         <Button
           variant='tertiary'
-          size='sm'
+          data-size='sm'
           onClick={() => setCollapsed(!collapsed)}
         >
           {collapsed ? <ChevronDownDoubleIcon /> : <ChevronUpDoubleIcon />}

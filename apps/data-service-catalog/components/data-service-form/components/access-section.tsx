@@ -23,7 +23,7 @@ export const AccessSection = ({ openLicenses, currencies }: Props) => {
           </TitleWithHelpTextAndTag>
         }
         onChange={(selectedValues) => setFieldValue('license', selectedValues.toString())}
-        size='sm'
+        data-size='sm'
       >
         <Radio value='none'>{`${localization.dataServiceForm.noLicense}`}</Radio>
         {openLicenses &&
@@ -40,7 +40,7 @@ export const AccessSection = ({ openLicenses, currencies }: Props) => {
       <FieldsetDivider />
 
       <Radio.Group
-        size='sm'
+        data-size='sm'
         legend={
           <TitleWithHelpTextAndTag helpText={localization.dataServiceForm.helptext.accessRights}>
             {localization.dataServiceForm.fieldLabel.accessRights}

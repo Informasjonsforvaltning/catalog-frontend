@@ -45,7 +45,7 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
 
             {contactPoint.email && (
               <Paragraph
-                size='small'
+                data-size='sm'
                 className={styles.content}
               >
                 <span className={styles.bold}>{`${localization.email}:`}</span>
@@ -55,7 +55,7 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
 
             {contactPoint.telephone && (
               <Paragraph
-                size='small'
+                data-size='sm'
                 className={styles.content}
               >
                 <span className={styles.bold}>{`${localization.telephone}:`}</span>
@@ -65,7 +65,7 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
 
             {contactPoint.contactPage && (
               <Paragraph
-                size='small'
+                data-size='sm'
                 className={styles.content}
               >
                 <span className={styles.bold}>{`${localization.contactPage}:`}</span>
@@ -95,7 +95,7 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
 
               {produce?.description && (
                 <Paragraph
-                  size='small'
+                  data-size='sm'
                   className={styles.content}
                 >
                   <span className={styles.bold}>{`${localization.description}:`}</span>

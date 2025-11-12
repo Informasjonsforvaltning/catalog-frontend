@@ -299,7 +299,7 @@ export const SearchPageClient = ({
     return (
       <div className={styles.chips}>
         <Chip.Group
-          size='small'
+          data-size='sm'
           className={styles.wrap}
         >
           {filterSubject?.map((filter, index) => (
@@ -365,7 +365,7 @@ export const SearchPageClient = ({
       <Tabs
         className={styles.tabs}
         defaultValue={'conceptTab'}
-        size='medium'
+        size='md'
       >
         <Tabs.List className={styles.tabsList}>
           <Tabs.Tab value={'conceptTab'}>{localization.concept.concepts}</Tabs.Tab>
@@ -401,7 +401,7 @@ export const SearchPageClient = ({
                     }}
                   />
                   <Select
-                    size='sm'
+                    data-size='sm'
                     onChange={(event) => onSortSelect(event?.target.value as SortOption)}
                     value={selectedSortOption}
                   >
@@ -413,7 +413,7 @@ export const SearchPageClient = ({
                       {/*hasAdminPermission && <ImportModal catalogId={catalogId} />*/}
                       {hasAdminPermission && (
                         <UploadButton
-                          size='sm'
+                          data-size='sm'
                           variant='secondary'
                           allowedMimeTypes={[
                             'text/csv',
@@ -433,7 +433,7 @@ export const SearchPageClient = ({
                       {hasWritePermission && (
                         <LinkButton
                           href={`/catalogs/${catalogId}/concepts/new`}
-                          size='sm'
+                          data-size='sm'
                         >
                           <>
                             <PlusCircleIcon fontSize='1.5rem' />

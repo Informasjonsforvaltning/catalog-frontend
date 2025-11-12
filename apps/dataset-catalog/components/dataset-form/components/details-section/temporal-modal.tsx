@@ -41,7 +41,7 @@ export const TemporalModal = ({ label }: Props) => {
           <div className={get(errors, `temporal`) ? styles.errorBorder : undefined}>
             {values?.temporal && values?.temporal?.length > 0 && (
               <Table
-                size='sm'
+                data-size='sm'
                 className={styles.table}
               >
                 <Table.Head>
@@ -143,7 +143,7 @@ const FieldModal = ({ template, type, onSuccess, onCancel, onChange }: ModalProp
                   <Modal.Content className={cn(styles.modalContent, styles.calendar)}>
                     <FastField
                       as={Textfield}
-                      size='sm'
+                      data-size='sm'
                       label={localization.from}
                       type='date'
                       name={`startDate`}
@@ -157,7 +157,7 @@ const FieldModal = ({ template, type, onSuccess, onCancel, onChange }: ModalProp
 
                     <FastField
                       as={Textfield}
-                      size='sm'
+                      data-size='sm'
                       label={localization.to}
                       type='date'
                       name={`endDate`}
@@ -171,7 +171,7 @@ const FieldModal = ({ template, type, onSuccess, onCancel, onChange }: ModalProp
                       type='button'
                       disabled={isSubmitting || !dirty || hasNoFieldValues(values)}
                       onClick={() => submitForm()}
-                      size='sm'
+                      data-size='sm'
                     >
                       {type === 'new' ? localization.add : localization.datasetForm.button.update}
                     </Button>
@@ -183,7 +183,7 @@ const FieldModal = ({ template, type, onSuccess, onCancel, onChange }: ModalProp
                         modalRef.current?.close();
                       }}
                       disabled={isSubmitting}
-                      size='sm'
+                      data-size='sm'
                     >
                       {localization.button.cancel}
                     </Button>

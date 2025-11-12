@@ -47,7 +47,7 @@ export const QualifiedAttributionsSection = ({ ref }: { ref: React.RefObject<HTM
   return (
     <Box>
       <Fieldset
-        size='sm'
+        data-size='sm'
         legend={
           <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.qualifiedAttributions}>
             {localization.datasetForm.fieldLabel.qualifiedAttributions}
@@ -55,7 +55,7 @@ export const QualifiedAttributionsSection = ({ ref }: { ref: React.RefObject<HTM
         }
       >
         <Combobox
-          size='sm'
+          data-size='sm'
           onValueChange={(selectedValues: string[]) => setFieldValue('qualifiedAttributions', selectedValues)}
           onChange={(input: any) => debouncedSearch(input.target.value)}
           loading={searching}

@@ -81,13 +81,13 @@ export const FormikAutoSaver = ({ id, storage, onRestore, confirmMessage, restor
       <Dialog.Block>{modalContent}</Dialog.Block>
       <Dialog.Block>
         <Button
-          size='sm'
+          data-size='sm'
           onClick={handleRestoreClick}
         >
           {localization.button.restore}
         </Button>
         <Button
-          size='sm'
+          data-size='sm'
           variant='secondary'
           color='danger'
           onClick={handleDiscardClick}

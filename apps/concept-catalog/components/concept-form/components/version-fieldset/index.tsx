@@ -18,7 +18,7 @@ export const VersionFieldset = ({ name, changed, readOnly }) => {
   return (
     <>
       <Fieldset
-        size='sm'
+        data-size='sm'
         legend={
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.versionNumber}
@@ -34,7 +34,7 @@ export const VersionFieldset = ({ name, changed, readOnly }) => {
             type='number'
             label='Major'
             min='0'
-            size='sm'
+            data-size='sm'
             name={`${name}.major`}
             error={typeof get(errors, name) === 'string'}
             readOnly={readOnly}
@@ -44,7 +44,7 @@ export const VersionFieldset = ({ name, changed, readOnly }) => {
             type='number'
             label='Minor'
             min='0'
-            size='sm'
+            data-size='sm'
             name={`${name}.minor`}
             error={typeof get(errors, name) === 'string'}
             readOnly={readOnly}
@@ -54,7 +54,7 @@ export const VersionFieldset = ({ name, changed, readOnly }) => {
             type='number'
             label='Patch'
             min='0'
-            size='sm'
+            data-size='sm'
             name={`${name}.patch`}
             error={typeof get(errors, name) === 'string'}
             readOnly={readOnly}
@@ -62,7 +62,7 @@ export const VersionFieldset = ({ name, changed, readOnly }) => {
         </div>
       </Fieldset>
       {typeof get(errors, name) === 'string' ? (
-        <ErrorMessage size='sm'>{get(errors, name)}</ErrorMessage>
+        <ErrorMessage data-size='sm'>{get(errors, name)}</ErrorMessage>
       ) : undefined}
     </>
   );

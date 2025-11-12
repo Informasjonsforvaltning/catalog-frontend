@@ -22,7 +22,7 @@ export const StatusSection = ({ statuses, availabilities }: Props) => {
           </TitleWithHelpTextAndTag>
         }
         onChange={(selectedValues) => setFieldValue('status', selectedValues.toString())}
-        size='sm'
+        data-size='sm'
       >
         <Radio value='none'>{`${localization.dataServiceForm.noStatus}`}</Radio>
         {statuses &&
@@ -50,7 +50,7 @@ export const StatusSection = ({ statuses, availabilities }: Props) => {
           </TitleWithHelpTextAndTag>
         }
         onChange={(selectedValues) => setFieldValue('availability', selectedValues.toString())}
-        size='sm'
+        data-size='sm'
       >
         <Radio value='none'>{`${localization.dataServiceForm.noAvailability}`}</Radio>
         {availabilities &&

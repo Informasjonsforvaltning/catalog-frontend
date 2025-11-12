@@ -69,7 +69,7 @@ export const NewDataServicePageClient = ({
                 <Button
                     variant='tertiary'
                     color='second'
-                    size='sm'
+                    data-size='sm'
                     onClick={() => setShowCancelConfirm(true)}
                 >
                     <ArrowLeftIcon fontSize='1.25em' />

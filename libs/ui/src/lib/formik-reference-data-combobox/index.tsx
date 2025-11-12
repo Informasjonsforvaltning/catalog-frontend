@@ -47,7 +47,7 @@ export function FormikReferenceDataCombobox({
       multiple
       hideClearButton
       filter={() => true} // disable filter
-      size='sm'
+      data-size='sm'
       virtual
       {...rest}
     >

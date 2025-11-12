@@ -151,7 +151,7 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
     return (
       <div className={styles.chips}>
         <Chip.Group
-          size='small'
+          data-size='sm'
           className={styles.wrap}
         >
           {filterStatus?.map((filter, index) => (

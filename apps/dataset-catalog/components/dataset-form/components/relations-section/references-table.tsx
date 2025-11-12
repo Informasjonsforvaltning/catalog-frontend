@@ -80,7 +80,7 @@ export const ReferenceTable = ({ searchEnv, autoSaveId, autoSaveStorage }: Props
       {values?.references && compact(values?.references).length > 0 && (
         <div className={get(errors, `references`) ? styles.errorBorder : undefined}>
           <Table
-            size='sm'
+            data-size='sm'
             className={styles.table}
           >
             <Table.Head>
@@ -253,14 +253,14 @@ const FieldModal = ({
                   <Modal.Content className={cn(styles.modalContent, styles.fieldContainer)}>
                     <Fieldset
                       legend={localization.datasetForm.fieldLabel.relationType}
-                      size='sm'
+                      data-size='sm'
                     >
                       <Combobox
                         onValueChange={(value) => setFieldValue(`referenceType`, value.toString())}
                         value={values.referenceType ? [values.referenceType] : []}
                         placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
                         portal={false}
-                        size='sm'
+                        data-size='sm'
                         error={errors?.referenceType}
                         virtual
                       >
@@ -279,7 +279,7 @@ const FieldModal = ({
 
                     <Fieldset
                       legend={localization.datasetForm.fieldLabel.dataset}
-                      size='sm'
+                      data-size='sm'
                     >
                       <Combobox
                         onChange={(input: any) => setSearchQuery(input.target.value)}
@@ -291,7 +291,7 @@ const FieldModal = ({
                         value={values?.source && !isEmpty(values.source) ? [values.source] : []}
                         placeholder={`${localization.search.search}...`}
                         portal={false}
-                        size='sm'
+                        data-size='sm'
                         error={errors?.source}
                       >
                         <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
@@ -318,7 +318,7 @@ const FieldModal = ({
                       type='button'
                       disabled={isSubmitting || !dirty || hasNoFieldValues(values)}
                       onClick={() => submitForm()}
-                      size='sm'
+                      data-size='sm'
                     >
                       {type === 'new' ? localization.add : localization.datasetForm.button.update}
                     </Button>
@@ -330,7 +330,7 @@ const FieldModal = ({
                         modalRef.current?.close();
                       }}
                       disabled={isSubmitting}
-                      size='sm'
+                      data-size='sm'
                     >
                       {localization.button.cancel}
                     </Button>

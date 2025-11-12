@@ -19,7 +19,7 @@ export const FormatList = ({ formatURIs, referenceDataEnv, language }: Props) =>
       {formatURIs?.map((uri, index) => {
         return (
           <Tag
-            size='sm'
+            data-size='sm'
             color='info'
             key={`format-${index}`}
           >

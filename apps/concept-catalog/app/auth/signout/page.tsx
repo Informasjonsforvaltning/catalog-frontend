@@ -22,7 +22,7 @@ export const SignOut = () => {
       <CenterContainer>
         <Heading
           level={2}
-          size='small'
+          data-size='sm'
         >
           <>
             <div>{localization.auth.loggingOut}</div>

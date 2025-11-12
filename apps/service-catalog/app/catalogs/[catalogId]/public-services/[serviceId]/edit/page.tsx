@@ -45,7 +45,7 @@ export default async function EditPublicServicePage({
       />
       <div className='container'>
         <Heading
-          size='medium'
+          size='md'
           className={styles.heading}
         >
           {localization.serviceCatalog.infoAboutService}

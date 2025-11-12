@@ -92,7 +92,7 @@ export const UsersPageClient = ({ catalogId }: UsersPageClientProps) => {
             </Accordion>
           )}
 
-          {searchResults?.length < 1 && <Heading size='medium'>{localization.search.noHits}</Heading>}
+          {searchResults?.length < 1 && <Heading size='md'>{localization.search.noHits}</Heading>}
           {searchResults &&
             searchResults.map((user: AssignedUser, index: number) => (
               <Accordion
