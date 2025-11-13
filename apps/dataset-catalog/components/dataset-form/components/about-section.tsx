@@ -18,7 +18,7 @@ import {
 import { FastField, useFormikContext } from "formik";
 import { FieldsetDivider } from "@catalog-frontend/ui";
 import { AccessRightFields } from "./access-rights-fields";
-import { SpacialCombobox } from "./spatial-combobox";
+import { SpatialCombobox } from "./spatial-combobox";
 import { Dataset, ReferenceDataCode } from "@catalog-frontend/types";
 
 interface Props {
@@ -64,7 +64,7 @@ export const AboutSection = ({
       <FieldsetDivider />
       {isMobility && (
         <>
-          <SpacialCombobox
+          <SpatialCombobox
             referenceDataEnv={referenceDataEnv}
             isMobility={isMobility}
           />

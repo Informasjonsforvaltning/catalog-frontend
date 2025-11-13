@@ -6,7 +6,7 @@ import { useFormikContext } from "formik";
 import { Dataset, ReferenceDataCode } from "@catalog-frontend/types";
 import { sortBy } from "lodash";
 import { TemporalModal } from "./temporal-modal";
-import { SpacialCombobox } from "../spatial-combobox";
+import { SpatialCombobox } from "../spatial-combobox";
 
 interface Props {
   referenceDataEnv: string;
@@ -67,7 +67,7 @@ export const RecommendedDetailFields = ({
       <FieldsetDivider />
       {!isMobility && (
         <>
-          <SpacialCombobox referenceDataEnv={referenceDataEnv} />
+          <SpatialCombobox referenceDataEnv={referenceDataEnv} />
         </>
       )}
       <TemporalModal
