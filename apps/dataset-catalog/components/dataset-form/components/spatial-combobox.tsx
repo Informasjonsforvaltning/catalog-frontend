@@ -26,7 +26,7 @@ interface Props {
   isMobility?: boolean;
 }
 
-export const SpacialCombobox = ({ referenceDataEnv, isMobility }: Props) => {
+export const SpatialCombobox = ({ referenceDataEnv, isMobility }: Props) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const { data: searchHits, isLoading: isSearching } =
     useSearchAdministrativeUnits(searchTerm, referenceDataEnv);
