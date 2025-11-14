@@ -79,7 +79,7 @@ export const DistributionModal = ({
   initialAccessServices,
   type,
   distributionType,
-  isMobility: isMobility,
+  isMobility,
   mobilityDataStandards,
   mobilityRights,
 }: Props) => {
@@ -871,15 +871,12 @@ export const DistributionModal = ({
                               virtual
                               error={errors.mobilityDataStandard}
                             >
-                              <Combobox.Option
-                                key={`mobilityDataStandard`}
-                                value={""}
-                              >
+                              <Combobox.Option value={`mobilityDataStandard`}>
                                 {localization.none}
                               </Combobox.Option>
                               {mobilityDataStandards &&
                                 mobilityDataStandards.map(
-                                  (mobilityDataStandard: any, i: number) => (
+                                  (mobilityDataStandard, i: number) => (
                                     <Combobox.Option
                                       key={`mobilityDataStandard-${mobilityDataStandard.uri}-${i}`}
                                       value={mobilityDataStandard.uri}
@@ -895,7 +892,7 @@ export const DistributionModal = ({
                           <FieldsetDivider />
                         </>
                       ) : undefined}
-                      {(isMobility && values.rights) ? (
+                      {isMobility && values.rights ? (
                         <>
                           <Fieldset
                             size="sm"
@@ -931,12 +928,12 @@ export const DistributionModal = ({
                               virtual
                               error={errors?.rights?.type}
                             >
-                              <Combobox.Option key={`right.type`} value={""}>
+                              <Combobox.Option value={`right.type`}>
                                 {localization.none}
                               </Combobox.Option>
                               {mobilityRights &&
                                 mobilityRights.map(
-                                  (mobilityRight: any, i: number) => (
+                                  (mobilityRight, i: number) => (
                                     <Combobox.Option
                                       key={`mobilityRights-${mobilityRight.uri}-${i}`}
                                       value={mobilityRight.uri}

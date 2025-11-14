@@ -62,7 +62,7 @@ export const DistributionSection = ({
   openLicenses,
   autoSaveId,
   autoSaveStorage,
-  isMobility: isMobility,
+  isMobility,
   mobilityDataStandards,
   mobilityRights,
 }: Props) => {
@@ -457,7 +457,7 @@ export const DistributionSection = ({
               page: [],
               conformsTo: [],
               accessServices: [],
-              rights: {type: ""},
+              rights: { type: "" },
               mobilityDataStandard: "",
             }}
             isMobility={isMobility}
@@ -465,14 +465,23 @@ export const DistributionSection = ({
         </div>
       </Fieldset>
       {!isMobility && (
-        <div>
+        <>
           <FieldsetDivider />
-          <div className={styles.fieldSet}>
-            <TitleWithHelpTextAndTag
-              helpText={localization.datasetForm.helptext.sample}
-            >
-              {localization.datasetForm.fieldLabel.sample}
-            </TitleWithHelpTextAndTag>
+          <Fieldset
+            size="sm"
+            legend={
+              <TitleWithHelpTextAndTag
+                helpText={localization.datasetForm.helptext.sample}
+                tagTitle={
+                  isMobility
+                    ? localization.tag.required
+                    : localization.tag.recommended
+                }
+              >
+                {localization.datasetForm.fieldLabel.sample}
+              </TitleWithHelpTextAndTag>
+            }
+          >
             {values?.sample &&
               !distributionArrayIsEmpty(values?.sample) &&
               values?.sample?.map(
@@ -662,8 +671,8 @@ export const DistributionSection = ({
                 }}
               />
             </div>
-          </div>
-        </div>
+          </Fieldset>
+        </>
       )}
     </Box>
   );

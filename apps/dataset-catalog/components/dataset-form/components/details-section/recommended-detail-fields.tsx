@@ -68,6 +68,7 @@ export const RecommendedDetailFields = ({
       {!isMobility && (
         <>
           <SpatialCombobox referenceDataEnv={referenceDataEnv} />
+          <FieldsetDivider />
         </>
       )}
       <TemporalModal

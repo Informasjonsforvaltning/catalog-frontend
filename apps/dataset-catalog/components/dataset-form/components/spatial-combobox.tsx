@@ -122,7 +122,6 @@ export const SpatialCombobox = ({ referenceDataEnv, isMobility }: Props) => {
           ))}
         </Combobox>
       </Fieldset>
-      <FieldsetDivider />
     </>
   );
 };

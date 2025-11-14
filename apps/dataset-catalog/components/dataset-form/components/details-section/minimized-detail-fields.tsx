@@ -463,7 +463,7 @@ export const MinimizedDetailFields = ({
 
   //Remove frequency if form is mobilityDCAT
   if (isMobility) {
-    fieldsList = FIELD_CONFIG.filter((f) => !(f.name === "frequency"));
+    fieldsList = FIELD_CONFIG.filter((f) => f.name !== "frequency");
   }
 
   // Split fields into expanded and minimized

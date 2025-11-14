@@ -1,6 +1,10 @@
 "use client";
 
-import { StorageData, DatasetToBeCreated } from "@catalog-frontend/types"; //need to change
+import {
+  StorageData,
+  DatasetToBeCreated,
+  ReferenceData,
+} from "@catalog-frontend/types"; //need to change
 import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import { createDataset } from "@dataset-catalog/app/actions/actions";
@@ -14,7 +18,7 @@ type NewPageProps = {
   dataset: DatasetToBeCreated;
   searchEnv: string;
   referenceDataEnv: string;
-  referenceData: any;
+  referenceData: ReferenceData;
 };
 
 export const NewPage = ({

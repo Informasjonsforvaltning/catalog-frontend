@@ -21,8 +21,8 @@ type Props = {
 export const ThemeSection = ({
   losThemes,
   euDataThemes,
-  mobilityThemes: mobilityThemes,
-  isMobility: isMobility,
+  mobilityThemes,
+  isMobility,
 }: Props) => {
   const { setFieldValue, values, errors } = useFormikContext<Dataset>();
   const containsFilter = (inputValue: string, option: Option): boolean => {

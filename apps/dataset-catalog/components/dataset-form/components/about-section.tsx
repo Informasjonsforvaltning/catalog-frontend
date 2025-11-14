@@ -68,6 +68,7 @@ export const AboutSection = ({
             referenceDataEnv={referenceDataEnv}
             isMobility={isMobility}
           />
+          <FieldsetDivider />
           <Fieldset
             size="sm"
             legend={
