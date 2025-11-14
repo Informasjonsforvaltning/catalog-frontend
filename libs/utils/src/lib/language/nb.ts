@@ -661,6 +661,7 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
     confirmDelete: "Er du sikker på at du vil slette importeringsrapporten?",
     cancelImport: "Avvis import",
     confirmImport: "Legg til i katalog",
+    tryAgain: "Prøv igjen",
     deleteCanResultInDuplicates: `Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.`,
     cancelledImport: `Importen ble avvist før den ble fullført.`,
     conceptId: "Begreps-ID ",

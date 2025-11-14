@@ -3,7 +3,7 @@
 import {
   ConceptExtractionStatus,
   ImportResult,
-  ImportResutStatus,
+  ImportResultStatus,
 } from "@catalog-frontend/types";
 import { localization } from "@catalog-frontend/utils";
 import {
@@ -35,8 +35,8 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
       importResultId: string;
     }) => {
       await deleteImportResult(catalogId, importResultId);
-      await router.push(`/catalogs/${catalogId}/concepts/import-results`);
-      await setShowDeleteConfirm(false);
+      setShowDeleteConfirm(false);
+      router.push(`/catalogs/${catalogId}/concepts/import-results`);
     },
     onError: (error) => {
       setIsDeleting(false);
@@ -51,12 +51,9 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
   };
 
   const saveConceptMutation = useMutation({
-    mutationFn: async (externalId: string) => {
-      await saveImportedConcept(catalogId, importResult.id, externalId);
-    },
-    onSuccess: async () => {
-      await refetch();
-    },
+    mutationFn: async (externalId: string) =>
+      await saveImportedConcept(catalogId, importResult.id, externalId),
+    onSettled: async () => await refetch(),
   });
 
   const cancelMutation = useMutation({
@@ -72,7 +69,7 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
       console.log("Refetched Import status data", refetched.data.status);
       if (
         isCancelling &&
-        refetched?.data.status !== ImportResutStatus.CANCELLED
+        refetched?.data.status !== ImportResultStatus.CANCELLED
       ) {
         console.log("should send cancel request again");
         await cancelMutation.mutateAsync();
@@ -81,14 +78,14 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
           ["refresh-import-result", catalogId, importResult?.id],
           (old: ImportResult) => ({
             ...old,
-            status: ImportResutStatus.CANCELLED,
+            status: ImportResultStatus.CANCELLED,
             conceptExtractions: old?.conceptExtractions.map((ce) => ({
               ...ce,
               conceptExtractionStatus: ConceptExtractionStatus.CANCELLED,
             })),
           }),
         );
-        await setIsCancelling(false);
+        setIsCancelling(false);
       }
     },
   });
@@ -98,7 +95,8 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
     await cancelMutation.mutateAsync();
   };
 
-  const shouldRefetch = (fetchedData) => fetchedData?.status === "IN_PROGRESS";
+  const shouldRefetch = (fetchedData) =>
+    fetchedData?.status === ImportResultStatus.IN_PROGRESS;
 
   const { data, refetch } = useQuery({
     queryKey: ["refresh-import-result", catalogId, importResult?.id],
@@ -124,14 +122,14 @@ const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
         <ConfirmModal
           title={localization.importResult.confirmDelete}
           content={
-            data?.status === ImportResutStatus.COMPLETED ||
-            data?.status === ImportResutStatus.PARTIALLY_COMPLETED
+            data?.status === ImportResultStatus.COMPLETED ||
+            data?.status === ImportResultStatus.PARTIALLY_COMPLETED
               ? localization.importResult.deleteCanResultInDuplicates
               : ""
           }
           onSuccess={async () => {
-            await setIsDeleting(true);
-            await deleteImportMutation.mutate({
+            setIsDeleting(true);
+            await deleteImportMutation.mutateAsync({
               catalogId: catalogId,
               importResultId: importResult.id,
             });

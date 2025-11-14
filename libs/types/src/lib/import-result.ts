@@ -1,7 +1,7 @@
 import { JsonPatchOperation } from "./json-patch";
 import { Concept } from "./concept";
 
-export enum ImportResutStatus {
+export enum ImportResultStatus {
   FAILED = "FAILED",
   COMPLETED = "COMPLETED",
   PARTIALLY_COMPLETED = "PARTIALLY_COMPLETED",
@@ -25,7 +25,7 @@ export interface ImportResult {
   id: string;
   created: string;
   catalogId: string;
-  status: ImportResutStatus;
+  status: ImportResultStatus;
   extractionRecords?: ExtractionRecord[];
   conceptExtractions: ConceptExtraction[];
   totalConcepts: number;

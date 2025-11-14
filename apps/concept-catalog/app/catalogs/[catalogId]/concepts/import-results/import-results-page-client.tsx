@@ -1,6 +1,6 @@
 "use client";
 
-import { ImportResult, ImportResutStatus } from "@catalog-frontend/types";
+import { ImportResult, ImportResultStatus } from "@catalog-frontend/types";
 import {
   AccordionItem,
   AccordionItemProps,
@@ -28,26 +28,26 @@ import { isEmpty } from "lodash";
 
 const importStatuses = [
   {
-    value: ImportResutStatus.IN_PROGRESS,
+    value: ImportResultStatus.IN_PROGRESS,
     label: localization.importResult.inProgress,
   },
   {
-    value: ImportResutStatus.PENDING_CONFIRMATION,
+    value: ImportResultStatus.PENDING_CONFIRMATION,
     label: localization.importResult.pendingConfirmation,
   },
   {
-    value: ImportResutStatus.PARTIALLY_COMPLETED,
+    value: ImportResultStatus.PARTIALLY_COMPLETED,
     label: localization.importResult.partiallyCompleted,
   },
   {
-    value: ImportResutStatus.COMPLETED,
+    value: ImportResultStatus.COMPLETED,
     label: localization.importResult.completed,
   },
   {
-    value: ImportResutStatus.CANCELLED,
+    value: ImportResultStatus.CANCELLED,
     label: localization.importResult.cancelled,
   },
-  { value: ImportResutStatus.FAILED, label: localization.importResult.failed },
+  { value: ImportResultStatus.FAILED, label: localization.importResult.failed },
 ];
 
 interface Props {

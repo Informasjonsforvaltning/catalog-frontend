@@ -267,8 +267,6 @@ export async function saveImportedConcept(
       `${session?.accessToken}`,
     );
 
-    console.log(response);
-
     if (response.status !== 200 && response.status !== 201) {
       throw new Error();
     }
