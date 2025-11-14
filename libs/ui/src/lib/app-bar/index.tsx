@@ -6,22 +6,12 @@ import styles from './styles.module.scss';
 
 import {
 	Button,
-	Avatar,
-	Dropdown
 } from '@digdir/designsystemet-react';
-import { OrgLogo } from '@fellesdatakatalog/ui';
-
-import {
-	MenuHamburgerIcon,
-	BellIcon,
-	ChevronDownIcon,
-	CheckmarkIcon,
-	// FilesIcon,
-	// CodeIcon,
-	// ChatElipsisIcon,
-	// TenancyIcon,
-	// CompassIcon
-} from '@navikt/aksel-icons';
+import { BellIcon } from '@navikt/aksel-icons';
+import { AppBarHamburgerMenu } from '../app-bar-hamburger-menu';
+import { AppBarOrgSelector } from '../app-bar-org-selector';
+import { AppBarDatasetSelector } from '../app-bar-catalog-selector';
+import { AppBarUserMenu } from '../app-bar-user-menu';
 
 type AppBarProps = {}
 
@@ -55,115 +45,15 @@ export const AppBar = ({ children, ...props }: AppBarProps & React.HTMLAttribute
 					[styles.sticky]: sticky
 				})}
 			>
-				<Button data-size='sm' variant='tertiary'>
-					<MenuHamburgerIcon fontSize='1.333333rem' />
-				</Button>
-				{/* <CopyButton copyLabel='copy' copiedLabel='copied' copyOnClick='hello' /> */}
-				<Dropdown.TriggerContext>
-					<Dropdown.Trigger data-size='sm' variant='secondary'>
-						<OrgLogo orgLogoSrc='https://orglogo.digdir.no/api/emblem/svg/974761076' style={{fontSize:'1.5rem'}} />
-						Skatteetaten
-						<ChevronDownIcon />
-					</Dropdown.Trigger>
-					<Dropdown placement="bottom-start">
-						<Dropdown.List>
-							<Dropdown.Item>
-								<Dropdown.Button>
-									<OrgLogo orgLogoSrc='https://orglogo.digdir.no/api/emblem/svg/974761076' style={{fontSize:'1.5rem'}} />
-									Skatteetaten
-									<CheckmarkIcon />
-								</Dropdown.Button>
-							</Dropdown.Item>
-							<Dropdown.Item>
-								<Dropdown.Button>
-									<OrgLogo orgLogoSrc='https://orglogo.digdir.no/api/emblem/svg/985399077' style={{fontSize:'1.5rem'}} />
-									MAttilsynet
-								</Dropdown.Button>
-							</Dropdown.Item>
-							<Dropdown.Item>
-								<Dropdown.Button>
-									<OrgLogo orgLogoSrc='https://orglogo.digdir.no/api/emblem/svg/991825827' style={{fontSize:'1.5rem'}} />
-									Digitaliseringsdirektoratet
-								</Dropdown.Button>
-							</Dropdown.Item>
-						</Dropdown.List>
-					</Dropdown>
-				</Dropdown.TriggerContext>
-				{/* <Button data-size='sm' variant='secondary'>
-					<OrgLogo orgLogoSrc='https://orglogo.digdir.no/api/emblem/svg/974761076' style={{fontSize:'1.5rem'}} />
-					Skatteetaten
-				</Button> */}
+				<AppBarHamburgerMenu />
+				<AppBarOrgSelector />
 				{children}
-				<Dropdown.TriggerContext>
-					<Dropdown.Trigger data-size='sm' variant='secondary'>
-						{/* <FilesIcon /> */}
-						Datasett
-						<ChevronDownIcon />
-					</Dropdown.Trigger>
-					<Dropdown placement="bottom-start">
-						<Dropdown.List>
-							<Dropdown.Item>
-								<Dropdown.Button>
-									{/* <FilesIcon /> */}
-									Datasett
-									<CheckmarkIcon />
-								</Dropdown.Button>
-							</Dropdown.Item>
-							<Dropdown.Item>
-								<Dropdown.Button>
-									{/* <CodeIcon /> */}
-									Data tjenester
-								</Dropdown.Button>
-							</Dropdown.Item>
-							<Dropdown.Item>
-								<Dropdown.Button>
-									{/* <ChatElipsisIcon /> */}
-									Begrep
-								</Dropdown.Button>
-							</Dropdown.Item>
-							<Dropdown.Item>
-								<Dropdown.Button>
-									{/* <TenancyIcon /> */}
-									Informasjonsmodeller
-								</Dropdown.Button>
-							</Dropdown.Item>
-							<Dropdown.Item>
-								<Dropdown.Button>
-									{/* <CompassIcon /> */}
-									Tjenester og hendelser
-								</Dropdown.Button>
-							</Dropdown.Item>
-						</Dropdown.List>
-					</Dropdown>
-				</Dropdown.TriggerContext>
+				<AppBarDatasetSelector />
 				<div style={{'flexGrow': 1}} />
 				<Button data-size='sm' variant='tertiary'>
 					<BellIcon />
 				</Button>
-				<Dropdown.TriggerContext>
-					<Dropdown.Trigger data-size='sm' variant='secondary'>
-						Eirik Lillebo
-					</Dropdown.Trigger>
-					<Dropdown placement="bottom-end">
-						<Dropdown.List>
-							<Dropdown.Item>
-								<Dropdown.Button>
-									Brukerprofil
-								</Dropdown.Button>
-							</Dropdown.Item>
-							<Dropdown.Item>
-								<Dropdown.Button>
-									Innstillinger
-								</Dropdown.Button>
-							</Dropdown.Item>
-							<Dropdown.Item>
-								<Dropdown.Button>
-									Logg ut
-								</Dropdown.Button>
-							</Dropdown.Item>
-						</Dropdown.List>
-					</Dropdown>
-				</Dropdown.TriggerContext>
+				<AppBarUserMenu />
 			</div>
 		</div>
 	);
