@@ -2,6 +2,8 @@
 
 import { Concept } from "@catalog-frontend/types";
 import {
+  getValidSession,
+  redirectToSignIn,
   validateAndEncodeUrlSafe,
   validateOrganizationNumber,
   validateUUID,
@@ -11,8 +13,13 @@ export const importConceptsCSV = async (
   catalogId: string,
   importId: string,
   concepts: Concept[],
-  accessToken: string,
 ) => {
+  const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn();
+  }
+  const accessToken = await session?.accessToken;
+
   validateOrganizationNumber(catalogId, "importConceptsCSV");
   validateUUID(importId, "importConceptsCSV");
 

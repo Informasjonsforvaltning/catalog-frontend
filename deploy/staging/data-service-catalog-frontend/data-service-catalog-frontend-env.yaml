@@ -23,12 +23,12 @@ spec:
             - name: KEYCLOAK_ISSUER
               valueFrom:
                 secretKeyRef:
-                  name: sso
-                  key: SSO_OIDC_ISSUER
+                  name: keycloak
+                  key: KEYCLOAK_OIDC_ISSUER
             - name: KEYCLOAK_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: sso-client-credentials
+                  name: keycloak-client-credentials
                   key: DATA_SERVICE_CATALOG_FRONTEND
             - name: DATA_SERVICE_CATALOG_FRONTEND
               valueFrom:

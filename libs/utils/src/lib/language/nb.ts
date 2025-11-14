@@ -431,22 +431,20 @@ rettigheter, eller at det har oppstått en feil ved henting av tilganger. Vennli
     importModal: {
       title: `__Import av begrep__`,
       titleHelpText: `
-For å importere en Turtle-fil, som er et RDF-format, brukes __Importer RDF__. CSV- og JSON-filer importeres ved hjelp av __Importer CSV/JSON__. Når importen er gjennomført, vises resultatene automatisk på en egen side. Tidligere importforsøk kan alltid åpnes igjen via __Resultater__.
+Ved import brukes __Import av RDF__ for Turtle-filer og __Import av CSV/JSON__ for CSV- og JSON-filer. Importen omfatter opplasting og analyse av filen, men begrep legges ikke automatisk til i katalogen. Etter at filen er behandlet, åpnes en resultatside. Hvis filen er uten feil, kan begrepene legges til etter behov. Tidligere importer kan åpnes igjen via __Resultater__.
 `,
       titleConfirmSending: `__Begreper klare til import__`,
       conceptUploadDescription: `
 Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- eller JSON-format. Etter import vises en side med resultater.
         `,
       textConfirmSending: `
- Importstatus vil vises på en egen side, der det også kan velges om begrepene skal opprettes i begrepskatalogen.
+ Importstatus vil vises på en egen side, der det også kan velges om begrepene skal legges til i begrepskatalogen.
  
  Vil du fortsette importen eller avbryte?
  `,
       maxFileSize: `
-___Merk:___
-* _Maksimal filstørrelse for opplastning er {0} MB_   
-* _CSV/JSON-format tillater opplastning av inntil 500 begreper per fil_
-      `,
+___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan inneholde opptil 500 begrep, og Turtle (RDF)-filer kan inneholde opptil 3000 begrep per fil._
+`,
       alert: {
         unsupportedFileUpload:
           "Den valgte filen kan ikke importeres fordi filformatet ikke støttes. Støttet filformate er {0}.",
@@ -649,28 +647,40 @@ ___Merk:___
   },
 
   importResult: {
-    completed: "Lagt til i katalog",
+    completed: "Fullført",
+    partiallyCompleted: "Delvis fullført",
     savingInCatalog: "Legges til i katalogen",
     failed: "Feilet",
     inProgress: "Pågår",
     cancelled: "Avvist",
-    pendingConfirmation: "Til gjennomgang",
+    pendingConfirmation: "Klar til katalog",
+    savingFailed: "Lagring feilet",
     warnings: "Advarsler",
     errors: "Feil",
     goToImported: "Gå til importert ressurs",
     confirmDelete: "Er du sikker på at du vil slette importeringsrapporten?",
     cancelImport: "Avvis import",
     confirmImport: "Legg til i katalog",
+    tryAgain: "Prøv igjen",
     deleteCanResultInDuplicates: `Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.`,
     cancelledImport: `Importen ble avvist før den ble fullført.`,
+    conceptId: "Begreps-ID ",
+    recordStatus: {
+      addToCatalog: "Klar til i katalog",
+      addedToCatalog: "Lagt til i katalog",
+      failedToAddToCatalog: "Feilet a legge til i katalog",
+    },
     helpText: {
       savingInCatalog:
         "Importen er godkjent, og begrepene vil være tilgjengelige i katalogen senere.",
       completed:
-        "Importen er godkjent, og begrepene er tilgjengelige i katalogen.",
+        "Importen er godkjent, og alle begrepene er tilgjengelige i katalogen.",
+      partiallyCompleted:
+        "Importen er godkjent, og minst ett begrep er tilgjengelig i katalogen.",
       failed:
-        "Importen kunne ikke fullføres på grunn av feil i minst ett av begrepene i den opplastede filen.",
+        "Importen kunne ikke fullføres på grunn av feil i alle begrepene i den opplastede filen.",
       inProgress: "Importen er under behandling. Importen kan avvises.",
+      cancelling: "Forkasting av importen pågår.",
       cancelled:
         "Importen er forkastet og begrepene er ikke lagt til i katalogen.",
       pendingConfirmation:
@@ -683,10 +693,13 @@ ___Merk:___
       statusHelpTextConceptImport: `
 Status viser hvor langt importen har kommet i prosessen:
 
-- __Til gjennomgang:__ Begrepene er importert, men er ennå ikke synlige i katalogen. Importen kan enten avvises eller legges til i katalogen.
-- __Lagt til i katalog:__ Importen er godkjent, og begrepene er tilgjengelige i katalogen.
+- __Pågår:__ Importen er under behandling. Importen kan avvises..
+- __Klar til katalog:__ Begrepene er importert, men er ennå ikke synlige i katalogen. Importen kan enten avvises eller legges til i katalogen.
+- __Delvis Fullført:__ Importen er godkjent, og minst ett begrep er tilgjengelig i katalogen.
+- __Fullført:__ Importen er godkjent, og begrepene er tilgjengelige i katalogen.
+- __Avvises:__ Forkasting av importen pågår.
 - __Avvist:__ Importen er forkastet og begrepene er ikke lagt til i katalogen.
-- __Feilet:__ Importen er ikke fullført fordi minst ett av begrepene i filen inneholder feil.
+- __Feilet:__ Importen er ikke fullført fordi alle begrepene i filen inneholder feil.
       `,
     },
     tooltip: {

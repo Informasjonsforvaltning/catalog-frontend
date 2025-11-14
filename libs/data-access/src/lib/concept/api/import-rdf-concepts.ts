@@ -1,15 +1,20 @@
 "use server";
 
 import {
+  getValidSession,
+  redirectToSignIn,
   validateAndEncodeUrlSafe,
   validateOrganizationNumber,
   validateUUID,
 } from "@catalog-frontend/utils";
 
-export const createImportJob = async (
-  catalogId: string,
-  accessToken: string,
-) => {
+export const createImportJob = async (catalogId: string) => {
+  const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn();
+  }
+  const accessToken = await session?.accessToken;
+
   validateOrganizationNumber(catalogId, "createImportJob");
   const encodedCatalogId = validateAndEncodeUrlSafe(
     catalogId,
@@ -36,8 +41,13 @@ export const importRdfConcepts = async (
   contentType: string,
   catalogId: string,
   importId: string,
-  accessToken: string,
 ) => {
+  const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn();
+  }
+  const accessToken = await session?.accessToken;
+
   validateOrganizationNumber(catalogId, "importRdfConcepts");
   validateUUID(importId, "importRdfConcepts");
 

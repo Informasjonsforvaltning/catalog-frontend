@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { localization } from "@catalog-frontend/utils";
-import { LinkButton, UploadButton } from "@catalog-frontend/ui";
+import { UploadButton } from "@catalog-frontend/ui";
 import {
   useImportConceptsCSV,
   useSendConcepts,
@@ -13,6 +13,8 @@ import { FileImportIcon, TasklistSendIcon } from "@navikt/aksel-icons";
 import Markdown from "react-markdown";
 import { Concept } from "@catalog-frontend/types";
 import { HelpMarkdown } from "@catalog-frontend/ui";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 interface ImportProps {
   catalogId: string;
@@ -35,10 +37,13 @@ export interface UploadRdfProps {
 }
 
 export function ImportModal({ catalogId }: ImportProps) {
+  const router = useRouter();
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isUploaded, setIsUploaded] = useState<boolean>(false);
   const [isSending, setIsSending] = useState<boolean>(false);
   const [cancelled, setCancelled] = useState<boolean>(false);
+  const [isGoingtoImportResults, setIsGoingtoImportResults] =
+    useState<boolean>(false);
   let uploadSession;
   const sessionId = useRef<number>(0);
 
@@ -61,6 +66,12 @@ export function ImportModal({ catalogId }: ImportProps) {
 
   const uploadRdf = useImportRdf(catalogId);
   const sendRdf = useSendRdf(catalogId);
+  const resultsPageMutation = useMutation({
+    mutationFn: async () =>
+      await router.push(`/catalogs/${catalogId}/concepts/import-results`),
+    onError: (error) =>
+      console.error("Failed to go to import results page", error),
+  });
 
   const maxSize = 10; // 10 MB
 
@@ -104,10 +115,11 @@ export function ImportModal({ catalogId }: ImportProps) {
   const send = async () => {
     setIsSending(true);
 
-    if (uploadType === UploadType.CSV) sendConcepts.mutate(uploadedConcepts);
+    if (uploadType === UploadType.CSV)
+      await sendConcepts.mutateAsync(uploadedConcepts);
     else if (uploadType === UploadType.RDF) {
       console.log("Uploaded concepts: ", uploadedRdfConcepts);
-      sendRdf.mutate(uploadedRdfConcepts);
+      await sendRdf.mutateAsync(uploadedRdfConcepts);
     }
   };
 
@@ -116,6 +128,7 @@ export function ImportModal({ catalogId }: ImportProps) {
     readerRdfRef?.current?.abort();
     readerRdfRef.current = null;
     setIsUploading(false);
+    setIsGoingtoImportResults(false);
     setIsUploaded(false);
     setIsSending(false);
     setCancelled(false);
@@ -201,6 +214,7 @@ export function ImportModal({ catalogId }: ImportProps) {
 
     return (
       <UploadButton
+        disabled={isGoingtoImportResults || isUploading}
         allowedMimeTypes={allowedExtensions}
         onUpload={(e) => {
           sessionId.current = Date.now();
@@ -212,6 +226,11 @@ export function ImportModal({ catalogId }: ImportProps) {
         <span>{localization.button.importConceptRDF}</span>
       </UploadButton>
     );
+  };
+
+  const goToImporResults = () => {
+    setIsGoingtoImportResults(true);
+    resultsPageMutation.mutate();
   };
 
   return (
@@ -243,7 +262,7 @@ export function ImportModal({ catalogId }: ImportProps) {
             </Modal.Header>
             <Modal.Content className={styles.content}>
               <div className={styles.modalContent}>
-                {(isUploading || isSending) && (
+                {(isGoingtoImportResults || isUploading || isSending) && (
                   <div className={styles.spinnerOverlay}>
                     <Spinner title={localization.loading} size="large" />
                   </div>
@@ -298,14 +317,16 @@ export function ImportModal({ catalogId }: ImportProps) {
           <Modal.Footer>
             <div className={styles.buttons}>
               <>
-                <LinkButton
-                  href={`/catalogs/${catalogId}/concepts/import-results`}
+                <Button
                   variant={"secondary"}
+                  disabled={isGoingtoImportResults || isUploading}
+                  onClick={goToImporResults}
                 >
                   Resultater
-                </LinkButton>
+                </Button>
 
                 <UploadButton
+                  disabled={isGoingtoImportResults || isUploading}
                   size="sm"
                   allowedMimeTypes={[
                     "text/csv",

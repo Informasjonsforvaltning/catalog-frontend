@@ -1,58 +1,114 @@
 "use client";
 
-import { ImportResult } from "@catalog-frontend/types";
+import {
+  ConceptExtraction,
+  ConceptExtractionStatus,
+  ImportResult,
+  ImportResultStatus,
+} from "@catalog-frontend/types";
 import styles from "./import-result-details.module.css";
-import { Accordion, Button, Heading, Tag } from "@digdir/designsystemet-react";
+import {
+  Accordion,
+  Heading,
+  Spinner,
+  Table,
+  Tag,
+} from "@digdir/designsystemet-react";
 import {
   capitalizeFirstLetter,
   formatISO,
   localization,
 } from "@catalog-frontend/utils";
 import { ImportRecordAccordionItem } from "./components/import-record-accordion-item";
-import { TrashIcon, CheckmarkIcon } from "@navikt/aksel-icons";
-import React from "react";
+import {
+  ArrowCirclepathIcon,
+  FloppydiskIcon,
+  TrashIcon,
+} from "@navikt/aksel-icons";
+import React, { useEffect } from "react";
 import {
   ImportResultStatusColors,
   StatusKey,
 } from "../tag/import-result-status/ImportResultStatus";
-import { CenterContainer, HelpMarkdown } from "@catalog-frontend/ui";
+import { Button, CenterContainer, HelpMarkdown } from "@catalog-frontend/ui";
+import { useMutation } from "@tanstack/react-query";
 
 interface Props {
   targetBaseHref: string;
   importResult: ImportResult;
   deleteHandler: (resultId: string) => void;
-  confirmHandler?: (resultId: string) => void;
+  saveConceptMutation?: ReturnType<typeof useMutation>;
+  deleteImportMutation?: ReturnType<typeof useMutation>;
   cancelHandler?: (resultId: string) => void;
+  cancelMutation?: ReturnType<typeof useMutation>;
   showCancellationButton?: boolean;
-  showConfirmationButton?: boolean;
+  isDeleting: boolean;
+  isCancelling: boolean;
 }
 
 const importStatuses = [
-  { value: "COMPLETED", label: localization.importResult.completed },
-  { value: "FAILED", label: localization.importResult.failed },
-  { value: "IN_PROGRESS", label: localization.importResult.inProgress },
-  { value: "CANCELLED", label: localization.importResult.cancelled },
-  { value: "SAVING", label: localization.importResult.savingInCatalog },
   {
-    value: "PENDING_CONFIRMATION",
+    value: ImportResultStatus.COMPLETED,
+    label: localization.importResult.completed,
+  },
+  {
+    value: ImportResultStatus.PARTIALLY_COMPLETED,
+    label: localization.importResult.partiallyCompleted,
+  },
+  { value: ImportResultStatus.FAILED, label: localization.importResult.failed },
+  {
+    value: ImportResultStatus.IN_PROGRESS,
+    label: localization.importResult.inProgress,
+  },
+  {
+    value: ImportResultStatus.CANCELLED,
+    label: localization.importResult.cancelled,
+  },
+  {
+    value: ImportResultStatus.SAVING,
+    label: localization.importResult.savingInCatalog,
+  },
+  {
+    value: ImportResultStatus.PENDING_CONFIRMATION,
     label: localization.importResult.pendingConfirmation,
+  },
+  {
+    value: ConceptExtractionStatus.SAVING_FAILED,
+    label: localization.importResult.savingFailed,
   },
 ];
 
 const importStatusHelpTexts = [
-  { value: "COMPLETED", label: localization.importResult.helpText.completed },
-  { value: "FAILED", label: localization.importResult.helpText.failed },
   {
-    value: "IN_PROGRESS",
+    value: ImportResultStatus.COMPLETED,
+    label: localization.importResult.helpText.completed,
+  },
+  {
+    value: ImportResultStatus.PARTIALLY_COMPLETED,
+    label: localization.importResult.helpText.partiallyCompleted,
+  },
+  {
+    value: ImportResultStatus.FAILED,
+    label: localization.importResult.helpText.failed,
+  },
+  {
+    value: ImportResultStatus.IN_PROGRESS,
     label: localization.importResult.helpText.inProgress,
   },
-  { value: "CANCELLED", label: localization.importResult.helpText.cancelled },
   {
-    value: "SAVING",
+    value: ImportResultStatus.CANCELLING,
+    label: localization.importResult.helpText.cancelling,
+  },
+  {
+    value: ImportResultStatus.CANCELLED,
+    label: localization.importResult.helpText.cancelled,
+  },
+  {
+    value: ImportResultStatus.SAVING,
     label: localization.importResult.helpText.savingInCatalog,
   },
   {
-    value: "PENDING_CONFIRMATION",
+    value: ImportResultStatus.PENDING_CONFIRMATION,
     label: localization.importResult.helpText.pendingConfirmation,
   },
 ];
@@ -61,10 +117,13 @@ const ImportResultDetails = ({
   targetBaseHref,
   importResult,
   deleteHandler,
-  confirmHandler,
+  saveConceptMutation,
+  deleteImportMutation,
   cancelHandler,
+  cancelMutation,
   showCancellationButton,
-  showConfirmationButton,
+  isDeleting,
+  isCancelling,
 }: Props) => {
   const formattedCreateDate = capitalizeFirstLetter(
     formatISO(importResult.created, {
@@ -77,6 +136,9 @@ const ImportResultDetails = ({
     }),
   );
 
+  const [savingExternalId, setSavingExternalId] = React.useState<string | null>(
+    null,
+  );
   const getImportStatusDisplay = (status: string) =>
     importStatuses.find((st) => status === st.value)?.label ?? status;
 
@@ -89,18 +151,122 @@ const ImportResultDetails = ({
       : "neutral";
 
   const getMessage = () => {
-    if (importResult.status === "FAILED" && importResult.failureMessage)
+    if (
+      importResult.status === ImportResultStatus.FAILED &&
+      importResult.failureMessage
+    )
       return importResult.failureMessage;
-    else if (importResult.status === "CANCELLED")
+    else if (importResult.status === ImportResultStatus.CANCELLED)
       return localization.importResult.cancelledImport;
 
     return "";
+  };
+
+  useEffect(() => {
+    if (savingExternalId !== null) saveExtractedConcept(savingExternalId);
+  }, [savingExternalId]);
+
+  function saveExtractedConcept(externalId: string) {
+    saveConceptMutation?.mutate(externalId, {
+      onSettled: () => setSavingExternalId(null),
+    });
+  }
+
+  const getButtonText = (conceptExtraction: ConceptExtraction) => {
+    if (
+      conceptExtraction.conceptExtractionStatus ===
+      ConceptExtractionStatus.PENDING_CONFIRMATION
+    )
+      return `${localization.importResult.confirmImport}`;
+    else if (
+      conceptExtraction.conceptExtractionStatus ===
+      ConceptExtractionStatus.SAVING_FAILED
+    )
+      return `${localization.importResult.tryAgain}`;
+  };
+
+  const getButtonColor = (conceptExtraction: ConceptExtraction) => {
+    if (
+      conceptExtraction.conceptExtractionStatus ===
+      ConceptExtractionStatus.PENDING_CONFIRMATION
+    ) {
+      return "first";
+    } else if (
+      conceptExtraction.conceptExtractionStatus ===
+      ConceptExtractionStatus.SAVING_FAILED
+    ) {
+      return "danger";
+    }
+  };
+
+  const checkIfSavingExternalIdMatches = (
+    conceptExtraction: ConceptExtraction,
+    savingExternalId: string | null,
+  ): boolean => {
+    return (
+      savingExternalId != null &&
+      conceptExtraction?.extractionRecord?.externalId != null &&
+      savingExternalId == conceptExtraction?.extractionRecord?.externalId
+    );
+  };
+
+  const getButton = (conceptExtraction: ConceptExtraction) => {
+    return (
+      <Button
+        variant="primary"
+        size="sm"
+        color={getButtonColor(conceptExtraction)}
+        disabled={
+          isDeleting ||
+          isCancelling ||
+          importResult.status === ImportResultStatus.CANCELLING ||
+          saveConceptMutation?.isPending ||
+          deleteImportMutation?.isPending
+        }
+        onClick={() => {
+          setSavingExternalId(conceptExtraction?.extractionRecord?.externalId);
+        }}
+      >
+        <>
+          {getButtonIcon(conceptExtraction)}
+          {getButtonText(conceptExtraction)}
+          {saveConceptMutation?.isPending &&
+            checkIfSavingExternalIdMatches(
+              conceptExtraction,
+              savingExternalId,
+            ) && <Spinner title={localization.loading} size="small" />}
+        </>
+      </Button>
+    );
+  };
+
+  const getButtonIcon = (conceptExtraction: ConceptExtraction) => {
+    if (
+      conceptExtraction.conceptExtractionStatus ===
+      ConceptExtractionStatus.PENDING_CONFIRMATION
+    ) {
+      return <FloppydiskIcon fontSize="1.5rem" />;
+    } else if (
+      conceptExtraction.conceptExtractionStatus ===
+      ConceptExtractionStatus.SAVING_FAILED
+    ) {
+      return <ArrowCirclepathIcon fontSize="1.5rem" />;
+    }
   };
 
   return (
     <div className={styles.pageContainer}>
       <div className={styles.header}>
         <div className={styles.titleContainer}>
+          {(isCancelling ||
+            importResult.status === ImportResultStatus.CANCELLING ||
+            isDeleting ||
+            cancelMutation?.isPending ||
+            deleteImportMutation?.isPending) && (
+            <div className={styles.spinnerOverlay}>
+              <Spinner title={localization.loading} size="large" />
+            </div>
+          )}
           <div className={styles.title}>
             {"Import #" + importResult.id.slice(0, 5).toUpperCase()}
           </div>
@@ -118,11 +284,11 @@ const ImportResultDetails = ({
                 </HelpMarkdown>
 
                 {cancelHandler &&
-                  confirmHandler &&
                   importResult.totalConcepts !== undefined &&
                   importResult.totalConcepts > 0 && (
                     <div className={styles.progress}>
-                      {importResult.status === "IN_PROGRESS" && (
+                      {importResult.status ===
+                        ImportResultStatus.IN_PROGRESS && (
                         <>
                           {importResult.extractedConcepts}/
                           {importResult.totalConcepts}
@@ -166,11 +332,15 @@ const ImportResultDetails = ({
             size="sm"
             color="danger"
             disabled={
+              isDeleting ||
+              saveConceptMutation?.isPending ||
               !importResult.status ||
               !(
-                importResult.status === "COMPLETED" ||
-                importResult.status === "CANCELLED" ||
-                importResult.status === "FAILED"
+                importResult.status === ImportResultStatus.COMPLETED ||
+                importResult.status ===
+                  ImportResultStatus.PARTIALLY_COMPLETED ||
+                importResult.status === ImportResultStatus.CANCELLED ||
+                importResult.status === ImportResultStatus.FAILED
               )
             }
             onClick={() => deleteHandler(importResult.id)}
@@ -185,11 +355,12 @@ const ImportResultDetails = ({
               size="small"
               color="first"
               disabled={
-                !importResult.status ||
-                importResult.status === "CANCELLED" ||
-                importResult.status === "FAILED" ||
-                importResult.status === "SAVING" ||
-                importResult.status === "COMPLETED"
+                saveConceptMutation?.isPending ||
+                importResult?.status === ImportResultStatus.CANCELLED ||
+                importResult?.status === ImportResultStatus.FAILED ||
+                importResult?.status === ImportResultStatus.SAVING ||
+                importResult?.status === ImportResultStatus.COMPLETED ||
+                importResult?.status === ImportResultStatus.PARTIALLY_COMPLETED
               }
               onClick={async () => {
                 cancelHandler && cancelHandler(importResult.id);
@@ -198,48 +369,81 @@ const ImportResultDetails = ({
               {localization.importResult.cancelImport}
             </Button>
           )}
-
-          {showConfirmationButton && (
-            <Button
-              variant="secondary"
-              size="small"
-              color="first"
-              disabled={
-                !importResult.status ||
-                importResult.status !== "PENDING_CONFIRMATION"
-              }
-              onClick={() => confirmHandler && confirmHandler(importResult.id)}
-            >
-              <CheckmarkIcon title="Legg til i katalog" fontSize="1.5rem" />
-              {localization.importResult.confirmImport}
-            </Button>
-          )}
         </div>
       </div>
-      {(!importResult.extractionRecords ||
-        importResult.extractionRecords?.length === 0) && (
+      {(!importResult.conceptExtractions ||
+        importResult.conceptExtractions?.length === 0) && (
         <CenterContainer>
           <Heading level={2} size="lg">
             {getMessage()}
           </Heading>
         </CenterContainer>
       )}
-      {importResult?.extractionRecords &&
-        importResult?.extractionRecords.length > 0 && (
-          <Accordion border={true}>
-            {importResult?.extractionRecords?.map((record) => (
-              <ImportRecordAccordionItem
-                key={`result-${record.internalId}`}
-                targetBaseHref={targetBaseHref}
-                record={record}
-                enableOpening={
-                  importResult?.status !== "PENDING_CONFIRMATION" &&
-                  importResult?.status !== "CANCELLED"
-                }
-                isCompleted={importResult.status === "COMPLETED"}
-              />
-            ))}
-          </Accordion>
+      {importResult?.conceptExtractions &&
+        importResult?.conceptExtractions.length > 0 && (
+          <div className={styles.tableContainer}>
+            <Table className={styles.tableFullWidth} zebra={true} border={true}>
+              <Table.Head>
+                <Table.Cell style={{ width: "70%" }}>
+                  {localization.importResult.conceptId}
+                </Table.Cell>
+                <Table.Cell style={{ width: "10%" }}>Status</Table.Cell>
+                <Table.Cell style={{ width: "20%" }} />
+              </Table.Head>
+              <Table.Body>
+                {importResult?.conceptExtractions?.map((conceptExtraction) => (
+                  <Table.Row
+                    key={conceptExtraction?.extractionRecord?.internalId}
+                  >
+                    <Table.Cell style={{ width: "70%" }}>
+                      <Accordion>
+                        <ImportRecordAccordionItem
+                          key={`result-${conceptExtraction?.extractionRecord?.internalId}`}
+                          targetBaseHref={targetBaseHref}
+                          conceptExtraction={conceptExtraction}
+                          enableOpening={
+                            importResult?.status !==
+                              ImportResultStatus.PENDING_CONFIRMATION &&
+                            importResult?.status !==
+                              ImportResultStatus.CANCELLED
+                          }
+                          isCompleted={
+                            importResult.status === ImportResultStatus.COMPLETED
+                          }
+                        />
+                      </Accordion>
+                    </Table.Cell>
+
+                    <Table.Cell style={{ width: "10%" }}>
+                      <Tag
+                        size={"sm"}
+                        color={getColorFromStatusKey(
+                          conceptExtraction.conceptExtractionStatus as StatusKey,
+                        )}
+                      >
+                        <div className={styles.titleTags}>
+                          {getImportStatusDisplay(
+                            conceptExtraction.conceptExtractionStatus,
+                          )}
+                        </div>
+                      </Tag>
+                    </Table.Cell>
+                    <Table.Cell style={{ width: "20%" }}>
+                      {(importResult.status ===
+                        ImportResultStatus.PENDING_CONFIRMATION ||
+                        importResult.status ===
+                          ImportResultStatus.PARTIALLY_COMPLETED) &&
+                        (conceptExtraction.conceptExtractionStatus ===
+                          ConceptExtractionStatus.PENDING_CONFIRMATION ||
+                          conceptExtraction.conceptExtractionStatus ===
+                            ConceptExtractionStatus.SAVING_FAILED) &&
+                        getButton(conceptExtraction)}
+                    </Table.Cell>
+                  </Table.Row>
+                ))}
+              </Table.Body>
+            </Table>
+          </div>
         )}
     </div>
   );
