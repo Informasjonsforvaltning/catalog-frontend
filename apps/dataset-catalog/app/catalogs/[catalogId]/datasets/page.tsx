@@ -34,14 +34,16 @@ const DatasetSearchHitsPage = withReadProtectedPage(
 
     return (
       <>
-        <Breadcrumbs
+        {/* <Breadcrumbs
           breadcrumbList={breadcrumbList}
           catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
-        />
+        /> */}
+        Datasett
+        {/*
         <DesignBanner
           catalogId={catalogId}
           title={localization.catalogType.dataset}
-        />
+        /> */}
         <DatasetsPageClient
           datasets={datasets}
           hasWritePermission={hasWritePermission}

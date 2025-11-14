@@ -10,7 +10,7 @@ export const StatusTag = ({ approved, ...props }: StatusTagProps) => {
   return (
     <Tag
       data-size='sm'
-      color={approved ? 'success' : 'second'}
+      data-color={approved ? 'success' : 'second'}
       {...props}
     >
       {localization.datasetCatalog.status?.[approved ? PublicationStatus.APPROVE : PublicationStatus.DRAFT]}

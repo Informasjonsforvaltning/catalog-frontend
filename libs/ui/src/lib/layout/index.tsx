@@ -7,6 +7,7 @@ import { AppBar } from '../app-bar';
 import cn from 'classnames';
 
 import './global.css';
+import '@fellesdatakatalog/ui/dist/styles.css';
 
 import style from './layout.module.css';
 import ErrorBoundary from '../error-boundry';

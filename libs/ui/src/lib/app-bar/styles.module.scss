@@ -1,11 +1,28 @@
 .appBar {
+	position:relative;
+	height:75px;
+	padding-top:75px;
+}
+
+.inner {
+	position:fixed;
+	top:0;
 	padding:1rem;
-	// background:white;
 	display:flex;
 	align-items:center;
 	gap:0.25rem;
-	// background:#6f2c3f;
+	gap:0.5rem;
 	color:white;
 	border-bottom:1px solid #eee;
-	// background: var(--fds-semantic-surface-action-first-no_fill-hover);
+	background: white;
+	width:100%;
+	box-sizing: border-box;
+	z-index:9999;
+	transition: all linear 200ms;
+	// border-bottom:2px solid #6f2c3f;
+	// border-bottom:5px solid blue;
+}
+
+.sticky {
+	box-shadow: var(--ds-shadow-md);
 }
