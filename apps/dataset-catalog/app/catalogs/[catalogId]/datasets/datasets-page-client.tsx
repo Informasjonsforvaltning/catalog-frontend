@@ -22,6 +22,7 @@ import {
   sortDateStringsDescending,
   sortDescending,
 } from '@catalog-frontend/utils';
+import { TagList } from '@fellesdatakatalog/ui';
 import StatusTag from '../../../../components/status-tag/index';
 import { PlusCircleIcon } from '@navikt/aksel-icons';
 import SearchFilter from '../../../../components/search-filter';
@@ -272,20 +273,18 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
                         title={getTranslateText(dataset?.title)}
                         description={getTranslateText(dataset?.description)}
                         titleHref={`/catalogs/${catalogId}/datasets/${dataset?.id}`}
-                        statusTag={datasetTags(dataset)}
-                        rightColumn={dataset.specializedType === 'SERIES' && <Tag>Serie</Tag>}
-                        content={
-                          <>
-                            <div className={styles.set}>
-                              <p>
-                                {localization.lastChanged} {formatDate(dateStringToDate(dataset.lastModified))}
-                              </p>
-                              <span>•</span>
-                              {dataset.published
-                                ? localization.publicationState.publishedInFDK
-                                : localization.publicationState.unpublished}
-                            </div>
-                          </>
+                        statusTag={
+                          <TagList>
+                            {datasetTags(dataset)}
+                            {dataset.published
+                              ? <Tag data-size='sm'>{localization.publicationState.publishedInFDK}</Tag>
+                              : <Tag data-size='sm'>{localization.publicationState.unpublished}</Tag>}
+                          </TagList>
+                        }
+                        labels={
+                          <span style={{fontSize:'0.9rem', opacity:'0.75'}}>
+                            {localization.lastChanged} {formatDate(dateStringToDate(dataset.lastModified))}
+                          </span>
                         }
                       />
                     </li>
