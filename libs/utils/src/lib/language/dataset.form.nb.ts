@@ -85,6 +85,11 @@ export const datasetFormNb = {
       'Datasettbeskrivelsen må ha status "Godkjent" for å kunne publiseres til Data.norge.no. Statusen kan endres i ',
     publish:
       "Publiser datasettbeskrivelsen til Data.norge.no. En beskrivelse kan ikke slettes så lenge den er publisert.",
+    mobilityTheme:
+      "Velg ett eller flere transporttema som beskriver innholdet i datasettet. Listen er fra [EUs liste over transporttema](https://w3id.org/mobilitydcat-ap/mobility-theme).",
+    distributionRights: "Betingelser for tilgang og bruk av distribusjonen.",
+    mobilityDataStandard:
+      "Standard for distribusjonen av datasettet. Velges fra [EUs kontrollerte vokabular for Mobility Data Standard](https://w3id.org/mobilitydcat-ap/mobility-data-standard).",
   },
   heading: {
     about: "Om datasettet",
@@ -95,6 +100,7 @@ export const datasetFormNb = {
     concept: "Begrep og emneord",
     informationModels: "Informasjonsmodeller",
     contactPoint: "Kontaktpunkt",
+    transportTheme: "Transporttema",
   },
   subtitle: {
     about: "Nøkkelinformasjon om datasettet.",
@@ -163,6 +169,9 @@ export const datasetFormNb = {
     contactName: "Navn",
     contactFields: "Kontaktinformasjon",
     description: "Beskrivelse",
+    mobilityTheme: "Transporttema",
+    distributionRights: "Rettigheter",
+    mobilityDataStandard: "Mobility-standard",
   },
   alert: {
     confirmDelete: "Er du sikker på at du vil slette datasettbeskrivelsen?",
@@ -190,8 +199,16 @@ export const datasetFormNb = {
     searchString: "Ingen treff. Søkestrengen må inneholde minst to bokstaver.",
     accessURL: "Tilgangslenke er påkrevd.",
     contactPoints: "Minst en verdi må fylles ut for kontaktpunktet.",
+    contacPointName: "Navn på kontaktpunkt er obligatorisk",
     accessUrlRequired: "Tilgangslenke må fylles ut.",
     relation: "Begge verdiene må fylles ut for å legge til en relasjon.",
+    mobilityTheme: "Minst ett transporttema må være valgt.",
+    mobilityDataStandard: "Minst en datastandard må være valgt.",
+    mobilityRights: "Rettigheter må velges.",
+    format: "Minst ett filformat må velges.",
+    distribution: "Distribusjon er påkrevd.",
+    spatial: "Minst ett dekningsområde må velges.",
+    frequency: "Oppdateringsfrekvens må velges.",
   },
   button: {
     addDate: "Legg til tidsperiode",
@@ -201,8 +218,10 @@ export const datasetFormNb = {
     addSample: "Legg til eksempeldata",
     updateSamole: "Oppdater eksempeldata",
     updateDistribution: "Oppdater distribusjon",
+    update: "Oppdater",
     addDataset: "Legg til datasett",
     addDatasetSeries: "Legg til datasettserie",
+    addTransportDataset: "Legg til transport-datasett",
   },
   errors: {
     qualifiedAttributions: "Kunne ikke hente enheter.",

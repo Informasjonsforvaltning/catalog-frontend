@@ -29,6 +29,7 @@ type Props = {
   datasetTypes: ReferenceDataCode[];
   provenanceStatements: ReferenceDataCode[];
   frequencies: ReferenceDataCode[];
+  isMobility?: boolean;
 };
 
 const FIELD_CONFIG = [
@@ -347,6 +348,7 @@ export const MinimizedDetailFields = ({
   datasetTypes,
   provenanceStatements,
   frequencies,
+  isMobility,
 }: Props) => {
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
   const [focus, setFocus] = useState<string | null>();
@@ -457,9 +459,16 @@ export const MinimizedDetailFields = ({
       </ToggleFieldButton>
     );
 
+  let fieldsList = FIELD_CONFIG;
+
+  //Remove frequency if form is mobilityDCAT
+  if (isMobility) {
+    fieldsList = FIELD_CONFIG.filter((f) => f.name !== "frequency");
+  }
+
   // Split fields into expanded and minimized
-  const expandedFields = FIELD_CONFIG.filter((f) => isExpanded(f));
-  const minimizedFields = FIELD_CONFIG.filter((f) => !isExpanded(f));
+  const expandedFields = fieldsList.filter((f) => isExpanded(f));
+  const minimizedFields = fieldsList.filter((f) => !isExpanded(f));
 
   return (
     <div>

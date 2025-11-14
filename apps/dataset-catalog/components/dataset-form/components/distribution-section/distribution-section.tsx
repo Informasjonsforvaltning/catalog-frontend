@@ -7,6 +7,7 @@ import {
   Button,
   Card,
   ErrorMessage,
+  Fieldset,
   Heading,
   Paragraph,
   Tag,
@@ -50,6 +51,9 @@ type Props = {
   openLicenses: ReferenceDataCode[];
   autoSaveId?: string;
   autoSaveStorage?: DataStorage<StorageData>;
+  isMobility?: boolean;
+  mobilityDataStandards?: ReferenceDataCode[];
+  mobilityRights?: ReferenceDataCode[];
 };
 
 export const DistributionSection = ({
@@ -58,6 +62,9 @@ export const DistributionSection = ({
   openLicenses,
   autoSaveId,
   autoSaveStorage,
+  isMobility,
+  mobilityDataStandards,
+  mobilityRights,
 }: Props) => {
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
   const [expandedIndexDistribution, setExpandedIndexDistribution] = useState<
@@ -66,7 +73,6 @@ export const DistributionSection = ({
   const [expandedIndexExampleData, setExpandedIndexExampleData] = useState<
     number | null
   >(null);
-
   const [selectedFileTypeUris, setSelectedFileTypeUris] = useState<string[]>();
   const [selectedMediaTypeUris, setSelectedMediaTypeUris] =
     useState<string[]>();
@@ -241,14 +247,23 @@ export const DistributionSection = ({
 
   return (
     <Box>
-      <div className={styles.fieldSet}>
-        <TitleWithHelpTextAndTag
-          helpText={localization.datasetForm.helptext.distribution}
-          tagColor="info"
-          tagTitle={localization.tag.recommended}
-        >
-          {localization.datasetForm.fieldLabel.distributions}
-        </TitleWithHelpTextAndTag>
+      <Fieldset
+        size="sm"
+        legend={
+          <TitleWithHelpTextAndTag
+            helpText={localization.datasetForm.helptext.distribution}
+            tagTitle={
+              isMobility
+                ? localization.tag.required
+                : localization.tag.recommended
+            }
+            tagColor={isMobility ? undefined : "info"}
+          >
+            {localization.datasetForm.fieldLabel.distributions}
+          </TitleWithHelpTextAndTag>
+        }
+        error={errors.distribution}
+      >
         {values?.distribution &&
           !distributionArrayIsEmpty(values?.distribution) &&
           values?.distribution?.map(
@@ -278,6 +293,8 @@ export const DistributionSection = ({
                         referenceDataEnv={referenceDataEnv}
                         searchEnv={searchEnv}
                         openLicenses={openLicenses}
+                        mobilityDataStandards={mobilityDataStandards}
+                        mobilityRights={mobilityRights}
                         distributionType="distribution"
                         onSuccess={(updatedDist) => {
                           handleDistributionSuccess(
@@ -296,6 +313,7 @@ export const DistributionSection = ({
                             index,
                           )
                         }
+                        isMobility={isMobility}
                         trigger={
                           <Button variant="tertiary" size="sm">
                             <PencilWritingIcon
@@ -424,6 +442,8 @@ export const DistributionSection = ({
             referenceDataEnv={referenceDataEnv}
             searchEnv={searchEnv}
             openLicenses={openLicenses}
+            mobilityDataStandards={mobilityDataStandards}
+            mobilityRights={mobilityRights}
             initialFileTypes={[]}
             initialMediaTypes={[]}
             initialAccessServices={[]}
@@ -437,188 +457,223 @@ export const DistributionSection = ({
               page: [],
               conformsTo: [],
               accessServices: [],
+              rights: { type: "" },
+              mobilityDataStandard: "",
             }}
+            isMobility={isMobility}
           />
         </div>
-      </div>
-      <FieldsetDivider />
-      <div className={styles.fieldSet}>
-        <TitleWithHelpTextAndTag
-          helpText={localization.datasetForm.helptext.sample}
-        >
-          {localization.datasetForm.fieldLabel.sample}
-        </TitleWithHelpTextAndTag>
-        {values?.sample &&
-          !distributionArrayIsEmpty(values?.sample) &&
-          values?.sample?.map(
-            (item, index) =>
-              !isEmpty(item) && (
-                <Card key={`sample-${index}`}>
-                  <div className={styles.heading}>
-                    <div className={styles.field}>
-                      {item?.accessURL && (
-                        <>
-                          <Heading size="2xs" level={4}>
-                            {localization.datasetForm.fieldLabel.accessURL}
-                          </Heading>
-                          {item.accessURL.map((url: string, index: number) => {
-                            return (
-                              <Paragraph key={`accessURL-${index}`} size="sm">
-                                {url}
-                              </Paragraph>
-                            );
-                          })}
-                        </>
-                      )}
-                    </div>
-                    <div className={styles.buttons}>
-                      <DistributionModal
-                        type="edit"
-                        initialValues={{ ...item }}
-                        initialFileTypes={selectedFileTypes ?? []}
-                        initialMediaTypes={selectedMediaTypes ?? []}
-                        initialAccessServices={selectedDataServices ?? []}
-                        distributionType="sample"
-                        referenceDataEnv={referenceDataEnv}
-                        searchEnv={searchEnv}
-                        openLicenses={openLicenses}
-                        onSuccess={(updatedDist: Distribution) => {
-                          handleDistributionSuccess(
-                            updatedDist,
-                            "sample",
-                            index,
-                          );
-                        }}
-                        onCancel={() => handleDistributionCancel("sample")}
-                        onChange={(updatedDist: Distribution) =>
-                          handleDistributionChange(updatedDist, "sample", index)
-                        }
-                        trigger={
-                          <Button variant="tertiary" size="sm">
-                            <PencilWritingIcon
-                              title="Rediger"
-                              fontSize="1.5rem"
-                            />
-                            {localization.button.edit}
-                          </Button>
-                        }
-                      />
-                      <DeleteButton
-                        onClick={() => {
-                          const newArray = [...(values.sample ?? [])];
-                          newArray.splice(index, 1);
-                          setFieldValue("sample", newArray);
-                          handleDistributionCancel("sample");
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className={styles.field}>
-                    {!isEmpty(item?.format) && (
-                      <Heading size="2xs" level={4}>
-                        {localization.datasetForm.fieldLabel.format}
-                      </Heading>
-                    )}
-                    <div className={styles.tags}>
-                      {item?.format?.map((uri) => (
-                        <Tag key={uri} color="info" size="sm">
-                          {(
-                            selectedFileTypes?.find(
-                              (format) => format?.uri === uri,
-                            ) ?? {}
-                          ).code ?? uri}
-                        </Tag>
-                      ))}
-                    </div>
-                  </div>
-
-                  {showSeeMoreButton(item) && (
-                    <div>
-                      <Button
-                        variant="tertiary"
-                        onClick={() => {
-                          setExpandedIndexExampleData(
-                            expandedIndexExampleData === index ? null : index,
-                          );
-                        }}
-                        className={styles.button}
-                        size="sm"
-                      >
-                        {expandedIndexExampleData === index ? (
-                          <>
-                            <ChevronUpIcon fontSize="1.3rem" />
-                            {localization.seeLess}
-                          </>
-                        ) : (
-                          <>
-                            <ChevronDownIcon fontSize="1.3rem" />
-                            {localization.seeMore}
-                          </>
-                        )}
-                      </Button>
-                    </div>
-                  )}
-
-                  {expandedIndexExampleData === index && (
-                    <DistributionDetails
-                      selectedDataServices={selectedDataServices ?? []}
-                      selectedMediaTypes={selectedMediaTypes ?? []}
-                      distribution={item}
-                      openLicenses={openLicenses}
-                    />
-                  )}
-                  {get(errors, "sample[" + index + "]") && (
-                    <ErrorMessage size={"sm"}>
-                      Inneholder en eller flere ugyldige verdier
-                    </ErrorMessage>
-                  )}
-                </Card>
-              ),
-          )}
-
-        <div className={styles.add}>
-          <DistributionModal
-            type="new"
-            distributionType="sample"
-            trigger={
-              <AddButton>{localization.datasetForm.button.addSample}</AddButton>
+      </Fieldset>
+      {!isMobility && (
+        <>
+          <FieldsetDivider />
+          <Fieldset
+            size="sm"
+            legend={
+              <TitleWithHelpTextAndTag
+                helpText={localization.datasetForm.helptext.sample}
+                tagTitle={
+                  isMobility
+                    ? localization.tag.required
+                    : localization.tag.recommended
+                }
+              >
+                {localization.datasetForm.fieldLabel.sample}
+              </TitleWithHelpTextAndTag>
             }
-            onSuccess={(formValues: Distribution) => {
-              handleDistributionSuccess(
-                formValues,
-                "sample",
-                values.sample?.length ?? 0,
-              );
-            }}
-            onCancel={() => handleDistributionCancel("sample")}
-            onChange={(formValues: Distribution) => {
-              handleDistributionChange(
-                formValues,
-                "sample",
-                values.sample?.length ?? 0,
-              );
-            }}
-            referenceDataEnv={referenceDataEnv}
-            searchEnv={searchEnv}
-            openLicenses={openLicenses}
-            initialFileTypes={[]}
-            initialMediaTypes={[]}
-            initialAccessServices={[]}
-            initialValues={{
-              title: {},
-              description: {},
-              downloadURL: [],
-              accessURL: [],
-              format: [],
-              mediaType: [],
-              page: [],
-              conformsTo: [],
-              accessServices: [],
-            }}
-          />
-        </div>
-      </div>
+          >
+            {values?.sample &&
+              !distributionArrayIsEmpty(values?.sample) &&
+              values?.sample?.map(
+                (item, index) =>
+                  !isEmpty(item) && (
+                    <Card key={`sample-${index}`}>
+                      <div className={styles.heading}>
+                        <div className={styles.field}>
+                          {item?.accessURL && (
+                            <>
+                              <Heading size="2xs" level={4}>
+                                {localization.datasetForm.fieldLabel.accessURL}
+                              </Heading>
+                              {item.accessURL.map(
+                                (url: string, index: number) => {
+                                  return (
+                                    <Paragraph
+                                      key={`accessURL-${index}`}
+                                      size="sm"
+                                    >
+                                      {url}
+                                    </Paragraph>
+                                  );
+                                },
+                              )}
+                            </>
+                          )}
+                        </div>
+                        <div className={styles.buttons}>
+                          <DistributionModal
+                            type="edit"
+                            initialValues={{ ...item }}
+                            initialFileTypes={selectedFileTypes ?? []}
+                            initialMediaTypes={selectedMediaTypes ?? []}
+                            initialAccessServices={selectedDataServices ?? []}
+                            distributionType="sample"
+                            referenceDataEnv={referenceDataEnv}
+                            searchEnv={searchEnv}
+                            openLicenses={openLicenses}
+                            mobilityDataStandards={mobilityDataStandards}
+                            mobilityRights={mobilityRights}
+                            onSuccess={(updatedDist: Distribution) => {
+                              handleDistributionSuccess(
+                                updatedDist,
+                                "sample",
+                                index,
+                              );
+                            }}
+                            onCancel={() => handleDistributionCancel("sample")}
+                            onChange={(updatedDist: Distribution) =>
+                              handleDistributionChange(
+                                updatedDist,
+                                "sample",
+                                index,
+                              )
+                            }
+                            trigger={
+                              <Button variant="tertiary" size="sm">
+                                <PencilWritingIcon
+                                  title="Rediger"
+                                  fontSize="1.5rem"
+                                />
+                                {localization.button.edit}
+                              </Button>
+                            }
+                            isMobility={isMobility}
+                          />
+                          <DeleteButton
+                            onClick={() => {
+                              const newArray = [...(values.sample ?? [])];
+                              newArray.splice(index, 1);
+                              setFieldValue("sample", newArray);
+                              handleDistributionCancel("sample");
+                            }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className={styles.field}>
+                        {!isEmpty(item?.format) && (
+                          <Heading size="2xs" level={4}>
+                            {localization.datasetForm.fieldLabel.format}
+                          </Heading>
+                        )}
+                        <div className={styles.tags}>
+                          {item?.format?.map((uri) => (
+                            <Tag key={uri} color="info" size="sm">
+                              {(
+                                selectedFileTypes?.find(
+                                  (format) => format?.uri === uri,
+                                ) ?? {}
+                              ).code ?? uri}
+                            </Tag>
+                          ))}
+                        </div>
+                      </div>
+
+                      {showSeeMoreButton(item) && (
+                        <div>
+                          <Button
+                            variant="tertiary"
+                            onClick={() => {
+                              setExpandedIndexExampleData(
+                                expandedIndexExampleData === index
+                                  ? null
+                                  : index,
+                              );
+                            }}
+                            className={styles.button}
+                            size="sm"
+                          >
+                            {expandedIndexExampleData === index ? (
+                              <>
+                                <ChevronUpIcon fontSize="1.3rem" />
+                                {localization.seeLess}
+                              </>
+                            ) : (
+                              <>
+                                <ChevronDownIcon fontSize="1.3rem" />
+                                {localization.seeMore}
+                              </>
+                            )}
+                          </Button>
+                        </div>
+                      )}
+
+                      {expandedIndexExampleData === index && (
+                        <DistributionDetails
+                          selectedDataServices={selectedDataServices ?? []}
+                          selectedMediaTypes={selectedMediaTypes ?? []}
+                          distribution={item}
+                          openLicenses={openLicenses}
+                        />
+                      )}
+                      {get(errors, "sample[" + index + "]") && (
+                        <ErrorMessage size={"sm"}>
+                          Inneholder en eller flere ugyldige verdier
+                        </ErrorMessage>
+                      )}
+                    </Card>
+                  ),
+              )}
+
+            <div className={styles.add}>
+              <DistributionModal
+                type="new"
+                distributionType="sample"
+                trigger={
+                  <AddButton>
+                    {localization.datasetForm.button.addSample}
+                  </AddButton>
+                }
+                onSuccess={(formValues: Distribution) => {
+                  handleDistributionSuccess(
+                    formValues,
+                    "sample",
+                    values.sample?.length ?? 0,
+                  );
+                }}
+                onCancel={() => handleDistributionCancel("sample")}
+                onChange={(formValues: Distribution) => {
+                  handleDistributionChange(
+                    formValues,
+                    "sample",
+                    values.sample?.length ?? 0,
+                  );
+                }}
+                referenceDataEnv={referenceDataEnv}
+                searchEnv={searchEnv}
+                openLicenses={openLicenses}
+                mobilityDataStandards={mobilityDataStandards}
+                mobilityRights={mobilityRights}
+                initialFileTypes={[]}
+                initialMediaTypes={[]}
+                initialAccessServices={[]}
+                isMobility={isMobility}
+                initialValues={{
+                  title: {},
+                  description: {},
+                  downloadURL: [],
+                  accessURL: [],
+                  format: [],
+                  mediaType: [],
+                  page: [],
+                  conformsTo: [],
+                  accessServices: [],
+                }}
+              />
+            </div>
+          </Fieldset>
+        </>
+      )}
     </Box>
   );
 };

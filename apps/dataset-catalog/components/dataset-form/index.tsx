@@ -37,6 +37,7 @@ import { datasetTemplate } from "./utils/dataset-initial-values";
 import { useEffect, useRef, useState } from "react";
 import {
   confirmedDatasetSchema,
+  confirmedMobilityDatasetSchema,
   draftDatasetSchema,
 } from "./utils/validation-schema";
 import { AboutSection } from "./components/about-section";
@@ -61,6 +62,7 @@ type Props = {
   onCancel?: () => void;
   onSubmit?: (values: Dataset) => Promise<Dataset | undefined>;
   showSnackbarSuccessOnInit?: boolean;
+  isMobility?: boolean;
 };
 
 const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
@@ -97,6 +99,7 @@ export const DatasetForm = ({
   afterSubmit,
   onSubmit,
   onCancel,
+  isMobility,
 }: Props) => {
   const { catalogId, datasetId } = useParams();
   const searchParams = useSearchParams();
@@ -107,7 +110,15 @@ export const DatasetForm = ({
   const [ignoreRequired, setIgnoreRequired] = useState(true);
   const [showUnapproveModal, setShowUnapproveModal] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
-  const { losThemes, dataThemes, openLicenses } = referenceData;
+  const {
+    losThemes,
+    dataThemes,
+    mobilityThemes,
+    openLicenses,
+    mobilityDataStandards,
+    mobilityRights,
+    frequencies,
+  } = referenceData;
 
   const [formApprovedStatus, setFormApprovedStatus] = useState(
     initialValues?.approved,
@@ -263,7 +274,11 @@ export const DatasetForm = ({
         innerRef={formikRef}
         initialValues={datasetTemplate(initialValues as Dataset)}
         validationSchema={
-          ignoreRequired ? draftDatasetSchema : confirmedDatasetSchema
+          ignoreRequired
+            ? draftDatasetSchema
+            : isMobility
+              ? confirmedMobilityDatasetSchema
+              : confirmedDatasetSchema
         }
         validateOnChange={validateOnChange}
         validateOnBlur={validateOnChange}
@@ -399,9 +414,15 @@ export const DatasetForm = ({
                       "legalBasisForRestriction",
                       "legalBasisForProcessing",
                       "legalBasisForAccess",
+                      "temporal",
+                      "spatial",
                     ])}
                   >
-                    <AboutSection />
+                    <AboutSection
+                      referenceDataEnv={referenceDataEnv}
+                      isMobility={isMobility}
+                      frequencies={frequencies}
+                    />
                   </FormLayout.Section>
 
                   <FormLayout.Section
@@ -409,11 +430,17 @@ export const DatasetForm = ({
                     title={localization.datasetForm.heading.theme}
                     subtitle={localization.datasetForm.subtitle.theme}
                     required
-                    error={hasError(["euDataTheme", "losTheme"])}
+                    error={hasError([
+                      "euDataTheme",
+                      "losTheme",
+                      "mobilityTheme",
+                    ])}
                   >
                     <ThemeSection
                       losThemes={losThemes}
                       euDataThemes={dataThemes}
+                      mobilityThemes={isMobility ? mobilityThemes : undefined}
+                      isMobility={isMobility}
                     />
                   </FormLayout.Section>
 
@@ -429,6 +456,9 @@ export const DatasetForm = ({
                       openLicenses={openLicenses}
                       autoSaveId={datasetId?.toString()}
                       autoSaveStorage={autoSaveStorage}
+                      isMobility={isMobility}
+                      mobilityDataStandards={mobilityDataStandards}
+                      mobilityRights={mobilityRights}
                     />
                   </FormLayout.Section>
 
@@ -441,6 +471,7 @@ export const DatasetForm = ({
                     <DetailsSection
                       referenceDataEnv={referenceDataEnv}
                       referenceData={referenceData}
+                      isMobility={isMobility}
                     />
                   </FormLayout.Section>
 
