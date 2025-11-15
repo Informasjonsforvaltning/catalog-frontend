@@ -4,13 +4,10 @@ import React, { useState, useEffect } from 'react';
 import cn from 'classnames';
 import styles from './styles.module.scss';
 
-import {
-	Button,
-} from '@digdir/designsystemet-react';
-import { BellIcon } from '@navikt/aksel-icons';
 import { AppBarHamburgerMenu } from '../app-bar-hamburger-menu';
 import { AppBarOrgSelector } from '../app-bar-org-selector';
-import { AppBarDatasetSelector } from '../app-bar-catalog-selector';
+import { AppBarCatalogSelector } from '../app-bar-catalog-selector';
+import { AppBarNotificationButton } from '../app-bar-notification-button';
 import { AppBarUserMenu } from '../app-bar-user-menu';
 
 type AppBarProps = {}
@@ -47,12 +44,10 @@ export const AppBar = ({ children, ...props }: AppBarProps & React.HTMLAttribute
 			>
 				<AppBarHamburgerMenu />
 				<AppBarOrgSelector />
+				<AppBarCatalogSelector />
 				{children}
-				<AppBarDatasetSelector />
 				<div style={{'flexGrow': 1}} />
-				<Button data-size='sm' variant='tertiary'>
-					<BellIcon />
-				</Button>
+				<AppBarNotificationButton />
 				<AppBarUserMenu />
 			</div>
 		</div>

@@ -1,0 +1,52 @@
+.container {
+    position:relative;
+}
+
+.drawer {
+    position:fixed;
+    inset: 0;
+    // background:white;
+    background:var(--ds-color-neutral-background-default);
+    width:400px;
+    box-shadow: var(--ds-shadow-md);
+    z-index:2;
+    overflow:scroll;
+    box-sizing: border-box;
+}
+
+.drawerInner {
+    display:flex;
+    flex-direction:column;
+    gap:2rem;
+    padding:4rem 3rem 3rem;
+    height:100%;
+    box-sizing: border-box;
+
+    > * {
+        display:flex;
+        flex-direction:column;
+        gap:1rem;
+    }
+
+    :global(.ds-popover) {
+        width:100%;
+    }
+}
+
+.toggleBtn {
+    position:relative;
+    z-index:200;
+}
+
+.catalogList {
+    display:flex;
+    flex-direction:column;
+
+    button {
+        width:100%;
+
+        // &:has(svg) {
+        //     background: red;
+        // }
+    }
+}

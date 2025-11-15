@@ -82,3 +82,9 @@ body {
   border: 0;
   white-space: nowrap;
 }
+
+hr {
+  border:0;
+  height:1px;
+  background:var(--ds-color-neutral-border-subtle);
+}

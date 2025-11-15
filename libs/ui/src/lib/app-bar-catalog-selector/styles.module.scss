@@ -1,0 +1,17 @@
+.catalogButton {
+    display:flex;
+    justify-content: space-between;
+
+    :last-child {
+        flex-grow:1;
+        display:flex;
+        justify-content:flex-end;
+        margin-left:1rem;
+    }
+}
+
+.catalogList {
+    button:has(svg) {
+        background:var(--ds-color-surface-hover);
+    }
+}

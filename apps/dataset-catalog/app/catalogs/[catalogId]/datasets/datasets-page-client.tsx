@@ -277,8 +277,8 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
                           <TagList>
                             {datasetTags(dataset)}
                             {dataset.published
-                              ? <Tag data-size='sm'>{localization.publicationState.publishedInFDK}</Tag>
-                              : <Tag data-size='sm'>{localization.publicationState.unpublished}</Tag>}
+                              ? <Tag data-color='success'>{localization.publicationState.publishedInFDK}</Tag>
+                              : <Tag data-color='warning'>{localization.publicationState.unpublished}</Tag>}
                           </TagList>
                         }
                         labels={

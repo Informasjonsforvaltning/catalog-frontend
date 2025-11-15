@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { useState } from 'react';
 import {
 	Dropdown
 } from '@digdir/designsystemet-react';
@@ -11,6 +11,9 @@ import {
 } from '@navikt/aksel-icons';
 
 export const AppBarOrgSelector = () => {
+
+    const [ currentOrg, setCurrentOrg ] = useState({ orgNr: 974761076, orgName: 'Skatteetaten' });
+
 	return (
 		<Dropdown.TriggerContext>
 			<Dropdown.Trigger data-size='sm' variant='secondary'>
@@ -21,20 +24,20 @@ export const AppBarOrgSelector = () => {
 			<Dropdown placement="bottom-start">
 				<Dropdown.List>
 					<Dropdown.Item>
-						<Dropdown.Button>
+						<Dropdown.Button data-size='sm'>
 							<OrgLogo orgLogoSrc='https://orglogo.digdir.no/api/emblem/svg/974761076' style={{fontSize:'1.5rem'}} />
 							Skatteetaten
 							<CheckmarkIcon />
 						</Dropdown.Button>
 					</Dropdown.Item>
 					<Dropdown.Item>
-						<Dropdown.Button>
+						<Dropdown.Button data-size='sm'>
 							<OrgLogo orgLogoSrc='https://orglogo.digdir.no/api/emblem/svg/985399077' style={{fontSize:'1.5rem'}} />
-							MAttilsynet
+							Mattilsynet
 						</Dropdown.Button>
 					</Dropdown.Item>
 					<Dropdown.Item>
-						<Dropdown.Button>
+						<Dropdown.Button data-size='sm'>
 							<OrgLogo orgLogoSrc='https://orglogo.digdir.no/api/emblem/svg/991825827' style={{fontSize:'1.5rem'}} />
 							Digitaliseringsdirektoratet
 						</Dropdown.Button>

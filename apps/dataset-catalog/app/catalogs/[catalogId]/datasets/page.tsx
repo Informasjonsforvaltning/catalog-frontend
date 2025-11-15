@@ -38,7 +38,6 @@ const DatasetSearchHitsPage = withReadProtectedPage(
           breadcrumbList={breadcrumbList}
           catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
         /> */}
-        Datasett
         {/*
         <DesignBanner
           catalogId={catalogId}

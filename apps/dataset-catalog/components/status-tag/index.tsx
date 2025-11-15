@@ -9,7 +9,6 @@ type StatusTagProps = {
 export const StatusTag = ({ approved, ...props }: StatusTagProps) => {
   return (
     <Tag
-      data-size='sm'
       data-color={approved ? 'success' : 'second'}
       {...props}
     >
