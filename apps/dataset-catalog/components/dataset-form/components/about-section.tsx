@@ -7,7 +7,7 @@ import { AccessRightFields } from './access-rights-fields';
 
 export const AboutSection = () => {
   return (
-    <div style={{background:'red'}}>
+    <div>
       <FormikLanguageFieldset
         name={'title'}
         as={Textfield}

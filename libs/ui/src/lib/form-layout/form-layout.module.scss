@@ -29,6 +29,7 @@
   flex-direction: column;
   gap: 2rem;
   flex-grow: 1;
+  min-width: 0;
 }
 
 .sideMenu {
@@ -114,6 +115,7 @@
   border: 1px solid #d5d7d9;
   border-radius: 8px;
   flex-grow: 1;
+  min-width: 0;
 }
 
 .sectionHeading {
