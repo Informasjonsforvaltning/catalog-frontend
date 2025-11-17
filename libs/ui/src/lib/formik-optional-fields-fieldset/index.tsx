@@ -64,7 +64,7 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields, errorPat
             key={field.valuePath}
           >
             <Fieldset.Legend>{field?.legend ?? field?.label}</Fieldset.Legend>
-            <Card
+            <div
               key={field.valuePath}
               className={styles.field}
             >
@@ -75,7 +75,7 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields, errorPat
                 error={get(errors, field.valuePath)}
               />
               <DeleteButton onClick={() => handleRemoveField(field.valuePath)} />
-            </Card>
+            </div>
           </Fieldset>
         ))}
         <div className={styles.addButtons}>

@@ -1,7 +1,6 @@
 import { Dataset, StorageData } from '@catalog-frontend/types';
 import { FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization, DataStorage } from '@catalog-frontend/utils';
-import { Card } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 import { UriWithLabelFieldsetTable } from '../uri-with-label-field-set-table';
 import { ReferenceTable } from './references-table';
@@ -17,7 +16,7 @@ export const RelationsSection = ({ searchEnv, autoSaveId, autoSaveStorage }: Pro
   const { errors } = useFormikContext<Dataset>();
 
   return (
-    <Card>
+    <div>
       <ReferenceTable
         searchEnv={searchEnv}
         autoSaveId={autoSaveId}
@@ -33,6 +32,6 @@ export const RelationsSection = ({ searchEnv, autoSaveId, autoSaveStorage }: Pro
           errors={errors.relatedResources}
         />
       </div>
-    </Card>
+    </div>
   );
 };
