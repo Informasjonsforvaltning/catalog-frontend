@@ -4,7 +4,7 @@ import {
   DesignBanner,
 } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
-import { ImportResult } from "@catalog-frontend/types";
+import { ImportResultSummary } from "@catalog-frontend/types";
 import { getConceptImportResults } from "@catalog-frontend/data-access";
 import { withAdminProtectedPage } from "@concept-catalog/utils/auth";
 import ImportResultsPageClient from "./import-results-page-client";
@@ -12,7 +12,7 @@ import ImportResultsPageClient from "./import-results-page-client";
 const ImportResultsPage = withAdminProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/concepts/import-results`,
   async ({ catalogId, session }) => {
-    const importResults: ImportResult[] = await getConceptImportResults(
+    const importResultSummaries: ImportResultSummary[] = await getConceptImportResults(
       catalogId,
       `${session.accessToken}`,
     )
@@ -47,7 +47,7 @@ const ImportResultsPage = withAdminProtectedPage(
         />
         <ImportResultsPageClient
           catalogId={catalogId}
-          importResults={importResults}
+          importResultSummaries={importResultSummaries}
         />
       </>
     );
