@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, type MouseEvent } from 'react';
 import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'nuqs';
 import { isEmpty } from 'lodash';
 import { useRouter } from 'next/navigation';
@@ -195,7 +195,7 @@ export const SearchPageClient = ({
     return user?.name ?? '';
   };
 
-  const onPageChange = (page: number) => {
+  const onPageChange = (event: MouseEvent<HTMLElement>, page: number) => {
     setPage(page - 1);
     window.scrollTo({
       top: 0,

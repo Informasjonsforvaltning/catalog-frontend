@@ -10,8 +10,9 @@ import {
   SearchHitContainer,
   SearchHitsLayout,
   Select,
+  Tag,
 } from '@catalog-frontend/ui';
-import { Chip, Tag } from '@digdir/designsystemet-react';
+import { Chip } from '@digdir/designsystemet-react';
 import {
   dateStringToDate,
   formatDate,
@@ -276,9 +277,7 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
                         statusTag={
                           <TagList>
                             {datasetTags(dataset)}
-                            {dataset.published
-                              ? <Tag data-color='success'>{localization.publicationState.publishedInFDK}</Tag>
-                              : <Tag data-color='warning'>{localization.publicationState.unpublished}</Tag>}
+                            <Tag.PublishedTag published={dataset.published} />
                           </TagList>
                         }
                         labels={
@@ -297,7 +296,7 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
               currentPage: page ?? 0,
               totalPages: totalPages,
             }}
-            onPageChange={(newPage) => {
+            onPageChange={(event, newPage) => {
               setPage(newPage - 1);
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}

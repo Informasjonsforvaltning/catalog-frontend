@@ -1,6 +1,6 @@
 'use client';
 import { localization } from '@catalog-frontend/utils';
-import { Switch } from '@digdir/designsystemet-react';
+import { Button } from '@digdir/designsystemet-react';
 import styles from './publish-switch.module.css';
 import { publishDataset } from '../../app/actions/actions';
 import { Dataset, PublicationStatus } from '@catalog-frontend/types';
@@ -45,16 +45,15 @@ export const PublishSwitch = ({ catalogId, dataset, disabled }: Props) => {
 
   return (
     <>
-      <Switch
-        className={styles.center}
-        data-size='sm'
-        position='right'
-        onChange={() => handlePublishDataset()}
-        checked={dataset.published}
-        disabled={disabled || !(dataset.approved || dataset.published)}
-      >
-        {localization.publicationState.published}
-      </Switch>
+      {
+        dataset.published ?
+        <Button onClick={() => handlePublishDataset()} data-size='sm' data-variant='secondary' data-color='danger'>
+          {localization.button.unpublish}
+        </Button> :
+        <Button onClick={() => handlePublishDataset()} data-size='sm' data-variant='secondary' data-color='success'>
+          {localization.button.publish}
+        </Button>
+      }
     </>
   );
 };

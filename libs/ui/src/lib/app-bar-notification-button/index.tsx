@@ -9,6 +9,12 @@ import {
 } from '@digdir/designsystemet-react';
 import { BellFillIcon, BellIcon } from '@navikt/aksel-icons';
 
+const notifications = [
+    {
+        type: 'views'
+    }
+];
+
 export const AppBarNotificationButton = () => {
 	return (
         <Dropdown.TriggerContext>

@@ -2,7 +2,7 @@
 
 import { ReactNode, Ref, useEffect, useRef, useState } from 'react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Fieldset, Box, Paragraph, Textfield, ErrorMessage } from '@digdir/designsystemet-react';
+import { Fieldset, Card, Paragraph, Textfield, ValidationMessage } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 
 import styles from './formik-language-fieldset.module.scss';
@@ -128,7 +128,7 @@ export const FormikLanguageFieldset = ({
               error={hasError(lang)}
             />
           ) : (
-            <Box
+            <Card
               key={lang}
               className={styles.languageField}
             >
@@ -151,9 +151,9 @@ export const FormikLanguageFieldset = ({
                             {localization.language[lang]}
                           </Paragraph>
                           {!requiredLanguages?.includes(lang) && !readOnly && (
-                            <Box>
+                            <Card>
                               <DeleteButton onClick={() => handleRemoveLanguage(lang)} />
-                            </Box>
+                            </Card>
                           )}
                         </>
                       ),
@@ -165,7 +165,7 @@ export const FormikLanguageFieldset = ({
               {!requiredLanguages?.includes(lang) && renderAs !== TextareaWithPrefix && !readOnly && (
                 <DeleteButton onClick={() => handleRemoveLanguage(lang)} />
               )}
-            </Box>
+            </Card>
           )}
         </div>
       ))}
@@ -184,12 +184,12 @@ export const FormikLanguageFieldset = ({
       )}
 
       {showError && getError() && (
-        <ErrorMessage
+        <ValidationMessage
           data-size='sm'
           error
         >
           {getError()}
-        </ErrorMessage>
+        </ValidationMessage>
       )}
     </Fieldset>
   );

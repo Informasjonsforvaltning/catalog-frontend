@@ -1,10 +1,10 @@
 import { localization } from '@catalog-frontend/utils';
 import styles from './search-hit-container.module.css';
 import { Pagination } from '../pagination';
-import { ReactNode } from 'react';
+import { ReactNode, type MouseEvent } from 'react';
 
 type Props = {
-  onPageChange?(selectedItem: number): void;
+  onPageChange?(event: MouseEvent<HTMLElement>, selectedItem: number): void;
   searchHits: ReactNode | undefined;
   paginationInfo?: PaginationInfo;
   noSearchHits: boolean;

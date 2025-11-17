@@ -57,7 +57,6 @@ export const AccessRightsDetails = ({ dataset, language }: Props) => {
         <div className={styles.infoCardItems}>
           {!isEmpty(dataset.accessRight) && (
             <Tag
-              data-size='sm'
               color='info'
             >
               {accessRightsOptions.find((option) => option.value === dataset.accessRight)?.label}

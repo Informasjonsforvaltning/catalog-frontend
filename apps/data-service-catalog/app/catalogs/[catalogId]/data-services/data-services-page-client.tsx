@@ -280,7 +280,7 @@ const DataServicesPageClient = ({
               currentPage: page ?? 0,
               totalPages: totalPages,
             }}
-            onPageChange={(newPage) => {
+            onPageChange={(event, newPage) => {
               setPage(newPage - 1);
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}

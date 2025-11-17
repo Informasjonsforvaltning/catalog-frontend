@@ -16,10 +16,7 @@ const TagList = ({ values, getTagText }: TagListProps) => {
         if (label) {
           return (
             <li key={index}>
-              <Tag
-                data-size='sm'
-                color='info'
-              >
+              <Tag data-color='accent'>
                 {label}
               </Tag>
             </li>

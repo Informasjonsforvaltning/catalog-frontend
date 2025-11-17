@@ -1,4 +1,4 @@
-import { InfoCard } from '@catalog-frontend/ui';
+import { InfoCard, Tag } from '@catalog-frontend/ui';
 import { formatISO, getTranslateText, localization } from '@catalog-frontend/utils';
 import { EnvelopeClosedIcon, PhoneIcon, LinkIcon } from '@navikt/aksel-icons';
 import { isEmpty } from 'lodash';
@@ -6,6 +6,7 @@ import PublishSwitch from '../publish-switch';
 import { Dataset } from '@catalog-frontend/types';
 import styles from './details-columns.module.css';
 import { Link } from '@digdir/designsystemet-react';
+import { VStack } from '@fellesdatakatalog/ui';
 
 type Props = {
   dataset: Dataset;
@@ -33,13 +34,14 @@ export const RightColumn = ({ dataset, hasWritePermission, language }: Props) =>
         }
         helpTextSeverity={!(dataset.approved || dataset.published) ? 'warning' : 'info'}
       >
-        <PublishSwitch
-          catalogId={dataset.catalogId}
-          dataset={dataset}
-          disabled={!hasWritePermission}
-        />
-
-        {dataset.published ? localization.publicationState.publishedInFDK : localization.publicationState.unpublished}
+        <VStack>
+          <Tag.PublishedTag published={dataset.published} />
+          <PublishSwitch
+            catalogId={dataset.catalogId}
+            dataset={dataset}
+            disabled={!hasWritePermission}
+          />
+        </VStack>
       </InfoCard.Item>
 
       {dataset?.lastModified && (

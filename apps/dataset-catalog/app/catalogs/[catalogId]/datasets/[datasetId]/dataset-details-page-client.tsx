@@ -1,7 +1,7 @@
 'use client';
 
 import { Dataset, DatasetSeries, ReferenceData } from '@catalog-frontend/types';
-import { DeleteButton, DetailsPageLayout, LinkButton } from '@catalog-frontend/ui';
+import { DeleteButton, DetailsPageLayout, LinkButton, Tag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { useState } from 'react';
 import styles from './dataset-details-page.module.css';
@@ -12,6 +12,7 @@ import StatusTag from '../../../../../components/status-tag/index';
 import { useRouter } from 'next/navigation';
 import { Alert } from '@digdir/designsystemet-react';
 import { ConfirmModal, MarkdownComponent } from '@catalog-frontend/ui';
+import { TagList } from '@fellesdatakatalog/ui';
 
 interface datasetDetailsPageProps {
   dataset: Dataset;
@@ -63,7 +64,12 @@ const DatasetDetailsPageClient = ({
         handleLanguageChange={handleLanguageChange}
         language={language}
         headingTitle={getTranslateText(dataset?.title ?? '', language)}
-        headingTag={<StatusTag approved={dataset.approved || dataset.published} />}
+        headingTag={
+          <TagList>
+            <StatusTag approved={dataset.approved || dataset.published} />
+            <Tag.PublishedTag published={dataset.published} />
+          </TagList>
+        }
         loading={false}
       >
         {dataset.specializedType === 'SERIES' ? (
@@ -78,7 +84,7 @@ const DatasetDetailsPageClient = ({
               searchEnv={searchEnv}
               referenceData={referenceData}
               datasetSeries={datasetSeries}
-              language={language}
+              language={language}x
             />
           </DetailsPageLayout.Left>
         )}
@@ -93,7 +99,7 @@ const DatasetDetailsPageClient = ({
           {hasWritePermission && (
             <div className={styles.set}>
               {dataset.specializedType !== 'SERIES' && (
-                <LinkButton href={`/catalogs/${catalogId}/datasets/${datasetId}/edit`}>
+                <LinkButton href={`/catalogs/${catalogId}/datasets/${datasetId}/edit`} data-size='sm'>
                   {localization.button.edit}
                 </LinkButton>
               )}

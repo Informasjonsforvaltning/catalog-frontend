@@ -181,7 +181,6 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
         <InfoCard.Item title={localization.datasetForm.fieldLabel.landingPage}>
           {dataset?.landingPage.map((page: string, index: number) => (
             <Paragraph
-              size={'sm'}
               key={`landing-page-${index}`}
             >
               <Link href={page}>{page}</Link>

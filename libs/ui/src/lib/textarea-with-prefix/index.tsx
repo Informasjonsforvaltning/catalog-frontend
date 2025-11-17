@@ -1,24 +1,25 @@
 import { forwardRef, ReactNode } from 'react';
-import { Box, Textarea, TextareaProps } from '@digdir/designsystemet-react';
+import { Card, Textfield, TextfieldProps } from '@digdir/designsystemet-react';
 import styles from './textarea-with-prefix.module.scss';
 
 export type TextareaWithPrefixProps = {
   prefix: ReactNode;
-} & TextareaProps;
+} & TextfieldProps;
 
 export const TextareaWithPrefix = forwardRef<HTMLTextAreaElement, TextareaWithPrefixProps>(
   ({ prefix, label, ...props }, ref) => {
     return (
-      <Box className={styles.textareaWithPrefix}>
+      <Card className={styles.textareaWithPrefix}>
         {label && <label>{label}</label>}
-        <Box>
-          <Box className={styles.prefix}>{prefix}</Box>
-          <Textarea
+        <Card>
+          <Card className={styles.prefix}>{prefix}</Card>
+          <Textfield
             ref={ref}
-            {...props}
+            {...(props as TextfieldProps & { multiline: true })}
+            multiline={true}
           />
-        </Box>
-      </Box>
+        </Card>
+      </Card>
     );
   },
 );

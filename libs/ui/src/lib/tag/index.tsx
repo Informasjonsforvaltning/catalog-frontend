@@ -12,6 +12,7 @@ import {
   DataServiceStatusTag as TagDataServiceStatus,
   type DataServiceStatusTagProps,
 } from './data-service-status/DataServiceStatus';
+import { PublishedTag as TagPublishedTag, type PublishedTagProps } from './published-tag/PublishedTag';
 
 type TagComponent = {
   ConceptStatus: typeof TagConceptStatus;
@@ -19,6 +20,7 @@ type TagComponent = {
   ChangeRequestStatus: typeof TagChangeRequestStatus;
   ImportResultStatus: typeof TagImportResultStatus;
   DataServiceStatus: typeof TagDataServiceStatus;
+  PublishedTag: typeof TagPublishedTag;
 };
 
 const Tag: TagComponent = {
@@ -27,6 +29,7 @@ const Tag: TagComponent = {
   ChangeRequestStatus: TagChangeRequestStatus,
   ImportResultStatus: TagImportResultStatus,
   DataServiceStatus: TagDataServiceStatus,
+  PublishedTag: TagPublishedTag,
 };
 
 Tag.ConceptStatus.displayName = `Tag.ConceptStatus`;
@@ -34,6 +37,7 @@ Tag.ChangeRequestStatus.displayName = `Tag.ChangeRequestStatus`;
 Tag.ServiceStatus.displayName = 'Tag.ServiceStatus';
 Tag.ImportResultStatus.displayName = 'Tag.ImportResultStatus';
 Tag.DataServiceStatus.displayName = 'Tag.DataServiceStatus';
+Tag.PublishedTag.displayName = 'Tag.PublishedTag';
 
 export type {
   ConceptStatusTagProps,
@@ -41,5 +45,6 @@ export type {
   ServiceStatusTagProps,
   ImportResultStatusTagProps,
   DataServiceStatusTagProps,
+  PublishedTagProps,
 };
-export { Tag, TagConceptStatus, TagChangeRequestStatus, TagDataServiceStatus, TagImportResultStatus, TagServiceStatus };
+export { Tag, TagConceptStatus, TagChangeRequestStatus, TagDataServiceStatus, TagImportResultStatus, TagServiceStatus, TagPublishedTag };
