@@ -1,5 +1,5 @@
 import { FastField, useFormikContext } from 'formik';
-import { ErrorMessage, Fieldset, Textfield } from '@digdir/designsystemet-react';
+import { ValidationMessage, Fieldset, Textfield } from '@digdir/designsystemet-react';
 import styles from './version-fieldset.module.scss';
 import { Concept } from '@catalog-frontend/types';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
@@ -62,7 +62,9 @@ export const VersionFieldset = ({ name, changed, readOnly }) => {
         </div>
       </Fieldset>
       {typeof get(errors, name) === 'string' ? (
-        <ErrorMessage data-size='sm'>{get(errors, name)}</ErrorMessage>
+        <ValidationMessage data-size='sm'>
+          {get(errors, name)}
+        </ValidationMessage>
       ) : undefined}
     </>
   );

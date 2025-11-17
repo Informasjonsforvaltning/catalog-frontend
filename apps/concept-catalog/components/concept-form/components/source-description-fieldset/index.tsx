@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Fieldset, Textfield, Button, Radio, Card, ErrorMessage } from '@digdir/designsystemet-react';
+import { Fieldset, Textfield, Button, Radio, Card, ValidationMessage } from '@digdir/designsystemet-react';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import styles from './source-description-fieldset.module.scss';
@@ -139,7 +139,9 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
             )}
           />
           {typeof _.get(errors, `${name}.kilde`) === 'string' && (
-            <ErrorMessage data-size='sm'>{`${_.get(errors, `${name}.kilde`)}`}</ErrorMessage>
+            <ValidationMessage data-size='sm'>
+              {`${_.get(errors, `${name}.kilde`)}`}
+            </ValidationMessage>
           )}
         </Fieldset>
       )}

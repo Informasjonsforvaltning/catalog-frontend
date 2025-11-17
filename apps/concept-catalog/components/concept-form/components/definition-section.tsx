@@ -2,7 +2,7 @@ import { Concept, Definisjon, ISOLanguage, Kilde, StorageData } from '@catalog-f
 import {
   Button,
   Card,
-  ErrorMessage,
+  ValidationMessage,
   Fieldset,
   Heading,
   Paragraph,
@@ -285,9 +285,9 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
       {Object.keys(errors).some((value) =>
         ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(value),
       ) && (
-          <ErrorMessage>
+          <ValidationMessage>
             {getFirstErrorByRootKeys(errors, ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'])}
-          </ErrorMessage>
+          </ValidationMessage>
         )}
     </Card>
   );

@@ -4,7 +4,7 @@ import { FormikLanguageFieldset, FormikOptionalFieldsFieldset, TitleWithHelpText
 import { localization } from '@catalog-frontend/utils';
 import { useFormikContext } from 'formik';
 import { get as lodashGet } from 'lodash';
-import { Card, ErrorMessage, Textfield } from '@digdir/designsystemet-react';
+import { Card, ValidationMessage, Textfield } from '@digdir/designsystemet-react';
 import styles from '../data-service-form.module.css';
 
 export const ContactPointSection = () => {
@@ -66,12 +66,9 @@ export const ContactPointSection = () => {
         availableFields={contactPointOptions}
       />
       {hasMainLevelError() && (
-        <ErrorMessage
-          data-size='sm'
-          error
-        >
+        <ValidationMessage data-size='sm'>
           {getErrors()}
-        </ErrorMessage>
+        </ValidationMessage>
       )}
     </Card>
   );

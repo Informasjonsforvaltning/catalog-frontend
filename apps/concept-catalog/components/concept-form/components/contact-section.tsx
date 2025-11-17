@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FastField, useFormikContext } from 'formik';
-import { Card, Textfield, ErrorMessage } from '@digdir/designsystemet-react';
+import { Card, Textfield, ValidationMessage } from '@digdir/designsystemet-react';
 import { CheckboxGroup } from '@fellesdatakatalog/ui';
 import { Concept } from '@catalog-frontend/types';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
@@ -96,7 +96,9 @@ export const ContactSection = ({ changed, readOnly = false }: ContactSectionProp
         />
       )}
       {typeof errors?.kontaktpunkt === 'string' ? (
-        <ErrorMessage data-size='sm'>{errors?.kontaktpunkt}</ErrorMessage>
+        <ValidationMessage data-size='sm'>
+          {errors?.kontaktpunkt}
+        </ValidationMessage>
       ) : undefined}
     </Card>
   );

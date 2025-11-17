@@ -4,7 +4,7 @@ import {
   Button,
   Card,
   Combobox,
-  ErrorMessage,
+  ValidationMessage,
   Fieldset,
   Link,
   List,
@@ -288,12 +288,9 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                         </AddButton>
                       )}
                       {showValueError() && (
-                        <ErrorMessage
-                          data-size='sm'
-                          error
-                        >
+                        <ValidationMessage data-size='sm'>
                           {errors.value}
-                        </ErrorMessage>
+                        </ValidationMessage>
                       )}
                     </Fieldset>
 

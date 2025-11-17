@@ -1,6 +1,6 @@
 'use client';
 
-import { Fieldset, Card, ErrorMessage } from '@digdir/designsystemet-react';
+import { Fieldset, Card, ValidationMessage } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 
 import styles from './formik-optional-fields-fieldset.module.scss';
@@ -89,7 +89,11 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields, errorPat
               </AddButton>
             ))}
           </div>
-          {typeof mainError === 'string' && <ErrorMessage data-size={'sm'}>{mainError}</ErrorMessage>}
+          {typeof mainError === 'string' && (
+            <ValidationMessage data-size={'sm'}>
+              {mainError}
+            </ValidationMessage>
+          )}
         </Card.Content>
       </Card>
     </Fieldset>

@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, Chip, ErrorMessage, Label, Textfield, TextfieldProps } from '@digdir/designsystemet-react';
+import { Card, Chip, ValidationMessage, Label, Textfield, TextfieldProps } from '@digdir/designsystemet-react';
 import { AddButton, DeleteButton } from '../button';
 import { forwardRef, ReactNode, useState } from 'react';
 import { useFormikContext } from 'formik';
@@ -118,7 +118,7 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
             </ChipComponent>
           ))}
         </Chip.Group>
-        {error && <ErrorMessage>{error}</ErrorMessage>}
+        {error && <ValidationMessage>{error}</ValidationMessage>}
       </>
     );
   },
