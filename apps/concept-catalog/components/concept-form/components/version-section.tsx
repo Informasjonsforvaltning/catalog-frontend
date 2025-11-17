@@ -1,3 +1,4 @@
+import { Card } from '@digdir/designsystemet-react';
 import { VersionFieldset } from './version-fieldset';
 
 type VersionSectionProps = {
@@ -7,7 +8,7 @@ type VersionSectionProps = {
 
 export const VersionSection = ({ changed, readOnly = false }: VersionSectionProps) => {
   return (
-    <div>
+    <Card>
       <VersionFieldset
         name='versjonsnr'
         changed={changed}
@@ -29,6 +30,6 @@ export const VersionSection = ({ changed, readOnly = false }: VersionSectionProp
         }
       />
        */}
-    </div>
+    </Card>
   );
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import { Chip, ValidationMessage, Label, Textfield, TextfieldProps } from '@digdir/designsystemet-react';
+import { Card, Chip, ValidationMessage, Label, Textfield, TextfieldProps } from '@digdir/designsystemet-react';
 import { AddButton, DeleteButton } from '../button';
 import { forwardRef, ReactNode, useState } from 'react';
 import { useFormikContext } from 'formik';
@@ -61,7 +61,7 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
 
     return (
       <>
-        <div className={classNames(styles.fieldBox, className)}>
+        <Card className={classNames(styles.fieldBox, className)}>
           {!readOnly && (
             <>
               <Textfield
@@ -96,7 +96,7 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
               onClick={() => onDeleteButtonClicked()}
             />
           )}
-        </div>
+        </Card>
         {readOnly && label && (
           <Label
             asChild

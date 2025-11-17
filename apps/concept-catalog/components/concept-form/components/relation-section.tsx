@@ -2,7 +2,7 @@
 
 import { useFormikContext } from 'formik';
 import { PencilWritingIcon, PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Button, Fieldset, Skeleton, Table } from '@digdir/designsystemet-react';
+import { Card, Button, Fieldset, Skeleton, Table } from '@digdir/designsystemet-react';
 import { Concept, RelatedConcept, UnionRelation, RelationTypeEnum, StorageData } from '@catalog-frontend/types';
 import { DataStorage, getTranslateText, localization } from '@catalog-frontend/utils';
 import { useSearchConcepts as useSearchInternalConcepts, useDataNorgeSearchConcepts } from '../../../hooks/search';
@@ -162,8 +162,8 @@ export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, auto
   }
 
   return (
-    <div>
-      <div className={styles.fieldSet}>
+    <Card>
+      <Card className={styles.fieldSet}>
         <Fieldset
           readOnly={readOnly}
           data-size='sm'
@@ -237,9 +237,9 @@ export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, auto
             </Table.Body>
           </Table>
         </Fieldset>
-      </div>
+      </Card>
       {!readOnly && (
-        <div className={styles.buttonRow}>
+        <Card className={styles.buttonRow}>
           <RelationModal
             header={'Ny relasjon'}
             catalogId={catalogId}
@@ -261,8 +261,8 @@ export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, auto
             onChange={(values) => handleChangeRelationInModal(values)}
             onClose={() => handleCloseRelationModal()}
           />
-        </div>
+        </Card>
       )}
-    </div>
+    </Card>
   );
 };

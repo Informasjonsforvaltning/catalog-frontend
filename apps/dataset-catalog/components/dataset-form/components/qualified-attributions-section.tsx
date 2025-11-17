@@ -1,7 +1,7 @@
 import { Dataset } from '@catalog-frontend/types';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { containsNonNumberRegex, localization, onlyNumbersRegex } from '@catalog-frontend/utils';
-import { Combobox, Fieldset } from '@digdir/designsystemet-react';
+import { Card, Combobox, Fieldset } from '@digdir/designsystemet-react';
 import { useSearchEnheter, useSearchEnheterByOrgNmbs } from '../../../hooks/useEnhetsregister';
 import { useFormikContext } from 'formik';
 import { debounce } from 'lodash';
@@ -45,7 +45,7 @@ export const QualifiedAttributionsSection = ({ ref }: { ref: React.RefObject<HTM
   ];
 
   return (
-    <div>
+    <Card>
       <Fieldset
         data-size='sm'
         legend={
@@ -78,6 +78,6 @@ export const QualifiedAttributionsSection = ({ ref }: { ref: React.RefObject<HTM
           ))}
         </Combobox>
       </Fieldset>
-    </div>
+    </Card>
   );
 };

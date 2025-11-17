@@ -1,7 +1,7 @@
 import { DataService } from '@catalog-frontend/types';
 import { AddButton, FastFieldWithRef, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Fieldset, Textfield } from '@digdir/designsystemet-react';
+import { Card, Fieldset, Textfield } from '@digdir/designsystemet-react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
 import FieldsetWithDelete from '../../fieldset-with-delete';
 import styles from '../data-service-form.module.css';
@@ -20,7 +20,7 @@ export const DocumentationSection = () => {
   }, [focus, fieldRef]);
 
   return (
-    <div>
+    <Card>
       <FastField
         name='landingPage'
         as={Textfield}
@@ -76,6 +76,6 @@ export const DocumentationSection = () => {
           )}
         </FieldArray>
       </Fieldset>
-    </div>
+    </Card>
   );
 };

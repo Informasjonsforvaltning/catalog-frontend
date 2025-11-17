@@ -1,7 +1,7 @@
 import { DataService } from '@catalog-frontend/types';
 import { FormikReferenceDataCombobox, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Fieldset } from '@digdir/designsystemet-react';
+import { Card, Fieldset } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 import { useState } from 'react';
 import { useSearchFileTypeByUri, useSearchFileTypes } from '../../../hooks/useReferenceDataSearch';
@@ -22,7 +22,7 @@ export const FormatSection = ({ referenceDataEnv }: Props) => {
   );
 
   return (
-    <div>
+    <Card>
       <Fieldset
         legend={
           <TitleWithHelpTextAndTag
@@ -47,6 +47,6 @@ export const FormatSection = ({ referenceDataEnv }: Props) => {
           portal={false}
         />
       </Fieldset>
-    </div>
+    </Card>
   );
 };

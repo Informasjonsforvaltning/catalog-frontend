@@ -124,7 +124,7 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
 
   return (
     <Card>
-      <div className={styles.fieldSet}>
+      <Card className={styles.fieldSet}>
         <Fieldset readOnly={readOnly}>
           <Fieldset.Legend>
             <TitleWithHelpTextAndTag
@@ -232,7 +232,7 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
                   </Card.Header>
                   <div className={styles.definitionContent}>
                     <Paragraph>{getTranslateText(def.tekst)}</Paragraph>
-                    <div>
+                    <Card>
                       {allowedLanguages
                         .filter((lang) => def.tekst[lang])
                         .map((lang) => (
@@ -244,15 +244,15 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
                             {localization.language[lang]}
                           </Tag>
                         ))}
-                    </div>
+                    </Card>
                   </div>
                 </Card>
               )
             );
           })}
-      </div>
+      </Card>
       {!readOnly && (
-        <div className={styles.buttonRow}>
+        <Card className={styles.buttonRow}>
           {definitions
             .filter((name) => !values[name])
             .map((name) => (
@@ -278,7 +278,7 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
                 onClose={handleCloseDefinitionModal}
               />
             ))}
-        </div>
+        </Card>
       )}
 
       {Object.keys(errors).some((value) =>

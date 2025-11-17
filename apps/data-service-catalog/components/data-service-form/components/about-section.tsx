@@ -5,11 +5,11 @@ import {
   TextareaWithPrefix,
 } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
-import { Textfield } from '@digdir/designsystemet-react';
+import { Card, Textfield } from '@digdir/designsystemet-react';
 
 export const AboutSection = () => {
   return (
-    <div>
+    <Card>
       <FormikLanguageFieldset
         name={'title'}
         as={Textfield}
@@ -50,6 +50,6 @@ export const AboutSection = () => {
         }
         multiple
       />
-    </div>
+    </Card>
   );
 };
