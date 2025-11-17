@@ -62,9 +62,8 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
         ))}
       </Radio.Group>
       {relationToSource !== 'egendefinert' && (
-        <Fieldset
-          data-size='sm'
-          legend={
+        <Fieldset data-size='sm'>
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag
               helpText={localization.conceptForm.helpText.sources}
               tagColor='second'
@@ -72,8 +71,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
             >
               {localization.conceptForm.fieldLabel.sources}
             </TitleWithHelpTextAndTag>
-          }
-        >
+          </Fieldset.Legend>
           <FieldArray
             name={`${name}.kilde`}
             render={(arrayHelpers) => (

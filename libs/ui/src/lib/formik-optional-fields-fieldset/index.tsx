@@ -55,15 +55,15 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields, errorPat
   return (
     <Fieldset
       className={styles.fieldset}
-      legend={legend}
       data-size='sm'
     >
+      {legend && <Fieldset.Legend>{legend}</Fieldset.Legend>}
       <Card>
         {visibleFields.map((field) => (
           <Fieldset
             key={field.valuePath}
-            legend={field?.legend ?? field?.label}
           >
+            <Fieldset.Legend>{field?.legend ?? field?.label}</Fieldset.Legend>
             <Card
               key={field.valuePath}
               className={styles.field}

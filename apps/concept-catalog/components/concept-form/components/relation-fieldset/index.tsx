@@ -197,9 +197,8 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
   return (
     <Card className={styles.root}>
       <Card className={styles.flex}>
-        <Fieldset
-          data-size='sm'
-          legend={
+        <Fieldset data-size='sm'>
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag
               helpText={localization.conceptForm.helpText.relatedConcept}
               tagColor='warning'
@@ -207,8 +206,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
             >
               {localization.conceptForm.fieldLabel.relatedConcept}
             </TitleWithHelpTextAndTag>
-          }
-        >
+          </Fieldset.Legend>
           <Radio.Group
             legend=''
             data-size='sm'

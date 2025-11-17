@@ -251,10 +251,8 @@ const FieldModal = ({
                   </Dialog.Block>
 
                   <Dialog.Block className={cn(styles.modalContent, styles.fieldContainer)}>
-                    <Fieldset
-                      legend={localization.datasetForm.fieldLabel.relationType}
-                      data-size='sm'
-                    >
+                    <Fieldset data-size='sm'>
+                      <Fieldset.Legend>{localization.datasetForm.fieldLabel.relationType}</Fieldset.Legend>
                       <Combobox
                         onValueChange={(value) => setFieldValue(`referenceType`, value.toString())}
                         value={values.referenceType ? [values.referenceType] : []}
@@ -277,10 +275,8 @@ const FieldModal = ({
                       </Combobox>
                     </Fieldset>
 
-                    <Fieldset
-                      legend={localization.datasetForm.fieldLabel.dataset}
-                      data-size='sm'
-                    >
+                    <Fieldset data-size='sm'>
+                      <Fieldset.Legend>{localization.datasetForm.fieldLabel.dataset}</Fieldset.Legend>
                       <Combobox
                         onChange={(input: any) => setSearchQuery(input.target.value)}
                         onValueChange={(value) => {

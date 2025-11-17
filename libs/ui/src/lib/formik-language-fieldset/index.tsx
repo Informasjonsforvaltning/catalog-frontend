@@ -109,10 +109,10 @@ export const FormikLanguageFieldset = ({
   return (
     <Fieldset
       className={styles.fieldset}
-      legend={legend}
       readOnly={readOnly}
       data-size='sm'
     >
+      {legend && <Fieldset.Legend>{legend}</Fieldset.Legend>}
       {visibleLanguageFields.map((lang) => (
         <div key={lang}>
           {multiple ? (

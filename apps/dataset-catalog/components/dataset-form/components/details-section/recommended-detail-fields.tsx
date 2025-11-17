@@ -109,9 +109,8 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
       <FieldsetDivider />
 
       <div className={styles.fieldContainer}>
-        <Fieldset
-          data-size='sm'
-          legend={
+        <Fieldset data-size='sm'>
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag
               tagColor='info'
               tagTitle={localization.tag.recommended}
@@ -119,8 +118,7 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
             >
               {localization.datasetForm.fieldLabel.spatial}
             </TitleWithHelpTextAndTag>
-          }
-        >
+          </Fieldset.Legend>
           <Combobox
             placeholder={`${localization.search.search}...`}
             multiple

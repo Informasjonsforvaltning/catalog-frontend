@@ -125,9 +125,8 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
   return (
     <Card>
       <Card className={styles.fieldSet}>
-        <Fieldset
-          readOnly={readOnly}
-          legend={
+        <Fieldset readOnly={readOnly}>
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag
               helpText={localization.conceptForm.helpText.definition}
               tagTitle={localization.tag.required}
@@ -135,8 +134,8 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
             >
               Definisjon
             </TitleWithHelpTextAndTag>
-          }
-        />
+          </Fieldset.Legend>
+        </Fieldset>
 
         {definitions
           .filter((name) => values[name])

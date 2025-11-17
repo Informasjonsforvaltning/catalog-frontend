@@ -165,10 +165,12 @@ export const RelationSection = ({ catalogId, changed, readOnly, autoSaveId, auto
     <Card>
       <Card className={styles.fieldSet}>
         <Fieldset
-          legend={<TitleWithHelpTextAndTag changed={isDirty}>Tabell over relasjoner</TitleWithHelpTextAndTag>}
           readOnly={readOnly}
           data-size='sm'
         >
+          <Fieldset.Legend>
+            <TitleWithHelpTextAndTag changed={isDirty}>Tabell over relasjoner</TitleWithHelpTextAndTag>
+          </Fieldset.Legend>
           <Table
             data-size='sm'
             className={styles.table}

@@ -17,17 +17,15 @@ export const VersionFieldset = ({ name, changed, readOnly }) => {
 
   return (
     <>
-      <Fieldset
-        data-size='sm'
-        legend={
+      <Fieldset data-size='sm'>
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             helpText={localization.conceptForm.helpText.versionNumber}
             changed={changed?.includes(name)}
           >
             {localization.conceptForm.fieldLabel.versionNumber}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <div className={styles.versionFieldset}>
           <FastField
             as={Textfield}

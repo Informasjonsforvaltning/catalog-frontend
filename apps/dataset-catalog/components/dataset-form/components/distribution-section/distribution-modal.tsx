@@ -200,14 +200,12 @@ export const DistributionModal = ({
         setSearchDataServicesQuery,
         selectedAndSearchedAccessServices,
       }: any) => (
-        <Fieldset
-          data-size='sm'
-          legend={
+        <Fieldset data-size='sm'>
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.accessServices}>
               {localization.datasetForm.fieldLabel.accessServices}
             </TitleWithHelpTextAndTag>
-          }
-        >
+          </Fieldset.Legend>
           {selectedAccessServiceUris?.every((v) =>
             selectedAndSearchedAccessServices.find((option: { uri: string }) => option.uri === v),
           ) ? (
@@ -264,12 +262,12 @@ export const DistributionModal = ({
       }: any) => (
         <Fieldset
           data-size='sm'
-          legend={
+        >
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.mediaType}>
               {localization.datasetForm.fieldLabel.mediaType}
             </TitleWithHelpTextAndTag>
-          }
-        >
+          </Fieldset.Legend>
           {selectedMediaTypeUris?.every((v) =>
             selectedAndSearchedMediaTypes?.find((option: ReferenceDataCode | undefined) => option?.uri === v),
           ) ? (

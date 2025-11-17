@@ -229,16 +229,15 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                   </Dialog.Block>
 
                   <Dialog.Block className={styles.modalContent}>
-                    <Fieldset
-                      legend={
+                    <Fieldset>
+                      <Fieldset.Legend>
                         <TitleWithHelpTextAndTag
                           tagTitle={localization.tag.recommended}
                           helpText={localization.dataServiceForm.helptext.costValue}
                         >
                           {localization.dataServiceForm.fieldLabel.costValue}
                         </TitleWithHelpTextAndTag>
-                      }
-                    >
+                      </Fieldset.Legend>
                       {showValueField || isNumber(values?.value) ? (
                         <div className={styles.valueCurrencyFieldset}>
                           <FastFieldWithRef
@@ -296,17 +295,15 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
 
                     <FieldsetDivider />
 
-                    <Fieldset
-                      data-size='sm'
-                      legend={
+                    <Fieldset data-size='sm'>
+                      <Fieldset.Legend>
                         <TitleWithHelpTextAndTag
                           tagTitle={localization.tag.recommended}
                           helpText={localization.dataServiceForm.helptext.costDocumentation}
                         >
                           {localization.dataServiceForm.fieldLabel.costDocumentation}
                         </TitleWithHelpTextAndTag>
-                      }
-                    >
+                      </Fieldset.Legend>
                       <FieldArray name='documentation'>
                         {(arrayHelpers) => (
                           <>
