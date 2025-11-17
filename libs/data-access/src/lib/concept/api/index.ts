@@ -10,13 +10,12 @@ import { searchConceptsByUri } from "../../search/api";
 import {
   getUniqueConceptIdsFromUris,
   isObjectNullUndefinedEmpty,
-  validUUID,
   validateOrganizationNumber,
   validateUUID,
   validateAndEncodeUrlSafe,
-  validURI,
 } from "@catalog-frontend/utils";
 import { Operation } from "fast-json-patch";
+import { hashText } from "@catalog-frontend/utils/src/lib/validation/hashing";
 
 type SearchObject = Search.SearchObject;
 
@@ -492,31 +491,19 @@ export const confirmImportedConcept = async (
     "confirmConceptImport",
   );
 
-  let encodedExternalId: string;
-  if (validUUID(externalId)) {
-    validateUUID(externalId, "confirmConceptImport");
-    encodedExternalId = validateAndEncodeUrlSafe(
-      externalId,
-      "external ID",
-      "confirmConceptImport",
-    );
-    console.log("Encoded external ID as UUID", encodedExternalId);
-  } else if (validURI(externalId)) {
-    encodedExternalId = encodeURIComponent(externalId);
-    console.log("Encoded external ID as URI", encodedExternalId);
-  } else {
-    throw new Error(
-      `Invalid URI or UUID for as ID in confirmConceptImport: ${externalId}`,
-    );
-  }
+  const hashedExternalId = hashText(externalId)
 
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}/confirmConceptImport`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
     },
     method: "PUT",
-    body: encodedExternalId,
+    body: JSON.stringify({
+      hashedId: hashedExternalId,
+      encodedId: externalId,
+    }),
   };
 
   return await fetch(resource, options);

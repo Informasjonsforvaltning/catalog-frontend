@@ -44,10 +44,13 @@ const ImportRecordAccordionItem = ({
       (issue) => issue.type === "WARNING",
     ) ?? [];
 
+  const decodeFromBase64 = (encodedBase64: string) =>
+    Buffer.from(encodedBase64, "base64").toString("utf-8");
+
   const renderHeader = (record: ExtractionRecord) => {
     return (
       <div className={styles.recordHeader}>
-        <div style={{ maxWidth: "90%" }}>{record.externalId}</div>
+        <div style={{ maxWidth: "90%" }}>{decodeFromBase64(record.externalId)}</div>
         {errors.length > 0 && (
           <Tag
             size={"sm"}
