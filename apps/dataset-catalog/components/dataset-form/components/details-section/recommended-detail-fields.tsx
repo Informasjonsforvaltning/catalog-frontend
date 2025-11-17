@@ -1,7 +1,8 @@
 'use client';
 import { FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Checkbox, Combobox, Fieldset } from '@digdir/designsystemet-react';
+import { Combobox, Fieldset } from '@digdir/designsystemet-react';
+import { CheckboxGroup } from '@fellesdatakatalog/ui';
 import { useCallback, useState } from 'react';
 import {
   useSearchAdministrativeUnits,
@@ -77,9 +78,19 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
     ).values(),
   ];
 
+  const languageOptions = [
+    ...(values.language && values.language.some((lang) => lang.includes('NOR')) ? [{ value: langNOR.uri, label: getTranslateText(langNOR.label) || '' }] : []),
+    ...sortedLanguages
+      .filter((lang) => lang.code !== 'NOR')
+      .map((lang) => ({
+        value: lang.uri,
+        label: getTranslateText(lang.label) || '',
+      })),
+  ];
+
   return (
     <>
-      <Checkbox.Group
+      <CheckboxGroup
         onChange={(values) => setFieldValue('language', values)}
         value={values.language ?? []}
         legend={
@@ -92,26 +103,8 @@ export const RecommendedDetailFields = ({ referenceDataEnv, languages }: Props) 
           </TitleWithHelpTextAndTag>
         }
         data-size='sm'
-      >
-        {values.language && values.language.some((lang) => lang.includes('NOR')) && (
-          <Checkbox
-            key={langNOR.uri}
-            value={langNOR.uri}
-          >
-            {getTranslateText(langNOR.label)}
-          </Checkbox>
-        )}
-        {sortedLanguages
-          .filter((lang) => lang.code !== 'NOR')
-          .map((lang) => (
-            <Checkbox
-              key={lang.uri}
-              value={lang.uri}
-            >
-              {getTranslateText(lang.label)}
-            </Checkbox>
-          ))}
-      </Checkbox.Group>
+        options={languageOptions}
+      />
 
       <FieldsetDivider />
 

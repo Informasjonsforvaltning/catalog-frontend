@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 import styles from './internal-field.module.css';
 import { Button, Select } from '@catalog-frontend/ui';
-import { Textfield, Checkbox, HelpText, Paragraph } from '@digdir/designsystemet-react';
+import { Textfield, HelpText, Paragraph } from '@digdir/designsystemet-react';
+import { CheckboxGroup } from '@fellesdatakatalog/ui';
 import { CodeList, FieldType, InternalField, InternalFieldTemplate } from '@catalog-frontend/types';
 import { getTranslateText, localization, textRegexWithNumbers } from '@catalog-frontend/utils';
 import { useAdminDispatch } from '../../context/admin';
@@ -234,7 +235,7 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
         newField?.type === 'boolean') && (
         <>
           <div className={cn('accordionField', styles.row)}>
-            <Checkbox.Group
+            <CheckboxGroup
               legend=''
               onChange={(filters) => {
                 field
@@ -244,12 +245,11 @@ export const InternalFieldEditor = ({ catalogId, field }: Props) => {
                       enableFilter: filters.length > 0,
                     }));
               }}
-              defaultValue={
+              value={
                 (updatedFieldsList.find((f) => f.id === field?.id) || field)?.enableFilter ? ['enableFilter'] : []
               }
-            >
-              <Checkbox value='enableFilter'>{localization.catalogAdmin.enableFilter}</Checkbox>
-            </Checkbox.Group>
+              options={[{ value: 'enableFilter', label: localization.catalogAdmin.enableFilter }]}
+            />
 
             <HelpText
               placement='right'

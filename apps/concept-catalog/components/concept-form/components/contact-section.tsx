@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FastField, useFormikContext } from 'formik';
-import { Card, Textfield, CheckboxGroup, Checkbox, ErrorMessage } from '@digdir/designsystemet-react';
+import { Card, Textfield, ErrorMessage } from '@digdir/designsystemet-react';
+import { CheckboxGroup } from '@fellesdatakatalog/ui';
 import { Concept } from '@catalog-frontend/types';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
@@ -61,17 +62,9 @@ export const ContactSection = ({ changed, readOnly = false }: ContactSectionProp
           </TitleWithHelpTextAndTag>
         }
         onChange={handleContactChange}
+        options={contactOptions}
         readOnly={readOnly}
-      >
-        {contactOptions.map((option) => (
-          <Checkbox
-            key={option.value}
-            value={option.value}
-          >
-            {option.label}
-          </Checkbox>
-        ))}
-      </CheckboxGroup>
+      />
       {selectedFields.includes('harEpost') && (
         <FastField
           as={Textfield}
