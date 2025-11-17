@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  ImportResultStatus,
-  ImportResultSummary,
-} from "@catalog-frontend/types";
+import { ImportResult, ImportResultStatus } from "@catalog-frontend/types";
 import styles from "./import-results-table.module.css";
 import { Table, Tooltip } from "@digdir/designsystemet-react";
 import {
@@ -46,21 +43,21 @@ const importStatuses = [
 
 interface Props {
   importHref: string;
-  importResultSummaries: ImportResultSummary[];
+  importResults: ImportResult[];
   showStatusHelpText?: boolean;
 }
 
 const ImportResultsTable = ({
   importHref,
-  importResultSummaries,
+  importResults,
   showStatusHelpText,
 }: Props) => {
   const router = useRouter();
-  const importResultHitTitle = (importResultSummary: ImportResultSummary) => {
+  const importResultHitTitle = (importResult: ImportResult) => {
     return (
       <div
         className={styles.bold}
-      >{`Import #${importResultSummary.id.slice(0, 5).toUpperCase()}`}</div>
+      >{`Import #${importResult.id.slice(0, 5).toUpperCase()}`}</div>
     );
   };
 
@@ -122,31 +119,47 @@ const ImportResultsTable = ({
         </Table.Row>
       </Table.Head>
       <Table.Body>
-        {importResultSummaries.map((importResultSummary: ImportResultSummary) => (
+        {importResults.map((importResult: ImportResult) => (
           <Table.Row
-            key={importResultSummary.id}
+            key={importResult.id}
             className={styles.tableItem}
-            onClick={() => router.push(`${importHref}/${importResultSummary.id}`)}
+            onClick={() => router.push(`${importHref}/${importResult.id}`)}
           >
-            <Table.Cell>{importResultHitTitle(importResultSummary)}</Table.Cell>
+            <Table.Cell>{importResultHitTitle(importResult)}</Table.Cell>
             <Table.Cell>
               <TagImportResultStatus
-                statusKey={importResultSummary.status}
+                statusKey={importResult.status}
                 statusLabel={
-                  importStatuses.find((st) => importResultSummary.status === st.value)
-                    ?.label ?? importResultSummary.status
+                  importStatuses.find((st) => importResult.status === st.value)
+                    ?.label ?? importResult.status
                 }
               />
             </Table.Cell>
-            <Table.Cell>{formatDate(importResultSummary.created)}</Table.Cell>
+            <Table.Cell>{formatDate(importResult.created)}</Table.Cell>
             <Table.Cell>
-              {importResultSummary.recordsWithNoIssues ?? 0}
+              {importResult?.conceptExtractions
+                ?.map((conceptExtraction) => conceptExtraction.extractionRecord)
+                ?.filter((record) => record.extractResult?.issues.length === 0)
+                .length ?? 0}
             </Table.Cell>
             <Table.Cell>
-              {importResultSummary.warningIssues ?? 0}
+              {importResult?.conceptExtractions
+                ?.map((conceptExtraction) => conceptExtraction.extractionRecord)
+                ?.filter(
+                  (record) =>
+                    !record.extractResult?.issues.some(
+                      (issue) => issue.type === "WARNING",
+                    ),
+                ).length ?? 0}
             </Table.Cell>
             <Table.Cell>
-              {importResultSummary.errorIssues ?? 0}
+              {importResult?.conceptExtractions
+                ?.map((conceptExtraction) => conceptExtraction.extractionRecord)
+                ?.filter((record) =>
+                  record.extractResult?.issues.some(
+                    (issue) => issue.type === "ERROR",
+                  ),
+                ).length ?? 0}
             </Table.Cell>
           </Table.Row>
         ))}

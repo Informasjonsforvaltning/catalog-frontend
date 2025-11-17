@@ -34,15 +34,6 @@ export interface ImportResult {
   failureMessage: string;
 }
 
-export interface ImportResultSummary {
-  id: string;
-  created: string;
-  status: ImportResultStatus;
-  recordsWithNoIssues: number,
-  warningIssues: number,
-  errorIssues: number,
-}
-
 export interface ConceptExtraction {
   extractionRecord: ExtractionRecord;
   concept: Concept;

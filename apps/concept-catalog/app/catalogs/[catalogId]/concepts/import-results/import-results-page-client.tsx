@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  ImportResultStatus,
-  ImportResultSummary,
-} from "@catalog-frontend/types";
+import { ImportResult, ImportResultStatus } from "@catalog-frontend/types";
 import {
   AccordionItem,
   AccordionItemProps,
@@ -55,12 +52,12 @@ const importStatuses = [
 
 interface Props {
   catalogId: string;
-  importResultSummaries: ImportResultSummary[];
+  importResults: ImportResult[];
 }
 
-const ImportResultsPageClient = ({ catalogId, importResultSummaries }: Props) => {
+const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
   const [filteredImportResults, setFilteredImportResults] =
-    useState<ImportResultSummary[]>(importResultSummaries);
+    useState<ImportResult[]>(importResults);
   const [sortType, setSortType] = useQueryState<string>(
     "api.import.sort.type",
     parseAsString,
@@ -98,10 +95,10 @@ const ImportResultsPageClient = ({ catalogId, importResultSummaries }: Props) =>
 
   const getSortFunction = (sortKey: string) => {
     if (sortKey === "createdAsc") {
-      return (a: ImportResultSummary, b: ImportResultSummary) =>
+      return (a: ImportResult, b: ImportResult) =>
         sortDateStringsAscending(a.created, b.created);
     }
-    return (a: ImportResultSummary, b: ImportResultSummary) =>
+    return (a: ImportResult, b: ImportResult) =>
       sortDateStringsDescending(a.created, b.created);
   };
 
@@ -132,7 +129,7 @@ const ImportResultsPageClient = ({ catalogId, importResultSummaries }: Props) =>
 
   useEffect(() => {
     const filteredImportResults = () => {
-      let filtered = importResultSummaries;
+      let filtered = importResults;
 
       if (!isEmpty(filterStatus)) {
         filtered = filtered.filter(
@@ -146,7 +143,7 @@ const ImportResultsPageClient = ({ catalogId, importResultSummaries }: Props) =>
     };
 
     filteredImportResults();
-  }, [importResultSummaries, sortType, filterStatus]);
+  }, [importResults, sortType, filterStatus]);
 
   const paginatedImportResults = useMemo(() => {
     setTotalPages(Math.ceil(filteredImportResults.length / itemsPerPage));
@@ -185,7 +182,7 @@ const ImportResultsPageClient = ({ catalogId, importResultSummaries }: Props) =>
             paginatedImportResults.length > 0 ? (
               <ImportResultsTable
                 importHref={`/catalogs/${catalogId}/concepts/import-results`}
-                importResultSummaries={paginatedImportResults}
+                importResults={paginatedImportResults}
                 showStatusHelpText={true}
               />
             ) : null
