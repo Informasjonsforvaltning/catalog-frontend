@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { Button, Modal, Paragraph } from '@digdir/designsystemet-react';
+import { Button, Dialog, Paragraph } from '@digdir/designsystemet-react';
 import { localization } from '@catalog-frontend/utils';
 
 type TermsModalProps = {
@@ -19,15 +19,15 @@ export const TermsOfUseModalClient = ({ termsOfUseUrl, closeUrl }: TermsModalPro
   }, []);
 
   return (
-    <Modal
+    <Dialog
       ref={modalRef}
-      onBeforeClose={() => false}
+      closedby='none'
     >
-      <Modal.Header closeButton={false}>{localization.termsOfUse.notAcceptedTitle}</Modal.Header>
-      <Modal.Content>
+      <Dialog.Block>{localization.termsOfUse.notAcceptedTitle}</Dialog.Block>
+      <Dialog.Block>
         <Paragraph size='sm'>{localization.termsOfUse.notAcceptedContent}</Paragraph>
-      </Modal.Content>
-      <Modal.Footer>
+      </Dialog.Block>
+      <Dialog.Block>
         <Button
           data-size='sm'
           asChild
@@ -53,7 +53,7 @@ export const TermsOfUseModalClient = ({ termsOfUseUrl, closeUrl }: TermsModalPro
             {localization.termsOfUse.cancel}
           </a>
         </Button>
-      </Modal.Footer>
-    </Modal>
+      </Dialog.Block>
+    </Dialog>
   );
 };

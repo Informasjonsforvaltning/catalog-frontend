@@ -1,6 +1,6 @@
 import { Dataset, Reference, Search, StorageData } from '@catalog-frontend/types';
 import { getTranslateText, localization, trimObjectWhitespace, DataStorage } from '@catalog-frontend/utils';
-import { Box, Button, Combobox, Fieldset, Modal, Table } from '@digdir/designsystemet-react';
+import { Box, Button, Combobox, Dialog, Fieldset, Table } from '@digdir/designsystemet-react';
 import { useSearchDatasetsByUri, useSearchDatasetSuggestions } from '../../../../hooks/useSearchService';
 import { Formik, useFormikContext } from 'formik';
 import relations from '../../utils/relations.json';
@@ -213,15 +213,15 @@ const FieldModal = ({
 
   return (
     <>
-      <Modal.Root>
-        <Modal.Trigger asChild>
+      <Dialog.TriggerContext>
+        <Dialog.Trigger asChild>
           {type === 'new' ? (
             <AddButton>{`${localization.add} ${localization.relation.toLowerCase()}`}</AddButton>
           ) : (
             <EditButton />
           )}
-        </Modal.Trigger>
-        <Modal.Dialog ref={modalRef}>
+        </Dialog.Trigger>
+        <Dialog ref={modalRef}>
           <Formik
             initialValues={template}
             validateOnChange={submitted}
@@ -244,13 +244,13 @@ const FieldModal = ({
 
               return (
                 <>
-                  <Modal.Header closeButton={false}>
+                  <Dialog.Block>
                     {type === 'edit'
                       ? `${localization.edit} ${localization.relation.toLowerCase()}`
                       : `${localization.add} ${localization.relation.toLowerCase()}`}
-                  </Modal.Header>
+                  </Dialog.Block>
 
-                  <Modal.Content className={cn(styles.modalContent, styles.fieldContainer)}>
+                  <Dialog.Block className={cn(styles.modalContent, styles.fieldContainer)}>
                     <Fieldset
                       legend={localization.datasetForm.fieldLabel.relationType}
                       data-size='sm'
@@ -311,9 +311,9 @@ const FieldModal = ({
                         })}
                       </Combobox>
                     </Fieldset>
-                  </Modal.Content>
+                  </Dialog.Block>
 
-                  <Modal.Footer>
+                  <Dialog.Block>
                     <Button
                       type='button'
                       disabled={isSubmitting || !dirty || hasNoFieldValues(values)}
@@ -334,13 +334,13 @@ const FieldModal = ({
                     >
                       {localization.button.cancel}
                     </Button>
-                  </Modal.Footer>
+                  </Dialog.Block>
                 </>
               );
             }}
           </Formik>
-        </Modal.Dialog>
-      </Modal.Root>
+        </Dialog>
+      </Dialog.TriggerContext>
     </>
   );
 };

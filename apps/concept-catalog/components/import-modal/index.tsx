@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { localization } from '@catalog-frontend/utils';
 import { LinkButton, UploadButton } from '@catalog-frontend/ui';
 import { useImportConceptsCSV, useSendConcepts, useImportRdf, useSendRdf } from '../../hooks/import';
-import { Button, Modal, Spinner } from '@digdir/designsystemet-react';
+import { Button, Dialog, Spinner } from '@digdir/designsystemet-react';
 import styles from './import-modal.module.scss';
 import { FileImportIcon, TasklistSendIcon } from '@navikt/aksel-icons';
 import Markdown from 'react-markdown';
@@ -171,14 +171,14 @@ export function ImportModal({ catalogId }: ImportProps) {
   };
 
   return (
-    <Modal.Root>
-      <Modal.Trigger asChild>
+    <Dialog.TriggerContext>
+      <Dialog.Trigger asChild>
         <Button variant={'secondary'}>
           <FileImportIcon />
           Importer
         </Button>
-      </Modal.Trigger>
-      <Modal.Dialog
+      </Dialog.Trigger>
+      <Dialog
         ref={modalRef}
         onClose={() => {
           cancel();
@@ -187,7 +187,7 @@ export function ImportModal({ catalogId }: ImportProps) {
       >
         {!isUploading && !isSending && !isUploaded && (
           <>
-            <Modal.Header className={styles.content}>
+            <Dialog.Block className={styles.content}>
               <div className={styles.titleTags}>
                 <Markdown>
                   {localization.concept.importModal.title}
@@ -196,8 +196,8 @@ export function ImportModal({ catalogId }: ImportProps) {
                   {localization.concept.importModal.titleHelpText}
                 </HelpMarkdown>
               </div>
-            </Modal.Header>
-            <Modal.Content className={styles.content}>
+            </Dialog.Block>
+            <Dialog.Block className={styles.content}>
               <div className={styles.modalContent}>
                 {(isUploading || isSending) && (
                   <div className={styles.spinnerOverlay}>
@@ -218,16 +218,16 @@ export function ImportModal({ catalogId }: ImportProps) {
                   </div>
                 </div>
               </div>
-            </Modal.Content>
+            </Dialog.Block>
           </>
         )}
 
         {(isUploading || isUploaded || isSending) && (
           <>
-            <Modal.Header className={styles.content}>
+            <Dialog.Block className={styles.content}>
                 <Markdown>{localization.concept.importModal.titleConfirmSending}</Markdown>
-            </Modal.Header>
-            <Modal.Content className={styles.content}>
+            </Dialog.Block>
+            <Dialog.Block className={styles.content}>
               <div className={styles.modalContent}>
                 {(isUploading || isSending) && (
                   <div className={styles.spinnerOverlay}>
@@ -241,12 +241,12 @@ export function ImportModal({ catalogId }: ImportProps) {
                   <Markdown>{localization.concept.importModal.textConfirmSending}</Markdown>
                 </div>
               </div>
-            </Modal.Content>
+            </Dialog.Block>
           </>
         )}
 
         {!isUploading && !isSending && !isUploaded && (
-          <Modal.Footer>
+          <Dialog.Block>
             <div className={styles.buttons}>
               <>
                 <LinkButton
@@ -280,10 +280,10 @@ export function ImportModal({ catalogId }: ImportProps) {
                 />
               </>
             </div>
-          </Modal.Footer>
+          </Dialog.Block>
         )}
         {(isUploading || isUploaded || isSending) && (
-          <Modal.Footer>
+          <Dialog.Block>
             <div className={styles.buttons}>
               <Button
                 onClick={send}
@@ -301,9 +301,9 @@ export function ImportModal({ catalogId }: ImportProps) {
                 Avbryt
               </Button>
             </div>
-          </Modal.Footer>
+          </Dialog.Block>
         )}
-      </Modal.Dialog>
-    </Modal.Root>
+      </Dialog>
+    </Dialog.TriggerContext>
   );
 }

@@ -13,7 +13,7 @@ import {
   FastFieldWithRef,
 } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Card, Combobox, Fieldset, Modal, SkeletonRectangle, Textfield } from '@digdir/designsystemet-react';
+import { Button, Card, Combobox, Dialog, Fieldset, SkeletonRectangle, Textfield } from '@digdir/designsystemet-react';
 import { useSearchFileTypes, useSearchMediaTypes } from '../../../../hooks/useReferenceDataSearch';
 import { useSearchDataServiceSuggestions } from '../../../../hooks/useSearchService';
 import { FastField, FieldArray, Formik } from 'formik';
@@ -422,9 +422,9 @@ export const DistributionModal = ({
   }, [focus]);
 
   return (
-    <Modal.Root>
-      <Modal.Trigger asChild>{trigger}</Modal.Trigger>
-      <Modal.Dialog
+    <Dialog.TriggerContext>
+      <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
+      <Dialog
         ref={modalRef}
         className={styles.dialog}
       >
@@ -504,15 +504,15 @@ export const DistributionModal = ({
               <>
                 {initialValues && (
                   <>
-                    <Modal.Header closeButton={false}>
+                    <Dialog.Block>
                       {type === 'new'
                         ? distributionType === 'distribution'
                           ? localization.datasetForm.button.addDistribution
                           : localization.datasetForm.button.addSample
                         : `${localization.edit} ${distributionType === 'distribution' ? localization.datasetForm.fieldLabel.distribution.toLowerCase() : localization.datasetForm.fieldLabel.sample.toLowerCase()}`}
-                    </Modal.Header>
+                    </Dialog.Block>
 
-                    <Modal.Content className={styles.modalContent}>
+                    <Dialog.Block className={styles.modalContent}>
                       {distributionType === 'distribution' && (
                         <>
                           <FormikLanguageFieldset
@@ -711,9 +711,9 @@ export const DistributionModal = ({
                         renderField(f, !(minimizedFields.length === 0 && index === expandedFields.length - 1)),
                       )}
                       {minimizedFields.map((f) => renderField(f))}
-                    </Modal.Content>
+                    </Dialog.Block>
 
-                    <Modal.Footer>
+                    <Dialog.Block>
                       <Button
                         type='button'
                         disabled={isSubmitting}
@@ -731,14 +731,14 @@ export const DistributionModal = ({
                       >
                         {localization.button.cancel}
                       </Button>
-                    </Modal.Footer>
+                    </Dialog.Block>
                   </>
                 )}
               </>
             );
           }}
         </Formik>
-      </Modal.Dialog>
-    </Modal.Root>
+      </Dialog>
+    </Dialog.TriggerContext>
   );
 };

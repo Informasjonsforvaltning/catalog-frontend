@@ -8,7 +8,7 @@ import {
   FormHeading,
 } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Modal, Table, Textfield } from '@digdir/designsystemet-react';
+import { Button, Dialog, Table, Textfield } from '@digdir/designsystemet-react';
 import { FastField, FieldArray, Formik, useFormikContext } from 'formik';
 import styles from '../dataset-form.module.css';
 import { ReactNode, useEffect, useRef, useState } from 'react';
@@ -130,15 +130,15 @@ const FieldModal = ({ fieldName, template, type, onSuccess, onCancel, onChange }
 
   return (
     <>
-      <Modal.Root>
-        <Modal.Trigger asChild>
+      <Dialog.TriggerContext>
+        <Dialog.Trigger asChild>
           {type === 'edit' ? (
             <EditButton />
           ) : (
             <AddButton>{`${localization.add} ${localization.datasetForm.fieldLabel?.[fieldName]?.toLowerCase()}`}</AddButton>
           )}
-        </Modal.Trigger>
-        <Modal.Dialog ref={modalRef}>
+        </Dialog.Trigger>
+        <Dialog ref={modalRef}>
           <Formik
             initialValues={template}
             validateOnChange={submitted}
@@ -161,13 +161,13 @@ const FieldModal = ({ fieldName, template, type, onSuccess, onCancel, onChange }
 
               return (
                 <>
-                  <Modal.Header closeButton={false}>
+                  <Dialog.Block>
                     {type === 'edit'
                       ? `${localization.edit} ${getTranslateText(localization.datasetForm.fieldLabel[fieldName])?.toString().toLowerCase()}`
                       : `${localization.add} ${getTranslateText(localization.datasetForm.fieldLabel[fieldName])?.toString().toLowerCase()}`}
-                  </Modal.Header>
+                  </Dialog.Block>
 
-                  <Modal.Content className={styles.modalContent}>
+                  <Dialog.Block className={styles.modalContent}>
                     <FormikLanguageFieldset
                       as={Textfield}
                       name='prefLabel'
@@ -181,9 +181,9 @@ const FieldModal = ({ fieldName, template, type, onSuccess, onCancel, onChange }
                       error={errors?.uri}
                       data-size='sm'
                     />
-                  </Modal.Content>
+                  </Dialog.Block>
 
-                  <Modal.Footer>
+                  <Dialog.Block>
                     <Button
                       type='button'
                       disabled={isSubmitting || !dirty || hasNoFieldValues(values)}
@@ -204,13 +204,13 @@ const FieldModal = ({ fieldName, template, type, onSuccess, onCancel, onChange }
                     >
                       {localization.button.cancel}
                     </Button>
-                  </Modal.Footer>
+                  </Dialog.Block>
                 </>
               );
             }}
           </Formik>
-        </Modal.Dialog>
-      </Modal.Root>
+        </Dialog>
+      </Dialog.TriggerContext>
     </>
   );
 };

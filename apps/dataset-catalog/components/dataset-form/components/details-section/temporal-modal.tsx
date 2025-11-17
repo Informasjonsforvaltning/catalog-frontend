@@ -1,7 +1,7 @@
 import { Dataset, DateRange } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, EditButton, FormHeading } from '@catalog-frontend/ui';
 import { formatDateToDDMMYYYY, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Modal, Table, Textfield } from '@digdir/designsystemet-react';
+import { Button, Dialog, Table, Textfield } from '@digdir/designsystemet-react';
 import { FastField, FieldArray, Formik, useFormikContext } from 'formik';
 import styles from '../../dataset-form.module.css';
 import { ReactNode, useEffect, useRef, useState } from 'react';
@@ -109,11 +109,11 @@ const FieldModal = ({ template, type, onSuccess, onCancel, onChange }: ModalProp
 
   return (
     <>
-      <Modal.Root>
-        <Modal.Trigger asChild>
+      <Dialog.TriggerContext>
+        <Dialog.Trigger asChild>
           {type === 'edit' ? <EditButton /> : <AddButton>{localization.datasetForm.button.addDate}</AddButton>}
-        </Modal.Trigger>
-        <Modal.Dialog ref={modalRef}>
+        </Dialog.Trigger>
+        <Dialog ref={modalRef}>
           <Formik
             initialValues={template}
             validateOnChange={submitted}
@@ -136,11 +136,11 @@ const FieldModal = ({ template, type, onSuccess, onCancel, onChange }: ModalProp
 
               return (
                 <>
-                  <Modal.Header closeButton={false}>
+                  <Dialog.Block>
                     {type === 'edit' ? `${localization.edit} ` : `${localization.add} `}
-                  </Modal.Header>
+                  </Dialog.Block>
 
-                  <Modal.Content className={cn(styles.modalContent, styles.calendar)}>
+                  <Dialog.Block className={cn(styles.modalContent, styles.calendar)}>
                     <FastField
                       as={Textfield}
                       data-size='sm'
@@ -164,9 +164,9 @@ const FieldModal = ({ template, type, onSuccess, onCancel, onChange }: ModalProp
                       error={errors.endDate}
                       min={values.startDate}
                     />
-                  </Modal.Content>
+                  </Dialog.Block>
 
-                  <Modal.Footer>
+                  <Dialog.Block>
                     <Button
                       type='button'
                       disabled={isSubmitting || !dirty || hasNoFieldValues(values)}
@@ -187,13 +187,13 @@ const FieldModal = ({ template, type, onSuccess, onCancel, onChange }: ModalProp
                     >
                       {localization.button.cancel}
                     </Button>
-                  </Modal.Footer>
+                  </Dialog.Block>
                 </>
               );
             }}
           </Formik>
-        </Modal.Dialog>
-      </Modal.Root>
+        </Dialog>
+      </Dialog.TriggerContext>
     </>
   );
 };

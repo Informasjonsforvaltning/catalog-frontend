@@ -9,7 +9,7 @@ import {
   Fieldset,
   Link,
   List,
-  Modal,
+  Dialog,
   Paragraph,
   Tag,
   Textfield,
@@ -195,15 +195,15 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
 
   return (
     <>
-      <Modal.Root>
-        <Modal.Trigger asChild>
+      <Dialog.TriggerContext>
+        <Dialog.Trigger asChild>
           {type === 'new' ? (
             <AddButton>{`${localization.add} ${localization.dataServiceForm.fieldLabel.costs.toLowerCase()}`}</AddButton>
           ) : (
             <EditButton />
           )}
-        </Modal.Trigger>
-        <Modal.Dialog ref={modalRef}>
+        </Dialog.Trigger>
+        <Dialog ref={modalRef}>
           <Formik
             initialValues={template}
             validateOnChange={validateOnChange}
@@ -223,13 +223,13 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
 
               return (
                 <>
-                  <Modal.Header closeButton={false}>
+                  <Dialog.Block>
                     {type === 'edit'
                       ? `${localization.edit} ${localization.dataServiceForm.fieldLabel.costs.toLowerCase()}`
                       : `${localization.add} ${localization.dataServiceForm.fieldLabel.costs.toLowerCase()}`}
-                  </Modal.Header>
+                  </Dialog.Block>
 
-                  <Modal.Content className={styles.modalContent}>
+                  <Dialog.Block className={styles.modalContent}>
                     <Fieldset
                       legend={
                         <TitleWithHelpTextAndTag
@@ -359,9 +359,9 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                         </TitleWithHelpTextAndTag>
                       }
                     />
-                  </Modal.Content>
+                  </Dialog.Block>
 
-                  <Modal.Footer>
+                  <Dialog.Block>
                     <Button
                       type='button'
                       disabled={isSubmitting || !dirty}
@@ -391,13 +391,13 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                     >
                       {localization.button.cancel}
                     </Button>
-                  </Modal.Footer>
+                  </Dialog.Block>
                 </>
               );
             }}
           </Formik>
-        </Modal.Dialog>
-      </Modal.Root>
+        </Dialog>
+      </Dialog.TriggerContext>
     </>
   );
 };
