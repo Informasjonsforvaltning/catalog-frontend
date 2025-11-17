@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FastField, useFormikContext } from 'formik';
-import { Box, Textfield, CheckboxGroup, Checkbox, ErrorMessage } from '@digdir/designsystemet-react';
+import { Card, Textfield, CheckboxGroup, Checkbox, ErrorMessage } from '@digdir/designsystemet-react';
 import { Concept } from '@catalog-frontend/types';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
@@ -45,7 +45,7 @@ export const ContactSection = ({ changed, readOnly = false }: ContactSectionProp
   }, [values.kontaktpunkt]);
 
   return (
-    <Box className={styles.contactSection}>
+    <Card className={styles.contactSection}>
       <CheckboxGroup
         data-size='sm'
         value={selectedFields}
@@ -105,6 +105,6 @@ export const ContactSection = ({ changed, readOnly = false }: ContactSectionProp
       {typeof errors?.kontaktpunkt === 'string' ? (
         <ErrorMessage data-size='sm'>{errors?.kontaktpunkt}</ErrorMessage>
       ) : undefined}
-    </Box>
+    </Card>
   );
 };

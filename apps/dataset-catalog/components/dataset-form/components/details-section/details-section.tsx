@@ -3,7 +3,7 @@
 import { ReferenceData } from '@catalog-frontend/types';
 import { RecommendedDetailFields } from './recommended-detail-fields';
 import { MinimizedDetailFields } from './minimized-detail-fields';
-import { Box } from '@digdir/designsystemet-react';
+import { Card } from '@digdir/designsystemet-react';
 
 type Props = {
   referenceDataEnv: string;
@@ -13,7 +13,7 @@ type Props = {
 export const DetailsSection = ({ referenceDataEnv, referenceData }: Props) => {
   const { datasetTypes, provenanceStatements, languages, frequencies } = referenceData;
   return (
-    <Box>
+    <Card>
       <RecommendedDetailFields
         referenceDataEnv={referenceDataEnv}
         languages={languages}
@@ -23,6 +23,6 @@ export const DetailsSection = ({ referenceDataEnv, referenceData }: Props) => {
         provenanceStatements={provenanceStatements}
         frequencies={frequencies}
       />
-    </Box>
+    </Card>
   );
 };

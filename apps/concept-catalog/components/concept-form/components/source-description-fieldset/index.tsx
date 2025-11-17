@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Fieldset, Textfield, Button, Radio, Box, ErrorMessage } from '@digdir/designsystemet-react';
+import { Fieldset, Textfield, Button, Radio, Card, ErrorMessage } from '@digdir/designsystemet-react';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import styles from './source-description-fieldset.module.scss';
@@ -40,7 +40,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
   }, [relationToSource]);
 
   return (
-    <Box className={styles.sourceDescription}>
+    <Card className={styles.sourceDescription}>
       <Radio.Group
         data-size='sm'
         legend={
@@ -143,6 +143,6 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
           )}
         </Fieldset>
       )}
-    </Box>
+    </Card>
   );
 };

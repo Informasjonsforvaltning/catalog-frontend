@@ -1,6 +1,6 @@
 'use client';
 
-import { Fieldset, Box, Card, ErrorMessage } from '@digdir/designsystemet-react';
+import { Fieldset, Card, ErrorMessage } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 
 import styles from './formik-optional-fields-fieldset.module.scss';
@@ -65,7 +65,7 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields, errorPat
               key={field.valuePath}
               legend={field?.legend ?? field?.label}
             >
-              <Box
+              <Card
                 key={field.valuePath}
                 className={styles.field}
               >
@@ -76,7 +76,7 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields, errorPat
                   error={get(errors, field.valuePath)}
                 />
                 <DeleteButton onClick={() => handleRemoveField(field.valuePath)} />
-              </Box>
+              </Card>
             </Fieldset>
           ))}
           <div className={styles.addButtons}>

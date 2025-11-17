@@ -1,6 +1,5 @@
 import { Concept, Definisjon, ISOLanguage, Kilde, StorageData } from '@catalog-frontend/types';
 import {
-  Box,
   Button,
   Card,
   ErrorMessage,
@@ -124,8 +123,8 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
   ForwardedTag.displayName = 'ForwardedTag';
 
   return (
-    <Box>
-      <Box className={styles.fieldSet}>
+    <Card>
+      <Card className={styles.fieldSet}>
         <Fieldset
           readOnly={readOnly}
           legend={
@@ -234,7 +233,7 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
                   </Card.Header>
                   <Card.Content className={styles.definitionContent}>
                     <Paragraph>{getTranslateText(def.tekst)}</Paragraph>
-                    <Box>
+                    <Card>
                       {allowedLanguages
                         .filter((lang) => def.tekst[lang])
                         .map((lang) => (
@@ -246,15 +245,15 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
                             {localization.language[lang]}
                           </Tag>
                         ))}
-                    </Box>
+                    </Card>
                   </Card.Content>
                 </Card>
               )
             );
           })}
-      </Box>
+      </Card>
       {!readOnly && (
-        <Box className={styles.buttonRow}>
+        <Card className={styles.buttonRow}>
           {definitions
             .filter((name) => !values[name])
             .map((name) => (
@@ -280,7 +279,7 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
                 onClose={handleCloseDefinitionModal}
               />
             ))}
-        </Box>
+        </Card>
       )}
 
       {Object.keys(errors).some((value) =>
@@ -290,6 +289,6 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
             {getFirstErrorByRootKeys(errors, ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'])}
           </ErrorMessage>
         )}
-    </Box>
+    </Card>
   );
 };
