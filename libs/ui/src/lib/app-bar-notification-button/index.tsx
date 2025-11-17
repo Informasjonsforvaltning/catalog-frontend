@@ -26,7 +26,10 @@ export const AppBarNotificationButton = () => {
 			</Dropdown.Trigger>
 			<Dropdown placement="bottom">
                 <Alert data-color='success' data-size='sm'>
-                    Du har ingen notifikasjoner
+                    Ditt datasett ble godkjent!
+                </Alert>
+				<Alert data-color='info' data-size='sm'>
+                    Ditt begrep har 500 visninger på data.norge.no
                 </Alert>
 				{/* <Dropdown.List>
 					<Dropdown.Item>
