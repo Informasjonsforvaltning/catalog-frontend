@@ -126,7 +126,7 @@ export const CostsTable = ({ currencies }: Props) => {
           </div>
           <Card.Footer className={styles.costFooter}>
             <Paragraph size={'sm'}>{getTranslateText(item.description)}</Paragraph>
-            <Card>
+            <div>
               {allowedLanguages
                 .filter((lang) => Object.prototype.hasOwnProperty.call(item.description, lang))
                 .map((lang) => (
@@ -138,7 +138,7 @@ export const CostsTable = ({ currencies }: Props) => {
                     {localization.language[lang]}
                   </Tag>
                 ))}
-            </Card>
+            </div>
           </Card.Footer>
         </Card>
       ))}

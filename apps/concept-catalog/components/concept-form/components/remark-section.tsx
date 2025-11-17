@@ -1,4 +1,3 @@
-import { Card } from '@digdir/designsystemet-react';
 import { FormikLanguageFieldset, TextareaWithPrefix, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { get, isEmpty, isEqual } from 'lodash';
@@ -12,7 +11,7 @@ type RemarkSectionProps = {
 
 export const RemarkSection = ({ changed, readOnly }: RemarkSectionProps) => {
   return (
-    <Card>
+    <div>
       <FormikLanguageFieldset
         name='merknad'
         as={TextareaWithPrefix}
@@ -27,6 +26,6 @@ export const RemarkSection = ({ changed, readOnly }: RemarkSectionProps) => {
           </TitleWithHelpTextAndTag>
         }
       />
-    </Card>
+    </div>
   );
 };

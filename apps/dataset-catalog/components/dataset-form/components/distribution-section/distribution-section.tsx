@@ -182,7 +182,7 @@ export const DistributionSection = ({
   };
 
   return (
-    <Card>
+    <div>
       <div className={styles.fieldSet}>
         <TitleWithHelpTextAndTag
           helpText={localization.datasetForm.helptext.distribution}
@@ -541,6 +541,6 @@ export const DistributionSection = ({
           />
         </div>
       </div>
-    </Card>
+    </div>
   );
 };

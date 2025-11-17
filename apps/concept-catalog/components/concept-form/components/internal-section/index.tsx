@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { FastField, FormikErrors, useFormikContext } from 'formik';
-import { Card, Combobox, Textarea, Textfield } from '@digdir/designsystemet-react';
+import { Combobox, Textarea, Textfield } from '@digdir/designsystemet-react';
 import { CheckboxGroup } from '@fellesdatakatalog/ui';
 import { AssignedUser, CodeList, Concept, InternalField } from '@catalog-frontend/types';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
@@ -145,7 +145,7 @@ export const InternalSection = ({
   };
 
   return (
-    <Card className={styles.internalSection}>
+    <div className={styles.internalSection}>
       <Combobox
         label={
           <TitleWithHelpTextAndTag
@@ -210,6 +210,6 @@ export const InternalSection = ({
           {renderInternalField({ internalField, values, setFieldValue, userList, codeLists })}
         </div>
       ))}
-    </Card>
+    </div>
   );
 };

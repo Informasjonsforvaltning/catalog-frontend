@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useFormikContext } from 'formik';
-import { Card, Combobox, Fieldset, Radio, Textfield } from '@digdir/designsystemet-react';
+import { Combobox, Fieldset, Radio, Textfield } from '@digdir/designsystemet-react';
 import { FieldsetDivider, FormikLanguageFieldset, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { RelatedConcept, UnionRelation, RelationSubtypeEnum, RelationTypeEnum, Concept } from '@catalog-frontend/types';
@@ -195,8 +195,8 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
   }, [relatedConcept]);
 
   return (
-    <Card className={styles.root}>
-      <Card className={styles.flex}>
+    <div className={styles.root}>
+      <div className={styles.flex}>
         <Fieldset data-size='sm'>
           <Fieldset.Legend>
             <TitleWithHelpTextAndTag
@@ -276,7 +276,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
             />
           )}
         </Fieldset>
-      </Card>
+      </div>
       <FieldsetDivider />
 
       <Combobox
@@ -309,7 +309,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
 
       {(values.relasjon === RelationTypeEnum.GENERISK || values.relasjon === RelationTypeEnum.PARTITIV) && (
         <>
-          <Card className={styles.flex}>
+          <div className={styles.flex}>
             <Combobox
               label={
                 <TitleWithHelpTextAndTag
@@ -339,7 +339,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
                 </Combobox.Option>
               ))}
             </Combobox>
-          </Card>
+          </div>
           <FormikLanguageFieldset
             name='inndelingskriterium'
             legend={
@@ -364,6 +364,6 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
           }
         />
       )}
-    </Card>
+    </div>
   );
 };
