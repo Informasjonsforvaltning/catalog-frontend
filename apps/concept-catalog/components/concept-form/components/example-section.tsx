@@ -1,4 +1,4 @@
-import { Box } from '@digdir/designsystemet-react';
+import { Card } from '@digdir/designsystemet-react';
 import { FormikLanguageFieldset, TextareaWithPrefix, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import { get, isEmpty, isEqual } from 'lodash';
@@ -12,7 +12,7 @@ type ExampleSectionProps = {
 
 export const ExampleSection = ({ changed, readOnly = false }: ExampleSectionProps) => {
   return (
-    <Box>
+    <Card>
       <FormikLanguageFieldset
         name='eksempel'
         as={TextareaWithPrefix}
@@ -23,6 +23,6 @@ export const ExampleSection = ({ changed, readOnly = false }: ExampleSectionProp
           </TitleWithHelpTextAndTag>
         }
       />
-    </Box>
+    </Card>
   );
 };

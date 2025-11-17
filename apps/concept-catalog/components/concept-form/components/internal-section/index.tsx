@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { FastField, FormikErrors, useFormikContext } from 'formik';
-import { Box, Checkbox, Combobox, Textarea, Textfield } from '@digdir/designsystemet-react';
+import { Card, Combobox, Textarea, Textfield } from '@digdir/designsystemet-react';
+import { CheckboxGroup } from '@fellesdatakatalog/ui';
 import { AssignedUser, CodeList, Concept, InternalField } from '@catalog-frontend/types';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
 import { FormikMultivalueTextfield, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
@@ -78,18 +79,14 @@ export const InternalSection = ({
 
     if (internalField.type === 'boolean') {
       return (
-        <Checkbox.Group
+        <CheckboxGroup
           legend={<FieldLabel />}
           data-size='sm'
           readOnly={readOnly}
-        >
-          <Checkbox
-            value={internalField.id}
-            checked={fieldValue === 'true'}
-            onChange={(e) => setFieldValue(name, e.target.checked ? 'true' : 'false')}
-            aria-label={`${internalField.label}, ja eller nei`}
-          />
-        </Checkbox.Group>
+          value={fieldValue === 'true' ? [internalField.id] : []}
+          onChange={(values) => setFieldValue(name, values.includes(internalField.id) ? 'true' : 'false')}
+          options={[{ value: internalField.id, label: '' }]}
+        />
       );
     }
 
@@ -148,7 +145,7 @@ export const InternalSection = ({
   };
 
   return (
-    <Box className={styles.internalSection}>
+    <Card className={styles.internalSection}>
       <Combobox
         label={
           <TitleWithHelpTextAndTag
@@ -213,6 +210,6 @@ export const InternalSection = ({
           {renderInternalField({ internalField, values, setFieldValue, userList, codeLists })}
         </div>
       ))}
-    </Box>
+    </Card>
   );
 };

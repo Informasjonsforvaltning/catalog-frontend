@@ -5,7 +5,7 @@ import { useFormikContext } from 'formik';
 import { PropsWithChildren } from 'react';
 import FieldsetWithDelete from '../../fieldset-with-delete';
 import styles from '../dataset-form.module.css';
-import { Box } from '@digdir/designsystemet-react';
+import { Card } from '@digdir/designsystemet-react';
 
 type Props = {
   fieldName: string;
@@ -34,7 +34,7 @@ export const ToggleFieldButton = ({
   };
 
   return (
-    <Box>
+    <Card>
       {expanded ? (
         <>
           {hasDeleteButton ? (
@@ -60,6 +60,6 @@ export const ToggleFieldButton = ({
           }}
         >{`${localization.add} ${localization.datasetForm.fieldLabel[fieldName.split('.')[0]]?.toLowerCase()}`}</AddButton>
       )}
-    </Box>
+    </Card>
   );
 };

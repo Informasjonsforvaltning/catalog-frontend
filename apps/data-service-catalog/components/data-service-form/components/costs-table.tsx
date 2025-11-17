@@ -1,7 +1,6 @@
 import { DataService, DataServiceCost, ISOLanguage, ReferenceDataCode } from '@catalog-frontend/types';
 import { capitalizeFirstLetter, getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import {
-  Box,
   Button,
   Card,
   Combobox,
@@ -127,7 +126,7 @@ export const CostsTable = ({ currencies }: Props) => {
           </div>
           <Card.Footer className={styles.costFooter}>
             <Paragraph size={'sm'}>{getTranslateText(item.description)}</Paragraph>
-            <Box>
+            <Card>
               {allowedLanguages
                 .filter((lang) => Object.prototype.hasOwnProperty.call(item.description, lang))
                 .map((lang) => (
@@ -139,7 +138,7 @@ export const CostsTable = ({ currencies }: Props) => {
                     {localization.language[lang]}
                   </Tag>
                 ))}
-            </Box>
+            </Card>
           </Card.Footer>
         </Card>
       ))}

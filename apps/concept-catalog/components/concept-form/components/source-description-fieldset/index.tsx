@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FastField, FieldArray, useFormikContext } from 'formik';
 import { PlusCircleIcon, TrashIcon } from '@navikt/aksel-icons';
-import { Fieldset, Textfield, Button, Radio, Box, ErrorMessage } from '@digdir/designsystemet-react';
+import { Fieldset, Textfield, Button, Radio, Card, ValidationMessage } from '@digdir/designsystemet-react';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
 import styles from './source-description-fieldset.module.scss';
@@ -40,7 +40,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
   }, [relationToSource]);
 
   return (
-    <Box className={styles.sourceDescription}>
+    <Card className={styles.sourceDescription}>
       <Radio.Group
         data-size='sm'
         legend={
@@ -62,9 +62,8 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
         ))}
       </Radio.Group>
       {relationToSource !== 'egendefinert' && (
-        <Fieldset
-          data-size='sm'
-          legend={
+        <Fieldset data-size='sm'>
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag
               helpText={localization.conceptForm.helpText.sources}
               tagColor='second'
@@ -72,8 +71,7 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
             >
               {localization.conceptForm.fieldLabel.sources}
             </TitleWithHelpTextAndTag>
-          }
-        >
+          </Fieldset.Legend>
           <FieldArray
             name={`${name}.kilde`}
             render={(arrayHelpers) => (
@@ -139,10 +137,12 @@ export const SourceDescriptionFieldset = <T,>({ name }: SourceDescriptionFieldse
             )}
           />
           {typeof _.get(errors, `${name}.kilde`) === 'string' && (
-            <ErrorMessage data-size='sm'>{`${_.get(errors, `${name}.kilde`)}`}</ErrorMessage>
+            <ValidationMessage data-size='sm'>
+              {`${_.get(errors, `${name}.kilde`)}`}
+            </ValidationMessage>
           )}
         </Fieldset>
       )}
-    </Box>
+    </Card>
   );
 };
