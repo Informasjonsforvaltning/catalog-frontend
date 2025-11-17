@@ -1,17 +1,26 @@
 import { Dataset } from '@catalog-frontend/types';
 import { FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { accessRights, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Box, Radio } from '@digdir/designsystemet-react';
+import { RadioGroup } from '@fellesdatakatalog/ui';
+import { Card } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 import { UriWithLabelFieldsetTable } from './uri-with-label-field-set-table';
 
 export const AccessRightFields = () => {
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
 
+  const radioOptions = [
+    { value: 'none', label: localization.accessRight.none },
+    ...(accessRights?.map((option) => ({
+      value: option.uri,
+      label: getTranslateText(option.label) || '',
+    })) || []),
+  ];
+
   return (
     <>
-      <Box>
-        <Radio.Group
+      <Card>
+        <RadioGroup
           data-size='sm'
           legend={
             <TitleWithHelpTextAndTag
@@ -23,19 +32,17 @@ export const AccessRightFields = () => {
             </TitleWithHelpTextAndTag>
           }
           value={values?.accessRight || 'none'}
-          onChange={(values) => setFieldValue('accessRight', values.toString())}
-        >
-          <Radio value='none'>{`${localization.accessRight.none}`}</Radio>
-          {accessRights?.map((option, index) => (
-            <Radio
-              key={`${option.uri}-${index}`}
-              value={option.uri}
-            >
-              {getTranslateText(option.label)}
-            </Radio>
-          ))}
-        </Radio.Group>
-      </Box>
+          onChange={(value: string) => setFieldValue('accessRight', value)}
+          options={radioOptions}
+          description={undefined}
+          error={undefined}
+          disabled={undefined}
+          readOnly={undefined}
+          required={undefined}
+          name={undefined}
+          className={undefined}
+        />
+      </Card>
 
       <FieldsetDivider />
 
