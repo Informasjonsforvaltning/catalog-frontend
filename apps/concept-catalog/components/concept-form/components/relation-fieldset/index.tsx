@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useFormikContext } from 'formik';
-import { Card, Combobox, Fieldset, Radio, Textfield } from '@digdir/designsystemet-react';
+import { Box, Combobox, Fieldset, Radio, Textfield } from '@digdir/designsystemet-react';
 import { FieldsetDivider, FormikLanguageFieldset, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { RelatedConcept, UnionRelation, RelationSubtypeEnum, RelationTypeEnum, Concept } from '@catalog-frontend/types';
@@ -195,10 +195,11 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
   }, [relatedConcept]);
 
   return (
-    <Card className={styles.root}>
-      <Card className={styles.flex}>
-        <Fieldset data-size='sm'>
-          <Fieldset.Legend>
+    <Box className={styles.root}>
+      <Box className={styles.flex}>
+        <Fieldset
+          data-size='sm'
+          legend={
             <TitleWithHelpTextAndTag
               helpText={localization.conceptForm.helpText.relatedConcept}
               tagColor='warning'
@@ -206,7 +207,8 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
             >
               {localization.conceptForm.fieldLabel.relatedConcept}
             </TitleWithHelpTextAndTag>
-          </Fieldset.Legend>
+          }
+        >
           <Radio.Group
             legend=''
             data-size='sm'
@@ -276,7 +278,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
             />
           )}
         </Fieldset>
-      </Card>
+      </Box>
       <FieldsetDivider />
 
       <Combobox
@@ -309,7 +311,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
 
       {(values.relasjon === RelationTypeEnum.GENERISK || values.relasjon === RelationTypeEnum.PARTITIV) && (
         <>
-          <Card className={styles.flex}>
+          <Box className={styles.flex}>
             <Combobox
               label={
                 <TitleWithHelpTextAndTag
@@ -339,7 +341,7 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
                 </Combobox.Option>
               ))}
             </Combobox>
-          </Card>
+          </Box>
           <FormikLanguageFieldset
             name='inndelingskriterium'
             legend={
@@ -364,6 +366,6 @@ export const RelationFieldset = ({ catalogId, initialRelatedConcept, conceptId }
           }
         />
       )}
-    </Card>
+    </Box>
   );
 };

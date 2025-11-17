@@ -1,8 +1,9 @@
 import { Concept, Definisjon, ISOLanguage, Kilde, StorageData } from '@catalog-frontend/types';
 import {
+  Box,
   Button,
   Card,
-  ValidationMessage,
+  ErrorMessage,
   Fieldset,
   Heading,
   Paragraph,
@@ -123,10 +124,11 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
   ForwardedTag.displayName = 'ForwardedTag';
 
   return (
-    <Card>
-      <Card className={styles.fieldSet}>
-        <Fieldset readOnly={readOnly}>
-          <Fieldset.Legend>
+    <Box>
+      <Box className={styles.fieldSet}>
+        <Fieldset
+          readOnly={readOnly}
+          legend={
             <TitleWithHelpTextAndTag
               helpText={localization.conceptForm.helpText.definition}
               tagTitle={localization.tag.required}
@@ -134,8 +136,8 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
             >
               Definisjon
             </TitleWithHelpTextAndTag>
-          </Fieldset.Legend>
-        </Fieldset>
+          }
+        />
 
         {definitions
           .filter((name) => values[name])
@@ -230,9 +232,9 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
                       </Button>
                     </div>
                   </Card.Header>
-                  <div className={styles.definitionContent}>
+                  <Card.Content className={styles.definitionContent}>
                     <Paragraph>{getTranslateText(def.tekst)}</Paragraph>
-                    <Card>
+                    <Box>
                       {allowedLanguages
                         .filter((lang) => def.tekst[lang])
                         .map((lang) => (
@@ -244,15 +246,15 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
                             {localization.language[lang]}
                           </Tag>
                         ))}
-                    </Card>
-                  </div>
+                    </Box>
+                  </Card.Content>
                 </Card>
               )
             );
           })}
-      </Card>
+      </Box>
       {!readOnly && (
-        <Card className={styles.buttonRow}>
+        <Box className={styles.buttonRow}>
           {definitions
             .filter((name) => !values[name])
             .map((name) => (
@@ -278,16 +280,16 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
                 onClose={handleCloseDefinitionModal}
               />
             ))}
-        </Card>
+        </Box>
       )}
 
       {Object.keys(errors).some((value) =>
         ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'].includes(value),
       ) && (
-          <ValidationMessage>
+          <ErrorMessage>
             {getFirstErrorByRootKeys(errors, ['definisjon', 'definisjonForAllmennheten', 'definisjonForSpesialister'])}
-          </ValidationMessage>
+          </ErrorMessage>
         )}
-    </Card>
+    </Box>
   );
 };

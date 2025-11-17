@@ -1,7 +1,7 @@
 import { DataService, ReferenceDataCode } from '@catalog-frontend/types';
 import { FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
-import { Card, Radio } from '@digdir/designsystemet-react';
+import { Box, Radio } from '@digdir/designsystemet-react';
 import { useFormikContext } from 'formik';
 
 type Props = {
@@ -13,7 +13,7 @@ export const StatusSection = ({ statuses, availabilities }: Props) => {
   const { values, setFieldValue } = useFormikContext<DataService>();
 
   return (
-    <Card>
+    <Box>
       <Radio.Group
         value={values?.status ?? 'none'}
         legend={
@@ -63,6 +63,6 @@ export const StatusSection = ({ statuses, availabilities }: Props) => {
             </Radio>
           ))}
       </Radio.Group>
-    </Card>
+    </Box>
   );
 };

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useFormikContext } from 'formik';
-import { Button, Card, ValidationMessage, Heading, Paragraph, Tag } from '@digdir/designsystemet-react';
+import { Box, Button, Card, ErrorMessage, Heading, Paragraph, Tag } from '@digdir/designsystemet-react';
 import { ChevronDownIcon, ChevronUpIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { Dataset, Distribution, ReferenceDataCode, Search, StorageData } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
@@ -182,7 +182,7 @@ export const DistributionSection = ({
   };
 
   return (
-    <Card>
+    <Box>
       <div className={styles.fieldSet}>
         <TitleWithHelpTextAndTag
           helpText={localization.datasetForm.helptext.distribution}
@@ -331,9 +331,7 @@ export const DistributionSection = ({
                     />
                   )}
                   {get(errors, 'distribution[' + index + ']') && (
-                    <ValidationMessage data-size={'sm'}>
-                      {localization.validation.multipleInvalidValues}
-                    </ValidationMessage>
+                    <ErrorMessage data-size={'sm'}>{localization.validation.multipleInvalidValues}</ErrorMessage>
                   )}
                 </Card>
               ),
@@ -501,9 +499,7 @@ export const DistributionSection = ({
                     />
                   )}
                   {get(errors, 'sample[' + index + ']') && (
-                    <ValidationMessage data-size={'sm'}>
-                      Inneholder en eller flere ugyldige verdier
-                    </ValidationMessage>
+                    <ErrorMessage data-size={'sm'}>Inneholder en eller flere ugyldige verdier</ErrorMessage>
                   )}
                 </Card>
               ),
@@ -541,6 +537,6 @@ export const DistributionSection = ({
           />
         </div>
       </div>
-    </Card>
+    </Box>
   );
 };

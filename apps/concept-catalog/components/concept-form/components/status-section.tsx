@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useFormikContext } from 'formik';
-import { Card, Radio } from '@digdir/designsystemet-react';
+import { Box, Radio } from '@digdir/designsystemet-react';
 import { Concept, ReferenceDataCode } from '@catalog-frontend/types';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
@@ -23,7 +23,7 @@ export const StatusSection = ({ conceptStatuses, changed, readOnly = false }: St
   }, [value]);
 
   return (
-    <Card>
+    <Box>
       <Radio.Group
         data-size='sm'
         legend={
@@ -48,6 +48,6 @@ export const StatusSection = ({ conceptStatuses, changed, readOnly = false }: St
           </Radio>
         ))}
       </Radio.Group>
-    </Card>
+    </Box>
   );
 };

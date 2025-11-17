@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FastField, useFormikContext } from 'formik';
-import { Card, Textfield, ValidationMessage } from '@digdir/designsystemet-react';
-import { CheckboxGroup } from '@fellesdatakatalog/ui';
+import { Box, Textfield, CheckboxGroup, Checkbox, ErrorMessage } from '@digdir/designsystemet-react';
 import { Concept } from '@catalog-frontend/types';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { localization } from '@catalog-frontend/utils';
@@ -46,7 +45,7 @@ export const ContactSection = ({ changed, readOnly = false }: ContactSectionProp
   }, [values.kontaktpunkt]);
 
   return (
-    <Card className={styles.contactSection}>
+    <Box className={styles.contactSection}>
       <CheckboxGroup
         data-size='sm'
         value={selectedFields}
@@ -62,9 +61,17 @@ export const ContactSection = ({ changed, readOnly = false }: ContactSectionProp
           </TitleWithHelpTextAndTag>
         }
         onChange={handleContactChange}
-        options={contactOptions}
         readOnly={readOnly}
-      />
+      >
+        {contactOptions.map((option) => (
+          <Checkbox
+            key={option.value}
+            value={option.value}
+          >
+            {option.label}
+          </Checkbox>
+        ))}
+      </CheckboxGroup>
       {selectedFields.includes('harEpost') && (
         <FastField
           as={Textfield}
@@ -96,10 +103,8 @@ export const ContactSection = ({ changed, readOnly = false }: ContactSectionProp
         />
       )}
       {typeof errors?.kontaktpunkt === 'string' ? (
-        <ValidationMessage data-size='sm'>
-          {errors?.kontaktpunkt}
-        </ValidationMessage>
+        <ErrorMessage data-size='sm'>{errors?.kontaktpunkt}</ErrorMessage>
       ) : undefined}
-    </Card>
+    </Box>
   );
 };
