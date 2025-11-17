@@ -484,146 +484,153 @@ export const DistributionSection = ({
           >
             {values?.sample &&
               !distributionArrayIsEmpty(values?.sample) &&
-              values?.sample?.map(
-                (item, index) =>
-                  !isEmpty(item) && (
-                    <Card key={`sample-${index}`}>
-                      <div className={styles.heading}>
-                        <div className={styles.field}>
-                          {item?.accessURL && (
-                            <>
-                              <Heading size="2xs" level={4}>
-                                {localization.datasetForm.fieldLabel.accessURL}
-                              </Heading>
-                              {item.accessURL.map(
-                                (url: string, index: number) => {
-                                  return (
-                                    <Paragraph
-                                      key={`accessURL-${index}`}
-                                      size="sm"
-                                    >
-                                      {url}
-                                    </Paragraph>
-                                  );
-                                },
-                              )}
-                            </>
-                          )}
-                        </div>
-                        <div className={styles.buttons}>
-                          <DistributionModal
-                            type="edit"
-                            initialValues={{ ...item }}
-                            initialFileTypes={selectedFileTypes ?? []}
-                            initialMediaTypes={selectedMediaTypes ?? []}
-                            initialAccessServices={selectedDataServices ?? []}
-                            distributionType="sample"
-                            referenceDataEnv={referenceDataEnv}
-                            searchEnv={searchEnv}
-                            openLicenses={openLicenses}
-                            mobilityDataStandards={mobilityDataStandards}
-                            mobilityRights={mobilityRights}
-                            onSuccess={(updatedDist: Distribution) => {
-                              handleDistributionSuccess(
-                                updatedDist,
-                                "sample",
-                                index,
-                              );
-                            }}
-                            onCancel={() => handleDistributionCancel("sample")}
-                            onChange={(updatedDist: Distribution) =>
-                              handleDistributionChange(
-                                updatedDist,
-                                "sample",
-                                index,
-                              )
-                            }
-                            trigger={
-                              <Button variant="tertiary" size="sm">
-                                <PencilWritingIcon
-                                  title="Rediger"
-                                  fontSize="1.5rem"
-                                />
-                                {localization.button.edit}
-                              </Button>
-                            }
-                            isMobility={isMobility}
-                          />
-                          <DeleteButton
-                            onClick={() => {
-                              const newArray = [...(values.sample ?? [])];
-                              newArray.splice(index, 1);
-                              setFieldValue("sample", newArray);
-                              handleDistributionCancel("sample");
-                            }}
-                          />
-                        </div>
-                      </div>
-
-                      <div className={styles.field}>
-                        {!isEmpty(item?.format) && (
-                          <Heading size="2xs" level={4}>
-                            {localization.datasetForm.fieldLabel.format}
-                          </Heading>
-                        )}
-                        <div className={styles.tags}>
-                          {item?.format?.map((uri) => (
-                            <Tag key={uri} color="info" size="sm">
-                              {(
-                                selectedFileTypes?.find(
-                                  (format) => format?.uri === uri,
-                                ) ?? {}
-                              ).code ?? uri}
-                            </Tag>
-                          ))}
-                        </div>
-                      </div>
-
-                      {showSeeMoreButton(item) && (
-                        <div>
-                          <Button
-                            variant="tertiary"
-                            onClick={() => {
-                              setExpandedIndexExampleData(
-                                expandedIndexExampleData === index
-                                  ? null
-                                  : index,
-                              );
-                            }}
-                            className={styles.button}
-                            size="sm"
-                          >
-                            {expandedIndexExampleData === index ? (
+              values?.sample
+                ?.filter((sample) => !isEmpty(sample))
+                .map(
+                  (item, index) =>
+                    !isEmpty(item) && (
+                      <Card key={`sample-${index}`}>
+                        <div className={styles.heading}>
+                          <div className={styles.field}>
+                            {item?.accessURL && (
                               <>
-                                <ChevronUpIcon fontSize="1.3rem" />
-                                {localization.seeLess}
-                              </>
-                            ) : (
-                              <>
-                                <ChevronDownIcon fontSize="1.3rem" />
-                                {localization.seeMore}
+                                <Heading size="2xs" level={4}>
+                                  {
+                                    localization.datasetForm.fieldLabel
+                                      .accessURL
+                                  }
+                                </Heading>
+                                {item.accessURL.map(
+                                  (url: string, index: number) => {
+                                    return (
+                                      <Paragraph
+                                        key={`accessURL-${index}`}
+                                        size="sm"
+                                      >
+                                        {url}
+                                      </Paragraph>
+                                    );
+                                  },
+                                )}
                               </>
                             )}
-                          </Button>
+                          </div>
+                          <div className={styles.buttons}>
+                            <DistributionModal
+                              type="edit"
+                              initialValues={{ ...item }}
+                              initialFileTypes={selectedFileTypes ?? []}
+                              initialMediaTypes={selectedMediaTypes ?? []}
+                              initialAccessServices={selectedDataServices ?? []}
+                              distributionType="sample"
+                              referenceDataEnv={referenceDataEnv}
+                              searchEnv={searchEnv}
+                              openLicenses={openLicenses}
+                              mobilityDataStandards={mobilityDataStandards}
+                              mobilityRights={mobilityRights}
+                              onSuccess={(updatedDist: Distribution) => {
+                                handleDistributionSuccess(
+                                  updatedDist,
+                                  "sample",
+                                  index,
+                                );
+                              }}
+                              onCancel={() =>
+                                handleDistributionCancel("sample")
+                              }
+                              onChange={(updatedDist: Distribution) =>
+                                handleDistributionChange(
+                                  updatedDist,
+                                  "sample",
+                                  index,
+                                )
+                              }
+                              trigger={
+                                <Button variant="tertiary" size="sm">
+                                  <PencilWritingIcon
+                                    title="Rediger"
+                                    fontSize="1.5rem"
+                                  />
+                                  {localization.button.edit}
+                                </Button>
+                              }
+                              isMobility={isMobility}
+                            />
+                            <DeleteButton
+                              onClick={() => {
+                                const newArray = [...(values.sample ?? [])];
+                                newArray.splice(index, 1);
+                                setFieldValue("sample", newArray);
+                                handleDistributionCancel("sample");
+                              }}
+                            />
+                          </div>
                         </div>
-                      )}
 
-                      {expandedIndexExampleData === index && (
-                        <DistributionDetails
-                          selectedDataServices={selectedDataServices ?? []}
-                          selectedMediaTypes={selectedMediaTypes ?? []}
-                          distribution={item}
-                          openLicenses={openLicenses}
-                        />
-                      )}
-                      {get(errors, "sample[" + index + "]") && (
-                        <ErrorMessage size={"sm"}>
-                          Inneholder en eller flere ugyldige verdier
-                        </ErrorMessage>
-                      )}
-                    </Card>
-                  ),
-              )}
+                        <div className={styles.field}>
+                          {!isEmpty(item?.format) && (
+                            <Heading size="2xs" level={4}>
+                              {localization.datasetForm.fieldLabel.format}
+                            </Heading>
+                          )}
+                          <div className={styles.tags}>
+                            {item?.format?.map((uri) => (
+                              <Tag key={uri} color="info" size="sm">
+                                {(
+                                  selectedFileTypes?.find(
+                                    (format) => format?.uri === uri,
+                                  ) ?? {}
+                                ).code ?? uri}
+                              </Tag>
+                            ))}
+                          </div>
+                        </div>
+
+                        {showSeeMoreButton(item) && (
+                          <div>
+                            <Button
+                              variant="tertiary"
+                              onClick={() => {
+                                setExpandedIndexExampleData(
+                                  expandedIndexExampleData === index
+                                    ? null
+                                    : index,
+                                );
+                              }}
+                              className={styles.button}
+                              size="sm"
+                            >
+                              {expandedIndexExampleData === index ? (
+                                <>
+                                  <ChevronUpIcon fontSize="1.3rem" />
+                                  {localization.seeLess}
+                                </>
+                              ) : (
+                                <>
+                                  <ChevronDownIcon fontSize="1.3rem" />
+                                  {localization.seeMore}
+                                </>
+                              )}
+                            </Button>
+                          </div>
+                        )}
+
+                        {expandedIndexExampleData === index && (
+                          <DistributionDetails
+                            selectedDataServices={selectedDataServices ?? []}
+                            selectedMediaTypes={selectedMediaTypes ?? []}
+                            distribution={item}
+                            openLicenses={openLicenses}
+                          />
+                        )}
+                        {get(errors, "sample[" + index + "]") && (
+                          <ErrorMessage size={"sm"}>
+                            Inneholder en eller flere ugyldige verdier
+                          </ErrorMessage>
+                        )}
+                      </Card>
+                    ),
+                )}
 
             <div className={styles.add}>
               <DistributionModal

@@ -21,8 +21,7 @@ import { SchemaType } from "@catalog-frontend/types";
 const NewDatasetPage = withWriteProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/datasets/new`,
   async ({ catalogId }) => {
-    const dataset = datasetToBeCreatedTemplate();
-    dataset.schemaType = SchemaType.DCATAPNO;
+    const dataset = datasetToBeCreatedTemplate(SchemaType.DCATAPNO);
     const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
     const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
 
