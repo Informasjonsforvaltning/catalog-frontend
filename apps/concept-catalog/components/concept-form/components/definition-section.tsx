@@ -231,7 +231,7 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
                       </Button>
                     </div>
                   </Card.Header>
-                  <Card.Content className={styles.definitionContent}>
+                  <div className={styles.definitionContent}>
                     <Paragraph>{getTranslateText(def.tekst)}</Paragraph>
                     <Card>
                       {allowedLanguages
@@ -246,7 +246,7 @@ export const DefinitionSection = ({ changed, readOnly, autoSaveId, autoSaveStora
                           </Tag>
                         ))}
                     </Card>
-                  </Card.Content>
+                  </div>
                 </Card>
               )
             );

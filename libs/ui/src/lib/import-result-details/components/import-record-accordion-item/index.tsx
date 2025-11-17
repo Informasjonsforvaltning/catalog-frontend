@@ -71,42 +71,38 @@ const ImportRecordAccordionItem = ({ targetBaseHref, record, enableOpening, isCo
         <div className={styles.issuesContainer}>
           {errors.length > 0 && (
             <Card key={'error-card'}>
-              <Card.Content>
-                <Heading
-                  level={3}
-                  size={'xs'}
-                >
-                  <div className={styles.issuesHeader}>
-                    <XMarkOctagonIcon className={styles.errorIcon} />
-                    <span>{localization.importResult.errors}</span>
-                  </div>
-                </Heading>
-                <List.Unordered>
-                  {errors.map((issue, i) => (
-                    <List.Item key={`error-${i}`}>{issue.message}</List.Item>
-                  ))}
-                </List.Unordered>
-              </Card.Content>
+              <Heading
+                level={3}
+                size={'xs'}
+              >
+                <div className={styles.issuesHeader}>
+                  <XMarkOctagonIcon className={styles.errorIcon} />
+                  <span>{localization.importResult.errors}</span>
+                </div>
+              </Heading>
+              <List.Unordered>
+                {errors.map((issue, i) => (
+                  <List.Item key={`error-${i}`}>{issue.message}</List.Item>
+                ))}
+              </List.Unordered>
             </Card>
           )}
           {warnings.length > 0 && (
             <Card key={'warning-card'}>
-              <Card.Content>
-                <Heading
-                  level={3}
-                  size={'xs'}
-                >
-                  <div className={styles.issuesHeader}>
-                    <ExclamationmarkTriangleIcon className={styles.warningIcon} />
-                    <span>{localization.importResult.warnings}</span>
-                  </div>
-                </Heading>
-                <List.Unordered>
-                  {warnings.map((issue, i) => (
-                    <List.Item key={`warning-${i}`}>{issue.message}</List.Item>
-                  ))}
-                </List.Unordered>
-              </Card.Content>
+              <Heading
+                level={3}
+                size={'xs'}
+              >
+                <div className={styles.issuesHeader}>
+                  <ExclamationmarkTriangleIcon className={styles.warningIcon} />
+                  <span>{localization.importResult.warnings}</span>
+                </div>
+              </Heading>
+              <List.Unordered>
+                {warnings.map((issue, i) => (
+                  <List.Item key={`warning-${i}`}>{issue.message}</List.Item>
+                ))}
+              </List.Unordered>
             </Card>
           )}
         </div>

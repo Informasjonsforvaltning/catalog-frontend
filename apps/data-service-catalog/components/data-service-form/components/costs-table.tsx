@@ -76,7 +76,7 @@ export const CostsTable = ({ currencies }: Props) => {
           key={`costs-card-${i}`}
           color='neutral'
         >
-          <Card.Content className={styles.costContent}>
+          <div className={styles.costContent}>
             <List.Root size={'sm'}>
               <List.Unordered
                 style={{
@@ -123,7 +123,7 @@ export const CostsTable = ({ currencies }: Props) => {
                 {localization.button.delete}
               </Button>
             </div>
-          </Card.Content>
+          </div>
           <Card.Footer className={styles.costFooter}>
             <Paragraph size={'sm'}>{getTranslateText(item.description)}</Paragraph>
             <Card>

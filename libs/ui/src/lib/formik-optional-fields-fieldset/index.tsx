@@ -59,42 +59,40 @@ export const FormikOptionalFieldsFieldset = ({ legend, availableFields, errorPat
       data-size='sm'
     >
       <Card>
-        <Card.Content>
-          {visibleFields.map((field) => (
-            <Fieldset
+        {visibleFields.map((field) => (
+          <Fieldset
+            key={field.valuePath}
+            legend={field?.legend ?? field?.label}
+          >
+            <Card
               key={field.valuePath}
-              legend={field?.legend ?? field?.label}
+              className={styles.field}
             >
-              <Card
-                key={field.valuePath}
-                className={styles.field}
-              >
-                <FastFieldWithRef
-                  ref={fieldRefs[field.valuePath]}
-                  name={field.valuePath}
-                  aria-label={field.label}
-                  error={get(errors, field.valuePath)}
-                />
-                <DeleteButton onClick={() => handleRemoveField(field.valuePath)} />
-              </Card>
-            </Fieldset>
+              <FastFieldWithRef
+                ref={fieldRefs[field.valuePath]}
+                name={field.valuePath}
+                aria-label={field.label}
+                error={get(errors, field.valuePath)}
+              />
+              <DeleteButton onClick={() => handleRemoveField(field.valuePath)} />
+            </Card>
+          </Fieldset>
+        ))}
+        <div className={styles.addButtons}>
+          {visibleFieldButtons.map((field) => (
+            <AddButton
+              key={field.valuePath}
+              onClick={() => handleAddField(field.valuePath)}
+            >
+              {field.label}
+            </AddButton>
           ))}
-          <div className={styles.addButtons}>
-            {visibleFieldButtons.map((field) => (
-              <AddButton
-                key={field.valuePath}
-                onClick={() => handleAddField(field.valuePath)}
-              >
-                {field.label}
-              </AddButton>
-            ))}
-          </div>
-          {typeof mainError === 'string' && (
-            <ValidationMessage data-size={'sm'}>
-              {mainError}
-            </ValidationMessage>
-          )}
-        </Card.Content>
+        </div>
+        {typeof mainError === 'string' && (
+          <ValidationMessage data-size={'sm'}>
+            {mainError}
+          </ValidationMessage>
+        )}
       </Card>
     </Fieldset>
   );

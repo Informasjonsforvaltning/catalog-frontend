@@ -16,34 +16,32 @@ export const CostList = ({ costs, language }: Props) => {
           key={`costs-card-${i}`}
           color='neutral'
         >
-          <Card.Content>
-            <List.Root size={'sm'}>
-              <List.Unordered
-                style={{
-                  listStyle: 'none',
-                  paddingLeft: 0,
-                }}
-              >
-                {cost.value && (
-                  <List.Item>
-                    {cost.value} {cost.currency?.split('/')?.reverse()[0] ?? ''}
-                  </List.Item>
-                )}
+          <List.Root size={'sm'}>
+            <List.Unordered
+              style={{
+                listStyle: 'none',
+                paddingLeft: 0,
+              }}
+            >
+              {cost.value && (
+                <List.Item>
+                  {cost.value} {cost.currency?.split('/')?.reverse()[0] ?? ''}
+                </List.Item>
+              )}
 
-                {cost.documentation?.map((doc, docIndex) => (
-                  <List.Item key={`costs-${i}-doc-${docIndex}`}>
-                    <Link
-                      href={doc}
-                      target='_blank'
-                    >
-                      {doc}
-                    </Link>
-                  </List.Item>
-                ))}
-              </List.Unordered>
-            </List.Root>
-            <Paragraph size={'sm'}>{getTranslateText(cost.description, language)}</Paragraph>
-          </Card.Content>
+              {cost.documentation?.map((doc, docIndex) => (
+                <List.Item key={`costs-${i}-doc-${docIndex}`}>
+                  <Link
+                    href={doc}
+                    target='_blank'
+                  >
+                    {doc}
+                  </Link>
+                </List.Item>
+              ))}
+            </List.Unordered>
+          </List.Root>
+          <Paragraph size={'sm'}>{getTranslateText(cost.description, language)}</Paragraph>
         </Card>
       ))}
     </>
