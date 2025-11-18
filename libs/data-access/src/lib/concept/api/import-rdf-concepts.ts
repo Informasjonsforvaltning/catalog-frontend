@@ -22,7 +22,7 @@ export const createImportJob = async (catalogId: string) => {
     "createImportJob",
   );
 
-  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/createImportId`;
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/create-import-id`;
 
   const options = {
     headers: {
