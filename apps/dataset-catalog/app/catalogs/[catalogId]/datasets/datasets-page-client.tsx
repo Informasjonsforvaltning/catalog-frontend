@@ -5,6 +5,7 @@ import styles from './datasets-page.module.css';
 import {
   HelpMarkdown,
   LinkButton,
+  NewDatasetModal,
   SearchField,
   SearchHit,
   SearchHitContainer,
@@ -25,7 +26,6 @@ import {
 } from '@catalog-frontend/utils';
 import { TagList } from '@fellesdatakatalog/ui';
 import StatusTag from '../../../../components/status-tag/index';
-import { PlusCircleIcon } from '@navikt/aksel-icons';
 import SearchFilter from '../../../../components/search-filter';
 import { isEmpty } from 'lodash';
 import { useQueryState, parseAsArrayOf, parseAsString, parseAsInteger } from 'nuqs';
@@ -235,16 +235,17 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
             </div>
             <div className={styles.buttons}>
               {hasWritePermission && (
-                <>
-                  <LinkButton
-                    variant='primary'
-                    data-size='sm'
-                    href={`/catalogs/${catalogId}/datasets/new`}
-                  >
-                    <PlusCircleIcon fontSize='1.2rem' />
-                    {localization.datasetForm.button.addDataset}
-                  </LinkButton>
-                </>
+                <NewDatasetModal
+                  catalogId={catalogId}
+                  firstButton={{
+                    href: `/catalogs/${catalogId}/datasets/new`,
+                    label: localization.datasetForm.button.addDataset,
+                  }}
+                  secondButton={{
+                    href: `/catalogs/${catalogId}/datasets/new`,
+                    label: localization.datasetForm.button.addDataset,
+                  }}
+                />
               )}
             </div>
           </div>

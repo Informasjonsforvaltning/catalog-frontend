@@ -1,5 +1,5 @@
 import { forwardRef, ReactNode } from 'react';
-import { Textfield, TextfieldProps } from '@digdir/designsystemet-react';
+import { Textfield, TextfieldProps, Label } from '@digdir/designsystemet-react';
 import styles from './textarea-with-prefix.module.scss';
 
 export type TextareaWithPrefixProps = {
@@ -10,7 +10,7 @@ export const TextareaWithPrefix = forwardRef<HTMLTextAreaElement, TextareaWithPr
   ({ prefix, label, ...props }, ref) => {
     return (
       <div className={styles.textareaWithPrefix}>
-        {label && <label>{label}</label>}
+        {label && <Label>{label}</Label>}
         <div>
           <div className={styles.prefix}>{prefix}</div>
           <Textfield

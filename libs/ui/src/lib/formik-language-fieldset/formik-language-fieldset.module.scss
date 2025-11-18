@@ -12,6 +12,7 @@
 
   & > *:first-child {
     flex-grow: 1;
+    min-width:0;
   }
 
   :global(.fds-textfield__prefix) {

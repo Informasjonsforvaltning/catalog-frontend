@@ -43,6 +43,7 @@ export * from './lib/link';
 export * from './lib/list';
 export * from './lib/markdown';
 export * from './lib/navigation-card';
+export * from './lib/new-dataset-modal';
 export * from './lib/next-auth-provider';
 export * from './lib/notification-carousel';
 export * from './lib/page-banner';

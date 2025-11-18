@@ -144,10 +144,7 @@ export const FormikLanguageFieldset = ({
                       cols: 110,
                       prefix: (
                         <>
-                          <Paragraph
-                            data-size='sm'
-                            variant='short'
-                          >
+                          <Paragraph>
                             {localization.language[lang]}
                           </Paragraph>
                           {!requiredLanguages?.includes(lang) && !readOnly && (
