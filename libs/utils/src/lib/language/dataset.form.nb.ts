@@ -223,6 +223,21 @@ export const datasetFormNb = {
     addDatasetSeries: "Legg til datasettserie",
     addTransportDataset: "Legg til transport-datasett",
   },
+  datasetTypeModal: {
+    title: "Legg til datasett",
+    intro: "Vennligst velg hvilken type datasett du vil registrere:",
+    selectButton: "Velg",
+    standardDataset: {
+      title: "Standard datasett",
+      description: "Bruker DCAT-AP-NO-spesifikasjonen",
+      button: "Standard datasett",
+    },
+    mobilityDataset: {
+      title: "Datasett for mobilitet og transport",
+      description: "Bruker MobilityDCAT-AP-NO-spesifikasjonen",
+      button: "Datasett for mobilitet og transport",
+    },
+  },
   errors: {
     qualifiedAttributions: "Kunne ikke hente enheter.",
   },
