@@ -15,7 +15,6 @@ import {
   validateAndEncodeUrlSafe,
 } from "@catalog-frontend/utils";
 import { Operation } from "fast-json-patch";
-import { hashText } from "@catalog-frontend/utils/src/lib/validation/hashing";
 
 type SearchObject = Search.SearchObject;
 
@@ -491,19 +490,14 @@ export const confirmImportedConcept = async (
     "confirmConceptImport",
   );
 
-  const hashedExternalId = hashText(externalId)
 
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}/confirmConceptImport`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      "Content-Type": "application/json",
     },
     method: "PUT",
-    body: JSON.stringify({
-      hashedId: hashedExternalId,
-      encodedId: externalId,
-    }),
+    body: externalId,
   };
 
   return await fetch(resource, options);
