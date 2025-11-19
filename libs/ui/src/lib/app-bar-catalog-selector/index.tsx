@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import cn from 'classnames';
 import {
 	Dropdown,
     Badge,
@@ -17,9 +18,8 @@ export const AppBarCatalogSelectorList = () => {
         <div className={styles.catalogList}>
             <Dropdown.List>
                 <Dropdown.Item>
-                    <Dropdown.Button data-size='sm' className={styles.catalogButton}>
+                    <Dropdown.Button data-size='sm' className={cn(styles.catalogButton, styles.current)}>
                         Datasett
-                        <CheckmarkIcon />
                         <Badge data-size='sm' count={12} data-color='neutral' variant='tinted' />
                     </Dropdown.Button>
                 </Dropdown.Item>

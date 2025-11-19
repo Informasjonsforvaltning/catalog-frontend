@@ -10,10 +10,8 @@
     }
 }
 
-.catalogList {
-    button:has(svg) {
-        // background:var(--ds-color-surface-hover);
-        background: #f8f8f8;
-        color: black;
-    }
+.current {
+    background: #f8f8f8;
+    color: black;
+    font-weight:bold;
 }

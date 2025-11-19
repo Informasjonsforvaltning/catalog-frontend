@@ -25,12 +25,12 @@ export const AppBarNotificationButton = () => {
                 </Badge.Position>
 			</Dropdown.Trigger>
 			<Dropdown placement="bottom">
-                <Alert data-color='success' data-size='sm'>
-                    Ditt datasett ble godkjent!
+                <Alert data-color='info' data-size='sm'>
+                    Du har ingen notifikasjoner
                 </Alert>
-				<Alert data-color='info' data-size='sm'>
+				{/* <Alert data-color='info' data-size='sm'>
                     Ditt begrep har 500 visninger på data.norge.no
-                </Alert>
+                </Alert> */}
 				{/* <Dropdown.List>
 					<Dropdown.Item>
 						<Dropdown.Button data-size='sm'>

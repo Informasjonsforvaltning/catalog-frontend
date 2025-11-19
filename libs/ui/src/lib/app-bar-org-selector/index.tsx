@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import cn from 'classnames';
 import {
 	Dropdown,
 	Divider
@@ -10,6 +11,7 @@ import {
 	ChevronDownIcon,
 	CheckmarkIcon,
 } from '@navikt/aksel-icons';
+import styles from './styles.module.scss';
 
 export const AppBarOrgSelector = () => {
 
@@ -25,10 +27,10 @@ export const AppBarOrgSelector = () => {
 			<Dropdown placement="bottom-start">
 				<Dropdown.List>
 					<Dropdown.Item>
-						<Dropdown.Button data-size='sm'>
+						<Dropdown.Button data-size='sm' className={styles.current}>
 							<OrgLogo orgLogoSrc='https://orglogo.digdir.no/api/emblem/svg/974761076' style={{fontSize:'1.5rem'}} />
 							Skatteetaten
-							<CheckmarkIcon />
+							{/* <CheckmarkIcon /> */}
 						</Dropdown.Button>
 					</Dropdown.Item>
 					<Dropdown.Item>
