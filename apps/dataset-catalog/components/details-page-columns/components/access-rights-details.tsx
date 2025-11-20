@@ -1,6 +1,5 @@
 import { Dataset, UriWithLabel } from "@catalog-frontend/types";
 import {
-  accessRightPublic,
   accessRights,
   getTranslateText,
   localization,

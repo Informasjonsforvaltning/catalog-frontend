@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import { Fragment, ReactNode, useEffect, useRef, useState } from "react";
 import {
   Distribution,
   ReferenceDataCode,
@@ -232,8 +232,8 @@ export const DistributionModal = ({
           {(arrayHelpers) => (
             <>
               {(arrayHelpers.form.values.downloadURL || []).map(
-                (_: any, index: number, array: string[]) => (
-                  <React.Fragment key={`downloadURL-${index}`}>
+                (_: any, index: number) => (
+                  <Fragment key={`downloadURL-${index}`}>
                     <div className={styles["padding-bottom-4"]}>
                       <FieldsetWithDelete
                         onDelete={() => arrayHelpers.remove(index)}
@@ -265,7 +265,7 @@ export const DistributionModal = ({
                         />
                       </FieldsetWithDelete>
                     </div>
-                  </React.Fragment>
+                  </Fragment>
                 ),
               )}
               <AddButton
@@ -441,7 +441,7 @@ export const DistributionModal = ({
             <>
               {(arrayHelpers.form.values.page || []).map(
                 (_: any, index: number) => (
-                  <React.Fragment key={`page-${index}`}>
+                  <Fragment key={`page-${index}`}>
                     <div className={styles["padding-bottom-4"]}>
                       <FieldsetWithDelete
                         onDelete={() => arrayHelpers.remove(index)}
@@ -470,7 +470,7 @@ export const DistributionModal = ({
                         />
                       </FieldsetWithDelete>
                     </div>
-                  </React.Fragment>
+                  </Fragment>
                 ),
               )}
               <AddButton
@@ -711,9 +711,9 @@ export const DistributionModal = ({
                         {(arrayHelpers) => (
                           <>
                             {(arrayHelpers.form.values.accessURL || []).map(
-                              (_: any, index: number, array: string[]) => {
+                              (_: any, index: number) => {
                                 return (
-                                  <React.Fragment key={`accessURL-${index}`}>
+                                  <Fragment key={`accessURL-${index}`}>
                                     <div>
                                       {index > 0 ? (
                                         <FieldsetWithDelete
@@ -802,7 +802,7 @@ export const DistributionModal = ({
                                         />
                                       )}
                                     </div>
-                                  </React.Fragment>
+                                  </Fragment>
                                 );
                               },
                             )}

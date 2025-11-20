@@ -101,9 +101,7 @@ export const DistributionSection = ({
     }
   };
 
-  const handleDistributionCancel = (
-    distributionType: "distribution" | "sample",
-  ) => {
+  const handleDistributionCancel = () => {
     // Clean up secondary storage on cancel
     if (autoSaveStorage) {
       autoSaveStorage.deleteSecondary("distribution");
@@ -286,9 +284,7 @@ export const DistributionSection = ({
                             index,
                           );
                         }}
-                        onCancel={() =>
-                          handleDistributionCancel("distribution")
-                        }
+                        onCancel={handleDistributionCancel}
                         onChange={(updatedDist) =>
                           handleDistributionChange(
                             updatedDist,
@@ -311,7 +307,7 @@ export const DistributionSection = ({
                           const newArray = [...(values.distribution ?? [])];
                           newArray.splice(index, 1);
                           setFieldValue("distribution", newArray);
-                          handleDistributionCancel("distribution");
+                          handleDistributionCancel();
                         }}
                       />
                     </div>
@@ -413,7 +409,7 @@ export const DistributionSection = ({
                 values.distribution?.length ?? 0,
               );
             }}
-            onCancel={() => handleDistributionCancel("distribution")}
+            onCancel={handleDistributionCancel}
             onChange={(formValues: Distribution) => {
               handleDistributionChange(
                 formValues,
@@ -489,7 +485,7 @@ export const DistributionSection = ({
                             index,
                           );
                         }}
-                        onCancel={() => handleDistributionCancel("sample")}
+                        onCancel={handleDistributionCancel}
                         onChange={(updatedDist: Distribution) =>
                           handleDistributionChange(updatedDist, "sample", index)
                         }
@@ -508,7 +504,7 @@ export const DistributionSection = ({
                           const newArray = [...(values.sample ?? [])];
                           newArray.splice(index, 1);
                           setFieldValue("sample", newArray);
-                          handleDistributionCancel("sample");
+                          handleDistributionCancel();
                         }}
                       />
                     </div>
@@ -591,7 +587,7 @@ export const DistributionSection = ({
                 values.sample?.length ?? 0,
               );
             }}
-            onCancel={() => handleDistributionCancel("sample")}
+            onCancel={handleDistributionCancel}
             onChange={(formValues: Distribution) => {
               handleDistributionChange(
                 formValues,

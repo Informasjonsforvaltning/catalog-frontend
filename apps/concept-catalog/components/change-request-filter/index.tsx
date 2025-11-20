@@ -18,6 +18,7 @@ const ChangeRequestsFilter = ({ itemType, status }: Props) => {
           <Accordion.Header level={3}>{localization.filter}</Accordion.Header>
           <Accordion.Content>
             <Radio.Group
+              legend=""
               size="small"
               onChange={itemType.onChange}
               defaultValue={itemType.selected}
@@ -34,6 +35,7 @@ const ChangeRequestsFilter = ({ itemType, status }: Props) => {
           <Accordion.Header level={3}>{localization.status}</Accordion.Header>
           <Accordion.Content>
             <Checkbox.Group
+              legend=""
               onChange={status.onChange}
               size="small"
               defaultValue={status.selected}

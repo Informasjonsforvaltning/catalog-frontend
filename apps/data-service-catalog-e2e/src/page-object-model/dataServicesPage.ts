@@ -31,7 +31,7 @@ export default class DataServicesPage {
     this.detailPage = new DataServiceDetailPage(page, context);
     this.editPage = new EditPage(page, context);
     this.context = context;
-    this.accessibilityBuilder = accessibilityBuilder;
+    this.accessibilityBuilder = accessibilityBuilder as any;
     this.searchInput = page.getByRole("searchbox", { name: "Søk" });
     this.searchButton = page.getByRole("button", { name: "Søk" });
     // More specific locator for data service cards
@@ -84,7 +84,7 @@ export default class DataServicesPage {
       // Wait for spinner to be visible and hidden
       await spinner.waitFor({ state: "visible", timeout: 3000 });
       await spinner.waitFor({ state: "hidden", timeout: 10000 });
-    } catch (error) {
+    } catch {
       console.log(
         "[DataServicesPage] Spinner not found or already hidden, continuing...",
       );
@@ -144,7 +144,7 @@ export default class DataServicesPage {
         `[DataServicesPage] Data services loaded. Found ${cardCount} cards.`,
       );
       return cardCount;
-    } catch (error) {
+    } catch {
       console.log(
         "[DataServicesPage] Timeout waiting for data services to load",
       );

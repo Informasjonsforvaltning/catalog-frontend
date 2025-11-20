@@ -117,7 +117,7 @@ export const ChangeRequestsPageClient = ({
     setFilterStatus(values);
   };
 
-  const onSortChange = (e) => {
+  const onSortChange = (e: any) => {
     setSort(e.target.value);
   };
 

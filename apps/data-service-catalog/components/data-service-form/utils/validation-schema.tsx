@@ -130,7 +130,7 @@ export const costValidationSchema = () =>
       value: Yup.number()
         .label(localization.dataServiceForm.fieldLabel.costValue)
         .when("documentation", {
-          is: (documentation) => {
+          is: (documentation: any) => {
             return isEmpty(documentation);
           },
           then: (valueSchema) =>
@@ -151,7 +151,7 @@ export const costValidationSchema = () =>
             .url(localization.validation.invalidUrl),
         )
         .when("value", {
-          is: (value) => {
+          is: (value: any) => {
             return !isNumber(value);
           },
           then: (docSchema) => docSchema.required().nonNullable(),

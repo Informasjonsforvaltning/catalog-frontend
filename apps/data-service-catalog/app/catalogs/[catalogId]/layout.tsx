@@ -1,8 +1,9 @@
 import { TermsOfUseModal } from "@catalog-frontend/ui";
 import { CatalogLayout } from "../../../components/catalog-layout";
+import { ReactNode } from "react";
 
 const PageLayout = async (props: {
-  children: React.ReactNode;
+  children: ReactNode;
   params: Promise<{ catalogId: string }>;
 }) => {
   const params = await props.params;

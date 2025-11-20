@@ -1,25 +1,18 @@
-//@ts-check
+import type { NextConfig } from "next";
+import { withNx } from "@nx/next/plugins/with-nx";
 
-const { withNx } = require("@nx/next/plugins/with-nx");
-const path = require("path");
-
-/**
- * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
- **/
-const nextConfig = {
+const nextConfig: NextConfig = {
   nx: {
     // Set this to true if you would like to to use SVGR
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
-  experimental: {
-    serverActions: {
-      bodySizeLimit: "10mb",
-    },
+  env: {
+    DATASET_CATALOG_BASE_URI: process.env.DATASET_CATALOG_BASE_URI,
   },
   webpack(config) {
     // Grab the existing rule that handles SVG imports
-    const fileLoaderRule = config.module.rules.find((rule) =>
+    const fileLoaderRule = config.module.rules.find((rule: any) =>
       rule.test?.test?.(".svg"),
     );
 
@@ -46,23 +39,6 @@ const nextConfig = {
 
     return config;
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  async redirects() {
-    return [
-      {
-        source: "/:catalogId(\\d{1,})/:conceptId*",
-        destination: "/catalogs/:catalogId/concepts/:conceptId*",
-        permanent: true,
-      },
-      {
-        source: "/:catalogId(\\d{1,})",
-        destination: "/catalogs/:catalogId/concepts",
-        permanent: true,
-      },
-    ];
-  },
 };
 
-module.exports = withNx(nextConfig);
+export default withNx(nextConfig);

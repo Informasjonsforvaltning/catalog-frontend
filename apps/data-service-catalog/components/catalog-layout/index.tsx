@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { Layout } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import { useParams } from "next/navigation";
@@ -28,7 +28,7 @@ export const CatalogLayout = ({
 }: CatalogLayoutProps) => {
   const { catalogId } = useParams();
   const { data: design } = useGetCatalogDesign(
-    catalogId?.toString(),
+    catalogId?.toString() as any,
     catalogAdminServiceUrl,
   );
 

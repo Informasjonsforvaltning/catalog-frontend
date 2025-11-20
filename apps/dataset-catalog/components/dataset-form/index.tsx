@@ -34,7 +34,7 @@ import {
 import { Formik, Form, FormikProps } from "formik";
 import { useParams, useSearchParams } from "next/navigation";
 import { datasetTemplate } from "./utils/dataset-initial-values";
-import { useEffect, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import {
   confirmedDatasetSchema,
   draftDatasetSchema,
@@ -133,7 +133,7 @@ export const DatasetForm = ({
   };
 
   const handleSwitchChange = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: ChangeEvent<HTMLInputElement>,
     setFieldValue: (fieldName: string, value: boolean) => void,
   ) => {
     const isChecked = event.target.checked;

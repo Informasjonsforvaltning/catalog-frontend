@@ -43,17 +43,17 @@ export const updateUnionRelation = (
 
   if (name) {
     if (prev?.index === undefined || name !== prevName) {
-      if (!values[name]) {
+      if (!(values as any)[name]) {
         setFieldValue(name, [relationValue]);
       } else {
-        setFieldValue(name, [...values[name], relationValue]);
+        setFieldValue(name, [...(values as any)[name], relationValue]);
       }
 
       if (prev && name !== prevName) {
         removeUnionRelation(prev, values, setFieldValue);
       }
     } else {
-      const relations = [...values[name]];
+      const relations = [...(values as any)[name]];
       relations[prev.index] = relationValue;
       setFieldValue(name, relations);
     }
@@ -70,7 +70,7 @@ export const removeUnionRelation = (
   }
   const name: string | undefined = getFieldname(rel);
   if (name) {
-    const relations = [...values[name]];
+    const relations = [...(values as any)[name]];
     relations.splice(rel.index, 1);
     setFieldValue(name, relations);
   }

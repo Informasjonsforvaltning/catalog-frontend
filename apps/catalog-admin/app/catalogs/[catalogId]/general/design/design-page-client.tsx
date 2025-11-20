@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAdminState } from "../../../../../context/admin";
 import { ColorPicker } from "../../../../../components/color-picker";
 import { ImageUploader } from "../../../../../components/image-uploader";

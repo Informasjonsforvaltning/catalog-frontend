@@ -10,7 +10,6 @@ import {
   getTranslateText,
   localization,
 } from "@catalog-frontend/utils";
-import { get, isEqual } from "lodash";
 
 type StatusSectionProps = {
   conceptStatuses: ReferenceDataCode[];
@@ -23,8 +22,7 @@ export const StatusSection = ({
   changed,
   readOnly = false,
 }: StatusSectionProps) => {
-  const { errors, initialValues, values, setFieldValue } =
-    useFormikContext<Concept>();
+  const { errors, values, setFieldValue } = useFormikContext<Concept>();
   const [value, setValue] = useState<string>(
     values.statusURI ?? conceptStatuses[0].uri,
   );

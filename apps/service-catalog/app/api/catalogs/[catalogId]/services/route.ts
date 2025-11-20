@@ -18,7 +18,7 @@ export const GET = async (
       }
       const services = await response.json();
       return new Response(JSON.stringify(services), { status: 200 });
-    } catch (err) {
+    } catch {
       return new Response("Failed to fetch services", { status: 500 });
     }
   });

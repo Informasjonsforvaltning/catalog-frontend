@@ -1,23 +1,28 @@
 import cn from "classnames";
-import { forwardRef } from "react";
+import {
+  forwardRef,
+  ForwardRefExoticComponent,
+  HTMLAttributes,
+  ReactNode,
+  RefAttributes,
+} from "react";
 import classes from "./info-card.module.css";
 import InfoCardItem, { InfoCardItemType } from "./info-card-item";
 
 interface InfoCardComponent
-  extends React.ForwardRefExoticComponent<
-    InfoCardProps & React.RefAttributes<HTMLDivElement>
+  extends ForwardRefExoticComponent<
+    InfoCardProps & RefAttributes<HTMLDivElement>
   > {
   Item: InfoCardItemType;
 }
 
-export const infoCardSize = ["large", "small"] as const;
-type InfoCardSize = (typeof infoCardSize)[number];
+type InfoCardSize = "large" | "small";
 
-export interface InfoCardProps extends React.HTMLAttributes<HTMLDivElement> {
+interface InfoCardProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Instances of InfoCard.Item
    */
-  children: React.ReactNode;
+  children: ReactNode;
   /**
    * Size
    */
@@ -35,6 +40,4 @@ export const InfoCard = forwardRef<HTMLDivElement, InfoCardProps>(
 ) as InfoCardComponent;
 
 InfoCard.Item = InfoCardItem;
-
-export default InfoCard;
 InfoCard.displayName = "InfoCard";

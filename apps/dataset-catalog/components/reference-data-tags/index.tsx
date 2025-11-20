@@ -1,4 +1,4 @@
-import { UriWithLabel, ReferenceDataCode } from "@catalog-frontend/types";
+import { ReferenceDataCode } from "@catalog-frontend/types";
 import {
   capitalizeFirstLetter,
   getTranslateText,

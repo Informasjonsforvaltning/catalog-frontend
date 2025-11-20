@@ -8,14 +8,13 @@ import {
   formatISO,
   localization,
 } from "@catalog-frontend/utils";
-import { ImportRecordAccordionItem } from "./components/import-record-accordion-item";
 import { TrashIcon, CheckmarkIcon } from "@navikt/aksel-icons";
-import React from "react";
 import {
   ImportResultStatusColors,
   StatusKey,
 } from "../tag/import-result-status/ImportResultStatus";
 import { CenterContainer, HelpMarkdown } from "@catalog-frontend/ui";
+import { ImportRecordAccordionItem } from "./components/import-record-accordion-item";
 
 interface Props {
   targetBaseHref: string;
@@ -89,10 +88,11 @@ const ImportResultDetails = ({
       : "neutral";
 
   const getMessage = () => {
-    if (importResult.status === "FAILED" && importResult.failureMessage)
+    if (importResult.status === "FAILED" && importResult.failureMessage) {
       return importResult.failureMessage;
-    else if (importResult.status === "CANCELLED")
+    } else if (importResult.status === "CANCELLED") {
       return localization.importResult.cancelledImport;
+    }
 
     return "";
   };

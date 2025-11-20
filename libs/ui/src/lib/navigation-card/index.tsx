@@ -8,11 +8,12 @@ import {
   Paragraph,
   Card,
 } from "@digdir/designsystemet-react";
+import { ReactElement } from "react";
 interface Card {
   title?: string;
-  body?: React.ReactElement | string;
+  body?: ReactElement | string;
   href?: string;
-  icon?: React.ReactElement;
+  icon?: ReactElement;
   subtitle?: string;
 }
 

@@ -12,22 +12,34 @@ export const test = base.extend<{
   servicesPage: any;
   publicServicesPage: any;
 }>({
-  loginPage: async ({ page, context }, use) => {
+  loginPage: async (
+    { page, context }: { page: any; context: any },
+    use: any,
+  ) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
     const loginPage = new LoginPage(page, context, accessibilityBuilder);
     await use(loginPage);
   },
-  homePage: async ({ page, context }, use) => {
+  homePage: async (
+    { page, context }: { page: any; context: any },
+    use: any,
+  ) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
     const homePage = new HomePage(page, context, accessibilityBuilder);
     await use(homePage);
   },
-  servicesPage: async ({ page, context }, use) => {
+  servicesPage: async (
+    { page, context }: { page: any; context: any },
+    use: any,
+  ) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
     const servicesPage = new ServicesPage(page, context, accessibilityBuilder);
     await use(servicesPage);
   },
-  publicServicesPage: async ({ page, context }, use) => {
+  publicServicesPage: async (
+    { page, context }: { page: any; context: any },
+    use: any,
+  ) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
     const publicServicesPage = new PublicServicesPage(
       page,
@@ -38,11 +50,11 @@ export const test = base.extend<{
   },
 });
 
-export const runTest = (name: string, fn: (any) => void) => {
+export const runTest = (name: string, fn: (any: any) => void) => {
   test(PREFIX_TEXT + name, fn);
 };
 
-export const runTestAsAdmin = (name: string, fn: (any) => void) => {
+export const runTestAsAdmin = (name: string, fn: (any: any) => void) => {
   test.use({ storageState: adminAuthFile });
   runTest(name, fn);
 };

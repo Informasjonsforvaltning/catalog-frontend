@@ -16,7 +16,7 @@ export const DELETE = async (req: NextRequest, props: { params: any }) => {
         throw new Error();
       }
       return new Response(response?.text?.toString(), { status: 200 });
-    } catch (err) {
+    } catch {
       return new Response("Failed to delete service", { status: 500 });
     }
   });

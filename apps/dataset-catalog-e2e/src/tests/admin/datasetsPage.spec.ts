@@ -40,7 +40,7 @@ runTestAsAdmin(
     playwright,
   }: {
     datasetsPage: DatasetsPage;
-    playwright;
+    playwright: any;
   }) => {
     // Create a request context with the admin storage state (includes next-auth cookie)
     const apiRequestContext = await playwright.request.newContext({
@@ -50,7 +50,7 @@ runTestAsAdmin(
     const dataset = getRandomDataset();
     await createDataset(apiRequestContext, dataset);
 
-    await datasetsPage.goto(process.env.E2E_CATALOG_ID);
+    await datasetsPage.goto(process.env.E2E_CATALOG_ID as any);
     await datasetsPage.expectHasDatasets();
   },
 );
@@ -58,7 +58,7 @@ runTestAsAdmin(
 runTestAsAdmin(
   "should show create dataset button",
   async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
-    await datasetsPage.goto(process.env.E2E_CATALOG_ID);
+    await datasetsPage.goto(process.env.E2E_CATALOG_ID as any);
     await datasetsPage.expectCreateDatasetButtonVisible();
   },
 );
@@ -66,7 +66,7 @@ runTestAsAdmin(
 runTestAsAdmin(
   "should have search input",
   async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
-    await datasetsPage.goto(process.env.E2E_CATALOG_ID);
+    await datasetsPage.goto(process.env.E2E_CATALOG_ID as any);
     await datasetsPage.expectSearchInputVisible();
   },
 );
@@ -74,7 +74,7 @@ runTestAsAdmin(
 runTestAsAdmin(
   "should show all filters",
   async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
-    await datasetsPage.goto(process.env.E2E_CATALOG_ID);
+    await datasetsPage.goto(process.env.E2E_CATALOG_ID as any);
     await datasetsPage.expectAllFiltersVisible();
   },
 );
@@ -82,7 +82,7 @@ runTestAsAdmin(
 runTestAsAdmin(
   "should show status filter",
   async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
-    await datasetsPage.goto(process.env.E2E_CATALOG_ID);
+    await datasetsPage.goto(process.env.E2E_CATALOG_ID as any);
     await datasetsPage.expectStatusFilterVisible();
   },
 );
@@ -90,7 +90,7 @@ runTestAsAdmin(
 runTestAsAdmin(
   "should show published filter",
   async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
-    await datasetsPage.goto(process.env.E2E_CATALOG_ID);
+    await datasetsPage.goto(process.env.E2E_CATALOG_ID as any);
     await datasetsPage.expectPublishedFilterVisible();
   },
 );
@@ -102,19 +102,19 @@ runTestAsAdmin(
     playwright,
   }: {
     datasetsPage: DatasetsPage;
-    playwright;
+    playwright: any;
   }) => {
     // Create a request context with the admin storage state (includes next-auth cookie)
     const apiRequestContext = await playwright.request.newContext({
       storageState: adminAuthFile,
     });
 
-    const datasets = Array.from({ length: 3 }).map((_) => getRandomDataset());
+    const datasets = Array.from({ length: 3 }).map(() => getRandomDataset());
     for (const dataset of datasets) {
       await createDataset(apiRequestContext, dataset);
     }
 
-    await datasetsPage.goto(process.env.E2E_CATALOG_ID);
+    await datasetsPage.goto(process.env.E2E_CATALOG_ID as any);
     await datasetsPage.expectSearchInputVisible();
 
     // Search for the dataset
@@ -146,7 +146,7 @@ runTestAsAdmin(
     playwright,
   }: {
     datasetsPage: DatasetsPage;
-    playwright;
+    playwright: any;
   }) => {
     // Create a request context with the admin storage state (includes next-auth cookie)
     const apiRequestContext = await playwright.request.newContext({
@@ -156,7 +156,7 @@ runTestAsAdmin(
     const dataset = getRandomDataset();
     await createDataset(apiRequestContext, dataset);
 
-    await datasetsPage.goto(process.env.E2E_CATALOG_ID);
+    await datasetsPage.goto(process.env.E2E_CATALOG_ID as any);
     await datasetsPage.expectSearchInputVisible();
     await datasetsPage.search("non-existent-dataset-123");
     await expect(datasetsPage.noResultsLocator()).toBeVisible();

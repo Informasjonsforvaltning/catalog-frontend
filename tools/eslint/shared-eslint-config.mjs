@@ -6,11 +6,7 @@ import tseslint from "typescript-eslint";
 export function createCommonTsConfig(tsconfigRootDir) {
   return {
     files: ["**/*.{js,cjs,mjs,ts,tsx,jsx}"],
-    settings: {
-      react: {
-        version: "detect",
-      },
-    },
+    ignores: ["**/.next/**"],
     languageOptions: {
       parser: tseslint.parser,
       parserOptions: {
@@ -24,20 +20,27 @@ export function createCommonTsConfig(tsconfigRootDir) {
         ...globals.jest,
       },
     },
+    rules: {
+      ...tseslint.configs.recommended[0].rules,
+      ...pluginReact.configs.flat.recommended.rules,
+
+      // not needed with Next.js / TS
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
+
+      // prefer TS unused-vars
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "warn",
+    },
     plugins: {
       "@typescript-eslint": tseslint.plugin,
       react: pluginReact,
       "@nx": pluginNx,
     },
-    rules: {
-      ...tseslint.configs.recommended[0].rules,
-      ...pluginReact.configs.flat.recommended.rules,
-      "@typescript-eslint/no-explicit-any": "warn",
-      "@typescript-eslint/triple-slash-reference": "off",
-      "@next/next/no-html-link-for-pages": [
-        "error",
-        ["apps/dataset-catalog/pages", "apps/catalog-admin/pages"],
-      ],
+    settings: {
+      react: {
+        version: "detect",
+      },
     },
   };
 }

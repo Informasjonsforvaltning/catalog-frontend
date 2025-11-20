@@ -48,7 +48,7 @@ export const getParentLocator = (locator: Locator, n = 1) => {
   return parent;
 };
 
-export const clearCombobox = async (page, label) => {
+export const clearCombobox = async (page: any, label: any) => {
   // Workaround to clear and close a combobox.
   const currentValue = await page
     .getByRole("combobox", { name: label })
@@ -62,7 +62,7 @@ export const clearCombobox = async (page, label) => {
   await page.getByLabel(label).press("Tab");
 };
 
-export const deleteAllDataServices = async (apiRequestContext) => {
+export const deleteAllDataServices = async (apiRequestContext: any) => {
   console.log(
     "[DELETE ALL DATA SERVICES] Starting deletion of all data services...",
   );
@@ -103,7 +103,10 @@ export const deleteAllDataServices = async (apiRequestContext) => {
   }
 };
 
-export const deleteDataService = async (apiRequestContext, dataServiceId) => {
+export const deleteDataService = async (
+  apiRequestContext: any,
+  dataServiceId: any,
+) => {
   console.log("[DELETE DATA SERVICE] Deleting data service:", dataServiceId);
   await apiRequestContext.delete(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/data-services/${dataServiceId}`,
@@ -111,7 +114,10 @@ export const deleteDataService = async (apiRequestContext, dataServiceId) => {
   console.log("[DELETE DATA SERVICE] Data service deleted successfully");
 };
 
-export const createDataService = async (apiRequestContext, dataService) => {
+export const createDataService = async (
+  apiRequestContext: any,
+  dataService: any,
+) => {
   console.log(
     "[CREATE DATA SERVICE] Creating data service:",
     dataService.title,
@@ -140,7 +146,7 @@ export const createDataService = async (apiRequestContext, dataService) => {
   return createdDataService;
 };
 
-export const getPublishedDataService = async (apiRequestContext) => {
+export const getPublishedDataService = async (apiRequestContext: any) => {
   console.log("[GET PUBLISHED DATA SERVICE] Fetching published data services");
   const response = await apiRequestContext.get(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/data-services`,
@@ -154,7 +160,9 @@ export const getPublishedDataService = async (apiRequestContext) => {
   }
 
   const dataServices = await response.json();
-  const publishedDataService = dataServices.filter((d) => d.published).pop();
+  const publishedDataService = dataServices
+    .filter((d: any) => d.published)
+    .pop();
   console.log(
     "[GET PUBLISHED DATA SERVICE] Found published data service:",
     publishedDataService?.id,
@@ -162,7 +170,10 @@ export const getPublishedDataService = async (apiRequestContext) => {
   return publishedDataService;
 };
 
-export const publishDataService = async (apiRequestContext, dataServiceId) => {
+export const publishDataService = async (
+  apiRequestContext: any,
+  dataServiceId: any,
+) => {
   console.log("[PUBLISH DATA SERVICE] Publishing data service:", dataServiceId);
   const response = await apiRequestContext.post(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/data-services/${dataServiceId}/publish`,
@@ -179,7 +190,7 @@ export const publishDataService = async (apiRequestContext, dataServiceId) => {
   console.log("[PUBLISH DATA SERVICE] Data service published successfully");
 };
 
-export const getUsers = async (apiRequestContext) => {
+export const getUsers = async (apiRequestContext: any) => {
   const response = await apiRequestContext.get(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/users`,
   );

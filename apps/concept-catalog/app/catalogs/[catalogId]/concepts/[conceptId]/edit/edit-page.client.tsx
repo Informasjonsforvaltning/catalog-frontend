@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { ArrowLeftIcon } from "@navikt/aksel-icons";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import type { Concept, StorageData } from "@catalog-frontend/types";
@@ -17,7 +17,7 @@ export const EditPage = ({
   fieldsResult,
   usersResult,
   hasChangeRequests,
-}) => {
+}: any) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [autoSave, setAutoSave] = useState(hasChangeRequests ? false : true);

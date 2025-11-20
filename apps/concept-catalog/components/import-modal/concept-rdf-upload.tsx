@@ -1,12 +1,12 @@
 import { UploadButton } from "@catalog-frontend/ui";
 import { FileImportIcon } from "@navikt/aksel-icons";
 import { localization } from "@catalog-frontend/utils";
-import React from "react";
 import { useImportRdf } from "@concept-catalog/hooks/import";
+import { Dispatch, SetStateAction } from "react";
 
 interface Props {
   catalogId: string;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 export const ImportConceptRdf = ({ catalogId, setIsLoading }: Props) => {
@@ -14,7 +14,7 @@ export const ImportConceptRdf = ({ catalogId, setIsLoading }: Props) => {
   extension2Type.set(".ttl", "text/turtle");
   const allowedExtensions = Array.from(extension2Type.keys());
   const uploadRdf = useImportRdf(catalogId);
-  const onFileUpload = async (event) => {
+  const onFileUpload = async (event: any) => {
     const file: File = event.target.files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -44,10 +44,7 @@ export const ImportConceptRdf = ({ catalogId, setIsLoading }: Props) => {
   };
 
   return (
-    <UploadButton
-      allowedMimeTypes={allowedExtensions}
-      onUpload={(e) => onFileUpload(e)}
-    >
+    <UploadButton allowedMimeTypes={allowedExtensions} onUpload={onFileUpload}>
       <FileImportIcon fontSize="1.5rem" />
       <span>{localization.button.importConceptRDF}</span>
     </UploadButton>

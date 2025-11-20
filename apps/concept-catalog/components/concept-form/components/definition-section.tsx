@@ -23,7 +23,7 @@ import {
   PlusCircleIcon,
   TrashIcon,
 } from "@navikt/aksel-icons";
-import { forwardRef, useState } from "react";
+import { ButtonHTMLAttributes, forwardRef, useState } from "react";
 import { DefinitionModal } from "./definition-modal";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
@@ -35,7 +35,7 @@ function getFirstErrorByRootKeys(
 ): string | null {
   for (const rootKey of rootKeys) {
     if (Object.prototype.hasOwnProperty.call(obj, rootKey)) {
-      const value = obj[rootKey];
+      const value: any = (obj as any)[rootKey];
       if (typeof value === "string") {
         return value;
       } else if (typeof value === "object") {
@@ -52,7 +52,7 @@ function getFirstErrorByRootKeys(
 
   // If none of the root keys are directly found, check nested objects
   for (const key in obj) {
-    const value = obj[key];
+    const value: any = (obj as any)[key];
     if (typeof value === "object") {
       const nestedValue = getFirstErrorByRootKeys(value, rootKeys);
       if (nestedValue) {
@@ -142,7 +142,7 @@ export const DefinitionSection = ({
 
   const ForwardedTag = forwardRef<
     HTMLButtonElement,
-    React.ButtonHTMLAttributes<HTMLButtonElement>
+    ButtonHTMLAttributes<HTMLButtonElement>
   >((props, ref) => {
     return <button className={styles.forwardedTag} {...props} ref={ref} />;
   });

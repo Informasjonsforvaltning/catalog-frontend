@@ -60,60 +60,63 @@ export default class ServicesPage {
       .fill(service.title.en as string);
     await this.page
       .getByLabel("Beskrivelse på bokmål")
-      .fill(service.description.nb as string);
+      .fill(service.description?.nb as string);
     await this.page
       .getByLabel("Beskrivelse på nynorsk")
-      .fill(service.description.nn as string);
+      .fill(service.description?.nn as string);
     await this.page
       .getByLabel("Beskrivelse på engelsk")
-      .fill(service.description.en as string);
+      .fill(service.description?.en as string);
 
     // Produces relations
-    for (let i = 0; i < service.produces.length; i++) {
-      const result = service.produces[i];
+    for (const [i, result] of (service.produces ?? []).entries()) {
       await this.page
         .getByRole("button", { name: "Legg til relasjon" })
         .click();
       await this.page
         .locator(`input[name="produces\\[${i}\\]\\.title\\.nb"]`)
-        .fill(result.title.nb as string);
+        .fill(result.title?.nb as string);
       await this.page
         .locator(`input[name="produces\\[${i}\\]\\.title\\.nn"]`)
-        .fill(result.title.nn as string);
+        .fill(result.title?.nn as string);
       await this.page
         .locator(`input[name="produces\\[${i}\\]\\.title\\.en"]`)
-        .fill(result.title.en as string);
+        .fill(result.title?.en as string);
       await this.page
         .locator(`input[name="produces\\[${i}\\]\\.description\\.nb"]`)
-        .fill(result.description.nb as string);
+        .fill(result.description?.nb as string);
       await this.page
         .locator(`input[name="produces\\[${i}\\]\\.description\\.nn"]`)
-        .fill(result.description.nn as string);
+        .fill(result.description?.nn as string);
       await this.page
         .locator(`input[name="produces\\[${i}\\]\\.description\\.en"]`)
-        .fill(result.description.en as string);
+        .fill(result.description?.en as string);
     }
 
     // Contact point
-    const contactPoint = service.contactPoints[0];
+    const contactPoint = service.contactPoints?.[0];
     await this.page
       .getByLabel("Kategori på bokmål")
-      .fill(contactPoint.category.nb as string);
+      .fill(contactPoint?.category?.nb as string);
     await this.page
       .getByLabel("Kategori på nynorsk")
-      .fill(contactPoint.category.nn as string);
+      .fill(contactPoint?.category?.nn as string);
     await this.page
       .getByLabel("Kategori på engelsk")
-      .fill(contactPoint.category.en as string);
-    await this.page.getByLabel("E-post").fill(contactPoint.email);
-    await this.page.getByLabel("Telefon").fill(contactPoint.telephone);
-    await this.page.getByLabel("Kontaktside").fill(contactPoint.contactPage);
+      .fill(contactPoint?.category?.en as string);
+    await this.page.getByLabel("E-post").fill(contactPoint?.email ?? "");
+    await this.page.getByLabel("Telefon").fill(contactPoint?.telephone ?? "");
+    await this.page
+      .getByLabel("Kontaktside")
+      .fill(contactPoint?.contactPage ?? "");
 
     // Status
-    await this.page.getByRole("combobox").selectOption(service.status);
+    await this.page.getByRole("combobox").selectOption(service.status ?? "");
 
     // Homepage (website)
-    await this.page.getByLabel("Lenke til hjemmeside").fill(service.homepage);
+    await this.page
+      .getByLabel("Lenke til hjemmeside")
+      .fill(service.homepage ?? "");
 
     // Save service
     await this.page.getByRole("button", { name: "Lagre tjeneste" }).click();
@@ -156,7 +159,7 @@ export default class ServicesPage {
   public async checkIfNoServicesExist() {
     const items = (await this.page.getByRole("link").all()).filter(
       async (link) => {
-        (await link.getAttribute("href")).startsWith(this.url);
+        (await link.getAttribute("href"))?.startsWith(this.url);
       },
     );
 
@@ -171,7 +174,6 @@ export default class ServicesPage {
       await dialog.accept();
     });
 
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       // Get the list of items
       const promises = (await this.page.getByRole("link").all()).map(
@@ -179,7 +181,7 @@ export default class ServicesPage {
           const href = await link.getAttribute("href");
           return {
             value: href,
-            include: href.includes(this.url) && !href.endsWith("/new"),
+            include: href?.includes(this.url) && !href.endsWith("/new"),
           };
         },
       );
@@ -196,7 +198,7 @@ export default class ServicesPage {
       console.log(`Number of items before deletion: ${items.length}`);
 
       // Click the delete button for the first item
-      await this.deleteService(items[0]);
+      await this.deleteService(items?.[0] as string);
       await this.goto();
     }
   }
@@ -271,7 +273,7 @@ export default class ServicesPage {
       [ServiceStatus.WITHDRAWN]: this.statusFilterWithdrawnLocator,
     };
 
-    const locatorFn = statusMap[status];
+    const locatorFn = statusMap[status as ServiceStatus];
     if (!locatorFn) {
       throw new Error(`Unknown status: ${status}`);
     }

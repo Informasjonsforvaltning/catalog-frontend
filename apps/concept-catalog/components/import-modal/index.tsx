@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { localization } from "@catalog-frontend/utils";
 import { LinkButton, UploadButton } from "@catalog-frontend/ui";
 import {
@@ -20,8 +20,8 @@ interface ImportProps {
 
 interface ImportRdfProps {
   catalogId: string;
-  setIsUploading: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsUploaded: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsUploading: Dispatch<SetStateAction<boolean>>;
+  setIsUploaded: Dispatch<SetStateAction<boolean>>;
 }
 
 enum UploadType {
@@ -39,7 +39,7 @@ export function ImportModal({ catalogId }: ImportProps) {
   const [isUploaded, setIsUploaded] = useState<boolean>(false);
   const [isSending, setIsSending] = useState<boolean>(false);
   const [cancelled, setCancelled] = useState<boolean>(false);
-  let uploadSession;
+  let uploadSession: any;
   const sessionId = useRef<number>(0);
 
   const [uploadType, setUploadType] = useState<UploadType>(UploadType.CSV);
@@ -64,7 +64,7 @@ export function ImportModal({ catalogId }: ImportProps) {
 
   const maxSize = 10; // 10 MB
 
-  const onCsvUpload = (event) => {
+  const onCsvUpload = (event: any) => {
     const file: File = event.target.files?.[0];
     if (file) {
       if (file.size > maxSize * 1024 * 1024) {
@@ -127,14 +127,13 @@ export function ImportModal({ catalogId }: ImportProps) {
   };
 
   const ImportConceptRdf = ({
-    catalogId,
     setIsUploading,
     setIsUploaded,
   }: ImportRdfProps) => {
     const extension2Type: Map<string, string> = new Map<string, string>();
     extension2Type.set(".ttl", "text/turtle");
     const allowedExtensions = Array.from(extension2Type.keys());
-    const onFileUpload = (event) => {
+    const onFileUpload = (event: any) => {
       setCancelled(false);
       setIsUploading(true);
       //await new Promise(resolve => setTimeout(resolve, 5000));
@@ -183,7 +182,7 @@ export function ImportModal({ catalogId }: ImportProps) {
             uploadRdf.mutate({
               fileContent: evt.target.result,
               contentType: contentType,
-            });
+            } as any);
             setUploadType(UploadType.RDF);
             setUploadedRdfConcepts({
               fileContent: evt.target.result,

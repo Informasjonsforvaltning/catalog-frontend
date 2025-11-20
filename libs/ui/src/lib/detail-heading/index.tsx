@@ -11,7 +11,6 @@ export const DetailHeading = ({
   headingTitle,
   subtitle,
   className,
-  ...rest
 }: DetailHeadingProps) => {
   return (
     <div className={cn(style.detailHeading, className)}>

@@ -1,12 +1,17 @@
 import cn from "classnames";
-import React, { forwardRef } from "react";
+import {
+  forwardRef,
+  ForwardRefExoticComponent,
+  HTMLAttributes,
+  ReactNode,
+  RefAttributes,
+} from "react";
 import classes from "./info-card.module.css";
 import { HelpMarkdown } from "../help-markdown";
 import { Heading } from "@digdir/designsystemet-react";
 import { localization } from "@catalog-frontend/utils";
 
-export const headingColor = ["neutral", "light"] as const;
-type HeadingColor = (typeof headingColor)[number];
+type HeadingColor = "neutral" | "light";
 type Size =
   | "2xs"
   | "xs"
@@ -25,8 +30,7 @@ type Size =
 
 type HeadingLevel = 1 | 2 | 3 | 4 | 5 | 6;
 
-export interface InfoCardItemProps
-  extends React.HTMLAttributes<HTMLDivElement> {
+interface InfoCardItemProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * Heading
    */
@@ -42,7 +46,7 @@ export interface InfoCardItemProps
   /**
    * Content in Item
    */
-  children: React.ReactNode;
+  children: ReactNode;
 
   /**
    * Helptext
@@ -61,8 +65,8 @@ export interface InfoCardItemProps
   headingSize?: Size;
 }
 
-export type InfoCardItemType = React.ForwardRefExoticComponent<
-  InfoCardItemProps & React.RefAttributes<HTMLDivElement>
+export type InfoCardItemType = ForwardRefExoticComponent<
+  InfoCardItemProps & RefAttributes<HTMLDivElement>
 >;
 
 const InfoCardItem: InfoCardItemType = forwardRef(

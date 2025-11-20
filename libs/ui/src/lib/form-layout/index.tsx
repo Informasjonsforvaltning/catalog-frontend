@@ -1,9 +1,13 @@
 "use client";
 
-import React, {
+import {
   Children,
+  createRef,
+  isValidElement,
   PropsWithChildren,
+  ReactElement,
   ReactNode,
+  RefObject,
   useRef,
   useState,
 } from "react";
@@ -38,8 +42,8 @@ const SideMenu = ({ heading, children }: SideMenuProps) => {
         {heading}
       </Heading>
       <ol>
-        {React.Children.map(children, (child) => {
-          if (React.isValidElement(child) && child.type === MenuItem) {
+        {Children.map(children, (child) => {
+          if (isValidElement(child) && child.type === MenuItem) {
             return <>{child}</>;
           }
         })}
@@ -69,12 +73,12 @@ const MenuItem = ({
 export const FormLayout = ({ children }: FormLayoutProps) => {
   const childrenArray = Children.toArray(children);
   const sectionArray = childrenArray
-    .filter((child) => React.isValidElement(child) && child.type === Section)
-    .map((child) => child as React.ReactElement);
+    .filter((child) => isValidElement(child) && child.type === Section)
+    .map((child) => child as ReactElement);
 
   const [activeSection, setActiveSection] = useState("");
   const sectionRefs = useRef(
-    sectionArray.map(() => React.createRef<HTMLDivElement>()),
+    sectionArray.map(() => createRef<HTMLDivElement>()),
   );
 
   const [observerEnabled, setObserverEnabled] = useState(true);
@@ -82,7 +86,7 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
   useIntersectionObserver({
     activeSection,
     setActiveSection,
-    sectionRefs: sectionRefs.current as React.RefObject<HTMLElement>[],
+    sectionRefs: sectionRefs.current as RefObject<HTMLElement>[],
     observerEnabled,
     threshold: 0.8,
   });
@@ -171,7 +175,7 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
   );
 };
 
-const Section = ({ id, title, subtitle, children }: SectionProps) => (
+const Section = ({ title, subtitle, children }: SectionProps) => (
   <div className={styles.section}>
     <div className={styles.sectionHeading}>
       <Heading className={styles.sectionHeadingTitle} level={2}>
@@ -186,5 +190,3 @@ const Section = ({ id, title, subtitle, children }: SectionProps) => (
 );
 
 FormLayout.Section = Section;
-
-export default FormLayout;

@@ -35,7 +35,7 @@ import {
   DeleteButton,
   FastFieldWithRef,
 } from "@catalog-frontend/ui";
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, createRef } from "react";
 import { isEmpty, isNumber } from "lodash";
 import styles from "../data-service-form.module.css";
 import FieldsetWithDelete from "../../fieldset-with-delete";
@@ -174,8 +174,8 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
   const [showValueField, setShowValueField] = useState(false);
   const [focus, setFocus] = useState<string | null>();
   const modalRef = useRef<HTMLDialogElement>(null);
-  const valueRef = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
-  const docRef = React.createRef<HTMLInputElement | HTMLTextAreaElement>();
+  const valueRef = createRef<HTMLInputElement | HTMLTextAreaElement>();
+  const docRef = createRef<HTMLInputElement | HTMLTextAreaElement>();
 
   useEffect(() => {
     if (focus === "value") {
@@ -349,7 +349,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                           <>
                             {arrayHelpers.form.values.documentation &&
                               arrayHelpers.form.values.documentation.map(
-                                (_, index: number) => (
+                                (_: any, index: number) => (
                                   <div
                                     key={`documentation-${index}`}
                                     className={styles.padding}

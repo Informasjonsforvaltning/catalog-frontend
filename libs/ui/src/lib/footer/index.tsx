@@ -1,12 +1,12 @@
 import { FC } from "react";
-import Link from "../link";
+import { Link } from "../link";
 
 import styles from "./footer.module.css";
 import { localization } from "@catalog-frontend/utils";
 import EmailIcon from "./images/email.svg";
 import Illustration from "./images/illustration.svg";
 
-export interface FooterProps {
+interface FooterProps {
   /**
    * font color
    * @type {string}
@@ -63,5 +63,3 @@ export const Footer: FC<FooterProps> = ({ fontColor, backgroundColor }) => (
     </div>
   </footer>
 );
-
-export default Footer;

@@ -28,7 +28,7 @@ export const EditConceptFormClient = ({
   codeListsResult,
   fieldsResult,
   usersResult,
-}) => {
+}: any) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [newChangeRequest, setNewChangeRequest] = useState(false);

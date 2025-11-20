@@ -27,7 +27,7 @@ export async function GET(
       {
         users: [
           {
-            id: session.user?.id || "current-user",
+            id: (session.user as any)?.id || "current-user",
             name: session.user?.name || "Current User",
             email: session.user?.email || "user@example.com",
             role: "admin",

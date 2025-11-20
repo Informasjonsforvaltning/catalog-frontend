@@ -117,8 +117,8 @@ export async function deleteDataService(
       throw new Error();
     }
     success = true;
-  } catch (error) {
-    throw new Error(localization.alert.deleteFail);
+  } catch {
+    throw new Error((localization.alert as any).deleteFail);
   } finally {
     if (success) {
       revalidateTag("data-services");
@@ -194,8 +194,8 @@ export async function publishDataService(
       throw new Error();
     }
     success = true;
-  } catch (error) {
-    throw new Error(localization.alert.deleteFail);
+  } catch {
+    throw new Error((localization.alert as any).deleteFail);
   } finally {
     if (success) {
       revalidateTag("data-service");
@@ -220,8 +220,8 @@ export async function unpublishDataService(
       throw new Error();
     }
     success = true;
-  } catch (error) {
-    throw new Error(localization.alert.deleteFail);
+  } catch {
+    throw new Error((localization.alert as any).deleteFail);
   } finally {
     if (success) {
       revalidateTag("data-service");
@@ -246,8 +246,8 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
       throw new Error();
     }
     success = true;
-  } catch (error) {
-    throw new Error(localization.alert.deleteFail);
+  } catch {
+    throw new Error((localization.alert as any).deleteFail);
   } finally {
     if (success) {
       revalidateTag("import-results");

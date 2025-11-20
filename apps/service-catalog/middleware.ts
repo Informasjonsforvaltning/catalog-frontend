@@ -6,9 +6,9 @@ import {
   hasOrganizationWritePermission,
   hasSystemAdminPermission,
   validateOidcUserSession,
-} from "../../libs/utils/src/lib/auth/token";
-import { validUUID } from "../../libs/utils/src/lib/validation/uuid";
-import { validOrganizationNumber } from "../../libs/utils/src/lib/validation/organization-number";
+} from "@catalog-frontend/utils/src/lib/auth/token";
+import { validUUID } from "@catalog-frontend/utils/src/lib/validation/uuid";
+import { validOrganizationNumber } from "@catalog-frontend/utils/src/lib/validation/organization-number";
 
 export const config = {
   matcher: "/catalogs/:path*",
@@ -81,7 +81,7 @@ export default withAuth(
       signOut: "/auth/signout",
     },
     callbacks: {
-      authorized: ({ req, token }) => {
+      authorized: ({ token }) => {
         if (!token || token.error === "RefreshAccessTokenError") {
           return false;
         }
