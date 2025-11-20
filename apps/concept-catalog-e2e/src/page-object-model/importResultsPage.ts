@@ -1,6 +1,7 @@
-import { expect, Page, BrowserContext } from '@playwright/test';
-import type AxeBuilder from '@axe-core/playwright';
-import { deleteAllImportResults } from '../utils/helpers';
+import { expect, Page, BrowserContext } from "@playwright/test";
+import type AxeBuilder from "@axe-core/playwright";
+import { deleteAllImportResults } from "../utils/helpers";
+import { localization } from "@catalog-frontend/utils";
 
 export default class ImportResultsPage {
   url: string;
@@ -8,7 +9,11 @@ export default class ImportResultsPage {
   context: BrowserContext;
   accessibilityBuilder: AxeBuilder;
 
-  constructor(page: Page, context: BrowserContext, accessibilityBuilder?: AxeBuilder) {
+  constructor(
+    page: Page,
+    context: BrowserContext,
+    accessibilityBuilder?: AxeBuilder,
+  ) {
     this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/concepts/import-results`;
     this.page = page;
     this.context = context;
@@ -18,55 +23,136 @@ export default class ImportResultsPage {
   public getByLabelLocator = (label: string) => this.page.getByLabel(label);
 
   // Locators
-  statusFilterHeaderLocator = () => this.page.getByRole('button', { name: 'Status' });
-  statusFilterSuccessfulLocator = () => this.getByLabelLocator('Lagt til i katalog');
-  statusFilterSavingLocator = () => this.getByLabelLocator('Legges til i katalog');
-  statusFilterFailedLocator = () => this.getByLabelLocator('Feilet');
-  statusFilterOngoingLocator = () => this.getByLabelLocator('Pågår');
-  statusFilterCancelledLocator = () => this.getByLabelLocator('Avvist');
-  statusFilterPendingConfirmationLocator = () => this.getByLabelLocator('Til gjennomgang');
+  statusFilterHeaderLocator = () =>
+    this.page.getByRole("button", { name: "Status" });
+  statusFilterSuccessfulLocator = () =>
+    this.getByLabelLocator(`${localization.importResult.completed}`);
+  statusFilterPartiallyCompletedLocator = () =>
+    this.getByLabelLocator(`${localization.importResult.partiallyCompleted}`);
+  statusFilterFailedLocator = () =>
+    this.getByLabelLocator(`${localization.importResult.failed}`);
+  statusFilterOngoingLocator = () =>
+    this.getByLabelLocator(`${localization.importResult.inProgress}`);
+  statusFilterCancelledLocator = () =>
+    this.getByLabelLocator(`${localization.importResult.cancelled}`);
+  statusFilterPendingConfirmationLocator = () =>
+    this.getByLabelLocator(`${localization.importResult.pendingConfirmation}`);
 
   async expectFiltersToBeInvisible() {
-    console.log('[Test] Expecting \'Lagt til i katalog\' filter to be invisible...');
-    await expect(this.statusFilterSuccessfulLocator()).not.toBeVisible({timeout: 20000});
+    console.log(
+      "[Test] Expecting '" +
+        localization.importResult.completed +
+        "' filter to be invisible...",
+    );
+    await expect(this.statusFilterSuccessfulLocator()).not.toBeVisible({
+      timeout: 20000,
+    });
 
-    console.log('[Test] Expecting \'Legging til i katalog\' filter to be invisible...');
-    await expect(this.statusFilterSavingLocator()).not.toBeVisible({timeout: 20000});
+    console.log(
+      "[Test] Expecting '" +
+        localization.importResult.failed +
+        "' filter to be invisible...",
+    );
+    await expect(this.statusFilterFailedLocator()).not.toBeVisible({
+      timeout: 20000,
+    });
 
-    console.log('[Test] Expecting \'Feilet\' filter to be invisible...');
-    await expect(this.statusFilterFailedLocator()).not.toBeVisible({timeout: 20000});
+    console.log(
+      "[Test] Expecting '" +
+        localization.importResult.inProgress +
+        "' filter to be invisible...",
+    );
+    await expect(this.statusFilterOngoingLocator()).not.toBeVisible({
+      timeout: 20000,
+    });
 
-    console.log('[Test] Expecting \'Pågår\' filter to be invisible...');
-    await expect(this.statusFilterOngoingLocator()).not.toBeVisible({timeout: 20000});
+    console.log(
+      "[Test] Expecting '" +
+        localization.importResult.cancelled +
+        "' filter to be invisible...",
+    );
+    await expect(this.statusFilterCancelledLocator()).not.toBeVisible({
+      timeout: 20000,
+    });
 
-    console.log('[Test] Expecting \'Avvist\' filter to be invisible...');
-    await expect(this.statusFilterCancelledLocator()).not.toBeVisible({timeout: 20000});
+    console.log(
+      "[Test] Expecting '" +
+        localization.importResult.pendingConfirmation +
+        "' filter to be invisible...",
+    );
+    await expect(this.statusFilterPendingConfirmationLocator()).not.toBeVisible(
+      { timeout: 20000 },
+    );
 
-    console.log('[Test] Expecting \'Til gjennomgang\' filter to be invisible...');
-    await expect(this.statusFilterPendingConfirmationLocator()).not.toBeVisible({timeout: 20000});
+    console.log(
+      "[Test] Expecting '" +
+        localization.importResult.partiallyCompleted +
+        "' filter to be invisible...",
+    );
+    await expect(this.statusFilterPartiallyCompletedLocator()).not.toBeVisible({
+      timeout: 20000,
+    });
   }
 
   async expectFiltersToBeVisible() {
-    console.log('[Test] Expecting \'Status\' filter to be visible...');
-    await expect(this.statusFilterHeaderLocator()).toBeVisible({timeout: 20000});
+    console.log("[Test] Expecting 'Status' filter to be visible...");
+    await expect(this.statusFilterHeaderLocator()).toBeVisible({
+      timeout: 20000,
+    });
 
-    console.log('[Test] Expecting \'Lagt til i katalog\' filter to be visible...');
-    await expect(this.statusFilterSuccessfulLocator()).toBeVisible({timeout: 20000});
+    console.log(
+      "[Test] Expecting '" +
+        localization.importResult.completed +
+        "' filter to be visible...",
+    );
+    await expect(this.statusFilterSuccessfulLocator()).toBeVisible({
+      timeout: 20000,
+    });
 
-    console.log('[Test] Expecting \'Legging til i katalog\' filter to be visible...');
-    await expect(this.statusFilterSavingLocator()).toBeVisible({timeout: 20000});
+    console.log(
+      "[Test] Expecting '" +
+        localization.importResult.failed +
+        "' filter to be visible...",
+    );
+    await expect(this.statusFilterFailedLocator()).toBeVisible({
+      timeout: 20000,
+    });
 
-    console.log('[Test] Expecting \'Feilet\' filter to be visible...');
-    await expect(this.statusFilterFailedLocator()).toBeVisible({timeout: 20000});
+    console.log(
+      "[Test] Expecting '" +
+        localization.importResult.inProgress +
+        "' filter to be visible...",
+    );
+    await expect(this.statusFilterOngoingLocator()).toBeVisible({
+      timeout: 20000,
+    });
 
-    console.log('[Test] Expecting \'Pågår\' filter to be visible...');
-    await expect(this.statusFilterOngoingLocator()).toBeVisible({timeout: 20000});
+    console.log(
+      "[Test] Expecting '" +
+        localization.importResult.cancelled +
+        "' filter to be visible...",
+    );
+    await expect(this.statusFilterCancelledLocator()).toBeVisible({
+      timeout: 20000,
+    });
 
-    console.log('[Test] Expecting \'Avvist\' filter to be visible...');
-    await expect(this.statusFilterCancelledLocator()).toBeVisible({timeout: 20000});
+    console.log(
+      "[Test] Expecting '" +
+        localization.importResult.pendingConfirmation +
+        "' filter to be visible...",
+    );
+    await expect(this.statusFilterPendingConfirmationLocator()).toBeVisible({
+      timeout: 20000,
+    });
 
-    console.log('[Test] Expecting \'Til gjennomgang\' filter to be visible...');
-    await expect(this.statusFilterPendingConfirmationLocator()).toBeVisible({timeout: 20000});
+    console.log(
+      "[Test] Expecting '" +
+        localization.importResult.partiallyCompleted +
+        "' filter to be visible...",
+    );
+    await expect(this.statusFilterPartiallyCompletedLocator()).toBeVisible({
+      timeout: 20000,
+    });
   }
 
   async goto() {
@@ -75,17 +161,24 @@ export default class ImportResultsPage {
 
   async checkAccessibility() {
     if (!this.accessibilityBuilder) {
-      console.log('[IMPORT RESULTS PAGE] Accessibility builder not available, skipping accessibility check.');
+      console.log(
+        "[IMPORT RESULTS PAGE] Accessibility builder not available, skipping accessibility check.",
+      );
       return;
     }
-    console.log('[IMPORT RESULTS PAGE] Running accessibility check...');
+    console.log("[IMPORT RESULTS PAGE] Running accessibility check...");
     const result = await this.accessibilityBuilder.analyze();
     expect.soft(result.violations).toEqual([]);
-    console.log('[IMPORT RESULTS PAGE] Accessibility check complete. Violations:', result.violations.length);
+    console.log(
+      "[IMPORT RESULTS PAGE] Accessibility check complete. Violations:",
+      result.violations.length,
+    );
   }
 
   async expectImportResultUrl() {
-    await this.page.waitForURL(`/catalogs/${process.env.E2E_CATALOG_ID}/concepts/import-results`);
+    await this.page.waitForURL(
+      `/catalogs/${process.env.E2E_CATALOG_ID}/concepts/import-results`,
+    );
   }
 
   async deleteAllImportResults(apiRequestContext) {

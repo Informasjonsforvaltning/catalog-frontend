@@ -647,6 +647,10 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
   },
 
   importResult: {
+    import: "Importer",
+    results: "Resultater",
+    continue: "Fortsett",
+    cancel: "Avbryt",
     completed: "Fullført",
     partiallyCompleted: "Delvis fullført",
     savingInCatalog: "Legges til i katalogen",
@@ -660,6 +664,7 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
     goToImported: "Gå til importert ressurs",
     confirmDelete: "Er du sikker på at du vil slette importeringsrapporten?",
     cancelImport: "Avvis import",
+    deleteImport: "Slett",
     confirmImport: "Legg til i katalog",
     tryAgain: "Prøv igjen",
     deleteCanResultInDuplicates: `Sletting av denne kan resultere i duplikater hvis samme import gjennomføres senere.`,

@@ -303,22 +303,6 @@ const ImportResultDetails = ({
                           />
                         </>
                       )}
-
-                      {importResult.status === "SAVING" && (
-                        <>
-                          {importResult.savedConcepts}/
-                          {importResult.totalConcepts}
-                          <progress
-                            value={importResult.savedConcepts}
-                            max={importResult.totalConcepts}
-                            style={{
-                              width: 120,
-                              height: 16,
-                              accentColor: "#0d6efd",
-                            }}
-                          />
-                        </>
-                      )}
                     </div>
                   )}
               </div>
@@ -346,7 +330,7 @@ const ImportResultDetails = ({
             onClick={() => deleteHandler(importResult.id)}
           >
             <TrashIcon title="Slett" fontSize="1.5rem" />
-            Slett
+            {localization.importResult.deleteImport}
           </Button>
 
           {showCancellationButton && (

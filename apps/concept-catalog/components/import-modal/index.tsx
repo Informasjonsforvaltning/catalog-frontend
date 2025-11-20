@@ -238,7 +238,7 @@ export function ImportModal({ catalogId }: ImportProps) {
       <Modal.Trigger asChild>
         <Button variant={"secondary"}>
           <FileImportIcon />
-          Importer
+          {localization.importResult.import}
         </Button>
       </Modal.Trigger>
       <Modal.Dialog
@@ -322,7 +322,7 @@ export function ImportModal({ catalogId }: ImportProps) {
                   disabled={isGoingtoImportResults || isUploading}
                   onClick={goToImporResults}
                 >
-                  Resultater
+                  {localization.importResult.results}
                 </Button>
 
                 <UploadButton
@@ -361,14 +361,14 @@ export function ImportModal({ catalogId }: ImportProps) {
                 variant={"primary"}
               >
                 <TasklistSendIcon />
-                Fortsett
+                {localization.importResult.continue}
               </Button>
               <Button
                 variant={"secondary"}
                 onClick={cancel}
                 disabled={isSending}
               >
-                Avbryt
+                {localization.importResult.cancel}
               </Button>
             </div>
           </Modal.Footer>

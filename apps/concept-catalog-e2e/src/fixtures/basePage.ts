@@ -1,12 +1,12 @@
-import { test as base } from '@playwright/test';
-import HomePage from '../page-object-model/homePage';
-import LoginPage from '../page-object-model/loginPage';
-import ConceptsPage from '../page-object-model/conceptsPage';
-import ImportResultsPage from '../page-object-model/importResultsPage';
-import ImportResultDetailsPage from '../page-object-model/importResultDetailsPage';
-import { adminAuthFile, generateAccessibilityBuilder } from '../utils/helpers';
+import { test as base } from "@playwright/test";
+import HomePage from "../page-object-model/homePage";
+import LoginPage from "../page-object-model/loginPage";
+import ConceptsPage from "../page-object-model/conceptsPage";
+import ImportResultsPage from "../page-object-model/importResultsPage";
+import ImportResultDetailsPage from "../page-object-model/importResultDetailsPage";
+import { adminAuthFile, generateAccessibilityBuilder } from "../utils/helpers";
 
-const PREFIX_TEXT = 'concept-catalog: ';
+const PREFIX_TEXT = "concept-catalog: ";
 export const test = base.extend<{
   loginPage: any;
   homePage: any;
@@ -31,12 +31,20 @@ export const test = base.extend<{
   },
   importResultsPage: async ({ page, context }, use) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
-    const importResultsPage = new ImportResultsPage(page, context, accessibilityBuilder);
+    const importResultsPage = new ImportResultsPage(
+      page,
+      context,
+      accessibilityBuilder,
+    );
     await use(importResultsPage);
   },
   importResultDetailsPage: async ({ page, context }, use) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
-    const importResultDetailsPage = new ImportResultDetailsPage(page, context, accessibilityBuilder);
+    const importResultDetailsPage = new ImportResultDetailsPage(
+      page,
+      context,
+      accessibilityBuilder,
+    );
     await use(importResultDetailsPage);
   },
 });
@@ -54,27 +62,26 @@ export const runTestAsAdmin = (name: string, fn: (any) => void) => {
   runTest(name, fn);
 };
 
-export const runSerialTestsAdmin = (name: string, tests: {name: string, fn: (any)  => void} [],
-                                    skippedTests?: {name: string, fn: (any)  => void} []) => {
+export const runSerialTestsAdmin = (
+  name: string,
+  tests: { name: string; fn: (any) => void }[],
+  skippedTests?: { name: string; fn: (any) => void }[],
+) => {
   test.use({ storageState: adminAuthFile });
-  test.describe.serial(PREFIX_TEXT + ' serial tests ' + name, () => {
-
+  test.describe.serial(PREFIX_TEXT + " serial tests " + name, () => {
     for (const { name, fn } of tests) {
       test.use({ storageState: adminAuthFile });
       runTest(`${PREFIX_TEXT} ${name}`, fn);
     }
-
   });
-  if(!skippedTests) return;
+  if (!skippedTests) return;
 
-  for (const { name, fn } of skippedTests)
-    skipTest(name, fn);
-
-}
+  for (const { name, fn } of skippedTests) skipTest(name, fn);
+};
 
 export const skipTestAsAdmin = (name: string, fn: (any) => void) => {
   test.use({ storageState: adminAuthFile });
   skipTest(name, fn);
 };
 
-export { expect } from '@playwright/test';
+export { expect } from "@playwright/test";
