@@ -508,26 +508,28 @@ export const SearchPageClient = ({
                 </div>
                 <div className={styles.buttons}>
                   <>
-                    {/*hasAdminPermission && <ImportModal catalogId={catalogId} />*/}
+                    {/*hasAdminPermission && (
+                      <ImportModal catalogId={catalogId} />
+                    )*/}
                     {hasAdminPermission && (
-                      <UploadButton
-                        size="sm"
-                        variant="secondary"
-                        allowedMimeTypes={[
-                          "text/csv",
-                          "text/x-csv",
-                          "text/plain",
-                          "application/csv",
-                          "application/x-csv",
-                          "application/vnd.ms-excel",
-                          "application/json",
-                        ]}
-                        onUpload={onImportUpload}
-                      >
-                        <FileImportIcon fontSize="1.5rem" />
-                        <span>{localization.button.importConceptCSV}</span>
-                      </UploadButton>
-                    )}
+                        <UploadButton
+                          size='sm'
+                          variant='secondary'
+                          allowedMimeTypes={[
+                            'text/csv',
+                            'text/x-csv',
+                            'text/plain',
+                            'application/csv',
+                            'application/x-csv',
+                            'application/vnd.ms-excel',
+                            'application/json',
+                          ]}
+                          onUpload={onImportUpload}
+                        >
+                          <FileImportIcon fontSize='1.5rem' />
+                          <span>{localization.button.importConceptCSV}</span>
+                        </UploadButton>
+                      )}
                     {hasWritePermission && (
                       <LinkButton
                         href={`/catalogs/${catalogId}/concepts/new`}
