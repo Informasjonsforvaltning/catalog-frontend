@@ -1,35 +1,66 @@
-'use server';
+"use server";
 
-import { validateAndEncodeUrlSafe, validateOrganizationNumber, validateUUID } from '@catalog-frontend/utils';
+import {
+  getValidSession,
+  redirectToSignIn,
+  validateAndEncodeUrlSafe,
+  validateOrganizationNumber,
+  validateUUID,
+} from "@catalog-frontend/utils";
 
-export const createImportJob = async (catalogId: string, accessToken: string) => {
-  validateOrganizationNumber(catalogId, 'createImportJob');
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'createImportJob');
+export const createImportJob = async (catalogId: string) => {
+  const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn();
+  }
+  const accessToken = await session?.accessToken;
 
-  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/createImportId`;
+  validateOrganizationNumber(catalogId, "createImportJob");
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "createImportJob",
+  );
+
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/create-import-id`;
 
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
-    method: 'GET',
+    method: "GET",
   };
 
-  return await fetch(resource, options).then((res) => res.headers.get('location'));
-}
+  return await fetch(resource, options).then((res) =>
+    res.headers.get("location"),
+  );
+};
 
 export const importRdfConcepts = async (
   fileContent: string,
   contentType: string,
   catalogId: string,
   importId: string,
-  accessToken: string
 ) => {
-  validateOrganizationNumber(catalogId, 'importRdfConcepts');
-  validateUUID(importId, 'importRdfConcepts');
+  const session = await getValidSession();
+  if (!session) {
+    return redirectToSignIn();
+  }
+  const accessToken = await session?.accessToken;
 
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'importRdfConcepts');
-  const encodedResultId = validateAndEncodeUrlSafe(importId, 'result ID', 'importRdfConcepts');
+  validateOrganizationNumber(catalogId, "importRdfConcepts");
+  validateUUID(importId, "importRdfConcepts");
+
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "importRdfConcepts",
+  );
+  const encodedResultId = validateAndEncodeUrlSafe(
+    importId,
+    "result ID",
+    "importRdfConcepts",
+  );
 
   console.log("Uploading the concept rdf file catalog:", encodedCatalogId);
 
@@ -40,11 +71,13 @@ export const importRdfConcepts = async (
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': contentType,
+      "Content-Type": contentType,
     },
-    method: 'POST',
+    method: "POST",
     body: fileContent,
   };
 
-  return await fetch(resource, options).then((res) => res.headers.get('location'));
-}
+  return await fetch(resource, options).then((res) =>
+    res.headers.get("location"),
+  );
+};

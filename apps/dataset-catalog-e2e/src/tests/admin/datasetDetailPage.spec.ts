@@ -1,27 +1,31 @@
-import { DatasetToBeCreated } from '@catalog-frontend/types';
-import { expect, runTestAsAdmin } from '../../fixtures/basePage';
-import DatasetDetailPage from '../../page-object-model/datasetDetailPage';
-import { adminAuthFile, createDataset, uniqueString } from '../../utils/helpers';
+import { DatasetToBeCreated } from "@catalog-frontend/types";
+import { expect, runTestAsAdmin } from "../../fixtures/basePage";
+import DatasetDetailPage from "../../page-object-model/datasetDetailPage";
+import {
+  adminAuthFile,
+  createDataset,
+  uniqueString,
+} from "../../utils/helpers";
 
 const getRandomDataset = () => {
   // Create a random dataset
   const dataset: DatasetToBeCreated = {
     title: {
-      nb: uniqueString('test_dataset_nb'),
-      nn: uniqueString('test_dataset_nn'),
-      en: uniqueString('test_dataset_en'),
+      nb: uniqueString("test_dataset_nb"),
+      nn: uniqueString("test_dataset_nn"),
+      en: uniqueString("test_dataset_en"),
     },
     description: {
-      nb: uniqueString('test_dataset_description_nb'),
-      nn: uniqueString('test_dataset_description_nn'),
-      en: uniqueString('test_dataset_description_en'),
+      nb: uniqueString("test_dataset_description_nb"),
+      nn: uniqueString("test_dataset_description_nn"),
+      en: uniqueString("test_dataset_description_en"),
     },
     approved: false,
     contactPoints: [
       {
-        email: 'test@test.com',
-        phone: '1234567890',
-        url: 'https://test.com',
+        email: "test@test.com",
+        phone: "1234567890",
+        url: "https://test.com",
       },
     ],
   };
@@ -29,8 +33,16 @@ const getRandomDataset = () => {
 };
 
 runTestAsAdmin(
-  'should load dataset detail page with all elements',
-  async ({ datasetsPage, context, playwright }: { datasetsPage; context; playwright }) => {
+  "should load dataset detail page with all elements",
+  async ({
+    datasetsPage,
+    context,
+    playwright,
+  }: {
+    datasetsPage;
+    context;
+    playwright;
+  }) => {
     // Create a request context with the admin storage state (includes next-auth cookie)
     const apiRequestContext = await playwright.request.newContext({
       storageState: adminAuthFile,
@@ -49,13 +61,16 @@ runTestAsAdmin(
 
     // Click on the dataset to go to detail page
     await datasetsPage.clickDatasetByTitle(dataset.title.nb as string);
-    await datasetsPage.expectDatasetDetailPageUrl(process.env.E2E_CATALOG_ID, datasetId);
+    await datasetsPage.expectDatasetDetailPageUrl(
+      process.env.E2E_CATALOG_ID,
+      datasetId,
+    );
 
     // Verify dataset details
     await detailPage.expectTitle(dataset.title.nb as string);
     await detailPage.expectDescription(dataset.description.nb as string);
-    await detailPage.expectStatus('Utkast');
-    await detailPage.expectPublicationStatus('Ikke publisert');
+    await detailPage.expectStatus("Utkast");
+    await detailPage.expectPublicationStatus("Ikke publisert");
 
     // Verify contact point information
     await detailPage.expectContactPoint(
@@ -78,19 +93,27 @@ runTestAsAdmin(
     await detailPage.expectPublishSwitch();
 
     // Verify help button for publication status
-    await detailPage.expectHelpButton('Publiseringstilstand');
+    await detailPage.expectHelpButton("Publiseringstilstand");
 
     // Verify section headings
-    await detailPage.expectSectionHeading('Beskrivelse');
-    await detailPage.expectSectionHeading('Datasett-ID');
-    await detailPage.expectSectionHeading('Publiseringstilstand');
-    await detailPage.expectSectionHeading('Kontaktpunkt');
+    await detailPage.expectSectionHeading("Beskrivelse");
+    await detailPage.expectSectionHeading("Datasett-ID");
+    await detailPage.expectSectionHeading("Publiseringstilstand");
+    await detailPage.expectSectionHeading("Kontaktpunkt");
   },
 );
 
 runTestAsAdmin(
-  'should delete dataset from detail page',
-  async ({ datasetsPage, context, playwright }: { datasetsPage; context; playwright }) => {
+  "should delete dataset from detail page",
+  async ({
+    datasetsPage,
+    context,
+    playwright,
+  }: {
+    datasetsPage;
+    context;
+    playwright;
+  }) => {
     // Create a request context with the admin storage state (includes next-auth cookie)
     const apiRequestContext = await playwright.request.newContext({
       storageState: adminAuthFile,
@@ -107,7 +130,10 @@ runTestAsAdmin(
     await datasetsPage.search(dataset.title.nb as string);
     await datasetsPage.verifyDatasetExists(dataset.title.nb as string);
     await datasetsPage.clickDatasetByTitle(dataset.title.nb as string);
-    await datasetsPage.expectDatasetDetailPageUrl(process.env.E2E_CATALOG_ID, datasetId);
+    await datasetsPage.expectDatasetDetailPageUrl(
+      process.env.E2E_CATALOG_ID,
+      datasetId,
+    );
 
     // Delete the dataset
     await detailPage.clickDeleteButton();
@@ -115,7 +141,9 @@ runTestAsAdmin(
     await detailPage.confirmDelete();
 
     // Verify we're back on the datasets page
-    await expect(datasetsPage.page).toHaveURL(`/catalogs/${process.env.E2E_CATALOG_ID}/datasets`);
+    await expect(datasetsPage.page).toHaveURL(
+      `/catalogs/${process.env.E2E_CATALOG_ID}/datasets`,
+    );
 
     // Verify the dataset no longer exists
     await datasetsPage.verifyDatasetDoesNotExist(dataset.title.nb as string);

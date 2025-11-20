@@ -1,16 +1,23 @@
-import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
-import { Organization, ReferenceDataCode, Service } from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
+import {
+  getAdmsStatuses,
+  getOrganization,
+} from "@catalog-frontend/data-access";
+import {
+  Organization,
+  ReferenceDataCode,
+  Service,
+} from "@catalog-frontend/types";
+import { BreadcrumbType, Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
 import {
   getTranslateText,
   getValidSession,
   hasOrganizationWritePermission,
   localization,
   redirectToSignIn,
-} from '@catalog-frontend/utils';
-import { getPublicServiceById } from '../../../../actions/public-services/actions';
-import { RedirectType, redirect } from 'next/navigation';
-import PublicServiceDetailsPageClient from './public-service-details-page-client';
+} from "@catalog-frontend/utils";
+import { getPublicServiceById } from "../../../../actions/public-services/actions";
+import { RedirectType, redirect } from "next/navigation";
+import PublicServiceDetailsPageClient from "./public-service-details-page-client";
 
 export default async function PublicServiceDetailsPage({
   params,
@@ -26,12 +33,18 @@ export default async function PublicServiceDetailsPage({
     });
   }
 
-  const service: Service | null = await getPublicServiceById(catalogId, serviceId);
+  const service: Service | null = await getPublicServiceById(
+    catalogId,
+    serviceId,
+  );
   if (!service) {
     redirect(`/notfound`, RedirectType.replace);
   }
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
-  const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
+  const organization: Organization = await getOrganization(catalogId).then(
+    (res) => res.json(),
+  );
+  const hasWritePermission =
+    session && hasOrganizationWritePermission(session?.accessToken, catalogId);
   const statusesResponse = await getAdmsStatuses().then((res) => res.json());
   const statuses: ReferenceDataCode[] = statusesResponse.statuses;
 

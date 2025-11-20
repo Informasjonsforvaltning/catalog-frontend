@@ -1,14 +1,19 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { Button } from '@catalog-frontend/ui';
-import { Textfield } from '@digdir/designsystemet-react';
-import { CodeList, EditorType } from '@catalog-frontend/types';
-import { localization } from '@catalog-frontend/utils';
-import { useAdminDispatch, useAdminState } from '../../context/admin';
-import { useCreateCodeList, useDeleteCodeList, useGetAllCodeLists, useUpdateCodeList } from '../../hooks/code-lists';
-import { compare } from 'fast-json-patch';
-import CodesEditor from '../codes-editor';
+import React, { useEffect, useState } from "react";
+import { Button } from "@catalog-frontend/ui";
+import { Textfield } from "@digdir/designsystemet-react";
+import { CodeList, EditorType } from "@catalog-frontend/types";
+import { localization } from "@catalog-frontend/utils";
+import { useAdminDispatch, useAdminState } from "../../context/admin";
+import {
+  useCreateCodeList,
+  useDeleteCodeList,
+  useGetAllCodeLists,
+  useUpdateCodeList,
+} from "../../hooks/code-lists";
+import { compare } from "fast-json-patch";
+import CodesEditor from "../codes-editor";
 
 export interface Props {
   codeList?: CodeList;
@@ -18,7 +23,13 @@ export interface Props {
   catalogId: string;
 }
 
-export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirty }: Props) => {
+export const CodeListEditor = ({
+  catalogId,
+  codeList,
+  codeListsInUse,
+  type,
+  dirty,
+}: Props) => {
   const adminDispatch = useAdminDispatch();
   const { updatedCodeLists, updatedCodes } = useAdminState();
 
@@ -32,10 +43,10 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
   const dbCodeLists = getAllCodeLists?.codeLists ?? [];
 
   const newCodeListTemplate = {
-    id: '',
+    id: "",
     catalogId: catalogId,
-    name: '',
-    description: '',
+    name: "",
+    description: "",
     codes: [],
   };
 
@@ -45,14 +56,14 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
     if (updatedCodes) {
       setNewCodeList((prevCodeList) => ({
         ...prevCodeList,
-        codes: updatedCodes['0'],
+        codes: updatedCodes["0"],
       }));
     }
   }, [updatedCodes]);
 
   useEffect(() => {
     if (dirty) {
-      dirty(newCodeList.name !== '' || newCodeList.description !== '');
+      dirty(newCodeList.name !== "" || newCodeList.description !== "");
     }
   }, [newCodeList]);
 
@@ -66,8 +77,14 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
     }
   };
 
-  const handleCodeListUpdate = (codeListId?: string, newName?: string, newDescription?: string) => {
-    const indexInUpdatedCodeLists = updatedCodeLists?.findIndex((codeList) => codeList.id === codeListId) ?? -1;
+  const handleCodeListUpdate = (
+    codeListId?: string,
+    newName?: string,
+    newDescription?: string,
+  ) => {
+    const indexInUpdatedCodeLists =
+      updatedCodeLists?.findIndex((codeList) => codeList.id === codeListId) ??
+      -1;
 
     if (indexInUpdatedCodeLists !== -1) {
       const codeListToUpdate = updatedCodeLists?.[indexInUpdatedCodeLists];
@@ -76,32 +93,52 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
         const updatedCodeList = {
           ...codeListToUpdate,
           name: newName !== undefined ? newName : codeListToUpdate.name,
-          description: newDescription !== undefined ? newDescription : codeListToUpdate.description,
+          description:
+            newDescription !== undefined
+              ? newDescription
+              : codeListToUpdate.description,
         };
 
         const updatedCodeListsCopy = [...updatedCodeLists];
         updatedCodeListsCopy[indexInUpdatedCodeLists] = updatedCodeList;
 
-        adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
+        adminDispatch({
+          type: "SET_CODE_LISTS",
+          payload: { updatedCodeLists: updatedCodeListsCopy },
+        });
       }
     } else {
-      const codeListToUpdate = dbCodeLists.find((codeList) => codeList.id === codeListId);
+      const codeListToUpdate = dbCodeLists.find(
+        (codeList) => codeList.id === codeListId,
+      );
 
       if (codeListToUpdate) {
         const updatedCodeList = {
           ...codeListToUpdate,
           name: newName !== undefined ? newName : codeListToUpdate.name,
-          description: newDescription !== undefined ? newDescription : codeListToUpdate.description,
+          description:
+            newDescription !== undefined
+              ? newDescription
+              : codeListToUpdate.description,
         };
 
-        const updatedCodeListsCopy = [...(updatedCodeLists || []), updatedCodeList];
-        adminDispatch({ type: 'SET_CODE_LISTS', payload: { updatedCodeLists: updatedCodeListsCopy } });
+        const updatedCodeListsCopy = [
+          ...(updatedCodeLists || []),
+          updatedCodeList,
+        ];
+        adminDispatch({
+          type: "SET_CODE_LISTS",
+          payload: { updatedCodeLists: updatedCodeListsCopy },
+        });
       }
     }
   };
 
   const handleCancel = () => {
-    adminDispatch({ type: 'SET_SHOW_CODE_LIST_EDITOR', payload: { showCodeListEditor: false } });
+    adminDispatch({
+      type: "SET_SHOW_CODE_LIST_EDITOR",
+      payload: { showCodeListEditor: false },
+    });
   };
 
   const handleCreateCodeList = () => {
@@ -117,8 +154,12 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
   };
 
   const handleUpdateDbCodeList = (codeListId: string) => {
-    const dbCodeList = dbCodeLists.find((codeList: CodeList) => codeList.id === codeListId);
-    const updatedCodeList = updatedCodeLists?.find((codeList) => codeList.id === codeListId) ?? dbCodeList;
+    const dbCodeList = dbCodeLists.find(
+      (codeList: CodeList) => codeList.id === codeListId,
+    );
+    const updatedCodeList =
+      updatedCodeLists?.find((codeList) => codeList.id === codeListId) ??
+      dbCodeList;
     const newCodes = updatedCodes?.[codeListId];
 
     const updatedCodeListCopy = {
@@ -130,7 +171,10 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
       const diff = compare(dbCodeList, updatedCodeListCopy);
       if (diff.length > 0) {
         updateCodeList
-          .mutateAsync({ oldCodeList: dbCodeList, newCodeList: updatedCodeListCopy })
+          .mutateAsync({
+            oldCodeList: dbCodeList,
+            newCodeList: updatedCodeListCopy,
+          })
           .then(() => {
             alert(localization.alert.success);
           })
@@ -144,57 +188,70 @@ export const CodeListEditor = ({ catalogId, codeList, codeListsInUse, type, dirt
   };
 
   return (
-    <div className='editorStructure'>
-      <div className='editorSpacing'>
+    <div className="editorStructure">
+      <div className="editorSpacing">
         <Textfield
           label={localization.name}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            type === 'create'
+            type === "create"
               ? setNewCodeList((prevCodeList) => ({
                   ...prevCodeList,
                   name: event.target.value,
                 }))
-              : handleCodeListUpdate(codeList?.id, event.target.value, undefined);
+              : handleCodeListUpdate(
+                  codeList?.id,
+                  event.target.value,
+                  undefined,
+                );
           }}
-          value={(updatedCodeLists?.find((c) => c.id === codeList?.id) || codeList)?.name || newCodeList?.name}
+          value={
+            (updatedCodeLists?.find((c) => c.id === codeList?.id) || codeList)
+              ?.name || newCodeList?.name
+          }
         />
       </div>
-      <div className='editorSpacing'>
+      <div className="editorSpacing">
         <Textfield
           label={localization.description}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            type === 'create'
-              ? setNewCodeList((prevCodeList) => ({ ...prevCodeList, description: event.target.value }))
-              : handleCodeListUpdate(codeList?.id, undefined, event.target.value);
+            type === "create"
+              ? setNewCodeList((prevCodeList) => ({
+                  ...prevCodeList,
+                  description: event.target.value,
+                }))
+              : handleCodeListUpdate(
+                  codeList?.id,
+                  undefined,
+                  event.target.value,
+                );
           }}
           value={
-            (updatedCodeLists?.find((c) => c.id === codeList?.id) || codeList)?.description || newCodeList?.description
+            (updatedCodeLists?.find((c) => c.id === codeList?.id) || codeList)
+              ?.description || newCodeList?.description
           }
         />
       </div>
 
-      <CodesEditor
-        codeList={codeList}
-        dirty={dirty}
-      />
-      <div className='editorButtons'>
+      <CodesEditor codeList={codeList} dirty={dirty} />
+      <div className="editorButtons">
         <Button
-          onClick={() => (type === 'create' ? handleCreateCodeList() : handleUpdateDbCodeList(codeList?.id ?? ''))}
+          onClick={() =>
+            type === "create"
+              ? handleCreateCodeList()
+              : handleUpdateDbCodeList(codeList?.id ?? "")
+          }
         >
           {localization.saveEdits}
         </Button>
-        {type === 'create' ? (
-          <Button
-            variant='secondary'
-            onClick={handleCancel}
-          >
+        {type === "create" ? (
+          <Button variant="secondary" onClick={handleCancel}>
             {localization.button.cancel}
           </Button>
         ) : (
           <Button
-            color='danger'
+            color="danger"
             onClick={() => {
-              handleDeleteCodeList(codeList?.id ?? '');
+              handleDeleteCodeList(codeList?.id ?? "");
             }}
           >
             {localization.button.delete}

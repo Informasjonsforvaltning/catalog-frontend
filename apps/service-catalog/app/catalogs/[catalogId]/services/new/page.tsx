@@ -1,17 +1,20 @@
-import { BasicServiceForm } from '../../../../../components/basic-service-form';
-import { Heading } from '@digdir/designsystemet-react';
-import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
-import { Organization, Params, ReferenceDataCode } from '@catalog-frontend/types';
-import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import styles from './service-new-page.module.css';
+import { Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
+import { Organization } from "@catalog-frontend/types";
+import {
+  getAdmsStatuses,
+  getOrganization,
+} from "@catalog-frontend/data-access";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import { NewPage } from "./new-page-client";
 
-export default async function NewServicePage(props: Params) {
-  const params = await props.params;
-  const { catalogId } = params;
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
+export default async function NewServicePage(props: {
+  params: Promise<{ catalogId: string; serviceId: string }>;
+}) {
+  const { catalogId } = await props.params;
+  const organization: Organization = await getOrganization(catalogId).then(
+    (res) => res.json(),
+  );
   const statusesResponse = await getAdmsStatuses().then((res) => res.json());
-  const statuses: ReferenceDataCode[] = statusesResponse.statuses;
 
   const breadcrumbList = [
     {
@@ -22,7 +25,7 @@ export default async function NewServicePage(props: Params) {
       href: `/catalogs/${catalogId}/services/new`,
       text: localization.serviceCatalog.form.new,
     },
-  ] as BreadcrumbType[];
+  ];
 
   return (
     <>
@@ -34,19 +37,7 @@ export default async function NewServicePage(props: Params) {
         title={localization.catalogType.service}
         subtitle={getTranslateText(organization?.prefLabel).toString()}
       />
-      <div className='container'>
-        <Heading
-          size='medium'
-          className={styles.heading}
-        >
-          {localization.serviceCatalog.infoAboutService}
-        </Heading>
-        <BasicServiceForm
-          catalogId={catalogId}
-          type='services'
-          statuses={statuses}
-        />
-      </div>
+      <NewPage statuses={statusesResponse.statuses} />
     </>
   );
 }

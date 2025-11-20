@@ -1,25 +1,31 @@
-import { Search } from '@catalog-frontend/types';
+import { Search } from "@catalog-frontend/types";
 import {
   validateURIs,
   validateSearchQuery,
   validateResourceType,
   validateEnvironmentURL,
-} from '@catalog-frontend/utils';
+} from "@catalog-frontend/utils";
 
 type SearchOperation = Search.SearchOperation;
 
-const searchApi = ({ path, searchOperation }: { path: string; searchOperation?: SearchOperation }) => {
+const searchApi = ({
+  path,
+  searchOperation,
+}: {
+  path: string;
+  searchOperation?: SearchOperation;
+}) => {
   return fetch(`${process.env.FDK_SEARCH_SERVICE_BASE_URI}/search${path}`, {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(searchOperation),
   });
 };
 
 export const searchConceptsByUri = (uri: string[]) => {
-  validateURIs(uri, 'searchConceptsByUri');
+  validateURIs(uri, "searchConceptsByUri");
 
   const searchOperation: SearchOperation = {
     filters: {
@@ -41,22 +47,22 @@ export const searchConceptsByUri = (uri: string[]) => {
 
 export const searchConcepts = (searchOperation: SearchOperation) => {
   return searchApi({
-    path: '/concepts',
+    path: "/concepts",
     searchOperation,
   });
 };
 
 export const searchConceptSuggestions = (env: string, query: string) => {
-  validateEnvironmentURL(env, 'searchConceptSuggestions');
-  validateSearchQuery(query, 'searchConceptSuggestions');
+  validateEnvironmentURL(env, "searchConceptSuggestions");
+  validateSearchQuery(query, "searchConceptSuggestions");
 
   const encodedQuery = encodeURIComponent(query);
   const path = `suggestions/concepts?q=${encodedQuery}`;
   return fetch(`${env}/${path}`, {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'GET',
+    method: "GET",
   });
 };
 
@@ -65,24 +71,26 @@ export const searchSuggestions = async (
   query?: string,
   resourceType?: string,
 ): Promise<Response> => {
-  validateEnvironmentURL(searchEnv, 'searchSuggestions');
+  validateEnvironmentURL(searchEnv, "searchSuggestions");
 
   if (query) {
-    validateSearchQuery(query, 'searchSuggestions');
+    validateSearchQuery(query, "searchSuggestions");
   }
 
   if (resourceType) {
-    validateResourceType(resourceType, 'searchSuggestions');
+    validateResourceType(resourceType, "searchSuggestions");
   }
 
-  const encodedResourceType = resourceType ? encodeURIComponent(resourceType) : '';
-  const encodedQuery = query ? encodeURIComponent(query) : '';
+  const encodedResourceType = resourceType
+    ? encodeURIComponent(resourceType)
+    : "";
+  const encodedQuery = query ? encodeURIComponent(query) : "";
   const path = `suggestions/${encodedResourceType}?q=${encodedQuery}`;
   return fetch(`${searchEnv}/${path}`, {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'GET',
+    method: "GET",
   });
 };
 
@@ -91,19 +99,21 @@ export const searchResourcesWithFilter = async (
   resourceType?: string,
   body?: SearchOperation,
 ): Promise<Response> => {
-  validateEnvironmentURL(searchEnv, 'searchResourcesWithFilter');
+  validateEnvironmentURL(searchEnv, "searchResourcesWithFilter");
 
   if (resourceType) {
-    validateResourceType(resourceType, 'searchResourcesWithFilter');
+    validateResourceType(resourceType, "searchResourcesWithFilter");
   }
 
-  const encodedResourceType = resourceType ? encodeURIComponent(resourceType) : '';
+  const encodedResourceType = resourceType
+    ? encodeURIComponent(resourceType)
+    : "";
   const path = `search/${encodedResourceType}`;
   return fetch(`${searchEnv}/${path}`, {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'POST',
+    method: "POST",
     body: JSON.stringify(body),
   });
 };

@@ -1,15 +1,19 @@
-import { FormikLanguageFieldset, TitleWithHelpTextAndTag, TextareaWithPrefix } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { Box, Textfield } from '@digdir/designsystemet-react';
-import { FastField } from 'formik';
-import { FieldsetDivider } from '@catalog-frontend/ui';
-import { AccessRightFields } from './access-rights-fields';
+import {
+  FormikLanguageFieldset,
+  TitleWithHelpTextAndTag,
+  TextareaWithPrefix,
+} from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { Box, Textfield } from "@digdir/designsystemet-react";
+import { FastField } from "formik";
+import { FieldsetDivider } from "@catalog-frontend/ui";
+import { AccessRightFields } from "./access-rights-fields";
 
 export const AboutSection = () => {
   return (
     <Box>
       <FormikLanguageFieldset
-        name={'title'}
+        name={"title"}
         as={Textfield}
         legend={
           <TitleWithHelpTextAndTag
@@ -22,7 +26,7 @@ export const AboutSection = () => {
       />
       <FieldsetDivider />
       <FormikLanguageFieldset
-        name='description'
+        name="description"
         as={TextareaWithPrefix}
         legend={
           <TitleWithHelpTextAndTag
@@ -37,16 +41,16 @@ export const AboutSection = () => {
       <AccessRightFields />
       <FieldsetDivider />
       <FastField
-        style={{ width: 'fit-content' }}
+        style={{ width: "fit-content" }}
         as={Textfield}
-        size='sm'
-        type='date'
-        name='issued'
+        size="sm"
+        type="date"
+        name="issued"
         label={
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
             helpText={localization.datasetForm.helptext.issued}
-            tagColor='info'
+            tagColor="info"
           >
             {localization.datasetForm.fieldLabel.issued}
           </TitleWithHelpTextAndTag>

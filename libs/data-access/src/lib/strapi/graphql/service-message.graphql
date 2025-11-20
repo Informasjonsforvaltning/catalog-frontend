@@ -1,4 +1,8 @@
-query GetServiceMessages($today: DateTime, $channelPubliseringPortal: Boolean, $env: String) {
+query GetServiceMessages(
+  $today: DateTime
+  $channelPubliseringPortal: Boolean
+  $env: String
+) {
   serviceMessages(
     filters: {
       valid_from: { lte: $today }

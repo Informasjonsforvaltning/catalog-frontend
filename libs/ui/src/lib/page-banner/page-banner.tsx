@@ -1,6 +1,7 @@
-import EllipseSVG from './svg/ellipse-1.svg';
-import RectangleSVG from './svg/rectangle-1.svg';
-import style from './page-banner.module.css';
+import cn from "classnames";
+import EllipseSVG from "./svg/ellipse-1.svg";
+import RectangleSVG from "./svg/rectangle-1.svg";
+import style from "./page-banner.module.css";
 
 interface PageBannerProps {
   title: string;
@@ -11,7 +12,14 @@ interface PageBannerProps {
   backgroundColor?: string;
 }
 
-const PageBanner = ({ title, subtitle, fontColor, backgroundColor, logo, logoDescription }: PageBannerProps) => {
+const PageBanner = ({
+  title,
+  subtitle,
+  fontColor,
+  backgroundColor,
+  logo,
+  logoDescription,
+}: PageBannerProps) => {
   return (
     <div
       className={style.banner}
@@ -25,24 +33,24 @@ const PageBanner = ({ title, subtitle, fontColor, backgroundColor, logo, logoDes
           <EllipseSVG />
         </div>
       )}
-      <div className='container'>
-        <div className={style.contentContainer}>
-          {logo && (
-            <div className={style.contentContainer}>
-              <img
-                src={logo}
-                alt={logoDescription}
-                title={logoDescription}
-                className={style.logoContainer}
-              />
-            </div>
-          )}
-          <div className={style.titleContainer}>
-            <h1 className={style.pageTitle}>{title}</h1>
-            <span className={style.pageSubtitle}>{subtitle}</span>
+
+      <div className={cn("container", style.contentContainer)}>
+        {logo && (
+          <div className={style.contentContainer}>
+            <img
+              src={logo}
+              alt={logoDescription}
+              title={logoDescription}
+              className={style.logoContainer}
+            />
           </div>
+        )}
+        <div className={style.titleContainer}>
+          <h1 className={style.pageTitle}>{title}</h1>
+          <span className={style.pageSubtitle}>{subtitle}</span>
         </div>
       </div>
+
       {!logo && (
         <div className={style.svgRectangle}>
           <RectangleSVG />

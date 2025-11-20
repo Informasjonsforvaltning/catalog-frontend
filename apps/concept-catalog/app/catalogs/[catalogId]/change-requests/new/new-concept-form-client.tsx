@@ -1,18 +1,23 @@
-'use client';
+"use client";
 
-import { useRef, useState } from 'react';
-import jsonpatch from 'fast-json-patch';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
-import type { Concept, ChangeRequestUpdateBody, JsonPatchOperation, StorageData } from '@catalog-frontend/types';
+import { useRef, useState } from "react";
+import jsonpatch from "fast-json-patch";
+import { ArrowLeftIcon } from "@navikt/aksel-icons";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
+import type {
+  Concept,
+  ChangeRequestUpdateBody,
+  JsonPatchOperation,
+  StorageData,
+} from "@catalog-frontend/types";
 import {
   LocalDataStorage,
   localization,
   pruneEmptyProperties,
   updateDefinitionsIfEgendefinert,
-} from '@catalog-frontend/utils';
-import ConceptForm from '@concept-catalog/components/concept-form';
-import { createChangeRequestAction } from '@concept-catalog/app/actions/change-requests/actions';
+} from "@catalog-frontend/utils";
+import ConceptForm from "@concept-catalog/components/concept-form";
+import { createChangeRequestAction } from "@concept-catalog/app/actions/change-requests/actions";
 
 export const NewConceptFormClient = ({
   organization,
@@ -29,15 +34,15 @@ export const NewConceptFormClient = ({
 
   const catalogId = organization.organizationId;
 
-  const dataStorage = new LocalDataStorage<StorageData>({ 
-    key: 'changeRequestForm', 
+  const dataStorage = new LocalDataStorage<StorageData>({
+    key: "changeRequestForm",
     secondaryKeys: {
-      definition: 'changeRequestFormDefinition',
-      relation: 'changeRequestFormRelation'
+      definition: "changeRequestFormDefinition",
+      relation: "changeRequestFormRelation",
     },
     metadata: {
       newChangeRequestConceptId: originalConcept?.originaltBegrep,
-    }
+    },
   });
 
   const baselineConcept: Concept = {
@@ -55,7 +60,9 @@ export const NewConceptFormClient = ({
       values.anbefaltTerm?.navn.nn ||
       values.anbefaltTerm?.navn.en;
 
-    const clonedConcept = jsonpatch.deepClone(originalConcept || baselineConcept);
+    const clonedConcept = jsonpatch.deepClone(
+      originalConcept || baselineConcept,
+    );
     // Remove specified fields from the concept object
     delete clonedConcept.id;
     delete clonedConcept.ansvarligVirksomhet;
@@ -63,6 +70,7 @@ export const NewConceptFormClient = ({
     delete clonedConcept.endringslogelement;
     delete clonedConcept.publiseringsTidspunkt;
     delete clonedConcept.erPublisert;
+    delete clonedConcept.isArchived;
 
     const changeRequestFromConcept: ChangeRequestUpdateBody = {
       conceptId: originalConcept?.originaltBegrep ?? null,
@@ -70,10 +78,13 @@ export const NewConceptFormClient = ({
         pruneEmptyProperties(clonedConcept),
         pruneEmptyProperties(updateDefinitionsIfEgendefinert(values)),
       ) as JsonPatchOperation[],
-      title: anbefaltTerm ? `${anbefaltTerm}` : '',
+      title: anbefaltTerm ? `${anbefaltTerm}` : "",
     };
 
-    const id = await createChangeRequestAction(catalogId, changeRequestFromConcept);
+    const id = await createChangeRequestAction(
+      catalogId,
+      changeRequestFromConcept,
+    );
     changeRequestIdRef.current = id;
     return undefined;
   };
@@ -85,7 +96,7 @@ export const NewConceptFormClient = ({
       );
     } else {
       window.location.replace(
-        `/catalogs/${organization.organizationId}/change-requests${!originalConcept ? '?filter.itemType=suggestionForNewConcept' : ''}`,
+        `/catalogs/${organization.organizationId}/change-requests${!originalConcept ? "?filter.itemType=suggestionForNewConcept" : ""}`,
       );
     }
   };
@@ -93,7 +104,7 @@ export const NewConceptFormClient = ({
   const handleCancel = () => {
     dataStorage.delete();
     window.location.replace(
-      `/catalogs/${organization.organizationId}/change-requests${!originalConcept ? '?filter.itemType=suggestionForNewConcept' : ''}`,
+      `/catalogs/${organization.organizationId}/change-requests${!originalConcept ? "?filter.itemType=suggestionForNewConcept" : ""}`,
     );
   };
 
@@ -105,10 +116,17 @@ export const NewConceptFormClient = ({
 
   function handleRestore(data: StorageData): boolean {
     if (data?.id) {
-      window.location.replace(`/catalogs/${catalogId}/change-requests/${data.id}/edit?restore=1`);
+      window.location.replace(
+        `/catalogs/${catalogId}/change-requests/${data.id}/edit?restore=1`,
+      );
       return false;
-    } else if (data?.metadata?.newChangeRequestConceptId !== originalConcept?.originaltBegrep) {
-      window.location.replace(`/catalogs/${catalogId}/change-requests/new?concept=${data.metadata.newChangeRequestConceptId}&restore=1`);
+    } else if (
+      data?.metadata?.newChangeRequestConceptId !==
+      originalConcept?.originaltBegrep
+    ) {
+      window.location.replace(
+        `/catalogs/${catalogId}/change-requests/new?concept=${data.metadata.newChangeRequestConceptId}&restore=1`,
+      );
       return false;
     }
     return true;
@@ -134,20 +152,20 @@ export const NewConceptFormClient = ({
       )}
       <ButtonBar>
         <Button
-          variant='tertiary'
-          color='second'
-          size='sm'
+          variant="tertiary"
+          color="second"
+          size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >
-          <ArrowLeftIcon fontSize='1.25em' />
+          <ArrowLeftIcon fontSize="1.25em" />
           {localization.button.backToOverview}
         </Button>
         <div style={{ flexGrow: 1 }}></div>
         {originalConcept && (
           <Button
-            variant='secondary'
-            color='second'
-            size='sm'
+            variant="secondary"
+            color="second"
+            size="sm"
             onClick={() => setShowGotoConceptConfirm(true)}
           >
             {localization.button.gotoConcept}

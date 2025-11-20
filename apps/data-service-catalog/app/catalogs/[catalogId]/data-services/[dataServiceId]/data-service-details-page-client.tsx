@@ -1,15 +1,20 @@
-'use client';
+"use client";
 
-import { DataService, DataServiceReferenceData } from '@catalog-frontend/types';
-import { ConfirmModal, DeleteButton, DetailsPageLayout, LinkButton } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import React, { useState } from 'react';
-import { deleteDataService } from '../../../../actions/actions';
-import styles from './data-service-details-page.module.css';
-import StatusTag from '../../../../../components/status-tag';
-import { LeftColumn } from '../../../../../components/details-page-columns/details-page-left-column';
-import { RightColumn } from '../../../../../components/details-page-columns/details-page-right-column';
-import { useRouter } from 'next/navigation';
+import { DataService, DataServiceReferenceData } from "@catalog-frontend/types";
+import {
+  ConfirmModal,
+  DeleteButton,
+  DetailsPageLayout,
+  LinkButton,
+} from "@catalog-frontend/ui";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import React, { useState } from "react";
+import { deleteDataService } from "../../../../actions/actions";
+import styles from "./data-service-details-page.module.css";
+import StatusTag from "../../../../../components/status-tag";
+import { LeftColumn } from "../../../../../components/details-page-columns/details-page-left-column";
+import { RightColumn } from "../../../../../components/details-page-columns/details-page-right-column";
+import { useRouter } from "next/navigation";
 
 interface dataServiceDetailsPageProps {
   dataService: DataService;
@@ -32,7 +37,7 @@ const DataServiceDetailsPageClient = ({
   referenceDataEnv,
   searchEnv,
 }: dataServiceDetailsPageProps) => {
-  const [language, setLanguage] = useState('nb');
+  const [language, setLanguage] = useState("nb");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const router = useRouter();
 
@@ -59,7 +64,10 @@ const DataServiceDetailsPageClient = ({
     <>
       {showDeleteConfirm && (
         <ConfirmModal
-          title={localization.dataServiceForm.alert.confirmDeleteTitle || 'Bekreft sletting'}
+          title={
+            localization.dataServiceForm.alert.confirmDeleteTitle ||
+            "Bekreft sletting"
+          }
           content={localization.dataServiceForm.alert.confirmDelete}
           successButtonText={localization.button.delete}
           onSuccess={handleConfirmDelete}
@@ -78,23 +86,26 @@ const DataServiceDetailsPageClient = ({
           />
         }
         loading={false}
-        data-testid='data-service-details-page'
+        data-testid="data-service-details-page"
       >
         <DetailsPageLayout.Buttons>
           {hasWritePermission && (
-            <div className={styles.set} data-testid='data-service-action-buttons'>
+            <div
+              className={styles.set}
+              data-testid="data-service-action-buttons"
+            >
               <LinkButton
                 href={`/catalogs/${catalogId}/data-services/${dataServiceId}/edit`}
-                data-testid='edit-data-service-button'
+                data-testid="edit-data-service-button"
               >
                 {localization.button.edit}
               </LinkButton>
 
               <DeleteButton
                 disabled={dataService?.published}
-                variant='secondary'
+                variant="secondary"
                 onClick={handleDeleteClick}
-                data-testid='delete-data-service-button'
+                data-testid="delete-data-service-button"
               />
             </div>
           )}

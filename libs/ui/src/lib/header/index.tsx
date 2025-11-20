@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { FC } from 'react';
+import { FC } from "react";
 import {
   getResourceRoles,
   hasOrganizationAdminPermission,
@@ -8,15 +8,20 @@ import {
   hasOrganizationWritePermission,
   hasSystemAdminPermission,
   localization,
-} from '@catalog-frontend/utils';
-import FDKLogo from './images/fdk-publishing-logo-negative.svg';
-import FDKLogoDemo from './images/fdk-publishing-logo-negative-demo.svg';
-import { useSession } from 'next-auth/react';
-import styles from './header.module.scss';
-import { ExternalLinkIcon, LeaveIcon, MenuHamburgerIcon, PersonIcon } from '@navikt/aksel-icons';
-import { Button, Divider, DropdownMenu } from '@digdir/designsystemet-react';
-import classNames from 'classnames';
-import { useParams } from 'next/navigation';
+} from "@catalog-frontend/utils";
+import FDKLogo from "./images/fdk-publishing-logo-negative.svg";
+import FDKLogoDemo from "./images/fdk-publishing-logo-negative-demo.svg";
+import { useSession } from "next-auth/react";
+import styles from "./header.module.scss";
+import {
+  ExternalLinkIcon,
+  LeaveIcon,
+  MenuHamburgerIcon,
+  PersonIcon,
+} from "@navikt/aksel-icons";
+import { Button, Divider, DropdownMenu } from "@digdir/designsystemet-react";
+import classNames from "classnames";
+import { useParams } from "next/navigation";
 
 export interface HeaderProps {
   homeUrl?: string;
@@ -62,27 +67,27 @@ const Header: FC<HeaderProps> = ({
     [
       {
         name: localization.footer.termsOfUse,
-        url: termsOfUseUrl ?? 'https://data.norge.no/publishing/terms-of-use',
+        url: termsOfUseUrl ?? "https://data.norge.no/publishing/terms-of-use",
         external: true,
       },
       {
         name: localization.footer.privacyStatement,
-        url: 'https://www.digdir.no/om-oss/personvernerklaering/706',
+        url: "https://www.digdir.no/om-oss/personvernerklaering/706",
         external: true,
       },
       {
         name: localization.footer.cookies,
-        url: 'https://www.digdir.no/om-oss/informasjonskapsler/707',
+        url: "https://www.digdir.no/om-oss/informasjonskapsler/707",
         external: true,
       },
       {
         name: localization.footer.accessibility,
-        url: 'https://uustatus.no/nb/erklaringer/publisert/8020b962-b706-4cdf-ab8b-cdb5f480a696',
+        url: "https://uustatus.no/nb/erklaringer/publisert/8020b962-b706-4cdf-ab8b-cdb5f480a696",
         external: true,
       },
       {
         name: localization.header.contactUs,
-        url: 'https://data.norge.no/nb/contact',
+        url: "https://data.norge.no/nb/contact",
         external: true,
       },
     ],
@@ -111,48 +116,38 @@ const Header: FC<HeaderProps> = ({
   })();
 
   const handleLogout = () => {
-    window.location.href = '/api/auth/logout';
+    window.location.href = "/api/auth/logout";
   };
 
   return (
     <header
       className={styles.header}
-      style={{ color: fontColor ?? '#fff', background: backgroundColor ?? '#2d3741' }}
+      style={{
+        color: fontColor ?? "#fff",
+        background: backgroundColor ?? "#2d3741",
+      }}
     >
       <div className={styles.headerContainer}>
-        <a
-          href={homeUrl}
-          title='Gå til hovedsiden'
-          className={styles.logo}
-        >
+        <a href={homeUrl} title="Gå til hovedsiden" className={styles.logo}>
           {useDemoLogo ? <FDKLogoDemo /> : <FDKLogo />}
         </a>
         {userDisplayName && (
-          <DropdownMenu size='small'>
+          <DropdownMenu size="small">
             <DropdownMenu.Trigger asChild>
-              <Button
-                variant='tertiary'
-                className={styles.menuButton}
-              >
-                <MenuHamburgerIcon
-                  aria-hidden
-                  fontSize='1.5rem'
-                />
+              <Button variant="tertiary" className={styles.menuButton}>
+                <MenuHamburgerIcon aria-hidden fontSize="1.5rem" />
                 {localization.header.menu}
               </Button>
             </DropdownMenu.Trigger>
             <DropdownMenu.Content>
-              <DropdownMenu.Group key='menu-group-user'>
+              <DropdownMenu.Group key="menu-group-user">
                 <DropdownMenu.Item
                   className={classNames(styles.dropDownItem, styles.userInfo)}
                   asChild
                 >
                   <div>
                     <span>
-                      <PersonIcon
-                        fontSize='1.3rem'
-                        role='presentation'
-                      />
+                      <PersonIcon fontSize="1.3rem" role="presentation" />
                       {userDisplayName}
                     </span>
                     {userRole && <span>{userRole}</span>}
@@ -160,16 +155,10 @@ const Header: FC<HeaderProps> = ({
                 </DropdownMenu.Item>
                 <Divider />
               </DropdownMenu.Group>
-              {resourceRoles.some((role) => role.role === 'admin') && (
-                <DropdownMenu.Group key='menu-group-admin'>
-                  <DropdownMenu.Item
-                    className={styles.dropDownItem}
-                    asChild
-                  >
-                    <a
-                      href={catalogAdminUrl}
-                      className={styles.dropDownItem}
-                    >
+              {resourceRoles.some((role) => role.role === "admin") && (
+                <DropdownMenu.Group key="menu-group-admin">
+                  <DropdownMenu.Item className={styles.dropDownItem} asChild>
+                    <a href={catalogAdminUrl} className={styles.dropDownItem}>
                       {localization.manageCatalogs}
                     </a>
                   </DropdownMenu.Item>
@@ -187,16 +176,16 @@ const Header: FC<HeaderProps> = ({
                       <a
                         href={urlObject.url}
                         className={styles.dropDownItem}
-                        target={urlObject.external ? '_blank' : ''}
-                        rel='noreferrer'
+                        target={urlObject.external ? "_blank" : ""}
+                        rel="noreferrer"
                       >
                         {urlObject.name}
                         {urlObject.external ? (
                           <span className={styles.icon}>
-                            <ExternalLinkIcon title='ExternalLinkIcon' />
+                            <ExternalLinkIcon title="ExternalLinkIcon" />
                           </span>
                         ) : (
-                          ''
+                          ""
                         )}
                       </a>
                     </DropdownMenu.Item>
@@ -205,13 +194,13 @@ const Header: FC<HeaderProps> = ({
                 </DropdownMenu.Group>
               ))}
               {handleLogout && (
-                <DropdownMenu.Group key='menu-group-logout'>
+                <DropdownMenu.Group key="menu-group-logout">
                   <DropdownMenu.Item asChild>
                     <button
                       onClick={handleLogout}
                       className={styles.dropDownItem}
                     >
-                      <LeaveIcon fontSize='1.3rem' />
+                      <LeaveIcon fontSize="1.3rem" />
                       <span>{localization.auth.logout}</span>
                     </button>
                   </DropdownMenu.Item>

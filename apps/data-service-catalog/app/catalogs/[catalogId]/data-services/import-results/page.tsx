@@ -1,14 +1,21 @@
-import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { ImportResult } from '@catalog-frontend/types';
-import { getDataServiceImportResults } from '@catalog-frontend/data-access';
-import { withAdminProtectedPage } from '@data-service-catalog/utils/auth';
-import ImportResultsPageClient from './import-results-page-client';
+import {
+  BreadcrumbType,
+  Breadcrumbs,
+  DesignBanner,
+} from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { ImportResult } from "@catalog-frontend/types";
+import { getDataServiceImportResults } from "@catalog-frontend/data-access";
+import { withAdminProtectedPage } from "@data-service-catalog/utils/auth";
+import ImportResultsPageClient from "./import-results-page-client";
 
 const ImportResultsPage = withAdminProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/data-services/import-results`,
   async ({ catalogId, session }) => {
-    const importResults: ImportResult[] = await getDataServiceImportResults(catalogId, `${session.accessToken}`)
+    const importResults: ImportResult[] = await getDataServiceImportResults(
+      catalogId,
+      `${session.accessToken}`,
+    )
       .then((response) => {
         return response.json();
       })
@@ -24,7 +31,7 @@ const ImportResultsPage = withAdminProtectedPage(
       },
       {
         href: `/catalogs/${catalogId}/data-services/import-results`,
-        text: 'Importeringsresultat',
+        text: "Importeringsresultat",
       },
     ] as BreadcrumbType[];
 

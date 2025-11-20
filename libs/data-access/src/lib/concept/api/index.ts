@@ -5,23 +5,21 @@ import {
   Search,
   RelatedConcept,
   RelationTypeEnum,
-} from '@catalog-frontend/types';
-import { searchConceptsByUri } from '../../search/api';
+} from "@catalog-frontend/types";
+import { searchConceptsByUri } from "../../search/api";
 import {
   getUniqueConceptIdsFromUris,
   isObjectNullUndefinedEmpty,
-  validOrganizationNumber,
-  validUUID,
   validateOrganizationNumber,
   validateUUID,
   validateAndEncodeUrlSafe,
-} from '@catalog-frontend/utils';
-import { Operation } from 'fast-json-patch';
+} from "@catalog-frontend/utils";
+import { Operation } from "fast-json-patch";
 
 type SearchObject = Search.SearchObject;
 
 export const conceptCatalogApiCall = async (
-  method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
+  method: "GET" | "POST" | "PATCH" | "DELETE",
   path: string,
   body: any,
   accessToken: string,
@@ -29,59 +27,135 @@ export const conceptCatalogApiCall = async (
   await fetch(`${process.env.CONCEPT_CATALOG_BASE_URI}${path}`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     method,
-    cache: 'no-cache' as RequestCache,
+    cache: "no-cache" as RequestCache,
     ...(body ? { body: JSON.stringify(body) } : {}),
   });
 
-export const searchConceptsForCatalog = (catalogId: string, query: SearchConceptQuery, accessToken: string) => {
-  validateOrganizationNumber(catalogId, 'searchConceptsForCatalog');
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'searchConceptsForCatalog');
-  return conceptCatalogApiCall('POST', `/begreper/search?orgNummer=${encodedCatalogId}`, query, accessToken);
+export const searchConceptsForCatalog = (
+  catalogId: string,
+  query: SearchConceptQuery,
+  accessToken: string,
+) => {
+  validateOrganizationNumber(catalogId, "searchConceptsForCatalog");
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "searchConceptsForCatalog",
+  );
+  return conceptCatalogApiCall(
+    "POST",
+    `/begreper/search?orgNummer=${encodedCatalogId}`,
+    query,
+    accessToken,
+  );
 };
 
-export const getConceptsForCatalog = (catalogId: string, accessToken: string) => {
-  validateOrganizationNumber(catalogId, 'getConceptsForCatalog');
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getConceptsForCatalog');
-  return conceptCatalogApiCall('GET', `/begreper?orgNummer=${encodedCatalogId}`, null, accessToken);
+export const getConceptsForCatalog = (
+  catalogId: string,
+  accessToken: string,
+) => {
+  validateOrganizationNumber(catalogId, "getConceptsForCatalog");
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "getConceptsForCatalog",
+  );
+  return conceptCatalogApiCall(
+    "GET",
+    `/begreper?orgNummer=${encodedCatalogId}`,
+    null,
+    accessToken,
+  );
 };
 
 export const getConcept = (conceptId: string, accessToken: string) => {
-  validateUUID(conceptId, 'getConcept');
-  const encodedConceptId = validateAndEncodeUrlSafe(conceptId, 'concept ID', 'getConcept');
-  return conceptCatalogApiCall('GET', `/begreper/${encodedConceptId}`, null, accessToken);
+  validateUUID(conceptId, "getConcept");
+  const encodedConceptId = validateAndEncodeUrlSafe(
+    conceptId,
+    "concept ID",
+    "getConcept",
+  );
+  return conceptCatalogApiCall(
+    "GET",
+    `/begreper/${encodedConceptId}`,
+    null,
+    accessToken,
+  );
 };
 
 export const getConceptRevisions = (conceptId: string, accessToken: string) => {
-  validateUUID(conceptId, 'getConceptRevisions');
-  const encodedConceptId = validateAndEncodeUrlSafe(conceptId, 'concept ID', 'getConceptRevisions');
-  return conceptCatalogApiCall('GET', `/begreper/${encodedConceptId}/revisions`, null, accessToken);
+  validateUUID(conceptId, "getConceptRevisions");
+  const encodedConceptId = validateAndEncodeUrlSafe(
+    conceptId,
+    "concept ID",
+    "getConceptRevisions",
+  );
+  return conceptCatalogApiCall(
+    "GET",
+    `/begreper/${encodedConceptId}/revisions`,
+    null,
+    accessToken,
+  );
 };
 
 export const createConcept = (concept: Partial<Concept>, accessToken: string) =>
-  conceptCatalogApiCall('POST', `/begreper`, concept, accessToken);
+  conceptCatalogApiCall("POST", `/begreper`, concept, accessToken);
 
-export const patchConcept = (conceptId: string, patchOperations: Operation[], accessToken: string) => {
-  validateUUID(conceptId, 'patchConcept');
-  const encodedConceptId = validateAndEncodeUrlSafe(conceptId, 'concept ID', 'patchConcept');
-  return conceptCatalogApiCall('PATCH', `/begreper/${encodedConceptId}`, patchOperations, accessToken);
+export const patchConcept = (
+  conceptId: string,
+  patchOperations: Operation[],
+  accessToken: string,
+) => {
+  validateUUID(conceptId, "patchConcept");
+  const encodedConceptId = validateAndEncodeUrlSafe(
+    conceptId,
+    "concept ID",
+    "patchConcept",
+  );
+  return conceptCatalogApiCall(
+    "PATCH",
+    `/begreper/${encodedConceptId}`,
+    patchOperations,
+    accessToken,
+  );
 };
 
-export const importConcepts = (concepts: Omit<Concept, 'id'>[], accessToken: string) =>
-  conceptCatalogApiCall('POST', `/begreper/import`, concepts, accessToken);
+export const importConcepts = (
+  concepts: Omit<Concept, "id">[],
+  accessToken: string,
+) => conceptCatalogApiCall("POST", `/begreper/import`, concepts, accessToken);
 
 export const deleteConcept = (conceptId: string, accessToken: string) => {
-  validateUUID(conceptId, 'deleteConcept');
-  const encodedConceptId = validateAndEncodeUrlSafe(conceptId, 'concept ID', 'deleteConcept');
-  return conceptCatalogApiCall('DELETE', `/begreper/${encodedConceptId}`, null, accessToken);
+  validateUUID(conceptId, "deleteConcept");
+  const encodedConceptId = validateAndEncodeUrlSafe(
+    conceptId,
+    "concept ID",
+    "deleteConcept",
+  );
+  return conceptCatalogApiCall(
+    "DELETE",
+    `/begreper/${encodedConceptId}`,
+    null,
+    accessToken,
+  );
 };
 
 export const publishConcept = (conceptId: string, accessToken: string) => {
-  validateUUID(conceptId, 'publishConcept');
-  const encodedConceptId = validateAndEncodeUrlSafe(conceptId, 'concept ID', 'publishConcept');
-  return conceptCatalogApiCall('POST', `/begreper/${encodedConceptId}/publish`, null, accessToken);
+  validateUUID(conceptId, "publishConcept");
+  const encodedConceptId = validateAndEncodeUrlSafe(
+    conceptId,
+    "concept ID",
+    "publishConcept",
+  );
+  return conceptCatalogApiCall(
+    "POST",
+    `/begreper/${encodedConceptId}/publish`,
+    null,
+    accessToken,
+  );
 };
 
 export const extractHits = (searchResponse: any) => searchResponse?.hits ?? [];
@@ -91,10 +165,14 @@ export const searchInternalConcepts = (
   body: string[],
   accessToken: string | null | undefined,
 ): Promise<Response> => {
-  validateOrganizationNumber(catalogId, 'searchInternalConcepts');
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'searchInternalConcepts');
+  validateOrganizationNumber(catalogId, "searchInternalConcepts");
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "searchInternalConcepts",
+  );
   return conceptCatalogApiCall(
-    'POST',
+    "POST",
     `/begreper/search?orgNummer=${encodedCatalogId}`,
     {
       filters: {
@@ -104,7 +182,7 @@ export const searchInternalConcepts = (
         size: body.length,
       },
     },
-    accessToken ?? '',
+    accessToken ?? "",
   );
 };
 
@@ -122,29 +200,46 @@ const hasRelatedInternalConcepts = (concept: Concept): boolean => {
   return false;
 };
 
-export const getPublishedConceptRelations = (concept: Concept): UnionRelation[] => {
+export const getPublishedConceptRelations = (
+  concept: Concept,
+): UnionRelation[] => {
   if (!hasRelatedConcepts(concept)) return [];
 
   const conceptRelations: UnionRelation[] = [];
 
   if (concept.begrepsRelasjon) {
-    conceptRelations.push(...concept.begrepsRelasjon.filter((relasjon) => !isObjectNullUndefinedEmpty(relasjon)));
+    conceptRelations.push(
+      ...concept.begrepsRelasjon.filter(
+        (relasjon) => !isObjectNullUndefinedEmpty(relasjon),
+      ),
+    );
   }
 
   if (concept.seOgså) {
     if (Array.isArray(concept.seOgså)) {
       conceptRelations.push(
-        ...concept.seOgså.map((uri): UnionRelation => ({ relatertBegrep: uri, relasjon: RelationTypeEnum.SE_OGSÅ })),
+        ...concept.seOgså.map(
+          (uri): UnionRelation => ({
+            relatertBegrep: uri,
+            relasjon: RelationTypeEnum.SE_OGSÅ,
+          }),
+        ),
       );
     } else {
-      conceptRelations.push({ relatertBegrep: concept.seOgså, relasjon: RelationTypeEnum.SE_OGSÅ });
+      conceptRelations.push({
+        relatertBegrep: concept.seOgså,
+        relasjon: RelationTypeEnum.SE_OGSÅ,
+      });
     }
   }
 
   if (concept.erstattesAv) {
     conceptRelations.push(
       ...concept.erstattesAv.map(
-        (uri): UnionRelation => ({ relatertBegrep: uri, relasjon: RelationTypeEnum.ERSTATTES_AV }),
+        (uri): UnionRelation => ({
+          relatertBegrep: uri,
+          relasjon: RelationTypeEnum.ERSTATTES_AV,
+        }),
       ),
     );
   }
@@ -179,20 +274,26 @@ export const getPublishedRelatedConcepts = async (
     relatedConceptsUris.push(...concept.erstattesAv);
   }
 
-  const filteredUris = relatedConceptsUris.filter((uri): uri is string => uri !== undefined && uri !== null);
+  const filteredUris = relatedConceptsUris.filter(
+    (uri): uri is string => uri !== undefined && uri !== null,
+  );
 
   const internalUris: string[] = [];
   const externalUris: string[] = [];
 
   filteredUris.forEach((uri: string) => {
-    if (uri.includes('concept-catalog') && uri.includes(concept.ansvarligVirksomhet.id)) {
+    if (
+      uri.includes("concept-catalog") &&
+      uri.includes(concept.ansvarligVirksomhet.id)
+    ) {
       internalUris.push(uri);
     } else {
       externalUris.push(uri);
     }
   });
 
-  const relatedExternalConcepts = await fetchExternaRelatedlConcepts(externalUris);
+  const relatedExternalConcepts =
+    await fetchExternaRelatedlConcepts(externalUris);
   const relatedInternalConcepts = await fetchInternalRelatedConcepts(
     concept.ansvarligVirksomhet.id,
     getUniqueConceptIdsFromUris(internalUris),
@@ -202,12 +303,17 @@ export const getPublishedRelatedConcepts = async (
   return [...relatedInternalConcepts, ...relatedExternalConcepts];
 };
 
-const fetchExternaRelatedlConcepts = async (uris: string[]): Promise<RelatedConcept[]> => {
+const fetchExternaRelatedlConcepts = async (
+  uris: string[],
+): Promise<RelatedConcept[]> => {
   if (uris.length === 0) return [];
 
   try {
     const response = await searchConceptsByUri(uris);
-    if (!response.ok) throw new Error(`Failed to fetch related concepts: ${response.statusText}`);
+    if (!response.ok)
+      throw new Error(
+        `Failed to fetch related concepts: ${response.statusText}`,
+      );
 
     const body = await response.json();
     const relatedExternalConcepts: SearchObject[] = extractHits(body);
@@ -220,7 +326,7 @@ const fetchExternaRelatedlConcepts = async (uris: string[]): Promise<RelatedConc
       href: `${process.env.FDK_BASE_URI}/concepts/${id}`,
     })) as RelatedConcept[];
   } catch (error) {
-    console.error('Failed to fetch related concepts', error);
+    console.error("Failed to fetch related concepts", error);
     return [];
   }
 };
@@ -233,33 +339,46 @@ const fetchInternalRelatedConcepts = async (
   if (internalConceptIds.length === 0) return [];
 
   try {
-    const response = await searchInternalConcepts(catalogId, internalConceptIds, accessToken);
-    if (!response.ok) throw new Error(`Failed to fetch internal concepts: ${response.statusText}`);
+    const response = await searchInternalConcepts(
+      catalogId,
+      internalConceptIds,
+      accessToken,
+    );
+    if (!response.ok)
+      throw new Error(
+        `Failed to fetch internal concepts: ${response.statusText}`,
+      );
 
     const body = await response.json();
     const relatedInternalConcepts: Concept[] = extractHits(body);
-    return relatedInternalConcepts.map(({ id, anbefaltTerm, definisjon, originaltBegrep }) => ({
-      id,
-      title: anbefaltTerm?.navn,
-      description: definisjon?.tekst,
-      identifier: originaltBegrep,
-      externalHref: false,
-      href: `/catalogs/${catalogId}/concepts/${id}`,
-    })) as RelatedConcept[];
+    return relatedInternalConcepts.map(
+      ({ id, anbefaltTerm, definisjon, originaltBegrep }) => ({
+        id,
+        title: anbefaltTerm?.navn,
+        description: definisjon?.tekst,
+        identifier: originaltBegrep,
+        externalHref: false,
+        href: `/catalogs/${catalogId}/concepts/${id}`,
+      }),
+    ) as RelatedConcept[];
   } catch (error) {
-    console.error('Failed to fetch internal concepts', error);
+    console.error("Failed to fetch internal concepts", error);
     return [];
   }
 };
 
-export const getUnpublishedConceptRelations = (concept: Concept): UnionRelation[] => {
+export const getUnpublishedConceptRelations = (
+  concept: Concept,
+): UnionRelation[] => {
   if (!hasRelatedInternalConcepts(concept)) return [];
 
   const internalConceptRelations: UnionRelation[] = [];
 
   if (concept.internBegrepsRelasjon) {
     internalConceptRelations.push(
-      ...concept.internBegrepsRelasjon.filter((relasjon) => !isObjectNullUndefinedEmpty(relasjon)),
+      ...concept.internBegrepsRelasjon.filter(
+        (relasjon) => !isObjectNullUndefinedEmpty(relasjon),
+      ),
     );
   }
 
@@ -267,7 +386,11 @@ export const getUnpublishedConceptRelations = (concept: Concept): UnionRelation[
     if (Array.isArray(concept.internSeOgså)) {
       internalConceptRelations.push(
         ...concept.internSeOgså.map(
-          (uri): UnionRelation => ({ relatertBegrep: uri, internal: true, relasjon: RelationTypeEnum.SE_OGSÅ }),
+          (uri): UnionRelation => ({
+            relatertBegrep: uri,
+            internal: true,
+            relasjon: RelationTypeEnum.SE_OGSÅ,
+          }),
         ),
       );
     } else {
@@ -282,7 +405,11 @@ export const getUnpublishedConceptRelations = (concept: Concept): UnionRelation[
   if (concept.internErstattesAv) {
     internalConceptRelations.push(
       ...concept.internErstattesAv.map(
-        (uri): UnionRelation => ({ relatertBegrep: uri, internal: true, relasjon: RelationTypeEnum.ERSTATTES_AV }),
+        (uri): UnionRelation => ({
+          relatertBegrep: uri,
+          internal: true,
+          relasjon: RelationTypeEnum.ERSTATTES_AV,
+        }),
       ),
     );
   }
@@ -290,90 +417,148 @@ export const getUnpublishedConceptRelations = (concept: Concept): UnionRelation[
   return internalConceptRelations;
 };
 
-export const getConceptImportResults = async (catalogId: string, accessToken: string) => {
-  validateOrganizationNumber(catalogId, 'getConceptImportResults');
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getConceptImportResults');
+export const getConceptImportResults = async (
+  catalogId: string,
+  accessToken: string,
+) => {
+  validateOrganizationNumber(catalogId, "getConceptImportResults");
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "getConceptImportResults",
+  );
 
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/results`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    next: { tags: ['import-results'] },
+    next: { tags: ["import-results"] },
   };
   return await fetch(resource, options);
 };
 
-export const getConceptImportResultById = async (catalogId: string, resultId: string, accessToken: string) => {
-  validateOrganizationNumber(catalogId, 'getConceptImportResultById');
-  validateUUID(resultId, 'getConceptImportResultById');
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getConceptImportResultById');
-  const encodedResultId = validateAndEncodeUrlSafe(resultId, 'result ID', 'getConceptImportResultById');
+export const getConceptImportResultById = async (
+  catalogId: string,
+  resultId: string,
+  accessToken: string,
+) => {
+  validateOrganizationNumber(catalogId, "getConceptImportResultById");
+  validateUUID(resultId, "getConceptImportResultById");
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "getConceptImportResultById",
+  );
+  const encodedResultId = validateAndEncodeUrlSafe(
+    resultId,
+    "result ID",
+    "getConceptImportResultById",
+  );
 
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/results/${encodedResultId}`;
 
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    next: { tags: ['import-result'] },
+    next: { tags: ["import-result"] },
   };
   return await fetch(resource, options);
 };
 
-export const confirmConceptImport = async (catalogId: string, resultId: string, accessToken: string) => {
-  validateOrganizationNumber(catalogId, 'confirmConceptImport');
-  validateUUID(resultId, 'confirmConceptImport');
+export const confirmImportedConcept = async (
+  catalogId: string,
+  resultId: string,
+  externalId: string,
+  accessToken: string,
+) => {
+  validateOrganizationNumber(catalogId, "confirm-concept-import");
+  validateUUID(resultId, "confirm-concept-import");
 
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'confirmConceptImport');
-  const encodedResultId = validateAndEncodeUrlSafe(resultId, 'result ID', 'confirmConceptImport');
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "confirm-concept-import",
+  );
 
-  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}/confirm`;
+  const encodedResultId = validateAndEncodeUrlSafe(
+    resultId,
+    "result ID",
+    "confirm-concept-import",
+  );
+
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}/confirm-concept-import`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
-    method: 'PUT',
+    method: "PUT",
+    body: externalId,
   };
 
   return await fetch(resource, options);
-}
+};
 
-export const cancelConceptImport = async (catalogId: string, resultId: string, accessToken: string) => {
-  validateOrganizationNumber(catalogId, 'cancelConceptImport');
-  validateUUID(resultId, 'cancelConceptImport');
+export const cancelConceptImport = async (
+  catalogId: string,
+  resultId: string,
+  accessToken: string,
+) => {
+  validateOrganizationNumber(catalogId, "cancelConceptImport");
+  validateUUID(resultId, "cancelConceptImport");
 
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'cancelConceptImport');
-  const encodedResultId = validateAndEncodeUrlSafe(resultId, 'result ID', 'cancelConceptImport');
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "cancelConceptImport",
+  );
+  const encodedResultId = validateAndEncodeUrlSafe(
+    resultId,
+    "result ID",
+    "cancelConceptImport",
+  );
 
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}/cancel`;
-    const options = {
-        headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-        },
-        method: 'PUT',
-    };
+  const options = {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    method: "PUT",
+  };
 
-    return await fetch(resource, options);
-}
+  return await fetch(resource, options);
+};
 
-export const removeImportResultConcept = async (catalogId: string, resultId: string, accessToken: string) => {
-  validateOrganizationNumber(catalogId, 'removeImportResultConcept');
-  validateUUID(resultId, 'removeImportResultConcept');
+export const removeImportResultConcept = async (
+  catalogId: string,
+  resultId: string,
+  accessToken: string,
+) => {
+  validateOrganizationNumber(catalogId, "removeImportResultConcept");
+  validateUUID(resultId, "removeImportResultConcept");
 
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'removeImportResultConcept');
-  const encodedResultId = validateAndEncodeUrlSafe(resultId, 'result ID', 'removeImportResultConcept');
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "removeImportResultConcept",
+  );
+  const encodedResultId = validateAndEncodeUrlSafe(
+    resultId,
+    "result ID",
+    "removeImportResultConcept",
+  );
 
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/results/${encodedResultId}`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
-    method: 'DELETE',
+    method: "DELETE",
   };
   return await fetch(resource, options);
 };
@@ -417,13 +602,25 @@ export const getUnpublishedRelatedConcepts = async (
 };
 
 export const getAllConceptCatalogs = (accessToken: string) =>
-  conceptCatalogApiCall('GET', `/begrepssamlinger`, null, accessToken);
+  conceptCatalogApiCall("GET", `/begrepssamlinger`, null, accessToken);
 
-export const getConceptCountByCatalogId = (catalogId: string, accessToken: string) => {
-  validateOrganizationNumber(catalogId, 'getConceptCountByCatalogId');
-  const encodedCatalogId = validateAndEncodeUrlSafe(catalogId, 'catalog ID', 'getConceptCountByCatalogId');
-  return conceptCatalogApiCall('GET', `/begreper/${encodedCatalogId}/count`, null, accessToken);
+export const getConceptCountByCatalogId = (
+  catalogId: string,
+  accessToken: string,
+) => {
+  validateOrganizationNumber(catalogId, "getConceptCountByCatalogId");
+  const encodedCatalogId = validateAndEncodeUrlSafe(
+    catalogId,
+    "catalog ID",
+    "getConceptCountByCatalogId",
+  );
+  return conceptCatalogApiCall(
+    "GET",
+    `/begreper/${encodedCatalogId}/count`,
+    null,
+    accessToken,
+  );
 };
 
-export * from './import-rdf-concepts';
-export * from './import-csv-json';
+export * from "./import-rdf-concepts";
+export * from "./import-csv-json";

@@ -1,17 +1,30 @@
-import { Dataset } from '@catalog-frontend/types';
-import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { containsNonNumberRegex, localization, onlyNumbersRegex } from '@catalog-frontend/utils';
-import { Box, Combobox, Fieldset } from '@digdir/designsystemet-react';
-import { useSearchEnheter, useSearchEnheterByOrgNmbs } from '../../../hooks/useEnhetsregister';
-import { useFormikContext } from 'formik';
-import { debounce } from 'lodash';
-import { useCallback, useState } from 'react';
+import { Dataset } from "@catalog-frontend/types";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import {
+  containsNonNumberRegex,
+  localization,
+  onlyNumbersRegex,
+} from "@catalog-frontend/utils";
+import { Box, Combobox, Fieldset } from "@digdir/designsystemet-react";
+import {
+  useSearchEnheter,
+  useSearchEnheterByOrgNmbs,
+} from "../../../hooks/useEnhetsregister";
+import { useFormikContext } from "formik";
+import { debounce } from "lodash";
+import { useCallback, useState } from "react";
 
-export const QualifiedAttributionsSection = ({ ref }: { ref: React.RefObject<HTMLInputElement>}) => {
+export const QualifiedAttributionsSection = ({
+  ref,
+}: {
+  ref: React.RefObject<HTMLInputElement>;
+}) => {
   const { setFieldValue, values } = useFormikContext<Dataset>();
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const { data: selectedEnheter } = useSearchEnheterByOrgNmbs(values.qualifiedAttributions);
+  const [searchTerm, setSearchTerm] = useState("");
+  const { data: selectedEnheter } = useSearchEnheterByOrgNmbs(
+    values.qualifiedAttributions,
+  );
   const { data: enheter, isLoading: searching } = useSearchEnheter(searchTerm);
 
   const debouncedSearch = useCallback(
@@ -32,8 +45,9 @@ export const QualifiedAttributionsSection = ({ ref }: { ref: React.RefObject<HTM
         ...(enheter ?? []),
         ...(values.qualifiedAttributions ?? []).map((orgNmb) => {
           const foundItem =
-            selectedEnheter?.find((item) => item.organisasjonsnummer === orgNmb) ||
-            enheter?.find((item) => item.organisasjonsnummer === orgNmb);
+            selectedEnheter?.find(
+              (item) => item.organisasjonsnummer === orgNmb,
+            ) || enheter?.find((item) => item.organisasjonsnummer === orgNmb);
 
           return {
             navn: foundItem?.navn ?? null,
@@ -47,16 +61,20 @@ export const QualifiedAttributionsSection = ({ ref }: { ref: React.RefObject<HTM
   return (
     <Box>
       <Fieldset
-        size='sm'
+        size="sm"
         legend={
-          <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.qualifiedAttributions}>
+          <TitleWithHelpTextAndTag
+            helpText={localization.datasetForm.helptext.qualifiedAttributions}
+          >
             {localization.datasetForm.fieldLabel.qualifiedAttributions}
           </TitleWithHelpTextAndTag>
         }
       >
         <Combobox
-          size='sm'
-          onValueChange={(selectedValues: string[]) => setFieldValue('qualifiedAttributions', selectedValues)}
+          size="sm"
+          onValueChange={(selectedValues: string[]) =>
+            setFieldValue("qualifiedAttributions", selectedValues)
+          }
           onChange={(input: any) => debouncedSearch(input.target.value)}
           loading={searching}
           multiple

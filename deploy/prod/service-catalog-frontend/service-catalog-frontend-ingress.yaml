@@ -4,9 +4,9 @@ kind: Ingress
 metadata:
   name: service-catalog-frontend
   annotations:
-    nginx.ingress.kubernetes.io/proxy-buffering: 'on'
-    nginx.ingress.kubernetes.io/proxy-buffers-number: '8'
-    nginx.ingress.kubernetes.io/proxy-buffer-size: '32k'
+    nginx.ingress.kubernetes.io/proxy-buffering: "on"
+    nginx.ingress.kubernetes.io/proxy-buffers-number: "8"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "32k"
 spec:
   ingressClassName: nginx
   rules:

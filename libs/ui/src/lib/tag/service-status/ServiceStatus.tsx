@@ -1,11 +1,14 @@
-import { Tag as DSTag, type TagProps as DSTagProps } from '@digdir/designsystemet-react';
-import { forwardRef } from 'react';
+import {
+  Tag as DSTag,
+  type TagProps as DSTagProps,
+} from "@digdir/designsystemet-react";
+import { forwardRef } from "react";
 
 export enum ServiceStatusColors {
-  COMPLETED = 'success',
-  DEPRECATED = 'second',
-  UNDERDEVELOPMENT = 'info',
-  WITHDRAWN = 'danger',
+  COMPLETED = "success",
+  DEPRECATED = "second",
+  UNDERDEVELOPMENT = "info",
+  WITHDRAWN = "danger",
 }
 
 export type StatusKey = keyof typeof ServiceStatusColors;
@@ -16,10 +19,24 @@ export type ServiceStatusTagProps = {
 } & DSTagProps;
 
 const getColorFromStatusKey = (statusKey: StatusKey | undefined) =>
-  statusKey ? ServiceStatusColors[statusKey.toLocaleUpperCase() as StatusKey] : 'neutral';
+  statusKey
+    ? ServiceStatusColors[statusKey.toLocaleUpperCase() as StatusKey]
+    : "neutral";
 
-export const ServiceStatusTag = forwardRef<HTMLSpanElement, ServiceStatusTagProps>(
-  ({ children, statusKey, statusLabel, size = 'medium', ...rest }: ServiceStatusTagProps, ref) => {
+export const ServiceStatusTag = forwardRef<
+  HTMLSpanElement,
+  ServiceStatusTagProps
+>(
+  (
+    {
+      children,
+      statusKey,
+      statusLabel,
+      size = "medium",
+      ...rest
+    }: ServiceStatusTagProps,
+    ref,
+  ) => {
     return (
       <DSTag
         ref={ref}
@@ -33,4 +50,4 @@ export const ServiceStatusTag = forwardRef<HTMLSpanElement, ServiceStatusTagProp
   },
 );
 
-ServiceStatusTag.displayName = 'ServiceStatusTag';
+ServiceStatusTag.displayName = "ServiceStatusTag";

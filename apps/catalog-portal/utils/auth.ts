@@ -6,18 +6,26 @@ import {
   hasSystemAdminPermission,
   redirectToSignIn,
   validOrganizationNumber,
-} from '@catalog-frontend/utils';
-import { RedirectType, redirect } from 'next/navigation';
+} from "@catalog-frontend/utils";
+import { RedirectType, redirect } from "next/navigation";
 
 type PageParams = {
   catalogId: string;
 };
 type PagePath = (params: PageParams) => string;
 type Render = (
-  props: { session: any; hasWritePermission: boolean; hasAdminPermission: boolean } & PageParams,
+  props: {
+    session: any;
+    hasWritePermission: boolean;
+    hasAdminPermission: boolean;
+  } & PageParams,
 ) => Promise<any>;
 
-const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', render: Render) => {
+const withProtectedPage = (
+  pagePath: PagePath,
+  permissions: "read" | "write",
+  render: Render,
+) => {
   return async ({ params }: any) => {
     const { catalogId } = await params;
 
@@ -34,17 +42,22 @@ const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', re
 
     const hasReadPermission =
       session?.accessToken &&
-      (hasOrganizationReadPermission(session?.accessToken, catalogId) || hasSystemAdminPermission(session.accessToken));
+      (hasOrganizationReadPermission(session?.accessToken, catalogId) ||
+        hasSystemAdminPermission(session.accessToken));
     if (!hasReadPermission) {
       redirect(`/no-access`, RedirectType.replace);
     }
 
-    const hasWritePermission = session?.accessToken && hasOrganizationWritePermission(session.accessToken, catalogId);
-    if (!hasWritePermission && permissions === 'write') {
+    const hasWritePermission =
+      session?.accessToken &&
+      hasOrganizationWritePermission(session.accessToken, catalogId);
+    if (!hasWritePermission && permissions === "write") {
       redirect(`/no-access`, RedirectType.replace);
     }
 
-    const hasAdminPermission = session?.accessToken && hasOrganizationAdminPermission(session.accessToken, catalogId);
+    const hasAdminPermission =
+      session?.accessToken &&
+      hasOrganizationAdminPermission(session.accessToken, catalogId);
 
     return await render({
       catalogId,
@@ -56,4 +69,4 @@ const withProtectedPage = (pagePath: PagePath, permissions: 'read' | 'write', re
 };
 
 export const withReadProtectedPage = (pagePath: PagePath, render: Render) =>
-  withProtectedPage(pagePath, 'read', render);
+  withProtectedPage(pagePath, "read", render);

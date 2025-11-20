@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import styles from './import-record-accordion-item.module.css';
+import styles from "./import-record-accordion-item.module.css";
 import {
   AccordionContent,
   AccordionHeader,
@@ -9,44 +9,64 @@ import {
   Heading,
   List,
   Tag,
-} from '@digdir/designsystemet-react';
-import { ExclamationmarkTriangleIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
-import { LinkButton } from '../../../button';
-import { ExtractionRecord } from '@catalog-frontend/types';
-import { localization } from '@catalog-frontend/utils';
+} from "@digdir/designsystemet-react";
+import {
+  ExclamationmarkTriangleIcon,
+  XMarkOctagonIcon,
+} from "@navikt/aksel-icons";
+import { LinkButton } from "../../../button";
+import {
+  ConceptExtraction,
+  ConceptExtractionStatus,
+  ExtractionRecord,
+} from "@catalog-frontend/types";
+import { localization } from "@catalog-frontend/utils";
 
 interface Props {
   targetBaseHref: string;
-  record: ExtractionRecord;
+  conceptExtraction: ConceptExtraction;
   enableOpening: boolean;
   isCompleted: boolean;
 }
 
-const ImportRecordAccordionItem = ({ targetBaseHref, record, enableOpening, isCompleted }: Props) => {
-  const errors = record.extractResult?.issues?.filter((issue) => issue.type === 'ERROR') ?? [];
-  const warnings = record.extractResult?.issues?.filter((issue) => issue.type === 'WARNING') ?? [];
+const ImportRecordAccordionItem = ({
+  targetBaseHref,
+  conceptExtraction,
+  enableOpening,
+  isCompleted,
+}: Props) => {
+  const errors =
+    conceptExtraction.extractionRecord.extractResult?.issues?.filter(
+      (issue) => issue.type === "ERROR",
+    ) ?? [];
+  const warnings =
+    conceptExtraction.extractionRecord.extractResult?.issues?.filter(
+      (issue) => issue.type === "WARNING",
+    ) ?? [];
+
+  const decodeFromBase64 = (encodedBase64: string) =>
+    Buffer.from(encodedBase64, "base64").toString("utf-8");
 
   const renderHeader = (record: ExtractionRecord) => {
     return (
       <div className={styles.recordHeader}>
-        <div>{record.externalId}</div>
+        <div style={{ maxWidth: "90%" }}>
+          {decodeFromBase64(record.externalId)}
+        </div>
         {errors.length > 0 && (
           <Tag
-            size={'sm'}
-            color={'danger'}
+            size={"sm"}
+            color={"danger"}
           >{`${localization.importResult.errors}: ${errors.length}`}</Tag>
         )}
         {warnings.length > 0 && (
           <Tag
-            size={'sm'}
-            color={'warning'}
+            size={"sm"}
+            color={"warning"}
           >{`${localization.importResult.warnings}: ${warnings.length}`}</Tag>
         )}
         {errors.length === 0 && warnings.length === 0 && (
-          <Tag
-            size={'sm'}
-            color={'success'}
-          >
+          <Tag size={"sm"} color={"success"}>
             {localization.ok}
           </Tag>
         )}
@@ -56,26 +76,29 @@ const ImportRecordAccordionItem = ({ targetBaseHref, record, enableOpening, isCo
 
   return (
     <AccordionItem>
-      <AccordionHeader>{renderHeader(record)}</AccordionHeader>
+      <AccordionHeader>
+        {renderHeader(conceptExtraction.extractionRecord)}
+      </AccordionHeader>
       <AccordionContent>
         {errors.length === 0 && enableOpening && (
           <div className={styles.buttonRow}>
-            {isCompleted && <LinkButton
-              variant={'tertiary'}
-              href={`/${targetBaseHref}/${record.internalId}`}
-            >
-              {localization.importResult.goToImported}
-            </LinkButton>}
+            {(isCompleted ||
+              conceptExtraction.conceptExtractionStatus ===
+                ConceptExtractionStatus.COMPLETED) && (
+              <LinkButton
+                variant={"tertiary"}
+                href={`/${targetBaseHref}/${conceptExtraction.extractionRecord.internalId}`}
+              >
+                {localization.importResult.goToImported}
+              </LinkButton>
+            )}
           </div>
         )}
         <div className={styles.issuesContainer}>
           {errors.length > 0 && (
-            <Card key={'error-card'}>
+            <Card key={"error-card"}>
               <Card.Content>
-                <Heading
-                  level={3}
-                  size={'xs'}
-                >
+                <Heading level={3} size={"xs"}>
                   <div className={styles.issuesHeader}>
                     <XMarkOctagonIcon className={styles.errorIcon} />
                     <span>{localization.importResult.errors}</span>
@@ -90,14 +113,13 @@ const ImportRecordAccordionItem = ({ targetBaseHref, record, enableOpening, isCo
             </Card>
           )}
           {warnings.length > 0 && (
-            <Card key={'warning-card'}>
+            <Card key={"warning-card"}>
               <Card.Content>
-                <Heading
-                  level={3}
-                  size={'xs'}
-                >
+                <Heading level={3} size={"xs"}>
                   <div className={styles.issuesHeader}>
-                    <ExclamationmarkTriangleIcon className={styles.warningIcon} />
+                    <ExclamationmarkTriangleIcon
+                      className={styles.warningIcon}
+                    />
                     <span>{localization.importResult.warnings}</span>
                   </div>
                 </Heading>

@@ -1,7 +1,10 @@
-import { NextAuthProvider, ReactQueryClientProvider } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { Metadata } from 'next';
-import { NuqsAdapter } from 'nuqs/adapters/react';
+import {
+  NextAuthProvider,
+  ReactQueryClientProvider,
+} from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { Metadata } from "next";
+import { NuqsAdapter } from "nuqs/adapters/react";
 
 export const metadata: Metadata = {
   title: localization.catalogType.dataService,
