@@ -871,7 +871,10 @@ export const DistributionModal = ({
                               virtual
                               error={errors.mobilityDataStandard}
                             >
-                              <Combobox.Option value={`mobilityDataStandard`}>
+                              <Combobox.Option
+                                key={`mobilityDataStandard`}
+                                value={""}
+                              >
                                 {localization.none}
                               </Combobox.Option>
                               {mobilityDataStandards &&
@@ -928,7 +931,7 @@ export const DistributionModal = ({
                               virtual
                               error={errors?.rights?.type}
                             >
-                              <Combobox.Option value={`right.type`}>
+                              <Combobox.Option key={`right.type`} value={""}>
                                 {localization.none}
                               </Combobox.Option>
                               {mobilityRights &&

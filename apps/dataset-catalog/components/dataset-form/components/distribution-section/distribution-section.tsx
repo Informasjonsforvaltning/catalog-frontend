@@ -472,11 +472,8 @@ export const DistributionSection = ({
             legend={
               <TitleWithHelpTextAndTag
                 helpText={localization.datasetForm.helptext.sample}
-                tagTitle={
-                  isMobility
-                    ? localization.tag.required
-                    : localization.tag.recommended
-                }
+                tagTitle={localization.tag.recommended}
+                tagColor={"info"}
               >
                 {localization.datasetForm.fieldLabel.sample}
               </TitleWithHelpTextAndTag>
