@@ -9820,7 +9820,6 @@ __metadata:
     prettier: "npm:3.6.2"
     react: "npm:19.1.1"
     react-arborist: "npm:^3.4.3"
-    react-checkbox-tree: "npm:^1.8.0"
     react-dom: "npm:19.1.1"
     react-is: "npm:19.1.1"
     react-localization: "npm:^2.0.6"
@@ -10043,7 +10042,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:^2.2.5, classnames@npm:^2.5.1":
+"classnames@npm:^2.5.1":
   version: 2.5.1
   resolution: "classnames@npm:2.5.1"
   checksum: 10/58eb394e8817021b153bb6e7d782cfb667e4ab390cb2e9dac2fc7c6b979d1cc2b2a733093955fc5c94aa79ef5c8c89f11ab77780894509be6afbb91dddd79d15
@@ -16803,7 +16802,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.10, lodash@npm:^4.17.21, lodash@npm:~4.17.0":
+"lodash@npm:^4.17.21, lodash@npm:~4.17.0":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: 10/c08619c038846ea6ac754abd6dd29d2568aa705feb69339e836dfa8d8b09abbb2f859371e86863eda41848221f9af43714491467b5b0299122431e202bb0c532
@@ -17972,7 +17971,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanoid@npm:^3.0.0, nanoid@npm:^3.3.11, nanoid@npm:^3.3.6, nanoid@npm:^3.3.7":
+"nanoid@npm:^3.3.11, nanoid@npm:^3.3.6, nanoid@npm:^3.3.7":
   version: 3.3.11
   resolution: "nanoid@npm:3.3.11"
   bin:
@@ -20773,7 +20772,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.5.8, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -20935,20 +20934,6 @@ __metadata:
     react: ">= 16.14"
     react-dom: ">= 16.14"
   checksum: 10/5e9a505c47f72421d41d01fab4e39ec2d64af2519d5701c289c4b4dfe89e750f5f25fd0fbd3f48a3f8ec46eb9b72b9e7c471301c07ce81c5b84033a1b38bc8bc
-  languageName: node
-  linkType: hard
-
-"react-checkbox-tree@npm:^1.8.0":
-  version: 1.8.0
-  resolution: "react-checkbox-tree@npm:1.8.0"
-  dependencies:
-    classnames: "npm:^2.2.5"
-    lodash: "npm:^4.17.10"
-    nanoid: "npm:^3.0.0"
-    prop-types: "npm:^15.5.8"
-  peerDependencies:
-    react: ^15.3.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: 10/700e87c0d6b1c7a15e104d0ef01ac1c15b8eb74905cd2a3b1e087a1c6fa596e4a58894ef553d5f8651782d7012c07eab87f9646f44def3569163a89c1cbb0f71
   languageName: node
   linkType: hard
 
