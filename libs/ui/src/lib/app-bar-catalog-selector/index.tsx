@@ -5,7 +5,7 @@ import cn from 'classnames';
 import {
 	Dropdown,
     Badge,
-    Paragraph
+    Divider
 } from '@digdir/designsystemet-react';
 import {
 	ChevronDownIcon,
@@ -47,6 +47,12 @@ export const AppBarCatalogSelectorList = () => {
                         <Badge data-size='sm' count={1} data-color='neutral' variant='tinted' />
                     </Dropdown.Button>
                 </Dropdown.Item>
+                {/* <Divider />
+                <Dropdown.Item>
+                    <Dropdown.Button data-size='sm'>
+                        Administrer kataloger
+                    </Dropdown.Button>
+                </Dropdown.Item> */}
             </Dropdown.List>
         </div>
     );

@@ -4,6 +4,7 @@ import { Button } from '@digdir/designsystemet-react';
 import styles from './publish-switch.module.css';
 import { publishDataset } from '../../app/actions/actions';
 import { Dataset, PublicationStatus } from '@catalog-frontend/types';
+import { VStack } from '@fellesdatakatalog/ui';
 
 type Props = {
   catalogId: string;
@@ -47,9 +48,14 @@ export const PublishSwitch = ({ catalogId, dataset, disabled }: Props) => {
     <>
       {
         dataset.published ?
-        <Button onClick={() => handlePublishDataset()} data-size='sm' data-variant='secondary' data-color='danger'>
-          {localization.button.unpublish}
-        </Button> :
+        <VStack>
+          <Button data-variant='secondary' data-size='sm'>
+            Gå til side
+          </Button>
+          <Button onClick={() => handlePublishDataset()} data-size='sm' data-variant='secondary' data-color='danger'>
+            {localization.button.unpublish}
+          </Button>
+        </VStack>:
         <Button onClick={() => handlePublishDataset()} data-size='sm' data-variant='secondary' data-color='success'>
           {localization.button.publish}
         </Button>

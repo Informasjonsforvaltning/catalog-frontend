@@ -518,13 +518,13 @@ Begrepsbeskrivelser kan importeres ved å laste opp filer i Turtle (RDF)-, CSV- 
 
   publicationState: {
     confirmPublish: 'Er du sikker på at du vil publisere?',
-    descriptionConcept: 'Publiseringstilstand forteller om et begrep er publisert på Data.Norge.no eller ikke.',
-    descriptionDataService: 'Publiseringstilstand forteller om API-et er publisert på Data.Norge.no eller ikke.',
+    descriptionConcept: 'Publiseringstilstand forteller om et begrep er publisert på data.norge.no eller ikke.',
+    descriptionDataService: 'Publiseringstilstand forteller om API-et er publisert på data.norge.no eller ikke.',
     published: 'Publisert',
-    publishedInFDK: 'Publisert på Data.Norge.no',
+    publishedInFDK: 'Publisert på data.norge.no',
     state: 'Publiseringstilstand',
     unpublished: 'Ikke publisert',
-    unpublishedInFDK: 'Ikke publisert på Data.Norge.no',
+    unpublishedInFDK: 'Ikke publisert på data.norge.no',
   },
 
   validation: {

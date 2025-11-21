@@ -1,5 +1,8 @@
 .current {
-    background: #f8f8f8;
     color: black;
     font-weight:bold;
+
+    &:not(:hover) {
+        background: #f8f8f8;
+    }
 }
