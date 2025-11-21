@@ -75,7 +75,7 @@ const SearchFilter = ({
   );
 
   // Query states
-  const [, setPage] = useQueryState("conceptPpage", parseAsInteger);
+  const [, setPage] = useQueryState("conceptPage", parseAsInteger);
   const [filterStatus, setFilterStatus] = useQueryState(
     "conceptFilter.status",
     parseAsArrayOf(parseAsString).withDefault(defaultFilterStatus),
