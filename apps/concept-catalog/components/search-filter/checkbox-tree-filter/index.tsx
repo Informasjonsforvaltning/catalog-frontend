@@ -1,19 +1,15 @@
 "use client";
 
-import React, { FC, JSX, useEffect } from "react";
-import CheckboxTree, { OnCheckNode } from "react-checkbox-tree";
-import "react-checkbox-tree/lib/react-checkbox-tree.css";
-
+import React, { FC, useEffect, useMemo, useState } from "react";
 import classes from "./checkbox-tree.module.css";
 import { Select } from "@catalog-frontend/ui";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheckSquare, faSquare } from "@fortawesome/free-regular-svg-icons";
 import { getPath, localization } from "@catalog-frontend/utils";
-import { Button, Label } from "@digdir/designsystemet-react";
+import { Button } from "@digdir/designsystemet-react";
 import {
   ChevronDownDoubleIcon,
   ChevronUpDoubleIcon,
 } from "@navikt/aksel-icons";
+import { RecursiveCheckbox } from "../recursive-checkbox";
 
 export interface TreeNode {
   value: string;
@@ -22,15 +18,14 @@ export interface TreeNode {
 }
 
 interface Props {
-  label?: string;
   "aria-label"?: string;
   nodes?: TreeNode[];
-  onCheck?: (value: string[]) => void;
+  onCheck: (value: string[]) => void;
   filters: string[];
 }
 
 const getSearchOptions = (nodes?: TreeNode[]) => {
-  let options: any = [];
+  let options: TreeNode[] = [];
   if (nodes) {
     nodes.forEach(({ value, label, children }) => {
       options.push({ value, label });
@@ -38,147 +33,93 @@ const getSearchOptions = (nodes?: TreeNode[]) => {
     });
   }
 
-  return options.sort((a: { label: string }, b: { label: any }) =>
+  return options.sort((a: { label: string }, b: { label: string }) =>
     a.label.localeCompare(b.label),
   );
 };
 
-const generateOptionElements = (nodes?: TreeNode[]): JSX.Element[] => {
-  const options = getSearchOptions(nodes);
-
-  return [
-    <option key={"no-user-selected"} value={undefined} />,
-    ...(options.map((opt, index) => (
-      <option value={opt.value} key={`searchOption-${opt.value}-${index}`}>
-        {opt.label}
-      </option>
-    )) || []),
-  ];
-};
-
 export const CheckboxTreeFilter: FC<Props> = ({
-  label,
   "aria-label": ariaLabel,
   nodes,
   onCheck,
   filters,
 }) => {
-  const [checked, setChecked] = React.useState<string[]>([]);
-  const [expanded, setExpanded] = React.useState<string[]>([]);
-  const [collapsed, setCollapsed] = React.useState(true);
-  const [searchOption, setSearchOption] = React.useState("");
+  const expandCutoff = 10;
+  const [expanded, setExpanded] = useState<string[]>([]);
+  const [collapsed, setCollapsed] = useState(true);
+  const [searchOption, setSearchOption] = useState("");
+  const options = useMemo(() => getSearchOptions(nodes), [nodes]);
 
-  // Generate a stable ID for the CheckboxTree to prevent hydration mismatches
-  const treeId = React.useMemo(() => {
-    return `checkbox-tree-${label?.replace(/\s+/g, "-").toLowerCase() || "default"}`;
-  }, [label]);
-
-  useEffect(() => {
-    setChecked(filters);
-    setExpanded(filters);
-  }, [filters]);
-
-  const handleChecked = ({ value }) => {
+  const handleChecked = (value: string) => {
     setSearchOption("");
 
     const path = getPath(nodes, value).map((item) => item.value);
-    if (checked.includes(value)) {
+    if (filters.includes(value)) {
       const newChecked = path.slice(0, -1);
       setExpanded(newChecked);
-      onCheck?.(newChecked);
+      onCheck(newChecked);
       return;
     }
 
-    let inCurrentPath = false;
-    for (const element of path) {
-      if (expanded.includes(element)) {
-        inCurrentPath = true;
-        break;
-      }
-    }
-
+    const inCurrentPath = path.some((element) => expanded.includes(element));
     if (!inCurrentPath) {
       setExpanded([value]);
-      onCheck?.([value]);
+      onCheck([value]);
     } else {
       setExpanded(path);
-      onCheck?.(path);
+      onCheck(path);
     }
   };
-  const handleSearchOnChange = (value: any) => {
+
+  const handleSearchOnChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const value = event.target.value;
     if (value !== null) {
       setSearchOption(value);
       const path = getPath(nodes, value).map((item) => item.value);
       setExpanded(path);
-      onCheck?.(path);
+      onCheck(path);
 
       const index = nodes?.findIndex((item) => item.value === path[0]);
-      if (index && index >= 9 && collapsed) {
+      if (index && index >= expandCutoff - 1 && collapsed) {
         setCollapsed(false);
       }
     }
   };
 
-  const handleOnCheck = (_values, node: OnCheckNode) => {
-    handleChecked(node);
-  };
+  useEffect(() => {
+    setExpanded(filters);
+  }, [filters]);
 
   return (
-    <div>
+    <>
       <Select
-        label={label}
         aria-label={ariaLabel}
         value={searchOption}
         size="sm"
-        onChange={(event) => handleSearchOnChange(event.target.value)}
+        onChange={handleSearchOnChange}
       >
-        {generateOptionElements(nodes)}
+        <option value=""></option>
+        {options.map((option) => (
+          <option value={option.value} key={option.value}>
+            {option.label}
+          </option>
+        ))}
       </Select>
+
       <div className={classes.pt1}>
-        <CheckboxTree
-          id={treeId}
-          nodes={
-            (collapsed ? nodes?.slice(0, 10) : nodes)?.map((node) => ({
-              ...node,
-              className: classes.checkbox,
-              label: (
-                <Label asChild size="small" weight="regular">
-                  <span>{node.label}</span>
-                </Label>
-              ),
-            })) ?? []
-          }
-          checked={checked}
-          expanded={expanded}
-          onCheck={handleOnCheck}
-          onExpand={(exp) => setExpanded(exp)}
-          noCascade
-          expandDisabled
-          icons={{
-            parentClose: null,
-            parentOpen: null,
-            leaf: null,
-            halfCheck: null,
-            expandClose: null,
-            expandOpen: null,
-            expandAll: null,
-            collapseAll: null,
-            check: (
-              <FontAwesomeIcon
-                className={classes.checkboxIcon}
-                icon={faCheckSquare}
-              />
-            ),
-            uncheck: (
-              <FontAwesomeIcon
-                className={classes.checkboxIcon}
-                icon={faSquare}
-              />
-            ),
-          }}
-        />
+        {(collapsed ? nodes?.slice(0, expandCutoff) : nodes)?.map((node) => (
+          <RecursiveCheckbox
+            filters={filters}
+            key={node.value}
+            node={node}
+            onCheck={handleChecked}
+          />
+        ))}
       </div>
-      {nodes && nodes.length > 10 && (
+
+      {nodes && nodes.length > expandCutoff && (
         <Button
           variant="tertiary"
           size="sm"
@@ -188,6 +129,6 @@ export const CheckboxTreeFilter: FC<Props> = ({
           {collapsed ? localization.showMore : localization.showLess}
         </Button>
       )}
-    </div>
+    </>
   );
 };
