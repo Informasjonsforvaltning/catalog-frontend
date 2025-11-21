@@ -8,9 +8,14 @@ import { Box } from "@digdir/designsystemet-react";
 type Props = {
   referenceDataEnv: string;
   referenceData: ReferenceData;
+  isMobility?: boolean;
 };
 
-export const DetailsSection = ({ referenceDataEnv, referenceData }: Props) => {
+export const DetailsSection = ({
+  referenceDataEnv,
+  referenceData,
+  isMobility,
+}: Props) => {
   const { datasetTypes, provenanceStatements, languages, frequencies } =
     referenceData;
   return (
@@ -18,11 +23,13 @@ export const DetailsSection = ({ referenceDataEnv, referenceData }: Props) => {
       <RecommendedDetailFields
         referenceDataEnv={referenceDataEnv}
         languages={languages}
+        isMobility={isMobility}
       />
       <MinimizedDetailFields
         datasetTypes={datasetTypes}
         provenanceStatements={provenanceStatements}
         frequencies={frequencies}
+        isMobility={isMobility}
       />
     </Box>
   );

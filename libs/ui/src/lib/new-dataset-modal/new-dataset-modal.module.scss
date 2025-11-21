@@ -1,0 +1,55 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-left: var(--fds-spacing-10, 2.5rem);
+  padding-right: var(--fds-spacing-10, 2.5rem);
+  padding-bottom: var(--fds-spacing-8, 2.5rem);
+}
+
+.header {
+  padding-left: var(--fds-spacing-10, 2.5rem);
+  padding-right: var(--fds-spacing-10, 2.5rem);
+  padding-bottom: var(--fds-spacing-2, 2.5rem);
+}
+
+.intro {
+  margin-bottom: 0.5rem;
+}
+
+.options {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.option {
+  flex: 1;
+  min-width: 0;
+  display: flex !important;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: var(--fds-spacing-6, 1.5rem);
+  border: 1px solid var(--fds-semantic-border-neutral-default);
+  border-radius: var(--fds-border_radius-medium, 0.5rem);
+  width: auto;
+}
+
+.selectButton {
+  width: 100%;
+  margin-top: auto;
+}
+
+.optionTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.optionDescription {
+  font-size: 1rem;
+  color: var(--fds-semantic-text-neutral-subtle);
+  margin: 0;
+  margin-bottom: 0.5rem;
+}

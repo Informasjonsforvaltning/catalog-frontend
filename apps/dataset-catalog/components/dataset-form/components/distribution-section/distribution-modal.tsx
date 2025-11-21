@@ -38,7 +38,10 @@ import { useSearchDataServiceSuggestions } from "../../../../hooks/useSearchServ
 import { FastField, FieldArray, Formik } from "formik";
 import styles from "./distributions.module.scss";
 import { distributionTemplate } from "../../utils/dataset-initial-values";
-import { distributionSectionSchema } from "../../utils/validation-schema";
+import {
+  distributionSectionSchema,
+  mobilityDistributionSectionSchema,
+} from "../../utils/validation-schema";
 import { ToggleFieldButton } from "@dataset-catalog/components/dataset-form/components/toggle-field-button";
 import { get, isArray, isEmpty, isNil, isObject } from "lodash";
 import FieldsetWithDelete from "@dataset-catalog/components/fieldset-with-delete";
@@ -57,6 +60,9 @@ type Props = {
   initialAccessServices: Search.SearchObject[];
   type: "new" | "edit";
   distributionType: "distribution" | "sample";
+  isMobility?: boolean;
+  mobilityDataStandards?: ReferenceDataCode[];
+  mobilityRights?: ReferenceDataCode[];
 };
 
 export const DistributionModal = ({
@@ -73,6 +79,9 @@ export const DistributionModal = ({
   initialAccessServices,
   type,
   distributionType,
+  isMobility,
+  mobilityDataStandards,
+  mobilityRights,
 }: Props) => {
   const [selectedFileTypeUris, setSelectedFileTypeUris] = useState(
     initialValues?.format ?? [],
@@ -91,10 +100,8 @@ export const DistributionModal = ({
     selectedAndSearchedAccessServices,
     setSelectedAndSearchedAccessServices,
   ] = useState<Search.SearchObject[]>([]);
-
   const template = distributionTemplate(initialValues);
   const [submitted, setSubmitted] = useState(false);
-
   const modalRef = useRef<HTMLDialogElement>(null);
 
   const [searchQueryMediaTypes, setSearchQueryMediaTypes] =
@@ -579,7 +586,11 @@ export const DistributionModal = ({
           name="distribution"
           validateOnChange={submitted}
           validateOnBlur={submitted}
-          validationSchema={distributionSectionSchema}
+          validationSchema={
+            isMobility
+              ? mobilityDistributionSectionSchema
+              : distributionSectionSchema
+          }
           onSubmit={handleSubmit}
         >
           {({
@@ -618,6 +629,8 @@ export const DistributionModal = ({
                 selectedAndSearchedFileTypes,
                 selectedAndSearchedMediaTypes,
                 openLicenses,
+                mobilityDataStandards,
+                mobilityRights,
                 ref: (el: HTMLInputElement | HTMLTextAreaElement | null) =>
                   setInputRef(fieldConfig.name, el),
                 searchingFileTypes,
@@ -822,6 +835,121 @@ export const DistributionModal = ({
                           </>
                         )}
                       </FieldArray>
+                      {isMobility && "mobilityDataStandard" in values ? (
+                        <>
+                          <Fieldset
+                            size="sm"
+                            legend={
+                              <TitleWithHelpTextAndTag
+                                tagTitle={localization.tag.required}
+                                helpText={
+                                  localization.datasetForm.helptext
+                                    .mobilityDataStandard
+                                }
+                              >
+                                {
+                                  localization.datasetForm.fieldLabel
+                                    .mobilityDataStandard
+                                }
+                              </TitleWithHelpTextAndTag>
+                            }
+                          >
+                            <Combobox
+                              value={
+                                values?.mobilityDataStandard
+                                  ? [values.mobilityDataStandard]
+                                  : [""]
+                              }
+                              portal={false}
+                              onValueChange={(selectedValues) => {
+                                setFieldValue(
+                                  "mobilityDataStandard",
+                                  selectedValues.toString(),
+                                );
+                              }}
+                              size="sm"
+                              virtual
+                              error={errors.mobilityDataStandard}
+                            >
+                              <Combobox.Option
+                                key={`mobilityDataStandard`}
+                                value={""}
+                              >
+                                {localization.none}
+                              </Combobox.Option>
+                              {mobilityDataStandards &&
+                                mobilityDataStandards.map(
+                                  (mobilityDataStandard, i: number) => (
+                                    <Combobox.Option
+                                      key={`mobilityDataStandard-${mobilityDataStandard.uri}-${i}`}
+                                      value={mobilityDataStandard.uri}
+                                    >
+                                      {getTranslateText(
+                                        mobilityDataStandard.label,
+                                      )}
+                                    </Combobox.Option>
+                                  ),
+                                )}
+                            </Combobox>
+                          </Fieldset>
+                          <FieldsetDivider />
+                        </>
+                      ) : undefined}
+                      {isMobility && values.rights ? (
+                        <>
+                          <Fieldset
+                            size="sm"
+                            legend={
+                              <TitleWithHelpTextAndTag
+                                helpText={
+                                  localization.datasetForm.helptext
+                                    .distributionRights
+                                }
+                                tagTitle={localization.tag.required}
+                              >
+                                {
+                                  localization.datasetForm.fieldLabel
+                                    .distributionRights
+                                }
+                              </TitleWithHelpTextAndTag>
+                            }
+                          >
+                            <Combobox
+                              value={
+                                values?.rights?.type
+                                  ? [values.rights.type]
+                                  : [""]
+                              }
+                              portal={false}
+                              onValueChange={(selectedValues) => {
+                                setFieldValue(
+                                  "rights.type",
+                                  selectedValues.toString(),
+                                );
+                              }}
+                              size="sm"
+                              virtual
+                              error={errors?.rights?.type}
+                            >
+                              <Combobox.Option key={`right.type`} value={""}>
+                                {localization.none}
+                              </Combobox.Option>
+                              {mobilityRights &&
+                                mobilityRights.map(
+                                  (mobilityRight, i: number) => (
+                                    <Combobox.Option
+                                      key={`mobilityRights-${mobilityRight.uri}-${i}`}
+                                      value={mobilityRight.uri}
+                                    >
+                                      {getTranslateText(mobilityRight.label)}
+                                    </Combobox.Option>
+                                  ),
+                                )}
+                            </Combobox>
+                          </Fieldset>
+                          <FieldsetDivider />
+                        </>
+                      ) : undefined}
                       <Fieldset
                         size="sm"
                         legend={
@@ -829,8 +957,12 @@ export const DistributionModal = ({
                             helpText={
                               localization.datasetForm.helptext.fileType
                             }
-                            tagTitle={localization.tag.recommended}
-                            tagColor="info"
+                            tagTitle={
+                              isMobility
+                                ? localization.tag.required
+                                : localization.tag.recommended
+                            }
+                            tagColor={isMobility ? undefined : "info"}
                           >
                             {localization.datasetForm.fieldLabel.format}
                           </TitleWithHelpTextAndTag>
@@ -863,6 +995,7 @@ export const DistributionModal = ({
                             ref={(el: HTMLInputElement | null) =>
                               setInputRef(`format`, el)
                             }
+                            error={errors.format}
                           />
                         ) : (
                           <SkeletonRectangle />

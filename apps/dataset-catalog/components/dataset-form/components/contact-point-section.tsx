@@ -21,21 +21,18 @@ export const ContactPointSection = () => {
 
   return (
     <>
-      <div>
-        <FormikLanguageFieldset
-          name={"contactPoints[0].name"}
-          as={Textfield}
-          legend={
-            <TitleWithHelpTextAndTag
-              tagTitle={localization.tag.required}
-              helpText={localization.datasetForm.helptext.contactName}
-            >
-              {localization.datasetForm.fieldLabel.contactName}
-            </TitleWithHelpTextAndTag>
-          }
-        />
-      </div>
-
+      <FormikLanguageFieldset
+        name={"contactPoints[0].name"}
+        as={Textfield}
+        legend={
+          <TitleWithHelpTextAndTag
+            tagTitle={localization.tag.required}
+            helpText={localization.datasetForm.helptext.contactName}
+          >
+            {localization.datasetForm.fieldLabel.contactName}
+          </TitleWithHelpTextAndTag>
+        }
+      />
       <FormikOptionalFieldsFieldset
         legend={
           <TitleWithHelpTextAndTag

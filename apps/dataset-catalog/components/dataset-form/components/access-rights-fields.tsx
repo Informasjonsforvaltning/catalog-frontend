@@ -9,7 +9,11 @@ import { Box, Radio } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 import { UriWithLabelFieldsetTable } from "./uri-with-label-field-set-table";
 
-export const AccessRightFields = () => {
+interface Props {
+  isMobility?: boolean;
+}
+
+export const AccessRightFields = ({ isMobility: isMobility }: Props) => {
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
 
   return (
@@ -38,58 +42,63 @@ export const AccessRightFields = () => {
         </Radio.Group>
       </Box>
 
-      <FieldsetDivider />
-
-      <UriWithLabelFieldsetTable
-        fieldName={"legalBasisForRestriction"}
-        errors={errors.legalBasisForRestriction}
-        hideHeadWhenEmpty={true}
-        label={
-          <TitleWithHelpTextAndTag
-            helpText={
-              localization.datasetForm.helptext.legalBasisForRestriction
+      {!isMobility && (
+        <div>
+          <FieldsetDivider />
+          <UriWithLabelFieldsetTable
+            fieldName={"legalBasisForRestriction"}
+            errors={errors.legalBasisForRestriction}
+            hideHeadWhenEmpty={true}
+            label={
+              <TitleWithHelpTextAndTag
+                helpText={
+                  localization.datasetForm.helptext.legalBasisForRestriction
+                }
+                tagTitle={localization.tag.recommended}
+                tagColor={"info"}
+              >
+                {localization.datasetForm.fieldLabel.legalBasisForRestriction}
+              </TitleWithHelpTextAndTag>
             }
-            tagTitle={localization.tag.recommended}
-            tagColor={"info"}
-          >
-            {localization.datasetForm.fieldLabel.legalBasisForRestriction}
-          </TitleWithHelpTextAndTag>
-        }
-      />
+          />
 
-      <FieldsetDivider />
+          <FieldsetDivider />
 
-      <UriWithLabelFieldsetTable
-        fieldName={"legalBasisForProcessing"}
-        errors={errors.legalBasisForProcessing}
-        hideHeadWhenEmpty={true}
-        label={
-          <TitleWithHelpTextAndTag
-            helpText={localization.datasetForm.helptext.legalBasisForProcessing}
-            tagTitle={localization.tag.recommended}
-            tagColor={"info"}
-          >
-            {localization.datasetForm.fieldLabel.legalBasisForProcessing}
-          </TitleWithHelpTextAndTag>
-        }
-      />
+          <UriWithLabelFieldsetTable
+            fieldName={"legalBasisForProcessing"}
+            errors={errors.legalBasisForProcessing}
+            hideHeadWhenEmpty={true}
+            label={
+              <TitleWithHelpTextAndTag
+                helpText={
+                  localization.datasetForm.helptext.legalBasisForProcessing
+                }
+                tagTitle={localization.tag.recommended}
+                tagColor={"info"}
+              >
+                {localization.datasetForm.fieldLabel.legalBasisForProcessing}
+              </TitleWithHelpTextAndTag>
+            }
+          />
 
-      <FieldsetDivider />
+          <FieldsetDivider />
 
-      <UriWithLabelFieldsetTable
-        fieldName={"legalBasisForAccess"}
-        errors={errors.legalBasisForAccess}
-        hideHeadWhenEmpty={true}
-        label={
-          <TitleWithHelpTextAndTag
-            helpText={localization.datasetForm.helptext.legalBasisForAccess}
-            tagTitle={localization.tag.recommended}
-            tagColor={"info"}
-          >
-            {localization.datasetForm.fieldLabel.legalBasisForAccess}
-          </TitleWithHelpTextAndTag>
-        }
-      />
+          <UriWithLabelFieldsetTable
+            fieldName={"legalBasisForAccess"}
+            errors={errors.legalBasisForAccess}
+            hideHeadWhenEmpty={true}
+            label={
+              <TitleWithHelpTextAndTag
+                helpText={localization.datasetForm.helptext.legalBasisForAccess}
+                tagTitle={localization.tag.recommended}
+                tagColor={"info"}
+              >
+                {localization.datasetForm.fieldLabel.legalBasisForAccess}
+              </TitleWithHelpTextAndTag>
+            }
+          />
+        </div>
+      )}
     </>
   );
 };
