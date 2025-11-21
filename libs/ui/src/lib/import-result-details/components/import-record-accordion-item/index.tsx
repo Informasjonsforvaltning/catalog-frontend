@@ -50,7 +50,9 @@ const ImportRecordAccordionItem = ({
   const renderHeader = (record: ExtractionRecord) => {
     return (
       <div className={styles.recordHeader}>
-        <div style={{ maxWidth: "90%" }}>{decodeFromBase64(record.externalId)}</div>
+        <div style={{ maxWidth: "90%" }}>
+          {decodeFromBase64(record.externalId)}
+        </div>
         {errors.length > 0 && (
           <Tag
             size={"sm"}

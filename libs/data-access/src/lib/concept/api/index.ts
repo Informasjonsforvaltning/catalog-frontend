@@ -490,7 +490,6 @@ export const confirmImportedConcept = async (
     "confirm-concept-import",
   );
 
-
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}/confirm-concept-import`;
   const options = {
     headers: {
