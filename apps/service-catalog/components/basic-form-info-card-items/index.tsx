@@ -1,9 +1,9 @@
-import { Service } from '@catalog-frontend/types';
-import { DividerLine, InfoCard } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
-import styles from './basic-form-info-card-items.module.css';
-import _ from 'lodash';
+import { Service } from "@catalog-frontend/types";
+import { DividerLine, InfoCard } from "@catalog-frontend/ui";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import { Heading, Paragraph } from "@digdir/designsystemet-react";
+import styles from "./basic-form-info-card-items.module.css";
+import _ from "lodash";
 
 type Props = {
   service?: Service;
@@ -24,7 +24,7 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
     <>
       {getTranslateText(service?.description) && (
         <InfoCard.Item title={`${localization.description}:`}>
-          {getTranslateText(service?.description ?? '', language)}
+          {getTranslateText(service?.description ?? "", language)}
         </InfoCard.Item>
       )}
 
@@ -32,43 +32,36 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
         <InfoCard.Item title={`${localization.serviceCatalog.contactPoint}:`}>
           <div>
             {contactPoint?.category && !_.isEmpty(contactPoint.category) && (
-              <Heading
-                size='xxsmall'
-                level={4}
-                className={styles.heading}
-              >
-                {getTranslateText(service?.contactPoints && service?.contactPoints[0].category)}
+              <Heading size="xxsmall" level={4} className={styles.heading}>
+                {getTranslateText(
+                  service?.contactPoints && service?.contactPoints[0].category,
+                )}
               </Heading>
             )}
 
             <DividerLine />
 
             {contactPoint.email && (
-              <Paragraph
-                size='small'
-                className={styles.content}
-              >
+              <Paragraph size="small" className={styles.content}>
                 <span className={styles.bold}>{`${localization.email}:`}</span>
                 {contactPoint.email}
               </Paragraph>
             )}
 
             {contactPoint.telephone && (
-              <Paragraph
-                size='small'
-                className={styles.content}
-              >
-                <span className={styles.bold}>{`${localization.telephone}:`}</span>
+              <Paragraph size="small" className={styles.content}>
+                <span
+                  className={styles.bold}
+                >{`${localization.telephone}:`}</span>
                 {contactPoint.telephone}
               </Paragraph>
             )}
 
             {contactPoint.contactPage && (
-              <Paragraph
-                size='small'
-                className={styles.content}
-              >
-                <span className={styles.bold}>{`${localization.contactPage}:`}</span>
+              <Paragraph size="small" className={styles.content}>
+                <span
+                  className={styles.bold}
+                >{`${localization.contactPage}:`}</span>
                 {contactPoint.contactPage}
               </Paragraph>
             )}
@@ -81,11 +74,7 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
             <div key={`produces-details-${index}`}>
               {produce?.title && (
                 <>
-                  <Heading
-                    size='xxsmall'
-                    level={4}
-                    className={styles.heading}
-                  >
+                  <Heading size="xxsmall" level={4} className={styles.heading}>
                     {getTranslateText(produce?.title)}
                   </Heading>
 
@@ -94,11 +83,10 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
               )}
 
               {produce?.description && (
-                <Paragraph
-                  size='small'
-                  className={styles.content}
-                >
-                  <span className={styles.bold}>{`${localization.description}:`}</span>
+                <Paragraph size="small" className={styles.content}>
+                  <span
+                    className={styles.bold}
+                  >{`${localization.description}:`}</span>
                   {getTranslateText(produce?.description)}
                 </Paragraph>
               )}
@@ -106,7 +94,11 @@ export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
           ))}
         </InfoCard.Item>
       )}
-      {homepage && <InfoCard.Item title={`${localization.homepage}:`}>{homepage}</InfoCard.Item>}
+      {homepage && (
+        <InfoCard.Item title={`${localization.homepage}:`}>
+          {homepage}
+        </InfoCard.Item>
+      )}
     </>
   );
 };

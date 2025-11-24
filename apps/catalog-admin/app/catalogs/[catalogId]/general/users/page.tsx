@@ -1,7 +1,11 @@
-import { withProtectedPage } from '../../../../../utils/auth';
-import UsersPageClient from './users-page-client';
-import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
+import { withProtectedPage } from "../../../../../utils/auth";
+import UsersPageClient from "./users-page-client";
+import {
+  Breadcrumbs,
+  BreadcrumbType,
+  DesignBanner,
+} from "@catalog-frontend/ui";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
 
 export default withProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/general/users`,

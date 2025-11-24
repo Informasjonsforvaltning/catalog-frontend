@@ -8,7 +8,10 @@ export const validOrganizationNumber = (organizationNumber: string) => {
  * @param functionName - Name of the function calling this validation (for error message)
  * @throws Error if organization number is invalid
  */
-export const validateOrganizationNumber = (organizationNumber: string, functionName: string): void => {
+export const validateOrganizationNumber = (
+  organizationNumber: string,
+  functionName: string,
+): void => {
   if (!validOrganizationNumber(organizationNumber)) {
     throw new Error(
       `Invalid organization number '${organizationNumber}' in ${functionName}. Organization number must be a 9-digit number.`,

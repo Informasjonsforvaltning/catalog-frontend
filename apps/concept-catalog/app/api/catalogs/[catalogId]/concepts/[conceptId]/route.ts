@@ -1,6 +1,6 @@
-import { deleteConcept } from '@catalog-frontend/data-access';
-import { withValidSessionForApi } from '@catalog-frontend/utils';
-import { NextRequest } from 'next/server';
+import { deleteConcept } from "@catalog-frontend/data-access";
+import { withValidSessionForApi } from "@catalog-frontend/utils";
+import { NextRequest } from "next/server";
 
 export const DELETE = async (req: NextRequest, props) => {
   const params = await props.params;
@@ -13,8 +13,11 @@ export const DELETE = async (req: NextRequest, props) => {
       }
       return new Response(response?.text?.toString(), { status: 200 });
     } catch (err) {
-      console.log('Error', err);
-      return new Response(JSON.stringify({ message: 'Failed to delete concept' }), { status: 500 });
+      console.log("Error", err);
+      return new Response(
+        JSON.stringify({ message: "Failed to delete concept" }),
+        { status: 500 },
+      );
     }
   });
 };

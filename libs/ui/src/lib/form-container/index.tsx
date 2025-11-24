@@ -1,9 +1,9 @@
-import React, { FC, PropsWithChildren, ReactElement } from 'react';
-import styles from './form-container.module.css';
-import cn from 'classnames';
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
+import React, { FC, PropsWithChildren, ReactElement } from "react";
+import styles from "./form-container.module.css";
+import cn from "classnames";
+import { Heading, Paragraph } from "@digdir/designsystemet-react";
 
-type Variant = 'default' | 'secondary';
+type Variant = "default" | "secondary";
 
 interface Props extends PropsWithChildren {
   variant?: Variant;
@@ -19,7 +19,7 @@ interface HeaderProps {
 
 const FormContainer: FC<PropsWithChildren<Props>> & {
   Header: FC<HeaderProps>;
-} = ({ variant = 'default', className, children }) => {
+} = ({ variant = "default", className, children }) => {
   return (
     <div className={cn(styles.container, styles[variant], className)}>
       {React.Children.map(children, (child) =>
@@ -33,12 +33,14 @@ const FormContainer: FC<PropsWithChildren<Props>> & {
   );
 };
 
-const Header: FC<HeaderProps> = ({ id, title, subtitle, variant = 'default' }) => {
+const Header: FC<HeaderProps> = ({
+  id,
+  title,
+  subtitle,
+  variant = "default",
+}) => {
   return (
-    <div
-      id={id}
-      className={cn(styles.header, styles[variant])}
-    >
+    <div id={id} className={cn(styles.header, styles[variant])}>
       <Heading className={styles.title}>{title}</Heading>
       <Paragraph className={styles.subtitle}>{subtitle}</Paragraph>
     </div>

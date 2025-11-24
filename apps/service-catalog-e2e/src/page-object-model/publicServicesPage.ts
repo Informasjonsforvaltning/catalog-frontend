@@ -1,5 +1,5 @@
-import { expect, Page, BrowserContext } from '@playwright/test';
-import type AxeBuilder from '@axe-core/playwright';
+import { expect, Page, BrowserContext } from "@playwright/test";
+import type AxeBuilder from "@axe-core/playwright";
 
 export default class PublicServicesPage {
   url: string;
@@ -7,7 +7,11 @@ export default class PublicServicesPage {
   context: BrowserContext;
   accessibilityBuilder;
 
-  constructor(page: Page, context: BrowserContext, accessibilityBuilder?: AxeBuilder) {
+  constructor(
+    page: Page,
+    context: BrowserContext,
+    accessibilityBuilder?: AxeBuilder,
+  ) {
     this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/public-services`;
     this.page = page;
     this.context = context;
@@ -15,13 +19,13 @@ export default class PublicServicesPage {
   }
 
   // Locators
-  pageTitle = () => this.page.getByRole('heading', { name: '' });
-  pageDescription = () => this.page.getByText('');
+  pageTitle = () => this.page.getByRole("heading", { name: "" });
+  pageDescription = () => this.page.getByText("");
 
   // Helpers
   async deleteItem(url: string) {
     await this.page.goto(url);
-    await this.page.getByRole('button', { name: 'Slett' }).click();
+    await this.page.getByRole("button", { name: "Slett" }).click();
   }
 
   public async goto() {
@@ -37,33 +41,39 @@ export default class PublicServicesPage {
   }
 
   public async checkPageTitleText() {
-    await expect(this.pageTitle()).toHaveText('');
+    await expect(this.pageTitle()).toHaveText("");
   }
 
   public async checkPageDescriptionText() {
-    await expect(this.pageDescription()).toHaveText('');
+    await expect(this.pageDescription()).toHaveText("");
   }
 
   public async deleteAllPublicServices() {
-    this.page.on('dialog', async (dialog) => {
-      expect(dialog.message()).toEqual('Er du sikker på at du vil slette tjenesten?');
+    this.page.on("dialog", async (dialog) => {
+      expect(dialog.message()).toEqual(
+        "Er du sikker på at du vil slette tjenesten?",
+      );
       await dialog.accept();
     });
 
     // eslint-disable-next-line no-constant-condition
     while (true) {
       // Get the list of items
-      const promises = (await this.page.getByRole('link').all()).map(async (link) => {
-        const href = await link.getAttribute('href');
-        return {
-          value: href,
-          include: href.includes(this.url) && !href.endsWith('/new'),
-        };
-      });
-      const items = (await Promise.all(promises)).filter((l) => l.include).map((l) => l.value);
+      const promises = (await this.page.getByRole("link").all()).map(
+        async (link) => {
+          const href = await link.getAttribute("href");
+          return {
+            value: href,
+            include: href.includes(this.url) && !href.endsWith("/new"),
+          };
+        },
+      );
+      const items = (await Promise.all(promises))
+        .filter((l) => l.include)
+        .map((l) => l.value);
 
       if (items.length === 0) {
-        console.log('All items deleted, the list is empty.');
+        console.log("All items deleted, the list is empty.");
         break;
       }
 
@@ -81,6 +91,6 @@ export default class PublicServicesPage {
   }
 
   public async createPublicServices() {
-    console.log('Create public services');
+    console.log("Create public services");
   }
 }

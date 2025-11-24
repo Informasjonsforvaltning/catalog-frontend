@@ -1,18 +1,24 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { Button } from '@digdir/designsystemet-react';
-import { formatISO, localization } from '@catalog-frontend/utils';
-import { ButtonBar, ChangeRequestStatusTagProps, LinkButton, Snackbar, Tag } from '@catalog-frontend/ui';
-import ConceptForm from '@concept-catalog/components/concept-form';
-import { getTranslatedStatus } from '@concept-catalog/utils/change-request';
+import { useEffect, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { ArrowLeftIcon } from "@navikt/aksel-icons";
+import { Button } from "@digdir/designsystemet-react";
+import { formatISO, localization } from "@catalog-frontend/utils";
+import {
+  ButtonBar,
+  ChangeRequestStatusTagProps,
+  LinkButton,
+  Snackbar,
+  Tag,
+} from "@catalog-frontend/ui";
+import ConceptForm from "@concept-catalog/components/concept-form";
+import { getTranslatedStatus } from "@concept-catalog/utils/change-request";
 import {
   acceptChangeRequestAction,
   rejectChangeRequestAction,
-} from '@concept-catalog/app/actions/change-requests/actions';
-import styles from './accept-concept-form-client.module.scss';
+} from "@concept-catalog/app/actions/change-requests/actions";
+import styles from "./accept-concept-form-client.module.scss";
 
 export const AcceptConceptFormClient = ({
   organization,
@@ -30,8 +36,10 @@ export const AcceptConceptFormClient = ({
   const searchParams = useSearchParams();
   const [saved, setSaved] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'danger'>('success');
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<
+    "success" | "danger"
+  >("success");
 
   const showSnackbarMessage = ({ message, severity }) => {
     setSnackbarMessage(message);
@@ -43,7 +51,7 @@ export const AcceptConceptFormClient = ({
   const handleGotoOverview = () => {
     // Use window location to make sure query params are used on page render
     window.location.replace(
-      `/catalogs/${organization.organizationId}/change-requests${!originalConcept ? '?filter.itemType=suggestionForNewConcept' : ''}`,
+      `/catalogs/${organization.organizationId}/change-requests${!originalConcept ? "?filter.itemType=suggestionForNewConcept" : ""}`,
     );
   };
 
@@ -60,10 +68,19 @@ export const AcceptConceptFormClient = ({
         setIsHandlingAction(true);
 
         try {
-          await acceptChangeRequestAction(organization.organizationId, changeRequest.id);
-          showSnackbarMessage({ message: localization.changeRequest.acceptSuccessfull, severity: 'success' });
+          await acceptChangeRequestAction(
+            organization.organizationId,
+            changeRequest.id,
+          );
+          showSnackbarMessage({
+            message: localization.changeRequest.acceptSuccessful,
+            severity: "success",
+          });
         } catch {
-          showSnackbarMessage({ message: localization.changeRequest.acceptFailed, severity: 'danger' });
+          showSnackbarMessage({
+            message: localization.changeRequest.acceptFailed,
+            severity: "danger",
+          });
         } finally {
           setIsHandlingAction(false);
         }
@@ -72,11 +89,11 @@ export const AcceptConceptFormClient = ({
 
     return (
       <Button
-        variant='primary'
-        color='success'
+        variant="primary"
+        color="success"
         onClick={handleAccept}
         disabled={isHandlingAction}
-        size='sm'
+        size="sm"
       >
         {localization.changeRequest.accept}
       </Button>
@@ -90,10 +107,19 @@ export const AcceptConceptFormClient = ({
         setIsHandlingAction(true);
 
         try {
-          await rejectChangeRequestAction(organization.organizationId, changeRequest.id);
-          showSnackbarMessage({ message: localization.changeRequest.rejectSuccessfull, severity: 'success' });
+          await rejectChangeRequestAction(
+            organization.organizationId,
+            changeRequest.id,
+          );
+          showSnackbarMessage({
+            message: localization.changeRequest.rejectSuccessful,
+            severity: "success",
+          });
         } catch {
-          showSnackbarMessage({ message: localization.changeRequest.rejectFailed, severity: 'danger' });
+          showSnackbarMessage({
+            message: localization.changeRequest.rejectFailed,
+            severity: "danger",
+          });
         } finally {
           setIsHandlingAction(false);
         }
@@ -102,11 +128,11 @@ export const AcceptConceptFormClient = ({
 
     return (
       <Button
-        variant='primary'
-        color='danger'
+        variant="primary"
+        color="danger"
         onClick={handleReject}
         disabled={isHandlingAction}
-        size='sm'
+        size="sm"
       >
         {localization.changeRequest.reject}
       </Button>
@@ -117,18 +143,18 @@ export const AcceptConceptFormClient = ({
     const info = `${localization.created}: ${
       changeRequest?.timeForProposal &&
       formatISO(changeRequest?.timeForProposal, {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
       })
     } ${localization.by} ${changeRequest.proposedBy?.name}`;
 
     return (
       <div className={styles.footerBar}>
         <div className={styles.footerButtons}>
-          {changeRequest.status === 'OPEN' && (
+          {changeRequest.status === "OPEN" && (
             <>
               {allowApprove && (
                 <>
@@ -139,15 +165,19 @@ export const AcceptConceptFormClient = ({
               {allowEdit && (
                 <LinkButton
                   href={`/catalogs/${organization.organizationId}/change-requests/${changeRequest.id}/edit`}
-                  variant='secondary'
-                  color='second'
-                  size='sm'
+                  variant="secondary"
+                  color="second"
+                  size="sm"
                 >
                   {localization.button.edit}
                 </LinkButton>
               )}
-              {!allowApprove && !allowEdit && <>{localization.changeRequest.needWriteAccessForOther}</>}
-              {!allowApprove && allowEdit && <>{localization.changeRequest.needWriteAccess}</>}
+              {!allowApprove && !allowEdit && (
+                <>{localization.changeRequest.needWriteAccessForOther}</>
+              )}
+              {!allowApprove && allowEdit && (
+                <>{localization.changeRequest.needWriteAccess}</>
+              )}
             </>
           )}
         </div>
@@ -156,7 +186,11 @@ export const AcceptConceptFormClient = ({
           <div>
             <Tag.ChangeRequestStatus
               statusKey={changeRequest.status}
-              statusLabel={getTranslatedStatus(changeRequest.status) as ChangeRequestStatusTagProps['statusLabel']}
+              statusLabel={
+                getTranslatedStatus(
+                  changeRequest.status,
+                ) as ChangeRequestStatusTagProps["statusLabel"]
+              }
             />
           </div>
         </div>
@@ -165,16 +199,19 @@ export const AcceptConceptFormClient = ({
   };
 
   useEffect(() => {
-    if (searchParams.get('saved') === 'true') {
+    if (searchParams.get("saved") === "true") {
       setSaved(true);
 
       // Remove the param and update the URL shallowly
       const newParams = new URLSearchParams(searchParams.toString());
-      newParams.delete('saved');
+      newParams.delete("saved");
 
-      const newUrl = newParams.toString().length > 0 ? `${pathname}?${newParams.toString()}` : pathname;
+      const newUrl =
+        newParams.toString().length > 0
+          ? `${pathname}?${newParams.toString()}`
+          : pathname;
 
-      window.history.replaceState(null, '', newUrl);
+      window.history.replaceState(null, "", newUrl);
     }
   }, [searchParams, pathname]);
 
@@ -182,20 +219,20 @@ export const AcceptConceptFormClient = ({
     <>
       <ButtonBar>
         <Button
-          variant='tertiary'
-          color='second'
-          size='sm'
+          variant="tertiary"
+          color="second"
+          size="sm"
           onClick={handleGotoOverview}
         >
-          <ArrowLeftIcon fontSize='1.25em' />
+          <ArrowLeftIcon fontSize="1.25em" />
           {localization.button.backToOverview}
         </Button>
         <div style={{ flexGrow: 1 }}></div>
         {originalConcept && (
           <Button
-            variant='secondary'
-            color='second'
-            size='sm'
+            variant="secondary"
+            color="second"
+            size="sm"
             onClick={handleGotoConcept}
           >
             {localization.button.gotoConcept}

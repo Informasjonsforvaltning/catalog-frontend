@@ -1,1 +1,1 @@
-yarn run affected:lint
+yarn lint-staged --relative

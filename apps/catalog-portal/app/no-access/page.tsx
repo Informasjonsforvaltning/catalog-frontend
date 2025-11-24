@@ -1,8 +1,17 @@
-import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { Heading, Link } from '@digdir/designsystemet-react';
+import {
+  BreadcrumbType,
+  Breadcrumbs,
+  CenterContainer,
+  PageBanner,
+} from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { Heading, Link } from "@digdir/designsystemet-react";
 
-const NoAccess = async ({ params }: { params: Promise<{ catalogId: string }> }) => {
+const NoAccess = async ({
+  params,
+}: {
+  params: Promise<{ catalogId: string }>;
+}) => {
   const { catalogId } = await params;
 
   const breadcrumbList = catalogId
@@ -27,12 +36,12 @@ const NoAccess = async ({ params }: { params: Promise<{ catalogId: string }> }) 
         subtitle={localization.noAccess}
       />
       <CenterContainer>
-        <Heading
-          level={2}
-          size='small'
-        >
+        <Heading level={2} size="small">
           <div>{localization.youHaveNoAccessToCatalogs} &nbsp; </div>
-          <Link href={link}> {localization.catalogAccessDocumentationLink}</Link>
+          <Link href={link}>
+            {" "}
+            {localization.catalogAccessDocumentationLink}
+          </Link>
         </Heading>
       </CenterContainer>
     </>

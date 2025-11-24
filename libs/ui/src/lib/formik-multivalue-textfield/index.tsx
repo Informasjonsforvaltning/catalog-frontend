@@ -1,12 +1,19 @@
-'use client';
+"use client";
 
-import { Box, Chip, ErrorMessage, Label, Textfield, TextfieldProps } from '@digdir/designsystemet-react';
-import { AddButton, DeleteButton } from '../button';
-import { forwardRef, ReactNode, useState } from 'react';
-import { useFormikContext } from 'formik';
-import _ from 'lodash';
-import classNames from 'classnames';
-import styles from './formik-multivalue-textfield.module.scss';
+import {
+  Box,
+  Chip,
+  ErrorMessage,
+  Label,
+  Textfield,
+  TextfieldProps,
+} from "@digdir/designsystemet-react";
+import { AddButton, DeleteButton } from "../button";
+import { forwardRef, ReactNode, useState } from "react";
+import { useFormikContext } from "formik";
+import _ from "lodash";
+import classNames from "classnames";
+import styles from "./formik-multivalue-textfield.module.scss";
 
 type FormikMultivalueTextfieldProps = {
   name: string;
@@ -16,7 +23,10 @@ type FormikMultivalueTextfieldProps = {
   onDeleteButtonClicked?: () => void;
 } & TextfieldProps;
 
-const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueTextfieldProps>(
+const FormikMultivalueTextfield = forwardRef<
+  HTMLInputElement,
+  FormikMultivalueTextfieldProps
+>(
   (
     {
       className,
@@ -30,8 +40,9 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
     },
     ref,
   ) => {
-    const { values, setFieldValue } = useFormikContext<Record<string, string[]>>();
-    const [inputValue, setInputValue] = useState<string>('');
+    const { values, setFieldValue } =
+      useFormikContext<Record<string, string[]>>();
+    const [inputValue, setInputValue] = useState<string>("");
 
     const handleOnChangeInputValue = (value: string) => {
       setInputValue(value);
@@ -44,7 +55,7 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
 
       if (Boolean(inputValue) === true) {
         setFieldValue(name, [...(_.get(values, name) ?? []), inputValue]);
-        setInputValue('');
+        setInputValue("");
       }
     };
 
@@ -66,13 +77,13 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
             <>
               <Textfield
                 ref={ref}
-                size='sm'
+                size="sm"
                 value={inputValue}
                 onChange={(e) => handleOnChangeInputValue(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.code === 'Enter') {
+                  if (e.code === "Enter") {
                     e.preventDefault();
-                    handleAddTextValue();                    
+                    handleAddTextValue();
                   }
                 }}
                 onBlur={() => handleAddTextValue()}
@@ -83,7 +94,7 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
               />
               <AddButton
                 className={styles.buttons}
-                variant='secondary'
+                variant="secondary"
                 disabled={readOnly || Boolean(inputValue) === false}
                 onClick={() => handleAddTextValue()}
               />
@@ -92,23 +103,17 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
           {!readOnly && showDeleteButton && onDeleteButtonClicked && (
             <DeleteButton
               className={styles.buttons}
-              variant='tertiary'
+              variant="tertiary"
               onClick={() => onDeleteButtonClicked()}
             />
           )}
         </Box>
         {readOnly && label && (
-          <Label
-            asChild
-            size='sm'
-          >
+          <Label asChild size="sm">
             <div>{label}</div>
           </Label>
         )}
-        <Chip.Group
-          size='sm'
-          className={styles.chipGroup}
-        >
+        <Chip.Group size="sm" className={styles.chipGroup}>
           {_.get(values, name)?.map((v, i) => (
             <ChipComponent
               key={`chip-${i}`}
@@ -124,5 +129,5 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
   },
 );
 
-FormikMultivalueTextfield.displayName = 'FormikMultivalueTextfield';
+FormikMultivalueTextfield.displayName = "FormikMultivalueTextfield";
 export { FormikMultivalueTextfield };

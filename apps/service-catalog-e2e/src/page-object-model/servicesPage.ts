@@ -1,7 +1,7 @@
-import { expect, Page, BrowserContext } from '@playwright/test';
-import type AxeBuilder from '@axe-core/playwright';
-import { Service, ServiceToBeCreated } from '@catalog-frontend/types';
-import { ServiceStatus } from '../utils/helpers';
+import { expect, Page, BrowserContext } from "@playwright/test";
+import type AxeBuilder from "@axe-core/playwright";
+import { Service, ServiceToBeCreated } from "@catalog-frontend/types";
+import { ServiceStatus } from "../utils/helpers";
 
 export default class ServicesPage {
   url: string;
@@ -9,7 +9,11 @@ export default class ServicesPage {
   context: BrowserContext;
   accessibilityBuilder;
 
-  constructor(page: Page, context: BrowserContext, accessibilityBuilder?: AxeBuilder) {
+  constructor(
+    page: Page,
+    context: BrowserContext,
+    accessibilityBuilder?: AxeBuilder,
+  ) {
     this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/services`;
     this.page = page;
     this.context = context;
@@ -17,18 +21,24 @@ export default class ServicesPage {
   }
 
   // Locators
-  pageTitleLocator = () => this.page.getByRole('heading', { name: '' });
-  pageDescriptionLocator = () => this.page.getByText('');
-  statusFilterHeaderLocator = () => this.page.getByRole('button', { name: 'Tjenestestatus' });
-  statusFilterCompletedLocator = () => this.page.getByLabel('Ferdigstilt');
-  statusFilterDeprecatedLocator = () => this.page.getByLabel('Frarådet');
-  statusFilterUnderDevelopmentLocator = () => this.page.getByLabel('Under utvikling');
-  statusFilterWithdrawnLocator = () => this.page.getByLabel('Trukket tilbake');
-  publishedStateFilterHeaderLocator = () => this.page.getByRole('button', { name: 'Publiseringstilstand' });
-  publishedStateFilterPublishedLocator = () => this.page.getByLabel('Publisert', { exact: true });
-  publishedStateFilterNotPublishedLocator = () => this.page.getByLabel('Ikke publisert');
-  searchInputLocator = () => this.page.getByPlaceholder('Søk etter tjeneste...');
-  searchButtonLocator = () => this.page.getByRole('button', { name: 'Søk' });
+  pageTitleLocator = () => this.page.getByRole("heading", { name: "" });
+  pageDescriptionLocator = () => this.page.getByText("");
+  statusFilterHeaderLocator = () =>
+    this.page.getByRole("button", { name: "Tjenestestatus" });
+  statusFilterCompletedLocator = () => this.page.getByLabel("Ferdigstilt");
+  statusFilterDeprecatedLocator = () => this.page.getByLabel("Frarådet");
+  statusFilterUnderDevelopmentLocator = () =>
+    this.page.getByLabel("Under utvikling");
+  statusFilterWithdrawnLocator = () => this.page.getByLabel("Trukket tilbake");
+  publishedStateFilterHeaderLocator = () =>
+    this.page.getByRole("button", { name: "Publiseringstilstand" });
+  publishedStateFilterPublishedLocator = () =>
+    this.page.getByLabel("Publisert", { exact: true });
+  publishedStateFilterNotPublishedLocator = () =>
+    this.page.getByLabel("Ikke publisert");
+  searchInputLocator = () =>
+    this.page.getByPlaceholder("Søk etter tjeneste...");
+  searchButtonLocator = () => this.page.getByRole("button", { name: "Søk" });
 
   // Helpers
   async createService(service: ServiceToBeCreated) {
@@ -36,51 +46,89 @@ export default class ServicesPage {
     await this.goto();
 
     // Name and description
-    await this.page.getByRole('link', { name: 'Opprett ny tjeneste' }).click({ timeout: 5000 });
-    await this.page.getByLabel('Navn på bokmål').fill(service.title.nb as string);
-    await this.page.getByLabel('Navn på nynorsk').fill(service.title.nn as string);
-    await this.page.getByLabel('Navn på engelsk').fill(service.title.en as string);
-    await this.page.getByLabel('Beskrivelse på bokmål').fill(service.description.nb as string);
-    await this.page.getByLabel('Beskrivelse på nynorsk').fill(service.description.nn as string);
-    await this.page.getByLabel('Beskrivelse på engelsk').fill(service.description.en as string);
+    await this.page
+      .getByRole("link", { name: "Opprett ny tjeneste" })
+      .click({ timeout: 5000 });
+    await this.page
+      .getByLabel("Navn på bokmål")
+      .fill(service.title.nb as string);
+    await this.page
+      .getByLabel("Navn på nynorsk")
+      .fill(service.title.nn as string);
+    await this.page
+      .getByLabel("Navn på engelsk")
+      .fill(service.title.en as string);
+    await this.page
+      .getByLabel("Beskrivelse på bokmål")
+      .fill(service.description.nb as string);
+    await this.page
+      .getByLabel("Beskrivelse på nynorsk")
+      .fill(service.description.nn as string);
+    await this.page
+      .getByLabel("Beskrivelse på engelsk")
+      .fill(service.description.en as string);
 
     // Produces relations
     for (let i = 0; i < service.produces.length; i++) {
       const result = service.produces[i];
-      await this.page.getByRole('button', { name: 'Legg til relasjon' }).click();
-      await this.page.locator(`input[name="produces\\[${i}\\]\\.title\\.nb"]`).fill(result.title.nb as string);
-      await this.page.locator(`input[name="produces\\[${i}\\]\\.title\\.nn"]`).fill(result.title.nn as string);
-      await this.page.locator(`input[name="produces\\[${i}\\]\\.title\\.en"]`).fill(result.title.en as string);
-      await this.page.locator(`input[name="produces\\[${i}\\]\\.description\\.nb"]`).fill(result.description.nb as string);
-      await this.page.locator(`input[name="produces\\[${i}\\]\\.description\\.nn"]`).fill(result.description.nn as string);
-      await this.page.locator(`input[name="produces\\[${i}\\]\\.description\\.en"]`).fill(result.description.en as string);
+      await this.page
+        .getByRole("button", { name: "Legg til relasjon" })
+        .click();
+      await this.page
+        .locator(`input[name="produces\\[${i}\\]\\.title\\.nb"]`)
+        .fill(result.title.nb as string);
+      await this.page
+        .locator(`input[name="produces\\[${i}\\]\\.title\\.nn"]`)
+        .fill(result.title.nn as string);
+      await this.page
+        .locator(`input[name="produces\\[${i}\\]\\.title\\.en"]`)
+        .fill(result.title.en as string);
+      await this.page
+        .locator(`input[name="produces\\[${i}\\]\\.description\\.nb"]`)
+        .fill(result.description.nb as string);
+      await this.page
+        .locator(`input[name="produces\\[${i}\\]\\.description\\.nn"]`)
+        .fill(result.description.nn as string);
+      await this.page
+        .locator(`input[name="produces\\[${i}\\]\\.description\\.en"]`)
+        .fill(result.description.en as string);
     }
 
     // Contact point
     const contactPoint = service.contactPoints[0];
-    await this.page.getByLabel('Kategori på bokmål').fill(contactPoint.category.nb as string);
-    await this.page.getByLabel('Kategori på nynorsk').fill(contactPoint.category.nn as string);
-    await this.page.getByLabel('Kategori på engelsk').fill(contactPoint.category.en as string);
-    await this.page.getByLabel('E-post').fill(contactPoint.email);
-    await this.page.getByLabel('Telefon').fill(contactPoint.telephone);
-    await this.page.getByLabel('Kontaktside').fill(contactPoint.contactPage);
+    await this.page
+      .getByLabel("Kategori på bokmål")
+      .fill(contactPoint.category.nb as string);
+    await this.page
+      .getByLabel("Kategori på nynorsk")
+      .fill(contactPoint.category.nn as string);
+    await this.page
+      .getByLabel("Kategori på engelsk")
+      .fill(contactPoint.category.en as string);
+    await this.page.getByLabel("E-post").fill(contactPoint.email);
+    await this.page.getByLabel("Telefon").fill(contactPoint.telephone);
+    await this.page.getByLabel("Kontaktside").fill(contactPoint.contactPage);
 
     // Status
-    await this.page.getByRole('combobox').selectOption(service.status);
+    await this.page.getByRole("combobox").selectOption(service.status);
 
     // Homepage (website)
-    await this.page.getByLabel('Lenke til hjemmeside').fill(service.homepage);
+    await this.page.getByLabel("Lenke til hjemmeside").fill(service.homepage);
 
     // Save service
-    await this.page.getByRole('button', { name: 'Lagre tjeneste' }).click();
-    await expect(this.page.getByRole('button', { name: 'Lagre tjeneste' })).toBeHidden({ timeout: 5000 });
+    await this.page.getByRole("button", { name: "Lagre tjeneste" }).click();
+    await expect(
+      this.page.getByRole("button", { name: "Lagre tjeneste" }),
+    ).toBeHidden({ timeout: 5000 });
     console.log(`Saved service with title ${service.title.nb}`);
   }
 
   async deleteService(url: string) {
     await this.page.goto(url);
-    await this.page.getByRole('button', { name: 'Slett' }).click();
-    await expect(this.page.getByRole('button', { name: 'Slett' })).toBeHidden({ timeout: 5000 });
+    await this.page.getByRole("button", { name: "Slett" }).click();
+    await expect(this.page.getByRole("button", { name: "Slett" })).toBeHidden({
+      timeout: 5000,
+    });
   }
 
   public async goto() {
@@ -91,46 +139,56 @@ export default class ServicesPage {
     if (!this.accessibilityBuilder) {
       return;
     }
-    const result = await this.accessibilityBuilder.disableRules(['svg-img-alt']).analyze();
+    const result = await this.accessibilityBuilder
+      .disableRules(["svg-img-alt"])
+      .analyze();
     expect.soft(result.violations).toEqual([]);
   }
 
   public async checkPageTitleText() {
-    await expect(this.pageTitleLocator()).toHaveText('');
+    await expect(this.pageTitleLocator()).toHaveText("");
   }
 
   public async checkPageDescriptionText() {
-    await expect(this.pageDescriptionLocator()).toHaveText('');
+    await expect(this.pageDescriptionLocator()).toHaveText("");
   }
 
   public async checkIfNoServicesExist() {
-    const items = (await this.page.getByRole('link').all()).filter(async (link) => {
-      (await link.getAttribute('href')).startsWith(this.url);
-    });
+    const items = (await this.page.getByRole("link").all()).filter(
+      async (link) => {
+        (await link.getAttribute("href")).startsWith(this.url);
+      },
+    );
 
     expect(items.length).toBe(0);
   }
 
   public async deleteAllServices() {
-    this.page.on('dialog', async (dialog) => {
-      expect(dialog.message()).toEqual('Er du sikker på at du vil slette tjenesten?');
+    this.page.on("dialog", async (dialog) => {
+      expect(dialog.message()).toEqual(
+        "Er du sikker på at du vil slette tjenesten?",
+      );
       await dialog.accept();
     });
 
     // eslint-disable-next-line no-constant-condition
     while (true) {
       // Get the list of items
-      const promises = (await this.page.getByRole('link').all()).map(async (link) => {
-        const href = await link.getAttribute('href');
-        return {
-          value: href,
-          include: href.includes(this.url) && !href.endsWith('/new'),
-        };
-      });
-      const items = (await Promise.all(promises)).filter((l) => l.include).map((l) => l.value);
+      const promises = (await this.page.getByRole("link").all()).map(
+        async (link) => {
+          const href = await link.getAttribute("href");
+          return {
+            value: href,
+            include: href.includes(this.url) && !href.endsWith("/new"),
+          };
+        },
+      );
+      const items = (await Promise.all(promises))
+        .filter((l) => l.include)
+        .map((l) => l.value);
 
       if (items.length === 0) {
-        console.log('All items deleted, the list is empty.');
+        console.log("All items deleted, the list is empty.");
         break;
       }
 
@@ -159,11 +217,16 @@ export default class ServicesPage {
     await expect(this.publishedStateFilterNotPublishedLocator()).toBeVisible();
   }
 
-  public async expectSearchResults(expected: Service[], notExpected: Service[] = []) {
+  public async expectSearchResults(
+    expected: Service[],
+    notExpected: Service[] = [],
+  ) {
     for (const service of expected) {
       const nbName = service.title.nb as string;
       // Expect to find the concept
-      await expect(this.page.getByText(nbName, { exact: true })).toBeVisible({ timeout: 5000 });
+      await expect(this.page.getByText(nbName, { exact: true })).toBeVisible({
+        timeout: 5000,
+      });
     }
 
     for (const service of notExpected) {
@@ -177,14 +240,14 @@ export default class ServicesPage {
     await this.searchInputLocator().fill(query);
     await this.searchButtonLocator().click();
 
-    const spinner = this.page.getByRole('img', { name: 'Laster' });
+    const spinner = this.page.getByRole("img", { name: "Laster" });
     // Wait for spinner to be visible and hidden
-    await spinner.waitFor({ state: 'visible', timeout: 3000 }).catch(() => {});
-    await spinner.waitFor({ state: 'hidden', timeout: 10000 }).catch(() => {});
+    await spinner.waitFor({ state: "visible", timeout: 3000 }).catch(() => {});
+    await spinner.waitFor({ state: "hidden", timeout: 10000 }).catch(() => {});
   }
 
   public async clearSearch() {
-    await this.searchInputLocator().fill('');
+    await this.searchInputLocator().fill("");
     await this.searchButtonLocator().click();
   }
 
@@ -197,11 +260,14 @@ export default class ServicesPage {
     await this.publishedStateFilterNotPublishedLocator().uncheck();
   }
 
-public async filterStatus(status: string) {
-    const statusMap: { [key in ServiceStatus]: () => ReturnType<Page['getByLabel']> } = {
+  public async filterStatus(status: string) {
+    const statusMap: {
+      [key in ServiceStatus]: () => ReturnType<Page["getByLabel"]>;
+    } = {
       [ServiceStatus.COMPLETED]: this.statusFilterCompletedLocator,
       [ServiceStatus.DEPRECATED]: this.statusFilterDeprecatedLocator,
-      [ServiceStatus.UNDER_DEVELOPMENT]: this.statusFilterUnderDevelopmentLocator,
+      [ServiceStatus.UNDER_DEVELOPMENT]:
+        this.statusFilterUnderDevelopmentLocator,
       [ServiceStatus.WITHDRAWN]: this.statusFilterWithdrawnLocator,
     };
 

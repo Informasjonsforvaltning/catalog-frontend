@@ -1,4 +1,4 @@
-import { LocalizedStrings } from './localization';
+import { LocalizedStrings } from "./localization";
 
 export interface DataService extends DataServiceToBeCreated {
   id: string;

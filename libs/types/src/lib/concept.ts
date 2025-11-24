@@ -1,6 +1,6 @@
-import { LocalizedStrings } from './localization';
-import { EntityEnum } from './enums';
-import { Organization } from './organization';
+import { LocalizedStrings } from "./localization";
+import { EntityEnum } from "./enums";
+import { Organization } from "./organization";
 
 export interface ErrorMessage {
   name?: string;
@@ -39,14 +39,14 @@ export default class ImportError {
   constructor(message: string, name?: string) {
     const error = Error(message);
 
-    Object.defineProperty(error, 'message', {
+    Object.defineProperty(error, "message", {
       get() {
         return message;
       },
     });
-    Object.defineProperty(error, 'name', {
+    Object.defineProperty(error, "name", {
       get() {
-        return name ?? 'ImportError';
+        return name ?? "ImportError";
       },
     });
     return error;
@@ -96,18 +96,18 @@ export type Relation = {
 };
 
 export enum UnionRelationTypeEnum {
-  ASSOSIATIV = 'assosiativ',
-  GENERISK = 'generisk',
-  PARTITIV = 'partitiv',
-  SE_OGSÅ = 'seOgså',
-  ERSTATTES_AV = 'erstattesAv',
+  ASSOSIATIV = "assosiativ",
+  GENERISK = "generisk",
+  PARTITIV = "partitiv",
+  SE_OGSÅ = "seOgså",
+  ERSTATTES_AV = "erstattesAv",
 }
 
 export enum UnionRelationSubtypeEnum {
-  OVERORDNET = 'overordnet',
-  UNDERORDNET = 'underordnet',
-  ER_DEL_AV = 'erDelAv',
-  OMFATTER = 'omfatter',
+  OVERORDNET = "overordnet",
+  UNDERORDNET = "underordnet",
+  ER_DEL_AV = "erDelAv",
+  OMFATTER = "omfatter",
 }
 
 export type UnionRelation = Relation & {
@@ -115,18 +115,18 @@ export type UnionRelation = Relation & {
 };
 
 export enum RelationTypeEnum {
-  ASSOSIATIV = 'assosiativ',
-  GENERISK = 'generisk',
-  PARTITIV = 'partitiv',
-  SE_OGSÅ = 'seOgså',
-  ERSTATTES_AV = 'erstattesAv',
+  ASSOSIATIV = "assosiativ",
+  GENERISK = "generisk",
+  PARTITIV = "partitiv",
+  SE_OGSÅ = "seOgså",
+  ERSTATTES_AV = "erstattesAv",
 }
 
 export enum RelationSubtypeEnum {
-  OVERORDNET = 'overordnet',
-  UNDERORDNET = 'underordnet',
-  ER_DEL_AV = 'erDelAv',
-  OMFATTER = 'omfatter',
+  OVERORDNET = "overordnet",
+  UNDERORDNET = "underordnet",
+  ER_DEL_AV = "erDelAv",
+  OMFATTER = "omfatter",
 }
 
 export type RelatedConcept = {
@@ -299,7 +299,12 @@ export interface SearchConceptResponse {
   page: ConceptHitPage;
 }
 
-export type SearchableField = 'anbefaltTerm' | 'frarådetTerm' | 'tillattTerm' | 'definisjon' | 'merknad';
+export type SearchableField =
+  | "anbefaltTerm"
+  | "frarådetTerm"
+  | "tillattTerm"
+  | "definisjon"
+  | "merknad";
 
 export interface ConceptSearchFulltextHit {
   id: string;
@@ -326,7 +331,10 @@ export interface GenericRelation {
   specializes: string;
 }
 
-export type RelationshipWithSource = 'egendefinert' | 'basertPaaKilde' | 'sitatFraKilde';
+export type RelationshipWithSource =
+  | "egendefinert"
+  | "basertPaaKilde"
+  | "sitatFraKilde";
 
 export type ConceptsPageSettings = {
   page: number | null;
@@ -349,7 +357,5 @@ export type ChangeRequestsPageSettings = {
   filter: {
     status: string[] | null;
     itemType: string | null;
-  }
+  };
 };
-
-

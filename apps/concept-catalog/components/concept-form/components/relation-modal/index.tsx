@@ -1,12 +1,17 @@
-'use client';
+"use client";
 
-import { ReactNode, useEffect, useRef, useState } from 'react';
-import { Formik } from 'formik';
-import { Button, Modal } from '@digdir/designsystemet-react';
-import { RelatedConcept, UnionRelation, RelationTypeEnum, Concept } from '@catalog-frontend/types';
-import { relationSchema } from '../../validation-schema';
-import { RelationFieldset } from '../relation-fieldset';
-import styles from './relation-modal.module.scss';
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { Formik } from "formik";
+import { Button, Modal } from "@digdir/designsystemet-react";
+import {
+  RelatedConcept,
+  UnionRelation,
+  RelationTypeEnum,
+  Concept,
+} from "@catalog-frontend/types";
+import { relationSchema } from "../../validation-schema";
+import { RelationFieldset } from "../relation-fieldset";
+import styles from "./relation-modal.module.scss";
 
 export type RelationModalProps = {
   catalogId: string;
@@ -43,7 +48,7 @@ export const RelationModal = ({
         ref={modalRef}
         className={styles.dialog}
         style={{
-          overflow: 'visible',
+          overflow: "visible",
         }}
       >
         <Formik
@@ -77,19 +82,19 @@ export const RelationModal = ({
                 </Modal.Content>
                 <Modal.Footer>
                   <Button
-                    type='button'
-                    size='sm'
+                    type="button"
+                    size="sm"
                     disabled={isSubmitting}
                     onClick={() => {
                       submitForm();
                     }}
                   >
-                    {initialRelation ? 'Oppdater' : 'Legg til'} relasjon
+                    {initialRelation ? "Oppdater" : "Legg til"} relasjon
                   </Button>
                   <Button
-                    variant='secondary'
-                    type='button'
-                    size='sm'
+                    variant="secondary"
+                    type="button"
+                    size="sm"
                     onClick={() => {
                       onClose();
                       modalRef.current?.close();

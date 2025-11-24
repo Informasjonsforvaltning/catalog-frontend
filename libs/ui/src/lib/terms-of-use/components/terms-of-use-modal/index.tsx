@@ -1,7 +1,10 @@
-'use server';
+"use server";
 
-import { getValidSession, hasAcceptedTermsForOrg } from '@catalog-frontend/utils';
-import { TermsOfUseModalClient } from './terms-of-use-client';
+import {
+  getValidSession,
+  hasAcceptedTermsForOrg,
+} from "@catalog-frontend/utils";
+import { TermsOfUseModalClient } from "./terms-of-use-client";
 
 type TermsOfUseModalProps = {
   catalogId: string;
@@ -13,7 +16,10 @@ const TermsOfUseModal = async ({ catalogId }: TermsOfUseModalProps) => {
     return null;
   }
 
-  const acceptedTerms = hasAcceptedTermsForOrg(`${session?.accessToken}`, catalogId);
+  const acceptedTerms = hasAcceptedTermsForOrg(
+    `${session?.accessToken}`,
+    catalogId,
+  );
   if (acceptedTerms) {
     return null;
   }

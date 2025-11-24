@@ -1,15 +1,15 @@
 name: E2E testing
-permissions: 
-    contents: read
+permissions:
+  contents: read
 on:
   push:
     branches:
-      - main  
+      - main
   pull_request:
     types: [ready_for_review, opened, reopened, synchronize]
     branches:
       - main
-  workflow_dispatch:    
+  workflow_dispatch:
 
 jobs:
   test:
@@ -17,17 +17,18 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        appname: [
-          concept-catalog-e2e, 
-          service-catalog-e2e, 
-          catalog-portal-e2e, 
-          catalog-admin-e2e, 
-          dataset-catalog-e2e,
-          data-service-catalog-e2e
-        ]
+        appname:
+          [
+            concept-catalog-e2e,
+            service-catalog-e2e,
+            catalog-portal-e2e,
+            catalog-admin-e2e,
+            dataset-catalog-e2e,
+            data-service-catalog-e2e,
+          ]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare against.
           fetch-depth: 0
@@ -48,7 +49,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22.14.0
-          cache: 'yarn'
+          cache: "yarn"
 
       - name: Yarn install
         run: |

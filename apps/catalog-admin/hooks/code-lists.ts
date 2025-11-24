@@ -1,19 +1,19 @@
-import { CodeList } from '@catalog-frontend/types';
-import { validOrganizationNumber, validUUID } from '@catalog-frontend/utils';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { compare } from 'fast-json-patch';
+import { CodeList } from "@catalog-frontend/types";
+import { validOrganizationNumber, validUUID } from "@catalog-frontend/utils";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { compare } from "fast-json-patch";
 
 export const useGetAllCodeLists = ({ catalogId }) => {
   return useQuery({
-    queryKey: ['getAllCodeLists', catalogId],
+    queryKey: ["getAllCodeLists", catalogId],
 
     queryFn: async () => {
       if (!validOrganizationNumber(catalogId)) {
-        return Promise.reject('Invalid organization number');
+        return Promise.reject("Invalid organization number");
       }
 
       const response = await fetch(`/api/code-lists/${catalogId}`, {
-        method: 'GET',
+        method: "GET",
       });
       return response.json();
     },
@@ -27,25 +27,27 @@ export const useCreateCodeList = (catalogId: string) => {
   return useMutation({
     mutationFn: async (codeList: CodeList) => {
       if (!validOrganizationNumber(catalogId)) {
-        return Promise.reject('Invalid organization number');
+        return Promise.reject("Invalid organization number");
       }
 
       if (codeList.name.length === 0) {
-        return Promise.reject('Code list must have a name');
+        return Promise.reject("Code list must have a name");
       }
       const response = await fetch(`/api/code-lists/${catalogId}`, {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           codeList,
         }),
-        cache: 'no-store',
+        cache: "no-store",
       });
       return response;
     },
 
     onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ['getAllCodeLists', catalogId] });
+      queryClient.invalidateQueries({
+        queryKey: ["getAllCodeLists", catalogId],
+      });
     },
   });
 };
@@ -54,28 +56,37 @@ export const useUpdateCodeList = (catalogId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ oldCodeList, newCodeList }: { oldCodeList: CodeList; newCodeList: CodeList }) => {
+    mutationFn: async ({
+      oldCodeList,
+      newCodeList,
+    }: {
+      oldCodeList: CodeList;
+      newCodeList: CodeList;
+    }) => {
       const diff = compare(oldCodeList, newCodeList);
 
       if (!validOrganizationNumber(catalogId)) {
-        throw new Error('Invalid organization number');
+        throw new Error("Invalid organization number");
       }
 
       if (!validUUID(oldCodeList.id)) {
-        throw new Error('Invalid code list id');
+        throw new Error("Invalid code list id");
       }
 
       if (diff) {
-        const response = await fetch(`/api/code-lists/${catalogId}/${oldCodeList.id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({
-            diff,
-          }),
-          cache: 'no-store',
-        });
+        const response = await fetch(
+          `/api/code-lists/${catalogId}/${oldCodeList.id}`,
+          {
+            method: "PATCH",
+            body: JSON.stringify({
+              diff,
+            }),
+            cache: "no-store",
+          },
+        );
 
         if (!response.ok) {
-          throw new Error('Failed to update code list');
+          throw new Error("Failed to update code list");
         }
 
         return response;
@@ -83,7 +94,9 @@ export const useUpdateCodeList = (catalogId: string) => {
     },
     onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ['getAllCodeLists', catalogId] });
+      queryClient.invalidateQueries({
+        queryKey: ["getAllCodeLists", catalogId],
+      });
     },
   });
 };
@@ -94,19 +107,24 @@ export const useDeleteCodeList = (catalogId: string) => {
   return useMutation({
     mutationFn: async (codeListId: string) => {
       if (!validOrganizationNumber(catalogId)) {
-        return Promise.reject('Invalid organization number');
+        return Promise.reject("Invalid organization number");
       }
 
-      const response = await fetch(`/api/code-lists/${catalogId}/${codeListId}`, {
-        method: 'DELETE',
-        cache: 'no-store',
-      });
+      const response = await fetch(
+        `/api/code-lists/${catalogId}/${codeListId}`,
+        {
+          method: "DELETE",
+          cache: "no-store",
+        },
+      );
 
       return response;
     },
     onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ['getAllCodeLists', catalogId] });
+      queryClient.invalidateQueries({
+        queryKey: ["getAllCodeLists", catalogId],
+      });
     },
   });
 };

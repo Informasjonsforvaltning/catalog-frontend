@@ -1,5 +1,9 @@
-import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
-import { getDatasetById } from '../../../../actions/actions';
+import {
+  Breadcrumbs,
+  BreadcrumbType,
+  DesignBanner,
+} from "@catalog-frontend/ui";
+import { getDatasetById } from "../../../../actions/actions";
 import {
   getTranslateText,
   getValidSession,
@@ -7,7 +11,7 @@ import {
   localization,
   redirectToSignIn,
   validUUID,
-} from '@catalog-frontend/utils';
+} from "@catalog-frontend/utils";
 import {
   getAllDatasetSeries,
   getDatasetTypes,
@@ -17,10 +21,10 @@ import {
   getLosThemes,
   getOpenLicenses,
   getProvenanceStatements,
-} from '@catalog-frontend/data-access';
-import DatasetDetailsPageClient from './dataset-details-page-client';
-import { withReadProtectedPage } from '@dataset-catalog/utils/auth';
-import { redirect, RedirectType } from 'next/navigation';
+} from "@catalog-frontend/data-access";
+import DatasetDetailsPageClient from "./dataset-details-page-client";
+import { withReadProtectedPage } from "@dataset-catalog/utils/auth";
+import { redirect, RedirectType } from "next/navigation";
 
 const DatasetDetailPage = withReadProtectedPage(
   ({ catalogId, datasetId }) => `/catalogs/${catalogId}/datasets/${datasetId}`,
@@ -30,14 +34,18 @@ const DatasetDetailPage = withReadProtectedPage(
     }
     const dataset = await getDatasetById(catalogId, datasetId);
 
-    const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
-    const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
+    const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
+    const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
 
     const session = await getValidSession();
     if (!session) {
-      return redirectToSignIn({ callbackUrl: `/catalogs/${catalogId}/datasets/${datasetId}` });
+      return redirectToSignIn({
+        callbackUrl: `/catalogs/${catalogId}/datasets/${datasetId}`,
+      });
     }
-    const hasWritePermission = session && hasOrganizationWritePermission(session?.accessToken, catalogId);
+    const hasWritePermission =
+      session &&
+      hasOrganizationWritePermission(session?.accessToken, catalogId);
 
     const breadcrumbList = [
       {
@@ -79,7 +87,10 @@ const DatasetDetailPage = withReadProtectedPage(
     };
 
     const accessToken = session?.accessToken;
-    const datasetSeries = await getAllDatasetSeries(catalogId, accessToken).then((res) => res.json());
+    const datasetSeries = await getAllDatasetSeries(
+      catalogId,
+      accessToken,
+    ).then((res) => res.json());
 
     return (
       <>
@@ -91,7 +102,7 @@ const DatasetDetailPage = withReadProtectedPage(
           catalogId={catalogId}
           title={localization.catalogType.dataset}
         />
-        <div className='container'>
+        <div className="container">
           {dataset && (
             <DatasetDetailsPageClient
               dataset={dataset}
