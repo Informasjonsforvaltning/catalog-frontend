@@ -27,6 +27,7 @@ export const nb = {
   homepage: "Hjemmeside",
   conceptId: "Begreps-ID",
   versionId: "Versjons-ID",
+  id: "ID",
   linkToDataset: "Lenke til datasett",
   linkToDatasets: "Lenke til datasett",
   loading: "Laster",

@@ -70,7 +70,6 @@ const DatasetDetailsPageClient = ({
         headingTag={
           <StatusTag approved={dataset.approved || dataset.published} />
         }
-        loading={false}
       >
         {dataset.specializedType === "SERIES" ? (
           <DetailsPageLayout.Left>
