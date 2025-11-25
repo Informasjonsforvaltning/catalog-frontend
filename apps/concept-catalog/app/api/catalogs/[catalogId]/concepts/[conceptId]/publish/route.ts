@@ -7,7 +7,7 @@ export const POST = async (
   props: { params: Promise<{ conceptId: string }> },
 ) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { conceptId } = params;
     try {
       const response = await publishConcept(

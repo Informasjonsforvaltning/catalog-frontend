@@ -69,7 +69,7 @@ export const EditConceptFormClient = ({
       title: `${changeRequestTitle}`,
     };
 
-    return await updateChangeRequestAction(
+    return updateChangeRequestAction(
       organization.organizationId,
       changeRequest.id,
       changeRequestFromConcept,

@@ -7,7 +7,7 @@ export const POST = async (req: NextRequest, props) => {
 
   const { catalogId } = params;
 
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     try {
       const concepts = await req.json();
       const response = await importConcepts(concepts, session?.accessToken);

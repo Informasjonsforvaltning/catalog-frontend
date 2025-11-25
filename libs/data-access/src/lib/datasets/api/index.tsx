@@ -27,7 +27,7 @@ export const getAllDatasets = async (
     },
     next: { tags: ["datasets"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getById = async (
@@ -56,7 +56,7 @@ export const getById = async (
     },
     next: { tags: ["dataset"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const postDataset = async (
@@ -80,7 +80,7 @@ export const postDataset = async (
     method: "POST",
     body: JSON.stringify(Dataset),
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const deleteDataset = async (
@@ -109,7 +109,7 @@ export const deleteDataset = async (
     },
     method: "DELETE",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const updateDataset = async (
@@ -140,7 +140,7 @@ export const updateDataset = async (
     method: "PATCH",
     body: JSON.stringify(patchOperations),
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const publishDataset = async (
@@ -169,7 +169,7 @@ export const publishDataset = async (
     },
     method: "POST",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const unpublishDataset = async (
@@ -198,7 +198,7 @@ export const unpublishDataset = async (
     },
     method: "POST",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getAllDatasetCatalogs = async (accessToken: string) => {
@@ -210,7 +210,7 @@ export const getAllDatasetCatalogs = async (accessToken: string) => {
     },
     next: { tags: ["dataset-catalogs"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getAllDatasetSeries = async (
@@ -232,5 +232,5 @@ export const getAllDatasetSeries = async (
     },
     next: { tags: ["datasetSeries"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };

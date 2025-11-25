@@ -19,7 +19,7 @@ export const oldGetAllDataServiceCatalogs = async (accessToken: string) => {
       "Content-Type": "application/json",
     },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getAllDataServices = async (
@@ -41,7 +41,7 @@ export const getAllDataServices = async (
     },
     next: { tags: ["data-services"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getDataServiceById = async (
@@ -70,7 +70,7 @@ export const getDataServiceById = async (
     },
     next: { tags: ["data-service"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const postDataService = async (
@@ -94,7 +94,7 @@ export const postDataService = async (
     method: "POST",
     body: JSON.stringify(dataService),
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const importDataService = async (
@@ -120,9 +120,7 @@ export const importDataService = async (
     body: fileContent,
   };
 
-  return await fetch(resource, options).then((res) =>
-    res.headers.get("location"),
-  );
+  return fetch(resource, options).then((res) => res.headers.get("location"));
 };
 
 export const getAllDataServiceCatalogs = async (accessToken: string) => {
@@ -133,7 +131,7 @@ export const getAllDataServiceCatalogs = async (accessToken: string) => {
       "Content-Type": "application/json",
     },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const deleteDataService = async (
@@ -162,7 +160,7 @@ export const deleteDataService = async (
     },
     method: "DELETE",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const updateDataService = async (
@@ -193,7 +191,7 @@ export const updateDataService = async (
     method: "PATCH",
     body: JSON.stringify(patchOperations),
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const publishDataService = async (
@@ -222,7 +220,7 @@ export const publishDataService = async (
     },
     method: "POST",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const unpublishDataService = async (
@@ -251,7 +249,7 @@ export const unpublishDataService = async (
     },
     method: "POST",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getDataServiceImportResults = async (
@@ -273,7 +271,7 @@ export const getDataServiceImportResults = async (
     },
     next: { tags: ["import-results"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getDataServiceImportResultById = async (
@@ -302,7 +300,7 @@ export const getDataServiceImportResultById = async (
     },
     next: { tags: ["import-result"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const deleteImportResult = async (
@@ -331,5 +329,5 @@ export const deleteImportResult = async (
     },
     method: "DELETE",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };

@@ -219,7 +219,7 @@ export async function updateConcept(
     revalidateTag("concepts");
   }
 
-  return await getConcept(`${conceptId}`, `${session?.accessToken}`).then(
+  return getConcept(`${conceptId}`, `${session?.accessToken}`).then(
     (response) => (response.ok ? response.json() : undefined),
   );
 }

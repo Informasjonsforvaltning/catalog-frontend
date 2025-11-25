@@ -7,7 +7,7 @@ export const GET = async (
   props: { params: Promise<{ catalogId: string }> },
 ) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { catalogId } = params;
 
     try {

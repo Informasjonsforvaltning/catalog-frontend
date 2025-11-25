@@ -12,7 +12,7 @@ export const GET = async (
   props: { params: Promise<{ slug: string }> },
 ) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { slug } = params;
 
     if (slug?.length >= 2 && slug?.length <= 3) {
@@ -49,7 +49,7 @@ export const POST = async (
   props: { params: Promise<{ slug: string }> },
 ) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { slug } = params;
     if (slug?.length >= 2 && slug?.length <= 3) {
       const { comment } = await req.json();
@@ -86,7 +86,7 @@ export const PUT = async (
   props: { params: Promise<{ slug: string }> },
 ) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { slug } = params;
     if (slug?.length >= 2 && slug?.length <= 3) {
       const [orgNumber, topicId, commentId] = slug;
@@ -125,7 +125,7 @@ export const DELETE = async (
   props: { params: Promise<{ slug: string }> },
 ) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { slug } = params;
     if (slug?.length >= 2 && slug?.length <= 3) {
       const [orgNumber, topicId, commentId] = slug;

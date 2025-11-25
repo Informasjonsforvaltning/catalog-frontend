@@ -26,7 +26,7 @@ export async function getDatasets(catalogId: string) {
   if (response.status !== 200) {
     throw new Error("getDatasets failed with response code " + response.status);
   }
-  return await response.json();
+  return response.json();
 }
 
 export async function getDatasetById(
@@ -49,7 +49,7 @@ export async function getDatasetById(
     );
   }
 
-  return await response.json();
+  return response.json();
 }
 
 export async function createDataset(

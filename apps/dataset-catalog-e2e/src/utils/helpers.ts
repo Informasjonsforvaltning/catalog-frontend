@@ -171,7 +171,7 @@ export const publishDataset = async (apiRequestContext, datasetId) => {
   }
 
   console.log("[PUBLISH DATASET] Dataset published successfully");
-  return await response.json();
+  return response.json();
 };
 
 export const getUsers = async (apiRequestContext) => {

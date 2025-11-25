@@ -15,7 +15,7 @@ interface Props {
 
 export const GET = async (req: NextRequest, props: Props) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId] = slug;
     try {
@@ -35,7 +35,7 @@ export const GET = async (req: NextRequest, props: Props) => {
 
 export const POST = async (req: NextRequest, props: Props) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId] = slug;
     try {
@@ -57,7 +57,7 @@ export const POST = async (req: NextRequest, props: Props) => {
 
 export const PATCH = async (req: NextRequest, props: Props) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId, userId] = slug;
 
@@ -84,7 +84,7 @@ export const PATCH = async (req: NextRequest, props: Props) => {
 
 export const DELETE = async (req: NextRequest, props: Props) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId, userId] = slug;
     try {

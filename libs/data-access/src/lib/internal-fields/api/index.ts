@@ -24,7 +24,7 @@ export const getFields = async (catalogId: string, accessToken: string) => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const createInternalField = async (
@@ -48,7 +48,7 @@ export const createInternalField = async (
     method: "POST",
     body: JSON.stringify(field),
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const patchInternalField = async (
@@ -80,7 +80,7 @@ export const patchInternalField = async (
       method: "PATCH",
       body: JSON.stringify(diff),
     };
-    return await fetch(resource, options);
+    return fetch(resource, options);
   }
 };
 
@@ -110,7 +110,7 @@ export const deleteInternalField = async (
     },
     method: "DELETE",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const patchEditableFields = async (
@@ -135,6 +135,6 @@ export const patchEditableFields = async (
       method: "PATCH",
       body: JSON.stringify(diff),
     };
-    return await fetch(resource, options);
+    return fetch(resource, options);
   }
 };

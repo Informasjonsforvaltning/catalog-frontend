@@ -7,7 +7,7 @@ export const PATCH = async (
   props: { params: Promise<{ slug: string }> },
 ) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const slug = params;
     const catalogId = slug.slug;
     try {

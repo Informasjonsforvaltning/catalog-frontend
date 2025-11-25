@@ -10,7 +10,7 @@ export const DELETE = async (
   props: { params: Promise<{ catalogId: string; resultId: string }> },
 ) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { catalogId, resultId } = params;
 
     try {
@@ -38,7 +38,7 @@ export const GET = async (
   props: { params: Promise<{ catalogId: string; resultId: string }> },
 ) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { catalogId, resultId } = params;
 
     try {

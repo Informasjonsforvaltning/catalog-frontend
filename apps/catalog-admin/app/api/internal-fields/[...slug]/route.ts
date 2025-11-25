@@ -12,7 +12,7 @@ export const GET = async (
   props: { params: Promise<{ slug: string[] }> },
 ) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId] = slug;
     try {
@@ -35,7 +35,7 @@ export const POST = async (
   props: { params: Promise<{ slug: string[] }> },
 ) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId] = slug;
     try {
@@ -62,7 +62,7 @@ export const PATCH = async (
   props: { params: Promise<{ slug: string[] }> },
 ) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId, fieldId] = slug;
     try {
@@ -91,7 +91,7 @@ export const DELETE = async (
   props: { params: Promise<{ slug: string[] }> },
 ) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId, fieldId] = slug;
     try {

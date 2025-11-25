@@ -11,7 +11,7 @@ export const GET = async (
   props: { params: Promise<{ slug: string }> },
 ) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { slug } = params;
     if (slug?.length === 2 && slug[1] === "design") {
       try {
@@ -71,7 +71,7 @@ export const PATCH = async (
   props: { params: Promise<{ slug: string }> },
 ) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { slug } = params;
     const catalogId = slug[0];
     try {

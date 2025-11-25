@@ -31,7 +31,7 @@ export const getOrganizations = async (
     method: "GET",
     cache: "no-cache" as RequestCache,
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getOrganization = async (organizationId: string) => {
@@ -51,5 +51,5 @@ export const getOrganization = async (organizationId: string) => {
     method: "GET",
     cache: "no-cache" as RequestCache,
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };

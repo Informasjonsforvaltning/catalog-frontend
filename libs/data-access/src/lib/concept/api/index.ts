@@ -436,7 +436,7 @@ export const getConceptImportResults = async (
     },
     next: { tags: ["import-results"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getConceptImportResultById = async (
@@ -466,7 +466,7 @@ export const getConceptImportResultById = async (
     },
     next: { tags: ["import-result"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const confirmImportedConcept = async (
@@ -490,7 +490,6 @@ export const confirmImportedConcept = async (
     "confirm-concept-import",
   );
 
-
   const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}/confirm-concept-import`;
   const options = {
     headers: {
@@ -500,7 +499,7 @@ export const confirmImportedConcept = async (
     body: externalId,
   };
 
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const cancelConceptImport = async (
@@ -531,7 +530,7 @@ export const cancelConceptImport = async (
     method: "PUT",
   };
 
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const removeImportResultConcept = async (
@@ -561,7 +560,7 @@ export const removeImportResultConcept = async (
     },
     method: "DELETE",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getUnpublishedRelatedConcepts = async (

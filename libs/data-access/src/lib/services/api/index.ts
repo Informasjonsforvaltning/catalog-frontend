@@ -27,7 +27,7 @@ export const getAllServices = async (
     },
     next: { tags: ["services"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getServiceById = async (
@@ -56,7 +56,7 @@ export const getServiceById = async (
     },
     next: { tags: ["service"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const createService = async (
@@ -80,7 +80,7 @@ export const createService = async (
     method: "POST",
     body: JSON.stringify(Service),
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const deleteService = async (
@@ -109,7 +109,7 @@ export const deleteService = async (
     },
     method: "DELETE",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const updateService = async (
@@ -140,7 +140,7 @@ export const updateService = async (
     method: "PATCH",
     body: JSON.stringify(patchOperations),
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const publishService = async (
@@ -169,7 +169,7 @@ export const publishService = async (
     },
     method: "POST",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const unpublishService = async (
@@ -198,7 +198,7 @@ export const unpublishService = async (
     },
     method: "POST",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getAllServiceCatalogs = async (accessToken: string) => {
@@ -210,5 +210,5 @@ export const getAllServiceCatalogs = async (accessToken: string) => {
     },
   };
 
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };

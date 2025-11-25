@@ -111,7 +111,7 @@ export const createConcept = async (apiRequestContext, concept) => {
     throw new Error(`API call failed with status ${response.status()}`);
   }
 
-  return await response.json();
+  return response.json();
 };
 
 export const getPublishedConcept = async (apiRequestContext) => {
@@ -139,7 +139,7 @@ export const publishConcept = async (apiRequestContext, conceptId) => {
     throw new Error(`API call failed with status ${response.status()}`);
   }
 
-  return await response.json();
+  return response.json();
 };
 
 export const getUsers = async (apiRequestContext) => {

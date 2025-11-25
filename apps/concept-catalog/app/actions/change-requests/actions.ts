@@ -136,7 +136,7 @@ export async function updateChangeRequestAction(
     throw new Error(errorMsg);
   }
 
-  return await getChangeRequestAsConcept(catalogId, changeRequestId);
+  return getChangeRequestAsConcept(catalogId, changeRequestId);
 }
 
 export async function acceptChangeRequestAction(

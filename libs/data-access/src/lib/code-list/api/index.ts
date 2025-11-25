@@ -27,7 +27,7 @@ export const getAllCodeLists = async (
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const createCodeList = async (
@@ -51,7 +51,7 @@ export const createCodeList = async (
     method: "POST",
     body: JSON.stringify(codeList),
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const patchCodeList = async (
@@ -83,7 +83,7 @@ export const patchCodeList = async (
       method: "PATCH",
       body: JSON.stringify(diff),
     };
-    return await fetch(resource, options);
+    return fetch(resource, options);
   }
 };
 
@@ -113,5 +113,5 @@ export const deleteCodeList = async (
     },
     method: "DELETE",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };

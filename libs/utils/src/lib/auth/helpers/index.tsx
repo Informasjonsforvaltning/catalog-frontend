@@ -22,7 +22,7 @@ export const withValidSessionForApi = async (
   if (!valid) {
     return new Response("Unauthorized", { status: 401 });
   }
-  return await next(session);
+  return next(session);
 };
 
 export const getValidSession = async () => {

@@ -79,7 +79,7 @@ const withProtectedPage = (
       redirect(`/catalogs/${catalogId}/no-access`, RedirectType.replace);
     }
 
-    return await render({
+    return render({
       catalogId,
       conceptId,
       resultId,

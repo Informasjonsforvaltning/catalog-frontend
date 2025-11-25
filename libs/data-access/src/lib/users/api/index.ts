@@ -24,7 +24,7 @@ export const getUsers = async (catalogId: string, accessToken: string) => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const createUser = async (
@@ -48,7 +48,7 @@ export const createUser = async (
     method: "POST",
     body: JSON.stringify(user),
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const patchUser = async (
@@ -80,7 +80,7 @@ export const patchUser = async (
       method: "PATCH",
       body: JSON.stringify(diff),
     };
-    return await fetch(resource, options);
+    return fetch(resource, options);
   }
 };
 
@@ -110,5 +110,5 @@ export const deleteUser = async (
     },
     method: "DELETE",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };

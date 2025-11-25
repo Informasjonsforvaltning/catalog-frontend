@@ -31,9 +31,7 @@ export const createImportJob = async (catalogId: string) => {
     method: "GET",
   };
 
-  return await fetch(resource, options).then((res) =>
-    res.headers.get("location"),
-  );
+  return fetch(resource, options).then((res) => res.headers.get("location"));
 };
 
 export const importRdfConcepts = async (
@@ -77,7 +75,5 @@ export const importRdfConcepts = async (
     body: fileContent,
   };
 
-  return await fetch(resource, options).then((res) =>
-    res.headers.get("location"),
-  );
+  return fetch(resource, options).then((res) => res.headers.get("location"));
 };

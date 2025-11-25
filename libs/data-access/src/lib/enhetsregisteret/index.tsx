@@ -26,7 +26,7 @@ export const getEnheterByOrgNmbs = async (orgNmbs?: string[]) => {
     method: "GET",
     cache: "default" as RequestCache,
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const searchEnheter = async (query: string) => {
@@ -48,5 +48,5 @@ export const searchEnheter = async (query: string) => {
     method: "GET",
     cache: "default" as RequestCache,
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };

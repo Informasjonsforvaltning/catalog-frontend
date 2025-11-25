@@ -55,7 +55,7 @@ export default class ConceptsPage {
         state: "visible",
         timeout: 5000,
       });
-      return await this.noResultsLocator().isVisible();
+      return this.noResultsLocator().isVisible();
     } catch {
       return false;
     }

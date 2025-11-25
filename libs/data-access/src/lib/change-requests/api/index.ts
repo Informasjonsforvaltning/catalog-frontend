@@ -27,7 +27,7 @@ export const getChangeRequests = async (
     method: "GET",
     next: { tags: ["concept-change-requests"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const searchChangeRequest = async (
@@ -56,7 +56,7 @@ export const searchChangeRequest = async (
     method: "GET",
     next: { tags: ["concept-change-requests"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getChangeRequest = async (
@@ -86,7 +86,7 @@ export const getChangeRequest = async (
     method: "GET",
     next: { tags: ["concept-change-request"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const createChangeRequest = async (
@@ -110,7 +110,7 @@ export const createChangeRequest = async (
     method: "POST",
     body: JSON.stringify(body),
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const updateChangeRequest = async (
@@ -141,7 +141,7 @@ export const updateChangeRequest = async (
     method: "POST",
     body: JSON.stringify(body),
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const acceptChangeRequest = async (
@@ -171,7 +171,7 @@ export const acceptChangeRequest = async (
     method: "POST",
     body: "{}",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const rejectChangeRequest = async (
@@ -201,5 +201,5 @@ export const rejectChangeRequest = async (
     method: "POST",
     body: "{}",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };

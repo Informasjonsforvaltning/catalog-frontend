@@ -14,7 +14,7 @@ export const getConceptStatuses = async () => {
     method: "GET",
     cache: "no-cache" as RequestCache,
   };
-  return await fetch(path, options);
+  return fetch(path, options);
 };
 
 export const getDatasetTypes = async () => {
@@ -25,7 +25,7 @@ export const getDatasetTypes = async () => {
     },
     method: "GET",
   };
-  return await fetch(path, options);
+  return fetch(path, options);
 };
 
 export const getDistributionStatuses = async () => {
@@ -37,7 +37,7 @@ export const getDistributionStatuses = async () => {
     method: "GET",
     cache: "no-cache" as RequestCache,
   };
-  return await fetch(path, options);
+  return fetch(path, options);
 };
 
 export const getLosThemes = async () => {
@@ -48,7 +48,7 @@ export const getLosThemes = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getDataThemes = async () => {
@@ -59,7 +59,7 @@ export const getDataThemes = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getFrequencies = async () => {
@@ -70,7 +70,7 @@ export const getFrequencies = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getOpenLicenses = async () => {
@@ -81,7 +81,7 @@ export const getOpenLicenses = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getProvenanceStatements = async () => {
@@ -92,7 +92,7 @@ export const getProvenanceStatements = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getPlannedAvailabilities = async () => {
@@ -103,7 +103,7 @@ export const getPlannedAvailabilities = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getCurrencies = async () => {
@@ -114,7 +114,7 @@ export const getCurrencies = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getFileTypes = async () => {
@@ -125,7 +125,7 @@ export const getFileTypes = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getMediaTypes = async () => {
@@ -136,7 +136,7 @@ export const getMediaTypes = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const searchReferenceData = async (
@@ -237,5 +237,5 @@ export const getLanguages = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };

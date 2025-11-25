@@ -33,6 +33,6 @@ export const withProtectedPage = (
       return redirect(`/catalogs/${catalogId}/no-access`);
     }
 
-    return await render({ catalogId, session });
+    return render({ catalogId, session });
   };
 };

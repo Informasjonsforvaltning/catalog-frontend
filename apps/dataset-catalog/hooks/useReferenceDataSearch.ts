@@ -93,7 +93,7 @@ export const useSearchFileTypes = (
   return useQuery({
     queryKey: ["FileTypes", "searchQuery", searchQuery],
     queryFn: async () => {
-      return await searchReferenceData(searchQuery, envVariable, [
+      return searchReferenceData(searchQuery, envVariable, [
         ReferenceDataGraphql.SearchAlternative.EuFileTypes,
       ]);
     },
@@ -112,7 +112,7 @@ export const useSearchFileTypeByUri = (
         return [];
       }
 
-      return await searchReferenceDataByUri(uriList, envVariable, [
+      return searchReferenceDataByUri(uriList, envVariable, [
         ReferenceDataGraphql.SearchAlternative.EuFileTypes,
       ]);
     },

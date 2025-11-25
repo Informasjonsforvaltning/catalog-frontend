@@ -11,7 +11,7 @@ const apiGetCall = async (resource: string, accessToken: string) => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getDesign = async (
@@ -81,7 +81,7 @@ export const patchDesign = async (
       method: "PATCH",
       body: JSON.stringify(diff),
     };
-    return await fetch(resource, options);
+    return fetch(resource, options);
   }
 };
 
@@ -122,7 +122,7 @@ export const deleteDesignLogo = async (
     },
     method: "DELETE",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const deleteLogo = async (catalogId: string, accessToken: string) => {
@@ -136,5 +136,5 @@ export const deleteLogo = async (catalogId: string, accessToken: string) => {
     },
     method: "DELETE",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };

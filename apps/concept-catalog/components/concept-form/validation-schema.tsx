@@ -18,7 +18,7 @@ const getRevisions = async ({ baseUri, catalogId, conceptId }) => {
   if (response.status !== 200) {
     return [];
   }
-  return await response.json();
+  return response.json();
 };
 
 const isValidUrl = (value) => {

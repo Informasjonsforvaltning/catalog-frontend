@@ -47,7 +47,5 @@ export const importConceptsCSV = async (
     body: JSON.stringify(concepts),
   };
 
-  return await fetch(resource, options).then((res) =>
-    res.headers.get("location"),
-  );
+  return fetch(resource, options).then((res) => res.headers.get("location"));
 };

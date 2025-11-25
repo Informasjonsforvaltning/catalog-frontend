@@ -7,7 +7,7 @@ export const GET = async (
   props: { params: Promise<{ slug: string }> },
 ) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { slug } = params;
     if (slug?.length == 2) {
       const [catalogId, resourceId] = slug;

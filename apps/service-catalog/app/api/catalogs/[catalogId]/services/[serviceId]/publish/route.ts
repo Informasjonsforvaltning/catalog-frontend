@@ -7,7 +7,7 @@ export const POST = async (
   props: { params: Promise<{ catalogId: string; serviceId: string }> },
 ) => {
   const params = await props.params;
-  return await withValidSessionForApi(async (session) => {
+  return withValidSessionForApi(async (session) => {
     const { catalogId, serviceId } = params;
     try {
       const response = await publishService(

@@ -67,7 +67,7 @@ const withProtectedPage = (
       session?.accessToken &&
       hasOrganizationAdminPermission(session.accessToken, catalogId);
 
-    return await render({
+    return render({
       catalogId,
       serviceId,
       session,

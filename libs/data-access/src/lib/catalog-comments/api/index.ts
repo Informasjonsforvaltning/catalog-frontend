@@ -31,7 +31,7 @@ export const getComments = async (
     method: "GET",
   };
 
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const createComment = async (
@@ -66,7 +66,7 @@ export const createComment = async (
     cache: "no-cache" as RequestCache,
   };
 
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const updateComment = async (
@@ -108,7 +108,7 @@ export const updateComment = async (
     cache: "no-cache" as RequestCache,
   };
 
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const deleteComment = async (
@@ -145,5 +145,5 @@ export const deleteComment = async (
     method: "DELETE",
     cache: "no-cache" as RequestCache,
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };

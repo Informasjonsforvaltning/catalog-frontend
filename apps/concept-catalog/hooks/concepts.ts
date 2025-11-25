@@ -24,7 +24,7 @@ const callConceptApi = async (
     return Promise.reject(new Error("Unauthorized"));
   }
 
-  return await response.json();
+  return response.json();
 };
 
 export const usePublishConcept = (catalogId: string) => {

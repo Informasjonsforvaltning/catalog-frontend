@@ -34,7 +34,7 @@ export async function getDataServices(catalogId: string) {
       "getDataServices failed with response code " + response.status,
     );
   }
-  return await response.json();
+  return response.json();
 }
 
 export async function createDataService(

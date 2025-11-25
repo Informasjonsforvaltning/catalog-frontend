@@ -27,7 +27,7 @@ export const getAllPublicServices = async (
     },
     next: { tags: ["public-services"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getPublicServiceById = async (
@@ -56,7 +56,7 @@ export const getPublicServiceById = async (
     },
     next: { tags: ["public-service"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const createPublicService = async (
@@ -80,7 +80,7 @@ export const createPublicService = async (
     method: "POST",
     body: JSON.stringify(publicService),
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const deletePublicService = async (
@@ -109,7 +109,7 @@ export const deletePublicService = async (
     },
     method: "DELETE",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const updatePublicService = async (
@@ -140,7 +140,7 @@ export const updatePublicService = async (
     method: "PATCH",
     body: JSON.stringify(patchOperations),
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const publishPublicService = async (
@@ -169,7 +169,7 @@ export const publishPublicService = async (
     },
     method: "POST",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const unpublishPublicService = async (
@@ -198,5 +198,5 @@ export const unpublishPublicService = async (
     },
     method: "POST",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };

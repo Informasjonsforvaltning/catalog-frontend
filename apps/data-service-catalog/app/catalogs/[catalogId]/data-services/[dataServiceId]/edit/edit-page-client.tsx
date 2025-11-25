@@ -34,7 +34,7 @@ export const EditPage = ({
   });
 
   const handleUpdate = async (values: DataService) => {
-    return await updateDataService(catalogId, dataService, values);
+    return updateDataService(catalogId, dataService, values);
   };
 
   const handleCancel = () => {

@@ -33,7 +33,7 @@ export const EditPage = ({
   });
 
   const handleUpdate = async (values: Concept) => {
-    return await updateConcept(concept, values, fieldsResult.internal);
+    return updateConcept(concept, values, fieldsResult.internal);
   };
 
   const handleSuccess = () => {

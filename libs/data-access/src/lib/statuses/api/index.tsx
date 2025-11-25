@@ -5,5 +5,5 @@ export const getAdmsStatuses = async () => {
       "Content-Type": "application/json",
     },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };

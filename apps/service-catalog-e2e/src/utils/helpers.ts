@@ -104,7 +104,7 @@ export const createService = async (apiRequestContext, service) => {
     throw new Error(`API call failed with status ${response.status()}`);
   }
 
-  return await response.json();
+  return response.json();
 };
 
 export const createPublicService = async (apiRequestContext, service) => {
@@ -123,7 +123,7 @@ export const createPublicService = async (apiRequestContext, service) => {
     throw new Error(`API call failed with status ${response.status()}`);
   }
 
-  return await response.json();
+  return response.json();
 };
 
 export const publishService = async (apiRequestContext, serviceId) => {
@@ -139,7 +139,7 @@ export const publishService = async (apiRequestContext, serviceId) => {
     throw new Error(`API call failed with status ${response.status()}`);
   }
 
-  return await response.json();
+  return response.json();
 };
 
 export const publishPublicService = async (apiRequestContext, serviceId) => {
@@ -155,7 +155,7 @@ export const publishPublicService = async (apiRequestContext, serviceId) => {
     throw new Error(`API call failed with status ${response.status()}`);
   }
 
-  return await response.json();
+  return response.json();
 };
 
 export enum ServiceStatus {

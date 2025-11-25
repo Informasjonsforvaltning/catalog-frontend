@@ -7,7 +7,7 @@ export const getLatestTerms = async () => {
     headers: { Accept: "application/json" },
     method: "GET",
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const getOrgAcceptation = async (
@@ -25,7 +25,7 @@ export const getOrgAcceptation = async (
     method: "GET",
     next: { tags: ["terms-acceptation"] },
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
 
 export const acceptTerms = async (
@@ -42,5 +42,5 @@ export const acceptTerms = async (
     method: "POST",
     body: JSON.stringify(acceptation),
   };
-  return await fetch(resource, options);
+  return fetch(resource, options);
 };
