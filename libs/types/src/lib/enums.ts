@@ -13,7 +13,7 @@ export enum SpecializedType {
   SERIES = "SERIES",
 }
 
-export enum SchemaType {
-  DCATAPNO = "DCAT-AP-NO",
-  MOBILITYDCATAP = "mobilityDCAT-AP",
+export enum ApplicationProfile {
+  DCATAPNO = "DCAT_AP_NO",
+  MOBILITYDCATAP = "MOBILITYDCAT_AP",
 }

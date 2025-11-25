@@ -146,7 +146,7 @@ export const rightsSchema = Yup.object().shape({
   type: Yup.string().required(
     localization.datasetForm.validation.mobilityRights,
   ),
-})
+});
 
 export const mobilityDistributionSectionSchema = Yup.object().shape({
   accessURL: Yup.array()
@@ -425,9 +425,6 @@ export const confirmedMobilityDatasetSchema = draftDatasetSchema.shape({
   frequency: Yup.string().required(
     localization.datasetForm.validation.frequency,
   ),
-  euDataTheme: Yup.array()
-    .min(1, localization.datasetForm.validation.euDataTheme)
-    .required(localization.datasetForm.validation.euDataTheme),
   mobilityTheme: Yup.array()
     .min(1, localization.datasetForm.validation.mobilityTheme)
     .required(localization.datasetForm.validation.mobilityTheme),

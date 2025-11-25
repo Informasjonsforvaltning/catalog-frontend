@@ -16,12 +16,12 @@ import {
 import { datasetToBeCreatedTemplate } from "@dataset-catalog/components/dataset-form/utils/dataset-initial-values";
 import { NewPage } from "./new-page-client";
 import { withWriteProtectedPage } from "@dataset-catalog/utils/auth";
-import { SchemaType } from "@catalog-frontend/types";
+import { ApplicationProfile } from "@catalog-frontend/types";
 
 const NewDatasetPage = withWriteProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/datasets/new`,
   async ({ catalogId }) => {
-    const dataset = datasetToBeCreatedTemplate(SchemaType.DCATAPNO);
+    const dataset = datasetToBeCreatedTemplate(ApplicationProfile.DCATAPNO);
     const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
     const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
 

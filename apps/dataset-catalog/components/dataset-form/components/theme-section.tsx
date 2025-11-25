@@ -31,36 +31,6 @@ export const ThemeSection = ({
 
   return (
     <>
-      <FastField
-        id="euDataTheme-combobox"
-        as={Combobox}
-        multiple
-        hideClearButton
-        label={
-          <TitleWithHelpTextAndTag
-            tagTitle={localization.tag.required}
-            helpText={localization.datasetForm.helptext.euDataTheme}
-          >
-            {localization.datasetForm.fieldLabel.euDataTheme}
-          </TitleWithHelpTextAndTag>
-        }
-        filter={containsFilter}
-        placeholder={`${localization.search.search}...`}
-        error={errors.euDataTheme}
-        value={values.euDataTheme}
-        onValueChange={(values: string[]) =>
-          setFieldValue("euDataTheme", values)
-        }
-        size="sm"
-      >
-        <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-        {euDataThemes &&
-          euDataThemes.map((theme) => (
-            <Combobox.Option key={theme.uri} value={theme.uri}>
-              {getTranslateText(theme.label)}
-            </Combobox.Option>
-          ))}
-      </FastField>
       {isMobility ? (
         <FastField
           id="mobilityTheme-combobox"
@@ -98,6 +68,36 @@ export const ThemeSection = ({
             ))}
         </FastField>
       ) : undefined}
+      <FastField
+        id="euDataTheme-combobox"
+        as={Combobox}
+        multiple
+        hideClearButton
+        label={
+          <TitleWithHelpTextAndTag
+            tagTitle={isMobility ? undefined : localization.tag.required}
+            helpText={localization.datasetForm.helptext.euDataTheme}
+          >
+            {localization.datasetForm.fieldLabel.euDataTheme}
+          </TitleWithHelpTextAndTag>
+        }
+        filter={containsFilter}
+        placeholder={`${localization.search.search}...`}
+        error={errors.euDataTheme}
+        value={values.euDataTheme}
+        onValueChange={(values: string[]) =>
+          setFieldValue("euDataTheme", values)
+        }
+        size="sm"
+      >
+        <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
+        {euDataThemes &&
+          euDataThemes.map((theme) => (
+            <Combobox.Option key={theme.uri} value={theme.uri}>
+              {getTranslateText(theme.label)}
+            </Combobox.Option>
+          ))}
+      </FastField>
       <FastField
         id="losTheme-combobox"
         as={Combobox}

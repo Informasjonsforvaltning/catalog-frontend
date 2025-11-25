@@ -10,7 +10,7 @@ export interface Dataset extends DatasetToBeCreated {
 }
 
 export type DatasetToBeCreated = {
-  schemaType?: string;
+  applicationProfile?: string;
   title: LocalizedStrings;
   description: LocalizedStrings;
   approved: boolean;
@@ -73,7 +73,7 @@ export type DatasetSeries = {
 
 export type Rights = {
   type?: string;
-}
+};
 
 export type Distribution = {
   title?: LocalizedStrings;

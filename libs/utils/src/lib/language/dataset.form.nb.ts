@@ -234,7 +234,7 @@ export const datasetFormNb = {
     },
     mobilityDataset: {
       title: "Datasett for mobilitet og transport",
-      description: "Bruker MobilityDCAT-AP-NO-spesifikasjonen",
+      description: "Bruker MobilityDCAT-AP-spesifikasjonen",
       button: "Datasett for mobilitet og transport",
     },
   },

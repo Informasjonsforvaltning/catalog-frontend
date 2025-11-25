@@ -2,7 +2,7 @@ import {
   Dataset,
   DatasetToBeCreated,
   Distribution,
-  SchemaType,
+  ApplicationProfile,
 } from "@catalog-frontend/types";
 import { isEmpty } from "lodash";
 
@@ -15,7 +15,9 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     lastModified: dataset?.lastModified,
     uri: dataset?.uri,
     originalUri: dataset?.originalUri,
-    schemaType: isEmpty(dataset?.schemaType) ? undefined : dataset.schemaType,
+    applicationProfile: isEmpty(dataset?.applicationProfile)
+      ? undefined
+      : dataset.applicationProfile,
     title: dataset.title ?? "",
     description: !isEmpty(dataset?.description) ? dataset.description : {},
     accessRight: dataset?.accessRight,
@@ -60,10 +62,10 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
 };
 
 export const datasetToBeCreatedTemplate = (
-  schemaType?: SchemaType,
+  applicationProfile?: ApplicationProfile,
 ): DatasetToBeCreated => {
   return {
-    schemaType: schemaType,
+    applicationProfile: applicationProfile,
     title: {},
     description: {},
     approved: false,
