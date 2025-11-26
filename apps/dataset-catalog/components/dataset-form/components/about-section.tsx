@@ -94,7 +94,7 @@ export const AboutSection = ({
                 {localization.none}
               </Combobox.Option>
               {frequencies &&
-                frequencies.map((frequency: any, i: number) => (
+                frequencies.map((frequency, i: number) => (
                   <Combobox.Option
                     key={`frequency-${frequency.uri}-${i}`}
                     value={frequency.uri}
