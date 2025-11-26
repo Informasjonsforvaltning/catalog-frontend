@@ -45,7 +45,7 @@ const ImportResultDetailsPage = withAdminProtectedPage(
     ] as BreadcrumbType[];
 
     return (
-      <>
+      <div>
         <Breadcrumbs
           breadcrumbList={breadcrumbList}
           catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
@@ -58,7 +58,7 @@ const ImportResultDetailsPage = withAdminProtectedPage(
           catalogId={catalogId}
           importResult={importResult}
         />
-      </>
+      </div>
     );
   },
 );

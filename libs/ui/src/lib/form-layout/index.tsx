@@ -40,7 +40,6 @@ const SideMenu = ({ heading, children }: SideMenuProps) => {
       <ol>
         {React.Children.map(children, (child) => {
           if (React.isValidElement(child) && child.type === MenuItem) {
-            // eslint-disable-next-line react/jsx-no-useless-fragment
             return <>{child}</>;
           }
         })}

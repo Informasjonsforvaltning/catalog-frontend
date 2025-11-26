@@ -508,7 +508,9 @@ export const SearchPageClient = ({
                 </div>
                 <div className={styles.buttons}>
                   <>
-                    {/*hasAdminPermission && <ImportModal catalogId={catalogId} />*/}
+                    {/*hasAdminPermission && (
+                      <ImportModal catalogId={catalogId} />
+                    )*/}
                     {hasAdminPermission && (
                       <UploadButton
                         size="sm"
