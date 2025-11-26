@@ -9,6 +9,7 @@ import {
 import styles from "./datasets-page.module.css";
 import {
   HelpMarkdown,
+  LinkButton,
   NewDatasetModal,
   SearchField,
   SearchHit,
@@ -287,6 +288,14 @@ const DatasetsPageClient = ({
             <div className={styles.buttons}>
               {hasWritePermission && (
                 <>
+                  <LinkButton
+                    variant="primary"
+                    href={`/catalogs/${catalogId}/datasets/new`}
+                  >
+                    <PlusCircleIcon fontSize="1.2rem" />
+                    {localization.datasetForm.button.addDataset}
+                  </LinkButton>
+                  {/* 
                   <NewDatasetModal
                     catalogId={catalogId}
                     trigger={
@@ -295,7 +304,7 @@ const DatasetsPageClient = ({
                         {localization.datasetForm.button.addDataset}
                       </Button>
                     }
-                  />
+                  />*/}
                 </>
               )}
             </div>
