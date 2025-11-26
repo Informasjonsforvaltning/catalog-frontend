@@ -1,22 +1,21 @@
-import { getServerSession } from "next-auth";
+import { getServerSession, Session } from "next-auth";
 import { redirect } from "next/navigation";
 import { authOptions } from "../auth-options";
 import { validateOidcUserSession } from "../token";
 
 type SignInCallbackProps = {
   callbackUrl: string;
-  callbackParams?: any;
 };
 
-export const isValidSessionAndToken = async (session: any) =>
+export const isValidSessionAndToken = async (session: Session) =>
   session &&
   session.accessTokenExpiresAt > Date.now() / 1000 &&
   (await validateOidcUserSession(session?.accessToken));
 
 export const withValidSessionForApi = async (
-  next: (session: any) => Promise<Response>,
+  next: (session: Session) => Promise<Response>,
 ) => {
-  const session: any = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
 
   const valid = await isValidSessionAndToken(session);
   if (!valid) {
@@ -26,19 +25,16 @@ export const withValidSessionForApi = async (
 };
 
 export const getValidSession = async () => {
-  const session: any = await getServerSession(authOptions);
+  const session = await getServerSession(authOptions);
   const valid = await isValidSessionAndToken(session);
   return valid ? session : undefined;
 };
 
-export const redirectToSignIn = (
-  callback: SignInCallbackProps | undefined = undefined,
-) => {
+export const redirectToSignIn = (callback?: SignInCallbackProps) => {
   if (callback) {
-    const { callbackUrl, callbackParams } = callback;
+    const { callbackUrl } = callback;
     if (callbackUrl.startsWith("/")) {
-      const callbackUrlWithParams = `${callbackUrl}${callbackParams ? "?" + new URLSearchParams(callbackParams) : ""}`;
-      return redirect(`/auth/signin?callbackUrl=${callbackUrlWithParams}`);
+      return redirect(`/auth/signin?callbackUrl=${callbackUrl}`);
     }
   }
   return redirect("/auth/signin");

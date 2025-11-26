@@ -46,12 +46,12 @@ const SearchPage = withReadProtectedPage(
       .then((statuses) => prepareStatusList(statuses));
 
     const breadcrumbList = catalogId
-      ? ([
+      ? [
           {
             href: `/catalogs/${catalogId}`,
             text: localization.catalogType.concept,
           },
-        ] as BreadcrumbType[])
+        ]
       : [];
 
     const pageSettings = getServerConceptsPageSettings(await cookies());

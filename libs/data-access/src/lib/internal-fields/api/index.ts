@@ -16,15 +16,13 @@ export const getFields = async (catalogId: string, accessToken: string) => {
     "getFields",
   );
 
-  const resource = `${path}/${encodedCatalogId}/concepts/fields`;
-  const options = {
+  return fetch(`${path}/${encodedCatalogId}/concepts/fields`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json",
     },
     method: "GET",
-  };
-  return fetch(resource, options);
+  });
 };
 
 export const createInternalField = async (

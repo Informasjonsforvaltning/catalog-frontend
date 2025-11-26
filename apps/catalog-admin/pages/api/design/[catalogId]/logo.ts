@@ -16,8 +16,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  const session: any = await getServerSession(req, res, authOptions);
-  if (!session || session?.accessTokenExpiresAt < Date.now() / 1000) {
+  const session = await getServerSession(req, res, authOptions);
+  if (
+    !session?.accessTokenExpiresAt ||
+    session.accessTokenExpiresAt < Date.now() / 1000
+  ) {
     return res.status(401).send("Unauthorized");
   }
 

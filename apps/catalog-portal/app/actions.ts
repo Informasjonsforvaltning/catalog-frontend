@@ -3,14 +3,12 @@
 import {
   acceptTerms,
   getAllDatasetCatalogs,
-  getAllProcessingActivities,
   getAllServiceCatalogs,
   getConceptCountByCatalogId,
   oldGetAllDataServiceCatalogs,
 } from "@catalog-frontend/data-access";
 import {
   ServiceCatalogItem,
-  RecordOfProcessingActivities,
   DatasetCatalog,
   DataServiceCatalog,
   TermsAcceptation,
@@ -20,40 +18,40 @@ import { Session } from "next-auth";
 import { revalidateTag } from "next/cache";
 
 export const getDatasetCount = async (catalogId: string) => {
-  const session: Session = await getValidSession();
+  const session = await getValidSession();
   if (!session) {
-    redirectToSignIn({ callbackUrl: `/catalogs` });
+    return redirectToSignIn({ callbackUrl: `/catalogs` });
   }
 
   return catalogId ? getDatasetCountByOrg(catalogId, session) : 0;
 };
 
 export const getDataServiceCount = async (catalogId: string) => {
-  const session: Session = await getValidSession();
+  const session = await getValidSession();
   if (!session) {
-    redirectToSignIn({ callbackUrl: `/catalogs` });
+    return redirectToSignIn({ callbackUrl: `/catalogs` });
   }
 
   return catalogId ? getDataServiceCountByOrg(catalogId, session) : 0;
 };
 
 export const getConceptCount = async (catalogId: string) => {
-  const session: Session = await getValidSession();
+  const session = await getValidSession();
   if (!session) {
-    redirectToSignIn({ callbackUrl: `/catalogs` });
+    return redirectToSignIn({ callbackUrl: `/catalogs` });
   }
 
   return catalogId ? getConceptCountByOrg(catalogId, session) : 0;
 };
 
 export const getServiceCount = async (catalogId: string) => {
-  const session: Session = await getValidSession();
+  const session = await getValidSession();
   if (!session) {
-    redirectToSignIn({ callbackUrl: `/catalogs` });
+    return redirectToSignIn({ callbackUrl: `/catalogs` });
   }
 
   return catalogId
-    ? await getServiceCountByOrg(catalogId, session)
+    ? getServiceCountByOrg(catalogId, session)
     : { serviceCount: 0, publicServiceCount: 0 };
 };
 
@@ -114,7 +112,7 @@ const getDatasetCountByOrg = async (
     return 0;
   }
   try {
-    const result = (await response.json()) as DatasetCatalog[];
+    const result: DatasetCatalog[] = await response.json();
     const catalog = result.find((catalog) => catalog.id === orgId);
     return catalog?.datasetCount ?? 0;
   } catch (e) {
@@ -141,7 +139,7 @@ const getDataServiceCountByOrg = async (
     return 0;
   }
   try {
-    const result = (await response.json()) as DataServiceCatalog[];
+    const result: DataServiceCatalog[] = await response.json();
     const catalog = result.find((catalog) => catalog.id === orgId);
     return catalog?.dataServiceCount ?? 0;
   } catch (e) {
@@ -167,7 +165,7 @@ const getConceptCountByOrg = async (
     );
     return 0;
   }
-  return (await response.json()) as number;
+  return response.json();
 };
 
 export async function acceptTermsAndConditions(acceptation: TermsAcceptation) {
