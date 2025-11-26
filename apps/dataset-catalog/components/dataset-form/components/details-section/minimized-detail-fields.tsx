@@ -459,12 +459,10 @@ export const MinimizedDetailFields = ({
       </ToggleFieldButton>
     );
 
-  let fieldsList = FIELD_CONFIG;
-
-  //Remove frequency if form is mobilityDCAT
-  if (isMobility) {
-    fieldsList = FIELD_CONFIG.filter((f) => f.name !== "frequency");
-  }
+  // remove frequency if mobility form
+  const fieldsList = isMobility
+    ? FIELD_CONFIG.filter((f) => f.name !== "frequency")
+    : FIELD_CONFIG;
 
   // Split fields into expanded and minimized
   const expandedFields = fieldsList.filter((f) => isExpanded(f));

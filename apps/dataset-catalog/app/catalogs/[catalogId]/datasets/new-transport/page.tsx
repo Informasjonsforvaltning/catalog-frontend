@@ -28,8 +28,6 @@ const NewTransportDatasetPage = withWriteProtectedPage(
     const dataset = datasetToBeCreatedTemplate(
       ApplicationProfile.MOBILITYDCATAP,
     );
-    const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
-    const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
 
     const [
       losThemesResponse,
@@ -70,7 +68,7 @@ const NewTransportDatasetPage = withWriteProtectedPage(
       distributionStatuses: distributionStatusResponse.distributionStatuses,
     };
 
-    const breadcrumbList = [
+    const breadcrumbList: BreadcrumbType[] = [
       {
         href: `/catalogs/${catalogId}/datasets`,
         text: localization.catalogType.dataset,
@@ -79,7 +77,7 @@ const NewTransportDatasetPage = withWriteProtectedPage(
         href: `/catalogs/${catalogId}/datasets/new-transport`,
         text: localization.button.addMobilityDataset,
       },
-    ] as BreadcrumbType[];
+    ];
 
     return (
       <>
@@ -95,8 +93,8 @@ const NewTransportDatasetPage = withWriteProtectedPage(
           catalogId={catalogId}
           dataset={dataset}
           referenceData={referenceData}
-          referenceDataEnv={referenceDataEnv}
-          searchEnv={searchEnv}
+          referenceDataEnv={process.env.FDK_BASE_URI ?? ""}
+          searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI ?? ""}
         />
       </>
     );
