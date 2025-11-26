@@ -4,7 +4,7 @@ import {
   StorageData,
   DatasetToBeCreated,
   ReferenceData,
-} from "@catalog-frontend/types"; //need to change
+} from "@catalog-frontend/types";
 import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import { createDataset } from "@dataset-catalog/app/actions/actions";

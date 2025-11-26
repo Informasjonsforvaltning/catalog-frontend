@@ -86,7 +86,7 @@ export const datasetFormNb = {
     publish:
       "Publiser datasettbeskrivelsen til Data.norge.no. En beskrivelse kan ikke slettes så lenge den er publisert.",
     mobilityTheme:
-      "Velg ett eller flere transporttema som beskriver innholdet i datasettet. Listen er fra [EUs liste over transporttema](https://w3id.org/mobilitydcat-ap/mobility-theme).",
+      "Velg ett eller flere mobility-tema som beskriver innholdet i datasettet. Listen er fra [EUs liste over mobility-tema](https://w3id.org/mobilitydcat-ap/mobility-theme).",
     distributionRights: "Betingelser for tilgang og bruk av distribusjonen.",
     mobilityDataStandard:
       "Standard for distribusjonen av datasettet. Velges fra [EUs kontrollerte vokabular for Mobility Data Standard](https://w3id.org/mobilitydcat-ap/mobility-data-standard).",
@@ -100,7 +100,7 @@ export const datasetFormNb = {
     concept: "Begrep og emneord",
     informationModels: "Informasjonsmodeller",
     contactPoint: "Kontaktpunkt",
-    transportTheme: "Transporttema",
+    transportTheme: "Mobility-tema",
   },
   subtitle: {
     about: "Nøkkelinformasjon om datasettet.",
@@ -169,7 +169,7 @@ export const datasetFormNb = {
     contactName: "Navn",
     contactFields: "Kontaktinformasjon",
     description: "Beskrivelse",
-    mobilityTheme: "Transporttema",
+    mobilityTheme: "Mobility-tema",
     distributionRights: "Rettigheter",
     mobilityDataStandard: "Mobility-standard",
   },
@@ -202,7 +202,7 @@ export const datasetFormNb = {
     contacPointName: "Navn på kontaktpunkt er obligatorisk",
     accessUrlRequired: "Tilgangslenke må fylles ut.",
     relation: "Begge verdiene må fylles ut for å legge til en relasjon.",
-    mobilityTheme: "Minst ett transporttema må være valgt.",
+    mobilityTheme: "Minst ett mobility-tema må være valgt.",
     mobilityDataStandard: "Minst en datastandard må være valgt.",
     mobilityRights: "Rettigheter må velges.",
     format: "Minst ett filformat må velges.",
@@ -221,7 +221,7 @@ export const datasetFormNb = {
     update: "Oppdater",
     addDataset: "Legg til datasett",
     addDatasetSeries: "Legg til datasettserie",
-    addTransportDataset: "Legg til transport-datasett",
+    addMobilitytDataset: "Legg til mobility-datasett",
   },
   datasetTypeModal: {
     title: "Legg til datasett",
