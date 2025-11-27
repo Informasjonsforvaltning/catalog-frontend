@@ -103,7 +103,7 @@ const contactPointConfirmValidationSchema = Yup.array()
   )
   .test(
     "contact-has-at-least-one-value-field",
-    localization.datasetForm.validation.contactPoint,
+    localization.datasetForm.validation.contactPoints,
     (contactPoints) => {
       if (!contactPoints || contactPoints.length === 0) {
         return false;
@@ -126,6 +126,44 @@ export const distributionSectionSchema = Yup.object().shape({
         .url(localization.validation.invalidUrl),
     )
     .min(1, localization.datasetForm.validation.accessUrlRequired),
+  downloadURL: Yup.array()
+    .nullable()
+    .of(
+      Yup.string()
+        .nullable()
+        .matches(httpsRegex, localization.validation.invalidProtocol)
+        .url(localization.validation.invalidUrl),
+    ),
+  conformsTo: Yup.array().of(uriWithLabelSchema),
+  page: Yup.array().of(
+    Yup.string()
+      .matches(httpsRegex, localization.validation.invalidProtocol)
+      .url(localization.validation.invalidUrl),
+  ),
+});
+
+export const rightsSchema = Yup.object().shape({
+  type: Yup.string().required(
+    localization.datasetForm.validation.mobilityRights,
+  ),
+});
+
+export const mobilityDistributionSectionSchema = Yup.object().shape({
+  accessURL: Yup.array()
+    .of(
+      Yup.string()
+        .required(localization.datasetForm.validation.accessUrlRequired)
+        .matches(httpsRegex, localization.validation.invalidProtocol)
+        .url(localization.validation.invalidUrl),
+    )
+    .min(1, localization.datasetForm.validation.accessUrlRequired),
+  mobilityDataStandard: Yup.string().required(
+    localization.datasetForm.validation.mobilityDataStandard,
+  ),
+  rights: rightsSchema,
+  format: Yup.array()
+    .min(1, localization.datasetForm.validation.format)
+    .required(localization.datasetForm.validation.format),
   downloadURL: Yup.array()
     .nullable()
     .of(
@@ -311,6 +349,97 @@ export const confirmedDatasetSchema = draftDatasetSchema.shape({
   legalBasisForRestriction: Yup.array().of(uriWithLabelSchema),
   legalBasisForProcessing: Yup.array().of(uriWithLabelSchema),
   legalBasisForAccess: Yup.array().of(uriWithLabelSchema),
+  conformsTo: Yup.array().of(uriWithLabelSchema),
+  informationModelsFromOtherSources: Yup.array().of(uriWithLabelSchema),
+  references: Yup.array().of(referenceSchema),
+  relations: Yup.array().of(uriWithLabelSchema),
+  contactPoints: contactPointConfirmValidationSchema,
+});
+
+export const confirmedMobilityDatasetSchema = draftDatasetSchema.shape({
+  title: Yup.object()
+    .shape({
+      nb: Yup.string()
+        .min(3, localization.datasetForm.validation.title)
+        .label(
+          `${localization.datasetForm.fieldLabel.title} (${localization.language.nb})`,
+        )
+        .notRequired(),
+      nn: Yup.string()
+        .min(3, localization.datasetForm.validation.title)
+        .label(
+          `${localization.datasetForm.fieldLabel.title} (${localization.language.nn})`,
+        )
+        .notRequired(),
+      en: Yup.string()
+        .min(3, localization.datasetForm.validation.title)
+        .label(
+          `${localization.datasetForm.fieldLabel.title} (${localization.language.en})`,
+        )
+        .notRequired(),
+    })
+    .test(
+      "title-test",
+      localization.validation.oneLanguageRequired,
+      (title) => {
+        if (!title) {
+          return false;
+        }
+        return !!(title.nb || title.nn || title.en);
+      },
+    ),
+  description: Yup.object()
+    .shape({
+      nb: Yup.string()
+        .label(
+          `${localization.datasetForm.fieldLabel.description} (${localization.language.nb})`,
+        )
+        .min(5, localization.datasetForm.validation.description)
+        .notRequired(),
+      nn: Yup.string()
+        .label(
+          `${localization.datasetForm.fieldLabel.description} (${localization.language.nn})`,
+        )
+        .min(5, localization.datasetForm.validation.description)
+        .notRequired(),
+      en: Yup.string()
+        .label(
+          `${localization.datasetForm.fieldLabel.description} (${localization.language.en})`,
+        )
+        .min(5, localization.datasetForm.validation.description)
+        .notRequired(),
+    })
+    .test(
+      "description-test",
+      localization.validation.oneLanguageRequired,
+      (description) => {
+        if (!description) {
+          return false;
+        }
+        return !!(description.nb || description.nn || description.en);
+      },
+    ),
+  spatial: Yup.array()
+    .min(1, localization.datasetForm.validation.spatial)
+    .required(localization.datasetForm.validation.spatial),
+  frequency: Yup.string().required(
+    localization.datasetForm.validation.frequency,
+  ),
+  mobilityTheme: Yup.array()
+    .min(1, localization.datasetForm.validation.mobilityTheme)
+    .required(localization.datasetForm.validation.mobilityTheme),
+  distribution: Yup.array()
+    .of(distributionSectionSchema)
+    .min(1, localization.datasetForm.validation.distribution)
+    .required(localization.datasetForm.validation.distribution),
+  landingPage: Yup.array()
+    .nullable()
+    .of(
+      Yup.string()
+        .nonNullable(localization.validation.deleteFieldIfEmpty)
+        .matches(httpsRegex, localization.validation.invalidProtocol)
+        .url(localization.validation.invalidUrl),
+    ),
   conformsTo: Yup.array().of(uriWithLabelSchema),
   informationModelsFromOtherSources: Yup.array().of(uriWithLabelSchema),
   references: Yup.array().of(referenceSchema),

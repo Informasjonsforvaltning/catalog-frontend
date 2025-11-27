@@ -194,6 +194,7 @@ export const nb = {
 
   button: {
     addDataset: "Legg til ny datasettbeskrivelse",
+    addMobilityDataset: "Legg til ny mobilty-datasettbeskrivelse",
     addRelation: "Legg til relasjon",
     addWithFormat: "Legg til ny {text}",
     bin: "Søppelkasse",
