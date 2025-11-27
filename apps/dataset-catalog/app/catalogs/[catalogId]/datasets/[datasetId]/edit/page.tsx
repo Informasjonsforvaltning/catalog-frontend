@@ -78,20 +78,23 @@ const EditDatasetPage = withWriteProtectedPage(
       distributionStatuses: distributionStatusResponse.distributionStatuses,
     };
 
-    const breadcrumbList = [
+    const getTitle = (title: string | string[]): string =>
+      Array.isArray(title) ? title[0] : title;
+
+    const breadcrumbList: BreadcrumbType[] = [
       {
         href: `/catalogs/${catalogId}/datasets`,
         text: localization.catalogType.dataset,
       },
       {
         href: `/catalogs/${catalogId}/datasets/${datasetId}`,
-        text: getTranslateText(dataset.title),
+        text: getTitle(getTranslateText(dataset.title)),
       },
       {
         href: `/catalogs/${catalogId}/datasets/${datasetId}/edit`,
         text: localization.edit,
       },
-    ] as BreadcrumbType[]; //fix type. choose first element from gettranslateText if string[]
+    ];
 
     return (
       <>
