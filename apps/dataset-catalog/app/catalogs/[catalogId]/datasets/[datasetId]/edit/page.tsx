@@ -16,6 +16,10 @@ import {
   getLosThemes,
   getOpenLicenses,
   getProvenanceStatements,
+  getMobilityThemes,
+  getMobilityDataStandards,
+  getMobilityRights,
+  getDistributionStatuses,
 } from "@catalog-frontend/data-access";
 import { getDatasetById } from "@dataset-catalog/app/actions/actions";
 import { EditPage } from "./edit-page-client";
@@ -42,6 +46,10 @@ const EditDatasetPage = withWriteProtectedPage(
       frequenciesResponse,
       languageResponse,
       licenseResponse,
+      mobilityThemesResponse,
+      mobilityDataStandardResponse,
+      mobilityRightsResponse,
+      distributionStatusResponse,
     ] = await Promise.all([
       getLosThemes().then((res) => res.json()),
       getDataThemes().then((res) => res.json()),
@@ -50,6 +58,10 @@ const EditDatasetPage = withWriteProtectedPage(
       getFrequencies().then((res) => res.json()),
       getLanguages().then((res) => res.json()),
       getOpenLicenses().then((res) => res.json()),
+      getMobilityThemes().then((res) => res.json()),
+      getMobilityDataStandards().then((res) => res.json()),
+      getMobilityRights().then((res) => res.json()),
+      getDistributionStatuses().then((res) => res.json()),
     ]);
 
     const referenceData = {
@@ -60,6 +72,10 @@ const EditDatasetPage = withWriteProtectedPage(
       frequencies: frequenciesResponse.frequencies,
       languages: languageResponse.linguisticSystems,
       openLicenses: licenseResponse.openLicenses,
+      mobilityThemes: mobilityThemesResponse.mobilityThemes,
+      mobilityDataStandards: mobilityDataStandardResponse.mobilityDataStandards,
+      mobilityRights: mobilityRightsResponse.mobilityConditions,
+      distributionStatuses: distributionStatusResponse.distributionStatuses,
     };
 
     const breadcrumbList = [
@@ -75,7 +91,7 @@ const EditDatasetPage = withWriteProtectedPage(
         href: `/catalogs/${catalogId}/datasets/${datasetId}/edit`,
         text: localization.edit,
       },
-    ] as BreadcrumbType[];
+    ] as BreadcrumbType[]; //fix type. choose first element from gettranslateText if string[]
 
     return (
       <>
