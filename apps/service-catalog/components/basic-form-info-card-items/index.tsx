@@ -11,42 +11,11 @@ type Props = {
 
 export const BasicServiceFormInfoCardItems = (props: Props) => {
   const { service, language } = props;
-  const contactPoint = service.contactPoints?.[0];
 
   return (
     <InfoCard>
       <InfoCard.Item title={`${localization.description}:`}>
         {getTranslateText(service.description, language)}
-      </InfoCard.Item>
-
-      <InfoCard.Item title={`${localization.serviceCatalog.contactPoint}:`}>
-        <Heading size="2xs" level={4} className={styles.heading}>
-          {getTranslateText(contactPoint?.category, language) ||
-            localization.noName}
-        </Heading>
-
-        <DividerLine />
-
-        {contactPoint?.email && (
-          <Paragraph size="small" className={styles.content}>
-            <span className={styles.bold}>{localization.email}:</span>
-            {contactPoint.email}
-          </Paragraph>
-        )}
-
-        {contactPoint?.telephone && (
-          <Paragraph size="small" className={styles.content}>
-            <span className={styles.bold}>{localization.telephone}:</span>
-            {contactPoint.telephone}
-          </Paragraph>
-        )}
-
-        {contactPoint?.contactPage && (
-          <Paragraph size="small" className={styles.content}>
-            <span className={styles.bold}>{localization.contactPage}:</span>
-            {contactPoint.contactPage}
-          </Paragraph>
-        )}
       </InfoCard.Item>
 
       <InfoCard.Item title={`${localization.serviceCatalog.produces}:`}>

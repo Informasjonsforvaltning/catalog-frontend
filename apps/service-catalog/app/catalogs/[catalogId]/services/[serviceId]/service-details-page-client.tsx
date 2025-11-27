@@ -14,6 +14,8 @@ import PublishSwitch from "../../../../../components/publish-switch";
 import BasicServiceFormInfoCardItems from "../../../../../components/basic-form-info-card-items";
 import { useState } from "react";
 import styles from "./service-details-page.module.css";
+import { EnvelopeClosedIcon, LinkIcon, PhoneIcon } from "@navikt/aksel-icons";
+import { Link } from "@digdir/designsystemet-react";
 
 interface ServiceDetailsPageProps {
   service: Service;
@@ -32,6 +34,7 @@ const ServiceDetailsPageClient = ({
 }: ServiceDetailsPageProps) => {
   const [language, setLanguage] = useState("nb");
   const status = statuses.find((item) => item.uri === service.status);
+  const contactPoint = service.contactPoints?.[0];
 
   const handleLanguageChange = (value: string) => {
     setLanguage(value);
@@ -78,6 +81,48 @@ const ServiceDetailsPageClient = ({
                 ? localization.publicationState.publishedInFDK
                 : localization.publicationState.unpublished}
             </p>
+          </InfoCard.Item>
+
+          <InfoCard.Item
+            title={localization.serviceCatalog.contactPoint}
+            headingColor="light"
+          >
+            <div className={styles.contactPoints}>
+              <span>
+                {getTranslateText(contactPoint?.category, language) ||
+                  localization.noName}
+              </span>
+
+              {contactPoint?.email && (
+                <span>
+                  <div>
+                    <EnvelopeClosedIcon />
+                  </div>
+
+                  {contactPoint.email}
+                </span>
+              )}
+              {contactPoint?.telephone && (
+                <span>
+                  <div>
+                    <PhoneIcon />
+                  </div>
+                  {contactPoint.telephone}
+                </span>
+              )}
+
+              {contactPoint?.contactPage && (
+                <span>
+                  <div>
+                    <LinkIcon />
+                  </div>
+
+                  <Link href={contactPoint.contactPage}>
+                    {contactPoint.contactPage}
+                  </Link>
+                </span>
+              )}
+            </div>
           </InfoCard.Item>
         </InfoCard>
       </DetailsPageLayout.Right>
