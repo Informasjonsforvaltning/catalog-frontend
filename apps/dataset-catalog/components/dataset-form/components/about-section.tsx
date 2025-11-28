@@ -2,7 +2,6 @@ import {
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
-  FastFieldWithRef,
 } from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
@@ -99,9 +98,7 @@ export const AboutSection = ({
                     key={`frequency-${frequency.uri}-${i}`}
                     value={frequency.uri}
                   >
-                    {capitalizeFirstLetter(
-                      getTranslateText(frequency.label).toString(),
-                    )}
+                    {capitalizeFirstLetter(getTranslateText(frequency.label))}
                   </Combobox.Option>
                 ))}
             </Combobox>

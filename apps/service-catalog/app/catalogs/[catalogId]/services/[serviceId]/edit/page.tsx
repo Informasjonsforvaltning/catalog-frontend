@@ -27,7 +27,7 @@ export default async function EditServicePage({
     },
     {
       href: `/catalogs/${catalogId}/services/${serviceId}`,
-      text: getTranslateText(service.title).toString(),
+      text: getTranslateText(service.title),
     },
     {
       href: `/catalogs/${catalogId}/services/${serviceId}/edit`,
@@ -43,7 +43,7 @@ export default async function EditServicePage({
       />
       <PageBanner
         title={localization.catalogType.service}
-        subtitle={getTranslateText(organization?.prefLabel).toString()}
+        subtitle={getTranslateText(organization?.prefLabel)}
       />
       <EditPage service={service} statuses={statusesResponse.statuses} />
     </>

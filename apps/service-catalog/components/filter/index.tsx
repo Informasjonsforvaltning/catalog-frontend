@@ -58,7 +58,7 @@ export const Filter = ({
             >
               {publicationStates.map((state) => (
                 <Checkbox key={state.name} value={state.value}>
-                  {getTranslateText(state.name)}
+                  {state.name}
                 </Checkbox>
               ))}
             </Checkbox.Group>

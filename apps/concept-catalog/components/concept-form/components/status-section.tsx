@@ -10,7 +10,6 @@ import {
   getTranslateText,
   localization,
 } from "@catalog-frontend/utils";
-import { get, isEqual } from "lodash";
 
 type StatusSectionProps = {
   conceptStatuses: ReferenceDataCode[];
@@ -52,7 +51,7 @@ export const StatusSection = ({
       >
         {conceptStatuses.map((status) => (
           <Radio key={status.uri} value={status.uri}>
-            {capitalizeFirstLetter(getTranslateText(status.label) as string)}
+            {capitalizeFirstLetter(getTranslateText(status.label))}
           </Radio>
         ))}
       </Radio.Group>

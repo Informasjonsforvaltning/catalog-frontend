@@ -66,10 +66,10 @@ export const InternalSection = ({
 
     const FieldLabel = () => (
       <TitleWithHelpTextAndTag
-        helpText={getTranslateText(internalField.description) as string}
+        helpText={getTranslateText(internalField.description)}
         changed={changed?.includes(name)}
       >
-        {capitalizeFirstLetter(getTranslateText(internalField.label) as string)}
+        {capitalizeFirstLetter(getTranslateText(internalField.label))}
       </TitleWithHelpTextAndTag>
     );
 

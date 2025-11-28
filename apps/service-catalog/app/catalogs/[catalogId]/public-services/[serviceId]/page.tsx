@@ -67,7 +67,7 @@ export default async function PublicServiceDetailsPage({
       />
       <PageBanner
         title={localization.catalogType.publicService}
-        subtitle={getTranslateText(organization?.prefLabel).toString()}
+        subtitle={getTranslateText(organization?.prefLabel)}
       />
       <PublicServiceDetailsPageClient
         service={service}

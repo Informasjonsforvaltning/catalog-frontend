@@ -1,15 +1,10 @@
 import React from "react";
-import {
-  UnionRelation,
-  RelatedConcept,
-  LocalizedStrings,
-} from "@catalog-frontend/types";
+import { UnionRelation, RelatedConcept } from "@catalog-frontend/types";
 import { KeyValueListItem } from "@catalog-frontend/ui";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { Link } from "@digdir/designsystemet-react";
 
 interface Props {
-  title: LocalizedStrings;
   isReplacedBy: UnionRelation[];
   relatedConceptsMap: (identifier: string) => RelatedConcept | undefined;
   language?: string;
