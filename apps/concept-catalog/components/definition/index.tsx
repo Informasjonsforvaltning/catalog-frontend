@@ -26,7 +26,7 @@ export const Definition = ({ definition, language }: Props) => {
 
   return (
     <>
-      <div>{getTranslateText(definition?.tekst ?? "", language)}</div>
+      <div>{getTranslateText(definition?.tekst, language)}</div>
       {(definition?.kildebeskrivelse?.forholdTilKilde === "egendefinert" ||
         definition?.kildebeskrivelse?.kilde.length !== 0) && (
         <div className={classes.source}>

@@ -232,7 +232,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
         );
       })
       .map((code: Code) => ({
-        label: String(getTranslateText(code.name)),
+        label: getTranslateText(code.name),
         value: code.id,
       }))
       .concat({

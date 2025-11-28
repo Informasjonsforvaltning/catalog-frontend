@@ -1,4 +1,4 @@
-import { UriWithLabel, ReferenceDataCode } from "@catalog-frontend/types";
+import { ReferenceDataCode } from "@catalog-frontend/types";
 import {
   capitalizeFirstLetter,
   getTranslateText,
@@ -20,9 +20,7 @@ export const ReferenceDataTags = ({ values, data }: Props) => {
 
   const renderTag = (uri: string) => {
     const label = dataMap.get(uri);
-    const displayText = capitalizeFirstLetter(
-      getTranslateText(label)?.toString() || uri,
-    );
+    const displayText = capitalizeFirstLetter(getTranslateText(label) || uri);
     return (
       <Tag size="sm" color="info" key={uri}>
         {displayText}

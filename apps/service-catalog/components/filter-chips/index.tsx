@@ -30,9 +30,7 @@ export const FilterChips = ({
             onClick={() => handleRemoveFilter(filter, "status")}
           >
             {capitalizeFirstLetter(
-              getTranslateText(
-                statuses?.find((s) => s.uri === filter)?.label,
-              ) as string,
+              getTranslateText(statuses?.find((s) => s.uri === filter)?.label),
             )}
           </Chip.Removable>
         ))}

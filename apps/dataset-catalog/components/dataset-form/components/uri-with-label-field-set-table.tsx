@@ -184,13 +184,9 @@ const FieldModal = ({
                 <>
                   <Modal.Header closeButton={false}>
                     {type === "edit" ? localization.edit : localization.add}{" "}
-                    {getTranslateText(
-                      localization.datasetForm.fieldLabel?.[
-                        fieldName as keyof typeof localization.datasetForm.fieldLabel
-                      ],
-                    )
-                      ?.toString()
-                      .toLowerCase()}
+                    {localization.datasetForm.fieldLabel?.[
+                      fieldName as keyof typeof localization.datasetForm.fieldLabel
+                    ].toLowerCase()}
                   </Modal.Header>
 
                   <Modal.Content className={styles.modalContent}>

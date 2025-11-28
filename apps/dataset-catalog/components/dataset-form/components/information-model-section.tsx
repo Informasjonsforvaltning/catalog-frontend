@@ -98,25 +98,23 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
                   value={suggestion.uri}
                   key={suggestion.uri}
                   displayValue={
-                    capitalizeFirstLetter(
-                      getTranslateText(suggestion.title) as string,
-                    ) ?? suggestion.uri
+                    capitalizeFirstLetter(getTranslateText(suggestion.title)) ??
+                    suggestion.uri
                   }
                 >
                   <div className={styles.comboboxOption}>
                     <div>
                       {capitalizeFirstLetter(
-                        getTranslateText(suggestion.title) as string,
+                        getTranslateText(suggestion.title),
                       ) ?? suggestion.uri}
                     </div>
                     <div>
                       {capitalizeFirstLetter(
-                        getTranslateText(suggestion.description) as string,
-                      ) ?? ""}
+                        getTranslateText(suggestion.description),
+                      )}
                     </div>
                     <div>
-                      {getTranslateText(suggestion.organization?.prefLabel) ??
-                        ""}
+                      {getTranslateText(suggestion.organization?.prefLabel)}
                     </div>
                   </div>
                 </Combobox.Option>

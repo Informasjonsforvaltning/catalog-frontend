@@ -37,7 +37,7 @@ export default async function NewPublicServicePage({
       />
       <PageBanner
         title={localization.catalogType.publicService}
-        subtitle={getTranslateText(organization?.prefLabel).toString()}
+        subtitle={getTranslateText(organization?.prefLabel)}
       />
       <NewPage statuses={statusesResponse.statuses} />
     </>

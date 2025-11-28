@@ -2,11 +2,7 @@ import { DataService, DataServiceReferenceData } from "@catalog-frontend/types";
 import styles from "./details-columns.module.css";
 import { InfoCard } from "@catalog-frontend/ui";
 import { isEmpty } from "lodash";
-import {
-  accessRights,
-  getTranslateText,
-  localization,
-} from "@catalog-frontend/utils";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { Paragraph, Tag } from "@digdir/designsystemet-react";
 import { DetailsUrlList } from "./components/details-url-list";
 import { ReferenceDataTag } from "./components/reference-data-tag";
@@ -119,20 +115,9 @@ export const LeftColumn = ({
           data-testid="data-service-keywords"
         >
           <li className={styles.list}>
-            {(
-              getTranslateText(dataService?.keywords, language) as string[]
-            )?.map((item, index) => {
-              return item ? (
-                <Tag
-                  size="sm"
-                  color="info"
-                  key={`keyword-tag-${index}`}
-                  data-testid={`keyword-tag-${index}`}
-                >
-                  {item}
-                </Tag>
-              ) : null;
-            })}
+            <Tag size="sm" color="info">
+              {getTranslateText(dataService?.keywords, language)}
+            </Tag>
           </li>
         </InfoCard.Item>
       )}

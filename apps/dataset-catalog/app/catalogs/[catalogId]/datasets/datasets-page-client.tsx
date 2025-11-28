@@ -10,14 +10,13 @@ import styles from "./datasets-page.module.css";
 import {
   HelpMarkdown,
   LinkButton,
-  NewDatasetModal,
   SearchField,
   SearchHit,
   SearchHitContainer,
   SearchHitsLayout,
   Select,
 } from "@catalog-frontend/ui";
-import { Button, Chip, Tag } from "@digdir/designsystemet-react";
+import { Chip, Tag } from "@digdir/designsystemet-react";
 import {
   dateStringToDate,
   formatDate,
@@ -94,15 +93,12 @@ const DatasetsPageClient = ({
       switch (sortKey) {
         case "titleAsc":
           return (a: Dataset, b: Dataset) =>
-            sortAscending(
-              getTranslateText(a.title)?.toString() || "",
-              getTranslateText(b.title)?.toString() || "",
-            );
+            sortAscending(getTranslateText(a.title), getTranslateText(b.title));
         case "titleDesc":
           return (a: Dataset, b: Dataset) =>
             sortDescending(
-              getTranslateText(a.title)?.toString() || "",
-              getTranslateText(b.title)?.toString() || "",
+              getTranslateText(a.title),
+              getTranslateText(b.title),
             );
         case "lastChanged":
           return (a: Dataset, b: Dataset) =>
@@ -174,11 +170,9 @@ const DatasetsPageClient = ({
         filtered = filtered.filter(
           (dataset) =>
             getTranslateText(dataset?.title)
-              .toString()
               .toLowerCase()
               .includes(lowercasedQuery) ||
             getTranslateText(dataset?.description)
-              .toString()
               .toLowerCase()
               .includes(lowercasedQuery),
         );
@@ -209,7 +203,7 @@ const DatasetsPageClient = ({
                 removeFilter(filter, "status");
               }}
             >
-              {getTranslateText(localization.datasetForm.filter[filter])}
+              {localization.datasetForm.filter[filter]}
             </Chip.Removable>
           ))}
           {filterPublicationState?.map((filter, index) => (

@@ -4,3 +4,7 @@ export const ensureStringArray = (input: string | string[]): string[] => {
   }
   return input; // Already an array, so return it as is
 };
+
+export function getString(input: string | string[]): string {
+  return typeof input === "object" ? input[0] : input;
+}

@@ -1,17 +1,6 @@
-import {
-  FormikLanguageFieldset,
-  TitleWithHelpTextAndTag,
-  TextareaWithPrefix,
-} from "@catalog-frontend/ui";
+import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 import { localization, getTranslateText } from "@catalog-frontend/utils";
-import {
-  Box,
-  Combobox,
-  Textfield,
-  Fieldset,
-} from "@digdir/designsystemet-react";
-import { FastField } from "formik";
-import { FieldsetDivider } from "@catalog-frontend/ui";
+import { Combobox, Fieldset } from "@digdir/designsystemet-react";
 import { Dataset, ReferenceDataCode } from "@catalog-frontend/types";
 import {
   useSearchAdministrativeUnits,
@@ -19,7 +8,7 @@ import {
 } from "../../../hooks/useReferenceDataSearch";
 import { useCallback, useState } from "react";
 import { useFormikContext } from "formik";
-import { debounce, sortBy } from "lodash";
+import { debounce } from "lodash";
 
 interface Props {
   referenceDataEnv: string;

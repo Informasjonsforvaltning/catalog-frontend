@@ -289,9 +289,7 @@ const FieldModal = ({ template, type, onSuccess, currencies }: ModalProps) => {
                                 >
                                   {currencyRef.code} (
                                   {capitalizeFirstLetter(
-                                    getTranslateText(
-                                      currencyRef.label,
-                                    )?.toString(),
+                                    getTranslateText(currencyRef.label),
                                   )}
                                   )
                                 </Combobox.Option>

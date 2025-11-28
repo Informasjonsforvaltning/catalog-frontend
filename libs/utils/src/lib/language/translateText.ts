@@ -1,26 +1,25 @@
 import { get } from "lodash";
 import { localization } from "./localization";
+import { LocalizedStrings } from "@catalog-frontend/types";
+import { getString } from "../text/text";
 
 export const getTranslateText = (
-  textObj: any,
+  textObj: LocalizedStrings | null | undefined,
   language?: string,
-): string | string[] => {
+): string => {
   const selectedLanguage = language || localization.getLanguage();
-  if (typeof textObj === "string") {
-    return textObj;
-  }
 
-  if (textObj === null || typeof textObj !== "object") {
+  if (!textObj) {
     return "";
   }
 
-  return (
+  const value =
     textObj[selectedLanguage] ||
     get(textObj, selectedLanguage) ||
     get(textObj, "nb") ||
     get(textObj, "no") ||
     get(textObj, "nn") ||
-    get(textObj, "en") ||
-    ""
-  );
+    get(textObj, "en");
+
+  return value ? getString(value) : "";
 };

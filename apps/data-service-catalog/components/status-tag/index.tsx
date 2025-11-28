@@ -20,12 +20,10 @@ export const StatusTag = ({
         findDistributionStatus(dataServiceStatus)
           ?.code as DataServiceStatusTagProps["statusKey"]
       }
-      statusLabel={
-        getTranslateText(
-          findDistributionStatus(dataServiceStatus)?.label,
-          language,
-        ) as string
-      }
+      statusLabel={getTranslateText(
+        findDistributionStatus(dataServiceStatus)?.label,
+        language,
+      )}
     />
   ) : (
     <></>

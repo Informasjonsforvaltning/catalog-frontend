@@ -122,11 +122,9 @@ const ConceptSearchHits: React.FC<Props> = ({
                       findConceptStatus(concept.statusURI)
                         ?.code as ConceptStatusTagProps["statusKey"]
                     }
-                    statusLabel={
-                      translate(
-                        findConceptStatus(concept.statusURI)?.label,
-                      ) as string
-                    }
+                    statusLabel={translate(
+                      findConceptStatus(concept.statusURI)?.label,
+                    )}
                   />
                 )
               }

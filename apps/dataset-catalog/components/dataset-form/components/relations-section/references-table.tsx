@@ -399,7 +399,7 @@ const FieldModal = ({
                                 <div>
                                   {getTranslateText(
                                     dataset.organization?.prefLabel,
-                                  ) ?? ""}
+                                  )}
                                 </div>
                               </div>
                             </Combobox.Option>

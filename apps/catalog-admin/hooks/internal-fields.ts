@@ -47,7 +47,7 @@ export const useCreateInternalField = (catalogId: string) => {
         return Promise.reject("Internal field must have a label");
       }
 
-      if (!validateLabelField(String(getTranslateText(field.label)))) {
+      if (!validateLabelField(getTranslateText(field.label))) {
         return Promise.reject("Internal field label must have correct format");
       }
 
@@ -95,7 +95,7 @@ export const useUpdateInternalField = (catalogId: string) => {
         return Promise.reject("Internal field must have a label");
       }
 
-      const label = String(getTranslateText(updatedField.label));
+      const label = getTranslateText(updatedField.label);
       if (!validateLabelField(label)) {
         return Promise.reject("Internal field label must have correct format");
       }

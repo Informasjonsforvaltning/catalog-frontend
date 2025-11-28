@@ -36,7 +36,7 @@ const DesignBanner = async ({ catalogId, title }: BannerProps) => {
   return (
     <PageBanner
       title={title}
-      subtitle={getTranslateText(organization.prefLabel).toString()}
+      subtitle={getTranslateText(organization.prefLabel)}
       fontColor={design?.fontColor}
       backgroundColor={design?.backgroundColor}
       logo={design?.hasLogo ? logo : undefined}

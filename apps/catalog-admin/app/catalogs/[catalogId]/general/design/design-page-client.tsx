@@ -5,12 +5,7 @@ import { useAdminState } from "../../../../../context/admin";
 import { ColorPicker } from "../../../../../components/color-picker";
 import { ImageUploader } from "../../../../../components/image-uploader";
 import styles from "./design.module.css";
-import {
-  BreadcrumbType,
-  Breadcrumbs,
-  Button,
-  PageBanner,
-} from "@catalog-frontend/ui";
+import { Breadcrumbs, Button, PageBanner } from "@catalog-frontend/ui";
 import { Heading, Label, Textfield } from "@digdir/designsystemet-react";
 import {
   getTranslateText,
@@ -92,20 +87,20 @@ const DesignPageClient = ({
   }, [dbDesign?.logoDescription]);
 
   const breadcrumbList = catalogId
-    ? ([
+    ? [
         {
           href: `/catalogs/${catalogId}`,
-          text: getTranslateText(localization.manageCatalog),
+          text: localization.manageCatalog,
         },
         {
           href: `/catalogs/${catalogId}/general`,
-          text: getTranslateText(localization.general),
+          text: localization.general,
         },
         {
           href: `/catalogs/${catalogId}/general/design`,
-          text: getTranslateText(localization.catalogAdmin.design),
+          text: localization.catalogAdmin.design,
         },
-      ] as BreadcrumbType[])
+      ]
     : [];
 
   return (

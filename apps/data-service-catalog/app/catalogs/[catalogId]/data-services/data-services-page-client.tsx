@@ -98,15 +98,12 @@ const DataServicesPageClient = ({
       switch (sortKey) {
         case "titleAsc":
           return (a: DataService, b: DataService) =>
-            sortAscending(
-              getTranslateText(a.title)?.toString() || "",
-              getTranslateText(b.title)?.toString() || "",
-            );
+            sortAscending(getTranslateText(a.title), getTranslateText(b.title));
         case "titleDesc":
           return (a: DataService, b: DataService) =>
             sortDescending(
-              getTranslateText(a.title)?.toString() || "",
-              getTranslateText(b.title)?.toString() || "",
+              getTranslateText(a.title),
+              getTranslateText(b.title),
             );
         case "lastChanged":
           return (a: DataService, b: DataService) =>
@@ -167,11 +164,9 @@ const DataServicesPageClient = ({
         filtered = filtered.filter(
           (dataService) =>
             getTranslateText(dataService?.title)
-              .toString()
               .toLowerCase()
               .includes(lowercasedQuery) ||
             getTranslateText(dataService?.description)
-              .toString()
               .toLowerCase()
               .includes(lowercasedQuery),
         );
@@ -215,7 +210,7 @@ const DataServicesPageClient = ({
               {capitalizeFirstLetter(
                 getTranslateText(
                   distributionStatuses?.find((s) => s.uri === filter)?.label,
-                ) as string,
+                ),
               )}
             </Chip.Removable>
           ))}

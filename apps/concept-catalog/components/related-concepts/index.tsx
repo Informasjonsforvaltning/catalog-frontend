@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  UnionRelation,
-  RelatedConcept,
-  LocalizedStrings,
-} from "@catalog-frontend/types";
+import { UnionRelation, RelatedConcept } from "@catalog-frontend/types";
 import { KeyValueList } from "@catalog-frontend/ui";
 import AssociativeRelations from "./associative-relations";
 import PartitiveRelations from "./partitive-relations";
@@ -17,7 +13,6 @@ type RelatedConceptsProps = {
   relatedConcepts: RelatedConcept[];
   validFromIncluding: string | null | undefined;
   validToIncluding: string | null | undefined;
-  title: LocalizedStrings;
   language: string;
 };
 
@@ -26,7 +21,6 @@ const RelatedConcepts = ({
   relatedConcepts,
   validToIncluding,
   validFromIncluding,
-  title,
   language,
 }: RelatedConceptsProps) => {
   const associativeRelations =
@@ -79,7 +73,6 @@ const RelatedConcepts = ({
       )}
       {isReplacedBy.length > 0 && (
         <IsReplacedBy
-          title={title}
           isReplacedBy={isReplacedBy}
           relatedConceptsMap={relatedConceptsMap}
           language={language}

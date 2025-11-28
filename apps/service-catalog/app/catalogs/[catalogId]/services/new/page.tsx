@@ -35,7 +35,7 @@ export default async function NewServicePage(props: {
       />
       <PageBanner
         title={localization.catalogType.service}
-        subtitle={getTranslateText(organization?.prefLabel).toString()}
+        subtitle={getTranslateText(organization?.prefLabel)}
       />
       <NewPage statuses={statusesResponse.statuses} />
     </>

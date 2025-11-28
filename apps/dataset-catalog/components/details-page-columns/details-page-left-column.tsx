@@ -103,7 +103,7 @@ export const LeftColumn = ({
       {hasValues(dataset?.description) && (
         <InfoCard.Item title={localization.description}>
           <MarkdownComponent>
-            {getTranslateText(dataset?.description, language) as string}
+            {getTranslateText(dataset?.description, language)}
           </MarkdownComponent>
         </InfoCard.Item>
       )}
@@ -330,7 +330,7 @@ export const LeftColumn = ({
                 qualifiedAttributions.find(
                   (attribution) => attribution.organisasjonsnummer === org,
                 );
-              return match ? getTranslateText(match?.navn, language) : org;
+              return match ? match.navn : org;
             }}
           />
         </InfoCard.Item>
@@ -406,12 +406,7 @@ export const LeftColumn = ({
                   return matchedType ? (
                     <>
                       <Tag size="sm" color="info">
-                        {capitalizeFirstLetter(
-                          getTranslateText(
-                            matchedType.title,
-                            language,
-                          ).toString(),
-                        )}
+                        {capitalizeFirstLetter(matchedType.title)}
                       </Tag>
                     </>
                   ) : (
@@ -459,10 +454,8 @@ export const LeftColumn = ({
                           <Link
                             href={`${referenceDataEnv}/concepts/${match?.id}`}
                           >
-                            {getTranslateText(
-                              match?.title,
-                              language,
-                            ).toString() ?? concept}
+                            {getTranslateText(match?.title, language) ??
+                              concept}
                           </Link>
                         }
                       </Table.Cell>
