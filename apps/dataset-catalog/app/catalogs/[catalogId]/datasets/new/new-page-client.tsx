@@ -29,10 +29,10 @@ export const NewPage = ({
   const router = useRouter();
 
   const dataStorage = new LocalDataStorage<StorageData>({
-    key: "mobilityDatasetForm",
+    key: "datasetForm",
     secondaryKeys: {
-      distribution: "mobilityDatasetFormDistribution",
-      reference: "mobilityDatasetFormReference",
+      distribution: "datasetFormDistribution",
+      reference: "datasetFormReference",
     },
   });
 
