@@ -124,8 +124,8 @@ export default class ConceptsPage {
     // Name and description
     await this.page
       .getByRole("link", { name: "Nytt begrep" })
-      .click({ timeout: 10000 }); // TODO
-    await this.editPage.expectMenu(); // TODO
+      .click({ timeout: 10000 });
+    await this.editPage.expectMenu();
     await this.editPage.fillFormAndSave(concept, apiRequestContext);
     await this.detailPage.expectDetails(concept, apiRequestContext);
   }
