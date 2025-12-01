@@ -106,7 +106,7 @@ export const FormikLanguageFieldset = ({
     }
 
     if (get(errors, name)) {
-      return getTranslateText(get(errors, name));
+      return get(errors, name);
     }
 
     return null;
