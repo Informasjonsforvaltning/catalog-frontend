@@ -12,3 +12,8 @@ export enum PublicationStatus {
 export enum SpecializedType {
   SERIES = "SERIES",
 }
+
+export enum ApplicationProfile {
+  DCATAPNO = "DCAT_AP_NO",
+  MOBILITYDCATAP = "MOBILITYDCAT_AP",
+}

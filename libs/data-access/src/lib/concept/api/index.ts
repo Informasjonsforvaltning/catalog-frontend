@@ -10,8 +10,6 @@ import { searchConceptsByUri } from "../../search/api";
 import {
   getUniqueConceptIdsFromUris,
   isObjectNullUndefinedEmpty,
-  validOrganizationNumber,
-  validUUID,
   validateOrganizationNumber,
   validateUUID,
   validateAndEncodeUrlSafe,
@@ -471,31 +469,34 @@ export const getConceptImportResultById = async (
   return await fetch(resource, options);
 };
 
-export const confirmConceptImport = async (
+export const confirmImportedConcept = async (
   catalogId: string,
   resultId: string,
+  externalId: string,
   accessToken: string,
 ) => {
-  validateOrganizationNumber(catalogId, "confirmConceptImport");
-  validateUUID(resultId, "confirmConceptImport");
+  validateOrganizationNumber(catalogId, "confirm-concept-import");
+  validateUUID(resultId, "confirm-concept-import");
 
   const encodedCatalogId = validateAndEncodeUrlSafe(
     catalogId,
     "catalog ID",
-    "confirmConceptImport",
+    "confirm-concept-import",
   );
+
   const encodedResultId = validateAndEncodeUrlSafe(
     resultId,
     "result ID",
-    "confirmConceptImport",
+    "confirm-concept-import",
   );
 
-  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}/confirm`;
+  const resource = `${process.env.CONCEPT_CATALOG_BASE_URI}/import/${encodedCatalogId}/${encodedResultId}/confirm-concept-import`;
   const options = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
     method: "PUT",
+    body: externalId,
   };
 
   return await fetch(resource, options);

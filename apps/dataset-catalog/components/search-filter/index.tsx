@@ -93,7 +93,7 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
       content: (
         <>
           <p>
-            {localization.publicationState.descriptionConcept}
+            {localization.publicationState.descriptionDataset}
             <br />
             <br />
           </p>

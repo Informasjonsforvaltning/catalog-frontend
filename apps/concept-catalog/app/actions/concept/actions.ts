@@ -6,8 +6,8 @@ import {
   patchConcept as patchConceptApi,
   getConcept,
   removeImportResultConcept as removeImportResult,
-  confirmConceptImport,
   cancelConceptImport,
+  confirmImportedConcept,
 } from "@catalog-frontend/data-access";
 import { Concept, InternalField } from "@catalog-frontend/types";
 import {
@@ -139,7 +139,7 @@ export async function deleteConcept(catalogId: string, conceptId: string) {
     success = true;
   } catch (error) {
     console.error(error);
-    throw new Error(localization.alert.deleteFail);
+    throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
       revalidateTag("concepts");
@@ -242,7 +242,7 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
     success = true;
     console.log("Deleted import result", catalogId, resultId);
   } catch (error) {
-    throw new Error(localization.alert.deleteFail);
+    throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
       revalidateTag("import-results");
@@ -250,31 +250,32 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
   }
 }
 
-export async function confirmImport(catalogId: string, resultId: string) {
+export async function saveImportedConcept(
+  catalogId: string,
+  resultId: string,
+  externalId: string,
+) {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
   try {
-    const response = await confirmConceptImport(
+    const response = await confirmImportedConcept(
       catalogId,
       resultId,
+      externalId,
       `${session?.accessToken}`,
     );
 
     if (response.status !== 200 && response.status !== 201) {
       throw new Error();
     }
-    success = true;
     console.log("Confirmed import result", catalogId, resultId);
   } catch (error) {
-    throw new Error(localization.alert.fail);
+    console.error(error);
   } finally {
-    if (success) {
-      revalidateTag("import-result");
-      revalidateTag("import-results");
-    }
+    revalidateTag("import-result");
+    revalidateTag("import-results");
   }
 }
 

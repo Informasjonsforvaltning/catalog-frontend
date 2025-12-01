@@ -1,6 +1,6 @@
 "use client";
 
-import { ImportResult } from "@catalog-frontend/types";
+import { ImportResult, ImportResultStatus } from "@catalog-frontend/types";
 import styles from "./import-results-table.module.css";
 import { Table, Tooltip } from "@digdir/designsystemet-react";
 import {
@@ -18,12 +18,25 @@ import { useRouter } from "next/navigation";
 import { HelpMarkdown } from "../help-markdown";
 
 const importStatuses = [
-  { value: "COMPLETED", label: localization.importResult.completed },
-  { value: "FAILED", label: localization.importResult.failed },
-  { value: "IN_PROGRESS", label: localization.importResult.inProgress },
-  { value: "CANCELLED", label: localization.importResult.cancelled },
   {
-    value: "PENDING_CONFIRMATION",
+    value: ImportResultStatus.COMPLETED,
+    label: localization.importResult.completed,
+  },
+  {
+    value: ImportResultStatus.PARTIALLY_COMPLETED,
+    label: localization.importResult.partiallyCompleted,
+  },
+  { value: ImportResultStatus.FAILED, label: localization.importResult.failed },
+  {
+    value: ImportResultStatus.IN_PROGRESS,
+    label: localization.importResult.inProgress,
+  },
+  {
+    value: ImportResultStatus.CANCELLED,
+    label: localization.importResult.cancelled,
+  },
+  {
+    value: ImportResultStatus.PENDING_CONFIRMATION,
     label: localization.importResult.pendingConfirmation,
   },
 ];
@@ -106,48 +119,47 @@ const ImportResultsTable = ({
         </Table.Row>
       </Table.Head>
       <Table.Body>
-        {importResults.map((result: ImportResult) => (
+        {importResults.map((importResult: ImportResult) => (
           <Table.Row
-            key={result.id}
+            key={importResult.id}
             className={styles.tableItem}
-            onClick={() => router.push(`${importHref}/${result.id}`)}
+            onClick={() => router.push(`${importHref}/${importResult.id}`)}
           >
-            <Table.Cell>{importResultHitTitle(result)}</Table.Cell>
+            <Table.Cell>{importResultHitTitle(importResult)}</Table.Cell>
             <Table.Cell>
               <TagImportResultStatus
-                statusKey={result.status}
+                statusKey={importResult.status}
                 statusLabel={
-                  importStatuses.find((st) => result.status === st.value)
-                    ?.label ?? result.status
+                  importStatuses.find((st) => importResult.status === st.value)
+                    ?.label ?? importResult.status
                 }
               />
             </Table.Cell>
-            <Table.Cell>{formatDate(result.created)}</Table.Cell>
+            <Table.Cell>{formatDate(importResult.created)}</Table.Cell>
             <Table.Cell>
-              {result?.extractionRecords?.filter(
-                (record) => record.extractResult?.issues.length === 0,
-              ).length ?? 0}
+              {importResult?.conceptExtractions
+                ?.map((conceptExtraction) => conceptExtraction.extractionRecord)
+                ?.filter((record) => record.extractResult?.issues.length === 0)
+                .length ?? 0}
             </Table.Cell>
             <Table.Cell>
-              {result?.extractionRecords
+              {importResult?.conceptExtractions
+                ?.map((conceptExtraction) => conceptExtraction.extractionRecord)
                 ?.filter(
                   (record) =>
                     !record.extractResult?.issues.some(
-                      (issue) => issue.type === "ERROR",
+                      (issue) => issue.type === "WARNING",
                     ),
-                )
-                ?.filter((record) =>
-                  record.extractResult?.issues.some(
-                    (issue) => issue.type === "WARNING",
-                  ),
                 ).length ?? 0}
             </Table.Cell>
             <Table.Cell>
-              {result?.extractionRecords?.filter((record) =>
-                record.extractResult?.issues.some(
-                  (issue) => issue.type === "ERROR",
-                ),
-              ).length ?? 0}
+              {importResult?.conceptExtractions
+                ?.map((conceptExtraction) => conceptExtraction.extractionRecord)
+                ?.filter((record) =>
+                  record.extractResult?.issues.some(
+                    (issue) => issue.type === "ERROR",
+                  ),
+                ).length ?? 0}
             </Table.Cell>
           </Table.Row>
         ))}

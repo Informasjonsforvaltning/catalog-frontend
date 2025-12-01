@@ -1,6 +1,6 @@
 "use client";
 
-import { ImportResult } from "@catalog-frontend/types";
+import { ImportResult, ImportResultStatus } from "@catalog-frontend/types";
 import {
   AccordionItem,
   AccordionItemProps,
@@ -27,15 +27,27 @@ import { useEffect, useMemo, useState } from "react";
 import { isEmpty } from "lodash";
 
 const importStatuses = [
-  { value: "COMPLETED", label: localization.importResult.completed },
-  { value: "FAILED", label: localization.importResult.failed },
-  { value: "IN_PROGRESS", label: localization.importResult.inProgress },
-  { value: "CANCELLED", label: localization.importResult.cancelled },
   {
-    value: "PENDING_CONFIRMATION",
+    value: ImportResultStatus.IN_PROGRESS,
+    label: localization.importResult.inProgress,
+  },
+  {
+    value: ImportResultStatus.PENDING_CONFIRMATION,
     label: localization.importResult.pendingConfirmation,
   },
-  { value: "SAVING", label: localization.importResult.savingInCatalog },
+  {
+    value: ImportResultStatus.PARTIALLY_COMPLETED,
+    label: localization.importResult.partiallyCompleted,
+  },
+  {
+    value: ImportResultStatus.COMPLETED,
+    label: localization.importResult.completed,
+  },
+  {
+    value: ImportResultStatus.CANCELLED,
+    label: localization.importResult.cancelled,
+  },
+  { value: ImportResultStatus.FAILED, label: localization.importResult.failed },
 ];
 
 interface Props {

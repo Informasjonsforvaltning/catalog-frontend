@@ -15,33 +15,44 @@ import {
   XMarkOctagonIcon,
 } from "@navikt/aksel-icons";
 import { LinkButton } from "../../../button";
-import { ExtractionRecord } from "@catalog-frontend/types";
+import {
+  ConceptExtraction,
+  ConceptExtractionStatus,
+  ExtractionRecord,
+} from "@catalog-frontend/types";
 import { localization } from "@catalog-frontend/utils";
 
 interface Props {
   targetBaseHref: string;
-  record: ExtractionRecord;
+  conceptExtraction: ConceptExtraction;
   enableOpening: boolean;
   isCompleted: boolean;
 }
 
 const ImportRecordAccordionItem = ({
   targetBaseHref,
-  record,
+  conceptExtraction,
   enableOpening,
   isCompleted,
 }: Props) => {
   const errors =
-    record.extractResult?.issues?.filter((issue) => issue.type === "ERROR") ??
-    [];
+    conceptExtraction.extractionRecord.extractResult?.issues?.filter(
+      (issue) => issue.type === "ERROR",
+    ) ?? [];
   const warnings =
-    record.extractResult?.issues?.filter((issue) => issue.type === "WARNING") ??
-    [];
+    conceptExtraction.extractionRecord.extractResult?.issues?.filter(
+      (issue) => issue.type === "WARNING",
+    ) ?? [];
+
+  const decodeFromBase64 = (encodedBase64: string) =>
+    Buffer.from(encodedBase64, "base64").toString("utf-8");
 
   const renderHeader = (record: ExtractionRecord) => {
     return (
       <div className={styles.recordHeader}>
-        <div>{record.externalId}</div>
+        <div style={{ maxWidth: "90%" }}>
+          {decodeFromBase64(record.externalId)}
+        </div>
         {errors.length > 0 && (
           <Tag
             size={"sm"}
@@ -65,14 +76,18 @@ const ImportRecordAccordionItem = ({
 
   return (
     <AccordionItem>
-      <AccordionHeader>{renderHeader(record)}</AccordionHeader>
+      <AccordionHeader>
+        {renderHeader(conceptExtraction.extractionRecord)}
+      </AccordionHeader>
       <AccordionContent>
         {errors.length === 0 && enableOpening && (
           <div className={styles.buttonRow}>
-            {isCompleted && (
+            {(isCompleted ||
+              conceptExtraction.conceptExtractionStatus ===
+                ConceptExtractionStatus.COMPLETED) && (
               <LinkButton
                 variant={"tertiary"}
-                href={`/${targetBaseHref}/${record.internalId}`}
+                href={`/${targetBaseHref}/${conceptExtraction.extractionRecord.internalId}`}
               >
                 {localization.importResult.goToImported}
               </LinkButton>

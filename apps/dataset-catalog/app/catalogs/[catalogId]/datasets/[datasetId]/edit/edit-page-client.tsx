@@ -1,6 +1,10 @@
 "use client";
 
-import { Dataset, StorageData } from "@catalog-frontend/types";
+import {
+  ApplicationProfile,
+  Dataset,
+  StorageData,
+} from "@catalog-frontend/types";
 import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
 import { LocalDataStorage, localization } from "@catalog-frontend/utils";
 import {
@@ -38,6 +42,9 @@ export const EditPage = ({
       reference: "datasetFormReference",
     },
   });
+
+  const isMobility: boolean =
+    dataset.applicationProfile == ApplicationProfile.MOBILITYDCATAP;
 
   if (dataset.specializedType === "SERIES") {
     window.location.replace(
@@ -111,6 +118,7 @@ export const EditPage = ({
         onSubmit={handleUpdate}
         onCancel={handleCancel}
         showSnackbarSuccessOnInit={showSnackbar}
+        isMobility={isMobility}
       />
     </>
   );
