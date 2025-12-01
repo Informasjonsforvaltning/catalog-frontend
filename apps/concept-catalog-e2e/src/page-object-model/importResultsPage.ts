@@ -20,7 +20,8 @@ export default class ImportResultsPage {
     this.accessibilityBuilder = accessibilityBuilder;
   }
 
-  public getByLabelLocator = (label: string) => this.page.getByLabel(label);
+  public getByLabelLocator = (label: string) =>
+    this.page.getByLabel(new RegExp(`^${label}$`));
 
   // Locators
   statusFilterHeaderLocator = () =>

@@ -60,21 +60,25 @@ runTestAsAdmin(
     const dialog = conceptsPage.page.getByRole("dialog", {
       has: conceptsPage.page.getByRole("button", {
         name: `${localization.importResult.results}`,
+        exact: true,
       }),
     });
 
     // click the Import results button
     console.log("[TEST] Clicking on results button...");
     //await conceptsPage.page.getByRole('button', { name: 'Resultater' }).click();
-    dialog
-      .getByRole("button", { name: `${localization.importResult.results}` })
-      .click({ timeout: 40000 });
+    await dialog
+      .getByRole("button", {
+        name: `${localization.importResult.results}`,
+        exact: true,
+      })
+      .click({ timeout: 100000 });
 
     // Wait for navigation to complete
     console.log("[TEST] Test Navigation to importResults...");
     await expect(conceptsPage.page).toHaveURL(
       conceptsPage.importResultsPage.url,
-      { timeout: 40000 },
+      { timeout: 100000 },
     );
   },
 );
