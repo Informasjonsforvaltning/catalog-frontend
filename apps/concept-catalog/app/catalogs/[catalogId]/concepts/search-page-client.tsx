@@ -22,7 +22,6 @@ import {
   Select,
   LinkButton,
   SearchField,
-  UploadButton,
 } from "@catalog-frontend/ui";
 import {
   getTranslateText,
@@ -39,7 +38,6 @@ import {
   getFields as getSearchFields,
 } from "@concept-catalog/hooks/search";
 import SearchFilter from "@concept-catalog/components/search-filter";
-import { useImportConcepts } from "@concept-catalog/hooks/import";
 import ConceptSearchHits from "@concept-catalog/components/concept-search-hits";
 import styles from "./search-page.module.scss";
 import { ImportModal } from "@concept-catalog/components/import-modal";
@@ -254,7 +252,6 @@ export const SearchPageClient = ({
     },
   });
 
-  const importConcepts = useImportConcepts(catalogId);
   const sortOptions = getSelectOptions(localization.search.sortOptions).map(
     (opt) => (
       <option key={`sortOption-${opt.value}`} value={opt.value}>
@@ -319,12 +316,6 @@ export const SearchPageClient = ({
 
   const onSortSelect = async (optionValue: SortOption) => {
     setSelectedSortOption(optionValue);
-  };
-
-  const onImportUpload = (event) => {
-    importConcepts.mutate(event.target.files[0], {
-      onError: (error) => alert("Import failed: " + error),
-    });
   };
 
   const onLabelClick = (label: string) => {
@@ -509,27 +500,8 @@ export const SearchPageClient = ({
                 </div>
                 <div className={styles.buttons}>
                   <>
-                    {/*hasAdminPermission && (
-                      <ImportModal catalogId={catalogId} />
-                    )*/}
                     {hasAdminPermission && (
-                      <UploadButton
-                        size="sm"
-                        variant="secondary"
-                        allowedMimeTypes={[
-                          "text/csv",
-                          "text/x-csv",
-                          "text/plain",
-                          "application/csv",
-                          "application/x-csv",
-                          "application/vnd.ms-excel",
-                          "application/json",
-                        ]}
-                        onUpload={onImportUpload}
-                      >
-                        <FileImportIcon fontSize="1.5rem" />
-                        <span>{localization.button.importConceptCSV}</span>
-                      </UploadButton>
+                      <ImportModal catalogId={catalogId} />
                     )}
                     {hasWritePermission && (
                       <LinkButton
@@ -557,7 +529,7 @@ export const SearchPageClient = ({
               />
             </SearchHitsLayout.LeftColumn>
             <SearchHitsLayout.MainColumn>
-              {status === "pending" || importConcepts.status === "pending" ? (
+              {status === "pending" ? (
                 <Spinner />
               ) : (
                 <SearchHitContainer
