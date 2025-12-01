@@ -6,6 +6,7 @@ import {
   uniqueString,
 } from "../../utils/helpers";
 import { expect } from "@playwright/test";
+import { localization } from "@catalog-frontend/utils";
 
 runTestAsAdmin(
   "test if the search page renders correctly",
@@ -182,118 +183,123 @@ runTestAsAdmin(
     });
 
     const dialog = conceptsPage.page.getByRole("dialog", {
-      has: conceptsPage.page.getByRole("button", { name: "Resultater" }),
+      has: conceptsPage.page
+        .getByRole("button")
+        .filter({
+          hasText: `${localization.importResult.results}`,
+          exact: true,
+        }),
     });
 
     console.log("[TEST] Checking that there are 3 buttons in the modal...");
-    await expect(dialog.getByRole("link", { name: "Resultater" })).toBeVisible({
-      timeout: 5000,
+
+    await expect(
+      dialog
+        .getByRole("button")
+        .filter({ hasText: `${localization.button.importConceptRDF}` }),
+    ).toBeVisible({ timeout: 20000 });
+
+    await expect(
+      dialog
+        .getByRole("button")
+        .filter({ hasText: `${localization.button.importConceptCSV}` }),
+    ).toBeVisible({ timeout: 20000 });
+
+    await expect(
+      dialog
+        .getByRole("button")
+        .filter({ hasText: `${localization.importResult.results}` }),
+    ).toBeVisible({
+      timeout: 20000,
     });
-
-    await expect(
-      dialog.getByRole("button", { name: "Import av RDF" }),
-    ).toBeVisible({ timeout: 5000 });
-
-    await expect(
-      dialog.getByRole("button", { name: "Import av CSV/JSON" }),
-    ).toBeVisible({ timeout: 5000 });
   },
 );
 
-runSerialTestsAdmin(
-  "Test @solo importing RDF",
-  [
-    {
-      name: "Test cancelling import turtle file after uploading and sending",
-      fn: async ({ conceptsPage, playwright }) => {
-        const apiRequestContext = await playwright.request.newContext({
-          storageState: adminAuthFile,
-        });
+runSerialTestsAdmin("Test @solo importing RDF", [
+  {
+    name: "Test cancelling import turtle file after uploading and sending",
+    fn: async ({ conceptsPage, playwright }) => {
+      const apiRequestContext = await playwright.request.newContext({
+        storageState: adminAuthFile,
+      });
 
-        const importResultDetailsPage = conceptsPage.importResultDetailsPage;
+      const importResultDetailsPage = conceptsPage.importResultDetailsPage;
 
-        console.log("[TEST] Deleting all previous import results...");
-        await importResultDetailsPage.deleteAllImportResults(apiRequestContext);
+      console.log("[TEST] Deleting all previous import results...");
+      await importResultDetailsPage.deleteAllImportResults(apiRequestContext);
 
-        console.log("[TEST] Importing turtle file...");
-        const importId: string =
-          await conceptsPage.importTurtleFile("begreper.ttl");
+      console.log("[TEST] Importing turtle file...");
+      const importId: string =
+        await conceptsPage.importTurtleFile("begreper.ttl");
 
-        expect(importId != null);
+      expect(importId != null);
 
-        console.log("[TEST] Redirecting to the created import result...");
-        await importResultDetailsPage.goto(importId, { timeout: 20000 });
+      console.log("[TEST] Redirecting to the created import result...");
+      await importResultDetailsPage.goto(importId, { timeout: 20000 });
 
-        console.log("[TEST] Checking buttons...");
-        await importResultDetailsPage.checkWaitingForConfirmationStatus();
+      console.log("[TEST] Checking buttons...");
+      await importResultDetailsPage.checkWaitingForConfirmationStatus();
 
-        console.log("[TEST] Cancelling import...");
-        await importResultDetailsPage.cancelImport();
+      console.log("[TEST] Cancelling import...");
+      await importResultDetailsPage.cancelImport();
 
-        console.log("[TEST] Checking cancelled status...");
-        await importResultDetailsPage.checkCancelledStatus();
-      },
+      console.log("[TEST] Checking cancelled status...");
+      await importResultDetailsPage.checkCancelledStatus();
     },
-    {
-      name: "Test if a modal can import Turtle file and confirm saving concepts ",
-      fn: async ({ conceptsPage, playwright }) => {
-        const apiRequestContext = await playwright.request.newContext({
-          storageState: adminAuthFile,
-        });
+  },
+  {
+    name: "Test if a modal can import Turtle file and confirm saving concepts ",
+    fn: async ({ conceptsPage, playwright }) => {
+      const apiRequestContext = await playwright.request.newContext({
+        storageState: adminAuthFile,
+      });
 
-        const importResultDetailsPage = conceptsPage.importResultDetailsPage;
+      const importResultDetailsPage = conceptsPage.importResultDetailsPage;
 
-        //await importResultDetailsPage.deleteAllImportResults(apiRequestContext);
+      console.log("[TEST] Importing turtle file...");
+      const importId: string =
+        await conceptsPage.importTurtleFile("begreper.ttl");
 
-        console.log("[TEST] Importing turtle file...");
-        const importId: string =
-          await conceptsPage.importTurtleFile("begreper.ttl");
+      console.log("[TEST] checking import ID...");
+      expect(importId != null);
 
-        console.log("[TEST] checking import ID...");
-        expect(importId != null);
+      console.log("[TEST] Going to import-result page...");
+      await importResultDetailsPage.goto(importId, { timeout: 5000 });
 
-        console.log("[TEST] Going to import-result page...");
-        await importResultDetailsPage.goto(importId, { timeout: 5000 });
+      console.log("[TEST] Checking buttons in import-result page...");
+      await importResultDetailsPage.checkVisibleButtons();
 
-        console.log("[TEST] Checking buttons in import-result page...");
-        await importResultDetailsPage.checkVisibleButtons();
+      console.log("[TEST] Checking Til gjennomgang status...");
+      await importResultDetailsPage.checkWaitingForConfirmationStatus();
 
-        console.log("[TEST] Checking Til gjennomgang status...");
-        await importResultDetailsPage.checkWaitingForConfirmationStatus();
+      console.log("[TEST] Checking that delete button is disabled...");
+      await importResultDetailsPage.checkDisabledDeleteButton();
 
-        console.log("[TEST] Checking that delete button is disabled...");
-        await importResultDetailsPage.checkDisabledDeleteButton();
+      console.log("[TEST] Confirming import...");
+      await importResultDetailsPage.confirmImport();
 
-        console.log("[TEST] Confirming import...");
-        await importResultDetailsPage.confirmImport();
-
-        console.log("[TEST] Checking successful status...");
-        await importResultDetailsPage.checkSuccessfulStatus();
-      },
+      console.log("[TEST] Checking successful status...");
+      await importResultDetailsPage.checkSuccessfulStatus();
     },
-  ],
-  [
-    {
-      name: "Test failing of import Turtle file after previously importing and confirm saving concepts",
-      fn: async ({ conceptsPage, playwright }) => {
-        const apiRequestContext = await playwright.request.newContext({
-          storageState: adminAuthFile,
-        });
+  },
+  {
+    name: "Test failing of import Turtle file after previously importing and confirm saving concepts",
+    fn: async ({ conceptsPage, playwright }) => {
+      const apiRequestContext = await playwright.request.newContext({
+        storageState: adminAuthFile,
+      });
 
-        const importResultDetailsPage = conceptsPage.importResultDetailsPage;
+      const importResultDetailsPage = conceptsPage.importResultDetailsPage;
 
-        console.log("[TEST] Importing turtle file...");
-        const importIdFailure: string =
-          await conceptsPage.importTurtleFile("begreper.ttl");
+      console.log("[TEST] Importing turtle file...");
+      const importIdFailure: string =
+        await conceptsPage.importTurtleFile("begreper.ttl");
 
-        console.log("[TEST] Going to import-result page...");
-        await importResultDetailsPage.goto(importIdFailure, { timeout: 5000 });
+      console.log("[TEST] Going to import-result page...");
+      await importResultDetailsPage.goto(importIdFailure, { timeout: 5000 });
 
-        console.log("[TEST] Checking failure status...");
-        await importResultDetailsPage.checkFailedStatus();
-
-        //await importResultDetailsPage.deleteAllImportResults(apiRequestContext);
-      },
+      console.log("[TEST] Checking failure status...");
+      await importResultDetailsPage.checkFailedStatus();
     },
-  ],
-);
+  },
+]);

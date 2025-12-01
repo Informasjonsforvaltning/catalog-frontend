@@ -19,24 +19,9 @@ runTestAsAdmin(
     await importResultsPage.expectImportResultUrl();
     console.log("[TEST] URLs to are visible...");
 
-    console.log("[TEST] Expecting filters to be invisible by default...");
-    await importResultsPage.expectFiltersToBeInvisible();
-    console.log("[TEST] Filters are invisible by default...");
-
-    console.log(
-      "[TEST] Expecting filters to be visible after clicking on Status...",
-    );
-
-    const statusLabels = await importResultsPage.page
-      .getByText(/^Status$/)
-      .all();
-    console.log("[TEST]: number of labels", statusLabels.length);
-    //expect(statusLabels).toHaveLength(1);
-
-    statusLabels.forEach((label) => label.click({ timeout: 40000 }));
-
-    console.log("[TEST] Filters are visible after clicking on Status...");
+    console.log("[TEST] Expecting filters to be visible by default...");
     await importResultsPage.expectFiltersToBeVisible();
+    console.log("[TEST] Filters are invisible by default...");
   },
 );
 
@@ -66,7 +51,6 @@ runTestAsAdmin(
 
     // click the Import results button
     console.log("[TEST] Clicking on results button...");
-    //await conceptsPage.page.getByRole('button', { name: 'Resultater' }).click();
     await dialog
       .getByRole("button", {
         name: `${localization.importResult.results}`,

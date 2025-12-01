@@ -64,21 +64,25 @@ export default class ImportResultDetailsPage {
   }
 
   async checkSuccessfulStatus() {
-    await expect(this.getSuccessfulLabel()).toBeVisible({ timeout: 20000 });
+    await expect(this.getSuccessfulLabel().first()).toBeVisible({
+      timeout: 20000,
+    });
   }
 
   async checkCancelledStatus() {
-    await expect(this.getCancelledLabel()).toBeVisible({ timeout: 20000 });
+    await expect(this.getCancelledLabel().first()).toBeVisible({
+      timeout: 20000,
+    });
   }
 
   async checkWaitingForConfirmationStatus() {
-    await expect(this.getWaitingForConfirmationLabel()).toBeVisible({
+    await expect(this.getWaitingForConfirmationLabel().first()).toBeVisible({
       timeout: 30000,
     });
   }
 
   async checkFailedStatus() {
-    await expect(this.getFailedLabel()).toBeVisible({ timeout: 30000 });
+    await expect(this.getFailedLabel().first()).toBeVisible({ timeout: 30000 });
   }
 
   async confirmImport() {

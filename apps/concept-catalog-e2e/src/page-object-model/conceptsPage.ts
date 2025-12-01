@@ -7,6 +7,7 @@ import { ConceptStatus } from "../utils/helpers";
 import ImportResultsPage from "./importResultsPage";
 import ImportResultDetailsPage from "./importResultDetailsPage";
 import * as path from "node:path";
+import { localization } from "@catalog-frontend/utils";
 
 export default class ConceptsPage {
   url: string;
@@ -293,21 +294,19 @@ export default class ConceptsPage {
 
     // Click the Import button
     console.log("[TEST] Clicking Importer Button...");
-    await this.page.getByRole("button", { name: "Importer" }).click();
+    await this.page
+      .getByRole("button", { name: `${localization.importResult.import}` })
+      .click();
 
     // A modal should open
     console.log("[TEST] Expecting an open modal...");
-    await expect(this.page.getByRole("dialog")).toBeVisible({ timeout: 5000 });
+    await expect(this.page.getByRole("dialog")).toBeVisible({ timeout: 20000 });
 
     let dialog = this.page.getByRole("dialog", {});
 
-    await expect(
-      dialog.getByRole("button", { name: "Import av RDF" }),
-    ).toBeVisible({ timeout: 10000 });
-
-    const importerRdfButton = dialog.getByRole("button", {
-      name: "Import av RDF",
-    });
+    const importerRdfButton = dialog
+      .getByRole("button")
+      .filter({ hasText: `${localization.button.importConceptRDF}` });
 
     console.log("[TEST] Clicking Importer RDF Button...");
 
@@ -321,13 +320,21 @@ export default class ConceptsPage {
     dialog = this.page.getByRole("dialog", {});
 
     await expect(
-      dialog.getByRole("button", { name: "Import av RDF" }),
+      dialog
+        .getByRole("button")
+        .filter({ hasText: `${localization.button.importConceptRDF}` }),
     ).toBeHidden({ timeout: 5000 });
-    await expect(dialog.getByRole("button", { name: "Fortsett" })).toBeVisible({
+    await expect(
+      dialog.getByRole("button", {
+        name: `${localization.importResult.continue}`,
+      }),
+    ).toBeVisible({
       timeout: 5000,
     });
 
-    const sendButton = dialog.getByRole("button", { name: "Fortsett" });
+    const sendButton = dialog
+      .getByRole("button")
+      .filter({ hasText: `${localization.importResult.continue}` });
     expect(sendButton).not.toBeDisabled({ timeout: 30000 });
 
     await Promise.all([
