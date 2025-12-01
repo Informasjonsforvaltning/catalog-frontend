@@ -1,4 +1,3 @@
-import { get } from "lodash";
 import { localization } from "./localization";
 import { LocalizedStrings } from "@catalog-frontend/types";
 import { getString } from "../text/text";
@@ -15,11 +14,10 @@ export const getTranslateText = (
 
   const value =
     textObj[selectedLanguage] ||
-    get(textObj, selectedLanguage) ||
-    get(textObj, "nb") ||
-    get(textObj, "no") ||
-    get(textObj, "nn") ||
-    get(textObj, "en");
+    textObj["nb"] ||
+    textObj["no"] ||
+    textObj["nn"] ||
+    textObj["en"];
 
   return value ? getString(value) : "";
 };

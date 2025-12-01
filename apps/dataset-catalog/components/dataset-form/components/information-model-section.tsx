@@ -98,7 +98,7 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
                   value={suggestion.uri}
                   key={suggestion.uri}
                   displayValue={
-                    capitalizeFirstLetter(getTranslateText(suggestion.title)) ??
+                    capitalizeFirstLetter(getTranslateText(suggestion.title)) ||
                     suggestion.uri
                   }
                 >
@@ -106,7 +106,7 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
                     <div>
                       {capitalizeFirstLetter(
                         getTranslateText(suggestion.title),
-                      ) ?? suggestion.uri}
+                      ) || suggestion.uri}
                     </div>
                     <div>
                       {capitalizeFirstLetter(

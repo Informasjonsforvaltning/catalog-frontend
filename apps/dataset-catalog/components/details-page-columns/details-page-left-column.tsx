@@ -376,7 +376,7 @@ export const LeftColumn = ({
                               <Link
                                 href={`${referenceDataEnv}/datasets/${match?.id}`}
                               >
-                                {getTranslateText(match?.title, language) ??
+                                {getTranslateText(match?.title, language) ||
                                   ref?.source}
                               </Link>
                             }
