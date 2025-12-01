@@ -2,6 +2,7 @@ import {
   Dataset,
   DatasetToBeCreated,
   Distribution,
+  ApplicationProfile,
 } from "@catalog-frontend/types";
 import { isEmpty } from "lodash";
 
@@ -14,6 +15,9 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     lastModified: dataset?.lastModified,
     uri: dataset?.uri,
     originalUri: dataset?.originalUri,
+    applicationProfile: isEmpty(dataset?.applicationProfile)
+      ? undefined
+      : dataset.applicationProfile,
     title: dataset.title ?? "",
     description: !isEmpty(dataset?.description) ? dataset.description : {},
     accessRight: dataset?.accessRight,
@@ -28,6 +32,7 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
         : [],
     euDataTheme: dataset.euDataTheme ?? [],
     losTheme: dataset.losTheme ?? [],
+    mobilityTheme: dataset.mobilityTheme ?? [],
     type: dataset?.type,
     keywords: dataset.keywords,
     concepts: dataset.concepts,
@@ -56,8 +61,11 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
   };
 };
 
-export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
+export const datasetToBeCreatedTemplate = (
+  applicationProfile?: ApplicationProfile,
+): DatasetToBeCreated => {
   return {
+    applicationProfile: applicationProfile,
     title: {},
     description: {},
     approved: false,
@@ -68,6 +76,7 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     legalBasisForRestriction: [],
     euDataTheme: [],
     losTheme: [],
+    mobilityTheme: [],
     type: undefined,
     keywords: {},
     concepts: [],
@@ -116,6 +125,8 @@ export const distributionTemplate = (dist: Distribution | undefined) => {
           conformsTo: [],
           page: [],
           accessServices: [],
+          mobilityDataStandard: {},
+          rights: [],
         }
   ) as Distribution;
 };

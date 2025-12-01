@@ -27,6 +27,7 @@ export const nb = {
   homepage: "Hjemmeside",
   conceptId: "Begreps-ID",
   versionId: "Versjons-ID",
+  id: "ID",
   linkToDataset: "Lenke til datasett",
   linkToDatasets: "Lenke til datasett",
   loading: "Laster",
@@ -193,6 +194,7 @@ export const nb = {
 
   button: {
     addDataset: "Legg til ny datasettbeskrivelse",
+    addMobilityDataset: "Legg til ny mobilty-datasettbeskrivelse",
     addRelation: "Legg til relasjon",
     addWithFormat: "Legg til ny {text}",
     bin: "Søppelkasse",
@@ -542,6 +544,8 @@ ___Merk:__ Maksimal filstørrelse for opplastning er {0} MB. CSV/JSON-filer kan 
       "Publiseringstilstand forteller om et begrep er publisert på Data.Norge.no eller ikke.",
     descriptionDataService:
       "Publiseringstilstand forteller om API-et er publisert på Data.Norge.no eller ikke.",
+    descriptionDataset:
+      "Publiseringstilstand forteller om et datasett er publisert på Data.Norge.no eller ikke.",
     published: "Publisert",
     publishedInFDK: "Publisert på Data.Norge.no",
     state: "Publiseringstilstand",

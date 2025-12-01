@@ -1,4 +1,10 @@
-import { Dataset, DataTheme, LosTheme, Option } from "@catalog-frontend/types";
+import {
+  Dataset,
+  DataTheme,
+  LosTheme,
+  Option,
+  MobilityTheme,
+} from "@catalog-frontend/types";
 import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 import { Combobox } from "@digdir/designsystemet-react";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
@@ -8,9 +14,16 @@ import { get } from "lodash";
 type Props = {
   losThemes: LosTheme[];
   euDataThemes: DataTheme[];
+  mobilityThemes?: MobilityTheme[];
+  isMobility?: boolean;
 };
 
-export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
+export const ThemeSection = ({
+  losThemes,
+  euDataThemes,
+  mobilityThemes,
+  isMobility,
+}: Props) => {
   const { setFieldValue, values, errors } = useFormikContext<Dataset>();
   const containsFilter = (inputValue: string, option: Option): boolean => {
     return option.label.toLowerCase().includes(inputValue.toLowerCase());
@@ -18,6 +31,43 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
 
   return (
     <>
+      {isMobility ? (
+        <FastField
+          id="mobilityTheme-combobox"
+          as={Combobox}
+          value={values.mobilityTheme}
+          multiple
+          hideClearButton
+          label={
+            <TitleWithHelpTextAndTag
+              tagTitle={localization.tag.required}
+              helpText={localization.datasetForm.helptext.mobilityTheme}
+            >
+              {localization.datasetForm.fieldLabel.mobilityTheme}
+            </TitleWithHelpTextAndTag>
+          }
+          filter={containsFilter}
+          placeholder={`${localization.search.search}...`}
+          onValueChange={(values: string[]) =>
+            setFieldValue("mobilityTheme", values)
+          }
+          error={errors.mobilityTheme}
+          size="sm"
+        >
+          <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
+          {mobilityThemes
+            ?.sort((a, b) =>
+              (get(a.label, "nb")?.toString() ?? "").localeCompare(
+                get(b.label, "nb")?.toString() ?? "",
+              ),
+            )
+            ?.map((theme) => (
+              <Combobox.Option key={theme.uri} value={theme.uri}>
+                {getTranslateText(theme.label)}
+              </Combobox.Option>
+            ))}
+        </FastField>
+      ) : undefined}
       <FastField
         id="euDataTheme-combobox"
         as={Combobox}
@@ -25,7 +75,7 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
         hideClearButton
         label={
           <TitleWithHelpTextAndTag
-            tagTitle={localization.tag.required}
+            tagTitle={isMobility ? undefined : localization.tag.required}
             helpText={localization.datasetForm.helptext.euDataTheme}
           >
             {localization.datasetForm.fieldLabel.euDataTheme}

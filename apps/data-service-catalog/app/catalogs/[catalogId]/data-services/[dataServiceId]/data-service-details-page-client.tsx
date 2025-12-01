@@ -85,7 +85,6 @@ const DataServiceDetailsPageClient = ({
             language={language}
           />
         }
-        loading={false}
         data-testid="data-service-details-page"
       >
         <DetailsPageLayout.Buttons>

@@ -12,7 +12,7 @@ interface DetailsPageLayoutProps extends HTMLAttributes<HTMLDivElement> {
   headingTitle: string | string[];
   headingSubtitle?: ReactNode;
   headingTag?: ReactNode;
-  loading: boolean;
+  loading?: boolean;
   handleLanguageChange?: (lang: string) => void;
   language?: string;
   buttons?: ReactNode;
@@ -22,7 +22,7 @@ const DetailsPageLayout = ({
   headingTitle,
   headingSubtitle,
   headingTag,
-  loading,
+  loading = false,
   handleLanguageChange,
   language,
   children,

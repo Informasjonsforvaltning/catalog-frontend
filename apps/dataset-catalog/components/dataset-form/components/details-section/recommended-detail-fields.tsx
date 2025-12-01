@@ -1,48 +1,26 @@
 "use client";
 import { FieldsetDivider, TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
-import { Checkbox, Combobox, Fieldset } from "@digdir/designsystemet-react";
-import { useCallback, useState } from "react";
-import {
-  useSearchAdministrativeUnits,
-  useSearchAdministrativeUnitsByUri,
-} from "../../../../hooks/useReferenceDataSearch";
+import { Checkbox } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 import { Dataset, ReferenceDataCode } from "@catalog-frontend/types";
-import { debounce, sortBy } from "lodash";
-import styles from "../../dataset-form.module.css";
+import { sortBy } from "lodash";
 import { TemporalModal } from "./temporal-modal";
+import { SpatialCombobox } from "../spatial-combobox";
 
 interface Props {
   referenceDataEnv: string;
   languages: ReferenceDataCode[];
+  isMobility?: boolean;
 }
 
 export const RecommendedDetailFields = ({
   referenceDataEnv,
   languages,
+  isMobility,
 }: Props) => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const { values, errors, setFieldValue } = useFormikContext<Dataset>();
+  const { values, setFieldValue } = useFormikContext<Dataset>();
   const langNOR = languages.filter((lang) => lang.code === "NOR")[0];
-
-  const { data: searchHits, isLoading: isSearching } =
-    useSearchAdministrativeUnits(searchTerm, referenceDataEnv);
-  const { data: selectedValues } = useSearchAdministrativeUnitsByUri(
-    values?.spatial,
-    referenceDataEnv,
-  );
-
-  const debouncedSetSearchTerm = debounce((term: string) => {
-    setSearchTerm(term);
-  }, 300);
-
-  const handleSearchChange = useCallback(
-    (input: any) => {
-      debouncedSetSearchTerm(input.target.value);
-    },
-    [searchTerm],
-  );
 
   const customLanguageOrder = [
     "http://publications.europa.eu/resource/authority/language/NOB",
@@ -54,40 +32,6 @@ export const RecommendedDetailFields = ({
   const sortedLanguages = sortBy(languages, (item) => {
     return customLanguageOrder.indexOf(item.uri);
   });
-
-  const getDescription = (item: ReferenceDataCode | undefined) =>
-    item
-      ? item.uri.includes("geonorge")
-        ? getLocationType(item.uri)
-        : item.code
-      : "";
-
-  const getLocationType = (uri: string): string => {
-    if (uri.includes("kommune")) return localization.spatial.municipality;
-    if (uri.includes("fylke")) return localization.spatial.county;
-    if (uri.includes("nasjon")) return localization.spatial.country;
-    return "";
-  };
-
-  const comboboxOptions: ReferenceDataCode[] = [
-    // Combine selectedValues, searchHits, and values (mapped with uri-only fallback)
-    ...new Map(
-      [
-        ...(selectedValues ?? []),
-        ...(searchHits ?? []),
-        ...(values.spatial ?? []).map((uri) => {
-          const foundItem =
-            selectedValues?.find((item) => item.uri === uri) ||
-            searchHits?.find((item) => item.uri === uri);
-          return {
-            uri,
-            label: foundItem?.label ?? undefined,
-            code: getDescription(foundItem),
-          };
-        }),
-      ].map((item) => [item.uri, item]),
-    ).values(),
-  ];
 
   return (
     <>
@@ -121,48 +65,12 @@ export const RecommendedDetailFields = ({
       </Checkbox.Group>
 
       <FieldsetDivider />
-
-      <div className={styles.fieldContainer}>
-        <Fieldset
-          size="sm"
-          legend={
-            <TitleWithHelpTextAndTag
-              tagColor="info"
-              tagTitle={localization.tag.recommended}
-              helpText={localization.datasetForm.helptext.spatial}
-            >
-              {localization.datasetForm.fieldLabel.spatial}
-            </TitleWithHelpTextAndTag>
-          }
-        >
-          <Combobox
-            placeholder={`${localization.search.search}...`}
-            multiple
-            hideClearButton
-            filter={() => true} // disable filter
-            size="sm"
-            onChange={handleSearchChange}
-            onValueChange={(selectedValues) =>
-              setFieldValue("spatial", selectedValues)
-            }
-            value={values.spatial || []}
-            virtual
-            loading={isSearching}
-          >
-            <Combobox.Empty>{`${localization.search.noHits}... `}</Combobox.Empty>
-            {comboboxOptions.map((item) => (
-              <Combobox.Option
-                key={item.uri}
-                value={item.uri}
-                description={getDescription(item)}
-              >
-                {item.label ? getTranslateText(item.label) : item.uri}
-              </Combobox.Option>
-            ))}
-          </Combobox>
-        </Fieldset>
-      </div>
-      <FieldsetDivider />
+      {!isMobility && (
+        <>
+          <SpatialCombobox referenceDataEnv={referenceDataEnv} />
+          <FieldsetDivider />
+        </>
+      )}
       <TemporalModal
         label={
           <TitleWithHelpTextAndTag
