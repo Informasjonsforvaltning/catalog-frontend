@@ -13,15 +13,22 @@ runTestAsAdmin(
     console.log("[TEST] Navigating to ImportResults page...");
     await importResultsPage.goto();
 
-    console.log("[TEST] Navigated to ImportResults page...");
+    console.log("[TEST] Checking accessibility of ImportResults page...");
+    await importResultsPage.checkAccessibility();
 
     console.log("[TEST] Expecting URLs to be visible...");
     await importResultsPage.expectImportResultUrl();
-    console.log("[TEST] URLs to are visible...");
 
     console.log("[TEST] Expecting filters to be visible by default...");
     await importResultsPage.expectFiltersToBeVisible();
-    console.log("[TEST] Filters are invisible by default...");
+
+    console.log("[TEST] Clicking on status filter...");
+    importResultsPage.statusFilterHeaderLocator().click({ timeout: 10000 });
+
+    console.log(
+      "[TEST] Expecting status filter options to be invisible after clicking...",
+    );
+    await importResultsPage.expectFiltersToBeInvisible();
   },
 );
 

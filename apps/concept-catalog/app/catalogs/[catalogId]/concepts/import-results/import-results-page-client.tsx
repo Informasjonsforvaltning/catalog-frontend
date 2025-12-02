@@ -160,6 +160,7 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
     <SearchHitsLayout>
       <SearchHitsLayout.SearchRow>
         <NativeSelect
+          aria-label={localization.search.sort}
           size="sm"
           className={styles.select}
           onChange={handleSortChange}

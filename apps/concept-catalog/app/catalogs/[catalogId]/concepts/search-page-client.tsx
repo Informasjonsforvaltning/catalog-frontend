@@ -497,6 +497,7 @@ export const SearchPageClient = ({
                     }}
                   />
                   <Select
+                    aria-label={localization.search.sort}
                     size="sm"
                     onChange={(event) =>
                       onSortSelect(event?.target.value as SortOption)
