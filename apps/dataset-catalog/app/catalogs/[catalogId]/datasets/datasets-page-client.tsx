@@ -152,10 +152,7 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
 
     return (
       <div className={styles.chips}>
-        <Chip.Group
-          data-size='sm'
-          className={styles.wrap}
-        >
+        <div className={styles.wrap}>
           {filterStatus?.map((filter, index) => (
             <Chip.Removable
               key={`status-${index}`}
@@ -178,7 +175,7 @@ const DatasetsPageClient = ({ datasets, catalogId, hasWritePermission, pageSetti
                 : localization.publicationState.unpublished}
             </Chip.Removable>
           ))}
-        </Chip.Group>
+        </div>
       </div>
     );
   };
