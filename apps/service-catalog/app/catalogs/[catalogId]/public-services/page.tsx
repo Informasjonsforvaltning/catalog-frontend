@@ -58,7 +58,7 @@ export default async function PublicServiceSearchHitsPage({
       />
       <PageBanner
         title={localization.catalogType.publicService}
-        subtitle={getTranslateText(organization.prefLabel).toString()}
+        subtitle={getTranslateText(organization.prefLabel)}
       />
       <PublicServicePageClient
         services={services}

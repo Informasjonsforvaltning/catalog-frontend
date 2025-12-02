@@ -97,7 +97,7 @@ export const DatasetSection = ({ searchEnv }: Props) => {
                   displayValue={
                     suggestion.title
                       ? capitalizeFirstLetter(
-                          getTranslateText(suggestion.title) as string,
+                          getTranslateText(suggestion.title),
                         )
                       : suggestion.uri
                   }
@@ -105,17 +105,16 @@ export const DatasetSection = ({ searchEnv }: Props) => {
                   <div className={styles.comboboxOption}>
                     <div>
                       {capitalizeFirstLetter(
-                        getTranslateText(suggestion.title) as string,
+                        getTranslateText(suggestion.title),
                       ) ?? suggestion.uri}
                     </div>
                     <div>
                       {capitalizeFirstLetter(
-                        getTranslateText(suggestion.description) as string,
-                      ) ?? ""}
+                        getTranslateText(suggestion.description),
+                      )}
                     </div>
                     <div>
-                      {getTranslateText(suggestion.organization?.prefLabel) ??
-                        ""}
+                      {getTranslateText(suggestion.organization?.prefLabel)}
                     </div>
                   </div>
                 </Combobox.Option>

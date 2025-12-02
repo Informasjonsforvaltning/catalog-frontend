@@ -36,9 +36,7 @@ export const StatusSection = ({ statuses, availabilities }: Props) => {
         {statuses &&
           statuses.map((statusRef, i) => (
             <Radio key={`licence-${statusRef.uri}-${i}`} value={statusRef.uri}>
-              {capitalizeFirstLetter(
-                getTranslateText(statusRef.label)?.toString(),
-              )}
+              {capitalizeFirstLetter(getTranslateText(statusRef.label))}
             </Radio>
           ))}
       </Radio.Group>
@@ -68,9 +66,7 @@ export const StatusSection = ({ statuses, availabilities }: Props) => {
               key={`availability-${availabilityRef.uri}-${i}`}
               value={availabilityRef.uri}
             >
-              {capitalizeFirstLetter(
-                getTranslateText(availabilityRef.label)?.toString(),
-              )}
+              {capitalizeFirstLetter(getTranslateText(availabilityRef.label))}
             </Radio>
           ))}
       </Radio.Group>

@@ -20,7 +20,6 @@ import {
   UnionRelation,
   RelationSubtypeEnum,
   RelationTypeEnum,
-  Concept,
 } from "@catalog-frontend/types";
 import {
   useSearchConcepts as useSearchInternalConcepts,
@@ -165,7 +164,7 @@ export const RelationFieldset = ({
       internalConcepts?.hits
         .filter((rel) => rel.originaltBegrep !== conceptId)
         .map((concept) => ({
-          label: getTranslateText(concept.anbefaltTerm?.navn) as string,
+          label: getTranslateText(concept.anbefaltTerm?.navn),
           value: concept.originaltBegrep as string,
         })) ?? [];
   } else if (
@@ -175,7 +174,7 @@ export const RelationFieldset = ({
   ) {
     internalRelatedConceptOptions = [
       {
-        label: getTranslateText(initialRelatedConcept.title) as string,
+        label: getTranslateText(initialRelatedConcept.title),
         value: initialRelatedConcept.id as string,
       },
     ];
@@ -186,7 +185,7 @@ export const RelationFieldset = ({
       externalConcepts?.hits
         .filter((rel) => !rel.uri?.includes(conceptId))
         .map((concept) => ({
-          label: getTranslateText(concept.title) as string,
+          label: getTranslateText(concept.title),
           description: getTranslateText(
             concept.organization?.prefLabel,
           ) as string,
@@ -199,7 +198,7 @@ export const RelationFieldset = ({
   ) {
     externalRelatedConceptOptions = [
       {
-        label: getTranslateText(initialRelatedConcept.title) as string,
+        label: getTranslateText(initialRelatedConcept.title),
         value: initialRelatedConcept.href as string,
       },
     ];
