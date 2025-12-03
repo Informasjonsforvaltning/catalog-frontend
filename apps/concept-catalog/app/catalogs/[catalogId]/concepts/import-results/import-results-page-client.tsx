@@ -18,7 +18,6 @@ import {
   useQueryState,
 } from "nuqs";
 import {
-  getTranslateText,
   localization,
   sortDateStringsAscending,
   sortDateStringsDescending,
@@ -118,9 +117,7 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
               )
             }
           >
-            {getTranslateText(
-              importStatuses?.find((s) => s.value === filter)?.label,
-            )}
+            {importStatuses?.find((s) => s.value === filter)?.label}
           </Chip.Removable>
         ))}
       </Chip.Group>

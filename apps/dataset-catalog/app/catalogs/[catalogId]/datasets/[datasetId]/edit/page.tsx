@@ -78,8 +78,6 @@ const EditDatasetPage = withWriteProtectedPage(
       distributionStatuses: distributionStatusResponse.distributionStatuses,
     };
 
-    const title = getTranslateText(dataset.title);
-
     const breadcrumbList: BreadcrumbType[] = [
       {
         href: `/catalogs/${catalogId}/datasets`,
@@ -87,7 +85,7 @@ const EditDatasetPage = withWriteProtectedPage(
       },
       {
         href: `/catalogs/${catalogId}/datasets/${datasetId}`,
-        text: Array.isArray(title) ? title[0] : title,
+        text: getTranslateText(dataset.title),
       },
       {
         href: `/catalogs/${catalogId}/datasets/${datasetId}/edit`,

@@ -40,7 +40,6 @@ import {
 import SearchFilter from "@concept-catalog/components/search-filter";
 import ConceptSearchHits from "@concept-catalog/components/concept-search-hits";
 import styles from "./search-page.module.scss";
-import { ImportModal } from "@concept-catalog/components/import-modal";
 
 export type FilterType =
   | "published"
@@ -401,7 +400,7 @@ export const SearchPageClient = ({
               {capitalizeFirstLetter(
                 getTranslateText(
                   conceptStatuses?.find((s) => s.uri === filter)?.label,
-                ) as string,
+                ),
               )}
             </Chip.Removable>
           ))}

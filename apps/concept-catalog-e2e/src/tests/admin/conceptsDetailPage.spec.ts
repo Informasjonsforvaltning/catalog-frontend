@@ -202,14 +202,38 @@ runTestAsAdmin(
         minor: crypto.randomInt(1, 100),
         patch: crypto.randomInt(1, 100),
       },
-      merknad: {},
+      merknad: {
+        nb: `Merknad no ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        nn: `Merknad nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        en: `Merknad en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+      },
       merkelapp: [],
       eksempel: null,
       fagområde: null,
       fagområdeKoder: null,
       omfang: null,
-      tillattTerm: null,
-      frarådetTerm: null,
+      tillattTerm: {
+        nb: [
+          `TillattTerm no ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        ],
+        nn: [
+          `TillattTerm nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        ],
+        en: [
+          `TillattTerm en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        ],
+      },
+      frarådetTerm: {
+        nb: [
+          `FrarådetTerm no ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        ],
+        nn: [
+          `FrarådetTerm nn ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        ],
+        en: [
+          `FrarådetTerm en ${crypto.randomInt(100000000, 1000000000).toString(36).substring(2, 8)}`,
+        ],
+      },
       gyldigFom: null,
       gyldigTom: null,
       seOgså: [

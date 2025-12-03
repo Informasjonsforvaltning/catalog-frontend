@@ -357,7 +357,7 @@ export const DistributionModal = ({
                       key={`distribution-${option.uri}-${i}`}
                       value={option.uri ?? option.description}
                       displayValue={
-                        (getTranslateText(option.title) as string) ?? option.uri
+                        getTranslateText(option.title) || option.uri
                       }
                     >
                       <div className={styles.comboboxOptionTwoColumns}>

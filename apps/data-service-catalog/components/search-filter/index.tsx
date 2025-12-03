@@ -35,7 +35,7 @@ const SearchFilter = ({ distributionStatuses }: Props) => {
   const statusItems =
     distributionStatuses?.map((s) => ({
       value: s.uri,
-      label: capitalizeFirstLetter(getTranslateText(s.label) as string),
+      label: capitalizeFirstLetter(getTranslateText(s.label)),
     })) ?? [];
 
   const publicationStateItems = [
