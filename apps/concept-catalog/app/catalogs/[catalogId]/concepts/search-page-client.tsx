@@ -40,6 +40,7 @@ import {
 import SearchFilter from "@concept-catalog/components/search-filter";
 import ConceptSearchHits from "@concept-catalog/components/concept-search-hits";
 import styles from "./search-page.module.scss";
+import { ImportModal } from "@concept-catalog/components";
 
 export type FilterType =
   | "published"
