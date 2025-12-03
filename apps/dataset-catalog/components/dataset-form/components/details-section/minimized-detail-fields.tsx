@@ -413,7 +413,7 @@ export const MinimizedDetailFields = ({
     () =>
       frequencies?.map((item) => (
         <Combobox.Option value={item.uri} key={item.uri}>
-          {capitalizeFirstLetter(getTranslateText(item.label).toString())}
+          {capitalizeFirstLetter(getTranslateText(item.label))}
         </Combobox.Option>
       )),
     [frequencies],

@@ -104,7 +104,7 @@ const SearchFilter = ({
   const statusItems =
     conceptStatuses?.map((s) => ({
       value: s.uri,
-      label: capitalizeFirstLetter(getTranslateText(s.label) as string),
+      label: capitalizeFirstLetter(getTranslateText(s.label)),
     })) ?? [];
   const publicationStateItems = [
     {

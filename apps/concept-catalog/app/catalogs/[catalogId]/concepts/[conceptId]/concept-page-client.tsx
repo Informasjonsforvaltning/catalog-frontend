@@ -394,9 +394,7 @@ export const ConceptPageClient = ({
   ];
 
   const findStatusLabel = (statusURI) => {
-    return translate(
-      conceptStatuses?.find((s) => s.uri === statusURI)?.label,
-    ) as string;
+    return translate(conceptStatuses?.find((s) => s.uri === statusURI)?.label);
   };
 
   const handleLanguageChange = (lang) => {
@@ -418,8 +416,8 @@ export const ConceptPageClient = ({
     }
   };
 
-  const getTitle = (text: string | string[]) =>
-    text ? text : localization.concept.noName;
+  const getTitle = (text: string): string =>
+    text || localization.concept.noName;
   const getDetailSubtitle = (lang) => {
     const subjectCodeList = codeListsResult?.codeLists?.find(
       (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
@@ -718,7 +716,7 @@ export const ConceptPageClient = ({
     return (
       <div>
         <InfoCard>
-          {!isEmpty(translate(concept?.definisjon?.tekst ?? "", language)) &&
+          {translate(concept?.definisjon?.tekst, language) &&
             !isEmpty(concept?.definisjon) && (
               <InfoCard.Item title={`${localization.concept.definition}:`}>
                 <Definition
@@ -727,12 +725,7 @@ export const ConceptPageClient = ({
                 />
               </InfoCard.Item>
             )}
-          {!isEmpty(
-            translate(
-              concept?.definisjonForAllmennheten?.tekst ?? "",
-              language,
-            ),
-          ) &&
+          {translate(concept?.definisjonForAllmennheten?.tekst, language) &&
             !isEmpty(concept?.definisjonForAllmennheten) && (
               <InfoCard.Item
                 title={`${localization.concept.publicDefinition}:`}
@@ -744,12 +737,7 @@ export const ConceptPageClient = ({
               </InfoCard.Item>
             )}
 
-          {!isEmpty(
-            translate(
-              concept?.definisjonForSpesialister?.tekst ?? "",
-              language,
-            ),
-          ) &&
+          {translate(concept?.definisjonForSpesialister?.tekst, language) &&
             !isEmpty(concept?.definisjonForSpesialister) && (
               <InfoCard.Item
                 title={`${localization.concept.specialistDefinition}:`}
@@ -760,38 +748,34 @@ export const ConceptPageClient = ({
                 />
               </InfoCard.Item>
             )}
-          {!isEmpty(translate(concept?.merknad, language)) && (
+          {translate(concept?.merknad, language) && (
             <InfoCard.Item title={`${localization.concept.remark}:`}>
               <span>{translate(concept?.merknad, language)}</span>
             </InfoCard.Item>
           )}
-          {!isEmpty(translate(concept?.eksempel, language)) && (
+          {translate(concept?.eksempel, language) && (
             <InfoCard.Item title={`${localization.concept.example}:`}>
               <span>{translate(concept?.eksempel, language)}</span>
             </InfoCard.Item>
           )}
-          {!isEmpty(translate(concept?.abbreviatedLabel, language)) && (
+          {concept?.abbreviatedLabel && (
             <InfoCard.Item title={`${localization.concept.abbreviation}:`}>
-              <span>{translate(concept?.abbreviatedLabel, language)}</span>
+              <span>{concept?.abbreviatedLabel}</span>
             </InfoCard.Item>
           )}
-          {!isEmpty(translate(concept?.tillattTerm, language)) && (
+          {concept?.tillattTerm?.[language]?.length && (
             <InfoCard.Item title={`${localization.concept.altLabel}:`}>
               <ul>
-                {ensureStringArray(
-                  translate(concept?.tillattTerm, language),
-                ).map((term, i) => (
+                {concept.tillattTerm?.[language].map((term, i) => (
                   <li key={`altLabel-${i}`}>{term}</li>
                 ))}
               </ul>
             </InfoCard.Item>
           )}
-          {!isEmpty(translate(concept?.frarådetTerm, language)) && (
+          {concept?.frarådetTerm?.[language]?.length && (
             <InfoCard.Item title={`${localization.concept.hiddenLabel}:`}>
               <ul>
-                {ensureStringArray(
-                  translate(concept?.frarådetTerm, language),
-                ).map((term, i) => (
+                {concept.frarådetTerm?.[language].map((term, i) => (
                   <li key={`hiddenLabel-${i}`}>{term}</li>
                 ))}
               </ul>
@@ -807,9 +791,6 @@ export const ConceptPageClient = ({
               )}`}
             >
               <RelatedConcepts
-                title={getTitle(
-                  translate(concept?.anbefaltTerm?.navn, language),
-                )}
                 conceptRelations={conceptRelations}
                 relatedConcepts={relatedConcepts}
                 validFromIncluding={concept?.gyldigFom}
@@ -828,9 +809,6 @@ export const ConceptPageClient = ({
               )}`}
             >
               <RelatedConcepts
-                title={getTitle(
-                  translate(concept?.anbefaltTerm?.navn, language),
-                )}
                 conceptRelations={internalConceptRelations}
                 relatedConcepts={internalRelatedConcepts}
                 validFromIncluding={concept?.gyldigFom}

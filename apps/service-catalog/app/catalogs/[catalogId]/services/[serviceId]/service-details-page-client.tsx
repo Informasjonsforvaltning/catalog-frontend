@@ -50,7 +50,7 @@ const ServiceDetailsPageClient = ({
         status?.label && (
           <Tag.ServiceStatus
             statusKey={status.code as ServiceStatusTagProps["statusKey"]}
-            statusLabel={getTranslateText(status.label) as string}
+            statusLabel={getTranslateText(status.label)}
           />
         )
       }

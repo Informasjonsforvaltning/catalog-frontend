@@ -20,10 +20,7 @@ const OrganizationCombobox = (props: OrganizationComboboxProps) => {
   const { organizations, currentOrganization } = props;
 
   const sortedOrganization = organizations.sort((a, b) =>
-    sortAscending(
-      getTranslateText(a.prefLabel).toString(),
-      getTranslateText(b.prefLabel).toString(),
-    ),
+    sortAscending(getTranslateText(a.prefLabel), getTranslateText(b.prefLabel)),
   );
 
   return (

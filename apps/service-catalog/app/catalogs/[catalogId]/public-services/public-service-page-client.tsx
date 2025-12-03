@@ -55,7 +55,7 @@ const PublicServicePageClient = ({
 
     if (searchQuery.trim() !== "") {
       const searchResult = services.filter((service) =>
-        String(getTranslateText(service.title))
+        getTranslateText(service.title)
           .toLowerCase()
           .includes(searchQuery.toLowerCase()),
       );
@@ -143,11 +143,9 @@ const PublicServicePageClient = ({
                         findServiceStatus(service)
                           ?.code as ServiceStatusTagProps["statusKey"]
                       }
-                      statusLabel={
-                        getTranslateText(
-                          findServiceStatus(service)?.label,
-                        ) as string
-                      }
+                      statusLabel={getTranslateText(
+                        findServiceStatus(service)?.label,
+                      )}
                     />
                   )
                 }

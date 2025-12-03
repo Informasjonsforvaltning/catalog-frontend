@@ -123,11 +123,6 @@ export const patchConcept = (
   );
 };
 
-export const importConcepts = (
-  concepts: Omit<Concept, "id">[],
-  accessToken: string,
-) => conceptCatalogApiCall("POST", `/begreper/import`, concepts, accessToken);
-
 export const deleteConcept = (conceptId: string, accessToken: string) => {
   validateUUID(conceptId, "deleteConcept");
   const encodedConceptId = validateAndEncodeUrlSafe(
