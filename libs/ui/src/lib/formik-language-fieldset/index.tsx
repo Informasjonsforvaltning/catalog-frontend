@@ -114,14 +114,12 @@ export const FormikLanguageFieldset = ({
       {legend && <Fieldset.Legend>{legend}</Fieldset.Legend>}
       {visibleLanguageFields.map((lang) => (
         <div key={lang}>
-          hallo
           {multiple ? (
             <FormikMultivalueTextfield
               ref={languageRefs.current[lang] as React.RefObject<HTMLInputElement>}
               label={<TitleWithHelpTextAndTag>{localization.language[lang]}</TitleWithHelpTextAndTag>}
               name={`${name}.${lang}`}
               prefix={localization.language[lang]}
-              aria-label={localization.language[lang]}
               showDeleteButton
               onDeleteButtonClicked={() => handleRemoveLanguage(lang)}
               readOnly={readOnly}
