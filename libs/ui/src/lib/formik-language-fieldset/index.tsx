@@ -109,12 +109,12 @@ export const FormikLanguageFieldset = ({
   return (
     <Fieldset
       className={styles.fieldset}
-      readOnly={readOnly}
       data-size='sm'
     >
       {legend && <Fieldset.Legend>{legend}</Fieldset.Legend>}
       {visibleLanguageFields.map((lang) => (
         <div key={lang}>
+          hallo
           {multiple ? (
             <FormikMultivalueTextfield
               ref={languageRefs.current[lang] as React.RefObject<HTMLInputElement>}

@@ -2,7 +2,7 @@
 
 import { Chip, ValidationMessage, Label, Textfield, TextfieldProps } from '@digdir/designsystemet-react';
 import { AddButton, DeleteButton } from '../button';
-import { forwardRef, ReactNode, useState } from 'react';
+import { forwardRef, ReactNode, useState, ChangeEvent, KeyboardEvent } from 'react';
 import { useFormikContext } from 'formik';
 import _ from 'lodash';
 import classNames from 'classnames';
@@ -16,14 +16,13 @@ type FormikMultivalueTextfieldProps = {
   onDeleteButtonClicked?: () => void;
 } & TextfieldProps;
 
-const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueTextfieldProps>(
+const FormikMultivalueTextfield = forwardRef<HTMLInputElement | HTMLTextAreaElement, FormikMultivalueTextfieldProps>(
   (
     {
       className,
       name,
       showDeleteButton,
       readOnly,
-      label,
       error,
       onDeleteButtonClicked,
       ...props
@@ -57,7 +56,7 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
       setFieldValue(name, newValues);
     };
 
-    const ChipComponent = readOnly ? Chip.Toggle : Chip.Removable;
+    const ChipComponent = readOnly ? Chip.Checkbox : Chip.Removable;
 
     return (
       <>
@@ -68,16 +67,15 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
                 ref={ref}
                 data-size='sm'
                 value={inputValue}
-                onChange={(e) => handleOnChangeInputValue(e.target.value)}
-                onKeyDown={(e) => {
+                onChange={(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => handleOnChangeInputValue(e.target.value)}
+                onKeyDown={(e: KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
                   if (e.code === 'Enter') {
                     e.preventDefault();
-                    handleAddTextValue();                    
+                    handleAddTextValue();
                   }
                 }}
                 onBlur={() => handleAddTextValue()}
                 readOnly={readOnly}
-                label={label}
                 error={Boolean(error)}
                 {...props}
               />
@@ -97,18 +95,15 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
             />
           )}
         </div>
-        {readOnly && label && (
+        {readOnly && props.label && (
           <Label
             asChild
             data-size='sm'
           >
-            <div>{label}</div>
+            <div>{props.label}</div>
           </Label>
         )}
-        <Chip.Group
-          data-size='sm'
-          className={styles.chipGroup}
-        >
+        <div className={styles.chipGroup}>
           {_.get(values, name)?.map((v, i) => (
             <ChipComponent
               key={`chip-${i}`}
@@ -117,7 +112,7 @@ const FormikMultivalueTextfield = forwardRef<HTMLInputElement, FormikMultivalueT
               {v}
             </ChipComponent>
           ))}
-        </Chip.Group>
+        </div>
         {error && <ValidationMessage>{error}</ValidationMessage>}
       </>
     );
