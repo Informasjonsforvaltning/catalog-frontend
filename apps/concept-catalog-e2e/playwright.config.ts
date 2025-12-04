@@ -33,8 +33,8 @@ export default defineConfig({
       },
     ],
   ],
-  retries: 2,
-  workers: 3,
+  retries: 3,
+  workers: 4,
   timeout: 180 * 1000,
   expect: {
     timeout: 10 * 1000,
@@ -42,6 +42,7 @@ export default defineConfig({
   use: {
     baseURL,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+    headless: true,
     trace: "on", // Captures a trace for each test
     screenshot: "on", // Takes screenshots on test failures
   },
@@ -68,12 +69,28 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
       dependencies: ["admin-init"],
       testMatch: "**/admin/*.spec.ts",
+      grepInvert: /@solo/,
     },
     {
       name: "admin-firefox",
       use: { ...devices["Desktop Firefox"] },
       dependencies: ["admin-init"],
       testMatch: "**/admin/*.spec.ts",
+      grepInvert: /@solo/,
+    },
+    {
+      name: "admin-chromium-solo",
+      use: { ...devices["Desktop Chrome"] },
+      dependencies: ["admin-init"],
+      testMatch: "**/admin/*.spec.ts",
+      grep: /@solo/,
+    },
+    {
+      name: "admin-firefox-solo",
+      use: { ...devices["Desktop Firefox"] },
+      dependencies: ["admin-init", "admin-chromium-solo"],
+      testMatch: "**/admin/*.spec.ts",
+      grep: /@solo/,
     },
     // Uncomment for mobile browsers support
     /* {

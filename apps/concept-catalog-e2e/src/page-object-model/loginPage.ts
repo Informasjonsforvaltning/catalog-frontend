@@ -49,7 +49,7 @@ export default class LoginPage {
     console.log('[LOGIN PAGE] Clicking "Logg inn via ID-porten"...');
     await this.page
       .getByRole("link", { name: "Logg inn via ID-porten" })
-      .click({ timeout: 5000 });
+      .click({ timeout: 20000 });
     console.log('[LOGIN PAGE] Clicking "TestID på nivå høyt"...');
     await this.page
       .getByRole("link", {

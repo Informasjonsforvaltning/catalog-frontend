@@ -111,7 +111,7 @@ runTestAsAdmin(
     await detailPage.goto(
       `/catalogs/${process.env.E2E_CATALOG_ID}/concepts/${concept.id}`,
     );
-    await detailPage.editConcept();
+    await detailPage.editConcept(); //TODO here
 
     // Initialize edit page
     const editPage: EditPage = conceptsPage.editPage;
