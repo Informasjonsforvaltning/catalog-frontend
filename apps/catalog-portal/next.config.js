@@ -1,12 +1,11 @@
-//@ts-check
-
+// @ts-check
 const { withNx } = require("@nx/next/plugins/with-nx");
-const path = require("path");
 
 /**
  * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
  **/
 const nextConfig = {
+  nx: {},
   webpack(config) {
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule) =>

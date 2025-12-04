@@ -1,12 +1,11 @@
-//@ts-check
-
+// @ts-check
 const { withNx } = require("@nx/next/plugins/with-nx");
-const path = require("path");
 
 /**
  * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
  **/
 const nextConfig = {
+  nx: {},
   env: {
     DATASET_CATALOG_BASE_URI: process.env.DATASET_CATALOG_BASE_URI,
   },
