@@ -1,4 +1,7 @@
 export const ensureStringArray = (input: string | string[]): string[] => {
+  if (input === undefined || input === null || input === "") {
+    return [];
+  }
   if (typeof input === "string") {
     return [input]; // Convert the string to a single-element array
   }
