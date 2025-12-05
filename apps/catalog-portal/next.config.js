@@ -1,5 +1,4 @@
-//@ts-check
-
+// @ts-check
 const { withNx } = require("@nx/next/plugins/with-nx");
 
 /**
