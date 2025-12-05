@@ -9952,6 +9952,7 @@ __metadata:
     react-papaparse: "npm:^4.4.0"
     remark-gfm: "npm:^4.0.1"
     sass: "npm:^1.94.1"
+    semver: "npm:^7.7.3"
     styled-components: "npm:^6.1.19"
     swc-loader: "npm:0.2.6"
     ts-jest: "npm:^29.4.5"
