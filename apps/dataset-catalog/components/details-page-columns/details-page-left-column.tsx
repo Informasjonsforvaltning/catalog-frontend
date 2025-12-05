@@ -116,7 +116,7 @@ export const LeftColumn = ({
         </InfoCard.Item>
       )}
 
-      {dataset?.issued && (
+      {dataset?.issued && !isEmpty(dataset?.issued) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.issued}>
           {formatDateToDDMMYYYY(dataset.issued)}
         </InfoCard.Item>
@@ -225,13 +225,13 @@ export const LeftColumn = ({
         </InfoCard.Item>
       )}
 
-      {dataset?.temporal && (
+      {dataset?.temporal && !isEmpty(dataset?.temporal) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.temporal}>
           <TemporalDetails temporal={dataset?.temporal} />
         </InfoCard.Item>
       )}
 
-      {dataset?.type && (
+      {dataset?.type && !isEmpty(dataset?.type) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.type}>
           <ReferenceDataTags
             values={dataset?.type}
@@ -249,7 +249,7 @@ export const LeftColumn = ({
         </InfoCard.Item>
       )}
 
-      {dataset?.modified && (
+      {dataset?.modified && !isEmpty(dataset?.modified) && (
         <InfoCard.Item
           title={localization.datasetForm.helptext.modified.slice(0, -1)}
         >
@@ -281,7 +281,7 @@ export const LeftColumn = ({
         </InfoCard.Item>
       )}
 
-      {dataset?.conformsTo && (
+      {dataset?.conformsTo && !isEmpty(dataset?.conformsTo) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.conformsTo}>
           <UriWithLabelTable values={dataset?.conformsTo} language={language} />
         </InfoCard.Item>
@@ -472,7 +472,7 @@ export const LeftColumn = ({
           </Table>
         </InfoCard.Item>
       )}
-      {dataset?.keywords && (
+      {dataset?.keywords && !isEmpty(dataset?.keywords) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.keywords}>
           <li className={styles.list}>
             {keywordLanguages.map((lang) => {
@@ -517,7 +517,7 @@ export const LeftColumn = ({
                           href={getDataNorgeUri(match.id, "information-models")}
                         >
                           {getTranslateText(match?.title, language) ||
-                            localization.noTitleAvailable}
+                            localization.datasetForm.errors.noTitleAvailable}
                         </Link>
                       </Table.Cell>
                       <Table.Cell>
@@ -530,7 +530,10 @@ export const LeftColumn = ({
                   ) : (
                     <Table.Row key={`missing-item-${index}`}>
                       <Table.Cell>
-                        {localization.noInformationModelFound}
+                        {
+                          localization.datasetForm.errors
+                            .noInformationModelFound
+                        }
                       </Table.Cell>
                       <Table.Cell>{item}</Table.Cell>
                     </Table.Row>

@@ -127,6 +127,7 @@ export const datasetFormNb = {
     relationType: "Relasjonstype",
     datasetSeries: "Datasettserie",
     choseRelation: "Velg relasjon",
+    relations: "Relasjoner",
     conformsTo: "Standard",
     standard: "Standard",
     page: "Lenke til dokumentasjon",
@@ -240,6 +241,8 @@ export const datasetFormNb = {
   },
   errors: {
     qualifiedAttributions: "Kunne ikke hente enheter.",
+    noTitleAvailable: "Mangler tittel",
+    noInformationModelFound: "Mangler informasjonsmodell",
   },
   filter: {
     DRAFT: "Utkast",
