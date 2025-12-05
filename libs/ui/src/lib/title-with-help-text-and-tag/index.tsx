@@ -30,8 +30,8 @@ export function TitleWithHelpTextAndTag({
       {helpText && <HelpMarkdown aria-label={`${localization.helpWithCompleting}`}>{helpText}</HelpMarkdown>}
       {tagTitle && (
         <Tag
-          color={tagColor}
-          size={tagSize}
+          data-color={tagColor}
+          data-size={tagSize}
         >
           {tagTitle}
         </Tag>
@@ -39,7 +39,7 @@ export function TitleWithHelpTextAndTag({
       {changed && (
         <Tag
           data-size='sm'
-          color='warning'
+          data-color='warning'
         >{`${localization.changed}`}</Tag>
       )}
     </div>

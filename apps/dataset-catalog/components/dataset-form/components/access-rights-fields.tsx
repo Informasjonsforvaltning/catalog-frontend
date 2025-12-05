@@ -19,30 +19,28 @@ export const AccessRightFields = () => {
 
   return (
     <>
-      <Card>
-        <RadioGroup
-          data-size='sm'
-          legend={
-            <TitleWithHelpTextAndTag
-              helpText={localization.datasetForm.helptext.accessRights}
-              tagColor='info'
-              tagTitle={localization.tag.recommended}
-            >
-              {localization.access}
-            </TitleWithHelpTextAndTag>
-          }
-          value={values?.accessRight || 'none'}
-          onChange={(value: string) => setFieldValue('accessRight', value)}
-          options={radioOptions}
-          description={undefined}
-          error={undefined}
-          disabled={undefined}
-          readOnly={undefined}
-          required={undefined}
-          name={undefined}
-          className={undefined}
-        />
-      </Card>
+      <RadioGroup
+        data-size='sm'
+        legend={
+          <TitleWithHelpTextAndTag
+            helpText={localization.datasetForm.helptext.accessRights}
+            tagColor='info'
+            tagTitle={localization.tag.recommended}
+          >
+            {localization.access}
+          </TitleWithHelpTextAndTag>
+        }
+        value={values?.accessRight || 'none'}
+        onChange={(value: string) => setFieldValue('accessRight', value)}
+        options={radioOptions}
+        description={undefined}
+        error={undefined}
+        disabled={undefined}
+        readOnly={undefined}
+        required={undefined}
+        name={undefined}
+        className={undefined}
+      />
 
       <FieldsetDivider />
 
