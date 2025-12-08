@@ -14,6 +14,7 @@ import {
   Tag,
 } from "@digdir/designsystemet-react";
 import {
+  ApplicationProfile,
   Dataset,
   DatasetSeries,
   ISOLanguage,
@@ -121,6 +122,29 @@ export const LeftColumn = ({
           {formatDateToDDMMYYYY(dataset.issued)}
         </InfoCard.Item>
       )}
+
+      {dataset?.applicationProfile == ApplicationProfile.MOBILITYDCATAP &&
+        hasValues(dataset?.mobilityTheme) && (
+          <InfoCard.Item
+            title={localization.datasetForm.fieldLabel.mobilityTheme}
+          >
+            {
+              <TagList
+                values={dataset.mobilityTheme}
+                getTagText={(item) => {
+                  const match =
+                    referenceData.dataThemes &&
+                    referenceData.dataThemes.find(
+                      (theme) => theme?.uri === item,
+                    );
+                  return match
+                    ? getTranslateText(match?.label, language)
+                    : item;
+                }}
+              />
+            }
+          </InfoCard.Item>
+        )}
 
       {hasValues(dataset?.euDataTheme) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.euDataTheme}>
