@@ -152,8 +152,7 @@
   },
   "resolutions": {
     "glob": "^10.5.0",
-    "mdast-util-to-hast": "^13.2.1",
-    "js-yaml": "^4.1.1"
+    "mdast-util-to-hast": "^13.2.1"
   },
   "packageManager": "yarn@4.9.2"
 }
