@@ -34,7 +34,7 @@
 
 .sideMenu {
   position: sticky;
-  top: 1rem;
+  top: 6rem;
   overflow: hidden;
   min-width: 265px;
   padding: 1rem;
@@ -52,11 +52,12 @@
     align-items: center;
 
     &.active {
-      background-color: var(--fds-semantic-surface-third-light);
+      background-color: #f8f8f8;
       border-left: 4px solid var(--fds-semantic-surface-action-default);
 
-      :global(.fds-link) {
+      :global(.ds-link) {
         color: black;
+        font-weight: bold;
       }
 
       & .required {
@@ -70,13 +71,7 @@
       color: var(--fds-colors-grey-700);
     }
 
-    &:hover {
-      border-left: 4px solid var(--fds-semantic-surface-action-default);
-      background: var(--fds-semantic-surface-action-first-no_fill-hover);
-      color: var(--fds-colors-gray-800);
-    }
-
-    :global(.fds-link) {
+    :global(.ds-link) {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -90,7 +85,9 @@
       }
 
       &:hover {
-        background: var(--fds-semantic-surface-action-first-no_fill-hover);
+        background-color: var(--ds-color-surface-hover);
+        color: var(--fds-colors-gray-800);
+        cursor: pointer;
       }
     }
   }
@@ -123,7 +120,7 @@
   flex-direction: column;
   padding: 1.5em 2em;
   gap: 0.25em;
-  background: var(--fds-semantic-surface-third-light);
+  background: var(--ds-color-surface-tinted);
 }
 
 .sectionHeadingTitle {
