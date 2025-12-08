@@ -2,20 +2,14 @@
 
 import React, { Children, PropsWithChildren, ReactNode, useRef, useState } from 'react';
 import styles from './form-layout.module.scss';
-import { Heading, Link, Paragraph, Tag } from '@digdir/designsystemet-react';
+import { Heading, Paragraph } from '@digdir/designsystemet-react';
 import { useIntersectionObserver } from '../intersection-observer';
-import classNames from 'classnames';
-import { localization } from '@catalog-frontend/utils';
-import { isEmpty } from 'lodash';
+import { SideMenu, MenuItem } from '../form-sidemenu';
 
 type FormLayoutProps = {
   title?: ReactNode;
   children: ReactNode;
 };
-
-type SideMenuProps = {
-  heading?: string;
-} & PropsWithChildren;
 
 type SectionProps = {
   id: string;
@@ -25,36 +19,6 @@ type SectionProps = {
   changed?: boolean;
   error?: boolean;
 } & PropsWithChildren;
-
-const SideMenu = ({ heading, children }: SideMenuProps) => {
-  return (
-    <div>
-      <Heading
-        data-size='sm'
-        className={styles.sideMenuHeading}
-      >
-        {heading}
-      </Heading>
-      <ol>
-        {React.Children.map(children, (child) => {
-          if (React.isValidElement(child) && child.type === MenuItem) {
-            // eslint-disable-next-line react/jsx-no-useless-fragment
-            return <>{child}</>;
-          }
-        })}
-      </ol>
-      <div className={styles.sideMenuFooter}>* Påkrevd</div>
-    </div>
-  );
-};
-
-const MenuItem = ({
-  active,
-  required = false,
-  children,
-}: PropsWithChildren & { active: boolean; required?: boolean }) => {
-  return <li className={classNames(active ? styles.active : {}, required ? styles.required : {})}>{children}</li>;
-};
 
 export const FormLayout = ({ children }: FormLayoutProps) => {
   const childrenArray = Children.toArray(children);
@@ -100,42 +64,12 @@ export const FormLayout = ({ children }: FormLayoutProps) => {
                   key={`menu-item-${id}`}
                   active={activeSection === id}
                   required={required}
-                >
-                  <Link
-                    onClick={() => handleNavClick(id, index)}
-                    className={styles.sideMenuItem}
-                  >
-                    <span>
-                      {title}{' '}
-                      {required && (
-                        <span
-                          className={styles.required}
-                          aria-label={localization.conceptForm.validation.required}
-                        >
-                          *
-                        </span>
-                      )}
-                    </span>
-                    {changed && (
-                      <Tag
-                        data-size='sm'
-                        color='warning'
-                        style={{ scale: 0.8, margin: '-0.25rem 0' }}
-                      >
-                        {localization.changed}
-                      </Tag>
-                    )}
-                    {error && (
-                      <Tag
-                        data-size='sm'
-                        color='danger'
-                        style={{ scale: 0.8, margin: '-0.25rem 0' }}
-                      >
-                        {localization.error}
-                      </Tag>
-                    )}
-                  </Link>
-                </MenuItem>
+                  id={id}
+                  title={title}
+                  changed={changed}
+                  error={error}
+                  onClick={() => handleNavClick(id, index)}
+                />
               );
             })}
           </SideMenu>
