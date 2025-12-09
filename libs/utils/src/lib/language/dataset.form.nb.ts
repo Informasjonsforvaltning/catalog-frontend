@@ -12,8 +12,6 @@ export const datasetFormNb = {
 Dersom flere tilgangstyper kan passe, velg den mest restriktive.
 
 [Mer informasjon om tilgangsnivå](https://data.norge.no/nb/docs/finding-data/access-data)`,
-    legalBasis:
-      "Relevante juridiske referanser for datasettet, som lover, forskrifter, eller andre rettslige rammer som begrenser eller gir grunnlag for behandling og bruk av datasettet. For eksempel kan dette være en lenke til en lovtekst.",
     legalBasisForRestriction:
       "Begrensning av deling av datasett. Refererer til lov eller forskrift (f.eks. offentlighetsloven, sikkerhetsloven). Relevant for datasett med betinget eller ikke-allmenn tilgangsnivå.",
     legalBasisForProcessing:
@@ -111,7 +109,6 @@ Dersom dette er en lenke hvor datasettet lastes ned direkte, og datasettet ikke 
     concept: "Begrep og emneord",
     informationModels: "Informasjonsmodeller",
     contactPoint: "Kontaktpunkt",
-    transportTheme: "Mobility-tema",
   },
   subtitle: {
     about:
