@@ -80,7 +80,7 @@ export const DistributionDetailsCard = ({
         )}
 
         {distribution?.accessURL && (
-          <div>
+          <>
             <Heading level={4} size="2xs">
               {localization.datasetForm.fieldLabel.accessURL}
             </Heading>
@@ -91,9 +91,27 @@ export const DistributionDetailsCard = ({
                 </Paragraph>
               );
             })}
-          </div>
+          </>
         )}
-
+        {distribution?.mobilityDataStandard &&
+          !isEmpty(distribution.mobilityDataStandard) && (
+            <>
+              <Heading
+                level={5}
+                size="2xs"
+              >{`${localization.datasetForm.fieldLabel.mobilityDataStandard}:`}</Heading>
+              <Paragraph size="sm">{`${distribution.mobilityDataStandard}`}</Paragraph>
+            </>
+          )}
+        {distribution?.rights && !isEmpty(distribution.rights) && (
+          <>
+            <Heading
+              level={5}
+              size="2xs"
+            >{`${localization.datasetForm.fieldLabel.distributionRights}:`}</Heading>
+            <Paragraph size="sm">{`${distribution.rights.type}`}</Paragraph>
+          </>
+        )}
         {distribution?.format && !isEmpty(distribution.format) && (
           <div>
             <Heading level={4} size="2xs">
