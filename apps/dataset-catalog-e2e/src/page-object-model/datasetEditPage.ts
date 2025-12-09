@@ -573,7 +573,7 @@ export default class DatasetEditPage {
     option: "none" | "public" | "restricted" | "non-public",
   ) {
     const accessRightsGroup = this.page.getByRole("group", {
-      name: "Tilgang Hjelp til utfylling Anbefalt",
+      name: "Tilgangsnivå Hjelp til utfylling Anbefalt",
     });
     const options = {
       none: "Ingen tilgangsrettighet valgt",
@@ -677,7 +677,7 @@ export default class DatasetEditPage {
   // Theme section
   async selectEuDataTheme(theme: string) {
     const themeField = this.page.getByRole("combobox", {
-      name: "Datatema(er)",
+      name: "Datatema",
     });
     await themeField.click();
     await this.page.getByRole("option", { name: theme, exact: true }).click();
@@ -687,7 +687,7 @@ export default class DatasetEditPage {
 
   async selectLosTheme(theme: string) {
     const themeField = this.page.getByRole("combobox", {
-      name: "LOS-tema(er)",
+      name: "LOS-tema",
     });
     await themeField.click();
     await this.page.getByRole("option", { name: theme, exact: true }).click();
@@ -885,7 +885,7 @@ export default class DatasetEditPage {
   async fillKeywords(keywords: LocalizedStrings) {
     await this.fillLanguageField(
       keywords,
-      "Emneord Hjelp til utfylling Anbefalt",
+      "Nøkkelord Hjelp til utfylling Anbefalt",
       ["Bokmål", "Nynorsk", "Engelsk"],
       false,
     );
