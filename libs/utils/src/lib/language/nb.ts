@@ -152,7 +152,6 @@ export const nb = {
 
   contactPoint: {
     contactInformation: "Kontaktinformasjon",
-    form: "Kontaktskjema",
   },
 
   search: {

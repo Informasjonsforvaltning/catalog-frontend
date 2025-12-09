@@ -33,10 +33,10 @@ export const ContactPointSection = () => {
     },
     {
       valuePath: "contactPoint.url",
-      label: localization.contactPoint.form,
+      label: localization.contactPage,
       legend: (
         <TitleWithHelpTextAndTag>
-          {localization.contactPoint.form}
+          {localization.contactPage}
         </TitleWithHelpTextAndTag>
       ),
     },

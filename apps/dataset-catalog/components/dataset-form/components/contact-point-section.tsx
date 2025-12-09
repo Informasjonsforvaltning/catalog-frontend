@@ -15,7 +15,7 @@ export const ContactPointSection = () => {
     },
     {
       valuePath: "contactPoints[0].url",
-      label: localization.contactPoint.form,
+      label: localization.contactPage,
     },
   ];
 
