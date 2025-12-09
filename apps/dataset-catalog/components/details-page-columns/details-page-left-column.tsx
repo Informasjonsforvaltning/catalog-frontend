@@ -133,8 +133,8 @@ export const LeftColumn = ({
                 values={dataset.mobilityTheme}
                 getTagText={(item) => {
                   const match =
-                    referenceData.dataThemes &&
-                    referenceData.dataThemes.find(
+                    referenceData.mobilityThemes &&
+                    referenceData.mobilityThemes.find(
                       (theme) => theme?.uri === item,
                     );
                   return match
@@ -190,6 +190,7 @@ export const LeftColumn = ({
                   distribution={dist}
                   searchEnv={searchEnv}
                   referenceDataEnv={referenceDataEnv}
+                  referenceData={referenceData}
                   openLicenses={referenceData.openLicenses}
                   language={language}
                 />
@@ -208,6 +209,7 @@ export const LeftColumn = ({
                   distribution={dist}
                   searchEnv={searchEnv}
                   referenceDataEnv={referenceDataEnv}
+                  referenceData={referenceData}
                   openLicenses={referenceData.openLicenses}
                   language={language}
                 />

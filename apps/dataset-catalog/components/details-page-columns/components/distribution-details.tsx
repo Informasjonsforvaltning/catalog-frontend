@@ -1,5 +1,6 @@
 import {
   Distribution,
+  ReferenceData,
   ReferenceDataCode,
   Search,
 } from "@catalog-frontend/types";
@@ -31,6 +32,7 @@ type Props = {
   searchEnv: string;
   referenceDataEnv: string;
   openLicenses: ReferenceDataCode[];
+  referenceData: ReferenceData;
   language?: string;
 };
 
@@ -39,6 +41,7 @@ export const DistributionDetailsCard = ({
   searchEnv,
   referenceDataEnv,
   openLicenses,
+  referenceData,
   language,
 }: Props) => {
   const { data: formats } = useSearchFileTypeByUri(
@@ -53,6 +56,22 @@ export const DistributionDetailsCard = ({
     distribution?.mediaType ?? [],
     referenceDataEnv,
   );
+
+  const getMobilityDataStandardText = (itemUri: string) => {
+    const match =
+      referenceData.mobilityDataStandards &&
+      referenceData.mobilityDataStandards.find(
+        (mobilityDataStandard) => mobilityDataStandard?.uri === itemUri,
+      );
+    return match ? getTranslateText(match?.label, language) : itemUri;
+  };
+
+  const getRightsText = (itemUri: string) => {
+    const match =
+      referenceData.mobilityRights &&
+      referenceData.mobilityRights.find((rights) => rights?.uri === itemUri);
+    return match ? getTranslateText(match?.label, language) : itemUri;
+  };
 
   const getDataNorgeUri = (
     id: string | undefined,
@@ -80,7 +99,7 @@ export const DistributionDetailsCard = ({
         )}
 
         {distribution?.accessURL && (
-          <>
+          <div>
             <Heading level={4} size="2xs">
               {localization.datasetForm.fieldLabel.accessURL}
             </Heading>
@@ -91,26 +110,30 @@ export const DistributionDetailsCard = ({
                 </Paragraph>
               );
             })}
-          </>
+          </div>
         )}
         {distribution?.mobilityDataStandard &&
           !isEmpty(distribution.mobilityDataStandard) && (
-            <>
+            <div>
               <Heading
                 level={5}
                 size="2xs"
-              >{`${localization.datasetForm.fieldLabel.mobilityDataStandard}:`}</Heading>
-              <Paragraph size="sm">{`${distribution.mobilityDataStandard}`}</Paragraph>
-            </>
+              >{`${localization.datasetForm.fieldLabel.mobilityDataStandard}`}</Heading>
+              <Paragraph size="sm">
+                {getMobilityDataStandardText(distribution.mobilityDataStandard)}
+              </Paragraph>
+            </div>
           )}
-        {distribution?.rights && !isEmpty(distribution.rights) && (
-          <>
+        {distribution?.rights?.type && !isEmpty(distribution.rights?.type) && (
+          <div>
             <Heading
               level={5}
               size="2xs"
-            >{`${localization.datasetForm.fieldLabel.distributionRights}:`}</Heading>
-            <Paragraph size="sm">{`${distribution.rights.type}`}</Paragraph>
-          </>
+            >{`${localization.datasetForm.fieldLabel.distributionRights}`}</Heading>
+            <Paragraph size="sm">
+              {getRightsText(distribution.rights.type)}
+            </Paragraph>
+          </div>
         )}
         {distribution?.format && !isEmpty(distribution.format) && (
           <div>
