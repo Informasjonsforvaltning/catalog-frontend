@@ -38,7 +38,7 @@ export const nb = {
   no: "Nei",
   to: "Til",
   from: "Fra",
-  access: "Tilgang",
+  access: "Tilgangsnivå",
   noAccess: "Ingen tilgang",
   youHaveNoAccess: "Det ser ikke ut til at du har tilgang til denne siden.",
   youHaveNoAccessToCatalogs:

@@ -1,57 +1,66 @@
 export const datasetFormNb = {
   helptext: {
     title:
-      "Tittelen skal være kortfattet, kunne stå alene og gi mening. Forkortelser skal skrives helt ut.",
+      "Tittelen gir andre et førsteinntrykk av datasettet, derfor er det viktig at denne er presist og forståelig formulert. Den skal kunne forstås av folk flest, derfor bør interne formuleringer og forkortelser unngås. For at datasettet skal bli lettere å finne, oppgi tittelen på flere språk.",
     description:
-      "Beskrivelsen skal være kortfattet. Det bør fremgå hvilke opplysninger som utgjør kjernen i datasettet, samt formålet til datasettet.",
-    accessRights: `Tilgangsnivå beskriver hvor fritt tilgjengelig datasettet er. Velg det mest restriktive tilgangsnivået som gjelder, basert på om datasettet har:  
-      - **Allmenn tilgang**: Tilgjengelig for alle.  
-      - **Betinget tilgang**: Tilgang krever oppfyllelse av bestemte betingelser.  
-      - **Ikke-allmenn tilgang**: Begrenset til en spesifikk gruppe eller formål.`,
+      "Kort og presis beskrivelse av datasettet. Dette gir brukeren innsikt i hvilke data man kan forvente å finne i datasettet. Beskrivelsen skal ikke inneholde informasjon som kan oppgis i andre felter i dette skjemaet.",
+    accessRights: `Hvem som har tilgang til datasettet. 
+- **Allmenn tilgang**: datasettet er tilgjengelig for alle. Må ha minst én distribusjon med åpen lisens for å regnes som åpne data.
+- **Betinget tilgang**: datasettet er kun tilgjengelig under visse betingelser fastsatt.
+- **Ikke-allmenn tilgang**: tilgang til datasettet er begrenset av lovregulerte hensyn knyttet til sikkerhet, personvern eller lignende.
+
+Dersom flere tilgangstyper kan passe, velg den mest restriktive.
+
+[Mer informasjon om tilgangsnivå](https://data.norge.no/nb/docs/finding-data/access-data)`,
     legalBasis:
       "Relevante juridiske referanser for datasettet, som lover, forskrifter, eller andre rettslige rammer som begrenser eller gir grunnlag for behandling og bruk av datasettet. For eksempel kan dette være en lenke til en lovtekst.",
     legalBasisForRestriction:
-      "Referanse til lov eller forskrift som begrenser deling av datasettet (f.eks. offentlighetsloven, sikkerhetsloven).",
+      "Begrensning av deling av datasett. Refererer til lov eller forskrift (f.eks. offentlighetsloven, sikkerhetsloven). Relevant for datasett med betinget eller ikke-allmenn tilgangsnivå.",
     legalBasisForProcessing:
-      "Lov, forskrift, samtykke eller nødvendighetsvurdering som grunnlag for behandling av personopplysninger.",
+      "Behandling av personopplysninger. Refererer til lov eller forskrift (f.eks. GDPR). Relevant for datasett med betinget eller ikke-allmenn tilgangsnivå.",
     legalBasisForAccess:
-      "Henvisning til lov eller forskrift som gir offentlig virksomhet rett eller plikt til å utlevere opplysninger til private eller juridiske personer.",
+      "Utlevering av opplysninger til private eller juridiske personer. Refererer til lov eller forskrift. Relevant for alle tilgangsnivå.",
     issued:
-      "Dato for når innholdet i datasettet ble eller blir tilgjengeliggjort.",
+      "Første gang datasettet ble (eller blir) tilgjengeliggjort. Dette er uavhengig av når denne beskrivelsen ble opprettet.",
     euDataTheme:
-      "Velg ett eller flere hovedtema som beskriver innholdet i datasettet. Listen er fra EUs kontrollerte vokabular.",
+      "Overordnede hovedtema for datasettet. Listen er fra [EUs kontrollerte vokabular](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/data-theme).",
     losTheme:
-      "Velg ett eller flere LOS-temaer som beskriver datasettet. LOS-tema (Livsområdestruktur) er en norsk utvidelse av EUs kontrollerte vokabular for temaer. Dette gjør det mulig å tilpasse kategoriseringen til nasjonale behov. [Les mer om LOS her](https://psi.norge.no/los/struktur.html).",
+      "Tema som beskriver datasettet på et mer detaljert nivå. Listen er fra [LOS](https://psi.norge.no/los/struktur.html), et felles vokabular som er temainndelt for å kategorisere og beskrive offentlige tjenester og ressurser i Norge. Velg det eller de mest presise temaene som er dekkende for innholdet i datasettet.",
     distribution:
-      'En distribusjon beskriver hvordan man får tilgang til datasettet. Datasett som har en distribusjon der det er lagt til en åpen lisens vil bli markert som "Åpne data"',
+      "Distribusjonen skal gi tilgang til hele datasettet. Hvis distribusjonen gir tilgang til en egen delmengde av datasettet skal dette beskrives som et eget datasett. Det skal opprettes en distribusjon for hvert format.",
+    distributionTitle:
+      "Kortfattet navn på distribusjonen. Navnet skal kunne stå alene og gi mening. Forkortelser skal skrives helt ut. Oppgi for hvert språk distribusjonen tilbys.",
     distributionDescription:
-      "Kortfattet fritekstbeskrivelse av distribusjonen.",
+      "Kortfattet beskrivelse av distribusjonen. Oppgi for hvert språk distribusjonen tilbys. Beskrivelsen skal ikke inneholde informasjon som kan oppgis i andre felter i dette skjemaet.",
     sample:
-      "Eksempeldata er en distribusjon som representerer et utdrag eller en delmengde av datasettet.",
-    accessURL:
-      "En nettadresse som gir tilgang til datasettet. Lenken kan peke til en ressurs som gir informasjon om hvordan datasettet kan brukes, for eksempel et API, en portal, eller en annen visning av datasettet.",
+      "En smakebit av datasettet (skarpe eller syntetiske data) som gir andre et innblikk i hva de kan forvente å finne i datasettet.",
+    accessURL: `En nettadresse hvor man kan få tilgang til datasettet. Adressen kan enten vise til en side hvor man kan laste ned datasettet direkte, eller til en side som gir informasjon om hvordan datasettet kan brukes, for eksempel et API, en portal, eller en annen visning av datasettet.
+
+Dersom dette er en lenke hvor datasettet lastes ned direkte, og datasettet ikke tilbyr noen annen form for distribusjon: legg inn lenken i dette feltet, legg til feltet 'nedlastingslenke' i tillegg, og fyll inn samme lenke her.`,
     downloadURL: "Direktelenke (URL) til en nedlastbar fil av datasettet.",
-    fileType: "Distribusjonens filformat.",
+    fileType:
+      "Filtypen til distribusjonen. Velges fra EU’s kontrollerte vokabular [file type](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/file-type)",
     mediaType:
-      "Distribusjonens medietype. Medietype velges fra listen _IANA Media Types_.",
+      "Innholdets spesifikke type. Medietype velges fra listen [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml).",
     accessServices:
-      "Datatjenester som gir tilgang til distribusjon av datasettet.",
+      "En datatjeneste hvor man kan skaffe tilgang til datasettet, for eksempel for datasett med begrenset tilgangsnivå.",
     license:
-      'Lisensen som distribusjonen er gjort tilgjengelig under. Velges fra EUs kontrollerte vokabular _License_. Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".',
-    page: "Refererer til en side eller et dokument som beskriver distribusjonen.",
+      "Lisensen denne distribusjonen kan tas i bruk under. Angir vilkår for tilgang, bruk og deling. Velges fra EUs kontrollerte vokabular [License](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/licence).",
+    page: "Lenker til en side eller et dokument som beskriver distribusjonen.",
     distributionConformsTo:
-      "En standard eller et etablert skjema som distribusjonen følger.",
-    language: "Språkene innholdet i datasettet er skrevet på.",
-    spatial: "Geografiske områder som er dekket av datasettet.",
+      "Lenke til en standard, spesifikasjon eller et etablert skjema som distribusjonen er i samsvar med.",
+    language: "Alle språk innholdet i datasettet er tilgjengelig på.",
+    spatial: "Geografiske områder datasettet dekker.",
     temporal:
-      "Tidsrommet datasettet dekker dersom det kun har innhold fra visse perioder.",
-    lastUpdated: "Dato for når innholdet i datasettet sist er endret.",
+      "Tidsperiode(r) datasettet dekker. En tidsperiode kan være pågående.",
+    lastUpdated: "Dato for siste oppdatering av innholdet i datasettet.",
     landingPage:
       "Lenke til en nettside som gir tilgang til datasettet, dets distribusjoner og/eller tilleggsinformasjon.",
-    type: "Refererer til EU publication office sine datasett-typer.",
+    type: "Datasettets spesifikke type. Dette kan velges blant EU’s kontrollerte vokabular [dataset type](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/dataset-type).",
     provenance:
-      "Brukes til å referere til beskrivelse av endring i eierskap og forvaltning av datasett (fra det ble skapt) som har betydning for autentisitet, integritet og fortolkning.",
-    frequency: "Hvor ofte datasettet har nytt innhold.",
+      "Endringer i eierskap eller forvaltning av datasettet, dersom dette har betydning for autentisitet, integritet og fortolkning.",
+    frequency:
+      "Hvor ofte datasettet har nytt innhold. Verdien velges fra EU’s kontrollerte vokabular [frequency](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/frequency)",
     modified: "Dato for siste oppdatering av datasettet.",
     currentness: "Avvik eller tilleggsopplysninger om oppdateringsfrekvens.",
     completeness:
@@ -61,26 +70,28 @@ export const datasetFormNb = {
     availability:
       "Dersom datasettets tilgangsnivå har avvik eller tilleggsopplysninger, bør det oppgis her.",
     qualifiedAttributions:
-      "Innholdsleverandør er en aktør som har en eller annen form for ansvar for datasettet, men som ikke er en utgiver eller produsent. ",
+      "En aktør som har en eller annen form for ansvar for datasettet, men som ikke er en utgiver eller produsent. Dette kan for eksempel være en distributør.",
     relevance:
       "Dersom det er bruksområder datasettet er spesielt egnet for eller ikke egnet for, bør det oppgis her.",
     conformsTo:
-      "Oppgi om datasettet er i henhold til gitt(e) standard(er), spesifikasjon(er) eller implementasjonsregler.",
-    references: "Et datasett dette datasettet refererer til.",
+      "Lenke til en standard, spesifikasjon eller et etablert skjema som datasettet er i samsvar med.",
+    references:
+      'Oppgi hvilken kobling dette datasettet har til et annet datasett. For eksempel: dersom dette datasettet er et utdrag av et større datasett, oppgir du relasjonen "er en del av" og datasettet det er et utdrag fra.',
     inSeries: "Velg en datasettserie som dette datasettet er en del av.",
-    relatedResources:
-      "Beslektet ressurs, uten nærmere angivelse av type relasjon.",
-    informationModelsFromFDK: "Informasjonsmodell fra Data.norge.no",
-    informationModelsFromOtherSources: "Informasjonsmodell fra andre kilder",
-    contactName: "Brukes til å oppgi navnet til kontaktpunktet.",
+    relatedResources: "En beslektet ressurs, uten spesifisert relasjonstype.",
+    informationModelsFromFDK: "Informasjonsmodell fra data.norge.no.",
+    informationModelsFromOtherSources:
+      "Informasjonsmodell fra et annet sted enn data.norge.no.",
+    contactName:
+      "Navnet på kontaktpunktet. Typisk en organisasjon eller enhet.",
     contactFields:
-      "Informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om datasettet. Minst ett av feltene må fylles ut for å oppfylle kravet til kontaktpunkt.",
+      "Kontaktinformasjon for kontaktpunktet. Minst ett av feltene må fylles ut.",
     statusSwitch:
       "Toggelen bestemmer om datasettbeskrivelsen blir lagret med status “Godkjent” eller som et “Utkast”. For å endre status til “Godkjent” må alle obligatoriske felter være fylt ut. Husk å lagre skjemaet for å oppdatere status. For å kunne fjerne godkjent-status må et publisert datasett først avpubliseres.",
     keywords:
-      "Emneord eller tagger beskriver sentralt innhold i datasettet, spesielt når begrepsdefinisjoner mangler eller når det brukes ord som folk ofte søker etter, men som ikke formelt er knyttet til datasettet.",
+      "Brukes gjerne dersom et sentralt begrep ikke finnes i begrepskatalogen.",
     concepts:
-      "Søk etter begrep som er publisert i Data.norge.no og velg fra nedtrekkslisten. Her legger du inn de begrepene som brukes i datasettet. Begrepene brukes til å si noe om hva informasjonen i datasettet betyr. Ved å henvise til gjennomarbeidede definisjoner som virksomheten selv er ansvarlig for å vedlikeholde, sikrer vi at det er tydelig hvordan et begrep brukt i datasettet skal forstås og at denne forståelsen til en hver tid er riktig og oppdatert.",
+      "Velg begrep registrert i [https://data.norge.no/concepts](begrepskatalogen til data.norge). Ved å henvise til gjennomarbeidede beskrivelser som virksomheten selv er ansvarlig for å vedlikeholde, sikrer vi at det er tydelig hvordan et begrep brukt i datasettet skal forstås og at denne forståelsen er riktig og oppdatert.",
     publishWarning:
       'Datasettbeskrivelsen må ha status "Godkjent" for å kunne publiseres til Data.norge.no. Statusen kan endres i ',
     publish:
@@ -103,21 +114,25 @@ export const datasetFormNb = {
     transportTheme: "Mobility-tema",
   },
   subtitle: {
-    about: "Nøkkelinformasjon om datasettet.",
+    about:
+      "Sentral informasjon om datasettet. Informasjonen som legges inn her skal hjelpe andre med å finne datasettet og vurdere om det er relevant for dem.",
     theme:
-      "Tema knyttet til datasettet, et datasett kan være assosiert med flere tema.",
+      "Det eller de mest sentrale områdene innholdet i datasettet kan kategoriseres under. Tema kan hjelpe andre med å finne presise resultater i filtrerte søk.",
     distributions:
-      "Tilgjengelige distribusjoner for datasettet og eksempeldata som illustrerer datasettet.",
-    details: "Detaljer om datasettet.",
-    relations: "Relasjoner til andre ressurser og datasett.",
-    concept: "Begrep og emneord knyttet til datasettet.",
+      "Informasjon som gjør det mulig for andre å ta i bruk selve datasettet. ",
+    details:
+      "Opplysninger som videre beskriver datasettet. Dette vil hjelpe datakonsumenter med å vurdere om datasettet er aktuelt for deres formål.",
+    relations:
+      "Andre datasett og ressurser som har relevante koblinger til dette datasettet.",
+    concept:
+      "Begrepsbeskrivelser gir felles og tydelige rammer for å forstå og tolke innholdet i datasettet.",
     informationModels: "Informasjonsmodeller som datasettet er i samsvar med.",
     contactPoint:
-      "Kontaktpunkt som kan brukes vedr. spørsmål og kommentarer om datasettet.",
+      "Informasjon om en organisasjon eller enhet som kan kontaktes for spørsmål eller kommentarer om datasettet. Dersom datakonsumenter har spørsmål knyttet til datasettet, er det hit de vil henvende seg.",
   },
   fieldLabel: {
-    losTheme: "LOS-tema(er)",
-    euDataTheme: "Datatema(er)",
+    losTheme: "LOS-tema",
+    euDataTheme: "Datatema",
     concepts: "Begreper",
     mediaType: "Medietyper",
     format: "Format",
@@ -136,7 +151,7 @@ export const datasetFormNb = {
     legalBasisForProcessing: "Behandlingsgrunnlag",
     legalBasisForAccess: "Utleveringshjemmel",
     legalBasis: "Juridisk grunnlag",
-    keywords: "Emneord",
+    keywords: "Nøkkelord",
     distribution: "Distribusjon",
     distributions: "Distribusjoner",
     issued: "Utgivelsesdato",
@@ -147,7 +162,7 @@ export const datasetFormNb = {
     landingPage: "Landingsside",
     type: "Type",
     title: "Tittel",
-    provenance: "Opphav",
+    provenance: "Eierskapshistorikk",
     frequency: "Oppdateringsfrekvens",
     modified: "Sist oppdatert",
     currentness:
@@ -155,7 +170,7 @@ export const datasetFormNb = {
     completeness: "Kompletthet",
     accuracy: "Nøyaktighet",
     availability: "Tilgjengelighet",
-    qualifiedAttributions: "Innholdsleverandører",
+    qualifiedAttributions: "Annen ansvarlig aktør",
     relevance: "Relevans",
     references: "Relaterte datasett",
     inSeries: "Relasjon til datasettserie",
