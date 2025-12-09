@@ -230,7 +230,7 @@ Eksempel: Versjon 2.1.3 betyr andre hovedversjon, første mindre oppdatering, og
     contactInfo: "Kontaktinformasjon",
     emailAddress: "E-postadresse",
     phoneNumber: "Telefonnummer",
-    contactForm: "Kontaktskjema",
+    contactForm: "Kontaktside",
     versionNumber: "Versjonsnummer",
     labels: "Merkelapp",
     valueRangeDescription: "Beskrivelse",
