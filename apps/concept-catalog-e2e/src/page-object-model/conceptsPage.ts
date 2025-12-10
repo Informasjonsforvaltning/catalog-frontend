@@ -4,11 +4,17 @@ import { Concept } from "@catalog-frontend/types";
 import DetailPage from "./detailPage";
 import EditPage from "./editPage";
 import { ConceptStatus } from "../utils/helpers";
+import ImportResultsPage from "./importResultsPage";
+import ImportResultDetailsPage from "./importResultDetailsPage";
+import * as path from "node:path";
+import { localization } from "@catalog-frontend/utils";
 
 export default class ConceptsPage {
   url: string;
   page: Page;
   detailPage: DetailPage;
+  importResultsPage: ImportResultsPage;
+  importResultDetailsPage: ImportResultDetailsPage;
   editPage: EditPage;
   context: BrowserContext;
   accessibilityBuilder: AxeBuilder;
@@ -21,6 +27,16 @@ export default class ConceptsPage {
     this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/concepts`;
     this.page = page;
     this.detailPage = new DetailPage(page, context, accessibilityBuilder);
+    this.importResultsPage = new ImportResultsPage(
+      page,
+      context,
+      accessibilityBuilder,
+    );
+    this.importResultDetailsPage = new ImportResultDetailsPage(
+      page,
+      context,
+      accessibilityBuilder,
+    );
     this.editPage = new EditPage(page, context, accessibilityBuilder);
     this.context = context;
     this.accessibilityBuilder = accessibilityBuilder;
@@ -267,5 +283,77 @@ export default class ConceptsPage {
         this.page.getByRole("button", { name: "Open Next.js Dev Tools" }),
       ).not.toBeVisible();
     }
+  }
+
+  public async importTurtleFile(fileName: string) {
+    const filePath = path.resolve(__dirname, `../data/${fileName}`);
+
+    console.log("File path: ", filePath);
+
+    await this.goto();
+
+    // Click the Import button
+    console.log("[TEST] Clicking Importer Button...");
+    await this.page
+      .getByRole("button", { name: `${localization.importResult.import}` })
+      .click();
+
+    // A modal should open
+    console.log("[TEST] Expecting an open modal...");
+    await expect(this.page.getByRole("dialog")).toBeVisible({ timeout: 20000 });
+
+    let dialog = this.page.getByRole("dialog", {});
+
+    const importerRdfButton = dialog
+      .getByRole("button")
+      .filter({ hasText: `${localization.button.importConceptRDF}` });
+
+    console.log("[TEST] Clicking Importer RDF Button...");
+
+    const [fileChooser] = await Promise.all([
+      this.page.waitForEvent("filechooser", { timeout: 20000 }),
+      await importerRdfButton.click({ timeout: 20000 }),
+    ]);
+
+    await fileChooser.setFiles(filePath);
+
+    dialog = this.page.getByRole("dialog", {});
+
+    await expect(
+      dialog
+        .getByRole("button")
+        .filter({ hasText: `${localization.button.importConceptRDF}` }),
+    ).toBeHidden({ timeout: 5000 });
+    await expect(
+      dialog.getByRole("button", {
+        name: `${localization.importResult.continue}`,
+      }),
+    ).toBeVisible({
+      timeout: 5000,
+    });
+
+    const sendButton = dialog
+      .getByRole("button")
+      .filter({ hasText: `${localization.importResult.continue}` });
+    expect(sendButton).not.toBeDisabled({ timeout: 30000 });
+
+    await Promise.all([
+      this.page.waitForURL("**/import-results/**", { timeout: 60_000 }),
+      sendButton.click({ timeout: 10000 }),
+    ]);
+
+    await expect(this.page).toHaveURL(/\/import-results\/.+/i, {
+      timeout: 100000,
+    });
+
+    const url = this.page.url();
+    console.log("Import result URL: ", url);
+
+    const importId = url.split("/").pop();
+    console.log("Import result ID: ", url);
+
+    expect(importId != null);
+
+    return importId;
   }
 }

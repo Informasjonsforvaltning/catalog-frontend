@@ -89,7 +89,11 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
   ];
 
   const filterItems = filterItemContents.map((item) => (
-    <AccordionItem key={`accordion-item-${item.header}`} {...item} />
+    <AccordionItem
+      initiallyOpen
+      key={`accordion-item-${item.header}`}
+      {...item}
+    />
   ));
 
   const getSortFunction = (sortKey: string) => {
@@ -153,6 +157,7 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
     <SearchHitsLayout>
       <SearchHitsLayout.SearchRow>
         <NativeSelect
+          aria-label={localization.search.sort}
           size="sm"
           className={styles.select}
           onChange={handleSortChange}
