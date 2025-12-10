@@ -138,13 +138,13 @@ export default class DatasetDetailPage {
 
   // Theme section
   async expectEuDataTheme(theme: string) {
-    const label = this.page.getByRole("heading", { name: "Datatema(er)" });
+    const label = this.page.getByRole("heading", { name: "Datatema" });
     await expect(label).toBeVisible();
     await expect(this.page.getByText(theme, { exact: true })).toBeVisible();
   }
 
   async expectLosTheme(theme: string) {
-    const label = this.page.getByRole("heading", { name: "LOS-tema(er)" });
+    const label = this.page.getByRole("heading", { name: "LOS-tema" });
     await expect(label).toBeVisible();
     await expect(this.page.getByText(theme, { exact: true })).toBeVisible();
   }
