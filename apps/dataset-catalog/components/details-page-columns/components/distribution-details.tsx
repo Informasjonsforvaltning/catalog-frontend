@@ -32,8 +32,9 @@ type Props = {
   searchEnv: string;
   referenceDataEnv: string;
   openLicenses: ReferenceDataCode[];
-  referenceData: ReferenceData;
   language?: string;
+  mobilityDataStandard?: ReferenceDataCode;
+  rights?: ReferenceDataCode;
 };
 
 export const DistributionDetailsCard = ({
@@ -41,8 +42,9 @@ export const DistributionDetailsCard = ({
   searchEnv,
   referenceDataEnv,
   openLicenses,
-  referenceData,
   language,
+  mobilityDataStandard,
+  rights,
 }: Props) => {
   const { data: formats } = useSearchFileTypeByUri(
     distribution.format,
@@ -56,22 +58,6 @@ export const DistributionDetailsCard = ({
     distribution?.mediaType ?? [],
     referenceDataEnv,
   );
-
-  const getMobilityDataStandardText = (itemUri: string) => {
-    const match =
-      referenceData.mobilityDataStandards &&
-      referenceData.mobilityDataStandards.find(
-        (mobilityDataStandard) => mobilityDataStandard?.uri === itemUri,
-      );
-    return match ? getTranslateText(match?.label, language) : itemUri;
-  };
-
-  const getRightsText = (itemUri: string) => {
-    const match =
-      referenceData.mobilityRights &&
-      referenceData.mobilityRights.find((rights) => rights?.uri === itemUri);
-    return match ? getTranslateText(match?.label, language) : itemUri;
-  };
 
   const getDataNorgeUri = (
     id: string | undefined,
@@ -112,26 +98,25 @@ export const DistributionDetailsCard = ({
             })}
           </div>
         )}
-        {distribution?.mobilityDataStandard &&
-          !isEmpty(distribution.mobilityDataStandard) && (
-            <div>
-              <Heading
-                level={5}
-                size="2xs"
-              >{`${localization.datasetForm.fieldLabel.mobilityDataStandard}`}</Heading>
-              <Paragraph size="sm">
-                {getMobilityDataStandardText(distribution.mobilityDataStandard)}
-              </Paragraph>
-            </div>
-          )}
-        {distribution?.rights?.type && !isEmpty(distribution.rights?.type) && (
+        {mobilityDataStandard && !isEmpty(mobilityDataStandard) && (
+          <div>
+            <Heading
+              level={5}
+              size="2xs"
+            >{`${localization.datasetForm.fieldLabel.mobilityDataStandard}`}</Heading>
+            <Paragraph size="sm">
+              {getTranslateText(mobilityDataStandard?.label, language)}
+            </Paragraph>
+          </div>
+        )}
+        {rights && !isEmpty(rights) && (
           <div>
             <Heading
               level={5}
               size="2xs"
             >{`${localization.datasetForm.fieldLabel.distributionRights}`}</Heading>
             <Paragraph size="sm">
-              {getRightsText(distribution.rights.type)}
+              {getTranslateText(rights.label, language)}
             </Paragraph>
           </div>
         )}

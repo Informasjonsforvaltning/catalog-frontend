@@ -190,9 +190,16 @@ export const LeftColumn = ({
                   distribution={dist}
                   searchEnv={searchEnv}
                   referenceDataEnv={referenceDataEnv}
-                  referenceData={referenceData}
                   openLicenses={referenceData.openLicenses}
                   language={language}
+                  mobilityDataStandard={referenceData.mobilityDataStandards.find(
+                    (mobilityDataStandard) =>
+                      mobilityDataStandard?.uri === dist.mobilityDataStandard,
+                  )}
+                  rights={referenceData.mobilityRights.find(
+                    (mobilityRights) =>
+                      mobilityRights?.uri === dist.rights?.type,
+                  )}
                 />
               ))}
           </div>
@@ -209,9 +216,16 @@ export const LeftColumn = ({
                   distribution={dist}
                   searchEnv={searchEnv}
                   referenceDataEnv={referenceDataEnv}
-                  referenceData={referenceData}
                   openLicenses={referenceData.openLicenses}
                   language={language}
+                  mobilityDataStandard={referenceData.mobilityDataStandards.find(
+                    (mobilityDataStandard) =>
+                      mobilityDataStandard?.uri === dist.mobilityDataStandard,
+                  )}
+                  rights={referenceData.mobilityRights.find(
+                    (mobilityRights) =>
+                      mobilityRights?.uri === dist.rights?.type,
+                  )}
                 />
               ))}
           </div>
