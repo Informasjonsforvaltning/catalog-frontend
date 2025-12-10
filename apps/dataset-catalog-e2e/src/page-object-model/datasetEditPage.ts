@@ -885,7 +885,7 @@ export default class DatasetEditPage {
   async fillKeywords(keywords: LocalizedStrings) {
     await this.fillLanguageField(
       keywords,
-      "Nøkkelord Hjelp til utfylling Anbefalt",
+      "Emneord Hjelp til utfylling Anbefalt",
       ["Bokmål", "Nynorsk", "Engelsk"],
       false,
     );
