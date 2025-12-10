@@ -105,7 +105,7 @@ export default class DataServiceEditPage {
       name: "Telefon",
     });
     this.contactUrlButton = this.contactInfoGroup.getByRole("button", {
-      name: "Kontaktskjema",
+      name: "Kontaktside",
     });
     this.contactEmailInput = page
       .getByRole("group", { name: "E-post" })
@@ -114,7 +114,7 @@ export default class DataServiceEditPage {
       .getByRole("group", { name: "Telefon" })
       .getByRole("textbox");
     this.contactUrlInput = page
-      .getByRole("group", { name: "Kontaktskjema" })
+      .getByRole("group", { name: "Kontaktside" })
       .getByRole("textbox");
     this.statusGroup = page.getByRole("group", { name: "Status" });
     this.licenseGroup = page.getByRole("group", { name: "Lisens" });

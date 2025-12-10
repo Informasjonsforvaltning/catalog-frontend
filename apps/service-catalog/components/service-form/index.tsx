@@ -500,7 +500,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                         },
                         {
                           valuePath: "contactPoints[0].contactPage",
-                          label: localization.contactPoint.form,
+                          label: localization.contactPage,
                         },
                       ]}
                       errorPath="contactPoints"

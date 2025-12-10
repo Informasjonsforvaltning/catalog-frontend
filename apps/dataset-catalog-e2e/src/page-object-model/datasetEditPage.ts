@@ -950,7 +950,7 @@ export default class DatasetEditPage {
   }) {
     await this.page.getByLabel("E-post").fill(data.email);
     await this.page.getByLabel("Telefon").fill(data.phone);
-    await this.page.getByLabel("Kontaktskjema").fill(data.url);
+    await this.page.getByLabel("Kontaktside").fill(data.url);
   }
 
   // Auto-save testing helpers
