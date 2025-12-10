@@ -38,7 +38,7 @@ Datasett som har en distribusjon der det er lagt til en åpen lisens vil bli mar
 Dersom dette er en lenke hvor datasettet lastes ned direkte, og datasettet ikke tilbyr noen annen form for distribusjon: legg inn lenken i dette feltet, legg til feltet 'nedlastingslenke' i tillegg, og fyll inn samme lenke her.`,
     downloadURL: "Direktelenke (URL) til en nedlastbar fil av datasettet.",
     fileType:
-      "Filtypen til distribusjonen. Velges fra EU’s kontrollerte vokabular [file type](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/file-type)",
+      "Filtypen til distribusjonen. Velges fra EU’s kontrollerte vokabular [file type](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/file-type).",
     mediaType:
       "Innholdets spesifikke type. Medietype velges fra listen [IANA Media Types](https://www.iana.org/assignments/media-types/media-types.xhtml).",
     accessServices:
@@ -62,7 +62,7 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     frequency:
       "Hvor ofte datasettet har nytt innhold. Verdien velges fra EU’s kontrollerte vokabular [frequency](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/frequency)",
     modified: "Dato for siste oppdatering av datasettet.",
-    currentness: "Avvik eller tilleggsopplysninger om oppdateringsfrekvens.",
+    currentness: "Tilleggsopplysninger om oppdateringsfrekvens.",
     completeness:
       "Dersom datasettet ikke innholder alle objekter som nevnt i formålet, bør det oppgis her.",
     accuracy:
@@ -91,7 +91,7 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     keywords:
       "Brukes gjerne dersom et sentralt begrep ikke finnes i begrepskatalogen.",
     concepts:
-      "Velg begrep registrert i [https://data.norge.no/concepts](begrepskatalogen til data.norge). Ved å henvise til gjennomarbeidede beskrivelser som virksomheten selv er ansvarlig for å vedlikeholde, sikrer vi at det er tydelig hvordan et begrep brukt i datasettet skal forstås og at denne forståelsen er riktig og oppdatert.",
+      "Velg begrep registrert i [begrepskatalogen til data.norge](https://data.norge.no/concepts). Ved å henvise til gjennomarbeidede beskrivelser som virksomheten selv er ansvarlig for å vedlikeholde, sikrer vi at det er tydelig hvordan et begrep brukt i datasettet skal forstås og at denne forståelsen er riktig og oppdatert.",
     publishWarning:
       'Datasettbeskrivelsen må ha status "Godkjent" for å kunne publiseres til Data.norge.no. Statusen kan endres i ',
     publish:
@@ -164,8 +164,7 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     provenance: "Eierskapshistorikk",
     frequency: "Oppdateringsfrekvens",
     modified: "Sist oppdatert",
-    currentness:
-      "Aktualitet: Avvik eller tilleggsopplysninger om oppdateringsfrekvens",
+    currentness: "Aktualitet",
     completeness: "Kompletthet",
     accuracy: "Nøyaktighet",
     availability: "Tilgjengelighet",
