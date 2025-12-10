@@ -26,7 +26,7 @@ Dersom flere tilgangstyper kan passe, velg den mest restriktive.
       "Tema som beskriver datasettet på et mer detaljert nivå. Listen er fra [LOS](https://psi.norge.no/los/struktur.html), et felles vokabular som er temainndelt for å kategorisere og beskrive offentlige tjenester og ressurser i Norge. Velg det eller de mest presise temaene som er dekkende for innholdet i datasettet.",
     distribution: `Distribusjonen skal gi tilgang til hele datasettet. Hvis distribusjonen gir tilgang til en egen delmengde av datasettet skal dette beskrives som et eget datasett. Opprett en distribusjon for hvert format. 
       
-      Datasett som har en distribusjon der det er lagt til en åpen lisens vil bli markert som "Åpne data".`,
+Datasett som har en distribusjon der det er lagt til en åpen lisens vil bli markert som "Åpne data".`,
     distributionTitle:
       "Kortfattet navn på distribusjonen. Navnet skal kunne stå alene og gi mening. Forkortelser skal skrives helt ut. Oppgi for hvert språk distribusjonen tilbys.",
     distributionDescription:
@@ -45,7 +45,7 @@ Dersom dette er en lenke hvor datasettet lastes ned direkte, og datasettet ikke 
       "En datatjeneste hvor man kan skaffe tilgang til datasettet, for eksempel for datasett med begrenset tilgangsnivå.",
     license: `Lisensen denne distribusjonen kan tas i bruk under. Angir vilkår for tilgang, bruk og deling. Velges fra EUs kontrollerte vokabular [License](https://op.europa.eu/en/web/eu-vocabularies/concept-scheme/-/resource?uri=http://publications.europa.eu/resource/authority/licence).
       
-      Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
+Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     page: "Lenker til en side eller et dokument som beskriver distribusjonen.",
     distributionConformsTo:
       "Lenke til en standard, spesifikasjon eller et etablert skjema som distribusjonen er i samsvar med.",
