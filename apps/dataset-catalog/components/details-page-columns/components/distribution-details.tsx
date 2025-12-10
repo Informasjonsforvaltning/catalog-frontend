@@ -68,14 +68,10 @@ export const DistributionDetailsCard = ({
       : "/not-found";
   };
 
-  const hasValues = (values: any | any[] | undefined | null): boolean => {
-    return values && !isEmpty(values); //TODO: loop through array to exclude empty strings
-  };
-
   return (
     <Card>
       <div className={styles.infoCardItems}>
-        {hasValues(distribution?.title) && (
+        {getTranslateText(distribution?.title, language) && (
           <div>
             <Heading level={4} size="2xs">
               {localization.title}
@@ -100,10 +96,9 @@ export const DistributionDetailsCard = ({
         )}
         {mobilityDataStandard && !isEmpty(mobilityDataStandard) && (
           <div>
-            <Heading
-              level={5}
-              size="2xs"
-            >{`${localization.datasetForm.fieldLabel.mobilityDataStandard}`}</Heading>
+            <Heading level={5} size="2xs">
+              {localization.datasetForm.fieldLabel.mobilityDataStandard}
+            </Heading>
             <Paragraph size="sm">
               {getTranslateText(mobilityDataStandard?.label, language)}
             </Paragraph>
@@ -111,10 +106,9 @@ export const DistributionDetailsCard = ({
         )}
         {rights && !isEmpty(rights) && (
           <div>
-            <Heading
-              level={5}
-              size="2xs"
-            >{`${localization.datasetForm.fieldLabel.distributionRights}`}</Heading>
+            <Heading level={5} size="2xs">
+              {localization.datasetForm.fieldLabel.distributionRights}
+            </Heading>
             <Paragraph size="sm">
               {getTranslateText(rights.label, language)}
             </Paragraph>
@@ -162,10 +156,9 @@ export const DistributionDetailsCard = ({
               <FieldsetDivider />
               {!isEmpty(distribution?.description) && (
                 <div className={styles.distributionField}>
-                  <Heading
-                    level={5}
-                    size="2xs"
-                  >{`${localization.description}:`}</Heading>
+                  <Heading level={5} size="2xs">
+                    {localization.description}
+                  </Heading>
                   <Paragraph size="sm">
                     {getTranslateText(distribution?.description, language)}
                   </Paragraph>
