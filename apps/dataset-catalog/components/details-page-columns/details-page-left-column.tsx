@@ -289,7 +289,7 @@ export const LeftColumn = ({
         </InfoCard.Item>
       )}
 
-      {dataset?.modified && !isEmpty(dataset?.modified) && (
+      {dataset?.modified && (
         <InfoCard.Item
           title={localization.datasetForm.helptext.modified.slice(0, -1)}
         >
@@ -308,10 +308,9 @@ export const LeftColumn = ({
 
             {hasValues(dataset?.currentness?.hasBody) && (
               <div>
-                <Heading
-                  level={3}
-                  size="2xs"
-                >{`${localization.datasetForm.fieldLabel.currentness}`}</Heading>
+                <Heading level={3} size="2xs">
+                  {localization.datasetForm.fieldLabel.currentness}
+                </Heading>
                 <Paragraph size="sm">
                   {getTranslateText(dataset?.currentness?.hasBody, language)}
                 </Paragraph>
@@ -321,7 +320,7 @@ export const LeftColumn = ({
         </InfoCard.Item>
       )}
 
-      {dataset?.conformsTo && !isEmpty(dataset?.conformsTo) && (
+      {!isEmpty(dataset?.conformsTo) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.conformsTo}>
           <UriWithLabelTable values={dataset?.conformsTo} language={language} />
         </InfoCard.Item>
@@ -512,7 +511,7 @@ export const LeftColumn = ({
           </Table>
         </InfoCard.Item>
       )}
-      {dataset?.keywords && !isEmpty(dataset?.keywords) && (
+      {!isEmpty(dataset?.keywords) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.keywords}>
           <li className={styles.list}>
             {keywordLanguages.map((lang) => {

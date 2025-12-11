@@ -167,10 +167,9 @@ export const DistributionDetailsCard = ({
 
               {!isEmpty(distribution?.downloadURL) && (
                 <div className={styles.distributionField}>
-                  <Heading
-                    level={5}
-                    size="2xs"
-                  >{`${localization.datasetForm.fieldLabel.downloadURL}:`}</Heading>
+                  <Heading level={5} size="2xs">
+                    {localization.datasetForm.fieldLabel.downloadURL}
+                  </Heading>
                   {distribution.downloadURL?.map(
                     (url: string, index: number) => {
                       return (
@@ -185,10 +184,9 @@ export const DistributionDetailsCard = ({
 
               {distribution.mediaType && distribution.mediaType.length > 0 && (
                 <div className={styles.distributionField}>
-                  <Heading
-                    level={5}
-                    size="2xs"
-                  >{`${localization.datasetForm.fieldLabel.mediaType}:`}</Heading>
+                  <Heading level={5} size="2xs">
+                    {localization.datasetForm.fieldLabel.mediaType}
+                  </Heading>
                   <ul className={styles.list}>
                     {distribution?.mediaType?.map((uri) => (
                       <li key={`mediatype-${uri}`}>
@@ -208,10 +206,9 @@ export const DistributionDetailsCard = ({
               {distribution?.accessServices &&
                 distribution.accessServices.length > 0 && (
                   <div className={styles.distributionField}>
-                    <Heading
-                      level={5}
-                      size="2xs"
-                    >{`${localization.datasetForm.fieldLabel.accessServices}:`}</Heading>
+                    <Heading level={5} size="2xs">
+                      {localization.datasetForm.fieldLabel.accessServices}
+                    </Heading>
                     {
                       <Table size="sm" className={styles.distributionTable}>
                         <Table.Head>
@@ -245,7 +242,7 @@ export const DistributionDetailsCard = ({
                                       target="_blank"
                                       rel="noopener noreferrer"
                                     >
-                                      {getTranslateText(match.title)}
+                                      {getTranslateText(match.title, language)}
                                     </Link>
                                   ) : (
                                     <Link
@@ -275,10 +272,9 @@ export const DistributionDetailsCard = ({
 
               {distribution.license && (
                 <>
-                  <Heading
-                    level={5}
-                    size="2xs"
-                  >{`${localization.datasetForm.fieldLabel.license}:`}</Heading>
+                  <Heading level={5} size="2xs">
+                    {localization.datasetForm.fieldLabel.license}
+                  </Heading>
                   <div className={styles.distributionField}>
                     <Paragraph size="sm">
                       {getTranslateText(
@@ -294,10 +290,9 @@ export const DistributionDetailsCard = ({
 
               {!isEmpty(distribution?.conformsTo) && (
                 <div className={styles.distributionField}>
-                  <Heading
-                    level={5}
-                    size="2xs"
-                  >{`${localization.datasetForm.fieldLabel.standard}:`}</Heading>
+                  <Heading level={5} size="2xs">
+                    {localization.datasetForm.fieldLabel.standard}
+                  </Heading>
 
                   <Table size="sm" className={styles.distributionTable}>
                     <Table.Head>
@@ -326,10 +321,9 @@ export const DistributionDetailsCard = ({
 
               {distribution?.page && !isEmpty(distribution.page[0]) && (
                 <div className={styles.distributionField}>
-                  <Heading
-                    level={5}
-                    size="2xs"
-                  >{`${localization.datasetForm.fieldLabel.page}:`}</Heading>
+                  <Heading level={5} size="2xs">
+                    {localization.datasetForm.fieldLabel.page}
+                  </Heading>
                   {distribution.page.map((page, index: number) => {
                     return (
                       <Paragraph size={"sm"} key={`page-${index}`}>
