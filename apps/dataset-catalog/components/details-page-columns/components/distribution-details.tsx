@@ -148,7 +148,7 @@ export const DistributionDetailsCard = ({
               distribution?.accessServices &&
               distribution.accessServices.length > 0
             ) &&
-            isEmpty(distribution?.license) &&
+            distribution?.license &&
             isEmpty(distribution?.conformsTo) &&
             !(distribution?.page && !isEmpty(distribution.page[0]))
           ) && (
