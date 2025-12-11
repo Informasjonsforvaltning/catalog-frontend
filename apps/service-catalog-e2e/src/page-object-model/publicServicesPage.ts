@@ -10,7 +10,7 @@ export default class PublicServicesPage {
   constructor(
     page: Page,
     context: BrowserContext,
-    accessibilityBuilder?: AxeBuilder,
+    accessibilityBuilder: AxeBuilder,
   ) {
     this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/public-services`;
     this.page = page;
@@ -56,7 +56,6 @@ export default class PublicServicesPage {
       await dialog.accept();
     });
 
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       // Get the list of items
       const promises = (await this.page.getByRole("link").all()).map(
@@ -64,7 +63,7 @@ export default class PublicServicesPage {
           const href = await link.getAttribute("href");
           return {
             value: href,
-            include: href.includes(this.url) && !href.endsWith("/new"),
+            include: href?.includes(this.url) && !href.endsWith("/new"),
           };
         },
       );
@@ -81,10 +80,9 @@ export default class PublicServicesPage {
       console.log(`Number of items before deletion: ${items.length}`);
 
       // Click the delete button for the first item
-      await this.deleteItem(items[0]);
+      await this.deleteItem(items[0] as string);
 
       // Wait for the list to update after deletion
-      // eslint-disable-next-line playwright/no-wait-for-timeout
       await this.page.waitForTimeout(500);
       await this.goto();
     }

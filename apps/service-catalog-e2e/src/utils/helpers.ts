@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
-import { Locator, Page } from "@playwright/test";
+import { ServiceToBeCreated } from "@catalog-frontend/types";
+import { APIRequestContext, Locator, Page } from "@playwright/test";
 import * as crypto from "crypto";
 
 export const adminAuthFile = `${__dirname}/../../.playwright/auth/admin.json`;
@@ -44,7 +45,9 @@ export const getParentLocator = (locator: Locator, n: number = 1) => {
   return parent;
 };
 
-export const deleteAllServices = async (apiRequestContext) => {
+export const deleteAllServices = async (
+  apiRequestContext: APIRequestContext,
+) => {
   const response = await apiRequestContext.get(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/services`,
   );
@@ -60,7 +63,9 @@ export const deleteAllServices = async (apiRequestContext) => {
   }
 };
 
-export const deleteAllPublicServices = async (apiRequestContext) => {
+export const deleteAllPublicServices = async (
+  apiRequestContext: APIRequestContext,
+) => {
   const response = await apiRequestContext.get(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/public-services`,
   );
@@ -76,19 +81,28 @@ export const deleteAllPublicServices = async (apiRequestContext) => {
   }
 };
 
-export const deleteService = async (apiRequestContext, serviceId) => {
+export const deleteService = async (
+  apiRequestContext: APIRequestContext,
+  serviceId: string,
+) => {
   await apiRequestContext.delete(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/services/${serviceId}`,
   );
 };
 
-export const deletePublicService = async (apiRequestContext, serviceId) => {
+export const deletePublicService = async (
+  apiRequestContext: APIRequestContext,
+  serviceId: string,
+) => {
   await apiRequestContext.delete(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/public-services/${serviceId}`,
   );
 };
 
-export const createService = async (apiRequestContext, service) => {
+export const createService = async (
+  apiRequestContext: APIRequestContext,
+  service: Partial<ServiceToBeCreated>,
+) => {
   const response = await apiRequestContext.post(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/services`,
     {
@@ -107,7 +121,10 @@ export const createService = async (apiRequestContext, service) => {
   return await response.json();
 };
 
-export const createPublicService = async (apiRequestContext, service) => {
+export const createPublicService = async (
+  apiRequestContext: APIRequestContext,
+  service: ServiceToBeCreated,
+) => {
   const response = await apiRequestContext.post(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/public-services`,
     {
@@ -126,7 +143,10 @@ export const createPublicService = async (apiRequestContext, service) => {
   return await response.json();
 };
 
-export const publishService = async (apiRequestContext, serviceId) => {
+export const publishService = async (
+  apiRequestContext: APIRequestContext,
+  serviceId: string,
+) => {
   const response = await apiRequestContext.post(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/services/${serviceId}/publish`,
   );
@@ -142,7 +162,10 @@ export const publishService = async (apiRequestContext, serviceId) => {
   return await response.json();
 };
 
-export const publishPublicService = async (apiRequestContext, serviceId) => {
+export const publishPublicService = async (
+  apiRequestContext: APIRequestContext,
+  serviceId: string,
+) => {
   const response = await apiRequestContext.post(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}public-services/${serviceId}/publish`,
   );

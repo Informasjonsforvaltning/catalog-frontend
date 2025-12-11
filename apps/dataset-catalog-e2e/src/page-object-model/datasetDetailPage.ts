@@ -9,7 +9,7 @@ export default class DatasetDetailPage {
   constructor(
     page: Page,
     context: BrowserContext,
-    accessibilityBuilder?: AxeBuilder,
+    accessibilityBuilder: AxeBuilder,
   ) {
     this.page = page;
     this.context = context;

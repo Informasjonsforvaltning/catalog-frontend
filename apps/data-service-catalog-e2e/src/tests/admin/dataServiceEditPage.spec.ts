@@ -13,10 +13,6 @@ import {
 runTestAsAdmin(
   "should create new data service",
   async ({ page, playwright, accessibilityBuilder }) => {
-    const apiRequestContext = await playwright.request.newContext({
-      storageState: adminAuthFile,
-    });
-
     const dataService = getRandomDataService();
     const dataServiceEditPage = new DataServiceEditPage(
       page,
@@ -24,9 +20,9 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
 
-    await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID);
+    await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID as string);
     await dataServiceEditPage.expectNewDataServicePageUrl(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
     );
 
     // Fill the form
@@ -60,7 +56,7 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
     await dataServiceEditPage.goto(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -100,7 +96,7 @@ runTestAsAdmin(
       playwright,
       accessibilityBuilder,
     );
-    await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID);
+    await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID as string);
 
     // Verify all form fields are visible
     await expect(dataServiceEditPage.titleGroup).toBeVisible();
@@ -127,7 +123,7 @@ runTestAsAdmin(
       playwright,
       accessibilityBuilder,
     );
-    await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID);
+    await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID as string);
 
     await dataServiceEditPage.fillDescription({ nb: "Test Description" }, [
       "Bokmål",
@@ -158,7 +154,7 @@ runTestAsAdmin(
       playwright,
       accessibilityBuilder,
     );
-    await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID);
+    await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID as string);
 
     // Fill some data
     await dataServiceEditPage.fillTitle({ nb: "Test Title" }, ["Bokmål"]);
@@ -179,7 +175,7 @@ runTestAsAdmin(
       playwright,
       accessibilityBuilder,
     );
-    await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID);
+    await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID as string);
 
     // Fill some data
     await dataServiceEditPage.fillTitle(
@@ -198,7 +194,7 @@ runTestAsAdmin(
 
     // Navigate away and back
     await page.goto("/");
-    await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID);
+    await dataServiceEditPage.gotoNew(process.env.E2E_CATALOG_ID as string);
 
     // Should show restore dialog
     await expect(page.getByText("Vil du gjenopprette?")).toBeVisible();

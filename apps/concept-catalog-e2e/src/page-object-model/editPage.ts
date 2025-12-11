@@ -1,8 +1,15 @@
-import { expect, Page, BrowserContext } from "@playwright/test";
+import {
+  expect,
+  Page,
+  BrowserContext,
+  APIRequestContext,
+} from "@playwright/test";
 import type AxeBuilder from "@axe-core/playwright";
 import {
   Concept,
   Definisjon,
+  FieldsResult,
+  LocalizedStrings,
   RelationSubtypeEnum,
   RelationTypeEnum,
   UnionRelation,
@@ -23,7 +30,7 @@ export default class EditPage {
   constructor(
     page: Page,
     context: BrowserContext,
-    accessibilityBuilder?: AxeBuilder,
+    accessibilityBuilder: AxeBuilder,
   ) {
     this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/concepts`;
     this.page = page;
@@ -35,7 +42,12 @@ export default class EditPage {
   pageTitleLocator = () => this.page.getByRole("heading", { name: "" });
   pageDescriptionLocator = () => this.page.getByText("");
 
-  async fillLanguageField(field, group, open, clear) {
+  async fillLanguageField(
+    field: LocalizedStrings | undefined,
+    group: string,
+    open: string[],
+    clear: boolean,
+  ) {
     console.log(
       `[fillLanguageField] group: ${group}, open: ${JSON.stringify(open)}, clear: ${clear}`,
     );
@@ -75,34 +87,34 @@ export default class EditPage {
     ) {
       for (let i = 0; i < (field?.nb?.length ?? 0); i++) {
         console.log(
-          `[fillLanguageField] Filling Bokmål [${i}]: ${field.nb[i]}`,
+          `[fillLanguageField] Filling Bokmål [${i}]: ${field.nb?.[i]}`,
         );
         await this.page
           .getByRole("group", { name: group })
           .getByLabel("Bokmål")
-          .fill(field.nb[i]);
+          .fill(field.nb?.[i] as string);
         await this.page.keyboard.press("Enter");
       }
 
       for (let i = 0; i < (field?.nn?.length ?? 0); i++) {
         console.log(
-          `[fillLanguageField] Filling Nynorsk [${i}]: ${field.nn[i]}`,
+          `[fillLanguageField] Filling Nynorsk [${i}]: ${field.nn?.[i]}`,
         );
         await this.page
           .getByRole("group", { name: group })
           .getByLabel("Nynorsk")
-          .fill(field.nn[i]);
+          .fill(field.nn?.[i] as string);
         await this.page.keyboard.press("Enter");
       }
 
       for (let i = 0; i < (field?.en?.length ?? 0); i++) {
         console.log(
-          `[fillLanguageField] Filling Engelsk [${i}]: ${field.en[i]}`,
+          `[fillLanguageField] Filling Engelsk [${i}]: ${field.en?.[i]}`,
         );
         await this.page
           .getByRole("group", { name: group })
           .getByLabel("Engelsk")
-          .fill(field.en[i]);
+          .fill(field.en?.[i] as string);
         await this.page.keyboard.press("Enter");
       }
     } else {
@@ -130,7 +142,7 @@ export default class EditPage {
     }
   }
 
-  async addRelation(search, item, relation: UnionRelation) {
+  async addRelation(search: string, item: string, relation: UnionRelation) {
     await this.page.getByRole("button", { name: "Legg til relasjon" }).click();
     if (relation.internal) {
       await this.page.getByText("Virksomhetens eget begrep").click();
@@ -203,7 +215,7 @@ export default class EditPage {
       .waitFor({ state: "hidden" });
   }
 
-  async clearFields(fields) {
+  async clearFields(fields: FieldsResult) {
     const removeBtn = this.page.getByRole("button", { name: "Slett" });
     while ((await removeBtn.count()) > 0) {
       await removeBtn.first().click();
@@ -256,23 +268,23 @@ export default class EditPage {
     for (const field of fields.internal) {
       if (field.type === "text_long" || field.type === "text_short") {
         console.log(
-          `[EDIT PAGE] Clearing internal field (text): ${field.label.nb}`,
+          `[EDIT PAGE] Clearing internal field (text): ${field.label?.nb}`,
         );
         await this.page
-          .getByRole("textbox", { name: field.label.nb as string })
+          .getByRole("textbox", { name: field.label?.nb as string })
           .clear();
       } else if (field.type === "boolean") {
         console.log(
-          `[EDIT PAGE] Clearing internal field (boolean): ${field.label.nb}`,
+          `[EDIT PAGE] Clearing internal field (boolean): ${field.label?.nb}`,
         );
         const checkbox = this.page
-          .getByRole("group", { name: field.label.nb as string })
+          .getByRole("group", { name: field.label?.nb as string })
           .getByRole("checkbox");
         if (await checkbox.isChecked()) {
           checkbox.uncheck();
         }
       } else if (field.type === "code_list") {
-        await clearCombobox(this.page, field.label.nb as string);
+        await clearCombobox(this.page, field.label?.nb as string);
       }
     }
   }
@@ -280,7 +292,7 @@ export default class EditPage {
   // Helpers
   async fillFormAndSave(
     concept: Concept,
-    apiRequestContext,
+    apiRequestContext: APIRequestContext,
     clearBeforeFill = false,
   ) {
     const fields = await getFields(apiRequestContext);
@@ -296,7 +308,7 @@ export default class EditPage {
 
     console.log("[EDIT PAGE] Filling anbefaltTerm...");
     await this.fillLanguageField(
-      concept.anbefaltTerm.navn,
+      concept.anbefaltTerm?.navn,
       "Anbefalt term Hjelp til utfylling",
       ["Engelsk"],
       clearBeforeFill,
@@ -334,7 +346,7 @@ export default class EditPage {
       .getByLabel(
         relationToSourceText(
           concept.definisjon?.kildebeskrivelse?.forholdTilKilde,
-        ),
+        ) as string,
       )
       .click();
     if (
@@ -388,20 +400,20 @@ export default class EditPage {
     // Internal fields
     console.log("[EDIT PAGE] Filling interneFelt...");
     for (const field of fields.internal) {
-      if (concept.interneFelt[field.id]) {
+      if (concept.interneFelt?.[field.id]) {
         if (field.type === "text_long" || field.type === "text_short") {
           console.log(
-            `[EDIT PAGE] Filling internal field (text): ${field.label.nb} = ${concept.interneFelt[field.id].value}`,
+            `[EDIT PAGE] Filling internal field (text): ${field.label?.nb} = ${concept.interneFelt[field.id].value}`,
           );
           await this.page
-            .getByRole("textbox", { name: field.label.nb as string })
+            .getByRole("textbox", { name: field.label?.nb as string })
             .fill(concept.interneFelt[field.id].value);
         } else if (field.type === "boolean") {
           console.log(
-            `[EDIT PAGE] Setting internal field (boolean): ${field.label.nb} = ${concept.interneFelt[field.id].value}`,
+            `[EDIT PAGE] Setting internal field (boolean): ${field.label?.nb} = ${concept.interneFelt[field.id].value}`,
           );
           const checkbox = this.page
-            .getByRole("group", { name: field.label.nb as string })
+            .getByRole("group", { name: field.label?.nb as string })
             .getByRole("checkbox");
           if (
             concept.interneFelt[field.id].value === "true" &&
@@ -422,10 +434,12 @@ export default class EditPage {
     console.log("[EDIT PAGE] Filling abbreviatedLabel...");
     await this.page
       .getByRole("textbox", { name: "Forkortelse" })
-      .fill(concept.abbreviatedLabel);
+      .fill(concept.abbreviatedLabel as string);
     for (let i = 0; i < (concept.merkelapp?.length ?? 0); i++) {
-      console.log(`[EDIT PAGE] Adding merkelapp: ${concept.merkelapp[i]}`);
-      await this.page.getByLabel("Merkelapp").fill(concept.merkelapp[i]);
+      console.log(`[EDIT PAGE] Adding merkelapp: ${concept.merkelapp?.[i]}`);
+      await this.page
+        .getByLabel("Merkelapp")
+        .fill(concept.merkelapp?.[i] as string);
       await this.page.keyboard.press("Enter");
     }
 
@@ -438,9 +452,9 @@ export default class EditPage {
 
     // Version
     console.log("[EDIT PAGE] Filling version:", concept.versjonsnr);
-    await this.page.getByLabel("Major").fill(`${concept.versjonsnr.major}`);
-    await this.page.getByLabel("Minor").fill(`${concept.versjonsnr.minor}`);
-    await this.page.getByLabel("Patch").fill(`${concept.versjonsnr.patch}`);
+    await this.page.getByLabel("Major").fill(`${concept.versjonsnr?.major}`);
+    await this.page.getByLabel("Minor").fill(`${concept.versjonsnr?.minor}`);
+    await this.page.getByLabel("Patch").fill(`${concept.versjonsnr?.patch}`);
 
     if (concept.gyldigFom) {
       console.log("[EDIT PAGE] Filling gyldigFom:", concept.gyldigFom);
@@ -487,7 +501,7 @@ export default class EditPage {
     console.log("[EDIT PAGE] Form filled and saved successfully.");
   }
 
-  public async goto(id?) {
+  public async goto(id?: string) {
     await this.page.goto(id ? `${this.url}/${id}/edit` : `${this.url}/new`);
   }
 
@@ -518,7 +532,7 @@ export default class EditPage {
   public async checkIfNoConceptsExist() {
     const items = (await this.page.getByRole("link").all()).filter(
       async (link) => {
-        (await link.getAttribute("href")).startsWith(this.url);
+        (await link.getAttribute("href"))?.startsWith(this.url);
       },
     );
 
@@ -635,7 +649,11 @@ export default class EditPage {
     await expect(termField).toHaveValue(expectedValue);
   }
 
-  async fillAnbefaltTermField(value: any, open: string[], clear: boolean) {
+  async fillAnbefaltTermField(
+    value: LocalizedStrings,
+    open: string[],
+    clear: boolean,
+  ) {
     await this.fillLanguageField(
       value,
       "Anbefalt term Hjelp til utfylling Må fylles ut",
@@ -673,7 +691,11 @@ export default class EditPage {
     await card.getByRole("button", { name: "Rediger" }).click();
   }
 
-  async fillDefinitionField(value: any, open: string[], clear: boolean) {
+  async fillDefinitionField(
+    value: LocalizedStrings,
+    open: string[],
+    clear: boolean,
+  ) {
     await this.fillLanguageField(
       value,
       "Definisjon Hjelp til utfylling",

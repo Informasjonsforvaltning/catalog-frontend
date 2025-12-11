@@ -25,11 +25,15 @@ export default class DataServicesPage {
   constructor(
     page: Page,
     context: BrowserContext,
-    accessibilityBuilder?: AxeBuilder,
+    accessibilityBuilder: AxeBuilder,
   ) {
     this.page = page;
-    this.detailPage = new DataServiceDetailPage(page, context);
-    this.editPage = new EditPage(page, context);
+    this.detailPage = new DataServiceDetailPage(
+      page,
+      context,
+      accessibilityBuilder,
+    );
+    this.editPage = new EditPage(page, context, accessibilityBuilder);
     this.context = context;
     this.accessibilityBuilder = accessibilityBuilder;
     this.searchInput = page.getByRole("searchbox", { name: "Søk" });

@@ -10,7 +10,7 @@ import { getRandomDataService } from "../../utils/dataService";
 
 runTestAsAdmin(
   "should display data service details",
-  async ({ page, context, accessibilityBuilder, playwright }) => {
+  async ({ page, accessibilityBuilder, playwright }) => {
     const apiRequestContext = await playwright.request.newContext({
       storageState: adminAuthFile,
     });
@@ -27,7 +27,7 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
     await dataServiceDetailPage.goto(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -69,7 +69,7 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
     await dataServiceDetailPage.goto(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -118,7 +118,7 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
     await dataServiceDetailPage.goto(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -164,7 +164,7 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
     await dataServiceDetailPage.goto(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -215,7 +215,7 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
     await dataServiceDetailPage.goto(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -224,7 +224,7 @@ runTestAsAdmin(
 
     // Verify navigation to edit page
     await dataServiceDetailPage.expectDataServiceDetailPageUrl(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -252,7 +252,7 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
     await dataServiceDetailPage.goto(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -300,7 +300,7 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
     await dataServiceDetailPage.goto(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -318,7 +318,7 @@ runTestAsAdmin(
 
     // Verify we're still on the detail page
     await dataServiceDetailPage.expectDataServiceDetailPageUrl(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -346,13 +346,13 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
     await dataServiceDetailPage.goto(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
     // Verify correct URL structure
     await dataServiceDetailPage.expectDataServiceDetailPageUrl(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 

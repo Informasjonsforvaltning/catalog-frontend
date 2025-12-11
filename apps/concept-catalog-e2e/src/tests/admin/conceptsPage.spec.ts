@@ -183,12 +183,10 @@ runTestAsAdmin(
     });
 
     const dialog = conceptsPage.page.getByRole("dialog", {
-      has: conceptsPage.page
-        .getByRole("button")
-        .filter({
-          hasText: `${localization.importResult.results}`,
-          exact: true,
-        }),
+      has: conceptsPage.page.getByRole("button").filter({
+        hasText: `${localization.importResult.results}`,
+        exact: true,
+      }),
     });
 
     console.log("[TEST] Checking that there are 3 buttons in the modal...");

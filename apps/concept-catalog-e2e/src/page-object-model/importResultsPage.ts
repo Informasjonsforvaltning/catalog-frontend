@@ -1,4 +1,9 @@
-import { expect, Page, BrowserContext } from "@playwright/test";
+import {
+  expect,
+  Page,
+  BrowserContext,
+  APIRequestContext,
+} from "@playwright/test";
 import type AxeBuilder from "@axe-core/playwright";
 import { deleteAllImportResults } from "../utils/helpers";
 import { localization } from "@catalog-frontend/utils";
@@ -12,7 +17,7 @@ export default class ImportResultsPage {
   constructor(
     page: Page,
     context: BrowserContext,
-    accessibilityBuilder?: AxeBuilder,
+    accessibilityBuilder: AxeBuilder,
   ) {
     this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/concepts/import-results`;
     this.page = page;
@@ -192,7 +197,7 @@ export default class ImportResultsPage {
     );
   }
 
-  async deleteAllImportResults(apiRequestContext) {
+  async deleteAllImportResults(apiRequestContext: APIRequestContext) {
     await deleteAllImportResults(apiRequestContext);
   }
 }

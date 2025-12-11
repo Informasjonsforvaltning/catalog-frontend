@@ -23,11 +23,15 @@ export default class DatasetsPage {
   constructor(
     page: Page,
     context: BrowserContext,
-    accessibilityBuilder?: AxeBuilder,
+    accessibilityBuilder: AxeBuilder,
   ) {
     this.page = page;
-    this.detailPage = new DatasetDetailPage(page, context);
-    this.editPage = new EditPage(page, context);
+    this.detailPage = new DatasetDetailPage(
+      page,
+      context,
+      accessibilityBuilder,
+    );
+    this.editPage = new EditPage(page, context, accessibilityBuilder);
     this.context = context;
     this.accessibilityBuilder = accessibilityBuilder;
     this.searchInput = page.getByRole("searchbox", { name: "Søk" });

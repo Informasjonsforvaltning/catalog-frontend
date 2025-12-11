@@ -1,6 +1,5 @@
 import { expect, Page, BrowserContext, Locator } from "@playwright/test";
 import type AxeBuilder from "@axe-core/playwright";
-import { clearCombobox } from "../utils/helpers";
 
 export default class DataServiceEditPage {
   protected page: Page;
@@ -16,7 +15,6 @@ export default class DataServiceEditPage {
   readonly descriptionNbInput: Locator;
   readonly descriptionNnInput: Locator;
   readonly descriptionEnInput: Locator;
-  readonly endpointUrlGroup: Locator;
   readonly endpointUrlInput: Locator;
   readonly endpointDescriptionGroup: Locator;
   readonly endpointDescriptionNbInput: Locator;
@@ -52,7 +50,7 @@ export default class DataServiceEditPage {
   constructor(
     page: Page,
     context: BrowserContext,
-    accessibilityBuilder?: AxeBuilder,
+    accessibilityBuilder: AxeBuilder,
   ) {
     this.page = page;
     this.context = context;
