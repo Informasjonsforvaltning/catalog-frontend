@@ -94,7 +94,7 @@ export const DistributionDetailsCard = ({
             })}
           </div>
         )}
-        {mobilityDataStandard && !isEmpty(mobilityDataStandard) && (
+        {!isEmpty(mobilityDataStandard) && (
           <div>
             <Heading level={5} size="2xs">
               {localization.datasetForm.fieldLabel.mobilityDataStandard}
