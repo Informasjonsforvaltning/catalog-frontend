@@ -68,6 +68,16 @@ export const DistributionDetailsCard = ({
       : "/not-found";
   };
 
+  const distHasDetails: boolean = !(
+    isEmpty(distribution?.description) &&
+    isEmpty(distribution?.downloadURL) &&
+    !(distribution.mediaType && distribution.mediaType.length) &&
+    !(distribution?.accessServices && distribution.accessServices.length > 0) &&
+    distribution?.license &&
+    isEmpty(distribution?.conformsTo) &&
+    !(distribution?.page && !isEmpty(distribution.page[0]))
+  );
+
   return (
     <Card>
       <div className={styles.infoCardItems}>
@@ -139,202 +149,183 @@ export const DistributionDetailsCard = ({
         )}
       </div>
       <div>
-        {distribution &&
-          !(
-            isEmpty(distribution?.description) &&
-            isEmpty(distribution?.downloadURL) &&
-            !(distribution.mediaType && distribution.mediaType.length) &&
-            !(
-              distribution?.accessServices &&
-              distribution.accessServices.length > 0
-            ) &&
-            distribution?.license &&
-            isEmpty(distribution?.conformsTo) &&
-            !(distribution?.page && !isEmpty(distribution.page[0]))
-          ) && (
-            <div>
-              <FieldsetDivider />
-              {!isEmpty(distribution?.description) && (
+        {distHasDetails && (
+          <div>
+            <FieldsetDivider />
+            {!isEmpty(distribution?.description) && (
+              <div className={styles.distributionField}>
+                <Heading level={5} size="2xs">
+                  {localization.description}
+                </Heading>
+                <Paragraph size="sm">
+                  {getTranslateText(distribution?.description, language)}
+                </Paragraph>
+              </div>
+            )}
+
+            {!isEmpty(distribution?.downloadURL) && (
+              <div className={styles.distributionField}>
+                <Heading level={5} size="2xs">
+                  {localization.datasetForm.fieldLabel.downloadURL}
+                </Heading>
+                {distribution.downloadURL?.map((url: string, index: number) => {
+                  return (
+                    <Paragraph size={"sm"} key={`downloadURL-${index}`}>
+                      <Link href={url}>{url}</Link>
+                    </Paragraph>
+                  );
+                })}
+              </div>
+            )}
+
+            {distribution.mediaType && distribution.mediaType.length > 0 && (
+              <div className={styles.distributionField}>
+                <Heading level={5} size="2xs">
+                  {localization.datasetForm.fieldLabel.mediaType}
+                </Heading>
+                <ul className={styles.list}>
+                  {distribution?.mediaType?.map((uri) => (
+                    <li key={`mediatype-${uri}`}>
+                      <Tag size="sm" color="info">
+                        {(
+                          selectedMediaTypes?.find(
+                            (type) => type.uri === uri,
+                          ) ?? {}
+                        ).code ?? uri}
+                      </Tag>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {distribution?.accessServices &&
+              distribution.accessServices.length > 0 && (
                 <div className={styles.distributionField}>
                   <Heading level={5} size="2xs">
-                    {localization.description}
+                    {localization.datasetForm.fieldLabel.accessServices}
                   </Heading>
+                  {
+                    <Table size="sm" className={styles.distributionTable}>
+                      <Table.Head>
+                        <Table.Row>
+                          <Table.HeaderCell>
+                            {localization.datasetForm.fieldLabel.accessServices}
+                          </Table.HeaderCell>
+                          <Table.HeaderCell>
+                            {localization.publisher}
+                          </Table.HeaderCell>
+                        </Table.Row>
+                      </Table.Head>
+
+                      <TableBody>
+                        {distribution.accessServices.map((uri, i) => {
+                          const match = selectedDataServices?.find(
+                            (service) => service.uri === uri,
+                          );
+                          return (
+                            <Table.Row key={`service-${uri}-${i}`}>
+                              <Table.Cell>
+                                {match ? (
+                                  <Link
+                                    href={getDataNorgeUri(
+                                      match.id,
+                                      "data-services",
+                                    )}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    {getTranslateText(match.title, language)}
+                                  </Link>
+                                ) : (
+                                  <Link
+                                    href={uri}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    {uri}
+                                  </Link>
+                                )}
+                              </Table.Cell>
+
+                              <Table.Cell>
+                                {getTranslateText(
+                                  match?.organization?.prefLabel,
+                                  language,
+                                )}
+                              </Table.Cell>
+                            </Table.Row>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  }
+                </div>
+              )}
+
+            {distribution.license && (
+              <>
+                <Heading level={5} size="2xs">
+                  {localization.datasetForm.fieldLabel.license}
+                </Heading>
+                <div className={styles.distributionField}>
                   <Paragraph size="sm">
-                    {getTranslateText(distribution?.description, language)}
+                    {getTranslateText(
+                      openLicenses.find(
+                        (license) => license.uri === distribution.license,
+                      )?.label,
+                      language,
+                    )}
                   </Paragraph>
                 </div>
-              )}
+              </>
+            )}
 
-              {!isEmpty(distribution?.downloadURL) && (
-                <div className={styles.distributionField}>
-                  <Heading level={5} size="2xs">
-                    {localization.datasetForm.fieldLabel.downloadURL}
-                  </Heading>
-                  {distribution.downloadURL?.map(
-                    (url: string, index: number) => {
-                      return (
-                        <Paragraph size={"sm"} key={`downloadURL-${index}`}>
-                          <Link href={url}>{url}</Link>
-                        </Paragraph>
-                      );
-                    },
-                  )}
-                </div>
-              )}
+            {!isEmpty(distribution?.conformsTo) && (
+              <div className={styles.distributionField}>
+                <Heading level={5} size="2xs">
+                  {localization.datasetForm.fieldLabel.standard}
+                </Heading>
 
-              {distribution.mediaType && distribution.mediaType.length > 0 && (
-                <div className={styles.distributionField}>
-                  <Heading level={5} size="2xs">
-                    {localization.datasetForm.fieldLabel.mediaType}
-                  </Heading>
-                  <ul className={styles.list}>
-                    {distribution?.mediaType?.map((uri) => (
-                      <li key={`mediatype-${uri}`}>
-                        <Tag size="sm" color="info">
-                          {(
-                            selectedMediaTypes?.find(
-                              (type) => type.uri === uri,
-                            ) ?? {}
-                          ).code ?? uri}
-                        </Tag>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {distribution?.accessServices &&
-                distribution.accessServices.length > 0 && (
-                  <div className={styles.distributionField}>
-                    <Heading level={5} size="2xs">
-                      {localization.datasetForm.fieldLabel.accessServices}
-                    </Heading>
-                    {
-                      <Table size="sm" className={styles.distributionTable}>
-                        <Table.Head>
-                          <Table.Row>
-                            <Table.HeaderCell>
-                              {
-                                localization.datasetForm.fieldLabel
-                                  .accessServices
-                              }
-                            </Table.HeaderCell>
-                            <Table.HeaderCell>
-                              {localization.publisher}
-                            </Table.HeaderCell>
-                          </Table.Row>
-                        </Table.Head>
-
-                        <TableBody>
-                          {distribution.accessServices.map((uri, i) => {
-                            const match = selectedDataServices?.find(
-                              (service) => service.uri === uri,
-                            );
-                            return (
-                              <Table.Row key={`service-${uri}-${i}`}>
-                                <Table.Cell>
-                                  {match ? (
-                                    <Link
-                                      href={getDataNorgeUri(
-                                        match.id,
-                                        "data-services",
-                                      )}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {getTranslateText(match.title, language)}
-                                    </Link>
-                                  ) : (
-                                    <Link
-                                      href={uri}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {uri}
-                                    </Link>
-                                  )}
-                                </Table.Cell>
-
-                                <Table.Cell>
-                                  {getTranslateText(
-                                    match?.organization?.prefLabel,
-                                    language,
-                                  )}
-                                </Table.Cell>
-                              </Table.Row>
-                            );
-                          })}
-                        </TableBody>
-                      </Table>
-                    }
-                  </div>
-                )}
-
-              {distribution.license && (
-                <>
-                  <Heading level={5} size="2xs">
-                    {localization.datasetForm.fieldLabel.license}
-                  </Heading>
-                  <div className={styles.distributionField}>
-                    <Paragraph size="sm">
-                      {getTranslateText(
-                        openLicenses.find(
-                          (license) => license.uri === distribution.license,
-                        )?.label,
-                        language,
-                      )}
-                    </Paragraph>
-                  </div>
-                </>
-              )}
-
-              {!isEmpty(distribution?.conformsTo) && (
-                <div className={styles.distributionField}>
-                  <Heading level={5} size="2xs">
-                    {localization.datasetForm.fieldLabel.standard}
-                  </Heading>
-
-                  <Table size="sm" className={styles.distributionTable}>
-                    <Table.Head>
-                      <Table.Row>
-                        <Table.HeaderCell>
-                          {localization.title}
-                        </Table.HeaderCell>
-                        <Table.HeaderCell>{localization.link}</Table.HeaderCell>
+                <Table size="sm" className={styles.distributionTable}>
+                  <Table.Head>
+                    <Table.Row>
+                      <Table.HeaderCell>{localization.title}</Table.HeaderCell>
+                      <Table.HeaderCell>{localization.link}</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Head>
+                  <TableBody>
+                    {distribution.conformsTo?.map((conform) => (
+                      <Table.Row key={`conformsTo-${conform.uri}`}>
+                        <Table.Cell>
+                          {getTranslateText(conform.prefLabel, language)}
+                        </Table.Cell>
+                        <Table.Cell>
+                          <Link href={conform.uri}>{conform.uri}</Link>
+                        </Table.Cell>
                       </Table.Row>
-                    </Table.Head>
-                    <TableBody>
-                      {distribution.conformsTo?.map((conform) => (
-                        <Table.Row key={`conformsTo-${conform.uri}`}>
-                          <Table.Cell>
-                            {getTranslateText(conform.prefLabel, language)}
-                          </Table.Cell>
-                          <Table.Cell>
-                            <Link href={conform.uri}>{conform.uri}</Link>
-                          </Table.Cell>
-                        </Table.Row>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              )}
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
 
-              {distribution?.page && !isEmpty(distribution.page[0]) && (
-                <div className={styles.distributionField}>
-                  <Heading level={5} size="2xs">
-                    {localization.datasetForm.fieldLabel.page}
-                  </Heading>
-                  {distribution.page.map((page, index: number) => {
-                    return (
-                      <Paragraph size={"sm"} key={`page-${index}`}>
-                        <Link href={page}>{page}</Link>
-                      </Paragraph>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          )}
+            {distribution?.page && !isEmpty(distribution.page[0]) && (
+              <div className={styles.distributionField}>
+                <Heading level={5} size="2xs">
+                  {localization.datasetForm.fieldLabel.page}
+                </Heading>
+                {distribution.page.map((page, index: number) => {
+                  return (
+                    <Paragraph size={"sm"} key={`page-${index}`}>
+                      <Link href={page}>{page}</Link>
+                    </Paragraph>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </Card>
   );
