@@ -696,9 +696,8 @@ export default class DatasetEditPage {
       name: "Datatema",
     });
     await themeField.click();
-    const option = this.page.getByRole("option", { name: theme, exact: true });
-    await option.waitFor({ state: "visible", timeout: 5000 });
-    await option.click();
+    await this.page.getByRole("option", { name: theme, exact: true }).click();
+    await this.page.waitForTimeout(100);
     await this.page.keyboard.press("Escape");
   }
 
@@ -707,9 +706,8 @@ export default class DatasetEditPage {
       name: "LOS-tema",
     });
     await themeField.click();
-    const option = this.page.getByRole("option", { name: theme, exact: true });
-    await option.waitFor({ state: "visible", timeout: 5000 });
-    await option.click();
+    await this.page.getByRole("option", { name: theme, exact: true }).click();
+    await this.page.waitForTimeout(100);
     await this.page.keyboard.press("Escape");
   }
 
@@ -763,12 +761,10 @@ export default class DatasetEditPage {
       .getByRole("group", { name: "Format" })
       .getByPlaceholder("Søk")
       .fill(data.format);
-    const formatOption = dialog.getByRole("option", {
-      name: data.format,
-      exact: true,
-    });
-    await formatOption.waitFor({ state: "visible", timeout: 5000 });
-    await formatOption.click();
+    await dialog
+      .getByRole("option", { name: data.format, exact: true })
+      .click();
+    await this.page.waitForTimeout(100);
     await dialog.getByLabel("Lenke").click();
     await dialog.getByRole("button", { name: "Legg til", exact: true }).click();
   }
@@ -789,9 +785,8 @@ export default class DatasetEditPage {
       .getByRole("group", { name: "Dekningsområde" })
       .getByPlaceholder("Søk")
       .fill(value);
-    const areaOption = this.page.getByRole("option", { name: value });
-    await areaOption.waitFor({ state: "visible", timeout: 5000 });
-    await areaOption.click();
+    await this.page.getByRole("option", { name: value }).click();
+    await this.page.waitForTimeout(100);
     await this.page.keyboard.press("Escape");
   }
 
@@ -909,9 +904,8 @@ export default class DatasetEditPage {
       .getByRole("group", { name: "Begreper Hjelp til utfylling Anbefalt" })
       .getByPlaceholder("Søk")
       .fill(concept);
-    const option = this.page.getByRole("option", { name: concept });
-    await option.waitFor({ state: "visible", timeout: 5000 });
-    await option.click();
+    await this.page.getByRole("option", { name: concept }).click();
+    await this.page.waitForTimeout(100);
     await this.page.keyboard.press("Escape");
   }
 
@@ -934,9 +928,8 @@ export default class DatasetEditPage {
       .getByRole("group", { name: "Informasjonsmodell fra Data.norge.no" })
       .getByPlaceholder("Søk")
       .fill(model);
-    const option = this.page.getByRole("option", { name: model });
-    await option.waitFor({ state: "visible", timeout: 5000 });
-    await option.click();
+    await this.page.getByRole("option", { name: model }).click();
+    await this.page.waitForTimeout(100);
     await this.page.keyboard.press("Escape");
   }
 
