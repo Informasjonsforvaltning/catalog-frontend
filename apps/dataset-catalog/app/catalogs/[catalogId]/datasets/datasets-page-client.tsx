@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useMemo } from "react";
 import {
+  ApplicationProfile,
   Dataset,
   DatasetsPageSettings,
   FilterType,
@@ -342,6 +343,15 @@ const DatasetsPageClient = ({
                               {dataset.published
                                 ? localization.publicationState.publishedInFDK
                                 : localization.publicationState.unpublished}
+                              {dataset?.applicationProfile && (
+                                <>
+                                  <span>•</span>
+                                  {dataset?.applicationProfile ===
+                                  ApplicationProfile.MOBILITYDCATAP
+                                    ? "mobilityDCAT-AP"
+                                    : "DCAT-AP-NO"}
+                                </>
+                              )}
                             </div>
                           </>
                         }

@@ -13,12 +13,17 @@ import {
   Textfield,
   Fieldset,
   Combobox,
+  Tag,
 } from "@digdir/designsystemet-react";
 import { FastField, useFormikContext } from "formik";
 import { FieldsetDivider } from "@catalog-frontend/ui";
 import { AccessRightFields } from "./access-rights-fields";
 import { SpatialCombobox } from "./spatial-combobox";
-import { Dataset, ReferenceDataCode } from "@catalog-frontend/types";
+import {
+  ApplicationProfile,
+  Dataset,
+  ReferenceDataCode,
+} from "@catalog-frontend/types";
 
 interface Props {
   referenceDataEnv: string;
@@ -35,6 +40,29 @@ export const AboutSection = ({
 
   return (
     <Box>
+      <Fieldset
+        size="sm"
+        legend={
+          <TitleWithHelpTextAndTag
+            helpText={
+              values?.applicationProfile === ApplicationProfile.MOBILITYDCATAP
+                ? localization.datasetForm.helptext
+                    .applicationProfileMobilityDcat
+                : localization.datasetForm.helptext.applicationProfileDcat
+            }
+          >
+            {localization.tag.applicationProfile}
+          </TitleWithHelpTextAndTag>
+        }
+        error={errors.distribution}
+      >
+        <Tag size="sm" color="info">
+          {values?.applicationProfile === ApplicationProfile.MOBILITYDCATAP
+            ? localization.tag.mobilityDcatAp
+            : localization.tag.dcatApNo}
+        </Tag>
+      </Fieldset>
+      <FieldsetDivider />
       <FormikLanguageFieldset
         name={"title"}
         as={Textfield}

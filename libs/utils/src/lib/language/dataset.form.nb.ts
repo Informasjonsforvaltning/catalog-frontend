@@ -101,6 +101,10 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     distributionRights: "Betingelser for tilgang og bruk av distribusjonen.",
     mobilityDataStandard:
       "Standard for distribusjonen av datasettet. Velges fra [EUs kontrollerte vokabular for Mobility Data Standard](https://w3id.org/mobilitydcat-ap/mobility-data-standard).",
+    applicationProfileMobilityDcat:
+      "Mobility-DCAT er en utvidelse av DCAT-AP-standarden. Den retter seg spesifikt mot datasett relatert til transport og samferdel.",
+    applicationProfileDcat:
+      "DCAT-AP-NO-standarden er den norske versjonen av DCAT-AP. Dette er en standard for beskrivelser av alle typer datasett.",
   },
   heading: {
     about: "Om datasettet",
