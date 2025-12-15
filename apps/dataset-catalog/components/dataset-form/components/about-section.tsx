@@ -14,6 +14,7 @@ import {
   Fieldset,
   Combobox,
   Tag,
+  Paragraph,
 } from "@digdir/designsystemet-react";
 import { FastField, useFormikContext } from "formik";
 import { FieldsetDivider } from "@catalog-frontend/ui";
@@ -56,11 +57,11 @@ export const AboutSection = ({
         }
         error={errors.distribution}
       >
-        <Tag size="sm" color="info">
+        <Paragraph size="sm">
           {values?.applicationProfile === ApplicationProfile.MOBILITYDCATAP
             ? localization.tag.mobilityDcatAp
             : localization.tag.dcatApNo}
-        </Tag>
+        </Paragraph>
       </Fieldset>
       <FieldsetDivider />
       <FormikLanguageFieldset
