@@ -104,5 +104,6 @@ export type DatasetsPageSettings = {
   filter: {
     status: string[] | null;
     pubState: string[] | null;
+    applicationProfile: string[] | null;
   };
 };
