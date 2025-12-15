@@ -58,8 +58,8 @@ export const RightColumn = ({
 
       {dataset?.lastModified && (
         <InfoCard.Item
-          key={`info-data-${localization.lastUpdated}`}
-          title={localization.lastUpdated}
+          key={`info-data-${localization.datasetForm.fieldLabel.lastUpdated}`}
+          title={localization.datasetForm.fieldLabel.lastUpdated}
           headingColor="light"
         >
           {formatISO(dataset?.lastModified, {
