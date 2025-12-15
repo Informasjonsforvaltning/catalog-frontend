@@ -645,8 +645,8 @@ export default class EditPage {
   }
 
   async waitForAutoSaveToComplete() {
-    // Wait for background autosave requests to settle
-    await this.page.waitForLoadState("networkidle");
+    // Wait a bit for auto-save to complete
+    await this.page.waitForTimeout(1000);
   }
 
   // Helper methods for concept form fields

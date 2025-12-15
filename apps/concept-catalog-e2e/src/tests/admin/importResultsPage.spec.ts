@@ -1,15 +1,10 @@
 import { runTestAsAdmin } from "../../fixtures/basePage";
-import { adminAuthFile } from "../../utils/helpers";
 import { expect } from "@playwright/test";
 import { localization } from "@catalog-frontend/utils";
 
 runTestAsAdmin(
   "test import results page renders correctly",
-  async ({ importResultsPage, playwright }) => {
-    const apiRequestContext = await playwright.request.newContext({
-      storageState: adminAuthFile,
-    });
-
+  async ({ importResultsPage }) => {
     console.log("[TEST] Navigating to ImportResults page...");
     await importResultsPage.goto();
 
@@ -34,13 +29,7 @@ runTestAsAdmin(
 
 runTestAsAdmin(
   "Test going to Import results page when clicking on Results button in the import modal",
-  async ({ conceptsPage, playwright }) => {
-    // Admin Access user
-    console.log("[TEST] Creating API request context for Admin user...");
-    const apiRequestContext = await playwright.request.newContext({
-      storageState: adminAuthFile,
-    });
-
+  async ({ conceptsPage }) => {
     await conceptsPage.goto();
 
     // Click the Import button
