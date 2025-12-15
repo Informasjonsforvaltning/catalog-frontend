@@ -169,16 +169,21 @@ export default class DetailPage {
     apiRequestContext: APIRequestContext,
   ) {
     console.log("[DETAIL PAGE] Checking left column content...");
-    await expect(
-      this.page
-        .locator("div")
-        .filter({
-          hasText: new RegExp(
-            `Definisjon:${concept.definisjon?.tekst.nb as string}${this.getDefinitionSourceText(concept.definisjon as Definisjon)}$`,
-          ),
-        })
-        .first(),
-    ).toBeVisible();
+    // Check definition text and source label separately to be robust to
+    // line breaks and formatting in the DOM.
+    const definitionText = concept.definisjon?.tekst.nb as string;
+    await expect(this.page.getByText(definitionText)).toBeVisible();
+
+    const sourceLabel = concept.definisjon
+      ? this.getDefinitionSourceText(concept.definisjon as Definisjon)
+      : "";
+    // The source label may include a trailing ':' depending on relation, so assert only when present
+    if (sourceLabel) {
+      const labelToMatch = sourceLabel.replace(/[:]?$/, "");
+      await expect(
+        this.page.getByText(new RegExp(`${labelToMatch}`, "m")),
+      ).toBeVisible();
+    }
 
     await expect(
       this.page

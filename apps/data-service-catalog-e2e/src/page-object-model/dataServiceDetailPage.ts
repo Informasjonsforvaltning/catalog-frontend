@@ -72,24 +72,20 @@ export default class DataServiceDetailPage {
         // Wait for the page to be fully loaded
         await this.page.waitForLoadState("networkidle");
 
-        // Check if we're on a 404 page by looking for the title element
-        const descriptionElement = await this.description;
-        const isDescriptionVisible = await descriptionElement.isVisible();
-
-        if (isDescriptionVisible) {
-          // Successfully loaded the data service
+        // Wait for the description element to appear within a timeout — if not visible, retry
+        try {
+          await this.description.waitFor({ state: "visible", timeout: 5000 });
           console.log(
             `[DataServiceDetailPage] Successfully loaded data service after ${retryCount + 1} attempts`,
           );
           return;
+        } catch (innerErr) {
+          console.log(
+            `[DataServiceDetailPage] Description not visible, retrying (attempt ${retryCount + 1}/${maxRetries})`,
+          );
+          retryCount++;
+          continue;
         }
-
-        // If we get here, we're probably on a 404 page
-        console.log(
-          `[DataServiceDetailPage] Data service not found, retrying in 1s (attempt ${retryCount + 1}/${maxRetries})`,
-        );
-        await this.page.waitForTimeout(1000);
-        retryCount++;
       } catch (error) {
         console.error(
           `[DataServiceDetailPage] Error during navigation attempt ${retryCount + 1}:`,
@@ -99,7 +95,6 @@ export default class DataServiceDetailPage {
         if (retryCount >= maxRetries) {
           throw error;
         }
-        await this.page.waitForTimeout(1000);
       }
     }
 

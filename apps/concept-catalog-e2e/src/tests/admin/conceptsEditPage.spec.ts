@@ -351,14 +351,26 @@ runTestAsAdmin(
       .getByRole("group", { name: "Relatert begrep" })
       .getByRole("combobox")
       .click();
-    await conceptsPage.page.waitForTimeout(100);
+    // Wait for the listbox with search results to become visible instead of a fixed timeout
+    await conceptsPage.page
+      .getByRole("group", { name: "Relatert begrep" })
+      .getByRole("listbox")
+      .waitFor({ state: "visible", timeout: 5000 });
 
     console.log("[TEST] Searching for the concept itself...");
     await conceptsPage.page
       .getByRole("group", { name: "Relatert begrep" })
       .getByLabel("Søk begrep")
       .fill(concept.anbefaltTerm?.navn.nb);
-    await conceptsPage.page.waitForTimeout(100);
+    // Wait for one option to appear (or the listbox to update) instead of using a fixed timeout
+    await conceptsPage.page
+      .getByRole("group", { name: "Relatert begrep" })
+      .getByRole("option")
+      .first()
+      .waitFor({ state: "visible", timeout: 5000 })
+      .catch(() => {
+        // It's okay if no options appear; the test later asserts count === 0.
+      });
 
     console.log(
       "[TEST] Verifying that the concept itself is not available in search results...",
@@ -369,11 +381,10 @@ runTestAsAdmin(
 
     // Check that the current concept's name is not in the search results
     // We need to get the actual concept name that was generated
-    const conceptName = concept.anbefaltTerm?.navn.nb;
-    const currentConceptOption = conceptsPage.page.getByRole("option", {
-      name: conceptName,
+    const matchingOptions = conceptsPage.page.getByRole("option", {
+      name: concept.anbefaltTerm?.navn.nb,
     });
-    await expect(currentConceptOption).not.toBeVisible();
+    await expect(matchingOptions).toHaveCount(0);
 
     console.log(
       "[TEST] Test completed: test that it should not be possible to make a relation to itself",
@@ -487,8 +498,10 @@ runTestAsAdmin(
       .getByRole("button", { name: "Allmennheten" })
       .click();
 
-    // Wait for the definition modal to appear
-    await conceptsPage.page.waitForTimeout(500);
+    // Wait for the definition dialog to appear
+    await conceptsPage.page
+      .getByRole("dialog")
+      .waitFor({ state: "visible", timeout: 5000 });
 
     await conceptsPage.editPage.fillLanguageField(
       { nb: "Min definisjon nb" },

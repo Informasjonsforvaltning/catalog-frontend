@@ -123,8 +123,8 @@ export default class DataServicesPage {
           `[DataServicesPage] Removing filter chip ${i + 1}/${chipCount}`,
         );
         await firstChip.click();
-        // Wait a moment for the pill to be removed
-        await this.page.waitForTimeout(500);
+        // Wait for the pill to be removed (detached)
+        await firstChip.waitFor({ state: "detached", timeout: 5000 });
       }
     }
 
@@ -163,32 +163,32 @@ export default class DataServicesPage {
   }
 
   async clickDataServiceByTitle(title: string) {
-    const card = await this.getDataServiceCardByTitle(title);
+    const card = this.getDataServiceCardByTitle(title);
     await card.getByRole("link", { name: title }).click();
   }
 
-  async getDataServiceCardByTitle(title: string) {
+  getDataServiceCardByTitle(title: string) {
     return this.dataServiceCards.filter({
       has: this.page.getByRole("link", { name: title }),
     });
   }
 
   async getDataServiceStatus(title: string) {
-    const card = await this.getDataServiceCardByTitle(title);
+    const card = this.getDataServiceCardByTitle(title);
     return card.locator('[role="status"]').textContent();
   }
 
   async verifyDataServiceText(title: string, text: string) {
-    const card = await this.getDataServiceCardByTitle(title);
+    const card = this.getDataServiceCardByTitle(title);
     return expect(card).toContainText(text);
   }
 
   async verifyDataServiceExists(title: string) {
-    await expect(await this.getDataServiceCardByTitle(title)).toBeVisible();
+    await expect(this.getDataServiceCardByTitle(title)).toHaveCount(1);
   }
 
   async verifyDataServiceDoesNotExist(title: string) {
-    await expect(await this.getDataServiceCardByTitle(title)).not.toBeVisible();
+    await expect(this.getDataServiceCardByTitle(title)).toHaveCount(0);
   }
 
   // Assertions
