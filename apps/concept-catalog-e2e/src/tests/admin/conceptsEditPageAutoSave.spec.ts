@@ -297,18 +297,16 @@ runTestAsAdmin(
 
     // Fill in the relation form
     await editPage.page.getByText("Publisert begrep på data.norge.no").click();
-    await editPage.page
-      .getByRole("group", { name: "Relatert begrep" })
-      .getByRole("combobox")
-      .click();
-    await editPage.page.waitForTimeout(100);
-    await editPage.page
-      .getByRole("group", { name: "Relatert begrep" })
-      .getByLabel("Søk begrep")
-      .fill("test");
-    await editPage.page.waitForTimeout(100);
-    await editPage.page.getByLabel("Test endringsloggen").first().click();
-    await editPage.page.waitForTimeout(100);
+    const relatedGroup = editPage.page.getByRole("group", {
+      name: "Relatert begrep",
+    });
+    await relatedGroup.getByRole("combobox").click();
+    await relatedGroup.getByLabel("Søk begrep").fill("test");
+    const resultOption = editPage.page
+      .getByLabel("Test endringsloggen")
+      .first();
+    await resultOption.waitFor({ state: "visible", timeout: 5000 });
+    await resultOption.click();
     await editPage.page.getByLabel("RelasjonMå fylles ut").click();
     await editPage.page.getByLabel("Se også").click();
     await editPage.waitForAutoSaveToComplete();

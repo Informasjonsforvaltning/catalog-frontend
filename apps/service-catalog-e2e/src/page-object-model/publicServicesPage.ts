@@ -83,7 +83,7 @@ export default class PublicServicesPage {
       await this.deleteItem(items[0] as string);
 
       // Wait for the list to update after deletion
-      await this.page.waitForTimeout(500);
+      await this.page.waitForLoadState("networkidle");
       await this.goto();
     }
   }

@@ -64,7 +64,9 @@ export default class EditPage {
         .getByRole("group", { name: group })
         .getByRole("button", { name: "Slett" });
       while ((await removeBtn.count()) > 0) {
-        await removeBtn.first().click();
+        const firstBtn = removeBtn.first();
+        await firstBtn.waitFor({ state: "visible", timeout: 5000 });
+        await firstBtn.click();
       }
     }
 
@@ -154,14 +156,13 @@ export default class EditPage {
       .getByRole("group", { name: "Relatert begrep" })
       .getByRole("combobox")
       .click();
-    await this.page.waitForTimeout(100);
     await this.page
       .getByRole("group", { name: "Relatert begrep" })
       .getByLabel("Søk begrep")
       .fill(search);
-    await this.page.waitForTimeout(100);
-    await this.page.getByLabel(item).first().click();
-    await this.page.waitForTimeout(100);
+    const resultOption = this.page.getByLabel(item).first();
+    await resultOption.waitFor({ state: "visible", timeout: 5000 });
+    await resultOption.click();
 
     await this.page.getByLabel("RelasjonMå fylles ut").click();
     if (relation.relasjon === RelationTypeEnum.ASSOSIATIV) {
@@ -205,25 +206,26 @@ export default class EditPage {
     } else if (relation.relasjon === RelationTypeEnum.ERSTATTES_AV) {
       await this.page.getByLabel("Erstattes av").click();
     }
-    await this.page
+    const addBtn = this.page
       .getByRole("dialog")
-      .getByRole("button", { name: "Legg til relasjon" })
-      .click();
-    await this.page
-      .getByRole("dialog")
-      .getByRole("button", { name: "Legg til relasjon" })
-      .waitFor({ state: "hidden" });
+      .getByRole("button", { name: "Legg til relasjon" });
+    await addBtn.click();
+    await addBtn.waitFor({ state: "hidden", timeout: 5000 });
   }
 
   async clearFields(fields: FieldsResult) {
     const removeBtn = this.page.getByRole("button", { name: "Slett" });
     while ((await removeBtn.count()) > 0) {
-      await removeBtn.first().click();
+      const firstBtn = removeBtn.first();
+      await firstBtn.waitFor({ state: "visible", timeout: 5000 });
+      await firstBtn.click();
     }
 
     const clearBtn = this.page.getByRole("button", { name: "Fjern alt" });
     while ((await clearBtn.count()) > 0) {
-      await clearBtn.first().click();
+      const firstClear = clearBtn.first();
+      await firstClear.waitFor({ state: "visible", timeout: 5000 });
+      await firstClear.click();
     }
 
     // The table is replaced with a skeleton when loading, so wait for the table to be visible
@@ -242,7 +244,10 @@ export default class EditPage {
           .getByRole("button", { name: "Slett" })
           .click();
       } else {
-        await this.page.waitForTimeout(100);
+        await relTable
+          .getByRole("row")
+          .first()
+          .waitFor({ state: "visible", timeout: 5000 });
       }
     }
 
@@ -612,7 +617,9 @@ export default class EditPage {
 
   async clickRestoreButton() {
     await this.page.getByRole("button", { name: "Gjenopprett" }).click();
-    await expect(this.page.getByRole("dialog")).not.toBeVisible();
+    await this.page
+      .getByRole("dialog")
+      .waitFor({ state: "hidden", timeout: 5000 });
   }
 
   async expectRestoreSuccessMessage() {
@@ -621,21 +628,25 @@ export default class EditPage {
     );
     await expect(snackbar).toBeVisible();
     await snackbar.getByRole("button").click();
-    await expect(snackbar).not.toBeVisible();
+    await snackbar.waitFor({ state: "hidden", timeout: 5000 });
   }
 
   async clickDiscardButton() {
     await this.page.getByRole("button", { name: "Forkast" }).click();
-    await expect(this.page.getByRole("dialog")).not.toBeVisible();
+    await this.page
+      .getByRole("dialog")
+      .waitFor({ state: "hidden", timeout: 5000 });
   }
 
   async expectNoRestoreDialog() {
-    await expect(this.page.getByRole("dialog")).not.toBeVisible();
+    await this.page
+      .getByRole("dialog")
+      .waitFor({ state: "hidden", timeout: 5000 });
   }
 
   async waitForAutoSaveToComplete() {
-    // Wait a bit for auto-save to complete
-    await this.page.waitForTimeout(1000);
+    // Wait for background autosave requests to settle
+    await this.page.waitForLoadState("networkidle");
   }
 
   // Helper methods for concept form fields

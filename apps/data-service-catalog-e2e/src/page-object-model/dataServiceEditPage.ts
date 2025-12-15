@@ -166,7 +166,9 @@ export default class DataServiceEditPage {
         .getByRole("group", { name: group })
         .getByRole("button", { name: "Slett" });
       while ((await removeBtn.count()) > 0) {
-        await removeBtn.first().click();
+        const firstBtn = removeBtn.first();
+        await firstBtn.waitFor({ state: "visible", timeout: 5000 });
+        await firstBtn.click();
       }
     }
 

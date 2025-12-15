@@ -83,7 +83,9 @@ runTestAsAdmin(
     );
 
     // Confirm the publish action
-    await page.locator("dialog[open] button").first().click();
+    const confirmBtn = page.locator("dialog[open] button").first();
+    await confirmBtn.waitFor({ state: "visible", timeout: 5000 });
+    await confirmBtn.click();
 
     // Verify modal is no longer visible
     await dataServiceDetailPage.expectConfirmModalNotVisible();
@@ -132,7 +134,9 @@ runTestAsAdmin(
     );
 
     // Confirm the unpublish action
-    await page.locator("dialog[open] button").first().click();
+    const confirmBtn2 = page.locator("dialog[open] button").first();
+    await confirmBtn2.waitFor({ state: "visible", timeout: 5000 });
+    await confirmBtn2.click();
 
     // Verify modal is no longer visible
     await dataServiceDetailPage.expectConfirmModalNotVisible();
@@ -274,7 +278,9 @@ runTestAsAdmin(
     );
 
     // Confirm the delete action
-    await page.locator("dialog[open] button").first().click();
+    const confirmBtn3 = page.locator("dialog[open] button").first();
+    await confirmBtn3.waitFor({ state: "visible", timeout: 5000 });
+    await confirmBtn3.click();
 
     // Should redirect to data services list
     await expect(page).toHaveURL(/\/catalogs\/.*\/data-services/);

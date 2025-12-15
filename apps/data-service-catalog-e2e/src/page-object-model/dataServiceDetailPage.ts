@@ -216,7 +216,7 @@ export default class DataServiceDetailPage {
   }
 
   async expectConfirmModalNotVisible() {
-    await expect(this.confirmModal).not.toBeVisible();
+    await this.confirmModal.waitFor({ state: "hidden", timeout: 5000 });
   }
 
   // Accessibility

@@ -538,8 +538,10 @@ runTestAsAdmin(
       .getByRole("button", { name: "Legg til definisjon" })
       .click();
 
-    await expect(uriError).not.toBeVisible();
-    await expect(conceptsPage.page.getByRole("dialog")).not.toBeVisible();
+    await uriError.waitFor({ state: "hidden", timeout: 5000 });
+    await conceptsPage.page
+      .getByRole("dialog")
+      .waitFor({ state: "hidden", timeout: 5000 });
 
     // Value range link (omfang.uri) - HTTP should be rejected on form submission
     console.log("[TEST] Testing value range link with HTTP URL...");
@@ -561,7 +563,7 @@ runTestAsAdmin(
     await conceptsPage.page.getByLabel("Lenke til referanse").blur();
 
     // The error should disappear immediately for modal fields
-    await expect(uriError).not.toBeVisible();
+    await uriError.waitFor({ state: "hidden", timeout: 5000 });
 
     // Try to save again - should work now with valid HTTPS URLs
     console.log("[TEST] Attempting to save form with valid HTTPS URLs...");

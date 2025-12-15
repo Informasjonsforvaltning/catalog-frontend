@@ -287,9 +287,9 @@ export default class ConceptsPage {
         .click();
       await this.page.getByText("Preferences").click();
       await this.page.getByRole("button", { name: "Hide" }).click();
-      await expect(
-        this.page.getByRole("button", { name: "Open Next.js Dev Tools" }),
-      ).not.toBeVisible();
+      await this.page
+        .getByRole("button", { name: "Open Next.js Dev Tools" })
+        .waitFor({ state: "hidden", timeout: 5000 });
     }
   }
 

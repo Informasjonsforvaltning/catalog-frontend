@@ -189,8 +189,8 @@ runTestAsAdmin(
       false,
     );
 
-    // Wait a moment for auto-save
-    await page.waitForTimeout(2000);
+    // Wait for network to be idle to allow autosave requests to complete
+    await page.waitForLoadState("networkidle");
 
     // Navigate away and back
     await page.goto("/");

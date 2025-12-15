@@ -52,7 +52,8 @@ export default class ImportResultsPage {
         localization.importResult.completed +
         "' filter to be invisible...",
     );
-    await expect(this.statusFilterSuccessfulLocator()).not.toBeVisible({
+    await this.statusFilterSuccessfulLocator().waitFor({
+      state: "hidden",
       timeout: 20000,
     });
 
@@ -61,7 +62,8 @@ export default class ImportResultsPage {
         localization.importResult.failed +
         "' filter to be invisible...",
     );
-    await expect(this.statusFilterFailedLocator()).not.toBeVisible({
+    await this.statusFilterFailedLocator().waitFor({
+      state: "hidden",
       timeout: 20000,
     });
 
@@ -70,7 +72,8 @@ export default class ImportResultsPage {
         localization.importResult.inProgress +
         "' filter to be invisible...",
     );
-    await expect(this.statusFilterOngoingLocator()).not.toBeVisible({
+    await this.statusFilterOngoingLocator().waitFor({
+      state: "hidden",
       timeout: 20000,
     });
 
@@ -79,7 +82,8 @@ export default class ImportResultsPage {
         localization.importResult.cancelled +
         "' filter to be invisible...",
     );
-    await expect(this.statusFilterCancelledLocator()).not.toBeVisible({
+    await this.statusFilterCancelledLocator().waitFor({
+      state: "hidden",
       timeout: 20000,
     });
 
@@ -88,16 +92,18 @@ export default class ImportResultsPage {
         localization.importResult.pendingConfirmation +
         "' filter to be invisible...",
     );
-    await expect(this.statusFilterPendingConfirmationLocator()).not.toBeVisible(
-      { timeout: 20000 },
-    );
+    await this.statusFilterPendingConfirmationLocator().waitFor({
+      state: "hidden",
+      timeout: 20000,
+    });
 
     console.log(
       "[Test] Expecting '" +
         localization.importResult.partiallyCompleted +
         "' filter to be invisible...",
     );
-    await expect(this.statusFilterPartiallyCompletedLocator()).not.toBeVisible({
+    await this.statusFilterPartiallyCompletedLocator().waitFor({
+      state: "hidden",
       timeout: 20000,
     });
   }

@@ -59,7 +59,9 @@ export default class DatasetEditPage {
         .getByRole("group", { name: group })
         .getByRole("button", { name: "Slett" });
       while ((await removeBtn.count()) > 0) {
-        await removeBtn.first().click();
+        const firstBtn = removeBtn.first();
+        await firstBtn.waitFor({ state: "visible", timeout: 5000 });
+        await firstBtn.click();
       }
     }
 
@@ -145,18 +147,14 @@ export default class DatasetEditPage {
       await this.page.getByText("Publisert begrep på data.norge.no").click();
     }
 
-    await this.page
-      .getByRole("group", { name: "Relatert begrep" })
-      .getByRole("combobox")
-      .click();
-    await this.page.waitForTimeout(100);
-    await this.page
-      .getByRole("group", { name: "Relatert begrep" })
-      .getByLabel("Søk begrep")
-      .fill(search);
-    await this.page.waitForTimeout(100);
-    await this.page.getByLabel(item).first().click();
-    await this.page.waitForTimeout(100);
+    const relatedGroup = this.page.getByRole("group", {
+      name: "Relatert begrep",
+    });
+    await relatedGroup.getByRole("combobox").click();
+    await relatedGroup.getByLabel("Søk begrep").fill(search);
+    const resultOption = this.page.getByLabel(item).first();
+    await resultOption.waitFor({ state: "visible", timeout: 5000 });
+    await resultOption.click();
 
     await this.page.getByLabel("RelasjonMå fylles ut").click();
     if (relation.relasjon === RelationTypeEnum.ASSOSIATIV) {
@@ -213,12 +211,16 @@ export default class DatasetEditPage {
   async clearFields(fields: any) {
     const removeBtn = this.page.getByRole("button", { name: "Slett" });
     while ((await removeBtn.count()) > 0) {
-      await removeBtn.first().click();
+      const firstBtn = removeBtn.first();
+      await firstBtn.waitFor({ state: "visible", timeout: 5000 });
+      await firstBtn.click();
     }
 
     const clearBtn = this.page.getByRole("button", { name: "Fjern alt" });
     while ((await clearBtn.count()) > 0) {
-      await clearBtn.first().click();
+      const firstClear = clearBtn.first();
+      await firstClear.waitFor({ state: "visible", timeout: 5000 });
+      await firstClear.click();
     }
 
     // The table is replaced with a skeleton when loading, so wait for the table to be visible
@@ -237,7 +239,10 @@ export default class DatasetEditPage {
           .getByRole("button", { name: "Slett" })
           .click();
       } else {
-        await this.page.waitForTimeout(100);
+        await relTable
+          .getByRole("row")
+          .first()
+          .waitFor({ state: "visible", timeout: 5000 });
       }
     }
 
@@ -533,10 +538,12 @@ export default class DatasetEditPage {
 
   // Title field
   async expectTitleField(language: string, expectedValue: string) {
-    const titleField = this.page
-      .getByRole("group", { name: "Tittel Hjelp til utfylling Må fylles ut" })
-      .getByLabel(language);
-    await expect(titleField).toBeVisible();
+    const group = this.page.getByRole("group", {
+      name: "Tittel Hjelp til utfylling Må fylles ut",
+    });
+    await group.waitFor({ state: "visible", timeout: 10000 });
+    const titleField = group.getByLabel(language);
+    await expect(titleField).toBeVisible({ timeout: 10000 });
     await expect(titleField).toHaveValue(expectedValue);
   }
 
@@ -555,12 +562,12 @@ export default class DatasetEditPage {
 
   // Description field
   async expectDescriptionField(language: string, expectedValue: string) {
-    const descriptionField = this.page
-      .getByRole("group", {
-        name: "Beskrivelse Hjelp til utfylling Må fylles ut",
-      })
-      .getByLabel(language);
-    await expect(descriptionField).toBeVisible();
+    const group = this.page.getByRole("group", {
+      name: "Beskrivelse Hjelp til utfylling Må fylles ut",
+    });
+    await group.waitFor({ state: "visible", timeout: 10000 });
+    const descriptionField = group.getByLabel(language);
+    await expect(descriptionField).toBeVisible({ timeout: 10000 });
     await expect(descriptionField).toHaveValue(expectedValue);
   }
 
@@ -689,8 +696,9 @@ export default class DatasetEditPage {
       name: "Datatema",
     });
     await themeField.click();
-    await this.page.getByRole("option", { name: theme, exact: true }).click();
-    await this.page.waitForTimeout(100);
+    const option = this.page.getByRole("option", { name: theme, exact: true });
+    await option.waitFor({ state: "visible", timeout: 5000 });
+    await option.click();
     await this.page.keyboard.press("Escape");
   }
 
@@ -699,8 +707,9 @@ export default class DatasetEditPage {
       name: "LOS-tema",
     });
     await themeField.click();
-    await this.page.getByRole("option", { name: theme, exact: true }).click();
-    await this.page.waitForTimeout(100);
+    const option = this.page.getByRole("option", { name: theme, exact: true });
+    await option.waitFor({ state: "visible", timeout: 5000 });
+    await option.click();
     await this.page.keyboard.press("Escape");
   }
 
@@ -739,10 +748,12 @@ export default class DatasetEditPage {
       .getByRole("group", { name: "Lisens" })
       .getByRole("combobox")
       .click();
-    await dialog
-      .getByRole("option", { name: data.license, exact: true })
-      .click();
-    await this.page.waitForTimeout(100);
+    const licenseOption = dialog.getByRole("option", {
+      name: data.license,
+      exact: true,
+    });
+    await licenseOption.waitFor({ state: "visible", timeout: 5000 });
+    await licenseOption.click();
     await dialog.getByLabel("Lenke").click();
     await dialog
       .getByRole("group", { name: "Format" })
@@ -752,10 +763,12 @@ export default class DatasetEditPage {
       .getByRole("group", { name: "Format" })
       .getByPlaceholder("Søk")
       .fill(data.format);
-    await dialog
-      .getByRole("option", { name: data.format, exact: true })
-      .click();
-    await this.page.waitForTimeout(100);
+    const formatOption = dialog.getByRole("option", {
+      name: data.format,
+      exact: true,
+    });
+    await formatOption.waitFor({ state: "visible", timeout: 5000 });
+    await formatOption.click();
     await dialog.getByLabel("Lenke").click();
     await dialog.getByRole("button", { name: "Legg til", exact: true }).click();
   }
@@ -776,8 +789,9 @@ export default class DatasetEditPage {
       .getByRole("group", { name: "Dekningsområde" })
       .getByPlaceholder("Søk")
       .fill(value);
-    await this.page.getByRole("option", { name: value }).click();
-    await this.page.waitForTimeout(100);
+    const areaOption = this.page.getByRole("option", { name: value });
+    await areaOption.waitFor({ state: "visible", timeout: 5000 });
+    await areaOption.click();
     await this.page.keyboard.press("Escape");
   }
 
@@ -810,7 +824,9 @@ export default class DatasetEditPage {
       .getByRole("group", { name: "Type" })
       .getByRole("combobox");
     await typeField.click();
-    await this.page.getByRole("option", { name: type }).click();
+    const typeOption = this.page.getByRole("option", { name: type });
+    await typeOption.waitFor({ state: "visible", timeout: 5000 });
+    await typeOption.click();
   }
 
   async selectProvenance(provenance: string) {
@@ -818,7 +834,11 @@ export default class DatasetEditPage {
       name: "Proveniens",
     });
     await provenanceField.click();
-    await this.page.getByRole("option", { name: provenance }).click();
+    const provenanceOption = this.page.getByRole("option", {
+      name: provenance,
+    });
+    await provenanceOption.waitFor({ state: "visible", timeout: 5000 });
+    await provenanceOption.click();
   }
 
   async selectFrequency(frequency: string) {
@@ -826,7 +846,9 @@ export default class DatasetEditPage {
       name: "Frekvens",
     });
     await frequencyField.click();
-    await this.page.getByRole("option", { name: frequency }).click();
+    const frequencyOption = this.page.getByRole("option", { name: frequency });
+    await frequencyOption.waitFor({ state: "visible", timeout: 5000 });
+    await frequencyOption.click();
   }
 
   // Relations section
@@ -855,8 +877,9 @@ export default class DatasetEditPage {
       .getByRole("group", { name: "Dataset" })
       .getByPlaceholder("Søk")
       .fill(data.dataset);
-    await dialog.getByRole("option", { name: data.dataset }).click();
-    await this.page.waitForTimeout(100);
+    const option = dialog.getByRole("option", { name: data.dataset });
+    await option.waitFor({ state: "visible", timeout: 5000 });
+    await option.click();
     await dialog.getByRole("button", { name: "Legg til" }).click();
   }
 
@@ -886,8 +909,9 @@ export default class DatasetEditPage {
       .getByRole("group", { name: "Begreper Hjelp til utfylling Anbefalt" })
       .getByPlaceholder("Søk")
       .fill(concept);
-    await this.page.getByRole("option", { name: concept }).click();
-    await this.page.waitForTimeout(100);
+    const option = this.page.getByRole("option", { name: concept });
+    await option.waitFor({ state: "visible", timeout: 5000 });
+    await option.click();
     await this.page.keyboard.press("Escape");
   }
 
@@ -910,8 +934,9 @@ export default class DatasetEditPage {
       .getByRole("group", { name: "Informasjonsmodell fra Data.norge.no" })
       .getByPlaceholder("Søk")
       .fill(model);
-    await this.page.getByRole("option", { name: model }).click();
-    await this.page.waitForTimeout(100);
+    const option = this.page.getByRole("option", { name: model });
+    await option.waitFor({ state: "visible", timeout: 5000 });
+    await option.click();
     await this.page.keyboard.press("Escape");
   }
 
@@ -978,20 +1003,26 @@ export default class DatasetEditPage {
 
   async clickRestoreButton() {
     await this.page.getByRole("button", { name: "Gjenopprett" }).click();
-    await expect(this.page.getByRole("dialog")).not.toBeVisible();
+    await this.page
+      .getByRole("dialog")
+      .waitFor({ state: "hidden", timeout: 5000 });
   }
 
   async clickDiscardButton() {
     await this.page.getByRole("button", { name: "Forkast" }).click();
-    await expect(this.page.getByRole("dialog")).not.toBeVisible();
+    await this.page
+      .getByRole("dialog")
+      .waitFor({ state: "hidden", timeout: 5000 });
   }
 
   async expectNoRestoreDialog() {
-    await expect(this.page.getByRole("dialog")).not.toBeVisible();
+    await this.page
+      .getByRole("dialog")
+      .waitFor({ state: "hidden", timeout: 5000 });
   }
 
   async waitForAutoSaveToComplete() {
-    // Wait a bit for auto-save to complete
-    await this.page.waitForTimeout(1000);
+    // Wait for background autosave requests to settle
+    await this.page.waitForLoadState("networkidle");
   }
 }
