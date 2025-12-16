@@ -412,8 +412,8 @@ const DatasetsPageClient = ({
                                   <span>•</span>
                                   {dataset?.applicationProfile ===
                                   ApplicationProfile.MOBILITYDCATAP
-                                    ? "mobilityDCAT-AP"
-                                    : "DCAT-AP-NO"}
+                                    ? localization.tag.mobilityDcatAp
+                                    : localization.tag.dcatApNo}
                                 </>
                               )}
                             </div>
