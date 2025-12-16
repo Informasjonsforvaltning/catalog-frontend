@@ -351,7 +351,7 @@ runTestAsAdmin(
       .getByRole("group", { name: "Relatert begrep" })
       .getByRole("combobox")
       .click();
-    // Wait for the listbox with search results to become visible instead of a fixed timeout
+
     await conceptsPage.page
       .getByRole("group", { name: "Relatert begrep" })
       .getByRole("listbox")
@@ -362,15 +362,12 @@ runTestAsAdmin(
       .getByRole("group", { name: "Relatert begrep" })
       .getByLabel("Søk begrep")
       .fill(concept.anbefaltTerm?.navn.nb);
-    // Wait for one option to appear (or the listbox to update) instead of using a fixed timeout
+
     await conceptsPage.page
       .getByRole("group", { name: "Relatert begrep" })
       .getByRole("option")
       .first()
-      .waitFor({ state: "visible", timeout: 5000 })
-      .catch(() => {
-        // It's okay if no options appear; the test later asserts count === 0.
-      });
+      .waitFor({ state: "visible", timeout: 5000 });
 
     console.log(
       "[TEST] Verifying that the concept itself is not available in search results...",

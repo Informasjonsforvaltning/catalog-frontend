@@ -167,7 +167,7 @@ export const publishPublicService = async (
   serviceId: string,
 ) => {
   const response = await apiRequestContext.post(
-    `/api/catalogs/${process.env.E2E_CATALOG_ID}public-services/${serviceId}/publish`,
+    `/api/catalogs/${process.env.E2E_CATALOG_ID}/public-services/${serviceId}/publish`,
   );
 
   if (!response.ok()) {

@@ -184,13 +184,6 @@ export const getFields = async (apiRequestContext: APIRequestContext) => {
   return result;
 };
 
-const getAccessToken = async (apiRequestContext: APIRequestContext) => {
-  const session = await apiRequestContext.get("/api/auth/session");
-  const accessToken = (await session.json())?.accessToken;
-
-  return accessToken;
-};
-
 export const getImportResults = async (
   apiRequestContext: APIRequestContext,
 ) => {

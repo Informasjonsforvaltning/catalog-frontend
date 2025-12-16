@@ -73,7 +73,9 @@ export default class ServicesPage {
       .fill(service.description?.en as string);
 
     // Produces relations
-    service.produces?.forEach(async (result, i) => {
+    const produces = service.produces || [];
+    for (let i = 0; i < produces.length; i++) {
+      const result = produces[i];
       await this.page
         .getByRole("button", { name: "Legg til relasjon" })
         .click();
@@ -95,7 +97,7 @@ export default class ServicesPage {
       await this.page
         .locator(`input[name="produces\\[${i}\\]\\.description\\.en"]`)
         .fill(result.description?.en as string);
-    });
+    }
 
     // Contact point
     const contactPoint = service.contactPoints?.[0] as ContactPoint;
