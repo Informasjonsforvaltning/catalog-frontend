@@ -118,7 +118,7 @@ export async function deleteDataService(
     }
     success = true;
   } catch (error) {
-    throw new Error(localization.alert.deleteFail);
+    throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
       revalidateTag("data-services");
@@ -195,7 +195,7 @@ export async function publishDataService(
     }
     success = true;
   } catch (error) {
-    throw new Error(localization.alert.deleteFail);
+    throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
       revalidateTag("data-service");
@@ -221,7 +221,7 @@ export async function unpublishDataService(
     }
     success = true;
   } catch (error) {
-    throw new Error(localization.alert.deleteFail);
+    throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
       revalidateTag("data-service");
@@ -247,7 +247,7 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
     }
     success = true;
   } catch (error) {
-    throw new Error(localization.alert.deleteFail);
+    throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
       revalidateTag("import-results");
