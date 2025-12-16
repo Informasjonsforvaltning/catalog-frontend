@@ -97,14 +97,15 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     publish:
       "Publiser datasettbeskrivelsen til Data.norge.no. En beskrivelse kan ikke slettes så lenge den er publisert.",
     mobilityTheme:
-      "Velg ett eller flere mobility-tema som beskriver innholdet i datasettet. Listen er fra [EUs liste over mobility-tema](https://w3id.org/mobilitydcat-ap/mobility-theme).",
+      "Velg ett eller flere mobility-relaterte tema som beskriver innholdet i datasettet. Listen er fra [EUs liste over mobility-tema](https://w3id.org/mobilitydcat-ap/mobility-theme).",
     distributionRights: "Betingelser for tilgang og bruk av distribusjonen.",
     mobilityDataStandard:
-      "Standard for distribusjonen av datasettet. Velges fra [EUs kontrollerte vokabular for Mobility Data Standard](https://w3id.org/mobilitydcat-ap/mobility-data-standard).",
+      "Standard for distribusjonen av datasettet. Velges fra [EUs kontrollerte vokabular for Mobility Data Standard.](https://w3id.org/mobilitydcat-ap/mobility-data-standard)",
     applicationProfileMobilityDcat:
       "Mobility-DCAT er en utvidelse av DCAT-AP-standarden. Den retter seg spesifikt mot datasett relatert til transport og samferdel.",
     applicationProfileDcat:
       "DCAT-AP-NO-standarden er den norske versjonen av DCAT-AP. Dette er en standard for beskrivelser av alle typer datasett.",
+    datasetApplicationProfile: "Standarder for datasettbeskrivelser,",
   },
   heading: {
     about: "Om datasettet",
@@ -188,7 +189,7 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     contactFields: "Kontaktinformasjon",
     description: "Beskrivelse",
     mobilityTheme: "Mobility-tema",
-    distributionRights: "Rettigheter",
+    distributionRights: "Rettigheter for bruk",
     mobilityDataStandard: "Mobility-standard",
   },
   alert: {

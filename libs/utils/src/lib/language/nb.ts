@@ -193,7 +193,8 @@ export const nb = {
 
   button: {
     addDataset: "Legg til ny datasettbeskrivelse",
-    addMobilityDataset: "Legg til ny datasettbeskrivelse i mobility-DCAT",
+    addMobilityDataset:
+      "Legg til ny datasettbeskrivelse av typen mobility-DCAT-AP",
     addRelation: "Legg til relasjon",
     addWithFormat: "Legg til ny {text}",
     bin: "Søppelkasse",
