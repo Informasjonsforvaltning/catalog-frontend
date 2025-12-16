@@ -39,7 +39,7 @@ export default async function ServiceSearchHitsPage({
     catalogId,
   );
 
-  const statusesResponse = await getAdmsStatuses().then((res) => res.json());
+  const statusesResponse = await getAdmsStatuses();
   const statuses: ReferenceDataCode[] = statusesResponse.statuses;
 
   const breadcrumbList = [
