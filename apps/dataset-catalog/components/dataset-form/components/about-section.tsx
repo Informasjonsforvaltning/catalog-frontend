@@ -13,7 +13,6 @@ import {
   Textfield,
   Fieldset,
   Combobox,
-  Tag,
   Paragraph,
 } from "@digdir/designsystemet-react";
 import { FastField, useFormikContext } from "formik";
@@ -55,7 +54,6 @@ export const AboutSection = ({
             {localization.tag.applicationProfile}
           </TitleWithHelpTextAndTag>
         }
-        error={errors.distribution}
       >
         <Paragraph size="sm">
           {values?.applicationProfile === ApplicationProfile.MOBILITYDCATAP

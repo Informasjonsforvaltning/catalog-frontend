@@ -251,7 +251,7 @@ const DatasetsPageClient = ({
         <Chip.Group size="small" className={styles.wrap}>
           {filterStatus?.map((filter, index) => (
             <Chip.Removable
-              key={`status-${index}`}
+              key={filter}
               onClick={() => {
                 removeFilter(filter, "status");
               }}
@@ -261,7 +261,7 @@ const DatasetsPageClient = ({
           ))}
           {filterPublicationState?.map((filter, index) => (
             <Chip.Removable
-              key={`published-${index}`}
+              key={filter}
               onClick={() => {
                 removeFilter(filter, "published");
               }}
@@ -273,7 +273,7 @@ const DatasetsPageClient = ({
           ))}
           {filterApplicationProfile?.map((filter, index) => (
             <Chip.Removable
-              key={`applicationProfile-${index}`}
+              key={filter}
               onClick={() => {
                 removeFilter(filter, "applicationProfile");
               }}

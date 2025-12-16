@@ -9,7 +9,7 @@ import { isEmpty } from "lodash";
 import PublishSwitch from "../publish-switch";
 import { ApplicationProfile, Dataset } from "@catalog-frontend/types";
 import styles from "./details-columns.module.css";
-import { Link, Paragraph, Tag } from "@digdir/designsystemet-react";
+import { Link, Paragraph } from "@digdir/designsystemet-react";
 
 type Props = {
   dataset: Dataset;
