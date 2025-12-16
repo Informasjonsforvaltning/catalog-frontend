@@ -1,11 +1,18 @@
-import { ReferenceDataCode } from "@catalog-frontend/types";
+import {
+  DataTheme,
+  LosTheme,
+  MobilityTheme,
+  ReferenceDataCode,
+} from "@catalog-frontend/types";
 import {
   FindByUrIsRequestQueryVariables,
   SearchAlternative,
   SearchQueryVariables,
 } from "../generated/graphql";
 
-export const getConceptStatuses = async () => {
+export const getConceptStatuses = async (): Promise<{
+  conceptStatuses: ReferenceDataCode[];
+}> => {
   const path = `${process.env.FDK_BASE_URI}/reference-data/eu/concept-statuses`;
   const options = {
     headers: {
@@ -14,10 +21,13 @@ export const getConceptStatuses = async () => {
     method: "GET",
     cache: "no-cache" as RequestCache,
   };
-  return await fetch(path, options);
+  const response = await fetch(path, options);
+  return await response.json();
 };
 
-export const getDatasetTypes = async () => {
+export const getDatasetTypes = async (): Promise<{
+  datasetTypes: ReferenceDataCode[];
+}> => {
   const path = `${process.env.FDK_BASE_URI}/reference-data/eu/dataset-types`;
   const options = {
     headers: {
@@ -25,10 +35,13 @@ export const getDatasetTypes = async () => {
     },
     method: "GET",
   };
-  return await fetch(path, options);
+  const response = await fetch(path, options);
+  return response.json();
 };
 
-export const getDistributionStatuses = async () => {
+export const getDistributionStatuses = async (): Promise<{
+  distributionStatuses: ReferenceDataCode[];
+}> => {
   const path = `${process.env.FDK_BASE_URI}/reference-data/eu/distribution-statuses`;
   const options = {
     headers: {
@@ -37,10 +50,13 @@ export const getDistributionStatuses = async () => {
     method: "GET",
     cache: "no-cache" as RequestCache,
   };
-  return await fetch(path, options);
+  const response = await fetch(path, options);
+  return response.json();
 };
 
-export const getLosThemes = async () => {
+export const getLosThemes = async (): Promise<{
+  losNodes: LosTheme[];
+}> => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/los/themes-and-words`;
   const options = {
     headers: {
@@ -48,10 +64,11 @@ export const getLosThemes = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  const response = await fetch(resource, options);
+  return response.json();
 };
 
-export const getDataThemes = async () => {
+export const getDataThemes = async (): Promise<{ dataThemes: DataTheme[] }> => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/data-themes`;
   const options = {
     headers: {
@@ -59,10 +76,13 @@ export const getDataThemes = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  const response = await fetch(resource, options);
+  return response.json();
 };
 
-export const getMobilityThemes = async () => {
+export const getMobilityThemes = async (): Promise<{
+  mobilityThemes: MobilityTheme[];
+}> => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/mobility/themes`;
   const options = {
     headers: {
@@ -70,10 +90,13 @@ export const getMobilityThemes = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  const response = await fetch(resource, options);
+  return response.json();
 };
 
-export const getMobilityDataStandards = async () => {
+export const getMobilityDataStandards = async (): Promise<{
+  mobilityDataStandards: ReferenceDataCode[];
+}> => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/mobility/data-standards`;
   const options = {
     headers: {
@@ -81,10 +104,13 @@ export const getMobilityDataStandards = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  const response = await fetch(resource, options);
+  return response.json();
 };
 
-export const getMobilityRights = async () => {
+export const getMobilityRights = async (): Promise<{
+  mobilityConditions: ReferenceDataCode[];
+}> => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/mobility/conditions-for-access-and-usage`;
   const options = {
     headers: {
@@ -92,10 +118,13 @@ export const getMobilityRights = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  const response = await fetch(resource, options);
+  return response.json();
 };
 
-export const getFrequencies = async () => {
+export const getFrequencies = async (): Promise<{
+  frequencies: ReferenceDataCode[];
+}> => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/frequencies`;
   const options = {
     headers: {
@@ -103,10 +132,13 @@ export const getFrequencies = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  const response = await fetch(resource, options);
+  return response.json();
 };
 
-export const getOpenLicenses = async () => {
+export const getOpenLicenses = async (): Promise<{
+  openLicenses: ReferenceDataCode[];
+}> => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/open-licenses`;
   const options = {
     headers: {
@@ -114,10 +146,13 @@ export const getOpenLicenses = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  const response = await fetch(resource, options);
+  return response.json();
 };
 
-export const getProvenanceStatements = async () => {
+export const getProvenanceStatements = async (): Promise<{
+  provenanceStatements: ReferenceDataCode[];
+}> => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/provenance-statements`;
   const options = {
     headers: {
@@ -125,10 +160,13 @@ export const getProvenanceStatements = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  const response = await fetch(resource, options);
+  return response.json();
 };
 
-export const getPlannedAvailabilities = async () => {
+export const getPlannedAvailabilities = async (): Promise<{
+  plannedAvailabilities: ReferenceDataCode[];
+}> => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/planned-availabilities`;
   const options = {
     headers: {
@@ -136,10 +174,13 @@ export const getPlannedAvailabilities = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  const response = await fetch(resource, options);
+  return response.json();
 };
 
-export const getCurrencies = async () => {
+export const getCurrencies = async (): Promise<{
+  currencies: ReferenceDataCode[];
+}> => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/currencies`;
   const options = {
     headers: {
@@ -147,29 +188,8 @@ export const getCurrencies = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
-};
-
-export const getFileTypes = async () => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/eu/file-types`;
-  const options = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "GET",
-  };
-  return await fetch(resource, options);
-};
-
-export const getMediaTypes = async () => {
-  const resource = `${process.env.FDK_BASE_URI}/reference-data/iana/media-types`;
-  const options = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    method: "GET",
-  };
-  return await fetch(resource, options);
+  const response = await fetch(resource, options);
+  return response.json();
 };
 
 export const searchReferenceData = async (
@@ -262,7 +282,9 @@ export const searchReferenceDataByUri = async (
   return data;
 };
 
-export const getLanguages = async () => {
+export const getLanguages = async (): Promise<{
+  linguisticSystems: ReferenceDataCode[];
+}> => {
   const resource = `${process.env.FDK_BASE_URI}/reference-data/linguistic-systems`;
   const options = {
     headers: {
@@ -270,5 +292,6 @@ export const getLanguages = async () => {
     },
     method: "GET",
   };
-  return await fetch(resource, options);
+  const response = await fetch(resource, options);
+  return response.json();
 };

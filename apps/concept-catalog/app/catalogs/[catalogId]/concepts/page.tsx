@@ -40,10 +40,9 @@ const SearchPage = withReadProtectedPage(
       `${session?.accessToken}`,
     ).then((response) => response.json());
 
-    const conceptStatuses = await getConceptStatuses()
-      .then((response) => response.json())
-      .then((body) => body?.conceptStatuses ?? [])
-      .then((statuses) => prepareStatusList(statuses));
+    const conceptStatuses = await getConceptStatuses().then((body) =>
+      prepareStatusList(body.conceptStatuses),
+    );
 
     const breadcrumbList = catalogId
       ? ([

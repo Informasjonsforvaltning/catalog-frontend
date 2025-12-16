@@ -50,12 +50,9 @@ const ConceptPage = withReadProtectedPage(
       return redirect(`/notfound`, RedirectType.replace);
     }
 
-    const conceptStatuses = await getConceptStatuses()
-      .then((response) => response.json())
-      .then((body) => {
-        return body?.conceptStatuses ?? [];
-      })
-      .then((statuses) => prepareStatusList(statuses));
+    const conceptStatuses = await getConceptStatuses().then((body) =>
+      prepareStatusList(body.conceptStatuses),
+    );
 
     const username = session && getUsername(session?.accessToken);
 
