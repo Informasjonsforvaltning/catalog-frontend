@@ -13,7 +13,6 @@ export * from "./lib/internal-fields/api";
 export * from "./lib/change-requests/api";
 export * from "./lib/public-services/api";
 export * from "./lib/services/api";
-export * from "./lib/statuses/api";
 export * from "./lib/datasets/api";
 export * from "./lib/data-service/api";
 export * as StrapiGraphql from "./lib/strapi/generated/graphql";
