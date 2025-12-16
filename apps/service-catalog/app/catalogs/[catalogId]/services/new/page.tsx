@@ -11,9 +11,7 @@ export default async function NewServicePage(props: {
   params: Promise<{ catalogId: string; serviceId: string }>;
 }) {
   const { catalogId } = await props.params;
-  const organization: Organization = await getOrganization(catalogId).then(
-    (res) => res.json(),
-  );
+  const organization: Organization = await getOrganization(catalogId);
   const statusesResponse = await getAdmsStatuses();
 
   const breadcrumbList = [

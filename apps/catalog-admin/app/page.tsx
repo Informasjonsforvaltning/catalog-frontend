@@ -20,9 +20,7 @@ const Home = async () => {
 
   let organizations: Organization[] = [];
   if (organiztionIdsWithAdminRole.length > 0) {
-    organizations = await getOrganizations(organiztionIdsWithAdminRole).then(
-      (res) => res.json(),
-    );
+    organizations = await getOrganizations(organiztionIdsWithAdminRole);
   }
 
   return (

@@ -15,9 +15,7 @@ export default async function EditServicePage({
 }) {
   const { catalogId, serviceId } = await params;
   const service: Service = await getPublicServiceById(catalogId, serviceId);
-  const organization: Organization = await getOrganization(catalogId).then(
-    (res) => res.json(),
-  );
+  const organization: Organization = await getOrganization(catalogId);
   const statusesResponse = await getAdmsStatuses();
 
   const breadcrumbList = [

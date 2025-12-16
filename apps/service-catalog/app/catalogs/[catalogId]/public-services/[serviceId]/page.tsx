@@ -40,15 +40,13 @@ export default async function PublicServiceDetailsPage({
   if (!service) {
     redirect(`/notfound`, RedirectType.replace);
   }
-  const organization: Organization = await getOrganization(catalogId).then(
-    (res) => res.json(),
-  );
+  const organization: Organization = await getOrganization(catalogId);
   const hasWritePermission =
     session && hasOrganizationWritePermission(session?.accessToken, catalogId);
   const statusesResponse = await getAdmsStatuses();
   const statuses: ReferenceDataCode[] = statusesResponse.statuses;
 
-  const breadcrumbList = [
+  const breadcrumbList: BreadcrumbType[] = [
     {
       href: `/catalogs/${catalogId}/public-services`,
       text: localization.catalogType.publicService,
@@ -57,7 +55,7 @@ export default async function PublicServiceDetailsPage({
       href: `/catalogs/${catalogId}/public-services/${serviceId}`,
       text: getTranslateText(service.title),
     },
-  ] as BreadcrumbType[];
+  ];
 
   return (
     <>

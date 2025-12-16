@@ -13,9 +13,7 @@ export default async function NewPublicServicePage({
   params: Promise<{ catalogId: string }>;
 }) {
   const { catalogId } = await params;
-  const organization: Organization = await getOrganization(catalogId).then(
-    (res) => res.json(),
-  );
+  const organization: Organization = await getOrganization(catalogId);
   const statusesResponse = await getAdmsStatuses();
 
   const breadcrumbList = [

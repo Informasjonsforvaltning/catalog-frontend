@@ -56,9 +56,7 @@ const ConceptPage = withReadProtectedPage(
 
     const username = session && getUsername(session?.accessToken);
 
-    const organization: Organization = await getOrganization(catalogId).then(
-      (response) => response.json(),
-    );
+    const organization: Organization = await getOrganization(catalogId);
     const revisions: Concept[] | null = await getConceptRevisions(
       `${conceptId}`,
       `${session?.accessToken}`,
