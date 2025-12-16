@@ -16,7 +16,7 @@ export default async function NewPublicServicePage({
   const organization: Organization = await getOrganization(catalogId).then(
     (res) => res.json(),
   );
-  const statusesResponse = await getAdmsStatuses().then((res) => res.json());
+  const statusesResponse = await getAdmsStatuses();
 
   const breadcrumbList = [
     {

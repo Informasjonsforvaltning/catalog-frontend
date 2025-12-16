@@ -14,7 +14,7 @@ export default async function NewServicePage(props: {
   const organization: Organization = await getOrganization(catalogId).then(
     (res) => res.json(),
   );
-  const statusesResponse = await getAdmsStatuses().then((res) => res.json());
+  const statusesResponse = await getAdmsStatuses();
 
   const breadcrumbList = [
     {
