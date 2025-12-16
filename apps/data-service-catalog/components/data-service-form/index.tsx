@@ -18,6 +18,7 @@ import {
   FormikAutoSaver,
   Snackbar,
   NotificationCarousel,
+  SnackbarSeverity,
 } from "@catalog-frontend/ui";
 import { Formik, Form } from "formik";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
@@ -107,16 +108,21 @@ const DataServiceForm = ({
   const [isCanceled, setIsCanceled] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<
-    "success" | "danger" | "warning" | "info"
-  >("success");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<SnackbarSeverity>("success");
   const [snackbarFadeIn, setSnackbarFadeIn] = useState(true);
   const router = useRouter();
   const formikRef = useRef(null);
 
-  //useWarnIfUnsavedChanges({ unsavedChanges: isDirty });
-
-  const showSnackbarMessage = ({ message, severity, fadeIn = true }) => {
+  const showSnackbarMessage = ({
+    message,
+    severity,
+    fadeIn = true,
+  }: {
+    message: string;
+    severity: SnackbarSeverity;
+    fadeIn?: boolean;
+  }) => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarFadeIn(fadeIn);

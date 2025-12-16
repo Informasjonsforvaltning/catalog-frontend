@@ -36,6 +36,7 @@ import {
   HelpMarkdown,
   ConfirmModal,
   Snackbar,
+  SnackbarSeverity,
 } from "@catalog-frontend/ui";
 import { conceptSchema } from "./validation-schema";
 import { TermSection } from "./components/term-section";
@@ -137,12 +138,19 @@ const ConceptForm = ({
 
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<
-    "success" | "danger"
-  >("success");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<SnackbarSeverity>("success");
   const [snackbarFadeIn, setSnackbarFadeIn] = useState(true);
 
-  const showSnackbarMessage = ({ message, severity, fadeIn = true }) => {
+  const showSnackbarMessage = ({
+    message,
+    severity,
+    fadeIn = true,
+  }: {
+    message: string;
+    severity: SnackbarSeverity;
+    fadeIn?: boolean;
+  }) => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarFadeIn(fadeIn);
