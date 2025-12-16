@@ -22,7 +22,7 @@ export const getConceptStatuses = async (): Promise<{
     cache: "no-cache" as RequestCache,
   };
   const response = await fetch(path, options);
-  return await response.json();
+  return response.json();
 };
 
 export const getDatasetTypes = async (): Promise<{
