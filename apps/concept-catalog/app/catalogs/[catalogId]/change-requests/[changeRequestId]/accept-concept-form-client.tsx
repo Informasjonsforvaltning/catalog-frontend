@@ -10,6 +10,7 @@ import {
   ChangeRequestStatusTagProps,
   LinkButton,
   Snackbar,
+  SnackbarSeverity,
   Tag,
 } from "@catalog-frontend/ui";
 import ConceptForm from "@concept-catalog/components/concept-form";
@@ -37,11 +38,16 @@ export const AcceptConceptFormClient = ({
   const [saved, setSaved] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<
-    "success" | "danger"
-  >("success");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<SnackbarSeverity>("success");
 
-  const showSnackbarMessage = ({ message, severity }) => {
+  const showSnackbarMessage = ({
+    message,
+    severity,
+  }: {
+    message: string;
+    severity: SnackbarSeverity;
+  }) => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setShowSnackbar(false);

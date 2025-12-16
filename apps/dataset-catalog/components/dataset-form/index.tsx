@@ -29,6 +29,7 @@ import {
   HelpMarkdown,
   NotificationCarousel,
   Snackbar,
+  SnackbarSeverity,
   StickyFooterBar,
 } from "@catalog-frontend/ui";
 import { Formik, Form, FormikProps } from "formik";
@@ -126,12 +127,19 @@ export const DatasetForm = ({
 
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<
-    "success" | "danger"
-  >("success");
+  const [snackbarSeverity, setSnackbarSeverity] =
+    useState<SnackbarSeverity>("success");
   const [snackbarFadeIn, setSnackbarFadeIn] = useState(true);
 
-  const showSnackbarMessage = ({ message, severity, fadeIn = true }: any) => {
+  const showSnackbarMessage = ({
+    message,
+    severity,
+    fadeIn = true,
+  }: {
+    message: string;
+    severity: SnackbarSeverity;
+    fadeIn?: boolean;
+  }) => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarFadeIn(fadeIn);
