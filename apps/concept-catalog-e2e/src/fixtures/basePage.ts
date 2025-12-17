@@ -8,11 +8,11 @@ import { adminAuthFile, generateAccessibilityBuilder } from "../utils/helpers";
 
 const PREFIX_TEXT = "concept-catalog: ";
 export const test = base.extend<{
-  loginPage: any;
-  homePage: any;
-  conceptsPage: any;
-  importResultsPage: any;
-  importResultDetailsPage: any;
+  loginPage: LoginPage;
+  homePage: HomePage;
+  conceptsPage: ConceptsPage;
+  importResultsPage: ImportResultsPage;
+  importResultDetailsPage: ImportResultDetailsPage;
 }>({
   loginPage: async ({ page, context }, use) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
@@ -49,23 +49,23 @@ export const test = base.extend<{
   },
 });
 
-export const runTest = (name: string, fn: (any) => void) => {
+export const runTest = (name: string, fn: (e: any) => void) => {
   test(PREFIX_TEXT + name, fn);
 };
 
-export const skipTest = (name: string, fn: (any) => void) => {
+export const skipTest = (name: string, fn: (e: any) => void) => {
   test.skip(PREFIX_TEXT + name, fn);
 };
 
-export const runTestAsAdmin = (name: string, fn: (any) => void) => {
+export const runTestAsAdmin = (name: string, fn: (e: any) => void) => {
   test.use({ storageState: adminAuthFile });
   runTest(name, fn);
 };
 
 export const runSerialTestsAdmin = (
   name: string,
-  tests: { name: string; fn: (any) => void }[],
-  skippedTests?: { name: string; fn: (any) => void }[],
+  tests: { name: string; fn: (e: any) => void }[],
+  skippedTests?: { name: string; fn: (e: any) => void }[],
 ) => {
   test.use({ storageState: adminAuthFile });
   test.describe.serial(PREFIX_TEXT + " serial tests " + name, () => {
@@ -79,7 +79,7 @@ export const runSerialTestsAdmin = (
   for (const { name, fn } of skippedTests) skipTest(name, fn);
 };
 
-export const skipTestAsAdmin = (name: string, fn: (any) => void) => {
+export const skipTestAsAdmin = (name: string, fn: (e: any) => void) => {
   test.use({ storageState: adminAuthFile });
   skipTest(name, fn);
 };

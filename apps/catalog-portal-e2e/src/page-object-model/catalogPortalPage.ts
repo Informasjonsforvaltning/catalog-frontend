@@ -10,7 +10,7 @@ export default class CatalogPortalPage {
   constructor(
     page: Page,
     context: BrowserContext,
-    accessibilityBuilder?: AxeBuilder,
+    accessibilityBuilder: AxeBuilder,
   ) {
     this.page = page;
     this.context = context;
@@ -45,7 +45,7 @@ export default class CatalogPortalPage {
     locatorFunction: keyof CatalogPortalPage,
     expectedUrl: RegExp,
   ) {
-    const locator = this[locatorFunction]();
+    const locator = (this[locatorFunction] as () => Locator)();
     await expect(locator).toBeVisible();
     await expect(locator).toHaveAttribute("href", expectedUrl);
   }
