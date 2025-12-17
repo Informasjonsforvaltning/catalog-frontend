@@ -1,6 +1,5 @@
 import {
   Distribution,
-  ReferenceData,
   ReferenceDataCode,
   Search,
 } from "@catalog-frontend/types";
@@ -19,12 +18,13 @@ import {
   Tag,
 } from "@digdir/designsystemet-react";
 import styles from "../details-columns.module.css";
+
+import { isEmpty } from "lodash";
 import {
+  FieldsetDivider,
   useSearchFileTypeByUri,
   useSearchMediaTypeByUri,
-} from "../../../hooks/useReferenceDataSearch";
-import { isEmpty } from "lodash";
-import { FieldsetDivider } from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui";
 import { useSearchDataServiceByUri } from "@dataset-catalog/hooks/useSearchService";
 
 type Props = {

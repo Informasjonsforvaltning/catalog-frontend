@@ -2,15 +2,13 @@ import { DataService } from "@catalog-frontend/types";
 import {
   FormikReferenceDataCombobox,
   TitleWithHelpTextAndTag,
+  useSearchFileTypeByUri,
+  useSearchFileTypes,
 } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 import { Box, Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 import { useState } from "react";
-import {
-  useSearchFileTypeByUri,
-  useSearchFileTypes,
-} from "../../../hooks/useReferenceDataSearch";
 
 type Props = {
   referenceDataEnv: string;

@@ -1,4 +1,7 @@
-import { InfoCard } from "@catalog-frontend/ui";
+import {
+  InfoCard,
+  useSearchAdministrativeUnitsByUri,
+} from "@catalog-frontend/ui";
 import {
   localization,
   getTranslateText,
@@ -22,7 +25,6 @@ import {
   Search,
 } from "@catalog-frontend/types";
 import styles from "./details-columns.module.css";
-import { useSearchAdministrativeUnitsByUri } from "../../hooks/useReferenceDataSearch";
 import { useSearchEnheterByOrgNmbs } from "../../hooks/useEnhetsregister";
 import {
   useSearchConceptsByUri,
