@@ -35,7 +35,7 @@ export default class DatasetsPage {
     this.datasetCards = page.locator(
       'ul[role="list"]:not(nav ul) li[role="listitem"]',
     );
-    this.createDatasetButton = page.getByRole("link", {
+    this.createDatasetButton = page.getByRole("button", {
       name: "Legg til datasett",
     });
     this.statusFilterHeader = page.getByRole("button", { name: "Status" });
