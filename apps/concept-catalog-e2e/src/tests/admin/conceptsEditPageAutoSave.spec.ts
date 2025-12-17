@@ -307,7 +307,7 @@ runTestAsAdmin(
       .getByLabel("Søk begrep")
       .fill("test");
     await editPage.page.waitForTimeout(100);
-    await editPage.page.getByLabel("Test endringsloggen").first().click();
+    await editPage.page.getByLabel("Test status").first().click();
     await editPage.page.waitForTimeout(100);
     await editPage.page.getByLabel("RelasjonMå fylles ut").click();
     await editPage.page.getByLabel("Se også").click();
@@ -321,7 +321,7 @@ runTestAsAdmin(
     await editPage.clickRestoreButton();
 
     // Verify the relation data was restored by checking if the relation was added
-    await expect(editPage.page.getByText("Test endringsloggen")).toBeVisible();
+    await expect(editPage.page.getByText("Test status")).toBeVisible();
     await expect(editPage.page.getByText("Se også")).toBeVisible();
   },
 );

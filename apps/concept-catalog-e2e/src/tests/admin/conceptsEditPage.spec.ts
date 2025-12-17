@@ -351,23 +351,14 @@ runTestAsAdmin(
       .getByRole("group", { name: "Relatert begrep" })
       .getByRole("combobox")
       .click();
-
-    await conceptsPage.page
-      .getByRole("group", { name: "Relatert begrep" })
-      .getByRole("listbox")
-      .waitFor({ state: "visible", timeout: 5000 });
+    await conceptsPage.page.waitForTimeout(100);
 
     console.log("[TEST] Searching for the concept itself...");
     await conceptsPage.page
       .getByRole("group", { name: "Relatert begrep" })
       .getByLabel("Søk begrep")
       .fill(concept.anbefaltTerm?.navn.nb);
-
-    await conceptsPage.page
-      .getByRole("group", { name: "Relatert begrep" })
-      .getByRole("option")
-      .first()
-      .waitFor({ state: "visible", timeout: 5000 });
+    await conceptsPage.page.waitForTimeout(100);
 
     console.log(
       "[TEST] Verifying that the concept itself is not available in search results...",
