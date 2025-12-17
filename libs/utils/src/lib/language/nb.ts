@@ -193,7 +193,8 @@ export const nb = {
 
   button: {
     addDataset: "Legg til ny datasettbeskrivelse",
-    addMobilityDataset: "Legg til ny mobilty-datasettbeskrivelse",
+    addMobilityDataset:
+      "Legg til ny datasettbeskrivelse av typen mobility-DCAT-AP",
     addRelation: "Legg til relasjon",
     addWithFormat: "Legg til ny {text}",
     bin: "Søppelkasse",
@@ -255,6 +256,9 @@ export const nb = {
     required: "Må fylles ut",
     recommended: "Anbefalt",
     minOneField: "Minst ett felt må fylles ut",
+    dcatApNo: "DCAT-AP-NO",
+    mobilityDcatAp: "mobilityDCAT-AP",
+    applicationProfile: "Datasett-standard",
   },
 
   searchHit: {

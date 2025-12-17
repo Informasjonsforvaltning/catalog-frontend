@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect, useMemo } from "react";
 import {
+  ApplicationProfile,
   Dataset,
   DatasetsPageSettings,
   FilterType,
@@ -65,6 +66,10 @@ const DatasetsPageClient = ({
     () => pageSettings?.filter?.pubState ?? [],
     [],
   );
+  const defaultFilterApplicationProfile = useMemo(
+    () => pageSettings?.filter?.applicationProfile ?? [],
+    [],
+  );
   const defaultSortValue = useMemo(() => pageSettings?.sort ?? "", []);
   const defaultPage = useMemo(() => pageSettings?.page ?? 0, []);
 
@@ -79,6 +84,10 @@ const DatasetsPageClient = ({
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
     "datasetFilter.pubState",
     parseAsArrayOf(parseAsString).withDefault(defaultFilterPublicationState),
+  );
+  const [filterApplicationProfile, setFilterApplicationProfile] = useQueryState(
+    "datasetFilter.applicationProfile",
+    parseAsArrayOf(parseAsString).withDefault(defaultFilterApplicationProfile),
   );
   const [sortValue, setSortValue] = useQueryState("datasetSort", {
     defaultValue: defaultSortValue,
@@ -123,6 +132,11 @@ const DatasetsPageClient = ({
         filterStatus?.filter((name) => name !== filterName) ?? [],
       );
       setPage(0);
+    } else if (filterType === "applicationProfile") {
+      setFilterApplicationProfile(
+        filterApplicationProfile?.filter((name) => name !== filterName) ?? [],
+      );
+      setPage(0);
     }
   };
 
@@ -134,10 +148,18 @@ const DatasetsPageClient = ({
       filter: {
         pubState: filterPublicationState,
         status: filterStatus,
+        applicationProfile: filterApplicationProfile,
       },
     };
     setClientDatasetsPageSettings(settings);
-  }, [page, searchTerm, sortValue, filterPublicationState, filterStatus]);
+  }, [
+    page,
+    searchTerm,
+    sortValue,
+    filterPublicationState,
+    filterStatus,
+    filterApplicationProfile,
+  ]);
 
   useEffect(() => {
     const filterAndSortDatasets = () => {
@@ -164,6 +186,26 @@ const DatasetsPageClient = ({
           return false;
         });
       }
+      if (!isEmpty(filterApplicationProfile)) {
+        filtered = filtered.filter((dataset) => {
+          if (
+            filterApplicationProfile?.includes(
+              ApplicationProfile.MOBILITYDCATAP,
+            )
+          ) {
+            return (
+              dataset?.applicationProfile === ApplicationProfile.MOBILITYDCATAP
+            );
+          }
+
+          if (filterApplicationProfile?.includes(ApplicationProfile.DCATAPNO)) {
+            return !(
+              dataset?.applicationProfile === ApplicationProfile.MOBILITYDCATAP
+            );
+          }
+          return false;
+        });
+      }
 
       if (searchTerm) {
         const lowercasedQuery = searchTerm.toLowerCase();
@@ -186,10 +228,21 @@ const DatasetsPageClient = ({
       setFilteredDatasets(filtered);
     };
     filterAndSortDatasets();
-  }, [datasets, filterPublicationState, filterStatus, searchTerm, sortValue]);
+  }, [
+    datasets,
+    filterPublicationState,
+    filterStatus,
+    filterApplicationProfile,
+    searchTerm,
+    sortValue,
+  ]);
 
   const FilterChips = () => {
-    if (isEmpty(filterStatus) && isEmpty(filterPublicationState)) {
+    if (
+      isEmpty(filterStatus) &&
+      isEmpty(filterPublicationState) &&
+      isEmpty(filterApplicationProfile)
+    ) {
       return undefined;
     }
 
@@ -198,7 +251,7 @@ const DatasetsPageClient = ({
         <Chip.Group size="small" className={styles.wrap}>
           {filterStatus?.map((filter, index) => (
             <Chip.Removable
-              key={`status-${index}`}
+              key={filter}
               onClick={() => {
                 removeFilter(filter, "status");
               }}
@@ -208,7 +261,7 @@ const DatasetsPageClient = ({
           ))}
           {filterPublicationState?.map((filter, index) => (
             <Chip.Removable
-              key={`published-${index}`}
+              key={filter}
               onClick={() => {
                 removeFilter(filter, "published");
               }}
@@ -216,6 +269,18 @@ const DatasetsPageClient = ({
               {filter === PublicationStatus.PUBLISH
                 ? localization.publicationState.published
                 : localization.publicationState.unpublished}
+            </Chip.Removable>
+          ))}
+          {filterApplicationProfile?.map((filter, index) => (
+            <Chip.Removable
+              key={filter}
+              onClick={() => {
+                removeFilter(filter, "applicationProfile");
+              }}
+            >
+              {filter === ApplicationProfile.MOBILITYDCATAP
+                ? localization.tag.mobilityDcatAp
+                : localization.tag.dcatApNo}
             </Chip.Removable>
           ))}
         </Chip.Group>
@@ -342,6 +407,15 @@ const DatasetsPageClient = ({
                               {dataset.published
                                 ? localization.publicationState.publishedInFDK
                                 : localization.publicationState.unpublished}
+                              {dataset?.applicationProfile && (
+                                <>
+                                  <span>•</span>
+                                  {dataset?.applicationProfile ===
+                                  ApplicationProfile.MOBILITYDCATAP
+                                    ? localization.tag.mobilityDcatAp
+                                    : localization.tag.dcatApNo}
+                                </>
+                              )}
                             </div>
                           </>
                         }
