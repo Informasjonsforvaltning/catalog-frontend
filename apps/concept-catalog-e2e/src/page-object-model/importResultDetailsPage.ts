@@ -1,4 +1,9 @@
-import { BrowserContext, expect, Page } from "@playwright/test";
+import {
+  APIRequestContext,
+  BrowserContext,
+  expect,
+  Page,
+} from "@playwright/test";
 import type AxeBuilder from "@axe-core/playwright";
 import ImportResultsPage from "./importResultsPage";
 import { deleteAllImportResults } from "../utils/helpers";
@@ -14,7 +19,7 @@ export default class ImportResultDetailsPage {
   constructor(
     page: Page,
     context: BrowserContext,
-    accessibilityBuilder?: AxeBuilder,
+    accessibilityBuilder: AxeBuilder,
   ) {
     this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/concepts/import-results`;
     this.page = page;
@@ -93,7 +98,7 @@ export default class ImportResultDetailsPage {
     await this.getCancelImportButton().click({ timeout: 40000 });
   }
 
-  async deleteAllImportResults(apiRequestContext) {
+  async deleteAllImportResults(apiRequestContext: APIRequestContext) {
     await deleteAllImportResults(apiRequestContext);
   }
 }

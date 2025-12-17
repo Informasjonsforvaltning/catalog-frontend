@@ -1,16 +1,14 @@
-import { Concept } from "@catalog-frontend/types";
+import { Concept, Definisjon, LocalizedStrings } from "@catalog-frontend/types";
 import { expect, runTestAsAdmin } from "../../fixtures/basePage";
 import {
   adminAuthFile,
   createConcept,
-  getFields,
-  getUsers,
   uniqueString,
 } from "../../utils/helpers";
 import EditPage from "../../page-object-model/editPage";
 import DetailPage from "../../page-object-model/detailPage";
 
-const createRandomConcept = async (playwright) => {
+const createRandomConcept = async (playwright: any) => {
   // Create a request context with the admin storage state (includes next-auth cookie)
   const apiRequestContext = await playwright.request.newContext({
     storageState: adminAuthFile,
@@ -27,7 +25,7 @@ const createRandomConcept = async (playwright) => {
       },
     },
     ansvarligVirksomhet: {
-      id: null,
+      id: "Ansvarligvirksomhet",
     },
     definisjon: {
       tekst: {
@@ -61,8 +59,8 @@ const createRandomConcept = async (playwright) => {
       nn: uniqueString("eksempel_nn"),
       en: uniqueString("eksempel_en"),
     },
-    fagområde: null,
-    fagområdeKoder: null,
+    fagområde: undefined,
+    fagområdeKoder: undefined,
     omfang: {
       tekst: "Test omfang",
       uri: "https://test.omfang.no",
@@ -86,9 +84,9 @@ const createRandomConcept = async (playwright) => {
     erstattesAv: [],
     statusURI:
       "http://publications.europa.eu/resource/authority/concept-status/DRAFT",
-    assignedUser: null,
+    assignedUser: undefined,
     begrepsRelasjon: [],
-    interneFelt: null,
+    interneFelt: undefined,
     abbreviatedLabel: "TEST",
   };
 
@@ -160,7 +158,10 @@ runTestAsAdmin(
 
     // Change anbefalt term and definition to create unsaved changes
     await editPage.fillAnbefaltTermField(newTerm, [], false);
-    await editPage.editDefinition(concept.definisjon, "uten målgruppe");
+    await editPage.editDefinition(
+      concept.definisjon as Definisjon,
+      "uten målgruppe",
+    );
     await editPage.fillDefinitionField(newDefinition, [], false);
     await editPage.waitForAutoSaveToComplete();
 
@@ -218,7 +219,7 @@ runTestAsAdmin(
     // Verify the form shows original data (not the changed term)
     await editPage.expectAnbefaltTermField(
       "Bokmål",
-      concept.anbefaltTerm.navn.nb as string,
+      concept.anbefaltTerm?.navn.nb as string,
     );
 
     // Refresh again - should not show restore dialog
@@ -306,7 +307,7 @@ runTestAsAdmin(
       .getByLabel("Søk begrep")
       .fill("test");
     await editPage.page.waitForTimeout(100);
-    await editPage.page.getByLabel("Test endringsloggen").first().click();
+    await editPage.page.getByLabel("Test status").first().click();
     await editPage.page.waitForTimeout(100);
     await editPage.page.getByLabel("RelasjonMå fylles ut").click();
     await editPage.page.getByLabel("Se også").click();
@@ -320,7 +321,7 @@ runTestAsAdmin(
     await editPage.clickRestoreButton();
 
     // Verify the relation data was restored by checking if the relation was added
-    await expect(editPage.page.getByText("Test endringsloggen")).toBeVisible();
+    await expect(editPage.page.getByText("Test status")).toBeVisible();
     await expect(editPage.page.getByText("Se også")).toBeVisible();
   },
 );
@@ -472,7 +473,11 @@ runTestAsAdmin(
     await editPage.expectRestoreSuccessMessage();
 
     // Step 3: Revert changes back to original state
-    await editPage.fillAnbefaltTermField(concept.anbefaltTerm.navn, [], false);
+    await editPage.fillAnbefaltTermField(
+      concept.anbefaltTerm?.navn as LocalizedStrings,
+      [],
+      false,
+    );
     // Press tab to trigger onBlur to make sure the autosave is triggered
     await editPage.waitForAutoSaveToComplete();
 
@@ -485,15 +490,15 @@ runTestAsAdmin(
     // Verify the form shows the original data
     await editPage.expectAnbefaltTermField(
       "Bokmål",
-      concept.anbefaltTerm.navn.nb as string,
+      concept.anbefaltTerm?.navn.nb as string,
     );
     await editPage.expectAnbefaltTermField(
       "Nynorsk",
-      concept.anbefaltTerm.navn.nn as string,
+      concept.anbefaltTerm?.navn.nn as string,
     );
     await editPage.expectAnbefaltTermField(
       "Engelsk",
-      concept.anbefaltTerm.navn.en as string,
+      concept.anbefaltTerm?.navn.en as string,
     );
   },
 );
