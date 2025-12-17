@@ -14,6 +14,7 @@ import {
   Tag,
 } from "@digdir/designsystemet-react";
 import {
+  ApplicationProfile,
   Dataset,
   DatasetSeries,
   ISOLanguage,
@@ -116,11 +117,34 @@ export const LeftColumn = ({
         </InfoCard.Item>
       )}
 
-      {dataset?.issued && (
+      {dataset?.issued && !isEmpty(dataset?.issued) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.issued}>
           {formatDateToDDMMYYYY(dataset.issued)}
         </InfoCard.Item>
       )}
+
+      {dataset?.applicationProfile == ApplicationProfile.MOBILITYDCATAP &&
+        hasValues(dataset?.mobilityTheme) && (
+          <InfoCard.Item
+            title={localization.datasetForm.fieldLabel.mobilityTheme}
+          >
+            {
+              <TagList
+                values={dataset.mobilityTheme}
+                getTagText={(item) => {
+                  const match =
+                    referenceData.mobilityThemes &&
+                    referenceData.mobilityThemes.find(
+                      (theme) => theme?.uri === item,
+                    );
+                  return match
+                    ? getTranslateText(match?.label, language)
+                    : item;
+                }}
+              />
+            }
+          </InfoCard.Item>
+        )}
 
       {hasValues(dataset?.euDataTheme) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.euDataTheme}>
@@ -168,6 +192,14 @@ export const LeftColumn = ({
                   referenceDataEnv={referenceDataEnv}
                   openLicenses={referenceData.openLicenses}
                   language={language}
+                  mobilityDataStandard={referenceData.mobilityDataStandards.find(
+                    (mobilityDataStandard) =>
+                      mobilityDataStandard?.uri === dist.mobilityDataStandard,
+                  )}
+                  rights={referenceData.mobilityRights.find(
+                    (mobilityRights) =>
+                      mobilityRights?.uri === dist.rights?.type,
+                  )}
                 />
               ))}
           </div>
@@ -186,6 +218,14 @@ export const LeftColumn = ({
                   referenceDataEnv={referenceDataEnv}
                   openLicenses={referenceData.openLicenses}
                   language={language}
+                  mobilityDataStandard={referenceData.mobilityDataStandards.find(
+                    (mobilityDataStandard) =>
+                      mobilityDataStandard?.uri === dist.mobilityDataStandard,
+                  )}
+                  rights={referenceData.mobilityRights.find(
+                    (mobilityRights) =>
+                      mobilityRights?.uri === dist.rights?.type,
+                  )}
                 />
               ))}
           </div>
@@ -225,13 +265,13 @@ export const LeftColumn = ({
         </InfoCard.Item>
       )}
 
-      {dataset?.temporal && (
+      {dataset?.temporal && !isEmpty(dataset?.temporal) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.temporal}>
           <TemporalDetails temporal={dataset?.temporal} />
         </InfoCard.Item>
       )}
 
-      {dataset?.type && (
+      {dataset?.type && !isEmpty(dataset?.type) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.type}>
           <ReferenceDataTags
             values={dataset?.type}
@@ -268,10 +308,9 @@ export const LeftColumn = ({
 
             {hasValues(dataset?.currentness?.hasBody) && (
               <div>
-                <Heading
-                  level={3}
-                  size="2xs"
-                >{`${localization.datasetForm.fieldLabel.currentness}`}</Heading>
+                <Heading level={3} size="2xs">
+                  {localization.datasetForm.fieldLabel.currentness}
+                </Heading>
                 <Paragraph size="sm">
                   {getTranslateText(dataset?.currentness?.hasBody, language)}
                 </Paragraph>
@@ -281,7 +320,7 @@ export const LeftColumn = ({
         </InfoCard.Item>
       )}
 
-      {dataset?.conformsTo && (
+      {!isEmpty(dataset?.conformsTo) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.conformsTo}>
           <UriWithLabelTable values={dataset?.conformsTo} language={language} />
         </InfoCard.Item>
@@ -472,7 +511,7 @@ export const LeftColumn = ({
           </Table>
         </InfoCard.Item>
       )}
-      {dataset?.keywords && (
+      {!isEmpty(dataset?.keywords) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.keywords}>
           <li className={styles.list}>
             {keywordLanguages.map((lang) => {
@@ -517,7 +556,7 @@ export const LeftColumn = ({
                           href={getDataNorgeUri(match.id, "information-models")}
                         >
                           {getTranslateText(match?.title, language) ||
-                            localization.noTitleAvailable}
+                            localization.datasetForm.errors.noTitleAvailable}
                         </Link>
                       </Table.Cell>
                       <Table.Cell>
@@ -530,7 +569,10 @@ export const LeftColumn = ({
                   ) : (
                     <Table.Row key={`missing-item-${index}`}>
                       <Table.Cell>
-                        {localization.noInformationModelFound}
+                        {
+                          localization.datasetForm.errors
+                            .noInformationModelFound
+                        }
                       </Table.Cell>
                       <Table.Cell>{item}</Table.Cell>
                     </Table.Row>

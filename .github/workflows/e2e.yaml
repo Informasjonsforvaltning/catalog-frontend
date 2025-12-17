@@ -57,7 +57,7 @@ jobs:
           yarn install --no-immutable
 
       - name: Caching Nx
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: node_modules/.cache
           key: cache-nx-${{ hashFiles('yarn.lock') }}

@@ -118,7 +118,15 @@ export const ServiceForm = (props: ServiceFormProps) => {
     useState<SnackbarSeverity>("success");
   const [snackbarFadeIn, setSnackbarFadeIn] = useState(true);
 
-  const showSnackbarMessage = ({ message, severity, fadeIn = true }: any) => {
+  const showSnackbarMessage = ({
+    message,
+    severity,
+    fadeIn = true,
+  }: {
+    message: string;
+    severity: SnackbarSeverity;
+    fadeIn?: boolean;
+  }) => {
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarFadeIn(fadeIn);

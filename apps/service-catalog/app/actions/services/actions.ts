@@ -105,7 +105,7 @@ export async function deleteService(catalogId: string, serviceId: string) {
     }
     success = true;
   } catch (error) {
-    throw new Error(localization.alert.deleteFail);
+    throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
       revalidateTag("services");
