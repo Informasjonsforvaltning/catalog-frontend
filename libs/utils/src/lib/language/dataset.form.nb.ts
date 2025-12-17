@@ -249,12 +249,10 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     standardDataset: {
       title: "Standard datasett",
       description: "Bruker DCAT-AP-NO-spesifikasjonen",
-      button: "Standard datasett",
     },
     mobilityDataset: {
-      title: "Datasett for mobilitet og transport",
-      description: "Bruker MobilityDCAT-AP-spesifikasjonen",
-      button: "Datasett for mobilitet og transport",
+      title: "Datasett for veg, transport og mobilitet",
+      description: "Bruker mobilityDCAT-AP-spesifikasjonen",
     },
   },
   errors: {
