@@ -1,18 +1,13 @@
 import { Dataset } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
-import {
-  containsNonNumberRegex,
-  localization,
-  onlyNumbersRegex,
-} from "@catalog-frontend/utils";
+import { TitleWithHelpTextAndTag, useDebounce } from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
 import { Box, Combobox, Fieldset } from "@digdir/designsystemet-react";
 import {
   useSearchEnheter,
   useSearchEnheterByOrgNmbs,
 } from "../../../hooks/useEnhetsregister";
 import { useFormikContext } from "formik";
-import { debounce } from "lodash";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 export const QualifiedAttributionsSection = ({
   ref,
@@ -22,21 +17,12 @@ export const QualifiedAttributionsSection = ({
   const { setFieldValue, values } = useFormikContext<Dataset>();
 
   const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchTerm = useDebounce(searchTerm);
   const { data: selectedEnheter } = useSearchEnheterByOrgNmbs(
     values.qualifiedAttributions,
   );
-  const { data: enheter, isLoading: searching } = useSearchEnheter(searchTerm);
-
-  const debouncedSearch = useCallback(
-    debounce((term: string) => {
-      const isOnlyNumbers = onlyNumbersRegex.test(term);
-      const hasNonNumber = containsNonNumberRegex.test(term);
-      if (isOnlyNumbers || hasNonNumber) {
-        setSearchTerm(term);
-      }
-    }, 300),
-    [searchTerm],
-  );
+  const { data: enheter, isLoading: searching } =
+    useSearchEnheter(debouncedSearchTerm);
 
   const comboboxOptions = [
     ...new Map(
@@ -75,7 +61,9 @@ export const QualifiedAttributionsSection = ({
           onValueChange={(selectedValues: string[]) =>
             setFieldValue("qualifiedAttributions", selectedValues)
           }
-          onChange={(input: any) => debouncedSearch(input.target.value)}
+          onChange={(input: React.ChangeEvent<HTMLInputElement>) =>
+            setSearchTerm(input.target.value)
+          }
           loading={searching}
           multiple
           value={values.qualifiedAttributions}
