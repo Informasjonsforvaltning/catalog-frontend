@@ -46,7 +46,10 @@ export const NewDatasetModal = ({
                 className={style.selectButton}
               >
                 <Link href={`/catalogs/${catalogId}/datasets/new`}>
-                  {localization.datasetForm.datasetTypeModal.selectButton}
+                  {
+                    localization.datasetForm.datasetTypeModal.standardDataset
+                      .button
+                  }
                 </Link>
               </Button>
             </Box>
@@ -70,7 +73,10 @@ export const NewDatasetModal = ({
                 className={style.selectButton}
               >
                 <Link href={`/catalogs/${catalogId}/datasets/new-transport`}>
-                  {localization.datasetForm.datasetTypeModal.selectButton}
+                  {
+                    localization.datasetForm.datasetTypeModal.mobilityDataset
+                      .button
+                  }
                 </Link>
               </Button>
             </Box>
