@@ -10,14 +10,14 @@ import {
 import styles from "./datasets-page.module.css";
 import {
   HelpMarkdown,
-  LinkButton,
+  NewDatasetModal,
   SearchField,
   SearchHit,
   SearchHitContainer,
   SearchHitsLayout,
   Select,
 } from "@catalog-frontend/ui";
-import { Chip, Tag } from "@digdir/designsystemet-react";
+import { Button, Chip, Tag } from "@digdir/designsystemet-react";
 import {
   dateStringToDate,
   formatDate,
@@ -346,25 +346,15 @@ const DatasetsPageClient = ({
             </div>
             <div className={styles.buttons}>
               {hasWritePermission && (
-                <>
-                  <LinkButton
-                    variant="primary"
-                    href={`/catalogs/${catalogId}/datasets/new`}
-                  >
-                    <PlusCircleIcon fontSize="1.2rem" />
-                    {localization.datasetForm.button.addDataset}
-                  </LinkButton>
-                  {/* 
-                  <NewDatasetModal
-                    catalogId={catalogId}
-                    trigger={
-                      <Button variant="primary" size="sm">
-                        <PlusCircleIcon fontSize="1.2rem" />
-                        {localization.datasetForm.button.addDataset}
-                      </Button>
-                    }
-                  />*/}
-                </>
+                <NewDatasetModal
+                  catalogId={catalogId}
+                  trigger={
+                    <Button variant="primary" size="sm">
+                      <PlusCircleIcon fontSize="1.2rem" />
+                      {localization.datasetForm.button.addDataset}
+                    </Button>
+                  }
+                />
               )}
             </div>
           </div>

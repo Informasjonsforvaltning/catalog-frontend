@@ -102,9 +102,9 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
     mobilityDataStandard:
       "Standard for distribusjonen av datasettet. Velges fra [EUs kontrollerte vokabular for Mobility Data Standard.](https://w3id.org/mobilitydcat-ap/mobility-data-standard)",
     applicationProfileMobilityDcat:
-      "Mobility-DCAT er en utvidelse av DCAT-AP-standarden. Den retter seg spesifikt mot datasett relatert til transport og samferdel.",
+      "mobilityDCAT-AP er en standard for å beskrive datasett med veg-, transport- og mobilitetsdata.",
     applicationProfileDcat:
-      "DCAT-AP-NO-standarden er den norske versjonen av DCAT-AP. Dette er en standard for beskrivelser av alle typer datasett.",
+      "DCAT-AP-NO er en standard for å beskrive alle typer datasett.",
     datasetApplicationProfile: "Standarder for datasettbeskrivelser,",
   },
   heading: {
@@ -244,17 +244,17 @@ Dersom man velger en åpen lisens, vil datasettet bli merket med "Åpne data".`,
   },
   datasetTypeModal: {
     title: "Legg til datasett",
-    intro: "Vennligst velg hvilken type datasett du vil registrere:",
+    intro: "Velg standard for datasettbeskrivelse:",
     selectButton: "Velg",
     standardDataset: {
-      title: "Standard datasett",
-      description: "Bruker DCAT-AP-NO-spesifikasjonen",
-      button: "Standard datasett",
+      title: "DCAT-AP-NO",
+      description: "Brukes for standard datasett",
+      button: "Velg DCAT-AP-NO",
     },
     mobilityDataset: {
-      title: "Datasett for mobilitet og transport",
-      description: "Bruker MobilityDCAT-AP-spesifikasjonen",
-      button: "Datasett for mobilitet og transport",
+      title: "mobilityDCAT-AP",
+      description: "Brukes for datasett for veg, transport og mobilitet",
+      button: "Velg mobilityDCAT-AP",
     },
   },
   errors: {
