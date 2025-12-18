@@ -10,7 +10,7 @@ export default class LoginPage {
   constructor(
     page: Page,
     context: BrowserContext,
-    accessibilityBuilder?: AxeBuilder,
+    accessibilityBuilder: AxeBuilder,
   ) {
     this.page = page;
     this.context = context;

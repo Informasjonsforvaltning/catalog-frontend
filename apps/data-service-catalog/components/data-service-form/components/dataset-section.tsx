@@ -7,14 +7,13 @@ import {
 } from "@catalog-frontend/utils";
 import { Box, Combobox, Fieldset } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
-import { debounce } from "lodash";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import styles from "../data-service-form.module.css";
 import {
   useSearchDatasetsByUri,
   useSearchDatasetSuggestions,
 } from "../../../hooks/useSearchService";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import { TitleWithHelpTextAndTag, useDebounce } from "@catalog-frontend/ui";
 
 interface Props {
   searchEnv: string;
@@ -23,9 +22,9 @@ interface Props {
 export const DatasetSection = ({ searchEnv }: Props) => {
   const { setFieldValue, values } = useFormikContext<DataService>();
   const [searchTerm, setSearchTerm] = useState<string>("");
-
+  const debouncedSearchTerm = useDebounce(searchTerm);
   const { data: datasetSuggestions, isLoading: searching } =
-    useSearchDatasetSuggestions(searchEnv, searchTerm);
+    useSearchDatasetSuggestions(searchEnv, debouncedSearchTerm);
   const { data: selectedDatasets, isLoading } = useSearchDatasetsByUri(
     searchEnv,
     values.servesDataset || [],
@@ -53,13 +52,6 @@ export const DatasetSection = ({ searchEnv }: Props) => {
     ).values(),
   ];
 
-  const debouncedSearch = useCallback(
-    debounce((term: string) => {
-      setSearchTerm(term);
-    }, 300),
-    [],
-  );
-
   return (
     <Box>
       {!isLoading && (
@@ -80,7 +72,9 @@ export const DatasetSection = ({ searchEnv }: Props) => {
             onValueChange={(selectedValues: string[]) =>
               setFieldValue("servesDataset", selectedValues)
             }
-            onChange={(input: any) => debouncedSearch(input.target.value)}
+            onChange={(input: React.ChangeEvent<HTMLInputElement>) =>
+              setSearchTerm(input.target.value)
+            }
             loading={searching}
             multiple
             hideClearButton

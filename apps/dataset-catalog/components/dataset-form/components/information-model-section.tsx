@@ -1,6 +1,6 @@
 "use client";
 import { Dataset } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import { TitleWithHelpTextAndTag, useDebounce } from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
   getTranslateText,
@@ -12,8 +12,7 @@ import {
   useSearchInformationModelsSuggestions,
 } from "../../../hooks/useSearchService";
 import { useFormikContext } from "formik";
-import { debounce } from "lodash";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import styles from "../dataset-form.module.css";
 import { UriWithLabelFieldsetTable } from "./uri-with-label-field-set-table";
 
@@ -24,9 +23,9 @@ interface Props {
 export const InformationModelSection = ({ searchEnv }: Props) => {
   const { setFieldValue, errors, values } = useFormikContext<Dataset>();
   const [searchTerm, setSearchTerm] = useState<string>("");
-
+  const debouncedSearchTerm = useDebounce(searchTerm);
   const { data: informationModelSuggestions, isLoading: searching } =
-    useSearchInformationModelsSuggestions(searchEnv, searchTerm);
+    useSearchInformationModelsSuggestions(searchEnv, debouncedSearchTerm);
   const { data: selectedInformationModels, isLoading } =
     useSearchInformationModelsByUri(
       searchEnv,
@@ -55,13 +54,6 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
     ).values(),
   ];
 
-  const debouncedSearch = useCallback(
-    debounce((term: string) => {
-      setSearchTerm(term);
-    }, 300),
-    [],
-  );
-
   return (
     <>
       {!isLoading && (
@@ -82,7 +74,9 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
             onValueChange={(selectedValues: string[]) =>
               setFieldValue("informationModelsFromFDK", selectedValues)
             }
-            onChange={(input: any) => debouncedSearch(input.target.value)}
+            onChange={(input: React.ChangeEvent<HTMLInputElement>) =>
+              setSearchTerm(input.target.value)
+            }
             loading={searching}
             multiple
             hideClearButton

@@ -32,7 +32,7 @@ runTestAsAdmin(
         },
       },
       ansvarligVirksomhet: {
-        id: null,
+        id: "AnsvarligVirksomhet",
       },
       definisjon: {
         tekst: {
@@ -67,8 +67,8 @@ runTestAsAdmin(
         nn: "Eksempel test concept 2 nn",
         en: "Eksempel test concept 2 en",
       },
-      fagområde: null,
-      fagområdeKoder: null,
+      fagområde: undefined,
+      fagområdeKoder: undefined,
       omfang: {
         tekst: "Omfang concept 2",
         uri: "https://omfang.concept2.no",
@@ -92,9 +92,9 @@ runTestAsAdmin(
       erstattesAv: [],
       statusURI:
         "http://publications.europa.eu/resource/authority/concept-status/CURRENT",
-      assignedUser: null,
+      assignedUser: undefined,
       begrepsRelasjon: [],
-      interneFelt: null,
+      interneFelt: undefined,
       abbreviatedLabel: "TC2",
     };
 
@@ -196,7 +196,7 @@ runTestAsAdmin(
             } else if (field.type === "code_list") {
               //TODO
             } else if (field.type === "user_list") {
-              acc[field.id] = { value: randomUser?.id };
+              acc[field.id] = { value: randomUser?.id as string };
             }
             return acc;
           },
@@ -264,7 +264,7 @@ runTestAsAdmin(
         },
       },
       ansvarligVirksomhet: {
-        id: null,
+        id: "AnsvarligVirksomhet",
       },
       definisjon: {
         tekst: {
@@ -298,8 +298,8 @@ runTestAsAdmin(
         nn: "Eksempel test concept for self-relation nn",
         en: "Eksempel test concept for self-relation en",
       },
-      fagområde: null,
-      fagområdeKoder: null,
+      fagområde: undefined,
+      fagområdeKoder: undefined,
       omfang: {
         tekst: "Omfang concept for self-relation",
         uri: "https://omfang.concept.self-relation.no",
@@ -323,9 +323,9 @@ runTestAsAdmin(
       erstattesAv: [],
       statusURI:
         "http://publications.europa.eu/resource/authority/concept-status/CURRENT",
-      assignedUser: null,
+      assignedUser: undefined,
       begrepsRelasjon: [],
-      interneFelt: null,
+      interneFelt: undefined,
       abbreviatedLabel: "TCSELF",
     };
 
@@ -357,7 +357,7 @@ runTestAsAdmin(
     await conceptsPage.page
       .getByRole("group", { name: "Relatert begrep" })
       .getByLabel("Søk begrep")
-      .fill(concept.anbefaltTerm.navn.nb);
+      .fill(concept.anbefaltTerm?.navn.nb);
     await conceptsPage.page.waitForTimeout(100);
 
     console.log(
@@ -369,11 +369,10 @@ runTestAsAdmin(
 
     // Check that the current concept's name is not in the search results
     // We need to get the actual concept name that was generated
-    const conceptName = concept.anbefaltTerm.navn.nb;
-    const currentConceptOption = conceptsPage.page.getByRole("option", {
-      name: conceptName,
+    const matchingOptions = conceptsPage.page.getByRole("option", {
+      name: concept.anbefaltTerm?.navn.nb,
     });
-    await expect(currentConceptOption).not.toBeVisible();
+    await expect(matchingOptions).toHaveCount(0);
 
     console.log(
       "[TEST] Test completed: test that it should not be possible to make a relation to itself",
@@ -403,7 +402,7 @@ runTestAsAdmin(
         },
       },
       ansvarligVirksomhet: {
-        id: null,
+        id: `Ansvarligvirksomhet`,
       },
       definisjon: {
         tekst: {
@@ -437,8 +436,8 @@ runTestAsAdmin(
         nn: "Eksempel test concept for URL validation nn",
         en: "Eksempel test concept for URL validation en",
       },
-      fagområde: null,
-      fagområdeKoder: null,
+      fagområde: undefined,
+      fagområdeKoder: undefined,
       omfang: {
         tekst: "Omfang for URL validation test",
         uri: "https://omfang.url-validation.no",
@@ -462,9 +461,9 @@ runTestAsAdmin(
       erstattesAv: [],
       statusURI:
         "http://publications.europa.eu/resource/authority/concept-status/CURRENT",
-      assignedUser: null,
+      assignedUser: undefined,
       begrepsRelasjon: [],
-      interneFelt: null,
+      interneFelt: undefined,
       abbreviatedLabel: "TCURL",
     };
 
@@ -487,8 +486,10 @@ runTestAsAdmin(
       .getByRole("button", { name: "Allmennheten" })
       .click();
 
-    // Wait for the definition modal to appear
-    await conceptsPage.page.waitForTimeout(500);
+    // Wait for the definition dialog to appear
+    await conceptsPage.page
+      .getByRole("dialog")
+      .waitFor({ state: "visible", timeout: 5000 });
 
     await conceptsPage.editPage.fillLanguageField(
       { nb: "Min definisjon nb" },
@@ -525,8 +526,10 @@ runTestAsAdmin(
       .getByRole("button", { name: "Legg til definisjon" })
       .click();
 
-    await expect(uriError).not.toBeVisible();
-    await expect(conceptsPage.page.getByRole("dialog")).not.toBeVisible();
+    await uriError.waitFor({ state: "hidden", timeout: 5000 });
+    await conceptsPage.page
+      .getByRole("dialog")
+      .waitFor({ state: "hidden", timeout: 5000 });
 
     // Value range link (omfang.uri) - HTTP should be rejected on form submission
     console.log("[TEST] Testing value range link with HTTP URL...");
@@ -548,7 +551,7 @@ runTestAsAdmin(
     await conceptsPage.page.getByLabel("Lenke til referanse").blur();
 
     // The error should disappear immediately for modal fields
-    await expect(uriError).not.toBeVisible();
+    await uriError.waitFor({ state: "hidden", timeout: 5000 });
 
     // Try to save again - should work now with valid HTTPS URLs
     console.log("[TEST] Attempting to save form with valid HTTPS URLs...");

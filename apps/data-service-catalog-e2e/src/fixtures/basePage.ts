@@ -3,13 +3,14 @@ import HomePage from "../page-object-model/homePage";
 import LoginPage from "../page-object-model/loginPage";
 import DataServicesPage from "../page-object-model/dataServicesPage";
 import { adminAuthFile, generateAccessibilityBuilder } from "../utils/helpers";
+import AxeBuilder from "@axe-core/playwright";
 
 const PREFIX_TEXT = "data-service-catalog: ";
 export const test = base.extend<{
-  loginPage: any;
-  homePage: any;
-  dataServicesPage: any;
-  accessibilityBuilder: any;
+  loginPage: LoginPage;
+  homePage: HomePage;
+  dataServicesPage: DataServicesPage;
+  accessibilityBuilder: AxeBuilder;
 }>({
   accessibilityBuilder: async ({ page }, use) => {
     const builder = await generateAccessibilityBuilder(page);
@@ -33,11 +34,11 @@ export const test = base.extend<{
   },
 });
 
-export const runTest = (name: string, fn: (any) => void) => {
+export const runTest = (name: string, fn: (e: any) => void) => {
   test(PREFIX_TEXT + name, fn);
 };
 
-export const runTestAsAdmin = (name: string, fn: (any) => void) => {
+export const runTestAsAdmin = (name: string, fn: (e: any) => void) => {
   test.use({ storageState: adminAuthFile });
   runTest(name, fn);
 };

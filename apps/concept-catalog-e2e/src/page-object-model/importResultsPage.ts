@@ -1,4 +1,9 @@
-import { expect, Page, BrowserContext } from "@playwright/test";
+import {
+  expect,
+  Page,
+  BrowserContext,
+  APIRequestContext,
+} from "@playwright/test";
 import type AxeBuilder from "@axe-core/playwright";
 import { deleteAllImportResults } from "../utils/helpers";
 import { localization } from "@catalog-frontend/utils";
@@ -12,7 +17,7 @@ export default class ImportResultsPage {
   constructor(
     page: Page,
     context: BrowserContext,
-    accessibilityBuilder?: AxeBuilder,
+    accessibilityBuilder: AxeBuilder,
   ) {
     this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/concepts/import-results`;
     this.page = page;
@@ -47,7 +52,8 @@ export default class ImportResultsPage {
         localization.importResult.completed +
         "' filter to be invisible...",
     );
-    await expect(this.statusFilterSuccessfulLocator()).not.toBeVisible({
+    await this.statusFilterSuccessfulLocator().waitFor({
+      state: "hidden",
       timeout: 20000,
     });
 
@@ -56,7 +62,8 @@ export default class ImportResultsPage {
         localization.importResult.failed +
         "' filter to be invisible...",
     );
-    await expect(this.statusFilterFailedLocator()).not.toBeVisible({
+    await this.statusFilterFailedLocator().waitFor({
+      state: "hidden",
       timeout: 20000,
     });
 
@@ -65,7 +72,8 @@ export default class ImportResultsPage {
         localization.importResult.inProgress +
         "' filter to be invisible...",
     );
-    await expect(this.statusFilterOngoingLocator()).not.toBeVisible({
+    await this.statusFilterOngoingLocator().waitFor({
+      state: "hidden",
       timeout: 20000,
     });
 
@@ -74,7 +82,8 @@ export default class ImportResultsPage {
         localization.importResult.cancelled +
         "' filter to be invisible...",
     );
-    await expect(this.statusFilterCancelledLocator()).not.toBeVisible({
+    await this.statusFilterCancelledLocator().waitFor({
+      state: "hidden",
       timeout: 20000,
     });
 
@@ -83,16 +92,18 @@ export default class ImportResultsPage {
         localization.importResult.pendingConfirmation +
         "' filter to be invisible...",
     );
-    await expect(this.statusFilterPendingConfirmationLocator()).not.toBeVisible(
-      { timeout: 20000 },
-    );
+    await this.statusFilterPendingConfirmationLocator().waitFor({
+      state: "hidden",
+      timeout: 20000,
+    });
 
     console.log(
       "[Test] Expecting '" +
         localization.importResult.partiallyCompleted +
         "' filter to be invisible...",
     );
-    await expect(this.statusFilterPartiallyCompletedLocator()).not.toBeVisible({
+    await this.statusFilterPartiallyCompletedLocator().waitFor({
+      state: "hidden",
       timeout: 20000,
     });
   }
@@ -192,7 +203,7 @@ export default class ImportResultsPage {
     );
   }
 
-  async deleteAllImportResults(apiRequestContext) {
+  async deleteAllImportResults(apiRequestContext: APIRequestContext) {
     await deleteAllImportResults(apiRequestContext);
   }
 }

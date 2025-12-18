@@ -29,7 +29,7 @@ export default class DataServiceDetailPage {
   constructor(
     page: Page,
     context: BrowserContext,
-    accessibilityBuilder?: AxeBuilder,
+    accessibilityBuilder: AxeBuilder,
   ) {
     this.page = page;
     this.context = context;
@@ -69,7 +69,6 @@ export default class DataServiceDetailPage {
           `/catalogs/${catalogId}/data-services/${dataServiceId}`,
         );
 
-        // Wait for the page to be fully loaded
         await this.page.waitForLoadState("networkidle");
 
         // Check if we're on a 404 page by looking for the title element
@@ -99,7 +98,6 @@ export default class DataServiceDetailPage {
         if (retryCount >= maxRetries) {
           throw error;
         }
-        await this.page.waitForTimeout(1000);
       }
     }
 
@@ -221,7 +219,7 @@ export default class DataServiceDetailPage {
   }
 
   async expectConfirmModalNotVisible() {
-    await expect(this.confirmModal).not.toBeVisible();
+    await this.confirmModal.waitFor({ state: "hidden", timeout: 5000 });
   }
 
   // Accessibility

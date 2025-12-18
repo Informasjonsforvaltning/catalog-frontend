@@ -1,4 +1,9 @@
-import { expect, Page, BrowserContext } from "@playwright/test";
+import {
+  expect,
+  Page,
+  BrowserContext,
+  APIRequestContext,
+} from "@playwright/test";
 import type AxeBuilder from "@axe-core/playwright";
 import { Concept } from "@catalog-frontend/types";
 import DetailPage from "./detailPage";
@@ -22,7 +27,7 @@ export default class ConceptsPage {
   constructor(
     page: Page,
     context: BrowserContext,
-    accessibilityBuilder?: AxeBuilder,
+    accessibilityBuilder: AxeBuilder,
   ) {
     this.url = `/catalogs/${process.env.E2E_CATALOG_ID}/concepts`;
     this.page = page;
@@ -114,11 +119,14 @@ export default class ConceptsPage {
     expect(items.length).toBe(0);
   }
 
-  public async createConceptUsingForm(concept, apiRequestContext) {
+  public async createConceptUsingForm(
+    concept: Concept,
+    apiRequestContext: APIRequestContext,
+  ) {
     await this.goto();
 
     console.log(
-      `Create new concept with title ${concept.anbefaltTerm.navn.nb}`,
+      `Create new concept with title ${concept.anbefaltTerm?.navn.nb}`,
     );
 
     // Name and description
@@ -148,7 +156,7 @@ export default class ConceptsPage {
     notExpected: Concept[] = [],
   ) {
     for (const concept of expected) {
-      const nbName = concept.anbefaltTerm.navn.nb as string;
+      const nbName = concept.anbefaltTerm?.navn.nb as string;
       // Expect to find the concept
       await expect(this.page.getByText(nbName, { exact: true })).toBeVisible({
         timeout: 5000,
@@ -156,7 +164,7 @@ export default class ConceptsPage {
     }
 
     for (const concept of notExpected) {
-      const nbName = concept.anbefaltTerm.navn.nb as string;
+      const nbName = concept.anbefaltTerm?.navn.nb as string;
       // Expect not to find the concept
       await expect(this.page.getByText(nbName, { exact: true })).toHaveCount(0);
     }
@@ -189,7 +197,7 @@ export default class ConceptsPage {
     await this.publishedStateFilterNotPublishedLocator().uncheck();
   }
 
-  public async filterStatus(status: string) {
+  public async filterStatus(status: ConceptStatus) {
     const statusMap: {
       [key in ConceptStatus]: () => ReturnType<Page["getByLabel"]>;
     } = {
@@ -279,9 +287,9 @@ export default class ConceptsPage {
         .click();
       await this.page.getByText("Preferences").click();
       await this.page.getByRole("button", { name: "Hide" }).click();
-      await expect(
-        this.page.getByRole("button", { name: "Open Next.js Dev Tools" }),
-      ).not.toBeVisible();
+      await this.page
+        .getByRole("button", { name: "Open Next.js Dev Tools" })
+        .waitFor({ state: "hidden", timeout: 5000 });
     }
   }
 

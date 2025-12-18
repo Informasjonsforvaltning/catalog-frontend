@@ -7,10 +7,10 @@ import { adminAuthFile, generateAccessibilityBuilder } from "../utils/helpers";
 
 const PREFIX_TEXT = "service-catalog: ";
 export const test = base.extend<{
-  loginPage: any;
-  homePage: any;
-  servicesPage: any;
-  publicServicesPage: any;
+  loginPage: LoginPage;
+  homePage: HomePage;
+  servicesPage: ServicesPage;
+  publicServicesPage: PublicServicesPage;
 }>({
   loginPage: async ({ page, context }, use) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
@@ -38,11 +38,11 @@ export const test = base.extend<{
   },
 });
 
-export const runTest = (name: string, fn: (any) => void) => {
+export const runTest = (name: string, fn: (e: any) => void) => {
   test(PREFIX_TEXT + name, fn);
 };
 
-export const runTestAsAdmin = (name: string, fn: (any) => void) => {
+export const runTestAsAdmin = (name: string, fn: (e: any) => void) => {
   test.use({ storageState: adminAuthFile });
   runTest(name, fn);
 };

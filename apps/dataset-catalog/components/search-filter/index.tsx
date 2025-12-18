@@ -8,6 +8,7 @@ import {
   CheckboxGroupFilter,
 } from "@catalog-frontend/ui";
 import {
+  ApplicationProfile,
   DatasetsPageSettings,
   PublicationStatus,
 } from "@catalog-frontend/types";
@@ -39,6 +40,10 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
     () => pageSettings?.filter?.pubState ?? [],
     [],
   );
+  const defaultFilterApplicationProfile = useMemo(
+    () => pageSettings?.filter?.applicationProfile ?? [],
+    [],
+  );
 
   const [filterStatus, setFilterStatus] = useQueryState(
     "datasetFilter.status",
@@ -47,6 +52,10 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
     "datasetFilter.pubState",
     parseAsArrayOf(parseAsString).withDefault(defaultFilterPublicationState),
+  );
+  const [filterApplicationProfile, setFilterApplicationProfile] = useQueryState(
+    "datasetFilter.applicationProfile",
+    parseAsArrayOf(parseAsString).withDefault(defaultFilterApplicationProfile),
   );
 
   const statusItems =
@@ -63,12 +72,29 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
     { value: "UNPUBLISH", label: localization.publicationState.unpublished },
   ];
 
+  const applicationProfileItems = [
+    {
+      value: ApplicationProfile.MOBILITYDCATAP,
+      label: localization.tag.mobilityDcatAp,
+    },
+    {
+      value: ApplicationProfile.DCATAPNO,
+      label: localization.tag.dcatApNo,
+    },
+  ];
+
   const handleStatusOnChange = (names: string[]) => {
     setFilterStatus(names.map((name) => name));
   };
 
   const handlePublicationOnChange = (names: string[]) => {
     setFilterPublicationState(names.map((name) => name as PublishedFilterType));
+  };
+
+  const handleApplicationProfileOnChange = (names: string[]) => {
+    setFilterApplicationProfile(
+      names.map((name) => name as ApplicationProfile),
+    );
   };
 
   const accordionItemContents: AccordionItemProps[] = [
@@ -103,6 +129,17 @@ const SearchFilter = ({ pageSettings }: SearchFilterProps) => {
             value={filterPublicationState ?? []}
           />
         </>
+      ),
+    },
+    {
+      initiallyOpen: true,
+      header: localization.tag.applicationProfile,
+      content: (
+        <CheckboxGroupFilter
+          items={applicationProfileItems}
+          onChange={handleApplicationProfileOnChange}
+          value={filterApplicationProfile ?? []}
+        />
       ),
     },
   ];

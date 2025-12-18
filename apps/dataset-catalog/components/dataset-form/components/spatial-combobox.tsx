@@ -1,4 +1,4 @@
-import { TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import { TitleWithHelpTextAndTag, useDebounce } from "@catalog-frontend/ui";
 import { localization, getTranslateText } from "@catalog-frontend/utils";
 import { Combobox, Fieldset } from "@digdir/designsystemet-react";
 import { Dataset, ReferenceDataCode } from "@catalog-frontend/types";
@@ -6,9 +6,8 @@ import {
   useSearchAdministrativeUnits,
   useSearchAdministrativeUnitsByUri,
 } from "../../../hooks/useReferenceDataSearch";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { useFormikContext } from "formik";
-import { debounce } from "lodash";
 
 interface Props {
   referenceDataEnv: string;
@@ -17,8 +16,9 @@ interface Props {
 
 export const SpatialCombobox = ({ referenceDataEnv, isMobility }: Props) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const debouncedSearchTerm = useDebounce(searchTerm);
   const { data: searchHits, isLoading: isSearching } =
-    useSearchAdministrativeUnits(searchTerm, referenceDataEnv);
+    useSearchAdministrativeUnits(debouncedSearchTerm, referenceDataEnv);
   const { values, errors, setFieldValue } = useFormikContext<Dataset>();
   const { data: selectedValues } = useSearchAdministrativeUnitsByUri(
     values?.spatial,
@@ -56,15 +56,6 @@ export const SpatialCombobox = ({ referenceDataEnv, isMobility }: Props) => {
       ].map((item) => [item.uri, item]),
     ).values(),
   ];
-  const debouncedSetSearchTerm = debounce((term: string) => {
-    setSearchTerm(term);
-  }, 300);
-  const handleSearchChange = useCallback(
-    (input: any) => {
-      debouncedSetSearchTerm(input.target.value);
-    },
-    [searchTerm],
-  );
 
   return (
     <>
@@ -90,7 +81,9 @@ export const SpatialCombobox = ({ referenceDataEnv, isMobility }: Props) => {
           hideClearButton
           filter={() => true} // disable filter
           size="sm"
-          onChange={handleSearchChange}
+          onChange={(input: React.ChangeEvent<HTMLInputElement>) =>
+            setSearchTerm(input.target.value)
+          }
           onValueChange={(selectedValues) =>
             setFieldValue("spatial", selectedValues)
           }
