@@ -72,8 +72,8 @@ runTestAsAdmin("test search", async ({ servicesPage, playwright }) => {
       const homepage = `https://${uniqueString(`example${i + 1}`)}.com`;
 
       return {
-        id: null,
-        catalogId: null,
+        id: undefined,
+        catalogId: undefined,
         published: false,
         title: {
           nb: titleNb,
@@ -142,7 +142,7 @@ runTestAsAdmin("test search", async ({ servicesPage, playwright }) => {
   }
 
   await servicesPage.goto();
-  await servicesPage.search(randomServices[0].title.nb);
+  await servicesPage.search(randomServices[0].title?.nb);
   await servicesPage.expectSearchResults(
     [randomServices[0]],
     [randomServices[1], randomServices[2]],
@@ -206,8 +206,8 @@ runTestAsAdmin("test status filter", async ({ servicesPage, playwright }) => {
       const homepage = `https://${uniqueString(`example${i + 1}`)}.com`;
 
       return {
-        id: null,
-        catalogId: null,
+        id: undefined,
+        catalogId: undefined,
         published: false,
         title: {
           nb: titleNb,
@@ -280,14 +280,14 @@ runTestAsAdmin("test status filter", async ({ servicesPage, playwright }) => {
   for (let i = 0; i < randomServices.length; i++) {
     await servicesPage.clearFilters();
     await servicesPage.filterStatus(randomServices[i].status);
-    await servicesPage.search(randomServices[i].title.nb);
+    await servicesPage.search(randomServices[i].title?.nb);
     const otherServices = randomServices.filter((_, idx) => idx !== i);
     await servicesPage.expectSearchResults([randomServices[i]], otherServices);
   }
 
   await servicesPage.clearFilters();
   for (const service of randomServices) {
-    await servicesPage.search(service.title.nb);
+    await servicesPage.search(service.title?.nb);
     await servicesPage.expectSearchResults(
       [service],
       randomServices.filter((s) => s !== service),
@@ -351,8 +351,8 @@ runTestAsAdmin(
         const homepage = `https://${uniqueString(`example${i + 1}`)}.com`;
 
         return {
-          id: null,
-          catalogId: null,
+          id: undefined,
+          catalogId: undefined,
           published: false,
           title: {
             nb: titleNb,
@@ -421,11 +421,11 @@ runTestAsAdmin(
       service.id = id;
     }
 
-    await publishService(apiRequestContext, randomServices[0].id);
+    await publishService(apiRequestContext, randomServices[0].id as string);
 
     await servicesPage.goto();
     await servicesPage.filterPublished();
-    await servicesPage.search(randomServices[0].title.nb);
+    await servicesPage.search(randomServices[0].title?.nb);
     await servicesPage.expectSearchResults(
       [randomServices[0]],
       [randomServices[1], randomServices[2]],
@@ -433,7 +433,7 @@ runTestAsAdmin(
 
     await servicesPage.clearFilters();
     for (const service of randomServices) {
-      await servicesPage.search(service.title.nb);
+      await servicesPage.search(service.title?.nb);
       await servicesPage.expectSearchResults(
         [service],
         randomServices.filter((s) => s !== service),
@@ -442,7 +442,7 @@ runTestAsAdmin(
 
     await servicesPage.filterNotPublished();
     for (const service of [randomServices[1], randomServices[2]]) {
-      await servicesPage.search(service.title.nb);
+      await servicesPage.search(service.title?.nb);
       await servicesPage.expectSearchResults(
         [service],
         randomServices.filter((s) => s !== service),

@@ -52,10 +52,10 @@ const EditDataServicePage = withWriteProtectedPage(
       availabilitiesResponse,
       currenciesResponse,
     ] = await Promise.all([
-      getOpenLicenses().then((res) => res.json()),
-      getDistributionStatuses().then((res) => res.json()),
-      getPlannedAvailabilities().then((res) => res.json()),
-      getCurrencies().then((res) => res.json()),
+      getOpenLicenses(),
+      getDistributionStatuses(),
+      getPlannedAvailabilities(),
+      getCurrencies(),
     ]);
 
     const referenceData = {

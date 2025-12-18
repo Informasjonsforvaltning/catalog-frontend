@@ -1,3 +1,4 @@
+import { Organization } from "@catalog-frontend/types";
 import {
   validateOrganizationNumber,
   validateAndEncodeUrlSafe,
@@ -5,7 +6,7 @@ import {
 
 export const getOrganizations = async (
   organizationIds: string[] | null = null,
-) => {
+): Promise<Organization[]> => {
   let resource;
 
   if (organizationIds === null) {
@@ -31,10 +32,13 @@ export const getOrganizations = async (
     method: "GET",
     cache: "no-cache" as RequestCache,
   };
-  return await fetch(resource, options);
+  const response = await fetch(resource, options);
+  return response.json();
 };
 
-export const getOrganization = async (organizationId: string) => {
+export const getOrganization = async (
+  organizationId: string,
+): Promise<Organization> => {
   validateOrganizationNumber(organizationId, "getOrganization");
   const encodedOrganizationId = validateAndEncodeUrlSafe(
     organizationId,
@@ -51,5 +55,6 @@ export const getOrganization = async (organizationId: string) => {
     method: "GET",
     cache: "no-cache" as RequestCache,
   };
-  return await fetch(resource, options);
+  const response = await fetch(resource, options);
+  return response.json();
 };

@@ -10,7 +10,7 @@ import { getRandomDataService } from "../../utils/dataService";
 
 runTestAsAdmin(
   "should display data service details",
-  async ({ page, context, accessibilityBuilder, playwright }) => {
+  async ({ page, accessibilityBuilder, playwright }) => {
     const apiRequestContext = await playwright.request.newContext({
       storageState: adminAuthFile,
     });
@@ -27,7 +27,7 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
     await dataServiceDetailPage.goto(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -69,7 +69,7 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
     await dataServiceDetailPage.goto(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -83,7 +83,9 @@ runTestAsAdmin(
     );
 
     // Confirm the publish action
-    await page.locator("dialog[open] button").first().click();
+    const confirmBtn = page.locator("dialog[open] button").first();
+    await confirmBtn.waitFor({ state: "visible", timeout: 5000 });
+    await confirmBtn.click();
 
     // Verify modal is no longer visible
     await dataServiceDetailPage.expectConfirmModalNotVisible();
@@ -118,7 +120,7 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
     await dataServiceDetailPage.goto(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -132,7 +134,9 @@ runTestAsAdmin(
     );
 
     // Confirm the unpublish action
-    await page.locator("dialog[open] button").first().click();
+    const confirmBtn2 = page.locator("dialog[open] button").first();
+    await confirmBtn2.waitFor({ state: "visible", timeout: 5000 });
+    await confirmBtn2.click();
 
     // Verify modal is no longer visible
     await dataServiceDetailPage.expectConfirmModalNotVisible();
@@ -164,7 +168,7 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
     await dataServiceDetailPage.goto(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -215,7 +219,7 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
     await dataServiceDetailPage.goto(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -224,7 +228,7 @@ runTestAsAdmin(
 
     // Verify navigation to edit page
     await dataServiceDetailPage.expectDataServiceDetailPageUrl(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -252,7 +256,7 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
     await dataServiceDetailPage.goto(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -274,7 +278,9 @@ runTestAsAdmin(
     );
 
     // Confirm the delete action
-    await page.locator("dialog[open] button").first().click();
+    const confirmBtn3 = page.locator("dialog[open] button").first();
+    await confirmBtn3.waitFor({ state: "visible", timeout: 5000 });
+    await confirmBtn3.click();
 
     // Should redirect to data services list
     await expect(page).toHaveURL(/\/catalogs\/.*\/data-services/);
@@ -300,7 +306,7 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
     await dataServiceDetailPage.goto(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -318,7 +324,7 @@ runTestAsAdmin(
 
     // Verify we're still on the detail page
     await dataServiceDetailPage.expectDataServiceDetailPageUrl(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
@@ -346,13 +352,13 @@ runTestAsAdmin(
       accessibilityBuilder,
     );
     await dataServiceDetailPage.goto(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 
     // Verify correct URL structure
     await dataServiceDetailPage.expectDataServiceDetailPageUrl(
-      process.env.E2E_CATALOG_ID,
+      process.env.E2E_CATALOG_ID as string,
       createdDataService.id,
     );
 

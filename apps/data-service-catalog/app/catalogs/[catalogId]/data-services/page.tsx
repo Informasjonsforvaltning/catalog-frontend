@@ -26,9 +26,9 @@ const DataServicesSearchHits = withReadProtectedPage(
     }
     const dataServices: DataService[] = await getDataServices(catalogId);
 
-    const distributionStatuses = await getDistributionStatuses()
-      .then((response) => response.json())
-      .then((body) => body?.distributionStatuses ?? []);
+    const distributionStatuses = await getDistributionStatuses().then(
+      (body) => body?.distributionStatuses ?? [],
+    );
 
     const cookieStore = await cookies();
     const pageSettings = getServerDataServicesPageSettings(cookieStore);

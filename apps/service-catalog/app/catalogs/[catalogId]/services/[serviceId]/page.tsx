@@ -36,12 +36,10 @@ export default async function ServiceDetailsPage({
   if (!service) {
     return redirect(`/notfound`, RedirectType.replace);
   }
-  const organization: Organization = await getOrganization(catalogId).then(
-    (res) => res.json(),
-  );
+  const organization: Organization = await getOrganization(catalogId);
   const hasWritePermission =
     session && hasOrganizationWritePermission(session?.accessToken, catalogId);
-  const statusesResponse = await getAdmsStatuses().then((res) => res.json());
+  const statusesResponse = await getAdmsStatuses();
   const statuses: ReferenceDataCode[] = statusesResponse.statuses;
 
   const breadcrumbList = [

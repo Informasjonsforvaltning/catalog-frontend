@@ -23,11 +23,15 @@ export default class DatasetsPage {
   constructor(
     page: Page,
     context: BrowserContext,
-    accessibilityBuilder?: AxeBuilder,
+    accessibilityBuilder: AxeBuilder,
   ) {
     this.page = page;
-    this.detailPage = new DatasetDetailPage(page, context);
-    this.editPage = new EditPage(page, context);
+    this.detailPage = new DatasetDetailPage(
+      page,
+      context,
+      accessibilityBuilder,
+    );
+    this.editPage = new EditPage(page, context, accessibilityBuilder);
     this.context = context;
     this.accessibilityBuilder = accessibilityBuilder;
     this.searchInput = page.getByRole("searchbox", { name: "Søk" });
@@ -35,7 +39,7 @@ export default class DatasetsPage {
     this.datasetCards = page.locator(
       'ul[role="list"]:not(nav ul) li[role="listitem"]',
     );
-    this.createDatasetButton = page.getByRole("link", {
+    this.createDatasetButton = page.getByRole("button", {
       name: "Legg til datasett",
     });
     this.statusFilterHeader = page.getByRole("button", { name: "Status" });
@@ -73,32 +77,32 @@ export default class DatasetsPage {
   }
 
   async clickDatasetByTitle(title: string) {
-    const card = await this.getDatasetCardByTitle(title);
+    const card = this.getDatasetCardByTitle(title);
     await card.getByRole("link", { name: title }).click();
   }
 
-  async getDatasetCardByTitle(title: string) {
+  getDatasetCardByTitle(title: string) {
     return this.datasetCards.filter({
       has: this.page.getByRole("link", { name: title }),
     });
   }
 
   async getDatasetStatus(title: string) {
-    const card = await this.getDatasetCardByTitle(title);
+    const card = this.getDatasetCardByTitle(title);
     return card.locator('[role="status"]').textContent();
   }
 
   async verifyDatasetText(title: string, text: string) {
-    const card = await this.getDatasetCardByTitle(title);
+    const card = this.getDatasetCardByTitle(title);
     return expect(card).toContainText(text);
   }
 
   async verifyDatasetExists(title: string) {
-    await expect(await this.getDatasetCardByTitle(title)).toBeVisible();
+    await expect(this.getDatasetCardByTitle(title)).toHaveCount(1);
   }
 
   async verifyDatasetDoesNotExist(title: string) {
-    await expect(await this.getDatasetCardByTitle(title)).not.toBeVisible();
+    await expect(this.getDatasetCardByTitle(title)).toHaveCount(0);
   }
 
   // Assertions

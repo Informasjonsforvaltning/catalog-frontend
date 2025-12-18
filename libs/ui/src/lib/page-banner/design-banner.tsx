@@ -27,9 +27,7 @@ const DesignBanner = async ({ catalogId, title }: BannerProps) => {
   const design = await getDesign(catalogId, accessToken).then((res) =>
     res.json(),
   );
-  const organization: Organization = await getOrganization(catalogId).then(
-    (res) => res.json(),
-  );
+  const organization: Organization = await getOrganization(catalogId);
   const logoResponse = await getBase64DesignLogo(catalogId, accessToken);
   const logo = logoResponse ? logoResponse : "undefined";
 

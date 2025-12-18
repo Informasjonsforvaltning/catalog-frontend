@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
-import { Page, Locator, expect } from "@playwright/test";
+import { DatasetToBeCreated } from "@catalog-frontend/types";
+import { Page, Locator, expect, APIRequestContext } from "@playwright/test";
 import * as crypto from "crypto";
 
 export const adminAuthFile = `${__dirname}/../../.playwright/auth/admin.json`;
@@ -44,7 +45,7 @@ export const getParentLocator = (locator: Locator, n = 1) => {
   return parent;
 };
 
-export const clearCombobox = async (page, label) => {
+export const clearCombobox = async (page: Page, label: string) => {
   // Workaround to clear and close a combobox.
   const currentValue = await page
     .getByRole("combobox", { name: label })
@@ -58,7 +59,7 @@ export const clearCombobox = async (page, label) => {
   await page.getByLabel(label).press("Tab");
 };
 
-export const relationToSourceText = (relationToSource) => {
+export const relationToSourceText = (relationToSource: string | undefined) => {
   if (relationToSource === "egendefinert") {
     return "Egendefinert";
   } else if (relationToSource === "basertPaaKilde") {
@@ -70,7 +71,9 @@ export const relationToSourceText = (relationToSource) => {
   return null;
 };
 
-export const deleteAllDatasets = async (apiRequestContext) => {
+export const deleteAllDatasets = async (
+  apiRequestContext: APIRequestContext,
+) => {
   console.log("[DELETE ALL DATASETS] Starting deletion of all datasets...");
 
   try {
@@ -100,7 +103,10 @@ export const deleteAllDatasets = async (apiRequestContext) => {
   }
 };
 
-export const deleteDataset = async (apiRequestContext, datasetId) => {
+export const deleteDataset = async (
+  apiRequestContext: APIRequestContext,
+  datasetId: string,
+) => {
   console.log("[DELETE DATASET] Deleting dataset:", datasetId);
   await apiRequestContext.delete(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/datasets/${datasetId}`,
@@ -108,7 +114,10 @@ export const deleteDataset = async (apiRequestContext, datasetId) => {
   console.log("[DELETE DATASET] Dataset deleted successfully");
 };
 
-export const createDataset = async (apiRequestContext, dataset) => {
+export const createDataset = async (
+  apiRequestContext: APIRequestContext,
+  dataset: DatasetToBeCreated,
+) => {
   console.log("[CREATE DATASET] Creating dataset:", dataset.title);
   const response = await apiRequestContext.post(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/datasets`,
@@ -134,7 +143,9 @@ export const createDataset = async (apiRequestContext, dataset) => {
   return createdDataset;
 };
 
-export const getPublishedDataset = async (apiRequestContext) => {
+export const getPublishedDataset = async (
+  apiRequestContext: APIRequestContext,
+) => {
   console.log("[GET PUBLISHED DATASET] Fetching published datasets");
   const response = await apiRequestContext.get(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/datasets`,
@@ -148,7 +159,9 @@ export const getPublishedDataset = async (apiRequestContext) => {
   }
 
   const datasets = await response.json();
-  const publishedDataset = datasets.filter((d) => d.erPublisert).pop();
+  const publishedDataset = datasets
+    .filter((d: { erPublisert: boolean }) => d.erPublisert)
+    .pop();
   console.log(
     "[GET PUBLISHED DATASET] Found published dataset:",
     publishedDataset?.id,
@@ -156,7 +169,10 @@ export const getPublishedDataset = async (apiRequestContext) => {
   return publishedDataset;
 };
 
-export const publishDataset = async (apiRequestContext, datasetId) => {
+export const publishDataset = async (
+  apiRequestContext: APIRequestContext,
+  datasetId: string,
+) => {
   console.log("[PUBLISH DATASET] Publishing dataset:", datasetId);
   const response = await apiRequestContext.post(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/datasets/${datasetId}/publish`,
@@ -174,7 +190,7 @@ export const publishDataset = async (apiRequestContext, datasetId) => {
   return await response.json();
 };
 
-export const getUsers = async (apiRequestContext) => {
+export const getUsers = async (apiRequestContext: APIRequestContext) => {
   const response = await apiRequestContext.get(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/users`,
   );

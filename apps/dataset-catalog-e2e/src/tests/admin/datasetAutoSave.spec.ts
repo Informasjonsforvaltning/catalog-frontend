@@ -9,7 +9,7 @@ import { accessRightPublic } from "@catalog-frontend/utils";
 import EditPage from "../../page-object-model/datasetEditPage";
 import DatasetDetailPage from "../../page-object-model/datasetDetailPage";
 
-const createRandomDataset = async (playwright) => {
+const createRandomDataset = async (playwright: any) => {
   // Create a request context with the admin storage state (includes next-auth cookie)
   const apiRequestContext = await playwright.request.newContext({
     storageState: adminAuthFile,
@@ -105,12 +105,15 @@ runTestAsAdmin(
 
     // Navigate to dataset details and click edit
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     // Initialize edit page
     const editPage: EditPage = datasetsPage.editPage;
-    await editPage.expectEditPageUrl(process.env.E2E_CATALOG_ID, dataset.id);
+    await editPage.expectEditPageUrl(
+      process.env.E2E_CATALOG_ID as string,
+      dataset.id,
+    );
 
     // Change title to create unsaved changes
     await editPage.fillTitleField(newTitle, [], false);
@@ -144,12 +147,15 @@ runTestAsAdmin(
 
     // Navigate to dataset details and click edit
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     // Initialize edit page
     const editPage: EditPage = datasetsPage.editPage;
-    await editPage.expectEditPageUrl(process.env.E2E_CATALOG_ID, dataset.id);
+    await editPage.expectEditPageUrl(
+      process.env.E2E_CATALOG_ID as string,
+      dataset.id,
+    );
 
     // Change title and description to create unsaved changes
     await editPage.fillTitleField(newTitle, [], false);
@@ -185,12 +191,15 @@ runTestAsAdmin(
 
     // Navigate to dataset details and click edit
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     // Initialize edit page
     const editPage: EditPage = datasetsPage.editPage;
-    await editPage.expectEditPageUrl(process.env.E2E_CATALOG_ID, dataset.id);
+    await editPage.expectEditPageUrl(
+      process.env.E2E_CATALOG_ID as string,
+      dataset.id,
+    );
 
     // Change title to create unsaved changes
     await editPage.fillTitleField(newTitle, [], false);
@@ -226,12 +235,15 @@ runTestAsAdmin(
 
     // Navigate to dataset details and click edit
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     // Initialize edit page
     const editPage: EditPage = datasetsPage.editPage;
-    await editPage.expectEditPageUrl(process.env.E2E_CATALOG_ID, dataset.id);
+    await editPage.expectEditPageUrl(
+      process.env.E2E_CATALOG_ID as string,
+      dataset.id,
+    );
 
     // Change title to create unsaved changes
     await editPage.fillTitleField(newTitle, [], false);
@@ -265,12 +277,15 @@ runTestAsAdmin(
 
     // Navigate to dataset details and click edit
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     // Initialize edit page
     const editPage: EditPage = datasetsPage.editPage;
-    await editPage.expectEditPageUrl(process.env.E2E_CATALOG_ID, dataset.id);
+    await editPage.expectEditPageUrl(
+      process.env.E2E_CATALOG_ID as string,
+      dataset.id,
+    );
 
     // Open a modal dialog (legal restriction)
     await editPage.clickAddLegalRestriction();
@@ -312,12 +327,15 @@ runTestAsAdmin(
 
     // Navigate to dataset details and click edit
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     // Initialize edit page
     const editPage: EditPage = datasetsPage.editPage;
-    await editPage.expectEditPageUrl(process.env.E2E_CATALOG_ID, dataset.id);
+    await editPage.expectEditPageUrl(
+      process.env.E2E_CATALOG_ID as string,
+      dataset.id,
+    );
 
     // Open distribution modal
     await editPage.clickAddDistribution();
@@ -361,12 +379,15 @@ runTestAsAdmin(
 
     // Navigate to dataset details and click edit
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     // Initialize edit page
     const editPage: EditPage = datasetsPage.editPage;
-    await editPage.expectEditPageUrl(process.env.E2E_CATALOG_ID, dataset.id);
+    await editPage.expectEditPageUrl(
+      process.env.E2E_CATALOG_ID as string,
+      dataset.id,
+    );
 
     // Don't make any changes, just refresh the page
     await page.reload();
@@ -388,12 +409,15 @@ runTestAsAdmin(
 
     // Navigate to dataset details and click edit
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     // Initialize edit page
     const editPage: EditPage = datasetsPage.editPage;
-    await editPage.expectEditPageUrl(process.env.E2E_CATALOG_ID, dataset.id);
+    await editPage.expectEditPageUrl(
+      process.env.E2E_CATALOG_ID as string,
+      dataset.id,
+    );
 
     // Change title to create unsaved changes
     await editPage.fillTitleField(newTitle, [], false);
@@ -453,7 +477,7 @@ runTestAsAdmin(
     await editPage.clickSaveButton();
 
     // Verify we're back on the details page
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await expect(page).toHaveURL(
       `/catalogs/${process.env.E2E_CATALOG_ID}/datasets/${dataset.id}`,
     );
@@ -481,12 +505,15 @@ runTestAsAdmin(
 
     // Navigate to dataset details and click edit
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     // Initialize edit page
     const editPage: EditPage = datasetsPage.editPage;
-    await editPage.expectEditPageUrl(process.env.E2E_CATALOG_ID, dataset.id);
+    await editPage.expectEditPageUrl(
+      process.env.E2E_CATALOG_ID as string,
+      dataset.id,
+    );
 
     // Fill in keywords data (similar to tillatt term in concepts)
     await editPage.fillKeywords(newKeywords);
@@ -518,12 +545,15 @@ runTestAsAdmin(
 
     // Navigate to dataset details and click edit
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     // Initialize edit page
     const editPage: EditPage = datasetsPage.editPage;
-    await editPage.expectEditPageUrl(process.env.E2E_CATALOG_ID, dataset.id);
+    await editPage.expectEditPageUrl(
+      process.env.E2E_CATALOG_ID as string,
+      dataset.id,
+    );
 
     // Step 1: Make initial changes and auto-save
     await editPage.fillTitleField(newTitle, [], false);

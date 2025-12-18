@@ -10,7 +10,7 @@ import EditPage from "../../page-object-model/datasetEditPage";
 import DatasetDetailPage from "../../page-object-model/datasetDetailPage";
 import DatasetEditPage from "../../page-object-model/datasetEditPage";
 
-const createRandomDataset = async (playwright) => {
+const createRandomDataset = async (playwright: any) => {
   // Create a request context with the admin storage state (includes next-auth cookie)
   const apiRequestContext = await playwright.request.newContext({
     storageState: adminAuthFile,
@@ -111,12 +111,15 @@ runTestAsAdmin(
 
     // Navigate to dataset details and click edit
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     // Initialize edit page
     const editPage: EditPage = datasetsPage.editPage;
-    await editPage.expectEditPageUrl(process.env.E2E_CATALOG_ID, dataset.id);
+    await editPage.expectEditPageUrl(
+      process.env.E2E_CATALOG_ID as string,
+      dataset.id,
+    );
 
     // Verify initial title and description
     await editPage.expectTitleField("Bokmål", dataset.title.nb as string);
@@ -183,7 +186,7 @@ runTestAsAdmin(
     await editPage.clickSaveButton();
 
     // Verify we're back on the details page
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await expect(page).toHaveURL(
       `/catalogs/${process.env.E2E_CATALOG_ID}/datasets/${dataset.id}`,
     );
@@ -208,7 +211,7 @@ runTestAsAdmin(
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
     const editPage: DatasetEditPage = datasetsPage.editPage;
 
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     // Select EU data theme
@@ -221,7 +224,7 @@ runTestAsAdmin(
     await editPage.clickSaveButton();
 
     // Verify changes
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.expectEuDataTheme("Energi");
     await detailPage.expectLosTheme("Energibruk");
   },
@@ -234,7 +237,7 @@ runTestAsAdmin(
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
     const editPage: DatasetEditPage = datasetsPage.editPage;
 
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     const distributionTitle = {
@@ -261,7 +264,7 @@ runTestAsAdmin(
     await editPage.clickSaveButton();
 
     // Verify changes
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.expectDistributionTitle(distributionTitle.nb as string);
     await detailPage.expectDistributionDescription(
       distributionDescription.nb as string,
@@ -283,7 +286,7 @@ runTestAsAdmin(
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
     const editPage: DatasetEditPage = datasetsPage.editPage;
 
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     // Fill in details
@@ -298,7 +301,7 @@ runTestAsAdmin(
     await editPage.clickSaveButton();
 
     // Verify changes
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.expectLandingPage("https://example.com/landing-page");
     await detailPage.expectLanguages([
       "Norsk Bokmål",
@@ -317,7 +320,7 @@ runTestAsAdmin(
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
     const editPage: DatasetEditPage = datasetsPage.editPage;
 
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     const referenceTitle = {
@@ -343,7 +346,7 @@ runTestAsAdmin(
     await editPage.clickSaveButton();
 
     // Verify changes
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.expectRelatedResourceTitle(referenceTitle.nb as string);
     await detailPage.expectRelatedResourceUri(
       "https://example.com/related-reference",
@@ -360,7 +363,7 @@ runTestAsAdmin(
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
     const editPage: DatasetEditPage = datasetsPage.editPage;
 
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     const keywords = {
@@ -378,7 +381,7 @@ runTestAsAdmin(
     await editPage.clickSaveButton();
 
     // Verify changes
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.expectConceptTitle("barnetillegg");
     await detailPage.expectConceptTitle("basispensjon");
     await detailPage.expectKeywords(keywords.nb);
@@ -392,7 +395,7 @@ runTestAsAdmin(
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
     const editPage: DatasetEditPage = datasetsPage.editPage;
 
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     const modelTitle = {
@@ -415,7 +418,7 @@ runTestAsAdmin(
     await editPage.clickSaveButton();
 
     // Verify changes
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.expectInformationModelTitle("ssbs informasjonsmodell");
     await detailPage.expectInformationModelTitle(modelTitle.nb as string);
     await detailPage.expectInformationModelUri(
@@ -431,7 +434,7 @@ runTestAsAdmin(
     const detailPage: DatasetDetailPage = datasetsPage.detailPage;
     const editPage: DatasetEditPage = datasetsPage.editPage;
 
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.clickEditButton();
 
     const newEmail = `${uniqueString("new_email")}@example.com`;
@@ -447,7 +450,7 @@ runTestAsAdmin(
     await editPage.clickSaveButton();
 
     // Verify changes
-    await detailPage.goto(process.env.E2E_CATALOG_ID, dataset.id);
+    await detailPage.goto(process.env.E2E_CATALOG_ID as string, dataset.id);
     await detailPage.expectContactPointEmail(newEmail);
     await detailPage.expectContactPointPhone("+358 12 34 56 78");
     await detailPage.expectContactPointUrl("https://example.com/new-contact");

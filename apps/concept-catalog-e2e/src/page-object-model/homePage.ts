@@ -10,7 +10,7 @@ export default class HomePage {
   constructor(
     page: Page,
     context: BrowserContext,
-    accessibilityBuilder?: AxeBuilder,
+    accessibilityBuilder: AxeBuilder,
   ) {
     this.page = page;
     this.context = context;
@@ -44,8 +44,7 @@ export default class HomePage {
     console.log(
       "[HOME PAGE] Waiting for possible redirect to registration portal...",
     );
-    await this.page.waitForTimeout(5000);
-    await this.page.waitForURL(/.*catalog-portal/);
+    await this.page.waitForURL(/.*catalog-portal/, { timeout: 5000 });
     console.log("[HOME PAGE] Redirected to registration portal.");
   }
 }

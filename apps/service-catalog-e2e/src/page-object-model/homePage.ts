@@ -10,7 +10,7 @@ export default class HomePage {
   constructor(
     page: Page,
     context: BrowserContext,
-    accessibilityBuilder?: AxeBuilder,
+    accessibilityBuilder: AxeBuilder,
   ) {
     this.page = page;
     this.context = context;
@@ -31,7 +31,6 @@ export default class HomePage {
   }
 
   public async checkIfRedirectedToRegistrationPortal() {
-    await this.page.waitForTimeout(5000);
-    await this.page.waitForURL(/.*catalog-portal/);
+    await this.page.waitForURL(/.*catalog-portal/, { timeout: 5000 });
   }
 }

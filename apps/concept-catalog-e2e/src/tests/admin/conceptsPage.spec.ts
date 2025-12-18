@@ -10,7 +10,7 @@ import { localization } from "@catalog-frontend/utils";
 
 runTestAsAdmin(
   "test if the search page renders correctly",
-  async ({ conceptsPage, playwright }) => {
+  async ({ conceptsPage }) => {
     console.log("[TEST] Navigating to concepts page...");
     await conceptsPage.goto();
     console.log("[TEST] Checking accessibility...");
@@ -183,12 +183,10 @@ runTestAsAdmin(
     });
 
     const dialog = conceptsPage.page.getByRole("dialog", {
-      has: conceptsPage.page
-        .getByRole("button")
-        .filter({
-          hasText: `${localization.importResult.results}`,
-          exact: true,
-        }),
+      has: conceptsPage.page.getByRole("button").filter({
+        hasText: `${localization.importResult.results}`,
+        exact: true,
+      }),
     });
 
     console.log("[TEST] Checking that there are 3 buttons in the modal...");

@@ -34,13 +34,13 @@ const NewDatasetPage = withWriteProtectedPage(
       languageResponse,
       licenseResponse,
     ] = await Promise.all([
-      getLosThemes().then((res) => res.json()),
-      getDataThemes().then((res) => res.json()),
-      getDatasetTypes().then((res) => res.json()),
-      getProvenanceStatements().then((res) => res.json()),
-      getFrequencies().then((res) => res.json()),
-      getLanguages().then((res) => res.json()),
-      getOpenLicenses().then((res) => res.json()),
+      getLosThemes(),
+      getDataThemes(),
+      getDatasetTypes(),
+      getProvenanceStatements(),
+      getFrequencies(),
+      getLanguages(),
+      getOpenLicenses(),
     ]);
 
     const referenceData = {

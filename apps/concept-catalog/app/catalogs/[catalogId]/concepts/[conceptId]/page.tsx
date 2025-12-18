@@ -50,18 +50,13 @@ const ConceptPage = withReadProtectedPage(
       return redirect(`/notfound`, RedirectType.replace);
     }
 
-    const conceptStatuses = await getConceptStatuses()
-      .then((response) => response.json())
-      .then((body) => {
-        return body?.conceptStatuses ?? [];
-      })
-      .then((statuses) => prepareStatusList(statuses));
+    const conceptStatuses = await getConceptStatuses().then((body) =>
+      prepareStatusList(body.conceptStatuses),
+    );
 
     const username = session && getUsername(session?.accessToken);
 
-    const organization: Organization = await getOrganization(catalogId).then(
-      (response) => response.json(),
-    );
+    const organization: Organization = await getOrganization(catalogId);
     const revisions: Concept[] | null = await getConceptRevisions(
       `${conceptId}`,
       `${session?.accessToken}`,

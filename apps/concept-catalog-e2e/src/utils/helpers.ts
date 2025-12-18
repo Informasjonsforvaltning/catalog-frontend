@@ -5,7 +5,7 @@ import {
   ImportResult,
   UsersResult,
 } from "@catalog-frontend/types";
-import { Locator, Page, expect } from "@playwright/test";
+import { APIRequestContext, Locator, Page, expect } from "@playwright/test";
 import * as crypto from "crypto";
 
 export const adminAuthFile = `${__dirname}/../../.playwright/auth/admin.json`;
@@ -50,7 +50,7 @@ export const getParentLocator = (locator: Locator, n = 1) => {
   return parent;
 };
 
-export const clearCombobox = async (page, label) => {
+export const clearCombobox = async (page: Page, label: string) => {
   // Workaround to clear and close a combobox.
   const currentValue = await page
     .getByRole("combobox", { name: label })
@@ -64,7 +64,7 @@ export const clearCombobox = async (page, label) => {
   await page.getByLabel(label).press("Tab");
 };
 
-export const relationToSourceText = (relationToSource) => {
+export const relationToSourceText = (relationToSource?: string) => {
   if (relationToSource === "egendefinert") {
     return "Egendefinert";
   } else if (relationToSource === "basertPaaKilde") {
@@ -76,7 +76,9 @@ export const relationToSourceText = (relationToSource) => {
   return null;
 };
 
-export const deleteAllConcepts = async (apiRequestContext) => {
+export const deleteAllConcepts = async (
+  apiRequestContext: APIRequestContext,
+) => {
   const response = await apiRequestContext.get(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts`,
   );
@@ -94,13 +96,19 @@ export const deleteAllConcepts = async (apiRequestContext) => {
   }
 };
 
-export const deleteConcept = async (apiRequestContext, conceptId) => {
+export const deleteConcept = async (
+  apiRequestContext: APIRequestContext,
+  conceptId: string,
+) => {
   await apiRequestContext.delete(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/${conceptId}`,
   );
 };
 
-export const createConcept = async (apiRequestContext, concept) => {
+export const createConcept = async (
+  apiRequestContext: APIRequestContext,
+  concept: Partial<Concept>,
+) => {
   const response = await apiRequestContext.post(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts`,
     {
@@ -119,7 +127,9 @@ export const createConcept = async (apiRequestContext, concept) => {
   return await response.json();
 };
 
-export const getPublishedConcept = async (apiRequestContext) => {
+export const getPublishedConcept = async (
+  apiRequestContext: APIRequestContext,
+) => {
   const response = await apiRequestContext.get(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts`,
   );
@@ -131,7 +141,10 @@ export const getPublishedConcept = async (apiRequestContext) => {
   return concepts.filter((c) => c.erPublisert).pop();
 };
 
-export const publishConcept = async (apiRequestContext, conceptId) => {
+export const publishConcept = async (
+  apiRequestContext: APIRequestContext,
+  conceptId: string,
+) => {
   const response = await apiRequestContext.post(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/${conceptId}/publish`,
   );
@@ -147,7 +160,7 @@ export const publishConcept = async (apiRequestContext, conceptId) => {
   return await response.json();
 };
 
-export const getUsers = async (apiRequestContext) => {
+export const getUsers = async (apiRequestContext: APIRequestContext) => {
   const response = await apiRequestContext.get(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/users`,
   );
@@ -159,7 +172,7 @@ export const getUsers = async (apiRequestContext) => {
   return result;
 };
 
-export const getFields = async (apiRequestContext) => {
+export const getFields = async (apiRequestContext: APIRequestContext) => {
   const response = await apiRequestContext.get(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/fields`,
   );
@@ -171,14 +184,9 @@ export const getFields = async (apiRequestContext) => {
   return result;
 };
 
-const getAccessToken = async (apiRequestContext) => {
-  const session = await apiRequestContext.get("/api/auth/session");
-  const accessToken = (await session.json())?.accessToken;
-
-  return accessToken;
-};
-
-export const getImportResults = async (apiRequestContext) => {
+export const getImportResults = async (
+  apiRequestContext: APIRequestContext,
+) => {
   const response = await apiRequestContext.get(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/import-results`,
   );
@@ -188,7 +196,10 @@ export const getImportResults = async (apiRequestContext) => {
   return response.json();
 };
 
-async function deleteImportResult(apiRequestContext, resultId: string) {
+async function deleteImportResult(
+  apiRequestContext: APIRequestContext,
+  resultId: string,
+) {
   const response = await apiRequestContext.delete(
     `/api/catalogs/${process.env.E2E_CATALOG_ID}/concepts/import-results/${resultId}`,
   );
@@ -203,7 +214,9 @@ async function deleteImportResult(apiRequestContext, resultId: string) {
   console.log("Deleted import result ", resultId);
 }
 
-export const deleteAllImportResults = async (apiRequestContext) => {
+export const deleteAllImportResults = async (
+  apiRequestContext: APIRequestContext,
+) => {
   try {
     const importResults: ImportResult[] =
       await getImportResults(apiRequestContext);
