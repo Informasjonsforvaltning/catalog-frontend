@@ -1,6 +1,10 @@
 import { Dataset } from "@catalog-frontend/types";
 import { TitleWithHelpTextAndTag, useDebounce } from "@catalog-frontend/ui";
-import { localization } from "@catalog-frontend/utils";
+import {
+  containsNonNumberRegex,
+  localization,
+  onlyNumbersRegex,
+} from "@catalog-frontend/utils";
 import { Box, Combobox, Fieldset } from "@digdir/designsystemet-react";
 import {
   useSearchEnheter,
@@ -61,9 +65,14 @@ export const QualifiedAttributionsSection = ({
           onValueChange={(selectedValues: string[]) =>
             setFieldValue("qualifiedAttributions", selectedValues)
           }
-          onChange={(input: React.ChangeEvent<HTMLInputElement>) =>
-            setSearchTerm(input.target.value)
-          }
+          onChange={(input: React.ChangeEvent<HTMLInputElement>) => {
+            const term = input.target.value;
+            const isOnlyNumbers = onlyNumbersRegex.test(term);
+            const hasNonNumber = containsNonNumberRegex.test(term);
+            if (isOnlyNumbers || hasNonNumber) {
+              setSearchTerm(term);
+            }
+          }}
           loading={searching}
           multiple
           value={values.qualifiedAttributions}
