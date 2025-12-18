@@ -22,10 +22,9 @@ import { NewPage } from "./new-page.client";
 export default withWriteProtectedPage(
   ({ catalogId }) => `/catalogs//${catalogId}/concepts/new`,
   async ({ catalogId, session }) => {
-    const conceptStatuses = await getConceptStatuses()
-      .then((response) => response.json())
-      .then((body) => body?.conceptStatuses ?? [])
-      .then((statuses) => prepareStatusList(statuses));
+    const conceptStatuses = await getConceptStatuses().then((body) =>
+      prepareStatusList(body.conceptStatuses),
+    );
 
     const codeListsResult: CodeListsResult = await getAllCodeLists(
       catalogId,

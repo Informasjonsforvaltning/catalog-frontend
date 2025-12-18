@@ -35,9 +35,7 @@ const ChangeRequestEditPage = withReadProtectedPage(
   ({ catalogId, changeRequestId }) =>
     `/catalogs/${catalogId}/change-requests/${changeRequestId}/edit`,
   async ({ catalogId, changeRequestId, session, hasWritePermission }) => {
-    const organization: Organization = await getOrganization(catalogId).then(
-      (res) => res.json(),
-    );
+    const organization: Organization = await getOrganization(catalogId);
 
     const baselineConcept: Concept = {
       id: null,
@@ -97,7 +95,7 @@ const ChangeRequestEditPage = withReadProtectedPage(
       false,
     ).newDocument;
 
-    const breadcrumbList = [
+    const breadcrumbList: BreadcrumbType[] = [
       {
         href: `/catalogs/${catalogId}`,
         text: localization.concept.concept,
@@ -114,12 +112,11 @@ const ChangeRequestEditPage = withReadProtectedPage(
         href: `/catalogs/${catalogId}/change-requests/${changeRequest.id}/edit`,
         text: localization.edit,
       },
-    ] as BreadcrumbType[];
+    ];
 
-    const conceptStatuses = await getConceptStatuses()
-      .then((response) => response.json())
-      .then((body) => body?.conceptStatuses ?? [])
-      .then((statuses) => prepareStatusList(statuses));
+    const conceptStatuses = await getConceptStatuses().then((body) =>
+      prepareStatusList(body.conceptStatuses),
+    );
 
     const codeListsResult: CodeListsResult = await getAllCodeLists(
       catalogId,

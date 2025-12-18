@@ -22,7 +22,7 @@ import {
   TermsOfUseAlert,
   MarkdownComponent,
 } from "@catalog-frontend/ui";
-import { Alert, Heading, Paragraph } from "@digdir/designsystemet-react";
+import { Alert, Heading } from "@digdir/designsystemet-react";
 import styles from "./catalogs.module.css";
 import { CatalogCard } from "./components/catalog-card";
 
@@ -40,7 +40,7 @@ const CatalogsPage = async (props: {
 
   let organizations: Organization[] = [];
   if (hasSystemAdminPermission(`${session?.accessToken}`)) {
-    organizations = await getOrganizations().then((res) => res.json());
+    organizations = await getOrganizations();
   } else {
     const resourceRoles = getResourceRoles(`${session?.accessToken}`);
     const organiztionIdsWithAdminRole = resourceRoles
@@ -48,9 +48,7 @@ const CatalogsPage = async (props: {
       .map((role) => role.resourceId);
 
     if (organiztionIdsWithAdminRole.length > 0) {
-      organizations = await getOrganizations(organiztionIdsWithAdminRole).then(
-        (res) => res.json(),
-      );
+      organizations = await getOrganizations(organiztionIdsWithAdminRole);
     }
   }
 

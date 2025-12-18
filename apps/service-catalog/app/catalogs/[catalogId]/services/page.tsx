@@ -31,23 +31,21 @@ export default async function ServiceSearchHitsPage({
   }
 
   const services: Service[] = await getServices(catalogId);
-  const organization: Organization = await getOrganization(catalogId).then(
-    (res) => res.json(),
-  );
-  const hasWritePermission = await hasOrganizationWritePermission(
+  const organization: Organization = await getOrganization(catalogId);
+  const hasWritePermission = hasOrganizationWritePermission(
     session.accessToken,
     catalogId,
   );
 
-  const statusesResponse = await getAdmsStatuses().then((res) => res.json());
+  const statusesResponse = await getAdmsStatuses();
   const statuses: ReferenceDataCode[] = statusesResponse.statuses;
 
-  const breadcrumbList = [
+  const breadcrumbList: BreadcrumbType[] = [
     {
       href: `/catalogs/${catalogId}/services`,
       text: localization.catalogType.service,
     },
-  ] as BreadcrumbType[];
+  ];
 
   return (
     <>
