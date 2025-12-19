@@ -1,7 +1,7 @@
 import { Tag } from "@digdir/designsystemet-react";
-import { useSearchFileTypeByUri } from "../../../hooks/useReferenceDataSearch";
 import { getTranslateText } from "@catalog-frontend/utils";
 import styles from "../details-columns.module.css";
+import { useSearchFileTypeByUri } from "@catalog-frontend/ui";
 
 type Props = {
   formatURIs: string[] | undefined;

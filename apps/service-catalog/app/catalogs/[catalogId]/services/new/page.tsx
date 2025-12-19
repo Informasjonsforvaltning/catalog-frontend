@@ -1,5 +1,4 @@
-import { Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
-import { Organization } from "@catalog-frontend/types";
+import { Breadcrumbs, BreadcrumbType, PageBanner } from "@catalog-frontend/ui";
 import {
   getAdmsStatuses,
   getOrganization,
@@ -11,10 +10,13 @@ export default async function NewServicePage(props: {
   params: Promise<{ catalogId: string; serviceId: string }>;
 }) {
   const { catalogId } = await props.params;
-  const organization: Organization = await getOrganization(catalogId);
-  const statusesResponse = await getAdmsStatuses();
 
-  const breadcrumbList = [
+  const [organization, statusesResponse] = await Promise.all([
+    getOrganization(catalogId),
+    getAdmsStatuses(),
+  ]);
+
+  const breadcrumbList: BreadcrumbType[] = [
     {
       href: `/catalogs/${catalogId}/services`,
       text: localization.catalogType.service,

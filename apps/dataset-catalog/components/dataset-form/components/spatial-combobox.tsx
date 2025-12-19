@@ -1,11 +1,12 @@
-import { TitleWithHelpTextAndTag, useDebounce } from "@catalog-frontend/ui";
+import {
+  TitleWithHelpTextAndTag,
+  useDebounce,
+  useSearchAdministrativeUnits,
+  useSearchAdministrativeUnitsByUri,
+} from "@catalog-frontend/ui";
 import { localization, getTranslateText } from "@catalog-frontend/utils";
 import { Combobox, Fieldset } from "@digdir/designsystemet-react";
 import { Dataset, ReferenceDataCode } from "@catalog-frontend/types";
-import {
-  useSearchAdministrativeUnits,
-  useSearchAdministrativeUnitsByUri,
-} from "../../../hooks/useReferenceDataSearch";
 import { useState } from "react";
 import { useFormikContext } from "formik";
 
