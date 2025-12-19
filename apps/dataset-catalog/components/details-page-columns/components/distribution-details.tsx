@@ -18,13 +18,12 @@ import {
   Tag,
 } from "@digdir/designsystemet-react";
 import styles from "../details-columns.module.css";
-
-import { isEmpty } from "lodash";
 import {
   FieldsetDivider,
   useSearchFileTypeByUri,
   useSearchMediaTypeByUri,
 } from "@catalog-frontend/ui";
+import { isEmpty } from "lodash";
 import { useSearchDataServiceByUri } from "@dataset-catalog/hooks/useSearchService";
 
 type Props = {
