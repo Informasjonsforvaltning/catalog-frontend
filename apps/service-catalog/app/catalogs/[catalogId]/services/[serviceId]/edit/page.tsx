@@ -2,8 +2,7 @@ import {
   getAdmsStatuses,
   getOrganization,
 } from "@catalog-frontend/data-access";
-import { Organization, Service } from "@catalog-frontend/types";
-import { Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
+import { Breadcrumbs, BreadcrumbType, PageBanner } from "@catalog-frontend/ui";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { getServiceById } from "../../../../../actions/services/actions";
 import { EditPage } from "./edit-page-client";
@@ -14,11 +13,13 @@ export default async function EditServicePage({
   params: Promise<{ catalogId: string; serviceId: string }>;
 }) {
   const { catalogId, serviceId } = await params;
-  const service: Service = await getServiceById(catalogId, serviceId);
-  const organization: Organization = await getOrganization(catalogId);
-  const statusesResponse = await getAdmsStatuses();
+  const [service, organization, statusesResponse] = await Promise.all([
+    getServiceById(catalogId, serviceId),
+    getOrganization(catalogId),
+    getAdmsStatuses(),
+  ]);
 
-  const breadcrumbList = [
+  const breadcrumbList: BreadcrumbType[] = [
     {
       href: `/catalogs/${catalogId}/services`,
       text: localization.catalogType.service,

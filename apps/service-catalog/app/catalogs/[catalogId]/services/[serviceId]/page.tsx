@@ -2,11 +2,7 @@ import {
   getAdmsStatuses,
   getOrganization,
 } from "@catalog-frontend/data-access";
-import {
-  Organization,
-  ReferenceDataCode,
-  Service,
-} from "@catalog-frontend/types";
+import { Service } from "@catalog-frontend/types";
 import { BreadcrumbType, Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
 import {
   getTranslateText,
@@ -36,13 +32,15 @@ export default async function ServiceDetailsPage({
   if (!service) {
     return redirect(`/notfound`, RedirectType.replace);
   }
-  const organization: Organization = await getOrganization(catalogId);
   const hasWritePermission =
     session && hasOrganizationWritePermission(session?.accessToken, catalogId);
-  const statusesResponse = await getAdmsStatuses();
-  const statuses: ReferenceDataCode[] = statusesResponse.statuses;
 
-  const breadcrumbList = [
+  const [organization, statusesResponse] = await Promise.all([
+    getOrganization(catalogId),
+    getAdmsStatuses(),
+  ]);
+
+  const breadcrumbList: BreadcrumbType[] = [
     {
       href: `/catalogs/${catalogId}/services`,
       text: localization.catalogType.service,
@@ -51,7 +49,7 @@ export default async function ServiceDetailsPage({
       href: `/catalogs/${catalogId}/services/${serviceId}`,
       text: getTranslateText(service.title),
     },
-  ] as BreadcrumbType[];
+  ];
 
   return (
     <>
@@ -68,7 +66,7 @@ export default async function ServiceDetailsPage({
         catalogId={catalogId}
         serviceId={serviceId}
         hasWritePermission={hasWritePermission}
-        statuses={statuses}
+        statuses={statusesResponse.statuses}
       />
     </>
   );
