@@ -52,6 +52,7 @@ import {
   draftServiceSchema,
 } from "./validation-schema";
 import { get, isEmpty, isEqual } from "lodash";
+import { SpatialCombobox } from "./components/spatial-combobox";
 
 interface ServiceFormProps {
   afterSubmit?: () => void;
@@ -59,6 +60,7 @@ interface ServiceFormProps {
   initialValues: ServiceToBeCreated;
   onCancel?: () => void;
   onSubmit?: (values: Service) => Promise<Service | undefined>;
+  referenceDataEnv: string;
   showSnackbarSuccessOnInit?: boolean;
   statuses: ReferenceDataCode[];
   type: "public-services" | "services";
@@ -95,6 +97,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
     initialValues,
     onCancel,
     onSubmit,
+    referenceDataEnv,
     showSnackbarSuccessOnInit,
     statuses,
     type,
@@ -359,15 +362,20 @@ export const ServiceForm = (props: ServiceFormProps) => {
                     subtitle={localization.serviceForm.section.about.subtitle}
                     required
                     changed={dirtyFields.some((field) =>
-                      ["title", "description", "homepage", "status"].includes(
-                        field,
-                      ),
+                      [
+                        "title",
+                        "description",
+                        "homepage",
+                        "status",
+                        "spatial",
+                      ].includes(field),
                     )}
                     error={hasError([
                       "title",
                       "description",
                       "homepage",
                       "status",
+                      "spatial",
                     ])}
                   >
                     <Box>
@@ -421,6 +429,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       <Field
                         error={errors?.status}
                         as={Select}
+                        size="sm"
                         label={
                           <TitleWithHelpTextAndTag
                             helpText={localization.serviceForm.helptext.status}
@@ -439,6 +448,8 @@ export const ServiceForm = (props: ServiceFormProps) => {
                           </option>
                         ))}
                       </Field>
+                      <FieldsetDivider />
+                      <SpatialCombobox referenceDataEnv={referenceDataEnv} />
                     </Box>
                   </FormLayout.Section>
 

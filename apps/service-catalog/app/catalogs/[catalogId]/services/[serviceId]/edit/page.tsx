@@ -44,7 +44,11 @@ export default async function EditServicePage({
         title={localization.catalogType.service}
         subtitle={getTranslateText(organization?.prefLabel)}
       />
-      <EditPage service={service} statuses={statusesResponse.statuses} />
+      <EditPage
+        referenceDataEnv={process.env.FDK_BASE_URI || ""}
+        service={service}
+        statuses={statusesResponse.statuses}
+      />
     </>
   );
 }
