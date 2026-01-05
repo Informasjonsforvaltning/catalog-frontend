@@ -2,6 +2,7 @@ import {
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
+  SpatialCombobox,
 } from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
@@ -18,7 +19,6 @@ import {
 import { FastField, useFormikContext } from "formik";
 import { FieldsetDivider } from "@catalog-frontend/ui";
 import { AccessRightFields } from "./access-rights-fields";
-import { SpatialCombobox } from "./spatial-combobox";
 import {
   ApplicationProfile,
   Dataset,
@@ -90,10 +90,7 @@ export const AboutSection = ({
       <FieldsetDivider />
       {isMobility && (
         <>
-          <SpatialCombobox
-            referenceDataEnv={referenceDataEnv}
-            isMobility={isMobility}
-          />
+          <SpatialCombobox referenceDataEnv={referenceDataEnv} required />
           <FieldsetDivider />
           <Fieldset
             size="sm"

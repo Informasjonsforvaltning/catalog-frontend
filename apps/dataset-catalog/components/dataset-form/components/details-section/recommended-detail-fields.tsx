@@ -1,12 +1,15 @@
 "use client";
-import { FieldsetDivider, TitleWithHelpTextAndTag } from "@catalog-frontend/ui";
+import {
+  FieldsetDivider,
+  SpatialCombobox,
+  TitleWithHelpTextAndTag,
+} from "@catalog-frontend/ui";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { Checkbox } from "@digdir/designsystemet-react";
 import { useFormikContext } from "formik";
 import { Dataset, ReferenceDataCode } from "@catalog-frontend/types";
 import { sortBy } from "lodash";
 import { TemporalModal } from "./temporal-modal";
-import { SpatialCombobox } from "../spatial-combobox";
 
 interface Props {
   referenceDataEnv: string;
