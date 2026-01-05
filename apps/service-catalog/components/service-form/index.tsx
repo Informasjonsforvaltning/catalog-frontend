@@ -21,6 +21,7 @@ import {
   Select,
   Snackbar,
   SnackbarSeverity,
+  SpatialCombobox,
   StickyFooterBar,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
@@ -52,7 +53,6 @@ import {
   draftServiceSchema,
 } from "./validation-schema";
 import { get, isEmpty, isEqual } from "lodash";
-import { SpatialCombobox } from "./components/spatial-combobox";
 
 interface ServiceFormProps {
   afterSubmit?: () => void;
