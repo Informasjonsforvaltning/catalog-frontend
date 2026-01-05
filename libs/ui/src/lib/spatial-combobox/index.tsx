@@ -25,19 +25,6 @@ export const SpatialCombobox = ({ referenceDataEnv }: Props) => {
     values?.spatial,
     referenceDataEnv,
   );
-  const getDescription = (item: ReferenceDataCode | undefined) =>
-    item
-      ? item.uri.includes("geonorge")
-        ? getLocationType(item.uri)
-        : item.code
-      : "";
-
-  const getLocationType = (uri: string): string => {
-    if (uri.includes("kommune")) return localization.spatial.municipality;
-    if (uri.includes("fylke")) return localization.spatial.county;
-    if (uri.includes("nasjon")) return localization.spatial.country;
-    return "";
-  };
 
   const comboboxOptions: ReferenceDataCode[] = useMemo(
     () => [
@@ -92,4 +79,18 @@ export const SpatialCombobox = ({ referenceDataEnv }: Props) => {
       ))}
     </Combobox>
   );
+};
+
+const getDescription = (item: ReferenceDataCode | undefined) =>
+  item
+    ? item.uri.includes("geonorge")
+      ? getLocationType(item.uri)
+      : item.code
+    : "";
+
+const getLocationType = (uri: string): string => {
+  if (uri.includes("kommune")) return localization.spatial.municipality;
+  if (uri.includes("fylke")) return localization.spatial.county;
+  if (uri.includes("nasjon")) return localization.spatial.country;
+  return "";
 };
