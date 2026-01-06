@@ -37,7 +37,7 @@ export const dataServiceFormNb = {
     costValue:
       "Brukes til å oppgi gebyrbeløpet. Selv om hverken beløp eller dokumentasjon er obligatorisk, SKAL minst én av dem brukes. Valutaverdien velges fra EUs kontrollerte vokabular _Valuta_.",
     publish:
-      "Publiser API-beskrivelsen til Data.norge.no. En beskrivelse kan ikke slettes så lenge den er publisert.",
+      "Publiser API-beskrivelsen til Data.norge.no. For å publisere må du fylle ut alle påkrevde felt i skjemaet, en beskrivelse kan ikke slettes så lenge den er publisert.",
   },
   heading: {
     about: "Om API-et",
