@@ -23,7 +23,7 @@ const SnackbarItem = ({ children, severity = 'info', onClose }: SnackbarItemProp
     <Alert
       className={classNames(styles.snackbarItem)}
       data-size='sm'
-      severity={severity}
+      data-color={severity}
     >
       <div>{children}</div>
       <Button

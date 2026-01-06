@@ -123,7 +123,7 @@ export const FormikLanguageFieldset = ({
               showDeleteButton
               onDeleteButtonClicked={() => handleRemoveLanguage(lang)}
               readOnly={readOnly}
-              error={hasError(lang)}
+              aria-invalid={hasError(lang)}
             />
           ) : (
             <div
@@ -135,7 +135,7 @@ export const FormikLanguageFieldset = ({
                 ref={languageRefs.current[lang]}
                 name={`${name}.${lang}`}
                 aria-label={localization.language[lang]}
-                error={hasError(lang)}
+                aria-invalid={hasError(lang)}
                 readOnly={readOnly}
                 {...(renderAs === TextareaWithPrefix
                   ? {

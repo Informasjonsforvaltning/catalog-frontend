@@ -68,7 +68,7 @@ export const MenuItem = ({
         {changed && (
           <Tag
             data-size='sm'
-            color='warning'
+            data-color='warning'
             style={{ scale: 0.8, margin: '-0.25rem 0' }}
           >
             {localization.changed}
@@ -77,7 +77,7 @@ export const MenuItem = ({
         {error && (
           <Tag
             data-size='sm'
-            color='danger'
+            data-color='danger'
             style={{ scale: 0.8, margin: '-0.25rem 0' }}
           >
             {localization.error}

@@ -194,4 +194,7 @@ export const datasetFormNb = {
     title: 'Datasettet er godkjent',
     message: 'Kan ikke ignorere påkrevde felt for godkjente datasett. Skal godkjenningen også fjernes?',
   },
+  placeholder: {
+    notSpecified: 'Ikke oppgitt'
+  }
 };

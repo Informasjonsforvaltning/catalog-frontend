@@ -20,11 +20,11 @@ import {
   ConfirmModal,
   FormikAutoSaver,
   FormLayout,
-  HelpMarkdown,
   NotificationCarousel,
   Snackbar,
   StickyFooterBar,
 } from '@catalog-frontend/ui';
+import { HelpText, HStack } from '@fellesdatakatalog/ui';
 import { Formik, Form, FormikProps } from 'formik';
 import { useParams, useSearchParams } from 'next/navigation';
 import { datasetTemplate } from './utils/dataset-initial-values';
@@ -187,7 +187,7 @@ export const DatasetForm = ({
           <Alert
             key={1}
             data-size='sm'
-            severity='danger'
+            data-color='danger'
             className={styles.notification}
           >
             {localization.validation.formError}
@@ -198,7 +198,7 @@ export const DatasetForm = ({
           <Alert
             key={1}
             data-size='sm'
-            severity='warning'
+            data-color='warning'
             className={styles.notification}
           >
             {localization.validation.unsavedChanges}
@@ -240,7 +240,7 @@ export const DatasetForm = ({
             try {
               const newValues = await onSubmit(trimObjectWhitespace(values));
 
-              showSnackbarMessage({ message: localization.snackbar.saveSuccessfull, severity: 'success' });
+              showSnackbarMessage({ message: localization.snackbar.saveSuccessful, severity: 'success' });
               if (newValues) {
                 resetForm({ values: datasetTemplate(newValues) });
               } else {
@@ -429,64 +429,59 @@ export const DatasetForm = ({
               )}
               <StickyFooterBar>
                 <div className={styles.footerContent}>
-                  <Button
-                    type='button'
-                    data-size='sm'
-                    disabled={isSubmitting || isValidating || isCanceled || !dirty}
-                    onClick={() => {
-                      setValidateOnChange(true);
-                      submitForm();
-                    }}
-                  >
-                    {isSubmitting ? (
-                      <Spinner
-                        title='Lagrer'
-                        data-size='sm'
-                      />
-                    ) : (
-                      localization.save
-                    )}
-                  </Button>
-
-                  <Button
-                    type='button'
-                    data-size='sm'
-                    variant='secondary'
-                    disabled={isSubmitting || isValidating || isCanceled}
-                    onClick={handleCancel}
-                  >
-                    {localization.button.cancel}
-                  </Button>
+                  <HStack>
+                    <Button
+                      type='button'
+                      data-size='sm'
+                      disabled={isCanceled}
+                      onClick={() => {
+                        if (isSubmitting || isValidating) {
+                          return;
+                        }
+                        setValidateOnChange(true);
+                        submitForm();
+                      }}
+                    >
+                      {isSubmitting && <Spinner data-size='xs' />}
+                      {localization.button.save}
+                    </Button>
+                    <Button
+                      type='button'
+                      data-size='sm'
+                      variant='secondary'
+                      disabled={isSubmitting || isValidating || isCanceled}
+                      onClick={handleCancel}
+                    >
+                      {localization.button.cancel}
+                    </Button>
+                  </HStack>
                   <div className={styles.verticalLine}></div>
-                  <Switch
-                    position='left'
-                    data-size='sm'
-                    checked={values.approved}
-                    onChange={(event) => handleSwitchChange(event, setFieldValue)}
-                  >
-                    <div className={styles.footerContent}>
-                      {localization.tag.approve}
-                      <HelpMarkdown
-                        title={localization.datasetForm.fieldLabel.registrationStatus}
-                        aria-label={'statusSwitch'}
-                      >
-                        {localization.datasetForm.helptext.statusSwitch}
-                      </HelpMarkdown>
-                    </div>
-                  </Switch>
+                  <HStack>
+                    <Switch
+                      position='left'
+                      data-size='sm'
+                      checked={values.approved}
+                      onChange={(event) => handleSwitchChange(event, setFieldValue)}
+                      label={localization.tag.approve}
+                    />
+                    <HelpText data-size='sm'>
+                      {localization.datasetForm.helptext.statusSwitch}
+                    </HelpText>
+                  </HStack>
                   <div className={styles.verticalLine}></div>
                   <div className={classNames(styles.flex, styles.gap2, styles.noWrap)}>
-                    <Checkbox
-                      data-size='sm'
-                      value='ignoreRequired'
-                      checked={ignoreRequired}
-                      onChange={(e) => handleIgnoreRequiredChange(e.target.checked)}
-                    >
-                      {localization.datasetForm.fieldLabel.ignoreRequired}
-                    </Checkbox>
-                    <HelpMarkdown aria-label={`Help ${localization.datasetForm.fieldLabel.ignoreRequired}`}>
-                      {localization.datasetForm.alert.ignoreRequired}
-                    </HelpMarkdown>
+                    <HStack>
+                      <Checkbox
+                        data-size='sm'
+                        value='ignoreRequired'
+                        checked={ignoreRequired}
+                        onChange={(e) => handleIgnoreRequiredChange(e.target.checked)}
+                        label={localization.datasetForm.fieldLabel.ignoreRequired}
+                      />
+                      <HelpText data-size='sm'>
+                        {localization.datasetForm.alert.ignoreRequired}
+                      </HelpText>
+                    </HStack>
                   </div>
                 </div>
                 {notifications.length > 0 && <NotificationCarousel notifications={notifications} />}

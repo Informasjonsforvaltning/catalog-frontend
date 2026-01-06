@@ -207,6 +207,8 @@ export const nb = {
     removeFromCodeList: 'Fjern fra kodeliste',
     restore: 'Gjenopprett',
     save: 'Lagre',
+    approve: 'Godkjenn',
+    saveDraft: 'Lagre utkast',
     send: 'Send inn',
     success: 'OK',
     unpublish: 'Avpubliser',

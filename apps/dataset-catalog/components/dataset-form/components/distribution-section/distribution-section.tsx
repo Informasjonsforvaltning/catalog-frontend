@@ -202,13 +202,12 @@ export const DistributionSection = ({
                       {!isEmpty(item?.title) && (
                         <>
                           <Heading
-                            size='2xs'
-                            spacing
+                            data-size='xs'
                             level={3}
                           >
                             {localization.datasetForm.fieldLabel.title}
                           </Heading>
-                          <Paragraph size='sm'>{getTranslateText(item.title)}</Paragraph>
+                          <Paragraph data-size='sm'>{getTranslateText(item.title)}</Paragraph>
                         </>
                       )}
                     </div>

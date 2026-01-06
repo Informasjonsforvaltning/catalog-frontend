@@ -6,7 +6,7 @@ import styles from './button.module.css';
 const DeleteButton = ({ children = localization.button.delete, ...props }: ButtonProps) => (
   <Button
     variant='tertiary'
-    color='danger'
+    data-color='danger'
     data-size='sm'
     {...props}
   >

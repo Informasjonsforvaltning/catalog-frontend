@@ -8,7 +8,8 @@ import {
   FormHeading,
 } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Dialog, Table, Textfield } from '@digdir/designsystemet-react';
+import { Button, Dialog, Table, Textfield, Heading } from '@digdir/designsystemet-react';
+import { HStack } from '@fellesdatakatalog/ui';
 import { FastField, FieldArray, Formik, useFormikContext } from 'formik';
 import styles from '../dataset-form.module.css';
 import { ReactNode, useEffect, useRef, useState } from 'react';
@@ -57,49 +58,52 @@ export const UriWithLabelFieldsetTable = ({
         name={fieldName}
         render={(arrayHelpers) => (
           <div className={errors ? styles.errorBorder : undefined}>
-            <Table
-              data-size='sm'
-              className={styles.table}
-            >
-              {showHead && (
-                <Table.Head>
-                  <Table.Row>
-                    <Table.HeaderCell>{localization.title}</Table.HeaderCell>
-                    <Table.HeaderCell>{localization.link}</Table.HeaderCell>
-                    <Table.HeaderCell aria-label='Actions' />
-                  </Table.Row>
-                </Table.Head>
-              )}
-              <Table.Body>
-                {fieldValues?.map((item, index) => (
-                  <Table.Row key={`${fieldName}-tableRow-${index}`}>
-                    <Table.Cell>{getTranslateText(item?.prefLabel)}</Table.Cell>
-                    <Table.Cell>{item?.uri}</Table.Cell>
-                    <Table.Cell>
-                      <span className={styles.set}>
-                        <FieldModal
-                          fieldName={fieldName}
-                          template={item}
-                          type={'edit'}
-                          onSuccess={(updatedItem: UriWithLabel) => {
-                            arrayHelpers.replace(index, updatedItem);
-                            setSnapshot([...fieldValues ?? []]);
-                          }}
-                          onCancel={() => setFieldValue(fieldName, snapshot)}
-                          onChange={(updatedItem: UriWithLabel) => arrayHelpers.replace(index, updatedItem)}
-                        />
-                        <DeleteButton onClick={() => {
-                          const newArray = [...fieldValues ?? []];
-                          newArray.splice(index, 1);
-                          setFieldValue(fieldName, newArray);
-                          setSnapshot([...newArray]);
-                        }} />
-                      </span>
-                    </Table.Cell>
-                  </Table.Row>
-                ))}
-              </Table.Body>
-            </Table>
+            {
+              fieldValues?.length > 0 &&
+              <Table
+                data-size='sm'
+                className={styles.table}
+              >
+                {showHead && (
+                  <Table.Head>
+                    <Table.Row>
+                      <Table.HeaderCell>{localization.title}</Table.HeaderCell>
+                      <Table.HeaderCell>{localization.link}</Table.HeaderCell>
+                      <Table.HeaderCell aria-label='Actions' />
+                    </Table.Row>
+                  </Table.Head>
+                )}
+                <Table.Body>
+                  {fieldValues?.map((item, index) => (
+                    <Table.Row key={`${fieldName}-tableRow-${index}`}>
+                      <Table.Cell>{getTranslateText(item?.prefLabel)}</Table.Cell>
+                      <Table.Cell>{item?.uri || localization.datasetForm.placeholder.notSpecified}</Table.Cell>
+                      <Table.Cell>
+                        <span className={styles.set}>
+                          <FieldModal
+                            fieldName={fieldName}
+                            template={item}
+                            type={'edit'}
+                            onSuccess={(updatedItem: UriWithLabel) => {
+                              arrayHelpers.replace(index, updatedItem);
+                              setSnapshot([...fieldValues ?? []]);
+                            }}
+                            onCancel={() => setFieldValue(fieldName, snapshot)}
+                            onChange={(updatedItem: UriWithLabel) => arrayHelpers.replace(index, updatedItem)}
+                          />
+                          <DeleteButton onClick={() => {
+                            const newArray = [...fieldValues ?? []];
+                            newArray.splice(index, 1);
+                            setFieldValue(fieldName, newArray);
+                            setSnapshot([...newArray]);
+                          }} />
+                        </span>
+                      </Table.Cell>
+                    </Table.Row>
+                  ))}
+                </Table.Body>
+              </Table>
+            }
             <div>
               <FieldModal
                 fieldName={fieldName}
@@ -162,12 +166,14 @@ const FieldModal = ({ fieldName, template, type, onSuccess, onCancel, onChange }
               return (
                 <>
                   <Dialog.Block>
+                    <Heading level={2} data-size='xs'>
                     {type === 'edit'
                       ? `${localization.edit} ${getTranslateText(localization.datasetForm.fieldLabel[fieldName])?.toString().toLowerCase()}`
                       : `${localization.add} ${getTranslateText(localization.datasetForm.fieldLabel[fieldName])?.toString().toLowerCase()}`}
+                    </Heading>
                   </Dialog.Block>
 
-                  <Dialog.Block className={styles.modalContent}>
+                  <Dialog.Block>
                     <FormikLanguageFieldset
                       as={Textfield}
                       name='prefLabel'
@@ -184,26 +190,28 @@ const FieldModal = ({ fieldName, template, type, onSuccess, onCancel, onChange }
                   </Dialog.Block>
 
                   <Dialog.Block>
-                    <Button
-                      type='button'
-                      disabled={isSubmitting || !dirty || hasNoFieldValues(values)}
-                      onClick={() => submitForm()}
-                      data-size='sm'
-                    >
-                      {type === 'new' ? localization.add : localization.datasetForm.button.update}
-                    </Button>
-                    <Button
-                      variant='secondary'
-                      type='button'
-                      onClick={() => {
-                        onCancel();
-                        modalRef.current?.close();
-                      }}
-                      disabled={isSubmitting}
-                      data-size='sm'
-                    >
-                      {localization.button.cancel}
-                    </Button>
+                    <HStack>
+                      <Button
+                        type='button'
+                        disabled={isSubmitting || !dirty || hasNoFieldValues(values)}
+                        onClick={() => submitForm()}
+                        data-size='sm'
+                      >
+                        {type === 'new' ? localization.add : localization.datasetForm.button.update}
+                      </Button>
+                      <Button
+                        variant='secondary'
+                        type='button'
+                        onClick={() => {
+                          onCancel();
+                          modalRef.current?.close();
+                        }}
+                        disabled={isSubmitting}
+                        data-size='sm'
+                      >
+                        {localization.button.cancel}
+                      </Button>
+                    </HStack>
                   </Dialog.Block>
                 </>
               );
