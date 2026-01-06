@@ -4,6 +4,7 @@ import {
   Alert,
   Box,
   Checkbox,
+  Fieldset,
   Paragraph,
   Spinner,
   Textfield,
@@ -336,6 +337,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
               "status",
               "produces",
               "contactPoints",
+              "spatial",
             ].forEach((name) => {
               if (isDirty(name)) {
                 dirtyFields.push(name);
@@ -449,7 +451,20 @@ export const ServiceForm = (props: ServiceFormProps) => {
                         ))}
                       </Field>
                       <FieldsetDivider />
-                      <SpatialCombobox referenceDataEnv={referenceDataEnv} />
+                      <Fieldset
+                        size="sm"
+                        legend={
+                          <TitleWithHelpTextAndTag
+                            tagTitle={localization.tag.recommended}
+                            tagColor="info"
+                            helpText={localization.serviceForm.helptext.spatial}
+                          >
+                            {localization.serviceForm.fieldLabel.spatial}
+                          </TitleWithHelpTextAndTag>
+                        }
+                      >
+                        <SpatialCombobox referenceDataEnv={referenceDataEnv} />
+                      </Fieldset>
                     </Box>
                   </FormLayout.Section>
 

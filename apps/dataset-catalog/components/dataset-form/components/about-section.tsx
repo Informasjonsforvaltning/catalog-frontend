@@ -89,7 +89,19 @@ export const AboutSection = ({
       <FieldsetDivider />
       {isMobility && (
         <>
-          <SpatialCombobox referenceDataEnv={referenceDataEnv} required />
+          <Fieldset
+            size="sm"
+            legend={
+              <TitleWithHelpTextAndTag
+                tagTitle={localization.tag.required}
+                helpText={localization.datasetForm.helptext.spatial}
+              >
+                {localization.datasetForm.fieldLabel.spatial}
+              </TitleWithHelpTextAndTag>
+            }
+          >
+            <SpatialCombobox referenceDataEnv={referenceDataEnv} />
+          </Fieldset>
           <FieldsetDivider />
           <Fieldset
             size="sm"

@@ -1,21 +1,21 @@
+"use client";
+
 import {
-  TitleWithHelpTextAndTag,
   useDebounce,
   useSearchAdministrativeUnits,
   useSearchAdministrativeUnitsByUri,
 } from "@catalog-frontend/ui";
 import { localization, getTranslateText } from "@catalog-frontend/utils";
-import { Combobox, Fieldset } from "@digdir/designsystemet-react";
+import { Combobox } from "@digdir/designsystemet-react";
 import { Dataset, ReferenceDataCode } from "@catalog-frontend/types";
 import { useMemo, useState } from "react";
 import { useFormikContext } from "formik";
 
 interface Props {
   referenceDataEnv: string;
-  required?: boolean;
 }
 
-export const SpatialCombobox = ({ referenceDataEnv, required }: Props) => {
+export const SpatialCombobox = ({ referenceDataEnv }: Props) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const debouncedSearchTerm = useDebounce(searchTerm);
   const { data: searchHits, isLoading: isSearching } =
@@ -25,19 +25,6 @@ export const SpatialCombobox = ({ referenceDataEnv, required }: Props) => {
     values?.spatial,
     referenceDataEnv,
   );
-  const getDescription = (item: ReferenceDataCode | undefined) =>
-    item
-      ? item.uri.includes("geonorge")
-        ? getLocationType(item.uri)
-        : item.code
-      : "";
-
-  const getLocationType = (uri: string): string => {
-    if (uri.includes("kommune")) return localization.spatial.municipality;
-    if (uri.includes("fylke")) return localization.spatial.county;
-    if (uri.includes("nasjon")) return localization.spatial.country;
-    return "";
-  };
 
   const comboboxOptions: ReferenceDataCode[] = useMemo(
     () => [
@@ -63,48 +50,47 @@ export const SpatialCombobox = ({ referenceDataEnv, required }: Props) => {
   );
 
   return (
-    <Fieldset
+    <Combobox
+      placeholder={`${localization.search.search}...`}
+      multiple
+      hideClearButton
+      filter={() => true} // results are already filtered
       size="sm"
-      legend={
-        <TitleWithHelpTextAndTag
-          tagTitle={
-            required ? localization.tag.required : localization.tag.recommended
-          }
-          tagColor={required ? undefined : "info"}
-          helpText={localization.datasetForm.helptext.spatial}
-        >
-          {localization.datasetForm.fieldLabel.spatial}
-        </TitleWithHelpTextAndTag>
+      onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+        setSearchTerm(event.target.value)
       }
+      onValueChange={(selectedValues) =>
+        setFieldValue("spatial", selectedValues)
+      }
+      value={values.spatial || []}
+      virtual
+      loading={isSearching}
+      error={errors.spatial}
     >
-      <Combobox
-        placeholder={`${localization.search.search}...`}
-        multiple
-        hideClearButton
-        filter={() => true} // disable filter
-        size="sm"
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-          setSearchTerm(event.target.value)
-        }
-        onValueChange={(selectedValues) =>
-          setFieldValue("spatial", selectedValues)
-        }
-        value={values.spatial || []}
-        virtual
-        loading={isSearching}
-        error={errors.spatial}
-      >
-        <Combobox.Empty>{localization.search.noHits}...</Combobox.Empty>
-        {comboboxOptions.map((item) => (
-          <Combobox.Option
-            key={item.uri}
-            value={item.uri}
-            description={getDescription(item)}
-          >
-            {item.label ? getTranslateText(item.label) : item.uri}
-          </Combobox.Option>
-        ))}
-      </Combobox>
-    </Fieldset>
+      <Combobox.Empty>{localization.search.noHits}...</Combobox.Empty>
+      {comboboxOptions.map((item) => (
+        <Combobox.Option
+          key={item.uri}
+          value={item.uri}
+          description={getDescription(item)}
+        >
+          {item.label ? getTranslateText(item.label) : item.uri}
+        </Combobox.Option>
+      ))}
+    </Combobox>
   );
+};
+
+const getDescription = (item: ReferenceDataCode | undefined) =>
+  item
+    ? item.uri.includes("geonorge")
+      ? getLocationType(item.uri)
+      : item.code
+    : "";
+
+const getLocationType = (uri: string): string => {
+  if (uri.includes("kommune")) return localization.spatial.municipality;
+  if (uri.includes("fylke")) return localization.spatial.county;
+  if (uri.includes("nasjon")) return localization.spatial.country;
+  return "";
 };
