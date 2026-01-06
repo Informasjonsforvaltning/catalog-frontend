@@ -84,7 +84,12 @@ export const RightColumn = ({
           headingColor="light"
           data-testid="data-service-modified-date"
         >
-          {new Date(dataService.modified).toLocaleDateString("no-NO")}
+          {formatISO(dataService.modified, {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })}
         </InfoCard.Item>
       )}
 
