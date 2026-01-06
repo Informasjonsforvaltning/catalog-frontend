@@ -38,8 +38,6 @@ export const dataServiceFormNb = {
       "Brukes til å oppgi gebyrbeløpet. Selv om hverken beløp eller dokumentasjon er obligatorisk, SKAL minst én av dem brukes. Valutaverdien velges fra EUs kontrollerte vokabular _Valuta_.",
     publish:
       "Publiser API-beskrivelsen til Data.norge.no. En beskrivelse kan ikke slettes så lenge den er publisert.",
-    publishWarning:
-      'API-beskrivelsen må ha status "Godkjent" for å kunne publiseres til Data.norge.no. Statusen kan endres i ',
   },
   heading: {
     about: "Om API-et",

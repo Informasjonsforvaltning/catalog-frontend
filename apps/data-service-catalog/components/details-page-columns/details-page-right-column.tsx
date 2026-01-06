@@ -41,12 +41,8 @@ export const RightColumn = ({
         key={`info-data-${localization.publicationState.state}`}
         title={localization.publicationState.state}
         headingColor="light"
-        helpText={
-          !dataService.published
-            ? `${localization.dataServiceForm.helptext.publishWarning} [skjemaet.](/catalogs/${catalogId}/data-services/${dataService?.id}/edit)`
-            : localization.dataServiceForm.helptext.publish
-        }
-        helpTextSeverity={!dataService.published ? "warning" : "info"}
+        helpText={localization.dataServiceForm.helptext.publish}
+        helpTextSeverity="info"
       >
         <PublishSwitch
           catalogId={dataService.catalogId}
