@@ -36,6 +36,8 @@ export const dataServiceFormNb = {
       "Brukes til å referere til en side eller et dokument som beskriver prismodell/beregningsgrunnlag. I tillegg til å dokumentere beregningsgrunnlaget, kan denne egenskapen brukes i tilfeller der det ikke bare er ett beløp, men en komplisert prismodell avhengig av f.eks. mengde data, hyppighet av oppslag/nedlasting osv. Selv om hverken beløp eller dokumentasjon er obligatorisk, SKAL minst én av dem brukes.",
     costValue:
       "Brukes til å oppgi gebyrbeløpet. Selv om hverken beløp eller dokumentasjon er obligatorisk, SKAL minst én av dem brukes. Valutaverdien velges fra EUs kontrollerte vokabular _Valuta_.",
+    publish:
+      "Publiser API-beskrivelsen til Data.norge.no. For å publisere må du fylle ut alle påkrevde felt i skjemaet, en beskrivelse kan ikke slettes så lenge den er publisert.",
   },
   heading: {
     about: "Om API-et",
