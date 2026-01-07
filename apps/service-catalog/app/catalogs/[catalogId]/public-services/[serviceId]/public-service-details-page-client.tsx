@@ -69,7 +69,7 @@ const PublicServiceDetailsPageClient = ({
               serviceId={serviceId}
               isPublished={service.published}
               type="public-services"
-              disabled={hasWritePermission}
+              disabled={!hasWritePermission}
             />
 
             <p className={styles.greyFont}>
