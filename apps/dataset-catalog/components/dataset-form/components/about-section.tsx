@@ -100,6 +100,7 @@ export const AboutSection = ({
                     ? localization.tag.required
                     : localization.tag.recommended
                 }
+                helpText={localization.datasetForm.helptext.spatial}
               >
                 {localization.datasetForm.fieldLabel.spatial}
               </TitleWithHelpTextAndTag>
