@@ -5,6 +5,7 @@ import {
   accessRights,
   getTranslateText,
   localization,
+  formatISO,
 } from "@catalog-frontend/utils";
 import { isEmpty } from "lodash";
 import { EnvelopeClosedIcon, LinkIcon, PhoneIcon } from "@navikt/aksel-icons";
