@@ -50,7 +50,6 @@ const EditDataServicePage = withReadProtectedPage(
     const hasWritePermission =
       session &&
       hasOrganizationWritePermission(session?.accessToken, catalogId);
-    const isValid = await dataServiceValidationSchema().isValid(dataService);
 
     const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
     const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
@@ -101,7 +100,6 @@ const EditDataServicePage = withReadProtectedPage(
             catalogId={catalogId}
             dataServiceId={dataServiceId}
             hasWritePermission={hasWritePermission}
-            isValid={isValid}
             referenceData={referenceData}
             referenceDataEnv={referenceDataEnv}
             searchEnv={searchEnv}

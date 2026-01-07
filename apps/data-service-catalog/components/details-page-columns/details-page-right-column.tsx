@@ -3,7 +3,6 @@ import styles from "./details-columns.module.css";
 import { DataService, DataServiceReferenceData } from "@catalog-frontend/types";
 import {
   accessRights,
-  formatISO,
   getTranslateText,
   localization,
 } from "@catalog-frontend/utils";
@@ -13,21 +12,17 @@ import PublishSwitch from "../publish-switch";
 import { ReferenceDataTag } from "./components/reference-data-tag";
 
 type Props = {
-  catalogId: string;
   dataService: DataService;
   referenceData: DataServiceReferenceData;
   language: string;
   hasWritePermission: boolean;
-  isValid: boolean;
 };
 
 export const RightColumn = ({
-  catalogId,
   dataService,
   hasWritePermission,
   referenceData,
   language,
-  isValid,
 }: Props) => {
   return (
     <InfoCard data-testid="data-service-right-column">
@@ -43,39 +38,19 @@ export const RightColumn = ({
       <InfoCard.Item
         key={`info-data-${localization.publicationState.state}`}
         title={localization.publicationState.state}
-        helpText={
-          isValid
-            ? undefined
-            : `Publisering er ikke mulig fordi ett eller flere felt inneholder ugyldige eller manglende verdier. Klikk på 
-            [Rediger API-et](/catalogs/${catalogId}/data-services/${dataService?.id}/edit) for å åpne skjemaet og se hvilke feil som må rettes for å publisere.`
-        }
-        helpTextSeverity={"warning"}
         headingColor="light"
-        data-testid="data-service-publication-state"
+        helpText={localization.dataServiceForm.helptext.publish}
+        helpTextSeverity="info"
       >
         <PublishSwitch
           catalogId={dataService.catalogId}
           dataService={dataService}
-          disabled={!hasWritePermission || !isValid}
+          disabled={!hasWritePermission}
         />
-        <div
-          className={styles.greyFont}
-          data-testid="data-service-publication-date"
-        >
-          {dataService.published
-            ? `${localization.publicationState.publishedInFDK}${
-                dataService.publishedDate
-                  ? " " +
-                    formatISO(dataService.publishedDate, {
-                      weekday: "long",
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })
-                  : ""
-              }`
-            : ""}
-        </div>
+
+        {dataService.published
+          ? localization.publicationState.publishedInFDK
+          : localization.publicationState.unpublished}
       </InfoCard.Item>
 
       {dataService?.modified && (

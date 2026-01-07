@@ -2,6 +2,7 @@ import {
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
+  SpatialCombobox,
 } from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
@@ -93,8 +94,12 @@ export const AboutSection = ({
             size="sm"
             legend={
               <TitleWithHelpTextAndTag
-                tagTitle={localization.tag.required}
-                helpText={localization.datasetForm.helptext.spatial}
+                tagColor={isMobility ? undefined : "info"}
+                tagTitle={
+                  isMobility
+                    ? localization.tag.required
+                    : localization.tag.recommended
+                }
               >
                 {localization.datasetForm.fieldLabel.spatial}
               </TitleWithHelpTextAndTag>
