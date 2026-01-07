@@ -94,7 +94,12 @@ export const AboutSection = ({
             size="sm"
             legend={
               <TitleWithHelpTextAndTag
-                tagTitle={localization.tag.required}
+                tagColor={isMobility ? undefined : "info"}
+                tagTitle={
+                  isMobility
+                    ? localization.tag.required
+                    : localization.tag.recommended
+                }
                 helpText={localization.datasetForm.helptext.spatial}
               >
                 {localization.datasetForm.fieldLabel.spatial}
