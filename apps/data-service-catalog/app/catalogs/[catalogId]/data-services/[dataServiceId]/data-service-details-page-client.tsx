@@ -118,7 +118,6 @@ const DataServiceDetailsPageClient = ({
         </DetailsPageLayout.Left>
         <DetailsPageLayout.Right>
           <RightColumn
-            catalogId={catalogId}
             dataService={dataService}
             referenceData={referenceData}
             language={language}

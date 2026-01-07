@@ -12,7 +12,6 @@ import PublishSwitch from "../publish-switch";
 import { ReferenceDataTag } from "./components/reference-data-tag";
 
 type Props = {
-  catalogId: string;
   dataService: DataService;
   referenceData: DataServiceReferenceData;
   language: string;
@@ -20,7 +19,6 @@ type Props = {
 };
 
 export const RightColumn = ({
-  catalogId,
   dataService,
   hasWritePermission,
   referenceData,
