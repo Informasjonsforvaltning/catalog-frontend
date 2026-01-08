@@ -18,6 +18,9 @@ import {
 import { DataService, DataServiceToBeCreated } from "@catalog-frontend/types";
 import { revalidateTag } from "next/cache";
 import { compare } from "fast-json-patch";
+import omit from "lodash/omit";
+
+const dataServiceMetadataFieldsToOmit = ["modified"];
 
 export async function getDataServices(catalogId: string) {
   const session = await getValidSession();
@@ -141,7 +144,10 @@ export async function updateDataService(
       values?.availability === "none" ? undefined : values?.availability,
   });
 
-  const diff = compare(initialDataService, updatedDataService);
+  const diff = compare(
+    omit(initialDataService, dataServiceMetadataFieldsToOmit),
+    omit(updatedDataService, dataServiceMetadataFieldsToOmit),
+  );
 
   if (diff.length === 0) {
     throw new Error(localization.alert.noChanges);
