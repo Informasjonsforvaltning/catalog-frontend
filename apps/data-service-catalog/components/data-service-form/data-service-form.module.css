@@ -90,6 +90,12 @@
   flex-wrap: nowrap;
 }
 
+.verticalLine {
+  border-left: 1px solid var(--fds-semantic-border-neutral-default);
+  height: 24px;
+  margin: 0 var(--fds-spacing-2);
+}
+
 .stickyFooterBar {
   position: sticky;
   bottom: 0px;
