@@ -1,8 +1,12 @@
-import { DataService, DataServiceReferenceData } from "@catalog-frontend/types";
+import {
+  DataService,
+  DataServiceReferenceData,
+  ISOLanguage,
+} from "@catalog-frontend/types";
 import styles from "./details-columns.module.css";
 import { InfoCard } from "@catalog-frontend/ui";
-import { isEmpty, some } from "lodash";
-import { getTranslateText, localization } from "@catalog-frontend/utils";
+import { isEmpty } from "lodash";
+import { localization, getTranslateText } from "@catalog-frontend/utils";
 import { Paragraph, Tag } from "@digdir/designsystemet-react";
 import { DetailsUrlList } from "./components/details-url-list";
 import { ReferenceDataTag } from "./components/reference-data-tag";
@@ -18,6 +22,8 @@ type Props = {
   searchEnv: string;
 };
 
+const keywordLanguages: ISOLanguage[] = ["nb", "nn", "en"];
+
 export const LeftColumn = ({
   dataService,
   referenceData,
@@ -25,6 +31,13 @@ export const LeftColumn = ({
   referenceDataEnv,
   searchEnv,
 }: Props) => {
+  const allKeywords = keywordLanguages
+    .flatMap((lang) => {
+      const values = dataService?.keywords?.[lang];
+      return Array.isArray(values) ? values : [];
+    })
+    .filter(Boolean);
+
   return (
     <InfoCard data-testid="data-service-left-column">
       {!isEmpty(dataService?.description) && (
@@ -109,15 +122,17 @@ export const LeftColumn = ({
         </InfoCard.Item>
       )}
 
-      {some(dataService?.keywords, (v) => !isEmpty(v)) && (
+      {allKeywords.length > 0 && (
         <InfoCard.Item
           title={localization.dataServiceForm.fieldLabel.keywords}
           data-testid="data-service-keywords"
         >
           <li className={styles.list}>
-            <Tag size="sm" color="info">
-              {getTranslateText(dataService?.keywords, language)}
-            </Tag>
+            {allKeywords.map((keyword, index) => (
+              <Tag size="sm" color="info" key={`keyword-tag-${index}`}>
+                {keyword}
+              </Tag>
+            ))}
           </li>
         </InfoCard.Item>
       )}
