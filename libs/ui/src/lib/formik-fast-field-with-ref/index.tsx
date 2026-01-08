@@ -16,7 +16,7 @@ export const FastFieldWithRef = forwardRef<
 >(({ as: Component = Textfield, ...props }, ref) => (
   <FastField {...props}>
     {({ field }: { field: any }) => (
-      <Component {...field} {...props} ref={ref} />
+      <Component {...field} {...props} value={field.value ?? ""} ref={ref} />
     )}
   </FastField>
 ));
