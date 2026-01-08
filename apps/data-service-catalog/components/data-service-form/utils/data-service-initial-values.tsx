@@ -1,15 +1,15 @@
 import { DataService, DataServiceToBeCreated } from "@catalog-frontend/types";
-import { removeEmptyOrNullValues } from "@catalog-frontend/utils";
+import { omitBy, isEmpty } from "lodash";
 
 export const dataServiceTemplate = (dataService: DataService): DataService => {
   return {
     ...dataService,
-    title: removeEmptyOrNullValues(dataService?.title),
-    description: removeEmptyOrNullValues(dataService?.description),
-    keywords: removeEmptyOrNullValues(dataService?.keywords),
+    title: omitBy(dataService?.title, isEmpty),
+    description: omitBy(dataService?.description, isEmpty),
+    keywords: omitBy(dataService?.keywords, isEmpty),
     contactPoint: {
       ...dataService?.contactPoint,
-      name: removeEmptyOrNullValues(dataService?.contactPoint?.name),
+      name: omitBy(dataService?.contactPoint?.name, isEmpty),
       email: dataService?.contactPoint?.email || undefined,
       phone: dataService?.contactPoint?.phone || undefined,
       url: dataService?.contactPoint?.url || undefined,

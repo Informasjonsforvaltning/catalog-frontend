@@ -1,43 +1,5 @@
 import _ from "lodash";
 
-/**
- * Checks if a value is considered empty (null, undefined, empty string, or empty array).
- */
-const isEmptyValue = (value: unknown): boolean => {
-  if (value === undefined || value === null || value === "") return true;
-  if (Array.isArray(value) && value.length === 0) return true;
-  return false;
-};
-
-/**
- * Recursively removes keys with empty values from an object.
- * Handles empty strings, null, undefined, and empty arrays.
- * E.g., { title: { nb: "", nn: "text" } } becomes { title: { nn: "text" } }
- */
-export const removeEmptyOrNullValues = <T>(obj: T): T => {
-  if (Array.isArray(obj)) {
-    return obj.map((value: unknown) =>
-      typeof value === "object" && value !== null
-        ? removeEmptyOrNullValues(value)
-        : isEmptyValue(value)
-          ? undefined
-          : value,
-    ) as T;
-  }
-
-  if (typeof obj === "object" && obj !== null) {
-    return _.mapValues(
-      _.omitBy(obj as Record<string, unknown>, isEmptyValue),
-      (value: unknown) =>
-        typeof value === "object" && value !== null
-          ? removeEmptyOrNullValues(value)
-          : value,
-    ) as T;
-  }
-
-  return obj;
-};
-
 export const removeEmptyValues = (obj: any): any => {
   if (Array.isArray(obj)) {
     return obj.map((value) =>
