@@ -43,6 +43,7 @@ import {
   dataServiceValidationSchema,
   draftDataServiceValidationSchema,
 } from "./utils/validation-schema";
+import { dataServiceTemplate } from "./utils/data-service-initial-values";
 import { DataStorage } from "@catalog-frontend/utils";
 import { get, isEmpty, isEqual } from "lodash";
 import classNames from "classnames";
@@ -187,7 +188,7 @@ const DataServiceForm = ({
     <>
       <Formik
         innerRef={formikRef}
-        initialValues={initialValues as DataService}
+        initialValues={dataServiceTemplate(initialValues as DataService)}
         validationSchema={
           ignoreRequired
             ? draftDataServiceValidationSchema
@@ -211,7 +212,7 @@ const DataServiceForm = ({
                 severity: "success",
               });
               if (newValues) {
-                resetForm({ values: newValues });
+                resetForm({ values: dataServiceTemplate(newValues) });
               } else {
                 resetForm();
               }
@@ -264,9 +265,8 @@ const DataServiceForm = ({
               return false;
             }
 
-            const restoreValues: DataService = deepMergeWithUndefinedHandling(
-              { ...initialValues },
-              data.values,
+            const restoreValues: DataService = dataServiceTemplate(
+              deepMergeWithUndefinedHandling({ ...initialValues }, data.values),
             );
             setValues(restoreValues);
 
