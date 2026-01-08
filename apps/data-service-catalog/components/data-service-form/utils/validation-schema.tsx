@@ -9,6 +9,60 @@ import { isEmpty, isNumber } from "lodash";
 
 Yup.setLocale(nb);
 
+export const draftDataServiceValidationSchema = () =>
+  Yup.object().shape({
+    title: Yup.object().shape({
+      nb: Yup.string().notRequired(),
+      nn: Yup.string().notRequired(),
+      en: Yup.string().notRequired(),
+    }),
+    endpointUrl: Yup.string()
+      .label(localization.dataServiceForm.fieldLabel.endpoint)
+      .notRequired()
+      .matches(httpsRegex, localization.validation.invalidProtocol)
+      .url(localization.validation.invalidUrl),
+    endpointDescriptions: Yup.array()
+      .label(localization.dataServiceForm.fieldLabel.endpointDescriptions)
+      .notRequired()
+      .of(
+        Yup.string()
+          .required(localization.validation.deleteFieldIfEmpty)
+          .matches(httpsRegex, localization.validation.invalidProtocol)
+          .url(localization.validation.invalidUrl),
+      ),
+    landingPage: Yup.string()
+      .label(localization.dataServiceForm.fieldLabel.landingPage)
+      .notRequired()
+      .matches(httpsRegex, localization.validation.invalidProtocol)
+      .url(localization.validation.invalidUrl),
+    pages: Yup.array()
+      .label(localization.dataServiceForm.fieldLabel.pages)
+      .notRequired()
+      .of(
+        Yup.string()
+          .required(localization.validation.deleteFieldIfEmpty)
+          .matches(httpsRegex, localization.validation.invalidProtocol)
+          .url(localization.validation.invalidUrl),
+      ),
+    contactPoint: Yup.object().shape({
+      name: Yup.object().shape({
+        nb: Yup.string().notRequired(),
+        nn: Yup.string().notRequired(),
+        en: Yup.string().notRequired(),
+      }),
+      email: Yup.string()
+        .email(localization.validation.invalidEmail)
+        .notRequired(),
+      phone: Yup.string()
+        .matches(telephoneNumberRegex, localization.validation.invalidPhone)
+        .notRequired(),
+      url: Yup.string()
+        .matches(httpsRegex, localization.validation.invalidProtocol)
+        .url(localization.validation.invalidUrl)
+        .notRequired(),
+    }),
+  });
+
 export const dataServiceValidationSchema = () =>
   Yup.object().shape({
     title: Yup.object()

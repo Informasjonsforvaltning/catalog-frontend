@@ -16,6 +16,7 @@ import {
 import {
   FormLayout,
   FormikAutoSaver,
+  HelpMarkdown,
   Snackbar,
   NotificationCarousel,
   SnackbarSeverity,
@@ -27,6 +28,7 @@ import {
   Spinner,
   Alert,
   Paragraph,
+  Checkbox,
 } from "@digdir/designsystemet-react";
 import styles from "./data-service-form.module.css";
 import { AboutSection } from "./components/about-section";
@@ -37,7 +39,10 @@ import { DocumentationSection } from "./components/documentation-section";
 import { AccessSection } from "./components/access-section";
 import { DatasetSection } from "./components/dataset-section";
 import { StatusSection } from "./components/status-section";
-import { dataServiceValidationSchema } from "./utils/validation-schema";
+import {
+  dataServiceValidationSchema,
+  draftDataServiceValidationSchema,
+} from "./utils/validation-schema";
 import { DataStorage } from "@catalog-frontend/utils";
 import { get, isEmpty, isEqual } from "lodash";
 import classNames from "classnames";
@@ -103,9 +108,9 @@ const DataServiceForm = ({
   const searchParams = useSearchParams();
   const restoreOnRender = Boolean(searchParams.get("restore"));
   const { catalogId, dataServiceId } = useParams();
-  const [isDirty, setIsDirty] = useState(false);
   const [validateOnChange, setValidateOnChange] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
+  const [ignoreRequired, setIgnoreRequired] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] =
@@ -183,7 +188,11 @@ const DataServiceForm = ({
       <Formik
         innerRef={formikRef}
         initialValues={initialValues as DataService}
-        validationSchema={dataServiceValidationSchema}
+        validationSchema={
+          ignoreRequired
+            ? draftDataServiceValidationSchema
+            : dataServiceValidationSchema
+        }
         validateOnChange={validateOnChange}
         validateOnBlur={validateOnChange}
         onSubmit={async (values: DataService, { setSubmitting, resetForm }) => {
@@ -234,7 +243,6 @@ const DataServiceForm = ({
           values,
           initialValues: formInitialValues,
         }) => {
-          setTimeout(() => setIsDirty(dirty), 0);
           const notifications = getNotifications({
             isValid: Object.keys(errors).length === 0,
             hasUnsavedChanges: false,
@@ -478,7 +486,7 @@ const DataServiceForm = ({
                   )}
                 >
                   <div>
-                    <div className={classNames(styles.flex, styles.gap4)}>
+                    <div className={classNames(styles.flex, styles.gap2)}>
                       <Button
                         size="sm"
                         type="button"
@@ -512,6 +520,31 @@ const DataServiceForm = ({
                       >
                         Avbryt
                       </Button>
+                      <div className={styles.verticalLine}></div>
+                      <div
+                        className={classNames(
+                          styles.flex,
+                          styles.gap2,
+                          styles.noWrap,
+                        )}
+                      >
+                        <Checkbox
+                          size="sm"
+                          value="ignoreRequired"
+                          checked={ignoreRequired}
+                          onChange={(e) => setIgnoreRequired(e.target.checked)}
+                        >
+                          {
+                            localization.dataServiceForm.fieldLabel
+                              .ignoreRequired
+                          }
+                        </Checkbox>
+                        <HelpMarkdown
+                          aria-label={`Help ${localization.dataServiceForm.fieldLabel.ignoreRequired}`}
+                        >
+                          {localization.dataServiceForm.alert.ignoreRequired}
+                        </HelpMarkdown>
+                      </div>
                     </div>
                   </div>
                   {notifications.length > 0 && (
