@@ -14,12 +14,14 @@ import {
   StorageData,
 } from "@catalog-frontend/types";
 import {
+  ConfirmModal,
   FormLayout,
   FormikAutoSaver,
   HelpMarkdown,
   Snackbar,
   NotificationCarousel,
   SnackbarSeverity,
+  StickyFooterBar,
 } from "@catalog-frontend/ui";
 import { Formik, Form } from "formik";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
@@ -112,6 +114,7 @@ const DataServiceForm = ({
   const [validateOnChange, setValidateOnChange] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
   const [ignoreRequired, setIgnoreRequired] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] =
@@ -135,8 +138,19 @@ const DataServiceForm = ({
     setShowSnackbar(true);
   };
 
-  const handleCancel = () => {
+  const handleCancel = (dirty: boolean) => () => {
+    if (dirty) {
+      setShowCancelConfirm(true);
+    } else {
+      handleConfirmCancel();
+    }
+  };
+
+  const handleConfirmCancel = () => {
+    setShowCancelConfirm(false);
+    autoSaveStorage?.delete();
     setIsCanceled(true);
+
     if (onCancel) {
       onCancel();
     } else {
@@ -146,6 +160,10 @@ const DataServiceForm = ({
           : `/catalogs/${catalogId}/data-services`,
       );
     }
+  };
+
+  const handleCloseConfirmCancel = () => {
+    setShowCancelConfirm(false);
   };
 
   const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
@@ -478,84 +496,80 @@ const DataServiceForm = ({
                 </Snackbar>
               )}
 
-              <div className={styles.stickyFooterBar}>
-                <div
-                  className={classNames(
-                    "container",
-                    styles.stickyFooterContent,
-                  )}
-                >
-                  <div>
-                    <div className={classNames(styles.flex, styles.gap2)}>
-                      <Button
-                        size="sm"
-                        type="button"
-                        disabled={
-                          readOnly ||
-                          isSubmitting ||
-                          isValidating ||
-                          isCanceled ||
-                          !dirty
-                        }
-                        onClick={() => {
-                          setValidateOnChange(true);
-                          submitForm();
-                        }}
-                        data-testid="save-data-service-button"
-                      >
-                        {isSubmitting ? (
-                          <Spinner title="Lagrer" size="sm" />
-                        ) : (
-                          "Lagre"
-                        )}
-                      </Button>
-                      <Button
-                        size="sm"
-                        disabled={
-                          readOnly || isSubmitting || isValidating || isCanceled
-                        }
-                        onClick={handleCancel}
-                        variant="secondary"
-                        data-testid="cancel-data-service-button"
-                      >
-                        Avbryt
-                      </Button>
-                      <div className={styles.verticalLine}></div>
-                      <div
-                        className={classNames(
-                          styles.flex,
-                          styles.gap2,
-                          styles.noWrap,
-                        )}
-                      >
-                        <Checkbox
-                          size="sm"
-                          value="ignoreRequired"
-                          checked={ignoreRequired}
-                          onChange={(e) => setIgnoreRequired(e.target.checked)}
-                        >
-                          {
-                            localization.dataServiceForm.fieldLabel
-                              .ignoreRequired
-                          }
-                        </Checkbox>
-                        <HelpMarkdown
-                          aria-label={`Help ${localization.dataServiceForm.fieldLabel.ignoreRequired}`}
-                        >
-                          {localization.dataServiceForm.alert.ignoreRequired}
-                        </HelpMarkdown>
-                      </div>
-                    </div>
+              <StickyFooterBar>
+                <div className={styles.footerContent}>
+                  <Button
+                    size="sm"
+                    type="button"
+                    disabled={
+                      readOnly ||
+                      isSubmitting ||
+                      isValidating ||
+                      isCanceled ||
+                      !dirty
+                    }
+                    onClick={() => {
+                      setValidateOnChange(true);
+                      submitForm();
+                    }}
+                    data-testid="save-data-service-button"
+                  >
+                    {isSubmitting ? (
+                      <Spinner title="Lagrer" size="sm" />
+                    ) : (
+                      "Lagre"
+                    )}
+                  </Button>
+                  <Button
+                    size="sm"
+                    disabled={
+                      readOnly || isSubmitting || isValidating || isCanceled
+                    }
+                    onClick={handleCancel(dirty)}
+                    variant="secondary"
+                    data-testid="cancel-data-service-button"
+                  >
+                    Avbryt
+                  </Button>
+                  <div className={styles.verticalLine}></div>
+                  <div
+                    className={classNames(
+                      styles.flex,
+                      styles.gap2,
+                      styles.noWrap,
+                    )}
+                  >
+                    <Checkbox
+                      size="sm"
+                      value="ignoreRequired"
+                      checked={ignoreRequired}
+                      onChange={(e) => setIgnoreRequired(e.target.checked)}
+                    >
+                      {localization.dataServiceForm.fieldLabel.ignoreRequired}
+                    </Checkbox>
+                    <HelpMarkdown
+                      aria-label={`Help ${localization.dataServiceForm.fieldLabel.ignoreRequired}`}
+                    >
+                      {localization.dataServiceForm.alert.ignoreRequired}
+                    </HelpMarkdown>
                   </div>
-                  {notifications.length > 0 && (
-                    <NotificationCarousel notifications={notifications} />
-                  )}
                 </div>
-              </div>
+                {notifications.length > 0 && (
+                  <NotificationCarousel notifications={notifications} />
+                )}
+              </StickyFooterBar>
             </>
           );
         }}
       </Formik>
+      {showCancelConfirm && (
+        <ConfirmModal
+          title={localization.confirm.exitForm.title}
+          content={localization.confirm.exitForm.message}
+          onSuccess={handleConfirmCancel}
+          onCancel={handleCloseConfirmCancel}
+        />
+      )}
     </>
   );
 };
