@@ -4,12 +4,7 @@ import { ReactNode, useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import { Formik, Form, FormikProps } from "formik";
 import { useSearchParams } from "next/navigation";
-import {
-  Alert,
-  Checkbox,
-  Paragraph,
-  Spinner,
-} from "@digdir/designsystemet-react";
+import { Checkbox, Paragraph, Spinner } from "@digdir/designsystemet-react";
 import {
   DataStorage,
   formatISO,
@@ -30,11 +25,12 @@ import type {
 } from "@catalog-frontend/types";
 import {
   Button,
+  ConfirmModal,
   FormLayout,
   FormikAutoSaver,
-  NotificationCarousel,
+  getFormNotifications,
   HelpMarkdown,
-  ConfirmModal,
+  NotificationCarousel,
   Snackbar,
   SnackbarSeverity,
 } from "@catalog-frontend/ui";
@@ -78,33 +74,6 @@ type Props = {
   showSnackbarSuccessOnInit?: boolean;
   usersResult: UsersResult;
 };
-
-const getNotifications = ({ isValid, hasUnsavedChanges }) => [
-  ...(isValid
-    ? []
-    : [
-        <Alert
-          key={1}
-          size="sm"
-          severity="danger"
-          style={{ background: "none", border: "none", padding: 0 }}
-        >
-          {localization.validation.formError}
-        </Alert>,
-      ]),
-  ...(hasUnsavedChanges
-    ? [
-        <Alert
-          key={1}
-          size="sm"
-          severity="warning"
-          style={{ background: "none", border: "none", padding: 0 }}
-        >
-          {localization.validation.unsavedChanges}
-        </Alert>,
-      ]
-    : []),
-];
 
 const ConceptForm = ({
   afterSubmit,
@@ -362,7 +331,7 @@ const ConceptForm = ({
           setValues,
           setFieldValue,
         }) => {
-          const notifications = getNotifications({
+          const notifications = getFormNotifications({
             isValid,
             hasUnsavedChanges: false,
           });
