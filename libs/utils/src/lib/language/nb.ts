@@ -167,6 +167,7 @@ export const nb = {
       "Lenke til søk i felles datakatalog",
     ],
     sort: "Sortering",
+    typeToSearch: "Skriv for å søke",
     clear: "Tøm",
 
     fields: {

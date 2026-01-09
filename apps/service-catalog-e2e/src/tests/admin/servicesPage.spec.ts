@@ -132,6 +132,7 @@ runTestAsAdmin("test search", async ({ servicesPage, playwright }) => {
               i % Object.keys(ServiceStatus).length
             ] as keyof typeof ServiceStatus
           ],
+        spatial: [],
       };
     },
   );
@@ -266,6 +267,7 @@ runTestAsAdmin("test status filter", async ({ servicesPage, playwright }) => {
               i % Object.keys(ServiceStatus).length
             ] as keyof typeof ServiceStatus
           ],
+        spatial: [],
       };
     },
   );

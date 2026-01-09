@@ -67,7 +67,11 @@ export const SpatialCombobox = ({ referenceDataEnv }: Props) => {
       loading={isSearching}
       error={errors.spatial}
     >
-      <Combobox.Empty>{localization.search.noHits}...</Combobox.Empty>
+      <Combobox.Empty>
+        {debouncedSearchTerm
+          ? localization.search.noHits
+          : `${localization.search.typeToSearch}...`}
+      </Combobox.Empty>
       {comboboxOptions.map((item) => (
         <Combobox.Option
           key={item.uri}

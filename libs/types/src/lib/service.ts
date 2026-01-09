@@ -7,12 +7,13 @@ export interface Service extends ServiceToBeCreated {
 }
 
 export interface ServiceToBeCreated {
-  title: LocalizedStrings;
-  description?: LocalizedStrings;
-  produces?: Output[];
   contactPoints?: ContactPoint[];
+  description?: LocalizedStrings;
   homepage?: string;
+  produces?: Output[];
+  spatial?: string[];
   status?: string;
+  title: LocalizedStrings;
 }
 
 export interface Output {

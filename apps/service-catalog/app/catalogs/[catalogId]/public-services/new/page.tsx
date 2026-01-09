@@ -37,7 +37,10 @@ export default async function NewPublicServicePage({
         title={localization.catalogType.publicService}
         subtitle={getTranslateText(organization?.prefLabel)}
       />
-      <NewPage statuses={statusesResponse.statuses} />
+      <NewPage
+        statuses={statusesResponse.statuses}
+        referenceDataEnv={process.env.FDK_BASE_URI || ""}
+      />
     </>
   );
 }

@@ -15,11 +15,12 @@ import { serviceTemplate } from "@service-catalog/components/service-form/servic
 import { createPublicService } from "@service-catalog/app/actions/public-services/actions";
 
 type NewPageProps = {
+  referenceDataEnv: string;
   statuses: ReferenceDataCode[];
 };
 
 export const NewPage = (props: NewPageProps) => {
-  const { statuses } = props;
+  const { referenceDataEnv, statuses } = props;
   const router = useRouter();
   const { catalogId } = useParams<{ catalogId: string }>();
   const serviceIdRef = useRef<string | undefined>(undefined); // Ref to store the service id
@@ -82,6 +83,7 @@ export const NewPage = (props: NewPageProps) => {
         onCancel={handleCancel}
         onSubmit={handleCreate}
         initialValues={serviceTemplate(undefined)}
+        referenceDataEnv={referenceDataEnv}
         statuses={statuses}
         type="public-services"
       />
