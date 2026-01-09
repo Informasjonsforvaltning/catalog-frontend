@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Alert,
   Box,
   Checkbox,
   Paragraph,
@@ -16,6 +15,7 @@ import {
   FormikLanguageFieldset,
   FormikOptionalFieldsFieldset,
   FormLayout,
+  getFormNotifications,
   HelpMarkdown,
   NotificationCarousel,
   Select,
@@ -175,38 +175,6 @@ export const ServiceForm = (props: ServiceFormProps) => {
     setShowCancelConfirm(false);
   };
 
-  type Notifications = {
-    isValid: boolean;
-    hasUnsavedChanges: boolean;
-  };
-
-  const getNotifications = ({ isValid, hasUnsavedChanges }: Notifications) => [
-    ...(isValid
-      ? []
-      : [
-          <Alert
-            key={1}
-            size="sm"
-            severity="danger"
-            className={styles.notification}
-          >
-            {localization.validation.formError}
-          </Alert>,
-        ]),
-    ...(hasUnsavedChanges
-      ? [
-          <Alert
-            key={1}
-            size="sm"
-            severity="warning"
-            className={styles.notification}
-          >
-            {localization.validation.unsavedChanges}
-          </Alert>,
-        ]
-      : []),
-  ];
-
   useEffect(() => {
     if (showSnackbarSuccessOnInit) {
       showSnackbarMessage({
@@ -282,7 +250,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
           setValues,
           values,
         }) => {
-          const notifications = getNotifications({
+          const notifications = getFormNotifications({
             isValid,
             hasUnsavedChanges: false,
           });

@@ -7,7 +7,6 @@ import {
   trimObjectWhitespace,
 } from "@catalog-frontend/utils";
 import {
-  Alert,
   Button,
   Checkbox,
   Paragraph,
@@ -26,6 +25,7 @@ import {
   ConfirmModal,
   FormikAutoSaver,
   FormLayout,
+  getFormNotifications,
   HelpMarkdown,
   NotificationCarousel,
   Snackbar,
@@ -220,38 +220,6 @@ export const DatasetForm = ({
     setShowCancelConfirm(false);
   };
 
-  type Notifications = {
-    isValid: boolean;
-    hasUnsavedChanges: boolean;
-  };
-
-  const getNotifications = ({ isValid, hasUnsavedChanges }: Notifications) => [
-    ...(isValid
-      ? []
-      : [
-          <Alert
-            key={1}
-            size="sm"
-            severity="danger"
-            className={styles.notification}
-          >
-            {localization.validation.formError}
-          </Alert>,
-        ]),
-    ...(hasUnsavedChanges
-      ? [
-          <Alert
-            key={1}
-            size="sm"
-            severity="warning"
-            className={styles.notification}
-          >
-            {localization.validation.unsavedChanges}
-          </Alert>,
-        ]
-      : []),
-  ];
-
   useEffect(() => {
     if (formApprovedStatus === true) {
       setIgnoreRequired(false);
@@ -333,7 +301,7 @@ export const DatasetForm = ({
           errors,
           setValues,
         }) => {
-          const notifications = getNotifications({
+          const notifications = getFormNotifications({
             isValid,
             hasUnsavedChanges: false,
           });

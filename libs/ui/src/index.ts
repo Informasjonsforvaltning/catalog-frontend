@@ -16,6 +16,7 @@ export * from "./lib/footer";
 export * from "./lib/form-container";
 export * from "./lib/form-heading";
 export * from "./lib/form-layout";
+export * from "./lib/form-notifications";
 export * from "./lib/formik-auto-saver";
 export * from "./lib/formik-fast-field-with-ref";
 export * from "./lib/formik-language-fieldset";

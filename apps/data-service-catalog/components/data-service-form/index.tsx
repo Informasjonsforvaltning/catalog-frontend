@@ -17,6 +17,7 @@ import {
   ConfirmModal,
   FormLayout,
   FormikAutoSaver,
+  getFormNotifications,
   HelpMarkdown,
   Snackbar,
   NotificationCarousel,
@@ -28,7 +29,6 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import {
   Button,
   Spinner,
-  Alert,
   Paragraph,
   Checkbox,
 } from "@digdir/designsystemet-react";
@@ -65,33 +65,6 @@ type Props = {
   showSnackbarSuccessOnInit?: boolean;
   markDirty?: boolean;
 };
-
-const getNotifications = ({ isValid, hasUnsavedChanges }) => [
-  ...(isValid
-    ? []
-    : [
-        <Alert
-          key={1}
-          size="sm"
-          severity="danger"
-          style={{ background: "none", border: "none", padding: 0 }}
-        >
-          {localization.validation.formError}
-        </Alert>,
-      ]),
-  ...(hasUnsavedChanges
-    ? [
-        <Alert
-          key={1}
-          size="sm"
-          severity="warning"
-          style={{ background: "none", border: "none", padding: 0 }}
-        >
-          {localization.validation.unsavedChanges}
-        </Alert>,
-      ]
-    : []),
-];
 
 const DataServiceForm = ({
   initialValues,
@@ -262,7 +235,7 @@ const DataServiceForm = ({
           values,
           initialValues: formInitialValues,
         }) => {
-          const notifications = getNotifications({
+          const notifications = getFormNotifications({
             isValid: Object.keys(errors).length === 0,
             hasUnsavedChanges: false,
           });
