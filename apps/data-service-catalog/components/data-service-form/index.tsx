@@ -14,6 +14,7 @@ import {
   StorageData,
 } from "@catalog-frontend/types";
 import {
+  ConfirmModal,
   FormLayout,
   FormikAutoSaver,
   HelpMarkdown,
@@ -112,6 +113,7 @@ const DataServiceForm = ({
   const [validateOnChange, setValidateOnChange] = useState(false);
   const [isCanceled, setIsCanceled] = useState(false);
   const [ignoreRequired, setIgnoreRequired] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] =
@@ -135,8 +137,19 @@ const DataServiceForm = ({
     setShowSnackbar(true);
   };
 
-  const handleCancel = () => {
+  const handleCancel = (dirty: boolean) => () => {
+    if (dirty) {
+      setShowCancelConfirm(true);
+    } else {
+      handleConfirmCancel();
+    }
+  };
+
+  const handleConfirmCancel = () => {
+    setShowCancelConfirm(false);
+    autoSaveStorage?.delete();
     setIsCanceled(true);
+
     if (onCancel) {
       onCancel();
     } else {
@@ -146,6 +159,10 @@ const DataServiceForm = ({
           : `/catalogs/${catalogId}/data-services`,
       );
     }
+  };
+
+  const handleCloseConfirmCancel = () => {
+    setShowCancelConfirm(false);
   };
 
   const restoreConfirmMessage = ({ values, lastChanged }: StorageData) => {
@@ -514,7 +531,7 @@ const DataServiceForm = ({
                         disabled={
                           readOnly || isSubmitting || isValidating || isCanceled
                         }
-                        onClick={handleCancel}
+                        onClick={handleCancel(dirty)}
                         variant="secondary"
                         data-testid="cancel-data-service-button"
                       >
@@ -556,6 +573,14 @@ const DataServiceForm = ({
           );
         }}
       </Formik>
+      {showCancelConfirm && (
+        <ConfirmModal
+          title={localization.confirm.exitForm.title}
+          content={localization.confirm.exitForm.message}
+          onSuccess={handleConfirmCancel}
+          onCancel={handleCloseConfirmCancel}
+        />
+      )}
     </>
   );
 };
