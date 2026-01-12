@@ -13,7 +13,8 @@ import {
   FastFieldWithRef,
 } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Card, Combobox, Dialog, Fieldset, SkeletonRectangle, Textfield } from '@digdir/designsystemet-react';
+import { Button, Card, Combobox, Dialog, Fieldset, Heading, SkeletonRectangle, Textfield } from '@digdir/designsystemet-react';
+import { HStack } from '@fellesdatakatalog/ui';
 import { useSearchFileTypes, useSearchMediaTypes } from '../../../../hooks/useReferenceDataSearch';
 import { useSearchDataServiceSuggestions } from '../../../../hooks/useSearchService';
 import { FastField, FieldArray, Formik } from 'formik';
@@ -503,14 +504,16 @@ export const DistributionModal = ({
                 {initialValues && (
                   <>
                     <Dialog.Block>
-                      {type === 'new'
-                        ? distributionType === 'distribution'
-                          ? localization.datasetForm.button.addDistribution
-                          : localization.datasetForm.button.addSample
-                        : `${localization.edit} ${distributionType === 'distribution' ? localization.datasetForm.fieldLabel.distribution.toLowerCase() : localization.datasetForm.fieldLabel.sample.toLowerCase()}`}
+                      <Heading level={2} data-size='xs'>
+                        {type === 'new'
+                          ? distributionType === 'distribution'
+                            ? localization.datasetForm.button.addDistribution
+                            : localization.datasetForm.button.addSample
+                          : `${localization.edit} ${distributionType === 'distribution' ? localization.datasetForm.fieldLabel.distribution.toLowerCase() : localization.datasetForm.fieldLabel.sample.toLowerCase()}`}
+                      </Heading>
                     </Dialog.Block>
 
-                    <Dialog.Block className={styles.modalContent}>
+                    <Dialog.Block>
                       {distributionType === 'distribution' && (
                         <>
                           <FormikLanguageFieldset
@@ -712,23 +715,25 @@ export const DistributionModal = ({
                     </Dialog.Block>
 
                     <Dialog.Block>
-                      <Button
-                        type='button'
-                        disabled={isSubmitting}
-                        onClick={() => submitForm()}
-                        data-size='sm'
-                      >
-                        {type === 'new' ? localization.add : localization.datasetForm.button.updateDistribution}
-                      </Button>
-                      <Button
-                        variant='secondary'
-                        type='button'
-                        onClick={handleCancel}
-                        disabled={isSubmitting}
-                        data-size='sm'
-                      >
-                        {localization.button.cancel}
-                      </Button>
+                      <HStack>
+                        <Button
+                          type='button'
+                          disabled={isSubmitting}
+                          onClick={() => submitForm()}
+                          data-size='sm'
+                        >
+                          {type === 'new' ? localization.add : localization.datasetForm.button.updateDistribution}
+                        </Button>
+                        <Button
+                          variant='secondary'
+                          type='button'
+                          onClick={handleCancel}
+                          disabled={isSubmitting}
+                          data-size='sm'
+                        >
+                          {localization.button.cancel}
+                        </Button>
+                      </HStack>
                     </Dialog.Block>
                   </>
                 )}

@@ -59,7 +59,8 @@
 
 .dialog {
   max-width: 1000px;
-  overflow: hidden;
+  max-height: 80vh;
+  overflow: auto;
 }
 
 .distributionContent {
