@@ -51,6 +51,7 @@ export const nb = {
   ok: "Ok",
   registerData: ["Registrere data", "Lenke til å registrere data"],
   save: "Lagre",
+  saving: "Lagrer",
   saveEdits: "Lagre endringer",
   services: "Tjenester",
   showLess: "Vis færre",
