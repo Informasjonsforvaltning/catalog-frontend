@@ -59,7 +59,7 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
       )}
 
       {!isEmpty(service.spatial) && (
-        <InfoCard.Item title={localization.datasetForm.fieldLabel.spatial}>
+        <InfoCard.Item title={localization.serviceForm.fieldLabel.spatial}>
           <ReferenceDataTags values={service.spatial} data={spatial} />
         </InfoCard.Item>
       )}
