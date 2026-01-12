@@ -197,6 +197,7 @@ export const nb = {
     discard: 'Forkast',
     edit: 'Rediger',
     expandAll: 'Vis alle felter',
+    goToPage: 'Gå til side',
     harvestDataset: 'Høst spesifikasjon fra katalog',
     importConceptCSV: 'Import av CSV/JSON',
     importConceptRDF: 'Import av RDF',

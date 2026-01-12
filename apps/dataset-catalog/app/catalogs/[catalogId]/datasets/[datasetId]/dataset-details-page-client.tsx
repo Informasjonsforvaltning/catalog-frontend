@@ -93,6 +93,7 @@ const DatasetDetailsPageClient = ({
             dataset={dataset}
             hasWritePermission={hasWritePermission}
             language={language}
+            referenceDataEnv={referenceDataEnv}
           />
         </DetailsPageLayout.Right>
         <DetailsPageLayout.Buttons>

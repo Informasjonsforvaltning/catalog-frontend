@@ -1,6 +1,7 @@
 'use client';
 import { localization } from '@catalog-frontend/utils';
 import { Button } from '@digdir/designsystemet-react';
+import { LinkButton } from '@catalog-frontend/ui';
 import styles from './publish-switch.module.css';
 import { publishDataset } from '../../app/actions/actions';
 import { Dataset, PublicationStatus } from '@catalog-frontend/types';
@@ -10,9 +11,10 @@ type Props = {
   catalogId: string;
   dataset: Dataset;
   disabled: boolean;
+  referenceDataEnv: string;
 };
 
-export const PublishSwitch = ({ catalogId, dataset, disabled }: Props) => {
+export const PublishSwitch = ({ catalogId, dataset, disabled, referenceDataEnv }: Props) => {
   const handlePublishDataset = async () => {
     if (dataset.approved && !dataset.published) {
       if (window.confirm(localization.datasetForm.alert.confirmPublish)) {
@@ -49,9 +51,13 @@ export const PublishSwitch = ({ catalogId, dataset, disabled }: Props) => {
       {
         dataset.published ?
         <VStack>
-          <Button data-variant='secondary' data-size='sm'>
-            Gå til side
-          </Button>
+          <LinkButton
+            href={`${referenceDataEnv}/nb/datasets/${dataset.id}`}
+            data-variant='secondary'
+            data-size='sm'
+          >
+            {localization.button.goToPage}
+          </LinkButton>
           <Button onClick={() => handlePublishDataset()} data-size='sm' data-variant='secondary' data-color='danger'>
             {localization.button.unpublish}
           </Button>
