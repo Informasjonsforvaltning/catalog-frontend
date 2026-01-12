@@ -1,7 +1,7 @@
 import { Dataset, Reference, Search, StorageData } from '@catalog-frontend/types';
 import { getTranslateText, localization, trimObjectWhitespace, DataStorage } from '@catalog-frontend/utils';
 import { Button, Combobox, Dialog, Fieldset, Heading, Table } from '@digdir/designsystemet-react';
-import { HStack } from '@fellesdatakatalog/ui';
+import { HStack, VStack } from '@fellesdatakatalog/ui';
 import { useSearchDatasetsByUri, useSearchDatasetSuggestions } from '../../../../hooks/useSearchService';
 import { Formik, useFormikContext } from 'formik';
 import relations from '../../utils/relations.json';
@@ -254,62 +254,64 @@ const FieldModal = ({
                   </Dialog.Block>
 
                   <Dialog.Block>
-                    <Fieldset data-size='sm'>
-                      <Fieldset.Legend>{localization.datasetForm.fieldLabel.relationType}</Fieldset.Legend>
-                      <Combobox
-                        onValueChange={(value) => setFieldValue(`referenceType`, value.toString())}
-                        value={values.referenceType ? [values.referenceType] : []}
-                        placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
-                        portal={false}
-                        data-size='sm'
-                        error={errors?.referenceType}
-                        virtual
-                      >
-                        <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-                        {relations.map((relation) => (
-                          <Combobox.Option
-                            key={relation?.code}
-                            value={relation?.code}
-                            description={`${relation?.uriAsPrefix} (${relation?.uri})`}
-                          >
-                            {getTranslateText(relation?.label)}
-                          </Combobox.Option>
-                        ))}
-                      </Combobox>
-                    </Fieldset>
-
-                    <Fieldset data-size='sm'>
-                      <Fieldset.Legend>{localization.datasetForm.fieldLabel.dataset}</Fieldset.Legend>
-                      <Combobox
-                        onChange={(input: any) => setSearchQuery(input.target.value)}
-                        onValueChange={(value) => {
-                          setSelectedUri(value.toString());
-                          setFieldValue(`source`, value.toString());
-                        }}
-                        loading={searching}
-                        value={values?.source && !isEmpty(values.source) ? [values.source] : []}
-                        placeholder={`${localization.search.search}...`}
-                        portal={false}
-                        data-size='sm'
-                        error={errors?.source}
-                      >
-                        <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
-                        {comboboxOptions?.map((dataset) => {
-                          return (
+                    <VStack>
+                      <Fieldset data-size='sm'>
+                        <Fieldset.Legend>{localization.datasetForm.fieldLabel.relationType}</Fieldset.Legend>
+                        <Combobox
+                          onValueChange={(value) => setFieldValue(`referenceType`, value.toString())}
+                          value={values.referenceType ? [values.referenceType] : []}
+                          placeholder={`${localization.datasetForm.fieldLabel.choseRelation}...`}
+                          portal={false}
+                          data-size='sm'
+                          error={errors?.referenceType}
+                          virtual
+                        >
+                          <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
+                          {relations.map((relation) => (
                             <Combobox.Option
-                              key={dataset.uri}
-                              value={dataset.uri}
-                              displayValue={dataset.title ? getTranslateText(dataset.title) : dataset.uri}
+                              key={relation?.code}
+                              value={relation?.code}
+                              description={`${relation?.uriAsPrefix} (${relation?.uri})`}
                             >
-                              <div className={styles.comboboxOptionTwoColumns}>
-                                <div>{dataset.title ? getTranslateText(dataset.title) : dataset.uri}</div>
-                                <div>{getTranslateText(dataset.organization?.prefLabel) ?? ''}</div>
-                              </div>
+                              {getTranslateText(relation?.label)}
                             </Combobox.Option>
-                          );
-                        })}
-                      </Combobox>
-                    </Fieldset>
+                          ))}
+                        </Combobox>
+                      </Fieldset>
+
+                      <Fieldset data-size='sm'>
+                        <Fieldset.Legend>{localization.datasetForm.fieldLabel.dataset}</Fieldset.Legend>
+                        <Combobox
+                          onChange={(input: any) => setSearchQuery(input.target.value)}
+                          onValueChange={(value) => {
+                            setSelectedUri(value.toString());
+                            setFieldValue(`source`, value.toString());
+                          }}
+                          loading={searching}
+                          value={values?.source && !isEmpty(values.source) ? [values.source] : []}
+                          placeholder={`${localization.search.search}...`}
+                          portal={false}
+                          data-size='sm'
+                          error={errors?.source}
+                        >
+                          <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
+                          {comboboxOptions?.map((dataset) => {
+                            return (
+                              <Combobox.Option
+                                key={dataset.uri}
+                                value={dataset.uri}
+                                displayValue={dataset.title ? getTranslateText(dataset.title) : dataset.uri}
+                              >
+                                <div className={styles.comboboxOptionTwoColumns}>
+                                  <div>{dataset.title ? getTranslateText(dataset.title) : dataset.uri}</div>
+                                  <div>{getTranslateText(dataset.organization?.prefLabel) ?? ''}</div>
+                                </div>
+                              </Combobox.Option>
+                            );
+                          })}
+                        </Combobox>
+                      </Fieldset>
+                    </VStack>
                   </Dialog.Block>
 
                   <Dialog.Block>
