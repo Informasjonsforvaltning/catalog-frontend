@@ -6,6 +6,7 @@ import {
   getById,
   postDataset,
   updateDataset as update,
+  getResourceByUri,
 } from '@catalog-frontend/data-access';
 import { Dataset, DatasetToBeCreated } from '@catalog-frontend/types';
 import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
@@ -142,4 +143,30 @@ export async function publishDataset(catalogId: string, initialDataset: Dataset,
   }
 
   revalidateTag('dataset');
+}
+
+export async function getFdkDatasetId(catalogId: string, datasetId: string, datasetUri?: string): Promise<string | null> {
+  try {
+    // Use provided URI or construct it from catalogId and datasetId
+    const uri = datasetUri || (process.env.FDK_REGISTRATION_BASE_URI 
+      ? `${process.env.FDK_REGISTRATION_BASE_URI}/catalogs/${catalogId}/datasets/${datasetId}`
+      : null);
+
+    if (!uri) {
+      return null;
+    }
+
+    const resourceResponse = await getResourceByUri(uri);
+    
+    if (!resourceResponse.ok) {
+      return null;
+    }
+
+    const resource = await resourceResponse.json();
+    return resource.id || null;
+  } catch (error) {
+    // Log error but don't fail - return null gracefully
+    console.error('Failed to fetch FDK dataset ID:', error);
+    return null;
+  }
 }

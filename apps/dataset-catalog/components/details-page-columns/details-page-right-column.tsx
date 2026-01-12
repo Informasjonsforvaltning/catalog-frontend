@@ -17,6 +17,7 @@ type Props = {
 };
 
 export const RightColumn = ({ dataset, hasWritePermission, language, referenceDataEnv, fdkDatasetId }: Props) => {
+  console.log(dataset);
   return (
     <InfoCard>
       <InfoCard.Item
