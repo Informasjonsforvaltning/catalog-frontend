@@ -354,12 +354,12 @@ export const DistributionModal = ({
       render: ({ errors }: any) => (
         <Fieldset
           data-size='sm'
-          legend={
+        >
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.distributionConformsTo}>
               {localization.datasetForm.fieldLabel.conformsTo}
             </TitleWithHelpTextAndTag>
-          }
-        >
+          </Fieldset.Legend>
           <FieldArray name='conformsTo'>
             {({ push, remove, form }) => (
               <>
@@ -629,7 +629,8 @@ export const DistributionModal = ({
                       </FieldArray>
                       <Fieldset
                         data-size='sm'
-                        legend={
+                      >
+                        <Fieldset.Legend>
                           <TitleWithHelpTextAndTag
                             helpText={localization.datasetForm.helptext.fileType}
                             tagTitle={localization.tag.recommended}
@@ -637,8 +638,7 @@ export const DistributionModal = ({
                           >
                             {localization.datasetForm.fieldLabel.format}
                           </TitleWithHelpTextAndTag>
-                        }
-                      >
+                        </Fieldset.Legend>
                         {!selectedFileTypeUris ||
                         selectedFileTypeUris?.every((v) =>
                           selectedAndSearchedFileTypes?.find(
@@ -669,7 +669,8 @@ export const DistributionModal = ({
                         <>
                           <Fieldset
                             data-size='sm'
-                            legend={
+                          >
+                            <Fieldset.Legend>
                               <TitleWithHelpTextAndTag
                                 tagTitle={localization.tag.recommended}
                                 tagColor='info'
@@ -677,8 +678,7 @@ export const DistributionModal = ({
                               >
                                 {localization.datasetForm.fieldLabel.license}
                               </TitleWithHelpTextAndTag>
-                            }
-                          >
+                            </Fieldset.Legend>
                             <Combobox
                               value={values?.license ? [values?.license] : ['']}
                               portal={false}
