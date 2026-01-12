@@ -20,7 +20,7 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
   const { service, language, referenceDataEnv } = props;
 
   const { data: spatial } = useSearchAdministrativeUnitsByUri(
-    service?.spatial,
+    service.spatial,
     referenceDataEnv,
   );
 
