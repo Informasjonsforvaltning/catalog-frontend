@@ -1,21 +1,17 @@
+import { Tag } from "@digdir/designsystemet-react";
 import { ReferenceDataCode } from "@catalog-frontend/types";
 import {
   capitalizeFirstLetter,
   getTranslateText,
 } from "@catalog-frontend/utils";
-import { Tag } from "@digdir/designsystemet-react";
 import styles from "./referenceDataTags.module.css";
 
 type Props = {
-  values: string[] | string | undefined;
-  data: ReferenceDataCode[] | undefined;
+  values?: string[] | string;
+  data?: ReferenceDataCode[];
 };
 
 export const ReferenceDataTags = ({ values, data }: Props) => {
-  if (!values) {
-    return null;
-  }
-
   const dataMap = new Map(data?.map((item) => [item.uri, item.label]));
 
   const renderTag = (uri: string) => {
@@ -27,6 +23,10 @@ export const ReferenceDataTags = ({ values, data }: Props) => {
       </Tag>
     );
   };
+
+  if (!values) {
+    return null;
+  }
 
   if (typeof values === "string") {
     return <>{renderTag(values)}</>;

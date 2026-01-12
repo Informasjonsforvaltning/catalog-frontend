@@ -1,5 +1,6 @@
 import {
   InfoCard,
+  ReferenceDataTags,
   useSearchAdministrativeUnitsByUri,
 } from "@catalog-frontend/ui";
 import {
@@ -32,7 +33,6 @@ import {
   useSearchInformationModelsByUri,
 } from "../../hooks/useSearchService";
 import relations from "../dataset-form/utils/relations.json";
-import { ReferenceDataTags } from "../reference-data-tags";
 import { UriWithLabelTable } from "../uri-with-label-table";
 import { DistributionDetailsCard } from "./components/distribution-details";
 import { AccessRightsDetails } from "./components/access-rights-details";
@@ -253,7 +253,7 @@ export const LeftColumn = ({
 
       {hasValues(dataset?.spatial) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.spatial}>
-          <ReferenceDataTags values={dataset?.spatial} data={spatial} />
+          <ReferenceDataTags values={dataset.spatial} data={spatial} />
         </InfoCard.Item>
       )}
 
@@ -276,7 +276,7 @@ export const LeftColumn = ({
       {dataset?.type && !isEmpty(dataset?.type) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.type}>
           <ReferenceDataTags
-            values={dataset?.type}
+            values={dataset.type}
             data={referenceData.datasetTypes}
           />
         </InfoCard.Item>
@@ -285,7 +285,7 @@ export const LeftColumn = ({
       {hasValues(dataset?.provenance) && (
         <InfoCard.Item title={localization.datasetForm.fieldLabel.provenance}>
           <ReferenceDataTags
-            values={dataset?.provenance}
+            values={dataset.provenance}
             data={referenceData.provenanceStatements}
           />
         </InfoCard.Item>
