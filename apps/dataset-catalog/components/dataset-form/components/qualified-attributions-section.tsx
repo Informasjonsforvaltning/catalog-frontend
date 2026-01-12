@@ -48,12 +48,12 @@ export const QualifiedAttributionsSection = ({ ref }: { ref: React.RefObject<HTM
     <div>
       <Fieldset
         data-size='sm'
-        legend={
+      >
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.qualifiedAttributions}>
             {localization.datasetForm.fieldLabel.qualifiedAttributions}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <Combobox
           data-size='sm'
           onValueChange={(selectedValues: string[]) => setFieldValue('qualifiedAttributions', selectedValues)}

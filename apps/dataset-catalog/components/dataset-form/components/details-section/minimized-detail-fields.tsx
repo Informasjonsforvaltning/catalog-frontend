@@ -34,12 +34,12 @@ const FIELD_CONFIG = [
     render: (props: any) => (
       <Fieldset
         data-size='sm'
-        legend={
+      >
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.type}>
             {localization.datasetForm.fieldLabel.type}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <FastFieldWithRef
           as={Combobox}
           ref={props.ref}
@@ -62,12 +62,12 @@ const FIELD_CONFIG = [
     render: (props: any) => (
       <Fieldset
         data-size='sm'
-        legend={
+      >
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.provenance}>
             {localization.datasetForm.fieldLabel.provenance}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <FastFieldWithRef
           as={Combobox}
           ref={props.ref}
@@ -89,12 +89,12 @@ const FIELD_CONFIG = [
     render: (props: any) => (
       <Fieldset
         data-size='sm'
-        legend={
+      >
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.frequency}>
             {localization.datasetForm.fieldLabel.frequency}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <FastFieldWithRef
           data-size='sm'
           as={Combobox}
@@ -117,12 +117,12 @@ const FIELD_CONFIG = [
     render: (props: any) => (
       <Fieldset
         data-size='sm'
-        legend={
+      >
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.modified}>
             {localization.datasetForm.fieldLabel.modified}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <FastFieldWithRef
           className={styles.calendar}
           as={Textfield}

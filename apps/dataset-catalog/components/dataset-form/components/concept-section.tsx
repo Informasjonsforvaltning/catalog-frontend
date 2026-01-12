@@ -44,7 +44,8 @@ export const ConceptSection = ({ searchEnv }: Props) => {
     <>
       <Fieldset
         data-size='sm'
-        legend={
+      >
+        <Fieldset.Legend>
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.recommended}
             tagColor='info'
@@ -52,8 +53,7 @@ export const ConceptSection = ({ searchEnv }: Props) => {
           >
             {localization.datasetForm.fieldLabel.concepts}
           </TitleWithHelpTextAndTag>
-        }
-      >
+        </Fieldset.Legend>
         <Combobox
           data-size='sm'
           onValueChange={(selectedValues: string[]) => setFieldValue('concepts', selectedValues)}

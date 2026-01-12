@@ -64,12 +64,12 @@ export const InformationModelSection = ({ searchEnv }: Props) => {
       {!isLoading && (
         <Fieldset
           data-size='sm'
-          legend={
+        >
+          <Fieldset.Legend>
             <TitleWithHelpTextAndTag helpText={localization.datasetForm.helptext.informationModelsFromFDK}>
               {localization.datasetForm.fieldLabel.informationModelsFromFDK}
             </TitleWithHelpTextAndTag>
-          }
-        >
+          </Fieldset.Legend>
           <Combobox
             data-size='sm'
             onValueChange={(selectedValues: string[]) => setFieldValue('informationModelsFromFDK', selectedValues)}
