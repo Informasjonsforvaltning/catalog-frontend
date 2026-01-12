@@ -129,6 +129,7 @@ export async function updateService(
     contactPoints: updatedService.contactPoints,
     homepage: updatedService.homepage,
     status: updatedService.status,
+    spatial: updatedService.spatial,
   };
 
   const diff = compare(oldService, updatedServiceMerged);

@@ -23,12 +23,13 @@ import {
 import { useEffect, useState } from "react";
 
 type EditPageProps = {
+  referenceDataEnv: string;
   service: Service;
   statuses: ReferenceDataCode[];
 };
 
 export const EditPage = (props: EditPageProps) => {
-  const { service, statuses } = props;
+  const { referenceDataEnv, service, statuses } = props;
   const router = useRouter();
   const { catalogId, serviceId } = useParams<{
     catalogId: string;
@@ -103,6 +104,7 @@ export const EditPage = (props: EditPageProps) => {
         onCancel={handleCancel}
         onSubmit={handleUpdate}
         initialValues={serviceTemplate(service)}
+        referenceDataEnv={referenceDataEnv}
         statuses={statuses}
         showSnackbarSuccessOnInit={showSnackbar}
         type="services"

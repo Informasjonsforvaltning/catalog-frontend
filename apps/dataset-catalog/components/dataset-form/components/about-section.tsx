@@ -1,4 +1,5 @@
 import {
+  FieldsetDivider,
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
@@ -17,7 +18,6 @@ import {
   Paragraph,
 } from "@digdir/designsystemet-react";
 import { FastField, useFormikContext } from "formik";
-import { FieldsetDivider } from "@catalog-frontend/ui";
 import { AccessRightFields } from "./access-rights-fields";
 import {
   ApplicationProfile,

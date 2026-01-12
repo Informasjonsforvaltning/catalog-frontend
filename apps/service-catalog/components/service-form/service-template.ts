@@ -82,5 +82,6 @@ export const serviceTemplate = (
     contactPoints,
     homepage: service?.homepage,
     status: service?.status,
+    spatial: service?.spatial || [],
   };
 };

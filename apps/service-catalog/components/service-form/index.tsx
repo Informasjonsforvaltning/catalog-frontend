@@ -3,6 +3,7 @@
 import {
   Box,
   Checkbox,
+  Fieldset,
   Paragraph,
   Spinner,
   Textfield,
@@ -21,6 +22,7 @@ import {
   Select,
   Snackbar,
   SnackbarSeverity,
+  SpatialCombobox,
   StickyFooterBar,
   TextareaWithPrefix,
   TitleWithHelpTextAndTag,
@@ -59,6 +61,7 @@ interface ServiceFormProps {
   initialValues: ServiceToBeCreated;
   onCancel?: () => void;
   onSubmit?: (values: Service) => Promise<Service | undefined>;
+  referenceDataEnv: string;
   showSnackbarSuccessOnInit?: boolean;
   statuses: ReferenceDataCode[];
   type: "public-services" | "services";
@@ -95,6 +98,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
     initialValues,
     onCancel,
     onSubmit,
+    referenceDataEnv,
     showSnackbarSuccessOnInit,
     statuses,
     type,
@@ -301,6 +305,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
               "status",
               "produces",
               "contactPoints",
+              "spatial",
             ].forEach((name) => {
               if (isDirty(name)) {
                 dirtyFields.push(name);
@@ -327,15 +332,20 @@ export const ServiceForm = (props: ServiceFormProps) => {
                     subtitle={localization.serviceForm.section.about.subtitle}
                     required
                     changed={dirtyFields.some((field) =>
-                      ["title", "description", "homepage", "status"].includes(
-                        field,
-                      ),
+                      [
+                        "title",
+                        "description",
+                        "homepage",
+                        "status",
+                        "spatial",
+                      ].includes(field),
                     )}
                     error={hasError([
                       "title",
                       "description",
                       "homepage",
                       "status",
+                      "spatial",
                     ])}
                   >
                     <Box>
@@ -389,6 +399,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       <Field
                         error={errors?.status}
                         as={Select}
+                        size="sm"
                         label={
                           <TitleWithHelpTextAndTag
                             helpText={localization.serviceForm.helptext.status}
@@ -407,6 +418,21 @@ export const ServiceForm = (props: ServiceFormProps) => {
                           </option>
                         ))}
                       </Field>
+                      <FieldsetDivider />
+                      <Fieldset
+                        size="sm"
+                        legend={
+                          <TitleWithHelpTextAndTag
+                            tagTitle={localization.tag.recommended}
+                            tagColor="info"
+                            helpText={localization.serviceForm.helptext.spatial}
+                          >
+                            {localization.serviceForm.fieldLabel.spatial}
+                          </TitleWithHelpTextAndTag>
+                        }
+                      >
+                        <SpatialCombobox referenceDataEnv={referenceDataEnv} />
+                      </Fieldset>
                     </Box>
                   </FormLayout.Section>
 
