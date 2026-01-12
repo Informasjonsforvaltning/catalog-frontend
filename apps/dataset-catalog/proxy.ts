@@ -4,4 +4,4 @@ export const config = {
   matcher: "/catalogs/:path*",
 };
 
-export default withAuth({});
+export const proxy = withAuth({});

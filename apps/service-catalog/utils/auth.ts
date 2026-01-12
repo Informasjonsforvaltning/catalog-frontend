@@ -29,7 +29,7 @@ const withProtectedPage = (
   render: Render,
 ) => {
   return async ({ params }: any) => {
-    const { catalogId, serviceId } = params;
+    const { catalogId, serviceId } = await params;
 
     if (!validOrganizationNumber(catalogId)) {
       redirect(`/notfound`, RedirectType.replace);
