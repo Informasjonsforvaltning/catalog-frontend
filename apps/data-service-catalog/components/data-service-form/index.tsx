@@ -24,7 +24,7 @@ import {
   SnackbarSeverity,
   StickyFooterBar,
 } from "@catalog-frontend/ui";
-import { Formik, Form } from "formik";
+import { Formik, Form, FormikProps } from "formik";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import {
   Button,
@@ -94,7 +94,7 @@ const DataServiceForm = ({
     useState<SnackbarSeverity>("success");
   const [snackbarFadeIn, setSnackbarFadeIn] = useState(true);
   const router = useRouter();
-  const formikRef = useRef(null);
+  const formikRef = useRef<FormikProps<DataService>>(null);
 
   const showSnackbarMessage = ({
     message,
@@ -108,7 +108,12 @@ const DataServiceForm = ({
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarFadeIn(fadeIn);
-    setShowSnackbar(true);
+    if (fadeIn) {
+      setShowSnackbar(false);
+      setTimeout(() => setShowSnackbar(true), 10);
+    } else {
+      setShowSnackbar(true);
+    }
   };
 
   const handleCancel = (dirty: boolean) => () => {
@@ -228,6 +233,7 @@ const DataServiceForm = ({
         {({
           errors,
           dirty,
+          isValid,
           isSubmitting,
           isValidating,
           submitForm,
@@ -236,7 +242,7 @@ const DataServiceForm = ({
           initialValues: formInitialValues,
         }) => {
           const notifications = getFormNotifications({
-            isValid: Object.keys(errors).length === 0,
+            isValid,
             hasUnsavedChanges: false,
           });
           const hasError = (fields: (keyof DataService)[]) =>
@@ -488,9 +494,9 @@ const DataServiceForm = ({
                     data-testid="save-data-service-button"
                   >
                     {isSubmitting ? (
-                      <Spinner title="Lagrer" size="sm" />
+                      <Spinner title={localization.saving} size="sm" />
                     ) : (
-                      "Lagre"
+                      localization.save
                     )}
                   </Button>
                   <Button
@@ -502,7 +508,7 @@ const DataServiceForm = ({
                     variant="secondary"
                     data-testid="cancel-data-service-button"
                   >
-                    Avbryt
+                    {localization.button.cancel}
                   </Button>
                   <div className={styles.verticalLine}></div>
                   <div
