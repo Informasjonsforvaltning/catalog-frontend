@@ -108,7 +108,12 @@ const DataServiceForm = ({
     setSnackbarMessage(message);
     setSnackbarSeverity(severity);
     setSnackbarFadeIn(fadeIn);
-    setShowSnackbar(true);
+    if (fadeIn) {
+      setShowSnackbar(false);
+      setTimeout(() => setShowSnackbar(true), 10);
+    } else {
+      setShowSnackbar(true);
+    }
   };
 
   const handleCancel = (dirty: boolean) => () => {
@@ -228,6 +233,7 @@ const DataServiceForm = ({
         {({
           errors,
           dirty,
+          isValid,
           isSubmitting,
           isValidating,
           submitForm,
@@ -236,7 +242,7 @@ const DataServiceForm = ({
           initialValues: formInitialValues,
         }) => {
           const notifications = getFormNotifications({
-            isValid: Object.keys(errors).length === 0,
+            isValid,
             hasUnsavedChanges: false,
           });
           const hasError = (fields: (keyof DataService)[]) =>
