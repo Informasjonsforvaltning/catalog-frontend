@@ -430,6 +430,24 @@ const DataServiceForm = ({
                     </FormLayout.Section>
 
                     <FormLayout.Section
+                      id="access-section"
+                      title={localization.dataServiceForm.heading.access}
+                      subtitle={localization.dataServiceForm.subtitle.access}
+                      changed={
+                        markDirty &&
+                        dirtyFields.some((field) =>
+                          ["license", "accessRights"].includes(field),
+                        )
+                      }
+                      error={hasError(["license", "accessRights"])}
+                    >
+                      <AccessSection
+                        openLicenses={referenceData.openLicenses}
+                        currencies={referenceData.currencies}
+                      />
+                    </FormLayout.Section>
+
+                    <FormLayout.Section
                       id="dataset-section"
                       title={localization.dataServiceForm.heading.dataset}
                       subtitle={localization.dataServiceForm.subtitle.dataset}
