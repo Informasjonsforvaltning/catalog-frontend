@@ -12,9 +12,10 @@ type Props = {
   dataset: Dataset;
   disabled: boolean;
   referenceDataEnv: string;
+  fdkDatasetId: string | null;
 };
 
-export const PublishSwitch = ({ catalogId, dataset, disabled, referenceDataEnv }: Props) => {
+export const PublishSwitch = ({ catalogId, dataset, disabled, referenceDataEnv, fdkDatasetId }: Props) => {
   const handlePublishDataset = async () => {
     if (dataset.approved && !dataset.published) {
       if (window.confirm(localization.datasetForm.alert.confirmPublish)) {
@@ -51,13 +52,15 @@ export const PublishSwitch = ({ catalogId, dataset, disabled, referenceDataEnv }
       {
         dataset.published ?
         <VStack>
-          <LinkButton
-            href={`${referenceDataEnv}/nb/datasets/${dataset.id}`}
-            data-variant='secondary'
-            data-size='sm'
-          >
-            {localization.button.goToPage}
-          </LinkButton>
+          {fdkDatasetId && (
+            <LinkButton
+              href={`${referenceDataEnv}/nb/datasets/${fdkDatasetId}`}
+              data-variant='secondary'
+              data-size='sm'
+            >
+              {localization.button.goToPage}
+            </LinkButton>
+          )}
           <Button onClick={() => handlePublishDataset()} data-size='sm' data-variant='secondary' data-color='danger'>
             {localization.button.unpublish}
           </Button>

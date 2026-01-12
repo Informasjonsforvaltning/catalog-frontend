@@ -13,9 +13,10 @@ type Props = {
   hasWritePermission: boolean;
   language: string;
   referenceDataEnv: string;
+  fdkDatasetId: string | null;
 };
 
-export const RightColumn = ({ dataset, hasWritePermission, language, referenceDataEnv }: Props) => {
+export const RightColumn = ({ dataset, hasWritePermission, language, referenceDataEnv, fdkDatasetId }: Props) => {
   return (
     <InfoCard>
       <InfoCard.Item
@@ -42,6 +43,7 @@ export const RightColumn = ({ dataset, hasWritePermission, language, referenceDa
             dataset={dataset}
             disabled={!hasWritePermission}
             referenceDataEnv={referenceDataEnv}
+            fdkDatasetId={fdkDatasetId}
           />
         </VStack>
       </InfoCard.Item>

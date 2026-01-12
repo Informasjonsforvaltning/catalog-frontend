@@ -17,6 +17,7 @@ import {
   getLosThemes,
   getOpenLicenses,
   getProvenanceStatements,
+  getResourceByUri,
 } from '@catalog-frontend/data-access';
 import DatasetDetailsPageClient from './dataset-details-page-client';
 import { withReadProtectedPage } from '@dataset-catalog/utils/auth';
@@ -81,6 +82,21 @@ const DatasetDetailPage = withReadProtectedPage(
     const accessToken = session?.accessToken;
     const datasetSeries = await getAllDatasetSeries(catalogId, accessToken).then((res) => res.json());
 
+    // Fetch FDK dataset ID from resource service if URI is available
+    let fdkDatasetId: string | null = null;
+    if (dataset.uri) {
+      try {
+        const resourceResponse = await getResourceByUri(dataset.uri);
+        if (resourceResponse.ok) {
+          const resource = await resourceResponse.json();
+          fdkDatasetId = resource.id || null;
+        }
+      } catch (error) {
+        // Log error but don't fail the page
+        console.error('Failed to fetch FDK dataset ID:', error);
+      }
+    }
+
     return (
       <>
         {/* <Breadcrumbs
@@ -102,6 +118,7 @@ const DatasetDetailPage = withReadProtectedPage(
               referenceDataEnv={referenceDataEnv}
               referenceData={referenceData}
               datasetSeries={datasetSeries}
+              fdkDatasetId={fdkDatasetId}
             ></DatasetDetailsPageClient>
           )}
         </div>
