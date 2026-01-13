@@ -33,7 +33,6 @@ export const useSearchConceptSuggestions = (
     queryFn: async () => {
       const res = await searchSuggestions(searchEnv, searchQuery, "concepts");
       const data = await res.json();
-      console.log(data);
       return data?.suggestions;
     },
     enabled: !!searchQuery && !!searchEnv,
