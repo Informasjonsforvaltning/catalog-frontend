@@ -1,16 +1,28 @@
+import { isEmpty } from "lodash";
 import { Service } from "@catalog-frontend/types";
-import { DividerLine, InfoCard } from "@catalog-frontend/ui";
-import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { Heading, Paragraph } from "@digdir/designsystemet-react";
+import {
+  DividerLine,
+  InfoCard,
+  ReferenceDataTags,
+  useSearchAdministrativeUnitsByUri,
+} from "@catalog-frontend/ui";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
 import styles from "./basic-form-info-card-items.module.css";
 
 type Props = {
   service: Service;
   language: string;
+  referenceDataEnv: string;
 };
 
 export const BasicServiceFormInfoCardItems = (props: Props) => {
-  const { service, language } = props;
+  const { service, language, referenceDataEnv } = props;
+
+  const { data: spatial } = useSearchAdministrativeUnitsByUri(
+    service.spatial,
+    referenceDataEnv,
+  );
 
   return (
     <InfoCard>
@@ -43,6 +55,12 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
       {service.homepage && (
         <InfoCard.Item title={`${localization.homepage}:`}>
           {service.homepage}
+        </InfoCard.Item>
+      )}
+
+      {!isEmpty(service.spatial) && (
+        <InfoCard.Item title={localization.serviceForm.fieldLabel.spatial}>
+          <ReferenceDataTags values={service.spatial} data={spatial} />
         </InfoCard.Item>
       )}
     </InfoCard>

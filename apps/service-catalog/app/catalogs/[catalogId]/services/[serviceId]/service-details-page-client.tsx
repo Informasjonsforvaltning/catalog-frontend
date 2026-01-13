@@ -18,18 +18,20 @@ import { EnvelopeClosedIcon, LinkIcon, PhoneIcon } from "@navikt/aksel-icons";
 import { Link } from "@digdir/designsystemet-react";
 
 interface ServiceDetailsPageProps {
-  service: Service;
   catalogId: string;
-  serviceId: string;
   hasWritePermission: boolean;
+  referenceDataEnv: string;
+  service: Service;
+  serviceId: string;
   statuses: ReferenceDataCode[];
 }
 
 const ServiceDetailsPageClient = ({
-  service,
   catalogId,
-  serviceId,
   hasWritePermission,
+  referenceDataEnv,
+  service,
+  serviceId,
   statuses,
 }: ServiceDetailsPageProps) => {
   const [language, setLanguage] = useState("nb");
@@ -56,7 +58,11 @@ const ServiceDetailsPageClient = ({
       }
     >
       <DetailsPageLayout.Left>
-        <BasicServiceFormInfoCardItems service={service} language={language} />
+        <BasicServiceFormInfoCardItems
+          language={language}
+          referenceDataEnv={referenceDataEnv}
+          service={service}
+        />
       </DetailsPageLayout.Left>
       <DetailsPageLayout.Right>
         <InfoCard>

@@ -65,10 +65,11 @@ export default async function PublicServiceDetailsPage({
         subtitle={getTranslateText(organization?.prefLabel)}
       />
       <PublicServiceDetailsPageClient
-        service={service}
         catalogId={catalogId}
-        serviceId={serviceId}
         hasWritePermission={hasWritePermission}
+        referenceDataEnv={process.env.FDK_BASE_URI ?? ""}
+        service={service}
+        serviceId={serviceId}
         statuses={statusesResponse.statuses}
       />
     </>

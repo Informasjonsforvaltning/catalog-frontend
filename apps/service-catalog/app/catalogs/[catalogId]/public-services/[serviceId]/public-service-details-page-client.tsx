@@ -15,18 +15,20 @@ import { useState } from "react";
 import styles from "./public-service-details-page.module.css";
 
 interface PublicServiceDetailsPageProps {
-  service: Service;
   catalogId: string;
-  serviceId: string;
   hasWritePermission: boolean;
+  referenceDataEnv: string;
+  service: Service;
+  serviceId: string;
   statuses: ReferenceDataCode[];
 }
 
 const PublicServiceDetailsPageClient = ({
-  service,
   catalogId,
-  serviceId,
   hasWritePermission,
+  referenceDataEnv,
+  service,
+  serviceId,
   statuses,
 }: PublicServiceDetailsPageProps) => {
   const [language, setLanguage] = useState("nb");
@@ -52,7 +54,11 @@ const PublicServiceDetailsPageClient = ({
       }
     >
       <DetailsPageLayout.Left>
-        <BasicServiceFormInfoCardItems service={service} language={language} />
+        <BasicServiceFormInfoCardItems
+          language={language}
+          referenceDataEnv={referenceDataEnv}
+          service={service}
+        />
       </DetailsPageLayout.Left>
       <DetailsPageLayout.Right>
         <InfoCard>
