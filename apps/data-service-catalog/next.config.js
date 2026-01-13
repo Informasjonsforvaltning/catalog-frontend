@@ -1,12 +1,7 @@
-// @ts-check
-
-const { withNx } = require("@nx/next/plugins/with-nx");
+//@ts-check
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  nx: {
-    svgr: false,
-  },
   turbopack: {
     rules: {
       "*.svg": {
@@ -20,4 +15,4 @@ const nextConfig = {
   },
 };
 
-module.exports = withNx(nextConfig);
+module.exports = nextConfig;
