@@ -1,4 +1,5 @@
 //@ts-check
+const { withNx } = require("@nx/next/plugins/with-nx");
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -15,4 +16,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withNx(nextConfig);
