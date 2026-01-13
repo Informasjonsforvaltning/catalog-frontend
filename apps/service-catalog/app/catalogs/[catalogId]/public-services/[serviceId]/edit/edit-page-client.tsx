@@ -24,12 +24,13 @@ import { useEffect, useState } from "react";
 
 type EditPageProps = {
   referenceDataEnv: string;
+  searchEnv: string;
   service: Service;
   statuses: ReferenceDataCode[];
 };
 
 export const EditPage = (props: EditPageProps) => {
-  const { referenceDataEnv, service, statuses } = props;
+  const { referenceDataEnv, searchEnv, service, statuses } = props;
   const router = useRouter();
   const { catalogId, serviceId } = useParams<{
     catalogId: string;
@@ -104,6 +105,7 @@ export const EditPage = (props: EditPageProps) => {
         onSubmit={handleUpdate}
         initialValues={serviceTemplate(service)}
         referenceDataEnv={referenceDataEnv}
+        searchEnv={searchEnv}
         statuses={statuses}
         showSnackbarSuccessOnInit={showSnackbar}
         type="public-services"

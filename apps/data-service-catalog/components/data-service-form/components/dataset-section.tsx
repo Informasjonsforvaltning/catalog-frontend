@@ -10,10 +10,11 @@ import { useFormikContext } from "formik";
 import { useState } from "react";
 import styles from "../data-service-form.module.css";
 import {
+  TitleWithHelpTextAndTag,
+  useDebounce,
   useSearchDatasetsByUri,
   useSearchDatasetSuggestions,
-} from "../../../hooks/useSearchService";
-import { TitleWithHelpTextAndTag, useDebounce } from "@catalog-frontend/ui";
+} from "@catalog-frontend/ui";
 
 interface Props {
   searchEnv: string;

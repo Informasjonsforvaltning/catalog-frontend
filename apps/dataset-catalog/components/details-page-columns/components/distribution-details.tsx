@@ -20,11 +20,11 @@ import {
 import styles from "../details-columns.module.css";
 import {
   FieldsetDivider,
+  useSearchDataServiceByUri,
   useSearchFileTypeByUri,
   useSearchMediaTypeByUri,
 } from "@catalog-frontend/ui";
 import { isEmpty } from "lodash";
-import { useSearchDataServiceByUri } from "@dataset-catalog/hooks/useSearchService";
 
 type Props = {
   distribution: Partial<Distribution>;
