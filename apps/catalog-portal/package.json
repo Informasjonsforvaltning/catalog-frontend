@@ -1,0 +1,6 @@
+{
+  "name": "catalog-portal",
+  "devDependencies": {
+    "semver": "^7.5.0"
+  }
+}

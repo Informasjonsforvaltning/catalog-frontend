@@ -1,0 +1,6 @@
+{
+  "name": "data-service-catalog",
+  "devDependencies": {
+    "semver": "^7.5.0"
+  }
+}
