@@ -1,6 +1,0 @@
-{
-  "name": "concept-catalog",
-  "devDependencies": {
-    "semver": "^7.5.0"
-  }
-}

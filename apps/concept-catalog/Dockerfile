@@ -1,6 +1,6 @@
 FROM node:22-alpine
 WORKDIR /app
-COPY yarn.lock dist/apps/concept-catalog ./
+COPY .yarnrc.yml yarn.lock dist/apps/concept-catalog ./
 ARG NODE_ENV
 ENV NODE_ENV=$NODE_ENV
 RUN corepack enable
