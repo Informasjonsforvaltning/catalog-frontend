@@ -38,7 +38,7 @@ jobs:
           cache: "yarn"
 
       - name: Yarn install
-        run: yarn install --no-immutable
+        run: yarn install --immutable
 
       - name: Caching Nx
         uses: actions/cache@v5
