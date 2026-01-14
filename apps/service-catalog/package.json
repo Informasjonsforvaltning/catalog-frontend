@@ -1,0 +1,6 @@
+{
+  "name": "service-catalog",
+  "devDependencies": {
+    "semver": "*"
+  }
+}

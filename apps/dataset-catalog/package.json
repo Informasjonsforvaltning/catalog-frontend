@@ -1,0 +1,6 @@
+{
+  "name": "dataset-catalog",
+  "devDependencies": {
+    "semver": "*"
+  }
+}

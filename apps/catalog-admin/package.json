@@ -1,0 +1,6 @@
+{
+  "name": "catalog-admin",
+  "devDependencies": {
+    "semver": "*"
+  }
+}
