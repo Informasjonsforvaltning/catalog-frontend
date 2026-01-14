@@ -65,11 +65,14 @@ export const LeftColumn = ({ dataset, referenceDataEnv, searchEnv, referenceData
 
   return (
     <InfoCard>
-      {hasValues(dataset?.description) && (
+      {hasValues(dataset?.description) ?
         <InfoCard.Item title={localization.description}>
           <MarkdownComponent>{getTranslateText(dataset?.description, language) as string}</MarkdownComponent>
+        </InfoCard.Item> :
+        <InfoCard.Item title={localization.description}>
+          Mangler beskrivelse
         </InfoCard.Item>
-      )}
+      }
       {(hasValues(dataset?.accessRight) ||
         hasValues(dataset?.legalBasisForAccess) ||
         hasValues(dataset?.legalBasisForRestriction) ||
