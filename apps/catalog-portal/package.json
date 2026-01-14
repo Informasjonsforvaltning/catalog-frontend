@@ -1,6 +1,0 @@
-{
-  "name": "catalog-portal",
-  "devDependencies": {
-    "semver": "*"
-  }
-}

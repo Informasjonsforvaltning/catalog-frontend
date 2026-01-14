@@ -1,0 +1,4 @@
+packageExtensions:
+  "@nx/next@*":
+    dependencies:
+      semver: "^7.5.0"
