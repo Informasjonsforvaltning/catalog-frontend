@@ -30,7 +30,7 @@ import {
   setClientConceptsPageSettings,
 } from "@catalog-frontend/utils";
 import { Chip, Tabs } from "@digdir/designsystemet-react";
-import { FileImportIcon, PlusCircleIcon } from "@navikt/aksel-icons";
+import { PlusCircleIcon } from "@navikt/aksel-icons";
 import {
   SortOption,
   getSelectOptions,

@@ -38,8 +38,9 @@ export default async function NewPublicServicePage({
         subtitle={getTranslateText(organization?.prefLabel)}
       />
       <NewPage
-        statuses={statusesResponse.statuses}
         referenceDataEnv={process.env.FDK_BASE_URI || ""}
+        searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI || ""}
+        statuses={statusesResponse.statuses}
       />
     </>
   );

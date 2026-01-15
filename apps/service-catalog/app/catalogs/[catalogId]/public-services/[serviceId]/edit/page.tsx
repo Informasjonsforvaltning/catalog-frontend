@@ -46,6 +46,7 @@ export default async function EditServicePage({
       />
       <EditPage
         referenceDataEnv={process.env.FDK_BASE_URI || ""}
+        searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI || ""}
         service={service}
         statuses={statusesResponse.statuses}
       />

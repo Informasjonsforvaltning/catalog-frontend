@@ -130,6 +130,7 @@ export async function updateService(
     homepage: updatedService.homepage,
     status: updatedService.status,
     spatial: updatedService.spatial,
+    subject: updatedService.subject,
   };
 
   const diff = compare(oldService, updatedServiceMerged);

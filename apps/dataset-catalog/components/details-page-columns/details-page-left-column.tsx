@@ -2,6 +2,9 @@ import {
   InfoCard,
   ReferenceDataTags,
   useSearchAdministrativeUnitsByUri,
+  useSearchConceptsByUri,
+  useSearchDatasetsByUri,
+  useSearchInformationModelsByUri,
 } from "@catalog-frontend/ui";
 import {
   localization,
@@ -27,11 +30,6 @@ import {
 } from "@catalog-frontend/types";
 import styles from "./details-columns.module.css";
 import { useSearchEnheterByOrgNmbs } from "../../hooks/useEnhetsregister";
-import {
-  useSearchConceptsByUri,
-  useSearchDatasetsByUri,
-  useSearchInformationModelsByUri,
-} from "../../hooks/useSearchService";
 import relations from "../dataset-form/utils/relations.json";
 import { UriWithLabelTable } from "../uri-with-label-table";
 import { DistributionDetailsCard } from "./components/distribution-details";

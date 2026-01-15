@@ -1,6 +1,6 @@
 import { Link, List } from "@digdir/designsystemet-react";
 import { getTranslateText } from "@catalog-frontend/utils";
-import { useSearchDatasetsByUri } from "../../../hooks/useSearchService";
+import { useSearchDatasetsByUri } from "@catalog-frontend/ui";
 
 type Props = {
   datasetURIs: string[] | undefined;
