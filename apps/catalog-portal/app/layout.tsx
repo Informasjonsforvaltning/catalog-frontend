@@ -7,11 +7,11 @@ export const metadata: Metadata = {
   description: localization.catalogOverview,
 };
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+const RootLayout = (props: LayoutProps<"/">) => {
   return (
     <html lang={localization.getLanguage()}>
       <body>
-        <NextAuthProvider>{children}</NextAuthProvider>
+        <NextAuthProvider>{props.children}</NextAuthProvider>
       </body>
     </html>
   );

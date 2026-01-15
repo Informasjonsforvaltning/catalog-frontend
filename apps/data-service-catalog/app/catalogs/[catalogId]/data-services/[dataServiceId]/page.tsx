@@ -12,14 +12,12 @@ import {
 } from "@catalog-frontend/utils";
 import {
   getCurrencies,
-  getDataServiceById,
   getDistributionStatuses,
   getOpenLicenses,
   getPlannedAvailabilities,
 } from "@catalog-frontend/data-access";
 import { redirect, RedirectType } from "next/navigation";
 import DataServiceDetailsPageClient from "./data-service-details-page-client";
-import { dataServiceValidationSchema } from "../../../../../components/data-service-form/utils/validation-schema";
 import { withReadProtectedPage } from "@data-service-catalog/utils/auth";
 import { fetchDataServiceWithRetry } from "@data-service-catalog/utils/data-service";
 

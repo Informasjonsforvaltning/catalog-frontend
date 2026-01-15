@@ -1,15 +1,8 @@
 import { TermsOfUseModal } from "@catalog-frontend/ui";
 import { CatalogLayout } from "@concept-catalog/components/catalog-layout";
 
-const Layout = async (props: {
-  children: React.ReactNode;
-  params: Promise<{ catalogId: string }>;
-}) => {
-  const params = await props.params;
-
-  const { catalogId } = params;
-
-  const { children } = props;
+const Layout = async (props: LayoutProps<"/catalogs/[catalogId]">) => {
+  const { catalogId } = await props.params;
 
   return (
     <CatalogLayout
@@ -21,7 +14,7 @@ const Layout = async (props: {
       fdkBaseUrl={process.env.FDK_BASE_URI}
     >
       <TermsOfUseModal catalogId={catalogId} />
-      {children}
+      {props.children}
     </CatalogLayout>
   );
 };

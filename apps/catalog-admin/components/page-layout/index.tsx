@@ -7,10 +7,8 @@ interface LayoutProps {
 
 export const PageLayout = ({ children }: LayoutProps) => {
   return (
-    <>
-      <div className="center">
-        <div className={styles.page}>{children}</div>
-      </div>
-    </>
+    <div className="center">
+      <div className={styles.page}>{children}</div>
+    </div>
   );
 };

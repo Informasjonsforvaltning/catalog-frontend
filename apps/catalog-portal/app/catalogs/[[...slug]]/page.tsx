@@ -26,12 +26,8 @@ import { Alert, Heading } from "@digdir/designsystemet-react";
 import styles from "./catalogs.module.css";
 import { CatalogCard } from "./components/catalog-card";
 
-const CatalogsPage = async (props: {
-  params: Promise<{ catalogId: string[] }>;
-}) => {
-  const params = await props.params;
-
-  const { catalogId } = params;
+const CatalogsPage = async (props: PageProps<"/catalogs/[[...catalogId]]">) => {
+  const { catalogId } = await props.params;
 
   const session = await getValidSession();
   if (!session) {

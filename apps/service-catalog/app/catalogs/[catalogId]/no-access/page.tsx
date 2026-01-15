@@ -7,12 +7,10 @@ import {
 import { localization } from "@catalog-frontend/utils";
 import { Heading } from "@digdir/designsystemet-react";
 
-type Props = {
-  params: Promise<{ catalogId: string }>;
-};
-
-const NoAccess = async ({ params }: Props) => {
-  const { catalogId } = await params;
+const NoAccess = async (
+  props: PageProps<"/catalogs/[catalogId]/no-access">,
+) => {
+  const { catalogId } = await props.params;
 
   const breadcrumbList = catalogId
     ? ([

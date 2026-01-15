@@ -9,7 +9,7 @@ import {
 
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ catalogId: string }> },
+  context: RouteContext<"/api/catalogs/[catalogId]/data-services">,
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -54,7 +54,7 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  context: { params: Promise<{ catalogId: string }> },
+  context: RouteContext<"/api/catalogs/[catalogId]/data-services">,
 ) {
   try {
     const session = await getServerSession(authOptions);

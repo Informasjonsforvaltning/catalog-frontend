@@ -11,13 +11,15 @@ export const metadata: Metadata = {
   description: localization.catalogType.dataService,
 };
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+const RootLayout = (props: LayoutProps<"/">) => {
   return (
     <html lang={localization.getLanguage()}>
       <body>
         <NextAuthProvider>
           <NuqsAdapter>
-            <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+            <ReactQueryClientProvider>
+              {props.children}
+            </ReactQueryClientProvider>
           </NuqsAdapter>
         </NextAuthProvider>
       </body>

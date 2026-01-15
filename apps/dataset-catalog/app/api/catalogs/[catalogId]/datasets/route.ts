@@ -5,7 +5,7 @@ import { getAllDatasets, postDataset } from "@catalog-frontend/data-access";
 
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ catalogId: string }> },
+  context: RouteContext<"/api/catalogs/[catalogId]/datasets">,
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -47,7 +47,7 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  context: { params: Promise<{ catalogId: string }> },
+  context: RouteContext<"/api/catalogs/[catalogId]/datasets">,
 ) {
   try {
     const session = await getServerSession(authOptions);

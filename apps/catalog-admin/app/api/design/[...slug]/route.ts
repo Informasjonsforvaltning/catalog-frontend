@@ -8,9 +8,9 @@ import { NextRequest } from "next/server";
 
 export const GET = async (
   req: NextRequest,
-  props: { params: Promise<{ slug: string }> },
+  ctx: RouteContext<"/api/design/[...slug]">,
 ) => {
-  const params = await props.params;
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     if (slug?.length === 2 && slug[1] === "design") {
@@ -68,9 +68,9 @@ export const GET = async (
 
 export const PATCH = async (
   req: NextRequest,
-  props: { params: Promise<{ slug: string }> },
+  ctx: RouteContext<"/api/design/[...slug]">,
 ) => {
-  const params = await props.params;
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     const catalogId = slug[0];

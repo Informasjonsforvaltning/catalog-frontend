@@ -4,9 +4,9 @@ import { NextRequest } from "next/server";
 
 export const GET = async (
   req: NextRequest,
-  props: { params: Promise<{ slug: string }> },
+  ctx: RouteContext<"/api/history/[...slug]">,
 ) => {
-  const params = await props.params;
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     if (slug?.length == 2) {

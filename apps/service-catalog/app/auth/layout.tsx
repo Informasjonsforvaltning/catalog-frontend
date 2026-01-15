@@ -1,7 +1,7 @@
 import { Layout } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 
-const PageLayout = ({ children }: { children: React.ReactNode }) => {
+const PageLayout = (props: LayoutProps<"/auth">) => {
   return (
     <Layout
       catalogAdminUrl={process.env.CATALOG_ADMIN_BASE_URI}
@@ -10,7 +10,7 @@ const PageLayout = ({ children }: { children: React.ReactNode }) => {
       fdkBaseUrl={process.env.FDK_BASE_URI}
       catalogTitle={localization.catalogType.service}
     >
-      {children}
+      {props.children}
     </Layout>
   );
 };

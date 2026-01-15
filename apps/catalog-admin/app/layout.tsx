@@ -12,13 +12,15 @@ export const metadata: Metadata = {
   description: localization.catalogType.admin,
 };
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+const RootLayout = (props: LayoutProps<"/">) => {
   return (
     <html lang={localization.getLanguage()}>
       <body>
         <NextAuthProvider>
           <AdminContextProvider>
-            <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+            <ReactQueryClientProvider>
+              {props.children}
+            </ReactQueryClientProvider>
           </AdminContextProvider>
         </NextAuthProvider>
       </body>

@@ -1,15 +1,9 @@
 import { Layout } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 
-const PageLayout = async (props: {
-  children: React.ReactNode;
-  params: Promise<{ catalogId: string }>;
-}) => {
-  const params = await props.params;
-
-  const { catalogId } = params;
-
-  const { children } = props;
+const PageLayout = async (props: LayoutProps<"/catalogs/[[...slug]]">) => {
+  const { slug } = await props.params;
+  const catalogId = slug ? slug[0] : null;
 
   return (
     <Layout
@@ -21,7 +15,7 @@ const PageLayout = async (props: {
       catalogTitle={localization.catalogOverview}
       displayFooter={false}
     >
-      {children}
+      {props.children}
     </Layout>
   );
 };

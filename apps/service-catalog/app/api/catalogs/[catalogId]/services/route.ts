@@ -5,9 +5,9 @@ import { NextRequest } from "next/server";
 
 export const GET = async (
   req: NextRequest,
-  props: { params: Promise<{ catalogId: string }> },
+  ctx: RouteContext<"/api/catalogs/[catalogId]/services">,
 ) => {
-  const params = await props.params;
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { catalogId } = params;
 
@@ -26,9 +26,9 @@ export const GET = async (
 
 export const POST = async (
   req: NextRequest,
-  props: { params: Promise<{ catalogId: string }> },
+  ctx: RouteContext<"/api/catalogs/[catalogId]/services">,
 ) => {
-  const params = await props.params;
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { catalogId } = params;
 

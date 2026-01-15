@@ -7,12 +7,10 @@ import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { EditPage } from "./edit-page-client";
 import { getPublicServiceById } from "@service-catalog/app/actions/public-services/actions";
 
-export default async function EditServicePage({
-  params,
-}: {
-  params: Promise<{ catalogId: string; serviceId: string }>;
-}) {
-  const { catalogId, serviceId } = await params;
+export default async function EditServicePage(
+  props: PageProps<"/catalogs/[catalogId]/public-services/[serviceId]/edit">,
+) {
+  const { catalogId, serviceId } = await props.params;
   const [service, organization, statusesResponse] = await Promise.all([
     getPublicServiceById(catalogId, serviceId),
     getOrganization(catalogId),

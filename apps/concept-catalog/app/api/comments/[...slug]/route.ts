@@ -9,9 +9,9 @@ import { NextRequest } from "next/server";
 
 export const GET = async (
   req: NextRequest,
-  props: { params: Promise<{ slug: string }> },
+  ctx: RouteContext<"/api/comments/[...slug]">,
 ) => {
-  const params = await props.params;
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
 
@@ -46,9 +46,9 @@ export const GET = async (
 
 export const POST = async (
   req: NextRequest,
-  props: { params: Promise<{ slug: string }> },
+  ctx: RouteContext<"/api/comments/[...slug]">,
 ) => {
-  const params = await props.params;
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     if (slug?.length >= 2 && slug?.length <= 3) {
@@ -83,9 +83,9 @@ export const POST = async (
 
 export const PUT = async (
   req: NextRequest,
-  props: { params: Promise<{ slug: string }> },
+  ctx: RouteContext<"/api/comments/[...slug]">,
 ) => {
-  const params = await props.params;
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     if (slug?.length >= 2 && slug?.length <= 3) {
@@ -122,9 +122,9 @@ export const PUT = async (
 
 export const DELETE = async (
   req: NextRequest,
-  props: { params: Promise<{ slug: string }> },
+  ctx: RouteContext<"/api/comments/[...slug]">,
 ) => {
-  const params = await props.params;
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     if (slug?.length >= 2 && slug?.length <= 3) {

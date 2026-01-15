@@ -7,9 +7,9 @@ import {
 
 export const DELETE = async (
   req: NextRequest,
-  props: { params: Promise<{ catalogId: string; resultId: string }> },
+  ctx: RouteContext<"/api/catalogs/[catalogId]/concepts/import-results/[resultId]">,
 ) => {
-  const params = await props.params;
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { catalogId, resultId } = params;
 
@@ -35,9 +35,9 @@ export const DELETE = async (
 
 export const GET = async (
   req: NextRequest,
-  props: { params: Promise<{ catalogId: string; resultId: string }> },
+  ctx: RouteContext<"/api/catalogs/[catalogId]/concepts/import-results/[resultId]">,
 ) => {
-  const params = await props.params;
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { catalogId, resultId } = params;
 

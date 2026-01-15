@@ -15,12 +15,10 @@ import { getPublicServiceById } from "../../../../actions/public-services/action
 import { RedirectType, redirect } from "next/navigation";
 import PublicServiceDetailsPageClient from "./public-service-details-page-client";
 
-export default async function PublicServiceDetailsPage({
-  params,
-}: {
-  params: Promise<{ catalogId: string; serviceId: string }>;
-}) {
-  const { catalogId, serviceId } = await params;
+export default async function PublicServiceDetailsPage(
+  props: PageProps<"/catalogs/[catalogId]/public-services/[serviceId]">,
+) {
+  const { catalogId, serviceId } = await props.params;
 
   const session = await getValidSession();
   if (!session) {
