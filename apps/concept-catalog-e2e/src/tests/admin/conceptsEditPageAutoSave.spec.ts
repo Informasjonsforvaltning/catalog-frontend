@@ -259,11 +259,13 @@ runTestAsAdmin(
     await page.reload();
     await editPage.expectRestoreDialog();
     await editPage.clickRestoreButton();
+    await editPage.waitForAutoSaveToComplete();
 
     // Second refresh - should show restore dialog again
     await page.reload();
     await editPage.expectRestoreDialog();
     await editPage.clickRestoreButton();
+    await editPage.waitForAutoSaveToComplete();
 
     // Third refresh - should show restore dialog again
     await page.reload();
@@ -301,14 +303,18 @@ runTestAsAdmin(
       .getByRole("group", { name: "Relatert begrep" })
       .getByRole("combobox")
       .click();
-    await editPage.page.waitForTimeout(100);
-    await editPage.page
+    // Wait for search input to be visible
+    const searchInput = editPage.page
       .getByRole("group", { name: "Relatert begrep" })
-      .getByLabel("Søk begrep")
-      .fill("test");
-    await editPage.page.waitForTimeout(100);
+      .getByLabel("Søk begrep");
+    await searchInput.waitFor({ state: "visible" });
+    await searchInput.fill("test");
+    // Wait for search results to appear
+    await editPage.page
+      .getByLabel("Test status")
+      .first()
+      .waitFor({ state: "visible" });
     await editPage.page.getByLabel("Test status").first().click();
-    await editPage.page.waitForTimeout(100);
     await editPage.page.getByLabel("RelasjonMå fylles ut").click();
     await editPage.page.getByLabel("Se også").click();
     await editPage.waitForAutoSaveToComplete();

@@ -645,8 +645,11 @@ export default class EditPage {
   }
 
   async waitForAutoSaveToComplete() {
-    // Wait a bit for auto-save to complete
-    await this.page.waitForTimeout(1000);
+    // Wait for localStorage to have the auto-save data
+    await this.page.waitForFunction(
+      () => localStorage.getItem("conceptForm") !== null,
+      { timeout: 5000 },
+    );
   }
 
   // Helper methods for concept form fields
