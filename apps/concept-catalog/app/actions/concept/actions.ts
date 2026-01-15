@@ -17,10 +17,10 @@ import {
   removeEmptyValues,
 } from "@catalog-frontend/utils";
 import _ from "lodash";
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { conceptJsonPatchOperations } from "@concept-catalog/utils/json-patch";
 
-const clearValues = (object: any, path: string) => {
+const clearValues = (object: Concept, path: string) => {
   const fields = path.split(".");
   const currentField = fields.shift();
 
@@ -114,8 +114,8 @@ export async function createConcept(
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
-      revalidateTag("concept");
-      revalidateTag("concepts");
+      updateTag("concept");
+      updateTag("concepts");
     }
   }
 
@@ -142,7 +142,7 @@ export async function deleteConcept(catalogId: string, conceptId: string) {
     throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
-      revalidateTag("concepts");
+      updateTag("concepts");
     }
   }
 }
@@ -215,8 +215,8 @@ export async function updateConcept(
   }
 
   if (success) {
-    revalidateTag("concept");
-    revalidateTag("concepts");
+    updateTag("concept");
+    updateTag("concepts");
   }
 
   return await getConcept(`${conceptId}`, `${session?.accessToken}`).then(
@@ -245,7 +245,7 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
     throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
-      revalidateTag("import-results");
+      updateTag("import-results");
     }
   }
 }
@@ -274,8 +274,8 @@ export async function saveImportedConcept(
   } catch (error) {
     console.error(error);
   } finally {
-    revalidateTag("import-result");
-    revalidateTag("import-results");
+    updateTag("import-result");
+    updateTag("import-results");
   }
 }
 
@@ -305,8 +305,8 @@ export async function cancelImport(catalogId: string, resultId: string) {
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
-      revalidateTag("import-result");
-      revalidateTag("import-results");
+      updateTag("import-result");
+      updateTag("import-results");
     }
   }
 }
