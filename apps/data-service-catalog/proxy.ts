@@ -14,7 +14,7 @@ export const config = {
   matcher: "/catalogs/:path*",
 };
 
-export default withAuth(
+export const proxy = withAuth(
   async function middleware(req: NextRequestWithAuth) {
     const accessToken = req.nextauth.token?.access_token;
 
