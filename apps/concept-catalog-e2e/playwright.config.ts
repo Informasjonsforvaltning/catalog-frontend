@@ -42,12 +42,12 @@ export default defineConfig({
     baseURL,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     headless: true,
-    trace: "on", // Captures a trace for each test
-    screenshot: "on", // Takes screenshots on test failures
+    trace: "on-first-retry",
+    screenshot: "only-on-failure",
   },
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: "yarn nx serve concept-catalog --configuration=e2e",
+    command: "nx serve concept-catalog --configuration=e2e",
     url: "http://127.0.0.1:4200",
     reuseExistingServer: !process.env.CI,
     cwd: workspaceRoot,
