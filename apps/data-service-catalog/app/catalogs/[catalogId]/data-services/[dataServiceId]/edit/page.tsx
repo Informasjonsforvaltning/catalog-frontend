@@ -13,7 +13,7 @@ import {
   getTranslateText,
   localization,
   redirectToSignIn,
-  validUUID,
+  validDataServiceID,
 } from "@catalog-frontend/utils";
 import { redirect, RedirectType } from "next/navigation";
 import { withWriteProtectedPage } from "@data-service-catalog/utils/auth";
@@ -24,7 +24,7 @@ const EditDataServicePage = withWriteProtectedPage(
   ({ catalogId, dataServiceId }) =>
     `/catalogs/${catalogId}/data-services/${dataServiceId}/edit`,
   async ({ catalogId, dataServiceId, session }) => {
-    if (!dataServiceId || !validUUID(dataServiceId)) {
+    if (!dataServiceId || !validDataServiceID(dataServiceId)) {
       return redirect(`/notfound`, RedirectType.replace);
     }
     if (!session) {
