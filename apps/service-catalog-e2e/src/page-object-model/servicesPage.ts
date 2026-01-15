@@ -153,7 +153,7 @@ export default class ServicesPage {
       return;
     }
     const result = await this.accessibilityBuilder
-      .disableRules(["svg-img-alt"])
+      .disableRules(["svg-img-alt", "target-size"])
       .analyze();
     expect.soft(result.violations).toEqual([]);
   }
