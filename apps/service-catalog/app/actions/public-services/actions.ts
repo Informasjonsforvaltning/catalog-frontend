@@ -17,7 +17,7 @@ import {
   redirectToSignIn,
 } from "@catalog-frontend/utils";
 import { compare } from "fast-json-patch";
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function getPublicServices(catalogId: string) {
@@ -86,8 +86,8 @@ export async function createPublicService(
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
-      revalidateTag("public-service");
-      revalidateTag("public-services");
+      updateTag("public-service");
+      updateTag("public-services");
     }
   }
 }
@@ -115,7 +115,7 @@ export async function deletePublicService(
     throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
-      revalidateTag("public-services");
+      updateTag("public-services");
       redirect(`/catalogs/${catalogId}/public-services`);
     }
   }
@@ -167,8 +167,8 @@ export async function updatePublicService(
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
-      revalidateTag("public-service");
-      revalidateTag("public-services");
+      updateTag("public-service");
+      updateTag("public-services");
     }
   }
 }
@@ -193,11 +193,11 @@ export async function publishPublicService(
     }
     success = true;
   } catch (error) {
-    throw new Error(localization.alert.publishFail);
+    throw new Error(localization.alert.fail);
   } finally {
     if (success) {
-      revalidateTag("public-service");
-      revalidateTag("public-services");
+      updateTag("public-service");
+      updateTag("public-services");
     }
   }
 }
@@ -222,11 +222,11 @@ export async function unpublishPublicService(
     }
     success = true;
   } catch (error) {
-    throw new Error(localization.alert.unpublishFail);
+    throw new Error(localization.alert.fail);
   } finally {
     if (success) {
-      revalidateTag("public-service");
-      revalidateTag("public-services");
+      updateTag("public-service");
+      updateTag("public-services");
     }
   }
 }

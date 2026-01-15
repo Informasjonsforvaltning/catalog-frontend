@@ -16,7 +16,7 @@ import {
   removeEmptyValues,
 } from "@catalog-frontend/utils";
 import { DataService, DataServiceToBeCreated } from "@catalog-frontend/types";
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { compare } from "fast-json-patch";
 import omit from "lodash/omit";
 
@@ -95,8 +95,8 @@ export async function createDataService(
       console.log(
         `[createDataService] Revalidating cache tags for data service ${dataServiceId}`,
       );
-      revalidateTag("data-service");
-      revalidateTag("data-services");
+      updateTag("data-service");
+      updateTag("data-services");
     }
   }
 }
@@ -124,7 +124,7 @@ export async function deleteDataService(
     throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
-      revalidateTag("data-services");
+      updateTag("data-services");
     }
   }
 }
@@ -178,8 +178,8 @@ export async function updateDataService(
     throw new Error(`Noe gikk galt, prøv igjen...`);
   } finally {
     if (success) {
-      revalidateTag("data-service");
-      revalidateTag("data-services");
+      updateTag("data-service");
+      updateTag("data-services");
     }
   }
 }
@@ -204,8 +204,8 @@ export async function publishDataService(
     throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
-      revalidateTag("data-service");
-      revalidateTag("data-services");
+      updateTag("data-service");
+      updateTag("data-services");
     }
   }
 }
@@ -230,8 +230,8 @@ export async function unpublishDataService(
     throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
-      revalidateTag("data-service");
-      revalidateTag("data-services");
+      updateTag("data-service");
+      updateTag("data-services");
     }
   }
 }
@@ -256,7 +256,7 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
     throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
-      revalidateTag("import-results");
+      updateTag("import-results");
     }
   }
 }
