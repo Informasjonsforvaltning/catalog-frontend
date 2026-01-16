@@ -15,7 +15,7 @@ import {
   removeEmptyValues,
 } from "@catalog-frontend/utils";
 import { compare } from "fast-json-patch";
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 
 export async function getDatasets(catalogId: string) {
   const session = await getValidSession();
@@ -81,8 +81,8 @@ export async function createDataset(
     throw new Error(`${localization.alert.fail} ${error}`);
   } finally {
     if (success) {
-      revalidateTag("dataset");
-      revalidateTag("datasets");
+      updateTag("dataset");
+      updateTag("datasets");
     }
   }
 }
@@ -107,7 +107,7 @@ export async function deleteDataset(catalogId: string, datasetId: string) {
     throw new Error(`${localization.alert.deleteFailed} ${error}`);
   } finally {
     if (success) {
-      revalidateTag("datasets");
+      updateTag("datasets");
     }
   }
 }
@@ -148,8 +148,8 @@ export async function updateDataset(
   }
 
   if (success) {
-    revalidateTag("dataset");
-    revalidateTag("datasets");
+    updateTag("dataset");
+    updateTag("datasets");
   }
 }
 
@@ -184,5 +184,5 @@ export async function publishDataset(
     throw new Error(`Noe gikk galt, prøv igjen...`);
   }
 
-  revalidateTag("dataset");
+  updateTag("dataset");
 }

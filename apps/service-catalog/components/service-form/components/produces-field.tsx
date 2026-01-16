@@ -5,7 +5,6 @@ import {
   EditButton,
   FieldsetDivider,
   FormikLanguageFieldset,
-  TitleWithHelpTextAndTag,
 } from "@catalog-frontend/ui";
 import cn from "classnames";
 import {
@@ -60,104 +59,96 @@ export const ProducesField = (props: Props) => {
   const [snapshot, setSnapshot] = useState<Output[]>(values.produces ?? []);
 
   return (
-    <div className={styles.fieldSet}>
-      <TitleWithHelpTextAndTag
-        helpText={localization.serviceForm.helptext.produces}
-        tagTitle={localization.tag.required}
-      >
-        {localization.serviceForm.fieldLabel.produces}
-      </TitleWithHelpTextAndTag>
-      <FieldArray
-        name="produces"
-        render={(arrayHelpers) => (
-          <div className={cn(styles.fieldSet, errors && styles.errorBorder)}>
-            {values.produces?.map((item, index) => (
-              <Card key={`${index}-${item.identifier}`}>
-                <div className={styles.heading}>
-                  <div className={styles.field}>
-                    {!isEmpty(item?.title) && (
-                      <>
-                        <Heading size="2xs" spacing level={3}>
-                          {localization.serviceForm.fieldLabel.title}
-                        </Heading>
-                        <Paragraph size="sm">
-                          {getTranslateText(item.title)}
-                        </Paragraph>
-                        {Array.isArray(errors) && errors?.[index]?.title && (
-                          <ErrorMessage size="sm">
-                            {getTranslateText(errors[index].title)}
-                          </ErrorMessage>
-                        )}
-                      </>
-                    )}
-                  </div>
-
-                  <div className={styles.buttons}>
-                    <FieldModal
-                      validationSchema={validationSchema}
-                      template={item}
-                      type="edit"
-                      onSuccess={(updatedItem: Output) => {
-                        arrayHelpers.replace(index, updatedItem);
-                        setSnapshot([...(values.produces ?? [])]);
-                      }}
-                      onCancel={() => setFieldValue("produces", snapshot)}
-                      onChange={(updatedItem: Output) =>
-                        arrayHelpers.replace(index, updatedItem)
-                      }
-                    />
-                    <DeleteButton
-                      onClick={() => {
-                        const newArray = [...(values.produces ?? [])];
-                        newArray.splice(index, 1);
-                        setFieldValue("produces", newArray);
-                        setSnapshot([...newArray]);
-                      }}
-                    />
-                  </div>
-                </div>
+    <FieldArray
+      name="produces"
+      render={(arrayHelpers) => (
+        <div className={cn(styles.fieldSet, errors && styles.errorBorder)}>
+          {values.produces?.map((item, index) => (
+            <Card key={`${index}-${item.identifier}`}>
+              <div className={styles.heading}>
                 <div className={styles.field}>
-                  <Heading size="2xs" spacing level={3}>
-                    {localization.serviceForm.fieldLabel.description}
-                  </Heading>
-                  <Paragraph size="sm">
-                    {getTranslateText(item.description)}
-                  </Paragraph>
-                  {Array.isArray(errors) && errors?.[index]?.description && (
-                    <ErrorMessage size="sm">
-                      {getTranslateText(errors[index].description)}
-                    </ErrorMessage>
+                  {!isEmpty(item?.title) && (
+                    <>
+                      <Heading size="2xs" spacing level={3}>
+                        {localization.serviceForm.fieldLabel.title}
+                      </Heading>
+                      <Paragraph size="sm">
+                        {getTranslateText(item.title)}
+                      </Paragraph>
+                      {Array.isArray(errors) && errors?.[index]?.title && (
+                        <ErrorMessage size="sm">
+                          {getTranslateText(errors[index].title)}
+                        </ErrorMessage>
+                      )}
+                    </>
                   )}
                 </div>
-              </Card>
-            ))}
 
-            <div>
-              <FieldModal
-                validationSchema={validationSchema}
-                template={{ title: {}, description: {}, identifier: "" }}
-                type="new"
-                onSuccess={() => setSnapshot([...(values.produces ?? [])])}
-                onCancel={() => setFieldValue("produces", snapshot)}
-                onChange={(updatedItem: Output) => {
-                  if (snapshot.length === (values.produces?.length ?? 0)) {
-                    arrayHelpers.push(updatedItem);
-                  } else {
-                    arrayHelpers.replace(snapshot.length, updatedItem);
-                  }
-                }}
-              />
-            </div>
+                <div className={styles.buttons}>
+                  <FieldModal
+                    validationSchema={validationSchema}
+                    template={item}
+                    type="edit"
+                    onSuccess={(updatedItem: Output) => {
+                      arrayHelpers.replace(index, updatedItem);
+                      setSnapshot([...(values.produces ?? [])]);
+                    }}
+                    onCancel={() => setFieldValue("produces", snapshot)}
+                    onChange={(updatedItem: Output) =>
+                      arrayHelpers.replace(index, updatedItem)
+                    }
+                  />
+                  <DeleteButton
+                    onClick={() => {
+                      const newArray = [...(values.produces ?? [])];
+                      newArray.splice(index, 1);
+                      setFieldValue("produces", newArray);
+                      setSnapshot([...newArray]);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className={styles.field}>
+                <Heading size="2xs" spacing level={3}>
+                  {localization.serviceForm.fieldLabel.description}
+                </Heading>
+                <Paragraph size="sm">
+                  {getTranslateText(item.description)}
+                </Paragraph>
+                {Array.isArray(errors) && errors?.[index]?.description && (
+                  <ErrorMessage size="sm">
+                    {getTranslateText(errors[index].description)}
+                  </ErrorMessage>
+                )}
+              </div>
+            </Card>
+          ))}
 
-            {typeof errors === "string" && (
-              <ErrorMessage className={styles.errorMessage} size="sm">
-                {errors}
-              </ErrorMessage>
-            )}
+          <div>
+            <FieldModal
+              validationSchema={validationSchema}
+              template={{ title: {}, description: {}, identifier: "" }}
+              type="new"
+              onSuccess={() => setSnapshot([...(values.produces ?? [])])}
+              onCancel={() => setFieldValue("produces", snapshot)}
+              onChange={(updatedItem: Output) => {
+                if (snapshot.length === (values.produces?.length ?? 0)) {
+                  arrayHelpers.push(updatedItem);
+                } else {
+                  arrayHelpers.replace(snapshot.length, updatedItem);
+                }
+              }}
+            />
           </div>
-        )}
-      />
-    </div>
+
+          {typeof errors === "string" && (
+            <ErrorMessage className={styles.errorMessage} size="sm">
+              {errors}
+            </ErrorMessage>
+          )}
+        </div>
+      )}
+    />
   );
 };
 

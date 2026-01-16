@@ -83,5 +83,6 @@ export const serviceTemplate = (
     homepage: service?.homepage,
     status: service?.status,
     spatial: service?.spatial || [],
+    subject: service?.subject || [],
   };
 };

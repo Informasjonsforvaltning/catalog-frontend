@@ -3,21 +3,19 @@
 import {
   acceptTerms,
   getAllDatasetCatalogs,
-  getAllProcessingActivities,
   getAllServiceCatalogs,
   getConceptCountByCatalogId,
   oldGetAllDataServiceCatalogs,
 } from "@catalog-frontend/data-access";
 import {
   ServiceCatalogItem,
-  RecordOfProcessingActivities,
   DatasetCatalog,
   DataServiceCatalog,
   TermsAcceptation,
 } from "@catalog-frontend/types";
 import { getValidSession, redirectToSignIn } from "@catalog-frontend/utils";
 import { Session } from "next-auth";
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 
 export const getDatasetCount = async (catalogId: string) => {
   const session: Session = await getValidSession();
@@ -180,5 +178,5 @@ export async function acceptTermsAndConditions(acceptation: TermsAcceptation) {
     console.error("status: " + response.status);
     throw new Error("acceptTerms failed with response code " + response.status);
   }
-  revalidateTag("terms-acceptation");
+  updateTag("terms-acceptation");
 }

@@ -16,11 +16,10 @@ import {
   rejectChangeRequest,
   updateChangeRequest,
 } from "@catalog-frontend/data-access";
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import jsonpatch from "fast-json-patch";
 import {
   ChangeRequest,
-  ChangeRequestsPageSettings,
   ChangeRequestUpdateBody,
   Concept,
 } from "@catalog-frontend/types";
@@ -161,8 +160,8 @@ export async function acceptChangeRequestAction(
   } catch (error) {
     throw new Error(error);
   } finally {
-    revalidateTag("concept-change-requests");
-    revalidateTag("concept-change-request");
+    updateTag("concept-change-requests");
+    updateTag("concept-change-request");
   }
 }
 
@@ -188,7 +187,7 @@ export async function rejectChangeRequestAction(
   } catch (error) {
     throw new Error(error);
   } finally {
-    revalidateTag("concept-change-requests");
-    revalidateTag("concept-change-request");
+    updateTag("concept-change-requests");
+    updateTag("concept-change-request");
   }
 }

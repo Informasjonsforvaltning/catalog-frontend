@@ -65,8 +65,6 @@ export const useSearchInformationModelsByUri = (
   });
 };
 
-// Dataservices
-
 export const useSearchDataServiceSuggestions = (
   searchEnv: string,
   searchQuery?: string,

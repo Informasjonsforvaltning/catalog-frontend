@@ -17,6 +17,7 @@ import {
   FastFieldWithRef,
   useSearchFileTypes,
   useSearchMediaTypes,
+  useSearchDataServiceSuggestions,
 } from "@catalog-frontend/ui";
 import {
   getTranslateText,
@@ -32,7 +33,6 @@ import {
   SkeletonRectangle,
   Textfield,
 } from "@digdir/designsystemet-react";
-import { useSearchDataServiceSuggestions } from "../../../../hooks/useSearchService";
 import { FastField, FieldArray, Formik } from "formik";
 import styles from "./distributions.module.scss";
 import { distributionTemplate } from "../../utils/dataset-initial-values";

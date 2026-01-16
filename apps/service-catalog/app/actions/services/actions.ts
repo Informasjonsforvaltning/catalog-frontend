@@ -17,7 +17,7 @@ import {
   removeEmptyValues,
 } from "@catalog-frontend/utils";
 import { compare } from "fast-json-patch";
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function getServices(catalogId: string) {
@@ -82,8 +82,8 @@ export async function createService(
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
-      revalidateTag("service");
-      revalidateTag("services");
+      updateTag("service");
+      updateTag("services");
     }
   }
 }
@@ -108,7 +108,7 @@ export async function deleteService(catalogId: string, serviceId: string) {
     throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
-      revalidateTag("services");
+      updateTag("services");
       redirect(`/catalogs/${catalogId}/services`);
     }
   }
@@ -130,6 +130,7 @@ export async function updateService(
     homepage: updatedService.homepage,
     status: updatedService.status,
     spatial: updatedService.spatial,
+    subject: updatedService.subject,
   };
 
   const diff = compare(oldService, updatedServiceMerged);
@@ -159,8 +160,8 @@ export async function updateService(
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
-      revalidateTag("service");
-      revalidateTag("services");
+      updateTag("service");
+      updateTag("services");
     }
   }
 }
@@ -182,11 +183,11 @@ export async function publishService(catalogId: string, serviceId: string) {
     }
     success = true;
   } catch (error) {
-    throw new Error(localization.alert.publishFail);
+    throw new Error(localization.alert.fail);
   } finally {
     if (success) {
-      revalidateTag("service");
-      revalidateTag("services");
+      updateTag("service");
+      updateTag("services");
     }
   }
 }
@@ -208,11 +209,11 @@ export async function unpublishService(catalogId: string, serviceId: string) {
     }
     success = true;
   } catch (error) {
-    throw new Error(localization.alert.unpublishFail);
+    throw new Error(localization.alert.fail);
   } finally {
     if (success) {
-      revalidateTag("service");
-      revalidateTag("services");
+      updateTag("service");
+      updateTag("services");
     }
   }
 }

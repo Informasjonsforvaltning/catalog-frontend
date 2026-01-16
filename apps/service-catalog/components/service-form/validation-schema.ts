@@ -133,6 +133,7 @@ export const draftServiceSchema = Yup.object().shape({
     .notRequired(),
   status: Yup.string(),
   spatial: Yup.array().of(Yup.string().notRequired()),
+  subject: Yup.array().of(Yup.string().notRequired()),
   produces: Yup.array().of(draftProducesSchema),
   contactPoints: Yup.array().of(
     Yup.object().shape({
@@ -191,6 +192,7 @@ export const confirmedServiceSchema = Yup.object().shape({
     .notRequired(),
   status: Yup.string(),
   spatial: Yup.array().of(Yup.string().notRequired()),
+  subject: Yup.array().of(Yup.string().notRequired()),
   produces: Yup.array()
     .of(confirmedProducesSchema)
     .min(1, localization.validation.minOneField)

@@ -10,6 +10,7 @@ import {
 } from "@digdir/designsystemet-react";
 import {
   Button,
+  ConceptCombobox,
   ConfirmModal,
   FieldsetDivider,
   FormikAutoSaver,
@@ -62,6 +63,7 @@ interface ServiceFormProps {
   onCancel?: () => void;
   onSubmit?: (values: Service) => Promise<Service | undefined>;
   referenceDataEnv: string;
+  searchEnv: string;
   showSnackbarSuccessOnInit?: boolean;
   statuses: ReferenceDataCode[];
   type: "public-services" | "services";
@@ -99,6 +101,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
     onCancel,
     onSubmit,
     referenceDataEnv,
+    searchEnv,
     showSnackbarSuccessOnInit,
     statuses,
     type,
@@ -306,6 +309,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
               "produces",
               "contactPoints",
               "spatial",
+              "subject",
             ].forEach((name) => {
               if (isDirty(name)) {
                 dirtyFields.push(name);
@@ -338,6 +342,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                         "homepage",
                         "status",
                         "spatial",
+                        "subject",
                       ].includes(field),
                     )}
                     error={hasError([
@@ -346,6 +351,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       "homepage",
                       "status",
                       "spatial",
+                      "subject",
                     ])}
                   >
                     <Box>
@@ -433,6 +439,24 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       >
                         <SpatialCombobox referenceDataEnv={referenceDataEnv} />
                       </Fieldset>
+                      <FieldsetDivider />
+                      <Fieldset
+                        size="sm"
+                        legend={
+                          <TitleWithHelpTextAndTag
+                            tagTitle={localization.tag.recommended}
+                            tagColor="info"
+                            helpText={localization.serviceForm.helptext.subject}
+                          >
+                            {localization.serviceForm.fieldLabel.subject}
+                          </TitleWithHelpTextAndTag>
+                        }
+                      >
+                        <ConceptCombobox
+                          fieldLabel="subject"
+                          searchEnv={searchEnv}
+                        />
+                      </Fieldset>
                     </Box>
                   </FormLayout.Section>
 
@@ -446,14 +470,22 @@ export const ServiceForm = (props: ServiceFormProps) => {
                     error={hasError(["produces"])}
                     changed={dirtyFields.includes("produces")}
                   >
-                    <ProducesField
-                      errors={errors.produces}
-                      validationSchema={
-                        ignoreRequired
-                          ? draftProducesSchema
-                          : confirmedProducesSchema
-                      }
-                    />
+                    <div className={styles.fieldSet}>
+                      <TitleWithHelpTextAndTag
+                        helpText={localization.serviceForm.helptext.produces}
+                        tagTitle={localization.tag.required}
+                      >
+                        {localization.serviceForm.fieldLabel.produces}
+                      </TitleWithHelpTextAndTag>
+                      <ProducesField
+                        errors={errors.produces}
+                        validationSchema={
+                          ignoreRequired
+                            ? draftProducesSchema
+                            : confirmedProducesSchema
+                        }
+                      />
+                    </div>
                   </FormLayout.Section>
 
                   <FormLayout.Section

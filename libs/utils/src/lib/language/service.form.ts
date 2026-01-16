@@ -14,6 +14,7 @@ export const serviceFormNb = {
     produces: "Produserer",
     spatial: "Dekningsområde",
     status: "Status",
+    subject: "Begrep",
     telephone: "Telefon",
     title: "Tittel",
   },
@@ -31,6 +32,8 @@ export const serviceFormNb = {
       "Egenskapen brukes til å referere til en eller flere instanser av tjenesteresultat som beskriver resultat av tjenesten.",
     spatial: "Geografiske områder som tjenesten dekker.",
     status: "Velg tjenestens nåværende status.",
+    subject:
+      "Velg begrep registrert i [begrepskatalogen til data.norge](https://data.norge.no/concepts). Ved å henvise til gjennomarbeidede beskrivelser som virksomheten selv er ansvarlig for å vedlikeholde, sikrer vi at det er tydelig hvordan et begrep brukt i tjenesten skal forstås og at denne forståelsen er riktig og oppdatert.",
     title: "Navnet skal være kortfattet, kunne stå alene og gi mening.",
   },
   section: {

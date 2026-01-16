@@ -13,6 +13,7 @@ export interface ServiceToBeCreated {
   produces?: Output[];
   spatial?: string[];
   status?: string;
+  subject?: string[];
   title: LocalizedStrings;
 }
 

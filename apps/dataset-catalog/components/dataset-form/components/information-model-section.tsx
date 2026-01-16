@@ -1,16 +1,17 @@
 "use client";
 import { Dataset } from "@catalog-frontend/types";
-import { TitleWithHelpTextAndTag, useDebounce } from "@catalog-frontend/ui";
+import {
+  TitleWithHelpTextAndTag,
+  useDebounce,
+  useSearchInformationModelsByUri,
+  useSearchInformationModelsSuggestions,
+} from "@catalog-frontend/ui";
 import {
   capitalizeFirstLetter,
   getTranslateText,
   localization,
 } from "@catalog-frontend/utils";
 import { Combobox, Fieldset } from "@digdir/designsystemet-react";
-import {
-  useSearchInformationModelsByUri,
-  useSearchInformationModelsSuggestions,
-} from "../../../hooks/useSearchService";
 import { useFormikContext } from "formik";
 import { useState } from "react";
 import styles from "../dataset-form.module.css";
