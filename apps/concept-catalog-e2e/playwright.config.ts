@@ -32,8 +32,8 @@ export default defineConfig({
       },
     ],
   ],
-  retries: 3,
-  workers: 4,
+  retries: 2,
+  workers: 2,
   timeout: 180 * 1000,
   expect: {
     timeout: 10 * 1000,
@@ -80,7 +80,7 @@ export default defineConfig({
     {
       name: "admin-chromium-solo",
       use: { ...devices["Desktop Chrome"] },
-      dependencies: ["admin-init"],
+      dependencies: ["admin-init", "admin-chromium", "admin-firefox"],
       testMatch: "**/admin/*.spec.ts",
       grep: /@solo/,
     },
