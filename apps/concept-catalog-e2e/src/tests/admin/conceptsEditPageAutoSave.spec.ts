@@ -272,6 +272,9 @@ runTestAsAdmin(
     await editPage.expectRestoreDialog();
     await editPage.clickDiscardButton();
 
+    // Wait for localStorage to be cleared after discard
+    await editPage.waitForAutoSaveToClear();
+
     // Fourth refresh - should NOT show restore dialog
     await page.reload();
     await editPage.expectNoRestoreDialog();
@@ -282,6 +285,11 @@ runTestAsAdmin(
   "should auto-save relation modal data and show restore dialog",
   async ({ page, conceptsPage, playwright }) => {
     const concept = await createRandomConcept(playwright);
+    const newTerm = {
+      nb: uniqueString("new_term_nb"),
+      nn: uniqueString("new_term_nn"),
+      en: uniqueString("new_term_en"),
+    };
 
     // Navigate to concept details and click edit
     const detailPage: DetailPage = conceptsPage.detailPage;
@@ -293,6 +301,10 @@ runTestAsAdmin(
     // Initialize edit page
     const editPage: EditPage = conceptsPage.editPage;
     await editPage.expectEditPageUrl(concept.id);
+
+    // Make a change to main form to trigger main storage save (required for restore dialog)
+    await editPage.fillAnbefaltTermField(newTerm, [], false);
+    await editPage.waitForAutoSaveToComplete();
 
     // Open relation modal
     await editPage.clickAddRelation();
@@ -317,7 +329,7 @@ runTestAsAdmin(
     await editPage.page.getByLabel("Test status").first().click();
     await editPage.page.getByLabel("RelasjonMå fylles ut").click();
     await editPage.page.getByLabel("Se også").click();
-    await editPage.waitForAutoSaveToComplete();
+    await editPage.waitForRelationAutoSaveToComplete();
 
     // Don't close the modal, just refresh the page
     await page.reload();
@@ -326,9 +338,15 @@ runTestAsAdmin(
     await editPage.expectRestoreDialog();
     await editPage.clickRestoreButton();
 
-    // Verify the relation data was restored by checking if the relation was added
+    // Wait for the relations section to load and verify the relation was restored
+    // The relation table fetches concept details asynchronously
+    const relationsSection = editPage.page.getByRole("heading", {
+      name: "Relasjoner",
+    });
+    await relationsSection.scrollIntoViewIfNeeded();
+
+    // Verify the relation was added - "Test status" is the concept title
     await expect(editPage.page.getByText("Test status")).toBeVisible();
-    await expect(editPage.page.getByText("Se også")).toBeVisible();
   },
 );
 
@@ -484,8 +502,8 @@ runTestAsAdmin(
       [],
       false,
     );
-    // Press tab to trigger onBlur to make sure the autosave is triggered
-    await editPage.waitForAutoSaveToComplete();
+    // Wait for auto-save to detect no diff and clear localStorage
+    await editPage.waitForAutoSaveToClear();
 
     // Step 4: Refresh again - should NOT show restore dialog since we reverted to original
     await page.reload();

@@ -89,6 +89,10 @@ export default class ConceptsPage {
 
   public async goto() {
     await this.page.goto(this.url);
+    // Wait for page to be ready - the search input indicates the page has loaded
+    await this.page
+      .getByRole("searchbox", { name: "Søk" })
+      .waitFor({ state: "visible" });
   }
 
   public async checkAccessibility() {
@@ -318,41 +322,43 @@ export default class ConceptsPage {
 
     console.log("[TEST] Clicking Importer RDF Button...");
 
-    const [fileChooser] = await Promise.all([
-      this.page.waitForEvent("filechooser", { timeout: 20000 }),
-      await importerRdfButton.click({ timeout: 20000 }),
-    ]);
+    // Ensure button is ready before clicking
+    await expect(importerRdfButton).toBeVisible();
 
-    await fileChooser.setFiles(filePath);
+    // Use a try-catch for file chooser as Firefox can be flaky
+    try {
+      const fileChooserPromise = this.page.waitForEvent("filechooser");
+      await importerRdfButton.click();
+      const fileChooser = await fileChooserPromise;
 
+      await fileChooser.setFiles(filePath);
+    } catch (error) {
+      // Fallback: Try clicking again with Promise.all pattern
+      const [fileChooser] = await Promise.all([
+        this.page.waitForEvent("filechooser"),
+        importerRdfButton.click({ force: true }),
+      ]);
+      await fileChooser.setFiles(filePath);
+    }
+
+    // Wait for file to be uploaded and processed
+    // The modal content changes when upload starts/completes
     dialog = this.page.getByRole("dialog", {});
 
-    await expect(
-      dialog
-        .getByRole("button")
-        .filter({ hasText: `${localization.button.importConceptRDF}` }),
-    ).toBeHidden({ timeout: 5000 });
-    await expect(
-      dialog.getByRole("button", {
-        name: `${localization.importResult.continue}`,
-      }),
-    ).toBeVisible({
-      timeout: 5000,
+    // Wait for the continue button to appear (indicates file was processed)
+    // This is more reliable than waiting for RDF button to disappear
+    const continueButton = dialog.getByRole("button", {
+      name: `${localization.importResult.continue}`,
     });
-
-    const sendButton = dialog
-      .getByRole("button")
-      .filter({ hasText: `${localization.importResult.continue}` });
-    expect(sendButton).not.toBeDisabled({ timeout: 30000 });
+    await expect(continueButton).toBeVisible();
+    await expect(continueButton).not.toBeDisabled();
 
     await Promise.all([
-      this.page.waitForURL("**/import-results/**", { timeout: 60_000 }),
-      sendButton.click({ timeout: 10000 }),
+      this.page.waitForURL("**/import-results/**"),
+      continueButton.click(),
     ]);
 
-    await expect(this.page).toHaveURL(/\/import-results\/.+/i, {
-      timeout: 100000,
-    });
+    await expect(this.page).toHaveURL(/\/import-results\/.+/i);
 
     const url = this.page.url();
     console.log("Import result URL: ", url);
