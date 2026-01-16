@@ -88,19 +88,13 @@ export default class ImportResultDetailsPage {
 
   async confirmImport() {
     const button = this.getConfirmButton();
-    await expect(button).toBeVisible();
-    await expect(button).toBeEnabled();
     await button.click();
-    // Wait for confirm button to disappear - reliable indicator the action completed
     await expect(button).toBeHidden();
   }
 
   async cancelImport() {
     const button = this.getCancelImportButton();
-    await expect(button).toBeVisible();
-    await expect(button).toBeEnabled();
     await button.click();
-    // Wait for cancel button to disappear - reliable indicator the action completed
     await expect(button).toBeHidden();
   }
 
