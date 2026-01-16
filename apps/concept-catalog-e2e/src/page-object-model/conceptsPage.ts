@@ -326,24 +326,22 @@ export default class ConceptsPage {
     await expect(importerRdfButton).toBeVisible();
     await expect(importerRdfButton).toBeEnabled();
 
-    // Use Promise.all pattern consistently - this works better across browsers
-    const [fileChooser] = await Promise.all([
-      this.page.waitForEvent("filechooser"),
-      importerRdfButton.click(),
-    ]);
-    await fileChooser.setFiles(filePath);
+    // Find the hidden file input for RDF upload (accepts .ttl files)
+    // The dialog has two file inputs - one for CSV/JSON and one for RDF
+    const fileInput = dialog.locator('input[type="file"][accept=".ttl"]');
+    await fileInput.setInputFiles(filePath);
 
-    // Wait for file to be uploaded and processed
-    // The modal content changes when upload starts/completes
+    // Wait for modal state to change: import buttons disappear when upload starts
+    // This confirms the file was picked up and processing began
+    await expect(importerRdfButton).toBeHidden();
+
+    // Wait for continue button to be visible and enabled (upload complete)
     dialog = this.page.getByRole("dialog", {});
-
-    // Wait for the continue button to appear (indicates file was processed)
-    // This is more reliable than waiting for RDF button to disappear
     const continueButton = dialog.getByRole("button", {
       name: `${localization.importResult.continue}`,
     });
     await expect(continueButton).toBeVisible();
-    await expect(continueButton).not.toBeDisabled();
+    await expect(continueButton).toBeEnabled();
 
     await Promise.all([
       this.page.waitForURL("**/import-results/**"),
