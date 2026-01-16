@@ -3,6 +3,7 @@ import {
   adminAuthFile,
   createConcept,
   ConceptStatus,
+  deleteAllConcepts,
   uniqueString,
 } from "../../utils/helpers";
 import { expect } from "@playwright/test";
@@ -226,11 +227,15 @@ runSerialTestsAdmin("Test @solo importing RDF", [
       console.log("[TEST] Deleting all previous import results...");
       await importResultDetailsPage.deleteAllImportResults(apiRequestContext);
 
+      await deleteAllConcepts(apiRequestContext);
+
       console.log("[TEST] Importing turtle file...");
       const importId: string =
         await conceptsPage.importTurtleFile("begreper.ttl");
 
       expect(importId != null);
+
+      await importResultDetailsPage.goto(importId);
 
       await importResultDetailsPage.checkWaitingForConfirmationStatus();
 
@@ -292,7 +297,10 @@ runSerialTestsAdmin("Test @solo importing RDF", [
       await conceptsPage.goto();
       // Search for a known concept from begreper.ttl to verify Test 2 succeeded
       await conceptsPage.search("testbegrep");
-      // If no results, the previous test may have failed - this test depends on it
+      // Verify search found results before continuing (use .first() to handle multiple matches from accumulated test data)
+      await expect(
+        conceptsPage.page.getByRole("link", { name: /testbegrep/i }).first(),
+      ).toBeVisible();
 
       const importIdFailure: string =
         await conceptsPage.importTurtleFile("begreper.ttl");
