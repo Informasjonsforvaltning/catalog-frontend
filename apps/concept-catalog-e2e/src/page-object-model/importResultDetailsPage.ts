@@ -55,7 +55,9 @@ export default class ImportResultDetailsPage {
     this.getElementByText(`${localization.importResult.failed}`);
 
   async goto(importResultId: string) {
-    await this.page.goto(`${this.url}/${importResultId}`);
+    await this.page.goto(`${this.url}/${importResultId}`, {
+      waitUntil: "networkidle",
+    });
   }
 
   async checkVisibleButtons() {
@@ -69,33 +71,37 @@ export default class ImportResultDetailsPage {
   }
 
   async checkSuccessfulStatus() {
-    await expect(this.getSuccessfulLabel().first()).toBeVisible({
-      timeout: 20000,
-    });
+    await expect(this.getSuccessfulLabel().first()).toBeVisible();
   }
 
   async checkCancelledStatus() {
-    await expect(this.getCancelledLabel().first()).toBeVisible({
-      timeout: 20000,
-    });
+    await expect(this.getCancelledLabel().first()).toBeVisible();
   }
 
   async checkWaitingForConfirmationStatus() {
-    await expect(this.getWaitingForConfirmationLabel().first()).toBeVisible({
-      timeout: 30000,
-    });
+    await expect(this.getWaitingForConfirmationLabel().first()).toBeVisible();
   }
 
   async checkFailedStatus() {
-    await expect(this.getFailedLabel().first()).toBeVisible({ timeout: 30000 });
+    await expect(this.getFailedLabel().first()).toBeVisible();
   }
 
   async confirmImport() {
-    await this.getConfirmButton().click({ timeout: 40000 });
+    const button = this.getConfirmButton();
+    await expect(button).toBeVisible();
+    await expect(button).toBeEnabled();
+    await button.click();
+    // Wait for confirm button to disappear - reliable indicator the action completed
+    await expect(button).toBeHidden();
   }
 
   async cancelImport() {
-    await this.getCancelImportButton().click({ timeout: 40000 });
+    const button = this.getCancelImportButton();
+    await expect(button).toBeVisible();
+    await expect(button).toBeEnabled();
+    await button.click();
+    // Wait for cancel button to disappear - reliable indicator the action completed
+    await expect(button).toBeHidden();
   }
 
   async deleteAllImportResults(apiRequestContext: APIRequestContext) {

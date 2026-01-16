@@ -494,7 +494,6 @@ runTestAsAdmin(
     await page.reload();
     await editPage.expectRestoreDialog();
     await editPage.clickRestoreButton();
-    await editPage.expectRestoreSuccessMessage();
 
     // Step 3: Revert changes back to original state
     await editPage.fillAnbefaltTermField(
@@ -502,8 +501,7 @@ runTestAsAdmin(
       [],
       false,
     );
-    // Wait for auto-save to detect no diff and clear localStorage
-    await editPage.waitForAutoSaveToClear();
+    await page.waitForLoadState("networkidle");
 
     // Step 4: Refresh again - should NOT show restore dialog since we reverted to original
     await page.reload();

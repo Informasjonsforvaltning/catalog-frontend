@@ -322,24 +322,16 @@ export default class ConceptsPage {
 
     console.log("[TEST] Clicking Importer RDF Button...");
 
-    // Ensure button is ready before clicking
+    // Ensure button is visible and enabled before clicking
     await expect(importerRdfButton).toBeVisible();
+    await expect(importerRdfButton).toBeEnabled();
 
-    // Use a try-catch for file chooser as Firefox can be flaky
-    try {
-      const fileChooserPromise = this.page.waitForEvent("filechooser");
-      await importerRdfButton.click();
-      const fileChooser = await fileChooserPromise;
-
-      await fileChooser.setFiles(filePath);
-    } catch (error) {
-      // Fallback: Try clicking again with Promise.all pattern
-      const [fileChooser] = await Promise.all([
-        this.page.waitForEvent("filechooser"),
-        importerRdfButton.click({ force: true }),
-      ]);
-      await fileChooser.setFiles(filePath);
-    }
+    // Use Promise.all pattern consistently - this works better across browsers
+    const [fileChooser] = await Promise.all([
+      this.page.waitForEvent("filechooser"),
+      importerRdfButton.click(),
+    ]);
+    await fileChooser.setFiles(filePath);
 
     // Wait for file to be uploaded and processed
     // The modal content changes when upload starts/completes
@@ -359,6 +351,9 @@ export default class ConceptsPage {
     ]);
 
     await expect(this.page).toHaveURL(/\/import-results\/.+/i);
+
+    // Wait for network to be idle after navigation to ensure page is fully loaded
+    await this.page.waitForLoadState("networkidle");
 
     const url = this.page.url();
     console.log("Import result URL: ", url);
