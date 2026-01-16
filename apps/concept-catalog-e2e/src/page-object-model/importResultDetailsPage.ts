@@ -61,13 +61,13 @@ export default class ImportResultDetailsPage {
   }
 
   async checkVisibleButtons() {
-    await expect(this.getCancelImportButton()).toBeVisible({ timeout: 5000 });
-    await expect(this.getDeleteImportButton()).toBeVisible({ timeout: 5000 });
-    await expect(this.getConfirmButton()).toBeVisible({ timeout: 5000 });
+    await expect(this.getCancelImportButton()).toBeVisible();
+    await expect(this.getDeleteImportButton()).toBeVisible();
+    await expect(this.getConfirmButton()).toBeVisible();
   }
 
   async checkDisabledDeleteButton() {
-    await expect(this.getDeleteImportButton()).toBeDisabled({ timeout: 5000 });
+    await expect(this.getDeleteImportButton()).toBeDisabled();
   }
 
   async checkSuccessfulStatus() {
@@ -83,19 +83,23 @@ export default class ImportResultDetailsPage {
   }
 
   async checkFailedStatus() {
+    // Wait for processing to complete first (ongoing label disappears)
+    await expect(this.getOngoingLabel().first()).toBeHidden({ timeout: 30000 });
     await expect(this.getFailedLabel().first()).toBeVisible();
   }
 
   async confirmImport() {
     const button = this.getConfirmButton();
     await button.click();
-    await expect(button).toBeHidden();
+    // Wait for status to change to "Completed"
+    await expect(this.getSuccessfulLabel().first()).toBeVisible();
   }
 
   async cancelImport() {
     const button = this.getCancelImportButton();
     await button.click();
-    await expect(button).toBeHidden();
+    // Wait for status to change to "Cancelled"
+    await expect(this.getCancelledLabel().first()).toBeVisible();
   }
 
   async deleteAllImportResults(apiRequestContext: APIRequestContext) {
