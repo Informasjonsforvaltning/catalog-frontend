@@ -1,6 +1,14 @@
+import {
+  Breadcrumbs as DsBreadcrumbs,
+  BreadcrumbsItem,
+  BreadcrumbsLink,
+  BreadcrumbsList,
+} from '@digdir/designsystemet-react';
 import { hashCode, localization } from '@catalog-frontend/utils';
-import styles from './breadcrumbs.module.css';
 import Link from 'next/link';
+import cn from 'classnames';
+import styles from './breadcrumbs.module.css';
+
 export type BreadcrumbType = {
   href: string;
   text: string;
@@ -14,35 +22,26 @@ export interface BreadcrumbsProps {
 
 const Breadcrumbs = ({ breadcrumbList, catalogPortalUrl }: BreadcrumbsProps) => {
   return (
-    <div className='container'>
-      <nav className={styles.breadcrumbs}>
-        <span>
-          <a
-            className={styles.link}
-            aria-label={localization.catalogOverview}
-            href={catalogPortalUrl}
-          >
-            {localization.catalogOverview}
-          </a>
-          {breadcrumbList?.map((breadcrumb, i) => {
-            return (
-              <span key={hashCode(breadcrumb.href)}>
-                <span className={styles.separator}>{'>'}</span>
-                {i === breadcrumbList.length - 1 ? (
-                  <span className={styles.deactiveLink}>{breadcrumb.text}</span>
-                ) : (
-                  <Link
-                    href={breadcrumb.href}
-                    className={styles.link}
-                  >
-                    {breadcrumb.text}
-                  </Link>
-                )}
-              </span>
-            );
-          })}
-        </span>
-      </nav>
+    <div className={cn('container', styles.breadcrumb)}>
+      <DsBreadcrumbs aria-label={localization.catalogOverview}>
+        <BreadcrumbsLink
+          href={catalogPortalUrl}
+          aria-label={localization.catalogOverview}
+        >
+          {localization.catalogOverview}
+        </BreadcrumbsLink>
+        {breadcrumbList && breadcrumbList.length > 0 && (
+          <BreadcrumbsList>
+            {breadcrumbList.map((breadcrumb) => (
+              <BreadcrumbsItem key={hashCode(breadcrumb.href)}>
+                <BreadcrumbsLink href={breadcrumb.href}>
+                  {breadcrumb.text}
+                </BreadcrumbsLink>
+              </BreadcrumbsItem>
+            ))}
+          </BreadcrumbsList>
+        )}
+      </DsBreadcrumbs>
     </div>
   );
 };
