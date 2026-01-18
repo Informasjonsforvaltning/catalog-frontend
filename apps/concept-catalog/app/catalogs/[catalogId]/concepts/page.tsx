@@ -38,14 +38,14 @@ const SearchPage = withReadProtectedPage(
 
     return (
       <>
-        {/*<Breadcrumbs
+        <Breadcrumbs
           breadcrumbList={breadcrumbList}
           catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
-        />*/}
-        {/*<DesignBanner
+        />
+        <DesignBanner
           title={localization.catalogType.concept}
           catalogId={catalogId}
-        />*/}
+        />
         <SearchPageClient
           catalogId={catalogId}
           hasWritePermission={!!hasWritePermission}

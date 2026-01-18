@@ -70,14 +70,14 @@ const EditDatasetPage = withWriteProtectedPage(
 
     return (
       <>
-        {/* <Breadcrumbs
+        <Breadcrumbs
           breadcrumbList={breadcrumbList}
           catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
         />
         <DesignBanner
           catalogId={catalogId}
           title={localization.catalogType.dataset}
-        /> */}
+        />
         <EditPage
           dataset={dataset}
           referenceData={referenceData}
