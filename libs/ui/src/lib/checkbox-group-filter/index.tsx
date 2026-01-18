@@ -12,17 +12,19 @@ interface Props<T> {
 }
 
 export const CheckboxGroupFilter = <T,>({ items, onChange, value }: Props<T>) => {
-
-  const { getCheckboxProps, validationMessageProps } = useCheckboxGroup(items);
+  const { getCheckboxProps, validationMessageProps } = useCheckboxGroup({
+    value: value ?? [],
+    onChange,
+  });
 
   return (
     <Fieldset>
-      {items.map(({ value, label }) => (
+      {items.map(({ value: itemValue, label }) => (
         <Checkbox
           data-size='sm'
-          key={`checkbox-item-${value}`}
+          key={`checkbox-item-${itemValue}`}
           label={label}
-          {...getCheckboxProps(label)}
+          {...getCheckboxProps({ value: String(itemValue) })}
         />
       ))}
     </Fieldset>
