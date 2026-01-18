@@ -1,6 +1,6 @@
 import { Dataset, DataTheme, LosTheme, Option } from '@catalog-frontend/types';
 import { TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
-import { Combobox, EXPERIMENTAL_Suggestion as Suggestion, Field, Label, ValidationMessage } from '@digdir/designsystemet-react';
+import { Combobox } from '@digdir/designsystemet-react';
 import { getTranslateText, localization } from '@catalog-frontend/utils';
 import { FastField, useFormikContext } from 'formik';
 import { get } from 'lodash';
@@ -16,50 +16,39 @@ export const ThemeSection = ({ losThemes, euDataThemes }: Props) => {
     return option.label.toLowerCase().includes(inputValue.toLowerCase());
   };
 
-  // Convert filter function to Suggestion's filter signature
-  const suggestionFilter = ({ label, input }: { label: string; input: HTMLInputElement }) => {
-    return label.toLowerCase().includes(input.value.toLowerCase());
-  };
-
   return (
     <>
-      <Field id='euDataTheme-combobox' data-size='sm'>
-        <Label>
+      <FastField
+        id='euDataTheme-combobox'
+        as={Combobox}
+        multiple
+        hideClearButton
+        label={
           <TitleWithHelpTextAndTag
             tagTitle={localization.tag.required}
             helpText={localization.datasetForm.helptext.euDataTheme}
           >
             {localization.datasetForm.fieldLabel.euDataTheme}
           </TitleWithHelpTextAndTag>
-        </Label>
-        <Suggestion
-          multiple
-          selected={values.euDataTheme || []}
-          onSelectedChange={(items) => setFieldValue('euDataTheme', items.map((item) => item.value))}
-          filter={suggestionFilter}
-          data-size='sm'
-        >
-          <Suggestion.Input placeholder={`${localization.search.search}...`} />
-          <Suggestion.List>
-            <Suggestion.Empty>{localization.search.noHits}</Suggestion.Empty>
-            {euDataThemes &&
-              euDataThemes.map((theme) => (
-                <Suggestion.Option
-                  key={theme.uri}
-                  value={theme.uri}
-                  label={getTranslateText(theme.label) as string}
-                >
-                  {getTranslateText(theme.label)}
-                </Suggestion.Option>
-              ))}
-          </Suggestion.List>
-        </Suggestion>
-        {errors.euDataTheme && (
-          <ValidationMessage data-size='sm'>
-            {errors.euDataTheme}
-          </ValidationMessage>
-        )}
-      </Field>
+        }
+        filter={containsFilter}
+        placeholder={`${localization.search.search}...`}
+        error={errors.euDataTheme}
+        value={values.euDataTheme}
+        onValueChange={(values: string[]) => setFieldValue('euDataTheme', values)}
+        data-size='sm'
+      >
+        <Combobox.Empty>{localization.search.noHits}</Combobox.Empty>
+        {euDataThemes &&
+          euDataThemes.map((theme) => (
+            <Combobox.Option
+              key={theme.uri}
+              value={theme.uri}
+            >
+              {getTranslateText(theme.label)}
+            </Combobox.Option>
+          ))}
+      </FastField>
       <FastField
         id='losTheme-combobox'
         as={Combobox}
