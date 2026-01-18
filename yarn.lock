@@ -9969,7 +9969,7 @@ __metadata:
     react-markdown: "npm:^10.1.0"
     react-papaparse: "npm:^4.4.0"
     remark-gfm: "npm:^4.0.1"
-    sass: "npm:^1.94.1"
+    sass: "npm:^1.97.2"
     styled-components: "npm:^6.1.19"
     swc-loader: "npm:0.2.6"
     ts-jest: "npm:^29.4.5"
@@ -22224,9 +22224,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass@npm:^1.94.1":
-  version: 1.94.1
-  resolution: "sass@npm:1.94.1"
+"sass@npm:^1.97.2":
+  version: 1.97.2
+  resolution: "sass@npm:1.97.2"
   dependencies:
     "@parcel/watcher": "npm:^2.4.1"
     chokidar: "npm:^4.0.0"
@@ -22237,7 +22237,7 @@ __metadata:
       optional: true
   bin:
     sass: sass.js
-  checksum: 10/5d046d429a9a5627dc36bdb696ac2ae13b0556582e0689e59a691e890c867955fac650f58a604f00f6159e6af1c72231556bdb0870d6f65bf51c179259e0624c
+  checksum: 10/a6b27e6a75bc8eedf0ce941a86e996f4a477640dfd214ecdcee5e8d7dca054bb03070974690b7f988a99ea729983cd8ddcdbb887bd068c73fde2d0010d835064
   languageName: node
   linkType: hard
 
