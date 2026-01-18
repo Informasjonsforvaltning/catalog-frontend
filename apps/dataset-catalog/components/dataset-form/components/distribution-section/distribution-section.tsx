@@ -2,13 +2,17 @@
 
 import { useEffect, useState } from 'react';
 import { useFormikContext } from 'formik';
+import dynamic from 'next/dynamic';
 import { Button, Card, ValidationMessage, Heading, Paragraph, Tag } from '@digdir/designsystemet-react';
 import { ChevronDownIcon, ChevronUpIcon, PencilWritingIcon } from '@navikt/aksel-icons';
 import { Dataset, Distribution, ReferenceDataCode, Search, StorageData } from '@catalog-frontend/types';
 import { AddButton, DeleteButton, FieldsetDivider, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 import { getTranslateText, localization, DataStorage } from '@catalog-frontend/utils';
-import { DistributionModal } from './distribution-modal';
 import { DistributionDetails } from './distribution-details';
+
+const DistributionModal = dynamic(() => import('./distribution-modal').then((mod) => ({ default: mod.DistributionModal })), {
+  ssr: false,
+});
 import styles from './distributions.module.scss';
 import { get, isEmpty } from 'lodash';
 import {
