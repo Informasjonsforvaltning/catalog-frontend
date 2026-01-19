@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, type MouseEvent } from "react";
 import {
   parseAsArrayOf,
   parseAsInteger,
@@ -265,8 +265,8 @@ export const SearchPageClient = ({
     return user?.name ?? "";
   };
 
-  const onPageChange = (page: number) => {
-    setPage(page - 1);
+  const onPageChange = (event: MouseEvent<HTMLElement>, selectedItem: number) => {
+    setPage(selectedItem - 1);
     window.scrollTo({
       top: 0,
       behavior: "smooth",
