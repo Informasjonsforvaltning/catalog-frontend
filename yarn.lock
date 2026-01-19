@@ -2749,9 +2749,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fellesdatakatalog/ui@portal:../fdk-ui::locator=catalog-frontend%40workspace%3A.":
-  version: 0.0.0-use.local
-  resolution: "@fellesdatakatalog/ui@portal:../fdk-ui::locator=catalog-frontend%40workspace%3A."
+"@fellesdatakatalog/ui@npm:^1.0.17":
+  version: 1.0.17
+  resolution: "@fellesdatakatalog/ui@npm:1.0.17"
   dependencies:
     "@navikt/aksel-icons": "npm:^7.39.0"
     classnames: "npm:^2.5.1"
@@ -2759,8 +2759,9 @@ __metadata:
     "@digdir/designsystemet-react": ^1.1.9
     react: ^19.1.1
     react-dom: ^19.1.1
+  checksum: 10/8c2d47feb361c3f24677fe293dac656b7a220cd5b4fdc716e76da6c8611048d7d221a2b1edac79af8b80a91a042497ee6530efecf1fce8baec7d1b00814f2467
   languageName: node
-  linkType: soft
+  linkType: hard
 
 "@floating-ui/core@npm:^1.7.3":
   version: 1.7.3
@@ -9765,7 +9766,7 @@ __metadata:
     "@eslint/eslintrc": "npm:^3.3.1"
     "@eslint/js": "npm:^9.35.0"
     "@fellesdatakatalog/icons": "npm:^0.8.5"
-    "@fellesdatakatalog/ui": "portal:../fdk-ui"
+    "@fellesdatakatalog/ui": "npm:^1.0.17"
     "@fortawesome/fontawesome-svg-core": "npm:7.0.0"
     "@fortawesome/free-regular-svg-icons": "npm:^7.0.0"
     "@fortawesome/free-solid-svg-icons": "npm:^7.0.0"

@@ -42,7 +42,7 @@
     "@digdir/designsystemet-react": "1.7.1",
     "@digdir/designsystemet-theme": "^1.7.1",
     "@fellesdatakatalog/icons": "^0.8.5",
-    "@fellesdatakatalog/ui": "portal:../fdk-ui",
+    "@fellesdatakatalog/ui": "^1.0.17",
     "@fortawesome/fontawesome-svg-core": "7.0.0",
     "@fortawesome/free-regular-svg-icons": "^7.0.0",
     "@fortawesome/free-solid-svg-icons": "^7.0.0",
