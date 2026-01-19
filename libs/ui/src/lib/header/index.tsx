@@ -13,8 +13,8 @@ import FDKLogo from './images/fdk-publishing-logo-negative.svg';
 import FDKLogoDemo from './images/fdk-publishing-logo-negative-demo.svg';
 import { useSession } from 'next-auth/react';
 import styles from './header.module.scss';
-import { ExternalLinkIcon, LeaveIcon, MenuHamburgerIcon, PersonIcon } from '@navikt/aksel-icons';
-import { Button, Divider, Dropdown } from '@digdir/designsystemet-react';
+import { ExternalLinkIcon, LeaveIcon, MenuHamburgerIcon } from '@navikt/aksel-icons';
+import { Avatar, Button, Divider, Dropdown } from '@digdir/designsystemet-react';
 import classNames from 'classnames';
 import { useParams } from 'next/navigation';
 
@@ -139,24 +139,24 @@ const Header: FC<HeaderProps> = ({
             <Dropdown placement='bottom-end'>
               <Dropdown.List key='menu-group-user'>
                 <Dropdown.Item
-                  className={classNames(styles.dropDownItem, styles.userInfo)}
+                  className={styles.dropDownItem}
                 >
-                  <div>
-                    <span>
-                      <PersonIcon
-                        fontSize='1.3rem'
-                        role='presentation'
-                      />
-                      {userDisplayName}
-                    </span>
-                    {userRole && <span>{userRole}</span>}
+                  <div className={styles.userInfo}>
+                    <Avatar
+                      aria-label={userDisplayName || ''}
+                      data-size='sm'
+                      variant='circle'
+                    />
+                    <div className={styles.userDetails}>
+                      <div className={styles.displayName}>{userDisplayName}</div>
+                      {userRole && <span>{userRole}</span>}
+                    </div>
                   </div>
                 </Dropdown.Item>
                 <Divider />
               </Dropdown.List>
               {resourceRoles.some((role) => role.role === 'admin') && (
                 <>
-                  <Dropdown.Heading>{localization.manageCatalogs}</Dropdown.Heading>
                   <Dropdown.List key='menu-group-admin'>
                     <Dropdown.Item>
                       <Dropdown.Button
