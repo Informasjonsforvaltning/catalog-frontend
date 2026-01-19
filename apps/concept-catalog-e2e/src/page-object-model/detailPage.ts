@@ -41,10 +41,16 @@ export default class DetailPage {
 
   public async goto(url: string) {
     await this.page.goto(url);
+    // Wait for page to load by checking for key element
+    await expect(
+      this.page.getByRole("button", { name: "Rediger" }),
+    ).toBeVisible();
   }
 
   public async editConcept() {
-    await this.page.getByRole("button", { name: "Rediger" }).click();
+    const editButton = this.page.getByRole("button", { name: "Rediger" });
+    await expect(editButton).toBeVisible();
+    await editButton.click();
     await this.editPage.expectMenu();
   }
 

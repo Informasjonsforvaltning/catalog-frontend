@@ -3,7 +3,7 @@ import {
   BreadcrumbType,
   DesignBanner,
 } from "@catalog-frontend/ui";
-import { localization, validUUID } from "@catalog-frontend/utils";
+import { localization, validDataServiceID } from "@catalog-frontend/utils";
 import { getDataServiceImportResultById } from "@catalog-frontend/data-access";
 import { redirect, RedirectType } from "next/navigation";
 import ImportResultDetailsPageClient from "./import-result-details-page-client";
@@ -13,7 +13,7 @@ const ImportResultDetailsPage = withAdminProtectedPage(
   ({ catalogId, resultId }) =>
     `/catalogs/${catalogId}/data-services/import-results/${resultId}`,
   async ({ catalogId, resultId, session }) => {
-    if (!resultId || !validUUID(resultId)) {
+    if (!resultId || !validDataServiceID(resultId)) {
       return redirect(`/notfound`, RedirectType.replace);
     }
     const importResult = await getDataServiceImportResultById(

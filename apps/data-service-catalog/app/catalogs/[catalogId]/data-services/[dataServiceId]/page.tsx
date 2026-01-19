@@ -8,7 +8,7 @@ import {
   hasOrganizationWritePermission,
   localization,
   redirectToSignIn,
-  validUUID,
+  validDataServiceID,
 } from "@catalog-frontend/utils";
 import {
   getCurrencies,
@@ -25,7 +25,7 @@ const EditDataServicePage = withReadProtectedPage(
   ({ catalogId, dataServiceId }) =>
     `/catalogs/${catalogId}/data-services/${dataServiceId}`,
   async ({ catalogId, dataServiceId, session }) => {
-    if (!dataServiceId || !validUUID(dataServiceId)) {
+    if (!dataServiceId || !validDataServiceID(dataServiceId)) {
       return redirect(`/notfound`, RedirectType.replace);
     }
     if (!session) {

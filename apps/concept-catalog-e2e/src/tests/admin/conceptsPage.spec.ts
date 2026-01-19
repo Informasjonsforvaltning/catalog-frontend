@@ -3,6 +3,7 @@ import {
   adminAuthFile,
   createConcept,
   ConceptStatus,
+  deleteAllConcepts,
   uniqueString,
 } from "../../utils/helpers";
 import { expect } from "@playwright/test";
@@ -226,16 +227,16 @@ runSerialTestsAdmin("Test @solo importing RDF", [
       console.log("[TEST] Deleting all previous import results...");
       await importResultDetailsPage.deleteAllImportResults(apiRequestContext);
 
+      await deleteAllConcepts(apiRequestContext);
+
       console.log("[TEST] Importing turtle file...");
       const importId: string =
         await conceptsPage.importTurtleFile("begreper.ttl");
 
       expect(importId != null);
 
-      console.log("[TEST] Redirecting to the created import result...");
-      await importResultDetailsPage.goto(importId, { timeout: 20000 });
+      await importResultDetailsPage.goto(importId);
 
-      console.log("[TEST] Checking buttons...");
       await importResultDetailsPage.checkWaitingForConfirmationStatus();
 
       console.log("[TEST] Cancelling import...");
@@ -254,6 +255,9 @@ runSerialTestsAdmin("Test @solo importing RDF", [
 
       const importResultDetailsPage = conceptsPage.importResultDetailsPage;
 
+      // Clean up cancelled import from Test 1 to avoid interference
+      await importResultDetailsPage.deleteAllImportResults(apiRequestContext);
+
       console.log("[TEST] Importing turtle file...");
       const importId: string =
         await conceptsPage.importTurtleFile("begreper.ttl");
@@ -262,7 +266,7 @@ runSerialTestsAdmin("Test @solo importing RDF", [
       expect(importId != null);
 
       console.log("[TEST] Going to import-result page...");
-      await importResultDetailsPage.goto(importId, { timeout: 5000 });
+      await importResultDetailsPage.goto(importId);
 
       console.log("[TEST] Checking buttons in import-result page...");
       await importResultDetailsPage.checkVisibleButtons();
@@ -289,12 +293,20 @@ runSerialTestsAdmin("Test @solo importing RDF", [
 
       const importResultDetailsPage = conceptsPage.importResultDetailsPage;
 
-      console.log("[TEST] Importing turtle file...");
+      // Verify concepts from Test 2 exist before attempting conflicting import
+      await conceptsPage.goto();
+      // Search for a known concept from begreper.ttl to verify Test 2 succeeded
+      await conceptsPage.search("testbegrep");
+      // Verify search found results before continuing (use .first() to handle multiple matches from accumulated test data)
+      await expect(
+        conceptsPage.page.getByRole("link", { name: /testbegrep/i }).first(),
+      ).toBeVisible();
+
       const importIdFailure: string =
         await conceptsPage.importTurtleFile("begreper.ttl");
 
       console.log("[TEST] Going to import-result page...");
-      await importResultDetailsPage.goto(importIdFailure, { timeout: 5000 });
+      await importResultDetailsPage.goto(importIdFailure);
 
       console.log("[TEST] Checking failure status...");
       await importResultDetailsPage.checkFailedStatus();

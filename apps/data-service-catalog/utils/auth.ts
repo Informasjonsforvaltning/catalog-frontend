@@ -5,8 +5,8 @@ import {
   hasOrganizationWritePermission,
   hasSystemAdminPermission,
   redirectToSignIn,
+  validDataServiceID,
   validOrganizationNumber,
-  validUUID,
 } from "@catalog-frontend/utils";
 import { RedirectType, redirect } from "next/navigation";
 
@@ -37,7 +37,7 @@ const withProtectedPage = (
     }
 
     [dataServiceId].forEach((param) => {
-      if (params[param] && !validUUID(params[param])) {
+      if (params[param] && !validDataServiceID(params[param])) {
         return redirect(`/not-found`, RedirectType.replace);
       }
     });

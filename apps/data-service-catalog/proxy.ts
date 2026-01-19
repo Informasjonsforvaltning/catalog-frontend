@@ -6,9 +6,9 @@ import {
   hasOrganizationWritePermission,
   hasSystemAdminPermission,
   validateOidcUserSession,
-} from "@catalog-frontend/utils/src/lib/auth/token";
-import { validUUID } from "@catalog-frontend/utils/src/lib/validation/uuid";
-import { validOrganizationNumber } from "@catalog-frontend/utils/src/lib/validation/organization-number";
+  validDataServiceID,
+  validOrganizationNumber,
+} from "@catalog-frontend/utils";
 
 export const config = {
   matcher: "/catalogs/:path*",
@@ -21,7 +21,7 @@ export const proxy = withAuth(
     const pathname = req.nextUrl.pathname;
     const parts = pathname.split("/");
     const catalogId = validOrganizationNumber(parts[2]) ? parts[2] : undefined;
-    const dataServiceId = validUUID(parts[4]) ? parts[4] : undefined;
+    const dataServiceId = validDataServiceID(parts[4]) ? parts[4] : undefined;
 
     const writePermissionsRoutes = [
       `/catalogs/${catalogId}/data-services/${dataServiceId}/edit`,
@@ -34,7 +34,7 @@ export const proxy = withAuth(
       );
     }
 
-    if (dataServiceId && !validUUID(dataServiceId)) {
+    if (dataServiceId && !validDataServiceID(dataServiceId)) {
       return NextResponse.rewrite(
         new URL("/not-found", process.env.NEXTAUTH_URL),
       );

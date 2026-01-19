@@ -18,6 +18,7 @@ interface PublicServiceDetailsPageProps {
   catalogId: string;
   hasWritePermission: boolean;
   referenceDataEnv: string;
+  searchEnv: string;
   service: Service;
   serviceId: string;
   statuses: ReferenceDataCode[];
@@ -27,6 +28,7 @@ const PublicServiceDetailsPageClient = ({
   catalogId,
   hasWritePermission,
   referenceDataEnv,
+  searchEnv,
   service,
   serviceId,
   statuses,
@@ -56,6 +58,7 @@ const PublicServiceDetailsPageClient = ({
       <DetailsPageLayout.Left>
         <BasicServiceFormInfoCardItems
           language={language}
+          searchEnv={searchEnv}
           referenceDataEnv={referenceDataEnv}
           service={service}
         />

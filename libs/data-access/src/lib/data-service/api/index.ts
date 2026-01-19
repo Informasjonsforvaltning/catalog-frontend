@@ -3,8 +3,8 @@
 import { DataService } from "@catalog-frontend/types";
 import { Operation } from "fast-json-patch";
 import {
+  validateDataServiceID,
   validateOrganizationNumber,
-  validateUUID,
   validateAndEncodeUrlSafe,
 } from "@catalog-frontend/utils";
 
@@ -50,7 +50,7 @@ export const getDataServiceById = async (
   accessToken: string,
 ) => {
   validateOrganizationNumber(catalogId, "getDataServiceById");
-  validateUUID(dataServiceId, "getDataServiceById");
+  validateDataServiceID(dataServiceId, "getDataServiceById");
   const encodedCatalogId = validateAndEncodeUrlSafe(
     catalogId,
     "catalog ID",
@@ -142,7 +142,7 @@ export const deleteDataService = async (
   accessToken: string,
 ) => {
   validateOrganizationNumber(catalogId, "deleteDataService");
-  validateUUID(dataServiceId, "deleteDataService");
+  validateDataServiceID(dataServiceId, "deleteDataService");
   const encodedCatalogId = validateAndEncodeUrlSafe(
     catalogId,
     "catalog ID",
@@ -172,7 +172,7 @@ export const updateDataService = async (
   accessToken: string,
 ) => {
   validateOrganizationNumber(catalogId, "updateDataService");
-  validateUUID(dataServiceId, "updateDataService");
+  validateDataServiceID(dataServiceId, "updateDataService");
   const encodedCatalogId = validateAndEncodeUrlSafe(
     catalogId,
     "catalog ID",
@@ -202,7 +202,7 @@ export const publishDataService = async (
   accessToken: string,
 ) => {
   validateOrganizationNumber(catalogId, "publishDataService");
-  validateUUID(dataServiceId, "publishDataService");
+  validateDataServiceID(dataServiceId, "publishDataService");
   const encodedCatalogId = validateAndEncodeUrlSafe(
     catalogId,
     "catalog ID",
@@ -231,7 +231,7 @@ export const unpublishDataService = async (
   accessToken: string,
 ) => {
   validateOrganizationNumber(catalogId, "unpublishDataService");
-  validateUUID(dataServiceId, "unpublishDataService");
+  validateDataServiceID(dataServiceId, "unpublishDataService");
   const encodedCatalogId = validateAndEncodeUrlSafe(
     catalogId,
     "catalog ID",
@@ -282,7 +282,7 @@ export const getDataServiceImportResultById = async (
   accessToken: string,
 ) => {
   validateOrganizationNumber(catalogId, "getDataServiceImportResultById");
-  validateUUID(resultId, "getDataServiceImportResultById");
+  validateDataServiceID(resultId, "getDataServiceImportResultById");
   const encodedCatalogId = validateAndEncodeUrlSafe(
     catalogId,
     "catalog ID",
@@ -311,7 +311,7 @@ export const deleteImportResult = async (
   accessToken: string,
 ) => {
   validateOrganizationNumber(catalogId, "deleteImportResult");
-  validateUUID(resultId, "deleteImportResult");
+  validateDataServiceID(resultId, "deleteImportResult");
   const encodedCatalogId = validateAndEncodeUrlSafe(
     catalogId,
     "catalog ID",

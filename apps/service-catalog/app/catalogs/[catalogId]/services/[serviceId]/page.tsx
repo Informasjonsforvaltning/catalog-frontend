@@ -63,6 +63,7 @@ export default async function ServiceDetailsPage(
         catalogId={catalogId}
         hasWritePermission={hasWritePermission}
         referenceDataEnv={process.env.FDK_BASE_URI ?? ""}
+        searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI ?? ""}
         service={service}
         serviceId={serviceId}
         statuses={statusesResponse.statuses}
