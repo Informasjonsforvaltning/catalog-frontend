@@ -1,23 +1,23 @@
-import React from 'react';
-import { withProtectedPage } from '../../../../utils/auth';
-import GeneralPageClient from './general-page-client';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { BreadcrumbType, Breadcrumbs, DesignBanner } from '@catalog-frontend/ui';
+import React from "react";
+import { withProtectedPage } from "../../../../utils/auth";
+import GeneralPageClient from "./general-page-client";
+import { localization } from "@catalog-frontend/utils";
+import { Breadcrumbs, DesignBanner } from "@catalog-frontend/ui";
 
 export default withProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/general`,
   async ({ catalogId }) => {
     const breadcrumbList = catalogId
-      ? ([
+      ? [
           {
             href: `/catalogs/${catalogId}`,
-            text: getTranslateText(localization.manageCatalog),
+            text: localization.manageCatalog,
           },
           {
             href: `/catalogs/${catalogId}/general`,
-            text: getTranslateText(localization.general),
+            text: localization.general,
           },
-        ] as BreadcrumbType[])
+        ]
       : [];
 
     return (

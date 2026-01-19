@@ -1,83 +1,88 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { Button, Dialog } from '@digdir/designsystemet-react';
-import { LinkButton } from '../button';
-import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { localization } from '@catalog-frontend/utils';
-
-type LinkButtonConfig = {
-  href: string;
-  label: string;
-};
+import { Box, Button, Modal, Paragraph } from "@digdir/designsystemet-react";
+import Link from "next/link";
+import { localization } from "@catalog-frontend/utils";
+import style from "./new-dataset-modal.module.scss";
 
 type NewDatasetModalProps = {
   catalogId: string;
-  triggerButtonText?: string;
-  modalTitle?: string;
-  firstButton: LinkButtonConfig;
-  secondButton: LinkButtonConfig;
+  trigger: React.ReactNode;
 };
 
 export const NewDatasetModal = ({
   catalogId,
-  triggerButtonText,
-  modalTitle,
-  firstButton,
-  secondButton,
+  trigger,
 }: NewDatasetModalProps) => {
-  const modalRef = useRef<HTMLDialogElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleOpen = () => {
-    setIsOpen(true);
-    modalRef.current?.showModal();
-  };
-
-  const handleClose = () => {
-    setIsOpen(false);
-    modalRef.current?.close();
-  };
-
-  useEffect(() => {
-    if (isOpen) {
-      modalRef.current?.showModal();
-    }
-  }, [isOpen]);
-
   return (
-    <>
-      <Button
-        variant='primary'
-        data-size='sm'
-        onClick={handleOpen}
-      >
-        <PlusCircleIcon fontSize='1.2rem' />
-        {triggerButtonText ?? localization.datasetForm.button.addDataset}
-      </Button>
-      <Dialog
-        ref={modalRef}
-        onClose={handleClose}
-      >
-        <Dialog.Block>{modalTitle ?? localization.datasetForm.button.addDataset}</Dialog.Block>
-        <Dialog.Block>
-          <LinkButton
-            variant='primary'
-            data-size='sm'
-            href={firstButton.href}
-          >
-            {firstButton.label}
-          </LinkButton>
-          <LinkButton
-            variant='secondary'
-            data-size='sm'
-            href={secondButton.href}
-          >
-            {secondButton.label}
-          </LinkButton>
-        </Dialog.Block>
-      </Dialog>
-    </>
+    <Modal.Root>
+      <Modal.Trigger asChild>{trigger}</Modal.Trigger>
+      <Modal.Dialog>
+        <Modal.Header className={style.header}>
+          {localization.datasetForm.datasetTypeModal.title}
+        </Modal.Header>
+        <Modal.Content className={style.content}>
+          <Paragraph size="sm" className={style.intro}>
+            {localization.datasetForm.datasetTypeModal.intro}
+          </Paragraph>
+          <div className={style.options}>
+            <Box className={style.option}>
+              <h3 className={style.optionTitle}>
+                {
+                  localization.datasetForm.datasetTypeModal.standardDataset
+                    .title
+                }
+              </h3>
+              <p className={style.optionDescription}>
+                {
+                  localization.datasetForm.datasetTypeModal.standardDataset
+                    .description
+                }
+              </p>
+              <Button
+                size="sm"
+                variant="primary"
+                asChild
+                className={style.selectButton}
+              >
+                <Link href={`/catalogs/${catalogId}/datasets/new`}>
+                  {
+                    localization.datasetForm.datasetTypeModal.standardDataset
+                      .button
+                  }
+                </Link>
+              </Button>
+            </Box>
+            <Box className={style.option}>
+              <h3 className={style.optionTitle}>
+                {
+                  localization.datasetForm.datasetTypeModal.mobilityDataset
+                    .title
+                }
+              </h3>
+              <p className={style.optionDescription}>
+                {
+                  localization.datasetForm.datasetTypeModal.mobilityDataset
+                    .description
+                }
+              </p>
+              <Button
+                size="sm"
+                variant="primary"
+                asChild
+                className={style.selectButton}
+              >
+                <Link href={`/catalogs/${catalogId}/datasets/new-transport`}>
+                  {
+                    localization.datasetForm.datasetTypeModal.mobilityDataset
+                      .button
+                  }
+                </Link>
+              </Button>
+            </Box>
+          </div>
+        </Modal.Content>
+      </Modal.Dialog>
+    </Modal.Root>
   );
 };
-

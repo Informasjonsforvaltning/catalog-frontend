@@ -1,27 +1,38 @@
-import { Dataset, DatasetToBeCreated, Distribution } from '@catalog-frontend/types';
-import { isEmpty } from 'lodash';
+import {
+  Dataset,
+  DatasetToBeCreated,
+  Distribution,
+  ApplicationProfile,
+} from "@catalog-frontend/types";
+import { isEmpty } from "lodash";
 
 export const datasetTemplate = (dataset: Dataset): Dataset => {
   return {
-    id: dataset?.id ?? '',
-    catalogId: dataset?.catalogId ?? '',
+    id: dataset?.id ?? "",
+    catalogId: dataset?.catalogId ?? "",
     approved: dataset?.approved ?? false,
     published: dataset?.published ?? false,
     lastModified: dataset?.lastModified,
     uri: dataset?.uri,
     originalUri: dataset?.originalUri,
-    title: dataset.title ?? '',
+    applicationProfile: isEmpty(dataset?.applicationProfile)
+      ? undefined
+      : dataset.applicationProfile,
+    title: dataset.title ?? "",
     description: !isEmpty(dataset?.description) ? dataset.description : {},
     accessRight: dataset?.accessRight,
     legalBasisForAccess: dataset?.legalBasisForAccess ?? [],
     legalBasisForProcessing: dataset?.legalBasisForProcessing ?? [],
     legalBasisForRestriction: dataset?.legalBasisForRestriction ?? [],
     landingPage:
-      dataset.landingPage && dataset?.landingPage?.length > 0 && dataset.landingPage.every((page) => page !== undefined)
+      dataset.landingPage &&
+      dataset?.landingPage?.length > 0 &&
+      dataset.landingPage.every((page) => page !== undefined)
         ? dataset.landingPage
         : [],
     euDataTheme: dataset.euDataTheme ?? [],
     losTheme: dataset.losTheme ?? [],
+    mobilityTheme: dataset.mobilityTheme ?? [],
     type: dataset?.type,
     keywords: dataset.keywords,
     concepts: dataset.concepts,
@@ -36,10 +47,11 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
     availability: { hasBody: dataset.availability?.hasBody },
     spatial: dataset.spatial,
     temporal: dataset.temporal ?? [],
-    issued: dataset.issued ?? '',
+    issued: dataset.issued ?? "",
     language: dataset.language,
     informationModelsFromFDK: dataset.informationModelsFromFDK ?? [],
-    informationModelsFromOtherSources: dataset?.informationModelsFromOtherSources,
+    informationModelsFromOtherSources:
+      dataset?.informationModelsFromOtherSources,
     qualifiedAttributions: dataset?.qualifiedAttributions,
     sample: dataset?.sample,
     references: dataset?.references,
@@ -49,8 +61,11 @@ export const datasetTemplate = (dataset: Dataset): Dataset => {
   };
 };
 
-export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
+export const datasetToBeCreatedTemplate = (
+  applicationProfile?: ApplicationProfile,
+): DatasetToBeCreated => {
   return {
+    applicationProfile: applicationProfile,
     title: {},
     description: {},
     approved: false,
@@ -61,6 +76,7 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     legalBasisForRestriction: [],
     euDataTheme: [],
     losTheme: [],
+    mobilityTheme: [],
     type: undefined,
     keywords: {},
     concepts: [],
@@ -75,7 +91,7 @@ export const datasetToBeCreatedTemplate = (): DatasetToBeCreated => {
     availability: undefined,
     spatial: [],
     temporal: [],
-    issued: '',
+    issued: "",
     language: [],
     informationModelsFromFDK: [],
     informationModelsFromOtherSources: undefined,
@@ -94,7 +110,8 @@ export const distributionTemplate = (dist: Distribution | undefined) => {
       ? {
           ...dist,
           title: dist?.title ?? {},
-          downloadURL: dist?.downloadURL && dist?.downloadURL[0] ? dist?.downloadURL : [],
+          downloadURL:
+            dist?.downloadURL && dist?.downloadURL[0] ? dist?.downloadURL : [],
           conformsTo: !isEmpty(dist.conformsTo) ? dist.conformsTo : [],
         }
       : {
@@ -108,6 +125,8 @@ export const distributionTemplate = (dist: Distribution | undefined) => {
           conformsTo: [],
           page: [],
           accessServices: [],
+          mobilityDataStandard: {},
+          rights: [],
         }
   ) as Distribution;
 };

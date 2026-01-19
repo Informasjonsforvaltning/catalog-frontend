@@ -1,1 +1,1 @@
-export type EditorType = 'create' | 'update';
+export type EditorType = "create" | "update";

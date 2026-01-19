@@ -1,113 +1,69 @@
-import { Service } from '@catalog-frontend/types';
-import { DividerLine, InfoCard } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Heading, Paragraph } from '@digdir/designsystemet-react';
-import styles from './basic-form-info-card-items.module.css';
-import _ from 'lodash';
+import { isEmpty } from "lodash";
+import { Service } from "@catalog-frontend/types";
+import { Heading, Paragraph } from "@digdir/designsystemet-react";
+import {
+  DividerLine,
+  InfoCard,
+  ReferenceDataTags,
+  useSearchAdministrativeUnitsByUri,
+} from "@catalog-frontend/ui";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import styles from "./basic-form-info-card-items.module.css";
 
 type Props = {
-  service?: Service;
-  language?: string;
+  service: Service;
+  language: string;
+  referenceDataEnv: string;
 };
 
-export const BasicServiceFormInfoCardItems = ({ service, language }: Props) => {
-  const produces = service?.produces || [];
-  const contactPoint = service?.contactPoints && service?.contactPoints[0];
-  const homepage = service?.homepage;
+export const BasicServiceFormInfoCardItems = (props: Props) => {
+  const { service, language, referenceDataEnv } = props;
 
-  // Check if all properties within an object are empty
-  const allPropertiesEmpty = (obj: any): boolean => {
-    return _.every(_.values(obj), _.isEmpty);
-  };
+  const { data: spatial } = useSearchAdministrativeUnitsByUri(
+    service.spatial,
+    referenceDataEnv,
+  );
 
   return (
-    <>
-      {getTranslateText(service?.description) && (
-        <InfoCard.Item title={`${localization.description}:`}>
-          {getTranslateText(service?.description ?? '', language)}
-        </InfoCard.Item>
-      )}
+    <InfoCard>
+      <InfoCard.Item title={`${localization.description}:`}>
+        {getTranslateText(service.description, language)}
+      </InfoCard.Item>
 
-      {contactPoint && !allPropertiesEmpty(contactPoint) && (
-        <InfoCard.Item title={`${localization.serviceCatalog.contactPoint}:`}>
-          <div>
-            {contactPoint?.category && !_.isEmpty(contactPoint.category) && (
-              <Heading
-                size='xxsmall'
-                level={4}
-                className={styles.heading}
-              >
-                {getTranslateText(service?.contactPoints && service?.contactPoints[0].category)}
-              </Heading>
-            )}
+      <InfoCard.Item title={`${localization.serviceCatalog.produces}:`}>
+        {!service.produces?.length && (
+          <Paragraph size="small" className={styles.content}>
+            {localization.none}
+          </Paragraph>
+        )}
+        {service.produces?.map((produce) => (
+          <div key={produce.identifier}>
+            <Heading size="2xs" level={4} className={styles.heading}>
+              {getTranslateText(produce.title, language) || localization.noName}
+            </Heading>
 
             <DividerLine />
 
-            {contactPoint.email && (
-              <Paragraph
-                data-size='sm'
-                className={styles.content}
-              >
-                <span className={styles.bold}>{`${localization.email}:`}</span>
-                {contactPoint.email}
-              </Paragraph>
-            )}
-
-            {contactPoint.telephone && (
-              <Paragraph
-                data-size='sm'
-                className={styles.content}
-              >
-                <span className={styles.bold}>{`${localization.telephone}:`}</span>
-                {contactPoint.telephone}
-              </Paragraph>
-            )}
-
-            {contactPoint.contactPage && (
-              <Paragraph
-                data-size='sm'
-                className={styles.content}
-              >
-                <span className={styles.bold}>{`${localization.contactPage}:`}</span>
-                {contactPoint.contactPage}
-              </Paragraph>
-            )}
+            <Paragraph size="small" className={styles.content}>
+              <span className={styles.bold}>{localization.description}:</span>
+              {getTranslateText(produce.description, language)}
+            </Paragraph>
           </div>
+        ))}
+      </InfoCard.Item>
+
+      {service.homepage && (
+        <InfoCard.Item title={`${localization.homepage}:`}>
+          {service.homepage}
         </InfoCard.Item>
       )}
-      {produces?.length > 0 && (
-        <InfoCard.Item title={`${localization.serviceCatalog.produces}:`}>
-          {produces.map((produce, index) => (
-            <div key={`produces-details-${index}`}>
-              {produce?.title && (
-                <>
-                  <Heading
-                    size='xxsmall'
-                    level={4}
-                    className={styles.heading}
-                  >
-                    {getTranslateText(produce?.title)}
-                  </Heading>
 
-                  <DividerLine />
-                </>
-              )}
-
-              {produce?.description && (
-                <Paragraph
-                  data-size='sm'
-                  className={styles.content}
-                >
-                  <span className={styles.bold}>{`${localization.description}:`}</span>
-                  {getTranslateText(produce?.description)}
-                </Paragraph>
-              )}
-            </div>
-          ))}
+      {!isEmpty(service.spatial) && (
+        <InfoCard.Item title={localization.serviceForm.fieldLabel.spatial}>
+          <ReferenceDataTags values={service.spatial} data={spatial} />
         </InfoCard.Item>
       )}
-      {homepage && <InfoCard.Item title={`${localization.homepage}:`}>{homepage}</InfoCard.Item>}
-    </>
+    </InfoCard>
   );
 };
 

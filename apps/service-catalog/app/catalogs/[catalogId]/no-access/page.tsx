@@ -1,6 +1,11 @@
-import { BreadcrumbType, Breadcrumbs, CenterContainer, PageBanner } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
-import { Heading } from '@digdir/designsystemet-react';
+import {
+  BreadcrumbType,
+  Breadcrumbs,
+  CenterContainer,
+  PageBanner,
+} from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
+import { Heading } from "@digdir/designsystemet-react";
 
 type Props = {
   params: Promise<{ catalogId: string }>;
@@ -29,10 +34,7 @@ const NoAccess = async ({ params }: Props) => {
         subtitle={localization.error}
       />
       <CenterContainer>
-        <Heading
-          level={2}
-          data-size='sm'
-        >
+        <Heading level={2} size="small">
           {localization.youHaveNoAccess}
         </Heading>
       </CenterContainer>

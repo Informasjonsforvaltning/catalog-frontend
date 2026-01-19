@@ -1,12 +1,20 @@
-'use client';
+"use client";
 
-import { ImportResult } from '@catalog-frontend/types';
-import { localization } from '@catalog-frontend/utils';
-import { confirmImport, cancelImport, deleteImportResult } from '../../../../../actions/concept/actions';
-import { ConfirmModal, ImportResultDetails } from '@catalog-frontend/ui';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  ConceptExtractionStatus,
+  ImportResult,
+  ImportResultStatus,
+} from "@catalog-frontend/types";
+import { localization } from "@catalog-frontend/utils";
+import {
+  cancelImport,
+  deleteImportResult,
+  saveImportedConcept,
+} from "../../../../../actions/concept/actions";
+import { ConfirmModal, ImportResultDetails } from "@catalog-frontend/ui";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   catalogId: string;
@@ -15,84 +23,133 @@ interface Props {
 
 const ImportResultDetailsPageClient = ({ catalogId, importResult }: Props) => {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isCancelling, setIsCancelling] = useState(false);
   const router = useRouter();
-  const handleDeleteConfirmed = async () => {
-    try {
-      await deleteImportResult(catalogId, importResult.id);
+  const deleteImportMutation = useMutation({
+    mutationFn: async ({
+      catalogId,
+      importResultId,
+    }: {
+      catalogId: string;
+      importResultId: string;
+    }) => {
+      await deleteImportResult(catalogId, importResultId);
+      setShowDeleteConfirm(false);
       router.push(`/catalogs/${catalogId}/concepts/import-results`);
-    } catch (error) {
+    },
+    onError: (error) => {
+      setIsDeleting(false);
       window.alert(error);
-    }
-  };
+    },
+  });
+
   const qc = useQueryClient();
 
   const handleDeleteClick = async () => {
     setShowDeleteConfirm(true);
   };
 
-  const confirmMutation = useMutation({
-    mutationFn: async () => await confirmImport(catalogId, importResult.id),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ['refresh-import-result', catalogId, importResult.id] });
+  const saveConceptMutation = useMutation({
+    mutationFn: async (externalId: string) =>
+      await saveImportedConcept(catalogId, importResult.id, externalId),
+    onSettled: async () => await refetch(),
+  });
+
+  const cancelMutation = useMutation({
+    mutationFn: async () => {
+      console.log("Is cancelling", isCancelling);
+      await cancelImport(catalogId, importResult.id);
+    },
+    onMutate: async () => {
+      setIsCancelling(true);
+    },
+    onSuccess: async () => {
+      const refetched = await refetch();
+      console.log("Refetched Import status data", refetched.data.status);
+      if (
+        isCancelling &&
+        refetched?.data.status !== ImportResultStatus.CANCELLED
+      ) {
+        console.log("should send cancel request again");
+        await cancelMutation.mutateAsync();
+      } else {
+        qc.setQueryData(
+          ["refresh-import-result", catalogId, importResult?.id],
+          (old: ImportResult) => ({
+            ...old,
+            status: ImportResultStatus.CANCELLED,
+            conceptExtractions: old?.conceptExtractions.map((ce) => ({
+              ...ce,
+              conceptExtractionStatus: ConceptExtractionStatus.CANCELLED,
+            })),
+          }),
+        );
+        setIsCancelling(false);
+      }
     },
   });
 
-    const handleConfirmClick = () => {
-      confirmMutation.mutate()
-    };
+  const handleCancelClick = async () => {
+    setIsCancelling(true);
+    await cancelMutation.mutateAsync();
+  };
 
-    const cancelMutation = useMutation({
-      mutationFn: async () => await cancelImport(catalogId, importResult.id),
-      onSuccess: () => {
-        qc.invalidateQueries({ queryKey: ['refresh-import-result', catalogId, importResult.id] });
-      },
-    });
+  const shouldRefetch = (fetchedData) =>
+    fetchedData?.status === ImportResultStatus.IN_PROGRESS;
 
-    const handleCancelClick = () => {
-      cancelMutation.mutate();
-    };
-
-    const shouldRefetch = (fetchedData)=> fetchedData.status === 'IN_PROGRESS'
-      || fetchedData.status === 'SAVING';
-
-    const isPendingConfirmation = (fetchedData) => fetchedData.status === 'PENDING_CONFIRMATION';
-
-    const { data } = useQuery({
-      queryKey: ['refresh-import-result', catalogId, importResult?.id],
-      queryFn: async () => {
-        const response = await fetch(`/api/catalogs/${catalogId}/concepts/import-results/${importResult?.id}`, {
-          method: 'GET',
-        });
-        return response.json();
-      },
-      initialData: importResult, // seed from server
-      refetchInterval: (q) => {
-        const status = q?.state?.data?.status;
-        return shouldRefetch(q?.state?.data) ? 3000 : isPendingConfirmation(q?.state?.data) ? 6000: false;
-      },
-      refetchOnWindowFocus: true,
-      retry: 2,
-    });
+  const { data, refetch } = useQuery({
+    queryKey: ["refresh-import-result", catalogId, importResult?.id],
+    queryFn: async () => {
+      const response = await fetch(
+        `/api/catalogs/${catalogId}/concepts/import-results/${importResult?.id}`,
+        {
+          method: "GET",
+        },
+      );
+      return response.json();
+    },
+    initialData: importResult,
+    refetchInterval: (q) => (shouldRefetch(q?.state?.data) ? 3000 : false),
+    refetchOnWindowFocus: true,
+    enabled: (q) => shouldRefetch(q?.state?.data),
+    retry: 2,
+  });
 
   return (
     <>
       {showDeleteConfirm && (
         <ConfirmModal
           title={localization.importResult.confirmDelete}
-          content={importResult.status === 'COMPLETED' ? localization.importResult.deleteCanResultInDuplicates : ''}
-          onSuccess={handleDeleteConfirmed}
+          content={
+            data?.status === ImportResultStatus.COMPLETED ||
+            data?.status === ImportResultStatus.PARTIALLY_COMPLETED
+              ? localization.importResult.deleteCanResultInDuplicates
+              : ""
+          }
+          onSuccess={async () => {
+            setIsDeleting(true);
+            await deleteImportMutation.mutateAsync({
+              catalogId: catalogId,
+              importResultId: importResult.id,
+            });
+          }}
           onCancel={() => setShowDeleteConfirm(false)}
         />
       )}
-      <ImportResultDetails
-        targetBaseHref={`catalogs/${catalogId}/concepts`}
-        importResult={data}
-        deleteHandler={handleDeleteClick}
-        confirmHandler={handleConfirmClick}
-        cancelHandler={handleCancelClick}
-        showCancellationButton={true}
-        showConfirmationButton={true}
-      />
+      {data && (
+        <ImportResultDetails
+          targetBaseHref={`catalogs/${catalogId}/concepts`}
+          importResult={data}
+          deleteHandler={handleDeleteClick}
+          cancelHandler={handleCancelClick}
+          cancelMutation={cancelMutation}
+          saveConceptMutation={saveConceptMutation}
+          isCancelling={isCancelling}
+          isDeleting={isDeleting}
+          showCancellationButton={true}
+        />
+      )}
     </>
   );
 };

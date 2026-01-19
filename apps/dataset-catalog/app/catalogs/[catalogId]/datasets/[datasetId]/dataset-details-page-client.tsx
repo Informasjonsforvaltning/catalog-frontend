@@ -1,18 +1,21 @@
-'use client';
+"use client";
 
-import { Dataset, DatasetSeries, ReferenceData } from '@catalog-frontend/types';
-import { DeleteButton, DetailsPageLayout, LinkButton, Tag } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { useState } from 'react';
-import styles from './dataset-details-page.module.css';
-import { RightColumn } from '../../../../../components/details-page-columns/details-page-right-column';
-import { LeftColumn } from '../../../../../components/details-page-columns/details-page-left-column';
-import { deleteDataset } from '../../../../actions/actions';
-import StatusTag from '../../../../../components/status-tag/index';
-import { useRouter } from 'next/navigation';
-import { Alert } from '@digdir/designsystemet-react';
-import { ConfirmModal, MarkdownComponent } from '@catalog-frontend/ui';
-import { TagList } from '@fellesdatakatalog/ui';
+import { Dataset, DatasetSeries, ReferenceData } from "@catalog-frontend/types";
+import {
+  DeleteButton,
+  DetailsPageLayout,
+  LinkButton,
+} from "@catalog-frontend/ui";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import { useState } from "react";
+import styles from "./dataset-details-page.module.css";
+import { RightColumn } from "../../../../../components/details-page-columns/details-page-right-column";
+import { LeftColumn } from "../../../../../components/details-page-columns/details-page-left-column";
+import { deleteDataset } from "../../../../actions/actions";
+import StatusTag from "../../../../../components/status-tag/index";
+import { useRouter } from "next/navigation";
+import { Alert } from "@digdir/designsystemet-react";
+import { ConfirmModal, MarkdownComponent } from "@catalog-frontend/ui";
 
 interface datasetDetailsPageProps {
   dataset: Dataset;
@@ -23,7 +26,6 @@ interface datasetDetailsPageProps {
   referenceDataEnv: string;
   referenceData: ReferenceData;
   datasetSeries: DatasetSeries[];
-  fdkDatasetId: string | null;
 }
 
 const DatasetDetailsPageClient = ({
@@ -35,9 +37,8 @@ const DatasetDetailsPageClient = ({
   referenceDataEnv,
   referenceData,
   datasetSeries,
-  fdkDatasetId,
 }: datasetDetailsPageProps) => {
-  const [language, setLanguage] = useState('nb');
+  const [language, setLanguage] = useState("nb");
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const router = useRouter();
 
@@ -54,9 +55,9 @@ const DatasetDetailsPageClient = ({
       await deleteDataset(catalogId, dataset.id);
       router.push(`/catalogs/${catalogId}/datasets`);
     } catch (error) {
-      console.error('Error deleting dataset:', error);
+      console.error("Error deleting dataset:", error);
       // Show error message to user
-      alert(localization.alert.deleteFail);
+      alert(localization.alert.deleteFailed);
     }
   };
 
@@ -65,18 +66,16 @@ const DatasetDetailsPageClient = ({
       <DetailsPageLayout
         handleLanguageChange={handleLanguageChange}
         language={language}
-        headingTitle={getTranslateText(dataset?.title ?? '', language)}
+        headingTitle={getTranslateText(dataset?.title, language)}
         headingTag={
-          <TagList>
-            <StatusTag approved={dataset.approved || dataset.published} />
-            <Tag.PublishedTag published={dataset.published} />
-          </TagList>
+          <StatusTag approved={dataset.approved || dataset.published} />
         }
-        loading={false}
       >
-        {dataset.specializedType === 'SERIES' ? (
+        {dataset.specializedType === "SERIES" ? (
           <DetailsPageLayout.Left>
-            <Alert severity={'warning'}>Datasettserier har ikke blitt implementert enda.</Alert>
+            <Alert severity={"warning"}>
+              Datasettserier har ikke blitt implementert enda.
+            </Alert>
           </DetailsPageLayout.Left>
         ) : (
           <DetailsPageLayout.Left>
@@ -95,22 +94,22 @@ const DatasetDetailsPageClient = ({
             dataset={dataset}
             hasWritePermission={hasWritePermission}
             language={language}
-            referenceDataEnv={referenceDataEnv}
-            fdkDatasetId={fdkDatasetId}
           />
         </DetailsPageLayout.Right>
         <DetailsPageLayout.Buttons>
           {hasWritePermission && (
             <div className={styles.set}>
-              {dataset.specializedType !== 'SERIES' && (
-                <LinkButton href={`/catalogs/${catalogId}/datasets/${datasetId}/edit`} data-size='sm'>
+              {dataset.specializedType !== "SERIES" && (
+                <LinkButton
+                  href={`/catalogs/${catalogId}/datasets/${datasetId}/edit`}
+                >
                   {localization.button.edit}
                 </LinkButton>
               )}
 
               <DeleteButton
                 disabled={dataset.published}
-                variant='secondary'
+                variant="secondary"
                 onClick={handleDeleteDataset}
               />
             </div>

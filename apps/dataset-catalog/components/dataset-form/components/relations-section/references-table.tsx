@@ -2,7 +2,7 @@ import { Dataset, Reference, Search, StorageData } from '@catalog-frontend/types
 import { getTranslateText, localization, trimObjectWhitespace, DataStorage } from '@catalog-frontend/utils';
 import { Button, Combobox, Dialog, Fieldset, Heading, Table } from '@digdir/designsystemet-react';
 import { HStack, VStack } from '@fellesdatakatalog/ui';
-import { useSearchDatasetsByUri, useSearchDatasetSuggestions } from '../../../../hooks/useSearchService';
+import { useSearchDatasetsByUri, useSearchDatasetSuggestions } from '@catalog-frontend/ui';
 import { Formik, useFormikContext } from 'formik';
 import relations from '../../utils/relations.json';
 import { AddButton, DeleteButton, EditButton, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';

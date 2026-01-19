@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { ImportResult } from '@catalog-frontend/types';
+import { ImportResult } from "@catalog-frontend/types";
 import {
   AccordionItem,
   AccordionItemProps,
@@ -8,23 +8,27 @@ import {
   ImportResultsTable,
   SearchHitContainer,
   SearchHitsLayout,
-} from '@catalog-frontend/ui';
-import styles from './import-results-page-client.module.css';
-import { Accordion, Chip, NativeSelect } from '@digdir/designsystemet-react';
-import { parseAsArrayOf, parseAsInteger, parseAsString, useQueryState } from 'nuqs';
+} from "@catalog-frontend/ui";
+import styles from "./import-results-page-client.module.css";
+import { Accordion, Chip, NativeSelect } from "@digdir/designsystemet-react";
 import {
-  getTranslateText,
+  parseAsArrayOf,
+  parseAsInteger,
+  parseAsString,
+  useQueryState,
+} from "nuqs";
+import {
   localization,
   localization as loc,
   sortDateStringsAscending,
   sortDateStringsDescending,
-} from '@catalog-frontend/utils';
-import { useEffect, useMemo, useState } from 'react';
-import { isEmpty } from 'lodash';
+} from "@catalog-frontend/utils";
+import { useEffect, useMemo, useState } from "react";
+import { isEmpty } from "lodash";
 
 const importStatuses = [
-  { value: 'COMPLETED', label: localization.importResult.completed },
-  { value: 'FAILED', label: localization.importResult.failed },
+  { value: "COMPLETED", label: localization.importResult.completed },
+  { value: "FAILED", label: localization.importResult.failed },
 ];
 
 interface Props {
@@ -33,10 +37,17 @@ interface Props {
 }
 
 const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
-  const [filteredImportResults, setFilteredImportResults] = useState<ImportResult[]>(importResults);
-  const [sortType, setSortType] = useQueryState<string>('api.import.sort.type', parseAsString);
-  const [filterStatus, setFilterStatus] = useQueryState('api.import.filter.status', parseAsArrayOf(parseAsString));
-  const [page, setPage] = useQueryState('api.import.page', parseAsInteger);
+  const [filteredImportResults, setFilteredImportResults] =
+    useState<ImportResult[]>(importResults);
+  const [sortType, setSortType] = useQueryState<string>(
+    "api.import.sort.type",
+    parseAsString,
+  );
+  const [filterStatus, setFilterStatus] = useQueryState(
+    "api.import.filter.status",
+    parseAsArrayOf(parseAsString),
+  );
+  const [page, setPage] = useQueryState("api.import.page", parseAsInteger);
   const [totalPages, setTotalPages] = useState<number>(1);
   const itemsPerPage = 10;
 
@@ -60,17 +71,16 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
   ];
 
   const filterItems = filterItemContents.map((item) => (
-    <AccordionItem
-      key={`accordion-item-${item.header}`}
-      {...item}
-    />
+    <AccordionItem key={`accordion-item-${item.header}`} {...item} />
   ));
 
   const getSortFunction = (sortKey: string) => {
-    if (sortKey === 'createdAsc') {
-      return (a: ImportResult, b: ImportResult) => sortDateStringsAscending(a.created, b.created);
+    if (sortKey === "createdAsc") {
+      return (a: ImportResult, b: ImportResult) =>
+        sortDateStringsAscending(a.created, b.created);
     }
-    return (a: ImportResult, b: ImportResult) => sortDateStringsDescending(a.created, b.created);
+    return (a: ImportResult, b: ImportResult) =>
+      sortDateStringsDescending(a.created, b.created);
   };
 
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -79,16 +89,17 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
 
   const FilterChips = () => (
     <div className={styles.chips}>
-      <Chip.Group
-        data-size='sm'
-        className={styles.wrap}
-      >
+      <Chip.Group size="small" className={styles.wrap}>
         {filterStatus?.map((filter, index) => (
           <Chip.Removable
             key={`status-${index}`}
-            onClick={() => setFilterStatus(filterStatus?.filter((value) => value !== filter) ?? [])}
+            onClick={() =>
+              setFilterStatus(
+                filterStatus?.filter((value) => value !== filter) ?? [],
+              )
+            }
           >
-            {getTranslateText(importStatuses?.find((s) => s.value === filter)?.label)}
+            {importStatuses?.find((s) => s.value === filter)?.label}
           </Chip.Removable>
         ))}
       </Chip.Group>
@@ -100,10 +111,12 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
       let filtered = importResults;
 
       if (!isEmpty(filterStatus)) {
-        filtered = filtered.filter((result) => result.status && filterStatus?.includes(result.status));
+        filtered = filtered.filter(
+          (result) => result.status && filterStatus?.includes(result.status),
+        );
       }
 
-      filtered = [...filtered].sort(getSortFunction(sortType ?? ''));
+      filtered = [...filtered].sort(getSortFunction(sortType ?? ""));
 
       setFilteredImportResults(filtered);
     };
@@ -122,20 +135,21 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
     <SearchHitsLayout>
       <SearchHitsLayout.SearchRow>
         <NativeSelect
-          data-size='sm'
+          size="sm"
           className={styles.select}
           onChange={handleSortChange}
         >
-          <option value=''>{localization.search.sortOptions.NEWEST_FIRST}</option>
-          <option value='createdAsc'>{localization.search.sortOptions.LAST_UPDATED_LAST}</option>
+          <option value="">
+            {localization.search.sortOptions.NEWEST_FIRST}
+          </option>
+          <option value="createdAsc">
+            {localization.search.sortOptions.LAST_UPDATED_LAST}
+          </option>
         </NativeSelect>
       </SearchHitsLayout.SearchRow>
       <SearchHitsLayout.LeftColumn>
         <div className={styles.importFilter}>
-          <Accordion
-            border={true}
-            className={styles.accordion}
-          >
+          <Accordion border={true} className={styles.accordion}>
             {filterItems}
           </Accordion>
         </div>
@@ -151,14 +165,16 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
               />
             ) : null
           }
-          noSearchHits={!paginatedImportResults || paginatedImportResults.length === 0}
+          noSearchHits={
+            !paginatedImportResults || paginatedImportResults.length === 0
+          }
           paginationInfo={{
             currentPage: page ?? 0,
             totalPages: totalPages,
           }}
-          onPageChange={(event, newPage) => {
+          onPageChange={(newPage) => {
             setPage(newPage - 1);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({ top: 0, behavior: "smooth" });
           }}
         />
       </SearchHitsLayout.MainColumn>

@@ -7,7 +7,7 @@ import { useCallback, useState } from 'react';
 import {
   useSearchAdministrativeUnits,
   useSearchAdministrativeUnitsByUri,
-} from '../../../../hooks/useReferenceDataSearch';
+} from '@catalog-frontend/ui';
 import { useFormikContext } from 'formik';
 import { Dataset, ReferenceDataCode } from '@catalog-frontend/types';
 import { debounce, sortBy } from 'lodash';

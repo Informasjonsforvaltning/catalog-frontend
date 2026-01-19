@@ -1,12 +1,19 @@
-'use client';
+"use client";
 
-import { DataService, DataServicesPageSettings } from '@catalog-frontend/types';
-import styles from './data-services-page.module.css';
+import { DataService, DataServicesPageSettings } from "@catalog-frontend/types";
+import styles from "./data-services-page.module.css";
 
-import { LinkButton, SearchField, SearchHit, SearchHitContainer, SearchHitsLayout, Select } from '@catalog-frontend/ui';
-import SearchFilter from '../../../../components/search-filter';
-import React, { useState, useEffect, useMemo } from 'react';
-import { Chip } from '@digdir/designsystemet-react';
+import {
+  LinkButton,
+  SearchField,
+  SearchHit,
+  SearchHitContainer,
+  SearchHitsLayout,
+  Select,
+} from "@catalog-frontend/ui";
+import SearchFilter from "../../../../components/search-filter";
+import React, { useState, useEffect, useMemo } from "react";
+import { Chip } from "@digdir/designsystemet-react";
 import {
   capitalizeFirstLetter,
   dateStringToDate,
@@ -17,16 +24,21 @@ import {
   sortDateStringsDescending,
   sortDescending,
   setClientDataServicesPageSettings,
-} from '@catalog-frontend/utils';
-import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { parseAsArrayOf, parseAsString, useQueryState, parseAsInteger } from 'nuqs';
-import StatusTag from '../../../../components/status-tag';
-import { isEmpty } from 'lodash';
-import ImportModal from '../../../../components/import-modal';
+} from "@catalog-frontend/utils";
+import { PlusCircleIcon } from "@navikt/aksel-icons";
+import {
+  parseAsArrayOf,
+  parseAsString,
+  useQueryState,
+  parseAsInteger,
+} from "nuqs";
+import StatusTag from "../../../../components/status-tag";
+import { isEmpty } from "lodash";
+import ImportModal from "../../../../components/import-modal";
 
-type SortTypes = 'titleAsc' | 'titleDesc' | 'lastChanged';
-type FilterType = 'published' | 'status';
-const sortTypes: SortTypes[] = ['titleAsc', 'titleDesc', 'lastChanged'];
+type SortTypes = "titleAsc" | "titleDesc" | "lastChanged";
+type FilterType = "published" | "status";
+const sortTypes: SortTypes[] = ["titleAsc", "titleDesc", "lastChanged"];
 const itemPerPage = 5;
 
 interface Props {
@@ -47,37 +59,55 @@ const DataServicesPageClient = ({
   pageSettings,
 }: Props) => {
   // Memoize default values for query states
-  const defaultSearchTerm = useMemo(() => pageSettings?.search ?? '', []);
-  const defaultFilterStatus = useMemo(() => pageSettings?.filter?.status ?? [], []);
-  const defaultFilterPublicationState = useMemo(() => pageSettings?.filter?.pubState ?? [], []);
-  const defaultSortValue = useMemo(() => pageSettings?.sort ?? '', []);
+  const defaultSearchTerm = useMemo(() => pageSettings?.search ?? "", []);
+  const defaultFilterStatus = useMemo(
+    () => pageSettings?.filter?.status ?? [],
+    [],
+  );
+  const defaultFilterPublicationState = useMemo(
+    () => pageSettings?.filter?.pubState ?? [],
+    [],
+  );
+  const defaultSortValue = useMemo(() => pageSettings?.sort ?? "", []);
   const defaultPage = useMemo(() => pageSettings?.page ?? 0, []);
 
   // Query states
-  const [searchTerm, setSearchTerm] = useQueryState('dataServiceSearch', { defaultValue: defaultSearchTerm });
+  const [searchTerm, setSearchTerm] = useQueryState("dataServiceSearch", {
+    defaultValue: defaultSearchTerm,
+  });
   const [filterStatus, setFilterStatus] = useQueryState(
-    'dataServiceFilter.status',
+    "dataServiceFilter.status",
     parseAsArrayOf(parseAsString).withDefault(defaultFilterStatus),
   );
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
-    'dataServiceFilter.pubState',
+    "dataServiceFilter.pubState",
     parseAsArrayOf(parseAsString).withDefault(defaultFilterPublicationState),
   );
-  const [sortValue, setSortValue] = useQueryState('dataServiceSort', { defaultValue: defaultSortValue });
-  const [page, setPage] = useQueryState('dataServicePage', parseAsInteger.withDefault(defaultPage));
-  const [filteredDataServices, setFilteredDataServices] = useState<DataService[]>(dataServices);
+  const [sortValue, setSortValue] = useQueryState("dataServiceSort", {
+    defaultValue: defaultSortValue,
+  });
+  const [page, setPage] = useQueryState(
+    "dataServicePage",
+    parseAsInteger.withDefault(defaultPage),
+  );
+  const [filteredDataServices, setFilteredDataServices] =
+    useState<DataService[]>(dataServices);
 
   const getSortFunction = useMemo(() => {
     return (sortKey: SortTypes) => {
       switch (sortKey) {
-        case 'titleAsc':
+        case "titleAsc":
           return (a: DataService, b: DataService) =>
-            sortAscending(getTranslateText(a.title)?.toString() || '', getTranslateText(b.title)?.toString() || '');
-        case 'titleDesc':
+            sortAscending(getTranslateText(a.title), getTranslateText(b.title));
+        case "titleDesc":
           return (a: DataService, b: DataService) =>
-            sortDescending(getTranslateText(a.title)?.toString() || '', getTranslateText(b.title)?.toString() || '');
-        case 'lastChanged':
-          return (a: DataService, b: DataService) => sortDateStringsDescending(a.modified || '', b.modified || '');
+            sortDescending(
+              getTranslateText(a.title),
+              getTranslateText(b.title),
+            );
+        case "lastChanged":
+          return (a: DataService, b: DataService) =>
+            sortDateStringsDescending(a.modified || "", b.modified || "");
         default:
           return () => 0;
       }
@@ -85,11 +115,15 @@ const DataServicesPageClient = ({
   }, []);
 
   const removeFilter = (filterName: string, filterType: FilterType) => {
-    if (filterType === 'published') {
-      setFilterPublicationState(filterPublicationState?.filter((name) => name !== filterName) ?? []);
+    if (filterType === "published") {
+      setFilterPublicationState(
+        filterPublicationState?.filter((name) => name !== filterName) ?? [],
+      );
       setPage(0);
-    } else if (filterType === 'status') {
-      setFilterStatus(filterStatus?.filter((name) => name !== filterName) ?? []);
+    } else if (filterType === "status") {
+      setFilterStatus(
+        filterStatus?.filter((name) => name !== filterName) ?? [],
+      );
       setPage(0);
     }
   };
@@ -113,13 +147,15 @@ const DataServicesPageClient = ({
 
       if (!isEmpty(filterStatus)) {
         filtered = filtered.filter((dataService) => {
-          return filterStatus?.includes(dataService.status || '');
+          return filterStatus?.includes(dataService.status || "");
         });
       }
 
       if (!isEmpty(filterPublicationState)) {
         filtered = filtered.filter((dataService) => {
-          return filterPublicationState?.includes(dataService?.published ? 'published' : 'unpublished');
+          return filterPublicationState?.includes(
+            dataService?.published ? "published" : "unpublished",
+          );
         });
       }
 
@@ -127,12 +163,18 @@ const DataServicesPageClient = ({
         const lowercasedQuery = searchTerm.toLowerCase();
         filtered = filtered.filter(
           (dataService) =>
-            getTranslateText(dataService?.title).toString().toLowerCase().includes(lowercasedQuery) ||
-            getTranslateText(dataService?.description).toString().toLowerCase().includes(lowercasedQuery),
+            getTranslateText(dataService?.title)
+              .toLowerCase()
+              .includes(lowercasedQuery) ||
+            getTranslateText(dataService?.description)
+              .toLowerCase()
+              .includes(lowercasedQuery),
         );
       }
 
-      const sort: SortTypes | '' = sortTypes.includes(sortValue as SortTypes) ? (sortValue as SortTypes) : '';
+      const sort: SortTypes | "" = sortTypes.includes(sortValue as SortTypes)
+        ? (sortValue as SortTypes)
+        : "";
       if (sort) {
         filtered = [...filtered].sort(getSortFunction(sort));
       }
@@ -140,7 +182,14 @@ const DataServicesPageClient = ({
       setFilteredDataServices(filtered);
     };
     filterAndSortDataServices();
-  }, [dataServices, filterPublicationState, filterStatus, searchTerm, sortValue, getSortFunction]);
+  }, [
+    dataServices,
+    filterPublicationState,
+    filterStatus,
+    searchTerm,
+    sortValue,
+    getSortFunction,
+  ]);
 
   const FilterChips = () => {
     if (isEmpty(filterStatus) && isEmpty(filterPublicationState)) {
@@ -149,20 +198,19 @@ const DataServicesPageClient = ({
 
     return (
       <div className={styles.chips}>
-        <Chip.Group
-          data-size='sm'
-          className={styles.wrap}
-        >
+        <Chip.Group size="small" className={styles.wrap}>
           {filterStatus?.map((filter, index) => (
             <Chip.Removable
               key={`status-${index}`}
               aria-label={`Fjern filter for status ${filter}`}
               onClick={() => {
-                removeFilter(filter, 'status');
+                removeFilter(filter, "status");
               }}
             >
               {capitalizeFirstLetter(
-                getTranslateText(distributionStatuses?.find((s) => s.uri === filter)?.label) as string,
+                getTranslateText(
+                  distributionStatuses?.find((s) => s.uri === filter)?.label,
+                ),
               )}
             </Chip.Removable>
           ))}
@@ -171,10 +219,10 @@ const DataServicesPageClient = ({
               key={`published-${index}`}
               aria-label={`Fjern filter for publisering ${filter}`}
               onClick={() => {
-                removeFilter(filter, 'published');
+                removeFilter(filter, "published");
               }}
             >
-              {filter === 'published'
+              {filter === "published"
                 ? localization.publicationState.published
                 : localization.publicationState.unpublished}
             </Chip.Removable>
@@ -208,20 +256,24 @@ const DataServicesPageClient = ({
                 }}
               />
               <Select
-                data-size='sm'
+                size="sm"
                 onChange={(e) => setSortValue(e.target.value)}
                 value={sortValue}
               >
-                <option value=''>{`${localization.choose} ${localization.search.sort.toLowerCase()}...`}</option>
-                <option value='lastChanged'>{localization.search.sortOptions.LAST_UPDATED_FIRST}</option>
-                <option value='titleAsc'>{localization.search.sortOptions.TITLE_AÅ}</option>
-                <option value='titleDesc'>{localization.search.sortOptions.TITLE_ÅA}</option>
+                <option value="">{`${localization.choose} ${localization.search.sort.toLowerCase()}...`}</option>
+                <option value="lastChanged">
+                  {localization.search.sortOptions.LAST_UPDATED_FIRST}
+                </option>
+                <option value="titleAsc">
+                  {localization.search.sortOptions.TITLE_AÅ}
+                </option>
+                <option value="titleDesc">
+                  {localization.search.sortOptions.TITLE_ÅA}
+                </option>
               </Select>
             </div>
             <div className={styles.buttons}>
-              {hasAdminPermission && (
-                <ImportModal catalogId={catalogId} />
-              )}
+              {hasAdminPermission && <ImportModal catalogId={catalogId} />}
               {hasWritePermission && (
                 <LinkButton href={`/catalogs/${catalogId}/data-services/new`}>
                   <PlusCircleIcon />
@@ -239,12 +291,9 @@ const DataServicesPageClient = ({
           <SearchHitContainer
             searchHits={
               paginatedDataServices.length > 0 ? (
-                <ul className={styles.searchHits} role='list'>
+                <ul className={styles.searchHits} role="list">
                   {paginatedDataServices.map((dataService: DataService) => (
-                    <li
-                      role='listitem'
-                      key={dataService.id}
-                    >
+                    <li role="listitem" key={dataService.id}>
                       <SearchHit
                         title={getTranslateText(dataService?.title)}
                         description={getTranslateText(dataService?.description)}
@@ -253,14 +302,17 @@ const DataServicesPageClient = ({
                           <StatusTag
                             dataServiceStatus={dataService?.status}
                             distributionStatuses={distributionStatuses}
-                            language={'nb'}
+                            language={"nb"}
                           />
                         }
                         content={
                           <>
                             <div className={styles.set}>
                               <p>
-                                {localization.lastChanged} {formatDate(dateStringToDate(dataService.modified ?? ''))}
+                                {localization.lastChanged}{" "}
+                                {formatDate(
+                                  dateStringToDate(dataService.modified ?? ""),
+                                )}
                               </p>
                               <span>•</span>
                               {dataService.published
@@ -275,14 +327,16 @@ const DataServicesPageClient = ({
                 </ul>
               ) : null
             }
-            noSearchHits={!paginatedDataServices || paginatedDataServices.length === 0}
+            noSearchHits={
+              !paginatedDataServices || paginatedDataServices.length === 0
+            }
             paginationInfo={{
               currentPage: page ?? 0,
               totalPages: totalPages,
             }}
-            onPageChange={(event, newPage) => {
+            onPageChange={(newPage) => {
               setPage(newPage - 1);
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+              window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           />
         </SearchHitsLayout.MainColumn>

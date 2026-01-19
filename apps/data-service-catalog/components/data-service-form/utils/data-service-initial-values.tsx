@@ -1,22 +1,39 @@
-import { DataServiceToBeCreated } from '@catalog-frontend/types';
+import { DataService, DataServiceToBeCreated } from "@catalog-frontend/types";
+import { omitBy, isEmpty } from "lodash";
+
+export const dataServiceTemplate = (dataService: DataService): DataService => {
+  return {
+    ...dataService,
+    title: omitBy(dataService?.title, isEmpty),
+    description: omitBy(dataService?.description, isEmpty),
+    keywords: omitBy(dataService?.keywords, isEmpty),
+    contactPoint: {
+      ...dataService?.contactPoint,
+      name: omitBy(dataService?.contactPoint?.name, isEmpty),
+      email: dataService?.contactPoint?.email || undefined,
+      phone: dataService?.contactPoint?.phone || undefined,
+      url: dataService?.contactPoint?.url || undefined,
+    },
+  };
+};
 
 export const dataServiceToBeCreatedTemplate = (): DataServiceToBeCreated => {
   return {
     title: {},
     description: {},
-    modified: '',
-    status: '',
-    endpointUrl: '',
+    modified: "",
+    status: "",
+    endpointUrl: "",
     endpointDescriptions: [],
-    accessRights: 'none',
+    accessRights: "none",
     formats: [],
     keywords: {},
-    landingPage: '',
+    landingPage: "",
     pages: [],
-    license: 'none',
+    license: "none",
     servesDataset: [],
     contactPoint: {},
-    availability: '',
+    availability: "",
     costs: [],
   };
 };

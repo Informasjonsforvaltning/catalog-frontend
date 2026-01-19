@@ -1,5 +1,9 @@
 export const validUUID = (uuid?: string | null) => {
-  return uuid?.match(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{3,4}-[0-9a-f]{3,4}-[0-9a-f]{12}$/i) !== null;
+  return (
+    uuid?.match(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{3,4}-[0-9a-f]{3,4}-[0-9a-f]{12}$/i,
+    ) !== null
+  );
 };
 
 /**
@@ -10,6 +14,8 @@ export const validUUID = (uuid?: string | null) => {
  */
 export const validateUUID = (uuid: string, functionName: string): void => {
   if (!validUUID(uuid)) {
-    throw new Error(`Invalid UUID '${uuid}' in ${functionName}. UUID must be a valid UUID format.`);
+    throw new Error(
+      `Invalid UUID '${uuid}' in ${functionName}. UUID must be a valid UUID format.`,
+    );
   }
 };

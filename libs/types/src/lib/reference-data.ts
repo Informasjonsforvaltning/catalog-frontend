@@ -1,5 +1,5 @@
-import { UriWithLabel } from './dataset';
-import { LocalizedStrings } from './localization';
+import { UriWithLabel } from "./dataset";
+import { LocalizedStrings } from "./localization";
 
 export interface ReferenceDataCode {
   uri: string;
@@ -33,14 +33,23 @@ export interface DataTheme {
   conceptSchema?: UriWithLabel;
 }
 
+export interface MobilityTheme {
+  uri: string;
+  code?: string;
+  label?: LocalizedStrings;
+}
+
 export interface ReferenceData {
   losThemes: LosTheme[];
   dataThemes: DataTheme[];
+  mobilityThemes: MobilityTheme[];
   provenanceStatements: ReferenceDataCode[];
   datasetTypes: ReferenceDataCode[];
   frequencies: ReferenceDataCode[];
   languages: ReferenceDataCode[];
   openLicenses: ReferenceDataCode[];
+  mobilityRights: ReferenceDataCode[];
+  mobilityDataStandards: ReferenceDataCode[];
 }
 
 export interface DataServiceReferenceData {

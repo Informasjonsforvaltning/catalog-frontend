@@ -1,5 +1,9 @@
-import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
-import { localization } from '@catalog-frontend/utils';
+import {
+  Breadcrumbs,
+  BreadcrumbType,
+  DesignBanner,
+} from "@catalog-frontend/ui";
+import { localization } from "@catalog-frontend/utils";
 import {
   getDatasetTypes,
   getDataThemes,
@@ -8,17 +12,18 @@ import {
   getLosThemes,
   getOpenLicenses,
   getProvenanceStatements,
-} from '@catalog-frontend/data-access';
-import { datasetToBeCreatedTemplate } from '@dataset-catalog/components/dataset-form/utils/dataset-initial-values';
-import { NewPage } from './new-page-client';
-import { withWriteProtectedPage } from '@dataset-catalog/utils/auth';
+} from "@catalog-frontend/data-access";
+import { datasetToBeCreatedTemplate } from "@dataset-catalog/components/dataset-form/utils/dataset-initial-values";
+import { NewPage } from "./new-page-client";
+import { withWriteProtectedPage } from "@dataset-catalog/utils/auth";
+import { ApplicationProfile } from "@catalog-frontend/types";
 
 const NewDatasetPage = withWriteProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/datasets/new`,
   async ({ catalogId }) => {
-    const dataset = datasetToBeCreatedTemplate();
-    const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
-    const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
+    const dataset = datasetToBeCreatedTemplate(ApplicationProfile.DCATAPNO);
+    const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
+    const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
 
     const [
       losThemesResponse,
@@ -29,13 +34,13 @@ const NewDatasetPage = withWriteProtectedPage(
       languageResponse,
       licenseResponse,
     ] = await Promise.all([
-      getLosThemes().then((res) => res.json()),
-      getDataThemes().then((res) => res.json()),
-      getDatasetTypes().then((res) => res.json()),
-      getProvenanceStatements().then((res) => res.json()),
-      getFrequencies().then((res) => res.json()),
-      getLanguages().then((res) => res.json()),
-      getOpenLicenses().then((res) => res.json()),
+      getLosThemes(),
+      getDataThemes(),
+      getDatasetTypes(),
+      getProvenanceStatements(),
+      getFrequencies(),
+      getLanguages(),
+      getOpenLicenses(),
     ]);
 
     const referenceData = {

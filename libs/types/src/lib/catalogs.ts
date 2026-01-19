@@ -1,5 +1,5 @@
-import { Publisher } from './concept';
-import { LocalizedStrings } from './localization';
+import { Publisher } from "./concept";
+import { LocalizedStrings } from "./localization";
 
 export interface ServiceCatalogItem {
   catalogId: string;
@@ -34,9 +34,4 @@ export interface PublicServiceCatalog {
 export interface ServiceCatalog {
   catalogId: string;
   serviceCount: number;
-}
-
-export interface RecordOfProcessingActivities {
-  organizationId: string;
-  recordCount: number;
 }

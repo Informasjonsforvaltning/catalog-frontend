@@ -1,19 +1,31 @@
-'use client';
-import { localization } from '@catalog-frontend/utils';
-import { Switch } from '@digdir/designsystemet-react';
-import { publishPublicService, unpublishPublicService } from '../../app/actions/public-services/actions';
-import styles from './publish-switch.module.css';
-import { publishService, unpublishService } from '../../app/actions/services/actions';
+"use client";
+import { localization } from "@catalog-frontend/utils";
+import { Switch } from "@digdir/designsystemet-react";
+import {
+  publishPublicService,
+  unpublishPublicService,
+} from "../../app/actions/public-services/actions";
+import styles from "./publish-switch.module.css";
+import {
+  publishService,
+  unpublishService,
+} from "../../app/actions/services/actions";
 
 type ServiceFormProps = {
   catalogId: string;
   serviceId: string;
   isPublished: boolean;
-  type: 'public-services' | 'services';
+  type: "public-services" | "services";
   disabled?: boolean;
 };
 
-export const PublishSwitch = ({ catalogId, serviceId, isPublished, type, disabled = false }: ServiceFormProps) => {
+export const PublishSwitch = ({
+  catalogId,
+  serviceId,
+  isPublished,
+  type,
+  disabled = false,
+}: ServiceFormProps) => {
   const handlePublishPublicService = async () => {
     if (isPublished === false) {
       if (window.confirm(localization.serviceCatalog.confirmPublish)) {
@@ -62,11 +74,15 @@ export const PublishSwitch = ({ catalogId, serviceId, isPublished, type, disable
     <>
       <Switch
         className={styles.center}
-        value='published'
-        data-size='sm'
-        position='right'
+        value="published"
+        size="small"
+        position="right"
         checked={isPublished}
-        onChange={() => (type === 'services' ? handlePublishService() : handlePublishPublicService())}
+        onChange={() =>
+          type === "services"
+            ? handlePublishService()
+            : handlePublishPublicService()
+        }
         disabled={disabled}
       >
         {localization.publicationState.published}

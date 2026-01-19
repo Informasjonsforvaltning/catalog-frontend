@@ -1,5 +1,5 @@
-import { TermsOfUseModal } from '@catalog-frontend/ui';
-import { CatalogLayout } from '../../../components/catalog-layout';
+import { TermsOfUseModal } from "@catalog-frontend/ui";
+import { CatalogLayout } from "../../../components/catalog-layout";
 
 export default async function PageLayout({
   children,

@@ -1,17 +1,28 @@
-import { Organization, ReferenceDataCode, Service } from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
+import {
+  Organization,
+  ReferenceDataCode,
+  Service,
+} from "@catalog-frontend/types";
+import { BreadcrumbType, Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
 import {
   getValidSession,
   getTranslateText,
   hasOrganizationWritePermission,
   localization,
   redirectToSignIn,
-} from '@catalog-frontend/utils';
-import { getPublicServices } from '../../../actions/public-services/actions';
-import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
-import PublicServicePageClient from './public-service-page-client';
+} from "@catalog-frontend/utils";
+import { getPublicServices } from "../../../actions/public-services/actions";
+import {
+  getAdmsStatuses,
+  getOrganization,
+} from "@catalog-frontend/data-access";
+import PublicServicePageClient from "./public-service-page-client";
 
-export default async function PublicServiceSearchHitsPage({ params }: { params: Promise<{ catalogId: string }> }) {
+export default async function PublicServiceSearchHitsPage({
+  params,
+}: {
+  params: Promise<{ catalogId: string }>;
+}) {
   const { catalogId } = await params;
 
   const session = await getValidSession();
@@ -22,9 +33,12 @@ export default async function PublicServiceSearchHitsPage({ params }: { params: 
   }
 
   const services: Service[] = await getPublicServices(catalogId);
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
-  const hasWritePermission = await hasOrganizationWritePermission(session.accessToken, catalogId);
-  const statusesResponse = await getAdmsStatuses().then((res) => res.json());
+  const organization: Organization = await getOrganization(catalogId);
+  const hasWritePermission = hasOrganizationWritePermission(
+    session.accessToken,
+    catalogId,
+  );
+  const statusesResponse = await getAdmsStatuses();
   const statuses: ReferenceDataCode[] = statusesResponse.statuses;
 
   const breadcrumbList = [
@@ -42,7 +56,7 @@ export default async function PublicServiceSearchHitsPage({ params }: { params: 
       />
       <PageBanner
         title={localization.catalogType.publicService}
-        subtitle={getTranslateText(organization.prefLabel).toString()}
+        subtitle={getTranslateText(organization.prefLabel)}
       />
       <PublicServicePageClient
         services={services}

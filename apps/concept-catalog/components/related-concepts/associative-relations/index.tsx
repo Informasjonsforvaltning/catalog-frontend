@@ -1,7 +1,7 @@
-import { UnionRelation, RelatedConcept } from '@catalog-frontend/types';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { KeyValueListItem } from '@catalog-frontend/ui';
-import { Link } from '@digdir/designsystemet-react';
+import { UnionRelation, RelatedConcept } from "@catalog-frontend/types";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import { KeyValueListItem } from "@catalog-frontend/ui";
+import { Link } from "@digdir/designsystemet-react";
 
 interface Props {
   associativeRelations: UnionRelation[];
@@ -9,34 +9,42 @@ interface Props {
   language?: string;
 }
 
-const AssociativeRelations = ({ associativeRelations, relatedConceptsMap, language }: Props) => {
+const AssociativeRelations = ({
+  associativeRelations,
+  relatedConceptsMap,
+  language,
+}: Props) => {
   return (
     <>
-      {associativeRelations.map(({ beskrivelse, relatertBegrep = '' }, index) => {
-        const relatedConcept = relatedConceptsMap(relatertBegrep);
-        return (
-          <KeyValueListItem
-            key={`${relatertBegrep}-${index}`}
-            property={
-              <div>
+      {associativeRelations.map(
+        ({ beskrivelse, relatertBegrep = "" }, index) => {
+          const relatedConcept = relatedConceptsMap(relatertBegrep);
+          return (
+            <KeyValueListItem
+              key={`${relatertBegrep}-${index}`}
+              property={
                 <div>
-                  <span>{localization.concept.associativeRelation}</span>
+                  <div>
+                    <span>{localization.concept.associativeRelation}</span>
+                  </div>
+                  <div>
+                    <span>{getTranslateText(beskrivelse, language)}</span>
+                  </div>
                 </div>
-                <div>
-                  <span>{getTranslateText(beskrivelse, language)}</span>
-                </div>
-              </div>
-            }
-            value={
-              relatedConcept ? (
-                <Link href={relatedConcept?.href}>{getTranslateText(relatedConcept?.title, language)}</Link>
-              ) : (
-                relatertBegrep
-              )
-            }
-          />
-        );
-      })}
+              }
+              value={
+                relatedConcept ? (
+                  <Link href={relatedConcept?.href}>
+                    {getTranslateText(relatedConcept?.title, language)}
+                  </Link>
+                ) : (
+                  relatertBegrep
+                )
+              }
+            />
+          );
+        },
+      )}
     </>
   );
 };

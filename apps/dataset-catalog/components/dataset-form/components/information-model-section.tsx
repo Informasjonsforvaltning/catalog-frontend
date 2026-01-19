@@ -6,7 +6,7 @@ import { Combobox, Fieldset } from '@digdir/designsystemet-react';
 import {
   useSearchInformationModelsByUri,
   useSearchInformationModelsSuggestions,
-} from '../../../hooks/useSearchService';
+} from '@catalog-frontend/ui';
 import { useFormikContext } from 'formik';
 import { debounce } from 'lodash';
 import { useCallback, useState } from 'react';

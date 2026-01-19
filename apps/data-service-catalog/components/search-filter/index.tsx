@@ -1,35 +1,52 @@
-'use client';
+"use client";
 
-import { memo } from 'react';
-import { Accordion } from '@digdir/designsystemet-react';
-import { ReferenceDataCode } from '@catalog-frontend/types';
-import { capitalizeFirstLetter, getTranslateText, localization as loc } from '@catalog-frontend/utils';
-import styles from './search-filter.module.css';
-import { parseAsArrayOf, parseAsString, useQueryState } from 'nuqs';
-import { AccordionItem, AccordionItemProps, CheckboxGroupFilter } from '@catalog-frontend/ui';
+import { memo } from "react";
+import { Accordion } from "@digdir/designsystemet-react";
+import { ReferenceDataCode } from "@catalog-frontend/types";
+import {
+  capitalizeFirstLetter,
+  getTranslateText,
+  localization as loc,
+} from "@catalog-frontend/utils";
+import styles from "./search-filter.module.css";
+import { parseAsArrayOf, parseAsString, useQueryState } from "nuqs";
+import {
+  AccordionItem,
+  AccordionItemProps,
+  CheckboxGroupFilter,
+} from "@catalog-frontend/ui";
 
-export type PublishedFilterType = 'published' | 'unpublished';
+export type PublishedFilterType = "published" | "unpublished";
 
 interface Props {
   distributionStatuses?: ReferenceDataCode[];
 }
 
 const SearchFilter = ({ distributionStatuses }: Props) => {
-  const [filterStatus, setFilterStatus] = useQueryState('dataServiceFilter.status', parseAsArrayOf(parseAsString));
+  const [filterStatus, setFilterStatus] = useQueryState(
+    "dataServiceFilter.status",
+    parseAsArrayOf(parseAsString),
+  );
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
-    'dataServiceFilter.pubState',
+    "dataServiceFilter.pubState",
     parseAsArrayOf(parseAsString),
   );
 
   const statusItems =
     distributionStatuses?.map((s) => ({
       value: s.uri,
-      label: capitalizeFirstLetter(getTranslateText(s.label) as string),
+      label: capitalizeFirstLetter(getTranslateText(s.label)),
     })) ?? [];
 
   const publicationStateItems = [
-    { value: 'published' as PublishedFilterType, label: loc.publicationState.published },
-    { value: 'unpublished' as PublishedFilterType, label: loc.publicationState.unpublished },
+    {
+      value: "published" as PublishedFilterType,
+      label: loc.publicationState.published,
+    },
+    {
+      value: "unpublished" as PublishedFilterType,
+      label: loc.publicationState.unpublished,
+    },
   ];
 
   const handleOnStatusChange = (names: string[]) => {
@@ -84,10 +101,7 @@ const SearchFilter = ({ distributionStatuses }: Props) => {
 
   return (
     <div className={styles.searchFilter}>
-      <Accordion
-        border={true}
-        className={styles.accordion}
-      >
+      <Accordion border={true} className={styles.accordion}>
         {accordionItems}
       </Accordion>
     </div>

@@ -2,10 +2,10 @@ import { Distribution, ReferenceDataCode, Search } from '@catalog-frontend/types
 import { localization, getTranslateText, validUUID } from '@catalog-frontend/utils';
 import { Card, Heading, Link, Paragraph, Table, TableBody, Tag } from '@digdir/designsystemet-react';
 import styles from '../details-columns.module.css';
-import { useSearchFileTypeByUri, useSearchMediaTypeByUri } from '../../../hooks/useReferenceDataSearch';
+import { useSearchFileTypeByUri, useSearchMediaTypeByUri } from '@catalog-frontend/ui';
 import { isEmpty } from 'lodash';
 import { FieldsetDivider } from '@catalog-frontend/ui';
-import { useSearchDataServiceByUri } from '@dataset-catalog/hooks/useSearchService';
+import { useSearchDataServiceByUri } from '@catalog-frontend/ui';
 
 type Props = {
   distribution: Partial<Distribution>;

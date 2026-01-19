@@ -1,4 +1,4 @@
-import { LocalizedStrings } from './localization';
+import { LocalizedStrings } from "./localization";
 
 export interface Dataset extends DatasetToBeCreated {
   id: string;
@@ -10,10 +10,11 @@ export interface Dataset extends DatasetToBeCreated {
 }
 
 export type DatasetToBeCreated = {
+  applicationProfile?: string;
   title: LocalizedStrings;
   description: LocalizedStrings;
   approved: boolean;
-  specializedType?: 'SERIES' | undefined;
+  specializedType?: "SERIES" | undefined;
   accessRight?: string;
   legalBasisForProcessing?: UriWithLabel[];
   legalBasisForAccess?: UriWithLabel[];
@@ -21,6 +22,7 @@ export type DatasetToBeCreated = {
   landingPage?: string[];
   euDataTheme?: string[];
   losTheme?: string[];
+  mobilityTheme?: string[];
   type?: string;
   keywords?: LocalizedStrings;
   concepts?: string[];
@@ -68,6 +70,11 @@ export type DatasetSeries = {
   uri: string;
   id: string;
 };
+
+export type Rights = {
+  type?: string;
+};
+
 export type Distribution = {
   title?: LocalizedStrings;
   description?: LocalizedStrings;
@@ -79,7 +86,10 @@ export type Distribution = {
   conformsTo?: UriWithLabel[];
   page?: string[];
   accessServices?: string[];
+  mobilityDataStandard?: string;
+  rights?: Rights;
 };
+
 type DatasetContactPoint = {
   name?: LocalizedStrings;
   email?: string;
@@ -94,5 +104,6 @@ export type DatasetsPageSettings = {
   filter: {
     status: string[] | null;
     pubState: string[] | null;
+    applicationProfile: string[] | null;
   };
 };

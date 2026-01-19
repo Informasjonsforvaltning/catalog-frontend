@@ -1,25 +1,30 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { NodeApi, NodeRendererProps, Tree } from 'react-arborist';
-import { TabsAddIcon, TabsRemoveIcon, TrashIcon, XMarkIcon } from '@navikt/aksel-icons';
-import cn from 'classnames';
-import styles from './codes-editor.module.css';
-import { Button, InfoCard, Select } from '@catalog-frontend/ui';
-import { Textfield, Button as FdsButton } from '@digdir/designsystemet-react';
-import { Code, CodeList, EditorType, TreeNode } from '@catalog-frontend/types';
+import React, { useEffect, useState } from "react";
+import { NodeApi, NodeRendererProps, Tree } from "react-arborist";
+import {
+  TabsAddIcon,
+  TabsRemoveIcon,
+  TrashIcon,
+  XMarkIcon,
+} from "@navikt/aksel-icons";
+import cn from "classnames";
+import styles from "./codes-editor.module.css";
+import { Button, InfoCard, Select } from "@catalog-frontend/ui";
+import { Textfield, Button as FdsButton } from "@digdir/designsystemet-react";
+import { Code, CodeList, EditorType, TreeNode } from "@catalog-frontend/types";
 import {
   convertCodeListToTreeNodes,
   getAllChildrenCodes,
   getTranslateText,
   localization,
-} from '@catalog-frontend/utils';
-import { useAdminDispatch, useAdminState } from '../../context/admin';
-import { compare } from 'fast-json-patch';
-import { v4 as uuid } from 'uuid';
+} from "@catalog-frontend/utils";
+import { useAdminDispatch, useAdminState } from "../../context/admin";
+import { compare } from "fast-json-patch";
+import { v4 as uuid } from "uuid";
 
 const INDENT_STEP = 15;
-const NO_PARENT = 'noParent';
+const NO_PARENT = "noParent";
 
 export interface Props {
   codeList?: CodeList;
@@ -31,9 +36,13 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   const adminDispatch = useAdminDispatch();
   const { updatedCodeLists, updatedCodes } = useAdminState();
 
-  const codeListInContext = updatedCodeLists?.find((codeList) => codeList.id === dbCodeList?.id);
+  const codeListInContext = updatedCodeLists?.find(
+    (codeList) => codeList.id === dbCodeList?.id,
+  );
   const currentCodeList = codeListInContext ?? dbCodeList;
-  const codes = updatedCodes ? updatedCodes[dbCodeList?.id ?? ''] || updatedCodes['0'] : [];
+  const codes = updatedCodes
+    ? updatedCodes[dbCodeList?.id ?? ""] || updatedCodes["0"]
+    : [];
 
   const [selectedCode, setSelectedCode] = useState<Code>();
   const [isEditViewOpen, setIsEditViewOpen] = useState<boolean>(false);
@@ -41,13 +50,16 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   const setDirtyState = () => {
     if (dirty) {
       const isDirty =
-        compare(dbCodeList?.codes ?? [], updatedCodes?.[dbCodeList?.id ?? ''] ?? []).length > 0 ||
+        compare(
+          dbCodeList?.codes ?? [],
+          updatedCodes?.[dbCodeList?.id ?? ""] ?? [],
+        ).length > 0 ||
         (selectedCode ? !dbCodeList?.codes?.includes(selectedCode) : false);
       dirty(isDirty);
     }
   };
 
-  const updateCodeName = (field: 'nb' | 'nn' | 'en', value: string) => {
+  const updateCodeName = (field: "nb" | "nn" | "en", value: string) => {
     setSelectedCode(
       (prevSelectedCode) =>
         prevSelectedCode && {
@@ -73,14 +85,16 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   const createNewCode = () => {
     setSelectedCode({
       id: uuid(),
-      name: { nb: 'Ny kode', nn: '', en: '' },
+      name: { nb: "Ny kode", nn: "", en: "" },
       parentID: null,
     });
   };
 
   const updateAndAddCode = (code: Code, codeList?: CodeList) => {
-    const codeListId = codeList?.id ?? '0';
-    const existingCodes = updatedCodes?.[codeListId] ? [...updatedCodes[codeListId]] : [];
+    const codeListId = codeList?.id ?? "0";
+    const existingCodes = updatedCodes?.[codeListId]
+      ? [...updatedCodes[codeListId]]
+      : [];
     const index = existingCodes.findIndex((c) => c.id === code.id);
 
     if (index !== -1) {
@@ -93,21 +107,23 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
     codesCopy[codeListId] = existingCodes;
 
     adminDispatch({
-      type: 'SET_UPDATED_CODES',
+      type: "SET_UPDATED_CODES",
       payload: { updatedCodes: codesCopy },
     });
   };
 
   const removeCode = (codeId: string, codeList?: CodeList) => {
-    const codeListId = codeList?.id || '0';
+    const codeListId = codeList?.id || "0";
     const allChildrenCodes = getAllChildrenCodes(codeId, codeList);
     const updatedCodesCopy = { ...updatedCodes };
 
-    updatedCodesCopy[codeListId] = codes.filter((code) => !(code.id === codeId || allChildrenCodes.includes(code)));
+    updatedCodesCopy[codeListId] = codes.filter(
+      (code) => !(code.id === codeId || allChildrenCodes.includes(code)),
+    );
 
     setSelectedCode(undefined);
     adminDispatch({
-      type: 'SET_UPDATED_CODES',
+      type: "SET_UPDATED_CODES",
       payload: { updatedCodes: updatedCodesCopy },
     });
   };
@@ -123,13 +139,17 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
         className={cn(styles.node, node.state)}
       >
         <div className={styles.indentLines}>
-          {new Array(Math.floor(indentSize / INDENT_STEP)).fill(0).map((_, index) => {
-            return <div key={index}></div>;
-          })}
+          {new Array(Math.floor(indentSize / INDENT_STEP))
+            .fill(0)
+            .map((_, index) => {
+              return <div key={index}></div>;
+            })}
         </div>
 
         <FolderIcon node={node} />
-        <span className={styles.text}>{node.isEditing ? <Input node={node} /> : node.data.label}</span>
+        <span className={styles.text}>
+          {node.isEditing ? <Input node={node} /> : node.data.label}
+        </span>
       </div>
     );
   };
@@ -140,13 +160,13 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
     return (
       <input
         autoFocus
-        type='text'
+        type="text"
         defaultValue={node.data.label}
         onFocus={(e) => e.currentTarget.select()}
         onBlur={() => node.reset()}
         onKeyDown={(e) => {
-          if (e.key === 'Escape') node.reset();
-          if (e.key === 'Enter') node.submit(e.currentTarget.value);
+          if (e.key === "Escape") node.reset();
+          if (e.key === "Enter") node.submit(e.currentTarget.value);
         }}
       />
     );
@@ -184,7 +204,12 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
     return level;
   };
 
-  function findRelatedCodes(codes: Code[], codeId: string, depth = 0, maxDepth = 4) {
+  function findRelatedCodes(
+    codes: Code[],
+    codeId: string,
+    depth = 0,
+    maxDepth = 4,
+  ) {
     if (depth > maxDepth) {
       return [];
     }
@@ -197,7 +222,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
   }
 
   function availableParentCodes(codes: Code[], codeId: string | undefined) {
-    const relatedCodes = findRelatedCodes(codes, codeId ?? '') || [];
+    const relatedCodes = findRelatedCodes(codes, codeId ?? "") || [];
     const filterOptions = codes
       .filter((code: Code) => {
         return (
@@ -207,16 +232,16 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
         );
       })
       .map((code: Code) => ({
-        label: String(getTranslateText(code.name)),
+        label: getTranslateText(code.name),
         value: code.id,
       }))
-      .concat({ label: localization.catalogAdmin.noParentCode, value: NO_PARENT });
+      .concat({
+        label: localization.catalogAdmin.noParentCode,
+        value: NO_PARENT,
+      });
 
     return filterOptions.map((option) => (
-      <option
-        key={`parentOption-${option.value}`}
-        value={option.value}
-      >
+      <option key={`parentOption-${option.value}`} value={option.value}>
         {option.label}
       </option>
     ));
@@ -251,7 +276,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
                   createNewCode();
                   setIsEditViewOpen(true);
                 }}
-                variant='secondary'
+                variant="secondary"
               >
                 {localization.catalogAdmin.createCode}
               </FdsButton>
@@ -261,9 +286,11 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
         {isEditViewOpen && (
           <InfoCard>
             <div className={styles.header}>
-              <p className={styles.headerText}>{localization.catalogAdmin.editCode}</p>
+              <p className={styles.headerText}>
+                {localization.catalogAdmin.editCode}
+              </p>
               <XMarkIcon
-                fontSize='1.5rem'
+                fontSize="1.5rem"
                 className={styles.xmark}
                 title={localization.catalogAdmin.closeEdit}
                 onClick={() => setIsEditViewOpen(false)}
@@ -276,7 +303,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
                   label={localization.catalogAdmin.codeName.nb}
                   value={selectedCode?.name?.nb}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    updateCodeName('nb', event.target.value);
+                    updateCodeName("nb", event.target.value);
                   }}
                 />
               </div>
@@ -285,7 +312,7 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
                   label={localization.catalogAdmin.codeName.nn}
                   value={selectedCode?.name?.nn}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    updateCodeName('nn', event.target.value);
+                    updateCodeName("nn", event.target.value);
                   }}
                 />
               </div>
@@ -294,14 +321,16 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
                   label={localization.catalogAdmin.codeName.en}
                   value={selectedCode?.name?.en}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    updateCodeName('en', event.target.value);
+                    updateCodeName("en", event.target.value);
                   }}
                 />
               </div>
               <div className={styles.codeListEditor}>
                 <Select
                   label={localization.catalogAdmin.parentCode}
-                  value={selectedCode?.parentID ? selectedCode.parentID : NO_PARENT}
+                  value={
+                    selectedCode?.parentID ? selectedCode.parentID : NO_PARENT
+                  }
                   onChange={(event) => {
                     updateCodeParent(event.target.value);
                   }}
@@ -313,21 +342,23 @@ export const CodesEditor = ({ codeList: dbCodeList, dirty }: Props) => {
               <div className={styles.buttonRow}>
                 <Button
                   onClick={() => {
-                    selectedCode && updateAndAddCode(selectedCode, currentCodeList);
+                    selectedCode &&
+                      updateAndAddCode(selectedCode, currentCodeList);
                     setIsEditViewOpen(false);
                   }}
                 >
                   {localization.ok}
                 </Button>
                 <Button
-                  color='danger'
-                  variant='secondary'
+                  color="danger"
+                  variant="secondary"
                   onClick={() => {
-                    selectedCode && removeCode(selectedCode.id, currentCodeList);
+                    selectedCode &&
+                      removeCode(selectedCode.id, currentCodeList);
                     setIsEditViewOpen(false);
                   }}
                 >
-                  <TrashIcon fontSize='1.5rem' />
+                  <TrashIcon fontSize="1.5rem" />
                   {localization.button.removeFromCodeList}
                 </Button>
               </div>

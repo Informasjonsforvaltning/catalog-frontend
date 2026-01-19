@@ -1,13 +1,20 @@
-import { RelationTypeEnum } from '@catalog-frontend/types';
-import { compareVersion, localization, parseDateTime, versionToString } from '@catalog-frontend/utils';
-import { isEmpty } from 'lodash';
-import * as Yup from 'yup';
-import { nb } from 'yup-locales';
+import { RelationTypeEnum } from "@catalog-frontend/types";
+import {
+  compareVersion,
+  localization,
+  parseDateTime,
+  versionToString,
+} from "@catalog-frontend/utils";
+import { isEmpty } from "lodash";
+import * as Yup from "yup";
+import { nb } from "yup-locales";
 
 Yup.setLocale(nb);
 
 const getRevisions = async ({ baseUri, catalogId, conceptId }) => {
-  const response = await fetch(`${baseUri}/api/catalogs/${catalogId}/concepts/${conceptId}/revisions`);
+  const response = await fetch(
+    `${baseUri}/api/catalogs/${catalogId}/concepts/${conceptId}/revisions`,
+  );
   if (response.status !== 200) {
     return [];
   }
@@ -17,7 +24,7 @@ const getRevisions = async ({ baseUri, catalogId, conceptId }) => {
 const isValidUrl = (value) => {
   try {
     const url = new URL(value);
-    return url.protocol === 'https:';
+    return url.protocol === "https:";
   } catch (e) {
     return false;
   }
@@ -27,9 +34,18 @@ const tekstMedSpraakKodeArray = (label: string) =>
   Yup.object()
     .nullable()
     .shape({
-      nb: Yup.array().of(Yup.string()).nullable().label(`${label} (${localization.language.nb})`),
-      nn: Yup.array().of(Yup.string()).nullable().label(`${label} (${localization.language.nn})`),
-      en: Yup.array().of(Yup.string()).nullable().label(`${label} (${localization.language.en})`),
+      nb: Yup.array()
+        .of(Yup.string())
+        .nullable()
+        .label(`${label} (${localization.language.nb})`),
+      nn: Yup.array()
+        .of(Yup.string())
+        .nullable()
+        .label(`${label} (${localization.language.nn})`),
+      en: Yup.array()
+        .of(Yup.string())
+        .nullable()
+        .label(`${label} (${localization.language.en})`),
     });
 
 const kilde = (required) =>
@@ -44,7 +60,10 @@ const kilde = (required) =>
 
               if (isRequired && (!value || value.length < 3)) {
                 return this.createError({
-                  message: localization.formatString(localization.conceptForm.validation.minLength, 3) as string,
+                  message: localization.formatString(
+                    localization.conceptForm.validation.minLength,
+                    3,
+                  ) as string,
                 });
               }
               return true;
@@ -68,7 +87,8 @@ const kilde = (required) =>
     )
     .test({
       test(value) {
-        const isRequired = required && this.parent.forholdTilKilde !== 'egendefinert';
+        const isRequired =
+          required && this.parent.forholdTilKilde !== "egendefinert";
 
         if (isRequired && !value?.length) {
           return this.createError({
@@ -131,8 +151,19 @@ export const definitionSchema = (required) =>
     .test({
       test() {
         if (this.parent) {
-          const { definisjon, definisjonForAllmennheten, definisjonForSpesialister } = this.parent;
-          if (required && !(definisjon || definisjonForAllmennheten || definisjonForSpesialister)) {
+          const {
+            definisjon,
+            definisjonForAllmennheten,
+            definisjonForSpesialister,
+          } = this.parent;
+          if (
+            required &&
+            !(
+              definisjon ||
+              definisjonForAllmennheten ||
+              definisjonForSpesialister
+            )
+          ) {
             return this.createError({
               message: localization.conceptForm.validation.required,
               path: this.path,
@@ -146,14 +177,26 @@ export const definitionSchema = (required) =>
     .default(null);
 
 export const relationSchema = Yup.object().shape({
-  relasjon: Yup.string().required().label(localization.conceptForm.fieldLabel.relation),
-  relasjonsType: Yup.string().when('relasjon', (relasjon) => {
-    if (`${relasjon}` === RelationTypeEnum.PARTITIV || `${relasjon}` === RelationTypeEnum.GENERISK) {
-      return Yup.string().required().label(localization.conceptForm.fieldLabel.relationLevel);
+  relasjon: Yup.string()
+    .required()
+    .label(localization.conceptForm.fieldLabel.relation),
+  relasjonsType: Yup.string().when("relasjon", (relasjon) => {
+    if (
+      `${relasjon}` === RelationTypeEnum.PARTITIV ||
+      `${relasjon}` === RelationTypeEnum.GENERISK
+    ) {
+      return Yup.string()
+        .required()
+        .label(localization.conceptForm.fieldLabel.relationLevel);
     }
-    return Yup.string().nullable().notRequired().label(localization.conceptForm.fieldLabel.relationRole);
+    return Yup.string()
+      .nullable()
+      .notRequired()
+      .label(localization.conceptForm.fieldLabel.relationRole);
   }),
-  relatertBegrep: Yup.string().required().label(localization.conceptForm.fieldLabel.relatedConcept),
+  relatertBegrep: Yup.string()
+    .required()
+    .label(localization.conceptForm.fieldLabel.relatedConcept),
 });
 
 const prefLabelNynorsk = Yup.string().label(
@@ -166,19 +209,29 @@ export const conceptSchema = ({ baseUri, required }) =>
       navn: Yup.object().shape({
         nb: Yup.string()
           .required()
-          .label(`${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.nb})`),
+          .label(
+            `${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.nb})`,
+          ),
         nn: required ? prefLabelNynorsk.required() : prefLabelNynorsk,
         en: Yup.string()
           .nullable()
-          .label(`${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.en})`),
+          .label(
+            `${localization.conceptForm.fieldLabel.prefLabel} (${localization.language.en})`,
+          ),
       }),
     }),
-    tillattTerm: tekstMedSpraakKodeArray(localization.conceptForm.fieldLabel.altLabel),
-    frarådetTerm: tekstMedSpraakKodeArray(localization.conceptForm.fieldLabel.hiddenLabel),
+    tillattTerm: tekstMedSpraakKodeArray(
+      localization.conceptForm.fieldLabel.altLabel,
+    ),
+    frarådetTerm: tekstMedSpraakKodeArray(
+      localization.conceptForm.fieldLabel.hiddenLabel,
+    ),
     definisjon: definitionSchema(required),
     definisjonForAllmennheten: definitionSchema(required),
     definisjonForSpesialister: definitionSchema(required),
-    fagområde: tekstMedSpraakKodeArray(localization.conceptForm.fieldLabel.subjectFree).test({
+    fagområde: tekstMedSpraakKodeArray(
+      localization.conceptForm.fieldLabel.subjectFree,
+    ).test({
       test(value) {
         if (!isEmpty(value) && !isEmpty(this.parent.fagområdeKoder)) {
           return this.createError({
@@ -203,11 +256,15 @@ export const conceptSchema = ({ baseUri, required }) =>
           return true;
         },
       }),
-    statusURI: Yup.string().nullable().label(localization.conceptForm.fieldLabel.status),
+    statusURI: Yup.string()
+      .nullable()
+      .label(localization.conceptForm.fieldLabel.status),
     omfang: Yup.object()
       .nullable()
       .shape({
-        tekst: Yup.string().nullable().label(localization.conceptForm.fieldLabel.valueRangeDescription),
+        tekst: Yup.string()
+          .nullable()
+          .label(localization.conceptForm.fieldLabel.valueRangeDescription),
         uri: Yup.string()
           .nullable()
           .test({
@@ -222,10 +279,14 @@ export const conceptSchema = ({ baseUri, required }) =>
           }),
       }),
     kontaktpunkt: Yup.object()
-      .test('contact-test', 'Minst en av kontaktfeltene må fylles ut.', (value: any) => {
-        if (!required) return true;
-        return value !== null && (value.harEpost || value.harTelefon);
-      })
+      .test(
+        "contact-test",
+        "Minst en av kontaktfeltene må fylles ut.",
+        (value: any) => {
+          if (!required) return true;
+          return value !== null && (value.harEpost || value.harTelefon);
+        },
+      )
       .shape({
         harEpost: Yup.string()
           .nullable()
@@ -273,7 +334,10 @@ export const conceptSchema = ({ baseUri, required }) =>
               return true;
             }
             const fomDateTime = parseDateTime(this.parent.gyldigFom);
-            if (fomDateTime && tomDateTime.toJSDate() >= fomDateTime?.toJSDate()) {
+            if (
+              fomDateTime &&
+              tomDateTime.toJSDate() >= fomDateTime?.toJSDate()
+            ) {
               return true;
             }
           }
@@ -306,18 +370,26 @@ export const conceptSchema = ({ baseUri, required }) =>
                 .sort((a, b) => -compareVersion(a.versjonsnr, b.versjonsnr));
               if (compareVersion(revisions[0]?.versjonsnr, value as any) >= 0) {
                 return this.createError({
-                  message: localization.formatString(localization.conceptForm.validation.version, {
-                    min: versionToString(revisions[0]?.versjonsnr),
-                  }) as string,
+                  message: localization.formatString(
+                    localization.conceptForm.validation.version,
+                    {
+                      min: versionToString(revisions[0]?.versjonsnr),
+                    },
+                  ) as string,
                 });
               }
             }
 
-            if (compareVersion({ major: 0, minor: 1, patch: 0 }, value as any) > 0) {
+            if (
+              compareVersion({ major: 0, minor: 1, patch: 0 }, value as any) > 0
+            ) {
               return this.createError({
-                message: localization.formatString(localization.conceptForm.validation.version, {
-                  min: '0.1.0',
-                }) as string,
+                message: localization.formatString(
+                  localization.conceptForm.validation.version,
+                  {
+                    min: "0.1.0",
+                  },
+                ) as string,
               });
             }
           }

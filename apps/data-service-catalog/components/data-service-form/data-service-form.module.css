@@ -90,19 +90,8 @@
   flex-wrap: nowrap;
 }
 
-.stickyFooterBar {
-  position: sticky;
-  bottom: 0px;
-  background-color: #fff;
-  border-top: 1px solid rgb(230, 230, 230);
-  box-shadow: #969ba0 0px 0px 10px -5px;
-  z-index: 10;
-}
-
-.stickyFooterContent {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  padding: 0.5rem 1rem;
+.verticalLine {
+  border-left: 1px solid var(--fds-semantic-border-neutral-default);
+  height: 24px;
+  margin: 0 var(--fds-spacing-2);
 }

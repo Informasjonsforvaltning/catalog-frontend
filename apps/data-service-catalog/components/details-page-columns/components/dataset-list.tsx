@@ -1,6 +1,6 @@
-import { Link, List } from '@digdir/designsystemet-react';
-import { getTranslateText } from '@catalog-frontend/utils';
-import { useSearchDatasetsByUri } from '../../../hooks/useSearchService';
+import { Link, List } from "@digdir/designsystemet-react";
+import { getTranslateText } from "@catalog-frontend/utils";
+import { useSearchDatasetsByUri } from "@catalog-frontend/ui";
 
 type Props = {
   datasetURIs: string[] | undefined;
@@ -9,22 +9,27 @@ type Props = {
 };
 
 export const DatasetList = ({ datasetURIs, searchEnv, language }: Props) => {
-  const { data: datasets } = useSearchDatasetsByUri(searchEnv, datasetURIs || []);
+  const { data: datasets } = useSearchDatasetsByUri(
+    searchEnv,
+    datasetURIs || [],
+  );
 
   const matchDataset = (uri: string) => datasets?.find((s) => s.uri === uri);
 
   return (
-    <List.Root size={'sm'}>
+    <List.Root size={"sm"}>
       <List.Unordered
         style={{
-          listStyle: 'none',
+          listStyle: "none",
           paddingLeft: 0,
         }}
       >
         {datasetURIs?.map((uri, index) => {
           return uri ? (
             <List.Item key={`dataset-${index}`}>
-                <Link href={uri}>{getTranslateText(matchDataset(uri)?.title, language) || uri}</Link>
+              <Link href={uri}>
+                {getTranslateText(matchDataset(uri)?.title, language) || uri}
+              </Link>
             </List.Item>
           ) : null;
         })}

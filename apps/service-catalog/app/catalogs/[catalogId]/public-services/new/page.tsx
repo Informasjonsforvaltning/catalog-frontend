@@ -1,17 +1,20 @@
-import { BasicServiceForm } from '../../../../../components/basic-service-form';
-import { Heading } from '@digdir/designsystemet-react';
-import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
-import { Organization, ReferenceDataCode } from '@catalog-frontend/types';
-import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import styles from './public-service-new-page.module.css';
+import { Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
+import { Organization } from "@catalog-frontend/types";
+import {
+  getAdmsStatuses,
+  getOrganization,
+} from "@catalog-frontend/data-access";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import { NewPage } from "./new-page-client";
 
-export default async function NewPublicServicePage({ params }: { params: Promise<{ catalogId: string }> }) {
+export default async function NewPublicServicePage({
+  params,
+}: {
+  params: Promise<{ catalogId: string }>;
+}) {
   const { catalogId } = await params;
-
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
-  const statusesResponse = await getAdmsStatuses().then((res) => res.json());
-  const statuses: ReferenceDataCode[] = statusesResponse.statuses;
+  const organization: Organization = await getOrganization(catalogId);
+  const statusesResponse = await getAdmsStatuses();
 
   const breadcrumbList = [
     {
@@ -22,7 +25,7 @@ export default async function NewPublicServicePage({ params }: { params: Promise
       href: `/catalogs/${catalogId}/public-services/new`,
       text: localization.serviceCatalog.form.newPublic,
     },
-  ] as BreadcrumbType[];
+  ];
 
   return (
     <>
@@ -32,21 +35,13 @@ export default async function NewPublicServicePage({ params }: { params: Promise
       />
       <PageBanner
         title={localization.catalogType.publicService}
-        subtitle={getTranslateText(organization?.prefLabel).toString()}
+        subtitle={getTranslateText(organization?.prefLabel)}
       />
-      <div className='container'>
-        <Heading
-          size='md'
-          className={styles.heading}
-        >
-          {localization.serviceCatalog.infoAboutService}
-        </Heading>
-        <BasicServiceForm
-          catalogId={catalogId}
-          type='public-services'
-          statuses={statuses}
-        />
-      </div>
+      <NewPage
+        referenceDataEnv={process.env.FDK_BASE_URI || ""}
+        searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI || ""}
+        statuses={statusesResponse.statuses}
+      />
     </>
   );
 }

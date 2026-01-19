@@ -1,28 +1,32 @@
-import { DatasetToBeCreated } from '@catalog-frontend/types';
-import { expect, runTestAsAdmin } from '../../fixtures/basePage';
-import DatasetsPage from '../../page-object-model/datasetsPage';
-import { adminAuthFile, createDataset, uniqueString } from '../../utils/helpers';
-import { dateStringToDate, formatDate } from '@catalog-frontend/utils';
+import { DatasetToBeCreated } from "@catalog-frontend/types";
+import { expect, runTestAsAdmin } from "../../fixtures/basePage";
+import DatasetsPage from "../../page-object-model/datasetsPage";
+import {
+  adminAuthFile,
+  createDataset,
+  uniqueString,
+} from "../../utils/helpers";
+import { dateStringToDate, formatDate } from "@catalog-frontend/utils";
 
 const getRandomDataset = () => {
   // Create a random dataset
   const dataset: DatasetToBeCreated = {
     title: {
-      nb: uniqueString('test_dataset_nb'),
-      nn: uniqueString('test_dataset_nn'),
-      en: uniqueString('test_dataset_en'),
+      nb: uniqueString("test_dataset_nb"),
+      nn: uniqueString("test_dataset_nn"),
+      en: uniqueString("test_dataset_en"),
     },
     description: {
-      nb: uniqueString('test_dataset_description_nb'),
-      nn: uniqueString('test_dataset_description_nn'),
-      en: uniqueString('test_dataset_description_en'),
+      nb: uniqueString("test_dataset_description_nb"),
+      nn: uniqueString("test_dataset_description_nn"),
+      en: uniqueString("test_dataset_description_en"),
     },
     approved: false,
     contactPoints: [
       {
-        email: 'test@test.com',
-        phone: '1234567890',
-        url: 'https://test.com',
+        email: "test@test.com",
+        phone: "1234567890",
+        url: "https://test.com",
       },
     ],
   };
@@ -30,8 +34,14 @@ const getRandomDataset = () => {
 };
 
 runTestAsAdmin(
-  'should load datasets page',
-  async ({ datasetsPage, playwright }: { datasetsPage: DatasetsPage; playwright }) => {
+  "should load datasets page",
+  async ({
+    datasetsPage,
+    playwright,
+  }: {
+    datasetsPage: DatasetsPage;
+    playwright: any;
+  }) => {
     // Create a request context with the admin storage state (includes next-auth cookie)
     const apiRequestContext = await playwright.request.newContext({
       storageState: adminAuthFile,
@@ -40,39 +50,60 @@ runTestAsAdmin(
     const dataset = getRandomDataset();
     await createDataset(apiRequestContext, dataset);
 
-    await datasetsPage.goto(process.env.E2E_CATALOG_ID);
+    await datasetsPage.goto(process.env.E2E_CATALOG_ID as string);
     await datasetsPage.expectHasDatasets();
   },
 );
 
-runTestAsAdmin('should show create dataset button', async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
-  await datasetsPage.goto(process.env.E2E_CATALOG_ID);
-  await datasetsPage.expectCreateDatasetButtonVisible();
-});
-
-runTestAsAdmin('should have search input', async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
-  await datasetsPage.goto(process.env.E2E_CATALOG_ID);
-  await datasetsPage.expectSearchInputVisible();
-});
-
-runTestAsAdmin('should show all filters', async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
-  await datasetsPage.goto(process.env.E2E_CATALOG_ID);
-  await datasetsPage.expectAllFiltersVisible();
-});
-
-runTestAsAdmin('should show status filter', async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
-  await datasetsPage.goto(process.env.E2E_CATALOG_ID);
-  await datasetsPage.expectStatusFilterVisible();
-});
-
-runTestAsAdmin('should show published filter', async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
-  await datasetsPage.goto(process.env.E2E_CATALOG_ID);
-  await datasetsPage.expectPublishedFilterVisible();
-});
+runTestAsAdmin(
+  "should show create dataset button",
+  async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
+    await datasetsPage.goto(process.env.E2E_CATALOG_ID as string);
+    await datasetsPage.expectCreateDatasetButtonVisible();
+  },
+);
 
 runTestAsAdmin(
-  'should be able to search datasets',
-  async ({ datasetsPage, playwright }: { datasetsPage: DatasetsPage; playwright }) => {
+  "should have search input",
+  async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
+    await datasetsPage.goto(process.env.E2E_CATALOG_ID as string);
+    await datasetsPage.expectSearchInputVisible();
+  },
+);
+
+runTestAsAdmin(
+  "should show all filters",
+  async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
+    await datasetsPage.goto(process.env.E2E_CATALOG_ID as string);
+    await datasetsPage.expectAllFiltersVisible();
+  },
+);
+
+runTestAsAdmin(
+  "should show status filter",
+  async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
+    await datasetsPage.goto(process.env.E2E_CATALOG_ID as string);
+    await datasetsPage.expectStatusFilterVisible();
+  },
+);
+
+runTestAsAdmin(
+  "should show published filter",
+  async ({ datasetsPage }: { datasetsPage: DatasetsPage }) => {
+    await datasetsPage.goto(process.env.E2E_CATALOG_ID as string);
+    await datasetsPage.expectPublishedFilterVisible();
+  },
+);
+
+runTestAsAdmin(
+  "should be able to search datasets",
+  async ({
+    datasetsPage,
+    playwright,
+  }: {
+    datasetsPage: DatasetsPage;
+    playwright: any;
+  }) => {
     // Create a request context with the admin storage state (includes next-auth cookie)
     const apiRequestContext = await playwright.request.newContext({
       storageState: adminAuthFile,
@@ -83,7 +114,7 @@ runTestAsAdmin(
       await createDataset(apiRequestContext, dataset);
     }
 
-    await datasetsPage.goto(process.env.E2E_CATALOG_ID);
+    await datasetsPage.goto(process.env.E2E_CATALOG_ID as string);
     await datasetsPage.expectSearchInputVisible();
 
     // Search for the dataset
@@ -93,8 +124,14 @@ runTestAsAdmin(
     await expect(datasetsPage.datasetCards).toHaveCount(1);
 
     // Verify dataset details
-    await datasetsPage.verifyDatasetText(datasets[0].title.nb as string, 'Utkast');
-    await datasetsPage.verifyDatasetText(datasets[0].title.nb as string, 'Ikke publisert');
+    await datasetsPage.verifyDatasetText(
+      datasets[0].title.nb as string,
+      "Utkast",
+    );
+    await datasetsPage.verifyDatasetText(
+      datasets[0].title.nb as string,
+      "Ikke publisert",
+    );
     await datasetsPage.verifyDatasetText(
       datasets[0].title.nb as string,
       `Sist endret ${formatDate(dateStringToDate(new Date().toISOString()))}`,
@@ -103,8 +140,14 @@ runTestAsAdmin(
 );
 
 runTestAsAdmin(
-  'should show no results when searching for non-existent dataset',
-  async ({ datasetsPage, playwright }: { datasetsPage: DatasetsPage; playwright }) => {
+  "should show no results when searching for non-existent dataset",
+  async ({
+    datasetsPage,
+    playwright,
+  }: {
+    datasetsPage: DatasetsPage;
+    playwright: any;
+  }) => {
     // Create a request context with the admin storage state (includes next-auth cookie)
     const apiRequestContext = await playwright.request.newContext({
       storageState: adminAuthFile,
@@ -113,9 +156,9 @@ runTestAsAdmin(
     const dataset = getRandomDataset();
     await createDataset(apiRequestContext, dataset);
 
-    await datasetsPage.goto(process.env.E2E_CATALOG_ID);
+    await datasetsPage.goto(process.env.E2E_CATALOG_ID as string);
     await datasetsPage.expectSearchInputVisible();
-    await datasetsPage.search('non-existent-dataset-123');
+    await datasetsPage.search("non-existent-dataset-123");
     await expect(datasetsPage.noResultsLocator()).toBeVisible();
   },
 );

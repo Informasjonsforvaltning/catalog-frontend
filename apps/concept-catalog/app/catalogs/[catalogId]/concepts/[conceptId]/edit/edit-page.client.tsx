@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { LocalDataStorage, localization } from '@catalog-frontend/utils';
-import type { Concept, StorageData } from '@catalog-frontend/types';
-import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
-import ConceptForm from '@concept-catalog/components/concept-form';
-import { updateConcept } from '@concept-catalog/app/actions/concept/actions';
+import { useEffect, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { ArrowLeftIcon } from "@navikt/aksel-icons";
+import { LocalDataStorage, localization } from "@catalog-frontend/utils";
+import type { Concept, StorageData } from "@catalog-frontend/types";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
+import ConceptForm from "@concept-catalog/components/concept-form";
+import { updateConcept } from "@concept-catalog/app/actions/concept/actions";
 
 export const EditPage = ({
   catalogId,
@@ -24,12 +24,12 @@ export const EditPage = ({
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
-  const dataStorage = new LocalDataStorage<StorageData>({ 
-    key: 'conceptForm', 
+  const dataStorage = new LocalDataStorage<StorageData>({
+    key: "conceptForm",
     secondaryKeys: {
-      definition: 'conceptFormDefinition',
-      relation: 'conceptFormRelation'
-    }
+      definition: "conceptFormDefinition",
+      relation: "conceptFormRelation",
+    },
   });
 
   const handleUpdate = async (values: Concept) => {
@@ -50,28 +50,35 @@ export const EditPage = ({
   };
 
   useEffect(() => {
-    if (searchParams.get('created') === 'true') {
+    if (searchParams.get("created") === "true") {
       setShowSnackbar(true);
 
       // Remove the param and update the URL shallowly
       const newParams = new URLSearchParams(searchParams.toString());
-      newParams.delete('created');
+      newParams.delete("created");
 
-      const newUrl = newParams.toString().length > 0 ? `${pathname}?${newParams.toString()}` : pathname;
+      const newUrl =
+        newParams.toString().length > 0
+          ? `${pathname}?${newParams.toString()}`
+          : pathname;
 
-      window.history.replaceState(null, '', newUrl);
+      window.history.replaceState(null, "", newUrl);
     }
   }, [searchParams, pathname]);
 
   function handleRestore(data: StorageData): boolean {
     if (data?.id !== concept.id) {
       if (!data?.id) {
-        window.location.replace(`/catalogs/${catalogId}/concepts/new?restore=1`);
+        window.location.replace(
+          `/catalogs/${catalogId}/concepts/new?restore=1`,
+        );
         return false;
       }
-      window.location.replace(`/catalogs/${catalogId}/concepts/${data.id}/edit?restore=1`);
+      window.location.replace(
+        `/catalogs/${catalogId}/concepts/${data.id}/edit?restore=1`,
+      );
       return false;
-    } 
+    }
     return true;
   }
 
@@ -95,12 +102,12 @@ export const EditPage = ({
       ) : undefined}
       <ButtonBar>
         <Button
-          variant='tertiary'
-          color='second'
-          data-size='sm'
+          variant="tertiary"
+          color="second"
+          size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >
-          <ArrowLeftIcon fontSize='1.25em' />
+          <ArrowLeftIcon fontSize="1.25em" />
           {localization.button.backToOverview}
         </Button>
       </ButtonBar>

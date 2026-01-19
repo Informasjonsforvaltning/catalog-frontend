@@ -1,7 +1,7 @@
-import { expect, Page, BrowserContext, Locator } from '@playwright/test';
-import type AxeBuilder from '@axe-core/playwright';
-import DataServiceDetailPage from './dataServiceDetailPage';
-import EditPage from './dataServiceEditPage';
+import { expect, Page, BrowserContext, Locator } from "@playwright/test";
+import type AxeBuilder from "@axe-core/playwright";
+import DataServiceDetailPage from "./dataServiceDetailPage";
+import EditPage from "./dataServiceEditPage";
 
 export default class DataServicesPage {
   protected page: Page;
@@ -22,39 +22,55 @@ export default class DataServicesPage {
   readonly publishedFilterPublished: Locator;
   readonly publishedFilterNotPublished: Locator;
 
-  constructor(page: Page, context: BrowserContext, accessibilityBuilder?: AxeBuilder) {
+  constructor(
+    page: Page,
+    context: BrowserContext,
+    accessibilityBuilder: AxeBuilder,
+  ) {
     this.page = page;
-    this.detailPage = new DataServiceDetailPage(page, context);
-    this.editPage = new EditPage(page, context);
+    this.detailPage = new DataServiceDetailPage(
+      page,
+      context,
+      accessibilityBuilder,
+    );
+    this.editPage = new EditPage(page, context, accessibilityBuilder);
     this.context = context;
     this.accessibilityBuilder = accessibilityBuilder;
-    this.searchInput = page.getByRole('searchbox', { name: 'Søk' });
-    this.searchButton = page.getByRole('button', { name: 'Søk' });
+    this.searchInput = page.getByRole("searchbox", { name: "Søk" });
+    this.searchButton = page.getByRole("button", { name: "Søk" });
     // More specific locator for data service cards
     this.dataServiceCards = page.locator(
       'ul[role="list"]:not(nav ul) li[role="listitem"]:has(a[href*="/data-services/"])',
     );
-    this.createDataServiceButton = page.getByRole('link', { name: 'Legg til API-beskrivelse' });
-    this.statusFilterHeader = page.getByRole('button', { name: 'Status' });
-    this.statusFilterFerdigstilt = page.getByLabel('Ferdigstilt');
-    this.statusFilterFrarådet = page.getByLabel('Frarådet');
-    this.statusFilterUnderUtvikling = page.getByLabel('Under utvikling');
-    this.statusFilterTrukketTilbake = page.getByLabel('Trukket tilbake');
-    this.publishedFilterHeader = page.getByRole('button', { name: 'Publiseringstilstand' });
-    this.publishedFilterPublished = page.getByLabel('Publisert', { exact: true });
-    this.publishedFilterNotPublished = page.getByLabel('Ikke publisert');
+    this.createDataServiceButton = page.getByRole("link", {
+      name: "Legg til API-beskrivelse",
+    });
+    this.statusFilterHeader = page.getByRole("button", { name: "Status" });
+    this.statusFilterFerdigstilt = page.getByLabel("Ferdigstilt");
+    this.statusFilterFrarådet = page.getByLabel("Frarådet");
+    this.statusFilterUnderUtvikling = page.getByLabel("Under utvikling");
+    this.statusFilterTrukketTilbake = page.getByLabel("Trukket tilbake");
+    this.publishedFilterHeader = page.getByRole("button", {
+      name: "Publiseringstilstand",
+    });
+    this.publishedFilterPublished = page.getByLabel("Publisert", {
+      exact: true,
+    });
+    this.publishedFilterNotPublished = page.getByLabel("Ikke publisert");
   }
 
-  noResultsLocator = () => this.page.getByText('Ditt søk ga ingen treff');
+  noResultsLocator = () => this.page.getByText("Ditt søk ga ingen treff");
 
   // Navigation
   async goto(catalogId: string) {
-    console.log(`[DataServicesPage] Navigating to data services page for catalog: ${catalogId}`);
+    console.log(
+      `[DataServicesPage] Navigating to data services page for catalog: ${catalogId}`,
+    );
     await this.page.goto(`/catalogs/${catalogId}/data-services`);
 
     // Wait for the page to be ready
-    await this.page.waitForLoadState('networkidle');
-    console.log('[DataServicesPage] Page loaded');
+    await this.page.waitForLoadState("networkidle");
+    console.log("[DataServicesPage] Page loaded");
   }
 
   // Actions
@@ -67,13 +83,15 @@ export default class DataServicesPage {
     await this.searchButton.click();
 
     // Wait for search to complete
-    const spinner = this.page.getByRole('img', { name: 'Laster' });
+    const spinner = this.page.getByRole("img", { name: "Laster" });
     try {
       // Wait for spinner to be visible and hidden
-      await spinner.waitFor({ state: 'visible', timeout: 3000 });
-      await spinner.waitFor({ state: 'hidden', timeout: 10000 });
+      await spinner.waitFor({ state: "visible", timeout: 3000 });
+      await spinner.waitFor({ state: "hidden", timeout: 10000 });
     } catch (error) {
-      console.log('[DataServicesPage] Spinner not found or already hidden, continuing...');
+      console.log(
+        "[DataServicesPage] Spinner not found or already hidden, continuing...",
+      );
     }
 
     // Wait for the page to stabilize
@@ -81,14 +99,18 @@ export default class DataServicesPage {
 
     // Log the current state
     const cardCount = await this.dataServiceCards.count();
-    console.log(`[DataServicesPage] Found ${cardCount} data service cards after search`);
+    console.log(
+      `[DataServicesPage] Found ${cardCount} data service cards after search`,
+    );
   }
 
   async clearFilters() {
-    console.log('[DataServicesPage] Clearing filters...');
+    console.log("[DataServicesPage] Clearing filters...");
 
     // Find and click all filter pills to remove them
-    const filterChips = this.page.locator('[role="button"]').filter({ hasText: /Fjern filter/ });
+    const filterChips = this.page
+      .locator('[role="button"]')
+      .filter({ hasText: /Fjern filter/ });
     const chipCount = await filterChips.count();
 
     console.log(`[DataServicesPage] Found ${chipCount} filter chips to remove`);
@@ -97,33 +119,39 @@ export default class DataServicesPage {
       // Click the first pill each time since the list will update after each removal
       const firstChip = filterChips.first();
       if (await firstChip.isVisible()) {
-        console.log(`[DataServicesPage] Removing filter chip ${i + 1}/${chipCount}`);
+        console.log(
+          `[DataServicesPage] Removing filter chip ${i + 1}/${chipCount}`,
+        );
         await firstChip.click();
-        // Wait a moment for the pill to be removed
-        await this.page.waitForTimeout(500);
+        // Wait for the pill to be removed (detached)
+        await firstChip.waitFor({ state: "detached", timeout: 5000 });
       }
     }
 
     // Wait for filters to be cleared and page to update
     await this.page.waitForTimeout(1000);
-    console.log('[DataServicesPage] Filters cleared');
+    console.log("[DataServicesPage] Filters cleared");
   }
 
   async waitForDataServicesToLoad(timeout = 10000) {
-    console.log('[DataServicesPage] Waiting for data services to load...');
+    console.log("[DataServicesPage] Waiting for data services to load...");
 
     try {
       // Wait for either data service cards to appear or no results message
       await Promise.race([
-        this.dataServiceCards.first().waitFor({ state: 'visible', timeout }),
-        this.noResultsLocator().waitFor({ state: 'visible', timeout }),
+        this.dataServiceCards.first().waitFor({ state: "visible", timeout }),
+        this.noResultsLocator().waitFor({ state: "visible", timeout }),
       ]);
 
       const cardCount = await this.dataServiceCards.count();
-      console.log(`[DataServicesPage] Data services loaded. Found ${cardCount} cards.`);
+      console.log(
+        `[DataServicesPage] Data services loaded. Found ${cardCount} cards.`,
+      );
       return cardCount;
     } catch (error) {
-      console.log('[DataServicesPage] Timeout waiting for data services to load');
+      console.log(
+        "[DataServicesPage] Timeout waiting for data services to load",
+      );
       const cardCount = await this.dataServiceCards.count();
       console.log(`[DataServicesPage] Current card count: ${cardCount}`);
       return cardCount;
@@ -135,30 +163,32 @@ export default class DataServicesPage {
   }
 
   async clickDataServiceByTitle(title: string) {
-    const card = await this.getDataServiceCardByTitle(title);
-    await card.getByRole('link', { name: title }).click();
+    const card = this.getDataServiceCardByTitle(title);
+    await card.getByRole("link", { name: title }).click();
   }
 
-  async getDataServiceCardByTitle(title: string) {
-    return this.dataServiceCards.filter({ has: this.page.getByRole('link', { name: title }) });
+  getDataServiceCardByTitle(title: string) {
+    return this.dataServiceCards.filter({
+      has: this.page.getByRole("link", { name: title }),
+    });
   }
 
   async getDataServiceStatus(title: string) {
-    const card = await this.getDataServiceCardByTitle(title);
+    const card = this.getDataServiceCardByTitle(title);
     return card.locator('[role="status"]').textContent();
   }
 
   async verifyDataServiceText(title: string, text: string) {
-    const card = await this.getDataServiceCardByTitle(title);
+    const card = this.getDataServiceCardByTitle(title);
     return expect(card).toContainText(text);
   }
 
   async verifyDataServiceExists(title: string) {
-    await expect(await this.getDataServiceCardByTitle(title)).toBeVisible();
+    await expect(this.getDataServiceCardByTitle(title)).toHaveCount(1);
   }
 
   async verifyDataServiceDoesNotExist(title: string) {
-    await expect(await this.getDataServiceCardByTitle(title)).not.toBeVisible();
+    await expect(this.getDataServiceCardByTitle(title)).toHaveCount(0);
   }
 
   // Assertions
@@ -174,11 +204,16 @@ export default class DataServicesPage {
   }
 
   async expectNoResults() {
-    await this.noResultsLocator().waitFor({ state: 'visible' });
+    await this.noResultsLocator().waitFor({ state: "visible" });
   }
 
-  async expectDataServiceDetailPageUrl(catalogId: string, dataServiceId: string) {
-    await expect(this.page).toHaveURL(`/catalogs/${catalogId}/data-services/${dataServiceId}`);
+  async expectDataServiceDetailPageUrl(
+    catalogId: string,
+    dataServiceId: string,
+  ) {
+    await expect(this.page).toHaveURL(
+      `/catalogs/${catalogId}/data-services/${dataServiceId}`,
+    );
   }
 
   async expectSearchInputVisible() {
@@ -214,7 +249,7 @@ export default class DataServicesPage {
       return;
     }
     const result = await this.accessibilityBuilder
-      .disableRules(['svg-img-alt', 'aria-toggle-field-name', 'target-size'])
+      .disableRules(["svg-img-alt", "aria-toggle-field-name", "target-size"])
       .analyze();
     expect.soft(result.violations).toEqual([]);
   }

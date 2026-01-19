@@ -1,12 +1,12 @@
-import { test as base } from '@playwright/test';
-import CatalogPortalPage from '../page-object-model/catalogPortalPage';
-import LoginPage from '../page-object-model/loginPage';
-import { adminAuthFile, generateAccessibilityBuilder } from '../utils/helpers';
+import { test as base } from "@playwright/test";
+import CatalogPortalPage from "../page-object-model/catalogPortalPage";
+import LoginPage from "../page-object-model/loginPage";
+import { adminAuthFile, generateAccessibilityBuilder } from "../utils/helpers";
 
-const PREFIX_TEXT = 'catalog-portal: ';
+const PREFIX_TEXT = "catalog-portal: ";
 export const test = base.extend<{
-  loginPage: any;
-  catalogPortalPage: any;
+  loginPage: LoginPage;
+  catalogPortalPage: CatalogPortalPage;
 }>({
   loginPage: async ({ page, context }, use) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
@@ -15,18 +15,22 @@ export const test = base.extend<{
   },
   catalogPortalPage: async ({ page, context }, use) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
-    const catalogPortalPage = new CatalogPortalPage(page, context, accessibilityBuilder);
+    const catalogPortalPage = new CatalogPortalPage(
+      page,
+      context,
+      accessibilityBuilder,
+    );
     await use(catalogPortalPage);
   },
 });
 
-export const runTest = (name: string, fn: (any) => void) => {
+export const runTest = (name: string, fn: (e: any) => void) => {
   test(PREFIX_TEXT + name, fn);
 };
 
-export const runTestAsAdmin = (name: string, fn: (any) => void) => {
+export const runTestAsAdmin = (name: string, fn: (e: any) => void) => {
   test.use({ storageState: adminAuthFile });
   runTest(name, fn);
 };
 
-export { expect } from '@playwright/test';
+export { expect } from "@playwright/test";

@@ -1,10 +1,20 @@
-'use client';
+"use client";
 
-import { useEffect, useMemo, type MouseEvent } from 'react';
-import { parseAsArrayOf, parseAsInteger, parseAsJson, parseAsString, useQueryState } from 'nuqs';
-import { isEmpty } from 'lodash';
-import { useRouter } from 'next/navigation';
-import { SearchableField, QuerySort, ConceptsPageSettings } from '@catalog-frontend/types';
+import { useEffect, useMemo } from "react";
+import {
+  parseAsArrayOf,
+  parseAsInteger,
+  parseAsJson,
+  parseAsString,
+  useQueryState,
+} from "nuqs";
+import { isEmpty } from "lodash";
+import { useRouter } from "next/navigation";
+import {
+  SearchableField,
+  QuerySort,
+  ConceptsPageSettings,
+} from "@catalog-frontend/types";
 import {
   SearchHitContainer,
   Spinner,
@@ -12,29 +22,33 @@ import {
   Select,
   LinkButton,
   SearchField,
-  UploadButton,
-} from '@catalog-frontend/ui';
+} from "@catalog-frontend/ui";
 import {
   getTranslateText,
   capitalizeFirstLetter,
   localization,
-  setClientConceptsPageSettings
-} from '@catalog-frontend/utils';
-import { Chip, Tabs } from '@digdir/designsystemet-react';
-import { FileImportIcon, PlusCircleIcon } from '@navikt/aksel-icons';
+  setClientConceptsPageSettings,
+} from "@catalog-frontend/utils";
+import { Chip, Tabs } from "@digdir/designsystemet-react";
+import { PlusCircleIcon } from "@navikt/aksel-icons";
 import {
   SortOption,
   getSelectOptions,
   useSearchConcepts,
   getFields as getSearchFields,
-} from '@concept-catalog/hooks/search';
-import SearchFilter from '@concept-catalog/components/search-filter';
-import { useImportConcepts } from '@concept-catalog/hooks/import';
-import ConceptSearchHits from '@concept-catalog/components/concept-search-hits';
-import styles from './search-page.module.scss';
-import { ImportModal } from '@concept-catalog/components/import-modal';
+} from "@concept-catalog/hooks/search";
+import SearchFilter from "@concept-catalog/components/search-filter";
+import ConceptSearchHits from "@concept-catalog/components/concept-search-hits";
+import styles from "./search-page.module.scss";
+import { ImportModal } from "@concept-catalog/components";
 
-export type FilterType = 'published' | 'status' | 'assignedUser' | 'subject' | 'internalFields' | 'label';
+export type FilterType =
+  | "published"
+  | "status"
+  | "assignedUser"
+  | "subject"
+  | "internalFields"
+  | "label";
 
 type Props = {
   catalogId: string;
@@ -55,68 +69,118 @@ export const SearchPageClient = ({
   codeListsResult,
   usersResult,
   conceptStatuses,
-  pageSettings
+  pageSettings,
 }: Props) => {
   const router = useRouter();
 
   // Memoize default values for query states
-  const defaultSelectedFieldOption = useMemo(() => pageSettings?.searchField ?? 'alleFelter', []);
-  const defaultSelectedSortOption = useMemo(() => pageSettings?.sort ?? SortOption.RELEVANCE, []);
+  const defaultSelectedFieldOption = useMemo(
+    () => pageSettings?.searchField ?? "alleFelter",
+    [],
+  );
+  const defaultSelectedSortOption = useMemo(
+    () => pageSettings?.sort ?? SortOption.RELEVANCE,
+    [],
+  );
   const defaultPage = useMemo(() => pageSettings?.page ?? 0, []);
-  const defaultSearchTerm = useMemo(() => pageSettings?.search ?? '', []);
-  const defaultFilterStatus = useMemo(() => pageSettings?.filter?.status ?? [], []);
-  const defaultFilterPublicationState = useMemo(() => pageSettings?.filter?.pubState ?? [], []);
-  const defaultFilterAssignedUser = useMemo(() => pageSettings?.filter?.assignedUser ?? '', []);
-  const defaultFilterInternalFields = useMemo(() => pageSettings?.filter?.internalFields ?? {}, []);
-  const defaultFilterLabel = useMemo(() => pageSettings?.filter?.label ?? [], []);
-  const defaultFilterSubject = useMemo(() => pageSettings?.filter?.subject ?? [], []);
+  const defaultSearchTerm = useMemo(() => pageSettings?.search ?? "", []);
+  const defaultFilterStatus = useMemo(
+    () => pageSettings?.filter?.status ?? [],
+    [],
+  );
+  const defaultFilterPublicationState = useMemo(
+    () => pageSettings?.filter?.pubState ?? [],
+    [],
+  );
+  const defaultFilterAssignedUser = useMemo(
+    () => pageSettings?.filter?.assignedUser ?? "",
+    [],
+  );
+  const defaultFilterInternalFields = useMemo(
+    () => pageSettings?.filter?.internalFields ?? {},
+    [],
+  );
+  const defaultFilterLabel = useMemo(
+    () => pageSettings?.filter?.label ?? [],
+    [],
+  );
+  const defaultFilterSubject = useMemo(
+    () => pageSettings?.filter?.subject ?? [],
+    [],
+  );
 
   // Query states
-  const [selectedFieldOption, setSelectedFieldOption] = useQueryState('conceptField', {
-    defaultValue: defaultSelectedFieldOption,
+  const [selectedFieldOption, setSelectedFieldOption] = useQueryState(
+    "conceptField",
+    {
+      defaultValue: defaultSelectedFieldOption,
+    },
+  );
+  const [selectedSortOption, setSelectedSortOption] = useQueryState(
+    "conceptSort",
+    {
+      defaultValue: defaultSelectedSortOption,
+    },
+  );
+  const [page, setPage] = useQueryState(
+    "conceptPage",
+    parseAsInteger.withDefault(defaultPage),
+  );
+  const [searchTerm, setSearchTerm] = useQueryState("conceptSearch", {
+    defaultValue: defaultSearchTerm,
   });
-  const [selectedSortOption, setSelectedSortOption] = useQueryState('conceptSort', {
-    defaultValue: defaultSelectedSortOption,
-  });
-  const [page, setPage] = useQueryState('conceptPage', parseAsInteger.withDefault(defaultPage));
-  const [searchTerm, setSearchTerm] = useQueryState('conceptSearch', { defaultValue: defaultSearchTerm });
   const [filterStatus, setFilterStatus] = useQueryState(
-    'conceptFilter.status',
+    "conceptFilter.status",
     parseAsArrayOf(parseAsString).withDefault(defaultFilterStatus),
   );
   const [filterPublicationState, setFilterPublicationState] = useQueryState(
-    'conceptFilter.pubState',
+    "conceptFilter.pubState",
     parseAsArrayOf(parseAsString).withDefault(defaultFilterPublicationState),
   );
-  const [filterAssignedUser, setFilterAssignedUser] = useQueryState('conceptFilter.assignedUser', {
-    defaultValue: defaultFilterAssignedUser,
-  });
+  const [filterAssignedUser, setFilterAssignedUser] = useQueryState(
+    "conceptFilter.assignedUser",
+    {
+      defaultValue: defaultFilterAssignedUser,
+    },
+  );
   const [filterInternalFields, setFilterInternalFields] = useQueryState(
-    'conceptFilter.internalFields',
-    parseAsJson<Record<string, string[]>>(() => ({})).withDefault(defaultFilterInternalFields),
+    "conceptFilter.internalFields",
+    parseAsJson<Record<string, string[]>>(() => ({})).withDefault(
+      defaultFilterInternalFields,
+    ),
   );
   const [filterLabel, setFilterLabel] = useQueryState(
-    'conceptFilter.label',
+    "conceptFilter.label",
     parseAsArrayOf(parseAsString).withDefault(defaultFilterLabel),
   );
   const [filterSubject, setFilterSubject] = useQueryState(
-    'conceptFilter.subject',
+    "conceptFilter.subject",
     parseAsArrayOf(parseAsString).withDefault(defaultFilterSubject),
   );
 
   const sortMappings: Record<SortOption, QuerySort | undefined> = {
     [SortOption.RELEVANCE]: undefined,
-    [SortOption.LAST_UPDATED_FIRST]: { field: 'SIST_ENDRET', direction: 'DESC' },
-    [SortOption.LAST_UPDATED_LAST]: { field: 'SIST_ENDRET', direction: 'ASC' },
-    [SortOption.RECOMMENDED_TERM_AÅ]: { field: 'ANBEFALT_TERM', direction: 'ASC' },
-    [SortOption.RECOMMENDED_TERM_ÅA]: { field: 'ANBEFALT_TERM', direction: 'DESC' },
+    [SortOption.LAST_UPDATED_FIRST]: {
+      field: "SIST_ENDRET",
+      direction: "DESC",
+    },
+    [SortOption.LAST_UPDATED_LAST]: { field: "SIST_ENDRET", direction: "ASC" },
+    [SortOption.RECOMMENDED_TERM_AÅ]: {
+      field: "ANBEFALT_TERM",
+      direction: "ASC",
+    },
+    [SortOption.RECOMMENDED_TERM_ÅA]: {
+      field: "ANBEFALT_TERM",
+      direction: "DESC",
+    },
   };
 
   const subjectCodeList = codeListsResult?.codeLists?.find(
     (codeList) => codeList.id === fieldsResult?.editable?.domainCodeListId,
   );
 
-  const getInternalFields = (fieldId) => fieldsResult?.internal?.find((field) => field.id === fieldId);
+  const getInternalFields = (fieldId) =>
+    fieldsResult?.internal?.find((field) => field.id === fieldId);
 
   const getSubjectChildren = (subjectId: string) => {
     const children: number[] = [];
@@ -138,7 +202,10 @@ export const SearchPageClient = ({
     // The lowest level code will always be the last code in the path, Code 1.1.1 in this example.
     if (subjects.length > 0) {
       const lowestLevelCodeId = subjects[subjects.length - 1];
-      const codes = [lowestLevelCodeId, ...getSubjectChildren(lowestLevelCodeId)];
+      const codes = [
+        lowestLevelCodeId,
+        ...getSubjectChildren(lowestLevelCodeId),
+      ];
       return codes;
     }
     return [];
@@ -146,16 +213,18 @@ export const SearchPageClient = ({
 
   const { status, data, refetch } = useSearchConcepts({
     catalogId,
-    searchTerm: searchTerm ?? '',
+    searchTerm: searchTerm ?? "",
     page: page ?? 0,
-    fields: getSearchFields(selectedFieldOption as SearchableField | 'alleFelter'),
+    fields: getSearchFields(
+      selectedFieldOption as SearchableField | "alleFelter",
+    ),
     sort: sortMappings[selectedSortOption],
     filters: {
       ...(filterStatus?.length && {
         status: { value: filterStatus },
       }),
       ...(filterPublicationState?.length === 1 && {
-        published: { value: filterPublicationState.includes('published') },
+        published: { value: filterPublicationState.includes("published") },
       }),
       ...(filterAssignedUser?.length && {
         assignedUser: { value: [filterAssignedUser] },
@@ -168,65 +237,76 @@ export const SearchPageClient = ({
       }),
       ...(Object.keys(filterInternalFields ?? {}).length > 0 && {
         internalFields: {
-          value: Object.keys(filterInternalFields ?? {}).reduce((result, key) => {
-            const value = filterInternalFields?.[key];
-            if (!isEmpty(value)) {
-              result[key] = value;
-            }
-            return result;
-          }, {}),
+          value: Object.keys(filterInternalFields ?? {}).reduce(
+            (result, key) => {
+              const value = filterInternalFields?.[key];
+              if (!isEmpty(value)) {
+                result[key] = value;
+              }
+              return result;
+            },
+            {},
+          ),
         },
       }),
     },
   });
 
-  const importConcepts = useImportConcepts(catalogId);
-  const sortOptions = getSelectOptions(localization.search.sortOptions).map((opt) => (
-    <option
-      key={`sortOption-${opt.value}`}
-      value={opt.value}
-    >
-      {opt.label}
-    </option>
-  ));
+  const sortOptions = getSelectOptions(localization.search.sortOptions).map(
+    (opt) => (
+      <option key={`sortOption-${opt.value}`} value={opt.value}>
+        {opt.label}
+      </option>
+    ),
+  );
 
   const getUsername = (userId: string) => {
     const user = usersResult?.users?.find((u) => u.id === userId);
-    return user?.name ?? '';
+    return user?.name ?? "";
   };
 
-  const onPageChange = (event: MouseEvent<HTMLElement>, page: number) => {
+  const onPageChange = (page: number) => {
     setPage(page - 1);
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
   };
 
   const removeFilter = (filterName, filterType: FilterType) => {
     switch (filterType) {
-      case 'published':
-        setFilterPublicationState(filterPublicationState?.filter((name) => name !== filterName) ?? []);
+      case "published":
+        setFilterPublicationState(
+          filterPublicationState?.filter((name) => name !== filterName) ?? [],
+        );
         break;
-      case 'status':
-        setFilterStatus(filterStatus?.filter((name) => name !== filterName) ?? []);
+      case "status":
+        setFilterStatus(
+          filterStatus?.filter((name) => name !== filterName) ?? [],
+        );
         break;
-      case 'assignedUser':
-        setFilterAssignedUser('');
+      case "assignedUser":
+        setFilterAssignedUser("");
         break;
-      case 'subject':
-        setFilterSubject(filterSubject?.filter((name) => name !== filterName) ?? []);
+      case "subject":
+        setFilterSubject(
+          filterSubject?.filter((name) => name !== filterName) ?? [],
+        );
         break;
-      case 'internalFields': {
+      case "internalFields": {
         const newFilter = filterInternalFields ?? {};
         if (newFilter[filterName.key] !== undefined) {
-          newFilter[filterName.key] = newFilter[filterName.key].filter((value) => value !== filterName.value);
+          newFilter[filterName.key] = newFilter[filterName.key].filter(
+            (value) => value !== filterName.value,
+          );
         }
         setFilterInternalFields({ ...newFilter });
         break;
       }
-      case 'label':
-        setFilterLabel(filterLabel?.filter((name) => name !== filterName) ?? []);
+      case "label":
+        setFilterLabel(
+          filterLabel?.filter((name) => name !== filterName) ?? [],
+        );
         break;
       default:
         break;
@@ -236,10 +316,6 @@ export const SearchPageClient = ({
 
   const onSortSelect = async (optionValue: SortOption) => {
     setSelectedSortOption(optionValue);
-  };
-
-  const onImportUpload = (event) => {
-    importConcepts.mutate(event.target.files[0], { onError: (error) => alert('Import failed: ' + error) });
   };
 
   const onLabelClick = (label: string) => {
@@ -252,7 +328,7 @@ export const SearchPageClient = ({
   };
 
   useEffect(() => {
-    refetch().catch((error) => console.error('refetch() failed: ', error));
+    refetch().catch((error) => console.error("refetch() failed: ", error));
   }, [selectedSortOption, refetch]);
 
   useEffect(() => {
@@ -298,22 +374,21 @@ export const SearchPageClient = ({
 
     return (
       <div className={styles.chips}>
-        <Chip.Group
-          data-size='sm'
-          className={styles.wrap}
-        >
+        <Chip.Group size="small" className={styles.wrap}>
           {filterSubject?.map((filter, index) => (
             <Chip.Removable
               key={`subject-${index}`}
-              onClick={() => removeFilter(filter, 'subject')}
+              onClick={() => removeFilter(filter, "subject")}
             >
-              {getTranslateText(subjectCodeList.codes.find((c) => c.id === filter)?.name)}
+              {getTranslateText(
+                subjectCodeList.codes.find((c) => c.id === filter)?.name,
+              )}
             </Chip.Removable>
           ))}
           {filterLabel?.map((filter, index) => (
             <Chip.Removable
               key={`label-${index}`}
-              onClick={() => removeFilter(filter, 'label')}
+              onClick={() => removeFilter(filter, "label")}
             >
               {filter}
             </Chip.Removable>
@@ -321,15 +396,21 @@ export const SearchPageClient = ({
           {filterStatus?.map((filter, index) => (
             <Chip.Removable
               key={`status-${index}`}
-              onClick={() => removeFilter(filter, 'status')}
+              onClick={() => removeFilter(filter, "status")}
             >
-              {capitalizeFirstLetter(getTranslateText(conceptStatuses?.find((s) => s.uri === filter)?.label) as string)}
+              {capitalizeFirstLetter(
+                getTranslateText(
+                  conceptStatuses?.find((s) => s.uri === filter)?.label,
+                ),
+              )}
             </Chip.Removable>
           ))}
           {filterAssignedUser && (
             <Chip.Removable
               key={`${filterAssignedUser}`}
-              onClick={() => removeFilter(getUsername(filterAssignedUser), 'assignedUser')}
+              onClick={() =>
+                removeFilter(getUsername(filterAssignedUser), "assignedUser")
+              }
             >
               {getUsername(filterAssignedUser)}
             </Chip.Removable>
@@ -337,49 +418,53 @@ export const SearchPageClient = ({
           {filterPublicationState?.map((filter, index) => (
             <Chip.Removable
               key={`published-${index}`}
-              onClick={() => removeFilter(filter, 'published')}
+              onClick={() => removeFilter(filter, "published")}
             >
-              {filter === 'published' ? localization.publicationState.published : localization.publicationState.unpublished}
+              {filter === "published"
+                ? localization.publicationState.published
+                : localization.publicationState.unpublished}
             </Chip.Removable>
           ))}
           {filterInternalFields &&
-            Object.entries(filterInternalFields).map(([key, values]: [string, string[]], index) => {
-              return values.map((value, innerIndex) => (
-                <Chip.Removable
-                  key={`internalFields-${index}-${innerIndex}`}
-                  onClick={() => {
-                    removeFilter({ key: key, value: value }, 'internalFields');
-                  }}
-                >
-                  {`${getTranslateText(getInternalFields(key).label)}: ${value === 'true' ? localization.yes : localization.no}`}
-                </Chip.Removable>
-              ));
-            })}
+            Object.entries(filterInternalFields).map(
+              ([key, values]: [string, string[]], index) => {
+                return values.map((value, innerIndex) => (
+                  <Chip.Removable
+                    key={`internalFields-${index}-${innerIndex}`}
+                    onClick={() => {
+                      removeFilter(
+                        { key: key, value: value },
+                        "internalFields",
+                      );
+                    }}
+                  >
+                    {`${getTranslateText(getInternalFields(key).label)}: ${value === "true" ? localization.yes : localization.no}`}
+                  </Chip.Removable>
+                ));
+              },
+            )}
         </Chip.Group>
       </div>
     );
   };
 
   return (
-    <div className='container'>
-      <Tabs
-        className={styles.tabs}
-        defaultValue={'conceptTab'}
-        size='md'
-      >
+    <div className="container">
+      <Tabs className={styles.tabs} defaultValue={"conceptTab"} size="medium">
         <Tabs.List className={styles.tabsList}>
-          <Tabs.Tab value={'conceptTab'}>{localization.concept.concepts}</Tabs.Tab>
+          <Tabs.Tab value={"conceptTab"}>
+            {localization.concept.concepts}
+          </Tabs.Tab>
           <Tabs.Tab
-            value={'changeRequestTab'}
-            onClick={() => router.push(`/catalogs/${catalogId}/change-requests`)}
+            value={"changeRequestTab"}
+            onClick={() =>
+              router.push(`/catalogs/${catalogId}/change-requests`)
+            }
           >
             {localization.changeRequest.changeRequest}
           </Tabs.Tab>
         </Tabs.List>
-        <Tabs.Content
-          value={'conceptTab'}
-          className={styles.tabsContent}
-        >
+        <Tabs.Content value={"conceptTab"} className={styles.tabsContent}>
           <SearchHitsLayout>
             <SearchHitsLayout.SearchRow>
               <div className={styles.searchRow}>
@@ -388,11 +473,13 @@ export const SearchPageClient = ({
                     className={styles.searchField}
                     placeholder={localization.search.search}
                     value={searchTerm}
-                    options={getSelectOptions(localization.search.fields).map(({ label, value }) => ({
-                      label,
-                      value,
-                      default: value === 'alleFelter',
-                    }))}
+                    options={getSelectOptions(localization.search.fields).map(
+                      ({ label, value }) => ({
+                        label,
+                        value,
+                        default: value === "alleFelter",
+                      }),
+                    )}
                     optionValue={selectedFieldOption}
                     onSearch={(value, option) => {
                       setSelectedFieldOption(option as SearchableField);
@@ -401,47 +488,33 @@ export const SearchPageClient = ({
                     }}
                   />
                   <Select
-                    data-size='sm'
-                    onChange={(event) => onSortSelect(event?.target.value as SortOption)}
+                    aria-label={localization.search.sort}
+                    size="sm"
+                    onChange={(event) =>
+                      onSortSelect(event?.target.value as SortOption)
+                    }
                     value={selectedSortOption}
                   >
                     {sortOptions}
                   </Select>
                 </div>
                 <div className={styles.buttons}>
-                    <>
-                      {/*hasAdminPermission && <ImportModal catalogId={catalogId} />*/}
-                      {hasAdminPermission && (
-                        <UploadButton
-                          data-size='sm'
-                          variant='secondary'
-                          allowedMimeTypes={[
-                            'text/csv',
-                            'text/x-csv',
-                            'text/plain',
-                            'application/csv',
-                            'application/x-csv',
-                            'application/vnd.ms-excel',
-                            'application/json',
-                          ]}
-                          onUpload={onImportUpload}
-                        >
-                          <FileImportIcon fontSize='1.5rem' />
-                          <span>{localization.button.importConceptCSV}</span>
-                        </UploadButton>
-                      )}
-                      {hasWritePermission && (
-                        <LinkButton
-                          href={`/catalogs/${catalogId}/concepts/new`}
-                          data-size='sm'
-                        >
-                          <>
-                            <PlusCircleIcon fontSize='1.5rem' />
-                            <span>{localization.button.createConcept}</span>
-                          </>
-                        </LinkButton>
-                      )}
-                    </>
+                  <>
+                    {hasAdminPermission && (
+                      <ImportModal catalogId={catalogId} />
+                    )}
+                    {hasWritePermission && (
+                      <LinkButton
+                        href={`/catalogs/${catalogId}/concepts/new`}
+                        size="sm"
+                      >
+                        <>
+                          <PlusCircleIcon fontSize="1.5rem" />
+                          <span>{localization.button.createConcept}</span>
+                        </>
+                      </LinkButton>
+                    )}
+                  </>
                 </div>
               </div>
               <FilterChips />
@@ -456,7 +529,7 @@ export const SearchPageClient = ({
               />
             </SearchHitsLayout.LeftColumn>
             <SearchHitsLayout.MainColumn>
-              {status === 'pending' || importConcepts.status === 'pending' ? (
+              {status === "pending" ? (
                 <Spinner />
               ) : (
                 <SearchHitContainer

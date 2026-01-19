@@ -17,7 +17,7 @@ spec:
       labels:
         app: catalog-portal-frontend
       annotations:
-        prometheus.io/scrape: 'false'
+        prometheus.io/scrape: "false"
     spec:
       containers:
         - name: catalog-portal-frontend

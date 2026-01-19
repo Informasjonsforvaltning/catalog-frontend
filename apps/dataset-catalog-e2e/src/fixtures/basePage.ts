@@ -1,14 +1,14 @@
-import { test as base } from '@playwright/test';
-import HomePage from '../page-object-model/homePage';
-import LoginPage from '../page-object-model/loginPage';
-import DatasetsPage from '../page-object-model/datasetsPage';
-import { adminAuthFile, generateAccessibilityBuilder } from '../utils/helpers';
+import { test as base } from "@playwright/test";
+import HomePage from "../page-object-model/homePage";
+import LoginPage from "../page-object-model/loginPage";
+import DatasetsPage from "../page-object-model/datasetsPage";
+import { adminAuthFile, generateAccessibilityBuilder } from "../utils/helpers";
 
-const PREFIX_TEXT = 'dataset-catalog: ';
+const PREFIX_TEXT = "dataset-catalog: ";
 export const test = base.extend<{
-  loginPage: any;
-  homePage: any;
-  datasetsPage: any;
+  loginPage: LoginPage;
+  homePage: HomePage;
+  datasetsPage: DatasetsPage;
 }>({
   loginPage: async ({ page, context }, use) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
@@ -24,16 +24,16 @@ export const test = base.extend<{
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
     const datasetsPage = new DatasetsPage(page, context, accessibilityBuilder);
     await use(datasetsPage);
-  }
+  },
 });
 
-export const runTest = (name: string, fn: (any) => void) => {
+export const runTest = (name: string, fn: (e: any) => void) => {
   test(PREFIX_TEXT + name, fn);
 };
 
-export const runTestAsAdmin = (name: string, fn: (any) => void) => {
+export const runTestAsAdmin = (name: string, fn: (e: any) => void) => {
   test.use({ storageState: adminAuthFile });
   runTest(name, fn);
 };
 
-export { expect } from '@playwright/test';
+export { expect } from "@playwright/test";

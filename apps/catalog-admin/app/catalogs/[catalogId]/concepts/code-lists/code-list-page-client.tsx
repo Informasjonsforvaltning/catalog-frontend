@@ -1,36 +1,48 @@
-'use client';
+"use client";
 
-import React, { useEffect, useMemo, useState } from 'react';
-import styles from './code-lists.module.css';
-import { Accordion, Heading } from '@digdir/designsystemet-react';
-import { Button, SearchField, useWarnIfUnsavedChanges } from '@catalog-frontend/ui';
-import { PlusCircleIcon } from '@navikt/aksel-icons';
-import { useGetAllCodeLists } from '../../../../../hooks/code-lists';
-import { Code, CodeList } from '@catalog-frontend/types';
-import { localization } from '@catalog-frontend/utils';
-import { useAdminDispatch, useAdminState } from '../../../../../context/admin';
-import CodeListEditor from '../../../../../components/code-list-editor';
-import { PageLayout } from '../../../../../components/page-layout';
-import { compare } from 'fast-json-patch';
+import React, { useEffect, useMemo, useState } from "react";
+import styles from "./code-lists.module.css";
+import { Accordion, Heading } from "@digdir/designsystemet-react";
+import {
+  Button,
+  SearchField,
+  useWarnIfUnsavedChanges,
+} from "@catalog-frontend/ui";
+import { PlusCircleIcon } from "@navikt/aksel-icons";
+import { useGetAllCodeLists } from "../../../../../hooks/code-lists";
+import { Code, CodeList } from "@catalog-frontend/types";
+import { localization } from "@catalog-frontend/utils";
+import { useAdminDispatch, useAdminState } from "../../../../../context/admin";
+import CodeListEditor from "../../../../../components/code-list-editor";
+import { PageLayout } from "../../../../../components/page-layout";
+import { compare } from "fast-json-patch";
 
 export interface CodeListsPageClientProps {
   catalogId: string;
   codeListsInUse: string[];
 }
 
-const CodeListsPageClient = ({ catalogId, codeListsInUse }: CodeListsPageClientProps) => {
+const CodeListsPageClient = ({
+  catalogId,
+  codeListsInUse,
+}: CodeListsPageClientProps) => {
   const adminDispatch = useAdminDispatch();
   const adminContext = useAdminState();
   const { showCodeListEditor, updatedCodeLists, updatedCodes } = adminContext;
 
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [dirtyCodeLists, setDirtyCodeLists] = useState<string[]>([]);
-  const [initialCodes, setInitialCodes] = useState<{ [key: string]: Code[] }>({});
+  const [initialCodes, setInitialCodes] = useState<{ [key: string]: Code[] }>(
+    {},
+  );
 
   const { data: getAllCodeLists } = useGetAllCodeLists({
     catalogId: catalogId,
   });
-  const dbCodeLists = useMemo(() => getAllCodeLists?.codeLists ?? [], [getAllCodeLists]);
+  const dbCodeLists = useMemo(
+    () => getAllCodeLists?.codeLists ?? [],
+    [getAllCodeLists],
+  );
 
   useEffect(() => {
     if (Object.keys(initialCodes).length === 0) {
@@ -39,10 +51,14 @@ const CodeListsPageClient = ({ catalogId, codeListsInUse }: CodeListsPageClientP
   }, [updatedCodes]);
 
   const filteredCodeLists = () =>
-    dbCodeLists.filter((codeList: CodeList) => codeList.name.toLowerCase().includes(search.toLowerCase()));
+    dbCodeLists.filter((codeList: CodeList) =>
+      codeList.name.toLowerCase().includes(search.toLowerCase()),
+    );
 
   const unsavedCodeChanges = () => {
-    return updatedCodes && initialCodes ? compare(updatedCodes, initialCodes).length > 0 : false;
+    return updatedCodes && initialCodes
+      ? compare(updatedCodes, initialCodes).length > 0
+      : false;
   };
 
   const unsavedCodeListChanges = () => {
@@ -50,7 +66,10 @@ const CodeListsPageClient = ({ catalogId, codeListsInUse }: CodeListsPageClientP
   };
 
   useWarnIfUnsavedChanges({
-    unsavedChanges: unsavedCodeChanges() || unsavedCodeListChanges() || dirtyCodeLists.length > 0,
+    unsavedChanges:
+      unsavedCodeChanges() ||
+      unsavedCodeListChanges() ||
+      dirtyCodeLists.length > 0,
   });
 
   useEffect(() => {
@@ -59,21 +78,24 @@ const CodeListsPageClient = ({ catalogId, codeListsInUse }: CodeListsPageClientP
 
     dbCodeLists.forEach((codeList: CodeList) => {
       if (codeList) {
-        updatedCodesAccumulator[codeList.id ?? ''] = codeList?.codes ?? [];
+        updatedCodesAccumulator[codeList.id ?? ""] = codeList?.codes ?? [];
       }
     });
 
     adminDispatch({
-      type: 'SET_UPDATED_CODES',
+      type: "SET_UPDATED_CODES",
       payload: { updatedCodes: updatedCodesAccumulator },
     });
   }, [dbCodeLists]);
 
   const handleCreateCodeList = () => {
-    adminDispatch({ type: 'SET_SHOW_CODE_LIST_EDITOR', payload: { showCodeListEditor: true } });
     adminDispatch({
-      type: 'SET_UPDATED_CODES',
-      payload: { updatedCodes: { ...updatedCodes, ['0']: [] } },
+      type: "SET_SHOW_CODE_LIST_EDITOR",
+      payload: { showCodeListEditor: true },
+    });
+    adminDispatch({
+      type: "SET_UPDATED_CODES",
+      payload: { updatedCodes: { ...updatedCodes, ["0"]: [] } },
     });
   };
 
@@ -82,8 +104,8 @@ const CodeListsPageClient = ({ catalogId, codeListsInUse }: CodeListsPageClientP
       <PageLayout>
         <div className={styles.row}>
           <SearchField
-            ariaLabel='Søkefelt kodeliste'
-            placeholder='Søk etter kodeliste...'
+            ariaLabel="Søkefelt kodeliste"
+            placeholder="Søk etter kodeliste..."
             onSearchSubmit={(search) => setSearch(search)}
           />
 
@@ -94,44 +116,37 @@ const CodeListsPageClient = ({ catalogId, codeListsInUse }: CodeListsPageClientP
             </>
           </Button>
         </div>
-        <Heading
-          level={2}
-          size='xsmall'
-        >
+        <Heading level={2} size="xsmall">
           {localization.catalogAdmin.codeLists}
         </Heading>
-        <div className='accordionStructure'>
+        <div className="accordionStructure">
           {showCodeListEditor && (
             <Accordion
-              key={'codeList-create-edtior'}
+              key={"codeList-create-edtior"}
               border={true}
-              className='accordionWidth'
+              className="accordionWidth"
             >
               <Accordion.Item defaultOpen={showCodeListEditor}>
                 <Accordion.Header>
-                  <Heading data-size='sm'></Heading>
+                  <Heading size="small"></Heading>
                 </Accordion.Header>
 
                 <Accordion.Content>
-                  <CodeListEditor
-                    type='create'
-                    catalogId={catalogId}
-                  />
+                  <CodeListEditor type="create" catalogId={catalogId} />
                 </Accordion.Content>
               </Accordion.Item>
             </Accordion>
           )}
           {filteredCodeLists() &&
             filteredCodeLists()?.map((codeList: CodeList, index: number) => (
-              <Accordion
-                key={index}
-                border={true}
-                className='accordionWidth'
-              >
+              <Accordion key={index} border={true} className="accordionWidth">
                 <Accordion.Item>
                   <Accordion.Header>
-                    <Heading size='xsmall'>{codeList.name}</Heading>
-                    <p className={styles.description}> {codeList.description} </p>
+                    <Heading size="xsmall">{codeList.name}</Heading>
+                    <p className={styles.description}>
+                      {" "}
+                      {codeList.description}{" "}
+                    </p>
                   </Accordion.Header>
                   <Accordion.Content>
                     <p className={styles.id}>ID: {codeList.id}</p>
@@ -144,8 +159,8 @@ const CodeListsPageClient = ({ catalogId, codeListsInUse }: CodeListsPageClientP
                       catalogId={catalogId}
                       dirty={(dirty) =>
                         setDirtyCodeLists((prev) => {
-                          if (dirty && !prev.includes(codeList.id ?? '')) {
-                            return [...prev, codeList.id ?? ''];
+                          if (dirty && !prev.includes(codeList.id ?? "")) {
+                            return [...prev, codeList.id ?? ""];
                           }
                           if (!dirty) {
                             return prev.filter((id) => id !== codeList.id);

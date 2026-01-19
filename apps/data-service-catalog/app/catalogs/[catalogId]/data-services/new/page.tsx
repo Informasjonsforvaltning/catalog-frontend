@@ -1,28 +1,37 @@
-import { Breadcrumbs, BreadcrumbType, DesignBanner } from '@catalog-frontend/ui';
+import {
+  Breadcrumbs,
+  BreadcrumbType,
+  DesignBanner,
+} from "@catalog-frontend/ui";
 import {
   getCurrencies,
   getDistributionStatuses,
   getOpenLicenses,
   getPlannedAvailabilities,
-} from '@catalog-frontend/data-access';
+} from "@catalog-frontend/data-access";
 
-import { dataServiceToBeCreatedTemplate } from '../../../../../components/data-service-form/utils/data-service-initial-values';
-import { localization } from '@catalog-frontend/utils';
-import { withWriteProtectedPage } from '@data-service-catalog/utils/auth';
-import { NewDataServicePageClient } from './new-page-client';
+import { dataServiceToBeCreatedTemplate } from "../../../../../components/data-service-form/utils/data-service-initial-values";
+import { localization } from "@catalog-frontend/utils";
+import { withWriteProtectedPage } from "@data-service-catalog/utils/auth";
+import { NewDataServicePageClient } from "./new-page-client";
 
 const NewDataServicePage = withWriteProtectedPage(
   ({ catalogId }) => `/catalogs/${catalogId}/data-services/new`,
   async ({ catalogId }) => {
     const initialValues = dataServiceToBeCreatedTemplate();
-    const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? '';
-    const referenceDataEnv = process.env.FDK_BASE_URI ?? '';
+    const searchEnv = process.env.FDK_SEARCH_SERVICE_BASE_URI ?? "";
+    const referenceDataEnv = process.env.FDK_BASE_URI ?? "";
 
-    const [licenseResponse, statusResponse, availabilitiesResponse, currenciesResponse] = await Promise.all([
-      getOpenLicenses().then((res) => res.json()),
-      getDistributionStatuses().then((res) => res.json()),
-      getPlannedAvailabilities().then((res) => res.json()),
-      getCurrencies().then((res) => res.json()),
+    const [
+      licenseResponse,
+      statusResponse,
+      availabilitiesResponse,
+      currenciesResponse,
+    ] = await Promise.all([
+      getOpenLicenses(),
+      getDistributionStatuses(),
+      getPlannedAvailabilities(),
+      getCurrencies(),
     ]);
 
     const referenceData = {

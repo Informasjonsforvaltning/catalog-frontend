@@ -5,7 +5,7 @@ import { useFormikContext } from 'formik';
 import { useState } from 'react';
 import { capitalizeFirstLetter, getTranslateText, localization } from '@catalog-frontend/utils';
 import styles from '../dataset-form.module.css';
-import { useSearchConceptsByUri, useSearchConceptSuggestions } from '../../../hooks/useSearchService';
+import { useSearchConceptsByUri, useSearchConceptSuggestions } from '@catalog-frontend/ui';
 import { FormikLanguageFieldset, TitleWithHelpTextAndTag } from '@catalog-frontend/ui';
 
 interface Props {

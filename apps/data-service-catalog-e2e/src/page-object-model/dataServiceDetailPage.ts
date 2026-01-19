@@ -1,5 +1,5 @@
-import { expect, Page, BrowserContext, Locator } from '@playwright/test';
-import type AxeBuilder from '@axe-core/playwright';
+import { expect, Page, BrowserContext, Locator } from "@playwright/test";
+import type AxeBuilder from "@axe-core/playwright";
 
 export default class DataServiceDetailPage {
   protected page: Page;
@@ -26,30 +26,36 @@ export default class DataServiceDetailPage {
   readonly confirmModalSuccessButton: Locator;
   readonly confirmModalCancelButton: Locator;
 
-  constructor(page: Page, context: BrowserContext, accessibilityBuilder?: AxeBuilder) {
+  constructor(
+    page: Page,
+    context: BrowserContext,
+    accessibilityBuilder: AxeBuilder,
+  ) {
     this.page = page;
     this.context = context;
     this.accessibilityBuilder = accessibilityBuilder;
-    this.editButton = page.getByTestId('edit-data-service-button');
-    this.deleteButton = page.getByTestId('delete-data-service-button');
-    this.publishSwitch = page.getByTestId('data-service-publish-switch');
-    this.title = page.locator('h2');
-    this.description = page.getByTestId('data-service-description');
-    this.endpointUrl = page.getByTestId('data-service-endpoint-url');
-    this.contactPoint = page.getByTestId('data-service-contact-point');
-    this.publicationState = page.getByTestId('data-service-publication-state');
-    this.publicationDate = page.getByTestId('data-service-publication-date');
-    this.dataServiceId = page.getByTestId('data-service-id');
-    this.modifiedDate = page.getByTestId('data-service-modified-date');
-    this.accessRights = page.getByTestId('data-service-access-rights');
-    this.availability = page.getByTestId('data-service-availability');
-    this.contactName = page.getByTestId('data-service-contact-name');
-    this.contactEmail = page.getByTestId('data-service-contact-email');
-    this.contactPhone = page.getByTestId('data-service-contact-phone');
-    this.contactUrl = page.getByTestId('data-service-contact-url');
-    this.confirmModal = page.locator('dialog[open]');
-    this.confirmModalSuccessButton = page.locator('dialog[open] button').first();
-    this.confirmModalCancelButton = page.locator('dialog[open] button').nth(1);
+    this.editButton = page.getByTestId("edit-data-service-button");
+    this.deleteButton = page.getByTestId("delete-data-service-button");
+    this.publishSwitch = page.getByTestId("data-service-publish-switch");
+    this.title = page.locator("h2");
+    this.description = page.getByTestId("data-service-description");
+    this.endpointUrl = page.getByTestId("data-service-endpoint-url");
+    this.contactPoint = page.getByTestId("data-service-contact-point");
+    this.publicationState = page.getByTestId("data-service-publication-state");
+    this.publicationDate = page.getByTestId("data-service-publication-date");
+    this.dataServiceId = page.getByTestId("data-service-id");
+    this.modifiedDate = page.getByTestId("data-service-modified-date");
+    this.accessRights = page.getByTestId("data-service-access-rights");
+    this.availability = page.getByTestId("data-service-availability");
+    this.contactName = page.getByTestId("data-service-contact-name");
+    this.contactEmail = page.getByTestId("data-service-contact-email");
+    this.contactPhone = page.getByTestId("data-service-contact-phone");
+    this.contactUrl = page.getByTestId("data-service-contact-url");
+    this.confirmModal = page.locator("dialog[open]");
+    this.confirmModalSuccessButton = page
+      .locator("dialog[open] button")
+      .first();
+    this.confirmModalCancelButton = page.locator("dialog[open] button").nth(1);
   }
 
   // Navigation
@@ -59,10 +65,11 @@ export default class DataServiceDetailPage {
 
     while (retryCount < maxRetries) {
       try {
-        await this.page.goto(`/catalogs/${catalogId}/data-services/${dataServiceId}`);
+        await this.page.goto(
+          `/catalogs/${catalogId}/data-services/${dataServiceId}`,
+        );
 
-        // Wait for the page to be fully loaded
-        await this.page.waitForLoadState('networkidle');
+        await this.page.waitForLoadState("networkidle");
 
         // Check if we're on a 404 page by looking for the title element
         const descriptionElement = await this.description;
@@ -70,7 +77,9 @@ export default class DataServiceDetailPage {
 
         if (isDescriptionVisible) {
           // Successfully loaded the data service
-          console.log(`[DataServiceDetailPage] Successfully loaded data service after ${retryCount + 1} attempts`);
+          console.log(
+            `[DataServiceDetailPage] Successfully loaded data service after ${retryCount + 1} attempts`,
+          );
           return;
         }
 
@@ -81,12 +90,14 @@ export default class DataServiceDetailPage {
         await this.page.waitForTimeout(1000);
         retryCount++;
       } catch (error) {
-        console.error(`[DataServiceDetailPage] Error during navigation attempt ${retryCount + 1}:`, error);
+        console.error(
+          `[DataServiceDetailPage] Error during navigation attempt ${retryCount + 1}:`,
+          error,
+        );
         retryCount++;
         if (retryCount >= maxRetries) {
           throw error;
         }
-        await this.page.waitForTimeout(1000);
       }
     }
 
@@ -102,21 +113,21 @@ export default class DataServiceDetailPage {
   async clickDelete() {
     await this.deleteButton.click();
     // Wait for confirmation modal and confirm
-    await this.confirmModal.waitFor({ state: 'visible' });
+    await this.confirmModal.waitFor({ state: "visible" });
     await this.confirmModalSuccessButton.click();
   }
 
   async clickPublish() {
     await this.publishSwitch.click();
     // Wait for confirmation modal and confirm
-    await this.confirmModal.waitFor({ state: 'visible' });
+    await this.confirmModal.waitFor({ state: "visible" });
     await this.confirmModalSuccessButton.click();
   }
 
   async clickUnpublish() {
     await this.publishSwitch.click();
     // Wait for confirmation modal and confirm
-    await this.confirmModal.waitFor({ state: 'visible' });
+    await this.confirmModal.waitFor({ state: "visible" });
     await this.confirmModalSuccessButton.click();
   }
 
@@ -139,9 +150,9 @@ export default class DataServiceDetailPage {
 
   async expectPublishedStatusToBe(published: boolean) {
     if (published) {
-      await expect(this.publicationDate).toContainText('Publisert');
+      await expect(this.publicationDate).toContainText("Publisert");
     } else {
-      await expect(this.publicationDate).not.toContainText('Publisert');
+      await expect(this.publicationDate).not.toContainText("Publisert");
     }
   }
 
@@ -161,8 +172,13 @@ export default class DataServiceDetailPage {
     await expect(this.publishSwitch).toBeVisible();
   }
 
-  async expectDataServiceDetailPageUrl(catalogId: string, dataServiceId: string) {
-    await expect(this.page).toHaveURL(`/catalogs/${catalogId}/data-services/${dataServiceId}`);
+  async expectDataServiceDetailPageUrl(
+    catalogId: string,
+    dataServiceId: string,
+  ) {
+    await expect(this.page).toHaveURL(
+      `/catalogs/${catalogId}/data-services/${dataServiceId}`,
+    );
   }
 
   async expectDataServiceIdToBe(id: string) {
@@ -203,7 +219,7 @@ export default class DataServiceDetailPage {
   }
 
   async expectConfirmModalNotVisible() {
-    await expect(this.confirmModal).not.toBeVisible();
+    await this.confirmModal.waitFor({ state: "hidden", timeout: 5000 });
   }
 
   // Accessibility
@@ -212,7 +228,7 @@ export default class DataServiceDetailPage {
       return;
     }
     const result = await this.accessibilityBuilder
-      .disableRules(['svg-img-alt', 'aria-toggle-field-name', 'target-size'])
+      .disableRules(["svg-img-alt", "aria-toggle-field-name", "target-size"])
       .analyze();
     expect.soft(result.violations).toEqual([]);
   }

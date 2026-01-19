@@ -8,6 +8,7 @@ context on this application, see the [Registration](https://github.com/Informasj
 ## Getting started
 
 ### Prerequisites
+
 - [Node.js](https://nodejs.org/en/download/) >=20.11.1
 - [yarn](https://yarnpkg.com/getting-started/install) >=1.22.19
 - [Nx](https://nx.dev/getting-started/installation) >=15.10.0
@@ -43,11 +44,12 @@ yarn start concept-catalog
 Go to http://localhost:4200
 
 > ⚠️ **Note:**
-Every catalog app requires a catalog id in the url path. When no catalog id is defined the user is redirected to
-the catalog portal app (https://catalog-portal.staging.fellesdatakatalog.digdir.no). Select your catalog and replace the domain
-with http://localhost:4200.
+> Every catalog app requires a catalog id in the url path. When no catalog id is defined the user is redirected to
+> the catalog portal app (https://catalog-portal.staging.fellesdatakatalog.digdir.no). Select your catalog and replace the domain
+> with http://localhost:4200.
 
 ### Running E2E tests
+
 We take dataset catalog as an example.
 
 Make sure you have these variables in you .env.local:

@@ -1,13 +1,20 @@
-'use client';
+"use client";
 
-import { Dataset, StorageData } from '@catalog-frontend/types';
-import { Button, ButtonBar, ConfirmModal } from '@catalog-frontend/ui';
-import { LocalDataStorage, localization } from '@catalog-frontend/utils';
-import { getDatasetById, updateDataset } from '@dataset-catalog/app/actions/actions';
-import DatasetForm from '@dataset-catalog/components/dataset-form';
-import { ArrowLeftIcon } from '@navikt/aksel-icons';
-import { usePathname, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import {
+  ApplicationProfile,
+  Dataset,
+  StorageData,
+} from "@catalog-frontend/types";
+import { Button, ButtonBar, ConfirmModal } from "@catalog-frontend/ui";
+import { LocalDataStorage, localization } from "@catalog-frontend/utils";
+import {
+  getDatasetById,
+  updateDataset,
+} from "@dataset-catalog/app/actions/actions";
+import DatasetForm from "@dataset-catalog/components/dataset-form";
+import { ArrowLeftIcon } from "@navikt/aksel-icons";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 type EditPageProps = {
   dataset: Dataset;
@@ -16,7 +23,12 @@ type EditPageProps = {
   referenceData: any;
 };
 
-export const EditPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }: EditPageProps) => {
+export const EditPage = ({
+  dataset,
+  searchEnv,
+  referenceDataEnv,
+  referenceData,
+}: EditPageProps) => {
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
@@ -24,15 +36,20 @@ export const EditPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }
   const searchParams = useSearchParams();
 
   const dataStorage = new LocalDataStorage<StorageData>({
-    key: 'datasetForm',
+    key: "datasetForm",
     secondaryKeys: {
-      distribution: 'datasetFormDistribution',
-      reference: 'datasetFormReference'
-    }
+      distribution: "datasetFormDistribution",
+      reference: "datasetFormReference",
+    },
   });
 
-  if (dataset.specializedType === 'SERIES') {
-    window.location.replace(`/catalogs/${dataset.catalogId}/datasets/${dataset.id}`);
+  const isMobility: boolean =
+    dataset.applicationProfile == ApplicationProfile.MOBILITYDCATAP;
+
+  if (dataset.specializedType === "SERIES") {
+    window.location.replace(
+      `/catalogs/${dataset.catalogId}/datasets/${dataset.id}`,
+    );
   }
 
   const handleGotoOverview = () => {
@@ -42,7 +59,9 @@ export const EditPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }
 
   const handleCancel = () => {
     dataStorage.delete();
-    window.location.replace(`/catalogs/${dataset.catalogId}/datasets/${dataset.id}`);
+    window.location.replace(
+      `/catalogs/${dataset.catalogId}/datasets/${dataset.id}`,
+    );
   };
 
   const handleUpdate = async (values: Dataset) => {
@@ -52,16 +71,19 @@ export const EditPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }
   };
 
   useEffect(() => {
-    if (searchParams.get('created') === 'true') {
+    if (searchParams.get("created") === "true") {
       setShowSnackbar(true);
 
       // Remove the param and update the URL shallowly
       const newParams = new URLSearchParams(searchParams.toString());
-      newParams.delete('created');
+      newParams.delete("created");
 
-      const newUrl = newParams.toString().length > 0 ? `${pathname}?${newParams.toString()}` : pathname;
+      const newUrl =
+        newParams.toString().length > 0
+          ? `${pathname}?${newParams.toString()}`
+          : pathname;
 
-      window.history.replaceState(null, '', newUrl);
+      window.history.replaceState(null, "", newUrl);
     }
   }, [searchParams, pathname]);
 
@@ -77,25 +99,26 @@ export const EditPage = ({ dataset, searchEnv, referenceDataEnv, referenceData }
       )}
       <ButtonBar>
         <Button
-          variant='tertiary'
-          color='second'
-          data-size='sm'
+          variant="tertiary"
+          color="second"
+          size="sm"
           onClick={() => setShowCancelConfirm(true)}
         >
-          <ArrowLeftIcon fontSize='1.25em' />
+          <ArrowLeftIcon fontSize="1.25em" />
           {localization.button.backToOverview}
         </Button>
       </ButtonBar>
       <DatasetForm
         autoSaveStorage={dataStorage}
         initialValues={dataset}
-        submitType={'update'}
+        submitType={"update"}
         searchEnv={searchEnv}
         referenceDataEnv={referenceDataEnv}
         referenceData={referenceData}
         onSubmit={handleUpdate}
         onCancel={handleCancel}
         showSnackbarSuccessOnInit={showSnackbar}
+        isMobility={isMobility}
       />
     </>
   );

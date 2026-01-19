@@ -1,7 +1,7 @@
-import { ReferenceDataCode } from '@catalog-frontend/types';
+import { ReferenceDataCode } from "@catalog-frontend/types";
 
-import { Tag } from '@digdir/designsystemet-react';
-import { getTranslateText } from '@catalog-frontend/utils';
+import { Tag } from "@digdir/designsystemet-react";
+import { getTranslateText } from "@catalog-frontend/utils";
 
 type Props = {
   referenceDataURI?: string;
@@ -9,13 +9,14 @@ type Props = {
   language: string;
 };
 
-export const ReferenceDataTag = ({ referenceDataURI, referenceDataCodes, language }: Props) => {
+export const ReferenceDataTag = ({
+  referenceDataURI,
+  referenceDataCodes,
+  language,
+}: Props) => {
   const code = referenceDataCodes?.find((s) => s.uri === referenceDataURI);
   return (
-    <Tag
-      data-size='sm'
-      color='info'
-    >
+    <Tag size="sm" color="info">
       {getTranslateText(code?.label, language) ?? referenceDataURI}
     </Tag>
   );

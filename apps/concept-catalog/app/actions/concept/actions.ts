@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 import {
   deleteConcept as deleteConceptApi,
@@ -6,30 +6,37 @@ import {
   patchConcept as patchConceptApi,
   getConcept,
   removeImportResultConcept as removeImportResult,
-  confirmConceptImport,
   cancelConceptImport,
-} from '@catalog-frontend/data-access';
-import { Concept, InternalField } from '@catalog-frontend/types';
-import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
-import _ from 'lodash';
-import { revalidateTag } from 'next/cache';
-import { conceptJsonPatchOperations } from '@concept-catalog/utils/json-patch';
+  confirmImportedConcept,
+} from "@catalog-frontend/data-access";
+import { Concept, InternalField } from "@catalog-frontend/types";
+import {
+  getValidSession,
+  localization,
+  redirectToSignIn,
+  removeEmptyValues,
+} from "@catalog-frontend/utils";
+import _ from "lodash";
+import { updateTag } from "next/cache";
+import { conceptJsonPatchOperations } from "@concept-catalog/utils/json-patch";
 
-const clearValues = (object: any, path: string) => {
-  const fields = path.split('.');
+const clearValues = (object: Concept, path: string) => {
+  const fields = path.split(".");
   const currentField = fields.shift();
 
   if (object && currentField) {
-    if (currentField.endsWith('[]')) {
-      const value = _.get(object, currentField.replace('[]', ''));
+    if (currentField.endsWith("[]")) {
+      const value = _.get(object, currentField.replace("[]", ""));
       if (_.isArray(value)) {
         _.forEach(value, (item) => {
-          clearValues(item, fields.join('.'));
+          clearValues(item, fields.join("."));
         });
       }
-    } else if (currentField === '*') {
+    } else if (currentField === "*") {
       if (fields.length > 0) {
-        Object.keys(object).forEach((key) => clearValues(_.get(object, key), fields.join('.')));
+        Object.keys(object).forEach((key) =>
+          clearValues(_.get(object, key), fields.join(".")),
+        );
       } else {
         Object.keys(object).forEach((key) => {
           const value = _.get(object, key);
@@ -39,7 +46,7 @@ const clearValues = (object: any, path: string) => {
         });
       }
     } else if (fields.length > 0) {
-      clearValues(object[currentField], fields.join('.'));
+      clearValues(object[currentField], fields.join("."));
     } else {
       const value = _.get(object, currentField);
       if (value !== undefined && _.isEmpty(value)) {
@@ -51,7 +58,15 @@ const clearValues = (object: any, path: string) => {
 
 const preProcessValues = (
   orgId: string,
-  { ansvarligVirksomhet, merknad, eksempel, fagområde, omfang, kontaktpunkt, ...conceptValues }: Concept,
+  {
+    ansvarligVirksomhet,
+    merknad,
+    eksempel,
+    fagområde,
+    omfang,
+    kontaktpunkt,
+    ...conceptValues
+  }: Concept,
 ) => ({
   ...conceptValues,
   merknad,
@@ -61,16 +76,20 @@ const preProcessValues = (
   ansvarligVirksomhet: ansvarligVirksomhet || { id: orgId },
 });
 
-export async function createConcept(values: Concept, catalogId: string, internalFields: InternalField[]) {
+export async function createConcept(
+  values: Concept,
+  catalogId: string,
+  internalFields: InternalField[],
+) {
   const processedValues = preProcessValues(catalogId, values);
   internalFields.forEach((field) => {
     if (
-      field.type === 'boolean' &&
-      (values.interneFelt?.[field.id]?.value === undefined)
+      field.type === "boolean" &&
+      values.interneFelt?.[field.id]?.value === undefined
     ) {
       // Ensure interneFelt is defined before assignment
       values.interneFelt = values.interneFelt || {};
-      values.interneFelt[field.id] = { value: 'false' };
+      values.interneFelt[field.id] = { value: "false" };
     }
   });
 
@@ -81,19 +100,22 @@ export async function createConcept(values: Concept, catalogId: string, internal
   let success = false;
   let conceptId: string | undefined = undefined;
   try {
-    const response = await createConceptApi(processedValues, `${session?.accessToken}`);
+    const response = await createConceptApi(
+      processedValues,
+      `${session?.accessToken}`,
+    );
     if (response.status !== 201) {
       throw new Error();
     }
-    conceptId = response?.headers?.get('location')?.split('/').pop();
+    conceptId = response?.headers?.get("location")?.split("/").pop();
     success = true;
   } catch (error) {
     console.error(error);
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
-      revalidateTag('concept');
-      revalidateTag('concepts');
+      updateTag("concept");
+      updateTag("concepts");
     }
   }
 
@@ -107,50 +129,57 @@ export async function deleteConcept(catalogId: string, conceptId: string) {
   }
   let success = false;
   try {
-    const response = await deleteConceptApi(conceptId, `${session?.accessToken}`);
+    const response = await deleteConceptApi(
+      conceptId,
+      `${session?.accessToken}`,
+    );
     if (response.status !== 200) {
       throw new Error();
     }
     success = true;
   } catch (error) {
     console.error(error);
-    throw new Error(localization.alert.deleteFail);
+    throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
-      revalidateTag('concepts');
+      updateTag("concepts");
     }
   }
 }
 
-export async function updateConcept(initialConcept: Concept, values: Concept, internalFields: InternalField[]) {
+export async function updateConcept(
+  initialConcept: Concept,
+  values: Concept,
+  internalFields: InternalField[],
+) {
   if (!initialConcept.id) {
-    throw new Error('Concept id cannot be null');
+    throw new Error("Concept id cannot be null");
   }
 
   let conceptId: string | undefined = initialConcept.id;
 
   [
-    'definisjon.kildebeskrivelse.kilde[].uri',
-    'definisjonForAllmennheten.kildebeskrivelse.kilde[].uri',
-    'definisjonForSpesialister.kildebeskrivelse.kilde[].uri',
-    'gyldigFom',
-    'gyldigTom',
-    'kontaktpunkt.harEpost',
-    'kontaktpunkt.harTelefon',
-    'interneFelt.*.value',
-    'omfang.*',
+    "definisjon.kildebeskrivelse.kilde[].uri",
+    "definisjonForAllmennheten.kildebeskrivelse.kilde[].uri",
+    "definisjonForSpesialister.kildebeskrivelse.kilde[].uri",
+    "gyldigFom",
+    "gyldigTom",
+    "kontaktpunkt.harEpost",
+    "kontaktpunkt.harTelefon",
+    "interneFelt.*.value",
+    "omfang.*",
   ].forEach((field) => {
     clearValues(values, field);
   });
 
   internalFields.forEach((field) => {
     if (
-      field.type === 'boolean' &&
-      (values.interneFelt?.[field.id]?.value === undefined)
+      field.type === "boolean" &&
+      values.interneFelt?.[field.id]?.value === undefined
     ) {
       // Ensure interneFelt is defined before assignment
       values.interneFelt = values.interneFelt || {};
-      values.interneFelt[field.id] = { value: 'false' };
+      values.interneFelt[field.id] = { value: "false" };
     }
   });
 
@@ -167,14 +196,18 @@ export async function updateConcept(initialConcept: Concept, values: Concept, in
   }
 
   try {
-    const response = await patchConceptApi(initialConcept.id, diff, `${session?.accessToken}`);
+    const response = await patchConceptApi(
+      initialConcept.id,
+      diff,
+      `${session?.accessToken}`,
+    );
     if (response.status !== 200 && response.status !== 201) {
       throw new Error(`${response.status} ${response.statusText}`);
     }
 
     success = true;
     if (response.status === 201) {
-      conceptId = response?.headers?.get('location')?.split('/').pop();
+      conceptId = response?.headers?.get("location")?.split("/").pop();
     }
   } catch (error) {
     console.error(`${localization.alert.fail} ${error}`);
@@ -182,12 +215,12 @@ export async function updateConcept(initialConcept: Concept, values: Concept, in
   }
 
   if (success) {
-    revalidateTag('concept');
-    revalidateTag('concepts');
+    updateTag("concept");
+    updateTag("concepts");
   }
 
-  return await getConcept(`${conceptId}`, `${session?.accessToken}`).then((response) =>
-    response.ok ? response.json() : undefined,
+  return await getConcept(`${conceptId}`, `${session?.accessToken}`).then(
+    (response) => (response.ok ? response.json() : undefined),
   );
 }
 
@@ -198,43 +231,51 @@ export async function deleteImportResult(catalogId: string, resultId: string) {
   }
   let success = false;
   try {
-    const response = await removeImportResult(catalogId, resultId, `${session?.accessToken}`);
+    const response = await removeImportResult(
+      catalogId,
+      resultId,
+      `${session?.accessToken}`,
+    );
     if (response.status !== 204) {
       throw new Error();
     }
     success = true;
     console.log("Deleted import result", catalogId, resultId);
   } catch (error) {
-    throw new Error(localization.alert.deleteFail);
+    throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
-      revalidateTag('import-results');
+      updateTag("import-results");
     }
   }
 }
 
-export async function confirmImport(catalogId: string, resultId: string) {
+export async function saveImportedConcept(
+  catalogId: string,
+  resultId: string,
+  externalId: string,
+) {
   const session = await getValidSession();
   if (!session) {
     return redirectToSignIn();
   }
-  let success = false;
   try {
-
-    const response = await confirmConceptImport(catalogId, resultId, `${session?.accessToken}`)
+    const response = await confirmImportedConcept(
+      catalogId,
+      resultId,
+      externalId,
+      `${session?.accessToken}`,
+    );
 
     if (response.status !== 200 && response.status !== 201) {
       throw new Error();
     }
-    success = true;
     console.log("Confirmed import result", catalogId, resultId);
   } catch (error) {
-    throw new Error(localization.alert.fail);
+    console.error(error);
   } finally {
-    if (success) {
-      revalidateTag('import-result');
-      revalidateTag('import-results');
-    }
+    updateTag("import-result");
+    updateTag("import-results");
   }
 }
 
@@ -247,7 +288,11 @@ export async function cancelImport(catalogId: string, resultId: string) {
   try {
     console.log("Sending import cancellation", catalogId, resultId);
 
-    const response = await cancelConceptImport(catalogId, resultId, `${session?.accessToken}`)
+    const response = await cancelConceptImport(
+      catalogId,
+      resultId,
+      `${session?.accessToken}`,
+    );
 
     console.log("Import cancellation has been sent", catalogId, resultId);
 
@@ -260,8 +305,8 @@ export async function cancelImport(catalogId: string, resultId: string) {
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
-      revalidateTag('import-result');
-      revalidateTag('import-results');
+      updateTag("import-result");
+      updateTag("import-results");
     }
   }
 }

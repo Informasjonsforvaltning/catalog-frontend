@@ -15,8 +15,8 @@ import {
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
 import { Button, Card, Combobox, Dialog, Fieldset, Heading, SkeletonRectangle, Textfield } from '@digdir/designsystemet-react';
 import { HStack } from '@fellesdatakatalog/ui';
-import { useSearchFileTypes, useSearchMediaTypes } from '../../../../hooks/useReferenceDataSearch';
-import { useSearchDataServiceSuggestions } from '../../../../hooks/useSearchService';
+import { useSearchFileTypes, useSearchMediaTypes } from '@catalog-frontend/ui';
+import { useSearchDataServiceSuggestions } from '@catalog-frontend/ui';
 import { FastField, FieldArray, Formik } from 'formik';
 import styles from './distributions.module.scss';
 import { distributionTemplate } from '../../utils/dataset-initial-values';

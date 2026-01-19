@@ -1,4 +1,4 @@
-'use server';
+"use server";
 
 import {
   createService as create,
@@ -8,12 +8,17 @@ import {
   publishService as publish,
   unpublishService as unpublish,
   updateService as update,
-} from '@catalog-frontend/data-access';
-import { Service, ServiceToBeCreated } from '@catalog-frontend/types';
-import { getValidSession, localization, redirectToSignIn, removeEmptyValues } from '@catalog-frontend/utils';
-import { compare } from 'fast-json-patch';
-import { revalidateTag } from 'next/cache';
-import { redirect } from 'next/navigation';
+} from "@catalog-frontend/data-access";
+import { Service, ServiceToBeCreated } from "@catalog-frontend/types";
+import {
+  getValidSession,
+  localization,
+  redirectToSignIn,
+  removeEmptyValues,
+} from "@catalog-frontend/utils";
+import { compare } from "fast-json-patch";
+import { updateTag } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function getServices(catalogId: string) {
   const session = await getValidSession();
@@ -23,7 +28,7 @@ export async function getServices(catalogId: string) {
 
   const response = await getAll(catalogId, `${session?.accessToken}`);
   if (response.status !== 200) {
-    throw new Error('getServices failed with response code ' + response.status);
+    throw new Error("getServices failed with response code " + response.status);
   }
   const jsonResponse = await response.json();
   return jsonResponse;
@@ -34,17 +39,26 @@ export async function getServiceById(catalogId: string, serviceId: string) {
   if (!session) {
     return redirectToSignIn();
   }
-  const response = await getById(catalogId, serviceId, `${session?.accessToken}`);
+  const response = await getById(
+    catalogId,
+    serviceId,
+    `${session?.accessToken}`,
+  );
 
   if (response.status !== 200) {
-    throw new Error('getServiceById failed with response code ' + response.status);
+    throw new Error(
+      "getServiceById failed with response code " + response.status,
+    );
   }
 
   const jsonResponse = await response.json();
   return jsonResponse;
 }
 
-export async function createService(catalogId: string, values: ServiceToBeCreated) {
+export async function createService(
+  catalogId: string,
+  values: ServiceToBeCreated,
+) {
   const newService = removeEmptyValues(values);
   const session = await getValidSession();
   if (!session) {
@@ -53,18 +67,23 @@ export async function createService(catalogId: string, values: ServiceToBeCreate
   let success = false;
   let serviceId = undefined;
   try {
-    const response = await create(newService, catalogId, `${session?.accessToken}`);
+    const response = await create(
+      newService,
+      catalogId,
+      `${session?.accessToken}`,
+    );
     if (response.status !== 201) {
       throw new Error();
     }
-    serviceId = response?.headers?.get('location')?.split('/').pop();
+    serviceId = response?.headers?.get("location")?.split("/").pop();
     success = true;
+    return serviceId;
   } catch (error) {
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
-      revalidateTag('service');
-      revalidateTag('services');
+      updateTag("service");
+      updateTag("services");
     }
   }
 }
@@ -76,22 +95,30 @@ export async function deleteService(catalogId: string, serviceId: string) {
   }
   let success = false;
   try {
-    const response = await removeService(catalogId, serviceId, `${session?.accessToken}`);
+    const response = await removeService(
+      catalogId,
+      serviceId,
+      `${session?.accessToken}`,
+    );
     if (response.status !== 204) {
       throw new Error();
     }
     success = true;
   } catch (error) {
-    throw new Error(localization.alert.deleteFail);
+    throw new Error(localization.alert.deleteFailed);
   } finally {
     if (success) {
-      revalidateTag('services');
+      updateTag("services");
       redirect(`/catalogs/${catalogId}/services`);
     }
   }
 }
 
-export async function updateService(catalogId: string, oldService: Service, values: Service) {
+export async function updateService(
+  catalogId: string,
+  oldService: Service,
+  values: Service,
+) {
   const updatedService = removeEmptyValues(values);
 
   const updatedServiceMerged = {
@@ -102,6 +129,8 @@ export async function updateService(catalogId: string, oldService: Service, valu
     contactPoints: updatedService.contactPoints,
     homepage: updatedService.homepage,
     status: updatedService.status,
+    spatial: updatedService.spatial,
+    subject: updatedService.subject,
   };
 
   const diff = compare(oldService, updatedServiceMerged);
@@ -117,7 +146,12 @@ export async function updateService(catalogId: string, oldService: Service, valu
   }
 
   try {
-    const response = await update(catalogId, oldService.id, diff, `${session?.accessToken}`);
+    const response = await update(
+      catalogId,
+      oldService.id,
+      diff,
+      `${session?.accessToken}`,
+    );
     if (response.status !== 200) {
       throw new Error(`${response.statusText}`);
     }
@@ -126,8 +160,8 @@ export async function updateService(catalogId: string, oldService: Service, valu
     throw new Error(localization.alert.fail);
   } finally {
     if (success) {
-      revalidateTag('service');
-      revalidateTag('services');
+      updateTag("service");
+      updateTag("services");
     }
   }
 }
@@ -139,17 +173,21 @@ export async function publishService(catalogId: string, serviceId: string) {
   }
   let success = false;
   try {
-    const response = await publish(catalogId, serviceId, `${session?.accessToken}`);
+    const response = await publish(
+      catalogId,
+      serviceId,
+      `${session?.accessToken}`,
+    );
     if (response.status !== 200) {
       throw new Error();
     }
     success = true;
   } catch (error) {
-    throw new Error(localization.alert.publishFail);
+    throw new Error(localization.alert.fail);
   } finally {
     if (success) {
-      revalidateTag('service');
-      revalidateTag('services');
+      updateTag("service");
+      updateTag("services");
     }
   }
 }
@@ -161,17 +199,21 @@ export async function unpublishService(catalogId: string, serviceId: string) {
   }
   let success = false;
   try {
-    const response = await unpublish(catalogId, serviceId, `${session?.accessToken}`);
+    const response = await unpublish(
+      catalogId,
+      serviceId,
+      `${session?.accessToken}`,
+    );
     if (response.status !== 200) {
       throw new Error();
     }
     success = true;
   } catch (error) {
-    throw new Error(localization.alert.unpublishFail);
+    throw new Error(localization.alert.fail);
   } finally {
     if (success) {
-      revalidateTag('service');
-      revalidateTag('services');
+      updateTag("service");
+      updateTag("services");
     }
   }
 }

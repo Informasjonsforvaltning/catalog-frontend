@@ -1,16 +1,16 @@
-import { test as base } from '@playwright/test';
-import HomePage from '../page-object-model/homePage';
-import LoginPage from '../page-object-model/loginPage';
-import ServicesPage from '../page-object-model/servicesPage';
-import PublicServicesPage from '../page-object-model/publicServicesPage';
-import { adminAuthFile, generateAccessibilityBuilder } from '../utils/helpers';
+import { test as base } from "@playwright/test";
+import HomePage from "../page-object-model/homePage";
+import LoginPage from "../page-object-model/loginPage";
+import ServicesPage from "../page-object-model/servicesPage";
+import PublicServicesPage from "../page-object-model/publicServicesPage";
+import { adminAuthFile, generateAccessibilityBuilder } from "../utils/helpers";
 
-const PREFIX_TEXT = 'service-catalog: ';
+const PREFIX_TEXT = "service-catalog: ";
 export const test = base.extend<{
-  loginPage: any;
-  homePage: any;
-  servicesPage: any;
-  publicServicesPage: any;
+  loginPage: LoginPage;
+  homePage: HomePage;
+  servicesPage: ServicesPage;
+  publicServicesPage: PublicServicesPage;
 }>({
   loginPage: async ({ page, context }, use) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
@@ -29,18 +29,22 @@ export const test = base.extend<{
   },
   publicServicesPage: async ({ page, context }, use) => {
     const accessibilityBuilder = await generateAccessibilityBuilder(page);
-    const publicServicesPage = new PublicServicesPage(page, context, accessibilityBuilder);
+    const publicServicesPage = new PublicServicesPage(
+      page,
+      context,
+      accessibilityBuilder,
+    );
     await use(publicServicesPage);
   },
 });
 
-export const runTest = (name: string, fn: (any) => void) => {
+export const runTest = (name: string, fn: (e: any) => void) => {
   test(PREFIX_TEXT + name, fn);
 };
 
-export const runTestAsAdmin = (name: string, fn: (any) => void) => {
+export const runTestAsAdmin = (name: string, fn: (e: any) => void) => {
   test.use({ storageState: adminAuthFile });
   runTest(name, fn);
 };
 
-export { expect } from '@playwright/test';
+export { expect } from "@playwright/test";

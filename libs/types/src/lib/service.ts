@@ -1,4 +1,4 @@
-import { LocalizedStrings } from './localization';
+import { LocalizedStrings } from "./localization";
 
 export interface Service extends ServiceToBeCreated {
   id: string;
@@ -7,12 +7,14 @@ export interface Service extends ServiceToBeCreated {
 }
 
 export interface ServiceToBeCreated {
-  title: LocalizedStrings;
-  description?: LocalizedStrings;
-  produces?: Output[];
   contactPoints?: ContactPoint[];
+  description?: LocalizedStrings;
   homepage?: string;
+  produces?: Output[];
+  spatial?: string[];
   status?: string;
+  subject?: string[];
+  title: LocalizedStrings;
 }
 
 export interface Output {

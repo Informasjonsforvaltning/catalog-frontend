@@ -1,20 +1,23 @@
-import React from 'react';
-import { UnionRelation, RelatedConcept, LocalizedStrings } from '@catalog-frontend/types';
-import { KeyValueListItem } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { Link } from '@digdir/designsystemet-react';
+import React from "react";
+import { UnionRelation, RelatedConcept } from "@catalog-frontend/types";
+import { KeyValueListItem } from "@catalog-frontend/ui";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import { Link } from "@digdir/designsystemet-react";
 
 interface Props {
-  title: LocalizedStrings;
   isReplacedBy: UnionRelation[];
   relatedConceptsMap: (identifier: string) => RelatedConcept | undefined;
   language?: string;
 }
 
-const IsReplacedBy = ({ isReplacedBy, relatedConceptsMap, language }: Props) => (
+const IsReplacedBy = ({
+  isReplacedBy,
+  relatedConceptsMap,
+  language,
+}: Props) => (
   <>
     {isReplacedBy.map((relasjon, index) => {
-      const relatedConcept = relatedConceptsMap(relasjon.relatertBegrep ?? '');
+      const relatedConcept = relatedConceptsMap(relasjon.relatertBegrep ?? "");
       if (relatedConcept) {
         return (
           <KeyValueListItem
@@ -24,7 +27,11 @@ const IsReplacedBy = ({ isReplacedBy, relatedConceptsMap, language }: Props) => 
                 <p>{localization.concept.isReplacedBy}</p>
               </div>
             }
-            value={<Link href={relatedConcept.href}>{getTranslateText(relatedConcept.title, language)}</Link>}
+            value={
+              <Link href={relatedConcept.href}>
+                {getTranslateText(relatedConcept.title, language)}
+              </Link>
+            }
           />
         );
       } else {

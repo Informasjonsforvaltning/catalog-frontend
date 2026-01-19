@@ -1,22 +1,23 @@
-import { getAdmsStatuses, getOrganization } from '@catalog-frontend/data-access';
-import { Organization, ReferenceDataCode, Service } from '@catalog-frontend/types';
-import { BreadcrumbType, Breadcrumbs, PageBanner } from '@catalog-frontend/ui';
-import { getTranslateText, localization } from '@catalog-frontend/utils';
-import { getPublicServiceById } from '../../../../../actions/public-services/actions';
-import { BasicServiceForm } from '../../../../../../components/basic-service-form';
-import styles from './public-service-edit-page.module.css';
-import { Heading } from '@digdir/designsystemet-react';
+import {
+  getAdmsStatuses,
+  getOrganization,
+} from "@catalog-frontend/data-access";
+import { Breadcrumbs, PageBanner } from "@catalog-frontend/ui";
+import { getTranslateText, localization } from "@catalog-frontend/utils";
+import { EditPage } from "./edit-page-client";
+import { getPublicServiceById } from "@service-catalog/app/actions/public-services/actions";
 
-export default async function EditPublicServicePage({
+export default async function EditServicePage({
   params,
 }: {
   params: Promise<{ catalogId: string; serviceId: string }>;
 }) {
   const { catalogId, serviceId } = await params;
-  const service: Service = await getPublicServiceById(catalogId, serviceId);
-  const organization: Organization = await getOrganization(catalogId).then((res) => res.json());
-  const statusesResponse = await getAdmsStatuses().then((res) => res.json());
-  const statuses: ReferenceDataCode[] = statusesResponse.statuses;
+  const [service, organization, statusesResponse] = await Promise.all([
+    getPublicServiceById(catalogId, serviceId),
+    getOrganization(catalogId),
+    getAdmsStatuses(),
+  ]);
 
   const breadcrumbList = [
     {
@@ -29,34 +30,26 @@ export default async function EditPublicServicePage({
     },
     {
       href: `/catalogs/${catalogId}/public-services/${serviceId}/edit`,
-      text: localization.serviceCatalog.editPublicService,
+      text: localization.serviceCatalog.editService,
     },
-  ] as BreadcrumbType[];
+  ];
 
   return (
-    <div>
+    <>
       <Breadcrumbs
         breadcrumbList={breadcrumbList}
         catalogPortalUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/catalogs`}
       />
       <PageBanner
-        title={localization.catalogType.publicService}
-        subtitle={getTranslateText(organization?.prefLabel).toString()}
+        title={localization.catalogType.service}
+        subtitle={getTranslateText(organization?.prefLabel)}
       />
-      <div className='container'>
-        <Heading
-          size='md'
-          className={styles.heading}
-        >
-          {localization.serviceCatalog.infoAboutService}
-        </Heading>
-        <BasicServiceForm
-          catalogId={catalogId}
-          service={service}
-          type='public-services'
-          statuses={statuses}
-        />
-      </div>
-    </div>
+      <EditPage
+        referenceDataEnv={process.env.FDK_BASE_URI || ""}
+        searchEnv={process.env.FDK_SEARCH_SERVICE_BASE_URI || ""}
+        service={service}
+        statuses={statusesResponse.statuses}
+      />
+    </>
   );
 }

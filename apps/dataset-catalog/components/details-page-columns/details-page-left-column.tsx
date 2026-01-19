@@ -9,13 +9,13 @@ import {
 import { Heading, Link, Paragraph, Table, Tag } from '@digdir/designsystemet-react';
 import { Dataset, DatasetSeries, ISOLanguage, ReferenceData, Search } from '@catalog-frontend/types';
 import styles from './details-columns.module.css';
-import { useSearchAdministrativeUnitsByUri } from '../../hooks/useReferenceDataSearch';
+import { useSearchAdministrativeUnitsByUri } from '@catalog-frontend/ui';
 import { useSearchEnheterByOrgNmbs } from '../../hooks/useEnhetsregister';
 import {
   useSearchConceptsByUri,
   useSearchDatasetsByUri,
   useSearchInformationModelsByUri,
-} from '../../hooks/useSearchService';
+} from '@catalog-frontend/ui';
 import relations from '../dataset-form/utils/relations.json';
 import { ReferenceDataTags } from '../reference-data-tags';
 import { UriWithLabelTable } from '../uri-with-label-table';
