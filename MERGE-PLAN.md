@@ -1,8 +1,10 @@
-# Merge Plan: feat/el/dataset-ds-upgrade-merge → main
+# Merge Plan: main → feat/el/dataset-ds-upgrade-merge
 
 ## Overview
 
-This document outlines all conflicts and potential conflicts when merging `feat/el/dataset-ds-upgrade-merge` into `main`. The branch contains significant design system upgrades and UI improvements that should be preserved, while main has received many new features and bug fixes.
+This document outlines all conflicts and potential conflicts when merging `main` **INTO** `feat/el/dataset-ds-upgrade-merge`. The goal is to update the branch with all changes from main so it can be merged into main later via pull request without conflicts.
+
+The branch contains significant design system upgrades and UI improvements that should be preserved, while main has received many new features and bug fixes that need to be incorporated.
 
 **Total files with conflicts**: ~150+ files  
 **Total files changed in branch**: 222 files  
@@ -13,9 +15,13 @@ This document outlines all conflicts and potential conflicts when merging `feat/
 ## Strategy
 
 **General approach:**
-- ✅ **Keep from branch**: All design system upgrades, UI component improvements, Header/Breadcrumbs changes
-- ✅ **Keep from main**: New features, bug fixes, functional improvements (except where they conflict with design system upgrades)
+- ✅ **Keep from branch (ours)**: All design system upgrades, UI component improvements, Header/Breadcrumbs changes
+- ✅ **Keep from main (theirs)**: New features, bug fixes, functional improvements (except where they conflict with design system upgrades)
 - ⚠️ **Manual review needed**: Files with overlapping changes
+
+**Note**: When merging main INTO the branch:
+- `--ours` = branch version (feat/el/dataset-ds-upgrade-merge)
+- `--theirs` = main version
 
 ---
 
@@ -32,13 +38,13 @@ This document outlines all conflicts and potential conflicts when merging `feat/
 - **Branch version**: Uses `Dialog` component, simpler implementation
 - **Main version**: Uses `Modal.Root`, `Modal.Trigger`, `Modal.Dialog` - more complete with better UX (shows two dataset type options)
 - **Action**: **KEEP MAIN VERSION** - You mentioned main has a more complete/recent version
-- **Note**: May need to ensure design system components are updated if main version uses older DS components
+- **Note**: Keep main's version as-is. Update design system components after merge if needed (main may use older DS components)
 
-### 3. `libs/ui/src/lib/header/index.tsx` ⚠️ **KEEP FROM BRANCH**
+### 3. `libs/ui/src/lib/header/index.tsx` ⚠️ **KEEP FROM BRANCH + MERGE FUNCTIONAL IMPROVEMENTS**
 - **Status**: Both branches modified
 - **Branch**: Contains design system upgrades (Header user details, dropdown upgrades)
-- **Main**: May have other changes
-- **Action**: **KEEP BRANCH VERSION** - Preserve design system upgrades, but review for any functional improvements from main
+- **Main**: May have functional improvements
+- **Action**: **KEEP BRANCH VERSION AS BASE** - Preserve design system upgrades, then manually merge any functional improvements from main
 
 ### 4. `libs/ui/src/lib/breadcrumbs/index.tsx` ⚠️ **KEEP FROM BRANCH**
 - **Status**: Both branches modified
@@ -182,11 +188,11 @@ These files contain design system upgrades and should be kept from the branch:
 
 ### Dataset Catalog App - HIGH PRIORITY
 **All dataset form components** - These have Fieldset.Legend upgrades and other DS improvements:
-- ⚠️ `apps/dataset-catalog/app/actions/actions.ts` - **May have resource service integration**
+- ⚠️ `apps/dataset-catalog/app/actions/actions.ts` - **Resource service integration (branch: dataset-catalog only - "Gå til side" button functionality)**
 - ⚠️ `apps/dataset-catalog/app/auth/signout/page.tsx`
 - ⚠️ `apps/dataset-catalog/app/catalogs/[catalogId]/datasets/[datasetId]/dataset-details-page-client.tsx`
 - ⚠️ `apps/dataset-catalog/app/catalogs/[catalogId]/datasets/[datasetId]/edit/edit-page-client.tsx`
-- ⚠️ `apps/dataset-catalog/app/catalogs/[catalogId]/datasets/[datasetId]/page.tsx` - **Resource service integration**
+- ⚠️ `apps/dataset-catalog/app/catalogs/[catalogId]/datasets/[datasetId]/page.tsx` - **Resource service integration (branch: dataset-catalog only - "Gå til side" button pointing to FDK_BASE_URI)**
 - ⚠️ `apps/dataset-catalog/app/catalogs/[catalogId]/datasets/datasets-page-client.tsx`
 - ⚠️ `apps/dataset-catalog/app/catalogs/[catalogId]/datasets/new/new-page-client.tsx`
 - ⚠️ `apps/dataset-catalog/app/catalogs/[catalogId]/no-access/page.tsx`
@@ -213,8 +219,8 @@ These files contain design system upgrades and should be kept from the branch:
 - ⚠️ `apps/dataset-catalog/components/details-page-columns/components/distribution-details.tsx`
 - ⚠️ `apps/dataset-catalog/components/details-page-columns/components/temporal-details.tsx`
 - ⚠️ `apps/dataset-catalog/components/details-page-columns/details-page-left-column.tsx`
-- ⚠️ `apps/dataset-catalog/components/details-page-columns/details-page-right-column.tsx` - **May have resource service changes**
-- ⚠️ `apps/dataset-catalog/components/publish-switch/index.tsx` - **LinkButton for "Gå til side", resource service integration**
+- ⚠️ `apps/dataset-catalog/components/details-page-columns/details-page-right-column.tsx` - **May have resource service changes (dataset-catalog specific)**
+- ⚠️ `apps/dataset-catalog/components/publish-switch/index.tsx` - **LinkButton for "Gå til side" (branch: dataset-catalog only - uses resource service to get FDK dataset ID for button)**
 - ⚠️ `apps/dataset-catalog/components/search-filter/index.tsx` - **CheckboxGroupFilter controlled component**
 - ⚠️ `apps/dataset-catalog/components/status-tag/index.tsx`
 - ⚠️ `apps/dataset-catalog/components/tag-list/index.tsx`
@@ -235,7 +241,8 @@ These files contain design system upgrades and should be kept from the branch:
 - ⚠️ `apps/service-catalog/components/publish-switch/index.tsx`
 
 ### Data Access Library
-- ⚠️ `libs/data-access/src/index.ts` - **Manual merge**: May have resource service exports from branch
+- ⚠️ `libs/data-access/src/index.ts` - **Manual merge**: Branch adds resource service export (new feature, doesn't exist in main). Add the export: `export * from './lib/resource-service/api';`
+- ✅ `libs/data-access/src/lib/resource-service/api/index.ts` - **New file in branch** - Keep from branch (doesn't exist in main)
 
 ### Other Files
 - ⚠️ `.husky/pre-commit` - Branch has `yarn lint-staged --relative`, main has disabled hook
@@ -268,7 +275,8 @@ These files exist only in main and should be kept:
 These are new files/features in the branch:
 - ✅ All new app-bar components (listed above)
 - ✅ `libs/ui/src/lib/form-sidemenu/` - **CRITICAL: Keep**
-- ✅ Resource service integration files (if any new ones)
+- ✅ `libs/data-access/src/lib/resource-service/api/index.ts` - **New resource service API library** (used only in dataset-catalog)
+- ✅ Resource service integration in dataset-catalog (new feature)
 
 ---
 
@@ -291,7 +299,7 @@ These are new files/features in the branch:
 ### 3. Import/Export Changes
 **Action**: Manual merge required
 - `libs/ui/src/index.ts` - Add new exports from branch, keep new exports from main
-- `libs/data-access/src/index.ts` - Merge resource service exports
+- `libs/data-access/src/index.ts` - Add resource service export from branch (new feature, doesn't exist in main)
 
 ### 4. Configuration Files
 **Action**: Merge carefully
@@ -308,19 +316,19 @@ These are new files/features in the branch:
 3. ⬜ Identify any additional files that need special handling
 
 ### Phase 2: Start Merge
-1. ⬜ `git checkout feat/el/dataset-ds-upgrade-merge`
-2. ⬜ `git merge main --no-commit --no-ff`
+1. ⬜ Ensure you're on the branch: `git checkout feat/el/dataset-ds-upgrade-merge`
+2. ⬜ Merge main into branch: `git merge main --no-commit --no-ff`
 3. ⬜ Review conflict list
 
 ### Phase 3: Resolve Critical Files First
-1. ⬜ **form-sidemenu**: Accept branch version (use `git checkout --ours`)
-2. ⬜ **new-dataset-modal**: Accept main version (use `git checkout --theirs`)
-3. ⬜ **header/index.tsx**: Accept branch version, then manually review for main improvements
-4. ⬜ **breadcrumbs**: Accept branch version
+1. ⬜ **form-sidemenu**: Accept branch version (use `git checkout --ours`) - file doesn't exist in main
+2. ⬜ **new-dataset-modal**: Accept main version (use `git checkout --theirs`) - will update DS components after merge if needed
+3. ⬜ **header/index.tsx**: Accept branch version as base (use `git checkout --ours`), then manually merge functional improvements from main
+4. ⬜ **breadcrumbs**: Accept branch version (use `git checkout --ours`)
 
 ### Phase 4: Resolve Design System Files
 1. ⬜ Accept branch version for all UI component files with DS upgrades
-2. ⬜ Use `git checkout --ours` for files in the "Design System Upgrade Files" section
+2. ⬜ Use `git checkout --ours` for files in the "Design System Upgrade Files" section (this keeps the branch's DS upgrades)
 
 ### Phase 5: Resolve Functional Files
 1. ⬜ For each file in "Files Modified in Both Branches":
@@ -348,22 +356,26 @@ These are new files/features in the branch:
    - Dataset forms with Fieldset.Legend
    - Resource service integration
 
-### Phase 9: Final Review
+### Phase 9: Final Review & Commit
 1. ⬜ Review all resolved conflicts
-2. ⬜ Ensure no design system upgrades were lost
+2. ⬜ Ensure no design system upgrades were lost (from branch)
 3. ⬜ Ensure no functional improvements from main were lost
-4. ⬜ Commit merge
+4. ⬜ Commit the merge: `git commit -m "Merge main into feat/el/dataset-ds-upgrade-merge"`
+5. ⬜ Push updated branch: `git push origin feat/el/dataset-ds-upgrade-merge`
+6. ⬜ Create/update pull request to merge branch into main
 
 ---
 
 ## Key Commands Reference
 
+**When merging main INTO the branch:**
+
 ```bash
-# Accept branch version (ours)
+# Accept branch version (feat/el/dataset-ds-upgrade-merge) - keeps DS upgrades
 git checkout --ours <file>
 git add <file>
 
-# Accept main version (theirs)
+# Accept main version - for new features/bug fixes
 git checkout --theirs <file>
 git add <file>
 
@@ -372,6 +384,9 @@ git add <file>
 
 # Abort merge if needed
 git merge --abort
+
+# After resolving all conflicts, complete the merge
+git commit -m "Merge main into feat/el/dataset-ds-upgrade-merge"
 ```
 
 ---
@@ -383,19 +398,24 @@ git merge --abort
 - The `form-sidemenu` component is critical - ensure it's not lost
 - The `new-dataset-modal` should use the main version (more complete)
 - Many conflicts will be import/component name changes due to DS upgrades
-- Resource service integration exists in both branches - may need careful merging
+- Resource service integration: **CONFIRMED** - Branch only uses resource service in **dataset-catalog** app (for "Gå til side" button). Resource service API library (`libs/data-access/src/lib/resource-service/api/index.ts`) is new in branch and doesn't exist in main. No other apps use resource service in either branch or main.
 
 ---
 
 ## Questions to Resolve During Merge
 
 1. Does main's `new-dataset-modal` use the latest design system components, or does it need updating?
+   - unknown, keep main's version, and i'll update the components after if needed
 2. Are there any functional improvements in main's header that should be preserved alongside branch's DS upgrades?
+   - if so, preserve functional improvements
 3. Has the resource service integration in main diverged significantly from branch?
+   - **Answer**: **CONFIRMED** - Resource service does NOT exist in main. Branch added resource service API library and only uses it in **dataset-catalog** app (for "Gå til side" button pointing to FDK_BASE_URI). No other apps use resource service in either branch or main. This is a new feature in the branch.
 4. Are there any breaking changes in main that would affect the DS upgrades?
+   - unknown
 
 ---
 
 **Last Updated**: Generated during merge planning  
-**Branch**: `feat/el/dataset-ds-upgrade-merge`  
-**Target**: `main`
+**Source**: `main` (being merged INTO)  
+**Target**: `feat/el/dataset-ds-upgrade-merge` (receiving the merge)  
+**Goal**: Update branch with main's changes so it can be PR'd into main without conflicts
