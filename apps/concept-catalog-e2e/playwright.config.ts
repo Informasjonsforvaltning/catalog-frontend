@@ -80,7 +80,7 @@ export default defineConfig({
     {
       name: "admin-chromium-solo",
       use: { ...devices["Desktop Chrome"] },
-      dependencies: ["admin-init", "admin-chromium", "admin-firefox"],
+      dependencies: ["admin-init"],
       testMatch: "**/admin/*.spec.ts",
       grep: /@solo/,
     },
