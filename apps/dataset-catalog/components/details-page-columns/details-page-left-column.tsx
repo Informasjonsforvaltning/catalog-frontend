@@ -443,11 +443,9 @@ export const LeftColumn = ({
                     (item) => item.id === dataset.inSeries,
                   );
                   return matchedType ? (
-                    <>
-                      <Tag size="sm" color="info">
-                        {capitalizeFirstLetter(matchedType.title)}
-                      </Tag>
-                    </>
+                    <Tag size="sm" color="info">
+                      {capitalizeFirstLetter(matchedType.title)}
+                    </Tag>
                   ) : (
                     <Paragraph size="sm">{dataset.inSeries}</Paragraph>
                   );
@@ -484,19 +482,16 @@ export const LeftColumn = ({
             </Table.Head>
             <Table.Body>
               {dataset?.concepts &&
-                dataset?.concepts.map((concept, index) => {
-                  const match = concepts?.find((item) => item?.uri === concept);
+                dataset?.concepts.map((concept) => {
+                  const match = concepts?.find((item) => item.uri === concept);
                   return (
-                    <Table.Row key={`references-${index}`}>
+                    <Table.Row key={concept}>
                       <Table.Cell>
-                        {
-                          <Link
-                            href={`${referenceDataEnv}/concepts/${match?.id}`}
-                          >
-                            {getTranslateText(match?.title, language) ??
-                              concept}
-                          </Link>
-                        }
+                        <Link
+                          href={`${referenceDataEnv}/concepts/${match?.id}`}
+                        >
+                          {getTranslateText(match?.title, language) ?? concept}
+                        </Link>
                       </Table.Cell>
                       <Table.Cell>
                         {getTranslateText(

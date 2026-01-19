@@ -21,6 +21,7 @@ interface ServiceDetailsPageProps {
   catalogId: string;
   hasWritePermission: boolean;
   referenceDataEnv: string;
+  searchEnv: string;
   service: Service;
   serviceId: string;
   statuses: ReferenceDataCode[];
@@ -30,6 +31,7 @@ const ServiceDetailsPageClient = ({
   catalogId,
   hasWritePermission,
   referenceDataEnv,
+  searchEnv,
   service,
   serviceId,
   statuses,
@@ -61,6 +63,7 @@ const ServiceDetailsPageClient = ({
         <BasicServiceFormInfoCardItems
           language={language}
           referenceDataEnv={referenceDataEnv}
+          searchEnv={searchEnv}
           service={service}
         />
       </DetailsPageLayout.Left>
