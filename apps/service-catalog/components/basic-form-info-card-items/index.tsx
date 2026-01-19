@@ -1,27 +1,34 @@
 import { isEmpty } from "lodash";
 import { Service } from "@catalog-frontend/types";
-import { Heading, Paragraph } from "@digdir/designsystemet-react";
+import { Heading, Link, Paragraph, Table } from "@digdir/designsystemet-react";
 import {
   DividerLine,
   InfoCard,
   ReferenceDataTags,
   useSearchAdministrativeUnitsByUri,
+  useSearchConceptsByUri,
 } from "@catalog-frontend/ui";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import styles from "./basic-form-info-card-items.module.css";
 
 type Props = {
-  service: Service;
   language: string;
   referenceDataEnv: string;
+  searchEnv: string;
+  service: Service;
 };
 
 export const BasicServiceFormInfoCardItems = (props: Props) => {
-  const { service, language, referenceDataEnv } = props;
+  const { language, referenceDataEnv, searchEnv, service } = props;
 
   const { data: spatial } = useSearchAdministrativeUnitsByUri(
     service.spatial,
     referenceDataEnv,
+  );
+
+  const { data: concepts } = useSearchConceptsByUri(
+    searchEnv,
+    service?.subject ?? [],
   );
 
   return (
@@ -61,6 +68,41 @@ export const BasicServiceFormInfoCardItems = (props: Props) => {
       {!isEmpty(service.spatial) && (
         <InfoCard.Item title={localization.serviceForm.fieldLabel.spatial}>
           <ReferenceDataTags values={service.spatial} data={spatial} />
+        </InfoCard.Item>
+      )}
+
+      {!isEmpty(service.subject) && (
+        <InfoCard.Item title={localization.serviceForm.fieldLabel.subject}>
+          <Table size="sm" className={styles.table}>
+            <Table.Head>
+              <Table.Row>
+                <Table.HeaderCell>
+                  {localization.serviceForm.fieldLabel.subject}
+                </Table.HeaderCell>
+                <Table.HeaderCell>{localization.publisher}</Table.HeaderCell>
+              </Table.Row>
+            </Table.Head>
+            <Table.Body>
+              {service.subject?.map((concept) => {
+                const match = concepts?.find((item) => item.uri === concept);
+                return (
+                  <Table.Row key={concept}>
+                    <Table.Cell>
+                      <Link href={`${referenceDataEnv}/concepts/${match?.id}`}>
+                        {getTranslateText(match?.title, language) ?? concept}
+                      </Link>
+                    </Table.Cell>
+                    <Table.Cell>
+                      {getTranslateText(
+                        match?.organization?.prefLabel,
+                        language,
+                      )}
+                    </Table.Cell>
+                  </Table.Row>
+                );
+              })}
+            </Table.Body>
+          </Table>
         </InfoCard.Item>
       )}
     </InfoCard>
