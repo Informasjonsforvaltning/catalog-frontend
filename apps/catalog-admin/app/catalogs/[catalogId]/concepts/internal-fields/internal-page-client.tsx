@@ -2,7 +2,7 @@
 
 import React from "react";
 import styles from "./internal-fields.module.css";
-import { Accordion, Heading } from "@digdir/designsystemet-react";
+import { Details, Heading } from "@digdir/designsystemet-react";
 import { PlusCircleIcon } from "@navikt/aksel-icons";
 import { Button } from "@catalog-frontend/ui";
 import { getTranslateText, localization } from "@catalog-frontend/utils";
@@ -50,44 +50,39 @@ export const InternalFieldsPageClient = ({
         </Heading>
         <div className="accordionStructure">
           {showInternalFieldEditor && (
-            <Accordion
+            <Details
               key={"create-editor"}
-              border={true}
+              open={showInternalFieldEditor}
               className="accordionWidth"
             >
-              <Accordion.Item defaultOpen={showInternalFieldEditor}>
-                <Accordion.Header>
-                  <Heading
-                    size="small"
-                    className={styles.label}
-                    level={3}
-                  ></Heading>
-                </Accordion.Header>
-                <Accordion.Content>
-                  <InternalFieldEditor catalogId={catalogId} />
-                </Accordion.Content>
-              </Accordion.Item>
-            </Accordion>
+              <Details.Summary>
+                <Heading
+                  size="small"
+                  className={styles.label}
+                  level={3}
+                ></Heading>
+              </Details.Summary>
+              <Details.Content>
+                <InternalFieldEditor catalogId={catalogId} />
+              </Details.Content>
+            </Details>
           )}
           {dbFields &&
             dbFields.map((field: InternalField) => (
-              <Accordion
+              <Details
                 key={field.id}
-                border={true}
                 className="accordionWidth"
               >
-                <Accordion.Item>
-                  <Accordion.Header>
-                    <Heading size="xsmall" className={styles.label}>
-                      {getTranslateText(field.label)}
-                    </Heading>
-                  </Accordion.Header>
+                <Details.Summary>
+                  <Heading size="xsmall" className={styles.label}>
+                    {getTranslateText(field.label)}
+                  </Heading>
+                </Details.Summary>
 
-                  <Accordion.Content>
-                    <InternalFieldEditor field={field} catalogId={catalogId} />
-                  </Accordion.Content>
-                </Accordion.Item>
-              </Accordion>
+                <Details.Content>
+                  <InternalFieldEditor field={field} catalogId={catalogId} />
+                </Details.Content>
+              </Details>
             ))}
         </div>
       </PageLayout>

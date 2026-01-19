@@ -1,7 +1,6 @@
 "use client";
 
 import { memo } from "react";
-import { Accordion } from "@digdir/designsystemet-react";
 import { ReferenceDataCode } from "@catalog-frontend/types";
 import {
   capitalizeFirstLetter,
@@ -101,9 +100,7 @@ const SearchFilter = ({ distributionStatuses }: Props) => {
 
   return (
     <div className={styles.searchFilter}>
-      <Accordion border={true} className={styles.accordion}>
-        {accordionItems}
-      </Accordion>
+      {accordionItems}
     </div>
   );
 };

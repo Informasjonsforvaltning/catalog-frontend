@@ -2,7 +2,7 @@
 
 import { ImportResult } from '@catalog-frontend/types';
 import styles from './import-result-details.module.css';
-import { Accordion, Button, Heading, Tag } from '@digdir/designsystemet-react';
+import { Details, Button, Heading, Tag } from '@digdir/designsystemet-react';
 import { capitalizeFirstLetter, formatISO, localization } from '@catalog-frontend/utils';
 import { ImportRecordAccordionItem } from './components/import-record-accordion-item';
 import { TrashIcon, CheckmarkIcon } from '@navikt/aksel-icons';
@@ -186,7 +186,7 @@ const ImportResultDetails = ({
           </CenterContainer>
         )}
       {importResult?.extractionRecords && importResult?.extractionRecords.length > 0 && (
-        <Accordion border={true}>
+        <div>
           {importResult?.extractionRecords?.map((record) => (
             <ImportRecordAccordionItem
               key={`result-${record.internalId}`}
@@ -196,7 +196,7 @@ const ImportResultDetails = ({
               isCompleted={importResult.status === 'COMPLETED'}
             />
           ))}
-        </Accordion>
+        </div>
       )}
     </div>
   );

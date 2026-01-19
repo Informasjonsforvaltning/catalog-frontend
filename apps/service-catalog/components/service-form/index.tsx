@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  Box,
+  Card,
   Checkbox,
   Fieldset,
   Paragraph,
@@ -354,7 +354,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                       "subject",
                     ])}
                   >
-                    <Box>
+                    <Card>
                       <FormikLanguageFieldset
                         name="title"
                         as={Textfield}
@@ -457,7 +457,7 @@ export const ServiceForm = (props: ServiceFormProps) => {
                           searchEnv={searchEnv}
                         />
                       </Fieldset>
-                    </Box>
+                    </Card>
                   </FormLayout.Section>
 
                   <FormLayout.Section

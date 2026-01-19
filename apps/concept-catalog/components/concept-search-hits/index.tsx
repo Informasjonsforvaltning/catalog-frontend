@@ -36,7 +36,7 @@ const ConceptSearchHits: React.FC<Props> = ({
 
   const ConceptLabels: React.FC<{ searchHit: Concept }> = ({ searchHit }) => (
     <div className={styles.rowSpaceBetween}>
-      <Chip.Group
+      <div
         data-size='sm'
         className={styles.chipGroup}
       >
@@ -49,7 +49,7 @@ const ConceptSearchHits: React.FC<Props> = ({
               {label}
             </Chip.Toggle>
           ))}
-      </Chip.Group>
+      </div>
     </div>
   );
 

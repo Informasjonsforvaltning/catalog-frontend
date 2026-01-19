@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import styles from "./code-lists.module.css";
-import { Accordion, Heading } from "@digdir/designsystemet-react";
+import { Details, Heading } from "@digdir/designsystemet-react";
 import {
   Button,
   SearchField,
@@ -121,57 +121,53 @@ const CodeListsPageClient = ({
         </Heading>
         <div className="accordionStructure">
           {showCodeListEditor && (
-            <Accordion
+            <Details
               key={"codeList-create-edtior"}
-              border={true}
+              open={showCodeListEditor}
               className="accordionWidth"
             >
-              <Accordion.Item defaultOpen={showCodeListEditor}>
-                <Accordion.Header>
-                  <Heading size="small"></Heading>
-                </Accordion.Header>
+              <Details.Summary>
+                <Heading size="small"></Heading>
+              </Details.Summary>
 
-                <Accordion.Content>
-                  <CodeListEditor type="create" catalogId={catalogId} />
-                </Accordion.Content>
-              </Accordion.Item>
-            </Accordion>
+              <Details.Content>
+                <CodeListEditor type="create" catalogId={catalogId} />
+              </Details.Content>
+            </Details>
           )}
           {filteredCodeLists() &&
             filteredCodeLists()?.map((codeList: CodeList, index: number) => (
-              <Accordion key={index} border={true} className="accordionWidth">
-                <Accordion.Item>
-                  <Accordion.Header>
-                    <Heading size="xsmall">{codeList.name}</Heading>
-                    <p className={styles.description}>
-                      {" "}
-                      {codeList.description}{" "}
-                    </p>
-                  </Accordion.Header>
-                  <Accordion.Content>
-                    <p className={styles.id}>ID: {codeList.id}</p>
-                  </Accordion.Content>
+              <Details key={index} className="accordionWidth">
+                <Details.Summary>
+                  <Heading size="xsmall">{codeList.name}</Heading>
+                  <p className={styles.description}>
+                    {" "}
+                    {codeList.description}{" "}
+                  </p>
+                </Details.Summary>
+                <Details.Content>
+                  <p className={styles.id}>ID: {codeList.id}</p>
+                </Details.Content>
 
-                  <Accordion.Content>
-                    <CodeListEditor
-                      codeList={codeList}
-                      codeListsInUse={codeListsInUse}
-                      catalogId={catalogId}
-                      dirty={(dirty) =>
-                        setDirtyCodeLists((prev) => {
-                          if (dirty && !prev.includes(codeList.id ?? "")) {
-                            return [...prev, codeList.id ?? ""];
-                          }
-                          if (!dirty) {
-                            return prev.filter((id) => id !== codeList.id);
-                          }
-                          return prev;
-                        })
-                      }
-                    />
-                  </Accordion.Content>
-                </Accordion.Item>
-              </Accordion>
+                <Details.Content>
+                  <CodeListEditor
+                    codeList={codeList}
+                    codeListsInUse={codeListsInUse}
+                    catalogId={catalogId}
+                    dirty={(dirty) =>
+                      setDirtyCodeLists((prev) => {
+                        if (dirty && !prev.includes(codeList.id ?? "")) {
+                          return [...prev, codeList.id ?? ""];
+                        }
+                        if (!dirty) {
+                          return prev.filter((id) => id !== codeList.id);
+                        }
+                        return prev;
+                      })
+                    }
+                  />
+                </Details.Content>
+              </Details>
             ))}
         </div>
       </PageLayout>

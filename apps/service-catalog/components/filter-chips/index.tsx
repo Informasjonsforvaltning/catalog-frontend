@@ -23,7 +23,7 @@ export const FilterChips = ({
 }: Props) => {
   return (
     <div className={styles.chips}>
-      <Chip.Group size="small" className={styles.wrap}>
+      <div className={styles.wrap}>
         {statusFilters?.map((filter, index) => (
           <Chip.Removable
             key={`status-${index}`}
@@ -44,7 +44,7 @@ export const FilterChips = ({
               : localization.publicationState.unpublished}
           </Chip.Removable>
         ))}
-      </Chip.Group>
+      </div>
     </div>
   );
 };

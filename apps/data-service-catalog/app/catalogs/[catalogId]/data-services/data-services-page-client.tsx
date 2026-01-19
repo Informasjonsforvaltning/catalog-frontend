@@ -198,7 +198,7 @@ const DataServicesPageClient = ({
 
     return (
       <div className={styles.chips}>
-        <Chip.Group size="small" className={styles.wrap}>
+        <div className={styles.wrap}>
           {filterStatus?.map((filter, index) => (
             <Chip.Removable
               key={`status-${index}`}
@@ -227,7 +227,7 @@ const DataServicesPageClient = ({
                 : localization.publicationState.unpublished}
             </Chip.Removable>
           ))}
-        </Chip.Group>
+        </div>
       </div>
     );
   };

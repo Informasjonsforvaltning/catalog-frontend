@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Button, Modal, Paragraph } from "@digdir/designsystemet-react";
+import { Card, Button, Dialog, Paragraph } from "@digdir/designsystemet-react";
 import Link from "next/link";
 import { localization } from "@catalog-frontend/utils";
 import style from "./new-dataset-modal.module.scss";
@@ -15,18 +15,18 @@ export const NewDatasetModal = ({
   trigger,
 }: NewDatasetModalProps) => {
   return (
-    <Modal.Root>
-      <Modal.Trigger asChild>{trigger}</Modal.Trigger>
-      <Modal.Dialog>
-        <Modal.Header className={style.header}>
+    <Dialog.TriggerContext>
+      <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
+      <Dialog>
+        <Dialog.Block className={style.header}>
           {localization.datasetForm.datasetTypeModal.title}
-        </Modal.Header>
-        <Modal.Content className={style.content}>
+        </Dialog.Block>
+        <Dialog.Block className={style.content}>
           <Paragraph size="sm" className={style.intro}>
             {localization.datasetForm.datasetTypeModal.intro}
           </Paragraph>
           <div className={style.options}>
-            <Box className={style.option}>
+            <Card className={style.option}>
               <h3 className={style.optionTitle}>
                 {
                   localization.datasetForm.datasetTypeModal.standardDataset
@@ -52,8 +52,8 @@ export const NewDatasetModal = ({
                   }
                 </Link>
               </Button>
-            </Box>
-            <Box className={style.option}>
+            </Card>
+            <Card className={style.option}>
               <h3 className={style.optionTitle}>
                 {
                   localization.datasetForm.datasetTypeModal.mobilityDataset
@@ -79,10 +79,10 @@ export const NewDatasetModal = ({
                   }
                 </Link>
               </Button>
-            </Box>
+            </Card>
           </div>
-        </Modal.Content>
-      </Modal.Dialog>
-    </Modal.Root>
+        </Dialog.Block>
+      </Dialog>
+    </Dialog.TriggerContext>
   );
 };

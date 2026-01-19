@@ -17,7 +17,7 @@ import {
   Card,
   ErrorMessage,
   Heading,
-  Modal,
+  Dialog,
   Paragraph,
   Textfield,
 } from "@digdir/designsystemet-react";
@@ -160,8 +160,8 @@ const FieldModal = (props: ModalProps) => {
 
   return (
     <>
-      <Modal.Root>
-        <Modal.Trigger asChild>
+      <Dialog.TriggerContext>
+        <Dialog.Trigger asChild>
           {type === "edit" ? (
             <EditButton />
           ) : (
@@ -170,8 +170,8 @@ const FieldModal = (props: ModalProps) => {
               {localization.serviceForm.fieldLabel.produces.toLowerCase()}
             </AddButton>
           )}
-        </Modal.Trigger>
-        <Modal.Dialog ref={modalRef}>
+        </Dialog.Trigger>
+        <Dialog ref={modalRef}>
           <Formik
             initialValues={template}
             validateOnChange={submitted}
@@ -194,12 +194,12 @@ const FieldModal = (props: ModalProps) => {
 
               return (
                 <>
-                  <Modal.Header closeButton={false}>
+                  <Dialog.Block>
                     {type === "edit" ? localization.edit : localization.add}{" "}
                     {localization.serviceForm.fieldLabel.produces.toLowerCase()}
-                  </Modal.Header>
+                  </Dialog.Block>
 
-                  <Modal.Content className={styles.modalContent}>
+                  <Dialog.Block className={styles.modalContent}>
                     <FormikLanguageFieldset
                       as={Textfield}
                       name="title"
@@ -212,9 +212,9 @@ const FieldModal = (props: ModalProps) => {
                       name="description"
                       legend={localization.serviceForm.fieldLabel.description}
                     />
-                  </Modal.Content>
+                  </Dialog.Block>
 
-                  <Modal.Footer>
+                  <Dialog.Block>
                     <Button
                       type="button"
                       disabled={
@@ -237,13 +237,13 @@ const FieldModal = (props: ModalProps) => {
                     >
                       {localization.button.cancel}
                     </Button>
-                  </Modal.Footer>
+                  </Dialog.Block>
                 </>
               );
             }}
           </Formik>
-        </Modal.Dialog>
-      </Modal.Root>
+        </Dialog>
+      </Dialog.TriggerContext>
     </>
   );
 };

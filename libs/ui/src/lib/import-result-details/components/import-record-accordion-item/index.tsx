@@ -2,9 +2,7 @@
 
 import styles from './import-record-accordion-item.module.css';
 import {
-  AccordionContent,
-  AccordionHeader,
-  AccordionItem,
+  Details,
   Card,
   Heading,
   List,
@@ -55,9 +53,9 @@ const ImportRecordAccordionItem = ({ targetBaseHref, record, enableOpening, isCo
   };
 
   return (
-    <AccordionItem>
-      <AccordionHeader>{renderHeader(record)}</AccordionHeader>
-      <AccordionContent>
+    <Details>
+      <Details.Summary>{renderHeader(record)}</Details.Summary>
+      <Details.Content>
         {errors.length === 0 && enableOpening && (
           <div className={styles.buttonRow}>
             {isCompleted && <LinkButton
@@ -106,8 +104,8 @@ const ImportRecordAccordionItem = ({ targetBaseHref, record, enableOpening, isCo
             </Card>
           )}
         </div>
-      </AccordionContent>
-    </AccordionItem>
+      </Details.Content>
+    </Details>
   );
 };
 

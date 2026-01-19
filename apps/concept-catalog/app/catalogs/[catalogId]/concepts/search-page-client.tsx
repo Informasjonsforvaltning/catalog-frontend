@@ -374,7 +374,7 @@ export const SearchPageClient = ({
 
     return (
       <div className={styles.chips}>
-        <Chip.Group size="small" className={styles.wrap}>
+        <div className={styles.wrap}>
           {filterSubject?.map((filter, index) => (
             <Chip.Removable
               key={`subject-${index}`}
@@ -443,7 +443,7 @@ export const SearchPageClient = ({
                 ));
               },
             )}
-        </Chip.Group>
+        </div>
       </div>
     );
   };

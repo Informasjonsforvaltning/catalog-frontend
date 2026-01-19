@@ -13,7 +13,7 @@ import {
   FastFieldWithRef,
 } from '@catalog-frontend/ui';
 import { getTranslateText, localization, trimObjectWhitespace } from '@catalog-frontend/utils';
-import { Button, Card, Combobox, Dialog, Fieldset, Heading, SkeletonRectangle, Textfield } from '@digdir/designsystemet-react';
+import { Button, Card, Combobox, Dialog, Fieldset, Heading, Skeleton, Textfield } from '@digdir/designsystemet-react';
 import { HStack } from '@fellesdatakatalog/ui';
 import { useSearchFileTypes, useSearchMediaTypes } from '@catalog-frontend/ui';
 import { useSearchDataServiceSuggestions } from '@catalog-frontend/ui';
@@ -245,7 +245,7 @@ export const DistributionModal = ({
               </Combobox>
             </FieldsetWithDelete>
           ) : (
-            <SkeletonRectangle />
+            <Skeleton />
           )}
         </Fieldset>
       ),
@@ -291,7 +291,7 @@ export const DistributionModal = ({
               />
             </FieldsetWithDelete>
           ) : (
-            <SkeletonRectangle />
+            <Skeleton />
           )}
         </Fieldset>
       ),
@@ -661,7 +661,7 @@ export const DistributionModal = ({
                             ref={(el: HTMLInputElement | null) => setInputRef(`format`, el)}
                           />
                         ) : (
-                          <SkeletonRectangle />
+                          <Skeleton />
                         )}
                       </Fieldset>
                       <FieldsetDivider />

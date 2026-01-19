@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Accordion, Heading } from "@digdir/designsystemet-react";
+import { Details, Heading } from "@digdir/designsystemet-react";
 import { Button, SearchField } from "@catalog-frontend/ui";
 import { PlusCircleIcon } from "@navikt/aksel-icons";
 import { localization } from "@catalog-frontend/utils";
@@ -67,20 +67,18 @@ export const UsersPageClient = ({ catalogId }: UsersPageClientProps) => {
 
         <div className="accordionStructure">
           {showUserEditor && (
-            <Accordion
+            <Details
               key={"create-editor"}
-              border={true}
+              open={showUserEditor}
               className="accordionWidth"
             >
-              <Accordion.Item defaultOpen={showUserEditor}>
-                <Accordion.Header>
-                  <Heading size="xsmall" level={3}></Heading>
-                </Accordion.Header>
-                <Accordion.Content>
-                  <UserEditor type={"create"} catalogId={catalogId} />
-                </Accordion.Content>
-              </Accordion.Item>
-            </Accordion>
+              <Details.Summary>
+                <Heading size="xsmall" level={3}></Heading>
+              </Details.Summary>
+              <Details.Content>
+                <UserEditor type={"create"} catalogId={catalogId} />
+              </Details.Content>
+            </Details>
           )}
 
           {searchResults?.length < 1 && (
@@ -88,16 +86,14 @@ export const UsersPageClient = ({ catalogId }: UsersPageClientProps) => {
           )}
           {searchResults &&
             searchResults.map((user: AssignedUser, index: number) => (
-              <Accordion key={index} border={true} className="accordionWidth">
-                <Accordion.Item>
-                  <Accordion.Header>
-                    <Heading size="xsmall">{user.name}</Heading>
-                  </Accordion.Header>
-                  <Accordion.Content>
-                    <UserEditor user={user} catalogId={catalogId} />
-                  </Accordion.Content>
-                </Accordion.Item>
-              </Accordion>
+              <Details key={index} className="accordionWidth">
+                <Details.Summary>
+                  <Heading size="xsmall">{user.name}</Heading>
+                </Details.Summary>
+                <Details.Content>
+                  <UserEditor user={user} catalogId={catalogId} />
+                </Details.Content>
+              </Details>
             ))}
         </div>
       </PageLayout>

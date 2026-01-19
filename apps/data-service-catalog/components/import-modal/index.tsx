@@ -6,7 +6,7 @@ import {
   UploadButton,
 } from "@catalog-frontend/ui";
 import { useImport } from "../../hooks/import";
-import { Button, Modal, Spinner } from "@digdir/designsystemet-react";
+import { Button, Dialog, Spinner } from "@digdir/designsystemet-react";
 import styles from "./import-modal.module.scss";
 import { FileImportIcon } from "@navikt/aksel-icons";
 
@@ -41,31 +41,31 @@ export function ImportModal({ catalogId }: Props) {
   };
 
   return (
-    <Modal.Root>
-      <Modal.Trigger asChild>
+    <Dialog.TriggerContext>
+      <Dialog.Trigger asChild>
         <Button variant={"secondary"} size="small">
           <FileImportIcon fontSize="1.5rem" />
           Import
         </Button>
-      </Modal.Trigger>
-      <Modal.Dialog
+      </Dialog.Trigger>
+      <Dialog
         ref={modalRef}
         onInteractOutside={() => modalRef.current?.close()}
       >
-        <Modal.Header>
+        <Dialog.Block>
           <TitleWithHelpTextAndTag>
             {localization.dataServiceCatalog.importModal.title}
           </TitleWithHelpTextAndTag>
-        </Modal.Header>
-        <Modal.Content>
+        </Dialog.Block>
+        <Dialog.Block>
           <div>
             {localization.dataServiceCatalog.importModal.openapiDescription}
           </div>
           <div>
             {localization.dataServiceCatalog.importModal.resultDescription}
           </div>
-        </Modal.Content>
-        <Modal.Footer>
+        </Dialog.Block>
+        <Dialog.Block>
           <div className={styles.buttons}>
             {isLoading ? (
               <Spinner title={localization.loading} size="large" />
@@ -86,9 +86,9 @@ export function ImportModal({ catalogId }: Props) {
               </>
             )}
           </div>
-        </Modal.Footer>
-      </Modal.Dialog>
-    </Modal.Root>
+        </Dialog.Block>
+      </Dialog>
+    </Dialog.TriggerContext>
   );
 }
 

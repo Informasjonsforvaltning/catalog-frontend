@@ -10,7 +10,7 @@ import {
   SearchHitsLayout,
 } from "@catalog-frontend/ui";
 import styles from "./import-results-page-client.module.css";
-import { Accordion, Chip, NativeSelect } from "@digdir/designsystemet-react";
+import { Chip, NativeSelect } from "@digdir/designsystemet-react";
 import {
   parseAsArrayOf,
   parseAsInteger,
@@ -89,7 +89,7 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
 
   const FilterChips = () => (
     <div className={styles.chips}>
-      <Chip.Group size="small" className={styles.wrap}>
+      <div className={styles.wrap}>
         {filterStatus?.map((filter, index) => (
           <Chip.Removable
             key={`status-${index}`}
@@ -102,7 +102,7 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
             {importStatuses?.find((s) => s.value === filter)?.label}
           </Chip.Removable>
         ))}
-      </Chip.Group>
+      </div>
     </div>
   );
 
@@ -149,9 +149,7 @@ const ImportResultsPageClient = ({ catalogId, importResults }: Props) => {
       </SearchHitsLayout.SearchRow>
       <SearchHitsLayout.LeftColumn>
         <div className={styles.importFilter}>
-          <Accordion border={true} className={styles.accordion}>
-            {filterItems}
-          </Accordion>
+          {filterItems}
         </div>
         <FilterChips />
       </SearchHitsLayout.LeftColumn>

@@ -23,6 +23,109 @@ The branch contains significant design system upgrades and UI improvements that 
 - `--ours` = branch version (feat/el/dataset-ds-upgrade-merge)
 - `--theirs` = main version
 
+### ⚠️ IMPORTANT: Version Upgrades from Main
+
+**If aborting this merge and attempting again in the future, ensure the following upgrades from main are adopted:**
+
+#### Major Version Upgrades (Critical)
+
+1. **Next.js**: `15.5.3` → `16.1.1` (MAJOR)
+   - **Action**: Accept main's version
+   - **Rationale**: Next.js 16 may have better Turbopack support and could resolve SVG handling issues. See `SVG-TURBOPACK-ISSUE.md` for details.
+
+2. **React Ecosystem**: `19.1.1` → `19.2.3` (MINOR)
+   - `react`: `19.1.1` → `19.2.3`
+   - `react-dom`: `19.1.1` → `19.2.3`
+   - `react-is`: `19.1.1` → `19.2.3`
+   - **Action**: Accept main's versions
+   - **Rationale**: React 19.2.3 includes bug fixes and improvements
+
+3. **NX Monorepo Tools**: `21.5.2` → `22.3.3` (MAJOR)
+   - All `@nx/*` packages: `21.5.2` → `22.3.3`
+   - `nx`: `21.5.2` → `22.3.3`
+   - **Action**: Accept main's versions
+   - **Rationale**: Major NX upgrade may include important fixes and features
+
+4. **Cypress**: `^14.2.0` → `^15.8.2` (MAJOR)
+   - **Action**: Accept main's version
+   - **Rationale**: Major version upgrade with potential breaking changes
+
+5. **eslint-plugin-react-hooks**: `5.2.0` → `7.0.1` (MAJOR)
+   - **Action**: Accept main's version
+   - **Rationale**: Major version upgrade, may require code changes
+
+#### Minor/Patch Upgrades (Should Adopt)
+
+6. **Next.js Ecosystem**:
+   - `next-auth`: `^4.24.11` → `^4.24.13`
+   - `eslint-config-next`: `15.5.3` → `16.0.3` (matches Next.js 16)
+
+7. **TypeScript & Type Definitions**:
+   - `typescript`: `5.9.2` → `5.9.3`
+   - `@types/react`: `19.1.8` → `19.2.6`
+   - `@types/react-dom`: `19.1.6` → `19.2.3`
+   - `@types/react-is`: `19.0.0` → `19.2.0`
+   - `@types/lodash`: `^4.17.17` → `^4.17.20`
+
+8. **ESLint & Linting Tools**:
+   - `eslint`: `^9.35.0` → `^9.39.1`
+   - `@eslint/js`: `^9.35.0` → `^9.39.1`
+   - `@typescript-eslint/eslint-plugin`: `^8.44.0` → `^8.47.0`
+   - `@typescript-eslint/parser`: `8.44.0` → `8.47.0`
+   - `typescript-eslint`: `^8.44.0` → `^8.47.0`
+   - `eslint-config-prettier`: `10.1.5` → `10.1.8`
+   - `eslint-plugin-cypress`: `5.1.1` → `5.2.0`
+   - `eslint-plugin-playwright`: `^2.2.1` → `^2.3.0`
+
+9. **Testing Tools**:
+   - `jest`: `^30.1.3` → `^30.2.0`
+   - `jest-environment-jsdom`: `^30.1.2` → `^30.2.0`
+   - `babel-jest`: `^30.1.2` → `^30.2.0`
+   - `ts-jest`: `^29.4.0` → `^29.4.5`
+   - `@playwright/test`: `^1.55.0` → `^1.55.1`
+   - `playwright-core`: `^1.55.0` → `^1.56.1`
+   - `playwright-ctrf-json-reporter`: `^0.0.22` → `^0.0.26`
+
+10. **Build & Development Tools**:
+    - `webpack`: `^5.101.3` → `^5.103.0`
+    - `sass`: `^1.92.1` → `^1.94.1`
+    - `lint-staged`: `^16.1.2` → `^16.2.6`
+    - `globals`: `^16.4.0` → `^16.5.0`
+
+11. **Runtime Dependencies**:
+    - `immer`: `^10.1.1` → `^10.2.0`
+    - `luxon`: `3.7.1` → `3.7.2`
+    - `nuqs`: `^2.6.0` → `^2.8.0`
+    - `postcss-preset-env`: `^10.3.1` → `^10.4.0`
+    - `yup`: `^1.7.0` → `^1.7.1`
+
+12. **Other Dev Dependencies**:
+    - `@0no-co/graphqlsp`: `^1.15.0` → `^1.15.1`
+    - `@axe-core/playwright`: `^4.10.1` → `^4.11.0`
+    - `@babel/core`: `^7.28.4` → `^7.28.5`
+    - `@babel/preset-react`: `^7.27.1` → `^7.28.5`
+
+#### Dependencies Where Branch Has Newer Version (Keep Branch)
+
+These are intentionally kept from branch (design system upgrades):
+- `@digdir/designsystemet-css`: `1.7.1` (branch) vs `0.10.0` (main) - **KEEP BRANCH**
+- `@digdir/designsystemet-react`: `1.7.1` (branch) vs `0.63.1` (main) - **KEEP BRANCH**
+- `@digdir/designsystemet-theme`: `^1.7.1` (branch) vs `^0.15.3` (main) - **KEEP BRANCH**
+- `@navikt/aksel-icons`: `^7.40.0` (branch) vs `^7.35.0` (main) - **KEEP BRANCH**
+
+#### Recommended Action
+
+**For future merge attempts:**
+1. Accept main's version for all major upgrades (Next.js 16, React 19.2.3, NX 22.3.3, etc.)
+2. Accept main's version for all minor/patch upgrades
+3. **Manually keep** design system packages from branch (listed above)
+4. Test thoroughly after adopting upgrades, especially:
+   - Next.js 16 compatibility with design system
+   - NX 22.3.3 compatibility
+   - React 19.2.3 compatibility
+
+**Why this matters**: The current merge kept older versions to avoid complexity, but this may have contributed to the SVG/Turbopack issue and other compatibility problems. Future merge attempts should adopt main's upgrades to potentially resolve these issues.
+
 ---
 
 ## Critical Files - Special Handling Required
@@ -319,6 +422,7 @@ These are new files/features in the branch:
 1. ⬜ Ensure you're on the branch: `git checkout feat/el/dataset-ds-upgrade-merge`
 2. ⬜ Merge main into branch: `git merge main --no-commit --no-ff`
 3. ⬜ Review conflict list
+4. ⬜ **IMPORTANT**: For `package.json` conflicts, accept main's Next.js version (16.1.1) and other dependency upgrades (see "Version Upgrades from Main" section above)
 
 ### Phase 3: Resolve Critical Files First
 1. ⬜ **form-sidemenu**: Accept branch version (use `git checkout --ours`) - file doesn't exist in main

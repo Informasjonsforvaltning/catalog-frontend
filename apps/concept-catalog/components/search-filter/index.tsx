@@ -1,7 +1,6 @@
 'use client';
 
 import { memo, useMemo } from 'react';
-import { Accordion } from '@digdir/designsystemet-react';
 import { AccordionItem, AccordionItemProps, CheckboxGroupFilter, Select } from '@catalog-frontend/ui';
 import { AssignedUser, CodeList, ConceptsPageSettings, InternalField, ReferenceDataCode } from '@catalog-frontend/types';
 import {
@@ -214,12 +213,7 @@ const SearchFilter = ({ catalogId, internalFields, subjectCodeList, conceptStatu
 
   return (
     <div className={styles.searchFilter}>
-      {/* <Accordion
-        border={true}
-        className={styles.accordion}
-      >
-        {accordionItems}
-      </Accordion> */}
+      {accordionItems}
     </div>
   );
 };
