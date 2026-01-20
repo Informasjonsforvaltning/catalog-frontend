@@ -25,6 +25,7 @@ export const dataServiceFormNb = {
       "Brukes til å oppgi tjenestens modenhet, velges fra EU’s kontrollerte vokabular _Distribution status_.",
     keywords:
       "Oppgi emneord (eller tag) som beskriver datatjenesten, f.eks. _eksempel_, _datatjeneste_ (bokmål) / _example_, _data service_ (Engelsk).",
+    version: "Versjon av API-et, f.eks. 1.0.0 eller v2.",
     servesDataset:
       "Brukes til å referere til datasett som datatjenesten kan distribuere.",
     availability:
@@ -74,6 +75,7 @@ export const dataServiceFormNb = {
     license: "Lisens",
     status: "Status",
     keywords: "Emneord",
+    version: "Versjon",
     availability: "Tilgjengelighet",
     costs: "Gebyr",
     costDocumentation: "Dokumentasjon",

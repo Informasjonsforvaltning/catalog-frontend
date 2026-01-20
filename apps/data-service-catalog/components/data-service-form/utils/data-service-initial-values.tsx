@@ -7,6 +7,7 @@ export const dataServiceTemplate = (dataService: DataService): DataService => {
     title: omitBy(dataService?.title, isEmpty),
     description: omitBy(dataService?.description, isEmpty),
     keywords: omitBy(dataService?.keywords, isEmpty),
+    version: dataService?.version ?? "",
     contactPoint: {
       ...dataService?.contactPoint,
       name: omitBy(dataService?.contactPoint?.name, isEmpty),
@@ -28,6 +29,7 @@ export const dataServiceToBeCreatedTemplate = (): DataServiceToBeCreated => {
     accessRights: "none",
     formats: [],
     keywords: {},
+    version: "",
     landingPage: "",
     pages: [],
     license: "none",

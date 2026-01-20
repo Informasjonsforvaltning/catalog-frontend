@@ -18,6 +18,7 @@ export interface DataServiceToBeCreated {
   accessRights?: string;
   formats?: string[];
   keywords: LocalizedStrings;
+  version?: string;
   landingPage?: string;
   pages?: string[];
   license?: string;
