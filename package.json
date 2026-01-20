@@ -94,7 +94,6 @@
     "@nx/playwright": "22.3.3",
     "@nx/react": "22.3.3",
     "@nx/web": "22.3.3",
-    "@nx/webpack": "22.3.3",
     "@nx/workspace": "22.3.3",
     "@parcel/watcher": "^2.5.4",
     "@playwright/test": "^1.57.0",
@@ -142,13 +141,10 @@
     "prettier": "3.8.0",
     "sass": "^1.97.2",
     "styled-components": "^6.3.8",
-    "swc-loader": "0.2.7",
     "ts-jest": "^29.4.6",
     "ts-node": "10.9.2",
     "typescript": "5.9.3",
-    "typescript-eslint": "^8.53.1",
-    "webpack": "^5.104.1",
-    "webpack-cli": "^6.0.1"
+    "typescript-eslint": "^8.53.1"
   },
   "resolutions": {
     "mdast-util-to-hast": "^13.2.1"
