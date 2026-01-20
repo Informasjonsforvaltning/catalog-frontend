@@ -38,7 +38,7 @@ export const NewDataServicePageClient = ({
   };
 
   const handleCreate = async (values: any) => {
-    const dataServiceId = await createDataService(catalogId.toString(), values);
+    const dataServiceId = await createDataService(catalogId, values);
     dataServiceIdRef.current = dataServiceId;
     return undefined;
   };

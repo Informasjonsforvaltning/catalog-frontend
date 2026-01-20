@@ -54,10 +54,10 @@ const CatalogsPage = async (props: PageProps<"/catalogs/[[...slug]]">) => {
   }
 
   const currentOrganization = organizations.find(
-    (org) => org.organizationId === catalogId?.[0],
+    (org) => org.organizationId === catalogId,
   );
   const hasNonSystemAccess = catalogId
-    ? hasNonSystemAccessForOrg(`${session?.accessToken}`, catalogId?.[0])
+    ? hasNonSystemAccessForOrg(`${session?.accessToken}`, catalogId)
     : false;
   const serviceMessages = await getServiceMessages();
 

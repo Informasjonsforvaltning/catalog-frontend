@@ -6,6 +6,7 @@ const PageLayout = async (props: LayoutProps<"/catalogs/[catalogId]">) => {
 
   return (
     <CatalogLayout
+      catalogId={catalogId}
       catalogAdminUrl={process.env.CATALOG_ADMIN_BASE_URI}
       catalogAdminServiceUrl={process.env.CATALOG_ADMIN_SERVICE_BASE_URI}
       fdkRegistrationBaseUrl={process.env.CATALOG_PORTAL_BASE_URI}
