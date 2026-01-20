@@ -222,6 +222,9 @@ export const nb = {
     addUrl: "Legg til lenke",
     backToOverview: "Tilbake til oversikten",
     gotoConcept: "Gå til begrepet",
+    goToPage: "Gå til side",
+    unpublish: "Avpubliser",
+    publish: "Publiser",
   },
 
   dropdown: {
