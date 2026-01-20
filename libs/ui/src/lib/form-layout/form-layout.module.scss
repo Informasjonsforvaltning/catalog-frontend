@@ -34,7 +34,7 @@
 
 .sideMenu {
   position: sticky;
-  top: 6rem;
+  top: 1rem; // Switch to 6rem when app-bar is used
   overflow: hidden;
   min-width: 265px;
   padding: 1rem;
