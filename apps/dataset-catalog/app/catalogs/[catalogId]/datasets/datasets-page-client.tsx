@@ -38,6 +38,7 @@ import {
   parseAsString,
   parseAsInteger,
 } from "nuqs";
+import { PublishedTag } from "libs/ui/src/lib/tag/published-tag/PublishedTag";
 
 interface Props {
   datasets: Dataset[];
@@ -378,7 +379,10 @@ const DatasetsPageClient = ({
                         title={getTranslateText(dataset?.title)}
                         description={getTranslateText(dataset?.description)}
                         titleHref={`/catalogs/${catalogId}/datasets/${dataset?.id}`}
-                        statusTag={datasetTags(dataset)}
+                        statusTag={[
+                            datasetTags(dataset),
+                            <PublishedTag published={dataset.published}/>
+                        ]}
                         rightColumn={
                           dataset.specializedType === "SERIES" && (
                             <Tag>Serie</Tag>
@@ -387,25 +391,20 @@ const DatasetsPageClient = ({
                         content={
                           <>
                             <div className={styles.set}>
-                              <p>
-                                {localization.lastChanged}{" "}
-                                {formatDate(
-                                  dateStringToDate(dataset.lastModified),
-                                )}
-                              </p>
-                              <span>•</span>
-                              {dataset.published
-                                ? localization.publicationState.publishedInFDK
-                                : localization.publicationState.unpublished}
                               {dataset?.applicationProfile && (
                                 <>
-                                  <span>•</span>
                                   {dataset?.applicationProfile ===
                                   ApplicationProfile.MOBILITYDCATAP
                                     ? localization.tag.mobilityDcatAp
                                     : localization.tag.dcatApNo}
                                 </>
                               )}
+                              <p>
+                                {localization.lastChanged}{" "}
+                                {formatDate(
+                                  dateStringToDate(dataset.lastModified),
+                                )}
+                              </p>
                             </div>
                           </>
                         }

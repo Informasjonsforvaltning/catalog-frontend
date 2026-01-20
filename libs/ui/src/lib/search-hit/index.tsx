@@ -41,19 +41,20 @@ const SearchHit = ({ title, description, content, statusTag, titleHref, rightCol
             <Heading level={2} className={styles.title}>
               {getTitle()}
             </Heading>
-            <TagList>
-              {statusTag && <div>{statusTag}</div>}
-            </TagList>
+            {
+              statusTag &&
+              <TagList>{statusTag}</TagList>
+            }
           </div>
           {rightColumn}
         </div>
-        {content}
         {description && (
           <div className={styles.description}>
             <MarkdownComponent>{description.toString()}</MarkdownComponent>
           </div>
         )}
         {labels}
+        {content}
       </Link>
     </Card>
   );

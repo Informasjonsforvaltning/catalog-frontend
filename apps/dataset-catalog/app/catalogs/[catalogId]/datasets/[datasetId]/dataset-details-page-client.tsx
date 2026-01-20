@@ -16,6 +16,8 @@ import StatusTag from "../../../../../components/status-tag/index";
 import { useRouter } from "next/navigation";
 import { Alert } from "@digdir/designsystemet-react";
 import { ConfirmModal, MarkdownComponent } from "@catalog-frontend/ui";
+import { PublishedTag } from "libs/ui/src/lib/tag/published-tag/PublishedTag";
+import { TagList } from "@fellesdatakatalog/ui";
 
 interface datasetDetailsPageProps {
   dataset: Dataset;
@@ -68,7 +70,10 @@ const DatasetDetailsPageClient = ({
         language={language}
         headingTitle={getTranslateText(dataset?.title, language)}
         headingTag={
-          <StatusTag approved={dataset.approved || dataset.published} />
+          <TagList>
+            <StatusTag approved={dataset.approved} />
+            <PublishedTag published={dataset.published}/>
+          </TagList>
         }
       >
         {dataset.specializedType === "SERIES" ? (
