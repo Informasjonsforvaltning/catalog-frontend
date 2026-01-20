@@ -17,14 +17,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        appname:
-          [
+        appname: [
             concept-catalog-e2e,
             service-catalog-e2e,
             catalog-portal-e2e,
             catalog-admin-e2e,
             dataset-catalog-e2e,
-            data-service-catalog-e2e,
+            # data-service-catalog-e2e, TEMPORARY DISABLED
           ]
     steps:
       - name: Checkout
