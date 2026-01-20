@@ -28,6 +28,7 @@ interface datasetDetailsPageProps {
   referenceDataEnv: string;
   referenceData: ReferenceData;
   datasetSeries: DatasetSeries[];
+  fdkDatasetId: string | null;
 }
 
 const DatasetDetailsPageClient = ({
@@ -39,6 +40,7 @@ const DatasetDetailsPageClient = ({
   referenceDataEnv,
   referenceData,
   datasetSeries,
+  fdkDatasetId,
 }: datasetDetailsPageProps) => {
   const [language, setLanguage] = useState("nb");
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
@@ -99,6 +101,8 @@ const DatasetDetailsPageClient = ({
             dataset={dataset}
             hasWritePermission={hasWritePermission}
             language={language}
+            referenceDataEnv={referenceDataEnv}
+            fdkDatasetId={fdkDatasetId}
           />
         </DetailsPageLayout.Right>
         <DetailsPageLayout.Buttons>

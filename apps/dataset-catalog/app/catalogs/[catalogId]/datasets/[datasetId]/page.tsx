@@ -3,7 +3,7 @@ import {
   BreadcrumbType,
   DesignBanner,
 } from "@catalog-frontend/ui";
-import { getDatasetById } from "../../../../actions/actions";
+import { getDatasetById, getFdkDatasetId } from "../../../../actions/actions";
 import {
   getTranslateText,
   getValidSession,
@@ -108,6 +108,9 @@ const DatasetDetailPage = withReadProtectedPage(
       accessToken,
     ).then((res) => res.json());
 
+    // Fetch FDK dataset ID from resource service
+    const fdkDatasetId = await getFdkDatasetId(catalogId, datasetId, dataset.uri);
+
     return (
       <>
         <Breadcrumbs
@@ -129,7 +132,8 @@ const DatasetDetailPage = withReadProtectedPage(
               referenceDataEnv={referenceDataEnv}
               referenceData={referenceData}
               datasetSeries={datasetSeries}
-            ></DatasetDetailsPageClient>
+              fdkDatasetId={fdkDatasetId}
+            />
           )}
         </div>
       </>
