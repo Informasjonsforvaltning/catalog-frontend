@@ -5,10 +5,10 @@ import {
   removeImportResultConcept,
 } from "@catalog-frontend/data-access";
 
-export const DELETE = async (
-  req: NextRequest,
-  ctx: RouteContext<"/api/catalogs/[catalogId]/concepts/import-results/[resultId]">,
-) => {
+type Context =
+  RouteContext<"/api/catalogs/[catalogId]/concepts/import-results/[resultId]">;
+
+export const DELETE = async (req: NextRequest, ctx: Context) => {
   const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { catalogId, resultId } = params;
@@ -33,10 +33,7 @@ export const DELETE = async (
   });
 };
 
-export const GET = async (
-  req: NextRequest,
-  ctx: RouteContext<"/api/catalogs/[catalogId]/concepts/import-results/[resultId]">,
-) => {
+export const GET = async (req: NextRequest, ctx: Context) => {
   const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { catalogId, resultId } = params;

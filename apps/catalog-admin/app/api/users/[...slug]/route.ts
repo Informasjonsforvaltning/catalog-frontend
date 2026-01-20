@@ -7,10 +7,9 @@ import {
 import { withValidSessionForApi } from "@catalog-frontend/utils";
 import { NextRequest } from "next/server";
 
-export const GET = async (
-  req: NextRequest,
-  ctx: RouteContext<"/api/users/[...slug]">,
-) => {
+type Context = RouteContext<"/api/users/[...slug]">;
+
+export const GET = async (req: NextRequest, ctx: Context) => {
   const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
@@ -30,10 +29,7 @@ export const GET = async (
   });
 };
 
-export const POST = async (
-  req: NextRequest,
-  ctx: RouteContext<"/api/users/[...slug]">,
-) => {
+export const POST = async (req: NextRequest, ctx: Context) => {
   const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
@@ -55,10 +51,7 @@ export const POST = async (
   });
 };
 
-export const PATCH = async (
-  req: NextRequest,
-  ctx: RouteContext<"/api/users/[...slug]">,
-) => {
+export const PATCH = async (req: NextRequest, ctx: Context) => {
   const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
@@ -85,10 +78,7 @@ export const PATCH = async (
   });
 };
 
-export const DELETE = async (
-  req: NextRequest,
-  ctx: RouteContext<"/api/users/[...slug]">,
-) => {
+export const DELETE = async (req: NextRequest, ctx: Context) => {
   const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
