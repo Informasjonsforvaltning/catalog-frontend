@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Button, Dialog, Paragraph } from '@digdir/designsystemet-react';
+import { HStack } from '@fellesdatakatalog/ui';
 import { LocalDataStorage, localization } from '@catalog-frontend/utils';
 import { useRouter, usePathname } from 'next/navigation';
 
@@ -64,19 +65,21 @@ export const AuthSessionModal = ({
         </Paragraph>
       </Dialog.Block>
       <Dialog.Block>
-        <Button
-          data-size='sm'
-          onClick={handleLoginClick}
-        >
-          {localization.auth.login}
-        </Button>
-        <Button
-          data-size='sm'
-          variant='secondary'
-          onClick={handleCancelClick}
-        >
-          {localization.button.cancel}
-        </Button>
+        <HStack>
+          <Button
+            data-size='sm'
+            onClick={handleLoginClick}
+          >
+            {localization.auth.login}
+          </Button>
+          <Button
+            data-size='sm'
+            variant='secondary'
+            onClick={handleCancelClick}
+          >
+            {localization.button.cancel}
+          </Button>
+        </HStack>
       </Dialog.Block>
     </Dialog>
   );

@@ -3,6 +3,7 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { useFormikContext } from 'formik';
 import { Button, Dialog } from '@digdir/designsystemet-react';
+import { HStack } from '@fellesdatakatalog/ui';
 import { DataStorage, localization } from '@catalog-frontend/utils';
 import type { StorageData } from '@catalog-frontend/types';
 import { isEqual } from 'lodash';
@@ -80,20 +81,22 @@ export const FormikAutoSaver = ({ id, storage, onRestore, confirmMessage, restor
       <Dialog.Block>Ulagrede endringer</Dialog.Block>
       <Dialog.Block>{modalContent}</Dialog.Block>
       <Dialog.Block>
-        <Button
-          data-size='sm'
-          onClick={handleRestoreClick}
-        >
-          {localization.button.restore}
-        </Button>
-        <Button
-          data-size='sm'
-          variant='secondary'
-          color='danger'
-          onClick={handleDiscardClick}
-        >
-          {localization.button.discard}
-        </Button>
+        <HStack>
+          <Button
+            data-size='sm'
+            onClick={handleRestoreClick}
+          >
+            {localization.button.restore}
+          </Button>
+          <Button
+            data-size='sm'
+            variant='secondary'
+            color='danger'
+            onClick={handleDiscardClick}
+          >
+            {localization.button.discard}
+          </Button>
+        </HStack>
       </Dialog.Block>
     </Dialog>
   );
