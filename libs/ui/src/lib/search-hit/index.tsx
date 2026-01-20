@@ -26,11 +26,12 @@ const SearchHit = ({ title, description, content, statusTag, titleHref, rightCol
     // If title is a string or string array, use it directly
     if (typeof title === 'string' || Array.isArray(title)) {
       const titleStr = typeof title === 'string' ? title : getString(title);
-      return titleStr || localization.concept.noName;
+      return titleStr || localization.noName;
     }
     // Otherwise, treat it as LocalizedStrings and translate
     const translated = translate(title as LocalizedStrings);
-    return translated || localization.concept.noName;
+    const translatedStr = typeof translated === 'string' ? translated : getString(translated);
+    return translatedStr || localization.noName;
   };
 
   return (

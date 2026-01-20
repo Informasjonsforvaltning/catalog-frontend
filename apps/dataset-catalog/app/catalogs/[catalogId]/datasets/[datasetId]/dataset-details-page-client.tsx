@@ -68,7 +68,7 @@ const DatasetDetailsPageClient = ({
       <DetailsPageLayout
         handleLanguageChange={handleLanguageChange}
         language={language}
-        headingTitle={getTranslateText(dataset?.title, language)}
+        headingTitle={getTranslateText(dataset?.title, language) || localization.noName}
         headingTag={
           <TagList>
             <StatusTag approved={dataset.approved} />
