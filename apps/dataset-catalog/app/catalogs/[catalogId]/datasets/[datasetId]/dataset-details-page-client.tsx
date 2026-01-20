@@ -106,6 +106,7 @@ const DatasetDetailsPageClient = ({
             <div className={styles.set}>
               {dataset.specializedType !== "SERIES" && (
                 <LinkButton
+                  data-size='sm'
                   href={`/catalogs/${catalogId}/datasets/${datasetId}/edit`}
                 >
                   {localization.button.edit}
