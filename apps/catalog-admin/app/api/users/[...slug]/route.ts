@@ -7,14 +7,10 @@ import {
 import { withValidSessionForApi } from "@catalog-frontend/utils";
 import { NextRequest } from "next/server";
 
-interface Props {
-  params: Promise<{
-    slug: string[];
-  }>;
-}
+type Context = RouteContext<"/api/users/[...slug]">;
 
-export const GET = async (req: NextRequest, props: Props) => {
-  const params = await props.params;
+export const GET = async (req: NextRequest, ctx: Context) => {
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId] = slug;
@@ -33,8 +29,8 @@ export const GET = async (req: NextRequest, props: Props) => {
   });
 };
 
-export const POST = async (req: NextRequest, props: Props) => {
-  const params = await props.params;
+export const POST = async (req: NextRequest, ctx: Context) => {
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId] = slug;
@@ -55,8 +51,8 @@ export const POST = async (req: NextRequest, props: Props) => {
   });
 };
 
-export const PATCH = async (req: NextRequest, props: Props) => {
-  const params = await props.params;
+export const PATCH = async (req: NextRequest, ctx: Context) => {
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId, userId] = slug;
@@ -82,8 +78,8 @@ export const PATCH = async (req: NextRequest, props: Props) => {
   });
 };
 
-export const DELETE = async (req: NextRequest, props: Props) => {
-  const params = await props.params;
+export const DELETE = async (req: NextRequest, ctx: Context) => {
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { slug } = params;
     const [catalogId, userId] = slug;

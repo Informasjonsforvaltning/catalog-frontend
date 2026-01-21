@@ -8,13 +8,9 @@ export const metadata: Metadata = {
   description: localization.catalogType.admin,
 };
 
-const PageLayout = ({
-  children,
-  params: { catalogId },
-}: {
-  children: React.ReactNode;
-  params: { catalogId: string };
-}) => {
+const PageLayout = async (props: LayoutProps<"/catalogs/[catalogId]">) => {
+  const { catalogId } = await props.params;
+
   return (
     <Layout
       catalogAdminUrl={process.env.CATALOG_ADMIN_BASE_URI}
@@ -24,7 +20,7 @@ const PageLayout = ({
       termsOfUseUrl={`${process.env.CATALOG_PORTAL_BASE_URI}/terms-and-conditions/${catalogId}`}
     >
       <TermsOfUseModal catalogId={catalogId} />
-      {children}
+      {props.children}
     </Layout>
   );
 };

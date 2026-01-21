@@ -3,10 +3,10 @@
 import React, { ReactNode } from "react";
 import { Layout } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
-import { useParams } from "next/navigation";
 import { useGetCatalogDesign } from "../../hooks/catalog-admin";
 
 interface CatalogLayoutProps {
+  catalogId?: string;
   children: ReactNode;
   className?: string;
   catalogAdminUrl?: string;
@@ -18,6 +18,7 @@ interface CatalogLayoutProps {
 }
 
 export const CatalogLayout = ({
+  catalogId,
   children,
   className,
   catalogAdminUrl,
@@ -26,9 +27,8 @@ export const CatalogLayout = ({
   adminGuiBaseUrl,
   fdkBaseUrl,
 }: CatalogLayoutProps) => {
-  const { catalogId } = useParams();
   const { data: design } = useGetCatalogDesign(
-    catalogId?.toString(),
+    catalogId || "",
     catalogAdminServiceUrl,
   );
 

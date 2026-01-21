@@ -3,10 +3,9 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@catalog-frontend/utils";
 import { getAllDatasets, postDataset } from "@catalog-frontend/data-access";
 
-export async function GET(
-  request: NextRequest,
-  context: { params: Promise<{ catalogId: string }> },
-) {
+type Context = RouteContext<"/api/catalogs/[catalogId]/datasets">;
+
+export async function GET(request: NextRequest, context: Context) {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
@@ -45,10 +44,7 @@ export async function GET(
   }
 }
 
-export async function POST(
-  request: NextRequest,
-  context: { params: Promise<{ catalogId: string }> },
-) {
+export async function POST(request: NextRequest, context: Context) {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {

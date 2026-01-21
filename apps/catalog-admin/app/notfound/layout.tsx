@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: localization.catalogType.admin,
 };
 
-const PageLayout = ({ children }: { children: React.ReactNode }) => {
+const PageLayout = (props: LayoutProps<"/notfound">) => {
   return (
     <Layout
       catalogAdminUrl={process.env.CATALOG_ADMIN_BASE_URI}
@@ -16,7 +16,7 @@ const PageLayout = ({ children }: { children: React.ReactNode }) => {
       adminGuiBaseUrl={process.env.ADMIN_GUI_BASE_URI}
       fdkBaseUrl={process.env.FDK_BASE_URI}
     >
-      {children}
+      {props.children}
     </Layout>
   );
 };

@@ -4,9 +4,9 @@ import { NextRequest } from "next/server";
 
 export const PATCH = async (
   req: NextRequest,
-  props: { params: Promise<{ slug: string }> },
+  ctx: RouteContext<"/api/editable-fields/[slug]">,
 ) => {
-  const params = await props.params;
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const slug = params;
     const catalogId = slug.slug;

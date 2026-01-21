@@ -3,11 +3,10 @@ import { Service } from "@catalog-frontend/types";
 import { withValidSessionForApi } from "@catalog-frontend/utils";
 import { NextRequest } from "next/server";
 
-export const GET = async (
-  req: NextRequest,
-  props: { params: Promise<{ catalogId: string }> },
-) => {
-  const params = await props.params;
+type Context = RouteContext<"/api/catalogs/[catalogId]/services">;
+
+export const GET = async (req: NextRequest, ctx: Context) => {
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { catalogId } = params;
 
@@ -24,11 +23,8 @@ export const GET = async (
   });
 };
 
-export const POST = async (
-  req: NextRequest,
-  props: { params: Promise<{ catalogId: string }> },
-) => {
-  const params = await props.params;
+export const POST = async (req: NextRequest, ctx: Context) => {
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { catalogId } = params;
 

@@ -18,12 +18,10 @@ import {
 } from "@catalog-frontend/data-access";
 import PublicServicePageClient from "./public-service-page-client";
 
-export default async function PublicServiceSearchHitsPage({
-  params,
-}: {
-  params: Promise<{ catalogId: string }>;
-}) {
-  const { catalogId } = await params;
+export default async function PublicServiceSearchHitsPage(
+  props: PageProps<"/catalogs/[catalogId]/public-services">,
+) {
+  const { catalogId } = await props.params;
 
   const session = await getValidSession();
   if (!session) {

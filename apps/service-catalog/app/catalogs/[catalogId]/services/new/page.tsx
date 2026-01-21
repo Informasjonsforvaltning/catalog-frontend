@@ -6,9 +6,9 @@ import {
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { NewPage } from "./new-page-client";
 
-export default async function NewServicePage(props: {
-  params: Promise<{ catalogId: string; serviceId: string }>;
-}) {
+export default async function NewServicePage(
+  props: PageProps<"/catalogs/[catalogId]/services/new">,
+) {
   const { catalogId } = await props.params;
 
   const [organization, statusesResponse] = await Promise.all([

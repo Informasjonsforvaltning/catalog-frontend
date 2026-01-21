@@ -26,12 +26,9 @@ import { Alert, Heading } from "@digdir/designsystemet-react";
 import styles from "./catalogs.module.css";
 import { CatalogCard } from "./components/catalog-card";
 
-const CatalogsPage = async (props: {
-  params: Promise<{ catalogId: string[] }>;
-}) => {
-  const params = await props.params;
-
-  const { catalogId } = params;
+const CatalogsPage = async (props: PageProps<"/catalogs/[[...slug]]">) => {
+  const { slug } = await props.params;
+  const catalogId = slug ? slug[0] : null;
 
   const session = await getValidSession();
   if (!session) {
@@ -57,10 +54,10 @@ const CatalogsPage = async (props: {
   }
 
   const currentOrganization = organizations.find(
-    (org) => org.organizationId === catalogId?.[0],
+    (org) => org.organizationId === catalogId,
   );
   const hasNonSystemAccess = catalogId
-    ? hasNonSystemAccessForOrg(`${session?.accessToken}`, catalogId?.[0])
+    ? hasNonSystemAccessForOrg(`${session?.accessToken}`, catalogId)
     : false;
   const serviceMessages = await getServiceMessages();
 

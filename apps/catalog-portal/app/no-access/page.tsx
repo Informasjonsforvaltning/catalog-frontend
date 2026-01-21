@@ -7,21 +7,13 @@ import {
 import { localization } from "@catalog-frontend/utils";
 import { Heading, Link } from "@digdir/designsystemet-react";
 
-const NoAccess = async ({
-  params,
-}: {
-  params: Promise<{ catalogId: string }>;
-}) => {
-  const { catalogId } = await params;
-
-  const breadcrumbList = catalogId
-    ? ([
-        {
-          href: `#`,
-          text: localization.noAccess,
-        },
-      ] as BreadcrumbType[])
-    : [];
+const NoAccess = async (props: PageProps<"/no-access">) => {
+  const breadcrumbList: BreadcrumbType[] = [
+    {
+      href: `#`,
+      text: localization.noAccess,
+    },
+  ];
 
   const link = `${process.env.FDK_BASE_URI}/docs/sharing-data/login-and-access`;
 

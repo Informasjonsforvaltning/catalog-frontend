@@ -4,7 +4,7 @@ import { authOptions } from "@catalog-frontend/utils";
 
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ catalogId: string }> },
+  context: RouteContext<"/api/catalogs/[catalogId]/users">,
 ) {
   try {
     const session = await getServerSession(authOptions);

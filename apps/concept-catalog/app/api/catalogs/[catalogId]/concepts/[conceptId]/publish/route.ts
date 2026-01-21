@@ -4,9 +4,9 @@ import { NextRequest } from "next/server";
 
 export const POST = async (
   request: NextRequest,
-  props: { params: Promise<{ conceptId: string }> },
+  ctx: RouteContext<"/api/catalogs/[catalogId]/concepts/[conceptId]/publish">,
 ) => {
-  const params = await props.params;
+  const params = await ctx.params;
   return await withValidSessionForApi(async (session) => {
     const { conceptId } = params;
     try {

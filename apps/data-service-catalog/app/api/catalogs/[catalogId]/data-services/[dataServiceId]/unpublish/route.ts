@@ -5,7 +5,7 @@ import { unpublishDataService } from "@catalog-frontend/data-access";
 
 export async function POST(
   request: NextRequest,
-  context: { params: Promise<{ catalogId: string; dataServiceId: string }> },
+  context: RouteContext<"/api/catalogs/[catalogId]/data-services/[dataServiceId]/unpublish">,
 ) {
   try {
     const session = await getServerSession(authOptions);

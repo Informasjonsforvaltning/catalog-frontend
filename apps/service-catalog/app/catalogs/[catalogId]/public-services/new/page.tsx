@@ -7,12 +7,10 @@ import {
 import { getTranslateText, localization } from "@catalog-frontend/utils";
 import { NewPage } from "./new-page-client";
 
-export default async function NewPublicServicePage({
-  params,
-}: {
-  params: Promise<{ catalogId: string }>;
-}) {
-  const { catalogId } = await params;
+export default async function NewPublicServicePage(
+  props: PageProps<"/catalogs/[catalogId]/public-services/new">,
+) {
+  const { catalogId } = await props.params;
   const organization: Organization = await getOrganization(catalogId);
   const statusesResponse = await getAdmsStatuses();
 

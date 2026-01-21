@@ -43,65 +43,63 @@ export const UsersPageClient = ({ catalogId }: UsersPageClientProps) => {
   };
 
   return (
-    <>
-      <PageLayout>
-        <div className={styles.row}>
-          <SearchField
-            ariaLabel={localization.search.searchForUsername}
-            placeholder={localization.search.searchForUsername}
-            onSearchSubmit={(search) => setSearch(search)}
-          />
-          <div className="editorButtons">
-            <Button className={styles.createButton} onClick={handleCreateUser}>
-              <>
-                <PlusCircleIcon />
-                {localization.catalogAdmin.addUser}
-              </>
-            </Button>
-          </div>
+    <PageLayout>
+      <div className={styles.row}>
+        <SearchField
+          ariaLabel={localization.search.searchForUsername}
+          placeholder={localization.search.searchForUsername}
+          onSearchSubmit={(search) => setSearch(search)}
+        />
+        <div className="editorButtons">
+          <Button className={styles.createButton} onClick={handleCreateUser}>
+            <>
+              <PlusCircleIcon />
+              {localization.catalogAdmin.addUser}
+            </>
+          </Button>
         </div>
+      </div>
 
-        <Heading level={2} size="xsmall">
-          {localization.catalogAdmin.username}
-        </Heading>
+      <Heading level={2} size="xsmall">
+        {localization.catalogAdmin.username}
+      </Heading>
 
-        <div className="accordionStructure">
-          {showUserEditor && (
-            <Accordion
-              key={"create-editor"}
-              border={true}
-              className="accordionWidth"
-            >
-              <Accordion.Item defaultOpen={showUserEditor}>
+      <div className="accordionStructure">
+        {showUserEditor && (
+          <Accordion
+            key={"create-editor"}
+            border={true}
+            className="accordionWidth"
+          >
+            <Accordion.Item defaultOpen={showUserEditor}>
+              <Accordion.Header>
+                <Heading size="xsmall" level={3}></Heading>
+              </Accordion.Header>
+              <Accordion.Content>
+                <UserEditor type={"create"} catalogId={catalogId} />
+              </Accordion.Content>
+            </Accordion.Item>
+          </Accordion>
+        )}
+
+        {searchResults?.length < 1 && (
+          <Heading size="medium">{localization.search.noHits}</Heading>
+        )}
+        {searchResults &&
+          searchResults.map((user: AssignedUser, index: number) => (
+            <Accordion key={index} border={true} className="accordionWidth">
+              <Accordion.Item>
                 <Accordion.Header>
-                  <Heading size="xsmall" level={3}></Heading>
+                  <Heading size="xsmall">{user.name}</Heading>
                 </Accordion.Header>
                 <Accordion.Content>
-                  <UserEditor type={"create"} catalogId={catalogId} />
+                  <UserEditor user={user} catalogId={catalogId} />
                 </Accordion.Content>
               </Accordion.Item>
             </Accordion>
-          )}
-
-          {searchResults?.length < 1 && (
-            <Heading size="medium">{localization.search.noHits}</Heading>
-          )}
-          {searchResults &&
-            searchResults.map((user: AssignedUser, index: number) => (
-              <Accordion key={index} border={true} className="accordionWidth">
-                <Accordion.Item>
-                  <Accordion.Header>
-                    <Heading size="xsmall">{user.name}</Heading>
-                  </Accordion.Header>
-                  <Accordion.Content>
-                    <UserEditor user={user} catalogId={catalogId} />
-                  </Accordion.Content>
-                </Accordion.Item>
-              </Accordion>
-            ))}
-        </div>
-      </PageLayout>
-    </>
+          ))}
+      </div>
+    </PageLayout>
   );
 };
 

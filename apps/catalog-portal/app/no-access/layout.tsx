@@ -1,7 +1,7 @@
 import { Layout } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
 
-const PageLayout = ({ children }: { children: React.ReactNode }) => {
+const PageLayout = (props: LayoutProps<"/no-access">) => {
   return (
     <Layout
       catalogAdminUrl={process.env.CATALOG_ADMIN_BASE_URI}
@@ -11,7 +11,7 @@ const PageLayout = ({ children }: { children: React.ReactNode }) => {
       catalogTitle={localization.catalogOverview}
       displayFooter={false}
     >
-      {children}
+      {props.children}
     </Layout>
   );
 };
