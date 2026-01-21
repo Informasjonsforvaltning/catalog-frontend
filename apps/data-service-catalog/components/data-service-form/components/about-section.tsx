@@ -1,4 +1,5 @@
 import {
+  FastFieldWithRef,
   FieldsetDivider,
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
@@ -51,6 +52,21 @@ export const AboutSection = () => {
           </TitleWithHelpTextAndTag>
         }
         multiple
+      />
+
+      <FieldsetDivider />
+
+      <FastFieldWithRef
+        name="version"
+        as={Textfield}
+        size="sm"
+        label={
+          <TitleWithHelpTextAndTag
+            helpText={localization.dataServiceForm.helptext.version}
+          >
+            {localization.dataServiceForm.fieldLabel.version}
+          </TitleWithHelpTextAndTag>
+        }
       />
     </Box>
   );

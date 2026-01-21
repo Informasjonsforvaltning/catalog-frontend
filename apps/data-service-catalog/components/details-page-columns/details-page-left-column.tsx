@@ -137,6 +137,15 @@ export const LeftColumn = ({
         </InfoCard.Item>
       )}
 
+      {!isEmpty(dataService?.version) && (
+        <InfoCard.Item
+          title={localization.dataServiceForm.fieldLabel.version}
+          data-testid="data-service-version"
+        >
+          {dataService.version}
+        </InfoCard.Item>
+      )}
+
       {!isEmpty(dataService?.servesDataset) && (
         <InfoCard.Item
           title={localization.dataServiceForm.fieldLabel.servesDataset}
