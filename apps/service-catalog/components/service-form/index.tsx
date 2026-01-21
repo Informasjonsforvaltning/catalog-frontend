@@ -211,15 +211,22 @@ export const ServiceForm = (props: ServiceFormProps) => {
         validateOnChange={validateOnChange}
         validateOnBlur={validateOnChange}
         onSubmit={async (values, { setSubmitting, resetForm }) => {
+          // set produces identifiers
+          values.produces?.map((produce, index) => ({
+            ...produce,
+            identifier: index,
+          }));
+
+          const trimmedValues = trimObjectWhitespace(values);
+
+          if (isEqual(trimmedValues, initialValues)) {
+            resetForm();
+            return;
+          }
+
           if (onSubmit) {
             try {
-              // set produces identifiers
-              values.produces?.map((produce, index) => ({
-                ...produce,
-                identifier: index,
-              }));
-
-              const newValues = await onSubmit(trimObjectWhitespace(values));
+              const newValues = await onSubmit(trimmedValues as Service);
 
               showSnackbarMessage({
                 message: localization.snackbar.saveSuccessful,
