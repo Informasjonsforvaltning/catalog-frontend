@@ -197,7 +197,7 @@ const DataServiceForm = ({
             return;
           }
 
-          const trimmedValues = trimObjectWhitespace(values) as DataService;
+          const trimmedValues = trimObjectWhitespace(values);
 
           if (
             isEqual(
