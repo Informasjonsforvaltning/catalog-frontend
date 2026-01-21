@@ -1,14 +1,17 @@
 import {
-  FastFieldWithRef,
   FieldsetDivider,
   FormikLanguageFieldset,
   TitleWithHelpTextAndTag,
   TextareaWithPrefix,
 } from "@catalog-frontend/ui";
 import { localization } from "@catalog-frontend/utils";
-import { Box, Textfield } from "@digdir/designsystemet-react";
+import { Box, ErrorMessage, Textfield } from "@digdir/designsystemet-react";
+import { DataService } from "@catalog-frontend/types";
+import { FastField, useFormikContext } from "formik";
 
 export const AboutSection = () => {
+  const { errors } = useFormikContext<DataService>();
+
   return (
     <Box>
       <FormikLanguageFieldset
@@ -56,9 +59,9 @@ export const AboutSection = () => {
 
       <FieldsetDivider />
 
-      <FastFieldWithRef
-        name="version"
+      <FastField
         as={Textfield}
+        name="version"
         size="sm"
         label={
           <TitleWithHelpTextAndTag
@@ -67,6 +70,7 @@ export const AboutSection = () => {
             {localization.dataServiceForm.fieldLabel.version}
           </TitleWithHelpTextAndTag>
         }
+        error={errors?.version}
       />
     </Box>
   );
