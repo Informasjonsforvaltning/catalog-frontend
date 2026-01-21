@@ -337,7 +337,7 @@ const DataServiceForm = ({
                           ["title", "description"].includes(field),
                         )
                       }
-                      error={hasError(["title"])}
+                      error={hasError(["title", "version"])}
                     >
                       <AboutSection />
                     </FormLayout.Section>

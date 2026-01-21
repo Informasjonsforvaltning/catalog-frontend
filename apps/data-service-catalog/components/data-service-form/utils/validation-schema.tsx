@@ -16,6 +16,10 @@ export const draftDataServiceValidationSchema = () =>
       nn: Yup.string().notRequired(),
       en: Yup.string().notRequired(),
     }),
+    version: Yup.string().max(
+      50,
+      localization.dataServiceForm.validation.versionMaxLength,
+    ),
     endpointUrl: Yup.string()
       .label(localization.dataServiceForm.fieldLabel.endpoint)
       .notRequired()
@@ -93,6 +97,10 @@ export const dataServiceValidationSchema = () =>
           return !!(title.nb || title.nn || title.en);
         },
       ),
+    version: Yup.string().max(
+      50,
+      localization.dataServiceForm.validation.versionMaxLength,
+    ),
     endpointUrl: Yup.string()
       .label(localization.dataServiceForm.fieldLabel.endpoint)
       .required(localization.validation.endpointURLRequired)

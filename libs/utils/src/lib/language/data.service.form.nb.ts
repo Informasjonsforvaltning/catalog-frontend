@@ -89,6 +89,7 @@ export const dataServiceFormNb = {
   validation: {
     costValueRequiredWhenMissingDoc:
       "Beløp er påkrevd når ingen dokumentasjon er oppgitt.",
+    versionMaxLength: "Versjon kan ikke være lengre enn 50 tegn.",
   },
   alert: {
     confirmDelete: "Er du sikker på at du vil slette API-beskrivelsen?",
